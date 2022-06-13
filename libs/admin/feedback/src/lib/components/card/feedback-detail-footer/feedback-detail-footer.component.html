@@ -5,11 +5,11 @@
     class="input"
     type="text"
     placeholder="Type Message"
-    [disabled]="feedback.status === 'RESOLVED'"
+    [disabled]="feedback?.status === 'RESOLVED'"
   />
   <div
     class="sendMessage"
-    [ngClass]="{ disabled: feedback.status === 'RESOLVED' }"
+    [ngClass]="{ disabled: feedback?.status === 'RESOLVED' }"
   >
     <img src="assets/images/sendIcon.png" />
   </div>

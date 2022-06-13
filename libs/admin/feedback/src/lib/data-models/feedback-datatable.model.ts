@@ -147,6 +147,23 @@ export class Feedback {
       .join('')
       .toUpperCase();
   }
+
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.updated).utcOffset(timezone), 'days');
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment
+      .unix(+this.updated / 1000)
+      .utcOffset(timezone)
+      .format('DD');
+    if (diff > 0) {
+      return moment(this.updated).utcOffset(timezone).format('DD MMM');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
+    }
+    return moment(this.updated).utcOffset(timezone).format('h:mm a');
+  }
 }
 
 export class TransactionalService {
@@ -353,6 +370,7 @@ export class StayFeedback {
   status: string;
   commentList;
   created: number;
+  updated: number;
   departmentId: string;
   departmentLabel: string;
   departmentName: string;
@@ -366,6 +384,7 @@ export class StayFeedback {
       set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
       set({}, 'comments', get(input, ['comments'])),
       set({}, 'created', get(input, ['created'])),
+      set({}, 'updated', get(input, ['updated'])),
       set({}, 'feedbackType', get(input, ['feedbackType'])),
       set({}, 'feedbackUrl', get(input, ['feedbackUrl'])),
       set({}, 'id', get(input, ['id'])),
@@ -445,6 +464,23 @@ export class StayFeedback {
       })
       .join('')
       .toUpperCase();
+  }
+
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.updated).utcOffset(timezone), 'days');
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment
+      .unix(+this.updated / 1000)
+      .utcOffset(timezone)
+      .format('DD');
+    if (diff > 0) {
+      return moment(this.updated).utcOffset(timezone).format('DD MMM');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
+    }
+    return moment(this.updated).utcOffset(timezone).format('h:mm a');
   }
 }
 

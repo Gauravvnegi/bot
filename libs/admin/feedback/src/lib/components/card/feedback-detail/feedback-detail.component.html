@@ -84,39 +84,30 @@
   </div>
   <div class="feedback-chat">
     <div class="feedback-chat__ratings">
-      <ng-container
-        *ngIf="
-          feedbackType === globalFeedbackConfig.types.transactional;
-          else stayServices
-        "
-      >
-        <div *ngFor="let service of feedback.feedback.services.services">
-          <div class="rating__card">
-            <div class="rating__name">{{ service.serviceName }}</div>
-            <div class="emoji">
-              <img
-                [src]="feedbackConfig.images.happy.url"
-                [alt]="feedbackConfig.images.happy.alt"
-                [ngClass]="{ 'gray-image': service.rating != 'EE' }"
-              />
-              <img
-                [src]="feedbackConfig.images.sceptic.url"
-                [alt]="feedbackConfig.images.sceptic.alt"
-                [ngClass]="{ 'gray-image': service.rating != 'ME' }"
-              />
-              <img
-                [src]="feedbackConfig.images.sad.url"
-                [alt]="feedbackConfig.images.sad.alt"
-                [ngClass]="{ 'gray-image': service.rating != 'EI' }"
-              />
-            </div>
+      <div *ngFor="let service of feedback.feedback.services.services">
+        <div class="rating__card">
+          <div class="rating__name">{{ service.serviceName }}</div>
+          <div
+            class="emoji"
+            *ngIf="checkForNumber(service.rating); else numericCard"
+          >
+            <img
+              [src]="feedbackConfig.images.happy.url"
+              [alt]="feedbackConfig.images.happy.alt"
+              [ngClass]="{ 'gray-image': service.rating != 'EE' }"
+            />
+            <img
+              [src]="feedbackConfig.images.sceptic.url"
+              [alt]="feedbackConfig.images.sceptic.alt"
+              [ngClass]="{ 'gray-image': service.rating != 'ME' }"
+            />
+            <img
+              [src]="feedbackConfig.images.sad.url"
+              [alt]="feedbackConfig.images.sad.alt"
+              [ngClass]="{ 'gray-image': service.rating != 'EI' }"
+            />
           </div>
-        </div>
-      </ng-container>
-      <ng-template #stayServices>
-        <div class="rating--card">
-          <div *ngFor="let service of feedback.feedback.services">
-            <div class="rating__name">{{ service.serviceName }}</div>
+          <ng-template #numericCard>
             <div class="rating__value">
               <div
                 class="rating__box"
@@ -153,23 +144,23 @@
                 </div>
               </div>
             </div>
-          </div>
+          </ng-template>
         </div>
-      </ng-template>
+      </div>
+    </div>
+    <div class="userComments">
+      <div class="time">
+        {{ feedback.getTime(_globalFilterService.timezone) }}
+      </div>
+      <div class="comment">
+        {{ feedback?.feedback.comments }}
+      </div>
+      <div class="userImage">
+        {{ feedback?.getProfileNickName() }}
+      </div>
     </div>
   </div>
 
-  <div class="userComments">
-    <div class="time">
-      {{ feedback.getTime(_globalFilterService.timezone) }}
-    </div>
-    <div class="comment">
-      {{ feedback?.feedback.comments }}
-    </div>
-    <div class="userImage">
-      {{ feedback?.getProfileNickName() }}
-    </div>
-  </div>
   <hospitality-bot-feedback-detail-footer
     [feedback]="feedback"
     [userPermissions]="userPermissions"

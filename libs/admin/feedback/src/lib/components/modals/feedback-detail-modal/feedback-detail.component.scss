@@ -16,7 +16,7 @@
   .feedback_labels {
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     font-family: Roboto;
     font-size: 12px;
@@ -340,7 +340,7 @@
 }
 
 .feedback-chat {
-  height: calc(100% - 300px);
+  height: calc(100% - 180px);
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 13px;

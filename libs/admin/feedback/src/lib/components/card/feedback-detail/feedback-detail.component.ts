@@ -95,6 +95,10 @@ export class FeedbackDetailComponent implements OnInit {
     );
   }
 
+  checkForNumber(item) {
+    return isNaN(item);
+  }
+
   get feedbackConfig() {
     return feedback;
   }

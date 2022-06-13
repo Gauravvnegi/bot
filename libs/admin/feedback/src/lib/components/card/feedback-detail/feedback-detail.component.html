@@ -24,7 +24,7 @@
       </div>
     </div>
   </div>
-  <div class="guestInfoOpen">
+  <div class="guestInfoOpen" [formGroup]="feedbackFG">
     <div class="feedback_labels">
       <div *ngIf="feedback?.feedback.guestData.bookingNo">
         BNO:{{ feedback?.feedback.guestData.bookingNo }}
@@ -67,6 +67,17 @@
           </div>
         </div>
       </div>
+      <mat-select
+        class="assignee-dropdown"
+        [value]="parentFG?.get('assignee')?.value"
+        (selectionChange)="setAssignee($event)"
+        placeholder="Assignee"
+        [disabled]="assigneeList?.length === 0"
+      >
+        <mat-option *ngFor="let assignee of assigneeList" [value]="assignee.id">
+          {{ assignee.firstName }} {{ assignee.lastName }}
+        </mat-option>
+      </mat-select>
     </div>
     <div class="guestInfoOpen-guest-wrap"></div>
     <div class="mr-10"></div>

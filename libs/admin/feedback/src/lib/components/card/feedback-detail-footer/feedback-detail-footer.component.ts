@@ -23,7 +23,8 @@ export class FeedbackDetailFooterComponent implements OnInit {
       this.userPermissions &&
       this.userPermissions.filter(
         (x) => x.department === this.feedback.departmentName
-      ).length
+      ).length &&
+      this.feedback.status !== 'RESOLVED'
     );
   }
 }

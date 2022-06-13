@@ -28,6 +28,10 @@ export class FeedbackTable {
                 ...item.feedback,
                 status: item.status,
                 departmentId: item.id,
+                departmentLabel: item.departmentLabel,
+                departmentName: item.departmentName,
+                userId: item.userId,
+                userName: item.userName,
               }
             : item,
           outlets
@@ -58,6 +62,11 @@ export class Feedback {
   notes: Notes;
   status: string;
   departmentId: string;
+  departmentLabel: string;
+  departmentName: string;
+  userId: string;
+  userName: string;
+
   deserialize(input, outlets) {
     Object.assign(
       this,
@@ -85,7 +94,11 @@ export class Feedback {
       set({}, 'tableNo', get(input, ['tableNo'])),
       set({}, 'updated', get(input, ['updated'])),
       set({}, 'status', get(input, ['status'])),
-      set({}, 'departmentId', get(input, ['departmentId']))
+      set({}, 'departmentId', get(input, ['departmentId'])),
+      set({}, 'departmentLabel', get(input, ['departmentLabel'])),
+      set({}, 'departmentName', get(input, ['departmentName'])),
+      set({}, 'userId', get(input, ['userId'])),
+      set({}, 'userName', get(input, ['userName']))
     );
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.entityId
@@ -303,6 +316,10 @@ export class StayFeedbackTable {
                 ...item.feedback,
                 status: item.status,
                 departmentId: item.id,
+                departmentLabel: item.departmentLabel,
+                departmentName: item.departmentName,
+                userId: item.userId,
+                userName: item.userName,
               }
             : item,
           outlets,
@@ -337,6 +354,10 @@ export class StayFeedback {
   commentList;
   created: number;
   departmentId: string;
+  departmentLabel: string;
+  departmentName: string;
+  userId: string;
+  userName: string;
   deserialize(input, outlets, colorMap) {
     this.services = new Array<Service>();
     this.commentList = {};
@@ -356,7 +377,11 @@ export class StayFeedback {
       set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber'])),
       set({}, 'transactionalService', get(input, ['transactionalService'])),
       set({}, 'status', get(input, ['status'])),
-      set({}, 'departmentId', get(input, ['departmentId']))
+      set({}, 'departmentId', get(input, ['departmentId'])),
+      set({}, 'departmentLabel', get(input, ['departmentLabel'])),
+      set({}, 'departmentName', get(input, ['departmentName'])),
+      set({}, 'userId', get(input, ['userId'])),
+      set({}, 'userName', get(input, ['userName']))
     );
     const serviceList = get(input, ['serviceMap'], ['services']);
     serviceList?.forEach((item) =>

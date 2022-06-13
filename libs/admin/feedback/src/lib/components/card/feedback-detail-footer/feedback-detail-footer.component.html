@@ -1,8 +1,16 @@
 <div class="footer" [ngClass]="{ disabled: !getDepartmentAllowed() }">
   <div class="nickname">{{ feedback?.getProfileNickName() }}</div>
   <div class="button">Mark Resolved</div>
-  <input class="input" type="text" placeholder="Type Message" />
-  <div class="sendMessage">
+  <input
+    class="input"
+    type="text"
+    placeholder="Type Message"
+    [disabled]="feedback.status === 'RESOLVED'"
+  />
+  <div
+    class="sendMessage"
+    [ngClass]="{ disabled: feedback.status === 'RESOLVED' }"
+  >
     <img src="assets/images/sendIcon.png" />
   </div>
 </div>

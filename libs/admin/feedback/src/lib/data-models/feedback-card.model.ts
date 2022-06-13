@@ -132,9 +132,16 @@ export class FeedbackRecord {
 export class UserList {
   records: User[];
 
-  deserialize(input) {
+  deserialize(input, department?) {
     this.records = new Array<User>();
-    input?.forEach((item) => this.records.push(new User().deserialize(item)));
+    input?.forEach((item) => {
+      if (
+        item.userCategoryPermission.filter(
+          (permission) => permission.department === department
+        ).length
+      )
+        this.records.push(new User().deserialize(item, department));
+    });
     return this.records;
   }
 }
@@ -143,14 +150,16 @@ export class User {
   id: string;
   firstName: string;
   lastName: string;
+  departmentPermission: Departmentpermission[];
 
-  deserialize(input) {
-    Object.assign(
-      this,
-      set({}, 'id', get(input, ['id', ''])),
-      set({}, 'firstName', get(input, ['firstName', ''])),
-      set({}, 'lastName', get(input, ['lastName', '']))
-    );
+  deserialize(input, department?) {
+    this.id = input?.id;
+    this.firstName = input?.firstName;
+    this.lastName = input?.lastName;
+    if (department)
+      this.departmentPermission = new Departmentpermissions().deserialize(
+        input.userCategoryPermission
+      );
     return this;
   }
 }

@@ -79,6 +79,7 @@ export class FeedbackListComponent implements OnInit {
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
     this.listenForEntityTypeChange();
+    this.listenForAssigneeChange();
   }
 
   listenForGlobalFilters() {
@@ -94,7 +95,7 @@ export class FeedbackListComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ]);
         this.cardService.$selectedFeedback.next(null);
-        this.getUsersList();
+        // this.getUsersList();
         this.filterData = {
           ...this.filterData,
           order: sharedConfig.defaultOrder,
@@ -107,6 +108,23 @@ export class FeedbackListComponent implements OnInit {
           limit: 20,
         };
         this.loadData();
+      })
+    );
+  }
+
+  listenForAssigneeChange() {
+    this.$subscription.add(
+      this.cardService.$assigneeChange.subscribe((response) => {
+        if (response.status) {
+          this.loadInitialData([
+            ...this.globalQueries,
+            this.filterData,
+            {
+              offset: 0,
+              limit: this.pagination.offset + 20,
+            },
+          ]);
+        }
       })
     );
   }

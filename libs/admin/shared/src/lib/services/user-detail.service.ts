@@ -5,7 +5,7 @@ import { UserConfig } from '../../../../shared/src/lib/models/userConfig.model';
 @Injectable({ providedIn: 'root' })
 export class UserService extends ApiService {
   userDetails;
-  $userPermissions = new BehaviorSubject(null);
+  userPermissions;
 
   initUserDetails(data) {
     this.userDetails = new UserConfig().deserialize(data);

@@ -67,22 +67,26 @@
     display: flex;
     gap: 20px;
     align-items: center;
-    p {
-      font-family: Roboto;
-      font-size: 14px;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: 1.07;
-      letter-spacing: 0.84px;
-      text-align: left;
-      color: #4b56c0;
-    }
-    .paper {
-      width: 14.7px;
-      height: 16px;
-      margin: 1px 6.3px 2px 0;
-      object-fit: contain;
+    .export {
+      display: flex;
+      align-items: center;
+      p {
+        font-family: Roboto;
+        font-size: 14px;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.07;
+        letter-spacing: 0.84px;
+        text-align: left;
+        color: #4b56c0;
+      }
+      .paper {
+        width: 14.7px;
+        height: 16px;
+        margin: 1px 6.3px 2px 0;
+        object-fit: contain;
+      }
     }
   }
 

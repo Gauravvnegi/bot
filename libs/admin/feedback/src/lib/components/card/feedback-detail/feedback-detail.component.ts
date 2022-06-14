@@ -183,6 +183,14 @@ export class FeedbackDetailComponent implements OnInit {
 
   addComment(event) {}
 
+  get feedbackServices() {
+    if (this.feedback) {
+      if (this.feedbackType === feedback.types.transactional)
+        return this.feedback.feedback.services.services;
+      return this.feedback.feedback.services;
+    } else [];
+  }
+
   get feedbackConfig() {
     return feedback;
   }

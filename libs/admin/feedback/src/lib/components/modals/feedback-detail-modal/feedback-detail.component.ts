@@ -148,6 +148,14 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
 
   addComment(event) {}
 
+  get feedbackServices() {
+    if (this.data.feedback) {
+      if (this.feedbackType === feedback.types.transactional)
+        return this.data.feedback.services.services;
+      return this.data.feedback.services;
+    } else [];
+  }
+
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

@@ -744,6 +744,18 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     return services.filter((service) => !service.label.includes('COMMENT'));
   }
 
+  getRowDataNegativeServices(rowData) {
+    if (this.tabFilterItems[this.tabFilterIdx]?.value && !this.loading) {
+      if (
+        this.tabFilterItems[this.tabFilterIdx]?.value ===
+        feedback.types.transactional
+      )
+        return rowData.services.getNegativeRatedService();
+      return rowData.getNegativeRatedService();
+    }
+    return [];
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

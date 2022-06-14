@@ -410,7 +410,7 @@
       >
         <tr
           class="data-table-row"
-          [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
+          [style.background]="rowData?.read ? '' : 'rgba(174, 209, 251, .1)'"
         >
           <!-- <tr class="data-table-row"> -->
           <td class="table--checkbox">
@@ -423,21 +423,21 @@
           </td>
           <td class="guest">
             <div class="guest-name">
-              {{ rowData.bookingDetails.tableOrRoomNumber }}
+              {{ rowData?.bookingDetails.tableOrRoomNumber }}
             </div>
-            <div class="guest-phone">{{ rowData.outlet }}</div>
+            <div class="guest-phone">{{ rowData?.outlet }}</div>
           </td>
           <td class="guest">
-            <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
-            <div class="guest-phone">{{ rowData.guest.getPhoneNumber() }}</div>
+            <div class="guest-name">{{ rowData?.guest.getFullName() }}</div>
+            <div class="guest-phone">{{ rowData?.guest.getPhoneNumber() }}</div>
           </td>
           <td class="service-feedback">
             <div class="feedback">
-              <ng-container *ngIf="rowData.services.services?.length > 0">
+              <ng-container *ngIf="rowData?.services.services?.length > 0">
                 <div
                   class="feedback-service"
                   *ngIf="
-                    rowData.services.getNegativeRatedService().length > 0;
+                    getRowDataNegativeServices(rowData).length > 0;
                     else noNegativeFeedback
                   "
                 >
@@ -448,35 +448,35 @@
                       </div>
                     </div>
                     <div
-                      *ngIf="rowData.services?.rating?.value"
+                      *ngIf="rowData?.services?.rating?.value"
                       class="stay-booking-feedback"
                       [ngClass]="{
                         'status-opacity-reject':
-                          rowData.services.rating.value < 5,
+                          rowData?.services.rating.value < 5,
                         'status-opacity-success':
-                          rowData.services.rating.value >= 5
+                          rowData?.services.rating.value >= 5
                       }"
                     >
                       <p
                         class="number"
                         [ngClass]="{
                           'status-background-reject':
-                            rowData.services.rating.value < 5,
+                            rowData?.services.rating.value < 5,
                           'status-background-moderate':
-                            rowData.services.rating.value >= 5 &&
-                            rowData.services.rating.value < 9,
+                            rowData?.services.rating.value >= 5 &&
+                            rowData?.services.rating.value < 9,
                           'status-background-success':
-                            rowData.services.rating.value > 8
+                            rowData?.services.rating.value > 8
                         }"
-                        *ngIf="rowData.services.rating.value"
+                        *ngIf="rowData?.services.rating.value"
                       >
-                        {{ rowData.services.rating.value }}
+                        {{ rowData?.services.rating.value }}
                       </p>
                     </div>
                   </div>
                   <ng-container
                     *ngFor="
-                      let service of rowData.services.getNegativeRatedService();
+                      let service of rowData?.services.getNegativeRatedService();
                       let i = index
                     "
                   >
@@ -510,7 +510,7 @@
                       class="feedback-service__container"
                       *ngIf="
                         i == 1 &&
-                        rowData.services.getNegativeRatedService()?.length >= 2
+                        getRowDataNegativeServices(rowData).length >= 2
                       "
                     >
                       <div class="feedback-service__container__label others">
@@ -519,7 +519,7 @@
                         </div>
                         <div class="stay-booking-feedback">
                           <p class="number">
-                            +{{ rowData.services.services.length - 2 }}
+                            +{{ rowData?.services.services.length - 2 }}
                           </p>
                         </div>
                       </div>
@@ -527,7 +527,7 @@
                     <ng-container
                       *ngIf="
                         i == 0 &&
-                        rowData.services.getNegativeRatedService()?.length == 1
+                        getRowDataNegativeServices(rowData).length == 1
                       "
                     >
                       <div class="feedback-service__container__label others">
@@ -536,7 +536,7 @@
                         </div>
                         <div class="stay-booking-feedback">
                           <p class="number">
-                            +{{ rowData.services.services.length - 1 }}
+                            +{{ rowData?.services.services.length - 1 }}
                           </p>
                         </div>
                       </div>
@@ -552,34 +552,34 @@
                         </div>
                         <div class="stay-booking-feedback">
                           <p class="number">
-                            +{{ rowData.services.services.length }}
+                            +{{ rowData?.services.services.length }}
                           </p>
                         </div>
                       </div>
                       <div
-                        *ngIf="rowData.services?.rating?.value"
+                        *ngIf="rowData?.services?.rating?.value"
                         class="stay-booking-feedback"
                         [ngClass]="{
                           'status-opacity-reject':
-                            rowData.services.rating.value < 5,
+                            rowData?.services.rating.value < 5,
                           'status-opacity-success':
-                            rowData.services.rating.value >= 5
+                            rowData?.services.rating.value >= 5
                         }"
                       >
                         <p
                           class="number"
                           [ngClass]="{
                             'status-background-reject':
-                              rowData.services.rating.value < 5,
+                              rowData?.services.rating.value < 5,
                             'status-background-moderate':
-                              rowData.services.rating.value >= 5 &&
-                              rowData.services.rating.value < 9,
+                              rowData?.services.rating.value >= 5 &&
+                              rowData?.services.rating.value < 9,
                             'status-background-success':
-                              rowData.services.rating.value > 8
+                              rowData?.services.rating.value > 8
                           }"
-                          *ngIf="rowData.services.rating.value"
+                          *ngIf="rowData?.services.rating.value"
                         >
-                          {{ rowData.services.rating.value }}
+                          {{ rowData?.services.rating.value }}
                         </p>
                       </div>
                     </div>
@@ -590,26 +590,26 @@
                 <img
                   [src]="globalFeedbackConfig.images.datatable.pdf.url"
                   [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
-                  (click)="downloadFeedbackPdf($event, rowData.id)"
+                  (click)="downloadFeedbackPdf($event, rowData?.id)"
                 />
               </div>
             </div>
           </td>
           <td class="package">
             <div class="package-date">
-              {{ rowData.getCreatedDate(_globalFilterService.timezone) }}
+              {{ rowData?.getCreatedDate(_globalFilterService.timezone) }}
             </div>
             <div class="package-date">
-              {{ rowData.getCreatedTime(_globalFilterService.timezone) }}
+              {{ rowData?.getCreatedTime(_globalFilterService.timezone) }}
             </div>
           </td>
-          <td class="comments">{{ rowData.guestData.overAllNps }}</td>
-          <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
+          <td class="comments">{{ rowData?.guestData.overAllNps }}</td>
+          <td class="comments">{{ rowData?.guestData.churnProbalilty }}</td>
           <td class="status-image" (click)="$event.stopPropagation()">
             <hospitality-bot-action-overlay
-              [rowDataStatus]="rowData.status"
-              [guestId]="rowData.departmentId"
-              [departmentName]="rowData.departmentName"
+              [rowDataStatus]="rowData?.status"
+              [guestId]="rowData?.departmentId"
+              [departmentName]="rowData?.departmentName"
               [feedbackType]="tabFilterItems[tabFilterIdx]?.value"
               (openDetail)="openDetailPage($event, rowData)"
               (statusUpdate)="updateFeedbackState($event)"
@@ -620,7 +620,7 @@
       <ng-template #stayTable>
         <tr
           class="data-table-row"
-          [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
+          [style.background]="rowData?.read ? '' : 'rgba(174, 209, 251, .1)'"
         >
           <!-- <tr class="data-table-row"> -->
           <td class="table--checkbox">
@@ -632,13 +632,13 @@
             </p-tableCheckbox>
           </td>
           <td class="guest">
-            <div>{{ rowData.tableOrRoomNumber }}</div>
+            <div>{{ rowData?.tableOrRoomNumber }}</div>
           </td>
           <td class="service-feedback">
             <div class="feedback">
               <ng-container
                 *ngIf="
-                  rowData.getNegativeRatedService().length > 0;
+                  getRowDataNegativeServices(rowData).length > 0;
                   else noNegativeFeedback
                 "
               >
@@ -649,24 +649,24 @@
                         Overall
                       </div>
                       <!-- <div class="stay-booking-feedback">
-                        <p class="number">+{{ rowData.services.length }}</p>
+                        <p class="number">+{{ rowData?.services.length }}</p>
                       </div> -->
                     </div>
                     <div class="stay-booking-feedback status-opacity-success">
                       <p
                         class="number status-background-success"
                         [style.background]="
-                          (colorMap?.stayFeedbacks)[rowData.ratings].colorCode
+                          (colorMap?.stayFeedbacks)[rowData?.ratings].colorCode
                         "
-                        *ngIf="rowData.ratings"
+                        *ngIf="rowData?.ratings"
                       >
-                        {{ rowData.ratings }}
+                        {{ rowData?.ratings }}
                       </p>
                     </div>
                   </div>
                   <ng-container
                     *ngFor="
-                      let service of rowData.getNegativeRatedService();
+                      let service of rowData?.getNegativeRatedService();
                       let i = index
                     "
                   >
@@ -688,9 +688,9 @@
                     <ng-container
                       *ngIf="
                         (i == 1 &&
-                          (rowData.getNegativeRatedService()?.length == 2 ||
-                            rowData.getNegativeRatedService()?.length >= 2)) ||
-                        (rowData.getNegativeRatedService()?.length == 1 &&
+                          (getRowDataNegativeServices(rowData).length == 2 ||
+                            getRowDataNegativeServices(rowData).length >= 2)) ||
+                        (getRowDataNegativeServices(rowData).length == 1 &&
                           i == 0)
                       "
                     >
@@ -701,9 +701,9 @@
                         <div class="stay-booking-feedback">
                           <p class="number">
                             +{{
-                              rowData.services.length -
-                                (rowData.getNegativeRatedService().length < 2
-                                  ? rowData.getNegativeRatedService().length
+                              rowData?.services.length -
+                                (getRowDataNegativeServices(rowData).length < 2
+                                  ? getRowDataNegativeServices(rowData).length
                                   : 2)
                             }}
                           </p>
@@ -722,18 +722,18 @@
                         Overall
                       </div>
                       <div class="stay-booking-feedback">
-                        <p class="number">+{{ rowData.services.length }}</p>
+                        <p class="number">+{{ rowData?.services.length }}</p>
                       </div>
                     </div>
                     <div class="stay-booking-feedback status-opacity-success">
                       <p
                         class="number status-background-success"
                         [style.background]="
-                          (colorMap?.stayFeedbacks)[rowData.ratings].colorCode
+                          (colorMap?.stayFeedbacks)[rowData?.ratings].colorCode
                         "
-                        *ngIf="rowData.ratings"
+                        *ngIf="rowData?.ratings"
                       >
-                        {{ rowData.ratings }}
+                        {{ rowData?.ratings }}
                       </p>
                     </div>
                   </div>
@@ -743,35 +743,35 @@
                 <img
                   [src]="globalFeedbackConfig.images.datatable.pdf.url"
                   [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
-                  (click)="downloadFeedbackPdf($event, rowData.id)"
+                  (click)="downloadFeedbackPdf($event, rowData?.id)"
                 />
               </div>
             </div>
           </td>
           <td class="guest">
-            <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
-            <div class="guest-phone">{{ rowData.guest.getPhoneNumber() }}</div>
-            <div class="guest-phone">{{ rowData.guest.emailId }}</div>
+            <div class="guest-name">{{ rowData?.guest.getFullName() }}</div>
+            <div class="guest-phone">{{ rowData?.guest.getPhoneNumber() }}</div>
+            <div class="guest-phone">{{ rowData?.guest.emailId }}</div>
           </td>
           <td class="package">
             <p class="arrival-date">
-              {{ rowData.getCreatedDate(_globalFilterService.timezone) }}
+              {{ rowData?.getCreatedDate(_globalFilterService.timezone) }}
             </p>
             <p class="arrival-time">
-              {{ rowData.getCreatedTime(_globalFilterService.timezone) }}
+              {{ rowData?.getCreatedTime(_globalFilterService.timezone) }}
             </p>
-            <p class="arrival-time">{{ rowData.guestData.guestCount }}G</p>
+            <p class="arrival-time">{{ rowData?.guestData.guestCount }}G</p>
           </td>
-          <td class="comments">{{ rowData.guestData.overAllNps }}</td>
-          <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
+          <td class="comments">{{ rowData?.guestData.overAllNps }}</td>
+          <td class="comments">{{ rowData?.guestData.churnProbalilty }}</td>
 
           <!-- status-image-initiated -->
           <td class="status-image" (click)="$event.stopPropagation()">
             <hospitality-bot-action-overlay
-              [rowDataStatus]="rowData.status"
-              [guestId]="rowData.departmentId"
+              [rowDataStatus]="rowData?.status"
+              [guestId]="rowData?.departmentId"
               [feedbackType]="tabFilterItems[tabFilterIdx]?.value"
-              [departmentName]="rowData.departmentName"
+              [departmentName]="rowData?.departmentName"
               (openDetail)="openDetailPage($event, rowData)"
               (statusUpdate)="updateFeedbackState($event)"
             ></hospitality-bot-action-overlay>

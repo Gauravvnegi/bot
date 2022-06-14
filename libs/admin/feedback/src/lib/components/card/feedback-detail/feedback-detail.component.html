@@ -31,7 +31,7 @@
       <div *ngIf="feedback?.feedback.guestData.bookingNo">
         BNO:{{ feedback?.feedback.guestData.bookingNo }}
       </div>
-      <div>{{ feedback?.getTableOrRoomNo() }}</div>
+      <div>{{ feedback?.getTableOrRoomNo(feedbackType) }}</div>
       <div>{{ feedback.getCreatedDate(_globalFilterService.timezone) }}</div>
       <div class="feedback">
         <div class="feedback-service">

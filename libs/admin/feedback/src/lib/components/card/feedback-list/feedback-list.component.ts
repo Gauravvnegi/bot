@@ -99,7 +99,7 @@ export class FeedbackListComponent implements OnInit {
         this.filterData = {
           ...this.filterData,
           order: sharedConfig.defaultOrder,
-          feedbackType: this.feedbackType,
+          feedbackType: data['filter'].value.feedback.feedbackType,
           entityType: this.entityType,
           entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
         };
@@ -107,6 +107,7 @@ export class FeedbackListComponent implements OnInit {
           offset: 0,
           limit: 20,
         };
+        this.cardService.$selectedFeedback.next(null);
         this.loadData();
       })
     );

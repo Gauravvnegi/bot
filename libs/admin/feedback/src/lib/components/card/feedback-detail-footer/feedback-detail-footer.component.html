@@ -1,6 +1,14 @@
-<div class="footer" [formGroup]="feedbackFG">
+<div
+  class="footer"
+  [formGroup]="feedbackFG"
+  [ngClass]="{ disabled: !getDepartmentAllowed() }"
+>
   <div class="nickname">{{ feedback?.getProfileNickName() }}</div>
-  <div class="button" [ngClass]="{ disabled: !getDepartmentAllowed() }">
+  <div
+    class="button"
+    [ngClass]="{ disabled: feedback?.status === 'RESOLVED' }"
+    (click)="markResolved()"
+  >
     Mark Resolved
   </div>
   <input

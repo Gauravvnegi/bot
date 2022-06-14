@@ -51,7 +51,6 @@ export class FeedbackDetailComponent implements OnInit {
   ngOnInit(): void {
     this.listenForGlobalFilters();
     this.listenForSelectedFeedback();
-    this.getUserPermission();
     this.assigneeList = new UserList().deserialize([]);
   }
 
@@ -62,6 +61,8 @@ export class FeedbackDetailComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+        this.feedbackType = data['filter'].value.feedback.feedbackType;
+        this.getUserPermission();
       })
     );
   }
@@ -149,39 +150,70 @@ export class FeedbackDetailComponent implements OnInit {
     let data = {
       status: 'RESOLVED',
     };
-    this.tableService
-      .updateFeedbackState(this.feedback.feedbackId, data)
-      .subscribe(
-        (response) => {
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'Status Updated Successfully.',
-                priorityMessage: 'Status Updated Successfully..',
-              },
-              '',
-              {
-                panelClass: 'success',
-              }
-            )
-            .subscribe();
-          this.cardService.$assigneeChange.next({ status: true });
-        },
-        ({ error }) => {
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: error.message,
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      );
+    this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
+      (response) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'Status Updated Successfully.',
+              priorityMessage: 'Status Updated Successfully..',
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
+        this.feedback.status = response.status;
+        this.cardService.$assigneeChange.next({ status: true });
+      },
+      ({ error }) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: error.message,
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+      }
+    );
   }
 
-  addComment(event) {}
+  addComment(event) {
+    let data = {
+      notes: event.data.comment,
+    };
+    this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
+      (response) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'Message sent.',
+              priorityMessage: 'Message sent Successfully..',
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
+        this.cardService.$assigneeChange.next({ status: true });
+      },
+      ({ error }) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: error.message,
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+      }
+    );
+  }
 
   get feedbackServices() {
     if (this.feedback) {

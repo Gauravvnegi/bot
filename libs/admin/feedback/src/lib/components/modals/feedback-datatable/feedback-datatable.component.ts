@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -23,17 +23,17 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-
-import { SelectedChip } from '../../../types/feedback.type';
 import { TranslateService } from '@ngx-translate/core';
+import * as FileSaver from 'file-saver';
 import { Observable } from 'rxjs';
 import {
   FeedbackTable,
   StayFeedbackTable,
 } from '../../../data-models/feedback-datatable.model';
 import { FeedbackTableService } from '../../../services/table.service';
+import { SelectedChip } from '../../../types/feedback.type';
 import { FeedbackDatatableComponent } from '../../datatable/feedback-datatable/feedback-datatable.component';
-import * as FileSaver from 'file-saver';
+import { FeedbackDetailModalComponent } from '../feedback-detail-modal/feedback-detail.component';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable-modal',
@@ -376,6 +376,39 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
           this.showErrorMessage(error);
         }
       )
+    );
+  }
+
+  /**
+   * @function openDetailPage To open the detail modal for a reservation.
+   * @param event The mouse click event.
+   * @param rowData The data of the clicked row.
+   * @param tabKey The key of the tab to be opened in detail modal.
+   */
+  openDetailPage(event: MouseEvent, rowData?, tabKey?: string): void {
+    event.stopPropagation();
+    if (!rowData) return;
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    dialogConfig.data = {
+      feedback: rowData,
+      colorMap: this.colorMap,
+      feedbackType: this.feedbackType,
+      isModal: true,
+      globalQueries: this.globalQueries,
+    };
+
+    const detailCompRef = this._modal.openDialog(
+      FeedbackDetailModalComponent,
+      dialogConfig
+    );
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        // remove loader for detail close
+        this.refreshTableData();
+        detailCompRef.close();
+      })
     );
   }
 

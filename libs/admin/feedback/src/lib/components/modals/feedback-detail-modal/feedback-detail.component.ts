@@ -146,11 +146,45 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
     );
   }
 
-  addComment(event) {}
+  addComment(event) {
+    let data = {
+      notes: event.data.comment,
+    };
+    this.tableService
+      .updateFeedbackState(this.data.feedback.departmentId, data)
+      .subscribe(
+        (response) => {
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'Message sent.',
+                priorityMessage: 'Message sent Successfully..',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
+          this.cardService.$assigneeChange.next({ status: true });
+        },
+        ({ error }) => {
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: error.message,
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
+        }
+      );
+  }
 
   get feedbackServices() {
     if (this.data.feedback) {
-      if (this.feedbackType === feedback.types.transactional)
+      if (this.data.feedbackType === feedback.types.transactional)
         return this.data.feedback.services.services;
       return this.data.feedback.services;
     } else [];

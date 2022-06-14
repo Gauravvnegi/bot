@@ -39,7 +39,7 @@ export class FeedbackRecord {
   feedbackId: string;
   id: string;
   jobDuration: number;
-  remarks;
+  remarks: Remark[];
   sla: number;
   status: string;
   timeOut: false;
@@ -49,6 +49,7 @@ export class FeedbackRecord {
   comments: string;
 
   deserialize(input, outlets, feedbackType, colorMap) {
+    this.remarks = new Array<Remark>();
     Object.assign(
       this,
       set({}, 'departmentLabel', get(input, ['departmentLabel'])),
@@ -57,7 +58,6 @@ export class FeedbackRecord {
       set({}, 'feedbackId', get(input, ['feedbackId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'jobDuration', get(input, ['jobDuration'])),
-      set({}, 'remarks', get(input, ['remarks'])),
       set({}, 'sla', get(input, ['sla'])),
       set({}, 'status', get(input, ['status'])),
       set({}, 'timeOut', get(input, ['timeOut'])),
@@ -65,6 +65,9 @@ export class FeedbackRecord {
       set({}, 'userId', get(input, ['userId'])),
       set({}, 'userName', get(input, ['userName'])),
       set({}, 'comments', get(input, [' feedback', 'comments']))
+    );
+    input.remarks?.forEach((remark) =>
+      this.remarks.push(new Remark().deserialize(remark))
     );
     this.feedback =
       feedbackType === feedback.types.transactional
@@ -398,5 +401,41 @@ export class Departmentpermission {
     );
 
     return this;
+  }
+}
+
+export class Remark {
+  created: number;
+  updated: number;
+  adminName: string;
+  remarks: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'created', get(input, ['created'])),
+      set({}, 'updated', get(input, ['updated'])),
+      set({}, 'adminName', get(input, ['adminName'])),
+      set({}, 'remarks', get(input, ['remarks']))
+    );
+
+    return this;
+  }
+
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.updated).utcOffset(timezone), 'days');
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment
+      .unix(+this.updated / 1000)
+      .utcOffset(timezone)
+      .format('DD');
+    if (diff > 0) {
+      return moment(this.updated).utcOffset(timezone).format('DD MMM');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
+    }
+    return moment(this.updated).utcOffset(timezone).format('h:mm a');
   }
 }

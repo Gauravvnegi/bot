@@ -30,14 +30,11 @@ import * as FileSaver from 'file-saver';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import {
-  Feedback,
   FeedbackTable,
-  Notes,
   StayFeedbackTable,
 } from '../../../data-models/feedback-datatable.model';
 import { FeedbackTableService } from '../../../services/table.service';
 import { EntityState, SelectedChip } from '../../../types/feedback.type';
-import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.component';
 import { FeedbackDetailModalComponent } from '../../modals/feedback-detail-modal/feedback-detail.component';
 
 @Component({

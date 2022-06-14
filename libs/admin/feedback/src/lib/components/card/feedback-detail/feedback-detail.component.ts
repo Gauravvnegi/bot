@@ -109,10 +109,7 @@ export class FeedbackDetailComponent implements OnInit {
       this.cardService
         .updateFeedbackAssignee(this.feedback.id, event.value)
         .subscribe((response) => {
-          this.cardService.$assigneeChange.next({
-            status: true,
-            data: response,
-          });
+          this.cardService.$assigneeChange.next({ status: true });
         })
     );
   }
@@ -147,6 +144,44 @@ export class FeedbackDetailComponent implements OnInit {
       )
     );
   }
+
+  updateFeedbackState() {
+    let data = {
+      status: 'RESOLVED',
+    };
+    this.tableService
+      .updateFeedbackState(this.feedback.feedbackId, data)
+      .subscribe(
+        (response) => {
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'Status Updated Successfully.',
+                priorityMessage: 'Status Updated Successfully..',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
+          this.cardService.$assigneeChange.next({ status: true });
+        },
+        ({ error }) => {
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: error.message,
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
+        }
+      );
+  }
+
+  addComment(event) {}
 
   get feedbackConfig() {
     return feedback;

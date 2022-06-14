@@ -7,7 +7,7 @@ export class CardService extends ApiService {
   $selectedFeedback = new BehaviorSubject(null);
   $selectedEntityType = new BehaviorSubject(null);
   $tabValues = new BehaviorSubject(null);
-  $assigneeChange = new BehaviorSubject({ status: false, data: null });
+  $assigneeChange = new BehaviorSubject({ status: false });
   getFeedbackList(config) {
     return this.get(`/api/v1/feedback/guests-card${config.queryObj}`);
   }

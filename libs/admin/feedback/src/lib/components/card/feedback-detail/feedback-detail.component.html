@@ -164,6 +164,8 @@
   <hospitality-bot-feedback-detail-footer
     [feedback]="feedback"
     [userPermissions]="userPermissions"
+    (updateStatus)="updateFeedbackState()"
+    (addComment)="addComment($event)"
   ></hospitality-bot-feedback-detail-footer>
 </div>
 <ng-template #noFeedbackData>

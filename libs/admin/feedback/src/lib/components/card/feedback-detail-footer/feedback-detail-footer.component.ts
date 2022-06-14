@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import {
   Departmentpermission,
@@ -13,8 +14,15 @@ import {
 export class FeedbackDetailFooterComponent implements OnInit {
   @Input() feedback: FeedbackRecord;
   @Input() userPermissions: Departmentpermission[];
+  @Output() updateStatus = new EventEmitter();
+  @Output() addComment = new EventEmitter();
   $subscription = new Subscription();
-  constructor() {}
+  feedbackFG: FormGroup;
+  constructor() {
+    this.feedbackFG = new FormGroup({
+      comment: new FormControl(''),
+    });
+  }
 
   ngOnInit(): void {}
 
@@ -26,5 +34,13 @@ export class FeedbackDetailFooterComponent implements OnInit {
       ).length &&
       this.feedback?.status !== 'RESOLVED'
     );
+  }
+
+  markResolved() {
+    this.updateStatus.emit();
+  }
+
+  sendMessage() {
+    this.addComment.emit({ data: this.feedbackFG.getRawValue() });
   }
 }

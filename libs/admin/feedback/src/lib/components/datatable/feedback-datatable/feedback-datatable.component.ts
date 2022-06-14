@@ -628,57 +628,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function openEditNotes To open edit notes modal.
-   * @param event The mouse click event.
-   * @param data The feedback data.
-   * @param notes The notes data for a particular feedback.
-   */
-  openEditNotes(event: MouseEvent, data: Feedback, notes: Notes): void {
-    event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '550';
-    dialogConfig.data = {
-      feedback: data,
-      timezone: this._globalFilterService.timezone,
-    };
-    const detailCompRef = this._modal.openDialog(
-      FeedbackNotesComponent,
-      dialogConfig
-    );
-
-    this.$subscription.add(
-      detailCompRef.componentInstance.onNotesClosed.subscribe((res) => {
-        // remove loader for detail close
-        if (res.status) {
-          this.$subscription.add(
-            this.tableService.updateNotes(res.id, res.data).subscribe(
-              (response) => {
-                this.statisticService.markReadStatusChanged.next(true);
-                detailCompRef.close();
-                this._snackbarService
-                  .openSnackBarWithTranslate(
-                    {
-                      translateKey: 'messages.success.feedback_closed',
-                      priorityMessage: 'Feedback Closed successfully.',
-                    },
-                    '',
-                    {
-                      panelClass: 'success',
-                    }
-                  )
-                  .subscribe();
-                this.refreshTableData();
-              },
-              ({ error }) => this.showErrorMessage(error)
-            )
-          );
-        } else detailCompRef.close();
-      })
-    );
-  }
-
-  /**
    * @function downloadFeedbackPdf To download feedback pdf of a feedback.
    * @param event The mouse click event.
    * @param id The outlet id.

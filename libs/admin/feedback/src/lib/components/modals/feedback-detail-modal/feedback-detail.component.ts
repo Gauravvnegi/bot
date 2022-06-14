@@ -112,6 +112,42 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
     );
   }
 
+  updateFeedbackState() {
+    let data = {
+      status: 'RESOLVED',
+    };
+    this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
+      (response) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'Status Updated Successfully.',
+              priorityMessage: 'Status Updated Successfully..',
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
+        this.cardService.$assigneeChange.next({ status: true });
+      },
+      ({ error }) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: error.message,
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+      }
+    );
+  }
+
+  addComment(event) {}
+
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

@@ -1,16 +1,22 @@
-<div class="footer" [ngClass]="{ disabled: !getDepartmentAllowed() }">
+<div class="footer" [formGroup]="feedbackFG">
   <div class="nickname">{{ feedback?.getProfileNickName() }}</div>
-  <div class="button">Mark Resolved</div>
+  <div class="button" [ngClass]="{ disabled: !getDepartmentAllowed() }">
+    Mark Resolved
+  </div>
   <input
+    formControlName="comment"
     class="input"
     type="text"
     placeholder="Type Message"
-    [disabled]="feedback?.status === 'RESOLVED'"
   />
   <div
     class="sendMessage"
-    [ngClass]="{ disabled: feedback?.status === 'RESOLVED' }"
+    [ngClass]="{ disabled: feedbackFG?.get('comment')?.value.length == 0 }"
   >
-    <img src="assets/images/sendIcon.png" />
+    <img
+      src="assets/images/sendIcon.png"
+      alt="send message"
+      (click)="sendMessage()"
+    />
   </div>
 </div>

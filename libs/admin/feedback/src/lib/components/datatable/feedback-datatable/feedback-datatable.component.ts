@@ -767,6 +767,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       colorMap: this.colorMap,
       feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
       isModal: true,
+      globalQueries: this.globalQueries,
     };
 
     const detailCompRef = this._modal.openDialog(

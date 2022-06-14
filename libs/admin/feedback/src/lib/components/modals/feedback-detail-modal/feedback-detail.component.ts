@@ -9,7 +9,11 @@ import {
 import { FormGroup, FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { UserService } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  UserService,
+} from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../../constants/feedback';
 import {
@@ -18,7 +22,9 @@ import {
   UserList,
 } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
+import { FeedbackTableService } from '../../../services/table.service';
 import { FeedbackDetailComponent } from '../../card';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-feedback-detail-modal',
@@ -36,9 +42,19 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
     protected cardService: CardService,
     public _globalFilterService: GlobalFilterService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    protected userService: UserService
+    protected userService: UserService,
+    protected _adminUtilityService: AdminUtilityService,
+    protected tableService: FeedbackTableService,
+    protected _snackbarService: SnackBarService
   ) {
-    super(cardService, _globalFilterService, userService);
+    super(
+      cardService,
+      _globalFilterService,
+      userService,
+      _adminUtilityService,
+      tableService,
+      _snackbarService
+    );
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
     });
@@ -66,6 +82,34 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
           );
           this.feedbackFG?.patchValue({ assignee: this.data.feedback?.userId });
         })
+    );
+  }
+
+  /**
+   * @function exportCSV To export CSV report for feedback.
+   */
+  exportCSV(): void {
+    debugger;
+    const queries = [
+      ...this.data.globalQueries,
+      {
+        feedbackType: this.feedbackType,
+        ids: this.data.feedback.id,
+      },
+    ];
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(queries),
+    };
+    this.$subscription.add(
+      this.tableService.exportCSV(config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            `Feedback_export_${new Date().getTime()}.csv`
+          );
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
     );
   }
 

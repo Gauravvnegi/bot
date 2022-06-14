@@ -1,7 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { UserService } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  UserService,
+} from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../../constants/feedback';
 import {
@@ -11,6 +14,9 @@ import {
   UserList,
 } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
+import { FeedbackTableService } from '../../../services/table.service';
+import * as FileSaver from 'file-saver';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'hospitality-bot-feedback-detail',
@@ -28,10 +34,14 @@ export class FeedbackDetailComponent implements OnInit {
   userPermissions: Departmentpermission[];
   assigneeList;
   $subscription = new Subscription();
+  globalQueries;
   constructor(
     protected cardService: CardService,
     public _globalFilterService: GlobalFilterService,
-    protected userService: UserService
+    protected userService: UserService,
+    protected _adminUtilityService: AdminUtilityService,
+    protected tableService: FeedbackTableService,
+    protected _snackbarService: SnackBarService
   ) {
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
@@ -39,9 +49,21 @@ export class FeedbackDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.listenForGlobalFilters();
     this.listenForSelectedFeedback();
     this.getUserPermission();
     this.assigneeList = new UserList().deserialize([]);
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+      })
+    );
   }
 
   listenForSelectedFeedback() {
@@ -97,6 +119,33 @@ export class FeedbackDetailComponent implements OnInit {
 
   checkForNumber(item) {
     return isNaN(item);
+  }
+
+  /**
+   * @function exportCSV To export CSV report for feedback.
+   */
+  exportCSV(): void {
+    const queries = [
+      ...this.globalQueries,
+      {
+        feedbackType: this.feedbackType,
+        ids: this.feedback.feedbackId,
+      },
+    ];
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams(queries),
+    };
+    this.$subscription.add(
+      this.tableService.exportCSV(config).subscribe(
+        (response) => {
+          FileSaver.saveAs(
+            response,
+            `Feedback_export_${new Date().getTime()}.csv`
+          );
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
+    );
   }
 
   get feedbackConfig() {

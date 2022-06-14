@@ -89,7 +89,6 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
    * @function exportCSV To export CSV report for feedback.
    */
   exportCSV(): void {
-    debugger;
     const queries = [
       ...this.data.globalQueries,
       {

@@ -96,7 +96,7 @@
       </div>
       <mat-select
         class="assignee-dropdown"
-        [value]="parentFG?.get('assignee')?.value"
+        [value]="feedbackFG?.get('assignee')?.value"
         (selectionChange)="setAssignee($event)"
         placeholder="Assignee"
         [disabled]="assigneeList?.length === 0"

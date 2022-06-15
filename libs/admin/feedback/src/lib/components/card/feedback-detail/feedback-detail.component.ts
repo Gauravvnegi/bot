@@ -25,7 +25,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 })
 export class FeedbackDetailComponent implements OnInit {
   num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  @Input() feedback: FeedbackRecord;
+  feedback: FeedbackRecord;
   @Input() colorMap;
   @Input() feedbackType;
   @Output() guestInfo = new EventEmitter();
@@ -72,7 +72,7 @@ export class FeedbackDetailComponent implements OnInit {
       this.cardService.$selectedFeedback.subscribe((response) => {
         this.feedback = response;
         this.feedbackFG?.patchValue({ assignee: response?.userId });
-        if (response)
+        if (response) {
           this.assigneeList = new UserList().deserialize(
             [
               this.userService.userPermissions,
@@ -80,10 +80,14 @@ export class FeedbackDetailComponent implements OnInit {
             ],
             response.departmentName
           );
+        }
       })
     );
   }
 
+  /**
+   * @function getUserPermission function to get user permission details
+   */
   getUserPermission() {
     this.$subscription.add(
       this.userService
@@ -97,14 +101,17 @@ export class FeedbackDetailComponent implements OnInit {
     );
   }
 
+  /**
+   * @function openGuestInfo Function to open guest info details.
+   */
   openGuestInfo(): void {
     this.guestInfo.emit({ openGuestInfo: true });
   }
 
-  numSequence(n: number): Array<number> {
-    return Array(n);
-  }
-
+  /**
+   * @function setAssignee Function to change feedback assignee.
+   * @param event
+   */
   setAssignee(event) {
     this.$subscription.add(
       this.cardService
@@ -115,6 +122,9 @@ export class FeedbackDetailComponent implements OnInit {
     );
   }
 
+  /**
+   * @function checkForNumber Function to check if number or not.
+   */
   checkForNumber(item) {
     return isNaN(item);
   }

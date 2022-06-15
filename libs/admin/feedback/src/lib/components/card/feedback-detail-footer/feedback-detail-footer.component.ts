@@ -26,6 +26,9 @@ export class FeedbackDetailFooterComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /**
+   * @function getDepartmentAllowed Returns if user have permission, department name and marked as Resolved.
+   */
   getDepartmentAllowed() {
     return (
       this.userPermissions &&

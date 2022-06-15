@@ -45,4 +45,34 @@ export const card = {
       },
     ],
   },
+  num: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  feedbackState: {
+    status: 'RESOLVED',
+  },
+  pagination: {
+    offset: 0,
+    limit: 20,
+  },
+  totalRecords: 0,
+  sortList: [
+    { label: 'Latest', value: 'created', order: 'DESC' },
+    { label: 'Room Ascending', value: 'room', order: 'ASC' },
+    { label: 'Room Descending', value: 'room', order: 'DESC' },
+    { label: 'Phone No.', value: 'phone', order: 'ASC' },
+    { label: 'Name A -> Z', value: 'name', order: 'ASC' },
+    { label: 'Name Z -> A', value: 'name', order: 'DESC' },
+  ],
+  buttonConfig: [
+    {
+      button: true,
+      label: 'Edit Details',
+      icon: 'assets/svg/user.svg',
+    },
+    {
+      button: true,
+      label: 'Map Details',
+      icon: 'assets/svg/user.svg',
+    },
+    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
+  ],
 };

@@ -1,63 +1,69 @@
 <div class="container">
   <div class="booking-title">
-    Booking Info
+    {{ 'booking.info' | translate }}
   </div>
   <div>
     <div class="user-journey-title" *ngIf="currentBooking?.length">
-      Current Booking
+      {{ 'booking.current' | translate }}
     </div>
     <div class="past">
       <div class="group" *ngFor="let item of currentBooking">
         <div>
-          <div class="subHeading">Reservation ID</div>
+          <div class="subHeading">
+            {{ 'guestData.reservationId' | translate }}
+          </div>
           <div class="subHeading--results"></div>
         </div>
         <div>
-          <div class="subHeading">Room No.</div>
+          <div class="subHeading">{{ 'guestData.roomNo' | translate }}</div>
           <div class="subHeading--results"></div>
         </div>
         <div class="arrow" (click)="openDetailPage(item)">
-          <mat-icon>east</mat-icon>
+          <mat-icon>{{ 'guestData.direction' | translate }}</mat-icon>
         </div>
       </div>
     </div>
   </div>
   <div>
     <div class="user-journey-title" *ngIf="pastBooking?.length">
-      Past Booking
+      {{ 'booking.past' | translate }}
     </div>
     <div class="past">
       <div class="group" *ngFor="let item of pastBooking">
         <div>
-          <div class="subHeading">Reservation ID</div>
+          <div class="subHeading">
+            {{ 'guestData.reservationId' | translate }}
+          </div>
           <div class="subHeading--results"></div>
         </div>
         <div>
-          <div class="subHeading">Room No.</div>
+          <div class="subHeading">{{ 'guestData.roomNo' | translate }}</div>
           <div class="subHeading--results"></div>
         </div>
         <div class="arrow" (click)="openDetailPage(item)">
-          <mat-icon>east</mat-icon>
+          <mat-icon>{{ 'guestData.direction' | translate }}</mat-icon>
         </div>
       </div>
     </div>
   </div>
   <div>
     <div class="user-journey-title" *ngIf="upcomingBooking?.length">
-      Upcoming Booking
+      {{ 'booking.upcoming' | translate }}
     </div>
     <div class="past">
       <div class="group" *ngFor="let item of upcomingBooking">
         <div>
-          <div class="subHeading">Reservation ID</div>
+          <div class="subHeading">
+            {{ 'guestData.reservationId' | translate }}
+          </div>
           <div class="subHeading--results"></div>
         </div>
         <div>
-          <div class="subHeading">Room No.</div>
+          <div class="subHeading">{{ 'guestData.roomNo' | translate }}</div>
           <div class="subHeading--results"></div>
         </div>
         <div class="arrow" (click)="openDetailPage(item)">
-          <mat-icon>east</mat-icon>
+          <mat-icon>{{ 'guestData.direction' | translate }}</mat-icon>
         </div>
       </div>
     </div>

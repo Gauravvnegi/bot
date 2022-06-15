@@ -1,12 +1,14 @@
 <div class="filter-container">
   <div class="sortFilt">
     <div class="sortFilt-text">
-      Sort & Filters
+      {{ 'filter.sort' | translate }}
     </div>
     <div class="sortFilt-clear">
       <div class="sortFilt-clear-all" (click)="clearFilter()">
-        <p class="filter">Clear All</p>
-        <mat-icon class="material-icon" matSuffix>undo</mat-icon>
+        <p class="filter">{{ 'filter.clear' | translate }}</p>
+        <mat-icon class="material-icon" matSuffix>{{
+          'filter.undo' | translate
+        }}</mat-icon>
       </div>
       <div class="division"></div>
       <div class="cross" (click)="closeFilter()">
@@ -18,7 +20,7 @@
     <div class="sortFilterWrapper" *ngIf="parentFG">
       <div class="sortFilterContainer" [formGroup]="parentFG">
         <div class="sortBy">
-          Sort By
+          {{ 'filter.sortBy' | translate }}
         </div>
         <div class="sortTypes">
           <div
@@ -47,7 +49,7 @@
         </div>
         <div class="filterUnderline"></div>
         <div class="filterBy">
-          Filter By Assignee
+          {{ 'filter.byAssignee' | translate }}
         </div>
         <mat-select
           class="assignee-dropdown"
@@ -59,7 +61,7 @@
           </mat-option>
         </mat-select>
         <div class="filterBy">
-          Filter By Department
+          {{ 'filter.byDepartment' | translate }}
         </div>
         <div
           *ngFor="let filter of filterData.department; let i = index"
@@ -80,7 +82,7 @@
       </div>
       <div class="applyBtnWrapper">
         <div class="applyBtn" (click)="applyFilter()">
-          <div>Apply</div>
+          <div>{{ 'filter.apply' | translate }}</div>
         </div>
       </div>
     </div>

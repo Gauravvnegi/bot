@@ -20,7 +20,7 @@
       color: #002046;
     "
   >
-    Details
+    {{ 'details' | translate }}
   </div>
   <div (click)="close()" style="cursor: pointer;">
     <i class="fa fa-times" aria-hidden="true"></i>
@@ -39,7 +39,7 @@
       <div class="req_button">
         <div class="export" (click)="exportCSV()">
           <img class="paper" src="assets/images/paper.png" alt="" />
-          <p>Export Feedback</p>
+          <p>{{ 'export.feedback' | translate }</p>
         </div>
         <img
           class="icon"
@@ -64,7 +64,7 @@
           <div class="feedback-service__container">
             <div class="feedback-service__container__label others">
               <div class="feedback-service__container__label__text">
-                Overall
+                {{ 'OverAll' | translate }}
               </div>
               <div class="stay-booking-feedback">
                 <p

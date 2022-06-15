@@ -48,11 +48,8 @@ export class FeedbackListComponent implements OnInit {
   userList: User[];
   feedbackList;
   filterData = {};
-  pagination = {
-    offset: 0,
-    limit: 20,
-  };
-  totalRecords = 0;
+  pagination = card.pagination;
+  totalRecords = card.totalRecords;
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,

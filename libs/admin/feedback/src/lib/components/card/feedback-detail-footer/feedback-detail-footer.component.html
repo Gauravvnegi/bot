@@ -9,7 +9,7 @@
     [ngClass]="{ disabled: feedback?.status === 'RESOLVED' }"
     (click)="markResolved()"
   >
-    Mark Resolved
+    {{ 'statusUpdate.resolved' | translate }}
   </div>
   <input
     formControlName="comment"

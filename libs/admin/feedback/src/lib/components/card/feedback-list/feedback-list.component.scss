@@ -68,6 +68,8 @@
         line-height: normal;
         letter-spacing: 0.72px;
         &__room {
+          display: flex;
+          gap: 10px;
           font-size: 10px;
           font-weight: bold;
           font-stretch: normal;
@@ -79,6 +81,13 @@
           margin-bottom: 13px;
           display: flex;
           align-items: center;
+          .rating {
+            width: 21px;
+            height: 20px;
+            padding: 4.5px 8px 2.5px 8px;
+            border-radius: 5px;
+            color: white;
+          }
         }
         &__name {
           font-size: 12px;

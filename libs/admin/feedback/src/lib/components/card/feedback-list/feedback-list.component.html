@@ -52,6 +52,14 @@
           <div class="item__body">
             <div class="item__body__room">
               <div>{{ feedbackItem.getTableOrRoomNo(feedbackType) }}</div>
+              <div
+                class="rating"
+                [style.background]="
+                  getRatingColorCode(feedbackItem.feedback.ratings)
+                "
+              >
+                {{ feedbackItem.feedback.ratings }}
+              </div>
             </div>
             <div class="item__body__name">
               {{ feedbackItem.feedback.guest.getFullName() }}
@@ -122,7 +130,6 @@
 </div>
 <ng-template #loader>
   <div class="loader">
-    <!-- <p class="loading">Loading</p> -->
     <div class="spinner">
       <div class="bounce1"></div>
       <div class="bounce2"></div>

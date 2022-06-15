@@ -5,6 +5,7 @@
   },
   "global_nps": { "title": "Global NPS" },
   "top_low_nps": {
+    "label":"NPS",
     "title": "Top/Low NPS",
     "top_performing": "Top Performing",
     "low_performing": "Low Performing"
@@ -59,5 +60,52 @@
       "feedback_closed": "Feedback Closed successfully",
       "feedback_status_updated": "'Status updated.'"
     }
-  }
+  },
+  "export":{
+    "feedback": "Export Feedback"
+  },
+  "noList":{
+    "noTitle":"No Feedbacks",
+    "noDescription":" When you have feedbacks, you'll see them here"
+  },
+  "nofeedback":{
+    "selectItem":"Select an item to read",
+    "nothingSelect":"Nothing is selected"
+  },
+  "OverAll":"Overall",
+  "statusUpdate":{
+    "resolved":"Mark Resolved"
+  },
+  "filter":{
+    "undo":"undo",
+    "sort":"Sort & Filters",
+    "clear":"Clear All",
+    "sortBy":"Sort By",
+    "byAssignee":"Filter By Assignee",
+    "byDepartment":"Filter By Department",
+    "apply":"Apply",
+    "cancel":"cancel"
+  },
+  "booking":{
+    "info":"Booking Info",
+    "current":"Current Booking",
+    "past":"Past Booking",
+    "upcoming":"Upcoming Booking"
+  },
+  "guestData":{
+    "info":"Guest Info",
+    "reservationId":"Reservation ID",
+    "roomNo":"Room No.",
+    "direction":"east",
+    "personalInfo":"Personal Info",
+    "contact":"Contact Details",
+    "phone":"Phone No.",
+    "email":"Email",
+    "other":"Other Details",
+    "noOfStays":"No. of stays"
+  },
+  "churnPrediction":"Curn probabilty prediction",
+  "details":"Details",
+  "viewDetail":"View Details",
+  "loading":"Loading"
 }

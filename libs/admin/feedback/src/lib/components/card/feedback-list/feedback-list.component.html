@@ -50,17 +50,44 @@
             {{ feedbackItem.getProfileNickName() }}
           </div>
           <div class="item__body">
-            <div class="item__body__room">
-              <div>{{ feedbackItem.getTableOrRoomNo(feedbackType) }}</div>
+            <div class="item__body__roomAndService">
+              <div class="item__body__room">
+                <div>{{ feedbackItem.getTableOrRoomNo(feedbackType) }}</div>
+                <div
+                  class="rating"
+                  [style.background]="
+                    getRatingColorCode(feedbackItem.feedback.ratings)
+                  "
+                >
+                  {{ feedbackItem.feedback.ratings }}
+                </div>
+              </div>
               <div
-                class="rating"
-                [style.background]="
-                  getRatingColorCode(feedbackItem.feedback.ratings)
+                class="item__body__services"
+                *ngIf="
+                  feedbackType === 'TRANSACTIONALFEEDBACK';
+                  else stayFeedback
                 "
               >
-                {{ feedbackItem.feedback.ratings }}
+                <div class="item__body__services__name">
+                  {{ feedbackItem.feedback.services.services[0].serviceName }}
+                </div>
+                <div class="item__body__services__length">
+                  +{{ feedbackItem.feedback.services.services.length - 1 }}
+                </div>
               </div>
+              <ng-template #stayFeedback>
+                <div class="item__body__services">
+                  <div class="item__body__services__name">
+                    {{ feedbackItem.feedback.services[0].serviceName }}
+                  </div>
+                  <div class="item__body__services__length">
+                    +{{ feedbackItem.feedback.services.length - 1 }}
+                  </div>
+                </div>
+              </ng-template>
             </div>
+
             <div class="item__body__name">
               {{ feedbackItem.feedback.guest.getFullName() }}
             </div>

@@ -1,5 +1,6 @@
 import {
   Component,
+  DebugNode,
   ElementRef,
   HostListener,
   Input,
@@ -305,7 +306,6 @@ export class FeedbackListComponent implements OnInit {
    * @param item
    */
   setSelectedItem(item) {
-    debugger;
     this.cardService.$selectedFeedback.next(item);
     this.selectedFeedback = item;
   }

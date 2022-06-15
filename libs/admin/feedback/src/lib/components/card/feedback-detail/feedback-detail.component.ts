@@ -17,6 +17,7 @@ import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { card } from '../../../constants/card';
 
 @Component({
   selector: 'hospitality-bot-feedback-detail',
@@ -24,7 +25,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
   styleUrls: ['./feedback-detail.component.scss'],
 })
 export class FeedbackDetailComponent implements OnInit {
-  num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  num = card.num;
   @Input() feedback: FeedbackRecord;
   @Input() colorMap;
   @Input() feedbackType;
@@ -148,7 +149,7 @@ export class FeedbackDetailComponent implements OnInit {
 
   updateFeedbackState() {
     let data = {
-      status: 'RESOLVED',
+      status: card.feedbackState.status,
     };
     this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
       (response) => {

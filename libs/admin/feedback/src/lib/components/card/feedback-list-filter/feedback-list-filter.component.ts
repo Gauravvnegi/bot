@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { card } from '../../../constants/card';
 import { CardService } from '../../../services/card.service';
 
 @Component({
@@ -14,14 +15,7 @@ export class FeedbackListFilterComponent implements OnInit {
   @Input() userList;
   @Output() filterApplied = new EventEmitter();
   @Output() close = new EventEmitter();
-  sortList = [
-    { label: 'Latest', value: 'created', order: 'DESC' },
-    { label: 'Room Ascending', value: 'room', order: 'ASC' },
-    { label: 'Room Descending', value: 'room', order: 'DESC' },
-    { label: 'Phone No.', value: 'phone', order: 'ASC' },
-    { label: 'Name A -> Z', value: 'name', order: 'ASC' },
-    { label: 'Name Z -> A', value: 'name', order: 'DESC' },
-  ];
+  sortList = card.sortList;
   $subscription = new Subscription();
   filterData = { department: [] };
   constructor(private fb: FormBuilder, private cardService: CardService) {}

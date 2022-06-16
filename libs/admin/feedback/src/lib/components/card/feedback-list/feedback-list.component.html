@@ -50,19 +50,55 @@
             {{ feedbackItem.getProfileNickName() }}
           </div>
           <div class="item__body">
-            <div class="item__body__room">
-              <div>{{ feedbackItem.getTableOrRoomNo(feedbackType) }}</div>
+            <div class="item__body__roomAndService">
+              <div class="item__body__room">
+                <div>{{ feedbackItem.getTableOrRoomNo(feedbackType) }}</div>
+                <div
+                  class="rating"
+                  [style.background]="
+                    getRatingColorCode(feedbackItem.feedback.ratings)
+                  "
+                >
+                  {{ feedbackItem.feedback.ratings }}
+                </div>
+              </div>
+              <div
+                class="item__body__services"
+                *ngIf="
+                  feedbackType === 'TRANSACTIONALFEEDBACK';
+                  else stayFeedback
+                "
+              >
+                <div class="item__body__services__name">
+                  {{ feedbackItem.feedback.services.services[0].serviceName }}
+                </div>
+                <div class="item__body__services__length">
+                  +{{ feedbackItem.feedback.services.services.length - 1 }}
+                </div>
+              </div>
+              <ng-template #stayFeedback>
+                <div class="item__body__services">
+                  <div class="item__body__services__name">
+                    {{ feedbackItem.feedback.services[0].serviceName }}
+                  </div>
+                  <div class="item__body__services__length">
+                    +{{ feedbackItem.feedback.services.length - 1 }}
+                  </div>
+                </div>
+              </ng-template>
             </div>
+
             <div class="item__body__name">
               {{ feedbackItem.feedback.guest.getFullName() }}
             </div>
             <div class="item__body__remarks">
               <ng-container
                 *ngIf="
-                  feedbackItem.remarks && feedbackItem.remarks.length;
+                  feedbackItem.feedback.comments &&
+                    feedbackItem.feedback.comments.length;
                   else noContent
                 "
-                >{{ feedbackItem.remarks[0].remarks }}</ng-container
+                >{{ feedbackItem.feedback.comments }}</ng-container
               >
             </div>
             <div class="item__body__status">
@@ -90,10 +126,10 @@
           <img src="assets/svg/no_request.svg" alt="No Request" />
         </div>
         <div class="no-contact__title">
-          No Feedbacks
+          {{ 'noList.noTitle' | translate }}
         </div>
         <div class="no-contact__description">
-          When you have feedbacks, you'll see them here
+          {{ 'noList.noDescription' | translate }}
         </div>
       </div>
     </ng-template>
@@ -121,7 +157,6 @@
 </div>
 <ng-template #loader>
   <div class="loader">
-    <!-- <p class="loading">Loading</p> -->
     <div class="spinner">
       <div class="bounce1"></div>
       <div class="bounce2"></div>

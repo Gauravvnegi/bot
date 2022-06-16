@@ -1,6 +1,6 @@
 <div class="guest-person" *ngIf="data">
   <div class="person-title">
-    Personal Info
+    {{ 'guestData.personalInfo' | translate }}
   </div>
   <div class="person-image">
     <div class="default">
@@ -21,37 +21,37 @@
   </div>
   <div class="border-line"></div>
   <div class="contact-detials">
-    Contact Details
+    {{ 'guestData.contact' | translate }}
   </div>
   <div class="label">
-    Phone No.
+    {{ 'guestData.phone' | translate }}
   </div>
   <div class="label-text">
     {{ data.phoneNumber }}
   </div>
   <div class="label">
-    Email
+    {{ 'guestData.email' | translate }}
   </div>
   <div class="label-text">
     {{ data.email || 'Unknown' }}
   </div>
   <div class="contact-detials">
-    Other Details
+    {{ 'guestData.other' | translate }}
   </div>
   <div class="label">
-    No. of stays
+    {{ 'guestData.noOfStays' | translate }}
   </div>
   <div class="label-text">
     {{ data.numberOfBookings }}
   </div>
   <div class="label">
-    NPS
+    {{ 'top_low_nps.label' | translate }}
   </div>
   <div class="label-text">
     {{ data.nps }}
   </div>
   <div class="label">
-    Curn probabilty prediction
+    {{ 'churnPrediction' | translate }}
   </div>
   <div class="label-text">
     {{ data.churn }}

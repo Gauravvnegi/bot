@@ -3,6 +3,10 @@ import { get, set } from 'lodash';
 import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
 
+export interface Deserializable {
+  deserialize(input: any): this;
+}
+
 export class FeedbackTable {
   total: number;
   entityTypeCounts;
@@ -19,7 +23,17 @@ export class FeedbackTable {
     input.records.forEach((item) => {
       this.records.push(
         new Feedback().deserialize(
-          item.feedback ? item.feedback : item,
+          item.feedback
+            ? {
+                ...item.feedback,
+                status: item.status,
+                departmentId: item.id,
+                departmentLabel: item.departmentLabel,
+                departmentName: item.departmentName,
+                userId: item.userId,
+                userName: item.userName,
+              }
+            : item,
           outlets
         )
       );
@@ -47,6 +61,11 @@ export class Feedback {
   updated: number;
   notes: Notes;
   status: string;
+  departmentId: string;
+  departmentLabel: string;
+  departmentName: string;
+  userId: string;
+  userName: string;
 
   deserialize(input, outlets) {
     Object.assign(
@@ -74,7 +93,12 @@ export class Feedback {
       set({}, 'session', get(input, ['session'])),
       set({}, 'tableNo', get(input, ['tableNo'])),
       set({}, 'updated', get(input, ['updated'])),
-      set({}, 'status', get(input, ['status']))
+      set({}, 'status', get(input, ['status'])),
+      set({}, 'departmentId', get(input, ['departmentId'])),
+      set({}, 'departmentLabel', get(input, ['departmentLabel'])),
+      set({}, 'departmentName', get(input, ['departmentName'])),
+      set({}, 'userId', get(input, ['userId'])),
+      set({}, 'userName', get(input, ['userName']))
     );
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.entityId
@@ -122,6 +146,23 @@ export class Feedback {
       })
       .join('')
       .toUpperCase();
+  }
+
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.updated).utcOffset(timezone), 'days');
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment
+      .unix(+this.updated / 1000)
+      .utcOffset(timezone)
+      .format('DD');
+    if (diff > 0) {
+      return moment(this.updated).utcOffset(timezone).format('DD MMM');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
+    }
+    return moment(this.updated).utcOffset(timezone).format('h:mm a');
   }
 }
 
@@ -287,7 +328,17 @@ export class StayFeedbackTable {
     input.records.forEach((item) => {
       this.records.push(
         new StayFeedback().deserialize(
-          item.feedback ? item.feedback : item,
+          item.feedback
+            ? {
+                ...item.feedback,
+                status: item.status,
+                departmentId: item.id,
+                departmentLabel: item.departmentLabel,
+                departmentName: item.departmentName,
+                userId: item.userId,
+                userName: item.userName,
+              }
+            : item,
           outlets,
           colorMap
         )
@@ -319,7 +370,12 @@ export class StayFeedback {
   status: string;
   commentList;
   created: number;
-
+  updated: number;
+  departmentId: string;
+  departmentLabel: string;
+  departmentName: string;
+  userId: string;
+  userName: string;
   deserialize(input, outlets, colorMap) {
     this.services = new Array<Service>();
     this.commentList = {};
@@ -328,6 +384,7 @@ export class StayFeedback {
       set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
       set({}, 'comments', get(input, ['comments'])),
       set({}, 'created', get(input, ['created'])),
+      set({}, 'updated', get(input, ['updated'])),
       set({}, 'feedbackType', get(input, ['feedbackType'])),
       set({}, 'feedbackUrl', get(input, ['feedbackUrl'])),
       set({}, 'id', get(input, ['id'])),
@@ -338,7 +395,12 @@ export class StayFeedback {
       set({}, 'size', get(input, ['size'])),
       set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber'])),
       set({}, 'transactionalService', get(input, ['transactionalService'])),
-      set({}, 'status', get(input, ['status']))
+      set({}, 'status', get(input, ['status'])),
+      set({}, 'departmentId', get(input, ['departmentId'])),
+      set({}, 'departmentLabel', get(input, ['departmentLabel'])),
+      set({}, 'departmentName', get(input, ['departmentName'])),
+      set({}, 'userId', get(input, ['userId'])),
+      set({}, 'userName', get(input, ['userName']))
     );
     const serviceList = get(input, ['serviceMap'], ['services']);
     serviceList?.forEach((item) =>
@@ -402,6 +464,23 @@ export class StayFeedback {
       })
       .join('')
       .toUpperCase();
+  }
+
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.updated).utcOffset(timezone), 'days');
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment
+      .unix(+this.updated / 1000)
+      .utcOffset(timezone)
+      .format('DD');
+    if (diff > 0) {
+      return moment(this.updated).utcOffset(timezone).format('DD MMM');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
+    }
+    return moment(this.updated).utcOffset(timezone).format('h:mm a');
   }
 }
 

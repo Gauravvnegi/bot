@@ -9,8 +9,10 @@
     </div>
     <div class="mr-10">
       <div class="req_button">
-        <img class="paper" src="assets/images/paper.png" alt="" />
-        <p>Export Feedback</p>
+        <div class="export" (click)="exportCSV()">
+          <img class="paper" src="assets/images/paper.png" alt="" />
+          <p>{{ 'export.feedback' | translate }}</p>
+        </div>
         <img
           class="icon"
           src="assets/images/guest-info-icon .png"
@@ -20,19 +22,19 @@
       </div>
     </div>
   </div>
-  <div class="guestInfoOpen">
+  <div class="guestInfoOpen" [formGroup]="feedbackFG">
     <div class="feedback_labels">
       <div *ngIf="feedback?.feedback.guestData.bookingNo">
         BNO:{{ feedback?.feedback.guestData.bookingNo }}
       </div>
-      <div>{{ feedback?.getTableOrRoomNo() }}</div>
+      <div>{{ feedback?.getTableOrRoomNo(feedbackType) }}</div>
       <div>{{ feedback.getCreatedDate(_globalFilterService.timezone) }}</div>
       <div class="feedback">
         <div class="feedback-service">
           <div class="feedback-service__container">
             <div class="feedback-service__container__label others">
               <div class="feedback-service__container__label__text">
-                Overall
+                {{ 'OverAll' | translate }}
               </div>
               <div class="stay-booking-feedback">
                 <p
@@ -63,31 +65,105 @@
           </div>
         </div>
       </div>
+      <mat-select
+        class="assignee-dropdown"
+        [value]="feedbackFG?.get('assignee')?.value"
+        (selectionChange)="setAssignee($event)"
+        placeholder="Assignee"
+        [disabled]="assigneeList?.length === 0"
+      >
+        <mat-option *ngFor="let assignee of assigneeList" [value]="assignee.id">
+          {{ assignee.firstName }} {{ assignee.lastName }}
+        </mat-option>
+      </mat-select>
     </div>
     <div class="guestInfoOpen-guest-wrap"></div>
     <div class="mr-10"></div>
   </div>
   <div class="feedback-chat">
     <div class="feedback-chat__ratings">
-      <ng-container
-        *ngIf="
-          feedbackType === globalFeedbackConfig.types.transactional;
-          else stayServices
-        "
-      >
-        <div *ngFor="let service of feedback.feedback.services.services">
-          {{ service | json }}
+      <div *ngFor="let service of feedbackServices">
+        <div class="rating__card">
+          <div class="rating__name">{{ service.serviceName }}</div>
+          <div
+            class="emoji"
+            *ngIf="checkForNumber(service.rating); else numericCard"
+          >
+            <img
+              [src]="feedbackConfig.images.happy.url"
+              [alt]="feedbackConfig.images.happy.alt"
+              [ngClass]="{ 'gray-image': service.rating != 'EE' }"
+            />
+            <img
+              [src]="feedbackConfig.images.sceptic.url"
+              [alt]="feedbackConfig.images.sceptic.alt"
+              [ngClass]="{ 'gray-image': service.rating != 'ME' }"
+            />
+            <img
+              [src]="feedbackConfig.images.sad.url"
+              [alt]="feedbackConfig.images.sad.alt"
+              [ngClass]="{ 'gray-image': service.rating != 'EI' }"
+            />
+          </div>
+          <ng-template #numericCard>
+            <div class="rating__value">
+              <div
+                class="rating__box"
+                *ngFor="let n of num"
+                [ngClass]="{ font: n < service.rating }"
+                [ngStyle]="
+                  n < service.rating
+                    ? {
+                        'background-color': service.colorCode,
+                        color: '',
+                        opacity: 0.5
+                      }
+                    : {}
+                "
+              >
+                <div
+                  class="rating"
+                  [ngClass]="{ border: n > service.rating }"
+                  [ngStyle]="
+                    n < service.rating
+                      ? {
+                          'background-color': service.colorCode,
+                          color: ''
+                        }
+                      : n == service.rating
+                      ? {
+                          'background-color': service.colorCode,
+                          color: 'white'
+                        }
+                      : {}
+                  "
+                >
+                  {{ n }}
+                </div>
+              </div>
+            </div>
+          </ng-template>
         </div>
-      </ng-container>
-      <ng-template #stayServices>
-        <div *ngFor="let service of feedback.feedback.services">
-          {{ service | json }}
-        </div>
-      </ng-template>
+      </div>
+    </div>
+    <div class="userComments" *ngFor="let remark of feedback?.remarks">
+      <div class="time">
+        {{ remark.getTime(_globalFilterService.timezone) }}
+      </div>
+      <div class="comment">
+        {{ remark.remarks }}
+      </div>
+      <div class="userImage">
+        <!-- {{ feedback?.getProfileNickName() }} -->
+      </div>
     </div>
   </div>
+
   <hospitality-bot-feedback-detail-footer
     [feedback]="feedback"
+    [userPermissions]="userPermissions"
+    (updateStatus)="updateFeedbackState()"
+    (addComment)="addComment($event)"
   ></hospitality-bot-feedback-detail-footer>
 </div>
 <ng-template #noFeedbackData>
@@ -96,10 +172,10 @@
       <img src="assets/svg/no_request.svg" alt="No feedback" />
     </div>
     <div class="no-data__title">
-      Select an item to read
+      {{ 'nofeedback.selectItem' | translate }}
     </div>
     <div class="no-data__description">
-      Nothing is selected
+      {{ 'nofeedback.nothingSelect' | translate }}
     </div>
   </div>
 </ng-template>

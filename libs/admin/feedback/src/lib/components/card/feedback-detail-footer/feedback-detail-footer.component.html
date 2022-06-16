@@ -1,8 +1,30 @@
-<div class="footer">
+<div
+  class="footer"
+  [formGroup]="feedbackFG"
+  [ngClass]="{ disabled: !getDepartmentAllowed() }"
+>
   <div class="nickname">{{ feedback?.getProfileNickName() }}</div>
-  <div class="button">Mark Resolved</div>
-  <input class="input" type="text" placeholder="Type Message" />
-  <div class="sendMessage">
-    <img src="assets/images/sendIcon.png" />
+  <div
+    class="button"
+    [ngClass]="{ disabled: feedback?.status === 'RESOLVED' }"
+    (click)="markResolved()"
+  >
+    {{ 'statusUpdate.resolved' | translate }}
+  </div>
+  <input
+    formControlName="comment"
+    class="input"
+    type="text"
+    placeholder="Type Message"
+  />
+  <div
+    class="sendMessage"
+    [ngClass]="{ disabled: feedbackFG?.get('comment')?.value.length == 0 }"
+  >
+    <img
+      src="assets/images/sendIcon.png"
+      alt="send message"
+      (click)="sendMessage()"
+    />
   </div>
 </div>

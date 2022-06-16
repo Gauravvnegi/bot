@@ -17,6 +17,7 @@ import {
   GuestDetails,
 } from 'libs/admin/request/src/lib/data-models/request.model';
 import { CardService } from '../../../services/card.service';
+import { card } from '../../../constants/card';
 @Component({
   selector: 'hospitality-bot-guest-info',
   templateUrl: './guest-info.component.html',
@@ -39,19 +40,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   isLoading = false;
   selectedIndex = 0;
   requestList;
-  buttonConfig = [
-    {
-      button: true,
-      label: 'Edit Details',
-      icon: 'assets/svg/user.svg',
-    },
-    {
-      button: true,
-      label: 'Map Details',
-      icon: 'assets/svg/user.svg',
-    },
-    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
-  ];
+  buttonConfig = card.buttonConfig;
   colorMap: any;
   guestData: Guest;
   constructor(
@@ -87,7 +76,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
     this.$subscription.add(
       this.feedbackService.$selectedFeedback.subscribe((response) => {
         if (response) {
-          this.data = response;
+          this.data = response.data;
           this.guestId = response['feedback']?.guest?.id;
           this.loadGuestInfo();
         }

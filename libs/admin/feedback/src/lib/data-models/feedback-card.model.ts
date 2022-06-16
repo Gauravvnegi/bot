@@ -39,15 +39,17 @@ export class FeedbackRecord {
   feedbackId: string;
   id: string;
   jobDuration: number;
-  remarks;
+  remarks: Remark[];
   sla: number;
   status: string;
   timeOut: false;
   updated: number;
   userId: string;
   userName: string;
+  comments: string;
 
   deserialize(input, outlets, feedbackType, colorMap) {
+    this.remarks = new Array<Remark>();
     Object.assign(
       this,
       set({}, 'departmentLabel', get(input, ['departmentLabel'])),
@@ -56,13 +58,16 @@ export class FeedbackRecord {
       set({}, 'feedbackId', get(input, ['feedbackId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'jobDuration', get(input, ['jobDuration'])),
-      set({}, 'remarks', get(input, ['remarks'])),
       set({}, 'sla', get(input, ['sla'])),
       set({}, 'status', get(input, ['status'])),
       set({}, 'timeOut', get(input, ['timeOut'])),
       set({}, 'updated', get(input, ['updated'])),
       set({}, 'userId', get(input, ['userId'])),
-      set({}, 'userName', get(input, ['userName']))
+      set({}, 'userName', get(input, ['userName'])),
+      set({}, 'comments', get(input, [' feedback', 'comments']))
+    );
+    input.remarks?.forEach((remark) =>
+      this.remarks.push(new Remark().deserialize(remark))
     );
     this.feedback =
       feedbackType === feedback.types.transactional
@@ -92,9 +97,13 @@ export class FeedbackRecord {
   }
 
   getSLA() {
-    if (this.sla)
-      return `${Math.round(((this.sla % 86400000) % 3600000) / 60000)}m`;
-    else '------';
+    if (this.sla) {
+      if (this.sla > 60 || this.sla < -60)
+        return `${Math.floor(this.sla / 60)}h ${Math.trunc(
+          (this.sla > 0 ? this.sla : this.sla * -1) % 60
+        )}m`;
+      return `${this.sla}m`;
+    } else '------';
   }
 
   getStatus(array) {
@@ -126,9 +135,16 @@ export class FeedbackRecord {
 export class UserList {
   records: User[];
 
-  deserialize(input) {
+  deserialize(input, department?) {
     this.records = new Array<User>();
-    input?.forEach((item) => this.records.push(new User().deserialize(item)));
+    input?.forEach((item) => {
+      if (
+        item.userCategoryPermission.filter(
+          (permission) => permission.department === department
+        ).length
+      )
+        this.records.push(new User().deserialize(item, department));
+    });
     return this.records;
   }
 }
@@ -137,14 +153,16 @@ export class User {
   id: string;
   firstName: string;
   lastName: string;
+  departmentPermission: Departmentpermission[];
 
-  deserialize(input) {
-    Object.assign(
-      this,
-      set({}, 'id', get(input, ['id', ''])),
-      set({}, 'firstName', get(input, ['firstName', ''])),
-      set({}, 'lastName', get(input, ['lastName', '']))
-    );
+  deserialize(input, department?) {
+    this.id = input?.id;
+    this.firstName = input?.firstName;
+    this.lastName = input?.lastName;
+    if (department)
+      this.departmentPermission = new Departmentpermissions().deserialize(
+        input.userCategoryPermission
+      );
     return this;
   }
 }
@@ -341,5 +359,83 @@ export class Request implements Deserializable {
         timezone
       )}`;
     else '------';
+  }
+}
+
+export class Departmentpermissions {
+  records: Departmentpermission[];
+
+  deserialize(input) {
+    this.records = new Array<Departmentpermission>();
+    input.forEach((item) =>
+      this.records.push(new Departmentpermission().deserialize(item))
+    );
+
+    return this.records;
+  }
+}
+
+export class Departmentpermission {
+  created: number;
+  department: string;
+  entityId: string;
+  id: string;
+  manage: number;
+  module: string;
+  updated: number;
+  userId: string;
+  view: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'created', get(input, ['created'])),
+      set({}, 'department', get(input, ['department'])),
+      set({}, 'entityId', get(input, ['entityId'])),
+      set({}, 'id', get(input, ['id'])),
+      set({}, 'manage', get(input, ['manage'])),
+      set({}, 'module', get(input, ['module'])),
+      set({}, 'updated', get(input, ['updated'])),
+      set({}, 'userId', get(input, ['userId'])),
+      set({}, 'view', get(input, ['view']))
+    );
+
+    return this;
+  }
+}
+
+export class Remark {
+  created: number;
+  updated: number;
+  adminName: string;
+  remarks: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'created', get(input, ['created'])),
+      set({}, 'updated', get(input, ['updated'])),
+      set({}, 'adminName', get(input, ['adminName'])),
+      set({}, 'remarks', get(input, ['remarks']))
+    );
+
+    return this;
+  }
+
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.updated).utcOffset(timezone), 'days');
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment
+      .unix(+this.updated / 1000)
+      .utcOffset(timezone)
+      .format('DD');
+    if (diff > 0) {
+      return moment(this.updated).utcOffset(timezone).format('DD MMM');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
+    }
+    return moment(this.updated).utcOffset(timezone).format('h:mm a');
   }
 }

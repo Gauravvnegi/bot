@@ -23,7 +23,7 @@ export class GuestBookingInfoComponent implements OnInit {
 
   ngOnChanges() {
     this.pastBooking = this.reservationData.records.filter(
-      (item) => item.subType === 'INSTANT'
+      (item) => item.subType === 'PAST'
     );
 
     this.currentBooking = this.reservationData.records.filter(

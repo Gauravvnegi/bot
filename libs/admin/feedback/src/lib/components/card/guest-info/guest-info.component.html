@@ -2,7 +2,7 @@
   <div class="close-icon" (click)="closeGuestInfo()">
     &#10006;
   </div>
-  <div>Guest Info</div>
+  <div>{{ 'guestData.info' | translate }}</div>
 </div>
 <div
   class="guestInfoWrapper"
@@ -31,6 +31,7 @@
       </ng-template>
       <ng-template matTabContent>
         <hospitality-bot-guest-booking-info
+          [guestId]="guestId"
           [data]="guestData"
           [hotelId]="hotelId"
           [reservationData]="guestReservations"

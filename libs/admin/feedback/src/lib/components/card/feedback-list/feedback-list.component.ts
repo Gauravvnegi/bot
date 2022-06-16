@@ -1,5 +1,6 @@
 import {
   Component,
+  DebugNode,
   ElementRef,
   HostListener,
   Input,
@@ -12,19 +13,20 @@ import {
   AdminUtilityService,
   sharedConfig,
   StatisticsService,
-  UserService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
+import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { forEach, keys, split } from 'lodash';
 import { Observable, Subscription } from 'rxjs';
 import { card } from '../../../constants/card';
 import {
   FeedbackList,
+  FeedbackRecord,
   User,
   UserList,
 } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
-import { FeedbackTableService } from '../../../services/table.service';
 
 @Component({
   selector: 'hospitality-bot-feedback-list',
@@ -50,11 +52,8 @@ export class FeedbackListComponent implements OnInit {
   userList: User[];
   feedbackList;
   filterData = {};
-  pagination = {
-    offset: 0,
-    limit: 20,
-  };
-  totalRecords = 0;
+  pagination = card.pagination;
+  totalRecords = card.totalRecords;
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
@@ -62,9 +61,7 @@ export class FeedbackListComponent implements OnInit {
     private fb: FormBuilder,
     private firebaseMessagingService: FirebaseMessagingService,
     private cardService: CardService,
-    private statisticService: StatisticsService,
-    private tableService: FeedbackTableService,
-    private userService: UserService
+    private statisticService: StatisticsService
   ) {}
 
   ngOnInit(): void {
@@ -83,8 +80,12 @@ export class FeedbackListComponent implements OnInit {
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
     this.listenForEntityTypeChange();
+    this.listenForAssigneeChange();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters() {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
@@ -98,12 +99,11 @@ export class FeedbackListComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ]);
         this.cardService.$selectedFeedback.next(null);
-        this.getUserPermission();
-        this.getUsersList();
+        // this.getUsersList();
         this.filterData = {
           ...this.filterData,
           order: sharedConfig.defaultOrder,
-          feedbackType: this.feedbackType,
+          feedbackType: data['filter'].value.feedback.feedbackType,
           entityType: this.entityType,
           entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
         };
@@ -111,11 +111,35 @@ export class FeedbackListComponent implements OnInit {
           offset: 0,
           limit: 20,
         };
+        this.cardService.$selectedFeedback.next(null);
         this.loadData();
       })
     );
   }
 
+  /**
+   * @function listenForAssigneeChange Function load when assignee is changed.
+   */
+  listenForAssigneeChange() {
+    this.$subscription.add(
+      this.cardService.$assigneeChange.subscribe((response) => {
+        if (response.status) {
+          this.loadInitialData([
+            ...this.globalQueries,
+            this.filterData,
+            {
+              offset: 0,
+              limit: this.pagination.offset + 20,
+            },
+          ]);
+        }
+      })
+    );
+  }
+
+  /**
+   * @function getUsersList Function to get feedback user list.
+   */
   getUsersList() {
     this.$subscription.add(
       this.cardService
@@ -123,16 +147,6 @@ export class FeedbackListComponent implements OnInit {
         .subscribe(
           (response) => (this.userList = new UserList().deserialize(response))
         )
-    );
-  }
-
-  getUserPermission() {
-    this.$subscription.add(
-      this.userService
-        .getUserPermission(this.feedbackType)
-        .subscribe((response) => {
-          console.log(response);
-        })
     );
   }
 
@@ -153,6 +167,9 @@ export class FeedbackListComponent implements OnInit {
     );
   }
 
+  /**
+   * @function listenForEntityTypeChange Function loads when change entity type.
+   */
   listenForEntityTypeChange() {
     this.$subscription.add(
       this.cardService.$selectedEntityType.subscribe((response) => {
@@ -165,6 +182,9 @@ export class FeedbackListComponent implements OnInit {
     );
   }
 
+  /**
+   * @function loadInitialData To load the initial data for feedback list.
+   */
   loadInitialData(queries = []) {
     if (this.feedbackList && !this.feedbackList.length) this.loading = true;
     this.$subscription.add(
@@ -199,10 +219,19 @@ export class FeedbackListComponent implements OnInit {
     );
   }
 
+  /**
+   * @function updateTabFilterCounts Function to update Tab filter count.
+   * @param object
+   */
   updateTabFilterCounts(object) {
     this.tabFilterItems.forEach((item) => (item.total = object[item.value]));
   }
 
+  /**
+   * @function fetchDataFrom Returns an observable for feedback list.
+   * @param queries
+   * @returns
+   */
   fetchDataFrom(queries): Observable<any> {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
@@ -210,6 +239,10 @@ export class FeedbackListComponent implements OnInit {
     return this.cardService.getFeedbackList(config);
   }
 
+  /**
+   * @function getHotelId Function to get hotel id.
+   * @param globalQueries
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
@@ -218,17 +251,27 @@ export class FeedbackListComponent implements OnInit {
     });
   }
 
+  /**
+   * @function enableSearch function to enable search.
+   */
   enableSearch() {
     this.parentFG.patchValue({ search: '' });
     this.enableSearchField = true;
   }
 
+  /**
+   * @function clearSearch function to clear search
+   */
   clearSearch() {
     this.parentFG.patchValue({ search: '' });
     this.enableSearchField = false;
     this.loading = true;
   }
 
+  /**
+   * @function getSearchValue Function to get search value.
+   * @param event
+   */
   getSearchValue(event) {
     if (event.status) {
       this.feedbackList = new FeedbackList().deserialize(
@@ -255,6 +298,10 @@ export class FeedbackListComponent implements OnInit {
     this.loadData();
   }
 
+  /**
+   * @function setSelectedItem
+   * @param item
+   */
   setSelectedItem(item) {
     this.cardService.$selectedFeedback.next(item);
     this.selectedFeedback = item;
@@ -268,6 +315,9 @@ export class FeedbackListComponent implements OnInit {
     this.showFilter = false;
   }
 
+  /**
+   * @function loadData Function to load data feedback user list data.
+   */
   loadData() {
     if (this.search.length) {
       this.loading = true;
@@ -311,6 +361,9 @@ export class FeedbackListComponent implements OnInit {
     }
   }
 
+  /**
+   * @function onScroll Function to load data on scrolling.
+   */
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
     if (!this.search.length)
@@ -327,6 +380,9 @@ export class FeedbackListComponent implements OnInit {
       }
   }
 
+  /**
+   * @function clearRecords Function to clear records on changing tab label.
+   */
   clearRecords() {
     this.feedbackList = new FeedbackList().deserialize(
       { records: [] },
@@ -336,10 +392,32 @@ export class FeedbackListComponent implements OnInit {
     );
   }
 
+  /**
+   * @function search Function for search.
+   */
   get search(): string {
     return this.parentFG.get('search')?.value;
   }
 
+  getRatingColorCode(rating) {
+    if (this.feedbackType === 'stayFeedbacks') {
+      return this.colorMap.stayFeedbacks[1].colorCode;
+    } else {
+      let colorCode = '';
+      Object.keys(this.colorMap.transactionalFeedbacks).forEach((element) => {
+        const a = this.colorMap.transactionalFeedbacks[element];
+        const [min, max] = a.scale.split('-');
+        if (rating >= min && rating <= max) {
+          colorCode = a.colorCode;
+        }
+      });
+      return colorCode;
+    }
+  }
+
+  /**
+   * @function ngOnDestroy Function to unsubscribe subscription.
+   */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

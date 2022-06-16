@@ -1,5 +1,4 @@
 @import 'main';
-
 .list-container {
   width: 345px;
   height: 100%;
@@ -68,7 +67,14 @@
         font-style: normal;
         line-height: normal;
         letter-spacing: 0.72px;
+        &__roomAndService {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+        }
         &__room {
+          display: flex;
+          gap: 10px;
           font-size: 10px;
           font-weight: bold;
           font-stretch: normal;
@@ -80,6 +86,40 @@
           margin-bottom: 13px;
           display: flex;
           align-items: center;
+          .rating {
+            width: 21px;
+            height: 20px;
+            padding: 4.5px 8px 2.5px 8px;
+            border-radius: 5px;
+            color: white;
+          }
+        }
+        &__services {
+          font-size: 10px;
+          font-weight: normal;
+          font-stretch: normal;
+          font-style: normal;
+          letter-spacing: 0.66px;
+          text-align: center;
+          border-radius: 20px;
+          background-color: #fdf4e5;
+          padding: 4px 10px;
+          display: flex;
+          gap: 7px;
+          align-items: center;
+          &__name {
+            color: #ff8f00;
+          }
+          &__length {
+            padding: 5px 0;
+            color: #ffffff;
+            margin: 0 0px;
+            text-align: center;
+            min-width: 20px;
+            border-radius: 50%;
+            font-size: 9px;
+            background-color: #ff8f00;
+          }
         }
         &__name {
           font-size: 12px;
@@ -111,7 +151,7 @@
           align-items: center;
           color: #727272;
           &__date {
-            width: 44px;
+            width: 62px;
           }
         }
       }
@@ -232,4 +272,11 @@
     text-align: left;
     color: #c5c5c5;
   }
+}
+
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: flex;
 }

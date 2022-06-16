@@ -4,7 +4,7 @@
     (click)="clearSearch()"
     class="cross_icon"
     *ngIf="parentFG.get('search')?.value.length; else searchicon"
-    >cancel</mat-icon
+    >{{ 'filter.cancel' | translate }}</mat-icon
   >
   <ng-template #searchicon>
     <div class="cross_icon">

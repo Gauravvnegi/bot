@@ -73,6 +73,9 @@
   height: auto;
   color: #c5c5c5;
   min-width: 3rem !important;
+  .svg path {
+    fill:#c5c5c5; 
+  }
 }
 
 :host ::ng-deep .mat-tab-label-active {
@@ -92,6 +95,7 @@
 :host ::ng-deep .mat-tab-labels {
   display: block;
 }
+
 
 :host ::ng-deep .mat-ink-bar {
   display: none;

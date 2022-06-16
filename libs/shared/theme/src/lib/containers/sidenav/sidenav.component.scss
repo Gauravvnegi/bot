@@ -66,6 +66,8 @@
 
 .nav {
   padding-top: 15px;
+
+  .spanWidth{margin-left: 5px; width: 21px;}
 }
 
 ul {
@@ -117,6 +119,9 @@ ul {
   -o-transition: all 400ms;
   transition: all 400ms;
 }
+.collapse{
+  a{height: 43px;}
+}
 
 .collapse-a {
   position: relative;
@@ -148,4 +153,10 @@ ul {
   -ms-transform: rotate(0deg);
   -o-transform: rotate(0deg);
   transform: rotate(0deg);
+}
+
+.collapse-container{
+  a{
+    padding: 0 15px;
+  }
 }

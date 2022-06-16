@@ -3,7 +3,9 @@
 .layoutMessageCheck {
   @include flex-between-center();
   @include width(75%);
-}
+  .margBtm{margin-bottom: -6px;
+  }}
+  
 .layoutFilterContent {
   color: $light-grey;
   font-size: $font12;
@@ -38,6 +40,9 @@
     justify-content: flex-start;
     gap: 2%;
     @include width(100%);
+  }
+  .positionRel{
+    position: relative;
   }
   .temp-width {
     width: 100%;

@@ -111,6 +111,7 @@
 
 :host ::ng-deep .data-table-row {
   height: 80px;
+  
   &:hover {
     cursor: pointer;
     background: $table-hover-background !important;
@@ -147,7 +148,9 @@ td {
   letter-spacing: 0.72px;
   color: #484848;
 }
-
+.ht{
+height: 80px;
+}
 .topic-name {
   opacity: 0.4;
 }

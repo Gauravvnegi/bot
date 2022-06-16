@@ -231,6 +231,9 @@
 .chat-height {
   height: 75vh;
 }
+.posRel{
+  position: relative;
+}
 .d-flex {
   display: flex;
 }
@@ -431,3 +434,24 @@
   opacity: 0.5;
   pointer-events: none;
 }
+.bg{
+  height: 61px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f4f5f7;
+  padding: 20px 15px;
+
+}
+.txt{
+      font-size: 16px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: #002046;
+}
+
+.click{cursor: pointer;}

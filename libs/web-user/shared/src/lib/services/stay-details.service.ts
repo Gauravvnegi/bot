@@ -55,7 +55,7 @@ export class StayDetailsService extends ApiService {
     stayDetailsFieldSchema[
       'travellingWithLabel'
     ] = new FieldSchema().deserialize({
-      master_label: 'Travelling with',
+      master_label: 'Room Occupancy',
       style: {
         childLabelStyles: {
           'font-weight': 700,

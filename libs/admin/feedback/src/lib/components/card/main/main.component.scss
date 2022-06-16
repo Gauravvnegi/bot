@@ -17,6 +17,9 @@
       border-radius: 5px 5px 0px 0px;
       opacity: 1;
       display: flex;
+
+      .divWidth{ width: calc(100% - 345px);}
+     
       .guest-info-enable {
         position: absolute;
         right: 24px;

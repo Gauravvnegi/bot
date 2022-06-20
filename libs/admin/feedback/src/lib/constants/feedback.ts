@@ -529,4 +529,11 @@ export const feedback = {
     distribution: 'Feedback Distribution',
     responseRate: 'Response Rate',
   },
+  keyLabels: {
+    topLow: [
+      { label: '<40', colorCode: '#ef1d45' },
+      { label: '40-80', colorCode: '#ff8f00' },
+      { label: '80<', colorCode: '#508919' },
+    ],
+  },
 };

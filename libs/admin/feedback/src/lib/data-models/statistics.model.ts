@@ -228,7 +228,12 @@ export class PerformanceNPS {
     input.npsPerformace.forEach((data) => {
       this.performances.push({
         ...data,
-        colorCode: data.score > 0 ? '#508919' : '#CD3A2D',
+        colorCode:
+          data.score < 40
+            ? '#ef1d45'
+            : data.score <= 80
+            ? '#ff8f00'
+            : '#508919',
       });
     });
     input.npsPerformace.sort(function (a, b) {

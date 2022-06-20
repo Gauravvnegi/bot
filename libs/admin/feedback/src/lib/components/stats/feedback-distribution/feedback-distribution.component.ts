@@ -194,7 +194,7 @@ export class FeedbackDistributionComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
     dialogConfig.data = {
-      tableName: 'Feedback Distribution',
+      tableName: feedback.tableName.distribution,
       tabFilterItems: this.createTabFilterItem(),
       tabFilterIdx: 0,
       globalFeedbackFilterType: this.globalFeedbackFilterType,

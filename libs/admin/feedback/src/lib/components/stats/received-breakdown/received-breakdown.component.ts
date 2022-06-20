@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
-  CircularChart,
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -15,50 +15,72 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
-import { SharedStats } from '../../../data-models/statistics.model';
+import { Bifurcation } from '../../../data-models/statistics.model';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
-  selector: 'hospitality-bot-shared',
-  templateUrl: './shared.component.html',
-  styleUrls: ['./shared.component.scss'],
+  selector: 'hospitality-bot-received-breakdown',
+  templateUrl: './received-breakdown.component.html',
+  styleUrls: ['./received-breakdown.component.scss'],
 })
-export class SharedComponent implements OnInit {
+export class ReceivedBreakdownComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
+  entityType: string = 'GTM';
   tabfeedbackType: string;
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
-  stats: SharedStats;
-  chart: CircularChart = {
-    labels: [],
-    data: [[]],
-    type: chartConfig.type.doughnut,
-    legend: false,
-    colors: [
+  stats: Bifurcation;
+  bifurcationFG: FormGroup;
+  keyLabels = [
+    { label: 'GTM', key: 'GTM' },
+    { label: 'ALL', key: 'ALL' },
+    { label: 'Others', key: 'OTHERS' },
+  ];
+  feedbackChart = {
+    Labels: [],
+    Data: [[]],
+    Type: chartConfig.type.doughnut,
+    Legend: false,
+    Colors: [
       {
         backgroundColor: [chartConfig.defaultColor],
         borderColor: [chartConfig.defaultColor],
       },
     ],
-    options: chartConfig.options.shared,
+    Options: chartConfig.options.distribution,
   };
+  feedbackConfig = feedback;
+
   constructor(
     protected _adminUtilityService: AdminUtilityService,
     protected _statisticService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
-    protected _dateService: DateService,
+    protected dateService: DateService,
     protected _translateService: TranslateService,
-    protected _modalService: ModalService
+    protected _modalService: ModalService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    this.initFG();
     this.registerListeners();
+  }
+
+  /**
+   * @function initFG Initializes the form group.
+   */
+  initFG(): void {
+    this.bifurcationFG = this.fb.group({
+      bifurcation: ['GTM'],
+    });
   }
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenForReadStatusChange();
     if (
       this.globalFeedbackFilterType === feedback.types.transactional ||
       this.globalFeedbackFilterType === feedback.types.both
@@ -70,7 +92,7 @@ export class SharedComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
-          calenderType: this._dateService.getCalendarType(
+          calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
             this._globalFilterService.timezone
@@ -90,10 +112,31 @@ export class SharedComponent implements OnInit {
         )
           this.globalQueries = [
             ...this.globalQueries,
-            { entityIds: this._statisticService.outletIds },
+            {
+              entityIds: this._statisticService.outletIds,
+            },
           ];
         this.setEntityId(data['filter'].value.feedback.feedbackType);
         this.getStats();
+      })
+    );
+  }
+
+  stopOpenModal(event) {
+    event.stopPropagation();
+  }
+  /**
+   * @function handleChannelChange Handles the channel dropdown value change.
+   * @param event The material select change event.
+   */
+  handleBifurcationChange(event: MatSelectChange): void {
+    this.entityType = event.value;
+    this.getStats();
+  }
+  listenForReadStatusChange() {
+    this.$subscription.add(
+      this._statisticService.markReadStatusChanged.subscribe((response) => {
+        if (response) this.getStats();
       })
     );
   }
@@ -131,7 +174,7 @@ export class SharedComponent implements OnInit {
   }
 
   /**
-   * @function getStats To get the shared stat data.
+   * @function getStats To get received feedback bifurcation data.
    */
   getStats(): void {
     const config = {
@@ -139,51 +182,49 @@ export class SharedComponent implements OnInit {
         ...this.globalQueries,
         {
           feedbackType: this.getFeedbackType(),
+          entityType: this.entityType,
         },
       ]),
     };
     this.$subscription.add(
-      this._statisticService.getSharedStats(config).subscribe((response) => {
-        this.stats = new SharedStats().deserialize(response);
-        this.initGraph(
-          this.stats.feedbacks.reduce(
-            (accumulator, current) => accumulator + current.count,
-            0
-          ) === 0
-        );
-      })
+      this._statisticService
+        .getBifurcationStats(config)
+        .subscribe((response) => {
+          this.stats = new Bifurcation().deserialize(response);
+          this.initFeedbackChart(
+            this.stats.feedbacks.reduce(
+              (accumulator, current) => accumulator + current.score,
+              0
+            ) === 0
+          );
+        })
     );
   }
 
   /**
-   * @function initGraph To initialize the graph data.
+   * @function initFeedbackChart To initialize chart data.
    * @param defaultGraph The data status.
    */
-  initGraph(defaultGraph = true): void {
-    this.chart.labels = [];
-    this.chart.data = [[]];
-    this.chart.colors = [
-      {
-        backgroundColor: [],
-        borderColor: [],
-      },
-    ];
+  initFeedbackChart(defaultGraph: boolean): void {
+    this.feedbackChart.Data[0].length = this.feedbackChart.Labels.length = this.feedbackChart.Colors[0].backgroundColor.length = this.feedbackChart.Colors[0].borderColor.length = 0;
     if (defaultGraph) {
       this._translateService
         .get('no_data_chart')
-        .subscribe((message) => this.chart.labels.push(message));
-      this.chart.data[0].push(100);
-      this.chart.colors[0].backgroundColor.push(chartConfig.defaultColor);
-      this.chart.colors[0].borderColor.push(chartConfig.defaultColor);
+        .subscribe((message) => (this.feedbackChart.Labels = [message]));
+      this.feedbackChart.Colors[0].backgroundColor.push(
+        chartConfig.defaultColor
+      );
+      this.feedbackChart.Colors[0].borderColor.push(chartConfig.defaultColor);
+      this.feedbackChart.Data = [[100]];
       return;
     }
-
-    this.stats.feedbacks.map((data) => {
-      if (data.count) {
-        this.chart.labels.push(data.label);
-        this.chart.data[0].push(data.count);
-        this.chart.colors[0].backgroundColor.push(data.color);
-        this.chart.colors[0].borderColor.push(data.color);
+    const data = this.stats.feedbacks;
+    data.map((feedback) => {
+      if (feedback.score) {
+        this.feedbackChart.Data[0].push(feedback.score);
+        this.feedbackChart.Labels.push(feedback.label);
+        this.feedbackChart.Colors[0].backgroundColor.push(feedback.color);
+        this.feedbackChart.Colors[0].borderColor.push(feedback.color);
       }
     });
   }
@@ -199,16 +240,19 @@ export class SharedComponent implements OnInit {
       : this.tabfeedbackType;
   }
 
-  openTableModal() {
+  openTableModal(event) {
+    event.stopPropagation();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
     dialogConfig.data = {
-      tableName: 'Response Rate',
+      tableName: feedback.tableName.receivedBreakdown,
       tabFilterItems: this.createTabFilterItem(),
-      tabFilterIdx: 0,
+      tabFilterIdx: this.keyLabels.findIndex(
+        (item) => item.key === this.entityType
+      ),
       globalFeedbackFilterType: this.globalFeedbackFilterType,
-      config: [{ feedbackGraph: 'REQUESTED' }],
+      config: [{ feedbackGraph: 'BIFURCATIONS' }],
       feedbackType: this.getFeedbackType(),
     };
     const detailCompRef = this._modalService.openDialog(
@@ -221,18 +265,17 @@ export class SharedComponent implements OnInit {
   }
 
   createTabFilterItem() {
-    return this.stats.feedbacks.map((keyObj) => {
+    return this.keyLabels.map((keyObj) => {
       return {
         label: keyObj.label,
         content: '',
         value: keyObj.key,
         disabled: false,
         total: 0,
-        chips: feedback.chips.feedbackDatatable,
+        chips: this.feedbackConfig.chips.feedbackDatatable,
       };
     });
   }
-
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

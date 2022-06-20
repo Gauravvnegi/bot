@@ -524,4 +524,9 @@ export const feedback = {
       },
     ],
   },
+  tableName: {
+    receivedBreakdown: 'Received Breakdown',
+    distribution: 'Feedback Distribution',
+    responseRate: 'Response Rate',
+  },
 };

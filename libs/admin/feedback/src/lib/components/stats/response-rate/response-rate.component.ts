@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  CircularChart,
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -15,72 +15,50 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
-import { Bifurcation, GTM } from '../../../data-models/statistics.model';
+import { SharedStats } from '../../../data-models/statistics.model';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
-import { MatSelectChange } from '@angular/material/select';
 
 @Component({
-  selector: 'hospitality-bot-overall-received-bifurcation',
-  templateUrl: './overall-received-bifurcation.component.html',
-  styleUrls: ['./overall-received-bifurcation.component.scss'],
+  selector: 'hospitality-bot-response-rate',
+  templateUrl: './response-rate.component.html',
+  styleUrls: ['./response-rate.component.scss'],
 })
-export class OverallReceivedBifurcationComponent implements OnInit {
+export class ResponseRateComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
-  entityType: string = 'GTM';
   tabfeedbackType: string;
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
-  stats: Bifurcation;
-  bifurcationFG: FormGroup;
-  keyLabels = [
-    { label: 'GTM', key: 'GTM' },
-    { label: 'ALL', key: 'ALL' },
-    { label: 'Others', key: 'OTHERS' },
-  ];
-  feedbackChart = {
-    Labels: [],
-    Data: [[]],
-    Type: chartConfig.type.doughnut,
-    Legend: false,
-    Colors: [
+  stats: SharedStats;
+  chart: CircularChart = {
+    labels: [],
+    data: [[]],
+    type: chartConfig.type.doughnut,
+    legend: false,
+    colors: [
       {
         backgroundColor: [chartConfig.defaultColor],
         borderColor: [chartConfig.defaultColor],
       },
     ],
-    Options: chartConfig.options.distribution,
+    options: chartConfig.options.shared,
   };
-  feedbackConfig = feedback;
-
   constructor(
     protected _adminUtilityService: AdminUtilityService,
     protected _statisticService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,
     protected _snackbarService: SnackBarService,
-    protected dateService: DateService,
+    protected _dateService: DateService,
     protected _translateService: TranslateService,
-    protected _modalService: ModalService,
-    private fb: FormBuilder
+    protected _modalService: ModalService
   ) {}
 
   ngOnInit(): void {
-    this.initFG();
     this.registerListeners();
-  }
-
-  /**
-   * @function initFG Initializes the form group.
-   */
-  initFG(): void {
-    this.bifurcationFG = this.fb.group({
-      bifurcation: ['GTM'],
-    });
   }
 
   registerListeners(): void {
     this.listenForGlobalFilters();
-    this.listenForReadStatusChange();
     if (
       this.globalFeedbackFilterType === feedback.types.transactional ||
       this.globalFeedbackFilterType === feedback.types.both
@@ -92,7 +70,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         let calenderType = {
-          calenderType: this.dateService.getCalendarType(
+          calenderType: this._dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
             this._globalFilterService.timezone
@@ -112,31 +90,10 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         )
           this.globalQueries = [
             ...this.globalQueries,
-            {
-              entityIds: this._statisticService.outletIds,
-            },
+            { entityIds: this._statisticService.outletIds },
           ];
         this.setEntityId(data['filter'].value.feedback.feedbackType);
         this.getStats();
-      })
-    );
-  }
-
-  stopOpenModal(event) {
-    event.stopPropagation();
-  }
-  /**
-   * @function handleChannelChange Handles the channel dropdown value change.
-   * @param event The material select change event.
-   */
-  handleBifurcationChange(event: MatSelectChange): void {
-    this.entityType = event.value;
-    this.getStats();
-  }
-  listenForReadStatusChange() {
-    this.$subscription.add(
-      this._statisticService.markReadStatusChanged.subscribe((response) => {
-        if (response) this.getStats();
       })
     );
   }
@@ -174,7 +131,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
   }
 
   /**
-   * @function getStats To get received feedback bifurcation data.
+   * @function getStats To get the shared stat data.
    */
   getStats(): void {
     const config = {
@@ -182,49 +139,51 @@ export class OverallReceivedBifurcationComponent implements OnInit {
         ...this.globalQueries,
         {
           feedbackType: this.getFeedbackType(),
-          entityType: this.entityType,
         },
       ]),
     };
     this.$subscription.add(
-      this._statisticService
-        .getBifurcationStats(config)
-        .subscribe((response) => {
-          this.stats = new Bifurcation().deserialize(response);
-          this.initFeedbackChart(
-            this.stats.feedbacks.reduce(
-              (accumulator, current) => accumulator + current.score,
-              0
-            ) === 0
-          );
-        })
+      this._statisticService.getSharedStats(config).subscribe((response) => {
+        this.stats = new SharedStats().deserialize(response);
+        this.initGraph(
+          this.stats.feedbacks.reduce(
+            (accumulator, current) => accumulator + current.count,
+            0
+          ) === 0
+        );
+      })
     );
   }
 
   /**
-   * @function initFeedbackChart To initialize chart data.
+   * @function initGraph To initialize the graph data.
    * @param defaultGraph The data status.
    */
-  initFeedbackChart(defaultGraph: boolean): void {
-    this.feedbackChart.Data[0].length = this.feedbackChart.Labels.length = this.feedbackChart.Colors[0].backgroundColor.length = this.feedbackChart.Colors[0].borderColor.length = 0;
+  initGraph(defaultGraph = true): void {
+    this.chart.labels = [];
+    this.chart.data = [[]];
+    this.chart.colors = [
+      {
+        backgroundColor: [],
+        borderColor: [],
+      },
+    ];
     if (defaultGraph) {
       this._translateService
         .get('no_data_chart')
-        .subscribe((message) => (this.feedbackChart.Labels = [message]));
-      this.feedbackChart.Colors[0].backgroundColor.push(
-        chartConfig.defaultColor
-      );
-      this.feedbackChart.Colors[0].borderColor.push(chartConfig.defaultColor);
-      this.feedbackChart.Data = [[100]];
+        .subscribe((message) => this.chart.labels.push(message));
+      this.chart.data[0].push(100);
+      this.chart.colors[0].backgroundColor.push(chartConfig.defaultColor);
+      this.chart.colors[0].borderColor.push(chartConfig.defaultColor);
       return;
     }
-    const data = this.stats.feedbacks;
-    data.map((feedback) => {
-      if (feedback.score) {
-        this.feedbackChart.Data[0].push(feedback.score);
-        this.feedbackChart.Labels.push(feedback.label);
-        this.feedbackChart.Colors[0].backgroundColor.push(feedback.color);
-        this.feedbackChart.Colors[0].borderColor.push(feedback.color);
+
+    this.stats.feedbacks.map((data) => {
+      if (data.count) {
+        this.chart.labels.push(data.label);
+        this.chart.data[0].push(data.count);
+        this.chart.colors[0].backgroundColor.push(data.color);
+        this.chart.colors[0].borderColor.push(data.color);
       }
     });
   }
@@ -240,19 +199,16 @@ export class OverallReceivedBifurcationComponent implements OnInit {
       : this.tabfeedbackType;
   }
 
-  openTableModal(event) {
-    event.stopPropagation();
+  openTableModal() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
     dialogConfig.data = {
-      tableName: 'Received Breakdown',
+      tableName: feedback.tableName.responseRate,
       tabFilterItems: this.createTabFilterItem(),
-      tabFilterIdx: this.keyLabels.findIndex(
-        (item) => item.key === this.entityType
-      ),
+      tabFilterIdx: 0,
       globalFeedbackFilterType: this.globalFeedbackFilterType,
-      config: [{ feedbackGraph: 'BIFURCATIONS' }],
+      config: [{ feedbackGraph: 'REQUESTED' }],
       feedbackType: this.getFeedbackType(),
     };
     const detailCompRef = this._modalService.openDialog(
@@ -265,17 +221,18 @@ export class OverallReceivedBifurcationComponent implements OnInit {
   }
 
   createTabFilterItem() {
-    return this.keyLabels.map((keyObj) => {
+    return this.stats.feedbacks.map((keyObj) => {
       return {
         label: keyObj.label,
         content: '',
         value: keyObj.key,
         disabled: false,
         total: 0,
-        chips: this.feedbackConfig.chips.feedbackDatatable,
+        chips: feedback.chips.feedbackDatatable,
       };
     });
   }
+
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

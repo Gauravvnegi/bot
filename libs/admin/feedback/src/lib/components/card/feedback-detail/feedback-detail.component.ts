@@ -5,7 +5,10 @@ import {
   AdminUtilityService,
   UserService,
 } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
+import { card } from '../../../constants/card';
 import { feedback } from '../../../constants/feedback';
 import {
   Departmentpermission,
@@ -15,9 +18,6 @@ import {
 } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
-import * as FileSaver from 'file-saver';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { card } from '../../../constants/card';
 
 @Component({
   selector: 'hospitality-bot-feedback-detail',
@@ -73,7 +73,7 @@ export class FeedbackDetailComponent implements OnInit {
       this.cardService.$selectedFeedback.subscribe((response) => {
         this.feedback = response;
         this.feedbackFG?.patchValue({ assignee: response?.userId });
-        if (response) {
+        if (response)
           this.assigneeList = new UserList().deserialize(
             [
               this.userService.userPermissions,
@@ -81,7 +81,6 @@ export class FeedbackDetailComponent implements OnInit {
             ],
             response.departmentName
           );
-        }
       })
     );
   }
@@ -91,14 +90,15 @@ export class FeedbackDetailComponent implements OnInit {
    */
   getUserPermission() {
     this.$subscription.add(
-      this.userService
-        .getUserPermission(this.feedbackType)
-        .subscribe((response) => {
+      this.userService.getUserPermission(this.feedbackType).subscribe(
+        (response) => {
           this.userPermissions = new Departmentpermissions().deserialize(
             response.userCategoryPermission
           );
           this.userService.userPermissions = response;
-        })
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
     );
   }
 
@@ -117,9 +117,15 @@ export class FeedbackDetailComponent implements OnInit {
     this.$subscription.add(
       this.cardService
         .updateFeedbackAssignee(this.feedback.id, event.value)
-        .subscribe((response) => {
-          this.cardService.$assigneeChange.next({ status: true });
-        })
+        .subscribe(
+          (response) => {
+            this.cardService.$assigneeChange.next({ status: true });
+            this._snackbarService.openSnackBarAsText('Assignee updated.', '', {
+              panelClass: 'success',
+            });
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
     );
   }
 
@@ -159,7 +165,7 @@ export class FeedbackDetailComponent implements OnInit {
 
   updateFeedbackState() {
     let data = {
-      status: card.feedbackState.status,
+      status: card.feedbackState.resolved,
     };
     this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
       (response) => {

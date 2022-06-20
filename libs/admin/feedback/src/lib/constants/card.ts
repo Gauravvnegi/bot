@@ -47,7 +47,7 @@ export const card = {
   },
   num: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   feedbackState: {
-    status: 'RESOLVED',
+    resolved: 'RESOLVED',
   },
   pagination: {
     offset: 0,

@@ -23,12 +23,15 @@
   padding-bottom: $padding-small;
   width: 100%;
   position: relative;
+  box-sizing: border-box;
 }
 
 .close_wrapper {
   position: absolute;
   right: 14px;
-  top: -13px;
+  
+    top: 0;
+  
 }
 
 .temp-div {
@@ -40,9 +43,10 @@
 
 .modal-title {
   text-align: center;
-  width: 33%;
+  width:  auto;
   .title {
     margin-bottom: $margin-small;
+    margin-top: 0.75rem;
   }
   p {
     text-align: center;
@@ -56,8 +60,18 @@
   }
   @media only screen and (max-width: $M) {
     font-size: $font-responsive-small;
-    width: 70%;
+
+   
   }
+  @media screen and (max-width:700px) {
+    width: 60%;
+  }
+  
+  @media screen and (min-width:$M) {
+    width: 38%;
+    
+  }
+ 
 }
 
 .close {

@@ -1,6 +1,8 @@
 <div>
   <form [formGroup]="subPackageForm">
-    <h3 class="heading">Enter below details to book {{subPackageForm.get('label').value}}</h3>
+    <h3 class="heading">
+      Enter below details to book {{ subPackageForm.get('label').value }}
+    </h3>
     <div class="wrapper">
       <div class="wrapper__item">
         <web-user-input
@@ -50,6 +52,8 @@
         ></web-user-input>
       </div>
     </div>
-    <h4>Note: Our in house chaffeur will call you on registered number.</h4>
+    <h4 style="margin-bottom: 1rem;">
+      Note: Our in house chaffeur will call you on registered number.
+    </h4>
   </form>
 </div>

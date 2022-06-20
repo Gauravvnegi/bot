@@ -49,6 +49,7 @@
     @media (max-width: $tablet) {
       @include width(42.6%);
     }
+    .width{  width:100%;}
     .mat-label {
       width: 150px;
       color: #b5b5c3;

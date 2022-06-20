@@ -672,3 +672,13 @@
 :host ::ng-deep .item {
   color: $primary-purple !important;
 }
+.flx{
+  display: flex;
+        align-items: center;
+        
+}
+.flxExt{
+  @extend .flx;
+  margin: 15px 0;
+        padding: 0 30px 20px;
+}

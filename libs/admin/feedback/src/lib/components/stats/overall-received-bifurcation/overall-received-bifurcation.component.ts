@@ -36,6 +36,7 @@ export class OverallReceivedBifurcationComponent implements OnInit {
   keyLabels = [
     { label: 'GTM', key: 'GTM' },
     { label: 'ALL', key: 'ALL' },
+    { label: 'Others', key: 'OTHERS' },
   ];
   feedbackChart = {
     Labels: [],
@@ -247,7 +248,9 @@ export class OverallReceivedBifurcationComponent implements OnInit {
     dialogConfig.data = {
       tableName: 'Received Breakdown',
       tabFilterItems: this.createTabFilterItem(),
-      tabFilterIdx: 0,
+      tabFilterIdx: this.keyLabels.findIndex(
+        (item) => item.key === this.entityType
+      ),
       globalFeedbackFilterType: this.globalFeedbackFilterType,
       config: [{ feedbackGraph: 'BIFURCATIONS' }],
       feedbackType: this.getFeedbackType(),

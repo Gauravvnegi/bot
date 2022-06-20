@@ -59,7 +59,7 @@
     font-size: 8px;
   }
 }
-.sideMargin{
+.sideMargin {
   margin: 0 -20px;
 }
 
@@ -227,6 +227,9 @@
 .guest {
   color: $dark-grey;
   font-weight: 500;
+  &-status {
+    margin-bottom: 6px;
+  }
   &-name {
     color: $dark-grey;
   }

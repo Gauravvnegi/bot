@@ -1,7 +1,9 @@
 <div
   class="footer"
   [formGroup]="feedbackFG"
-  [ngClass]="{ disabled: !getDepartmentAllowed() }"
+  [ngClass]="{
+    disabled: !getDepartmentAllowed()
+  }"
 >
   <div class="nickname">{{ feedback?.getProfileNickName() }}</div>
   <div

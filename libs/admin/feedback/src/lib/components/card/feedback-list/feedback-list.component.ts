@@ -1,6 +1,5 @@
 import {
   Component,
-  DebugNode,
   ElementRef,
   HostListener,
   Input,
@@ -16,13 +15,10 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
-import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
-import { forEach, keys, split } from 'lodash';
 import { Observable, Subscription } from 'rxjs';
 import { card } from '../../../constants/card';
 import {
   FeedbackList,
-  FeedbackRecord,
   User,
   UserList,
 } from '../../../data-models/feedback-card.model';

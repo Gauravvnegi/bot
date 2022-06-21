@@ -42,11 +42,13 @@
     <mat-tab>
       <ng-template mat-tab-label>
         <div>
-          <img src="assets/svg/requests.svg" alt="Requests" />
+          <img src="assets/svg/reload.svg" alt="Requests" />
         </div>
       </ng-template>
       <ng-template matTabContent>
-        <hospitality-bot-guest-requests></hospitality-bot-guest-requests>
+        <hospitality-bot-guest-timeline
+          [guestId]="guestId"
+        ></hospitality-bot-guest-timeline>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

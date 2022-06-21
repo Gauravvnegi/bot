@@ -23,12 +23,15 @@ import {
   FeedbackDetailComponent,
   SearchComponent,
   FeedbackDetailFooterComponent,
-  GuestInfoComponent,
-  GuestPersonalInfoComponent,
-  GuestBookingInfoComponent,
   FeedbackListFilterComponent,
 } from './components/card';
 import { ActionOverlayComponent } from './components/action-overlay/action-overlay.component';
+import {
+  GuestInfoComponent,
+  GuestBookingInfoComponent,
+  GuestPersonalInfoComponent,
+  GuestTimelineComponent,
+} from './components/guest-info';
 
 const appRoutes: Route[] = [
   {
@@ -40,7 +43,6 @@ const appRoutes: Route[] = [
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
-  declarations: [],
 })
 export class AdminFeedbackRoutingModule {
   static components = [
@@ -70,5 +72,6 @@ export class AdminFeedbackRoutingModule {
     GuestBookingInfoComponent,
     FeedbackListFilterComponent,
     FeedbackDetailModalComponent,
+    GuestTimelineComponent,
   ];
 }

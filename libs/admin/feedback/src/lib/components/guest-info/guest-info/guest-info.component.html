@@ -1,7 +1,7 @@
 <div class="guest-info">
-  <div class="close-icon" (click)="closeGuestInfo()">
-    &#10006;
-  </div>
+  <mat-icon (click)="closeGuestInfo()" class="close-icon" matSuffix
+    >keyboard_backspace
+  </mat-icon>
   <div>{{ 'guestData.info' | translate }}</div>
 </div>
 <div

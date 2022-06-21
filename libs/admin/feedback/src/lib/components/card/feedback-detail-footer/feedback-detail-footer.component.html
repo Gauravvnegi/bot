@@ -2,7 +2,7 @@
   class="footer"
   [formGroup]="feedbackFG"
   [ngClass]="{
-    disabled: !getDepartmentAllowed()
+    disabled: !getDepartmentAllowed() || feedback.status === 'NOACTION'
   }"
 >
   <div class="nickname">{{ feedback?.getProfileNickName() }}</div>

@@ -597,7 +597,11 @@
             <!-- status-image-initiated -->
             <td class="status-image">
               <ng-container
-                *ngIf="rowData.departmentId === undefined; else dropDown"
+                *ngIf="
+                  rowData.departmentId === undefined ||
+                    rowData.status === 'NOACTION';
+                  else dropDown
+                "
               >
                 <div
                   class="detailPage"
@@ -797,7 +801,11 @@
             <!-- status-image-initiated -->
             <td class="status-image">
               <ng-container
-                *ngIf="rowData.departmentId === undefined; else dropDown"
+                *ngIf="
+                  rowData.departmentId === undefined ||
+                    rowData.status === 'NOACTION';
+                  else dropDown
+                "
               >
                 <div
                   class="detailPage"

@@ -609,14 +609,21 @@
           <td class="comments">{{ rowData?.guestData.overAllNps }}</td>
           <td class="comments">{{ rowData?.guestData.churnProbalilty }}</td>
           <td class="status-image" (click)="$event.stopPropagation()">
-            <hospitality-bot-action-overlay
-              [rowDataStatus]="rowData?.status"
-              [guestId]="rowData?.departmentId"
-              [departmentName]="rowData?.departmentName"
-              [feedbackType]="tabFilterItems[tabFilterIdx]?.value"
-              (openDetail)="openDetailPage($event, rowData)"
-              (statusUpdate)="updateFeedbackState($event)"
-            ></hospitality-bot-action-overlay>
+            <ng-container *ngIf="rowData.status === 'NOACTION'; else dropDown">
+              <div class="detailPage" (click)="openDetailPage($event, rowData)">
+                View Detail
+              </div>
+            </ng-container>
+            <ng-template #dropDown>
+              <hospitality-bot-action-overlay
+                [rowDataStatus]="rowData?.status"
+                [guestId]="rowData?.departmentId"
+                [feedbackType]="tabFilterItems[tabFilterIdx]?.value"
+                [departmentName]="rowData?.departmentName"
+                (openDetail)="openDetailPage($event, rowData)"
+                (statusUpdate)="updateFeedbackState($event)"
+              ></hospitality-bot-action-overlay>
+            </ng-template>
           </td>
         </tr>
       </ng-container>
@@ -773,14 +780,21 @@
 
           <!-- status-image-initiated -->
           <td class="status-image" (click)="$event.stopPropagation()">
-            <hospitality-bot-action-overlay
-              [rowDataStatus]="rowData?.status"
-              [guestId]="rowData?.departmentId"
-              [feedbackType]="tabFilterItems[tabFilterIdx]?.value"
-              [departmentName]="rowData?.departmentName"
-              (openDetail)="openDetailPage($event, rowData)"
-              (statusUpdate)="updateFeedbackState($event)"
-            ></hospitality-bot-action-overlay>
+            <ng-container *ngIf="rowData.status === 'NOACTION'; else dropDown">
+              <div class="detailPage" (click)="openDetailPage($event, rowData)">
+                View Detail
+              </div>
+            </ng-container>
+            <ng-template #dropDown>
+              <hospitality-bot-action-overlay
+                [rowDataStatus]="rowData?.status"
+                [guestId]="rowData?.departmentId"
+                [feedbackType]="tabFilterItems[tabFilterIdx]?.value"
+                [departmentName]="rowData?.departmentName"
+                (openDetail)="openDetailPage($event, rowData)"
+                (statusUpdate)="updateFeedbackState($event)"
+              ></hospitality-bot-action-overlay>
+            </ng-template>
           </td>
         </tr>
       </ng-template>

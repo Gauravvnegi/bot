@@ -193,7 +193,8 @@
   <div class="guest-info-enable" *ngIf="guestInfoEnable" [@slideInOut]>
     <hospitality-bot-guest-info
       (closeInfo)="closeGuestInfo($event)"
-      [guestData]="data.feedback"
+      [guestModalData]="data.feedback"
+      [isModal]="true"
     ></hospitality-bot-guest-info>
   </div>
 </div>

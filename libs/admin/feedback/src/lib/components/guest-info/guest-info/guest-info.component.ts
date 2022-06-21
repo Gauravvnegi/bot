@@ -32,10 +32,9 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   @Output() onDetailsClose = new EventEmitter();
   bookingFG: FormGroup;
   @Input() feedback;
-
+  @Input() guestModalData;
   @ViewChild('matTab') matTab: MatTabGroup;
   $subscription = new Subscription();
-
   hotelId: string;
   isLoading = false;
   selectedIndex = 0;
@@ -43,6 +42,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   buttonConfig = card.buttonConfig;
   colorMap: any;
   guestData: Guest;
+  @Input() isModal = false;
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _snackBarService: SnackBarService,
@@ -53,7 +53,12 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   ngOnChanges() {}
 
   ngOnInit(): void {
-    this.registerListeners();
+    console.log(this.guestModalData);
+    if (this.isModal) {
+      this.loadGuestInfo();
+    } else {
+      this.registerListeners();
+    }
   }
 
   registerListeners(): void {
@@ -116,6 +121,9 @@ export class GuestInfoComponent implements OnInit, OnChanges {
   }
 
   loadGuestInfo(): void {
+    if (this.isModal) {
+      this.guestId = this.guestModalData.guest.id;
+    }
     this.$subscription.add(
       this.feedbackService.getGuestById(this.guestId).subscribe(
         (response) => {

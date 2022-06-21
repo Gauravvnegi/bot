@@ -31,6 +31,9 @@ import {
   GuestBookingInfoComponent,
   GuestPersonalInfoComponent,
   GuestTimelineComponent,
+  MentionsComponent,
+  RequestComponent,
+  FeedbackHistoryComponent,
 } from './components/guest-info';
 
 const appRoutes: Route[] = [
@@ -73,5 +76,8 @@ export class AdminFeedbackRoutingModule {
     FeedbackListFilterComponent,
     FeedbackDetailModalComponent,
     GuestTimelineComponent,
+    MentionsComponent,
+    RequestComponent,
+    FeedbackHistoryComponent,
   ];
 }

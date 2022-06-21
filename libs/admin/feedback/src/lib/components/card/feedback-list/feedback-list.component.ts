@@ -172,6 +172,7 @@ export class FeedbackListComponent implements OnInit {
         if (response) {
           this.entityType = response;
           this.filterData = { ...this.filterData, entityType: response };
+          this.selectedFeedback = null;
           this.loadData();
         }
       })
@@ -292,6 +293,7 @@ export class FeedbackListComponent implements OnInit {
     };
     this.pagination.offset = 0;
     this.cardService.$selectedFeedback.next(null);
+    this.selectedFeedback = null;
     this.loadData();
   }
 

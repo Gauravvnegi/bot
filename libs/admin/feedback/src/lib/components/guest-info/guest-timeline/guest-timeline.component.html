@@ -6,7 +6,9 @@
       </div>
     </ng-template>
     <ng-template matTabContent
-      ><hospitality-bot-feedback-history></hospitality-bot-feedback-history>
+      ><hospitality-bot-feedback-history
+        [guestId]="guestId"
+      ></hospitality-bot-feedback-history>
     </ng-template>
   </mat-tab>
   <mat-tab>
@@ -16,7 +18,7 @@
       </div>
     </ng-template>
     <ng-template matTabContent>
-      <hospitality-bot-mentions></hospitality-bot-mentions
+      <hospitality-bot-mentions [guestId]="guestId"></hospitality-bot-mentions
     ></ng-template>
   </mat-tab>
   <mat-tab>
@@ -26,7 +28,7 @@
       </div>
     </ng-template>
     <ng-template matTabContent
-      ><hospitality-bot-request></hospitality-bot-request>
+      ><hospitality-bot-request [guestId]="guestId"></hospitality-bot-request>
     </ng-template>
   </mat-tab>
 </mat-tab-group>

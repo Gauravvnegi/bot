@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵtransitiveScopesFor } from '@angular/core';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MarketingStats } from '../../../../data-models/stats.model';
 import { MarketingService } from '../../../../services/stats.service';
 
@@ -14,7 +14,7 @@ import { MarketingService } from '../../../../services/stats.service';
 })
 export class StatsViewComponent implements OnInit {
   globalQueries = [];
-  selectedInterval;
+  selectedInterval: string;
   hotelId: any;
   stats: MarketingStats;
   $subscription = new Subscription();
@@ -60,12 +60,14 @@ export class StatsViewComponent implements OnInit {
    * @function getHotelId To set the hotel id after extracting from filter array.
    * @param globalQueries The filter list with date and hotel filters.
    */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
+  getHotelId(globalQueries: any[]): void {
+    globalQueries.forEach(
+      (element: { hasOwnProperty: (arg0: string) => any; hotelId: any }) => {
+        if (element.hasOwnProperty('hotelId')) {
+          this.hotelId = element.hotelId;
+        }
       }
-    });
+    );
   }
 
   getMarketingCards(): void {
@@ -81,6 +83,7 @@ export class StatsViewComponent implements OnInit {
       )
     );
   }
+
   /**
    * @function ngOnDestroy to unsubscribe subscription
    */

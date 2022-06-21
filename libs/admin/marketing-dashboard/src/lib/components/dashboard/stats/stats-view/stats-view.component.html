@@ -2,7 +2,25 @@
   <div class="stats-container">
     <div class="stats" *ngFor="let item of stats?.chips">
       <div class="stats__text">{{ item.label }}</div>
-      <div class="stats__value">{{ item.score }}</div>
+      <div class="stats__value">
+        {{ item.score }}
+        <div
+          style="display: flex; align-items: center;"
+          *ngIf="
+            item.label === 'CTR' ||
+            item.label === 'Conversion Rate' ||
+            item.label === 'Total Open'
+          "
+        >
+          %
+          <div class="rating">
+            <div class="rating__percentage">
+              (0%)<img src="assets/svg/uparrow.svg" />
+            </div>
+            <div class="rating__days">In 30 Days</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

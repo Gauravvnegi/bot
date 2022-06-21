@@ -291,6 +291,7 @@ export class FeedbackListComponent implements OnInit {
       entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
     };
     this.pagination.offset = 0;
+    this.cardService.$selectedFeedback.next(null);
     this.loadData();
   }
 

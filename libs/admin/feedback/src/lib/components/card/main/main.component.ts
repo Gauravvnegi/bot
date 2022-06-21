@@ -113,6 +113,7 @@ export class MainComponent implements OnInit {
     this.cardService.$selectedEntityType.next(
       this.tabFilterItems[event.index].value
     );
+    this.cardService.$selectedFeedback.next(null);
   }
 
   ngOnDestroy(): void {

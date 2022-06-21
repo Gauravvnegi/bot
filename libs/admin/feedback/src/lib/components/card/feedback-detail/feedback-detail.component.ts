@@ -232,6 +232,23 @@ export class FeedbackDetailComponent implements OnInit {
     );
   }
 
+  downloadFeedback(event, id) {
+    event.stopPropagation();
+    this.$subscription.add(
+      this.cardService.getFeedbackPdf(id).subscribe(
+        (response) => {
+          const link = document.createElement('a');
+          link.href = response.fileDownloadUri;
+          link.target = '_blank';
+          link.download = response.fileName;
+          link.click();
+          link.remove();
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
+    );
+  }
+
   get feedbackServices() {
     if (this.feedback) {
       if (this.feedbackType === feedback.types.transactional)

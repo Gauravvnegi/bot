@@ -89,7 +89,26 @@
       }
     }
   }
-
+  .view-feedback-btn {
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
+    img {
+      width: 16px;
+      margin-right: 5px;
+    }
+    &__text {
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.07;
+      letter-spacing: 0.84px;
+      text-align: left;
+      color: #4b56c0;
+    }
+  }
   .guestInfoEditWrapper {
     display: flex;
     justify-content: center;
@@ -323,7 +342,7 @@
 .chat-height {
   height: 100%;
 }
-.posRel{
+.posRel {
   position: relative;
 }
 .d-flex {
@@ -526,27 +545,28 @@
   opacity: 0.5;
   pointer-events: none;
 }
-.bg{
+.bg {
   height: 61px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #f4f5f7;
   padding: 20px 15px;
-
 }
-.txt{
-      font-size: 16px;
-      font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
-      color: #002046;
+.txt {
+  font-size: 16px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.96px;
+  text-align: left;
+  color: #002046;
 }
 
-.click{cursor: pointer;}
+.click {
+  cursor: pointer;
+}
 
 .gray-image {
   filter: grayscale(100%);

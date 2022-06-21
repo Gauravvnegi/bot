@@ -89,7 +89,26 @@
       }
     }
   }
-
+  .view-feedback-btn {
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
+    img {
+      width: 16px;
+      margin-right: 5px;
+    }
+    &__text {
+      font-family: Roboto;
+      font-size: 14px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.07;
+      letter-spacing: 0.84px;
+      text-align: left;
+      color: #4b56c0;
+    }
+  }
   .guestInfoEditWrapper {
     display: flex;
     justify-content: center;
@@ -323,7 +342,7 @@
 .chat-height {
   height: 100%;
 }
-.posRel{
+.posRel {
   position: relative;
 }
 .d-flex {

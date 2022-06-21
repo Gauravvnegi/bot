@@ -21,13 +21,22 @@
           <img class="paper" src="assets/images/paper.png" alt="" />
           <p>Export Feedback</p>
         </div>
-        <img
-          class="icon"
-          src="assets/images/guest-info-icon .png"
-          [alt]=""
-          (click)="openGuestInfo()"
-        />
       </div>
+      <div
+        class="view-feedback-btn"
+        (click)="downloadFeedback($event, data.feedback.id)"
+      >
+        <img src="assets/svg/View.svg" alt="" />
+        <div class="view-feedback-btn__text">
+          View Feedback
+        </div>
+      </div>
+      <img
+        class="icon"
+        src="assets/images/guest-info-icon .png"
+        [alt]=""
+        (click)="openGuestInfo()"
+      />
     </div>
   </div>
   <div class="guestInfoOpen" [formGroup]="feedbackFG">

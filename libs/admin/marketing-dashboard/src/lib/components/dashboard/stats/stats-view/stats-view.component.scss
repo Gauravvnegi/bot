@@ -7,7 +7,7 @@
     .stats {
       height: 108px;
       width: 197px;
-      padding: 25px 46px 24px 42px;
+      padding: 25px 11px;
       border-radius: 5px;
       box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
       background-color: #fff;
@@ -34,6 +34,32 @@
         letter-spacing: 0.5px;
         text-align: center;
         color: #484848;
+        display: flex;
+        justify-content: center;
+        .rating {
+          padding: 0 4px;
+          &__percentage {
+            font-size: 12px;
+            font-weight: normal;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: left;
+            color: #3fb34b;
+          }
+          &__days {
+            font-family: Roboto;
+            font-size: 10px;
+            font-weight: 500;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            text-align: center;
+            color: #b4b4b4;
+          }
+        }
       }
     }
   }

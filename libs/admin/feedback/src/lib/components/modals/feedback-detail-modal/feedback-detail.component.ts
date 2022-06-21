@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -25,11 +18,23 @@ import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
 import { FeedbackDetailComponent } from '../../card';
 import * as FileSaver from 'file-saver';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'hospitality-bot-feedback-detail-modal',
   templateUrl: './feedback-detail.component.html',
   styleUrls: ['./feedback-detail.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({ transform: 'translateX(100%)' }),
+        animate('200ms ease-in', style({ transform: 'translateX(0%)' })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ transform: 'translateX(100%)' })),
+      ]),
+    ]),
+  ],
 })
 export class FeedbackDetailModalComponent extends FeedbackDetailComponent
   implements OnInit {
@@ -38,6 +43,7 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
   userPermissions: Departmentpermission[];
   $subscription = new Subscription();
   assigneeList;
+  guestInfoEnable = false;
   constructor(
     protected cardService: CardService,
     public _globalFilterService: GlobalFilterService,
@@ -58,6 +64,7 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
     });
+    this.cardService.$selectedFeedback.next(this.data.feedback);
   }
 
   ngOnInit(): void {
@@ -188,6 +195,14 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
         return this.data.feedback.services.services;
       return this.data.feedback.services;
     } else [];
+  }
+
+  openGuestInfo() {
+    this.guestInfoEnable = true;
+  }
+
+  closeGuestInfo(event) {
+    this.guestInfoEnable = false;
   }
 
   ngOnDestroy() {

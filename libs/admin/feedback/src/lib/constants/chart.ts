@@ -102,6 +102,40 @@ export const chartConfig = {
         yPadding: 10,
       },
     },
+    art: {
+      responsive: true,
+      scales: {
+        xAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              display: true,
+            },
+            ticks: {
+              min: 0,
+              max: 48,
+              stepSize: 6,
+            },
+          },
+        ],
+      },
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
+    },
   },
   colors: {
     distribution: [

@@ -31,8 +31,10 @@ export type BarColor = {
 };
 
 export type Bar = {
-  data: string[];
+  data: any[];
   label: string;
   fill?: boolean;
   borderDash?: number[];
+  backgroundColor?: string[];
+  hoverBackgroundColor?: string[];
 };

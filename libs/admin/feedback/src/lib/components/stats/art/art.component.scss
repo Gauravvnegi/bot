@@ -1,0 +1,65 @@
+@import 'main';
+
+.container {
+  background: #ffffff;
+  border: solid 1px #e2e2e2;
+  box-shadow: 0px 3px 6px #0000000d;
+  border-radius: 5px;
+}
+
+.info-icon {
+  position: relative;
+  cursor: pointer;
+  img {
+    margin: 3px 5px 0;
+    width: 14px;
+    height: 100%;
+  }
+  .tooltip {
+    position: absolute;
+    font: normal normal normal 12px/16px Roboto;
+    background-color: $white;
+    min-width: 160px;
+    border: 1px solid $border;
+    padding: 10px;
+    top: 120%;
+    left: -200%;
+    color: $tooltip;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px $border;
+    display: none;
+    .arrow {
+      position: absolute;
+      top: -10px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 10px solid $border;
+      left: 40%;
+      transform: translate(-50%);
+      &::before {
+        content: '';
+        top: 1px;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 9px solid $white;
+        left: -6px;
+        z-index: 3;
+        position: absolute;
+      }
+    }
+  }
+
+  &:hover {
+    .tooltip {
+      display: block;
+    }
+  }
+}
+
+.graph {
+  margin-top: 20px;
+}

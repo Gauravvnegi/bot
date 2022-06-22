@@ -35,6 +35,7 @@ import {
   RequestComponent,
   FeedbackHistoryComponent,
 } from './components/guest-info';
+import { ArtComponent } from './components/stats/art/art.component';
 
 const appRoutes: Route[] = [
   {
@@ -79,5 +80,6 @@ export class AdminFeedbackRoutingModule {
     MentionsComponent,
     RequestComponent,
     FeedbackHistoryComponent,
+    ArtComponent,
   ];
 }

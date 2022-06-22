@@ -8,13 +8,21 @@
   </div>
   <div class="body">
     <div class="body__container">
-      <hospitality-bot-feedback-list
-        [feedbackType]="feedbackType"
-        [entityType]="tabFilterItems[tabFilterIdx]?.value"
-        [outlets]="outlets"
-        [colorMap]="colorMap"
-      ></hospitality-bot-feedback-list>
-      <div style="width: calc(100% - 345px);">
+      <div class="feedback-body-left" [ngClass]="{ disabled: guestInfoEnable }">
+        <div class="blackscreen"></div>
+        <hospitality-bot-feedback-list
+          [feedbackType]="feedbackType"
+          [entityType]="tabFilterItems[tabFilterIdx]?.value"
+          [outlets]="outlets"
+          [colorMap]="colorMap"
+        ></hospitality-bot-feedback-list>
+      </div>
+      <div
+        class="feedback-body-right"
+        style="width: calc(100% - 345px);"
+        [ngClass]="{ disabled: guestInfoEnable }"
+      >
+        <div class="blackscreen"></div>
         <hospitality-bot-feedback-detail
           [colorMap]="colorMap"
           [feedbackType]="feedbackType"

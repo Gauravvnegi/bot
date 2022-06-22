@@ -51,8 +51,11 @@ const appRoutes: Route[] = [
 export class AdminFeedbackRoutingModule {
   static components = [
     FeedbackComponent,
+    FeedbackDatatableComponent,
     FeedbackDistributionComponent,
+    FeedbackNotesComponent,
     GlobalNpsComponent,
+    GtmAcrossServicesComponent,
     NetPromoterScoreComponent,
     NpsAcrossDepartmentsComponent,
     ReceivedBreakdownComponent,

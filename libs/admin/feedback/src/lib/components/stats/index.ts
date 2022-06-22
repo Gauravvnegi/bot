@@ -7,3 +7,4 @@ export * from './received-breakdown/received-breakdown.component';
 export * from './top-low-nps/top-low-nps.component';
 export * from './two-way-progress/two-way-progress.component';
 export * from './gtm-across-services/gtm-across-services.component';
+export * from './art-across-experience/art-across-experience.component';

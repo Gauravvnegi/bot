@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GaugeModule } from 'angular-gauge';
 import {
   AdminSharedModule,
   getTranslationConfigs,
@@ -30,6 +31,7 @@ import { CardService } from './services/card.service';
     SlickCarouselModule,
     NgCircleProgressModule.forRoot(),
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['feedback'])),
+    GaugeModule.forRoot(),
   ],
   declarations: [...AdminFeedbackRoutingModule.components],
   providers: [StatisticsService, FeedbackTableService, CardService],

@@ -35,6 +35,7 @@ import {
   RequestComponent,
   FeedbackHistoryComponent,
 } from './components/guest-info';
+import { ArtComponent } from './components/stats/art/art.component';
 
 const appRoutes: Route[] = [
   {
@@ -50,8 +51,11 @@ const appRoutes: Route[] = [
 export class AdminFeedbackRoutingModule {
   static components = [
     FeedbackComponent,
+    FeedbackDatatableComponent,
     FeedbackDistributionComponent,
+    FeedbackNotesComponent,
     GlobalNpsComponent,
+    GtmAcrossServicesComponent,
     NetPromoterScoreComponent,
     NpsAcrossDepartmentsComponent,
     ReceivedBreakdownComponent,
@@ -79,5 +83,6 @@ export class AdminFeedbackRoutingModule {
     MentionsComponent,
     RequestComponent,
     FeedbackHistoryComponent,
+    ArtComponent,
   ];
 }

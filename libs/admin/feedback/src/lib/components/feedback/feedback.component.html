@@ -52,10 +52,21 @@
     [globalFeedbackFilterType]="globalFeedbackFilterType"
   >
   </hospitality-bot-nps-across-departments>
-  <hospitality-bot-gtm-across-services
-    [globalFeedbackFilterType]="globalFeedbackFilterType"
-  >
-  </hospitality-bot-gtm-across-services>
+
+  <div class="gtmContainer">
+    <div class="gtm">
+      <hospitality-bot-gtm-across-services
+        [globalFeedbackFilterType]="globalFeedbackFilterType"
+      >
+      </hospitality-bot-gtm-across-services>
+    </div>
+    <div class="art">
+      <hospitality-bot-art
+        [globalFeedbackFilterType]="globalFeedbackFilterType"
+      >
+      </hospitality-bot-art>
+    </div>
+  </div>
   <hospitality-bot-feedback-datatable
     [globalFeedbackFilterType]="globalFeedbackFilterType"
   >

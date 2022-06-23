@@ -17,7 +17,7 @@ export type BarChart = {
   data: Bar[];
   type: string;
   legend: false;
-  colors: BarColor[];
+  colors?: BarColor[];
   options: any;
 };
 
@@ -31,8 +31,10 @@ export type BarColor = {
 };
 
 export type Bar = {
-  data: string[];
+  data: any[];
   label: string;
   fill?: boolean;
   borderDash?: number[];
+  backgroundColor?: string[];
+  hoverBackgroundColor?: string[];
 };

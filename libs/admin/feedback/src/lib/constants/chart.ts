@@ -104,6 +104,15 @@ export const chartConfig = {
     },
     art: {
       responsive: true,
+      plugins: {
+        datalabels: {
+          anchor: 'end',
+          align: 'end',
+          font: {
+            size: 20,
+          },
+        },
+      },
       scales: {
         xAxes: [
           {
@@ -119,7 +128,6 @@ export const chartConfig = {
             },
             ticks: {
               min: 0,
-              max: 48,
               stepSize: 6,
             },
           },

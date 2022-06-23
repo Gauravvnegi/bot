@@ -115,4 +115,8 @@ export class MessagesExchangedComponent implements OnInit {
     else if (this.selectedInterval === 'month') return 'MMM YYYY';
     return '';
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

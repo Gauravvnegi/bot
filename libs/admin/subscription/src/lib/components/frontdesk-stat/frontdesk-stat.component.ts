@@ -83,4 +83,8 @@ export class FrontdeskStatComponent implements OnInit {
       )
     );
   }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

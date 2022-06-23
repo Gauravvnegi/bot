@@ -1,6 +1,43 @@
 import { get, set } from 'lodash';
 import { Chip } from '../types/feedback.type';
 
+export class ARTGraph {
+  data: ART[];
+
+  deserialize(input) {
+    this.data = new Array<ART>();
+
+    input.artGraph?.forEach((item) =>
+      this.data.push(new ART().deserialize(item))
+    );
+    return this.data;
+  }
+}
+
+export class ART {
+  label: string;
+  colorCode: string;
+  value: number;
+  feedbackCount: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'value', get(input, ['resolutionTime'])),
+      set({}, 'feedbackCount', get(input, ['resolutioncount']))
+    );
+    this.colorCode =
+      input.resolutionTime < 12
+        ? '#508919'
+        : input.resolutionTime <= 24
+        ? '#ff8f00'
+        : '#ef1d45';
+
+    return this;
+  }
+}
+
 export class NPS {
   label: string;
   score: number;

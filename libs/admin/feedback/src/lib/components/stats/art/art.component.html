@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="title-container">
+    <div class="stat-title">
+      {{ 'art.title_text' | translate }}
+    </div>
+    <div class="info-icon">
+      <img
+        [src]="feedbackConfig.images.info.url"
+        [alt]="feedbackConfig.images.info.alt"
+      />
+      <div class="tooltip">
+        <span class="arrow"></span>
+        {{ 'art.tooltip_text' | translate }}
+      </div>
+    </div>
+  </div>
+  <div class="graph">
+    <canvas
+      baseChart
+      class="line-chart__canvas"
+      [datasets]="chart.data"
+      [labels]="chart.labels"
+      [options]="chart.options"
+      [legend]="chart.legend"
+      [chartType]="chart.type"
+    >
+    </canvas>
+  </div>
+</div>

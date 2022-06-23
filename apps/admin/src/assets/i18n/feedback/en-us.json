@@ -5,7 +5,7 @@
   },
   "global_nps": { "title": "Global NPS" },
   "top_low_nps": {
-    "label":"NPS",
+    "label": "NPS",
     "title": "Top/Low NPS",
     "top_performing": "Top Performing",
     "low_performing": "Low Performing"
@@ -20,6 +20,10 @@
     "closed_text": "Closed",
     "remaining_text": "Remaining",
     "total_arrival_text": "Total Guest to meet who are at risk"
+  },
+  "art": {
+    "title_text": "ART",
+    "tooltip_text": "Number of guest that must be met due to low score for the selected date range"
   },
   "nps": { "title": "Net Promoter Score" },
   "nps_across_department": { "title": "NPS Across Departments" },
@@ -61,51 +65,51 @@
       "feedback_status_updated": "'Status updated.'"
     }
   },
-  "export":{
+  "export": {
     "feedback": "Export Feedback"
   },
-  "noList":{
-    "noTitle":"No Feedbacks",
-    "noDescription":" When you have feedbacks, you'll see them here"
+  "noList": {
+    "noTitle": "No Feedbacks",
+    "noDescription": " When you have feedbacks, you'll see them here"
   },
-  "nofeedback":{
-    "selectItem":"Select an item to read",
-    "nothingSelect":"Nothing is selected"
+  "nofeedback": {
+    "selectItem": "Select an item to read",
+    "nothingSelect": "Nothing is selected"
   },
-  "OverAll":"Overall",
-  "statusUpdate":{
-    "resolved":"Mark Resolved"
+  "OverAll": "Overall",
+  "statusUpdate": {
+    "resolved": "Mark Resolved"
   },
-  "filter":{
-    "undo":"undo",
-    "sort":"Sort & Filters",
-    "clear":"Clear All",
-    "sortBy":"Sort By",
-    "byAssignee":"Filter By Assignee",
-    "byDepartment":"Filter By Department",
-    "apply":"Apply",
-    "cancel":"cancel"
+  "filter": {
+    "undo": "undo",
+    "sort": "Sort & Filters",
+    "clear": "Clear All",
+    "sortBy": "Sort By",
+    "byAssignee": "Filter By Assignee",
+    "byDepartment": "Filter By Department",
+    "apply": "Apply",
+    "cancel": "cancel"
   },
-  "booking":{
-    "info":"Booking Info",
-    "current":"Current Booking",
-    "past":"Past Booking",
-    "upcoming":"Upcoming Booking"
+  "booking": {
+    "info": "Booking Info",
+    "current": "Current Booking",
+    "past": "Past Booking",
+    "upcoming": "Upcoming Booking"
   },
-  "guestData":{
-    "info":"Guest Info",
-    "reservationId":"Reservation ID",
-    "roomNo":"Room No.",
-    "direction":"east",
-    "personalInfo":"Personal Info",
-    "contact":"Contact Details",
-    "phone":"Phone No.",
-    "email":"Email",
-    "other":"Other Details",
-    "noOfStays":"No. of stays"
+  "guestData": {
+    "info": "Guest Info",
+    "reservationId": "Reservation ID",
+    "roomNo": "Room No.",
+    "direction": "east",
+    "personalInfo": "Personal Info",
+    "contact": "Contact Details",
+    "phone": "Phone No.",
+    "email": "Email",
+    "other": "Other Details",
+    "noOfStays": "No. of stays"
   },
-  "churnPrediction":"Curn probabilty prediction",
-  "details":"Details",
-  "viewDetail":"View Details",
-  "loading":"Loading"
+  "churnPrediction": "Curn probabilty prediction",
+  "details": "Details",
+  "viewDetail": "View Details",
+  "loading": "Loading"
 }

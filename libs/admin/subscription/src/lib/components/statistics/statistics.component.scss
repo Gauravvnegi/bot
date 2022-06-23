@@ -18,7 +18,13 @@
     &__item {
       width: 24%;
       padding: 20px 15px 25px 15px;
-      height: 273px;
+      background: #ffffff 0% 0% no-repeat padding-box;
+      box-shadow: 0px 3px 6px #0000000d;
+      border-radius: 5px;
+    }
+    &__first {
+      width: 49%;
+      padding: 20px 15px 25px 15px;
       background: #ffffff 0% 0% no-repeat padding-box;
       box-shadow: 0px 3px 6px #0000000d;
       border-radius: 5px;

@@ -11,7 +11,7 @@
   <div class="title">Plan Usage</div>
   <div class="usages">
     <div
-      class="usages__item"
+      class="usages__first"
       featureSubscribed
       [feature]="'modules.roles-permissions'"
     >
@@ -20,13 +20,6 @@
         [chartData]="planUsageChartData.userCount"
         [usage]="planUsagePercentage.userUsagePercentage"
       ></hospitality-bot-users-usage>
-    </div>
-    <div class="usages__item" featureSubscribed [feature]="'modules.guest'">
-      <hospitality-bot-guest-usage
-        [data]="subscriptionPlanUsage?.guests"
-        [chartData]="planUsageChartData.guestCount"
-        [usage]="planUsagePercentage.guestUsagePercentage"
-      ></hospitality-bot-guest-usage>
     </div>
     <div class="usages__item" featureSubscribed [feature]="'integrations.ocr'">
       <hospitality-bot-ocr-usage

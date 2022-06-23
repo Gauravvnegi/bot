@@ -17,7 +17,7 @@ export type BarChart = {
   data: Bar[];
   type: string;
   legend: false;
-  colors: BarColor[];
+  colors?: BarColor[];
   options: any;
 };
 

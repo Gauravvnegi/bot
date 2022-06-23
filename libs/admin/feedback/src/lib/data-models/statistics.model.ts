@@ -7,7 +7,9 @@ export class ARTGraph {
   deserialize(input) {
     this.data = new Array<ART>();
 
-    input.forEach((item) => this.data.push(new ART().deserialize(item)));
+    input.artGraph?.forEach((item) =>
+      this.data.push(new ART().deserialize(item))
+    );
     return this.data;
   }
 }
@@ -16,15 +18,21 @@ export class ART {
   label: string;
   colorCode: string;
   value: number;
+  feedbackCount: number;
 
   deserialize(input) {
     Object.assign(
       this,
       set({}, 'label', get(input, ['label'])),
-      set({}, 'value', get(input, ['score']))
+      set({}, 'value', get(input, ['resolutionTime'])),
+      set({}, 'feedbackCount', get(input, ['resolutioncount']))
     );
     this.colorCode =
-      input.score < 12 ? '#508919' : input.score <= 24 ? '#ff8f00' : '#ef1d45';
+      input.resolutionTime < 12
+        ? '#508919'
+        : input.resolutionTime <= 24
+        ? '#ff8f00'
+        : '#ef1d45';
 
     return this;
   }

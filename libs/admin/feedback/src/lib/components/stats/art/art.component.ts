@@ -36,12 +36,12 @@ export class ArtComponent implements OnInit {
         label: 'ART',
       },
     ],
-    labels: ['Dept1', 'Dept2', 'Dept3'],
+    labels: [],
     options: chartConfig.options.art,
-    colors: chartConfig.colors.nps,
     legend: false,
     type: chartConfig.type.bar,
   };
+
   constructor(
     protected statisticsService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,
@@ -75,8 +75,7 @@ export class ArtComponent implements OnInit {
         this.globalFeedbackFilterType =
           data['filter'].value.feedback.feedbackType;
         this.setEntityId(data['filter'].value.feedback.feedbackType);
-        this.chartData = new ARTGraph().deserialize(this.data);
-        this.initChartData();
+        this.getGraphData();
       })
     );
   }
@@ -108,10 +107,26 @@ export class ArtComponent implements OnInit {
             element.entityIds = this.statisticsService.outletIds;
           }
         });
-        this.chartData = new ARTGraph().deserialize(this.data);
-        this.initChartData();
+        this.getGraphData();
       }
     });
+  }
+
+  getGraphData() {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          feedbackType: this.getFeedbackType(),
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.statisticsService.getARTGraphData(config).subscribe((response) => {
+        this.chartData = new ARTGraph().deserialize(response);
+        this.initChartData();
+      })
+    );
   }
 
   data = [
@@ -125,11 +140,26 @@ export class ArtComponent implements OnInit {
     this.chart.data[0].data = [];
     this.chart.data[0].backgroundColor = [];
     this.chart.labels = [];
-    this.chartData.forEach((item: ART) => {
+    this.chartData?.forEach((item: ART) => {
       this.chart.data[0].data.push(item.value);
       this.chart.data[0].backgroundColor.push(item.colorCode);
       this.chart.data[0].hoverBackgroundColor.push(item.colorCode);
       this.chart.labels.push(item.label);
     });
+  }
+
+  getFeedbackType() {
+    if (this.tabfeedbackType === undefined) {
+      return this.globalFeedbackFilterType === this.feedbackConfig.types.both
+        ? feedback.types.stay
+        : this.globalFeedbackFilterType;
+    }
+    return this.tabfeedbackType === this.feedbackConfig.types.both
+      ? feedback.types.transactional
+      : this.tabfeedbackType;
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

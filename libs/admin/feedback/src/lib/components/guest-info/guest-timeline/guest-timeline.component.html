@@ -1,0 +1,34 @@
+<mat-tab-group #matTab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div>
+        <img src="assets/svg/past-feedback-icon.svg" alt="Personal Info" />
+      </div>
+    </ng-template>
+    <ng-template matTabContent
+      ><hospitality-bot-feedback-history
+        [guestId]="guestId"
+      ></hospitality-bot-feedback-history>
+    </ng-template>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div>
+        <img src="assets/svg/mention.svg" alt="Booking Info" />
+      </div>
+    </ng-template>
+    <ng-template matTabContent>
+      <hospitality-bot-mentions [guestId]="guestId"></hospitality-bot-mentions
+    ></ng-template>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <div>
+        <img src="assets/svg/request_icon.svg" alt="Requests" />
+      </div>
+    </ng-template>
+    <ng-template matTabContent
+      ><hospitality-bot-request [guestId]="guestId"></hospitality-bot-request>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

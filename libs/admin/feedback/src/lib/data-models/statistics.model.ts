@@ -228,7 +228,12 @@ export class PerformanceNPS {
     input.npsPerformace.forEach((data) => {
       this.performances.push({
         ...data,
-        colorCode: data.score > 0 ? '#508919' : '#CD3A2D',
+        colorCode:
+          data.score < 40
+            ? '#ef1d45'
+            : data.score <= 80
+            ? '#ff8f00'
+            : '#508919',
       });
     });
     input.npsPerformace.sort(function (a, b) {
@@ -421,10 +426,13 @@ export const SharedColors = {
   LUNCH: '#f18533',
   BREAKFAST: '#4974e0',
   DINNER: '#3db76b',
-  INPROGRESS: '#31bb92',
-  RESOLVED: '#ff6804',
+  INPROGRESS: '#4ba0f5',
+  RESOLVED: '#31bb92',
   OPEN: '#4ba0f5',
   CLOSED: '#ff6804',
+  TODO: '#c5c5c5',
+  TIMEOUT: '#ef1d45',
+  NOACTION: '#ff8f00',
 };
 
 export class NPOSVertical {

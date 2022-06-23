@@ -6,8 +6,8 @@ import {
   GtmAcrossServicesComponent,
   NetPromoterScoreComponent,
   NpsAcrossDepartmentsComponent,
-  OverallReceivedBifurcationComponent,
-  SharedComponent,
+  ReceivedBreakdownComponent,
+  ResponseRateComponent,
   TopLowNpsComponent,
   TwoWayProgressComponent,
 } from './components/stats';
@@ -16,6 +16,25 @@ import { FeedbackNotesComponent } from './components/feedback-notes/feedback-not
 import { FeedbackComponent } from './components/feedback/feedback.component';
 import { FeedbackDatatableModalComponent } from './components/modals/feedback-datatable/feedback-datatable.component';
 import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
+import { FeedbackDetailModalComponent } from './components/modals/feedback-detail-modal/feedback-detail.component';
+import {
+  MainComponent,
+  FeedbackListComponent,
+  FeedbackDetailComponent,
+  SearchComponent,
+  FeedbackDetailFooterComponent,
+  FeedbackListFilterComponent,
+} from './components/card';
+import { ActionOverlayComponent } from './components/action-overlay/action-overlay.component';
+import {
+  GuestInfoComponent,
+  GuestBookingInfoComponent,
+  GuestPersonalInfoComponent,
+  GuestTimelineComponent,
+  MentionsComponent,
+  RequestComponent,
+  FeedbackHistoryComponent,
+} from './components/guest-info';
 
 const appRoutes: Route[] = [
   {
@@ -35,8 +54,8 @@ export class AdminFeedbackRoutingModule {
     GlobalNpsComponent,
     NetPromoterScoreComponent,
     NpsAcrossDepartmentsComponent,
-    OverallReceivedBifurcationComponent,
-    SharedComponent,
+    ReceivedBreakdownComponent,
+    ResponseRateComponent,
     TopLowNpsComponent,
     TwoWayProgressComponent,
     FeedbackDatatableComponent,
@@ -44,5 +63,21 @@ export class AdminFeedbackRoutingModule {
     FeedbackNotesComponent,
     GtmAcrossServicesComponent,
     DepartmentBarGraphComponent,
+    MainComponent,
+    FeedbackListComponent,
+    FeedbackListFilterComponent,
+    ActionOverlayComponent,
+    FeedbackDetailComponent,
+    SearchComponent,
+    FeedbackDetailFooterComponent,
+    GuestInfoComponent,
+    GuestPersonalInfoComponent,
+    GuestBookingInfoComponent,
+    FeedbackListFilterComponent,
+    FeedbackDetailModalComponent,
+    GuestTimelineComponent,
+    MentionsComponent,
+    RequestComponent,
+    FeedbackHistoryComponent,
   ];
 }

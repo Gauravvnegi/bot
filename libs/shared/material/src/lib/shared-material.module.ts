@@ -31,6 +31,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 @NgModule({
   imports: [
@@ -64,6 +65,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ClipboardModule,
     TranslateModule,
     MatAutocompleteModule,
+    OverlayModule,
   ],
   exports: [
     FlexLayoutModule,
@@ -94,7 +96,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatSlideToggleModule,
     MatTabsModule,
     ClipboardModule,
-
+    OverlayModule,
     MatAutocompleteModule,
   ],
   providers: [SnackBarService, ModalService],

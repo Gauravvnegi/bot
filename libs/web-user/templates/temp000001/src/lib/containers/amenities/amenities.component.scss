@@ -54,3 +54,7 @@
       padding: $padding-large 5px !important;
     }
   }
+  :host ::ng-deep .mat-form-field-infix {
+    font-size: 18px !important;
+    color:#121212 !important;
+  }

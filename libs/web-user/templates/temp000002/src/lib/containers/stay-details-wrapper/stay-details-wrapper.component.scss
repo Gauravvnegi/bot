@@ -9,6 +9,9 @@
 :host ::ng-deep .mat-input-element{
   color:$stepper-font-color !important;
 }
+:host ::ng-deep .ngx-timepicker-control{
+  width: 70px !important;
+}
 
 :host ::ng-deep .ngx-timepicker-control__input{
   font-size: 25px !important;

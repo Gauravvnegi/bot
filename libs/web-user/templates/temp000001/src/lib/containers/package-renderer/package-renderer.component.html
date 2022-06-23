@@ -39,16 +39,16 @@
         </div>
       </div>
     </div>
-    <ng-container #packageMetadata> </ng-container>
-    <div class="package-button" *ngIf="checkForUpdatePossibility">
-      <hospitality-bot-temp000001-button
-        #saveButton
-        buttonTemplateSwitchh
-        [settings]="{ label: 'Save' }"
-        [buttonClass]="'next-button'"
-        class="user-button"
-        (click)="onSaveSubPackages()"
-      ></hospitality-bot-temp000001-button>
-    </div>
+  </div>
+  <ng-container #packageMetadata> </ng-container>
+  <div class="package-button" *ngIf="checkForUpdatePossibility">
+    <hospitality-bot-temp000001-button
+      #saveButton
+      buttonTemplateSwitchh
+      [settings]="{ label: 'Save' }"
+      [buttonClass]="'next-button'"
+      class="user-button"
+      (click)="onSaveSubPackages()"
+    ></hospitality-bot-temp000001-button>
   </div>
 </div>

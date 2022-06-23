@@ -1,0 +1,42 @@
+<div class="container">
+  <div *ngIf="tabFilterItems" class="header">
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+  </div>
+  <div class="body">
+    <div class="body__container">
+      <div class="feedback-body-left" [ngClass]="{ disabled: guestInfoEnable }">
+        <div class="blackscreen"></div>
+        <hospitality-bot-feedback-list
+          [feedbackType]="feedbackType"
+          [entityType]="tabFilterItems[tabFilterIdx]?.value"
+          [outlets]="outlets"
+          [colorMap]="colorMap"
+        ></hospitality-bot-feedback-list>
+      </div>
+      <div
+        class="feedback-body-right"
+        style="width: calc(100% - 345px);"
+        [ngClass]="{ disabled: guestInfoEnable }"
+      >
+        <div class="blackscreen"></div>
+        <hospitality-bot-feedback-detail
+          [colorMap]="colorMap"
+          [feedbackType]="feedbackType"
+          (guestInfo)="openGuestInfo($event)"
+        ></hospitality-bot-feedback-detail>
+      </div>
+      <div>
+        <div class="guest-info-enable" *ngIf="guestInfoEnable" [@slideInOut]>
+          <hospitality-bot-guest-info
+            (closeInfo)="closeGuestInfo($event)"
+            [guestData]="guestData"
+          ></hospitality-bot-guest-info>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

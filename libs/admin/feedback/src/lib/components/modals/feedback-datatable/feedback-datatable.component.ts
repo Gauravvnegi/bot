@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -24,14 +24,16 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
+import * as FileSaver from 'file-saver';
 import { Observable } from 'rxjs';
 import {
   FeedbackTable,
   StayFeedbackTable,
 } from '../../../data-models/feedback-datatable.model';
 import { FeedbackTableService } from '../../../services/table.service';
+import { SelectedChip } from '../../../types/feedback.type';
 import { FeedbackDatatableComponent } from '../../datatable/feedback-datatable/feedback-datatable.component';
-import * as FileSaver from 'file-saver';
+import { FeedbackDetailModalComponent } from '../feedback-detail-modal/feedback-detail.component';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable-modal',
@@ -48,6 +50,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   @Input() feedbackType;
   @Input() tabFilterItems: any;
   @Output() onModalClose = new EventEmitter();
+  feedbackGraph: string;
   constructor(
     public fb: FormBuilder,
     _adminUtilityService: AdminUtilityService,
@@ -98,6 +101,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     this.tabFilterIdx = this.data.tabFilterIdx;
     this.globalFeedbackFilterType = this.data.globalFeedbackFilterType;
     this.config = this.data.config;
+    this.feedbackGraph = this.config[0].feedbackGraph;
     this.feedbackType = this.data.feedbackType;
     this.rowsPerPage = 5;
   }
@@ -173,8 +177,14 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         },
       ]),
     };
-
-    return this.tableService.getGuestFeedbacks(config);
+    if (
+      this.feedbackGraph === 'GUESTTOMEET' ||
+      this.feedbackGraph === 'BIFURCATIONS'
+    ) {
+      return this.tableService.getBifurationGTMData(config);
+    } else {
+      return this.tableService.getGuestFeedbacks(config);
+    }
   }
 
   /**
@@ -197,6 +207,45 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       this.updateQuickReplyFilterCount(data.entityStateCounts);
 
     this.loading = false;
+  }
+
+  updateFeedbackState(event) {
+    let data = {
+      status: event.statusType,
+    };
+    let id = event.id;
+    this.tableService.updateFeedbackState(id, data).subscribe(
+      (response) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'Status Updated Successfully.',
+              priorityMessage: 'Status Updated Successfully..',
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
+        this.loadInitialData([
+          ...this.globalQueries,
+          { order: sharedConfig.defaultOrder },
+          ...this.getSelectedQuickReplyFilters(),
+        ]);
+      },
+      ({ error }) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: error.message,
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+      }
+    );
   }
 
   /**
@@ -278,6 +327,18 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   }
 
   /**
+   * @function getSelectedQuickReplyFilters To get the selected chips.
+   * @returns The selected chips.
+   */
+  getSelectedQuickReplyFilters(): SelectedChip[] {
+    return this.tabFilterItems[this.tabFilterIdx].chips
+      .filter((item) => item.isSelected == true)
+      .map((item) => ({
+        entityState: item.value,
+      }));
+  }
+
+  /**
    * @function exportCSV To export CSV report for feedback table.
    */
   exportCSV(): void {
@@ -318,7 +379,45 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     );
   }
 
+  /**
+   * @function openDetailPage To open the detail modal for a reservation.
+   * @param event The mouse click event.
+   * @param rowData The data of the clicked row.
+   * @param tabKey The key of the tab to be opened in detail modal.
+   */
+  openDetailPage(event: MouseEvent, rowData?, tabKey?: string): void {
+    event.stopPropagation();
+    if (!rowData) return;
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    dialogConfig.data = {
+      feedback: rowData,
+      colorMap: this.colorMap,
+      feedbackType: this.feedbackType,
+      isModal: true,
+      globalQueries: this.globalQueries,
+    };
+
+    const detailCompRef = this._modal.openDialog(
+      FeedbackDetailModalComponent,
+      dialogConfig
+    );
+    this.$subscription.add(
+      detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
+        // remove loader for detail close
+        this.refreshTableData();
+        detailCompRef.close();
+      })
+    );
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+    this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
+      if (chip.value !== 'ALL') {
+        chip.isSelected = false;
+      } else chip.isSelected = true;
+    });
   }
 }

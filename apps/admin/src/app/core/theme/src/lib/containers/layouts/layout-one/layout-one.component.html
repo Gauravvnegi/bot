@@ -21,7 +21,7 @@
           Conversation &gt; <span class="breadcrums_messages">Messages</span>
         </div>
         <div class="layoutMessageCheck" *ngIf="checkForMessageRoute()">
-          <div style="margin-bottom: -6px;">
+          <div class="margBtm">
             <admin-message-tab-menu></admin-message-tab-menu>
           </div>
           <div class="dropdown-wrapper">
@@ -67,7 +67,7 @@
             ></admin-profile-dropdown>
           </div>
           <div class="filter-range-wrapper">
-            <div style="position: relative;" class="temp-width">
+            <div class="temp-width positionRel">
               <div (click)="enableGlobalFilter(main)" class="header--button">
                 <img class="filter-icon" src="assets/svg/Filter-Icon.svg" />
               </div>

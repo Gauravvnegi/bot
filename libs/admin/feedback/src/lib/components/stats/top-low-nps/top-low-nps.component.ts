@@ -22,6 +22,7 @@ export class TopLowNpsComponent implements OnInit {
   globalQueries;
   performanceNPS: PerformanceNPS;
   protected $subscription = new Subscription();
+  keyLabels = feedback.keyLabels.topLow;
   constructor(
     protected statisticsService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,

@@ -2,22 +2,29 @@
 
 :host ::ng-deep .back-button {
   @include footer-back();
-  @media (max-width: 992px) {
+  @media (min-width:602px) and (max-width: 767px) {
     left: -24px;
   }
-  @media (max-width: 767px) {
-    left: inherit;
-  }
+  // @media (max-width: 767px) {
+  //   // left: inherit;
+  // }
 }
 :host ::ng-deep .next-button {
   @include footer-next();
-  @media (max-width: 992px) {
+  @media (min-width:602px) and (max-width: 767px) {
     left: -24px;
   }
-  @media (max-width: 767px) {
-    left: inherit;
-  }
+  // @media (max-width: 767px) {
+  //   // left: inherit;
+  // }
 }
+// @media  (min-width:300px) and (max-width:600px){
+//   :host ::ng-deep .back-button {left: inherit !important;}
+//   :host ::ng-deep .next-button {
+//     left: inherit !important;
+//   }
+  
+// }
 
 :host ::ng-deep .mat-button-wrapper {
   display: flex;

@@ -11,6 +11,7 @@ import { UpdateNoteData, UpdateStatusData } from '../types/feedback.type';
 @Injectable()
 export class FeedbackTableService extends ApiService {
   $feedbackType = new BehaviorSubject('');
+  $disableContextMenus = new BehaviorSubject(false);
   /**
    * @function To get guest feedback list.
    * @param config The filter config data.
@@ -20,6 +21,10 @@ export class FeedbackTableService extends ApiService {
     return this.get(`/api/v1/feedback/guests${config.queryObj}`);
   }
 
+  getBifurationGTMData(config) {
+    return this.get(`/api/v1/feedback/guests-card${config.queryObj}`);
+  }
+
   /**
    * @function updateNotes To update notes for a feedback.
    * @param id The feedback id.
@@ -27,6 +32,10 @@ export class FeedbackTableService extends ApiService {
    * @returns The observable with updated notes data.
    */
   updateNotes(id: string, data: UpdateNoteData): Observable<any> {
+    return this.patch(`/api/v1/feedback/${id}/notes`, data);
+  }
+
+  updateFeedbackState(id, data): Observable<any> {
     return this.patch(`/api/v1/feedback/${id}/notes`, data);
   }
 

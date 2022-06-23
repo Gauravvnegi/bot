@@ -201,7 +201,7 @@
       @media screen and (max-width: 700px) {
         justify-content: space-between;
       }
-      @media only screen and (max-width: $T) {
+      @media only screen and (max-width: 850px) {
         font-size: 17px;
       }
     }
@@ -271,5 +271,10 @@
   .mat-checkbox-inner-container {
     width: 30px;
     height: 30px;
+  }
+}
+@media (min-width:769px) and (max-width:850px) {
+  .section--content--container--value{
+    font-size: 17px;
   }
 }

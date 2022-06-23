@@ -92,6 +92,26 @@
       position: absolute;
       height: 100%;
       width: 100%;
+      .fredabg{ background-image: linear-gradient(
+        132deg,
+        #01a4e9 1%,
+        #0074a6 106%
+      );
+      opacity: 0.4;
+      width: 100%;
+      height: 100%;}
+     
+      .hedabg{ background-image: linear-gradient(
+        312deg,
+        #ac14b7 99%,
+        #765bd5 1%
+      );
+      opacity: 0.4;
+      width: 100%;
+      height: 100%;} 
+
+      .heda{position: absolute; bottom: 16px; right: 43.3%;}
+      .freedie{position: absolute; bottom: 16px; right: 57.5%;} 
     }
     &-header {
       position: absolute;
@@ -224,3 +244,4 @@
     }
   }
 }
+

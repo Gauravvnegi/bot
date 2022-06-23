@@ -19,11 +19,11 @@ import { SharedStats } from '../../../data-models/statistics.model';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
 
 @Component({
-  selector: 'hospitality-bot-shared',
-  templateUrl: './shared.component.html',
-  styleUrls: ['./shared.component.scss'],
+  selector: 'hospitality-bot-response-rate',
+  templateUrl: './response-rate.component.html',
+  styleUrls: ['./response-rate.component.scss'],
 })
-export class SharedComponent implements OnInit {
+export class ResponseRateComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
   tabfeedbackType: string;
   $subscription = new Subscription();
@@ -204,7 +204,7 @@ export class SharedComponent implements OnInit {
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
     dialogConfig.data = {
-      tableName: 'Response Rate',
+      tableName: feedback.tableName.responseRate,
       tabFilterItems: this.createTabFilterItem(),
       tabFilterIdx: 0,
       globalFeedbackFilterType: this.globalFeedbackFilterType,

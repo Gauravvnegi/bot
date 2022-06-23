@@ -41,6 +41,11 @@
   <div class="plan-usage-2">
     <div
       class="plan-usage-2__item"
+      [ngStyle]="{
+        'max-width': graphSubscriptions.messagesSubscribed
+          ? 'calc(50% - 7.5px)'
+          : '100%'
+      }"
       *ngIf="
         graphSubscriptions.feedbackSubscribed && graphOrder.feedback === 1;
         else order1Messages

@@ -32,4 +32,12 @@ export class SubscriptionService extends ApiService {
   getFrontdeskStats(config): Observable<any> {
     return this.get(`/api/v1/subscription-stats${config.queryObj}`);
   }
+
+  getMessagesExchangedStats(config): Observable<any> {
+    return this.get(`/api/v1/subscription-stats/messages${config.queryObj}`);
+  }
+
+  getFeedbackReceivedStats(config): Observable<any> {
+    return this.get(`/api/v1/subscription-stats/feedback${config.queryObj}`);
+  }
 }

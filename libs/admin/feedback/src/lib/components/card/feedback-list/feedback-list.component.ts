@@ -14,15 +14,12 @@ import {
   StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { Observable, Subscription } from 'rxjs';
 import { card } from '../../../constants/card';
-import {
-  FeedbackList,
-  User,
-  UserList,
-} from '../../../data-models/feedback-card.model';
+import { feedback } from '../../../constants/feedback';
+import { FeedbackList, User } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
+import { FeedbackTableService } from '../../../services/table.service';
 
 @Component({
   selector: 'hospitality-bot-feedback-list',
@@ -36,7 +33,7 @@ export class FeedbackListComponent implements OnInit {
   @Input() feedbackType: string;
   @ViewChild('feedbackListContainer') private myScrollContainer: ElementRef;
   parentFG: FormGroup;
-  tabFilterItems = card.list.tabFilterItems;
+  cardTabFilterItems = card.list.tabFilterItems;
   selectedFeedback;
   tabFilterIdx: number = 0;
   hotelId: string;
@@ -55,9 +52,9 @@ export class FeedbackListComponent implements OnInit {
     private _snackbarService: SnackBarService,
     private _adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
-    private firebaseMessagingService: FirebaseMessagingService,
     private cardService: CardService,
-    private statisticService: StatisticsService
+    private statisticService: StatisticsService,
+    protected tableService: FeedbackTableService
   ) {}
 
   ngOnInit(): void {
@@ -73,10 +70,17 @@ export class FeedbackListComponent implements OnInit {
   }
 
   registerListeners() {
+    this.filterData = {
+      ...this.filterData,
+      order: sharedConfig.defaultOrder,
+      feedbackType: this.feedbackType,
+      entityType: this.entityType,
+      entityState: this.cardTabFilterItems[this.tabFilterIdx]?.value,
+    };
     this.listenForGlobalFilters();
-    this.listenForOutletChanged();
     this.listenForEntityTypeChange();
     this.listenForAssigneeChange();
+    this.listenForOutletChanged();
   }
 
   /**
@@ -95,14 +99,6 @@ export class FeedbackListComponent implements OnInit {
           ...data['dateRange'].queryValue,
         ]);
         this.cardService.$selectedFeedback.next(null);
-        // this.getUsersList();
-        this.filterData = {
-          ...this.filterData,
-          order: sharedConfig.defaultOrder,
-          feedbackType: data['filter'].value.feedback.feedbackType,
-          entityType: this.entityType,
-          entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
-        };
         this.pagination = {
           offset: 0,
           limit: 20,
@@ -111,6 +107,13 @@ export class FeedbackListComponent implements OnInit {
         this.loadData();
       })
     );
+  }
+
+  getFeedbackType(feedbackType) {
+    if (feedbackType === feedback.types.both) {
+      return feedback.types.stay;
+    }
+    return feedbackType;
   }
 
   /**
@@ -134,31 +137,43 @@ export class FeedbackListComponent implements OnInit {
   }
 
   /**
-   * @function getUsersList Function to get feedback user list.
-   */
-  getUsersList() {
-    this.$subscription.add(
-      this.cardService
-        .getUsersList(this.hotelId)
-        .subscribe(
-          (response) => (this.userList = new UserList().deserialize(response))
-        )
-    );
-  }
-
-  /**
    * @function listenForOutletChanged To listen for outlet tab change.
    */
   listenForOutletChanged(): void {
     this.$subscription.add(
       this.statisticService.$outletChange.subscribe((response) => {
-        if (response) {
+        if (response.status) {
           this.globalQueries.forEach((element) => {
             if (element.hasOwnProperty('entityIds')) {
               element.entityIds = this.statisticService.outletIds;
             }
           });
+          this.pagination = {
+            offset: 0,
+            limit: 20,
+          };
+          this.loadData();
         }
+      })
+    );
+  }
+
+  /**
+   * @function listenForFeedbackTypeChanged To listen the local tab change.
+   */
+  listenForFeedbackTypeChanged(): void {
+    this.$subscription.add(
+      this.tableService.$feedbackType.subscribe((response) => {
+        this.feedbackType = response;
+        this.filterData = {
+          ...this.filterData,
+          feedbackType: response,
+        };
+        this.pagination = {
+          offset: 0,
+          limit: 20,
+        };
+        this.loadData();
       })
     );
   }
@@ -194,14 +209,14 @@ export class FeedbackListComponent implements OnInit {
                   ...new FeedbackList().deserialize(
                     response,
                     this.outlets,
-                    this.feedbackType,
+                    this.getFeedbackType(this.feedbackType),
                     this.colorMap
                   ).records,
                 ]
               : new FeedbackList().deserialize(
                   response,
                   this.outlets,
-                  this.feedbackType,
+                  this.getFeedbackType(this.feedbackType),
                   this.colorMap
                 ).records;
           this.totalRecords = response.total;
@@ -221,7 +236,9 @@ export class FeedbackListComponent implements OnInit {
    * @param object
    */
   updateTabFilterCounts(object) {
-    this.tabFilterItems.forEach((item) => (item.total = object[item.value]));
+    this.cardTabFilterItems.forEach(
+      (item) => (item.total = object[item.value])
+    );
   }
 
   /**
@@ -289,11 +306,12 @@ export class FeedbackListComponent implements OnInit {
     this.tabFilterIdx = event.index;
     this.filterData = {
       ...this.filterData,
-      entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
+      entityState: this.cardTabFilterItems[this.tabFilterIdx]?.value,
     };
     this.pagination.offset = 0;
     this.cardService.$selectedFeedback.next(null);
     this.selectedFeedback = null;
+
     this.loadData();
   }
 
@@ -350,7 +368,7 @@ export class FeedbackListComponent implements OnInit {
     } else {
       this.filterData = {
         ...this.filterData,
-        entityState: this.tabFilterItems[this.tabFilterIdx]?.value,
+        entityState: this.cardTabFilterItems[this.tabFilterIdx]?.value,
       };
       this.loadInitialData([
         ...this.globalQueries,

@@ -19,6 +19,7 @@ export class SearchComponent implements OnInit {
   @Output() clear = new EventEmitter();
   @Output() search = new EventEmitter();
   searchValue = false;
+  searched = false;
   constructor(
     private snackbarService: SnackBarService,
     private cardService: CardService,
@@ -27,6 +28,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenForSearchChanges();
+    this.searched = false;
   }
 
   listenForSearchChanges(): void {
@@ -48,11 +50,14 @@ export class SearchComponent implements OnInit {
         })
       )
       .subscribe(
-        (response) =>
-          this.search.emit({
-            status: this.parentFG.get('search').value.trim().length,
-            response,
-          }),
+        (response) => {
+          if (this.searched)
+            this.search.emit({
+              status: this.parentFG.get('search').value.trim().length,
+              response,
+            });
+          this.searched = true;
+        },
         ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
       );
   }

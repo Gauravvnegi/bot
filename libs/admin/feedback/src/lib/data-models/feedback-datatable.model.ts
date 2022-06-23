@@ -504,7 +504,7 @@ export class StayGuestData {
       set({}, 'churnPrediction', get(input, ['churnPrediction'])),
       set({}, 'churnProbalilty', get(input, ['churnProbalilty'])),
       set({}, 'departureTime', get(input, ['departureTime'])),
-      set({}, 'dueSpend', JSON.parse(get(input, ['dueSpend']))),
+      set({}, 'dueSpend', get(input, ['dueSpend'])),
       set({}, 'guestCount', get(input, ['guestCount'])),
       set({}, 'overAllNps', get(input, ['overAllNps'])),
       set({}, 'totalSpend', get(input, ['totalSpend'])),

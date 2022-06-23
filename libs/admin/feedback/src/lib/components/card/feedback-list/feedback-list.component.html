@@ -9,7 +9,7 @@
       <hospitality-bot-search
         [parentFG]="parentFG"
         [globalQueries]="globalQueries"
-        [feedbackType]="feedbackType"
+        [feedbackType]="getFeedbackType(feedbackType)"
         [filterData]="filterData"
         (clear)="clearSearch()"
         (search)="getSearchValue($event)"
@@ -25,7 +25,7 @@
   </div>
   <hospitality-bot-tab-group
     *ngIf="!search.length"
-    [listItems]="tabFilterItems"
+    [listItems]="cardTabFilterItems"
     [selectedIndex]="tabFilterIdx"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
@@ -52,7 +52,11 @@
           <div class="item__body">
             <div class="item__body__roomAndService">
               <div class="item__body__room">
-                <div>{{ feedbackItem.getTableOrRoomNo(feedbackType) }}</div>
+                <div>
+                  {{
+                    feedbackItem.getTableOrRoomNo(getFeedbackType(feedbackType))
+                  }}
+                </div>
                 <div
                   class="rating"
                   [style.background]="
@@ -65,23 +69,33 @@
               <div
                 class="item__body__services"
                 *ngIf="
-                  feedbackType === 'TRANSACTIONALFEEDBACK';
+                  getFeedbackType(feedbackType) === 'TRANSACTIONALFEEDBACK' &&
+                    feedbackItem.feedback.services.services?.length;
                   else stayFeedback
                 "
               >
                 <div class="item__body__services__name">
-                  {{ feedbackItem.feedback.services.services[0].serviceName }}
+                  {{ feedbackItem.feedback.services.services[0]?.serviceName }}
                 </div>
-                <div class="item__body__services__length">
+                <div
+                  class="item__body__services__length"
+                  *ngIf="feedbackItem.feedback.services.services.length > 1"
+                >
                   +{{ feedbackItem.feedback.services.services.length - 1 }}
                 </div>
               </div>
               <ng-template #stayFeedback>
-                <div class="item__body__services">
+                <div
+                  class="item__body__services"
+                  *ngIf="feedbackItem.feedback.services?.length"
+                >
                   <div class="item__body__services__name">
-                    {{ feedbackItem.feedback.services[0].serviceName }}
+                    {{ feedbackItem.feedback.services[0]?.serviceName }}
                   </div>
-                  <div class="item__body__services__length">
+                  <div
+                    class="item__body__services__length"
+                    *ngIf="feedbackItem.feedback.services.length > 1"
+                  >
                     +{{ feedbackItem.feedback.services.length - 1 }}
                   </div>
                 </div>
@@ -102,7 +116,7 @@
               >
             </div>
             <div class="item__body__status">
-              <div>{{ feedbackItem.getStatus(tabFilterItems) }}</div>
+              <div>{{ feedbackItem.getStatus(cardTabFilterItems) }}</div>
               <div class="divider"></div>
               <div>SLA: {{ feedbackItem.getSLA() }}</div>
               <div class="divider"></div>

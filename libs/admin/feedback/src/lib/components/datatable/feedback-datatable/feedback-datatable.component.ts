@@ -465,9 +465,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
-    this.setTableCols();
-    this.values = [];
-    this.changePage(+this.tabFilterItems[event.index].lastPage);
+    if (this.tableFG?.get('tableType').value !== 'card') {
+      this.setTableCols();
+      this.values = [];
+      this.changePage(+this.tabFilterItems[event.index].lastPage);
+    }
   }
 
   /**

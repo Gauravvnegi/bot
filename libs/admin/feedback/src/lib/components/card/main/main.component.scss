@@ -18,8 +18,30 @@
       opacity: 1;
       display: flex;
 
-      .divWidth{ width: calc(100% - 345px);}
-     
+      .feedback-body-left {
+        position: relative;
+        .blackscreen {
+          position: absolute;
+          height: 100%;
+          width: 100%;
+          opacity: 0.3;
+          background-color: black;
+          z-index: 4;
+          display: none;
+        }
+      }
+      .feedback-body-right {
+        position: relative;
+        .blackscreen {
+          position: absolute;
+          height: 100%;
+          width: calc(100% - 233px);
+          opacity: 0.3;
+          background-color: black;
+          z-index: 4;
+          display: none;
+        }
+      }
       .guest-info-enable {
         position: absolute;
         right: 24px;
@@ -48,5 +70,11 @@
   }
   .mat-tab-header {
     border-bottom: none !important;
+  }
+}
+.disabled {
+  pointer-events: none;
+  .blackscreen {
+    display: block !important;
   }
 }

@@ -5,7 +5,7 @@
   opacity: 0.1;
 }
 .usage-container {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   .title {
     margin: 15px 0;
     font: normal normal bold 16px/21px Roboto;
@@ -15,19 +15,21 @@
   .usages {
     display: flex;
     justify-content: space-between;
+    max-width: 100%;
+    gap: 15px;
     &__item {
-      width: 24%;
+      width: 25%;
       padding: 20px 15px 25px 15px;
       background: #ffffff 0% 0% no-repeat padding-box;
       box-shadow: 0px 3px 6px #0000000d;
       border-radius: 5px;
     }
     &__first {
-      width: 49%;
       padding: 20px 15px 25px 15px;
       background: #ffffff 0% 0% no-repeat padding-box;
       box-shadow: 0px 3px 6px #0000000d;
       border-radius: 5px;
+      width: 50%;
     }
   }
 }
@@ -70,12 +72,6 @@
 :host ::ng-deep .line-chart {
   height: 137px !important;
   margin-bottom: 22px !important;
-  // .canvas{
-  //   height: 100% !important;
-  // }
-}
-:host ::ng-deep canvas {
-  height: 144px !important;
 }
 :host ::ng-deep .details {
   align-items: center;
@@ -197,5 +193,20 @@
     display: none;
     border: 1px solid rgba(158, 207, 250, 0.3);
     box-shadow: 0px 3px 9px #0000000d;
+  }
+}
+
+.plan-usage-2 {
+  display: flex;
+  justify-content: space-between;
+  max-width: 100%;
+  gap: 15px;
+  &__item {
+    padding: 20px 15px 25px 15px;
+    background: #ffffff 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #0000000d;
+    border-radius: 5px;
+    flex-grow: 1;
+    margin-top: 20px;
   }
 }

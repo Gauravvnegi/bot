@@ -28,4 +28,8 @@ export class SubscriptionService extends ApiService {
       }
     );
   }
+
+  getFrontdeskStats(config): Observable<any> {
+    return this.get(`/api/v1/subscription-stats${config.queryObj}`);
+  }
 }

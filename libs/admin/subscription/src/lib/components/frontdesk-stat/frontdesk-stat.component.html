@@ -1,1 +1,26 @@
-<p>frontdesk-stat works!</p>
+<div class="heading">
+  <div class="heading__label">Total Check-in/Check-out</div>
+  <div class="key-container">
+    <div class="key">
+      <div class="key__icon" [style.background]="'#2a8853'"></div>
+      <div class="key__label">Check-in</div>
+    </div>
+    <div class="key">
+      <div class="key__icon" [style.background]="'#ef1d45'"></div>
+      <div class="key__label">Check-Out</div>
+    </div>
+  </div>
+</div>
+<div>
+  <canvas
+    baseChart
+    class="line-chart__canvas"
+    [datasets]="chart.data"
+    [labels]="chart.labels"
+    [options]="chart.options"
+    [colors]="chart.colors"
+    [legend]="chart.legend"
+    [chartType]="chart.type"
+  >
+  </canvas>
+</div>

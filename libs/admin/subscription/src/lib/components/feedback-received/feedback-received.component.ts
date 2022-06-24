@@ -7,6 +7,7 @@ import { ChartOptions, ChartDataSets } from 'chart.js';
 import { Label, Color } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../constants/chart';
+import { FeedbackReceived } from '../../data-models/subscription.model';
 import { SubscriptionService } from '../../services/subscription.service';
 
 @Component({
@@ -39,6 +40,8 @@ export class FeedbackReceivedComponent implements OnInit {
   $subscription = new Subscription();
   globalQueries = [];
   selectedInterval: string;
+  hotelId: string;
+  graphData: FeedbackReceived;
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _adminUtilityService: AdminUtilityService,
@@ -71,18 +74,37 @@ export class FeedbackReceivedComponent implements OnInit {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
+        this.getHotelId(this.globalQueries);
         this.getChartData();
       })
     );
   }
 
+  /**
+   * @function getHotelId To get hotel id from the filter data.
+   * @param globalQueries The filter list data.
+   */
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
+  }
+
   getChartData() {
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        { entityIds: this.hotelId },
+      ]),
     };
     this.$subscription.add(
       this.subscriptionService.getFeedbackReceivedStats(config).subscribe(
-        (resposne) => console.log(resposne),
+        (resposne) => {
+          this.graphData = new FeedbackReceived().deserialize(resposne);
+          this.initGraphData();
+        },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
     );
@@ -92,14 +114,13 @@ export class FeedbackReceivedComponent implements OnInit {
    * @function initGraphData To initialize the graph data.
    */
   protected initGraphData(): void {
-    const botKeys = [];
     this.barChartData[0].data = [];
     this.barChartLabels = [];
-    botKeys.forEach((d, i) => {
+    this.graphData.feedbackGraph.forEach((d, i) => {
       this.barChartLabels.push(
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
-          d,
+          d.label,
           this._globalFilterService.timezone,
           this.getFormatForlabels(),
           this.selectedInterval === 'week'
@@ -107,6 +128,7 @@ export class FeedbackReceivedComponent implements OnInit {
             : null
         )
       );
+      this.barChartData[0].data.push(d.value);
     });
   }
 

@@ -5,7 +5,7 @@
     disabled: !getDepartmentAllowed() || feedback.status === 'NOACTION'
   }"
 >
-  <div class="nickname">{{ feedback?.getProfileNickName() }}</div>
+  <div class="nickname">{{ getNicknameLoggedinUser() }}</div>
   <div
     class="button"
     [ngClass]="{ disabled: feedback?.status === 'RESOLVED' }"

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { UserService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import {
   Departmentpermission,
@@ -18,13 +19,28 @@ export class FeedbackDetailFooterComponent implements OnInit {
   @Output() addComment = new EventEmitter();
   $subscription = new Subscription();
   feedbackFG: FormGroup;
-  constructor() {
+  constructor(private userService: UserService) {
     this.feedbackFG = new FormGroup({
       comment: new FormControl(''),
     });
   }
 
   ngOnInit(): void {}
+
+  getNicknameLoggedinUser() {
+    const userData = this.userService.userDetails;
+    if (userData) {
+      const nameList = [userData.firstName, userData.lastName];
+      return nameList
+        .map((i, index) => {
+          if ([0, 1].includes(index)) return i.charAt(0);
+          else return '';
+        })
+        .join('')
+        .toUpperCase();
+    }
+    return '';
+  }
 
   /**
    * @function getDepartmentAllowed Returns if user have permission, department name and marked as Resolved.

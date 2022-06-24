@@ -84,6 +84,35 @@ export class FrontdeskStatComponent implements OnInit {
     );
   }
 
+  /**
+   * @function initGraphData To initialize the graph data.
+   */
+  protected initGraphData(): void {
+    const botKeys = [];
+    this.chart.data[0].data = [];
+    this.chart.data[1].data = [];
+    this.chart.labels = [];
+    botKeys.forEach((d, i) => {
+      this.chart.labels.push(
+        this.dateService.convertTimestampToLabels(
+          this.selectedInterval,
+          d,
+          this._globalFilterService.timezone,
+          this.getFormatForlabels(),
+          this.selectedInterval === 'week'
+            ? this._adminUtilityService.getToDate(this.globalQueries)
+            : null
+        )
+      );
+    });
+  }
+
+  getFormatForlabels() {
+    if (this.selectedInterval === 'date') return 'DD MMM';
+    else if (this.selectedInterval === 'month') return 'MMM YYYY';
+    return '';
+  }
+
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

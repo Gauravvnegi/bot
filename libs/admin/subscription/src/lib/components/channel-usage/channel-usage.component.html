@@ -1,31 +1,33 @@
-<div class="heading">
-  <div class="heading__label">Total Channels</div>
-</div>
-<div class="carousel" *ngIf="communicationChannels" [config]="slideConfig">
-  <div class="slide" *ngFor="let channel of communicationChannels">
-    <div class="channels">
-      <div class="channels__container">
-        <div class="channels__container__image">
-          <img
-            class="channels__container__image__enabled"
-            *ngIf="channel.active"
-            [src]="channel.imageUrl"
-          />
-          <img
-            class="channels__container__image__disabled"
-            *ngIf="!channel.active"
-            [src]="channel.disabledImageUrl"
-          />
+<div class="container">
+  <div class="heading">
+    <div class="heading__label">Total Channels</div>
+  </div>
+  <div class="carousel" *ngIf="communicationChannels" [config]="slideConfig">
+    <div class="slide" *ngFor="let channel of communicationChannels">
+      <div class="channels">
+        <div class="channels__container">
+          <div class="channels__container__image">
+            <img
+              class="channels__container__image__enabled"
+              *ngIf="channel.active"
+              [src]="channel.imageUrl"
+            />
+            <img
+              class="channels__container__image__disabled"
+              *ngIf="!channel.active"
+              [src]="channel.disabledImageUrl"
+            />
+          </div>
+          <div class="channels__container__label">{{ channel.label }}</div>
         </div>
-        <div class="channels__container__label">{{ channel.label }}</div>
       </div>
     </div>
   </div>
-</div>
-<div class="details">
-  <div class="details__stat">
-    <div class="channel-stat-value">
-      {{ activeChannels }}/{{ data?.length }} Active
+  <div class="details">
+    <div class="details__stat">
+      <div class="channel-stat-value">
+        {{ activeChannels }}/{{ data?.length }} Active
+      </div>
     </div>
   </div>
 </div>

@@ -5,9 +5,12 @@ import { GuestUsageComponent } from './components/guest-usage/guest-usage.compon
 import { HotelUsageDatatableComponent } from './components/hotel-usage-datatable/hotel-usage-datatable.component';
 import { OcrUsageComponent } from './components/ocr-usage/ocr-usage.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
-import { SubscriptionComponent } from "./components/subscription/subscription.component";
+import { SubscriptionComponent } from './components/subscription/subscription.component';
 import { TopCardsComponent } from './components/top-cards/top-cards.component';
 import { UsersUsageComponent } from './components/users-usage/users-usage.component';
+import { FeedbackReceivedComponent } from './components/feedback-received/feedback-received.component';
+import { MessagesExchangedComponent } from './components/messages-exchanged/messages-exchanged.component';
+import { FrontdeskStatComponent } from './components/frontdesk-stat/frontdesk-stat.component';
 
 const appRoutes: Route[] = [
   {
@@ -22,13 +25,16 @@ const appRoutes: Route[] = [
 })
 export class AdminSubscriptionRoutingModule {
   static components = [
-		SubscriptionComponent,
-		StatisticsComponent,
-		HotelUsageDatatableComponent,
-		UsersUsageComponent,
-		OcrUsageComponent,
-		GuestUsageComponent,
+    SubscriptionComponent,
+    StatisticsComponent,
+    HotelUsageDatatableComponent,
+    UsersUsageComponent,
+    OcrUsageComponent,
+    GuestUsageComponent,
     ChannelUsageComponent,
-    TopCardsComponent
+    TopCardsComponent,
+    FeedbackReceivedComponent,
+    MessagesExchangedComponent,
+    FrontdeskStatComponent,
   ];
 }

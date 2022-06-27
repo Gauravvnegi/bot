@@ -213,3 +213,11 @@ body {
 .disabled {
   pointer-events: none;
 }
+
+.comparison-negative {
+  color: $comparison-negative;
+}
+
+.comparison-positive {
+  color: $comparison-positive;
+}

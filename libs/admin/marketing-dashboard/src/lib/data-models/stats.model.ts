@@ -5,13 +5,17 @@ export interface Deserializable {
 }
 
 export class MarketingStats implements Deserializable {
-  chips: ChipStats[];
-
+  CONVERSION_RATE: ChipStats;
+  CTR: ChipStats;
+  TOTAL_CLICKS: ChipStats;
+  TOTAL_EMAIL_SENT: ChipStats;
+  TOTAL_OPEN_RATE: ChipStats;
   deserialize(input) {
-    this.chips = new Array<ChipStats>();
-    Object.keys(input).forEach((key) => {
-      this.chips.push(new ChipStats().deserialize(input[key]));
-    });
+    this.CONVERSION_RATE = new ChipStats().deserialize(input.CONVERSION_RATE);
+    this.CTR = new ChipStats().deserialize(input.CTR);
+    this.TOTAL_CLICKS = new ChipStats().deserialize(input.TOTAL_CLICKS);
+    this.TOTAL_EMAIL_SENT = new ChipStats().deserialize(input.TOTAL_EMAIL_SENT);
+    this.TOTAL_OPEN_RATE = new ChipStats().deserialize(input.TOTAL_OPEN_RATE);
     return this;
   }
 }

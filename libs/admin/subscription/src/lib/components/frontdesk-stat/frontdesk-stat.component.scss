@@ -1,0 +1,26 @@
+@import 'main';
+
+.key-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  .key {
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+    &__icon {
+      width: 16px;
+      height: 14px;
+      border-radius: 1px;
+    }
+    &__label {
+      font-size: 12px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.17;
+      letter-spacing: 0.72px;
+      color: #6d7580;
+    }
+  }
+}

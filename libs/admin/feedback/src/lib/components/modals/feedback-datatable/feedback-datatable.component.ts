@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -336,6 +337,17 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       .map((item) => ({
         entityState: item.value,
       }));
+  }
+
+  /**
+   * @function onSelectedTabFilterChange To handle tab filter selection.
+   * @param event The material tab change event.
+   */
+  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
+    this.tabFilterIdx = event.index;
+    this.setTableCols();
+    this.values = [];
+    this.changePage(+this.tabFilterItems[event.index].lastPage);
   }
 
   /**

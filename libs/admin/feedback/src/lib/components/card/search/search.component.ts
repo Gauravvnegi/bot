@@ -19,7 +19,6 @@ export class SearchComponent implements OnInit {
   @Output() clear = new EventEmitter();
   @Output() search = new EventEmitter();
   searchValue = false;
-  searched = false;
   constructor(
     private snackbarService: SnackBarService,
     private cardService: CardService,
@@ -28,11 +27,10 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.listenForSearchChanges();
-    this.searched = false;
   }
 
   listenForSearchChanges(): void {
-    const formChanges$ = this.parentFG.valueChanges;
+    const formChanges$ = this.parentFG.get('search')?.valueChanges;
     const findSearch$ = ({ search }: { search: string }) =>
       this.cardService.searchFeedbacks({
         queryObj: this._adminUtilityService.makeQueryParams([
@@ -44,19 +42,19 @@ export class SearchComponent implements OnInit {
       .pipe(
         debounceTime(1000),
         switchMap((formValue) => {
-          if (formValue.search.trim().length)
-            return findSearch$(formValue).pipe(catchError((err) => empty()));
+          if (formValue.trim().length)
+            return findSearch$({ search: formValue }).pipe(
+              catchError((err) => empty())
+            );
           else return of(null);
         })
       )
       .subscribe(
         (response) => {
-          if (this.searched)
-            this.search.emit({
-              status: this.parentFG.get('search').value.trim().length,
-              response,
-            });
-          this.searched = true;
+          this.search.emit({
+            status: this.parentFG.get('search').value.trim().length,
+            response,
+          });
         },
         ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
       );

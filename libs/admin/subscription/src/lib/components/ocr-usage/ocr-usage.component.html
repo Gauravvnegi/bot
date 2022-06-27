@@ -1,52 +1,60 @@
-<!-- <div class="container"> -->
-<div class="heading">
-  <div class="heading__label">
-    OCR Count
-    <div class="tooltip">
-      <img
-        class="tooltip__image"
-        src="assets/svg/information-circle-outline.svg"
-      />
-      <span class="tooltip__text"
-        >Optical card reading technology is deployed to negate fake identity
-        cards being given during verification.</span
+<div class="container">
+  <div>
+    <div class="heading">
+      <div class="heading__label">
+        OCR Count
+        <div class="tooltip">
+          <img
+            class="tooltip__image"
+            src="assets/svg/information-circle-outline.svg"
+          />
+          <span class="tooltip__text"
+            >Optical card reading technology is deployed to negate fake identity
+            cards being given during verification.</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="line-chart">
+      <canvas
+        baseChart
+        class="line-chart__canvas"
+        [datasets]="chart.chartData"
+        [labels]="chart.chartLabels"
+        [options]="chart.chartOptions"
+        [colors]="chart.chartColors"
+        [legend]="chart.chartLegend"
+        [chartType]="chart.chartType"
       >
+      </canvas>
     </div>
   </div>
-</div>
-<div class="line-chart">
-  <canvas
-    baseChart
-    class="line-chart__canvas"
-    [datasets]="chart.chartData"
-    [labels]="chart.chartLabels"
-    [options]="chart.chartOptions"
-    [colors]="chart.chartColors"
-    [legend]="chart.chartLegend"
-    [chartType]="chart.chartType"
-  >
-  </canvas>
-</div>
-<div class="details">
-  <div class="details__stat">
-    <div class="details__stat__value">
-      {{ format(data?.currentUsage) }}/{{ format(data?.cost.usageLimit) }}
+
+  <div>
+    <div class="details">
+      <div class="details__stat">
+        <div class="details__stat__value">
+          {{ format(data?.currentUsage) }}/{{ format(data?.cost.usageLimit) }}
+        </div>
+        <div
+          class="details__stat__diff"
+          [style.color]="usage >= 0 ? '#52B33F' : '#CC052B'"
+        >
+          ({{ usage < 0 ? usage * -1 : usage }}%)
+          <img
+            [src]="
+              usage >= 0
+                ? 'assets/svg/up-percentage.svg'
+                : 'assets/svg/down-percentage.svg'
+            "
+          />
+        </div>
+      </div>
+      <div class="details__link">
+        in 30 days
+      </div>
     </div>
-    <div
-      class="details__stat__diff"
-      [style.color]="usage >= 0 ? '#52B33F' : '#CC052B'"
-    >
-      ({{ usage < 0 ? usage * -1 : usage }}%)
-      <img
-        [src]="
-          usage >= 0
-            ? 'assets/svg/up-percentage.svg'
-            : 'assets/svg/down-percentage.svg'
-        "
-      />
-    </div>
-  </div>
-  <div class="details__link">
-    in 30 days
   </div>
 </div>

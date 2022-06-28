@@ -127,7 +127,7 @@ export class GtmAcrossServicesComponent implements OnInit {
         .subscribe((response) => {
           this.statistics = new GTM().deserialize(response);
           this.keyLabels = [
-            { label: 'Closed', key: 'CLOSED' },
+            { label: 'Resolved', key: 'CLOSED' },
             { label: 'Remaining', key: 'REMAINING' },
           ];
           this.setProgress();

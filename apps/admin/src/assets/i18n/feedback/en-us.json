@@ -15,14 +15,14 @@
     "sub_title": "Response Breakdown as per feedback shared"
   },
   "gtm_across_services": {
-    "title_text": "GTM(Guest To Meet) across services",
+    "title_text": "GTM(Guest To Meet)",
     "tooltip_text": "Number of guest that must be met due to low score for the selected date range",
-    "closed_text": "Closed",
+    "closed_text": "Resolved",
     "remaining_text": "Remaining",
     "total_arrival_text": "Total Guest to meet who are at risk"
   },
   "art": {
-    "title_text": "ART",
+    "title_text": "ART(Average Resolution Time)",
     "tooltip_text": "The average time in which requests are getting closed per department"
   },
   "nps": { "title": "Net Promoter Score" },

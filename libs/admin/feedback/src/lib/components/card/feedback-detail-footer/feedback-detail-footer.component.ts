@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import {
@@ -18,14 +18,12 @@ export class FeedbackDetailFooterComponent implements OnInit {
   @Output() updateStatus = new EventEmitter();
   @Output() addComment = new EventEmitter();
   $subscription = new Subscription();
-  feedbackFG: FormGroup;
-  constructor(private userService: UserService) {
-    this.feedbackFG = new FormGroup({
-      comment: new FormControl(''),
-    });
-  }
+  @Input() feedbackFG: FormGroup;
+  constructor(private userService: UserService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.feedbackFG.addControl('comment', new FormControl(''));
+  }
 
   getNicknameLoggedinUser() {
     const userData = this.userService.userDetails;

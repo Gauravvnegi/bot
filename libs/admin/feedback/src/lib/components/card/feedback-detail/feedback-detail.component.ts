@@ -216,6 +216,7 @@ export class FeedbackDetailComponent implements OnInit {
             }
           )
           .subscribe();
+        this.feedbackFG.patchValue({ comment: '' });
         this.cardService.$assigneeChange.next({ status: true });
       },
       ({ error }) => {

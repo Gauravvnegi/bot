@@ -364,7 +364,7 @@
 }
 
 .feedback-chat {
-  height: calc(100% - 180px);
+  max-height: 47vh;
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 13px;

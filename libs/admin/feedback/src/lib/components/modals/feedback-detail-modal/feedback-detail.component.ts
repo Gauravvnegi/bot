@@ -180,6 +180,7 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
               }
             )
             .subscribe();
+          this.feedbackFG.patchValue({ comment: '' });
           this.cardService.$assigneeChange.next({ status: true });
         },
         ({ error }) => {

@@ -215,6 +215,7 @@
     <hospitality-bot-feedback-detail-footer
       [feedback]="data.feedback"
       [userPermissions]="userPermissions"
+      [feedbackFG]="feedbackFG"
       (updateStatus)="updateFeedbackState()"
       (addComment)="addComment($event)"
     ></hospitality-bot-feedback-detail-footer>

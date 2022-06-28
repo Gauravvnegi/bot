@@ -156,39 +156,35 @@
       </div>
     </div>
     <div class="comment-container">
-      <div style="position: absolute; left: 0;">
-        <div
-          class="guestComment"
-          *ngIf="
-            feedback?.feedback.comments && feedback?.feedback.comments.length
-          "
-        >
-          <div class="time">
-            {{ feedback.getTime(_globalFilterService.timezone) }}
-          </div>
-          <div class="comment">
-            {{ feedback?.feedback.comments }}
-          </div>
-          <div class="userImage">
-            <!-- {{ remark.getNickName() }} -->
-          </div>
+      <div
+        class="guestComment"
+        *ngIf="
+          feedback?.feedback.comments && feedback?.feedback.comments.length
+        "
+      >
+        <div class="time">
+          {{ feedback.getTime(_globalFilterService.timezone) }}
+        </div>
+        <div class="comment">
+          {{ feedback?.feedback.comments }}
+        </div>
+        <div class="userImage">
+          <!-- {{ remark.getNickName() }} -->
         </div>
       </div>
-      <div style="position: absolute; right: 0;">
-        <ng-container *ngFor="let remark of feedback?.remarks">
-          <div class="userComments" *ngIf="remark.remarks">
-            <div class="userImage">
-              {{ remark.getNickName() }}
-            </div>
-            <div class="comment">
-              {{ remark.remarks }}
-            </div>
-            <div class="time">
-              {{ remark.getTime(_globalFilterService.timezone) }}
-            </div>
+      <ng-container *ngFor="let remark of feedback?.remarks">
+        <div class="userComments" *ngIf="remark.remarks">
+          <div class="userImage">
+            {{ remark.getNickName() }}
           </div>
-        </ng-container>
-      </div>
+          <div class="comment">
+            {{ remark.remarks }}
+          </div>
+          <div class="time">
+            {{ remark.getTime(_globalFilterService.timezone) }}
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
   <hospitality-bot-feedback-detail-footer

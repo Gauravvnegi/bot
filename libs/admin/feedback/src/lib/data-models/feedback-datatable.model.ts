@@ -2,6 +2,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
+import { Remark } from './feedback-card.model';
 
 export interface Deserializable {
   deserialize(input: any): this;
@@ -32,6 +33,7 @@ export class FeedbackTable {
                 departmentName: item.departmentName,
                 userId: item.userId,
                 userName: item.userName,
+                remarks: item.remarks,
               }
             : item,
           outlets
@@ -66,8 +68,9 @@ export class Feedback {
   departmentName: string;
   userId: string;
   userName: string;
-
+  remarks: Remark[];
   deserialize(input, outlets) {
+    this.remarks = new Array<Remark>();
     Object.assign(
       this,
       set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
@@ -104,6 +107,10 @@ export class Feedback {
       (outlet) => outlet.id === input.entityId
     )[0]?.name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
+    if (input.remarks)
+      input.remarks.forEach((item) =>
+        this.remarks.push(new Remark().deserialize(item))
+      );
     this.guest = new Guest().deserialize(input.guestId);
     this.guestData = new StayGuestData().deserialize(
       input.guestData || {
@@ -337,6 +344,7 @@ export class StayFeedbackTable {
                 departmentName: item.departmentName,
                 userId: item.userId,
                 userName: item.userName,
+                remarks: item.remarks,
               }
             : item,
           outlets,
@@ -376,8 +384,10 @@ export class StayFeedback {
   departmentName: string;
   userId: string;
   userName: string;
+  remarks: Remark[];
   deserialize(input, outlets, colorMap) {
     this.services = new Array<Service>();
+    this.remarks = new Array<Remark>();
     this.commentList = {};
     Object.assign(
       this,
@@ -410,6 +420,10 @@ export class StayFeedback {
       (outlet) => outlet.id === input.entityId
     )[0]?.name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
+    if (input.remarks)
+      input.remarks.forEach((item) =>
+        this.remarks.push(new Remark().deserialize(item))
+      );
     this.guestData = new StayGuestData().deserialize(input.guestData);
     this.guest = new Guest().deserialize(input.guestId);
     return this;

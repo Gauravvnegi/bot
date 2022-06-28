@@ -170,7 +170,36 @@
           </div>
         </div>
       </div>
-      <div class="userComments">
+      <div class="comment-container">
+        <div
+          class="guestComment"
+          *ngIf="data.feedback?.comments && data?.feedback.comments.length"
+        >
+          <div class="time">
+            {{ data.feedback.getTime(_globalFilterService.timezone) }}
+          </div>
+          <div class="comment">
+            {{ data?.feedback.comments }}
+          </div>
+          <div class="userImage">
+            <!-- {{ remark.getNickName() }} -->
+          </div>
+        </div>
+        <ng-container *ngFor="let remark of data.feedback?.remarks">
+          <div class="userComments" *ngIf="remark.remarks">
+            <div class="userImage">
+              {{ remark.getNickName() }}
+            </div>
+            <div class="comment">
+              {{ remark.remarks }}
+            </div>
+            <div class="time">
+              {{ remark.getTime(_globalFilterService.timezone) }}
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!-- <div class="userComments">
         <div class="time">
           {{ data.feedback?.getTime(_globalFilterService.timezone) }}
         </div>
@@ -180,7 +209,7 @@
         <div class="userImage">
           {{ data.feedback?.getProfileNickName() }}
         </div>
-      </div>
+      </div> -->
     </div>
 
     <hospitality-bot-feedback-detail-footer

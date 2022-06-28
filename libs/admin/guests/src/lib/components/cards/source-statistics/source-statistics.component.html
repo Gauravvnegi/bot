@@ -1,0 +1,51 @@
+<div class="container" (click)="openTableModal()">
+  <div class="title-container">
+    <div class="icon">
+      <img
+        [src]="guestConfig.images.source.url"
+        [alt]="guestConfig.images.source.alt"
+      />
+    </div>
+    <div class="stat-title">{{ 'source.title' | translate }}</div>
+    <div class="info-icon">
+      <img
+        [src]="guestConfig.images.tooltip.url"
+        [alt]="guestConfig.images.tooltip.alt"
+      />
+      <div class="tooltip">
+        <span class="arrow"> </span> {{ 'source.tooltip' | translate }}
+      </div>
+    </div>
+  </div>
+  <div class="graph-container">
+    <div class="graph">
+      <canvas
+        baseChart
+        class="graph-base-chart"
+        [data]="chart.Data"
+        [labels]="chart.Labels"
+        [chartType]="chart.Type"
+        [legend]="chart.Legend"
+        [colors]="chart.Colors"
+        [options]="chart.Options"
+      >
+      </canvas>
+    </div>
+    <div class="labels">
+      <div class="val">{{ sourceGraphData?.totalCount }}</div>
+      <div class="label">{{ 'total_guests' | translate }}</div>
+    </div>
+  </div>
+  <div>
+    <div
+      class="stat-val-container"
+      *ngFor="let item of sourceGraphData?.statistics"
+    >
+      <div class="stat-lable-container">
+        <div class="icon" [style.background]="item.color"></div>
+        <div class="stat-lable">{{ item.label | titlecase }}</div>
+      </div>
+      <div class="stat-val">{{ item.value }}</div>
+    </div>
+  </div>
+</div>

@@ -218,11 +218,9 @@ export class PreArrivalPackagesComponent implements OnInit {
           this.selectedInterval,
           d,
           this._globalFilterService.timezone,
-          this.selectedInterval === 'date'
-            ? 'DD MMM'
-            : this.selectedInterval === 'month'
-            ? 'MMM YYYY'
-            : '',
+          this._adminUtilityService.getDateFormatFromInterval(
+            this.selectedInterval
+          ),
           this.selectedInterval === 'week'
             ? this._adminUtilityService.getToDate(this.globalFilters)
             : null

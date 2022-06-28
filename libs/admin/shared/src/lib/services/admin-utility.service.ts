@@ -75,4 +75,12 @@ export class AdminUtilityService {
         })
     );
   }
+
+  getDateFormatFromInterval(interval) {
+    return interval === 'date'
+      ? 'DD MMM'
+      : interval === 'month'
+      ? 'MMM YYYY'
+      : '';
+  }
 }

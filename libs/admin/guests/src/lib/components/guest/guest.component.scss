@@ -1,6 +1,6 @@
 @import 'main';
 .table-container {
-  margin-top: 15px;
+  margin-top: $margin15;
   @media (max-width: $tablet) {
     @include margin-top(0);
   }

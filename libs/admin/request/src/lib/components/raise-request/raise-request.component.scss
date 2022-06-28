@@ -10,14 +10,14 @@
   background: transparent
     linear-gradient(180deg, #a09fe5d9 0%, $primary-purple 100%) 0% 0% no-repeat
     padding-box;
-    position: sticky;
-    top: 0;
-    z-index: 999;
+  position: sticky;
+  top: 0;
+  z-index: 999;
   .close {
     width: 13.7px;
     height: 13.7px;
     margin: 15px;
-    color: #fff;
+    color: $white;
     font-size: 20px;
     cursor: pointer;
   }
@@ -48,13 +48,13 @@
       width: 100%;
       padding: 14px 14px 14px 40px;
       font-size: 16px;
-      color: #002046;
+      color: $dark-blue;
       letter-spacing: 0.32px;
-      border: 1px solid #ced5d9;
+      border: 1px solid $c-gray-81;
       border-radius: 5px;
 
       ::placeholder {
-        color: #9eaeb8;
+        color: $primary-gray;
       }
     }
   }
@@ -79,7 +79,7 @@
   line-height: normal;
   letter-spacing: 1.2px;
   text-align: left;
-  color: #fff;
+  color: $white;
 }
 .request-popup-btnwrap {
   display: flex;
@@ -88,16 +88,16 @@
   position: sticky;
   bottom: 0;
   padding: 15px 30px;
-  background: #fff;
+  background: $white;
   &-cancel {
     width: 113px;
     height: 35px;
     margin: 0 15px 0 0;
     padding: 8px 35px 9px 34px;
     border-radius: 18px;
-    border: solid 1px #4b56c0;
-    background-color: white;
-    color: #4b56c0;
+    border: solid 1px $button-blue;
+    background-color: $white;
+    color: $button-blue;
     cursor: pointer;
   }
   &-save {
@@ -106,15 +106,15 @@
     margin: 0 0 0 15px;
     padding: 8px 41px 9px 42px;
     border-radius: 18px;
-    background-color: #4b56c0;
-    color: white;
+    background-color: $button-blue;
+    color: $white;
     cursor: pointer;
   }
 }
 .body {
   margin: 30px 0px;
   max-height: calc(100% - 108px);
-  overflow-y:scroll;
+  overflow-y: scroll;
   padding: 0 30px;
   height: 49vh;
 }

@@ -11,9 +11,12 @@
       class="request-wrapper-header-btnwrap-btn"
       (click)="openRaiseRequest()"
     >
-      <img src="assets/svg/request_icon.svg" alt="" />
+      <img
+        [src]="requestConfig.images.raiseRequest.url"
+        [alt]="requestConfig.images.raiseRequest.alt"
+      />
       <div class="request-wrapper-header-btnwrap-btn-name">
-        Raise Request
+        {{ 'raiseRequest' | translate }}
       </div>
     </div>
   </div>

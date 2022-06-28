@@ -56,12 +56,12 @@
   .sortFilterContainer {
     height: calc(100% - 62px);
     width: 100%;
-    border-bottom: 1px solid #9eaeb8;
+    border-bottom: 1px solid $primary-gray;
     padding: 15px;
     .sortBy {
       font: normal normal bold 10px/13px Roboto;
       letter-spacing: 0.6px;
-      color: #b8bbbe;
+      color: $c-gray-74;
       margin-bottom: 10px;
     }
     .sortTypes {
@@ -79,18 +79,18 @@
         .sortItem {
           font: normal normal normal 14px/19px Roboto;
           letter-spacing: 0.84px;
-          color: #002046;
+          color: $dark-blue;
         }
       }
     }
     .filterUnderline {
-      border: solid 1px #e0e0e0;
+      border: solid 1px $border;
       margin: 20px 0;
     }
     .filterBy {
       font: normal normal bold 10px/13px Roboto;
       letter-spacing: 0.6px;
-      color: #b8bbbe;
+      color: $c-gray-74;
       margin-bottom: 10px;
     }
     .filterItemWrapper {
@@ -106,7 +106,7 @@
     .filterItem {
       font: normal normal normal 14px/19px Roboto;
       letter-spacing: 0.84px;
-      color: #002046;
+      color: $dark-blue;
       opacity: 1;
     }
   }
@@ -119,9 +119,9 @@
   .applyBtn {
     width: 138px;
     height: 36px;
-    background: #4b56c0 0% 0% no-repeat padding-box;
+    background: $button-blue 0% 0% no-repeat padding-box;
     border-radius: 100px;
-    color: #ffffff;
+    color: $white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -131,7 +131,7 @@
 .priority {
   font: normal normal bold 14px/19px Roboto;
   letter-spacing: 0.84px;
-  color: #002046;
+  color: $dark-blue;
   opacity: 1;
 }
 

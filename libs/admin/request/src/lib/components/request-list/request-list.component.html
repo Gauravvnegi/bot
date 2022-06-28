@@ -20,8 +20,8 @@
     </div>
     <div class="right-side-header-filter">
       <img
-        src="assets/svg/Filter-Icon.svg"
-        alt="filter"
+        [src]="requestConfig.images.filter.url"
+        [alt]="requestConfig.images.filter.alt"
         (click)="showFilter = true"
       />
     </div>
@@ -107,7 +107,7 @@
                   'sla-new': item.getSLAvalue() > 5
                 }"
               >
-                SLA: {{ item.getSLA() }}
+                {{ 'requestDetail.sla' | translate }}: {{ item.getSLA() }}
               </div>
               <div class="content-wrap-r2-divider"></div>
               <div>JD:- {{ item.jobDuration }}m</div>
@@ -138,7 +138,7 @@
       ? {
           visibility: 'visible',
           width: '100%',
-          marginRight: '1px solid #9eaeb8'
+          marginRight: '1px solid $primary-gray'
         }
       : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
   "

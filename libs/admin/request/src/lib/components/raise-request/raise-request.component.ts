@@ -11,11 +11,13 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from 'libs/shared/utils/src/lib/date.service';
 import { Subscription } from 'rxjs';
+import { request } from '../../constants/request';
 import { debounceTime, filter, map, startWith } from 'rxjs/operators';
 import { RequestService } from '../../services/request.service';
 
@@ -32,20 +34,17 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   reservation = {};
   $subscription = new Subscription();
   cmsServices = [];
+  priorityList = request.priority;
   filteredCMSServiceOptions;
-  priorityList = [
-    // { label: 'Low', value: 'LOW' },
-    { label: 'Medium', value: 'MEDIUM' },
-    { label: 'High', value: 'HIGH' },
-    { label: 'ASAP', value: 'ASAP' },
-  ];
   isRaisingRequest = false;
+  requestConfig = request;
   constructor(
     private fb: FormBuilder,
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
     private _requestService: RequestService,
-    private adminUtilityService: AdminUtilityService
+    private adminUtilityService: AdminUtilityService,
+    private _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -53,15 +52,17 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     this.registerListeners();
   }
 
-  registerListeners() {
+  registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForRoomNumberChanges();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        //set-global query everytime global filter changes
         this.getHotelId([
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
@@ -87,15 +88,21 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * @function getHotelId To set the hotel id after extractinf from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
+
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
+      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
     });
   }
 
-  initFG() {
+  /**
+   * @function initFG To initialize FormGroup.
+   */
+  initFG(): void {
     this.requestFG = this.fb.group({
       roomNo: ['', Validators.required],
       firstName: ['', Validators.required],
@@ -112,10 +119,13 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     });
   }
 
-  initItemList() {
+  /**
+   * @function initItemList To init Item List.
+   */
+  initItemList(): void {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
-        { entityType: 'cms services' },
+        { entityType: request.cmsServices },
       ]),
     };
     this.$subscription.add(
@@ -126,14 +136,25 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
           );
           this.listenForItemNameChange();
         },
-        ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
-        }
+        ({ error }) =>
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
 
-  handleItemNameChange(event) {
+  /**
+   * @function handleItemNameChange To handle item name value change.
+   * @param event The MatSelectionChange event.
+   */
+  handleItemNameChange(event): void {
     const service = this.cmsServices.filter(
       (d) => d.itemName === event.option.value
     )[0];
@@ -141,9 +162,22 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     this.requestFG.get('jobDuration').setValue(parseInt(service.duration));
   }
 
-  raiseRequest() {
+  /**
+   * @function raiseRequest To raise request.
+   */
+  raiseRequest(): void {
     if (this.requestFG.invalid) {
-      this._snackbarService.openSnackBarAsText('Please fill all details.');
+      this._translateService.get('error.fillAllDetails').subscribe((message) =>
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.error.some_thing_wrong',
+              priorityMessage: message,
+            },
+            ''
+          )
+          .subscribe()
+      );
       this.requestFG.markAllAsTouched();
       return;
     }
@@ -151,32 +185,60 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     const data = {
       ...this.requestFG.getRawValue(),
       systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
-      sender: 'KIOSK',
+      sender: request.kiosk,
       propertyID: '1',
     };
     this.isRaisingRequest = true;
     this.$subscription.add(
       this._requestService.createRequest(this.hotelId, data).subscribe(
         (response) => {
-          this._snackbarService.openSnackBarAsText('Request created.', '', {
-            panelClass: 'success',
-          });
+          this._translateService
+            .get('success.requestCreated')
+            .subscribe((message) =>
+              this._snackbarService
+                .openSnackBarWithTranslate(
+                  {
+                    translateKey: 'success.requestCreated',
+                    priorityMessage: message,
+                  },
+                  '',
+                  {
+                    panelClass: 'success',
+                  }
+                )
+                .subscribe()
+            );
           this.isRaisingRequest = false;
           this.close({ status: true, data: this.reservation });
         },
         ({ error }) => {
           this.isRaisingRequest = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
   }
 
-  close(closeData) {
+  /**
+   * @function close To close the raise request modal.
+   * @param closeData The status and reservation data.
+   */
+  close(closeData: { status: boolean; data? }): void {
     this.onRaiseRequestClose.emit(closeData);
   }
 
-  listenForRoomNumberChanges() {
+  /**
+   * @function listenForRoomNumberChanges To listen for room number field value change.
+   */
+  listenForRoomNumberChanges(): void {
     const formChanges$ = this.searchFG.valueChanges.pipe(
       filter(() => !!(this.searchFG.get('search') as FormControl).value)
     );
@@ -185,7 +247,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this.requestFG.patchValue({
         roomNo: response.search,
       });
-      if (response?.search.length >= 3) {
+      if (response?.search.length >= 3)
         this.$subscription.add(
           this._requestService
             .searchBooking(
@@ -195,29 +257,39 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
                 },
               ])
             )
-            .subscribe((res) => {
-              if (res) {
-                this.reservation = res;
-                this.requestFG.patchValue({
-                  firstName: res.guestDetails.primaryGuest.firstName,
-                  lastName: res.guestDetails.primaryGuest.lastName,
-                });
-                this.requestFG.get('firstName').disable();
-                this.requestFG.get('lastName').disable();
-              } else {
-                this.reservation = {};
-                this.requestFG.get('firstName').enable();
-                this.requestFG.get('lastName').enable();
-              }
-            })
+            .subscribe(
+              (res) => {
+                if (res) {
+                  this.reservation = res;
+                  this.requestFG.patchValue({
+                    firstName: res.guestDetails.primaryGuest.firstName,
+                    lastName: res.guestDetails.primaryGuest.lastName,
+                  });
+                  this.requestFG.get('firstName').disable();
+                  this.requestFG.get('lastName').disable();
+                } else {
+                  this.reservation = {};
+                  this.requestFG.get('firstName').enable();
+                  this.requestFG.get('lastName').enable();
+                }
+              },
+              ({ error }) =>
+                this._snackbarService
+                  .openSnackBarWithTranslate(
+                    {
+                      translateKey: 'messages.error.some_thing_wrong',
+                      priorityMessage: error?.message,
+                    },
+                    ''
+                  )
+                  .subscribe()
+            )
         );
-      } else {
-        this.reservation = {};
-      }
+      else this.reservation = {};
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 }

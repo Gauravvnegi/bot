@@ -30,6 +30,9 @@ export class SearchComponent implements OnInit {
     this.listenForSearchChanges();
   }
 
+  /**
+   * @function listenForSearchChanges To listen for search field value change.
+   */
   listenForSearchChanges(): void {
     const formChanges$ = this.parentFG.valueChanges;
     const findSearch$ = ({ search }: { search: string }) =>
@@ -58,11 +61,23 @@ export class SearchComponent implements OnInit {
             status: this.parentFG.get('search').value.trim().length,
             response,
           }),
-        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       );
   }
 
-  clearSearch() {
+  /**
+   * @function clearSearch To clear search field value.
+   */
+  clearSearch(): void {
     this.clear.emit();
   }
 }

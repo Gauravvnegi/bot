@@ -10,9 +10,14 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Observable, Subscription } from 'rxjs';
-import { InhouseTable } from '../../data-models/inhouse-list.model';
+import {
+  InhouseData,
+  InhouseTable,
+} from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
+import { request } from '../../constants/request';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'hospitality-bot-request-list',
@@ -22,6 +27,7 @@ import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/
 export class RequestListComponent implements OnInit {
   @ViewChild('requestList') private myScrollContainer: ElementRef;
   $subscription = new Subscription();
+  requestConfig = request;
   entityType = 'Inhouse';
   enableSearchField = false;
   showFilter = false;
@@ -36,42 +42,9 @@ export class RequestListComponent implements OnInit {
   offset = 0;
   limit = 10;
   totalData;
-  selectedRequest;
+  selectedRequest: InhouseData;
   parentFG: FormGroup;
-  tabFilterItems = [
-    {
-      label: 'All',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'To-Do',
-      content: '',
-      value: 'Pending',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Timeout',
-      content: '',
-      value: 'Timeout',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Close',
-      content: '',
-      value: 'Closed',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-  ];
+  tabFilterItems = request.tabFilter;
 
   tabFilterIdx: number = 0;
   hotelId: string;
@@ -90,18 +63,24 @@ export class RequestListComponent implements OnInit {
     this._requestService.selectedRequest.next(null);
   }
 
-  initFG() {
+  /**
+   * @function initFG To initialize form group.
+   */
+  initFG(): void {
     this.parentFG = this.fb.group({
       search: ['', Validators.minLength(3)],
     });
   }
 
-  registerListeners() {
+  registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForNotification();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
@@ -132,7 +111,10 @@ export class RequestListComponent implements OnInit {
     );
   }
 
-  listenForNotification() {
+  /**
+   * @function listenForNotification To listen for request notification.
+   */
+  listenForNotification(): void {
     this.firebaseMessagingService.newInhouseRequest.subscribe((response) => {
       if (response) {
         this.loadInitialRequestList([
@@ -153,9 +135,11 @@ export class RequestListComponent implements OnInit {
     });
   }
 
+  /**
+   * @function getHotelId To set the hotel id after extractinf from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
   getHotelId(globalQueries): void {
-    //todo
-
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
         this.hotelId = element.hotelId;
@@ -163,7 +147,10 @@ export class RequestListComponent implements OnInit {
     });
   }
 
-  listenForRefreshData() {
+  /**
+   * @function listenForRefreshData To listen for refreshing data.
+   */
+  listenForRefreshData(): void {
     this.$subscription.add(
       this._requestService.refreshData.subscribe((response) => {
         if (response) {
@@ -174,7 +161,11 @@ export class RequestListComponent implements OnInit {
     );
   }
 
-  loadInitialRequestList(queries = []) {
+  /**
+   * @function loadInitialRequestList To load the initial request list.
+   * @param queries The queries for data fetching.
+   */
+  loadInitialRequestList(queries = []): void {
     this.loading = true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
@@ -184,11 +175,16 @@ export class RequestListComponent implements OnInit {
           this.totalData = response.total;
           this.loading = false;
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) => this.showError(error)
       )
     );
   }
 
+  /**
+   * @function fetchDataFrom To fetch data from api.
+   * @param queries The queries for data fetching.
+   * @returns The observable with stream of data.
+   */
   fetchDataFrom(queries): Observable<any> {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
@@ -196,7 +192,12 @@ export class RequestListComponent implements OnInit {
     return this._requestService.getAllLiveRequest(config);
   }
 
-  loadData(offset, limit) {
+  /**
+   * @function loadData To load request list data.
+   * @param offset The page offset.
+   * @param limit The limit of data to be fetched.
+   */
+  loadData(offset: number, limit: number): void {
     this.$subscription.add(
       this.fetchDataFrom([
         ...this.globalQueries,
@@ -224,12 +225,16 @@ export class RequestListComponent implements OnInit {
           this.updateTabFilterCount(response.entityStateCounts);
           this.loading = false;
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) => this.showError(error)
       )
     );
   }
 
-  updateTabFilterCount(countObj) {
+  /**
+   * @function updateTabFilterCount To update tab filter count.
+   * @param countObj The object tab data count.
+   */
+  updateTabFilterCount(countObj): void {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
         if (tab.value !== 'ALL') tab.total = countObj[tab.value];
@@ -237,13 +242,21 @@ export class RequestListComponent implements OnInit {
     }
   }
 
-  onSelectedTabFilterChange(event) {
+  /**
+   * @function onSelectedTabFilterChange To handle tab selection.
+   * @param event The Mat tab selection change event.
+   */
+  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
     this.loadData(0, 10);
   }
 
+  /**
+   * @function onScroll To handle request list scroll.
+   * @param event The scroll event.
+   */
   @HostListener('window:scroll', ['$event'])
-  onScroll(event) {
+  onScroll(event): void {
     if (!this.enableSearchField)
       if (
         this.myScrollContainer &&
@@ -260,24 +273,38 @@ export class RequestListComponent implements OnInit {
       }
   }
 
-  setSelectedRequest(item) {
+  /**
+   * @function setSelectedRequest To set selected request data.
+   * @param item The request data.
+   */
+  setSelectedRequest(item: InhouseData): void {
     this.selectedRequest = item;
     this._requestService.selectedRequest.next(item);
   }
 
-  enableSearch() {
+  /**
+   * @function enableSearch To enable search field.
+   */
+  enableSearch(): void {
     this.parentFG.patchValue({ search: '' });
     this.enableSearchField = true;
   }
 
-  clearSearch() {
+  /**
+   * @function clearSearch To clear search field.
+   */
+  clearSearch(): void {
     this.parentFG.patchValue({ search: '' });
     this.enableSearchField = false;
     this.loading = true;
     this.loadData(0, 10);
   }
 
-  getSearchValue(event) {
+  /**
+   * @function getSearchValue To get request list based on search field value.
+   * @param event The search event data.
+   */
+  getSearchValue(event: { status: boolean; response? }): void {
     if (event.status)
       this.listData = new InhouseTable().deserialize({
         records: event.response,
@@ -288,7 +315,11 @@ export class RequestListComponent implements OnInit {
     }
   }
 
-  handleFilter(event) {
+  /**
+   * @function handleFilter To handle filter submit.
+   * @param event The filter event data.
+   */
+  handleFilter(event: { status: boolean; data? }): void {
     if (event.status) {
       this.filterData = event.data;
       if (this.parentFG.get('search').value.trim().length)
@@ -298,7 +329,12 @@ export class RequestListComponent implements OnInit {
     this.showFilter = false;
   }
 
-  getRequestWithSearchAndFilter(offset, limit) {
+  /**
+   * @function getRequestWithSearchAndFilter To get request data with search and filter.
+   * @param offset The page offset.
+   * @param limit The limit of data to be fetched.
+   */
+  getRequestWithSearchAndFilter(offset, limit): void {
     this._requestService
       .searchRequest(this.hotelId, {
         queryObj: this._adminUtilityService.makeQueryParams([
@@ -317,8 +353,24 @@ export class RequestListComponent implements OnInit {
           (this.listData = new InhouseTable().deserialize({
             records: response,
           }).records),
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) => this.showError(error)
       );
+  }
+
+  /**
+   * @function showError To show error with translation.
+   * @param error The error object.
+   */
+  showError(error) {
+    this._snackbarService
+      .openSnackBarWithTranslate(
+        {
+          translateKey: 'messages.error.some_thing_wrong',
+          priorityMessage: error?.message,
+        },
+        ''
+      )
+      .subscribe();
   }
 
   resetFilter() {

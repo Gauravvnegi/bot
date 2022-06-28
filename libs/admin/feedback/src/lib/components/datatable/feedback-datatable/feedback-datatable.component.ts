@@ -123,13 +123,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   setTableType(value) {
     this.tableFG.patchValue({ tableType: value });
-    if (value === feedback.tableTypes.table)
+    if (value === feedback.tableTypes.table.value) {
       this.loadInitialData([
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
         ...this.getSelectedQuickReplyFilters(),
       ]);
-    else this.selectedRows = [];
+      this.getUserPermission(this.tabFilterItems[this.tabFilterIdx]?.value);
+    } else this.selectedRows = [];
   }
 
   getConfig() {
@@ -153,17 +154,20 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.getHotelId(this.globalQueries);
         this.getOutlets(data['filter'].value.property.branchName);
         const feedbackType = data['filter'].value.feedback.feedbackType;
-        if (this.tabFilterItems.length === 0)
-          this.setTabFilters(
-            feedbackType === feedback.types.transactional
-              ? feedback.types.transactional
-              : feedback.types.stay
-          );
-        this.loadInitialData([
-          ...this.globalQueries,
-          { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFilters(),
-        ]);
+
+        if (this.tableFG?.get('tableType').value !== 'card') {
+          if (this.tabFilterItems.length === 0)
+            this.setTabFilters(
+              feedbackType === feedback.types.transactional
+                ? feedback.types.transactional
+                : feedback.types.stay
+            );
+          this.loadInitialData([
+            ...this.globalQueries,
+            { order: sharedConfig.defaultOrder },
+            ...this.getSelectedQuickReplyFilters(),
+          ]);
+        }
       })
     );
   }

@@ -77,10 +77,11 @@ export class FeedbackListComponent implements OnInit {
       entityType: this.entityType,
       entityState: this.cardTabFilterItems[this.tabFilterIdx]?.value,
     };
+    this.listenForFeedbackTypeChanged();
+    this.listenForOutletChanged();
     this.listenForGlobalFilters();
     this.listenForEntityTypeChange();
     this.listenForAssigneeChange();
-    this.listenForOutletChanged();
   }
 
   /**
@@ -167,13 +168,12 @@ export class FeedbackListComponent implements OnInit {
         this.feedbackType = response;
         this.filterData = {
           ...this.filterData,
-          feedbackType: response,
+          feedbackType: response.length ? response : feedback.types.stay,
         };
         this.pagination = {
           offset: 0,
           limit: 20,
         };
-        this.loadData();
       })
     );
   }
@@ -248,9 +248,22 @@ export class FeedbackListComponent implements OnInit {
    */
   fetchDataFrom(queries): Observable<any> {
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(queries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...queries,
+        { entityIds: this.setEntityId() },
+      ]),
     };
     return this.cardService.getFeedbackList(config);
+  }
+
+  /**
+   * @function setEntityId To set entity id based on current table filter.
+   * @returns The entityIds.
+   */
+  setEntityId() {
+    if (this.feedbackType === feedback.types.transactional)
+      return this.statisticService.outletIds;
+    else return this.hotelId;
   }
 
   /**

@@ -187,18 +187,12 @@ export class ArtComponent implements OnInit {
     );
   }
 
-  data = [
-    { label: 'Dept1', score: 11 },
-    { label: 'Dept2', score: 18 },
-    { label: 'Dept3', score: 41 },
-    { label: 'Dept4', score: 11 },
-  ];
-
   initChartData() {
     this.chart.datasets[0].data = [];
     this.chart.datasets[1].data = [];
-    this.chart.datasets[1].backgroundColor = [''];
-    this.chart.datasets[1].borderColor = [''];
+    this.chart.datasets[1].backgroundColor = [];
+    this.chart.datasets[1].borderColor = [];
+    this.chart.datasets[1].hoverBackgroundColor = [];
     this.chart.labels = [];
     if (!this.chartData.length) {
       return;
@@ -226,8 +220,8 @@ export class ArtComponent implements OnInit {
         this.chart.labels.push('');
         this.chart.options.scales.xAxes[0].ticks.max = item.label;
         this.chart.datasets[1].backgroundColor.push(item.colorCode);
-        this.chart.datasets[1].borderColor.push(item.colorCode);
         this.chart.datasets[1].hoverBackgroundColor.push(item.colorCode);
+        this.chart.datasets[1].borderColor.push(item.colorCode);
         this.loading = false;
       }
     });

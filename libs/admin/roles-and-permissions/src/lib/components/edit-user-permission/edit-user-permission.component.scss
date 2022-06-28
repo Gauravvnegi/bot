@@ -1,6 +1,21 @@
+@import 'main';
+
 ::ng-deep .field-trio {
   justify-content: flex-end;
 }
 ::ng-deep .field-width {
   width: 33%;
+}
+
+.add-user {
+  background: transparent;
+  border: none;
+  outline: none;
+  margin-right: $margin20;
+  color: $primary-gray;
+  font-size: $font14;
+  &:hover {
+    cursor: pointer;
+    color: $primary-purple;
+  }
 }

@@ -12,7 +12,7 @@ import { CountryCode } from '../../../../../../shared/models/country-code.model'
 import { Regex } from '../../../../../../shared/constants/regex';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs';
@@ -54,7 +54,8 @@ export class EditUserPermissionComponent implements OnInit {
     private _managePermissionService: ManagePermissionService,
     private _snackbarService: SnackBarService,
     private _route: ActivatedRoute,
-    private _location: Location
+    private _location: Location,
+    private _router: Router
   ) {
     this.initUserForm();
   }
@@ -225,10 +226,14 @@ export class EditUserPermissionComponent implements OnInit {
       );
   }
 
+  addUser() {
+    this._router.navigate(['/pages/roles-permissions/add-user']);
+  }
+
   get permissionConfigsFA() {
     return this.userForm.get('permissionConfigs') as FormArray;
   }
-  
+
   goback() {
     this._location.back();
   }

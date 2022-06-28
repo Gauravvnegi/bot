@@ -17,12 +17,12 @@
   <div class="graph">
     <canvas
       baseChart
-      class="line-chart__canvas"
-      [datasets]="chart.data"
+      *ngIf="!loading"
+      chartType="bar"
+      [datasets]="chart.datasets"
       [labels]="chart.labels"
       [options]="chart.options"
       [legend]="chart.legend"
-      [chartType]="chart.type"
     >
     </canvas>
   </div>

@@ -22,26 +22,83 @@ import { ART, ARTGraph } from '../../../data-models/statistics.model';
 })
 export class ArtComponent implements OnInit {
   @Input() globalFeedbackFilterType;
+  loading = false;
   tabfeedbackType: string;
   $subscription = new Subscription();
   feedbackConfig = feedback;
   globalQueries = [];
   chartData: ART[];
-  chart: BarChart = {
-    data: [
+
+  public chart = {
+    datasets: [
       {
+        data: [],
+        label: 'Line',
+        type: 'line',
+        fill: false,
+        borderColor: ['#000000'],
+        tooltipHidden: true,
+      },
+      {
+        data: [],
         backgroundColor: [],
         hoverBackgroundColor: [],
-        data: [],
+        borderColor: [],
         label: 'ART',
+        tooltipHidden: false,
       },
     ],
     labels: [],
-    options: chartConfig.options.art,
+    options: {
+      elements: {
+        line: {
+          tension: 0,
+        },
+        point: {
+          radius: 0,
+          borderWidth: 2,
+          hitRadius: 5,
+          hoverRadius: 0,
+          hoverBorderWidth: 2,
+        },
+      },
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+        filter: function (tooltipItem, data) {
+          return !data.datasets[tooltipItem.datasetIndex].tooltipHidden; // custom added prop to dataset
+        },
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+              stepSize: 6,
+            },
+          },
+        ],
+        xAxes: [
+          {
+            ticks: {
+              min: 'Monday',
+              max: 'Sunday',
+            },
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+      },
+    },
     legend: false,
-    type: chartConfig.type.bar,
   };
-
   constructor(
     protected statisticsService: StatisticsService,
     protected _globalFilterService: GlobalFilterService,
@@ -124,6 +181,7 @@ export class ArtComponent implements OnInit {
     this.$subscription.add(
       this.statisticsService.getARTGraphData(config).subscribe((response) => {
         this.chartData = new ARTGraph().deserialize(response);
+        if (this.chartData.length) this.loading = true;
         this.initChartData();
       })
     );
@@ -137,14 +195,41 @@ export class ArtComponent implements OnInit {
   ];
 
   initChartData() {
-    this.chart.data[0].data = [];
-    this.chart.data[0].backgroundColor = [];
+    this.chart.datasets[0].data = [];
+    this.chart.datasets[1].data = [];
+    this.chart.datasets[1].backgroundColor = [''];
+    this.chart.datasets[1].borderColor = [''];
     this.chart.labels = [];
-    this.chartData?.forEach((item: ART) => {
-      this.chart.data[0].data.push(item.value);
-      this.chart.data[0].backgroundColor.push(item.colorCode);
-      this.chart.data[0].hoverBackgroundColor.push(item.colorCode);
+    if (!this.chartData.length) {
+      return;
+    }
+    this.loading = true;
+    this.chart.datasets[0].data = [8];
+    this.chart.datasets[1].data = [0];
+    this.chart.labels = [''];
+    this.chartData?.forEach((item: ART, index) => {
+      if (index === 0) {
+        this.chart.options.scales.xAxes[0].ticks.min = item.label;
+        this.chart.datasets[1].backgroundColor.push(item.colorCode);
+        this.chart.datasets[1].borderColor.push(item.colorCode);
+        this.chart.datasets[1].hoverBackgroundColor.push(item.colorCode);
+      }
+      this.chart.datasets[0].data.push(8);
+      this.chart.datasets[1].data.push(item.value);
+      this.chart.datasets[1].backgroundColor.push(item.colorCode);
+      this.chart.datasets[1].borderColor.push(item.colorCode);
+      this.chart.datasets[1].hoverBackgroundColor.push(item.colorCode);
       this.chart.labels.push(item.label);
+      if (index === this.chartData.length - 1) {
+        this.chart.datasets[1].data.push(0);
+        this.chart.datasets[0].data.push(8);
+        this.chart.labels.push('');
+        this.chart.options.scales.xAxes[0].ticks.max = item.label;
+        this.chart.datasets[1].backgroundColor.push(item.colorCode);
+        this.chart.datasets[1].borderColor.push(item.colorCode);
+        this.chart.datasets[1].hoverBackgroundColor.push(item.colorCode);
+        this.loading = false;
+      }
     });
   }
 

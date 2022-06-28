@@ -4,6 +4,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
+import { request } from '../../constants/request';
 import { InhouseData } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
 
@@ -15,11 +16,7 @@ import { RequestService } from '../../services/request.service';
 export class RequestDetailComponent implements OnInit {
   data: InhouseData;
   status = false;
-  statusList = [
-    { label: 'To-Do', value: 'Immediate' },
-    { label: 'Timeout', value: 'Timeout' },
-    { label: 'Closed', value: 'Closed' },
-  ];
+  statusList = request.status;
   $subscription = new Subscription();
   hotelId: string;
   @Output() guestInfo = new EventEmitter();
@@ -43,6 +40,9 @@ export class RequestDetailComponent implements OnInit {
     this.listenForSelectedRequest();
   }
 
+  /**
+   * @function listenForSelectedRequest To listen for request selection.
+   */
   listenForSelectedRequest() {
     this.$subscription.add(
       this._requestService.selectedRequest.subscribe((response) => {
@@ -58,18 +58,24 @@ export class RequestDetailComponent implements OnInit {
     );
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters() {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        //set-global query everytime global filter changes
+      this._globalFilterService.globalFilter$.subscribe((data) =>
         this.getHotelId([
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
-        ]);
-      })
+        ])
+      )
     );
   }
 
+  /**
+   * @function getHotelId To set the hotel id after extractinf from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
@@ -78,19 +84,31 @@ export class RequestDetailComponent implements OnInit {
     });
   }
 
+  /**
+   * @function initFG To initialize FormGroup.
+   */
   initFG() {
     this.requestFG = this.fb.group({
       status: [''],
     });
   }
 
-  checkForData() {
+  /**
+   * @function To check for data existence.
+   * @returns The length of the object.
+   */
+  checkForData(): number {
     return this.data && Object.keys(this.data).length;
   }
 
   openGuestInfo(): void {
     this.guestInfo.emit({ openGuestInfo: true });
   }
+
+  /**
+   * @function handleStatusChange To handle the status drop down value change.
+   * @param event the mat selection change event.
+   */
 
   handleStatusChange(event) {
     const requestData = {
@@ -115,10 +133,18 @@ export class RequestDetailComponent implements OnInit {
             '',
             { panelClass: 'success' }
           ),
-          
+
         ({ error }) => {
           this.requestFG.patchValue({ status: this.data.action });
-          this._snackbarService.openSnackBarAsText(error.message);
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.error.some_thing_wrong',
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );

@@ -1,31 +1,31 @@
 @import 'main';
 
 .priority-low {
-  background-color: #119e0c;
+  background-color: $priority-low;
 }
 
 .priority-medium {
-  background-color: #25a2e2;
+  background-color: $priority-medium;
 }
 
 .priority-high {
-  background-color: #f8b633;
+  background-color: $priority-high;
 }
 
 .priority-asap {
-  background-color: #ce0c0c;
+  background-color: $priority-asap;
 }
 
 .sla-new {
-  color: #119e0c;
+  color: $priority-low;
 }
 
 .sla-pending {
-  color: #f8b633;
+  color: $priority-high;
 }
 
 .sla-timeout {
-  color: #ce0c0c;
+  color: $priority-asap;
 }
 
 .right-side {
@@ -57,13 +57,13 @@
       height: 138px;
       padding: 10px;
       display: flex;
-      border-bottom: solid 1px #e0e0e0;
+      border-bottom: solid 1px $border;
       cursor: pointer;
       &-avt {
         height: 45px;
         width: 45px;
         border-radius: 50%;
-        background-color: olivedrab;
+        background-color: $olivedrab;
         justify-content: center;
         align-items: center;
         display: flex;
@@ -82,7 +82,7 @@
           font-style: normal;
           line-height: normal;
           letter-spacing: 0.6px;
-          color: #99a6b5;
+          color: $c-gray-61;
           margin-top: 3px;
           margin-bottom: 13px;
           display: flex;
@@ -93,7 +93,7 @@
           &-status {
             padding: 2px 5px 3px;
             border-radius: 5px;
-            color: #fff;
+            color: $white;
             margin-left: 10px;
           }
         }
@@ -101,11 +101,11 @@
           font-size: 12px;
           font-weight: bold;
           letter-spacing: 0.72px;
-          color: #002046;
+          color: $dark-blue;
           margin-bottom: 5px;
         }
         &-subtitle {
-          color: #909090;
+          color: $c-gray-55;
           font-weight: 500;
           font-size: 12px;
         }
@@ -113,7 +113,7 @@
           font-size: 12px;
           font-weight: normal;
           letter-spacing: 0.72px;
-          color: #909090;
+          color: $c-gray-55;
           margin-bottom: 5px;
         }
         &-r2 {
@@ -123,7 +123,7 @@
           letter-spacing: 0.72px;
           &-divider {
             height: 15px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid $border;
             margin: 0 10px;
             @media (max-width: $tablet) {
               @include margin(0 5px);
@@ -238,14 +238,14 @@
 .sortFilt {
   height: 62px;
   padding: 10px 15px;
-  border-bottom: 1px solid #9eaeb8;
+  border-bottom: 1px solid $primary-gray;
   display: flex;
   justify-content: space-between;
   align-items: center;
   &-text {
     font: normal normal medium 16px/21px Roboto;
     letter-spacing: 0.64px;
-    color: #002046;
+    color: $dark-blue;
     opacity: 1;
   }
 }
@@ -254,7 +254,7 @@
   cursor: pointer;
 }
 .content-wrap-subtitle {
-  color: #002046;
+  color: $dark-blue;
   font-weight: 500;
 }
 .right-side-subheader {

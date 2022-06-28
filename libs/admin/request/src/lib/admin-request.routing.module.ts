@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { RequestDataTableComponent } from './components/request-data-table/request-data-table.component';
 import { RequestComponent } from './components/request/request.component';
 import { RequestWrapperComponent } from './components/request-wrapper/request-wrapper.component';
 import { RequestListComponent } from './components/request-list/request-list.component';
@@ -33,8 +32,6 @@ const appRoutes: Route[] = [
 export class AdminRequestRoutingModule {
   static components = [
     RequestComponent,
-    RequestDataTableComponent,
-    RequestDataTableComponent,
     RequestWrapperComponent,
     RequestListComponent,
     RequestDetailComponent,

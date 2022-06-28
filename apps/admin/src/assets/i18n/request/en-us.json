@@ -1,0 +1,35 @@
+{
+  "requestDetail": {
+    "priorityCode": "Item / Priority Code",
+    "bookingRoomNo": "Booking / Rooms No.",
+    "company": "Company",
+    "contactInfo": "Source / Phone No. / Email",
+    "openDateTime": "Open - Date & Time",
+    "closeDateTime": "Close - Date & Time",
+    "jobDuration": "Job Duration",
+    "sla": "SLA",
+    "quantity": "Quantity",
+    "noRequestSelected": "Please select a request to view"
+  },
+  "filter": {
+    "sortBy": "Sort By",
+    "filterBy": "Filter By",
+    "priority": "Priority"
+  },
+  "error": {
+    "roomNoRequired": "Room No is required",
+    "firstNameRequired": "First Name is required",
+    "lastNameRequired": "Last Name is required",
+    "itemNameRequired": "Item Name is required",
+    "itemCodeRequired": "Item Code is required",
+    "priorityCodeRequired": "Priority code is required",
+    "fillAllDetails": "Please fill all details."
+  },
+  "noRequestFound": "No requests found",
+  "raiseRequest": "Raise Request",
+  "searchPlaceHolder": "Search by Name, Number...",
+  "minute": "minute",
+  "success": {
+    "requestCreated": "Request created."
+  }
+}

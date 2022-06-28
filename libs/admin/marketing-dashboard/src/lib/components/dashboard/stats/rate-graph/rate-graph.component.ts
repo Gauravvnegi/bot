@@ -101,8 +101,8 @@ export class RateGraphComponent implements OnInit {
     chartLegend: false,
     chartType: 'line',
   };
-  globalQueries;
-  selectedInterval;
+  globalQueries = [];
+  selectedInterval: string;
   @Input() hotelId: string;
   $subscription = new Subscription();
   rateGraph: RateGraphStats;
@@ -118,6 +118,9 @@ export class RateGraphComponent implements OnInit {
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
@@ -144,6 +147,9 @@ export class RateGraphComponent implements OnInit {
     );
   }
 
+  /**
+   * @function rateGraphStats To get rate graph data.
+   */
   rateGraphStats(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
@@ -159,6 +165,10 @@ export class RateGraphComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getHotelId To set the hotel id after extracting from filter array.
+   * @param globalQueries The filter list with date and hotel filters.
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
@@ -167,11 +177,15 @@ export class RateGraphComponent implements OnInit {
     });
   }
 
+  /**
+   * @function initChartData To initialize chart data.
+   */
   initChartData() {
     this.chart.chartLabels = this.rateGraph.label;
     this.chart.chartData[0].data = this.rateGraph.clickRate;
     this.chart.chartData[1].data = this.rateGraph.openRate;
   }
+
   legendOnClick = (index) => {
     let ci = this.baseChart.chart;
     let alreadyHidden =

@@ -101,9 +101,9 @@ export class SubscribersGraphComponent implements OnInit {
     chartLegend: false,
     chartType: 'line',
   };
-  selectedInterval;
-  globalQueries;
-  @Input() hotelId;
+  selectedInterval: string;
+  globalQueries = [];
+  @Input() hotelId: string;
   subscriberGraph: SubscriberGraphStats;
   $subscription = new Subscription();
   constructor(
@@ -118,6 +118,9 @@ export class SubscribersGraphComponent implements OnInit {
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
@@ -144,6 +147,9 @@ export class SubscribersGraphComponent implements OnInit {
     );
   }
 
+  /**
+   * @function subscriberGraphStats To get subscriber graph data.
+   */
   subscriberGraphStats(): void {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
@@ -161,6 +167,10 @@ export class SubscribersGraphComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getHotelId To get hotel id fro the global filters.
+   * @param globalQueries The global filter array.
+   */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
       if (element.hasOwnProperty('hotelId')) {
@@ -169,11 +179,15 @@ export class SubscribersGraphComponent implements OnInit {
     });
   }
 
-  initChartData() {
+  /**
+   * @function initChartData To initialize chart data.
+   */
+  initChartData(): void {
     this.chart.chartLabels = this.subscriberGraph.labels;
     this.chart.chartData[0].data = this.subscriberGraph.unsubscribers;
     this.chart.chartData[1].data = this.subscriberGraph.subscribers;
   }
+
   legendOnClick = (index) => {
     let ci = this.baseChart.chart;
     let alreadyHidden =

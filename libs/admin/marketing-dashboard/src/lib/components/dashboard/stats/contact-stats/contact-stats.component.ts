@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { MarketingService } from '../../../../services/stats.service';
 import { ContactStat } from '../../../../data-models/stats.model';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service';
+import { sharedConfig } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-contact-stats',
@@ -14,15 +14,15 @@ import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service
   styleUrls: ['./contact-stats.component.scss'],
 })
 export class ContactStatsComponent implements OnInit {
+  adminSharedConfig = sharedConfig;
   contactValue = [];
-  selectedInterval;
+  selectedInterval: string;
   globalQueries = [];
   hotelId: any;
   contactStats: ContactStat;
   $subscription = new Subscription();
 
   constructor(
-    private configService: ConfigService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private marketingService: MarketingService,
@@ -34,6 +34,9 @@ export class ContactStatsComponent implements OnInit {
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -71,6 +74,9 @@ export class ContactStatsComponent implements OnInit {
     });
   }
 
+  /**
+   * @function getContactStats To get contact stat data.
+   */
   getContactStats(): void {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(this.globalQueries),

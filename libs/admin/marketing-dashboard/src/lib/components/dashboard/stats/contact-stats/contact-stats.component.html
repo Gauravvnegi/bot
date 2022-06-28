@@ -1,6 +1,6 @@
 <div class="contact">
   <div class="contact-stats-header">
-    Contact Stats
+    {{ 'contact-stats.title' | translate }}
   </div>
   <div class="contact-graph-wraper">
     <div
@@ -29,7 +29,7 @@
         {{ contactStats?.totalContact }}
       </div>
       <div class="contact-graph-wraper-total-text">
-        Total Contacts
+        {{ 'contact-stats.total' | translate }}
       </div>
     </div>
     <div class="stat-val-container">
@@ -61,10 +61,16 @@
             >
             </ng-container>
             <ng-template #uparrow>
-              <img src="assets/svg/uparrow.svg" />
+              <img
+                [src]="adminSharedConfig.img.upArrow.url"
+                [alt]="adminSharedConfig.img.upArrow.alt"
+              />
             </ng-template>
             <ng-template #down>
-              <img src="assets/svg/down-percentage.svg" />
+              <img
+                [src]="adminSharedConfig.img.downArrow.url"
+                [alt]="adminSharedConfig.img.downArrow.alt"
+              />
             </ng-template>
           </div>
         </div>
@@ -72,6 +78,6 @@
     </div>
   </div>
   <div class="contact-footer">
-    In 90 Days
+    {{ 'contact-stats.in90Days' | translate }}
   </div>
 </div>

@@ -115,7 +115,7 @@ export class DateService {
     return returnData;
   }
 
-  getCalendarType(startDate, endDate, timezone) {
+  getCalendarType(startDate, endDate, timezone): string {
     const dateDiff = DateService.getDateDifference(
       startDate,
       endDate,

@@ -1,13 +1,13 @@
 <div class="wrapper">
   <div class="stats-container">
     <div class="stats">
-      <div class="stats__text">{{ stats?.TOTAL_EMAIL_SENT?.label }}</div>
+      <div class="stats__text">{{ 'stats.totalEmailSent' | translate }}</div>
       <div class="stats__value">
         {{ stats?.TOTAL_EMAIL_SENT?.score | numberFormat }}
       </div>
     </div>
     <div class="stats">
-      <div class="stats__text">{{ stats?.TOTAL_OPEN_RATE?.label }}</div>
+      <div class="stats__text">{{ 'stats.totalOpen' | translate }}</div>
       <div class="stats__value">
         {{ stats?.TOTAL_OPEN_RATE?.score }}
         <div style="display: flex; align-items: center;">
@@ -27,18 +27,23 @@
               }}%)<img
                 [src]="
                   stats?.TOTAL_OPEN_RATE?.comparisonPercent >= 0
-                    ? 'assets/svg/uparrow.svg'
-                    : 'assets/svg/down-percentage.svg'
+                    ? adminSharedConfig.img.upArrow.url
+                    : adminSharedConfig.img.downArrow.url
+                "
+                [alt]="
+                  stats?.TOTAL_OPEN_RATE?.comparisonPercent >= 0
+                    ? adminSharedConfig.img.upArrow.alt
+                    : adminSharedConfig.img.downArrow.alt
                 "
               />
             </div>
-            <div class="rating__days">In 30 Days</div>
+            <div class="rating__days">{{ 'stats.in30Days' | translate }}</div>
           </div>
         </div>
       </div>
     </div>
     <div class="stats">
-      <div class="stats__text">{{ stats?.CONVERSION_RATE?.label }}</div>
+      <div class="stats__text">{{ 'stats.conversionRate' | translate }}</div>
       <div class="stats__value">
         {{ stats?.CONVERSION_RATE?.score }}
         <div style="display: flex; align-items: center;">
@@ -58,24 +63,29 @@
               }}%)<img
                 [src]="
                   stats?.CONVERSION_RATE?.comparisonPercent >= 0
-                    ? 'assets/svg/uparrow.svg'
-                    : 'assets/svg/down-percentage.svg'
+                    ? adminSharedConfig.img.upArrow.url
+                    : adminSharedConfig.img.downArrow.url
+                "
+                [alt]="
+                  stats?.CONVERSION_RATE?.comparisonPercent >= 0
+                    ? adminSharedConfig.img.upArrow.alt
+                    : adminSharedConfig.img.downArrow.alt
                 "
               />
             </div>
-            <div class="rating__days">In 30 Days</div>
+            <div class="rating__days">{{ 'stats.in30Days' | translate }}</div>
           </div>
         </div>
       </div>
     </div>
     <div class="stats">
-      <div class="stats__text">{{ stats?.TOTAL_CLICKS?.label }}</div>
+      <div class="stats__text">{{ 'stats.totalClicks' | translate }}</div>
       <div class="stats__value">
         {{ stats?.TOTAL_CLICKS?.score | numberFormat }}
       </div>
     </div>
     <div class="stats">
-      <div class="stats__text">{{ stats?.CTR?.label }}</div>
+      <div class="stats__text">{{ 'stats.ctr' | translate }}</div>
       <div class="stats__value">
         {{ stats?.CTR?.score }}
         <div style="display: flex; align-items: center;">
@@ -91,12 +101,17 @@
               ({{ stats?.CTR?.comparisonPercent | numberFormat }}%)<img
                 [src]="
                   stats?.CTR?.comparisonPercent >= 0
-                    ? 'assets/svg/uparrow.svg'
-                    : 'assets/svg/down-percentage.svg'
+                    ? adminSharedConfig.img.upArrow.url
+                    : adminSharedConfig.img.downArrow.url
+                "
+                [alt]="
+                  stats?.CTR?.comparisonPercent >= 0
+                    ? adminSharedConfig.img.upArrow.alt
+                    : adminSharedConfig.img.downArrow.alt
                 "
               />
             </div>
-            <div class="rating__days">In 30 Days</div>
+            <div class="rating__days">{{ 'stats.in30Days' | translate }}</div>
           </div>
         </div>
       </div>

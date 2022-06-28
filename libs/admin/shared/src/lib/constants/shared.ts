@@ -5,4 +5,14 @@ export const sharedConfig = {
     month: 'month',
   },
   defaultOrder: 'DESC',
+  img: {
+    upArrow: {
+      url: 'assets/svg/uparrow.svg',
+      alt: 'uparrow',
+    },
+    downArrow: {
+      url: 'assets/svg/down-percentage.svg',
+      alt: 'down-percentage',
+    },
+  },
 };

@@ -1,4 +1,5 @@
 import { Component, OnInit, ɵtransitiveScopesFor } from '@angular/core';
+import { sharedConfig } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -13,9 +14,10 @@ import { MarketingService } from '../../../../services/stats.service';
   styleUrls: ['./stats-view.component.scss'],
 })
 export class StatsViewComponent implements OnInit {
+  adminSharedConfig = sharedConfig;
   globalQueries = [];
   selectedInterval: string;
-  hotelId: any;
+  hotelId: string;
   stats: MarketingStats;
   $subscription = new Subscription();
 
@@ -31,6 +33,9 @@ export class StatsViewComponent implements OnInit {
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -70,6 +75,9 @@ export class StatsViewComponent implements OnInit {
     );
   }
 
+  /**
+   * @function getMarketingCards To get data for stat cards.
+   */
   getMarketingCards(): void {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(this.globalQueries),

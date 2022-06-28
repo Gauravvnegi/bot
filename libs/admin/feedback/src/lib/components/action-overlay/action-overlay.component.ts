@@ -12,10 +12,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FeedbackTableService } from '../../services/table.service';
 import { Subscription } from 'rxjs';
 import { UserService } from '@hospitality-bot/admin/shared';
-import {
-  Departmentpermission,
-  Departmentpermissions,
-} from '../../data-models/feedback-card.model';
+import { Departmentpermission } from '../../data-models/feedback-card.model';
 import {
   FlexibleConnectedPositionStrategy,
   OverlayRef,
@@ -34,7 +31,7 @@ export class ActionOverlayComponent implements OnInit {
   isOpen = false;
   type: string;
   globalQueries = [];
-  userPermissions: Departmentpermission[];
+  @Input() userPermissions: Departmentpermission[];
   @Input() rowDataStatus;
   @Input() guestId;
   @Input() feedbackType;
@@ -140,19 +137,6 @@ export class ActionOverlayComponent implements OnInit {
     this.isOpen = false;
     this.removeOverlay();
     this.openDetail.emit(event);
-  }
-
-  getUserPermission() {
-    this.$subscription.add(
-      this.userService
-        .getUserPermission(this.feedbackType)
-        .subscribe((response) => {
-          this.userPermissions = new Departmentpermissions().deserialize(
-            response.userCategoryPermission
-          );
-          this.userService.userPermissions = response;
-        })
-    );
   }
 
   getDepartmentAllowed() {

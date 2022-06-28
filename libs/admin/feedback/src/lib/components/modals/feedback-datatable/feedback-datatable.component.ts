@@ -19,6 +19,7 @@ import {
   sharedConfig,
   StatisticsService,
   TableService,
+  UserService,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -65,6 +66,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     _hotelDetailService: HotelDetailService,
     _translateService: TranslateService,
     protected configService: ConfigService,
+    userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     super(
@@ -79,7 +81,8 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       statisticService,
       _hotelDetailService,
       _translateService,
-      configService
+      configService,
+      userService
     );
   }
 
@@ -94,6 +97,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       defaultLabel: 'Export Summary',
     });
     this.getConfig();
+    this.getUserPermission(this.data.feedbackType);
   }
 
   initData() {
@@ -229,6 +233,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
             }
           )
           .subscribe();
+        this.tableService.$disableContextMenus.next(true);
         this.loadInitialData([
           ...this.globalQueries,
           { order: sharedConfig.defaultOrder },

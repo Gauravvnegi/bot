@@ -616,6 +616,7 @@
                   [guestId]="rowData.departmentId"
                   [feedbackType]="feedbackType"
                   [departmentName]="rowData.departmentName"
+                  [userPermissions]="userPermissions"
                   (openDetail)="openDetailPage($event, rowData)"
                   (statusUpdate)="updateFeedbackState($event)"
                 ></hospitality-bot-action-overlay>
@@ -820,6 +821,7 @@
                   [guestId]="rowData.departmentId"
                   [feedbackType]="feedbackType"
                   [departmentName]="rowData.departmentName"
+                  [userPermissions]="userPermissions"
                   (openDetail)="openDetailPage($event, rowData)"
                   (statusUpdate)="updateFeedbackState($event)"
                 ></hospitality-bot-action-overlay>

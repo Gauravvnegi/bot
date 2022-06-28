@@ -620,6 +620,7 @@
                 [guestId]="rowData?.departmentId"
                 [feedbackType]="tabFilterItems[tabFilterIdx]?.value"
                 [departmentName]="rowData?.departmentName"
+                [userPermissions]="userPermissions"
                 (openDetail)="openDetailPage($event, rowData)"
                 (statusUpdate)="updateFeedbackState($event)"
               ></hospitality-bot-action-overlay>
@@ -793,6 +794,7 @@
                 [departmentName]="rowData?.departmentName"
                 (openDetail)="openDetailPage($event, rowData)"
                 (statusUpdate)="updateFeedbackState($event)"
+                [userPermissions]="userPermissions"
               ></hospitality-bot-action-overlay>
             </ng-template>
           </td>

@@ -8,7 +8,7 @@ import {
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { GlobalFilterService, Item } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { feedback } from '@hospitality-bot/admin/feedback';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
@@ -20,6 +20,7 @@ import {
   sharedConfig,
   StatisticsService,
   TableService,
+  UserService,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -36,7 +37,10 @@ import {
 import { FeedbackTableService } from '../../../services/table.service';
 import { EntityState, SelectedChip } from '../../../types/feedback.type';
 import { FeedbackDetailModalComponent } from '../../modals/feedback-detail-modal/feedback-detail.component';
-
+import {
+  Departmentpermission,
+  Departmentpermissions,
+} from '../../../data-models/feedback-card.model';
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
   templateUrl: './feedback-datatable.component.html',
@@ -69,6 +73,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   chips = feedback.chips.feedbackDatatable;
   globalQueries = [];
   $subscription = new Subscription();
+  userPermissions: Departmentpermission[];
   constructor(
     public fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,
@@ -81,7 +86,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     protected statisticService: StatisticsService,
     protected _hotelDetailService: HotelDetailService,
     protected _translateService: TranslateService,
-    protected configService: ConfigService
+    protected configService: ConfigService,
+    protected userService: UserService
   ) {
     super(fb, tabFilterService);
   }
@@ -102,6 +108,17 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.listenForGlobalFilters();
     this.listenForOutletChanged();
     this.getConfig();
+  }
+
+  getUserPermission(feedbackType) {
+    this.$subscription.add(
+      this.userService.getUserPermission(feedbackType).subscribe((response) => {
+        this.userPermissions = new Departmentpermissions().deserialize(
+          response.userCategoryPermission
+        );
+        this.userService.userPermissions = response;
+      })
+    );
   }
 
   setTableType(value) {
@@ -193,6 +210,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
     else this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
     this.setTableCols();
+    this.getUserPermission(this.tabFilterItems[this.tabFilterIdx].value);
   }
 
   /**
@@ -407,6 +425,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             }
           )
           .subscribe();
+        this.tableService.$disableContextMenus.next(true);
         this.loadInitialData([
           ...this.globalQueries,
           { order: sharedConfig.defaultOrder },

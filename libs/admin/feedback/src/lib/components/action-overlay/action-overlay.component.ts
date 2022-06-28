@@ -40,7 +40,7 @@ export class ActionOverlayComponent implements OnInit {
   @Output() statusUpdate = new EventEmitter();
   feedbackStatusFG: FormGroup;
   private $subscription: Subscription = new Subscription();
-  @ViewChild('overlayHost') inputElement: ElementRef;
+  @ViewChild('overlayHost') overlayBtn: ElementRef;
   positionStrategy: FlexibleConnectedPositionStrategy;
   scrollStrategy: BlockScrollStrategy;
   overlayRef: OverlayRef;
@@ -78,16 +78,17 @@ export class ActionOverlayComponent implements OnInit {
       this.removeOverlay();
     } else {
       this.isOpen = true;
+      const { y } = this.overlayBtn.nativeElement.getBoundingClientRect();
       this.positionStrategy = this.overlay
         .position()
-        .flexibleConnectedTo(this.inputElement)
+        .flexibleConnectedTo(this.overlayBtn)
         .withPush(false)
         .withFlexibleDimensions(false)
         .withLockedPosition(true)
         .withPositions([
           {
             offsetX: -8,
-            offsetY: -230,
+            offsetY: y < 250 ? 10 : -230,
             originX: 'start',
             originY: 'bottom',
             overlayX: 'start',
@@ -134,7 +135,6 @@ export class ActionOverlayComponent implements OnInit {
   }
 
   openDetailPage(event) {
-    this.isOpen = false;
     this.removeOverlay();
     this.openDetail.emit(event);
   }

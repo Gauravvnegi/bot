@@ -438,4 +438,13 @@ export class Remark {
     }
     return moment(this.updated).utcOffset(timezone).format('h:mm a');
   }
+
+  getNickName() {
+    return this.adminName.split(' ').map((i, index) => {
+      if ([0, 1].includes(index)) return i.charAt(0);
+      else return '';
+    })
+    .join('')
+    .toUpperCase();
+  }
 }

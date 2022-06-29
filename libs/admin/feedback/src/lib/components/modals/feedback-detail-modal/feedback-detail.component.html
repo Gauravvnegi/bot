@@ -185,16 +185,19 @@
             <!-- {{ remark.getNickName() }} -->
           </div>
         </div>
+
         <ng-container *ngFor="let remark of data.feedback?.remarks">
-          <div class="userComments" *ngIf="remark.remarks">
-            <div class="userImage">
-              {{ remark.getNickName() }}
-            </div>
-            <div class="comment">
-              {{ remark.remarks }}
-            </div>
-            <div class="time">
-              {{ remark.getTime(_globalFilterService.timezone) }}
+          <div class="userChat">
+            <div class="userComments" *ngIf="remark.remarks">
+              <div class="userImage">
+                {{ remark.getNickName() }}
+              </div>
+              <div class="comment">
+                {{ remark.remarks }}
+              </div>
+              <div class="time">
+                {{ remark.getTime(_globalFilterService.timezone) }}
+              </div>
             </div>
           </div>
         </ng-container>

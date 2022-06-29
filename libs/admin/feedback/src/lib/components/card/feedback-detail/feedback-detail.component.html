@@ -62,7 +62,7 @@
             </div>
             <div class="stay-booking-feedback status-opacity-success">
               <p
-                class="number status-background-success"
+                class="number status-background-success numPadding"
                 [style.background]="
                   (colorMap?.stayFeedbacks)[feedback.feedback.ratings].colorCode
                 "
@@ -173,15 +173,17 @@
         </div>
       </div>
       <ng-container *ngFor="let remark of feedback?.remarks">
-        <div class="userComments" *ngIf="remark.remarks">
-          <div class="userImage">
-            {{ remark.getNickName() }}
-          </div>
-          <div class="comment">
-            {{ remark.remarks }}
-          </div>
-          <div class="time">
-            {{ remark.getTime(_globalFilterService.timezone) }}
+        <div class="userChat">
+          <div class="userComments" *ngIf="remark.remarks">
+            <div class="userImage">
+              {{ remark.getNickName() }}
+            </div>
+            <div class="comment">
+              {{ remark.remarks }}
+            </div>
+            <div class="time">
+              {{ remark.getTime(_globalFilterService.timezone) }}
+            </div>
           </div>
         </div>
       </ng-container>

@@ -86,6 +86,7 @@ input {
 
 /* CREDIT CARD IMAGE STYLING */
 .preload * {
+  transition: none;
   -webkit-transition: none !important;
   -moz-transition: none !important;
   -ms-transition: none !important;
@@ -125,7 +126,7 @@ input {
   font-size: 12px;
   color: #fff;
   padding: 2px 4px;
-  background-color: $c-gray-55;
+  background-color: #909090;
   border-radius: 4px;
   cursor: pointer;
   float: right;

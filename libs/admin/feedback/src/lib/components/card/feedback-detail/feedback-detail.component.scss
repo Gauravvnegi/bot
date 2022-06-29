@@ -536,12 +536,10 @@
   display: flex;
   align-items: end;
   justify-content: center;
-  padding: 0px;
+
   border-radius: 10px;
   position: relative;
   background-color: $booking-feedback;
-  min-width: 18px;
-  height: 18px;
   margin: 0 3px;
   &:hover {
     cursor: pointer;
@@ -567,13 +565,16 @@
     margin: 0 2px;
   }
   .number {
-    padding: 5px 0;
+    padding: 4px;
     color: $white;
     margin: 0 0px;
     text-align: center;
-    min-width: 20px;
+
     border-radius: 50%;
     font-size: 9px;
+  }
+  .numPadding {
+    padding: 6px;
   }
 
   @media screen and (max-width: 1050px) {
@@ -584,8 +585,7 @@
     }
     .number {
       font-size: 10px;
-      padding: 2px 0;
-      min-width: 15px;
+      padding: 2px;
     }
   }
 }
@@ -603,4 +603,8 @@
   padding: 8px 10px;
   border-radius: 5px;
   border: solid 1px #d9d9d9;
+}
+.userChat {
+  display: flex;
+  justify-content: flex-end;
 }

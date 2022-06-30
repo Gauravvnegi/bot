@@ -83,7 +83,7 @@
           <p *ngIf="rowData.remarks; else emptyCell">{{ rowData.remarks }}</p>
           <ng-container
             *ngIf="
-              rowData.journey != 'INHOUSE' &&
+              rowData.journey !== 'INHOUSE' &&
               ['INITIATED'].includes(rowData.status)
             "
           >

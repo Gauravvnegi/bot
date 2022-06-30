@@ -49,7 +49,7 @@ export class ContactStat implements Deserializable {
     this.stats = new Array<StatsContact>();
     const data = input['CONTACT_STATS'];
     Object.keys(data).forEach((key) => {
-      if (key != 'TOTAL_CONTACT') {
+      if (key !== 'TOTAL_CONTACT') {
         this.stats.push(
           new StatsContact().deserialize(data[key], circleRadius[key])
         );

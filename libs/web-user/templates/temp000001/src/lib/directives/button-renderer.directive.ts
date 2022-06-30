@@ -73,7 +73,7 @@ export class ButtonDirective {
     host
   ): void {
     if (config.click && config.click.fn_name) {
-      if (typeof this.context[config.click.fn_name] != 'function') {
+      if (typeof this.context[config.click.fn_name] !== 'function') {
         console.error('No function exists in context');
       } else {
         this._renderer.listen(

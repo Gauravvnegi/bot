@@ -50,7 +50,7 @@ export function getTransformationsFromExifData(
 
 function getExifRotation(imageBase64: string): number {
   const view = new DataView(base64ToArrayBuffer(imageBase64));
-  if (view.getUint16(0, false) != 0xffd8) {
+  if (view.getUint16(0, false) !== 0xffd8) {
     return -2;
   }
   const length = view.byteLength;
@@ -60,7 +60,7 @@ function getExifRotation(imageBase64: string): number {
     const marker = view.getUint16(offset, false);
     offset += 2;
     if (marker === 0xffe1) {
-      if (view.getUint32((offset += 2), false) != 0x45786966) {
+      if (view.getUint32((offset += 2), false) !== 0x45786966) {
         return -1;
       }
 
@@ -73,7 +73,7 @@ function getExifRotation(imageBase64: string): number {
           return view.getUint16(offset + i * 12 + 8, little);
         }
       }
-    } else if ((marker & 0xff00) != 0xff00) {
+    } else if ((marker & 0xff00) !== 0xff00) {
       break;
     } else {
       offset += view.getUint16(offset, false);

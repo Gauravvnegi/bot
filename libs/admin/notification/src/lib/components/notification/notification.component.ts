@@ -170,7 +170,7 @@ export class NotificationComponent implements OnInit {
 
   removeChipElement(valueToRemove: string, control: FormControl): void {
     const controlValues = control.value.filter(
-      (cValue) => cValue != valueToRemove
+      (cValue) => cValue !== valueToRemove
     );
     control.patchValue(controlValues);
     control === this.roomNumbers

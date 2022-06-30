@@ -156,7 +156,8 @@ export class ReceiverFieldComponent implements OnInit {
   enableDropdownItems() {
     this._emailService.$enableDropdown[this.name].next(true);
     Object.keys(this._emailService.$enableDropdown).forEach((key) => {
-      if (key != this.name) this._emailService.$enableDropdown[key].next(false);
+      if (key !== this.name)
+        this._emailService.$enableDropdown[key].next(false);
     });
   }
 

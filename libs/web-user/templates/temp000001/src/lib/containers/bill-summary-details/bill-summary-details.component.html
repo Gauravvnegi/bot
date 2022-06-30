@@ -101,7 +101,7 @@
             Debit
           </th>
           <td class="padding-left-none" mat-cell *matCellDef="let element">
-            <div class="debit-data" *ngIf="element.debitAmount != 0">
+            <div class="debit-data" *ngIf="element.debitAmount !== 0">
               <p class="debit">
                 {{ element.currency }} {{ element.debitAmount }}
               </p>
@@ -114,7 +114,7 @@
             Credit
           </th>
           <td class="padding-left-none" mat-cell *matCellDef="let element">
-            <div class="room-data" *ngIf="element.creditAmount != 0">
+            <div class="room-data" *ngIf="element.creditAmount !== 0">
               <p class="room">
                 {{ element.currency }} {{ element.creditAmount }}
               </p>

@@ -184,7 +184,7 @@ export class FeedbackComponent {
         ? [this.tabFilterItems[this.tabFilterIdx].value]
         : this.tabFilterItems
             .map((item) => item.value)
-            .filter((value) => value != 'ALL');
+            .filter((value) => value !== 'ALL');
     this.statisticsService.type = this.tabFilterItems[this.tabFilterIdx].type;
     this.statisticsService.$outletChange.next({
       status: true,

@@ -285,7 +285,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     documents.forEach((doc) => {
       urls.push(doc.frontUrl);
       fileNames.push(`${name}_${doc.documentType}_frontURL`);
-      if (doc.documentType != 'VISA') {
+      if (doc.documentType !== 'VISA') {
         urls.push(doc.backUrl);
         fileNames.push(`${name}_${doc.documentType}_backURL`);
       }

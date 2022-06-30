@@ -101,17 +101,17 @@
             <img
               [src]="feedbackConfig.images.happy.url"
               [alt]="feedbackConfig.images.happy.alt"
-              [ngClass]="{ 'gray-image': service.rating != 'EE' }"
+              [ngClass]="{ 'gray-image': service.rating !== 'EE' }"
             />
             <img
               [src]="feedbackConfig.images.sceptic.url"
               [alt]="feedbackConfig.images.sceptic.alt"
-              [ngClass]="{ 'gray-image': service.rating != 'ME' }"
+              [ngClass]="{ 'gray-image': service.rating !== 'ME' }"
             />
             <img
               [src]="feedbackConfig.images.sad.url"
               [alt]="feedbackConfig.images.sad.alt"
-              [ngClass]="{ 'gray-image': service.rating != 'EI' }"
+              [ngClass]="{ 'gray-image': service.rating !== 'EI' }"
             />
           </div>
           <ng-template #numericCard>

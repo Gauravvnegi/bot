@@ -222,7 +222,7 @@ export class LayoutOneComponent implements OnInit {
       if (
         !Array.isArray(filterObj[key]) &&
         filterObj[key] &&
-        filterObj[key].constructor.name != 'Object'
+        filterObj[key].constructor.name !== 'Object'
       ) {
         if (filterObj[key]) {
           this.filterConfig.totalFilters += 1;

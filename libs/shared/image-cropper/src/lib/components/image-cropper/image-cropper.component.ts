@@ -396,7 +396,7 @@ export class ImageCropperComponent implements OnChanges, OnInit {
   }
 
   imageLoadedInView(): void {
-    if (this.transformedImage != null) {
+    if (this.transformedImage !== null) {
       this.imageLoaded.emit();
       this.setImageMaxSizeRetries = 0;
       setTimeout(() => this.checkImageMaxSizeRecursively());
@@ -1004,7 +1004,7 @@ export class ImageCropperComponent implements OnChanges, OnInit {
     if (
       this.sourceImage &&
       this.sourceImage.nativeElement &&
-      this.transformedImage != null
+      this.transformedImage !== null
     ) {
       this.startCropImage.emit();
       const imagePosition = this.getImagePosition();
@@ -1017,7 +1017,7 @@ export class ImageCropperComponent implements OnChanges, OnInit {
 
       const ctx = cropCanvas.getContext('2d');
       if (ctx) {
-        if (this.backgroundColor != null) {
+        if (this.backgroundColor !== null) {
           ctx.fillStyle = this.backgroundColor;
           ctx.fillRect(0, 0, width, height);
         }

@@ -1,7 +1,7 @@
 <div class="material-body">
   <div
     *ngIf="
-      detailsData.stepStatusDetails.documents != 'PENDING';
+      detailsData.stepStatusDetails.documents !== 'PENDING';
       else documentsPending
     "
   >
@@ -116,7 +116,7 @@
                 </div>
                 <div
                   class="upload-image"
-                  *ngIf="document.get('documentType').value != 'VISA'"
+                  *ngIf="document.get('documentType').value !== 'VISA'"
                 >
                   <hospitality-bot-upload-file
                     [fileUploadData]="fileUploadData"

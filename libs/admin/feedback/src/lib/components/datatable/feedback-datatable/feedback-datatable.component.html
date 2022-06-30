@@ -167,9 +167,9 @@
             (click)="toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)"
           >
             {{ quickReplyType.label }}
-            <span *ngIf="quickReplyType.value != 'ALL'"> (</span
+            <span *ngIf="quickReplyType.value !== 'ALL'"> (</span
             >{{ quickReplyType.total
-            }}<span *ngIf="quickReplyType.value != 'ALL'">)</span>
+            }}<span *ngIf="quickReplyType.value !== 'ALL'">)</span>
           </mat-chip>
         </mat-chip-list>
       </div>

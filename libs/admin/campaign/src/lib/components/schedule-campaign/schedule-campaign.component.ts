@@ -120,7 +120,7 @@ export class ScheduleCampaignComponent implements OnInit {
       .utcOffset(this._globalFilterService.timezone)
       .add(1, 'days')
       .startOf('day');
-    while (time.valueOf() != endOfDay.valueOf()) {
+    while (time.valueOf() !== endOfDay.valueOf()) {
       this.timeList.push({
         label: time.format('hh:mm A'),
         value: time.valueOf(),

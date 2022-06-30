@@ -13,8 +13,7 @@
     </mat-form-field>
     <div
       [ngClass]="{
-        disabled: !getDepartmentAllowed,
-        disabled: !feedbackStatusFG.get('comment')?.value?.length
+        disabled: !getDepartmentAllowed || !feedbackStatusFG.get('comment')?.value?.length,
       }"
       style="
         padding: 6px 9px;

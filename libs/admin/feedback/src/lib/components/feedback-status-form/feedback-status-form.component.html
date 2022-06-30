@@ -5,13 +5,19 @@
       class="comment"
       [ngClass]="{ disabled: !getDepartmentAllowed }"
     >
-      <textarea matInput placeholder="Type your comment"></textarea>
+      <textarea
+        matInput
+        formControlName="comment"
+        placeholder="Type your comment"
+      ></textarea>
     </mat-form-field>
     <div
-      [ngClass]="{ disabled: !getDepartmentAllowed }"
+      [ngClass]="{
+        disabled: !getDepartmentAllowed,
+        disabled: !feedbackStatusFG.get('comment')?.value?.length
+      }"
       style="
         padding: 6px 9px;
-        opacity: 0.4;
         border-radius: 14px;
         border: solid 1px #4b56c0;
         background-color: #fff;

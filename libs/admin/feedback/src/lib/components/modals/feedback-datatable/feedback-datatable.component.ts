@@ -217,6 +217,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   updateFeedbackState(event) {
     let data = {
       status: event.statusType,
+      notes: event.comment,
     };
     let id = event.id;
     this.tableService.updateFeedbackState(id, data).subscribe(

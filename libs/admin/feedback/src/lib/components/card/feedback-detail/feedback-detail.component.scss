@@ -152,7 +152,15 @@
     text-align: left;
     color: #9eaeb8;
   }
-
+  .rating__comment {
+    padding: 20px;
+    border-radius: 5px;
+    border: solid 1px #ced5d9;
+    background-color: #fff;
+    width: 515px;
+    height: 132px;
+    overflow-y: auto;
+  }
   .emoji {
     display: flex;
     gap: 50px;
@@ -167,7 +175,7 @@
   width: 80%;
 
   .rating__box {
-    width: 10%;
+    width: 54px;
   }
 }
 .rating {

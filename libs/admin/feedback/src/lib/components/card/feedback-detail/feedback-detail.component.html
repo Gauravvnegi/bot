@@ -152,6 +152,12 @@
               </div>
             </div>
           </ng-template>
+          <div
+            class="rating__comment"
+            *ngIf="service.comment && service.comment.length"
+          >
+            {{ service.comment }}
+          </div>
         </div>
       </div>
     </div>
@@ -169,7 +175,7 @@
           {{ feedback?.feedback.comments }}
         </div>
         <div class="userImage">
-          <!-- {{ remark.getNickName() }} -->
+          {{ feedback.getProfileNickName() }}
         </div>
       </div>
       <ng-container *ngFor="let remark of feedback?.remarks">

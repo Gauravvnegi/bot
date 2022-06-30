@@ -27,7 +27,12 @@ export class FeedbackStatusFormComponent implements OnInit {
   }
 
   updateStatus() {
-    this.statusUpdate.emit({ statusType: this.type, id: this.guestId });
+    const { comment } = this.feedbackStatusFG.getRawValue();
+    this.statusUpdate.emit({
+      statusType: this.type,
+      id: this.guestId,
+      comment,
+    });
   }
 
   openDetailPage(event) {

@@ -74,6 +74,13 @@ export class ArtComponent implements OnInit {
         filter: function (tooltipItem, data) {
           return !data.datasets[tooltipItem.datasetIndex].tooltipHidden; // custom added prop to dataset
         },
+        callbacks: {
+          label: function (context) {
+            if (context.value !== null) {
+              return ' ART: ' + context.value + ' hrs';
+            }
+          },
+        },
       },
       scales: {
         yAxes: [
@@ -81,6 +88,9 @@ export class ArtComponent implements OnInit {
             ticks: {
               beginAtZero: true,
               stepSize: 6,
+              callback: function (value, index, ticks) {
+                return Math.floor(value) + ' hrs';
+              },
             },
           },
         ],

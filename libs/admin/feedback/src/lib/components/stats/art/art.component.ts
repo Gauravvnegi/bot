@@ -49,64 +49,7 @@ export class ArtComponent implements OnInit {
       },
     ],
     labels: [],
-    options: {
-      elements: {
-        line: {
-          tension: 0,
-        },
-        point: {
-          radius: 0,
-          borderWidth: 2,
-          hitRadius: 5,
-          hoverRadius: 0,
-          hoverBorderWidth: 2,
-        },
-      },
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-        filter: function (tooltipItem, data) {
-          return !data.datasets[tooltipItem.datasetIndex].tooltipHidden; // custom added prop to dataset
-        },
-        callbacks: {
-          label: function (context) {
-            if (context.value !== null) {
-              return ' ART: ' + context.value + ' hrs';
-            }
-          },
-        },
-      },
-      scales: {
-        yAxes: [
-          {
-            ticks: {
-              beginAtZero: true,
-              stepSize: 6,
-              callback: function (value, index, ticks) {
-                return Math.floor(value) + ' hrs';
-              },
-            },
-          },
-        ],
-        xAxes: [
-          {
-            ticks: {
-              min: 'Monday',
-              max: 'Sunday',
-            },
-            gridLines: {
-              display: false,
-            },
-          },
-        ],
-      },
-    },
+    options: chartConfig.options.art,
     legend: false,
   };
   constructor(

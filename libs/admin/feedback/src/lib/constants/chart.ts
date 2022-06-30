@@ -103,35 +103,17 @@ export const chartConfig = {
       },
     },
     art: {
-      responsive: true,
-      plugins: {
-        datalabels: {
-          anchor: 'end',
-          align: 'end',
-          font: {
-            size: 20,
-          },
+      elements: {
+        line: {
+          tension: 0,
         },
-      },
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: false,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: true,
-            },
-            ticks: {
-              min: 0,
-              stepSize: 6,
-            },
-          },
-        ],
+        point: {
+          radius: 0,
+          borderWidth: 2,
+          hitRadius: 5,
+          hoverRadius: 0,
+          hoverBorderWidth: 2,
+        },
       },
       tooltips: {
         backgroundColor: 'white',
@@ -142,6 +124,40 @@ export const chartConfig = {
         titleMarginBottom: 5,
         xPadding: 10,
         yPadding: 10,
+        filter: function (tooltipItem, data) {
+          return !data.datasets[tooltipItem.datasetIndex].tooltipHidden; // custom added prop to dataset
+        },
+        callbacks: {
+          label: function (context) {
+            if (context.value !== null) {
+              return ' ART: ' + context.value + ' hrs';
+            }
+          },
+        },
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+              stepSize: 6,
+              callback: function (value, index, ticks) {
+                return Math.floor(value) + ' hrs';
+              },
+            },
+          },
+        ],
+        xAxes: [
+          {
+            ticks: {
+              min: 'Monday',
+              max: 'Sunday',
+            },
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
       },
     },
   },

@@ -145,7 +145,7 @@ export class BookingStatusComponent implements OnInit {
     chartRef.data.datasets.forEach((error, i) => {
       let meta = chartRef.getDatasetMeta(i);
 
-      if (i == index) {
+      if (i === index) {
         if (!alreadyHidden) {
           meta.hidden = true;
         } else {

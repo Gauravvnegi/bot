@@ -1,4 +1,4 @@
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 export interface Deserializable {
@@ -211,7 +211,7 @@ export class Booking implements Deserializable {
   }
 
   getArrivalDate(timezone = '+05:30') {
-    if (this.expectedArrivalTimeStamp == 0) {
+    if (this.expectedArrivalTimeStamp === 0) {
       return DateService.getDateFromTimeStamp(
         this.arrivalTimeStamp,
         'DD/M/YY',
@@ -227,7 +227,7 @@ export class Booking implements Deserializable {
   }
 
   getDepartureDate(timezone = '+05:30') {
-    if (this.expectedArrivalTimeStamp == 0) {
+    if (this.expectedArrivalTimeStamp === 0) {
       return DateService.getDateFromTimeStamp(
         this.departureTimeStamp,
         'DD/M/YY',
@@ -243,7 +243,7 @@ export class Booking implements Deserializable {
   }
 
   getArrivalTime(timezone = '+05:30') {
-    if (this.expectedArrivalTimeStamp == 0) {
+    if (this.expectedArrivalTimeStamp === 0) {
       return DateService.getDateFromTimeStamp(
         this.arrivalTimeStamp,
         'HH:mm',
@@ -259,7 +259,7 @@ export class Booking implements Deserializable {
   }
 
   getArrivalTimeStamp() {
-    if (this.expectedArrivalTimeStamp == 0) {
+    if (this.expectedArrivalTimeStamp === 0) {
       return this.arrivalTimeStamp;
     } else {
       return this.expectedArrivalTimeStamp;
@@ -267,7 +267,7 @@ export class Booking implements Deserializable {
   }
 
   getDepartureTime(timezone = '+05:30') {
-    if (this.expectedDepartureTimeStamp == 0) {
+    if (this.expectedDepartureTimeStamp === 0) {
       return DateService.getDateFromTimeStamp(
         this.departureTimeStamp,
         'HH:mm',

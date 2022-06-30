@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import {
   Amenity,
   Metadata,
@@ -10,7 +10,7 @@ import {
 import { Subject } from 'rxjs';
 import * as moment from 'moment';
 import { FieldSchema } from '../data-models/fieldSchema.model';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 @Injectable()
 export class PaidService extends ApiService {

@@ -67,7 +67,7 @@ export class ActionOverlayComponent implements OnInit {
   }
 
   statusType() {
-    if (this.rowDataStatus == 'TODO') this.type = 'INPROGRESS';
+    if (this.rowDataStatus === 'TODO') this.type = 'INPROGRESS';
     else if (this.rowDataStatus === 'INPROGRESS') this.type = 'RESOLVED';
     else this.type = this.rowDataStatus;
   }

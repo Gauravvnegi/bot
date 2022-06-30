@@ -517,38 +517,6 @@
         }
       }
     },
-    "web-user-templates": {
-      "projectType": "library",
-      "root": "libs/web-user/templates",
-      "sourceRoot": "libs/web-user/templates/src",
-      "prefix": "hospitality-bot",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/web-user/templates/tsconfig.lib.json",
-              "libs/web-user/templates/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/web-user/templates/**/*"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/web-user/templates/jest.config.js",
-            "tsConfig": "libs/web-user/templates/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/web-user/templates/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
     "web-user-templates-temp000002": {
       "projectType": "library",
       "root": "libs/web-user/templates/temp000002",
@@ -686,6 +654,102 @@
         }
       }
     },
+    "shared-interceptors": {
+      "projectType": "library",
+      "root": "libs/shared/interceptors",
+      "sourceRoot": "libs/shared/interceptors/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/interceptors/tsconfig.lib.json",
+              "libs/shared/interceptors/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/interceptors/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/interceptors/jest.config.js",
+            "tsConfig": "libs/shared/interceptors/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/interceptors/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-material": {
+      "projectType": "library",
+      "root": "libs/shared/material",
+      "sourceRoot": "libs/shared/material/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/material/tsconfig.lib.json",
+              "libs/shared/material/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/material/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/material/jest.config.js",
+            "tsConfig": "libs/shared/material/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/material/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "shared-utils": {
+      "projectType": "library",
+      "root": "libs/shared/utils",
+      "sourceRoot": "libs/shared/utils/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/shared/utils/tsconfig.lib.json",
+              "libs/shared/utils/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/shared/utils/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/shared/utils/jest.config.js",
+            "tsConfig": "libs/shared/utils/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/shared/utils/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
     "admin-dashboard": {
       "projectType": "library",
       "root": "libs/admin/dashboard",
@@ -741,41 +805,6 @@
             "tsConfig": "libs/admin/reservation/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/admin/reservation/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
-    "admin-special-amenities": {
-      "projectType": "library",
-      "root": "libs/admin/special-amenities",
-      "sourceRoot": "libs/admin/special-amenities/src",
-      "prefix": "hospitality-bot",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/admin/special-amenities/tsconfig.lib.json",
-              "libs/admin/special-amenities/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/admin/special-amenities/**/*"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/admin/special-amenities/jest.config.js",
-            "tsConfig": "libs/admin/special-amenities/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/admin/special-amenities/src/test-setup.ts"
           }
         }
       },
@@ -1221,73 +1250,6 @@
             "tsConfig": "libs/admin/whatsapp/tsconfig.spec.json",
             "passWithNoTests": true,
             "setupFile": "libs/admin/whatsapp/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
-    "admin-transactional-feedback": {
-      "projectType": "library",
-      "root": "libs/admin/transactional-feedback",
-      "sourceRoot": "libs/admin/transactional-feedback/src",
-      "prefix": "hospitality-bot",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/admin/transactional-feedback/tsconfig.lib.json",
-              "libs/admin/transactional-feedback/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!libs/admin/transactional-feedback/**/*"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/admin/transactional-feedback/jest.config.js",
-            "tsConfig": "libs/admin/transactional-feedback/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/admin/transactional-feedback/src/test-setup.ts"
-          }
-        }
-      },
-      "schematics": {
-        "@nrwl/angular:component": {
-          "style": "scss"
-        }
-      }
-    },
-    "admin-stay-feedback": {
-      "projectType": "library",
-      "root": "libs/admin/stay-feedback",
-      "sourceRoot": "libs/admin/stay-feedback/src",
-      "prefix": "hospitality-bot",
-      "architect": {
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "libs/admin/stay-feedback/tsconfig.lib.json",
-              "libs/admin/stay-feedback/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!libs/admin/stay-feedback/**/*"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/admin/stay-feedback/jest.config.js",
-            "tsConfig": "libs/admin/stay-feedback/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "libs/admin/stay-feedback/src/test-setup.ts"
           }
         }
       },

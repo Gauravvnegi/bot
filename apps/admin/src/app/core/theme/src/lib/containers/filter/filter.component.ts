@@ -99,7 +99,7 @@ export class FilterComponent implements OnChanges, OnInit {
       .get('hotelName')
       .valueChanges.subscribe((brandId) => {
         const { branches } = this.hotelList.find(
-          (brand) => brand['value'] == brandId
+          (brand) => brand['value'] === brandId
         );
 
         this.branchList = branches;
@@ -112,7 +112,7 @@ export class FilterComponent implements OnChanges, OnInit {
       .get('branchName')
       .valueChanges.subscribe((id) => {
         const { outlets } = this.branchList.find(
-          (branch) => branch['id'] == id
+          (branch) => branch['id'] === id
         );
 
         this.outlets = outlets;

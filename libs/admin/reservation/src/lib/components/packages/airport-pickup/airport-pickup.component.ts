@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DefaultPackageComponent } from '../default-package/default-package.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ReservationService } from '../../../services/reservation.service';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 @Component({
   selector: 'hospitality-bot-airport-pickup',

@@ -120,7 +120,7 @@ export class WhatsappMessageAnalyticsComponent implements OnInit {
     ci.data.datasets.forEach((e, i) => {
       let meta = ci.getDatasetMeta(i);
 
-      if (i == index) {
+      if (i === index) {
         if (!alreadyHidden) {
           meta.hidden = true;
         } else {

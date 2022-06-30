@@ -105,7 +105,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
         (res) => {
           //update rows
           this.values = this.values.map((row) => {
-            if (row.id == id) {
+            if (row.id === id) {
               row.status = 'COMPLETED';
             }
             return row;

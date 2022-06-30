@@ -25,7 +25,7 @@ export class ButtonTemplateSwitchDirective {
 
   protected listenForButtonLoading() {
     this._buttonService.buttonLoading$.subscribe((buttonComponent) => {
-      buttonComponent['id'] == this._host.id &&
+      buttonComponent['id'] === this._host.id &&
         (this._host.isTemplateVisible = false);
     });
   }

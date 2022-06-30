@@ -73,9 +73,9 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.depositRuleForm.get('amountType').valueChanges.subscribe((type) => {
         const amount = this.depositRuleForm.get('amount').value;
-        if (type == 'FLAT') {
+        if (type === 'FLAT') {
           this.depositRuleForm.get('amountPayable').setValue(+amount);
-        } else if (type == 'PERCENT') {
+        } else if (type === 'PERCENT') {
           this.depositRuleForm
             .get('amountPayable')
             .setValue(
@@ -90,9 +90,9 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.depositRuleForm.get('amount').valueChanges.subscribe((amount) => {
         const amountType = this.depositRuleForm.get('amountType').value;
-        if (amountType == 'FLAT') {
+        if (amountType === 'FLAT') {
           this.depositRuleForm.get('amountPayable').setValue(+amount);
-        } else if (amountType == 'PERCENT') {
+        } else if (amountType === 'PERCENT') {
           this.depositRuleForm
             .get('amountPayable')
             .setValue(

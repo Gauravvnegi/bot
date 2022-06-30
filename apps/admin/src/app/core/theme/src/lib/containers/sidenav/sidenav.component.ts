@@ -55,10 +55,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
         ].value.property;
 
         const brandConfig = this._hotelDetailService.hotelDetails.brands.find(
-          (brand) => brand.id == brandId
+          (brand) => brand.id === brandId
         );
         this.branchConfig = brandConfig.branches.find(
-          (branch) => branch.id == branchId
+          (branch) => branch.id === branchId
         );
       })
     );
@@ -157,7 +157,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
         return libraryList.length ? [{ ...data, children: libraryList }] : [];
       default:
         return subscription.filter(
-          (d) => ModuleNames[d.name] == data.path && d.active
+          (d) => ModuleNames[d.name] === data.path && d.active
         );
     }
   }

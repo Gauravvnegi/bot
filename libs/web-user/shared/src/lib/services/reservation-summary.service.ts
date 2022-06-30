@@ -51,7 +51,7 @@ export class ReservationSummaryService {
     const searchPaths: string[] = this.convertStringToArray(component.path);
     let value: string = '';
 
-    if (component.pathType == 'object') {
+    if (component.pathType === 'object') {
       value = '';
 
       find(formValues, (formValue) => {
@@ -65,7 +65,7 @@ export class ReservationSummaryService {
       });
     }
 
-    if (component.pathType == 'array') {
+    if (component.pathType === 'array') {
       value = '';
 
       for (const formValue of formValues) {

@@ -5,7 +5,7 @@ import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.se
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 
 @Component({

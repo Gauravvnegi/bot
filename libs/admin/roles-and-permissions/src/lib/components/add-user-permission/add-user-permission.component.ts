@@ -8,12 +8,12 @@ import {
 } from '@angular/forms';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { CountryCode } from '../../../../../../shared/models/country-code.model';
-import { Regex } from '../../../../../../shared/constants/regex';
+import { CountryCode } from '@hospitality-bot/admin/shared';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs';
+import { Regex } from '@hospitality-bot/admin/shared';
 @Component({
   selector: 'hospitality-bot-add-user-permission',
   templateUrl: './add-user-permission.component.html',
@@ -106,7 +106,7 @@ export class AddUserPermissionComponent implements OnInit {
   listenForBrandChanges() {
     this.userForm.get('brandName').valueChanges.subscribe((brandId) => {
       const { branches } = this.brandNames.find(
-        (brand) => brand['id'] == brandId
+        (brand) => brand['id'] === brandId
       );
       this.branchNames = branches;
       this.userForm.get('branchName').enable();
@@ -134,19 +134,19 @@ export class AddUserPermissionComponent implements OnInit {
             manage: [
               {
                 value: config.permissions.manage <= 0 ? 0 : 1,
-                disabled: config.permissions.manage == -1 ? true : false,
+                disabled: config.permissions.manage === -1 ? true : false,
               },
             ],
             view: [
               {
                 value: config.permissions.view <= 0 ? 0 : 1,
-                disabled: config.permissions.view == -1 ? true : false,
+                disabled: config.permissions.view === -1 ? true : false,
               },
             ],
             // action: [
             //   {
             //     value: config.permissions.action <= 0 ? 0 : 1,
-            //     disabled: config.permissions.action == -1 ? true : false,
+            //     disabled: config.permissions.action === -1 ? true : false,
             //   },
             // ],
           }),

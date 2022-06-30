@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Regex } from '@hospitality-bot/shared';
+import { Regex } from '@hospitality-bot/admin/shared';
 import { contactConfig } from '../../constants/contact';
 
 @Component({

@@ -188,7 +188,7 @@ export class CampaignFormComponent implements OnInit {
    * @param event event object for form control.
    */
   updateFieldData(event, control) {
-    if (event.action == campaignConfig.add)
+    if (event.action === campaignConfig.add)
       control.push(new FormControl(event.value));
     else control.removeAt(event.value);
   }

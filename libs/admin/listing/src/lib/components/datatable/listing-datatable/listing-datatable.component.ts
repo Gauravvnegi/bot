@@ -102,9 +102,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    */
   getHotelId(globalQueries): void {
     globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) 
-        this.hotelId = element.hotelId;
-      
+      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
     });
   }
 
@@ -162,7 +160,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    */
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected)
       .map((item) => ({
         entityState: item.value,
       }));
@@ -359,11 +357,10 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    */
   toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     //toggle isSelected
-    if (quickReplyTypeIdx == 0) {
+    if (quickReplyTypeIdx === 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== listingConfig.list.chipValue.all) 
+        if (chip.value !== listingConfig.list.chipValue.all)
           chip.isSelected = false;
-        
       });
       this.tabFilterItems[this.tabFilterIdx].chips[
         quickReplyTypeIdx
@@ -430,7 +427,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     );
   }
 
-   /**
+  /**
    * @function openList To navigate to edit listing page.
    * @param event To stop openCreateList navigation.
    * @param id The id for which edit action will be done.

@@ -87,7 +87,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
         this.addSubPackageToAmenity(slide);
       }
       this.getAminityForm(slide.packageCode).patchValue(slide);
-      if (this.packageRendererContainer && i == 0)
+      if (this.packageRendererContainer && i === 0)
         this.openPackage(slide.packageCode);
     });
   }

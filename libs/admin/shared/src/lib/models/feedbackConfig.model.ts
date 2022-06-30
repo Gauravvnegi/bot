@@ -1,5 +1,5 @@
 import { get, set } from 'lodash';
-import { DateService } from '../../../../../shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import * as moment from 'moment';
 
 export interface Deserializable {

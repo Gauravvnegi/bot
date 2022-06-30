@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SummaryDetailsConfigI } from '../data-models/billSummaryConfig.model';
 import { FieldSchema } from '../data-models/fieldSchema.model';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { SummaryDetails } from '../data-models/summaryConfig.model';
 import { BehaviorSubject } from 'rxjs';
 

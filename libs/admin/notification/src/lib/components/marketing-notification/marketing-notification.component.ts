@@ -102,7 +102,9 @@ export class MarketingNotificationComponent extends NotificationComponent
         this._snackbarService.openSnackBarAsText('Invalid email format');
         return;
       } else {
-        const controlValues = control.value.filter((cValue) => cValue == value);
+        const controlValues = control.value.filter(
+          (cValue) => cValue === value
+        );
         if (!controlValues.length) {
           control.push(this._fb.control(value.trim()));
         }

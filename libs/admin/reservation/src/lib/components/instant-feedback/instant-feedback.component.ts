@@ -43,7 +43,7 @@ export class InstantFeedbackComponent implements OnInit {
     const branch = this._hotelDetailService.hotelDetails.brands
       .find((brand) => brand.id === globalQueryValue.property.hotelName)
       .branches.find(
-        (branch) => branch['id'] == globalQueryValue.property.branchName
+        (branch) => branch['id'] === globalQueryValue.property.branchName
       );
     this.outlets = branch.outlets;
   }

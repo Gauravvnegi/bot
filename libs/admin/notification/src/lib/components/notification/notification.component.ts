@@ -153,7 +153,9 @@ export class NotificationComponent implements OnInit {
         this._snackbarService.openSnackBarAsText('Invalid email format');
         return;
       } else {
-        const controlValues = control.value.filter((cValue) => cValue == value);
+        const controlValues = control.value.filter(
+          (cValue) => cValue === value
+        );
         if (!controlValues.length) {
           control.patchValue([...control.value, ...[value]]);
         }

@@ -30,6 +30,7 @@ import { ClickStopPropagation } from './directives/stoppropagation.directive';
 import { EmailChipListComponent } from './components/email-chip-list/email-chip-list.component';
 import { DashboardErrorComponent } from './components/dashboard-error/dashboard-error.component';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
+import { LinkDetector } from './pipes/linkDetector.pipe';
 
 @NgModule({
   imports: [
@@ -67,6 +68,7 @@ import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
     EmailChipListComponent,
     DashboardErrorComponent,
     NumberFormatterPipe,
+    LinkDetector,
   ],
   exports: [
     DatatableComponent,
@@ -93,6 +95,7 @@ import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
     ClickStopPropagation,
     EmailChipListComponent,
     NumberFormatterPipe,
+    LinkDetector,
   ],
 })
 export class AdminSharedModule {}

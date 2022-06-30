@@ -5,7 +5,7 @@ import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/dat
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Subscription, Observable } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
@@ -132,7 +132,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
 
   getSelectedQuickReplyFilters() {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => ({
         actionType: item.value,
       }));

@@ -57,7 +57,7 @@ export class Package implements Deserializable {
       set({}, 'autoAccept', get(input, ['autoAccept'])),
       set({}, 'categoryName', get(input, ['categoryName']) || ''),
       set({}, 'category', get(input, ['parentId']) || ''),
-      set({}, 'type', get(input, ['rate']) == 0 ? 'Complimentary' : 'Paid')
+      set({}, 'type', get(input, ['rate']) === 0 ? 'Complimentary' : 'Paid')
     );
     return this;
   }

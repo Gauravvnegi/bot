@@ -443,7 +443,7 @@ export class StayFeedback {
     let sortOrder = ['EI', 'ME', 'EE'];
     if (isNaN(this.services[0]?.rating))
       this.services.sort((a, b) => {
-        if (a.rating == b.rating) {
+        if (a.rating === b.rating) {
           return a.rating?.localeCompare(b.rating);
         } else {
           return sortOrder?.indexOf(a.rating) - sortOrder.indexOf(b.rating);

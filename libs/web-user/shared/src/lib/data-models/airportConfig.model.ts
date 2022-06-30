@@ -1,7 +1,7 @@
 import { FieldSchema } from './fieldSchema.model';
 import * as moment from 'moment';
 import { get, set } from 'lodash';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 export interface Deserializable {
   deserialize(input: any): this;

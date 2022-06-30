@@ -190,7 +190,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   updateDocumentVerificationStatus(status, isConfirmALL = false) {
-    if (status == 'REJECT' && !this.selectedGuestGroup.get('remarks').value) {
+    if (status === 'REJECT' && !this.selectedGuestGroup.get('remarks').value) {
       this._snackBarService.openSnackBarAsText('Please enter remarks');
       return;
     }

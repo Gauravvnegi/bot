@@ -165,7 +165,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   markChatAsRead(value) {
     const index = this.chatList.contacts.findIndex(
-      (obj) => obj.receiverId == value.receiverId
+      (obj) => obj.receiverId === value.receiverId
     );
     if (this.chatList.contacts[index].unreadCount) {
       this.messageService

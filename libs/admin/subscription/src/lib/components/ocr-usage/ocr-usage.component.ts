@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 
 @Component({

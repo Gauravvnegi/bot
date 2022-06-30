@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UpdateNoteData, UpdateStatusData } from '../types/feedback.type';

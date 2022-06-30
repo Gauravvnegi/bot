@@ -95,7 +95,7 @@ export class ValidatorService {
           ...validatorFunc,
           ...fieldComponent.settings.validation.customValidation.map(
             (validation) => {
-              if (validation.type == 'customPatternValid') {
+              if (validation.type === 'customPatternValid') {
                 return customPatternValid(validation.params);
               }
             }

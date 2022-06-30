@@ -18,7 +18,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { debounceTime, filter } from 'rxjs/operators';
-import { Regex } from 'libs/shared/constants/regex';
+import { Regex } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-guest-detail-map',

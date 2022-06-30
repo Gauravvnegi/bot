@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '@hospitality-bot/admin/shared';
-import { Regex } from '@hospitality-bot/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Regex } from '@hospitality-bot/admin/shared';
 import { authConstants } from '../../constants/auth';
 import { AuthService } from '../../services/auth.service';
 

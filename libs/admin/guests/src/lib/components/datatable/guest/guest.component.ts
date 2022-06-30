@@ -155,7 +155,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
    */
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected)
       .map((item) => ({
         entityState: item.value,
       }));
@@ -331,7 +331,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   }
 
   toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType): void {
-    if (quickReplyTypeIdx == 0) {
+    if (quickReplyTypeIdx === 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
           chip.isSelected = false;

@@ -234,12 +234,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   getOutlets(branchId: string): void {
     this.outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
-      (branch) => branch['id'] == branchId
+      (branch) => branch['id'] === branchId
     ).outlets;
     this.outlets = [
       ...this.outlets,
       ...this._hotelDetailService.hotelDetails.brands[0].branches.filter(
-        (branch) => branch['id'] == branchId
+        (branch) => branch['id'] === branchId
       ),
     ];
   }
@@ -282,7 +282,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   getSelectedQuickReplyFilters(): SelectedChip[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => ({
         entityType: item.value,
       }));
@@ -627,7 +627,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param quickReplyType The selected chip.
    */
   toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
-    if (quickReplyTypeIdx == 0) {
+    if (quickReplyTypeIdx === 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'GTM') {
           chip.isSelected = false;

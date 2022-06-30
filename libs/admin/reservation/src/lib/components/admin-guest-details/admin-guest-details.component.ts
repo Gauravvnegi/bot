@@ -131,7 +131,7 @@ export class AdminGuestDetailsComponent implements OnInit {
       temperature: formValues.temperature,
     };
 
-    if (status == 'REJECT' && isEmpty(data.remarks)) {
+    if (status === 'REJECT' && isEmpty(data.remarks)) {
       this._snackBarService.openSnackBarAsText(
         'Please provide a relevant remark'
       );

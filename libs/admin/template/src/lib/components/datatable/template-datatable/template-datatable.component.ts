@@ -285,7 +285,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    */
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => ({
         entityState: item.value,
       }));
@@ -436,7 +436,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    */
   toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     //toggle isSelected
-    if (quickReplyTypeIdx == 0) {
+    if (quickReplyTypeIdx === 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== templateConfig.selectedTopic.all) {
           chip.isSelected = false;

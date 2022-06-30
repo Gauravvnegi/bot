@@ -24,7 +24,7 @@ export class SendTestComponent implements OnInit {
    * @function sendMail function to send campaign email.
    */
   sendMail() {
-    if (this.parentFG.get('testEmails').value.length == 0) {
+    if (this.parentFG.get('testEmails').value.length === 0) {
       this._snackbarService
         .openSnackBarWithTranslate(
           {

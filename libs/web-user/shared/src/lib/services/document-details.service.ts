@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { isEmpty } from 'lodash';
 import { Observable, Subject } from 'rxjs';
 import { GuestRole } from '../constants/guest';
@@ -91,8 +91,8 @@ export class DocumentDetailsService extends ApiService {
     value.documentDetail.guests.forEach((guest) => {
       guest.documents = guest.documents.map((document) => {
         if (
-          document.documentType == 'VISA' &&
-          journey == 'PRECHECKIN' &&
+          document.documentType === 'VISA' &&
+          journey === 'PRECHECKIN' &&
           isEmpty(document.documentFileFront.trim())
         ) {
           return;
@@ -268,7 +268,7 @@ export class DocumentDetailsService extends ApiService {
             }
 
             if (guest.isInternational) {
-              if (document.documentType == 'PASSPORT') {
+              if (document.documentType === 'PASSPORT') {
                 if (isEmpty(document.documentFileFront.trim())) {
                   status.push({
                     validity: false,
@@ -296,7 +296,7 @@ export class DocumentDetailsService extends ApiService {
                 }
               }
 
-              if (document.documentType == 'VISA' && journey == 'CHECKIN') {
+              if (document.documentType === 'VISA' && journey === 'CHECKIN') {
                 if (isEmpty(document.documentFileFront.trim())) {
                   status.push({
                     validity: false,

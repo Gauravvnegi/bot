@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Regex } from '@hospitality-bot/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { ContactList, IContact } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
 import { TranslateService } from '@ngx-translate/core';
 import { contactConfig } from '../../constants/contact';
+import { Regex } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-import-contact',
@@ -30,7 +30,7 @@ export class ImportContactComponent implements OnInit {
   }
 
   contactFA: FormArray;
-  salutationList =contactConfig.datatable.salutationList;
+  salutationList = contactConfig.datatable.salutationList;
 
   ngOnInit(): void {
     this.generateContactField();
@@ -55,7 +55,7 @@ export class ImportContactComponent implements OnInit {
     });
   }
 
-   /**
+  /**
    * @function generateContactField To generate new add contact fields.
    */
   generateContactField() {
@@ -93,21 +93,21 @@ export class ImportContactComponent implements OnInit {
           this.contacts = new ContactList().deserialize(response).records;
           this.contacts.forEach((contact, index) => {
             this.contactFA.controls[index].patchValue(contact);
-            if (index < this.contacts.length - 1) 
+            if (index < this.contacts.length - 1)
               this.contactFA.push(this.createContactFG());
-            
           });
           this.contactFA.controls.forEach((control) => control.disable());
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.contact_not_import',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.contact_not_import',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -122,14 +122,15 @@ export class ImportContactComponent implements OnInit {
       this.contactFA.controls.length === 1 &&
       this.contactFA.controls[0].value.email === ''
     ) {
-      this._snackbarService.openSnackBarWithTranslate(
-        {
-          translateKey: 'message.error.contact_not_import',
-          priorityMessage: 'Please import a contact file.',
-        },
-        ''
-      )
-      .subscribe();
+      this._snackbarService
+        .openSnackBarWithTranslate(
+          {
+            translateKey: 'message.error.contact_not_import',
+            priorityMessage: 'Please import a contact file.',
+          },
+          ''
+        )
+        .subscribe();
       return;
     }
     this.onImportClosed.emit({
@@ -148,7 +149,7 @@ export class ImportContactComponent implements OnInit {
     else this.contactFA.controls.forEach((control) => control.disable());
   }
 
-   /**
+  /**
    * @function ngOnDestroy To unsubscribe subscription
    */
   ngOnDestroy() {

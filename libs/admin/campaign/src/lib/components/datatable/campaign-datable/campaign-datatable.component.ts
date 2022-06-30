@@ -297,7 +297,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected)
       .map((item) => ({
         entityState: item.value,
       }));
@@ -427,7 +427,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     //toggle isSelected
-    if (quickReplyTypeIdx == 0) {
+    if (quickReplyTypeIdx === 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== campaignConfig.chipValue.all)
           chip.isSelected = false;

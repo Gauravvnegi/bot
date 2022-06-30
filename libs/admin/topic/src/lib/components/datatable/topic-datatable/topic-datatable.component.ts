@@ -128,14 +128,15 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.loading_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.loading_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -196,28 +197,30 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     };
     this.topicService.updateTopicStatus(this.hotelId, data, topicId).subscribe(
       (response) => {
-        this._snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: 'message.success.topic_status_updated',
-            priorityMessage: 'Status Updated Successfully..',
-          },
-          '',
-          {
-            panelClass: 'success',
-          }
-        )
-        .subscribe();
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.success.topic_status_updated',
+              priorityMessage: 'Status Updated Successfully..',
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
         this.changePage(this.currentPage);
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: 'message.error.topic_status_update_fail',
-            priorityMessage: error.message,
-          },
-          ''
-        )
-        .subscribe();
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.topic_status_update_fail',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
       }
     );
   }
@@ -245,7 +248,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    */
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => ({
         entityState: item.value,
       }));
@@ -283,14 +286,15 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.loading_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.loading_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -380,14 +384,15 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.exportCSV_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.exportCSV_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -400,7 +405,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    */
   toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     //toggle isSelected
-    if (quickReplyTypeIdx == 0) {
+    if (quickReplyTypeIdx === 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== topicConfig.datatable.chipValue.all) {
           chip.isSelected = false;

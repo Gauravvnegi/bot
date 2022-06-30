@@ -98,12 +98,12 @@ export class MainComponent implements OnInit {
    */
   getOutlets(branchId: string): void {
     this.outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
-      (branch) => branch['id'] == branchId
+      (branch) => branch['id'] === branchId
     ).outlets;
     this.outlets = [
       ...this.outlets,
       ...this._hotelDetailService.hotelDetails.brands[0].branches.filter(
-        (branch) => branch['id'] == branchId
+        (branch) => branch['id'] === branchId
       ),
     ];
   }

@@ -32,7 +32,7 @@ export class ScheduleCampaignComponent implements OnInit {
     if (
       this.checkForSameDay(value) &&
       this.timeList.filter((time) => time.value === currentTime.valueOf())
-        .length == 0
+        .length === 0
     ) {
       this.timeList = [
         {

@@ -36,7 +36,7 @@ export class RatingComponent extends BaseComponent {
   listenForZeroRating() {
     this.parentForm
       .get(this.name)
-      .valueChanges.pipe(filter((val) => val == 0))
+      .valueChanges.pipe(filter((val) => val === 0))
       .subscribe((res) => {
         this.selectedRatingObj = null;
       });

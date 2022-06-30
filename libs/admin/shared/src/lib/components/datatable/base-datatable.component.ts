@@ -288,7 +288,7 @@ export class BaseDatatableComponent implements OnInit {
 
   onRowSelect(event) {
     this.documentActionTypes.forEach((item) => {
-      if (item.type == 'countType') {
+      if (item.type === 'countType') {
         item.label = `Export (${this.selectedRows.length})`;
         this.tableFG
           .get('documentActions')
@@ -300,7 +300,7 @@ export class BaseDatatableComponent implements OnInit {
 
   onRowUnselect(event?) {
     this.documentActionTypes.forEach((item) => {
-      if (item.type == 'countType') {
+      if (item.type === 'countType') {
         item.label =
           this.selectedRows.length > 0
             ? `Export (${this.selectedRows.length})`
@@ -322,9 +322,9 @@ export class BaseDatatableComponent implements OnInit {
       let value2 = data2[event.field];
       let result = null;
 
-      if (value1 == null && value2 != null) result = -1;
-      else if (value1 != null && value2 == null) result = 1;
-      else if (value1 == null && value2 == null) result = 0;
+      if (value1 === null && value2 != null) result = -1;
+      else if (value1 != null && value2 === null) result = 1;
+      else if (value1 === null && value2 === null) result = 0;
       else if (
         typeof value1 === 'string' &&
         typeof value2 === 'string' &&

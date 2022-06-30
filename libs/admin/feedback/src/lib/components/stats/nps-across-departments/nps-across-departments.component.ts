@@ -97,7 +97,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
           this.tabfeedbackType = undefined;
         }
         this.setEntityId(data['filter'].value.feedback.feedbackType);
-        if (this.tabFilterItems.length == 0) this.getNPSDepartments();
+        if (this.tabFilterItems.length === 0) this.getNPSDepartments();
         else this.getNPSChartData();
       })
     );
@@ -254,7 +254,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
    * @param quickReplyType The chip type.
    */
   toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
-    if (quickReplyTypeIdx == 0) {
+    if (quickReplyTypeIdx === 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
           chip.isSelected = false;
@@ -295,10 +295,10 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
    * @returns The quick reply filter array.
    */
   getSelectedQuickReplyFilters() {
-    if (this.npsFG.get('npsChartType').value == feedback.chartType.bar.value)
+    if (this.npsFG.get('npsChartType').value === feedback.chartType.bar.value)
       return this.tabFilterItems.length
         ? this.tabFilterItems[this.tabFilterIdx].chips
-            .filter((item) => item.isSelected == true)
+            .filter((item) => item.isSelected === true)
             .map((item) => ({
               services: item.value,
             }))
@@ -338,8 +338,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit {
             response.npsStats
           );
           if (
-            this.tabFilterItems[this.tabFilterIdx].chips.length == 1 &&
-            this.npsFG.get('npsChartType').value == feedback.chartType.bar.value
+            this.tabFilterItems[this.tabFilterIdx].chips.length === 1 &&
+            this.npsFG.get('npsChartType').value ===
+              feedback.chartType.bar.value
           )
             this.createChipsForDepartment(response).then((res) => {
               this.tabFilterItems[this.tabFilterIdx].chips = res;

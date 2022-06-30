@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs/internal/Observable';
 import {
   BillSummaryDetailDS,
@@ -40,7 +40,12 @@ export class BillSummaryService extends ApiService {
     return this.get(`/api/v1/reservation/${reservationId}/bill-summary`);
   }
 
-  uploadSignature(reservationId, hotelId, guestId, formData): Observable<FileDetails> {
+  uploadSignature(
+    reservationId,
+    hotelId,
+    guestId,
+    formData
+  ): Observable<FileDetails> {
     return this.uploadDocumentPost(
       `/api/v1/uploads?folder_name=hotel/${hotelId}/reservation/${reservationId}/guest/${guestId}/payment`,
       formData

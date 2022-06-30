@@ -141,10 +141,10 @@ export class DetailsComponent implements OnInit {
           'filter'
         ].value.property;
         const brandConfig = this._hotelDetailService.hotelDetails.brands.find(
-          (brand) => brand.id == brandId
+          (brand) => brand.id === brandId
         );
         this.branchConfig = brandConfig.branches.find(
-          (branch) => branch.id == branchId
+          (branch) => branch.id === branchId
         );
         this.getShareIcon();
         this.loadGuestInfo();
@@ -290,7 +290,7 @@ export class DetailsComponent implements OnInit {
 
   verifyAllDocuments() {
     if (
-      this.detailsForm.get('documentStatus').get('status').value == 'COMPLETED'
+      this.detailsForm.get('documentStatus').get('status').value === 'COMPLETED'
     ) {
       this._snackBarService.openSnackBarAsText(
         'Documents are already verified.',
@@ -743,7 +743,7 @@ export class DetailsComponent implements OnInit {
 
   get tabIndex() {
     let { index } = this.detailsConfig.find(
-      (tabConfig) => tabConfig.key == this.tabKey
+      (tabConfig) => tabConfig.key === this.tabKey
     );
     return index ? index : 0;
   }

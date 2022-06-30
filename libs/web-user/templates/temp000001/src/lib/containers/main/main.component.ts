@@ -5,7 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presentational/checkin-date-alert/checkin-date-alert.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
@@ -74,7 +74,7 @@ export class MainComponent implements OnInit {
             this._reservationService.reservationData = reservationData;
           },
           ({ error }) => {
-            if (error.type == 'BOOKING_CANCELED') {
+            if (error.type === 'BOOKING_CANCELED') {
               this.getHotelDataById(error.type);
             }
           }

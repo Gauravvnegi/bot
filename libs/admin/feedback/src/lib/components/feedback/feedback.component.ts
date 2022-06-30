@@ -96,7 +96,7 @@ export class FeedbackComponent {
     const branch = this._hotelDetailService.hotelDetails.brands
       .find((brand) => brand.id === globalQueryValue.property.hotelName)
       .branches.find(
-        (branch) => branch['id'] == globalQueryValue.property.branchName
+        (branch) => branch['id'] === globalQueryValue.property.branchName
       );
     this.setTabFilterItems(branch);
   }
@@ -104,7 +104,7 @@ export class FeedbackComponent {
   getOutlets(branchId, brandId) {
     const branch = this._hotelDetailService.hotelDetails.brands
       .find((brand) => brand.id === brandId)
-      .branches.find((branch) => branch['id'] == branchId);
+      .branches.find((branch) => branch['id'] === branchId);
     this.outlets = branch.outlets;
     this.statisticsService.outletIds =
       this.globalFeedbackFilterType === feedback.types.both

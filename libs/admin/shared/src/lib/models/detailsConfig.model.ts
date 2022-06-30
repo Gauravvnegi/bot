@@ -1,6 +1,6 @@
 import { get, set } from 'lodash';
 import * as moment from 'moment';
-import { DateService } from '../../../../../shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { GuestRole } from '../constants/guest';
 
 export interface Deserializable {
@@ -350,7 +350,7 @@ export class StayDetailsConfig implements Deserializable {
       set(
         {},
         'roomNumber',
-        get(input, ['roomNumber']) == 0 ? '' : get(input, ['roomNumber'])
+        get(input, ['roomNumber']) === 0 ? '' : get(input, ['roomNumber'])
       ),
       set({}, 'special_comments', get(input, ['comments'])),
       set({}, 'checkin_comments', get(input, ['checkInComment']))

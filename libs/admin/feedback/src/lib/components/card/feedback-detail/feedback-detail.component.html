@@ -93,7 +93,7 @@
     <div class="feedback-chat__ratings">
       <div *ngFor="let service of feedbackServices">
         <div class="rating__card">
-          <div class="rating__name">{{ service.serviceName }}</div>
+          <div class="rating__name">{{ service.question }}</div>
           <div
             class="emoji"
             *ngIf="checkForNumber(service.rating); else numericCard"

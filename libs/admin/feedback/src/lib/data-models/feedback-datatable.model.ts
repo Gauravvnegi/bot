@@ -203,13 +203,15 @@ export class Service {
   rating;
   colorCode: string;
   comment: string;
+  question: string;
 
   deserialize(input, colorMap?) {
     Object.assign(
       this,
       set({}, 'serviceName', get(input, 'serviceName')),
       set({}, 'rating', get(input, 'rating')),
-      set({}, 'comment', get(input, 'comment'))
+      set({}, 'comment', get(input, 'comment')),
+      set({}, 'question', get(input, 'question'))
     );
     if (colorMap) {
       if (isNaN(this.rating))

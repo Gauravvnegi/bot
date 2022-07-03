@@ -157,3 +157,7 @@
     color: $primary-purple;
   }
 }
+
+:host ::ng-deep .mat-pseudo-checkbox-checked {
+  background: #4b56c0 !important;
+}

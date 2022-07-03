@@ -54,9 +54,14 @@
         <mat-select
           class="assignee-dropdown"
           [value]="parentFG?.get('assignee')?.value"
+          placeholder="Select Assignee"
           (selectionChange)="setAssignee($event)"
+          multiple
         >
-          <mat-option *ngFor="let assignee of userList" [value]="assignee.id">
+          <mat-option
+            *ngFor="let assignee of assigneeList"
+            [value]="assignee.id"
+          >
             {{ assignee.firstName }} {{ assignee.lastName }}
           </mat-option>
         </mat-select>

@@ -1,8 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { UserService } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { card } from '../../../constants/card';
+import { User, UserList } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
+import { FeedbackTableService } from '../../../services/table.service';
 
 @Component({
   selector: 'hospitality-bot-feedback-list-filter',
@@ -12,16 +17,66 @@ import { CardService } from '../../../services/card.service';
 export class FeedbackListFilterComponent implements OnInit {
   @Input() parentFG: FormGroup;
   @Input() hotelId: string;
-  @Input() userList;
   @Output() filterApplied = new EventEmitter();
   @Output() close = new EventEmitter();
   sortList = card.sortList;
   $subscription = new Subscription();
   filterData = { department: [] };
-  constructor(private fb: FormBuilder, private cardService: CardService) {}
+  globalQueries = [];
+  assigneeList: User[];
+  feedbackType: string;
+  constructor(
+    private fb: FormBuilder,
+    private cardService: CardService,
+    private _globalFilterService: GlobalFilterService,
+    private userService: UserService,
+    private _snackbarService: SnackBarService,
+    private tableService: FeedbackTableService
+  ) {}
 
   ngOnInit(): void {
     this.getDepartmentList();
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this._globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+        this.feedbackType = data['filter'].value.feedback.feedbackType;
+        this.getUserPermission();
+      })
+    );
+  }
+
+  /**
+   * @function listenForFeedbackTypeChanged To listen the local tab change.
+   */
+  listenForFeedbackTypeChanged(): void {
+    this.$subscription.add(
+      this.tableService.$feedbackType.subscribe((response) => {
+        this.feedbackType = response;
+        this.getUserPermission();
+      })
+    );
+  }
+
+  /**
+   * @function getUserPermission function to get user permission details
+   */
+  getUserPermission() {
+    this.$subscription.add(
+      this.userService.getUserPermission(this.feedbackType).subscribe(
+        (response) => {
+          this.assigneeList = response.childUser;
+          this.userService.userPermissions = response;
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
+    );
   }
 
   getDepartmentList() {
@@ -35,7 +90,7 @@ export class FeedbackListFilterComponent implements OnInit {
 
   initFG(): void {
     this.parentFG.addControl('sortBy', new FormControl({}));
-    this.parentFG.addControl('assignee', new FormControl(''));
+    this.parentFG.addControl('assignee', new FormControl([]));
     this.parentFG.addControl(
       'department',
       this.fb.array(this.filterData.department.map((x) => false))

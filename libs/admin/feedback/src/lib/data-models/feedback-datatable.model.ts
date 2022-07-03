@@ -34,6 +34,7 @@ export class FeedbackTable {
                 userId: item.userId,
                 userName: item.userName,
                 remarks: item.remarks,
+                timeOut: item.timeOut,
               }
             : item,
           outlets
@@ -69,6 +70,7 @@ export class Feedback {
   userId: string;
   userName: string;
   remarks: Remark[];
+  timeOut: boolean;
   deserialize(input, outlets) {
     this.remarks = new Array<Remark>();
     Object.assign(
@@ -101,7 +103,8 @@ export class Feedback {
       set({}, 'departmentLabel', get(input, ['departmentLabel'])),
       set({}, 'departmentName', get(input, ['departmentName'])),
       set({}, 'userId', get(input, ['userId'])),
-      set({}, 'userName', get(input, ['userName']))
+      set({}, 'userName', get(input, ['userName'])),
+      set({}, 'timeOut', get(input, ['timeOut']))
     );
     this.outlet = outlets.filter(
       (outlet) => outlet.id === input.entityId
@@ -349,6 +352,7 @@ export class StayFeedbackTable {
                 userId: item.userId,
                 userName: item.userName,
                 remarks: item.remarks,
+                timeOut: item.timeOut,
               }
             : item,
           outlets,
@@ -389,6 +393,7 @@ export class StayFeedback {
   userId: string;
   userName: string;
   remarks: Remark[];
+  timeOut: boolean;
   deserialize(input, outlets, colorMap) {
     this.services = new Array<Service>();
     this.remarks = new Array<Remark>();
@@ -414,7 +419,8 @@ export class StayFeedback {
       set({}, 'departmentLabel', get(input, ['departmentLabel'])),
       set({}, 'departmentName', get(input, ['departmentName'])),
       set({}, 'userId', get(input, ['userId'])),
-      set({}, 'userName', get(input, ['userName']))
+      set({}, 'userName', get(input, ['userName'])),
+      set({}, 'timeOut', get(input, ['timeOut']))
     );
     const serviceList = get(input, ['serviceMap'], ['services']);
     serviceList?.forEach((item) =>

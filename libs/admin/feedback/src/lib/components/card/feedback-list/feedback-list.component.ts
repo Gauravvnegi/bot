@@ -42,7 +42,6 @@ export class FeedbackListComponent implements OnInit {
   enableSearchField = false;
   loading = false;
   showFilter = false;
-  userList: User[];
   feedbackList;
   filterData = {};
   pagination = card.pagination;

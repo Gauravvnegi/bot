@@ -27,7 +27,7 @@ export class ArtComponent implements OnInit {
   $subscription = new Subscription();
   feedbackConfig = feedback;
   globalQueries = [];
-  chartData: ART[];
+  chartData: ARTGraph;
 
   public chart = {
     datasets: [
@@ -134,7 +134,7 @@ export class ArtComponent implements OnInit {
     this.$subscription.add(
       this.statisticsService.getARTGraphData(config).subscribe((response) => {
         this.chartData = new ARTGraph().deserialize(response);
-        if (this.chartData.length) this.loading = true;
+        if (this.chartData.data.length) this.loading = true;
         this.initChartData();
       })
     );
@@ -147,29 +147,29 @@ export class ArtComponent implements OnInit {
     this.chart.datasets[1].borderColor = [];
     this.chart.datasets[1].hoverBackgroundColor = [];
     this.chart.labels = [];
-    if (!this.chartData.length) {
+    if (!this.chartData.data.length) {
       return;
     }
     this.loading = true;
-    this.chart.datasets[0].data = [8];
+    this.chart.datasets[0].data = [this.chartData.average];
     this.chart.datasets[1].data = [0];
     this.chart.labels = [''];
-    this.chartData?.forEach((item: ART, index) => {
+    this.chartData.data?.forEach((item: ART, index) => {
       if (index === 0) {
         this.chart.options.scales.xAxes[0].ticks.min = item.label;
         this.chart.datasets[1].backgroundColor.push(item.colorCode);
         this.chart.datasets[1].borderColor.push(item.colorCode);
         this.chart.datasets[1].hoverBackgroundColor.push(item.colorCode);
       }
-      this.chart.datasets[0].data.push(8);
+      this.chart.datasets[0].data.push(this.chartData.average);
       this.chart.datasets[1].data.push(item.value);
       this.chart.datasets[1].backgroundColor.push(item.colorCode);
       this.chart.datasets[1].borderColor.push(item.colorCode);
       this.chart.datasets[1].hoverBackgroundColor.push(item.colorCode);
       this.chart.labels.push(item.label);
-      if (index === this.chartData.length - 1) {
+      if (index === this.chartData.data.length - 1) {
         this.chart.datasets[1].data.push(0);
-        this.chart.datasets[0].data.push(8);
+        this.chart.datasets[0].data.push(this.chartData.average);
         this.chart.labels.push('');
         this.chart.options.scales.xAxes[0].ticks.max = item.label;
         this.chart.datasets[1].backgroundColor.push(item.colorCode);

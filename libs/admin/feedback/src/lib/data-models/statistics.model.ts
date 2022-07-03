@@ -3,6 +3,7 @@ import { Chip } from '../types/feedback.type';
 
 export class ARTGraph {
   data: ART[];
+  average: number;
 
   deserialize(input) {
     this.data = new Array<ART>();
@@ -10,7 +11,8 @@ export class ARTGraph {
     input.artGraph?.forEach((item) =>
       this.data.push(new ART().deserialize(item))
     );
-    return this.data;
+    this.average = input.average;
+    return this;
   }
 }
 

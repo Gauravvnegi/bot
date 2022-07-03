@@ -5,6 +5,7 @@ import { UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { card } from '../../../constants/card';
+import { feedback } from '../../../constants/feedback';
 import { User, UserList } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
@@ -35,8 +36,9 @@ export class FeedbackListFilterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getDepartmentList();
+    this.initFG();
     this.listenForGlobalFilters();
+    this.listenForFeedbackTypeChanged();
   }
 
   listenForGlobalFilters() {
@@ -46,8 +48,11 @@ export class FeedbackListFilterComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.feedbackType = data['filter'].value.feedback.feedbackType;
+        this.feedbackType = this.getFeedbackType(
+          data['filter'].value.feedback.feedbackType
+        );
         this.getUserPermission();
+        this.getDepartmentList();
       })
     );
   }
@@ -58,8 +63,10 @@ export class FeedbackListFilterComponent implements OnInit {
   listenForFeedbackTypeChanged(): void {
     this.$subscription.add(
       this.tableService.$feedbackType.subscribe((response) => {
-        this.feedbackType = response;
+        if (this.feedbackType !== response) this.filterData.department = [];
+        this.feedbackType = this.getFeedbackType(response);
         this.getUserPermission();
+        this.getDepartmentList();
       })
     );
   }
@@ -81,20 +88,23 @@ export class FeedbackListFilterComponent implements OnInit {
 
   getDepartmentList() {
     this.$subscription.add(
-      this.cardService.getDepartmentList(this.hotelId).subscribe((response) => {
-        this.filterData.department = response;
-        this.initFG();
-      })
+      this.cardService
+        .getDepartmentList(this.hotelId, this.feedbackType)
+        .subscribe((response) => {
+          this.filterData.department = response;
+          this.parentFG
+            .get('department')
+            .setValue(
+              this.fb.array(this.filterData.department.map((x) => false))
+            );
+        })
     );
   }
 
   initFG(): void {
     this.parentFG.addControl('sortBy', new FormControl({}));
     this.parentFG.addControl('assignee', new FormControl([]));
-    this.parentFG.addControl(
-      'department',
-      this.fb.array(this.filterData.department.map((x) => false))
-    );
+    this.parentFG.addControl('department', this.fb.array([]));
   }
 
   applyFilter() {
@@ -144,6 +154,10 @@ export class FeedbackListFilterComponent implements OnInit {
 
   get department(): FormArray {
     return this.parentFG.controls.department as FormArray;
+  }
+
+  getFeedbackType(type) {
+    return type === feedback.types.both || '' ? feedback.types.stay : type;
   }
 
   ngOnDestroy(): void {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { feedback } from '../constants/feedback';
 
 @Injectable()
 export class CardService extends ApiService {
@@ -21,9 +22,13 @@ export class CardService extends ApiService {
   getGuestById(guestId: string): Observable<any> {
     return this.get(`/api/v1/guest/${guestId}`);
   }
-  getDepartmentList(hotelId: string) {
+  getDepartmentList(hotelId: string, feedbackType: string) {
     return this.get(
-      `/api/v1/cms/hotel/${hotelId}/feedback-form?key=departments`
+      `/api/v1/cms/hotel/${hotelId}/feedback-form?key=${
+        feedbackType === feedback.types.stay
+          ? 'departments'
+          : 'transactionaldepartments'
+      }`
     );
   }
 

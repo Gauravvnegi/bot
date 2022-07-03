@@ -396,7 +396,7 @@
               </p-tableCheckbox>
             </td>
             <td class="guest">
-              <div class="guest-status" *ngIf="rowData?.status == 'Timeout'">
+              <div class="guest-status" *ngIf="rowData?.timeOut">
                 <img src="assets/svg/timeout.svg" alt="timeout" />
               </div>
               <div class="guest-name">
@@ -636,7 +636,7 @@
               </p-tableCheckbox>
             </td>
             <td class="guest">
-              <div class="guest-status" *ngIf="rowData?.status == 'Timeout'">
+              <div class="guest-status" *ngIf="rowData?.timeOut">
                 <img src="assets/svg/timeout.svg" alt="timeout" />
               </div>
               <div>{{ rowData.guestData.bookingNo }}</div>

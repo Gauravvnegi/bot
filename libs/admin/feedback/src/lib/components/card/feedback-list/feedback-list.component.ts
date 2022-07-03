@@ -110,10 +110,9 @@ export class FeedbackListComponent implements OnInit {
   }
 
   getFeedbackType(feedbackType) {
-    if (feedbackType === feedback.types.both) {
-      return feedback.types.stay;
-    }
-    return feedbackType;
+    return feedbackType === feedback.types.both
+      ? feedback.types.stay
+      : feedbackType;
   }
 
   /**
@@ -164,6 +163,8 @@ export class FeedbackListComponent implements OnInit {
   listenForFeedbackTypeChanged(): void {
     this.$subscription.add(
       this.tableService.$feedbackType.subscribe((response) => {
+        if (this.feedbackType !== this.getFeedbackType(response))
+          this.filterData = { ...this.filterData, department: [] };
         this.feedbackType = response;
         this.filterData = {
           ...this.filterData,

@@ -164,4 +164,8 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     this.searchDropdownVisible = false;
     this.searchValue = false;
   }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

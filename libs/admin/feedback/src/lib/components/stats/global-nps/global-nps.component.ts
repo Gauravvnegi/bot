@@ -3,7 +3,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   CircularChart,
-  StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
 import { GlobalNPS } from '../../../data-models/statistics.model';
+import { StatisticsService } from '../../../services/feedback-statistics.service';
 
 @Component({
   selector: 'hospitality-bot-global-nps',

@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   AdminSharedModule,
   getTranslationConfigs,
-  StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { AdminFeedbackRoutingModule } from './admin-feedback.routing.module';
 import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
@@ -16,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { FeedbackTableService } from './services/table.service';
 import { CardService } from './services/card.service';
+import { StatisticsService } from './services/feedback-statistics.service';
 
 @NgModule({
   imports: [

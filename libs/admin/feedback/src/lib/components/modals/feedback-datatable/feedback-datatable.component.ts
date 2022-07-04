@@ -17,7 +17,6 @@ import {
   FeedbackService,
   HotelDetailService,
   sharedConfig,
-  StatisticsService,
   TableService,
   UserService,
 } from '@hospitality-bot/admin/shared';
@@ -32,6 +31,7 @@ import {
   FeedbackTable,
   StayFeedbackTable,
 } from '../../../data-models/feedback-datatable.model';
+import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../../services/table.service';
 import { SelectedChip } from '../../../types/feedback.type';
 import { FeedbackDatatableComponent } from '../../datatable/feedback-datatable/feedback-datatable.component';

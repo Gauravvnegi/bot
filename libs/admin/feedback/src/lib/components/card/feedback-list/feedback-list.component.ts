@@ -12,7 +12,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   sharedConfig,
-  StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Observable, Subscription } from 'rxjs';
@@ -20,6 +19,7 @@ import { card } from '../../../constants/card';
 import { feedback } from '../../../constants/feedback';
 import { FeedbackList, User } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
+import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../../services/table.service';
 
 @Component({

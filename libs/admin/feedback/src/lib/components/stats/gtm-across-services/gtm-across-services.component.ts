@@ -1,9 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  StatisticsService,
-  AdminUtilityService,
-} from '@hospitality-bot/admin/shared';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
   SnackBarService,
@@ -14,6 +11,7 @@ import { feedback } from '../../../constants/feedback';
 import { GTM } from '../../../data-models/statistics.model';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
+import { StatisticsService } from '../../../services/feedback-statistics.service';
 
 @Component({
   selector: 'hospitality-bot-gtm-across-services',

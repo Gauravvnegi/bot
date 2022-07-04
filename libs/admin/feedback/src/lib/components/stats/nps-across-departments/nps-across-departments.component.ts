@@ -5,13 +5,13 @@ import { feedback } from '@hospitality-bot/admin/feedback';
 import {
   AdminUtilityService,
   sharedConfig,
-  StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
 import { NPSDepartments } from '../../../data-models/statistics.model';
+import { StatisticsService } from '../../../services/feedback-statistics.service';
 
 @Component({
   selector: 'hospitality-bot-nps-across-departments',

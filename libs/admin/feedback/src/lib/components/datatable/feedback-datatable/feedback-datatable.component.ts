@@ -18,7 +18,6 @@ import {
   FeedbackService,
   HotelDetailService,
   sharedConfig,
-  StatisticsService,
   TableService,
   UserService,
 } from '@hospitality-bot/admin/shared';
@@ -41,6 +40,7 @@ import {
   Departmentpermission,
   Departmentpermissions,
 } from '../../../data-models/feedback-card.model';
+import { StatisticsService } from '../../../services/feedback-statistics.service';
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
   templateUrl: './feedback-datatable.component.html',

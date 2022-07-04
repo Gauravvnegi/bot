@@ -6,12 +6,12 @@ import {
   CardNames,
   TableNames,
   HotelDetailService,
-  StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../constants/feedback';
+import { StatisticsService } from '../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../services/table.service';
 
 @Component({

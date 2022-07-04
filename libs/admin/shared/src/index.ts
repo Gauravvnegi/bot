@@ -2,7 +2,6 @@ export * from './lib/admin-shared.module';
 export * from './lib/services/user-detail.service';
 export * from './lib/services/admin-utility.service';
 export * from './lib/services/feedback.service';
-export * from './lib/services/feedback-statistics.service';
 export * from './lib/services/hotel-detail.service';
 export * from './lib/services/table.service';
 export * from './lib/constants/subscriptionConfig';

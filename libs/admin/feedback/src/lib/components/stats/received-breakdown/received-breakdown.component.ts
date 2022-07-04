@@ -2,10 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  AdminUtilityService,
-  StatisticsService,
-} from '@hospitality-bot/admin/shared';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
   SnackBarService,
@@ -18,6 +15,7 @@ import { feedback } from '../../../constants/feedback';
 import { Bifurcation } from '../../../data-models/statistics.model';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
 import { MatSelectChange } from '@angular/material/select';
+import { StatisticsService } from '../../../services/feedback-statistics.service';
 
 @Component({
   selector: 'hospitality-bot-received-breakdown',

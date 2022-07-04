@@ -5,7 +5,6 @@ import {
   AdminUtilityService,
   BarChart,
   sharedConfig,
-  StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
@@ -14,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
 import { feedback } from '../../../constants/feedback';
 import { NPS } from '../../../data-models/statistics.model';
+import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../../services/table.service';
 import { ChartTypeOption } from '../../../types/feedback.type';
 

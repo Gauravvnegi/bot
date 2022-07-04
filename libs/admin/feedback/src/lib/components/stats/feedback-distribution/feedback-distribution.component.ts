@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
-  StatisticsService,
   CircularChart,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -16,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { chartConfig } from '../../../constants/chart';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable/feedback-datatable.component';
+import { StatisticsService } from '../../../services/feedback-statistics.service';
 
 @Component({
   selector: 'hospitality-bot-feedback-distribution',

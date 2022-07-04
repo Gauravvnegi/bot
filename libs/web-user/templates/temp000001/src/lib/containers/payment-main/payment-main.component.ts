@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './payment-main.component.html',
   styleUrls: ['./payment-main.component.scss'],
 })
-export class PaymentMainComponent implements OnInit {
+export class PaymentMainComponent implements OnInit, OnDestroy {
   protected $subscription: Subscription = new Subscription();
   paymentStatusData: PaymentMainStatus = new PaymentMainStatus();
 

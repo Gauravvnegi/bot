@@ -1,5 +1,5 @@
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -18,7 +18,7 @@ import { NotificationComponent } from '../notification/notification.component';
   styleUrls: ['./marketing-notification.component.scss'],
 })
 export class MarketingNotificationComponent extends NotificationComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   emailFG: FormGroup;
   @Input() hotelId: string;
   @Input() email: string;
@@ -190,5 +190,9 @@ export class MarketingNotificationComponent extends NotificationComponent
 
   get to() {
     return this.emailFG.get('emailIds') as FormArray;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

@@ -1,4 +1,11 @@
-import { Component, Inject, OnInit, Optional, ViewChild } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Optional,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
@@ -12,7 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './input-popup.component.html',
   styleUrls: ['./input-popup.component.scss'],
 })
-export class InputPopupComponent implements OnInit {
+export class InputPopupComponent implements OnInit, OnDestroy {
   dialaogData: any;
   termsStatus: boolean;
   requestForm: FormGroup;
@@ -49,29 +56,31 @@ export class InputPopupComponent implements OnInit {
       special_remarks: this.requestForm.get('request').value,
       // termsStatus: this.termsStatus,
     };
-    this._reservationService
-      .checkIn(this._reservationService.reservationData.id, data)
-      .subscribe(
-        (res) => {
-          this._translateService
-            .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
-            .subscribe((translatedMsg) => {
-              this._snackBarService.openSnackBarAsText(translatedMsg, '', {
-                panelClass: 'success',
+    this.$subscription.add(
+      this._reservationService
+        .checkIn(this._reservationService.reservationData.id, data)
+        .subscribe(
+          (res) => {
+            this._translateService
+              .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg, '', {
+                  panelClass: 'success',
+                });
               });
-            });
-          this.close('success');
-        },
-        ({ error }) => {
-          this._translateService
-            .get(`MESSAGES.ERROR.${error.type}`)
-            .subscribe((translatedMsg) => {
-              this._snackBarService.openSnackBarAsText(translatedMsg);
-            });
-          this._buttonService.buttonLoading$.next(this.saveButton);
-          //this.close('success');
-        }
-      );
+            this.close('success');
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
+            this._buttonService.buttonLoading$.next(this.saveButton);
+            //this.close('success');
+          }
+        )
+    );
   }
 
   close(state?) {
@@ -82,5 +91,9 @@ export class InputPopupComponent implements OnInit {
       data = { event: 'close' };
     }
     this.dialogRef.close(data);
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

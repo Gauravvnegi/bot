@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -13,7 +20,7 @@ import { CampaignService } from '../../services/campaign.service';
   templateUrl: './template-list-container.component.html',
   styleUrls: ['./template-list-container.component.scss'],
 })
-export class TemplateListContainerComponent implements OnInit {
+export class TemplateListContainerComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
   @Input() hotelId: string;
   @Input() templateType: string;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
@@ -19,7 +19,7 @@ import { FeedbackTableService } from '../../services/table.service';
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.scss'],
 })
-export class FeedbackComponent {
+export class FeedbackComponent implements OnInit, OnDestroy {
   feedbackConfig = feedback;
   public cards = CardNames;
   tables = TableNames;

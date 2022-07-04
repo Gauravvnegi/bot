@@ -1,4 +1,9 @@
-import { Component, OnInit, ɵtransitiveScopesFor } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ɵtransitiveScopesFor,
+} from '@angular/core';
 import { sharedConfig } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
@@ -13,7 +18,7 @@ import { MarketingService } from '../../../../services/stats.service';
   templateUrl: './stats-view.component.html',
   styleUrls: ['./stats-view.component.scss'],
 })
-export class StatsViewComponent implements OnInit {
+export class StatsViewComponent implements OnInit, OnDestroy {
   adminSharedConfig = sharedConfig;
   globalQueries = [];
   selectedInterval: string;

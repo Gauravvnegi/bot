@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ConfigService,
@@ -26,7 +26,7 @@ import { trigger, transition, animate, style } from '@angular/animations';
     ]),
   ],
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
   guestInfoEnable = false;
   outlets = [];
   colorMap;

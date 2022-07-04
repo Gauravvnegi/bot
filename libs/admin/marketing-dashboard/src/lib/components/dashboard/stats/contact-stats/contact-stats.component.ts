@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -13,7 +13,7 @@ import { sharedConfig } from '@hospitality-bot/admin/shared';
   templateUrl: './contact-stats.component.html',
   styleUrls: ['./contact-stats.component.scss'],
 })
-export class ContactStatsComponent implements OnInit {
+export class ContactStatsComponent implements OnInit, OnDestroy {
   adminSharedConfig = sharedConfig;
   contactValue = [];
   selectedInterval: string;

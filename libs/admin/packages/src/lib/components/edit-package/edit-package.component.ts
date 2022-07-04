@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,7 +20,7 @@ import { ConfigService } from '@hospitality-bot/admin/shared';
   templateUrl: './edit-package.component.html',
   styleUrls: ['./edit-package.component.scss'],
 })
-export class EditPackageComponent implements OnInit {
+export class EditPackageComponent implements OnInit, OnDestroy {
   @Input() id: string;
 
   private $subscription: Subscription = new Subscription();

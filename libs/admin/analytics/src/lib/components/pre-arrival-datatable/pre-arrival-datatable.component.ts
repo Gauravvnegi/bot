@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
@@ -22,7 +29,7 @@ import { analytics } from '@hospitality-bot/admin/shared';
   ],
 })
 export class PreArrivalDatatableComponent extends BaseDatatableComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @Input() entityType = 'Inhouse';
   @Input() optionLabels = [];
   @Input() packageId: string;

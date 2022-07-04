@@ -3,6 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -27,7 +28,7 @@ import { FeedbackStatusFormComponent } from '../feedback-status-form/feedback-st
   templateUrl: './action-overlay.component.html',
   styleUrls: ['./action-overlay.component.scss'],
 })
-export class ActionOverlayComponent implements OnInit {
+export class ActionOverlayComponent implements OnInit, OnDestroy {
   isOpen = false;
   type: string;
   globalQueries = [];

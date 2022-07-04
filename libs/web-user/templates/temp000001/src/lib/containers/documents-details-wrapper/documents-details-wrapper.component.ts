@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./documents-details-wrapper.component.scss'],
 })
 export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @ViewChild('documentDetailsComp')
   documentDetailsComp: DocumentsDetailsComponent;
   isUploading = false;

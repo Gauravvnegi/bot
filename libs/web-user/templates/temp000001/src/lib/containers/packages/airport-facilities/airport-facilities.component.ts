@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AirportConfigI } from 'libs/web-user/shared/src/lib/data-models/airportConfig.model';
 import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './airport-facilities.component.html',
   styleUrls: ['./airport-facilities.component.scss'],
 })
-export class AirportFacilitiesComponent implements OnInit {
+export class AirportFacilitiesComponent implements OnInit, OnDestroy {
   @Input() uniqueData;
   @Input() amenityData;
   @Input() subPackageForm;

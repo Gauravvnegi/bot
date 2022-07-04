@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
@@ -13,7 +20,7 @@ import { Regex } from '@hospitality-bot/admin/shared';
   templateUrl: './import-contact.component.html',
   styleUrls: ['./import-contact.component.scss'],
 })
-export class ImportContactComponent implements OnInit {
+export class ImportContactComponent implements OnInit, OnDestroy {
   @Output() onImportClosed = new EventEmitter();
   @Input() hotelId: string;
   fileUploadData = contactConfig.datatable.fileUploadData;

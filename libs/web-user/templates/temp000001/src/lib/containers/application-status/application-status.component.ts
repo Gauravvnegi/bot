@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { FileData } from 'libs/web-user/shared/src/lib/data-models/file';
@@ -22,7 +29,7 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
   templateUrl: './application-status.component.html',
   styleUrls: ['./application-status.component.scss'],
 })
-export class ApplicationStatusComponent implements OnInit {
+export class ApplicationStatusComponent implements OnInit, OnDestroy {
   protected _dialogRef: MatDialogRef<any>;
   summaryDetails: SummaryDetails = new SummaryDetails();
   protected regCardComponent = RegistrationCardComponent;

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -13,7 +13,7 @@ import { MarketingService } from '../../../../services/stats.service';
   templateUrl: './subscribers-graph.component.html',
   styleUrls: ['./subscribers-graph.component.scss'],
 })
-export class SubscribersGraphComponent implements OnInit {
+export class SubscribersGraphComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
 
   legendData: any = [

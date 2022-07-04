@@ -1,4 +1,4 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as JSZipUtils from 'jszip-utils';
@@ -14,7 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './registration-card.component.html',
   styleUrls: ['./registration-card.component.scss'],
 })
-export class RegistrationCardComponent {
+export class RegistrationCardComponent implements OnInit, OnDestroy {
   regCard = {
     fileName: '',
     src: '',

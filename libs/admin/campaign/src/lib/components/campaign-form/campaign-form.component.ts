@@ -3,6 +3,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -28,7 +29,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './campaign-form.component.html',
   styleUrls: ['./campaign-form.component.scss'],
 })
-export class CampaignFormComponent implements OnInit {
+export class CampaignFormComponent implements OnInit, OnDestroy {
   @Input() hotelId: string;
   @Input() campaignId: string;
   @Input() campaignFG: FormGroup;

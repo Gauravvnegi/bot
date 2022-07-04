@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   QueryList,
@@ -28,7 +29,7 @@ import { GuestDetailsService } from './../../../../../../shared/src/lib/services
   templateUrl: './guest-details.component.html',
   styleUrls: ['./guest-details.component.scss'],
 })
-export class GuestDetailsComponent implements OnInit, OnChanges {
+export class GuestDetailsComponent implements OnInit, OnChanges, OnDestroy {
   protected $subscription: Subscription = new Subscription();
   @ViewChild('guestAccordian') guestAccordian: MatAccordion;
 

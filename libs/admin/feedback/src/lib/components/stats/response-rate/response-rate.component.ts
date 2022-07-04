@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -23,7 +23,7 @@ import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable
   templateUrl: './response-rate.component.html',
   styleUrls: ['./response-rate.component.scss'],
 })
-export class ResponseRateComponent implements OnInit {
+export class ResponseRateComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   tabfeedbackType: string;
   $subscription = new Subscription();

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -20,7 +20,8 @@ import { CategoriesService } from '../../services/category.service';
     './categories-datatable.component.scss',
   ],
 })
-export class CategoriesDatatableComponent extends BaseDatatableComponent {
+export class CategoriesDatatableComponent extends BaseDatatableComponent
+  implements OnInit, OnDestroy {
   tableName = 'Categories';
   isResizableColumns = true;
   isAutoLayout = false;

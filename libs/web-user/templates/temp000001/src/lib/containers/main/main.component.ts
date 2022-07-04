@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -23,7 +23,7 @@ import { Temp000001StepperComponent } from '../../presentational/temp000001-step
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
   protected $subscription: Subscription = new Subscription();
   @ViewChild('stepperComponent') stepperComponent: Temp000001StepperComponent;
   protected checkInDialogRef: MatDialogRef<CheckinDateAlertComponent>;
@@ -163,5 +163,9 @@ export class MainComponent implements OnInit {
       const group: FormGroup = this.fb.group({});
       this.parentForm.push(group);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { TranslateService } from '@ngx-translate/core';
@@ -13,7 +20,7 @@ import { EmailService } from '../../services/email.service';
   templateUrl: './to-dropdown.component.html',
   styleUrls: ['./to-dropdown.component.scss'],
 })
-export class ToDropdownComponent implements OnInit {
+export class ToDropdownComponent implements OnInit, OnDestroy {
   @Input() value: string;
   @Input() search = false;
   @Input() hotelId: string;

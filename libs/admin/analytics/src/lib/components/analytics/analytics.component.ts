@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service';
 import { Subscription } from 'rxjs';
@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './analytics.component.html',
   styleUrls: ['./analytics.component.scss'],
 })
-export class AnalyticsComponent implements OnInit {
+export class AnalyticsComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   hotelId: string;
   requestConfiguration;
@@ -65,5 +65,9 @@ export class AnalyticsComponent implements OnInit {
         label
       ] || []
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

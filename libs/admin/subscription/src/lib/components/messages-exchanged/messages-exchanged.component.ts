@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -15,7 +15,7 @@ import { SubscriptionService } from '../../services/subscription.service';
   templateUrl: './messages-exchanged.component.html',
   styleUrls: ['./messages-exchanged.component.scss'],
 })
-export class MessagesExchangedComponent implements OnInit {
+export class MessagesExchangedComponent implements OnInit, OnDestroy {
   public barChartOptions: ChartOptions = {
     responsive: true,
     tooltips: {

@@ -3,6 +3,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -22,7 +23,7 @@ import { EmailService } from '../../services/email.service';
   templateUrl: './receiver-field.component.html',
   styleUrls: ['./receiver-field.component.scss'],
 })
-export class ReceiverFieldComponent implements OnInit {
+export class ReceiverFieldComponent implements OnInit, OnDestroy {
   @ViewChild('receiverField') receiverField;
   @Input() chipList = [];
   @Input() name: string;

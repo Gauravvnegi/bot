@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -27,7 +34,7 @@ import { GuestDatatableComponent } from '../../datatable/guest/guest.component';
   ],
 })
 export class GuestDatatableModalComponent extends GuestDatatableComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @Input() callingMethod: string;
   @Input() guestFilter: string;
   @Input() exportURL: string;

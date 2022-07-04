@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
@@ -11,7 +11,7 @@ import { AdminUtilityService, analytics } from '@hospitality-bot/admin/shared';
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.scss'],
 })
-export class ConversationComponent implements OnInit {
+export class ConversationComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   globalFilters;
   hotelId: string;

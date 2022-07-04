@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import {
@@ -31,7 +38,7 @@ import { TranslateService } from '@ngx-translate/core';
   ],
 })
 export class ContactDatatableComponent extends BaseDatatableComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   isTabFilters: boolean = false;
   tabFilterItems = [];
   @Input() dataSource = [];

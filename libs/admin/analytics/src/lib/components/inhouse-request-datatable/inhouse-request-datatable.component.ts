@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -22,7 +29,7 @@ import { analytics } from '@hospitality-bot/admin/shared';
   ],
 })
 export class InhouseRequestDatatableComponent extends BaseDatatableComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @Input() entityType = 'Inhouse';
   @Input() optionLabels = [];
   @Output() onModalClose = new EventEmitter();

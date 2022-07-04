@@ -1,4 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -13,7 +19,7 @@ import { RequestService } from '../../services/request.service';
   templateUrl: './request-detail.component.html',
   styleUrls: ['./request-detail.component.scss'],
 })
-export class RequestDetailComponent implements OnInit {
+export class RequestDetailComponent implements OnInit, OnDestroy {
   data: InhouseData;
   status = false;
   statusList = request.status;
@@ -148,5 +154,9 @@ export class RequestDetailComponent implements OnInit {
         }
       )
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

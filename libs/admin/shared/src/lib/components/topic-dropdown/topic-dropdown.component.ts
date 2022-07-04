@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
@@ -11,7 +18,7 @@ import { TopicService } from '../../services/topic.service';
   templateUrl: './topic-dropdown.component.html',
   styleUrls: ['./topic-dropdown.component.scss'],
 })
-export class TopicDropdownComponent implements OnInit {
+export class TopicDropdownComponent implements OnInit, OnDestroy {
   @Input() parentForm: FormGroup;
   @Input() name: string;
   @Input() hotelId: string;

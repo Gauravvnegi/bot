@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { camapign } from '../../constant/demo-data';
 import { EmailService } from '../../services/email.service';
@@ -9,7 +16,7 @@ import { campaignConfig } from '../../constant/campaign';
   templateUrl: './personalization.component.html',
   styleUrls: ['./personalization.component.scss'],
 })
-export class PersonalizationComponent implements OnInit {
+export class PersonalizationComponent implements OnInit, OnDestroy {
   @Output() personalization = new EventEmitter();
   @Input() enablePersonalization = false;
   @Input() name;

@@ -1,12 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, FormArray } from '@angular/forms';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { card } from '../../../constants/card';
 import { feedback } from '../../../constants/feedback';
-import { User, UserList } from '../../../data-models/feedback-card.model';
+import { User } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
 import { FeedbackTableService } from '../../../services/table.service';
 
@@ -15,7 +22,7 @@ import { FeedbackTableService } from '../../../services/table.service';
   templateUrl: './feedback-list-filter.component.html',
   styleUrls: ['./feedback-list-filter.component.scss'],
 })
-export class FeedbackListFilterComponent implements OnInit {
+export class FeedbackListFilterComponent implements OnInit, OnDestroy {
   @Input() parentFG: FormGroup;
   @Input() hotelId: string;
   @Output() filterApplied = new EventEmitter();

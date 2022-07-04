@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import { ModalService } from '@hospitality-bot/shared/material';
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './guest-booking-info.component.html',
   styleUrls: ['./guest-booking-info.component.scss'],
 })
-export class GuestBookingInfoComponent implements OnInit, OnChanges {
+export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data;
   @Input() hotelId;
   @Input() reservationData;
@@ -53,5 +53,9 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
         detailCompRef.close();
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

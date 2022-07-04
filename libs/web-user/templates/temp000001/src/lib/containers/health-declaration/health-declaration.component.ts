@@ -3,6 +3,7 @@ import {
   ComponentFactoryResolver,
   ElementRef,
   EventEmitter,
+  OnDestroy,
   OnInit,
   Output,
   QueryList,
@@ -45,7 +46,7 @@ const components = {
   templateUrl: './health-declaration.component.html',
   styleUrls: ['./health-declaration.component.scss'],
 })
-export class HealthDeclarationComponent implements OnInit {
+export class HealthDeclarationComponent implements OnInit, OnDestroy {
   private $subscription: Subscription = new Subscription();
   protected healthComponents = components;
   @Output()

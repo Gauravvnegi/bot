@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
@@ -12,7 +19,7 @@ import {
   templateUrl: './feedback-detail-footer.component.html',
   styleUrls: ['./feedback-detail-footer.component.scss'],
 })
-export class FeedbackDetailFooterComponent implements OnInit {
+export class FeedbackDetailFooterComponent implements OnInit, OnDestroy {
   @Input() feedback: FeedbackRecord;
   @Input() userPermissions: Departmentpermission[];
   @Output() updateStatus = new EventEmitter();
@@ -58,5 +65,9 @@ export class FeedbackDetailFooterComponent implements OnInit {
 
   sendMessage() {
     this.addComment.emit({ data: this.feedbackFG.getRawValue() });
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

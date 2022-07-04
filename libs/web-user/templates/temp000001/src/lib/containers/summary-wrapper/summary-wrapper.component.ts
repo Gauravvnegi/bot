@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,7 +15,8 @@ import { SnackBarService } from 'libs/shared/material/src';
   styleUrls: ['./summary-wrapper.component.scss'],
   providers: [SummaryService],
 })
-export class SummaryWrapperComponent extends BaseWrapperComponent {
+export class SummaryWrapperComponent extends BaseWrapperComponent
+  implements OnInit, OnDestroy {
   requestForm: FormGroup;
   summaryConfig: SummaryDetailsConfigI;
   summaryDetails;

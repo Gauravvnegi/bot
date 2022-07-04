@@ -1,14 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { analytics } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
-import {
-  Conversation,
-  Notification,
-} from '../../models/whatsapp-analytics.model';
+import { Notification } from '../../models/whatsapp-analytics.model';
 import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
@@ -16,7 +13,7 @@ import { AnalyticsService } from '../../services/analytics.service';
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   globalFilters;
   hotelId: string;

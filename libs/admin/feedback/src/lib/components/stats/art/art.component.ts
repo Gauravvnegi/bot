@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -20,7 +20,7 @@ import { ART, ARTGraph } from '../../../data-models/statistics.model';
   templateUrl: './art.component.html',
   styleUrls: ['./art.component.scss'],
 })
-export class ArtComponent implements OnInit {
+export class ArtComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType;
   loading = false;
   tabfeedbackType: string;

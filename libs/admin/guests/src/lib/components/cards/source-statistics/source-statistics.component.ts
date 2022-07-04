@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
@@ -20,7 +20,7 @@ import { GuestDatatableModalComponent } from '../../modal/guest-datatable/guest-
   templateUrl: './source-statistics.component.html',
   styleUrls: ['./source-statistics.component.scss'],
 })
-export class SourceStatisticsComponent implements OnInit {
+export class SourceStatisticsComponent implements OnInit, OnDestroy {
   selectedInterval: any;
   $subscription = new Subscription();
   sourceGraphData: Source;

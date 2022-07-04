@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -25,7 +25,7 @@ import { ChartTypeOption } from '../../../types/feedback.type';
     './net-promoter-score.component.scss',
   ],
 })
-export class NetPromoterScoreComponent implements OnInit {
+export class NetPromoterScoreComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   tabfeedbackType: string;
   feedbackConfig = feedback;

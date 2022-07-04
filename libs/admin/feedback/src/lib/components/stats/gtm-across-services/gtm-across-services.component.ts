@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   StatisticsService,
@@ -20,7 +20,7 @@ import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable
   templateUrl: './gtm-across-services.component.html',
   styleUrls: ['./gtm-across-services.component.scss'],
 })
-export class GtmAcrossServicesComponent implements OnInit {
+export class GtmAcrossServicesComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   tabfeedbackType: string;
   $subscription = new Subscription();

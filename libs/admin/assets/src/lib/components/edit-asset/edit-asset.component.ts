@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -15,7 +15,7 @@ import { assetConfig } from '../../constants/asset';
   templateUrl: './edit-asset.component.html',
   styleUrls: ['./edit-asset.component.scss'],
 })
-export class EditAssetComponent implements OnInit {
+export class EditAssetComponent implements OnInit, OnDestroy {
   @Input() id: string;
   fileUploadData = assetConfig.fileUploadData;
 
@@ -329,9 +329,7 @@ export class EditAssetComponent implements OnInit {
    */
   updateFileType(type: string): void {
     this.fileUploadData.fileType =
-      type === 'Image'
-        ? assetConfig.size.image
-        : assetConfig.size.video;
+      type === 'Image' ? assetConfig.size.image : assetConfig.size.video;
   }
 
   /**

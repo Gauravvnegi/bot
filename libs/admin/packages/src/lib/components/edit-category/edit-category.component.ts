@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -17,7 +17,7 @@ import { PackageService } from '../../services/package.service';
   templateUrl: './edit-category.component.html',
   styleUrls: ['./edit-category.component.scss'],
 })
-export class EditCategoryComponent implements OnInit {
+export class EditCategoryComponent implements OnInit, OnDestroy {
   private $subscription: Subscription = new Subscription();
 
   fileUploadData = {

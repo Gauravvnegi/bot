@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -27,7 +28,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./signature-capture-wrapper.component.scss'],
 })
 export class SignatureCaptureWrapperComponent
-  implements OnChanges, AfterViewInit {
+  implements OnChanges, AfterViewInit, OnDestroy {
   private _dialogRef: MatDialogRef<any>;
   private _settings;
   private $subscription: Subscription = new Subscription();

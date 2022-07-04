@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MessageService } from '../../services/messages.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -15,14 +15,14 @@ import { ModalService } from '@hospitality-bot/shared/material';
   templateUrl: './guest-booking-info.component.html',
   styleUrls: ['./guest-booking-info.component.scss'],
 })
-export class GuestBookingInfoComponent implements OnInit, OnChanges {
+export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data;
   @Input() guestId;
   @Input() hotelId;
   @Input() reservation;
   $subscription = new Subscription();
   reservationData;
-  booking= false;
+  booking = false;
   currentBooking = [];
   pastBooking = [];
   upcomingBooking = [];
@@ -41,24 +41,22 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
       this.pastBooking = this.reservation.records.filter(
         (item) => item.reservation.type === 'PAST'
       );
-  
+
       this.currentBooking = this.reservation.records.filter(
         (item) => item.reservation.type === 'CURRENT'
       );
-  
+
       this.upcomingBooking = this.reservation.records.filter(
         (item) => item.reservation.type === 'UPCOMING'
       );
-        this.booking=true;
-          
+      this.booking = true;
     } else {
       this.reservation = undefined;
-      this.pastBooking= this.currentBooking = this.upcomingBooking = [];
+      this.pastBooking = this.currentBooking = this.upcomingBooking = [];
       this.booking = false;
     }
-
   }
-  
+
   openDetailPage(item) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -77,5 +75,9 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges {
         detailCompRef.close();
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

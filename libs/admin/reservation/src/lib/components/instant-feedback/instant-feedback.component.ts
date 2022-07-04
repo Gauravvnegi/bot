@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { HotelDetailService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -10,7 +10,7 @@ import { ReservationService } from '../../services/reservation.service';
   templateUrl: './instant-feedback.component.html',
   styleUrls: ['./instant-feedback.component.scss'],
 })
-export class InstantFeedbackComponent implements OnInit {
+export class InstantFeedbackComponent implements OnInit, OnDestroy {
   @Input() title;
   @Input() rowData;
   @Input() openedState: boolean;
@@ -69,5 +69,9 @@ export class InstantFeedbackComponent implements OnInit {
         ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
       )
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

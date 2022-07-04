@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -47,7 +48,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-export class StayDetailsComponent implements OnInit, OnChanges {
+export class StayDetailsComponent implements OnInit, OnChanges, OnDestroy {
   private $subscription: Subscription = new Subscription();
   @ViewChild(MatAccordion) accordion: MatAccordion;
 

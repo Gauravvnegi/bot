@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
@@ -19,7 +19,7 @@ export interface IStayDetailsWrapper {
   styleUrls: ['./stay-details-wrapper.component.scss'],
 })
 export class StayDetailsWrapperComponent extends BaseWrapperComponent
-  implements IStayDetailsWrapper {
+  implements IStayDetailsWrapper, OnInit, OnDestroy {
   isAmenityDataAvl: boolean = false;
 
   constructor(

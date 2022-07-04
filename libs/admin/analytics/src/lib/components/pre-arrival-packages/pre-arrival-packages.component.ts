@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { analytics } from '@hospitality-bot/admin/shared';
@@ -18,7 +18,7 @@ import { PreArrivalDatatableComponent } from '../pre-arrival-datatable/pre-arriv
   templateUrl: './pre-arrival-packages.component.html',
   styleUrls: ['./pre-arrival-packages.component.scss'],
 })
-export class PreArrivalPackagesComponent implements OnInit {
+export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   $subscription = new Subscription();
   globalFilters;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -20,7 +20,8 @@ import { PackageService } from '../../services/package.service';
     './package-datatable.component.scss',
   ],
 })
-export class PackageDatatableComponent extends BaseDatatableComponent {
+export class PackageDatatableComponent extends BaseDatatableComponent
+  implements OnInit, OnDestroy {
   tableName = 'Packages';
   isResizableColumns = true;
   isAutoLayout = false;

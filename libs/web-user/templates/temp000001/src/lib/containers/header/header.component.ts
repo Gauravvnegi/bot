@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { Subscription } from 'rxjs';
@@ -9,7 +9,7 @@ import { HeaderSummaryComponent } from '../header-summary/header-summary.compone
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnChanges, OnInit {
+export class HeaderComponent implements OnChanges, OnInit, OnDestroy {
   protected $subscription: Subscription = new Subscription();
   @Input() headerName: string;
   headerLogo: string = 'assets/logo.png';

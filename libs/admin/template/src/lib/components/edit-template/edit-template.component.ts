@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './edit-template.component.html',
   styleUrls: ['./edit-template.component.scss'],
 })
-export class EditTemplateComponent implements OnDestroy {
+export class EditTemplateComponent implements OnInit, OnDestroy {
   id: string;
   templateForm: FormGroup;
   private $subscription = new Subscription();

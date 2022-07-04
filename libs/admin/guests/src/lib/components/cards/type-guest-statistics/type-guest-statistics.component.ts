@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
@@ -22,7 +22,7 @@ import { ChartTypeOption } from '../../../types/guest.type';
   templateUrl: './type-guest-statistics.component.html',
   styleUrls: ['./type-guest-statistics.component.scss'],
 })
-export class TypeGuestStatisticsComponent implements OnInit {
+export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   selectedInterval: any;
   customerData: VIP = new VIP();

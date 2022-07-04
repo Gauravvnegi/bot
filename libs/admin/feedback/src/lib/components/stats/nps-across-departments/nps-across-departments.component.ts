@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { feedback } from '@hospitality-bot/admin/feedback';
@@ -21,7 +21,7 @@ import { NPSDepartments } from '../../../data-models/statistics.model';
     './nps-across-departments.component.scss',
   ],
 })
-export class NpsAcrossDepartmentsComponent implements OnInit {
+export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   feedbackConfig = feedback;
   npsFG: FormGroup;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { PaymentDetailsService } from 'libs/web-user/shared/src/lib/services/payment-details.service';
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './summary-main.component.html',
   styleUrls: ['./summary-main.component.scss'],
 })
-export class SummaryMainComponent implements OnInit {
+export class SummaryMainComponent implements OnInit, OnDestroy {
   reservationData;
   isReservationData = false;
   private $subscription: Subscription = new Subscription();

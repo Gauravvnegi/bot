@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -24,7 +31,7 @@ import { FeedbackTableService } from '../../../services/table.service';
   templateUrl: './feedback-detail.component.html',
   styleUrls: ['./feedback-detail.component.scss'],
 })
-export class FeedbackDetailComponent implements OnInit {
+export class FeedbackDetailComponent implements OnInit, OnDestroy {
   num = card.num;
   @Input() feedback: FeedbackRecord;
   @Input() colorMap;
@@ -260,5 +267,9 @@ export class FeedbackDetailComponent implements OnInit {
 
   get feedbackConfig() {
     return feedback;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

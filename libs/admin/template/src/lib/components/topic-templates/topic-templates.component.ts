@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,7 +18,7 @@ import { TemplateService } from '../../services/template.service';
   templateUrl: './topic-templates.component.html',
   styleUrls: ['./topic-templates.component.scss'],
 })
-export class TopicTemplatesComponent implements OnInit {
+export class TopicTemplatesComponent implements OnInit, OnDestroy {
   @Input() template;
   @Input() hotelId: string;
   @Input() templateType: string;
@@ -71,5 +78,9 @@ export class TopicTemplatesComponent implements OnInit {
    */
   selectTemplate(template) {
     this.selectedTemplate.emit({ status: true, data: template });
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

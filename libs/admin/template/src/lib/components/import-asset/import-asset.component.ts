@@ -3,6 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   HostListener,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -25,7 +26,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './import-asset.component.html',
   styleUrls: ['./import-asset.component.scss'],
 })
-export class ImportAssetComponent implements OnInit {
+export class ImportAssetComponent implements OnInit, OnDestroy {
   @ViewChild('assetList') private myScrollContainer: ElementRef;
   @Output() closeImport = new EventEmitter();
   searchValue = false;
@@ -204,5 +205,9 @@ export class ImportAssetComponent implements OnInit {
    */
   close() {
     this.closeImport.emit();
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -14,7 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './edit-topic.component.html',
   styleUrls: ['./edit-topic.component.scss'],
 })
-export class EditTopicComponent implements OnInit {
+export class EditTopicComponent implements OnInit, OnDestroy {
   @Input() id: string;
   private $subscription: Subscription = new Subscription();
 
@@ -85,14 +85,15 @@ export class EditTopicComponent implements OnInit {
    */
   handleSubmit() {
     if (this.topicForm.invalid) {
-      this._snackbarService.openSnackBarWithTranslate(
-        {
-          translateKey: 'message.error.invalid',
-          priorityMessage: 'Invalid Form.',
-        },
-        ''
-      )
-      .subscribe();
+      this._snackbarService
+        .openSnackBarWithTranslate(
+          {
+            translateKey: 'message.error.invalid',
+            priorityMessage: 'Invalid Form.',
+          },
+          ''
+        )
+        .subscribe();
       return;
     }
     const data = this.topicForm.getRawValue();
@@ -118,29 +119,31 @@ export class EditTopicComponent implements OnInit {
         (response) => {
           this.topic = new Topic().deserialize(response);
           this.topicForm.patchValue(this.topic);
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.success.topic_created',
-              priorityMessage: 'Topic Created Successfully.',
-            },
-            '',
-            {
-              panelClass: 'success',
-            }
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.success.topic_created',
+                priorityMessage: 'Topic Created Successfully.',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
           this._router.navigate(['/pages/library/topic']);
           this.isSavingTopic = false;
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.topic_not_created',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.topic_not_created',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
           this.isSavingTopic = false;
         }
       )
@@ -194,29 +197,31 @@ export class EditTopicComponent implements OnInit {
         .updateTopic(this.hotelId, this.topic.id, data)
         .subscribe(
           (response) => {
-            this._snackbarService.openSnackBarWithTranslate(
-              {
-                translateKey: 'message.success.topic_updated',
-                priorityMessage: 'Topic Updated Successfully.',
-              },
-              '',
-              {
-                panelClass: 'success',
-              }
-            )
-            .subscribe();
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'message.success.topic_updated',
+                  priorityMessage: 'Topic Updated Successfully.',
+                },
+                '',
+                {
+                  panelClass: 'success',
+                }
+              )
+              .subscribe();
             this._router.navigate(['/pages/library/topic']);
             this.isSavingTopic = false;
           },
           ({ error }) => {
-            this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.topic_not_updated',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'message.error.topic_not_updated',
+                  priorityMessage: error.message,
+                },
+                ''
+              )
+              .subscribe();
             this.isSavingTopic = false;
           }
         )

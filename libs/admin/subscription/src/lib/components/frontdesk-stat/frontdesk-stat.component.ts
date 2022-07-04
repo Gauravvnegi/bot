@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService, BarChart } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -14,7 +14,7 @@ import { SubscriptionService } from '../../services/subscription.service';
   templateUrl: './frontdesk-stat.component.html',
   styleUrls: ['./frontdesk-stat.component.scss'],
 })
-export class FrontdeskStatComponent implements OnInit {
+export class FrontdeskStatComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {

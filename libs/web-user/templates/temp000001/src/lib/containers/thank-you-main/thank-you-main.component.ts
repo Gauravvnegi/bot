@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
@@ -14,7 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './thank-you-main.component.html',
   styleUrls: ['./thank-you-main.component.scss'],
 })
-export class ThankYouMainComponent implements OnInit {
+export class ThankYouMainComponent implements OnInit, OnDestroy {
   isReservationData: boolean = false;
   reservationData: ReservationDetails;
   $subscription: Subscription = new Subscription();

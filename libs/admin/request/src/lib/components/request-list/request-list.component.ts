@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   HostListener,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -24,7 +25,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
   templateUrl: './request-list.component.html',
   styleUrls: ['./request-list.component.scss'],
 })
-export class RequestListComponent implements OnInit {
+export class RequestListComponent implements OnInit, OnDestroy {
   @ViewChild('requestList') private myScrollContainer: ElementRef;
   $subscription = new Subscription();
   requestConfig = request;
@@ -379,5 +380,9 @@ export class RequestListComponent implements OnInit {
       order: 'DESC',
       priorityType: '',
     };
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

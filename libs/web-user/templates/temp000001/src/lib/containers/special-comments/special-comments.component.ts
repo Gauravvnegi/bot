@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -16,7 +17,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './special-comments.component.html',
   styleUrls: ['./special-comments.component.scss'],
 })
-export class SpecialCommentsComponent implements OnInit, OnChanges {
+export class SpecialCommentsComponent implements OnInit, OnChanges, OnDestroy {
   private $subscription: Subscription = new Subscription();
   @Input() parentForm: FormGroup;
   @Input() reservationData;

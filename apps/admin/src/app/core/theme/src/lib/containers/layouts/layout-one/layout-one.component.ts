@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '@hospitality-bot/admin/shared';
@@ -33,7 +33,7 @@ import { trigger, transition, animate, style } from '@angular/animations';
     ]),
   ],
 })
-export class LayoutOneComponent implements OnInit {
+export class LayoutOneComponent implements OnInit, OnDestroy {
   backgroundColor: string;
   background_image: string;
   profile = layoutConfig.profile;

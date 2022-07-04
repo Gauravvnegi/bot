@@ -3,6 +3,7 @@ import {
   ElementRef,
   HostListener,
   Input,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -26,7 +27,7 @@ import { FeedbackTableService } from '../../../services/table.service';
   templateUrl: './feedback-list.component.html',
   styleUrls: ['./feedback-list.component.scss'],
 })
-export class FeedbackListComponent implements OnInit {
+export class FeedbackListComponent implements OnInit, OnDestroy {
   @Input() entityType;
   @Input() outlets;
   @Input() colorMap;

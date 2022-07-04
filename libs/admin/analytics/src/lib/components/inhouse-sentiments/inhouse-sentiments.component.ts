@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -17,7 +17,7 @@ import { InhouseRequestDatatableComponent } from '../inhouse-request-datatable/i
   templateUrl: './inhouse-sentiments.component.html',
   styleUrls: ['./inhouse-sentiments.component.scss'],
 })
-export class InhouseSentimentsComponent implements OnInit {
+export class InhouseSentimentsComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   @Input() requestConfiguration;
   $subscription = new Subscription();

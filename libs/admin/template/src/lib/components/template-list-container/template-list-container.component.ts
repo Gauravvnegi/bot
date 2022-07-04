@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -12,7 +19,7 @@ import { TemplateService } from '../../services/template.service';
   templateUrl: './template-list-container.component.html',
   styleUrls: ['./template-list-container.component.scss'],
 })
-export class TemplateListContainerComponent implements OnInit {
+export class TemplateListContainerComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
   @Input() hotelId: string;
   @Input() templateForm: FormGroup;
@@ -121,5 +128,9 @@ export class TemplateListContainerComponent implements OnInit {
    */
   goBack() {
     this.change.emit({ status: false });
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

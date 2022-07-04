@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { feedback } from '@hospitality-bot/admin/feedback';
@@ -16,7 +16,7 @@ import { PerformanceNPS } from '../../../data-models/statistics.model';
   templateUrl: './top-low-nps.component.html',
   styleUrls: ['./top-low-nps.component.scss'],
 })
-export class TopLowNpsComponent implements OnInit {
+export class TopLowNpsComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   tabfeedbackType: string;
   globalQueries;

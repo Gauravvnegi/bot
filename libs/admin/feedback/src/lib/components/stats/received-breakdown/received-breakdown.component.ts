@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -24,7 +24,7 @@ import { MatSelectChange } from '@angular/material/select';
   templateUrl: './received-breakdown.component.html',
   styleUrls: ['./received-breakdown.component.scss'],
 })
-export class ReceivedBreakdownComponent implements OnInit {
+export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   entityType: string = 'GTM';
   tabfeedbackType: string;

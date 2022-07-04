@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
@@ -20,7 +20,7 @@ import { GuestDatatableModalComponent } from '../../modal/guest-datatable/guest-
   templateUrl: './guest-documents-statistics.component.html',
   styleUrls: ['./guest-documents-statistics.component.scss'],
 })
-export class GuestDocumentsStatisticsComponent implements OnInit {
+export class GuestDocumentsStatisticsComponent implements OnInit, OnDestroy {
   document: Document;
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   $subscription = new Subscription();

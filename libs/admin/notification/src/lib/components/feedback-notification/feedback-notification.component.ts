@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -18,7 +18,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
   ],
 })
 export class FeedbackNotificationComponent extends NotificationComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   constructor(
     protected _fb: FormBuilder,
     protected _location: Location,
@@ -169,5 +169,9 @@ export class FeedbackNotificationComponent extends NotificationComponent
           }
         )
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

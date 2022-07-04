@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -14,7 +15,12 @@ import { MessageService } from '../../services/messages.service';
 import { GuestDetailMapComponent } from '../guest-detail-map/guest-detail-map.component';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { Subscription } from 'rxjs';
-import { Contact, GuestDetails, IContact, RequestList } from '../../models/message.model';
+import {
+  Contact,
+  GuestDetails,
+  IContact,
+  RequestList,
+} from '../../models/message.model';
 import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
@@ -24,14 +30,14 @@ import { SnackBarService } from 'libs/shared/material/src';
   templateUrl: './guest-info.component.html',
   styleUrls: ['./guest-info.component.scss'],
 })
-export class GuestInfoComponent implements OnInit, OnChanges {
+export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data;
   @Output() closeInfo = new EventEmitter();
   @ViewChild('matTab') matTab: MatTabGroup;
   $subscription = new Subscription();
   guestReservations: GuestDetails;
   colorMap: any;
-  guestId :string;
+  guestId: string;
   guestData: IContact;
   hotelId: string;
   isLoading = false;
@@ -221,4 +227,7 @@ export class GuestInfoComponent implements OnInit, OnChanges {
     );
   }
 
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

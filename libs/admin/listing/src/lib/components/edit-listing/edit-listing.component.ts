@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -14,7 +14,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './edit-listing.component.html',
   styleUrls: ['./edit-listing.component.scss'],
 })
-export class EditListingComponent implements OnInit {
+export class EditListingComponent implements OnInit, OnDestroy {
   listFG: FormGroup;
   listData: IList;
   private $subscription = new Subscription();
@@ -107,14 +107,15 @@ export class EditListingComponent implements OnInit {
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.listing_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.listing_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -129,14 +130,14 @@ export class EditListingComponent implements OnInit {
       this.listFG.get('marketingContacts').value.length === 0
     ) {
       this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.invalid',
-              priorityMessage: 'Invalid Form.',
-            },
-            ''
-          )
-          .subscribe();
+        .openSnackBarWithTranslate(
+          {
+            translateKey: 'message.error.invalid',
+            priorityMessage: 'Invalid Form.',
+          },
+          ''
+        )
+        .subscribe();
       return;
     }
     const data = this.listFG.getRawValue();
@@ -161,28 +162,30 @@ export class EditListingComponent implements OnInit {
     this.isSaving = true;
     this._listingService.updateList(this.hotelId, this.listId, data).subscribe(
       (response) => {
-        this._snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: 'message.success.listing_updated',
-            priorityMessage: `${response.name} Updated Successfully.`,
-          },
-          '',
-          {
-            panelClass: 'success',
-          }
-        )
-        .subscribe();
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.success.listing_updated',
+              priorityMessage: `${response.name} Updated Successfully.`,
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
         this._router.navigate([`pages/library/listing`]);
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: 'message.error.listing_not_updated',
-            priorityMessage: error.message,
-          },
-          ''
-        )
-        .subscribe();
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.listing_not_updated',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
       },
       () => (this.isSaving = false)
     );
@@ -199,11 +202,11 @@ export class EditListingComponent implements OnInit {
   /**
    * @function redirectToTable To navigate back to data table page.
    */
-   redirectToTable() {
+  redirectToTable() {
     this._location.back();
   }
 
-   /**
+  /**
    * @function ngOnDestroy to unsubscribe subscription
    */
   ngOnDestroy(): void {

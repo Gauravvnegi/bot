@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,7 +26,7 @@ import { BaseWrapperComponent } from '../../base/base-wrapper.component';
   styleUrls: ['./payment-details-wrapper.component.scss'],
 })
 export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @ViewChild('matTab') matTab: MatTabGroup;
 
   hotelPaymentConfig: IPaymentConfiguration;

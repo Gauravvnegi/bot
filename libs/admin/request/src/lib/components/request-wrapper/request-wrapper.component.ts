@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
@@ -24,7 +24,7 @@ import { trigger, transition, animate, style } from '@angular/animations';
     ]),
   ],
 })
-export class RequestWrapperComponent implements OnInit {
+export class RequestWrapperComponent implements OnInit, OnDestroy {
   guestInfoEnable = false;
   private $subscription = new Subscription();
   requestConfig = request;
@@ -88,5 +88,9 @@ export class RequestWrapperComponent implements OnInit {
         }
       )
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

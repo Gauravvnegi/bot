@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -29,7 +29,7 @@ import { ScheduleCampaignComponent } from '../schedule-campaign/schedule-campaig
   templateUrl: './edit-camapaign.component.html',
   styleUrls: ['./edit-camapaign.component.scss'],
 })
-export class EditCampaignComponent implements OnInit {
+export class EditCampaignComponent implements OnInit, OnDestroy {
   campaignId: string;
   campaignFG: FormGroup;
   scheduleFG: FormGroup;

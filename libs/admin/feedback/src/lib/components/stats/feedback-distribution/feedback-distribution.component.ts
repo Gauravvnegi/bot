@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -22,7 +22,7 @@ import { FeedbackDatatableModalComponent } from '../../modals/feedback-datatable
   templateUrl: './feedback-distribution.component.html',
   styleUrls: ['./feedback-distribution.component.scss'],
 })
-export class FeedbackDistributionComponent implements OnInit {
+export class FeedbackDistributionComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   tabfeedbackType: string;
   feedbackConfig = feedback;

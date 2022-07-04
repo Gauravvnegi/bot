@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -19,7 +20,7 @@ import { Guest, GuestDetails, Requests } from '../../data-models/request.model';
   templateUrl: './guest-info.component.html',
   styleUrls: ['./guest-info.component.scss'],
 })
-export class GuestInfoComponent implements OnInit, OnChanges {
+export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   isGuestReservationFetched = false;
   guestReservations: GuestDetails;
   guestId: string;
@@ -167,5 +168,9 @@ export class GuestInfoComponent implements OnInit, OnChanges {
         ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
       )
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

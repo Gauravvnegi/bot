@@ -4,6 +4,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -41,7 +42,7 @@ import {
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, OnDestroy {
   @Input() tabKey = 'guest_details';
   @Output() onDetailsClose = new EventEmitter();
   @ViewChild('adminDocumentsDetailsComponent')

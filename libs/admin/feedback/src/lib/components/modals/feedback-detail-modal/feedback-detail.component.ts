@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Inject,
   Input,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -44,7 +45,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
   ],
 })
 export class FeedbackDetailModalComponent extends FeedbackDetailComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @Output() onDetailsClose = new EventEmitter();
   globalFeedbackConfig = feedback;
   userPermissions: Departmentpermission[];

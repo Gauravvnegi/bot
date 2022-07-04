@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -35,7 +35,7 @@ import { TranslateService } from '@ngx-translate/core';
   ],
 })
 export class TopicDatatableComponent extends BaseDatatableComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   tableName = topicConfig.datatable.title;
   @Input() tabFilterItems;
   @Input() tabFilterIdx: number = 0;

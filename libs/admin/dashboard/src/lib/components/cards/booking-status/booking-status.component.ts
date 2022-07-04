@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -20,7 +20,7 @@ import { ChartTypeOption } from '../../../types/dashboard.type';
   templateUrl: './booking-status.component.html',
   styleUrls: ['./booking-status.component.scss'],
 })
-export class BookingStatusComponent implements OnInit {
+export class BookingStatusComponent implements OnInit, OnDestroy {
   @Input() customerData: BookingStatus;
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   $subscription = new Subscription();

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -17,7 +17,7 @@ import { GlobalNPS } from '../../../data-models/statistics.model';
   templateUrl: './global-nps.component.html',
   styleUrls: ['./global-nps.component.scss'],
 })
-export class GlobalNpsComponent implements OnInit {
+export class GlobalNpsComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   tabfeedbackType: string;
   feedbackConfig = feedback;

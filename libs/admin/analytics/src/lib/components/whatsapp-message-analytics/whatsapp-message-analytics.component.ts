@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { analytics } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -17,7 +17,7 @@ import { AnalyticsService } from '../../services/analytics.service';
   templateUrl: './whatsapp-message-analytics.component.html',
   styleUrls: ['./whatsapp-message-analytics.component.scss'],
 })
-export class WhatsappMessageAnalyticsComponent implements OnInit {
+export class WhatsappMessageAnalyticsComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   messageOverallAnalytics: IMessageOverallAnalytics;
   sentReceivedChartData: ISentdeliveredChart;

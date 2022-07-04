@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
@@ -14,7 +14,8 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './guest-details-wrapper.component.html',
   styleUrls: ['./guest-details-wrapper.component.scss'],
 })
-export class GuestDetailsWrapperComponent extends BaseWrapperComponent {
+export class GuestDetailsWrapperComponent extends BaseWrapperComponent
+  implements OnInit, OnDestroy {
   @ViewChild('guestDetailsComp')
   guestDetailsComp: GuestDetailsComponent;
 

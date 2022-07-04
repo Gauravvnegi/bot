@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  OnDestroy,
+  Output,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
@@ -17,7 +24,7 @@ import { GlobalFilterService } from '../../services/global-filters.service';
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.scss'],
 })
-export class SearchBarComponent implements OnInit {
+export class SearchBarComponent implements OnInit, OnDestroy {
   @Input() parentForm: FormGroup;
   @Input() name: string;
   @Input() parentSearchVisible: boolean;

@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -23,7 +24,7 @@ import { card } from '../../../constants/card';
   templateUrl: './guest-info.component.html',
   styleUrls: ['./guest-info.component.scss'],
 })
-export class GuestInfoComponent implements OnInit, OnChanges {
+export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   isGuestReservationFetched = false;
   guestReservations: GuestDetails;
   guestId: string;

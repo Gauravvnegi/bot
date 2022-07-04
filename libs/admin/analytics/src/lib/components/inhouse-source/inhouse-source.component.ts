@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { analytics } from 'libs/admin/shared/src/lib/constants/charts';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -12,7 +12,7 @@ import { AnalyticsService } from '../../services/analytics.service';
   templateUrl: './inhouse-source.component.html',
   styleUrls: ['./inhouse-source.component.scss'],
 })
-export class InhouseSourceComponent implements OnInit {
+export class InhouseSourceComponent implements OnInit, OnDestroy {
   @Input() entityType = 'Inhouse';
   @Input() requestConfiguration;
   $subscription = new Subscription();

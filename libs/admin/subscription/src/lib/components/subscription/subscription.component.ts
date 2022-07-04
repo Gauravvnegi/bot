@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscriptions } from 'apps/admin/src/app/core/theme/src/lib/data-models/subscription-plan-config.model';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
@@ -16,7 +16,7 @@ import {
   templateUrl: './subscription.component.html',
   styleUrls: ['./subscription.component.scss'],
 })
-export class SubscriptionComponent implements OnInit {
+export class SubscriptionComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   loading: boolean = false;
   subscriptionPlanUsage;
@@ -103,5 +103,9 @@ export class SubscriptionComponent implements OnInit {
         .getSubscriptionUsagePercentage(hotelId, config)
         .subscribe((response) => console.log(response))
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

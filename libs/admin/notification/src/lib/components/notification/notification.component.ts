@@ -4,6 +4,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -28,7 +29,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent implements OnInit, OnDestroy {
   templateData: string;
   attachment: string;
   templates = {
@@ -365,5 +366,9 @@ export class NotificationComponent implements OnInit {
 
   get roomNumbers(): FormControl {
     return this.notificationForm.get('roomNumbers') as FormControl;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

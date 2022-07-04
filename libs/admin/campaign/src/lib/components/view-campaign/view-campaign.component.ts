@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import {
   FormArray,
@@ -27,7 +27,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './view-campaign.component.html',
   styleUrls: ['./view-campaign.component.scss'],
 })
-export class ViewCampaignComponent implements OnInit {
+export class ViewCampaignComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
   globalQueries = [];
   fromEmailList = [];

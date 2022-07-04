@@ -36,7 +36,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   tableName = assetConfig.datatable.title;
   @Input() tabFilterItems;
-  @Input() tabFilterIdx: number = 0;
+  @Input() tabFilterIdx = 0;
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;

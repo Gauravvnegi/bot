@@ -53,7 +53,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   @Input() tableName = feedback.table.name;
-  @Input() tabFilterIdx: number = 0;
+  @Input() tabFilterIdx = 0;
   @Input() tabFilterItems = [];
   globalFeedbackConfig = feedback;
   outlets = [];
@@ -65,7 +65,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   hotelId: string;
-  rowsPerPage: number = 25;
+  rowsPerPage = 25;
   colorMap;
   cols = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;

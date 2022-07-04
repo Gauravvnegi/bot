@@ -39,8 +39,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   profile = layoutConfig.profile;
   outlets = [];
   lastUpdatedAt: string;
-  isGlobalFilterVisible: boolean = false;
-  isDetailPageVisible: boolean = false;
+  isGlobalFilterVisible = false;
+  isDetailPageVisible = false;
   searchFG: FormGroup;
   timezone: string;
   filterConfig = {
@@ -52,7 +52,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     },
   };
   private $firebaseMessagingSubscription = new Subscription();
-  isGlobalSearchVisible: boolean = true;
+  isGlobalSearchVisible = true;
 
   constructor(
     private _router: Router,

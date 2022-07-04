@@ -29,7 +29,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   isTabFilters = false;
   globalQueries = [];
-  tabFilterIdx: number = 1;
+  tabFilterIdx = 1;
   $subscription = new Subscription();
   hotelId;
 

@@ -51,9 +51,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
   hotelId: string;
   detailsForm: FormGroup;
   details;
-  isGuestInfoPatched: boolean = false;
+  isGuestInfoPatched = false;
   primaryGuest;
-  isReservationDetailFetched: boolean = false;
+  isReservationDetailFetched = false;
   isGuestReservationFetched = false;
   shareIconList;
   colorMap;

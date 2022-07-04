@@ -156,7 +156,7 @@ export class BaseComponent
 
   defaultClasses;
 
-  errorMsg: string = '';
+  errorMsg = '';
 
   constructor(
     protected _utility: UtilityService,

@@ -30,7 +30,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
   $subscription: Subscription = new Subscription();
   globalQueries = [];
   selectedInterval: string;
-  loading: boolean = false;
+  loading = false;
   tabFilterItems = [];
   tabFilterIdx = 0;
   tabfeedbackType;

@@ -22,8 +22,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   public normalFontColor: string;
   public dividerBgColor: string;
   public headerBgColor: string;
-  isExpanded: boolean = true;
-  status: boolean = false;
+  isExpanded = true;
+  status = false;
   $subscription = new Subscription();
   branchConfig;
   constructor(

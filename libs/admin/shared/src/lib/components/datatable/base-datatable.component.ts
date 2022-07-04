@@ -32,16 +32,16 @@ export class BaseDatatableComponent implements OnInit {
   /**
    * Action Buttons & filters visibility
    */
-  isActionButtons: boolean = false;
-  isQuickFilters: boolean = false;
+  isActionButtons = false;
+  isQuickFilters = false;
   isTabFilters = true;
   isCustomSort = true;
 
   tableFG: FormGroup;
 
-  isPaginaton: boolean = false;
+  isPaginaton = false;
   rowsPerPage = 5;
-  showCurrentPageReport: boolean = true;
+  showCurrentPageReport = true;
   rowsPerPageOptions = [5, 10, 25, 50];
   first = 0; //index of the first page to show
 
@@ -55,8 +55,8 @@ export class BaseDatatableComponent implements OnInit {
 
   isResizableColumns = true;
   isAutoLayout = false;
-  @Input() loading: boolean = false;
-  initialLoading: boolean = true;
+  @Input() loading = false;
+  initialLoading = true;
 
   tabFilterItems = [
     { label: 'Inhouse', content: '', value: 'INHOUSE' },

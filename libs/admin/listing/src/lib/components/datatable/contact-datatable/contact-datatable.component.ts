@@ -39,15 +39,15 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ContactDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  isTabFilters: boolean = false;
+  isTabFilters = false;
   tabFilterItems = [];
   @Input() dataSource = [];
-  @Input() totalRecords: number = 0;
-  @Input() add: boolean = true;
+  @Input() totalRecords = 0;
+  @Input() add = true;
   @Input() hotelId: string;
   @Output() updateContacts = new EventEmitter();
   @Input() list: List;
-  tableName: string = contactConfig.datatable.title;
+  tableName = contactConfig.datatable.title;
   cols = contactConfig.datatable.cols;
   $subscription = new Subscription();
   globalQueries = [];

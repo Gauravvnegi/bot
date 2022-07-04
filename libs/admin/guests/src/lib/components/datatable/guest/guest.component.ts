@@ -43,7 +43,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   hotelId: string;
   cols = guest.cols.datatable;
-  tabFilterIdx: number = 0;
+  tabFilterIdx = 0;
   globalQueries = [];
   $subscription = new Subscription();
 

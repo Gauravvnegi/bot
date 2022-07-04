@@ -11,7 +11,7 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
   styleUrls: ['./summary.component.scss'],
 })
 export class SummaryComponent implements OnInit {
-  showAppStatusForm: boolean = false;
+  showAppStatusForm = false;
   @Input() stepperIndex;
   reservationData: ReservationDetails = new ReservationDetails();
   context: any;

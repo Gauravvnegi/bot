@@ -28,10 +28,7 @@ export class DateService {
     return moment().utcOffset(timezone).format();
   }
 
-  static getCurrentDateWithFormat(
-    format: string = 'DD-MM-YYYY',
-    timezone = '+05:30'
-  ) {
+  static getCurrentDateWithFormat(format = 'DD-MM-YYYY', timezone = '+05:30') {
     return moment().utcOffset(timezone).format(format);
   }
 

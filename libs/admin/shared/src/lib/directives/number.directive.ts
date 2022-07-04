@@ -14,8 +14,8 @@ export class NumberDirective {
     if (this.specialKeys.indexOf(event.key) !== -1) {
       return;
     }
-    let current: string = this.el.nativeElement.value;
-    let next: string = current.concat(event.key);
+    let current = this.el.nativeElement.value;
+    let next = current.concat(event.key);
 
     if (next && !String(next).match(this.regex)) {
       event.preventDefault();

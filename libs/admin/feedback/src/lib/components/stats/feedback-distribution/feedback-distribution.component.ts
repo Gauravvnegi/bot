@@ -41,7 +41,7 @@ export class FeedbackDistributionComponent implements OnInit, OnDestroy {
   };
 
   keyLabels = [];
-  loading: boolean = false;
+  loading = false;
 
   distribution: FeedbackDistribution;
   constructor(

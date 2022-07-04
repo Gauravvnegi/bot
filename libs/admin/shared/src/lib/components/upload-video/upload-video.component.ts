@@ -16,7 +16,7 @@ export class UploadVideoComponent implements OnInit {
   @Input() uploadStatus: boolean;
   @Input() pageType: string;
   @Input() documentType: string;
-  @Input() isDisable: boolean = false;
+  @Input() isDisable = false;
   @Input('fileUploadData') set fileUploadData(value: {}) {
     this._fileUploadData = { ...this.defaultValue, ...value };
   }
@@ -46,7 +46,7 @@ export class UploadVideoComponent implements OnInit {
         fileSize <= +this.uploadFileData.maxFileSize
       ) {
         reader.onload = (_event) => {
-          const result: string = reader.result as string;
+          const result = reader.result as string;
           this.createThumbnail(file, name).then((value) => {
             this.url = value['url'];
             const data = {

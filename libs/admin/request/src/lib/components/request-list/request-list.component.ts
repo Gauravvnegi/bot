@@ -47,7 +47,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   parentFG: FormGroup;
   tabFilterItems = request.tabFilter;
 
-  tabFilterIdx: number = 0;
+  tabFilterIdx = 0;
   hotelId: string;
   constructor(
     private _globalFilterService: GlobalFilterService,

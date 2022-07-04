@@ -12,9 +12,9 @@ import { HeaderSummaryComponent } from '../header-summary/header-summary.compone
 export class HeaderComponent implements OnChanges, OnInit, OnDestroy {
   protected $subscription: Subscription = new Subscription();
   @Input() headerName: string;
-  headerLogo: string = 'assets/logo.png';
+  headerLogo = 'assets/logo.png';
   headerData = {};
-  isCustomHeader: boolean = false;
+  isCustomHeader = false;
   protected summaryComponent = HeaderSummaryComponent;
   constructor(
     protected _matDialog: MatDialog,

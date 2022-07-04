@@ -14,7 +14,7 @@ export class SidenavComponent implements OnInit {
   public normalFontColor: string;
   public dividerBgColor: string;
   isExpanded = true;
-  status: boolean = false;
+  status = false;
   constructor(
     public settingsService: SettingsService,
     private _themeService: ThemeService

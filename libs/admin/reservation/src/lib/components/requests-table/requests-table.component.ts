@@ -37,7 +37,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
     { field: 'guests.primaryGuest.firstName', header: 'Category/Type' },
   ];
 
-  showEmptyView: boolean = false;
+  showEmptyView = false;
 
   constructor(
     public fb: FormBuilder,

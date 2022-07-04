@@ -32,7 +32,7 @@ export class CustomStepperComponent extends CdkStepper {
   @ViewChildren('stepperContent', { read: ViewContainerRef })
   stepperContent: QueryList<any>;
 
-  progress: string = '0,100';
+  progress = '0,100';
 
   // @Output() isComponentRendered = new EventEmitter();
 
@@ -47,7 +47,7 @@ export class CustomStepperComponent extends CdkStepper {
   }
 
   setStepperProgress() {
-    let progress: number =
+    let progress =
       ((this.selectedIndex + 1) / +this.parentForm.controls.length) * 100;
 
     this.progress = `${progress},100`;

@@ -14,7 +14,7 @@ import { ReservationDatatableModalComponent } from '../../modal/reservation-data
 export class ArrivalsStatisticsComponent implements OnInit {
   @Input() arrivals: Arrivals;
 
-  progress: number = 0;
+  progress = 0;
   constructor(private _modalService: ModalService) {}
 
   modalData = {

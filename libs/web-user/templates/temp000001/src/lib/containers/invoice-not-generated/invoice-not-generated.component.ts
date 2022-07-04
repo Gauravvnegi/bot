@@ -23,7 +23,7 @@ export class InvoiceNotGeneratedComponent implements OnInit, OnDestroy {
     private _templateLoadingService: TemplateLoaderService
   ) {}
 
-  isReservationData: boolean = false;
+  isReservationData = false;
 
   reservationDetails;
 

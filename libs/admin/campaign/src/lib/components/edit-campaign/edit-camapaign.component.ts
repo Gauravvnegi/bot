@@ -39,7 +39,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   globalQueries = [];
   fromEmailList = [];
   isSending = false;
-  visible: boolean = true;
+  visible = true;
   private $subscription = new Subscription();
   enableDropdown = false;
   template = '';

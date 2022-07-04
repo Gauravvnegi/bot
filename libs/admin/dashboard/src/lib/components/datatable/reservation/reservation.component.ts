@@ -58,7 +58,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   cols = cols.reservation;
 
   @Input() tabFilterItems = tabFilterItems.reservation;
-  @Input() tabFilterIdx: number = 1;
+  @Input() tabFilterIdx = 1;
 
   globalQueries = [];
   $subscription = new Subscription();

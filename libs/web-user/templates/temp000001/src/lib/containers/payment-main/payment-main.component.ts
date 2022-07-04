@@ -35,10 +35,10 @@ export class PaymentMainComponent implements OnInit, OnDestroy {
     label: '',
     floatLabel: 'always',
   };
-  ispaymentStatusLoaded: boolean = false;
+  ispaymentStatusLoaded = false;
   isReservationData = false;
   reservationData: ReservationDetails;
-  showFields: boolean = false;
+  showFields = false;
   constructor(
     protected _reservationService: ReservationService,
     protected _hotelService: HotelService,

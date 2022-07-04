@@ -36,7 +36,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   parentFG: FormGroup;
   cardTabFilterItems = card.list.tabFilterItems;
   selectedFeedback;
-  tabFilterIdx: number = 0;
+  tabFilterIdx = 0;
   hotelId: string;
   $subscription = new Subscription();
   globalQueries = [];

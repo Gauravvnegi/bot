@@ -27,10 +27,10 @@ export class MarketingNotificationComponent extends NotificationComponent
   templateList = [];
   selectedTemplate;
   separatorKeysCodes = [ENTER, COMMA];
-  visible: boolean = true;
-  selectable: boolean = true;
-  removable: boolean = true;
-  addOnBlur: boolean = true;
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
   isSending = false;
   template = '';
   constructor(

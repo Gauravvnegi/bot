@@ -39,7 +39,7 @@ export class GlobalNpsComponent implements OnInit, OnDestroy {
     options: chartConfig.options.globalNPS,
   };
 
-  loading: boolean = false;
+  loading = false;
 
   $subscription = new Subscription();
   globalQueries;

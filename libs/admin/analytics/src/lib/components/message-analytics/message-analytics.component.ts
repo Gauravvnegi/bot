@@ -37,7 +37,7 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
   hotelId: string;
   $subscription = new Subscription();
   analyticsFG: FormGroup;
-  tabFilterIdx: number = 0;
+  tabFilterIdx = 0;
 
   tabFilterItems = [
     new Tab({

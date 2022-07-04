@@ -15,7 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./thank-you-main.component.scss'],
 })
 export class ThankYouMainComponent implements OnInit, OnDestroy {
-  isReservationData: boolean = false;
+  isReservationData = false;
   reservationData: ReservationDetails;
   $subscription: Subscription = new Subscription();
   config = {
@@ -27,7 +27,7 @@ export class ThankYouMainComponent implements OnInit, OnDestroy {
       description: '',
     },
   };
-  headerTitle: string = '';
+  headerTitle = '';
   state: string;
 
   constructor(

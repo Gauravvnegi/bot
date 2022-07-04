@@ -17,7 +17,7 @@ import { Statistics, Customer } from '../../data-models';
 export class StatisticsComponent implements OnInit, OnDestroy {
   statistics: Statistics;
   customerData: Customer;
-  interval: string = 'day';
+  interval = 'day';
   $subscription = new Subscription();
   hotelId: string;
   channelOptions = [{ label: 'All', value: 'ALL' }];

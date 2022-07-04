@@ -38,7 +38,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   tableName = campaignConfig.datatable.title;
   @Input() tabFilterItems = campaignConfig.datatable.tabFilterItems;
-  @Input() tabFilterIdx: number = 0;
+  @Input() tabFilterIdx = 0;
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;

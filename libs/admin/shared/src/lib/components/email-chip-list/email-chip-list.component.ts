@@ -14,10 +14,10 @@ export class EmailChipListComponent implements OnInit {
   @Input() name: string;
   @Input() disabled = false;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  visible: boolean = true;
-  selectable: boolean = true;
-  removable: boolean = true;
-  addOnBlur: boolean = true;
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
   constructor(
     private _snackbarService: SnackBarService,
     private _fb: FormBuilder

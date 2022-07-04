@@ -115,7 +115,7 @@ export class TopLowNpsComponent implements OnInit, OnDestroy {
 
   tabFilterItems;
 
-  tabFilterIdx: number = 0;
+  tabFilterIdx = 0;
 
   /**
    * @function getPerformanceNps To get the performance nps data.

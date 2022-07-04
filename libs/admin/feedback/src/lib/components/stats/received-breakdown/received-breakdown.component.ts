@@ -26,7 +26,7 @@ import { MatSelectChange } from '@angular/material/select';
 })
 export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
-  entityType: string = 'GTM';
+  entityType = 'GTM';
   tabfeedbackType: string;
   $subscription = new Subscription();
   selectedInterval;

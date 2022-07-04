@@ -39,7 +39,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   tableName = templateConfig.datatable.title;
   @Input() tabFilterItems;
-  @Input() tabFilterIdx: number = 0;
+  @Input() tabFilterIdx = 0;
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;

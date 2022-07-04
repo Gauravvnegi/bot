@@ -10,7 +10,7 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
   styleUrls: ['./header-summary.component.scss'],
 })
 export class HeaderSummaryComponent implements OnInit {
-  showAppStatusForm: boolean = false;
+  showAppStatusForm = false;
   date: string;
   @Input() stepperIndex;
   context: any;

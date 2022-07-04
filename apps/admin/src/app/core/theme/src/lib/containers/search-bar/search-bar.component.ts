@@ -33,7 +33,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
 
   searchOptions: SearchResultDetail[];
   results: any;
-  searchDropdownVisible: boolean = false;
+  searchDropdownVisible = false;
   $subscription = new Subscription();
 
   constructor(

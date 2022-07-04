@@ -30,7 +30,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   @ViewChild('matTab') matTab: MatTabGroup;
 
   hotelPaymentConfig: IPaymentConfiguration;
-  isConfigLoaded: boolean = false;
+  isConfigLoaded = false;
   selectedPaymentOption: SelectedPaymentOption = new SelectedPaymentOption();
 
   constructor(

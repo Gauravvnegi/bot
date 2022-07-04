@@ -33,7 +33,7 @@ export class MainComponent implements OnInit, OnDestroy {
   stepperData: ITemplateTemp000001;
   parentForm: FormArray = new FormArray([]);
   reservationData: ReservationDetails;
-  isReservationData: boolean = false;
+  isReservationData = false;
 
   constructor(
     protected fb: FormBuilder,

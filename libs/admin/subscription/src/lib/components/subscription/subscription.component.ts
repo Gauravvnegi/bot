@@ -18,7 +18,7 @@ import {
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
-  loading: boolean = false;
+  loading = false;
   subscriptionPlanUsage;
   globalQueries;
   hotelId: string;

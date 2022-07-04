@@ -20,7 +20,7 @@ export interface IStayDetailsWrapper {
 })
 export class StayDetailsWrapperComponent extends BaseWrapperComponent
   implements IStayDetailsWrapper, OnInit, OnDestroy {
-  isAmenityDataAvl: boolean = false;
+  isAmenityDataAvl = false;
 
   constructor(
     private _stayDetailService: StayDetailsService,

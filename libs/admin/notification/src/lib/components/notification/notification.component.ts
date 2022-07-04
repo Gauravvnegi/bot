@@ -44,7 +44,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   config;
   @Input() isModal = false;
   @Output() onModalClose = new EventEmitter();
-  isSending: boolean = false;
+  isSending = false;
 
   ckeditorContent;
   // public Editor = ClassicEditor;

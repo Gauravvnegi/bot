@@ -39,7 +39,7 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
     },
   ];
 
-  tabFilterIdx: number = 0;
+  tabFilterIdx = 0;
 
   constructor(
     private _modal: ModalService,

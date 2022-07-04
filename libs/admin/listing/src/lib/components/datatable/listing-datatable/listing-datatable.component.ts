@@ -38,7 +38,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   @Input() tableName = listingConfig.datatable.title;
   @Input() tabFilterItems = listingConfig.datatable.tabFilterItems;
-  @Input() tabFilterIdx: number = 0;
+  @Input() tabFilterIdx = 0;
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;

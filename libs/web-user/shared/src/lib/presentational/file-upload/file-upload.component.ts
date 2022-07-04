@@ -52,7 +52,7 @@ export class FileUploadComponent extends BaseComponent {
       if (this.checkFileType(extension)) {
         this.openCropperModal(event);
         // reader.onload = (_event) => {
-        //   const result: string = reader.result as string;
+        //   const result = reader.result as string;
         //   this.url = result;
         //   const data = {
         //     file: file,

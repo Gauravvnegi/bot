@@ -23,7 +23,7 @@ import { Subscription } from 'rxjs';
 })
 export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
   protected $subscription: Subscription = new Subscription();
-  isLoaderVisible: boolean = true;
+  isLoaderVisible = true;
 
   constructor(
     @Inject(DOCUMENT) protected document: Document,
@@ -90,7 +90,7 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
   }
 
   protected initCssVariables(): void {
-    let cssText: string = '';
+    let cssText = '';
     for (let stepperLayoutVariable in this.templateService.templateData[
       this.templateId
     ].layout_variables) {

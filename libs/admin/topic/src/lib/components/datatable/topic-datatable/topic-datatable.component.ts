@@ -38,7 +38,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   tableName = topicConfig.datatable.title;
   @Input() tabFilterItems;
-  @Input() tabFilterIdx: number = 0;
+  @Input() tabFilterIdx = 0;
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;

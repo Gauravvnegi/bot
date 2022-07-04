@@ -40,7 +40,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   templateList = [];
   fromEmailList = [];
   isSending = false;
-  visible: boolean = true;
+  visible = true;
   private $subscription = new Subscription();
   enableDropdown = false;
   template = '';

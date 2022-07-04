@@ -66,7 +66,7 @@ export class StepperContentRendererDirective implements OnChanges {
 
   protected _stepperComponentObj: ComponentRef<Temp000001StepperComponent>;
   protected stepperComponent = Temp000001StepperComponent;
-  protected _isStepperRendered: boolean = false;
+  protected _isStepperRendered = false;
   protected componentMapping = componentMapping;
 
   constructor(

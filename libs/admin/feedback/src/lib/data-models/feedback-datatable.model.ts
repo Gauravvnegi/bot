@@ -448,7 +448,7 @@ export class StayFeedback {
   }
 
   getSortedServices() {
-    let sortOrder = ['EI', 'ME', 'EE'];
+    const sortOrder = ['EI', 'ME', 'EE'];
     if (isNaN(this.services[0]?.rating))
       this.services.sort((a, b) => {
         if (a.rating === b.rating) {

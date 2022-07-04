@@ -210,7 +210,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
    * @returns create template api.
    */
   createTemplate(templateFormData) {
-    let data = this.templateService.mapTemplateData(
+    const data = this.templateService.mapTemplateData(
       templateFormData,
       this.hotelId
     );

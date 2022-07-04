@@ -95,8 +95,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   legendOnClick = (index, event) => {
     event.stopPropagation();
-    let ci = this.baseChart.chart;
-    let meta = ci.getDatasetMeta(0);
+    const ci = this.baseChart.chart;
+    const meta = ci.getDatasetMeta(0);
     if (!meta.data[index].hidden) {
       meta.data[index].hidden = true;
     } else {

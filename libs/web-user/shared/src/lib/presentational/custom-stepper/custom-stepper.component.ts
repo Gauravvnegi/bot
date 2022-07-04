@@ -47,7 +47,7 @@ export class CustomStepperComponent extends CdkStepper {
   }
 
   setStepperProgress() {
-    let progress =
+    const progress =
       ((this.selectedIndex + 1) / +this.parentForm.controls.length) * 100;
 
     this.progress = `${progress},100`;

@@ -147,25 +147,25 @@
                       'chipSelected status-selected-default':
                         quickReplyType.isSelected,
                       'status-opacity-pending status-text-pending':
-                        quickReplyType.type == 'pending',
+                        quickReplyType.type === 'pending',
                       'status-opacity-initiated status-text-initiated':
-                        quickReplyType.type == 'initiated',
+                        quickReplyType.type === 'initiated',
                       'status-opacity-success status-text-success':
-                        quickReplyType.type == 'completed',
+                        quickReplyType.type === 'completed',
                       'status-opacity-reject status-text-reject':
-                        quickReplyType.type == 'failed',
-                      'status-default': quickReplyType.type == '',
+                        quickReplyType.type === 'failed',
+                      'status-default': quickReplyType.type === '',
                       'status-selected-pending':
-                        quickReplyType.type == 'pending' &&
+                        quickReplyType.type === 'pending' &&
                         quickReplyType.isSelected,
                       'status-selected-initiated':
-                        quickReplyType.type == 'initiated' &&
+                        quickReplyType.type === 'initiated' &&
                         quickReplyType.isSelected,
                       'status-selected-completed':
-                        quickReplyType.type == 'completed' &&
+                        quickReplyType.type === 'completed' &&
                         quickReplyType.isSelected,
                       'status-selected-reject':
-                        quickReplyType.type == 'failed' &&
+                        quickReplyType.type === 'failed' &&
                         quickReplyType.isSelected
                     }"
                     [selected]="isQuickReplyFilterSelected(quickReplyType)"
@@ -495,7 +495,7 @@
                       <div
                         class="feedback-service__container"
                         *ngIf="
-                          i == 1 &&
+                          i === 1 &&
                           rowData.services.getNegativeRatedService()?.length >=
                             2
                         "
@@ -513,7 +513,7 @@
                       </div>
                       <ng-container
                         *ngIf="
-                          i == 0 &&
+                          i === 0 &&
                           rowData.services.getNegativeRatedService()?.length ==
                             1
                         "
@@ -697,12 +697,12 @@
                       </div>
                       <ng-container
                         *ngIf="
-                          (i == 1 &&
-                            (rowData.getNegativeRatedService()?.length == 2 ||
+                          (i === 1 &&
+                            (rowData.getNegativeRatedService()?.length === 2 ||
                               rowData.getNegativeRatedService()?.length >=
                                 2)) ||
-                          (rowData.getNegativeRatedService()?.length == 1 &&
-                            i == 0)
+                          (rowData.getNegativeRatedService()?.length === 1 &&
+                            i === 0)
                         "
                       >
                         <div class="feedback-service__container__label others">

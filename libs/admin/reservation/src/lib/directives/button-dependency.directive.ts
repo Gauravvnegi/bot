@@ -79,7 +79,7 @@ export class ButtonDependencyDirective {
 
   setDependencyDS() {
     this.parentForm.valueChanges.subscribe((data) => {
-      let dependencystatus = {
+      const dependencystatus = {
         confirmAndNotifyCheckin: {
           dependencies: [
             this.parentForm.get('healthCardDetails').get('status').value ==

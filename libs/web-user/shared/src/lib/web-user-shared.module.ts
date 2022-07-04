@@ -47,7 +47,7 @@ import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shar
 import { TabGroupComponent } from './presentational/tab-group/tab-group.component';
 
 export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
-  let { templateId } = injector.get('TEMPLATE_CONFIG');
+  const { templateId } = injector.get('TEMPLATE_CONFIG');
 
   if (templateId) {
     return new MultiTranslateHttpLoader(http, [

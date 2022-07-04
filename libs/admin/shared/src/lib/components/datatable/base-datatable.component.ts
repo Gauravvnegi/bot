@@ -200,7 +200,7 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   onFilterTypeTextChange(event, field, matchMode = 'startsWith') {
-    let value = event.target.value && event.target.value.trim();
+    const value = event.target.value && event.target.value.trim();
     this.table.filter(value, field, matchMode);
   }
 
@@ -243,9 +243,9 @@ export class BaseDatatableComponent implements OnInit {
 
   saveAsExcelFile(buffer: any, fileName: string): void {
     import('file-saver').then((FileSaver) => {
-      let EXCEL_TYPE =
+      const EXCEL_TYPE =
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-      let EXCEL_EXTENSION = '.xlsx';
+      const EXCEL_EXTENSION = '.xlsx';
       const data: Blob = new Blob([buffer], {
         type: EXCEL_TYPE,
       });
@@ -318,8 +318,8 @@ export class BaseDatatableComponent implements OnInit {
 
   sort(event: SortEvent, type: string) {
     event.data.sort((data1, data2) => {
-      let value1 = data1[event.field];
-      let value2 = data2[event.field];
+      const value1 = data1[event.field];
+      const value2 = data2[event.field];
       let result = null;
 
       if (value1 === null && value2 !== null) result = -1;

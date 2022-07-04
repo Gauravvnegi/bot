@@ -72,7 +72,7 @@ export class RequestService extends ApiService {
   }
 
   validateRequestData(fg: FormGroup, channelSelection) {
-    let status = [];
+    const status = [];
 
     if (channelSelection) {
       status.push({

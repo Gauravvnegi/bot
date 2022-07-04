@@ -5,10 +5,6 @@ import * as moment from 'moment';
 export class DateService {
   private constructor() {}
 
-  getCurrentTimeStamp(timezone = '+05:30') {
-    return moment().utcOffset(timezone).unix() * 1000;
-  }
-
   static convertDateToTimestamp(inputDate, timezone = '+05:30') {
     return moment(inputDate).utcOffset(timezone).unix();
   }
@@ -60,6 +56,13 @@ export class DateService {
     timezone = '+05:30'
   ) {
     return moment(inputTimeStamp).utcOffset(timezone).format(format);
+  }
+
+  static sortObjArrayByTimeStamp(arr, field, order = 'asc') {
+    if (order === 'asc') {
+      return arr?.sort((a, b) => (a[field] > b[field] ? 1 : -1));
+    }
+    return arr?.sort((a, b) => (a[field] < b[field] ? 1 : -1));
   }
 
   convertTimestampToLabels(type, timestamp, timezone, format?, toDate?) {
@@ -145,10 +148,7 @@ export class DateService {
     }
   }
 
-  static sortObjArrayByTimeStamp(arr, field, order = 'asc') {
-    if (order === 'asc') {
-      return arr?.sort((a, b) => (a[field] > b[field] ? 1 : -1));
-    }
-    return arr?.sort((a, b) => (a[field] < b[field] ? 1 : -1));
+  getCurrentTimeStamp(timezone = '+05:30') {
+    return moment().utcOffset(timezone).unix() * 1000;
   }
 }

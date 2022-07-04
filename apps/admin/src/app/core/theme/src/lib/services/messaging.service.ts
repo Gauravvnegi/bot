@@ -93,7 +93,7 @@ export class FirebaseMessagingService {
   }
 
   playNotificationSound() {
-    let sound = new Howl({
+    const sound = new Howl({
       src: ['assets/audio/notification.mp3'],
     });
     sound.play();

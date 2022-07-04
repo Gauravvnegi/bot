@@ -91,9 +91,9 @@
             <div class="content-wrap-r2">
               <div
                 [ngClass]="{
-                  'status-text-initiated': item.action == 'Timeout',
-                  'status-text-reject': item.action == 'Pending',
-                  'status-text-success': item.action == 'Closed'
+                  'status-text-initiated': item.action === 'Timeout',
+                  'status-text-reject': item.action === 'Pending',
+                  'status-text-success': item.action === 'Closed'
                 }"
               >
                 {{ item.getAction() || '------' }}

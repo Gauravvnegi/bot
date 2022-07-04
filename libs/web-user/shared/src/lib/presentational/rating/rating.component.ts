@@ -44,7 +44,7 @@ export class RatingComponent extends BaseComponent {
 
   setRatingValue(rating: number) {
     Object.keys(this.ratingScaleConfig).map((key) => {
-      let ratingKey = JSON.parse(key);
+      const ratingKey = JSON.parse(key);
       ratingKey.forEach((element) => {
         if (element === rating) {
           this.selectedRatingObj = { ...this.ratingScaleConfig[key], rating };

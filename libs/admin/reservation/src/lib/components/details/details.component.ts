@@ -338,7 +338,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   generateCheckinLink() {}
 
   acceptPayment(status = 'Accept') {
-    let data = {
+    const data = {
       stepName: 'PAYMENT',
       state: status,
       remarks: '',
@@ -581,7 +581,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   verifyJourney(journeyName, status) {
-    let data = {
+    const data = {
       journey: journeyName,
       state: status,
       remarks: '',
@@ -743,7 +743,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   get tabIndex() {
-    let { index } = this.detailsConfig.find(
+    const { index } = this.detailsConfig.find(
       (tabConfig) => tabConfig.key === this.tabKey
     );
     return index ? index : 0;

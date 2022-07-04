@@ -213,7 +213,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    */
   customSort(event: SortEvent): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;
@@ -289,7 +289,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    * @param event active and inactive event check.
    */
   updateAssetStatus(event, assetId): void {
-    let data = {
+    const data = {
       active: event.checked,
     };
     this.assetService.updateAssetStatus(this.hotelId, data, assetId).subscribe(

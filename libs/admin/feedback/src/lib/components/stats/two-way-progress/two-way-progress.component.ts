@@ -30,19 +30,19 @@ export class TwoWayProgressComponent implements OnInit {
    * @function drawArcs To draw the arcs on the canvas.
    */
   drawArcs(): void {
-    let cal_values = this.calculatevalues();
-    let largest = Math.max(
+    const cal_values = this.calculatevalues();
+    const largest = Math.max(
       this.settings.positive,
       this.settings.negative,
       this.settings.neutral
     );
-    let positiveCanvasContext = this.positiveCanvas.nativeElement.getContext(
+    const positiveCanvasContext = this.positiveCanvas.nativeElement.getContext(
       '2d'
     );
-    let defaultCanvasContext = this.defaultCanvas.nativeElement.getContext(
+    const defaultCanvasContext = this.defaultCanvas.nativeElement.getContext(
       '2d'
     );
-    let negativeCanvasContext = this.negativeCanvas.nativeElement.getContext(
+    const negativeCanvasContext = this.negativeCanvas.nativeElement.getContext(
       '2d'
     );
     positiveCanvasContext.strokeStyle = defaultCanvasContext.strokeStyle = negativeCanvasContext.strokeStyle =
@@ -94,7 +94,7 @@ export class TwoWayProgressComponent implements OnInit {
    * @returns The values for a department.
    */
   private calculatevalues(): DepartmentValue {
-    let score =
+    const score =
       this.settings.score < 0 ? this.settings.score * -1 : this.settings.score;
     let positiveValue = parseFloat((1.5 + score * 0.009).toFixed(3));
     if (positiveValue > 1.991) {
@@ -104,7 +104,7 @@ export class TwoWayProgressComponent implements OnInit {
         positiveValue = parseFloat((positiveValue - 2).toFixed(3));
       }
     }
-    let negativeValue = 1.5 - score * 0.009;
+    const negativeValue = 1.5 - score * 0.009;
     return {
       positiveValue,
       negativeValue,

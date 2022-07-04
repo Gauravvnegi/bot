@@ -123,8 +123,8 @@ export class AdminGuestDetailsComponent implements OnInit {
   }
 
   updateHealthCardStatus(status) {
-    let formValues = this.healthCardDetailsForm.getRawValue();
-    let data = {
+    const formValues = this.healthCardDetailsForm.getRawValue();
+    const data = {
       stepName: 'HEALTHDECLARATION',
       state: status,
       remarks: formValues.remarks,

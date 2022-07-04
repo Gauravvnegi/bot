@@ -212,7 +212,7 @@ export class EditPackageComponent implements OnInit, OnDestroy {
     }
 
     this.isSavingPackage = true;
-    let data = this.packageService.mapPackageData(
+    const data = this.packageService.mapPackageData(
       this.packageForm.getRawValue(),
       this.hotelId
     );
@@ -245,7 +245,7 @@ export class EditPackageComponent implements OnInit, OnDestroy {
   }
 
   uploadFile(event): void {
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('files', event.file);
     this.$subscription.add(
       this.packageService.uploadImage(this.hotelId, formData).subscribe(

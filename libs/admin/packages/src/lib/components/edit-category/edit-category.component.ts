@@ -133,7 +133,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
       return;
     }
     this.isSavingCategory = true;
-    let data = this.categoriesService.mapCategoryData(
+    const data = this.categoriesService.mapCategoryData(
       this.categoryForm.getRawValue()
     );
     this.$subscription.add(
@@ -204,7 +204,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   }
 
   uploadFile(event): void {
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('files', event.file);
     this.$subscription.add(
       this.packageService.uploadImage(this.hotelId, formData).subscribe(

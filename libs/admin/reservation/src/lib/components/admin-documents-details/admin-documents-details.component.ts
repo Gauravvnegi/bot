@@ -157,7 +157,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     if (this.guestsFA.controls.length > 0) {
       this.guestsFA.controls.forEach((guestFG: FormGroup, index) => {
         guestFG.addControl('documents', new FormArray([]));
-        let controlFA = guestFG.get('documents') as FormArray;
+        const controlFA = guestFG.get('documents') as FormArray;
         //improper check ? what if i manipulate the guest index
         this.detailsData.guestDetails.guests[index].documents.forEach((doc) => {
           controlFA.push(this.getDocumentFG());
@@ -195,7 +195,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       return;
     }
 
-    let data = this.mapDocumentVerificationData(status, isConfirmALL);
+    const data = this.mapDocumentVerificationData(status, isConfirmALL);
 
     this._reservationService
       .updateStepStatus(
@@ -276,8 +276,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   downloadDocs(documents) {
-    let urls = [];
-    let fileNames = [];
+    const urls = [];
+    const fileNames = [];
     const guest = this.detailsData.guestDetails.guests.filter(
       (data) => data.id === this.selectedGuestId
     )[0];
@@ -293,7 +293,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     const zipFile = new JSZip();
     let count = 0;
     urls.forEach((url, i) => {
-      let fileName = urls[i];
+      const fileName = urls[i];
       const index = fileName.lastIndexOf('/');
       fileName = fileName.slice(index + 1);
       fileName = decodeURIComponent(fileName);

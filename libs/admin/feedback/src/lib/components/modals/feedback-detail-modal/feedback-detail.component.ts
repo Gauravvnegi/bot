@@ -128,7 +128,7 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
   }
 
   updateFeedbackState() {
-    let data = {
+    const data = {
       status: 'RESOLVED',
     };
     this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
@@ -162,7 +162,7 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
   }
 
   addComment(event) {
-    let data = {
+    const data = {
       notes: event.data.comment,
     };
     this.tableService

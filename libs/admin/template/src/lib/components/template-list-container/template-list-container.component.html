@@ -13,7 +13,7 @@
 
     <div class="preDesigned">
       <ng-container
-        *ngIf="templateType == 'SAVEDTEMPLATE'; else preDesignTemplate"
+        *ngIf="templateType === 'SAVEDTEMPLATE'; else preDesignTemplate"
       >
         <p class="head">{{ 'templateType.savedTemplate' | translate }}</p>
       </ng-container>

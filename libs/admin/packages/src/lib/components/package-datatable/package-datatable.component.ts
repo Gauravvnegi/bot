@@ -159,7 +159,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent
 
   customSort(event: SortEvent) {
     const col = this.cols.filter((data) => data.field === event.field)[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;
@@ -203,7 +203,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent
   }
 
   updatePackageStatus(event, packageId): void {
-    let packages = [];
+    const packages = [];
     packages.push(packageId);
     this.packageService
       .updatePackageStatus(this.hotelId, event.checked, packages)

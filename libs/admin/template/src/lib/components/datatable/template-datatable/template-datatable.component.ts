@@ -231,7 +231,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    * @param templateId The template id for which status update action will be done.
    */
   updateTemplateStatus(event, templateId): void {
-    let data = {
+    const data = {
       active: event.checked,
     };
     this.templateService
@@ -349,7 +349,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    */
   customSort(event: SortEvent): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;

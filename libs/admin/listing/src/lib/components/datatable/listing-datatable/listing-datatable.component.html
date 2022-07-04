@@ -123,29 +123,30 @@
                   'chipSelected status-selected-default':
                     quickReplyType.isSelected,
                   'status-opacity-new status-text-new':
-                    quickReplyType.type == 'new',
+                    quickReplyType.type === 'new',
                   'status-selected-new':
-                    quickReplyType.type == 'new' && quickReplyType.isSelected,
+                    quickReplyType.type === 'new' && quickReplyType.isSelected,
                   'status-opacity-pending status-text-pending':
-                    quickReplyType.type == 'pending',
+                    quickReplyType.type === 'pending',
                   'status-opacity-initiated status-text-initiated':
-                    quickReplyType.type == 'initiated',
+                    quickReplyType.type === 'initiated',
                   'status-opacity-success status-text-success':
-                    quickReplyType.type == 'completed',
+                    quickReplyType.type === 'completed',
                   'status-opacity-reject status-text-reject':
-                    quickReplyType.type == 'failed',
-                  'status-default': quickReplyType.type == '',
+                    quickReplyType.type === 'failed',
+                  'status-default': quickReplyType.type === '',
                   'status-selected-pending':
-                    quickReplyType.type == 'pending' &&
+                    quickReplyType.type === 'pending' &&
                     quickReplyType.isSelected,
                   'status-selected-initiated':
-                    quickReplyType.type == 'initiated' &&
+                    quickReplyType.type === 'initiated' &&
                     quickReplyType.isSelected,
                   'status-selected-completed':
-                    quickReplyType.type == 'completed' &&
+                    quickReplyType.type === 'completed' &&
                     quickReplyType.isSelected,
                   'status-selected-reject':
-                    quickReplyType.type == 'failed' && quickReplyType.isSelected
+                    quickReplyType.type === 'failed' &&
+                    quickReplyType.isSelected
                 }"
                 [selected]="isQuickReplyFilterSelected(quickReplyType)"
                 (click)="

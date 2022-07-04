@@ -111,14 +111,14 @@ export class WhatsappMessageAnalyticsComponent implements OnInit, OnDestroy {
   }
 
   legendOnClick = (index) => {
-    let ci = this.baseChart.chart;
-    let alreadyHidden =
+    const ci = this.baseChart.chart;
+    const alreadyHidden =
       ci.getDatasetMeta(index).hidden === null
         ? false
         : ci.getDatasetMeta(index).hidden;
 
     ci.data.datasets.forEach((e, i) => {
-      let meta = ci.getDatasetMeta(i);
+      const meta = ci.getDatasetMeta(i);
 
       if (i === index) {
         if (!alreadyHidden) {

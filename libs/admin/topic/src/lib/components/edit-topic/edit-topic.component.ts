@@ -110,7 +110,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
    */
   addTopic() {
     this.isSavingTopic = true;
-    let data = this.topicService.mapTopicData(
+    const data = this.topicService.mapTopicData(
       this.topicForm.getRawValue(),
       this.hotelId
     );

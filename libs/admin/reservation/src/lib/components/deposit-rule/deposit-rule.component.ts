@@ -126,7 +126,7 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let {
+    const {
       guaranteeType,
       amountType,
       amount,

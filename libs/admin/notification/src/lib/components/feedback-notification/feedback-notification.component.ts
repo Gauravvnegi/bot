@@ -125,7 +125,7 @@ export class FeedbackNotificationComponent extends NotificationComponent
   }
 
   sendMessage(): void {
-    let validation = this.requestService.validateRequestData(
+    const validation = this.requestService.validateRequestData(
       this.notificationForm,
       false
     );

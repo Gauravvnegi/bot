@@ -480,7 +480,7 @@ export class NPOSVertical {
   Dinner: ServiceStat[];
 
   deserialize(input) {
-    let chipLabels = [];
+    const chipLabels = [];
     this.Breakfast = new Array<ServiceStat>();
     this.Lunch = new Array<ServiceStat>();
     this.Dinner = new Array<ServiceStat>();

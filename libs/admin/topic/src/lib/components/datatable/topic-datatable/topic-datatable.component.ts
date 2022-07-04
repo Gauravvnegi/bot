@@ -192,7 +192,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    * @param topicId The topic id for which status update action will be done.
    */
   updateTopicStatus(event, topicId): void {
-    let data = {
+    const data = {
       active: event.checked,
     };
     this.topicService.updateTopicStatus(this.hotelId, data, topicId).subscribe(
@@ -315,7 +315,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    */
   customSort(event: SortEvent): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;

@@ -23,7 +23,7 @@ export class LoadGuard implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    let subscription = this.subscriptionService.getModuleSubscription();
+    const subscription = this.subscriptionService.getModuleSubscription();
     if (subscription === undefined) {
       if (!this._userService.getLoggedInUserid()) {
         this._router.navigate(['/auth']);

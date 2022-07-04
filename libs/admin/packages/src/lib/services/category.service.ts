@@ -55,7 +55,7 @@ export class CategoriesService extends ApiService {
 
   validate(form, status, index?) {
     Object.keys(form.controls).forEach((key) => {
-      let control = form.get(key);
+      const control = form.get(key);
       let msg;
       if (control.invalid) {
         if (control.value === '') {
@@ -71,12 +71,4 @@ export class CategoriesService extends ApiService {
     });
     return status;
   }
-
-  // set categoriesList(categories) {
-  //   this._categoriesList = categories;
-  // }
-
-  // get categoriesList() {
-  //   return this._categoriesList;
-  // }
 }

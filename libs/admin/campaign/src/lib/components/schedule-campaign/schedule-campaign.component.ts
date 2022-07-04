@@ -27,7 +27,7 @@ export class ScheduleCampaignComponent implements OnInit {
   ngOnInit(): void {}
 
   updateFormDate(value: any) {
-    let currentTime = moment().utcOffset(this._globalFilterService.timezone);
+    const currentTime = moment().utcOffset(this._globalFilterService.timezone);
     this.createTimeList(value);
     if (
       this.checkForSameDay(value) &&
@@ -113,7 +113,7 @@ export class ScheduleCampaignComponent implements OnInit {
 
   createTimeList(timestamp) {
     this.timeList = [];
-    let time = moment(timestamp)
+    const time = moment(timestamp)
       .utcOffset(this._globalFilterService.timezone)
       .startOf('day');
     const endOfDay = moment(timestamp)

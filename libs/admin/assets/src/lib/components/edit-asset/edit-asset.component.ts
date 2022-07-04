@@ -139,7 +139,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
    */
   addAsset(): void {
     this.isSavingasset = true;
-    let data = this.assetService.mapAssetData(
+    const data = this.assetService.mapAssetData(
       this.assetForm.getRawValue(),
       this.hotelId
     );
@@ -192,10 +192,10 @@ export class EditAssetComponent implements OnInit, OnDestroy {
    * @param event url of uploadFile.
    */
   uploadFile(event): void {
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('files', event.file);
     if (this.assetType === assetConfig.type.video) {
-      let thumbnailData = new FormData();
+      const thumbnailData = new FormData();
       thumbnailData.append('files', event.thumbnailFile);
       this.$subscription.add(
         forkJoin({

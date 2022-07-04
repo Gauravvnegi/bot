@@ -26,9 +26,9 @@ export class TableService {
       this.snackBarService.openSnackBarAsText(validityStatus.error);
     }
     if (filters.length) {
-      let getPath = ['modules', module, 'tables', table, 'tabFilters'];
+      const getPath = ['modules', module, 'tables', table, 'tabFilters'];
       const subscription = this.subscriptionService.getModuleSubscription();
-      let subscribedFilters = get(subscription, getPath, []);
+      const subscribedFilters = get(subscription, getPath, []);
       return subscribedFilters.length
         ? subscribedFilters.map(
             (filter) => filters.filter((d) => d.value === filter)[0]

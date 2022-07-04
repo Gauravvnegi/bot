@@ -158,7 +158,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   refreshDashboard() {
-    let currentUrl = this._router.url;
+    const currentUrl = this._router.url;
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this._router.onSameUrlNavigation = 'reload';
     this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -217,7 +217,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     if (event.property) {
       delete event.property;
     }
-    let filterObj = event;
+    const filterObj = event;
     for (let key in filterObj) {
       if (
         !Array.isArray(filterObj[key]) &&

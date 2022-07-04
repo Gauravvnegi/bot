@@ -77,7 +77,7 @@ export class BookingStatusComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
+        const calenderType = {
           calenderType: this._dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
@@ -136,14 +136,14 @@ export class BookingStatusComponent implements OnInit, OnDestroy {
    * @param index The index of the legend.
    */
   legendOnClick = (index) => {
-    let chartRef = this.baseChart.chart;
-    let alreadyHidden =
+    const chartRef = this.baseChart.chart;
+    const alreadyHidden =
       chartRef.getDatasetMeta(index).hidden === null
         ? false
         : chartRef.getDatasetMeta(index).hidden;
 
     chartRef.data.datasets.forEach((error, i) => {
-      let meta = chartRef.getDatasetMeta(i);
+      const meta = chartRef.getDatasetMeta(i);
 
       if (i === index) {
         if (!alreadyHidden) {

@@ -91,7 +91,7 @@
         *ngFor="let item of searchList"
         (click)="selectItem(item.type, item)"
       >
-        <ng-container *ngIf="item.type == 'email'; else noEmail">
+        <ng-container *ngIf="item.type === 'email'; else noEmail">
           <div class="title">{{ item.name }}</div>
           <div class="description" *ngIf="item.firstName">
             <div class="margin">{{ item.firstName }} {{ item.lastName }}</div>

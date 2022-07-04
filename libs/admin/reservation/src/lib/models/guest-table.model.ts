@@ -121,7 +121,7 @@ export class Guest implements Deserializable {
       if (reservation.guestDetails.primaryGuest.id === input.id) {
         this.documents = reservation.guestDetails.primaryGuest.documents;
       } else {
-        let keys = Object.keys(reservation.guestDetails.allGuest);
+        const keys = Object.keys(reservation.guestDetails.allGuest);
         keys.forEach((key) => {
           if (key === input.id) {
             this.documents = reservation.guestDetails.allGuest[key].documents;

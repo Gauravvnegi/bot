@@ -162,7 +162,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    */
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => ({
         entityState: item.value,
       }));
@@ -278,7 +278,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    */
   customSort(event: SortEvent): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;
@@ -370,7 +370,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    */
   toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     //toggle isSelected
-    if (quickReplyTypeIdx == 0) {
+    if (quickReplyTypeIdx === 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
           chip.isSelected = false;

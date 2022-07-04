@@ -294,7 +294,8 @@
                   <mat-checkbox
                     formControlName="view"
                     [checked]="
-                      userPermissionFG.get('permissions').get('view').value == 1
+                      userPermissionFG.get('permissions').get('view').value ===
+                      1
                         ? true
                         : false
                     "

@@ -184,7 +184,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param campaignId The campaign id for which status update action will be done.
    */
   updateCampaignStatus(event, campaignId: string): void {
-    let data = {
+    const data = {
       active: event.checked,
     };
     this.loading = true;
@@ -348,7 +348,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     const col = campaignConfig.datatable.cols.filter(
       (data) => data.field === event.field
     )[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;

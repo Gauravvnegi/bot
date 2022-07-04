@@ -16,7 +16,7 @@ export class TableDirective implements OnInit {
 
   checkSubscription(): void {
     const subscription = this.subscriptionService.getModuleSubscription();
-    let getPath = [...['modules'], ...this.paths.split('.'), ...['active']];
+    const getPath = [...['modules'], ...this.paths.split('.'), ...['active']];
     this.elementRef.nativeElement.style.display = get(
       subscription,
       getPath,

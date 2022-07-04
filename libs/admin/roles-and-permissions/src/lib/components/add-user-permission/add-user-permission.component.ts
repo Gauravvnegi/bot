@@ -161,7 +161,7 @@ export class AddUserPermissionComponent implements OnInit {
       return;
     }
 
-    let formValue = this.userForm.getRawValue();
+    const formValue = this.userForm.getRawValue();
 
     formValue.permissionConfigs.forEach((config, configIndex) => {
       const permissionFA = this.permissionConfigsFA
@@ -183,7 +183,7 @@ export class AddUserPermissionComponent implements OnInit {
 
     this.value = { ...formValue };
 
-    let data = this._managePermissionService.modifyPermissionDetails(
+    const data = this._managePermissionService.modifyPermissionDetails(
       this.value
     );
 

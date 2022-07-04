@@ -207,7 +207,7 @@
   <hospitality-bot-template-html-editor
     *ngSwitchCase="2"
     [isDisabled]="contentNotEditable"
-    [openEditor]="stepper.selectedIndex == 2"
+    [openEditor]="stepper.selectedIndex === 2"
     [templateForm]="templateForm"
     [template]="template"
     [templateId]="templateId"

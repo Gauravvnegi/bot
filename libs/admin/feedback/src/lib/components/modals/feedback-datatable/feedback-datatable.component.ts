@@ -215,11 +215,11 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   }
 
   updateFeedbackState(event) {
-    let data = {
+    const data = {
       status: event.statusType,
       notes: event.comment,
     };
-    let id = event.id;
+    const id = event.id;
     this.tableService.updateFeedbackState(id, data).subscribe(
       (response) => {
         this._snackbarService
@@ -339,7 +339,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    */
   getSelectedQuickReplyFilters(): SelectedChip[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => ({
         entityState: item.value,
       }));

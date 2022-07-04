@@ -91,7 +91,7 @@ export class ImportContactComponent implements OnInit, OnDestroy {
    * @param event The event for which import action will be done.
    */
   importContact(event) {
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('file', event.file);
     this.$subscription.add(
       this._listingService.importContact(this.hotelId, formData).subscribe(

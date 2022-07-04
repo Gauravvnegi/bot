@@ -87,9 +87,9 @@
             [ngClass]="{
               'chipSelected status-selected-default': quickReplyType.isSelected,
               'status-opacity-initiated status-text-initiated':
-                quickReplyType.type == 'initiated',
+                quickReplyType.type === 'initiated',
               'status-selected-initiated':
-                quickReplyType.type == 'initiated' && quickReplyType.isSelected
+                quickReplyType.type === 'initiated' && quickReplyType.isSelected
             }"
           >
             {{ quickReplyType.label }}

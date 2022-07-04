@@ -74,7 +74,7 @@ export class UploadVideoComponent implements OnInit {
       video.src = URL.createObjectURL(file);
 
       video.onloadeddata = () => {
-        let ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d');
 
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;

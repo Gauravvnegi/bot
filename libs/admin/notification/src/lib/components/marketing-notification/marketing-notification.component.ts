@@ -93,8 +93,8 @@ export class MarketingNotificationComponent extends NotificationComponent
   }
 
   addEmail(event: MatChipInputEvent, control): void {
-    let input = event.input;
-    let value = event.value;
+    const input = event.input;
+    const value = event.value;
 
     // Add our keyword
     if ((value || '').trim()) {
@@ -118,7 +118,7 @@ export class MarketingNotificationComponent extends NotificationComponent
   }
 
   removeEmail(keyword: any, control: FormArray): void {
-    let index = control.value.indexOf(keyword);
+    const index = control.value.indexOf(keyword);
 
     if (index >= 0) {
       control.removeAt(index);

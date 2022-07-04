@@ -136,7 +136,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
 
   getSelectedQuickReplyFilters() {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => ({
         actionType: item.value,
       }));
@@ -231,7 +231,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
 
   customSort(event: SortEvent) {
     const col = this.cols.filter((data) => data.field === event.field)[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;

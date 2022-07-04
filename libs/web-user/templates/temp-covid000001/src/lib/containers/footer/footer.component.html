@@ -27,9 +27,9 @@
   >
     <div ngxSlickItem *ngFor="let slide of slides" class="slide">
       <div class="slider__image">
-        <img *ngIf="slide.type == 'IMAGE'" src="{{ slide.url }}" />
-        <span class="slider__image--text">{{slide.title}}</span>
-        <!-- <div *ngIf="slide.type == 'VIDEO'">
+        <img *ngIf="slide.type === 'IMAGE'" src="{{ slide.url }}" />
+        <span class="slider__image--text">{{ slide.title }}</span>
+        <!-- <div *ngIf="slide.type === 'VIDEO'">
           <video width="320" height="240" controls>
             <source src="{{ slide.url }}" type="video/mp4" />
             Your browser does not support the video tag.

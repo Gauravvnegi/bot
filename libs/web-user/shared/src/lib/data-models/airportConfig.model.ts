@@ -29,7 +29,7 @@ export class AirportAmenity {
     let pickupDate;
 
     if (input) {
-      let pickTime = DateService.getDateFromTimeStamp(
+      const pickTime = DateService.getDateFromTimeStamp(
         get(input, ['pickupTime']) * 1000,
         'DD-MM-YYYY hh:mm a'
       );

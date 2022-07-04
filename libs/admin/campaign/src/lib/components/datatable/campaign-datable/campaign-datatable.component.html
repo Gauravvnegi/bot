@@ -118,29 +118,30 @@
                   'chipSelected status-selected-default':
                     quickReplyType.isSelected,
                   'status-opacity-new status-text-new':
-                    quickReplyType.type == 'new',
+                    quickReplyType.type === 'new',
                   'status-selected-new':
-                    quickReplyType.type == 'new' && quickReplyType.isSelected,
+                    quickReplyType.type === 'new' && quickReplyType.isSelected,
                   'status-opacity-pending status-text-pending':
-                    quickReplyType.type == 'pending',
+                    quickReplyType.type === 'pending',
                   'status-opacity-initiated status-text-initiated':
-                    quickReplyType.type == 'initiated',
+                    quickReplyType.type === 'initiated',
                   'status-opacity-success status-text-success':
-                    quickReplyType.type == 'completed',
+                    quickReplyType.type === 'completed',
                   'status-opacity-reject status-text-reject':
-                    quickReplyType.type == 'failed',
-                  'status-default': quickReplyType.type == '',
+                    quickReplyType.type === 'failed',
+                  'status-default': quickReplyType.type === '',
                   'status-selected-pending':
-                    quickReplyType.type == 'pending' &&
+                    quickReplyType.type === 'pending' &&
                     quickReplyType.isSelected,
                   'status-selected-initiated':
-                    quickReplyType.type == 'initiated' &&
+                    quickReplyType.type === 'initiated' &&
                     quickReplyType.isSelected,
                   'status-selected-completed':
-                    quickReplyType.type == 'completed' &&
+                    quickReplyType.type === 'completed' &&
                     quickReplyType.isSelected,
                   'status-selected-reject':
-                    quickReplyType.type == 'failed' && quickReplyType.isSelected
+                    quickReplyType.type === 'failed' &&
+                    quickReplyType.isSelected
                 }"
                 [selected]="isQuickReplyFilterSelected(quickReplyType)"
                 (click)="
@@ -275,22 +276,22 @@
               class="stat-chip"
               *ngFor="let key of getStatsCampaignChips(rowData)"
               [ngClass]="{
-                delivered: key == 'delivered',
-                unopened: key == 'unopened',
-                opened: key == 'opened',
-                clicked: key == 'clicked',
-                failed: key == 'failed'
+                delivered: key === 'delivered',
+                unopened: key === 'unopened',
+                opened: key === 'opened',
+                clicked: key === 'clicked',
+                failed: key === 'failed'
               }"
             >
               <div>{{ key | titlecase }}</div>
               <div
                 class="stat-chip__value"
                 [ngClass]="{
-                  delivered__value: key == 'delivered',
-                  unopened__value: key == 'unopened',
-                  opened__value: key == 'opened',
-                  clicked__value: key == 'clicked',
-                  failed__value: key == 'failed'
+                  delivered__value: key === 'delivered',
+                  unopened__value: key === 'unopened',
+                  opened__value: key === 'opened',
+                  clicked__value: key === 'clicked',
+                  failed__value: key === 'failed'
                 }"
               >
                 {{ rowData.statsCampaign[key] }}
@@ -323,7 +324,7 @@
           <div
             class="dropdown"
             (click)="handleDropdownClick($event)"
-            [style.top]="rowIndex == 0 ? '100%' : ''"
+            [style.top]="rowIndex === 0 ? '100%' : ''"
             [style.bottom]="rowIndex !== 0 ? '100%' : ''"
           >
             <div

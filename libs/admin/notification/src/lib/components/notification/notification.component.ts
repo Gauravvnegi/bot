@@ -141,7 +141,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   isValidEmail(email): RegExpMatchArray {
-    let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return !!email && typeof email === 'string' && email.match(emailRegex);
   }
 
@@ -182,20 +182,20 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   readDataFromCSV($event: any, control: FormControl): void {
-    let files = $event.srcElement.files;
+    const files = $event.srcElement.files;
 
     if (files[0].name.endsWith('.csv')) {
-      let input = $event.target;
-      let reader = new FileReader();
+      const input = $event.target;
+      const reader = new FileReader();
       reader.readAsText(input.files[0]);
 
       reader.onload = () => {
-        let csvData = reader.result;
-        let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
+        const csvData = reader.result;
+        const csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
 
-        let csvArr = [];
+        const csvArr = [];
         for (let i = 1; i < csvRecordsArray.length; i++) {
-          let curruntRecord = (<string>csvRecordsArray[i]).split(',');
+          const curruntRecord = (<string>csvRecordsArray[i]).split(',');
           if (curruntRecord[0].trim()) {
             csvArr.push(curruntRecord[0].trim());
           }
@@ -212,7 +212,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   uploadAttachments(event): void {
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('files', event.currentTarget.files[0]);
     this.requestService
       .uploadAttachments(this.templates.hotelId, formData)
@@ -237,7 +237,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   changeTemplateIds(method): void {
-    let data = this.config.messageTypes.filter((d) => d.value === method)[0];
+    const data = this.config.messageTypes.filter((d) => d.value === method)[0];
     this.templates.ids = data['templateIds'];
     this.modifyControl(
       this.templates.ids && this.templates.ids.length > 0,
@@ -247,7 +247,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(): void {
-    let validation = this.requestService.validateRequestData(
+    const validation = this.requestService.validateRequestData(
       this.notificationForm,
       !(this.isEmailChannel || this.isSocialChannel)
     );
@@ -257,7 +257,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
       return;
     }
     this.isSending = true;
-    let values = new RequestData().deserialize(
+    const values = new RequestData().deserialize(
       this.notificationForm.getRawValue()
     );
 
@@ -313,7 +313,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   private modifyControl(event: boolean, control: string): void {
-    let formControl = this.notificationForm.get(control);
+    const formControl = this.notificationForm.get(control);
     formControl.setValue([]);
     event
       ? formControl.setValidators([Validators.required])

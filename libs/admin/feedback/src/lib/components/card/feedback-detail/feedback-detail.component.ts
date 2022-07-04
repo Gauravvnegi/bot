@@ -171,7 +171,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
   }
 
   updateFeedbackState() {
-    let data = {
+    const data = {
       status: card.feedbackState.resolved,
     };
     this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
@@ -206,7 +206,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
   }
 
   addComment(event) {
-    let data = {
+    const data = {
       notes: event.data.comment,
     };
     this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(

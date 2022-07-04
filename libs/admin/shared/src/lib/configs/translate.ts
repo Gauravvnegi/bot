@@ -18,7 +18,7 @@ export const getTranslationConfigs = (
    * @returns Load translations.
    */
   function HttpLoaderFactory(http: HttpClient) {
-    let translationFile = moduleName.map((name) => {
+    const translationFile = moduleName.map((name) => {
       return { prefix: `./assets/i18n/${name}/`, suffix: '.json' };
     });
     return new MultiTranslateHttpLoader(http, translationFile);

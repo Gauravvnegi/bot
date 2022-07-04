@@ -178,7 +178,7 @@ export class EditUserPermissionComponent implements OnInit {
       this._snackbarService.openSnackBarAsText('Invalid Form');
       return;
     }
-    let formValue = this.userForm.getRawValue();
+    const formValue = this.userForm.getRawValue();
 
     formValue.permissionConfigs.forEach((config, configIndex) => {
       const permissionFA = this.permissionConfigsFA
@@ -200,7 +200,7 @@ export class EditUserPermissionComponent implements OnInit {
 
     this.value = { ...formValue };
 
-    let data = this._managePermissionService.modifyPermissionDetailsForEdit(
+    const data = this._managePermissionService.modifyPermissionDetailsForEdit(
       this.value
     );
 

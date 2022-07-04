@@ -18,7 +18,7 @@
     </div>
     <div class="go-requests">
       Go to Requests
-      </div>
+    </div>
     <!-- <p class="go-to">Go to Requests</p> -->
   </div>
   <p-table
@@ -107,13 +107,13 @@
               class="journey"
               [ngClass]="{
                 'status-opacity-initiated status-text-initiated':
-                  rowData.status == 'INITIATED',
+                  rowData.status === 'INITIATED',
                 'status-opacity-pending status-text-pending':
-                  rowData.status == 'PENDING',
+                  rowData.status === 'PENDING',
                 'status-opacity-reject status-text-reject':
-                  rowData.status == 'FAILED',
+                  rowData.status === 'FAILED',
                 'status-opacity-success status-text-success':
-                  rowData.status == 'COMPLETED'
+                  rowData.status === 'COMPLETED'
               }"
             >
               {{ rowData.journey }}
@@ -121,13 +121,13 @@
                 *ngIf="rowData.getElapsedTime(_globalFilterService.timezone)"
                 [ngClass]="{
                   'status-opacity-initiated status-text-initiated':
-                    rowData.status == 'INITIATED',
+                    rowData.status === 'INITIATED',
                   'status-opacity-pending status-text-pending':
-                    rowData.status == 'PENDING',
+                    rowData.status === 'PENDING',
                   'status-opacity-reject status-text-reject':
-                    rowData.status == 'FAILED',
+                    rowData.status === 'FAILED',
                   'status-opacity-success status-text-success':
-                    rowData.status == 'COMPLETED'
+                    rowData.status === 'COMPLETED'
                 }"
               >
                 {{ rowData.getElapsedTime(_globalFilterService.timezone) }}

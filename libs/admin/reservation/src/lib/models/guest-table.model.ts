@@ -7,7 +7,7 @@ import {
   Payment,
   Room,
   Status,
-} from '../../../../dashboard/src/lib/data-models/reservation-table.model';
+} from './reservation-table.model';
 
 export interface Deserializable {
   deserialize(input: any, hotelNationality: string): this;

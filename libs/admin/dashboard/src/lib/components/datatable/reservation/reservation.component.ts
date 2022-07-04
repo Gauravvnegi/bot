@@ -2,11 +2,12 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
+  DetailsComponent,
   Reservation,
   ReservationTable,
-} from '../../../data-models/reservation-table.model';
-import { DetailsComponent } from '@hospitality-bot/admin/reservation';
+} from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -16,7 +17,6 @@ import {
   TableNames,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ModalService,
   SnackBarService,
@@ -24,10 +24,10 @@ import {
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Observable, Subscription } from 'rxjs';
-import { ReservationService } from '../../../services/reservation.service';
-import { tabFilterItems } from '../../../constants/tabFilterItem';
 import { cols } from '../../../constants/cols';
 import { dashboard } from '../../../constants/dashboard';
+import { tabFilterItems } from '../../../constants/tabFilterItem';
+import { ReservationService } from '../../../services/reservation.service';
 import {
   EntityState,
   EntityType,

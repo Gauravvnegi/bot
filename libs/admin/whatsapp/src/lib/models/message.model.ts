@@ -6,7 +6,7 @@ import {
   Booking,
   Feedback,
   Room,
-} from '../../../../dashboard/src/lib/data-models/reservation-table.model';
+} from '../../../../reservation/src/lib/models/reservation-table.model';
 
 export class Chats {
   messages: IChat[];

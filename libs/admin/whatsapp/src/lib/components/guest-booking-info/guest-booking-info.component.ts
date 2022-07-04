@@ -1,14 +1,12 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { DetailsComponent } from '@hospitality-bot/admin/reservation';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import { ModalService } from '@hospitality-bot/shared/material';
+import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
 import { MessageService } from '../../services/messages.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { Details } from 'libs/admin/shared/src/lib/models/detailsConfig.model';
-import { Reservation } from 'libs/admin/dashboard/src/lib/data-models/reservation-table.model';
-import { SnackBarService } from 'libs/shared/material/src';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { DetailsComponent } from '@hospitality-bot/admin/reservation';
-import { ModalService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'hospitality-bot-guest-booking-info',

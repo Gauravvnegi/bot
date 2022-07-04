@@ -41,7 +41,6 @@ export const adminDashboardRoutes: Route[] = [
     ChartsModule,
     NgCircleProgressModule.forRoot(),
     RouterModule,
-    AdminSharedModule,
     TranslateModule.forChild(
       getTranslationConfigs([HttpClient], ['dashboard'])
     ),

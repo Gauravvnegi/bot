@@ -1,6 +1,4 @@
 import { get, set } from 'lodash';
-import { DateService } from '@hospitality-bot/shared/utils';
-import * as moment from 'moment';
 
 export interface Deserializable {
   deserialize(input: any, hotelNationality: string): this;

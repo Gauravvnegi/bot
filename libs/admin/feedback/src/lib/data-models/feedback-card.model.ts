@@ -1,7 +1,4 @@
-import {
-  Booking,
-  Room,
-} from 'libs/admin/dashboard/src/lib/data-models/reservation-table.model';
+import { Booking, Room } from '@hospitality-bot/admin/reservation';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
 import * as moment from 'moment';

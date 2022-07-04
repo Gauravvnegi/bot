@@ -1,2 +1,2 @@
 export * from './statistics.model';
-export * from './reservation-table.model';
+export * from '../../../../reservation/src/lib/models/reservation-table.model';

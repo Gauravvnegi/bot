@@ -59,6 +59,7 @@ export const adminReservationRoutes: Route[] = [];
     InstantFeedbackComponent,
   ],
   exports: [
+    AdminSharedModule,
     DetailsComponent,
     AdminGuestDetailsComponent,
     AdminDocumentsDetailsComponent,

@@ -113,7 +113,7 @@ export class ScheduleCampaignComponent implements OnInit {
 
   createTimeList(timestamp) {
     this.timeList = [];
-    const time = moment(timestamp)
+    let time = moment(timestamp)
       .utcOffset(this._globalFilterService.timezone)
       .startOf('day');
     const endOfDay = moment(timestamp)

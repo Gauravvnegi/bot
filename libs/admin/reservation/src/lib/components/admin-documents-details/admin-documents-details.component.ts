@@ -293,7 +293,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     const zipFile = new JSZip();
     let count = 0;
     urls.forEach((url, i) => {
-      const fileName = urls[i];
+      let fileName = urls[i];
       const index = fileName.lastIndexOf('/');
       fileName = fileName.slice(index + 1);
       fileName = decodeURIComponent(fileName);

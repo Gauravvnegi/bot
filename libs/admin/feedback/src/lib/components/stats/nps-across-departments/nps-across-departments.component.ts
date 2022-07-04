@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { feedback } from '@hospitality-bot/admin/feedback';
+import { feedback } from '../../../constants/feedback';
 import {
   AdminUtilityService,
   sharedConfig,

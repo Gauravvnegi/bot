@@ -5,7 +5,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import {
   Reservation,
   ReservationTable,
-} from '@hospitality-bot/admin/dashboard';
+} from '../../../data-models/reservation-table.model';
 import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,

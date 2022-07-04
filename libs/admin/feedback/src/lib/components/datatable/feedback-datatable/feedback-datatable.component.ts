@@ -9,7 +9,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { feedback } from '@hospitality-bot/admin/feedback';
+import { feedback } from '../../../constants/feedback';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
   AdminUtilityService,

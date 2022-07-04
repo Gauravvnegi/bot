@@ -6,7 +6,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
-import { Feedback, StayFeedback } from './feedback-datatable.model';
+import { Feedback, Remark, StayFeedback } from './feedback-datatable.model';
 
 export interface Deserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -401,52 +401,5 @@ export class Departmentpermission {
     );
 
     return this;
-  }
-}
-
-export class Remark {
-  created: number;
-  updated: number;
-  adminName: string;
-  remarks: string;
-
-  deserialize(input) {
-    Object.assign(
-      this,
-      set({}, 'created', get(input, ['created'])),
-      set({}, 'updated', get(input, ['updated'])),
-      set({}, 'adminName', get(input, ['adminName'])),
-      set({}, 'remarks', get(input, ['remarks']))
-    );
-
-    return this;
-  }
-
-  getTime(timezone = '+05:30') {
-    const diff = moment()
-      .utcOffset(timezone)
-      .diff(moment(+this.updated).utcOffset(timezone), 'days');
-    const currentDay = moment().format('DD');
-    const lastMessageDay = moment
-      .unix(+this.updated / 1000)
-      .utcOffset(timezone)
-      .format('DD');
-    if (diff > 0) {
-      return moment(this.updated).utcOffset(timezone).format('DD MMM');
-    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
-      return 'Yesterday';
-    }
-    return moment(this.updated).utcOffset(timezone).format('h:mm a');
-  }
-
-  getNickName() {
-    return this.adminName
-      .split(' ')
-      .map((i, index) => {
-        if ([0, 1].includes(index)) return i.charAt(0);
-        else return '';
-      })
-      .join('')
-      .toUpperCase();
   }
 }

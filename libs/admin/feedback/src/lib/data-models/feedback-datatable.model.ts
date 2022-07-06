@@ -34,6 +34,7 @@ export class FeedbackTable {
                 userName: item.userName,
                 remarks: item.remarks,
                 timeOut: item.timeOut,
+                feedbackId: item.id,
               }
             : item,
           outlets
@@ -70,6 +71,7 @@ export class Feedback {
   userName: string;
   remarks: Remark[];
   timeOut: boolean;
+  feedbackId: string;
   deserialize(input, outlets) {
     this.remarks = new Array<Remark>();
     Object.assign(
@@ -103,9 +105,10 @@ export class Feedback {
       set({}, 'departmentName', get(input, ['departmentName'])),
       set({}, 'userId', get(input, ['userId'])),
       set({}, 'userName', get(input, ['userName'])),
-      set({}, 'timeOut', get(input, ['timeOut']))
+      set({}, 'timeOut', get(input, ['timeOut'])),
+      set({}, 'feedbackId', get(input, ['feedbackId'], ''))
     );
-    this.outlet = outlets.filter(
+    this.outlet = outlets?.filter(
       (outlet) => outlet.id === input.entityId
     )[0]?.name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
@@ -352,6 +355,7 @@ export class StayFeedbackTable {
                 userName: item.userName,
                 remarks: item.remarks,
                 timeOut: item.timeOut,
+                feedbackId: item.id,
               }
             : item,
           outlets,
@@ -419,13 +423,14 @@ export class StayFeedback {
       set({}, 'departmentName', get(input, ['departmentName'])),
       set({}, 'userId', get(input, ['userId'])),
       set({}, 'userName', get(input, ['userName'])),
-      set({}, 'timeOut', get(input, ['timeOut']))
+      set({}, 'timeOut', get(input, ['timeOut'])),
+      set({}, 'feedbackId', get(input, ['feedbackId'], ''))
     );
     const serviceList = get(input, ['serviceMap'], ['services']);
     serviceList?.forEach((item) =>
       this.services.push(new Service().deserialize(item, colorMap))
     );
-    this.outlet = outlets.filter(
+    this.outlet = outlets?.filter(
       (outlet) => outlet.id === input.entityId
     )[0]?.name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);

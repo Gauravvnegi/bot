@@ -24,6 +24,7 @@
       >
         <div class="blackscreen"></div>
         <hospitality-bot-feedback-detail
+          [outlets]="outlets"
           [colorMap]="colorMap"
           [feedbackType]="feedbackType"
           (guestInfo)="openGuestInfo($event)"

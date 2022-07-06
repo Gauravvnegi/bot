@@ -1,10 +1,12 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -32,11 +34,13 @@ import { FeedbackTableService } from '../../../services/table.service';
   styleUrls: ['./feedback-detail.component.scss'],
 })
 export class FeedbackDetailComponent implements OnInit, OnDestroy {
+  @ViewChild('feedbackChat') private feedbackChat: ElementRef;
   num = card.num;
   @Input() feedback: FeedbackRecord;
   @Input() colorMap;
   @Input() feedbackType;
   @Output() guestInfo = new EventEmitter();
+  @Input() outlets;
   feedbackFG: FormGroup;
   globalFeedbackConfig = feedback;
   userPermissions: Departmentpermission[];
@@ -80,7 +84,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
       this.cardService.$selectedFeedback.subscribe((response) => {
         this.feedback = response;
         this.feedbackFG?.patchValue({ assignee: response?.userId });
-        if (response)
+        if (response) {
           this.assigneeList = new UserList().deserialize(
             [
               this.userService.userPermissions,
@@ -88,6 +92,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
             ],
             response.departmentName
           );
+        }
       })
     );
   }
@@ -188,8 +193,6 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
             }
           )
           .subscribe();
-        this.feedback.status = response.status;
-        this.cardService.$assigneeChange.next({ status: true });
       },
       ({ error }) => {
         this._snackbarService
@@ -224,7 +227,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
           )
           .subscribe();
         this.feedbackFG.patchValue({ comment: '' });
-        this.cardService.$assigneeChange.next({ status: true });
+        this.refreshFeedbackData();
       },
       ({ error }) => {
         this._snackbarService
@@ -254,6 +257,24 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         },
         ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
       )
+    );
+  }
+
+  refreshFeedbackData() {
+    this.$subscription.add(
+      this.cardService
+        .getFeedbackByID(this.feedback.id)
+        .subscribe((response) => {
+          this.feedback = new FeedbackRecord().deserialize(
+            response,
+            this.outlets,
+            this.feedbackType,
+            this.colorMap
+          );
+          setTimeout(() => {
+            this.feedbackChat.nativeElement.scrollTop = this.feedbackChat.nativeElement.scrollHeight;
+          }, 1000);
+        })
     );
   }
 

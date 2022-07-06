@@ -30,7 +30,7 @@ export class ART {
       set({}, 'feedbackCount', get(input, ['resolutioncount']))
     );
     this.colorCode =
-      input.resolutionTime < 12
+      input.resolutionTime <= 12
         ? '#508919'
         : input.resolutionTime <= 24
         ? '#ff8f00'

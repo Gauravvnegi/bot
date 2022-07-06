@@ -415,6 +415,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       feedbackType: this.feedbackType,
       isModal: true,
       globalQueries: this.globalQueries,
+      outlets: this.outlets,
     };
 
     const detailCompRef = this._modal.openDialog(

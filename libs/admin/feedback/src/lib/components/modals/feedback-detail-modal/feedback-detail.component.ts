@@ -1,11 +1,13 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Inject,
   Input,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -27,6 +29,10 @@ import { FeedbackTableService } from '../../../services/table.service';
 import { FeedbackDetailComponent } from '../../card';
 import * as FileSaver from 'file-saver';
 import { trigger, transition, style, animate } from '@angular/animations';
+import {
+  Feedback,
+  StayFeedback,
+} from '../../../data-models/feedback-datatable.model';
 
 @Component({
   selector: 'hospitality-bot-feedback-detail-modal',
@@ -46,6 +52,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 export class FeedbackDetailModalComponent extends FeedbackDetailComponent
   implements OnInit, OnDestroy {
+  @ViewChild('feedbackChatRef') private feedbackChatRef: ElementRef;
   @Output() onDetailsClose = new EventEmitter();
   globalFeedbackConfig = feedback;
   userPermissions: Departmentpermission[];
@@ -77,6 +84,7 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
 
   ngOnInit(): void {
     this.getUserPermission();
+    console.log(this.data.feedback);
   }
 
   close() {
@@ -182,7 +190,7 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
             )
             .subscribe();
           this.feedbackFG.patchValue({ comment: '' });
-          this.cardService.$assigneeChange.next({ status: true });
+          this.refreshFeedbackData();
         },
         ({ error }) => {
           this._snackbarService
@@ -196,6 +204,51 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
             .subscribe();
         }
       );
+  }
+
+  refreshFeedbackData() {
+    this.$subscription.add(
+      this.cardService
+        .getFeedbackByID(this.data.feedback.feedbackId)
+        .subscribe((response) => {
+          this.data.feedback =
+            this.data.feedbackType === feedback.types.stay
+              ? new StayFeedback().deserialize(
+                  {
+                    ...response.feedback,
+                    status: response.status,
+                    departmentId: response.id,
+                    departmentLabel: response.departmentLabel,
+                    departmentName: response.departmentName,
+                    userId: response.userId,
+                    userName: response.userName,
+                    remarks: response.remarks,
+                    timeOut: response.timeOut,
+                    feedbackId: response.id,
+                  },
+                  this.data.outlets,
+                  this.data.colorMap
+                )
+              : new Feedback().deserialize(
+                  {
+                    ...response.feedback,
+                    status: response.status,
+                    departmentId: response.id,
+                    departmentLabel: response.departmentLabel,
+                    departmentName: response.departmentName,
+                    userId: response.userId,
+                    userName: response.userName,
+                    remarks: response.remarks,
+                    timeOut: response.timeOut,
+                    feedbackId: response.id,
+                  },
+                  this.data.outlets
+                );
+          setTimeout(() => {
+            this.feedbackChatRef.nativeElement.scrollTop = this.feedbackChatRef.nativeElement.scrollHeight;
+          }, 1000);
+        })
+    );
   }
 
   get feedbackServices() {

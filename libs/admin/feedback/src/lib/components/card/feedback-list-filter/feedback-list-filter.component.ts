@@ -98,20 +98,25 @@ export class FeedbackListFilterComponent implements OnInit, OnDestroy {
       this.cardService
         .getDepartmentList(this.hotelId, this.feedbackType)
         .subscribe((response) => {
+          this.addDepartmentControls(response);
           this.filterData.department = response;
-          this.parentFG
-            .get('department')
-            .setValue(
-              this.fb.array(this.filterData.department.map((x) => false))
-            );
         })
     );
+  }
+
+  addDepartmentControls(response) {
+    if (this.parentFG.get('department'))
+      this.parentFG.get('department')?.setValue(response.map((key) => false));
+    else
+      this.parentFG.addControl(
+        'department',
+        this.fb.array(response.map((key) => false))
+      );
   }
 
   initFG(): void {
     this.parentFG.addControl('sortBy', new FormControl({}));
     this.parentFG.addControl('assignee', new FormControl([]));
-    this.parentFG.addControl('department', this.fb.array([]));
   }
 
   applyFilter() {

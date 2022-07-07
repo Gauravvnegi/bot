@@ -56,9 +56,6 @@ export const card = {
   totalRecords: 0,
   sortList: [
     { label: 'Latest', value: 'created', order: 'DESC' },
-    { label: 'Room Ascending', value: 'room', order: 'ASC' },
-    { label: 'Room Descending', value: 'room', order: 'DESC' },
-    { label: 'Phone No.', value: 'phone', order: 'ASC' },
     { label: 'Name A -> Z', value: 'name', order: 'ASC' },
     { label: 'Name Z -> A', value: 'name', order: 'DESC' },
   ],

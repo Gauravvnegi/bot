@@ -639,8 +639,7 @@
               <div class="guest-status" *ngIf="rowData?.timeOut">
                 <img src="assets/svg/timeout.svg" alt="timeout" />
               </div>
-              <div>{{ rowData.guestData.bookingNo }}</div>
-              <div>{{ rowData.outlet }}</div>
+              <div>{{ rowData.bookingDetails.tableOrRoomNumber }}</div>
             </td>
             <td class="service-feedback">
               <div class="feedback">

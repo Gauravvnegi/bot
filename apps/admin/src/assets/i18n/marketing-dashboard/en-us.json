@@ -13,7 +13,7 @@
   "stats": {
     "in30Days": "In 30 Days",
     "totalEmailSent": "Total Email Sent",
-    "totalOpen": "Total Open",
+    "totalOpen": "Total Open Rate",
     "conversionRate": "Conversion Rate",
     "totalClicks": "Total Clicks",
     "ctr": "CTR"

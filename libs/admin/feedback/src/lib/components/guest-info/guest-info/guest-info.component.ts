@@ -54,7 +54,6 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges() {}
 
   ngOnInit(): void {
-    console.log(this.guestModalData);
     if (this.isModal) {
       this.loadGuestInfo();
     } else {

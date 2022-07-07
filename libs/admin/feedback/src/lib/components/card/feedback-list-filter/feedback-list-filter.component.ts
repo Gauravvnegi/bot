@@ -140,7 +140,7 @@ export class FeedbackListFilterComponent implements OnInit, OnDestroy {
 
   convertDepartmentFilterToValue() {
     return this.department.value
-      .map((x, i) => x && this.filterData.department[i].id)
+      .map((x, i) => x && this.filterData.department[i].entity)
       .filter((x) => !!x);
   }
 

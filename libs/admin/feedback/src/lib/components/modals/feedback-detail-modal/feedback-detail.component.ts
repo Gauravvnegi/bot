@@ -84,7 +84,6 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
 
   ngOnInit(): void {
     this.getUserPermission();
-    console.log(this.data.feedback);
   }
 
   close() {
@@ -139,34 +138,37 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
     const data = {
       status: 'RESOLVED',
     };
-    this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
-      (response) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'Status Updated Successfully.',
-              priorityMessage: 'Status Updated Successfully..',
-            },
-            '',
-            {
-              panelClass: 'success',
-            }
-          )
-          .subscribe();
-        this.cardService.$assigneeChange.next({ status: true });
-      },
-      ({ error }) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: error.message,
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      }
-    );
+    this.tableService
+      .updateFeedbackState(this.data.feedback.departmentId, data)
+      .subscribe(
+        (response) => {
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'Status Updated Successfully.',
+                priorityMessage: 'Status Updated Successfully..',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
+          this.cardService.$assigneeChange.next({ status: true });
+          this.refreshFeedbackData();
+        },
+        ({ error }) => {
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: error.message,
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
+        }
+      );
   }
 
   addComment(event) {

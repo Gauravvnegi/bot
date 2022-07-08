@@ -195,6 +195,7 @@
   margin: 14.6px 7px 17.4px 14px;
   padding: 8px 8px 8px 8px;
   border-radius: 10px;
+  background-color: purple;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
   .time {
     width: 47px;
@@ -208,6 +209,7 @@
     letter-spacing: 0.6px;
     text-align: right;
     color: #c7c7c7;
+    margin-left: 3px;
   }
   .comment {
     display: flex;
@@ -220,14 +222,15 @@
     line-height: normal;
     letter-spacing: 0.72px;
     text-align: left;
-    color: #002046;
+    // color: #002046;
+    color: #fff;
   }
   .userImage {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    padding: 8px;
+    margin-right: 5px;
     border-radius: 100%;
     background-color: greenyellow;
   }
@@ -524,7 +527,7 @@
     margin: 0 2px;
   }
   .number {
-    padding: 5px 0;
+    padding: 4px;
     color: $white;
     margin: 0 0px;
     text-align: center;
@@ -654,4 +657,7 @@
 .userChat {
   display: flex;
   justify-content: flex-end;
+}
+.textblk {
+  color: $black !important;
 }

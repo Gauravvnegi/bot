@@ -93,7 +93,8 @@ export class Feedback {
         {},
         'services',
         new TransactionalService().deserialize(
-          JSON.parse(get(input, ['services']))
+          JSON.parse(get(input, ['services'])),
+          get(input, ['serviceMap'], [])
         )
       ),
       set({}, 'session', get(input, ['session'])),
@@ -184,7 +185,7 @@ export class TransactionalService {
   comment: string;
   staffName: string;
 
-  deserialize(input) {
+  deserialize(input, services) {
     this.services = new Array<Service>();
     Object.assign(
       this,
@@ -192,7 +193,7 @@ export class TransactionalService {
       set({}, 'staffName', get(input, ['staffName'])),
       set({}, 'rating', get(input, ['rating']))
     );
-    input.services.forEach((service) =>
+    services.forEach((service) =>
       this.services.push(new Service().deserialize(service))
     );
     return this;

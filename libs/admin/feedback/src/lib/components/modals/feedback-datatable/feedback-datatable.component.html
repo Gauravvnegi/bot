@@ -770,31 +770,10 @@
             </td>
             <td class="package">
               <p class="arrival-date">
-                {{
-                  rowData.guestData.getArrivalDate(
-                    _globalFilterService.timezone
-                  )
-                }}
-                -
-                {{
-                  rowData.guestData.getDepartureDate(
-                    _globalFilterService.timezone
-                  )
-                }}
+                {{ rowData?.getCreatedDate(_globalFilterService.timezone) }}
               </p>
-
               <p class="arrival-time">
-                {{
-                  rowData.guestData.getArrivalTime(
-                    _globalFilterService.timezone
-                  )
-                }}
-                -
-                {{
-                  rowData.guestData.getDepartureTime(
-                    _globalFilterService.timezone
-                  )
-                }}
+                {{ rowData?.getCreatedTime(_globalFilterService.timezone) }}
               </p>
               <p class="arrival-time">{{ rowData.guestData.guestCount }}G</p>
             </td>

@@ -1,14 +1,15 @@
 export enum PaymentHeaders {
-	payAtDesk = 'Pay At Desk',
-	payNow = 'Pay Now'
+  payAtDesk = 'Pay At Desk',
+  payNow = 'Pay Now',
 }
 
 export enum DepositRules {
-	prePayment = 'PREPAYMENT',
-	guarantee = 'GUARANTEE',
-	deposit = 'DEPOSIT'
+  prePayment = 'PREPAYMENT',
+  guarantee = 'GUARANTEE',
+  deposit = 'DEPOSIT',
 }
 
 export enum GatewayTypes {
-	ccavenue = 'CCAVENUE'
+  ccavenue = 'CCAVENUE',
+  payumoney = 'PAYU',
 }

@@ -157,6 +157,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
       {
         feedbackType: this.feedbackType,
         ids: this.feedback.feedbackId,
+        departmentName: this.feedback.departmentName,
       },
     ];
     const config = {

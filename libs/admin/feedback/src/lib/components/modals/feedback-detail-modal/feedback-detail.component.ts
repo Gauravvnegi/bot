@@ -114,10 +114,12 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
     const queries = [
       ...this.data.globalQueries,
       {
-        feedbackType: this.feedbackType,
+        feedbackType: this.data.feedbackType,
         ids: this.data.feedback.id,
       },
     ];
+    if (this.data.feedback.departmentName)
+      queries.push({ departmentName: this.data.feedback.departmentName });
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };

@@ -286,6 +286,26 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * @function setAssignee Function to change feedback assignee.
+   * @param event
+   */
+  setAssignee(event) {
+    this.$subscription.add(
+      this.cardService
+        .updateFeedbackAssignee(this.data.feedback.id, event.value)
+        .subscribe(
+          (response) => {
+            this.cardService.$assigneeChange.next({ status: true });
+            this._snackbarService.openSnackBarAsText('Assignee updated.', '', {
+              panelClass: 'success',
+            });
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
+    );
+  }
+
   get feedbackConfig() {
     return feedback;
   }

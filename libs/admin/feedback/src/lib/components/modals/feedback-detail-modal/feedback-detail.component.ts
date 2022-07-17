@@ -1,15 +1,15 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import {
   Component,
   ElementRef,
   EventEmitter,
   Inject,
-  Input,
   OnDestroy,
   OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -17,22 +17,21 @@ import {
   UserService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
+import { card } from '../../../constants/card';
 import { feedback } from '../../../constants/feedback';
 import {
   Departmentpermission,
   Departmentpermissions,
   UserList,
 } from '../../../data-models/feedback-card.model';
-import { CardService } from '../../../services/card.service';
-import { FeedbackTableService } from '../../../services/table.service';
-import { FeedbackDetailComponent } from '../../card';
-import * as FileSaver from 'file-saver';
-import { trigger, transition, style, animate } from '@angular/animations';
 import {
   Feedback,
   StayFeedback,
 } from '../../../data-models/feedback-datatable.model';
+import { CardService } from '../../../services/card.service';
+import { FeedbackTableService } from '../../../services/table.service';
 
 @Component({
   selector: 'hospitality-bot-feedback-detail-modal',
@@ -50,8 +49,7 @@ import {
     ]),
   ],
 })
-export class FeedbackDetailModalComponent extends FeedbackDetailComponent
-  implements OnInit, OnDestroy {
+export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   @ViewChild('feedbackChatRef') private feedbackChatRef: ElementRef;
   @Output() onDetailsClose = new EventEmitter();
   globalFeedbackConfig = feedback;
@@ -59,6 +57,8 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
   $subscription = new Subscription();
   assigneeList;
   guestInfoEnable = false;
+  feedbackFG: FormGroup;
+  num = card.num;
   constructor(
     protected cardService: CardService,
     public _globalFilterService: GlobalFilterService,
@@ -68,18 +68,9 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
     protected tableService: FeedbackTableService,
     protected _snackbarService: SnackBarService
   ) {
-    super(
-      cardService,
-      _globalFilterService,
-      userService,
-      _adminUtilityService,
-      tableService,
-      _snackbarService
-    );
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
     });
-    this.cardService.$selectedFeedback.next(this.data.feedback);
   }
 
   ngOnInit(): void {
@@ -269,6 +260,34 @@ export class FeedbackDetailModalComponent extends FeedbackDetailComponent
 
   closeGuestInfo(event) {
     this.guestInfoEnable = false;
+  }
+
+  /**
+   * @function checkForNumber Function to check if number or not.
+   */
+  checkForNumber(item) {
+    return isNaN(item);
+  }
+
+  downloadFeedback(event, id) {
+    event.stopPropagation();
+    this.$subscription.add(
+      this.cardService.getFeedbackPdf(id).subscribe(
+        (response) => {
+          const link = document.createElement('a');
+          link.href = response.fileDownloadUri;
+          link.target = '_blank';
+          link.download = response.fileName;
+          link.click();
+          link.remove();
+        },
+        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      )
+    );
+  }
+
+  get feedbackConfig() {
+    return feedback;
   }
 
   ngOnDestroy() {

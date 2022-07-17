@@ -525,7 +525,7 @@ export const feedback = {
     ],
   },
   tableName: {
-    receivedBreakdown: 'Received Breakdown',
+    receivedBreakdown: 'Task Breakdown',
     distribution: 'Feedback Distribution',
     responseRate: 'Response Rate',
   },

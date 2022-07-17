@@ -140,9 +140,8 @@ export const chartConfig = {
           {
             ticks: {
               beginAtZero: true,
-              stepSize: 6,
               callback: function (value, index, ticks) {
-                return Math.floor(value) + ' hrs';
+                return value + ' hrs';
               },
             },
           },

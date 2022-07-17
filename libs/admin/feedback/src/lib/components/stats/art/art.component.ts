@@ -33,8 +33,8 @@ export class ArtComponent implements OnInit, OnDestroy {
         label: 'Line',
         type: 'line',
         fill: false,
-        borderColor: [],
-        backgroundColor: [],
+        borderColor: ['#000000'],
+        backgroundColor: ['#000000'],
         tooltipHidden: false,
       },
       {

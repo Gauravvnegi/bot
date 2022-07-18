@@ -102,7 +102,9 @@ export class GtmAcrossServicesComponent implements OnInit, OnDestroy {
   setProgress() {
     if (this.statistics?.REMAINING) {
       this.progress = Math.abs(
-        (this.statistics?.CLOSED / this.statistics?.score) * 100
+        (this.statistics?.CLOSED /
+          (this.statistics?.REMAINING + this.statistics?.CLOSED)) *
+          100
       );
     } else {
       this.progress = 0;

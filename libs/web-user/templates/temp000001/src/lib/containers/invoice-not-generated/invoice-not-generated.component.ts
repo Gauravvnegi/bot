@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './invoice-not-generated.component.html',
   styleUrls: ['./invoice-not-generated.component.scss'],
 })
-export class InvoiceNotGeneratedComponent implements OnInit {
+export class InvoiceNotGeneratedComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
   constructor(
     private _thankyouService: ThankYouService,
@@ -23,7 +23,7 @@ export class InvoiceNotGeneratedComponent implements OnInit {
     private _templateLoadingService: TemplateLoaderService
   ) {}
 
-  isReservationData: boolean = false;
+  isReservationData = false;
 
   reservationDetails;
 
@@ -76,5 +76,9 @@ export class InvoiceNotGeneratedComponent implements OnInit {
           }
         )
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

@@ -1,4 +1,4 @@
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
 
 export class InhouseTable {

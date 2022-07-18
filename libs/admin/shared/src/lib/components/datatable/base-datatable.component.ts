@@ -18,6 +18,7 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
+  currentPage = 0;
   @ViewChild('dt') table: Table; //reference to data-table
   tableName = 'Datatable'; //table name
 
@@ -31,16 +32,16 @@ export class BaseDatatableComponent implements OnInit {
   /**
    * Action Buttons & filters visibility
    */
-  isActionButtons: boolean = false;
-  isQuickFilters: boolean = false;
+  isActionButtons = false;
+  isQuickFilters = false;
   isTabFilters = true;
   isCustomSort = true;
 
   tableFG: FormGroup;
 
-  isPaginaton: boolean = false;
+  isPaginaton = false;
   rowsPerPage = 5;
-  showCurrentPageReport: boolean = true;
+  showCurrentPageReport = true;
   rowsPerPageOptions = [5, 10, 25, 50];
   first = 0; //index of the first page to show
 
@@ -54,8 +55,8 @@ export class BaseDatatableComponent implements OnInit {
 
   isResizableColumns = true;
   isAutoLayout = false;
-  @Input() loading: boolean = false;
-  initialLoading: boolean = true;
+  @Input() loading = false;
+  initialLoading = true;
 
   tabFilterItems = [
     { label: 'Inhouse', content: '', value: 'INHOUSE' },
@@ -174,6 +175,7 @@ export class BaseDatatableComponent implements OnInit {
     //rows - Number of rows to display per page.
     //event.page: Index of the new page
     //event.pageCount: Total number of pages
+    this.currentPage = event.page;
     this.loadData(event);
   }
 
@@ -194,11 +196,11 @@ export class BaseDatatableComponent implements OnInit {
   ): Observable<any> {
     return of(
       this.dataSource.slice(config.first, config.first + config.rows)
-    ).pipe(delay(2000));
+    ).pipe(delay(this.dataSource.length ? 2000 : 500));
   }
 
   onFilterTypeTextChange(event, field, matchMode = 'startsWith') {
-    let value = event.target.value && event.target.value.trim();
+    const value = event.target.value && event.target.value.trim();
     this.table.filter(value, field, matchMode);
   }
 
@@ -241,9 +243,9 @@ export class BaseDatatableComponent implements OnInit {
 
   saveAsExcelFile(buffer: any, fileName: string): void {
     import('file-saver').then((FileSaver) => {
-      let EXCEL_TYPE =
+      const EXCEL_TYPE =
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-      let EXCEL_EXTENSION = '.xlsx';
+      const EXCEL_EXTENSION = '.xlsx';
       const data: Blob = new Blob([buffer], {
         type: EXCEL_TYPE,
       });
@@ -286,7 +288,7 @@ export class BaseDatatableComponent implements OnInit {
 
   onRowSelect(event) {
     this.documentActionTypes.forEach((item) => {
-      if (item.type == 'countType') {
+      if (item.type === 'countType') {
         item.label = `Export (${this.selectedRows.length})`;
         this.tableFG
           .get('documentActions')
@@ -298,7 +300,7 @@ export class BaseDatatableComponent implements OnInit {
 
   onRowUnselect(event?) {
     this.documentActionTypes.forEach((item) => {
-      if (item.type == 'countType') {
+      if (item.type === 'countType') {
         item.label =
           this.selectedRows.length > 0
             ? `Export (${this.selectedRows.length})`
@@ -316,13 +318,13 @@ export class BaseDatatableComponent implements OnInit {
 
   sort(event: SortEvent, type: string) {
     event.data.sort((data1, data2) => {
-      let value1 = data1[event.field];
-      let value2 = data2[event.field];
+      const value1 = data1[event.field];
+      const value2 = data2[event.field];
       let result = null;
 
-      if (value1 == null && value2 != null) result = -1;
-      else if (value1 != null && value2 == null) result = 1;
-      else if (value1 == null && value2 == null) result = 0;
+      if (value1 === null && value2 !== null) result = -1;
+      else if (value1 !== null && value2 === null) result = 1;
+      else if (value1 === null && value2 === null) result = 0;
       else if (
         typeof value1 === 'string' &&
         typeof value2 === 'string' &&

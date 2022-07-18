@@ -36,7 +36,7 @@ export class RatingComponent extends BaseComponent {
   listenForZeroRating() {
     this.parentForm
       .get(this.name)
-      .valueChanges.pipe(filter((val) => val == 0))
+      .valueChanges.pipe(filter((val) => val === 0))
       .subscribe((res) => {
         this.selectedRatingObj = null;
       });
@@ -44,7 +44,7 @@ export class RatingComponent extends BaseComponent {
 
   setRatingValue(rating: number) {
     Object.keys(this.ratingScaleConfig).map((key) => {
-      let ratingKey = JSON.parse(key);
+      const ratingKey = JSON.parse(key);
       ratingKey.forEach((element) => {
         if (element === rating) {
           this.selectedRatingObj = { ...this.ratingScaleConfig[key], rating };

@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="headings">
+    <div class="go-back">
+      <button mat-button (click)="goBack()">
+        <mat-icon class="material-icons" matSuffix
+          >keyboard_backspace
+        </mat-icon>
+      </button>
+      <p>
+        {{ 'templateForm.createTemplate' | translate }}
+      </p>
+    </div>
+
+    <div class="preDesigned">
+      <ng-container
+        *ngIf="templateType === 'SAVEDTEMPLATE'; else preDesignTemplate"
+      >
+        <p class="head">{{ 'templateType.savedTemplate' | translate }}</p>
+      </ng-container>
+      <ng-template #preDesignTemplate class="pre-head">
+        <p class="prehead">
+          {{ 'templateType.preDesignedTemplate' | translate }}
+        </p>
+      </ng-template>
+
+      <mat-form-field>
+        <mat-select [value]="selectedTopic">
+          <mat-option [value]="'All'" (click)="getTemplateForAllTopics()"
+            >All</mat-option
+          >
+          <mat-option
+            *ngFor="let topic of topicList"
+            [value]="topic.name"
+            (click)="getTemplateByTopicId(topic)"
+          >
+            {{ topic.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <ng-container *ngFor="let template of templateTopicList; last as isLast">
+    <hospitality-bot-topic-templates
+      [hotelId]="hotelId"
+      [templateType]="templateType"
+      [template]="template"
+      (selectedTemplate)="setTemplate($event)"
+    ></hospitality-bot-topic-templates>
+    <div *ngIf="!isLast" class="line"></div>
+  </ng-container>
+</div>

@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { Regex } from 'libs/shared/constants/regex';
+import { Regex } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import { Category } from '../../data-models/categoryConfig.model';
@@ -20,7 +20,7 @@ import { ConfigService } from '@hospitality-bot/admin/shared';
   templateUrl: './edit-package.component.html',
   styleUrls: ['./edit-package.component.scss'],
 })
-export class EditPackageComponent implements OnInit {
+export class EditPackageComponent implements OnInit, OnDestroy {
   @Input() id: string;
 
   private $subscription: Subscription = new Subscription();
@@ -212,7 +212,7 @@ export class EditPackageComponent implements OnInit {
     }
 
     this.isSavingPackage = true;
-    let data = this.packageService.mapPackageData(
+    const data = this.packageService.mapPackageData(
       this.packageForm.getRawValue(),
       this.hotelId
     );
@@ -227,7 +227,7 @@ export class EditPackageComponent implements OnInit {
             { panelClass: 'success' }
           );
           this.router.navigate([
-            '/pages/package/edit',
+            '/pages/library/package/edit',
             this.hotelPackage.amenityPackage.id,
           ]);
           this.isSavingPackage = false;
@@ -241,11 +241,11 @@ export class EditPackageComponent implements OnInit {
   }
 
   redirectToPackages() {
-    this._location.back();
+    this.router.navigate(['/pages/library/package']);
   }
 
   uploadFile(event): void {
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('files', event.file);
     this.$subscription.add(
       this.packageService.uploadImage(this.hotelId, formData).subscribe(
@@ -291,7 +291,7 @@ export class EditPackageComponent implements OnInit {
               { panelClass: 'success' }
             );
             this.router.navigate([
-              '/pages/package/edit',
+              '/pages/library/package/edit',
               this.hotelPackage.amenityPackage.id,
             ]);
             this.isSavingPackage = false;

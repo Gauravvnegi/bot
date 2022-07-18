@@ -14,7 +14,7 @@ import { AuthService } from './services/auth.service';
 import { ResendPasswordComponent } from './components/resend-password/resend-password.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
-
+import {  NgxSlickJsModule } from 'ngx-slickjs';
 @NgModule({
   declarations: [
     AuthComponent,
@@ -28,7 +28,8 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
     FormsModule,
     ReactiveFormsModule,
     SharedMaterialModule,
-    AdminSharedModule,
+    AdminSharedModule, 
+    NgxSlickJsModule.forRoot(),
     RouterModule,
     TranslateModule,
   ],

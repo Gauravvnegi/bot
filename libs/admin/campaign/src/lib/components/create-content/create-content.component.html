@@ -1,0 +1,41 @@
+<div class="wrapper">
+  <header class="wrapper-header">
+    <div class="back">
+      <mat-icon class="material-icons" matSuffix (click)="goBack()"
+        >keyboard_backspace</mat-icon
+      >
+      <p class="label">
+        {{ 'content.create' | translate }}
+      </p>
+    </div>
+  </header>
+  <div class="body">
+    <div class="btn" (click)="openTemplateList('SAVEDTEMPLATE')">
+      <img
+        [src]="campaignConfiguration.images.saved.url"
+        [alt]="campaignConfiguration.images.saved.alt"
+      />
+      <div class="text">
+        {{ 'template.saved' | translate }}
+      </div>
+    </div>
+    <div class="btn" (click)="openTemplateList('PREDESIGNTEMPLATE')">
+      <img
+        [src]="campaignConfiguration.images.inbuilt.url"
+        [alt]="campaignConfiguration.images.inbuilt.alt"
+      />
+      <div class="text">
+        {{ 'template.inbuilt' | translate }}
+      </div>
+    </div>
+    <div class="btn" [routerLink]="['/pages/library/template/create']">
+      <img
+        [src]="campaignConfiguration.images.editTemplate.url"
+        [alt]="campaignConfiguration.images.editTemplate.alt"
+      />
+      <div class="text">
+        {{ 'template.createHtml' | translate }}
+      </div>
+    </div>
+  </div>
+</div>

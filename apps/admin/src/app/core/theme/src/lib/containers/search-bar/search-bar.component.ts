@@ -1,7 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  OnDestroy,
+  Output,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { DetailsComponent as GuestDetailComponent } from 'libs/admin/guest-detail/src/lib/components/details/details.component';
 import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
@@ -18,7 +24,7 @@ import { GlobalFilterService } from '../../services/global-filters.service';
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.scss'],
 })
-export class SearchBarComponent implements OnInit {
+export class SearchBarComponent implements OnInit, OnDestroy {
   @Input() parentForm: FormGroup;
   @Input() name: string;
   @Input() parentSearchVisible: boolean;
@@ -27,7 +33,7 @@ export class SearchBarComponent implements OnInit {
 
   searchOptions: SearchResultDetail[];
   results: any;
-  searchDropdownVisible: boolean = false;
+  searchDropdownVisible = false;
   $subscription = new Subscription();
 
   constructor(
@@ -149,7 +155,7 @@ export class SearchBarComponent implements OnInit {
 
   openEditPackage(id: string) {
     this.searchDropdownVisible = false;
-    this.router.navigateByUrl(`/pages/package/edit/${id}`);
+    this.router.navigateByUrl(`/pages/library/package/edit/${id}`);
   }
 
   clearSearch() {
@@ -157,5 +163,9 @@ export class SearchBarComponent implements OnInit {
     this.parentForm.get('search').patchValue('');
     this.searchDropdownVisible = false;
     this.searchValue = false;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

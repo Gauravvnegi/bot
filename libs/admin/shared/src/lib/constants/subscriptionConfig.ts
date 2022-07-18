@@ -7,6 +7,7 @@ export enum ModuleNames {
   NOTIFICATIONS = 'notification',
   ROLE_MANAGEMENT = 'roles-permissions',
   FEEDBACK_TRANSACTIONAL = 'FEEDBACK_TRANSACTIONAL',
+  MARKETING = 'marketing',
 }
 
 export enum Integrations {
@@ -64,7 +65,7 @@ export enum Communication {
   FACEBOOK = 'FACEBOOK_BOT',
   WEB = 'WEB_BOT',
   MICRO = 'MICRO_SITES',
-  CALL_SUPPORT = 'CALL_SUPPORT',
+  TELEGRAM = 'TELEGRAM_BOT',
   WHATSAPP_LITE = 'WHATSAPP_LITE',
 }
 
@@ -85,9 +86,10 @@ export const CommunicationConfig = {
     imageUrl: 'assets/svg/Micro-Site.svg',
     disabledImageUrl: 'assets/svg/Micro-Site-disabled.svg',
   },
-  [Communication.CALL_SUPPORT]: {
-    imageUrl: 'assets/images/call-support.png',
-    disabledImageUrl: 'assets/images/call-supprtb.png',
+  [Communication.TELEGRAM]: {
+    imageUrl: '../../../../../../apps/admin/src/assets/svg/telegram.svg',
+    disabledImageUrl:
+      '../../../../../../apps/admin/src/assets/svg/telegram.svg',
   },
   [Communication.WHATSAPP_LITE]: {
     imageUrl: 'assets/images/whatsapp.png',
@@ -206,5 +208,10 @@ export const ModuleConfig = {
     cards: [],
     tables: [],
     filters: {},
+  },
+  [ModuleNames.MARKETING]: {
+    cards: [],
+    tables: [],
+    filters: [],
   },
 };

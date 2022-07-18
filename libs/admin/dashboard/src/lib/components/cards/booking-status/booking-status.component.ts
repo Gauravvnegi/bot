@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -20,7 +20,7 @@ import { ChartTypeOption } from '../../../types/dashboard.type';
   templateUrl: './booking-status.component.html',
   styleUrls: ['./booking-status.component.scss'],
 })
-export class BookingStatusComponent implements OnInit {
+export class BookingStatusComponent implements OnInit, OnDestroy {
   @Input() customerData: BookingStatus;
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   $subscription = new Subscription();
@@ -77,7 +77,7 @@ export class BookingStatusComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
+        const calenderType = {
           calenderType: this._dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
@@ -136,16 +136,16 @@ export class BookingStatusComponent implements OnInit {
    * @param index The index of the legend.
    */
   legendOnClick = (index) => {
-    let chartRef = this.baseChart.chart;
-    let alreadyHidden =
+    const chartRef = this.baseChart.chart;
+    const alreadyHidden =
       chartRef.getDatasetMeta(index).hidden === null
         ? false
         : chartRef.getDatasetMeta(index).hidden;
 
     chartRef.data.datasets.forEach((error, i) => {
-      let meta = chartRef.getDatasetMeta(i);
+      const meta = chartRef.getDatasetMeta(i);
 
-      if (i == index) {
+      if (i === index) {
         if (!alreadyHidden) {
           meta.hidden = true;
         } else {

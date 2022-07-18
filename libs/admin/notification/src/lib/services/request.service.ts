@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
 import { RequestData } from '../../../../notification/src/lib/data-models/request.model';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
   getAllRequests(config): Observable<any> {
-    return this.get(`/api/v1/live-request/${config.queryObj}`);
+    return this.get(`/api/v1/request/${config.queryObj}`);
   }
 
   exportCSV(config): Observable<any> {
-    return this.get(`/api/v1/live-request/export/${config.queryObj}`, {
+    return this.get(`/api/v1/request/export/${config.queryObj}`, {
       responseType: 'blob',
     });
   }
@@ -45,7 +45,7 @@ export class RequestService extends ApiService {
   }
 
   validateRequestData(fg: FormGroup, channelSelection) {
-    let status = [];
+    const status = [];
 
     if (channelSelection) {
       status.push({

@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="go-back">
+    <mat-icon (click)="redirectToTable()" class="material-icons" matSuffix
+      >keyboard_backspace
+    </mat-icon>
+    <p>
+      <ng-container *ngIf="topicId; else addTopic">
+        {{ 'topicForm.editTopic' | translate }}
+      </ng-container>
+      <ng-template #addTopic>
+        {{ 'topicForm.createTopic' | translate }}
+      </ng-template>
+    </p>
+  </div>
+  <div class="wrapper-form" [formGroup]="topicForm" *ngIf="topicForm">
+    <div class="fields">
+      <div class="field">
+        <mat-label class="mat-label">{{
+          'formFieldLabels.name' | translate
+        }}</mat-label>
+        <mat-form-field class="name">
+          <input
+            matInput
+            formControlName="name"
+            placeholder="Enter Topic Name"
+          />
+          <mat-error
+            *ngIf="
+              topicForm.get('name').touched &&
+              topicForm.get('name').hasError('required')
+            "
+          >
+            {{ 'validationMessage.name' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <mat-label class="mat-label">{{
+          'formFieldLabels.description' | translate
+        }}</mat-label>
+        <mat-form-field class="description">
+          <input
+            matInput
+            formControlName="description"
+            placeholder="Write Your Description Here"
+          />
+          <mat-error
+            *ngIf="
+              topicForm.get('description').touched &&
+              topicForm.get('description').hasError('required')
+            "
+          >
+            {{ 'validationMessage.description' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="toggle_wrapper">
+        <mat-label class="mat-label">{{
+          'formFieldLabels.active' | translate
+        }}</mat-label>
+        <div class="status status--left">
+          {{ 'active.disable' | translate }}
+        </div>
+        <mat-slide-toggle formControlName="status"></mat-slide-toggle>
+        <div class="status status--right">
+          {{ 'active.enable' | translate }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer_button">
+    <button
+      mat-button
+      class="button"
+      (click)="handleSubmit()"
+      [ngClass]="{ active: !isSavingTopic, disabled: isSavingTopic }"
+    >
+      <i *ngIf="isSavingTopic" class="fa fa-spinner fa-spin"></i>
+      {{ isSavingTopic ? 'Saving' : 'Save' }}
+    </button>
+  </div>
+</div>

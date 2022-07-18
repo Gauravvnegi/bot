@@ -1,0 +1,50 @@
+<ng-container
+  *ngIf="hybrid; then hybridField; else notHybridField"
+></ng-container>
+<ng-template #hybridField>
+  <ng-container
+    *ngIf="richText; then richTextTemplate; else plainTextTemplate"
+  ></ng-container>
+  <ng-template #richTextTemplate>
+    <div [formGroup]="parentFG">
+      <ckeditor [formControlName]="name" [config]="ckeConfig"></ckeditor>
+    </div>
+    <div class="text-field" (click)="changeField(false)">
+      Plain Text
+    </div>
+  </ng-template>
+  <ng-template #plainTextTemplate>
+    <div [formGroup]="parentFG" class="plain-text-container">
+      <ng-container *ngIf="disabled; else editableDiv">
+        <div
+          class="editable"
+          #plainTextControl
+          [innerHTML]="template | safeHtml"
+        ></div>
+      </ng-container>
+      <ng-template #editableDiv>
+        <div
+          class="editable"
+          #plainTextControl
+          contenteditable="true"
+          [innerHTML]="template | safeHtml"
+          (input)="onTemplateChange($event.target.innerHTML)"
+        ></div>
+      </ng-template>
+    </div>
+    <div class="text-field" (click)="changeField(true)">
+      Rich Text
+    </div>
+  </ng-template>
+</ng-template>
+<ng-template #notHybridField>
+  <div [formGroup]="parentFG">
+    <ckeditor [formControlName]="name" [config]="ckeConfig"></ckeditor>
+  </div>
+</ng-template>
+<mat-error
+  *ngIf="parentFG.get(name).touched && parentFG.get(name).hasError('required')"
+  class="message-error"
+>
+  Message is required
+</mat-error>

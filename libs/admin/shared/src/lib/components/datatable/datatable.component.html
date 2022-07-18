@@ -1,26 +1,3 @@
-<!-- <div class="p-mb-3">
-  <p-button
-    type="button"
-    icon="pi pi-chevron-left"
-    (click)="prev()"
-    [disabled]="isFirstPage()"
-    styleClass="p-button-text"
-  ></p-button>
-  <p-button
-    type="button"
-    icon="pi pi-refresh"
-    (click)="reset()"
-    styleClass="p-button-text"
-  ></p-button>
-  <p-button
-    type="button"
-    icon="pi pi-chevron-right"
-    (click)="next()"
-    [disabled]="isLastPage()"
-    styleClass="p-button-text"
-  ></p-button>
-</div> -->
-
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"
@@ -55,27 +32,29 @@
               </div>
               <div *ngIf="isActionButtons" class="seperator"></div>
               <div formGroupName="documentActions" class="dropdown--wrapper">
-                <p-dropdown class="export"
+                <p-dropdown
+                  class="export"
                   [options]="documentActionTypes"
                   formControlName="documentActionType"
                 >
                   <ng-template let-documentActionItem pTemplate="selectedItem">
                     <img src="assets/svg/Export.svg" />
-                    <span class="databaseActionLabel"
-                      >{{ documentActionItem.label }}</span
-                    >
+                    <span class="databaseActionLabel">{{
+                      documentActionItem.label
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <div class="divider"></div>
-                <p-dropdown class="export"
+                <p-dropdown
+                  class="export"
                   [options]="documentTypes"
                   formControlName="documentType"
                 >
                   <ng-template let-documentTypeItem pTemplate="selectedItem">
                     <img src="assets/svg/CSV.svg" />
-                    <span class="databaseActionLabel"
-                      >{{ documentTypeItem.label }}</span
-                    >
+                    <span class="databaseActionLabel">{{
+                      documentTypeItem.label
+                    }}</span>
                   </ng-template>
                 </p-dropdown>
                 <button class="go" (click)="onDocumentActions()">
@@ -112,16 +91,6 @@
             </mat-chip-list>
             <img src="assets/svg/Filter-Icon.svg" />
           </div>
-          <!-- <div
-            class="button__wrapper"
-            *ngFor="let quickReplyType of quickReplyTypes"
-          >
-            <button
-              pButton
-              type="button"
-              [label]="quickReplyType.label"
-            ></button>
-          </div> -->
         </div>
       </form>
       {{ tableFG.value | json }}
@@ -134,9 +103,7 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th class="databaseTableHead"
-        pResizableColumn
-      >
+      <th class="databaseTableHead" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
@@ -163,32 +130,6 @@
           class="p-column-filter"
         />
       </th>
-      <!-- <th>
-          <input pInputText type="text" (input)="dt.filter($event.target.value, 'country.name', 'contains')" placeholder="Search by Country" class="p-column-filter">
-      </th>
-      <th>
-          <p-multiSelect [options]="representatives" placeholder="All" (onChange)="onRepresentativeChange($event)" styleClass="p-column-filter" optionLabel="name">
-              <ng-template let-option pTemplate="item">
-                  <div class="p-multiselect-representative-option">
-                      <img [alt]="option.label" src="assets/showcase/images/demo/avatar/{{option.value.image}}" width="32" style="vertical-align: middle" />
-                      <span class="p-ml-1">{{option.label}}</span>
-                  </div>
-              </ng-template>
-          </p-multiSelect>
-      </th>
-      <th>
-          <p-calendar (onSelect)="onDateSelect($event)" (onClearClick)="dt.filter('', 'date', 'equals')" [showButtonBar]="true" styleClass="p-column-filter" placeholder="Registration Date" [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
-      </th>
-      <th>
-          <p-dropdown [options]="statuses" (onChange)="dt.filter($event.value, 'status', 'equals')" styleClass="p-column-filter" placeholder="Select a Status" [showClear]="true">
-              <ng-template let-option pTemplate="item">
-                  <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
-              </ng-template>
-          </p-dropdown>
-      </th>
-      <th>
-          <input pInputText type="text" (input)="onActivityChange($event)" placeholder="Minimum" class="p-column-filter" >
-      </th> -->
     </tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->

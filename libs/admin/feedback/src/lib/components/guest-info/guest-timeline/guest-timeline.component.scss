@@ -1,0 +1,12 @@
+@import 'main';
+
+:host ::ng-deep {
+  .mat-tab-labels {
+    background-color: #f4f5f7 !important;
+    border-bottom: solid 1px #e0e0e0;
+  }
+  .mat-tab-label-active {
+    border-bottom: 2px solid $black !important;
+    color: $black;
+  }
+}

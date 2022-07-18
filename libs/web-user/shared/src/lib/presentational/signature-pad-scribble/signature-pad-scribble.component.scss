@@ -5,13 +5,20 @@
   display: flex;
   justify-content: flex-end;
   border-bottom: 1px solid grey;
+  width: 80%;
+  position: absolute;
+  bottom: 40px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 }
 
 .signContainer {
-  margin: $margin-medium $margin-medium 0 $margin-medium;
+  margin: 35px 35px 0 35px;
   padding: $padding-large;
   background-color: rgb(243, 241, 241);
   border-radius: $border-radius-small;
+  height: 300px;
   @media only screen and (max-width: 780px) {
     padding: 5px;
     margin: 5px;
@@ -22,4 +29,14 @@
   cursor: pointer;
   font-size: 32px;
   font-weight: bold;
+}
+
+:host ::ng-deep .mat-dialog-container {
+  padding: 0px !important;
+}
+
+
+.sign-pad{
+   width: 85%; 
+   margin: 0 auto;
 }

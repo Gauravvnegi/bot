@@ -1,0 +1,49 @@
+<div class="container" (click)="openTableModal()">
+  <div class="title-container">
+    <div class="icon">
+      <img
+        [src]="guestConfig.images.payment.url"
+        [alt]="guestConfig.images.payment.alt"
+      />
+    </div>
+    <div class="stat-title">{{ 'payment.title' | translate }}</div>
+    <div class="info-icon">
+      <img
+        [src]="guestConfig.images.tooltip.url"
+        [alt]="guestConfig.images.tooltip.alt"
+      />
+      <div class="tooltip">
+        <span class="arrow"> </span> {{ 'payment.tooltip' | translate }}
+      </div>
+    </div>
+  </div>
+  <div class="graph-container">
+    <div class="graph">
+      <canvas
+        baseChart
+        class="graph-base-chart"
+        [data]="chart.Data"
+        [labels]="chart.Labels"
+        [chartType]="chart.Type"
+        [legend]="chart.Legend"
+        [colors]="chart.Colors"
+        [options]="chart.Options"
+      >
+      </canvas>
+    </div>
+    <div>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+    <div class="detail-container">
+      <div class="val">{{ payment?.totalCount }}</div>
+      <div class="label">{{ 'total_users' | translate }}</div>
+    </div>
+  </div>
+  <div class="stat-vals-container">
+    <div class="stat-val-container" *ngFor="let stat of payment?.statistics">
+      <div class="icon" [style.background-color]="stat.color"></div>
+      <div class="stat-val">{{ stat.value }}</div>
+      <div class="stat-lable">{{ stat.label }}</div>
+    </div>
+  </div>
+</div>

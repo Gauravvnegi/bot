@@ -1,5 +1,4 @@
 @import 'main';
-
 .wrapper {
   padding: $padding20;
   background-color: white;
@@ -28,7 +27,7 @@
   &-form {
     padding-left: 20px;
     // border-bottom: 2px solid rgb(61, 187, 230, 0.1);
-    .feilds {
+    .fields {
       display: flex;
       align-items: center;
       margin-top: 2%;
@@ -38,7 +37,7 @@
         padding-left: 13%;
         margin-bottom: 20px;
       }
-      .feild {
+      .field {
         display: flex;
         align-items: center;
         width: 40%;
@@ -72,7 +71,6 @@
         height: 150px;
         width: 200px;
       }
-
       // .button {
       //   border-radius: 20px;
       //   padding: 10px 35px;
@@ -83,7 +81,6 @@
       //   font-size: $font14;
       //   margin-right: 15px;
       //   border: 1.5px solid $primary-purple;
-
       //   &:hover {
       //     cursor: pointer;
       //     background-color: $primary-purple;
@@ -153,8 +150,8 @@
   }
 }
 
-:host ::ng-deep .upload__box{
- border: 1px dashed #d9d9d9;
+:host ::ng-deep .upload__box {
+  border: 1px dashed #d9d9d9;
 }
 
 :host ::ng-deep .mat-select-value-text {

@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="heading">
+    <p>{{ template.topicName }}</p>
+  </div>
+  <div class="template-container">
+    <div class="topic-cards" *ngFor="let t of template.templates">
+      <div class="card" (click)="selectTemplate(t.htmlTemplate)">
+        <div [innerHTML]="t.htmlTemplate" class="card__content"></div>
+      </div>
+      <div class="template-name">
+        {{ t.name }}
+      </div>
+    </div>
+  </div>
+  <div class="show-button" (click)="loadData()">
+    <ng-container *ngIf="template.templates?.length < template.totalTemplate">
+      <button class="button">
+        {{ 'showMore' | translate }}
+      </button>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<div>
+  <div class="upload__box">
+    <div class="before-upload">
+      <img src="assets/svg/upload.svg" />
+      <p class="upload-label">Upload Video</p>
+    </div>
+    <img
+      file-upload-css
+      loading="'lazy'"
+      [src]="url"
+      class="upload__box__child"
+      [style.display]="url ? 'block' : 'none'"
+    />
+    <input
+      #fileInput
+      type="file"
+      accept="video/*"
+      (click)="fileInput.value = null"
+      [attr.disabled]="isDisable ? true : null"
+      (change)="onSelectFile($event)"
+      class="input-upload"
+    />
+    <input type="hidden" />
+    <mat-label></mat-label>
+  </div>
+  <ng-container *ngIf="uploadStatus">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </ng-container>
+</div>

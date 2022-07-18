@@ -6,11 +6,15 @@
   }
 }
 
+:host ::ng-deep .slick-track {
+  width: 6000px !important;
+}
+
 :host ::ng-deep .draggable {
   margin-top: 3%;
+  height: 51vh;
   .slick-track {
-    height: 49vh;
-    min-width: 1300px;
+    height: 16vh;
     display: inline-block;
     div:focus {
       border: none;
@@ -59,10 +63,11 @@
   }
   .slider__text {
     padding: $padding-small;
+    min-height: 40px;
     .label {
       font-size: $font-medium;
       font-weight: $bolder;
-      margin-bottom: $margin-small;
+      // margin-bottom: $margin-small;
     }
     .description {
       font-size: $font-responsive-small;
@@ -106,7 +111,7 @@
   &::after {
     content: '';
     position: absolute;
-    bottom: -26px;
+    bottom: -15px;
     right: 46%;
     width: 0;
     height: 0;
@@ -129,7 +134,7 @@
   z-index: 2;
   &::before {
     font-size: 47px;
-    color: lightgray;
+    color: $primary-blue;
     @media only screen and (max-width: $M) {
       font-size: 30px;
     }
@@ -145,7 +150,7 @@
   z-index: 2;
   &::before {
     font-size: 47px;
-    color: lightgray;
+    color: $primary-blue;
     @media only screen and (max-width: $M) {
       font-size: 30px;
     }
@@ -157,7 +162,7 @@
   }
 }
 
-:host ::ng-deep .slick-dotted.slick-slider{
+:host ::ng-deep .slick-dotted.slick-slider {
   margin-bottom: 0;
 }
 
@@ -183,13 +188,13 @@
   }
 }
 
-:host ::ng-deep .slick-dotted.slick-slider{
+:host ::ng-deep .slick-dotted.slick-slider {
   @media only screen and (max-width: $M) {
     margin-bottom: 0px;
   }
 }
 
-:host ::ng-deep .activated{
+:host ::ng-deep .activated {
   border: 2px solid $primary-blue !important;
   .slider__text {
     background-color: $primary-blue !important;
@@ -197,12 +202,90 @@
   }
 }
 
-:host ::ng-deep .tick{
+:host ::ng-deep .tick {
   position: absolute;
   top: 8px;
   right: 8px;
-  img{
+  img {
     height: $full-width;
     width: $full-width;
   }
 }
+
+:host ::ng-deep .ngx-timepicker-control__input {
+  background: transparent !important;
+}
+
+.tab-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  .tab-item {
+    font-size: 18px;
+    font-weight: 600;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #121212;
+    margin: 5px 25px 5px 10px;
+    cursor: pointer;
+  }
+  
+}
+.more-services {
+  font-size: 18px;
+  font-weight: 600;
+  width: 10rem;
+  padding: 8px 15px 7px;
+  border-radius: 5px;
+  border: 1px solid #d9d9d9;
+}
+
+
+.tab-active {
+  border-bottom: 1px solid #ff9600;
+  color: #ff9600 !important;
+  margin-bottom: 10px;
+  transform: scale(1.1);
+}
+
+:host ::ng-deep .mat-form-field-type-mat-select .mat-form-field-label {
+  font-size: 16px;
+}
+:host ::ng-deep .mat-form-field-label {
+  color: #121212 !important;
+  font-weight: 600;
+}
+:host
+  ::ng-deep
+  .ng-trigger
+  ng-trigger-transformPanel
+  mat-select-panel
+  mat-primary {
+  height: 75px;
+}
+
+:host ::ng-deep .more-services > .mat-form-field-wrapper > .mat-form-field-underline {
+  display: none !important;
+  max-height: 80px !important;
+
+}
+ :host::ng-deep .mat-form-field-type-mat-select .mat-form-field-label {
+   border: 1px solid #121212;
+ }
+
+
+ 
+
+:host ::ng-deep .more-services > .mat-select-panel-wrap > .mat-select-panel  {
+  display: none !important;
+  max-height: 80px !important;
+
+}
+
+:host ::ng-deep .more-services >.mat-select-trigger > .mat-select-value >.mat-select-placeholder{
+color: #121212 !important;
+}
+

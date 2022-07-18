@@ -3,9 +3,9 @@
     <div class="editForm-header-items">
       <div class="editForm-header-items-note">
         <mat-select
-          style="width: 110px;"
           formControlName="status"
           placeholder="Select status"
+          class="width"
         >
           <mat-option [value]="item.value" *ngFor="let item of statusOptions">{{
             item.label

@@ -22,7 +22,7 @@ export class CardDirective implements OnInit {
       'active',
     ]);
 
-    let subscribedStatus = this.paths.map((path) =>
+    const subscribedStatus = this.paths.map((path) =>
       get(subscription, path, false)
     );
 

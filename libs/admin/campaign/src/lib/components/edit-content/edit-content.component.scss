@@ -1,0 +1,99 @@
+@import 'main';
+
+.ck-editor {
+  width: 100%;
+  min-height: 310px;
+  margin-top: -20px;
+  .info-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #484848;
+    margin-bottom: 3px;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.96px;
+    text-align: left;
+  }
+  &__container {
+    width: 100%;
+    position: relative;
+    .controls {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.25);
+      .btn {
+        margin: 0 17px;
+        img {
+          height: 67px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.fields {
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+  width: 100%;
+  justify-content: space-between;
+  @media (max-width: $tablet) {
+    flex-wrap: wrap;
+    gap: 60px;
+  }
+  .field {
+    display: flex;
+    margin-right: 1.5%;
+    width: 45%;
+    @media (max-width: $tablet) {
+      @include width(42.6%);
+    }
+    .mat-label {
+      width: 150px;
+      color: #b5b5c3;
+      font-size: $font14;
+    }
+  }
+}
+
+.add-content {
+  height: 157px;
+  width: 100%;
+  opacity: 0.4;
+  border-radius: 4px;
+  border: solid 1px #707070;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  cursor: pointer;
+  &__btn {
+    height: 53px;
+    border: solid 1px #707070;
+    border-radius: 40px;
+    padding: 14px 30px;
+    margin-top: 20px;
+  }
+}
+
+:host ::ng-deep mat-form-field {
+  width: 100%;
+}
+
+.full-width {
+  width: 100% !important;
+}

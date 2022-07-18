@@ -16,8 +16,8 @@ import { MediaChatComponent } from './components/media-chat/media-chat.component
 import { MessageBoxComponent } from './components/message-box/message-box.component';
 import { WhatsappComponent } from './components/whatsapp/whatsapp.component';
 import { MessageService } from 'primeng/api';
-import { LinkDetector } from 'libs/shared/pipes/linkDetector.pipe';
 import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
+import { LinkDetector } from 'libs/admin/shared/src/lib/pipes/linkDetector.pipe';
 
 @NgModule({
   imports: [
@@ -40,7 +40,6 @@ import { RequestService } from 'libs/admin/request/src/lib/services/request.serv
     GuestDetailMapComponent,
     MediaChatComponent,
     MessageBoxComponent,
-    LinkDetector,
   ],
   exports: [
     ChatListComponent,

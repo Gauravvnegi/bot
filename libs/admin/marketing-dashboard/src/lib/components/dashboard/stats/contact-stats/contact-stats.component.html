@@ -1,0 +1,83 @@
+<div class="contact">
+  <div class="contact-stats-header">
+    {{ 'contact-stats.title' | translate }}
+  </div>
+  <div class="contact-graph-wraper">
+    <div
+      class="contact-graph-wraper-graph"
+      *ngFor="let item of contactStats?.stats"
+    >
+      <circle-progress
+        [radius]="item.radius"
+        [percent]="item.score"
+        [space]="-5"
+        [outerStrokeWidth]="5"
+        [innerStrokeWidth]="5"
+        [outerStrokeColor]="item.colorCode"
+        [innerStrokeColor]="'#e7e8ea'"
+        [outerStrokeLinecap]="'square'"
+        [animation]="true"
+        [animationDuration]="300"
+        [showTitle]="false"
+        [showSubtitle]="false"
+        [showUnits]="false"
+        [showZeroOuterStroke]="false"
+      ></circle-progress>
+    </div>
+    <div class="contact-graph-wraper-total">
+      <div class="contact-graph-wraper-total-number">
+        {{ contactStats?.totalContact }}
+      </div>
+      <div class="contact-graph-wraper-total-text">
+        {{ 'contact-stats.total' | translate }}
+      </div>
+    </div>
+    <div class="stat-val-container">
+      <div
+        class="stat-val"
+        *ngFor="let item of contactStats?.stats"
+        [style.border-left]="'5px solid ' + item.colorCode"
+      >
+        <div class="label">{{ item.label }}</div>
+        <div class="value">
+          <div>
+            {{ item.score }}
+          </div>
+          <div
+            class="value__percent"
+            [ngStyle]="
+              item.comparisonPercent >= 0
+                ? { color: 'green' }
+                : { color: 'red' }
+            "
+          >
+            (
+            <div class="value__percent__width">
+              {{ item.comparisonPercent }}
+            </div>
+            %)
+            <ng-container
+              *ngIf="item.comparisonPercent >= 0; then uparrow; else down"
+            >
+            </ng-container>
+            <ng-template #uparrow>
+              <img
+                [src]="adminSharedConfig.img.upArrow.url"
+                [alt]="adminSharedConfig.img.upArrow.alt"
+              />
+            </ng-template>
+            <ng-template #down>
+              <img
+                [src]="adminSharedConfig.img.downArrow.url"
+                [alt]="adminSharedConfig.img.downArrow.alt"
+              />
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contact-footer">
+    {{ 'contact-stats.in90Days' | translate }}
+  </div>
+</div>

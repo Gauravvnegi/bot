@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -18,7 +18,7 @@ import { SelectOption } from '../../../types/dashboard.type';
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.scss'],
 })
-export class NotificationsComponent implements OnInit {
+export class NotificationsComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   @Input() hotelId: string;
   @Input() channelOptions: SelectOption[];

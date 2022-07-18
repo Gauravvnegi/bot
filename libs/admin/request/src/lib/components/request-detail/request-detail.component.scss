@@ -3,21 +3,21 @@
 .form-elements {
   min-width: 110px;
   margin-right: 10px;
-  padding: 14px;
+  padding: 10px 14px;
   font-size: 16px;
-  color: #002046;
+  color: $dark-blue;
   letter-spacing: 0.32px;
-  border: 1px solid #ced5d9;
+  border: 1px solid $c-gray-81;
   border-radius: 5px;
 
   ::placeholder {
-    color: #9eaeb8;
+    color: $primary-gray;
   }
 }
 
 table {
   border-radius: 5px;
-  border: solid 1px #e5e9f2;
+  border: solid 1px $c-gray-91;
   width: 100%;
 }
 
@@ -35,23 +35,23 @@ td {
   font-style: normal;
   line-height: normal;
   letter-spacing: 0.72px;
-  color: #002046;
+  color: $dark-blue;
 }
 
 .priority-low {
-  background-color: #119e0c;
+  background-color: $priority-low;
 }
 
 .priority-medium {
-  background-color: #25a2e2;
+  background-color: $priority-medium;
 }
 
 .priority-high {
-  background-color: #f8b633;
+  background-color: $priority-high;
 }
 
 .priority-asap {
-  background-color: #ce0c0c;
+  background-color: $priority-asap;
 }
 .request-items {
   height: 100%;
@@ -61,7 +61,7 @@ td {
     align-items: center;
     height: 65px;
     padding: 15px;
-    border-bottom: solid 1px #e0e0e0;
+    border-bottom: solid 1px $border;
     &-left {
       display: flex;
       align-items: center;
@@ -69,7 +69,7 @@ td {
         height: 35px;
         width: 35px;
         border-radius: 50%;
-        background-color: chocolate;
+        background-color: $chocolate;
         margin-right: 15px;
         justify-content: center;
         align-items: center;
@@ -84,7 +84,7 @@ td {
         line-height: normal;
         letter-spacing: 0.84px;
         text-align: left;
-        color: #002046;
+        color: $dark-blue;
       }
     }
     &-right {
@@ -94,6 +94,7 @@ td {
   }
   &-body {
     height: calc(100% - 65px);
+    overflow: auto;
     padding: 20px 25px;
     font-family: Roboto;
     font-stretch: normal;
@@ -103,29 +104,29 @@ td {
       font-size: 24px;
       font-weight: bold;
       letter-spacing: 1.44px;
-      color: #002046;
+      color: $dark-blue;
       margin-bottom: 10px;
     }
     &-subtitle {
       font-size: 16px;
       font-weight: normal;
       letter-spacing: 0.96px;
-      color: #909090;
+      color: $c-gray-55;
       margin-bottom: 30px;
     }
     &-card {
       margin-bottom: 20px;
       table {
         .tr {
-          border-bottom: 1px solid #e5e9f2;
-          background-color: #f5f6fa;
+          border-bottom: 1px solid $c-gray-91;
+          background-color: $c-gray-99;
         }
       }
       &-status {
         padding: 6px 17px 6px 18px;
         border-radius: 5px;
         width: fit-content;
-        color: #fff;
+        color: $white;
         font-weight: bold;
         margin-top: 15px;
       }
@@ -133,8 +134,8 @@ td {
         margin-top: 15px;
         padding: 6px 14px 6px 13px;
         border-radius: 1000px;
-        background-color: #f8dd8c;
-        color: #ff8f00;
+        background-color: $room-type;
+        color: $initiated-2;
         width: fit-content;
       }
     }
@@ -142,15 +143,15 @@ td {
 }
 
 .sla-new {
-  color: #119e0c;
+  color: $priority-low;
 }
 
 .sla-pending {
-  color: #f8b633;
+  color: $priority-high;
 }
 
 .sla-timeout {
-  color: #ce0c0c;
+  color: $priority-asap;
 }
 
 .no-data {
@@ -187,4 +188,8 @@ td {
     text-align: left;
     color: #c5c5c5;
   }
+}
+.man-icon {
+  cursor: pointer;
+  padding-left: 15px;
 }

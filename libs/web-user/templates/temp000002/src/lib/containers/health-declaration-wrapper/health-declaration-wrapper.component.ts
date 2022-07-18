@@ -9,7 +9,7 @@ import { HealthDeclarationWrapperComponent as BaseHealthDeclarationWrapperCompon
 import { Router, ActivatedRoute } from '@angular/router';
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 @Component({
   selector: 'hospitality-bot-health-declaration-wrapper',

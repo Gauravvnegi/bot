@@ -1,0 +1,40 @@
+<div class="wrapper">
+  <header class="wrapper-header">
+    <div class="title">
+      {{ 'mail.send' | translate }}
+    </div>
+    <div (click)="close()" class="close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </header>
+  <div class="body" [formGroup]="parentFG">
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">
+          {{ 'mail.add' | translate }}
+        </mat-label>
+        <div class="width">
+          <hospitality-bot-email-chip-list
+            [parentFG]="parentFG"
+            [name]="'testEmails'"
+          ></hospitality-bot-email-chip-list>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-wrapper">
+    <div class="cancel" (click)="close()">
+      <div class="cancel__text">{{ 'cancel' | translate }}</div>
+    </div>
+    <div
+      class="send"
+      (click)="sendMail()"
+      [ngClass]="{ active: !isSending, disabled: isSending }"
+    >
+      <div class="send__text">
+        <i *ngIf="isSending" class="fa fa-spinner fa-spin"></i>
+        {{ isSending ? 'Sending' : 'Send' }}
+      </div>
+    </div>
+  </div>
+</div>

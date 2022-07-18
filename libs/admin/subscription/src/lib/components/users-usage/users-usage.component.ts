@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 @Component({
   selector: 'hospitality-bot-users-usage',

@@ -157,7 +157,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     if (this.guestsFA.controls.length > 0) {
       this.guestsFA.controls.forEach((guestFG: FormGroup, index) => {
         guestFG.addControl('documents', new FormArray([]));
-        let controlFA = guestFG.get('documents') as FormArray;
+        const controlFA = guestFG.get('documents') as FormArray;
         //improper check ? what if i manipulate the guest index
         this.detailsData.guestDetails.guests[index].documents.forEach((doc) => {
           controlFA.push(this.getDocumentFG());
@@ -190,12 +190,12 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   updateDocumentVerificationStatus(status, isConfirmALL = false) {
-    if (status == 'REJECT' && !this.selectedGuestGroup.get('remarks').value) {
+    if (status === 'REJECT' && !this.selectedGuestGroup.get('remarks').value) {
       this._snackBarService.openSnackBarAsText('Please enter remarks');
       return;
     }
 
-    let data = this.mapDocumentVerificationData(status, isConfirmALL);
+    const data = this.mapDocumentVerificationData(status, isConfirmALL);
 
     this._reservationService
       .updateStepStatus(
@@ -276,8 +276,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   downloadDocs(documents) {
-    let urls = [];
-    let fileNames = [];
+    const urls = [];
+    const fileNames = [];
     const guest = this.detailsData.guestDetails.guests.filter(
       (data) => data.id === this.selectedGuestId
     )[0];
@@ -285,7 +285,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     documents.forEach((doc) => {
       urls.push(doc.frontUrl);
       fileNames.push(`${name}_${doc.documentType}_frontURL`);
-      if (doc.documentType != 'VISA') {
+      if (doc.documentType !== 'VISA') {
         urls.push(doc.backUrl);
         fileNames.push(`${name}_${doc.documentType}_backURL`);
       }

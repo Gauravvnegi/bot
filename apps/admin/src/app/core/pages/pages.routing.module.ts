@@ -5,8 +5,8 @@ import { PagesComponent } from './containers/pages/pages.component';
 import { DashboardComponent } from '@hospitality-bot/admin/dashboard';
 
 import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
-import { FeedbackConfigResolver } from './resolvers/feedback-config.resolver';
 import { LoadGuard } from '../guards/load-guard';
+import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 
 const appRoutes: Route[] = [
   {
@@ -14,7 +14,6 @@ const appRoutes: Route[] = [
     component: PagesComponent,
     resolve: {
       adminDetails: AdminDetailResolver,
-      feedbackConfig: FeedbackConfigResolver,
     },
     children: [
       {
@@ -28,14 +27,6 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/conversation').then(
             (m) => m.AdminConversationModule
           ),
-      },
-      {
-        path: 'package',
-        loadChildren: () =>
-          import('@hospitality-bot/admin/packages').then(
-            (m) => m.AdminPackagesModule
-          ),
-        canActivate: [LoadGuard],
       },
       {
         path: 'covid',
@@ -82,6 +73,22 @@ const appRoutes: Route[] = [
         pathMatch: 'full',
         canActivate: [LoadGuard],
       },
+      {
+        path: 'library',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/library').then(
+            (m) => m.AdminLibraryModule
+          ),
+      },
+      // {
+      //   path: 'marketing',
+      //   loadChildren: () =>
+      //     import('@hospitality-bot/admin/marketing').then(
+      //       (m) => m.AdminMarketingModule
+      //     ),
+      // },
+      { path: '**', redirectTo: '404' },
+      { path: '404', component: DashboardErrorComponent },
     ],
   },
 ];

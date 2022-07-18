@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { dashboard } from '../../../constants/dashboard';
@@ -11,10 +11,10 @@ import { ReservationDatatableModalComponent } from '../../modal/reservation-data
   templateUrl: './arrivals-stats.component.html',
   styleUrls: ['./arrivals-stats.component.scss'],
 })
-export class ArrivalsStatisticsComponent implements OnInit {
+export class ArrivalsStatisticsComponent implements OnInit, OnChanges {
   @Input() arrivals: Arrivals;
 
-  progress: number = 0;
+  progress = 0;
   constructor(private _modalService: ModalService) {}
 
   modalData = {

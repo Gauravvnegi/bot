@@ -1,0 +1,55 @@
+{
+  "datatable": {
+    "no_data": "No data available in table",
+    "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries"
+  },
+
+  "formFieldLabels":{
+    "name":"Name:",
+    "type":"Type:",
+    "description":"Description:",
+    "active":"Active:"
+    },
+
+"type":{
+  "image":"Image",
+  "video":"Video"
+},
+
+"active":{
+  "enable":"Enable",
+  "disable":"Disable"
+},
+
+  "createAsset": "+Create Asset",
+
+  "assetForm": {
+    "createAsset": "Create Asset",
+    "editAsset": "Edit Asset"
+  },
+
+  "uploadMessage": "Recommended Ratio : 16:9 | 3MB Max Size",
+
+  "validationMessage": {
+    "name": "Name is required",
+    "type": "Type is required",
+    "description": "Description is required"
+  },
+  "message": {
+    "success": {
+      "asset_created": "Asset Created Successfully.",
+      "asset_updated": "Asset Updated Successfully.",
+      "asset_status_updated": "Status updated Successfully.",
+      "asset_url":"Asset Url Copied.",
+      "upload":"Asset Uploaded Successfully"
+    },
+    "error": {
+      "asset_not_created": "Asset Not Created.",
+      "asset_not_updated": "Asset Not Updated.",
+      "asset_status_update_fail": "Status Not Updated.",
+      "exportCSV_fail": "Export CSV Failed.",
+      "loading_fail": "Loading Fail.",
+      "upload_fail": "Asset Not Uploaded"
+    }
+  }
+}

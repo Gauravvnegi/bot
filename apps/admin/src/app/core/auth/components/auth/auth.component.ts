@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { authConstants } from '../../constants/auth';
 import { ManagingOption } from '../../types/auth.type';
+import { Slick } from 'ngx-slickjs';
 
 @Component({
   selector: 'admin-auth',
@@ -10,6 +11,16 @@ import { ManagingOption } from '../../types/auth.type';
 })
 export class AuthComponent implements OnInit {
   authConstants = authConstants;
+
+  config: Slick.Config = {
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    dots: true,
+    autoplay: true,
+    autoplaySpeed: 1000, 
+  }
 
   constructor() {}
 
@@ -32,4 +43,9 @@ export class AuthComponent implements OnInit {
   get currentDate(): string {
     return DateService.getCurrentDateWithFormat('YYYY');
   }
+
+  getArray(count: number) {
+    return new Array(count)
+  }
+
 }

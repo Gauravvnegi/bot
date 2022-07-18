@@ -1,7 +1,7 @@
 <div class="container">
   <div class="header">
     <div class="button raise-request-btn">
-      Raise Request
+      {{ 'raiseRequest' | translate }}
     </div>
     <div (click)="close({ status: false })" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -10,7 +10,11 @@
   <div class="body">
     <div class="form-elements-groups" [formGroup]="searchFG">
       <div class="form-elements-container full-width">
-        <img class="icon" src="assets/svg/room.svg" alt="room" />
+        <img
+          class="icon"
+          [src]="requestConfig.images.room.url"
+          [alt]="requestConfig.images.room.alt"
+        />
         <input
           matInput
           type="text"
@@ -25,12 +29,16 @@
           requestFG.get('roomNo').hasError('required')
         "
       >
-        Room No is required
+        {{ 'error.roomNoRequired' | translate }}
       </mat-error>
     </div>
     <div class="form-elements-groups" [formGroup]="requestFG">
       <div class="form-elements-container">
-        <img class="icon" src="assets/svg/user-01.svg" alt="firstName" />
+        <img
+          class="icon"
+          [src]="requestConfig.images.user.url"
+          [alt]="requestConfig.images.user.alt"
+        />
         <input
           matInput
           class="form-elements"
@@ -44,11 +52,15 @@
             requestFG.get('firstName').hasError('required')
           "
         >
-          First Name is required
+          {{ 'error.firstNameRequired' | translate }}
         </mat-error>
       </div>
       <div class="form-elements-container">
-        <img class="icon" src="assets/svg/user-01.svg" alt="LastName" />
+        <img
+          class="icon"
+          [src]="requestConfig.images.user.url"
+          [alt]="requestConfig.images.user.alt"
+        />
         <input
           matInput
           class="form-elements"
@@ -61,11 +73,15 @@
             requestFG.get('lastName').hasError('required')
           "
         >
-          Last Name is required
+          {{ 'error.lastNameRequired' | translate }}
         </mat-error>
       </div>
       <div class="form-elements-container">
-        <img class="icon" src="assets/svg/user-01.svg" alt="Channel" />
+        <img
+          class="icon"
+          [src]="requestConfig.images.user.url"
+          [alt]="requestConfig.images.user.alt"
+        />
         <input
           type="text"
           class="form-elements"
@@ -92,14 +108,14 @@
             requestFG.get('itemName').hasError('required')
           "
         >
-          Item Name is required
+          {{ 'error.itemNameRequired' | translate }}
         </mat-error>
       </div>
       <div class="form-elements-container">
         <img
           class="icon"
-          src="assets//images/shopping-list.png"
-          alt="Channel"
+          [src]="requestConfig.images.shopping.url"
+          [alt]="requestConfig.images.shopping.alt"
         />
         <mat-select
           class="form-elements"
@@ -119,11 +135,15 @@
             requestFG.get('itemName').hasError('required')
           "
         >
-          Item Code is required
+          {{ 'error.itemCodeRequired' | translate }}
         </mat-error>
       </div>
       <div class="form-elements-container">
-        <img class="icon" src="assets/images/pyramid.png" alt="Channel" />
+        <img
+          class="icon"
+          [src]="requestConfig.images.pyramid.url"
+          [alt]="requestConfig.images.pyramid.alt"
+        />
         <mat-select
           class="form-elements"
           placeholder="Priority Code*"
@@ -141,11 +161,15 @@
             requestFG.get('priority').hasError('required')
           "
         >
-          Priority Code is required
+          {{ 'error.priorityCodeRequired' | translate }}
         </mat-error>
       </div>
       <div class="form-elements-container">
-        <img class="icon" src="assets/images/hourglass.png" alt="Channel" />
+        <img
+          class="icon"
+          [src]="requestConfig.images.hourglass.url"
+          [alt]="requestConfig.images.hourglass.alt"
+        />
         <mat-select
           class="form-elements"
           placeholder="Job Duration"
@@ -155,12 +179,16 @@
           <mat-option
             *ngFor="let item of [].constructor(60); let i = index"
             [value]="i + 1"
-            >{{ i + 1 }} minute</mat-option
+            >{{ i + 1 }} {{ 'minute' | translate }}</mat-option
           >
         </mat-select>
       </div>
       <div class="form-elements-container full-width">
-        <img class="icon" src="assets/svg/comments.svg" alt="description" />
+        <img
+          class="icon"
+          [src]="requestConfig.images.comment.url"
+          [alt]="requestConfig.images.comment.alt"
+        />
         <textarea
           formControlName="remarks"
           class="form-elements"
@@ -169,7 +197,6 @@
         ></textarea>
       </div>
     </div>
-    
   </div>
   <div class="request-popup-btnwrap">
     <div

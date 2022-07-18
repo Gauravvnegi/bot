@@ -1,6 +1,6 @@
 import { get, set } from 'lodash';
 import * as moment from 'moment';
-import { DateService } from '../../../../../shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { GuestRole } from '../constants/guest';
 
 export interface Deserializable {
@@ -22,7 +22,7 @@ export class Details implements Deserializable {
   feedbackDetails: FeedbackDetails;
 
   deserialize(input: any, timezone) {
-    let hotelNationality = input.hotel.address.countryCode;
+    const hotelNationality = input.hotel.address.countryCode;
 
     this.guestDetails = new GuestDetailDS().deserialize(
       input.guestDetails,
@@ -136,7 +136,7 @@ export class GuestDetailDS implements Deserializable {
 
   deserialize(input: any, hotelNationality: string) {
     this.guests = new Array<GuestDetailsConfig>();
-    let keys = Object.keys(input);
+    const keys = Object.keys(input);
 
     keys.forEach((key) => {
       if (!['allGuest', 'secondaryGuest', 'pmsSharerGuest'].includes(key)) {
@@ -155,13 +155,13 @@ export class GuestDetailDS implements Deserializable {
             )
           );
         } else {
-          let role =
+          const role =
             key === 'sharerGuests'
               ? GuestRole.sharer
               : key === 'accompanyGuests'
               ? GuestRole.accompany
               : GuestRole.kids;
-          let label = key === 'sharerGuests' ? 'Sharer' : 'Accomanied / Kids';
+          const label = key === 'sharerGuests' ? 'Sharer' : 'Accomanied / Kids';
           input[key] &&
             input[key].forEach((guest) => {
               this.guests.push(
@@ -212,7 +212,7 @@ export class GuestDetailsConfig implements Deserializable {
     const contactDetails = new ContactDetailsConfig().deserialize(
       input.contactDetails
     );
-    let documents = new Array<DocumentDetailsConfig>();
+    const documents = new Array<DocumentDetailsConfig>();
     input.documents.forEach((document) => {
       documents.push(new DocumentDetailsConfig().deserialize(document));
     });
@@ -350,7 +350,7 @@ export class StayDetailsConfig implements Deserializable {
       set(
         {},
         'roomNumber',
-        get(input, ['roomNumber']) == 0 ? '' : get(input, ['roomNumber'])
+        get(input, ['roomNumber']) === 0 ? '' : get(input, ['roomNumber'])
       ),
       set({}, 'special_comments', get(input, ['comments'])),
       set({}, 'checkin_comments', get(input, ['checkInComment']))

@@ -1,14 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { DateService } from '@hospitality-bot/shared/utils';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import * as FileSaver from 'file-saver';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { WhatsappMessageAnalyticsComponent } from '../whatsapp-message-analytics/whatsapp-message-analytics.component';
 import { Tab } from '../../models/tab.model';
 import { AnalyticsService } from '../../services/analytics.service';
-import * as FileSaver from 'file-saver';
+import { WhatsappMessageAnalyticsComponent } from '../whatsapp-message-analytics/whatsapp-message-analytics.component';
 
 @Component({
   selector: 'hospitality-bot-message-analytics',
@@ -18,7 +18,7 @@ import * as FileSaver from 'file-saver';
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
   ],
 })
-export class MessageAnalyticsComponent implements OnInit {
+export class MessageAnalyticsComponent implements OnInit, OnDestroy {
   documentActionTypes = [
     {
       label: `Export`,
@@ -37,7 +37,7 @@ export class MessageAnalyticsComponent implements OnInit {
   hotelId: string;
   $subscription = new Subscription();
   analyticsFG: FormGroup;
-  tabFilterIdx: number = 0;
+  tabFilterIdx = 0;
 
   tabFilterItems = [
     new Tab({
@@ -68,7 +68,7 @@ export class MessageAnalyticsComponent implements OnInit {
   listenForGlobalFilters() {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
+        const calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,

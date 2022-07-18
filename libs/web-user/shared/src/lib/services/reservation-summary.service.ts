@@ -49,9 +49,9 @@ export class ReservationSummaryService {
 
   private getValuefromPath(component: any, formValues: any) {
     const searchPaths: string[] = this.convertStringToArray(component.path);
-    let value: string = '';
+    let value = '';
 
-    if (component.pathType == 'object') {
+    if (component.pathType === 'object') {
       value = '';
 
       find(formValues, (formValue) => {
@@ -65,13 +65,11 @@ export class ReservationSummaryService {
       });
     }
 
-    if (component.pathType == 'array') {
+    if (component.pathType === 'array') {
       value = '';
 
       for (const formValue of formValues) {
-        const arrayPropPath: string = this.getArrayFieldName(
-          component.arrayPropPath
-        );
+        const arrayPropPath = this.getArrayFieldName(component.arrayPropPath);
         const nestedArrayField = this.getNestedProp(formValue, arrayPropPath);
 
         /* for (const val of nestedArrayField) {

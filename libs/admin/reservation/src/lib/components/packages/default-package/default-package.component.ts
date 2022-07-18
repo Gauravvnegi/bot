@@ -21,7 +21,7 @@ export class DefaultPackageComponent implements OnInit {
   ngOnInit(): void {}
 
   updatePackageStatus(status) {
-    let data = {
+    const data = {
       stepName: 'PACKAGE',
       state: status,
       remarks: this.paidAmenityFG.get('remarks').value,

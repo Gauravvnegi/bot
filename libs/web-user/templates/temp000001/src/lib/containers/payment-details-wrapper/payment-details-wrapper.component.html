@@ -1,12 +1,24 @@
 <div *ngIf="isRendered">
   <div class="container" *ngIf="isConfigLoaded">
     <mat-tab-group #matTab dynamicHeight>
-      <mat-tab *ngFor="let header of hotelPaymentConfig.paymentHeaders">
+      <mat-tab
+        *ngFor="let header of hotelPaymentConfig.paymentHeaders; let i = index"
+      >
         <ng-template mat-tab-label>
-          <div [ngClass]="hotelPaymentConfig.paymentHeaders?.length < 2 ? 'custom-tab full_width' : 'custom-tab'">
+          <div
+            [ngClass]="
+              hotelPaymentConfig.paymentHeaders?.length < 2
+                ? 'custom-tab full_width'
+                : 'custom-tab'
+            "
+          >
             <div>
-              <img [src]="header.imageUrl" style="height: 53px" class="svg-payment" />
-              <!-- <svg-icon [src]="header.imageUrl" class="svg-payment"></svg-icon> -->
+              <img
+                [src]="header.imageUrl"
+                style="height: 53px;"
+                class="svg-payment"
+                [alt]="'image' + i"
+              />
             </div>
             <div class="inner-label">
               <div class="type-label">
@@ -28,9 +40,7 @@
         </ng-template>
         <div class="payment-wrapper">
           <div *ngIf="header.type !== 'Pay At Desk'">
-            <div
-              class="payment__wrapper__heading"
-            >
+            <div class="payment__wrapper__heading">
               Payment Methods
             </div>
             <web-user-payment-method
@@ -53,4 +63,5 @@
     <ng-container button-renderer [config]="buttonConfig" [context]="self">
     </ng-container>
   </div>
+  <div class="payment-form" style="display: hidden;"></div>
 </div>

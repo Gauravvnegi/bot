@@ -1,0 +1,21 @@
+<mat-form-field>
+  <mat-chip-list #sendTest multiple [formControl]="parentFG?.get(name)">
+    <mat-chip
+      *ngFor="let email of parentFG?.get(name).value"
+      (removed)="removeEmail(email, parentFG?.get(name))"
+    >
+      {{ email }}
+      <button matChipRemove class="chip-remove-btn">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+    <input
+      matInput
+      placeholder="Add Recipient"
+      [matChipInputFor]="sendTest"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      [matChipInputAddOnBlur]="addOnBlur"
+      (matChipInputTokenEnd)="addEmail($event, parentFG?.get(name))"
+    />
+  </mat-chip-list>
+</mat-form-field>

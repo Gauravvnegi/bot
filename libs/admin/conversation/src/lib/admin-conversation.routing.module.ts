@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
+import { LoadGuard } from 'apps/admin/src/app/core/guards/load-guard';
+import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 import { ConversationComponent } from './components/conversation/conversation.component';
 
 const appRoutes: Route[] = [
   {
     path: '',
+    pathMatch: 'full',
     redirectTo: 'analytics',
   },
   {
@@ -31,9 +34,12 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/request').then(
             (m) => m.AdminRequestModule
           ),
+        canActivate: [LoadGuard],
       },
     ],
   },
+  { path: '**', pathMatch: 'full', redirectTo: '404' },
+  { path: '404', component: DashboardErrorComponent },
 ];
 
 @NgModule({

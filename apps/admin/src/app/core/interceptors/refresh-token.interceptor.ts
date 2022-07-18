@@ -53,7 +53,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
           // – which means the new token is ready and we can retry the request again
           console.log('Refresh tokken in progress');
           return this.refreshTokenSubject.pipe(
-            filter((result) => result != null),
+            filter((result) => result !== null),
             take(1),
             switchMap(() => {
               return next.handle(this.addAuthenticationToken(req));

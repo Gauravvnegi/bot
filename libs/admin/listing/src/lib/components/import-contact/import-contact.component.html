@@ -1,0 +1,141 @@
+<div class="import">
+  <div class="import-close" (click)="close()">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </div>
+  <div class="import-contact">
+    {{ 'contact.import' | translate }}
+  </div>
+
+  <div class="upload-btn-wrapper">
+    <hospitality-bot-upload-csv
+      [fileUploadData]="fileUploadData"
+      [isDisable]="false"
+      (fileData)="importContact($event)"
+    >
+    </hospitality-bot-upload-csv>
+  </div>
+  <div class="import-popup">
+    <div class="sample">
+      <div class="simple-fields">
+        <div class="field">
+          <mat-label class="mat-label">{{
+            'sampleType' | translate
+          }}</mat-label>
+          <mat-form-field>
+            <mat-select placeholder="Select Sample" disabled="true"
+              ><mat-option>{{ 'noData' | translate }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="import-checkbox">
+        <form>
+          <input type="checkbox" (change)="enableField($event)" />
+          <label>
+            {{ 'checkboxMessage' | translate }}
+          </label>
+        </form>
+      </div>
+    </div>
+
+    <div class="add-contact">
+      {{ 'addContact' | translate }}
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ 'formFieldLabels.email' | translate }}</th>
+            <th>{{ 'formFieldLabels.salutation' | translate }}</th>
+            <th>{{ 'formFieldLabels.firstName' | translate }}</th>
+            <th>{{ 'formFieldLabels.lastName' | translate }}</th>
+            <th>{{ 'formFieldLabels.companyName' | translate }}</th>
+            <th>{{ 'formFieldLabels.mobile' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let contactFG of contactFA?.controls; let i = index"
+            [formGroup]="contactFG"
+          >
+            <td>
+              <div class="add-contacts-field">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Contact Email"
+                    formControlName="email"
+                  />
+                </mat-form-field>
+              </div>
+            </td>
+            <td>
+              <div class="add-contacts-field small">
+                <mat-form-field>
+                  <mat-select formControlName="salutation" placeholder="Mr.">
+                    <mat-option
+                      *ngFor="let salutation of salutationList"
+                      [value]="salutation.value"
+                      >{{ salutation.name }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </td>
+            <td>
+              <div class="add-contacts-field">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="First Name"
+                    formControlName="firstName"
+                  />
+                </mat-form-field>
+              </div>
+            </td>
+            <td>
+              <div class="add-contacts-field">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Last Name"
+                    formControlName="lastName"
+                  />
+                </mat-form-field>
+              </div>
+            </td>
+            <td>
+              <div class="add-contacts-field">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Company Name"
+                    formControlName="companyName"
+                  />
+                </mat-form-field>
+              </div>
+            </td>
+            <td>
+              <div class="add-contacts-field">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Mobile"
+                    formControlName="mobile"
+                  />
+                </mat-form-field>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="import-save">
+    <div class="save-btn" (click)="save()">
+      <div class="save">
+        {{ 'import' | translate }}
+      </div>
+    </div>
+  </div>
+</div>

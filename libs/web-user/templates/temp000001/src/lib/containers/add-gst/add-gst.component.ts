@@ -4,6 +4,7 @@ import {
   Output,
   EventEmitter,
   ViewChild,
+  OnDestroy,
 } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -20,7 +21,7 @@ import { GstConfigI } from 'libs/web-user/shared/src/lib/data-models/gstConfig.m
   templateUrl: './add-gst.component.html',
   styleUrls: ['./add-gst.component.scss'],
 })
-export class AddGstComponent implements OnInit {
+export class AddGstComponent implements OnInit, OnDestroy {
   gstFG: FormGroup;
   @Output()
   isSubmittedEvent = new EventEmitter<Object>();
@@ -99,5 +100,9 @@ export class AddGstComponent implements OnInit {
 
   closeModal() {
     this.dialogRef.close();
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { FileDetails } from '../data-models/reservationDetails';
 import { FormGroup } from '@angular/forms';
 

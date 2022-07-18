@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { RequestData } from '../../../../notification/src/lib/data-models/request.model';
 
@@ -8,6 +8,11 @@ import { RequestData } from '../../../../notification/src/lib/data-models/reques
 export class RequestService extends ApiService {
   selectedRequest = new BehaviorSubject(null);
   refreshData = new BehaviorSubject(false);
+
+  getReservationDetails(reservationId): Observable<any> {
+    return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
+  }
+
   getAllRequests(config): Observable<any> {
     return this.get(`/api/v1/request/${config.queryObj}`);
   }
@@ -54,6 +59,10 @@ export class RequestService extends ApiService {
     );
   }
 
+  updatePreArrivalRequest(id, data) {
+    return this.patch(`/api/v1/request/pre-arrival/${id}`, data);
+  }
+
   getNotificationConfig(hotelId: string): Observable<any> {
     return this.get(`/api/v1/cms/hotel/${hotelId}/notification-config`);
   }
@@ -63,7 +72,7 @@ export class RequestService extends ApiService {
   }
 
   validateRequestData(fg: FormGroup, channelSelection) {
-    let status = [];
+    const status = [];
 
     if (channelSelection) {
       status.push({
@@ -101,5 +110,17 @@ export class RequestService extends ApiService {
 
   searchBooking(config) {
     return this.get(`/api/v1/reservation/room${config}`);
+  }
+
+  getGuestReservations(guestId: string): Observable<any> {
+    return this.get(`/api/v1/guest/${guestId}/reservations`);
+  }
+
+  getGuestById(guestId: string): Observable<any> {
+    return this.get(`/api/v1/guest/${guestId}`);
+  }
+
+  getGuestRequestData(guestId) {
+    return this.get(`/api/v1/request/${guestId}/guest`);
   }
 }

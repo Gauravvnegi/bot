@@ -31,12 +31,12 @@ export class StepperService {
         break;
       case 'back':
         this.setSelectedIndex(
-          this._selectedIndex - 1 == 0 ? 0 : this._selectedIndex - 1
+          this._selectedIndex - 1 === 0 ? 0 : this._selectedIndex - 1
         );
     }
   }
 
   jumpToStep(index: number) {
-    this.stepperSelectedIndex$.next(index - 1 == 0 ? 0 : index - 1);
+    this.stepperSelectedIndex$.next(index - 1 === 0 ? 0 : index - 1);
   }
 }

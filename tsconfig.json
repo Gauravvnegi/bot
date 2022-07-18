@@ -22,10 +22,11 @@
       "@hospitality-bot/admin/environment": [
         "apps/admin/src/environments/environment.ts"
       ],
-      "@hospitality-bot/shared": ["libs/shared/index.ts"],
       "@hospitality-bot/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@hospitality-bot/shared/material": ["libs/shared/material/src/index.ts"],
-      "@hospitality-bot/shared/interceptors": ["libs/shared/iterceptors/src/index.ts"],
+      "@hospitality-bot/shared/interceptors": [
+        "libs/shared/iterceptors/src/index.ts"
+      ],
       "@hospitality-bot/web-user/shared": ["libs/web-user/shared/src/index.ts"],
       "@hospitality-bot/shared/auth": ["libs/shared/auth/src/index.ts"],
       "@hospitality-bot/web-user/template-renderer": [
@@ -63,9 +64,6 @@
       "@hospitality-bot/admin/feedback": ["libs/admin/feedback/src/index.ts"],
       "@hospitality-bot/admin/guests": ["libs/admin/guests/src/index.ts"],
       "@hospitality-bot/admin/packages": ["libs/admin/packages/src/index.ts"],
-      "@hospitality-bot/admin/guest-detail": [
-        "libs/admin/guest-detail/src/index.ts"
-      ],
       "@hospitality-bot/admin/subscription": [
         "libs/admin/subscription/src/index.ts"
       ],
@@ -80,6 +78,16 @@
       "@hospitality-bot/admin/whatsapp": ["libs/admin/whatsapp/src/index.ts"],
       "@hospitality-bot/admin/core/theme": [
         "apps/admin/src/app/core/theme/src/index.ts"
+      ],
+      "@hospitality-bot/admin/listing": ["libs/admin/listing/src/index.ts"],
+      "@hospitality-bot/admin/library": ["libs/admin/library/src/index.ts"],
+      "@hospitality-bot/admin/assets": ["libs/admin/assets/src/index.ts"],
+      "@hospitality-bot/admin/topic": ["libs/admin/topic/src/index.ts"],
+      "@hospitality-bot/admin/template": ["libs/admin/template/src/index.ts"],
+      "@hospitality-bot/admin/marketing": ["libs/admin/marketing/src/index.ts"],
+      "@hospitality-bot/admin/campaign": ["libs/admin/campaign/src/index.ts"],
+      "@hospitality-bot/admin/marketing-dashboard": [
+        "libs/admin/marketing-dashboard/src/index.ts"
       ]
     }
   },

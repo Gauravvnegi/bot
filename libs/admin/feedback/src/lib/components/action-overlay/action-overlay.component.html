@@ -1,0 +1,11 @@
+<button (click)="handleButtonClick($event)" type="button" #overlayHost>
+  {{ rowDataStatus }}
+  <ng-container *ngIf="isOpen; else opened">
+    <mat-icon class="material-icons" matSuffix>chevron_left</mat-icon>
+  </ng-container>
+  <ng-template #opened>
+    <mat-icon class="material-icons" matSuffix>chevron_right</mat-icon>
+  </ng-template>
+</button>
+
+<!-- This template displays the overlay content and is connected to the button -->

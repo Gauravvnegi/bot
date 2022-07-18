@@ -26,11 +26,11 @@
   // }
 }
 
-.feilds-wrapper {
+.fields-wrapper {
   display: flex;
   align-items: center;
   margin: 30px 0px;
-  .feild {
+  .field {
     .label {
       letter-spacing: 0.72px;
       font-size: $font12;
@@ -72,7 +72,7 @@
   // border: 2px solid #4b56c0;
   margin: $margin20 0px;
   opacity: 0.1;
-  background:#4b56c0 ;
+  background: #4b56c0;
   margin: 0 -30px -20px;
 }
 
@@ -199,7 +199,7 @@
   display: flex;
 }
 
-.visit-details{
+.visit-details {
   width: 160px;
   height: 33px;
   margin: 0 94px 0 40px;
@@ -210,7 +210,7 @@
   display: flex;
   justify-content: left;
   align-items: center;
-  .view-feedback{
+  .view-feedback {
     font-family: Roboto;
     font-size: 11px;
     font-weight: bold;
@@ -224,29 +224,28 @@
     padding-right: 10px;
     padding-top: 4px;
     height: 20px;
-     img{
+    img {
       width: 18px !important;
       margin-right: 3px;
     }
   }
-  img{
+  img {
     padding-left: 2px;
     margin-left: 3px;
   }
 }
 
-.mat-expansion-panel{
+.mat-expansion-panel {
   box-shadow: none !important;
   border: solid 1px $light-grey;
-
 }
-:host ::ng-deep .mat-expansion-panel-header.mat-expanded:hover{
+:host ::ng-deep .mat-expansion-panel-header.mat-expanded:hover {
   background: $accordian-background;
 }
-:host ::ng-deep .mat-expansion-panel-header:hover{
+:host ::ng-deep .mat-expansion-panel-header:hover {
   background: $accordian-background !important;
 }
 
-.visit-padding{
+.visit-padding {
   padding: 0 0 0 10px !important;
 }

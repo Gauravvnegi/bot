@@ -29,11 +29,14 @@ export class UtilityService {
     classes.fieldMasterLabelClasses = 'mat__field--heading';
     classes.fieldContainerWrapperClasses = classesStr;
 
-    if (fieldComponent.settings && fieldComponent.settings.type == 'radio') {
+    if (fieldComponent.settings && fieldComponent.settings.type === 'radio') {
       classes.fieldMainWrapperClasses = 'flex__column';
       classes.fieldClasses = 'radion__btn--group';
     }
-    if (fieldComponent.settings && fieldComponent.settings.type == 'textarea') {
+    if (
+      fieldComponent.settings &&
+      fieldComponent.settings.type === 'textarea'
+    ) {
       classes.fieldMainWrapperClasses = 'flex__column';
     }
 
@@ -89,5 +92,4 @@ export class UtilityService {
         }
       });
   }
-
 }

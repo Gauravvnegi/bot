@@ -14,12 +14,13 @@
         <ng-template #addCategory>
           Add Category
         </ng-template>
+      </p>
     </div>
   </header>
   <form [formGroup]="categoryForm">
     <div class="wrapper-form">
-      <div class="feilds">
-        <div class="feild">
+      <div class="fields">
+        <div class="field">
           <mat-label class="mat-label">Category Name:</mat-label>
           <mat-form-field>
             <input matInput formControlName="name" />
@@ -33,7 +34,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="feild" *ngIf="categoryId; else packageCodeField">
+        <div class="field" *ngIf="categoryId; else packageCodeField">
           <mat-label class="mat-label" *ngIf="subPackages">Packages:</mat-label>
           <span *ngIf="subPackages && subPackages.length <= 0">NA</span>
           <mat-form-field *ngIf="subPackages && subPackages.length > 0">
@@ -47,7 +48,7 @@
           </mat-form-field>
         </div>
         <ng-template #packageCodeField>
-          <div class="feild">
+          <div class="field">
             <mat-label class="mat-label">Category Code:</mat-label>
             <mat-form-field>
               <input matInput formControlName="packageCode" />
@@ -63,8 +64,8 @@
           </div>
         </ng-template>
       </div>
-      <div class="feilds">
-        <div class="feild full-width">
+      <div class="fields">
+        <div class="field full-width">
           <mat-label class="mat-label">Description:</mat-label>
           <mat-form-field>
             <input matInput formControlName="description" />
@@ -79,7 +80,7 @@
           </mat-form-field>
         </div>
       </div>
-      <!-- <div class="feilds image-wrapper">
+      <!-- <div class="fields image-wrapper">
         <div class="image">
           <hospitality-bot-upload-file
             [fileUploadData]="fileUploadData"
@@ -89,7 +90,7 @@
           </hospitality-bot-upload-file>
         </div>
       </div> -->
-      <div class="feilds margin-adjust">
+      <div class="fields margin-adjust">
         <div class="image-button">
           <mat-label class="mat-label">Upload Image:</mat-label>
           <div class="image">
@@ -102,7 +103,7 @@
           </div>
         </div>
       </div>
-      <!-- <div class="feilds margin-adjust">
+      <!-- <div class="fields margin-adjust">
         <div class="note">
           Recommended dimension (in px) : 60*60
         </div>

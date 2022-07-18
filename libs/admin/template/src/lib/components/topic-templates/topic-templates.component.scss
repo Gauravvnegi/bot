@@ -1,0 +1,74 @@
+.container {
+  height: max-content;
+}
+.heading {
+  padding-left: 40px;
+
+  p {
+    height: 33px;
+    margin: 44px 58px 31px 0;
+    font-family: Roboto;
+    font-size: 25px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 1.5px;
+    text-align: left;
+    color: #002046;
+  }
+}
+
+.template-container {
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  .topic-cards {
+    padding-left: 5px;
+    margin-bottom: 2rem;
+    .card {
+      cursor: pointer;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      box-shadow: rgb(82 82 82 / 10%) 1px -3px 0px -3px,
+        rgb(87 86 86 / 10%) 0px -1px 4px -2px,
+        rgb(70 70 70 / 10%) 0px 3px 14px 2px;
+      border-radius: 5px;
+      width: 255px;
+      height: 273px;
+      margin: 0 4rem 2rem 4rem;
+      &__content {
+        pointer-events: none;
+      }
+    }
+    .template-name {
+      text-align: center;
+      font-size: 14px;
+    }
+  }
+}
+
+.show-button {
+  display: flex;
+  justify-content: center;
+  .button {
+    align-self: center;
+    width: 250px;
+    height: 46px;
+    margin: 0px 37px 32px 38px;
+    border-radius: 23px;
+    box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+    border: solid 1px #4b56c0;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.96px;
+    color: #4b56c0;
+    background-color: #fff;
+    justify-content: center;
+  }
+}

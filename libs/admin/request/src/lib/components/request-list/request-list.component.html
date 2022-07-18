@@ -7,10 +7,7 @@
   "
 >
   <div class="right-side-header">
-    <div
-      *ngIf="enableSearchField; else tabGroup"
-      class="right-side-header-loop"
-    >
+    <div>
       <hospitality-bot-search
         [parentFG]="parentFG"
         [hotelId]="hotelId"
@@ -21,28 +18,21 @@
         (search)="getSearchValue($event)"
       ></hospitality-bot-search>
     </div>
-    <ng-template #tabGroup>
-      <div class="right-side-header-nav">
-        <hospitality-bot-tab-group
-          [listItems]="tabFilterItems"
-          [selectedIndex]="tabFilterIdx"
-          (selectedTabChange)="onSelectedTabFilterChange($event)"
-        ></hospitality-bot-tab-group>
-      </div>
-    </ng-template>
-    <div
-      class="right-side-header-filter"
-      (click)="enableSearch()"
-      *ngIf="!enableSearchField"
-    >
-      <img src="assets/svg/Search.svg" alt="filter" />
-    </div>
     <div class="right-side-header-filter">
       <img
-        src="assets/svg/Filter-Icon.svg"
-        alt="filter"
+        [src]="requestConfig.images.filter.url"
+        [alt]="requestConfig.images.filter.alt"
         (click)="showFilter = true"
       />
+    </div>
+  </div>
+  <div class="right-side-subheader">
+    <div class="right-side-header-nav">
+      <hospitality-bot-tab-group
+        [listItems]="tabFilterItems"
+        [selectedIndex]="tabFilterIdx"
+        (selectedTabChange)="onSelectedTabFilterChange($event)"
+      ></hospitality-bot-tab-group>
     </div>
   </div>
   <ng-template #loader>
@@ -101,9 +91,9 @@
             <div class="content-wrap-r2">
               <div
                 [ngClass]="{
-                  'status-text-initiated': item.action == 'Timeout',
-                  'status-text-reject': item.action == 'Pending',
-                  'status-text-success': item.action == 'Closed'
+                  'status-text-initiated': item.action === 'Timeout',
+                  'status-text-reject': item.action === 'Pending',
+                  'status-text-success': item.action === 'Closed'
                 }"
               >
                 {{ item.getAction() || '------' }}
@@ -117,7 +107,7 @@
                   'sla-new': item.getSLAvalue() > 5
                 }"
               >
-                SLA: {{ item.getSLA() }}
+                {{ 'requestDetail.sla' | translate }}: {{ item.getSLA() }}
               </div>
               <div class="content-wrap-r2-divider"></div>
               <div>JD:- {{ item.jobDuration }}m</div>
@@ -148,7 +138,7 @@
       ? {
           visibility: 'visible',
           width: '100%',
-          marginRight: '1px solid #9eaeb8'
+          marginRight: '1px solid $primary-gray'
         }
       : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
   "

@@ -16,7 +16,7 @@ export class ButtonComponent {
     disableButtonIfLoading: true,
   };
   @Input() buttonClass;
-  isTemplateVisible: boolean = false;
+  isTemplateVisible = false;
   id;
 
   @Input('settings') set settings(value: object) {

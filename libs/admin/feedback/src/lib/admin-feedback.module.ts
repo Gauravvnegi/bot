@@ -4,18 +4,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   AdminSharedModule,
   getTranslationConfigs,
-  StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { AdminFeedbackRoutingModule } from './admin-feedback.routing.module';
 import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
 import { ChartsModule } from 'ng2-charts';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SlickCarouselModule } from 'ngx-slick-carousel';
-import { AdminGuestDetailModule } from '@hospitality-bot/admin/guest-detail';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { FeedbackTableService } from './services/table.service';
+import { CardService } from './services/card.service';
+import { StatisticsService } from './services/feedback-statistics.service';
 
 @NgModule({
   imports: [
@@ -28,11 +28,10 @@ import { FeedbackTableService } from './services/table.service';
     AdminFeedbackRoutingModule,
     FlexLayoutModule,
     SlickCarouselModule,
-    AdminGuestDetailModule,
     NgCircleProgressModule.forRoot(),
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['feedback'])),
   ],
   declarations: [...AdminFeedbackRoutingModule.components],
-  providers: [StatisticsService, FeedbackTableService],
+  providers: [StatisticsService, FeedbackTableService, CardService],
 })
 export class AdminFeedbackModule {}

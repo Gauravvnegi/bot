@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 @Component({
   selector: 'admin-footer',

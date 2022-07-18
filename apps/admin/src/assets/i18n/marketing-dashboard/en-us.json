@@ -1,0 +1,21 @@
+{
+  "subscriber": {
+    "title": "Subscribers vs Unsubscribers"
+  },
+  "rate-graph": {
+    "title": "Open Rate vs Click Rate"
+  },
+  "contact-stats": {
+    "title": "Contact Stats",
+    "total": "Total Contacts",
+    "in90Days": "in 90 Days"
+  },
+  "stats": {
+    "in30Days": "In 30 Days",
+    "totalEmailSent": "Total Email Sent",
+    "totalOpen": "Total Open Rate",
+    "conversionRate": "Conversion Rate",
+    "totalClicks": "Total Clicks",
+    "ctr": "CTR"
+  }
+}

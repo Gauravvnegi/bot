@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 

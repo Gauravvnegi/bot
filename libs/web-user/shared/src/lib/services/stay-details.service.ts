@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable, Subject } from 'rxjs';
 import { FieldSchema } from '../data-models/fieldSchema.model';
 import { ReservationDetails } from '../data-models/reservationDetails';
@@ -10,7 +10,7 @@ import {
   StayDetailsConfigI,
 } from '../data-models/stayDetailsConfig.model';
 import * as moment from 'moment';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 @Injectable()
 export class StayDetailsService extends ApiService {
@@ -55,7 +55,7 @@ export class StayDetailsService extends ApiService {
     stayDetailsFieldSchema[
       'travellingWithLabel'
     ] = new FieldSchema().deserialize({
-      master_label: 'Travelling with',
+      master_label: 'Room Occupancy',
       style: {
         childLabelStyles: {
           'font-weight': 700,

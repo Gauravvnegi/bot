@@ -9,7 +9,7 @@
     <ng-container *ngIf="rowData.type === 'FEEDBACK'; else reservation">
       <hospitality-bot-instant-feedback
         [rowData]="rowData.feedback"
-        [openedState]="index == 0"
+        [openedState]="index === 0"
       >
       </hospitality-bot-instant-feedback>
     </ng-container>
@@ -17,7 +17,7 @@
       <hospitality-bot-stay-feedback
         [rowData]="rowData.reservation"
         [openedState]="
-          bookingNumber == rowData.reservation?.booking.bookingNumber
+          bookingNumber === rowData.reservation?.booking.bookingNumber
         "
       >
       </hospitality-bot-stay-feedback>

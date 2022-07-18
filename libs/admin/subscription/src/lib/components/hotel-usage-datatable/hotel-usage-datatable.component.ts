@@ -1,17 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { TableData } from '../../data-models/subscription.model';
-import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SubscriptionService } from '../../services/subscription.service';
-import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-hotel-usage-datatable',
@@ -22,7 +21,7 @@ import * as FileSaver from 'file-saver';
   ],
 })
 export class HotelUsageDatatableComponent extends BaseDatatableComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @Input() featureData;
 
   tableName = 'Usage of Hotel';
@@ -32,7 +31,7 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   isTabFilters = false;
   globalQueries = [];
-  tabFilterIdx: number = 1;
+  tabFilterIdx = 1;
   $subscription = new Subscription();
   hotelId;
   usageData;
@@ -130,18 +129,20 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
       ]),
     };
 
-    this.subscriptionService.exportCSV(this.hotelId, config).subscribe(
-      (res) => {
-        FileSaver.saveAs(
-          res,
-          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-        );
-        this.loading = false;
-      },
-      ({ error }) => {
-        this.loading = false;
-        this._snackbarService.openSnackBarAsText(error.message);
-      }
+    this.$subscription.add(
+      this.subscriptionService.exportCSV(this.hotelId, config).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+          this.loading = false;
+        },
+        ({ error }) => {
+          this.loading = false;
+          this._snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 
@@ -161,5 +162,9 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
 
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

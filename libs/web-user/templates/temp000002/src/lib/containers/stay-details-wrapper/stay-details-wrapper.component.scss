@@ -5,3 +5,31 @@
     width: 100vw !important;
   }
 }
+
+:host ::ng-deep .mat-input-element{
+  color:$stepper-font-color !important;
+}
+:host ::ng-deep .ngx-timepicker-control{
+  width: 70px !important;
+}
+
+:host ::ng-deep .ngx-timepicker-control__input{
+  font-size: 25px !important;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+:host ::ng-deep .ngx-timepicker__time-colon{
+  font-size: 25px !important;
+}
+
+:host ::ng-deep .ngx-timepicker{
+  margin-top: 15px !important;
+}
+:host ::ng-deep .mat__field--heading{
+  color: $time-arrival !important;
+}
+
+:host ::ng-deep .mat-form-field-label{
+  color: $time-arrival !important;
+}

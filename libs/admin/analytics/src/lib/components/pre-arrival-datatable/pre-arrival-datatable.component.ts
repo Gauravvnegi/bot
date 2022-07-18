@@ -1,16 +1,24 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Subscription, Observable } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import * as FileSaver from 'file-saver';
+import { analytics } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-datatable',
@@ -21,7 +29,7 @@ import * as FileSaver from 'file-saver';
   ],
 })
 export class PreArrivalDatatableComponent extends BaseDatatableComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @Input() entityType = 'Inhouse';
   @Input() optionLabels = [];
   @Input() packageId: string;
@@ -40,70 +48,9 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     super(fb, tabFilterService);
   }
 
-  cols = [
-    {
-      field: 'itemCode',
-      header: 'Item & Priority Code / Qty',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'confirmationNumber',
-      header: 'Booking No. / Rooms',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'guestDetails.primaryGuest.getFullName()',
-      header: 'Guest/ company',
-      isSort: true,
-      sortType: 'string',
-    },
-    {
-      field: 'journey',
-      header: 'Phone No./ Email',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: 'journey',
-      header: 'Item Name/ Desc./ Status/ Job Duration',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: 'remarks',
-      header: 'Open & Close- Date & Time',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: '',
-      header: 'Actions',
-      isSort: false,
-      sortType: '',
-    },
-  ];
+  cols = analytics.preArrivalCols;
 
-  tabFilterItems = [
-    {
-      label: 'All',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-      chips: [
-        {
-          label: 'All',
-          icon: '',
-          value: 'ALL',
-          total: 0,
-          isSelected: true,
-          type: '',
-        },
-      ],
-    },
-  ];
+  tabFilterItems = analytics.PreArrivaltabFilterItems;
   hotelId: string;
 
   ngOnInit(): void {
@@ -192,7 +139,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
 
   getSelectedQuickReplyFilters() {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => ({
         actionType: item.value,
       }));
@@ -288,7 +235,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
 
   customSort(event: SortEvent) {
     const col = this.cols.filter((data) => data.field === event.field)[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;

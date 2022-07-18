@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -27,5 +27,17 @@ export class SubscriptionService extends ApiService {
         responseType: 'blob',
       }
     );
+  }
+
+  getFrontdeskStats(config): Observable<any> {
+    return this.get(`/api/v1/subscription-stats${config.queryObj}`);
+  }
+
+  getMessagesExchangedStats(config): Observable<any> {
+    return this.get(`/api/v1/subscription-stats/messages${config.queryObj}`);
+  }
+
+  getFeedbackReceivedStats(config): Observable<any> {
+    return this.get(`/api/v1/subscription-stats/feedback${config.queryObj}`);
   }
 }

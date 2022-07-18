@@ -1,0 +1,50 @@
+<div class="container">
+  <header class="header">
+    <div class="header__back">
+      <mat-icon class="material-icons" matSuffix (click)="goBack()"
+        >keyboard_backspace</mat-icon
+      >
+      <div class="template-name">
+        <mat-select
+          [value]="templateType"
+          (selectionChange)="templateTypeSelection($event.value)"
+        >
+          <mat-option
+            *ngFor="let template of templateTypes"
+            [value]="template.type"
+            >{{ template.name }}</mat-option
+          >
+        </mat-select>
+      </div>
+    </div>
+    <div class="header__preDesigned">
+      <div class="topic">Topic</div>
+      <div class="mt-20">
+        <mat-form-field>
+          <mat-select [value]="selectedTopic">
+            <mat-option [value]="'ALL'" (click)="getTemplateForAllTopics()"
+              >All</mat-option
+            >
+            <mat-option
+              *ngFor="let topic of topicList"
+              [value]="topic.name"
+              (click)="getTemplateByTopicId(topic)"
+            >
+              {{ topic.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </header>
+
+  <ng-container *ngFor="let template of templateTopicList; last as isLast">
+    <hospitality-bot-topic-templates
+      [hotelId]="hotelId"
+      [templateType]="templateType"
+      [template]="template"
+      (selectedTemplate)="setTemplate($event)"
+    ></hospitality-bot-topic-templates>
+    <div *ngIf="!isLast" class="line"></div>
+  </ng-container>
+</div>

@@ -29,7 +29,7 @@ export class BookingFeedback {
       input.quickServices.map((service) => {
         return new FeedbackSuggestion().deserialize(service);
       });
-    let departments: Department[] = [];
+    const departments: Department[] = [];
     input.departments.forEach((data, i) => {
       departments[i] = new Department().deserialize(data, config);
     });
@@ -71,7 +71,7 @@ export class Department {
       set({}, 'name', get(input, ['name'])),
       set({}, 'rating', get(input, ['rating']))
     );
-    let services: Service[] = [];
+    const services: Service[] = [];
     input.services.forEach((data, i) => {
       services[i] = new Service().deserialize(data, config);
     });
@@ -97,7 +97,7 @@ export class Service {
       set({}, 'rating', get(input, ['rating'])),
       set({}, 'comments', get(input, ['comments']))
     );
-    let touchpoints: Touchpoint[] = [];
+    const touchpoints: Touchpoint[] = [];
     input.touchpoints.forEach((data, i) => {
       touchpoints[i] = new Touchpoint().deserialize(data, config);
     });
@@ -130,7 +130,7 @@ export class Color {
   color: string;
   deserialize(config, rating) {
     Object.keys(config).map((key) => {
-      let ratingKey = JSON.parse(key);
+      const ratingKey = JSON.parse(key);
       ratingKey.forEach((element) => {
         if (element === rating) {
           const rating = config[key];

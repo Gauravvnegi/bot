@@ -1,4 +1,5 @@
 @import 'temp000001';
+@import 'temp000002';
 
 .expand-icon {
   margin-left: auto;
@@ -81,7 +82,7 @@
   margin: 0px 18px;
 }
 
-:host ::ng-deep .adult-type-feild {
+:host ::ng-deep .adult-type-field {
   .mat-form-field-infix {
     width: 10px;
   }
@@ -93,7 +94,7 @@
   }
 }
 
-:host ::ng-deep .room-type-feild {
+:host ::ng-deep .room-type-field {
   .mat__field--heading {
     display: none;
   }
@@ -105,7 +106,7 @@
   }
 }
 
-:host ::ng-deep .input_feild {
+:host ::ng-deep .input_field {
   display: flex;
   align-items: center;
 }

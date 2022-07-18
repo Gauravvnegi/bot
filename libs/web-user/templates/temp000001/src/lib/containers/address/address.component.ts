@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   Output,
 } from '@angular/core';
@@ -16,7 +17,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './address.component.html',
   styleUrls: ['./address.component.scss'],
 })
-export class AddressComponent implements OnInit, OnChanges {
+export class AddressComponent implements OnInit, OnChanges, OnDestroy {
   private $subscription: Subscription = new Subscription();
   @Input() parentForm: FormGroup;
   @Input() reservationData;

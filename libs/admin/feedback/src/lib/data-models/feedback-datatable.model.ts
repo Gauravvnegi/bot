@@ -1,6 +1,11 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
+import { feedback } from '../constants/feedback';
+
+export interface Deserializable {
+  deserialize(input: any): this;
+}
 
 export class FeedbackTable {
   total: number;
@@ -13,18 +18,38 @@ export class FeedbackTable {
     this.entityStateCounts = new EntityStateCounts().deserialize(
       input.entityStateCounts
     );
-    this.records = input.records.map((record) =>
-      new Feedback().deserialize(record, outlets)
-    );
+
+    this.records = new Array<Feedback>();
+    input.records.forEach((item) => {
+      this.records.push(
+        new Feedback().deserialize(
+          item.feedback
+            ? {
+                ...item.feedback,
+                status: item.status,
+                departmentId: item.id,
+                departmentLabel: item.departmentLabel,
+                departmentName: item.departmentName,
+                userId: item.userId,
+                userName: item.userName,
+                remarks: item.remarks,
+                timeOut: item.timeOut,
+                feedbackId: item.id,
+              }
+            : item,
+          outlets
+        )
+      );
+    });
     return this;
   }
 }
 
 export class Feedback {
-  bookingDetails: string;
+  bookingDetails;
   comments: string;
   created: number;
-  feedback: string;
+  feedback;
   guestData: StayGuestData;
   guest: Guest;
   hotelId: string;
@@ -39,8 +64,16 @@ export class Feedback {
   updated: number;
   notes: Notes;
   status: string;
-
+  departmentId: string;
+  departmentLabel: string;
+  departmentName: string;
+  userId: string;
+  userName: string;
+  remarks: Remark[];
+  timeOut: boolean;
+  feedbackId: string;
   deserialize(input, outlets) {
+    this.remarks = new Array<Remark>();
     Object.assign(
       this,
       set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
@@ -60,18 +93,30 @@ export class Feedback {
         {},
         'services',
         new TransactionalService().deserialize(
-          JSON.parse(get(input, ['services']))
+          JSON.parse(get(input, ['services'])),
+          get(input, ['serviceMap'], [])
         )
       ),
       set({}, 'session', get(input, ['session'])),
       set({}, 'tableNo', get(input, ['tableNo'])),
       set({}, 'updated', get(input, ['updated'])),
-      set({}, 'status', get(input, ['status']))
+      set({}, 'status', get(input, ['status'])),
+      set({}, 'departmentId', get(input, ['departmentId'])),
+      set({}, 'departmentLabel', get(input, ['departmentLabel'])),
+      set({}, 'departmentName', get(input, ['departmentName'])),
+      set({}, 'userId', get(input, ['userId'])),
+      set({}, 'userName', get(input, ['userName'])),
+      set({}, 'timeOut', get(input, ['timeOut'])),
+      set({}, 'feedbackId', get(input, ['feedbackId'], ''))
     );
-    this.outlet = outlets.filter(
+    this.outlet = outlets?.filter(
       (outlet) => outlet.id === input.entityId
     )[0]?.name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
+    if (input.remarks)
+      input.remarks.forEach((item) =>
+        this.remarks.push(new Remark().deserialize(item))
+      );
     this.guest = new Guest().deserialize(input.guestId);
     this.guestData = new StayGuestData().deserialize(
       input.guestData || {
@@ -98,6 +143,40 @@ export class Feedback {
   getCreatedTime(timezone = '+05:30') {
     return moment(this.created).utcOffset(timezone).format('HH:mm');
   }
+
+  getTableOrRoomNo(feedbackType) {
+    return feedbackType === feedback.types.stay
+      ? `RNO: ${this.bookingDetails.tableOrRoomNumber}`
+      : `TNO: ${this.bookingDetails.tableOrRoomNumber}`;
+  }
+
+  getProfileNickName() {
+    const nameList = [this.guest.firstName, this.guest.lastName];
+    return nameList
+      .map((i, index) => {
+        if ([0, 1].includes(index)) return i.charAt(0);
+        else return '';
+      })
+      .join('')
+      .toUpperCase();
+  }
+
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.updated).utcOffset(timezone), 'days');
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment
+      .unix(+this.updated / 1000)
+      .utcOffset(timezone)
+      .format('DD');
+    if (diff > 0) {
+      return moment(this.updated).utcOffset(timezone).format('DD MMM');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
+    }
+    return moment(this.updated).utcOffset(timezone).format('h:mm a');
+  }
 }
 
 export class TransactionalService {
@@ -106,7 +185,7 @@ export class TransactionalService {
   comment: string;
   staffName: string;
 
-  deserialize(input) {
+  deserialize(input, services) {
     this.services = new Array<Service>();
     Object.assign(
       this,
@@ -114,7 +193,7 @@ export class TransactionalService {
       set({}, 'staffName', get(input, ['staffName'])),
       set({}, 'rating', get(input, ['rating']))
     );
-    input.services.forEach((service) =>
+    services.forEach((service) =>
       this.services.push(new Service().deserialize(service))
     );
     return this;
@@ -129,12 +208,16 @@ export class Service {
   serviceName: string;
   rating;
   colorCode: string;
+  comment: string;
+  question: string;
 
   deserialize(input, colorMap?) {
     Object.assign(
       this,
       set({}, 'serviceName', get(input, 'serviceName')),
-      set({}, 'rating', get(input, 'rating'))
+      set({}, 'rating', get(input, 'rating')),
+      set({}, 'comment', get(input, 'comment')),
+      set({}, 'question', get(input, 'question'))
     );
     if (colorMap) {
       if (isNaN(this.rating))
@@ -186,18 +269,18 @@ export class Guest {
     Object.assign(
       this,
       set({}, 'anniversaryDate', get(input, ['anniversaryDate'])),
-      set({}, 'countryCode', get(input, ['countryCode'])),
-      set({}, 'created', get(input, ['created'])),
-      set({}, 'dateOfBirth', get(input, ['dateOfBirth'])),
-      set({}, 'emailId', get(input, ['emailId'])),
-      set({}, 'firstName', get(input, ['firstName'])),
-      set({}, 'id', get(input, ['id'])),
-      set({}, 'lastName', get(input, ['lastName'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'])),
-      set({}, 'phoneNumber', get(input, ['phoneNumber'])),
-      set({}, 'place', get(input, ['place'])),
-      set({}, 'spouseBirthDate', get(input, ['spouseBirthDate'])),
-      set({}, 'updated', get(input, ['updated']))
+      set({}, 'countryCode', get(input, ['countryCode'], '')),
+      set({}, 'created', get(input, ['created'], '')),
+      set({}, 'dateOfBirth', get(input, ['dateOfBirth'], '')),
+      set({}, 'emailId', get(input, ['emailId'], '')),
+      set({}, 'firstName', get(input, ['firstName'], '')),
+      set({}, 'id', get(input, ['id'], '')),
+      set({}, 'lastName', get(input, ['lastName'], '')),
+      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'phoneNumber', get(input, ['phoneNumber'], '')),
+      set({}, 'place', get(input, ['place'], '')),
+      set({}, 'spouseBirthDate', get(input, ['spouseBirthDate'], '')),
+      set({}, 'updated', get(input, ['updated'], ''))
     );
     return this;
   }
@@ -251,16 +334,36 @@ export class StayFeedbackTable {
   total: number;
   entityTypeCounts;
   entityStateCounts: EntityStateCounts;
-  records: Feedback[];
+  records: StayFeedback[];
 
   deserialize(input, outlets, colorMap) {
     Object.assign(this, set({}, 'total', get(input, ['total'])));
     this.entityStateCounts = new EntityStateCounts().deserialize(
       input.entityStateCounts
     );
-    this.records = input.records.map((record) =>
-      new StayFeedback().deserialize(record, outlets, colorMap)
-    );
+    this.records = new Array<StayFeedback>();
+    input.records.forEach((item) => {
+      this.records.push(
+        new StayFeedback().deserialize(
+          item.feedback
+            ? {
+                ...item.feedback,
+                status: item.status,
+                departmentId: item.id,
+                departmentLabel: item.departmentLabel,
+                departmentName: item.departmentName,
+                userId: item.userId,
+                userName: item.userName,
+                remarks: item.remarks,
+                timeOut: item.timeOut,
+                feedbackId: item.id,
+              }
+            : item,
+          outlets,
+          colorMap
+        )
+      );
+    });
     return this;
   }
 }
@@ -287,15 +390,24 @@ export class StayFeedback {
   status: string;
   commentList;
   created: number;
-
+  updated: number;
+  departmentId: string;
+  departmentLabel: string;
+  departmentName: string;
+  userId: string;
+  userName: string;
+  remarks: Remark[];
+  timeOut: boolean;
   deserialize(input, outlets, colorMap) {
     this.services = new Array<Service>();
+    this.remarks = new Array<Remark>();
     this.commentList = {};
     Object.assign(
       this,
       set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
       set({}, 'comments', get(input, ['comments'])),
       set({}, 'created', get(input, ['created'])),
+      set({}, 'updated', get(input, ['updated'])),
       set({}, 'feedbackType', get(input, ['feedbackType'])),
       set({}, 'feedbackUrl', get(input, ['feedbackUrl'])),
       set({}, 'id', get(input, ['id'])),
@@ -306,16 +418,27 @@ export class StayFeedback {
       set({}, 'size', get(input, ['size'])),
       set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber'])),
       set({}, 'transactionalService', get(input, ['transactionalService'])),
-      set({}, 'status', get(input, ['status']))
+      set({}, 'status', get(input, ['status'])),
+      set({}, 'departmentId', get(input, ['departmentId'])),
+      set({}, 'departmentLabel', get(input, ['departmentLabel'])),
+      set({}, 'departmentName', get(input, ['departmentName'])),
+      set({}, 'userId', get(input, ['userId'])),
+      set({}, 'userName', get(input, ['userName'])),
+      set({}, 'timeOut', get(input, ['timeOut'])),
+      set({}, 'feedbackId', get(input, ['feedbackId'], ''))
     );
     const serviceList = get(input, ['serviceMap'], ['services']);
-    serviceList.forEach((item) =>
+    serviceList?.forEach((item) =>
       this.services.push(new Service().deserialize(item, colorMap))
     );
-    this.outlet = outlets.filter(
+    this.outlet = outlets?.filter(
       (outlet) => outlet.id === input.entityId
     )[0]?.name;
     if (input.notes) this.notes = new Notes().deserialize(input.notes);
+    if (input.remarks)
+      input.remarks.forEach((item) =>
+        this.remarks.push(new Remark().deserialize(item))
+      );
     this.guestData = new StayGuestData().deserialize(input.guestData);
     this.guest = new Guest().deserialize(input.guestId);
     return this;
@@ -323,24 +446,24 @@ export class StayFeedback {
 
   getNegativeRatedService() {
     return this.getSortedServices().filter((service) =>
-      isNaN(this.services[0].rating)
+      isNaN(this.services[0]?.rating)
         ? service.rating === 'EI'
         : service.rating < 5
     );
   }
 
   getSortedServices() {
-    let sortOrder = ['EI', 'ME', 'EE'];
-    if (isNaN(this.services[0].rating))
+    const sortOrder = ['EI', 'ME', 'EE'];
+    if (isNaN(this.services[0]?.rating))
       this.services.sort((a, b) => {
-        if (a.rating == b.rating) {
-          return a.rating.localeCompare(b.rating);
+        if (a.rating === b.rating) {
+          return a.rating?.localeCompare(b.rating);
         } else {
-          return sortOrder.indexOf(a.rating) - sortOrder.indexOf(b.rating);
+          return sortOrder?.indexOf(a.rating) - sortOrder.indexOf(b.rating);
         }
       });
-    else this.services.sort((a, b) => a.rating - b.rating);
-    return this.services;
+    else this?.services.sort((a, b) => a.rating - b.rating);
+    return this?.services;
   }
 
   getServiceComment(serviceName) {
@@ -353,6 +476,40 @@ export class StayFeedback {
 
   getCreatedTime(timezone = '+05:30') {
     return moment(this.created).utcOffset(timezone).format('HH:mm');
+  }
+
+  getTableOrRoomNo(feedbackType) {
+    return feedbackType === feedback.types.stay
+      ? `RNO: ${this.bookingDetails.tableOrRoomNumber}`
+      : `TNO: ${this.bookingDetails.tableOrRoomNumber}`;
+  }
+
+  getProfileNickName() {
+    const nameList = [this.guest.firstName, this.guest.lastName];
+    return nameList
+      .map((i, index) => {
+        if ([0, 1].includes(index)) return i.charAt(0);
+        else return '';
+      })
+      .join('')
+      .toUpperCase();
+  }
+
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.updated).utcOffset(timezone), 'days');
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment
+      .unix(+this.updated / 1000)
+      .utcOffset(timezone)
+      .format('DD');
+    if (diff > 0) {
+      return moment(this.updated).utcOffset(timezone).format('DD MMM');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
+    }
+    return moment(this.updated).utcOffset(timezone).format('h:mm a');
   }
 }
 
@@ -376,7 +533,7 @@ export class StayGuestData {
       set({}, 'churnPrediction', get(input, ['churnPrediction'])),
       set({}, 'churnProbalilty', get(input, ['churnProbalilty'])),
       set({}, 'departureTime', get(input, ['departureTime'])),
-      set({}, 'dueSpend', JSON.parse(get(input, ['dueSpend']))),
+      set({}, 'dueSpend', get(input, ['dueSpend'])),
       set({}, 'guestCount', get(input, ['guestCount'])),
       set({}, 'overAllNps', get(input, ['overAllNps'])),
       set({}, 'totalSpend', get(input, ['totalSpend'])),
@@ -443,5 +600,52 @@ export class EntityStateCounts {
       set({}, 'UNREAD', get(input, ['UNREAD']))
     );
     return this;
+  }
+}
+
+export class Remark {
+  created: number;
+  updated: number;
+  adminName: string;
+  remarks: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'created', get(input, ['created'])),
+      set({}, 'updated', get(input, ['updated'])),
+      set({}, 'adminName', get(input, ['adminName'])),
+      set({}, 'remarks', get(input, ['remarks']))
+    );
+
+    return this;
+  }
+
+  getTime(timezone = '+05:30') {
+    const diff = moment()
+      .utcOffset(timezone)
+      .diff(moment(+this.updated).utcOffset(timezone), 'days');
+    const currentDay = moment().format('DD');
+    const lastMessageDay = moment
+      .unix(+this.updated / 1000)
+      .utcOffset(timezone)
+      .format('DD');
+    if (diff > 0) {
+      return moment(this.updated).utcOffset(timezone).format('DD MMM');
+    } else if (+diff === 0 && +currentDay > +lastMessageDay) {
+      return 'Yesterday';
+    }
+    return moment(this.updated).utcOffset(timezone).format('h:mm a');
+  }
+
+  getNickName() {
+    return this.adminName
+      .split(' ')
+      .map((i, index) => {
+        if ([0, 1].includes(index)) return i.charAt(0);
+        else return '';
+      })
+      .join('')
+      .toUpperCase();
   }
 }

@@ -3,6 +3,7 @@ import {
   ComponentFactoryResolver,
   ElementRef,
   EventEmitter,
+  OnDestroy,
   OnInit,
   Output,
   QueryList,
@@ -45,7 +46,7 @@ const components = {
   templateUrl: './health-declaration.component.html',
   styleUrls: ['./health-declaration.component.scss'],
 })
-export class HealthDeclarationComponent implements OnInit {
+export class HealthDeclarationComponent implements OnInit, OnDestroy {
   private $subscription: Subscription = new Subscription();
   protected healthComponents = components;
   @Output()
@@ -130,7 +131,7 @@ export class HealthDeclarationComponent implements OnInit {
     this.healthDeclarationForm = this.fb.group({});
 
     for (let panel of this.settings) {
-      if (panel.type == 'primary') {
+      if (panel.type === 'primary') {
         this.healthDeclarationForm.addControl('primary', new FormGroup({}));
       } else {
         if (!this.healthDeclarationForm.get('secondary')) {
@@ -168,7 +169,7 @@ export class HealthDeclarationComponent implements OnInit {
     for (let panelIndex in this.settings) {
       if (this.settings[panelIndex].child.length) {
         let formGroup: FormGroup;
-        if (this.settings[panelIndex].type == 'primary') {
+        if (this.settings[panelIndex].type === 'primary') {
           formGroup = this.healthDeclarationForm.get('primary') as FormGroup;
           this.currentParentContainer = this.parentPanelContentContainer.toArray()[
             panelIndex
@@ -179,7 +180,7 @@ export class HealthDeclarationComponent implements OnInit {
             this.parentPanelContentContainer.toArray()[panelIndex],
             formGroup
           );
-        } else if (this.settings[panelIndex].type == 'secondary') {
+        } else if (this.settings[panelIndex].type === 'secondary') {
           let formArray = this.healthDeclarationForm.get(
             'secondary'
           ) as FormArray;
@@ -214,7 +215,7 @@ export class HealthDeclarationComponent implements OnInit {
         formGroup
       );
 
-      if (componentRef.instance.settings.type == 'fieldset') {
+      if (componentRef.instance.settings.type === 'fieldset') {
         container = componentRef.instance.fstContainer;
       }
 
@@ -228,7 +229,7 @@ export class HealthDeclarationComponent implements OnInit {
           formGroup
         );
       }
-      if (componentRef.instance.settings.type == 'fieldset') {
+      if (componentRef.instance.settings.type === 'fieldset') {
         container = this.containerStack.pop();
       }
 
@@ -238,7 +239,7 @@ export class HealthDeclarationComponent implements OnInit {
 
   generateComponent(config, container: ViewContainerRef, formGroup: FormGroup) {
     config = this.setConfigData(config);
-    if (config.isDummy == false) {
+    if (config.isDummy === false) {
       this.keysToBeUpdated.push(config.id);
     }
     if (config && this.healthComponents[config.component.type]) {

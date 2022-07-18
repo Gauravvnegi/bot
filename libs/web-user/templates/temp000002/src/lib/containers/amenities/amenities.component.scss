@@ -1,11 +1,12 @@
 @import 'temp000002';
   .expand-icon {
     margin-left: auto;
+    padding: 10px;
   }
   
   .hotel__services--images {
     @include flex-all-center();
-    margin: 25px 0px;
+    margin: 20px 0px;
     flex-wrap: wrap;
     @media only screen and (max-width: 900px) {
       font-size: $font-responsive-small;
@@ -54,3 +55,4 @@
       padding: $padding-large 5px !important;
     }
   }
+

@@ -5,6 +5,7 @@
   },
   "global_nps": { "title": "Global NPS" },
   "top_low_nps": {
+    "label": "NPS",
     "title": "Top/Low NPS",
     "top_performing": "Top Performing",
     "low_performing": "Low Performing"
@@ -14,11 +15,15 @@
     "sub_title": "Response Breakdown as per feedback shared"
   },
   "gtm_across_services": {
-    "title_text": "GTM(Guest To Meet) across services",
+    "title_text": "GTM(Guest To Meet)",
     "tooltip_text": "Number of guest that must be met due to low score for the selected date range",
-    "closed_text": "Closed",
+    "closed_text": "Resolved",
     "remaining_text": "Remaining",
     "total_arrival_text": "Total Guest to meet who are at risk"
+  },
+  "art": {
+    "title_text": "ART(Average Resolution Time)",
+    "tooltip_text": "The average time in which requests are getting closed per department"
   },
   "nps": { "title": "Net Promoter Score" },
   "nps_across_department": { "title": "NPS Across Departments" },
@@ -27,7 +32,7 @@
   "request_feedback_label": "Request Feedback",
   "no_data_available": "No data available in table",
   "no_data_chart": "No Data",
-  "bifurcation": { "title": "Received Breakdown" },
+  "bifurcation": { "title": "Task Breakdown" },
   "nps_across_pos": {
     "title": "NPS Across Point of Sale",
     "outlet_label": "Outlets",
@@ -59,5 +64,52 @@
       "feedback_closed": "Feedback Closed successfully",
       "feedback_status_updated": "'Status updated.'"
     }
-  }
+  },
+  "export": {
+    "feedback": "Export Feedback"
+  },
+  "noList": {
+    "noTitle": "No Feedbacks",
+    "noDescription": " When you have feedbacks, you'll see them here"
+  },
+  "nofeedback": {
+    "selectItem": "Select an item to read",
+    "nothingSelect": "Nothing is selected"
+  },
+  "OverAll": "Overall",
+  "statusUpdate": {
+    "resolved": "Mark Resolved"
+  },
+  "filter": {
+    "undo": "undo",
+    "sort": "Sort & Filters",
+    "clear": "Clear All",
+    "sortBy": "Sort By",
+    "byAssignee": "Filter By Assignee",
+    "byDepartment": "Filter By Department",
+    "apply": "Apply",
+    "cancel": "cancel"
+  },
+  "booking": {
+    "info": "Booking Info",
+    "current": "Current Booking",
+    "past": "Past Booking",
+    "upcoming": "Upcoming Booking"
+  },
+  "guestData": {
+    "info": "Guest Info",
+    "reservationId": "Reservation ID",
+    "roomNo": "Room No.",
+    "direction": "east",
+    "personalInfo": "Personal Info",
+    "contact": "Contact Details",
+    "phone": "Phone No.",
+    "email": "Email",
+    "other": "Other Details",
+    "noOfStays": "No. of stays"
+  },
+  "churnPrediction": "Curn probabilty prediction",
+  "details": "Details",
+  "viewDetail": "View Details",
+  "loading": "Loading"
 }

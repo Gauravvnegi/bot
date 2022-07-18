@@ -66,7 +66,7 @@ export class StepperContentRendererDirective implements OnChanges {
 
   protected _stepperComponentObj: ComponentRef<Temp000001StepperComponent>;
   protected stepperComponent = Temp000001StepperComponent;
-  protected _isStepperRendered: boolean = false;
+  protected _isStepperRendered = false;
   protected componentMapping = componentMapping;
 
   constructor(
@@ -145,7 +145,7 @@ export class StepperContentRendererDirective implements OnChanges {
         if (isRendered && this.dataToPopulate) {
           this._isStepperRendered = true;
           this.createStepperContentComponents();
-          this.stepperConfig.position == 'vertical' &&
+          this.stepperConfig.position === 'vertical' &&
             this._changeDetectorRef.detectChanges();
         }
       }
@@ -195,7 +195,7 @@ export class StepperContentRendererDirective implements OnChanges {
 
     this.listenForWrapperRendered(componentObj, index);
 
-    // this.stepperConfig.position == 'vertical' &&
+    // this.stepperConfig.position === 'vertical' &&
     //   componentObj.changeDetectorRef.detectChanges();
   }
 
@@ -205,7 +205,7 @@ export class StepperContentRendererDirective implements OnChanges {
   ): void {
     try {
       componentObj.instance.isWrapperRendered$.subscribe((val) => {
-        this.stepperConfig.stepConfigs.length - 1 == index &&
+        this.stepperConfig.stepConfigs.length - 1 === index &&
           this._templateLoadingService.isTemplateLoading$.next(false);
         componentObj.instance.isRendered = true;
       });

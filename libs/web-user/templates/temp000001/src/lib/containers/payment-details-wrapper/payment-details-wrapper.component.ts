@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,11 +26,11 @@ import { BaseWrapperComponent } from '../../base/base-wrapper.component';
   styleUrls: ['./payment-details-wrapper.component.scss'],
 })
 export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @ViewChild('matTab') matTab: MatTabGroup;
 
   hotelPaymentConfig: IPaymentConfiguration;
-  isConfigLoaded: boolean = false;
+  isConfigLoaded = false;
   selectedPaymentOption: SelectedPaymentOption = new SelectedPaymentOption();
 
   constructor(
@@ -51,7 +51,6 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   ngOnInit(): void {
     this.getPaymentConfiguration();
-    this.parentForm.addControl('paynow', new FormControl(true));
   }
 
   initPaymentDetailsDS(hotelPaymentConfig) {
@@ -83,22 +82,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       const TAB_INDEX = this.matTab['_selectedIndex'];
       const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
       if (TAB_LABEL === paymentEnum.PaymentHeaders.payNow) {
-        if (
-          this.selectedPaymentOption.config &&
-          this.selectedPaymentOption.config.gatewayType ===
-            paymentEnum.GatewayTypes.ccavenue
-        ) {
-          this.initiateCCAvenuePayment(data, 'submitButton');
-        } else {
-          this._translateService
-            .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
-            .subscribe((translatedMsg) => {
-              this._snackBarService.openSnackBarAsText(translatedMsg);
-            });
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['submitButton']
-          );
-        }
+        this.handlePayNowPayment(data, 'submitButton');
       } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
         this.updatePaymentStatus(journeyEnums.JOURNEY.preCheckin);
       }
@@ -113,22 +97,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       const TAB_INDEX = this.matTab['_selectedIndex'];
       const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
       if (TAB_LABEL === paymentEnum.PaymentHeaders.payNow) {
-        if (
-          this.selectedPaymentOption.config &&
-          this.selectedPaymentOption.config.gatewayType ===
-            paymentEnum.GatewayTypes.ccavenue
-        ) {
-          this.initiateCCAvenuePayment(data, 'nextButton');
-        } else {
-          this._translateService
-            .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
-            .subscribe((translatedMsg) => {
-              this._snackBarService.openSnackBarAsText(translatedMsg);
-            });
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['nextButton']
-          );
-        }
+        this.handlePayNowPayment(data, 'nextButton');
       } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
         this.updatePaymentStatus(journeyEnums.JOURNEY.checkin);
       }
@@ -163,28 +132,113 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       const TAB_INDEX = this.matTab['_selectedIndex'];
       const TAB_LABEL = this.hotelPaymentConfig.paymentHeaders[TAB_INDEX].type;
       if (TAB_LABEL === paymentEnum.PaymentHeaders.payNow) {
-        if (
-          this.selectedPaymentOption.config &&
-          this.selectedPaymentOption.config.gatewayType ===
-            paymentEnum.GatewayTypes.ccavenue
-        ) {
-          this.initiateCCAvenuePayment(data, 'submitButton');
-        } else {
-          this._translateService
-            .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
-            .subscribe((translatedMsg) => {
-              this._snackBarService.openSnackBarAsText(translatedMsg);
-            });
-          this._buttonService.buttonLoading$.next(
-            this.buttonRefs['submitButton']
-          );
-        }
+        this.handlePayNowPayment(data, 'submitButton');
       } else if (TAB_LABEL === paymentEnum.PaymentHeaders.payAtDesk) {
         this.updatePaymentStatus(journeyEnums.JOURNEY.preCheckin);
         this._buttonService.buttonLoading$.next(
           this.buttonRefs['submitButton']
         );
       }
+    }
+  }
+
+  initiatePayUMoneyPayment(data, buttonRef) {
+    this.$subscription.add(
+      this._paymentDetailsService
+        .initiatePaymentCCAvenue(this._reservationService.reservationId, data)
+        .subscribe(
+          (response) => {
+            let form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            // form.setAttribute('target', 'payment_popup');
+            // form.setAttribute(
+            //   'onSubmit',
+            //   "window.open('about:blank','payment_popup','width=900,height=500');"
+            // );
+            form.setAttribute('action', ' https://test.payu.in/_payment');
+            form.appendChild(
+              this.createHiddenFields('curl', response.transaction.curl)
+            );
+            form.appendChild(
+              this.createHiddenFields('SALT', response.transaction.SALT)
+            );
+            form.appendChild(
+              this.createHiddenFields('furl', response.transaction.furl)
+            );
+            form.appendChild(
+              this.createHiddenFields('surl', response.transaction.surl)
+            );
+            form.appendChild(
+              this.createHiddenFields('email', response.transaction.email)
+            );
+            form.appendChild(
+              this.createHiddenFields(
+                'txnid',
+                response.transaction.transactionId
+              )
+            );
+            form.appendChild(
+              this.createHiddenFields(
+                'productinfo',
+                response.transaction.productinfo
+              )
+            );
+            form.appendChild(
+              this.createHiddenFields(
+                'firstname',
+                response.transaction.firstname
+              )
+            );
+            form.appendChild(
+              this.createHiddenFields('hash', response.transaction.hash)
+            );
+            form.appendChild(
+              this.createHiddenFields('key', response.transaction.key)
+            );
+            form.appendChild(
+              this.createHiddenFields('amount', response.transaction.amount)
+            );
+            document
+              .getElementsByClassName('payment-form')[0]
+              .appendChild(form);
+            form.submit();
+            form.remove();
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackBarService.openSnackBarAsText(translatedMsg);
+              });
+            this._buttonService.buttonLoading$.next(this.buttonRefs[buttonRef]);
+          }
+        )
+    );
+  }
+
+  createHiddenFields(name: string, value: string) {
+    let EID = document.createElement('input');
+    EID.setAttribute('type', 'hidden');
+    EID.setAttribute('name', name);
+    EID.setAttribute('value', value);
+    return EID;
+  }
+
+  handlePayNowPayment(data, buttonRef: string) {
+    switch (this.selectedPaymentOption.config.gatewayType) {
+      case paymentEnum.GatewayTypes.ccavenue:
+        this.initiateCCAvenuePayment(data, buttonRef);
+        break;
+      case paymentEnum.GatewayTypes.payumoney:
+        this.initiatePayUMoneyPayment(data, buttonRef);
+        break;
+      default:
+        this._translateService
+          .get('VALIDATION.PAYMENT_METHOD_SELECT_PENDING')
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
+        this._buttonService.buttonLoading$.next(this.buttonRefs[buttonRef]);
     }
   }
 
@@ -284,8 +338,10 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   mapPaymentInitiationData() {
     if (
       this.selectedPaymentOption.config &&
-      this.selectedPaymentOption.config['gatewayType'] ===
-        paymentEnum.GatewayTypes.ccavenue
+      (this.selectedPaymentOption.config['gatewayType'] ===
+        paymentEnum.GatewayTypes.ccavenue ||
+        this.selectedPaymentOption.config['gatewayType'] ===
+          paymentEnum.GatewayTypes.payumoney)
     ) {
       const paymentInitiationData = new PaymentCCAvenue().deserialize(
         this.selectedPaymentOption.config,

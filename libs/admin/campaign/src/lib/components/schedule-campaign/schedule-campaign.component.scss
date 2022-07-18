@@ -1,0 +1,110 @@
+@import 'main';
+
+.container {
+  width: 617px;
+  border-radius: 5px;
+  background-color: #fff;
+  .header {
+    width: 617px;
+    height: 51.7px;
+    padding: 14px 22.5px 16.7px 20.5px;
+    background-color: #f4f5f7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .close {
+      cursor: pointer;
+    }
+  }
+  .body {
+    padding: 12px 6px;
+    display: flex;
+    .left-container {
+      width: 50%;
+    }
+    .right-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 55px;
+      width: 50%;
+      .field-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        img {
+          width: 27.5px;
+          margin-right: 10px;
+        }
+        .calendar {
+          width: 205.6px;
+          height: 36px;
+          padding: 8px 160.6px 9px 14px;
+          opacity: 0.2;
+          border-radius: 4px;
+          border: solid 1px #707070;
+          background-color: #fff;
+        }
+        .time {
+          width: 205.6px;
+        }
+      }
+    }
+  }
+}
+.btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 40px 0;
+  .schedule {
+    height: 46px;
+    margin: 0 60px 0 0;
+    padding: 11.9px 26px 13px;
+    border-radius: 23px;
+    border: solid 1px $primary-purple;
+    background-color: white;
+    cursor: pointer;
+    &:active {
+      transform: scale(0.97);
+    }
+    &__text {
+      font-family: Roboto;
+      font-size: $font16;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: $primary-purple;
+    }
+  }
+  .send {
+    height: 46px;
+    padding: 12px 43px 13px;
+    border-radius: 23px;
+    background-color: $primary-purple;
+    cursor: pointer;
+    &:active {
+      transform: scale(0.97);
+    }
+    &__text {
+      font-family: Roboto;
+      font-size: $font16;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: white;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .mat-form-field-label-wrapper {
+    display: none !important;
+  }
+}

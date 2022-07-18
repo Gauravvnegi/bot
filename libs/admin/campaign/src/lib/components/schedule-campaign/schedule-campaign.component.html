@@ -1,0 +1,67 @@
+<div class="container">
+  <div class="header">
+    <div>Schedule Email</div>
+    <div class="close" (click)="close()">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="body" [formGroup]="scheduleFG" *ngIf="scheduleFG">
+    <div class="left-container">
+      <mat-calendar
+        [selected]="scheduleFG.get('scheduleDate').value"
+        [minDate]="minDate"
+        (selectedChange)="updateFormDate($event)"
+      ></mat-calendar>
+    </div>
+    <div class="right-container">
+      <div class="field-container">
+        <div>
+          <img src="assets/svg/calendar.svg" alt="calendar" />
+        </div>
+        <div
+          class="calendar"
+          *ngIf="scheduleFG.get('scheduleDate')?.value > 0; else emptyDate"
+        >
+          {{ scheduleFG.get('scheduleDate').value | date: 'dd/MM/yyyy' }}
+        </div>
+      </div>
+      <div class="field-container">
+        <div>
+          <img src="assets/svg/time.svg" alt="time" />
+        </div>
+        <mat-form-field class="time">
+          <mat-select formControlName="time" placeholder="Time">
+            <mat-option
+              *ngFor="let item of timeList"
+              [value]="item.value"
+              [disabled]="!checkEnableTime(item.value)"
+              >{{ item.label }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="btn-wrapper">
+    <div class="schedule" (click)="close()">
+      <div class="schedule__text">
+        Cancel
+      </div>
+    </div>
+    <div
+      class="send"
+      [ngClass]="{ active: !isSending, disabled: isSending }"
+      (click)="scheduleCampaign()"
+    >
+      <div class="send__text">
+        Send
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #emptyDate>
+  <div class="calendar">
+    Date
+  </div>
+</ng-template>

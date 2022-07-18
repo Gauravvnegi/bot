@@ -1,46 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { SnackBarService } from 'libs/shared/material/src';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { Conversation } from '../../models/whatsapp-analytics.model';
 import { AnalyticsService } from '../../services/analytics.service';
+import { AdminUtilityService, analytics } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-conversation',
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.scss'],
 })
-export class ConversationComponent implements OnInit {
+export class ConversationComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   globalFilters;
   hotelId: string;
-  chart: any = {
-    Labels: ['No Data'],
-    Data: [[100]],
-    Type: 'doughnut',
-    Legend: false,
-    Colors: [
-      {
-        backgroundColor: ['#D5D1D1'],
-        borderColor: ['#D5D1D1'],
-      },
-    ],
-    Options: {
-      responsive: true,
-      cutoutPercentage: 0,
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-    },
-  };
+  chart: any = analytics.chart;
   stats: Conversation;
   constructor(
     private _adminUtilityService: AdminUtilityService,

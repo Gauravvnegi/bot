@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AirportConfigI } from 'libs/web-user/shared/src/lib/data-models/airportConfig.model';
 import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './airport-facilities.component.html',
   styleUrls: ['./airport-facilities.component.scss'],
 })
-export class AirportFacilitiesComponent implements OnInit {
+export class AirportFacilitiesComponent implements OnInit, OnDestroy {
   @Input() uniqueData;
   @Input() amenityData;
   @Input() subPackageForm;

@@ -4,6 +4,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -13,7 +14,6 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
-import { NotificationComponent } from 'libs/admin/notification/src/lib/components/notification/notification.component';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
@@ -32,23 +32,28 @@ import { Guest } from '../../models/guest-table.model';
 import { get } from 'lodash';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
+import {
+  NotificationComponent,
+  MarketingNotificationComponent,
+} from '@hospitality-bot/admin/notification';
 
 @Component({
   selector: 'hospitality-bot-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.scss'],
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent implements OnInit, OnDestroy {
   @Input() tabKey = 'guest_details';
   @Output() onDetailsClose = new EventEmitter();
   @ViewChild('adminDocumentsDetailsComponent')
   documentDetailComponent: AdminDocumentsDetailsComponent;
   self;
+  hotelId: string;
   detailsForm: FormGroup;
   details;
-  isGuestInfoPatched: boolean = false;
+  isGuestInfoPatched = false;
   primaryGuest;
-  isReservationDetailFetched: boolean = false;
+  isReservationDetailFetched = false;
   isGuestReservationFetched = false;
   shareIconList;
   colorMap;
@@ -129,19 +134,31 @@ export class DetailsComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
+        this.getHotelId([
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ]);
         const { hotelName: brandId, branchName: branchId } = data[
           'filter'
         ].value.property;
         const brandConfig = this._hotelDetailService.hotelDetails.brands.find(
-          (brand) => brand.id == brandId
+          (brand) => brand.id === brandId
         );
         this.branchConfig = brandConfig.branches.find(
-          (branch) => branch.id == branchId
+          (branch) => branch.id === branchId
         );
         this.getShareIcon();
         this.loadGuestInfo();
       })
     );
+  }
+
+  getHotelId(globalQueries): void {
+    globalQueries.forEach((element) => {
+      if (element.hasOwnProperty('hotelId')) {
+        this.hotelId = element.hotelId;
+      }
+    });
   }
 
   getConfig() {
@@ -274,7 +291,7 @@ export class DetailsComponent implements OnInit {
 
   verifyAllDocuments() {
     if (
-      this.detailsForm.get('documentStatus').get('status').value == 'COMPLETED'
+      this.detailsForm.get('documentStatus').get('status').value === 'COMPLETED'
     ) {
       this._snackBarService.openSnackBarAsText(
         'Documents are already verified.',
@@ -321,7 +338,7 @@ export class DetailsComponent implements OnInit {
   generateCheckinLink() {}
 
   acceptPayment(status = 'Accept') {
-    let data = {
+    const data = {
       stepName: 'PAYMENT',
       state: status,
       remarks: '',
@@ -564,7 +581,7 @@ export class DetailsComponent implements OnInit {
   }
 
   verifyJourney(journeyName, status) {
-    let data = {
+    const data = {
       journey: journeyName,
       state: status,
       remarks: '',
@@ -608,10 +625,12 @@ export class DetailsComponent implements OnInit {
   openSendNotification(channel) {
     if (channel) {
       const dialogConfig = new MatDialogConfig();
-      dialogConfig.disableClose = true;
+      dialogConfig.disableClose = false;
       dialogConfig.width = '100%';
       const notificationCompRef = this._modal.openDialog(
-        NotificationComponent,
+        channel === 'email'
+          ? MarketingNotificationComponent
+          : NotificationComponent,
         dialogConfig
       );
 
@@ -622,16 +641,15 @@ export class DetailsComponent implements OnInit {
         notificationCompRef.componentInstance.isEmail = false;
         notificationCompRef.componentInstance.channel = channel;
       }
+      notificationCompRef.componentInstance.hotelId = this.hotelId;
       notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
-      notificationCompRef.componentInstance.hotelId = this.details.reservationDetails.hotelId;
       notificationCompRef.componentInstance.isModal = true;
       notificationCompRef.componentInstance.onModalClose.subscribe((res) => {
-        // remove loader for detail close
         notificationCompRef.close();
       });
     } else {
       this._modal.close();
-      this.router.navigateByUrl('/pages/request');
+      this.router.navigateByUrl('/pages/conversation/request');
     }
   }
 
@@ -725,8 +743,8 @@ export class DetailsComponent implements OnInit {
   }
 
   get tabIndex() {
-    let { index } = this.detailsConfig.find(
-      (tabConfig) => tabConfig.key == this.tabKey
+    const { index } = this.detailsConfig.find(
+      (tabConfig) => tabConfig.key === this.tabKey
     );
     return index ? index : 0;
   }

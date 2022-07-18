@@ -1,0 +1,20 @@
+{
+  "graph_no_data": "No Data",
+  "source": {
+    "title": "Guest Source",
+    "tooltip": "Total number of guest booking came from different sources in a selected time frame."
+  },
+  "vip": {
+    "title": "VIP Guest"
+  },
+  "payment": {
+    "title": "Guest Payments",
+    "tooltip": "Total number of guest booking payment status in a selected time frame."
+  },
+  "document": {
+    "title": "Guest Documents",
+    "tooltip": "Total number of guest document status in a selected time frame."
+  },
+  "total_guests": "Total Guests",
+  "total_users": "Total Users"
+}

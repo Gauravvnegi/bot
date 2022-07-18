@@ -52,7 +52,7 @@ export interface IPaymentConfiguration {
   id: string;
   merchantId: string;
   accessCode: string;
-  gatewayType: GatewayTypes.ccavenue;
+  gatewayType: GatewayTypes.ccavenue | GatewayTypes.payumoney;
   subAccountId: string;
   chainId: string;
   secretKey: string;

@@ -1,11 +1,16 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import {
+  Component,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { feedback } from '@hospitality-bot/admin/feedback';
+import { feedback } from '../../../constants/feedback';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
-import { DetailsComponent } from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -13,8 +18,8 @@ import {
   FeedbackService,
   HotelDetailService,
   sharedConfig,
-  StatisticsService,
   TableService,
+  UserService,
 } from '@hospitality-bot/admin/shared';
 import {
   ModalService,
@@ -25,15 +30,17 @@ import * as FileSaver from 'file-saver';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import {
-  Feedback,
   FeedbackTable,
-  Notes,
   StayFeedbackTable,
 } from '../../../data-models/feedback-datatable.model';
 import { FeedbackTableService } from '../../../services/table.service';
 import { EntityState, SelectedChip } from '../../../types/feedback.type';
-import { FeedbackNotesComponent } from '../../feedback-notes/feedback-notes.component';
-
+import { FeedbackDetailModalComponent } from '../../modals/feedback-detail-modal/feedback-detail.component';
+import {
+  Departmentpermission,
+  Departmentpermissions,
+} from '../../../data-models/feedback-card.model';
+import { StatisticsService } from '../../../services/feedback-statistics.service';
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
   templateUrl: './feedback-datatable.component.html',
@@ -46,7 +53,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   @Input() tableName = feedback.table.name;
-  @Input() tabFilterIdx: number = 0;
+  @Input() tabFilterIdx = 0;
   @Input() tabFilterItems = [];
   globalFeedbackConfig = feedback;
   outlets = [];
@@ -58,15 +65,15 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   hotelId: string;
-  rowsPerPage: number = 25;
+  rowsPerPage = 25;
   colorMap;
   cols = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
-
+  tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
   chips = feedback.chips.feedbackDatatable;
-
   globalQueries = [];
   $subscription = new Subscription();
+  userPermissions: Departmentpermission[];
   constructor(
     public fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,
@@ -79,12 +86,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     protected statisticService: StatisticsService,
     protected _hotelDetailService: HotelDetailService,
     protected _translateService: TranslateService,
-    protected configService: ConfigService
+    protected configService: ConfigService,
+    protected userService: UserService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
+    this.tableFG?.addControl('tableType', new FormControl('table'));
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,
@@ -101,11 +110,33 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.getConfig();
   }
 
+  getUserPermission(feedbackType) {
+    this.$subscription.add(
+      this.userService.getUserPermission(feedbackType).subscribe((response) => {
+        this.userPermissions = new Departmentpermissions().deserialize(
+          response.userCategoryPermission
+        );
+        this.userService.userPermissions = response;
+      })
+    );
+  }
+
+  setTableType(value) {
+    this.tableFG.patchValue({ tableType: value });
+    if (value === feedback.tableTypes.table.value) {
+      this.loadInitialData([
+        ...this.globalQueries,
+        { order: sharedConfig.defaultOrder },
+        ...this.getSelectedQuickReplyFilters(),
+      ]);
+      this.getUserPermission(this.tabFilterItems[this.tabFilterIdx]?.value);
+    } else this.selectedRows = [];
+  }
+
   getConfig() {
     this.$subscription.add(
       this.configService.$config.subscribe((response) => {
         if (response) this.colorMap = response?.feedbackColorMap;
-        console.log(this.colorMap);
       })
     );
   }
@@ -123,18 +154,20 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.getHotelId(this.globalQueries);
         this.getOutlets(data['filter'].value.property.branchName);
         const feedbackType = data['filter'].value.feedback.feedbackType;
-        if (this.tabFilterItems.length === 0)
-          this.setTabFilters(
-            feedbackType === feedback.types.transactional
-              ? feedback.types.transactional
-              : feedback.types.stay
-          );
-        //fetch-api for records
-        this.loadInitialData([
-          ...this.globalQueries,
-          { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFilters(),
-        ]);
+
+        if (this.tableFG?.get('tableType').value !== 'card') {
+          if (this.tabFilterItems.length === 0)
+            this.setTabFilters(
+              feedbackType === feedback.types.transactional
+                ? feedback.types.transactional
+                : feedback.types.stay
+            );
+          this.loadInitialData([
+            ...this.globalQueries,
+            { order: sharedConfig.defaultOrder },
+            ...this.getSelectedQuickReplyFilters(),
+          ]);
+        }
       })
     );
   }
@@ -181,6 +214,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
     else this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
     this.setTableCols();
+    this.getUserPermission(this.tabFilterItems[this.tabFilterIdx].value);
   }
 
   /**
@@ -200,12 +234,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   getOutlets(branchId: string): void {
     this.outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
-      (branch) => branch['id'] == branchId
+      (branch) => branch['id'] === branchId
     ).outlets;
     this.outlets = [
       ...this.outlets,
       ...this._hotelDetailService.hotelDetails.brands[0].branches.filter(
-        (branch) => branch['id'] == branchId
+        (branch) => branch['id'] === branchId
       ),
     ];
   }
@@ -248,9 +282,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   getSelectedQuickReplyFilters(): SelectedChip[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => ({
-        entityState: item.value,
+        entityType: item.value,
       }));
   }
 
@@ -304,8 +338,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
       ]),
     };
-
-    return this.tableService.getGuestFeedbacks(config);
+    return this.tableService.getBifurationGTMData(config);
   }
 
   /**
@@ -364,12 +397,58 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.outlets,
         this.colorMap
       ).records;
-    this.totalRecords = data.total;
+    this.totalRecords =
+      data.entityTypeCounts[
+        this.tabFilterItems[this.tabFilterIdx].chips.filter(
+          (item) => item.isSelected
+        )[0].value
+      ];
     this.tabFilterItems[this.tabFilterIdx].total = data.total;
-    data.entityStateCounts &&
-      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    data.entityTypeCounts &&
+      this.updateQuickReplyFilterCount(data.entityTypeCounts);
 
     this.loading = false;
+  }
+
+  updateFeedbackState(event) {
+    const data = {
+      status: event.statusType,
+      notes: event.comment,
+    };
+    const id = event.id;
+    this.tableService.updateFeedbackState(id, data).subscribe(
+      (response) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'Status Updated Successfully.',
+              priorityMessage: 'Status Updated Successfully..',
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
+        this.tableService.$disableContextMenus.next(true);
+        this.loadInitialData([
+          ...this.globalQueries,
+          { order: sharedConfig.defaultOrder },
+          ...this.getSelectedQuickReplyFilters(),
+        ]);
+      },
+      ({ error }) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: error.message,
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+      }
+    );
   }
 
   /**
@@ -395,7 +474,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   customSort(event: SortEvent): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;
@@ -410,9 +489,11 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
-    this.setTableCols();
-    this.values = [];
-    this.changePage(+this.tabFilterItems[event.index].lastPage);
+    if (this.tableFG?.get('tableType').value !== 'card') {
+      this.setTableCols();
+      this.values = [];
+      this.changePage(+this.tabFilterItems[event.index].lastPage);
+    }
   }
 
   /**
@@ -546,9 +627,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param quickReplyType The selected chip.
    */
   toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
-    if (quickReplyTypeIdx == 0) {
+    if (quickReplyTypeIdx === 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
+        if (chip.value !== 'GTM') {
           chip.isSelected = false;
         }
       });
@@ -567,57 +648,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     }
 
     this.changePage(0);
-  }
-
-  /**
-   * @function openEditNotes To open edit notes modal.
-   * @param event The mouse click event.
-   * @param data The feedback data.
-   * @param notes The notes data for a particular feedback.
-   */
-  openEditNotes(event: MouseEvent, data: Feedback, notes: Notes): void {
-    event.stopPropagation();
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '550';
-    dialogConfig.data = {
-      feedback: data,
-      timezone: this._globalFilterService.timezone,
-    };
-    const detailCompRef = this._modal.openDialog(
-      FeedbackNotesComponent,
-      dialogConfig
-    );
-
-    this.$subscription.add(
-      detailCompRef.componentInstance.onNotesClosed.subscribe((res) => {
-        // remove loader for detail close
-        if (res.status) {
-          this.$subscription.add(
-            this.tableService.updateNotes(res.id, res.data).subscribe(
-              (response) => {
-                this.statisticService.markReadStatusChanged.next(true);
-                detailCompRef.close();
-                this._snackbarService
-                  .openSnackBarWithTranslate(
-                    {
-                      translateKey: 'messages.success.feedback_closed',
-                      priorityMessage: 'Feedback Closed successfully.',
-                    },
-                    '',
-                    {
-                      panelClass: 'success',
-                    }
-                  )
-                  .subscribe();
-                this.refreshTableData();
-              },
-              ({ error }) => this.showErrorMessage(error)
-            )
-          );
-        } else detailCompRef.close();
-      })
-    );
   }
 
   /**
@@ -704,15 +734,18 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
+    dialogConfig.data = {
+      feedback: rowData,
+      colorMap: this.colorMap,
+      feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+      isModal: true,
+      globalQueries: this.globalQueries,
+    };
+
     const detailCompRef = this._modal.openDialog(
-      DetailsComponent,
+      FeedbackDetailModalComponent,
       dialogConfig
     );
-
-    detailCompRef.componentInstance.guestId = rowData.guest.id;
-    detailCompRef.componentInstance.feedbackId = rowData.id;
-    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
-
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         // remove loader for detail close
@@ -737,7 +770,24 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     return services.filter((service) => !service.label.includes('COMMENT'));
   }
 
+  getRowDataNegativeServices(rowData) {
+    if (this.tabFilterItems[this.tabFilterIdx]?.value && !this.loading) {
+      if (
+        this.tabFilterItems[this.tabFilterIdx]?.value ===
+        feedback.types.transactional
+      )
+        return rowData.services.getNegativeRatedService();
+      return rowData.getNegativeRatedService();
+    }
+    return [];
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickout() {
+    this.tableService.$disableContextMenus.next(true);
   }
 }

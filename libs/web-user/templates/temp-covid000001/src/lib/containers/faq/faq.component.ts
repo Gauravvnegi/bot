@@ -20,7 +20,7 @@ export class FaqComponent implements OnInit, OnDestroy {
   faqCategories = [];
   faqQuestions = [];
 
-  dropdown: boolean = true;
+  dropdown = true;
 
   selectingCategory: string;
 

@@ -1,0 +1,166 @@
+@import 'main';
+
+.documentActionItemLabel {
+  margin-left: 0.5em;
+  font-weight: 500;
+}
+.tableHeading {
+  width: 5%;
+  background-color: #eaf0f6;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  text-align: center;
+}
+
+.icon-wrapper {
+  @include flex-space-between();
+  flex-wrap: wrap;
+
+  position: relative;
+  .icon {
+    width: 32%;
+    margin: 6% 0.5%;
+    @include flex-item-center();
+    flex-direction: column;
+
+    .table-body-journey-icon {
+      height: 14px;
+      width: 14px;
+      &:hover {
+        cursor: pointer;
+      }
+      @media screen and (max-width: 800px) {
+        height: 10px;
+        width: 10px;
+      }
+    }
+    .label {
+      font-size: 6px;
+      margin-top: 3px;
+      @media screen and (max-width: 800px) {
+        font-size: 3px;
+      }
+    }
+  }
+  .extra-width {
+    width: 24%;
+  }
+  .line {
+    position: absolute;
+    height: 2px;
+    width: 72%;
+    background-color: #edf1f5;
+    right: 17px;
+    @media screen and (max-width: 800px) {
+      width: 62%;
+    }
+  }
+  .first {
+    top: 15%;
+  }
+  .second {
+    top: 65%;
+  }
+}
+
+:host ::ng-deep .mat-slide-toggle-bar {
+  width: 50px;
+  height: 15px;
+  .mat-slide-toggle-thumb-container {
+    left: -2px;
+  }
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: $completed;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked {
+  .mat-slide-toggle-thumb-container {
+    left: 2px;
+    transform: translate3d(30px, 0, 0);
+    .mat-slide-toggle-thumb {
+      background-color: white;
+    }
+  }
+}
+
+.listing-button {
+  width: 145px;
+  height: 36px;
+  border-radius: 18px;
+  background-color: #4b56c0;
+  padding: 10px 23.25px 8px 18.25px;
+  cursor: pointer;
+  &.listing-button {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.56px;
+    text-align: left;
+    color: #fff;
+  }
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
+  color: $primary-purple !important;
+}
+
+:host ::ng-deep .data-table-row {
+  height: 80px;
+  
+  &:hover {
+    cursor: pointer;
+    background: $table-hover-background !important;
+  }
+}
+:host ::ng-deep .header {
+  color: $dark-blue !important;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+:host ::ng-deep .table-data-head {
+  color: $dark-blue !important;
+}
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+  height: 80px !important;
+}
+
+th.tableHeading.p-resizable-column {
+  background: #edf1f5 !important;
+  border-top: 1px solid #e4e4e4 !important;
+}
+
+:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
+  text-align: center;
+}
+td {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.72px;
+  color: #484848;
+}
+.ht{
+height: 80px;
+}
+.topic-name {
+  opacity: 0.4;
+}
+
+.status-toggle {
+  display: flex;
+  justify-content: center;
+}
+
+.control-container {
+  display: flex;
+  align-items: center;
+}

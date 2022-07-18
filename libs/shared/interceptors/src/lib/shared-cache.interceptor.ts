@@ -2,7 +2,7 @@ import {
   HttpInterceptor,
   HttpRequest,
   HttpHandler,
-  HttpEvent
+  HttpEvent,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable, Inject, Injector } from '@angular/core';
@@ -14,7 +14,7 @@ export class SharedCacheInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     //
-    if (req.method == 'GET') {
+    if (req.method === 'GET') {
       return next.handle(req);
     }
   }

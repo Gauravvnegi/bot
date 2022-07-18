@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -6,11 +13,12 @@ import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/dat
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
+import { analytics } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-datatable',
@@ -21,7 +29,7 @@ import { AnalyticsService } from '../../services/analytics.service';
   ],
 })
 export class InhouseRequestDatatableComponent extends BaseDatatableComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   @Input() entityType = 'Inhouse';
   @Input() optionLabels = [];
   @Output() onModalClose = new EventEmitter();
@@ -38,71 +46,8 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   ) {
     super(fb, tabFilterService);
   }
-
-  cols = [
-    {
-      field: 'itemCode',
-      header: 'Item & Priority Code / Qty',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'confirmationNumber',
-      header: 'Booking No. / Rooms',
-      isSort: true,
-      sortType: 'number',
-    },
-    {
-      field: 'guestDetails.primaryGuest.getFullName()',
-      header: 'Guest/ company',
-      isSort: true,
-      sortType: 'string',
-    },
-    {
-      field: 'journey',
-      header: 'Phone No./ Email',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: 'journey',
-      header: 'Item Name/ Desc./ Status/ Job Duration',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: 'remarks',
-      header: 'Assigned To/ Op & Cl - Dt & Tm',
-      isSort: false,
-      sortType: 'string',
-    },
-    {
-      field: '',
-      header: 'Actions',
-      isSort: false,
-      sortType: '',
-    },
-  ];
-
-  tabFilterItems = [
-    {
-      label: 'All',
-      content: '',
-      value: '',
-      disabled: false,
-      total: 0,
-      chips: [
-        {
-          label: 'All',
-          icon: '',
-          value: 'ALL',
-          total: 0,
-          isSelected: true,
-          type: '',
-        },
-      ],
-    },
-  ];
+  cols = analytics.cols;
+  tabFilterItems = analytics.tabFilterItems;
 
   hotelId: string;
 
@@ -191,7 +136,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
 
   getSelectedQuickReplyFilters() {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => ({
         actionType: item.value,
       }));
@@ -286,7 +231,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
 
   customSort(event: SortEvent) {
     const col = this.cols.filter((data) => data.field === event.field)[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;

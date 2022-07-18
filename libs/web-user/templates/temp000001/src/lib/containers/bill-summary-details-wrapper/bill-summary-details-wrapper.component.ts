@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
@@ -13,7 +13,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './bill-summary-details-wrapper.component.html',
   styleUrls: ['./bill-summary-details-wrapper.component.scss'],
 })
-export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
+export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent
+  implements OnInit, OnDestroy {
   signature: string;
 
   paymentSummary;
@@ -132,5 +133,6 @@ export class BillSummaryDetailsWrapperComponent extends BaseWrapperComponent {
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
+    this.$subscription.unsubscribe();
   }
 }

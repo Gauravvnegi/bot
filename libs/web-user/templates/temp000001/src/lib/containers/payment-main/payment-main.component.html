@@ -73,22 +73,14 @@
           >
             <img src="assets/mail.png" />
           </div>
-          <!-- <div class="seperator"></div>
-          <div
-            class="actions_wrapper__icon_box__icon"
-            (click)="downloadInvoice()"
-          >
-            <img src="assets/svg/Download.svg" />
-          </div> -->
         </div>
         <div class="actions_wrapper__title_box">
           <p>Download Receipt</p>
           <p [ngClass]="showFields ? 'selected_action_text' : ''">
             Send Invoice Email
           </p>
-          <!-- <p>Download Receipt</p> -->
         </div>
-        <div class="email_feild" *ngIf="showFields">
+        <div class="email_field" *ngIf="showFields">
           <web-user-input
             [parentForm]="emailFG"
             [name]="'email'"

@@ -1,0 +1,225 @@
+@import 'main';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  border-radius: 5px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+
+  .headings {
+    margin-left: 13px;
+    font-family: Roboto;
+    font-weight: bold;
+    font-size: 18px;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.96px;
+    text-align: left;
+    color: #002046;
+
+    .go-back {
+      display: flex;
+      padding-top: 20px;
+      align-items: center;
+      p {
+        cursor: default;
+      }
+      button:hover {
+        background-color: transparent;
+      }
+      .material-icons {
+        cursor: pointer;
+      }
+    }
+
+    .preDesigned {
+      display: flex;
+      padding: 40px 0 0 40px;
+      .head {
+        padding-top: 8px;
+        padding-right: 23px;
+        width: 200px;
+      }
+      .prehead {
+        padding-top: 8px;
+        padding-right: 23px;
+        width: 296px;
+      }
+    }
+  }
+
+  .heading {
+    padding-left: 40px;
+
+    p {
+      height: 33px;
+      margin: 44px 58px 31px 0;
+      font-family: Roboto;
+      font-size: 25px;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 1.5px;
+      text-align: left;
+      color: #002046;
+    }
+  }
+
+  .topic-cards {
+    padding-left: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+    .card {
+      cursor: pointer;
+      overflow-y: hidden;
+      overflow-x: hidden;
+      border: 1px solid grey;
+      width: 255px;
+      height: 273px;
+      margin: 0 4rem 2rem 4rem;
+    }
+  }
+
+  .show-button {
+    display: flex;
+    justify-content: center;
+    .button {
+      align-self: center;
+      width: 250px;
+      height: 46px;
+      margin: 56px 37px 32px 38px;
+      border-radius: 23px;
+      box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+      border: solid 1px #4b56c0;
+      font-family: Roboto;
+      font-size: 16px;
+      font-weight: 500;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      color: #4b56c0;
+      background-color: #fff;
+      justify-content: center;
+    }
+  }
+}
+
+:host ::ng-deep .mat-label {
+  display: none;
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  width: 205px;
+  height: 36px;
+  opacity: 0.2;
+  border-radius: 4px;
+  border: solid 1.7px #555555;
+  background-color: #fff;
+  .mat-form-field-label {
+    border-bottom: none;
+  }
+}
+
+:host
+  ::ng-deep
+  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-label,
++ .mat-form-field-label-wrapper .mat-form-field-label {
+  transform: translateY(-1.28125em) scale(0.75) perspective(100px);
+  -ms-transform: translateY(-1.28125em) scale(0.75);
+  width: 133.3333333333%;
+  display: none;
+}
+
+:host ::ng-deep .mat-button-focus-overlay {
+  display: none;
+}
+:host ::ng-deep .mat-form-field-underline {
+  display: none;
+}
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-wrapper {
+  width: 205px;
+}
+.heading {
+  padding-left: 40px;
+
+  p {
+    height: 33px;
+    margin: 44px 58px 31px 0;
+    font-family: Roboto;
+    font-size: 25px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 1.5px;
+    text-align: left;
+    color: #002046;
+  }
+}
+
+.topic-cards {
+  padding-left: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+
+  .card {
+    cursor: pointer;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    border: 1px solid grey;
+    width: 255px;
+    height: 273px;
+    margin: 0 4rem 2rem 4rem;
+  }
+}
+
+.show-button {
+  display: flex;
+  justify-content: center;
+  .button {
+    align-self: center;
+    width: 250px;
+    height: 46px;
+    margin: 56px 37px 32px 38px;
+    border-radius: 23px;
+    box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+    border: solid 1px #4b56c0;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.96px;
+    color: #4b56c0;
+    background-color: #fff;
+    justify-content: center;
+  }
+}
+
+.line {
+  border: 1px solid #9eaeb8;
+  width: 100%;
+  opacity: 0.3;
+}
+:host ::ng-deep .mat-select-value{
+  padding-left: 13px;
+  color: #002046 !important;
+}
+.line {
+  border: 1px solid #9eaeb8;
+    opacity: 0.3;
+    margin: 0 2rem;
+    width:94%;
+}

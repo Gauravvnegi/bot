@@ -31,6 +31,28 @@
     </div>
   </div>
   <div class="wrapper--right">
+    <div
+      class="wrapper--right--carousel"
+      slickContainer
+      #slickController="slick"
+      [slickConfig]="config"
+    >
+      <ng-container *ngIf="slickController.initialize">
+        <div slickItem></div>
+        <div slickItem class="carousel--free">
+          <div class="fredabg"></div>
+          <div class="freedie">
+            <img src="assets/svg/freedie-login.svg" alt="freedie-login" />
+          </div>
+        </div>
+        <div slickItem class="carousel--hed">
+          <div class="hedabg"></div>
+          <div class="heda">
+            <img src="assets/svg/heda-login.svg" alt="heda-login" />
+          </div>
+        </div>
+      </ng-container>
+    </div>
     <header class="wrapper--right-header">
       <a
         [href]="authConstants.linkUrl.aboutUs"
@@ -64,7 +86,6 @@
       <div class="image">
         <img [src]="authConstants.imgUrl.botshotLogo" alt="Botshot" />
       </div>
-      ©&nbsp;{{ currentDate }}, {{ 'copyright_text' | translate }}
     </div>
   </div>
 </div>

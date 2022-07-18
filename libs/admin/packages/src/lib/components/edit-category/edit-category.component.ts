@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -17,7 +17,7 @@ import { PackageService } from '../../services/package.service';
   templateUrl: './edit-category.component.html',
   styleUrls: ['./edit-category.component.scss'],
 })
-export class EditCategoryComponent implements OnInit {
+export class EditCategoryComponent implements OnInit, OnDestroy {
   private $subscription: Subscription = new Subscription();
 
   fileUploadData = {
@@ -133,7 +133,7 @@ export class EditCategoryComponent implements OnInit {
       return;
     }
     this.isSavingCategory = true;
-    let data = this.categoriesService.mapCategoryData(
+    const data = this.categoriesService.mapCategoryData(
       this.categoryForm.getRawValue()
     );
     this.$subscription.add(
@@ -147,7 +147,7 @@ export class EditCategoryComponent implements OnInit {
             { panelClass: 'success' }
           );
           this.router.navigate([
-            '/pages/package/category',
+            '/pages/library/package/category',
             this.hotelCategory.category.id,
           ]);
           this.isSavingCategory = false;
@@ -186,7 +186,7 @@ export class EditCategoryComponent implements OnInit {
               { panelClass: 'success' }
             );
             this.router.navigate([
-              '/pages/package/category',
+              '/pages/library/package/category',
               this.hotelCategory.category.id,
             ]);
             this.isSavingCategory = false;
@@ -204,7 +204,7 @@ export class EditCategoryComponent implements OnInit {
   }
 
   uploadFile(event): void {
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('files', event.file);
     this.$subscription.add(
       this.packageService.uploadImage(this.hotelId, formData).subscribe(
@@ -227,7 +227,7 @@ export class EditCategoryComponent implements OnInit {
   }
 
   redirectToCategories() {
-    this.router.navigate(['/pages/package/']);
+    this.router.navigate(['/pages/library/package/']);
   }
 
   private performActionIfNotValid(status: any[]): any[] {

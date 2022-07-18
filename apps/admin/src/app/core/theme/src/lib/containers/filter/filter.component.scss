@@ -1,9 +1,11 @@
 @import 'main';
 
 .filter--header {
+  background-color: $primary-purple;
   padding: $padding15 $padding10;
+  color: white;
   @include flex-between-center();
-  border-bottom: 1px solid #c5c5c5;
+  border-bottom: 1px solid $primary-purple;
   .close--wrapper {
     display: flex;
     align-items: center;
@@ -28,21 +30,24 @@
     align-items: center;
     color: #c5c5c5;
     .material-icon {
+      color: #c5c5c5;
       font-size: $font20;
       height: auto;
       width: auto;
       margin-left: $margin10;
       &:hover {
+        color: white;
         cursor: pointer;
-        color: $primary-purple;
       }
     }
     .filter {
       font-weight: 400;
       margin: 0;
+      color: #c5c5c5;
       font-size: $font16;
-      &:hover{
-        color: $primary-purple;
+      &:hover {
+        color: white;
+        cursor: pointer;
       }
     }
   }
@@ -50,26 +55,36 @@
     cursor: pointer;
   }
 }
+.filter--form {
+  border: 1px solid $primary-purple;
+}
 
 :host ::ng-deep .mat-tab-group {
   flex-direction: initial;
   position: relative;
+  background-color: white;
 }
 
 :host ::ng-deep .mat-tab-label {
   text-align: initial;
   display: block;
-  padding: $padding15;
+  padding: 20px;
   opacity: 1;
   height: auto;
   color: #c5c5c5;
+  min-width: 3rem !important;
+  .svg path {
+    fill:#c5c5c5; 
+  }
 }
 
 :host ::ng-deep .mat-tab-label-active {
   background-color: #e8eef5;
   color: $primary-purple;
+  border-bottom: 1px solid $primary-purple;
+  border-top: 1px solid $primary-purple;
   .svg path {
-    fill: $primary-purple;
+    fill: $primary-purple !important;
   }
 }
 
@@ -80,6 +95,7 @@
 :host ::ng-deep .mat-tab-labels {
   display: block;
 }
+
 
 :host ::ng-deep .mat-ink-bar {
   display: none;
@@ -94,10 +110,11 @@
   font-weight: $medium;
   border-radius: 25px;
   padding: 12px 0px;
-  width: $normal-button-width;
+  width: 155px;
+  margin-bottom: 28px;
   position: absolute;
   bottom: 10px;
-  right: 21%;
+  right: 15%;
   opacity: 0.85;
   z-index: 222;
   box-shadow: 0px 0px 5px 0px $primary-purple;
@@ -110,18 +127,7 @@
 :host ::ng-deep .svg {
   height: 20px;
   width: 20px;
-  path {
-    fill: #c5c5c5;
-  }
 }
-
-// :host ::ng-deep .svg {
-//   height: 20px;
-// }
-
-// :host ::ng-deep .svg path {
-//   fill: #c5c5c5;
-// }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
   background-color: #c5c5c5;
@@ -137,15 +143,33 @@
 
 :host ::ng-deep .mat-tab-header {
   border-bottom: none;
-  border-right: 1px solid #c5c5c5;
-  min-height: 50vh;
+  border-right: 1px solid $primary-purple;
+  min-height: calc(100vh - 53px);
 }
 
 :host ::ng-deep .mat-tab-body-content {
-  padding: $padding15;
   padding-bottom: 4rem;
 }
-
+.tab-head {
+  background-color: #e8eef5;
+  color: #4b56c0;
+  padding: $padding15;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.96px;
+  text-align: left;
+  border-bottom: 1px solid $primary-purple;
+  &__padding {
+    padding: $padding15;
+  }
+}
+:host ::ng-deep .mat-select-value-text {
+  font-size: 16px;
+}
 :host ::ng-deep .hotel-branch {
   color: #c5c5c5;
   margin-bottom: $margin20;
@@ -166,6 +190,7 @@
 
 :host ::ng-deep .guest-title {
   color: #c5c5c5;
+  margin-bottom: $margin20;
 }
 
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
@@ -183,11 +208,6 @@
   margin: 20px 0;
 }
 
-:host ::ng-deep .mat-tab-label .mat-tab-label-content {
-  display: flex;
-  justify-content: space-between;
-}
-
 :host ::ng-deep {
   .mat-radio-group {
     display: flex;
@@ -202,4 +222,10 @@
   .mat-radio-checked .mat-radio-inner-circle {
     background-color: #4b56c0;
   }
+}
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: none !important;
 }

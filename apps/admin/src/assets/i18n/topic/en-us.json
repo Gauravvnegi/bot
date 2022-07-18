@@ -1,0 +1,42 @@
+{
+  "datatable": {
+    "no_data": "No data available in table",
+    "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries",
+    "status_success": "Status updated successfully",
+    "error_message": "Invalid"
+  },
+  "createTopic": "+Create Topic",
+
+  "topicForm": { "editTopic": "Edit Topic", "createTopic": "Create Topic" },
+
+  "validationMessage": {
+    "name": " Name is required",
+    "description": "Description is required"
+  },
+  "formFieldLabels": {
+    "name": "Name:",
+    "type": "Type:",
+    "description": "Description:",
+    "active": "Active:"
+  },
+
+  "active": {
+    "disable": "Disable",
+    "enable": "Enable"
+  },
+  "message": {
+    "success": {
+      "topic_created": "Topic Created Successfully.",
+      "topic_updated": "Topic Updated Successfully.",
+      "topic_status_updated": "Status updated Successfully.."
+    },
+    "error": {
+      "topic_not_created": "Topic Not Created.",
+      "topic_not_updated": "Topic Not Updated.",
+      "topic_status_update_fail": "Status Not Updated.",
+      "exportCSV_fail": "Export CSV Failed.",
+      "loading_fail": "Loading Fail.",
+      "invalid":"Invalid Form"
+    }
+  }
+}

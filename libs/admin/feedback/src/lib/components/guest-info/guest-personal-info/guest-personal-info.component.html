@@ -1,0 +1,59 @@
+<div class="guest-person" *ngIf="data">
+  <div class="person-title">
+    {{ 'guestData.personalInfo' | translate }}
+  </div>
+  <div class="person-image">
+    <div class="default">
+      <img
+        [src]="data.profileUrl"
+        *ngIf="data.profileUrl; else defaultAvatar"
+      />
+      <ng-template #defaultAvatar
+        ><div>
+          {{ data.getProfileNickName() }}
+        </div></ng-template
+      >
+    </div>
+    <div class="guest-name">
+      {{ data.firstName || 'Unknown Person' }}
+      {{ data.lastName }}
+    </div>
+  </div>
+  <div class="border-line"></div>
+  <div class="contact-detials">
+    {{ 'guestData.contact' | translate }}
+  </div>
+  <div class="label">
+    {{ 'guestData.phone' | translate }}
+  </div>
+  <div class="label-text">
+    {{ data.phoneNumber }}
+  </div>
+  <div class="label">
+    {{ 'guestData.email' | translate }}
+  </div>
+  <div class="label-text">
+    {{ data.email || 'Unknown' }}
+  </div>
+  <div class="contact-detials">
+    {{ 'guestData.other' | translate }}
+  </div>
+  <div class="label">
+    {{ 'guestData.noOfStays' | translate }}
+  </div>
+  <div class="label-text">
+    {{ data.numberOfBookings }}
+  </div>
+  <div class="label">
+    {{ 'top_low_nps.label' | translate }}
+  </div>
+  <div class="label-text">
+    {{ data.nps }}
+  </div>
+  <div class="label">
+    {{ 'churnPrediction' | translate }}
+  </div>
+  <div class="label-text">
+    {{ data.churn }}
+  </div>
+</div>

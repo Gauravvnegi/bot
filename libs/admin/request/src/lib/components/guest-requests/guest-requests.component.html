@@ -1,0 +1,93 @@
+<div class="guest-request">
+  <div class="guest-request-title">
+    Requests
+  </div>
+  <div
+    *ngIf="requestList?.records; else noRequest"
+    class="guest-request-items-wrap"
+  >
+    <div
+      *ngFor="let request of requestList.records"
+      class="guest-request-items-wrap-item"
+    >
+      <div class="row guest-request-items-wrap-item-row">
+        <div class="item-code">Item Code : {{ request.itemCode }}</div>
+        <div
+          class="priority-status"
+          [ngClass]="{
+            'priority-low': request.priority === 'Low',
+            'priority-medium': request.priority === 'Medium',
+            'priority-high': request.priority === 'High',
+            'priority-asap': request.priority === 'ASAP'
+          }"
+        >
+          {{ request.priority }}
+        </div>
+      </div>
+      <div class="row intiated-row">
+        <div>{{ request.status }}</div>
+        <div>JD:-{{ request.jobDuration }}m</div>
+      </div>
+      <div class="row nail-utter-row">
+        {{ request.itemName }}
+      </div>
+      <div class="row gsb-row">
+        {{ request.remarks }}
+      </div>
+      <div class="date-time-row">
+        <div class="mr-10">
+          <img
+            src="assets/svg/calendar.svg"
+            alt="calendar"
+            class="date-time-row-img"
+          />
+        </div>
+        <div>
+          <div>
+            {{ request.getRequestDateTime() }}
+          </div>
+          <div class="mt-5">
+            {{ request.getClosedTime() }}
+          </div>
+        </div>
+      </div>
+      <mat-select
+        class="status"
+        placeholder=""
+        [value]="request.action"
+        [disabled]="true"
+        (selectionChange)="handleStatusChange(request, $event)"
+      >
+        <ng-container
+          *ngIf="request.journey === 'INHOUSE'; else prearrivaloptions"
+          ><mat-option
+            [value]="item"
+            *ngFor="let item of optionLabels"
+            [disabled]="item === 'Timeout'"
+            >{{ item }}</mat-option
+          ></ng-container
+        >
+        <ng-template #prearrivaloptions
+          ><mat-option
+            [value]="item"
+            *ngFor="let item of preArrivalOptions"
+            [disabled]="item === 'Timeout'"
+            >{{ item }}</mat-option
+          ></ng-template
+        >
+      </mat-select>
+      <div class="guest-request-items-wrap-item-under-line"></div>
+    </div>
+  </div>
+  <ng-template #noRequest>
+    <div class="no-request">
+      <div class="mt-45">
+        <img src="assets/svg/conversation-no-request.svg" alt="No Request" />
+      </div>
+      <div class="no-request-msg">
+        No request found
+      </div>
+      <div class="no-request-underline"></div>
+    </div>
+  </ng-template>
+</div>

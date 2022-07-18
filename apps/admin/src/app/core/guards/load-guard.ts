@@ -6,7 +6,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { ModuleNames, UserService } from '@hospitality-bot/admin/shared';
 import { get } from 'lodash';
 import { forkJoin, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class LoadGuard implements CanActivate {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    let subscription = this.subscriptionService.getModuleSubscription();
+    const subscription = this.subscriptionService.getModuleSubscription();
     if (subscription === undefined) {
       if (!this._userService.getLoggedInUserid()) {
         this._router.navigate(['/auth']);
@@ -56,24 +56,40 @@ export class LoadGuard implements CanActivate {
 
   validate(subscription, route): boolean {
     if (subscription && subscription.modules) {
-      if (!subscription.modules[route.routeConfig.path].active) {
+      if (!subscription.modules[route.routeConfig.path]?.active) {
         if (route.routeConfig.path === 'feedback') {
-          return get(subscription, [
-            'modules',
-            'FEEDBACK_TRANSACTIONAL',
-            'active',
-          ]);
-        }
-        this.goBack(route.routeConfig.path);
+          if (
+            get(subscription, [
+              'modules',
+              ModuleNames.FEEDBACK_TRANSACTIONAL,
+              'active',
+            ])
+          )
+            return true;
+          else this.openErrorPage();
+        } else if (
+          ['listing', 'topic', 'template'].includes(route.routeConfig.path)
+        ) {
+          if (get(subscription, ['modules', ModuleNames.MARKETING, 'active']))
+            return true;
+          else this.openErrorPage();
+        } else if (route.routeConfig.path === 'assets') {
+          if (
+            get(subscription, ['modules', ModuleNames.PACKAGES, 'active']) ||
+            get(subscription, ['modules', ModuleNames.MARKETING, 'active'])
+          )
+            return true;
+          else this.openErrorPage();
+        } else this.openErrorPage();
       }
       return subscription.modules[route.routeConfig.path].active;
     } else {
-      this.goBack(route.routeConfig.path);
+      this.openErrorPage();
       return false;
     }
   }
 
-  goBack(path) {
-    if (path !== 'dashboard') this.location.back();
+  openErrorPage() {
+    this._router.navigate(['/pages/404']);
   }
 }

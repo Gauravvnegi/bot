@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Route } from '@angular/router';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminNotificationModule } from 'libs/admin/notification/src/lib/admin-notification.module';
+import { EmailService } from 'libs/admin/notification/src/lib/services/email.service';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { DropdownModule } from 'primeng/dropdown';
 import { AdminReservationRoutingModule } from './admin-reservation.routing.module';
@@ -40,7 +41,6 @@ export const adminReservationRoutes: Route[] = [];
     DropdownModule,
     AdminNotificationModule,
   ],
-  providers: [ReservationService, AdminDetailsService],
   declarations: [
     DetailsComponent,
     AdminGuestDetailsComponent,
@@ -59,6 +59,7 @@ export const adminReservationRoutes: Route[] = [];
     InstantFeedbackComponent,
   ],
   exports: [
+    AdminSharedModule,
     DetailsComponent,
     AdminGuestDetailsComponent,
     AdminDocumentsDetailsComponent,
@@ -74,5 +75,6 @@ export const adminReservationRoutes: Route[] = [];
     StayFeedbackComponent,
     InstantFeedbackComponent,
   ],
+  providers: [ReservationService, AdminDetailsService],
 })
 export class AdminReservationModule {}

@@ -1,0 +1,50 @@
+<div class="asset-container" (click)="$event.stopPropagation()">
+  <div class="asset-container__header">
+    <div class="close">
+      <i class="fa fa-times" aria-hidden="true" (click)="close()"></i>
+    </div>
+    <div class="title">
+      {{ 'selectAsset' | translate }}
+    </div>
+  </div>
+  <div>
+    <mat-tab-group
+      #matTab
+      (selectedTabChange)="onTabChanged($event)"
+      [selectedIndex]="tabFilterIdx"
+    >
+      <mat-tab *ngFor="let item of tabFilterItems">
+        <ng-template mat-tab-label>
+          <div class="messageTabWrapper">
+            <div><img [src]="item.src" /></div>
+            <div *ngIf="item.total">({{ item.total }})</div>
+          </div>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <div class="body">
+    <div *ngFor="let asset of assets; let i = index" class="img-container">
+      <div class="image">
+        <img
+          [src]="asset.type === 'Image' ? asset.url : asset.thumbnailUrl"
+          alt="Asset"
+        />
+      </div>
+      <div
+        class="copy"
+        [cdkCopyToClipboard]="asset.url"
+        (click)="handleCopyToClipboard($event)"
+      >
+        <div>{{ 'copyLink' | translate }}</div>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="assets.length < tabFilterItems[this.tabFilterIdx]?.total"
+    class="load-more"
+    (click)="loadMoreAssetData()"
+  >
+    {{ 'showMore' | translate }}
+  </div>
+</div>

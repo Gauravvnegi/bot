@@ -3,7 +3,11 @@
 .layoutMessageCheck {
   @include flex-between-center();
   @include width(75%);
+  .margBtm {
+    margin-bottom: -6px;
+  }
 }
+
 .layoutFilterContent {
   color: $light-grey;
   font-size: $font12;
@@ -38,6 +42,9 @@
     justify-content: flex-start;
     gap: 2%;
     @include width(100%);
+  }
+  .positionRel {
+    position: relative;
   }
   .temp-width {
     width: 100%;
@@ -74,13 +81,14 @@
   overflow-x: hidden;
   overflow-y: hidden;
   &--header {
-    padding: 6px $padding10;
+    padding: 6px 0 6px $padding10;
     position: relative;
     @media (max-width: $tablet) {
       @include width(93%);
       @include margin-left(auto);
     }
     .options {
+      display: flex;
       @include flex-between-center();
       @media (max-width: $tablet) {
         @include height(53px);
@@ -104,9 +112,8 @@
 
       .header--button {
         padding: 0px $padding10;
-        @include width(100%);
         @include height(42px);
-        border: 2px solid $light-grey;
+        border: none;
         font-size: 12px;
         color: $primary-purple;
         @include flex-between-center();
@@ -115,9 +122,6 @@
         position: relative;
         &:hover {
           cursor: pointer;
-          background-color: rgba(232, 238, 245, 0.25);
-          color: white;
-          border: 2px solid $primary-purple;
         }
         &:focus {
           outline: none;
@@ -138,12 +142,12 @@
       }
       .filter-wrapper {
         position: absolute;
-        top: 98%;
-        left: 1%;
-        box-shadow: 0px 0px 5px 0px darkgray;
-        @include width(45vw);
+        top: -1vh;
+        right: 0;
+        height: 100vh;
+        box-shadow: 0px 0px 3px 0px $primary-purple;
+        @include width(299px);
         background-color: $white;
-        border-radius: $border5;
         z-index: 22;
       }
       .date-range {
@@ -167,17 +171,27 @@
         span {
           color: $dark-blue;
         }
-        
       }
     }
   }
   &--container {
     .main {
-      max-height: calc(100vh - 9.5vh);
+      max-height: calc(100vh - 60px);
       overflow-x: hidden;
       background-color: #f4f5f6;
+      position: relative;
+      .blackscreen {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        opacity: 0.3;
+        background-color: black;
+        z-index: 4;
+        display: none;
+      }
+
       .router__wrapper {
-        min-height: calc(100vh - 19.5vh);
+        min-height: calc(100vh - 12.5vh);
         @include padding(0 1.5rem);
         @include padding-top(1.5rem);
         @media only screen and (max-width: 1300px) {
@@ -189,7 +203,7 @@
         }
         @media (max-width: $tablet) {
           padding: 1.3%;
-          @include width(93%);
+          @include width(80%);
           @include margin-left(auto);
         }
       }
@@ -252,4 +266,41 @@
 }
 :host::ng-deep .mat-tab-label-active img {
   filter: grayscale(0) !important;
+}
+.options1 {
+  flex: 9;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.options2 {
+  display: flex;
+  justify-content: flex-end;
+  flex: 2;
+}
+
+.disabled {
+  pointer-events: none;
+  .blackscreen {
+    display: block !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 13px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+::-webkit-scrollbar-track {
+  background: rgb(238, 233, 233);
+}
+
+::-webkit-scrollbar-thumb {
+  &:hover {
+    background: #8f8f8f;
+  }
+  background: #c3c2c2;
+  border-radius: 10px;
 }

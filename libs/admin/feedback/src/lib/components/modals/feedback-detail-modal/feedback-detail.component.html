@@ -1,0 +1,239 @@
+<div style="position: relative;">
+  <div class="bg">
+    <div class="txt">
+      Details
+    </div>
+    <div class="click" (click)="close()">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="chat-height" style="position: relative;">
+    <div class="guestInfoOpen">
+      <div class="guestInfoOpen-guest-wrap">
+        <div class="guestInfoAvatar">
+          {{ data.feedback?.getProfileNickName() }}
+        </div>
+        <div class="selectedChat"></div>
+        {{ data.feedback?.guest.getFullName() }}
+      </div>
+      <div class="mr-10">
+        <div class="req_button">
+          <div class="export" (click)="exportCSV()">
+            <img class="paper" src="assets/images/paper.png" alt="" />
+            <p>Export Feedback</p>
+          </div>
+        </div>
+        <div
+          class="view-feedback-btn"
+          (click)="downloadFeedback($event, data.feedback.id)"
+        >
+          <img src="assets/svg/View.svg" alt="" />
+          <div class="view-feedback-btn__text">
+            View Feedback
+          </div>
+        </div>
+        <img
+          class="icon"
+          src="assets/images/guest-info-icon .png"
+          [alt]=""
+          (click)="openGuestInfo()"
+        />
+      </div>
+    </div>
+    <div class="guestInfoOpen" [formGroup]="feedbackFG">
+      <div class="feedback_labels">
+        <div *ngIf="data.feedback?.guestData.bookingNo">
+          BNO:{{ data.feedback?.guestData.bookingNo }}
+        </div>
+        <div>{{ data.feedback?.getTableOrRoomNo() }}</div>
+        <div>
+          {{ data.feedback.getCreatedDate(_globalFilterService.timezone) }}
+        </div>
+        <div class="feedback">
+          <div class="feedback-service">
+            <div class="feedback-service__container">
+              <div class="feedback-service__container__label others">
+                <div class="feedback-service__container__label__text">
+                  {{ 'OverAll' | translate }}
+                </div>
+                <div class="stay-booking-feedback">
+                  <p
+                    class="number"
+                    *ngIf="
+                      data.feedbackType ===
+                        globalFeedbackConfig.types.transactional;
+                      else stayFeedbakServiceLength
+                    "
+                  >
+                    +{{ data.feedback.services.services.length }}
+                  </p>
+                </div>
+                <ng-template #stayFeedbakServiceLength>
+                  <p class="number">+{{ data.feedback.services.length }}</p>
+                </ng-template>
+              </div>
+              <div class="stay-booking-feedback status-opacity-success">
+                <p
+                  class="number status-background-success textblk"
+                  [style.background]="
+                    (colorMap?.stayFeedbacks)[data.feedback.ratings].colorCode
+                  "
+                  *ngIf="data.feedback.ratings"
+                >
+                  {{ data.feedback.ratings }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-select
+          class="assignee-dropdown"
+          [value]="feedbackFG?.get('assignee')?.value"
+          (selectionChange)="setAssignee($event)"
+          placeholder="Assignee"
+          [disabled]="assigneeList?.length === 0"
+        >
+          <mat-option
+            *ngFor="let assignee of assigneeList"
+            [value]="assignee.id"
+          >
+            {{ assignee.firstName }} {{ assignee.lastName }}
+          </mat-option>
+        </mat-select>
+      </div>
+      <div class="guestInfoOpen-guest-wrap"></div>
+      <div class="mr-10"></div>
+    </div>
+    <div class="feedback-chat" #feedbackChatRef>
+      <div class="feedback-chat__ratings">
+        <div *ngFor="let service of feedbackServices">
+          <div class="rating__card">
+            <div class="rating__name">{{ service.question }}</div>
+            <div
+              class="emoji"
+              *ngIf="checkForNumber(service.rating); else numericCard"
+            >
+              <img
+                [src]="feedbackConfig.images.happy.url"
+                [alt]="feedbackConfig.images.happy.alt"
+                [ngClass]="{ 'gray-image': service.rating !== 'EE' }"
+              />
+              <img
+                [src]="feedbackConfig.images.sceptic.url"
+                [alt]="feedbackConfig.images.sceptic.alt"
+                [ngClass]="{ 'gray-image': service.rating !== 'ME' }"
+              />
+              <img
+                [src]="feedbackConfig.images.sad.url"
+                [alt]="feedbackConfig.images.sad.alt"
+                [ngClass]="{ 'gray-image': service.rating !== 'EI' }"
+              />
+            </div>
+            <ng-template #numericCard>
+              <div class="rating__value">
+                <div
+                  class="rating__box"
+                  *ngFor="let n of num"
+                  [ngClass]="{ font: n < service.rating }"
+                  [ngStyle]="
+                    n < service.rating
+                      ? {
+                          'background-color': service.colorCode,
+                          color: '',
+                          opacity: 0.5
+                        }
+                      : {}
+                  "
+                >
+                  <div
+                    class="rating"
+                    [ngClass]="{ border: n > service.rating }"
+                    [ngStyle]="
+                      n < service.rating
+                        ? {
+                            'background-color': service.colorCode,
+                            color: ''
+                          }
+                        : n === service.rating
+                        ? {
+                            'background-color': service.colorCode,
+                            color: 'white'
+                          }
+                        : {}
+                    "
+                  >
+                    {{ n }}
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+            <div
+              class="rating__comment"
+              *ngIf="service.comment && service.comment.length"
+            >
+              {{ service.comment }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="comment-container">
+        <div
+          class="guestComment"
+          *ngIf="data.feedback?.comments && data?.feedback.comments.length"
+        >
+          <div class="time">
+            {{ data.feedback.getTime(_globalFilterService.timezone) }}
+          </div>
+          <div class="comment">
+            {{ data?.feedback.comments }}
+          </div>
+          <div class="userImage">
+            {{ data?.feedback.getProfileNickName() }}
+          </div>
+        </div>
+
+        <ng-container *ngFor="let remark of data.feedback?.remarks">
+          <div class="userChat">
+            <div class="userComments" *ngIf="remark.remarks">
+              <div class="userImage">
+                {{ remark.getNickName() }}
+              </div>
+              <div class="comment">
+                {{ remark.remarks }}
+              </div>
+              <div class="time">
+                {{ remark.getTime(_globalFilterService.timezone) }}
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!-- <div class="userComments">
+        <div class="time">
+          {{ data.feedback?.getTime(_globalFilterService.timezone) }}
+        </div>
+        <div class="comment">
+          {{ data.feedback?.comments }}
+        </div>
+        <div class="userImage">
+          {{ data.feedback?.getProfileNickName() }}
+        </div>
+      </div> -->
+    </div>
+
+    <hospitality-bot-feedback-detail-footer
+      [feedback]="data.feedback"
+      [userPermissions]="userPermissions"
+      [feedbackFG]="feedbackFG"
+      (updateStatus)="updateFeedbackState()"
+      (addComment)="addComment($event)"
+    ></hospitality-bot-feedback-detail-footer>
+  </div>
+  <div class="guest-info-enable" *ngIf="guestInfoEnable" [@slideInOut]>
+    <hospitality-bot-guest-info
+      (closeInfo)="closeGuestInfo($event)"
+      [guestModalData]="data.feedback"
+      [isModal]="true"
+    ></hospitality-bot-guest-info>
+  </div>
+</div>

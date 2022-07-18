@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
@@ -17,7 +17,8 @@ import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.
   templateUrl: './health-declaration-wrapper.component.html',
   styleUrls: ['./health-declaration-wrapper.component.scss'],
 })
-export class HealthDeclarationWrapperComponent extends BaseWrapperComponent {
+export class HealthDeclarationWrapperComponent extends BaseWrapperComponent
+  implements OnInit, OnDestroy {
   @ViewChild('healthComponent') healthComponent: HealthDeclarationComponent;
   modalVisible = false;
 

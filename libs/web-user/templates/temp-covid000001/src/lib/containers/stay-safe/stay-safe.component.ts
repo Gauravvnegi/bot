@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Measures } from 'libs/web-user/shared/src/lib/data-models/safeMeasureConfig.model';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 import { SafeMeasuresService } from 'libs/web-user/shared/src/lib/services/safe-measures.service';
@@ -12,7 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './stay-safe.component.html',
   styleUrls: ['./stay-safe.component.scss'],
 })
-export class StaySafeComponent implements OnInit {
+export class StaySafeComponent implements OnInit, OnDestroy {
   @ViewChild('precautionaryMeasures') hyperlinkElement: ElementRef;
   safeMeasures: Measures;
   $subscription: Subscription = new Subscription();
@@ -45,17 +51,18 @@ export class StaySafeComponent implements OnInit {
 
   getSafeMeasures() {
     this.$subscription.add(
-      this._safeMeasures
-      .getSafeMeasures(this._hotelService.hotelId)
-      .subscribe((measuresResponse) => {
-        this.safeMeasures = measuresResponse;
-      },({error})=>{
-        this._translateService
-          .get(`MESSAGES.ERROR.${error.type}`)
-          .subscribe((translatedMsg) => {
-            this._snackBarService.openSnackBarAsText(translatedMsg);
-          });
-      })
+      this._safeMeasures.getSafeMeasures(this._hotelService.hotelId).subscribe(
+        (measuresResponse) => {
+          this.safeMeasures = measuresResponse;
+        },
+        ({ error }) => {
+          this._translateService
+            .get(`MESSAGES.ERROR.${error.type}`)
+            .subscribe((translatedMsg) => {
+              this._snackBarService.openSnackBarAsText(translatedMsg);
+            });
+        }
+      )
     );
   }
 

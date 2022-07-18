@@ -25,9 +25,7 @@
       routerLinkActive
       #rla="routerLinkActive"
       [routerLinkActiveOptions]="{ exact: false }"
-      [ngClass]="
-        rla.isActive ? 'active' : ''
-      "
+      [ngClass]="rla.isActive ? 'active' : ''"
     >
       <a
         class="main_heading_anchor"
@@ -36,11 +34,7 @@
         [style.background-color]="
           rla.isActive ? list_item_colour : 'transparent'
         "
-        [style.color]="
-          rla.isActive
-            ? activeFontColor
-            : normalFontColor
-        "
+        [style.color]="rla.isActive ? activeFontColor : normalFontColor"
         [style.padding]="'0px 15px'"
         ><div class="sidenav_logo">
           <img [src]="menuItem.url" class="svg-icon" />
@@ -75,8 +69,8 @@
           [style.background-color]="
             rla.isActive ? list_item_colour : 'transparent'
           "
+          [style.justify-content]="'center'"
           [style.color]="rla.isActive ? activeFontColor : normalFontColor"
-          [style.padding]="'0px 25px'"
           [style.width]="'100%'"
           ><div class="sidenav_logo">
             <img [src]="subItem.url" class="svg-icon" />

@@ -1,14 +1,15 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { InhouseSentiments } from '../../models/statistics.model';
 import { AnalyticsService } from '../../services/analytics.service';
+import { analytics } from '@hospitality-bot/admin/shared';
 import { InhouseRequestDatatableComponent } from '../inhouse-request-datatable/inhouse-request-datatable.component';
 
 @Component({
@@ -16,7 +17,7 @@ import { InhouseRequestDatatableComponent } from '../inhouse-request-datatable/i
   templateUrl: './inhouse-sentiments.component.html',
   styleUrls: ['./inhouse-sentiments.component.scss'],
 })
-export class InhouseSentimentsComponent implements OnInit {
+export class InhouseSentimentsComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   @Input() requestConfiguration;
   $subscription = new Subscription();
@@ -34,97 +35,9 @@ export class InhouseSentimentsComponent implements OnInit {
     };
   })(this);
 
-  legendData = [
-    {
-      label: 'To Do',
-      bubbleColor: '#fb3d4e',
-      img: 'assets/svg/test-4.svg',
-    },
-    {
-      label: 'Active',
-      bubbleColor: '#4A73FB',
-      img: 'assets/svg/test.svg',
-    },
-    {
-      label: 'Closed',
-      bubbleColor: '#F25E5E',
-      img: 'assets/svg/test-2.svg',
-    },
-    {
-      label: 'Timeout',
-      bubbleColor: '#30D8B6',
-      img: 'assets/svg/test-3.svg',
-    },
-  ];
-
-  chartTypes = [
-    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
-    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
-  ];
-
-  chart: any = {
-    chartData: [{ data: [], label: 'No Data', fill: false }],
-    chartLabels: [],
-    chartOptions: {
-      responsive: true,
-      elements: {
-        line: {
-          tension: 0,
-        },
-      },
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: false,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: true,
-            },
-            ticks: {
-              min: 0,
-            },
-          },
-        ],
-      },
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-      legendCallback: this.getLegendCallback,
-    },
-    chartColors: [
-      {
-        borderColor: '#fb3d4e',
-        backgroundColor: '#fb3d4e',
-      },
-      {
-        borderColor: '#2a8853',
-        backgroundColor: '#2a8853',
-      },
-      {
-        borderColor: '#0bb2d4',
-        backgroundColor: '#0bb2d4',
-      },
-      {
-        borderColor: '#FF9F67',
-        backgroundColor: '#FF9F67',
-      },
-    ],
-    chartLegend: false,
-    chartType: 'line',
-  };
-
+  chart = analytics.inhouseSentimentChart;
+  legendData = analytics.legendData;
+  chartTypes = analytics.chartTypes;
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _globalFilterService: GlobalFilterService,
@@ -145,7 +58,7 @@ export class InhouseSentimentsComponent implements OnInit {
   listenForGlobalFilters() {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
+        const calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
@@ -183,16 +96,16 @@ export class InhouseSentimentsComponent implements OnInit {
 
   legendOnClick = (index, event) => {
     event.stopPropagation();
-    let ci = this.baseChart.chart;
-    let alreadyHidden =
+    const ci = this.baseChart.chart;
+    const alreadyHidden =
       ci.getDatasetMeta(index).hidden === null
         ? false
         : ci.getDatasetMeta(index).hidden;
 
     ci.data.datasets.forEach((e, i) => {
-      let meta = ci.getDatasetMeta(i);
+      const meta = ci.getDatasetMeta(i);
 
-      if (i == index) {
+      if (i === index) {
         if (!alreadyHidden) {
           meta.hidden = true;
         } else {
@@ -241,11 +154,9 @@ export class InhouseSentimentsComponent implements OnInit {
           this.selectedInterval,
           d,
           this._globalFilterService.timezone,
-          this.selectedInterval === 'date'
-            ? 'DD MMM'
-            : this.selectedInterval === 'month'
-            ? 'MMM YYYY'
-            : '',
+          this._adminUtilityService.getDateFormatFromInterval(
+            this.selectedInterval
+          ),
           this.selectedInterval === 'week'
             ? this._adminUtilityService.getToDate(this.globalFilters)
             : null

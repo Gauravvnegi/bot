@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
@@ -6,12 +6,12 @@ import {
   CardNames,
   TableNames,
   HotelDetailService,
-  StatisticsService,
 } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../constants/feedback';
+import { StatisticsService } from '../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../services/table.service';
 
 @Component({
@@ -19,7 +19,7 @@ import { FeedbackTableService } from '../../services/table.service';
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.scss'],
 })
-export class FeedbackComponent {
+export class FeedbackComponent implements OnInit, OnDestroy {
   feedbackConfig = feedback;
   public cards = CardNames;
   tables = TableNames;
@@ -96,7 +96,7 @@ export class FeedbackComponent {
     const branch = this._hotelDetailService.hotelDetails.brands
       .find((brand) => brand.id === globalQueryValue.property.hotelName)
       .branches.find(
-        (branch) => branch['id'] == globalQueryValue.property.branchName
+        (branch) => branch['id'] === globalQueryValue.property.branchName
       );
     this.setTabFilterItems(branch);
   }
@@ -104,7 +104,7 @@ export class FeedbackComponent {
   getOutlets(branchId, brandId) {
     const branch = this._hotelDetailService.hotelDetails.brands
       .find((brand) => brand.id === brandId)
-      .branches.find((branch) => branch['id'] == branchId);
+      .branches.find((branch) => branch['id'] === branchId);
     this.outlets = branch.outlets;
     this.statisticsService.outletIds =
       this.globalFeedbackFilterType === feedback.types.both
@@ -184,7 +184,7 @@ export class FeedbackComponent {
         ? [this.tabFilterItems[this.tabFilterIdx].value]
         : this.tabFilterItems
             .map((item) => item.value)
-            .filter((value) => value != 'ALL');
+            .filter((value) => value !== 'ALL');
     this.statisticsService.type = this.tabFilterItems[this.tabFilterIdx].type;
     this.statisticsService.$outletChange.next({
       status: true,

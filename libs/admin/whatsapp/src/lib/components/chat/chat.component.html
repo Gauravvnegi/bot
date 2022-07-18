@@ -1,6 +1,6 @@
 <div class="chat-height">
   <div class="guestInfoOpen">
-    <div class="guestInfoOpen-guest-wrap" (click)="openGuestInfo()">
+    <div class="guestInfoOpen-guest-wrap">
       <div class="guestInfoAvatar" [style.background]="selectedChat?.color">
         <img
           [src]="chat?.receiver?.profileUrl"
@@ -16,18 +16,39 @@
         {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}
       </div>
     </div>
+
     <div
       class="mr-10"
       [formGroup]="liveChatFG"
       channelSubscribed
       [paths]="'WHATSAPP_BOT'"
     >
-      <mat-slide-toggle
-        formControlName="status"
-        (change)="onLiveChatChange()"
-        [disabled]="liveChatStatus.value"
-        >Hand Over to Bot</mat-slide-toggle
-      >
+      <div class="req_button">
+        <div class="guestInfoEditWrapper">
+          <div
+            class="guestInfoEditContainer"
+            *ngIf="buttonConfig[selectedIndex].button"
+            (click)="handleButtonClick()"
+          >
+            <img [src]="buttonConfig[selectedIndex].icon" alt="" />
+            <div class="guestInfoEditText">
+              {{ buttonConfig[selectedIndex].label }}
+            </div>
+          </div>
+        </div>
+        <mat-slide-toggle
+          formControlName="status"
+          (change)="onLiveChatChange()"
+          [disabled]="liveChatStatus.value"
+          >Hand Over to Bot</mat-slide-toggle
+        >
+        <img
+          class="icon"
+          src="assets/images/guest-info-icon .png"
+          [alt]=""
+          (click)="openGuestInfo()"
+        />
+      </div>
     </div>
   </div>
   <div

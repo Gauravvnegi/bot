@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { FileData } from 'libs/web-user/shared/src/lib/data-models/file';
@@ -22,7 +29,7 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
   templateUrl: './application-status.component.html',
   styleUrls: ['./application-status.component.scss'],
 })
-export class ApplicationStatusComponent implements OnInit {
+export class ApplicationStatusComponent implements OnInit, OnDestroy {
   protected _dialogRef: MatDialogRef<any>;
   summaryDetails: SummaryDetails = new SummaryDetails();
   protected regCardComponent = RegistrationCardComponent;
@@ -181,12 +188,13 @@ export class ApplicationStatusComponent implements OnInit {
             document.body.appendChild(iframe);
             iframe.contentWindow.print();
           },
-          ({ error }) =>
+          ({ error }) => {
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
               .subscribe((translatedMsg) => {
                 this._snackBarService.openSnackBarAsText(translatedMsg);
-              })
+              });
+          }
         )
     );
   }
@@ -197,29 +205,21 @@ export class ApplicationStatusComponent implements OnInit {
         .summaryDownload(this._reservationService.reservationId)
         .subscribe(
           (response) => {
-            var blob = new Blob([response], { type: 'application/pdf' });
-            const blobUrl = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.target = '_blank';
-            link.download = `${this.guestDetail.guests[0].firstName}_${
-              this.guestDetail.guests[0].lastName
-            }_export_summary_${new Date().getTime()}.pdf`;
-            link.dispatchEvent(
-              new MouseEvent('click', {
-                bubbles: true,
-                cancelable: true,
-                view: window,
-              })
+            FileSaver.saveAs(
+              response,
+              `${this.guestDetail.guests[0].firstName}_${this.guestDetail.guests[0].lastName}` +
+                '_export_summary_' +
+                new Date().getTime() +
+                '.pdf'
             );
-            link.remove();
           },
-          ({ error }) =>
+          ({ error }) => {
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
               .subscribe((translatedMsg) => {
                 this._snackBarService.openSnackBarAsText(translatedMsg);
-              })
+              });
+          }
         )
     );
   }

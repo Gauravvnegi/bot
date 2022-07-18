@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Regex } from '@hospitality-bot/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Regex } from '@hospitality-bot/admin/shared';
 import { AuthService } from '../../services/auth.service';
 
 /**

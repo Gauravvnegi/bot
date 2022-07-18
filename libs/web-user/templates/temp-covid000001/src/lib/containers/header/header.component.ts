@@ -11,7 +11,7 @@ import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.servic
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  status: boolean = false;
+  status = false;
 
   toggleMenuButton() {
     this.status = !this.status;

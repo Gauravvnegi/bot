@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { SummaryDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/billSummaryConfig.model';
@@ -17,7 +17,7 @@ import { AddGstComponent } from '../add-gst/add-gst.component';
   templateUrl: './bill-summary-details.component.html',
   styleUrls: ['./bill-summary-details.component.scss'],
 })
-export class BillSummaryDetailsComponent implements OnInit {
+export class BillSummaryDetailsComponent implements OnInit, OnDestroy {
   private $subscription: Subscription = new Subscription();
   @Input() parentForm: FormGroup;
   @Input() reservationData;

@@ -23,3 +23,12 @@
       justify-content: inherit;
     }
   }
+
+  :host ::ng-deep .ngx-timepicker-control{
+    width: 75px !important;
+  }
+  .enter-below-details{
+    padding-top: 60px;
+    border-top: solid 2px $border-color;
+    padding-bottom: 20px;
+  }

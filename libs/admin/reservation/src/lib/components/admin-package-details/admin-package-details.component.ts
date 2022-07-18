@@ -56,7 +56,7 @@ export class AdminPackageDetailsComponent implements OnChanges, AfterViewInit {
   generatePackages() {
     this.paidAmenityFA.controls.forEach((paidAmenity: FormGroup, index) => {
       const paidPackage = this.detailsData.amenitiesDetails.paidPackages.find(
-        (paidPackage) => paidPackage.id == paidAmenity.get('id').value
+        (paidPackage) => paidPackage.id === paidAmenity.get('id').value
       );
       if (componentPackageMapping[paidPackage.type]) {
         //create a specifi package

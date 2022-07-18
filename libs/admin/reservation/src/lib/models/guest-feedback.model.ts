@@ -1,11 +1,6 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
-import {
-  Booking,
-  Feedback,
-  Room,
-  Status,
-} from '../../../../dashboard/src/lib/data-models/reservation-table.model';
+import { Booking, Feedback, Room } from './reservation-table.model';
 
 export class GuestDetails {
   records: GuestDetail[];

@@ -25,7 +25,7 @@ export class BaseWrapperComponent implements OnInit, AfterViewInit, OnDestroy {
   protected buttonRefs = {};
 
   public isWrapperRendered$: Subject<boolean> = new Subject();
-  public isRendered: boolean = false;
+  public isRendered = false;
 
   ngOnInit(): void {}
 

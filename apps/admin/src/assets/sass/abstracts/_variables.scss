@@ -14,7 +14,8 @@ $initiated: #6bacf8;
 $reject: #f00d2a;
 $completed: #53b33e;
 $light-gray: #e0e0e0;
-$medium-gay:#b8bbbe;
+$medium-gay: #b8bbbe;
+$manually-contacts: #707070;
 // $completed1: #2cf708;
 $pending: #c2c2c2;
 $default: #959ea7;
@@ -24,7 +25,7 @@ $white: #ffffff;
 $button-blue: #4b56c0;
 $auth-gray: #555;
 $note: #9ea3aa;
-$note1:#8995a3;
+$note1: #8995a3;
 $black: #000;
 $tooltip: #484848;
 $warning: #f6b155;
@@ -34,6 +35,8 @@ $approved: #2f1dce;
 $btn-shadow: #4b56c04d;
 $box-shadow: #0000000d;
 $hover-box-shadow: #0368ff42;
+$chocolate: chocolate;
+$olivedrab: olivedrab;
 $timeout: #0bb2d4;
 $accept: #119e0c;
 $closed: #fb3d4e;
@@ -42,24 +45,33 @@ $gray-total: #8995a3;
 $text-email: #faa700;
 $text-bot: #745af2;
 $booking-feedback: #0030b5;
-$list-popup:#cfd9f5;
+$list-popup: #cfd9f5;
 $arrival-time: #b2b7bc;
-$accordian-background:#e8eef5;
+$accordian-background: #e8eef5;
 
 // grey palet
 $c-white: $white;
-$c-gray-71: #d3d3d3;
+$c-gray-99: #f5f6fa;
 $c-gray-98: #f3f3f3;
 $c-gray-95: #ededed;
+$c-gray-92: #eaf0f6;
+$c-gray-91: #e5e9f2;
 $c-gray-90: #e3e3e3;
 $c-gray-89: #e2e2e2;
+$c-gray-87: #e1e1f2;
 $c-gray-85: #d9d9d9;
+$c-gray-82: #d3d3d3;
+$c-gray-81: #ced5d9;
 $c-gray-80: #cccccc;
 $c-gray-77: #c5c5c5;
 $c-gray-75: #c0c0c0;
+$c-gray-74: #b8bbbe;
 $c-gray-72: #b4b4b4;
+$c-gray-71: #b2b7bc;
 $c-gray-70: #b0b0b0;
+$c-gray-61: #99a6b5;
 $c-gray-60: #999999;
+$c-gray-55: #909090;
 $c-gray-50: #808080;
 $c-gray-47: #7e7e7e;
 $c-gray-45: #727272;
@@ -84,18 +96,24 @@ $pending-2: #38649f;
 $accepted: #389f99;
 $initiated-2: #ff8f00;
 $tab-bottom-border: rgba(0, 0, 0, 0.12);
-$table-hover-background:rgba(0, 0, 0, 0.01);
+$table-hover-background: rgba(0, 0, 0, 0.01);
 $table-popup-background: rgba(0, 0, 0, 0.04);
-$table-hover-dark-background:rgba(0, 0, 0, 0.03);
+$table-hover-dark-background: rgba(0, 0, 0, 0.03);
 $go-btn-default: #4b56c033;
+$priority-low: #119e0c;
+$priority-medium: #25a2e2;
+$email: #faa700;
+$pacific-blue: #0bb2d4;
+$dodger-blue: #3e8ef7;
+$blue-magenta: #745af2;
+$alice-blue: #edf1f5;
+$room-type: #f8dd8c;
 $dropdown-selected-value: #673ab7;
-
 $popup-button-width: 10vw;
-
 $normal-button-width: 15vw;
-
 $box-shadow-1: 0px 0px 6px $c-gray-71;
-
+$priority-high: #f8b633;
+$priority-asap: #ce0c0c;
 $palettes: (
   red: (
     600: #c6002b,

@@ -148,11 +148,11 @@ export class ModuleSubscription {
     this.features = get(input, ['features']);
     input.features?.MODULE?.forEach((module) => {
       if (!this.modules[ModuleNames[module.name]] && ModuleNames[module.name]) {
-        let tempCards = new Object();
+        const tempCards = new Object();
         ModuleConfig[ModuleNames[module.name]].cards.forEach((card) => {
           tempCards[card] = { active: module.active };
         });
-        let tempTables = new Object();
+        const tempTables = new Object();
         ModuleConfig[ModuleNames[module.name]].tables.forEach((table) => {
           tempTables[table] = {
             active: module.active,

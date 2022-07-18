@@ -37,27 +37,27 @@
       </div>
       <div class="header-seperator"></div>
       <div class="guest_data">
-        <div class="guest_data__feild">
+        <div class="guest_data__field">
           <div class="label">
             {{ guestData.guestAttributes.overAllNps / 10 }}/10
           </div>
           <div class="value">Overall NPS</div>
         </div>
-        <div class="guest_data__feild">
+        <div class="guest_data__field">
           <div class="label">
             {{ guestData.guestAttributes.churnProbalilty }}
           </div>
           <div class="value">Churn Probability</div>
         </div>
-        <div class="guest_data__feild">
+        <div class="guest_data__field">
           <div class="label">{{ guestData.guestAttributes.totalSpend }}</div>
           <div class="value">Overall Spent</div>
         </div>
-        <div class="guest_data__feild">
+        <div class="guest_data__field">
           <div class="label">{{ guestData.guestAttributes.potential }}</div>
           <div class="value">Potential</div>
         </div>
-        <div class="guest_data__feild">
+        <div class="guest_data__field">
           <div class="label">{{ bookingCount }}</div>
           <div class="value">Bookings</div>
         </div>
@@ -141,15 +141,10 @@
       </div>
     </div>
     <div
-      style="
-        display: flex;
-        align-items: center;
-        margin: 15px 0;
-        padding: 0 30px 20px;
-      "
+      class="flxExt"
       *ngIf="isGuestInfoPatched && guestReservationDropdownList.length"
     >
-      <div style="display: flex; align-items: center;">
+      <div class="flx">
         <div class="svg-wrapper">
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -59,10 +59,10 @@ export class User implements Deserializable {
   }
 
   getAvailablePermissions() {
-    let availablePermissions = [];
+    const availablePermissions = [];
     this.permissionConfigs.forEach((config) => {
       for (let permissionType in config.permissions) {
-        if (config.permissions[permissionType] == 1) {
+        if (config.permissions[permissionType] === 1) {
           availablePermissions.push(
             `${config.entity.slice(0, 1).toUpperCase()}${config.entity
               .slice(1)

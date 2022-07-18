@@ -1,0 +1,313 @@
+@import 'main';
+
+.wrapper {
+  padding: $padding20;
+  background-color: white;
+  border-radius: 5px;
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .back {
+      display: flex;
+      align-items: center;
+      .label {
+        letter-spacing: 0.96px;
+        font-weight: $bold;
+        font-size: $font16;
+      }
+      .material-icons {
+        margin-right: $margin15;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  &-form {
+    padding-left: $padding20;
+    .fields {
+      display: flex;
+      align-items: center;
+      margin-top: 2%;
+      justify-content: space-between;
+      @media (max-width: $tablet) {
+        flex-wrap: wrap;
+        gap: 60px;
+      }
+      .toggle_wrapper {
+        display: flex;
+        align-items: center;
+        min-width: 35%;
+        .status {
+          font-size: $font14;
+          margin-right: 20px;
+        }
+        .status--left {
+          color: $primary-gray;
+          font-size: $font16;
+        }
+        .status--right {
+          color: $primary-black;
+          margin-left: 20px;
+          font-size: $font16;
+        }
+      }
+      .note {
+        color: $primary-gray;
+        font-size: $font12;
+        padding-left: 11%;
+        margin-bottom: 20px;
+      }
+      .field {
+        display: flex;
+        align-items: center;
+        width: 31.5%;
+        margin-right: 1.5%;
+        @media (max-width: $tablet) {
+          @include width(42.6%);
+        }
+        ::ng-deep .mat-form-field-infix {
+          @media (max-width: 1024px) {
+            width: inherit;
+          }
+        }
+      }
+      .description {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        // margin-right: 1.5%;
+        @media (max-width: $tablet) {
+          @include width(42.6%);
+        }
+        ::ng-deep .mat-form-field-infix {
+          @media (max-width: 1024px) {
+            width: inherit;
+          }
+        }
+      }
+      .material-icons {
+        margin-left: 15px;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .image-button {
+      display: flex;
+      align-items: baseline;
+      .image {
+        height: 150px;
+        width: 200px;
+      }
+    }
+    .margin-adjust {
+      padding: $padding20 0;
+    }
+  }
+  .wrapper-text {
+    margin: 15px 0;
+    padding-left: $padding20;
+    .add-text {
+      font-family: Roboto;
+      font-size: $font16;
+      font-weight: bold;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: normal;
+      letter-spacing: 0.96px;
+      text-align: left;
+      color: $dark-blue;
+    }
+  }
+  .manually-add {
+    display: flex;
+    .manually-contacts {
+      opacity: 0.9;
+      border-radius: 4px;
+      border: solid 1px $manually-contacts;
+      width: 255px;
+      height: 135px;
+      margin: 30px 31px 15px 0;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      // justify-content: center;
+      padding-top: 30px;
+      align-items: center;
+      color: $primary-gray;
+      letter-spacing: 0.96px;
+      font-weight: bold;
+      padding-bottom: 12px;
+      .manually-import {
+        padding-top: 20px;
+        font-size: 16px;
+      }
+    }
+  }
+  .save-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    .save-button {
+      display: flex;
+      justify-content: center;
+      width: 300px;
+      height: 46px;
+      margin: 121px 34px 0 2.5px;
+      padding: 12px 106px 13px;
+      border-radius: 23px;
+      box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+      background-color: $primary-purple;
+      .save-text {
+        font-size: $font16;
+        font-weight: 500;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 0.96px;
+        text-align: left;
+        color: white;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .mat-slide-toggle-bar {
+  width: 50px;
+  height: 15px;
+  .mat-slide-toggle-thumb-container {
+    left: -2px;
+  }
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: $completed;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked {
+  .mat-slide-toggle-thumb-container {
+    left: 2px;
+    transform: translate3d(30px, 0, 0);
+    .mat-slide-toggle-thumb {
+      background-color: white;
+    }
+  }
+}
+
+:host ::ng-deep .mat-form-field-infix {
+  border-top: none;
+  letter-spacing: 0.96px;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+  background-color: $primary-gray;
+}
+
+:host ::ng-deep .mat-form-field-disabled .mat-form-field-underline {
+  background-color: transparent;
+}
+
+.mat-label {
+  font-size: $font16;
+  color: $primary-gray;
+  margin-right: 10px;
+  width: 165px;
+  @media only screen and (max-width: 1300px) {
+    font-size: $font13;
+  }
+  @media only screen and (max-width: 1080px) {
+    font-size: $font10;
+  }
+}
+
+:host ::ng-deep .mat-select-arrow {
+  border-top-color: $primary-gray;
+}
+
+:host ::ng-deep .mat-form-field {
+  width: 100%;
+}
+
+.full-width {
+  width: 100% !important;
+  margin-right: 0 !important;
+}
+
+.footer_button {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+  margin-top: 50px;
+  button {
+    @include admin-panel-button();
+    padding: 0;
+    font-weight: 400;
+  }
+}
+
+:host ::ng-deep .upload__box {
+  border: 1px dashed $light-grey;
+}
+
+:host ::ng-deep .currency {
+  width: 28%;
+}
+
+:host ::ng-deep .rate {
+  width: 36.2%;
+  margin-left: 5px;
+}
+
+:host ::ng-deep .mat-select-value-text {
+  font-size: $font16;
+  color: $dark-blue;
+}
+
+:host ::ng-deep input.mat-input-element {
+  font-size: $font16;
+  color: $dark-blue;
+}
+
+:host ::ng-deep .description {
+  width: 100% !important;
+}
+
+:host ::ng-deep .description .mat-form-field-infix {
+  min-width: 100%;
+  letter-spacing: 0.96px;
+}
+
+:host
+  ::ng-deep
+  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-label,
+.mat-form-field-appearance-legacy.mat-form-field-can-float
+  .mat-input-server:focus
+  + .mat-form-field-label-wrapper
+  .mat-form-field-label {
+  display: none !important;
+}
+
+// :host ::ng-deep .description-fields{
+//   width: 100% !important;
+//   display: block !important;
+// // }
+// :host ::ng-deep .description-field{
+//   width: 100% !important;
+//   display: block !important;
+// }
+
+:host ::ng-deep .field.description-field {
+  width: 100% !important;
+  display: block;
+}
+:host ::ng-deep .mat-form-field.description {
+  width: 100% !important;
+  display: block !important;
+}
+
+:host ::ng-deep .mat-description {
+  width: 8% !important;
+}

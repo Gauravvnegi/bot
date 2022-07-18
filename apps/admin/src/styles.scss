@@ -205,3 +205,19 @@ body {
 .mat-option.mat-active {
   color: $dropdown-selected-value;
 }
+
+.active {
+  pointer-events: visible;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+.comparison-negative {
+  color: $comparison-negative;
+}
+
+.comparison-positive {
+  color: $comparison-positive;
+}

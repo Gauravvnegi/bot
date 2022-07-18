@@ -1,6 +1,45 @@
 import { get, set } from 'lodash';
 import { Chip } from '../types/feedback.type';
 
+export class ARTGraph {
+  data: ART[];
+  average: number;
+
+  deserialize(input) {
+    this.data = new Array<ART>();
+
+    input.artGraph?.forEach((item) =>
+      this.data.push(new ART().deserialize(item))
+    );
+    this.average = input.average;
+    return this;
+  }
+}
+
+export class ART {
+  label: string;
+  colorCode: string;
+  value: number;
+  feedbackCount: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'value', get(input, ['resolutionTime'])),
+      set({}, 'feedbackCount', get(input, ['resolutioncount']))
+    );
+    this.colorCode =
+      input.resolutionTime <= 12
+        ? '#508919'
+        : input.resolutionTime <= 24
+        ? '#ff8f00'
+        : '#ef1d45';
+
+    return this;
+  }
+}
+
 export class NPS {
   label: string;
   score: number;
@@ -225,17 +264,20 @@ export class PerformanceNPS {
     this.performances = new Array<Touchpoint>();
     Object.assign(this, set({}, 'label', get(input, ['label'])));
 
-    input.npsPerformace.TOP_PERFORMING.forEach((data) =>
-      this.performances.push({ ...data, colorCode: '#1AB99F' })
-    );
-    input.npsPerformace.LOW_PERFORMING.sort(function (a, b) {
+    input.npsPerformace.forEach((data) => {
+      this.performances.push({
+        ...data,
+        colorCode:
+          data.score < 40
+            ? '#ef1d45'
+            : data.score <= 80
+            ? '#ff8f00'
+            : '#508919',
+      });
+    });
+    input.npsPerformace.sort(function (a, b) {
       return b.score - a.score;
     });
-
-    input.npsPerformace.LOW_PERFORMING.forEach((data) =>
-      this.performances.push({ ...data, colorCode: '#EF1D45' })
-    );
-
     return this;
   }
 }
@@ -423,10 +465,13 @@ export const SharedColors = {
   LUNCH: '#f18533',
   BREAKFAST: '#4974e0',
   DINNER: '#3db76b',
-  INPROGRESS: '#31bb92',
-  RESOLVED: '#ff6804',
+  INPROGRESS: '#4ba0f5',
+  RESOLVED: '#31bb92',
   OPEN: '#4ba0f5',
   CLOSED: '#ff6804',
+  TODO: '#c5c5c5',
+  TIMEOUT: '#ef1d45',
+  NOACTION: '#ff8f00',
 };
 
 export class NPOSVertical {
@@ -435,11 +480,10 @@ export class NPOSVertical {
   Dinner: ServiceStat[];
 
   deserialize(input) {
-    let chipLabels = [];
     this.Breakfast = new Array<ServiceStat>();
     this.Lunch = new Array<ServiceStat>();
     this.Dinner = new Array<ServiceStat>();
-    chipLabels = new Array<string>();
+    const chipLabels = new Array<string>();
 
     input.forEach((data) => {
       chipLabels.push(data.label);

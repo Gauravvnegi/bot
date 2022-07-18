@@ -1,34 +1,46 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { UserService } from '@hospitality-bot/admin/shared';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { get } from 'lodash';
+import { Subscription } from 'rxjs';
+import { ModuleNames } from '../../../../../../../../../../../libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { AuthService } from '../../../../../../auth/services/auth.service';
+import { layoutConfig } from '../../../constants/layout';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
 import { GlobalFilterService } from '../../../services/global-filters.service';
 import { FirebaseMessagingService } from '../../../services/messaging.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
+import { trigger, transition, animate, style } from '@angular/animations';
 
 @Component({
   selector: 'admin-layout-one',
   templateUrl: './layout-one.component.html',
   styleUrls: ['./layout-one.component.scss'],
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({ transform: 'translateX(100%)' }),
+        animate('200ms ease-in', style({ transform: 'translateX(0%)' })),
+      ]),
+      transition(':leave', [
+        animate('200ms ease-in', style({ transform: 'translateX(100%)' })),
+      ]),
+    ]),
+  ],
 })
-export class LayoutOneComponent implements OnInit {
+export class LayoutOneComponent implements OnInit, OnDestroy {
   backgroundColor: string;
   background_image: string;
-  profile = [
-    { label: 'Profile', value: 'profile' },
-    { label: 'Logout', value: 'logout' },
-  ];
+  profile = layoutConfig.profile;
   outlets = [];
   lastUpdatedAt: string;
-  isGlobalFilterVisible: boolean = false;
-  isDetailPageVisible: boolean = false;
+  isGlobalFilterVisible = false;
+  isDetailPageVisible = false;
   searchFG: FormGroup;
   timezone: string;
   filterConfig = {
@@ -39,8 +51,8 @@ export class LayoutOneComponent implements OnInit {
       return this.totalFilters <= 0 ? '' : `(+${this.totalFilters}) Others`;
     },
   };
-
-  isGlobalSearchVisible: boolean = true;
+  private $firebaseMessagingSubscription = new Subscription();
+  isGlobalSearchVisible = true;
 
   constructor(
     private _router: Router,
@@ -54,50 +66,53 @@ export class LayoutOneComponent implements OnInit {
     private fb: FormBuilder,
     private firebaseMessagingService: FirebaseMessagingService,
     private subscriptionPlanService: SubscriptionPlanService
-  ) {}
+  ) {
+    this.initSearchQueryForm();
+  }
 
   ngOnInit() {
     this.initLayoutConfigs();
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
-    this.initSearchQueryForm();
-    this.initFirebaseMessaging();
   }
 
-  initFirebaseMessaging() {
-    this.firebaseMessagingService.requestPermission({
-      hotelId: this._hotelDetailService.hotelDetails.brands[0].branches.filter(
-        (d) => d.name === this.filterConfig.branchName
-      )[0].id,
+  initFirebaseMessaging(entityId?) {
+    const requestPermissionData = {
+      hotelId: entityId,
       userId: this._userService.getLoggedInUserid(),
-    });
-    this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
-      const notificationPayload = payload;
-      this.firebaseMessagingService.playNotificationSound();
-      if (notificationPayload) {
-        switch (notificationPayload['data']?.notificationType) {
-          case 'Live Request':
-            if (this.checkForMessageRoute())
-              this.firebaseMessagingService.liveRequestEnable.next(
-                notificationPayload
-              );
-            break;
-          case 'In-house Request':
-            if (this._router.url.includes('request'))
-              this.firebaseMessagingService.newInhouseRequest.next(
-                notificationPayload
-              );
-            break;
-          default:
-            if (this.checkForMessageRoute())
-              this.firebaseMessagingService.currentMessage.next(payload);
-            else if (Object.keys(payload).length) {
-              this.firebaseMessagingService.showNotificationAsSnackBar(payload);
-            }
-            break;
+    };
+    this.firebaseMessagingService.requestPermission(requestPermissionData);
+    this.$firebaseMessagingSubscription.add(
+      this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
+        const notificationPayload = payload;
+        this.firebaseMessagingService.playNotificationSound();
+        if (notificationPayload) {
+          switch (notificationPayload['data']?.notificationType) {
+            case 'Live Request':
+              if (this.checkForMessageRoute())
+                this.firebaseMessagingService.liveRequestEnable.next(
+                  notificationPayload
+                );
+              break;
+            case 'In-house Request':
+              if (this._router.url.includes('request'))
+                this.firebaseMessagingService.newInhouseRequest.next(
+                  notificationPayload
+                );
+              break;
+            default:
+              if (this.checkForMessageRoute())
+                this.firebaseMessagingService.currentMessage.next(payload);
+              else if (Object.keys(payload).length) {
+                this.firebaseMessagingService.showNotificationAsSnackBar(
+                  payload
+                );
+              }
+              break;
+          }
         }
-      }
-    });
+      })
+    );
   }
 
   initSearchQueryForm(): void {
@@ -116,67 +131,34 @@ export class LayoutOneComponent implements OnInit {
   }
 
   setInitialFilterValue() {
-    const branches = this._hotelDetailService.hotelDetails?.brands[0]?.branches;
-    this.outlets = get(this._hotelDetailService.hotelDetails, [
-      'brands',
-      '0',
-      'branches',
-      branches.length - 1,
-      'outlets',
-    ]);
-    // console.log(outlets);
-    this.filterConfig.brandName = get(this._hotelDetailService.hotelDetails, [
-      'brands',
-      '0',
-      'label',
-    ]);
-    this.filterConfig.branchName = get(this._hotelDetailService.hotelDetails, [
-      'brands',
-      '0',
-      'branches',
-      branches.length - 1,
-      'label',
-    ]);
+    const brand = get(this._hotelDetailService.hotelDetails, ['brands', '0']);
+    const branches = brand?.branches;
+    const branch = get(branches, [branches.length - 1]);
+    this.outlets = branch?.outlets;
+    this.filterConfig.brandName = brand?.label;
+    this.filterConfig.branchName = branch?.label;
     this.filterService.emitFilterValue$.next({
       property: {
-        hotelName: get(this._hotelDetailService.hotelDetails, [
-          'brands',
-          '0',
-          'id',
-        ]),
-        branchName: get(this._hotelDetailService.hotelDetails, [
-          'brands',
-          '0',
-          'branches',
-          branches.length - 1,
-          'id',
-        ]),
+        hotelName: brand?.id,
+        branchName: branch?.id,
       },
       feedback: {
         feedbackType: this.checkForTransactionFeedbackSubscribed()
-          ? 'TRANSACTIONALFEEDBACK'
-          : 'STAYFEEDBACK',
+          ? layoutConfig.feedback.transactional
+          : layoutConfig.feedback.stay,
       },
-      outlets: this.getOutletIds(),
+      outlets: this.outlets.reduce(
+        (acc, curr) => ((acc[curr.id] = true), acc),
+        {}
+      ),
     });
-    this.timezone = get(this._hotelDetailService.hotelDetails, [
-      'brands',
-      '0',
-      'branches',
-      branches.length - 1,
-      'timezone',
-    ]);
+    this.initFirebaseMessaging(branch?.id);
+    this.timezone = get(brand, ['branches', branches.length - 1, 'timezone']);
     this.globalFilterService.timezone = this.timezone;
   }
 
-  getOutletIds() {
-    const outlets = {};
-    this.outlets.forEach((d) => (outlets[d.id] = true));
-    return outlets;
-  }
-
   refreshDashboard() {
-    let currentUrl = this._router.url;
+    const currentUrl = this._router.url;
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this._router.onSameUrlNavigation = 'reload';
     this._router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -185,17 +167,18 @@ export class LayoutOneComponent implements OnInit {
     });
   }
 
-  toggleGlobalFilter() {
+  enableGlobalFilter(el) {
     this.isGlobalFilterVisible = true;
     this.isGlobalSearchVisible = false;
+    el.scrollTop = 0;
   }
 
-  switchVisibility() {
+  enableGlobalSearch() {
     this.isGlobalFilterVisible = false;
     this.isGlobalSearchVisible = true;
   }
 
-  noFilterNoSearch() {
+  disableFilter() {
     this.isGlobalFilterVisible = false;
     this.isGlobalSearchVisible = false;
   }
@@ -206,21 +189,21 @@ export class LayoutOneComponent implements OnInit {
 
   applyFilter(event) {
     const values = event.values;
+    this.filterService.emitFilterValue$.next(values);
+    this.resetFilterCount();
+    this.getFilterCount({ ...values });
+    this.isGlobalFilterVisible = false;
     if (event.token.key) {
-      const branch = this._hotelDetailService.hotelDetails.brands[0].branches.filter(
-        (d) => d.id === values.property.branchName
-      )[0];
+      const branch = this._hotelDetailService.hotelDetails.brands
+        .filter((brand) => brand.id === values.property.hotelName)[0]
+        .branches.filter((d) => d.id === values.property.branchName)[0];
       this.filterConfig.branchName = branch.name;
       this.timezone = branch.timezone;
       this.globalFilterService.timezone = branch.timezone;
       localStorage.setItem(event.token.key, event.token.value);
+      this.$firebaseMessagingSubscription.unsubscribe();
+      this.initFirebaseMessaging(values.property.branchName);
     }
-    this.filterService.emitFilterValue$.next(values);
-    this.resetFilterCount();
-    this.getFilterCount({ ...values });
-    this.initFirebaseMessaging();
-    this.toggleGlobalFilter();
-    this.isGlobalFilterVisible = false;
   }
 
   resetFilterCount() {
@@ -234,12 +217,12 @@ export class LayoutOneComponent implements OnInit {
     if (event.property) {
       delete event.property;
     }
-    let filterObj = event;
+    const filterObj = event;
     for (let key in filterObj) {
       if (
         !Array.isArray(filterObj[key]) &&
         filterObj[key] &&
-        filterObj[key].constructor.name != 'Object'
+        filterObj[key].constructor.name !== 'Object'
       ) {
         if (filterObj[key]) {
           this.filterConfig.totalFilters += 1;
@@ -264,10 +247,10 @@ export class LayoutOneComponent implements OnInit {
     const itemType = event;
 
     switch (itemType) {
-      case 'profile':
+      case layoutConfig.userDropdown.profile:
         this.displayProfile();
         break;
-      case 'logout':
+      case layoutConfig.userDropdown.logout:
         this.logoutUser();
         break;
       default:
@@ -278,11 +261,13 @@ export class LayoutOneComponent implements OnInit {
   displayProfile() {
     if (
       this.subscriptionPlanService.getModuleSubscription().modules[
-        'roles-permissions'
+        ModuleNames.ROLE_MANAGEMENT
       ].active
     )
       this._router.navigate([
-        `/pages/roles-permissions/${this._userService.getLoggedInUserid()}`,
+        `/pages/${
+          ModuleNames.ROLE_MANAGEMENT
+        }/${this._userService.getLoggedInUserid()}`,
       ]);
   }
 
@@ -301,7 +286,11 @@ export class LayoutOneComponent implements OnInit {
 
   checkForTransactionFeedbackSubscribed() {
     const subscription = this.subscriptionPlanService.getModuleSubscription();
-    return get(subscription, ['modules', 'FEEDBACK_TRANSACTIONAL', 'active']);
+    return get(subscription, [
+      'modules',
+      ModuleNames.FEEDBACK_TRANSACTIONAL,
+      'active',
+    ]);
   }
 
   @HostListener('document:visibilitychange', ['$event'])

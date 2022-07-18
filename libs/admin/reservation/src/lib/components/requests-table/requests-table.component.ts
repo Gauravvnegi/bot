@@ -37,7 +37,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
     { field: 'guests.primaryGuest.firstName', header: 'Category/Type' },
   ];
 
-  showEmptyView: boolean = false;
+  showEmptyView = false;
 
   constructor(
     public fb: FormBuilder,
@@ -105,7 +105,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
         (res) => {
           //update rows
           this.values = this.values.map((row) => {
-            if (row.id == id) {
+            if (row.id === id) {
               row.status = 'COMPLETED';
             }
             return row;

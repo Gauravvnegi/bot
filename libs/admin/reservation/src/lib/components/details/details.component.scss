@@ -120,7 +120,7 @@
       font-size: $font16;
       padding-left: 5px;
       width: 70%;
-      &__feild {
+      &__field {
         display: flex;
         flex-direction: column;
         align-items: left;
@@ -261,6 +261,7 @@
 }
 :host ::ng-deep .mat-select-panel:not([class*='mat-elevation-z']) {
   margin: 30px 0 0 15px !important;
+  height: 80px!important;
 }
 
 :host ::ng-deep .p-dropdown {
@@ -349,12 +350,12 @@
   opacity: 0.1;
 }
 
-.feilds-wrapper {
+.fields-wrapper {
   display: flex;
   justify-content: space-between;
   margin: 30px 0px;
   padding: 0px 30px;
-  .feild {
+  .field {
     .label {
       letter-spacing: 0.72px;
       font-size: $font12;
@@ -670,4 +671,14 @@
 }
 :host ::ng-deep .item {
   color: $primary-purple !important;
+}
+.flx{
+  display: flex;
+        align-items: center;
+        
+}
+.flxExt{
+  @extend .flx;
+  margin: 15px 0;
+        padding: 0 30px 20px;
 }

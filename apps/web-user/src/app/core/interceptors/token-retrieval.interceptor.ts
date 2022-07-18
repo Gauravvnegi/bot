@@ -20,7 +20,7 @@ export class TokenRetievalInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse && req.url.includes('decrypt')) {
-          let accessToken = event.headers.get('x-access-token');
+          const accessToken = event.headers.get('x-access-token');
           if (!isEmpty(accessToken)) {
             this._accessTokenService.setAccessToken(accessToken);
           }

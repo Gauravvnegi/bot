@@ -1,0 +1,86 @@
+{
+  "datatable": {
+    "no_data": "No data available in table",
+    "currentPageReportTemplate": "Showing {{first}} to {{last}} of {{totalRecords}} entries"
+  },
+
+  "formFieldLabels": {
+    "name": "Name:",
+    "type": "Type:",
+    "description": "Description:",
+    "active": "Active:"
+  },
+
+  "type": {
+    "image": "Image",
+    "video": "Video"
+  },
+
+  "active": {
+    "disable": "Disable",
+    "enable": "Enable"
+  },
+
+  "createTemplate": "+Create Template",
+
+  "templateForm": {
+    "createTemplate": "Template Name",
+    "editTemplate": "Template Name"
+  },
+
+  "createContent": {
+    "savedTemplate": "Saved Template",
+    "inBuiltTemplate": "In-Built Template",
+    "createNew": "Create New(HTML Editor)"
+  },
+
+  "importAsset": "Import Assets",
+
+  "showMore": "Show More",
+
+  "viewTemplate": "View Template",
+
+  "createdOn": "Created on",
+
+  "editTemplateButtons": {
+    "preview&Save": "Preview and Save",
+    "saveChanges": "Save Changes",
+    "save&Next": "Save and Next"
+  },
+
+  "templateType": {
+    "savedTemplate": "Saved Templates",
+    "preDesignedTemplate": "Pre-Designed Templates"
+  },
+
+  "validationMessage": {
+    "name": "Name is required",
+    "description": "Description is required",
+    "topic": "Topic name is required"
+  },
+
+  "contentForm": {
+    "editContent": "Edit Content",
+    "createContent": "Create Content"
+  },
+
+  "selectAsset": "Select Asset",
+  "copyLink": "Copy Link",
+  "sharedTemplates": "Shared templates",
+  "descriptionMessage": "Shared templates and their contents are openly available for all users under your organisations.",
+
+  "messages": {
+    "success": {
+      "status_updated": "Status updated",
+      "updateTemplate": "Template Updated successfully",
+      "createTemplate": "Template Created successfully",
+      "deleteTemplate": "Template Deleted successfully",
+      "urlCopied": "Asset url copied",
+      "noContent": "No template content"
+    },
+    "error": {
+      "exportCSV": "Failed to export CSV",
+      "loadData": "Failed to load data"
+    }
+  }
+}

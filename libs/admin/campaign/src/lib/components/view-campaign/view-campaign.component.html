@@ -1,0 +1,157 @@
+<div class="wrapper">
+  <header class="wrapper-header">
+    <div class="back">
+      <mat-icon class="material-icons" matSuffix (click)="goBack()"
+        >keyboard_backspace</mat-icon
+      >
+      <div class="name-field" [formGroup]="campaignFG" *ngIf="campaignFG">
+        <mat-form-field class="description">
+          <input matInput formControlName="name" placeholder="Enter Name" />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="option">
+      <div class="icon"></div>
+      <div class="icon"></div>
+      <div class="icon"></div>
+      <div
+        class="dropdown"
+        [style.height.px]="campaignId && !campaign?.archieved ? 118 : 69"
+      >
+        <div class="dropdown__item" (click)="sendTestCampaign()">
+          {{ 'viewCampaign.sendTest' | translate }}
+        </div>
+        <div
+          class="dropdown__item"
+          (click)="archiveCampaign()"
+          *ngIf="campaignId && !campaign?.archieved"
+        >
+          {{ 'formFieldLabels.archiveCampaign' | translate }}
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="sent-details">
+    <div class="icon"></div>
+    <div>
+      {{ 'viewCampaign.sentOn' | translate }}
+      {{
+        campaign?.getDraftDate(
+          globalFilterService.timezone,
+          'MMM DD, YYYY hh:mm a'
+        )
+      }}
+    </div>
+  </div>
+  <div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
+    <div class="stats-container">
+      <div
+        class="stats"
+        *ngFor="let item of campaign?.statsCampaign | keyvalue"
+      >
+        <div>{{ item.value }}</div>
+        <div class="stats__text">{{ item.key | titlecase }}</div>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field">
+        <mat-label class="mat-label">{{
+          'formFieldLabels.from' | translate
+        }}</mat-label>
+        <mat-form-field>
+          <mat-select
+            formControlName="from"
+            placeholder="Select email"
+            [disabled]="true"
+          >
+            <mat-option *ngFor="let item of fromEmailList" [value]="item.id">{{
+              item.email
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">{{
+          'formFieldLabels.to' | translate
+        }}</mat-label>
+        <div class="email-field-container">
+          <hospitality-bot-to-receiver-field
+            [name]="'to'"
+            [hotelId]="hotelId"
+            [chipList]="campaignFG.get('to')?.value || []"
+            [disableInput]="(campaignFG.get('to')?.value || []).length"
+            [disabled]="true"
+          ></hospitality-bot-to-receiver-field>
+        </div>
+      </div>
+    </div>
+    <div class="fields" *ngIf="campaignFG?.get('cc')">
+      <div class="field full-width">
+        <mat-label class="mat-label">{{
+          'formFieldLabels.cc' | translate
+        }}</mat-label>
+        <div class="width">
+          <hospitality-bot-email-chip-list
+            [parentFG]="campaignFG"
+            [name]="'cc'"
+            [disabled]="true"
+          ></hospitality-bot-email-chip-list>
+        </div>
+      </div>
+    </div>
+    <div class="fields" *ngIf="campaignFG?.get('bcc')">
+      <div class="field full-width">
+        <mat-label class="mat-label">{{
+          'formFieldLabels.bcc' | translate
+        }}</mat-label>
+        <div class="width">
+          <hospitality-bot-email-chip-list
+            [parentFG]="campaignFG"
+            [name]="'bcc'"
+            [disabled]="true"
+          ></hospitality-bot-email-chip-list>
+        </div>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">{{
+          'formFieldLabels.subject' | translate
+        }}</mat-label>
+        <mat-form-field class="description">
+          <input
+            matInput
+            formControlName="subject"
+            placeholder="Enter Subject"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="fields">
+      <div class="field full-width">
+        <mat-label class="mat-label">{{
+          'formFieldLabels.previewText' | translate
+        }}</mat-label>
+        <mat-form-field class="description">
+          <input
+            matInput
+            formControlName="previewText"
+            placeholder="Enter Preview Text"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="info-container" *ngIf="campaignDetails">
+      <div>
+        {{ campaignDetails.templateName }}
+      </div>
+    </div>
+    <hospitality-bot-edit-content
+      [campaignFG]="campaignFG"
+      [campaignDetails]="campaign"
+      [viewMode]="true"
+    ></hospitality-bot-edit-content>
+  </div>
+</div>

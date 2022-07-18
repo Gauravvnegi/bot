@@ -126,7 +126,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
               this.guestDetailsConfig[guest.id]['documents'] = [];
 
-              if (guest.documents.length == response.documentList.length) {
+              if (guest.documents.length === response.documentList.length) {
                 let documentFA = this.guestsFA
                   .at(index)
                   .get('documents') as FormArray;
@@ -266,7 +266,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   setConfigIfInternational(guestId, config) {
     let guestFG = this.guestsFA.at(
       this.guestsFA.controls.findIndex(
-        (guestFG: FormGroup) => guestFG.get('id').value == guestId
+        (guestFG: FormGroup) => guestFG.get('id').value === guestId
       )
     ) as FormArray;
 
@@ -294,7 +294,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   setConfigIfNotInternational(guestId, config?) {
     let guestFG = this.guestsFA.at(
       this.guestsFA.controls.findIndex(
-        (guestFG: FormGroup) => guestFG.get('id').value == guestId
+        (guestFG: FormGroup) => guestFG.get('id').value === guestId
       )
     ) as FormArray;
     const guest = this._documentDetailService.documentDetailDS.guests.filter(
@@ -320,7 +320,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   resetDocumentsIfNationalityChanges(guestId, config?) {
     let guestFG = this.guestsFA.at(
       this.guestsFA.controls.findIndex(
-        (guestFG: FormGroup) => guestFG.get('id').value == guestId
+        (guestFG: FormGroup) => guestFG.get('id').value === guestId
       )
     ) as FormArray;
 
@@ -332,7 +332,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   resetIfNationalityChanges(guestId) {
     let guestFG = this.guestsFA.at(
       this.guestsFA.controls.findIndex(
-        (guestFG: FormGroup) => guestFG.get('id').value == guestId
+        (guestFG: FormGroup) => guestFG.get('id').value === guestId
       )
     ) as FormArray;
 
@@ -345,7 +345,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     this.resetIfNationalityChanges(guestId);
     let guestFG = this.guestsFA.at(
       this.guestsFA.controls.findIndex(
-        (guestFG: FormGroup) => guestFG.get('id').value == guestId
+        (guestFG: FormGroup) => guestFG.get('id').value === guestId
       )
     ) as FormGroup;
     guestFG.get('uploadStatus').patchValue(false);
@@ -362,7 +362,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     this.resetIfNationalityChanges(guestId);
     let guestFG = this.guestsFA.at(
       this.guestsFA.controls.findIndex(
-        (guestFG: FormGroup) => guestFG.get('id').value == guestId
+        (guestFG: FormGroup) => guestFG.get('id').value === guestId
       )
     ) as FormGroup;
     const guest = this._documentDetailService.documentDetailDS.guests.filter(
@@ -537,7 +537,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   updateUploadStatus(guestId, status) {
     let guestFG = this.guestsFA.at(
       this.guestsFA.controls.findIndex(
-        (guestFG: FormGroup) => guestFG.get('id').value == guestId
+        (guestFG: FormGroup) => guestFG.get('id').value === guestId
       )
     ) as FormGroup;
     if (status) {
@@ -568,7 +568,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   updateDocumentUploadingStatus(guestId, doc_page, doc_type, isUploading) {
     let documentIndex;
     documentIndex = this.guestDetailsConfig[guestId].documents.findIndex(
-      (doc) => doc.documentFileFront.label.split(' ')[0] == doc_type
+      (doc) => doc.documentFileFront.label.split(' ')[0] === doc_type
     );
     if (documentIndex >= 0) {
       Object.keys(
@@ -589,7 +589,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   updateDocumentFG(guestId, doc_type, doc_page, data) {
     let guestFG = this.guestsFA.at(
       this.guestsFA.controls.findIndex(
-        (guestFG: FormGroup) => guestFG.get('id').value == guestId
+        (guestFG: FormGroup) => guestFG.get('id').value === guestId
       )
     ) as FormGroup;
 
@@ -598,12 +598,12 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
         .get('documents')
         ['controls'].findIndex(
           (documentFG: FormGroup) =>
-            documentFG.get('documentType').value == doc_type
+            documentFG.get('documentType').value === doc_type
         )
     ) as FormGroup;
 
     documentFG
-      .get(doc_page == 'front' ? 'documentFileFront' : 'documentFileBack')
+      .get(doc_page === 'front' ? 'documentFileFront' : 'documentFileBack')
       .patchValue(data);
   }
 

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SnackBarService } from 'libs/shared/material/src';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { MessageService } from '../../services/messages.service';
 

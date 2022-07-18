@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -20,7 +20,8 @@ import { CategoriesService } from '../../services/category.service';
     './categories-datatable.component.scss',
   ],
 })
-export class CategoriesDatatableComponent extends BaseDatatableComponent {
+export class CategoriesDatatableComponent extends BaseDatatableComponent
+  implements OnInit, OnDestroy {
   tableName = 'Categories';
   isResizableColumns = true;
   isAutoLayout = false;
@@ -28,7 +29,7 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent {
   triggerInitialData = false;
   isTabFilters = false;
   globalQueries = [];
-  tabFilterIdx: number = 1;
+  tabFilterIdx = 1;
   $subscription = new Subscription();
   hotelId;
 
@@ -98,7 +99,7 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent {
 
   customSort(event: SortEvent) {
     const col = this.cols.filter((data) => data.field === event.field)[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;
@@ -225,5 +226,9 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent {
 
     value = value && value.trim();
     this.table.filter(value, field, matchMode);
+  }
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
   }
 }

@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -27,7 +28,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./signature-capture-wrapper.component.scss'],
 })
 export class SignatureCaptureWrapperComponent
-  implements OnChanges, AfterViewInit {
+  implements OnChanges, AfterViewInit, OnDestroy {
   private _dialogRef: MatDialogRef<any>;
   private _settings;
   private $subscription: Subscription = new Subscription();
@@ -52,7 +53,7 @@ export class SignatureCaptureWrapperComponent
         settings: {
           signaturePadOptions: {
             minWidth: 1.3,
-            canvasWidth: (window.innerWidth * 72.5) / 100,
+            canvasWidth: (window.innerWidth * 58.4) / 100,
             canvasHeight: 250,
             maxWidth: 2,
           },
@@ -96,6 +97,7 @@ export class SignatureCaptureWrapperComponent
     ],
     uploadAPI: '',
   };
+
   @ViewChild('matTab') matTab: MatTabGroup;
   @ViewChild('signatuePadScribbleComponent')
   signatuePadScribbleComponent: SignaturePadScribbleComponent;

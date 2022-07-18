@@ -4,6 +4,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -28,7 +29,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent implements OnInit, OnDestroy {
   templateData: string;
   attachment: string;
   templates = {
@@ -43,7 +44,7 @@ export class NotificationComponent implements OnInit {
   config;
   @Input() isModal = false;
   @Output() onModalClose = new EventEmitter();
-  isSending: boolean = false;
+  isSending = false;
 
   ckeditorContent;
   // public Editor = ClassicEditor;
@@ -139,8 +140,8 @@ export class NotificationComponent implements OnInit {
     });
   }
 
-  private isValidEmail(email): RegExpMatchArray {
-    let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  isValidEmail(email): RegExpMatchArray {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return !!email && typeof email === 'string' && email.match(emailRegex);
   }
 
@@ -153,7 +154,9 @@ export class NotificationComponent implements OnInit {
         this._snackbarService.openSnackBarAsText('Invalid email format');
         return;
       } else {
-        const controlValues = control.value.filter((cValue) => cValue == value);
+        const controlValues = control.value.filter(
+          (cValue) => cValue === value
+        );
         if (!controlValues.length) {
           control.patchValue([...control.value, ...[value]]);
         }
@@ -168,7 +171,7 @@ export class NotificationComponent implements OnInit {
 
   removeChipElement(valueToRemove: string, control: FormControl): void {
     const controlValues = control.value.filter(
-      (cValue) => cValue != valueToRemove
+      (cValue) => cValue !== valueToRemove
     );
     control.patchValue(controlValues);
     control === this.roomNumbers
@@ -179,20 +182,20 @@ export class NotificationComponent implements OnInit {
   }
 
   readDataFromCSV($event: any, control: FormControl): void {
-    let files = $event.srcElement.files;
+    const files = $event.srcElement.files;
 
     if (files[0].name.endsWith('.csv')) {
-      let input = $event.target;
-      let reader = new FileReader();
+      const input = $event.target;
+      const reader = new FileReader();
       reader.readAsText(input.files[0]);
 
       reader.onload = () => {
-        let csvData = reader.result;
-        let csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
+        const csvData = reader.result;
+        const csvRecordsArray = (<string>csvData).split(/\r\n|\n/);
 
-        let csvArr = [];
+        const csvArr = [];
         for (let i = 1; i < csvRecordsArray.length; i++) {
-          let curruntRecord = (<string>csvRecordsArray[i]).split(',');
+          const curruntRecord = (<string>csvRecordsArray[i]).split(',');
           if (curruntRecord[0].trim()) {
             csvArr.push(curruntRecord[0].trim());
           }
@@ -209,7 +212,7 @@ export class NotificationComponent implements OnInit {
   }
 
   uploadAttachments(event): void {
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('files', event.currentTarget.files[0]);
     this.requestService
       .uploadAttachments(this.templates.hotelId, formData)
@@ -234,7 +237,7 @@ export class NotificationComponent implements OnInit {
   }
 
   changeTemplateIds(method): void {
-    let data = this.config.messageTypes.filter((d) => d.value === method)[0];
+    const data = this.config.messageTypes.filter((d) => d.value === method)[0];
     this.templates.ids = data['templateIds'];
     this.modifyControl(
       this.templates.ids && this.templates.ids.length > 0,
@@ -244,7 +247,7 @@ export class NotificationComponent implements OnInit {
   }
 
   sendMessage(): void {
-    let validation = this.requestService.validateRequestData(
+    const validation = this.requestService.validateRequestData(
       this.notificationForm,
       !(this.isEmailChannel || this.isSocialChannel)
     );
@@ -254,7 +257,7 @@ export class NotificationComponent implements OnInit {
       return;
     }
     this.isSending = true;
-    let values = new RequestData().deserialize(
+    const values = new RequestData().deserialize(
       this.notificationForm.getRawValue()
     );
 
@@ -299,7 +302,7 @@ export class NotificationComponent implements OnInit {
             (response) => {
               this.notificationForm
                 .get('message')
-                .patchValue(response.template);
+                .patchValue(this.modifyTemplate(response.template));
             },
             ({ error }) => {
               this._snackbarService.openSnackBarAsText(error.message);
@@ -310,7 +313,7 @@ export class NotificationComponent implements OnInit {
   }
 
   private modifyControl(event: boolean, control: string): void {
-    let formControl = this.notificationForm.get(control);
+    const formControl = this.notificationForm.get(control);
     formControl.setValue([]);
     event
       ? formControl.setValidators([Validators.required])
@@ -363,5 +366,9 @@ export class NotificationComponent implements OnInit {
 
   get roomNumbers(): FormControl {
     return this.notificationForm.get('roomNumbers') as FormControl;
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

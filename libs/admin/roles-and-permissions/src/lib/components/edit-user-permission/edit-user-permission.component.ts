@@ -8,14 +8,14 @@ import {
 } from '@angular/forms';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { CountryCode } from '../../../../../../shared/models/country-code.model';
-import { Regex } from '../../../../../../shared/constants/regex';
+import { CountryCode } from '@hospitality-bot/admin/shared';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs';
+import { Regex } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-edit-user-permission',
@@ -54,7 +54,8 @@ export class EditUserPermissionComponent implements OnInit {
     private _managePermissionService: ManagePermissionService,
     private _snackbarService: SnackBarService,
     private _route: ActivatedRoute,
-    private _location: Location
+    private _location: Location,
+    private _router: Router
   ) {
     this.initUserForm();
   }
@@ -123,7 +124,7 @@ export class EditUserPermissionComponent implements OnInit {
   listenForBrandChanges() {
     this.userForm.get('brandName').valueChanges.subscribe((brandId) => {
       const { branches } = this.brandNames.find(
-        (brand) => brand['id'] == brandId
+        (brand) => brand['id'] === brandId
       );
       this.branchNames = branches;
       this.userForm.get('branchName').enable();
@@ -151,19 +152,19 @@ export class EditUserPermissionComponent implements OnInit {
             manage: [
               {
                 value: config.permissions.manage <= 0 ? 0 : 1,
-                disabled: config.permissions.manage == -1 ? true : false,
+                disabled: config.permissions.manage === -1 ? true : false,
               },
             ],
             view: [
               {
                 value: config.permissions.view <= 0 ? 0 : 1,
-                disabled: config.permissions.view == -1 ? true : false,
+                disabled: config.permissions.view === -1 ? true : false,
               },
             ],
             // action: [
             //   {
             //     value: config.permissions.action <= 0 ? 0 : 1,
-            //     disabled: config.permissions.action == -1 ? true : false,
+            //     disabled: config.permissions.action === -1 ? true : false,
             //   },
             // ],
           }),
@@ -177,7 +178,7 @@ export class EditUserPermissionComponent implements OnInit {
       this._snackbarService.openSnackBarAsText('Invalid Form');
       return;
     }
-    let formValue = this.userForm.getRawValue();
+    const formValue = this.userForm.getRawValue();
 
     formValue.permissionConfigs.forEach((config, configIndex) => {
       const permissionFA = this.permissionConfigsFA
@@ -199,7 +200,7 @@ export class EditUserPermissionComponent implements OnInit {
 
     this.value = { ...formValue };
 
-    let data = this._managePermissionService.modifyPermissionDetailsForEdit(
+    const data = this._managePermissionService.modifyPermissionDetailsForEdit(
       this.value
     );
 
@@ -223,6 +224,10 @@ export class EditUserPermissionComponent implements OnInit {
           this.isUpdatingPermissions = false;
         }
       );
+  }
+
+  addUser() {
+    this._router.navigate(['/pages/roles-permissions/add-user']);
   }
 
   get permissionConfigsFA() {

@@ -1,0 +1,85 @@
+@import 'main';
+
+.form-field {
+  width: 100%;
+  height: auto;
+  min-height: 52px;
+  cursor: text;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  padding-bottom: 1.25em;
+  .field {
+    width: 100%;
+  }
+}
+
+.form-field .chips .chip {
+  display: inline-block;
+  width: auto;
+  background-color: #e0e0e0;
+  color: $black;
+  border-radius: 18px;
+  margin: 2px;
+  overflow: hidden;
+  &:hover {
+    background-color: #ccc7c7;
+  }
+}
+.form-field .chips .chip {
+  display: flex;
+}
+
+.form-field .chips .chip .chip--button {
+  padding: 4px 10px;
+  cursor: pointer;
+  display: inline-block;
+  color: gray;
+  line-height: 18px;
+}
+.form-field .chips .chip .chip--text {
+  padding: 4px 12px;
+  cursor: none;
+  display: inline-block;
+  pointer-events: none;
+  line-height: 29px;
+}
+
+.form-field > .chips > .field > input {
+  display: block !important;
+  box-sizing: border-box;
+  width: 100%;
+  border: none;
+  display: inline-block;
+  background-color: transparent;
+  outline: none;
+  margin-top: 17px;
+  font-size: 18px;
+  font-family: Roboto;
+  padding: 7px 0 5px 0;
+}
+
+.chips {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #737679;
+  padding-bottom: 6px;
+  padding-right: 65px;
+}
+
+.dropdown {
+  width: 100%;
+  position: absolute;
+  top: calc(100% - 12px);
+  left: 0px;
+  z-index: 112;
+  border-radius: 10px;
+  box-shadow: 3px 9px 20px 0 rgba(0, 0, 0, 0.25);
+  background-color: $white;
+  padding: 15px;
+}
+
+.disabled {
+  opacity: 0.8;
+}

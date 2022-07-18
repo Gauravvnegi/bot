@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CountryCode } from '../../../../../../shared/models/country-code.model';
+import { CountryCode } from '@hospitality-bot/admin/shared';
 import { Subject } from 'rxjs';
-import { Regex } from '../../../../../../shared/constants/regex';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Regex } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-manual-checkin',

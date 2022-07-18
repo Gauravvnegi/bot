@@ -2,11 +2,12 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
+  DetailsComponent,
   Reservation,
   ReservationTable,
-} from '@hospitality-bot/admin/dashboard';
-import { DetailsComponent } from '@hospitality-bot/admin/reservation';
+} from '@hospitality-bot/admin/reservation';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -16,7 +17,6 @@ import {
   TableNames,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ModalService,
   SnackBarService,
@@ -24,10 +24,10 @@ import {
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Observable, Subscription } from 'rxjs';
-import { ReservationService } from '../../../services/reservation.service';
-import { tabFilterItems } from '../../../constants/tabFilterItem';
 import { cols } from '../../../constants/cols';
 import { dashboard } from '../../../constants/dashboard';
+import { tabFilterItems } from '../../../constants/tabFilterItem';
+import { ReservationService } from '../../../services/reservation.service';
 import {
   EntityState,
   EntityType,
@@ -58,7 +58,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   cols = cols.reservation;
 
   @Input() tabFilterItems = tabFilterItems.reservation;
-  @Input() tabFilterIdx: number = 1;
+  @Input() tabFilterIdx = 1;
 
   globalQueries = [];
   $subscription = new Subscription();
@@ -162,7 +162,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    */
   getSelectedQuickReplyFilters(): SelectedEntityState[] {
     return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected == true)
+      .filter((item) => item.isSelected === true)
       .map((item) => ({
         entityState: item.value,
       }));
@@ -278,7 +278,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    */
   customSort(event: SortEvent): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
-    let field =
+    const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;
@@ -370,7 +370,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    */
   toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
     //toggle isSelected
-    if (quickReplyTypeIdx == 0) {
+    if (quickReplyTypeIdx === 0) {
       this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
         if (chip.value !== 'ALL') {
           chip.isSelected = false;

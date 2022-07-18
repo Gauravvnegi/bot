@@ -1,29 +1,42 @@
 <div class="whole-package-wrapper">
-  <div class="close">
+  <!-- <div class="close">
     <mat-icon (click)="closeCategory()">clear</mat-icon>
-  </div>
+  </div> -->
   <div class="checkbox-wrapper">
     <div
       class="checkbox"
       *ngFor="let subPackageFormGroup of subPackages.controls; let i = index"
     >
-      <web-user-checkbox
-        [parentForm]="subPackageFormGroup"
-        [name]="'isSelected'"
-        [settings]="subPackageFieldConfig[i].amenity"
-        (onValueChange)="onSubPackageStatusChange($event)"
-      >
-      </web-user-checkbox>
       <div class="image">
         <img src="{{ subPackageFormGroup.get('imgUrl').value }}" />
       </div>
-      <div class="text">
-        <p class="label">{{ subPackageFormGroup.get('label').value }}</p>
+      <div class="text-container">
+        <div class="text">
+          <p class="label">{{ subPackageFormGroup.get('label').value }}</p>
 
-        <p class="rate">
-          {{ subPackageFormGroup.get('currencyCode').value }}
-          {{ subPackageFormGroup.get('rate').value }}
-        </p>
+          <p class="rate">
+            {{ subPackageFormGroup.get('currencyCode').value }}
+            {{ subPackageFormGroup.get('rate').value }}
+          </p>
+        </div>
+        <div class="btn-container">
+          <div
+            class="remove-btn"
+            *ngIf="subPackageFormGroup.get('isSelected').value; else addButton"
+            (click)="onRemoveButtonClicked(subPackageFormGroup)"
+          >
+            Remove
+          </div>
+          <ng-template #addButton>
+            <div
+              class="btn"
+              (click)="onSubPackageStatusChange(subPackageFormGroup)"
+            >
+              <div>Add</div>
+              <mat-icon>add_circle</mat-icon>
+            </div>
+          </ng-template>
+        </div>
       </div>
     </div>
   </div>

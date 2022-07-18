@@ -22,9 +22,9 @@ import { SlickCarouselModule } from 'ngx-slick-carousel';
     SharedMaterialModule,
     SlickCarouselModule,
     DropdownModule,
-    ChartsModule
+    ChartsModule,
   ],
   declarations: [AdminSubscriptionRoutingModule.components],
-  providers: [SubscriptionService]
+  providers: [SubscriptionService],
 })
 export class AdminSubscriptionModule {}

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './cancel-booking.component.html',
   styleUrls: ['./cancel-booking.component.scss'],
 })
-export class CancelBookingComponent implements OnInit {
+export class CancelBookingComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
   constructor(
     private _thankyouService: ThankYouService,
@@ -46,5 +46,9 @@ export class CancelBookingComponent implements OnInit {
           }
         )
     );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

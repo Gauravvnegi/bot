@@ -3,7 +3,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "target": "es2015",
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts"],
 }

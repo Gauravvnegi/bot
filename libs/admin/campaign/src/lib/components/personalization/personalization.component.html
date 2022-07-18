@@ -1,0 +1,20 @@
+<div class="container" (click)="openPersonalization($event)">
+  <img
+    [src]="campaignConfiguration.images.write.url"
+    [alt]="campaignConfiguration.images.write.alt"
+  />
+  <div class="personalization" *ngIf="enablePersonalization">
+    <div class="title">
+      {{ 'personlize' | translate }}
+    </div>
+    <div class="body">
+      <div
+        class="item"
+        *ngFor="let item of personalizationList"
+        (click)="addPersonalization($event, item.value)"
+      >
+        {{ item.label }}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,12 @@
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
 import { InhouseData } from 'libs/admin/request/src/lib/data-models/inhouse-list.model';
+import {
+  Booking,
+  Feedback,
+  Room,
+} from '../../../../reservation/src/lib/models/reservation-table.model';
 
 export class Chats {
   messages: IChat[];
@@ -247,3 +252,62 @@ export type IChat = Omit<Chat, 'deserialize'>;
 export type IChats = Omit<Chats, 'deserialize'>;
 export type IContact = Omit<Contact, 'deserialize'>;
 export type IContactList = Omit<ContactList, 'deserialize'>;
+
+export class GuestDetails {
+  records: GuestDetail[];
+  id: string;
+
+  deserialize(input, colorMap) {
+    this.records = new Array();
+    input.forEach((item) => {
+      this.records.push(new GuestDetail().deserialize(item, colorMap));
+    });
+    return this;
+  }
+}
+export class GuestDetail {
+  reservation: Reservation;
+  type: string;
+  subType: string;
+
+  deserialize(input, colorMap) {
+    if (input.guestReservation) {
+      this.reservation = new Reservation().deserialize(
+        input.guestReservation,
+        input.subType,
+        colorMap
+      );
+    }
+    if (input.feedback)
+      Object.assign(
+        this,
+        set({}, 'type', get(input, ['type'])),
+        set({}, 'subType', get(input, ['subType']))
+      );
+
+    return this;
+  }
+}
+export class Reservation {
+  rooms: Room;
+  feedback: Feedback;
+  booking: Booking;
+  type: string;
+  deserialize(input: any, type: string, colorMap) {
+    this.rooms = new Room().deserialize(input.stayDetails);
+    this.booking = new Booking().deserialize(input);
+    this.type = type;
+    return this;
+  }
+
+  getTitle() {
+    switch (this.type) {
+      case 'UPCOMING':
+        return 'Upcoming Booking';
+      case 'PAST':
+        return 'Past Booking';
+      case 'PRESENT':
+        return 'Current Booking';
+    }
+  }
+}

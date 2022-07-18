@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SummaryDetails } from 'libs/web-user/shared/src/lib/data-models/summaryConfig.model';
 import { ApplicationStatusComponent } from '../application-status/application-status.component';
 
@@ -8,7 +8,7 @@ import { ApplicationStatusComponent } from '../application-status/application-st
   styleUrls: ['./status.component.scss'],
 })
 export class StatusComponent extends ApplicationStatusComponent
-  implements OnInit {
+  implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getSummaryDetails();
   }
@@ -25,5 +25,9 @@ export class StatusComponent extends ApplicationStatusComponent
           this.isLoaderVisible = false;
         })
     );
+  }
+
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
   }
 }

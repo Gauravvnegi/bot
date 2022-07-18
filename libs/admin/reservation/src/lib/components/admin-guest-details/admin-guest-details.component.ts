@@ -45,7 +45,6 @@ export class AdminGuestDetailsComponent implements OnInit {
     this.stayDetailsForm = this.initStayDetailsForm();
     (this.guestDetailsForm = this._fb.group({ guests: this._fb.array([]) })) &&
       this.initGuestDetailsForm();
-    this.stayDetailsForm = this.initStayDetailsForm();
   }
 
   pushDataToForm() {
@@ -68,8 +67,6 @@ export class AdminGuestDetailsComponent implements OnInit {
       value: this.guestDetailsForm,
     });
 
-    this.stayDetailsForm.patchValue(this.detailsData.stayDetails);
-    this.addFGEvent.next({ name: 'stayDetails', value: this.stayDetailsForm });
     this.isGuestInfoPatched.next(true);
   }
 
@@ -126,15 +123,15 @@ export class AdminGuestDetailsComponent implements OnInit {
   }
 
   updateHealthCardStatus(status) {
-    let formValues = this.healthCardDetailsForm.getRawValue();
-    let data = {
+    const formValues = this.healthCardDetailsForm.getRawValue();
+    const data = {
       stepName: 'HEALTHDECLARATION',
       state: status,
       remarks: formValues.remarks,
       temperature: formValues.temperature,
     };
 
-    if (status == 'REJECT' && isEmpty(data.remarks)) {
+    if (status === 'REJECT' && isEmpty(data.remarks)) {
       this._snackBarService.openSnackBarAsText(
         'Please provide a relevant remark'
       );

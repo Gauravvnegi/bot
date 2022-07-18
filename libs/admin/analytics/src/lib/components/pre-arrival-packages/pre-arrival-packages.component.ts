@@ -1,11 +1,12 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { analytics } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { InhouseSentiments } from '../../models/statistics.model';
@@ -17,7 +18,7 @@ import { PreArrivalDatatableComponent } from '../pre-arrival-datatable/pre-arriv
   templateUrl: './pre-arrival-packages.component.html',
   styleUrls: ['./pre-arrival-packages.component.scss'],
 })
-export class PreArrivalPackagesComponent implements OnInit {
+export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   $subscription = new Subscription();
   globalFilters;
@@ -37,82 +38,10 @@ export class PreArrivalPackagesComponent implements OnInit {
     };
   })(this);
 
-  legendData = [
-    {
-      label: 'To DO',
-      bubbleColor: '#fb3d4e',
-      img: 'assets/svg/test-4.svg',
-    },
-    {
-      label: 'Active',
-      bubbleColor: '#4A73FB',
-      img: 'assets/svg/test.svg',
-    },
-    {
-      label: 'Closed',
-      bubbleColor: '#F25E5E',
-      img: 'assets/svg/test-2.svg',
-    },
-    {
-      label: 'Timeout',
-      bubbleColor: '#30D8B6',
-      img: 'assets/svg/test-3.svg',
-    },
-  ];
-
-  chartTypes = [
-    { name: 'Bar', value: 'bar', url: 'assets/svg/bar-graph.svg' },
-    { name: 'Line', value: 'line', url: 'assets/svg/line-graph.svg' },
-  ];
-
-  chart: any = {
-    chartData: [{ data: [], label: 'To Do', fill: false }],
-    chartLabels: [],
-    chartOptions: {
-      responsive: true,
-      elements: {
-        line: {
-          tension: 0,
-        },
-      },
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: false,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: true,
-            },
-            ticks: {
-              min: 0,
-            },
-          },
-        ],
-      },
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 5,
-        xPadding: 10,
-        yPadding: 10,
-      },
-      legendCallback: this.getLegendCallback,
-    },
-    chartColors: [],
-    chartLegend: false,
-    chartType: 'line',
-  };
-
+  legendData = analytics.legendData;
+  chartTypes = analytics.chartTypes;
+  chart = analytics.preArrivalChart;
   tabFilterItems = [];
-
   tabFilterIdx = 0;
   hotelId: string;
 
@@ -144,7 +73,7 @@ export class PreArrivalPackagesComponent implements OnInit {
   listenForGlobalFilters() {
     this.$subscription.add(
       this._globalFilterService.globalFilter$.subscribe((data) => {
-        let calenderType = {
+        const calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
@@ -231,16 +160,16 @@ export class PreArrivalPackagesComponent implements OnInit {
 
   legendOnClick = (index, event) => {
     event.stopPropagation();
-    let ci = this.baseChart.chart;
-    let alreadyHidden =
+    const ci = this.baseChart.chart;
+    const alreadyHidden =
       ci.getDatasetMeta(index).hidden === null
         ? false
         : ci.getDatasetMeta(index).hidden;
 
     ci.data.datasets.forEach((e, i) => {
-      let meta = ci.getDatasetMeta(i);
+      const meta = ci.getDatasetMeta(i);
 
-      if (i == index) {
+      if (i === index) {
         if (!alreadyHidden) {
           meta.hidden = true;
         } else {
@@ -289,11 +218,9 @@ export class PreArrivalPackagesComponent implements OnInit {
           this.selectedInterval,
           d,
           this._globalFilterService.timezone,
-          this.selectedInterval === 'date'
-            ? 'DD MMM'
-            : this.selectedInterval === 'month'
-            ? 'MMM YYYY'
-            : '',
+          this._adminUtilityService.getDateFormatFromInterval(
+            this.selectedInterval
+          ),
           this.selectedInterval === 'week'
             ? this._adminUtilityService.getToDate(this.globalFilters)
             : null

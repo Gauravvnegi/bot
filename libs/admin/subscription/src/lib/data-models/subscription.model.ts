@@ -1,5 +1,5 @@
 import { CommunicationConfig } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
 
@@ -193,6 +193,73 @@ export class CommunicationChannels {
         ...CommunicationConfig[data.name],
       });
     });
+
+    return this;
+  }
+}
+
+export class FeedbackReceived {
+  feedbackGraph: GraphData[];
+  total: number;
+
+  deserialize(input) {
+    this.feedbackGraph = new Array<GraphData>();
+    Object.keys(input.feedbackGraph).forEach((key) =>
+      this.feedbackGraph.push(
+        new GraphData().deserialize({
+          label: key,
+          data: input.feedbackGraph[key],
+        })
+      )
+    );
+    this.total = input.totalCount;
+
+    return this;
+  }
+}
+
+export class MessageExchanged {
+  messageGraph: GraphData[];
+  total: number;
+
+  deserialize(input) {
+    this.messageGraph = new Array<GraphData>();
+    Object.keys(input.messageGraph).forEach((key) =>
+      this.messageGraph.push(
+        new GraphData().deserialize({
+          label: key,
+          data: input.messageGraph[key],
+        })
+      )
+    );
+    this.total = input.totalCount;
+    return this;
+  }
+}
+
+export class FrontDeskGraph {
+  checkIn: GraphData[];
+  checkOut: GraphData[];
+  total: number;
+
+  deserialize(input) {
+    this.checkIn = new Array<GraphData>();
+    this.checkOut = new Array<GraphData>();
+    Object.keys(input.checkIn.checkInStat).forEach((key) => {
+      this.checkIn.push(
+        new GraphData().deserialize({
+          label: key,
+          data: input.checkIn.checkInStat[key],
+        })
+      );
+      this.checkOut.push(
+        new GraphData().deserialize({
+          label: key,
+          data: input.checkOut.checkOutStat[key],
+        })
+      );
+    });
+    this.total = input.totalCount;
 
     return this;
   }

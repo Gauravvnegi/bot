@@ -22,7 +22,7 @@ export class TemplateRendererComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const token: string = this.checkForToken();
+    const token = this.checkForToken();
     if (!!!token) {
       //Do something in future
       console.log('Not a valid token.');

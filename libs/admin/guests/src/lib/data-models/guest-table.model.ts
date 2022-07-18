@@ -6,7 +6,7 @@ import {
   Payment,
   Room,
   Status,
-} from '../../../../dashboard/src/lib/data-models/reservation-table.model';
+} from '../../../../reservation/src/lib/models/reservation-table.model';
 
 export interface Deserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -120,7 +120,7 @@ export class Guest implements Deserializable {
       if (reservation.guestDetails.primaryGuest.id === input.id) {
         this.documents = reservation.guestDetails.primaryGuest.documents;
       } else {
-        let keys = Object.keys(reservation.guestDetails.allGuest);
+        const keys = Object.keys(reservation.guestDetails.allGuest);
         keys.forEach((key) => {
           if (key === input.id) {
             this.documents = reservation.guestDetails.allGuest[key].documents;

@@ -1,13 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { analytics } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
-import {
-  Conversation,
-  Notification,
-} from '../../models/whatsapp-analytics.model';
+import { Notification } from '../../models/whatsapp-analytics.model';
 import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
@@ -15,68 +13,13 @@ import { AnalyticsService } from '../../services/analytics.service';
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   globalFilters;
   hotelId: string;
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
 
-  chart: any = {
-    chartData: [
-      // { data: [80], label: 'Pre-Check-In', fill: false },
-      // { data: [160], label: 'Post Check-In', fill: false },
-      // { data: [78], label: 'Post Check-Out', fill: false },
-      {
-        data: [0, 0, 0],
-        label: '',
-      },
-    ],
-    chartLabels: ['Pre-Check-In', 'Post Check-In', 'Post Check-Out'],
-    chartOptions: {
-      responsive: true,
-      cornerRadius: 20,
-      tooltips: {
-        backgroundColor: 'white',
-        bodyFontColor: 'black',
-        borderColor: '#f4f5f6',
-        borderWidth: 3,
-        titleFontColor: 'black',
-        titleMarginBottom: 10,
-        xPadding: 10,
-        yPadding: 10,
-      },
-      scales: {
-        xAxes: [
-          {
-            gridLines: {
-              display: true,
-            },
-            ticks: {
-              min: 0,
-            },
-          },
-        ],
-        yAxes: [
-          {
-            maxBarThickness: 30,
-            barPercentage: 0.4,
-            display: false,
-            gridLines: {
-              display: true,
-            },
-          },
-        ],
-      },
-    },
-    chartColors: [
-      {
-        borderColor: ['#3270eb', '#15eda3', '#ff9867'],
-        backgroundColor: ['#3270eb', '#15eda3', '#ff9867'],
-      },
-    ],
-    chartLegend: false,
-    chartType: 'horizontalBar',
-  };
+  chart = analytics.notificationChart;
   stats: Notification;
   constructor(
     private _adminUtilityService: AdminUtilityService,
@@ -141,17 +84,19 @@ export class NotificationComponent implements OnInit {
     this.chart.chartColors[0].borderColor = [];
 
     this.stats.statistics.forEach((data) => {
+      // if (data.count) {
       this.chart.chartLabels.push(data.label);
       this.chart.chartData[0].data.push(data.count);
       this.chart.chartColors[0].backgroundColor.push(data.color);
       this.chart.chartColors[0].borderColor.push(data.color);
+      // }
     });
   }
 
   legendOnClick = (index, event) => {
     event.stopPropagation();
-    let ci = this.baseChart.chart;
-    let meta = ci.getDatasetMeta(0);
+    const ci = this.baseChart.chart;
+    const meta = ci.getDatasetMeta(0);
     if (!meta.data[index].hidden) {
       meta.data[index].hidden = true;
     } else {

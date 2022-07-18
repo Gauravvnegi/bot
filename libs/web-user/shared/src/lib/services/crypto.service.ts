@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from 'libs/shared/utils/src/lib/api.service';
+import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { IToken, ITokenInfo } from 'libs/web-user/shared/src/lib/types/token';
 import { Observable } from 'rxjs';
 

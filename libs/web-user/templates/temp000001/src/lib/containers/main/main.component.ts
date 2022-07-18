@@ -1,11 +1,11 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { DateService } from 'libs/shared/utils/src/lib/date.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presentational/checkin-date-alert/checkin-date-alert.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
@@ -23,7 +23,7 @@ import { Temp000001StepperComponent } from '../../presentational/temp000001-step
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
   protected $subscription: Subscription = new Subscription();
   @ViewChild('stepperComponent') stepperComponent: Temp000001StepperComponent;
   protected checkInDialogRef: MatDialogRef<CheckinDateAlertComponent>;
@@ -33,7 +33,7 @@ export class MainComponent implements OnInit {
   stepperData: ITemplateTemp000001;
   parentForm: FormArray = new FormArray([]);
   reservationData: ReservationDetails;
-  isReservationData: boolean = false;
+  isReservationData = false;
 
   constructor(
     protected fb: FormBuilder,
@@ -74,7 +74,7 @@ export class MainComponent implements OnInit {
             this._reservationService.reservationData = reservationData;
           },
           ({ error }) => {
-            if (error.type == 'BOOKING_CANCELED') {
+            if (error.type === 'BOOKING_CANCELED') {
               this.getHotelDataById(error.type);
             }
           }
@@ -163,5 +163,9 @@ export class MainComponent implements OnInit {
       const group: FormGroup = this.fb.group({});
       this.parentForm.push(group);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

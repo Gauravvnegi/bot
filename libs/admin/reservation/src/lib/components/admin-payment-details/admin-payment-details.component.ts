@@ -44,7 +44,7 @@ export class AdminPaymentDetailsComponent implements OnInit {
   getModifiedPaymentSummary() {
     const paymentSummary = this.detailsData.paymentDetails;
     paymentSummary.packages.forEach((amenity) => {
-      let {
+      const {
         label,
         description,
         unit,

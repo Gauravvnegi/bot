@@ -33,6 +33,7 @@
     max-height: 289px;
     .referenceImg{
       max-height: 289px;
+      width: 100%;
     }
   }
 }
@@ -40,6 +41,7 @@
 
 .expand-icon {
   margin-left: auto;
+  padding: 10px;
 }
 
 mat-icon {

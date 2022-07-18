@@ -11,9 +11,12 @@
       class="request-wrapper-header-btnwrap-btn"
       (click)="openRaiseRequest()"
     >
-      <img src="assets/svg/request_icon.svg" alt="" />
+      <img
+        [src]="requestConfig.images.raiseRequest.url"
+        [alt]="requestConfig.images.raiseRequest.alt"
+      />
       <div class="request-wrapper-header-btnwrap-btn-name">
-        Raise Request
+        {{ 'raiseRequest' | translate }}
       </div>
     </div>
   </div>
@@ -22,11 +25,21 @@
 <ng-container [ngSwitch]="tabFilterItems[tabFilterIdx]?.value">
   <ng-container *ngSwitchCase="'INHOUSE'">
     <div class="request-body">
-      <div class="request-body-left">
+      <div class="request-body-left" [ngClass]="{ disabled: guestInfoEnable }">
+        <div class="blackscreen"></div>
         <hospitality-bot-request-list></hospitality-bot-request-list>
       </div>
-      <div class="request-body-right">
-        <hospitality-bot-request-detail></hospitality-bot-request-detail>
+      <div class="request-body-right" [ngClass]="{ disabled: guestInfoEnable }">
+        <div class="blackscreen"></div>
+        <hospitality-bot-request-detail
+          (guestInfo)="openGuestInfo($event)"
+        ></hospitality-bot-request-detail>
+      </div>
+      <div class="guest-info-enable" *ngIf="guestInfoEnable" [@slideInOut]>
+        <hospitality-bot-guest-info
+          (closeInfo)="closeGuestInfo($event)"
+          [data]="Id"
+        ></hospitality-bot-guest-info>
       </div>
     </div>
   </ng-container>

@@ -72,6 +72,7 @@ export class Feedback {
   remarks: Remark[];
   timeOut: boolean;
   feedbackId: string;
+  tableOrRoomNumber: string;
   deserialize(input, outlets) {
     this.remarks = new Array<Remark>();
     Object.assign(
@@ -107,7 +108,8 @@ export class Feedback {
       set({}, 'userId', get(input, ['userId'])),
       set({}, 'userName', get(input, ['userName'])),
       set({}, 'timeOut', get(input, ['timeOut'])),
-      set({}, 'feedbackId', get(input, ['feedbackId'], ''))
+      set({}, 'feedbackId', get(input, ['feedbackId'], '')),
+      set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber'], ''))
     );
     this.outlet = outlets?.filter(
       (outlet) => outlet.id === input.entityId
@@ -146,8 +148,8 @@ export class Feedback {
 
   getTableOrRoomNo(feedbackType) {
     return feedbackType === feedback.types.stay
-      ? `RNO: ${this.bookingDetails.tableOrRoomNumber}`
-      : `TNO: ${this.bookingDetails.tableOrRoomNumber}`;
+      ? `RNO: ${this.tableOrRoomNumber}`
+      : `TNO: ${this.tableOrRoomNumber}`;
   }
 
   getProfileNickName() {
@@ -480,12 +482,15 @@ export class StayFeedback {
 
   getTableOrRoomNo(feedbackType) {
     return feedbackType === feedback.types.stay
-      ? `RNO: ${this.bookingDetails.tableOrRoomNumber}`
-      : `TNO: ${this.bookingDetails.tableOrRoomNumber}`;
+      ? `RNO: ${this.tableOrRoomNumber}`
+      : `TNO: ${this.tableOrRoomNumber}`;
   }
 
   getProfileNickName() {
-    const nameList = [this.guest.firstName, this.guest.lastName];
+    const nameList = [
+      this.guest.firstName,
+      this.guest.lastName ? this.guest.lastName : '',
+    ];
     return nameList
       .map((i, index) => {
         if ([0, 1].includes(index)) return i.charAt(0);

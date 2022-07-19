@@ -49,10 +49,14 @@ export class PaymentSummary {
       set({}, 'packages', get(paymentSummary, ['packages'])),
       set({}, 'inclusions', get(paymentSummary, ['inclusions'])),
       set({}, 'roomRates', get(paymentSummary, ['roomRates'])),
-      set({}, 'transactionsHistory', get(paymentSummary, ['transactionsHistory'])),
+      set(
+        {},
+        'transactionsHistory',
+        get(paymentSummary, ['transactionsHistory'])
+      ),
       set({}, 'depositRules', get(paymentSummary, ['depositRules'])),
       set({}, 'printRate', get(paymentSummary, ['printRate']))
-    )
+    );
     return this;
   }
 }
@@ -60,15 +64,19 @@ export class PaymentSummary {
 export class HotelConfig {
   payAtDesk: boolean;
   paymentConfigurations: paymentType.IPaymentConfiguration;
-  paymentMethods: paymentType.IPrePaymentPM[] | paymentType.IDepositPM[] | paymentType.IGuaranteePM[];
+  paymentMethods:
+    | paymentType.IPrePaymentPM[]
+    | paymentType.IDepositPM[]
+    | paymentType.IGuaranteePM[];
 
   deserialize(input: paymentType.IPaymentConfiguration, paymentSummary: any) {
     Object.assign(
       this,
-      set({}, 'payAtDesk', get(paymentSummary, ['depositRules', 'payAtDesk'])),
-    )
-
-    this.paymentMethods = input.paymentMethods[paymentSummary.depositRules.guaranteeType];
+      set({}, 'payAtDesk', get(paymentSummary, ['depositRules', 'payAtDesk']))
+    );
+    this.paymentMethods =
+      input.paymentMethods &&
+      input.paymentMethods[paymentSummary.depositRules.guaranteeType];
     this.paymentConfigurations = input;
     return this;
   }
@@ -93,7 +101,10 @@ export class PaymentCCAvenue {
   deserialize(
     config: paymentType.IPaymentConfiguration,
     depositRules: paymentType.IDepositRule,
-    type: paymentType.IPrePaymentPM | paymentType.IDepositPM | paymentType.IGuaranteePM
+    type:
+      | paymentType.IPrePaymentPM
+      | paymentType.IDepositPM
+      | paymentType.IGuaranteePM
   ) {
     Object.assign(
       this,
@@ -115,5 +126,8 @@ export class PaymentCCAvenue {
 
 export class SelectedPaymentOption {
   config: paymentType.IPaymentConfiguration;
-  type: paymentType.IPrePaymentPM | paymentType.IDepositPM | paymentType.IGuaranteePM;
+  type:
+    | paymentType.IPrePaymentPM
+    | paymentType.IDepositPM
+    | paymentType.IGuaranteePM;
 }

@@ -293,7 +293,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   setAssignee(event) {
     this.$subscription.add(
       this.cardService
-        .updateFeedbackAssignee(this.data.feedback.id, event.value)
+        .updateFeedbackAssignee(this.data.feedback.departmentId, event.value)
         .subscribe(
           (response) => {
             this.cardService.$assigneeChange.next({ status: true });

@@ -44,7 +44,7 @@ export interface CustomConfig {
   ],
 })
 export class SharedThemeModule {
-  public static forRoot(config: CustomConfig): ModuleWithProviders {
+  public static forRoot(config: CustomConfig): ModuleWithProviders<SharedThemeModule> {
     return {
       ngModule: SharedThemeModule,
       providers: [{ provide: 'THEME_CONFIG', useValue: config }, ThemeService],

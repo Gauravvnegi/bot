@@ -168,7 +168,7 @@ export interface IThemeConfig {
   ],
 })
 export class WebUserSharedModule {
-  public static forRoot(config: IThemeConfig): ModuleWithProviders {
+  public static forRoot(config: IThemeConfig): ModuleWithProviders<WebUserSharedModule> {
     return {
       ngModule: WebUserSharedModule,
       providers: [{ provide: 'TEMPLATE_CONFIG', useValue: config }],

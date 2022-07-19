@@ -201,14 +201,9 @@
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
   background: $white;
   .time {
-    width: 47px;
-    height: 13px;
     font-family: Roboto;
     font-size: 10px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+    padding: 0 10px;
     letter-spacing: 0.6px;
     text-align: right;
     color: #c7c7c7;
@@ -230,10 +225,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    padding: 8px 6px;
     border-radius: 100%;
     background-color: #feba1b;
+    margin-left: 2px;
   }
 }
 
@@ -573,7 +568,7 @@
     margin: 0 2px;
   }
   .number {
-    padding: 4px;
+    padding: 5px;
     color: $white;
     margin: 0 0px;
     text-align: center;
@@ -582,7 +577,7 @@
     font-size: 9px;
   }
   .numPadding {
-    padding: 6px;
+    padding: 7px 6px;
   }
 
   @media screen and (max-width: 1050px) {

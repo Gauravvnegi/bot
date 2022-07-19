@@ -153,7 +153,7 @@ export class Feedback {
   }
 
   getProfileNickName() {
-    const nameList = [this.guest.firstName, this.guest.lastName];
+    const nameList = [this.guest.firstName, this.guest.lastName || ''];
     return nameList
       .map((i, index) => {
         if ([0, 1].includes(index)) return i.charAt(0);

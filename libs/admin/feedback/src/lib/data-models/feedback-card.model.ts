@@ -82,7 +82,7 @@ export class FeedbackRecord {
   getProfileNickName() {
     const nameList = [
       this.feedback.guest.firstName,
-      this.feedback.guest.lastName,
+      this.feedback.guest.lastName || '',
     ];
     return nameList
       .map((i, index) => {
@@ -285,7 +285,7 @@ export class Guest implements Deserializable {
     return cc;
   }
   getProfileNickName() {
-    const nameList = [this.firstName, this.lastName];
+    const nameList = [this.firstName, this.lastName || ''];
     return nameList
       .map((i, index) => {
         if ([0, 1].includes(index)) return i.charAt(0);

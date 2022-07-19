@@ -527,7 +527,7 @@
     margin: 0 2px;
   }
   .number {
-    padding: 4px;
+    padding: 4px 5px;
     color: $white;
     margin: 0 0px;
     text-align: center;
@@ -615,8 +615,6 @@
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
   background: $white;
   .time {
-    width: 47px;
-    height: 13px;
     font-family: Roboto;
     font-size: 10px;
     font-weight: normal;
@@ -626,6 +624,7 @@
     letter-spacing: 0.6px;
     text-align: right;
     color: #c7c7c7;
+    padding: 0 10px;
   }
   .comment {
     display: flex;
@@ -644,9 +643,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    padding: 8px 6px;
     border-radius: 100%;
+    margin-left: 2px;
     background-color: #feba1b;
   }
 }
@@ -660,4 +659,7 @@
 }
 .textblk {
   color: $black !important;
+}
+.numPadding {
+  padding: 6px !important;
 }

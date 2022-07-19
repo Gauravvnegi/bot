@@ -21,7 +21,7 @@
   }
   .body {
     overflow-y: auto;
-    height: calc(100% - 117px);
+    // height: calc(100% - 117px);
     &::-webkit-scrollbar {
       width: 13px;
       &:hover {
@@ -40,7 +40,6 @@
       border-radius: 10px;
     }
     .item {
-      height: 163px;
       border-bottom: 1px solid #f4f5f6;
       padding: 10px;
       display: flex;

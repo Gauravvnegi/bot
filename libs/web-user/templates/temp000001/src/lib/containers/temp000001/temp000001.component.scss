@@ -9,7 +9,9 @@
   z-index: -1;
   min-width: $full-width;
   min-height: $full-width;
-  background-repeat: no-repeat;
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  height: 100vh;
 }
 
 .background__wrapper-img {

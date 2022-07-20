@@ -17,14 +17,13 @@
       </div>
     </div>
 
-    <div
-      class="mr-10"
-      [formGroup]="liveChatFG"
-      channelSubscribed
-      [paths]="'WHATSAPP_BOT'"
-    >
+    <div class="mr-10" [formGroup]="liveChatFG">
       <div class="req_button">
-        <div class="guestInfoEditWrapper">
+        <div
+          class="guestInfoEditWrapper"
+          featureSubscribed
+          [feature]="'modules.request'"
+        >
           <div
             class="guestInfoEditContainer"
             *ngIf="buttonConfig[selectedIndex].button"
@@ -37,6 +36,8 @@
           </div>
         </div>
         <mat-slide-toggle
+          channelSubscribed
+          [paths]="'WHATSAPP_BOT'"
           formControlName="status"
           (change)="onLiveChatChange()"
           [disabled]="liveChatStatus.value"

@@ -45,6 +45,7 @@ import { CheckinDateAlertComponent } from './presentational/checkin-date-alert/c
 import { ImageHandlingComponent } from './presentational/image-handling/image-handling.component';
 import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shared-image-cropper.module';
 import { TabGroupComponent } from './presentational/tab-group/tab-group.component';
+import { BackgroundUrlPipe } from './pipes/background-url.pipe';
 
 export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
   const { templateId } = injector.get('TEMPLATE_CONFIG');
@@ -123,6 +124,7 @@ export interface IThemeConfig {
     CheckinDateAlertComponent,
     ImageHandlingComponent,
     TabGroupComponent,
+    BackgroundUrlPipe,
   ],
   exports: [
     SharedMaterialModule,
@@ -165,10 +167,13 @@ export interface IThemeConfig {
     CheckinDateAlertComponent,
     ImageHandlingComponent,
     TabGroupComponent,
+    BackgroundUrlPipe,
   ],
 })
 export class WebUserSharedModule {
-  public static forRoot(config: IThemeConfig): ModuleWithProviders {
+  public static forRoot(
+    config: IThemeConfig
+  ): ModuleWithProviders<WebUserSharedModule> {
     return {
       ngModule: WebUserSharedModule,
       providers: [{ provide: 'TEMPLATE_CONFIG', useValue: config }],

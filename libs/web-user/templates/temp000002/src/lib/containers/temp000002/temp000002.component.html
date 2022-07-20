@@ -1,1 +1,21 @@
-<p>temp000002 works!</p>
+<ng-container template-loader [templateId]="templateId"></ng-container>
+<div [style]="isLoaderVisible ? { visibility: 'hidden' } : {}">
+  <div
+    class="background__wrapper"
+    [ngStyle]="{ background: hotelImageUrl || 'assets/bg.png' | asBgUrl }"
+  >
+    <!-- <picture>
+      <source
+        class="background__wrapper-img"
+        type="image/webp"
+        srcset="assets/bg.webp"
+      />
+      <img
+        class="background__wrapper-img"
+        src="assets/bg.png"
+        alt="background image"
+      />
+    </picture> -->
+  </div>
+  <router-outlet></router-outlet>
+</div>

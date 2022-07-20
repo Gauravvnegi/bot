@@ -1,6 +1,9 @@
 <ng-container template-loader [templateId]="templateId"></ng-container>
 <div [style]="isLoaderVisible ? { visibility: 'hidden' } : {}">
-  <div class="background__wrapper">
+  <div
+    class="background__wrapper"
+    [ngStyle]="{ background: hotelImageUrl || 'assets/bg.png' | asBgUrl }"
+  >
     <!-- <picture>
       <source
         class="background__wrapper-img"

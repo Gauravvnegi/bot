@@ -128,12 +128,12 @@ export class MainComponent implements OnInit, OnDestroy {
         switch (errorType) {
           case 'BOOKING_CANCELED':
             this.router.navigate(['booking-cancel'], {
-              preserveQueryParams: true,
+              queryParamsHandling: 'preserve',
             });
             break;
           case 'expiry':
             this.router.navigate(['booking-expired'], {
-              preserveQueryParams: true,
+              queryParamsHandling: 'preserve',
             });
             break;
         }

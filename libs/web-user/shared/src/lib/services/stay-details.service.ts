@@ -149,16 +149,60 @@ export class StayDetailsService extends ApiService {
     return specialCommentsFieldSchema as SpecialCommentsConfigI;
   }
 
-  setFieldForAddress() {
+  setFieldForAddress(countriesList) {
     let addressFieldSchema = {};
 
-    addressFieldSchema['address'] = new FieldSchema().deserialize({
-      label: 'address',
-      appearance: 'outline',
-      type: 'textarea',
-      placeholder: 'Please enter address',
+    addressFieldSchema['addressLine1'] = new FieldSchema().deserialize({
+      master_label: 'Address Line 1',
+      label: '',
+      placeholder: '',
+      style: {
+        fieldParentWrapperStyles: { width: '100%' },
+      },
     });
 
+    addressFieldSchema['addressLine2'] = new FieldSchema().deserialize({
+      master_label: 'Address Line 2',
+      label: '',
+      placeholder: '',
+      style: {
+        fieldParentWrapperStyles: { width: '100%' },
+      },
+    });
+
+    addressFieldSchema['city'] = new FieldSchema().deserialize({
+      master_label: 'City',
+      label: '',
+      placeholder: '',
+      style: {
+        fieldParentWrapperStyles: { width: '100%' },
+      },
+    });
+
+    addressFieldSchema['state'] = new FieldSchema().deserialize({
+      master_label: 'State',
+      label: '',
+      placeholder: '',
+      style: {
+        fieldParentWrapperStyles: { width: '100%' },
+      },
+    });
+
+    addressFieldSchema['postalCode'] = new FieldSchema().deserialize({
+      master_label: 'Postal Code',
+      label: '',
+      placeholder: '',
+      style: {
+        fieldParentWrapperStyles: { width: '100%' },
+      },
+    });
+
+    addressFieldSchema['country'] = new FieldSchema().deserialize({
+      master_label: 'Country',
+      label: '',
+      disable: false,
+      options: countriesList,
+    });
     return addressFieldSchema as AddressConfigI;
   }
 

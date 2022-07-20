@@ -8,7 +8,10 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 import { AddressConfigI } from 'libs/web-user/shared/src/lib/data-models/stayDetailsConfig.model';
+import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
 import { Subscription } from 'rxjs';
 
@@ -27,10 +30,14 @@ export class AddressComponent implements OnInit, OnChanges, OnDestroy {
 
   addressForm: FormGroup;
   addressDetailsConfig: AddressConfigI;
+  countries = [];
 
   constructor(
     protected fb: FormBuilder,
-    protected _stayDetailService: StayDetailsService
+    protected _stayDetailService: StayDetailsService,
+    protected _documentDetailService: DocumentDetailsService,
+    protected _translateService: TranslateService,
+    protected _snackBarService: SnackBarService
   ) {
     this.initAddressForm();
   }
@@ -40,8 +47,7 @@ export class AddressComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.setFieldConfiguration();
-    this.registerListeners();
+    this.getCountriesList();
   }
 
   /**
@@ -49,12 +55,45 @@ export class AddressComponent implements OnInit, OnChanges, OnDestroy {
    */
   initAddressForm() {
     this.addressForm = this.fb.group({
-      address: [''],
+      addressLine1: [''],
+      addressLine2: [''],
+      city: [''],
+      state: [''],
+      country: [''],
+      postalCode: [''],
     });
   }
 
+  getCountriesList() {
+    this.$subscription.add(
+      this._documentDetailService.getCountryList().subscribe(
+        (countriesList) => {
+          this.countries = countriesList.map((country) => {
+            //@todo change key
+            return {
+              key: country.nationality,
+              value: country.name,
+              id: country.id,
+              nationality: country.nationality,
+            };
+          });
+
+          this.setFieldConfiguration();
+          this.registerListeners();
+        },
+        ({ error }) => {
+          this._translateService.get(error.code).subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
+        }
+      )
+    );
+  }
+
   setFieldConfiguration() {
-    this.addressDetailsConfig = this._stayDetailService.setFieldForAddress();
+    this.addressDetailsConfig = this._stayDetailService.setFieldForAddress(
+      this.countries
+    );
   }
 
   setAddress() {

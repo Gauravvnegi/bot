@@ -32,11 +32,13 @@ export class TemplateRendererDirective implements OnChanges {
     this.router.resetConfig(config);
 
     if (entity && id) {
-      this.router.navigate([`${entity}/${id}`], { preserveQueryParams: true });
+      this.router.navigate([`${entity}/${id}`], {
+        queryParamsHandling: 'preserve',
+      });
     } else if (entity) {
-      this.router.navigate([`${entity}`], { preserveQueryParams: true });
+      this.router.navigate([`${entity}`], { queryParamsHandling: 'preserve' });
     } else {
-      this.router.navigate([''], { preserveQueryParams: true });
+      this.router.navigate([''], { queryParamsHandling: 'preserve' });
     }
   }
 }

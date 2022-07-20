@@ -3,13 +3,13 @@
 // Global CSS for Template
 
 .background__wrapper {
-  background: url('../../../../../../../../apps/web-user/src/assets/bg.png');
   position: fixed;
   top: 0;
   left: 0;
   z-index: -1;
   min-width: $full-width;
   min-height: $full-width;
+  background-repeat: no-repeat;
 }
 
 .background__wrapper-img {
@@ -88,7 +88,7 @@
   }
   &-expansion-panel-body {
     margin: 0 24px 16px;
-    padding: $padding-large $padding30 0px!important;
+    padding: $padding-large $padding30 0px !important;
     border: 2px solid $border-color;
     border-radius: $border-radius-medium;
     position: relative;

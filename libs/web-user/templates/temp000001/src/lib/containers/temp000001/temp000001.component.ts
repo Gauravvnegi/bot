@@ -24,6 +24,7 @@ import { Subscription } from 'rxjs';
 export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
   protected $subscription: Subscription = new Subscription();
   isLoaderVisible = true;
+  hotelImageUrl: string;
 
   constructor(
     @Inject(DOCUMENT) protected document: Document,
@@ -66,6 +67,7 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
         this.titleService.setTitle(response.name);
         let favicon = this.document.querySelector('#favicon');
         favicon['href'] = response['favIcon']?.trim() ?? 'favicon.ico';
+        this.hotelImageUrl = this.hotelService.hotelConfig.imageUrl;
       }
     });
   }

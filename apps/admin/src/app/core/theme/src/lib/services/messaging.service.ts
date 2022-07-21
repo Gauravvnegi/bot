@@ -25,8 +25,10 @@ export class FirebaseMessagingService {
     private _snackbarService: SnackBarService,
     private _modalService: ModalService
   ) {
-    this.fireMessaging.tokenChanges.subscribe((response) =>
-      console.log('Messaging token Refreshed')
+    this.subscription.add(
+      this.fireMessaging.tokenChanges.subscribe((response) =>
+        console.log('Messaging token Refreshed')
+      )
     );
   }
 

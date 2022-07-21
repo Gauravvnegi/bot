@@ -272,16 +272,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   logoutUser() {
-    this._authService.logout(this._userService.getLoggedInUserid()).subscribe(
-      (response) => {
+    this._authService
+      .logout(this._userService.getLoggedInUserid())
+      .subscribe(() => {
+        this.firebaseMessagingService.destroySubscription();
         this._authService.clearToken();
-        this._router.navigate(['/auth']);
-      },
-      (error) => {
-        this._authService.clearToken();
-        this._router.navigate(['/auth']);
-      }
-    );
+        location.reload();
+      });
   }
 
   checkForTransactionFeedbackSubscribed() {

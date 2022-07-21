@@ -34,6 +34,7 @@ export class MainComponent implements OnInit, OnDestroy {
   tabFilterIdx = 0;
   feedbackType: string;
   $subscription = new Subscription();
+  feedback;
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
@@ -47,6 +48,7 @@ export class MainComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
     this.listenForTabFilterCounts();
     this.listenForFeedbackTypeChanged();
+    this.listenForSelectedFeedback();
   }
 
   getConfig() {
@@ -89,6 +91,14 @@ export class MainComponent implements OnInit, OnDestroy {
       this.tableService.$feedbackType.subscribe(
         (response) => (this.feedbackType = response)
       )
+    );
+  }
+
+  listenForSelectedFeedback() {
+    this.$subscription.add(
+      this.cardService.$selectedFeedback.subscribe((response) => {
+        this.feedback = response;
+      })
     );
   }
 

@@ -1,5 +1,5 @@
 <form [formGroup]="addressForm">
-  <mat-accordion>
+  <mat-accordion #accordian="matAccordion">
     <mat-expansion-panel #panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -20,7 +20,7 @@
           <div class="wrapper__item">
             <web-user-input
               [parentForm]="addressForm"
-              [name]="'addressLine1'"
+              [name]="'addressLine2'"
               [settings]="addressDetailsConfig.addressLine2"
             ></web-user-input>
           </div>

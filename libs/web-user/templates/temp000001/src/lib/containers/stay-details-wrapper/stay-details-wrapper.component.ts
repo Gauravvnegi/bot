@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
@@ -8,6 +8,7 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { AddressComponent } from '../address/address.component';
 
 export interface IStayDetailsWrapper {
   saveStayDetails(): void;
@@ -20,8 +21,8 @@ export interface IStayDetailsWrapper {
 })
 export class StayDetailsWrapperComponent extends BaseWrapperComponent
   implements IStayDetailsWrapper, OnInit, OnDestroy {
+  @ViewChild('addressFields') addressFields: AddressComponent;
   isAmenityDataAvl = false;
-
   constructor(
     private _stayDetailService: StayDetailsService,
     private _amenitiesService: AmenitiesService,
@@ -71,6 +72,12 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
    * Function to save/update all the details for guest stay on Next button click
    */
   saveStayDetails(): void {
+    if (this.parentForm.invalid) {
+      this.parentForm.markAllAsTouched();
+      this.openPanels(this.addressFields.panelList.toArray());
+      this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
+      return;
+    }
     const formValue = this.parentForm.getRawValue();
     const data = this._stayDetailService.modifyStayDetails(
       formValue,
@@ -103,6 +110,12 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
           }
         )
     );
+  }
+
+  openPanels(panelList) {
+    panelList.forEach((s, index) => {
+      panelList[index].open();
+    });
   }
 
   ngOnDestroy(): void {

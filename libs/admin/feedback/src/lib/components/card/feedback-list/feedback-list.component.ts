@@ -47,6 +47,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   filterData = {};
   pagination = card.pagination;
   totalRecords = card.totalRecords;
+  outletChangeSubscribed = false;
   constructor(
     private _globalFilterService: GlobalFilterService,
     private _snackbarService: SnackBarService,
@@ -78,7 +79,6 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
       entityState: this.cardTabFilterItems[this.tabFilterIdx]?.value,
     };
     this.listenForFeedbackTypeChanged();
-    this.listenForOutletChanged();
     this.listenForGlobalFilters();
     this.listenForEntityTypeChange();
     this.listenForAssigneeChange();
@@ -105,6 +105,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
           limit: 20,
         };
         this.cardService.$selectedFeedback.next(null);
+        if (!this.outletChangeSubscribed) this.listenForOutletChanged();
         this.loadData();
       })
     );
@@ -143,16 +144,12 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.statisticService.$outletChange.subscribe((response) => {
         if (response.status) {
-          this.globalQueries.forEach((element) => {
-            if (element.hasOwnProperty('entityIds')) {
-              element.entityIds = this.statisticService.outletIds;
-            }
-          });
+          this.outletChangeSubscribed = true;
           this.pagination = {
             offset: 0,
             limit: 20,
           };
-          this.loadData();
+          if (this.globalQueries.length) this.loadData();
         }
       })
     );

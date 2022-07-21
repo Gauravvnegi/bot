@@ -4,6 +4,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -41,6 +42,7 @@ import {
   Departmentpermissions,
 } from '../../../data-models/feedback-card.model';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
+import { MainComponent } from '../../card';
 @Component({
   selector: 'hospitality-bot-feedback-datatable',
   templateUrl: './feedback-datatable.component.html',
@@ -51,6 +53,7 @@ import { StatisticsService } from '../../../services/feedback-statistics.service
 })
 export class FeedbackDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
+  @ViewChild('cardComponent') cardComponent: MainComponent;
   @Input() globalFeedbackFilterType: string;
   @Input() tableName = feedback.table.name;
   @Input() tabFilterIdx = 0;
@@ -124,6 +127,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   setTableType(value) {
     this.tableFG.patchValue({ tableType: value });
     if (value === feedback.tableTypes.table.value) {
+      this.cardComponent.$subscription.unsubscribe();
       this.loadInitialData([
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
@@ -184,11 +188,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
               element.entityIds = this.statisticService.outletIds;
             }
           });
-          this.loadInitialData([
-            ...this.globalQueries,
-            { order: sharedConfig.defaultOrder },
-            ...this.getSelectedQuickReplyFilters(),
-          ]);
+          if (this.tableFG.value.tableType !== feedback.tableTypes.card.value)
+            this.loadInitialData([
+              ...this.globalQueries,
+              { order: sharedConfig.defaultOrder },
+              ...this.getSelectedQuickReplyFilters(),
+            ]);
         }
       })
     );

@@ -182,7 +182,7 @@
   *ngIf="tableFG?.get('tableType').value === 'card'; else tableView"
 >
   <div class="sideMargin">
-    <hospitality-bot-main></hospitality-bot-main>
+    <hospitality-bot-main #cardComponent></hospitality-bot-main>
   </div>
 </ng-container>
 <ng-template #tableView>

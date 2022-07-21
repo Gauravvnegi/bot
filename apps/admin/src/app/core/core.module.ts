@@ -14,11 +14,11 @@ import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
 @NgModule({
   declarations: [],
   imports: [
+    AngularFireModule.initializeApp(environment.firebase),
+    AuthModule,
     BrowserModule,
     CommonModule,
-    AuthModule,
     RouterModule,
-    AngularFireModule.initializeApp(environment.firebase),
     TranslateModule.forRoot(
       getTranslationConfigs([HttpClient], ['core', 'auth'])
     ),

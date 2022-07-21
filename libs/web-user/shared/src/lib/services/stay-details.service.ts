@@ -153,8 +153,8 @@ export class StayDetailsService extends ApiService {
     let addressFieldSchema = {};
 
     addressFieldSchema['addressLine1'] = new FieldSchema().deserialize({
-      master_label: 'Address Line 1',
-      label: '',
+      label: 'Address Line 1',
+      required: true,
       placeholder: '',
       style: {
         fieldParentWrapperStyles: { width: '100%' },
@@ -162,8 +162,8 @@ export class StayDetailsService extends ApiService {
     });
 
     addressFieldSchema['addressLine2'] = new FieldSchema().deserialize({
-      master_label: 'Address Line 2',
-      label: '',
+      label: 'Address Line 2',
+      required: true,
       placeholder: '',
       style: {
         fieldParentWrapperStyles: { width: '100%' },
@@ -171,8 +171,8 @@ export class StayDetailsService extends ApiService {
     });
 
     addressFieldSchema['city'] = new FieldSchema().deserialize({
-      master_label: 'City',
-      label: '',
+      label: 'City',
+      required: true,
       placeholder: '',
       style: {
         fieldParentWrapperStyles: { width: '100%' },
@@ -180,8 +180,8 @@ export class StayDetailsService extends ApiService {
     });
 
     addressFieldSchema['state'] = new FieldSchema().deserialize({
-      master_label: 'State',
-      label: '',
+      label: 'State',
+      required: true,
       placeholder: '',
       style: {
         fieldParentWrapperStyles: { width: '100%' },
@@ -189,8 +189,8 @@ export class StayDetailsService extends ApiService {
     });
 
     addressFieldSchema['postalCode'] = new FieldSchema().deserialize({
-      master_label: 'Postal Code',
-      label: '',
+      label: 'Postal Code',
+      required: true,
       placeholder: '',
       style: {
         fieldParentWrapperStyles: { width: '100%' },
@@ -198,8 +198,8 @@ export class StayDetailsService extends ApiService {
     });
 
     addressFieldSchema['country'] = new FieldSchema().deserialize({
-      master_label: 'Country',
-      label: '',
+      label: 'Country',
+      required: true,
       disable: false,
       options: countriesList,
     });
@@ -218,10 +218,17 @@ export class StayDetailsService extends ApiService {
         stayDetails,
         timezone
       ),
+      address: {
+        addressLines: [
+          stayDetails.address.addressLine1,
+          stayDetails.address.addressLine2,
+        ],
+        city: stayDetails.address.city,
+        state: stayDetails.address.state,
+        countryCode: stayDetails.address.country,
+        postalCode: stayDetails.address.postalCode,
+      },
     };
-    if (stayDetails.address) {
-      data['address'] = stayDetails.address.address;
-    }
     return {
       stayDetails: data,
     };

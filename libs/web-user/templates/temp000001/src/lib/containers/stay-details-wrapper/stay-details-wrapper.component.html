@@ -8,6 +8,7 @@
 
     <ng-container *ngIf="_hotelService.hotelConfig?.showAddress">
       <hospitality-bot-address
+        #addressFields
         [parentForm]="parentForm"
         [reservationData]="reservationData"
         (addFGEvent)="addFGEvent($event)"

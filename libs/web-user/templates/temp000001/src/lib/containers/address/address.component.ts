@@ -6,8 +6,12 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
 import { AddressConfigI } from 'libs/web-user/shared/src/lib/data-models/stayDetailsConfig.model';
@@ -24,9 +28,9 @@ export class AddressComponent implements OnInit, OnChanges, OnDestroy {
   private $subscription: Subscription = new Subscription();
   @Input() parentForm: FormGroup;
   @Input() reservationData;
-
-  @Output()
-  addFGEvent = new EventEmitter();
+  @ViewChild('accordian') accordion: MatAccordion;
+  @ViewChildren('panel') panelList: QueryList<MatExpansionPanel>;
+  @Output() addFGEvent = new EventEmitter();
 
   addressForm: FormGroup;
   addressDetailsConfig: AddressConfigI;
@@ -55,12 +59,12 @@ export class AddressComponent implements OnInit, OnChanges, OnDestroy {
    */
   initAddressForm() {
     this.addressForm = this.fb.group({
-      addressLine1: [''],
-      addressLine2: [''],
-      city: [''],
-      state: [''],
-      country: [''],
-      postalCode: [''],
+      addressLine1: ['', Validators.required],
+      addressLine2: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      country: ['', Validators.required],
+      postalCode: ['', Validators.required],
     });
   }
 

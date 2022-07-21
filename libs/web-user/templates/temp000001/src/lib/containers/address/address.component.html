@@ -1,5 +1,5 @@
 <form [formGroup]="addressForm">
-  <mat-accordion>
+  <mat-accordion #accordian="matAccordion">
     <mat-expansion-panel #panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -8,11 +8,58 @@
           <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <hospitality-bot-temp000001-textarea
-        [parentForm]="addressForm"
-        [name]="'address'"
-        [settings]="addressDetailsConfig.address"
-      ></hospitality-bot-temp000001-textarea>
+      <ng-container *ngIf="addressForm && addressDetailsConfig">
+        <div class="wrapper">
+          <div class="wrapper__item">
+            <web-user-input
+              [parentForm]="addressForm"
+              [name]="'addressLine1'"
+              [settings]="addressDetailsConfig.addressLine1"
+            ></web-user-input>
+          </div>
+          <div class="wrapper__item">
+            <web-user-input
+              [parentForm]="addressForm"
+              [name]="'addressLine2'"
+              [settings]="addressDetailsConfig.addressLine2"
+            ></web-user-input>
+          </div>
+        </div>
+        <div class="wrapper">
+          <div class="wrapper__item">
+            <web-user-input
+              [parentForm]="addressForm"
+              [name]="'city'"
+              [settings]="addressDetailsConfig.city"
+            ></web-user-input>
+          </div>
+          <div class="wrapper__item">
+            <web-user-input
+              [parentForm]="addressForm"
+              [name]="'state'"
+              [settings]="addressDetailsConfig.state"
+            ></web-user-input>
+          </div>
+        </div>
+        <div class="wrapper">
+          <div class="wrapper__item">
+            <web-user-select-box
+              [parentForm]="addressForm"
+              [name]="'country'"
+              [settings]="addressDetailsConfig.country"
+            >
+            </web-user-select-box>
+          </div>
+          <div class="wrapper__item">
+            <web-user-input
+              [parentForm]="addressForm"
+              [name]="'postalCode'"
+              [settings]="addressDetailsConfig.postalCode"
+              class="room-type-field"
+            ></web-user-input>
+          </div>
+        </div>
+      </ng-container>
     </mat-expansion-panel>
   </mat-accordion>
 </form>

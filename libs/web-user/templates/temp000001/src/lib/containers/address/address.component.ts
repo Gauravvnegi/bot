@@ -6,9 +6,16 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  QueryList,
+  ViewChild,
+  ViewChildren,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
 import { AddressConfigI } from 'libs/web-user/shared/src/lib/data-models/stayDetailsConfig.model';
+import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-details.service';
 import { Subscription } from 'rxjs';
 
@@ -21,16 +28,20 @@ export class AddressComponent implements OnInit, OnChanges, OnDestroy {
   private $subscription: Subscription = new Subscription();
   @Input() parentForm: FormGroup;
   @Input() reservationData;
-
-  @Output()
-  addFGEvent = new EventEmitter();
+  @ViewChild('accordian') accordion: MatAccordion;
+  @ViewChildren('panel') panelList: QueryList<MatExpansionPanel>;
+  @Output() addFGEvent = new EventEmitter();
 
   addressForm: FormGroup;
   addressDetailsConfig: AddressConfigI;
+  countries = [];
 
   constructor(
     protected fb: FormBuilder,
-    protected _stayDetailService: StayDetailsService
+    protected _stayDetailService: StayDetailsService,
+    protected _documentDetailService: DocumentDetailsService,
+    protected _translateService: TranslateService,
+    protected _snackBarService: SnackBarService
   ) {
     this.initAddressForm();
   }
@@ -40,8 +51,7 @@ export class AddressComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.setFieldConfiguration();
-    this.registerListeners();
+    this.getCountriesList();
   }
 
   /**
@@ -49,12 +59,45 @@ export class AddressComponent implements OnInit, OnChanges, OnDestroy {
    */
   initAddressForm() {
     this.addressForm = this.fb.group({
-      address: [''],
+      addressLine1: ['', Validators.required],
+      addressLine2: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      country: ['', Validators.required],
+      postalCode: ['', Validators.required],
     });
   }
 
+  getCountriesList() {
+    this.$subscription.add(
+      this._documentDetailService.getCountryList().subscribe(
+        (countriesList) => {
+          this.countries = countriesList.map((country) => {
+            //@todo change key
+            return {
+              key: country.nationality,
+              value: country.name,
+              id: country.id,
+              nationality: country.nationality,
+            };
+          });
+
+          this.setFieldConfiguration();
+          this.registerListeners();
+        },
+        ({ error }) => {
+          this._translateService.get(error.code).subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
+        }
+      )
+    );
+  }
+
   setFieldConfiguration() {
-    this.addressDetailsConfig = this._stayDetailService.setFieldForAddress();
+    this.addressDetailsConfig = this._stayDetailService.setFieldForAddress(
+      this.countries
+    );
   }
 
   setAddress() {

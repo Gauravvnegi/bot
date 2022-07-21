@@ -149,16 +149,60 @@ export class StayDetailsService extends ApiService {
     return specialCommentsFieldSchema as SpecialCommentsConfigI;
   }
 
-  setFieldForAddress() {
+  setFieldForAddress(countriesList) {
     let addressFieldSchema = {};
 
-    addressFieldSchema['address'] = new FieldSchema().deserialize({
-      label: 'address',
-      appearance: 'outline',
-      type: 'textarea',
-      placeholder: 'Please enter address',
+    addressFieldSchema['addressLine1'] = new FieldSchema().deserialize({
+      label: 'Address Line 1',
+      required: true,
+      placeholder: '',
+      style: {
+        fieldParentWrapperStyles: { width: '100%' },
+      },
     });
 
+    addressFieldSchema['addressLine2'] = new FieldSchema().deserialize({
+      label: 'Address Line 2',
+      required: true,
+      placeholder: '',
+      style: {
+        fieldParentWrapperStyles: { width: '100%' },
+      },
+    });
+
+    addressFieldSchema['city'] = new FieldSchema().deserialize({
+      label: 'City',
+      required: true,
+      placeholder: '',
+      style: {
+        fieldParentWrapperStyles: { width: '100%' },
+      },
+    });
+
+    addressFieldSchema['state'] = new FieldSchema().deserialize({
+      label: 'State',
+      required: true,
+      placeholder: '',
+      style: {
+        fieldParentWrapperStyles: { width: '100%' },
+      },
+    });
+
+    addressFieldSchema['postalCode'] = new FieldSchema().deserialize({
+      label: 'Postal Code',
+      required: true,
+      placeholder: '',
+      style: {
+        fieldParentWrapperStyles: { width: '100%' },
+      },
+    });
+
+    addressFieldSchema['country'] = new FieldSchema().deserialize({
+      label: 'Country',
+      required: true,
+      disable: false,
+      options: countriesList,
+    });
     return addressFieldSchema as AddressConfigI;
   }
 
@@ -174,10 +218,17 @@ export class StayDetailsService extends ApiService {
         stayDetails,
         timezone
       ),
+      address: {
+        addressLines: [
+          stayDetails.address.addressLine1,
+          stayDetails.address.addressLine2,
+        ],
+        city: stayDetails.address.city,
+        state: stayDetails.address.state,
+        countryCode: stayDetails.address.country,
+        postalCode: stayDetails.address.postalCode,
+      },
     };
-    if (stayDetails.address) {
-      data['address'] = stayDetails.address.address;
-    }
     return {
       stayDetails: data,
     };

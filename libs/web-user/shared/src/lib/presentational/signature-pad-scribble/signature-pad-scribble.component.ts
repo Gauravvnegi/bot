@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { SignaturePad } from 'angular2-signaturepad/signature-pad';
+import { Component, Input, ViewChild } from '@angular/core';
+import { SignaturePad } from 'angular2-signaturepad';
 
 @Component({
   selector: 'hospitality-bot-signature-pad',

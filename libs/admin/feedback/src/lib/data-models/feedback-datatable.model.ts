@@ -1,5 +1,5 @@
 import { DateService } from '@hospitality-bot/shared/utils';
-import { get, set } from 'lodash';
+import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
 
@@ -266,7 +266,7 @@ export class Guest {
   place: string;
   spouseBirthDate: string;
   updated: number;
-
+  fullName: string;
   deserialize(input) {
     Object.assign(
       this,
@@ -278,6 +278,13 @@ export class Guest {
       set({}, 'firstName', get(input, ['firstName'], '')),
       set({}, 'id', get(input, ['id'], '')),
       set({}, 'lastName', get(input, ['lastName'], '')),
+      set(
+        {},
+        'fullName',
+        `${trim(get(input, ['firstName'], 'No'))} ${trim(
+          get(input, ['lastName'], 'Name')
+        )}`
+      ),
       set({}, 'nameTitle', get(input, ['nameTitle'], '')),
       set({}, 'phoneNumber', get(input, ['phoneNumber'], '')),
       set({}, 'place', get(input, ['place'], '')),

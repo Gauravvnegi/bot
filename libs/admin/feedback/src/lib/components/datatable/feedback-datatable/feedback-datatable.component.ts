@@ -510,7 +510,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   onFilterTypeTextChange(
     value: string,
     field: string,
-    matchMode = 'startsWith'
+    matchMode = 'contains'
   ): void {
     if (!!value && !this.isSearchSet) {
       this.tempFirst = this.first;
@@ -535,7 +535,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       ...this.globalQueries,
       {
         order: sharedConfig.defaultOrder,
-        // entityType: this.tabFilterItems[this.tabFilterIdx].value,
         feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
         entityIds: this.setEntityId(),
       },

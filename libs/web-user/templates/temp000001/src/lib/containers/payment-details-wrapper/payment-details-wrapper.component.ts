@@ -155,7 +155,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
             //   'onSubmit',
             //   "window.open('about:blank','payment_popup','width=900,height=500');"
             // );
-            form.setAttribute('action', ' https://test.payu.in/_payment');
+            form.setAttribute('action', response.billingUrl);
             form.appendChild(
               this.createHiddenFields('curl', response.transaction.curl)
             );

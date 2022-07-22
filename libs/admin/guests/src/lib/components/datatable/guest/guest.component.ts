@@ -277,7 +277,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     this.changePage(+this.tabFilterItems[event.index].lastPage);
   }
 
-  onFilterTypeTextChange(value, field, matchMode = 'startsWith'): void {
+  onFilterTypeTextChange(value, field, matchMode = 'contains'): void {
     if (!!value && !this.isSearchSet) {
       this.tempFirst = this.first;
       this.tempRowsPerPage = this.rowsPerPage;

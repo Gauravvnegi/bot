@@ -305,7 +305,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   onFilterTypeTextChange(
     value: string,
     field: string,
-    matchMode = 'startsWith'
+    matchMode = 'contains'
   ): void {
     if (!!value && !this.isSearchSet) {
       this.tempFirst = this.first;

@@ -342,6 +342,7 @@ export class Guest implements Deserializable {
   email: string;
   documents?: any[];
   nationality: string;
+  fullName: string;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -349,6 +350,13 @@ export class Guest implements Deserializable {
       set({}, 'nameTitle', get(input, ['nameTitle'], '')),
       set({}, 'firstName', trim(get(input, ['firstName'], 'No'))),
       set({}, 'lastName', trim(get(input, ['lastName'], 'Name'))),
+      set(
+        {},
+        'fullName',
+        `${trim(get(input, ['firstName'], 'No'))} ${trim(
+          get(input, ['lastName'], 'Name')
+        )}`
+      ),
       set(
         {},
         'countryCode',

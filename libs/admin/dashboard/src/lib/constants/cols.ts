@@ -13,7 +13,7 @@ export const cols = {
       sortType: 'number',
     },
     {
-      field: `guests.primaryGuest.getFullName()`,
+      field: `guests.primaryGuest.fullName`,
       header: 'Guest/company',
       isSort: true,
       sortType: 'string',

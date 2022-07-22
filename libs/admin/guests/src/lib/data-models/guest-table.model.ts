@@ -87,7 +87,7 @@ export class Guest implements Deserializable {
   rooms: Room;
   documents: any[];
   vip: boolean;
-
+  fullName: string;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -97,6 +97,13 @@ export class Guest implements Deserializable {
       set({}, 'title', get(input, ['title'])),
       set({}, 'firstName', trim(get(input, ['firstName'], 'No'))),
       set({}, 'lastName', trim(get(input, ['lastName'], 'Name'))),
+      set(
+        {},
+        'fullName',
+        `${trim(get(input, ['firstName'], 'No'))} ${trim(
+          get(input, ['lastName'], 'Name')
+        )}`
+      ),
       set({}, 'nameTitle', get(input, ['nameTitle'], '')),
       set({}, 'nationality', get(input, ['nationality'])),
       set(

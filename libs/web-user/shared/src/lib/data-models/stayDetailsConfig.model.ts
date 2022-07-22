@@ -10,12 +10,12 @@ export interface Deserializable {
 export class StayDetailDS implements Deserializable {
   stayDetail: StayDetail;
   special_comments: SpecialComments;
-  address: string;
+  address: Address;
 
   deserialize(input: any, timezone = '+05:30') {
     this.stayDetail = new StayDetail().deserialize(input, timezone);
     this.special_comments = new SpecialComments().deserialize(input);
-    Object.assign(this, set({}, 'address', get(input, ['address'], '')));
+    this.address = new Address().deserialize(input.address);
     return this;
   }
 }
@@ -72,6 +72,29 @@ export class SpecialComments implements Deserializable {
 
   deserialize(input: any) {
     Object.assign(this, set({}, 'comments', get(input, ['comments'])));
+    return this;
+  }
+}
+
+export class Address {
+  city: string;
+  state: string;
+  addressLine1: string;
+  addressLine2: string;
+  country: string;
+  postalCode: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'city', get(input, ['city'], '')),
+      set({}, 'state', get(input, ['state'], '')),
+      set({}, 'country', get(input, ['country'], '')),
+      set({}, 'postalCode', get(input, ['postalCode'], ''))
+    );
+    this.addressLine1 = input.addressLines.length ? input.addressLines[0] : '';
+    this.addressLine2 =
+      input.addressLines.length > 1 ? input.addressLines[1] : '';
     return this;
   }
 }

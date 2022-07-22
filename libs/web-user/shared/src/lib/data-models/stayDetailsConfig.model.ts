@@ -89,7 +89,7 @@ export class Address {
       this,
       set({}, 'city', get(input, ['city'], '')),
       set({}, 'state', get(input, ['state'], '')),
-      set({}, 'country', get(input, ['country'], '')),
+      set({}, 'country', get(input, ['countryCode'], '')),
       set({}, 'postalCode', get(input, ['postalCode'], ''))
     );
     this.addressLine1 = input.addressLines?.length ? input.addressLines[0] : '';

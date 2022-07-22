@@ -60,7 +60,7 @@ export class AddressComponent implements OnInit, OnChanges, OnDestroy {
   initAddressForm() {
     this.addressForm = this.fb.group({
       addressLine1: ['', Validators.required],
-      addressLine2: ['', Validators.required],
+      addressLine2: [''],
       city: ['', Validators.required],
       state: ['', Validators.required],
       country: ['', Validators.required],
@@ -107,7 +107,8 @@ export class AddressComponent implements OnInit, OnChanges, OnDestroy {
         value: this.addressForm,
       });
 
-      this.addressForm.patchValue({ address: this._stayDetailService.address });
+      debugger;
+      this.addressForm.patchValue(this._stayDetailService.address);
     }
   }
 

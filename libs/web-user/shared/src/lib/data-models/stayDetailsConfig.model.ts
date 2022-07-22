@@ -92,9 +92,9 @@ export class Address {
       set({}, 'country', get(input, ['country'], '')),
       set({}, 'postalCode', get(input, ['postalCode'], ''))
     );
-    this.addressLine1 = input.addressLines.length ? input.addressLines[0] : '';
+    this.addressLine1 = input.addressLines?.length ? input.addressLines[0] : '';
     this.addressLine2 =
-      input.addressLines.length > 1 ? input.addressLines[1] : '';
+      input.addressLines?.length > 1 ? input.addressLines[1] : '';
     return this;
   }
 }

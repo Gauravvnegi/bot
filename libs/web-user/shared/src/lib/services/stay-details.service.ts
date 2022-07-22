@@ -163,7 +163,6 @@ export class StayDetailsService extends ApiService {
 
     addressFieldSchema['addressLine2'] = new FieldSchema().deserialize({
       label: 'Address Line 2',
-      required: true,
       placeholder: '',
       style: {
         fieldParentWrapperStyles: { width: '100%' },

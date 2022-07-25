@@ -55,6 +55,14 @@ export class GuestBookingInfoComponent implements OnInit, OnDestroy {
     );
   }
 
+  checkForNoBooking(): number {
+    return (
+      this.pastBooking.length &&
+      this.currentBooking.length &&
+      this.upcomingBooking.length
+    );
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }

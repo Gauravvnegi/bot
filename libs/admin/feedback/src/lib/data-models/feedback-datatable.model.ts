@@ -208,6 +208,7 @@ export class Service {
   serviceName: string;
   rating;
   colorCode: string;
+  backgroundcolor: string;
   comment: string;
   question: string;
 
@@ -220,11 +221,15 @@ export class Service {
       set({}, 'question', get(input, 'question'))
     );
     if (colorMap) {
-      if (isNaN(this.rating))
+      if (isNaN(this.rating)) {
         this.colorCode =
           colorMap['transactionalFeedbacks'][this.rating].colorCode;
-      else {
+        this.backgroundcolor =
+          colorMap['transactionalFeedbacks'][this.rating].backgroundcolor;
+      } else {
         this.colorCode = colorMap['stayFeedbacks'][this.rating].colorCode;
+        this.backgroundcolor =
+          colorMap['stayFeedbacks'][this.rating].backgroundcolor;
         this.rating = parseInt(this.rating);
       }
     }

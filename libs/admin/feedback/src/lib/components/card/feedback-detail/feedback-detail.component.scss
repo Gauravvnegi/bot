@@ -169,13 +169,16 @@
 }
 .rating__value {
   display: flex;
-  padding-top: 20px;
-  padding-bottom: 30px;
   font-size: 12px;
-  width: 80%;
-
+  border-radius: 5px;
+  margin: 20px 0 30px 0;
   .rating__box {
     width: 54px;
+    display: flex;
+    .gap {
+      height: 40px;
+      width: 15px;
+    }
   }
 }
 .rating {
@@ -184,7 +187,6 @@
   align-items: center;
   width: 40px;
   height: 40px;
-  border-radius: 5px;
 }
 .comment-container {
   position: relative;
@@ -599,6 +601,7 @@
 
 .border {
   border: 1px solid #ced5d9;
+  border-radius: 5px;
 }
 
 .assignee-dropdown {

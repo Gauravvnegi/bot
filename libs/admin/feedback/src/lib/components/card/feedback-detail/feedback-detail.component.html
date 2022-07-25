@@ -120,15 +120,6 @@
                 class="rating__box"
                 *ngFor="let n of num"
                 [ngClass]="{ font: n < service.rating }"
-                [ngStyle]="
-                  n < service.rating
-                    ? {
-                        'background-color': service.colorCode,
-                        color: '',
-                        opacity: 0.5
-                      }
-                    : {}
-                "
               >
                 <div
                   class="rating"
@@ -136,19 +127,28 @@
                   [ngStyle]="
                     n < service.rating
                       ? {
-                          'background-color': service.colorCode,
+                          'background-color': service.backgroundcolor,
                           color: ''
                         }
                       : n === service.rating
                       ? {
                           'background-color': service.colorCode,
-                          color: 'white'
+                          color: 'white',
+                          'border-radius': '5px'
                         }
                       : {}
                   "
                 >
                   {{ n }}
                 </div>
+                <div
+                  class="gap"
+                  [ngStyle]="{
+                    'background-color':
+                      n < service.rating ? service.backgroundcolor : '',
+                    color: ''
+                  }"
+                ></div>
               </div>
             </div>
           </ng-template>

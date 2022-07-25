@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { GuestDetail } from '../../../data-models/feedback-card.model';
 
 @Component({
   selector: 'hospitality-bot-feedback-history',
@@ -7,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class FeedbackHistoryComponent implements OnInit {
   @Input() guestId;
+  @Input() guestReservations: GuestDetail[];
   constructor() {}
 
   ngOnInit(): void {}

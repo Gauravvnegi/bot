@@ -42,7 +42,7 @@ export class UserConfig implements Deserializable {
   }
 
   getProfileNickName() {
-    return `${this.firstName.slice(0, 1)}${this.lastName.slice(0, 1)}`;
+    return `${this.firstName.slice(0, 1)}${(this.lastName || '').slice(0, 1)}`;
   }
 
   getNationality(cc) {

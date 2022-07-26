@@ -10,21 +10,26 @@
 >
   <div class="title">Plan Usage</div>
   <div class="usages">
-    <div class="usages__first">
-      <hospitality-bot-frontdesk-stat
-        *ngIf="graphSubscriptions.frontdeskSubscribed; else order0Feedback"
-      ></hospitality-bot-frontdesk-stat>
-      <ng-template #order0Feedback>
-        <hospitality-bot-feedback-received
-          *ngIf="graphSubscriptions.feedbackSubscribed; else order0Messages"
-        ></hospitality-bot-feedback-received>
-        <ng-template #order0Messages>
-          <hospitality-bot-messages-exchanged
-            *ngIf="graphSubscriptions.messagesSubscribed"
-          ></hospitality-bot-messages-exchanged>
-        </ng-template>
-      </ng-template>
+    <div
+      class="usages__item"
+      featureSubscribed
+      [feature]="'modules.roles-permissions'"
+    >
+      <hospitality-bot-users-usage
+        [data]="subscriptionPlanUsage?.users"
+        [chartData]="planUsageChartData.userCount"
+        [usage]="planUsagePercentage.userUsagePercentage"
+      ></hospitality-bot-users-usage>
     </div>
+    <div class="usages__item" featureSubscribed [feature]="'modules.guest'">
+      <!-- <div class="usages__item"> -->
+      <hospitality-bot-guest-usage
+        [data]="subscriptionPlanUsage?.guests"
+        [chartData]="planUsageChartData.guestCount"
+        [usage]="planUsagePercentage.guestUsagePercentage"
+      ></hospitality-bot-guest-usage>
+    </div>
+    <!-- <div class="usages__item"> -->
     <div class="usages__item" featureSubscribed [feature]="'integrations.ocr'">
       <hospitality-bot-ocr-usage
         [data]="subscriptionPlanUsage?.ocr"
@@ -32,35 +37,10 @@
         [usage]="planUsagePercentage.ocrUsagePercentage"
       ></hospitality-bot-ocr-usage>
     </div>
-    <div class="usages__item" style="display: block;">
+    <div class="usages__item">
       <hospitality-bot-channel-usage
         [data]="subscriptionPlanUsage?.channels"
       ></hospitality-bot-channel-usage>
-    </div>
-  </div>
-  <div class="plan-usage-2">
-    <div
-      class="plan-usage-2__item"
-      [ngStyle]="{
-        'max-width': graphSubscriptions.messagesSubscribed
-          ? 'calc(50% - 7.5px)'
-          : '100%'
-      }"
-      *ngIf="
-        graphSubscriptions.feedbackSubscribed && graphOrder.feedback === 1;
-        else order1Messages
-      "
-    >
-      <hospitality-bot-feedback-received></hospitality-bot-feedback-received>
-    </div>
-    <div
-      class="plan-usage-2__item"
-      *ngIf="
-        graphSubscriptions.messagesSubscribed &&
-        (graphOrder.message === 1 || graphOrder.message === 2)
-      "
-    >
-      <hospitality-bot-messages-exchanged></hospitality-bot-messages-exchanged>
     </div>
   </div>
 </div>

@@ -147,7 +147,7 @@
 }
 
 :host ::ng-deep .full_width {
-  width: 92vw;
+  width: 100%;
   @media only screen and (max-width: $M) {
     width: 85vw;
   }

@@ -39,6 +39,13 @@ export class TopLowNpsComponent implements OnInit, OnDestroy {
     this.registerListeners();
   }
 
+  ngOnChanges() {
+    this.tabFilterItems =
+      this.globalFeedbackFilterType === feedback.types.transactional
+        ? feedback.tabFilterItems.topLowNPS.transactional
+        : feedback.tabFilterItems.topLowNPS.stay;
+  }
+
   registerListeners(): void {
     this.listenForGlobalFilters();
     if (
@@ -173,7 +180,7 @@ export class TopLowNpsComponent implements OnInit, OnDestroy {
       : this.tabfeedbackType;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 }

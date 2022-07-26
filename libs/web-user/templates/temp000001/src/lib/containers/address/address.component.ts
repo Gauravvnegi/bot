@@ -107,7 +107,6 @@ export class AddressComponent implements OnInit, OnChanges, OnDestroy {
         value: this.addressForm,
       });
 
-      debugger;
       this.addressForm.patchValue(this._stayDetailService.address);
     }
   }

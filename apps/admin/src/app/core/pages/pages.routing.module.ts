@@ -80,13 +80,13 @@ const appRoutes: Route[] = [
             (m) => m.AdminLibraryModule
           ),
       },
-      {
-        path: 'marketing',
-        loadChildren: () =>
-          import('@hospitality-bot/admin/marketing').then(
-            (m) => m.AdminMarketingModule
-          ),
-      },
+      // {
+      //   path: 'marketing',
+      //   loadChildren: () =>
+      //     import('@hospitality-bot/admin/marketing').then(
+      //       (m) => m.AdminMarketingModule
+      //     ),
+      // },
       { path: '**', redirectTo: '404' },
       { path: '404', component: DashboardErrorComponent },
     ],

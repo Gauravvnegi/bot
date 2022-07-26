@@ -1,14 +1,17 @@
 @import 'main';
 
+
+
 :host ::ng-deep .mat-step-header .mat-step-icon {
   background: var(--stepper-background-color, $stepper-background-color);
 }
+
 
 :host
   ::ng-deep
   .mat-stepper-label-position-bottom
   .mat-horizontal-stepper-header:not(:last-child)::after {
-  border-top-width: 3px;
+  border-top-width: 0px;
 }
 
 :host ::ng-deep .mat-step-optional {
@@ -24,6 +27,15 @@
     --stepper-icon-selected-font-color,
     $stepper-icon-selected-font-color
   );
+}
+
+:host ::ng-deep .step-disable{
+  .mat-step-icon{
+    background: #c2c2c2 !important;
+  }
+  .mat-step-label{
+    color: #c2c2c2 !important;
+  }
 }
 
 :host ::ng-deep.mat-step-icon-state-number > div > span {
@@ -48,6 +60,7 @@
   border-top-style: solid;
   flex: auto;
   height: 0;
+  background-color: red;
   // margin: 0 -16px;
   min-width: 32px;
   background: var(--stepper-background-color, $stepper-background-color);
@@ -184,4 +197,21 @@
   font-size: $font-responsive-small;
   margin-top: 5px;
   font-weight: $medium;
+}
+
+:host ::ng-deep .disable-before::before{
+  border-color: #c2c2c2 !important;
+  // left: 0;
+  //   border-top-width: 3px;
+  //   border-top-style: solid;
+  //   flex: auto;
+  //   height: 0;
+  //   min-width: 32px;
+}
+:host ::ng-deep .disable-after::after{
+  border-color: #c2c2c2 !important;
+}
+
+:host ::ng-deep .disable-bar{
+  border-color: #c2c2c2 !important;
 }

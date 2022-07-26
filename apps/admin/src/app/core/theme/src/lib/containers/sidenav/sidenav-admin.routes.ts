@@ -46,25 +46,25 @@ export const ADMIN_ROUTES = [
       },
     ],
   },
-  {
-    path: 'marketing',
-    title: 'eMark-IT',
-    url: 'assets/svg/megaphone.svg',
-    children: [
-      {
-        path: 'marketing/dashboard',
-        title: 'Dashboard',
-        children: null,
-        url: 'assets/svg/dashboard.svg',
-      },
-      {
-        path: 'marketing/campaign',
-        title: 'Campaign',
-        children: null,
-        url: 'assets/svg/marketing.svg',
-      },
-    ],
-  },
+  // {
+  //   path: 'marketing',
+  //   title: 'eMark-IT',
+  //   url: 'assets/svg/megaphone.svg',
+  //   children: [
+  //     {
+  //       path: 'marketing/dashboard',
+  //       title: 'Dashboard',
+  //       children: null,
+  //       url: 'assets/svg/dashboard.svg',
+  //     },
+  //     {
+  //       path: 'marketing/campaign',
+  //       title: 'Campaign',
+  //       children: null,
+  //       url: 'assets/svg/marketing.svg',
+  //     },
+  //   ],
+  // },
   {
     path: 'library',
     title: 'Library',
@@ -76,30 +76,30 @@ export const ADMIN_ROUTES = [
         children: null,
         url: 'assets/svg/box.svg',
       },
-      {
-        path: 'library/listing',
-        title: 'Listing',
-        children: null,
-        url: 'assets/svg/to-do-list.svg',
-      },
-      {
-        path: 'library/topic',
-        title: 'Topic',
-        children: null,
-        url: 'assets/svg/ballot.svg',
-      },
-      {
-        path: 'library/assets',
-        title: 'Assets',
-        children: null,
-        url: 'assets/svg/allocation.svg',
-      },
-      {
-        path: 'library/template',
-        title: 'Template',
-        children: null,
-        url: 'assets/svg/template.svg',
-      },
+      // {
+      //   path: 'library/listing',
+      //   title: 'Listing',
+      //   children: null,
+      //   url: 'assets/svg/to-do-list.svg',
+      // },
+      // {
+      //   path: 'library/topic',
+      //   title: 'Topic',
+      //   children: null,
+      //   url: 'assets/svg/ballot.svg',
+      // },
+      // {
+      //   path: 'library/assets',
+      //   title: 'Assets',
+      //   children: null,
+      //   url: 'assets/svg/allocation.svg',
+      // },
+      // {
+      //   path: 'library/template',
+      //   title: 'Template',
+      //   children: null,
+      //   url: 'assets/svg/template.svg',
+      // },
     ],
   },
 ];

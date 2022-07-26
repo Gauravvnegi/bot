@@ -1,4 +1,8 @@
-<div #stepperWrapper>
+<div #stepperWrapper class="stepper_wrapper">
+  <!-- <div class="progressbar">
+    <div [style.width]="((1216 / (totalSteps)) * (selectedIndex + 1)) + 'px'" class="fill_progress_bar"></div>
+  </div> -->
+
   <mat-horizontal-stepper
     [labelPosition]="stepperConfig.labelPosition"
     [linear]="stepperConfig.isLinear"
@@ -7,7 +11,9 @@
     #stepper
     *ngIf="stepperConfig.position === 'horizontal'; else verticalStepper"
   >
-    <ng-container
+
+
+    <div
       *ngFor="
         let formGroup of parentForm.controls;
         let stepperIndex = index;
@@ -44,7 +50,7 @@
           </ng-container>
         </form>
       </mat-step>
-    </ng-container>
+    </div>
   </mat-horizontal-stepper>
 </div>
 

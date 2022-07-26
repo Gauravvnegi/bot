@@ -74,7 +74,6 @@ export class HotelConfig {
       this,
       set({}, 'payAtDesk', get(paymentSummary, ['depositRules', 'payAtDesk']))
     );
-
     this.paymentMethods =
       input.paymentMethods &&
       input.paymentMethods[paymentSummary.depositRules.guaranteeType];

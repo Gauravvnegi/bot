@@ -1,21 +1,32 @@
 <ng-container template-loader [templateId]="templateId"></ng-container>
 <div [style]="isLoaderVisible ? { visibility: 'hidden' } : {}">
-  <div
+  <!-- <div
     class="background__wrapper"
-    [ngStyle]="{ background: hotelImageUrl || 'assets/bg.png' | asBgUrl }"
+    [ngStyle]="{ background: 'assets/hotel.png' || 'assets/hotel.png' | asBgUrl }"
   >
-    <!-- <picture>
+  </div> -->
+  <div class="background__wrapper">
+    <picture class="background__wrapper__picture">
       <source
-        class="background__wrapper-img"
-        type="image/webp"
-        srcset="assets/bg.webp"
+        *ngIf="mobileImage"
+        media="(max-width: 599px)"
+        [srcset]="mobileImage || 'assets/hotel.png'"
+      />
+      <source
+        *ngIf="webImage"
+        media="(min-width: 1200px)"
+        [srcset]="webImage || 'assets/hotel-web.jpg'"
+      />
+      <source
+        *ngIf="tabletImage"
+        media="(min-width: 600px)"
+        [srcset]="tabletImage || 'assets/hotel-web.jpg'"
       />
       <img
-        class="background__wrapper-img"
-        src="assets/bg.png"
-        alt="background image"
+        [src]="hotelImageUrl || 'assets/bg.png'"
+        alt="Chris standing up holding his daughter Elva"
       />
-    </picture> -->
+    </picture>
   </div>
   <router-outlet></router-outlet>
 </div>

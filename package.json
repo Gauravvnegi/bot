@@ -54,7 +54,7 @@
     "angular-fire-schematics": "^1.0.0",
     "angular-gauge": "^4.0.0",
     "angular-svg-icon": "^10.0.0",
-    "angular2-signaturepad": "^2.11.1",
+    "angular2-signaturepad": "^2.11.0",
     "angular2-text-mask": "^9.0.0",
     "chart.js": "^2.9.3",
     "ckeditor4-angular": "^2.4.0",

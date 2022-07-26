@@ -25,6 +25,9 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
   protected $subscription: Subscription = new Subscription();
   isLoaderVisible = true;
   hotelImageUrl: string;
+  mobileImage: string;
+  webImage: string;
+  tabletImage: string;
 
   constructor(
     @Inject(DOCUMENT) protected document: Document,
@@ -68,6 +71,9 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
         let favicon = this.document.querySelector('#favicon');
         favicon['href'] = response['favIcon']?.trim() ?? 'favicon.ico';
         this.hotelImageUrl = this.hotelService.hotelConfig.imageUrl;
+        this.mobileImage = this.hotelService.hotelConfig.mobileImageUrl;
+        this.webImage = this.hotelService.hotelConfig.webImageUrl;
+        this.tabletImage = this.hotelService.hotelConfig.tabletImageUrl;
       }
     });
   }

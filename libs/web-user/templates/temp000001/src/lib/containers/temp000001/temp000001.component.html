@@ -8,22 +8,19 @@
   <div class="background__wrapper">
     <picture class="background__wrapper__picture">
       <source
-        *ngIf="mobileImage"
         media="(max-width: 599px)"
         [srcset]="mobileImage || 'assets/hotel.png'"
       />
       <source
-        *ngIf="webImage"
         media="(min-width: 1200px)"
         [srcset]="webImage || 'assets/hotel-web.jpg'"
       />
       <source
-        *ngIf="tabletImage"
         media="(min-width: 600px)"
         [srcset]="tabletImage || 'assets/hotel-web.jpg'"
       />
       <img
-        [src]="hotelImageUrl || 'assets/bg.png'"
+        [src]="'assets/bg.png'"
         alt="Chris standing up holding his daughter Elva"
       />
     </picture>

@@ -7,23 +7,6 @@
 }
 
 
-// .stepper_wrapper{
-//   position: relative;
-// }
-
-// :host ::ng-deep .progressbar{
-//   height: 3px;
-//   background-color: #c2c2c2;
-//   position: absolute;
-//   top: 35px;
-//   left: 8%;
-//   right: 7.6%;
-//   .fill_progress_bar{
-//     height: 3px;
-//     background-color: red;
-//   }
-// }
-
 :host
   ::ng-deep
   .mat-stepper-label-position-bottom

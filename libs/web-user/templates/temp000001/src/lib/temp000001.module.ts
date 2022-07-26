@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { WebUserSharedModule } from '@hospitality-bot/web-user/shared';
 import { AngularSvgIconModule } from 'angular-svg-icon';
-import { Angular2SignaturepadModule } from 'angular2-signaturepad';
+import { SignaturePadModule } from 'angular2-signaturepad';
 import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
 import { AmenitiesService } from 'libs/web-user/shared/src/lib/services/amenities.service';
 import { BillSummaryService } from 'libs/web-user/shared/src/lib/services/bill-summary.service';
@@ -48,7 +48,7 @@ import { QuestionnaireComponent } from './containers/questionnaire/questionnaire
     HttpClientModule,
     WebUserSharedModule.forRoot({ templateId: 'temp000001' }),
     Temp000001RoutingModule,
-    Angular2SignaturepadModule,
+    SignaturePadModule,
     PdfViewerModule,
     SlickCarouselModule,
     MatTabsModule,

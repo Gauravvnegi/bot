@@ -4,7 +4,7 @@ RUN mkdir -p /app
 WORKDIR /app
 COPY . .
 RUN npm config set maxsockets 10 
-RUN npm install -g @angular/cli@10.0.0
+RUN npm install -g @angular/cli@10.2.4
 RUN npm i --also=dev
 #RUN npm ci
 RUN ng run admin:build --configuration=development --baseHref=/

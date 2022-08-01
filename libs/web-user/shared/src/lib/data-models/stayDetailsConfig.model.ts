@@ -30,12 +30,12 @@ export class StayDetail implements Deserializable {
   expectedDepartureTime: string;
   deserialize(input: any, timezone = '+05:30') {
     let expectedArrivalTime = DateService.getDateFromTimeStamp(
-      get(input, ['expectedArrivalTime']),
+      get(input, ['arrivalTime']),
       'DD-MM-YYYY hh:mm a',
       timezone
     );
     let expectedDepartureTime = DateService.getDateFromTimeStamp(
-      get(input, ['expectedDepartureTime']),
+      get(input, ['departureTime']),
       'DD-MM-YYYY hh:mm a',
       timezone
     );
@@ -55,14 +55,12 @@ export class StayDetail implements Deserializable {
       set({}, 'kidsCount', get(input, ['kidsCount'])),
       set({}, 'adultsCount', get(input, ['adultsCount']))
     );
-    this.expectedArrivalTime =
-      input.expectedArrivalTime === 0
-        ? '02:00 pm'
-        : expectedArrivalTime.substr(expectedArrivalTime.indexOf(' ') + 1);
-    this.expectedDepartureTime =
-      input.expectedDepartureTime === 0
-        ? '12:00 pm'
-        : expectedDepartureTime.substr(expectedDepartureTime.indexOf(' ') + 1);
+    this.expectedArrivalTime = expectedArrivalTime.substr(
+      expectedArrivalTime.indexOf(' ') + 1
+    );
+    this.expectedDepartureTime = expectedDepartureTime.substr(
+      expectedDepartureTime.indexOf(' ') + 1
+    );
     return this;
   }
 }

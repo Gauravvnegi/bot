@@ -6,11 +6,12 @@
   justify-content: space-evenly;
 
   .nickname {
-    width: 30px;
-    height: 30px;
-    padding: 5.5px 6px;
+    padding: 8px 6px;
     background-color: #feba1b;
     border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .button {
     width: 105px;

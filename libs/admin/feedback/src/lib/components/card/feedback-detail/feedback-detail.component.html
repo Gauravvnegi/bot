@@ -24,7 +24,7 @@
         </div>
       </div>
       <img
-        class="icon"
+        class=""
         src="assets/images/guest-info-icon .png"
         [alt]=""
         (click)="openGuestInfo()"
@@ -181,8 +181,8 @@
       <ng-container *ngFor="let remark of feedback?.remarks">
         <div class="userChat">
           <div class="userComments" *ngIf="remark.remarks">
-            <div class="userImage">
-              {{ remark.getNickName() }}
+            <div class="userImage icon">
+              <div class="icon-value">{{ remark.getNickName() }}</div>
             </div>
             <div class="comment">
               {{ remark.remarks }}

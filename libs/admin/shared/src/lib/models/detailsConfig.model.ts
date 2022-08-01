@@ -339,7 +339,7 @@ export class StayDetailsConfig implements Deserializable {
         {},
         'expectedArrivalTime',
         DateService.getDateFromTimeStamp(
-          get(input, ['expectedArrivalTime']),
+          get(input, ['arrivalTime']),
           'HH:mm',
           timezone
         )

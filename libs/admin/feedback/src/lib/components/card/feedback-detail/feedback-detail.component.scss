@@ -269,6 +269,7 @@
     letter-spacing: 0.72px;
     text-align: left;
     color: $white;
+    width: 70%;
   }
   .userImage {
     display: flex;
@@ -570,11 +571,15 @@
     margin: 0 2px;
   }
   .number {
+    min-width: 22px;
+    min-height: 22px;
     padding: 5px;
     color: $white;
     margin: 0 0px;
     text-align: center;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
     font-size: 9px;
   }

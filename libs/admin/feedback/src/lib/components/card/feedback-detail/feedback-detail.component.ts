@@ -61,19 +61,18 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.listenForGlobalFilters();
+    this.listenForFeedbackTypeChanged();
     this.listenForSelectedFeedback();
     this.assigneeList = new UserList().deserialize([]);
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForFeedbackTypeChanged To listen the local tab change.
+   */
+  listenForFeedbackTypeChanged(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ];
-        this.feedbackType = data['filter'].value.feedback.feedbackType;
+      this.tableService.$feedbackType.subscribe((response) => {
+        this.feedbackType = response;
         this.getUserPermission();
       })
     );
@@ -102,15 +101,19 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
    */
   getUserPermission() {
     this.$subscription.add(
-      this.userService.getUserPermission(this.feedbackType).subscribe(
-        (response) => {
-          this.userPermissions = new Departmentpermissions().deserialize(
-            response.userCategoryPermission
-          );
-          this.userService.userPermissions = response;
-        },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
-      )
+      this.userService
+        .getUserPermission(
+          this.feedbackType === '' ? feedback.types.stay : this.feedbackType
+        )
+        .subscribe(
+          (response) => {
+            this.userPermissions = new Departmentpermissions().deserialize(
+              response.userCategoryPermission
+            );
+            this.userService.userPermissions = response;
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
     );
   }
 

@@ -106,6 +106,8 @@ export class GtmAcrossServicesComponent implements OnInit, OnDestroy {
           (this.statistics?.REMAINING + this.statistics?.CLOSED)) *
           100
       );
+    } else if (this.statistics.REMAINING === 0 && this.statistics.CLOSED) {
+      this.progress = 100;
     } else {
       this.progress = 0;
     }

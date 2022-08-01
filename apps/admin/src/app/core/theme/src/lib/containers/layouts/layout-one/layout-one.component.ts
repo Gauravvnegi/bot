@@ -16,6 +16,7 @@ import { FirebaseMessagingService } from '../../../services/messaging.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
 import { trigger, transition, animate, style } from '@angular/animations';
+import { LoadingService } from '../../../services/loader.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -65,7 +66,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private _userService: UserService,
     private fb: FormBuilder,
     private firebaseMessagingService: FirebaseMessagingService,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private loadingService: LoadingService
   ) {
     this.initSearchQueryForm();
   }
@@ -74,6 +76,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.initLayoutConfigs();
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
+    this.loadingService.close();
   }
 
   initFirebaseMessaging(entityId?) {

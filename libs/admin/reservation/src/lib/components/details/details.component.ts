@@ -628,7 +628,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
       dialogConfig.disableClose = false;
       dialogConfig.width = '100%';
       const notificationCompRef = this._modal.openDialog(
-        NotificationComponent,
+        channel === 'email'
+          ? MarketingNotificationComponent
+          : NotificationComponent,
         dialogConfig
       );
 

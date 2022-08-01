@@ -44,24 +44,7 @@ export class FeedbackListFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initFG();
-    this.listenForGlobalFilters();
     this.listenForFeedbackTypeChanged();
-  }
-
-  listenForGlobalFilters() {
-    this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ];
-        this.feedbackType = this.getFeedbackType(
-          data['filter'].value.feedback.feedbackType
-        );
-        this.getUserPermission();
-        this.getDepartmentList();
-      })
-    );
   }
 
   /**
@@ -83,20 +66,27 @@ export class FeedbackListFilterComponent implements OnInit, OnDestroy {
    */
   getUserPermission() {
     this.$subscription.add(
-      this.userService.getUserPermission(this.feedbackType).subscribe(
-        (response) => {
-          this.assigneeList = response.childUser;
-          this.userService.userPermissions = response;
-        },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
-      )
+      this.userService
+        .getUserPermission(
+          this.feedbackType === '' ? feedback.types.stay : this.feedbackType
+        )
+        .subscribe(
+          (response) => {
+            this.assigneeList = response.childUser;
+            this.userService.userPermissions = response;
+          },
+          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        )
     );
   }
 
   getDepartmentList() {
     this.$subscription.add(
       this.cardService
-        .getDepartmentList(this.hotelId, this.feedbackType)
+        .getDepartmentList(
+          this.hotelId,
+          this.feedbackType === '' ? feedback.types.stay : this.feedbackType
+        )
         .subscribe((response) => {
           this.addDepartmentControls(response);
           this.filterData.department = response;
@@ -105,9 +95,9 @@ export class FeedbackListFilterComponent implements OnInit, OnDestroy {
   }
 
   addDepartmentControls(response) {
-    if (this.parentFG.get('department'))
-      this.parentFG.get('department')?.setValue(response.map((key) => false));
-    else
+    if (this.parentFG.get('department')) {
+      this.parentFG.patchValue({ department: response.map((key) => false) });
+    } else
       this.parentFG.addControl(
         'department',
         this.fb.array(response.map((key) => false))

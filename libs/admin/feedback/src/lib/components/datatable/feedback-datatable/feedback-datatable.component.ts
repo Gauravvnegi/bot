@@ -115,12 +115,16 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
 
   getUserPermission(feedbackType) {
     this.$subscription.add(
-      this.userService.getUserPermission(feedbackType).subscribe((response) => {
-        this.userPermissions = new Departmentpermissions().deserialize(
-          response.userCategoryPermission
-        );
-        this.userService.userPermissions = response;
-      })
+      this.userService
+        .getUserPermission(
+          feedbackType === '' ? feedback.types.stay : feedbackType
+        )
+        .subscribe((response) => {
+          this.userPermissions = new Departmentpermissions().deserialize(
+            response.userCategoryPermission
+          );
+          this.userService.userPermissions = response;
+        })
     );
   }
 

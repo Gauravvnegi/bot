@@ -36,7 +36,10 @@ import { FeedbackTableService } from '../../../services/table.service';
 @Component({
   selector: 'hospitality-bot-feedback-detail-modal',
   templateUrl: './feedback-detail.component.html',
-  styleUrls: ['./feedback-detail.component.scss'],
+  styleUrls: [
+    './feedback-detail.component.scss',
+    '../../card/feedback-detail/feedback-detail.component.scss',
+  ],
   animations: [
     trigger('slideInOut', [
       transition(':enter', [

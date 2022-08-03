@@ -19,7 +19,7 @@
     justify-content: space-between;
     align-items: center;
     font-family: Roboto;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: bold;
     font-stretch: normal;
     font-style: normal;
@@ -40,8 +40,8 @@
 }
 
 .guestInfoAvatar {
-  width: 28px;
-  height: 28px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: chartreuse;
   margin-right: 20px;
@@ -200,7 +200,7 @@
   margin: 14.6px 7px 17.4px 14px;
   padding: 8px 8px 8px 8px;
   border-radius: 10px;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
   background: $white;
   .time {
     font-family: Roboto;
@@ -259,17 +259,15 @@
   }
   .comment {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     font-family: Roboto;
     font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.72px;
     text-align: left;
     color: $white;
     width: 70%;
+    padding-right: 5px;
   }
   .userImage {
     display: flex;
@@ -298,10 +296,6 @@
   margin-bottom: 10px;
   font-family: Roboto;
   font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
   letter-spacing: 0.72px;
   color: #002046;
 }
@@ -329,9 +323,6 @@
     margin: 12px 0;
     font-size: 16px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.96px;
     text-align: left;
     color: #002046;
@@ -339,9 +330,6 @@
   &__description {
     font-size: 12px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.72px;
     text-align: left;
     color: #c5c5c5;
@@ -582,6 +570,9 @@
 
     border-radius: 50%;
     font-size: 9px;
+  }
+  .round {
+    width: 16px !important;
   }
   .numPadding {
     padding: 7px 6px;

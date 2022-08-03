@@ -55,6 +55,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     protected tableService: FeedbackTableService,
     protected _snackbarService: SnackBarService
   ) {
+    this.assigneeList = new UserList().deserialize([]);
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
     });
@@ -63,7 +64,6 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.listenForFeedbackTypeChanged();
     this.listenForSelectedFeedback();
-    this.assigneeList = new UserList().deserialize([]);
   }
 
   /**

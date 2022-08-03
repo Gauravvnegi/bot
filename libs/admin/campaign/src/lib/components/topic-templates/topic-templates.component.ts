@@ -40,10 +40,11 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
    * @function loadData To load data for the table after any event.
    */
   loadData() {
+    this.offset = this.offset + campaignConfig.templateCard.limit;
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          offset: this.offset + campaignConfig.templateCard.limit,
+          offset: this.offset,
           limit: campaignConfig.templateCard.limit,
           entityState: campaignConfig.topicConfig.active,
           templateType: this.templateType,

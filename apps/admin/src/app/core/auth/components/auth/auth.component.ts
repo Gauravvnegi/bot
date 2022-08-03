@@ -3,6 +3,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { authConstants } from '../../constants/auth';
 import { ManagingOption } from '../../types/auth.type';
 import { Slick } from 'ngx-slickjs';
+import { LoadingService } from '../../../theme/src/lib/services/loader.service';
 
 @Component({
   selector: 'admin-auth',
@@ -19,12 +20,14 @@ export class AuthComponent implements OnInit {
     arrows: false,
     dots: true,
     autoplay: true,
-    autoplaySpeed: 1000, 
+    autoplaySpeed: 1000,
+  };
+
+  constructor(private loadingService: LoadingService) {}
+
+  ngOnInit(): void {
+    this.loadingService.close();
   }
-
-  constructor() {}
-
-  ngOnInit(): void {}
 
   /**
    * @function trackById To track managing options by id.
@@ -45,7 +48,6 @@ export class AuthComponent implements OnInit {
   }
 
   getArray(count: number) {
-    return new Array(count)
+    return new Array(count);
   }
-
 }

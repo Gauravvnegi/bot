@@ -84,6 +84,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         this.feedback = response;
         this.feedbackFG?.patchValue({ assignee: response?.userId });
         if (response) {
+          this.refreshFeedbackData(false);
           this.assigneeList = new UserList().deserialize(
             [
               this.userService.userPermissions,
@@ -231,7 +232,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
           )
           .subscribe();
         this.feedbackFG.patchValue({ comment: '' });
-        this.refreshFeedbackData();
+        this.refreshFeedbackData(true);
       },
       ({ error }) => {
         this._snackbarService
@@ -264,7 +265,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  refreshFeedbackData() {
+  refreshFeedbackData(scrollTop: boolean) {
     this.$subscription.add(
       this.cardService
         .getFeedbackByID(this.feedback.id)
@@ -275,9 +276,10 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
             this.feedbackType,
             this.colorMap
           );
-          setTimeout(() => {
-            this.feedbackChat.nativeElement.scrollTop = this.feedbackChat.nativeElement.scrollHeight;
-          }, 1000);
+          if (scrollTop)
+            setTimeout(() => {
+              this.feedbackChat.nativeElement.scrollTop = this.feedbackChat.nativeElement.scrollHeight;
+            }, 1000);
         })
     );
   }

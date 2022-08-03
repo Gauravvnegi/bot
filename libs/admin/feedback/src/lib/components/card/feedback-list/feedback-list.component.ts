@@ -59,6 +59,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.loading = true;
     this.initFG();
     this.registerListeners();
     this.cardService.$selectedFeedback.next(null);

@@ -110,7 +110,9 @@
             <img
               [src]="feedbackConfig.images.sad.url"
               [alt]="feedbackConfig.images.sad.alt"
-              [ngClass]="{ 'gray-image': service.rating !== 'EI' }"
+              [ngClass]="{
+                'gray-image gray-image-red': service.rating !== 'EI'
+              }"
             />
           </div>
           <ng-template #numericCard>

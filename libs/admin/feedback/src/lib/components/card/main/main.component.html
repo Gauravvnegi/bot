@@ -24,18 +24,32 @@
       >
         <div class="blackscreen"></div>
         <hospitality-bot-feedback-detail
-          *ngIf="feedback"
+          *ngIf="feedback; else emptyFeedbackView"
           [outlets]="outlets"
           [colorMap]="colorMap"
           [feedbackType]="feedbackType"
           (guestInfo)="openGuestInfo($event)"
         ></hospitality-bot-feedback-detail>
+        <ng-template #emptyFeedbackView>
+          <div class="empty">
+            <div class="empty__img">
+              <img src="assets/svg/no_request.svg" alt="No Request" />
+            </div>
+            <div class="empty__title">
+              Select an item to read
+            </div>
+            <div class="empty__description">
+              Nothing is selected
+            </div>
+          </div>
+        </ng-template>
       </div>
       <div>
         <div class="guest-info-enable" *ngIf="guestInfoEnable" [@slideInOut]>
           <hospitality-bot-guest-info
             (closeInfo)="closeGuestInfo($event)"
             [guestData]="guestData"
+            [colorMap]="colorMap"
           ></hospitality-bot-guest-info>
         </div>
       </div>

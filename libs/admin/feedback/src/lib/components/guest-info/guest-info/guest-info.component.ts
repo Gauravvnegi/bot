@@ -13,12 +13,13 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { Subscription } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import {
-  Guest,
-  GuestDetails,
-} from 'libs/admin/request/src/lib/data-models/request.model';
 import { CardService } from '../../../services/card.service';
 import { card } from '../../../constants/card';
+import { Guest } from 'libs/admin/request/src/lib/data-models/request.model';
+import {
+  GuestDetail,
+  GuestDetails,
+} from '../../../data-models/guest-feedback.model';
 @Component({
   selector: 'hospitality-bot-guest-info',
   templateUrl: './guest-info.component.html',
@@ -26,7 +27,8 @@ import { card } from '../../../constants/card';
 })
 export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   isGuestReservationFetched = false;
-  guestReservations: GuestDetails;
+  guestReservations: GuestDetail[];
+  guestFeedback: GuestDetail[];
   guestId: string;
   data;
   @Output() closeInfo = new EventEmitter();
@@ -34,6 +36,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   bookingFG: FormGroup;
   @Input() feedback;
   @Input() guestModalData;
+  @Input() colorMap: any;
   @ViewChild('matTab') matTab: MatTabGroup;
   $subscription = new Subscription();
   hotelId: string;
@@ -41,7 +44,6 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   selectedIndex = 0;
   requestList;
   buttonConfig = card.buttonConfig;
-  colorMap: any;
   guestData: Guest;
   @Input() isModal = false;
   constructor(
@@ -107,15 +109,6 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     this.selectedIndex = event.index;
   }
 
-  handleButtonCLick(): void {
-    switch (this.selectedIndex) {
-      case 0:
-        break;
-      case 1:
-        break;
-    }
-  }
-
   closeDetails() {
     this.onDetailsClose.next(true);
   }
@@ -142,11 +135,13 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     this.$subscription.add(
       this.feedbackService.getGuestReservations(this.guestId).subscribe(
         (response) => {
-          this.guestReservations = new GuestDetails().deserialize(
-            response,
-            this.colorMap
+          const data = new GuestDetails().deserialize(response, this.colorMap);
+          this.guestReservations = data.records.filter(
+            (item) => item.type === 'RESERVATION'
           );
-
+          this.guestFeedback = data.records.filter(
+            (item) => item.type !== 'RESERVATION'
+          );
           this.isGuestReservationFetched = true;
         },
         ({ error }) => {

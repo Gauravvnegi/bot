@@ -28,19 +28,13 @@ export class GuestDetail {
   subType: string;
 
   deserialize(input, colorMap) {
-    if (input.guestReservation) {
-      this.reservation = new Reservation().deserialize(
-        input.guestReservation,
-        input.subType,
-        colorMap
-      );
-    }
-    if (input.feedback)
-      Object.assign(
-        this,
-        set({}, 'type', get(input, ['type'])),
-        set({}, 'subType', get(input, ['subType']))
-      );
+    // if (input.guestReservation) {
+    this.reservation = new Reservation().deserialize(
+      input.guestReservation,
+      input.subType,
+      colorMap
+    );
+    // }
 
     return this;
   }

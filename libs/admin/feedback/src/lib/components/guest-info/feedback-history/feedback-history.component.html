@@ -1,1 +1,35 @@
-<div style="padding: 15px;">No feedbacks found.</div>
+<div
+  *ngIf="guestReservations?.length; else noFeedback"
+  style="padding: 12px 15px; font-family: Roboto;"
+>
+  <div style="font-family: Roboto; font-size: 14px; font-weight: bold;">
+    Past Feedbacks
+  </div>
+  <ng-container *ngFor="let item of guestReservations; let i = index">
+    <div style="padding: 15px 0;">
+      <div style="display: flex; justify-content: space-between;">
+        <div style="font-size: 14px; color: #b5b5c3;">
+          RNO: {{ item.feedback.tableOrRoomNumber }}
+        </div>
+        <div class="stay-booking-feedback status-opacity-success">
+          <p
+            class="number status-background-success"
+            [style.background]="item.feedback.color"
+          >
+            {{ item.feedback.intentToRecommends.rating }}
+          </p>
+        </div>
+      </div>
+      <div>{{ item.feedback.statusMessage }}</div>
+      <div>
+        {{
+          item.feedback.getfeedbackSubmissionTime(globalFilterService.timezone)
+        }}
+      </div>
+    </div>
+    <div class="line" *ngIf="i < guestReservations.length - 1"></div>
+  </ng-container>
+</div>
+<ng-template #noFeedback
+  ><div style="padding: 15px;">No feedbacks found.</div>
+</ng-template>

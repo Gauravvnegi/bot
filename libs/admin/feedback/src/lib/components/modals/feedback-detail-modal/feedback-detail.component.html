@@ -129,7 +129,9 @@
               <img
                 [src]="feedbackConfig.images.sad.url"
                 [alt]="feedbackConfig.images.sad.alt"
-                [ngClass]="{ 'gray-image gray-image-red': service.rating !== 'EI' }"
+                [ngClass]="{
+                  'gray-image gray-image-red': service.rating !== 'EI'
+                }"
               />
             </div>
             <ng-template #numericCard>
@@ -237,9 +239,10 @@
   </div>
   <div class="guest-info-enable" *ngIf="guestInfoEnable" [@slideInOut]>
     <hospitality-bot-guest-info
-      (closeInfo)="closeGuestInfo($event)"
-      [guestModalData]="data.feedback"
       [isModal]="true"
+      [guestModalData]="data.feedback"
+      [colorMap]="data.colorMap"
+      (closeInfo)="closeGuestInfo($event)"
     ></hospitality-bot-guest-info>
   </div>
 </div>

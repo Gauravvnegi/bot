@@ -26,28 +26,26 @@ import {
   styleUrls: ['./guest-info.component.scss'],
 })
 export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
+  @ViewChild('matTab') matTab: MatTabGroup;
+  @Input() feedback;
+  @Input() guestModalData;
+  @Input() colorMap: any;
+  @Input() isModal = false;
+  @Output() closeInfo = new EventEmitter();
+  @Output() onDetailsClose = new EventEmitter();
   isGuestReservationFetched = false;
   guestReservations: GuestDetail[];
   guestFeedback: GuestDetail[];
   guestId: string;
   data;
-  @Output() closeInfo = new EventEmitter();
-  @Output() onDetailsClose = new EventEmitter();
   bookingFG: FormGroup;
-  @Input() feedback;
-  @Input() guestModalData;
-  @Input() colorMap: any;
-  @ViewChild('matTab') matTab: MatTabGroup;
   $subscription = new Subscription();
-  hotelId: string;
   isLoading = false;
   selectedIndex = 0;
   requestList;
   buttonConfig = card.buttonConfig;
   guestData: Guest;
-  @Input() isModal = false;
   constructor(
-    private _globalFilterService: GlobalFilterService,
     private _snackBarService: SnackBarService,
     private feedbackService: CardService,
     private _fb: FormBuilder
@@ -57,6 +55,8 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     if (this.isModal) {
+      this.data = this.guestModalData;
+      this.guestId = this.guestModalData.guest?.id;
       this.loadGuestInfo();
     } else {
       this.registerListeners();
@@ -64,19 +64,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   registerListeners(): void {
-    this.listenForGlobalFilters();
     this.listenForSelectedRequest();
-  }
-
-  listenForGlobalFilters(): void {
-    this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
-      })
-    );
   }
 
   listenForSelectedRequest() {
@@ -91,14 +79,6 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
         }
       })
     );
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   closeGuestInfo() {
@@ -135,6 +115,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     this.$subscription.add(
       this.feedbackService.getGuestReservations(this.guestId).subscribe(
         (response) => {
+          debugger;
           const data = new GuestDetails().deserialize(response, this.colorMap);
           this.guestReservations = data.records.filter(
             (item) => item.type === 'RESERVATION'

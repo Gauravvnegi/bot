@@ -11,7 +11,6 @@ import { Subscription } from 'rxjs';
 })
 export class GuestBookingInfoComponent implements OnInit, OnDestroy {
   @Input() data;
-  @Input() hotelId;
   @Input() reservationData;
   currentBooking = [];
   pastBooking = [];

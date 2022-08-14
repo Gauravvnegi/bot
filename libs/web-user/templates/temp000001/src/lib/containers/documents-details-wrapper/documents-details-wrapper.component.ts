@@ -19,7 +19,7 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
   @ViewChild('documentDetailsComp')
   documentDetailsComp: DocumentsDetailsComponent;
   isUploading = false;
-
+  countries = [];
   constructor(
     protected _documentDetailService: DocumentDetailsService,
     protected _reservationService: ReservationService,
@@ -36,10 +36,34 @@ export class DocumentsDetailsWrapperComponent extends BaseWrapperComponent
   ngOnInit(): void {
     super.ngOnInit();
     this.initDocumentDetailsDS();
+    this.getCountriesList();
   }
 
   protected initDocumentDetailsDS() {
     this._documentDetailService.initDocumentDetailDS(this.reservationData);
+  }
+
+  getCountriesList() {
+    this.$subscription.add(
+      this._documentDetailService.getCountryList().subscribe(
+        (countriesList) => {
+          this.countries = countriesList.map((country) => {
+            //@todo change key
+            return {
+              key: country.nationality,
+              value: country.name,
+              id: country.id,
+              nationality: country.nationality,
+            };
+          });
+        },
+        ({ error }) => {
+          this._translateService.get(error.code).subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
+        }
+      )
+    );
   }
 
   /**

@@ -60,7 +60,7 @@ export class PaidService extends ApiService {
   mapDataForAminityAddition(amenityData, timezone) {
     let data = new Amenity();
     data.packageId = amenityData.id;
-    data.rate = 1000;
+    data.rate = amenityData.rate;
     data.metaData = new Metadata();
     if (
       amenityData.metaData &&

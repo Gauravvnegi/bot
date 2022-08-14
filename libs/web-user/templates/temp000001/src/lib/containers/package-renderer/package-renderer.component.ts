@@ -23,10 +23,13 @@ import { DefaultAmenityComponent } from '../packages/default-amenity/default-ame
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { RoomUpgradeComponent } from '../packages/room-upgrade/room-upgrade.component';
 
 const componentMapping = {
   'AIRPORT P/UP': AirportFacilitiesComponent,
   'AIRPORT DROP': AirportFacilitiesComponent,
+  UPGRADE: RoomUpgradeComponent,
+  UPGRADE2: RoomUpgradeComponent,
 };
 
 @Component({

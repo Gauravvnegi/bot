@@ -8,6 +8,7 @@ import { StayDetailsService } from 'libs/web-user/shared/src/lib/services/stay-d
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
+import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 @Component({
   selector: 'hospitality-bot-stay-details-wrapper',
   templateUrl:
@@ -23,7 +24,8 @@ export class StayDetailsWrapperComponent extends BaseStayDetailsWrapperComponent
     snackBarService: SnackBarService,
     translateService: TranslateService,
     stepperService: StepperService,
-    buttonService: ButtonService
+    buttonService: ButtonService,
+    documentDetailService: DocumentDetailsService
   ) {
     super(
       stayDetailService,
@@ -33,7 +35,8 @@ export class StayDetailsWrapperComponent extends BaseStayDetailsWrapperComponent
       snackBarService,
       translateService,
       stepperService,
-      buttonService
+      buttonService,
+      documentDetailService
     );
     this.self = this;
   }

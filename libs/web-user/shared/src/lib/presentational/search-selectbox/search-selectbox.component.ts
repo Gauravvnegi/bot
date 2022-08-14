@@ -41,7 +41,6 @@ export class SearchSelectboxComponent extends BaseComponent {
       this.parentForm.get(this.name).value.trim().length &&
       this.settings.options
     ) {
-      debugger;
       const list = this.settings.options.filter(
         (option) => option.key === this.parentForm.get(this.name).value
       );

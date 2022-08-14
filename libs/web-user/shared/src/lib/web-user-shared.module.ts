@@ -46,6 +46,7 @@ import { ImageHandlingComponent } from './presentational/image-handling/image-ha
 import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shared-image-cropper.module';
 import { TabGroupComponent } from './presentational/tab-group/tab-group.component';
 import { BackgroundUrlPipe } from './pipes/background-url.pipe';
+import { SearchSelectboxComponent } from './presentational/search-selectbox/search-selectbox.component';
 
 export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
   const { templateId } = injector.get('TEMPLATE_CONFIG');
@@ -125,6 +126,7 @@ export interface IThemeConfig {
     ImageHandlingComponent,
     TabGroupComponent,
     BackgroundUrlPipe,
+    SearchSelectboxComponent,
   ],
   exports: [
     SharedMaterialModule,
@@ -168,6 +170,7 @@ export interface IThemeConfig {
     ImageHandlingComponent,
     TabGroupComponent,
     BackgroundUrlPipe,
+    SearchSelectboxComponent,
   ],
 })
 export class WebUserSharedModule {

@@ -409,7 +409,6 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
         name: 'documentDetail',
         value: this.documentDetailsForm,
       });
-
       this.documentDetailsForm.patchValue(
         this._documentDetailService.documentDetailDS
       );
@@ -472,7 +471,13 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       formData.append('file', event.file);
       formData.append('doc_type', doc_type);
       formData.append('doc_page', doc_page);
-      formData.append('doc_issue_place', doc_issue_place);
+      const list = this.countries.filter(
+        (item) => item.value === doc_issue_place
+      );
+      formData.append(
+        'doc_issue_place',
+        list.length ? list[0].key : doc_issue_place
+      );
       this.setIsUploading({ value: true });
       this.$subscription.add(
         this._documentDetailService
@@ -612,7 +617,9 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       this._documentDetailService
         .getDocumentsByNationality(
           this._hotelService.hotelId,
-          event.selectEvent.value
+          this.countries.filter(
+            (item) => item.value === event.selectEvent.value
+          )[0].key
         )
         .subscribe(({ documentList, verifyAllDocuments }) => {
           if (verifyAllDocuments) {

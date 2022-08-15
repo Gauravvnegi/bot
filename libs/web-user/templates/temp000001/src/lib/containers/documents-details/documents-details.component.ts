@@ -271,12 +271,11 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     ) as FormArray;
 
     guestFG.get('isInternational').patchValue(true);
-
-    let documentTypes = config.dropDownDocumentList; //hardcoded
     const guest = this._documentDetailService.documentDetailDS.guests.filter(
       (guest) => guest.id === guestId
     )[0];
-    documentTypes.forEach((documentType, index) => {
+    let documents = config.selectedDocumentType.split('/');
+    documents.forEach((documentType, index) => {
       let documentFA = guestFG.get('documents') as FormArray;
       documentFA.push(this.getFileFG());
 
@@ -350,11 +349,17 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     ) as FormGroup;
     guestFG.get('uploadStatus').patchValue(false);
     this.guestDetailsConfig[guestId].documents = [];
+    guestFG.get('isInternational').patchValue(true);
+    const guest = this._documentDetailService.documentDetailDS.guests.filter(
+      (guest) => guest.id === guestId
+    )[0];
     this.guestDetailsConfig[guestId].selectedDocumentType = {
       ...this.guestDetailsConfig[guestId].selectedDocumentType,
-      disable: true,
-      options: [],
-      required: false,
+      disable: false,
+      options: this._documentDetailService.setDocumentsList(
+        config.dropDownDocumentList
+      ),
+      required: guest.isPrimary || guest.role === GuestRole.sharer,
     };
   }
 
@@ -623,8 +628,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
         )
         .subscribe(({ documentList, verifyAllDocuments }) => {
           if (verifyAllDocuments) {
-            this.resetIfInternationalGuest(guestId);
-            this.setConfigIfInternational(guestId, {
+            this.resetIfInternationalGuest(guestId, {
               dropDownDocumentList: documentList,
             });
           } else {
@@ -637,10 +641,20 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
   }
 
   onSelectedDocumentTypeChange(event, guestId) {
+    let guestFG = this.guestsFA.at(
+      this.guestsFA.controls.findIndex(
+        (guestFG: FormGroup) => guestFG.get('id').value === guestId
+      )
+    ) as FormGroup;
     this.resetDocumentsIfNationalityChanges(guestId);
-    this.setConfigIfNotInternational(guestId, {
-      selectedDocumentType: event.selectEvent.value,
-    });
+    if (guestFG.value.isInternational) {
+      this.setConfigIfInternational(guestId, {
+        selectedDocumentType: event.selectEvent.value,
+      });
+    } else
+      this.setConfigIfNotInternational(guestId, {
+        selectedDocumentType: event.selectEvent.value,
+      });
   }
 
   ngOnDestroy() {

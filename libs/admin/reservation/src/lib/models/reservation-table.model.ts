@@ -199,12 +199,12 @@ export class Booking implements Deserializable {
       set(
         {},
         'expectedArrivalTimeStamp',
-        get(input, ['stayDetails', 'arrivalTimeStamp'])
+        get(input, ['stayDetails', 'arrivalTime'])
       ),
       set(
         {},
         'expectedDepartureTimeStamp',
-        get(input, ['stayDetails', 'departureTimeStamp'])
+        get(input, ['stayDetails', 'departureTime'])
       )
     );
     return this;

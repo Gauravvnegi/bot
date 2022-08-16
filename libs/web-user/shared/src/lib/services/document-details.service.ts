@@ -281,19 +281,6 @@ export class DocumentDetailsService extends ApiService {
                     },
                   });
                 }
-
-                if (isEmpty(document.documentFileBack.trim())) {
-                  status.push({
-                    validity: false,
-                    msg: `Please upload back document for ${document.documentType}.`,
-                    code: 'UPLOAD_BACK_DOCUMENT_PENDING',
-                    type: document.documentType,
-                    data: {
-                      guestId: guest.id,
-                      index,
-                    },
-                  });
-                }
               }
 
               if (document.documentType === 'VISA' && journey === 'CHECKIN') {

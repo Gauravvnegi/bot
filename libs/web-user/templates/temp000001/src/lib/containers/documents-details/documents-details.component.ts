@@ -119,103 +119,39 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
           ) as Observable<any>;
 
           this.$subscription.add(
-            getDropDownDocType$.subscribe((response) => {
-              this.guestDetailsConfig[guest.id] = this.setFieldConfiguration([
-                'nationality',
-              ]);
-
-              this.guestDetailsConfig[guest.id]['documents'] = [];
-
-              if (guest.documents.length === response.documentList.length) {
-                let documentFA = this.guestsFA
-                  .at(index)
-                  .get('documents') as FormArray;
-
-                guest.documents.forEach((document) => {
-                  documentFA.push(this.getFileFG());
-
-                  this.guestDetailsConfig[guest.id]['documents'].push(
-                    this._documentDetailService.setDocumentFileConfig(
-                      guest.isPrimary || guest.role === GuestRole.sharer,
-                      document.documentType
-                    )
-                  );
-                });
-              } else if (
-                guest.documents.length &&
-                guest.documents.length < response.documentList.length
-              ) {
-                let documentFA = this.guestsFA
-                  .at(index)
-                  .get('documents') as FormArray;
-
-                let uploadedDocs = [];
-
-                guest.documents.forEach((document) => {
-                  documentFA.push(this.getFileFG());
-
-                  this.guestDetailsConfig[guest.id]['documents'].push(
-                    this._documentDetailService.setDocumentFileConfig(
-                      guest.isPrimary || guest.role === GuestRole.sharer,
-                      document.documentType
-                    )
-                  );
-                  uploadedDocs.push(document.documentType.toUpperCase());
-                });
-
-                let documentTypes = response.documentList.filter(
-                  (doc) => !uploadedDocs.includes(doc)
+            getDropDownDocType$.subscribe(
+              (response) => {
+                const documentsList = this._documentDetailService.setDocumentsList(
+                  response.documentList
                 );
 
-                documentTypes.forEach((documentType) => {
-                  let documentFA = this.guestsFA
-                    .at(index)
-                    .get('documents') as FormArray;
-
-                  let documentTypeIndex = documentFA.controls.length;
-                  documentFA.push(this.getFileFG());
-
-                  this.guestDetailsConfig[guest.id]['documents'].push(
-                    this._documentDetailService.setDocumentFileConfig(
-                      guest.isPrimary || guest.role === GuestRole.sharer,
-                      documentType
-                    )
-                  );
-
-                  documentFA
-                    .at(documentTypeIndex)
-                    .get('documentType')
-                    .patchValue(documentType);
-                });
-              } else {
-                let documentTypes = response.documentList.map((doc) =>
-                  doc.toUpperCase()
+                this.guestDetailsConfig[guest.id] = this.setFieldConfiguration(
+                  guest.isPrimary || guest.role === GuestRole.sharer
+                    ? ['nationality', 'selectedDocumentType']
+                    : [],
+                  documentsList
                 );
 
-                documentTypes.forEach((documentType, documentTypeIndex) => {
+                if (guest.documents.length) {
                   let documentFA = this.guestsFA
                     .at(index)
                     .get('documents') as FormArray;
                   documentFA.push(this.getFileFG());
 
-                  this.guestDetailsConfig[guest.id]['documents'].push(
+                  this.guestDetailsConfig[guest.id]['documents'] = [
                     this._documentDetailService.setDocumentFileConfig(
                       guest.isPrimary || guest.role === GuestRole.sharer,
-                      documentType
-                    )
-                  );
+                      guest.selectedDocumentType
+                    ),
+                  ];
+                }
 
-                  documentFA
-                    .at(documentTypeIndex)
-                    .get('documentType')
-                    .patchValue(documentType);
-                });
-              }
-
-              this.documentDetailsForm.patchValue(
-                this._documentDetailService.documentDetailDS
-              );
-            })
+                this.documentDetailsForm.patchValue(
+                  this._documentDetailService.documentDetailDS
+                );
+              },
+              (error) => {}
+            )
           );
         } else {
           // call api to fetch options

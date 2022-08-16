@@ -50,18 +50,10 @@ export class DocumentDetailsService extends ApiService {
       'selectedDocumentType'
     ] = new FieldSchema().deserialize({
       label: 'Document Type',
-      disable: dropDownDocumentList.length ? false : true,
+      disable: false,
       options: dropDownDocumentList,
       required: requiredList.includes('selectedDocumentType'),
     });
-
-    // if (documentsArray.length > 0) {
-    //   documentsArray.forEach((element) => {
-    //     fileArray.push(this.setDocumentFileConfig());
-    //   });
-    // }
-
-    //documentDetailsFieldSchema['documents'] = fileArray;
     return documentDetailsFieldSchema as DocumentDetailsConfigI;
   }
 
@@ -99,8 +91,8 @@ export class DocumentDetailsService extends ApiService {
         } else {
           return {
             documentType: document.documentType,
-            frontUrl: document.documentFileFront,
-            backUrl: document.documentFileBack,
+            frontUrl: document.documentFileFront.trim(),
+            backUrl: document.documentFileBack.trim(),
           };
         }
       });

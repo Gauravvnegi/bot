@@ -565,15 +565,17 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
           )[0].key
         )
         .subscribe(({ documentList, verifyAllDocuments }) => {
-          if (verifyAllDocuments) {
+          if (
+            this._hotelService.hotelConfig.address.country !==
+            event.selectEvent.value
+          )
             this.resetIfInternationalGuest(guestId, {
               dropDownDocumentList: documentList,
             });
-          } else {
+          else
             this.resetIfNotInternationalGuest(guestId, {
               dropDownDocumentList: documentList,
             });
-          }
         })
     );
   }
@@ -585,11 +587,11 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       )
     ) as FormGroup;
     this.resetDocumentsIfNationalityChanges(guestId);
-    if (guestFG.value.isInternational) {
+    if (guestFG.value.isInternational)
       this.setConfigIfInternational(guestId, {
         selectedDocumentType: event.selectEvent.value,
       });
-    } else
+    else
       this.setConfigIfNotInternational(guestId, {
         selectedDocumentType: event.selectEvent.value,
       });

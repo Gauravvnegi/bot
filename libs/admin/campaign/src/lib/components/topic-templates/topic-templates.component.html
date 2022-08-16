@@ -15,13 +15,11 @@
       </div>
     </div>
   </div>
-  <div class="button-container">
-    <div class="show-button">
-      <ng-container *ngIf="template.templates?.length < template.totalTemplate">
-        <button class="button" (click)="loadData()">
-          {{ 'toDrop.show' | translate }}
-        </button>
-      </ng-container>
-    </div>
+  <div class="button-holder">
+    <ng-container *ngIf="template.templates?.length < template.totalTemplate">
+      <button class="button" (click)="loadData()">
+        {{ 'toDrop.show' | translate }}
+      </button>
+    </ng-container>
   </div>
 </div>

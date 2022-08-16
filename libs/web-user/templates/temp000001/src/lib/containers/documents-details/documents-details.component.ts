@@ -136,14 +136,16 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
                   let documentFA = this.guestsFA
                     .at(index)
                     .get('documents') as FormArray;
-                  documentFA.push(this.getFileFG());
-
-                  this.guestDetailsConfig[guest.id]['documents'] = [
-                    this._documentDetailService.setDocumentFileConfig(
-                      guest.isPrimary || guest.role === GuestRole.sharer,
-                      guest.selectedDocumentType
-                    ),
-                  ];
+                  this.guestDetailsConfig[guest.id]['documents'] = [];
+                  guest.documents.forEach((item) => {
+                    documentFA.push(this.getFileFG());
+                    this.guestDetailsConfig[guest.id]['documents'].push(
+                      this._documentDetailService.setDocumentFileConfig(
+                        guest.isPrimary || guest.role === GuestRole.sharer,
+                        item.documentType
+                      )
+                    );
+                  });
                 }
 
                 this.documentDetailsForm.patchValue(

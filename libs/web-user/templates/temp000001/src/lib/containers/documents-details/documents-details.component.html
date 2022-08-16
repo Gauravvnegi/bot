@@ -64,50 +64,48 @@
                 let documentFGIndex = index
               "
             >
-              <ng-container>
-                <div class="doc__upload__section--doc extra-gap">
-                  <web-user-file-upload
-                    [parentForm]="documentFG"
-                    [fileSize]="maxFileSize"
-                    [fileType]="validFileType"
-                    [name]="'documentFileFront'"
-                    [index]="documentFGIndex"
-                    [url]="documentFG.get('documentFileFront').value"
-                    [settings]="
-                      guestDetailsConfig &&
-                      guestDetailsConfig[guestGroup.get('id').value]
-                        .documents &&
-                      guestDetailsConfig[guestGroup.get('id').value].documents[
-                        documentFGIndex
-                      ] &&
-                      guestDetailsConfig[guestGroup.get('id').value].documents[
-                        documentFGIndex
-                      ].documentFileFront
-                    "
-                    [isUploading]="
-                      guestDetailsConfig &&
-                      guestDetailsConfig[guestGroup.get('id').value]
-                        .documents &&
-                      guestDetailsConfig[guestGroup.get('id').value].documents[
-                        documentFGIndex
-                      ] &&
-                      guestDetailsConfig[guestGroup.get('id').value].documents[
-                        documentFGIndex
-                      ].documentFileFront &&
-                      guestDetailsConfig[guestGroup.get('id').value].documents[
-                        documentFGIndex
-                      ].documentFileFront.isUploading
-                    "
-                    (documentData)="
-                      saveDocument($event, {
-                        guestId: guestGroup.get('id').value,
-                        doc_page: 'front',
-                        doc_type: documentFG.get('documentType').value,
-                        doc_issue_place: guestGroup.get('nationality').value
-                      })
-                    "
-                  ></web-user-file-upload>
-                </div>
+              <div class="doc__upload__section--doc extra-gap">
+                <web-user-file-upload
+                  [parentForm]="documentFG"
+                  [fileSize]="maxFileSize"
+                  [fileType]="validFileType"
+                  [name]="'documentFileFront'"
+                  [index]="documentFGIndex"
+                  [url]="documentFG.get('documentFileFront').value"
+                  [settings]="
+                    guestDetailsConfig &&
+                    guestDetailsConfig[guestGroup.get('id').value].documents &&
+                    guestDetailsConfig[guestGroup.get('id').value].documents[
+                      documentFGIndex
+                    ] &&
+                    guestDetailsConfig[guestGroup.get('id').value].documents[
+                      documentFGIndex
+                    ].documentFileFront
+                  "
+                  [isUploading]="
+                    guestDetailsConfig &&
+                    guestDetailsConfig[guestGroup.get('id').value].documents &&
+                    guestDetailsConfig[guestGroup.get('id').value].documents[
+                      documentFGIndex
+                    ] &&
+                    guestDetailsConfig[guestGroup.get('id').value].documents[
+                      documentFGIndex
+                    ].documentFileFront &&
+                    guestDetailsConfig[guestGroup.get('id').value].documents[
+                      documentFGIndex
+                    ].documentFileFront.isUploading
+                  "
+                  (documentData)="
+                    saveDocument($event, {
+                      guestId: guestGroup.get('id').value,
+                      doc_page: 'front',
+                      doc_type: documentFG.get('documentType').value,
+                      doc_issue_place: guestGroup.get('nationality').value
+                    })
+                  "
+                ></web-user-file-upload>
+              </div>
+              <ng-container *ngIf="!guestGroup.get('isInternational').value">
                 <div
                   *ngIf="
                     guestGroup.get('selectedDocumentType').value ||
@@ -199,69 +197,6 @@
               <img class="referenceImg" src="assets/ADHAARSAMPLE.png" />
             </div>
           </div>
-          <!-- <div
-            class="doc__warning_section"
-            fxLayout
-            fxLayoutGap="70px"
-            fxLayoutAlign="center"
-          >
-            <div
-              class="hide_on_mobile"
-              *ngIf="
-                guestGroup.get('documents')['controls'] &&
-                guestGroup.get('documents')['controls'].length
-              "
-            >
-              <p>
-                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
-                <span>Upload Complete</span>
-              </p>
-              <p *ngIf="this.reservationData.hotel.ocrActive">
-                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
-                <span>Clearly Visible</span>
-              </p>
-            </div>
-            <div
-              class="hide_on_mobile"
-              *ngIf="
-                guestGroup.get('documents')['controls'] &&
-                guestGroup.get('documents')['controls'].length
-              "
-            >
-              <p *ngIf="this.reservationData.hotel.ocrActive">
-                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
-                <span>Document in Valid Period</span>
-              </p>
-              <p>
-                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
-                <span>No larger than 3 MB in size</span>
-              </p>
-            </div>
-            <div
-              class="show_on_mobile"
-              *ngIf="
-                guestGroup.get('documents')['controls'] &&
-                guestGroup.get('documents')['controls'].length
-              "
-            >
-              <p>
-                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
-                <span>Upload Complete</span>
-              </p>
-              <p *ngIf="this.reservationData.hotel.ocrActive">
-                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
-                <span>Clearly Visible</span>
-              </p>
-              <p *ngIf="this.reservationData.hotel.ocrActive">
-                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
-                <span>Document in Valid Period</span>
-              </p>
-              <p>
-                <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
-                <span>No larger than 3 MB in size</span>
-              </p>
-            </div>
-          </div> -->
         </mat-expansion-panel>
       </mat-accordion>
     </ng-container>

@@ -115,7 +115,6 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     this.$subscription.add(
       this.feedbackService.getGuestReservations(this.guestId).subscribe(
         (response) => {
-          debugger;
           const data = new GuestDetails().deserialize(response, this.colorMap);
           this.guestReservations = data.records.filter(
             (item) => item.type === 'RESERVATION'

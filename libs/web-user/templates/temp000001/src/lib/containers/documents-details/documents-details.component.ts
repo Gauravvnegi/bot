@@ -119,103 +119,41 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
           ) as Observable<any>;
 
           this.$subscription.add(
-            getDropDownDocType$.subscribe((response) => {
-              this.guestDetailsConfig[guest.id] = this.setFieldConfiguration([
-                'nationality',
-              ]);
-
-              this.guestDetailsConfig[guest.id]['documents'] = [];
-
-              if (guest.documents.length === response.documentList.length) {
-                let documentFA = this.guestsFA
-                  .at(index)
-                  .get('documents') as FormArray;
-
-                guest.documents.forEach((document) => {
-                  documentFA.push(this.getFileFG());
-
-                  this.guestDetailsConfig[guest.id]['documents'].push(
-                    this._documentDetailService.setDocumentFileConfig(
-                      guest.isPrimary || guest.role === GuestRole.sharer,
-                      document.documentType
-                    )
-                  );
-                });
-              } else if (
-                guest.documents.length &&
-                guest.documents.length < response.documentList.length
-              ) {
-                let documentFA = this.guestsFA
-                  .at(index)
-                  .get('documents') as FormArray;
-
-                let uploadedDocs = [];
-
-                guest.documents.forEach((document) => {
-                  documentFA.push(this.getFileFG());
-
-                  this.guestDetailsConfig[guest.id]['documents'].push(
-                    this._documentDetailService.setDocumentFileConfig(
-                      guest.isPrimary || guest.role === GuestRole.sharer,
-                      document.documentType
-                    )
-                  );
-                  uploadedDocs.push(document.documentType.toUpperCase());
-                });
-
-                let documentTypes = response.documentList.filter(
-                  (doc) => !uploadedDocs.includes(doc)
+            getDropDownDocType$.subscribe(
+              (response) => {
+                const documentsList = this._documentDetailService.setDocumentsList(
+                  response.documentList
                 );
 
-                documentTypes.forEach((documentType) => {
+                this.guestDetailsConfig[guest.id] = this.setFieldConfiguration(
+                  guest.isPrimary || guest.role === GuestRole.sharer
+                    ? ['nationality', 'selectedDocumentType']
+                    : [],
+                  documentsList
+                );
+
+                if (guest.documents.length) {
                   let documentFA = this.guestsFA
                     .at(index)
                     .get('documents') as FormArray;
+                  this.guestDetailsConfig[guest.id]['documents'] = [];
+                  guest.documents.forEach((item) => {
+                    documentFA.push(this.getFileFG());
+                    this.guestDetailsConfig[guest.id]['documents'].push(
+                      this._documentDetailService.setDocumentFileConfig(
+                        guest.isPrimary || guest.role === GuestRole.sharer,
+                        item.documentType
+                      )
+                    );
+                  });
+                }
 
-                  let documentTypeIndex = documentFA.controls.length;
-                  documentFA.push(this.getFileFG());
-
-                  this.guestDetailsConfig[guest.id]['documents'].push(
-                    this._documentDetailService.setDocumentFileConfig(
-                      guest.isPrimary || guest.role === GuestRole.sharer,
-                      documentType
-                    )
-                  );
-
-                  documentFA
-                    .at(documentTypeIndex)
-                    .get('documentType')
-                    .patchValue(documentType);
-                });
-              } else {
-                let documentTypes = response.documentList.map((doc) =>
-                  doc.toUpperCase()
+                this.documentDetailsForm.patchValue(
+                  this._documentDetailService.documentDetailDS
                 );
-
-                documentTypes.forEach((documentType, documentTypeIndex) => {
-                  let documentFA = this.guestsFA
-                    .at(index)
-                    .get('documents') as FormArray;
-                  documentFA.push(this.getFileFG());
-
-                  this.guestDetailsConfig[guest.id]['documents'].push(
-                    this._documentDetailService.setDocumentFileConfig(
-                      guest.isPrimary || guest.role === GuestRole.sharer,
-                      documentType
-                    )
-                  );
-
-                  documentFA
-                    .at(documentTypeIndex)
-                    .get('documentType')
-                    .patchValue(documentType);
-                });
-              }
-
-              this.documentDetailsForm.patchValue(
-                this._documentDetailService.documentDetailDS
-              );
-            })
+              },
+              (error) => {}
+            )
           );
         } else {
           // call api to fetch options
@@ -271,12 +209,11 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     ) as FormArray;
 
     guestFG.get('isInternational').patchValue(true);
-
-    let documentTypes = config.dropDownDocumentList; //hardcoded
     const guest = this._documentDetailService.documentDetailDS.guests.filter(
       (guest) => guest.id === guestId
     )[0];
-    documentTypes.forEach((documentType, index) => {
+    let documents = config.selectedDocumentType.split('/');
+    documents.forEach((documentType, index) => {
       let documentFA = guestFG.get('documents') as FormArray;
       documentFA.push(this.getFileFG());
 
@@ -350,11 +287,17 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     ) as FormGroup;
     guestFG.get('uploadStatus').patchValue(false);
     this.guestDetailsConfig[guestId].documents = [];
+    guestFG.get('isInternational').patchValue(true);
+    const guest = this._documentDetailService.documentDetailDS.guests.filter(
+      (guest) => guest.id === guestId
+    )[0];
     this.guestDetailsConfig[guestId].selectedDocumentType = {
       ...this.guestDetailsConfig[guestId].selectedDocumentType,
-      disable: true,
-      options: [],
-      required: false,
+      disable: false,
+      options: this._documentDetailService.setDocumentsList(
+        config.dropDownDocumentList
+      ),
+      required: guest.isPrimary || guest.role === GuestRole.sharer,
     };
   }
 
@@ -622,25 +565,36 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
           )[0].key
         )
         .subscribe(({ documentList, verifyAllDocuments }) => {
-          if (verifyAllDocuments) {
-            this.resetIfInternationalGuest(guestId);
-            this.setConfigIfInternational(guestId, {
+          if (
+            this._hotelService.hotelConfig.address.country !==
+            event.selectEvent.value
+          )
+            this.resetIfInternationalGuest(guestId, {
               dropDownDocumentList: documentList,
             });
-          } else {
+          else
             this.resetIfNotInternationalGuest(guestId, {
               dropDownDocumentList: documentList,
             });
-          }
         })
     );
   }
 
   onSelectedDocumentTypeChange(event, guestId) {
+    let guestFG = this.guestsFA.at(
+      this.guestsFA.controls.findIndex(
+        (guestFG: FormGroup) => guestFG.get('id').value === guestId
+      )
+    ) as FormGroup;
     this.resetDocumentsIfNationalityChanges(guestId);
-    this.setConfigIfNotInternational(guestId, {
-      selectedDocumentType: event.selectEvent.value,
-    });
+    if (guestFG.value.isInternational)
+      this.setConfigIfInternational(guestId, {
+        selectedDocumentType: event.selectEvent.value,
+      });
+    else
+      this.setConfigIfNotInternational(guestId, {
+        selectedDocumentType: event.selectEvent.value,
+      });
   }
 
   ngOnDestroy() {

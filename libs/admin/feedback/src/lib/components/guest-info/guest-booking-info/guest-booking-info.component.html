@@ -1,4 +1,4 @@
-<div class="container" *ngIf="checkForNoBooking(); else noBooking">
+<div class="container" *ngIf="reservationData?.length; else noBooking">
   <div class="booking-title">
     {{ 'booking.info' | translate }}
   </div>
@@ -12,11 +12,15 @@
           <div class="subHeading">
             {{ 'guestData.reservationId' | translate }}
           </div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.booking.bookingNumber }}
+          </div>
         </div>
         <div>
           <div class="subHeading">{{ 'guestData.roomNo' | translate }}</div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.rooms.roomNumber }}
+          </div>
         </div>
         <div class="arrow" (click)="openDetailPage(item)">
           <mat-icon>{{ 'guestData.direction' | translate }}</mat-icon>
@@ -34,11 +38,15 @@
           <div class="subHeading">
             {{ 'guestData.reservationId' | translate }}
           </div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.booking.bookingNumber }}
+          </div>
         </div>
         <div>
           <div class="subHeading">{{ 'guestData.roomNo' | translate }}</div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.rooms.roomNumber }}
+          </div>
         </div>
         <div class="arrow" (click)="openDetailPage(item)">
           <mat-icon>{{ 'guestData.direction' | translate }}</mat-icon>
@@ -56,11 +64,15 @@
           <div class="subHeading">
             {{ 'guestData.reservationId' | translate }}
           </div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.booking.bookingNumber }}
+          </div>
         </div>
         <div>
           <div class="subHeading">{{ 'guestData.roomNo' | translate }}</div>
-          <div class="subHeading--results"></div>
+          <div class="subHeading--results">
+            {{ item.reservation.rooms.roomNumber }}
+          </div>
         </div>
         <div class="arrow" (click)="openDetailPage(item)">
           <mat-icon>{{ 'guestData.direction' | translate }}</mat-icon>
@@ -73,4 +85,5 @@
   <div class="container">
     No bookings found
   </div>
+  {{ reservationData?.length }}
 </ng-template>

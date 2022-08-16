@@ -20,6 +20,7 @@
       <ng-template matTabContent>
         <hospitality-bot-guest-personal-info
           [data]="guestData"
+          [colorMap]="colorMap"
         ></hospitality-bot-guest-personal-info>
       </ng-template>
     </mat-tab>
@@ -33,7 +34,6 @@
         <hospitality-bot-guest-booking-info
           [guestId]="guestId"
           [data]="guestData"
-          [hotelId]="hotelId"
           [reservationData]="guestReservations"
         >
         </hospitality-bot-guest-booking-info>
@@ -48,7 +48,7 @@
       <ng-template matTabContent>
         <hospitality-bot-guest-timeline
           [guestId]="guestId"
-          [guestReservations]="guestReservations"
+          [guestReservations]="guestFeedback"
         ></hospitality-bot-guest-timeline>
       </ng-template>
     </mat-tab>

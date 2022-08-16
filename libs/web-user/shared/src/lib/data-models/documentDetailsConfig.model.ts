@@ -94,12 +94,18 @@ export class DocumentDetail implements Deserializable {
     this.id = input.id;
     this.isPrimary = input.isPrimary;
 
-    this.selectedDocumentType =
-      this.nationality === hotelNationality
-        ? input.documents && input.documents[0]
-          ? input.documents[0].documentType
-          : null
-        : null;
+    if (this.isInternational) {
+      this.selectedDocumentType =
+        input.documents &&
+        input.documents.map((item) => item.documentType).join('/');
+    } else {
+      this.selectedDocumentType =
+        this.nationality === hotelNationality
+          ? input.documents && input.documents[0]
+            ? input.documents[0].documentType
+            : null
+          : null;
+    }
 
     input.documents.forEach((document, i) => {
       this.documents.push(new Document().deserialize(document));

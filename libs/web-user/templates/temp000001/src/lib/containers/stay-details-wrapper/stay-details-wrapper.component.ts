@@ -9,6 +9,7 @@ import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import { AddressComponent } from '../address/address.component';
+import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
 
 export interface IStayDetailsWrapper {
   saveStayDetails(): void;
@@ -23,6 +24,7 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
   implements IStayDetailsWrapper, OnInit, OnDestroy {
   @ViewChild('addressFields') addressFields: AddressComponent;
   isAmenityDataAvl = false;
+  countries = [];
   constructor(
     private _stayDetailService: StayDetailsService,
     private _amenitiesService: AmenitiesService,
@@ -31,7 +33,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     private _snackBarService: SnackBarService,
     private _translateService: TranslateService,
     private _stepperService: StepperService,
-    private _buttonService: ButtonService
+    private _buttonService: ButtonService,
+    private _documentDetailService: DocumentDetailsService
   ) {
     super();
     this.self = this;
@@ -41,6 +44,7 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     super.ngOnInit();
     this.fetchData();
     this.initStayDetailsDS();
+    this.getCountriesList();
   }
 
   fetchData(): void {
@@ -68,6 +72,29 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     );
   }
 
+  getCountriesList() {
+    this.$subscription.add(
+      this._documentDetailService.getCountryList().subscribe(
+        (countriesList) => {
+          this.countries = countriesList.map((country) => {
+            //@todo change key
+            return {
+              key: country.nationality,
+              value: country.name,
+              id: country.id,
+              nationality: country.nationality,
+            };
+          });
+        },
+        ({ error }) => {
+          this._translateService.get(error.code).subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
+        }
+      )
+    );
+  }
+
   /**
    * Function to save/update all the details for guest stay on Next button click
    */
@@ -81,9 +108,9 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     const formValue = this.parentForm.getRawValue();
     const data = this._stayDetailService.modifyStayDetails(
       formValue,
-      this._hotelService.hotelConfig.timezone
+      this._hotelService.hotelConfig.timezone,
+      this.countries
     );
-
     this.$subscription.add(
       this._stayDetailService
         .updateStayDetails(this._reservationService.reservationId, data)

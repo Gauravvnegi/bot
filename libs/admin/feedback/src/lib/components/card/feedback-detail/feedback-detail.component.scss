@@ -269,6 +269,7 @@
     color: $white;
     width: 70%;
     padding-right: 5px;
+    word-break: break-all;
   }
   .userImage {
     display: flex;
@@ -594,6 +595,10 @@
 
 .gray-image {
   filter: grayscale(100%);
+}
+.gray-image-red {
+  filter: invert(65%) sepia(0%) saturate(2%) hue-rotate(8deg) brightness(115%)
+    contrast(93%) !important;
 }
 
 .border {

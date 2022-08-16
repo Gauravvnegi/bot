@@ -199,12 +199,12 @@ export class Booking implements Deserializable {
       set(
         {},
         'expectedArrivalTimeStamp',
-        get(input, ['stayDetails', 'expectedArrivalTime'])
+        get(input, ['stayDetails', 'arrivalTime'])
       ),
       set(
         {},
         'expectedDepartureTimeStamp',
-        get(input, ['stayDetails', 'expectedDepartureTime'])
+        get(input, ['stayDetails', 'departureTime'])
       )
     );
     return this;
@@ -385,6 +385,17 @@ export class Guest implements Deserializable {
       return cc.includes('+') ? cc : `+${cc}`;
     }
     return cc;
+  }
+
+  getProfileNickName() {
+    const nameList = [this.firstName, this.lastName || ''];
+    return nameList
+      .map((i, index) => {
+        if ([0, 1].includes(index)) return i.charAt(0);
+        else return '';
+      })
+      .join('')
+      .toUpperCase();
   }
 }
 

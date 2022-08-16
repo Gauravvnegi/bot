@@ -216,7 +216,7 @@
     align-items: center;
     font-family: Roboto;
     font-size: 12px;
-    word-break: break-all;  
+    word-break: break-all;
     letter-spacing: 0.72px;
     text-align: left;
     // color: #002046;
@@ -579,6 +579,10 @@
 
 .gray-image {
   filter: grayscale(100%);
+}
+.gray-image-red {
+  filter: invert(65%) sepia(0%) saturate(2%) hue-rotate(8deg) brightness(115%)
+    contrast(93%) !important;
 }
 
 .border {

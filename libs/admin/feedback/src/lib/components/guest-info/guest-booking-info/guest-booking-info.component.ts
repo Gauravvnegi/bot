@@ -11,7 +11,6 @@ import { Subscription } from 'rxjs';
 })
 export class GuestBookingInfoComponent implements OnInit, OnDestroy {
   @Input() data;
-  @Input() hotelId;
   @Input() reservationData;
   currentBooking = [];
   pastBooking = [];
@@ -22,15 +21,21 @@ export class GuestBookingInfoComponent implements OnInit, OnDestroy {
   ngOnInit(): void {}
 
   ngOnChanges() {
-    this.pastBooking = this.reservationData.records.filter(
+    if (this.reservationData) {
+      this.filterData();
+    }
+  }
+
+  filterData() {
+    this.pastBooking = this.reservationData.filter(
       (item) => item.subType === 'PAST'
     );
-
-    this.currentBooking = this.reservationData.records.filter(
+    console.log(this.pastBooking);
+    this.currentBooking = this.reservationData.filter(
       (item) => item.subType === 'CURRENT'
     );
 
-    this.upcomingBooking = this.reservationData.records.filter(
+    this.upcomingBooking = this.reservationData.filter(
       (item) => item.subType === 'UPCOMING'
     );
   }
@@ -55,11 +60,16 @@ export class GuestBookingInfoComponent implements OnInit, OnDestroy {
     );
   }
 
-  checkForNoBooking(): number {
+  checkForNoBooking(): boolean {
+    console.log(
+      !this.pastBooking.length ||
+        !this.currentBooking.length ||
+        !this.upcomingBooking.length
+    );
     return (
-      this.pastBooking.length &&
-      this.currentBooking.length &&
-      this.upcomingBooking.length
+      !this.pastBooking.length &&
+      !this.currentBooking.length &&
+      !this.upcomingBooking.length
     );
   }
 

@@ -13,39 +13,39 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { Subscription } from 'rxjs';
 import { SnackBarService } from 'libs/shared/material/src';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import {
-  Guest,
-  GuestDetails,
-} from 'libs/admin/request/src/lib/data-models/request.model';
 import { CardService } from '../../../services/card.service';
 import { card } from '../../../constants/card';
+import { Guest } from 'libs/admin/request/src/lib/data-models/request.model';
+import {
+  GuestDetail,
+  GuestDetails,
+} from '../../../data-models/guest-feedback.model';
 @Component({
   selector: 'hospitality-bot-guest-info',
   templateUrl: './guest-info.component.html',
   styleUrls: ['./guest-info.component.scss'],
 })
 export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
-  isGuestReservationFetched = false;
-  guestReservations: GuestDetails;
-  guestId: string;
-  data;
-  @Output() closeInfo = new EventEmitter();
-  @Output() onDetailsClose = new EventEmitter();
-  bookingFG: FormGroup;
+  @ViewChild('matTab') matTab: MatTabGroup;
   @Input() feedback;
   @Input() guestModalData;
-  @ViewChild('matTab') matTab: MatTabGroup;
+  @Input() colorMap: any;
+  @Input() isModal = false;
+  @Output() closeInfo = new EventEmitter();
+  @Output() onDetailsClose = new EventEmitter();
+  isGuestReservationFetched = false;
+  guestReservations: GuestDetail[];
+  guestFeedback: GuestDetail[];
+  guestId: string;
+  data;
+  bookingFG: FormGroup;
   $subscription = new Subscription();
-  hotelId: string;
   isLoading = false;
   selectedIndex = 0;
   requestList;
   buttonConfig = card.buttonConfig;
-  colorMap: any;
   guestData: Guest;
-  @Input() isModal = false;
   constructor(
-    private _globalFilterService: GlobalFilterService,
     private _snackBarService: SnackBarService,
     private feedbackService: CardService,
     private _fb: FormBuilder
@@ -55,6 +55,8 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit(): void {
     if (this.isModal) {
+      this.data = this.guestModalData;
+      this.guestId = this.guestModalData.guest?.id;
       this.loadGuestInfo();
     } else {
       this.registerListeners();
@@ -62,19 +64,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   registerListeners(): void {
-    this.listenForGlobalFilters();
     this.listenForSelectedRequest();
-  }
-
-  listenForGlobalFilters(): void {
-    this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
-      })
-    );
   }
 
   listenForSelectedRequest() {
@@ -91,29 +81,12 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
-  }
-
   closeGuestInfo() {
     this.closeInfo.emit({ close: true });
   }
 
   onTabChanged(event) {
     this.selectedIndex = event.index;
-  }
-
-  handleButtonCLick(): void {
-    switch (this.selectedIndex) {
-      case 0:
-        break;
-      case 1:
-        break;
-    }
   }
 
   closeDetails() {
@@ -142,11 +115,13 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     this.$subscription.add(
       this.feedbackService.getGuestReservations(this.guestId).subscribe(
         (response) => {
-          this.guestReservations = new GuestDetails().deserialize(
-            response,
-            this.colorMap
+          const data = new GuestDetails().deserialize(response, this.colorMap);
+          this.guestReservations = data.records.filter(
+            (item) => item.type === 'RESERVATION'
           );
-
+          this.guestFeedback = data.records.filter(
+            (item) => item.type !== 'RESERVATION'
+          );
           this.isGuestReservationFetched = true;
         },
         ({ error }) => {

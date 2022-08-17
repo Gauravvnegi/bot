@@ -42,18 +42,7 @@ export class AirportFacilitiesComponent implements OnInit, OnDestroy {
 
   initAirportForm() {
     this.airportForm = this._fb.group({
-      airportName: ['', [Validators.required]],
-      terminal: ['', [Validators.required]],
-      flightNumber: [
-        '',
-        [
-          Validators.required,
-          customPatternValid({
-            pattern: Regex.ALPHANUMERIC_REGEX,
-            msg: 'Please enter valid Flight number',
-          }),
-        ],
-      ],
+      flightNumber: ['', [Validators.required]],
       pickupDate: ['', [Validators.required]],
       pickupTime: ['', [Validators.required]],
       quantity: [

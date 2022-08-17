@@ -14,14 +14,13 @@ $padding-small: 10px;
 $padding-medium: 15px;
 $padding-large: 20px;
 
-
 // Breakpoint variables
 
 $tab-size: 990px;
-$S:     480px;   
-$M:     768px;     
-$L:     1170px;  
-$XL:    1500px;
+$S: 480px;
+$M: 768px;
+$L: 1170px;
+$XL: 1500px;
 
 // letter-spacing
 
@@ -32,7 +31,49 @@ $large-spacing: 6px;
 
 // color constant
 
-
 $white: white;
 $black: black;
 $light-gray: lightgray;
+
+// Constant Variables
+
+$border5: 5px;
+$border10: 10px;
+$border15: 15px;
+$border20: 20px;
+$margin10: 10px;
+$margin15: 15px;
+$margin20: 20px;
+$full: 100%;
+$half: 50%;
+$quarter: 25%;
+$padding4: 4px;
+$padding5: 5px;
+$padding10: 10px;
+$padding15: 15px;
+$padding20: 20px;
+$padding30: 30px;
+$margin10: 10px;
+$margin15: 15px;
+$margin20: 20px;
+$margin5: 5px;
+
+// Breakpoint variables
+
+$S: 480px;
+$M: 768px;
+$L: 1170px;
+$XL: 1500px;
+$tablet: 1024px;
+
+// letter-spacing
+
+$spacing1: 1px;
+$spacing2: 2px;
+$spacing4: 4px;
+$spacing6: 6px;
+
+// Border radius
+$borderRadius5: 5px;
+$borderRadius10: 10px;
+$borderRadius50P: 50%;

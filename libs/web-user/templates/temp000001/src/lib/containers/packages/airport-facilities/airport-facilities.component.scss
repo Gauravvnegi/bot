@@ -1,11 +1,15 @@
 @import 'temp000001';
 
+.airport-container {
+  border-top: solid 2px #989696;
+  padding-top: 40px;
+}
 
 .heading {
   margin-bottom: $margin-medium;
 }
 
-:host ::ng-deep .ngx-timepicker-control__input{
+:host ::ng-deep .ngx-timepicker-control__input {
   background-color: #f8f8f8;
 }
 

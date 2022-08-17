@@ -75,6 +75,7 @@ export class VisitDetail {
   intentToRecommends;
   marketSegment: string;
   outletId: string;
+  outletName: string;
   serviceType: string;
   status: string;
   surveyType: string;
@@ -91,6 +92,7 @@ export class VisitDetail {
       set({}, 'intentToRecommends', get(input, ['intentToRecommends'])),
       set({}, 'marketSegment', get(input, ['marketSegment'])),
       set({}, 'outletId', get(input, ['outletId'])),
+      set({}, 'outletName', get(input, ['outletName'])),
       set({}, 'serviceType', get(input, ['serviceType'])),
       set({}, 'surveyType', get(input, ['surveyType'])),
       set({}, 'status', get(input, ['status'])),

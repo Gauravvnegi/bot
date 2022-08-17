@@ -1,24 +1,8 @@
-<div>
+<div style="border-top: solid 2px #989696; padding-top: 40px;">
   <form [formGroup]="subPackageForm">
     <h3 class="heading">
       Enter below details to book {{ subPackageForm.get('label').value }}
     </h3>
-    <!-- <div class="wrapper">
-      <div class="wrapper__item">
-        <web-user-input
-          [parentForm]="metaDataForm"
-          [name]="'airportName'"
-          [settings]="airportConfig.airportName"
-        ></web-user-input>
-      </div>
-      <div class="wrapper__item">
-        <web-user-input
-          [parentForm]="metaDataForm"
-          [name]="'terminal'"
-          [settings]="airportConfig.terminal"
-        ></web-user-input>
-      </div>
-    </div> -->
     <div class="wrapper">
       <div class="wrapper__item">
         <web-user-input
@@ -52,8 +36,5 @@
         ></web-user-time-picker>
       </div>
     </div>
-    <h4 style="margin-bottom: 1rem;">
-      Note: Our in house chaffeur will call you on registered number.
-    </h4>
   </form>
 </div>

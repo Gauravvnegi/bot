@@ -18,27 +18,14 @@ export class AirportService extends ApiService {
 
   setFieldConfigForAirportDetails() {
     let airportFormFieldSchema = {};
-
-    // airportFormFieldSchema['airportName'] = new FieldSchema().deserialize({
-    //   label: 'Airport',
-    //   disable: false,
-    //   placeholder: 'Enter Airport ',
-    //   required: true,
-    // });
-    // airportFormFieldSchema['terminal'] = new FieldSchema().deserialize({
-    //   label: 'Terminal',
-    //   disable: false,
-    //   placeholder: 'Enter Terminal',
-    //   required: true,
-    // });
     airportFormFieldSchema['pickupDate'] = new FieldSchema().deserialize({
-      label: 'Pickup Date',
+      label: 'Select Pick up Date',
       disable: true,
       required: true,
     });
 
     airportFormFieldSchema['pickupTime'] = new FieldSchema().deserialize({
-      label: 'Pickup Time',
+      label: 'Enter Pickup Time',
       disable: false,
       style: {
         childLabelStyles: {

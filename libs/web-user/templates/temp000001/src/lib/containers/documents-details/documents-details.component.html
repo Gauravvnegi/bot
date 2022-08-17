@@ -105,7 +105,12 @@
                   "
                 ></web-user-file-upload>
               </div>
-              <ng-container *ngIf="!guestGroup.get('isInternational').value">
+              <ng-container
+                *ngIf="
+                  !guestGroup.get('isInternational').value ||
+                  documentFG.get('documentType').value === 'OCI'
+                "
+              >
                 <div
                   *ngIf="
                     guestGroup.get('selectedDocumentType').value ||

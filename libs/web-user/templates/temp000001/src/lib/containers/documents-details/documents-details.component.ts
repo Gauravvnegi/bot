@@ -213,6 +213,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
       (guest) => guest.id === guestId
     )[0];
     let documents = config.selectedDocumentType.split('/');
+    if (documents.includes('OCI')) documents = documents.reverse();
     documents.forEach((documentType, index) => {
       let documentFA = guestFG.get('documents') as FormArray;
       documentFA.push(this.getFileFG());

@@ -59,12 +59,10 @@ export class DocumentDetailsService extends ApiService {
 
   setDocumentFileConfig(required, documentTypeLabel?) {
     let fileSchema = {};
-    // fileSchema['documentType'] = new FieldSchema().deserialize({
-    //   label: 'Document Type',
-    //   disable: false,
-    // });
     fileSchema['documentFileFront'] = new FieldSchema().deserialize({
-      label: `${documentTypeLabel} FIRST PAGE`,
+      label: `${documentTypeLabel} ${
+        documentTypeLabel != 'VISA' ? 'FIRST' : ''
+      } PAGE`,
       type: 'front',
       disable: false,
       required,

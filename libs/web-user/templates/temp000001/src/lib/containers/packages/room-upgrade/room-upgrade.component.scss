@@ -1,22 +1,15 @@
 @import 'temp000001';
 
-.airport-container {
-  border-top: solid 2px #989696;
-  padding-top: 40px;
-}
-
 .heading {
-  margin-bottom: $margin-medium;
-}
-
-:host ::ng-deep .ngx-timepicker-control__input {
-  background-color: #f8f8f8;
+  margin-bottom: 20px;
+  font-weight: 600;
+  font-size: 18px;
 }
 
 .wrapper {
   &__item {
-    width: 45%;
-    margin: 5px 0;
+    width: 46%;
+    margin-bottom: 10px;
     @media only screen and (max-width: $M) {
       width: 100%;
     }
@@ -30,9 +23,14 @@
   }
 }
 
-.width-added {
-  width: 31%;
-  @media screen and (max-width: 780px) {
-    width: 100%;
+:host ::ng-deep .ngx-timepicker-control {
+  input {
+    background: transparent;
   }
+}
+
+.enter-below-details {
+  padding-top: 60px;
+  border-top: solid 2px $border-color;
+  padding-bottom: 20px;
 }

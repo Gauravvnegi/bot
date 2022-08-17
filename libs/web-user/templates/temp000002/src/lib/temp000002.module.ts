@@ -42,6 +42,7 @@ import { GSTService } from 'libs/web-user/shared/src/lib/services/gst.service';
 import { CancelBookingComponent } from './containers/cancel-booking/cancel-booking.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { QuestionnaireComponent } from './containers/questionnaire/questionnaire.component';
+import { RoomUpgradeComponent } from './containers/packages/room-upgrade/room-upgrade.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { QuestionnaireComponent } from './containers/questionnaire/questionnaire
     Temp000002SignatureCaptureWrapperComponent,
     CancelBookingComponent,
     QuestionnaireComponent,
+    RoomUpgradeComponent,
   ],
   providers: [
     {

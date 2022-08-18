@@ -26,7 +26,7 @@ export class AuthComponent implements OnInit {
   constructor(private loadingService: LoadingService) {}
 
   ngOnInit(): void {
-    this.loadingService.close();
+    if (this.loadingService.overlayCompRef) this.loadingService?.close();
   }
 
   /**

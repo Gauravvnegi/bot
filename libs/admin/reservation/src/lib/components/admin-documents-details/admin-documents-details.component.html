@@ -31,8 +31,8 @@
         *ngIf="selectedGuestGroup"
         (click)="downloadDocs(selectedGuestGroup.get('documents').value)"
       >
-      <img src="assets/svg/d_document.svg" alt=""> &nbsp;
-      <p>Download All Docs</p> 
+        <img src="assets/svg/d_document.svg" alt="document" /> &nbsp;
+        <p>Download All Docs</p>
       </div>
     </div>
     <ng-container *ngIf="selectedGuestGroup">
@@ -71,25 +71,7 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="nationality-wrapper">
-            <!-- <span class="text">Select Document Type :</span>
-    
-            <mat-form-field>
-              <mat-select
-                [(value)]="selectedGuestGroup.get('selectedDocumentType').value"
-                formControlName="selectedDocumentType"
-                [disabled]="disableDocumentType"
-                (selectionChange)="onSelectedDocumentTypeChange($event.value)"
-              >
-                <mat-option
-                  *ngFor="let document of documentsList"
-                  [value]="document"
-                >
-                  {{ document }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field> -->
-          </div>
+          <div class="nationality-wrapper"></div>
           <div *ngIf="selectedGuestGroup.get('nationality').value">
             <ng-container
               formArrayName="documents"
@@ -108,16 +90,16 @@
                   >
                   </hospitality-bot-upload-file>
                   <p class="text">
-                    {{ document.get('documentType').value }} FIRST PAGE<b
-                      class="red-color"
-                      >*</b
-                    >
+                    {{ document.get('documentType').value
+                    }}{{
+                      document.get('documentType').value !== 'VISA'
+                        ? ' FRONT'
+                        : ''
+                    }}
+                    PAGE<b class="red-color">*</b>
                   </p>
                 </div>
-                <div
-                  class="upload-image"
-                  *ngIf="document.get('documentType').value !== 'VISA'"
-                >
+                <div class="upload-image" *ngIf="document.get('backUrl').value">
                   <hospitality-bot-upload-file
                     [fileUploadData]="fileUploadData"
                     [url]="document.get('backUrl').value"

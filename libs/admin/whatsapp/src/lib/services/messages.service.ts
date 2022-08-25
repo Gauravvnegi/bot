@@ -92,6 +92,12 @@ export class MessageService extends ApiService {
     );
   }
 
+  exportChat(hotelId: string, id: string) {
+    return this.get(`/api/v1/hotel/${hotelId}/conversations/${id}/export`, {
+      responseType: 'blob',
+    });
+  }
+
   filterMessagesByDate(messages: IChat[], timezone = '+05:30') {
     const currentDate = moment().utcOffset(timezone);
     const filteredMsgObj = {};

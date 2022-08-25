@@ -19,6 +19,10 @@
 
     <div class="mr-10" [formGroup]="liveChatFG">
       <div class="req_button">
+        <div class="export-chat" (click)="exportChat()">
+          <img src="assets/svg/CSV.svg" alt="csv" />
+          <div>Export Chat</div>
+        </div>
         <div
           class="guestInfoEditWrapper"
           featureSubscribed

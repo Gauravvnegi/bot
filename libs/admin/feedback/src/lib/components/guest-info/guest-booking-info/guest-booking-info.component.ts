@@ -62,11 +62,6 @@ export class GuestBookingInfoComponent implements OnInit, OnDestroy {
   }
 
   checkForNoBooking(): boolean {
-    console.log(
-      !this.pastBooking.length ||
-        !this.currentBooking.length ||
-        !this.upcomingBooking.length
-    );
     return (
       !this.pastBooking.length &&
       !this.currentBooking.length &&

@@ -102,7 +102,7 @@
 }
 .userTableHead {
   width: 5%;
-  background-color: #eaf0f6;
+  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
@@ -127,7 +127,7 @@
   width: 20px;
   left: 0px;
   bottom: 0px;
-  background-color: white;
+  background-color: $white;
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -161,7 +161,7 @@
     left: 2px;
     transform: translate3d(30px, 0, 0);
     .mat-slide-toggle-thumb {
-      background-color: white;
+      background-color: $white;
     }
   }
 }
@@ -180,4 +180,3 @@ tr > td {
     background: $table-hover-background;
   }
 }
-

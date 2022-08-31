@@ -1,3 +1,4 @@
+@import 'main';
 .footer {
   width: 100%;
   display: flex;
@@ -21,8 +22,8 @@
     padding: 9px 10px;
     margin: 0 15px;
     border-radius: 15px;
-    background-color: #4b56c0;
-    color: #fff;
+    background-color: $button-blue;
+    color: $white;
     font-size: 12px;
     cursor: pointer;
     border: none;
@@ -34,7 +35,7 @@
     padding: 13px 20px;
     border-radius: 21px;
     border: solid 1px #d5e0e6;
-    background-color: #fff;
+    background-color: $white;
     outline: none;
   }
   .sendMessage {

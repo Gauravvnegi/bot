@@ -6,7 +6,7 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: #eaf0f6;
+  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
@@ -49,7 +49,7 @@
     position: absolute;
     height: 2px;
     width: 72%;
-    background-color: #edf1f5;
+    background-color: $alice-blue;
     right: 17px;
     @media screen and (max-width: 800px) {
       width: 62%;
@@ -98,7 +98,7 @@
           line-height: normal;
           letter-spacing: 0.56px;
           text-align: center;
-          color: white;
+          color: $white;
         }
       }
     }
@@ -114,7 +114,7 @@
   line-height: 1.07;
   letter-spacing: 0.84px;
   text-align: left;
-  color: #4b56c0;
+  color: $button-blue;
   margin-right: 10px;
   cursor: pointer;
   display: flex;
@@ -133,8 +133,8 @@
   font-size: $font14;
 }
 th.tableHeading.p-resizable-column {
-  background: #eaf0f6 !important;
-  border-top: 1px solid #e4e4e4 !important;
+  background: $c-gray-93 !important;
+  border-top: 1px solid $c-gray-92 !important;
 }
 :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
   text-align: center;

@@ -99,7 +99,7 @@
   flex-direction: column;
   margin: 0;
   padding: 15px 10px;
-  background-color: white;
+  background-color: $white;
   border-radius: 3px;
   padding-bottom: 0;
   .back-icon {
@@ -203,7 +203,7 @@
   margin-top: -10px;
   .import {
     cursor: pointer;
-    color: #4b56c0;
+    color: $button-blue;
     display: flex;
     align-items: center;
     margin-bottom: 15px;
@@ -281,7 +281,7 @@
   margin: 10px 0;
   &__heading {
     font-size: 20px;
-    color: #002046;
+    color: $dark-blue;
     font-weight: bold;
     letter-spacing: 1.2px;
     text-align: center;
@@ -304,7 +304,7 @@
 }
 
 :host ::ng-deep .mat-checkbox-frame {
-  border: 1.5px solid #e8eef5;
+  border: 1.5px solid $accordian-background;
 }
 
 :host

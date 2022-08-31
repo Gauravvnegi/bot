@@ -30,7 +30,7 @@
   width: 138px;
   height: 36px;
   background: $button-blue 0% 0% no-repeat padding-box;
-  border: 1px solid #e1e1f2;
+  border: 1px solid $c-gray-87;
   border-radius: 100px;
   opacity: 1;
   display: flex;
@@ -51,7 +51,7 @@
 .guest-info {
   height: 62px;
   width: 100%;
-  border-bottom: 1px solid #9eaeb8;
+  border-bottom: 1px solid $primary-gray;
   display: flex;
   align-items: center;
   padding: 20px;
@@ -65,7 +65,7 @@
 }
 .material-icons {
   cursor: pointer;
-  color: #9eaeb8;
+  color: $primary-gray;
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);

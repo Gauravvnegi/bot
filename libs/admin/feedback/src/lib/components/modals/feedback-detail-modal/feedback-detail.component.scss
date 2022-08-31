@@ -2,12 +2,12 @@
 .guestInfoOpen {
   height: 62px;
   width: 100%;
-  background: #ffffff;
+  background: $white;
   display: flex;
   padding: 15px;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid $light-gray;
   cursor: pointer;
   &-guest-wrap {
     display: flex;
@@ -26,7 +26,7 @@
     line-height: normal;
     letter-spacing: 0.72px;
     text-align: left;
-    color: #99a6b5;
+    color: $c-gray-61;
     .overall {
       width: 107.7px;
       height: 28px;
@@ -34,7 +34,7 @@
       padding: 5.6px 12.8px 6.4px 8px;
       opacity: 0.1;
       border-radius: 14px;
-      background-color: #0030b5;
+      background-color: $booking-feedback;
     }
   }
 }
@@ -57,7 +57,7 @@
 .selectedChat {
   font: normal normal medium 14px/19px Roboto;
   letter-spacing: 0.84px;
-  color: #002046;
+  color: $dark-blue;
   opacity: 1;
 }
 
@@ -79,7 +79,7 @@
         line-height: 1.07;
         letter-spacing: 0.84px;
         text-align: left;
-        color: #4b56c0;
+        color: $button-blue;
       }
       .paper {
         width: 14.7px;
@@ -106,7 +106,7 @@
       line-height: 1.07;
       letter-spacing: 0.84px;
       text-align: left;
-      color: #4b56c0;
+      color: $button-blue;
     }
   }
   .guestInfoEditWrapper {
@@ -118,7 +118,7 @@
       width: 138px;
       height: 36px;
       background: $button-blue 0% 0% no-repeat padding-box;
-      border: 1px solid #e1e1f2;
+      border: 1px solid $c-gray-87;
       border-radius: 100px;
       opacity: 1;
       display: flex;
@@ -150,13 +150,13 @@
     line-height: normal;
     letter-spacing: 0.32px;
     text-align: left;
-    color: #9eaeb8;
+    color: $primary-gray;
   }
   .rating__comment {
     padding: 20px;
     border-radius: 5px;
-    border: solid 1px #ced5d9;
-    background-color: #fff;
+    border: solid 1px $c-gray-81;
+    background-color: $white;
     width: 515px;
     height: 132px;
     overflow-y: auto;
@@ -219,8 +219,8 @@
     word-break: break-all;
     letter-spacing: 0.72px;
     text-align: left;
-    // color: #002046;
-    color: #fff;
+    // color: $dark-blue;
+    color: $white;
   }
   .userImage {
     display: flex;
@@ -254,7 +254,7 @@
   font-style: normal;
   line-height: normal;
   letter-spacing: 0.72px;
-  color: #002046;
+  color: $dark-blue;
 }
 .noChat {
   height: calc(100% - 124px);
@@ -285,7 +285,7 @@
     line-height: normal;
     letter-spacing: 0.96px;
     text-align: left;
-    color: #002046;
+    color: $dark-blue;
   }
   &__description {
     font-size: 12px;
@@ -295,13 +295,13 @@
     line-height: normal;
     letter-spacing: 0.72px;
     text-align: left;
-    color: #c5c5c5;
+    color: $c-gray-77;
   }
 }
 .chatRecieve {
   height: 62px;
   width: 100%;
-  background: #ffffff;
+  background: $white;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
@@ -325,14 +325,14 @@
 .whatsAppRule {
   height: 62px;
   width: 100%;
-  background: #ffffff;
+  background: $white;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font: normal normal normal 14px/19px Roboto;
   letter-spacing: 0.84px;
-  color: #fb3d4e;
+  color: $closed;
 }
 
 .message-field-input {
@@ -362,7 +362,7 @@
 :host ::ng-deep .mat-slide-toggle.mat-checked {
   .mat-slide-toggle-thumb-container {
     .mat-slide-toggle-thumb {
-      background-color: white;
+      background-color: $white;
     }
   }
 }
@@ -395,7 +395,7 @@
     height: 367px;
     margin: 15px 7px 5px 12px;
     padding: 20px 0 20px 25px;
-    background-color: #f4f5f7;
+    background-color: $c-gray-103;
     overflow-y: auto;
     &::-webkit-scrollbar {
       width: 13px;
@@ -559,7 +559,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f4f5f7;
+  background-color: $c-gray-103;
   padding: 20px 15px;
 }
 .txt {
@@ -570,7 +570,7 @@
   line-height: normal;
   letter-spacing: 0.96px;
   text-align: left;
-  color: #002046;
+  color: $dark-blue;
 }
 
 .click {
@@ -586,21 +586,21 @@
 }
 
 .border {
-  border: 1px solid #ced5d9;
+  border: 1px solid $c-gray-81;
 }
 
 .assignee-dropdown {
   width: 140px;
   padding: 8px 10px;
   border-radius: 5px;
-  border: solid 1px #d9d9d9;
+  border: solid 1px $light-grey;
 }
 
 .guest-info-enable {
   position: absolute;
   right: 0;
   top: 61px;
-  background: #ffffff;
+  background: $white;
   width: 23%;
   max-width: 259px;
   border-radius: 5px;
@@ -637,7 +637,7 @@
     line-height: normal;
     letter-spacing: 0.72px;
     text-align: left;
-    color: #000000;
+    color: $c-black;
   }
   .userImage {
     display: flex;

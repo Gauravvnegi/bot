@@ -166,7 +166,7 @@
   color: $comparison-positive;
 }
 :host ::ng-deep .mat-select-value-text {
-  white-space: nowrap;
+  $white-space: nowrap;
   overflow: hidden;
   width: 46px;
   height: 19px;
@@ -179,6 +179,6 @@
   line-height: 1.07;
   letter-spacing: 0.84px;
   text-align: left;
-  color: #00162b;
+  color: $dark-blue2;
   text-overflow: ellipsis;
 }

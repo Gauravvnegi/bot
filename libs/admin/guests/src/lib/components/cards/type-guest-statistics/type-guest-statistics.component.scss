@@ -28,7 +28,7 @@
   text-align: left;
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0.72px;
-  color: #c6f0ef;
+  color: $stat-legend-title;
 }
 .status-right {
   display: flex;
@@ -102,7 +102,7 @@
 
 .labl > .image {
   height: 38px;
-  width:38px;
+  width: 38px;
   display: flex;
   align-items: center;
   justify-content: center;

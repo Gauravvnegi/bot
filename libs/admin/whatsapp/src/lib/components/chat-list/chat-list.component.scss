@@ -1,15 +1,16 @@
+@import 'main';
 .showFilter {
   height: 100%;
-  background: #ffffff;
+  background: $white;
 }
 
 .chatlist-wrapper {
   height: 100%;
-  background: #ffffff;
+  background: $white;
   .search-filter-wrapper {
     height: 62px;
     padding: 10px 15px;
-    border-bottom: 1px solid #9eaeb8;
+    border-bottom: 1px solid $primary-gray;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -61,7 +62,7 @@
             line-height: normal;
             letter-spacing: 0.6px;
             text-align: left;
-            color: #99a6b5;
+            color: $c-gray-61;
           }
           .time {
             font-family: Roboto;
@@ -84,7 +85,7 @@
           font-style: normal;
           line-height: normal;
           letter-spacing: 0.72px;
-          color: #002046;
+          color: $dark-blue;
           &-about {
             display: flex;
             justify-content: space-between;
@@ -98,9 +99,9 @@
           font-style: normal;
           line-height: normal;
           letter-spacing: 0.72px;
-          color: #002046;
+          color: $dark-blue;
           text-overflow: ellipsis;
-          white-space: nowrap;
+          $white-space: nowrap;
           overflow: hidden;
           max-width: 150px;
         }
@@ -139,7 +140,7 @@
       line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
-      color: #002046;
+      color: $dark-blue;
     }
     &__description {
       font-size: 12px;
@@ -149,7 +150,7 @@
       line-height: normal;
       letter-spacing: 0.72px;
       text-align: left;
-      color: #c5c5c5;
+      color: $c-gray-77;
     }
   }
 }
@@ -165,7 +166,7 @@
   &::placeholder {
     font: normal normal normal 12px/16px Roboto;
     letter-spacing: 0.48px;
-    color: #9eaeb8;
+    color: $primary-gray;
     opacity: 1;
   }
 }

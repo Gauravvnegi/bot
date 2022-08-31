@@ -4,7 +4,7 @@
   // display: none;
   content: 'FIRST';
   font-size: 15px;
-  color: #7e7e7e;
+  color: $c-gray-47;
   font-weight: 700;
   font-family: 'system-ui';
   margin: 10px;
@@ -14,7 +14,7 @@
   // display: none;
   content: 'LAST';
   font-size: 15px;
-  color: #7e7e7e;
+  color: $c-gray-47;
   font-family: 'system-ui';
   margin: 10px;
 
@@ -30,7 +30,7 @@
 }
 
 :host ::ng-deep .table-data-head {
-  background-color: #eaf0f6 !important;
+  background-color: $c-gray-93 !important;
   color: black !important;
   font-size: 14px;
   border-bottom: 0 !important;
@@ -59,7 +59,7 @@
 }
 
 :host ::ng-deep .table-search-head {
-  background-color: #eaf0f6 !important;
+  background-color: $c-gray-93 !important;
   border-top: 0 !important;
   border-bottom: 0 !important;
   input {
@@ -95,7 +95,7 @@
 }
 .databaseActionLabel {
   width: 5%;
-  background-color: #eaf0f6;
+  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
@@ -114,7 +114,7 @@
   }
   .selected {
     font-size: 20px;
-    color: #7e7e7e;
+    color: $c-gray-47;
     font-style: italic;
     margin-bottom: 0;
     margin-left: 3%;
@@ -132,7 +132,7 @@
         height: auto;
         width: auto;
         path {
-          fill: #959ea7;
+          fill: $default;
         }
         &:hover {
           cursor: pointer;
@@ -150,12 +150,12 @@
     display: flex;
     align-items: center;
     padding: 5px;
-    border: 2px solid #d9d9d9;
+    border: 2px solid $light-grey;
     border-radius: 5px;
 
     .divider {
       height: 20px;
-      border: 1px solid #d9d9d9;
+      border: 1px solid $light-grey;
       margin: 0px 15px;
     }
   }
@@ -170,7 +170,7 @@
     margin-left: 10px;
     &:hover {
       background-color: $primary-purple;
-      color: white;
+      color: $white;
       cursor: pointer;
     }
     .material-icons {
@@ -180,7 +180,7 @@
     }
   }
   .reset-link {
-    color: #5391d4;
+    color: $reset-link;
     font-size: 14px;
     font-weight: 700;
   }
@@ -203,7 +203,7 @@
 
 :host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background-color: $primary-purple;
-  color: white;
+  color: $white;
   height: 2rem;
   min-width: 2rem;
 }
@@ -220,21 +220,21 @@
   &--buttons {
     display: flex;
     align-items: center;
-    background-color: white;
+    background-color: $white;
     padding: 10px;
 
     .filter {
       padding: 4px 15px;
-      border: 1px solid white;
-      background-color: #f7f7f7;
+      border: 1px solid $white;
+      background-color: $progress-bar-messages-base;
       border-radius: 20px;
       outline: none;
       font-size: 14px;
-      color: #7e7e7e;
+      color: $c-gray-47;
       &:hover {
         cursor: pointer;
-        background-color: #7e7e7e;
-        color: white;
+        background-color: $c-gray-47;
+        color: $white;
       }
     }
     .button__wrapper {
@@ -243,16 +243,16 @@
       justify-content: space-between;
       width: 100%;
       .p-button {
-        background-color: #f7f7f7;
+        background-color: $progress-bar-messages-base;
         padding: 6px 15px;
         margin-left: 15px;
         font-size: 14px;
-        color: #7e7e7e;
-        border: 1px solid white;
+        color: $c-gray-47;
+        border: 1px solid $white;
         border-radius: 20px;
         &:hover {
-          background-color: #7e7e7e;
-          color: white;
+          background-color: $c-gray-47;
+          color: $white;
           cursor: pointer;
         }
       }
@@ -284,7 +284,7 @@
     width: 90%;
     bottom: -12px;
     font-size: 12px;
-    background-color: white;
+    background-color: $white;
     left: 5%;
     box-shadow: 0px 0px 5px 0px lightgray;
     border-radius: 5px;
@@ -302,12 +302,12 @@
 }
 
 :host ::ng-deep .p-checkbox .p-checkbox-box {
-  border-color: #d9d9d9;
+  border-color: $light-grey;
 }
 
 :host ::ng-deep .mat-chip-list-wrapper {
   overflow: auto;
-  white-space: nowrap;
+  $white-space: nowrap;
 
   overflow-x: scroll;
   width: 68vw;
@@ -427,7 +427,7 @@
   // display: none;
   content: 'NEXT';
   font-size: 15px;
-  color: #7e7e7e;
+  color: $c-gray-47;
   font-family: 'system-ui';
 
   font-weight: 700;
@@ -443,7 +443,7 @@
   // display: none;
   content: 'PREVIOUS';
   font-size: 15px;
-  color: #7e7e7e;
+  color: $c-gray-47;
   font-family: 'system-ui';
   margin: 10px;
 
@@ -460,7 +460,7 @@
 
 :host ::ng-deep td,
 th {
-  white-space: break-spaces !important;
+  $white-space: break-spaces !important;
   overflow: inherit !important;
   @media screen and (max-width: 800px) {
     padding: 0 5px !important;
@@ -469,11 +469,11 @@ th {
 
 :host ::ng-deep .mat-chip {
   border: 1px solid !important;
-  // background-color: white !important;
+  // background-color: $white !important;
   display: inline-block;
   text-align: center;
   font-weight: 400;
-  background-color: white;
+  background-color: $white;
   &:hover {
     cursor: pointer;
   }
@@ -485,7 +485,7 @@ th {
 }
 
 :host ::ng-deep .chipSelected {
-  color: white !important;
+  color: $white !important;
   font-weight: 400;
 }
 
@@ -529,7 +529,7 @@ th {
 }
 
 :host ::ng-deep .details_wrapper {
-  background-color: white;
+  background-color: $white;
   max-height: 85vh;
   @media screen and (max-width: 1100px) {
     height: 85vh;
@@ -544,11 +544,11 @@ th {
     top: 100%;
     right: -35%;
     font-size: 12px;
-    background: #fff;
+    background: $white;
     padding: 7px;
     line-height: 1;
     box-shadow: 0 0 8px 0 rgb(0 0 0 / 30%);
-    color: #727272;
+    color: $c-gray-45;
     display: none;
     min-width: 100px;
     text-align: center;
@@ -563,7 +563,7 @@ th {
       height: 0;
       border-left: 7px solid transparent;
       border-right: 7px solid transparent;
-      border-top: 10px solid #ffffff;
+      border-top: 10px solid $white;
       transform: rotate(54deg);
     }
   }

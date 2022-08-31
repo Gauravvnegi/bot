@@ -60,7 +60,6 @@
     height: 512px;
     margin-top: 10px;
     .progress_bar_data {
-      // width: 25%;
       .progess_bars {
         width: 100%;
         height: 100%;
@@ -77,9 +76,6 @@
               display: block;
               opacity: 1 !important;
             }
-            // .progress {
-            //   opacity: 0.5;
-            // }
           }
           .progress {
             width: 100%;
@@ -101,7 +97,7 @@
                 z-index: 2;
                 border-radius: 4px;
                 box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.27);
-                background-color: #fff;
+                background-color: $white;
                 padding: 10px;
                 .journey {
                   font: normal normal bold 16px/19px Roboto;

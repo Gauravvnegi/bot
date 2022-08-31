@@ -2,7 +2,7 @@
 
 .wrapper {
   padding: $padding20;
-  background-color: white;
+  background-color: $white;
   margin: $margin20 0px;
   border-radius: 5px;
   &-header {
@@ -98,7 +98,7 @@
         background-color: #414ce8;
         opacity: 0.85;
         outline: none;
-        color: white;
+        color: $white;
         font-size: $font14;
         margin: 0 15px;
         border: none;

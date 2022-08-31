@@ -1,3 +1,4 @@
+@import 'main';
 .container {
   height: max-content;
 }
@@ -15,7 +16,7 @@
     line-height: normal;
     letter-spacing: 1.5px;
     text-align: left;
-    color: #002046;
+    color: $dark-blue;
   }
 }
 
@@ -68,13 +69,13 @@
     margin: 0px 37px 32px 38px;
     border-radius: 23px;
     box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
-    border: solid 1px #4b56c0;
+    border: solid 1px $button-blue;
     font-family: Roboto;
     font-size: 16px;
     font-weight: 500;
     letter-spacing: 0.96px;
-    color: #4b56c0;
-    background-color: #fff;
+    color: $button-blue;
+    background-color: $white;
     justify-content: center;
     cursor: pointer;
   }

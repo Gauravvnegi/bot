@@ -2,8 +2,8 @@
 
 .sentAnalytics {
   width: 100%;
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border: 1px solid #e2e2e2;
+  background: 0% 0% no-repeat padding-box #ffffff;
+  border: 1px solid $c-gray-89;
   border-radius: 5px;
   padding: 20px;
   opacity: 1;
@@ -27,7 +27,7 @@
   &__total {
     font: normal normal bold 25px/30px Roboto;
     letter-spacing: 1.5px;
-    color: #002046;
+    color: $dark-blue;
     opacity: 1;
   }
   &__text {
@@ -58,7 +58,7 @@
   text-align: left;
   font: normal normal bold 25px/33px Roboto;
   letter-spacing: 1.5px;
-  color: #ffffff;
+  color: $white;
   opacity: 1;
 }
 
@@ -67,7 +67,7 @@
   text-align: left;
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0.72px;
-  color: #c6f0ef;
+  color: $stat-legend-title;
   opacity: 1;
 }
 
@@ -90,7 +90,7 @@
     display: none;
   }
   .text-white {
-    color: white;
+    color: $white;
   }
   @media screen and (max-width: 1070px) {
     padding: 5px;

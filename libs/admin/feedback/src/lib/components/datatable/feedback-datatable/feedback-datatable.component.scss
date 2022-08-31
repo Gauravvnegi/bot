@@ -37,7 +37,7 @@
     position: absolute;
     height: 2px;
     width: 72%;
-    background-color: #edf1f5;
+    background-color: $alice-blue;
     right: 17px;
     @media screen and (max-width: 800px) {
       width: 62%;
@@ -177,7 +177,7 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: #eaf0f6;
+  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
@@ -369,7 +369,7 @@
   width: 124px;
   height: 36px;
   border-radius: 100px;
-  border: solid 1px #e1e1f2;
+  border: solid 1px $c-gray-87;
   background-color: #f6f6fc;
   align-items: center;
   display: flex;
@@ -533,7 +533,7 @@
 }
 
 .service-list-popup {
-  border: 1px solid #e1e1f2;
+  border: 1px solid $c-gray-87;
   border-radius: 12px;
   padding: 5px;
   z-index: 1;
@@ -613,9 +613,9 @@
   width: fit-content;
   border-radius: 24px;
   font-size: 14px;
-  border: solid 1px #4b56c0;
-  background-color: white;
+  border: solid 1px $button-blue;
+  background-color: $white;
   padding: 4px 10px;
-  color: #4b56c0;
+  color: $button-blue;
   cursor: pointer;
 }

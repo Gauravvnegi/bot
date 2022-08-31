@@ -1,7 +1,7 @@
 @import 'main';
 
 :host ::ng-deep .mat-tab-label {
-  color: #b5b5c3;
+  color: $mat-tab-label;
   font-size: $font14;
 }
 
@@ -261,7 +261,7 @@
 }
 :host ::ng-deep .mat-select-panel:not([class*='mat-elevation-z']) {
   margin: 30px 0 0 15px !important;
-  height: 80px!important;
+  height: 80px !important;
 }
 
 :host ::ng-deep .p-dropdown {
@@ -672,13 +672,12 @@
 :host ::ng-deep .item {
   color: $primary-purple !important;
 }
-.flx{
+.flx {
   display: flex;
-        align-items: center;
-        
+  align-items: center;
 }
-.flxExt{
+.flxExt {
   @extend .flx;
   margin: 15px 0;
-        padding: 0 30px 20px;
+  padding: 0 30px 20px;
 }

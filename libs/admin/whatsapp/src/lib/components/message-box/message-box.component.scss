@@ -1,7 +1,9 @@
+@import 'main';
+
 .chatRecieve {
   height: 124px;
   width: 100%;
-  background: #ffffff;
+  background: $white;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
@@ -38,12 +40,12 @@
 .whatsAppRule {
   height: 62px;
   width: 100%;
-  background: #ffffff;
+  background: $white;
   padding: 10px 20px;
   display: flex !important;
   justify-content: space-between;
   align-items: center;
   font: normal normal normal 14px/19px Roboto;
   letter-spacing: 0.84px;
-  color: #fb3d4e;
+  color: $closed;
 }

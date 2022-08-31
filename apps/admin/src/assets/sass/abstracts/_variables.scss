@@ -1,5 +1,3 @@
-// color-variables
-
 $auth-color: #4b56c0;
 $quote-color: #6d7580;
 $primary-purple: #4b56c0;
@@ -14,23 +12,21 @@ $initiated: #6bacf8;
 $reject: #f00d2a;
 $completed: #53b33e;
 $light-gray: #e0e0e0;
-$medium-gay: #b8bbbe;
+$medium-gray: #b8bbbe;
 $manually-contacts: #707070;
-// $completed1: #2cf708;
 $pending: #c2c2c2;
 $default: #959ea7;
 $dark-blue: #002046;
 $dark-blue2: #00162b;
 $white: #ffffff;
 $button-blue: #4b56c0;
-$auth-gray: #555;
+$auth-gray: #555555;
 $note: #9ea3aa;
 $note1: #8995a3;
 $black: #000;
 $tooltip: #484848;
 $warning: #f6b155;
 $dark-warning: #fc9d03;
-// $warning1: #f7910b;
 $approved: #2f1dce;
 $btn-shadow: #4b56c04d;
 $box-shadow: #0000000d;
@@ -50,14 +46,18 @@ $arrival-time: #b2b7bc;
 $accordian-background: #e8eef5;
 
 // grey palet
-$c-white: $white;
-$c-gray-99: #f5f6fa;
+$c-white: white;
+$c-gray-105: #f5f6fa;
+$c-gray-103: #f4f5f7;
 $c-gray-98: #f3f3f3;
 $c-gray-95: #ededed;
-$c-gray-92: #eaf0f6;
+$c-gray-94: #eaf3fa;
+$c-gray-93: #eaf0f6;
+$c-gray-92: #e4e4e4;
 $c-gray-91: #e5e9f2;
 $c-gray-90: #e3e3e3;
 $c-gray-89: #e2e2e2;
+$c-gray-88: #e1e1f8;
 $c-gray-87: #e1e1f2;
 $c-gray-85: #d9d9d9;
 $c-gray-82: #d3d3d3;
@@ -69,15 +69,20 @@ $c-gray-74: #b8bbbe;
 $c-gray-72: #b4b4b4;
 $c-gray-71: #b2b7bc;
 $c-gray-70: #b0b0b0;
+$c-gray-65: #a3a3a3;
 $c-gray-61: #99a6b5;
 $c-gray-60: #999999;
 $c-gray-55: #909090;
+$c-gray-53: #868686;
 $c-gray-50: #808080;
 $c-gray-47: #7e7e7e;
+$c-gray-46: #737679;
 $c-gray-45: #727272;
 $c-gray-40: #696969;
 $c-gray-30: #4d4d4d;
 $c-gray-20: #363636;
+$c-gray-18: #3b3b3b;
+$c-gray-17: #262626;
 $c-gray-15: #222222;
 $c-gray-10: #171717;
 $c-black: #000000;
@@ -114,6 +119,13 @@ $normal-button-width: 15vw;
 $box-shadow-1: 0px 0px 6px $c-gray-71;
 $priority-high: #f8b633;
 $priority-asap: #ce0c0c;
+$mat-tab-label: #b5b5c3;
+$reset-link: #5391d4;
+$question: #545454;
+$stat-legend-bg: #f9fafa;
+$stat-legend-title: #c6f0ef;
+$receiver-chip-bg: #ccc7c7;
+$load-more: #0099ff;
 $palettes: (
   red: (
     600: #c6002b,

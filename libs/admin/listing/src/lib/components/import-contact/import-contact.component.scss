@@ -120,7 +120,7 @@
 
 .table-wrap {
   height: 30vh;
-  border-right: 2px solid #e8f3fe;
+  border-right: 2px solid $c-gray-93;
   overflow-y: auto;
   padding-bottom: $padding20;
 
@@ -140,7 +140,7 @@
   width: 160px;
   border: solid 1px $manually-contacts;
   border-radius: 4px;
-  color: #232323;
+  color: $black;
   padding: 11px 0 10px 0;
 }
 

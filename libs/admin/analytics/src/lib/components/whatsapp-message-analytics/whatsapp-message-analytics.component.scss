@@ -74,7 +74,7 @@
   .messageAnalytics {
     width: 40%;
     margin-right: 15px;
-    background: 0% 0% no-repeat padding-box #ffffff;
+    background: 0% 0% no-repeat padding-box $white;
     border: 1px solid $c-gray-89;
     border-radius: 5px;
     padding: 20px;
@@ -173,7 +173,7 @@
   }
   .sentAnalytics {
     width: 60%;
-    background: 0% 0% no-repeat padding-box #ffffff;
+    background: 0% 0% no-repeat padding-box $white;
     border: 1px solid $c-gray-89;
     border-radius: 5px;
     padding: 20px;
@@ -288,7 +288,7 @@
 //   text-align: right;
 //   font: normal normal bold 12px/16px Roboto;
 //   letter-spacing: 0.72px;
-//   color: #0239cf;
+//   color: $vip-stat-label;
 //   opacity: 1;
 // }
 

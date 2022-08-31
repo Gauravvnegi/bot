@@ -208,7 +208,7 @@
     line-height: normal;
     letter-spacing: 0.6px;
     text-align: right;
-    color: #c7c7c7;
+    color: $c-gray-78;
     margin-left: 3px;
   }
   .comment {
@@ -229,7 +229,7 @@
     padding: 8px;
     margin-right: 5px;
     border-radius: 100%;
-    background-color: greenyellow;
+    background-color: $greenyellow;
   }
 }
 
@@ -238,7 +238,7 @@
 }
 .scrollChat {
   height: calc(100% - 186px);
-  background: #f1f1f1;
+  background: $c-gray-98;
   overflow-y: auto;
   padding: 20px;
   position: relative;
@@ -258,7 +258,7 @@
 }
 .noChat {
   height: calc(100% - 124px);
-  background: #f1f1f1;
+  background: $c-gray-98;
   overflow-y: auto;
   padding: 20px;
   position: relative;
@@ -337,8 +337,8 @@
 
 .message-field-input {
   padding-left: 20px;
-  background: #f2f6f8 0% 0% no-repeat padding-box;
-  border: 1px solid #d5e0e6;
+  background: $c-gray-100 0% 0% no-repeat padding-box;
+  border: 1px solid $c-gray-84;
   border-radius: 20px;
   opacity: 1;
   height: 100%;
@@ -386,9 +386,9 @@
 
   &::-webkit-scrollbar-thumb {
     &:hover {
-      background: #8f8f8f;
+      background: $c-gray-53;
     }
-    background: #c3c2c2;
+    background: $c-gray-76;
     border-radius: 10px;
   }
   &__ratings {
@@ -409,9 +409,9 @@
 
     &::-webkit-scrollbar-thumb {
       &:hover {
-        background: #8f8f8f;
+        background: $c-gray-53;
       }
-      background: #c3c2c2;
+      background: $c-gray-76;
       border-radius: 10px;
     }
   }
@@ -623,7 +623,7 @@
     font-size: 10px;
     letter-spacing: 0.6px;
     text-align: right;
-    color: #c7c7c7;
+    color: $c-gray-78;
     padding: 0 10px;
   }
   .comment {
@@ -646,7 +646,7 @@
     padding: 8px 6px;
     border-radius: 100%;
     margin-left: 2px;
-    background-color: #feba1b;
+    background-color: $dark-warning;
   }
 }
 

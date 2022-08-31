@@ -311,7 +311,7 @@
       visibility: hidden;
       width: 120px;
       background-color: $white;
-      border: 1px solid #ccc;
+      border: 1px solid $c-gray-80;
       color: $black;
       text-align: center;
       border-radius: 6px;
@@ -329,7 +329,7 @@
         margin-left: -5px;
         border-width: 5px;
         border-style: solid;
-        border-color: #ccc transparent transparent transparent;
+        border-color: $c-gray-80 transparent transparent transparent;
       }
     }
 
@@ -370,7 +370,7 @@
   height: 36px;
   border-radius: 100px;
   border: solid 1px $c-gray-87;
-  background-color: #f6f6fc;
+  background-color: $c-gray-105;
   align-items: center;
   display: flex;
   justify-content: center;

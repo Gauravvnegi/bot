@@ -3,14 +3,14 @@
   width: 345px;
   height: 100%;
   opacity: 1;
-  border-right: 2px solid #f4f5f6;
+  border-right: 2px solid $c-gray-102;
   .header {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    border-bottom: 2px solid #f4f5f6;
+    border-bottom: 2px solid $c-gray-102;
     &__search {
       width: 289px;
     }
@@ -34,13 +34,13 @@
 
     &::-webkit-scrollbar-thumb {
       &:hover {
-        background: #8f8f8f;
+        background: $c-gray-53;
       }
-      background: #c3c2c2;
+      background: $c-gray-76;
       border-radius: 10px;
     }
     .item {
-      border-bottom: 1px solid #f4f5f6;
+      border-bottom: 1px solid $c-gray-102;
       padding: 10px;
       display: flex;
       cursor: pointer;
@@ -99,7 +99,7 @@
           letter-spacing: 0.66px;
           text-align: center;
           border-radius: 20px;
-          background-color: #fdf4e5;
+          background-color: $c-gray-105;
           padding: 4px 10px;
           display: flex;
           gap: 7px;
@@ -168,7 +168,7 @@
     color: $primary-purple;
   }
   .mat-tab-header {
-    border-bottom: 2px solid #f4f5f6 !important;
+    border-bottom: 2px solid $c-gray-102 !important;
   }
 }
 

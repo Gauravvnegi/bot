@@ -8,7 +8,7 @@
 
   .nickname {
     padding: 8px 6px;
-    background-color: #feba1b;
+    background-color: $dark-warning;
     border-radius: 100%;
     display: flex;
     justify-content: center;
@@ -34,7 +34,7 @@
     margin: 0 17px 0 0;
     padding: 13px 20px;
     border-radius: 21px;
-    border: solid 1px #d5e0e6;
+    border: solid 1px $c-gray-84;
     background-color: $white;
     outline: none;
   }

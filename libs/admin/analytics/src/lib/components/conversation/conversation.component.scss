@@ -155,7 +155,7 @@
     &__dot {
       width: 14px;
       height: 14px;
-      background: #31bb92 0% 0% no-repeat padding-box;
+      background: $received-dot 0% 0% no-repeat padding-box;
       border-radius: 2px;
     }
     &__count {
@@ -187,7 +187,7 @@
       &__dot {
         width: 14px;
         height: 14px;
-        background: #ffec8c 0% 0% no-repeat padding-box;
+        background: $no-received 0% 0% no-repeat padding-box;
         border-radius: 2px;
       }
       &__count {

@@ -22,7 +22,7 @@
     &__item {
       width: calc(25% - 7.5px);
       padding: 20px 15px 25px 15px;
-      background: 0% 0% no-repeat padding-box #ffffff;
+      background: 0% 0% no-repeat padding-box $white;
       box-shadow: 0px 3px 6px $progress-bar-messages;
       border-radius: 5px;
       display: flex;
@@ -31,21 +31,21 @@
     }
     &__first {
       padding: 20px 15px 25px 15px;
-      background: 0% 0% no-repeat padding-box #ffffff;
+      background: 0% 0% no-repeat padding-box $white;
       box-shadow: 0px 3px 6px $progress-bar-messages;
       border-radius: 5px;
       width: 50%;
     }
     &__first {
       padding: 20px 15px 25px 15px;
-      background: 0% 0% no-repeat padding-box #ffffff;
+      background: 0% 0% no-repeat padding-box $white;
       box-shadow: 0px 3px 6px $progress-bar-messages;
       border-radius: 5px;
       width: 50%;
     }
     &__first {
       padding: 20px 15px 25px 15px;
-      background: 0% 0% no-repeat padding-box #ffffff;
+      background: 0% 0% no-repeat padding-box $white;
       box-shadow: 0px 3px 6px $progress-bar-messages;
       border-radius: 5px;
       width: 50%;
@@ -221,7 +221,7 @@
   gap: 15px;
   &__item {
     padding: 20px 15px 25px 15px;
-    background: 0% 0% no-repeat padding-box #ffffff;
+    background: 0% 0% no-repeat padding-box $white;
     box-shadow: 0px 3px 6px $progress-bar-messages;
     border-radius: 5px;
     flex-grow: 1;

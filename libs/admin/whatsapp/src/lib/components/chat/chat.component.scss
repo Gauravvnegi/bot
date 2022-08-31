@@ -88,7 +88,7 @@
 
 .scrollChat {
   height: calc(100% - 186px);
-  background: #f1f1f1;
+  background: $c-gray-98;
   overflow-y: auto;
   padding: 20px;
   position: relative;
@@ -108,14 +108,14 @@
 }
 .noChat {
   height: calc(100% - 124px);
-  background: #f1f1f1;
+  background: $c-gray-98;
   overflow-y: auto;
   padding: 20px;
   position: relative;
 }
 .no-data {
   height: calc(100% - 124px);
-  background: #f1f1f1;
+  background: $c-gray-98;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -188,8 +188,8 @@
 
 .message-field-input {
   padding-left: 20px;
-  background: #f2f6f8 0% 0% no-repeat padding-box;
-  border: 1px solid #d5e0e6;
+  background: $c-gray-100 0% 0% no-repeat padding-box;
+  border: 1px solid $c-gray-84;
   border-radius: 20px;
   opacity: 1;
   height: 100%;
@@ -206,7 +206,7 @@
   border-radius: 10px 10px 0 10px;
   color: $white;
   box-shadow: 0 3px 6px 0 rgba(97, 115, 244, 0.05);
-  background-color: #6173f4;
+  background-color: $chat-background;
   &__text {
     font-family: Roboto;
     font-size: 12px;
@@ -263,7 +263,7 @@
   font-style: normal;
   line-height: normal;
   letter-spacing: 0.6px;
-  color: #c7c7c7;
+  color: $c-gray-78;
   padding-left: 10px;
   width: 60px;
 }

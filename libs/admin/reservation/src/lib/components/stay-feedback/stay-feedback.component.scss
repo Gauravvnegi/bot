@@ -192,7 +192,7 @@
 
 .header-seperator {
   height: 20px;
-  border: 1px solid #b8b8b8;
+  border: 1px solid $c-gray-74;
 }
 
 ::ng-deep .d-flex {
@@ -206,7 +206,7 @@
   padding: 0px 0px 0px 10px;
   border-radius: 6px;
   border: solid 1px $button-blue;
-  background-color: #ecf1f7;
+  background-color: $c-gray-93;
   display: flex;
   justify-content: left;
   align-items: center;

@@ -77,7 +77,7 @@
       text-align: center;
       mat-icon {
         cursor: pointer;
-        color: gray;
+        color: $gray;
         &:hover {
           color: $button-blue;
         }

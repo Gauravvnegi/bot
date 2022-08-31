@@ -21,7 +21,7 @@
       height: 100%;
       width: 100%;
       opacity: 0.3;
-      background-color: black;
+      background-color: $black;
       z-index: 4;
       display: none;
     }
@@ -90,7 +90,7 @@
     height: 100%;
     width: 100%;
     opacity: 0.3;
-    background-color: black;
+    background-color: $black;
     z-index: 4;
     display: none;
   }

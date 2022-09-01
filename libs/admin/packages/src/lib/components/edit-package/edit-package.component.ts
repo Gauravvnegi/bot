@@ -105,6 +105,9 @@ export class EditPackageComponent implements OnInit, OnDestroy {
     this.packageForm.get('rate').enable();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -114,20 +117,12 @@ export class EditPackageComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
         ];
 
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getConfig();
         this.getCategoriesList(this.hotelId);
         this.getPackageId();
       })
     );
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   getPackageId(): void {
@@ -233,7 +228,15 @@ export class EditPackageComponent implements OnInit, OnDestroy {
           this.isSavingPackage = false;
         },
         ({ error }) => {
-          this.snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.isSavingPackage = false;
         }
       )
@@ -259,7 +262,15 @@ export class EditPackageComponent implements OnInit, OnDestroy {
           );
         },
         ({ error }) => {
-          this.snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -297,7 +308,15 @@ export class EditPackageComponent implements OnInit, OnDestroy {
             this.isSavingPackage = false;
           },
           ({ error }) => {
-            this.snackbarService.openSnackBarAsText(error.message);
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
             this.isSavingPackage = false;
           }
         )

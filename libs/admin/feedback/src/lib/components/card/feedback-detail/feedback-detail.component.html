@@ -37,7 +37,7 @@
         BNO:{{ feedback?.feedback.guestData.bookingNo }}
       </div>
       <div>{{ feedback?.getTableOrRoomNo(feedbackType) }}</div>
-      <div>{{ feedback.getCreatedDate(_globalFilterService.timezone) }}</div>
+      <div>{{ feedback.getCreatedDate(globalFilterService.timezone) }}</div>
       <div class="feedback">
         <div class="feedback-service">
           <div class="feedback-service__container">
@@ -173,7 +173,7 @@
         "
       >
         <div class="time">
-          {{ feedback.getTime(_globalFilterService.timezone) }}
+          {{ feedback.getTime(globalFilterService.timezone) }}
         </div>
         <div class="comment">
           {{ feedback?.feedback.comments }}
@@ -192,7 +192,7 @@
               {{ remark.remarks }}
             </div>
             <div class="time">
-              {{ remark.getTime(_globalFilterService.timezone) }}
+              {{ remark.getTime(globalFilterService.timezone) }}
             </div>
           </div>
         </div>

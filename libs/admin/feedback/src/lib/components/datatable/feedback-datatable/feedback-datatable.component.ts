@@ -80,8 +80,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   constructor(
     public fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,
-    protected _globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
     protected tabFilterService: TableService,
@@ -154,12 +154,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getOutlets(data['filter'].value.property.branchName);
         const feedbackType = data['filter'].value.feedback.feedbackType;
 
@@ -251,18 +251,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         (branch) => branch['id'] === branchId
       ),
     ];
-  }
-
-  /**
-   * @function getHotelId To get hotel id from the filter data.
-   * @param globalQueries The filter list data.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   /**
@@ -427,7 +415,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     const id = event.id;
     this.tableService.updateFeedbackState(id, data).subscribe(
       (response) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'Status Updated Successfully.',
@@ -447,10 +435,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         ]);
       },
       ({ error }) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
-              translateKey: error.message,
+              translateKey: `messages.error.${error?.type}`,
               priorityMessage: error.message,
             },
             ''
@@ -577,7 +565,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   updateFeedbackStatus(status: boolean): void {
     if (!this.selectedRows.length) {
-      this._snackbarService.openSnackBarAsText(
+      this.snackbarService.openSnackBarAsText(
         this._translateService.instant(
           'messages.validation.select_record_status',
           { status: status ? 'read' : 'unread' }
@@ -606,7 +594,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.tableService.updateFeedbackStatus(config, reqData).subscribe(
         (response) => {
           this.statisticService.markReadStatusChanged.next(true);
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.success.feedback_status_updated',
@@ -719,7 +707,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param error The error object from api.
    */
   showErrorMessage(error): void {
-    this._snackbarService
+    this.snackbarService
       .openSnackBarWithTranslate(
         {
           translateKey: 'messages.error.some_thing_wrong',

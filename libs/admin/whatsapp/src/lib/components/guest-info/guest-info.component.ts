@@ -59,8 +59,8 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private modalService: ModalService,
     private messageService: MessageService,
-    private _globalFilterService: GlobalFilterService,
-    private snackBarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService
   ) {}
 
@@ -83,7 +83,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
         .subscribe((response) => {
           this.guestData = new Contact().deserialize(
             response.receiver,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           );
           if (this.guestData.reservationId) this.getRequestList();
           else this.requestList = [];
@@ -92,13 +92,13 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
       })
     );
   }
@@ -108,15 +108,6 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
       if (response) {
         this.getGuestInfo();
         this.messageService.refreshData$.next(false);
-      }
-    });
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-        this.getGuestInfo();
       }
     });
   }
@@ -137,7 +128,16 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           this.guestId = this.requestList[0].guestDetails?.primaryGuest?.id;
           this.loadGuestReservations();
         },
-        ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -152,7 +152,15 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           );
         },
         ({ error }) => {
-          this.snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -217,7 +225,15 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
                     this.messageService.refreshData$.next(true);
                   },
                   ({ error }) =>
-                    this.snackBarService.openSnackBarAsText(error.message)
+                    this.snackbarService
+                      .openSnackBarWithTranslate(
+                        {
+                          translateKey: `messages.error.${error?.type}`,
+                          priorityMessage: error?.message,
+                        },
+                        ''
+                      )
+                      .subscribe()
                 )
             );
           }

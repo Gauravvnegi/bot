@@ -23,16 +23,16 @@ export class FeedbackNotificationComponent extends NotificationComponent
     protected _fb: FormBuilder,
     protected _location: Location,
     protected requestService: RequestService,
-    protected _snackbarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     protected route: ActivatedRoute,
     protected _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService
   ) {
     super(
       _fb,
       _location,
       requestService,
-      _snackbarService,
+      snackbarService,
       route,
       _adminUtilityService
     );
@@ -46,28 +46,17 @@ export class FeedbackNotificationComponent extends NotificationComponent
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+        this.hotelId = this.globalFilterService.hotelId;
         //fetch-api for records
       })
     );
-  }
-
-  getHotelId(globalQueries): void {
-    //todo
-
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-        this.getConfigData(this.hotelId);
-      }
-    });
   }
 
   getConfigData(hotelId): void {
@@ -119,7 +108,16 @@ export class FeedbackNotificationComponent extends NotificationComponent
                   ? this.modifyTemplate(response.template)
                   : response.template
               ),
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }
@@ -134,12 +132,12 @@ export class FeedbackNotificationComponent extends NotificationComponent
       this.notificationForm.get('channel').value === 'email' &&
       this.emailIds.value.length === 0
     ) {
-      this._snackbarService.openSnackBarAsText('Please enter an email');
+      this.snackbarService.openSnackBarAsText('Please enter an email');
       return;
     }
 
     if (validation.length) {
-      this._snackbarService.openSnackBarAsText(validation[0].data.message);
+      this.snackbarService.openSnackBarAsText(validation[0].data.message);
       return;
     }
     const data = this.notificationForm.getRawValue();
@@ -158,14 +156,22 @@ export class FeedbackNotificationComponent extends NotificationComponent
         .subscribe(
           (res) => {
             this.isSending = false;
-            this._snackbarService.openSnackBarAsText('Notification sent.', '', {
+            this.snackbarService.openSnackBarAsText('Notification sent.', '', {
               panelClass: 'success',
             });
             this.closeModal();
           },
           ({ error }) => {
             this.isSending = false;
-            this._snackbarService.openSnackBarAsText(error.message);
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
           }
         )
     );

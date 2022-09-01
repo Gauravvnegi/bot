@@ -52,7 +52,7 @@ export class EditUserPermissionComponent implements OnInit {
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
     private _managePermissionService: ManagePermissionService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private _route: ActivatedRoute,
     private _location: Location,
     private _router: Router
@@ -175,7 +175,7 @@ export class EditUserPermissionComponent implements OnInit {
 
   savePermission() {
     if (!this.userForm.valid) {
-      this._snackbarService.openSnackBarAsText('Invalid Form');
+      this.snackbarService.openSnackBarAsText('Invalid Form');
       return;
     }
     const formValue = this.userForm.getRawValue();
@@ -212,7 +212,7 @@ export class EditUserPermissionComponent implements OnInit {
       })
       .subscribe(
         (res) => {
-          this._snackbarService.openSnackBarAsText(
+          this.snackbarService.openSnackBarAsText(
             'User Permission edited sucessfull.',
             '',
             { panelClass: 'success' }
@@ -220,7 +220,15 @@ export class EditUserPermissionComponent implements OnInit {
           this.isUpdatingPermissions = false;
         },
         (error) => {
-          this._snackbarService.openSnackBarAsText(error.error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.isUpdatingPermissions = false;
         }
       );

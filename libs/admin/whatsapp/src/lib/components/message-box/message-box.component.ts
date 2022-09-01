@@ -25,7 +25,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
   @Input() hotelId;
   $subscription = new Subscription();
   constructor(
-    private snackBarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private messageService: MessageService,
     private dateService: DateService
   ) {}
@@ -35,13 +35,13 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
   sendMessage(): void {
     if (this.chatFG.invalid) {
       this.chatFG.markAsTouched();
-      this.snackBarService.openSnackBarAsText('Please enter a message');
+      this.snackbarService.openSnackBarAsText('Please enter a message');
       return;
     }
     if (
       !this.chatList.receiver[this.selectedChat.receiverId]?.checkEnableSend()
     ) {
-      this.snackBarService
+      this.snackbarService
         .openSnackBarAsText(`As per WhatsApp's rules, you can only respond to a user within 24 hours of
       their messages.`);
     }
@@ -67,7 +67,16 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
             update: true,
           });
         },
-        ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

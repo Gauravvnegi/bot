@@ -49,8 +49,8 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
     private dateService: DateService,
     private analyticService: AnalyticsService
   ) {}
@@ -65,14 +65,17 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;
@@ -80,17 +83,9 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
       })
     );
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   initFG(): void {
@@ -115,7 +110,16 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
             res,
             'Message_Analytics_export_' + new Date().getTime() + '.csv'
           ),
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

@@ -45,8 +45,8 @@ export class RequestsTableComponent extends BaseDatatableComponent {
     public fb: FormBuilder,
     private _reservationService: ReservationService,
     private _adminUtilityService: AdminUtilityService,
-    private _snackbarService: SnackBarService,
-    private _globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
     private _router: Router,
     private _route: ActivatedRoute,
     protected tabFilterService: TableService
@@ -77,7 +77,15 @@ export class RequestsTableComponent extends BaseDatatableComponent {
       },
       ({ error }) => {
         this.loading = false;
-        this._snackbarService.openSnackBarAsText(error.message);
+        this.snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: `messages.error.${error?.type}`,
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe();
       }
     );
   }
@@ -116,7 +124,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
             return row;
           });
 
-          this._snackbarService.openSnackBarAsText(
+          this.snackbarService.openSnackBarAsText(
             'Request updated successfully',
             '',
             {
@@ -125,7 +133,15 @@ export class RequestsTableComponent extends BaseDatatableComponent {
           );
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       );
   }

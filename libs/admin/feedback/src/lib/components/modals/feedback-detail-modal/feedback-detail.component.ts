@@ -64,12 +64,12 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   num = card.num;
   constructor(
     protected cardService: CardService,
-    public _globalFilterService: GlobalFilterService,
+    public globalFilterService: GlobalFilterService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     protected userService: UserService,
     protected _adminUtilityService: AdminUtilityService,
     protected tableService: FeedbackTableService,
-    protected _snackbarService: SnackBarService
+    protected snackbarService: SnackBarService
   ) {
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
@@ -125,7 +125,16 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
             `Feedback_export_${new Date().getTime()}.csv`
           );
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -138,7 +147,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
       .updateFeedbackState(this.data.feedback.departmentId, data)
       .subscribe(
         (response) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'Status Updated Successfully.',
@@ -154,10 +163,10 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           this.refreshFeedbackData();
         },
         ({ error }) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
-                translateKey: error.message,
+                translateKey: `messages.error.${error?.type}`,
                 priorityMessage: error.message,
               },
               ''
@@ -175,7 +184,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
       .updateFeedbackState(this.data.feedback.departmentId, data)
       .subscribe(
         (response) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'Message sent.',
@@ -191,10 +200,10 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           this.refreshFeedbackData();
         },
         ({ error }) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
-                translateKey: error.message,
+                translateKey: `messages.error.${error?.type}`,
                 priorityMessage: error.message,
               },
               ''
@@ -284,7 +293,16 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           link.click();
           link.remove();
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -300,11 +318,20 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) => {
             this.cardService.$assigneeChange.next({ status: true });
-            this._snackbarService.openSnackBarAsText('Assignee updated.', '', {
+            this.snackbarService.openSnackBarAsText('Assignee updated.', '', {
               panelClass: 'success',
             });
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }

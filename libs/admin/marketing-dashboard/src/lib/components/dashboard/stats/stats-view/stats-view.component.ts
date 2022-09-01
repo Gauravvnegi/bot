@@ -30,7 +30,7 @@ export class StatsViewComponent implements OnInit, OnDestroy {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private marketingService: MarketingService,
-    protected _snackbarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     private dateService: DateService
   ) {}
 
@@ -57,26 +57,9 @@ export class StatsViewComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getMarketingCards();
       })
-    );
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries: any[]): void {
-    globalQueries.forEach(
-      (element: { hasOwnProperty: (arg0: string) => any; hotelId: any }) => {
-        if (element.hasOwnProperty('hotelId')) {
-          this.hotelId = element.hotelId;
-        }
-      }
     );
   }
 
@@ -92,7 +75,16 @@ export class StatsViewComponent implements OnInit, OnDestroy {
         (response) => {
           this.stats = new MarketingStats().deserialize(response);
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

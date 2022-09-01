@@ -28,7 +28,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private _listingService: ListingService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private activatedRoute: ActivatedRoute,
     private _location: Location,
     protected _translateService: TranslateService,
@@ -62,20 +62,10 @@ export class EditListingComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getListingId();
       })
     );
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
-    });
   }
 
   /**
@@ -107,7 +97,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.listing_fail',
@@ -129,10 +119,10 @@ export class EditListingComponent implements OnInit, OnDestroy {
       this.listFG.invalid ||
       this.listFG.get('marketingContacts').value.length === 0
     ) {
-      this._snackbarService
+      this.snackbarService
         .openSnackBarWithTranslate(
           {
-            translateKey: 'message.error.invalid',
+            translateKey: `message.validation.INVALID_FORM`,
             priorityMessage: 'Invalid Form.',
           },
           ''
@@ -162,7 +152,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
     this.isSaving = true;
     this._listingService.updateList(this.hotelId, this.listId, data).subscribe(
       (response) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'message.success.listing_updated',
@@ -177,7 +167,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
         this._router.navigate([`pages/library/listing`]);
       },
       ({ error }) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'message.error.listing_not_updated',

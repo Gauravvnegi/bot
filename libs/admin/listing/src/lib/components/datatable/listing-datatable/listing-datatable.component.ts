@@ -55,8 +55,8 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   constructor(
     public fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,
-    protected _globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     protected tabFilterService: TableService,
     protected router: Router,
@@ -80,11 +80,8 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
         this.loadInitialData([
           {
             order: sharedConfig.defaultOrder,
@@ -94,16 +91,6 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         ]);
       })
     );
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extractinf from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
-    });
   }
 
   /**
@@ -126,7 +113,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',
@@ -216,7 +203,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',
@@ -336,7 +323,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.exportCSV_fail',
@@ -398,7 +385,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         .updateListStatus(this.hotelId, rowData.id, { status: event.checked })
         .subscribe(
           (response) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'message.success.listing_status_updated',
@@ -413,7 +400,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
             this.changePage(this.currentPage);
           },
           ({ error }) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'message.error.listing_status_updated_fail',

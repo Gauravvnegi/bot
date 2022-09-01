@@ -13,7 +13,7 @@ import { get } from 'lodash';
 export class TableService {
   constructor(
     protected subscriptionService: SubscriptionPlanService,
-    private snackBarService: SnackBarService
+    private snackbarService: SnackBarService
   ) {}
 
   getSubscribedFilters(
@@ -23,7 +23,7 @@ export class TableService {
   ): any[] {
     const validityStatus = this.validateInputs(module, table);
     if (!validityStatus.status) {
-      this.snackBarService.openSnackBarAsText(validityStatus.error);
+      this.snackbarService.openSnackBarAsText(validityStatus.error);
     }
     if (filters.length) {
       const getPath = ['modules', module, 'tables', table, 'tabFilters'];

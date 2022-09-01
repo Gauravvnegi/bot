@@ -47,7 +47,7 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
-    private _snackBarService: SnackBarService
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {}
@@ -122,7 +122,7 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
   updateDepositRule() {
     if (this.depositRuleForm.invalid) {
       this.depositRuleForm.markAllAsTouched();
-      this._snackBarService.openSnackBarAsText('Please fill required fields.');
+      this.snackbarService.openSnackBarAsText('Please fill required fields.');
       return;
     }
 
@@ -144,7 +144,7 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (data) => {
-          this._snackBarService.openSnackBarAsText(
+          this.snackbarService.openSnackBarAsText(
             'Deposit rule updated sucessfully.',
             '',
             { panelClass: 'success' }
@@ -152,7 +152,15 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
           this.isUpdatingRule = false;
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.isUpdatingRule = false;
         }
       );

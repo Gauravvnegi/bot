@@ -59,7 +59,7 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
     private subscriptionService: SubscriptionService,
     private globalFilterService: GlobalFilterService,
     protected tabFilterService: TableService,
-    private _snackbarService: SnackBarService
+    private snackbarService: SnackBarService
   ) {
     super(fb, tabFilterService);
   }
@@ -69,6 +69,9 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
       //set-global query everytime global filter changes
@@ -76,17 +79,7 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.getHotelId(this.globalQueries);
-    });
-  }
-
-  getHotelId(globalQueries): void {
-    //todo
-
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
+      this.hotelId = this.globalFilterService.hotelId;
     });
   }
 
@@ -140,7 +133,15 @@ export class HotelUsageDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );

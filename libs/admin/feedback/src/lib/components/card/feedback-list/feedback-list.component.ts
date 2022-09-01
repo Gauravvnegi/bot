@@ -49,8 +49,8 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   totalRecords = card.totalRecords;
   outletChangeSubscribed = false;
   constructor(
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
     private _adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
     private cardService: CardService,
@@ -88,18 +88,15 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
-  listenForGlobalFilters() {
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+        this.hotelId = this.globalFilterService.hotelId;
         this.cardService.$selectedFeedback.next(null);
         this.pagination = {
           offset: 0,
@@ -224,7 +221,16 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
           response.entityStateCounts &&
             this.updateTabFilterCounts(response.entityStateCounts);
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe(),
         () => (this.loading = false)
       )
     );
@@ -263,18 +269,6 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
     if (this.feedbackType === feedback.types.transactional)
       return this.statisticService.outletIds;
     else return this.hotelId;
-  }
-
-  /**
-   * @function getHotelId Function to get hotel id.
-   * @param globalQueries
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   /**
@@ -373,7 +367,15 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
                 this.colorMap
               ).records),
             ({ error }) =>
-              this._snackbarService.openSnackBarAsText(error.message),
+              this.snackbarService
+                .openSnackBarWithTranslate(
+                  {
+                    translateKey: `messages.error.${error?.type}`,
+                    priorityMessage: error?.message,
+                  },
+                  ''
+                )
+                .subscribe(),
             () => (this.loading = false)
           )
       );

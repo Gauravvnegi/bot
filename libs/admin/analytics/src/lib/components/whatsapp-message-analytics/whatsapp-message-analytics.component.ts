@@ -38,7 +38,7 @@ export class WhatsappMessageAnalyticsComponent implements OnInit, OnDestroy {
 
   chart = analytics.whatsappChart;
   constructor(
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private analyticsService: AnalyticsService,
     private _adminUtilityService: AdminUtilityService
   ) {}
@@ -51,25 +51,17 @@ export class WhatsappMessageAnalyticsComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
         this.getConversationStats();
         this.getSentReceivedChartData();
       })
     );
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   getConversationStats() {
@@ -109,7 +101,10 @@ export class WhatsappMessageAnalyticsComponent implements OnInit, OnDestroy {
     this.chart.chartData[0].data = this.sentReceivedChartData.sent;
     this.chart.chartData[1].data = this.sentReceivedChartData.delivered;
   }
-
+  /**
+   * @function legendOnClick To perform action on legend selection change.
+   * @param index The selected legend index.
+   */
   legendOnClick = (index) => {
     const ci = this.baseChart.chart;
     const alreadyHidden =

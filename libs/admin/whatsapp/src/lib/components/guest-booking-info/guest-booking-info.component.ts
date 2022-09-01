@@ -29,7 +29,7 @@ export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
     private messageService: MessageService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    private _snackBarService: SnackBarService
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {}

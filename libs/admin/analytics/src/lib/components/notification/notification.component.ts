@@ -23,7 +23,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   stats: Notification;
   constructor(
     private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private analyticsService: AnalyticsService,
     private snackbarService: SnackBarService
   ) {}
@@ -36,14 +36,17 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         this.globalFilters = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId(this.globalFilters);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getConversationData();
       })
     );
@@ -63,18 +66,18 @@ export class NotificationComponent implements OnInit, OnDestroy {
             this.initGraphData();
           },
           ({ error }) => {
-            this.snackbarService.openSnackBarAsText(error.message);
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
           }
         )
     );
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   initGraphData() {
@@ -92,7 +95,10 @@ export class NotificationComponent implements OnInit, OnDestroy {
       // }
     });
   }
-
+  /**
+   * @function legendOnClick To perform action on legend selection change.
+   * @param index The selected legend index.
+   */
   legendOnClick = (index, event) => {
     event.stopPropagation();
     const ci = this.baseChart.chart;

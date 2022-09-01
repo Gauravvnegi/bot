@@ -67,7 +67,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     protected _fb: FormBuilder,
     protected _location: Location,
     protected requestService: RequestService,
-    protected _snackbarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     protected route: ActivatedRoute,
     protected _adminUtilityService: AdminUtilityService
   ) {}
@@ -151,7 +151,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
     if ((value || '').trim()) {
       if (control === this.emailIds && !this.isValidEmail(value)) {
-        this._snackbarService.openSnackBarAsText('Invalid email format');
+        this.snackbarService.openSnackBarAsText('Invalid email format');
         return;
       } else {
         const controlValues = control.value.filter(
@@ -222,12 +222,20 @@ export class NotificationComponent implements OnInit, OnDestroy {
           this.notificationForm
             .get('attachments')
             .patchValue([response.fileDownloadUri]);
-          this._snackbarService.openSnackBarAsText('Attachment uploaded', '', {
+          this.snackbarService.openSnackBarAsText('Attachment uploaded', '', {
             panelClass: 'success',
           });
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       );
   }
@@ -253,7 +261,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     );
 
     if (validation.length) {
-      this._snackbarService.openSnackBarAsText(validation[0].data.message);
+      this.snackbarService.openSnackBarAsText(validation[0].data.message);
       return;
     }
     this.isSending = true;
@@ -271,14 +279,22 @@ export class NotificationComponent implements OnInit, OnDestroy {
         .subscribe(
           (res) => {
             this.isSending = false;
-            this._snackbarService.openSnackBarAsText('Notification sent.', '', {
+            this.snackbarService.openSnackBarAsText('Notification sent.', '', {
               panelClass: 'success',
             });
             this.isModal ? this.closeModal() : this._location.back();
           },
           ({ error }) => {
             this.isSending = false;
-            this._snackbarService.openSnackBarAsText(error.message);
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
           }
         )
     );
@@ -305,7 +321,15 @@ export class NotificationComponent implements OnInit, OnDestroy {
                 .patchValue(this.modifyTemplate(response.template));
             },
             ({ error }) => {
-              this._snackbarService.openSnackBarAsText(error.message);
+              this.snackbarService
+                .openSnackBarWithTranslate(
+                  {
+                    translateKey: `messages.error.${error?.type}`,
+                    priorityMessage: error?.message,
+                  },
+                  ''
+                )
+                .subscribe();
             }
           )
       );

@@ -44,8 +44,8 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
     private _modal: ModalService,
     private _translateService: TranslateService
   ) {}
@@ -63,7 +63,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
@@ -87,7 +87,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
           this.initGraphData();
         },
         ({ error }) =>
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',

@@ -56,8 +56,8 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   constructor(
     public fb: FormBuilder,
     _adminUtilityService: AdminUtilityService,
-    _globalFilterService: GlobalFilterService,
-    _snackbarService: SnackBarService,
+    globalFilterService: GlobalFilterService,
+    snackbarService: SnackBarService,
     _modal: ModalService,
     public feedbackService: FeedbackService,
     tabFilterService: TableService,
@@ -72,8 +72,8 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     super(
       fb,
       _adminUtilityService,
-      _globalFilterService,
-      _snackbarService,
+      globalFilterService,
+      snackbarService,
       _modal,
       feedbackService,
       tabFilterService,
@@ -142,13 +142,13 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
           ...this.config,
         ];
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getOutlets(data['filter'].value.property.branchName);
         //fetch-api for records
         this.loadInitialData([
@@ -222,7 +222,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     const id = event.id;
     this.tableService.updateFeedbackState(id, data).subscribe(
       (response) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'Status Updated Successfully.',
@@ -242,10 +242,10 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         ]);
       },
       ({ error }) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
-              translateKey: error.message,
+              translateKey: `messages.error.${error?.type}`,
               priorityMessage: error.message,
             },
             ''
@@ -274,7 +274,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    */
   updateFeedbackStatus(status: boolean): void {
     if (!this.selectedRows.length) {
-      this._snackbarService.openSnackBarAsText(
+      this.snackbarService.openSnackBarAsText(
         this._translateService.instant(
           'messages.validation.select_record_status',
           { status: status ? 'read' : 'unread' }
@@ -303,7 +303,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       this.tableService.updateFeedbackStatus(config, reqData).subscribe(
         (response) => {
           this.statisticService.markReadStatusChanged.next(true);
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.success.feedback_status_updated',

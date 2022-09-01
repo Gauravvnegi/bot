@@ -43,7 +43,7 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   ];
   constructor(
     protected _modal: ModalService,
-    protected _globalFilterService: GlobalFilterService,
+    protected globalFilterService: GlobalFilterService,
     protected _hotelDetailService: HotelDetailService,
     protected statisticsService: StatisticsService,
     protected subscriptionPlanService: SubscriptionPlanService,
@@ -60,11 +60,8 @@ export class FeedbackComponent implements OnInit, OnDestroy {
 
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
         this.globalFeedbackFilterType =
           data['filter'].value.feedback.feedbackType;
         if (
@@ -153,14 +150,6 @@ export class FeedbackComponent implements OnInit, OnDestroy {
       chips: [],
       type: type,
     };
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   getOutletsSelected(globalQueries, globalQueryValue) {

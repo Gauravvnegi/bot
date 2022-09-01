@@ -32,8 +32,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     private _requestService: RequestService,
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
-    private _snackbarService: SnackBarService,
-    private _globalFilterService: GlobalFilterService
+    private snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService
   ) {}
 
   ngOnInit(): void {
@@ -67,27 +67,12 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
-  listenForGlobalFilters() {
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) =>
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ])
+      this.globalFilterService.globalFilter$.subscribe(
+        (data) => this.globalFilterService.hotelId
       )
     );
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extractinf from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   /**
@@ -134,7 +119,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._requestService.closeRequest(config, requestData).subscribe(
         (response) =>
-          this._snackbarService.openSnackBarAsText(
+          this.snackbarService.openSnackBarAsText(
             `Job: ${this.data.jobID} closed`,
             '',
             { panelClass: 'success' }
@@ -142,7 +127,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
 
         ({ error }) => {
           this.requestFG.patchValue({ status: this.data.action });
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',

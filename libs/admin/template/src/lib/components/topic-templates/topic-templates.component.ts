@@ -30,7 +30,7 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
   constructor(
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     protected translateService: TranslateService
   ) {}
 
@@ -61,7 +61,7 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
             ];
           },
           ({ error }) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate({
                 translateKey: 'messages.error.loadData',
                 priorityMessage: error.message,

@@ -43,7 +43,7 @@ export class AddUserPermissionComponent implements OnInit {
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
     private _managePermissionService: ManagePermissionService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private _location: Location
   ) {
     this.initUserForm();
@@ -157,7 +157,7 @@ export class AddUserPermissionComponent implements OnInit {
 
   savePermission() {
     if (!this.userForm.valid) {
-      this._snackbarService.openSnackBarAsText('Invalid Form');
+      this.snackbarService.openSnackBarAsText('Invalid Form');
       return;
     }
 
@@ -195,7 +195,7 @@ export class AddUserPermissionComponent implements OnInit {
       })
       .subscribe(
         (res) => {
-          this._snackbarService.openSnackBarAsText(
+          this.snackbarService.openSnackBarAsText(
             'User Added sucessfull.',
             '',
             { panelClass: 'success' }
@@ -203,7 +203,15 @@ export class AddUserPermissionComponent implements OnInit {
           this.isSavingPermissions = false;
         },
         (error) => {
-          this._snackbarService.openSnackBarAsText(error.error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.isSavingPermissions = false;
         }
       );

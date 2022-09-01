@@ -27,7 +27,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
 
   constructor(
     private _fb: FormBuilder,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private location: Location,
     private activatedRoute: ActivatedRoute,
     private globalFilterService: GlobalFilterService,
@@ -62,22 +62,10 @@ export class EditTopicComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
         ];
 
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getTopicId();
       })
     );
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   /**
@@ -85,10 +73,10 @@ export class EditTopicComponent implements OnInit, OnDestroy {
    */
   handleSubmit() {
     if (this.topicForm.invalid) {
-      this._snackbarService
+      this.snackbarService
         .openSnackBarWithTranslate(
           {
-            translateKey: 'message.error.invalid',
+            translateKey: `message.validation.INVALID_FORM`,
             priorityMessage: 'Invalid Form.',
           },
           ''
@@ -119,7 +107,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
         (response) => {
           this.topic = new Topic().deserialize(response);
           this.topicForm.patchValue(this.topic);
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.success.topic_created',
@@ -135,7 +123,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
           this.isSavingTopic = false;
         },
         ({ error }) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.topic_not_created',
@@ -197,7 +185,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
         .updateTopic(this.hotelId, this.topic.id, data)
         .subscribe(
           (response) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'message.success.topic_updated',
@@ -213,7 +201,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
             this.isSavingTopic = false;
           },
           ({ error }) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'message.error.topic_not_updated',

@@ -56,7 +56,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     protected tabFilterService: TableService,
     protected _adminUtilityService: AdminUtilityService,
     private _listingService: ListingService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     protected _translateService: TranslateService,
     private _modal: ModalService
   ) {
@@ -144,7 +144,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
           },
           ({ error }) => {
             this.loading = false;
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'message.error.exportCSV_fail',
@@ -172,7 +172,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
           )
           .subscribe(
             (response) => {
-              this._snackbarService
+              this.snackbarService
                 .openSnackBarWithTranslate(
                   {
                     translateKey: 'message.success.contact_delete',
@@ -187,7 +187,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
               this.updateDataSourceAfterDelete(ids);
             },
             ({ error }) => {
-              this._snackbarService
+              this.snackbarService
                 .openSnackBarWithTranslate(
                   {
                     translateKey: 'message.error.contact_not_delete',
@@ -249,7 +249,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
                     this.handleContactAddEvent(response);
                   },
                   ({ error }) => {
-                    this._snackbarService
+                    this.snackbarService
                       .openSnackBarWithTranslate(
                         {
                           translateKey: 'message.error.contact_not_add',
@@ -353,7 +353,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
               this.updateContacts.emit();
             },
             ({ error }) => {
-              this._snackbarService
+              this.snackbarService
                 .openSnackBarWithTranslate(
                   {
                     translateKey: 'message.error.contact_not_import',

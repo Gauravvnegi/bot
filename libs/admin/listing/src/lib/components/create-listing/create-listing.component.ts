@@ -29,7 +29,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private _location: Location,
     private _listingService: ListingService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private _router: Router,
     protected _translateService: TranslateService,
     private adminUtilityService: AdminUtilityService
@@ -61,20 +61,10 @@ export class CreateListingComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getTopicList(this.hotelId);
       })
     );
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extracting it from flobal filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
-    });
   }
 
   /**
@@ -95,7 +85,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         (response) =>
           (this.topicList = new Topics().deserialize(response).records),
         ({ error }) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.topicList_fail',
@@ -117,10 +107,10 @@ export class CreateListingComponent implements OnInit, OnDestroy {
       this.listFG.invalid ||
       this.listFG.get('marketingContacts').value.length === 0
     ) {
-      this._snackbarService
+      this.snackbarService
         .openSnackBarWithTranslate(
           {
-            translateKey: 'message.error.invalid',
+            translateKey: `message.validation.INVALID_FORM`,
             priorityMessage: 'Invalid Form.',
           },
           ''
@@ -150,7 +140,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     this.isSaving = true;
     this._listingService.createList(this.hotelId, data).subscribe(
       (response) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'message.success.listing_created',
@@ -165,7 +155,7 @@ export class CreateListingComponent implements OnInit, OnDestroy {
         this._router.navigate([`pages/library/listing`]);
       },
       ({ error }) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'message.error.listing_not_created',

@@ -108,9 +108,9 @@ export class SubscribersGraphComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   constructor(
     private _adminUtilityService: AdminUtilityService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private statsService: MarketingService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private dateService: DateService
   ) {}
 
@@ -123,12 +123,12 @@ export class SubscribersGraphComponent implements OnInit, OnDestroy {
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ),
         };
 
@@ -138,10 +138,7 @@ export class SubscribersGraphComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+        this.hotelId = this.globalFilterService.hotelId;
         this.subscriberGraphStats();
       })
     );
@@ -162,21 +159,18 @@ export class SubscribersGraphComponent implements OnInit, OnDestroy {
           );
           this.initChartData();
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
-  }
-
-  /**
-   * @function getHotelId To get hotel id fro the global filters.
-   * @param globalQueries The global filter array.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   /**
@@ -188,6 +182,10 @@ export class SubscribersGraphComponent implements OnInit, OnDestroy {
     this.chart.chartData[1].data = this.subscriberGraph.subscribers;
   }
 
+  /**
+   * @function legendOnClick To perform action on legend selection change.
+   * @param index The selected legend index.
+   */
   legendOnClick = (index) => {
     const ci = this.baseChart.chart;
     const alreadyHidden =

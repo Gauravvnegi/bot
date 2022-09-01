@@ -31,7 +31,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
     private _adminDetailsService: AdminDetailsService,
-    private _snackBarService: SnackBarService
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -191,7 +191,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
 
   updateDocumentVerificationStatus(status, isConfirmALL = false) {
     if (status === 'REJECT' && !this.selectedGuestGroup.get('remarks').value) {
-      this._snackBarService.openSnackBarAsText('Please enter remarks');
+      this.snackbarService.openSnackBarAsText('Please enter remarks');
       return;
     }
 
@@ -207,7 +207,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
           this.selectedGuestGroup
             .get('status')
             .setValue(status === 'ACCEPT' ? 'COMPLETED' : 'FAILED');
-          this._snackBarService.openSnackBarAsText(
+          this.snackbarService.openSnackBarAsText(
             'Status updated sucessfully.',
             '',
             { panelClass: 'success' }
@@ -217,7 +217,15 @@ export class AdminDocumentsDetailsComponent implements OnInit {
             : this.checkIfAllDocumentsVerified();
         },
         (error) => {
-          this._snackBarService.openSnackBarAsText(error.error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           // this.selectedGuestGroup.get('status').setValue(status === 'ACCEPT'?'COMPLETED':'FAILED');
           // isConfirmALL? this.updateAllDocumentsStatus(): this.checkIfAllDocumentsVerified();
         }
@@ -300,7 +308,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       fileName = `${fileNames[i]}_${fileName}`;
       JSZipUtils.getBinaryContent(url, (err, data) => {
         if (err) {
-          this._snackBarService.openSnackBarAsText(err);
+          this.snackbarService.openSnackBarAsText(err);
           throw err;
         }
         zipFile.file(fileName, data, { binary: true });

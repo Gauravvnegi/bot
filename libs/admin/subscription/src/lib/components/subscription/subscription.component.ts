@@ -27,10 +27,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
   planUsagePercentage: PlanUsagePercentage;
 
   constructor(
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private subscriptionService: SubscriptionPlanService,
     private adminUtilityService: AdminUtilityService,
-    private snackBarService: SnackBarService
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -41,9 +41,12 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         this.hotelId = data['filter'].queryValue[0].hotelId;
         this.initSubscriptionPlan();
       })
@@ -62,7 +65,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.getSubscriptionUsage(this.hotelId);
       },
       ({ error }) => {
-        this.snackBarService.openSnackBarAsText(error.message);
+        this.snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: `messages.error.${error?.type}`,
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe();
       }
     );
   }

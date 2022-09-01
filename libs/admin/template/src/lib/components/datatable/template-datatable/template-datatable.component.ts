@@ -59,7 +59,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     protected tabFilterService: TableService,
     protected _modal: ModalService,
     private _router: Router,
@@ -85,19 +85,8 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.getHotelId(this.globalQueries);
+      this.hotelId = this.globalFilterService.hotelId;
       this.setTabFilterItems();
-    });
-  }
-  /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
     });
   }
 
@@ -170,7 +159,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate({
               translateKey: 'messages.error.loadData',
               priorityMessage: error.message,
@@ -238,7 +227,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
       .updateTemplateStatus(this.hotelId, data, templateId)
       .subscribe(
         (response) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.success.status_updated',
@@ -254,7 +243,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate({
               translateKey: 'messages.error.loadData',
               priorityMessage: error.message,
@@ -323,7 +312,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate({
               translateKey: 'messages.error.loadData',
               priorityMessage: error.message,
@@ -418,7 +407,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate({
               translateKey: 'messages.error.exportCSV',
               priorityMessage: error.message,

@@ -14,7 +14,7 @@ export class StayFeedbackComponent implements OnInit, OnDestroy {
   @Input() openedState: boolean;
   private $subscription = new Subscription();
   constructor(
-    public _globalFilterService: GlobalFilterService,
+    public globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private reservationService: ReservationService
   ) {}
@@ -34,7 +34,16 @@ export class StayFeedbackComponent implements OnInit, OnDestroy {
           link.click();
           link.remove();
         },
-        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

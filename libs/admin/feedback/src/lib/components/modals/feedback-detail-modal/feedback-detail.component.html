@@ -47,7 +47,7 @@
         </div>
         <div>{{ data.feedback?.getTableOrRoomNo(data.feedbackType) }}</div>
         <div>
-          {{ data.feedback.getCreatedDate(_globalFilterService.timezone) }}
+          {{ data.feedback.getCreatedDate(globalFilterService.timezone) }}
         </div>
         <div class="feedback">
           <div class="feedback-service">
@@ -188,7 +188,7 @@
         >
           <div class="d-flex">
             <div class="time">
-              {{ data.feedback.getTime(_globalFilterService.timezone) }}
+              {{ data.feedback.getTime(globalFilterService.timezone) }}
             </div>
             <div class="comment">
               {{ data?.feedback.comments }}
@@ -210,7 +210,7 @@
                 {{ remark.remarks }}
               </div>
               <div class="time">
-                {{ remark.getTime(_globalFilterService.timezone) }}
+                {{ remark.getTime(globalFilterService.timezone) }}
               </div>
             </div>
           </div>
@@ -218,7 +218,7 @@
       </div>
       <!-- <div class="userComments">
         <div class="time">
-          {{ data.feedback?.getTime(_globalFilterService.timezone) }}
+          {{ data.feedback?.getTime(globalFilterService.timezone) }}
         </div>
         <div class="comment">
           {{ data.feedback?.comments }}

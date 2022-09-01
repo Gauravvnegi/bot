@@ -25,9 +25,9 @@ export class TopLowNpsComponent implements OnInit, OnDestroy {
   keyLabels = feedback.keyLabels.topLow;
   constructor(
     protected statisticsService: StatisticsService,
-    protected _globalFilterService: GlobalFilterService,
+    protected globalFilterService: GlobalFilterService,
     protected _adminUtilityService: AdminUtilityService,
-    protected _snackbarService: SnackBarService
+    protected snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -55,9 +55,12 @@ export class TopLowNpsComponent implements OnInit, OnDestroy {
       this.listenForOutletChanged();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
         this.globalQueries = [
           ...data['filter'].queryValue,
@@ -144,7 +147,7 @@ export class TopLowNpsComponent implements OnInit, OnDestroy {
         // this.initData();
       },
       ({ error }) =>
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'messages.error.some_thing_wrong',

@@ -222,9 +222,16 @@ export class NotificationComponent implements OnInit, OnDestroy {
           this.notificationForm
             .get('attachments')
             .patchValue([response.fileDownloadUri]);
-          this.snackbarService.openSnackBarAsText('Attachment uploaded', '', {
-            panelClass: 'success',
-          });
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.ATTACHMENT_UPLOADED',
+                priorityMessage: 'Attachment uploaded.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
         },
         ({ error }) => {
           this.snackbarService
@@ -279,9 +286,16 @@ export class NotificationComponent implements OnInit, OnDestroy {
         .subscribe(
           (res) => {
             this.isSending = false;
-            this.snackbarService.openSnackBarAsText('Notification sent.', '', {
-              panelClass: 'success',
-            });
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.NOTIFICATION_SENT',
+                  priorityMessage: 'Notification sent.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe();
             this.isModal ? this.closeModal() : this._location.back();
           },
           ({ error }) => {

@@ -215,9 +215,14 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) => {
             this.setDataAfterUpdate(response);
-            this.snackbarService.openSnackBarAsText('Campaign Archived.', '', {
-              panelClass: 'success',
-            });
+            this.snackbarService.openSnackBarWithTranslate(
+              {
+                translateKey: `messages.SUCCESS.CAMPAIGN_ARCHIVED`,
+                priorityMessage: 'Campaign Archived.',
+              },
+              '',
+              { panelClass: 'success' }
+            );
           },
           ({ error }) => {
             this.snackbarService

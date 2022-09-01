@@ -212,8 +212,11 @@ export class EditUserPermissionComponent implements OnInit {
       })
       .subscribe(
         (res) => {
-          this.snackbarService.openSnackBarAsText(
-            'User Permission edited sucessfull.',
+          this.snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: `messages.SUCCESS.USER_PERMISSION_EDITED`,
+              priorityMessage: 'User Permission edited successfully.',
+            },
             '',
             { panelClass: 'success' }
           );

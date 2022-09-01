@@ -190,11 +190,16 @@ export class MarketingNotificationComponent extends NotificationComponent
     this.$subscription.add(
       this._emailService.sendEmail(this.hotelId, reqData).subscribe(
         (response) => {
-          this.snackbarService.openSnackBarAsText(
-            'Email sent successfully.',
-            '',
-            { panelClass: 'success' }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.EMAIL_SENT',
+                priorityMessage: 'Email sent successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
           this.onModalClose.emit();
         },
         ({ error }) =>

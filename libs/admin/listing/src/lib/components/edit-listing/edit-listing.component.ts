@@ -159,9 +159,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
               priorityMessage: `${response.name} Updated Successfully.`,
             },
             '',
-            {
-              panelClass: 'success',
-            }
+            { panelClass: 'success' }
           )
           .subscribe();
         this._router.navigate([`pages/library/listing`]);

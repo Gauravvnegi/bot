@@ -317,11 +317,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (
       this.detailsForm.get('documentStatus').get('status').value === 'COMPLETED'
     ) {
-      this.snackbarService.openSnackBarAsText(
-        'Documents are already verified.',
-        '',
-        { panelClass: 'success' }
-      );
+      this.snackbarService
+        .openSnackBarWithTranslate({
+          translateKey: 'messages.validation.DOCUMENT_ALREADY_VERIFIED',
+          priorityMessage: 'Documents are already verified.',
+        })
+        .subscribe();
       return;
     }
 
@@ -383,11 +384,17 @@ export class DetailsComponent implements OnInit, OnDestroy {
           data
         )
         .subscribe(
-          (res) => {
-            this.snackbarService.openSnackBarAsText('Payment accepted', '', {
-              panelClass: 'success',
-            });
-          },
+          (res) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.PAYMENT_ACCEPTED',
+                  priorityMessage: 'Payment accepted.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe(),
           ({ error }) => {
             this.snackbarService
               .openSnackBarWithTranslate(
@@ -439,15 +446,17 @@ export class DetailsComponent implements OnInit, OnDestroy {
       this._reservationService
         .prepareInvoice(this.reservationDetailsFG.get('bookingId').value)
         .subscribe(
-          (res) => {
-            this.snackbarService.openSnackBarAsText(
-              'Ticket raised for invoice',
-              '',
-              {
-                panelClass: 'success',
-              }
-            );
-          },
+          (res) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.INVOICE_TICKET_RAISED',
+                  priorityMessage: 'Payment accepted.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe(),
           ({ error }) => {
             this.snackbarService
               .openSnackBarWithTranslate(
@@ -610,11 +619,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
             .subscribe(
               (response) => {
                 manualCheckinCompRef.componentInstance.loading = false;
-                this.snackbarService.openSnackBarAsText(
-                  'Guest Manually Checked In',
-                  '',
-                  { panelClass: 'success' }
-                );
+                this.snackbarService
+                  .openSnackBarWithTranslate(
+                    {
+                      translateKey: 'messages.SUCCESS.GUEST_MANUAL_CHECKIN',
+                      priorityMessage: 'Guest Manually Checked In.',
+                    },
+                    '',
+                    { panelClass: 'success' }
+                  )
+                  .subscribe();
                 manualCheckinCompRef.close();
                 this.closeDetails();
               },
@@ -666,17 +680,20 @@ export class DetailsComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (res) => {
-          this.snackbarService.openSnackBarAsText(
-            `${journeyName[0]
-              .toUpperCase()
-              .concat(
-                journeyName.slice(1, journeyName.length).toLowerCase()
-              )} completed`,
-            '',
-            {
-              panelClass: 'success',
-            }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.JOURNEY_COMPLETED',
+                priorityMessage: `${journeyName[0]
+                  .toUpperCase()
+                  .concat(
+                    journeyName.slice(1, journeyName.length).toLowerCase()
+                  )} completed`,
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
         },
         ({ error }) => {
           this.snackbarService

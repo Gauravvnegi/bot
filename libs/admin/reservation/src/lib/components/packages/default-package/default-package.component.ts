@@ -38,8 +38,11 @@ export class DefaultPackageComponent implements OnInit {
           this.paidAmenityFG
             .get('status')
             .patchValue(status === 'ACCEPT' ? 'COMPLETED' : 'FAILED');
-          this.snackbarService.openSnackBarAsText(
-            'Status updated sucessfully.',
+          this.snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
+              priorityMessage: 'Request status updated',
+            },
             '',
             { panelClass: 'success' }
           );

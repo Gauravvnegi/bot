@@ -197,8 +197,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       .updateRolesStatus(userData.parentId, data)
       .subscribe(
         (response) => {
-          this.snackbarService.openSnackBarAsText(
-            'Status updated successfully',
+          this.snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: `messages.SUCCESS.STATUS_UPDATED`,
+              priorityMessage: 'Status Updated Successfully.',
+            },
             '',
             { panelClass: 'success' }
           );

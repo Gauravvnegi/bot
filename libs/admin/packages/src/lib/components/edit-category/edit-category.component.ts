@@ -136,11 +136,16 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
         (response) => {
           this.hotelCategory = new CategoryDetail().deserialize(response);
           this.categoryForm.patchValue(this.hotelCategory);
-          this.snackbarService.openSnackBarAsText(
-            'Category added successfully',
-            '',
-            { panelClass: 'success' }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.CATEGORY_ADDED',
+                priorityMessage: 'Category added successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
           this.router.navigate([
             '/pages/library/package/category',
             this.hotelCategory.category.id,
@@ -183,11 +188,16 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
         .updateCategory(this.hotelId, this.hotelCategory.category.id, data)
         .subscribe(
           (response) => {
-            this.snackbarService.openSnackBarAsText(
-              'Category updated successfully',
-              '',
-              { panelClass: 'success' }
-            );
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.CATEGORY_UPDATED',
+                  priorityMessage: 'Category updated successfully.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe();
             this.router.navigate([
               '/pages/library/package/category',
               this.hotelCategory.category.id,
@@ -224,11 +234,16 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
             .get('imageUrl')
             .patchValue(response.fileDownloadUri);
           this.categoryForm.get('imageName').patchValue(response.fileName);
-          this.snackbarService.openSnackBarAsText(
-            'Category image uploaded successfully',
-            '',
-            { panelClass: 'success' }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.CATEGORY_IMAGE_UPLOADED',
+                priorityMessage: 'Category image uploaded successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
         },
         ({ error }) => {
           this.snackbarService

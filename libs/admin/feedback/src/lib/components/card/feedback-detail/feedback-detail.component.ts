@@ -145,9 +145,14 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) => {
             this.cardService.$assigneeChange.next({ status: true });
-            this.snackbarService.openSnackBarAsText('Assignee updated.', '', {
-              panelClass: 'success',
-            });
+            this.snackbarService.openSnackBarWithTranslate(
+              {
+                translateKey: `messages.SUCCESS.ASSIGNEE_UPDATED`,
+                priorityMessage: 'Assignee updated.',
+              },
+              '',
+              { panelClass: 'success' }
+            );
           },
           ({ error }) =>
             this.snackbarService
@@ -213,18 +218,14 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     };
     this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
       (response) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'Status Updated Successfully.',
-              priorityMessage: 'Status Updated Successfully..',
-            },
-            '',
-            {
-              panelClass: 'success',
-            }
-          )
-          .subscribe();
+        this.snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: `messages.SUCCESS.STATUS_UPDATED`,
+            priorityMessage: 'Status Updated Successfully.',
+          },
+          '',
+          { panelClass: 'success' }
+        );
       },
       ({ error }) => {
         this.snackbarService
@@ -249,13 +250,11 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         this.snackbarService
           .openSnackBarWithTranslate(
             {
-              translateKey: 'Message sent.',
-              priorityMessage: 'Message sent Successfully..',
+              translateKey: 'messages.SUCCESS.MESSAGE_SENT',
+              priorityMessage: 'Message sent Successfully.',
             },
             '',
-            {
-              panelClass: 'success',
-            }
+            { panelClass: 'success' }
           )
           .subscribe();
         this.feedbackFG.patchValue({ comment: '' });

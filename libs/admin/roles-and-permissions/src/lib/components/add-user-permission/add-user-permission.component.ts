@@ -195,8 +195,11 @@ export class AddUserPermissionComponent implements OnInit {
       })
       .subscribe(
         (res) => {
-          this.snackbarService.openSnackBarAsText(
-            'User Added sucessfull.',
+          this.snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: `messages.SUCCESS.USER_ADDED`,
+              priorityMessage: 'User Added successfully.',
+            },
             '',
             { panelClass: 'success' }
           );

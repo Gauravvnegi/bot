@@ -236,8 +236,11 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
                 [],
                 this.globalFilterService.timezone
               );
-              this.snackbarService.openSnackBarAsText(
-                `No contact found with search key: ${searchKey}!`,
+              this.snackbarService.openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.SUCCESS.NO_CONTACT_FOUND`,
+                  priorityMessage: `No contact found with search key: ${searchKey}!`,
+                },
                 '',
                 { panelClass: 'success' }
               );

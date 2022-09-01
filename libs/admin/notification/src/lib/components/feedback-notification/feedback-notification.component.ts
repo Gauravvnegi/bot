@@ -156,9 +156,16 @@ export class FeedbackNotificationComponent extends NotificationComponent
         .subscribe(
           (res) => {
             this.isSending = false;
-            this.snackbarService.openSnackBarAsText('Notification sent.', '', {
-              panelClass: 'success',
-            });
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.NOTIFICATION_SENT',
+                  priorityMessage: 'Notification sent.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe();
             this.closeModal();
           },
           ({ error }) => {

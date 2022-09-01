@@ -225,7 +225,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         this.snackbarService
           .openSnackBarWithTranslate(
             {
-              translateKey: 'Status Updated Successfully.',
+              translateKey: 'messages.SUCCESS.STATUS_UPDATED',
               priorityMessage: 'Status Updated Successfully..',
             },
             '',

@@ -226,11 +226,16 @@ export class PackageDatatableComponent extends BaseDatatableComponent
       .updatePackageStatus(this.hotelId, event.checked, packages)
       .subscribe(
         (response) => {
-          this.snackbarService.openSnackBarAsText(
-            'Status updated successfully',
-            '',
-            { panelClass: 'success' }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.STATUS_UPDATED',
+                priorityMessage: 'Status Updated Successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
         },
         ({ error }) => {
           this.snackbarService

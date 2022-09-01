@@ -119,11 +119,16 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._requestService.closeRequest(config, requestData).subscribe(
         (response) =>
-          this.snackbarService.openSnackBarAsText(
-            `Job: ${this.data.jobID} closed`,
-            '',
-            { panelClass: 'success' }
-          ),
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.JOB_CLOSED',
+                priorityMessage: `Job: ${this.data.jobID} closed.`,
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe(),
 
         ({ error }) => {
           this.requestFG.patchValue({ status: this.data.action });

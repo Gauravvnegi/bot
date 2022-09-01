@@ -54,12 +54,13 @@ export class GuestRequestsComponent implements OnChanges {
       };
       this.messageService.closeRequest(config, requestData).subscribe(
         (response) => {
-          this.snackbarService.openSnackBarAsText(
-            `Request status updated`,
-            '',
+          this.snackbarService.openSnackBarWithTranslate(
             {
-              panelClass: 'success',
-            }
+              translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
+              priorityMessage: 'Request status updated',
+            },
+            '',
+            { panelClass: 'success' }
           );
         },
         ({ error }) => {
@@ -91,12 +92,13 @@ export class GuestRequestsComponent implements OnChanges {
       .updatePreArrivalRequest(request.id, requestData)
       .subscribe(
         (response) => {
-          this.snackbarService.openSnackBarAsText(
-            `Request status updated`,
-            '',
+          this.snackbarService.openSnackBarWithTranslate(
             {
-              panelClass: 'success',
-            }
+              translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
+              priorityMessage: 'Request status updated',
+            },
+            '',
+            { panelClass: 'success' }
           );
         },
         ({ error }) => {

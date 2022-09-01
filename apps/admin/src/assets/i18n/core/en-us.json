@@ -15,11 +15,35 @@
   },
   "messages": {
     "validation": {
-      "INVALID_FORM": "Invalid Form."
+      "INVALID_FORM": "Invalid Form.",
+      "DOCUMENT_ALREADY_VERIFIED": "Documents are already verified."
     },
     "SUCCESS": {
       "REQUEST_STATUS_UPDATED": "Request status updated",
-      "CAMPAIGN_SCEDULED": "Campaign scheduled."
+      "CAMPAIGN_SCEDULED": "Campaign scheduled.",
+      "CAMPAIGN_ARCHIVED": "Campaign Archived.",
+      "STATUS_UPDATED": "Status Updated Successfully.",
+      "MESSAGE_SENT": "Message sent Successfully.",
+      "ASSIGNEE_UPDATED": "Assignee updated.",
+      "NOTIFICATION_SENT": "Notification sent.",
+      "EMAIL_SENT": "Email sent successfully.",
+      "ATTACHMENT_UPLOADED": "Attachment uploaded.",
+      "CATEGORY_ADDED": "Category added successfully.",
+      "CATEGORY_UPDATED": "Category updated successfully.",
+      "CATEGORY_IMAGE_UPLOADED": "Category image uploaded successfully.",
+      "PACKAGE_ADDED": "Package added successfully.",
+      "PACKAGE_UPDATED": "Package updated successfully.",
+      "PACKAGE_IMAGE_UPLOADED": "Package image uploaded successfully.",
+      "JOB_CLOSED": "Job Closed.",
+      "DEPOSIT_RULE_UPDATED": "Deposit Rule updated successfully.",
+      "PAYMENT_ACCEPTED": "Payment accepted.",
+      "INVOICE_TICKET_RAISED": "Ticket raised for invoice.",
+      "GUEST_MANUAL_CHECKIN": "Guest Manually Checked In.",
+      "JOURNEY_COMPLETED": "Journey Completed.",
+      "REQUEST_UPDATED": "Request updated successfully",
+      "USER_ADDED": "User Added successfully.",
+      "USER_PERMISSION_EDITED": "User Permission edited successfully.",
+      "NO_CONTACT_FOUND": "No contact found with search key"
     },
     "error": {
       "some_thing_wrong": "Something went wrong !!",

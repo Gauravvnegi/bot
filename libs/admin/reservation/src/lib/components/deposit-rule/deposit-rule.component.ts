@@ -144,11 +144,16 @@ export class DepositRuleComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (data) => {
-          this.snackbarService.openSnackBarAsText(
-            'Deposit rule updated sucessfully.',
-            '',
-            { panelClass: 'success' }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.DEPOSIT_RULE_UPDATED',
+                priorityMessage: 'Deposit Rule updated successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
           this.isUpdatingRule = false;
         },
         ({ error }) => {

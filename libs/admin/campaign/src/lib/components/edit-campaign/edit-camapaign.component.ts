@@ -443,8 +443,11 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
             )
             .subscribe(
               (response) => {
-                this.snackbarService.openSnackBarAsText(
-                  'Campaign scheduled.',
+                this.snackbarService.openSnackBarWithTranslate(
+                  {
+                    translateKey: `messages.SUCCESS.CAMPAIGN_SCEDULED`,
+                    priorityMessage: 'Campaign scheduled.',
+                  },
                   '',
                   { panelClass: 'success' }
                 );

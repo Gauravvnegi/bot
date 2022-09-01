@@ -123,13 +123,13 @@ export class RequestsTableComponent extends BaseDatatableComponent {
             }
             return row;
           });
-
-          this.snackbarService.openSnackBarAsText(
-            'Request updated successfully',
-            '',
+          this.snackbarService.openSnackBarWithTranslate(
             {
-              panelClass: 'success',
-            }
+              translateKey: `messages.SUCCESS.REQUEST_UPDATED`,
+              priorityMessage: 'Request updated successfully',
+            },
+            '',
+            { panelClass: 'success' }
           );
         },
         ({ error }) => {

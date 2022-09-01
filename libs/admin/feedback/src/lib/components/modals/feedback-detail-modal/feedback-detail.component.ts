@@ -150,13 +150,11 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           this.snackbarService
             .openSnackBarWithTranslate(
               {
-                translateKey: 'Status Updated Successfully.',
+                translateKey: 'messages.SUCCESS.STATUS_UPDATED',
                 priorityMessage: 'Status Updated Successfully..',
               },
               '',
-              {
-                panelClass: 'success',
-              }
+              { panelClass: 'success' }
             )
             .subscribe();
           this.cardService.$assigneeChange.next({ status: true });
@@ -187,13 +185,11 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           this.snackbarService
             .openSnackBarWithTranslate(
               {
-                translateKey: 'Message sent.',
+                translateKey: 'messages.SUCCESS.MESSAGE_SENT',
                 priorityMessage: 'Message sent Successfully..',
               },
               '',
-              {
-                panelClass: 'success',
-              }
+              { panelClass: 'success' }
             )
             .subscribe();
           this.feedbackFG.patchValue({ comment: '' });
@@ -318,9 +314,16 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) => {
             this.cardService.$assigneeChange.next({ status: true });
-            this.snackbarService.openSnackBarAsText('Assignee updated.', '', {
-              panelClass: 'success',
-            });
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.ASSIGNEE_UPDATED',
+                  priorityMessage: 'Assignee updated.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe();
           },
           ({ error }) =>
             this.snackbarService

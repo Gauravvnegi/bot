@@ -418,7 +418,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         this.snackbarService
           .openSnackBarWithTranslate(
             {
-              translateKey: 'Status Updated Successfully.',
+              translateKey: 'messages.SUCCESS.STATUS_UPDATED',
               priorityMessage: 'Status Updated Successfully..',
             },
             '',
@@ -597,7 +597,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.snackbarService
             .openSnackBarWithTranslate(
               {
-                translateKey: 'messages.success.feedback_status_updated',
+                translateKey: 'messages.SUCCESS.STATUS_UPDATED',
                 priorityMessage: 'Status updated.',
               },
               '',

@@ -216,11 +216,16 @@ export class EditPackageComponent implements OnInit, OnDestroy {
         (response) => {
           this.hotelPackage = new PackageDetail().deserialize(response);
           this.packageForm.patchValue(this.hotelPackage.amenityPackage);
-          this.snackbarService.openSnackBarAsText(
-            'Package added successfully',
-            '',
-            { panelClass: 'success' }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.PACKAGE_ADDED',
+                priorityMessage: 'Package added successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
           this.router.navigate([
             '/pages/library/package/edit',
             this.hotelPackage.amenityPackage.id,
@@ -255,11 +260,16 @@ export class EditPackageComponent implements OnInit, OnDestroy {
         (response) => {
           this.packageForm.get('imageUrl').patchValue(response.fileDownloadUri);
           this.packageForm.get('imageName').patchValue(response.fileName);
-          this.snackbarService.openSnackBarAsText(
-            'Package image uploaded successfully',
-            '',
-            { panelClass: 'success' }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.PACKAGE_IMAGE_UPLOADED',
+                priorityMessage: 'Package image uploaded successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
         },
         ({ error }) => {
           this.snackbarService
@@ -296,11 +306,16 @@ export class EditPackageComponent implements OnInit, OnDestroy {
         .updatePackage(this.hotelId, this.hotelPackage.amenityPackage.id, data)
         .subscribe(
           (response) => {
-            this.snackbarService.openSnackBarAsText(
-              'Package updated successfully',
-              '',
-              { panelClass: 'success' }
-            );
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.PACKAGE_UPDATED',
+                  priorityMessage: 'Package updated successfully.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe();
             this.router.navigate([
               '/pages/library/package/edit',
               this.hotelPackage.amenityPackage.id,

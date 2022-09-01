@@ -227,18 +227,14 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
       .updateTemplateStatus(this.hotelId, data, templateId)
       .subscribe(
         (response) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.success.status_updated',
-                priorityMessage: 'Status updated successfully',
-              },
-              '',
-              {
-                panelClass: 'success',
-              }
-            )
-            .subscribe();
+          this.snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: `messages.SUCCESS.STATUS_UPDATED`,
+              priorityMessage: 'Status Updated Successfully.',
+            },
+            '',
+            { panelClass: 'success' }
+          );
           this.changePage(this.currentPage);
         },
         ({ error }) => {

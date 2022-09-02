@@ -14,7 +14,7 @@ export class DefaultPackageComponent implements OnInit {
   @Input() index;
 
   constructor(
-    private snackbarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     private _reservationService: ReservationService
   ) {}
 

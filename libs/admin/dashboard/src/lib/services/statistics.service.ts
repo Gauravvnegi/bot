@@ -52,7 +52,7 @@ export class StatisticsService extends ApiService {
    */
   getConversationStats(hotelId: string, config): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/conversations/stats/counts${config.queryObj}`
+      `/api/v1/dashboard-stats/conversations-stats/counts${config.queryObj}`
     );
   }
 

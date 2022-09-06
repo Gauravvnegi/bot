@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import {
+  ArtComponent,
   FeedbackDistributionComponent,
   GlobalNpsComponent,
   GtmAcrossServicesComponent,
@@ -10,6 +11,8 @@ import {
   ResponseRateComponent,
   TopLowNpsComponent,
   TwoWayProgressComponent,
+  DisengagementComponent,
+  GtmClosureComponent,
 } from './components/stats';
 import { FeedbackDatatableComponent } from './components/datatable/feedback-datatable/feedback-datatable.component';
 import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
@@ -35,7 +38,6 @@ import {
   RequestComponent,
   FeedbackHistoryComponent,
 } from './components/guest-info';
-import { ArtComponent } from './components/stats/art/art.component';
 import { FeedbackStatusFormComponent } from './components/feedback-status-form/feedback-status-form.component';
 
 const appRoutes: Route[] = [
@@ -86,5 +88,7 @@ export class AdminFeedbackRoutingModule {
     FeedbackHistoryComponent,
     ArtComponent,
     FeedbackStatusFormComponent,
+    DisengagementComponent,
+    GtmClosureComponent,
   ];
 }

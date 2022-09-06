@@ -159,6 +159,81 @@ export const chartConfig = {
         ],
       },
     },
+    disengagement: {
+      doughnut: {
+        tooltips: {
+          backgroundColor: 'white',
+          bodyFontColor: 'black',
+          borderColor: '#f4f5f6',
+          borderWidth: 3,
+          titleFontColor: 'black',
+          titleMarginBottom: 5,
+          xPadding: 10,
+          yPadding: 10,
+        },
+        responsive: true,
+        cutoutPercentage: 40,
+      },
+      transparentDoughnut: {
+        tooltips: {
+          backgroundColor: 'transparent',
+          bodyFontColor: 'transparent',
+          borderColor: 'transparent',
+          borderWidth: 0,
+          titleFontColor: 'transparent',
+          titleMarginBottom: 5,
+          xPadding: 10,
+          yPadding: 10,
+        },
+        responsive: true,
+        cutoutPercentage: 50,
+      },
+      line: {
+        responsive: true,
+        elements: {
+          line: {
+            tension: 0,
+            borderWidth: 2,
+          },
+          point: {
+            radius: 5,
+            hitRadius: 4,
+            hoverRadius: 6,
+            hoverBorderWidth: 2,
+            borderWidth: 2,
+          },
+        },
+        scales: {
+          xAxes: [
+            {
+              gridLines: {
+                display: false,
+              },
+            },
+          ],
+          yAxes: [
+            {
+              gridLines: {
+                display: true,
+              },
+              ticks: {
+                min: 0,
+              },
+            },
+          ],
+        },
+        tooltips: {
+          backgroundColor: 'white',
+          bodyFontColor: 'black',
+          borderColor: '#f4f5f6',
+          borderWidth: 3,
+          titleFontColor: 'black',
+          titleMarginBottom: 5,
+          xPadding: 10,
+          yPadding: 10,
+        },
+      },
+    },
   },
   colors: {
     distribution: [
@@ -181,6 +256,22 @@ export const chartConfig = {
         pointBorderColor: '#0C8054',
         pointHoverBackgroundColor: 'white',
         pointHoverBorderColor: '#0C8054',
+      },
+    ],
+    disengagement: [
+      {
+        borderColor: '#4b56c0',
+        backgroundColor: '#4b56c0',
+        pointBackgroundColor: 'white',
+        pointHoverBackgroundColor: 'white',
+        pointBorderColor: '#4b56c0',
+      },
+      {
+        borderColor: '#c5c5c5',
+        backgroundColor: '#c5c5c5',
+        pointBackgroundColor: 'white',
+        pointHoverBackgroundColor: 'white',
+        pointBorderColor: '#c5c5c5',
       },
     ],
   },

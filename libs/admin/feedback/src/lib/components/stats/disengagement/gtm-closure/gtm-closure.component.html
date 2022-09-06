@@ -1,0 +1,40 @@
+<div
+  style="
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.96px;
+    text-align: left;
+    color: #002046;
+  "
+>
+  How is Guest to Meet & Closure Rate varying over a period of time ?
+</div>
+<div style="margin-top: 25px;">
+  <canvas
+    baseChart
+    #lineChart
+    [datasets]="lineGraph.chartData"
+    [labels]="lineGraph.chartLabels"
+    [options]="lineGraph.chartOptions"
+    [colors]="lineGraph.chartColors"
+    [legend]="lineGraph.chartLegend"
+    [chartType]="lineGraph.chartType"
+  >
+  </canvas>
+</div>
+<div style="margin-top: 20px; display: flex;">
+  <ng-container *ngFor="let legend of legends; let legendIndex = index">
+    <div class="stat-label" (click)="legendOnClick(legendIndex)">
+      <input class="legends" type="checkbox" />
+      <div
+        class="legend-border"
+        [style.border-color]="legend.borderColor"
+      ></div>
+      <p class="stat-label-title">{{ legend.label }}</p>
+    </div>
+  </ng-container>
+</div>

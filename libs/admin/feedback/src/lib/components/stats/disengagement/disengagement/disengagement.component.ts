@@ -259,23 +259,22 @@ export class DisengagementComponent implements OnInit {
   initGTMBreakdown() {
     const selectedDepartmentKey = Object.keys(
       this.disengagementData.departmenList
-    ).filter((item, i) => i == 0)[0];
+    ).filter((item, i) => i == this.selectedDepartmentIndex)[0];
     this.selectedDepartment = this.disengagementData.departmenList[
       selectedDepartmentKey
     ];
-    this.selectedDepartmentIndex = 0;
   }
 
   handleCircularGraphClick(e: any): void {
     if (e.event.type === 'click') {
       const clickedIndex = e.active[0]?._index;
+      this.selectedDepartmentIndex = clickedIndex;
       this.selectedDepartmentKey = Object.keys(
         this.disengagementData.departmenList
       ).filter((item, i) => i == clickedIndex)[0];
       this.selectedDepartment = this.disengagementData.departmenList[
         this.selectedDepartmentKey
       ];
-      this.selectedDepartmentIndex = clickedIndex;
       this.initCircularGraphData(this.disengagementData);
       this.getGraphData(false);
     }

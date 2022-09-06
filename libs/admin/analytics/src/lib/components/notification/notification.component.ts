@@ -58,25 +58,23 @@ export class NotificationComponent implements OnInit, OnDestroy {
     };
 
     this.$subscription.add(
-      this.analyticsService
-        .getConversationTemplateStats(this.hotelId, config)
-        .subscribe(
-          (response) => {
-            this.stats = new Notification().deserialize(response);
-            this.initGraphData();
-          },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
-        )
+      this.analyticsService.getConversationTemplateStats(config).subscribe(
+        (response) => {
+          this.stats = new Notification().deserialize(response);
+          this.initGraphData();
+        },
+        ({ error }) => {
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
+        }
+      )
     );
   }
 

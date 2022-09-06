@@ -2,10 +2,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
-
-export interface Deserializable {
-  deserialize(input: any): this;
-}
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class FeedbackTable {
   total: number;

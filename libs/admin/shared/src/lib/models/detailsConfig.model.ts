@@ -3,11 +3,11 @@ import * as moment from 'moment';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { GuestRole } from '../constants/guest';
 
-export interface Deserializable {
+export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
-export class Details implements Deserializable {
+export class Details implements IDeserializable {
   reservationDetails: ReservationDetailsConfig; // bookingDetails
   guestDetails: GuestDetailDS;
   stayDetails: StayDetailsConfig;
@@ -58,7 +58,7 @@ export class Details implements Deserializable {
   }
 }
 
-export class FeedbackDetails implements Deserializable {
+export class FeedbackDetails implements IDeserializable {
   rating;
   comments: string;
   status: string;
@@ -79,7 +79,7 @@ export class FeedbackDetails implements Deserializable {
   }
 }
 
-export class FeedbackSuggestion implements Deserializable {
+export class FeedbackSuggestion implements IDeserializable {
   id: string;
   label: string;
   url: string;
@@ -89,7 +89,7 @@ export class FeedbackSuggestion implements Deserializable {
   }
 }
 
-export class RoomsDetails implements Deserializable {
+export class RoomsDetails implements IDeserializable {
   rooms;
   totalRooms: number;
   deserialize(input: any) {
@@ -97,7 +97,7 @@ export class RoomsDetails implements Deserializable {
     return this;
   }
 }
-export class StepStatusDetails implements Deserializable {
+export class StepStatusDetails implements IDeserializable {
   documents;
   guestDetails;
   stayDetails;
@@ -118,7 +118,7 @@ export class StepStatusDetails implements Deserializable {
   }
 }
 
-export class CurrentJourneyDetails implements Deserializable {
+export class CurrentJourneyDetails implements IDeserializable {
   status;
   journey;
   deserialize(input: any) {
@@ -131,7 +131,7 @@ export class CurrentJourneyDetails implements Deserializable {
   }
 }
 
-export class GuestDetailDS implements Deserializable {
+export class GuestDetailDS implements IDeserializable {
   guests: GuestDetailsConfig[];
 
   deserialize(input: any, hotelNationality: string) {
@@ -185,7 +185,7 @@ export class GuestDetailDS implements Deserializable {
   }
 }
 
-export class GuestDetailsConfig implements Deserializable {
+export class GuestDetailsConfig implements IDeserializable {
   id: string;
   code: number;
   title: string;
@@ -270,7 +270,7 @@ export class GuestDetailsConfig implements Deserializable {
   }
 }
 
-export class ShareIconConfig implements Deserializable {
+export class ShareIconConfig implements IDeserializable {
   applications: ShareIcon[];
 
   deserialize(input: any) {
@@ -282,7 +282,7 @@ export class ShareIconConfig implements Deserializable {
   }
 }
 
-export class ShareIcon implements Deserializable {
+export class ShareIcon implements IDeserializable {
   value: string;
   label: string;
   iconUrl: string;
@@ -297,7 +297,7 @@ export class ShareIcon implements Deserializable {
   }
 }
 
-export class StayDetailsConfig implements Deserializable {
+export class StayDetailsConfig implements IDeserializable {
   code: string;
   arrivalDate: string;
   departureDate: string;
@@ -369,7 +369,7 @@ export class StayDetailsConfig implements Deserializable {
   }
 }
 
-export class DocumentDetailsConfig implements Deserializable {
+export class DocumentDetailsConfig implements IDeserializable {
   id: string;
   documentType: string;
   frontUrl: string;
@@ -387,7 +387,7 @@ export class DocumentDetailsConfig implements Deserializable {
   }
 }
 
-export class ContactDetailsConfig implements Deserializable {
+export class ContactDetailsConfig implements IDeserializable {
   cc: string;
   contactNumber: string;
   email: string;
@@ -410,7 +410,7 @@ export class ContactDetailsConfig implements Deserializable {
   }
 }
 
-export class HealthDeclarationConfig implements Deserializable {
+export class HealthDeclarationConfig implements IDeserializable {
   status: string;
   remarks: string;
   temperatureDetails: string;
@@ -427,7 +427,7 @@ export class HealthDeclarationConfig implements Deserializable {
   }
 }
 
-export class ReservationDetailsConfig implements Deserializable {
+export class ReservationDetailsConfig implements IDeserializable {
   bookingNumber: string;
   bookingId: string;
   hotelId: string;
@@ -443,7 +443,7 @@ export class ReservationDetailsConfig implements Deserializable {
   }
 }
 
-export class RegCardConfig implements Deserializable {
+export class RegCardConfig implements IDeserializable {
   status: string;
   url: string;
   deserialize(input: any) {
@@ -456,7 +456,7 @@ export class RegCardConfig implements Deserializable {
   }
 }
 
-export class PackageDetailsConfig implements Deserializable {
+export class PackageDetailsConfig implements IDeserializable {
   complimentryPackages = new Array<Package>();
   paidPackages = new Array<Package>();
 
@@ -472,7 +472,7 @@ export class PackageDetailsConfig implements Deserializable {
   }
 }
 
-export class PaymentDetailsConfig implements Deserializable {
+export class PaymentDetailsConfig implements IDeserializable {
   currency: string;
   dueAmount: number;
   paidAmount: number;
@@ -506,7 +506,7 @@ export class PaymentDetailsConfig implements Deserializable {
   }
 }
 
-export class DepositRuleDetailsConfig implements Deserializable {
+export class DepositRuleDetailsConfig implements IDeserializable {
   payAtDesk: boolean;
   amount: number;
   depositNight: number;
@@ -528,7 +528,7 @@ export class DepositRuleDetailsConfig implements Deserializable {
   }
 }
 
-export class RoomRateConfig implements Deserializable {
+export class RoomRateConfig implements IDeserializable {
   amount: number;
   base: number;
   description: string;
@@ -555,7 +555,7 @@ export class RoomRateConfig implements Deserializable {
   }
 }
 
-export class Package implements Deserializable {
+export class Package implements IDeserializable {
   active: boolean;
   description: string;
   name: string;

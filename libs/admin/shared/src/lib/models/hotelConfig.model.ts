@@ -1,10 +1,7 @@
 import { get, set } from 'lodash';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
-
-export class HotelDetails implements Deserializable {
+export class HotelDetails implements IDeserializable {
   hotelAccess;
   brands;
 
@@ -20,7 +17,7 @@ export class HotelDetails implements Deserializable {
   }
 }
 
-export class HotelBrand implements Deserializable {
+export class HotelBrand implements IDeserializable {
   id;
   label;
   name;
@@ -44,7 +41,7 @@ export class HotelBrand implements Deserializable {
   }
 }
 
-export class HotelBranch implements Deserializable {
+export class HotelBranch implements IDeserializable {
   id;
   label;
   name;

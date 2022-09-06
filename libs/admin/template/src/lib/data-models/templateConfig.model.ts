@@ -1,11 +1,8 @@
 import { get, set } from 'lodash';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
-
-export class Templates implements Deserializable {
+export class Templates implements IDeserializable {
   records: ITemplate[];
   deserialize(input) {
     this.records = new Array<ITemplate>();
@@ -16,7 +13,7 @@ export class Templates implements Deserializable {
   }
 }
 
-export class Template implements Deserializable {
+export class Template implements IDeserializable {
   id: string;
   status: boolean;
   description: string;

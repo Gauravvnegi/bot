@@ -1,11 +1,8 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
-
-export class Campaigns implements Deserializable {
+export class Campaigns implements IDeserializable {
   records: Campaign[];
   deserialize(input: any) {
     this.records = input.records.map((record: any) =>
@@ -15,7 +12,7 @@ export class Campaigns implements Deserializable {
   }
 }
 
-export class Campaign implements Deserializable {
+export class Campaign implements IDeserializable {
   id: string;
   name: string;
   hotelId: string;

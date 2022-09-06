@@ -1,11 +1,11 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
-export interface Deserializable {
+export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
-export class ReservationTable implements Deserializable {
+export class ReservationTable implements IDeserializable {
   records: Reservation[];
   deserialize(input: any, timezone) {
     this.records = input.records.map((record) =>
@@ -15,7 +15,7 @@ export class ReservationTable implements Deserializable {
   }
 }
 
-export class Reservation implements Deserializable {
+export class Reservation implements IDeserializable {
   rooms;
   guests;
   booking;
@@ -37,7 +37,7 @@ export class Reservation implements Deserializable {
   }
 }
 
-export class Package implements Deserializable {
+export class Package implements IDeserializable {
   paidPackages;
   deserialize(input: any) {
     this.paidPackages = input.paidPackages.map((packageDetail) => {
@@ -58,7 +58,7 @@ export class Package implements Deserializable {
   }
 }
 
-export class PackageDetail implements Deserializable {
+export class PackageDetail implements IDeserializable {
   id;
   label;
   deserialize(input: any) {
@@ -71,7 +71,7 @@ export class PackageDetail implements Deserializable {
   }
 }
 
-export class Feedback implements Deserializable {
+export class Feedback implements IDeserializable {
   rating;
   comments: string;
   status: string;
@@ -95,7 +95,7 @@ export class Feedback implements Deserializable {
   }
 }
 
-export class FeedbackSuggestion implements Deserializable {
+export class FeedbackSuggestion implements IDeserializable {
   id;
   label;
   url;
@@ -105,7 +105,7 @@ export class FeedbackSuggestion implements Deserializable {
   }
 }
 
-export class Status implements Deserializable {
+export class Status implements IDeserializable {
   journeyStatus;
   stepsStatus;
   deserialize(input: any) {
@@ -116,7 +116,7 @@ export class Status implements Deserializable {
   }
 }
 
-export class CurrentJourney implements Deserializable {
+export class CurrentJourney implements IDeserializable {
   currentJourneyName;
   deserialize(input) {
     Object.assign(
@@ -127,7 +127,7 @@ export class CurrentJourney implements Deserializable {
   }
 }
 
-export class JourneyStatus implements Deserializable {
+export class JourneyStatus implements IDeserializable {
   new;
   preCheckin;
   checkin;
@@ -144,7 +144,7 @@ export class JourneyStatus implements Deserializable {
   }
 }
 
-export class StepsStatus implements Deserializable {
+export class StepsStatus implements IDeserializable {
   documents;
   payment;
   feedback;
@@ -158,7 +158,7 @@ export class StepsStatus implements Deserializable {
     return this;
   }
 }
-export class Payment implements Deserializable {
+export class Payment implements IDeserializable {
   totalAmount;
   taxAmount;
   totalDiscount;
@@ -181,7 +181,7 @@ export class Payment implements Deserializable {
   }
 }
 
-export class Booking implements Deserializable {
+export class Booking implements IDeserializable {
   bookingId;
   bookingNumber;
   arrivalTimeStamp;
@@ -293,7 +293,7 @@ export class Booking implements Deserializable {
   }
 }
 
-export class GuestType implements Deserializable {
+export class GuestType implements IDeserializable {
   primaryGuest;
   secondaryGuest = [];
   deserialize(input) {
@@ -332,7 +332,7 @@ export class GuestType implements Deserializable {
   }
 }
 
-export class Guest implements Deserializable {
+export class Guest implements IDeserializable {
   id;
   nameTitle;
   firstName: string;
@@ -399,7 +399,7 @@ export class Guest implements Deserializable {
   }
 }
 
-export class Room implements Deserializable {
+export class Room implements IDeserializable {
   roomNumber;
   type;
   unit;

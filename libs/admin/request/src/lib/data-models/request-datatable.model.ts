@@ -1,10 +1,10 @@
 import { get, set } from 'lodash';
 import * as moment from 'moment';
-export interface Deserializable {
+export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
-export class RequestTable implements Deserializable {
+export class RequestTable implements IDeserializable {
   records: Request[];
   deserialize(input: any) {
     this.records = input.records.map((record) =>
@@ -15,7 +15,7 @@ export class RequestTable implements Deserializable {
   }
 }
 
-export class Request implements Deserializable {
+export class Request implements IDeserializable {
   requestTimeStamp;
   remarks;
   journey;
@@ -88,7 +88,7 @@ export class Request implements Deserializable {
   }
 }
 
-export class GuestType implements Deserializable {
+export class GuestType implements IDeserializable {
   primaryGuest;
   secondaryGuest = [];
   deserialize(input) {
@@ -116,7 +116,7 @@ export class GuestType implements Deserializable {
   }
 }
 
-export class Guest implements Deserializable {
+export class Guest implements IDeserializable {
   id;
   nameTitle;
   firstName: string;
@@ -139,7 +139,7 @@ export class Guest implements Deserializable {
   }
 }
 
-export class Booking implements Deserializable {
+export class Booking implements IDeserializable {
   bookingId;
   bookingNumber;
 
@@ -153,7 +153,7 @@ export class Booking implements Deserializable {
   }
 }
 
-export class Room implements Deserializable {
+export class Room implements IDeserializable {
   roomNumber;
   type;
   unit;

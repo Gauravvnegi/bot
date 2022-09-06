@@ -1,10 +1,10 @@
 import { get, set } from 'lodash';
 import * as moment from 'moment';
-export interface Deserializable {
+export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
-export class UserPermissionTable implements Deserializable {
+export class UserPermissionTable implements IDeserializable {
   records: User[];
   deserialize(input: any) {
     this.records = input.records.map((record) =>
@@ -14,7 +14,7 @@ export class UserPermissionTable implements Deserializable {
   }
 }
 
-export class User implements Deserializable {
+export class User implements IDeserializable {
   firstName;
   lastName;
   jobTitle;
@@ -94,6 +94,6 @@ export class User implements Deserializable {
   }
 }
 
-// export class Manager implements Deserializable{
+// export class Manager implements IDeserializable{
 
 // }

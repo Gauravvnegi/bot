@@ -72,7 +72,7 @@ export class WhatsappMessageAnalyticsComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this.analyticsService
-        .getConversationStats(this.hotelId, config)
+        .getConversationStats(config)
         .subscribe((response) => {
           this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
             response.messageCounts

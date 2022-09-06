@@ -41,9 +41,13 @@
     p {
       margin: 0;
       font-size: 14px;
+     
       @media screen and (max-width: 800px) {
         font-size: 10px;
       }
+    }
+    .table-header-text{
+      color: $quote-color !important;
     }
   }
 }

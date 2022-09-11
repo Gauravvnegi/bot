@@ -414,6 +414,7 @@ export class Status {
   comparisonPercent: number;
   color: string;
   key: string;
+  selected: boolean;
 
   deserialize(input) {
     Object.assign(
@@ -421,7 +422,8 @@ export class Status {
       set({}, 'color', get(input, ['color'])),
       set({}, 'score', get(input, ['score'])),
       set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
-      set({}, 'label', get(input, ['label']))
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'selected', get(input, ['selected'], false))
     );
     this.key = input.key
       ? input.key
@@ -556,14 +558,13 @@ export class Bifurcations {
 export class Disengagement {
   gtmClosureGraph: GtmClosureGraph;
   gtmbreakDown: GtmBreakdown;
-  disengagmentDrivers;
+  disengagmentDrivers: Status[];
   total: number;
-  entityTypeIndex: number;
   selectedItemColor: string;
 
   deserialize(input) {
     this.total = 0;
-    this.disengagmentDrivers = new Array<any>();
+    this.disengagmentDrivers = new Array<Status>();
     this.gtmClosureGraph = new GtmClosureGraph().deserialize({
       closerGraph: input.gtmClosedRate?.closerGraph?.closerGraphStats,
       gtmGraph: input.gtmClosedRate?.gtmGraph?.gtmGraphStats,
@@ -577,10 +578,10 @@ export class Disengagement {
           score: input.disengagmentDrivers[key],
           key,
           color: this.colors[i],
+          selected: key === input.entityType,
         })
       );
       this.total += input.disengagmentDrivers[key];
-      if (input.entityType === key) this.entityTypeIndex = i;
     });
 
     return this;

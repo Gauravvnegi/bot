@@ -74,7 +74,7 @@ export class DisengagementComponent implements OnInit {
   })(this);
 
   selectedDepartment: string;
-  selectedDepartmentKey = 'RESERVATIONS';
+  selectedDepartmentKey = '';
   selectedDepartmentIndex = 0;
   $subscription = new Subscription();
   hotelId: string;
@@ -140,15 +140,17 @@ export class DisengagementComponent implements OnInit {
         .subscribe(
           (response) => {
             this.disengagement = new Disengagement().deserialize(response);
-            this.selectedDepartmentIndex = this.disengagement.entityTypeIndex;
+            this.selectedDepartmentIndex = this.disengagement.disengagmentDrivers.findIndex(
+              (item) => item.selected
+            );
             this.total = this.disengagement.total;
             if (status && this.total) {
-              this.initCircularGraphData(response);
               this.initGTMBreakdown(
                 this.disengagement.disengagmentDrivers[
-                  this.disengagement.entityTypeIndex
+                  this.selectedDepartmentIndex
                 ]
               );
+              this.initCircularGraphData(response);
             }
             this.loading = false;
           },
@@ -255,8 +257,8 @@ export class DisengagementComponent implements OnInit {
   }
 
   initGTMBreakdown(obj) {
-    this.selectedDepartmentKey = obj.key;
-    this.selectedDepartment = obj.label;
+    this.selectedDepartmentKey = obj?.key;
+    this.selectedDepartment = obj?.label;
   }
 
   handleCircularGraphClick(e: any): void {

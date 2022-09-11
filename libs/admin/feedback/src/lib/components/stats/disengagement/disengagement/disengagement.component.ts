@@ -72,10 +72,11 @@ export class DisengagementComponent implements OnInit {
       return handle(chart);
     };
   })(this);
-
-  selectedDepartment: string;
-  selectedDepartmentKey = '';
-  selectedDepartmentIndex = 0;
+  selectedDepartment = {
+    key: '',
+    index: 0,
+    label: '',
+  };
   $subscription = new Subscription();
   hotelId: string;
   constructor(
@@ -132,7 +133,7 @@ export class DisengagementComponent implements OnInit {
           queryObj: this._adminUtilityService.makeQueryParams([
             ...this.globalQueries,
             {
-              entityType: this.selectedDepartmentKey,
+              entityType: this.selectedDepartment.key,
               feedbackType: this.getFeedbackType(),
             },
           ]),
@@ -140,18 +141,13 @@ export class DisengagementComponent implements OnInit {
         .subscribe(
           (response) => {
             this.disengagement = new Disengagement().deserialize(response);
-            this.selectedDepartmentIndex = this.disengagement.disengagmentDrivers.findIndex(
+            const index = this.disengagement.disengagmentDrivers.findIndex(
               (item) => item.selected
             );
+            this.selectedDepartment.index = index > 0 ? index : 0;
             this.total = this.disengagement.total;
-            if (status && this.total) {
-              this.initGTMBreakdown(
-                this.disengagement.disengagmentDrivers[
-                  this.selectedDepartmentIndex
-                ]
-              );
-              this.initCircularGraphData(response);
-            }
+            this.initGTMBreakdown(status && this.total > 0);
+            this.initCircularGraphData();
             this.loading = false;
           },
           ({ error }) => {
@@ -217,8 +213,8 @@ export class DisengagementComponent implements OnInit {
     });
   }
 
-  initCircularGraphData(data): void {
-    if (data) {
+  private initCircularGraphData(): void {
+    if (this.disengagement.total) {
       this.circularGraph.Data[0] = [];
       this.circularGraph.Labels = [];
       this.circularGraph.Colors[0].backgroundColor = [];
@@ -232,7 +228,7 @@ export class DisengagementComponent implements OnInit {
         this.circularGraph.Labels.push(item.label);
         this.circularTransparentGraph.Data[0].push(item.score);
         this.circularTransparentGraph.Labels.push(item.label);
-        if (index !== this.selectedDepartmentIndex) {
+        if (index !== this.selectedDepartment.index) {
           this.circularGraph.Colors[0].backgroundColor.push(item.color);
           this.circularTransparentGraph.Colors[0].backgroundColor.push(
             'transparent'
@@ -253,23 +249,45 @@ export class DisengagementComponent implements OnInit {
           );
         }
       });
+    } else {
+      this.resetGraph();
     }
   }
 
-  initGTMBreakdown(obj) {
-    this.selectedDepartmentKey = obj?.key;
-    this.selectedDepartment = obj?.label;
+  private resetGraph() {
+    this.circularGraph.Data[0] = [100];
+    this.circularTransparentGraph.Data[0] = [100];
+    this.circularGraph.Colors = [
+      {
+        backgroundColor: [chartConfig.defaultColor],
+        borderColor: [chartConfig.defaultColor],
+      },
+    ];
+    this.circularTransparentGraph.Colors = [
+      {
+        backgroundColor: [chartConfig.defaultColor],
+        borderColor: [chartConfig.defaultColor],
+      },
+    ];
+    this.circularGraph.Labels = ['No Data'];
+    this.circularTransparentGraph.Labels = ['No Data'];
+  }
+
+  private initGTMBreakdown(status = true) {
+    const obj = this.disengagement.disengagmentDrivers[
+      this.selectedDepartment.index
+    ];
+    if (status) this.selectedDepartment.key = obj?.key;
+    this.selectedDepartment.label = obj?.label;
   }
 
   handleCircularGraphClick(e: any): void {
     if (e.event.type === 'click') {
       const clickedIndex = e.active[0]?._index;
-      this.selectedDepartmentIndex = clickedIndex;
-      this.initGTMBreakdown(
-        this.disengagement.disengagmentDrivers[this.selectedDepartmentIndex]
-      );
+      this.selectedDepartment.index = clickedIndex;
+      this.initGTMBreakdown(true);
       this.getGraphData(false);
-      this.initCircularGraphData(this.disengagement);
+      this.initCircularGraphData();
     }
   }
 

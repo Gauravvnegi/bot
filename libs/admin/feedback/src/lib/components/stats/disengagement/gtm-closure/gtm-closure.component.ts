@@ -5,6 +5,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../../constants/chart';
+import { GtmClosureGraph } from '../../../../data-models/statistics.model';
 
 @Component({
   selector: 'hospitality-bot-gtm-closure',
@@ -14,7 +15,7 @@ import { chartConfig } from '../../../../constants/chart';
 export class GtmClosureComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   @Input() department: string;
-  @Input() data;
+  @Input() data: GtmClosureGraph;
   @Input() selectedInterval: string;
   globalQueries = [];
   legends = [
@@ -72,7 +73,7 @@ export class GtmClosureComponent implements OnInit {
       this.lineGraph.chartData[0].data = [];
       this.lineGraph.chartData[1].data = [];
       this.lineGraph.chartLabels = [];
-      const dataKeys = Object.keys(this.data.closerGraph.closerGraphStats);
+      const dataKeys = Object.keys(this.data.closerGraph);
       dataKeys.forEach((key) => {
         this.lineGraph.chartLabels.push(
           this.dateService.convertTimestampToLabels(
@@ -87,12 +88,8 @@ export class GtmClosureComponent implements OnInit {
               : null
           )
         );
-        this.lineGraph.chartData[0].data.push(
-          this.data.gtmGraph.gtmGraphStats[key]
-        );
-        this.lineGraph.chartData[1].data.push(
-          this.data.closerGraph.closerGraphStats[key]
-        );
+        this.lineGraph.chartData[0].data.push(this.data.gtmGraph[key]);
+        this.lineGraph.chartData[1].data.push(this.data.closerGraph[key]);
       });
     }
   }

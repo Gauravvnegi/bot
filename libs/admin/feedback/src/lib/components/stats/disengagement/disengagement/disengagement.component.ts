@@ -7,6 +7,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../../constants/chart';
 import { feedback } from '../../../../constants/feedback';
+import { Disengagement } from '../../../../data-models/statistics.model';
 import { StatisticsService } from '../../../../services/feedback-statistics.service';
 
 @Component({
@@ -17,7 +18,7 @@ import { StatisticsService } from '../../../../services/feedback-statistics.serv
 export class DisengagementComponent implements OnInit {
   @Input() globalFeedbackFilterType: string;
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
-  disengagementData;
+  disengagement: Disengagement;
   feedbackConfig = feedback;
   tabfeedbackType: string;
   selectedInterval: string;
@@ -72,12 +73,11 @@ export class DisengagementComponent implements OnInit {
     };
   })(this);
 
-  selectedDepartment;
+  selectedDepartment: string;
   selectedDepartmentKey = 'RESERVATIONS';
   selectedDepartmentIndex = 0;
   $subscription = new Subscription();
   hotelId: string;
-  deaprtmentList = [];
   constructor(
     private dateService: DateService,
     private _globalFilterService: GlobalFilterService,
@@ -139,12 +139,17 @@ export class DisengagementComponent implements OnInit {
         })
         .subscribe(
           (response) => {
-            this.disengagementData = response;
-            if (status) {
+            this.disengagement = new Disengagement().deserialize(response);
+            this.selectedDepartmentIndex = this.disengagement.entityTypeIndex;
+            this.total = this.disengagement.total;
+            if (status && this.total) {
               this.initCircularGraphData(response);
-              this.initDepartments(response.departmenList);
+              this.initGTMBreakdown(
+                this.disengagement.disengagmentDrivers[
+                  this.disengagement.entityTypeIndex
+                ]
+              );
             }
-            this.initGTMBreakdown();
             this.loading = false;
           },
           ({ error }) => {
@@ -152,13 +157,6 @@ export class DisengagementComponent implements OnInit {
             this.snackbarService.openSnackBarAsText(error.message);
           }
         )
-    );
-  }
-
-  initDepartments(departmenList) {
-    this.deaprtmentList = [];
-    Object.keys(departmenList).forEach((key) =>
-      this.deaprtmentList.push({ key, value: departmenList[key] })
     );
   }
 
@@ -227,17 +225,13 @@ export class DisengagementComponent implements OnInit {
       this.circularTransparentGraph.Labels = [];
       this.circularTransparentGraph.Colors[0].backgroundColor = [];
       this.circularTransparentGraph.Colors[0].borderColor = [];
-      this.total = 0;
-      Object.keys(data?.disengagmentDrivers).forEach((item, index) => {
-        this.total += data?.disengagmentDrivers[item];
-        this.circularGraph.Data[0].push(data?.disengagmentDrivers[item]);
-        this.circularGraph.Labels.push(data?.departmenList[item]);
-        this.circularTransparentGraph.Data[0].push(
-          data?.disengagmentDrivers[item]
-        );
-        this.circularTransparentGraph.Labels.push(data?.departmenList[item]);
+      this.disengagement.disengagmentDrivers.forEach((item, index) => {
+        this.circularGraph.Data[0].push(item.score);
+        this.circularGraph.Labels.push(item.label);
+        this.circularTransparentGraph.Data[0].push(item.score);
+        this.circularTransparentGraph.Labels.push(item.label);
         if (index !== this.selectedDepartmentIndex) {
-          this.circularGraph.Colors[0].backgroundColor.push(this.colors[index]);
+          this.circularGraph.Colors[0].backgroundColor.push(item.color);
           this.circularTransparentGraph.Colors[0].backgroundColor.push(
             'transparent'
           );
@@ -247,36 +241,33 @@ export class DisengagementComponent implements OnInit {
           this.circularGraph.Colors[0].borderColor.push('transparent');
         } else {
           this.circularTransparentGraph.Colors[0].backgroundColor.push(
-            this.selectedColor
+            this.disengagement.selectedItemColor
           );
-          this.circularGraph.Colors[0].borderColor.push(this.selectedColor);
-          this.circularGraph.Colors[0].backgroundColor.push(this.selectedColor);
+          this.circularGraph.Colors[0].borderColor.push(
+            this.disengagement.selectedItemColor
+          );
+          this.circularGraph.Colors[0].backgroundColor.push(
+            this.disengagement.selectedItemColor
+          );
         }
       });
     }
   }
 
-  initGTMBreakdown() {
-    const selectedDepartmentKey = Object.keys(
-      this.disengagementData.departmenList
-    ).filter((item, i) => i == this.selectedDepartmentIndex)[0];
-    this.selectedDepartment = this.disengagementData.departmenList[
-      selectedDepartmentKey
-    ];
+  initGTMBreakdown(obj) {
+    this.selectedDepartmentKey = obj.key;
+    this.selectedDepartment = obj.label;
   }
 
   handleCircularGraphClick(e: any): void {
     if (e.event.type === 'click') {
       const clickedIndex = e.active[0]?._index;
       this.selectedDepartmentIndex = clickedIndex;
-      this.selectedDepartmentKey = Object.keys(
-        this.disengagementData.departmenList
-      ).filter((item, i) => i == clickedIndex)[0];
-      this.selectedDepartment = this.disengagementData.departmenList[
-        this.selectedDepartmentKey
-      ];
-      this.initCircularGraphData(this.disengagementData);
+      this.initGTMBreakdown(
+        this.disengagement.disengagmentDrivers[this.selectedDepartmentIndex]
+      );
       this.getGraphData(false);
+      this.initCircularGraphData(this.disengagement);
     }
   }
 
@@ -305,15 +296,4 @@ export class DisengagementComponent implements OnInit {
 
     chartRef.update();
   };
-
-  colors = [
-    '#b8bbbe',
-    '#b2b7bc',
-    '#99a6b5',
-    '#909090',
-    '#7e7e7e',
-    '#696969',
-    '#363636',
-  ];
-  selectedColor = '#4b56c0';
 }

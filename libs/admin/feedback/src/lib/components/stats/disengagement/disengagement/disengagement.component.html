@@ -49,17 +49,17 @@
       <mat-progress-bar
         [color]="'#e61042'"
         mode="determinate"
-        [value]="disengagementData?.gtmbreakDown?.HIGH_RISK_PERCENTAGE || 0"
+        [value]="disengagement?.gtmbreakDown?.HIGH_RISK_PERCENTAGE || 0"
       >
       </mat-progress-bar>
       <div class="right__top__stat-container">
         <div>
           High Risk
-          <span>{{ disengagementData?.gtmbreakDown?.HIGH_RISK || 0 }}</span>
+          <span>{{ disengagement?.gtmbreakDown?.HIGH_RISK || 0 }}</span>
         </div>
         <div>
           Medium Risk
-          <span>{{ disengagementData?.gtmbreakDown?.MEDIUM_RISK || 0 }}</span>
+          <span>{{ disengagement?.gtmbreakDown?.MEDIUM_RISK || 0 }}</span>
         </div>
       </div>
     </div>
@@ -67,7 +67,7 @@
     <div class="right__bottom">
       <hospitality-bot-gtm-closure
         [department]="selectedDepartment"
-        [data]="disengagementData?.gtmClosedRate"
+        [data]="disengagement?.gtmClosureGraph"
         [selectedInterval]="selectedInterval"
       ></hospitality-bot-gtm-closure>
     </div>

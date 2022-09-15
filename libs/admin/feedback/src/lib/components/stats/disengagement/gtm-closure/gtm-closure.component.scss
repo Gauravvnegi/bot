@@ -1,0 +1,66 @@
+@import 'main';
+
+.stat-label {
+  cursor: pointer;
+  height: 28px;
+  background: $white 0% 0% no-repeat padding-box;
+  border: 1px solid $border;
+  border-radius: 100px;
+  opacity: 1;
+  padding: 5px 8px;
+  margin: 0 5px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  .no-border {
+    display: none;
+  }
+  .text-white {
+    color: $white;
+  }
+  @media screen and (max-width: 1070px) {
+    padding: 5px;
+    margin: 0px 2.5px;
+  }
+}
+
+.stat-label-title {
+  height: 16px;
+  text-align: left;
+  font: normal normal normal 10px/16px Roboto;
+  letter-spacing: 0.72px;
+  color: $quote-color;
+  @media screen and (max-width: 1070px) {
+    font: normal normal normal 8px/16px Roboto;
+    letter-spacing: 0;
+  }
+}
+
+.legend-border {
+  border-top: 1px solid;
+  height: 1px;
+  line-height: 0.1em;
+  width: 15px;
+  margin-top: 7px;
+  margin-right: 3px;
+  @media screen and (max-width: 1070px) {
+    width: 8px;
+  }
+}
+
+.stat-label > input {
+  opacity: 0;
+  position: absolute; /* Remove input from document flow */
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.stat-label > input:checked + p {
+  text-decoration: line-through;
+}

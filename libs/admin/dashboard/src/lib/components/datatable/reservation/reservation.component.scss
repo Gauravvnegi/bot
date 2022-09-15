@@ -105,10 +105,12 @@
     font-size: 10px;
   }
   span {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 98%;
+
     @media screen and (max-width: 540px) {
-      display: inline-block;
-      overflow: hidden;
-      text-overflow: ellipsis;
       max-width: 50px;
     }
   }
@@ -221,7 +223,7 @@
     background: $table-hover-background !important;
   }
 }
-:host ::ng-deep .header{
+:host ::ng-deep .header {
   color: $dark-blue !important;
   font-size: 16px;
   font-weight: bold;

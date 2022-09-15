@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { PackageRendererComponent as BasePackageRendererComponent } from 'libs/web-user/templates/temp000001/src/lib/containers/package-renderer/package-renderer.component';
 import { AirportFacilitiesComponent } from '../packages/airport-facilities/airport-facilities.component';
 import { DefaultAmenityComponent } from '../packages/default-amenity/default-amenity.component';
+import { RoomUpgradeComponent } from '../packages/room-upgrade/room-upgrade.component';
 
 const componentMapping = {
   'AIRPORT P/UP': AirportFacilitiesComponent,
   'AIRPORT DROP': AirportFacilitiesComponent,
+  UPGRADE: RoomUpgradeComponent,
+  UPGRADE2: RoomUpgradeComponent,
 };
 @Component({
   selector: 'hospitality-bot-package-renderer',

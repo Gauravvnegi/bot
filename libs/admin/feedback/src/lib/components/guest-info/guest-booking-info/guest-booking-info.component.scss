@@ -1,7 +1,9 @@
 @import 'main';
 .container {
-  height: 546px;
+  height: 530px;
   overflow-y: auto;
+  justify-content: start;
+  padding: 15px;
   .booking-title {
     font-family: Roboto;
     font-size: 14px;

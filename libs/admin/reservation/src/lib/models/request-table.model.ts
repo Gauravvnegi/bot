@@ -7,9 +7,9 @@ export interface Deserializable {
 
 export class RequestTable implements Deserializable {
   records: Request[];
-  deserialize(input: any) {
+  deserialize(input: any, colorMap) {
     this.records = input.records.map((record) =>
-      new Request().deserialize(record)
+      new Request().deserialize(record, colorMap)
     );
     return this;
   }
@@ -17,19 +17,25 @@ export class RequestTable implements Deserializable {
 
 export class Request implements Deserializable {
   id;
-  requestTimeStamp;
-  remarks;
-  journey;
-  status;
-  deserialize(input) {
+  bookingNumber: string;
+  requestTimeStamp: number;
+  message;
+  type: string;
+  color: string;
+  deserialize(input, colorMap) {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
-      set({}, 'requestTimeStamp', get(input, ['requestTime'])),
-      set({}, 'remarks', get(input, ['remarks'])),
-      set({}, 'status', get(input, ['status'])),
-      set({}, 'journey', get(input, ['journey']))
+      set({}, 'requestTimeStamp', get(input, ['date'])),
+      set({}, 'bookingNumber', get(input, ['bookingNumber'])),
+      set({}, 'message', get(input, ['message'])),
+      set({}, 'type', get(input, ['type']))
     );
+    if (input.message.overAllRating)
+      this.color = this.getColor(
+        { ...input, feedbackType: 'STAYFEEDBACK' },
+        colorMap
+      );
     return this;
   }
 
@@ -90,6 +96,31 @@ export class Request implements Deserializable {
         )} min(s)`;
     } else {
       return;
+    }
+  }
+
+  getColor(input, colorMap) {
+    if (input.feedbackType === 'STAYFEEDBACK') {
+      return colorMap.stayFeedbacks[input.message.overAllRating].colorCode;
+    } else {
+      return (
+        input.feedbackType &&
+        colorMap.transactionalFeedbacks[
+          Object.keys(colorMap.transactionalFeedbacks).filter((key) => {
+            const startValue = parseInt(
+              colorMap.transactionalFeedbacks[key].scale[0]
+            );
+            const endValue = parseInt(
+              colorMap.transactionalFeedbacks[key].scale.substring(
+                2,
+                colorMap.transactionalFeedbacks[key].scale.length
+              )
+            );
+            const rating = parseInt(input.message.overAllRating);
+            return rating >= startValue && rating <= endValue;
+          })[0]
+        ].colorCode
+      );
     }
   }
 }

@@ -21,6 +21,7 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 export class RequestsTableComponent extends BaseDatatableComponent {
   @Input('data') detailsData;
   @Input() parentForm;
+  @Input() colorMap;
 
   actionButtons = false;
   isQuickFilters = false;
@@ -32,9 +33,10 @@ export class RequestsTableComponent extends BaseDatatableComponent {
   isPaginaton = false;
 
   cols = [
-    { field: 'rooms.roomNumber', header: 'Date/Time' },
-    { field: 'booking.bookingNumber', header: 'Message' },
-    { field: 'guests.primaryGuest.firstName', header: 'Category/Type' },
+    { field: 'vin', header: 'Date/Time' },
+    { field: 'bookingNumber', header: 'Booking No.' },
+    { field: 'type', header: 'Type' },
+    { field: 'vin', header: 'Message/Status' },
   ];
 
   showEmptyView = false;
@@ -65,7 +67,10 @@ export class RequestsTableComponent extends BaseDatatableComponent {
           this.showEmptyView = true;
           return;
         }
-        this.values = new RequestTable().deserialize({ records: data }).records;
+        this.values = new RequestTable().deserialize(
+          { records: data },
+          this.colorMap
+        ).records;
         //set pagination
         this.totalRecords = data.total;
         this.loading = false;
@@ -128,5 +133,17 @@ export class RequestsTableComponent extends BaseDatatableComponent {
   goToRequestTable() {
     this._router.navigate(['pages', 'request']);
     //this._router.navigate(['add-user'], { relativeTo: this._route });
+  }
+
+  downloadFeedbackPDF(downloadUrl) {
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.target = '_blank';
+    link.download = downloadUrl.substring(
+      downloadUrl.lastIndexOf('/') + 1,
+      downloadUrl.length
+    );
+    link.click();
+    link.remove();
   }
 }

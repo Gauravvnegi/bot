@@ -75,8 +75,9 @@ export class VisitDetail {
   intentToRecommends;
   marketSegment: string;
   outletId: string;
+  outletName: string;
   serviceType: string;
-  statusMessage;
+  status: string;
   surveyType: string;
   color: string;
   tableOrRoomNumber: string;
@@ -91,9 +92,10 @@ export class VisitDetail {
       set({}, 'intentToRecommends', get(input, ['intentToRecommends'])),
       set({}, 'marketSegment', get(input, ['marketSegment'])),
       set({}, 'outletId', get(input, ['outletId'])),
+      set({}, 'outletName', get(input, ['outletName'])),
       set({}, 'serviceType', get(input, ['serviceType'])),
       set({}, 'surveyType', get(input, ['surveyType'])),
-      set({}, 'statusMessage', get(input, ['statusMessage'])),
+      set({}, 'status', get(input, ['status'])),
       set({}, 'color', this.getColor(input, colorMap)),
       set({}, 'tableOrRoomNumber', get(input, ['tableOrRoomNumber']))
     );

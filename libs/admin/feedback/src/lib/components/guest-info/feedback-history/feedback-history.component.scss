@@ -1,5 +1,47 @@
 @import 'main';
 
+.history-container {
+  padding: 12px 15px;
+  font-family: Roboto;
+  height: 488px;
+  .title {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .feedback-container {
+    padding: 15px 0;
+  }
+  .first-row {
+    display: flex;
+    justify-content: space-between;
+    .room-no {
+      font-size: 14px;
+      color: #b5b5c3;
+      font-weight: bold;
+    }
+  }
+  .status {
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 16px;
+  }
+  .comment {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6d7580;
+    margin: 10px 0;
+  }
+  .date {
+    font-size: 12px;
+    margin: 8px 0;
+    img {
+      height: 13px;
+      margin-right: 10px;
+    }
+  }
+}
+
 .stay-booking-feedback {
   display: flex;
   align-items: end;

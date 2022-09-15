@@ -19,7 +19,7 @@
     justify-content: space-between;
     align-items: center;
     font-family: Roboto;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: bold;
     font-stretch: normal;
     font-style: normal;
@@ -40,8 +40,8 @@
 }
 
 .guestInfoAvatar {
-  width: 28px;
-  height: 28px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: chartreuse;
   margin-right: 20px;
@@ -346,7 +346,7 @@
   outline: none;
 }
 .chat-height {
-  height: 100%;
+  height: 655px !important;
 }
 .posRel {
   position: relative;
@@ -498,7 +498,7 @@
   position: relative;
   background-color: $booking-feedback;
   min-width: 18px;
-  height: 18px;
+
   margin: 0 3px;
   &:hover {
     cursor: pointer;
@@ -616,15 +616,11 @@
   margin: 14.6px 7px 17.4px 14px;
   padding: 8px 8px 8px 8px;
   border-radius: 10px;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
   background: $white;
   .time {
     font-family: Roboto;
     font-size: 10px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.6px;
     text-align: right;
     color: #c7c7c7;

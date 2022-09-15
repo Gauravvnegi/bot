@@ -79,60 +79,68 @@
             {{ rowData.getRequestTime(_globalFilterService.timezone) }}
           </p>
         </td>
-        <td class="message">
-          <p *ngIf="rowData.remarks; else emptyCell">{{ rowData.remarks }}</p>
-          <ng-container
-            *ngIf="
-              rowData.journey !== 'INHOUSE' &&
-              ['INITIATED'].includes(rowData.status)
-            "
-          >
-            <button
-              class="conditional"
-              (click)="updateRequest('ACCEPT', rowData.journey, rowData.id)"
-            >
-              <img src="assets/svg/tick.svg" />
-            </button>
-            <button
-              class="conditional"
-              (click)="updateRequest('REJECT', rowData.journey, rowData.id)"
-            >
-              <img src="assets/svg/cross.svg" />
-            </button>
-          </ng-container>
+        <td class="booking-number">
+          <p *ngIf="rowData.bookingNumber; else emptyCell">
+            {{ rowData.bookingNumber }}
+          </p>
+          type
         </td>
-        <td class="category">
+        <td class="message">
+          <div
+            [ngClass]="{
+              spl: rowData.type === 'Pre-Arrival special request',
+              other: rowData.type !== 'Pre-Arrival special request'
+            }"
+          >
+            {{ rowData.type }}
+          </div>
+        </td>
+        <td class="message">
           <div>
             <p
-              class="journey"
+              *ngIf="rowData.message.status"
               [ngClass]="{
-                'status-opacity-initiated status-text-initiated':
-                  rowData.status === 'INITIATED',
-                'status-opacity-pending status-text-pending':
-                  rowData.status === 'PENDING',
-                'status-opacity-reject status-text-reject':
-                  rowData.status === 'FAILED',
-                'status-opacity-success status-text-success':
-                  rowData.status === 'COMPLETED'
+                closed: rowData.message.status == 'Closed' || rowData.message.status=='Accept',
+                resolved: rowData.message.status == 'RESOLVED',
+                timeOut: rowData.message.status == 'Timeout'|| rowData.message.status=='Reject',
+                pending: rowData.message.status == 'Pending'
               }"
             >
-              {{ rowData.journey }}
-              <b
-                *ngIf="rowData.getElapsedTime(_globalFilterService.timezone)"
-                [ngClass]="{
-                  'status-opacity-initiated status-text-initiated':
-                    rowData.status === 'INITIATED',
-                  'status-opacity-pending status-text-pending':
-                    rowData.status === 'PENDING',
-                  'status-opacity-reject status-text-reject':
-                    rowData.status === 'FAILED',
-                  'status-opacity-success status-text-success':
-                    rowData.status === 'COMPLETED'
-                }"
-              >
-                {{ rowData.getElapsedTime(_globalFilterService.timezone) }}
-              </b>
+              {{ rowData.message.status }}
             </p>
+            <p *ngIf="rowData.message.item; else feedback">
+              {{ rowData.message.item }}
+            </p>
+            <ng-template #feedback>
+              <div class="feedback">
+                <div class="wrapper">
+                  <div class="overall">
+                    <img src="assets/images/overall.png" alt="" />
+                  </div>
+                  <div class="booking-id-wrapper">
+                    <div class="feedback">
+                      <div>
+                        <div class="booking-feedback">
+                          <p
+                            class="number"
+                            [style.backgroundColor]="rowData.color"
+                          >
+                            {{ rowData.message.overAllRating }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="feedback__pdf">
+                  <img
+                    src="assets/svg/file-download.svg"
+                    alt="download pdf"
+                    (click)="downloadFeedbackPDF(rowData.message.feedbackPdf)"
+                  />
+                </div>
+              </div>
+            </ng-template>
           </div>
         </td>
       </tr>

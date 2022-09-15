@@ -10,6 +10,12 @@
   }
 }
 
+.booking-number {
+  font-size: 12px;
+  font-weight: normal;
+  color: #727272;
+}
+
 .activity-wrapper {
   display: flex;
   align-items: center;
@@ -23,7 +29,6 @@
       margin-right: $margin20;
       font-weight: $bolder;
     }
-  
   }
 
   .go-to {
@@ -31,10 +36,11 @@
     font-size: $font16;
     font-weight: $bolder;
   }
-  .go-requests{
+  .go-requests {
     font-size: 12px;
     color: #9eaeb8;
     cursor: pointer;
+    display: none;
   }
 }
 
@@ -60,4 +66,123 @@
   img {
     height: 20px;
   }
+}
+
+.feedback {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  &__pdf {
+    img {
+      cursor: pointer;
+    }
+  }
+  .wrapper {
+    display: flex;
+    align-items: center;
+    .overall {
+      width: 50px;
+      height: 20px;
+      img {
+        object-fit: contain;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+}
+
+.booking-id-wrapper {
+  // margin-top: 20px;
+  .booking-id {
+    text-align: center;
+  }
+  .feedback {
+    color: white;
+    font-size: $font10;
+    display: flex;
+    align-items: center;
+    .booking-feedback {
+      display: flex;
+      align-items: center;
+      background-color: #f5f5f5;
+      justify-content: space-around;
+      padding: 0px;
+      margin: 0 10px;
+      min-width: 20px;
+      min-height: 20px;
+      // margin-top: 7px;
+      border-radius: 25px;
+      position: relative;
+      &:hover {
+        cursor: pointer;
+        .feedback-msg {
+          display: block;
+        }
+      }
+      .feedback-msg {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        font-size: 12px;
+        color: $dark-grey;
+        background-color: white;
+        left: 0%;
+        padding: 7px;
+        box-shadow: 0px 0px 5px 0px lightgray;
+        border-radius: 5px;
+        display: none;
+      }
+      .feedback-icon {
+        height: 10px;
+        margin: 0 2px;
+      }
+      .number {
+        padding: 3px;
+        color: $white;
+        text-align: center;
+        width: 15px;
+        border-radius: 50%;
+        font-size: 12px;
+        margin: 0 2px;
+        min-width: 26px;
+        min-height: 26px;
+        padding-top: 5px;
+        background: $white;
+        border: solid 2px $white;
+      }
+      @media screen and (max-width: 800px) {
+        margin: 0;
+        margin-top: 7px;
+        .feedback-icon {
+          height: 12px;
+        }
+        .number {
+          font-size: 10px;
+          padding: 2px;
+          width: 15px;
+        }
+      }
+    }
+  }
+}
+.spl {
+  color: $spl-req;
+}
+
+.other {
+  color: $other-req;
+}
+
+.closed {
+  color: $completed;
+}
+.resolved {
+  color: $resolved;
+}
+.timeOut {
+  color: $reject;
+}
+.pending {
+  color: $pending;
 }

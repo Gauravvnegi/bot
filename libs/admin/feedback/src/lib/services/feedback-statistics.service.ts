@@ -92,4 +92,10 @@ export class StatisticsService extends ApiService {
   getARTGraphData(config) {
     return this.get(`/api/v1/feedback-stats/art-graph${config.queryObj}`);
   }
+
+  getDisengagementData(config) {
+    return this.get(
+      `/api/v1/feedback-stats/guest-to-meet-breakdown${config.queryObj}`
+    );
+  }
 }

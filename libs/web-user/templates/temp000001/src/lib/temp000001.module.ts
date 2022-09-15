@@ -41,6 +41,7 @@ import { ButtonTemplateSwitchDirective } from './directives/button-template-swit
 import { Temp000001SignatureCaptureWrapperComponent } from './presentational/temp000001-signature-capture-wrapper/temp000001-signature-capture-wrapper.component';
 import { TokenInterceptor } from 'libs/web-user/templates/temp000001/src/lib/interceptors/token.interceptor';
 import { QuestionnaireComponent } from './containers/questionnaire/questionnaire.component';
+import { RoomUpgradeComponent } from './containers/packages/room-upgrade/room-upgrade.component';
 
 @NgModule({
   imports: [
@@ -65,6 +66,7 @@ import { QuestionnaireComponent } from './containers/questionnaire/questionnaire
     ButtonTemplateSwitchDirective,
     Temp000001SignatureCaptureWrapperComponent,
     QuestionnaireComponent,
+    RoomUpgradeComponent,
   ],
   providers: [
     {

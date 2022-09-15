@@ -50,29 +50,19 @@ export class DocumentDetailsService extends ApiService {
       'selectedDocumentType'
     ] = new FieldSchema().deserialize({
       label: 'Document Type',
-      disable: dropDownDocumentList.length ? false : true,
+      disable: false,
       options: dropDownDocumentList,
       required: requiredList.includes('selectedDocumentType'),
     });
-
-    // if (documentsArray.length > 0) {
-    //   documentsArray.forEach((element) => {
-    //     fileArray.push(this.setDocumentFileConfig());
-    //   });
-    // }
-
-    //documentDetailsFieldSchema['documents'] = fileArray;
     return documentDetailsFieldSchema as DocumentDetailsConfigI;
   }
 
   setDocumentFileConfig(required, documentTypeLabel?) {
     let fileSchema = {};
-    // fileSchema['documentType'] = new FieldSchema().deserialize({
-    //   label: 'Document Type',
-    //   disable: false,
-    // });
     fileSchema['documentFileFront'] = new FieldSchema().deserialize({
-      label: `${documentTypeLabel} FIRST PAGE`,
+      label: `${documentTypeLabel} ${
+        documentTypeLabel != 'VISA' ? 'FIRST' : ''
+      } PAGE`,
       type: 'front',
       disable: false,
       required,
@@ -99,8 +89,8 @@ export class DocumentDetailsService extends ApiService {
         } else {
           return {
             documentType: document.documentType,
-            frontUrl: document.documentFileFront,
-            backUrl: document.documentFileBack,
+            frontUrl: document.documentFileFront.trim(),
+            backUrl: document.documentFileBack.trim(),
           };
         }
       });
@@ -274,19 +264,6 @@ export class DocumentDetailsService extends ApiService {
                     validity: false,
                     msg: `Please upload front document for ${document.documentType}.`,
                     code: 'UPLOAD_FRONT_DOCUMENT_PENDING',
-                    type: document.documentType,
-                    data: {
-                      guestId: guest.id,
-                      index,
-                    },
-                  });
-                }
-
-                if (isEmpty(document.documentFileBack.trim())) {
-                  status.push({
-                    validity: false,
-                    msg: `Please upload back document for ${document.documentType}.`,
-                    code: 'UPLOAD_BACK_DOCUMENT_PENDING',
                     type: document.documentType,
                     data: {
                       guestId: guest.id,

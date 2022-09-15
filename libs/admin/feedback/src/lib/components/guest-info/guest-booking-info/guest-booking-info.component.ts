@@ -11,7 +11,6 @@ import { Subscription } from 'rxjs';
 })
 export class GuestBookingInfoComponent implements OnInit, OnDestroy {
   @Input() data;
-  @Input() hotelId;
   @Input() reservationData;
   currentBooking = [];
   pastBooking = [];
@@ -31,7 +30,6 @@ export class GuestBookingInfoComponent implements OnInit, OnDestroy {
     this.pastBooking = this.reservationData.filter(
       (item) => item.subType === 'PAST'
     );
-    console.log(this.pastBooking);
     this.currentBooking = this.reservationData.filter(
       (item) => item.subType === 'CURRENT'
     );

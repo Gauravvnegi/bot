@@ -34,7 +34,7 @@ export class FeedbackReceivedComponent implements OnInit, OnDestroy {
   public barChartLegend = false;
 
   public barChartData: ChartDataSets[] = [
-    { data: [], label: 'Messages Exchanged' },
+    { data: [], label: 'Feedback Received' },
   ];
   public barChartColors: Color[] = [{ backgroundColor: '#ff8f00' }];
   $subscription = new Subscription();

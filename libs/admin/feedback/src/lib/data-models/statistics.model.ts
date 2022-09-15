@@ -414,6 +414,7 @@ export class Status {
   comparisonPercent: number;
   color: string;
   key: string;
+  selected: boolean;
 
   deserialize(input) {
     Object.assign(
@@ -421,9 +422,12 @@ export class Status {
       set({}, 'color', get(input, ['color'])),
       set({}, 'score', get(input, ['score'])),
       set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
-      set({}, 'label', get(input, ['label']))
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'selected', get(input, ['selected'], false))
     );
-    this.key = this.label.toUpperCase().split(' ').join('');
+    this.key = input.key
+      ? input.key
+      : this.label.toUpperCase().split(' ').join('');
     return this;
   }
 }
@@ -545,6 +549,80 @@ export class Bifurcations {
     this.data = new Array<Bifurcation>();
     input.forEach((service) =>
       this.data.push(new Bifurcation().deserialize(service))
+    );
+
+    return this;
+  }
+}
+
+export class Disengagement {
+  gtmClosureGraph: GtmClosureGraph;
+  gtmbreakDown: GtmBreakdown;
+  disengagmentDrivers: Status[];
+  total: number;
+  selectedItemColor: string;
+
+  deserialize(input) {
+    this.total = 0;
+    this.disengagmentDrivers = new Array<Status>();
+    this.gtmClosureGraph = new GtmClosureGraph().deserialize({
+      closerGraph: input.gtmClosedRate?.closerGraph?.closerGraphStats,
+      gtmGraph: input.gtmClosedRate?.gtmGraph?.gtmGraphStats,
+    });
+    this.gtmbreakDown = new GtmBreakdown().deserialize(input.gtmbreakDown);
+    this.selectedItemColor = '#4b56c0';
+    Object.keys(input.disengagmentDrivers).forEach((key, i) => {
+      this.disengagmentDrivers.push(
+        new Status().deserialize({
+          label: input.departmenList[key],
+          score: input.disengagmentDrivers[key],
+          key,
+          color: this.colors[i],
+          selected: key === input.entityType,
+        })
+      );
+      this.total += input.disengagmentDrivers[key];
+    });
+
+    return this;
+  }
+  colors = [
+    '#b8bbbe',
+    '#b2b7bc',
+    '#99a6b5',
+    '#909090',
+    '#7e7e7e',
+    '#696969',
+    '#363636',
+  ];
+}
+
+export class GtmClosureGraph {
+  closerGraph;
+  gtmGraph;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'closerGraph', get(input, ['closerGraph'])),
+      set({}, 'gtmGraph', get(input, ['gtmGraph']))
+    );
+
+    return this;
+  }
+}
+
+export class GtmBreakdown {
+  HIGH_RISK: number;
+  HIGH_RISK_PERCENTAGE: number;
+  MEDIUM_RISK: number;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'HIGH_RISK', get(input, ['HIGH_RISK'])),
+      set({}, 'HIGH_RISK_PERCENTAGE', get(input, ['HIGH_RISK_PERCENTAGE'])),
+      set({}, 'MEDIUM_RISK', get(input, ['MEDIUM_RISK']))
     );
 
     return this;

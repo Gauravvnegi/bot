@@ -1,0 +1,75 @@
+<div class="card-container">
+  <div class="left">
+    <div class="left__title">
+      What drivers are leading to disengagement at All Outlets ?
+    </div>
+    <div class="left__graph" *ngIf="!loading">
+      <div class="outer">
+        <canvas
+          baseChart
+          class="graph-base-chart"
+          [data]="circularTransparentGraph.Data"
+          [labels]="circularTransparentGraph.Labels"
+          [chartType]="circularTransparentGraph.Type"
+          [legend]="circularTransparentGraph.Legend"
+          [colors]="circularTransparentGraph.Colors"
+          [options]="circularTransparentGraph.Options"
+        >
+        </canvas>
+      </div>
+      <div class="inner">
+        <canvas
+          baseChart
+          class="graph-base-chart"
+          [data]="circularGraph.Data"
+          [labels]="circularGraph.Labels"
+          [chartType]="circularGraph.Type"
+          [legend]="circularGraph.Legend"
+          [colors]="circularGraph.Colors"
+          [options]="circularGraph.Options"
+          (chartHover)="handleCircularGraphClick($event)"
+        >
+        </canvas>
+      </div>
+      <div class="left__graph__stat">
+        <div class="text">
+          {{ total }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="right__title">
+      {{ selectedDepartment.label }}
+    </div>
+    <div class="right__sub-title">
+      Guest to meet Break-down
+    </div>
+    <div class="right__top">
+      <mat-progress-bar
+        [color]="'#e61042'"
+        mode="determinate"
+        [value]="disengagement?.gtmbreakDown?.HIGH_RISK_PERCENTAGE || 0"
+      >
+      </mat-progress-bar>
+      <div class="right__top__stat-container">
+        <div>
+          High Risk
+          <span>{{ disengagement?.gtmbreakDown?.HIGH_RISK || 0 }}</span>
+        </div>
+        <div>
+          Medium Risk
+          <span>{{ disengagement?.gtmbreakDown?.MEDIUM_RISK || 0 }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="right__bottom">
+      <hospitality-bot-gtm-closure
+        [department]="selectedDepartment"
+        [data]="disengagement?.gtmClosureGraph"
+        [selectedInterval]="selectedInterval"
+      ></hospitality-bot-gtm-closure>
+    </div>
+  </div>
+</div>

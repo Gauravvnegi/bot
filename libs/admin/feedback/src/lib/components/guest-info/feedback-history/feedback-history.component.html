@@ -1,15 +1,15 @@
 <div
   *ngIf="guestReservations?.length; else noFeedback"
-  style="padding: 12px 15px; font-family: Roboto;"
+  class="history-container"
 >
-  <div style="font-family: Roboto; font-size: 14px; font-weight: bold;">
+  <div class="title">
     Past Feedbacks
   </div>
   <ng-container *ngFor="let item of guestReservations; let i = index">
-    <div style="padding: 15px 0;">
-      <div style="display: flex; justify-content: space-between;">
-        <div style="font-size: 14px; color: #b5b5c3;">
-          RNO: {{ item.feedback.tableOrRoomNumber }}
+    <div class="feedback-container">
+      <div class="first-row">
+        <div class="room-no">
+          Table/ RNO: {{ item.feedback.tableOrRoomNumber }}
         </div>
         <div class="stay-booking-feedback status-opacity-success">
           <p
@@ -20,10 +20,16 @@
           </p>
         </div>
       </div>
-      <div>{{ item.feedback.statusMessage }}</div>
-      <div>
-        {{
+      <div class="status">{{ item.feedback.status || '----' }}</div>
+      <div class="comment">{{ item.feedback.comment || '----' }}</div>
+      <div class="date">
+        <img src="assets/images/calendar-icon.png" alt="calendar" />{{
           item.feedback.getfeedbackSubmissionTime(globalFilterService.timezone)
+        }}
+      </div>
+      <div class="date">
+        <img src="assets/images/hotel-icon.png" alt="outlet" />{{
+          item.feedback.outletName
         }}
       </div>
     </div>

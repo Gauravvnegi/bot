@@ -69,14 +69,17 @@
                   </p>
                 </div>
                 <ng-template #stayFeedbakServiceLength>
-                  <p class="number">+{{ data.feedback.services.length }}</p>
+                  <p class="number round">
+                    +{{ data.feedback.services.length }}
+                  </p>
                 </ng-template>
               </div>
               <div class="stay-booking-feedback status-opacity-success">
                 <p
-                  class="number status-background-success textblk numPadding"
+                  class="number status-background-success numPadding"
                   [style.background]="
-                    (colorMap?.stayFeedbacks)[data.feedback.ratings].colorCode
+                    (data.colorMap?.stayFeedbacks)[data.feedback.ratings]
+                      .colorCode
                   "
                   *ngIf="data.feedback.ratings"
                 >
@@ -126,7 +129,9 @@
               <img
                 [src]="feedbackConfig.images.sad.url"
                 [alt]="feedbackConfig.images.sad.alt"
-                [ngClass]="{ 'gray-image gray-image-red': service.rating !== 'EI' }"
+                [ngClass]="{
+                  'gray-image gray-image-red': service.rating !== 'EI'
+                }"
               />
             </div>
             <ng-template #numericCard>
@@ -181,12 +186,15 @@
           class="guestComment"
           *ngIf="data.feedback?.comments && data?.feedback.comments.length"
         >
-          <div class="time">
-            {{ data.feedback.getTime(_globalFilterService.timezone) }}
+          <div class="d-flex">
+            <div class="time">
+              {{ data.feedback.getTime(_globalFilterService.timezone) }}
+            </div>
+            <div class="comment">
+              {{ data?.feedback.comments }}
+            </div>
           </div>
-          <div class="comment">
-            {{ data?.feedback.comments }}
-          </div>
+
           <div class="userImage">
             {{ data?.feedback.getProfileNickName() }}
           </div>
@@ -231,9 +239,10 @@
   </div>
   <div class="guest-info-enable" *ngIf="guestInfoEnable" [@slideInOut]>
     <hospitality-bot-guest-info
-      (closeInfo)="closeGuestInfo($event)"
-      [guestModalData]="data.feedback"
       [isModal]="true"
+      [guestModalData]="data.feedback"
+      [colorMap]="data.colorMap"
+      (closeInfo)="closeGuestInfo($event)"
     ></hospitality-bot-guest-info>
   </div>
 </div>

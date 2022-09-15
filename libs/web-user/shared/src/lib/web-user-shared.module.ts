@@ -46,6 +46,7 @@ import { ImageHandlingComponent } from './presentational/image-handling/image-ha
 import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shared-image-cropper.module';
 import { TabGroupComponent } from './presentational/tab-group/tab-group.component';
 import { BackgroundUrlPipe } from './pipes/background-url.pipe';
+import { SearchSelectboxComponent } from './presentational/search-selectbox/search-selectbox.component';
 import { ImageComponent } from './presentational/image/image.component';
 
 export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
@@ -126,6 +127,7 @@ export interface IThemeConfig {
     ImageHandlingComponent,
     TabGroupComponent,
     BackgroundUrlPipe,
+    SearchSelectboxComponent,
     ImageComponent,
   ],
   exports: [
@@ -170,13 +172,12 @@ export interface IThemeConfig {
     ImageHandlingComponent,
     TabGroupComponent,
     BackgroundUrlPipe,
+    SearchSelectboxComponent,
     ImageComponent,
   ],
 })
 export class WebUserSharedModule {
-  public static forRoot(
-    config: IThemeConfig
-  ): ModuleWithProviders<WebUserSharedModule> {
+  public static forRoot(config: IThemeConfig): ModuleWithProviders {
     return {
       ngModule: WebUserSharedModule,
       providers: [{ provide: 'TEMPLATE_CONFIG', useValue: config }],

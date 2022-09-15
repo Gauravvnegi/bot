@@ -51,22 +51,20 @@ export class ConversationComponent implements OnInit, OnDestroy {
     };
 
     this.$subscription.add(
-      this.analyticsService
-        .getConversationMessageStats(this.hotelId, config)
-        .subscribe(
-          (response) => {
-            this.stats = new Conversation().deserialize(response);
-            this.initGraphData(
-              this.stats.statistics.reduce(
-                (accumulator, current) => accumulator + current.count,
-                0
-              ) === 0
-            );
-          },
-          ({ error }) => {
-            this.snackbarService.openSnackBarAsText(error.message);
-          }
-        )
+      this.analyticsService.getConversationMessageStats(config).subscribe(
+        (response) => {
+          this.stats = new Conversation().deserialize(response);
+          this.initGraphData(
+            this.stats.statistics.reduce(
+              (accumulator, current) => accumulator + current.count,
+              0
+            ) === 0
+          );
+        },
+        ({ error }) => {
+          this.snackbarService.openSnackBarAsText(error.message);
+        }
+      )
     );
   }
 

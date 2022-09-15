@@ -22,6 +22,7 @@ import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/
 import { IChats, Chats, Chat, RequestList } from '../../models/message.model';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { RaiseRequestComponent } from 'libs/admin/request/src/lib/components/raise-request/raise-request.component';
+import * as FileSaver from 'file-saver';
 
 @Component({
   selector: 'hospitality-bot-chat',
@@ -398,6 +399,24 @@ export class ChatComponent
           raiseRequestCompRef.close();
         }
       )
+    );
+  }
+
+  exportChat() {
+    this.$subscription.add(
+      this.messageService
+        .exportChat(this.hotelId, this.selectedChat.receiverId)
+        .subscribe(
+          (response) => {
+            FileSaver.saveAs(
+              response,
+              `${this.selectedChat.name
+                .split(' ')
+                .join('_')}_export_${new Date().getTime()}.csv`
+            );
+          },
+          ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+        )
     );
   }
 

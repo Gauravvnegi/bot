@@ -224,7 +224,12 @@
               <input
                 pInputText
                 type="text"
-                (input)="onFilterTypeTextChange($event.target.value, 'outlet')"
+                (input)="
+                  onFilterTypeTextChange(
+                    $event.target.value,
+                    'tableOrRoomNumber'
+                  )
+                "
                 class="p-column-filter"
               />
             </th>
@@ -300,7 +305,7 @@
                 (input)="
                   onFilterTypeTextChange(
                     $event.target.value,
-                    'guestData.bookingNo'
+                    'bookingDetails.tableOrRoomNumber'
                   )
                 "
                 class="p-column-filter"

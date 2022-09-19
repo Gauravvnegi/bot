@@ -268,7 +268,7 @@ export const feedback = {
     feedbackDatatable: {
       transactional: [
         {
-          field: 'outlet',
+          field: 'bookingDetails.tableOrRoomNumber',
           header: 'Table No./ Outlet',
           isSort: true,
           sortType: 'string',

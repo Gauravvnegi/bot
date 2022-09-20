@@ -21,7 +21,7 @@
           </mat-expansion-panel-header>
           <div class="citizen__info">
             <div class="citizen__info--country">
-              <web-user-select-box
+              <web-user-search-selectbox
                 [parentForm]="guestGroup"
                 [name]="'nationality'"
                 [index]="guestGroupIndex"
@@ -34,7 +34,7 @@
                   onNationalityChange($event, guestGroup.get('id').value)
                 "
               >
-              </web-user-select-box>
+              </web-user-search-selectbox>
             </div>
             <div class="citizen__info--doc">
               <web-user-select-box
@@ -110,8 +110,12 @@
                 </div>
                 <div
                   *ngIf="
-                    guestGroup.get('selectedDocumentType').value ||
-                    documentFG.get('documentType').value !== 'VISA'
+                    !(
+                      guestGroup.value.isInternational &&
+                      ['VISA', 'PASSPORT'].includes(
+                        documentFG.get('documentType').value
+                      )
+                    )
                   "
                   class="doc__upload__section--doc extra-gap"
                 >

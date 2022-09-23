@@ -41,21 +41,16 @@
     p {
       margin: 0;
       font-size: 14px;
-     
+
       @media screen and (max-width: 800px) {
         font-size: 10px;
       }
     }
-    .table-header-text{
+    .table-header-text {
       color: $quote-color !important;
     }
   }
 }
-
-// :host ::ng-deep .p-highlight {
-//   border-color: #6bacf8 !important;
-//   background: #6bacf8 !important;
-// }
 
 :host ::ng-deep .mat-ink-bar {
   background-color: $primary-purple;

@@ -186,3 +186,6 @@
 .pending {
   color: $pending;
 }
+:host::ng-deep .p-datatable-resizable > .p-datatable-wrapper {
+  margin-bottom: 1rem !important;
+}

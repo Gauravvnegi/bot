@@ -392,6 +392,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         .prepareInvoice(this.reservationDetailsFG.get('bookingId').value)
         .subscribe(
           (res) => {
+            this.details.invoicePrepareRequest = true;
             this._snackBarService.openSnackBarAsText(
               'Ticket raised for invoice',
               '',

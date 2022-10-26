@@ -214,19 +214,6 @@
           (input)="
             onFilterTypeTextChange(
               $event.target.value,
-              'guestAttributes.transactionUsage'
-            )
-          "
-          class="p-column-filter"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="
-            onFilterTypeTextChange(
-              $event.target.value,
               'guestAttributes.overAllNps'
             )
           "
@@ -279,11 +266,6 @@
         </div>
         <span>{{ rowData.getFullName() }}</span>
       </td>
-      <!-- <td>
-        <p class="tabel-room-no status-text-success">
-          {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}
-        </p>
-      </td> -->
       <td>
         <p class="arrival-date">
           {{ rowData.booking.getArrivalDate(_globalFilterService.timezone) }}-{{
@@ -398,10 +380,6 @@
         >/ {{ rowData.payment.totalAmount }}
       </td>
       <td class="package">
-        <span>{{ rowData.guestAttributes.transactionUsage }} </span>
-      </td>
-
-      <td class="package">
         <span
           [ngClass]="{
             'status-text-initiated':
@@ -430,7 +408,6 @@
         </span>
       </td>
 
-      <!-- status-image-initiated -->
       <td class="status-image">
         <div class="icon-wrapper">
           <div class="line first"></div>

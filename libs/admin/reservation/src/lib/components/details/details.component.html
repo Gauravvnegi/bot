@@ -52,10 +52,6 @@
           <div class="value">Overall Spent</div>
         </div>
         <div class="guest_data__field">
-          <div class="label">{{ guestData.guestAttributes.potential }}</div>
-          <div class="value">Potential</div>
-        </div>
-        <div class="guest_data__field">
           <div class="label">{{ bookingCount }}</div>
           <div class="value">Bookings</div>
         </div>
@@ -209,16 +205,9 @@
             stayDetailsFG.get('kidsCount').value
           }}</span>
         </div>
-        <div class="vip-image">
+        <div class="vip-image" *ngIf="guestData.vip">
           <img src="assets/images/VIP.png" />
         </div>
-        <!-- <div class="vip-add">
-          <ul>
-            <li class="cricle">2</li>
-            <li class="contant">134-Grand H. Lake V + Balcony </li>
-            <button type="button">Still Cleaning</button>
-          </ul>
-        </div>  -->
       </div>
     </div>
   </div>

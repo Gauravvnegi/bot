@@ -333,12 +333,6 @@ export const guest = {
         sortType: 'number',
       },
       {
-        field: 'guestAttributes.transactionUsage',
-        header: 'Transaction Usage',
-        isSort: true,
-        sortType: 'string',
-      },
-      {
         field: 'guestAttributes.overAllNps',
         header: 'Overall NPS',
         isSort: true,

@@ -327,7 +327,7 @@ export const analytics = {
   ],
 
   preArrivalChart: {
-    chartData: [{ data: [], label: 'To Do', fill: false }],
+    chartData: [{ data: [], label: '', fill: false }],
     chartLabels: [],
     chartOptions: {
       responsive: true,

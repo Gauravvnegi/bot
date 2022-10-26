@@ -1,11 +1,10 @@
 <div class="pap-wraper">
   <div class="pap-wraper-header">
     <div class="pap-wraper-header-title">
-     <p>Pre-Arrival Packages</p> 
-     <div class="info-icon">
-      <img src="assets/svg/info.svg" alt="info-icon" />
-     
-    </div>
+      <p>Pre-Arrival Packages</p>
+      <div class="info-icon">
+        <img src="assets/svg/info.svg" alt="info-icon" />
+      </div>
     </div>
     <div class="pap-wraper-header-chart-type" [formGroup]="packageFG">
       <label
@@ -34,6 +33,7 @@
   </div>
   <div class="m-10">
     <canvas
+      height="51vh"
       baseChart
       (click)="openModal()"
       [datasets]="chart.chartData"

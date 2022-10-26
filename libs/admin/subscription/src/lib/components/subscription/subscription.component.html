@@ -5,11 +5,6 @@
     [featureData]="subscriptionData"
     [planUsagePercentage]="planUsagePercentage"
   ></hospitality-bot-statistics>
-  <ng-container *ngIf="subscriptionData">
-    <hospitality-bot-hotel-usage-datatable
-      [featureData]="subscriptionData"
-    ></hospitality-bot-hotel-usage-datatable>
-  </ng-container>
 </ng-container>
 
 <ng-template #loader>

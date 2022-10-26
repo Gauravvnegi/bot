@@ -72,7 +72,7 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
     this.chart.colors[0].backgroundColor = [];
     this.chart.colors[0].borderColor = [];
     const keys = Object.keys(this.graphData.inhouseRequestSourceStats);
-    keys.forEach((key, index) => {
+    keys.forEach((key) => {
       if (this.graphData.inhouseRequestSourceStats[key].value) {
         this.chart.data[0].push(
           this.graphData.inhouseRequestSourceStats[key].value

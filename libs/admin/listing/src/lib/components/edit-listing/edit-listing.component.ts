@@ -151,8 +151,8 @@ export class EditListingComponent implements OnInit, OnDestroy {
         email,
       } = contact;
       return {
-        firstName,
-        lastName,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
         salutation,
         companyName,
         mobile,

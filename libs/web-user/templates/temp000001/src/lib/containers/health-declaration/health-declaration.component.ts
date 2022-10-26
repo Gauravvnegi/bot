@@ -839,7 +839,7 @@ export class HealthDeclarationComponent implements OnInit, OnDestroy {
     const data = {};
 
     this.keysToBeUpdated.forEach((key) => {
-      data[key] = healthFormValue.primary[key];
+      data[key] = healthFormValue.primary[key].trim();
     });
     return data;
   }

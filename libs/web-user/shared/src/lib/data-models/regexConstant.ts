@@ -27,5 +27,5 @@ export class Regex {
     /\d/,
     /\d/,
   ];
-  public static NAME = '^[A-Za-z]*$|^[A-Za-z][A-Za-z ]*[A-Za-z]$';
+  public static NAME = /^[a-zA-Z ]+$/;
 }

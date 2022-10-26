@@ -20,10 +20,11 @@ export class Details implements Deserializable {
   stepStatusDetails: StepStatusDetails;
   roomsDetails: RoomsDetails;
   feedbackDetails: FeedbackDetails;
+  invoicePrepareRequest: boolean;
 
   deserialize(input: any, timezone) {
     const hotelNationality = input.hotel.address.countryCode;
-
+    this.invoicePrepareRequest = input.invoicePrepareRequest || false;
     this.guestDetails = new GuestDetailDS().deserialize(
       input.guestDetails,
       hotelNationality

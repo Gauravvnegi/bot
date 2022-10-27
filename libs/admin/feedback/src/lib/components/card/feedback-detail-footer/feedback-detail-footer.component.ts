@@ -6,7 +6,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import {
@@ -60,7 +60,7 @@ export class FeedbackDetailFooterComponent implements OnInit, OnDestroy {
   }
 
   markResolved() {
-    this.updateStatus.emit();
+    this.updateStatus.emit({ data: this.feedbackFG.getRawValue() });
   }
 
   sendMessage() {

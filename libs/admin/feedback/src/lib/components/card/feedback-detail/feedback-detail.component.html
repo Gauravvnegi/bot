@@ -203,7 +203,7 @@
     [feedback]="feedback"
     [feedbackFG]="feedbackFG"
     [userPermissions]="userPermissions"
-    (updateStatus)="updateFeedbackState()"
+    (updateStatus)="updateFeedbackState($event)"
     (addComment)="addComment($event)"
   ></hospitality-bot-feedback-detail-footer>
 </div>

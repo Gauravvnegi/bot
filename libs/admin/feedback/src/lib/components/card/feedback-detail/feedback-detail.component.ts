@@ -180,12 +180,14 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  updateFeedbackState() {
+  updateFeedbackState(event) {
     const data = {
       status: card.feedbackState.resolved,
+      notes: event.data.comment,
     };
     this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
       (response) => {
+        this.feedbackFG.patchValue({ comment: '' });
         this._snackbarService
           .openSnackBarWithTranslate(
             {

@@ -130,9 +130,10 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
     );
   }
 
-  updateFeedbackState() {
+  updateFeedbackState(event) {
     const data = {
       status: 'RESOLVED',
+      notes: event.data.comment,
     };
     this.tableService
       .updateFeedbackState(this.data.feedback.departmentId, data)
@@ -150,6 +151,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
               }
             )
             .subscribe();
+          this.feedbackFG.patchValue({ comment: '' });
           this.cardService.$assigneeChange.next({ status: true });
           this.refreshFeedbackData();
         },

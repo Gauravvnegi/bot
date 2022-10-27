@@ -8,7 +8,7 @@ import { GlobalFilterService } from '../../services/global-filters.service';
 import { Subscription } from 'rxjs';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
-import { ModuleNames } from '../../../../../../../../../../libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-sidenav',

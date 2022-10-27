@@ -8,7 +8,11 @@
   <div class="nickname">{{ getNicknameLoggedinUser() }}</div>
   <div
     class="button"
-    [ngClass]="{ disabled: feedback?.status === 'RESOLVED' }"
+    [ngClass]="{
+      disabled:
+        feedback?.status === 'RESOLVED' &&
+        feedbackFG?.get('comment')?.value.length === 0
+    }"
     (click)="markResolved()"
   >
     {{ 'statusUpdate.resolved' | translate }}

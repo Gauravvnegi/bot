@@ -216,24 +216,13 @@
           </div>
         </ng-container>
       </div>
-      <!-- <div class="userComments">
-        <div class="time">
-          {{ data.feedback?.getTime(_globalFilterService.timezone) }}
-        </div>
-        <div class="comment">
-          {{ data.feedback?.comments }}
-        </div>
-        <div class="userImage">
-          {{ data.feedback?.getProfileNickName() }}
-        </div>
-      </div> -->
     </div>
 
     <hospitality-bot-feedback-detail-footer
       [feedback]="data.feedback"
       [userPermissions]="userPermissions"
       [feedbackFG]="feedbackFG"
-      (updateStatus)="updateFeedbackState()"
+      (updateStatus)="updateFeedbackState($event)"
       (addComment)="addComment($event)"
     ></hospitality-bot-feedback-detail-footer>
   </div>

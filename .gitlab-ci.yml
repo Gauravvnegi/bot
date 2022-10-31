@@ -23,7 +23,6 @@ Deploy_Admin_Prod:
     #- docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
     #- docker push $CI_REGISTRY_IMAGE_URL:latest
     - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
-
     - cat "$DEPLOYMENT_FILE" > deployment.yaml
     - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
     - export KUBECONFIG=k8s-config.yaml
@@ -50,7 +49,6 @@ Deploy_Web_Prod:
     #- docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
     #- docker push $CI_REGISTRY_IMAGE_URL:latest
     - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
-
     - cat "$DEPLOYMENT_FILE" > deployment.yaml
     - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
     - export KUBECONFIG=k8s-config.yaml

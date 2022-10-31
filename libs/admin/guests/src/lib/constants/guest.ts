@@ -390,13 +390,21 @@ export const guest = {
       alt: 'Guest Source',
     },
     vip: {
-      url: 'assets/svg/vip_guest.svg',
+      url: 'assets/svg/Guest.svg',
       alt: 'VIP',
     },
     tooltip: {
       url: 'assets/svg/info.svg',
       alt: 'info-icon',
     },
+  },
+  dropdown: {
+    typeGuest: [
+      { label: 'All Guests', value: '' },
+      { label: 'New Guests', value: 'NEWGUEST' },
+      { label: 'Recurring Guests', value: 'REPEATGUEST' },
+      { label: 'VIP Guests', value: 'VIP' },
+    ],
   },
 };
 

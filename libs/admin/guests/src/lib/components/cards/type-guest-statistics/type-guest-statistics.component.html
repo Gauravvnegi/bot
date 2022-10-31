@@ -7,7 +7,16 @@
           [alt]="guestConfig.images.vip.alt"
         />
       </div>
-      <div class="stat-title">{{ 'vip.title' | translate }}</div>
+      <mat-select
+        class="stat-title"
+        [(value)]="guestType"
+        (selectionChange)="handleGuestTypeChange($event)"
+        (click)="$event.stopPropagation()"
+      >
+        <mat-option [value]="item.value" *ngFor="let item of guestTypes">{{
+          item.label
+        }}</mat-option>
+      </mat-select>
     </div>
     <div class="status-right">
       <div class="stat-labels-container">

@@ -31,6 +31,7 @@ Deploy_Admin_Prod:
   tags:
     - k8s
 
+
 Deploy_Web_Prod:
   stage: deploy
   environment:

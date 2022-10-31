@@ -32,6 +32,7 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
   legendData = guest.legend.typeGuest;
   chartTypes = guest.chartTypes.typeGuest;
   guestConfig = guest;
+  guestType = '';
 
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {
@@ -42,6 +43,8 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
       return handle(chart);
     };
   })(this);
+
+  guestTypes = guest.dropdown.typeGuest;
 
   chart: any = {
     chartData: [
@@ -167,7 +170,10 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
    */
   private getVIPStatistics(): void {
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        { guestType: this.guestType },
+      ]),
     };
     this.$subscription.add(
       this.$subscription.add(
@@ -217,6 +223,11 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
         tableCompRef.close();
       })
     );
+  }
+
+  handleGuestTypeChange(event) {
+    this.guestType = event.value;
+    this.getVIPStatistics();
   }
 
   ngOnDestroy(): void {

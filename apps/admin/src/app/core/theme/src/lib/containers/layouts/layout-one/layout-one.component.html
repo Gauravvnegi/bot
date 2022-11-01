@@ -60,6 +60,27 @@
           </div>
         </div>
         <div class="options2">
+          <div class="notification-wrapper">
+            <div class="temp-width">
+              <div class="header--button" (click)="enableNotification(main)">
+                <img
+                  class="filter-icon"
+                  src="assets/svg/notification-bell.svg"
+                />
+              </div>
+              <div
+                class="notification"
+                *ngIf="isNotificationVisible"
+                [@slideInOut]
+              >
+                <admin-notification
+                  [notificationFilterData]="notificationFilterData"
+                  (onCloseNotification)="isNotificationVisible = false"
+                  (filterData)="notificationFilterData = $event.data"
+                ></admin-notification>
+              </div>
+            </div>
+          </div>
           <div class="dropdown-wrapper">
             <admin-profile-dropdown
               [items]="profile"
@@ -100,7 +121,7 @@
     </div>
     <div
       class="main-panel--container"
-      [ngClass]="{ disabled: isGlobalFilterVisible }"
+      [ngClass]="{ disabled: isGlobalFilterVisible || isNotificationVisible }"
     >
       <div class="main" #main>
         <div class="blackscreen"></div>

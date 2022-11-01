@@ -15,12 +15,15 @@ import { FilterComponent } from './containers/filter/filter.component';
 import { FooterComponent } from './containers/footer/footer.component';
 import { LayoutOneComponent } from './containers/layouts/layout-one/layout-one.component';
 import { MessageTabMenuComponent } from './containers/message-tab-menu/message-tab-menu.component';
-import { NotificationComponent } from './containers/notification/notification.component';
+import { NotificationPopupComponent } from './containers/notification-popup/notification-popup.component';
 import { OrientationPopupComponent } from './containers/orientation-popup/orientation-popup.component';
 import { ProfileDropdownComponent } from './containers/profile-dropdown/profile-dropdown.component';
 import { SearchBarComponent } from './containers/search-bar/search-bar.component';
 import { SettingsComponent } from './containers/settings/settings.component';
 import { SidenavComponent } from './containers/sidenav/sidenav.component';
+import { NotificationComponent } from './containers/notification/notification.component';
+import { NotificationSettingsComponent } from './containers/notification/notification-settings/notification-settings.component';
+import { NotificationFilterComponent } from './containers/notification/notification-filter/notification-filter.component';
 
 @NgModule({
   imports: [
@@ -46,7 +49,10 @@ import { SidenavComponent } from './containers/sidenav/sidenav.component';
     FilterComponent,
     OrientationPopupComponent,
     MessageTabMenuComponent,
+    NotificationPopupComponent,
     NotificationComponent,
+    NotificationSettingsComponent,
+    NotificationFilterComponent,
   ],
   exports: [
     SidenavComponent,
@@ -58,6 +64,7 @@ import { SidenavComponent } from './containers/sidenav/sidenav.component';
     SearchBarComponent,
     FilterComponent,
     MessageTabMenuComponent,
+    NotificationPopupComponent,
     NotificationComponent,
   ],
 })

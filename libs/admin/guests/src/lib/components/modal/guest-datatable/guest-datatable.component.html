@@ -266,19 +266,6 @@
               (input)="
                 onFilterTypeTextChange(
                   $event.target.value,
-                  'guestAttributes.transactionUsage'
-                )
-              "
-              class="p-column-filter"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="
-                onFilterTypeTextChange(
-                  $event.target.value,
                   'guestAttributes.overAllNps'
                 )
               "
@@ -449,9 +436,6 @@
               }"
               >{{ rowData.payment.dueAmount }}</span
             >/ {{ rowData.payment.totalAmount }}
-          </td>
-          <td class="package">
-            <span>{{ rowData.guestAttributes.transactionUsage }} </span>
           </td>
 
           <td class="package">

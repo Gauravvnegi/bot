@@ -1,0 +1,74 @@
+@import 'main';
+
+.filter--container {
+  padding: 13px 10px;
+  position: relative;
+  height: 100%;
+  .header {
+    @include flex-item-center();
+    font-size: 14px;
+    color: #4b56c0;
+    cursor: pointer;
+    width: fit-content;
+    mat-icon {
+      margin-right: 7px;
+    }
+  }
+  .title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  .filter--form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #b5b5c3;
+    .date {
+      .fields {
+        @include flex-item-center();
+        gap: 12px;
+        margin-top: 12px;
+        .date-field {
+          width: 119px;
+        }
+      }
+    }
+  }
+  .apply {
+    position: fixed;
+    bottom: 20px;
+    right: 64px;
+    width: 172px;
+    height: 46px;
+    border-radius: 23px;
+    background-color: #4b56c0;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    @include flex-justify-center();
+    align-items: center;
+    &:active {
+      transform: scale(0.99);
+    }
+  }
+}
+
+:host ::ng-deep {
+  .mat-radio-group {
+    display: flex;
+    flex-direction: row;
+    gap: 45px;
+    margin-top: 15px;
+  }
+  .mat-radio-label-content {
+    font-size: 16px;
+    color: #00162b;
+  }
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+}

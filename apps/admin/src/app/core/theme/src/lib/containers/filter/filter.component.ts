@@ -134,7 +134,7 @@ export class FilterComponent implements OnChanges, OnInit {
     });
   }
 
-  updateOutletsValue(value) {
+  updateOutletsValue(value: boolean) {
     Object.keys(this.outletFG.controls).forEach((id) => {
       this.outletFG.get(id).setValue(value);
     });

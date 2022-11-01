@@ -42,6 +42,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   lastUpdatedAt: string;
   isGlobalFilterVisible = false;
   isDetailPageVisible = false;
+  isNotificationVisible = false;
   searchFG: FormGroup;
   timezone: string;
   filterConfig = {
@@ -51,6 +52,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     totalFilterContent: function () {
       return this.totalFilters <= 0 ? '' : `(+${this.totalFilters}) Others`;
     },
+  };
+  notificationFilterData = {
+    status: '',
+    fromDate: '',
+    toDate: '',
   };
   private $firebaseMessagingSubscription = new Subscription();
   isGlobalSearchVisible = true;
@@ -69,7 +75,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private subscriptionPlanService: SubscriptionPlanService,
     private loadingService: LoadingService
   ) {
-    this.initSearchQueryForm();
+    this.initFG();
   }
 
   ngOnInit() {
@@ -118,7 +124,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     );
   }
 
-  initSearchQueryForm(): void {
+  initFG(): void {
     this.searchFG = this.fb.group({
       search: [''],
     });
@@ -173,17 +179,27 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   enableGlobalFilter(el) {
     this.isGlobalFilterVisible = true;
     this.isGlobalSearchVisible = false;
+    this.isNotificationVisible = false;
     el.scrollTop = 0;
   }
 
   enableGlobalSearch() {
     this.isGlobalFilterVisible = false;
     this.isGlobalSearchVisible = true;
+    this.isNotificationVisible = false;
+  }
+
+  enableNotification(el) {
+    this.isGlobalFilterVisible = false;
+    this.isGlobalSearchVisible = false;
+    this.isNotificationVisible = true;
+    el.scrollTop = 0;
   }
 
   disableFilter() {
     this.isGlobalFilterVisible = false;
     this.isGlobalSearchVisible = false;
+    this.isNotificationVisible = false;
   }
 
   closeGlobalFilter() {

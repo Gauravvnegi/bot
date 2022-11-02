@@ -1,14 +1,30 @@
 <div class="stats" click-allow (click)="openTableModal()">
-  <div class="stats__title">
-    {{ 'shared.title' | translate }}
-  </div>
-  <div class="info-icon">
-    <img src="assets/svg/info.svg" alt="info-icon" />
-    <div class="tooltip">
-      <span class="arrow"> </span> Response Breakdown as per feedback shared
+  <div class="stats__head" [formGroup]="rategraphFG">
+    <div>
+      <div class="stats__head__title">
+        {{ 'shared.title' | translate }}
+      </div>
+      <div class="info-icon">
+        <img src="assets/svg/info.svg" alt="info-icon" />
+        <div class="tooltip">
+          <span class="arrow"> </span> Response Breakdown as per feedback shared
+        </div>
+      </div>
+    </div>
+    <div>
+      <mat-select
+        (click)="stopOpenModal($event)"
+        class="stats__head__select"
+        formControlName="rategraph"
+        (selectionChange)="handleRateGraphChange($event)"
+      >
+        <mat-option [value]="item.key" *ngFor="let item of keyLabels">{{
+          item.label
+        }}</mat-option>
+      </mat-select>
     </div>
   </div>
-   <!-- <div class="stats__subheading">
+  <!-- <div class="stats__subheading">
     {{ 'shared.sub_title' | translate }}
   </div>  -->
   <div class="stats__body">

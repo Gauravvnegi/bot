@@ -318,6 +318,14 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     }
   }
 
+  setNotificationFilterData(event): void {
+    this.notificationFilterData = event.data;
+  }
+
+  closeNotification(): void {
+    this.isNotificationVisible = false;
+  }
+
   ngOnDestroy() {
     this.firebaseMessagingService.destroySubscription();
   }

@@ -75,8 +75,8 @@
               >
                 <admin-notification
                   [notificationFilterData]="notificationFilterData"
-                  (onCloseNotification)="isNotificationVisible = false"
-                  (filterData)="notificationFilterData = $event.data"
+                  (onCloseNotification)="closeNotification()"
+                  (filterData)="setNotificationFilterData($event)"
                 ></admin-notification>
               </div>
             </div>

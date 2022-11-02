@@ -112,6 +112,11 @@ export class NotificationComponent
   }
 
   closePopup() {
+    let data = this.notificationFilterData;
+    data.fromDate = data.fromDate
+      ? moment(data.fromDate).unix() * 1000
+      : data.fromDate;
+    data.toDate = data.toDate ? moment(data.toDate).unix() * 1000 : data.toDate;
     this.onCloseNotification.emit();
   }
 
@@ -158,7 +163,7 @@ export class NotificationComponent
 
   openFilterForm() {
     if (!this.isFilterVisible) {
-      const data = this.notificationFilterData;
+      let data = this.notificationFilterData;
       data.fromDate = data.fromDate ? moment(data.fromDate) : data.fromDate;
       data.toDate = data.toDate ? moment(data.toDate) : data.toDate;
       this.filterFG.patchValue(data);

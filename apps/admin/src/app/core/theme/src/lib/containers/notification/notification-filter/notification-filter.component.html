@@ -20,7 +20,7 @@
             matInput
             [matDatepicker]="datepicker"
             formControlName="fromDate"
-            [max]="getFromMaxDate()"
+            [max]="fromMaxDate"
           />
           <mat-datepicker-toggle matSuffix [for]="datepicker"
             ><img src="assets/svg/calendar.svg" class="calendar-image"
@@ -33,8 +33,8 @@
             matInput
             [matDatepicker]="datepicker1"
             formControlName="toDate"
-            [max]="getToMaxDate()"
-            [min]="getToMinDate()"
+            [max]="toMaxDate"
+            [min]="toMinDate"
           />
           <mat-datepicker-toggle matSuffix [for]="datepicker1"
             ><img src="assets/svg/calendar.svg" class="calendar-image"

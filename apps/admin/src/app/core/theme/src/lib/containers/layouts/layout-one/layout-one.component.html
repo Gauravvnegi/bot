@@ -121,7 +121,11 @@
     </div>
     <div
       class="main-panel--container"
-      [ngClass]="{ disabled: isGlobalFilterVisible || isNotificationVisible }"
+      [ngClass]="{
+        disabled:
+          (isGlobalFilterVisible && !checkForMessageRoute()) ||
+          (isNotificationVisible && !checkForMessageRoute())
+      }"
     >
       <div class="main" #main>
         <div class="blackscreen"></div>

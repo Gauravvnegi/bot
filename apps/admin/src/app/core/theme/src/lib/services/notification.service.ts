@@ -15,9 +15,13 @@ export class NotificationService extends ApiService {
     return this.get(`/api/v1/user/${userId}/push-notification-setting`);
   }
 
-  updateNotificationSetting(userId: string, settingId: string) {
+  updateNotificationSetting(
+    userId: string,
+    settingId: string,
+    status: boolean
+  ) {
     return this.patch(
-      `/api/v1/user/${userId}/push-notification-setting/${settingId}?status=false`,
+      `/api/v1/user/${userId}/push-notification-setting/${settingId}?status=${status}`,
       {}
     );
   }

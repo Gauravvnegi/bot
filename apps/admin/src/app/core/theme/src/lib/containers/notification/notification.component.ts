@@ -32,7 +32,6 @@ export class NotificationComponent
   @Output() filterData = new EventEmitter();
   @ViewChild('notificationList') private myScrollContainer: ElementRef;
   scrollView;
-  customizeFG: FormGroup;
   filterFG: FormGroup;
   isCustomizeVisible = false;
   isFilterVisible = false;
@@ -62,15 +61,6 @@ export class NotificationComponent
   }
 
   initFG(): void {
-    this.customizeFG = this.fb.group({
-      email: [false],
-      department: [false],
-      preCheckin: [false],
-      checkin: [false],
-      feedback: [false],
-      request: [false],
-    });
-
     this.filterFG = this.fb.group({
       status: [''],
       fromDate: [''],
@@ -122,6 +112,7 @@ export class NotificationComponent
 
   handleCustomize(event) {
     event.stopPropagation();
+    this.isCustomizeVisible = true;
   }
 
   deleteNotification(item: Notification) {
@@ -169,6 +160,11 @@ export class NotificationComponent
       this.filterFG.patchValue(data);
       this.isFilterVisible = true;
     }
+  }
+
+  handleCustomizeClose() {
+    this.isCustomizeVisible = false;
+    this.getNotifications();
   }
 
   ngOnDestroy(): void {

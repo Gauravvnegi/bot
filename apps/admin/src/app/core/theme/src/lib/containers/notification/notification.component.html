@@ -4,7 +4,7 @@
   </div>
   <div class="reset-wrapper">
     <img
-      src="assets/svg/Filter-Icon.svg"
+      src="assets/svg/notification-filter.svg"
       alt="filter"
       (click)="openFilterForm()"
     />
@@ -17,7 +17,11 @@
   *ngIf="isCustomizeVisible || isFilterVisible; else notificationListTemplate"
 >
   <ng-container *ngIf="isCustomizeVisible; else filter">
-    <div></div>
+    <div>
+      <admin-notification-settings
+        (closeCustomize)="handleCustomizeClose()"
+      ></admin-notification-settings>
+    </div>
   </ng-container>
   <ng-template #filter>
     <div class="filter--form">

@@ -1,1 +1,29 @@
-<p>notification-settings works!</p>
+<div class="customize--container">
+  <div class="header" (click)="close()">
+    <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+    <div>Go Back</div>
+  </div>
+  <div class="title">
+    <div>
+      Customise
+    </div>
+    <div class="sub-title">
+      Set the notifications you want to see in your Notifications pane.
+    </div>
+  </div>
+  <div class="customize--form" [formGroup]="customizeFG" *ngIf="!loading">
+    <div
+      *ngFor="let item of notificationSettings | keyvalue"
+      [formGroupName]="item.key"
+    >
+      <div>{{ item.key }}</div>
+      <div class="field" *ngFor="let control of item.value">
+        <div class="field--title">{{ control.notificationLabel }}</div>
+        <mat-slide-toggle
+          [formControlName]="control.id"
+          (change)="updatePackageStatus($event, control.id)"
+        ></mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+</div>

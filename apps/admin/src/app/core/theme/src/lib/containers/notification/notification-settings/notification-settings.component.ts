@@ -36,9 +36,10 @@ export class NotificationSettingsComponent implements OnInit {
           Object.keys(response).forEach((key) => {
             this.customizeFG.addControl(key, new FormGroup({}));
             response[key].forEach((item) => {
-              this.customizeFG
-                .get(key)
-                .addControl(item.id, new FormControl(item.active));
+              (this.customizeFG.get(key) as FormGroup).addControl(
+                item.id,
+                new FormControl(item.active)
+              );
             });
           });
           this.notificationSettings = response;

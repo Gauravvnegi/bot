@@ -15,10 +15,10 @@ export class NotificationFilterComponent {
   applyFilter() {
     const data = this.filterFG.getRawValue();
     data.fromDate = data.fromDate
-      ? moment(data.fromDate).startOf('Day').unix() * 1000
+      ? moment(data.fromDate).startOf('day').unix() * 1000
       : data.fromDate;
     data.toDate = data.toDate
-      ? moment(data.toDate).endOf('Day').unix() * 1000
+      ? moment(data.toDate).endOf('day').unix() * 1000
       : data.toDate;
     this.filterApplied.emit({
       status: true,
@@ -32,18 +32,18 @@ export class NotificationFilterComponent {
 
   getFromMaxDate() {
     if (this.filterFG?.get('toDate').value) {
-      return moment(this.filterFG?.get('toDate').value).endOf('Day');
+      return moment(this.filterFG?.get('toDate').value).endOf('day');
     }
-    return moment().startOf('Day');
+    return moment().startOf('day');
   }
 
   getToMaxDate() {
-    return moment().endOf('Day');
+    return moment().endOf('day');
   }
 
   getToMinDate() {
     if (this.filterFG?.get('fromDate').value) {
-      return moment(this.filterFG?.get('fromDate').value).endOf('Day');
+      return moment(this.filterFG?.get('fromDate').value).endOf('day');
     }
     return null;
   }

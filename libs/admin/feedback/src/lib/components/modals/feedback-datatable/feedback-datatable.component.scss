@@ -27,6 +27,33 @@
     cursor: pointer;
   }
 }
+.rate {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  .rate-images {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    opacity: 0.4;
+    img {
+      width: 22px;
+      height: 22px;
+    }
+  }
+  .rate-divider {
+    font-family: LithosPro;
+    font-size: 41px;
+    font-weight: 300;
+    line-height: 0.95;
+    text-align: left;
+    color: #727272;
+    opacity: 0.35;
+  }
+  .opacImage {
+    opacity: 1 !important;
+  }
+}
 
 :host ::ng-deep .p-datatable {
   margin: 10px 1.5% !important;

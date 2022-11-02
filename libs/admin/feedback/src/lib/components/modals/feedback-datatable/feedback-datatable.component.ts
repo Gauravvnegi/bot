@@ -124,10 +124,17 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    * @function setTableCols To set table columns header
    */
   setTableCols(): void {
-    this.cols =
-      this.feedbackType === this.globalFeedbackConfig.types.stay
-        ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
-        : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;
+    if (this.tableName === 'Response Rate') {
+      this.cols =
+        this.feedbackType === this.globalFeedbackConfig.types.stay
+          ? this.globalFeedbackConfig.cols.rategraphDatatable.stay
+          : this.globalFeedbackConfig.cols.rategraphDatatable.transactional;
+    } else {
+      this.cols =
+        this.feedbackType === this.globalFeedbackConfig.types.stay
+          ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
+          : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;
+    }
   }
 
   /**

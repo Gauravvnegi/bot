@@ -284,6 +284,15 @@
                 disabled="true"
               />
             </th>
+            <th class="table-search-head" *ngIf="tableName === 'Response Rate'">
+              <input
+                pInputText
+                type="text"
+                (input)="onFilterTypeTextChange($event.target.value, 'vin')"
+                class="p-column-filter"
+                disabled="true"
+              />
+            </th>
             <th class="table-search-head">
               <input
                 pInputText
@@ -362,6 +371,15 @@
                 (input)="
                   onFilterTypeTextChange($event.target.value, 'comments')
                 "
+                class="p-column-filter"
+                disabled="true"
+              />
+            </th>
+            <th class="table-search-head" *ngIf="tableName === 'Response Rate'">
+              <input
+                pInputText
+                type="text"
+                (input)="onFilterTypeTextChange($event.target.value, 'vin')"
                 class="p-column-filter"
                 disabled="true"
               />
@@ -601,7 +619,33 @@
             </td>
             <td class="comments">{{ rowData.guestData.overAllNps }}</td>
             <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
-
+            <td *ngIf="tableName === 'Response Rate'" class="rate">
+              <div class="rate-images">
+                <img
+                  [src]="globalFeedbackConfig.images.whatsapp.url"
+                  [alt]="globalFeedbackConfig.images.whatsapp.alt"
+                  class="svg"
+                />
+                <img
+                  [src]="globalFeedbackConfig.images.email.url"
+                  [alt]="globalFeedbackConfig.images.email.alt"
+                  class="svg"
+                />
+                <img
+                  [src]="globalFeedbackConfig.images.manual.url"
+                  [alt]="globalFeedbackConfig.images.manual.alt"
+                  class="svg"
+                />
+              </div>
+              <div class="rate-divider">/</div>
+              <div class="rate-images opacImage">
+                <img
+                  [src]="globalFeedbackConfig.images.manual.url"
+                  [alt]="globalFeedbackConfig.images.manual.alt"
+                  class="svg"
+                />
+              </div>
+            </td>
             <!-- status-image-initiated -->
             <td class="status-image">
               <ng-container
@@ -784,7 +828,33 @@
             </td>
             <td class="comments">{{ rowData.guestData.overAllNps }}</td>
             <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
-
+            <td *ngIf="tableName === 'Response Rate'" class="rate">
+              <div class="rate-images">
+                <img
+                  [src]="globalFeedbackConfig.images.whatsapp.url"
+                  [alt]="globalFeedbackConfig.images.whatsapp.alt"
+                  class="svg"
+                />
+                <img
+                  [src]="globalFeedbackConfig.images.email.url"
+                  [alt]="globalFeedbackConfig.images.email.alt"
+                  class="svg"
+                />
+                <img
+                  [src]="globalFeedbackConfig.images.manual.url"
+                  [alt]="globalFeedbackConfig.images.manual.alt"
+                  class="svg"
+                />
+              </div>
+              <div class="rate-divider">/</div>
+              <div class="rate-images opacImage">
+                <img
+                  [src]="globalFeedbackConfig.images.manual.url"
+                  [alt]="globalFeedbackConfig.images.manual.alt"
+                  class="svg"
+                />
+              </div>
+            </td>
             <!-- status-image-initiated -->
             <td class="status-image">
               <ng-container

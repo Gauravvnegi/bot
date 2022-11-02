@@ -5,6 +5,15 @@ export const feedback = {
     both: 'ALL',
   },
   images: {
+    whatsapp: {
+      url: 'assets/svg/whatsapp-circle.svg',
+      alt: 'whatspp',
+    },
+    email: { url: 'assets/svg/email-circle.svg', alt: 'mail' },
+    manual: {
+      url: 'assets/svg/manual-circle.svg',
+      alt: 'manualmessage',
+    },
     distribution: {
       url: 'assets/svg/feedback-distribution.svg',
       alt: 'distribution',
@@ -265,6 +274,112 @@ export const feedback = {
     ],
   },
   cols: {
+    rategraphDatatable: {
+      transactional: [
+        {
+          field: 'bookingDetails.tableOrRoomNumber',
+          header: 'Table No./ Outlet',
+          isSort: true,
+          sortType: 'string',
+          dynamicWidth: false,
+        },
+        {
+          field: 'guest.getFullName()',
+          header: 'Name/Phone No./ Email',
+          isSort: true,
+          sortType: 'string',
+          dynamicWidth: false,
+        },
+        {
+          field: 'getServiceTypeAndTime()',
+          header: 'Service/ Feedback',
+          isSort: false,
+          sortType: 'string',
+          dynamicWidth: true,
+        },
+        {
+          field: `getCreatedDate()`,
+          header: 'Date/Time',
+          isSort: true,
+          sortType: 'date',
+          dynamicWidth: false,
+        },
+        {
+          field: 'guestData.overAllNps',
+          header: 'Overall NPS',
+          isSort: true,
+          sortType: 'number',
+          dynamicWidth: false,
+        },
+        {
+          field: 'guestData.churnProbalilty',
+          header: 'Churn Prob/ Prediction',
+          isSort: false,
+          sortType: 'string',
+          dynamicWidth: false,
+        },
+        {
+          field: '',
+          header: 'Shared on /Received on',
+          isSort: false,
+          sortType: 'string',
+          dynamicWidth: false,
+        },
+        { field: 'actions', header: 'Actions', dynamicWidth: false },
+      ],
+      stay: [
+        {
+          field: 'tableOrRoomNumber',
+          header: 'Room No',
+          isSort: true,
+          sortType: 'string',
+          dynamicWidth: false,
+        },
+        {
+          field: '',
+          header: 'Service/ Feedback',
+          isSort: false,
+          sortType: 'string',
+          dynamicWidth: true,
+        },
+        {
+          field: 'guest.getFullName()',
+          header: 'Name/Phone No./ Email',
+          isSort: true,
+          sortType: 'string',
+          dynamicWidth: false,
+        },
+        {
+          field: `guest.getCreatedDate()`,
+          header: 'Date/Time /Guests',
+          isSort: true,
+          sortType: 'date',
+          dynamicWidth: false,
+        },
+        {
+          field: 'guestData.overAllNps',
+          header: 'Overall NPS',
+          isSort: true,
+          sortType: 'number',
+          dynamicWidth: false,
+        },
+        {
+          field: 'guestData.churnProbalilty',
+          header: 'Churn Prob/ Prediction',
+          isSort: false,
+          sortType: 'string',
+          dynamicWidth: false,
+        },
+        {
+          field: '',
+          header: 'Shared on /Received on',
+          isSort: false,
+          sortType: 'string',
+          dynamicWidth: false,
+        },
+        { field: 'actions', header: 'Actions', dynamicWidth: false },
+      ],
+    },
     feedbackDatatable: {
       transactional: [
         {

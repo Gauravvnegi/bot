@@ -30,7 +30,7 @@ export class AirportAmenity {
 
     if (input) {
       const pickTime = DateService.getDateFromTimeStamp(
-        get(input, ['pickupTime']) * 1000,
+        parseFloat(get(input, ['pickupTime'])) * 1000,
         'DD-MM-YYYY hh:mm a'
       );
       pickTimeFormatted =
@@ -38,7 +38,9 @@ export class AirportAmenity {
           pickTime.split(' ')[1] + pickTime.split(' ')[2],
           'h:mm a'
         ).format('h:mm a') || '12:00 pm';
-      pickupDate = new Date(get(input, ['pickupTime']) * 1000).toISOString();
+      pickupDate = new Date(
+        parseFloat(get(input, ['pickupTime'])) * 1000
+      ).toISOString();
     }
     Object.assign(
       this,

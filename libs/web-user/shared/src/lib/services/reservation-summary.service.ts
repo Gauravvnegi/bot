@@ -59,7 +59,7 @@ export class ReservationSummaryService {
           const tempValue = get(formValue, path);
           //to be removed and replaced with transformation
           if (tempValue) {
-            value = value.concat(tempValue).concat(' ');
+            value = value.concat(tempValue as string).concat(' ');
           }
         }
       });

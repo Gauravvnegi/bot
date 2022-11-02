@@ -27,11 +27,13 @@ export class defaultAmenity {
 
     if (input) {
       let pickTime = DateService.getDateFromTimeStamp(
-        get(input, ['pickupTime']) * 1000,
+        parseFloat(get(input, ['pickupTime'])) * 1000,
         'hh:mm a'
       );
       pickTimeFormatted = pickTime || '12:00 pm';
-      pickupDate = new Date(get(input, ['pickupTime']) * 1000).toISOString();
+      pickupDate = new Date(
+        parseFloat(get(input, ['pickupTime'])) * 1000
+      ).toISOString();
     }
     Object.assign(
       this,

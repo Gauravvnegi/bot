@@ -1,4 +1,4 @@
-import { get, set } from 'lodash';
+import { create, get, set } from 'lodash';
 import * as moment from 'moment';
 
 export class NotificationList {
@@ -26,18 +26,13 @@ export class Notification {
   userId: string;
 
   deserialize(input) {
-    Object.assign(
-      this,
-      set({}, 'id', get(input, ['id'])),
-      set({}, 'active', get(input, ['active'])),
-      set({}, 'created', get(input, ['created'])),
-      set({}, 'message', get(input, ['message'])),
-      set({}, 'notificationType', get(input, ['notificationType'])),
-      set({}, 'read', get(input, ['read'])),
-      set({}, 'updated', get(input, ['updated'])),
-      set({}, 'userAgent', get(input, ['userAgent'])),
-      set({}, 'userId', get(input, ['userId']))
-    );
+    this.id = input.id || '';
+    this.active = input.active || '';
+    this.created = input.created || '';
+    this.message = input.message || '';
+    this.notificationType = input.notificationType || '';
+    this.read = input.read || false;
+    this.updated = input.updated || '';
     this.message =
       this.message.length > 33
         ? this.message.substring(0, 33) + '...'

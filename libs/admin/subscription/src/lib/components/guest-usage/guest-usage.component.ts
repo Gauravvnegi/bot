@@ -109,7 +109,7 @@ export class GuestUsageComponent implements OnInit {
     this.chart.chartData.datasets[1].data = [];
     this.chart.chartLabels = [];
     const limit =
-      get(this.subscriptionData, ['features', 'MODULE'])?.filter(
+      (get(this.subscriptionData, ['features', 'MODULE']) as any[])?.filter(
         (data) => data.name === 'GUESTS'
       )[0]?.cost?.usageLimit || 0;
     this.chartData.forEach((data) => {

@@ -102,9 +102,21 @@ export class PaymentSummaryDetail implements Deserializable {
     Object.assign(
       this,
       set({}, 'currency', get(input, ['currency'])),
-      set({}, 'dueAmount', get(input, ['totalDueAmount']).toFixed(2)),
-      set({}, 'totalAmount', get(input, ['totalAmount']).toFixed(2)),
-      set({}, 'paidAmount', get(input, ['totalPaidAmount']).toFixed(2)),
+      set(
+        {},
+        'dueAmount',
+        parseFloat(get(input, ['totalDueAmount'])).toFixed(2)
+      ),
+      set(
+        {},
+        'totalAmount',
+        parseFloat(get(input, ['totalAmount'])).toFixed(2)
+      ),
+      set(
+        {},
+        'paidAmount',
+        parseFloat(get(input, ['totalPaidAmount'])).toFixed(2)
+      ),
       set({}, 'signatureUrl', get(input, ['signatureUrl']))
     );
     input.billItems.forEach((item) => {
@@ -134,9 +146,17 @@ export class BillItem {
           timezone
         )
       ),
-      set({}, 'creditAmount', get(input, ['creditAmount']).toFixed(2)),
+      set(
+        {},
+        'creditAmount',
+        parseFloat(get(input, ['creditAmount'])).toFixed(2)
+      ),
       set({}, 'currency', get(input, ['currency'])),
-      set({}, 'debitAmount', get(input, ['debitAmount']).toFixed(2)),
+      set(
+        {},
+        'debitAmount',
+        parseFloat(get(input, ['debitAmount'])).toFixed(2)
+      ),
       set({}, 'description', get(input, ['description'])),
       set({}, 'unit', get(input, ['unit']))
     );

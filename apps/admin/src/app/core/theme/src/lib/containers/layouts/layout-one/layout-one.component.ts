@@ -141,15 +141,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   setInitialFilterValue() {
     const brand = get(this._hotelDetailService.hotelDetails, ['brands', '0']);
-    const branches = brand?.branches;
+    const branches = brand?.['branches'];
     const branch = get(branches, [branches.length - 1]);
-    this.outlets = branch?.outlets;
-    this.filterConfig.brandName = brand?.label;
-    this.filterConfig.branchName = branch?.label;
+    this.outlets = branch?.['outlets'];
+    this.filterConfig.brandName = brand?.['label'];
+    this.filterConfig.branchName = branch?.['label'];
     this.filterService.emitFilterValue$.next({
       property: {
-        hotelName: brand?.id,
-        branchName: branch?.id,
+        hotelName: brand?.['id'],
+        branchName: branch?.['id'],
       },
       feedback: {
         feedbackType: this.checkForTransactionFeedbackSubscribed()
@@ -161,7 +161,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         {}
       ),
     });
-    this.initFirebaseMessaging(branch?.id);
+    this.initFirebaseMessaging(branch?.['id']);
     this.timezone = get(brand, ['branches', branches.length - 1, 'timezone']);
     this.globalFilterService.timezone = this.timezone;
   }

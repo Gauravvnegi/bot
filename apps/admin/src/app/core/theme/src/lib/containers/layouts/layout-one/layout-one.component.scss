@@ -154,6 +154,22 @@
         @media screen and (max-width: 800px) {
           @include width(95%);
         }
+        .notification-count {
+          position: absolute;
+          height: 20px;
+          border: solid 1px #fff;
+          border-radius: 50%;
+          background-color: #ffa329;
+          padding: 2px 6px;
+          top: 0;
+          right: 0;
+          font-size: 12px;
+          font-weight: bold;
+          color: #fff;
+        }
+      }
+      .notification-icon {
+        margin-right: 10px;
       }
       .filter-wrapper {
         position: absolute;
@@ -328,4 +344,10 @@
   }
   background: #c3c2c2;
   border-radius: 10px;
+}
+
+:host ::ng-deep .mat-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
 }

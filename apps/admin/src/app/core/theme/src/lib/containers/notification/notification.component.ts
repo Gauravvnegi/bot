@@ -115,7 +115,8 @@ export class NotificationComponent
     this.isCustomizeVisible = true;
   }
 
-  deleteNotification(item: Notification) {
+  deleteNotification(event, item: Notification) {
+    event.stopPropagation();
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([{ id: item.id }]),
     };
@@ -129,11 +130,7 @@ export class NotificationComponent
   dismisAll() {
     if (this.notifications?.length) {
       const config = {
-        queryObj: this.adminUtilityService.makeQueryParams([
-          ...this.notifications.map((item) => {
-            return { id: item.id };
-          }),
-        ]),
+        queryObj: '',
       };
       this.$subscription.add(
         this.notificationService
@@ -159,12 +156,22 @@ export class NotificationComponent
       data.toDate = data.toDate ? moment(data.toDate) : data.toDate;
       this.filterFG.patchValue(data);
       this.isFilterVisible = true;
+      this.isCustomizeVisible = false;
     }
   }
 
   handleCustomizeClose() {
     this.isCustomizeVisible = false;
     this.getNotifications();
+  }
+
+  openNotifications(event, item) {
+    event.stopPropagation();
+    this.$subscription.add(
+      this.notificationService
+        .updateNotificationStatus(this.userService.getLoggedInUserid(), item.id)
+        .subscribe((_) => console.log('Notification status updated'))
+    );
   }
 
   ngOnDestroy(): void {

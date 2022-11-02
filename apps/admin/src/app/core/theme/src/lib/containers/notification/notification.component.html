@@ -38,7 +38,11 @@
       <img src="assets/svg/settings.svg" alt="setting" />
       <div>Customise</div>
     </div>
-    <div class="dismiss" (click)="dismisAll()">
+    <div
+      class="dismiss"
+      (click)="dismisAll()"
+      *ngIf="notifications && notifications.length"
+    >
       <img src="assets/svg/delete-transparent.svg" alt="delete" />
       <div>Dismiss All</div>
     </div>
@@ -50,7 +54,11 @@
       *ngIf="notifications && notifications.length"
       (scroll)="onScroll($event)"
     >
-      <div class="notification--item" *ngFor="let item of notifications">
+      <div
+        class="notification--item"
+        *ngFor="let item of notifications"
+        (click)="openNotifications($event, item)"
+      >
         <div class="profile">
           {{ userService.userDetails.getProfileNickName() }}
         </div>
@@ -64,7 +72,7 @@
               <img
                 src="assets/svg/mat-cross.svg"
                 alt="close"
-                (click)="deleteNotification(item)"
+                (click)="deleteNotification($event, item)"
               />
             </div>
           </div>

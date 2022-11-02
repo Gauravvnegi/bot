@@ -31,4 +31,11 @@ export class NotificationService extends ApiService {
       `/api/v1/user/${userId}/push-notification-history/${config.queryObj}`
     );
   }
+
+  updateNotificationStatus(userId: string, notificationId: string) {
+    return this.patch(
+      `/api/v1/user/${userId}/push-notifiation-history/${notificationId}?status=true`,
+      {}
+    );
+  }
 }

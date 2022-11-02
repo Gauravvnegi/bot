@@ -6,7 +6,7 @@ import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-det
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get } from 'lodash';
 import { Subscription } from 'rxjs';
-import { ModuleNames } from '../../../../../../../../../../../libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { AuthService } from '../../../../../../auth/services/auth.service';
 import { layoutConfig } from '../../../constants/layout';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';

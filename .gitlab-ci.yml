@@ -57,3 +57,4 @@ Deploy_Web_Prod:
     - kubectl apply -f deployment.yaml --validate=false
   tags:
     - k8s
+    

@@ -17,6 +17,7 @@ import { ProgressSpinnerService } from '../../../services/progress-spinner.servi
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
 import { trigger, transition, animate, style } from '@angular/animations';
 import { LoadingService } from '../../../services/loader.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -58,6 +59,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     fromDate: '',
     toDate: '',
   };
+  unreadCount: number;
   private $firebaseMessagingSubscription = new Subscription();
   isGlobalSearchVisible = true;
 
@@ -73,7 +75,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private firebaseMessagingService: FirebaseMessagingService,
     private subscriptionPlanService: SubscriptionPlanService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private notificatonService: NotificationService
   ) {
     this.initFG();
   }
@@ -83,6 +86,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
     this.loadingService.close();
+    this.getNotificationUnreadCount();
   }
 
   initFirebaseMessaging(entityId?) {
@@ -95,6 +99,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
         const notificationPayload = payload;
         this.firebaseMessagingService.playNotificationSound();
+        this.getNotificationUnreadCount();
         if (notificationPayload) {
           switch (notificationPayload['data']?.notificationType) {
             case 'Live Request':
@@ -324,6 +329,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   closeNotification(): void {
     this.isNotificationVisible = false;
+    this.getNotificationUnreadCount();
+  }
+
+  getNotificationUnreadCount() {
+    this.notificatonService
+      .getUnreadCount(this._userService.getLoggedInUserid())
+      .subscribe((response) => (this.unreadCount = response?.unreadCount));
   }
 
   ngOnDestroy() {

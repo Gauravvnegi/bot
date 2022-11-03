@@ -35,7 +35,7 @@
 <ng-template #notificationListTemplate>
   <div class="notification--customize">
     <div class="customize" (click)="handleCustomize($event)">
-      <img src="assets/svg/settings.svg" alt="setting" />
+      <img src="assets/svg/customize.svg" alt="setting" />
       <div>Customise</div>
     </div>
     <div
@@ -51,13 +51,14 @@
     <div
       #notificationList
       class="notification"
-      *ngIf="notifications && notifications.length"
+      *ngIf="notifications && notifications.length; else emptyNotication"
       (scroll)="onScroll($event)"
     >
       <div
         class="notification--item"
         *ngFor="let item of notifications"
         (click)="openNotifications($event, item)"
+        [ngClass]="{ unread: !item.read }"
       >
         <div class="profile">
           {{ userService.userDetails.getProfileNickName() }}
@@ -76,9 +77,27 @@
               />
             </div>
           </div>
-          <div class="message">{{ item.message }}</div>
+          <div
+            class="message"
+            [ngStyle]="{ color: item.read ? '#002046' : '#4b56c0' }"
+          >
+            {{
+              item.message.length > 33
+                ? item.message.substring(0, 33) + '...'
+                : item.message
+            }}
+          </div>
         </div>
       </div>
     </div>
+    <ng-template #emptyNotication>
+      <div class="empty-view">
+        <img src="assets/svg/empty-notification.svg" alt="empty" />
+        <div class="empty-view--title">No Notification</div>
+        <div class="empty-view--sub-title">
+          Currently you do not have any notification
+        </div>
+      </div>
+    </ng-template>
   </div>
 </ng-template>

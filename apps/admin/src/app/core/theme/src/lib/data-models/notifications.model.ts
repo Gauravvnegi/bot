@@ -33,10 +33,6 @@ export class Notification {
     this.notificationType = input.notificationType || '';
     this.read = input.read || false;
     this.updated = input.updated || '';
-    this.message =
-      this.message.length > 33
-        ? this.message.substring(0, 33) + '...'
-        : this.message;
     return this;
   }
 

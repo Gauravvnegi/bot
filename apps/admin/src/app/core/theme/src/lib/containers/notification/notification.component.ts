@@ -19,7 +19,11 @@ import {
   NotificationList,
 } from '../../data-models/notifications.model';
 import { GlobalFilterService } from '../../services/global-filters.service';
+import { FirebaseMessagingService } from '../../services/messaging.service';
+import { ModalService } from 'libs/shared/material/src';
+import { MatDialogConfig } from '@angular/material/dialog';
 import * as moment from 'moment';
+import { NotificationDetailComponent } from './notification-detail/notification-detail.component';
 @Component({
   selector: 'admin-notification',
   templateUrl: './notification.component.html',
@@ -44,13 +48,22 @@ export class NotificationComponent
     private notificationService: NotificationService,
     private adminUtilityService: AdminUtilityService,
     public userService: UserService,
-    public globalFilterService: GlobalFilterService
+    public globalFilterService: GlobalFilterService,
+    private firebaseMessagingService: FirebaseMessagingService,
+    private modalService: ModalService
   ) {
     this.initFG();
   }
 
   ngOnInit(): void {
     this.getNotifications();
+    this.listenForNewNotification();
+  }
+
+  listenForNewNotification() {
+    this.firebaseMessagingService
+      .receiveMessage()
+      .subscribe((_) => this.getNotifications());
   }
 
   ngAfterViewChecked() {
@@ -170,7 +183,28 @@ export class NotificationComponent
     this.$subscription.add(
       this.notificationService
         .updateNotificationStatus(this.userService.getLoggedInUserid(), item.id)
-        .subscribe((_) => console.log('Notification status updated'))
+        .subscribe((_) => {
+          this.getNotifications();
+          console.log('Notification status updated');
+        })
+    );
+    this.openNotificationDetail(item);
+  }
+
+  openNotificationDetail(item: Notification) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '550';
+    dialogConfig.disableClose = true;
+    const detailCompRef = this.modalService.openDialog(
+      NotificationDetailComponent,
+      dialogConfig
+    );
+    detailCompRef.componentInstance.data = item;
+    detailCompRef.componentInstance.onNotificationClose.subscribe(
+      (response) => {
+        if (response.close) detailCompRef.close();
+      }
     );
   }
 

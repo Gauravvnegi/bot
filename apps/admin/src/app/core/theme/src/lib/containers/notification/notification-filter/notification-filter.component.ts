@@ -26,8 +26,12 @@ export class NotificationFilterComponent {
     });
   }
 
-  closeFilter() {
+  closeFilter(): void {
     this.filterApplied.emit({ status: false });
+  }
+
+  clearFilter(): void {
+    this.filterFG.reset();
   }
 
   get fromMaxDate() {

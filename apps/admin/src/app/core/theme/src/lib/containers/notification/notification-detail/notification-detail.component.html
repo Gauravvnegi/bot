@@ -1,0 +1,23 @@
+<div class="detail--container">
+  <div class="header">
+    <div class="header__title">
+      <img
+        class="filter-icon"
+        src="assets/svg/notification-bell.svg"
+        alt="bell"
+      />
+      <div>Notification</div>
+    </div>
+    <div (click)="closeNotes()" class="header__close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="body">
+    <div class="message">{{ data.message }}</div>
+    <div class="footer">
+      <div class="redirect-btn">
+        <div>Go to {{ data.notificationType | titlecase }}</div>
+      </div>
+    </div>
+  </div>
+</div>

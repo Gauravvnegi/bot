@@ -34,8 +34,14 @@ export class NotificationService extends ApiService {
 
   updateNotificationStatus(userId: string, notificationId: string) {
     return this.patch(
-      `/api/v1/user/${userId}/push-notifiation-history/${notificationId}?status=true`,
+      `/api/v1/user/${userId}/push-notification-history/${notificationId}?status=true`,
       {}
+    );
+  }
+
+  getUnreadCount(userId: string) {
+    return this.get(
+      `/api/v1/user/${userId}/push-notification-history/unread-count`
     );
   }
 }

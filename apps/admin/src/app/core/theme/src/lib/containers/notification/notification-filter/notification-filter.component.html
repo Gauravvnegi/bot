@@ -1,7 +1,13 @@
 <div class="filter--container">
-  <div class="header" (click)="closeFilter()">
-    <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
-    <div>Go Back</div>
+  <div class="header">
+    <div class="header--title" (click)="closeFilter()">
+      <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+      <div>Go Back</div>
+    </div>
+    <div class="header--clear" (click)="clearFilter()">
+      <img src="assets/svg/delete-transparent.svg" alt="remove filters" />
+      <div>Remove Filters</div>
+    </div>
   </div>
   <div class="title">Filter by</div>
   <div class="filter--form" [formGroup]="filterFG">

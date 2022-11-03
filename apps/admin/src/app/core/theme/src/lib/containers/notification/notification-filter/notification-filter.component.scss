@@ -5,13 +5,26 @@
   position: relative;
   height: 100%;
   .header {
-    @include flex-item-center();
     font-size: 14px;
     color: #4b56c0;
     cursor: pointer;
-    width: fit-content;
-    mat-icon {
-      margin-right: 7px;
+    @include flex-between-center();
+    &--title {
+      @include flex-item-center();
+      mat-icon {
+        margin-right: 7px;
+      }
+    }
+    &--clear {
+      @include flex-item-center();
+      font-size: 14px;
+      color: #b5b5c3;
+      &:hover {
+        color: #4b56c0;
+      }
+      img {
+        height: 29px;
+      }
     }
   }
   .title {

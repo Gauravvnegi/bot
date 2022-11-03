@@ -24,6 +24,7 @@ import { SidenavComponent } from './containers/sidenav/sidenav.component';
 import { NotificationComponent } from './containers/notification/notification.component';
 import { NotificationSettingsComponent } from './containers/notification/notification-settings/notification-settings.component';
 import { NotificationFilterComponent } from './containers/notification/notification-filter/notification-filter.component';
+import { NotificationDetailComponent } from './containers/notification/notification-detail/notification-detail.component';
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import { NotificationFilterComponent } from './containers/notification/notificat
     NotificationComponent,
     NotificationSettingsComponent,
     NotificationFilterComponent,
+    NotificationDetailComponent,
   ],
   exports: [
     SidenavComponent,

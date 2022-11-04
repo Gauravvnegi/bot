@@ -74,3 +74,16 @@
   @include flex-item-center();
   gap: 20px;
 }
+
+:host ::ng-deep {
+  .mat-checkbox-label {
+    font-size: 16px;
+    color: #00162b;
+  }
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+    background-color: #4b56c0;
+  }
+  .mat-checkbox-background {
+    background-color: #e5e5e5;
+  }
+}

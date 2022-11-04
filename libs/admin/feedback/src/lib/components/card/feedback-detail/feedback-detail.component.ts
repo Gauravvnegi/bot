@@ -200,6 +200,8 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
             }
           )
           .subscribe();
+        this.refreshFeedbackData(true);
+        this.cardService.$refreshList.next(true);
       },
       ({ error }) => {
         this._snackbarService

@@ -48,10 +48,10 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
 
   chart: any = {
     chartData: [
-      { data: [], label: 'Arrival', fill: false },
+      { data: [], label: 'Due-In', fill: false },
       { data: [], label: 'In House', fill: false },
-      { data: [], label: 'Departure', fill: false },
-      { data: [], label: 'Out-Guest', fill: false },
+      { data: [], label: 'Due-Out', fill: false },
+      { data: [], label: 'Check-Out', fill: false },
     ],
     chartLabels: [],
     chartOptions: {

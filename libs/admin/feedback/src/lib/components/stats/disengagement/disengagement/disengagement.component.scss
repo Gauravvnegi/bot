@@ -73,6 +73,22 @@
         justify-content: space-between;
         align-items: center;
       }
+      .progress {
+        height: 10px;
+        border-radius: 5px;
+        @include flex-item-center();
+        background-color: rgb(20, 149, 164, 0.1);
+        .high-risk {
+          background-color: #e61042;
+          height: 100%;
+          border-radius: 5px 0 0 5px;
+        }
+        .medium-risk {
+          background-color: rgb(255, 143, 0);
+          height: 100%;
+          border-radius: 0 5px 5px 0;
+        }
+      }
     }
     .divider {
       height: 1px;

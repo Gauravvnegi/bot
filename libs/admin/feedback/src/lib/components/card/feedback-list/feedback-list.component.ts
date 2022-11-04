@@ -17,7 +17,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Observable, Subscription } from 'rxjs';
 import { card } from '../../../constants/card';
 import { feedback } from '../../../constants/feedback';
-import { FeedbackList, User } from '../../../data-models/feedback-card.model';
+import { FeedbackList } from '../../../data-models/feedback-card.model';
 import { CardService } from '../../../services/card.service';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../../services/table.service';
@@ -83,6 +83,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
     this.listenForEntityTypeChange();
     this.listenForAssigneeChange();
+    this.listenForRefreshList();
   }
 
   /**
@@ -108,6 +109,14 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
         this.cardService.$selectedFeedback.next(null);
         if (!this.outletChangeSubscribed) this.listenForOutletChanged();
         this.loadData();
+      })
+    );
+  }
+
+  listenForRefreshList() {
+    this.$subscription.add(
+      this.cardService.$refreshList.subscribe((response) => {
+        if (response) this.loadData();
       })
     );
   }
@@ -262,7 +271,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   setEntityId() {
     if (this.feedbackType === feedback.types.transactional)
       return this.statisticService.outletIds;
-    else return this.hotelId;
+    return this.hotelId;
   }
 
   /**

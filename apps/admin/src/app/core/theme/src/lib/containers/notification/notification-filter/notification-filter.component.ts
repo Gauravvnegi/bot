@@ -20,6 +20,9 @@ export class NotificationFilterComponent {
     data.toDate = data.toDate
       ? moment(data.toDate).endOf('day').unix() * 1000
       : data.toDate;
+    data.status = Object.keys(data.status)
+      .map((key) => (data.status[key] ? key.toUpperCase() : ''))
+      .filter((item) => item !== '');
     this.filterApplied.emit({
       status: true,
       data,

@@ -75,7 +75,11 @@ export class NotificationComponent
 
   initFG(): void {
     this.filterFG = this.fb.group({
-      status: [''],
+      status: this.fb.group({
+        read: [false],
+        unread: [false],
+        removed: [false],
+      }),
       fromDate: [''],
       toDate: [''],
     });
@@ -167,6 +171,12 @@ export class NotificationComponent
       let data = this.notificationFilterData;
       data.fromDate = data.fromDate ? moment(data.fromDate) : data.fromDate;
       data.toDate = data.toDate ? moment(data.toDate) : data.toDate;
+      const status = {
+        read: data.status.includes('READ'),
+        unread: data.status.includes('UNREAD'),
+        removed: data.status.includes('REMOVED'),
+      };
+      data.status = status;
       this.filterFG.patchValue(data);
       this.isFilterVisible = true;
       this.isCustomizeVisible = false;

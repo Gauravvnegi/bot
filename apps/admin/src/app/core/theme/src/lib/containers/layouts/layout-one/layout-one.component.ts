@@ -55,7 +55,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     },
   };
   notificationFilterData = {
-    status: '',
+    status: [],
     fromDate: '',
     toDate: '',
   };

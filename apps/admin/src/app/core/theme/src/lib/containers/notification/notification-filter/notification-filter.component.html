@@ -11,12 +11,13 @@
   </div>
   <div class="title">Filter by</div>
   <div class="filter--form" [formGroup]="filterFG">
-    <div class="messages">
+    <div class="messages" formGroupName="status">
       <div>Messages</div>
-      <mat-radio-group formControlName="status">
-        <mat-radio-button value="READ">Read</mat-radio-button>
-        <mat-radio-button value="UNREAD">Unread</mat-radio-button>
-      </mat-radio-group>
+      <div class="status">
+        <mat-checkbox formControlName="read">Read</mat-checkbox>
+        <mat-checkbox formControlName="unread">Unread</mat-checkbox>
+        <mat-checkbox formControlName="removed">Removed</mat-checkbox>
+      </div>
     </div>
     <div class="date">
       <div>Date</div>

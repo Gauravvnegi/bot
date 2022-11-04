@@ -70,18 +70,7 @@
   }
 }
 
-:host ::ng-deep {
-  .mat-radio-group {
-    display: flex;
-    flex-direction: row;
-    gap: 45px;
-    margin-top: 15px;
-  }
-  .mat-radio-label-content {
-    font-size: 16px;
-    color: #00162b;
-  }
-  .mat-form-field-wrapper {
-    padding-bottom: 0;
-  }
+.status {
+  @include flex-item-center();
+  gap: 20px;
 }

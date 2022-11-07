@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { FormBuilder } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -23,12 +29,17 @@ import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 })
 export class UserPermissionDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  tableName = 'Roles & Permissions';
+  @Output() onModalClose = new EventEmitter();
+  tableName = 'My Team';
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
-  isTabFilters = false;
+  isTabFilters = true;
+  tabFilterItems = [
+    { label: 'All', content: '', value: 'ALL' },
+    { label: 'Reporting to me', content: '', value: 'REPORTING' },
+  ];
 
   cols = [
     {
@@ -226,10 +237,12 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     this.table.filter(value, field, matchMode);
   }
 
-  goBack() {
-    this.location.back();
+  /**
+   * @function closeModal Emits the close click event for the modal
+   */
+  closeModal(): void {
+    this.onModalClose.emit(true);
   }
-
   ngOnDestroy() {
     this.$subscription.unsubscribe();
   }

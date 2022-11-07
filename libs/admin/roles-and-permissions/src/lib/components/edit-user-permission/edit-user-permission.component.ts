@@ -10,12 +10,14 @@ import { UserService } from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { CountryCode } from '@hospitality-bot/admin/shared';
 import { ManagePermissionService } from '../../services/manage-permission.service';
-import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs';
 import { Regex } from '@hospitality-bot/admin/shared';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { UserPermissionDatatableComponent } from '../user-permission-datatable/user-permission-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-edit-user-permission',
@@ -38,6 +40,14 @@ export class EditUserPermissionComponent implements OnInit {
     jobTitle: string;
   };
 
+  productTypeList = [
+    { label: 'Heda', content: '', value: 'Heda' },
+    { label: 'eFront Desk', content: '', value: 'eFront Desk' },
+    { label: 'eMark-IT', content: '', value: 'eFront Desk' },
+    { label: 'Freddie', content: '', value: 'Freddie' },
+  ];
+  teamMember = ['An', 'BS', 'SD', 'RG', 'SF'];
+
   value;
 
   userToModDetails;
@@ -49,6 +59,7 @@ export class EditUserPermissionComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
+    private _modal: ModalService,
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
     private _managePermissionService: ManagePermissionService,
@@ -67,12 +78,43 @@ export class EditUserPermissionComponent implements OnInit {
       lastName: [''],
       jobTitle: ['', Validators.required],
       brandName: ['', Validators.required],
+      productType: ['', Validators.required],
+      deptName: ['', Validators.required],
       branchName: ['', Validators.required],
       cc: [''],
       phoneNumber: [''],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       profileUrl: [''],
       permissionConfigs: this._fb.array([]),
+    });
+  }
+
+  /**
+   * @function userProfileURL getter for image url.
+   */
+  get userProfileUrl(): string {
+    return this.userForm?.get('profileUrl').value || '';
+  }
+
+  uploadProfile(event): void {
+    const formData = new FormData();
+    formData.append('files', event.file);
+    this._userService.uploadProfile(formData).subscribe(
+      (response) => {
+        this.userForm.get('profileUrl').patchValue([response.fileDownloadUri]);
+        this._snackbarService.openSnackBarAsText('Profile uploaded', '', {
+          panelClass: 'success',
+        });
+      },
+      ({ error }) => {
+        this._snackbarService.openSnackBarAsText(error.message);
+      }
+    );
+  }
+
+  deleteFile() {
+    this.userForm.patchValue({
+      profileUrl: [''],
     });
   }
 
@@ -170,6 +212,23 @@ export class EditUserPermissionComponent implements OnInit {
           }),
         })
       );
+    });
+  }
+
+  /**
+   * @function openTableModal To open modal pop-up for user persmission.
+   */
+  openTableModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const tableCompRef = this._modal.openDialog(
+      UserPermissionDatatableComponent,
+      dialogConfig
+    );
+
+    tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+      tableCompRef.close();
     });
   }
 

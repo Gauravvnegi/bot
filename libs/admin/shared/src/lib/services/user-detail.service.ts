@@ -19,6 +19,10 @@ export class UserService extends ApiService {
     return localStorage.getItem('userId');
   }
 
+  uploadProfile(data) {
+    return this.post(`/api/v1/uploads?folder_name=hotel/roseate/banner`, data);
+  }
+
   getUserDetailsById(userId): Observable<any> {
     return this.get(`/api/v1/user/${userId}`);
   }

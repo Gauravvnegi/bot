@@ -38,6 +38,8 @@ export class AddUserPermissionComponent implements OnInit {
   optionChange = new EventEmitter();
 
   value;
+  productTypeList: string[] = ['Heda', 'eFront Desk', 'eMark-IT', 'Freddie'];
+
   constructor(
     private _fb: FormBuilder,
     private _userService: UserService,
@@ -74,12 +76,21 @@ export class AddUserPermissionComponent implements OnInit {
       jobTitle: ['', Validators.required],
       brandName: ['', Validators.required],
       branchName: ['', Validators.required],
+      productType: ['', Validators.required],
+      deptName: ['', Validators.required],
       cc: [''],
       phoneNumber: [''],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       profileUrl: [''],
       permissionConfigs: this._fb.array([]),
     });
+  }
+
+  /**
+   * @function userProfileURL getter for image url.
+   */
+  get userProfileUrl(): string {
+    return this.userForm?.get('profileUrl').value || '';
   }
 
   ngOnInit(): void {

@@ -23,6 +23,11 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
   @Input() chatList;
   @Output() messageSent = new EventEmitter();
   @Input() hotelId;
+  items = [
+    { id: 1, name: 'Ram ', department: 'Department' },
+    { id: 2, name: 'Shyam ', department: 'Department' },
+  ];
+  mentions = [];
   $subscription = new Subscription();
   constructor(
     private snackBarService: SnackBarService,
@@ -56,7 +61,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
       update: false,
     });
     values.message = encodeURIComponent(values.message);
-
+    const mentions = this.checkForMentions();
     this.$subscription.add(
       this.messageService.sendMessage(this.hotelId, values).subscribe(
         (response) => {
@@ -65,6 +70,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
             timestamp,
             status: 'sent',
             update: true,
+            // mentions,
           });
         },
         ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
@@ -76,6 +82,21 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     if (event.keyCode === 13) {
       this.sendMessage();
     }
+  }
+
+  setSelectedItem(event) {
+    this.mentions.push(event);
+  }
+
+  checkForMentions() {
+    const data = [];
+    const chat = this.chatFG.get('message').value;
+    this.mentions.forEach((mention) => {
+      if (chat.includes(`@${mention.name}`)) {
+        data.push(mention);
+      }
+    });
+    return data;
   }
 
   ngOnDestroy(): void {

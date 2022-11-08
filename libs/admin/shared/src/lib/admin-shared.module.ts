@@ -31,6 +31,7 @@ import { EmailChipListComponent } from './components/email-chip-list/email-chip-
 import { DashboardErrorComponent } from './components/dashboard-error/dashboard-error.component';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { LinkDetector } from './pipes/linkDetector.pipe';
+import { MentionDirective, MentionListComponent } from './components/mention';
 
 @NgModule({
   imports: [
@@ -69,6 +70,8 @@ import { LinkDetector } from './pipes/linkDetector.pipe';
     DashboardErrorComponent,
     NumberFormatterPipe,
     LinkDetector,
+    MentionListComponent,
+    MentionDirective,
   ],
   exports: [
     DatatableComponent,
@@ -96,6 +99,8 @@ import { LinkDetector } from './pipes/linkDetector.pipe';
     EmailChipListComponent,
     NumberFormatterPipe,
     LinkDetector,
+    MentionListComponent,
+    MentionDirective,
   ],
 })
 export class AdminSharedModule {}

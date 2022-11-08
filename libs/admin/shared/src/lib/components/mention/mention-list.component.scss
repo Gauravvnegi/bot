@@ -1,0 +1,71 @@
+/** 
+ * The internal mention styles can be disabled using the configuration setting leading to these 
+ * possible states:
+ *  
+ *   bootstrap not present; disableStyle false; (new default - use internal styles)
+ *   bootstrap not present; disableStyle true;  (no style - so user can add their own styles)
+ *   bootstrap present;     disableStyle true;  (original behavior - use bs styles)
+ *   bootstrap present;     disableStyle false; (mixes internal style with bs)
+ **/
+
+.mention-menu {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  width: 210px;
+  height: 246px;
+  padding: 7px 0.3px 8px 0;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.27);
+  background-color: #fff;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-clip: padding-box;
+  font-family: Roboto;
+  font-size: 14px;
+}
+.mention-item {
+  display: block;
+  padding: 0.2em 1.5em;
+  line-height: 1.5em;
+  clear: both;
+  font-weight: normal;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+  border-bottom: 1px solid #707070;
+  cursor: pointer;
+  .sub-title {
+    font-size: 10px;
+    color: #b5b5c3;
+  }
+  &:hover {
+    color: #fff;
+    background-color: #337ab7;
+  }
+}
+.mention-active > a {
+  text-decoration: none;
+  outline: 0;
+}
+.scrollable-menu {
+  display: block;
+  height: auto;
+  max-height: 292px; /* fits 11 items with 14px font-size */
+  overflow: auto;
+}
+[hidden] {
+  display: none;
+}
+
+.mention-dropdown {
+  bottom: 100%;
+  top: auto;
+  margin-bottom: 2px;
+}

@@ -26,6 +26,10 @@ export class FeedbackDetailFooterComponent implements OnInit, OnDestroy {
   @Output() addComment = new EventEmitter();
   $subscription = new Subscription();
   @Input() feedbackFG: FormGroup;
+  items = [
+    { id: 1, name: 'Ram ', department: 'Department' },
+    { id: 2, name: 'Shyam ', department: 'Department' },
+  ];
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {

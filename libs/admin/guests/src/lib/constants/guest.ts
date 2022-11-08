@@ -356,7 +356,7 @@ export const guest = {
   legend: {
     typeGuest: [
       {
-        label: 'Arrival',
+        label: 'Due-In',
         bubbleColor: '#FF9F67',
       },
       {
@@ -364,11 +364,11 @@ export const guest = {
         bubbleColor: '#30D8B6',
       },
       {
-        label: 'Departure',
+        label: 'Due-Out',
         bubbleColor: '#F25E5E',
       },
       {
-        label: 'Out-Guest',
+        label: 'Check-Out',
         bubbleColor: '#4A73FB',
       },
     ],

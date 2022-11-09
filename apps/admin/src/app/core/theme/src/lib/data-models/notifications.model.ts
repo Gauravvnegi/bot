@@ -24,6 +24,7 @@ export class Notification {
   updated: number;
   userAgent: string;
   userId: string;
+  data;
 
   deserialize(input) {
     this.id = input.id || '';
@@ -35,6 +36,7 @@ export class Notification {
     this.notificationType = input.notificationType || '';
     this.read = input.read || false;
     this.updated = input.updated || '';
+    this.data = input.data;
     return this;
   }
 

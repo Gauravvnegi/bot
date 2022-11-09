@@ -43,6 +43,7 @@ Deploy_Web_Prod:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
     #- sed -i "s/admin:build/web-user:build/g" Dockerfile
     - sed -i "s/admin/web-user/g" Dockerfile
+    - cat Dockerfile
     - sed -i "s/admin/web/g" deploy/nginx.conf
   script:
     - docker build -t $CI_IMAGE_NAME .

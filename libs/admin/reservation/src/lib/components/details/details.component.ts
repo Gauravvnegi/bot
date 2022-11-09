@@ -114,7 +114,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private router: Router,
     private _hotelDetailService: HotelDetailService,
     private _globalFilterService: GlobalFilterService,
-    private _userService: UserService,
     private subscriptionService: SubscriptionPlanService,
     private configService: ConfigService
   ) {
@@ -147,7 +146,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.branchConfig = brandConfig.branches.find(
           (branch) => branch.id === branchId
         );
-        this.getShareIcon();
         this.loadGuestInfo();
       })
     );
@@ -163,7 +161,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   getConfig() {
     this.configService.$config.subscribe((response) => {
-      if (response) this.colorMap = response?.feedbackColorMap;
+      if (response) {
+        this.colorMap = response?.feedbackColorMap;
+        this.shareIconList = response?.responseRate;
+      }
     });
   }
 
@@ -199,24 +200,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.closeDetails();
         }
       )
-    );
-  }
-
-  getShareIcon() {
-    this.$subscription.add(
-      this._userService
-        .getUserShareIconByNationality(this.branchConfig.nationality)
-        .subscribe(
-          (response) => {
-            this.shareIconList = new ShareIconConfig().deserialize(response);
-            this.shareIconList = this.shareIconList.applications.concat(
-              this.defaultIconList
-            );
-          },
-          ({ error }) => {
-            this._snackBarService.openSnackBarAsText(error.message);
-          }
-        )
     );
   }
 
@@ -640,7 +623,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
         notificationCompRef.componentInstance.email = this.primaryGuest.email;
       } else {
         notificationCompRef.componentInstance.isEmail = false;
-        notificationCompRef.componentInstance.channel = channel;
+        notificationCompRef.componentInstance.channel = channel.replace(
+          /\w\S*/g,
+          function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+          }
+        );
       }
       notificationCompRef.componentInstance.hotelId = this.hotelId;
       notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;

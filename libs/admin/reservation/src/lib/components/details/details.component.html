@@ -444,13 +444,14 @@
             </ng-container>
           </ng-template>
         </div>
-        <div featureSubscribed [feature]="'modules.notification'">
+        <div>
           <p class="contact">Contact Guest</p>
           <div class="right-bottom-icons">
             <ng-container *ngFor="let icon of shareIconList">
               <div
                 class="social-icons"
-                (click)="openSendNotification(icon.value)"
+                (click)="openSendNotification(icon.label.toLowerCase())"
+                *ngIf="icon.label != 'MANUAL'"
               >
                 <div class="icon">
                   <img [src]="icon.iconUrl" />

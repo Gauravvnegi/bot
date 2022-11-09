@@ -70,6 +70,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   hotelId: string;
   rowsPerPage = 25;
   colorMap;
+  responseRate;
   cols = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
   tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
@@ -144,7 +145,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   getConfig() {
     this.$subscription.add(
       this.configService.$config.subscribe((response) => {
-        if (response) this.colorMap = response?.feedbackColorMap;
+        if (response) {
+          this.colorMap = response?.feedbackColorMap;
+          this.responseRate = response?.responseRate;
+        }
       })
     );
   }

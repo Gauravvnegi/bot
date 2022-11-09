@@ -43,11 +43,10 @@
   }
   .rate-divider {
     font-family: LithosPro;
-    font-size: 41px;
+    font-size: $font41;
     font-weight: 300;
     line-height: 0.95;
-    text-align: left;
-    color: #727272;
+    color: $dark-grey;
     opacity: 0.35;
   }
   .opacImage {

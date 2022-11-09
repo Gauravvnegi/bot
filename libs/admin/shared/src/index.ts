@@ -15,3 +15,4 @@ export * from './lib/components/dashboard-error/dashboard-error.component';
 export * from './lib/constants/charts';
 export * from './lib/models/country-code.model';
 export * from './lib/components/mention';
+export * from './lib/models/userConfig.model';

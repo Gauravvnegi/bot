@@ -11,6 +11,13 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
 import { MessageService } from '../../services/messages.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  User,
+  UserList,
+  UserService,
+} from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-message-box',
@@ -23,19 +30,33 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
   @Input() chatList;
   @Output() messageSent = new EventEmitter();
   @Input() hotelId;
-  items = [
-    { id: 1, name: 'Ram ', department: 'Department' },
-    { id: 2, name: 'Shyam ', department: 'Department' },
-  ];
+  items: User[];
   mentions = [];
   $subscription = new Subscription();
   constructor(
     private snackBarService: SnackBarService,
     private messageService: MessageService,
-    private dateService: DateService
+    private dateService: DateService,
+    private globalFilterService: GlobalFilterService,
+    private userService: UserService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((_) => {
+        this.userService
+          .getUsersList(this.globalFilterService.hotelId)
+          .subscribe((response) => {
+            this.items = new UserList().deserialize(response);
+          });
+      })
+    );
+  }
 
   sendMessage(): void {
     if (this.chatFG.invalid) {
@@ -53,6 +74,13 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
 
     const values = this.chatFG.getRawValue();
     values.receiverId = this.selectedChat.phone;
+    const mentions = this.mentions
+      .map((mention) => {
+        if (values.message.includes(`@${mention.firstName}`)) {
+          return { mentionedUserId: mention.id };
+        }
+      })
+      .filter((item) => item !== undefined);
     const timestamp = this.dateService.getCurrentTimeStamp();
     this.messageSent.emit({
       message: encodeURIComponent(this.chatFG.get('message').value),
@@ -61,16 +89,20 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
       update: false,
     });
     values.message = encodeURIComponent(values.message);
-    const mentions = this.checkForMentions();
+    const queryObj = this.adminUtilityService.makeQueryParams([
+      {
+        isMention: mentions.length > 0,
+      },
+      ...mentions,
+    ]);
     this.$subscription.add(
-      this.messageService.sendMessage(this.hotelId, values).subscribe(
-        (response) => {
+      this.messageService.sendMessage(this.hotelId, values, queryObj).subscribe(
+        (_) => {
           this.messageSent.emit({
             message: encodeURIComponent(this.chatFG.get('message').value),
             timestamp,
             status: 'sent',
             update: true,
-            // mentions,
           });
         },
         ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
@@ -86,17 +118,6 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
 
   setSelectedItem(event) {
     this.mentions.push(event);
-  }
-
-  checkForMentions() {
-    const data = [];
-    const chat = this.chatFG.get('message').value;
-    this.mentions.forEach((mention) => {
-      if (chat.includes(`@${mention.name}`)) {
-        data.push(mention);
-      }
-    });
-    return data;
   }
 
   ngOnDestroy(): void {

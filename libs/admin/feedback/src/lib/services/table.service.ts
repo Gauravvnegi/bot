@@ -35,8 +35,8 @@ export class FeedbackTableService extends ApiService {
     return this.patch(`/api/v1/feedback/${id}/notes`, data);
   }
 
-  updateFeedbackState(id, data): Observable<any> {
-    return this.patch(`/api/v1/feedback/${id}/notes`, data);
+  updateFeedbackState(id, data, queryObj?): Observable<any> {
+    return this.patch(`/api/v1/feedback/${id}/notes${queryObj || ''}`, data);
   }
 
   /**

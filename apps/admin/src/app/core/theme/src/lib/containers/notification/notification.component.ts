@@ -124,6 +124,9 @@ export class NotificationComponent
       ? moment(data.fromDate).unix() * 1000
       : data.fromDate;
     data.toDate = data.toDate ? moment(data.toDate).unix() * 1000 : data.toDate;
+    data.status = Object.keys(data.status)
+      .map((key) => (data.status[key] ? key : ''))
+      .filter((label) => label !== '');
     this.onCloseNotification.emit();
   }
 
@@ -171,12 +174,14 @@ export class NotificationComponent
       let data = this.notificationFilterData;
       data.fromDate = data.fromDate ? moment(data.fromDate) : data.fromDate;
       data.toDate = data.toDate ? moment(data.toDate) : data.toDate;
-      const status = {
-        read: data.status.includes('READ'),
-        unread: data.status.includes('UNREAD'),
-        removed: data.status.includes('REMOVED'),
-      };
-      data.status = status;
+      if (!('read' in data.status)) {
+        const status = {
+          read: data.status.includes('READ'),
+          unread: data.status.includes('UNREAD'),
+          removed: data.status.includes('REMOVED'),
+        };
+        data.status = status;
+      }
       this.filterFG.patchValue(data);
       this.isFilterVisible = true;
       this.isCustomizeVisible = false;
@@ -193,10 +198,7 @@ export class NotificationComponent
     this.$subscription.add(
       this.notificationService
         .updateNotificationStatus(this.userService.getLoggedInUserid(), item.id)
-        .subscribe((_) => {
-          this.getNotifications();
-          console.log('Notification status updated');
-        })
+        .subscribe((_) => this.getNotifications())
     );
     this.openNotificationDetail(item);
   }

@@ -44,9 +44,9 @@ export class Statistic {
 export class VIP {
   label: string;
   totalCount: number;
-  arrival: any;
+  dueIn: any;
   inHouse: any;
-  departure: any;
+  dueOut: any;
   outGuest: any;
 
   deserialize(statistics: any) {
@@ -54,9 +54,9 @@ export class VIP {
       this,
       set({}, 'label', get(statistics, ['label'])),
       set({}, 'totalCount', get(statistics, ['totalCount'])),
-      set({}, 'arrival', get(statistics, ['arrival'])),
+      set({}, 'dueIn', get(statistics, ['dueIn'])),
       set({}, 'inHouse', get(statistics, ['inHouse'])),
-      set({}, 'departure', get(statistics, ['departure'])),
+      set({}, 'dueOut', get(statistics, ['dueOut'])),
       set({}, 'outGuest', get(statistics, ['outGuest']))
     );
     return this;

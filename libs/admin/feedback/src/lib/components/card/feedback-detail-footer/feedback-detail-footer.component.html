@@ -24,6 +24,7 @@
     placeholder="Type Message"
     [mention]="items"
     [mentionConfig]="{ triggerChar: '@', labelKey: 'name' }"
+    (itemSelected)="setSelectedItem($event)"
   />
   <div
     class="sendMessage"

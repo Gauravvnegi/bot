@@ -8,7 +8,7 @@ import { FilterService } from './filter.service';
 export class GlobalFilterService {
   globalFilter$ = new BehaviorSubject({});
   timezone: string;
-
+  hotelId: string;
   globalFilterObj = {
     filter: {
       value: {},

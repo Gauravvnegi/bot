@@ -221,35 +221,51 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     const data = {
       notes: event.data.comment,
     };
-    this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
-      (response) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'Message sent.',
-              priorityMessage: 'Message sent Successfully..',
-            },
-            '',
-            {
-              panelClass: 'success',
-            }
-          )
-          .subscribe();
-        this.feedbackFG.patchValue({ comment: '' });
-        this.refreshFeedbackData(true);
+    const mentions = event.mentions
+      .map((mention) => {
+        if (data.notes.includes(`@${mention.firstName}`)) {
+          return { mentionedUserId: mention.id };
+        }
+      })
+      .filter((item) => item !== undefined);
+    const queryObj = this._adminUtilityService.makeQueryParams([
+      {
+        isMention: mentions.length > 0,
       },
-      ({ error }) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: error.message,
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      }
-    );
+      ...mentions,
+    ]);
+    this.tableService
+      .updateFeedbackState(this.feedback.id, data, queryObj)
+      .subscribe(
+        (_) => {
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'Message sent.',
+                priorityMessage: 'Message sent Successfully..',
+              },
+              '',
+              {
+                panelClass: 'success',
+              }
+            )
+            .subscribe();
+          this.feedbackFG.patchValue({ comment: '' });
+          this.refreshFeedbackData(true);
+          this.cardService.$refreshList.next(true);
+        },
+        ({ error }) => {
+          this._snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: error.message,
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
+        }
+      );
   }
 
   downloadFeedback(event, id) {

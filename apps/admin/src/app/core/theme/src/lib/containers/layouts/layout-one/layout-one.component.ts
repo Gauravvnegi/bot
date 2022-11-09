@@ -169,6 +169,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.initFirebaseMessaging(branch?.['id']);
     this.timezone = get(brand, ['branches', branches.length - 1, 'timezone']);
     this.globalFilterService.timezone = this.timezone;
+    this.globalFilterService.hotelId = branch?.['id'];
   }
 
   refreshDashboard() {
@@ -227,6 +228,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       localStorage.setItem(event.token.key, event.token.value);
       this.$firebaseMessagingSubscription.unsubscribe();
       this.initFirebaseMessaging(values.property.branchName);
+      this.globalFilterService.hotelId = branch?.['id'];
     }
   }
 

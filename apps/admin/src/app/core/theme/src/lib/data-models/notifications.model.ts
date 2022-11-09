@@ -29,7 +29,9 @@ export class Notification {
     this.id = input.id || '';
     this.active = input.active || '';
     this.created = input.created || '';
-    this.message = input.message || '';
+    this.message = decodeURIComponent(
+      input.message || ''.replace(/\n/g, '<br/>')
+    );
     this.notificationType = input.notificationType || '';
     this.read = input.read || false;
     this.updated = input.updated || '';

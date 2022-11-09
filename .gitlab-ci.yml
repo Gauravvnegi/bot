@@ -54,6 +54,7 @@ Deploy_Web_Prod:
     - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
     - export KUBECONFIG=k8s-config.yaml
     - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
+    - kubectl delete -f deployment.yaml
     - kubectl apply -f deployment.yaml --validate=false
     - kubectl get pods
     - kubectl get pods -n botshot-prod-admin

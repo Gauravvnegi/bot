@@ -1,5 +1,7 @@
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
@@ -11,6 +13,7 @@ import { ModalService } from '@hospitality-bot/shared/material';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../constants/feedback';
+import { CardService } from '../../services/card.service';
 import { StatisticsService } from '../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../services/table.service';
 
@@ -47,7 +50,9 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     protected _hotelDetailService: HotelDetailService,
     protected statisticsService: StatisticsService,
     protected subscriptionPlanService: SubscriptionPlanService,
-    protected tableService: FeedbackTableService
+    protected tableService: FeedbackTableService,
+    private cardService: CardService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +61,7 @@ export class FeedbackComponent implements OnInit, OnDestroy {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenForStateData();
   }
 
   listenForGlobalFilters(): void {
@@ -217,6 +223,19 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   checkForTransactionalSubscribed() {
     return this.subscriptionPlanService.getModuleSubscription().modules
       .FEEDBACK_TRANSACTIONAL.active;
+  }
+
+  listenForStateData() {
+    const stateData = this.location.getState();
+    if (stateData['feedbackId']) {
+      this.$subscription.add(
+        this.cardService
+          .getFeedbackByID(stateData['feedbackId'])
+          .subscribe((response) => {
+            console.log(response.id);
+          })
+      );
+    }
   }
 
   ngOnDestroy() {

@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import {
   AfterViewChecked,
   Component,
@@ -46,7 +47,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     private fb: FormBuilder,
     private _firebaseMessagingService: FirebaseMessagingService,
     private _snackBarService: SnackBarService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {
     this.initFG();
   }
@@ -62,6 +64,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.listenForMessageNotification();
     this.listenForApplicationActive();
     this.listenForQueryParam();
+    this.listenForStateData();
   }
 
   initFG() {
@@ -281,6 +284,14 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.loadChatList();
       } else this.loadSearchList(this.contactFG.get('search').value);
       this.showFilter = false;
+    }
+  }
+
+  listenForStateData() {
+    const stateData = this.location.getState();
+    if (stateData['phoneNumber']) {
+      this.contactFG.patchValue({ search: stateData['phoneNumber'] });
+      this.autoSearched = true;
     }
   }
 

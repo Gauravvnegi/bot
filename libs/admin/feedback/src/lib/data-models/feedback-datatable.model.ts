@@ -541,6 +541,8 @@ export class StayGuestData {
   overAllNps: number;
   totalSpend: number;
   transactionUsage: string;
+  receivedOn: string;
+  sharedOn: string[];
 
   deserialize(input) {
     Object.assign(
@@ -554,7 +556,9 @@ export class StayGuestData {
       set({}, 'guestCount', get(input, ['guestCount'])),
       set({}, 'overAllNps', get(input, ['overAllNps'])),
       set({}, 'totalSpend', get(input, ['totalSpend'])),
-      set({}, 'transactionUsage', get(input, ['transactionUsage']))
+      set({}, 'transactionUsage', get(input, ['transactionUsage'])),
+      set({}, 'receivedOn', get(input, ['receivedOn'])),
+      set({}, 'sharedOn', get(input, ['sharedOn']))
     );
     return this;
   }

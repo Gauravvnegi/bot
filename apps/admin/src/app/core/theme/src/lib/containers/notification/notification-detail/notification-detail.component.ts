@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Notification } from '../../../data-models/notifications.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-notification-detail',
@@ -12,6 +12,8 @@ export class NotificationDetailComponent {
   @Output() onNotificationClose = new EventEmitter();
   constructor(private router: Router) {}
 
+  constructor(private router: Router) {}
+
   closeNotes() {
     this.onNotificationClose.emit({ close: true });
   }
@@ -21,19 +23,19 @@ export class NotificationDetailComponent {
     const { data } = this.data;
     switch (this.data.notificationType.toUpperCase()) {
       case 'WHATSAPP':
-        state = { phoneNumber: data['phone_number'] };
+        state = { phoneNumber: data['phoneNumber'] };
         break;
       case 'FEEDBACK':
-        state = { feedbackId: data['feedback_id'] };
+        state = { feedbackId: data['feedbackId'] };
         break;
       case 'RESERVATION':
-        state = { reservationId: data['reservation_id'] };
+        state = { reservationId: data['reservationId'] };
         break;
     }
     this.router.navigate(
-      [data['redirect_url'].replace('https://n-devadmin.botshot.in', '')],
+      [data['redirectUrl'].replace('https://n-devadmin.botshot.in', '')],
       { state }
     );
-    this.onNotificationClose.emit({ close: true });
+    this.onNotificationClose.emit({ close: true, notificationClose: true });
   }
 }

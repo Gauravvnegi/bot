@@ -216,6 +216,7 @@ export class NotificationComponent
     detailCompRef.componentInstance.onNotificationClose.subscribe(
       (response) => {
         if (response.close) detailCompRef.close();
+        if (response.notificationClose) this.closePopup();
       }
     );
   }

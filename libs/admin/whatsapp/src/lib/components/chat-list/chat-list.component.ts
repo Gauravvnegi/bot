@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import {
   AfterViewChecked,
   Component,
@@ -12,9 +11,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
+import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
@@ -47,8 +46,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     private fb: FormBuilder,
     private _firebaseMessagingService: FirebaseMessagingService,
     private _snackBarService: SnackBarService,
-    private route: ActivatedRoute,
-    private location: Location
+    private notificationService: NotificationService
   ) {
     this.initFG();
   }
@@ -288,11 +286,14 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   listenForStateData() {
-    const stateData = this.location.getState();
-    if (stateData['phoneNumber']) {
-      this.contactFG.patchValue({ search: stateData['phoneNumber'] });
-      this.autoSearched = true;
-    }
+    this.$subscription.add(
+      this.notificationService.$whatsappNotification.subscribe((response) => {
+        if (response) {
+          this.contactFG.patchValue({ search: response });
+          this.autoSearched = true;
+        }
+      })
+    );
   }
 
   ngOnDestroy(): void {

@@ -79,10 +79,10 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
         );
         this.chart.labels.push(key);
         this.chart.colors[0].backgroundColor.push(
-          this.getFilteredConfig(key).color
+          this.graphData.inhouseRequestSourceStats[key].color
         );
         this.chart.colors[0].borderColor.push(
-          this.getFilteredConfig(key).color
+          this.graphData.inhouseRequestSourceStats[key].color
         );
       }
     });

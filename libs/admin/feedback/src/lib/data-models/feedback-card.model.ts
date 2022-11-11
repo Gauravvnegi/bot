@@ -81,16 +81,20 @@ export class FeedbackRecord {
 
   getProfileNickName() {
     const nameList = [
-      this.feedback.guest.firstName,
+      this.feedback.guest.firstName || '',
       this.feedback.guest.lastName || '',
     ];
-    return nameList
-      .map((i, index) => {
-        if ([0, 1].includes(index)) return i.charAt(0);
-        else return '';
-      })
-      .join('')
-      .toUpperCase();
+    if (nameList[0].length && nameList[1].length) {
+      return nameList
+        .map((i, index) => {
+          if ([0, 1].includes(index)) return i.charAt(0);
+          else return '';
+        })
+        .join('')
+        .toUpperCase();
+    } else {
+      return '';
+    }
   }
 
   getSLA() {
@@ -269,7 +273,9 @@ export class Guest implements Deserializable {
   }
 
   getFullName() {
-    return `${this.firstName} ${this.lastName}`;
+    return `${this.firstName === null ? 'No' : this.firstName} ${
+      this.lastName === null ? (this.firstName ? '' : 'Name') : this.lastName
+    }`;
   }
 
   getPhoneNumber() {

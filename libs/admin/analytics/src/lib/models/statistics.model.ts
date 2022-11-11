@@ -1,4 +1,5 @@
 import { get, set } from 'lodash';
+import { colors as randomColors } from '@hospitality-bot/admin/shared';
 
 export class InhouseSource {
   inhouseRequestSourceStats: any;
@@ -17,7 +18,7 @@ export class InhouseSource {
     keys.forEach((key, index) => {
       this.inhouseRequestSourceStats[key] = {
         value: input.requestSourceStats[key],
-        color: config.filter((d) => d.label === key)[0]?.color,
+        color: randomColors[Math.floor(Math.random() * randomColors.length)],
       };
     });
 

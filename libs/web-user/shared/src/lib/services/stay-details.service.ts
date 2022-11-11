@@ -209,7 +209,7 @@ export class StayDetailsService extends ApiService {
     return this.patch(`/api/v1/reservation/${reservationId}`, data);
   }
 
-  modifyStayDetails(stayDetails, timezone, countries) {
+  modifyStayDetails(stayDetails, timezone, countries, addressEnable) {
     const data = {
       comments: stayDetails.special_comments.comments,
       expectedArrivalTime: this.getArrivalTimeTimestamp(stayDetails, timezone),
@@ -217,7 +217,9 @@ export class StayDetailsService extends ApiService {
         stayDetails,
         timezone
       ),
-      address: {
+    };
+    if (addressEnable) {
+      data['address'] = {
         addressLines: [
           stayDetails.address.addressLine1,
           stayDetails.address.addressLine2,
@@ -228,8 +230,8 @@ export class StayDetailsService extends ApiService {
           (item) => item.value === stayDetails.address.country
         )[0].key,
         postalCode: stayDetails.address.postalCode,
-      },
-    };
+      };
+    }
     return {
       stayDetails: data,
     };

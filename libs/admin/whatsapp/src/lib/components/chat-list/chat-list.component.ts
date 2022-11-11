@@ -11,6 +11,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
@@ -46,7 +47,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     private fb: FormBuilder,
     private _firebaseMessagingService: FirebaseMessagingService,
     private _snackBarService: SnackBarService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private route: ActivatedRoute
   ) {
     this.initFG();
   }

@@ -10,15 +10,16 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
+import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
+import { debounceTime, filter } from 'rxjs/operators';
 import { ContactList, IContactList } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { debounceTime, filter } from 'rxjs/operators';
-import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
-import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-chat-list',
@@ -37,14 +38,18 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   scrollView;
   showFilter = false;
   filterData = {};
+  autoSearched = false;
   constructor(
     private messageService: MessageService,
     private _globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
     private _firebaseMessagingService: FirebaseMessagingService,
-    private _snackBarService: SnackBarService
-  ) {}
+    private _snackBarService: SnackBarService,
+    private notificationService: NotificationService
+  ) {
+    this.initFG();
+  }
 
   ngOnInit(): void {
     this.initFG();
@@ -261,6 +266,17 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
       } else this.loadSearchList(this.contactFG.get('search').value);
       this.showFilter = false;
     }
+  }
+
+  listenForStateData() {
+    this.$subscription.add(
+      this.notificationService.$whatsappNotification.subscribe((response) => {
+        if (response) {
+          this.contactFG.patchValue({ search: response });
+          this.autoSearched = true;
+        }
+      })
+    );
   }
 
   ngOnDestroy(): void {

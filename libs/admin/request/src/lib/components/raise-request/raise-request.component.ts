@@ -111,7 +111,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       itemCode: ['', Validators.required],
       priority: ['', Validators.required],
       jobDuration: [''],
-      remarks: [''],
+      remarks: ['', [Validators.maxLength(200)]],
       quantity: [1],
     });
     this.searchFG = this.fb.group({

@@ -32,6 +32,7 @@ import { DashboardErrorComponent } from './components/dashboard-error/dashboard-
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { LinkDetector } from './pipes/linkDetector.pipe';
 import { MentionDirective, MentionListComponent } from './components/mention';
+import { CustomSizeInputComponent } from './components/custom-size-input/custom-size-input.component';
 
 @NgModule({
   imports: [
@@ -72,6 +73,7 @@ import { MentionDirective, MentionListComponent } from './components/mention';
     LinkDetector,
     MentionListComponent,
     MentionDirective,
+    CustomSizeInputComponent,
   ],
   exports: [
     DatatableComponent,
@@ -101,6 +103,7 @@ import { MentionDirective, MentionListComponent } from './components/mention';
     LinkDetector,
     MentionListComponent,
     MentionDirective,
+    CustomSizeInputComponent,
   ],
 })
 export class AdminSharedModule {}

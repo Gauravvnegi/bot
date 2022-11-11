@@ -1,0 +1,6 @@
+<div class="custom-input-container">
+  <mat-form-field [formGroup]="parentForm">
+    <input matInput [formControlName]="name" [maxLength]="customSize" />
+  </mat-form-field>
+  <div class="count">{{ parentForm.get(name)?.value?.length || '0' }}/200</div>
+</div>

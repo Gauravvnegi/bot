@@ -31,6 +31,7 @@ import { EmailChipListComponent } from './components/email-chip-list/email-chip-
 import { DashboardErrorComponent } from './components/dashboard-error/dashboard-error.component';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { LinkDetector } from './pipes/linkDetector.pipe';
+import { UnsubscribeViewComponent } from './components/unsubscribe-view/unsubscribe-view.component';
 import { MentionDirective, MentionListComponent } from './components/mention';
 import { CustomSizeInputComponent } from './components/custom-size-input/custom-size-input.component';
 
@@ -69,6 +70,7 @@ import { CustomSizeInputComponent } from './components/custom-size-input/custom-
     SafeHtmlPipe,
     EmailChipListComponent,
     DashboardErrorComponent,
+    UnsubscribeViewComponent,
     NumberFormatterPipe,
     LinkDetector,
     MentionListComponent,

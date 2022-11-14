@@ -1,1 +1,4 @@
-<router-outlet></router-outlet>
+<ngcontainer *ngIf="unsubscribe.length === 0; else subscribedview">
+  <hospitality-bot-unsubscribe-view></hospitality-bot-unsubscribe-view>
+</ngcontainer>
+<ng-template #subscribedview><router-outlet></router-outlet> </ng-template>

@@ -9,8 +9,8 @@ import {
   ISentdeliveredChart,
   MessageOverallAnalytics,
   SentdeliveredChart,
-} from '../../models/whatsapp-analytics.model';
-import { AnalyticsService } from '../../services/analytics.service';
+} from '../../../../../request-analytics/src/lib/models/whatsapp-analytics.model';
+import { AnalyticsService } from '../../../../../request-analytics/src/lib/services/analytics.service';
 
 @Component({
   selector: 'hospitality-bot-whatsapp-message-analytics',

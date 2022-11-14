@@ -1,0 +1,6 @@
+<ngcontainer *ngIf="unsubscribe.length === 0; else subscribedview">
+  <hospitality-bot-unsubscribe-view></hospitality-bot-unsubscribe-view>
+</ngcontainer>
+<ng-template #subscribedview>
+  <hospitality-bot-feedback></hospitality-bot-feedback>
+</ng-template>

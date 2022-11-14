@@ -1,0 +1,86 @@
+@import 'main';
+
+.sidenav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 15px;
+  background: rgb(75, 86, 192);
+  border-left: 2px solid rgba(255, 255, 255, 0.8);
+  height: 60px;
+  .logo {
+    height: 40px;
+    width: 65px;
+    img {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
+
+.heading {
+  padding: 15px;
+  background-color: white;
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 1.08px;
+  text-align: left;
+  color: #000;
+}
+
+.backColor {
+  border-left: 2px solid #c5c5c5;
+  background-color: #edeef1;
+  height: 100vh;
+}
+
+.subitems_heading {
+  margin-bottom: 9px;
+  cursor: pointer;
+  &_anchor {
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.8);
+    border: none;
+    -webkit-transition: all 400ms;
+    -moz-transition: all 400ms;
+    -ms-transition: all 400ms;
+    -o-transition: all 400ms;
+    transition: all 400ms;
+    height: 50px;
+    text-decoration: none;
+    &:hover {
+      background-color: #e2e3f7;
+    }
+    span {
+      margin-left: 12px;
+      font-weight: 500;
+      width: 6.5rem;
+    }
+  }
+  &:hover {
+    background-color: #e2e3f7;
+  }
+  .sidenav_logo {
+    width: 18px;
+    height: 18px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.active a .svg-icon {
+  filter: invert(75%) sepia(23%) saturate(3170%) hue-rotate(209deg)
+    brightness(90%) contrast(89%);
+}
+
+.parent-active {
+  background-color: rgba(255, 255, 255, 0.1);
+}

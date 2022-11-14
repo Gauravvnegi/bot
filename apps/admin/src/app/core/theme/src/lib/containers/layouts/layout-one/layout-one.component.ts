@@ -38,6 +38,8 @@ import { NotificationService } from '../../../services/notification.service';
 export class LayoutOneComponent implements OnInit, OnDestroy {
   backgroundColor: string;
   background_image: string;
+  menuItem: any;
+  menuTitle: string;
   profile = layoutConfig.profile;
   outlets = [];
   lastUpdatedAt: string;
@@ -46,6 +48,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   isNotificationVisible = false;
   searchFG: FormGroup;
   timezone: string;
+  isExpand = true;
   filterConfig = {
     brandName: '',
     branchName: '',
@@ -230,6 +233,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       this.initFirebaseMessaging(values.property.branchName);
       this.globalFilterService.hotelId = branch?.['id'];
     }
+  }
+
+  subMenuItem(data) {
+    this.menuTitle = data.title;
+    this.menuItem = data.list;
+  }
+
+  sideNavToggle(item) {
+    this.isExpand = !this.isExpand;
   }
 
   resetFilterCount() {

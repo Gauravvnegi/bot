@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { TableNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import {
+  ModuleNames,
+  TableNames,
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-admin-packages-wrapper',
@@ -8,7 +12,20 @@ import { TableNames } from 'libs/admin/shared/src/lib/constants/subscriptionConf
 })
 export class AdminPackagesWrapperComponent implements OnInit {
   tables = TableNames;
-  constructor() {}
+  unsubscribe;
+  constructor(private subscriptionPlanService: SubscriptionPlanService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getSubscriptionPlan();
+  }
+
+  getSubscriptionPlan() {
+    this.unsubscribe = this.checkSubscriptionByPath(
+      ModuleNames.PACKAGES,
+      this.subscriptionPlanService.getSubscription()['features'].MODULE
+    );
+  }
+  checkSubscriptionByPath(path, subscription) {
+    return subscription.filter((d) => ModuleNames[d.name] === path && d.active);
+  }
 }

@@ -74,7 +74,7 @@
       "@hospitality-bot/shared/image-cropper": [
         "libs/shared/image-cropper/src/index.ts"
       ],
-      "@hospitality-bot/admin/analytics": ["libs/admin/analytics/src/index.ts"],
+      "@hospitality-bot/admin/analytics": ["libs/admin/request-analytics/src/index.ts"],
       "@hospitality-bot/admin/whatsapp": ["libs/admin/whatsapp/src/index.ts"],
       "@hospitality-bot/admin/core/theme": [
         "apps/admin/src/app/core/theme/src/index.ts"
@@ -88,6 +88,12 @@
       "@hospitality-bot/admin/campaign": ["libs/admin/campaign/src/index.ts"],
       "@hospitality-bot/admin/marketing-dashboard": [
         "libs/admin/marketing-dashboard/src/index.ts"
+      ],
+      "@hospitality-bot/admin/conversation-analytics": [
+        "libs/admin/conversation-analytics/src/index.ts"
+      ],
+      "@hospitality-bot/admin/request-analytics": [
+        "libs/admin/request-analytics/src/index.ts"
       ]
     }
   },

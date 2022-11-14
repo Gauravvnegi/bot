@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { Conversation } from '../../models/whatsapp-analytics.model';
-import { AnalyticsService } from '../../services/analytics.service';
 import { AdminUtilityService, analytics } from '@hospitality-bot/admin/shared';
+import { Conversation } from 'libs/admin/request-analytics/src/lib/models/whatsapp-analytics.model';
+import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
 
 @Component({
   selector: 'hospitality-bot-conversation',

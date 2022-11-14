@@ -1,15 +1,16 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
   CardNames,
-  TableNames,
+  ConfigService,
   HotelDetailService,
+  TableNames,
 } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
+import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../constants/feedback';
@@ -31,6 +32,8 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   globalFeedbackFilterType = '';
   outlets;
   outletIds;
+  colorMap;
+  responseRate;
 
   tabFilterIdx = 0;
   tabFilterItems = [
@@ -52,11 +55,14 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     protected subscriptionPlanService: SubscriptionPlanService,
     protected tableService: FeedbackTableService,
     private cardService: CardService,
-    private location: Location
+    private location: Location,
+    private configService: ConfigService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this.registerListeners();
+    this.getConfig();
   }
 
   registerListeners(): void {
@@ -93,6 +99,17 @@ export class FeedbackComponent implements OnInit, OnDestroy {
           this.statisticsService.type = feedback.types.stay;
           this.tableService.$feedbackType.next(feedback.types.stay);
           this.setStayTabFilters(data['filter'].value);
+        }
+      })
+    );
+  }
+
+  getConfig() {
+    this.$subscription.add(
+      this.configService.$config.subscribe((response) => {
+        if (response) {
+          this.colorMap = response?.feedbackColorMap;
+          this.responseRate = response?.responseRate;
         }
       })
     );
@@ -226,16 +243,16 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   }
 
   listenForStateData() {
-    const stateData = this.location.getState();
-    if (stateData['feedbackId']) {
-      this.$subscription.add(
-        this.cardService
-          .getFeedbackByID(stateData['feedbackId'])
-          .subscribe((response) => {
+    this.notificationService.$feedbackNotification.subscribe((response) => {
+      if (response) {
+        this.$subscription.add(
+          this.cardService.getFeedbackByID(response).subscribe((response) => {
             console.log(response.id);
+            this.notificationService.$feedbackNotification.next(null);
           })
-      );
-    }
+        );
+      }
+    });
   }
 
   ngOnDestroy() {

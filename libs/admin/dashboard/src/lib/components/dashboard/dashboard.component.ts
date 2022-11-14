@@ -44,6 +44,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 );
                 this.openDetailPage(data);
               });
+            this.notificationService.$reservationNotification.next(null);
           }
         }
       )

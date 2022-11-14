@@ -39,11 +39,13 @@ import {
   FeedbackHistoryComponent,
 } from './components/guest-info';
 import { FeedbackStatusFormComponent } from './components/feedback-status-form/feedback-status-form.component';
+import { FeedbackContainerComponent } from './components/feedback-container/feedback-container.component';
 
 const appRoutes: Route[] = [
+  { path: '', redirectTo: 'analytics' },
   {
-    path: '',
-    component: FeedbackComponent,
+    path: 'analytics',
+    component: FeedbackContainerComponent,
   },
 ];
 
@@ -53,6 +55,7 @@ const appRoutes: Route[] = [
 })
 export class AdminFeedbackRoutingModule {
   static components = [
+    FeedbackContainerComponent,
     FeedbackComponent,
     FeedbackDatatableComponent,
     FeedbackDistributionComponent,

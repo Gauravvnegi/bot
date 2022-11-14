@@ -8,6 +8,10 @@ export enum ModuleNames {
   ROLE_MANAGEMENT = 'roles-permissions',
   FEEDBACK_TRANSACTIONAL = 'FEEDBACK_TRANSACTIONAL',
   MARKETING = 'marketing',
+  HEDA = 'heda',
+  FREDDIE = 'freddie',
+  FRONT_DESK = 'efrontdesk',
+  BUILDER = 'builder',
 }
 
 export enum Integrations {
@@ -210,6 +214,26 @@ export const ModuleConfig = {
     filters: {},
   },
   [ModuleNames.MARKETING]: {
+    cards: [],
+    tables: [],
+    filters: [],
+  },
+  [ModuleNames.HEDA]: {
+    cards: [],
+    tables: [],
+    filters: [],
+  },
+  [ModuleNames.FREDDIE]: {
+    cards: [],
+    tables: [],
+    filters: [],
+  },
+  [ModuleNames.FRONT_DESK]: {
+    cards: [],
+    tables: [],
+    filters: [],
+  },
+  [ModuleNames.BUILDER]: {
     cards: [],
     tables: [],
     filters: [],

@@ -3,11 +3,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
+import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
-import { Tab } from '../../models/tab.model';
-import { AnalyticsService } from '../../services/analytics.service';
+import { Tab } from 'libs/admin/request-analytics/src/lib/models/tab.model';
 import { WhatsappMessageAnalyticsComponent } from '../whatsapp-message-analytics/whatsapp-message-analytics.component';
 
 @Component({

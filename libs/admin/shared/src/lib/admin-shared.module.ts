@@ -106,6 +106,7 @@ import { CustomSizeInputComponent } from './components/custom-size-input/custom-
     MentionListComponent,
     MentionDirective,
     CustomSizeInputComponent,
+    UnsubscribeViewComponent,
   ],
 })
 export class AdminSharedModule {}

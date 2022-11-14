@@ -5,8 +5,8 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { SnackBarService } from 'libs/shared/material/src';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
-import { Notification } from '../../models/whatsapp-analytics.model';
-import { AnalyticsService } from '../../services/analytics.service';
+import { Notification } from '../../../../../request-analytics/src/lib/models/whatsapp-analytics.model';
+import { AnalyticsService } from '../../../../../request-analytics/src/lib/services/analytics.service';
 
 @Component({
   selector: 'hospitality-bot-notification',

@@ -8,17 +8,24 @@ const appRoutes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'analytics',
+    redirectTo: 'conversation-analytics',
   },
   {
     path: '',
     component: ConversationComponent,
     children: [
       {
-        path: 'analytics',
+        path: 'conversation-analytics',
         loadChildren: () =>
-          import('@hospitality-bot/admin/analytics').then(
-            (m) => m.AdminAnalyticsModule
+          import('@hospitality-bot/admin/conversation-analytics').then(
+            (m) => m.AdminConversationAnalyticsModule
+          ),
+      },
+      {
+        path: 'request-analytics',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/request-analytics').then(
+            (m) => m.AdminRequestAnalyticsModule
           ),
       },
       {
@@ -34,7 +41,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/request').then(
             (m) => m.AdminRequestModule
           ),
-        canActivate: [LoadGuard],
+        // canActivate: [LoadGuard],
       },
     ],
   },

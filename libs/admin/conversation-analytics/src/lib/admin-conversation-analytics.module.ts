@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdminAnalyticsRoutingModule } from './admin-analytics.routing.module';
+import { AdminConversationAnalyticsRoutingModule } from './admin-conversation-analytics.routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
-import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
-import { ChartsModule } from 'ng2-charts';
+import { SharedMaterialModule } from '@hospitality-bot/shared/material';
 import { NgCircleProgressModule } from 'ng-circle-progress';
-import { AnalyticsService } from './services/analytics.service';
+import { ChartsModule } from 'ng2-charts';
+import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
 
 @NgModule({
   imports: [
     CommonModule,
-    AdminAnalyticsRoutingModule,
+    AdminConversationAnalyticsRoutingModule,
     FormsModule,
     ChartsModule,
     ReactiveFormsModule,
@@ -19,7 +19,7 @@ import { AnalyticsService } from './services/analytics.service';
     AdminSharedModule,
     NgCircleProgressModule.forRoot(),
   ],
-  declarations: [...AdminAnalyticsRoutingModule.components],
+  declarations: [...AdminConversationAnalyticsRoutingModule.components],
   providers: [AnalyticsService],
 })
-export class AdminAnalyticsModule {}
+export class AdminConversationAnalyticsModule {}

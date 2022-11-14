@@ -1,17 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { LoadGuard } from 'apps/admin/src/app/core/guards/load-guard';
 import { MarketingComponent } from './components/marketing/marketing.component';
 
 const appRoutes: Route[] = [
-  { path: '', redirectTo: 'dashboard' },
+  { path: '', redirectTo: 'analytics' },
   {
-    path: 'dashboard',
+    path: 'analytics',
     loadChildren: () =>
       import('@hospitality-bot/admin/marketing-dashboard').then(
         (m) => m.AdminMarketingDashboardModule
       ),
-    canActivate: [LoadGuard],
   },
   {
     path: 'campaign',

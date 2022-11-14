@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { AngularFireModule } from '@angular/fire';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -25,6 +24,7 @@ import { NotificationComponent } from './containers/notification/notification.co
 import { NotificationSettingsComponent } from './containers/notification/notification-settings/notification-settings.component';
 import { NotificationFilterComponent } from './containers/notification/notification-filter/notification-filter.component';
 import { NotificationDetailComponent } from './containers/notification/notification-detail/notification-detail.component';
+import { SidenavExpandComponent } from './containers/sidenav/sidenav-expand/sidenav-expand.component';
 
 @NgModule({
   imports: [
@@ -41,6 +41,7 @@ import { NotificationDetailComponent } from './containers/notification/notificat
   ],
   declarations: [
     SidenavComponent,
+    SidenavExpandComponent,
     LayoutOneComponent,
     SettingsComponent,
     DaterangeComponent,
@@ -58,6 +59,7 @@ import { NotificationDetailComponent } from './containers/notification/notificat
   ],
   exports: [
     SidenavComponent,
+    SidenavExpandComponent,
     LayoutOneComponent,
     SettingsComponent,
     DaterangeComponent,

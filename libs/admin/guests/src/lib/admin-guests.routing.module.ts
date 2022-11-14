@@ -13,8 +13,9 @@ import {
 } from './components';
 
 const appRoutes: Route[] = [
+  { path: '', redirectTo: 'guest' },
   {
-    path: '',
+    path: 'guest',
     component: GuestComponent,
   },
 ];

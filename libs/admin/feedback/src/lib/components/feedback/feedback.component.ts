@@ -6,11 +6,14 @@ import {
   CardNames,
   TableNames,
   HotelDetailService,
+  ConfigService,
 } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
+import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../constants/feedback';
+import { CardService } from '../../services/card.service';
 import { StatisticsService } from '../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../services/table.service';
 
@@ -28,6 +31,8 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   globalFeedbackFilterType = '';
   outlets;
   outletIds;
+  colorMap;
+  responseRate;
 
   tabFilterIdx = 0;
   tabFilterItems = [
@@ -47,11 +52,16 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     protected _hotelDetailService: HotelDetailService,
     protected statisticsService: StatisticsService,
     protected subscriptionPlanService: SubscriptionPlanService,
-    protected tableService: FeedbackTableService
+    protected tableService: FeedbackTableService,
+    private cardService: CardService,
+    private location: Location,
+    private configService: ConfigService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this.registerListeners();
+    this.getConfig();
   }
 
   registerListeners(): void {
@@ -87,6 +97,17 @@ export class FeedbackComponent implements OnInit, OnDestroy {
           this.statisticsService.type = feedback.types.stay;
           this.tableService.$feedbackType.next(feedback.types.stay);
           this.setStayTabFilters(data['filter'].value);
+        }
+      })
+    );
+  }
+
+  getConfig() {
+    this.$subscription.add(
+      this.configService.$config.subscribe((response) => {
+        if (response) {
+          this.colorMap = response?.feedbackColorMap;
+          this.responseRate = response?.responseRate;
         }
       })
     );
@@ -217,6 +238,19 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   checkForTransactionalSubscribed() {
     return this.subscriptionPlanService.getModuleSubscription().modules
       .FEEDBACK_TRANSACTIONAL.active;
+  }
+
+  listenForStateData() {
+    this.notificationService.$feedbackNotification.subscribe((response) => {
+      if (response) {
+        this.$subscription.add(
+          this.cardService.getFeedbackByID(response).subscribe((response) => {
+            console.log(response.id);
+            this.notificationService.$feedbackNotification.next(null);
+          })
+        );
+      }
+    });
   }
 
   ngOnDestroy() {

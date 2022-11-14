@@ -274,6 +274,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
         if (response) {
           this.contactFG.patchValue({ search: response });
           this.autoSearched = true;
+          this.notificationService.$whatsappNotification.next(null);
         }
       })
     );

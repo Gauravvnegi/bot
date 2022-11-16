@@ -14,7 +14,7 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { MessageService } from '../../services/messages.service';
 import { GuestDetailMapComponent } from '../guest-detail-map/guest-detail-map.component';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import {
   Contact,
   GuestDetails,
@@ -85,8 +85,10 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
             response.receiver,
             this._globalFilterService.timezone
           );
-          if (this.guestData.reservationId) this.getRequestList();
-          else this.requestList = [];
+          if (this.guestData.reservationId) {
+            this.guestId = this.guestData.guestId;
+            this.getRequestAndReservation();
+          } else this.requestList = [];
           this.isLoading = false;
         })
     );
@@ -121,6 +123,34 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  getRequestAndReservation() {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          hotelId: this.hotelId,
+          confirmationNumber: this.data.reservationId,
+        },
+      ]),
+    };
+    forkJoin({
+      requests: this.messageService.getRequestByConfNo(config),
+      reservations: this.messageService.getGuestReservations(this.guestId),
+    }).subscribe(
+      (response) => {
+        this.requestList = new RequestList().deserialize(
+          response.requests
+        ).data;
+        this.guestReservations = new GuestDetails().deserialize(
+          response.reservations,
+          this.colorMap
+        );
+      },
+      ({ error }) => {
+        this.snackBarService.openSnackBarAsText(error.message);
+      }
+    );
+  }
+
   getRequestList() {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
@@ -132,28 +162,9 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     };
     this.$subscription.add(
       this.messageService.getRequestByConfNo(config).subscribe(
-        (response) => {
-          this.requestList = new RequestList().deserialize(response).data;
-          this.guestId = this.requestList[0].guestDetails?.primaryGuest?.id;
-          this.loadGuestReservations();
-        },
+        (response) =>
+          (this.requestList = new RequestList().deserialize(response).data),
         ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
-      )
-    );
-  }
-
-  loadGuestReservations(): void {
-    this.$subscription.add(
-      this.messageService.getGuestReservations(this.guestId).subscribe(
-        (response) => {
-          this.guestReservations = new GuestDetails().deserialize(
-            response,
-            this.colorMap
-          );
-        },
-        ({ error }) => {
-          this.snackBarService.openSnackBarAsText(error.message);
-        }
       )
     );
   }

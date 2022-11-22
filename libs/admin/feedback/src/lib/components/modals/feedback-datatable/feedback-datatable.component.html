@@ -133,7 +133,10 @@
               *ngIf="tabFilterItems[tabFilterIdx]?.chips?.length"
               class="caption__wrapper--buttons"
             >
-              <div class="button__wrapper">
+              <div
+                class="button__wrapper"
+                [style.display]="isNotVisible ? 'none' : ''"
+              >
                 <mat-chip-list
                   multiple
                   #chipList
@@ -599,7 +602,7 @@
                     </div>
                   </ng-template>
                 </ng-container>
-                <div class="pdf">
+                <div class="pdf" [style.display]="isNotVisible ? 'none' : ''">
                   <img
                     [src]="globalFeedbackConfig.images.datatable.pdf.url"
                     [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
@@ -794,7 +797,7 @@
                     </div>
                   </div>
                 </ng-template>
-                <div class="pdf">
+                <div class="pdf" [style.display]="isNotVisible ? 'none' : ''">
                   <img
                     [src]="globalFeedbackConfig.images.datatable.pdf.url"
                     [alt]="globalFeedbackConfig.images.datatable.pdf.alt"

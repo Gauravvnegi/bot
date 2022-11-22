@@ -30,7 +30,8 @@
 .rate {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 3px;
   .rate-images {
     display: flex;
     flex-direction: column;

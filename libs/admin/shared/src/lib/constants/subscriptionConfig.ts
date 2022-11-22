@@ -56,7 +56,10 @@ export enum CardNames {
 
 export enum Filters {
   ARRIVAL = 'ARRIVAL',
+  DUEIN = 'DUEIN',
+  DUEOUT = 'DUEOUT',
   INHOUSE = 'INHOUSE',
+  CHECKEDOUT = 'CHECKEDOUT',
   DEPARTURE = 'DEPARTURE',
   OUTGUEST = 'OUTGUEST',
   RESERVATION = 'RESERVATION',
@@ -136,10 +139,10 @@ export const ModuleConfig = {
     filters: {
       [TableNames.GUEST]: {
         tabFilters: [
-          Filters.ARRIVAL,
+          Filters.DUEIN,
           Filters.INHOUSE,
-          Filters.DEPARTURE,
-          Filters.OUTGUEST,
+          Filters.DUEOUT,
+          Filters.CHECKEDOUT,
         ],
       },
     },

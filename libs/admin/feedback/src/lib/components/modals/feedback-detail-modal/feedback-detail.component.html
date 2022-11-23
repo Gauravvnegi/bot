@@ -14,12 +14,12 @@
           {{ data.feedback?.getProfileNickName() }}
         </div>
         <div class="selectedChat"></div>
-        {{ data.feedback?.guest.getFullName() }}
+        {{ data.feedback?.guest?.getFullName() }}
       </div>
       <div class="mr-10">
         <div class="req_button">
           <div class="export" (click)="exportCSV()">
-            <img class="paper" src="assets/images/paper.png" alt="" />
+            <img class="paper" src="assets/images/paper.png" alt="export" />
             <p>Export Feedback</p>
           </div>
         </div>
@@ -42,12 +42,12 @@
     </div>
     <div class="guestInfoOpen" [formGroup]="feedbackFG">
       <div class="feedback_labels">
-        <div *ngIf="data.feedback?.guestData.bookingNo">
-          BNO:{{ data.feedback?.guestData.bookingNo }}
+        <div *ngIf="data.feedback?.guestData?.bookingNo">
+          BNO:{{ data.feedback?.guestData?.bookingNo }}
         </div>
         <div>{{ data.feedback?.getTableOrRoomNo(data.feedbackType) }}</div>
         <div>
-          {{ data.feedback.getCreatedDate(_globalFilterService.timezone) }}
+          {{ data.feedback?.getCreatedDate(_globalFilterService.timezone) }}
         </div>
         <div class="feedback">
           <div class="feedback-service">
@@ -65,12 +65,12 @@
                       else stayFeedbakServiceLength
                     "
                   >
-                    +{{ data.feedback.services.services.length }}
+                    +{{ data.feedback.services?.services.length }}
                   </p>
                 </div>
                 <ng-template #stayFeedbakServiceLength>
                   <p class="number round">
-                    +{{ data.feedback.services.length }}
+                    +{{ data.feedback.services?.length }}
                   </p>
                 </ng-template>
               </div>
@@ -79,7 +79,7 @@
                   class="number status-background-success numPadding"
                   [style.background]="
                     (data.colorMap?.stayFeedbacks)[data.feedback.ratings]
-                      .colorCode
+                      ?.colorCode
                   "
                   *ngIf="data.feedback.ratings"
                 >
@@ -184,7 +184,7 @@
       <div class="comment-container">
         <div
           class="guestComment"
-          *ngIf="data.feedback?.comments && data?.feedback.comments.length"
+          *ngIf="data.feedback?.comments && data?.feedback.comments?.length"
         >
           <div class="d-flex">
             <div class="time">

@@ -14,9 +14,11 @@ import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../constants/feedback';
+import { FeedbackRecord } from '../../data-models/feedback-card.model';
 import { CardService } from '../../services/card.service';
 import { StatisticsService } from '../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../services/table.service';
+import { FeedbackDetailModalComponent } from '../modals/feedback-detail-modal/feedback-detail.component';
 
 @Component({
   selector: 'hospitality-bot-feedback',
@@ -246,10 +248,40 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     this.notificationService.$feedbackNotification.subscribe((response) => {
       if (response) {
         this.$subscription.add(
-          this.cardService.getFeedbackByID(response).subscribe((response) => {
-            console.log(response.id);
-            this.notificationService.$feedbackNotification.next(null);
-          })
+          this.cardService
+            .getFeedbackNotificationData(response)
+            .subscribe((response) => {
+              const data = new FeedbackRecord().deserialize(
+                response,
+                this.outlets,
+                response.feedbackType,
+                this.colorMap
+              );
+              console.log(data);
+              const dialogConfig = new MatDialogConfig();
+              dialogConfig.disableClose = true;
+              dialogConfig.width = '100%';
+              dialogConfig.data = {
+                feedback: data.feedback,
+                colorMap: this.colorMap,
+                feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+                isModal: true,
+                globalQueries: [],
+              };
+
+              const detailCompRef = this._modal.openDialog(
+                FeedbackDetailModalComponent,
+                dialogConfig
+              );
+              this.$subscription.add(
+                detailCompRef.componentInstance.onDetailsClose.subscribe(
+                  (res) => {
+                    detailCompRef.close();
+                  }
+                )
+              );
+              this.notificationService.$feedbackNotification.next(null);
+            })
         );
       }
     });

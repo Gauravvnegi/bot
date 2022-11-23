@@ -69,7 +69,11 @@ export class FeedbackRecord {
     this.feedback =
       feedbackType === feedback.types.transactional
         ? new Feedback().deserialize(input.feedback, outlets)
-        : new StayFeedback().deserialize(input.feedback, outlets, colorMap);
+        : new StayFeedback().deserialize(
+            input.feedback || input,
+            outlets,
+            colorMap
+          );
     return this;
   }
 

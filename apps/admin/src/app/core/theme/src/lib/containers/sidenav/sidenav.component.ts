@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
@@ -32,6 +33,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   status = true;
   $subscription = new Subscription();
   branchConfig;
+  menuItemChildren = [];
   @Output() submenuItems = new EventEmitter<any>();
   @Output() navToggle = new EventEmitter<boolean>();
 
@@ -40,7 +42,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
     private _modal: ModalService,
     private _globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -115,18 +118,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.dividerBgColor = 'white';
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
-    //check if admin or super admin by using command pattern
-    // ADMIN_ROUTES.forEach((data, i) => {
-    //   const checkSubscriptionData = this.subscriptionCheck(data, subscription);
-    //   if (checkSubscriptionData.length) {
-    //     this.menuItems.push(
-    //       checkSubscriptionData[0].children ? checkSubscriptionData[0] : data
-    //     );
-    //   }
-    // });
     this.menuItems = [
       ...new Map(
-        [...ADMIN_ROUTES, ...DEFAULT_ROUTES].map((item) => [item.path, item])
+        [...ADMIN_ROUTES, ...DEFAULT_ROUTES].map((item) => {
+          if (this.router.url.includes(item.path)) {
+            this.handleRouteChange(item);
+          }
+          return [item.path, item];
+        })
       ).values(),
     ];
   }
@@ -235,6 +234,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     });
     return subItemList;
+  }
+
+  handleRouteChange(menuItem) {
+    this.isExpanded =
+      menuItem.children && menuItem.children.length ? true : false;
+    this.navToggle.emit(this.isExpanded);
+    this.subSideNav(menuItem.title, menuItem.children);
   }
 
   checkSubscriptionByPath(path, subscription) {

@@ -241,7 +241,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   sideNavToggle(item) {
-    this.isExpand = !this.isExpand;
+    this.isExpand = item;
   }
 
   resetFilterCount() {

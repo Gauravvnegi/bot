@@ -313,6 +313,11 @@
   display: block;
 
   padding: 10px;
+  flex-wrap: nowrap;
+  display: inline-flex;
+  .mat-chip {
+    display: flex;
+  }
   &::-webkit-scrollbar {
     height: 6px;
     &:hover {

@@ -18,13 +18,6 @@ export const ADMIN_ROUTES = [
       },
     ],
   },
-
-  {
-    path: 'covid',
-    title: 'Covid-19',
-    children: null,
-    url: 'assets/svg/virus.svg',
-  },
   {
     path: 'freddie',
     title: 'Freddie',

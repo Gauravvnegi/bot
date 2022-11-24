@@ -20,10 +20,6 @@
   padding: 20px;
   height: 100%;
   margin-bottom: 1.3%;
-  // &:hover{
-  //    border: 0.5px solid rgb(108, 108, 245);
-  //    cursor: pointer;
-  // }
   &-header {
     display: flex;
     align-items: center;
@@ -129,7 +125,6 @@
   color: $comparison-positive;
 }
 
-
 .info-icon {
   position: relative;
 
@@ -142,15 +137,15 @@
   .tooltip {
     position: absolute;
     font: normal normal normal 12px/16px Roboto;
-    background-color: #fff;
+    background-color: $white;
     min-width: 160px;
-    border: 1px solid #eee;
+    border: 1px solid $c-gray-85;
     padding: 10px;
     top: 120%;
     left: -200%;
-    color: #484848;
+    color: $tooltip;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px 0px #eee;
+    box-shadow: 0px 0px 10px 0px $c-gray-85;
     display: none;
     z-index: 100;
 
@@ -161,7 +156,7 @@
       height: 0;
       border-left: 7px solid transparent;
       border-right: 7px solid transparent;
-      border-bottom: 10px solid #eee;
+      border-bottom: 10px solid $c-gray-85;
       left: 40%;
       transform: translate(-50%);
 
@@ -172,7 +167,7 @@
         height: 0;
         border-left: 6px solid transparent;
         border-right: 6px solid transparent;
-        border-bottom: 9px solid #ffffff;
+        border-bottom: 9px solid $white;
         left: -6px;
         z-index: 3;
         position: absolute;

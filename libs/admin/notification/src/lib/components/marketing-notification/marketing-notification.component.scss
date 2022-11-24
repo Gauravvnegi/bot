@@ -26,7 +26,7 @@
   top: 10.1%;
   right: 12%;
   left: 12%;
-  background-color: white !important;
+  background-color: $white !important;
   color: $dark-blue;
   z-index: 111;
 }
@@ -49,10 +49,12 @@
     @media (max-width: $tablet) {
       @include width(42.6%);
     }
-    .width{  width:100%;}
+    .width {
+      width: 100%;
+    }
     .mat-label {
       width: 150px;
-      color: #b5b5c3;
+      color: $mat-tab-label;
       font-size: $font14;
     }
   }
@@ -81,7 +83,7 @@
     padding: 11.9px 26px 13px;
     border-radius: 23px;
     border: solid 1px $primary-purple;
-    background-color: white;
+    background-color: $white;
     cursor: pointer;
     &:active {
       transform: scale(0.97);
@@ -116,7 +118,7 @@
       line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
-      color: white;
+      color: $white;
     }
   }
 }

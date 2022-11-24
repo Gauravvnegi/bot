@@ -25,7 +25,7 @@
   text-align: left;
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0.72px;
-  color: #c6f0ef;
+  color: $stat-legend-title;
 }
 .status-right {
   display: flex;
@@ -83,7 +83,7 @@
   text-align: right;
   font: normal normal bold 12px/16px Roboto;
   letter-spacing: 0.72px;
-  color: #0239cf;
+  color: $vip-stat-label;
   opacity: 1;
 }
 

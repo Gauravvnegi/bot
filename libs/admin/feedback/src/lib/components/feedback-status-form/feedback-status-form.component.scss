@@ -1,3 +1,4 @@
+@import 'main';
 button {
   display: flex;
   outline: none;
@@ -6,10 +7,10 @@ button {
   justify-content: space-between;
   border-radius: 24px;
   font-size: 11px;
-  border: solid 1px #4b56c0;
-  background-color: white;
+  border: solid 1px $button-blue;
+  background-color: $white;
   padding: 4px;
-  color: #4b56c0;
+  color: $button-blue;
   cursor: pointer;
 }
 
@@ -19,7 +20,7 @@ button {
   padding: 7px 8px 7px 8px;
   border-radius: 4px;
   box-shadow: 2px 6px 12px 0 rgba(0, 0, 0, 0.16);
-  background-color: #fff;
+  background-color: $white;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -32,7 +33,7 @@ button {
 
 .material-icons {
   cursor: pointer;
-  color: #4b56c0;
+  color: $button-blue;
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
   -ms-transform: rotate(90deg);
@@ -74,5 +75,5 @@ button {
   pointer-events: auto;
   box-shadow: 0 2px 12px 0 rgba(10, 50, 70, 0.35);
   border-radius: 8px;
-  background-color: white;
+  background-color: $white;
 }

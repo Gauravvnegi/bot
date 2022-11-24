@@ -12,15 +12,15 @@
   .tooltip {
     position: absolute;
     font: normal normal normal 12px/16px Roboto;
-    background-color: #fff;
+    background-color: $white;
     min-width: 160px;
-    border: 1px solid #eee;
+    border: 1px solid $c-gray-85;
     padding: 10px;
     top: 120%;
     left: -200%;
-    color: #484848;
+    color: $tooltip;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px 0px #eee;
+    box-shadow: 0px 0px 10px 0px $c-gray-85;
     display: none;
     z-index: 1024;
     .arrow {
@@ -30,7 +30,7 @@
       height: 0;
       border-left: 7px solid transparent;
       border-right: 7px solid transparent;
-      border-bottom: 10px solid #eee;
+      border-bottom: 10px solid $c-gray-85;
       left: 40%;
       transform: translate(-50%);
 
@@ -41,7 +41,7 @@
         height: 0;
         border-left: 6px solid transparent;
         border-right: 6px solid transparent;
-        border-bottom: 9px solid #ffffff;
+        border-bottom: 9px solid $white;
         left: -6px;
         z-index: 3;
         position: absolute;
@@ -72,7 +72,7 @@
     .analyticsHeading {
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0.96px;
-      color: #002046;
+      color: $dark-blue;
       opacity: 1;
       display: flex;
       align-items: center;
@@ -101,7 +101,7 @@
           .val {
             font: normal normal bold 25px/30px Roboto;
             letter-spacing: 1.5px;
-            color: #002046;
+            color: $dark-blue;
             opacity: 1;
             padding-top: 7px;
           }
@@ -125,7 +125,7 @@
         margin-top: 10px;
         padding: 0 15px;
         border-radius: 5px;
-        background-color: #f9fafa;
+        background-color: $stat-legend-bg;
         align-items: center;
         justify-content: space-between;
         font-family: Roboto;
@@ -143,7 +143,7 @@
           font-weight: bold;
           letter-spacing: 0.72px;
           text-align: right;
-          color: #002046;
+          color: $dark-blue;
         }
       }
     }
@@ -157,7 +157,7 @@
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #b4b4b4;
+    color: $c-gray-72;
     margin: 0 0 20px 20px;
     align-self: flex-start;
   }

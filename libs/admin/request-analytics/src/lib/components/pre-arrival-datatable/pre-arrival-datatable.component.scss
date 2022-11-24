@@ -5,7 +5,7 @@
   font-size: 16px;
   color: $dark-blue;
   letter-spacing: 0.32px;
-  border: 1px solid #ced5d9;
+  border: 1px solid $c-gray-81;
   border-radius: 5px;
   background: $white;
   ::placeholder {
@@ -16,7 +16,7 @@
     font-style: normal;
     line-height: 1.25;
     letter-spacing: 0.72px;
-    color: #9eaeb8;
+    color: $primary-gray;
   }
 }
 .popup__wrap {
@@ -36,7 +36,7 @@
     gap: 8px;
   }
   .requestDataTableHead {
-    background-color: #eaf0f6 !important;
+    background-color: $c-gray-93 !important;
     width: 50px;
     text-align: center;
   }
@@ -55,7 +55,7 @@
 td {
   ::ng-deep p {
     font-size: 12px;
-    color: #727272;
+    color: $c-gray-45;
     line-height: 16px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -63,19 +63,19 @@ td {
       font-size: 10px;
     }
     &.high {
-      background-color: #f8b633;
+      background-color: $priority-high;
       @include inhouse-popup-status;
     }
     &.asap {
-      background-color: #cc052b;
+      background-color: $comparison-negative;
       @include inhouse-popup-status;
     }
     &.low {
-      background-color: #119e0c;
+      background-color: $priority-low;
       @include inhouse-popup-status;
     }
     &.light {
-      color: #b2b7bc;
+      color: $c-gray-71;
       text-overflow: ellipsis;
       overflow: hidden;
     }
@@ -96,46 +96,44 @@ td {
   }
   mat-select {
     font-size: 12px;
-    color: #9eaeb8;
+    color: $primary-gray;
   }
 }
 
-:host ::ng-deep .status-opacity-reject{
+:host ::ng-deep .status-opacity-reject {
   color: $light-blue !important;
 }
-:host ::ng-deep .status-text-reject{
-background-color: $light-blue !important;
-color: $white !important;
+:host ::ng-deep .status-text-reject {
+  background-color: $light-blue !important;
+  color: $white !important;
 }
 
-:host ::ng-deep .status-opacity-accept{
+:host ::ng-deep .status-opacity-accept {
   color: $accept !important;
   background: $white !important;
 }
-:host ::ng-deep .status-text-accept{
-     background-color: $accept !important;
-     color: $white !important;
-   }
-
-:host ::ng-deep .status-opacity-closed{
-    color: $closed !important;
-    background: #fff !important;
-}
-:host ::ng-deep .status-text-closed{
-    background-color: $closed !important;
-    color: $white !important;
+:host ::ng-deep .status-text-accept {
+  background-color: $accept !important;
+  color: $white !important;
 }
 
-:host ::ng-deep .status-opacity-pending{
+:host ::ng-deep .status-opacity-closed {
+  color: $closed !important;
+  background: $white !important;
+}
+:host ::ng-deep .status-text-closed {
+  background-color: $closed !important;
+  color: $white !important;
+}
+
+:host ::ng-deep .status-opacity-pending {
   color: $timeout !important;
 }
-:host ::ng-deep .status-text-pending{
-    background-color: $timeout !important;
-    color: $white !important;
+:host ::ng-deep .status-text-pending {
+  background-color: $timeout !important;
+  color: $white !important;
 }
-:host ::ng-deep .requestDataActionLabel{
+:host ::ng-deep .requestDataActionLabel {
   margin-left: 0.5em;
   font-weight: 500;
 }
-
-

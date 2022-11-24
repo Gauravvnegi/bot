@@ -202,21 +202,17 @@ svg text.label {
   color: $comparison-positive;
 }
 :host ::ng-deep .labels {
-    position: absolute;
-    color: #8995a3;
-    font: normal normal bold 11px/12px Roboto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 1;
-  
+  position: absolute;
+  color: $gray-total;
+  font: normal normal bold 11px/12px Roboto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 1;
 }
 :host ::ng-deep .labels .val {
-    text-align: center;
-    color:$dark-blue;
-    font: normal normal bold 21px/24px Roboto;
-
+  text-align: center;
+  color: $dark-blue;
+  font: normal normal bold 21px/24px Roboto;
 }
-
-

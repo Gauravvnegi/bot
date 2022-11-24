@@ -34,7 +34,7 @@
     height: 65px;
     display: flex;
     justify-content: space-evenly;
-    border-right: solid 1px #e0e0e0;
+    border-right: solid 1px $light-gray;
     align-items: center;
     max-width: 100%;
     &-loop {
@@ -52,7 +52,7 @@
   &-body {
     height: calc(100% - 112px);
     overflow: auto;
-    border-right: solid 1px #e0e0e0;
+    border-right: solid 1px $light-gray;
     &-card {
       height: 138px;
       padding: 10px;
@@ -156,7 +156,7 @@
         line-height: normal;
         letter-spacing: 0.96px;
         text-align: left;
-        color: #002046;
+        color: $dark-blue;
       }
       &__description {
         font-size: 12px;
@@ -166,7 +166,7 @@
         line-height: normal;
         letter-spacing: 0.72px;
         text-align: left;
-        color: #c5c5c5;
+        color: $c-gray-77;
       }
     }
   }
@@ -259,14 +259,14 @@
 }
 .right-side-subheader {
   display: flex;
-  border: solid 1px #e0e0e0;
+  border: solid 1px $light-gray;
   border-left: none;
   align-items: center;
   border-bottom: none;
   max-width: 100%;
 }
 :host ::ng-deep .mat-tab-header {
-  border-bottom: solid 1px #e0e0e0 !important;
+  border-bottom: solid 1px $light-gray !important;
 }
 :host ::ng-deep .mat-tab-list {
   width: 100%;

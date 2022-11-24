@@ -1,7 +1,7 @@
 @import 'main';
 .border {
   margin: 15px 0.5%;
-  border: 1px solid #f4f5f7;
+  border: 1px solid $c-gray-103;
   opacity: 0.1;
 }
 .usage-container {
@@ -11,7 +11,7 @@
     margin: 15px 0;
     font: normal normal bold 16px/21px Roboto;
     letter-spacing: 0.96px;
-    color: #002046;
+    color: $dark-blue;
   }
   .usages {
     display: flex;
@@ -22,8 +22,8 @@
     &__item {
       width: calc(25% - 7.5px);
       padding: 20px 15px 25px 15px;
-      background: #ffffff 0% 0% no-repeat padding-box;
-      box-shadow: 0px 3px 6px #0000000d;
+      background: 0% 0% no-repeat padding-box $white;
+      box-shadow: 0px 3px 6px $progress-bar-messages;
       border-radius: 5px;
       display: flex;
       flex-direction: column;
@@ -31,22 +31,22 @@
     }
     &__first {
       padding: 20px 15px 25px 15px;
-      background: #ffffff 0% 0% no-repeat padding-box;
-      box-shadow: 0px 3px 6px #0000000d;
+      background: 0% 0% no-repeat padding-box $white;
+      box-shadow: 0px 3px 6px $progress-bar-messages;
       border-radius: 5px;
       width: 50%;
     }
     &__first {
       padding: 20px 15px 25px 15px;
-      background: #ffffff 0% 0% no-repeat padding-box;
-      box-shadow: 0px 3px 6px #0000000d;
+      background: 0% 0% no-repeat padding-box $white;
+      box-shadow: 0px 3px 6px $progress-bar-messages;
       border-radius: 5px;
       width: 50%;
     }
     &__first {
       padding: 20px 15px 25px 15px;
-      background: #ffffff 0% 0% no-repeat padding-box;
-      box-shadow: 0px 3px 6px #0000000d;
+      background: 0% 0% no-repeat padding-box $white;
+      box-shadow: 0px 3px 6px $progress-bar-messages;
       border-radius: 5px;
       width: 50%;
     }
@@ -59,28 +59,28 @@
   display: flex;
   justify-content: space-between;
   &__label {
-    color: #484848;
+    color: $tooltip;
     font-weight: normal;
     font-size: 14px;
     @media (max-width: 992px) {
       font-size: 12px;
-      white-space: nowrap;
+      $white-space: nowrap;
     }
   }
   &__button {
     outline: none;
     width: 116px;
     height: 28px;
-    background: #e8eef5 0% 0% no-repeat padding-box;
+    background: $accordian-background 0% 0% no-repeat padding-box;
     border-radius: 24px;
-    border: 1px solid #e8eef5;
-    color: #4b56c0;
+    border: 1px solid $accordian-background;
+    color: $button-blue;
     font-weight: 600;
     font-size: 12px;
     cursor: pointer;
     &:hover {
-      background: #4b56c0;
-      color: white;
+      background: $button-blue;
+      color: $white;
     }
     @media (max-width: 992px) {
       width: 72px;
@@ -107,7 +107,7 @@
       }
       @media (max-width: 992px) {
         font-size: 11px;
-        white-space: nowrap;
+        $white-space: nowrap;
       }
     }
     &__diff {
@@ -115,7 +115,7 @@
       font-weight: 500;
       @media (max-width: 992px) {
         font-size: 11px;
-        white-space: nowrap;
+        $white-space: nowrap;
       }
       img {
         width: 8px;
@@ -131,7 +131,7 @@
     color: $quote-color;
     @media (max-width: 992px) {
       text-align: right;
-      white-space: nowrap;
+      $white-space: nowrap;
     }
   }
 }
@@ -199,8 +199,8 @@
   &__text {
     font-size: 12px;
     font-weight: 200;
-    background-color: white;
-    color: #484848;
+    background-color: $white;
+    color: $tooltip;
     border-radius: 6px;
     min-width: 14vw;
     padding: 10px;
@@ -210,7 +210,7 @@
     left: -5vw;
     display: none;
     border: 1px solid rgba(158, 207, 250, 0.3);
-    box-shadow: 0px 3px 9px #0000000d;
+    box-shadow: 0px 3px 9px $progress-bar-messages;
   }
 }
 
@@ -221,8 +221,8 @@
   gap: 15px;
   &__item {
     padding: 20px 15px 25px 15px;
-    background: #ffffff 0% 0% no-repeat padding-box;
-    box-shadow: 0px 3px 6px #0000000d;
+    background: 0% 0% no-repeat padding-box $white;
+    box-shadow: 0px 3px 6px $progress-bar-messages;
     border-radius: 5px;
     flex-grow: 1;
     margin-top: 20px;

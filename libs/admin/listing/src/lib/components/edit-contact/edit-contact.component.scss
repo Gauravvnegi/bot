@@ -1,9 +1,8 @@
 @import 'main';
 
-
 /* Set header to stick to the top of the container. */
 thead tr th {
-  background-color: white;
+  background-color: $white;
   padding: 40px $padding10 $padding20 $padding10;
   position: sticky;
   top: 0px;
@@ -13,7 +12,7 @@ thead tr th {
 
 tr,
 th {
-  font-size:$font14;
+  font-size: $font14;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
@@ -28,10 +27,10 @@ td {
   background-color: transparent;
 }
 
-.add-popup{
-  padding: $padding30 40px; 
+.add-popup {
+  padding: $padding30 40px;
   height: 80vh;
-  .add-contact{
+  .add-contact {
     font-family: Roboto;
     font-size: $font20;
     font-weight: bold;
@@ -46,25 +45,25 @@ td {
     overflow: auto;
     padding-bottom: $padding20;
 
-    .add-contacts-field{
+    .add-contacts-field {
       margin: $margin5 $margin10;
     }
-    .remove-table{
+    .remove-table {
       cursor: pointer;
     }
   }
 }
-.ad-contact{
-  width: fit-content; 
-  cursor: pointer; 
+.ad-contact {
+  width: fit-content;
+  cursor: pointer;
   margin: $margin20 0;
   color: $primary-purple;
 }
-.submit{
-  display: flex; 
-  justify-content: center; 
+.submit {
+  display: flex;
+  justify-content: center;
   margin-bottom: $margin20;
-  .submit-contact{
+  .submit-contact {
     display: flex;
     justify-content: center;
     width: 250px;
@@ -75,7 +74,7 @@ td {
     box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
     background-color: $primary-purple;
     cursor: pointer;
-    .save{
+    .save {
       font-size: $font16;
       font-weight: 500;
       font-stretch: normal;
@@ -83,7 +82,7 @@ td {
       line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
-      color: white;
+      color: $white;
     }
   }
 }
@@ -93,18 +92,18 @@ td {
   border-radius: 4px;
 }
 
-:host ::ng-deep .mat-form-field-label-wrapper{
+:host ::ng-deep .mat-form-field-label-wrapper {
   margin-left: 9px;
   top: -6px;
 }
 
-:host ::ng-deep input.mat-input-element{
+:host ::ng-deep input.mat-input-element {
   padding-top: $padding5;
   padding-bottom: 4px;
 }
 
 :host ::ng-deep .mat-input-element {
-  color: #000;
+  color: $c-black;
   padding-left: $padding5;
 }
 // :host ::ng-deep .mat-select-placeholder{
@@ -115,40 +114,49 @@ td {
   height: 0px !important;
 }
 
-:host ::ng-deep .mat-form-field-ripple{
+:host ::ng-deep .mat-form-field-ripple {
   height: 1px;
   width: 173px;
   margin-left: 3px;
   margin-top: -2px;
 }
 
-:host ::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label, .mat-form-field-appearance-legacy.mat-form-field-can-float .mat-input-server:focus+.mat-form-field-label-wrapper .mat-form-field-label {
+:host
+  ::ng-deep
+  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-label,
+.mat-form-field-appearance-legacy.mat-form-field-can-float
+  .mat-input-server:focus
+  + .mat-form-field-label-wrapper
+  .mat-form-field-label {
   display: none;
 }
 
-.close-popup-icon{
-  margin: $margin10; 
-  cursor: pointer; 
+.close-popup-icon {
+  margin: $margin10;
+  cursor: pointer;
   text-align: right;
 }
 
-:host ::ng-deep .mat-form-field-ripple{
+:host ::ng-deep .mat-form-field-ripple {
   display: none;
 }
 
-:host ::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-ripple, .mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
+:host ::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-ripple,
+.mat-form-field.mat-form-field-invalid .mat-form-field-ripple.mat-accent {
   display: none;
 }
 
-:host ::ng-deep .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+:host
+  ::ng-deep
+  .mat-form-field-type-mat-select:not(.mat-form-field-disabled)
+  .mat-form-field-flex {
   cursor: pointer;
   width: 100px;
 }
 
-:host ::ng-deep .mat-select-value{
+:host ::ng-deep .mat-select-value {
   padding-left: $padding5;
   padding-top: 2px;
   padding-bottom: 2px;
 }
-
-

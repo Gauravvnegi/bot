@@ -1,20 +1,20 @@
 @import 'main';
 .container {
-  border-right: solid 1px #e0e0e0;
+  border-right: solid 1px $light-gray;
   height: 100%;
   overflow-y: auto;
 }
 .sortFilt {
   height: 62px;
   padding: 10px 15px;
-  border-bottom: 1px solid #9eaeb8;
+  border-bottom: 1px solid $primary-gray;
   display: flex;
   justify-content: space-between;
   align-items: center;
   &-text {
     font: normal normal medium 16px/21px Roboto;
     letter-spacing: 0.64px;
-    color: #002046;
+    color: $dark-blue;
     opacity: 1;
     font-size: 16px;
     font-weight: 500;
@@ -33,7 +33,7 @@
         font-style: normal;
         line-height: normal;
         letter-spacing: 0.56px;
-        color: #9eaeb8;
+        color: $primary-gray;
         margin-right: 5px;
         &:hover {
           color: $primary-purple;
@@ -45,7 +45,7 @@
 .cross {
   font-size: 22px;
   cursor: pointer;
-  color: #9eaeb8;
+  color: $primary-gray;
   &:hover {
     color: $primary-purple;
   }
@@ -137,12 +137,12 @@
 
 .division {
   height: 20px;
-  border: 1px solid #9eaeb8;
+  border: 1px solid $primary-gray;
   margin: 0 10px;
 }
 
 .material-icon {
-  color: #9eaeb8;
+  color: $primary-gray;
   &:hover {
     color: $primary-purple;
   }

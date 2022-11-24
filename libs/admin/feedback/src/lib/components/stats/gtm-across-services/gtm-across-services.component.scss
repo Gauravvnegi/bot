@@ -1,9 +1,9 @@
 @import 'main';
 
 .container {
-  background: #ffffff;
-  border: solid 1px #e2e2e2;
-  box-shadow: 0px 3px 6px #0000000d;
+  background: $white;
+  border: solid 1px $c-gray-89;
+  box-shadow: 0px 3px 6px $progress-bar-messages;
   border-radius: 5px;
   height: 100%;
   width: 100%;
@@ -152,7 +152,7 @@
 }
 .clickable-card {
   cursor: pointer;
-  box-shadow: 0px 3px 20px #0368ff42;
+  box-shadow: 0px 3px 20px $hover-box-shadow;
   border: 1px solid $primary-purple;
   border-radius: 5px;
 }

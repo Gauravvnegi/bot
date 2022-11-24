@@ -1,4 +1,5 @@
 @import 'main';
+
 .whatsapp-wrapper {
   height: 100%;
   display: flex;
@@ -13,14 +14,14 @@
   &-sidebar {
     width: 25%;
     height: 100%;
-    border-right: 1px solid #9eaeb8;
+    border-right: 1px solid $primary-gray;
     position: relative;
     .blackscreen {
       position: absolute;
       height: 100%;
       width: 100%;
       opacity: 0.3;
-      background-color: black;
+      background-color: $black;
       z-index: 4;
       display: none;
     }
@@ -29,7 +30,7 @@
   .no-selected-guest {
     height: 100%;
     width: 75%;
-    background: #ffffff;
+    background: $white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,7 +51,7 @@
       line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
-      color: #002046;
+      color: $dark-blue;
     }
     &__description {
       font-size: 12px;
@@ -60,14 +61,14 @@
       line-height: normal;
       letter-spacing: 0.72px;
       text-align: left;
-      color: #c5c5c5;
+      color: $c-gray-77;
     }
   }
   .guest-info-enable {
     width: 23%;
     height: 100%;
-    background: #ffffff;
-    border-left: 1px solid #9eaeb8;
+    background: $white;
+    border-left: 1px solid $primary-gray;
     max-width: 259px;
     // position: absolute;
     // right: 12px;
@@ -89,7 +90,7 @@
     height: 100%;
     width: 100%;
     opacity: 0.3;
-    background-color: black;
+    background-color: $black;
     z-index: 4;
     display: none;
   }

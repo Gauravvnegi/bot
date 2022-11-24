@@ -2,7 +2,7 @@
 
 .wrapper {
   padding: $padding20;
-  background-color: white;
+  background-color: $white;
   margin: $margin20 0px;
   border-radius: 5px;
   &-header {
@@ -32,7 +32,7 @@
         padding: $padding10 $padding15;
         font-size: $font12;
         color: $dark-grey;
-        background-color: #f5f5f5;
+        background-color: $c-gray-103;
         border-radius: 25px;
       }
       .text {
@@ -95,10 +95,10 @@
       .button {
         border-radius: 20px;
         padding: 10px 35px;
-        background-color: #414ce8;
+        background-color: $button-blue;
         opacity: 0.85;
         outline: none;
-        color: white;
+        color: $white;
         font-size: $font14;
         margin: 0 15px;
         border: none;
@@ -168,7 +168,7 @@
             width: 50%;
             height: 132px;
             margin: 5px 10px;
-            background-color: #f1f5f8;
+            background-color: $c-gray-100;
             border-radius: 5px;
             position: relative;
             text-align: center;
@@ -184,7 +184,7 @@
               }
             }
             .paragraph {
-              color: #787e81;
+              color: $c-gray-47;
               font-size: 15px;
               letter-spacing: 0.9px;
               margin: 0 auto;
@@ -201,7 +201,7 @@
               justify-content: center;
               border-radius: 50%;
               box-shadow: 0px 0px 5px 0px darkgray;
-              background-color: #f1f5f8;
+              background-color: $c-gray-100;
               z-index: 10;
               position: absolute;
               top: -30%;

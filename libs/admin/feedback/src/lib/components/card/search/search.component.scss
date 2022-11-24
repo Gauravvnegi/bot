@@ -6,7 +6,7 @@
     width: 100%;
     border: none;
     padding: 5px 28px 5px 5px;
-    border: 1px solid #d9d9d9;
+    border: 1px solid $light-grey;
     border-radius: 5px;
     font-size: 14px;
     height: 42px;
@@ -31,7 +31,7 @@
 }
 
 .cross_icon {
-  color: #c5c5c5;
+  color: $c-gray-77;
   font-size: $font20;
   position: absolute;
   right: 9px;

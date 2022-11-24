@@ -17,7 +17,7 @@
         {{ data.feedback?.guest?.getFullName() }}
       </div>
       <div class="mr-10">
-        <div class="req_button">
+        <div class="req_button" [ngClass]="{ disabled: data.isDisabled }">
           <div class="export" (click)="exportCSV()">
             <img class="paper" src="assets/images/paper.png" alt="export" />
             <p>Export Feedback</p>
@@ -26,6 +26,7 @@
         <div
           class="view-feedback-btn"
           (click)="downloadFeedback($event, data.feedback.id)"
+          [ngClass]="{ disabled: data.isDisabled }"
         >
           <img src="assets/svg/View.svg" alt="" />
           <div class="view-feedback-btn__text">

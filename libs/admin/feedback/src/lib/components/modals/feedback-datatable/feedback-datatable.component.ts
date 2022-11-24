@@ -421,6 +421,9 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   openDetailPage(event: MouseEvent, rowData?, tabKey?: string): void {
     event.stopPropagation();
     if (!rowData) return;
+    let isDisabled;
+    if (this.tableName === 'Response Rate' && this.isNotVisible)
+      isDisabled = true;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -431,6 +434,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       isModal: true,
       globalQueries: this.globalQueries,
       outlets: this.outlets,
+      isDisabled: isDisabled,
     };
 
     const detailCompRef = this._modal.openDialog(

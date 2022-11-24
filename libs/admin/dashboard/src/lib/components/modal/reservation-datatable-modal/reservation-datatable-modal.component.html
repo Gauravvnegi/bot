@@ -432,26 +432,26 @@
           <td>
             <p class="arrival-date">
               {{
-                rowData.booking.getArrivalDate(_globalFilterService.timezone)
+                rowData.booking.getArrivalDate(globalFilterService.timezone)
               }}-{{
-                rowData.booking.getDepartureDate(_globalFilterService.timezone)
+                rowData.booking.getDepartureDate(globalFilterService.timezone)
               }}
             </p>
 
             <p class="arrival-time">
               {{
-                rowData.booking.getArrivalTime(_globalFilterService.timezone)
+                rowData.booking.getArrivalTime(globalFilterService.timezone)
               }}-{{
-                rowData.booking.getDepartureTime(_globalFilterService.timezone)
+                rowData.booking.getDepartureTime(globalFilterService.timezone)
               }}
             </p>
             <p class="arrival-time">
               {{
-                rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+                rowData.booking.getDaysAndNights(globalFilterService.timezone)
                   .nights
               }}N |
               {{
-                rowData.booking.getDaysAndNights(_globalFilterService.timezone)
+                rowData.booking.getDaysAndNights(globalFilterService.timezone)
                   .days
               }}D
             </p>

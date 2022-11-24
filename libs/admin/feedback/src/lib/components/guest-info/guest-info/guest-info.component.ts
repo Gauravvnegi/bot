@@ -46,7 +46,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   buttonConfig = card.buttonConfig;
   guestData: Guest;
   constructor(
-    private _snackBarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private feedbackService: CardService,
     private _fb: FormBuilder
   ) {}
@@ -104,7 +104,15 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           this.loadGuestReservations();
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.closeDetails();
         }
       )
@@ -125,7 +133,15 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           this.isGuestReservationFetched = true;
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.closeDetails();
         }
       )

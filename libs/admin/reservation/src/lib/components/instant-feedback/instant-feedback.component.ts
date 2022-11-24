@@ -17,7 +17,7 @@ export class InstantFeedbackComponent implements OnInit, OnDestroy {
   outlets;
   private $subscription = new Subscription();
   constructor(
-    public _globalFilterService: GlobalFilterService,
+    public globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
     private snackbarService: SnackBarService,
     private reservationService: ReservationService
@@ -31,9 +31,12 @@ export class InstantFeedbackComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         this.getOutlets(data['filter'].value);
       })
     );
@@ -66,7 +69,16 @@ export class InstantFeedbackComponent implements OnInit, OnDestroy {
           link.click();
           link.remove();
         },
-        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

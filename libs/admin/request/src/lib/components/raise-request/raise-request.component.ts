@@ -40,8 +40,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   requestConfig = request;
   constructor(
     private fb: FormBuilder,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private adminUtilityService: AdminUtilityService,
     private _translateService: TranslateService
@@ -62,11 +62,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
         this.initItemList();
       })
     );
@@ -86,17 +83,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     return this.cmsServices.filter((option) =>
       option.itemName.toLowerCase().includes(filterValue)
     );
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extractinf from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
-    });
   }
 
   /**
@@ -137,7 +123,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
           this.listenForItemNameChange();
         },
         ({ error }) =>
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',
@@ -168,7 +154,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   raiseRequest(): void {
     if (this.requestFG.invalid) {
       this._translateService.get('error.fillAllDetails').subscribe((message) =>
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'messages.error.some_thing_wrong',
@@ -195,7 +181,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
           this._translateService
             .get('success.requestCreated')
             .subscribe((message) =>
-              this._snackbarService
+              this.snackbarService
                 .openSnackBarWithTranslate(
                   {
                     translateKey: 'success.requestCreated',
@@ -213,7 +199,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
         },
         ({ error }) => {
           this.isRaisingRequest = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',
@@ -274,7 +260,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
                 }
               },
               ({ error }) =>
-                this._snackbarService
+                this.snackbarService
                   .openSnackBarWithTranslate(
                     {
                       translateKey: 'messages.error.some_thing_wrong',

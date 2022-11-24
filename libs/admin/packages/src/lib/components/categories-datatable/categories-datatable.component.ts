@@ -71,6 +71,9 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
       //set-global query everytime global filter changes
@@ -78,7 +81,7 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.getHotelId(this.globalQueries);
+      this.hotelId = this.globalFilterService.hotelId;
       //fetch-api for records
       this.loadInitialData([
         ...this.globalQueries,
@@ -86,14 +89,6 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
         },
       ]);
-    });
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
     });
   }
 
@@ -120,7 +115,15 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -162,7 +165,15 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -196,7 +207,15 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );

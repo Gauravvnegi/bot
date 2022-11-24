@@ -30,7 +30,7 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
   constructor(
     private adminUtilityService: AdminUtilityService,
     private templateService: CampaignService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     protected _translateService: TranslateService
   ) {}
 
@@ -64,7 +64,7 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
           },
           ({ error }) => {
             this.loading = false;
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate({
                 translateKey: 'Cannot load Data',
                 priorityMessage: error.message,

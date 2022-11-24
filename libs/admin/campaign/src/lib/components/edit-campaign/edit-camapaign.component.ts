@@ -60,7 +60,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private _campaignService: CampaignService,
     private _emailService: EmailService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private _router: Router,
     protected _translateService: TranslateService,
     private _modalService: ModalService
@@ -111,20 +111,10 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getTemplateId();
       })
     );
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
-    });
   }
 
   /**
@@ -175,7 +165,16 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
           this.$formChangeDetection.unsubscribe();
           this.listenForAutoSave();
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       );
   }
 
@@ -290,7 +289,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
             }
           },
           ({ error }) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate({
                 translateKey: 'messages.error.fail',
                 priorityMessage: error.message,
@@ -393,7 +392,15 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
         this.autoSave(this.campaignFG.getRawValue()).subscribe(
           (response) => this._router.navigate(['/pages/marketing/campaign']),
           ({ error }) => {
-            this._snackbarService.openSnackBarAsText(error.message);
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
             this._router.navigate(['/pages/marketing/campaign']);
           }
         )
@@ -406,7 +413,12 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
    */
   scheduleCampaign() {
     if (this.campaignFG.invalid) {
-      this._snackbarService.openSnackBarAsText('Invalid form.');
+      this.snackbarService
+        .openSnackBarWithTranslate({
+          translateKey: 'messages.validation.INVALID_FORM',
+          priorityMessage: 'Invalid Form.',
+        })
+        .subscribe();
       return;
     }
     const dialogConfig = new MatDialogConfig();
@@ -431,15 +443,26 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
             )
             .subscribe(
               (response) => {
-                this._snackbarService.openSnackBarAsText(
-                  'Campaign scheduled.',
+                this.snackbarService.openSnackBarWithTranslate(
+                  {
+                    translateKey: `messages.SUCCESS.CAMPAIGN_SCEDULED`,
+                    priorityMessage: 'Campaign scheduled.',
+                  },
                   '',
                   { panelClass: 'success' }
                 );
                 this._router.navigate(['pages/marketing/campaign']);
               },
               ({ error }) =>
-                this._snackbarService.openSnackBarAsText(error.message)
+                this.snackbarService
+                  .openSnackBarWithTranslate(
+                    {
+                      translateKey: `messages.error.${error?.type}`,
+                      priorityMessage: error?.message,
+                    },
+                    ''
+                  )
+                  .subscribe()
             )
         );
       } else this.scheduleFG.reset();
@@ -453,7 +476,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
    */
   sendMail() {
     if (this.campaignFG.invalid) {
-      this._snackbarService
+      this.snackbarService
         .openSnackBarWithTranslate({
           translateKey: 'messages.error.fail',
           priorityMessage: 'Invalid form.',
@@ -470,7 +493,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._emailService.sendEmail(this.hotelId, reqData).subscribe(
         (response) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.success.campaignSent',
@@ -485,7 +508,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
           this._router.navigate(['pages/marketing/campaign']);
         },
         ({ error }) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate({
               translateKey: 'messages.error.loadData',
               priorityMessage: error.message,

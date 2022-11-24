@@ -39,8 +39,8 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private messageService: MessageService,
     private adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private snackBarService: SnackBarService // private subscriptionPlanService: SubscriptionPlanService
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService // private subscriptionPlanService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {
@@ -81,29 +81,21 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
     this.listenForReservationIdChanges();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
       })
     );
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   saveDetails() {
     if (this.parentFG.invalid) {
       this.parentFG.markAsTouched();
-      this.snackBarService.openSnackBarAsText('Please fill all details');
+      this.snackbarService.openSnackBarAsText('Please fill all details');
       return;
     }
     const values = this.parentFG.getRawValue();
@@ -117,7 +109,16 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
             this.messageService.refreshData$.next(true);
             this.onModalClose.emit();
           },
-          ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }

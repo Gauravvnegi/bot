@@ -15,7 +15,7 @@ export class GuestRequestsComponent implements OnChanges {
   @Input() hotelId;
   requestFG: FormGroup;
   constructor(
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private messageService: MessageService,
     private _adminUtilityService: AdminUtilityService,
     private fb: FormBuilder
@@ -54,19 +54,28 @@ export class GuestRequestsComponent implements OnChanges {
       };
       this.messageService.closeRequest(config, requestData).subscribe(
         (response) => {
-          this._snackbarService.openSnackBarAsText(
-            `Request status updated`,
-            '',
+          this.snackbarService.openSnackBarWithTranslate(
             {
-              panelClass: 'success',
-            }
+              translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
+              priorityMessage: 'Request status updated',
+            },
+            '',
+            { panelClass: 'success' }
           );
         },
         ({ error }) => {
           this.requestFG.patchValue({
             [request.id]: request.action,
           });
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       );
       return;
@@ -83,19 +92,28 @@ export class GuestRequestsComponent implements OnChanges {
       .updatePreArrivalRequest(request.id, requestData)
       .subscribe(
         (response) => {
-          this._snackbarService.openSnackBarAsText(
-            `Request status updated`,
-            '',
+          this.snackbarService.openSnackBarWithTranslate(
             {
-              panelClass: 'success',
-            }
+              translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
+              priorityMessage: 'Request status updated',
+            },
+            '',
+            { panelClass: 'success' }
           );
         },
         ({ error }) => {
           this.requestFG.patchValue({
             [request.id]: request.action,
           });
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       );
   }

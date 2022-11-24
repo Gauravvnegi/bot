@@ -295,14 +295,13 @@
         <td>
           <p class="date-time">
             {{
-              rowData.getRequestDateTime(_globalFilterService.timezone) ||
+              rowData.getRequestDateTime(globalFilterService.timezone) ||
                 '- - - - -'
             }}
           </p>
           <p class="date-time">
             {{
-              rowData.getClosedTime(_globalFilterService.timezone) ||
-                '- - - - -'
+              rowData.getClosedTime(globalFilterService.timezone) || '- - - - -'
             }}
           </p>
         </td>

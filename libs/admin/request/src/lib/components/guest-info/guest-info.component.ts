@@ -51,8 +51,8 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   ];
   colorMap: any;
   constructor(
-    private _globalFilterService: GlobalFilterService,
-    private _snackBarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
     private requestService: RequestService,
     private _fb: FormBuilder
   ) {}
@@ -68,13 +68,13 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     this.listenForSelectedRequest();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
       })
     );
   }
@@ -92,29 +92,12 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
-  }
-
   closeGuestInfo() {
     this.closeInfo.emit({ close: true });
   }
 
   onTabChanged(event) {
     this.selectedIndex = event.index;
-  }
-
-  handleButtonCLick(): void {
-    switch (this.selectedIndex) {
-      case 0:
-        break;
-      case 1:
-        break;
-    }
   }
 
   closeDetails() {
@@ -129,7 +112,15 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           this.loadGuestReservations();
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.closeDetails();
         }
       )
@@ -148,7 +139,15 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           this.isGuestReservationFetched = true;
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.closeDetails();
         }
       )
@@ -165,7 +164,16 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     this.$subscription.add(
       this.requestService.getGuestRequestData(this.guestId).subscribe(
         (response) => (this.requestList = new Requests().deserialize(response)),
-        ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

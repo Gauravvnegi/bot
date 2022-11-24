@@ -1,6 +1,4 @@
-export interface Deserializable {
-  deserialize(input: any): this;
-}
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class RateGraphStats {
   label: string[];

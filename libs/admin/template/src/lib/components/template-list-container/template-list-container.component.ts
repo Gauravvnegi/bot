@@ -32,7 +32,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
   constructor(
     private adminUtilityService: AdminUtilityService,
     private templateService: TemplateService,
-    private _snackbarService: SnackBarService
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -59,7 +59,16 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
         (response) => {
           this.topicList = new Topics().deserialize(response).records;
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

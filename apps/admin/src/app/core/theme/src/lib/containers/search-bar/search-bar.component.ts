@@ -42,7 +42,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     private modal: ModalService,
     private snackbarService: SnackBarService,
     private router: Router,
-    private _globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService
   ) {}
 
   searchValue = false;
@@ -55,9 +55,12 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     this.listenForSearchChanges();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const { branchName: branchId } = data['filter'].value.property;
         this.hotelId = branchId;
       })

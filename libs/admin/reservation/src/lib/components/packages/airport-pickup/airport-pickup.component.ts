@@ -17,10 +17,10 @@ export class AirportPickupComponent extends DefaultPackageComponent
   implements OnInit {
   constructor(
     private _fb: FormBuilder,
-    protected snackBarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     protected reservationService: ReservationService
   ) {
-    super(snackBarService, reservationService);
+    super(snackbarService, reservationService);
   }
 
   ngOnInit(): void {

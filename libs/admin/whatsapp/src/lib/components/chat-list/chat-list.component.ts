@@ -42,11 +42,11 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   autoSearched = false;
   constructor(
     private messageService: MessageService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
     private _firebaseMessagingService: FirebaseMessagingService,
-    private _snackBarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private notificationService: NotificationService,
     private route: ActivatedRoute
   ) {
@@ -91,13 +91,13 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     );
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
         this.loadChatList();
       })
     );
@@ -134,14 +134,6 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
   }
 
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
-  }
-
   loadChatList(updatePagination = true) {
     this.$subscription.add(
       this.messageService
@@ -160,14 +152,23 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             if (updatePagination) this.updatePagination(response.length);
             this.chatList = new ContactList().deserialize(
               response,
-              this._globalFilterService.timezone
+              this.globalFilterService.timezone
             );
             this.messageService.setWhatsappUnreadContactCount(
               this.chatList.unreadContacts
             );
             if (this.selected) this.markChatAsRead(this.selected);
           },
-          ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }
@@ -197,7 +198,16 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
               this.chatList.unreadContacts
             );
           },
-          ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         );
     }
   }
@@ -238,7 +248,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
                 response.length < this.limit ? this.limit : this.limit + 20;
               this.chatList = new ContactList().deserialize(
                 response,
-                this._globalFilterService.timezone
+                this.globalFilterService.timezone
               );
               if (this.autoSearched) {
                 this.selectedChat.emit({ value: this.chatList.contacts[0] });
@@ -246,17 +256,29 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
             } else {
               this.chatList = new ContactList().deserialize(
                 [],
-                this._globalFilterService.timezone
+                this.globalFilterService.timezone
               );
-              this._snackBarService.openSnackBarAsText(
-                `No contact found with search key: ${searchKey}!`,
+              this.snackbarService.openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.SUCCESS.NO_CONTACT_FOUND`,
+                  priorityMessage: `No contact found with search key: ${searchKey}!`,
+                },
                 '',
                 { panelClass: 'success' }
               );
               this.autoSearched = false;
             }
           },
-          ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }

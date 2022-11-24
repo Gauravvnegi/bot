@@ -1,10 +1,10 @@
 import { get, set } from 'lodash';
 
-export interface Deserializable {
+export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
-export class FeedbackConfig implements Deserializable {
+export class FeedbackConfig implements IDeserializable {
   suggestions;
   suggestionsObj = {};
   deserialize(input) {
@@ -18,7 +18,7 @@ export class FeedbackConfig implements Deserializable {
   }
 }
 
-export class Suggestion implements Deserializable {
+export class Suggestion implements IDeserializable {
   id;
   label;
   url;

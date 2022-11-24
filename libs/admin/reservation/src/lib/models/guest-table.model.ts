@@ -9,11 +9,11 @@ import {
   Status,
 } from './reservation-table.model';
 
-export interface Deserializable {
+export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
-export class GuestTable implements Deserializable {
+export class GuestTable implements IDeserializable {
   total: number;
   entityTypeCounts: EntityTypeCounts;
   entityStateCounts: EntityStateCounts;
@@ -68,7 +68,7 @@ export class EntityStateCounts {
   }
 }
 
-export class Guest implements Deserializable {
+export class Guest implements IDeserializable {
   dateOfBirth: string;
   contactDetails;
   firstName: string;
@@ -174,7 +174,7 @@ export class GuestAttributes {
   }
 }
 
-export class Reservation implements Deserializable {
+export class Reservation implements IDeserializable {
   rooms: Room;
   feedback: Feedback;
   booking: Booking;

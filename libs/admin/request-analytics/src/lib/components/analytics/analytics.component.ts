@@ -13,7 +13,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   requestConfiguration;
   constructor(
     private configService: ConfigService,
-    private _globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService
   ) {}
 
   ngOnInit(): void {
@@ -21,26 +21,16 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     this.getColorConfig();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+        this.hotelId = this.globalFilterService.hotelId;
       })
     );
-  }
-
-  getHotelId(globalQueries): void {
-    //todo
-
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   getColorConfig() {

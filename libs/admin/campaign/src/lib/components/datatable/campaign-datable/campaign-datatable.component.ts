@@ -56,7 +56,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     protected tabFilterService: TableService,
     protected _modal: ModalService,
     private _router: Router,
@@ -81,7 +81,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.getHotelId(this.globalQueries);
+      this.hotelId = this.globalFilterService.hotelId;
       this.loadInitialData([
         ...this.globalQueries,
         {
@@ -89,18 +89,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         },
         ...this.getSelectedQuickReplyFilters(),
       ]);
-    });
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
     });
   }
 
@@ -470,7 +458,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param messageObj The message object.
    */
   showMessage(messageObj, panelClass = 'danger'): void {
-    this._snackbarService
+    this.snackbarService
       .openSnackBarWithTranslate(
         {
           translateKey: messageObj.key,

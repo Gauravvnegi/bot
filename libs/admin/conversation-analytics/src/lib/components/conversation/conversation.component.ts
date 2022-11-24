@@ -19,7 +19,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
   stats: Conversation;
   constructor(
     private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private analyticsService: AnalyticsService,
     private snackbarService: SnackBarService
   ) {}
@@ -32,14 +32,17 @@ export class ConversationComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         this.globalFilters = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId(this.globalFilters);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getConversationData();
       })
     );
@@ -62,18 +65,18 @@ export class ConversationComponent implements OnInit, OnDestroy {
           );
         },
         ({ error }) => {
-          this.snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   initGraphData(defaultGraph = false) {

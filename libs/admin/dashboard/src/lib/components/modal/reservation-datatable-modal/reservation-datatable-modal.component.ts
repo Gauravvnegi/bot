@@ -30,8 +30,8 @@ export class ReservationDatatableModalComponent
     public fb: FormBuilder,
     protected _reservationService: ReservationService,
     protected _adminUtilityService: AdminUtilityService,
-    protected _globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     protected tabFilterService: TableService,
     public feedbackService: FeedbackService
@@ -40,8 +40,8 @@ export class ReservationDatatableModalComponent
       fb,
       _reservationService,
       _adminUtilityService,
-      _globalFilterService,
-      _snackbarService,
+      globalFilterService,
+      snackbarService,
       _modal,
       feedbackService,
       tabFilterService

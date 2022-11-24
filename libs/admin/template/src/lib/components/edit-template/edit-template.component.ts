@@ -33,7 +33,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   constructor(
     private _fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private templateService: TemplateService,
     private location: Location,
     private _router: Router,
@@ -69,20 +69,10 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getTemplateId();
       })
     );
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
-    });
   }
 
   /**
@@ -123,7 +113,15 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
    */
   handleSubmit(event) {
     if (this.templateForm.invalid) {
-      this._snackbarService.openSnackBarAsText('Invalid Form.');
+      this.snackbarService
+        .openSnackBarWithTranslate(
+          {
+            translateKey: `message.validation.INVALID_FORM`,
+            priorityMessage: 'Invalid Form.',
+          },
+          ''
+        )
+        .subscribe();
       return;
     }
     const data = this.templateForm.getRawValue();
@@ -132,7 +130,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
       this.$subscription.add(
         this.updateTemplate(data).subscribe(
           (response) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'messages.success.updateTemplate',
@@ -150,7 +148,15 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
             if (event.data.preview) this.contentNotEditable = true;
           },
           ({ error }) => {
-            this._snackbarService.openSnackBarAsText(error.message);
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
           },
           () => (this.isSaving = false)
         )
@@ -160,7 +166,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
         this.createTemplate(data).subscribe(
           (response) => {
             this.template = new Template().deserialize(response);
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'messages.success.createTemplate',
@@ -175,7 +181,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
             this._router.navigate(['/pages/library/template']);
           },
           ({ error }) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate({
                 translateKey: 'messages.error.createTemplate',
                 priorityMessage: error.message,
@@ -254,7 +260,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
           .subscribe(
             (response) => {
               this.templateForm.patchValue({ htmlTemplate: '' });
-              this._snackbarService
+              this.snackbarService
                 .openSnackBarWithTranslate(
                   {
                     translateKey: 'messages.success.deleteTemplate',
@@ -268,7 +274,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
                 .subscribe();
             },
             ({ error }) => {
-              this._snackbarService
+              this.snackbarService
                 .openSnackBarWithTranslate({
                   translateKey: 'messages.success.deleteTemplate',
                   priorityMessage: error.message,

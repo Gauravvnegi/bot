@@ -77,7 +77,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     private _adminUtilityService: AdminUtilityService,
     private _managePermissionService: ManagePermissionService,
     public userService: UserService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private location: Location,
     protected tabFilterService: TableService
   ) {
@@ -100,7 +100,15 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
         },
         (error) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -137,7 +145,15 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -169,7 +185,15 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
         },
         (error) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -184,14 +208,25 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       .updateRolesStatus(userData.parentId, data)
       .subscribe(
         (response) => {
-          this._snackbarService.openSnackBarAsText(
-            'Status updated successfully',
+          this.snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: `messages.SUCCESS.STATUS_UPDATED`,
+              priorityMessage: 'Status Updated Successfully.',
+            },
             '',
             { panelClass: 'success' }
           );
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       );
   }

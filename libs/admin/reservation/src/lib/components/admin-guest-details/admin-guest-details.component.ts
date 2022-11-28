@@ -24,7 +24,7 @@ export class AdminGuestDetailsComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
-    private _snackBarService: SnackBarService
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {
@@ -132,7 +132,7 @@ export class AdminGuestDetailsComponent implements OnInit {
     };
 
     if (status === 'REJECT' && isEmpty(data.remarks)) {
-      this._snackBarService.openSnackBarAsText(
+      this.snackbarService.openSnackBarAsText(
         'Please provide a relevant remark'
       );
       // add remakrks validator as required
@@ -151,14 +151,27 @@ export class AdminGuestDetailsComponent implements OnInit {
           this.healthCardDetailsForm
             .get('status')
             .patchValue(status === 'ACCEPT' ? 'COMPLETED' : 'FAILED');
-          this._snackBarService.openSnackBarAsText(
-            'Status updated sucessfully.',
-            '',
-            { panelClass: 'success' }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.STATUS_UPDATED',
+                priorityMessage: 'Status Updated Successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
         },
         (error) => {
-          this._snackBarService.openSnackBarAsText(error.error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       );
   }

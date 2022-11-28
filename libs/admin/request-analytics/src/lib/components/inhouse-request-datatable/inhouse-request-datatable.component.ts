@@ -19,6 +19,7 @@ import { Observable, Subscription } from 'rxjs';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import { analytics } from '@hospitality-bot/admin/shared';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-datatable',
@@ -39,8 +40,8 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   constructor(
     public fb: FormBuilder,
     private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
     private analyticsService: AnalyticsService,
     protected tabFilterService: TableService
   ) {
@@ -59,18 +60,18 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+        this.hotelId = this.globalFilterService.hotelId;
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,
@@ -82,16 +83,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         ]);
       })
     );
-  }
-
-  getHotelId(globalQueries): void {
-    //todo
-
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   loadInitialData(
@@ -114,7 +105,15 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -197,7 +196,15 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -268,7 +275,15 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -309,11 +324,25 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
               : this.rowsPerPage,
           }
         );
-        this._snackbarService.openSnackBarAsText(`Request status updated`, '', {
-          panelClass: 'success',
-        });
+        this.snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
+            priorityMessage: 'Request status updated',
+          },
+          '',
+          { panelClass: 'success' }
+        );
       },
-      ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+      ({ error }) =>
+        this.snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: `messages.error.${error?.type}`,
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe()
     );
   }
 

@@ -6,7 +6,7 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: #eaf0f6;
+  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
@@ -49,7 +49,7 @@
     position: absolute;
     height: 2px;
     width: 72%;
-    background-color: #edf1f5;
+    background-color: $alice-blue;
     right: 17px;
     @media screen and (max-width: 800px) {
       width: 62%;
@@ -228,6 +228,11 @@
   font-size: 16px;
   font-weight: bold;
 }
-:host ::ng-deep .table-data-head {
-  color: $dark-blue !important;
+:host ::ng-deep {
+  .table-data-head {
+    color: $dark-blue !important;
+  }
+  .mat-chip-list-wrapper {
+    width: 83vw !important;
+  }
 }

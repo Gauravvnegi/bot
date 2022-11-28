@@ -6,13 +6,13 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: #eaf0f6;
+  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
 }
 .rowsData {
-  color: #4b56c0;
+  color: $button-blue;
 }
 
 .close {
@@ -20,7 +20,7 @@
   justify-content: flex-end;
   width: 100%;
   i {
-    color: gray;
+    color: $gray;
     margin: 0 10px;
   }
   &:hover {
@@ -131,10 +131,10 @@
   width: fit-content;
   border-radius: 24px;
   font-size: 14px;
-  border: solid 1px #4b56c0;
-  background-color: white;
+  border: solid 1px $button-blue;
+  background-color: $white;
   padding: 4px 10px;
-  color: #4b56c0;
+  color: $button-blue;
   cursor: pointer;
 }
 .flx {

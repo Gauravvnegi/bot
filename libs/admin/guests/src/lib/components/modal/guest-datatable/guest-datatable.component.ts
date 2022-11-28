@@ -43,8 +43,8 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     public fb: FormBuilder,
     protected _guestTableService: GuestTableService,
     protected _adminUtilityService: AdminUtilityService,
-    protected _globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     protected tabFilterService: TableService,
     public feedbackService: FeedbackService
@@ -53,8 +53,8 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       fb,
       _guestTableService,
       _adminUtilityService,
-      _globalFilterService,
-      _snackbarService,
+      globalFilterService,
+      snackbarService,
       _modal,
       tabFilterService,
       feedbackService
@@ -83,7 +83,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',
@@ -148,7 +148,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',
@@ -189,7 +189,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',

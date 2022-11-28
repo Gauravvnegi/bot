@@ -51,8 +51,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     public fb: FormBuilder,
     protected _guestTableService: GuestTableService,
     protected _adminUtilityService: AdminUtilityService,
-    protected _globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     protected tabFilterService: TableService,
     public feedbackService: FeedbackService
@@ -78,12 +78,12 @@ export class GuestDatatableComponent extends BaseDatatableComponent
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.loadInitialData([
           ...this.globalQueries,
           {
@@ -100,13 +100,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
    *
    * @param globalQueries
    */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
-  }
 
   /**
    * @function loadInitialData To load the initial data for datatable.
@@ -126,7 +119,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate({
               translateKey: 'messages.error.some_thing_wrong',
               priorityMessage: error?.message,
@@ -231,7 +224,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate({
               translateKey: 'messages.error.some_thing_wrong',
               priorityMessage: error?.message,
@@ -316,7 +309,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',

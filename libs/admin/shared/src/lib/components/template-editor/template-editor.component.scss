@@ -8,7 +8,7 @@
   font-style: normal;
   line-height: normal;
   letter-spacing: 0.96px;
-  color: #4b56c0;
+  color: $button-blue;
   display: flex;
   justify-content: flex-end;
   margin: 10px 0;
@@ -21,7 +21,7 @@
 }
 
 .plain-text-container {
-  border: 1px solid #d1d1d1;
+  border: 1px solid $c-gray-82;
   padding: 15px;
   max-width: 100%;
   overflow: auto;

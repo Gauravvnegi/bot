@@ -613,10 +613,10 @@
             </td>
             <td class="package">
               <div class="package-date">
-                {{ rowData.getCreatedDate(_globalFilterService.timezone) }}
+                {{ rowData.getCreatedDate(globalFilterService.timezone) }}
               </div>
               <div class="package-date">
-                {{ rowData.getCreatedTime(_globalFilterService.timezone) }}
+                {{ rowData.getCreatedTime(globalFilterService.timezone) }}
               </div>
               <!-- <div class="package-city">{{ rowData.guest.place }}</div> -->
             </td>
@@ -815,10 +815,10 @@
             </td>
             <td class="package">
               <p class="arrival-date">
-                {{ rowData?.getCreatedDate(_globalFilterService.timezone) }}
+                {{ rowData?.getCreatedDate(globalFilterService.timezone) }}
               </p>
               <p class="arrival-time">
-                {{ rowData?.getCreatedTime(_globalFilterService.timezone) }}
+                {{ rowData?.getCreatedTime(globalFilterService.timezone) }}
               </p>
               <p class="arrival-time">{{ rowData.guestData.guestCount }}G</p>
             </td>

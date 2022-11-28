@@ -2,7 +2,7 @@
 
 .wrapper {
   padding: $padding20;
-  background-color: white;
+  background-color: $white;
   border-radius: 5px;
   height: 740px;
   &-header {
@@ -179,7 +179,7 @@
         line-height: normal;
         letter-spacing: 0.96px;
         text-align: left;
-        color: white;
+        color: $white;
       }
     }
   }
@@ -202,7 +202,7 @@
     left: 2px;
     transform: translate3d(30px, 0, 0);
     .mat-slide-toggle-thumb {
-      background-color: white;
+      background-color: $white;
     }
   }
 }

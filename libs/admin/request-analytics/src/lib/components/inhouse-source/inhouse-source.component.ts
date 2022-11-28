@@ -21,7 +21,7 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
   chart = analytics.inhouseSourceChart;
   constructor(
     private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private analyticsService: AnalyticsService,
     private snackbarService: SnackBarService
   ) {}
@@ -34,9 +34,12 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         this.globalFilters = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
@@ -61,7 +64,16 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
           );
           this.initGraphData();
         },
-        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

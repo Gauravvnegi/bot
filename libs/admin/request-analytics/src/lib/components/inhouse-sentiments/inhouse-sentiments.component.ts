@@ -40,7 +40,7 @@ export class InhouseSentimentsComponent implements OnInit, OnDestroy {
   chartTypes = analytics.chartTypes;
   constructor(
     private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private analyticsService: AnalyticsService,
     private snackbarService: SnackBarService,
     private dateService: DateService,
@@ -55,14 +55,17 @@ export class InhouseSentimentsComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ),
         };
 
@@ -89,11 +92,23 @@ export class InhouseSentimentsComponent implements OnInit, OnDestroy {
           this.graphData = new InhouseSentiments().deserialize(response);
           this.initGraphData();
         },
-        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
-
+  /**
+   * @function legendOnClick To perform action on legend selection change.
+   * @param index The selected legend index.
+   */
   legendOnClick = (index, event) => {
     event.stopPropagation();
     const ci = this.baseChart.chart;
@@ -153,7 +168,7 @@ export class InhouseSentimentsComponent implements OnInit, OnDestroy {
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d,
-          this._globalFilterService.timezone,
+          this.globalFilterService.timezone,
           this._adminUtilityService.getDateFormatFromInterval(
             this.selectedInterval
           ),

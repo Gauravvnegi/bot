@@ -37,17 +37,17 @@ export class MarketingNotificationComponent extends NotificationComponent
     protected _fb: FormBuilder,
     protected _location: Location,
     protected requestService: RequestService,
-    protected _snackbarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     protected route: ActivatedRoute,
     protected _adminUtilityService: AdminUtilityService,
-    protected _globalFilterService: GlobalFilterService,
+    protected globalFilterService: GlobalFilterService,
     private _emailService: EmailService
   ) {
     super(
       _fb,
       _location,
       requestService,
-      _snackbarService,
+      snackbarService,
       route,
       _adminUtilityService
     );
@@ -76,7 +76,16 @@ export class MarketingNotificationComponent extends NotificationComponent
       this._emailService.getFromEmail(this.hotelId).subscribe(
         (response) =>
           (this.fromEmailList = new EmailList().deserialize(response)),
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
     this.to.push(this._fb.control(this.email));
@@ -87,7 +96,16 @@ export class MarketingNotificationComponent extends NotificationComponent
       this._emailService.getTopicList(this.hotelId).subscribe(
         (response) =>
           (this.topicList = new Topics().deserialize(response).records),
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -99,7 +117,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     // Add our keyword
     if ((value || '').trim()) {
       if (!this.isValidEmail(value)) {
-        this._snackbarService.openSnackBarAsText('Invalid email format');
+        this.snackbarService.openSnackBarAsText('Invalid email format');
         return;
       } else {
         const controlValues = control.value.filter(
@@ -142,7 +160,12 @@ export class MarketingNotificationComponent extends NotificationComponent
 
   sendMail() {
     if (this.emailFG.invalid) {
-      this._snackbarService.openSnackBarAsText('Invalid form.');
+      this.snackbarService
+        .openSnackBarWithTranslate({
+          translateKey: 'messages.validation.INVALID_FORM',
+          priorityMessage: 'Invalid Form.',
+        })
+        .subscribe();
       this.emailFG.markAllAsTouched();
       return;
     }
@@ -167,14 +190,28 @@ export class MarketingNotificationComponent extends NotificationComponent
     this.$subscription.add(
       this._emailService.sendEmail(this.hotelId, reqData).subscribe(
         (response) => {
-          this._snackbarService.openSnackBarAsText(
-            'Email sent successfully.',
-            '',
-            { panelClass: 'success' }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.EMAIL_SENT',
+                priorityMessage: 'Email sent successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
           this.onModalClose.emit();
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message),
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe(),
         () => (this.isSending = false)
       )
     );

@@ -75,8 +75,8 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
     private _modal: ModalService,
     private dateService: DateService,
     private _translateService: TranslateService
@@ -93,14 +93,14 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
-  listenForGlobalFilters() {
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;
@@ -129,7 +129,7 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
             this.initGraphData();
           },
           ({ error }) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'messages.error.some_thing_wrong',

@@ -1,14 +1,14 @@
 @import 'main';
 
 .popup-wrapper {
-//   height: 30vh;
+  //   height: 30vh;
   border-radius: 5px;
   .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px;
-    background-color: #f4f5f7;
+    background-color: $c-gray-103;
     .title-container {
       @include flex-item-center();
     }
@@ -44,18 +44,18 @@
       margin-top: 2rem;
       button {
         margin: 0 7px;
-        color: white;
+        color: $white;
         font-size: $font12;
         font-weight: 400;
         width: $popup-button-width;
         border-radius: 25px;
         &:hover {
           cursor: pointer;
-          box-shadow: 0px 4px 4px #4b56c04d;
+          box-shadow: 0px 4px 4px $btn-shadow;
         }
       }
       .cancel {
-        background-color: white;
+        background-color: $white;
         margin-right: $margin20;
         color: $primary-purple;
         border: 1px solid $primary-purple;

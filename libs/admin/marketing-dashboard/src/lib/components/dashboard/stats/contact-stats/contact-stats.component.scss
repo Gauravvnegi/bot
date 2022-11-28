@@ -2,8 +2,8 @@
 
 .contact {
   @include padding(20px);
-  background: #ffffff 0% 0% no-repeat padding-box;
-  border: 1px solid #e2e2e2;
+  background: 0% 0% no-repeat padding-box $white;
+  border: 1px solid $c-gray-89;
   border-radius: 5px;
   flex-direction: column;
   justify-content: center;
@@ -19,7 +19,7 @@
     line-height: normal;
     letter-spacing: 0.96px;
     text-align: center;
-    color: #484848;
+    color: $tooltip;
   }
 
   &-graph-wraper {
@@ -52,7 +52,7 @@
         line-height: normal;
         letter-spacing: 0.96px;
         text-align: center;
-        color: #484848;
+        color: $tooltip;
       }
       &-text {
         font-family: Roboto;
@@ -62,7 +62,7 @@
         line-height: normal;
         letter-spacing: 0.96px;
         text-align: center;
-        color: #484848;
+        color: $tooltip;
       }
     }
     .stat-val-container {
@@ -73,7 +73,7 @@
         margin-top: 10px;
         padding: 0 15px;
         border-radius: 5px;
-        background-color: #f9fafa;
+        background-color: $stat-legend-bg;
         align-items: center;
         justify-content: space-between;
         font-family: Roboto;
@@ -93,11 +93,11 @@
           font-weight: bold;
           letter-spacing: 0.72px;
           text-align: right;
-          color: #002046;
+          color: $dark-blue;
           &__percent {
             display: flex;
             &__width {
-              white-space: normal;
+              $white-space: normal;
               display: block;
               height: 15px;
               overflow: hidden;
@@ -118,6 +118,6 @@
     font-style: normal;
     line-height: normal;
     letter-spacing: normal;
-    color: #b4b4b4;
+    color: $c-gray-72;
   }
 }

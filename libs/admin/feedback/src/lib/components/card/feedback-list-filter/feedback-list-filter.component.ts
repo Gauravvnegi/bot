@@ -36,9 +36,9 @@ export class FeedbackListFilterComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private cardService: CardService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private userService: UserService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private tableService: FeedbackTableService
   ) {}
 
@@ -75,7 +75,16 @@ export class FeedbackListFilterComponent implements OnInit, OnDestroy {
             this.assigneeList = response.childUser;
             this.userService.userPermissions = response;
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }

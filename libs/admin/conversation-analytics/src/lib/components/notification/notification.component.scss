@@ -63,7 +63,7 @@
 .notification {
   width: 100%;
   border-radius: 5px;
-  border: solid 1px #e2e2e2;
+  border: solid 1px $c-gray-89;
   height: 100%;
   padding: 20px;
   &-title {
@@ -75,7 +75,7 @@
     line-height: normal;
     letter-spacing: 0.96px;
     text-align: left;
-    color: #002046;
+    color: $dark-blue;
   }
   &-subtitle {
     font-family: Roboto;
@@ -149,7 +149,7 @@
         line-height: normal;
         letter-spacing: normal;
         text-align: left;
-        color: #002046;
+        color: $dark-blue;
       }
       &-sent {
         font-family: Roboto;
@@ -163,10 +163,10 @@
         display: flex;
         align-items: center;
         &-num {
-          color: #52b33f;
+          color: $comparison-positive;
         }
         &-day {
-          color: #b4b4b4;
+          color: $c-gray-72;
         }
       }
     }
@@ -187,15 +187,15 @@
   .tooltip {
     position: absolute;
     font: normal normal normal 12px/16px Roboto;
-    background-color: #fff;
+    background-color: $white;
     min-width: 160px;
-    border: 1px solid #eee;
+    border: 1px solid $c-gray-85;
     padding: 10px;
     top: 120%;
     left: -11%;
-    color: #484848;
+    color: $tooltip;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px 0px #eee;
+    box-shadow: 0px 0px 10px 0px $c-gray-85;
     display: none;
     z-index: 100;
     min-width: 160px;
@@ -207,7 +207,7 @@
       height: 0;
       border-left: 7px solid transparent;
       border-right: 7px solid transparent;
-      border-bottom: 10px solid #eee;
+      border-bottom: 10px solid $c-gray-85;
       left: 40%;
       transform: translate(-50%);
 
@@ -218,7 +218,7 @@
         height: 0;
         border-left: 6px solid transparent;
         border-right: 6px solid transparent;
-        border-bottom: 9px solid #ffffff;
+        border-bottom: 9px solid $white;
         left: -6px;
         z-index: 3;
         position: absolute;

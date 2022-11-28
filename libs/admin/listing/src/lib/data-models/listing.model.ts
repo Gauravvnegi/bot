@@ -1,8 +1,5 @@
 import { get, set } from 'lodash';
-
-export interface IDeserializable {
-  deserialize(input: any): this;
-}
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class ListTable {
   records: IList[];

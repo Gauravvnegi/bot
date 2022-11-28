@@ -31,7 +31,7 @@ export class ImportContactComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private _listingService: ListingService,
     protected _translateService: TranslateService,
-    private _snackbarService: SnackBarService
+    private snackbarService: SnackBarService
   ) {
     this.createFA();
   }
@@ -106,7 +106,7 @@ export class ImportContactComponent implements OnInit, OnDestroy {
           this.contactFA.controls.forEach((control) => control.disable());
         },
         ({ error }) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.contact_not_import',
@@ -129,7 +129,7 @@ export class ImportContactComponent implements OnInit, OnDestroy {
       this.contactFA.controls.length === 1 &&
       this.contactFA.controls[0].value.email === ''
     ) {
-      this._snackbarService
+      this.snackbarService
         .openSnackBarWithTranslate(
           {
             translateKey: 'message.error.contact_not_import',

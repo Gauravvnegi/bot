@@ -107,13 +107,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
     private _changeDetectorRef: ChangeDetectorRef,
-    private _snackBarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private _clipboard: Clipboard,
     public feedbackService: FeedbackService,
     private _modal: ModalService,
     private router: Router,
     private _hotelDetailService: HotelDetailService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private subscriptionService: SubscriptionPlanService,
     private configService: ConfigService
   ) {
@@ -130,13 +130,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
         const { hotelName: brandId, branchName: branchId } = data[
           'filter'
         ].value.property;
@@ -149,14 +149,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.loadGuestInfo();
       })
     );
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   getConfig() {
@@ -176,7 +168,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.loadGuestReservations();
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.closeDetails();
         }
       )
@@ -196,7 +196,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.isGuestReservationFetched = true;
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.closeDetails();
         }
       )
@@ -209,13 +217,21 @@ export class DetailsComponent implements OnInit, OnDestroy {
         (response) => {
           this.details = new Details().deserialize(
             response,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           );
           this.mapValuesInForm();
           this.isReservationDetailFetched = true;
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.closeDetails();
         }
       )
@@ -276,11 +292,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if (
       this.detailsForm.get('documentStatus').get('status').value === 'COMPLETED'
     ) {
-      this._snackBarService.openSnackBarAsText(
-        'Documents are already verified.',
-        '',
-        { panelClass: 'success' }
-      );
+      this.snackbarService
+        .openSnackBarWithTranslate({
+          translateKey: 'messages.validation.DOCUMENT_ALREADY_VERIFIED',
+          priorityMessage: 'Documents are already verified.',
+        })
+        .subscribe();
       return;
     }
 
@@ -304,7 +321,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       .subscribe(
         (res) => {
           this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
-          this._snackBarService.openSnackBarAsText(
+          this.snackbarService.openSnackBarAsText(
             'Link copied successfully',
             '',
             {
@@ -313,7 +330,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
           );
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       );
   }
@@ -334,13 +359,27 @@ export class DetailsComponent implements OnInit, OnDestroy {
           data
         )
         .subscribe(
-          (res) => {
-            this._snackBarService.openSnackBarAsText('Payment accepted', '', {
-              panelClass: 'success',
-            });
-          },
+          (res) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.PAYMENT_ACCEPTED',
+                  priorityMessage: 'Payment accepted.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe(),
           ({ error }) => {
-            this._snackBarService.openSnackBarAsText(error.message);
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
           }
         )
     );
@@ -363,7 +402,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
             }
           },
           ({ error }) => {
-            this._snackBarService.openSnackBarAsText(error.message);
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
           }
         )
     );
@@ -374,18 +421,29 @@ export class DetailsComponent implements OnInit, OnDestroy {
       this._reservationService
         .prepareInvoice(this.reservationDetailsFG.get('bookingId').value)
         .subscribe(
-          (res) => {
+          (_) => {
             this.details.invoicePrepareRequest = true;
-            this._snackBarService.openSnackBarAsText(
-              'Ticket raised for invoice',
-              '',
-              {
-                panelClass: 'success',
-              }
-            );
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.INVOICE_TICKET_RAISED',
+                  priorityMessage: 'Payment accepted.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe();
           },
           ({ error }) => {
-            this._snackBarService.openSnackBarAsText(error.message);
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
           }
         )
     );
@@ -495,7 +553,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
           }
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       );
   }
@@ -530,17 +596,30 @@ export class DetailsComponent implements OnInit, OnDestroy {
             .subscribe(
               (response) => {
                 manualCheckinCompRef.componentInstance.loading = false;
-                this._snackBarService.openSnackBarAsText(
-                  'Guest Manually Checked In',
-                  '',
-                  { panelClass: 'success' }
-                );
+                this.snackbarService
+                  .openSnackBarWithTranslate(
+                    {
+                      translateKey: 'messages.SUCCESS.GUEST_MANUAL_CHECKIN',
+                      priorityMessage: 'Guest Manually Checked In.',
+                    },
+                    '',
+                    { panelClass: 'success' }
+                  )
+                  .subscribe();
                 manualCheckinCompRef.close();
                 this.closeDetails();
               },
               ({ error }) => {
                 manualCheckinCompRef.componentInstance.loading = false;
-                this._snackBarService.openSnackBarAsText(error.message);
+                this.snackbarService
+                  .openSnackBarWithTranslate(
+                    {
+                      translateKey: `messages.error.${error?.type}`,
+                      priorityMessage: error?.message,
+                    },
+                    ''
+                  )
+                  .subscribe();
               }
             )
         );
@@ -578,20 +657,31 @@ export class DetailsComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (res) => {
-          this._snackBarService.openSnackBarAsText(
-            `${journeyName[0]
-              .toUpperCase()
-              .concat(
-                journeyName.slice(1, journeyName.length).toLowerCase()
-              )} completed`,
-            '',
-            {
-              panelClass: 'success',
-            }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.JOURNEY_COMPLETED',
+                priorityMessage: `${journeyName[0]
+                  .toUpperCase()
+                  .concat(
+                    journeyName.slice(1, journeyName.length).toLowerCase()
+                  )} completed`,
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       );
   }

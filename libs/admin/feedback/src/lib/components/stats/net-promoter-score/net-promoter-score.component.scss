@@ -49,7 +49,7 @@
         height: auto;
         width: auto;
         path {
-          fill: #959ea7;
+          fill: $default;
         }
         &:hover {
           cursor: pointer;
@@ -67,12 +67,12 @@
     display: flex;
     align-items: center;
     padding: 5px;
-    border: 2px solid #d9d9d9;
+    border: 2px solid $light-grey;
     border-radius: 5px;
 
     .divider {
       height: 20px;
-      border: 1px solid #d9d9d9;
+      border: 1px solid $light-grey;
       margin: 0px 15px;
     }
   }

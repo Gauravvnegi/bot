@@ -226,8 +226,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         .filter((brand) => brand.id === values.property.hotelName)[0]
         .branches.filter((d) => d.id === values.property.branchName)[0];
       this.filterConfig.branchName = branch.name;
-      this.timezone = branch.timezone;
-      this.globalFilterService.timezone = branch.timezone;
+      this.globalFilterService.timezone = this.timezone = branch.timezone;
       localStorage.setItem(event.token.key, event.token.value);
       this.$firebaseMessagingSubscription.unsubscribe();
       this.initFirebaseMessaging(values.property.branchName);

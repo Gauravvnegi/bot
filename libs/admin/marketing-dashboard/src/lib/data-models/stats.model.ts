@@ -1,10 +1,7 @@
 import { get, set } from 'lodash';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
-
-export class MarketingStats implements Deserializable {
+export class MarketingStats implements IDeserializable {
   CONVERSION_RATE: ChipStats;
   CTR: ChipStats;
   TOTAL_CLICKS: ChipStats;
@@ -41,7 +38,7 @@ const circleRadius = {
   UNSUBSCRIBED: 75,
 };
 
-export class ContactStat implements Deserializable {
+export class ContactStat implements IDeserializable {
   totalContact: number;
   stats: StatsContact[];
 

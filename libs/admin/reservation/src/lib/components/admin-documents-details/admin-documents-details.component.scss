@@ -1,7 +1,7 @@
 @import 'main';
 
 :host ::ng-deep .mat-tab-label {
-  color: #b5b5c3;
+  color: $mat-tab-label;
   font-size: $font14;
 }
 
@@ -24,19 +24,19 @@
   margin-left: 0;
   background: transparent;
   outline: none;
-  border: 1px solid #ffffff;
+  border: 1px solid $white;
   border-radius: 5px;
   padding: 6px $padding20;
   .p-inputtext {
-    color: white;
+    color: $white;
   }
   &:hover {
-    border-color: #ffffff;
+    border-color: $white;
   }
 }
 
 // :host ::ng-deep .pi {
-//   color: white;
+//   color: $white;
 // }
 
 .svg-wrapper {
@@ -45,7 +45,7 @@
     height: 20px;
     width: 20px;
     path {
-      fill: white;
+      fill: $white;
     }
   }
 }
@@ -53,7 +53,7 @@
 // :host ::ng-deep .mat-head {
 //   font-size: $font16;
 //   font-weight: $bolder;
-//   color: #002046;
+//   color: $dark-blue;
 //   letter-spacing: 0.96px;
 // }
 
@@ -109,7 +109,7 @@
   .download {
     font: normal normal medium 14px/19px Roboto;
     letter-spacing: 0.84px;
-    color: #9eaeb8;
+    color: $primary-gray;
     opacity: 1;
     cursor: pointer;
   }
@@ -139,7 +139,7 @@
 :host ::ng-deep .nationality > .mat-form-field-wrapper > .mat-form-field-flex {
   padding: 5px $padding10;
   border-radius: 5px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid $light-grey;
 }
 
 .border-none {
@@ -168,7 +168,7 @@
     text-align: center;
     font-size: $font12;
     margin: 1%;
-    border: 1px dashed #d9d9d9;
+    border: 1px dashed $light-grey;
     border-radius: 8px;
     img {
       border-radius: 8px;
@@ -221,15 +221,15 @@
   margin-left: 0;
 }
 .red-color {
-  color: #f00d2a;
+  color: $reject;
 }
 
 :host ::ng-deep {
   .mat-select-value-text {
-    color: #000000;
+    color: $c-black;
   }
   .mat-select-arrow {
-    color: #000000;
+    color: $c-black;
   }
 }
 .download {

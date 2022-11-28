@@ -10,7 +10,7 @@
   justify-content: space-between;
   font: normal normal bold 20px/26px Roboto;
   letter-spacing: 1.2px;
-  color: #ffffff;
+  color: $white;
   &__title {
     margin: 41px 30px;
   }
@@ -49,51 +49,50 @@
   }
 }
 
-
-.form-elements-groups{
+.form-elements-groups {
   display: flex;
   flex-wrap: wrap;
 
-  .form-elements-container{
+  .form-elements-container {
     width: 50%;
     height: 48px;
     margin-bottom: 15px;
     padding: 5px;
     position: relative;
 
-    .icon{
+    .icon {
       position: absolute;
       top: 58%;
       transform: translateY(-50%);
       left: 20px;
     }
 
-    .form-elements{
+    .form-elements {
       width: 100%;
       padding: 14px 14px 14px 40px;
       font-size: 16px;
       color: $dark-blue;
       letter-spacing: 0.32px;
-      border: 1px solid #CED5D9;
+      border: 1px solid $c-gray-81;
       border-radius: 5px;
 
-      ::placeholder{
-        color: #9EAEB8;
+      ::placeholder {
+        color: $primary-gray;
       }
     }
     ::ng-deep {
-      .mat-error{
+      .mat-error {
         font-size: 12px;
         margin-bottom: 5px;
       }
     }
   }
 }
-.showsearchresult{
+.showsearchresult {
   position: absolute;
   z-index: 85759;
   padding: 5px;
-  background-color:$white;
+  background-color: $white;
   border-radius: 3px;
   width: 44vw;
   left: 0;
@@ -101,11 +100,11 @@
   box-shadow: 0px 0px 5px 0px darkgray;
   overflow-y: auto;
 
-  .search-item{
+  .search-item {
     padding: 5px;
     cursor: pointer;
   }
 }
-.full-width{
+.full-width {
   width: 100% !important;
 }

@@ -1,10 +1,7 @@
 import { get, set } from 'lodash';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
-
-export class UserConfig implements Deserializable {
+export class UserConfig implements IDeserializable {
   permissionConfigs;
   departments;
   products;

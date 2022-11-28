@@ -66,8 +66,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     public fb: FormBuilder,
     protected _reservationService: ReservationService,
     protected _adminUtilityService: AdminUtilityService,
-    protected _globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     public feedbackService: FeedbackService,
     protected tabFilterService: TableService
@@ -93,7 +93,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
         this.globalQueries = [
           ...data['filter'].queryValue,
@@ -129,7 +129,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         (data) => {
           this.values = new ReservationTable().deserialize(
             data,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ).records;
           this.initialLoading = false;
           this.totalRecords = data.total;
@@ -142,7 +142,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',
@@ -236,7 +236,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         (data) => {
           this.values = new ReservationTable().deserialize(
             data,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ).records;
           data.entityTypeCounts &&
             this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
@@ -247,7 +247,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',
@@ -349,7 +349,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',

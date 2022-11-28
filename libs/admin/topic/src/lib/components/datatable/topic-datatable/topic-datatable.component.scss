@@ -11,13 +11,13 @@
 }
 .tableHeading {
   width: 70px;
-  background-color: #eaf0f6;
+  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
 }
 .table_head {
-  background-color: #eaf0f6 !important;
+  background-color: $c-gray-93 !important;
 }
 .icon-wrapper {
   @include flex-space-between();
@@ -56,7 +56,7 @@
     position: absolute;
     height: 2px;
     width: 72%;
-    background-color: #edf1f5;
+    background-color: $alice-blue;
     right: 17px;
     @media screen and (max-width: 800px) {
       width: 62%;
@@ -72,8 +72,8 @@
     margin: 0 20px 0 254px;
     padding: 9.5px 28.5px 8.5px 25.5px;
     border-radius: 18px;
-    background-color: #4b56c0;
-    color: white;
+    background-color: $button-blue;
+    color: $white;
   }
 }
 :host ::ng-deep .mat-slide-toggle-bar {
@@ -93,7 +93,7 @@
     left: 2px;
     transform: translate3d(30px, 0, 0);
     .mat-slide-toggle-thumb {
-      background-color: white;
+      background-color: $white;
     }
   }
 }
@@ -104,7 +104,7 @@
 
 :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
   padding: 0.8rem 0.5rem !important;
-  background-color: #eaf0f6;
+  background-color: $c-gray-93;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
@@ -144,7 +144,7 @@
   font-size: $font14 !important;
 }
 :host ::ng-deep thead.p-datatable-thead {
-  border-top: solid 1px $c-gray-90 !important; 
+  border-top: solid 1px $c-gray-90 !important;
 }
 :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
   padding: 0.5rem 0.5rem;

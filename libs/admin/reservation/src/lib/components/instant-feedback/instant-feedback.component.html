@@ -8,9 +8,7 @@
         </p>
         <div class="header-seperator"></div>
         <p>
-          {{
-            rowData?.getfeedbackSubmissionTime(_globalFilterService.timezone)
-          }}
+          {{ rowData?.getfeedbackSubmissionTime(globalFilterService.timezone) }}
         </p>
         <div class="header-seperator"></div>
         <div class="booking-id-wrapper">
@@ -46,7 +44,7 @@
           <mat-label class="label">Date/Time</mat-label>
           <div class="value">
             {{
-              rowData?.getfeedbackSubmissionTime(_globalFilterService.timezone)
+              rowData?.getfeedbackSubmissionTime(globalFilterService.timezone)
             }}
           </div>
         </div>

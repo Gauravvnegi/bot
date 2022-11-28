@@ -14,7 +14,7 @@ export class DefaultPackageComponent implements OnInit {
   @Input() index;
 
   constructor(
-    private _snackBarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     private _reservationService: ReservationService
   ) {}
 
@@ -38,14 +38,25 @@ export class DefaultPackageComponent implements OnInit {
           this.paidAmenityFG
             .get('status')
             .patchValue(status === 'ACCEPT' ? 'COMPLETED' : 'FAILED');
-          this._snackBarService.openSnackBarAsText(
-            'Status updated sucessfully.',
+          this.snackbarService.openSnackBarWithTranslate(
+            {
+              translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
+              priorityMessage: 'Request status updated',
+            },
             '',
             { panelClass: 'success' }
           );
         },
         ({ error }) => {
-          this._snackBarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       );
   }

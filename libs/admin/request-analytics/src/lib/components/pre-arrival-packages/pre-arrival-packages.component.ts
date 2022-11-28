@@ -47,7 +47,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
 
   constructor(
     private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private analyticsService: AnalyticsService,
     private snackbarService: SnackBarService,
     private dateService: DateService,
@@ -70,14 +70,17 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ),
         };
 
@@ -87,24 +90,11 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+        this.hotelId = this.globalFilterService.hotelId;
         if (!this.tabFilterItems.length) this.getPackageList();
         this.getInhouseSentimentsData();
       })
     );
-  }
-
-  getHotelId(globalQueries): void {
-    //todo
-
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   getPackageList() {
@@ -124,7 +114,16 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
               });
           });
         },
-        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -147,7 +146,16 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
           this.updatePackageCount(response.packageTotalCounts);
           this.initGraphData();
         },
-        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -158,6 +166,10 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @function legendOnClick To perform action on legend selection change.
+   * @param index The selected legend index.
+   */
   legendOnClick = (index, event) => {
     event.stopPropagation();
     const ci = this.baseChart.chart;
@@ -217,7 +229,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d,
-          this._globalFilterService.timezone,
+          this.globalFilterService.timezone,
           this._adminUtilityService.getDateFormatFromInterval(
             this.selectedInterval
           ),

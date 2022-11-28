@@ -40,7 +40,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   constructor(
     private _breakpointObserver: BreakpointObserver,
     private _modal: ModalService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
     private subscriptionPlanService: SubscriptionPlanService,
     private router: Router
@@ -59,9 +59,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.listenForTabPortrait();
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const { hotelName: brandId, branchName: branchId } = data[
           'filter'
         ].value.property;

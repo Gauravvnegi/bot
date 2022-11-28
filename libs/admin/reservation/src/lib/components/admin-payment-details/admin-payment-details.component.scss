@@ -20,7 +20,7 @@
 }
 
 .adminPayDesc {
-  color: #9eaeb8;
+  color: $primary-gray;
   font-size: 13px;
 }
 
@@ -64,7 +64,7 @@
 }
 
 :host ::ng-deep .mat-expansion-panel-header {
-  background-color: #e8eef5 !important;
+  background-color: $accordian-background !important;
 }
 
 :host ::ng-deep .mat-expansion-panel-body {
@@ -160,7 +160,7 @@ td {
     letter-spacing: 0.84px;
   }
   .image-wrapper {
-    background-color: #f1f1f1;
+    background-color: $c-gray-98;
     margin-top: 15px;
     height: 70px;
     display: flex;
@@ -189,7 +189,7 @@ td {
 }
 
 .data-seperator {
-  border: 2px solid #218af3;
+  border: 2px solid $data-separator;
   margin: $margin20 0px;
   opacity: 0.1;
 }

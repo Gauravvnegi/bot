@@ -1,10 +1,7 @@
 import { get, set } from 'lodash';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
-
-export class FeedbackConfigDS implements Deserializable {
+export class FeedbackConfigDS implements IDeserializable {
   feedBackConfig: FeedBackDetail;
 
   deserialize(input: any) {
@@ -13,7 +10,7 @@ export class FeedbackConfigDS implements Deserializable {
   }
 }
 
-export class FeedBackDetail implements Deserializable {
+export class FeedBackDetail implements IDeserializable {
   ratingScale: number[];
   negativeTitle: string;
   positiveTitle: string;

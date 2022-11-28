@@ -3,7 +3,7 @@
   padding: 17px 38px 60px 20px;
   border-radius: 5px;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
-  background-color: #fff;
+  background-color: $white;
 }
 
 .create_Assets {
@@ -17,7 +17,7 @@
 
 .wrapper {
   padding: $padding20;
-  background-color: white;
+  background-color: $white;
   margin: $margin20 0px;
   border-radius: 5px;
   &-form {
@@ -26,7 +26,7 @@
       display: flex;
       justify-content: space-between;
       margin-top: 1.5%;
-      color: #9eaeb8;
+      color: $primary-gray;
       @media (max-width: $tablet) {
         flex-wrap: wrap;
         gap: 60px;
@@ -35,10 +35,10 @@
         display: flex;
         align-items: center;
         margin-right: 1.5%;
-        color: #9eaeb8;
+        color: $primary-gray;
         gap: 40px;
         input {
-          color: #002046;
+          color: $dark-blue;
         }
         @media (max-width: $tablet) {
           @include width(42.6%);
@@ -52,7 +52,7 @@
     }
     .full-width {
       margin-top: 25px;
-      color: #9eaeb8;
+      color: $primary-gray;
       display: flex;
       .mat-label {
         display: flex;
@@ -89,12 +89,12 @@
   align-items: center;
   gap: 40px;
   padding-top: 52px;
-  color: #9eaeb8;
+  color: $primary-gray;
   .status--left {
     padding-left: 20px;
   }
   .status--right {
-    color: black;
+    color: $black;
   }
 }
 
@@ -109,11 +109,11 @@
     // padding: 12px 106px 13px;
     border-radius: 23px;
     box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
-    background-color: #4b56c0;
+    background-color: $button-blue;
     line-height: normal;
     letter-spacing: 0.96px;
     text-align: center;
-    color: #fff;
+    color: $white;
     font-size: 16px;
     font-weight: 500;
     border-style: none;
@@ -122,7 +122,7 @@
 
 :host ::ng-deep .description {
   width: 100%;
-  color: black;
+  color: $black;
 }
 
 :host ::ng-deep .mat-form-field {
@@ -135,8 +135,8 @@
   height: 223px !important;
   border-radius: 5px;
   padding: 60px 85px 59px 86px;
-  border: solid 1px #9eaeb8 !important;
-  background-color: #fff;
+  border: solid 1px $primary-gray !important;
+  background-color: $white;
 }
 
 :host ::ng-deep .mat-form-field-infix {
@@ -153,7 +153,7 @@
     left: 2px;
     transform: translate3d(30px, 0, 0);
     .mat-slide-toggle-thumb {
-      background-color: white;
+      background-color: $white;
     }
   }
 }

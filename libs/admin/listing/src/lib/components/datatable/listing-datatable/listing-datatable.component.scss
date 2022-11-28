@@ -6,7 +6,7 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: #eaf0f6;
+  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
@@ -49,7 +49,7 @@
     position: absolute;
     height: 2px;
     width: 72%;
-    background-color: #edf1f5;
+    background-color: $alice-blue;
     right: 17px;
     @media screen and (max-width: 800px) {
       width: 62%;
@@ -80,7 +80,7 @@
     left: 2px;
     transform: translate3d(30px, 0, 0);
     .mat-slide-toggle-thumb {
-      background-color: white;
+      background-color: $white;
     }
   }
 }
@@ -89,7 +89,7 @@
   width: 145px;
   height: 36px;
   border-radius: 18px;
-  background-color: #4b56c0;
+  background-color: $button-blue;
   padding: 10px 23.25px 8px 18.25px;
   cursor: pointer;
   &.listing-button {
@@ -101,7 +101,7 @@
     line-height: normal;
     letter-spacing: 0.56px;
     text-align: left;
-    color: #fff;
+    color: $white;
   }
 }
 
@@ -111,7 +111,7 @@
 
 :host ::ng-deep .data-table-row {
   height: 80px;
-  
+
   &:hover {
     cursor: pointer;
     background: $table-hover-background !important;
@@ -132,8 +132,8 @@
 }
 
 th.tableHeading.p-resizable-column {
-  background: #edf1f5 !important;
-  border-top: 1px solid #e4e4e4 !important;
+  background: $alice-blue !important;
+  border-top: 1px solid $c-gray-92 !important;
 }
 
 :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
@@ -147,10 +147,10 @@ td {
   font-style: normal;
   line-height: normal;
   letter-spacing: 0.72px;
-  color: #484848;
+  color: $tooltip;
 }
-.ht{
-height: 80px;
+.ht {
+  height: 80px;
 }
 .topic-name {
   opacity: 0.4;

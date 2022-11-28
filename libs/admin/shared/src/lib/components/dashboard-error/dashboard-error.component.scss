@@ -21,7 +21,7 @@
         .freedie-message {
           position: absolute;
           top: -147px;
-          background-color: white;
+          background-color: $white;
           border-radius: 48%;
           width: 14rem;
           height: 6rem;
@@ -38,7 +38,7 @@
           position: absolute;
           top: -125px;
           left: -88px;
-          background-color: white;
+          background-color: $white;
           border-radius: 47%;
           width: 12rem;
           height: 4rem;
@@ -59,10 +59,10 @@
       left: 0;
       right: 0;
       button {
-        background-color: #4b56c0;
+        background-color: $button-blue;
         border: none;
         outline: none;
-        color: white;
+        color: $white;
         font-size: 14px;
         font-weight: 500;
         border-radius: 25px;
@@ -70,7 +70,7 @@
         width: 10vw;
         opacity: 0.85;
         z-index: 222;
-        box-shadow: 0px 0px 5px 0px #4b56c0;
+        box-shadow: 0px 0px 5px 0px $button-blue;
         &:hover {
           cursor: pointer;
           opacity: 1;

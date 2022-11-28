@@ -49,7 +49,7 @@
     line-height: normal;
     letter-spacing: 1.2px;
     color: $primary-black;
-    background: #f4f5f7;
+    background: $c-gray-103;
     padding: $padding15 25px $padding15 25px;
     display: flex;
     align-items: center;
@@ -91,7 +91,7 @@
         line-height: normal;
         letter-spacing: 0.96px;
         text-align: left;
-        color: white;
+        color: $white;
       }
     }
   }
@@ -120,10 +120,9 @@
 
 .table-wrap {
   height: 30vh;
-  border-right: 2px solid #e8f3fe;
+  border-right: 2px solid $c-gray-93;
   overflow-y: auto;
   padding-bottom: $padding20;
-
 
   .add-contacts-field {
     margin: $margin5 $margin10;
@@ -141,7 +140,7 @@
   width: 160px;
   border: solid 1px $manually-contacts;
   border-radius: 4px;
-  color: #232323;
+  color: $black;
   padding: 11px 0 10px 0;
 }
 
@@ -168,7 +167,7 @@
     padding-top: $padding20;
   }
   thead tr th {
-    background-color: white;
+    background-color: $white;
     padding: 40px $padding10 $padding20 $padding10;
     position: sticky;
     top: 0px;
@@ -210,7 +209,7 @@
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
-  color: #9eaeb8;
+  color: $primary-gray;
 }
 :host ::ng-deep .mat-input-element {
   padding: 4px 0 4px 0 !important;

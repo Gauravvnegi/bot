@@ -53,10 +53,10 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
 
   constructor(
     private _statisticsService: StatisticsService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private _adminUtilityService: AdminUtilityService,
     private _dateService: DateService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private _translateService: TranslateService
   ) {}
 
@@ -69,12 +69,12 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const calenderType = {
           calenderType: this._dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ),
         };
         this.globalQueries = [
@@ -102,7 +102,7 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
           this.initCheckoutChart();
         },
         ({ error }) =>
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',

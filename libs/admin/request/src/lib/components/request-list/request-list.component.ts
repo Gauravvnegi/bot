@@ -50,8 +50,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
   tabFilterIdx = 0;
   hotelId: string;
   constructor(
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
     private _requestService: RequestService,
     private _adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
@@ -83,16 +83,13 @@ export class RequestListComponent implements OnInit, OnDestroy {
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+        this.hotelId = this.globalFilterService.hotelId;
         this._requestService.selectedRequest.next(null);
         this.loadInitialRequestList([
           ...this.globalQueries,
@@ -132,18 +129,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
                 : 10,
           },
         ]);
-      }
-    });
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extractinf from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
       }
     });
   }
@@ -363,7 +348,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
    * @param error The error object.
    */
   showError(error) {
-    this._snackbarService
+    this.snackbarService
       .openSnackBarWithTranslate(
         {
           translateKey: 'messages.error.some_thing_wrong',

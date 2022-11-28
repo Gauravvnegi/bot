@@ -1,10 +1,7 @@
 import { get, set } from 'lodash';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
-
-export class Topics implements Deserializable {
+export class Topics implements IDeserializable {
   records: Topic[];
   deserialize(input: any) {
     this.records = input.records.map((record: any) =>
@@ -14,7 +11,7 @@ export class Topics implements Deserializable {
   }
 }
 
-export class Topic implements Deserializable {
+export class Topic implements IDeserializable {
   id: string;
   status: boolean;
   description: string;

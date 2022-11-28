@@ -49,7 +49,7 @@ export class ActionOverlayComponent implements OnInit, OnDestroy {
   constructor(
     private tableService: FeedbackTableService,
     private _fb: FormBuilder,
-    protected _snackbarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     private userService: UserService,
     private overlay: Overlay
   ) {

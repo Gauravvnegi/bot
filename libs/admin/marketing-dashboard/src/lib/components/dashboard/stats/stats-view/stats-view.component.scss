@@ -10,7 +10,7 @@
       padding: 25px 11px;
       border-radius: 5px;
       box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
-      background-color: #fff;
+      background-color: $white;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -23,7 +23,7 @@
         line-height: normal;
         letter-spacing: 0.28px;
         text-align: center;
-        color: #484848;
+        color: $tooltip;
       }
       &__value {
         font-family: Roboto;
@@ -33,7 +33,7 @@
         line-height: 2;
         letter-spacing: 0.5px;
         text-align: center;
-        color: #484848;
+        color: $tooltip;
         display: flex;
         justify-content: center;
         .rating {
@@ -55,7 +55,7 @@
             line-height: normal;
             letter-spacing: normal;
             text-align: center;
-            color: #b4b4b4;
+            color: $c-gray-72;
           }
         }
       }

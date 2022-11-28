@@ -1,10 +1,7 @@
 import { get, set } from 'lodash';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
-
-export class SearchResultDetail implements Deserializable {
+export class SearchResultDetail implements IDeserializable {
   searchResults = new Array<any>();
 
   deserialize(input: any) {
@@ -35,7 +32,7 @@ export class SearchResultDetail implements Deserializable {
   }
 }
 
-export class GuestSearchResult implements Deserializable {
+export class GuestSearchResult implements IDeserializable {
   id: string;
   label: string;
   description: string;
@@ -59,7 +56,7 @@ export class GuestSearchResult implements Deserializable {
   }
 }
 
-export class ReservationSearchResult implements Deserializable {
+export class ReservationSearchResult implements IDeserializable {
   id: string;
   label: string;
   bookingNumber: string;
@@ -85,7 +82,7 @@ export class ReservationSearchResult implements Deserializable {
   }
 }
 
-export class PackageSearchResult implements Deserializable {
+export class PackageSearchResult implements IDeserializable {
   id: string;
   label: string;
   description: string;

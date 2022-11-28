@@ -31,7 +31,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
     private router: Router,
     private _location: Location,
     private _fb: FormBuilder,
-    private _snakbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private assetService: AssetService,
     protected _translateService: TranslateService,
     private globalFilterService: GlobalFilterService,
@@ -59,7 +59,12 @@ export class EditAssetComponent implements OnInit, OnDestroy {
    */
   handleSubmit() {
     if (this.assetForm.invalid) {
-      this._snakbarService.openSnackBarAsText('Invalid form.');
+      this.snackbarService
+        .openSnackBarWithTranslate({
+          translateKey: 'messages.validation.INVALID_FORM',
+          priorityMessage: 'Invalid Form.',
+        })
+        .subscribe();
       return;
     }
     const data = this.assetForm.getRawValue();
@@ -81,23 +86,11 @@ export class EditAssetComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
 
         this.getAssetId();
       })
     );
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   /**
@@ -148,7 +141,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
         (response) => {
           this.hotelasset = new Asset().deserialize(response);
           this.assetForm.patchValue(this.hotelasset);
-          this._snakbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.success.asset_created',
@@ -165,7 +158,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
           this.isSavingasset = false;
         },
         ({ error }) => {
-          this._snakbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.asset_not_created',
@@ -207,7 +200,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
               url: response.videoFile.fileDownloadUri,
               thumbnailUrl: response.thumbnail.fileDownloadUri,
             });
-            this._snakbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'message.success.upload',
@@ -221,7 +214,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
               .subscribe();
           },
           ({ error }) => {
-            this._snakbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'message.error.upload_fail',
@@ -238,7 +231,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
         this.assetService.uploadImage(this.hotelId, formData).subscribe(
           (response) => {
             this.assetForm.get('url').patchValue(response.fileDownloadUri);
-            this._snakbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'message.success.upload',
@@ -253,7 +246,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
             this.isSavingasset = false;
           },
           ({ error }) => {
-            this._snakbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'message.error.upload_fail',
@@ -283,7 +276,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
         .updateAsset(this.hotelId, data, this.hotelasset.id)
         .subscribe(
           (response) => {
-            this._snakbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'message.success.asset_update',
@@ -300,7 +293,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
             this.isSavingasset = false;
           },
           ({ error }) => {
-            this._snakbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'message.error.asset_not_updated',

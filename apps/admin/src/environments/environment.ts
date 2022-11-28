@@ -17,6 +17,7 @@ export const environment = {
     appId: '1:171589915997:web:8ba37d0c270148914204b4',
     measurementId: 'G-CV14FFBNNF',
   },
+  guest_home: 'https://botshot.ai',
 };
 
 /*

@@ -52,6 +52,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   @Input() feedbackType;
   @Input() tabFilterItems: any;
   @Output() onModalClose = new EventEmitter();
+  isNotVisible = false;
   feedbackGraph: string;
   constructor(
     public fb: FormBuilder,
@@ -109,6 +110,9 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     this.feedbackGraph = this.config[0].feedbackGraph;
     this.feedbackType = this.data.feedbackType;
     this.rowsPerPage = 5;
+    if (this.tableName === 'Response Rate')
+      this.isNotVisible =
+        this.tabFilterIdx === 0 || this.tabFilterIdx === 2 ? true : false;
   }
 
   /**
@@ -358,6 +362,10 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
+    if (this.tableName === 'Response Rate')
+      this.isNotVisible =
+        this.tabFilterIdx === 0 || this.tabFilterIdx === 2 ? true : false;
+
     this.setTableCols();
     this.values = [];
     this.changePage(+this.tabFilterItems[event.index].lastPage);
@@ -413,6 +421,9 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   openDetailPage(event: MouseEvent, rowData?, tabKey?: string): void {
     event.stopPropagation();
     if (!rowData) return;
+    let isDisabled;
+    if (this.tableName === 'Response Rate' && this.isNotVisible)
+      isDisabled = true;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -423,6 +434,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       isModal: true,
       globalQueries: this.globalQueries,
       outlets: this.outlets,
+      isDisabled: isDisabled,
     };
 
     const detailCompRef = this._modal.openDialog(

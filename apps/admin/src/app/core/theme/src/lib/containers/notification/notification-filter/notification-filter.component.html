@@ -1,16 +1,23 @@
 <div class="filter--container">
-  <div class="header" (click)="closeFilter()">
-    <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
-    <div>Go Back</div>
+  <div class="header">
+    <div class="header--title" (click)="closeFilter()">
+      <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+      <div>Go Back</div>
+    </div>
+    <div class="header--clear" (click)="clearFilter()">
+      <img src="assets/svg/delete-transparent.svg" alt="remove filters" />
+      <div>Remove Filters</div>
+    </div>
   </div>
   <div class="title">Filter by</div>
   <div class="filter--form" [formGroup]="filterFG">
-    <div class="messages">
+    <div class="messages" formGroupName="status">
       <div>Messages</div>
-      <mat-radio-group formControlName="status">
-        <mat-radio-button value="READ">Read</mat-radio-button>
-        <mat-radio-button value="UNREAD">Unread</mat-radio-button>
-      </mat-radio-group>
+      <div class="status">
+        <mat-checkbox formControlName="read">Read</mat-checkbox>
+        <mat-checkbox formControlName="unread">Unread</mat-checkbox>
+        <mat-checkbox formControlName="removed">Removed</mat-checkbox>
+      </div>
     </div>
     <div class="date">
       <div>Date</div>

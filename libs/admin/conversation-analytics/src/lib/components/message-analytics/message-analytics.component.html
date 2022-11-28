@@ -1,0 +1,48 @@
+<div class="analyticsWrapper">
+  <div class="header" [formGroup]="analyticsFG">
+    <div class="title-container">
+      <div class="icon">
+        <img src="assets/svg/analytics-stat-icon.svg" />
+      </div>
+      <div class="title">Across Messages</div>
+    </div>
+    <div class="dropdown--wrapper">
+      <p-dropdown
+        class="export"
+        [options]="documentActionTypes"
+        formControlName="documentActionType"
+      >
+        <ng-template let-documentActionItem pTemplate="selectedItem">
+          <img src="assets/svg/Export.svg" />
+          <span class="dropdown-label">{{ documentActionItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <div class="divider"></div>
+      <p-dropdown
+        class="export"
+        [options]="documentTypes"
+        formControlName="documentType"
+      >
+        <ng-template let-documentTypeItem pTemplate="selectedItem">
+          <img src="assets/svg/CSV.svg" />
+          <span class="dropdown-label">{{ documentTypeItem.label }}</span>
+        </ng-template>
+      </p-dropdown>
+      <button class="go" (click)="exportCSV()">
+        <mat-icon class="material-icons" matSuffix>east</mat-icon>
+      </button>
+    </div>
+  </div>
+  <mat-tab-group (selectedTabChange)="onSelectedTabFilterChange($event)">
+    <mat-tab *ngFor="let tab of tabFilterItems; let tabIndex = index">
+      <ng-template mat-tab-label>{{ tab.title }} </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+  <div class="graphWrapper">
+    <ng-container [ngSwitch]="tabFilterItems[tabFilterIdx].title">
+      <ng-container *ngSwitchCase="'WhatsApp'">
+        <hospitality-bot-whatsapp-message-analytics></hospitality-bot-whatsapp-message-analytics>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

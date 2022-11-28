@@ -133,7 +133,10 @@
               *ngIf="tabFilterItems[tabFilterIdx]?.chips?.length"
               class="caption__wrapper--buttons"
             >
-              <div class="button__wrapper">
+              <div
+                class="button__wrapper"
+                [style.display]="isNotVisible ? 'none' : ''"
+              >
                 <mat-chip-list
                   multiple
                   #chipList
@@ -599,7 +602,7 @@
                     </div>
                   </ng-template>
                 </ng-container>
-                <div class="pdf">
+                <div class="pdf" [style.display]="isNotVisible ? 'none' : ''">
                   <img
                     [src]="globalFeedbackConfig.images.datatable.pdf.url"
                     [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
@@ -619,31 +622,24 @@
             </td>
             <td class="comments">{{ rowData.guestData.overAllNps }}</td>
             <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
-            <td *ngIf="tableName === 'Response Rate'" class="rate">
-              <div class="rate-images">
-                <img
-                  [src]="globalFeedbackConfig.images.whatsapp.url"
-                  [alt]="globalFeedbackConfig.images.whatsapp.alt"
-                  class="svg"
-                />
-                <img
-                  [src]="globalFeedbackConfig.images.email.url"
-                  [alt]="globalFeedbackConfig.images.email.alt"
-                  class="svg"
-                />
-                <img
-                  [src]="globalFeedbackConfig.images.manual.url"
-                  [alt]="globalFeedbackConfig.images.manual.alt"
-                  class="svg"
-                />
-              </div>
-              <div class="rate-divider">/</div>
-              <div class="rate-images opacImage">
-                <img
-                  [src]="globalFeedbackConfig.images.manual.url"
-                  [alt]="globalFeedbackConfig.images.manual.alt"
-                  class="svg"
-                />
+            <td class="comments" *ngIf="tableName === 'Response Rate'">
+              <div class="rate">
+                <div class="rate-images" *ngFor="let icon of responseRate">
+                  <div *ngFor="let item of rowData.guestData.sharedOn">
+                    <div *ngIf="icon.label === item">
+                      <img [src]="icon.iconUrl" [alt]="icon" class="svg" />
+                    </div>
+                  </div>
+                </div>
+                <div class="rate-divider">/</div>
+                <div
+                  class="rate-images opacImage"
+                  *ngFor="let item of responseRate"
+                >
+                  <div *ngIf="item.label === rowData.guestData.receivedOn">
+                    <img [src]="item.iconUrl" [alt]="icon" class="svg" />
+                  </div>
+                </div>
               </div>
             </td>
             <!-- status-image-initiated -->
@@ -801,7 +797,7 @@
                     </div>
                   </div>
                 </ng-template>
-                <div class="pdf">
+                <div class="pdf" [style.display]="isNotVisible ? 'none' : ''">
                   <img
                     [src]="globalFeedbackConfig.images.datatable.pdf.url"
                     [alt]="globalFeedbackConfig.images.datatable.pdf.alt"
@@ -828,31 +824,24 @@
             </td>
             <td class="comments">{{ rowData.guestData.overAllNps }}</td>
             <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
-            <td *ngIf="tableName === 'Response Rate'" class="rate">
-              <div class="rate-images">
-                <img
-                  [src]="globalFeedbackConfig.images.whatsapp.url"
-                  [alt]="globalFeedbackConfig.images.whatsapp.alt"
-                  class="svg"
-                />
-                <img
-                  [src]="globalFeedbackConfig.images.email.url"
-                  [alt]="globalFeedbackConfig.images.email.alt"
-                  class="svg"
-                />
-                <img
-                  [src]="globalFeedbackConfig.images.manual.url"
-                  [alt]="globalFeedbackConfig.images.manual.alt"
-                  class="svg"
-                />
-              </div>
-              <div class="rate-divider">/</div>
-              <div class="rate-images opacImage">
-                <img
-                  [src]="globalFeedbackConfig.images.manual.url"
-                  [alt]="globalFeedbackConfig.images.manual.alt"
-                  class="svg"
-                />
+            <td class="comments" *ngIf="tableName === 'Response Rate'">
+              <div class="rate">
+                <div class="rate-images" *ngFor="let icon of responseRate">
+                  <div *ngFor="let item of rowData.guestData.sharedOn">
+                    <div *ngIf="icon.label === item">
+                      <img [src]="icon.iconUrl" [alt]="icon" class="svg" />
+                    </div>
+                  </div>
+                </div>
+                <div class="rate-divider">/</div>
+                <div
+                  class="rate-images opacImage"
+                  *ngFor="let item of responseRate"
+                >
+                  <div *ngIf="item.label === rowData.guestData.receivedOn">
+                    <img [src]="item.iconUrl" [alt]="icon" class="svg" />
+                  </div>
+                </div>
               </div>
             </td>
             <!-- status-image-initiated -->

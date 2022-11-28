@@ -79,7 +79,6 @@ export class HealthDeclarationWrapperComponent extends BaseWrapperComponent
               .subscribe((translatedMsg) => {
                 this._snackBarService.openSnackBarAsText(translatedMsg);
               });
-            //   this._snackBarService.openSnackBarAsText(error.message);
             this._buttonService.buttonLoading$.next(
               this.buttonRefs['nextButton']
             );

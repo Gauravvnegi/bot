@@ -142,7 +142,7 @@ export const tabFilterItems = {
   ],
   reservation: [
     {
-      label: 'In-house/Stay-over',
+      label: 'In-house',
       content: '',
       value: 'INHOUSE',
       disabled: false,

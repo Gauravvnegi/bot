@@ -1,18 +1,24 @@
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notification';
 import {
   CardNames,
-  TableNames,
+  ConfigService,
   HotelDetailService,
+  TableNames,
 } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
+import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { Subscription } from 'rxjs';
 import { feedback } from '../../constants/feedback';
+import { FeedbackRecord } from '../../data-models/feedback-card.model';
+import { CardService } from '../../services/card.service';
 import { StatisticsService } from '../../services/feedback-statistics.service';
 import { FeedbackTableService } from '../../services/table.service';
+import { FeedbackDetailModalComponent } from '../modals/feedback-detail-modal/feedback-detail.component';
 
 @Component({
   selector: 'hospitality-bot-feedback',
@@ -28,6 +34,8 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   globalFeedbackFilterType = '';
   outlets;
   outletIds;
+  colorMap;
+  responseRate;
 
   tabFilterIdx = 0;
   tabFilterItems = [
@@ -47,15 +55,21 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     protected _hotelDetailService: HotelDetailService,
     protected statisticsService: StatisticsService,
     protected subscriptionPlanService: SubscriptionPlanService,
-    protected tableService: FeedbackTableService
+    protected tableService: FeedbackTableService,
+    private cardService: CardService,
+    private location: Location,
+    private configService: ConfigService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this.registerListeners();
+    this.getConfig();
   }
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenForStateData();
   }
 
   listenForGlobalFilters(): void {
@@ -87,6 +101,17 @@ export class FeedbackComponent implements OnInit, OnDestroy {
           this.statisticsService.type = feedback.types.stay;
           this.tableService.$feedbackType.next(feedback.types.stay);
           this.setStayTabFilters(data['filter'].value);
+        }
+      })
+    );
+  }
+
+  getConfig() {
+    this.$subscription.add(
+      this.configService.$config.subscribe((response) => {
+        if (response) {
+          this.colorMap = response?.feedbackColorMap;
+          this.responseRate = response?.responseRate;
         }
       })
     );
@@ -217,6 +242,49 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   checkForTransactionalSubscribed() {
     return this.subscriptionPlanService.getModuleSubscription().modules
       .FEEDBACK_TRANSACTIONAL.active;
+  }
+
+  listenForStateData() {
+    this.notificationService.$feedbackNotification.subscribe((response) => {
+      if (response) {
+        this.$subscription.add(
+          this.cardService
+            .getFeedbackNotificationData(response)
+            .subscribe((response) => {
+              const data = new FeedbackRecord().deserialize(
+                response,
+                this.outlets,
+                response.feedbackType,
+                this.colorMap
+              );
+              console.log(data);
+              const dialogConfig = new MatDialogConfig();
+              dialogConfig.disableClose = true;
+              dialogConfig.width = '100%';
+              dialogConfig.data = {
+                feedback: data.feedback,
+                colorMap: this.colorMap,
+                feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+                isModal: true,
+                globalQueries: [],
+              };
+
+              const detailCompRef = this._modal.openDialog(
+                FeedbackDetailModalComponent,
+                dialogConfig
+              );
+              this.$subscription.add(
+                detailCompRef.componentInstance.onDetailsClose.subscribe(
+                  (res) => {
+                    detailCompRef.close();
+                  }
+                )
+              );
+              this.notificationService.$feedbackNotification.next(null);
+            })
+        );
+      }
+    });
   }
 
   ngOnDestroy() {

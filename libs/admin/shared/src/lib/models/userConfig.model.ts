@@ -65,3 +65,33 @@ export class UserConfig implements Deserializable {
     return cc;
   }
 }
+
+export class UserList {
+  list: User[];
+
+  deserialize(input) {
+    this.list = new Array<User>();
+    input.forEach((item) => this.list.push(new User().deserialize(item)));
+    return this.list;
+  }
+}
+
+export class User {
+  firstName: string;
+  id: string;
+  lastName: string;
+  name: string;
+  department: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'id', get(input, ['id'], '')),
+      set({}, 'firstName', get(input, ['firstName'], '')),
+      set({}, 'lastName', get(input, ['lastName'], '')),
+      set({}, 'department', get(input, ['department'], 'Default department'))
+    );
+    this.name = `${this.firstName} ${this.lastName ? this.lastName + ' ' : ''}`;
+    return this;
+  }
+}

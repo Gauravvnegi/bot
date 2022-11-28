@@ -17,6 +17,7 @@ import { ProgressSpinnerService } from '../../../services/progress-spinner.servi
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
 import { trigger, transition, animate, style } from '@angular/animations';
 import { LoadingService } from '../../../services/loader.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -37,6 +38,8 @@ import { LoadingService } from '../../../services/loader.service';
 export class LayoutOneComponent implements OnInit, OnDestroy {
   backgroundColor: string;
   background_image: string;
+  menuItem: any;
+  menuTitle: string;
   profile = layoutConfig.profile;
   outlets = [];
   lastUpdatedAt: string;
@@ -45,6 +48,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   isNotificationVisible = false;
   searchFG: FormGroup;
   timezone: string;
+  isExpand = true;
   filterConfig = {
     brandName: '',
     branchName: '',
@@ -54,10 +58,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     },
   };
   notificationFilterData = {
-    status: '',
+    status: [],
     fromDate: '',
     toDate: '',
   };
+  unreadCount: number;
   private $firebaseMessagingSubscription = new Subscription();
   isGlobalSearchVisible = true;
 
@@ -73,7 +78,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private firebaseMessagingService: FirebaseMessagingService,
     private subscriptionPlanService: SubscriptionPlanService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private notificatonService: NotificationService
   ) {
     this.initFG();
   }
@@ -83,6 +89,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
     this.loadingService.close();
+    this.getNotificationUnreadCount();
   }
 
   initFirebaseMessaging(entityId?) {
@@ -95,6 +102,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
         const notificationPayload = payload;
         this.firebaseMessagingService.playNotificationSound();
+        this.getNotificationUnreadCount();
         if (notificationPayload) {
           switch (notificationPayload['data']?.notificationType) {
             case 'Live Request':
@@ -164,6 +172,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.initFirebaseMessaging(branch?.['id']);
     this.timezone = get(brand, ['branches', branches.length - 1, 'timezone']);
     this.globalFilterService.timezone = this.timezone;
+    this.globalFilterService.hotelId = branch?.['id'];
   }
 
   refreshDashboard() {
@@ -222,7 +231,17 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       localStorage.setItem(event.token.key, event.token.value);
       this.$firebaseMessagingSubscription.unsubscribe();
       this.initFirebaseMessaging(values.property.branchName);
+      this.globalFilterService.hotelId = branch?.['id'];
     }
+  }
+
+  subMenuItem(data) {
+    this.menuTitle = data.title;
+    this.menuItem = data.list;
+  }
+
+  sideNavToggle(item) {
+    this.isExpand = item;
   }
 
   resetFilterCount() {
@@ -324,6 +343,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   closeNotification(): void {
     this.isNotificationVisible = false;
+    this.getNotificationUnreadCount();
+  }
+
+  getNotificationUnreadCount() {
+    this.notificatonService
+      .getUnreadCount(this._userService.getLoggedInUserid())
+      .subscribe((response) => (this.unreadCount = response?.unreadCount));
   }
 
   ngOnDestroy() {

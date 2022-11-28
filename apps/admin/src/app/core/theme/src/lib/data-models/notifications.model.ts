@@ -24,19 +24,19 @@ export class Notification {
   updated: number;
   userAgent: string;
   userId: string;
+  data;
 
   deserialize(input) {
     this.id = input.id || '';
     this.active = input.active || '';
     this.created = input.created || '';
-    this.message = input.message || '';
+    this.message = decodeURIComponent(
+      input.message || ''.replace(/\n/g, '<br/>')
+    );
     this.notificationType = input.notificationType || '';
     this.read = input.read || false;
     this.updated = input.updated || '';
-    this.message =
-      this.message.length > 33
-        ? this.message.substring(0, 33) + '...'
-        : this.message;
+    this.data = input.data;
     return this;
   }
 

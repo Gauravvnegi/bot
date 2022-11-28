@@ -28,8 +28,11 @@ export class MessageService extends ApiService {
     );
   }
 
-  sendMessage(hotelId: string, data) {
-    return this.post(`/api/v1/hotel/${hotelId}/conversations/send`, data);
+  sendMessage(hotelId: string, data, queryObj) {
+    return this.post(
+      `/api/v1/hotel/${hotelId}/conversations/send${queryObj}`,
+      data
+    );
   }
 
   updateGuestDetail(hotelId: string, conversationId: string, data) {

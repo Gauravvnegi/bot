@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { ReservationService } from '../../services/reservation.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { isEmpty } from 'lodash';
@@ -81,7 +81,7 @@ export class AdminGuestDetailsComponent implements OnInit {
   initHealthCardDetailsForm() {
     return this._fb.group({
       status: [''],
-      remarks: [''],
+      remarks: ['', [Validators.maxLength(200)]],
       url: [''],
       temperature: [''],
     });
@@ -116,7 +116,7 @@ export class AdminGuestDetailsComponent implements OnInit {
       selectedDocumentType: [''],
       age: [''],
       status: [''],
-      remarks: [''],
+      remarks: ['', [Validators.maxLength(200)]],
       label: [''],
       role: [''],
     });

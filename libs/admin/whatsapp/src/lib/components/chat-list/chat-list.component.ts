@@ -10,15 +10,17 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
+import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
+import { debounceTime, filter } from 'rxjs/operators';
 import { ContactList, IContactList } from '../../models/message.model';
 import { MessageService } from '../../services/messages.service';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { debounceTime, filter } from 'rxjs/operators';
-import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
-import { SnackBarService } from 'libs/shared/material/src';
 
 @Component({
   selector: 'hospitality-bot-chat-list',
@@ -37,17 +39,21 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   scrollView;
   showFilter = false;
   filterData = {};
+  autoSearched = false;
   constructor(
     private messageService: MessageService,
     private _globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
     private _firebaseMessagingService: FirebaseMessagingService,
-    private _snackBarService: SnackBarService
-  ) {}
+    private _snackBarService: SnackBarService,
+    private notificationService: NotificationService,
+    private route: ActivatedRoute
+  ) {
+    this.initFG();
+  }
 
   ngOnInit(): void {
-    this.initFG();
     this.registerListeners();
   }
 
@@ -57,6 +63,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.listenForRefreshData();
     this.listenForMessageNotification();
     this.listenForApplicationActive();
+    this.listenForQueryParam();
+    this.listenForStateData();
   }
 
   initFG() {
@@ -70,6 +78,17 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.myScrollContainer.nativeElement.scrollTop = this.scrollView;
       this.scrollView = undefined;
     }
+  }
+
+  listenForQueryParam() {
+    this.$subscription.add(
+      this.route.queryParams.subscribe((response) => {
+        if (response['phoneNumber']) {
+          this.contactFG.patchValue({ search: response['phoneNumber'] });
+          this.autoSearched = true;
+        }
+      })
+    );
   }
 
   listenForGlobalFilters(): void {
@@ -221,6 +240,9 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
                 response,
                 this._globalFilterService.timezone
               );
+              if (this.autoSearched) {
+                this.selectedChat.emit({ value: this.chatList.contacts[0] });
+              }
             } else {
               this.chatList = new ContactList().deserialize(
                 [],
@@ -231,6 +253,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
                 '',
                 { panelClass: 'success' }
               );
+              this.autoSearched = false;
             }
           },
           ({ error }) => this._snackBarService.openSnackBarAsText(error.message)
@@ -248,6 +271,7 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
       if (response?.search.length >= 3) {
         this.loadSearchList(response?.search);
       } else {
+        this.autoSearched = false;
         this.loadChatList();
       }
     });
@@ -261,6 +285,18 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
       } else this.loadSearchList(this.contactFG.get('search').value);
       this.showFilter = false;
     }
+  }
+
+  listenForStateData() {
+    this.$subscription.add(
+      this.notificationService.$whatsappNotification.subscribe((response) => {
+        if (response) {
+          this.contactFG.patchValue({ search: response });
+          this.autoSearched = true;
+          this.notificationService.$whatsappNotification.next(null);
+        }
+      })
+    );
   }
 
   ngOnDestroy(): void {

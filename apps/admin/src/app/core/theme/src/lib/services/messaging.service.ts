@@ -79,19 +79,21 @@ export class FirebaseMessagingService {
   }
 
   showNotificationAsSnackBar(payload: any) {
-    const title = payload.notification?.body.split(',')[0];
-    this._snackbarService.openSnackBarAsText(
-      `${payload.notification?.title}(${title}): ${decodeURIComponent(
-        payload.notification?.body.substring(
-          payload.notification?.body.indexOf(',') + 1
-        )
-      )}`,
-      '',
-      {
-        panelClass: 'notification',
-        horizontalPosition: 'center',
-      }
-    );
+    if (payload.notification?.body) {
+      const title = payload.notification?.body.split(',')[0];
+      this._snackbarService.openSnackBarAsText(
+        `${payload.notification?.title}(${title}): ${decodeURIComponent(
+          payload.notification?.body.substring(
+            payload.notification?.body.indexOf(',') + 1
+          )
+        )}`,
+        '',
+        {
+          panelClass: 'notification',
+          horizontalPosition: 'center',
+        }
+      );
+    }
   }
 
   playNotificationSound() {

@@ -8,7 +8,7 @@ import {
   ComponentRef,
   OnChanges,
 } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { DefaultPackageComponent } from '../packages/default-package/default-package.component';
 import { AirportPickupComponent } from '../packages/airport-pickup/airport-pickup.component';
 
@@ -89,7 +89,7 @@ export class AdminPackageDetailsComponent implements OnChanges, AfterViewInit {
     return this._fb.group({
       id: [''],
       status: [''],
-      remarks: [''],
+      remarks: ['', , [Validators.maxLength(200)]],
       type: [''],
       name: [''],
       description: [''],

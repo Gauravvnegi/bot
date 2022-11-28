@@ -5,13 +5,26 @@
   position: relative;
   height: 100%;
   .header {
-    @include flex-item-center();
     font-size: 14px;
     color: #4b56c0;
     cursor: pointer;
-    width: fit-content;
-    mat-icon {
-      margin-right: 7px;
+    @include flex-between-center();
+    &--title {
+      @include flex-item-center();
+      mat-icon {
+        margin-right: 7px;
+      }
+    }
+    &--clear {
+      @include flex-item-center();
+      font-size: 14px;
+      color: #b5b5c3;
+      &:hover {
+        color: #4b56c0;
+      }
+      img {
+        height: 29px;
+      }
     }
   }
   .title {
@@ -57,18 +70,20 @@
   }
 }
 
+.status {
+  @include flex-item-center();
+  gap: 20px;
+}
+
 :host ::ng-deep {
-  .mat-radio-group {
-    display: flex;
-    flex-direction: row;
-    gap: 45px;
-    margin-top: 15px;
-  }
-  .mat-radio-label-content {
+  .mat-checkbox-label {
     font-size: 16px;
     color: #00162b;
   }
-  .mat-form-field-wrapper {
-    padding-bottom: 0;
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+    background-color: #4b56c0;
+  }
+  .mat-checkbox-background {
+    background-color: #e5e5e5;
   }
 }

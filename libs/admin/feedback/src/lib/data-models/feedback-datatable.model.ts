@@ -75,9 +75,16 @@ export class Feedback {
   tableOrRoomNumber: string;
   deserialize(input, outlets) {
     this.remarks = new Array<Remark>();
+    const bookingDetails = get(input, ['bookingDetails']);
     Object.assign(
       this,
-      set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
+      set(
+        {},
+        'bookingDetails',
+        typeof bookingDetails === 'string' || bookingDetails instanceof String
+          ? JSON.parse(get(input, ['bookingDetails']))
+          : bookingDetails
+      ),
       set({}, 'comments', get(input, ['comments'])),
       set({}, 'created', get(input, ['created'])),
       set(
@@ -416,9 +423,16 @@ export class StayFeedback {
     this.services = new Array<Service>();
     this.remarks = new Array<Remark>();
     this.commentList = {};
+    const bookingDetails = get(input, ['bookingDetails']);
     Object.assign(
       this,
-      set({}, 'bookingDetails', JSON.parse(get(input, ['bookingDetails']))),
+      set(
+        {},
+        'bookingDetails',
+        typeof bookingDetails === 'string' || bookingDetails instanceof String
+          ? JSON.parse(get(input, ['bookingDetails']))
+          : bookingDetails
+      ),
       set({}, 'comments', get(input, ['comments'])),
       set({}, 'created', get(input, ['created'])),
       set({}, 'updated', get(input, ['updated'])),
@@ -441,10 +455,11 @@ export class StayFeedback {
       set({}, 'timeOut', get(input, ['timeOut'])),
       set({}, 'feedbackId', get(input, ['feedbackId'], ''))
     );
-    const serviceList = get(input, ['serviceMap'], ['services']);
-    serviceList?.forEach((item) =>
-      this.services.push(new Service().deserialize(item, colorMap))
-    );
+    const serviceList = (get(input, ['serviceMap', 'services']) ||
+      get(input, ['serviceMap'])) as any[];
+    serviceList?.forEach((item) => {
+      this.services.push(new Service().deserialize(item, colorMap));
+    });
     this.outlet = outlets?.filter(
       (outlet) => outlet.id === input.entityId
     )[0]?.name;
@@ -541,6 +556,8 @@ export class StayGuestData {
   overAllNps: number;
   totalSpend: number;
   transactionUsage: string;
+  receivedOn: string;
+  sharedOn: string[];
 
   deserialize(input) {
     Object.assign(
@@ -554,7 +571,9 @@ export class StayGuestData {
       set({}, 'guestCount', get(input, ['guestCount'])),
       set({}, 'overAllNps', get(input, ['overAllNps'])),
       set({}, 'totalSpend', get(input, ['totalSpend'])),
-      set({}, 'transactionUsage', get(input, ['transactionUsage']))
+      set({}, 'transactionUsage', get(input, ['transactionUsage'])),
+      set({}, 'receivedOn', get(input, ['receivedOn'])),
+      set({}, 'sharedOn', get(input, ['sharedOn']))
     );
     return this;
   }

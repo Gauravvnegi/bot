@@ -4,8 +4,23 @@
     id="sidebar"
     [style.background-color]="backgroundColor"
   >
-    <hospitality-bot-sidenav></hospitality-bot-sidenav>
+    <hospitality-bot-sidenav
+      (submenuItems)="subMenuItem($event)"
+      (navToggle)="sideNavToggle($event)"
+    ></hospitality-bot-sidenav>
   </div>
+  <div
+    class="sidebar-panel"
+    id="sidebar"
+    [style.background-color]="backgroundColor"
+  >
+    <hospitality-bot-sidenav-expand
+      [title]="menuTitle"
+      [submenuItems]="menuItem"
+      [isExpanded]="isExpand"
+    ></hospitality-bot-sidenav-expand>
+  </div>
+
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
       <!-- message header -->
@@ -70,7 +85,12 @@
                   class="filter-icon"
                   src="assets/svg/notification-bell.svg"
                 />
-                <div class="notification-count">5</div>
+                <div
+                  class="notification-count"
+                  *ngIf="unreadCount && unreadCount > 0"
+                >
+                  {{ unreadCount }}
+                </div>
               </div>
               <div
                 class="notification"

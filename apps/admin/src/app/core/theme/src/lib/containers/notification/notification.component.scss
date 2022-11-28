@@ -77,6 +77,9 @@
   .dismiss {
     @include flex-between-center();
     color: $primary-gray;
+    &:hover {
+      color: #4b56c0;
+    }
     img {
       height: 33px;
     }
@@ -84,6 +87,22 @@
     &:active {
       transform: scale(0.98);
     }
+  }
+}
+.empty-view {
+  margin-top: 60px;
+  @include flex-between-center();
+  flex-direction: column;
+  &--title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 38px;
+  }
+  &--sub-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: #c5c5c5;
+    margin-top: 12px;
   }
 }
 .notification--form {
@@ -111,6 +130,9 @@
       }
       background: #c3c2c2;
       border-radius: 8px;
+    }
+    .unread {
+      border-left: 3px solid #4b56c0;
     }
     &--item {
       border: solid 1px rgb(112, 112, 112, 0.15);

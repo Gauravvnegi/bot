@@ -11,9 +11,13 @@
       />
     </div>
     <div class="menu_button" (click)="toggleMenuButton()">
-      <div class="bar1"></div>
-      <div class="bar2"></div>
-      <div class="bar3"></div>
+      <img
+        [src]="
+          isExpanded
+            ? 'assets/svg/vertical-lines.svg'
+            : 'assets/svg/horizontal-lines.svg'
+        "
+      />
     </div>
   </div>
 </div>
@@ -30,54 +34,23 @@
       <a
         class="main_heading_anchor"
         [routerLink]="[menuItem.path]"
-        [style.display]="'flex'"
         [style.background-color]="
           rla.isActive ? list_item_colour : 'transparent'
         "
         [style.color]="rla.isActive ? activeFontColor : normalFontColor"
-        [style.padding]="'0px 15px'"
+        [style.border-right]="rla.isActive ? '3.2px solid #4B56C0' : ''"
+        [style.padding]="'10px 15px'"
+        (click)="handleRouteChange(menuItem)"
         ><div class="sidenav_logo">
-          <img [src]="menuItem.url" class="svg-icon" />
+          <ng-container *ngIf="menuItem.urlColor; else imageurl">
+            <img [src]="rla.isActive ? menuItem.urlColor : menuItem.url" />
+          </ng-container>
+          <ng-template #imageurl
+            ><img [src]="menuItem.url" class="svg-icon"
+          /></ng-template>
         </div>
-        <span class="icon-label" *ngIf="isExpanded">{{ menuItem.title }}</span>
-        <mat-icon
-          *ngIf="menuItem.children !== null"
-          [style.transform]="rla.isActive ? 'rotate(90deg)' : ''"
-          >keyboard_arrow_right</mat-icon
-        >
+        <div class="icon-label">{{ menuItem.title }}</div>
       </a>
-    </div>
-
-    <div
-      [ngClass]="
-        rla.isActive ? (menuItem.children !== null ? 'child-active' : '') : ''
-      "
-      class="subitems"
-    >
-      <div
-        *ngFor="let subItem of menuItem.children"
-        routerLinkActive
-        #rla="routerLinkActive"
-        [routerLinkActiveOptions]="{ exact: false }"
-        class="subitems_heading"
-        [ngClass]="rla.isActive ? 'parent-active active' : ''"
-        [routerLink]="[subItem.path]"
-      >
-        <a
-          class="subitems_heading_anchor"
-          [style.display]="'flex'"
-          [style.background-color]="
-            rla.isActive ? list_item_colour : 'transparent'
-          "
-          [style.justify-content]="'center'"
-          [style.color]="rla.isActive ? activeFontColor : normalFontColor"
-          [style.width]="'100%'"
-          ><div class="sidenav_logo">
-            <img [src]="subItem.url" class="svg-icon" />
-          </div>
-          <span class="icon-label" *ngIf="isExpanded">{{ subItem.title }}</span>
-        </a>
-      </div>
     </div>
   </div>
 </div>

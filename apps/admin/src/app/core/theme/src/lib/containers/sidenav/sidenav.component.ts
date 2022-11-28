@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  OnDestroy,
+  EventEmitter,
+} from '@angular/core';
 import { ADMIN_ROUTES, DEFAULT_ROUTES } from './sidenav-admin.routes';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
@@ -9,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
@@ -23,15 +30,20 @@ export class SidenavComponent implements OnInit, OnDestroy {
   public dividerBgColor: string;
   public headerBgColor: string;
   isExpanded = true;
-  status = false;
+  status = true;
   $subscription = new Subscription();
   branchConfig;
+  menuItemChildren = [];
+  @Output() submenuItems = new EventEmitter<any>();
+  @Output() navToggle = new EventEmitter<boolean>();
+
   constructor(
     private _breakpointObserver: BreakpointObserver,
     private _modal: ModalService,
     private _globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
-    private subscriptionPlanService: SubscriptionPlanService
+    private subscriptionPlanService: SubscriptionPlanService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -68,8 +80,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._breakpointObserver.observe([Breakpoints.Web]).subscribe((res) => {
         if (!res.matches) {
-          this.toggleMenuButton();
-        } else if (!this.isExpanded) {
           this.toggleMenuButton();
         }
       })
@@ -108,25 +118,29 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.dividerBgColor = 'white';
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
-    //check if admin or super admin by using command pattern
-    ADMIN_ROUTES.forEach((data, i) => {
-      const checkSubscriptionData = this.subscriptionCheck(data, subscription);
-      if (checkSubscriptionData.length) {
-        this.menuItems.push(
-          checkSubscriptionData[0].children ? checkSubscriptionData[0] : data
-        );
-      }
-    });
     this.menuItems = [
       ...new Map(
-        [...this.menuItems, ...DEFAULT_ROUTES].map((item) => [item.path, item])
+        [...ADMIN_ROUTES, ...DEFAULT_ROUTES].map((item) => {
+          if (this.router.url.includes(item.path)) {
+            this.handleRouteChange(item);
+          }
+          return [item.path, item];
+        })
       ).values(),
     ];
   }
 
   toggleMenuButton() {
-    this.status = !this.status;
     this.isExpanded = !this.isExpanded;
+    this.navToggle.emit(this.isExpanded);
+  }
+
+  subSideNav(title: string, items: any) {
+    const data = {
+      title: title,
+      list: items,
+    };
+    this.submenuItems.emit(data);
   }
 
   ngOnDestroy() {
@@ -220,6 +234,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     });
     return subItemList;
+  }
+
+  handleRouteChange(menuItem) {
+    this.isExpanded =
+      menuItem.children && menuItem.children.length ? true : false;
+    this.navToggle.emit(this.isExpanded);
+    this.subSideNav(menuItem.title, menuItem.children);
   }
 
   checkSubscriptionByPath(path, subscription) {

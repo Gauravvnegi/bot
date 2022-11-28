@@ -48,10 +48,10 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
 
   chart: any = {
     chartData: [
-      { data: [], label: 'Arrival', fill: false },
+      { data: [], label: 'Due-In', fill: false },
       { data: [], label: 'In House', fill: false },
-      { data: [], label: 'Departure', fill: false },
-      { data: [], label: 'Out-Guest', fill: false },
+      { data: [], label: 'Due-Out', fill: false },
+      { data: [], label: 'Check-Out', fill: false },
     ],
     chartLabels: [],
     chartOptions: {
@@ -158,9 +158,9 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
             : null
         )
       );
-      this.chart.chartData[0].data.push(this.customerData.arrival[timestamp]);
+      this.chart.chartData[0].data.push(this.customerData.dueIn[timestamp]);
       this.chart.chartData[1].data.push(this.customerData.inHouse[timestamp]);
-      this.chart.chartData[2].data.push(this.customerData.departure[timestamp]);
+      this.chart.chartData[2].data.push(this.customerData.dueOut[timestamp]);
       this.chart.chartData[3].data.push(this.customerData.outGuest[timestamp]);
     });
   }
@@ -195,33 +195,6 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
           }
         )
       )
-    );
-  }
-
-  /**
-   * @function openTableModal To open modal pop-up for guest table based on VIP filter.
-   */
-  openTableModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const tableCompRef = this._modal.openDialog(
-      GuestDatatableModalComponent,
-      dialogConfig
-    );
-
-    this._translateService
-      .get('vip.title')
-      .subscribe(
-        (message) => (tableCompRef.componentInstance.tableName = message)
-      );
-    tableCompRef.componentInstance.callingMethod = 'getGuestList';
-    tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
-
-    this.$subscription.add(
-      tableCompRef.componentInstance.onModalClose.subscribe((res) => {
-        tableCompRef.close();
-      })
     );
   }
 

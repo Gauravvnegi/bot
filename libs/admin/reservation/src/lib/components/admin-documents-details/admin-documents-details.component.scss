@@ -210,10 +210,12 @@
     font-weight: $bolder;
     margin-right: 15px;
   }
+  display: flex;
+  align-items: baseline;
 }
 
 :host ::ng-deep .remark {
-  width: 70%;
+  width: 75%;
 }
 .ml-0 {
   margin-left: 0;

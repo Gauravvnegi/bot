@@ -12,6 +12,9 @@
         class="message-field-input"
         placeholder="Type Message"
         formControlName="message"
+        [mention]="items"
+        [mentionConfig]="{ triggerChar: '@', labelKey: 'name' }"
+        (itemSelected)="setSelectedItem($event)"
       ></textarea>
       <!-- <img src="assets/svg/smile.svg" class="smileImg" /> -->
     </div>

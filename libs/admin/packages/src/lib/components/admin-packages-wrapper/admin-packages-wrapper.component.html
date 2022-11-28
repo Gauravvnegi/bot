@@ -1,13 +1,19 @@
-<hospitality-bot-package-datatable
-  tableSubscribed
-  [paths]="'package.tables.' + tables.PACKAGE"
->
-</hospitality-bot-package-datatable>
+<ngcontainer *ngIf="unsubscribe.length === 0; else subscribedview">
+  <hospitality-bot-unsubscribe-view></hospitality-bot-unsubscribe-view>
+</ngcontainer>
+<ng-template #subscribedview>
+  <hospitality-bot-package-datatable
+    tableSubscribed
+    [paths]="'package.tables.' + tables.PACKAGE"
+  >
+  </hospitality-bot-package-datatable>
 
-<div
-  class="category_table"
-  tableSubscribed
-  [paths]="'package.tables.' + tables.CATEGORY"
->
-  <hospitality-bot-categories-datatable> </hospitality-bot-categories-datatable>
-</div>
+  <div
+    class="category_table"
+    tableSubscribed
+    [paths]="'package.tables.' + tables.CATEGORY"
+  >
+    <hospitality-bot-categories-datatable>
+    </hospitality-bot-categories-datatable>
+  </div>
+</ng-template>

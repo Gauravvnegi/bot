@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TableNames } from '@hospitality-bot/admin/shared';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import { ModuleNames, TableNames } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-guest',
@@ -8,7 +9,20 @@ import { TableNames } from '@hospitality-bot/admin/shared';
 })
 export class GuestComponent implements OnInit {
   tables = TableNames;
-  constructor() {}
+  unsubscribe;
+  constructor(private subscriptionPlanService: SubscriptionPlanService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getSubscriptionPlan();
+  }
+
+  getSubscriptionPlan() {
+    this.unsubscribe = this.checkSubscriptionByPath(
+      ModuleNames.GUESTS,
+      this.subscriptionPlanService.getSubscription()['features'].MODULE
+    );
+  }
+  checkSubscriptionByPath(path, subscription) {
+    return subscription.filter((d) => ModuleNames[d.name] === path && d.active);
+  }
 }

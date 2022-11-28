@@ -48,6 +48,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
   };
+  config = campaignConfig;
   constructor(
     private _snackbarService: SnackBarService,
     private _emailService: EmailService,

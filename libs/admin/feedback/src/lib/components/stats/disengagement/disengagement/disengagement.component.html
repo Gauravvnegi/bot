@@ -46,12 +46,28 @@
       Guest to meet Break-down
     </div>
     <div class="right__top">
-      <mat-progress-bar
-        [color]="'#e61042'"
-        mode="determinate"
-        [value]="disengagement?.gtmbreakDown?.HIGH_RISK_PERCENTAGE || 0"
-      >
-      </mat-progress-bar>
+      <div class="progress">
+        <div
+          class="high-risk"
+          *ngIf="disengagement?.gtmbreakDown?.HIGH_RISK"
+          [style.width]="
+            getPercentage(
+              disengagement?.gtmbreakDown?.HIGH_RISK,
+              disengagement?.gtmbreakDown?.MEDIUM_RISK
+            ) + '%'
+          "
+        ></div>
+        <div
+          class="medium-risk"
+          *ngIf="disengagement?.gtmbreakDown?.MEDIUM_RISK"
+          [style.width]="
+            getPercentage(
+              disengagement?.gtmbreakDown?.MEDIUM_RISK,
+              disengagement?.gtmbreakDown?.HIGH_RISK
+            ) + '%'
+          "
+        ></div>
+      </div>
       <div class="right__top__stat-container">
         <div>
           High Risk

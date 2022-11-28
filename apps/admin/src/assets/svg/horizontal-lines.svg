@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <path data-name="Rectangle 175" style="fill:none" d="M0 0h16v16H0z"/>
+    <path data-name="Union 4" d="M1 8a1 1 0 0 1 0-2h14a1 1 0 0 1 0 2zm0-6a1 1 0 1 1 0-2h14a1 1 0 0 1 0 2z" transform="translate(0 1)" style="fill:#fff"/>
+    <path data-name="Union 4" d="M1 2a1 1 0 1 1 0-2h14a1 1 0 0 1 0 2z" transform="translate(0 13)" style="fill:#fff"/>
+</svg>

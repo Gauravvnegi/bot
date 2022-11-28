@@ -8,6 +8,10 @@ export enum ModuleNames {
   ROLE_MANAGEMENT = 'roles-permissions',
   FEEDBACK_TRANSACTIONAL = 'FEEDBACK_TRANSACTIONAL',
   MARKETING = 'marketing',
+  HEDA = 'heda',
+  FREDDIE = 'freddie',
+  FRONT_DESK = 'efrontdesk',
+  BUILDER = 'builder',
 }
 
 export enum Integrations {
@@ -52,7 +56,10 @@ export enum CardNames {
 
 export enum Filters {
   ARRIVAL = 'ARRIVAL',
+  DUEIN = 'DUEIN',
+  DUEOUT = 'DUEOUT',
   INHOUSE = 'INHOUSE',
+  CHECKEDOUT = 'CHECKEDOUT',
   DEPARTURE = 'DEPARTURE',
   OUTGUEST = 'OUTGUEST',
   RESERVATION = 'RESERVATION',
@@ -132,10 +139,10 @@ export const ModuleConfig = {
     filters: {
       [TableNames.GUEST]: {
         tabFilters: [
-          Filters.ARRIVAL,
+          Filters.DUEIN,
           Filters.INHOUSE,
-          Filters.DEPARTURE,
-          Filters.OUTGUEST,
+          Filters.DUEOUT,
+          Filters.CHECKEDOUT,
         ],
       },
     },
@@ -210,6 +217,26 @@ export const ModuleConfig = {
     filters: {},
   },
   [ModuleNames.MARKETING]: {
+    cards: [],
+    tables: [],
+    filters: [],
+  },
+  [ModuleNames.HEDA]: {
+    cards: [],
+    tables: [],
+    filters: [],
+  },
+  [ModuleNames.FREDDIE]: {
+    cards: [],
+    tables: [],
+    filters: [],
+  },
+  [ModuleNames.FRONT_DESK]: {
+    cards: [],
+    tables: [],
+    filters: [],
+  },
+  [ModuleNames.BUILDER]: {
     cards: [],
     tables: [],
     filters: [],

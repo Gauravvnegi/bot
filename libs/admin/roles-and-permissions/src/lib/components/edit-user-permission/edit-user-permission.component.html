@@ -59,17 +59,17 @@
         <div class="field width-half">
           <mat-label class="mat-label">Product Type :</mat-label>
           <mat-form-field>
-            <mat-select formControlName="productType" multiple>
+            <mat-select formControlName="products" multiple>
               <mat-option
-                *ngFor="let product of productTypeList"
-                [value]="product.value"
-                >{{ product.value }}</mat-option
+                *ngFor="let product of userToModDetails?.products"
+                [value]="product"
+                >{{ product.label }}</mat-option
               >
             </mat-select>
             <mat-error
               *ngIf="
-                userForm.get('productType').touched &&
-                userForm.get('productType').hasError('required')
+                userForm.get('products').touched &&
+                userForm.get('products').hasError('required')
               "
             >
               Product Type is required
@@ -81,17 +81,17 @@
         <div class="field width-half">
           <mat-label class="mat-label">Dept :</mat-label>
           <mat-form-field>
-            <mat-select formControlName="deptName" multiple>
+            <mat-select formControlName="departments" multiple>
               <mat-option
-                *ngFor="let product of productTypeList"
-                [value]="product"
-                >{{ product }}</mat-option
+                *ngFor="let depts of userToModDetails?.departments"
+                [value]="depts"
+                >{{ depts.productLabel }}</mat-option
               >
             </mat-select>
             <mat-error
               *ngIf="
-                userForm.get('deptName').touched &&
-                userForm.get('deptName').hasError('required')
+                userForm.get('departments').touched &&
+                userForm.get('departments').hasError('required')
               "
             >
               Deparment Name is required
@@ -310,10 +310,11 @@
           + Add New User
         </div>
       </div>
-      <div *ngIf="productTypeList" class="tabs">
+      <div *ngIf="userToModDetails?.products" class="tabs">
         <hospitality-bot-tab-group
-          [listItems]="productTypeList"
+          [listItems]="userToModDetails.products"
           [selectedIndex]="tabFilterIdx"
+          (selectedTabChange)="onSelectedTabFilterChange($event)"
         ></hospitality-bot-tab-group>
       </div>
 

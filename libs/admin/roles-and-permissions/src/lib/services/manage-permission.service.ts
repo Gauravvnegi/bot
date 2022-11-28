@@ -88,6 +88,10 @@ export class ManagePermissionService extends ApiService {
     return this.get(`/api/v1/user/${userId}`);
   }
 
+  getUserPermission(userId, config): Observable<any> {
+    return this.get(`/api/v1/user/${userId}${config.queryObj}`);
+  }
+
   getManagedUsers(config): Observable<any> {
     return this.get(
       `/api/v1/user/${config.loggedInUserId}/users/${config.queryObj}`

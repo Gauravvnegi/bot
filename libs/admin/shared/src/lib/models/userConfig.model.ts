@@ -6,6 +6,8 @@ export interface Deserializable {
 
 export class UserConfig implements Deserializable {
   permissionConfigs;
+  departments;
+  products;
   firstName;
   lastName;
   jobTitle;
@@ -22,6 +24,7 @@ export class UserConfig implements Deserializable {
       this,
       set({}, 'id', get(input, ['id'])),
       set({}, 'permissionConfigs', get(input, ['permissions'])),
+      set({}, 'departments', get(input, ['departments'])),
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'jobTitle', get(input, ['title'])),
@@ -34,6 +37,16 @@ export class UserConfig implements Deserializable {
     this.brandName = input?.hotelAccess?.chains[0]?.id;
     this.branchName = input?.hotelAccess?.chains[0]?.hotels[length - 1]?.id;
     this.timezone = input?.hotelAccess?.chains[0]?.hotels[length - 1]?.timezone;
+
+    this.products = this.departments.map(({ productLabel, productType }) => ({
+      label: productLabel,
+      value: productType,
+    }));
+
+    this.products = [
+      ...new Map(this.products.map((item) => [item['label'], item])).values(),
+    ];
+
     return this;
   }
 

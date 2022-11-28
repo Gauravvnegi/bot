@@ -56,17 +56,17 @@
         <div class="field width-half">
           <mat-label class="mat-label">Product Type :</mat-label>
           <mat-form-field>
-            <mat-select formControlName="productType" multiple>
+            <mat-select formControlName="products" multiple>
               <mat-option
-                *ngFor="let product of productTypeList"
+                *ngFor="let product of productList"
                 [value]="product"
-                >{{ product }}</mat-option
+                >{{ product.label }}</mat-option
               >
             </mat-select>
             <mat-error
               *ngIf="
-                userForm.get('productType').touched &&
-                userForm.get('productType').hasError('required')
+                userForm.get('products').touched &&
+                userForm.get('products').hasError('required')
               "
             >
               Product Type is required
@@ -78,17 +78,17 @@
         <div class="field width-half">
           <mat-label class="mat-label">Dept :</mat-label>
           <mat-form-field>
-            <mat-select formControlName="deptName" multiple>
+            <mat-select formControlName="deparments" multiple>
               <mat-option
-                *ngFor="let product of productTypeList"
-                [value]="product"
-                >{{ product }}</mat-option
+                *ngFor="let depts of departmentList"
+                [value]="depts"
+                >{{ depts.productLabel }}</mat-option
               >
             </mat-select>
             <mat-error
               *ngIf="
-                userForm.get('deptName').touched &&
-                userForm.get('deptName').hasError('required')
+                userForm.get('deparments').touched &&
+                userForm.get('deparments').hasError('required')
               "
             >
               Deparment Name is required

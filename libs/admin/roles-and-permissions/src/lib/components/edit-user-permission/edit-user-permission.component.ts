@@ -6,7 +6,10 @@ import {
   FormArray,
   FormControl,
 } from '@angular/forms';
-import { UserService } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  UserService,
+} from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { CountryCode } from '@hospitality-bot/admin/shared';
 import { ManagePermissionService } from '../../services/manage-permission.service';
@@ -40,14 +43,8 @@ export class EditUserPermissionComponent implements OnInit {
     jobTitle: string;
   };
 
-  productTypeList = [
-    { label: 'Heda', content: '', value: 'Heda' },
-    { label: 'eFront Desk', content: '', value: 'eFront Desk' },
-    { label: 'eMark-IT', content: '', value: 'eFront Desk' },
-    { label: 'Freddie', content: '', value: 'Freddie' },
-  ];
   teamMember = ['An', 'BS', 'SD', 'RG', 'SF'];
-
+  tabFilterIdx = 0;
   value;
 
   userToModDetails;
@@ -59,6 +56,7 @@ export class EditUserPermissionComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
+    private adminUtilityService: AdminUtilityService,
     private _modal: ModalService,
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
@@ -78,8 +76,8 @@ export class EditUserPermissionComponent implements OnInit {
       lastName: [''],
       jobTitle: ['', Validators.required],
       brandName: ['', Validators.required],
-      productType: ['', Validators.required],
-      deptName: ['', Validators.required],
+      products: ['', Validators.required],
+      departments: ['', Validators.required],
       branchName: ['', Validators.required],
       cc: [''],
       phoneNumber: [''],
@@ -142,8 +140,8 @@ export class EditUserPermissionComponent implements OnInit {
       .subscribe((data) => {
         this.userToModDetails = new UserConfig().deserialize(data);
         this.initLOV();
-        this.initUserPermissions();
         this.userForm.patchValue(this.userToModDetails);
+        this.loadData();
       });
     this.initManager();
     this.registerListeners();
@@ -161,6 +159,29 @@ export class EditUserPermissionComponent implements OnInit {
   registerListeners() {
     this.userForm.get('branchName').disable();
     this.listenForBrandChanges();
+  }
+
+  onSelectedTabFilterChange(event) {
+    this.tabFilterIdx = event.index;
+    this.loadData();
+  }
+
+  loadData() {
+    let queries = [
+      {
+        productType: this.userForm.get('products').value[this.tabFilterIdx]
+          .value,
+      },
+    ];
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams(queries),
+    };
+    this._managePermissionService
+      .getUserPermission(this._route.snapshot.paramMap.get('id'), config)
+      .subscribe((data) => {
+        this._userService.initUserDetails(data);
+        this.initUserPermissions();
+      });
   }
 
   listenForBrandChanges() {

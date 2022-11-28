@@ -100,12 +100,12 @@ export class EditUserPermissionComponent implements OnInit {
     this._userService.uploadProfile(formData).subscribe(
       (response) => {
         this.userForm.get('profileUrl').patchValue([response.fileDownloadUri]);
-        this._snackbarService.openSnackBarAsText('Profile uploaded', '', {
+        this.snackbarService.openSnackBarAsText('Profile uploaded', '', {
           panelClass: 'success',
         });
       },
       ({ error }) => {
-        this._snackbarService.openSnackBarAsText(error.message);
+        this.snackbarService.openSnackBarAsText(error.message);
       }
     );
   }

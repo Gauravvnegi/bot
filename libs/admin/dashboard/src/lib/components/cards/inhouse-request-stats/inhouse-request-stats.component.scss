@@ -7,21 +7,36 @@
 .chart__wrapper {
   display: flex;
   margin-top: 15px;
+  @media screen and (min-width: $XL) {
+    justify-content: space-around;
+  }
+
+  @media screen and (max-width: $L) {
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+
   &--container {
     width: 50%;
     height: 100%;
     transform: scale(1.5) translateY(17%);
-    transform: unset;
+    //transform: unset;
     display: flex;
     justify-content: center;
     align-items: center;
 
     @media only screen and (min-width: $XL) {
       transform: unset;
+      width: 45%;
     }
 
-    @media only screen and (max-width: $L) {
+    @media only screen and (max-width: $XL) {
       transform: unset;
+      canvas {
+        width: 225px !important;
+        height: 100% !important;
+      }
     }
     &-base-chart {
       height: 117px;
@@ -111,7 +126,9 @@ svg text.label {
 }
 .inhouse--chart-rightblock {
   height: 124px;
-
+  @media screen and (max-width: $L) {
+    height: auto;
+  }
   &--status {
     display: flex;
     align-items: center;

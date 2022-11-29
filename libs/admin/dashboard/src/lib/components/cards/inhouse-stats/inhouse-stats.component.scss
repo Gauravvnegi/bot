@@ -3,13 +3,16 @@
 .chart__wrapper {
   display: flex;
   margin-top: 15px;
-  @media (max-width: $tablet) {
-    justify-content: center;
+  @media screen and (min-width: $XL) {
+    justify-content: space-around;
+  }
+  @media screen and (max-width: $L) {
+    justify-content: space-between;
     align-items: center;
     overflow: hidden;
   }
   &--container {
-    width: 50%;
+    width: 45%;
     height: 100%;
     transform: scale(1.5) translateY(17%);
 
@@ -18,7 +21,7 @@
     }
 
     @media only screen and (max-width: $L) {
-      transform: unset;
+      transform: scale(1.5);
     }
     &-base-chart {
       height: 117px;
@@ -264,6 +267,9 @@
 
 :host ::ng-deep .mat-tab-label {
   width: 50%;
+
+  min-width: $half;
+  padding: 0 12px;
 }
 
 :host ::ng-deep .mat-tab-label-active {
@@ -272,7 +278,6 @@
   color: $button-blue;
   opacity: 1;
   font-weight: 600;
-
 }
 
 .comparison-negative {
@@ -281,4 +286,19 @@
 
 .comparison-positive {
   color: $comparison-positive;
+}
+
+@media screen and (max-width: $L) {
+  :host::ng-deep {
+    .mat-tab-label {
+      min-width: $half;
+      padding: 0 12px;
+    }
+    .mat-tab-label-active {
+      font-size: $font18;
+    }
+    .mat-tab-body-content {
+      overflow-x: hidden;
+    }
+  }
 }

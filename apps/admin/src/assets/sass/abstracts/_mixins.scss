@@ -4,7 +4,14 @@
   display: flex;
   justify-content: space-between;
 }
-
+@mixin flex-space-btw-wrap{
+  @include flex-space-between;
+  flex-wrap: wrap;
+}
+@mixin flex-space-between-cen-Algn{
+@include flex-space-between;
+align-items: center;
+}
 @mixin flex-item-center() {
   display: flex;
   align-items: center;
@@ -14,11 +21,18 @@
   display: flex;
   justify-content: center;
 }
-
+@mixin flex-col-justCenter {
+  @include flex-justify-center;
+  flex-direction: column;
+}
 @mixin flex-between-center() {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+@mixin flex-all-center {
+  @include flex-justify-center;
+  align-items: center;
 }
 
 @mixin auth-heading() {

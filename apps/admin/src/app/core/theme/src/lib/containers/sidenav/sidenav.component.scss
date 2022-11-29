@@ -28,6 +28,9 @@
       width: 100%;
     }
   }
+  @media screen and (max-width: $tablet) {
+    @include height(65px);
+  }
 }
 
 .sidebar {
@@ -255,4 +258,11 @@
 
 .collapse ul li a {
   padding-left: 10px;
+}
+
+// tablet
+
+@media screen and (max-width: $tablet) {
+  .sidenav-header {
+  }
 }

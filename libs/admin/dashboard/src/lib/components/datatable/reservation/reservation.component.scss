@@ -80,10 +80,6 @@
   }
 }
 
-// :host ::ng-deep .table-header-text {
-//   font-size: 13px;
-// }
-
 :host ::ng-deep .status-image {
   padding: 5px !important;
 }
@@ -137,12 +133,23 @@
 }
 
 :host ::ng-deep .p-datatable {
-  margin: 0 1.5%;
   margin-top: 20px;
   @media (max-width: $tablet) {
     @include width(100%);
-    @include margin(0 auto);
+    @include margin(10px auto);
     box-shadow: none;
+  }
+  @media (max-width: $XL) {
+    tr {
+      td {
+        p,
+        span,
+        div {
+          white-space: break-spaces !important;
+          word-break: break-word !important;
+        }
+      }
+    }
   }
 }
 
@@ -231,6 +238,8 @@
 :host ::ng-deep {
   .table-data-head {
     color: $dark-blue !important;
+    white-space: break-spaces !important;
+    word-break: break-word !important;
   }
   .mat-chip-list-wrapper {
     width: 83vw !important;

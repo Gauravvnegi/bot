@@ -24,6 +24,7 @@
   @include height(33px);
   background-color: $primary-purple;
   align-items: center;
+  @include padding(10px);
   border-radius: $borderRadius50P;
   @include flex-justify-center();
 
@@ -66,12 +67,15 @@
 
 .dropdown-text {
   font-size: $font12;
+  white-space: nowrap;
   @include margin(0 15px);
   font-weight: 500;
   @media only screen and (max-width: 1200px) {
     font-size: $font12;
   }
-  @media only screen and (max-width: 1000px) {
-    font-size: $font10;
+  @media only screen and (max-width: $tablet) {
+    font-size: $font12;
+    @include margin(0 5px);
+    white-space: nowrap;
   }
 }

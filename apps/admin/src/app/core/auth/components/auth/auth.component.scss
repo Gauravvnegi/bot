@@ -7,12 +7,7 @@
     @include padding-percentage(1%);
     height: 100vh;
     position: relative;
-    @media (max-width: 1024px) {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      @include width-percentage(40.9%);
-    }
+
     &-logo {
       @include height(80);
       @include width(100);
@@ -26,8 +21,10 @@
       @media only screen and (max-width: 1300px) {
         @include padding(20px);
       }
-      @media (max-width: 1024px) {
-        @include width(68.8%);
+
+      @media screen and (max-width: $tablet) {
+        @include margin-top(20%);
+        @include width(90%);
         @include padding(0);
       }
     }
@@ -74,6 +71,10 @@
       bottom: 0px;
       left: 10px;
     }
+    @media screen and (max-width: $tablet) {
+      @include flex-justify-center;
+      @include width-percentage(40.9%);
+    }
   }
   &--right {
     position: relative;
@@ -82,28 +83,22 @@
     background-image: url('/assets/images/auth-banner.webp');
     background-repeat: no-repeat;
     background-size: $full $full;
-    @media (max-width: 1024px) {
-      @include width-percentage(59.1%);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
     &--carousel {
       position: absolute;
-      height: 100%;
-      width: 100%;
+      height: $full;
+      width: $full;
       .fredabg {
         background-image: linear-gradient(132deg, #01a4e9 1%, #0074a6 106%);
         opacity: 0.4;
-        width: 100%;
-        height: 100%;
+        width: $full;
+        height: $full;
       }
 
       .hedabg {
         background-image: linear-gradient(312deg, #ac14b7 99%, #765bd5 1%);
         opacity: 0.4;
-        width: 100%;
-        height: 100%;
+        width: $full;
+        height: $full;
       }
 
       .heda {
@@ -124,18 +119,20 @@
       @include padding(15px 1%);
       @include flex-item-center();
       justify-content: flex-end;
-      @media (max-width: 1024px) {
-        @include padding-top(25px);
-        @include padding-left(26px);
-        @include padding-right(26px);
-      }
+
       a {
         text-decoration: none;
         font-size: $font12;
         font-weight: $bolder;
         @include margin(0px 10px);
         color: $white;
-        @media (max-width: 1024px) {
+      }
+      @media screen and (max-width: $tablet) {
+        top: 0;
+        @include padding-top(25px);
+        @include padding-left(26px);
+        @include padding-right(26px);
+        a {
           font-size: $font14;
         }
       }
@@ -148,35 +145,22 @@
       @include margin(0px 8%);
       @include margin-top(15%);
       color: $white;
-      @media (max-width: 1024px) {
-        flex: 1;
-        justify-content: center;
-        display: flex;
-        flex-direction: column;
-        @include margin-top(0);
-      }
+
       .heading {
         font-size: $font40;
         @include margin(20px 0px);
         @media only screen and (max-width: 1300px) {
           font-size: $font30;
         }
-        @media (max-width: 1024px) {
-          @include margin-bottom(57px);
-        }
       }
       &-option-box {
-        @include flex-space-between();
-        flex-wrap: wrap;
+        @include flex-space-btw-wrap;
         .option {
           width: $half;
           margin-bottom: $margin20;
           @include flex-item-center();
           @include padding(10px);
-          @media (max-width: 1024px) {
-            @include margin-bottom(43px);
-            @include padding(0);
-          }
+
           .material-icons {
             @include margin-right(10px);
           }
@@ -188,30 +172,60 @@
           }
         }
       }
+      @media screen and (max-width: $tablet) {
+        @include flex-col-justCenter;
+
+        .heading {
+          @include margin-bottom(57px);
+        }
+        &-option-box {
+          .option {
+            @include margin-bottom(43px);
+            @include padding(0);
+          }
+        }
+      }
     }
     &-footer {
       @include padding-percentage(1%);
       position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      @include flex-space-between-cen-Algn;
       @include width(96%);
       bottom: 10px;
       font-size: $font14;
       color: $white;
-      @media (max-width: 1024px) {
+      @media (max-width: $tablet) {
         @include margin-bottom(20px);
         @include padding-left(26px);
         @include padding-right(26px);
+        @media screen and (max-width: $M) {
+          bottom: 0;
+          .image {
+            @include width(35%);
+            img {
+              width: $full;
+              height: $full;
+              object-fit: contain;
+            }
+          }
+        }
       }
     }
+    @media screen and (max-width: $tablet) {
+      @include width-percentage(59.1%);
+      @include flex-col-justCenter;
+    }
+  }
+
+  @media screen and (max-width: $tablet) {
+    width: $full;
   }
 }
 :host ::ng-deep .slick-list {
-  height: 100%;
+  height: $full;
 }
 :host ::ng-deep .slick-track {
-  height: 100%;
+  height: $full;
 }
 :host ::ng-deep .carousel--free slick-slide slick-current slick-active {
   position: relative !important;
@@ -227,7 +241,7 @@
   text-align: center;
   padding: 0;
   margin: 0;
-  width: 100%;
+  width: $full;
   height: 30px;
   cursor: pointer;
 }
@@ -246,5 +260,11 @@
       height: 10px;
       width: 10px;
     }
+  }
+}
+
+@media screen and (max-width: $tablet) {
+  :host ::ng-deep .slick-dotted.slick-slider {
+    margin: 0 !important;
   }
 }

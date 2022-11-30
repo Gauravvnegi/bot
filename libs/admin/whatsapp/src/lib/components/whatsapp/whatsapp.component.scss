@@ -25,6 +25,9 @@
       z-index: 4;
       display: none;
     }
+    @media screen and (max-width:$L) {
+      width: 45% !important;
+    }
   }
 
   .no-selected-guest {

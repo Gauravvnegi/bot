@@ -107,6 +107,9 @@
         }
       }
     }
+    @media screen and (max-width: $L) {
+      @include height(170px);
+    }
   }
   &-footer {
     position: absolute;
@@ -119,5 +122,8 @@
     line-height: normal;
     letter-spacing: normal;
     color: $c-gray-72;
+    @media screen and(max-width:$L) {
+      bottom: 5px;
+    }
   }
 }

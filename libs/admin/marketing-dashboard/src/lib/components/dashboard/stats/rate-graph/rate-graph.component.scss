@@ -13,6 +13,11 @@
   @media (max-width: $tablet) {
     @include width(60.7%);
   }
+  .analyticsHeading {
+    @media screen and (max-width: $L) {
+      @include margin-bottom($margin20);
+    }
+  }
 }
 
 .center-circle-progress {

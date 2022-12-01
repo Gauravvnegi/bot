@@ -13,11 +13,11 @@
   position: relative;
   display: flex;
   height: 173px;
-  @media only screen and (max-width: 1100px) {
+  @media only screen and (max-width: $L) {
     height: 138px;
   }
   .graph {
-    @media only screen and (max-width: 1100px) {
+    @media only screen and (max-width: $L) {
       position: absolute;
       top: 17%;
       left: -19%;
@@ -48,6 +48,9 @@
         @media (max-width: 1100px) {
           font-size: 15px;
         }
+        @media screen and (max-width: $L) {
+          font-size: 35px;
+        }
       }
       .comparisonPercent {
         font: normal normal normal 10px/14px Roboto;
@@ -61,6 +64,10 @@
           letter-spacing: 0.72px;
           font: normal normal normal 10px/14px Roboto;
         }
+
+        @media screen and (max-width: $L) {
+          font-size: 12px;
+        }
       }
     }
     .label {
@@ -72,6 +79,9 @@
       @media (max-width: 1024px) {
         font-size: 10px;
       }
+      @media screen and (max-width:$L) {
+        transform: translate(-25px);
+      }
     }
     position: absolute;
     left: 70%;
@@ -79,7 +89,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    @media only screen and (max-width: 1100px) {
+    @media only screen and (max-width: $L) {
       width: fit-content;
       right: 1%;
       left: auto;

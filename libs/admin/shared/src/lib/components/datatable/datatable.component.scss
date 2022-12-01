@@ -319,6 +319,7 @@
   display: inline-flex;
   .mat-chip {
     display: flex;
+    white-space: nowrap;
   }
   &::-webkit-scrollbar {
     height: 6px;

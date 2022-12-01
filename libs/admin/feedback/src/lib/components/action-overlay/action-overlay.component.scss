@@ -12,6 +12,12 @@ button {
   padding: 4px;
   color: $button-blue;
   cursor: pointer;
+  @media screen and (max-width: $L) {
+    @include font-size(10);
+    @include min-width(87px);
+    @include max-width(87px);
+    @include height(28px);
+  }
 }
 
 .example-list {

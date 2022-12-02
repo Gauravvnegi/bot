@@ -114,6 +114,9 @@
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
   color: $primary-purple !important;
+  @media screen and (max-width: $L) {
+    font-size: 14px !important;
+  }
 }
 
 :host ::ng-deep .stat-body-container {

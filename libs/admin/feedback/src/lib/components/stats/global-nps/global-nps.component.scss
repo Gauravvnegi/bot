@@ -79,9 +79,6 @@
       @media (max-width: 1024px) {
         font-size: 10px;
       }
-      @media screen and (max-width:$L) {
-        transform: translate(-25px);
-      }
     }
     position: absolute;
     left: 70%;

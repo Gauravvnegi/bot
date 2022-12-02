@@ -233,6 +233,10 @@
     padding-left: 2px;
     margin-left: 3px;
   }
+@media screen and (max-width: $L) {
+  @include width(170px);
+}
+
 }
 
 .mat-expansion-panel {

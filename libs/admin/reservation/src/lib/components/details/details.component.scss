@@ -587,6 +587,7 @@
   @media screen and (max-width: 1100px) {
     padding: 10px;
   }
+  @media screen and (max-width: $L) {right: 10px;}
 }
 
 .loader {

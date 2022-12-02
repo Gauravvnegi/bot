@@ -20,6 +20,7 @@
       @include padding(30px);
       @media only screen and (max-width: 1300px) {
         @include padding(20px);
+        @include margin-top(50px);
       }
 
       @media screen and (max-width: $tablet) {

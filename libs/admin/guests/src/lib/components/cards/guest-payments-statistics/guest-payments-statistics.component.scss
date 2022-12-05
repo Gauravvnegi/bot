@@ -10,6 +10,9 @@
   position: relative;
   display: flex;
   justify-content: space-around;
+  @media screen and (max-width: $L) {
+    @include padding(20px 0);
+  }
   .detail-container {
     .val {
       font: normal normal bold 25px/30px Roboto;

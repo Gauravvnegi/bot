@@ -138,7 +138,7 @@
   cursor: pointer;
   @media screen and (max-width: $L) {
     @include font-size(12);
-    @include padding(4px);
+    @include padding($padding4);
   }
 }
 .flx {

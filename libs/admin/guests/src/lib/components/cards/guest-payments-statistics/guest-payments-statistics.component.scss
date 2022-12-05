@@ -11,7 +11,7 @@
   display: flex;
   justify-content: space-around;
   @media screen and (max-width: $L) {
-    @include padding(20px 0);
+    @include padding($padding20 0);
   }
   .detail-container {
     .val {

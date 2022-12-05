@@ -73,7 +73,7 @@
         cursor: pointer;
         img {
           filter: brightness(0) invert(1);
-          @include margin-right(10px);
+          @include margin-right($margin10);
         }
 
         .guestInfoEditText {

@@ -7,6 +7,7 @@
     <hospitality-bot-sidenav
       (submenuItems)="subMenuItem($event)"
       (navToggle)="sideNavToggle($event)"
+      [isExpanded]="isExpand"
     ></hospitality-bot-sidenav>
   </div>
   <div
@@ -18,6 +19,7 @@
       [title]="menuTitle"
       [submenuItems]="menuItem"
       [isExpanded]="isExpand"
+      (navToggle)="sideNavToggle($event)"
     ></hospitality-bot-sidenav-expand>
   </div>
 

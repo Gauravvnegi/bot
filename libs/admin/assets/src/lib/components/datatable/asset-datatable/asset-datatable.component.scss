@@ -148,7 +148,10 @@
   .image_url {
     text-overflow: ellipsis;
     overflow: hidden;
-    $white-space: nowrap !important;
+    @media screen and (max-width:$L) {
+      @include max-width(90%);
+      white-space: nowrap !important;
+    }
   }
 }
 

@@ -130,6 +130,24 @@
           }
         }
       }
+      .graphcontainer__graph {
+        canvas {
+          @media screen and (max-width: $L) {
+            height: 220px !important;
+            width: auto !important;
+          }
+        }
+        @media screen and (max-width: $L) {
+          position: absolute;
+          left: -110px;
+          overflow: hidden;
+        }
+      }
+      @media screen and (max-width: $L) {
+        @include width(55%);
+        @include height($full);
+        @include flex-all-center;
+      }
     }
     &__detail {
       width: 50%;
@@ -146,6 +164,9 @@
         font: normal normal bold 12px/16px Roboto;
         letter-spacing: 0.72px;
         color: $quote-color;
+      }
+      @media screen and (max-width: $L) {
+        @include width(45%);
       }
     }
   }

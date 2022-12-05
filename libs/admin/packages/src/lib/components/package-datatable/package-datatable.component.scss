@@ -252,3 +252,8 @@
   outline: 0 none;
   height: 80px !important;
 }
+
+:host ::ng-deep .p-datatable-resizable .p-datatable-tbody>tr>td{
+  white-space: break-spaces !important;
+  word-break: break-word !important;
+}

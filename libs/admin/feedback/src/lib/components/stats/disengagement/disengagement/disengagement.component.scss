@@ -72,6 +72,15 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        @media screen and (max-width: $L) {
+          @include font-size(12);
+          div {
+            color: $quote-color;
+          }
+          span {
+            color: $navy-blue;
+          }
+        }
       }
       .progress {
         height: 10px;

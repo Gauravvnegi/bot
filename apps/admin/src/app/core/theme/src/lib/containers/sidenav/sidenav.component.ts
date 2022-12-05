@@ -4,6 +4,7 @@ import {
   Output,
   OnDestroy,
   EventEmitter,
+  Input
 } from '@angular/core';
 import { ADMIN_ROUTES, DEFAULT_ROUTES } from './sidenav-admin.routes';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -29,7 +30,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   public normalFontColor: string;
   public dividerBgColor: string;
   public headerBgColor: string;
-  isExpanded = true;
+  @Input() isExpanded: boolean = true;
   status = true;
   $subscription = new Subscription();
   branchConfig;

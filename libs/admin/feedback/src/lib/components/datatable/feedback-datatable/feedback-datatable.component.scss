@@ -618,4 +618,10 @@
   padding: 4px 10px;
   color: $button-blue;
   cursor: pointer;
+
+  @media screen and (max-width: $L) {
+    @include font-size(12);
+    @include height(28px);
+    align-items: center;
+  }
 }

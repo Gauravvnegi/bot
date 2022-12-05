@@ -50,6 +50,9 @@
 
 :host ::ng-deep .mat-tab-label {
   min-width: 12vw !important;
+  @media screen and (max-width: $L) {
+    @include padding(0 6px);
+  }
 }
 :host
   ::ng-deep
@@ -61,6 +64,10 @@
   font-size: 14px !important;
   font-weight: 500;
   letter-spacing: 0.84px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 :host ::ng-deep .mat-tab-label-active > .mat-tab-label-content {
   font-size: 14px !important;

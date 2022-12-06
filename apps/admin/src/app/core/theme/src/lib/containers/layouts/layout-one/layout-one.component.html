@@ -1,4 +1,9 @@
 <div class="wrapper">
+  <div *ngIf="showNotification" class="flash-notification">
+    <p [ngStyle]="{color: flashNotification.notificationTextColor}">
+      {{ flashNotification.notificationMessage }}
+    </p>
+  </div>
   <div
     class="sidebar-panel"
     id="sidebar"

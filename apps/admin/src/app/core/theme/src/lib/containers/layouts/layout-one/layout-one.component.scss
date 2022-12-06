@@ -34,6 +34,22 @@
   }
 }
 
+.flash-notification {
+  position: absolute;
+  @include flex-justify-center();
+  left: 80px;
+  right: 0;
+  z-index: 2222;
+  top: 16px;
+  p {
+    max-width: 70%;
+    text-align: center;
+    padding: 8px 8px 7px;
+    border-radius: 5px;
+    background-color: $notification;
+  }
+}
+
 .filter-range-wrapper {
   width: 30%;
   @include width(30%);

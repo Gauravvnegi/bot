@@ -40,6 +40,7 @@ import { Temp000002RadioComponent } from './presentational/temp000002-radio/temp
 import { InvoiceNotGeneratedComponent } from './containers/invoice-not-generated/invoice-not-generated.component';
 import { CancelBookingComponent } from './containers/cancel-booking/cancel-booking.component';
 import { ExpiredBookingComponent } from './containers/expired-booking/expired-booking.component';
+import { AddressComponent } from './containers/address/address.component';
 
 export const sharedAuthRoutes: Route[] = [
   {
@@ -160,5 +161,6 @@ export class Temp000002RoutingModule {
     InvoiceNotGeneratedComponent,
     CancelBookingComponent,
     ExpiredBookingComponent,
+    AddressComponent
   ];
 }

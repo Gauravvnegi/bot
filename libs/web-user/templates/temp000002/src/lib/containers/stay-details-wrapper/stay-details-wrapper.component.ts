@@ -17,26 +17,26 @@ import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/do
 })
 export class StayDetailsWrapperComponent extends BaseStayDetailsWrapperComponent {
   constructor(
-    stayDetailService: StayDetailsService,
-    amenitiesService: AmenitiesService,
-    hotelService: HotelService,
-    reservationService: ReservationService,
-    snackBarService: SnackBarService,
-    translateService: TranslateService,
-    stepperService: StepperService,
-    buttonService: ButtonService,
-    documentDetailService: DocumentDetailsService
+     _stayDetailService: StayDetailsService,
+     _amenitiesService: AmenitiesService,
+     _hotelService: HotelService,
+     _reservationService: ReservationService,
+     _snackBarService: SnackBarService,
+     _translateService: TranslateService,
+     _stepperService: StepperService,
+     _buttonService: ButtonService,
+     _documentDetailService: DocumentDetailsService
   ) {
     super(
-      stayDetailService,
-      amenitiesService,
-      hotelService,
-      reservationService,
-      snackBarService,
-      translateService,
-      stepperService,
-      buttonService,
-      documentDetailService
+      _stayDetailService,
+      _amenitiesService,
+      _hotelService,
+      _reservationService,
+      _snackBarService,
+      _translateService,
+      _stepperService,
+      _buttonService,
+      _documentDetailService
     );
     this.self = this;
   }

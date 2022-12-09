@@ -28,6 +28,11 @@
   padding: 2rem 20px;
   margin: 0 2rem;
   background-color: white;
+  height: -webkit-fill-available;
+  overflow-y: auto;
+  @media only screen and (min-width: $M) {
+    padding: 2rem 20px 7rem;
+  }
 }
 
 :host ::ng-deep .mat-expanded {
@@ -40,12 +45,12 @@
     hospitality-bot-temp000002-button {
       width: $full-width;
     }
-    left:0;
+    left: 0;
   }
 }
 
 :host ::ng-deep .container {
-  max-width: 1300px;
+  max-width: $full;
   margin: 0 auto;
   margin-bottom: $margin-large;
 
@@ -70,7 +75,7 @@
 ::ng-deep .mat {
   &-horizontal-stepper-header-container {
     padding: 0 4%;
-    max-width: 1300px;
+    max-width: $full;
     margin: 0 auto;
   }
   &-step-label {

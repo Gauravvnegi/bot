@@ -82,3 +82,11 @@
     stroke-dasharray: 0 100;
   }
 }
+
+
+
+:host ::ng-deep{
+  .mat-step-header.cdk-keyboard-focused, .mat-step-header.cdk-program-focused, .mat-step-header:hover{
+    background-color: transparent;
+  }
+}

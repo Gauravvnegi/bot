@@ -6,7 +6,13 @@
   align-items: center;
   background-color: var(--footer-background-color, $footer-background-color);
   padding: $padding-medium;
-  
+  @media screen and (min-width: $M) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99;
+  }
   &--text {
     font-size: $font-responsive-small;
     @include flex-justify-center();

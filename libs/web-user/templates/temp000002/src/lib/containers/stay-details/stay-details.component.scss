@@ -58,7 +58,7 @@
     }
 
     &-item {
-      width: 25%;
+      width: 50%;
       align-items: center;
       @include flex-space-between();
     }
@@ -121,4 +121,21 @@
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
   border-top: 8px solid;
+}
+
+:host ::ng-deep .adult_field {
+  .input_field {
+    .mat-form-field .mat-form-field-infix .mat-form-field-label {
+      display: none;
+    }
+  }
+}
+
+.required {
+  position: relative;
+  .astric {
+    position: absolute;
+    left: 134px;
+    top: 4px;
+  }
 }

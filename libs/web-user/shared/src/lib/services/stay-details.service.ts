@@ -221,15 +221,15 @@ export class StayDetailsService extends ApiService {
     if (addressEnable) {
       data['address'] = {
         addressLines: [
-          stayDetails.address.addressLine1,
-          stayDetails.address.addressLine2,
+          stayDetails.address?.addressLine1,
+          stayDetails.address?.addressLine2,
         ],
-        city: stayDetails.address.city,
-        state: stayDetails.address.state,
-        countryCode: countries.filter(
-          (item) => item.value === stayDetails.address.country
+        city: stayDetails.address?.city,
+        state: stayDetails.address?.state,
+        countryCode: countries?.filter(
+          (item) => item.value === stayDetails.address?.country
         )[0].key,
-        postalCode: stayDetails.address.postalCode,
+        postalCode: stayDetails.address?.postalCode,
       };
     }
     return {

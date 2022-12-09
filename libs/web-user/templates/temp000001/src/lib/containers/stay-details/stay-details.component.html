@@ -34,12 +34,16 @@
           ></web-user-input>
         </div>
         <div class="wrapper__item travelling__info">
-          <web-user-label
-            [settings]="stayDetailsConfig.travellingWithLabel"
-          ></web-user-label>
+          <div class="required">
+            <web-user-label
+              [settings]="stayDetailsConfig.travellingWithLabel"
+            ></web-user-label>
+            <span class="astric" *ngIf="stayDetailsConfig.adultGuest.required">*</span>
+          </div>
+
           <div class="travelling__info--block">
             <div class="travelling__info--block-item">
-              <div class="wrapper__input">
+              <div class="wrapper__input adult_field">
                 <web-user-input
                   [parentForm]="stayDetailsForm"
                   [name]="'adultsCount'"

@@ -257,7 +257,7 @@
 }
 
 :host ::ng-deep .ng-star-inserted{
-  padding: 0 20px;
+  padding: 0 $padding20 $padding20;
 }
 
 :host ::ng-deep .mat-dialog-container{

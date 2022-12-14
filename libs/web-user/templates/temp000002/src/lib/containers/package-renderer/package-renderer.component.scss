@@ -182,6 +182,9 @@
 
 :host ::ng-deep .next-button {
   @include primary-button();
+  @media  only screen and (max-width: $M){
+    width: 200px !important;
+  }
 }
 
 .subPackage_img {

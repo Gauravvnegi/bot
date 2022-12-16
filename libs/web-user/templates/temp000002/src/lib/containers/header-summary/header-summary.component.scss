@@ -29,12 +29,18 @@
   position: absolute;
   right: 14px;
   top: 0px;
+  @media screen and (max-width: $S) {
+    right:0;
+  }
 }
 
 .temp-div {
   width: 33%;
   @media screen and (max-width: 700px) {
     width: 15%;
+  }
+  @media screen and (max-width:$S){
+    width: 0;
   }
 }
 
@@ -67,6 +73,9 @@
   position: absolute;
   top: 10px;
   right: 10px;
+   @media screen and (max-width: $S) {
+    right:0;
+  }
 }
 
 .header-summary {

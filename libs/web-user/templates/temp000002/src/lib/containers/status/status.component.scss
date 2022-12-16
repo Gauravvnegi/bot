@@ -124,6 +124,7 @@
         margin-left: 10px;
         @media screen and (max-width: $M) {
           font-size: $font-small;
+          margin-left: $margin5;
         }
       }
       mat-icon {
@@ -141,6 +142,7 @@
     }
     @media screen and (max-width: 700px) {
       font-size: 14px;
+      margin:$margin-small $margin5 ;
     }
   }
   &--label {
@@ -258,6 +260,10 @@
 
 :host ::ng-deep .ng-star-inserted{
   padding: 0 $padding20 $padding20;
+
+  @media screen and (max-width: $S) {
+    padding: 0 2px $padding20;
+  }
 }
 
 :host ::ng-deep .mat-dialog-container{

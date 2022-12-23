@@ -6,6 +6,43 @@ export const ADMIN_ROUTES = [
     url: 'assets/svg/dashboard.svg',
   },
   {
+    path: 'create-with',
+    title: 'Create With',
+    url: 'assets/svg/efrontdesk.svg',
+    children: [
+      {
+        path: 'create-with/',
+        title: 'Dashboard',
+        children: null,
+        url: 'assets/svg/guest-tab.svg',
+      },
+      {
+        path: 'create-with/marketing-seo',
+        title: 'Marketing & SEO',
+        children: null,
+        url: 'assets/svg/guest-tab.svg',
+      },
+      {
+        path: 'create-with/theme',
+        title: 'Themes',
+        children: null,
+        url: 'assets/svg/guest-tab.svg',
+      },
+      {
+        path: 'create-with/page',
+        title: 'Pages',
+        children: null,
+        url: 'assets/svg/guest-tab.svg',
+      },
+      {
+        path: 'create-with/blog',
+        title: 'Blogs',
+        children: null,
+        url: 'assets/svg/guest-tab.svg',
+      },
+    ],
+  },
+  {
     path: 'efrontdesk',
     title: 'eFrontdesk',
     url: 'assets/svg/efrontdesk.svg',

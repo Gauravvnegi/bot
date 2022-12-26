@@ -11,11 +11,11 @@
       />
     </div>
     <div class="menu_button" (click)="toggleMenuButton()">
+      <img class="onHoverShow" src="assets/svg/horizontal-lines.svg" />
       <img
+        class="onHoverHide"
         [src]="
-          isExpanded
-            ? 'assets/svg/vertical-lines.svg'
-            : 'assets/svg/horizontal-lines.svg'
+          isExpanded ? 'assets/svg/forward.svg' : 'assets/svg/backward.svg'
         "
       />
     </div>

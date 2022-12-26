@@ -37,6 +37,7 @@ export class MainComponent implements OnInit {
         sameSite: 'None',
         secure: true,
         path: '/',
+        domain: 'botshot.ai',
       });
     });
   }

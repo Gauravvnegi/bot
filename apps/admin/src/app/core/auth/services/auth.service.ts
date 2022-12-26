@@ -102,4 +102,8 @@ export class AuthService extends ApiService {
   logout(userIdParam: string): Observable<any> {
     return this.post(`/api/v1/user/${userIdParam}/logout`, {});
   }
+
+  verifyPlatformAccessToken(data): Observable<any> {
+    return this.post(`/api/v1/user/verify-token`, data);
+  }
 }

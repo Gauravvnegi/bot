@@ -92,6 +92,13 @@ const appRoutes: Route[] = [
         component: ComingSoonComponent,
         // canActivate: [LoadGuard],
       },
+      {
+        path: 'create-with',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/create-with').then(
+            (m) => m.AdminCreateWithModule
+          ),
+      },
       { path: '**', redirectTo: '404' },
       { path: '404', component: DashboardErrorComponent },
     ],

@@ -51,8 +51,6 @@ export class LoginComponent implements OnInit {
   }
 
   autoLoginWithAccessToken() {
-    //call an api to verify token .
-    // if verification success auto login
     const data = {
       platformReferer: this.platformReferer,
       platformAccessToken: this.platformAccessToken,
@@ -66,7 +64,6 @@ export class LoginComponent implements OnInit {
         }
       },
       ({ error }) => {
-        this.isSigningIn = false;
         this._snackbarService
           .openSnackBarWithTranslate(
             {

@@ -11,7 +11,7 @@ export const ADMIN_ROUTES = [
     url: 'assets/svg/efrontdesk.svg',
     children: [
       {
-        path: 'create-with/',
+        path: 'create-with/dashboard',
         title: 'Dashboard',
         children: null,
         url: 'assets/svg/guest-tab.svg',

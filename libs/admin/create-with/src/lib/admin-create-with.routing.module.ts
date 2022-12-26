@@ -13,7 +13,7 @@ const appRoutes: Route[] = [
     component: MainComponent,
     children: [
       {
-        path: '',
+        path: 'dashboard',
         component: DashboardComponent,
       },
       {
@@ -31,6 +31,10 @@ const appRoutes: Route[] = [
       {
         path: 'blog',
         component: BlogComponent,
+      },
+      {
+        path: '',
+        redirectTo: 'dashboard',
       },
     ],
   },

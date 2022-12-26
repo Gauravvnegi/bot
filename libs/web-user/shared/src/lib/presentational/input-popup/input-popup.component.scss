@@ -90,7 +90,7 @@
 @media screen and (max-width: 650px) {
   .popup__wrapper {
     position: relative;
-    width: 75vw !important;
+    width: $full !important;
     min-height: 50vh !important;
   }
 }

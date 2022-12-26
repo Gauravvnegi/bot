@@ -132,6 +132,9 @@
         height: auto;
         width: auto;
       }
+      @media screen and (max-width: $S) {
+        height: auto;
+      }
     }
     &--disclaimer {
       margin-top: $margin-medium;
@@ -142,7 +145,6 @@
     }
     @media screen and (max-width: 700px) {
       font-size: 14px;
-      margin:$margin-small $margin5 ;
     }
   }
   &--label {

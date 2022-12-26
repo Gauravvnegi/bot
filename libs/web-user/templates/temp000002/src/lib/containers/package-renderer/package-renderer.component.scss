@@ -180,13 +180,9 @@
   @include secondary-button();
 }
 
-:host ::ng-deep .next-button {
+:host ::ng-deep .save-button {
   @include primary-button();
-  @media  only screen and (max-width: $M){
-    width: 200px !important;
-  }
 }
-
 .subPackage_img {
   width: 50px;
   height: 50px;

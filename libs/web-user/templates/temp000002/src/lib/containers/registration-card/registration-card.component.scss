@@ -4,9 +4,12 @@
   @include flex-justify-center();
 }
 
-.reg-card-wrapper{
+.reg-card-wrapper {
   height: 80vh;
   width: 75vw;
+  @media screen and (max-width: $S) {
+    margin: 0 auto;
+  }
 }
 
 :host ::ng-deep .next-button {
@@ -33,7 +36,7 @@
 }
 
 .pdf-header {
-	@include flex-space-between();
+  @include flex-space-between();
 }
 
 .modal-header {
@@ -46,8 +49,11 @@
 }
 
 .modal-title {
-	width: 98%;
-	text-align: center;
+  width: 98%;
+  text-align: center;
+  @media screen and (max-width: $S) {
+    width: auto;
+  }
 }
 
 .modal-body {

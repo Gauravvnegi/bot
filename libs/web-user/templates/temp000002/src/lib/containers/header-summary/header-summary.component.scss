@@ -36,7 +36,7 @@
 
 .temp-div {
   width: 33%;
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: $M) {
     width: 15%;
   }
   @media screen and (max-width:$S){
@@ -53,16 +53,27 @@
   p {
     text-align: center;
     font-weight: $bolder;
+    @media screen and (max-width: $S) {
+      text-align: left;
+    }
   }
   span {
     text-align: center;
     font-weight: 100;
     color: #a7a1a1;
     padding: 5px;
+    @media screen and (max-width: $S) {
+      text-align: left;
+      padding: 5px 0;
+    }
   }
   @media only screen and (max-width: $M) {
-    font-size: $font-responsive-small;
+    font-size: $font14;
     width: 70%;
+  }
+  @media screen and (max-width: $S) {
+    margin: 0 auto;
+    text-align: left;
   }
 }
 
@@ -80,6 +91,9 @@
 
 .header-summary {
   width: 75vw;
+  @media screen and (max-width: $S) {
+    margin: 0 auto;
+  }
 }
 
 .modal-body {

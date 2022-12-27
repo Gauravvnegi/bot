@@ -21,7 +21,7 @@
     <div *ngIf="guestDetail && guestDetail.guests.length">
       <div class="section--heading">Guest Details</div>
       <div class="section--content" *ngFor="let guest of guestDetail.guests">
-        <div class="section--content--container">
+        <div class="section--content--container min-width">
           <div class="section--content--container--title">
             {{ guest.type === 'primary' ? 'Full Name (Primary)' : 'Full Name' }}
           </div>
@@ -31,7 +31,7 @@
             {{ guest.lastName }}
           </div>
         </div>
-        <div class="section--content--container">
+        <div class="section--content--container min-width">
           <div class="section--content--container--title">Phone No.</div>
           <div class="section--content--container--value">
             {{
@@ -43,7 +43,7 @@
             }}
           </div>
         </div>
-        <div class="section--content--container">
+        <div class="section--content--container min-width">
           <div class="section--content--container--title">Email ID</div>
           <div class="section--content--container--value">
             {{ guest.contactDetails.emailId || '-' }}
@@ -274,31 +274,5 @@
         </div>
       </div>
     </div>
-    <!-- <div>
-      <div class="section--heading">Terms & Conditions</div>
-      <div class="section--content">
-        <div
-          class="section--content--label"
-          *ngIf="summaryFG?.get('privacyPolicy')"
-        >
-          <web-user-checkbox
-            [parentForm]="summaryFG"
-            [name]="'termsStatus'"
-            (onValueChange)="setTermsStatus($event)"
-          >
-          </web-user-checkbox>
-          <div style="margin-left: 10px;">
-            <label>
-              I agree to
-              <a
-                [href]="_reservationService.reservationData.hotel.termsUrl"
-                target="_blank"
-                >Terms & Conditions</a
-              ></label
-            >
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </ng-container>

@@ -19,6 +19,9 @@
   background-color: $white;
   border-radius: 0 0 $border-radius-small $border-radius-small;
   padding-bottom: 20px;
+  @media only screen and (min-width: $M) {
+     padding-bottom: $padding50;
+  }
 }
 
 :host ::ng-deep .mat-tab-header {
@@ -39,14 +42,13 @@
   img {
     filter: contrast(0);
   }
-  @media only screen and (max-width: $M) {
+  @media only screen and (max-width: $T) {
     padding: $padding-small;
-  }
-  @media screen and (min-width: $L) {
     width: 50%;
+    height: $full;
   }
-  @media screen and (min-width: $M) and (max-width: $L) {
-    width: 45%;
+  @media screen and (min-width: $T) {
+    width: 50%;
   }
 }
 
@@ -86,11 +88,8 @@
   img {
     filter: contrast(1);
   }
-  @media screen and (min-width: $L) {
+  @media screen and (max-width: $T) {
     width: 50%;
-  }
-  @media screen and (min-width: $M) and (max-width: $L) {
-    width: 45%;
   }
 }
 
@@ -103,8 +102,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media only screen and (max-width: $M) {
-    width: 40.7vw;
+  @media only screen and (max-width: $L) {
+    width: 38.7vw;
   }
 }
 
@@ -128,7 +127,7 @@
 
 .info-label {
   display: flex;
-  @media only screen and (max-width: $T) {
+  @media only screen and (max-width: $L) {
     display: none;
   }
 }

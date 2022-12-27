@@ -44,15 +44,27 @@
   @media screen and (max-width: $S) {
     padding: 10px 5px;
   }
+  .cross {
+    background-color: transparent;
+    span {
+      color: $black;
+      font-size: 24px;
+      font-weight: 900;
+      font-family: sans-serif;
+    }
+  }
 }
 .req_wrapper {
   position: absolute;
-  top: 50px;
+  top: 90px;
   box-sizing: border-box;
   width: $full;
 
-  @media screen and (max-width:$L) {
+  @media screen and (max-width: $L) {
     left: 0;
+  }
+  @media screen and (max-width: $S) {
+    top: 50px;
   }
 }
 @media screen and (max-width: $S) {
@@ -63,7 +75,7 @@
     margin: 0 auto;
     .cross_holder {
       .cross {
-        padding: 2px 6px;
+        padding-right: 5px;
       }
     }
   }

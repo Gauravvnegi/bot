@@ -223,6 +223,9 @@
   @media screen and (max-width: $M) {
     flex-wrap: wrap;
   }
+  .min-width {
+    min-width: 33%;
+  }
 }
 
 .link {
@@ -260,14 +263,14 @@
   }
 }
 
-:host ::ng-deep .ng-star-inserted{
+:host ::ng-deep .ng-star-inserted {
   padding: 0 $padding20 $padding20;
 
   @media screen and (max-width: $S) {
-    padding: 0 2px $padding20;
+    padding: 0 2px $padding5;
   }
 }
 
-:host ::ng-deep .mat-dialog-container{
+:host ::ng-deep .mat-dialog-container {
   padding: inherit !important;
 }

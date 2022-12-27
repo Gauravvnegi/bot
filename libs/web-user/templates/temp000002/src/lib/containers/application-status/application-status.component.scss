@@ -110,7 +110,7 @@
 
 .section--content {
   @include flex-space-between();
-  margin: 0 $margin-medium;
+  margin: $margin20 $margin-medium;
   &--health {
     flex-direction: column;
     margin: $margin-small $margin-medium;
@@ -217,6 +217,9 @@
   }
   @media screen and (max-width: $M) {
     flex-wrap: wrap;
+  }
+  .min-width {
+    min-width: 33%;
   }
 }
 

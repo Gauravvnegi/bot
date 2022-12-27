@@ -23,6 +23,7 @@
   padding-bottom: $padding-small;
   width: 100%;
   position: relative;
+  background-color: #f4f5f7;
 }
 
 .close_wrapper {
@@ -30,7 +31,7 @@
   right: 14px;
   top: 0px;
   @media screen and (max-width: $S) {
-    right:0;
+    right: 5px;
   }
 }
 
@@ -39,7 +40,7 @@
   @media screen and (max-width: $M) {
     width: 15%;
   }
-  @media screen and (max-width:$S){
+  @media screen and (max-width: $S) {
     width: 0;
   }
 }
@@ -53,9 +54,6 @@
   p {
     text-align: center;
     font-weight: $bolder;
-    @media screen and (max-width: $S) {
-      text-align: left;
-    }
   }
   span {
     text-align: center;
@@ -74,6 +72,7 @@
   @media screen and (max-width: $S) {
     margin: 0 auto;
     text-align: left;
+    @include flex-col-center-align;
   }
 }
 
@@ -84,8 +83,8 @@
   position: absolute;
   top: 10px;
   right: 10px;
-   @media screen and (max-width: $S) {
-    right:0;
+  @media screen and (max-width: $S) {
+    right: 0;
   }
 }
 
@@ -93,6 +92,7 @@
   width: 75vw;
   @media screen and (max-width: $S) {
     margin: 0 auto;
+    width: $full;
   }
 }
 

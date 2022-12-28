@@ -179,8 +179,8 @@
     &--value {
       font-size: $font-large;
       font-weight: $bolder;
-      @media only screen and (max-width: $T) {
-        font-size: 17px;
+      @media only screen and (max-width: $tab-size) {
+        font-size: $font17;
       }
     }
     &--value--container {
@@ -193,12 +193,15 @@
         @media screen and (max-width: 700px) {
           margin-right: 0;
         }
+        @media only screen and (max-width: $tab-size) {
+          font-size: $font17;
+        }
       }
       @media screen and (max-width: 700px) {
         justify-content: space-between;
       }
-      @media only screen and (max-width: $T) {
-        font-size: 17px;
+      @media only screen and (max-width: $tab-size) {
+        font-size: $font17;
       }
     }
     @media screen and (max-width: $M) {

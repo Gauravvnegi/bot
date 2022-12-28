@@ -24,8 +24,8 @@
   min-height: 35vh !important;
   margin: 0 auto;
 
-  @media screen and (max-width: $T) {
-    height: 40vh;
+  @media screen and (max-width: $tab-size) {
+    min-height: 30vh !important;
   }
 }
 .cross_holder {
@@ -59,19 +59,19 @@
   top: 90px;
   box-sizing: border-box;
   width: $full;
-
+  padding-bottom: $padding20;
   @media screen and (max-width: $L) {
     left: 0;
   }
   @media screen and (max-width: $S) {
-    top: 50px;
+    top: 60px;
   }
 }
 @media screen and (max-width: $S) {
   .popup__wrapper {
     padding: 0 $padding-large;
     width: 15rem;
-    min-height: 50vh !important;
+    min-height: 42vh !important;
     margin: 0 auto;
     .cross_holder {
       .cross {

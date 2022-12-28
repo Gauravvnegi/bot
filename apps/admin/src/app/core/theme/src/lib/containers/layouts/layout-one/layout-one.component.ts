@@ -18,6 +18,7 @@ import { SubscriptionPlanService } from '../../../services/subscription-plan.ser
 import { trigger, transition, animate, style } from '@angular/animations';
 import { LoadingService } from '../../../services/loader.service';
 import { NotificationService } from '../../../services/notification.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -44,9 +45,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   outlets = [];
   lastUpdatedAt: string;
   isGlobalFilterVisible = false;
-  showNotification= false;
+  showNotification = false;
   flashNotification: any;
-  delayTime= layoutConfig.notificationDelayTime;
+  delayTime = layoutConfig.notificationDelayTime;
   isDetailPageVisible = false;
   isNotificationVisible = false;
   private $subscription = new Subscription();
@@ -84,7 +85,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private subscriptionPlanService: SubscriptionPlanService,
     private loadingService: LoadingService,
     private notificatonService: NotificationService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private cookieService: CookieService
   ) {
     this.initFG();
   }
@@ -338,6 +340,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.firebaseMessagingService.destroySubscription();
         this._authService.clearToken();
+        this._authService.deletePlatformRefererTokens(this.cookieService);
         location.reload();
       });
   }

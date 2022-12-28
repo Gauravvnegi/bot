@@ -106,4 +106,24 @@ export class AuthService extends ApiService {
   verifyPlatformAccessToken(data): Observable<any> {
     return this.post(`/api/v1/user/verify-token`, data);
   }
+
+  deletePlatformRefererTokens(cookieService) {
+    const tokensToRemove = [
+      'authorizationToken',
+      'accessToken',
+      'refreshToken',
+      'accessRefreshToken',
+      'user',
+    ];
+
+    tokensToRemove.forEach((token) =>
+      cookieService.set(token, null, {
+        sameSite: 'None',
+        secure: true,
+        path: '/',
+        domain: 'botshot.ai',
+        expires: -1,
+      })
+    );
+  }
 }

@@ -8,15 +8,25 @@
       <img
         [src]="branchConfig.logoUrl"
         onerror="this.src='assets/images/hotelhilltop.png';"
+        alt=""
       />
     </div>
     <div class="menu_button" (click)="toggleMenuButton()">
-      <img class="onHoverShow" src="assets/svg/horizontal-lines.svg" />
+      <img
+        class="onHoverShow"
+        [src]="
+          isExpanded
+            ? 'assets/svg/backward.svg'
+            : 'assets/svg/horizontal-lines.svg'
+        "
+        alt=""
+      />
       <img
         class="onHoverHide"
         [src]="
-          isExpanded ? 'assets/svg/forward.svg' : 'assets/svg/backward.svg'
+          isExpanded ? 'assets/svg/backward.svg' : 'assets/svg/forward.svg'
         "
+        alt=""
       />
     </div>
   </div>

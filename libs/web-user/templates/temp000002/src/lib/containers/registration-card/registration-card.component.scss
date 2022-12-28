@@ -2,11 +2,18 @@
 
 .save-button {
   @include flex-justify-center();
+  @media screen and (max-width: $S) {
+    padding-bottom: $padding20;
+  }
 }
 
-.reg-card-wrapper{
+.reg-card-wrapper {
   height: 80vh;
   width: 75vw;
+  @media screen and (max-width: $S) {
+    margin: 0 auto;
+    width: $full;
+  }
 }
 
 :host ::ng-deep .next-button {
@@ -17,6 +24,9 @@
   position: absolute;
   right: 14px;
   top: 0px;
+  @media screen and (max-width: $S) {
+    right: 5px;
+  }
 }
 
 .payment-wrapper {
@@ -33,27 +43,36 @@
 }
 
 .pdf-header {
-	@include flex-space-between();
+  @include flex-space-between();
 }
 
 .modal-header {
   padding: 10px 0px;
   @include flex-space-between();
-
-	padding-bottom: $padding-small;
+  background-color: #f4f5f7;
+  padding-bottom: $padding-small;
   width: $full-width;
   position: relative;
+  @media screen and (max-width: $S) {
+    justify-content: center;
+  }
 }
 
 .modal-title {
-	width: 98%;
-	text-align: center;
+  width: 98%;
+  text-align: center;
+  @media screen and (max-width: $S) {
+    width: auto;
+  }
 }
 
 .modal-body {
   margin-bottom: $margin-small;
-	width: $full-width;
-	height: 65vh;
+  width: $full-width;
+  height: 65vh;
+  @media screen and (max-width: $S) {
+    height: 62vh;
+  }
 }
 
 // .modal-footer {
@@ -68,9 +87,9 @@
 }
 
 .modal--link {
-	text-decoration: underline;
-	color: mediumblue;
-	cursor: pointer;
+  text-decoration: underline;
+  color: mediumblue;
+  cursor: pointer;
 }
 
 .signature-container {
@@ -85,14 +104,18 @@
   .signature--tagline {
     text-align: center;
   }
+  position: relative;
+  .body-height {
+    height: calc(100% - 50px);
+  }
 }
 
 pdf-viewer {
-	display: block;
+  display: block;
   height: calc(51vh - 80px);
-	border: 1px solid rgb(243, 241, 241);
-	border-radius: 4px;
-	padding-bottom: 2px;
+  border: 1px solid rgb(243, 241, 241);
+  border-radius: 4px;
+  padding-bottom: 2px;
 }
 
 .text-container {
@@ -116,11 +139,14 @@ pdf-viewer {
 }
 
 .reg-card-container {
-	margin-top: $margin-small;
-	// min-height: calc(65vh - 50px);
-	// max-height: calc(65vh - 51px);
+  margin-top: $margin-small;
+  // min-height: calc(65vh - 50px);
+  // max-height: calc(65vh - 51px);
 }
 
-:host ::ng-deep .signature-image-container{
+:host ::ng-deep .signature-image-container {
   margin-top: $margin-large;
+  @media screen {
+    margin-top: $margin5;
+  }
 }

@@ -10,9 +10,13 @@
 .reg-card-wrapper {
   height: 80vh;
   width: 75vw;
+  @media screen and (max-width: $L) {
+    height: 78vh;
+  }
   @media screen and (max-width: $S) {
     margin: 0 auto;
     width: $full;
+    height: 80vh;
   }
 }
 

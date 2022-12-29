@@ -126,6 +126,9 @@
           font-size: $font-small;
           margin-left: $margin5;
         }
+        @media screen and (max-width: $tab-size) {
+          margin-left: 0;
+        }
       }
       mat-icon {
         font-size: 35px;
@@ -188,6 +191,9 @@
       @media only screen and (max-width: $T) {
         font-size: 17px;
       }
+      @media screen and (max-width: $tab-size) {
+        font-size: $font14;
+      }
     }
     &--value--container {
       font-size: $font-large;
@@ -240,7 +246,7 @@
 .margin-added {
   @media screen and (max-width: 700px) {
     margin-left: 15%;
-    margin-top: 3%;
+    padding-bottom: 8%;
   }
 }
 
@@ -268,6 +274,9 @@
 
   @media screen and (max-width: $S) {
     padding: 0 2px $padding5;
+  }
+  @media screen and (max-width: $tab-size) {
+    padding: 0 $padding10 $padding10;
   }
 }
 

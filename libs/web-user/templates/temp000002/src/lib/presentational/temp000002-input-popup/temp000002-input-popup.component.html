@@ -2,7 +2,7 @@
   <div class="cross_holder">
     <h4 class="popup__wrapper--heading">{{ dialaogData.heading }}</h4>
     <div (click)="close()" class="cross">
-      <span>x</span>
+      <span aria-hidden="true" class="close" (click)="close()">&times;</span>
     </div>
   </div>
   <div class="req_wrapper">

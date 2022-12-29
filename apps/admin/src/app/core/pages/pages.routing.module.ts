@@ -7,14 +7,20 @@ import { DashboardComponent } from '@hospitality-bot/admin/dashboard';
 import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
 import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { TemporaryRedirectPageComponent } from './containers/trp/temporary-redirect-page/temporary-redirect-page.component';
 
 const appRoutes: Route[] = [
   {
+    path: 'trp',
+    component: TemporaryRedirectPageComponent,
+    pathMatch: 'full',
+  },
+  {
     path: '',
     component: PagesComponent,
-    resolve: {
-      adminDetails: AdminDetailResolver,
-    },
+    // resolve: {
+    //   adminDetails: AdminDetailResolver,
+    // },
     children: [
       {
         path: 'dashboard',

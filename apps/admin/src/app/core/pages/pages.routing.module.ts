@@ -18,9 +18,9 @@ const appRoutes: Route[] = [
   {
     path: '',
     component: PagesComponent,
-    // resolve: {
-    //   adminDetails: AdminDetailResolver,
-    // },
+    resolve: {
+      adminDetails: AdminDetailResolver,
+    },
     children: [
       {
         path: 'dashboard',

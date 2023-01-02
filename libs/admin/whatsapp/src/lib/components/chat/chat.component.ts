@@ -115,6 +115,7 @@ export class ChatComponent
       this.globalFilterService.globalFilter$.subscribe((data) => {
         this.hotelId = this.globalFilterService.hotelId;
         this.getLiveChat();
+        this.loadChat();
       })
     );
   }

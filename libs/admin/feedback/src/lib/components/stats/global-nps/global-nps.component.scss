@@ -13,11 +13,11 @@
   position: relative;
   display: flex;
   height: 173px;
-  @media only screen and (max-width: 1100px) {
+  @media only screen and (max-width: $L) {
     height: 138px;
   }
   .graph {
-    @media only screen and (max-width: 1100px) {
+    @media only screen and (max-width: $L) {
       position: absolute;
       top: 17%;
       left: -19%;
@@ -48,6 +48,9 @@
         @media (max-width: 1100px) {
           font-size: 15px;
         }
+        @media screen and (max-width: $L) {
+          font-size: 35px;
+        }
       }
       .comparisonPercent {
         font: normal normal normal 10px/14px Roboto;
@@ -60,6 +63,10 @@
           color: $c-gray-72;
           letter-spacing: 0.72px;
           font: normal normal normal 10px/14px Roboto;
+        }
+
+        @media screen and (max-width: $L) {
+          font-size: 12px;
         }
       }
     }
@@ -79,7 +86,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    @media only screen and (max-width: 1100px) {
+    @media only screen and (max-width: $L) {
       width: fit-content;
       right: 1%;
       left: auto;

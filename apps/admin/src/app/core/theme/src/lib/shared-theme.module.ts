@@ -25,6 +25,7 @@ import { NotificationSettingsComponent } from './containers/notification/notific
 import { NotificationFilterComponent } from './containers/notification/notification-filter/notification-filter.component';
 import { NotificationDetailComponent } from './containers/notification/notification-detail/notification-detail.component';
 import { SidenavExpandComponent } from './containers/sidenav/sidenav-expand/sidenav-expand.component';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { SidenavExpandComponent } from './containers/sidenav/sidenav-expand/side
     NotificationFilterComponent,
     NotificationDetailComponent,
   ],
+  providers: [CookieService],
   exports: [
     SidenavComponent,
     SidenavExpandComponent,

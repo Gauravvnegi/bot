@@ -20,7 +20,7 @@
     <div *ngIf="guestDetail && guestDetail.guests.length">
       <div class="section--heading">Guest Details</div>
       <div class="section--content" *ngFor="let guest of guestDetail.guests">
-        <div class="section--content--container">
+        <div class="section--content--container min-width">
           <div class="section--content--container--title">
             {{ guest.type === 'primary' ? 'Full Name (Primary)' : 'Full Name' }}
           </div>
@@ -30,7 +30,7 @@
             {{ guest.lastName }}
           </div>
         </div>
-        <div class="section--content--container">
+        <div class="section--content--container min-width">
           <div class="section--content--container--title">Phone No.</div>
           <div class="section--content--container--value">
             {{
@@ -42,7 +42,7 @@
             }}
           </div>
         </div>
-        <div class="section--content--container">
+        <div class="section--content--container min-width">
           <div class="section--content--container--title">Email ID</div>
           <div class="section--content--container--value">
             {{ guest.contactDetails.emailId || '-' }}

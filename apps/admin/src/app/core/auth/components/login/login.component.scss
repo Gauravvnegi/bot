@@ -7,18 +7,21 @@
 
 .card {
   &--heading {
-    color:$navy-blue !important;
+    color: $navy-blue !important;
     @include auth-heading();
-    @media (max-width: 1024px) {
+
+    @media screen and (max-width: $tablet) {
       font-size: $font30;
       font-weight: bold;
       @include margin-bottom(20px);
+      letter-spacing: 0.9px;
     }
   }
   &--quote {
     @include auth-quote();
-    @media (max-width: 1024px) {
+    @media screen and (max-width: $tablet) {
       @include margin-bottom(0);
+      letter-spacing: 0.48px;
     }
   }
 }
@@ -42,7 +45,6 @@
 }
 
 .social-btns i {
-  // font-size: 21px;
   @include font-size(21);
   color: $white;
 }
@@ -60,6 +62,7 @@
     color: $auth-color;
     font-size: $font14;
     font-weight: $medium;
+    letter-spacing: 0.56px;
     &:hover {
       cursor: pointer;
     }
@@ -84,8 +87,12 @@
   position: relative;
   @include flex-item-center();
   @include margin-top(30px);
-  @media (max-width: 1024px) {
+  @media screen and (max-width: $tablet) {
     @include margin-top(45px);
+    input {
+      color: $navy-blue !important;
+      letter-spacing: 0.48px;
+    }
   }
 }
 
@@ -115,10 +122,28 @@
     cursor: pointer;
     box-shadow: 0px 4px 4px #4b56c04d;
   }
+  @media screen and (max-width: $tablet) {
+    font-size: $font16;
+    font-weight: $medium;
+    letter-spacing: 0.48px;
+    height: 4.5vw;
+    @include flex-all-center;
+    width: 14vw;
+  }
 }
-::ng-deep .mat-form-field-label {
+:host ::ng-deep .mat-form-field-label {
   @media (max-width: 1024px) {
     font-size: $font14 !important;
+    color: $primary-gray !important;
+    letter-spacing: 0.42px;
     @include margin-bottom(33px);
+  }
+}
+
+@media screen and (max-width: $tablet) {
+  :host ::ng-deep {
+    .mat-form-field-underline {
+      background-color: $quote-color !important;
+    }
   }
 }

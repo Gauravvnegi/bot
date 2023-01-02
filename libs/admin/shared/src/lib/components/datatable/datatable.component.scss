@@ -41,6 +41,8 @@
     p {
       margin: 0;
       font-size: 14px;
+      word-break: break-word;
+      white-space: break-spaces;
 
       @media screen and (max-width: 800px) {
         font-size: 10px;
@@ -317,6 +319,7 @@
   display: inline-flex;
   .mat-chip {
     display: flex;
+    white-space: nowrap;
   }
   &::-webkit-scrollbar {
     height: 6px;
@@ -399,6 +402,9 @@
   @include flex-justify-center();
   width: 72vw;
   padding: $padding10 0;
+  @media screen and (max-width: $L) {
+    width: 85vw;
+  }
 }
 
 :host ::ng-deep .category {
@@ -460,6 +466,18 @@
 
 :host ::ng-deep .p-datatable {
   box-shadow: 0px 0px 5px 0px lightgrey;
+  @media (max-width: $XL) {
+    tr {
+      td {
+        p,
+        span,
+        div {
+          white-space: break-spaces !important;
+          word-break: break-word !important;
+        }
+      }
+    }
+  }
 }
 
 :host ::ng-deep td,
@@ -473,7 +491,6 @@ th {
 
 :host ::ng-deep .mat-chip {
   border: 1px solid !important;
-  // background-color: $white !important;
   display: inline-block;
   text-align: center;
   font-weight: 400;

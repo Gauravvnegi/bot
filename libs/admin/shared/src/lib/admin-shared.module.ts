@@ -34,6 +34,7 @@ import { LinkDetector } from './pipes/linkDetector.pipe';
 import { UnsubscribeViewComponent } from './components/unsubscribe-view/unsubscribe-view.component';
 import { MentionDirective, MentionListComponent } from './components/mention';
 import { CustomSizeInputComponent } from './components/custom-size-input/custom-size-input.component';
+import { SafeUrlPipe } from './pipes/safe-url-pipe';
 
 @NgModule({
   imports: [
@@ -76,6 +77,7 @@ import { CustomSizeInputComponent } from './components/custom-size-input/custom-
     MentionListComponent,
     MentionDirective,
     CustomSizeInputComponent,
+    SafeUrlPipe,
   ],
   exports: [
     DatatableComponent,
@@ -107,6 +109,8 @@ import { CustomSizeInputComponent } from './components/custom-size-input/custom-
     MentionDirective,
     CustomSizeInputComponent,
     UnsubscribeViewComponent,
+    SafeHtmlPipe,
+    SafeUrlPipe,
   ],
 })
 export class AdminSharedModule {}

@@ -1,7 +1,8 @@
-@import 'temp000001';
+@import 'temp000002';
 
 .expand-icon {
   margin-left: auto;
+  padding: $padding10;
 }
 
 mat-icon {
@@ -33,6 +34,23 @@ mat-icon {
   padding-bottom: 0px;
 }
 
+.wrapper {
+  &__item {
+    width: 45%;
+    margin: 5px 0;
+    @media only screen and (max-width: $M) {
+      width: auto;
+    }
+  }
+
+  @include flex-space-between();
+  @include display-block-on-breakpoint($M);
+  @media only screen and (max-width: $M) {
+    flex-direction: column;
+    justify-content: inherit;
+  }
+}
+
 :host ::ng-deep {
   .mat-form-field-underline {
     bottom: 0 !important;
@@ -50,5 +68,8 @@ mat-icon {
   }
   .mat-expansion-panel-body {
     padding: 10px 30px 10px 5px !important;
+  }
+  .mat-error {
+    margin-top: 20px;
   }
 }

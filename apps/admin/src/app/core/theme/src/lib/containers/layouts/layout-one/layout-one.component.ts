@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { UserService, ConfigService } from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get } from 'lodash';
@@ -18,6 +18,7 @@ import { SubscriptionPlanService } from '../../../services/subscription-plan.ser
 import { trigger, transition, animate, style } from '@angular/animations';
 import { LoadingService } from '../../../services/loader.service';
 import { NotificationService } from '../../../services/notification.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -44,8 +45,12 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   outlets = [];
   lastUpdatedAt: string;
   isGlobalFilterVisible = false;
+  showNotification = false;
+  flashNotification: any;
+  delayTime = layoutConfig.notificationDelayTime;
   isDetailPageVisible = false;
   isNotificationVisible = false;
+  private $subscription = new Subscription();
   searchFG: FormGroup;
   timezone: string;
   isExpand = true;
@@ -79,7 +84,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private firebaseMessagingService: FirebaseMessagingService,
     private subscriptionPlanService: SubscriptionPlanService,
     private loadingService: LoadingService,
-    private notificatonService: NotificationService
+    private notificatonService: NotificationService,
+    private configService: ConfigService,
+    private cookieService: CookieService
   ) {
     this.initFG();
   }
@@ -90,6 +97,25 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.setInitialFilterValue();
     this.loadingService.close();
     this.getNotificationUnreadCount();
+    this.$subscription.add(
+      this.configService.$config.subscribe((response) => {
+        if (response) {
+          this.flashNotification = response?.flashNotifications;
+          this.initNotification();
+        }
+      })
+    );
+  }
+
+  initNotification() {
+    if (this.flashNotification?.notificationView) {
+      const { delayTimeAllow = false, delayTime } = this.flashNotification;
+      this.delayTime = delayTimeAllow ? delayTime : this.delayTime;
+      this.showNotification = true;
+    }
+    setTimeout(() => {
+      this.showNotification = false;
+    }, this.delayTime * 1000);
   }
 
   initFirebaseMessaging(entityId?) {
@@ -314,6 +340,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.firebaseMessagingService.destroySubscription();
         this._authService.clearToken();
+        this._authService.deletePlatformRefererTokens(this.cookieService);
         location.reload();
       });
   }

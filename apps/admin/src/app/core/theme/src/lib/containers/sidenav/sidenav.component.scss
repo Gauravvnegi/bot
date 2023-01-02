@@ -28,6 +28,9 @@
       width: 100%;
     }
   }
+  @media screen and (max-width: $tablet) {
+    @include height(65px);
+  }
 }
 
 .sidebar {
@@ -170,6 +173,17 @@
 .menu_button {
   width: 16px;
   height: 16px;
+  .onHoverHide{
+    display: none;
+  }
+  &:hover{
+    .onHoverHide{
+      display: block;
+    }
+    .onHoverShow{
+      display: none;
+    }
+  }
   img {
     width: 100%;
     height: 100%;
@@ -255,4 +269,11 @@
 
 .collapse ul li a {
   padding-left: 10px;
+}
+
+// tablet
+
+@media screen and (max-width: $tablet) {
+  .sidenav-header {
+  }
 }

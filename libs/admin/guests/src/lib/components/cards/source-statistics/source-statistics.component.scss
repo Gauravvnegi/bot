@@ -43,6 +43,18 @@
   }
 }
 
+.stat {
+  @media screen and (max-width: $L) {
+    @include height(65px);
+    overflow-y: auto;
+    @include padding-right($padding20);
+    &::-webkit-scrollbar {
+      @include width(1px);
+      background-color: $c-gray-84;
+    }
+  }
+}
+
 .stat-val-container {
   width: 100%;
   align-items: center;

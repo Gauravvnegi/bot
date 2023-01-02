@@ -124,12 +124,19 @@
         margin-left: 10px;
         @media screen and (max-width: $M) {
           font-size: $font-small;
+          margin-left: $margin5;
+        }
+        @media screen and (max-width: $tab-size) {
+          margin-left: 0;
         }
       }
       mat-icon {
         font-size: 35px;
         height: auto;
         width: auto;
+      }
+      @media screen and (max-width: $S) {
+        height: auto;
       }
     }
     &--disclaimer {
@@ -184,6 +191,9 @@
       @media only screen and (max-width: $T) {
         font-size: 17px;
       }
+      @media screen and (max-width: $tab-size) {
+        font-size: $font14;
+      }
     }
     &--value--container {
       font-size: $font-large;
@@ -219,6 +229,9 @@
   @media screen and (max-width: $M) {
     flex-wrap: wrap;
   }
+  .min-width {
+    min-width: 33%;
+  }
 }
 
 .link {
@@ -233,7 +246,7 @@
 .margin-added {
   @media screen and (max-width: 700px) {
     margin-left: 15%;
-    margin-top: 3%;
+    padding-bottom: 8%;
   }
 }
 
@@ -256,10 +269,17 @@
   }
 }
 
-:host ::ng-deep .ng-star-inserted{
-  padding: 0 20px;
+:host ::ng-deep .ng-star-inserted {
+  padding: 0 $padding20 $padding20;
+
+  @media screen and (max-width: $S) {
+    padding: 0 2px $padding5;
+  }
+  @media screen and (max-width: $tab-size) {
+    padding: 0 $padding10 $padding10;
+  }
 }
 
-:host ::ng-deep .mat-dialog-container{
+:host ::ng-deep .mat-dialog-container {
   padding: inherit !important;
 }

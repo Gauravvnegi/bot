@@ -7,8 +7,14 @@ import { DashboardComponent } from '@hospitality-bot/admin/dashboard';
 import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
 import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { TemporaryRedirectPageComponent } from './containers/trp/temporary-redirect-page/temporary-redirect-page.component';
 
 const appRoutes: Route[] = [
+  {
+    path: 'trp',
+    component: TemporaryRedirectPageComponent,
+    pathMatch: 'full',
+  },
   {
     path: '',
     component: PagesComponent,
@@ -91,6 +97,13 @@ const appRoutes: Route[] = [
         path: 'builder',
         component: ComingSoonComponent,
         // canActivate: [LoadGuard],
+      },
+      {
+        path: 'create-with',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/create-with').then(
+            (m) => m.AdminCreateWithModule
+          ),
       },
       { path: '**', redirectTo: '404' },
       { path: '404', component: DashboardErrorComponent },

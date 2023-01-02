@@ -6,12 +6,12 @@
   }
 }
 
-:host ::ng-deep .svg-payment > svg{
+:host ::ng-deep .svg-payment > svg {
   height: 48px;
   width: 48px;
   @media only screen and (max-width: $M) {
-   height: 25px;
-   width: 25px;
+    height: 25px;
+    width: 25px;
   }
 }
 
@@ -19,6 +19,9 @@
   background-color: $white;
   border-radius: 0 0 $border-radius-small $border-radius-small;
   padding-bottom: 20px;
+  @media only screen and (min-width: $M) {
+     padding-bottom: $padding50;
+  }
 }
 
 :host ::ng-deep .mat-tab-header {
@@ -39,8 +42,13 @@
   img {
     filter: contrast(0);
   }
-  @media only screen and (max-width: $M) {
+  @media only screen and (max-width: $T) {
     padding: $padding-small;
+    width: 50%;
+    height: $full;
+  }
+  @media screen and (min-width: $T) {
+    width: 50%;
   }
 }
 
@@ -55,6 +63,10 @@
   font-size: 23px;
   @media only screen and (max-width: $M) {
     font-size: 14px;
+  }
+
+  @media screen and (max-width: $tab-size) {
+    font-size: $font16;
   }
 }
 
@@ -80,6 +92,9 @@
   img {
     filter: contrast(1);
   }
+  @media screen and (max-width: $T) {
+    width: 50%;
+  }
 }
 
 :host ::ng-deep .mat-tab-label-content {
@@ -91,8 +106,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  @media only screen and (max-width: $M) {
-    width: 40.7vw;
+  @media only screen and (max-width: $L) {
+    width: 38.7vw;
   }
 }
 
@@ -116,7 +131,7 @@
 
 .info-label {
   display: flex;
-  @media only screen and (max-width: $T) {
+  @media only screen and (max-width: $L) {
     display: none;
   }
 }
@@ -131,7 +146,7 @@
   }
 }
 
-:host ::ng-deep .full_width{
+:host ::ng-deep .full_width {
   width: 92vw;
   @media only screen and (max-width: $M) {
     width: 85vw;
@@ -150,7 +165,6 @@
   background-color: $primary-blue !important;
 }
 
-
 :host ::ng-deep .method-style :focus {
   border-color: $primary-blue !important;
 }
@@ -163,12 +177,12 @@
   border: 1px solid $primary-blue !important;
 }
 
-:host ::ng-deep .info-label{
+:host ::ng-deep .info-label {
   font-size: 18px;
-  color: #9EAEB8;
+  color: #9eaeb8;
   padding-top: 8px;
 }
 
-:host ::ng-deep .mat-tab-label-content{
+:host ::ng-deep .mat-tab-label-content {
   font-size: 26px !important;
 }

@@ -19,6 +19,12 @@
   }
 }
 
+.sideNav-expand-box{
+  position: absolute;
+  z-index: 111;
+  box-shadow: 0px 0px 3px 0px grey;
+}
+
 .heading {
   padding: 15px;
   background-color: white;

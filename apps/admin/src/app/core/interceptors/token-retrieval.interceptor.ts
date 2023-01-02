@@ -17,7 +17,7 @@ export class TokenRetievalInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (req.url.includes('login')) {
+    if (req.url.includes('login') || req.url.includes('verify-token')) {
       console.log('running token reciever interceptor inside login req only');
       return next.handle(req).pipe(
         map((event: HttpEvent<any>) => {

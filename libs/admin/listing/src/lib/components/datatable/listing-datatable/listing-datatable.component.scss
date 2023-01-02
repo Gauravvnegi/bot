@@ -128,7 +128,8 @@
 }
 :host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
   height: 80px !important;
-  word-break: break-all;
+  word-break: break-word;
+  white-space: normal;
 }
 
 th.tableHeading.p-resizable-column {

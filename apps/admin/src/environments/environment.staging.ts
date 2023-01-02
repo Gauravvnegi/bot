@@ -5,4 +5,5 @@ export const environment = {
   production: true,
   name: 'staging',
   base_url: 'https://stageapi.botshot.in:8443',
+  createWithUrl: 'https://createwith.botshot.ai',
 };

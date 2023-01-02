@@ -26,6 +26,11 @@ td {
   padding: 15px;
   text-align: left;
 }
+th {
+  @media screen and (max-width: $L) {
+    font-size: $font14;
+  }
+}
 
 td {
   font-family: Roboto;
@@ -137,6 +142,9 @@ td {
         background-color: $room-type;
         color: $initiated-2;
         width: fit-content;
+        @media screen and (max-width: $L) {
+          width: max-content;
+        }
       }
     }
   }

@@ -10,6 +10,7 @@ import { UserService } from '@hospitality-bot/admin/shared';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth/services/auth.service';
+import { LoadingService } from '../theme/src/lib/services/loader.service';
 
 @Injectable()
 export class RefreshTokenInterceptor implements HttpInterceptor {
@@ -20,7 +21,8 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   constructor(
     private _authService: AuthService,
     private _userService: UserService,
-    private _router: Router
+    private _router: Router,
+    private loadingService: LoadingService
   ) {}
   intercept(
     req: HttpRequest<any>,
@@ -128,6 +130,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
       (response) => {
         this._authService.clearToken();
         this._router.navigate(['/auth']);
+        this.loadingService?.close();
       },
       (error) => {
         this._authService.clearToken();

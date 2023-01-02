@@ -23,18 +23,25 @@
   padding-bottom: $padding-small;
   width: 100%;
   position: relative;
+  background-color: #f4f5f7;
 }
 
 .close_wrapper {
   position: absolute;
   right: 14px;
   top: 0px;
+  @media screen and (max-width: $S) {
+    right: 5px;
+  }
 }
 
 .temp-div {
   width: 33%;
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: $M) {
     width: 15%;
+  }
+  @media screen and (max-width: $S) {
+    width: 0;
   }
 }
 
@@ -53,10 +60,19 @@
     font-weight: 100;
     color: #a7a1a1;
     padding: 5px;
+    @media screen and (max-width: $S) {
+      text-align: left;
+      padding: 5px 0;
+    }
   }
   @media only screen and (max-width: $M) {
-    font-size: $font-responsive-small;
+    font-size: $font14;
     width: 70%;
+  }
+  @media screen and (max-width: $S) {
+    margin: 0 auto;
+    text-align: left;
+    @include flex-col-center-align;
   }
 }
 
@@ -67,14 +83,21 @@
   position: absolute;
   top: 10px;
   right: 10px;
+  @media screen and (max-width: $S) {
+    right: 0;
+  }
 }
 
 .header-summary {
   width: 75vw;
+  @media screen and (max-width: $S) {
+    margin: 0 auto;
+    width: $full;
+  }
 }
 
 .modal-body {
-  max-height: calc(90vh - 100px);
+  max-height: calc(90vh - 120px);
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 4px;

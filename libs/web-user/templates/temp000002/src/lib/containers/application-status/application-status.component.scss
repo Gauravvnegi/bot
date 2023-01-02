@@ -110,7 +110,7 @@
 
 .section--content {
   @include flex-space-between();
-  margin: 0 $margin-medium;
+  margin: $margin20 $margin-medium;
   &--health {
     flex-direction: column;
     margin: $margin-small $margin-medium;
@@ -179,8 +179,8 @@
     &--value {
       font-size: $font-large;
       font-weight: $bolder;
-      @media only screen and (max-width: $T) {
-        font-size: 17px;
+      @media only screen and (max-width: $tab-size) {
+        font-size: $font17;
       }
     }
     &--value--container {
@@ -193,12 +193,15 @@
         @media screen and (max-width: 700px) {
           margin-right: 0;
         }
+        @media only screen and (max-width: $tab-size) {
+          font-size: $font17;
+        }
       }
       @media screen and (max-width: 700px) {
         justify-content: space-between;
       }
-      @media only screen and (max-width: $T) {
-        font-size: 17px;
+      @media only screen and (max-width: $tab-size) {
+        font-size: $font17;
       }
     }
     @media screen and (max-width: $M) {
@@ -208,6 +211,7 @@
       }
       &--value {
         font-size: 14px;
+        word-break: break-word;
       }
       &--value--container {
         font-size: 14px;
@@ -216,6 +220,9 @@
   }
   @media screen and (max-width: $M) {
     flex-wrap: wrap;
+  }
+  .min-width {
+    min-width: 33%;
   }
 }
 
@@ -251,5 +258,11 @@
   height: 40px;
   @media screen and (max-width: $M) {
     height: 30px;
+  }
+}
+
+:host ::ng-deep .ng-star-inserted {
+  @media screen and (width: $M) {
+    padding-bottom: $padding30;
   }
 }

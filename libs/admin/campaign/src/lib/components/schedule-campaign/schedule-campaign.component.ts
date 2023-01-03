@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as moment from 'moment';
+import { campaignConfig } from '../../constant/campaign';
 
 @Component({
   selector: 'hospitality-bot-schedule-campaign',
@@ -109,6 +110,14 @@ export class ScheduleCampaignComponent implements OnInit {
     this.onScheduleClose.emit({
       status: true,
     });
+  }
+
+  /**
+   * @function campaignConfiguration returns campaignConfig object.
+   * @returns campaignConfig object.
+   */
+  get campaignConfiguration() {
+    return campaignConfig;
   }
 
   createTimeList(timestamp) {

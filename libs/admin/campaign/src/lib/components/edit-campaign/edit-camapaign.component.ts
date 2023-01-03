@@ -182,7 +182,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
    * @function getCampaignDetails o get campaign detail.
    * @param id campaign id for which the action will be taken.
    */
-  getCampaignDetails(id) {
+  getCampaignDetails(id: string) {
     this.$subscription.add(
       this._campaignService
         .getCampaignById(this.hotelId, id)
@@ -203,7 +203,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
    * @returns resolves promise.
    */
   addElementToData() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       Promise.all([
         this.addFormArray('to', 'toReceivers'),
         this.addEmailControls(),
@@ -227,8 +227,8 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
    * @param dataField field where the form data is stored.
    * @returns resolved promise.
    */
-  addFormArray(control, dataField) {
-    return new Promise((resolve, reject) => {
+  addFormArray(control: string, dataField: string) {
+    return new Promise((resolve) => {
       if (this.campaign[dataField]) {
         this.campaign[control] = [];
         if (!this.campaignFG.get(control))
@@ -250,7 +250,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
    * @returns resolved promise.
    */
   addEmailControls() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.campaign.testEmails.forEach((item) =>
         (this.campaignFG.get('testEmails') as FormArray).push(
           new FormControl(item)
@@ -273,11 +273,10 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
    */
   listenForAutoSave() {
     this.$autoSaveSubscription.add(
-      interval(campaignConfig.autosave.time).subscribe((x) => {
+      interval(campaignConfig.autosave.time).subscribe(() => {
         this.autoSave(this.campaignFG.getRawValue()).subscribe(
           (response) => {
             if (this.campaignId) {
-              console.log('Saved');
               this.setDataAfterUpdate(response);
             } else {
               this.campaignFG.patchValue({ id: response.id });
@@ -306,7 +305,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
    * @param data data to be saved.
    * @returns save.
    */
-  autoSave(data?) {
+  autoSave(data: any) {
     return this._campaignService.save(
       this.hotelId,
       this._emailService.createRequestData(data),
@@ -315,24 +314,11 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function setTemplate function to set template.
-   * @param event event object to patch values.
-   */
-  setTemplate(event) {
-    this.campaignFG.patchValue({
-      message: event.htmlTemplate,
-      topicId: event.topicId,
-      templateId: event.id,
-    });
-    this.stepper.selectedIndex = 0;
-  }
-
-  /**
    * @function changeStep function to change form steps.
    * @param event event object to change form step.
    * @returns
    */
-  changeStep(event) {
+  changeStep(event: Record<string, any>) {
     if (event.status) {
       if (this.campaign) {
         this.campaign.templateName = event.data.name;
@@ -353,7 +339,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
    * @function handleCreateContentChange function to handle created content change.
    * @param event event object for the stepper.
    */
-  handleCreateContentChange(event) {
+  handleCreateContentChange(event: { step: string; templateType?: string }) {
     this.stepper[event.step]();
     if (event.templateType) this.createContentType = event.templateType;
   }
@@ -383,14 +369,14 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   /**
    * @function saveAndCloseForm function for saving and closing the form.
    */
-  saveAndCloseForm(event) {
+  saveAndCloseForm() {
     if (
       this.campaignId ||
       this._emailService.checkForEmptyForm(this.campaignFG.getRawValue())
     )
       this.$subscription.add(
         this.autoSave(this.campaignFG.getRawValue()).subscribe(
-          (response) => this._router.navigate(['/pages/marketing/campaign']),
+          (_response) => this._router.navigate(['/pages/marketing/campaign']),
           ({ error }) => {
             this.snackbarService
               .openSnackBarWithTranslate(
@@ -497,7 +483,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.success.campaignSent',
-                priorityMessage: 'Campiagn Sent successfully',
+                priorityMessage: 'Campaign Sent successfully',
               },
               '',
               {
@@ -521,7 +507,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function ngOnDestroy unsubscribe subscriiption
+   * @function ngOnDestroy unsubscribe subscription
    */
   ngOnDestroy() {
     this.$subscription.unsubscribe();

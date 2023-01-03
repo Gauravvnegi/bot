@@ -29,9 +29,9 @@ export class Campaign implements IDeserializable {
   message: string;
   previewText: string;
   sentCount: number;
-  subject;
+  subject: string;
   templateId: string;
-  testEmails;
+  testEmails: string[];
   toReceivers;
   topicId: string;
   updatedAt: number;

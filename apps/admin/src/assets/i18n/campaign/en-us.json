@@ -66,7 +66,7 @@
 
   "messages": {
     "success": {
-      "status_updated": "Status updated",
+      "status_updated": "Status updated successfully",
       "updateTemplate": "Template Updated successfully",
       "createTemplate": "Template Created successfully",
       "sendTestcampaign": "Campaign sent to test email(s)",
@@ -78,7 +78,8 @@
     "error": {
       "exportCSV": "Failed to export CSV",
       "loadData": "Failed to load data",
-      "fail": "Try again."
+      "fail": "Try again.",
+      "fetch": "Failed to fetch"
     }
   }
 }

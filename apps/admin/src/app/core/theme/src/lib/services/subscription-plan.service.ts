@@ -5,7 +5,9 @@ import { Observable } from 'rxjs';
 import {
   ModuleSubscription,
   Subscriptions,
+  Features,
 } from '../data-models/subscription-plan-config.model';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 
 @Injectable({ providedIn: 'root' })
 export class SubscriptionPlanService extends ApiService {
@@ -48,5 +50,13 @@ export class SubscriptionPlanService extends ApiService {
 
   get ChannelSubscription() {
     return this.subscriptions?.features?.CHANNELS || [];
+  }
+
+  checkSubscriptionByPath(
+    path: ModuleNames,
+    feature: Exclude<keyof Features, 'deserialize'> = 'MODULE'
+  ) {
+    const features = this.subscriptions.features[feature];
+    return !!features.filter((d) => ModuleNames[d.name] === path && d.active);
   }
 }

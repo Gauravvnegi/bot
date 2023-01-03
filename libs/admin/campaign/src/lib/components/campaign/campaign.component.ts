@@ -8,7 +8,7 @@ import { ModuleNames } from '@hospitality-bot/admin/shared';
   styleUrls: ['./campaign.component.scss'],
 })
 export class CampaignComponent implements OnInit {
-  unsubscribe;
+  isSubscribed: boolean;
   constructor(private subscriptionPlanService: SubscriptionPlanService) {}
 
   ngOnInit(): void {
@@ -16,12 +16,8 @@ export class CampaignComponent implements OnInit {
   }
 
   getSubscriptionPlan() {
-    this.unsubscribe = this.checkSubscriptionByPath(
-      ModuleNames.MARKETING,
-      this.subscriptionPlanService.getSubscription()['features'].MODULE
+    this.isSubscribed = this.subscriptionPlanService.checkSubscriptionByPath(
+      ModuleNames.MARKETING
     );
-  }
-  checkSubscriptionByPath(path, subscription) {
-    return subscription.filter((d) => ModuleNames[d.name] === path && d.active);
   }
 }

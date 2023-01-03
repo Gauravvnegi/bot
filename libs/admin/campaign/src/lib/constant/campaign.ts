@@ -150,11 +150,15 @@ export const campaignConfig = {
     filter: { url: 'assets/svg/Filter-Icon.svg', alt: 'Filter' },
     edit: { url: 'assets/svg/edit8278.svg', alt: 'edit' },
     view: { url: 'assets/svg/view8280.svg', alt: 'view' },
-    delete: { url: 'assets/svg/delete8279.svg', alt: 'delete' },
+    delete: { url: 'assets/svg/delete-transparent.svg', alt: 'delete' },
     saved: { url: 'assets/svg/diskette.svg', alt: 'saved' },
     inbuilt: { url: 'assets/svg/web-design.svg', alt: 'inbuilt' },
     editTemplate: { url: 'assets/svg/design.svg', alt: 'edit Template' },
-    write: { url:'assets/svg/edit-layer92.svg', alt: ' write'}
+    write: { url: 'assets/svg/edit-layer92.svg', alt: ' write' },
+    preview: { url: 'assets/svg/default_img.svg', alt: 'preview' },
+    calendar: { url: 'assets/svg/calendar.svg', alt: 'calendar' },
+    time: { url: 'assets/svg/time.svg', alt: 'time' },
+    shared: { url: 'assets/svg/shared_template.svg', alt: 'shared' },
   },
   dropDownTabFilter: [
     {

@@ -1,17 +1,25 @@
-<ngcontainer *ngIf="unsubscribe.length === 0; else subscribedview">
-  <hospitality-bot-unsubscribe-view></hospitality-bot-unsubscribe-view>
-</ngcontainer>
-<ng-template #subscribedview>
+<ng-container *ngIf="isSubscribed; else unsubscribedView">
   <hospitality-bot-stats-view></hospitality-bot-stats-view>
   <div class="container">
     <div class="rate-contact-stat">
       <div class="rateGraph">
-        <hospitality-bot-rate-graph></hospitality-bot-rate-graph>
+        <hospitality-bot-comparison-graph
+          [charts]="rateGraph.chart"
+          [legendData]="rateGraph.legendData"
+          [title]="rateGraph.title"
+        ></hospitality-bot-comparison-graph>
       </div>
       <hospitality-bot-contact-stats></hospitality-bot-contact-stats>
     </div>
     <div class="subscriberGraph">
-      <hospitality-bot-subscribers-graph></hospitality-bot-subscribers-graph>
+      <hospitality-bot-comparison-graph
+        [charts]="subscriberGraph.chart"
+        [legendData]="subscriberGraph.legendData"
+        [title]="subscriberGraph.title"
+      ></hospitality-bot-comparison-graph>
     </div>
   </div>
+</ng-container>
+<ng-template #unsubscribedView>
+  <hospitality-bot-unsubscribe-view></hospitality-bot-unsubscribe-view>
 </ng-template>

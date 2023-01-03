@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Campaign } from '../data-model/campaign.model';
+import { QueryConfig } from '../types/campaign.type';
 
 @Injectable()
 export class CampaignService extends ApiService {
@@ -10,7 +11,7 @@ export class CampaignService extends ApiService {
    * @param config dynamically getting global query filter into api.
    * @returns get api of topic list.
    */
-  getTopicList(id: string, config) {
+  getTopicList(id: string, config: QueryConfig) {
     return this.get(`/api/v1/entity/${id}/topics/${config.queryObj}`);
   }
 
@@ -20,7 +21,7 @@ export class CampaignService extends ApiService {
    * @param config dynamically getting global query filter into api.
    * @returns get api to get listing.
    */
-  getListings(hotelId: string, config) {
+  getListings(hotelId: string, config: QueryConfig) {
     return this.get(
       `/api/v1/marketing/entity/${hotelId}/listing${config.queryObj}`
     );
@@ -32,7 +33,7 @@ export class CampaignService extends ApiService {
    * @param hotelId dynamically getting hotelId into api.
    * @returns get api of campaign lists.
    */
-  getHotelCampaign(config, hotelId) {
+  getHotelCampaign(config: QueryConfig, hotelId: string) {
     return this.get(`/api/v1/cms/${hotelId}/campaign${config.queryObj}`);
   }
 
@@ -43,7 +44,7 @@ export class CampaignService extends ApiService {
    * @param campaignId dynamically getting campaignId into api.
    * @returns patch api of update status.
    */
-  updateCampaignStatus(hotelId, data, campaignId) {
+  updateCampaignStatus(hotelId: string, data, campaignId: string) {
     return this.patch(
       `/api/v1/cms/${hotelId}/campaign/${campaignId}/toggle`,
       data
@@ -57,7 +58,7 @@ export class CampaignService extends ApiService {
    * @param campaignId dynamically getting campaignId into api.
    * @returns post api for cloning campaign.
    */
-  cloneCampaign(hotelId, data, campaignId) {
+  cloneCampaign(hotelId: string, data, campaignId: string) {
     return this.post(
       `/api/v1/cms/${hotelId}/campaign/${campaignId}/clone`,
       data
@@ -65,13 +66,13 @@ export class CampaignService extends ApiService {
   }
 
   /**
-   * @function cloneCampaign function to archive campaign.
+   * @function archiveCampaign function to archive campaign.
    * @param hotelId dynamically getting hotelId into api.
    * @param data getting form input data.
    * @param campaignId dynamically getting campaignId into api.
    * @returns patch api for archive campaign.
    */
-  archiveCampaign(hotelId, data, campaignId) {
+  archiveCampaign(hotelId: string, data, campaignId: string) {
     return this.patch(
       `/api/v1/cms/${hotelId}/campaign/${campaignId}/archieve`,
       data
@@ -83,7 +84,8 @@ export class CampaignService extends ApiService {
    * @param config dynamically getting global query filter into api.
    * @returns get api of export csv report of table.
    */
-  exportCSV(hotelId, config) {
+  exportCSV(hotelId: string, config: QueryConfig) {
+    console.log('config', config);
     return this.get(
       `/api/v1/cms/${hotelId}/campaign/export${config.queryObj}`,
       {
@@ -108,7 +110,7 @@ export class CampaignService extends ApiService {
    * @param config dynamically getting global query filter into api.
    * @returns get api of get template by content type.
    */
-  getTemplateByContentType(entityId: string, config) {
+  getTemplateByContentType(entityId: string, config: QueryConfig) {
     return this.get(
       `/api/v1/entity/${entityId}/templates/topic${config.queryObj}`
     );
@@ -121,7 +123,11 @@ export class CampaignService extends ApiService {
    * @param config dynamically getting global query filter into api.
    * @returns get api of getting tempate by topic id.
    */
-  getTemplateListByTopicId(hotelId, topicId, config) {
+  getTemplateListByTopicId(
+    hotelId: string,
+    topicId: string,
+    config: QueryConfig
+  ) {
     return this.get(
       `/api/v1/entity/${hotelId}/templates/topic/${topicId}${config.queryObj}`
     );
@@ -133,7 +139,7 @@ export class CampaignService extends ApiService {
    * @param campaignId dynamically getting campaignId into api.
    * @returns get api of deleting campaign template.
    */
-  deleteCampaignTemplate(entityId: string, campaignId) {
+  deleteCampaignTemplate(entityId: string, campaignId: string) {
     return this.get(`/api/v1/cms/${entityId}/campaign/${campaignId}`);
   }
 
@@ -143,28 +149,8 @@ export class CampaignService extends ApiService {
    * @param hotelId dynamically getting hotel id.
    * @returns get api of getting list by id.
    */
-  getListById(id, hotelId) {
+  getListById(id: string, hotelId: string) {
     return this.get(`/api/v1/marketing/entity/${hotelId}/listing/${id}`);
-  }
-
-  /**
-   * @function mapcampaignData map api data into campaign form data.
-   * @param formValue form key values.
-   * @param hotelId hotelId for campaign table.
-   * @param id campaign id.
-   * @returns campaign data.
-   */
-  mapCampaignData(formValue, hotelId, id?) {
-    const campaignData = new Campaign();
-    campaignData.id = formValue.id;
-    campaignData.active = formValue.status;
-    campaignData.hotelId = hotelId;
-    campaignData.name = formValue.name;
-    campaignData.templateName = formValue.templateName;
-    campaignData.isDraft = formValue.isDraft;
-    campaignData.active = campaignData.active;
-    campaignData.name = campaignData.name;
-    return campaignData;
   }
 
   /**

@@ -1,6 +1,6 @@
-<ngcontainer *ngIf="unsubscribe.length === 0; else subscribedview">
+<ng-container *ngIf="isSubscribed; else unsubscribedView">
+  <hospitality-bot-campaign-datatable></hospitality-bot-campaign-datatable>
+</ng-container>
+<ng-template #unsubscribedView>
   <hospitality-bot-unsubscribe-view></hospitality-bot-unsubscribe-view>
-</ngcontainer>
-<ng-template #subscribedview
-  ><hospitality-bot-campaign-datatable></hospitality-bot-campaign-datatable>
 </ng-template>

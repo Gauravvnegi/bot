@@ -19,7 +19,7 @@ import { campaignConfig } from '../../constant/campaign';
 export class PersonalizationComponent implements OnInit, OnDestroy {
   @Output() personalization = new EventEmitter();
   @Input() enablePersonalization = false;
-  @Input() name;
+  @Input() name: string;
   personalizationList = camapign.personalization;
   $subscription = new Subscription();
   constructor(private _emailService: EmailService) {}
@@ -33,7 +33,8 @@ export class PersonalizationComponent implements OnInit, OnDestroy {
    */
   listenForPersonalizationDisable() {
     this._emailService.$disablePersonalizationPopup[this.name].subscribe(
-      (response) => {
+      (response: boolean) => {
+        console.log('listenForPersonalizationDisable', response);
         if (response) this.enablePersonalization = false;
       }
     );
@@ -42,7 +43,7 @@ export class PersonalizationComponent implements OnInit, OnDestroy {
   /**
    * @function addPersonalization TO add Personalization.
    */
-  addPersonalization(event, value) {
+  addPersonalization(event: PointerEvent, value: string) {
     event.stopPropagation();
     this.personalization.emit(value);
   }
@@ -50,7 +51,7 @@ export class PersonalizationComponent implements OnInit, OnDestroy {
   /**
    * @function openPersonalization function to open personalization on the basis of name.
    */
-  openPersonalization(event) {
+  openPersonalization(event: PointerEvent) {
     event.stopPropagation();
     this.enablePersonalization = !this.enablePersonalization;
     if (this.name === 'subject')

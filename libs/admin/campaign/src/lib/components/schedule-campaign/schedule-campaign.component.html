@@ -16,7 +16,10 @@
     <div class="right-container">
       <div class="field-container">
         <div>
-          <img src="assets/svg/calendar.svg" alt="calendar" />
+          <img
+            [src]="campaignConfiguration.images.calendar.url"
+            [alt]="campaignConfiguration.images.calendar.alt"
+          />
         </div>
         <div
           class="calendar"
@@ -27,7 +30,10 @@
       </div>
       <div class="field-container">
         <div>
-          <img src="assets/svg/time.svg" alt="time" />
+          <img
+            [src]="campaignConfiguration.images.time.url"
+            [alt]="campaignConfiguration.images.time.alt"
+          />
         </div>
         <mat-form-field class="time">
           <mat-select formControlName="time" placeholder="Time">

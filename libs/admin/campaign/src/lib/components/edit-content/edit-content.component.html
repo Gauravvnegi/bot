@@ -11,7 +11,6 @@
             {{ campaignDetails.templateName }}
           </div>
           <div>{{ campaignDetails.topicName }}</div>
-          <!-- <div>{{ campaignDetails | json }}</div> -->
         </div>
         <div class="ck-editor__container">
           <ng-container [ngSwitch]="currentMode">
@@ -66,7 +65,12 @@
       </div>
       <ng-template #createTemplate>
         <div class="add-content">
-          <div><img src="assets/svg/default_img.svg" alt="" /></div>
+          <div>
+            <img
+              [src]="campaignConfiguration.images.preview.url"
+              [alt]="campaignConfiguration.images.preview.alt"
+            />
+          </div>
           <div class="add-content__btn" (click)="openAddContent()">
             {{ 'content.add' | translate }}
           </div>

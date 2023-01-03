@@ -19,9 +19,7 @@ export class MainComponent implements OnInit {
 
   initCookiesForPlatform() {
     const keys = {
-      authorizationToken: this._authService.getTokenByName('x-authorization'),
       accessToken: this._authService.getTokenByName('x-access-token'),
-      refreshToken: this._authService.getTokenByName('x-refresh-authorization'),
       accessRefreshToken: this._authService.getTokenByName(
         'x-access-refresh-token'
       ),

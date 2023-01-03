@@ -78,9 +78,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
                 'x-access-refresh-token'
               ),
               'x-userId': this._authService.getTokenByName('x-userId'),
-              'x-refresh-authorization': this._authService.getTokenByName(
-                'x-refresh-authorization'
-              ),
             })
             .pipe(
               switchMap((tokenObj: any) => {
@@ -118,7 +115,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
 
     return request.clone({
       setHeaders: {
-        'x-authorization': this._authService.getTokenByName('x-authorization'),
         'x-access-token': this._authService.getTokenByName('x-access-token'),
         'x-userId': this._authService.getTokenByName('x-userId'),
       },
@@ -140,11 +136,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   }
 
   updateAccessToken(tokenConfig) {
-    this._authService.setTokenByName(
-      'x-authorization',
-      tokenConfig['x-authorization']
-    );
-
     this._authService.setTokenByName(
       'x-access-token',
       tokenConfig['x-access-token']

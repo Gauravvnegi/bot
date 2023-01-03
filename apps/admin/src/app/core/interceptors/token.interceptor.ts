@@ -24,9 +24,6 @@ export class TokenInterceptor implements HttpInterceptor {
       console.log('authenticated user so adding token');
       const modifiedRequest = req.clone({
         setHeaders: {
-          'x-authorization': this._authService.getTokenByName(
-            'x-authorization'
-          ),
           'x-access-token': this._authService.getTokenByName('x-access-token'),
           'x-userId': this._authService.getTokenByName('x-userId'),
         },

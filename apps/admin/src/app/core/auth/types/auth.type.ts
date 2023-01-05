@@ -15,7 +15,6 @@ export type ChangePasswordParam = {
 export type RefreshTokenParam = {
   'x-access-refresh-token': string;
   'x-userId': string;
-  'x-refresh-authorization': string;
 };
 
 export type ManagingOption = {

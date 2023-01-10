@@ -20,9 +20,6 @@ export class MainComponent implements OnInit {
   initCookiesForPlatform() {
     const keys = {
       accessToken: this._authService.getTokenByName('x-access-token'),
-      accessRefreshToken: this._authService.getTokenByName(
-        'x-access-refresh-token'
-      ),
       user: JSON.stringify({
         id: '52b3ea00-6058-4fad-b7f5-a119d47e6f25',
         firstName: 'Ajay',

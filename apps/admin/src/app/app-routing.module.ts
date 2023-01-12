@@ -42,7 +42,7 @@ const appRoutes: Route[] = [
   },
   {
     path: '',
-    redirectTo: 'pages/efrontdesk',
+    redirectTo: 'pages',
     pathMatch: 'full',
   },
 ];

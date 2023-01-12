@@ -28,7 +28,7 @@ export class CreateContentComponent implements OnInit {
   /**
    * @function openTemplateList function to open template list.
    */
-  openTemplateList(type) {
+  openTemplateList(type: string) {
     this.changeStep.emit({ step: 'next', templateType: type });
   }
 }

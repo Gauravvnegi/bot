@@ -96,7 +96,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
    * @param type type of item.
    * @param list list content.
    */
-  selectItem(type, list) {
+  selectItem(type: string, list) {
     this.selectedList.emit({ type, data: list });
   }
 
@@ -104,7 +104,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
    * @function redirect function to redirect to url
    * @param url particular url.
    */
-  redirect(url) {
+  redirect(url: string) {
     this._router.navigate([url]);
   }
 
@@ -112,7 +112,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
    * @function close function to close dropdown.
    * @param event event object to stop propagation.
    */
-  close(event) {
+  close(event: PointerEvent) {
     event.stopPropagation();
     this.closeDropdown.emit(event);
   }

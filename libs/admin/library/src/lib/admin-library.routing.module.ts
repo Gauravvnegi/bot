@@ -1,52 +1,67 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule } from '@angular/router';
+import { RouterModule, ROUTES } from '@angular/router';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import {
+  CRoutes,
+  DashboardErrorComponent,
+  ModuleNames,
+  routesFactory,
+} from '@hospitality-bot/admin/shared';
 import { LibraryComponent } from './components/library/library.component';
-import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 
-const appRoutes: Route[] = [
+const appRoutes: CRoutes = [
   { path: '', pathMatch: 'full', redirectTo: 'package' },
   {
     path: 'package',
+    name: ModuleNames.PACKAGES,
     loadChildren: () =>
       import('@hospitality-bot/admin/packages').then(
         (m) => m.AdminPackagesModule
       ),
-    // canActivate: [LoadGuard],
   },
   {
     path: 'listing',
+    name: ModuleNames.LISTING,
     loadChildren: () =>
       import('@hospitality-bot/admin/listing').then(
         (m) => m.AdminListingModule
       ),
-    // canActivate: [LoadGuard],
   },
   {
     path: 'assets',
+    name: ModuleNames.ASSET,
     loadChildren: () =>
       import('@hospitality-bot/admin/assets').then((m) => m.AdminAssetsModule),
-    // canActivate: [LoadGuard],
   },
   {
     path: 'topic',
+    name: ModuleNames.TOPIC,
     loadChildren: () =>
       import('@hospitality-bot/admin/topic').then((m) => m.AdminTopicModule),
-    // canActivate: [LoadGuard],
   },
   {
     path: 'template',
+    name: ModuleNames.TEMPLATE,
     loadChildren: () =>
       import('@hospitality-bot/admin/template').then(
         (m) => m.AdminTemplateModule
       ),
-    // canActivate: [LoadGuard],
   },
   { path: '**', pathMatch: 'full', redirectTo: '404' },
   { path: '404', component: DashboardErrorComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(appRoutes)],
+  imports: [RouterModule.forChild([])],
+  providers: [
+    {
+      provide: ROUTES,
+      useFactory: (subscriptionService: SubscriptionPlanService) =>
+        routesFactory(appRoutes, [subscriptionService]),
+      multi: true,
+      deps: [SubscriptionPlanService],
+    },
+  ],
   exports: [RouterModule],
 })
 export class AdminLibraryRoutingModule {

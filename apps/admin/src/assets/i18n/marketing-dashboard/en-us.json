@@ -2,7 +2,7 @@
   "subscriber": {
     "title": "Subscribers vs Unsubscribers"
   },
-  "rate-graph": {
+  "rateGraph": {
     "title": "Open Rate vs Click Rate"
   },
   "contact-stats": {
@@ -17,5 +17,10 @@
     "conversionRate": "Conversion Rate",
     "totalClicks": "Total Clicks",
     "ctr": "CTR"
+  },
+  "messages": {
+    "error": {
+      "undefined": "Fetching Stats failed"
+    }
   }
 }

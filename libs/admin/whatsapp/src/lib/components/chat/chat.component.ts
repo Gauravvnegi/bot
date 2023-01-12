@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalService, SnackBarService } from 'libs/shared/material/src';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -83,6 +84,13 @@ export class ChatComponent
     }
   }
 
+  get productName() {
+    return {
+      whatsappBot: ModuleNames.WHATSAPP_BOT,
+      request: ModuleNames.REQUEST,
+    };
+  }
+
   loadChat() {
     if (
       !this.chatList.messages[this.selectedChat.receiverId] ||
@@ -115,6 +123,7 @@ export class ChatComponent
       this.globalFilterService.globalFilter$.subscribe((data) => {
         this.hotelId = this.globalFilterService.hotelId;
         this.getLiveChat();
+        this.loadChat();
       })
     );
   }

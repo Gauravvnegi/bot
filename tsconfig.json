@@ -99,7 +99,15 @@
       ],
       "@hospitality-bot/admin/create-with": [
         "libs/admin/create-with/src/index.ts"
-      ]
+      ],
+      "@hospitality-bot/admin/inventory": ["libs/admin/inventory/src/index.ts"],
+      "@hospitality-bot/admin/e-frontdesk": [
+        "libs/admin/e-frontdesk/src/index.ts"
+      ],
+      "@hospitality-bot/admin/unsubscribed": [
+        "libs/admin/unsubscribed/src/index.ts"
+      ],
+      "@hospitality-bot/admin/finance": ["libs/admin/finance/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

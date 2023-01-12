@@ -7,6 +7,7 @@ import {
   CardNames,
   ConfigService,
   HotelDetailService,
+  ModuleNames,
   TableNames,
 } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
@@ -224,13 +225,15 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   }
 
   checkForStaySubscribed() {
-    return this.subscriptionPlanService.getModuleSubscription().modules.feedback
-      .active;
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.FEEDBACK
+    );
   }
 
   checkForTransactionalSubscribed() {
-    return this.subscriptionPlanService.getModuleSubscription().modules
-      .FEEDBACK_TRANSACTIONAL.active;
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.FEEDBACK_TRANSACTIONAL
+    );
   }
 
   listenForStateData() {

@@ -144,9 +144,7 @@
                     quickReplyType.isSelected
                 }"
                 [selected]="isQuickReplyFilterSelected(quickReplyType)"
-                (click)="
-                  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
-                "
+                (click)="toggleQuickReplyFilter(quickReplyTypeIdx)"
               >
                 {{ quickReplyType.label }}
                 <span *ngIf="quickReplyType.value !== 'ALL'"> (</span

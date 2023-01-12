@@ -128,10 +128,10 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function getCampaignDetails funcction to get campaign details.
+   * @function getCampaignDetails function to get campaign details.
    * @param id campaign id.
    */
-  getCampaignDetails(id) {
+  getCampaignDetails(id: string) {
     this.$subscription.add(
       this._campaignService
         .getCampaignById(this.hotelId, id)
@@ -173,7 +173,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
    * @param control campaignFG.
    * @param dataField have form data.
    */
-  addFormArray(control, dataField) {
+  addFormArray(control: string, dataField: string) {
     return new Promise((resolve, reject) => {
       if (this.campaign[dataField]) {
         this.campaign[control] = [];

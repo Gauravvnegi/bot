@@ -1613,6 +1613,134 @@
           "style": "scss"
         }
       }
+    },
+    "admin-inventory": {
+      "projectType": "library",
+      "root": "libs/admin/inventory",
+      "sourceRoot": "libs/admin/inventory/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/inventory/tsconfig.lib.json",
+              "libs/admin/inventory/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/inventory/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/inventory/jest.config.js",
+            "tsConfig": "libs/admin/inventory/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/inventory/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-e-frontdesk": {
+      "projectType": "library",
+      "root": "libs/admin/e-frontdesk",
+      "sourceRoot": "libs/admin/e-frontdesk/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/e-frontdesk/tsconfig.lib.json",
+              "libs/admin/e-frontdesk/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/e-frontdesk/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/e-frontdesk/jest.config.js",
+            "tsConfig": "libs/admin/e-frontdesk/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/e-frontdesk/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-unsubscribed": {
+      "projectType": "library",
+      "root": "libs/admin/unsubscribed",
+      "sourceRoot": "libs/admin/unsubscribed/src",
+      "prefix": "admin",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/unsubscribed/tsconfig.lib.json",
+              "libs/admin/unsubscribed/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/unsubscribed/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/unsubscribed/jest.config.js",
+            "tsConfig": "libs/admin/unsubscribed/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/unsubscribed/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-finance": {
+      "projectType": "library",
+      "root": "libs/admin/finance",
+      "sourceRoot": "libs/admin/finance/src",
+      "prefix": "admin",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/finance/tsconfig.lib.json",
+              "libs/admin/finance/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/finance/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/finance/jest.config.js",
+            "tsConfig": "libs/admin/finance/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/finance/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

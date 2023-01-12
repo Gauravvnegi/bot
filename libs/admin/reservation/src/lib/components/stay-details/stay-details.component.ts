@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
-import { get } from 'lodash';
-import { GuestDetails } from '../../models/guest-feedback.model';
-import { GuestReservation } from '../../models/guest-table.model';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-stay-details',
@@ -58,12 +56,14 @@ export class StayDetailsComponent implements OnInit {
   }
 
   checkForTransactionFeedbackSubscribed() {
-    const subscription = this.subscriptionService.getModuleSubscription();
-    return get(subscription, ['modules', 'FEEDBACK_TRANSACTIONAL', 'active']);
+    return this.subscriptionService.checkModuleSubscription(
+      ModuleNames.FEEDBACK_TRANSACTIONAL
+    );
   }
 
   checkForStayFeedbackSubscribed() {
-    const subscription = this.subscriptionService.getModuleSubscription();
-    return get(subscription, ['modules', 'feedback', 'active']);
+    return this.subscriptionService.checkModuleSubscription(
+      ModuleNames.FEEDBACK
+    );
   }
 }

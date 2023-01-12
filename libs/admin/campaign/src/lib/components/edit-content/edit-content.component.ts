@@ -30,7 +30,7 @@ export class EditContentComponent implements OnInit {
    * @function changeMode function to change mode.
    * @param mode param to store current mode.
    */
-  changeMode(mode) {
+  changeMode(mode: string) {
     this.currentMode = mode;
   }
 

@@ -76,6 +76,14 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * @function campaignConfiguration returns campaignConfig object.
+   * @returns campaignConfig object.
+   */
+  get campaignConfiguration() {
+    return campaignConfig;
+  }
+
+  /**
    * @function selectTemplate function to select template.
    * @param template template data.
    */

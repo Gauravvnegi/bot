@@ -1,0 +1,30 @@
+<div class="sentAnalytics">
+  <div class="analyticsHeading">
+    <p>{{ title | translate }}</p>
+  </div>
+  <div class="line-chart">
+    <canvas
+      baseChart
+      class="canvas"
+      [datasets]="charts.chartData"
+      [labels]="charts.chartLabels"
+      [options]="charts.chartOptions"
+      [colors]="charts.chartColors"
+      [legend]="charts.chartLegend"
+      [chartType]="charts.chartType"
+    >
+    </canvas>
+  </div>
+
+  <div class="stat-labels-container">
+    <div
+      class="stat-label"
+      (click)="legendOnClick(legendIndex)"
+      *ngFor="let legend of legendData; let legendIndex = index"
+    >
+      <input class="legends" type="checkbox" />
+      <img src="{{ legend.src }}" alt="{{ legend.label }}" />
+      <p class="stat-label-title">{{ legend.label }}</p>
+    </div>
+  </div>
+</div>

@@ -39,9 +39,11 @@ export class PagesComponent implements OnInit {
       get(adminDetails, ['userDetail'])
     );
 
-    this._subscriptionPlanService.initSubscriptionDetails(
-      get(adminDetails, ['subscription'])
-    );
+    const subscriptionDetails = get(adminDetails, ['subscription']);
+    if (subscriptionDetails)
+      this._subscriptionPlanService.initSubscriptionDetails(
+        get(adminDetails, ['subscription'])
+      );
   }
 
   getConfigData(hotelId) {

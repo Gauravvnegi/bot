@@ -23,18 +23,8 @@ export class TokenRetievalInterceptor implements HttpInterceptor {
         map((event: HttpEvent<any>) => {
           if (event instanceof HttpResponse) {
             this._authService.setTokenByName(
-              'x-authorization',
-              event.headers.get('x-authorization')
-            );
-
-            this._authService.setTokenByName(
               'x-access-token',
               event.headers.get('x-access-token')
-            );
-
-            this._authService.setTokenByName(
-              'x-refresh-authorization',
-              event.headers.get('x-refresh-authorization')
             );
 
             this._authService.setTokenByName(

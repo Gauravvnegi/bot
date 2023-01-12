@@ -63,11 +63,10 @@ export class AuthService extends ApiService {
    * @returns The user is authenticated or not.
    */
   isAuthenticated(): boolean {
-    const xAuthToken = this.getTokenByName('x-authorization');
     const xAccessToken = this.getTokenByName('x-access-token');
     const xUserIdToken = this.getTokenByName('x-userId');
 
-    return !!xAuthToken && !!xAccessToken && !!xUserIdToken;
+    return !!xAccessToken && !!xUserIdToken;
   }
 
   /**
@@ -84,9 +83,7 @@ export class AuthService extends ApiService {
    */
   clearToken() {
     const tokensToRemove = [
-      'x-authorization',
       'x-userId',
-      'x-refresh-authorization',
       'x-access-token',
       'userId',
       'x-access-refresh-token',

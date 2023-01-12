@@ -18,3 +18,5 @@ export * from './lib/components/mention';
 export * from './lib/models/userConfig.model';
 export * from './lib/constants/colors';
 export * from './lib/interfaces/deserializable.interface';
+export * from './lib/constants/routes';
+export * from './lib/utils/routesFactory';

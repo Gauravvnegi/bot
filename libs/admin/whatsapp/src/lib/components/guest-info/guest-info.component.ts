@@ -101,6 +101,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         this.hotelId = this.globalFilterService.hotelId;
+        this.getGuestInfo();
       })
     );
   }

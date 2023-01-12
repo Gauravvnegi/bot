@@ -143,6 +143,18 @@
     },
     "admin-create-with": {
       "tags": []
+    },
+    "admin-inventory": {
+      "tags": []
+    },
+    "admin-e-frontdesk": {
+      "tags": []
+    },
+    "admin-unsubscribed": {
+      "tags": []
+    },
+    "admin-finance": {
+      "tags": []
     }
   }
 }

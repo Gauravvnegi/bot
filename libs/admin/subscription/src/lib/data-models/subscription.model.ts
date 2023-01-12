@@ -1,7 +1,6 @@
-import { CommunicationConfig } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { CommunicationConfig } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { get, set } from 'lodash';
-import * as moment from 'moment';
 
 export class SubscriptionPlan {
   description: string;
@@ -22,12 +21,15 @@ export class SubscriptionPlan {
       set({}, 'endDate', get(input, ['endDate'])),
       set({}, 'startDate', get(input, ['startDate']))
     );
-    this.deploymentType = input.features?.ESSENTIALS?.filter(
+
+    this.deploymentType = input.features.ESSENTIALS?.filter(
       (data) => data.name === 'DEPLOYMENT'
     )[0]?.description;
-    this.supportType = input.features?.COMMUNICATION?.filter(
+
+    this.supportType = input.features.COMMUNICATION?.filter(
       (data) => data.name === 'TECHICAL_SUPPORT'
     )[0]?.description;
+
     return this;
   }
 
@@ -45,19 +47,15 @@ export class SubscriptionPlan {
 }
 
 export class PlanUsage {
-  users;
+  // users;
   guests;
   ocr;
   channels;
 
   deserialize(input: any) {
-    this.users = input.features?.MODULE?.filter(
-      (data) => data.name === 'USERS'
-    )[0];
-    this.guests = input.features?.MODULE?.filter(
-      (data) => data.name === 'GUESTS'
-    )[0];
-    this.ocr = input.features?.INTEGRATION?.filter(
+    // this.users = input.features.modules?.filter((data) => data.name === 'USERS')[0];
+    this.guests = input.products.filter((data) => data.name === 'GUESTS')[0];
+    this.ocr = input.features.INTEGRATION?.filter(
       (data) => data.name === 'OCR'
     )[0];
     Object.assign(
@@ -187,7 +185,7 @@ export class CommunicationChannels {
     input.forEach((data) => {
       this.channels.push({
         ...{
-          active: data.active,
+          isActive: data.isActive,
           label: data.label,
         },
         ...CommunicationConfig[data.name],

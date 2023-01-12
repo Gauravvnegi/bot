@@ -1,56 +1,72 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule } from '@angular/router';
+import { RouterModule, ROUTES } from '@angular/router';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import {
+  CRoutes,
+  ModuleNames,
+  routesFactory,
+} from '@hospitality-bot/admin/shared';
+import { ActionOverlayComponent } from './components/action-overlay/action-overlay.component';
+import {
+  FeedbackDetailComponent,
+  FeedbackDetailFooterComponent,
+  FeedbackListComponent,
+  FeedbackListFilterComponent,
+  MainComponent,
+  SearchComponent,
+} from './components/card';
+import { FeedbackDatatableComponent } from './components/datatable/feedback-datatable/feedback-datatable.component';
+import { FeedbackContainerComponent } from './components/feedback-container/feedback-container.component';
+import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
+import { FeedbackStatusFormComponent } from './components/feedback-status-form/feedback-status-form.component';
+import { FeedbackComponent } from './components/feedback/feedback.component';
+import {
+  FeedbackHistoryComponent,
+  GuestBookingInfoComponent,
+  GuestInfoComponent,
+  GuestPersonalInfoComponent,
+  GuestTimelineComponent,
+  MentionsComponent,
+  RequestComponent,
+} from './components/guest-info';
+import { FeedbackDatatableModalComponent } from './components/modals/feedback-datatable/feedback-datatable.component';
+import { FeedbackDetailModalComponent } from './components/modals/feedback-detail-modal/feedback-detail.component';
 import {
   ArtComponent,
+  DisengagementComponent,
   FeedbackDistributionComponent,
   GlobalNpsComponent,
   GtmAcrossServicesComponent,
+  GtmClosureComponent,
   NetPromoterScoreComponent,
   NpsAcrossDepartmentsComponent,
   ReceivedBreakdownComponent,
   ResponseRateComponent,
   TopLowNpsComponent,
   TwoWayProgressComponent,
-  DisengagementComponent,
-  GtmClosureComponent,
 } from './components/stats';
-import { FeedbackDatatableComponent } from './components/datatable/feedback-datatable/feedback-datatable.component';
-import { FeedbackNotesComponent } from './components/feedback-notes/feedback-notes.component';
-import { FeedbackComponent } from './components/feedback/feedback.component';
-import { FeedbackDatatableModalComponent } from './components/modals/feedback-datatable/feedback-datatable.component';
 import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
-import { FeedbackDetailModalComponent } from './components/modals/feedback-detail-modal/feedback-detail.component';
-import {
-  MainComponent,
-  FeedbackListComponent,
-  FeedbackDetailComponent,
-  SearchComponent,
-  FeedbackDetailFooterComponent,
-  FeedbackListFilterComponent,
-} from './components/card';
-import { ActionOverlayComponent } from './components/action-overlay/action-overlay.component';
-import {
-  GuestInfoComponent,
-  GuestBookingInfoComponent,
-  GuestPersonalInfoComponent,
-  GuestTimelineComponent,
-  MentionsComponent,
-  RequestComponent,
-  FeedbackHistoryComponent,
-} from './components/guest-info';
-import { FeedbackStatusFormComponent } from './components/feedback-status-form/feedback-status-form.component';
-import { FeedbackContainerComponent } from './components/feedback-container/feedback-container.component';
 
-const appRoutes: Route[] = [
+const appRoutes: CRoutes = [
   { path: '', redirectTo: 'analytics' },
   {
     path: 'analytics',
+    name: ModuleNames.HEDA_DASHBOARD,
     component: FeedbackContainerComponent,
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(appRoutes)],
+  imports: [RouterModule.forChild([])],
+  providers: [
+    {
+      provide: ROUTES,
+      useFactory: (subscriptionService: SubscriptionPlanService) =>
+        routesFactory(appRoutes, [subscriptionService]),
+      multi: true,
+      deps: [SubscriptionPlanService],
+    },
+  ],
   exports: [RouterModule],
 })
 export class AdminFeedbackRoutingModule {

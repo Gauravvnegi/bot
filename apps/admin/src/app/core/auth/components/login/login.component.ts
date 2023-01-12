@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { Regex, routes, UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Regex } from '@hospitality-bot/admin/shared';
 import { authConstants } from '../../constants/auth';
 import { AuthService } from '../../services/auth.service';
 
@@ -36,7 +35,8 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.checkForAccessToken();
     if (this._authService.isAuthenticated()) {
-      this._router.navigate(['/pages/dashboard']);
+      // this._router.navigate(['/pages/dashboard']);
+      this._router.navigate([`/pages/${routes?.FRONT_DESK_DASHBOARD}`]);
     }
   }
 
@@ -108,7 +108,8 @@ export class LoginComponent implements OnInit {
     this._authService.login(data).subscribe(
       (response) => {
         this._userService.setLoggedInUserId(response?.id);
-        this._router.navigate(['/pages/dashboard']);
+        // this._router.navigate(['/pages/dashboard']);
+        this._router.navigate([`/pages/${routes?.FRONT_DESK_DASHBOARD}`]);
       },
       ({ error }) => {
         this.isSigningIn = false;

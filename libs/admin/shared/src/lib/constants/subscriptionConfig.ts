@@ -1,17 +1,63 @@
 export enum ModuleNames {
-  GUESTS = 'guest',
-  REQUEST = 'request',
-  FEEDBACK = 'feedback',
-  PACKAGES = 'package',
-  RESERVATION = 'dashboard',
-  NOTIFICATIONS = 'notification',
-  ROLE_MANAGEMENT = 'roles-permissions',
+  //Dashboard
+  Home = 'HOME',
+
+  // Create with
+  CREATE_WITH = 'CREATE_WITH',
+  CREATE_WITH_DASHBOARD = 'CREATE_WITH_DASHBOARD',
+  SEO_FRIENDLY = 'SEO_FRIENDLY',
+  THEME = 'THEME',
+  PAGES = 'PAGES',
+  BLOG = 'BLOG',
+  BOOKING_ENGINE = 'BOOKING_ENGINE',
+
+  // Front Desk
+  FRONT_DESK = 'FRONT_DESK',
+  FRONT_DESK_DASHBOARD = 'FRONT_DESK_DASHBOARD',
+  REQUEST_DASHBOARD = 'REQUEST_DASHBOARD',
+  REQUEST = 'REQUEST',
+  RESERVATION = 'RESERVATION',
+
+  // Freddie
+  FREDDIE = 'FREDDIE',
+  CONVERSATION_DASHBOARD = 'CONVERSATION_DASHBOARD',
+  LIVE_MESSAGING = 'LIVE_MESSAGING',
+  WHATSAPP_BOT = 'WHATSAPP_BOT',
+
+  // Hedda
+  HEDA = 'HEDA',
+  HEDA_DASHBOARD = 'HEDA_DASHBOARD',
+  FEEDBACK = 'FEEDBACK',
   FEEDBACK_TRANSACTIONAL = 'FEEDBACK_TRANSACTIONAL',
-  MARKETING = 'marketing',
-  HEDA = 'heda',
-  FREDDIE = 'freddie',
-  FRONT_DESK = 'efrontdesk',
-  BUILDER = 'builder',
+
+  // eMarkt_IT
+  EMARK_IT = 'eMARK_IT',
+  EMARK_IT_DASHBOARD = 'eMARK_IT_DASHBOARD',
+  CAMPAIGN = 'CAMPAIGN',
+
+  // Library
+  LIBRARY = 'LIBRARY',
+  PACKAGES = 'PACKAGES',
+  LISTING = 'LISTING',
+  TOPIC = 'TOPIC',
+  ASSET = 'ASSET',
+  TEMPLATE = 'TEMPLATE',
+
+  // Inventory
+  INVENTORY = 'INVENTORY',
+  ROOM = 'ROOM',
+
+  // FINANCE
+  FINANCE = 'FINANCE',
+
+  // GUESTS
+  GUESTS = 'GUESTS',
+  GUESTS_DASHBOARD = 'GUESTS_DASHBOARD',
+  RESIDENT = 'RESIDENT',
+  NON_RESIDENT = 'NON_RESIDENT',
+
+  // SUBSCRIPTION
+  SUBSCRIPTION = 'SUBSCRIPTION',
 }
 
 export enum Integrations {
@@ -111,7 +157,7 @@ export const TechSupport = {
 };
 
 export const ModuleConfig = {
-  [ModuleNames.RESERVATION]: {
+  [ModuleNames.FRONT_DESK_DASHBOARD]: {
     cards: [
       CardNames.ARRIVAL,
       CardNames.INHOUSE,
@@ -128,7 +174,7 @@ export const ModuleConfig = {
       },
     },
   },
-  [ModuleNames.GUESTS]: {
+  [ModuleNames.GUESTS_DASHBOARD]: {
     cards: [
       CardNames.VIP,
       CardNames.STATUS,
@@ -205,40 +251,5 @@ export const ModuleConfig = {
         tabFilters: [Filters.RESERVATION, Filters.INHOUSE],
       },
     },
-  },
-  [ModuleNames.NOTIFICATIONS]: {
-    cards: [],
-    tables: [],
-    filters: {},
-  },
-  [ModuleNames.ROLE_MANAGEMENT]: {
-    cards: [],
-    tables: [],
-    filters: {},
-  },
-  [ModuleNames.MARKETING]: {
-    cards: [],
-    tables: [],
-    filters: [],
-  },
-  [ModuleNames.HEDA]: {
-    cards: [],
-    tables: [],
-    filters: [],
-  },
-  [ModuleNames.FREDDIE]: {
-    cards: [],
-    tables: [],
-    filters: [],
-  },
-  [ModuleNames.FRONT_DESK]: {
-    cards: [],
-    tables: [],
-    filters: [],
-  },
-  [ModuleNames.BUILDER]: {
-    cards: [],
-    tables: [],
-    filters: [],
   },
 };

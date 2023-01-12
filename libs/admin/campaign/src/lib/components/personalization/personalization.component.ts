@@ -34,7 +34,6 @@ export class PersonalizationComponent implements OnInit, OnDestroy {
   listenForPersonalizationDisable() {
     this._emailService.$disablePersonalizationPopup[this.name].subscribe(
       (response: boolean) => {
-        console.log('listenForPersonalizationDisable', response);
         if (response) this.enablePersonalization = false;
       }
     );

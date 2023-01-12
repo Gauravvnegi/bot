@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { routes } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-dashboard-error',
@@ -11,6 +12,7 @@ export class DashboardErrorComponent implements OnInit {
 
   ngOnInit(): void {}
   redirectToDashboard() {
-    this._router.navigate(['/pages/dashboard']);
+    // this._router.navigate(['/pages/dashboard']);
+    this._router.navigate([`/pages/${routes.FRONT_DESK_DASHBOARD}`]);
   }
 }

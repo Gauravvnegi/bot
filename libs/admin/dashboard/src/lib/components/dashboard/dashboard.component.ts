@@ -8,7 +8,10 @@ import {
 import { ModalService } from '@hospitality-bot/shared/material';
 import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
-import { TableNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import {
+  ModuleNames,
+  TableNames,
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -28,6 +31,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.listenForStateData();
+  }
+
+  get featurePath() {
+    return [
+      `${ModuleNames.FRONT_DESK_DASHBOARD}.tables.${TableNames.RESERVATION}`,
+    ];
   }
 
   listenForStateData(): void {

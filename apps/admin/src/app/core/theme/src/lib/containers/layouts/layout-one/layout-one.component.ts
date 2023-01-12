@@ -1,24 +1,25 @@
-import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService, ConfigService } from '@hospitality-bot/admin/shared';
-import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { get } from 'lodash';
-import { Subscription } from 'rxjs';
 import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { get } from 'lodash';
+import { CookieService } from 'ngx-cookie-service';
+import { Subscription } from 'rxjs';
+import { routes } from '../../../../../../../../../../../libs/admin/shared/src/index';
 import { AuthService } from '../../../../../../auth/services/auth.service';
 import { layoutConfig } from '../../../constants/layout';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
 import { GlobalFilterService } from '../../../services/global-filters.service';
+import { LoadingService } from '../../../services/loader.service';
 import { FirebaseMessagingService } from '../../../services/messaging.service';
+import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
-import { trigger, transition, animate, style } from '@angular/animations';
-import { LoadingService } from '../../../services/loader.service';
-import { NotificationService } from '../../../services/notification.service';
-import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -322,16 +323,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   displayProfile() {
-    if (
-      this.subscriptionPlanService.getModuleSubscription().modules[
-        ModuleNames.ROLE_MANAGEMENT
-      ].active
-    )
-      this._router.navigate([
-        `/pages/${
-          ModuleNames.ROLE_MANAGEMENT
-        }/${this._userService.getLoggedInUserid()}`,
-      ]);
+    this._router.navigate([
+      `/pages/${
+        routes.RoleAndPermission
+      }/${this._userService.getLoggedInUserid()}`,
+    ]);
   }
 
   logoutUser() {
@@ -346,12 +342,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   checkForTransactionFeedbackSubscribed() {
-    const subscription = this.subscriptionPlanService.getModuleSubscription();
-    return get(subscription, [
-      'modules',
-      ModuleNames.FEEDBACK_TRANSACTIONAL,
-      'active',
-    ]);
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.FEEDBACK_TRANSACTIONAL
+    );
   }
 
   @HostListener('document:visibilitychange', ['$event'])

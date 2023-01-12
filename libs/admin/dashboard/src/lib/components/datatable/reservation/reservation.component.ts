@@ -78,7 +78,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.registerListeners();
     this.getSubscribedFilters(
-      ModuleNames.RESERVATION,
+      ModuleNames.FRONT_DESK_DASHBOARD,
       TableNames.RESERVATION,
       this.tabFilterItems
     );

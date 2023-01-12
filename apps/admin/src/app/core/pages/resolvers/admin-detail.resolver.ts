@@ -23,11 +23,15 @@ export class AdminDetailResolver implements Resolve<any> {
       .getUserDetailsById(this._userService.getLoggedInUserid())
       .pipe(
         switchMap((res) => {
+          let subscription: Observable<any> = of(undefined);
+          if (!this.subscriptionPlanService.getSubscription())
+            subscription = this.subscriptionPlanService.getSubscriptionPlan(
+              res.hotelAccess.chains[0].hotels[0].id
+            );
+
           return forkJoin({
             userDetail: of(res),
-            subscription: this.subscriptionPlanService.getSubscriptionPlan(
-              res.hotelAccess.chains[0].hotels[0].id
-            ),
+            subscription,
           });
         })
       );

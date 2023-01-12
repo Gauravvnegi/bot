@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { trigger, transition, animate, style } from '@angular/animations';
+import { routes } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-sidenav-expand',
@@ -25,7 +26,11 @@ export class SidenavExpandComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  toggleSideNav(){
+  get routes() {
+    return routes;
+  }
+
+  toggleSideNav() {
     this.isExpanded = !this.isExpanded;
     this.navToggle.emit(this.isExpanded);
   }

@@ -1,22 +1,21 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
   OnInit,
   Output,
-  OnDestroy,
-  EventEmitter,
-  Input
 } from '@angular/core';
-import { ADMIN_ROUTES, DEFAULT_ROUTES } from './sidenav-admin.routes';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { OrientationPopupComponent } from '../orientation-popup/orientation-popup.component';
-import { GlobalFilterService } from '../../services/global-filters.service';
-import { Subscription } from 'rxjs';
-import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { SubscriptionPlanService } from '../../services/subscription-plan.service';
-import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { Router } from '@angular/router';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { Subscription } from 'rxjs';
+import { MenuItem } from '../../data-models/menu.model';
+import { GlobalFilterService } from '../../services/global-filters.service';
+import { SubscriptionPlanService } from '../../services/subscription-plan.service';
+import { OrientationPopupComponent } from '../orientation-popup/orientation-popup.component';
 
 @Component({
   selector: 'hospitality-bot-sidenav',
@@ -49,7 +48,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.registerListeners();
-    this.getSubscriptionPlan({
+    this.initSideNavConfigs({
       headerBgColor: this.branchConfig.headerBgColor,
     });
   }
@@ -109,29 +108,23 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this._modal.openDialog(OrientationPopupComponent, dialogConfig);
   }
 
-  getSubscriptionPlan(config) {
-    this.initSideNavConfigs(
-      this.subscriptionPlanService.getSubscription()['features'].MODULE,
-      config
-    );
-  }
-
-  private initSideNavConfigs(subscription, config = {}) {
+  private initSideNavConfigs(config = {}) {
     this.activeFontColor = '#4B56C0';
     this.normalFontColor = '#C5C5C5';
     this.dividerBgColor = 'white';
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
-    this.menuItems = [
-      ...new Map(
-        [...ADMIN_ROUTES, ...DEFAULT_ROUTES].map((item) => {
-          if (this.router.url.includes(item.path)) {
-            this.handleRouteChange(item);
-          }
-          return [item.path, item];
-        })
-      ).values(),
-    ];
+    let products = this.subscriptionPlanService.getSubscription()['products'];
+
+    this.menuItems = products
+      .filter((item) => item.isView)
+      .map((product) => {
+        let menuItem = new MenuItem().deserialize(product);
+        if (this.router.url.includes(menuItem.path)) {
+          this.handleRouteChange(menuItem);
+        }
+        return menuItem;
+      });
   }
 
   toggleMenuButton() {
@@ -151,103 +144,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.$subscription.unsubscribe();
   }
 
-  subscriptionCheck(data, subscription) {
-    switch (data.path) {
-      case ModuleNames.FEEDBACK:
-        return subscription.filter(
-          (d) =>
-            (ModuleNames[d.name] === data.path && d.active) ||
-            (ModuleNames.FEEDBACK_TRANSACTIONAL === d.name && d.active)
-        );
-      case 'conversation':
-        const subItemList = this.checkConversationSubscription(
-          data,
-          subscription
-        );
-        return subItemList.length ? [{ ...data, children: subItemList }] : [];
-      case ModuleNames.MARKETING:
-        return this.checkSubscriptionByPath(
-          ModuleNames.MARKETING,
-          subscription
-        );
-      case 'library':
-        const libraryList = this.checkLibraryItems(data, subscription);
-        return libraryList.length ? [{ ...data, children: libraryList }] : [];
-      default:
-        return subscription.filter(
-          (d) => ModuleNames[d.name] === data.path && d.active
-        );
-    }
-  }
-
-  checkConversationSubscription(item, subscription) {
-    const subItemList = [];
-    item.children.forEach((child) => {
-      if (
-        child.path.includes(ModuleNames.REQUEST) &&
-        this.checkSubscriptionByPath(ModuleNames.REQUEST, subscription).length
-      )
-        subItemList.push(child);
-      else if (!child.path.includes(ModuleNames.REQUEST))
-        subItemList.push(child);
-    });
-    return subItemList;
-  }
-
-  checkLibraryItems(item, subscription) {
-    const subItemList = [];
-    item.children.forEach((child) => {
-      switch (child.path) {
-        case 'library/package':
-          if (
-            this.checkSubscriptionByPath(ModuleNames.PACKAGES, subscription)
-              .length
-          )
-            subItemList.push(child);
-          break;
-        case 'library/listing':
-          if (
-            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
-              .length
-          )
-            subItemList.push(child);
-          break;
-        case 'library/topic':
-          if (
-            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
-              .length
-          )
-            subItemList.push(child);
-          break;
-        case 'library/template':
-          if (
-            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
-              .length
-          )
-            subItemList.push(child);
-          break;
-        case 'library/assets':
-          if (
-            this.checkSubscriptionByPath(ModuleNames.MARKETING, subscription)
-              .length ||
-            this.checkSubscriptionByPath(ModuleNames.PACKAGES, subscription)
-              .length
-          )
-            subItemList.push(child);
-          break;
-      }
-    });
-    return subItemList;
-  }
-
   handleRouteChange(menuItem) {
     this.isExpanded =
       menuItem.children && menuItem.children.length ? true : false;
     this.navToggle.emit(this.isExpanded);
     this.subSideNav(menuItem.title, menuItem.children);
-  }
-
-  checkSubscriptionByPath(path, subscription) {
-    return subscription.filter((d) => ModuleNames[d.name] === path && d.active);
   }
 }

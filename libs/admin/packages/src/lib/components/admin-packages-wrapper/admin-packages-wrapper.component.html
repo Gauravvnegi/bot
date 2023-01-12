@@ -1,19 +1,9 @@
-<ngcontainer *ngIf="unsubscribe.length === 0; else subscribedview">
-  <hospitality-bot-unsubscribe-view></hospitality-bot-unsubscribe-view>
-</ngcontainer>
-<ng-template #subscribedview>
-  <hospitality-bot-package-datatable
-    tableSubscribed
-    [paths]="'package.tables.' + tables.PACKAGE"
-  >
-  </hospitality-bot-package-datatable>
+<hospitality-bot-package-datatable
+  isFeatureSubscribed
+  [paths]="featurePath.package"
+>
+</hospitality-bot-package-datatable>
 
-  <div
-    class="category_table"
-    tableSubscribed
-    [paths]="'package.tables.' + tables.CATEGORY"
-  >
-    <hospitality-bot-categories-datatable>
-    </hospitality-bot-categories-datatable>
-  </div>
-</ng-template>
+<div class="category_table" isFeatureSubscribed [paths]="featurePath.category">
+  <hospitality-bot-categories-datatable> </hospitality-bot-categories-datatable>
+</div>

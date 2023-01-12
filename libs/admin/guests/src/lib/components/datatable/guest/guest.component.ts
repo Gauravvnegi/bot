@@ -63,7 +63,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.registerListeners();
     this.getSubscribedFilters(
-      ModuleNames.GUESTS,
+      ModuleNames.GUESTS_DASHBOARD,
       TableNames.GUEST,
       this.tabFilterItems
     );

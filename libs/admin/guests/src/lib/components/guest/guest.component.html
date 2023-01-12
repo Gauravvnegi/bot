@@ -1,12 +1,7 @@
-<ngcontainer *ngIf="unsubscribe.length === 0; else subscribedview">
-  <hospitality-bot-unsubscribe-view></hospitality-bot-unsubscribe-view>
-</ngcontainer>
-<ng-template #subscribedview
-  ><hospitality-bot-statistics></hospitality-bot-statistics>
-  <div class="table-container">
-    <hospitality-bot-guest-datatable
-      tableSubscribed
-      [paths]="'guest.tables.' + tables.GUEST"
-    ></hospitality-bot-guest-datatable>
-  </div>
-</ng-template>
+<hospitality-bot-statistics></hospitality-bot-statistics>
+<div class="table-container">
+  <hospitality-bot-guest-datatable
+    isFeatureSubscribed
+    [paths]="featurePath"
+  ></hospitality-bot-guest-datatable>
+</div>

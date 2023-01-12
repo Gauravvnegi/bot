@@ -1,8 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  GlobalFilterService,
-  SubscriptionPlanService,
-} from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   ModuleNames,
@@ -21,7 +18,6 @@ import { GraphData } from '../types/stats';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class MarketingDashboardComponent implements OnInit, OnDestroy {
-  isSubscribed: boolean;
   $subscription = new Subscription();
   hotelId: string;
   config: any;
@@ -40,7 +36,6 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private _adminUtilityService: AdminUtilityService,
-    private subscriptionPlanService: SubscriptionPlanService,
     private globalFilterService: GlobalFilterService,
     private dateService: DateService,
     private statsService: MarketingService,
@@ -48,14 +43,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.getSubscriptionPlan();
     this.listenForGlobalFilters();
-  }
-
-  getSubscriptionPlan() {
-    this.isSubscribed = this.subscriptionPlanService.checkSubscriptionByPath(
-      ModuleNames.MARKETING
-    );
   }
 
   /**

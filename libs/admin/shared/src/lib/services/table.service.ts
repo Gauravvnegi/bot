@@ -17,18 +17,20 @@ export class TableService {
   ) {}
 
   getSubscribedFilters(
-    module: string,
-    table: string,
+    module: ModuleNames,
+    table: TableNames,
     filters: any[] = []
   ): any[] {
     const validityStatus = this.validateInputs(module, table);
     if (!validityStatus.status) {
-      this.snackbarService.openSnackBarAsText(validityStatus.error);
+      this.snackbarService.openSnackBarAsText(validityStatus.error + module);
     }
+
     if (filters.length) {
-      const getPath = ['modules', module, 'tables', table, 'tabFilters'];
-      const subscription = this.subscriptionService.getModuleSubscription();
-      const subscribedFilters = get(subscription, getPath, []);
+      const getPath = [module, 'tables', table, 'tabFilters'];
+      const productSubscriptionData = this.subscriptionService.getProductSubscription();
+      const subscribedFilters = get(productSubscriptionData, getPath, []);
+
       return subscribedFilters.length
         ? subscribedFilters.map(
             (filter) => filters.filter((d) => d.value === filter)[0]
@@ -42,12 +44,12 @@ export class TableService {
     if (!Object.values(ModuleNames).includes(module)) {
       return {
         status: false,
-        error: 'Module not found.',
+        error: module + ' Module not found.',
       };
     } else if (!Object.values(TableNames).includes(table)) {
       return {
         status: false,
-        error: 'Table not found.',
+        error: table + ' Table not found.',
       };
     } else {
       return { status: true };

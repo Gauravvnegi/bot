@@ -1,0 +1,35 @@
+@import 'main';
+
+.unsubscribe-feature {
+  text-align: center;
+  margin: 15px;
+  padding: 15px;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: 0px 3px 6px #0000000d;
+  border-radius: 8px;
+
+  .head {
+    padding: 10px;
+    font-size: $font22;
+    font-weight: bold;
+    letter-spacing: 1.32px;
+    color: #1f4380;
+  }
+  .subhead {
+    opacity: 0.35;
+    font-size: $font16;
+    font-weight: 500;
+    line-height: 1.56;
+    color: $dark-blue;
+  }
+  .visit {
+    padding-top: 7px;
+    text-decoration: underline;
+    font-size: $font16;
+    font-weight: 500;
+    line-height: 1;
+    color: #166dff;
+    cursor: pointer;
+  }
+}

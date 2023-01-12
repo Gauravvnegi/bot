@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service';
 import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'hospitality-bot-analytics',
   templateUrl: './analytics.component.html',

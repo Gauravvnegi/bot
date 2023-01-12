@@ -1,14 +1,15 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
+import { Component, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { SnackBarService } from 'libs/shared/material/src';
-import { ReservationService } from '../../services/reservation.service';
-import { Observable } from 'rxjs';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { RequestTable } from '../../models/request-table.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import { ModuleNames, TableNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { Observable } from 'rxjs';
+import { RequestTable } from '../../models/request-table.model';
+import { ReservationService } from '../../services/reservation.service';
 
 @Component({
   selector: 'hospitality-bot-requests-table',
@@ -56,7 +57,11 @@ export class RequestsTableComponent extends BaseDatatableComponent {
 
   ngOnInit() {
     this.loadInitialData();
-    this.getSubscribedFilters('request', 'Requests', this.tabFilterItems);
+    this.getSubscribedFilters(
+      ModuleNames.REQUEST,
+      TableNames.REQUEST,
+      this.tabFilterItems
+    );
   }
 
   loadInitialData(queries = []) {

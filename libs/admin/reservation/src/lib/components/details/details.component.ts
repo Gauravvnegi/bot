@@ -16,7 +16,11 @@ import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/servi
 import * as FileSaver from 'file-saver';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
+import {
+  ConfigService,
+  ModuleNames,
+  UserService,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
@@ -782,13 +786,15 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   checkForTransactionFeedbackSubscribed() {
-    const subscription = this.subscriptionService.getModuleSubscription();
-    return get(subscription, ['modules', 'FEEDBACK_TRANSACTIONAL', 'active']);
+    return this.subscriptionService.checkModuleSubscription(
+      ModuleNames.FEEDBACK_TRANSACTIONAL
+    );
   }
 
   checkForStayFeedbackSubscribed() {
-    const subscription = this.subscriptionService.getModuleSubscription();
-    return get(subscription, ['modules', 'feedback', 'active']);
+    return this.subscriptionService.checkModuleSubscription(
+      ModuleNames.FEEDBACK
+    );
   }
 
   get bookingCount() {

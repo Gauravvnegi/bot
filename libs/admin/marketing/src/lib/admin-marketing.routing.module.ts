@@ -1,11 +1,18 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule } from '@angular/router';
+import { RouterModule, ROUTES } from '@angular/router';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import {
+  CRoutes,
+  ModuleNames,
+  routesFactory,
+} from '@hospitality-bot/admin/shared';
 import { MarketingComponent } from './components/marketing/marketing.component';
 
-const appRoutes: Route[] = [
+const appRoutes: CRoutes = [
   { path: '', redirectTo: 'analytics' },
   {
     path: 'analytics',
+    name: ModuleNames.EMARK_IT_DASHBOARD,
     loadChildren: () =>
       import('@hospitality-bot/admin/marketing-dashboard').then(
         (m) => m.AdminMarketingDashboardModule
@@ -13,6 +20,7 @@ const appRoutes: Route[] = [
   },
   {
     path: 'campaign',
+    name: ModuleNames.CAMPAIGN,
     loadChildren: () =>
       import('@hospitality-bot/admin/campaign').then(
         (m) => m.AdminCampaignModule
@@ -21,7 +29,16 @@ const appRoutes: Route[] = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(appRoutes)],
+  imports: [RouterModule.forChild([])],
+  providers: [
+    {
+      provide: ROUTES,
+      useFactory: (subscriptionService: SubscriptionPlanService) =>
+        routesFactory(appRoutes, [subscriptionService]),
+      multi: true,
+      deps: [SubscriptionPlanService],
+    },
+  ],
   exports: [RouterModule],
 })
 export class AdminMarketingRoutingModule {

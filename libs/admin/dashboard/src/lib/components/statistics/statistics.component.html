@@ -1,15 +1,19 @@
 <div class="stats--wrapper" *ngIf="statistics">
   <div
     class="stats"
-    cardSubscribed
-    [paths]="['dashboard.cards.ARRIVAL']"
+    isFeatureSubscribed
+    [paths]="[productName + '.cards.' + cardNames.ARRIVAL]"
     click-allow
   >
     <hospitality-bot-arrivals-statistics
       [arrivals]="statistics.arrivals"
     ></hospitality-bot-arrivals-statistics>
   </div>
-  <div class="stats" cardSubscribed [paths]="['dashboard.cards.INHOUSE']">
+  <div
+    class="stats"
+    isFeatureSubscribed
+    [paths]="[productName + '.cards.' + cardNames.INHOUSE]"
+  >
     <hospitality-bot-inhouse-statistics
       [inhouse]="statistics.inhouse"
       [inhouseRequest]="statistics.inhouseRequest"
@@ -17,8 +21,8 @@
   </div>
   <div
     class="stats full-width"
-    cardSubscribed
-    [paths]="['dashboard.cards.DEPARTURE']"
+    isFeatureSubscribed
+    [paths]="[productName + '.cards.' + cardNames.DEPARTURE]"
     click-allow
   >
     <hospitality-bot-departure-statistics
@@ -28,15 +32,15 @@
 
   <div
     class="stats inc-width-xl change-height"
-    cardSubscribed
-    [paths]="['dashboard.cards.BOOKINGSTATUS']"
+    isFeatureSubscribed
+    [paths]="[productName + '.cards.' + cardNames.BOOKINGSTATUS]"
   >
     <hospitality-bot-booking-status></hospitality-bot-booking-status>
   </div>
   <div
     class="stats inc-width-l change-height"
-    cardSubscribed
-    [paths]="['dashboard.cards.RESERVATION']"
+    isFeatureSubscribed
+    [paths]="[productName + '.cards.' + cardNames.RESERVATION]"
   >
     <hospitality-bot-customer-statistics></hospitality-bot-customer-statistics>
   </div>

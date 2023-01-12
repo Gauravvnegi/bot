@@ -1,6 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  CardNames,
+  ModuleNames,
+} from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { Statistics } from '../../data-models';
 import { StatisticsService } from '../../services/statistics.service';
@@ -29,6 +33,14 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+  }
+
+  get productName() {
+    return ModuleNames.FRONT_DESK_DASHBOARD;
+  }
+
+  get cardNames() {
+    return CardNames;
   }
 
   /**

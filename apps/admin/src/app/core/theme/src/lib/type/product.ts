@@ -9,7 +9,7 @@ export type ModuleConfig = {
   label: string;
   description: string;
   icon: string;
-  isActive: boolean;
+  isSubscribed: boolean;
   isView: boolean;
 };
 
@@ -17,17 +17,20 @@ export type Product = ModuleConfig & {
   config: ModuleConfig;
 };
 
-export type Cards = Record<CardNames, { isActive: boolean; isView: boolean }>;
+export type Cards = Record<
+  CardNames,
+  { isSubscribed: boolean; isView: boolean }
+>;
 
 export type Tables = Record<
   TableNames,
-  { isActive: boolean; isView: boolean; tabFilters: TableNames[] }
+  { isSubscribed: boolean; isView: boolean; tabFilters: TableNames[] }
 >;
 
 export type Modules = Record<
   ModuleNames,
   {
-    isActive: boolean;
+    isSubscribed: boolean;
     isView: boolean;
     cards: Partial<Cards>;
     tables: Partial<Tables>;

@@ -4,7 +4,7 @@ import { get } from 'lodash';
 
 @Directive({ selector: '[isFeatureSubscribed]' })
 export class InternalSubscriptionDirective implements OnInit {
-  isActive: boolean;
+  isSubscribed: boolean;
 
   @Input() paths: string[];
 
@@ -20,17 +20,17 @@ export class InternalSubscriptionDirective implements OnInit {
   checkSubscription(): void {
     const subscription = this.subscriptionService.getProductSubscription();
 
-    this.isActive = this.paths
-      .map((path) => get(subscription, [...path.split('.'), 'isActive'], false))
+    this.isSubscribed = this.paths
+      .map((path) =>
+        get(subscription, [...path.split('.'), 'isSubscribed'], false)
+      )
       .reduce((prev, curr) => prev || curr, false);
-
-    console.log(this.isActive, 'isActive');
 
     this.viewFeature();
   }
 
   viewFeature() {
-    this.elementRef.nativeElement.style.display = this.isActive
+    this.elementRef.nativeElement.style.display = this.isSubscribed
       ? 'block'
       : 'none';
   }

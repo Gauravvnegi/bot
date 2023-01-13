@@ -4,7 +4,7 @@ import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/s
 
 @Directive({ selector: '[featureSubscribed]' })
 export class FeatureDirective implements OnInit {
-  isActive = false;
+  isSubscribed = false;
   @Input() feature: ModuleNames;
   constructor(
     private subscriptionPlanService: SubscriptionPlanService,
@@ -16,14 +16,14 @@ export class FeatureDirective implements OnInit {
   }
 
   getSubscriptionPlan() {
-    this.isActive = this.subscriptionPlanService.checkModuleSubscription(
+    this.isSubscribed = this.subscriptionPlanService.checkModuleSubscription(
       this.feature
     );
     this.viewModule();
   }
 
   viewModule() {
-    this.elementRef.nativeElement.style.display = this.isActive
+    this.elementRef.nativeElement.style.display = this.isSubscribed
       ? 'block'
       : 'none';
   }

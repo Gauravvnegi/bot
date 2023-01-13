@@ -52,7 +52,7 @@ export class SubscriptionPlanService extends ApiService {
   }
 
   getChannelSubscription() {
-    return this.subscriptions.features.CHANNELS;
+    return this.subscriptions.channels;
   }
 
   checkModuleSubscription(productName: ModuleNames) {

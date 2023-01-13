@@ -32,13 +32,23 @@ export class Subscriptions {
   description: string;
   startDate: number;
   endDate: number;
-  features: Features;
+
+  channels: Feature[];
+  integration: Feature[];
+  essentials: Feature[];
+  communication: Feature[];
+
   products: Products[];
   active: boolean;
   planUpgradable: boolean;
 
   deserialize(input: any) {
     this.products = new Array<Products>();
+
+    this.essentials = new Array<Feature>();
+    this.integration = new Array<Feature>();
+    this.channels = new Array<Feature>();
+    this.communication = new Array<Feature>();
 
     Object.assign(
       this,
@@ -52,10 +62,22 @@ export class Subscriptions {
       set({}, 'planUpgradable', get(input, ['planUpgradable'])),
       set({}, 'description', get(input, ['description']))
     );
-    this.features = new Features().deserialize(input.features);
 
     input.products?.forEach((product) => {
       this.products.push(new Products().deserialize(product));
+    });
+
+    input.essentials?.forEach((item) => {
+      this.essentials.push(new Feature().deserialize(item));
+    });
+    input.integration?.forEach((item) => {
+      this.integration.push(new Feature().deserialize(item));
+    });
+    input.channels?.forEach((item) => {
+      this.channels.push(new Feature().deserialize(item));
+    });
+    input.communication?.forEach((item) => {
+      this.communication.push(new Feature().deserialize(item));
     });
 
     return this;
@@ -68,7 +90,7 @@ export class Products {
   description: string;
   icon: string;
   config: SubProducts[];
-  isActive: true;
+  isSubscribed: true;
   isView: true;
 
   deserialize(input: any) {
@@ -80,7 +102,7 @@ export class Products {
       set({}, 'label', get(input, ['label'])),
       set({}, 'description', get(input, ['description'])),
       set({}, 'icon', get(input, ['icon'])),
-      set({}, 'isActive', get(input, ['isActive'])),
+      set({}, 'isSubscribed', get(input, ['isSubscribed'])),
       set({}, 'isView', get(input, ['isView']))
     );
     input.config?.forEach((subProduct) => {
@@ -96,9 +118,9 @@ export class SubProducts {
   label: string;
   description: string;
   icon: string;
-  usageLimit: number;
+  cost: Cost;
   currentUsage: number;
-  isActive: true;
+  isSubscribed: true;
   isView: true;
 
   deserialize(input: any) {
@@ -108,11 +130,12 @@ export class SubProducts {
       set({}, 'label', get(input, ['label'])),
       set({}, 'description', get(input, ['description'])),
       set({}, 'icon', get(input, ['icon'])),
-      set({}, 'usageLimit', get(input, ['usageLimit'])),
       set({}, 'currentUsage', get(input, ['currentUsage'])),
-      set({}, 'isActive', get(input, ['isActive'])),
+      set({}, 'isSubscribed', get(input, ['isSubscribed'])),
       set({}, 'isView', get(input, ['isView']))
     );
+
+    this.cost = new Cost().deserialize(input.cost);
 
     return this;
   }
@@ -138,7 +161,7 @@ export class Feature {
   description: string;
   cost: Cost;
   currentUsage: number;
-  isActive: boolean;
+  isSubscribed: boolean;
   isView: boolean;
 
   deserialize(input: any) {
@@ -148,38 +171,10 @@ export class Feature {
       set({}, 'label', get(input, ['label'])),
       set({}, 'description', get(input, ['description'])),
       set({}, 'currentUsage', get(input, ['currentUsage'])),
-      set({}, 'isActive', get(input, ['isActive'])),
-      set({}, 'isActive', get(input, ['isActive']))
+      set({}, 'isSubscribed', get(input, ['isSubscribed'])),
+      set({}, 'isSubscribed', get(input, ['isSubscribed']))
     );
     this.cost = new Cost().deserialize(input.cost);
-    return this;
-  }
-}
-
-export class Features {
-  CHANNELS: Feature[];
-  COMMUNICATION: Feature[];
-  ESSENTIALS: Feature[];
-  INTEGRATION: Feature[];
-
-  deserialize(input: any) {
-    this.ESSENTIALS = new Array<Feature>();
-    this.INTEGRATION = new Array<Feature>();
-    this.CHANNELS = new Array<Feature>();
-    this.COMMUNICATION = new Array<Feature>();
-
-    input.ESSENTIALS?.forEach((essential) => {
-      this.ESSENTIALS.push(new Feature().deserialize(essential));
-    });
-    input.INTEGRATION?.forEach((integration) => {
-      this.INTEGRATION.push(new Feature().deserialize(integration));
-    });
-    input.CHANNELS?.forEach((channel) => {
-      this.CHANNELS.push(new Feature().deserialize(channel));
-    });
-    input.COMMUNICATION?.forEach((communication) => {
-      this.COMMUNICATION.push(new Feature().deserialize(communication));
-    });
     return this;
   }
 }
@@ -203,7 +198,7 @@ export class ProductSubscription {
   }
 
   setConfig(product: Product) {
-    if (product.isActive) this.subscribedModules.push(product.name);
+    if (product.isSubscribed) this.subscribedModules.push(product.name);
 
     const productName: ModuleNames = product.name;
     let moduleProduct = ModuleConfig[productName];
@@ -211,7 +206,7 @@ export class ProductSubscription {
       const tempCards: Partial<Cards> = new Object();
       moduleProduct.cards.forEach((card: CardNames) => {
         tempCards[card] = {
-          isActive: product.isActive,
+          isSubscribed: product.isSubscribed,
           isView: product.isView,
         };
       });
@@ -219,7 +214,7 @@ export class ProductSubscription {
       const tempTables: Partial<Tables> = new Object();
       moduleProduct.tables.forEach((table: TableNames) => {
         tempTables[table] = {
-          isActive: product.isActive,
+          isSubscribed: product.isSubscribed,
           isView: product.isView,
           tabFilters:
             ModuleConfig[ModuleNames[product.name]]?.filters[table].tabFilters,
@@ -228,7 +223,7 @@ export class ProductSubscription {
 
       this.modules[productName] = {
         isView: product.isView,
-        isActive: product.isActive,
+        isSubscribed: product.isSubscribed,
         cards: tempCards,
         tables: tempTables,
       };

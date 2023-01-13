@@ -7,6 +7,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '@hospitality-bot/admin/shared';
+import { ModalService } from '@hospitality-bot/shared/material';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth/services/auth.service';
@@ -22,7 +23,8 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     private _authService: AuthService,
     private _userService: UserService,
     private _router: Router,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private modalService: ModalService
   ) {}
   intercept(
     req: HttpRequest<any>,
@@ -38,6 +40,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
             console.log(
               'Error occured in refresh token. So logout current user and redirecting to login'
             );
+            this.modalService.close();
             this.logoutUser();
           }
 

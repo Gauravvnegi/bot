@@ -115,7 +115,7 @@ export class GuestUsageComponent implements OnInit {
         .find((product) => product.name === ModuleNames.GUESTS)
         ?.config.find(
           (subProduct) => subProduct.name === ModuleNames.GUESTS_DASHBOARD
-        ).usageLimit || 0;
+        ).cost.usageLimit || 0;
 
     this.chartData.forEach((data) => {
       this.chart.chartData.datasets[1].data.push(limit);

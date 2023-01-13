@@ -62,7 +62,7 @@ export const request = {
       alt: 'filter',
     },
     search: {
-      url: 'assets/svg/Search.svg',
+      url: 'assets/svg/search.svg',
       alt: 'search',
     },
     room: {

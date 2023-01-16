@@ -182,17 +182,35 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
     };
     const mentions = event.mentions
       .map((mention) => {
-        if (data.notes.includes(`@${mention.firstName}`)) {
+        if (mention.firstName && data.notes.includes(`@${mention.firstName}`)) {
           return { mentionedUserId: mention.id };
+        }
+        if (
+          mention.departmentLabel &&
+          data.notes.includes(`@${mention.departmentLabel}`)
+        ) {
+          return { departmentMentionedUserName: mention.departmentName };
         }
       })
       .filter((item) => item !== undefined);
+
+    const departmentMentions = mentions.filter(
+      (item) => !!item.departmentMentionedUserName
+    );
+    const userMentions = mentions.filter((item) => !!item.mentionedUserId);
+
+    const getQueryArray = (list: typeof mentions, configName: string) => {
+      if (list.length > 0) {
+        return [{ [configName]: true }, ...list];
+      }
+      return [];
+    };
+
     const queryObj = this._adminUtilityService.makeQueryParams([
-      {
-        isMention: mentions.length > 0,
-      },
-      ...mentions,
+      ...getQueryArray(userMentions, 'isMention'),
+      ...getQueryArray(departmentMentions, 'isDepartmentMention'),
     ]);
+
     this.tableService
       .updateFeedbackState(this.data.feedback.departmentId, data, queryObj)
       .subscribe(

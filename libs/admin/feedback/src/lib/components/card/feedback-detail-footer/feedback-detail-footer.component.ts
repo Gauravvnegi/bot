@@ -10,6 +10,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
+  DepartmentList,
+  Department,
   User,
   UserList,
   UserService,
@@ -32,7 +34,7 @@ export class FeedbackDetailFooterComponent implements OnInit, OnDestroy {
   @Output() addComment = new EventEmitter();
   $subscription = new Subscription();
   @Input() feedbackFG: FormGroup;
-  items: User[];
+  items: Array<User | Department>;
   mentions = [];
   constructor(
     private userService: UserService,
@@ -51,7 +53,11 @@ export class FeedbackDetailFooterComponent implements OnInit, OnDestroy {
         this.userService
           .getMentionList(this.globalFilterService.hotelId)
           .subscribe((response) => {
-            this.items = new UserList().deserialize(response?.users);
+            const userList = new UserList().deserialize(response?.users);
+            const departmentList = new DepartmentList().deserialize(
+              response?.department
+            );
+            this.items = [].concat(departmentList, userList);
           });
       })
     );
@@ -96,7 +102,7 @@ export class FeedbackDetailFooterComponent implements OnInit, OnDestroy {
   }
 
   setSelectedItem(event) {
-    this.mentions.push(event);
+    if (!this.mentions.includes(event)) this.mentions.push(event);
   }
 
   ngOnDestroy(): void {

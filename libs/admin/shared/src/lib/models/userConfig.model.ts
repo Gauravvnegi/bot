@@ -79,3 +79,27 @@ export class User {
     return this;
   }
 }
+
+export class DepartmentList {
+  list: Department[];
+
+  deserialize(input) {
+    this.list = new Array<Department>();
+    input.forEach((item) => this.list.push(new Department().deserialize(item)));
+    return this.list;
+  }
+}
+
+export class Department {
+  departmentLabel: string;
+  departmentName: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'departmentLabel', get(input, ['departmentLabel'], '')),
+      set({}, 'departmentName', get(input, ['departmentName'], ''))
+    );
+    return this;
+  }
+}

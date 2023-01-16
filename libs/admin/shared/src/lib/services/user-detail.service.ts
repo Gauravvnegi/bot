@@ -42,4 +42,8 @@ export class UserService extends ApiService {
   getUsersList(hotelId: string) {
     return this.get(`/api/v1/hotel/${hotelId}/users`);
   }
+
+  getMentionList(hotelId: string) {
+    return this.get(`/api/v1/hotel/${hotelId}/users?mention=true`);
+  }
 }

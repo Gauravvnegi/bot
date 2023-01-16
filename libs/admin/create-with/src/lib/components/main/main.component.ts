@@ -28,7 +28,7 @@ export class MainComponent implements OnInit {
         firstName: 'Ajay',
         email: 'abc@gmail.com',
       }),
-      websiteUrl: 'https://dev.createwith.io',
+      websiteUrl: 'dev.createwith.io',
     };
 
     Object.entries(keys).forEach(([name, value]) => {

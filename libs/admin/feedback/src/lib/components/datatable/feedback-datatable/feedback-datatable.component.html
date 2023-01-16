@@ -13,11 +13,11 @@
           {{ tableName }}
         </p>
         <div class="mark-btn-container">
-          <div class="request-btn" (click)="openFeedbackRequestPage($event)">
+          <!-- <div class="request-btn" (click)="openFeedbackRequestPage($event)">
             <div class="request-btn__wrap">
               {{ 'request_feedback_label' | translate }}
             </div>
-          </div>
+          </div> -->
           <div class="btn read" *ngIf="selectedRows.length > 0">
             <img
               [src]="globalFeedbackConfig.images.datatable.mark_as_read.url"

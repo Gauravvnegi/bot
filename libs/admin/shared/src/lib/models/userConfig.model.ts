@@ -73,7 +73,7 @@ export class User {
       set({}, 'id', get(input, ['id'], '')),
       set({}, 'firstName', get(input, ['firstName'], '')),
       set({}, 'lastName', get(input, ['lastName'], '')),
-      set({}, 'department', get(input, ['department'], 'Default department'))
+      set({}, 'department', get(input, ['department'], 'Hotel Admin'))
     );
     this.name = `${this.firstName} ${this.lastName ? this.lastName + ' ' : ''}`;
     return this;
@@ -91,14 +91,18 @@ export class DepartmentList {
 }
 
 export class Department {
+  name: string;
   departmentLabel: string;
   departmentName: string;
+  department: string;
 
   deserialize(input) {
     Object.assign(
       this,
+      set({}, 'name', get(input, ['departmentLabel'], '')),
+      set({}, 'departmentName', get(input, ['departmentName'], '')),
       set({}, 'departmentLabel', get(input, ['departmentLabel'], '')),
-      set({}, 'departmentName', get(input, ['departmentName'], ''))
+      set({}, 'department', get(input, ['department'], 'Hotel Department'))
     );
     return this;
   }

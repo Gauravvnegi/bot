@@ -30,7 +30,7 @@ export class MessageService extends ApiService {
 
   sendMessage(hotelId: string, data, queryObj) {
     return this.post(
-      `/api/v1/hotel/${hotelId}/conversations/send${queryObj}`,
+      `/api/v1/hotel/${hotelId}/conversations/send${queryObj ?? ''}`,
       data
     );
   }

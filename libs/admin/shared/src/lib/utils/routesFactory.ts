@@ -1,6 +1,5 @@
 import { Route, Routes } from '@angular/router';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
-import { debug } from 'console';
 import { DashboardErrorComponent } from '../components/dashboard-error/dashboard-error.component';
 import { ModuleNames, routes as defaultRoutes } from '../constants';
 

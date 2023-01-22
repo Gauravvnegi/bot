@@ -1,19 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, ROUTES } from '@angular/router';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
-import {
-  DashboardErrorComponent,
-  ModuleNames,
-} from '@hospitality-bot/admin/shared';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { CRoutes, routesFactory } from 'libs/admin/shared/src';
 import { ConversationComponent } from './components/conversation/conversation.component';
 
 const appRoutes: CRoutes = [
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'conversation-analytics',
-  },
   {
     path: '',
     component: ConversationComponent,
@@ -37,8 +29,6 @@ const appRoutes: CRoutes = [
       },
     ],
   },
-  { path: '**', pathMatch: 'full', redirectTo: '404' },
-  { path: '404', component: DashboardErrorComponent },
 ];
 
 @NgModule({

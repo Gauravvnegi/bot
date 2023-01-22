@@ -35,8 +35,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.checkForAccessToken();
     if (this._authService.isAuthenticated()) {
-      // this._router.navigate(['/pages/dashboard']);
-      this._router.navigate([`/pages/${routes?.FRONT_DESK_DASHBOARD}`]);
+      this._router.navigate([`/pages`]);
     }
   }
 
@@ -108,8 +107,7 @@ export class LoginComponent implements OnInit {
     this._authService.login(data).subscribe(
       (response) => {
         this._userService.setLoggedInUserId(response?.id);
-        // this._router.navigate(['/pages/dashboard']);
-        this._router.navigate([`/pages/${routes?.FRONT_DESK_DASHBOARD}`]);
+        this._router.navigate([`/pages`]);
       },
       ({ error }) => {
         this.isSigningIn = false;

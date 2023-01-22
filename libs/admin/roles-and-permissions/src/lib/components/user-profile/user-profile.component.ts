@@ -43,7 +43,7 @@ export class UserProfileComponent implements OnInit {
   };
   adminData;
 
-  teamMember = ['An', 'BS', 'SD', 'RG', 'SF'];
+  teamMember = ['An', 'BS', 'SD'];
   value;
 
   manageProduct: string;
@@ -204,7 +204,6 @@ export class UserProfileComponent implements OnInit {
 
   change(event) {
     const selectData = {
-      // index: this.index,
       selectEvent: event,
       formControlName: 'cc',
       formGroup: this.userForm,
@@ -322,13 +321,13 @@ export class UserProfileComponent implements OnInit {
       return this._fb.group({
         manage: [
           {
-            value: userManage <= 0 ? 0 : 1,
+            value: userManage <= 0 || manage <= 0 ? 0 : 1,
             disabled: manage === -1 || manage === 0,
           },
         ],
         view: [
           {
-            value: userView <= 0 ? 0 : 1,
+            value: userView <= 0 || view <= 0 ? 0 : 1,
             disabled: view === -1 || view === 0,
           },
         ],

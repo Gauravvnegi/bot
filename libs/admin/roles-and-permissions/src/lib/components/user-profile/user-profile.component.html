@@ -27,7 +27,7 @@
       <div class="fields">
         <div class="field width-half">
           <mat-label class="mat-label">First Name :</mat-label>
-          <mat-form-field disabled="true">
+          <mat-form-field class="mat-fields">
             <input
               class="input-field"
               formControlName="firstName"
@@ -49,7 +49,7 @@
         </div>
         <div class="field width-half">
           <mat-label class="mat-label">Last Name :</mat-label>
-          <mat-form-field>
+          <mat-form-field class="mat-fields">
             <input
               class="input-field"
               formControlName="lastName"
@@ -62,7 +62,7 @@
         </div>
         <div class="field width-half">
           <mat-label class="mat-label">Product Type :</mat-label>
-          <mat-form-field>
+          <mat-form-field class="mat-fields">
             <mat-select formControlName="products" multiple>
               <mat-option *ngFor="let product of products" [value]="product"
                 >{{ product.label }}
@@ -83,7 +83,7 @@
       <div class="fields">
         <div class="field width-half">
           <mat-label class="mat-label">Dept :</mat-label>
-          <mat-form-field>
+          <mat-form-field class="mat-fields">
             <mat-select formControlName="departments" multiple>
               <mat-option
                 *ngFor="let department of departments"
@@ -103,7 +103,7 @@
         </div>
         <div class="field width-half">
           <mat-label class="mat-label">Job Title :</mat-label>
-          <mat-form-field>
+          <mat-form-field class="mat-fields">
             <input
               class="input-field"
               formControlName="jobTitle"
@@ -124,7 +124,7 @@
         </div>
         <div class="field width-half">
           <mat-label class="mat-label">Hotel :</mat-label>
-          <mat-form-field>
+          <mat-form-field class="mat-fields">
             <mat-select formControlName="branchName">
               <!-- <option value="" selected>None</option> -->
               <mat-option
@@ -147,26 +147,16 @@
       <div class="fields">
         <div class="field width-half">
           <mat-label class="mat-label">Phone# :</mat-label>
-          <mat-form-field class="phone-no-dropdown">
-            <mat-select
-              formControlName="cc"
-              (selectionChange)="change($event)"
-              (openedChange)="openedChange($event)"
-            >
-              <!-- <option value="" selected>None</option> -->
-              <ng-container
-                *ngIf="!isOptionsOpenedChanged; else optionsChanged"
+          <div class="mat-fields phone-no">
+            <mat-form-field class="phone-no-dropdown">
+              <mat-select
+                formControlName="cc"
+                (selectionChange)="change($event)"
+                (openedChange)="openedChange($event)"
               >
-                <mat-option
-                  *ngFor="let country of countries; trackBy: trackByFn"
-                  [value]="country.value"
-                  >{{ country.value }}</mat-option
-                >
-              </ng-container>
-
-              <ng-template #optionsChanged>
+                <!-- <option value="" selected>None</option> -->
                 <ng-container
-                  *ngIf="!(onOpenedChange | async); else openOptions"
+                  *ngIf="!isOptionsOpenedChanged; else optionsChanged"
                 >
                   <mat-option
                     *ngFor="let country of countries; trackBy: trackByFn"
@@ -175,30 +165,42 @@
                   >
                 </ng-container>
 
-                <ng-template #openOptions>
-                  <mat-option
-                    *ngFor="let country of countries; trackBy: trackByFn"
-                    [value]="country.value"
-                    >{{ country.label }}</mat-option
+                <ng-template #optionsChanged>
+                  <ng-container
+                    *ngIf="!(onOpenedChange | async); else openOptions"
                   >
+                    <mat-option
+                      *ngFor="let country of countries; trackBy: trackByFn"
+                      [value]="country.value"
+                      >{{ country.value }}</mat-option
+                    >
+                  </ng-container>
+
+                  <ng-template #openOptions>
+                    <mat-option
+                      *ngFor="let country of countries; trackBy: trackByFn"
+                      [value]="country.value"
+                      >{{ country.label }}</mat-option
+                    >
+                  </ng-template>
                 </ng-template>
-              </ng-template>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="phone-no-field">
-            <input
-              formControlName="phoneNumber"
-              class="input-field"
-              type="text"
-              placeholder=""
-              matInput
-              spellcheck="false"
-            />
-          </mat-form-field>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="phone-no-field">
+              <input
+                formControlName="phoneNumber"
+                class="input-field"
+                type="text"
+                placeholder=""
+                matInput
+                spellcheck="false"
+              />
+            </mat-form-field>
+          </div>
         </div>
         <div class="field width-half">
           <mat-label class="mat-label">Brand :</mat-label>
-          <mat-form-field>
+          <mat-form-field class="mat-fields">
             <mat-select formControlName="brandName">
               <!-- <option value="" selected>None</option> -->
 
@@ -220,27 +222,28 @@
         </div>
         <div class="field width-half" *ngIf="hasPageState('view')">
           <div class="mat-label">Team :</div>
-          <div class="member">
-            <div
-              *ngFor="let item of teamMember; let index = index"
-              (click)="openTableModal()"
-            >
+          <div class="mat-fields">
+            <div class="member">
               <div
-                class="member-name"
-                [style.margin-left]="'calc(indexpx + 48px)'"
-                *ngIf="index < 3"
+                *ngFor="let item of teamMember; let index = index"
+                (click)="openTableModal()"
               >
-                {{ item }}
+                <div
+                  class="member-name"
+                  [style.margin-left]="'calc(indexpx + 48px)'"
+                  *ngIf="index < 3"
+                >
+                  {{ item }}
+                </div>
               </div>
             </div>
           </div>
-          <div>+ {{ teamMember.length - 3 }}</div>
         </div>
       </div>
       <div class="fields">
         <div class="field width-half">
           <mat-label class="mat-label">Email ID :</mat-label>
-          <mat-form-field>
+          <mat-form-field class="mat-fields">
             <input
               formControlName="email"
               class="input-field"

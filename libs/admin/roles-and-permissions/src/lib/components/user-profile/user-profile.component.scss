@@ -52,7 +52,7 @@
     .fields {
       display: flex;
       align-items: center;
-      // justify-content: space-between;
+      justify-content: space-between;
       margin-top: 5%;
       .note {
         color: $primary-gray;
@@ -269,7 +269,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 163px;
+  width: 70px;
   flex-direction: row-reverse;
   position: relative;
 }
@@ -303,6 +303,7 @@
 }
 
 :host ::ng-deep .mat-label {
+  flex-basis: 30%;
   font-size: $font14;
   color: $primary-gray1;
   margin-right: 10px;
@@ -317,8 +318,8 @@
 }
 
 :host ::ng-deep .phone-no-dropdown {
-  width: 12%;
-  margin-right: -40px;
+  width: 20%;
+  margin-right: 9%;
 }
 
 :host ::ng-deep .phone-no-field {
@@ -359,14 +360,15 @@
 }
 
 .width-half {
-  width: 32%;
+  flex-basis: 30%;
 }
 
 .width-trio {
   width: 37%;
-  .mat-form-field {
-    width: 49%;
-  }
+}
+
+.mat-fields {
+  flex-basis: 70%;
 }
 
 // .color-added {

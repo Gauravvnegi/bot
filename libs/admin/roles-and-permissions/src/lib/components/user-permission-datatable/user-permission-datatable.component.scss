@@ -77,6 +77,11 @@
 //   }
 // }
 
+.table-container {
+  max-height: 79vh;
+  overflow: auto;
+}
+
 :host ::ng-deep .service-details {
   font-size: 12px;
   color: $primary-black;

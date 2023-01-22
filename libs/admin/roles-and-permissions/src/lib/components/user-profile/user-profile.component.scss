@@ -16,6 +16,7 @@
         letter-spacing: 0.96px;
         font-weight: $bold;
         font-size: $font16;
+        text-transform: capitalize;
       }
       .material-icons {
         margin-right: $margin15;
@@ -51,7 +52,7 @@
     .fields {
       display: flex;
       align-items: center;
-      // justify-content: space-between;
+      justify-content: space-between;
       margin-top: 5%;
       .note {
         color: $primary-gray;
@@ -231,6 +232,64 @@
   }
 }
 
+::ng-deep .field-trio {
+  justify-content: flex-end;
+}
+::ng-deep .field-width {
+  width: 33%;
+}
+
+.add-user {
+  background: transparent;
+  border: none;
+  outline: none;
+  margin-right: $margin20;
+  color: $primary-gray;
+  font-size: $font14;
+  &:hover {
+    cursor: pointer;
+    color: $primary-purple;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.add-user {
+  color: #4b56c0;
+}
+
+.tabs {
+  padding-bottom: 65px;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 70px;
+  flex-direction: row-reverse;
+  position: relative;
+}
+
+.member-name {
+  cursor: pointer;
+  position: absolute;
+  top: -32px;
+  padding: 14px;
+  border-radius: 50%;
+  border: solid 4px #fff;
+  background-color: #f04949;
+  font-family: Roboto;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: 1.14px;
+  color: #fff;
+}
+
 :host ::ng-deep .mat-form-field-infix {
   border-top: none;
 }
@@ -244,6 +303,7 @@
 }
 
 :host ::ng-deep .mat-label {
+  flex-basis: 30%;
   font-size: $font14;
   color: $primary-gray1;
   margin-right: 10px;
@@ -258,8 +318,8 @@
 }
 
 :host ::ng-deep .phone-no-dropdown {
-  width: 12%;
-  margin-right: -40px;
+  width: 20%;
+  margin-right: 9%;
 }
 
 :host ::ng-deep .phone-no-field {
@@ -300,14 +360,15 @@
 }
 
 .width-half {
-  width: 32%;
+  flex-basis: 30%;
 }
 
 .width-trio {
   width: 37%;
-  .mat-form-field {
-    width: 49%;
-  }
+}
+
+.mat-fields {
+  flex-basis: 70%;
 }
 
 // .color-added {

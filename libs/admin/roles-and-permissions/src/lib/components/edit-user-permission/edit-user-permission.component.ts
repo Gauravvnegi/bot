@@ -6,16 +6,21 @@ import {
   FormArray,
   FormControl,
 } from '@angular/forms';
-import { UserService } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  UserService,
+} from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { CountryCode } from '@hospitality-bot/admin/shared';
 import { ManagePermissionService } from '../../services/manage-permission.service';
-import { SnackBarService } from 'libs/shared/material/src';
+import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
 import { Location } from '@angular/common';
 import { Subject } from 'rxjs';
 import { Regex } from '@hospitality-bot/admin/shared';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { UserPermissionDatatableComponent } from '../user-permission-datatable/user-permission-datatable.component';
 
 @Component({
   selector: 'hospitality-bot-edit-user-permission',
@@ -38,6 +43,8 @@ export class EditUserPermissionComponent implements OnInit {
     jobTitle: string;
   };
 
+  teamMember = ['An', 'BS', 'SD', 'RG', 'SF'];
+  tabFilterIdx = 0;
   value;
 
   userToModDetails;
@@ -49,6 +56,8 @@ export class EditUserPermissionComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
+    private adminUtilityService: AdminUtilityService,
+    private _modal: ModalService,
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
     private _managePermissionService: ManagePermissionService,
@@ -67,12 +76,43 @@ export class EditUserPermissionComponent implements OnInit {
       lastName: [''],
       jobTitle: ['', Validators.required],
       brandName: ['', Validators.required],
+      products: ['', Validators.required],
+      departments: ['', Validators.required],
       branchName: ['', Validators.required],
       cc: [''],
       phoneNumber: [''],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       profileUrl: [''],
       permissionConfigs: this._fb.array([]),
+    });
+  }
+
+  /**
+   * @function userProfileURL getter for image url.
+   */
+  get userProfileUrl(): string {
+    return this.userForm?.get('profileUrl').value || '';
+  }
+
+  uploadProfile(event): void {
+    const formData = new FormData();
+    formData.append('files', event.file);
+    this._userService.uploadProfile(formData).subscribe(
+      (response) => {
+        this.userForm.get('profileUrl').patchValue([response.fileDownloadUri]);
+        this.snackbarService.openSnackBarAsText('Profile uploaded', '', {
+          panelClass: 'success',
+        });
+      },
+      ({ error }) => {
+        this.snackbarService.openSnackBarAsText(error.message);
+      }
+    );
+  }
+
+  deleteFile() {
+    this.userForm.patchValue({
+      profileUrl: [''],
     });
   }
 
@@ -100,8 +140,8 @@ export class EditUserPermissionComponent implements OnInit {
       .subscribe((data) => {
         this.userToModDetails = new UserConfig().deserialize(data);
         this.initLOV();
-        this.initUserPermissions();
         this.userForm.patchValue(this.userToModDetails);
+        this.loadData();
       });
     this.initManager();
     this.registerListeners();
@@ -119,6 +159,29 @@ export class EditUserPermissionComponent implements OnInit {
   registerListeners() {
     this.userForm.get('branchName').disable();
     this.listenForBrandChanges();
+  }
+
+  onSelectedTabFilterChange(event) {
+    this.tabFilterIdx = event.index;
+    this.loadData();
+  }
+
+  loadData() {
+    let queries = [
+      {
+        productType: this.userForm.get('products').value[this.tabFilterIdx]
+          .value,
+      },
+    ];
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams(queries),
+    };
+    this._managePermissionService
+      .getUserPermission(this._route.snapshot.paramMap.get('id'), config)
+      .subscribe((data) => {
+        this._userService.initUserDetails(data);
+        this.initUserPermissions();
+      });
   }
 
   listenForBrandChanges() {
@@ -173,6 +236,23 @@ export class EditUserPermissionComponent implements OnInit {
     });
   }
 
+  /**
+   * @function openTableModal To open modal pop-up for user persmission.
+   */
+  openTableModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.width = '100%';
+    const tableCompRef = this._modal.openDialog(
+      UserPermissionDatatableComponent,
+      dialogConfig
+    );
+
+    tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+      tableCompRef.close();
+    });
+  }
+
   savePermission() {
     if (!this.userForm.valid) {
       this.snackbarService.openSnackBarAsText('Invalid Form');
@@ -207,8 +287,8 @@ export class EditUserPermissionComponent implements OnInit {
     this.isUpdatingPermissions = true;
     this._managePermissionService
       .updateUserDetailsById({
-        data,
-        parentUserId: this._userService.getLoggedInUserid(),
+        ...data,
+        parentId: this._userService.getLoggedInUserid(),
       })
       .subscribe(
         (res) => {

@@ -53,8 +53,48 @@
             />
           </mat-form-field>
         </div>
+        <div class="field width-half">
+          <mat-label class="mat-label">Product Type :</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="products" multiple>
+              <mat-option
+                *ngFor="let product of productList"
+                [value]="product"
+                >{{ product.label }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                userForm.get('products').touched &&
+                userForm.get('products').hasError('required')
+              "
+            >
+              Product Type is required
+            </mat-error>
+          </mat-form-field>
+        </div>
       </div>
       <div class="fields">
+        <div class="field width-half">
+          <mat-label class="mat-label">Dept :</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="deparments" multiple>
+              <mat-option
+                *ngFor="let depts of departmentList"
+                [value]="depts"
+                >{{ depts.productLabel }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                userForm.get('deparments').touched &&
+                userForm.get('deparments').hasError('required')
+              "
+            >
+              Deparment Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
         <div class="field width-half">
           <mat-label class="mat-label">Job Title :</mat-label>
           <mat-form-field>
@@ -77,31 +117,30 @@
           </mat-form-field>
         </div>
         <div class="field width-half">
-          <mat-label class="mat-label">Brand :</mat-label>
+          <mat-label class="mat-label">Hotel :</mat-label>
           <mat-form-field>
-            <mat-select formControlName="brandName">
+            <mat-select formControlName="branchName">
               <!-- <option value="" selected>None</option> -->
-
               <mat-option
-                *ngFor="let brandName of brandNames"
-                [value]="brandName.value"
-                >{{ brandName.label }}</mat-option
+                *ngFor="let branch of branchNames"
+                [value]="branch.value"
+                >{{ branch.label }}</mat-option
               >
             </mat-select>
             <mat-error
               *ngIf="
-                userForm.get('brandName').touched &&
-                userForm.get('brandName').hasError('required')
+                userForm.get('branchName').touched &&
+                userForm.get('branchName').hasError('required')
               "
             >
-              Brand name is required
+              Hotel name is required
             </mat-error>
           </mat-form-field>
         </div>
       </div>
       <div class="fields">
         <div class="field width-half">
-          <mat-label class="mat-label">Phone No. :</mat-label>
+          <mat-label class="mat-label">Phone# :</mat-label>
           <mat-form-field class="phone-no-dropdown">
             <mat-select
               formControlName="cc"
@@ -152,7 +191,31 @@
           </mat-form-field>
         </div>
         <div class="field width-half">
-          <mat-label class="mat-label">Email :</mat-label>
+          <mat-label class="mat-label">Brand :</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="brandName">
+              <!-- <option value="" selected>None</option> -->
+
+              <mat-option
+                *ngFor="let brandName of brandNames"
+                [value]="brandName.value"
+                >{{ brandName.label }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                userForm.get('brandName').touched &&
+                userForm.get('brandName').hasError('required')
+              "
+            >
+              Brand name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field width-half">
+          <mat-label class="mat-label">Email ID :</mat-label>
           <mat-form-field>
             <input
               formControlName="email"
@@ -181,32 +244,14 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="fields">
-        <div class="field width-half">
-          <mat-label class="mat-label">Hotel :</mat-label>
-          <mat-form-field>
-            <mat-select formControlName="branchName">
-              <!-- <option value="" selected>None</option> -->
-              <mat-option
-                *ngFor="let branch of branchNames"
-                [value]="branch.value"
-                >{{ branch.label }}</mat-option
-              >
-            </mat-select>
-            <mat-error
-              *ngIf="
-                userForm.get('branchName').touched &&
-                userForm.get('branchName').hasError('required')
-              "
-            >
-              Hotel name is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <!-- <div class="fields image-wrapper">
+      <div class="fields image-wrapper">
         <div class="image">
-          <img src="assets/dummy.png" />
+          <hospitality-bot-upload-file
+            [fileUploadData]="'Image'"
+            [url]="userProfileUrl"
+            [isDisable]="false"
+          >
+          </hospitality-bot-upload-file>
         </div>
         <img class="material-icons" src="assets/svg/edit.svg" />
         <img class="material-icons" src="assets/svg/delete.svg" />
@@ -222,7 +267,7 @@
         <div class="note">
           Recommended dimension (in px) : 60*60
         </div>
-      </div> -->
+      </div>
     </div>
     <pre>
       <!-- {{ userForm.getRawValue() | json }} -->

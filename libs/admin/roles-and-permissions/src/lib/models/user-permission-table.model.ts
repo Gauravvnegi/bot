@@ -18,6 +18,7 @@ export class User implements IDeserializable {
   firstName;
   lastName;
   jobTitle;
+  departments;
   cc;
   phoneNumber;
   email;
@@ -35,6 +36,7 @@ export class User implements IDeserializable {
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'jobTitle', get(input, ['title'])),
+      set({}, 'departments', get(input, ['departments'])),
       set({}, 'cc', this.getNationality(get(input, ['cc']))),
       set({}, 'phoneNumber', get(input, ['phoneNumber'])),
       set({}, 'profileUrl', get(input, ['profileUrl'])),

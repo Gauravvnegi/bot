@@ -1,17 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
-import { FormBuilder } from '@angular/forms';
 import { Location } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { ManagePermissionService } from '../../services/manage-permission.service';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from 'libs/shared/material/src';
-import { UserPermissionTable } from '../../models/user-permission-table.model';
 import * as FileSaver from 'file-saver';
-import { SortEvent } from 'primeng/api';
+import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import { SnackBarService } from 'libs/shared/material/src';
+import { SortEvent } from 'primeng/api';
+import { Observable, Subscription } from 'rxjs';
+import { UserPermissionTable } from '../../models/user-permission-table.model';
+import { ManagePermissionService } from '../../services/manage-permission.service';
+import { QueryConfig } from '../../types';
 
 @Component({
   selector: 'hospitality-bot-user-permission-datatable',
@@ -23,12 +30,19 @@ import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 })
 export class UserPermissionDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  tableName = 'Roles & Permissions';
+  @Output() onModalClose = new EventEmitter();
+  tableName = 'My Team';
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
-  isTabFilters = false;
+  isTabFilters = true;
+  tabFilterItems = [
+    { label: 'All', content: '', value: 'ALL' },
+    { label: 'Reporting to me', content: '', value: 'REPORTING' },
+  ];
+  tabFilterIdx = 1;
+  hotelId;
 
   cols = [
     {
@@ -42,17 +56,6 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       header: 'Hotel Name & Branch/Job title',
       sortType: 'string',
       isSort: true,
-    },
-    {
-      field: 'guests.primaryGuest.firstName',
-      header: 'Permissions',
-      isSort: false,
-    },
-    {
-      field: 'arrivalAndDepartureDate',
-      header: 'Manages By',
-      sortType: 'string',
-      isSort: false,
     },
     { field: 'package', header: 'Active', isSort: false },
   ];
@@ -74,6 +77,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
+    this.hotelId = this.userService.getHotelId();
     this.loadInitialData();
   }
 
@@ -109,12 +113,16 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   ): Observable<any> {
     this.resetRowSelection();
     queries.push(defaultProps);
-    const config = {
+    const config: QueryConfig = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
       loggedInUserId: this.userService.getLoggedInUserid(),
+      hotelId: this.hotelId,
     };
 
-    return this._managePermissionService.getManagedUsers(config);
+    return this._managePermissionService.getManagedUsers(
+      config,
+      this.tabFilterItems[this.tabFilterIdx].value === 'ALL'
+    );
   }
 
   loadData(event) {
@@ -148,6 +156,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  onSelectedTabFilterChange({ index }) {
+    this.tabFilterIdx = index;
+    this.loadInitialData();
+  }
+
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
@@ -156,35 +169,41 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   exportCSV() {
     this.loading = true;
 
-    const config = {
+    const config: QueryConfig = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.userId })),
       ]),
       loggedInUserId: this.userService.getLoggedInUserid(),
+      hotelId: this.hotelId,
     };
 
     this.$subscription.add(
-      this._managePermissionService.exportCSV(config).subscribe(
-        (res) => {
-          FileSaver.saveAs(
-            res,
-            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-          );
-          this.loading = false;
-        },
-        (error) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      )
+      this._managePermissionService
+        .exportCSV(
+          config,
+          this.tabFilterItems[this.tabFilterIdx].value === 'ALL'
+        )
+        .subscribe(
+          (res) => {
+            FileSaver.saveAs(
+              res,
+              `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+            );
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
+          }
+        )
     );
   }
 
@@ -240,7 +259,8 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   }
 
   openUserDetails(rowData) {
-    this._router.navigate([`${rowData.userId}`], { relativeTo: this._route });
+    if (this.tabFilterItems[this.tabFilterIdx].value === 'REPORTING')
+      this.closeModal(rowData);
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
@@ -261,8 +281,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     this.table.filter(value, field, matchMode);
   }
 
-  goBack() {
-    this.location.back();
+  /**
+   * @function closeModal Emits the close click event for the modal
+   */
+  closeModal(userData?: string): void {
+    this.onModalClose.emit(userData);
   }
 
   ngOnDestroy() {

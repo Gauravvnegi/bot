@@ -36,7 +36,8 @@ export class AddUserPermissionComponent implements OnInit {
   isOptionsOpenedChanged = true;
   @Output()
   optionChange = new EventEmitter();
-
+  productList;
+  departmentList;
   value;
   constructor(
     private _fb: FormBuilder,
@@ -74,6 +75,8 @@ export class AddUserPermissionComponent implements OnInit {
       jobTitle: ['', Validators.required],
       brandName: ['', Validators.required],
       branchName: ['', Validators.required],
+      products: ['', Validators.required],
+      departments: ['', Validators.required],
       cc: [''],
       phoneNumber: [''],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
@@ -82,8 +85,16 @@ export class AddUserPermissionComponent implements OnInit {
     });
   }
 
+  /**
+   * @function userProfileURL getter for image url.
+   */
+  get userProfileUrl(): string {
+    return this.userForm?.get('profileUrl').value || '';
+  }
+
   ngOnInit(): void {
     this.initLOV();
+    this.productAndDepartments();
     this.initUserPermissions();
     this.initManager();
     this.registerListeners();
@@ -96,6 +107,11 @@ export class AddUserPermissionComponent implements OnInit {
       lastName,
       jobTitle,
     };
+  }
+
+  productAndDepartments() {
+    this.productList = this._userService.userDetails.products;
+    this.departmentList = this._userService.userDetails.departments;
   }
 
   registerListeners() {

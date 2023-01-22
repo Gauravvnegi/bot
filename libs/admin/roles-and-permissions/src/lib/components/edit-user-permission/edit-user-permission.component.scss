@@ -19,3 +19,41 @@
     color: $primary-purple;
   }
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.add-user {
+  color: #4b56c0;
+}
+
+.tabs {
+  padding-bottom: 65px;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 163px;
+  flex-direction: row-reverse;
+  position: relative;
+}
+
+.member-name {
+  cursor: pointer;
+  position: absolute;
+  top: -32px;
+  padding: 14px;
+  border-radius: 50%;
+  border: solid 4px #fff;
+  background-color: #f04949;
+  font-family: Roboto;
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: 1.14px;
+  color: #fff;
+}

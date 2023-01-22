@@ -9,22 +9,28 @@ import {
 import { MarketingComponent } from './components/marketing/marketing.component';
 
 const appRoutes: CRoutes = [
-  { path: '', redirectTo: 'analytics' },
   {
-    path: 'analytics',
-    name: ModuleNames.EMARK_IT_DASHBOARD,
-    loadChildren: () =>
-      import('@hospitality-bot/admin/marketing-dashboard').then(
-        (m) => m.AdminMarketingDashboardModule
-      ),
-  },
-  {
-    path: 'campaign',
-    name: ModuleNames.CAMPAIGN,
-    loadChildren: () =>
-      import('@hospitality-bot/admin/campaign').then(
-        (m) => m.AdminCampaignModule
-      ),
+    path: '',
+    component: MarketingComponent,
+    name: ModuleNames.EMARK_IT,
+    children: [
+      {
+        path: 'analytics',
+        name: ModuleNames.EMARK_IT_DASHBOARD,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/marketing-dashboard').then(
+            (m) => m.AdminMarketingDashboardModule
+          ),
+      },
+      {
+        path: 'campaign',
+        name: ModuleNames.CAMPAIGN,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/campaign').then(
+            (m) => m.AdminCampaignModule
+          ),
+      },
+    ],
   },
 ];
 

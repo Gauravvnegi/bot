@@ -28,6 +28,7 @@ export class MainComponent implements OnInit {
         firstName: 'Ajay',
         email: 'abc@gmail.com',
       }),
+      'x-userId': this._authService.getTokenByName('x-userId'),
       websiteUrl: 'dev.createwith.io',
     };
 

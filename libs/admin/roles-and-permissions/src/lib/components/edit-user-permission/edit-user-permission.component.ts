@@ -287,8 +287,8 @@ export class EditUserPermissionComponent implements OnInit {
     this.isUpdatingPermissions = true;
     this._managePermissionService
       .updateUserDetailsById({
-        data,
-        parentUserId: this._userService.getLoggedInUserid(),
+        ...data,
+        parentId: this._userService.getLoggedInUserid(),
       })
       .subscribe(
         (res) => {

@@ -1,0 +1,423 @@
+<div class="wrapper">
+  <header class="wrapper-header">
+    <div class="back">
+      <mat-icon (click)="goBack()" class="material-icons" matSuffix
+        >keyboard_backspace</mat-icon
+      >
+      <p class="label" *ngIf="hasPageState('view', 'edit')">
+        {{ pageState.value }}
+        {{ userForm.get('firstName').value }}
+        {{ userForm.get('lastName').value }} Details
+      </p>
+      <p class="label" *ngIf="hasPageState('add')">
+        Add New User
+      </p>
+    </div>
+    <div class="edit-wrapper" *ngIf="hasPageState('edit', 'add')">
+      <div class="manage-box">
+        <p>
+          Manage By : {{ managedBy.firstName }} {{ managedBy.lastName }},
+          {{ managedBy.jobTitle }}
+        </p>
+      </div>
+    </div>
+  </header>
+  <form [formGroup]="userForm">
+    <div class="wrapper-form">
+      <div class="fields">
+        <div class="field width-half">
+          <mat-label class="mat-label">First Name :</mat-label>
+          <mat-form-field disabled="true">
+            <input
+              class="input-field"
+              formControlName="firstName"
+              type="text"
+              placeholder=""
+              matInput
+              spellcheck="false"
+              disabled="true"
+            />
+            <mat-error
+              *ngIf="
+                userForm.get('firstName').touched &&
+                userForm.get('firstName').hasError('required')
+              "
+            >
+              First name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="field width-half">
+          <mat-label class="mat-label">Last Name :</mat-label>
+          <mat-form-field>
+            <input
+              class="input-field"
+              formControlName="lastName"
+              type="text"
+              placeholder=""
+              matInput
+              spellcheck="false"
+            />
+          </mat-form-field>
+        </div>
+        <div class="field width-half">
+          <mat-label class="mat-label">Product Type :</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="products" multiple>
+              <mat-option *ngFor="let product of products" [value]="product"
+                >{{ product.label }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                userForm.get('products').touched &&
+                userForm.get('products').hasError('required')
+              "
+            >
+              Product Type is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="fields">
+        <div class="field width-half">
+          <mat-label class="mat-label">Dept :</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="departments" multiple>
+              <mat-option
+                *ngFor="let department of departments"
+                [value]="department"
+                >{{ department.departmentLabel }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                userForm.get('departments').touched &&
+                userForm.get('departments').hasError('required')
+              "
+            >
+              Deparment Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="field width-half">
+          <mat-label class="mat-label">Job Title :</mat-label>
+          <mat-form-field>
+            <input
+              class="input-field"
+              formControlName="jobTitle"
+              type="text"
+              placeholder=""
+              matInput
+              spellcheck="false"
+            />
+            <mat-error
+              *ngIf="
+                userForm.get('jobTitle').touched &&
+                userForm.get('jobTitle').hasError('required')
+              "
+            >
+              Job title is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="field width-half">
+          <mat-label class="mat-label">Hotel :</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="branchName">
+              <!-- <option value="" selected>None</option> -->
+              <mat-option
+                *ngFor="let branch of branchNames"
+                [value]="branch.value"
+                >{{ branch.label }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                userForm.get('branchName').touched &&
+                userForm.get('branchName').hasError('required')
+              "
+            >
+              Hotel name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field width-half">
+          <mat-label class="mat-label">Phone# :</mat-label>
+          <mat-form-field class="phone-no-dropdown">
+            <mat-select
+              formControlName="cc"
+              (selectionChange)="change($event)"
+              (openedChange)="openedChange($event)"
+            >
+              <!-- <option value="" selected>None</option> -->
+              <ng-container
+                *ngIf="!isOptionsOpenedChanged; else optionsChanged"
+              >
+                <mat-option
+                  *ngFor="let country of countries; trackBy: trackByFn"
+                  [value]="country.value"
+                  >{{ country.value }}</mat-option
+                >
+              </ng-container>
+
+              <ng-template #optionsChanged>
+                <ng-container
+                  *ngIf="!(onOpenedChange | async); else openOptions"
+                >
+                  <mat-option
+                    *ngFor="let country of countries; trackBy: trackByFn"
+                    [value]="country.value"
+                    >{{ country.value }}</mat-option
+                  >
+                </ng-container>
+
+                <ng-template #openOptions>
+                  <mat-option
+                    *ngFor="let country of countries; trackBy: trackByFn"
+                    [value]="country.value"
+                    >{{ country.label }}</mat-option
+                  >
+                </ng-template>
+              </ng-template>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="phone-no-field">
+            <input
+              formControlName="phoneNumber"
+              class="input-field"
+              type="text"
+              placeholder=""
+              matInput
+              spellcheck="false"
+            />
+          </mat-form-field>
+        </div>
+        <div class="field width-half">
+          <mat-label class="mat-label">Brand :</mat-label>
+          <mat-form-field>
+            <mat-select formControlName="brandName">
+              <!-- <option value="" selected>None</option> -->
+
+              <mat-option
+                *ngFor="let brandName of brandNames"
+                [value]="brandName.value"
+                >{{ brandName.label }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                userForm.get('brandName').touched &&
+                userForm.get('brandName').hasError('required')
+              "
+            >
+              Brand name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="field width-half" *ngIf="hasPageState('view')">
+          <div class="mat-label">Team :</div>
+          <div class="member">
+            <div
+              *ngFor="let item of teamMember; let index = index"
+              (click)="openTableModal()"
+            >
+              <div
+                class="member-name"
+                [style.margin-left]="'calc(indexpx + 48px)'"
+                *ngIf="index < 3"
+              >
+                {{ item }}
+              </div>
+            </div>
+          </div>
+          <div>+ {{ teamMember.length - 3 }}</div>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field width-half">
+          <mat-label class="mat-label">Email ID :</mat-label>
+          <mat-form-field>
+            <input
+              formControlName="email"
+              class="input-field"
+              type="text"
+              placeholder=""
+              matInput
+              spellcheck="false"
+            />
+            <mat-error
+              *ngIf="
+                userForm.get('email').touched &&
+                userForm.get('email').hasError('required')
+              "
+            >
+              Email is required
+            </mat-error>
+            <mat-error
+              *ngIf="
+                userForm.get('email').touched &&
+                userForm.get('email').hasError('pattern')
+              "
+            >
+              Please enter the valid Email
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- ******** uploadImage *********** -->
+
+      <!-- <div class="fields image-wrapper">
+        <div class="image">
+          <hospitality-bot-upload-file
+            [fileUploadData]="'Image'"
+            [url]="userProfileUrl"
+            [isDisable]="false"
+            (fileData)="uploadProfileImage($event)"
+          >
+          </hospitality-bot-upload-file>
+        </div>
+        <img class="material-icons" src="assets/svg/edit.svg" alt="edit" />
+        <img
+          class="material-icons"
+          src="assets/svg/delete.svg"
+          (click)="deleteFile()"
+          alt-="delete"
+        />
+      </div>
+      <div class="fields margin-adjust">
+        <div class="image-button">
+          <mat-label class="text">Image :</mat-label>
+          <button class="button">
+            Choose File
+          </button>
+        </div>
+      </div>
+      <div class="fields margin-adjust">
+        <div class="note">
+          Recommended dimension (in px) : 60*60
+        </div>
+      </div> -->
+    </div>
+
+    <!-- ****************Permission Wrapper**************** -->
+    <div class="wrapper-manage-permission" (click)="handleManage($event)">
+      <div class="header">
+        <span *ngIf="hasPageState('add', 'edit')">
+          Manage Permissions
+        </span>
+        <span *ngIf="hasPageState('view')">
+          Permissions
+        </span>
+        <div (click)="addUser()" class="add-user" *ngIf="hasPageState('view')">
+          + Add New User
+        </div>
+      </div>
+      <div *ngIf="userToModDetails?.products" class="tabs">
+        <hospitality-bot-tab-group
+          [listItems]="userForm.get('products').value"
+          [selectedIndex]="tabFilterIdx"
+          (selectedTabChange)="onSelectedTabFilterChange($event)"
+        ></hospitality-bot-tab-group>
+      </div>
+
+      <div class="permission-table-header">
+        <div class="left-table">
+          <div class="image">
+            <img src="assets/svg/roles.svg" alt="roles" />
+          </div>
+          <p class="left-table-header">Entity</p>
+          <ng-container *ngIf="userForm.get('products').value?.length">
+            <ng-container
+              *ngFor="
+                let userPermissionFG of permissionConfigsFA['controls'];
+                let oddIdx = odd
+              "
+            >
+              <p
+                *ngIf="
+                  manageProduct === userPermissionFG.get('productType').value
+                "
+                class="left-table-entity"
+                [ngClass]="oddIdx ? 'color-added' : ''"
+              >
+                {{ userPermissionFG.get('label').value }}
+              </p>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="right-table">
+          <div class="box-wrapper">
+            <div class="box">
+              <p class="label">View</p>
+              <p class="paragraph">View General & Sensitive Info</p>
+              <div class="float-box">
+                <img src="assets/svg/View.svg" alt="view" />
+              </div>
+            </div>
+            <div class="box">
+              <p class="label">Manage</p>
+              <p class="paragraph">Create/Delete/Edit Source of Data</p>
+              <div class="float-box">
+                <img src="assets/svg/Manage.svg" alt="manage" />
+              </div>
+            </div>
+          </div>
+          <div
+            formArrayName="permissionConfigs"
+            *ngIf="userForm.get('products').value?.length"
+          >
+            <div
+              *ngFor="
+                let userPermissionFG of permissionConfigsFA['controls'];
+                let oddIdx = odd;
+                let userPermissionIdx = index
+              "
+              [ngClass]="oddIdx ? 'color-added' : ''"
+            >
+              <div
+                formGroupName="{{ userPermissionIdx }}"
+                *ngIf="
+                  manageProduct === userPermissionFG.get('productType').value
+                "
+              >
+                <div formGroupName="permissions" class="checkbox-wrapper">
+                  <mat-checkbox
+                    formControlName="view"
+                    [checked]="
+                      userPermissionFG.get('permissions').get('view').value ===
+                      1
+                        ? true
+                        : false
+                    "
+                  ></mat-checkbox>
+                  <mat-checkbox
+                    formControlName="manage"
+                    [checked]="
+                      userPermissionFG.get('permissions').get('manage').value ==
+                      1
+                        ? true
+                        : false
+                    "
+                  ></mat-checkbox>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="permission-button-wrapper"
+        *ngIf="hasPageState('edit', 'add', 'view')"
+      >
+        <button (click)="savePermission()">
+          <i *ngIf="isUpdatingPermissions" class="fa fa-spinner fa-spin"></i>
+          {{ isUpdatingPermissions ? 'Updating User Permissions' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

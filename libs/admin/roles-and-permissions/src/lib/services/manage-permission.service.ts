@@ -3,6 +3,7 @@ import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-det
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { QueryConfig } from '../types';
 
 @Injectable({ providedIn: 'root' })
 export class ManagePermissionService extends ApiService {
@@ -44,6 +45,8 @@ export class ManagePermissionService extends ApiService {
   modifyPermissionDetailsForEdit(value) {
     // to be changed when multiple hotels
     // temp function
+
+    let selectedProducts = value.products.map((item) => item.value);
     return {
       id: value.id,
       email: value.email.trim(),
@@ -53,7 +56,12 @@ export class ManagePermissionService extends ApiService {
       cc: value.cc,
       phoneNumber: value.phoneNumber,
       profileUrl: value.profileUrl,
-      permissions: value.permissionConfigs,
+      departments: value.departments,
+      permissions: value.permissionConfigs.filter(
+        ({ permissions, productType }) =>
+          (permissions.manage || permissions.view) &&
+          selectedProducts.includes(productType)
+      ),
       hotelAccess: {
         chains: [
           {
@@ -76,8 +84,8 @@ export class ManagePermissionService extends ApiService {
     );
   }
 
-  updateUserDetailsById(config): Observable<any> {
-    return this.put(`/api/v1/user/${config.parentUserId}`, config.data);
+  updateUserDetailsById(data): Observable<any> {
+    return this.put(`/api/v1/user/${data.parentId}`, data);
   }
 
   updateRolesStatus(userId, statusData) {
@@ -92,17 +100,29 @@ export class ManagePermissionService extends ApiService {
     return this.get(`/api/v1/user/${userId}${config.queryObj}`);
   }
 
-  getManagedUsers(config): Observable<any> {
+  getManagedUsers(
+    config: QueryConfig,
+    allUsers: boolean = false
+  ): Observable<any> {
     return this.get(
-      `/api/v1/user/${config.loggedInUserId}/users/${config.queryObj}`
+      `/api/v1/${
+        allUsers ? `hotel/${config.hotelId}` : `user/${config.loggedInUserId}`
+      }/users${config.queryObj ?? ''}`
     );
   }
 
-  exportCSV(config): Observable<any> {
+  addNewUser(parentUserId: string, data: any) {
+    return this.post(`/api/v1/user/${parentUserId}/add-user`, {
+      ...data,
+      parentId: parentUserId,
+    });
+  }
+
+  exportCSV(config: QueryConfig, allUsers: boolean = false): Observable<any> {
     return this.get(
-      `/api/v1/user/${config.loggedInUserId}/users/export/${
-        config.queryObj ? config.queryObj : ''
-      }`,
+      `/api/v1/${
+        allUsers ? `hotel/${config.hotelId}` : `user/${config.loggedInUserId}`
+      }/users/export/${config.queryObj ? config.queryObj : ''}`,
       {
         responseType: 'blob',
       }

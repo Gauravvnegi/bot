@@ -192,24 +192,6 @@
               disabled="true"
             />
           </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-              class="p-column-filter"
-              disabled="true"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-              class="p-column-filter"
-              disabled="true"
-            />
-          </th>
         </tr>
       </ng-template>
       <!-- **************************************BODY********************************* -->
@@ -238,13 +220,7 @@
             {{ rowData.getBrandAndBranchName() }}
             <p>{{ rowData.jobTitle }}</p>
           </td>
-          <td class="guest">
-            {{ rowData.getSecGuestDisplayConfig().displayString }}
-          </td>
-          <td class="service-details">
-            {{ userService.userDetails.getFullName() }}
-            <p>Admin</p>
-          </td>
+
           <td class="">
             <label (click)="onCheckboxClicked($event)" class="switch">
               <input type="checkbox" [checked]="rowData.status" />

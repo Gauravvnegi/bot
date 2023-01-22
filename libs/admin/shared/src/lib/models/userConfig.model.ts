@@ -2,11 +2,12 @@ import { get, set } from 'lodash';
 import { IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class UserConfig implements IDeserializable {
+  id: string;
+  firstName: string;
+  lastName: string;
+  products;
   permissionConfigs;
   departments;
-  products;
-  firstName;
-  lastName;
   jobTitle;
   brandName;
   branchName;
@@ -14,8 +15,8 @@ export class UserConfig implements IDeserializable {
   phoneNumber;
   email;
   profileUrl;
-  id;
   timezone;
+  hotelAccess;
   deserialize(input) {
     Object.assign(
       this,
@@ -30,6 +31,7 @@ export class UserConfig implements IDeserializable {
       set({}, 'profileUrl', get(input, ['profileUrl'])),
       set({}, 'email', get(input, ['email']))
     );
+
     const length = input?.hotelAccess?.chains[0]?.hotels.length;
     this.brandName = input?.hotelAccess?.chains[0]?.id;
     this.branchName = input?.hotelAccess?.chains[0]?.hotels[length - 1]?.id;

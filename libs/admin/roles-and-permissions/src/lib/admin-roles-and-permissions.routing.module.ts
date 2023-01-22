@@ -4,6 +4,7 @@ import { ManagePermissionComponent } from './components/manage-permission/manage
 import { UserPermissionDatatableComponent } from './components/user-permission-datatable/user-permission-datatable.component';
 import { AddUserPermissionComponent } from './components/add-user-permission/add-user-permission.component';
 import { EditUserPermissionComponent } from './components/edit-user-permission/edit-user-permission.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 const appRoutes: Route[] = [
   {
@@ -20,7 +21,7 @@ const appRoutes: Route[] = [
       },
       {
         path: ':id',
-        component: EditUserPermissionComponent,
+        component: UserProfileComponent,
       },
     ],
   },

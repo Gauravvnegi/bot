@@ -227,6 +227,7 @@
               <mat-slide-toggle
                 [checked]="rowData.status"
                 (change)="updateRolesStatus($event, rowData)"
+                [disabled]="tabFilterItems[tabFilterIdx].value === 'ALL'"
               >
               </mat-slide-toggle>
             </label>

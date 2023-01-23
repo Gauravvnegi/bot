@@ -159,7 +159,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.configService.$config.subscribe((response) => {
       if (response) {
         this.colorMap = response?.feedbackColorMap;
-        this.shareIconList = response?.responseRate;
+        this.shareIconList = response?.communicationChannels;
       }
     });
   }

@@ -31,11 +31,21 @@ export const routesFactory = (
         name as ModuleNames
       );
 
+      const productsConfig = subscriptionService
+        .getSubscription()
+        .products.find((item) => item.name === name)?.config;
+
       // getting the first subscribed sub module
-      if (children) {
-        firstSubscribedChild = children.find((item) =>
-          subscriptionService.checkModuleSubscription(item.name as ModuleNames)
-        ).name;
+      if (children && productsConfig) {
+        let subscribedConfigsName = productsConfig
+          .filter((item) => item.isSubscribed)
+          .map((item) => item.name);
+
+        let childrenNames = children.map((item) => item.name);
+
+        firstSubscribedChild = subscribedConfigsName.find((item) =>
+          childrenNames.includes(item)
+        );
       }
 
       // check what will happens if main module is unsubscribed
@@ -48,7 +58,8 @@ export const routesFactory = (
               import('@hospitality-bot/admin/unsubscribed').then(
                 (m) => m.AdminUnsubscribedModule
               ),
-        children: children ? deepCloneRoutes(children) : children,
+        children:
+          children && isSubscribed ? deepCloneRoutes(children) : undefined,
         component: isSubscribed ? component : undefined,
       };
 

@@ -443,13 +443,14 @@ export class UserProfileComponent implements OnInit {
     };
 
     const handleSuccess = (res) => {
-      this.snackbarService.openSnackBarWithTranslate(
-        {
-          translateKey: `messages.SUCCESS.USER_PERMISSION_EDITED`,
-          priorityMessage: 'User Permission edited successfully.',
-        },
+      this.snackbarService.openSnackBarAsText(
+        this.hasPageState('add')
+          ? 'User Added Successfully'
+          : 'User Edited Successfully',
         '',
-        { panelClass: 'success' }
+        {
+          panelClass: 'success',
+        }
       );
       this.isUpdatingPermissions = false;
       this.pageState.next('view');

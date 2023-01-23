@@ -416,7 +416,7 @@
         class="permission-button-wrapper"
         *ngIf="hasPageState('edit', 'add', 'view')"
       >
-        <button (click)="savePermission()">
+        <button (click)="savePermission()" *ngIf="hasPageState('edit', 'add')">
           <i *ngIf="isUpdatingPermissions" class="fa fa-spinner fa-spin"></i>
           {{ isUpdatingPermissions ? 'Updating User Permissions' : 'Save' }}
         </button>

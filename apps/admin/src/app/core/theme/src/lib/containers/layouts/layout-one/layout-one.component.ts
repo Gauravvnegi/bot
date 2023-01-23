@@ -54,7 +54,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
   searchFG: FormGroup;
   timezone: string;
-  isExpand = true;
+  isExpand = false;
   filterConfig = {
     brandName: '',
     branchName: '',

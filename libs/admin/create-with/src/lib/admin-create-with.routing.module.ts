@@ -50,10 +50,6 @@ const appRoutes: CRoutes = [
         name: ModuleNames.BOOKING_ENGINE,
         component: ComingSoonComponent,
       },
-      {
-        path: '',
-        redirectTo: 'dashboard',
-      },
     ],
   },
 ];

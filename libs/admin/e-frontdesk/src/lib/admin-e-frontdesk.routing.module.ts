@@ -1,19 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, ROUTES } from '@angular/router';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
-import {
-  DashboardErrorComponent,
-  ModuleNames,
-} from '@hospitality-bot/admin/shared';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { CRoutes, routesFactory } from 'libs/admin/shared/src';
 import { EFrontDeskComponent } from './components/e-front-desk/e-front-desk.component';
 
 const appRoutes: CRoutes = [
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'dashboard',
-  },
   {
     path: '',
     component: EFrontDeskComponent,
@@ -46,8 +38,6 @@ const appRoutes: CRoutes = [
       },
     ],
   },
-  { path: '**', pathMatch: 'full', redirectTo: '404' },
-  { path: '404', component: DashboardErrorComponent },
 ];
 
 @NgModule({

@@ -3,6 +3,7 @@ import { Route, RouterModule } from '@angular/router';
 import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 import { CanLoadGuard } from '../guards/can-load-gurad';
+import { RedirectGuard } from '../guards/redirect-guard';
 import { PagesComponent } from './containers/pages/pages.component';
 import { TemporaryRedirectPageComponent } from './containers/trp/temporary-redirect-page/temporary-redirect-page.component';
 import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
@@ -123,8 +124,17 @@ const appRoutes: Route[] = [
         canLoad: [CanLoadGuard],
       },
       {
+        path: 'redirect',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/unsubscribed').then(
+            (m) => m.AdminUnsubscribedModule
+          ),
+        canLoad: [CanLoadGuard],
+        canActivate: [RedirectGuard],
+      },
+      {
         path: '',
-        redirectTo: 'efrontdesk',
+        redirectTo: 'redirect',
         pathMatch: 'full',
       },
       { path: '**', redirectTo: '404' },
@@ -136,6 +146,6 @@ const appRoutes: Route[] = [
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
-  providers: [CanLoadGuard],
+  providers: [CanLoadGuard, RedirectGuard],
 })
 export class PagesRoutingModule {}

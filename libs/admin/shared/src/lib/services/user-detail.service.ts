@@ -19,6 +19,21 @@ export class UserService extends ApiService {
     return localStorage.getItem('userId');
   }
 
+  getHotelId() {
+    return this.userDetails.branchName;
+  }
+
+  uploadProfile(data) {
+    return this.post(`/api/v1/uploads?folder_name=hotel/roseate/banner`, data);
+  }
+
+  uploadProfileImage(hotelId: string, formData) {
+    return this.uploadDocumentPost(
+      `/api/v1/uploads?folder_name=hotel/${hotelId}/profileImage`,
+      formData
+    );
+  }
+
   getUserDetailsById(userId): Observable<any> {
     return this.get(`/api/v1/user/${userId}`);
   }
@@ -35,8 +50,10 @@ export class UserService extends ApiService {
     );
   }
 
-  getUsersList(hotelId: string) {
-    return this.get(`/api/v1/hotel/${hotelId}/users`);
+  getUsersList(config: { hotelId: string; queryObj?: string }) {
+    return this.get(
+      `/api/v1/hotel/${config.hotelId}/users${config.queryObj ?? ''}`
+    );
   }
 
   getMentionList(hotelId: string) {

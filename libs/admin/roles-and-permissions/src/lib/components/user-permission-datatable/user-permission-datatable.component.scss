@@ -12,7 +12,18 @@
     color: $primary-purple;
   }
 }
-
+.close {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  i {
+    color: gray;
+    margin: 0 10px;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
 :host ::ng-deep .name {
   display: flex;
   align-items: center;
@@ -40,6 +51,14 @@
     }
   }
 }
+.tabs {
+  padding-bottom: 32px;
+}
+
+:host ::ng-deep .p-datatable {
+  margin: 10px 1.5% !important;
+  box-shadow: none !important;
+}
 
 :host ::ng-deep .brand-name {
   font-size: 12px;
@@ -57,6 +76,11 @@
 //     color: $primary-purple;
 //   }
 // }
+
+.table-container {
+  max-height: 79vh;
+  overflow: auto;
+}
 
 :host ::ng-deep .service-details {
   font-size: 12px;

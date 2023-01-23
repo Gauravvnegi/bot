@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ModuleNames } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival',
@@ -11,8 +10,4 @@ export class PreArrivalComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
-
-  get featurePath() {
-    return [ModuleNames.REQUEST_DASHBOARD];
-  }
 }

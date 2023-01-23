@@ -1,5 +1,11 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule } from '@angular/router';
+import { RouterModule, ROUTES } from '@angular/router';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import {
+  CRoutes,
+  ModuleNames,
+  routesFactory,
+} from '@hospitality-bot/admin/shared';
 import { ChartsModule } from 'ng2-charts';
 import {
   GuestComponent,
@@ -12,15 +18,26 @@ import {
   TypeGuestStatisticsComponent,
 } from './components';
 
-const appRoutes: Route[] = [
+const appRoutes: CRoutes = [
+  { path: '', redirectTo: 'dashboard' },
   {
-    path: '',
+    path: 'dashboard',
+    name: ModuleNames.GUESTS_DASHBOARD,
     component: GuestComponent,
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(appRoutes), ChartsModule],
+  imports: [RouterModule.forChild([]), ChartsModule],
+  providers: [
+    {
+      provide: ROUTES,
+      useFactory: (subscriptionService: SubscriptionPlanService) =>
+        routesFactory(appRoutes, [subscriptionService]),
+      multi: true,
+      deps: [SubscriptionPlanService],
+    },
+  ],
   exports: [RouterModule],
 })
 export class AdminGuestsRoutingModule {

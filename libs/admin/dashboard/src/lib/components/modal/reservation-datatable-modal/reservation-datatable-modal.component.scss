@@ -6,7 +6,7 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: #eaf0f6;
+  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
@@ -23,7 +23,7 @@
   // top: 5px;
   // right: 10px;
   i {
-    color: gray;
+    color: $gray;
     margin: 0 10px;
   }
   &:hover {
@@ -37,7 +37,7 @@
 }
 
 // :host ::ng-deep .details_wrapper{
-//   background-color: white;
+//   background-color: $white;
 //   max-height: 85vh;
 // }
 
@@ -108,10 +108,10 @@
   }
 }
 
- :host ::ng-deep .data-table-row.hover-background {
-   &:hover { 
-     cursor: pointer;
-     background: $table-popup-background !important;
-   }
- }
+:host ::ng-deep .data-table-row.hover-background {
+  &:hover {
+    cursor: pointer;
+    background: $table-popup-background !important;
+  }
+}
 

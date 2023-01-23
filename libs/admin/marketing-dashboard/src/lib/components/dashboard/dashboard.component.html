@@ -2,11 +2,19 @@
 <div class="container">
   <div class="rate-contact-stat">
     <div class="rateGraph">
-      <hospitality-bot-rate-graph></hospitality-bot-rate-graph>
+      <hospitality-bot-comparison-graph
+        [charts]="rateGraph.chart"
+        [legendData]="rateGraph.legendData"
+        [title]="rateGraph.title"
+      ></hospitality-bot-comparison-graph>
     </div>
     <hospitality-bot-contact-stats></hospitality-bot-contact-stats>
   </div>
   <div class="subscriberGraph">
-    <hospitality-bot-subscribers-graph></hospitality-bot-subscribers-graph>
+    <hospitality-bot-comparison-graph
+      [charts]="subscriberGraph.chart"
+      [legendData]="subscriberGraph.legendData"
+      [title]="subscriberGraph.title"
+    ></hospitality-bot-comparison-graph>
   </div>
 </div>

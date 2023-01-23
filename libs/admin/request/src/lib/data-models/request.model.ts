@@ -6,7 +6,7 @@ import {
   Room,
 } from '../../../../reservation/src/lib/models/reservation-table.model';
 
-export interface Deserializable {
+export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
@@ -64,7 +64,7 @@ export class Reservation {
   }
 }
 
-export class Guest implements Deserializable {
+export class Guest implements IDeserializable {
   id;
   nameTitle;
   name: string;
@@ -135,7 +135,7 @@ export class Guest implements Deserializable {
   }
 }
 
-export class Requests implements Deserializable {
+export class Requests implements IDeserializable {
   records: Request[];
   deserialize(input) {
     this.records = new Array<Request>();
@@ -144,7 +144,7 @@ export class Requests implements Deserializable {
   }
 }
 
-export class Request implements Deserializable {
+export class Request implements IDeserializable {
   action: string;
   itemCode: number;
   jobDuration: number;

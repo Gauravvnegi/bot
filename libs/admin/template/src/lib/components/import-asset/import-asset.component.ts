@@ -39,10 +39,10 @@ export class ImportAssetComponent implements OnInit, OnDestroy {
   assetFG: FormGroup;
   constructor(
     private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private _templateService: TemplateService,
     private _fb: FormBuilder,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     protected translateService: TranslateService
   ) {}
   ngOnInit(): void {
@@ -61,11 +61,8 @@ export class ImportAssetComponent implements OnInit, OnDestroy {
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
         // fetch-api for records
         this.loadAssetData([
           {
@@ -74,18 +71,6 @@ export class ImportAssetComponent implements OnInit, OnDestroy {
         ]);
       })
     );
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   /**
@@ -175,7 +160,7 @@ export class ImportAssetComponent implements OnInit, OnDestroy {
    */
   handleCopyToClipboard(event) {
     event.stopPropagation();
-    this._snackbarService
+    this.snackbarService
       .openSnackBarWithTranslate(
         {
           translateKey: 'messages.success.urlCopied',

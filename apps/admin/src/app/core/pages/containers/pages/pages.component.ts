@@ -31,16 +31,19 @@ export class PagesComponent implements OnInit {
   initAdminDetails() {
     const adminDetails = this._route.snapshot.data['adminDetails'];
     this.getConfigData(
-      get(adminDetails, ['userDetail'])?.hotelAccess?.chains[0]?.hotels[0]?.id
+      get(adminDetails, ['userDetail'])?.['hotelAccess']?.chains[0]?.hotels[0]
+        ?.id
     );
     this._userService.initUserDetails(get(adminDetails, ['userDetail']));
     this._hotelDetailService.initHotelDetails(
       get(adminDetails, ['userDetail'])
     );
 
-    this._subscriptionPlanService.initSubscriptionDetails(
-      get(adminDetails, ['subscription'])
-    );
+    const subscriptionDetails = get(adminDetails, ['subscription']);
+    if (subscriptionDetails)
+      this._subscriptionPlanService.initSubscriptionDetails(
+        get(adminDetails, ['subscription'])
+      );
   }
 
   getConfigData(hotelId) {

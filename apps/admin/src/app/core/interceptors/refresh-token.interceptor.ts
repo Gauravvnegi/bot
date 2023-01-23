@@ -7,9 +7,11 @@ import {
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '@hospitality-bot/admin/shared';
+import { ModalService } from '@hospitality-bot/shared/material';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth/services/auth.service';
+import { LoadingService } from '../theme/src/lib/services/loader.service';
 
 @Injectable()
 export class RefreshTokenInterceptor implements HttpInterceptor {
@@ -20,7 +22,9 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   constructor(
     private _authService: AuthService,
     private _userService: UserService,
-    private _router: Router
+    private _router: Router,
+    private loadingService: LoadingService,
+    private modalService: ModalService
   ) {}
   intercept(
     req: HttpRequest<any>,
@@ -36,6 +40,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
             console.log(
               'Error occured in refresh token. So logout current user and redirecting to login'
             );
+            this.modalService.close();
             this.logoutUser();
           }
 
@@ -76,9 +81,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
                 'x-access-refresh-token'
               ),
               'x-userId': this._authService.getTokenByName('x-userId'),
-              'x-refresh-authorization': this._authService.getTokenByName(
-                'x-refresh-authorization'
-              ),
             })
             .pipe(
               switchMap((tokenObj: any) => {
@@ -116,7 +118,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
 
     return request.clone({
       setHeaders: {
-        'x-authorization': this._authService.getTokenByName('x-authorization'),
         'x-access-token': this._authService.getTokenByName('x-access-token'),
         'x-userId': this._authService.getTokenByName('x-userId'),
       },
@@ -128,6 +129,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
       (response) => {
         this._authService.clearToken();
         this._router.navigate(['/auth']);
+        this.loadingService?.close();
       },
       (error) => {
         this._authService.clearToken();
@@ -137,11 +139,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   }
 
   updateAccessToken(tokenConfig) {
-    this._authService.setTokenByName(
-      'x-authorization',
-      tokenConfig['x-authorization']
-    );
-
     this._authService.setTokenByName(
       'x-access-token',
       tokenConfig['x-access-token']

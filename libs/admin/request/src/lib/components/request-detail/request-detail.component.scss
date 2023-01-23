@@ -26,6 +26,11 @@ td {
   padding: 15px;
   text-align: left;
 }
+th {
+  @media screen and (max-width: $L) {
+    font-size: $font14;
+  }
+}
 
 td {
   font-family: Roboto;
@@ -119,7 +124,7 @@ td {
       table {
         .tr {
           border-bottom: 1px solid $c-gray-91;
-          background-color: $c-gray-99;
+          background-color: $c-gray-105;
         }
       }
       &-status {
@@ -137,6 +142,9 @@ td {
         background-color: $room-type;
         color: $initiated-2;
         width: fit-content;
+        @media screen and (max-width: $L) {
+          width: max-content;
+        }
       }
     }
   }
@@ -176,7 +184,7 @@ td {
     line-height: normal;
     letter-spacing: 0.96px;
     text-align: left;
-    color: #002046;
+    color: $dark-blue;
   }
   &__description {
     font-size: 12px;
@@ -186,7 +194,7 @@ td {
     line-height: normal;
     letter-spacing: 0.72px;
     text-align: left;
-    color: #c5c5c5;
+    color: $c-gray-77;
   }
 }
 .man-icon {

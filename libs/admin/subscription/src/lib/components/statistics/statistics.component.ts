@@ -1,5 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Subscriptions } from '@hospitality-bot/admin/core/theme';
+import {
+  SubscriptionPlanService,
+  Subscriptions,
+} from '@hospitality-bot/admin/core/theme';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 import {
   PlanUsageCharts,
   PlanUsagePercentage,
@@ -25,31 +29,27 @@ export class StatisticsComponent implements OnInit {
     feedback: -1,
     message: -1,
   };
-  constructor() {}
+  constructor(private subscriptionService: SubscriptionPlanService) {}
 
   ngOnInit(): void {
     this.setGraphSubscriptions();
   }
 
   setGraphSubscriptions() {
-    this.featureData.features.MODULE.forEach((item) => {
-      switch (item.name) {
-        case 'FEEDBACK_TRANSACTIONAL':
-          if (!this.graphSubscriptions.feedbackSubscribed)
-            this.graphSubscriptions.feedbackSubscribed = item.active;
-          break;
-        case 'FEEDBACK':
-          if (!this.graphSubscriptions.feedbackSubscribed)
-            this.graphSubscriptions.feedbackSubscribed = item.active;
-          break;
-        case 'RESERVATION':
-          this.graphSubscriptions.frontdeskSubscribed = item.active;
-          break;
-      }
-    });
-    this.graphSubscriptions.messagesSubscribed =
-      this.featureData.features.CHANNELS.filter((item) => item.active).length >
-      0;
+    this.graphSubscriptions.feedbackSubscribed =
+      this.subscriptionService.checkModuleSubscription(
+        ModuleNames.FEEDBACK_TRANSACTIONAL
+      ) ||
+      this.subscriptionService.checkModuleSubscription(ModuleNames.FEEDBACK);
+
+    this.graphSubscriptions.frontdeskSubscribed = this.subscriptionService.checkModuleSubscription(
+      ModuleNames.FRONT_DESK
+    );
+
+    this.graphSubscriptions.messagesSubscribed = this.subscriptionService.checkModuleSubscription(
+      ModuleNames.FREDDIE
+    );
+
     this.setGraphOrder();
   }
 

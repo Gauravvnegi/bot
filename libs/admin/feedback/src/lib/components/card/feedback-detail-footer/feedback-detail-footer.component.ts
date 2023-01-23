@@ -6,8 +6,16 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { FormControl, FormGroup } from '@angular/forms';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  AdminUtilityService,
+  DepartmentList,
+  Department,
+  User,
+  UserList,
+  UserService,
+} from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import {
   Departmentpermission,
@@ -26,10 +34,33 @@ export class FeedbackDetailFooterComponent implements OnInit, OnDestroy {
   @Output() addComment = new EventEmitter();
   $subscription = new Subscription();
   @Input() feedbackFG: FormGroup;
-  constructor(private userService: UserService) {}
+  items: Array<User | Department>;
+  mentions = [];
+  constructor(
+    private userService: UserService,
+    private adminUtilityService: AdminUtilityService,
+    private globalFilterService: GlobalFilterService
+  ) {}
 
   ngOnInit(): void {
     this.feedbackFG.addControl('comment', new FormControl(''));
+    this.listenForGlobalFilters();
+  }
+
+  listenForGlobalFilters() {
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((_) => {
+        this.userService
+          .getMentionList(this.globalFilterService.hotelId)
+          .subscribe((response) => {
+            const userList = new UserList().deserialize(response?.users);
+            const departmentList = new DepartmentList().deserialize(
+              response?.department
+            );
+            this.items = [].concat(departmentList, userList);
+          });
+      })
+    );
   }
 
   getNicknameLoggedinUser() {
@@ -60,11 +91,18 @@ export class FeedbackDetailFooterComponent implements OnInit, OnDestroy {
   }
 
   markResolved() {
-    this.updateStatus.emit();
+    this.updateStatus.emit({ data: this.feedbackFG.getRawValue() });
   }
 
   sendMessage() {
-    this.addComment.emit({ data: this.feedbackFG.getRawValue() });
+    this.addComment.emit({
+      data: this.feedbackFG.getRawValue(),
+      mentions: this.mentions,
+    });
+  }
+
+  setSelectedItem(event) {
+    if (!this.mentions.includes(event)) this.mentions.push(event);
   }
 
   ngOnDestroy(): void {

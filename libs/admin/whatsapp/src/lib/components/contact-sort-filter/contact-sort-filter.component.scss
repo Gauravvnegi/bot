@@ -55,7 +55,7 @@
     .sortBy {
       font: normal normal bold 10px/13px Roboto;
       letter-spacing: 0.6px;
-      color: #b8bbbe;
+      color: $c-gray-74;
       margin-bottom: 10px;
     }
     .sortTypes {
@@ -84,7 +84,7 @@
     .filterBy {
       font: normal normal bold 10px/13px Roboto;
       letter-spacing: 0.6px;
-      color: $medium-gay;
+      color: $medium-gray;
       margin-bottom: 10px;
     }
     .filterItemWrapper {

@@ -1,0 +1,67 @@
+<div class="pap-wraper">
+  <div class="pap-wraper-header">
+    <div class="pap-wraper-header-title">
+      <p>Pre-Arrival Packages</p>
+      <div class="info-icon">
+        <img src="assets/svg/info.svg" alt="info-icon" />
+      </div>
+    </div>
+    <div class="pap-wraper-header-chart-type" [formGroup]="packageFG">
+      <label
+        class="labl"
+        *ngFor="let option of chartTypes"
+        (click)="setChartType(option, $event)"
+      >
+        <input
+          type="radio"
+          formControlName="chartType"
+          [value]="option.value"
+          [id]="option.value + '-type'"
+        />
+        <div class="image">
+          <img [src]="option.url" />
+        </div>
+      </label>
+    </div>
+  </div>
+  <div class="pap-wraper-filter">
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+  </div>
+  <div class="m-10">
+    <canvas
+      height="51vh"
+      baseChart
+      (click)="openModal()"
+      [datasets]="chart.chartData"
+      [labels]="chart.chartLabels"
+      [options]="chart.chartOptions"
+      [colors]="chart.chartColors"
+      [legend]="chart.chartLegend"
+      [chartType]="chart.chartType"
+    >
+    </canvas>
+    <div class="stat-vals-container">
+      <div
+        class="stat-val"
+        [class.text-decoration]="textCut"
+        *ngFor="let key of stats; let i = index"
+        (click)="legendOnClick(i, $event)"
+      >
+        <div class="label">
+          <input class="legends" type="checkbox" />
+          <img
+            [src]="getFilteredConfig(graphData[key].label)?.icon"
+            [alt]="graphData[key].label"
+          />
+          <span>{{ graphData[key].label }}</span>
+        </div>
+        <div class="value">{{ graphData[key].totalCount }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="days-label">In 30 Days</div>
+</div>

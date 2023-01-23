@@ -1,10 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { StatisticsService } from '../../services/statistics.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { AdminUtilityService } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  CardNames,
+  ModuleNames,
+} from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Statistics, Customer } from '../../data-models';
+import { Statistics } from '../../data-models';
+import { StatisticsService } from '../../services/statistics.service';
 
 /**
  * @class Statistics Component
@@ -16,17 +19,12 @@ import { Statistics, Customer } from '../../data-models';
 })
 export class StatisticsComponent implements OnInit, OnDestroy {
   statistics: Statistics;
-  customerData: Customer;
-  interval = 'day';
   $subscription = new Subscription();
-  hotelId: string;
-  channelOptions = [{ label: 'All', value: 'ALL' }];
 
   constructor(
     private _statisticService: StatisticsService,
     private _adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService
+    private globalFilterService: GlobalFilterService
   ) {}
 
   ngOnInit(): void {
@@ -37,23 +35,25 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
   }
 
+  get productName() {
+    return ModuleNames.FRONT_DESK_DASHBOARD;
+  }
+
+  get cardNames() {
+    return CardNames;
+  }
+
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const queries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
         this.getDashboardStats(queries);
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
-        this.channelOptions = [{ label: 'All', value: 'ALL' }];
-        this.getHotelChannels();
       })
     );
   }
@@ -70,46 +70,6 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     this._statisticService.getStatistics(config).subscribe(({ stats }) => {
       this.statistics = new Statistics().deserialize(stats);
     });
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extractinf from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
-  }
-
-  /**
-   * @function getHotelChannels To get all the communication channels for the current hotel.
-   */
-  getHotelChannels(): void {
-    this.$subscription.add(
-      this._statisticService.getHotelChannels(this.hotelId).subscribe(
-        (response) => {
-          response?.forEach((channel) =>
-            this.channelOptions.push({
-              label: channel.name,
-              value: channel.name,
-            })
-          );
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
-      )
-    );
   }
 
   ngOnDestroy(): void {

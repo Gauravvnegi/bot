@@ -1,0 +1,11 @@
+.custom-input-container {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  mat-form-field {
+    width: 90%;
+  }
+  .count {
+    margin-left: 5px;
+  }
+}

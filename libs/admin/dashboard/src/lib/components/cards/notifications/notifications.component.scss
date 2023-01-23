@@ -61,17 +61,17 @@
       align-items: center;
       color: $dark-blue;
     }
-    &-number-color{
+    &-number-color {
       color: $dark-blue;
       font-weight: bold;
       font-size: 25px;
     }
-    &-text-color{
+    &-text-color {
       color: $quote-color;
       font-size: 12px;
     }
   }
-  
+
   &-items {
     display: flex;
     justify-content: space-between;
@@ -101,7 +101,7 @@
   }
   .info-icon {
     position: relative;
-  
+
     img {
       margin: 3px 5px 0;
       width: 14px;
@@ -111,18 +111,18 @@
     .tooltip {
       position: absolute;
       font: normal normal normal 12px/16px Roboto;
-      background-color: #fff;
+      background-color: $white;
       min-width: 160px;
-      border: 1px solid #eee;
+      border: 1px solid $c-gray-85;
       padding: 10px;
       top: 120%;
       left: -200%;
       color: $tooltip;
       border-radius: 5px;
-      box-shadow: 0px 0px 10px 0px #eee;
+      box-shadow: 0px 0px 10px 0px $c-gray-85;
       display: none;
       z-index: 100;
-  
+
       .arrow {
         position: absolute;
         top: -10px;
@@ -130,10 +130,10 @@
         height: 0;
         border-left: 7px solid transparent;
         border-right: 7px solid transparent;
-        border-bottom: 10px solid #eee;
+        border-bottom: 10px solid $c-gray-85;
         left: 40%;
         transform: translate(-50%);
-  
+
         &::before {
           content: '';
           top: 1px;
@@ -141,14 +141,14 @@
           height: 0;
           border-left: 6px solid transparent;
           border-right: 6px solid transparent;
-          border-bottom: 9px solid #ffffff;
+          border-bottom: 9px solid $white;
           left: -6px;
           z-index: 3;
           position: absolute;
         }
       }
     }
-  
+
     &:hover {
       .tooltip {
         display: block;
@@ -164,5 +164,5 @@
 }
 .notifications-graph-wraper-text-color {
   color: $note1;
-  font:normal normal 700 12px/14px Roboto;
+  font: normal normal 700 12px/14px Roboto;
 }

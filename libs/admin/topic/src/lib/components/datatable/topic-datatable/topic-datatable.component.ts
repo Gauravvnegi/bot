@@ -57,7 +57,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     protected tabFilterService: TableService,
     protected _modal: ModalService,
     private _router: Router,
@@ -83,7 +83,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.getHotelId(this.globalQueries);
+      this.hotelId = this.globalFilterService.hotelId;
       // fetch-api for records
       this.loadInitialData([
         ...this.globalQueries,
@@ -92,18 +92,6 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ...this.getSelectedQuickReplyFilters(),
       ]);
-    });
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
     });
   }
 
@@ -128,7 +116,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.loading_fail',
@@ -197,7 +185,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     };
     this.topicService.updateTopicStatus(this.hotelId, data, topicId).subscribe(
       (response) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'message.success.topic_status_updated',
@@ -212,7 +200,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         this.changePage(this.currentPage);
       },
       ({ error }) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'message.error.topic_status_update_fail',
@@ -286,7 +274,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.loading_fail',
@@ -384,7 +372,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.exportCSV_fail',

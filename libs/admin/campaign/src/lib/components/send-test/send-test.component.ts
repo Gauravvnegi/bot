@@ -14,7 +14,7 @@ export class SendTestComponent implements OnInit {
   isSending = false;
   constructor(
     private _fb: FormBuilder,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     protected _translateService: TranslateService
   ) {}
 
@@ -25,7 +25,7 @@ export class SendTestComponent implements OnInit {
    */
   sendMail() {
     if (this.parentFG.get('testEmails').value.length === 0) {
-      this._snackbarService
+      this.snackbarService
         .openSnackBarWithTranslate(
           {
             translateKey: 'messages.success.sendMail',

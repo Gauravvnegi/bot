@@ -1,27 +1,29 @@
-import { Directive, Input, OnInit, ElementRef } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
-import { get } from 'lodash';
 
 @Directive({ selector: '[featureSubscribed]' })
 export class FeatureDirective implements OnInit {
-  @Input() feature: string;
+  isSubscribed = false;
+  @Input() feature: ModuleNames;
   constructor(
-    protected subscriptionService: SubscriptionPlanService,
+    private subscriptionPlanService: SubscriptionPlanService,
     protected elementRef: ElementRef
   ) {}
 
   ngOnInit() {
-    this.checkSubscription();
+    this.getSubscriptionPlan();
   }
 
-  checkSubscription(): void {
-    this.feature += '.active';
-    const subscription = this.subscriptionService.getModuleSubscription();
-    this.elementRef.nativeElement.style.display = get(
-      subscription,
-      this.feature.split('.'),
-      false
-    )
+  getSubscriptionPlan() {
+    this.isSubscribed = this.subscriptionPlanService.checkModuleSubscription(
+      this.feature
+    );
+    this.viewModule();
+  }
+
+  viewModule() {
+    this.elementRef.nativeElement.style.display = this.isSubscribed
       ? 'block'
       : 'none';
   }

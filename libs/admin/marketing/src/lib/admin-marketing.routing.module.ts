@@ -1,20 +1,26 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule } from '@angular/router';
-import { LoadGuard } from 'apps/admin/src/app/core/guards/load-guard';
+import { RouterModule, ROUTES } from '@angular/router';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import {
+  CRoutes,
+  ModuleNames,
+  routesFactory,
+} from '@hospitality-bot/admin/shared';
 import { MarketingComponent } from './components/marketing/marketing.component';
 
-const appRoutes: Route[] = [
-  { path: '', redirectTo: 'dashboard' },
+const appRoutes: CRoutes = [
+  { path: '', redirectTo: 'analytics' },
   {
-    path: 'dashboard',
+    path: 'analytics',
+    name: ModuleNames.EMARK_IT_DASHBOARD,
     loadChildren: () =>
       import('@hospitality-bot/admin/marketing-dashboard').then(
         (m) => m.AdminMarketingDashboardModule
       ),
-    canActivate: [LoadGuard],
   },
   {
     path: 'campaign',
+    name: ModuleNames.CAMPAIGN,
     loadChildren: () =>
       import('@hospitality-bot/admin/campaign').then(
         (m) => m.AdminCampaignModule
@@ -23,7 +29,16 @@ const appRoutes: Route[] = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(appRoutes)],
+  imports: [RouterModule.forChild([])],
+  providers: [
+    {
+      provide: ROUTES,
+      useFactory: (subscriptionService: SubscriptionPlanService) =>
+        routesFactory(appRoutes, [subscriptionService]),
+      multi: true,
+      deps: [SubscriptionPlanService],
+    },
+  ],
   exports: [RouterModule],
 })
 export class AdminMarketingRoutingModule {

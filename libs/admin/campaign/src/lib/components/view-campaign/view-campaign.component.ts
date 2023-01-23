@@ -42,7 +42,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
   constructor(
     private location: Location,
     private _fb: FormBuilder,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     public globalFilterService: GlobalFilterService,
     private _emailService: EmailService,
     private _campaignService: CampaignService,
@@ -84,22 +84,11 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getFromEmails();
         this.getTemplateId();
       })
     );
-  }
-
-  /**
-   * @function getHotelId function to get hotel id.
-   * @param globalQueries set-global query everytime global filter changes
-
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) this.hotelId = element.hotelId;
-    });
   }
 
   /**
@@ -110,7 +99,16 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
       this._emailService.getFromEmail(this.hotelId).subscribe(
         (response) =>
           (this.fromEmailList = new EmailList().deserialize(response)),
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -130,10 +128,10 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function getCampaignDetails funcction to get campaign details.
+   * @function getCampaignDetails function to get campaign details.
    * @param id campaign id.
    */
-  getCampaignDetails(id) {
+  getCampaignDetails(id: string) {
     this.$subscription.add(
       this._campaignService
         .getCampaignById(this.hotelId, id)
@@ -175,7 +173,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
    * @param control campaignFG.
    * @param dataField have form data.
    */
-  addFormArray(control, dataField) {
+  addFormArray(control: string, dataField: string) {
     return new Promise((resolve, reject) => {
       if (this.campaign[dataField]) {
         this.campaign[control] = [];
@@ -217,14 +215,19 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) => {
             this.setDataAfterUpdate(response);
-            this._snackbarService.openSnackBarAsText('Campaign Archived.', '', {
-              panelClass: 'success',
-            });
+            this.snackbarService.openSnackBarWithTranslate(
+              {
+                translateKey: `messages.SUCCESS.CAMPAIGN_ARCHIVED`,
+                priorityMessage: 'Campaign Archived.',
+              },
+              '',
+              { panelClass: 'success' }
+            );
           },
           ({ error }) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate({
-                translateKey: '',
+                translateKey: `messages.error.${error?.type}`,
                 priorityMessage: error.message,
               })
               .subscribe();
@@ -256,7 +259,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
               this._emailService.sendTest(this.hotelId, reqData).subscribe(
                 (response) => {
                   this.setDataAfterUpdate(response);
-                  this._snackbarService
+                  this.snackbarService
                     .openSnackBarWithTranslate(
                       {
                         translateKey: 'messages.success.sendTestcampaign',
@@ -270,9 +273,9 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
                     .subscribe();
                 },
                 ({ error }) => {
-                  this._snackbarService
+                  this.snackbarService
                     .openSnackBarWithTranslate({
-                      translateKey: '',
+                      translateKey: `messages.error.${error?.type}`,
                       priorityMessage: error.message,
                     })
                     .subscribe();

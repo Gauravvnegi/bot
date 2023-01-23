@@ -1,10 +1,7 @@
 import { get, set } from 'lodash';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
-
-export class PackageDetail implements Deserializable {
+export class PackageDetail implements IDeserializable {
   amenityPackage: Package;
   deserialize(input: any) {
     this.amenityPackage = new Package().deserialize(input);
@@ -12,7 +9,7 @@ export class PackageDetail implements Deserializable {
   }
 }
 
-export class Packages implements Deserializable {
+export class Packages implements IDeserializable {
   records: Package[];
   deserialize(input: any) {
     this.records = input.records.map((record) =>
@@ -22,7 +19,7 @@ export class Packages implements Deserializable {
   }
 }
 
-export class Package implements Deserializable {
+export class Package implements IDeserializable {
   id: string;
   status: boolean;
   description: string;

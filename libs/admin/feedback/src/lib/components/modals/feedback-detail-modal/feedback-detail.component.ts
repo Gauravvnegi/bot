@@ -64,12 +64,12 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
   num = card.num;
   constructor(
     protected cardService: CardService,
-    public _globalFilterService: GlobalFilterService,
+    public globalFilterService: GlobalFilterService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     protected userService: UserService,
     protected _adminUtilityService: AdminUtilityService,
     protected tableService: FeedbackTableService,
-    protected _snackbarService: SnackBarService
+    protected snackbarService: SnackBarService
   ) {
     this.feedbackFG = new FormGroup({
       assignee: new FormControl(''),
@@ -125,39 +125,48 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
             `Feedback_export_${new Date().getTime()}.csv`
           );
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
 
-  updateFeedbackState() {
+  updateFeedbackState(event) {
     const data = {
       status: 'RESOLVED',
+      notes: event.data.comment,
     };
     this.tableService
       .updateFeedbackState(this.data.feedback.departmentId, data)
       .subscribe(
         (response) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
-                translateKey: 'Status Updated Successfully.',
+                translateKey: 'messages.SUCCESS.STATUS_UPDATED',
                 priorityMessage: 'Status Updated Successfully..',
               },
               '',
-              {
-                panelClass: 'success',
-              }
+              { panelClass: 'success' }
             )
             .subscribe();
+          this.feedbackFG.patchValue({ comment: '' });
           this.cardService.$assigneeChange.next({ status: true });
           this.refreshFeedbackData();
         },
         ({ error }) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
-                translateKey: error.message,
+                translateKey: `messages.error.${error?.type}`,
                 priorityMessage: error.message,
               },
               ''
@@ -171,30 +180,59 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
     const data = {
       notes: event.data.comment,
     };
+    const mentions = event.mentions
+      .map((mention) => {
+        if (mention.firstName && data.notes.includes(`@${mention.firstName}`)) {
+          return { mentionedUserId: mention.id };
+        }
+        if (
+          mention.departmentLabel &&
+          data.notes.includes(`@${mention.departmentLabel}`)
+        ) {
+          return { departmentMentionedUserName: mention.departmentName };
+        }
+      })
+      .filter((item) => item !== undefined);
+
+    const departmentMentions = mentions.filter(
+      (item) => !!item.departmentMentionedUserName
+    );
+    const userMentions = mentions.filter((item) => !!item.mentionedUserId);
+
+    const getQueryArray = (list: typeof mentions, configName: string) => {
+      if (list.length > 0) {
+        return [{ [configName]: true }, ...list];
+      }
+      return [];
+    };
+
+    const queryObj = this._adminUtilityService.makeQueryParams([
+      ...getQueryArray(userMentions, 'isMention'),
+      ...getQueryArray(departmentMentions, 'isDepartmentMention'),
+    ]);
+
     this.tableService
-      .updateFeedbackState(this.data.feedback.departmentId, data)
+      .updateFeedbackState(this.data.feedback.departmentId, data, queryObj)
       .subscribe(
         (response) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
-                translateKey: 'Message sent.',
+                translateKey: 'messages.SUCCESS.MESSAGE_SENT',
                 priorityMessage: 'Message sent Successfully..',
               },
               '',
-              {
-                panelClass: 'success',
-              }
+              { panelClass: 'success' }
             )
             .subscribe();
           this.feedbackFG.patchValue({ comment: '' });
           this.refreshFeedbackData();
         },
         ({ error }) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
-                translateKey: error.message,
+                translateKey: `messages.error.${error?.type}`,
                 priorityMessage: error.message,
               },
               ''
@@ -284,7 +322,16 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           link.click();
           link.remove();
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -300,11 +347,27 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) => {
             this.cardService.$assigneeChange.next({ status: true });
-            this._snackbarService.openSnackBarAsText('Assignee updated.', '', {
-              panelClass: 'success',
-            });
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.ASSIGNEE_UPDATED',
+                  priorityMessage: 'Assignee updated.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe();
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }

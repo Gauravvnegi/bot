@@ -1,22 +1,25 @@
-import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '@hospitality-bot/admin/shared';
-import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
+import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { get } from 'lodash';
+import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
-import { ModuleNames } from '../../../../../../../../../../../libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { routes } from '../../../../../../../../../../../libs/admin/shared/src/index';
 import { AuthService } from '../../../../../../auth/services/auth.service';
 import { layoutConfig } from '../../../constants/layout';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
 import { GlobalFilterService } from '../../../services/global-filters.service';
+import { LoadingService } from '../../../services/loader.service';
 import { FirebaseMessagingService } from '../../../services/messaging.service';
+import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
-import { trigger, transition, animate, style } from '@angular/animations';
-import { LoadingService } from '../../../services/loader.service';
 
 @Component({
   selector: 'admin-layout-one',
@@ -37,13 +40,21 @@ import { LoadingService } from '../../../services/loader.service';
 export class LayoutOneComponent implements OnInit, OnDestroy {
   backgroundColor: string;
   background_image: string;
+  menuItem: any;
+  menuTitle: string;
   profile = layoutConfig.profile;
   outlets = [];
   lastUpdatedAt: string;
   isGlobalFilterVisible = false;
+  showNotification = false;
+  flashNotification: any;
+  delayTime = layoutConfig.notificationDelayTime;
   isDetailPageVisible = false;
+  isNotificationVisible = false;
+  private $subscription = new Subscription();
   searchFG: FormGroup;
   timezone: string;
+  isExpand = true;
   filterConfig = {
     brandName: '',
     branchName: '',
@@ -52,6 +63,12 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       return this.totalFilters <= 0 ? '' : `(+${this.totalFilters}) Others`;
     },
   };
+  notificationFilterData = {
+    status: [],
+    fromDate: '',
+    toDate: '',
+  };
+  unreadCount: number;
   private $firebaseMessagingSubscription = new Subscription();
   isGlobalSearchVisible = true;
 
@@ -67,9 +84,12 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private firebaseMessagingService: FirebaseMessagingService,
     private subscriptionPlanService: SubscriptionPlanService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private notificatonService: NotificationService,
+    private configService: ConfigService,
+    private cookieService: CookieService
   ) {
-    this.initSearchQueryForm();
+    this.initFG();
   }
 
   ngOnInit() {
@@ -77,6 +97,26 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.globalFilterService.listenForGlobalFilterChange();
     this.setInitialFilterValue();
     this.loadingService.close();
+    this.getNotificationUnreadCount();
+    this.$subscription.add(
+      this.configService.$config.subscribe((response) => {
+        if (response) {
+          this.flashNotification = response?.flashNotifications;
+          this.initNotification();
+        }
+      })
+    );
+  }
+
+  initNotification() {
+    if (this.flashNotification?.notificationView) {
+      const { delayTimeAllow = false, delayTime } = this.flashNotification;
+      this.delayTime = delayTimeAllow ? delayTime : this.delayTime;
+      this.showNotification = true;
+    }
+    setTimeout(() => {
+      this.showNotification = false;
+    }, this.delayTime * 1000);
   }
 
   initFirebaseMessaging(entityId?) {
@@ -89,6 +129,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       this.firebaseMessagingService.receiveMessage().subscribe((payload) => {
         const notificationPayload = payload;
         this.firebaseMessagingService.playNotificationSound();
+        this.getNotificationUnreadCount();
         if (notificationPayload) {
           switch (notificationPayload['data']?.notificationType) {
             case 'Live Request':
@@ -118,7 +159,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     );
   }
 
-  initSearchQueryForm(): void {
+  initFG(): void {
     this.searchFG = this.fb.group({
       search: [''],
     });
@@ -135,15 +176,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   setInitialFilterValue() {
     const brand = get(this._hotelDetailService.hotelDetails, ['brands', '0']);
-    const branches = brand?.branches;
+    const branches = brand?.['branches'];
     const branch = get(branches, [branches.length - 1]);
-    this.outlets = branch?.outlets;
-    this.filterConfig.brandName = brand?.label;
-    this.filterConfig.branchName = branch?.label;
+    this.outlets = branch?.['outlets'];
+    this.filterConfig.brandName = brand?.['label'];
+    this.filterConfig.branchName = branch?.['label'];
     this.filterService.emitFilterValue$.next({
       property: {
-        hotelName: brand?.id,
-        branchName: branch?.id,
+        hotelName: brand?.['id'],
+        branchName: branch?.['id'],
       },
       feedback: {
         feedbackType: this.checkForTransactionFeedbackSubscribed()
@@ -155,9 +196,10 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         {}
       ),
     });
-    this.initFirebaseMessaging(branch?.id);
+    this.initFirebaseMessaging(branch?.['id']);
     this.timezone = get(brand, ['branches', branches.length - 1, 'timezone']);
     this.globalFilterService.timezone = this.timezone;
+    this.globalFilterService.hotelId = branch?.['id'];
   }
 
   refreshDashboard() {
@@ -173,17 +215,27 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   enableGlobalFilter(el) {
     this.isGlobalFilterVisible = true;
     this.isGlobalSearchVisible = false;
+    this.isNotificationVisible = false;
     el.scrollTop = 0;
   }
 
   enableGlobalSearch() {
     this.isGlobalFilterVisible = false;
     this.isGlobalSearchVisible = true;
+    this.isNotificationVisible = false;
+  }
+
+  enableNotification(el) {
+    this.isGlobalFilterVisible = false;
+    this.isGlobalSearchVisible = false;
+    this.isNotificationVisible = true;
+    el.scrollTop = 0;
   }
 
   disableFilter() {
     this.isGlobalFilterVisible = false;
     this.isGlobalSearchVisible = false;
+    this.isNotificationVisible = false;
   }
 
   closeGlobalFilter() {
@@ -201,12 +253,21 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         .filter((brand) => brand.id === values.property.hotelName)[0]
         .branches.filter((d) => d.id === values.property.branchName)[0];
       this.filterConfig.branchName = branch.name;
-      this.timezone = branch.timezone;
-      this.globalFilterService.timezone = branch.timezone;
+      this.globalFilterService.timezone = this.timezone = branch.timezone;
       localStorage.setItem(event.token.key, event.token.value);
       this.$firebaseMessagingSubscription.unsubscribe();
       this.initFirebaseMessaging(values.property.branchName);
+      this.globalFilterService.hotelId = branch?.['id'];
     }
+  }
+
+  subMenuItem(data) {
+    this.menuTitle = data.title;
+    this.menuItem = data.list;
+  }
+
+  sideNavToggle(item) {
+    this.isExpand = item;
   }
 
   resetFilterCount() {
@@ -262,16 +323,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   displayProfile() {
-    if (
-      this.subscriptionPlanService.getModuleSubscription().modules[
-        ModuleNames.ROLE_MANAGEMENT
-      ].active
-    )
-      this._router.navigate([
-        `/pages/${
-          ModuleNames.ROLE_MANAGEMENT
-        }/${this._userService.getLoggedInUserid()}`,
-      ]);
+    this._router.navigate([
+      `/pages/${
+        routes.RoleAndPermission
+      }/${this._userService.getLoggedInUserid()}`,
+    ]);
   }
 
   logoutUser() {
@@ -280,17 +336,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.firebaseMessagingService.destroySubscription();
         this._authService.clearToken();
+        this._authService.deletePlatformRefererTokens(this.cookieService);
         location.reload();
       });
   }
 
   checkForTransactionFeedbackSubscribed() {
-    const subscription = this.subscriptionPlanService.getModuleSubscription();
-    return get(subscription, [
-      'modules',
-      ModuleNames.FEEDBACK_TRANSACTIONAL,
-      'active',
-    ]);
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.FEEDBACK_TRANSACTIONAL
+    );
   }
 
   @HostListener('document:visibilitychange', ['$event'])
@@ -300,6 +354,21 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     } else if (this._router.url.includes('messages')) {
       this.firebaseMessagingService.tabActive.next(true);
     }
+  }
+
+  setNotificationFilterData(event): void {
+    this.notificationFilterData = event.data;
+  }
+
+  closeNotification(): void {
+    this.isNotificationVisible = false;
+    this.getNotificationUnreadCount();
+  }
+
+  getNotificationUnreadCount() {
+    this.notificatonService
+      .getUnreadCount(this._userService.getLoggedInUserid())
+      .subscribe((response) => (this.unreadCount = response?.unreadCount));
   }
 
   ngOnDestroy() {

@@ -19,7 +19,7 @@ export class EmailChipListComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   constructor(
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private _fb: FormBuilder
   ) {}
 
@@ -36,7 +36,7 @@ export class EmailChipListComponent implements OnInit {
     // Add our keyword
     if ((value || '').trim()) {
       if (!this.isValidEmail(value)) {
-        this._snackbarService.openSnackBarAsText('Invalid email format');
+        this.snackbarService.openSnackBarAsText('Invalid email format');
         return;
       } else {
         const controlValues = control.value.filter(

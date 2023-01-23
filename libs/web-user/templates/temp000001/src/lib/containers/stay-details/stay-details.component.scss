@@ -1,5 +1,4 @@
 @import 'temp000001';
-@import 'temp000002';
 
 .expand-icon {
   margin-left: auto;
@@ -112,7 +111,7 @@
 }
 
 :host ::ng-deep .mat__field--heading {
-  margin-right: 3rem;
+  margin-right: 5rem;
   margin-bottom: 13px;
   @media only screen and (max-width: $M) {
     margin-right: $margin-small;
@@ -129,4 +128,10 @@
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
   border-top: 8px solid;
+}
+
+.required{
+  .astric{
+    display: none;
+  }
 }

@@ -1,7 +1,9 @@
+@import 'main';
+
 .chatRecieve {
   height: 124px;
   width: 100%;
-  background: #ffffff;
+  background: $white;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
@@ -14,9 +16,9 @@
       height: 100%;
       width: calc(100% - 10px);
       .message-field-input {
-        padding-left: 20px;
-        background: #f2f6f8 0% 0% no-repeat padding-box;
-        border: 1px solid #d5e0e6;
+        padding: 10px 20px;
+        background: $c-gray-100 0% 0% no-repeat padding-box;
+        border: 1px solid $c-gray-84;
         border-radius: 20px;
         opacity: 1;
         height: 100%;
@@ -38,12 +40,12 @@
 .whatsAppRule {
   height: 62px;
   width: 100%;
-  background: #ffffff;
+  background: $white;
   padding: 10px 20px;
   display: flex !important;
   justify-content: space-between;
   align-items: center;
   font: normal normal normal 14px/19px Roboto;
   letter-spacing: 0.84px;
-  color: #fb3d4e;
+  color: $closed;
 }

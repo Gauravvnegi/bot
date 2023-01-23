@@ -169,12 +169,14 @@
           class="remark-wrapper"
         >
           <!-- Add flow not to show  remarks when its empty and status is completed -->
-          <form [formGroup]="selectedGuestGroup">
-            <span class="text">Remark :</span>
-            <mat-form-field class="remark">
-              <input matInput formControlName="remarks" />
-            </mat-form-field>
-          </form>
+          <div class="text">Remark :</div>
+          <div class="remark">
+            <hospitality-bot-custom-size-input
+              [parentForm]="selectedGuestGroup"
+              [name]="'remarks'"
+              [customSize]="200"
+            ></hospitality-bot-custom-size-input>
+          </div>
         </div>
       </form>
     </ng-container>

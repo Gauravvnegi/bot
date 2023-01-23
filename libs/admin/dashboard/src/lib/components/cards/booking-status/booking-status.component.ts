@@ -44,9 +44,9 @@ export class BookingStatusComponent implements OnInit, OnDestroy {
   constructor(
     private _dateService: DateService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private _adminUtilityService: AdminUtilityService,
-    private _snackbarService: SnackBarService
+    private snackbarService: SnackBarService
   ) {}
 
   /**
@@ -76,12 +76,12 @@ export class BookingStatusComponent implements OnInit, OnDestroy {
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const calenderType = {
           calenderType: this._dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;
@@ -107,7 +107,7 @@ export class BookingStatusComponent implements OnInit, OnDestroy {
         this._dateService.convertTimestampToLabels(
           this.selectedInterval,
           timestamp,
-          this._globalFilterService.timezone,
+          this.globalFilterService.timezone,
           this.extractFormatFromSelectedInterval(),
           this.selectedInterval === sharedConfig.timeInterval.week
             ? this._adminUtilityService.getToDate(this.globalQueries)
@@ -130,7 +130,6 @@ export class BookingStatusComponent implements OnInit, OnDestroy {
       return 'MMM YYYY';
     else return '';
   }
-
   /**
    * @function legendOnClick To handle legend click for the graph.
    * @param index The index of the legend.
@@ -171,7 +170,7 @@ export class BookingStatusComponent implements OnInit, OnDestroy {
           this.initGraphData();
         },
         ({ error }) =>
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',

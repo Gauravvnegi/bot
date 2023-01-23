@@ -1,11 +1,33 @@
 <div class="wrapper">
+  <div *ngIf="showNotification" class="flash-notification">
+    <p [ngStyle]="{color: flashNotification.notificationTextColor}">
+      {{ flashNotification.notificationMessage }}
+    </p>
+  </div>
   <div
     class="sidebar-panel"
     id="sidebar"
     [style.background-color]="backgroundColor"
   >
-    <hospitality-bot-sidenav></hospitality-bot-sidenav>
+    <hospitality-bot-sidenav
+      (submenuItems)="subMenuItem($event)"
+      (navToggle)="sideNavToggle($event)"
+      [isExpanded]="isExpand"
+    ></hospitality-bot-sidenav>
   </div>
+  <div
+    class="sidebar-panel"
+    id="sidebar"
+    [style.background-color]="backgroundColor"
+  >
+    <hospitality-bot-sidenav-expand
+      [title]="menuTitle"
+      [submenuItems]="menuItem"
+      [isExpanded]="isExpand"
+      (navToggle)="sideNavToggle($event)"
+    ></hospitality-bot-sidenav-expand>
+  </div>
+
   <div class="main-panel" id="main-panel">
     <div class="main-panel--header">
       <!-- message header -->
@@ -60,6 +82,36 @@
           </div>
         </div>
         <div class="options2">
+          <div class="notification-wrapper">
+            <div class="temp-width">
+              <div
+                class="header--button notification-icon"
+                (click)="enableNotification(main)"
+              >
+                <img
+                  class="filter-icon"
+                  src="assets/svg/notification-bell.svg"
+                />
+                <div
+                  class="notification-count"
+                  *ngIf="unreadCount && unreadCount > 0"
+                >
+                  {{ unreadCount }}
+                </div>
+              </div>
+              <div
+                class="notification"
+                *ngIf="isNotificationVisible"
+                [@slideInOut]
+              >
+                <admin-notification
+                  [notificationFilterData]="notificationFilterData"
+                  (onCloseNotification)="closeNotification()"
+                  (filterData)="setNotificationFilterData($event)"
+                ></admin-notification>
+              </div>
+            </div>
+          </div>
           <div class="dropdown-wrapper">
             <admin-profile-dropdown
               [items]="profile"
@@ -90,17 +142,21 @@
           </div>
         </div>
       </div>
-      <mat-progress-bar
-        *ngIf="
-          progressSpinnerService.isProgressSpinnerVisible &&
-          !checkForMessageRoute()
-        "
-        mode="query"
-      ></mat-progress-bar>
     </div>
+    <mat-progress-bar
+      *ngIf="
+        progressSpinnerService.isProgressSpinnerVisible &&
+        !checkForMessageRoute()
+      "
+      mode="query"
+    ></mat-progress-bar>
     <div
       class="main-panel--container"
-      [ngClass]="{ disabled: isGlobalFilterVisible }"
+      [ngClass]="{
+        disabled:
+          (isGlobalFilterVisible && !checkForMessageRoute()) ||
+          (isNotificationVisible && !checkForMessageRoute())
+      }"
     >
       <div class="main" #main>
         <div class="blackscreen"></div>

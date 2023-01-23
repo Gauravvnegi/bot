@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { ReceiverFields, SendersData } from '../types/campaign.type';
 
 @Injectable()
 export class EmailService extends ApiService {
@@ -147,7 +148,7 @@ export class EmailService extends ApiService {
    * @param data senders data.
    * @returns
    */
-  mapSendersData(field, data) {
+  mapSendersData(field: ReceiverFields, data): SendersData {
     const reqData = {
       subscribers: [],
       listing: [],
@@ -188,7 +189,7 @@ export class EmailService extends ApiService {
 
   /**
    *@function checkForEmptyForm function to check for empty forms.
-   * @param values values object to bind values with individual form fileds.
+   * @param values values object to bind values with individual form fields.
    */
   checkForEmptyForm(values) {
     return (

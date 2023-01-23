@@ -1,7 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -9,22 +10,20 @@ import {
   sharedConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
+import * as FileSaver from 'file-saver';
 import {
-  SnackBarService,
-  ModalService,
-} from '@hospitality-bot/shared/material';
-import {
-  EntityType,
   EntityState,
+  EntityType,
   SelectedEntityState,
 } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { campaignConfig } from '../../../constant/campaign';
-import { Campaigns } from '../../../data-model/campaign.model';
-import * as FileSaver from 'file-saver';
+import { Campaigns, Campaign } from '../../../data-model/campaign.model';
 import { CampaignService } from '../../../services/campaign.service';
-import { TranslateService } from '@ngx-translate/core';
+import { MessageObj } from '../../../types/campaign.type';
 
 @Component({
   selector: 'hospitality-bot-campaign-datatable',
@@ -56,10 +55,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     protected tabFilterService: TableService,
-    protected _modal: ModalService,
-    private _router: Router,
+    private router: Router,
     private route: ActivatedRoute,
     private campaignService: CampaignService,
     protected _translateService: TranslateService
@@ -81,7 +79,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.getHotelId(this.globalQueries);
+      this.hotelId = this.globalFilterService.hotelId;
       this.loadInitialData([
         ...this.globalQueries,
         {
@@ -93,24 +91,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
-  }
-
-  /**
    * @function loadInitialData To load the initial data for datatable.
    * @param queries The filter list with date and hotel filters.
    * @param loading The loading status.
    */
   loadInitialData(queries = [], loading = true): void {
-    this.loading = loading && true;
+    this.loading = loading;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => this.setRecords(data),
@@ -125,7 +111,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @function setRecords To set the datatable records.
    * @param data Campaign list response data.
    */
-  setRecords(data): void {
+  setRecords(data: Record<string, any>): void {
     this.values = new Campaigns().deserialize(data).records;
     this.totalRecords = data.total;
     data.entityTypeCounts &&
@@ -183,7 +169,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param event active & inactive event check.
    * @param campaignId The campaign id for which status update action will be done.
    */
-  updateCampaignStatus(event, campaignId: string): void {
+  updateCampaignStatus(event: MatSlideToggleChange, campaignId: string): void {
     const data = {
       active: event.checked,
     };
@@ -192,11 +178,11 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       this.campaignService
         .updateCampaignStatus(this.hotelId, data, campaignId)
         .subscribe(
-          (response) => {
+          (_response) => {
             this.showMessage(
               {
                 key: 'messages.success.status_updated',
-                message: 'Status updated successfully',
+                message: '',
               },
               'success'
             );
@@ -214,13 +200,13 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param campaignId campaign id of a particular campaign.
    * @param data campaign data.
    */
-  cloneCampaign(campaignId, data): void {
+  cloneCampaign(campaignId: string, data): void {
     this.loading = true;
     this.$subscription.add(
       this.campaignService
         .cloneCampaign(this.hotelId, data, campaignId)
         .subscribe(
-          (response) => {
+          (_response) => {
             this.showMessage(
               {
                 key: 'messages.success.campaignCloned',
@@ -241,13 +227,13 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param campaignId campaign id of a particular campaign.
    * @param data campaign data.
    */
-  archiveCampaign(campaignId, data): void {
+  archiveCampaign(campaignId: string, data): void {
     this.loading = true;
     this.$subscription.add(
       this.campaignService
         .archiveCampaign(this.hotelId, data, campaignId)
         .subscribe(
-          (response) => {
+          (_response) => {
             this.showMessage(
               {
                 key: 'messages.success.campaignArchived',
@@ -267,15 +253,15 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @function openCreateCampaign to create campaign page.
    */
   openCreateCampaign(): void {
-    this._router.navigate(['create'], { relativeTo: this.route });
+    this.router.navigate(['create'], { relativeTo: this.route });
   }
 
   /**
-   * @function openCreateTemlplate navigate to edit campaign page.
+   * @function openEditCampaign navigate to edit campaign page.
    */
-  openEditCampaign(campaign, event): void {
+  openEditCampaign(campaign: Campaign, event: MouseEvent): void {
     event.stopPropagation();
-    this._router.navigate(
+    this.router.navigate(
       [`${campaign.isDraft ? 'edit' : 'view'}/${campaign.id}`],
       {
         relativeTo: this.route,
@@ -285,9 +271,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
 
   /**
    * @function handleDropdownClick function to handle dropdown.
-   * @param event event object for stop propogation.
+   * @param event event object for stop propagation.
    */
-  handleDropdownClick(event): void {
+  handleDropdownClick(event: MouseEvent): void {
     event.stopPropagation();
   }
 
@@ -325,7 +311,8 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         }
       ).subscribe(
         (data) => this.setRecords(data),
-        ({ error }) => this.showMessage({ ...error, key: '' }),
+        ({ error }) =>
+          this.showMessage({ ...error, key: 'messages.error.fetch' }),
         () => (this.loading = false)
       )
     );
@@ -335,23 +322,25 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @function updatePaginations To update the pagination variable values.
    * @param event The lazy load event for the table.
    */
-  updatePaginations(event): void {
+  updatePaginations(event: LazyLoadEvent): void {
     this.first = event.first;
     this.rowsPerPage = event.rows;
   }
 
   /**
    * @function customSort To sort the rows of the table.
-   * @param eventThe The event for sort click action.
+   * @param event The event for sort click action.
    */
   customSort(event: SortEvent): void {
-    const col = campaignConfig.datatable.cols.filter(
+    const col = campaignConfig.datatable.cols.find(
       (data) => data.field === event.field
-    )[0];
+    );
+
     const field =
       event.field[event.field.length - 1] === ')'
         ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
         : event.field;
+
     event.data.sort((data1, data2) =>
       this.sortOrder(event, field, data1, data2, col)
     );
@@ -381,7 +370,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       this.tempFirst = this.first;
       this.tempRowsPerPage = this.rowsPerPage;
       this.isSearchSet = true;
-    } else if (!!!value) {
+    } else if (!value) {
       this.isSearchSet = false;
       this.first = this.tempFirst;
       this.rowsPerPage = this.tempRowsPerPage;
@@ -423,28 +412,21 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   /**
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
    * @param quickReplyTypeIdx The chip index.
-   * @param quickReplyType The chip type.
    */
-  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
-    //toggle isSelected
-    if (quickReplyTypeIdx === 0) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== campaignConfig.chipValue.all)
-          chip.isSelected = false;
-      });
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    }
+  toggleQuickReplyFilter(quickReplyTypeIdx: number): void {
+    this.tabFilterItems[
+      this.tabFilterIdx
+    ].chips[0].isSelected = this.tabFilterItems[this.tabFilterIdx].chips.reduce(
+      (value, chip, idx) => {
+        if (!quickReplyTypeIdx) {
+          chip.isSelected = chip.value === campaignConfig.chipValue.all;
+        } else if (quickReplyTypeIdx === idx) {
+          chip.isSelected = !chip.isSelected;
+        }
+        return value && !chip.isSelected;
+      },
+      true
+    );
     this.changePage(0);
   }
 
@@ -461,7 +443,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param data campaign stats data.
    * @returns statsCampaign key object.
    */
-  getStatsCampaignChips(data): string[] {
+  getStatsCampaignChips(data: Campaign): string[] {
     return Object.keys(data.statsCampaign);
   }
 
@@ -469,8 +451,8 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @function showMessage To show the translated message.
    * @param messageObj The message object.
    */
-  showMessage(messageObj, panelClass = 'danger'): void {
-    this._snackbarService
+  showMessage(messageObj: MessageObj, panelClass = 'danger'): void {
+    this.snackbarService
       .openSnackBarWithTranslate(
         {
           translateKey: messageObj.key,

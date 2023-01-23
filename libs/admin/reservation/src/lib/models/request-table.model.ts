@@ -1,11 +1,11 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
 import * as moment from 'moment';
-export interface Deserializable {
+export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
-export class RequestTable implements Deserializable {
+export class RequestTable implements IDeserializable {
   records: Request[];
   deserialize(input: any, colorMap) {
     this.records = input.records.map((record) =>
@@ -15,7 +15,7 @@ export class RequestTable implements Deserializable {
   }
 }
 
-export class Request implements Deserializable {
+export class Request implements IDeserializable {
   id;
   bookingNumber: string;
   requestTimeStamp: number;

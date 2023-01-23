@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as moment from 'moment';
+import { campaignConfig } from '../../constant/campaign';
 
 @Component({
   selector: 'hospitality-bot-schedule-campaign',
@@ -16,18 +17,18 @@ export class ScheduleCampaignComponent implements OnInit {
   @Output() onScheduleClose = new EventEmitter();
   minDate = new Date();
   constructor(
-    private _snackbarService: SnackBarService,
-    private _globalFilterService: GlobalFilterService
+    private snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService
   ) {
     this.createTimeList(
-      moment().utcOffset(this._globalFilterService.timezone).valueOf()
+      moment().utcOffset(this.globalFilterService.timezone).valueOf()
     );
   }
 
   ngOnInit(): void {}
 
   updateFormDate(value: any) {
-    const currentTime = moment().utcOffset(this._globalFilterService.timezone);
+    const currentTime = moment().utcOffset(this.globalFilterService.timezone);
     this.createTimeList(value);
     if (
       this.checkForSameDay(value) &&
@@ -65,17 +66,17 @@ export class ScheduleCampaignComponent implements OnInit {
   checkEnableTime(time) {
     if (this.checkForSameDay(this.scheduleFG.get('scheduleDate').value)) {
       const hour = moment(time)
-        .utcOffset(this._globalFilterService.timezone)
+        .utcOffset(this.globalFilterService.timezone)
         .hour();
       const minute = moment(time)
-        .utcOffset(this._globalFilterService.timezone)
+        .utcOffset(this.globalFilterService.timezone)
         .minute();
 
       const currentHour = moment()
-        .utcOffset(this._globalFilterService.timezone)
+        .utcOffset(this.globalFilterService.timezone)
         .hour();
       const currentMinute = moment()
-        .utcOffset(this._globalFilterService.timezone)
+        .utcOffset(this.globalFilterService.timezone)
         .minute();
 
       if (hour < currentHour) return false;
@@ -90,17 +91,17 @@ export class ScheduleCampaignComponent implements OnInit {
   checkForSameDay(timestamp) {
     return (
       moment()
-        .utcOffset(this._globalFilterService.timezone)
+        .utcOffset(this.globalFilterService.timezone)
         .format('dd/MM/yyyy') ==
       moment(timestamp)
-        .utcOffset(this._globalFilterService.timezone)
+        .utcOffset(this.globalFilterService.timezone)
         .format('dd/MM/yyyy')
     );
   }
 
   scheduleCampaign() {
     if (this.scheduleFG.invalid) {
-      this._snackbarService.openSnackBarAsText(
+      this.snackbarService.openSnackBarAsText(
         'Please select the schedule time.'
       );
       this.scheduleFG.markAllAsTouched();
@@ -111,13 +112,21 @@ export class ScheduleCampaignComponent implements OnInit {
     });
   }
 
+  /**
+   * @function campaignConfiguration returns campaignConfig object.
+   * @returns campaignConfig object.
+   */
+  get campaignConfiguration() {
+    return campaignConfig;
+  }
+
   createTimeList(timestamp) {
     this.timeList = [];
     let time = moment(timestamp)
-      .utcOffset(this._globalFilterService.timezone)
+      .utcOffset(this.globalFilterService.timezone)
       .startOf('day');
     const endOfDay = moment(timestamp)
-      .utcOffset(this._globalFilterService.timezone)
+      .utcOffset(this.globalFilterService.timezone)
       .add(1, 'days')
       .startOf('day');
     while (time.valueOf() !== endOfDay.valueOf()) {
@@ -132,7 +141,7 @@ export class ScheduleCampaignComponent implements OnInit {
   onTimeChange(event) {
     this.scheduleFG.patchValue({
       time: moment(+event.value)
-        .utcOffset(this._globalFilterService.timezone)
+        .utcOffset(this.globalFilterService.timezone)
         .format('h:mm A'),
     });
   }

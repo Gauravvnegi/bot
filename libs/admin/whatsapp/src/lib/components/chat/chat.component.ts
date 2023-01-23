@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalService, SnackBarService } from 'libs/shared/material/src';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { MessageService } from '../../services/messages.service';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
@@ -53,9 +54,9 @@ export class ChatComponent
     private modalService: ModalService,
     private messageService: MessageService,
     private fb: FormBuilder,
-    private snackBarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private _firebaseMessagingService: FirebaseMessagingService
   ) {}
 
@@ -83,6 +84,13 @@ export class ChatComponent
     }
   }
 
+  get productName() {
+    return {
+      whatsappBot: ModuleNames.WHATSAPP_BOT,
+      request: ModuleNames.REQUEST,
+    };
+  }
+
   loadChat() {
     if (
       !this.chatList.messages[this.selectedChat.receiverId] ||
@@ -107,14 +115,15 @@ export class ChatComponent
     this.listenForLiveRequestNotification();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
         this.getLiveChat();
+        this.loadChat();
       })
     );
   }
@@ -149,15 +158,6 @@ export class ChatComponent
         response?.data?.phoneNumber === this.selectedChat.phone
       ) {
         this.getLiveChat();
-      }
-    });
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-        this.loadChat();
       }
     });
   }
@@ -200,7 +200,15 @@ export class ChatComponent
             ({ error }) => {
               this.isLoading = false;
               this.chat = new Chats();
-              this.snackBarService.openSnackBarAsText(error.message);
+              this.snackbarService
+                .openSnackBarWithTranslate(
+                  {
+                    translateKey: `messages.error.${error?.type}`,
+                    priorityMessage: error?.message,
+                  },
+                  ''
+                )
+                .subscribe();
             }
           )
       );
@@ -214,7 +222,7 @@ export class ChatComponent
   handleChatResponse(response) {
     this.chat = new Chats().deserialize(
       response,
-      this._globalFilterService.timezone
+      this.globalFilterService.timezone
     );
     this.chat.messages = DateService.sortObjArrayByTimeStamp(
       this.chat.messages,
@@ -325,7 +333,16 @@ export class ChatComponent
         )
         .subscribe(
           (response) => this.liveChatFG.patchValue(response),
-          ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }
@@ -340,7 +357,16 @@ export class ChatComponent
         )
         .subscribe(
           (response) => this.liveChatFG.patchValue(response),
-          ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }
@@ -363,7 +389,16 @@ export class ChatComponent
         (response) => {
           this.requestList = new RequestList().deserialize(response).data;
         },
-        ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -392,7 +427,15 @@ export class ChatComponent
                     this.messageService.refreshData$.next(true);
                   },
                   ({ error }) =>
-                    this.snackBarService.openSnackBarAsText(error.message)
+                    this.snackbarService
+                      .openSnackBarWithTranslate(
+                        {
+                          translateKey: `messages.error.${error?.type}`,
+                          priorityMessage: error?.message,
+                        },
+                        ''
+                      )
+                      .subscribe()
                 )
             );
           }
@@ -415,7 +458,16 @@ export class ChatComponent
                 .join('_')}_export_${new Date().getTime()}.csv`
             );
           },
-          ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }

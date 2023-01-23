@@ -1,5 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { MatSelectChange } from '@angular/material/select';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -30,6 +32,13 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
   selectedInterval;
   globalQueries;
   stats: SharedStats;
+  rategraphFG: FormGroup;
+  keyLabels = [
+    { label: 'All', key: 'ALL' },
+    { label: 'Whatsapp', key: 'WHATSAPP' },
+    { label: 'Email', key: 'EMAIL' },
+  ];
+  entityType = 'ALL';
   chart: CircularChart = {
     labels: [],
     data: [[]],
@@ -46,15 +55,26 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
   constructor(
     protected _adminUtilityService: AdminUtilityService,
     protected _statisticService: StatisticsService,
-    protected _globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService,
     protected _dateService: DateService,
     protected _translateService: TranslateService,
-    protected _modalService: ModalService
+    protected _modalService: ModalService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    this.initFG();
     this.registerListeners();
+  }
+
+  /**
+   * @function initFG Initializes the form group.
+   */
+  initFG(): void {
+    this.rategraphFG = this.fb.group({
+      rategraph: ['ALL'],
+    });
   }
 
   registerListeners(): void {
@@ -66,14 +86,17 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
       this.listenForOutletChanged();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const calenderType = {
           calenderType: this._dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;
@@ -139,6 +162,7 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
         ...this.globalQueries,
         {
           feedbackType: this.getFeedbackType(),
+          entityType: this.entityType,
         },
       ]),
     };
@@ -186,6 +210,19 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
         this.chart.colors[0].borderColor.push(data.color);
       }
     });
+  }
+
+  stopOpenModal(event) {
+    event.stopPropagation();
+  }
+
+  /**
+   * @function handleChannelChange Handles the channel dropdown value change.
+   * @param event The material select change event.
+   */
+  handleRateGraphChange(event: MatSelectChange): void {
+    this.entityType = event.value;
+    this.getStats();
   }
 
   getFeedbackType() {

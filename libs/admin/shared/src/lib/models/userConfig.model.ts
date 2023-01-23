@@ -1,10 +1,7 @@
 import { get, set } from 'lodash';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
-
-export class UserConfig implements Deserializable {
+export class UserConfig implements IDeserializable {
   permissionConfigs;
   firstName;
   lastName;
@@ -50,5 +47,63 @@ export class UserConfig implements Deserializable {
       return cc.includes('+') ? cc : `+${cc}`;
     }
     return cc;
+  }
+}
+
+export class UserList {
+  list: User[];
+
+  deserialize(input) {
+    this.list = new Array<User>();
+    input.forEach((item) => this.list.push(new User().deserialize(item)));
+    return this.list;
+  }
+}
+
+export class User {
+  firstName: string;
+  id: string;
+  lastName: string;
+  name: string;
+  department: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'id', get(input, ['id'], '')),
+      set({}, 'firstName', get(input, ['firstName'], '')),
+      set({}, 'lastName', get(input, ['lastName'], '')),
+      set({}, 'department', get(input, ['department'], 'Hotel Admin'))
+    );
+    this.name = `${this.firstName} ${this.lastName ? this.lastName + ' ' : ''}`;
+    return this;
+  }
+}
+
+export class DepartmentList {
+  list: Department[];
+
+  deserialize(input) {
+    this.list = new Array<Department>();
+    input.forEach((item) => this.list.push(new Department().deserialize(item)));
+    return this.list;
+  }
+}
+
+export class Department {
+  name: string;
+  departmentLabel: string;
+  departmentName: string;
+  department: string;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'name', get(input, ['departmentLabel'], '')),
+      set({}, 'departmentName', get(input, ['departmentName'], '')),
+      set({}, 'departmentLabel', get(input, ['departmentLabel'], '')),
+      set({}, 'department', get(input, ['department'], 'Hotel Department'))
+    );
+    return this;
   }
 }

@@ -20,6 +20,6 @@ import { TopicService } from './services/topic.service';
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['topic'])),
   ],
   declarations: [...AdminTopicRoutingModule.components],
-  providers:[TopicService]
+  providers: [TopicService],
 })
 export class AdminTopicModule {}

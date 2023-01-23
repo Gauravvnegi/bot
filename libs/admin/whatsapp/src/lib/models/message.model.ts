@@ -119,7 +119,7 @@ export class Contact {
   enableSend: boolean;
   color: string;
   unreadCount: number;
-
+  guestId: string;
   deserialize(input, timezone) {
     Object.assign(
       this,
@@ -132,7 +132,8 @@ export class Contact {
       set({}, 'reservationId', get(input, ['reservationId'])),
       set({}, 'roomNo', get(input, ['roomNo'])),
       set({}, 'lastInboundMessageAt', get(input, ['lastInboundMessageAt'])),
-      set({}, 'unreadCount', get(input, ['unreadCount']))
+      set({}, 'unreadCount', get(input, ['unreadCount'])),
+      set({}, 'guestId', get(input, ['guestId']))
     );
     this.descriptionMessage = decodeURIComponent(
       get(input, ['descriptionMessage']) || ''

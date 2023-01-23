@@ -25,8 +25,8 @@
         </div>
         <div
           class="guestInfoEditWrapper"
-          featureSubscribed
-          [feature]="'modules.request'"
+          isFeatureSubscribed
+          [paths]="[productName.request]"
         >
           <div
             class="guestInfoEditContainer"
@@ -40,8 +40,8 @@
           </div>
         </div>
         <mat-slide-toggle
-          channelSubscribed
-          [paths]="'WHATSAPP_BOT'"
+          featureSubscribed
+          [feature]="productName.whatsappBot"
           formControlName="status"
           (change)="onLiveChatChange()"
           [disabled]="liveChatStatus.value"
@@ -105,7 +105,7 @@
             ></ng-template>
           </div>
           <div class="message__time">
-            {{ message.getTime(_globalFilterService.timezone) }}
+            {{ message.getTime(globalFilterService.timezone) }}
           </div>
         </div>
       </div>

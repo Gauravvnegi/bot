@@ -35,9 +35,9 @@ export class ChannelUsageComponent implements OnInit {
       this.communicationChannels = new CommunicationChannels()
         .deserialize(this.data)
         .channels.sort((x, y) =>
-          x.active === y.active ? 0 : x.active ? -1 : 1
+          x.isSubscribed === y.isSubscribed ? 0 : x.isSubscribed ? -1 : 1
         );
-      this.activeChannels = this.data.filter((d) => d.active).length;
+      this.activeChannels = this.data.filter((d) => d.isSubscribed).length;
     }
   }
 }

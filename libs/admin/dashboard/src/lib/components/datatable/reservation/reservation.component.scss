@@ -6,7 +6,7 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: #eaf0f6;
+  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
@@ -49,7 +49,7 @@
     position: absolute;
     height: 2px;
     width: 72%;
-    background-color: #edf1f5;
+    background-color: $alice-blue;
     right: 17px;
     @media screen and (max-width: 800px) {
       width: 62%;
@@ -79,10 +79,6 @@
     font-size: 8px;
   }
 }
-
-// :host ::ng-deep .table-header-text {
-//   font-size: 13px;
-// }
 
 :host ::ng-deep .status-image {
   padding: 5px !important;
@@ -137,12 +133,23 @@
 }
 
 :host ::ng-deep .p-datatable {
-  margin: 0 1.5%;
   margin-top: 20px;
   @media (max-width: $tablet) {
     @include width(100%);
-    @include margin(0 auto);
+    @include margin(10px auto);
     box-shadow: none;
+  }
+  @media (max-width: $XL) {
+    tr {
+      td {
+        p,
+        span,
+        div {
+          white-space: break-spaces !important;
+          word-break: break-word !important;
+        }
+      }
+    }
   }
 }
 
@@ -228,6 +235,13 @@
   font-size: 16px;
   font-weight: bold;
 }
-:host ::ng-deep .table-data-head {
-  color: $dark-blue !important;
+:host ::ng-deep {
+  .table-data-head {
+    color: $dark-blue !important;
+    white-space: break-spaces !important;
+    word-break: break-word !important;
+  }
+  .mat-chip-list-wrapper {
+    width: 72vw !important;
+  }
 }

@@ -1,0 +1,33 @@
+@import 'main';
+
+.unsubscribe {
+  text-align: center;
+  width: 367px;
+  margin: auto;
+  img {
+    padding-top: 48px;
+  }
+  .head {
+    padding: 37px 0 14px;
+    font-size: $font22;
+    font-weight: bold;
+    letter-spacing: 1.32px;
+    color: #1f4380;
+  }
+  .subhead {
+    opacity: 0.35;
+    font-size: $font16;
+    font-weight: 500;
+    line-height: 1.56;
+    color: $dark-blue;
+  }
+  .visit {
+    padding-top: 7px;
+    text-decoration: underline;
+    font-size: $font16;
+    font-weight: 500;
+    line-height: 1;
+    color: #166dff;
+    cursor: pointer;
+  }
+}

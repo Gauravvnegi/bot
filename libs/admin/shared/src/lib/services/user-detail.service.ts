@@ -34,4 +34,12 @@ export class UserService extends ApiService {
       `/api/v1/user/${this.getLoggedInUserid()}/module-permission?module=${feedbackType}`
     );
   }
+
+  getUsersList(hotelId: string) {
+    return this.get(`/api/v1/hotel/${hotelId}/users`);
+  }
+
+  getMentionList(hotelId: string) {
+    return this.get(`/api/v1/hotel/${hotelId}/users?mention=true`);
+  }
 }

@@ -58,7 +58,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected snackbarService: SnackBarService,
     protected tabFilterService: TableService,
     private assetService: AssetService,
     protected _translateService: TranslateService
@@ -81,7 +81,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.getHotelId(this.globalQueries);
+      this.hotelId = this.globalFilterService.hotelId;
       //fetch-api for records
       this.loadInitialData([
         ...this.globalQueries,
@@ -91,18 +91,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         },
         ...this.getSelectedQuickReplyFilters(),
       ]);
-    });
-  }
-
-  /**
-   * @function getHotelId To set the hotel id after extracting from filter array.
-   * @param globalQueries The filter list with date and hotel filters.
-   */
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
     });
   }
 
@@ -128,7 +116,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.loading_fail',
@@ -193,7 +181,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.loading_fail',
@@ -269,7 +257,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'message.error.exportCSV_fail',
@@ -294,7 +282,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     };
     this.assetService.updateAssetStatus(this.hotelId, data, assetId).subscribe(
       (response) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'message.success.asset_status_updated',
@@ -309,7 +297,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         this.changePage(this.currentPage);
       },
       ({ error }) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
               translateKey: 'message.error.asset_status_update_fail',
@@ -444,7 +432,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    */
   handleCopyToClipboard(event) {
     event.stopPropagation();
-    this._snackbarService
+    this.snackbarService
       .openSnackBarWithTranslate(
         {
           translateKey: 'message.success.asset_url',

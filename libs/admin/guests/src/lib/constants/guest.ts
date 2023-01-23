@@ -263,16 +263,16 @@ export const guest = {
     ],
     datatable: [
       {
-        label: 'Arrival/Due-In',
+        label: 'Due-In',
         content: '',
-        value: 'ARRIVAL',
+        value: 'DUEIN',
         disabled: false,
         total: 0,
         chips: chips.datatable,
         lastPage: 0,
       },
       {
-        label: 'In-house/Stay-Over',
+        label: 'In-house',
         content: '',
         value: 'INHOUSE',
         disabled: false,
@@ -281,18 +281,18 @@ export const guest = {
         lastPage: 0,
       },
       {
-        label: 'Departure/Due-out',
+        label: 'Due-out',
         content: '',
-        value: 'DEPARTURE',
+        value: 'DUEOUT',
         disabled: false,
         total: 0,
         chips: chips.datatable,
         lastPage: 0,
       },
       {
-        label: 'Out-Guest',
+        label: 'Check-Out',
         content: '',
-        value: 'OUTGUEST',
+        value: 'CHECKEDOUT',
         disabled: false,
         total: 0,
         chips: chips.datatable,
@@ -333,12 +333,6 @@ export const guest = {
         sortType: 'number',
       },
       {
-        field: 'guestAttributes.transactionUsage',
-        header: 'Transaction Usage',
-        isSort: true,
-        sortType: 'string',
-      },
-      {
         field: 'guestAttributes.overAllNps',
         header: 'Overall NPS',
         isSort: true,
@@ -362,7 +356,7 @@ export const guest = {
   legend: {
     typeGuest: [
       {
-        label: 'Arrival',
+        label: 'Due-In',
         bubbleColor: '#FF9F67',
       },
       {
@@ -370,11 +364,11 @@ export const guest = {
         bubbleColor: '#30D8B6',
       },
       {
-        label: 'Departure',
+        label: 'Due-Out',
         bubbleColor: '#F25E5E',
       },
       {
-        label: 'Out-Guest',
+        label: 'Check-Out',
         bubbleColor: '#4A73FB',
       },
     ],
@@ -396,13 +390,21 @@ export const guest = {
       alt: 'Guest Source',
     },
     vip: {
-      url: 'assets/svg/vip_guest.svg',
+      url: 'assets/svg/Guest.svg',
       alt: 'VIP',
     },
     tooltip: {
       url: 'assets/svg/info.svg',
       alt: 'info-icon',
     },
+  },
+  dropdown: {
+    typeGuest: [
+      { label: 'All Guests', value: '' },
+      { label: 'New Guests', value: 'NEWGUEST' },
+      { label: 'Recurring Guests', value: 'REPEATGUEST' },
+      { label: 'VIP Guests', value: 'VIP' },
+    ],
   },
 };
 

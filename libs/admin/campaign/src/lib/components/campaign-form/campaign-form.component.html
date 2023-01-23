@@ -134,7 +134,12 @@
         'formFieldLabels.subject' | translate
       }}</mat-label>
       <mat-form-field class="description">
-        <input matInput formControlName="subject" placeholder="Enter Subject" />
+        <input
+          matInput
+          formControlName="subject"
+          placeholder="Enter Subject"
+          [maxLength]="config.validator.length"
+        />
         <div class="description-style">
           <div class="style-subject">
             <div class="subject-options">
@@ -175,6 +180,7 @@
           matInput
           formControlName="previewText"
           placeholder="Enter Preview Text (optional)"
+          [maxLength]="config.validator.length"
         />
         <div class="description-style">
           <div class="style-subject">

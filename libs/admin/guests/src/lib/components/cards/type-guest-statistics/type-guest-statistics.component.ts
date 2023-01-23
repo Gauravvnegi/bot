@@ -32,6 +32,7 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
   legendData = guest.legend.typeGuest;
   chartTypes = guest.chartTypes.typeGuest;
   guestConfig = guest;
+  guestType = '';
 
   public getLegendCallback: any = ((self: this): any => {
     function handle(chart: any): any {
@@ -43,12 +44,14 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
     };
   })(this);
 
+  guestTypes = guest.dropdown.typeGuest;
+
   chart: any = {
     chartData: [
-      { data: [], label: 'Arrival', fill: false },
+      { data: [], label: 'Due-In', fill: false },
       { data: [], label: 'In House', fill: false },
-      { data: [], label: 'Departure', fill: false },
-      { data: [], label: 'Out-Guest', fill: false },
+      { data: [], label: 'Due-Out', fill: false },
+      { data: [], label: 'Check-Out', fill: false },
     ],
     chartLabels: [],
     chartOptions: {
@@ -63,8 +66,8 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private _statisticService: StatisticsService,
-    private _globalFilterService: GlobalFilterService,
-    private _snackbarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
     private _modal: ModalService,
     private dateService: DateService,
     private _translateService: TranslateService
@@ -77,14 +80,14 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
-  listenForGlobalFilters() {
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;
@@ -98,6 +101,10 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * @function legendOnClick To perform action on legend selection change.
+   * @param index The selected legend index.
+   */
   legendOnClick = (index, event) => {
     event.stopPropagation();
     const ci = this.baseChart.chart;
@@ -146,7 +153,7 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           timestamp,
-          this._globalFilterService.timezone,
+          this.globalFilterService.timezone,
           this._adminUtilityService.getDateFormatFromInterval(
             this.selectedInterval
           ),
@@ -155,9 +162,9 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
             : null
         )
       );
-      this.chart.chartData[0].data.push(this.customerData.arrival[timestamp]);
+      this.chart.chartData[0].data.push(this.customerData.dueIn[timestamp]);
       this.chart.chartData[1].data.push(this.customerData.inHouse[timestamp]);
-      this.chart.chartData[2].data.push(this.customerData.departure[timestamp]);
+      this.chart.chartData[2].data.push(this.customerData.dueOut[timestamp]);
       this.chart.chartData[3].data.push(this.customerData.outGuest[timestamp]);
     });
   }
@@ -167,7 +174,10 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
    */
   private getVIPStatistics(): void {
     const config = {
-      queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        { guestType: this.guestType },
+      ]),
     };
     this.$subscription.add(
       this.$subscription.add(
@@ -177,7 +187,7 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
             this.initGraphData();
           },
           ({ error }) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'messages.error.some_thing_wrong',
@@ -192,31 +202,9 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
     );
   }
 
-  /**
-   * @function openTableModal To open modal pop-up for guest table based on VIP filter.
-   */
-  openTableModal() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.width = '100%';
-    const tableCompRef = this._modal.openDialog(
-      GuestDatatableModalComponent,
-      dialogConfig
-    );
-
-    this._translateService
-      .get('vip.title')
-      .subscribe(
-        (message) => (tableCompRef.componentInstance.tableName = message)
-      );
-    tableCompRef.componentInstance.callingMethod = 'getGuestList';
-    tableCompRef.componentInstance.tabFilterItems = this.tabFilterItems;
-
-    this.$subscription.add(
-      tableCompRef.componentInstance.onModalClose.subscribe((res) => {
-        tableCompRef.close();
-      })
-    );
+  handleGuestTypeChange(event) {
+    this.guestType = event.value;
+    this.getVIPStatistics();
   }
 
   ngOnDestroy(): void {

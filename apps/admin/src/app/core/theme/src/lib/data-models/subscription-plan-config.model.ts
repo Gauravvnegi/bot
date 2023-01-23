@@ -1,9 +1,11 @@
-import { get, set } from 'lodash';
 import {
-  ModuleNames,
+  CardNames,
   ModuleConfig,
-  Integrations,
+  ModuleNames,
+  TableNames,
 } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import { get, set } from 'lodash';
+import { Cards, Modules, Product, Tables } from '../type/product';
 
 export class SubscriptionPlan {
   featureIncludes: Item[];
@@ -28,14 +30,26 @@ export class Subscriptions {
   name: string;
   planId: string;
   description: string;
-  cost: Cost;
   startDate: number;
   endDate: number;
-  features: Features;
+
+  channels: Feature[];
+  integration: Feature[];
+  essentials: Feature[];
+  communication: Feature[];
+
+  products: Products[];
   active: boolean;
   planUpgradable: boolean;
 
   deserialize(input: any) {
+    this.products = new Array<Products>();
+
+    this.essentials = new Array<Feature>();
+    this.integration = new Array<Feature>();
+    this.channels = new Array<Feature>();
+    this.communication = new Array<Feature>();
+
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
@@ -48,29 +62,92 @@ export class Subscriptions {
       set({}, 'planUpgradable', get(input, ['planUpgradable'])),
       set({}, 'description', get(input, ['description']))
     );
+
+    input.products?.forEach((product) => {
+      this.products.push(new Products().deserialize(product));
+    });
+
+    input.essentials?.forEach((item) => {
+      this.essentials.push(new Feature().deserialize(item));
+    });
+    input.integration?.forEach((item) => {
+      this.integration.push(new Feature().deserialize(item));
+    });
+    input.channels?.forEach((item) => {
+      this.channels.push(new Feature().deserialize(item));
+    });
+    input.communication?.forEach((item) => {
+      this.communication.push(new Feature().deserialize(item));
+    });
+
+    return this;
+  }
+}
+
+export class Products {
+  name: string;
+  label: string;
+  description: string;
+  icon: string;
+  config: SubProducts[];
+  isSubscribed: true;
+  isView: true;
+
+  deserialize(input: any) {
+    this.config = new Array<SubProducts>();
+
+    Object.assign(
+      this,
+      set({}, 'name', get(input, ['name'])),
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'description', get(input, ['description'])),
+      set({}, 'icon', get(input, ['icon'])),
+      set({}, 'isSubscribed', get(input, ['isSubscribed'])),
+      set({}, 'isView', get(input, ['isView']))
+    );
+    input.config?.forEach((subProduct) => {
+      this.config.push(new SubProducts().deserialize(subProduct));
+    });
+
+    return this;
+  }
+}
+
+export class SubProducts {
+  name: string;
+  label: string;
+  description: string;
+  icon: string;
+  cost: Cost;
+  currentUsage: number;
+  isSubscribed: true;
+  isView: true;
+
+  deserialize(input: any) {
+    Object.assign(
+      this,
+      set({}, 'name', get(input, ['name'])),
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'description', get(input, ['description'])),
+      set({}, 'icon', get(input, ['icon'])),
+      set({}, 'currentUsage', get(input, ['currentUsage'])),
+      set({}, 'isSubscribed', get(input, ['isSubscribed'])),
+      set({}, 'isView', get(input, ['isView']))
+    );
+
     this.cost = new Cost().deserialize(input.cost);
-    this.features = new Features().deserialize(input.features);
+
     return this;
   }
 }
 
 export class Cost {
-  created: number;
-  updated: number;
-  id: string;
-  type: string;
   cost: number;
-  currency: string;
   usageLimit: number;
 
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'id', get(input, ['id'])),
-      set({}, 'created', get(input, ['created'])),
-      set({}, 'updated', get(input, ['updated'])),
-      set({}, 'currency', get(input, ['currency'])),
-      set({}, 'type', get(input, ['type'])),
       set({}, 'cost', get(input, ['cost'])),
       set({}, 'usageLimit', get(input, ['usageLimit']))
     );
@@ -79,102 +156,77 @@ export class Cost {
 }
 
 export class Feature {
-  id: string;
   name: string;
   label: string;
   description: string;
-  type: string;
   cost: Cost;
   currentUsage: number;
-  active: boolean;
+  isSubscribed: boolean;
+  isView: boolean;
 
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'id', get(input, ['id'])),
       set({}, 'name', get(input, ['name'])),
       set({}, 'label', get(input, ['label'])),
       set({}, 'description', get(input, ['description'])),
-      set({}, 'type', get(input, ['type'])),
       set({}, 'currentUsage', get(input, ['currentUsage'])),
-      set({}, 'active', get(input, ['active']))
+      set({}, 'isSubscribed', get(input, ['isSubscribed'])),
+      set({}, 'isSubscribed', get(input, ['isSubscribed']))
     );
     this.cost = new Cost().deserialize(input.cost);
     return this;
   }
 }
 
-export class Features {
-  MODULE: Feature[];
-  ESSENTIALS: Feature[];
-  INTEGRATION: Feature[];
-  CHANNELS: Feature[];
-  COMMUNICATION: Feature[];
+export class ProductSubscription {
+  subscribedModules: ModuleNames[];
+  modules: Partial<Modules>;
 
   deserialize(input: any) {
-    this.MODULE = new Array<Feature>();
-    this.ESSENTIALS = new Array<Feature>();
-    this.INTEGRATION = new Array<Feature>();
-    this.CHANNELS = new Array<Feature>();
-    this.COMMUNICATION = new Array<Feature>();
+    this.subscribedModules = new Array<ModuleNames>();
+    this.modules = new Object();
 
-    input.MODULE?.forEach((module) => {
-      this.MODULE.push(new Feature().deserialize(module));
+    input.products?.forEach((product) => {
+      this.setConfig(product);
+      product.config?.forEach((subProduct) => {
+        this.setConfig(subProduct);
+      });
     });
-    input.ESSENTIALS?.forEach((essential) => {
-      this.ESSENTIALS.push(new Feature().deserialize(essential));
-    });
-    input.INTEGRATION?.forEach((integration) => {
-      this.INTEGRATION.push(new Feature().deserialize(integration));
-    });
-    input.CHANNELS?.forEach((channel) => {
-      this.CHANNELS.push(new Feature().deserialize(channel));
-    });
-    input.COMMUNICATION?.forEach((communication) => {
-      this.COMMUNICATION.push(new Feature().deserialize(communication));
-    });
+
     return this;
   }
-}
 
-export class ModuleSubscription {
-  features: any;
-  modules: any;
-  integrations: any;
+  setConfig(product: Product) {
+    if (product.isSubscribed) this.subscribedModules.push(product.name);
 
-  deserialize(input: any) {
-    this.modules = new Object();
-    this.integrations = new Object();
-    this.features = get(input, ['features']);
-    input.features?.MODULE?.forEach((module) => {
-      if (!this.modules[ModuleNames[module.name]] && ModuleNames[module.name]) {
-        const tempCards = new Object();
-        ModuleConfig[ModuleNames[module.name]].cards.forEach((card) => {
-          tempCards[card] = { active: module.active };
-        });
-        const tempTables = new Object();
-        ModuleConfig[ModuleNames[module.name]].tables.forEach((table) => {
-          tempTables[table] = {
-            active: module.active,
-            tabFilters:
-              ModuleConfig[ModuleNames[module.name]]?.filters[table].tabFilters,
-          };
-        });
-        this.modules[ModuleNames[module.name]] = {
-          active: module.active,
-          cards: tempCards,
-          tables: tempTables,
+    const productName: ModuleNames = product.name;
+    let moduleProduct = ModuleConfig[productName];
+    if (moduleProduct) {
+      const tempCards: Partial<Cards> = new Object();
+      moduleProduct.cards.forEach((card: CardNames) => {
+        tempCards[card] = {
+          isSubscribed: product.isSubscribed,
+          isView: product.isView,
         };
-      }
-    });
-    input.features?.INTEGRATION?.forEach((data) => {
-      if (
-        !this.integrations[Integrations[data.name]] &&
-        Integrations[data.name]
-      ) {
-        this.integrations[Integrations[data.name]] = { active: data.active };
-      }
-    });
-    return this;
+      });
+
+      const tempTables: Partial<Tables> = new Object();
+      moduleProduct.tables.forEach((table: TableNames) => {
+        tempTables[table] = {
+          isSubscribed: product.isSubscribed,
+          isView: product.isView,
+          tabFilters:
+            ModuleConfig[ModuleNames[product.name]]?.filters[table].tabFilters,
+        };
+      });
+
+      this.modules[productName] = {
+        isView: product.isView,
+        isSubscribed: product.isSubscribed,
+        cards: tempCards,
+        tables: tempTables,
+      };
+    }
   }
 }

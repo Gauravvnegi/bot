@@ -13,7 +13,7 @@
 .booking-number {
   font-size: 12px;
   font-weight: normal;
-  color: #727272;
+  color: $c-gray-45;
 }
 
 .activity-wrapper {
@@ -38,7 +38,7 @@
   }
   .go-requests {
     font-size: 12px;
-    color: #9eaeb8;
+    color: $primary-gray;
     cursor: pointer;
     display: none;
   }
@@ -98,14 +98,14 @@
     text-align: center;
   }
   .feedback {
-    color: white;
+    color: $white;
     font-size: $font10;
     display: flex;
     align-items: center;
     .booking-feedback {
       display: flex;
       align-items: center;
-      background-color: #f5f5f5;
+      background-color: $c-gray-103;
       justify-content: space-around;
       padding: 0px;
       margin: 0 10px;
@@ -126,7 +126,7 @@
         top: 50%;
         font-size: 12px;
         color: $dark-grey;
-        background-color: white;
+        background-color: $white;
         left: 0%;
         padding: 7px;
         box-shadow: 0px 0px 5px 0px lightgray;
@@ -185,4 +185,7 @@
 }
 .pending {
   color: $pending;
+}
+:host::ng-deep .p-datatable-resizable > .p-datatable-wrapper {
+  margin-bottom: 1rem !important;
 }

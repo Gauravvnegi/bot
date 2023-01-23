@@ -29,7 +29,7 @@
     .img-with-text {
       .image {
         border-radius: 50%;
-        background-color: #f3f3f3;
+        background-color: $c-gray-102;
         padding: $padding15;
         padding-bottom: 10px;
         img {
@@ -63,7 +63,7 @@
 }
 
 .package-label {
-  color: #002046;
+  color: $dark-blue;
   font-weight: 600;
   letter-spacing: 0.96px;
   font-size: 16px;
@@ -74,7 +74,7 @@
   align-items: center;
   justify-content: space-between;
   margin: 20px 0;
-  .text{
+  .text {
     font-size: $font14;
     color: $primary-black;
   }
@@ -93,9 +93,8 @@
   }
 }
 
-
-:host ::ng-deep .mat-expansion-panel{
+:host ::ng-deep .mat-expansion-panel {
   margin-top: 20px !important;
   box-shadow: none;
-  border: solid 1px $light-grey
+  border: solid 1px $light-grey;
 }

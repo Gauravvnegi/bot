@@ -101,7 +101,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
   saveStayDetails(): void {
     if (this.parentForm.invalid) {
       this.parentForm.markAllAsTouched();
-      this.openPanels(this.addressFields.panelList.toArray());
+      if (this._hotelService.hotelConfig?.showAddress)
+        this.openPanels(this.addressFields.panelList.toArray());
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       return;
     }
@@ -109,7 +110,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     const data = this._stayDetailService.modifyStayDetails(
       formValue,
       this._hotelService.hotelConfig.timezone,
-      this.countries
+      this.countries,
+      this._hotelService.hotelConfig?.showAddress
     );
     this.$subscription.add(
       this._stayDetailService

@@ -1,0 +1,55 @@
+<div class="filter--container">
+  <div class="header">
+    <div class="header--title" (click)="closeFilter()">
+      <mat-icon class="material-icons" matSuffix>keyboard_backspace</mat-icon>
+      <div>Go Back</div>
+    </div>
+    <div class="header--clear" (click)="clearFilter()">
+      <img src="assets/svg/delete-transparent.svg" alt="remove filters" />
+      <div>Remove Filters</div>
+    </div>
+  </div>
+  <div class="title">Filter by</div>
+  <div class="filter--form" [formGroup]="filterFG">
+    <div class="messages" formGroupName="status">
+      <div>Messages</div>
+      <div class="status">
+        <mat-checkbox formControlName="read">Read</mat-checkbox>
+        <mat-checkbox formControlName="unread">Unread</mat-checkbox>
+        <mat-checkbox formControlName="removed">Removed</mat-checkbox>
+      </div>
+    </div>
+    <div class="date">
+      <div>Date</div>
+      <div class="fields">
+        <mat-form-field appearance="outline" class="date-field">
+          <input
+            matInput
+            [matDatepicker]="datepicker"
+            formControlName="fromDate"
+            [max]="fromMaxDate"
+          />
+          <mat-datepicker-toggle matSuffix [for]="datepicker"
+            ><img src="assets/svg/calendar.svg" class="calendar-image"
+          /></mat-datepicker-toggle>
+          <mat-datepicker #datepicker> </mat-datepicker>
+        </mat-form-field>
+        <div>to</div>
+        <mat-form-field appearance="outline" class="date-field">
+          <input
+            matInput
+            [matDatepicker]="datepicker1"
+            formControlName="toDate"
+            [max]="toMaxDate"
+            [min]="toMinDate"
+          />
+          <mat-datepicker-toggle matSuffix [for]="datepicker1"
+            ><img src="assets/svg/calendar.svg" class="calendar-image"
+          /></mat-datepicker-toggle>
+          <mat-datepicker #datepicker1> </mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="apply" (click)="applyFilter()"><div>Apply</div></div>
+</div>

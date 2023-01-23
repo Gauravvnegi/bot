@@ -1,20 +1,20 @@
 @import 'main';
 .filter-container {
-  border-right: solid 1px #e0e0e0;
+  border-right: solid 1px $light-gray;
   height: 100%;
   overflow-y: auto;
 }
 .sortFilt {
   height: 62px;
   padding: 10px 15px;
-  border-bottom: 1px solid #9eaeb8;
+  border-bottom: 1px solid $primary-gray;
   display: flex;
   justify-content: space-between;
   align-items: center;
   &-text {
     font: normal normal medium 16px/21px Roboto;
     letter-spacing: 0.64px;
-    color: #002046;
+    color: $dark-blue;
     opacity: 1;
     font-size: 16px;
     font-weight: 500;
@@ -33,7 +33,7 @@
         font-style: normal;
         line-height: normal;
         letter-spacing: 0.56px;
-        color: #9eaeb8;
+        color: $primary-gray;
         margin-right: 5px;
         &:hover {
           color: $primary-purple;
@@ -45,7 +45,7 @@
 .cross {
   font-size: 22px;
   cursor: pointer;
-  color: #9eaeb8;
+  color: $primary-gray;
   &:hover {
     color: $primary-purple;
   }
@@ -59,12 +59,12 @@
   .sortFilterContainer {
     height: calc(100% - 62px);
     width: 100%;
-    border-bottom: 1px solid #9eaeb8;
+    border-bottom: 1px solid $primary-gray;
     padding: 15px;
     .sortBy {
       font: normal normal bold 10px/13px Roboto;
       letter-spacing: 0.6px;
-      color: #b8bbbe;
+      color: $c-gray-74;
       margin-bottom: 10px;
     }
     .sortTypes {
@@ -82,18 +82,18 @@
         .sortItem {
           font: normal normal normal 14px/19px Roboto;
           letter-spacing: 0.84px;
-          color: #002046;
+          color: $dark-blue;
         }
       }
     }
     .filterUnderline {
-      border: solid 1px #e0e0e0;
+      border: solid 1px $light-gray;
       margin: 20px 0;
     }
     .filterBy {
       font: normal normal bold 10px/13px Roboto;
       letter-spacing: 0.6px;
-      color: #b8bbbe;
+      color: $c-gray-74;
       margin-bottom: 10px;
     }
     .filterItemWrapper {
@@ -109,14 +109,14 @@
     .filterItem {
       font: normal normal normal 14px/19px Roboto;
       letter-spacing: 0.84px;
-      color: #002046;
+      color: $dark-blue;
       opacity: 1;
     }
     .assignee-dropdown {
       width: 156px;
       padding: 8px 15px 7px 14px;
       border-radius: 5px;
-      border: solid 1px #d9d9d9;
+      border: solid 1px $light-grey;
       margin-bottom: 20px;
     }
   }
@@ -129,9 +129,9 @@
   .applyBtn {
     width: 138px;
     height: 36px;
-    background: #4b56c0 0% 0% no-repeat padding-box;
+    background: $button-blue 0% 0% no-repeat padding-box;
     border-radius: 100px;
-    color: #ffffff;
+    color: $white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -141,23 +141,23 @@
 .priority {
   font: normal normal bold 14px/19px Roboto;
   letter-spacing: 0.84px;
-  color: #002046;
+  color: $dark-blue;
   opacity: 1;
 }
 
 .division {
   height: 20px;
-  border: 1px solid #9eaeb8;
+  border: 1px solid $primary-gray;
   margin: 0 10px;
 }
 
 .material-icon {
-  color: #9eaeb8;
+  color: $primary-gray;
   &:hover {
     color: $primary-purple;
   }
 }
 
 :host ::ng-deep .mat-pseudo-checkbox-checked {
-  background: #4b56c0 !important;
+  background: $button-blue !important;
 }

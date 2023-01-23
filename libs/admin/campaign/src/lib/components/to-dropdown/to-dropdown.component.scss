@@ -1,7 +1,8 @@
+@import 'main';
 :host ::ng-deep {
   .mat-tab-header {
     padding-bottom: 10px;
-    border-bottom: 1px solid #707070 !important;
+    border-bottom: 1px solid $manually-contacts !important;
   }
   .mat-tab-label-content {
     font-family: Roboto;
@@ -11,7 +12,7 @@
     font-style: normal;
     line-height: normal;
     letter-spacing: 0.96px;
-    color: #b5b5c3;
+    color: $mat-tab-label;
   }
   .mat-tab-label-active > .mat-tab-label-content {
     font-family: Roboto;
@@ -21,7 +22,7 @@
     font-style: normal;
     line-height: normal;
     letter-spacing: 0.96px;
-    color: #4b56c0 !important;
+    color: $button-blue !important;
   }
   .mat-form-field-underline {
     display: none !important;
@@ -38,7 +39,7 @@
   padding: 10px 15px;
   cursor: pointer;
   &:hover {
-    background-color: #e1e1f8;
+    background-color: $c-gray-88;
     border-radius: 5px;
   }
   .title {
@@ -47,7 +48,7 @@
   .description {
     display: flex;
     align-items: center;
-    color: #a3a3a3;
+    color: $c-gray-65;
   }
   .listing {
     display: flex;
@@ -76,16 +77,16 @@
       text-align: center;
       mat-icon {
         cursor: pointer;
-        color: gray;
+        color: $gray;
         &:hover {
-          color: #4b56c0;
+          color: $button-blue;
         }
       }
     }
   }
   .sub-title {
     margin: 20px 10px;
-    color: #868686;
+    color: $c-gray-53;
   }
   .listing {
     max-height: 170px;
@@ -97,7 +98,7 @@
       cursor: pointer;
       .data {
         text-align: right;
-        color: #9eaeb8;
+        color: $primary-gray;
       }
     }
   }
@@ -107,27 +108,27 @@
     line-height: 1.67;
     letter-spacing: 0.9px;
     text-align: center;
-    color: #9eaeb8;
+    color: $primary-gray;
     max-width: 90%;
     margin: auto;
   }
   .division {
     margin: 10px 0;
-    border: 1px solid #707070;
+    border: 1px solid $manually-contacts;
   }
   .load-more {
     padding: 5px 0;
-    color: #0099ff;
+    color: $load-more;
     cursor: pointer;
     text-align: center;
     font-weight: bold;
     &:hover {
-      background-color: #eaf3fa;
+      background-color: $c-gray-94;
     }
   }
 }
 .color {
-  color: #0099ff;
+  color: $load-more;
   cursor: pointer;
 }
 .margin {

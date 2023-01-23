@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TableNames } from '@hospitality-bot/admin/shared';
+import { ModuleNames, TableNames } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-guest',
@@ -7,8 +7,11 @@ import { TableNames } from '@hospitality-bot/admin/shared';
   styleUrls: ['./guest.component.scss'],
 })
 export class GuestComponent implements OnInit {
-  tables = TableNames;
   constructor() {}
 
   ngOnInit(): void {}
+
+  get featurePath() {
+    return [`${ModuleNames.GUESTS_DASHBOARD}.tables.${TableNames.GUEST}`];
+  }
 }

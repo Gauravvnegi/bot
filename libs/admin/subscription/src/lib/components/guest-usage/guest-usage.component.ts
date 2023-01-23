@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Subscriptions } from '@hospitality-bot/admin/core/theme';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { DateService } from '@hospitality-bot/shared/utils';
-import { get } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-guest-usage',
@@ -13,7 +14,7 @@ export class GuestUsageComponent implements OnInit {
   @Input() data;
   @Input() chartData;
   @Input() usage: number;
-  subscriptionData;
+  productData: Subscriptions['products'];
   chart: any = {
     chartData: {
       datasets: [
@@ -100,7 +101,7 @@ export class GuestUsageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.subscriptionData = this.subscriptionService.getModuleSubscription();
+    this.productData = this.subscriptionService.getSubscription()['products'];
     this.initChart();
   }
 
@@ -108,10 +109,14 @@ export class GuestUsageComponent implements OnInit {
     this.chart.chartData.datasets[0].data = [];
     this.chart.chartData.datasets[1].data = [];
     this.chart.chartLabels = [];
+
     const limit =
-      get(this.subscriptionData, ['features', 'MODULE'])?.filter(
-        (data) => data.name === 'GUESTS'
-      )[0]?.cost?.usageLimit || 0;
+      this.productData
+        .find((product) => product.name === ModuleNames.GUESTS)
+        ?.config.find(
+          (subProduct) => subProduct.name === ModuleNames.GUESTS_DASHBOARD
+        ).cost.usageLimit || 0;
+
     this.chartData.forEach((data) => {
       this.chart.chartData.datasets[1].data.push(limit);
       this.chart.chartData.datasets[0].data.push(data.value);

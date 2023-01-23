@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="header">
+    <div class="header__title-container">
+      <img src="assets/svg/notifications-title-icon.svg" alt="Notification" />
+      <div class="title">
+        Notification
+      </div>
+    </div>
+    <div (click)="closeNotes()" class="header__close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="body">
+    <div class="body__text">
+      Allow notification otherwise few features may not work properly
+    </div>
+    <div class="btn-container">
+      <div class="btn btn__yes" (click)="closeNotes()">
+        <div class="btn__yes__text">
+          OK
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

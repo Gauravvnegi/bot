@@ -14,7 +14,7 @@
   cursor: pointer;
   font: normal normal medium 14px/19px Roboto;
   letter-spacing: 0.56px;
-  color: #9eaeb8;
+  color: $primary-gray;
 }
 
 .label-wrapper {
@@ -51,7 +51,7 @@
       line-height: normal;
       letter-spacing: 0.24px;
       text-align: left;
-      color: #545454;
+      color: $question;
       margin: 5px 0;
     }
     .answer {
@@ -63,23 +63,23 @@
       line-height: 1.67;
       letter-spacing: 0.24px;
       text-align: left;
-      color: #6d7580;
+      color: $quote-color;
     }
   }
 }
 
 .data-seperator {
-  // border: 2px solid #4b56c0;
+  // border: 2px solid $button-blue;
   margin: $margin20 0px;
   opacity: 0.1;
-  background: #4b56c0;
+  background: $button-blue;
   margin: 0 -30px -20px;
 }
 
 :host ::ng-deep .mat-head {
   font-size: $font16;
   font-weight: $bolder;
-  color: #002046;
+  color: $dark-blue;
   letter-spacing: 0.96px;
 }
 
@@ -105,11 +105,11 @@
 }
 
 .accordian__header {
-  background: #e8eef5e6 0% 0% no-repeat padding-box;
+  background: $accordian-background 0% 0% no-repeat padding-box;
 }
 
 :host ::ng-deep .mat-expansion-panel-header:focus {
-  background: #e8eef5e6 0% 0% no-repeat padding-box;
+  background: $accordian-background 0% 0% no-repeat padding-box;
 }
 
 .booking__container {
@@ -122,7 +122,7 @@
     text-align: center;
   }
   .feedback {
-    color: white;
+    color: $white;
     font-size: $font10;
     display: flex;
     align-items: center;
@@ -150,7 +150,7 @@
         top: 50%;
         font-size: 12px;
         color: $dark-grey;
-        background-color: white;
+        background-color: $white;
         left: 0%;
         padding: 7px;
         box-shadow: 0px 0px 5px 0px lightgray;
@@ -192,7 +192,7 @@
 
 .header-seperator {
   height: 20px;
-  border: 1px solid #b8b8b8;
+  border: 1px solid $c-gray-74;
 }
 
 ::ng-deep .d-flex {
@@ -205,8 +205,8 @@
   margin: 0 94px 0 40px;
   padding: 0px 0px 0px 10px;
   border-radius: 6px;
-  border: solid 1px #4b56c0;
-  background-color: #ecf1f7;
+  border: solid 1px $button-blue;
+  background-color: $c-gray-93;
   display: flex;
   justify-content: left;
   align-items: center;
@@ -219,8 +219,8 @@
     line-height: normal;
     letter-spacing: 0.66px;
     text-align: right;
-    color: #4b56c0;
-    border-right: solid 2px #4b56c0;
+    color: $button-blue;
+    border-right: solid 2px $button-blue;
     padding-right: 10px;
     padding-top: 4px;
     height: 20px;
@@ -233,6 +233,10 @@
     padding-left: 2px;
     margin-left: 3px;
   }
+@media screen and (max-width: $L) {
+  @include width(170px);
+}
+
 }
 
 .mat-expansion-panel {

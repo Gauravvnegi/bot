@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Regex, routes, UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Regex } from '@hospitality-bot/admin/shared';
 import { authConstants } from '../../constants/auth';
 import { AuthService } from '../../services/auth.service';
 
@@ -19,21 +18,63 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isPasswordVisible = false;
   isSigningIn = false;
+  platformReferer: string;
+  platformAccessToken: string;
 
   constructor(
     private _fb: FormBuilder,
     private _router: Router,
     private _authService: AuthService,
     private _userService: UserService,
-    private _snackbarService: SnackBarService
+    private _snackbarService: SnackBarService,
+    private _activatedRoute: ActivatedRoute
   ) {
     this.initLoginForm();
   }
 
   ngOnInit(): void {
+    this.checkForAccessToken();
     if (this._authService.isAuthenticated()) {
-      this._router.navigate(['/pages/dashboard']);
+      // this._router.navigate(['/pages/dashboard']);
+      this._router.navigate([`/pages/${routes?.FRONT_DESK_DASHBOARD}`]);
     }
+  }
+
+  checkForAccessToken() {
+    this._activatedRoute.queryParams.subscribe((params) => {
+      if (params['platformReferer'] && params['pat']) {
+        this.platformReferer = decodeURIComponent(params['platformReferer']);
+        this.platformAccessToken = decodeURIComponent(params['pat']);
+        this.autoLoginWithAccessToken();
+      }
+    });
+  }
+
+  autoLoginWithAccessToken() {
+    const data = {
+      platformReferer: this.platformReferer,
+      platformAccessToken: this.platformAccessToken,
+    };
+
+    this._authService.verifyPlatformAccessToken(data).subscribe(
+      (response) => {
+        this._userService.setLoggedInUserId(response?.id);
+        if (this.platformReferer == 'CREATE_WITH') {
+          this._router.navigate(['/pages/create-with']);
+        }
+      },
+      ({ error }) => {
+        this._snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'messages.error.some_thing_wrong',
+              priorityMessage: error?.message,
+            },
+            ''
+          )
+          .subscribe();
+      }
+    );
   }
 
   /**
@@ -67,7 +108,8 @@ export class LoginComponent implements OnInit {
     this._authService.login(data).subscribe(
       (response) => {
         this._userService.setLoggedInUserId(response?.id);
-        this._router.navigate(['/pages/dashboard']);
+        // this._router.navigate(['/pages/dashboard']);
+        this._router.navigate([`/pages/${routes?.FRONT_DESK_DASHBOARD}`]);
       },
       ({ error }) => {
         this.isSigningIn = false;

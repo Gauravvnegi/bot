@@ -1,37 +1,19 @@
-export interface Deserializable {
-  deserialize(input: any): this;
-}
+import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { GraphStatsData } from '../components/types/stats';
 
-export class RateGraphStats {
-  label: string[];
-  clickRate: number[];
-  openRate: number[];
-  deserialize(input) {
-    this.label = new Array<string>();
-    this.clickRate = new Array<number>();
-    this.openRate = new Array<number>();
-    input.forEach((item) => {
-      this.label.push(item['label']);
-      this.clickRate.push(item['clickRate']);
-      this.openRate.push(item['openRate']);
-    });
-    return this;
-  }
-}
-
-export class SubscriberGraphStats {
+export class ComparisonGraphStats implements IDeserializable {
   labels: string[];
-  unsubscribers: number[];
-  subscribers: number[];
-  deserialize(input) {
+  primaryData: number[];
+  secondaryData: number[];
+  deserialize(input: GraphStatsData[]) {
     this.labels = new Array<string>();
-    this.unsubscribers = new Array<number>();
-    this.subscribers = new Array<number>();
+    this.primaryData = new Array<number>();
+    this.secondaryData = new Array<number>();
+
     input.forEach((item) => {
-      const key = Object.keys(item)[0];
-      this.labels.push(key);
-      this.unsubscribers.push(item[key]['Unsubscribers']);
-      this.subscribers.push(item[key]['Subscribers']);
+      this.labels.push(item['label']);
+      this.primaryData.push(item['primaryData']);
+      this.secondaryData.push(item['secondaryData']);
     });
     return this;
   }

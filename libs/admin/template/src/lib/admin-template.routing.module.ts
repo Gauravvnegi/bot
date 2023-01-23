@@ -9,7 +9,7 @@ import { TemplateListContainerComponent } from './components/template-list-conta
 import { TopicTemplatesComponent } from './components/topic-templates/topic-templates.component';
 
 const appRoutes: Route[] = [
-  { path: '', component: TemplateDatatableComponent },
+  { path: '', component: TemplateComponent },
   { path: 'create', component: EditTemplateComponent },
   { path: 'edit/:id', component: EditTemplateComponent },
 ];
@@ -27,6 +27,6 @@ export class AdminTemplateRoutingModule {
     TemplateHtmlEditorComponent,
     ImportAssetComponent,
     TemplateListContainerComponent,
-    TopicTemplatesComponent
+    TopicTemplatesComponent,
   ];
 }

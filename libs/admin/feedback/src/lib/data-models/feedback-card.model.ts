@@ -4,10 +4,8 @@ import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
 import { Feedback, Remark, StayFeedback } from './feedback-datatable.model';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any, hotelNationality: string): this;
-}
 export class FeedbackList {
   records: FeedbackRecord[];
 
@@ -69,7 +67,11 @@ export class FeedbackRecord {
     this.feedback =
       feedbackType === feedback.types.transactional
         ? new Feedback().deserialize(input.feedback, outlets)
-        : new StayFeedback().deserialize(input.feedback, outlets, colorMap);
+        : new StayFeedback().deserialize(
+            input.feedback || input,
+            outlets,
+            colorMap
+          );
     return this;
   }
 
@@ -81,16 +83,20 @@ export class FeedbackRecord {
 
   getProfileNickName() {
     const nameList = [
-      this.feedback.guest.firstName,
+      this.feedback.guest.firstName || '',
       this.feedback.guest.lastName || '',
     ];
-    return nameList
-      .map((i, index) => {
-        if ([0, 1].includes(index)) return i.charAt(0);
-        else return '';
-      })
-      .join('')
-      .toUpperCase();
+    if (nameList[0].length && nameList[1].length) {
+      return nameList
+        .map((i, index) => {
+          if ([0, 1].includes(index)) return i.charAt(0);
+          else return '';
+        })
+        .join('')
+        .toUpperCase();
+    } else {
+      return '';
+    }
   }
 
   getSLA() {
@@ -225,7 +231,7 @@ export class Reservation {
   }
 }
 
-export class Guest implements Deserializable {
+export class Guest implements IDeserializable {
   id;
   nameTitle;
   name: string;
@@ -269,7 +275,9 @@ export class Guest implements Deserializable {
   }
 
   getFullName() {
-    return `${this.firstName} ${this.lastName}`;
+    return `${this.firstName === null ? 'No' : this.firstName} ${
+      this.lastName === null ? (this.firstName ? '' : 'Name') : this.lastName
+    }`;
   }
 
   getPhoneNumber() {
@@ -296,7 +304,7 @@ export class Guest implements Deserializable {
   }
 }
 
-export class Requests implements Deserializable {
+export class Requests implements IDeserializable {
   records: Request[];
   deserialize(input) {
     this.records = new Array<Request>();
@@ -305,7 +313,7 @@ export class Requests implements Deserializable {
   }
 }
 
-export class Request implements Deserializable {
+export class Request implements IDeserializable {
   action: string;
   itemCode: number;
   jobDuration: number;

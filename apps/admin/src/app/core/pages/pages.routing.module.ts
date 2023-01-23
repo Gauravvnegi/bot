@@ -1,14 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-
-import { PagesComponent } from './containers/pages/pages.component';
-import { DashboardComponent } from '@hospitality-bot/admin/dashboard';
-
-import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
-import { LoadGuard } from '../guards/load-guard';
 import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
+import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { CanLoadGuard } from '../guards/can-load-gurad';
+import { PagesComponent } from './containers/pages/pages.component';
+import { TemporaryRedirectPageComponent } from './containers/trp/temporary-redirect-page/temporary-redirect-page.component';
+import { AdminDetailResolver } from './resolvers/admin-detail.resolver';
 
 const appRoutes: Route[] = [
+  {
+    path: 'trp',
+    component: TemporaryRedirectPageComponent,
+    pathMatch: 'full',
+  },
   {
     path: '',
     component: PagesComponent,
@@ -17,16 +21,16 @@ const appRoutes: Route[] = [
     },
     children: [
       {
-        path: 'dashboard',
-        component: DashboardComponent,
-        canActivate: [LoadGuard],
+        path: 'home',
+        component: ComingSoonComponent,
       },
       {
-        path: 'conversation',
+        path: 'freddie',
         loadChildren: () =>
           import('@hospitality-bot/admin/conversation').then(
             (m) => m.AdminConversationModule
           ),
+        canLoad: [CanLoadGuard],
       },
       {
         path: 'covid',
@@ -34,7 +38,6 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/covid').then(
             (m) => m.AdminCovidModule
           ),
-        canActivate: [LoadGuard],
       },
       {
         path: 'roles-permissions',
@@ -42,15 +45,22 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/roles-and-permissions').then(
             (m) => m.AdminRolesAndPermissionsModule
           ),
-        canActivate: [LoadGuard],
       },
       {
-        path: 'feedback',
+        path: 'heda',
         loadChildren: () =>
           import('@hospitality-bot/admin/feedback').then(
             (m) => m.AdminFeedbackModule
           ),
-        canActivate: [LoadGuard],
+        canLoad: [CanLoadGuard],
+      },
+      {
+        path: 'efrontdesk',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/e-frontdesk').then(
+            (m) => m.AdminEFrontdeskModule
+          ),
+        canLoad: [CanLoadGuard],
       },
       {
         path: 'guest',
@@ -58,7 +68,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/guests').then(
             (m) => m.AdminGuestsModule
           ),
-        canActivate: [LoadGuard],
+        canLoad: [CanLoadGuard],
       },
       {
         path: 'subscription',
@@ -66,12 +76,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/subscription').then(
             (m) => m.AdminSubscriptionModule
           ),
-      },
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
-        canActivate: [LoadGuard],
+        canLoad: [CanLoadGuard],
       },
       {
         path: 'library',
@@ -79,14 +84,49 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/library').then(
             (m) => m.AdminLibraryModule
           ),
+        canLoad: [CanLoadGuard],
       },
-      // {
-      //   path: 'marketing',
-      //   loadChildren: () =>
-      //     import('@hospitality-bot/admin/marketing').then(
-      //       (m) => m.AdminMarketingModule
-      //     ),
-      // },
+      {
+        path: 'marketing',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/marketing').then(
+            (m) => m.AdminMarketingModule
+          ),
+        canLoad: [CanLoadGuard],
+      },
+      {
+        path: 'builder',
+        component: ComingSoonComponent,
+      },
+      {
+        path: 'create-with',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/create-with').then(
+            (m) => m.AdminCreateWithModule
+          ),
+        canLoad: [CanLoadGuard],
+      },
+      {
+        path: 'inventory',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/inventory').then(
+            (m) => m.AdminInventoryModule
+          ),
+        canLoad: [CanLoadGuard],
+      },
+      {
+        path: 'finance',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/finance').then(
+            (m) => m.AdminFinanceModule
+          ),
+        canLoad: [CanLoadGuard],
+      },
+      {
+        path: '',
+        redirectTo: 'efrontdesk',
+        pathMatch: 'full',
+      },
       { path: '**', redirectTo: '404' },
       { path: '404', component: DashboardErrorComponent },
     ],
@@ -96,5 +136,6 @@ const appRoutes: Route[] = [
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
+  providers: [CanLoadGuard],
 })
 export class PagesRoutingModule {}

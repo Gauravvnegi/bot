@@ -80,7 +80,7 @@
   flex-direction: column;
   margin: 0;
   padding: 15px 10px;
-  background-color: white;
+  background-color: $white;
   border-radius: 3px;
   padding-bottom: 0;
   .back-icon {
@@ -136,17 +136,6 @@
 .button {
   @include admin-panel-button();
   padding: 16px 0px !important;
-  // outline: none;
-  // border: none;
-  // width: 250px;
-  // height: 46px;
-  // background: #4b56c0 0% 0% no-repeat padding-box;
-  // border-radius: 23px;
-  // opacity: 1;
-  // font: normal normal medium 16px/19px Roboto;
-  // letter-spacing: 0.96px;
-  // color: #ffffff;
-  // opacity: 1;
   &:hover {
     cursor: pointer;
   }
@@ -191,7 +180,7 @@
   margin-top: -10px;
   .import {
     cursor: pointer;
-    color: #4b56c0;
+    color: $button-blue;
     display: flex;
     align-items: center;
     margin-bottom: 15px;
@@ -247,7 +236,7 @@
   // top: 5px;
   // right: 10px;
   i {
-    color: gray;
+    color: $gray;
     margin: 0 10px;
   }
   &:hover {
@@ -288,7 +277,7 @@
 }
 
 :host ::ng-deep .mat-checkbox-frame {
-  border: 1.5px solid #e8eef5;
+  border: 1.5px solid $accordian-background;
 }
 
 :host

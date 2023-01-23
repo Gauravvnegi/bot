@@ -1,0 +1,132 @@
+@import 'main';
+.form-elements {
+  width: 75%;
+  padding: 5px 10px;
+  font-size: 16px;
+  color: $dark-blue;
+  letter-spacing: 0.32px;
+  border: 1px solid $c-gray-81;
+  border-radius: 5px;
+  background: $white;
+  ::placeholder {
+    font-family: Roboto;
+    font-size: 12px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.25;
+    letter-spacing: 0.72px;
+    color: $primary-gray;
+  }
+}
+.popup__wrap {
+  margin: 20px 20px 0 20px;
+  overflow-y: auto;
+  max-height: 500px;
+  &__close {
+    display: flex;
+    justify-content: flex-end;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 25px;
+  }
+  ::ng-deep .p-inputtext {
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px;
+  }
+  .requestDataTableHead {
+    background-color: $c-gray-93 !important;
+    width: 50px;
+    text-align: center;
+  }
+  table {
+    thead {
+      th {
+        &:nth-child(6) {
+          @media (max-width: 1024px) {
+            width: 125px;
+          }
+        }
+      }
+    }
+  }
+}
+td {
+  ::ng-deep p {
+    font-size: 12px;
+    color: $c-gray-45;
+    line-height: 16px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    @media (max-width: 992px) {
+      font-size: 10px;
+    }
+    &.high {
+      background-color: $priority-high;
+      @include inhouse-popup-status;
+    }
+    &.asap {
+      background-color: $comparison-negative;
+      @include inhouse-popup-status;
+    }
+    &.low {
+      background-color: $priority-low;
+      @include inhouse-popup-status;
+    }
+    &.light {
+      color: $c-gray-71;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    &.item-name {
+      color: $dark-blue;
+    }
+    &.date-time {
+      color: $dark-blue;
+    }
+  }
+  .job-duration {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    @media (max-width: 1024px) {
+      font-size: 10px;
+    }
+  }
+  mat-select {
+    font-size: 12px;
+    color: $primary-gray;
+  }
+}
+
+:host ::ng-deep .status-text-timeout {
+  background: $pacific-blue !important;
+  color: $white !important;
+}
+:host ::ng-deep .status-opacity-pending {
+  color: $pacific-blue;
+}
+:host ::ng-deep .status-opacity-initiated {
+  color: $closed !important;
+}
+:host ::ng-deep .status-text-closed {
+  background: $closed !important;
+  color: $white !important;
+}
+
+:host ::ng-deep .status-opacity-success {
+  color: $priority-low !important;
+}
+:host ::ng-deep .status-text-pending {
+  background: $priority-low !important;
+  color: $white !important;
+}
+:host ::ng-deep .requestDataActionLabel {
+  margin-left: 0.5em;
+  font-weight: 500;
+}
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
+  color: rgb(75, 86, 192) !important;
+}

@@ -52,10 +52,6 @@
           <div class="value">Overall Spent</div>
         </div>
         <div class="guest_data__field">
-          <div class="label">{{ guestData.guestAttributes.potential }}</div>
-          <div class="value">Potential</div>
-        </div>
-        <div class="guest_data__field">
           <div class="label">{{ bookingCount }}</div>
           <div class="value">Bookings</div>
         </div>
@@ -209,16 +205,9 @@
             stayDetailsFG.get('kidsCount').value
           }}</span>
         </div>
-        <div class="vip-image">
+        <div class="vip-image" *ngIf="guestData.vip">
           <img src="assets/images/VIP.png" />
         </div>
-        <!-- <div class="vip-add">
-          <ul>
-            <li class="cricle">2</li>
-            <li class="contant">134-Grand H. Lake V + Balcony </li>
-            <button type="button">Still Cleaning</button>
-          </ul>
-        </div>  -->
       </div>
     </div>
   </div>
@@ -399,75 +388,54 @@
                 </button>
               </ng-container>
             </ng-container>
-            <!-- <button
-              (click)="manualCheckin()"
-              class="button"
-              *ngIf="details.currentJourneyDetails.status !== 'COMPLETED'"
-            >
-              Manual Checkin
-            </button> -->
           </ng-template>
           <ng-template #CHECKOUT
             ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
               <ng-container *ngSwitchCase="'PENDING'">
-                <button
-                  (click)="activateAndgenerateJourney('CHECKOUT')"
-                  class="button"
+                <ng-container
+                  *ngIf="details.invoicePrepareRequest; else prepareInvoiceBtn"
                 >
-                  Activate & Generate Checkout Link
-                </button>
-                <button class="button" (click)="prepareInvoice()">
-                  Prepare Invoice
-                </button>
-                <button class="button" (click)="sendInvoice()">
-                  Send Invoice
-                </button>
-                <button (click)="downloadInvoice()" class="button">
-                  Download Invoice/Folio
-                </button>
+                  <button
+                    (click)="activateAndgenerateJourney('CHECKOUT')"
+                    class="button"
+                  >
+                    Activate & Generate Checkout Link
+                  </button>
+                  <button (click)="downloadInvoice()" class="button">
+                    Download Invoice/Folio
+                  </button>
+                </ng-container>
+                <ng-template #prepareInvoiceBtn>
+                  <button class="button" (click)="prepareInvoice()">
+                    Prepare Invoice
+                  </button>
+                </ng-template>
               </ng-container>
               <ng-container *ngSwitchCase="'INITIATED'">
-                <!-- iniated only from bot   -->
                 <button
                   (click)="activateAndgenerateJourney('CHECKOUT')"
                   class="button"
                 >
                   Activate & Generate Checkout Link
-                </button>
-                <button class="button" (click)="prepareInvoice()">
-                  Prepare Invoice
                 </button>
                 <button (click)="downloadInvoice()" class="button">
                   Download Invoice/Folio
                 </button>
               </ng-container>
               <ng-container *ngSwitchCase="'COMPLETED'">
-                <!-- <button
-                  (click)="activateAndgenerateJourney('CHECKOUT')"
-                  class="button"
-                >
-                  Activate & Generate Checkout Link
-                </button>
-                <button class="button" (click)="prepareInvoice()">
-                  Prepare Invoice
-                </button>
                 <button (click)="downloadInvoice()" class="button">
                   Download Invoice/Folio
-                </button> -->
-                <button (click)="downloadInvoice()" class="button">
-                  Download Invoice/Folio
+                </button>
+                <button class="button" (click)="sendInvoice()">
+                  Send Invoice
                 </button>
               </ng-container>
               <ng-container *ngSwitchCase="'FAILED'">
-                <!-- Flow to-be-decided -->
                 <button
                   (click)="activateAndgenerateJourney('CHECKOUT')"
                   class="button"
                 >
                   Activate & Generate Checkout Link
-                </button>
-                <button class="button" (click)="prepareInvoice()">
-                  Prepare Invoice
                 </button>
                 <button (click)="downloadInvoice()" class="button">
                   Download Invoice/Folio
@@ -476,13 +444,14 @@
             </ng-container>
           </ng-template>
         </div>
-        <div featureSubscribed [feature]="'modules.notification'">
+        <div>
           <p class="contact">Contact Guest</p>
           <div class="right-bottom-icons">
             <ng-container *ngFor="let icon of shareIconList">
               <div
                 class="social-icons"
-                (click)="openSendNotification(icon.value)"
+                (click)="openSendNotification(icon.label.toLowerCase())"
+                *ngIf="icon.label != 'MANUAL'"
               >
                 <div class="icon">
                   <img [src]="icon.iconUrl" />

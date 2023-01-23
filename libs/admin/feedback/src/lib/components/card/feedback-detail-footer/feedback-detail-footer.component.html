@@ -8,7 +8,11 @@
   <div class="nickname">{{ getNicknameLoggedinUser() }}</div>
   <div
     class="button"
-    [ngClass]="{ disabled: feedback?.status === 'RESOLVED' }"
+    [ngClass]="{
+      disabled:
+        feedback?.status === 'RESOLVED' ||
+        feedbackFG?.get('comment')?.value.length === 0
+    }"
     (click)="markResolved()"
   >
     {{ 'statusUpdate.resolved' | translate }}
@@ -18,6 +22,9 @@
     class="input"
     type="text"
     placeholder="Type Message"
+    [mention]="items"
+    [mentionConfig]="{ triggerChar: '@', labelKey: 'name' }"
+    (itemSelected)="setSelectedItem($event)"
   />
   <div
     class="sendMessage"

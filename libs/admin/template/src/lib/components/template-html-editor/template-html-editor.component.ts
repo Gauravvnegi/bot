@@ -33,7 +33,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
   isSaving = false;
   enableAssetImport = false;
   constructor(
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     protected translateService: TranslateService
   ) {}
 
@@ -58,7 +58,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
    */
   saveAndNext() {
     if (trim(this.templateForm.get('htmlTemplate').value) === '') {
-      this._snackbarService
+      this.snackbarService
         .openSnackBarWithTranslate({
           translateKey: 'messages.success.noContent',
           priorityMessage: 'No template content',

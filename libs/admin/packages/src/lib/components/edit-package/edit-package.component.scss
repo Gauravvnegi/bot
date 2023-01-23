@@ -2,7 +2,7 @@
 
 .wrapper {
   padding: $padding20;
-  background-color: white;
+  background-color: $white;
   margin: $margin20 0px;
   border-radius: 5px;
   &-header {
@@ -106,7 +106,7 @@
       //   opacity: 0.85;
       //   outline: none;
       //   color: $primary-purple;
-      //   background-color: white;
+      //   background-color: $white;
       //   font-size: $font14;
       //   margin-right: 15px;
       //   border: 1.5px solid $primary-purple;
@@ -114,14 +114,14 @@
       //   &:hover {
       //     cursor: pointer;
       //     background-color: $primary-purple;
-      //     color: white;
+      //     color: $white;
       //     opacity: 1;
       //   }
       // }
       // .image-name {
       //   font-size: $font14;
       //   letter-spacing: 0.96px;
-      //   color: #002046;
+      //   color: $dark-blue;
       // }
     }
     .margin-adjust {
@@ -147,7 +147,7 @@
     left: 2px;
     transform: translate3d(30px, 0, 0);
     .mat-slide-toggle-thumb {
-      background-color: white;
+      background-color: $white;
     }
   }
 }

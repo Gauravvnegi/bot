@@ -27,9 +27,9 @@ export class MessagesComponent implements OnInit, OnDestroy {
   globalQueries;
   constructor(
     private statisticsService: StatisticsService,
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private adminutilityService: AdminUtilityService,
-    private _globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService,
     private fb: FormBuilder
   ) {}
 
@@ -56,11 +56,12 @@ export class MessagesComponent implements OnInit, OnDestroy {
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
+        this.hotelId = this.globalFilterService.hotelId;
         this.getConversationStats([
           ...this.globalQueries,
           {
@@ -90,7 +91,7 @@ export class MessagesComponent implements OnInit, OnDestroy {
               response?.messageCounts
             )),
           ({ error }) =>
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'messages.error.some_thing_wrong',

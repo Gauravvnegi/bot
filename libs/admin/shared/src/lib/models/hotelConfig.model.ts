@@ -1,10 +1,7 @@
 import { get, set } from 'lodash';
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
-export interface Deserializable {
-  deserialize(input: any): this;
-}
-
-export class HotelDetails implements Deserializable {
+export class HotelDetails implements IDeserializable {
   hotelAccess;
   brands;
 
@@ -20,7 +17,7 @@ export class HotelDetails implements Deserializable {
   }
 }
 
-export class HotelBrand implements Deserializable {
+export class HotelBrand implements IDeserializable {
   id;
   label;
   name;
@@ -44,7 +41,7 @@ export class HotelBrand implements Deserializable {
   }
 }
 
-export class HotelBranch implements Deserializable {
+export class HotelBranch implements IDeserializable {
   id;
   label;
   name;
@@ -54,6 +51,7 @@ export class HotelBranch implements Deserializable {
   nationality;
   timezone: string;
   outlets;
+  websiteUrl;
   deserialize(input) {
     Object.assign(
       this,
@@ -66,7 +64,8 @@ export class HotelBranch implements Deserializable {
       set({}, 'headerBgColor', get(input, ['bgColor'])),
       set({}, 'nationality', get(input, ['nationality'])),
       set({}, 'timezone', get(input, ['timezone'])),
-      set({}, 'outlets', get(input, ['outlets']))
+      set({}, 'outlets', get(input, ['outlets'])),
+      set({}, 'websiteUrl', get(input, ['websiteUrl']))
     );
 
     return this;

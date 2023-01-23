@@ -11,4 +11,5 @@ export const layoutConfig = {
     transactional: 'TRANSACTIONALFEEDBACK',
     stay: 'STAYFEEDBACK',
   },
+  notificationDelayTime:5
 };

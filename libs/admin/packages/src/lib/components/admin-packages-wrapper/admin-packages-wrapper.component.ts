@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { TableNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
+import {
+  ModuleNames,
+  TableNames,
+} from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 
 @Component({
   selector: 'hospitality-bot-admin-packages-wrapper',
@@ -7,8 +10,14 @@ import { TableNames } from 'libs/admin/shared/src/lib/constants/subscriptionConf
   styleUrls: ['./admin-packages-wrapper.component.scss'],
 })
 export class AdminPackagesWrapperComponent implements OnInit {
-  tables = TableNames;
   constructor() {}
 
   ngOnInit(): void {}
+
+  get featurePath() {
+    return {
+      category: [`${ModuleNames.PACKAGES}.tables.${TableNames.CATEGORY}`],
+      package: [`${ModuleNames.PACKAGES}.tables.${TableNames.PACKAGE}`],
+    };
+  }
 }

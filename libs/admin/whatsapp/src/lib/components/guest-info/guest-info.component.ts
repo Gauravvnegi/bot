@@ -14,7 +14,7 @@ import { ModalService } from 'libs/shared/material/src/lib/services/modal.servic
 import { MessageService } from '../../services/messages.service';
 import { GuestDetailMapComponent } from '../guest-detail-map/guest-detail-map.component';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import {
   Contact,
   GuestDetails,
@@ -59,8 +59,8 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private modalService: ModalService,
     private messageService: MessageService,
-    private _globalFilterService: GlobalFilterService,
-    private snackBarService: SnackBarService,
+    private globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService
   ) {}
 
@@ -83,22 +83,25 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
         .subscribe((response) => {
           this.guestData = new Contact().deserialize(
             response.receiver,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           );
-          if (this.guestData.reservationId) this.getRequestList();
-          else this.requestList = [];
+          if (this.guestData.reservationId) {
+            this.guestId = this.guestData.guestId;
+            this.getRequestAndReservation();
+          } else this.requestList = [];
           this.isLoading = false;
         })
     );
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
-        this.getHotelId([
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ]);
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.hotelId = this.globalFilterService.hotelId;
+        this.getGuestInfo();
       })
     );
   }
@@ -112,13 +115,32 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-        this.getGuestInfo();
+  getRequestAndReservation() {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          hotelId: this.hotelId,
+          confirmationNumber: this.data.reservationId,
+        },
+      ]),
+    };
+    forkJoin({
+      requests: this.messageService.getRequestByConfNo(config),
+      reservations: this.messageService.getGuestReservations(this.guestId),
+    }).subscribe(
+      (response) => {
+        this.requestList = new RequestList().deserialize(
+          response.requests
+        ).data;
+        this.guestReservations = new GuestDetails().deserialize(
+          response.reservations,
+          this.colorMap
+        );
+      },
+      ({ error }) => {
+        this.snackbarService.openSnackBarAsText(error.message);
       }
-    });
+    );
   }
 
   getRequestList() {
@@ -132,28 +154,18 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     };
     this.$subscription.add(
       this.messageService.getRequestByConfNo(config).subscribe(
-        (response) => {
-          this.requestList = new RequestList().deserialize(response).data;
-          this.guestId = this.requestList[0].guestDetails?.primaryGuest?.id;
-          this.loadGuestReservations();
-        },
-        ({ error }) => this.snackBarService.openSnackBarAsText(error.message)
-      )
-    );
-  }
-
-  loadGuestReservations(): void {
-    this.$subscription.add(
-      this.messageService.getGuestReservations(this.guestId).subscribe(
-        (response) => {
-          this.guestReservations = new GuestDetails().deserialize(
-            response,
-            this.colorMap
-          );
-        },
-        ({ error }) => {
-          this.snackBarService.openSnackBarAsText(error.message);
-        }
+        (response) =>
+          (this.requestList = new RequestList().deserialize(response).data),
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
@@ -217,7 +229,15 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
                     this.messageService.refreshData$.next(true);
                   },
                   ({ error }) =>
-                    this.snackBarService.openSnackBarAsText(error.message)
+                    this.snackbarService
+                      .openSnackBarWithTranslate(
+                        {
+                          translateKey: `messages.error.${error?.type}`,
+                          priorityMessage: error?.message,
+                        },
+                        ''
+                      )
+                      .subscribe()
                 )
             );
           }

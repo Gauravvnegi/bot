@@ -74,7 +74,9 @@
       "@hospitality-bot/shared/image-cropper": [
         "libs/shared/image-cropper/src/index.ts"
       ],
-      "@hospitality-bot/admin/analytics": ["libs/admin/analytics/src/index.ts"],
+      "@hospitality-bot/admin/analytics": [
+        "libs/admin/request-analytics/src/index.ts"
+      ],
       "@hospitality-bot/admin/whatsapp": ["libs/admin/whatsapp/src/index.ts"],
       "@hospitality-bot/admin/core/theme": [
         "apps/admin/src/app/core/theme/src/index.ts"
@@ -88,7 +90,24 @@
       "@hospitality-bot/admin/campaign": ["libs/admin/campaign/src/index.ts"],
       "@hospitality-bot/admin/marketing-dashboard": [
         "libs/admin/marketing-dashboard/src/index.ts"
-      ]
+      ],
+      "@hospitality-bot/admin/conversation-analytics": [
+        "libs/admin/conversation-analytics/src/index.ts"
+      ],
+      "@hospitality-bot/admin/request-analytics": [
+        "libs/admin/request-analytics/src/index.ts"
+      ],
+      "@hospitality-bot/admin/create-with": [
+        "libs/admin/create-with/src/index.ts"
+      ],
+      "@hospitality-bot/admin/inventory": ["libs/admin/inventory/src/index.ts"],
+      "@hospitality-bot/admin/e-frontdesk": [
+        "libs/admin/e-frontdesk/src/index.ts"
+      ],
+      "@hospitality-bot/admin/unsubscribed": [
+        "libs/admin/unsubscribed/src/index.ts"
+      ],
+      "@hospitality-bot/admin/finance": ["libs/admin/finance/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

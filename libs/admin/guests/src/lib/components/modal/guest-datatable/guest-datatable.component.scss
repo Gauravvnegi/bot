@@ -6,7 +6,7 @@
 }
 .tableHead {
   width: 5%;
-  background-color: $c-gray-92;
+  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
@@ -165,11 +165,8 @@
 }
 
 :host ::ng-deep .data-table-row.hover-background {
-  &:hover { 
+  &:hover {
     cursor: pointer;
     background: $table-popup-background !important;
   }
 }
-
-
-

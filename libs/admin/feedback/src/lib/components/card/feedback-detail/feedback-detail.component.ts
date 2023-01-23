@@ -49,11 +49,11 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
   globalQueries;
   constructor(
     protected cardService: CardService,
-    public _globalFilterService: GlobalFilterService,
+    public globalFilterService: GlobalFilterService,
     protected userService: UserService,
     protected _adminUtilityService: AdminUtilityService,
     protected tableService: FeedbackTableService,
-    protected _snackbarService: SnackBarService
+    protected snackbarService: SnackBarService
   ) {
     this.assigneeList = new UserList().deserialize([]);
     this.feedbackFG = new FormGroup({
@@ -113,7 +113,16 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
             );
             this.userService.userPermissions = response;
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }
@@ -136,11 +145,25 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) => {
             this.cardService.$assigneeChange.next({ status: true });
-            this._snackbarService.openSnackBarAsText('Assignee updated.', '', {
-              panelClass: 'success',
-            });
+            this.snackbarService.openSnackBarWithTranslate(
+              {
+                translateKey: `messages.SUCCESS.ASSIGNEE_UPDATED`,
+                priorityMessage: 'Assignee updated.',
+              },
+              '',
+              { panelClass: 'success' }
+            );
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }
@@ -175,35 +198,43 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
             `Feedback_export_${new Date().getTime()}.csv`
           );
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }
 
-  updateFeedbackState() {
+  updateFeedbackState(event) {
     const data = {
       status: card.feedbackState.resolved,
+      notes: event.data.comment,
     };
     this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
       (response) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'Status Updated Successfully.',
-              priorityMessage: 'Status Updated Successfully..',
-            },
-            '',
-            {
-              panelClass: 'success',
-            }
-          )
-          .subscribe();
+        this.snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: `messages.SUCCESS.STATUS_UPDATED`,
+            priorityMessage: 'Status Updated Successfully.',
+          },
+          '',
+          { panelClass: 'success' }
+        );
+        this.refreshFeedbackData(true);
+        this.cardService.$refreshList.next(true);
       },
       ({ error }) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
-              translateKey: error.message,
+              translateKey: `messages.error.${error?.type}`,
               priorityMessage: error.message,
             },
             ''
@@ -217,35 +248,67 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
     const data = {
       notes: event.data.comment,
     };
-    this.tableService.updateFeedbackState(this.feedback.id, data).subscribe(
-      (response) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'Message sent.',
-              priorityMessage: 'Message sent Successfully..',
-            },
-            '',
-            {
-              panelClass: 'success',
-            }
-          )
-          .subscribe();
-        this.feedbackFG.patchValue({ comment: '' });
-        this.refreshFeedbackData(true);
-      },
-      ({ error }) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: error.message,
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      }
+    const mentions = event.mentions
+      .map((mention) => {
+        if (mention.firstName && data.notes.includes(`@${mention.firstName}`)) {
+          return { mentionedUserId: mention.id };
+        }
+        if (
+          mention.departmentLabel &&
+          data.notes.includes(`@${mention.departmentLabel}`)
+        ) {
+          return { departmentMentionedUserName: mention.departmentName };
+        }
+      })
+      .filter((item) => item !== undefined);
+
+    const departmentMentions = mentions.filter(
+      (item) => !!item.departmentMentionedUserName
     );
+    const userMentions = mentions.filter((item) => !!item.mentionedUserId);
+
+    const getQueryArray = (list: typeof mentions, configName: string) => {
+      if (list.length > 0) {
+        return [{ [configName]: true }, ...list];
+      }
+      return [];
+    };
+
+    const queryObj = this._adminUtilityService.makeQueryParams([
+      ...getQueryArray(userMentions, 'isMention'),
+      ...getQueryArray(departmentMentions, 'isDepartmentMention'),
+    ]);
+
+    this.tableService
+      .updateFeedbackState(this.feedback.id, data, queryObj)
+      .subscribe(
+        (_) => {
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.MESSAGE_SENT',
+                priorityMessage: 'Message sent Successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
+          this.feedbackFG.patchValue({ comment: '' });
+          this.refreshFeedbackData(true);
+          this.cardService.$refreshList.next(true);
+        },
+        ({ error }) => {
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
+        }
+      );
   }
 
   downloadFeedback(event, id) {
@@ -260,7 +323,16 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
           link.click();
           link.remove();
         },
-        ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+        ({ error }) =>
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe()
       )
     );
   }

@@ -1,13 +1,9 @@
 <hospitality-bot-package-datatable
-  tableSubscribed
-  [paths]="'package.tables.' + tables.PACKAGE"
+  isFeatureSubscribed
+  [paths]="featurePath.package"
 >
 </hospitality-bot-package-datatable>
 
-<div
-  class="category_table"
-  tableSubscribed
-  [paths]="'package.tables.' + tables.CATEGORY"
->
+<div class="category_table" isFeatureSubscribed [paths]="featurePath.category">
   <hospitality-bot-categories-datatable> </hospitality-bot-categories-datatable>
 </div>

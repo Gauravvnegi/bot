@@ -75,7 +75,7 @@
   "datatable": {
     "document": "Document",
     "payment": "Payment",
-    "feedback": "feedback",
+    "feedback": "Feedback",
     "new": "New",
     "pre_checkin": "PreCheck-in",
     "checkin": "Check-In",

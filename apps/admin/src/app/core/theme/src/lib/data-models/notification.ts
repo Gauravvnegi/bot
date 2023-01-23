@@ -1,8 +1,5 @@
 import { get } from 'lodash';
-
-export interface IDeserializable {
-  deserialize(input: any): this;
-}
+import { IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class Notification implements IDeserializable {
   id?: string;

@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'hospitality-bot-assets',
   templateUrl: './assets.component.html',
   styleUrls: ['./assets.component.scss'],
 })
-export class AssetsComponent implements OnInit {
+export class AssetsComponent {
   constructor() {}
-
-  ngOnInit(): void {}
 }

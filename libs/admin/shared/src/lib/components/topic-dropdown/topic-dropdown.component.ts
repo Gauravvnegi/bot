@@ -31,7 +31,7 @@ export class TopicDropdownComponent implements OnInit, OnDestroy {
   constructor(
     private adminUtilityService: AdminUtilityService,
     private topicService: TopicService,
-    private _snackbarService: SnackBarService
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit() {
@@ -52,7 +52,15 @@ export class TopicDropdownComponent implements OnInit, OnDestroy {
           this.topicList = new Topics().deserialize(response).records;
         },
         ({ error }) => {
-          this._snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );

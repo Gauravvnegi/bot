@@ -58,7 +58,7 @@ export class ButtonDependencyDirective {
     );
 
     if (!status) {
-      this._snackBarService.openSnackBarAsText(
+      this.snackbarService.openSnackBarAsText(
         this.dependencyDS[this.id].msgs[errorIndex]
       );
       return;
@@ -71,7 +71,7 @@ export class ButtonDependencyDirective {
     }
   }
 
-  constructor(private _snackBarService: SnackBarService) {}
+  constructor(private snackbarService: SnackBarService) {}
 
   ngOnChanges() {
     this.setDependencyDS();

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import {
-  ModuleSubscription,
+  ProductSubscription,
   Subscriptions,
 } from '../data-models/subscription-plan-config.model';
 
@@ -11,27 +11,32 @@ import {
 export class SubscriptionPlanService extends ApiService {
   subscription$ = new BehaviorSubject({});
   private subscriptions: Subscriptions;
-  private moduleSubscriptions: ModuleSubscription;
+  private productSubscription: ProductSubscription;
+
   getSubscriptionPlan(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/subscriptions/`);
   }
 
   initSubscriptionDetails(data) {
     this.setSubscription(data);
-    this.subscription$.next(new ModuleSubscription().deserialize(data));
+    this.subscription$.next(new ProductSubscription().deserialize(data));
   }
 
   setSubscription(data) {
-    this.moduleSubscriptions = new ModuleSubscription().deserialize(data);
     this.subscriptions = new Subscriptions().deserialize(data);
+    this.productSubscription = new ProductSubscription().deserialize(data);
   }
 
   getSubscription(): Subscriptions {
     return this.subscriptions;
   }
 
-  getModuleSubscription(): ModuleSubscription {
-    return this.moduleSubscriptions;
+  getProductSubscription(): ProductSubscription['modules'] {
+    return this.productSubscription.modules;
+  }
+
+  getSubscribedModules(): ProductSubscription['subscribedModules'] {
+    return this.productSubscription.subscribedModules;
   }
 
   getSubscriptionUsage(hotelId: string, config: any): Observable<any> {
@@ -46,7 +51,11 @@ export class SubscriptionPlanService extends ApiService {
     );
   }
 
-  get ChannelSubscription() {
-    return this.subscriptions?.features?.CHANNELS || [];
+  getChannelSubscription() {
+    return this.subscriptions.channels;
+  }
+
+  checkModuleSubscription(productName: ModuleNames) {
+    return this.productSubscription.subscribedModules.indexOf(productName) > -1;
   }
 }

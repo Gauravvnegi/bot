@@ -52,12 +52,13 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
   @Input() feedbackType;
   @Input() tabFilterItems: any;
   @Output() onModalClose = new EventEmitter();
+  isNotVisible = false;
   feedbackGraph: string;
   constructor(
     public fb: FormBuilder,
     _adminUtilityService: AdminUtilityService,
-    _globalFilterService: GlobalFilterService,
-    _snackbarService: SnackBarService,
+    globalFilterService: GlobalFilterService,
+    snackbarService: SnackBarService,
     _modal: ModalService,
     public feedbackService: FeedbackService,
     tabFilterService: TableService,
@@ -72,8 +73,8 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     super(
       fb,
       _adminUtilityService,
-      _globalFilterService,
-      _snackbarService,
+      globalFilterService,
+      snackbarService,
       _modal,
       feedbackService,
       tabFilterService,
@@ -109,6 +110,9 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     this.feedbackGraph = this.config[0].feedbackGraph;
     this.feedbackType = this.data.feedbackType;
     this.rowsPerPage = 5;
+    if (this.tableName === 'Response Rate')
+      this.isNotVisible =
+        this.tabFilterIdx === 0 || this.tabFilterIdx === 2 ? true : false;
   }
 
   /**
@@ -124,10 +128,17 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    * @function setTableCols To set table columns header
    */
   setTableCols(): void {
-    this.cols =
-      this.feedbackType === this.globalFeedbackConfig.types.stay
-        ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
-        : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;
+    if (this.tableName === 'Response Rate') {
+      this.cols =
+        this.feedbackType === this.globalFeedbackConfig.types.stay
+          ? this.globalFeedbackConfig.cols.rategraphDatatable.stay
+          : this.globalFeedbackConfig.cols.rategraphDatatable.transactional;
+    } else {
+      this.cols =
+        this.feedbackType === this.globalFeedbackConfig.types.stay
+          ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
+          : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;
+    }
   }
 
   /**
@@ -142,13 +153,13 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
           ...this.config,
         ];
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getOutlets(data['filter'].value.property.branchName);
         //fetch-api for records
         this.loadInitialData([
@@ -222,10 +233,10 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     const id = event.id;
     this.tableService.updateFeedbackState(id, data).subscribe(
       (response) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
-              translateKey: 'Status Updated Successfully.',
+              translateKey: 'messages.SUCCESS.STATUS_UPDATED',
               priorityMessage: 'Status Updated Successfully..',
             },
             '',
@@ -242,10 +253,10 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         ]);
       },
       ({ error }) => {
-        this._snackbarService
+        this.snackbarService
           .openSnackBarWithTranslate(
             {
-              translateKey: error.message,
+              translateKey: `messages.error.${error?.type}`,
               priorityMessage: error.message,
             },
             ''
@@ -274,7 +285,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    */
   updateFeedbackStatus(status: boolean): void {
     if (!this.selectedRows.length) {
-      this._snackbarService.openSnackBarAsText(
+      this.snackbarService.openSnackBarAsText(
         this._translateService.instant(
           'messages.validation.select_record_status',
           { status: status ? 'read' : 'unread' }
@@ -303,7 +314,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       this.tableService.updateFeedbackStatus(config, reqData).subscribe(
         (response) => {
           this.statisticService.markReadStatusChanged.next(true);
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.success.feedback_status_updated',
@@ -351,6 +362,10 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
+    if (this.tableName === 'Response Rate')
+      this.isNotVisible =
+        this.tabFilterIdx === 0 || this.tabFilterIdx === 2 ? true : false;
+
     this.setTableCols();
     this.values = [];
     this.changePage(+this.tabFilterItems[event.index].lastPage);

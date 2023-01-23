@@ -105,6 +105,9 @@ export class EditPackageComponent implements OnInit, OnDestroy {
     this.packageForm.get('rate').enable();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -114,20 +117,12 @@ export class EditPackageComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
         ];
 
-        this.getHotelId(this.globalQueries);
+        this.hotelId = this.globalFilterService.hotelId;
         this.getConfig();
         this.getCategoriesList(this.hotelId);
         this.getPackageId();
       })
     );
-  }
-
-  getHotelId(globalQueries): void {
-    globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
-      }
-    });
   }
 
   getPackageId(): void {
@@ -221,11 +216,16 @@ export class EditPackageComponent implements OnInit, OnDestroy {
         (response) => {
           this.hotelPackage = new PackageDetail().deserialize(response);
           this.packageForm.patchValue(this.hotelPackage.amenityPackage);
-          this.snackbarService.openSnackBarAsText(
-            'Package added successfully',
-            '',
-            { panelClass: 'success' }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.PACKAGE_ADDED',
+                priorityMessage: 'Package added successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
           this.router.navigate([
             '/pages/library/package/edit',
             this.hotelPackage.amenityPackage.id,
@@ -233,7 +233,15 @@ export class EditPackageComponent implements OnInit, OnDestroy {
           this.isSavingPackage = false;
         },
         ({ error }) => {
-          this.snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
           this.isSavingPackage = false;
         }
       )
@@ -252,14 +260,27 @@ export class EditPackageComponent implements OnInit, OnDestroy {
         (response) => {
           this.packageForm.get('imageUrl').patchValue(response.fileDownloadUri);
           this.packageForm.get('imageName').patchValue(response.fileName);
-          this.snackbarService.openSnackBarAsText(
-            'Package image uploaded successfully',
-            '',
-            { panelClass: 'success' }
-          );
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'messages.SUCCESS.PACKAGE_IMAGE_UPLOADED',
+                priorityMessage: 'Package image uploaded successfully.',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
         },
         ({ error }) => {
-          this.snackbarService.openSnackBarAsText(error.message);
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.error.${error?.type}`,
+                priorityMessage: error?.message,
+              },
+              ''
+            )
+            .subscribe();
         }
       )
     );
@@ -285,11 +306,16 @@ export class EditPackageComponent implements OnInit, OnDestroy {
         .updatePackage(this.hotelId, this.hotelPackage.amenityPackage.id, data)
         .subscribe(
           (response) => {
-            this.snackbarService.openSnackBarAsText(
-              'Package updated successfully',
-              '',
-              { panelClass: 'success' }
-            );
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.PACKAGE_UPDATED',
+                  priorityMessage: 'Package updated successfully.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe();
             this.router.navigate([
               '/pages/library/package/edit',
               this.hotelPackage.amenityPackage.id,
@@ -297,7 +323,15 @@ export class EditPackageComponent implements OnInit, OnDestroy {
             this.isSavingPackage = false;
           },
           ({ error }) => {
-            this.snackbarService.openSnackBarAsText(error.message);
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
             this.isSavingPackage = false;
           }
         )

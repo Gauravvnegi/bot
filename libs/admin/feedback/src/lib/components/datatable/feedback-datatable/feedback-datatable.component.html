@@ -13,11 +13,11 @@
           {{ tableName }}
         </p>
         <div class="mark-btn-container">
-          <div class="request-btn" (click)="openFeedbackRequestPage($event)">
+          <!-- <div class="request-btn" (click)="openFeedbackRequestPage($event)">
             <div class="request-btn__wrap">
               {{ 'request_feedback_label' | translate }}
             </div>
-          </div>
+          </div> -->
           <div class="btn read" *ngIf="selectedRows.length > 0">
             <img
               [src]="globalFeedbackConfig.images.datatable.mark_as_read.url"
@@ -228,7 +228,7 @@
           pResizableColumn
           [pSortableColumn]="col.field"
           *ngFor="let col of columns; let i = index"
-          [ngStyle]="col.dynamicWidth ? { width: '320px' } : {}"
+          [ngStyle]="col.dynamicWidth ? { width: '225px' } : {}"
         >
           <div>
             <p class="table-header-text">{{ col.header }}</p>
@@ -604,10 +604,10 @@
           </td>
           <td class="package">
             <div class="package-date">
-              {{ rowData?.getCreatedDate(_globalFilterService.timezone) }}
+              {{ rowData?.getCreatedDate(globalFilterService.timezone) }}
             </div>
             <div class="package-date">
-              {{ rowData?.getCreatedTime(_globalFilterService.timezone) }}
+              {{ rowData?.getCreatedTime(globalFilterService.timezone) }}
             </div>
           </td>
           <td class="comments">{{ rowData?.guestData.overAllNps }}</td>
@@ -773,10 +773,10 @@
           </td>
           <td class="package">
             <p class="arrival-date">
-              {{ rowData?.getCreatedDate(_globalFilterService.timezone) }}
+              {{ rowData?.getCreatedDate(globalFilterService.timezone) }}
             </p>
             <p class="arrival-time">
-              {{ rowData?.getCreatedTime(_globalFilterService.timezone) }}
+              {{ rowData?.getCreatedTime(globalFilterService.timezone) }}
             </p>
             <p class="arrival-time">{{ rowData?.guestData.guestCount }}G</p>
           </td>

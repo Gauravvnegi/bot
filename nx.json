@@ -57,9 +57,15 @@
     "shared-theme": {
       "tags": []
     },
-    "shared-interceptors": { "tags": [] },
-    "shared-material": { "tags": [] },
-    "shared-utils": { "tags": [] },
+    "shared-interceptors": {
+      "tags": []
+    },
+    "shared-material": {
+      "tags": []
+    },
+    "shared-utils": {
+      "tags": []
+    },
     "admin-dashboard": {
       "tags": []
     },
@@ -127,6 +133,27 @@
       "tags": []
     },
     "admin-marketing-dashboard": {
+      "tags": []
+    },
+    "admin-conversation-analytics": {
+      "tags": []
+    },
+    "admin-request-analytics": {
+      "tags": []
+    },
+    "admin-create-with": {
+      "tags": []
+    },
+    "admin-inventory": {
+      "tags": []
+    },
+    "admin-e-frontdesk": {
+      "tags": []
+    },
+    "admin-unsubscribed": {
+      "tags": []
+    },
+    "admin-finance": {
       "tags": []
     }
   }

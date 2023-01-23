@@ -48,8 +48,9 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
   };
+  config = campaignConfig;
   constructor(
-    private _snackbarService: SnackBarService,
+    private snackbarService: SnackBarService,
     private _emailService: EmailService,
     private _modalService: ModalService,
     private _router: Router,
@@ -72,7 +73,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
           this.fromEmailList = new EmailList().deserialize(response);
         },
         ({ error }) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate({
               translateKey: 'messages.error.fail',
               priorityMessage: error.message,
@@ -113,7 +114,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
             this.$subscription.add(
               this._emailService.sendTest(this.hotelId, reqData).subscribe(
                 (response) => {
-                  this._snackbarService
+                  this.snackbarService
                     .openSnackBarWithTranslate(
                       {
                         translateKey: 'messages.success.sendTestcampaign',
@@ -127,7 +128,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
                     .subscribe();
                 },
                 ({ error }) => {
-                  this._snackbarService
+                  this.snackbarService
                     .openSnackBarWithTranslate({
                       translateKey: 'messages.error.fail',
                       priorityMessage: error.message,
@@ -152,7 +153,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
         .archiveCampaign(this.hotelId, {}, this.campaignId)
         .subscribe(
           (response) => {
-            this._snackbarService
+            this.snackbarService
               .openSnackBarWithTranslate(
                 {
                   translateKey: 'messages.success.campaignArchived',
@@ -165,7 +166,16 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
               )
               .subscribe();
           },
-          ({ error }) => this._snackbarService.openSnackBarAsText(error.message)
+          ({ error }) =>
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe()
         )
     );
   }

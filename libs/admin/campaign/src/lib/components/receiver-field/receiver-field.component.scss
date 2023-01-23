@@ -17,13 +17,13 @@
 .form-field .chips .chip {
   display: inline-block;
   width: auto;
-  background-color: #e0e0e0;
+  background-color: $light-gray;
   color: $black;
   border-radius: 18px;
   margin: 2px;
   overflow: hidden;
   &:hover {
-    background-color: #ccc7c7;
+    background-color: $receiver-chip-bg;
   }
 }
 .form-field .chips .chip {
@@ -34,7 +34,7 @@
   padding: 4px 10px;
   cursor: pointer;
   display: inline-block;
-  color: gray;
+  color: $gray;
   line-height: 18px;
 }
 .form-field .chips .chip .chip--text {
@@ -63,7 +63,7 @@
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  border-bottom: 1px solid #737679;
+  border-bottom: 1px solid $c-gray-46;
   padding-bottom: 6px;
   padding-right: 65px;
 }

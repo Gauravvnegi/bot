@@ -41,6 +41,9 @@
     &:hover {
       cursor: pointer;
     }
+    @media screen and (max-width: $L) {
+      right: 10px;
+    }
   }
   &__dropdown {
     position: absolute;

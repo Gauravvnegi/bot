@@ -316,4 +316,8 @@ export class DisengagementComponent implements OnInit {
 
     chartRef.update();
   };
+
+  getPercentage(first: number, second: number) {
+    return (first * 100) / (first + second);
+  }
 }

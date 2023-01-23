@@ -49,8 +49,8 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
     protected fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,
     protected _statisticService: StatisticsService,
-    protected _globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService,
     protected dateService: DateService
   ) {}
 
@@ -70,14 +70,17 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  listenForGlobalFilters() {
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const calenderType = {
           calenderType: this.dateService.getCalendarType(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ),
         };
         this.selectedInterval = calenderType.calenderType;
@@ -177,7 +180,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
             this.getNPSChartData();
           }),
         ({ error }) =>
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate({
               translateKey: 'messages.error.some_thing_wrong',
               priorityMessage: error?.message,
@@ -347,7 +350,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
             });
         },
         ({ error }) =>
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',
@@ -384,7 +387,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
           );
         },
         ({ error }) =>
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',

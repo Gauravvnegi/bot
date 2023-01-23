@@ -63,11 +63,10 @@ export class AuthService extends ApiService {
    * @returns The user is authenticated or not.
    */
   isAuthenticated(): boolean {
-    const xAuthToken = this.getTokenByName('x-authorization');
     const xAccessToken = this.getTokenByName('x-access-token');
     const xUserIdToken = this.getTokenByName('x-userId');
 
-    return !!xAuthToken && !!xAccessToken && !!xUserIdToken;
+    return !!xAccessToken && !!xUserIdToken;
   }
 
   /**
@@ -84,9 +83,7 @@ export class AuthService extends ApiService {
    */
   clearToken() {
     const tokensToRemove = [
-      'x-authorization',
       'x-userId',
-      'x-refresh-authorization',
       'x-access-token',
       'userId',
       'x-access-refresh-token',
@@ -101,5 +98,29 @@ export class AuthService extends ApiService {
    */
   logout(userIdParam: string): Observable<any> {
     return this.post(`/api/v1/user/${userIdParam}/logout`, {});
+  }
+
+  verifyPlatformAccessToken(data): Observable<any> {
+    return this.post(`/api/v1/user/verify-token`, data);
+  }
+
+  deletePlatformRefererTokens(cookieService) {
+    const tokensToRemove = [
+      'authorizationToken',
+      'accessToken',
+      'refreshToken',
+      'accessRefreshToken',
+      'user',
+    ];
+
+    tokensToRemove.forEach((token) =>
+      cookieService.set(token, null, {
+        sameSite: 'None',
+        secure: true,
+        path: '/',
+        domain: 'botshot.ai',
+        expires: -1,
+      })
+    );
   }
 }

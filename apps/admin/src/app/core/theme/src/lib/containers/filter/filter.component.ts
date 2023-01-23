@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { get } from 'lodash';
+import { ModuleNames } from '../../../../../../../../../../libs/admin/shared/src/index';
 import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/index';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 import { TokenUpdateService } from '../../services/token-update.service';
@@ -134,7 +134,7 @@ export class FilterComponent implements OnChanges, OnInit {
     });
   }
 
-  updateOutletsValue(value) {
+  updateOutletsValue(value: boolean) {
     Object.keys(this.outletFG.controls).forEach((id) => {
       this.outletFG.get(id).setValue(value);
     });
@@ -225,13 +225,15 @@ export class FilterComponent implements OnChanges, OnInit {
   }
 
   checkForTransactionFeedbackSubscribed() {
-    const subscription = this.subscriptionService.getModuleSubscription();
-    return get(subscription, ['modules', 'FEEDBACK_TRANSACTIONAL', 'active']);
+    return this.subscriptionService.checkModuleSubscription(
+      ModuleNames.FEEDBACK_TRANSACTIONAL
+    );
   }
 
   checkForStayFeedbackSubscribed() {
-    const subscription = this.subscriptionService.getModuleSubscription();
-    return get(subscription, ['modules', 'feedback', 'active']);
+    return this.subscriptionService.checkModuleSubscription(
+      ModuleNames.FEEDBACK
+    );
   }
 
   get propertyFG() {

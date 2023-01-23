@@ -7,7 +7,7 @@ import { MessageTabService } from './messages-tab.service';
 import { Howl } from 'howler';
 import { ModalService } from '../../../../../../../../../libs/shared/material/src';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { NotificationComponent } from '../containers/notification/notification.component';
+import { NotificationPopupComponent } from '../containers/notification-popup/notification-popup.component';
 
 @Injectable({
   providedIn: 'root',
@@ -64,7 +64,7 @@ export class FirebaseMessagingService {
     dialogConfig.width = '550';
     dialogConfig.disableClose = true;
     const detailCompRef = this._modalService.openDialog(
-      NotificationComponent,
+      NotificationPopupComponent,
       dialogConfig
     );
     detailCompRef.componentInstance.onNotificationClose.subscribe(
@@ -79,19 +79,21 @@ export class FirebaseMessagingService {
   }
 
   showNotificationAsSnackBar(payload: any) {
-    const title = payload.notification?.body.split(',')[0];
-    this._snackbarService.openSnackBarAsText(
-      `${payload.notification?.title}(${title}): ${decodeURIComponent(
-        payload.notification?.body.substring(
-          payload.notification?.body.indexOf(',') + 1
-        )
-      )}`,
-      '',
-      {
-        panelClass: 'notification',
-        horizontalPosition: 'center',
-      }
-    );
+    if (payload.notification?.body) {
+      const title = payload.notification?.body.split(',')[0];
+      this._snackbarService.openSnackBarAsText(
+        `${payload.notification?.title}(${title}): ${decodeURIComponent(
+          payload.notification?.body.substring(
+            payload.notification?.body.indexOf(',') + 1
+          )
+        )}`,
+        '',
+        {
+          panelClass: 'notification',
+          horizontalPosition: 'center',
+        }
+      );
+    }
   }
 
   playNotificationSound() {

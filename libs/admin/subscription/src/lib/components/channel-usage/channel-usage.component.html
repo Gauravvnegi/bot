@@ -9,12 +9,12 @@
           <div class="channels__container__image">
             <img
               class="channels__container__image__enabled"
-              *ngIf="channel.active"
+              *ngIf="channel.isSubscribed"
               [src]="channel.imageUrl"
             />
             <img
               class="channels__container__image__disabled"
-              *ngIf="!channel.active"
+              *ngIf="!channel.isSubscribed"
               [src]="channel.disabledImageUrl"
             />
           </div>

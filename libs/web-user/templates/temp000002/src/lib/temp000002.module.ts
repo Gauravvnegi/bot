@@ -43,6 +43,7 @@ import { CancelBookingComponent } from './containers/cancel-booking/cancel-booki
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { QuestionnaireComponent } from './containers/questionnaire/questionnaire.component';
 import { RoomUpgradeComponent } from './containers/packages/room-upgrade/room-upgrade.component';
+import { AddressComponent } from './containers/address/address.component';
 
 @NgModule({
   imports: [
@@ -99,6 +100,7 @@ import { RoomUpgradeComponent } from './containers/packages/room-upgrade/room-up
     DefaultAmenityService,
     ThankYouService,
     GSTService,
+    AddressComponent
   ],
 })
 export class Temp000002Module {}

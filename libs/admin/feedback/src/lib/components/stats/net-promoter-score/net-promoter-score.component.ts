@@ -71,8 +71,8 @@ export class NetPromoterScoreComponent implements OnInit, OnDestroy {
     protected fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,
     protected _statisticService: StatisticsService,
-    protected _globalFilterService: GlobalFilterService,
-    protected _snackbarService: SnackBarService,
+    protected globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService,
     protected dateService: DateService,
     protected tableService: FeedbackTableService
   ) {}
@@ -92,14 +92,17 @@ export class NetPromoterScoreComponent implements OnInit, OnDestroy {
       this.listenForOutletChanged();
   }
 
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
   listenForGlobalFilters(): void {
     this.$subscription.add(
-      this._globalFilterService.globalFilter$.subscribe((data) => {
+      this.globalFilterService.globalFilter$.subscribe((data) => {
         const calenderType = {
           calenderType: this.tableService.getCalendarTypeNPS(
             data['dateRange'].queryValue[0].toDate,
             data['dateRange'].queryValue[1].fromDate,
-            this._globalFilterService.timezone
+            this.globalFilterService.timezone
           ),
         };
         this.globalFeedbackFilterType =
@@ -178,7 +181,7 @@ export class NetPromoterScoreComponent implements OnInit, OnDestroy {
         this.dateService.convertTimestampToLabels(
           this.selectedInterval,
           d,
-          this._globalFilterService.timezone,
+          this.globalFilterService.timezone,
           this.getFormatForlabels(),
           this.selectedInterval === 'week'
             ? this._adminUtilityService.getToDate(this.globalQueries)
@@ -220,7 +223,7 @@ export class NetPromoterScoreComponent implements OnInit, OnDestroy {
           this.initGraphData();
         },
         ({ error }) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',
@@ -257,7 +260,7 @@ export class NetPromoterScoreComponent implements OnInit, OnDestroy {
           );
         },
         ({ error }) => {
-          this._snackbarService
+          this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.error.some_thing_wrong',
@@ -290,7 +293,7 @@ export class NetPromoterScoreComponent implements OnInit, OnDestroy {
     const fromDate = this.tableService.getNPSStartDate(
       this.globalQueries[6].fromDate,
       this.globalQueries[5].toDate,
-      this._globalFilterService.timezone
+      this.globalFilterService.timezone
     );
     return (
       configuration.queryObj.substring(

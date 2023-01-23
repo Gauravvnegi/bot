@@ -29,7 +29,7 @@ Deploy_Admin_Prod:
     - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
     - kubectl apply -f deployment.yaml 
   tags:
-    - k8s-prod
+    - k8s
 
 
 Deploy_Web_Prod:
@@ -60,5 +60,5 @@ Deploy_Web_Prod:
     - kubectl get pods
     - kubectl get pods -n botshot-prod-admin
   tags:
-    - k8s-prod
+    - k8s
     

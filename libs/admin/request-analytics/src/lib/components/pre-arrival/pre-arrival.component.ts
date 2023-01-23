@@ -13,6 +13,6 @@ export class PreArrivalComponent implements OnInit {
   ngOnInit(): void {}
 
   get featurePath() {
-    return [ModuleNames.REQUEST];
+    return [ModuleNames.REQUEST_DASHBOARD];
   }
 }

@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
 import { Feedback, Remark, StayFeedback } from './feedback-datatable.model';
 import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { colors } from '@hospitality-bot/admin/shared';
 
 export class FeedbackList {
   records: FeedbackRecord[];
@@ -42,6 +43,7 @@ export class FeedbackRecord {
   userId: string;
   userName: string;
   comments: string;
+  color: string;
 
   deserialize(input, outlets, feedbackType, colorMap) {
     this.remarks = new Array<Remark>();
@@ -61,6 +63,8 @@ export class FeedbackRecord {
       set({}, 'userName', get(input, ['userName'])),
       set({}, 'comments', get(input, [' feedback', 'comments']))
     );
+
+    this.color = colors[Math.floor(Math.random() * colors.length)];
     input.remarks?.forEach((remark) =>
       this.remarks.push(new Remark().deserialize(remark))
     );
@@ -72,6 +76,7 @@ export class FeedbackRecord {
             outlets,
             colorMap
           );
+
     return this;
   }
 
@@ -86,17 +91,13 @@ export class FeedbackRecord {
       this.feedback.guest.firstName || '',
       this.feedback.guest.lastName || '',
     ];
-    if (nameList[0].length && nameList[1].length) {
-      return nameList
-        .map((i, index) => {
-          if ([0, 1].includes(index)) return i.charAt(0);
-          else return '';
-        })
-        .join('')
-        .toUpperCase();
-    } else {
-      return '';
-    }
+
+    return nameList
+      .map((item, index) => {
+        return item ? item.charAt(0) : '';
+      })
+      .join('')
+      .toUpperCase();
   }
 
   getSLA() {

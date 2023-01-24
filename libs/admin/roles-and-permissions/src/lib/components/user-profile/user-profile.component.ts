@@ -33,6 +33,7 @@ export class UserProfileComponent implements OnInit {
   products: any[];
 
   tabListItems: { label: string; value: string }[];
+  tabIdx = 1;
 
   countries = new CountryCode().getByLabelAndValue();
 
@@ -116,6 +117,8 @@ export class UserProfileComponent implements OnInit {
 
   initStateSubscription() {
     this.pageState$.subscribe((res) => {
+      this.tabIdx = 0;
+
       switch (res) {
         case 'view':
           this.userToModDetails = this.adminToModDetails;
@@ -256,6 +259,7 @@ export class UserProfileComponent implements OnInit {
 
   onSelectedTabFilterChange(event) {
     this.manageProduct = this.userForm.get('products')?.value[event.index];
+    this.tabIdx = event.index;
   }
 
   get permissionConfigsFA() {

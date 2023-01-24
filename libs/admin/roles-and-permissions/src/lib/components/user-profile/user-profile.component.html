@@ -222,31 +222,30 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div
-          class="field width-half"
-          *ngIf="hasPageState('view') && !!totalTeamMember"
-        >
-          <div class="mat-label">Team :</div>
-          <div class="mat-fields">
-            <div class="member">
-              <div
-                *ngFor="let item of teamMember; let index = index"
-                (click)="openTableModal()"
-              >
+        <div class="field width-half">
+          <ng-container *ngIf="hasPageState('view') && !!totalTeamMember">
+            <div class="mat-label">Team :</div>
+            <div class="mat-fields">
+              <div class="member">
                 <div
-                  class="member-name"
-                  [style.margin-left]="'calc(indexpx + 48px)'"
-                  *ngIf="index < 3"
-                  [style.background]="item.color"
+                  *ngFor="let item of teamMember; let index = index"
+                  (click)="openTableModal()"
                 >
-                  {{ item.initial }}
+                  <div
+                    class="member-name"
+                    [style.margin-left]="'calc(indexpx + 48px)'"
+                    *ngIf="index < 3"
+                    [style.background]="item.color"
+                  >
+                    {{ item.initial }}
+                  </div>
                 </div>
               </div>
+              <div *ngIf="totalTeamMember > 3" class="total-member">
+                + {{ totalTeamMember - 3 }}
+              </div>
             </div>
-            <div *ngIf="totalTeamMember > 3" class="total-member">
-              + {{ totalTeamMember - 3 }}
-            </div>
-          </div>
+          </ng-container>
         </div>
         <div
           *ngIf="!totalTeamMember"
@@ -338,7 +337,7 @@
       <div *ngIf="userToModDetails?.products" class="tabs">
         <hospitality-bot-tab-group
           [listItems]="tabListItems"
-          [selectedIndex]="tabFilterIdx"
+          [selectedIndex]="tabIdx"
           (selectedTabChange)="onSelectedTabFilterChange($event)"
         ></hospitality-bot-tab-group>
       </div>

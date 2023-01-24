@@ -20,7 +20,7 @@ export type PermissionMod = Permission & {
 export type PageState = 'view' | 'edit' | 'add';
 
 export type QueryConfig = {
-  queryObj: string;
-  loggedInUserId: string;
-  hotelId: string;
+  queryObj?: string;
+  loggedInUserId?: string;
+  hotelId?: string;
 };

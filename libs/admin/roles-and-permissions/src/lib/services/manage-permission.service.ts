@@ -42,11 +42,10 @@ export class ManagePermissionService extends ApiService {
     };
   }
 
-  modifyPermissionDetailsForEdit(value) {
+  modifyPermissionDetailsForEdit(value, allDepartments) {
     // to be changed when multiple hotels
     // temp function
 
-    let selectedProducts = value.products.map((item) => item.value);
     return {
       id: value.id,
       email: value.email.trim(),
@@ -56,11 +55,13 @@ export class ManagePermissionService extends ApiService {
       cc: value.cc,
       phoneNumber: value.phoneNumber,
       profileUrl: value.profileUrl,
-      departments: value.departments,
+      departments: allDepartments.filter((item) =>
+        value.departments?.includes(item.department)
+      ),
       permissions: value.permissionConfigs.filter(
         ({ permissions, productType }) =>
           (permissions.manage || permissions.view) &&
-          selectedProducts.includes(productType)
+          value.products?.includes(productType)
       ),
       hotelAccess: {
         chains: [

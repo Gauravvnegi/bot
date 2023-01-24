@@ -222,30 +222,38 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="field width-half">
-          <ng-container *ngIf="hasPageState('view')">
-            <div class="mat-label">Team :</div>
-            <div class="mat-fields">
-              <div class="member">
+        <div
+          class="field width-half"
+          *ngIf="hasPageState('view') && !!totalTeamMember"
+        >
+          <div class="mat-label">Team :</div>
+          <div class="mat-fields">
+            <div class="member">
+              <div
+                *ngFor="let item of teamMember; let index = index"
+                (click)="openTableModal()"
+              >
                 <div
-                  *ngFor="let item of teamMember; let index = index"
-                  (click)="openTableModal()"
+                  class="member-name"
+                  [style.margin-left]="'calc(indexpx + 48px)'"
+                  *ngIf="index < 3"
+                  [style.background]="item.color"
                 >
-                  <div
-                    class="member-name"
-                    [style.margin-left]="'calc(indexpx + 48px)'"
-                    *ngIf="index < 3"
-                    [style.background]="item.color"
-                  >
-                    {{ item.initial }}
-                  </div>
+                  {{ item.initial }}
                 </div>
               </div>
-              <div *ngIf="totalTeamMember" class="total-member">
-                + {{ totalTeamMember - 3 }}
-              </div>
             </div>
-          </ng-container>
+            <div *ngIf="totalTeamMember > 3" class="total-member">
+              + {{ totalTeamMember - 3 }}
+            </div>
+          </div>
+        </div>
+        <div
+          *ngIf="!totalTeamMember"
+          class="all-user"
+          (click)="openTableModal()"
+        >
+          View All Users
         </div>
       </div>
       <div class="fields">

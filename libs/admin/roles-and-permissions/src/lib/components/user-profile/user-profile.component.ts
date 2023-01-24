@@ -47,7 +47,7 @@ export class UserProfileComponent implements OnInit {
   value;
 
   teamMember: { initial: string; color: string }[] = [];
-  totalTeamMember: number;
+  totalTeamMember: number = 0;
 
   manageProduct: string;
 
@@ -398,6 +398,9 @@ export class UserProfileComponent implements OnInit {
       UserPermissionDatatableComponent,
       dialogConfig
     );
+
+    tableCompRef.componentInstance.tabFilterIdx =
+      this.totalTeamMember === 0 ? 0 : 1;
 
     tableCompRef.componentInstance.onModalClose.subscribe((userData) => {
       tableCompRef.close();

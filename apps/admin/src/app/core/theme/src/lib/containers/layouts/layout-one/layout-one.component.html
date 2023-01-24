@@ -1,6 +1,6 @@
 <div class="wrapper">
   <div *ngIf="showNotification" class="flash-notification">
-    <p [ngStyle]="{color: flashNotification.notificationTextColor}">
+    <p [ngStyle]="{ color: flashNotification.notificationTextColor }">
       {{ flashNotification.notificationMessage }}
     </p>
   </div>
@@ -21,6 +21,7 @@
     [style.background-color]="backgroundColor"
   >
     <hospitality-bot-sidenav-expand
+      [logoUrl]="logoUrl"
       [title]="menuTitle"
       [submenuItems]="menuItem"
       [isExpanded]="isExpand"

@@ -31,7 +31,7 @@
   ></hospitality-bot-tab-group>
   <div
     class="body"
-    [style.height]="search.length ? 'calc(100% - 64px)' : 'calc(100% - 117px)'"
+    [style.height]="search.length ? '480px' : '520px'"
     #feedbackListContainer
     (scroll)="onScroll($event)"
     *ngIf="!loading; else loader"

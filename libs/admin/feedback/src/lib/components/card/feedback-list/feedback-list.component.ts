@@ -170,6 +170,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   listenForFeedbackTypeChanged(): void {
     this.$subscription.add(
       this.tableService.$feedbackType.subscribe((response) => {
+        this.selectedFeedback = null;
         if (this.feedbackType !== this.getFeedbackType(response))
           this.filterData = { ...this.filterData, department: [] };
         this.feedbackType = response;

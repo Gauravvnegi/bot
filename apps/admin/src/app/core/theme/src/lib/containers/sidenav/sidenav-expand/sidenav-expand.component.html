@@ -4,13 +4,12 @@
   [@slideInOut]
 >
   <div
-    class="logo text-uppercase"
+    class="sidenav-header"
     [style.color]="'#C5C5C5'"
-    [style.background-color]="'#4B56C0'"
     *ngIf="submenuItems !== null"
   >
-    <div class="sidenav-header">
-      <div class="logo" *ngIf="isExpanded">
+    <div class="logo" *ngIf="isExpanded" [style.background-color]="bgColor">
+      <div class="logo-image">
         <img [src]="logoUrl" alt="logo" />
       </div>
     </div>
@@ -44,3 +43,8 @@
     </div>
   </div>
 </div>
+<div
+  class="overlay-container"
+  (click)="toggleSideNav()"
+  *ngIf="isExpanded && submenuItems !== null"
+></div>

@@ -144,6 +144,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.$subscription.unsubscribe();
   }
 
+  isSameModule(path: string) {
+    return this.router.url.includes(path);
+  }
+
   handleRouteChange(menuItem) {
     this.isExpanded =
       menuItem.children && menuItem.children.length ? true : false;

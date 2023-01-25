@@ -41,6 +41,11 @@
       [routerLinkActiveOptions]="{ exact: false }"
       [ngClass]="rla.isActive ? 'active' : ''"
     >
+      <div
+        class="overlay-link"
+        (click)="toggleMenuButton()"
+        *ngIf="isSameModule(menuItem.path)"
+      ></div>
       <a
         class="main_heading_anchor"
         [routerLink]="[menuItem.path]"

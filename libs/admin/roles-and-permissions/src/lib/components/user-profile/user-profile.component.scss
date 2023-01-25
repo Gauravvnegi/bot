@@ -133,7 +133,7 @@
           padding: 0 $padding15;
           margin: 5px 0;
           width: 100%;
-          height: 118px;
+          height: 132px;
           img {
             height: 100%;
             width: 100%;
@@ -207,7 +207,8 @@
               z-index: 10;
               position: absolute;
               top: -30%;
-              left: 42%;
+              left: 50%;
+              transform: translateX(-50%);
               img {
                 width: 37px;
                 height: 34px;
@@ -387,6 +388,6 @@
   flex-basis: 70%;
 }
 
-// .color-added {
-//   background-color: #f8f8f8;
-// }
+.color-added {
+  // background-color: #f8f8f8;
+}

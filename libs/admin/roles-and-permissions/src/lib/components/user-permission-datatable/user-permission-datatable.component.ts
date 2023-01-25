@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -31,6 +32,8 @@ import { QueryConfig } from '../../types';
 export class UserPermissionDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   @Output() onModalClose = new EventEmitter();
+  @Input() tabFilterIdx = 1;
+
   tableName = 'My Team';
   isResizableColumns = true;
   isAutoLayout = false;
@@ -41,7 +44,6 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     { label: 'All', content: '', value: 'ALL' },
     { label: 'Reporting to me', content: '', value: 'REPORTING' },
   ];
-  tabFilterIdx = 1;
   hotelId;
 
   cols = [

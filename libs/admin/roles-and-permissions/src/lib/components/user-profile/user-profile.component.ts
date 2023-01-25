@@ -32,6 +32,9 @@ export class UserProfileComponent implements OnInit {
   departments: any[];
   products: any[];
 
+  tabListItems: { label: string; value: string }[];
+  tabIdx = 1;
+
   countries = new CountryCode().getByLabelAndValue();
 
   isUpdatingPermissions = false;
@@ -42,9 +45,10 @@ export class UserProfileComponent implements OnInit {
     jobTitle: string;
   };
   adminData;
-
-  teamMember = ['An', 'BS', 'SD'];
   value;
+
+  teamMember: { initial: string; color: string }[] = [];
+  totalTeamMember: number = 0;
 
   manageProduct: string;
 
@@ -91,16 +95,39 @@ export class UserProfileComponent implements OnInit {
     this.brandNames = this._hotelDetailService.hotelDetails.brands;
 
     this.initManager();
+    this.initTeamMember();
     this.registerListeners();
+  }
+
+  initTeamMember() {
+    this._managePermissionService
+      .getManagedUsers({
+        queryObj: '?limit=3',
+        loggedInUserId: this._route.snapshot.paramMap.get('id'),
+      })
+      .subscribe((res) => {
+        const color = ['#99e6e6', '#4db380', '#e6331a'];
+        this.teamMember = res?.records?.map((item, idx) => ({
+          initial: item.firstName?.charAt(0) + item.lastName?.charAt(0),
+          color: color[idx],
+        }));
+        this.totalTeamMember = res?.total;
+      });
   }
 
   initStateSubscription() {
     this.pageState$.subscribe((res) => {
+      this.tabIdx = 0;
+
       switch (res) {
         case 'view':
           this.userToModDetails = this.adminToModDetails;
-
-          this.userForm.patchValue(this.userToModDetails);
+          const { departments, products, ...rest } = this.userToModDetails;
+          this.userForm.patchValue({
+            ...rest,
+            products: products.map((item) => item.value),
+            departments: departments.map((item) => item.department),
+          });
           this.userForm.disable();
           this.initAfterFormLoaded();
 
@@ -117,7 +144,13 @@ export class UserProfileComponent implements OnInit {
           this.userForm.enable();
           break;
         case 'edit':
-          this.userForm.patchValue(this.userToModDetails);
+          this.userForm.patchValue({
+            ...this.userToModDetails,
+            products: this.userToModDetails.products.map((item) => item.value),
+            departments: this.userToModDetails.departments.map(
+              (item) => item.department
+            ),
+          });
           this.userForm.enable();
           this.initAfterFormLoaded();
           break;
@@ -138,7 +171,6 @@ export class UserProfileComponent implements OnInit {
    */
   initAdminPermission() {
     const { permissionConfigs } = this._userService.userDetails;
-    console.log('this._userService.userDetails', this._userService.userDetails);
     this.adminPermissions = permissionConfigs;
   }
 
@@ -154,7 +186,7 @@ export class UserProfileComponent implements OnInit {
       jobTitle: ['', Validators.required],
       brandName: ['', Validators.required],
       products: ['', Validators.required],
-      departments: ['', Validators.required],
+      departments: [[], Validators.required],
       branchName: ['', Validators.required],
       cc: [''],
       phoneNumber: [''],
@@ -226,9 +258,8 @@ export class UserProfileComponent implements OnInit {
   }
 
   onSelectedTabFilterChange(event) {
-    this.manageProduct = this.userForm.get('products')?.value[
-      event.index
-    ]?.value;
+    this.manageProduct = this.userForm.get('products')?.value[event.index];
+    this.tabIdx = event.index;
   }
 
   get permissionConfigsFA() {
@@ -252,15 +283,20 @@ export class UserProfileComponent implements OnInit {
 
   listenForProductChange() {
     this.userForm.get('products').valueChanges.subscribe((products) => {
-      const productsValue = products.map((item) => item.value);
+      const departmentValue = this.userForm.get('departments').value;
+
+      this.tabListItems = this.products.filter((item) =>
+        products.includes(item.value)
+      );
 
       this.departments = this.adminToModDetails.departments.filter(
-        (item: any) => productsValue.includes(item.productType)
+        (item: any) => products.includes(item.productType)
       );
 
-      const currentDepartments = this.userToModDetails.departments.filter(
-        (item: any) => productsValue.includes(item.productType)
-      );
+      const currentDepartments = this.departments
+        .filter((item: any) => departmentValue?.includes(item.department))
+        .map((item) => item.department);
+
       this.userForm.patchValue({ departments: currentDepartments });
     });
   }
@@ -353,8 +389,6 @@ export class UserProfileComponent implements OnInit {
         })
       );
     });
-
-    console.log(this.userForm.get('permissionConfigs'), 'permissions');
   }
 
   /**
@@ -368,6 +402,9 @@ export class UserProfileComponent implements OnInit {
       UserPermissionDatatableComponent,
       dialogConfig
     );
+
+    tableCompRef.componentInstance.tabFilterIdx =
+      this.totalTeamMember === 0 ? 0 : 1;
 
     tableCompRef.componentInstance.onModalClose.subscribe((userData) => {
       tableCompRef.close();
@@ -393,8 +430,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   savePermission() {
-    console.log(this.userForm.getRawValue());
-
     if (!this.userForm.valid) {
       this.snackbarService.openSnackBarAsText('Invalid Form');
       return;
@@ -426,7 +461,8 @@ export class UserProfileComponent implements OnInit {
     this.value = { ...formValue, permissionConfigs };
 
     const data = this._managePermissionService.modifyPermissionDetailsForEdit(
-      this.value
+      this.value,
+      this.departments
     );
 
     const handleError = (error) => {
@@ -489,7 +525,6 @@ export class UserProfileComponent implements OnInit {
   goBack() {
     if (this.pageState.value !== 'view') {
       this.pageState.next('view');
-      console.log('helloView', '***');
     } else {
       this._location.back();
     }

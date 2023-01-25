@@ -246,13 +246,13 @@
               </div>
             </div>
           </ng-container>
-        </div>
-        <div
-          *ngIf="!totalTeamMember"
-          class="all-user"
-          (click)="openTableModal()"
-        >
-          View All Users
+          <div
+            *ngIf="!totalTeamMember"
+            class="all-user"
+            (click)="openTableModal()"
+          >
+            View All Users
+          </div>
         </div>
       </div>
       <div class="fields">
@@ -352,7 +352,7 @@
             <ng-container
               *ngFor="
                 let userPermissionFG of permissionConfigsFA['controls'];
-                let oddIdx = odd
+                let index = index
               "
             >
               <p
@@ -360,7 +360,7 @@
                   manageProduct === userPermissionFG.get('productType').value
                 "
                 class="left-table-entity"
-                [ngClass]="oddIdx ? 'color-added' : ''"
+                [ngClass]="{ 'color-added': 0 === index % 2 }"
               >
                 {{ userPermissionFG.get('label').value }}
               </p>
@@ -378,7 +378,7 @@
             </div>
             <div class="box">
               <p class="label">Manage</p>
-              <p class="paragraph">Create/Delete/Edit Source of Data</p>
+              <p class="paragraph">Create/Delete/Edit</p>
               <div class="float-box">
                 <img src="assets/svg/Manage.svg" alt="manage" />
               </div>
@@ -391,10 +391,9 @@
             <div
               *ngFor="
                 let userPermissionFG of permissionConfigsFA['controls'];
-                let oddIdx = odd;
                 let userPermissionIdx = index
               "
-              [ngClass]="oddIdx ? 'color-added' : ''"
+              [ngClass]="{ 'color-added': 0 === userPermissionIdx % 2 }"
             >
               <div
                 formGroupName="{{ userPermissionIdx }}"

@@ -177,10 +177,8 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: $c-gray-93;
-  border-top: 0 !important;
-  border-bottom: 0 !important;
-  text-align: center;
+  background-color: $c-gray-93 !important;
+  @include align-checkbox();
 }
 
 :host ::ng-deep input[disabled='true'] {
@@ -197,7 +195,6 @@
   border-radius: 14px;
   border: solid 1px $primary-purple;
   background-color: $white;
-  font-family: Roboto;
   font-size: 12px;
   font-weight: 500;
   font-stretch: normal;
@@ -213,11 +210,8 @@
   padding: 6px 2px 6px 2px;
   border-radius: 14px;
   background-color: $primary-purple;
-  font-family: Roboto;
   font-size: 12px;
   font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
   line-height: 1.25;
   letter-spacing: 0.72px;
   text-align: center;
@@ -354,12 +348,7 @@
     transform: scale(0.95);
   }
   &__wrap {
-    font-family: Roboto;
     font-size: 11px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.66px;
     text-align: center;
     color: $white;
@@ -383,12 +372,7 @@
     transform: scale(0.95);
   }
   &__wrap {
-    font-family: Roboto;
     font-size: 11px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.66px;
     text-align: center;
     color: $dark-blue;

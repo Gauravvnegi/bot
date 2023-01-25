@@ -7,9 +7,7 @@
 .tableHeading {
   width: 5%;
   background-color: $c-gray-93;
-  border-top: 0 !important;
-  border-bottom: 0 !important;
-  text-align: center;
+  @include align-checkbox();
 }
 
 .icon-wrapper {
@@ -93,12 +91,8 @@
   padding: 10px 23.25px 8px 18.25px;
   cursor: pointer;
   &.listing-button {
-    font-family: Roboto;
     font-size: 14px;
     font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.56px;
     text-align: left;
     color: $white;
@@ -141,12 +135,7 @@ th.tableHeading.p-resizable-column {
   text-align: center;
 }
 td {
-  font-family: Roboto;
   font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
   letter-spacing: 0.72px;
   color: $tooltip;
 }

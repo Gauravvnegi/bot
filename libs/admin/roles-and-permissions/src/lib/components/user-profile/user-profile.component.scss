@@ -264,9 +264,12 @@
 
 .all-user {
   color: #4b56c0;
-  font-weight: 500;
-  flex-basis: 30%;
-  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  width: 100%;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .tabs {
@@ -336,7 +339,7 @@
 }
 
 :host ::ng-deep .phone-no-field {
-  width: 32% !important;
+  width: 70% !important;
 }
 
 :host ::ng-deep .mat-checkbox-frame {

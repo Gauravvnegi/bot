@@ -55,7 +55,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     },
     {
       field: 'getBrandAndBranchName()',
-      header: 'Hotel Name & Branch/Job title',
+      header: 'Hotel Name & Job title',
       sortType: 'string',
       isSort: true,
     },

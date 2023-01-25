@@ -33,6 +33,12 @@
   }
 }
 
+.overlay-link {
+  position: absolute;
+  inset: 0 0 0 0;
+  z-index: 10;
+}
+
 .sidebar {
   padding-top: 15px;
   &__container {
@@ -58,6 +64,7 @@
       }
     }
     .main_heading {
+      position: relative;
       margin-bottom: 9px;
       &_anchor {
         display: block;
@@ -173,14 +180,14 @@
 .menu_button {
   width: 16px;
   height: 16px;
-  .onHoverHide{
+  .onHoverHide {
     display: none;
   }
-  &:hover{
-    .onHoverHide{
+  &:hover {
+    .onHoverHide {
       display: block;
     }
-    .onHoverShow{
+    .onHoverShow {
       display: none;
     }
   }

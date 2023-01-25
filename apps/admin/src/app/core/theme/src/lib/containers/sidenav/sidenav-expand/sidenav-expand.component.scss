@@ -19,10 +19,18 @@
   }
 }
 
-.sideNav-expand-box{
+.sideNav-expand-box {
   position: absolute;
   z-index: 111;
   box-shadow: 0px 0px 3px 0px grey;
+}
+
+.overlay-container {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  inset: 0 0 0 0;
+  z-index: 100;
 }
 
 .heading {

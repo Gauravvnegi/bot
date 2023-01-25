@@ -36,7 +36,7 @@
   <div *ngFor="let menuItem of menuItems">
     <div
       class="main_heading"
-      routerLinkActive="false"
+      routerLinkActive
       #rla="routerLinkActive"
       [routerLinkActiveOptions]="{ exact: false }"
       [ngClass]="rla.isActive ? 'active' : ''"

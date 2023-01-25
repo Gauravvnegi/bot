@@ -7,9 +7,7 @@
 .tableHeading {
   width: 5%;
   background-color: $c-gray-93;
-  border-top: 0 !important;
-  border-bottom: 0 !important;
-  text-align: center;
+  @include align-checkbox();
 }
 
 .icon-wrapper {
@@ -90,12 +88,8 @@
         padding: $padding10 23.25px 8px 18.25px;
         cursor: pointer;
         .add-contact {
-          font-family: Roboto;
           font-size: $font14;
           font-weight: 500;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
           letter-spacing: 0.56px;
           text-align: center;
           color: $white;
@@ -106,11 +100,8 @@
 }
 
 .import {
-  font-family: Roboto;
   font-size: 14px;
   font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
   line-height: 1.07;
   letter-spacing: 0.84px;
   text-align: left;

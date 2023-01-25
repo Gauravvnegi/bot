@@ -81,16 +81,13 @@
         @media (max-width: $tablet) {
           font-size: $font14;
         }
-        &:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-        }
         span {
           margin-left: 20px;
           font-weight: 500;
         }
       }
       &:hover {
-        background-color: rgba(232, 238, 245, 0.25);
+        background-color: $list-item-hover;
       }
       .sidenav_logo {
         width: 18px;
@@ -119,7 +116,6 @@
   max-height: 500px !important;
   transition: visibility 1.5s, max-height 1.5s, opacity 1.5s linear !important;
   .subitems_heading {
-    // display: block !important;
     display: flex !important;
     align-items: center;
   }
@@ -140,9 +136,6 @@
     transition: all 400ms;
     height: 50px;
     text-decoration: none;
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
     span {
       margin-left: 12px;
       font-weight: 500;
@@ -218,12 +211,6 @@
 .sidebar-wrapper {
   overflow-y: auto;
   position: relative;
-}
-
-.active a,
-.active a:hover {
-  border: 1px solid;
-  box-shadow: none;
 }
 
 .active a .svg-icon {

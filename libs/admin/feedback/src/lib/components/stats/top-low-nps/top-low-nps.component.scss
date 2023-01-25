@@ -15,7 +15,6 @@
   }
   .stat-lable {
     text-align: center;
-    font: normal normal medium 9px/11px Roboto;
     letter-spacing: 0.6px;
     color: $quote-color;
     opacity: 1;
@@ -70,7 +69,6 @@
       display: flex;
       margin: 0 10px;
       align-items: center;
-      margin: 0 18px;
       .icon {
         width: 14px;
         height: 14px;
@@ -101,8 +99,9 @@
 }
 
 :host ::ng-deep .mat-tab-label {
-  min-width: 9vw !important;
   flex-grow: inherit !important;
+  min-width: 50% !important;
+  padding: 0 !important;
   @media (max-width: $L) {
     min-width: 15vw !important;
   }
@@ -127,8 +126,4 @@
 :host ::ng-deep .mat-tab-labels {
   display: flex;
   justify-content: space-around;
-}
-:host ::ng-deep .mat-tab-label {
-  min-width: 50% !important;
-  padding: 0 !important;
 }

@@ -12,9 +12,7 @@
 .tableHeading {
   width: 70px;
   background-color: $c-gray-93;
-  border-top: 0 !important;
-  border-bottom: 0 !important;
-  text-align: center;
+  @include align-checkbox();
 }
 .table_head {
   background-color: $c-gray-93 !important;
@@ -119,18 +117,17 @@
   td {
     padding: $padding20 !important;
   }
-}
-
-:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
-}
-
-:host ::ng-deep .data-table-row {
   &:hover {
     cursor: pointer;
     background: $table-hover-background !important;
   }
 }
+
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
+  color: $primary-purple !important;
+  font-size: $font14 !important;
+}
+
 :host ::ng-deep .header {
   color: $dark-blue !important;
   font-size: $font16;
@@ -140,9 +137,7 @@
 :host ::ng-deep .table-data-head {
   color: $dark-blue !important;
 }
-:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  font-size: $font14 !important;
-}
+
 :host ::ng-deep thead.p-datatable-thead {
   border-top: solid 1px $c-gray-90 !important;
 }

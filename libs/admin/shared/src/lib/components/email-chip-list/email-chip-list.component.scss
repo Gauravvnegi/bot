@@ -19,9 +19,6 @@ mat-form-field {
   max-width: calc(100% - 80px) !important;
 }
 
-:host ::ng-deep .mat-chip-list-wrapper {
-  max-width: 90% !important;
-}
 
 :host ::ng-deep {
   .mat-chip-remove {

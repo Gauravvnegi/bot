@@ -6,10 +6,8 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: $c-gray-93;
-  border-top: 0 !important;
-  border-bottom: 0 !important;
-  text-align: center;
+  background-color: $c-gray-93 !important;
+  @include align-checkbox();
 }
 
 .icon-wrapper {
@@ -241,7 +239,5 @@
     white-space: break-spaces !important;
     word-break: break-word !important;
   }
-  .mat-chip-list-wrapper {
-    width: 72vw !important;
-  }
+
 }

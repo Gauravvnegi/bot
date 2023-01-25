@@ -43,6 +43,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   menuItem: any;
   menuTitle: string;
   logoUrl: string;
+  bgColor: string;
   profile = layoutConfig.profile;
   outlets = [];
   lastUpdatedAt: string;
@@ -180,6 +181,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     const branches = brand?.['branches'];
     const branch = get(branches, [branches.length - 1]);
     this.logoUrl = branch?.['logoUrl'];
+    this.bgColor = branch?.['headerBgColor'];
     this.outlets = branch?.['outlets'];
     this.filterConfig.brandName = brand?.['label'];
     this.filterConfig.branchName = branch?.['label'];

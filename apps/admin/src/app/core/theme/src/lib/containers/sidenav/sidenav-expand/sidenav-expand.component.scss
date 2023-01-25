@@ -4,14 +4,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  padding: 10px 15px;
-  background: rgb(75, 86, 192);
+  background-color: #4b56c0;
+  padding: 5px 5px;
   border-left: 2px solid rgba(255, 255, 255, 0.8);
   height: 60px;
   .logo {
+    width: 100%;
+    height: 100%;
+  }
+
+  .logo-image {
     height: 40px;
     width: 65px;
+    margin: 5px auto;
     img {
       height: 100%;
       width: 100%;

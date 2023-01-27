@@ -4,7 +4,7 @@ RUN mkdir -p /app
 WORKDIR /app
 COPY . .
 RUN npm config set maxsockets 10 
-RUN npm install -g @angular/cli@9.1.0
+RUN npm install -g @angular/cli@15.0.1
 RUN rm -rf node_modules
 RUN npm i --legacy-peer-deps
 #RUN npm ci

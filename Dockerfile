@@ -6,7 +6,7 @@ COPY . .
 RUN npm config set maxsockets 10 
 RUN npm install -g @angular/cli@9.1.0
 RUN rm -rf node_modules
-RUN npm i
+RUN npm i --legacy-peer-deps
 #RUN npm ci
 RUN ng run admin:build --configuration=development --baseHref=/
 #RUN ng run admin:build --configuration=development

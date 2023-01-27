@@ -1,2 +1,2 @@
 rm -rf dist
-npm i && ng run web-user:build --configuration=development
+npm i --legacy-peer-deps && ng run web-user:build --configuration=development

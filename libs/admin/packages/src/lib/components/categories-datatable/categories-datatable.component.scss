@@ -25,14 +25,6 @@
     color: $primary-purple;
   }
 }
-
-:host ::ng-deep .no-data-found {
-  display: flex;
-  justify-content: center;
-  width: 72vw;
-  padding: $padding10 0;
-}
-
 :host ::ng-deep .name {
   .package_image_wrapper {
     display: flex;

@@ -88,9 +88,10 @@ export class MainComponent implements OnInit, OnDestroy {
    */
   listenForFeedbackTypeChanged(): void {
     this.$subscription.add(
-      this.tableService.$feedbackType.subscribe(
-        (response) => (this.feedbackType = response)
-      )
+      this.tableService.$feedbackType.subscribe((response) => {
+        this.feedback = null;
+        this.feedbackType = response;
+      })
     );
   }
 

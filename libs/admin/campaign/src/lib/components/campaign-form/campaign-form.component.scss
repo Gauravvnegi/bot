@@ -57,12 +57,8 @@
   background-color: $white;
   right: 0;
   top: 0;
-  font-family: Roboto;
   font-size: 16px;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
   letter-spacing: 0.96px;
   text-align: left;
   color: $dark-blue;
@@ -137,12 +133,8 @@
       transform: scale(0.97);
     }
     &__text {
-      font-family: Roboto;
       font-size: $font16;
       font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
       color: $primary-purple;
@@ -158,12 +150,8 @@
       transform: scale(0.97);
     }
     &__text {
-      font-family: Roboto;
       font-size: $font16;
       font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
       color: $white;
@@ -222,9 +210,6 @@
   max-width: calc(100% - 80px) !important;
 }
 
-:host ::ng-deep .mat-chip-list-wrapper {
-  max-width: 90% !important;
-}
 
 .email-field-container {
   width: 100%;
@@ -262,12 +247,8 @@
   display: none;
   .title {
     padding: 0 37px 8.2px 30.5px;
-    font-family: Roboto;
     font-size: 16px;
     font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.96px;
     text-align: left;
     color: $dark-blue;

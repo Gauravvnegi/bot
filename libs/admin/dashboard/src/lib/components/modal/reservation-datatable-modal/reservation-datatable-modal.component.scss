@@ -7,9 +7,7 @@
 .tableHeading {
   width: 5%;
   background-color: $c-gray-93;
-  border-top: 0 !important;
-  border-bottom: 0 !important;
-  text-align: center;
+ @include align-checkbox();
 }
 .rowsData {
   color: $primary-purple !important;

@@ -64,7 +64,9 @@
           <mat-label class="mat-label">Product Type :</mat-label>
           <mat-form-field class="mat-fields">
             <mat-select formControlName="products" multiple>
-              <mat-option *ngFor="let product of products" [value]="product"
+              <mat-option
+                *ngFor="let product of products"
+                [value]="product.value"
                 >{{ product.label }}
               </mat-option>
             </mat-select>
@@ -87,7 +89,7 @@
             <mat-select formControlName="departments" multiple>
               <mat-option
                 *ngFor="let department of departments"
-                [value]="department"
+                [value]="department.department"
                 >{{ department.departmentLabel }}</mat-option
               >
             </mat-select>
@@ -220,23 +222,36 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="field width-half" *ngIf="hasPageState('view')">
-          <div class="mat-label">Team :</div>
-          <div class="mat-fields">
-            <div class="member">
-              <div
-                *ngFor="let item of teamMember; let index = index"
-                (click)="openTableModal()"
-              >
+        <div class="field width-half">
+          <ng-container *ngIf="hasPageState('view') && !!totalTeamMember">
+            <div class="mat-label">Team :</div>
+            <div class="mat-fields">
+              <div class="member">
                 <div
-                  class="member-name"
-                  [style.margin-left]="'calc(indexpx + 48px)'"
-                  *ngIf="index < 3"
+                  *ngFor="let item of teamMember; let index = index"
+                  (click)="openTableModal()"
                 >
-                  {{ item }}
+                  <div
+                    class="member-name"
+                    [style.margin-left]="'calc(indexpx + 48px)'"
+                    *ngIf="index < 3"
+                    [style.background]="item.color"
+                  >
+                    {{ item.initial }}
+                  </div>
                 </div>
               </div>
+              <div *ngIf="totalTeamMember > 3" class="total-member">
+                + {{ totalTeamMember - 3 }}
+              </div>
             </div>
+          </ng-container>
+          <div
+            *ngIf="!totalTeamMember"
+            class="all-user"
+            (click)="openTableModal()"
+          >
+            View All Users
           </div>
         </div>
       </div>
@@ -321,8 +336,8 @@
       </div>
       <div *ngIf="userToModDetails?.products" class="tabs">
         <hospitality-bot-tab-group
-          [listItems]="userForm.get('products').value"
-          [selectedIndex]="tabFilterIdx"
+          [listItems]="tabListItems"
+          [selectedIndex]="tabIdx"
           (selectedTabChange)="onSelectedTabFilterChange($event)"
         ></hospitality-bot-tab-group>
       </div>
@@ -337,7 +352,7 @@
             <ng-container
               *ngFor="
                 let userPermissionFG of permissionConfigsFA['controls'];
-                let oddIdx = odd
+                let index = index
               "
             >
               <p
@@ -345,7 +360,7 @@
                   manageProduct === userPermissionFG.get('productType').value
                 "
                 class="left-table-entity"
-                [ngClass]="oddIdx ? 'color-added' : ''"
+                [ngClass]="{ 'color-added': 0 === index % 2 }"
               >
                 {{ userPermissionFG.get('label').value }}
               </p>
@@ -363,7 +378,7 @@
             </div>
             <div class="box">
               <p class="label">Manage</p>
-              <p class="paragraph">Create/Delete/Edit Source of Data</p>
+              <p class="paragraph">Create/Delete/Edit</p>
               <div class="float-box">
                 <img src="assets/svg/Manage.svg" alt="manage" />
               </div>
@@ -376,10 +391,9 @@
             <div
               *ngFor="
                 let userPermissionFG of permissionConfigsFA['controls'];
-                let oddIdx = odd;
                 let userPermissionIdx = index
               "
-              [ngClass]="oddIdx ? 'color-added' : ''"
+              [ngClass]="{ 'color-added': 0 === userPermissionIdx % 2 }"
             >
               <div
                 formGroupName="{{ userPermissionIdx }}"

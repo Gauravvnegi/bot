@@ -238,3 +238,37 @@ align-items: center;
 @mixin font-size($size) {
   font-size: $size + px;
 }
+
+// table checkbox align mixin
+
+@mixin align-checkbox(){
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  text-align: center !important;
+}
+
+@mixin buttonWrapper(){
+
+}
+
+@mixin primaryButton(){
+  color: $white;
+  font-size: $font14;
+  font-weight: 400;
+  background-color: $auth-color;
+  width: 10vw;
+  border: none;
+  border-radius: 25px;
+  &:hover{
+    cursor: pointer;
+    box-shadow: 0px 4px 4px #4b56c04d;
+    font-weight: bold;
+  }
+}
+
+@mixin secondaryButton(){
+  @include primaryButton();
+  border: 1px solid $auth-color;
+  background-color: $white;
+  color: $auth-color;
+}

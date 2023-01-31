@@ -1,24 +1,21 @@
 @import 'main';
 
 :host ::ng-deep .p-paginator-first > .pi-angle-double-left:before {
-  // display: none;
   content: 'FIRST';
-  font-size: 15px;
-  color: $c-gray-47;
+  font-size: 12px;
   font-weight: 700;
-  font-family: 'system-ui';
   margin: 10px;
+  font-family: 'roboto';
+  color:$dark-blue;
 }
 
 :host ::ng-deep .p-paginator-last > .pi-angle-double-right:before {
-  // display: none;
   content: 'LAST';
-  font-size: 15px;
-  color: $c-gray-47;
-  font-family: 'system-ui';
+  font-size: 12px;
   margin: 10px;
-
   font-weight: 700;
+  font-family: 'roboto';
+  color:$dark-blue;
 }
 
 :host ::ng-deep .p-datatable.p-datatable-lg .p-datatable-header {
@@ -93,8 +90,6 @@
   vertical-align: middle;
   margin-left: 0.5em;
   font-weight: 500;
-}
-.databaseActionLabel {
   width: 5%;
   background-color: $c-gray-93;
   border-top: 0 !important;
@@ -187,6 +182,10 @@
   }
 }
 
+:host ::ng-deep .p-inputtext {
+  color: $dark-blue;
+}
+
 :host ::ng-deep .export {
   .p-dropdown .p-inputtext {
     padding: 5px;
@@ -243,6 +242,9 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      .mat-chip-list {
+        width: 94%;
+      }
       .p-button {
         background-color: $progress-bar-messages-base;
         padding: 6px 15px;
@@ -309,11 +311,8 @@
 :host ::ng-deep .mat-chip-list-wrapper {
   overflow: auto;
   $white-space: nowrap;
-
   overflow-x: scroll;
-  width: 68vw;
-  display: block;
-
+  width: 100%;
   padding: 10px;
   flex-wrap: nowrap;
   display: inline-flex;
@@ -340,6 +339,13 @@
       background: darkgray;
       border-radius: 10px;
     }
+  }
+}
+
+:host ::ng-deep .p-checkbox {
+  .p-highlight {
+    background-color: $primary-purple !important;
+    border-color: $primary-purple !important;
   }
 }
 
@@ -399,8 +405,8 @@
 }
 
 :host ::ng-deep .no-data-found {
-  @include flex-justify-center();
-  width: 72vw;
+  width: 90vw;
+  text-align: center;
   padding: $padding10 0;
   @media screen and (max-width: $L) {
     width: 85vw;
@@ -434,12 +440,10 @@
 }
 
 :host ::ng-deep .p-paginator-next > .pi-angle-right:before {
-  // display: none;
   content: 'NEXT';
-  font-size: 15px;
-  color: $c-gray-47;
-  font-family: 'system-ui';
-
+  font-size: 12px;
+  font-family: 'roboto';
+  color: $dark-blue;
   font-weight: 700;
   margin: 10px;
 }
@@ -450,14 +454,12 @@
 }
 
 :host ::ng-deep .p-paginator-prev > .pi-angle-left:before {
-  // display: none;
   content: 'PREVIOUS';
-  font-size: 15px;
-  color: $c-gray-47;
-  font-family: 'system-ui';
+  font-size: 12px;
   margin: 10px;
-
   font-weight: 700;
+  font-family: 'roboto';
+  color: $dark-blue;
 }
 
 :host ::ng-deep .p-paginator-pages {

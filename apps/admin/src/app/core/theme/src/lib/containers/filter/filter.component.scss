@@ -152,14 +152,10 @@
 }
 .tab-head {
   background-color: #e8eef5;
-  color: #4b56c0;
+  color: $primary-purple;
   padding: $padding15;
-  font-family: Roboto;
   font-size: 16px;
   font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
   letter-spacing: 0.96px;
   text-align: left;
   border-bottom: 1px solid $primary-purple;
@@ -217,10 +213,10 @@
     margin: 5px 0;
   }
   .mat-radio-checked .mat-radio-outer-circle {
-    border-color: #4b56c0 !important;
+    border-color: $primary-purple !important;
   }
   .mat-radio-checked .mat-radio-inner-circle {
-    background-color: #4b56c0;
+    background-color: $primary-purple;
   }
 }
 :host

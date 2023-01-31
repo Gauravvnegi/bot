@@ -22,6 +22,9 @@ export class SidenavExpandComponent implements OnInit {
   @Input() title: string;
   @Input() submenuItems: any;
   @Input() isExpanded: boolean = true;
+  @Input() logoUrl: string;
+  @Input() bgColor: string = '#4b56c0';
+
   @Output() navToggle = new EventEmitter<boolean>();
 
   ngOnInit(): void {}

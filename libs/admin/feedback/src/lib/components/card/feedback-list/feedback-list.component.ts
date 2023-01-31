@@ -48,6 +48,8 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   pagination = card.pagination;
   totalRecords = card.totalRecords;
   outletChangeSubscribed = false;
+  fetchingPaginationData = false;
+
   constructor(
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
@@ -168,6 +170,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   listenForFeedbackTypeChanged(): void {
     this.$subscription.add(
       this.tableService.$feedbackType.subscribe((response) => {
+        this.selectedFeedback = null;
         if (this.feedbackType !== this.getFeedbackType(response))
           this.filterData = { ...this.filterData, department: [] };
         this.feedbackType = response;
@@ -203,6 +206,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
    * @function loadInitialData To load the initial data for feedback list.
    */
   loadInitialData(queries = []) {
+    this.fetchingPaginationData = true;
     if (this.feedbackList && !this.feedbackList.length) this.loading = true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
@@ -240,7 +244,10 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
               ''
             )
             .subscribe(),
-        () => (this.loading = false)
+        () => {
+          this.loading = false;
+          this.fetchingPaginationData = false;
+        }
       )
     );
   }
@@ -410,10 +417,13 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
       if (
         this.myScrollContainer &&
         this.myScrollContainer.nativeElement.offsetHeight +
-          this.myScrollContainer.nativeElement.scrollTop ===
-          this.myScrollContainer.nativeElement.scrollHeight
+          this.myScrollContainer.nativeElement.scrollTop >
+          this.myScrollContainer.nativeElement.scrollHeight - 1
       ) {
-        if (this.totalRecords > this.feedbackList.length) {
+        if (
+          this.totalRecords > this.feedbackList.length &&
+          !this.fetchingPaginationData
+        ) {
           this.pagination.offset = this.feedbackList.length;
           this.loadData();
         }

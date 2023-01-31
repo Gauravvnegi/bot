@@ -31,7 +31,7 @@
   ></hospitality-bot-tab-group>
   <div
     class="body"
-    [style.height]="search.length ? 'calc(100% - 64px)' : 'calc(100% - 117px)'"
+    [style.height]="search.length ? '480px' : '520px'"
     #feedbackListContainer
     (scroll)="onScroll($event)"
     *ngIf="!loading; else loader"
@@ -46,7 +46,7 @@
             selectedFeedback.id === feedbackItem.id && { background: '#f1f1f1' }
           "
         >
-          <div class="item__logo">
+          <div class="item__logo" [style.backgroundColor]="feedbackItem.color">
             {{ feedbackItem.getProfileNickName() }}
           </div>
           <div class="item__body">

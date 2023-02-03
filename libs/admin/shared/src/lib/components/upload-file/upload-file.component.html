@@ -16,7 +16,7 @@
       type="file"
       accept="image/*"
       (click)="fileInput.value = null"
-      [attr.disabled]="isDisable ? true : null"
+      [disabled]="isDisable"
       (change)="onSelectFile($event)"
       class="input-upload"
     />

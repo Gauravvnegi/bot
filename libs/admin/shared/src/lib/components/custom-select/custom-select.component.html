@@ -1,0 +1,20 @@
+<div class="item-boxes">
+  <div class="item-box" *ngFor="let item of itemsList; index as i">
+    <div class="image-wrapper">
+      <img [src]="item.imageUrl" class="upload__box__child" alt="image" />
+    </div>
+    <div class="content">
+      <mat-checkbox
+        [checked]="isChecked"
+        class="checkbox"
+        (change)="getItems($event, i)"
+      ></mat-checkbox>
+      <p class="item-name" [matTooltip]="item.label">
+        {{ item.label }}
+      </p>
+      <p *ngIf="item.type != 'Complimentary'" class="item-rate">
+        {{ item.rate }}
+      </p>
+    </div>
+  </div>
+</div>

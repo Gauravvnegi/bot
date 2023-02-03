@@ -35,6 +35,8 @@ import { LinkDetector } from './pipes/linkDetector.pipe';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SafeUrlPipe } from './pipes/safe-url-pipe';
+import { CustomSelectComponent } from './components/custom-select/custom-select.component';
+import { CustomFileUploadComponent } from './components/custom-file-upload/custom-file-upload.component';
 
 @NgModule({
   imports: [
@@ -78,6 +80,8 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     MentionDirective,
     CustomSizeInputComponent,
     SafeUrlPipe,
+    CustomSelectComponent,
+    CustomFileUploadComponent,
   ],
   exports: [
     DatatableComponent,
@@ -111,6 +115,10 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     UnsubscribeFeatureComponent,
     SafeHtmlPipe,
     SafeUrlPipe,
+    FormsModule,
+    ReactiveFormsModule,
+    CustomSelectComponent,
+    CustomFileUploadComponent,
   ],
 })
 export class AdminSharedModule {}

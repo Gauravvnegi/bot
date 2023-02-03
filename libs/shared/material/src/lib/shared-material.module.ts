@@ -32,6 +32,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { TranslateModule } from '@ngx-translate/core';
 import { ModalService } from './services/modal.service';
 import { SnackBarService } from './services/snackbar.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -66,6 +67,7 @@ import { SnackBarService } from './services/snackbar.service';
     TranslateModule,
     MatAutocompleteModule,
     OverlayModule,
+    MatTooltipModule,
   ],
   exports: [
     FlexLayoutModule,
@@ -98,6 +100,7 @@ import { SnackBarService } from './services/snackbar.service';
     ClipboardModule,
     OverlayModule,
     MatAutocompleteModule,
+    MatTooltipModule,
   ],
   providers: [SnackBarService, ModalService],
 })

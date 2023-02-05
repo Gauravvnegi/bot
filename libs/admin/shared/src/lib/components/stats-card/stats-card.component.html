@@ -1,0 +1,32 @@
+<div class="stats">
+  <div class="stats__text">{{ title }}</div>
+  <div class="stats__value">
+    {{ score }}
+    <div *ngIf="comparisonStats" style="display: flex; align-items: center;">
+      <div class="rating">
+        <div
+          class="rating__percentage"
+          [ngClass]="{
+            'comparison-positive': !comparisonStats.isNegative,
+            'comparison-negative': comparisonStats.isNegative
+          }"
+        >
+          ({{ comparisonStats.score }})
+          <img
+            [src]="
+              comparisonStats.isNegative
+                ? adminSharedConfig.img.downArrow.url
+                : adminSharedConfig.img.upArrow.url
+            "
+            [alt]="
+              comparisonStats.isNegative
+                ? adminSharedConfig.img.downArrow.alt
+                : adminSharedConfig.img.upArrow.alt
+            "
+          />
+        </div>
+        <div class="rating__days">{{ comparisonStats.time }}</div>
+      </div>
+    </div>
+  </div>
+</div>

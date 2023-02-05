@@ -1,0 +1,41 @@
+@import 'main';
+
+:host ::ng-deep .p-splitbutton {
+  height: 40px;
+}
+
+:host ::ng-deep .newButton {
+  .p-button {
+    background-color: $light-blue;
+    color: white;
+  }
+}
+
+:host ::ng-deep .completedButton {
+  .p-button {
+    background-color: $completed;
+    color: white;
+  }
+}
+:host ::ng-deep .pendingButton {
+  .p-button {
+    background-color: $pending;
+    color: white;
+  }
+}
+:host ::ng-deep .initiatedButton {
+  .p-button {
+    background-color: $initiated;
+    color: white;
+  }
+}
+
+:host ::ng-deep .failedButton {
+  .p-button {
+    background-color: $reject;
+    color: white;
+  }
+}
+
+.wrapper {
+}

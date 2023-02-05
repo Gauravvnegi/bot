@@ -10,6 +10,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { PaginatorModule } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { SplitButtonModule } from 'primeng/splitbutton';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
 import { CustomSizeInputComponent } from './components/custom-size-input/custom-size-input.component';
 import { DashboardErrorComponent } from './components/dashboard-error/dashboard-error.component';
@@ -35,6 +36,11 @@ import { LinkDetector } from './pipes/linkDetector.pipe';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SafeUrlPipe } from './pipes/safe-url-pipe';
+import { StatsCardComponent } from './components/stats-card/stats-card.component';
+import { FilterChipsComponent } from './components/datatable/filter-chips/filter-chips.component';
+import { ExportListComponent } from './components/datatable/export-list/export-list.component';
+import { ButtonComponent } from './components/button/button.component';
+import { ToggleDropdownComponent } from './components/toggle-dropdown/toggle-dropdown.component';
 
 @NgModule({
   imports: [
@@ -46,6 +52,7 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     ButtonModule,
     PaginatorModule,
     TabMenuModule,
+    SplitButtonModule,
     DropdownModule,
     MatChipsModule,
     MatAutocompleteModule,
@@ -78,6 +85,11 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     MentionDirective,
     CustomSizeInputComponent,
     SafeUrlPipe,
+    StatsCardComponent,
+    FilterChipsComponent,
+    ExportListComponent,
+    ButtonComponent,
+    ToggleDropdownComponent,
   ],
   exports: [
     DatatableComponent,
@@ -88,6 +100,7 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     ButtonModule,
     PaginatorModule,
     TabMenuModule,
+    SplitButtonModule,
     DropdownModule,
     CKEditorModule,
     NumberDirective,
@@ -111,6 +124,11 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     UnsubscribeFeatureComponent,
     SafeHtmlPipe,
     SafeUrlPipe,
+    StatsCardComponent,
+    FilterChipsComponent,
+    ExportListComponent,
+    ButtonComponent,
+    ToggleDropdownComponent,
   ],
 })
 export class AdminSharedModule {}

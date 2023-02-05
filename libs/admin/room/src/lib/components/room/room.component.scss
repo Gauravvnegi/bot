@@ -1,0 +1,12 @@
+@import 'main';
+
+.stats-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 21px;
+}
+
+.stats-box {
+  flex-basis: 100%;
+}

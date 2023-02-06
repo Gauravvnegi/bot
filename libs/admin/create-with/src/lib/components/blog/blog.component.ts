@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from '@hospitality-bot/admin/environment';
 
 @Component({
   selector: 'hospitality-bot-create-with-blog',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./blog.component.scss'],
 })
 export class BlogComponent implements OnInit {
+  onboardingUrl = `${environment.createWithUrl}/admin/blog`;
+
   constructor() {}
 
   ngOnInit(): void {}

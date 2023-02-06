@@ -4,7 +4,8 @@ export type FlagType =
   | 'initiated'
   | 'pending'
   | 'completed'
-  | 'failed';
+  | 'failed'
+  | 'warning';
 
 export type Chip<T extends string> = {
   label: string;

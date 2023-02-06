@@ -17,7 +17,7 @@ import { Chip, Status } from '../../types/table.type';
 })
 export class ToggleDropdownComponent {
   label = 'Active';
-  value = 'active';
+  value = 'ACTIVE';
   styleClass = 'newButton';
   items: (MenuItem & { type: string; value: string })[] = [
     {
@@ -25,7 +25,7 @@ export class ToggleDropdownComponent {
       command: () => {
         this.onClick.emit('active');
       },
-      value: 'active',
+      value: 'ACTIVE',
       type: 'new',
     },
     {
@@ -33,7 +33,7 @@ export class ToggleDropdownComponent {
       command: () => {
         this.onClick.emit('inactive');
       },
-      value: 'rejected',
+      value: 'INACTIVE',
       type: 'rejected',
     },
   ];

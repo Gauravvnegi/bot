@@ -151,28 +151,36 @@
 </ng-template>
 
 <ng-template #roomCell let-rowData>
-  <td class="type">
-    <div class="text" *ngIf="rowData.type; else emptyCell">
-      <div class="template-name">{{ rowData.type }}</div>
+  <td>
+    <div
+      class="room-no"
+      [ngClass]="{
+        'room-no__active': rowData.status.value === 'ACTIVE',
+        'room-no__soldOut': rowData.status.value === 'SOLD_OUT',
+        'room-no__unavailable': rowData.status.value === 'UNAVAILABLE'
+      }"
+      *ngIf="rowData.type; else emptyCell"
+    >
+      {{ rowData.type }}
     </div>
   </td>
-  <td class="roomNo">
-    <div class="text" *ngIf="rowData.roomNo; else emptyCell">
-      <div class="template-name">{{ rowData.roomNo }}</div>
+  <td>
+    <div class="cell-content" *ngIf="rowData.roomNo; else emptyCell">
+      {{ rowData.roomNo }}
     </div>
   </td>
-  <td class="date">
-    <div class="text" *ngIf="rowData.date; else emptyCell">
-      <div class="template-name">{{ rowData.date }}</div>
+  <td>
+    <div class="cell-content" *ngIf="rowData.date; else emptyCell">
+      {{ rowData.date }}
     </div>
   </td>
-  <td class="price">
-    <div class="text" *ngIf="rowData.price; else emptyCell">
-      <div class="template-name">{{ rowData.price }}</div>
+  <td>
+    <div class="cell-content" *ngIf="rowData.price; else emptyCell">
+      {{ rowData.price }}
     </div>
   </td>
-  <td class="status">
-    <div class="text" *ngIf="rowData.status; else emptyCell">
+  <td>
+    <div class="" *ngIf="rowData.status; else emptyCell">
       <hospitality-bot-toggle-dropdown
         [listItem]="status.room"
         (onClick)="handleStatus($event, rowData)"
@@ -184,33 +192,33 @@
 </ng-template>
 
 <ng-template #roomTypeCell let-rowData>
-  <td class="type">
-    <div class="text" *ngIf="rowData.name; else emptyCell">
-      <div class="template-name">{{ rowData.name }}</div>
+  <td>
+    <div class="cell-content" *ngIf="rowData.name; else emptyCell">
+      {{ rowData.name }}
     </div>
   </td>
-  <td class="area">
-    <div class="text" *ngIf="rowData.area; else emptyCell">
-      <div class="template-name">{{ rowData.area }}</div>
+  <td>
+    <div class="cell-content" *ngIf="rowData.area; else emptyCell">
+      {{ rowData.area }}
     </div>
   </td>
-  <td class="roomCount">
-    <div class="text" *ngIf="rowData.roomCount; else emptyCell">
-      <div class="template-name">{{ rowData.roomCount }}</div>
+  <td>
+    <div class="cell-content" *ngIf="rowData.roomCount; else emptyCell">
+      {{ rowData.roomCount }}
     </div>
   </td>
-  <td class="amenities">
-    <div class="text" *ngIf="rowData.amenities; else emptyCell">
-      <div class="template-name">{{ rowData.amenities }}</div>
+  <td>
+    <div class="cell-content" *ngIf="rowData.amenities; else emptyCell">
+      {{ rowData.amenities }}
     </div>
   </td>
-  <td class="occupancy">
-    <div class="text" *ngIf="rowData.occupancy; else emptyCell">
-      <div class="template-name">{{ rowData.occupancy }}</div>
+  <td>
+    <div class="cell-content" *ngIf="rowData.occupancy; else emptyCell">
+      {{ rowData.occupancy }}
     </div>
   </td>
-  <td class="status">
-    <div class="text" *ngIf="rowData.status; else emptyCell">
+  <td>
+    <div class="" *ngIf="rowData.status; else emptyCell">
       <hospitality-bot-toggle-dropdown
         [listItem]="status.roomType"
         (onClick)="handleStatus($event, rowData)"

@@ -10,10 +10,10 @@ import {
 import { TableValue } from '../types/room';
 
 export enum Status {
-  active = 'ACTIVE',
-  inactive = 'INACTIVE',
-  soldOut = 'SOLD OUT',
-  unavailable = 'UNAVAILABLE',
+  ACTIVE = 'Active',
+  INACTIVE = 'Inactive',
+  SOLD_OUT = 'Sold Out',
+  UNAVAILABLE = 'Unavailable',
 }
 
 export const roomFilter: Filter<TableValue, keyof RoomRecordsCount> = {
@@ -193,31 +193,31 @@ export const title: Record<TableValue, string> = {
 export const status: Record<TableValue, StatusType[]> = {
   room: [
     {
-      label: Status.active,
-      value: 'active',
+      label: Status.ACTIVE,
+      value: 'ACTIVE',
       type: 'new',
     },
     {
-      label: Status.unavailable,
-      value: 'unavailable',
-      type: 'pending',
+      label: Status.UNAVAILABLE,
+      value: 'UNAVAILABLE',
+      type: 'warning',
     },
     {
-      label: Status.soldOut,
-      value: 'soldOut',
+      label: Status.SOLD_OUT,
+      value: 'SOLD_OUT',
       type: 'failed',
     },
   ],
   roomType: [
     {
-      label: Status.active,
-      value: 'active',
+      label: Status.ACTIVE,
+      value: 'ACTIVE',
       type: 'new',
     },
     {
-      label: Status.inactive,
-      value: 'inactive',
-      type: 'pending',
+      label: Status.INACTIVE,
+      value: 'INACTIVE',
+      type: 'failed',
     },
   ],
 };

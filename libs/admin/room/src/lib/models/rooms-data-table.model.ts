@@ -7,6 +7,18 @@ import {
   RoomTypeResponse,
 } from '../types/service-response';
 
+function getModifiedData(value: string) {
+  const [date, time] = value.split(' ');
+  const [yy, mm, dd] = date.split('-');
+  const newDate = `${dd}/${mm}/${yy.substring(2)}`;
+
+  const [hr, min] = time.split(':');
+  const hour = +hr % 24;
+  const newTime = `${hour % 12 || 12}:${min} ${hour < 12 ? 'AM' : 'PM'}`;
+
+  return `${newDate} at ${newTime}`;
+}
+
 // ************ Room Models ******************
 export class RoomList {
   records: Room[];
@@ -24,17 +36,15 @@ export class Room {
   type: string;
   roomNo: string;
   date: string;
-  price: number;
+  price: string;
   status: { label: string; value: string };
   deserialize(input: RoomResponse) {
-    let status = input.roomStatus.toLowerCase();
-
     this.id = input.id;
     this.type = input.roomTypeDetails.name;
     this.roomNo = input.roomNumber;
-    this.date = input.updatedAt;
-    this.price = input.price;
-    this.status = { label: Status[status], value: status };
+    this.date = getModifiedData(input.updatedAt);
+    this.price = `${input.currency} ${input.price}`;
+    this.status = { label: Status[input.roomStatus], value: input.roomStatus };
 
     return this;
   }
@@ -81,21 +91,21 @@ export class RoomType {
   area: string;
   roomCount: number;
   amenities: string[];
-  occupancy: number;
+  occupancy: string;
   status: { label: string; value: string };
 
   deserialize(input: RoomTypeResponse) {
     this.id = input.id;
     this.name = input.name;
-    this.area = input.area;
+    this.area = `${input.area} Sq.Ft.`;
     this.roomCount = input.roomCount;
     this.amenities = input.paidAmenities
       .map((item) => item.name)
       .concat(input.complimentaryAmenities.map((item) => item.name));
-    this.occupancy = input.totalOccupancy;
+    this.occupancy = `${input.totalOccupancy} people`;
     this.status = {
-      label: input.status ? Status.active : Status.inactive,
-      value: input.status ? 'active' : 'inactive',
+      label: input.status ? Status.ACTIVE : Status.INACTIVE,
+      value: input.status ? 'ACTIVE' : 'INACTIVE',
     };
 
     return this;

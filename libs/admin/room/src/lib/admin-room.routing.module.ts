@@ -1,12 +1,30 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
+import { AddMultipleRoomsComponent } from './components/add-multiple-rooms/add-multiple-rooms.component';
+import { AddRoomComponent } from './components/add-room/add-room.component';
+import { MainComponent } from './components/main/main.component';
 import { RoomDataTableComponent } from './components/room-data-table/room-data-table.component';
 import { RoomComponent } from './components/room/room.component';
+import routes from './config/routes';
 
 export const adminRoomRoutes: Route[] = [
   {
     path: '',
-    component: RoomComponent,
+    component: MainComponent,
+    children: [
+      {
+        path: routes.dashboard,
+        component: RoomComponent,
+      },
+      {
+        path: routes.addRoom,
+        component: AddRoomComponent,
+      },
+      {
+        path: routes.addMultipleRooms,
+        component: AddMultipleRoomsComponent,
+      },
+    ],
   },
 ];
 
@@ -15,5 +33,11 @@ export const adminRoomRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminRoomRoutingModule {
-  static components = [RoomComponent, RoomDataTableComponent];
+  static components = [
+    RoomComponent,
+    RoomDataTableComponent,
+    MainComponent,
+    AddRoomComponent,
+    AddMultipleRoomsComponent,
+  ];
 }

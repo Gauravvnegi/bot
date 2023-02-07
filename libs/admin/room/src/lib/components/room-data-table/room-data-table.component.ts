@@ -13,6 +13,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import routes from '../../config/routes';
 import { cols, filter, Status, status, title } from '../../constant/data-table';
 import {
   RoomList,
@@ -33,6 +34,9 @@ import { QueryConfig, TableValue } from '../../types/room';
 })
 export class RoomDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
+  readonly routes = routes;
+  readonly status = status;
+
   hotelId: string;
   $subscription = new Subscription();
   cols: Cols[];
@@ -40,7 +44,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   tabFilterItems = filter;
   tabFilterIdx: number = 0;
   selectedTable: TableValue;
-  status = status;
 
   constructor(
     public fb: FormBuilder,

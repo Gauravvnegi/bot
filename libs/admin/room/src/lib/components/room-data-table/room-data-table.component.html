@@ -32,17 +32,17 @@
                 *ngIf="selectedTable === 'room'"
                 label="{{ 'room.addSingle' | translate }}"
                 variant="text"
-                link="/pages/inventory/add-single-room"
+                link="/pages/inventory/room/{{ routes.addRoom }}"
               ></hospitality-bot-button>
               <hospitality-bot-button
                 *ngIf="selectedTable === 'roomType'"
                 label="{{ 'room.createType' | translate }}"
-                link="/pages/inventory/add-room-type"
+                link="/pages/inventory/room/{{ routes.addRoomType }}"
               ></hospitality-bot-button>
               <hospitality-bot-button
                 *ngIf="selectedTable === 'room'"
                 label="{{ 'room.addMultiple' | translate }}"
-                link="/pages/inventory/add-multiple-room"
+                link="/pages/inventory/room/{{ routes.addMultipleRooms }}"
               ></hospitality-bot-button>
               <hospitality-bot-export-list
                 (onDocumentActions)="onDocumentActions()"

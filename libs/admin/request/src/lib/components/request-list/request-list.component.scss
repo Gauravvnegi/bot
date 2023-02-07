@@ -25,7 +25,7 @@
 }
 
 .sla-timeout {
-  color: $priority-asap;
+  color:$comparison-negative;
 }
 
 .right-side {
@@ -129,6 +129,17 @@
               @include margin(0 5px);
             }
           }
+        }
+        &-job-duration{
+          font-family: Roboto;
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.72px;
+  text-align: left;
+  color: $dark-blue;
         }
       }
     }
@@ -256,6 +267,7 @@
 .content-wrap-subtitle {
   color: $dark-blue;
   font-weight: 500;
+  margin-bottom: 5px;
 }
 .right-side-subheader {
   display: flex;

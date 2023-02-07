@@ -14,16 +14,14 @@
 }
 
 .add-user {
-  background: transparent;
-  border: none;
-  outline: none;
-  margin-right: $margin20;
-  color: $primary-gray;
-  font-size: $font14;
-  &:hover {
+ @include primaryButton();
+ width:8vw;
+ padding:8px;
+ margin-right: 15px;
+ &:hover{
     cursor: pointer;
-    color: $primary-purple;
-  }
+    font-weight: normal;
+ }
 }
 
 :host ::ng-deep .name {

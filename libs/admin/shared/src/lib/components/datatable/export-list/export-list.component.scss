@@ -1,0 +1,62 @@
+@import 'main';
+
+.dropdown--wrapper {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border: 2px solid $light-grey;
+  border-radius: 5px;
+
+  .divider {
+    height: 20px;
+    border: 1px solid $light-grey;
+    margin: 0px 15px;
+  }
+}
+
+.go {
+  outline: none;
+  color: $primary-purple;
+  background: $go-btn-default;
+  border: none;
+  font-size: 10px;
+  padding: 5px;
+  display: flex;
+  margin-left: 10px;
+  &:hover {
+    background-color: $primary-purple;
+    color: $white;
+    cursor: pointer;
+  }
+  .material-icons {
+    font-size: 16px;
+    height: auto;
+    width: auto;
+  }
+}
+
+.databaseActionLabel {
+  vertical-align: middle;
+  margin-left: 0.5em;
+  font-weight: 500;
+  width: 5%;
+  background-color: $c-gray-93;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  text-align: center;
+}
+
+:host ::ng-deep .export {
+  .p-dropdown .p-inputtext {
+    padding: 5px;
+    align-items: baseline;
+    display: flex;
+    font-size: 14px;
+
+    .material-icons {
+      font-size: 16px;
+      height: auto;
+      width: auto;
+    }
+  }
+}

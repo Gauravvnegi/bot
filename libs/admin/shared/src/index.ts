@@ -20,3 +20,4 @@ export * from './lib/constants/colors';
 export * from './lib/interfaces/deserializable.interface';
 export * from './lib/constants/routes';
 export * from './lib/utils/routesFactory';
+export * from './lib/types/table.type';

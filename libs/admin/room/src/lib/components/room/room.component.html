@@ -1,1 +1,9 @@
-<p>Room Works</p>
+<div class="stats-wrapper">
+  <hospitality-bot-stats-card
+    class="stats-box"
+    *ngFor="let stats of statsArr"
+    [stats]="stats"
+  ></hospitality-bot-stats-card>
+</div>
+
+<hospitality-bot-room-data-table></hospitality-bot-room-data-table>

@@ -1,0 +1,34 @@
+@import 'main';
+
+.chipSelected {
+  color: $white !important;
+  font-weight: 400;
+}
+
+.status-selected-new {
+  background-color: $light-blue !important;
+  opacity: 1;
+}
+
+.status-selected-pending {
+  background-color: $pending !important;
+  opacity: 1;
+}
+.status-selected-initiated {
+  background-color: $initiated !important;
+  opacity: 1;
+}
+.status-selected-completed {
+  background-color: $completed !important;
+  opacity: 1;
+}
+
+.status-selected-reject {
+  background-color: $reject !important;
+  opacity: 1;
+}
+
+.status-selected-default {
+  background-color: $default;
+  opacity: 1;
+}

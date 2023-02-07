@@ -1,0 +1,48 @@
+@import 'main';
+
+::ng-deep .p-datatable-resizable > .p-datatable-wrapper {
+  overflow-x: unset !important;
+}
+
+.data-table-row {
+  height: 90px;
+}
+
+.room-no {
+  font-size: 12px;
+  letter-spacing: 0.72px;
+  padding: 7px;
+  font-size: 12px;
+  border-radius: 25px;
+  text-align: center;
+  filter: alpha(opacity=80);
+
+  &__active {
+    background-color: rgba($comparison, 0.2);
+    color: $comparison;
+  }
+
+  &__soldOut {
+    background-color: rgba($reject, 0.2);
+    color: $reject;
+  }
+
+  &__unavailable {
+    background-color: rgba($warning, 0.2);
+    color: $warning;
+  }
+}
+
+.cell-content {
+  text-align: center;
+  color: $quote-color;
+  font-size: 12px;
+  letter-spacing: 0.72px;
+}
+
+.room-count {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 5% 15%;
+}

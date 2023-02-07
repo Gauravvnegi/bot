@@ -98,7 +98,7 @@ export const cols: Record<TableValue, Cols[]> = {
       isSort: true,
       sortType: 'string',
       dynamicWidth: true,
-      width: '20%',
+      width: '15%',
     },
     {
       field: 'roomNo',
@@ -114,7 +114,7 @@ export const cols: Record<TableValue, Cols[]> = {
       isSort: true,
       sortType: 'string',
       dynamicWidth: true,
-      width: '30%',
+      width: '32%',
     },
     {
       field: 'price',
@@ -122,7 +122,7 @@ export const cols: Record<TableValue, Cols[]> = {
       isSort: true,
       sortType: 'string',
       dynamicWidth: true,
-      width: '15%',
+      width: '18%',
     },
     {
       field: 'status',
@@ -140,7 +140,7 @@ export const cols: Record<TableValue, Cols[]> = {
       isSort: true,
       sortType: 'string',
       dynamicWidth: true,
-      width: '15%',
+      width: '14%',
     },
     {
       field: 'area',
@@ -148,7 +148,7 @@ export const cols: Record<TableValue, Cols[]> = {
       isSort: true,
       sortType: 'string',
       dynamicWidth: true,
-      width: '15%',
+      width: '13%',
     },
     {
       field: 'roomCount',
@@ -156,7 +156,7 @@ export const cols: Record<TableValue, Cols[]> = {
       isSort: true,
       sortType: 'string',
       dynamicWidth: true,
-      width: '15%',
+      width: '17%',
     },
     {
       field: 'amenities',
@@ -164,7 +164,7 @@ export const cols: Record<TableValue, Cols[]> = {
       isSort: true,
       sortType: 'string',
       dynamicWidth: true,
-      width: '20%',
+      width: '18%',
     },
     {
       field: 'occupancy',
@@ -172,7 +172,7 @@ export const cols: Record<TableValue, Cols[]> = {
       isSort: true,
       sortType: 'string',
       dynamicWidth: true,
-      width: '15%',
+      width: '17%',
     },
     {
       field: 'active',
@@ -180,7 +180,7 @@ export const cols: Record<TableValue, Cols[]> = {
       isSort: true,
       sortType: 'string',
       dynamicWidth: true,
-      width: '15%',
+      width: '16%',
     },
   ],
 };

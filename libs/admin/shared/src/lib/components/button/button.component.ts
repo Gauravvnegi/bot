@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-button',
@@ -11,11 +12,13 @@ export class ButtonComponent {
   @Input() label: string;
   @Input() type: string = 'button';
   @Input() disabled: boolean = false;
+  @Input() link: string = null;
   @Output() onClick = new EventEmitter();
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   handleClick() {
     this.onClick.emit();
+    if (this.link) this.router.navigate([this.link]);
   }
 }

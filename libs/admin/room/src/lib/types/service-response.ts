@@ -1,3 +1,5 @@
+export type RoomStatus = 'ACTIVE' | 'UNAVAILABLE' | 'SOLD_OUT';
+
 export type RoomResponse = {
   id: string;
   roomNumber: string;
@@ -10,7 +12,7 @@ export type RoomResponse = {
     maxAdult: number;
     totalOccupancy: number;
   };
-  roomStatus: string;
+  roomStatus: RoomStatus;
   source: string;
   price: number;
   currency: string;
@@ -19,8 +21,13 @@ export type RoomResponse = {
 };
 
 export type RoomListResponse = {
-  records: RoomResponse[];
-  counts: any;
+  rooms: RoomResponse[];
+  roomStatusCount: {
+    ALL: number;
+    ACTIVE: number;
+    SOLD_OUT: number;
+    UNAVAILABLE: number;
+  };
 };
 
 export type RoomTypeResponse = {
@@ -74,7 +81,11 @@ export type RoomTypeResponse = {
   currency: string;
   originalPrice: number;
   discountedPrice: number;
-  roomCount: number;
+  roomCount: {
+    active: number;
+    unavailable: number;
+    soldOut: number;
+  };
   maxChildren: number;
   maxAdult: number;
   area: string;
@@ -83,6 +94,10 @@ export type RoomTypeResponse = {
 };
 
 export type RoomTypeListResponse = {
-  records: RoomTypeResponse[];
-  counts: any;
+  roomTypes: RoomTypeResponse[];
+  roomTypeStatusCount: {
+    ALL: number;
+    ACTIVE: number;
+    INACTIVE: number;
+  };
 };

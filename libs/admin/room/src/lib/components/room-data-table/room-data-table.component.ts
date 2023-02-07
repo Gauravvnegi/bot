@@ -9,6 +9,8 @@ import {
   Cols,
   TableService,
 } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import * as FileSaver from 'file-saver';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { cols, filter, Status, status, title } from '../../constant/data-table';
@@ -45,7 +47,8 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     protected tabFilterService: TableService,
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService
+    private globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService
   ) {
     super(fb, tabFilterService);
   }
@@ -92,12 +95,8 @@ export class RoomDataTableComponent extends BaseDatatableComponent
       }));
   }
 
-  /**
-   * Get table related data from service
-   * @param table selected table value
-   */
-  getDataTableValue(table: TableValue) {
-    const config: QueryConfig = {
+  getQueryConfig(): QueryConfig {
+    const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.getSelectedQuickReplyFilters(),
         {
@@ -106,23 +105,32 @@ export class RoomDataTableComponent extends BaseDatatableComponent
         },
       ]),
     };
+    return config;
+  }
 
+  /**
+   * Get table related data from service
+   * @param table selected table value
+   */
+  getDataTableValue(table: TableValue) {
     this.loading = true;
 
     if (table === 'room')
       this.$subscription.add(
-        this.roomService.getRoomsList(this.hotelId, config).subscribe((res) => {
-          const roomList = new RoomList().deserialize(res);
-          this.values = roomList.records;
-          this.setRecordsCount(roomList.count);
-          this.loading = false;
-        })
+        this.roomService
+          .getRoomsList(this.hotelId, this.getQueryConfig())
+          .subscribe((res) => {
+            const roomList = new RoomList().deserialize(res);
+            this.values = roomList.records;
+            this.setRecordsCount(roomList.count);
+            this.loading = false;
+          })
       );
 
     if (table === 'roomType')
       this.$subscription.add(
         this.roomService
-          .getRoomsTypeList(this.hotelId, config)
+          .getRoomsTypeList(this.hotelId, this.getQueryConfig())
           .subscribe((res) => {
             const roomTypesList = new RoomTypeList().deserialize(res);
             this.values = roomTypesList.records;
@@ -137,6 +145,22 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param status
    */
   handleStatus(status: string, rowData) {
+    const statusData =
+      this.selectedTable === 'room'
+        ? { roomStatus: rowData.status.value }
+        : { status: rowData.status.value === 'ACTIVE' };
+
+    this.loading = true;
+    this.roomService
+      .updateStatus(this.hotelId, this.selectedTable, {
+        id: rowData.id,
+        ...statusData,
+      })
+      .subscribe((res) => {
+        this.loading = false;
+        console.log(res);
+      }, this.handleError);
+
     this.values.find((item) => item.id === rowData.id).status = {
       label: Status[status],
       value: status,
@@ -168,6 +192,50 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.tabFilterItems[this.tabFilterIdx].chips = chips;
     this.changePage(0);
   }
+
+  /**
+   * @function exportCSV To export CSV report of the table.
+   */
+  exportCSV(): void {
+    this.loading = true;
+
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        // {
+        //   order: sharedConfig.defaultOrder,
+        // },
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
+      ]),
+    };
+    this.$subscription.add(
+      this.roomService
+        .exportCSV(this.hotelId, this.selectedTable, config)
+        .subscribe((res) => {
+          FileSaver.saveAs(
+            res,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+          this.loading = false;
+        }, this.handleError)
+    );
+  }
+
+  /**
+   * @function handleError to show the error
+   * @param param0
+   */
+  handleError = ({ error }) => {
+    this.loading = false;
+    this.snackbarService
+      .openSnackBarWithTranslate(
+        {
+          translateKey: `messages.error.${error?.type}`,
+          priorityMessage: error?.message,
+        },
+        ''
+      )
+      .subscribe();
+  };
 
   /**
    * @function ngOnDestroy unsubscribe subscription

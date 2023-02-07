@@ -7,25 +7,14 @@ import {
   RoomTypeResponse,
 } from '../types/service-response';
 
-function getModifiedData(value: string) {
-  const [date, time] = value.split(' ');
-  const [yy, mm, dd] = date.split('-');
-  const newDate = `${dd}/${mm}/${yy.substring(2)}`;
-
-  const [hr, min] = time.split(':');
-  const hour = +hr % 24;
-  const newTime = `${hour % 12 || 12}:${min} ${hour < 12 ? 'AM' : 'PM'}`;
-
-  return `${newDate} at ${newTime}`;
-}
-
 // ************ Room Models ******************
+
 export class RoomList {
   records: Room[];
   count: RoomRecordsCount;
   deserialize(input: RoomListResponse) {
-    this.records = input.records.map((item) => new Room().deserialize(item));
-    this.count = new RoomRecordsCount().deserialize(input.counts);
+    this.records = input.rooms.map((item) => new Room().deserialize(item));
+    this.count = new RoomRecordsCount().deserialize(input.roomStatusCount);
 
     return this;
   }
@@ -59,12 +48,17 @@ export class RoomRecordsCount {
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'total', get(input, ['total'])),
-      set({}, 'active', get(input, ['active'])),
-      set({}, 'unavailable', get(input, ['unavailable'])),
-      set({}, 'soldOut', get(input, ['soldOut']))
+      set({}, 'total', get(input, ['all']) ?? get(input, ['ALL'])),
+      set({}, 'active', get(input, ['active']) ?? get(input, ['ACTIVE'])),
+      set(
+        {},
+        'unavailable',
+        get(input, ['unavailable']) ?? get(input, ['UNAVAILABLE'])
+      ),
+      set({}, 'soldOut', get(input, ['soldOut']) ?? get(input, ['SOLD_OUT']))
     );
 
+    if (!this.total) delete this.total;
     return this;
   }
 }
@@ -76,10 +70,12 @@ export class RoomTypeList {
   count: RoomTypeRecordsCount;
 
   deserialize(input: RoomTypeListResponse) {
-    this.records = input.records.map((item) =>
+    this.records = input.roomTypes.map((item) =>
       new RoomType().deserialize(item)
     );
-    this.count = new RoomTypeRecordsCount().deserialize(input.counts);
+    this.count = new RoomTypeRecordsCount().deserialize(
+      input.roomTypeStatusCount
+    );
 
     return this;
   }
@@ -89,7 +85,7 @@ export class RoomType {
   id: string;
   name: string;
   area: string;
-  roomCount: number;
+  roomCount: RoomRecordsCount;
   amenities: string[];
   occupancy: string;
   status: { label: string; value: string };
@@ -98,7 +94,7 @@ export class RoomType {
     this.id = input.id;
     this.name = input.name;
     this.area = `${input.area} Sq.Ft.`;
-    this.roomCount = input.roomCount;
+    this.roomCount = new RoomRecordsCount().deserialize(input.roomCount);
     this.amenities = input.paidAmenities
       .map((item) => item.name)
       .concat(input.complimentaryAmenities.map((item) => item.name));
@@ -119,11 +115,27 @@ export class RoomTypeRecordsCount {
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'total', get(input, ['total'])),
-      set({}, 'active', get(input, ['active'])),
-      set({}, 'inactive', get(input, ['inactive']))
+      set({}, 'total', get(input, ['all']) ?? get(input, ['ALL'])),
+      set({}, 'active', get(input, ['active']) ?? get(input, ['ACTIVE'])),
+      set({}, 'inactive', get(input, ['inactive']) ?? get(input, ['INACTIVE']))
     );
-
     return this;
   }
+}
+
+/**
+ * @function getModifiedData handle the date modification
+ * @param value date as string
+ * @returns formatted date
+ */
+function getModifiedData(value: string) {
+  const [date, time] = value.split(' ');
+  const [yy, mm, dd] = date.split('-');
+  const newDate = `${dd}/${mm}/${yy.substring(2)}`;
+
+  const [hr, min] = time.split(':');
+  const hour = +hr % 24;
+  const newTime = `${hour % 12 || 12}:${min} ${hour < 12 ? 'AM' : 'PM'}`;
+
+  return `${newDate} at ${newTime}`;
 }

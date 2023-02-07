@@ -32,14 +32,17 @@
                 *ngIf="selectedTable === 'room'"
                 label="{{ 'room.addSingle' | translate }}"
                 variant="text"
+                link="/pages/inventory/add-single-room"
               ></hospitality-bot-button>
               <hospitality-bot-button
                 *ngIf="selectedTable === 'roomType'"
                 label="{{ 'room.createType' | translate }}"
+                link="/pages/inventory/add-room-type"
               ></hospitality-bot-button>
               <hospitality-bot-button
                 *ngIf="selectedTable === 'room'"
                 label="{{ 'room.addMultiple' | translate }}"
+                link="/pages/inventory/add-multiple-room"
               ></hospitality-bot-button>
               <hospitality-bot-export-list
                 (onDocumentActions)="onDocumentActions()"
@@ -203,8 +206,21 @@
     </div>
   </td>
   <td>
-    <div class="cell-content" *ngIf="rowData.roomCount; else emptyCell">
-      {{ rowData.roomCount }}
+    <div
+      class="cell-content room-count"
+      *ngIf="rowData.roomCount; else emptyCell"
+    >
+      <div
+        class="room-no"
+        [ngClass]="{
+          'room-no__active': item.key === 'active',
+          'room-no__soldOut': item.key === 'soldOut',
+          'room-no__unavailable': item.key === 'unavailable'
+        }"
+        *ngFor="let item of rowData.roomCount | keyvalue"
+      >
+        {{ item.value }} - {{ item.key }}
+      </div>
     </div>
   </td>
   <td>

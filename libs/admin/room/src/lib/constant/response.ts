@@ -24,14 +24,14 @@ export const stats = [
 
 export const records = {
   room: {
-    total: 18,
-    active: 6,
-    unavailable: 4,
-    soldOut: 8,
+    ALL: 18,
+    ACTIVE: 6,
+    UNAVAILABLE: 4,
+    SOLD_OUT: 8,
   },
   roomType: {
-    total: 12,
-    active: 6,
-    inactive: 6,
+    ALL: 12,
+    ACTIVE: 6,
+    INACTIVE: 6,
   },
 };

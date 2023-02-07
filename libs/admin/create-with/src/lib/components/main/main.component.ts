@@ -1,20 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { UserConfig, UserService } from '@hospitality-bot/admin/shared';
 import { AuthService } from 'apps/admin/src/app/core/auth/services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'hospitality-bot-create-with-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
+  adminDetails: UserConfig;
+  $subscription = new Subscription();
+
   constructor(
     private _authService: AuthService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
-    this.initCookiesForPlatform();
+    this.listenForGlobalFilters();
+  }
+
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
+    const userId = this._authService.getTokenByName('x-userId');
+
+    this.$subscription.add(
+      this.userService.getUserDetailsById(userId).subscribe((data) => {
+        this.adminDetails = new UserConfig().deserialize(data);
+        this.initCookiesForPlatform();
+      })
+    );
   }
 
   initCookiesForPlatform() {
@@ -24,12 +44,13 @@ export class MainComponent implements OnInit {
         'x-access-refresh-token'
       ),
       user: JSON.stringify({
-        id: '52b3ea00-6058-4fad-b7f5-a119d47e6f25',
-        firstName: 'Ajay',
-        email: 'abc@gmail.com',
+        id: this.adminDetails.id,
+        firstName: this.adminDetails.firstName,
+        email: this.adminDetails.email,
       }),
       'x-userId': this._authService.getTokenByName('x-userId'),
       websiteUrl: 'dev.createwith.io',
+      hotelId: this.adminDetails.branchName,
     };
 
     Object.entries(keys).forEach(([name, value]) => {
@@ -40,5 +61,9 @@ export class MainComponent implements OnInit {
         domain: 'botshot.ai',
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

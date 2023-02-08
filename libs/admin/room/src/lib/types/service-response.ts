@@ -1,4 +1,4 @@
-export type RoomStatus = 'ACTIVE' | 'UNAVAILABLE' | 'SOLD_OUT';
+export type RoomStatus = 'ACTIVE' | 'UNAVAILABLE' | 'SOLD_OUT' | 'INACTIVE';
 
 export type RoomResponse = {
   id: string;

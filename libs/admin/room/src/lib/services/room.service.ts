@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/operators';
-import { records, stats } from '../constant/response';
+import { stats } from '../constant/response';
 import { QueryConfig, TableValue } from '../types/room';
 import {
   RoomListResponse,
@@ -43,7 +43,7 @@ export class RoomService extends ApiService {
     ).pipe(
       map((res) => {
         return {
-          roomTypes: res.map((item) => ({
+          roomTypes: res.roomTypes.map((item) => ({
             ...item,
             roomCount: {
               active: Math.floor(Math.random() * 100),
@@ -51,7 +51,7 @@ export class RoomService extends ApiService {
               soldOut: Math.floor(Math.random() * 100),
             },
           })),
-          roomTypeStatusCount: records.roomType,
+          roomTypeStatusCount: res.roomTypeStatusCount,
         };
       })
     );
@@ -62,16 +62,7 @@ export class RoomService extends ApiService {
     config?: QueryConfig
   ): Observable<RoomListResponse> {
     const { params } = config;
-    return this.get(
-      `/api/v1/entity/${hotelId}/inventory/rooms${params ?? ''}`
-    ).pipe(
-      map((res) => {
-        return {
-          rooms: res,
-          roomStatusCount: records.room,
-        };
-      })
-    );
+    return this.get(`/api/v1/entity/${hotelId}/inventory/rooms${params ?? ''}`);
   }
 
   updateStatus(

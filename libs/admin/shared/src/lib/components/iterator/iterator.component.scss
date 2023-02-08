@@ -1,0 +1,43 @@
+@import 'main';
+
+.wrapper {
+}
+
+.header {
+  display: flex;
+  padding: 0 2%;
+  height: 63px;
+  gap: 2%;
+  background-color: $accordian-background;
+  border-radius: 4px;
+  &__cell {
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: bold;
+    color: $dark-blue;
+    margin: auto 0;
+  }
+}
+
+.values-row {
+  position: relative;
+  display: flex;
+  gap: 2%;
+  padding: 1% 2%;
+  border-bottom: 2px solid;
+  border-color: $accordian-background;
+}
+
+.delete {
+  font-size: 25px;
+  font-weight: 900;
+  position: absolute;
+  right: 1%;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.action-btn {
+  margin-top: 22px;
+}

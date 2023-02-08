@@ -11,6 +11,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { TableModule } from 'primeng/table';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { InputTextModule } from 'primeng/inputtext';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
 import { CustomSizeInputComponent } from './components/custom-size-input/custom-size-input.component';
 import { DashboardErrorComponent } from './components/dashboard-error/dashboard-error.component';
@@ -41,6 +42,9 @@ import { FilterChipsComponent } from './components/datatable/filter-chips/filter
 import { ExportListComponent } from './components/datatable/export-list/export-list.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ToggleDropdownComponent } from './components/toggle-dropdown/toggle-dropdown.component';
+import { IteratorComponent } from './components/iterator/iterator.component';
+import { InputComponent } from './components/form-component/input/input.component';
+import { SelectComponent } from './components/form-component/select/select.component';
 
 @NgModule({
   imports: [
@@ -53,6 +57,7 @@ import { ToggleDropdownComponent } from './components/toggle-dropdown/toggle-dro
     PaginatorModule,
     TabMenuModule,
     SplitButtonModule,
+    InputTextModule,
     DropdownModule,
     MatChipsModule,
     MatAutocompleteModule,
@@ -90,6 +95,9 @@ import { ToggleDropdownComponent } from './components/toggle-dropdown/toggle-dro
     ExportListComponent,
     ButtonComponent,
     ToggleDropdownComponent,
+    IteratorComponent,
+    InputComponent,
+    SelectComponent,
   ],
   exports: [
     DatatableComponent,
@@ -101,6 +109,7 @@ import { ToggleDropdownComponent } from './components/toggle-dropdown/toggle-dro
     PaginatorModule,
     TabMenuModule,
     SplitButtonModule,
+    InputTextModule,
     DropdownModule,
     CKEditorModule,
     NumberDirective,
@@ -129,6 +138,9 @@ import { ToggleDropdownComponent } from './components/toggle-dropdown/toggle-dro
     ExportListComponent,
     ButtonComponent,
     ToggleDropdownComponent,
+    IteratorComponent,
+    InputComponent,
+    SelectComponent,
   ],
 })
 export class AdminSharedModule {}

@@ -1,0 +1,42 @@
+<div class="wrapper">
+  <div class="header">
+    <div
+      *ngFor="let field of fields"
+      [style.flexBasis]="width"
+      class="header__cell"
+    >
+      {{ field.label }}
+    </div>
+  </div>
+
+  <div
+    [formArray]="useFormArray"
+    *ngFor="let controls of useFormArray.controls; let i = index"
+  >
+    <div [formGroup]="controls" class="values-row">
+      <div
+        *ngFor="let field of fields"
+        [style.flexBasis]="width"
+        [ngSwitch]="field.type"
+      >
+        <hospitality-bot-input
+          *ngSwitchCase="'input'"
+          [controlName]="field.name"
+        ></hospitality-bot-input>
+        <hospitality-bot-select
+          *ngSwitchCase="'dropdown'"
+          [controlName]="field.name"
+        ></hospitality-bot-select>
+      </div>
+
+      <div>{{ controls.value | json }}</div>
+      <mat-icon class="delete" (click)="removeField(i)">clear</mat-icon>
+    </div>
+  </div>
+  <div class="action-btn">
+    <hospitality-bot-button
+      label="Add More"
+      (onClick)="addNewField()"
+    ></hospitality-bot-button>
+  </div>
+</div>

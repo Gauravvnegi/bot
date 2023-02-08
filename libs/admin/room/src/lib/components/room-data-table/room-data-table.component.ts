@@ -106,8 +106,8 @@ export class RoomDataTableComponent extends BaseDatatableComponent
       ? chips.map((item) => ({ roomStatus: StatusEntity[item.value] }))
       : [
           chips.length !== 1
-            ? { status: null }
-            : { status: chips[0].value === 'active' },
+            ? { roomTypeStatus: null }
+            : { roomTypeStatus: chips[0].value === 'active' },
         ];
   }
 

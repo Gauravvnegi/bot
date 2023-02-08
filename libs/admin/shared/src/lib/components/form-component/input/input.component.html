@@ -1,0 +1,17 @@
+<div
+  class="wrapper"
+  [ngClass]="{
+    'p-input-icon-left': isSearch,
+    'p-input-icon-right': isLoading
+  }"
+  [formGroup]="controlContainer.control"
+>
+  <i class="pi pi-search" *ngIf="isSearch"></i>
+  <input
+    [formControlName]="controlName"
+    type="text"
+    pInputText
+    placeholder="text"
+  />
+  <i class="pi pi-spin pi-spinner" *ngIf="isLoading"></i>
+</div>

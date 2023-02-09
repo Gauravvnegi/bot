@@ -45,6 +45,7 @@ import { ToggleDropdownComponent } from './components/toggle-dropdown/toggle-dro
 import { IteratorComponent } from './components/iterator/iterator.component';
 import { InputComponent } from './components/form-component/input/input.component';
 import { SelectComponent } from './components/form-component/select/select.component';
+import { CustomHeaderComponent } from './components/custom-header/custom-header.component';
 
 @NgModule({
   imports: [
@@ -98,6 +99,7 @@ import { SelectComponent } from './components/form-component/select/select.compo
     IteratorComponent,
     InputComponent,
     SelectComponent,
+    CustomHeaderComponent,
   ],
   exports: [
     DatatableComponent,
@@ -141,6 +143,7 @@ import { SelectComponent } from './components/form-component/select/select.compo
     IteratorComponent,
     InputComponent,
     SelectComponent,
+    CustomHeaderComponent,
   ],
 })
 export class AdminSharedModule {}

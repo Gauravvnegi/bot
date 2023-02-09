@@ -77,20 +77,21 @@ td {
     justify-content: space-between;
     align-items: center;
     height: 65px;
-    padding: 15px;
+    padding: 17px 42px 14px 25px;
     border-bottom: solid 1px $border;
     &-left {
       display: flex;
       align-items: center;
       &-avt {
-        height: 35px;
-        width: 35px;
+        height: 28px;
+        width: 28px;
         border-radius: 50%;
         background-color: $chocolate;
         margin-right: 15px;
         justify-content: center;
         align-items: center;
         display: flex;
+        font-size: 12px;
       }
       &-title {
         font-family: Roboto;
@@ -151,7 +152,7 @@ td {
         margin-top: 15px;
         padding: 6px 14px 6px 13px;
         border-radius: 1000px;
-        background-color: $room-type;
+        background-color: $room-type-opacity;
         color: $initiated-2;
         width: fit-content;
         @media screen and (max-width: $L) {

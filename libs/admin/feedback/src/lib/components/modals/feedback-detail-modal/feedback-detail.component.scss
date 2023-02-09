@@ -39,7 +39,7 @@
       padding: 5.6px 12.8px 6.4px 8px;
       opacity: 0.1;
       border-radius: 14px;
-      background-color: $booking-feedback;
+      background-color: $booking-feedback-opacity;
     }
 
     .feedback-container{
@@ -124,6 +124,7 @@
       letter-spacing: 0.84px;
       text-align: left;
       color: $button-blue;
+
     }
   }
   .guestInfoEditWrapper {
@@ -190,6 +191,7 @@
   // padding-bottom: 30px;
   font-size: 12px;
   width: 80%;
+  color: #002046;
 
   .rating__box {
     width: 54px;
@@ -471,6 +473,7 @@
       &__text {
         color: $booking-feedback;
         padding-top: 2px;
+        margin-right: 12px !important;
       }
     }
     &__comment {
@@ -556,9 +559,10 @@
 
   @media screen and (max-width: 1050px) {
     margin: 0;
-    margin-top: 7px;
+    // margin-top: 7px;
     .feedback-icon {
       height: 12px;
+      min-width: 25px;
     }
     .number {
       font-size: 10px;

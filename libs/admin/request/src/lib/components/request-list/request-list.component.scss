@@ -47,7 +47,11 @@
     }
     &-filter {
       cursor: pointer;
-      margin: 0 3px;
+      margin-left:15px;
+    }
+
+    &-search{
+      width:100%;
     }
   }
   &-body {
@@ -55,14 +59,14 @@
     overflow: auto;
     border-right: solid 1px $light-gray;
     &-card {
-      height: 138px;
+      height: auto;
       padding: 10px;
       display: flex;
       border-bottom: solid 1px $border;
       cursor: pointer;
       &-avt {
-        height: 45px;
-        width: 45px;
+        height: 46px;
+        width: 46px;
         border-radius: 50%;
         background-color: $olivedrab;
         justify-content: center;

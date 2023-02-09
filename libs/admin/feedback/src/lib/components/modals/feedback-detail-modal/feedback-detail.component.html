@@ -43,11 +43,11 @@
     <div class="guestInfoOpen" [formGroup]="feedbackFG">
       <div class="feedback_labels">
         <div class="feedback-container">
-        <div *ngIf="data.feedback?.guestData?.bookingNo">
+        <div *ngIf="data.feedback?.guestData?.bookingNo" class="feedback-container-data">
           BNO:{{ data.feedback?.guestData?.bookingNo }}
         </div>
-        <div>{{ data.feedback?.getTableOrRoomNo(data.feedbackType) }}</div>
-        <div>
+        <div class="feedback-container-data">{{ data.feedback?.getTableOrRoomNo(data.feedbackType) }}</div>
+        <div class="feedback-container-data">
           {{ data.feedback?.getCreatedDate(globalFilterService.timezone) }}
         </div>
         <div class="feedback">

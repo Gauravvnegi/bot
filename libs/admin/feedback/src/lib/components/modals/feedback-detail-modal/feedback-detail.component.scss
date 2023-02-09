@@ -177,6 +177,7 @@
     width: 515px;
     height: 132px;
     overflow-y: auto;
+    margin-bottom: 30px;
   }
   .emoji {
     display: flex;
@@ -186,8 +187,7 @@
 }
 .rating__value {
   display: flex;
-  padding-top: 20px;
-  padding-bottom: 30px;
+  // padding-bottom: 30px;
   font-size: 12px;
   width: 80%;
 

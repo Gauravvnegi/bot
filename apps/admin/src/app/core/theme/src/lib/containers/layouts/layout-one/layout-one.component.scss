@@ -164,6 +164,11 @@
             font-size: $font10;
           }
         }
+        .filter-icon{
+          &:hover{
+           filter:invert(90%) sepia(141%) saturate(1362%) hue-rotate(221deg) brightness(80%) contrast(124%)
+          }
+        }
         .material-icons {
           @include margin-left(15px);
         }
@@ -183,6 +188,7 @@
           font-weight: bold;
           color: #fff;
         }
+        
       }
       .notification-icon {
         margin-right: 20px;

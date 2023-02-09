@@ -95,7 +95,7 @@ body {
 }
 
 .status-text-success {
-  color: $completed !important;
+  color: $success !important;
 }
 
 .status-opacity-pending {
@@ -150,36 +150,6 @@ body {
 .notification {
   background-color: $white;
   color: $black;
-}
-
-// modal overlay styling
-
-.cdk-global-overlay-wrapper:nth-child(4) {
-  .cdk-overlay-pane {
-    padding-top: 33px;
-    padding-left: 20px;
-  }
-}
-
-.cdk-global-overlay-wrapper:nth-child(6) {
-  .cdk-overlay-pane {
-    padding-top: 50px;
-    padding-left: 40px;
-  }
-}
-
-.cdk-global-overlay-wrapper:nth-child(8) {
-  .cdk-overlay-pane {
-    padding-top: 65px;
-    padding-left: 60px;
-  }
-}
-
-.cdk-global-overlay-wrapper:nth-child(10) {
-  .cdk-overlay-pane {
-    padding-top: 80px;
-    padding-left: 80px;
-  }
 }
 
 .clickable-card {

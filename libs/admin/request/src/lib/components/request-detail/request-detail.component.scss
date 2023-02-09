@@ -17,8 +17,9 @@
 
 table {
   border-radius: 5px;
-  border: solid 1px $c-gray-91;
+  border: solid 1px $c-gray-92;
   width: 100%;
+  border-spacing: unset;
 }
 
 th,
@@ -26,7 +27,20 @@ td {
   padding: 15px;
   text-align: left;
 }
+th:first-child,th:last-child{
+  border-radius: 5px;
+}
 th {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.14;
+  letter-spacing: normal;
+  text-align: left;
+  
+  color: #002046;
   @media screen and (max-width: $L) {
     font-size: $font14;
   }
@@ -36,8 +50,6 @@ td {
   font-family: Roboto;
   font-size: 12px;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
   line-height: normal;
   letter-spacing: 0.72px;
   color: $dark-blue;
@@ -65,20 +77,21 @@ td {
     justify-content: space-between;
     align-items: center;
     height: 65px;
-    padding: 15px;
+    padding: 17px 25px;
     border-bottom: solid 1px $border;
     &-left {
       display: flex;
       align-items: center;
       &-avt {
-        height: 35px;
-        width: 35px;
+        height: 28px;
+        width: 28px;
         border-radius: 50%;
         background-color: $chocolate;
         margin-right: 15px;
         justify-content: center;
         align-items: center;
         display: flex;
+        font-size: 12px;
       }
       &-title {
         font-family: Roboto;
@@ -86,7 +99,6 @@ td {
         font-weight: 500;
         font-stretch: normal;
         font-style: normal;
-        line-height: normal;
         letter-spacing: 0.84px;
         text-align: left;
         color: $dark-blue;
@@ -123,7 +135,7 @@ td {
       margin-bottom: 20px;
       table {
         .tr {
-          border-bottom: 1px solid $c-gray-91;
+          border-bottom: 1px solid $c-gray-92;
           background-color: $c-gray-105;
         }
       }
@@ -139,7 +151,7 @@ td {
         margin-top: 15px;
         padding: 6px 14px 6px 13px;
         border-radius: 1000px;
-        background-color: $room-type;
+        background-color: $room-type-opacity;
         color: $initiated-2;
         width: fit-content;
         @media screen and (max-width: $L) {

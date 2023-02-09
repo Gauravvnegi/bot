@@ -12,6 +12,11 @@
   &-guest-wrap {
     display: flex;
     align-items: center;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.84px;
+    color: $dark-blue;
   }
   .feedback_labels {
     width: 100%;
@@ -19,7 +24,7 @@
     justify-content: space-between;
     align-items: center;
     font-family: Roboto;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     font-stretch: normal;
     font-style: normal;
@@ -34,7 +39,19 @@
       padding: 5.6px 12.8px 6.4px 8px;
       opacity: 0.1;
       border-radius: 14px;
-      background-color: $booking-feedback;
+      background-color: $booking-feedback-opacity;
+    }
+
+    .feedback-container{
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      width:max-content;
+
+     &-data{
+        margin-right:20px;
+      }
+      
     }
   }
 }
@@ -44,7 +61,7 @@
   height: 38px;
   border-radius: 50%;
   background: chartreuse;
-  margin-right: 20px;
+  margin-right: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -63,6 +80,7 @@
 
 .mr-10 {
   display: flex;
+  margin-right: 0px !important;
   .req_button {
     display: flex;
     gap: 20px;
@@ -107,6 +125,7 @@
       letter-spacing: 0.84px;
       text-align: left;
       color: $button-blue;
+
     }
   }
   .guestInfoEditWrapper {
@@ -160,6 +179,7 @@
     width: 515px;
     height: 132px;
     overflow-y: auto;
+    margin-bottom: 30px;
   }
   .emoji {
     display: flex;
@@ -169,10 +189,9 @@
 }
 .rating__value {
   display: flex;
-  padding-top: 20px;
-  padding-bottom: 30px;
   font-size: 12px;
   width: 80%;
+  color: #002046;
 
   .rating__box {
     width: 54px;
@@ -218,7 +237,6 @@
     word-break: break-all;
     letter-spacing: 0.72px;
     text-align: left;
-    // color: $dark-blue;
     color: $white;
   }
   .userImage {
@@ -371,7 +389,6 @@
 }
 
 .feedback-chat {
-  max-height: 47vh;
   overflow-y: auto;
   &::-webkit-scrollbar {
     width: 13px;
@@ -392,7 +409,7 @@
   }
   &__ratings {
     height: 367px;
-    margin: 15px 7px 5px 12px;
+    margin: 15px 15px 5px 12px;
     padding: 20px 0 20px 25px;
     background-color: $c-gray-103;
     overflow-y: auto;
@@ -449,9 +466,11 @@
       padding: 4px 10px;
       display: flex;
       align-items: center;
+      margin-right:20px;
       &__text {
-        color: $primary-purple;
+        color: $booking-feedback;
         padding-top: 2px;
+        margin-right: 12px !important;
       }
     }
     &__comment {
@@ -527,7 +546,7 @@
     color: $white;
     margin: 0 0px;
     text-align: center;
-    min-width: 20px;
+    min-width: 22.5px;
     border-radius: 50%;
     font-size: 9px;
   }
@@ -537,9 +556,9 @@
 
   @media screen and (max-width: 1050px) {
     margin: 0;
-    margin-top: 7px;
     .feedback-icon {
       height: 12px;
+      min-width: 25px;
     }
     .number {
       font-size: 10px;

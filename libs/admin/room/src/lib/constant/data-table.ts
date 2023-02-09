@@ -16,6 +16,13 @@ export enum Status {
   UNAVAILABLE = 'Unavailable',
 }
 
+export enum StatusEntity {
+  active = 'ACTIVE',
+  inactive = 'INACTIVE',
+  soldOut = 'SOLD_OUT',
+  unavailable = 'UNAVAILABLE',
+}
+
 export const roomFilter: Filter<TableValue, keyof RoomRecordsCount> = {
   label: 'Room',
   value: 'room',

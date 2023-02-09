@@ -14,7 +14,14 @@ import * as FileSaver from 'file-saver';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import routes from '../../config/routes';
-import { cols, filter, Status, status, title } from '../../constant/data-table';
+import {
+  cols,
+  filter,
+  Status,
+  status,
+  StatusEntity,
+  title,
+} from '../../constant/data-table';
 import {
   RoomList,
   RoomRecordsCount,
@@ -23,6 +30,7 @@ import {
 } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { QueryConfig, TableValue } from '../../types/room';
+import { RoomStatus } from '../../types/service-response';
 
 @Component({
   selector: 'hospitality-bot-room-data-table',
@@ -91,11 +99,16 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @returns The selected chips.
    */
   getSelectedQuickReplyFilters() {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected && item.value !== 'total')
-      .map((item) => ({
-        entityState: item.value,
-      }));
+    const chips = this.tabFilterItems[this.tabFilterIdx].chips.filter(
+      (item) => item.isSelected && item.value !== 'total'
+    );
+    return this.selectedTable === 'room'
+      ? chips.map((item) => ({ roomStatus: StatusEntity[item.value] }))
+      : [
+          chips.length !== 1
+            ? { roomTypeStatus: null }
+            : { roomTypeStatus: chips[0].value === 'active' },
+        ];
   }
 
   getQueryConfig(): QueryConfig {
@@ -147,11 +160,11 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function handleStatus To handle the status change
    * @param status
    */
-  handleStatus(status: string, rowData) {
+  handleStatus(status: RoomStatus, rowData) {
     const statusData =
       this.selectedTable === 'room'
-        ? { roomStatus: rowData.status.value }
-        : { status: rowData.status.value === 'ACTIVE' };
+        ? { roomStatus: status }
+        : { status: status === 'ACTIVE' };
 
     this.loading = true;
     this.roomService
@@ -161,13 +174,11 @@ export class RoomDataTableComponent extends BaseDatatableComponent
       })
       .subscribe((res) => {
         this.loading = false;
-        console.log(res);
+        this.values.find((item) => item.id === rowData.id).status = {
+          label: Status[status],
+          value: status,
+        };
       }, this.handleError);
-
-    this.values.find((item) => item.id === rowData.id).status = {
-      label: Status[status],
-      value: status,
-    };
   }
 
   /**

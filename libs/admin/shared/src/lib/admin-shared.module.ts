@@ -7,6 +7,7 @@ import { CKEditorModule } from 'ckeditor4-angular';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { ButtonModule } from 'primeng/button/';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { TableModule } from 'primeng/table';
@@ -14,6 +15,7 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { ButtonComponent } from './components/button/button.component';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
 import { CustomFileUploadComponent } from './components/custom-file-upload/custom-file-upload.component';
+import { CustomHeaderComponent } from './components/custom-header/custom-header.component';
 import { CustomSelectComponent } from './components/custom-select/custom-select.component';
 import { CustomSizeInputComponent } from './components/custom-size-input/custom-size-input.component';
 import { DashboardErrorComponent } from './components/dashboard-error/dashboard-error.component';
@@ -21,6 +23,9 @@ import { DatatableComponent } from './components/datatable/datatable.component';
 import { ExportListComponent } from './components/datatable/export-list/export-list.component';
 import { FilterChipsComponent } from './components/datatable/filter-chips/filter-chips.component';
 import { EmailChipListComponent } from './components/email-chip-list/email-chip-list.component';
+import { InputComponent } from './components/form-component/input/input.component';
+import { SelectComponent } from './components/form-component/select/select.component';
+import { IteratorComponent } from './components/iterator/iterator.component';
 import { MentionDirective, MentionListComponent } from './components/mention';
 import { MultipleDropdownComponent } from './components/multiple-dropdown/multiple-dropdown.component';
 import { StatsCardComponent } from './components/stats-card/stats-card.component';
@@ -55,6 +60,7 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     PaginatorModule,
     TabMenuModule,
     SplitButtonModule,
+    InputTextModule,
     DropdownModule,
     MatChipsModule,
     MatAutocompleteModule,
@@ -94,6 +100,10 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     ExportListComponent,
     ButtonComponent,
     ToggleDropdownComponent,
+    IteratorComponent,
+    InputComponent,
+    SelectComponent,
+    CustomHeaderComponent,
   ],
   exports: [
     DatatableComponent,
@@ -105,6 +115,7 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     PaginatorModule,
     TabMenuModule,
     SplitButtonModule,
+    InputTextModule,
     DropdownModule,
     CKEditorModule,
     NumberDirective,
@@ -135,6 +146,10 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     ExportListComponent,
     ButtonComponent,
     ToggleDropdownComponent,
+    IteratorComponent,
+    InputComponent,
+    SelectComponent,
+    CustomHeaderComponent,
   ],
 })
 export class AdminSharedModule {}

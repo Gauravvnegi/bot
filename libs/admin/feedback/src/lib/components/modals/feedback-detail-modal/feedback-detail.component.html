@@ -42,6 +42,7 @@
     </div>
     <div class="guestInfoOpen" [formGroup]="feedbackFG">
       <div class="feedback_labels">
+        <div class="feedback-container">
         <div *ngIf="data.feedback?.guestData?.bookingNo">
           BNO:{{ data.feedback?.guestData?.bookingNo }}
         </div>
@@ -89,6 +90,8 @@
             </div>
           </div>
         </div>
+        </div>
+        <div class="dropdown-wrapper">
         <mat-select
           class="assignee-dropdown"
           [value]="feedbackFG?.get('assignee')?.value"
@@ -103,6 +106,7 @@
             {{ assignee.firstName }} {{ assignee.lastName }}
           </mat-option>
         </mat-select>
+      </div>
       </div>
       <div class="guestInfoOpen-guest-wrap"></div>
       <div class="mr-10"></div>

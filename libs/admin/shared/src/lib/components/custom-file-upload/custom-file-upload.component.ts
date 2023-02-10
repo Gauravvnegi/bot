@@ -1,14 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormArray,
-  FormControl,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { PackageService } from 'libs/admin/packages/src/lib/services/package.service';
 import { Subscription } from 'rxjs';
+import { UserService } from '../../services/user-detail.service';
 
 @Component({
   selector: 'hospitality-bot-custom-file-upload',
@@ -25,21 +21,22 @@ import { Subscription } from 'rxjs';
 export class CustomFileUploadComponent
   implements OnInit, ControlValueAccessor, OnDestroy {
   constructor(
-    private _packageService: PackageService,
     private _snackbarService: SnackBarService,
-    private _globalService: GlobalFilterService
+    private _globalService: GlobalFilterService,
+    private _userDetailsService: UserService
   ) {}
 
   subscription$ = new Subscription();
   hotelId: string;
   imageUrl: any[] = [];
-  imageName: any[] = [];
+  tempImageUrl: any[] = [];
+
+  @Input() multipleFileUpload: boolean = false;
+  @Input() path = 'static-content/files';
+
   fileUploadData = {
     fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
   };
-  value: any[];
-
-  // control = new FormControl();
 
   ngOnInit(): void {
     this.hotelId = this._globalService.hotelId;
@@ -49,7 +46,8 @@ export class CustomFileUploadComponent
   onTouched = () => {};
 
   writeValue(controlValue: any[]): void {
-    this.value = controlValue;
+    this.imageUrl = controlValue;
+    this.tempImageUrl = [...this.imageUrl, ''];
   }
 
   registerOnChange(fn: any): void {
@@ -60,51 +58,46 @@ export class CustomFileUploadComponent
     this.onTouched = fn;
   }
 
-  uploadFile(event): void {
+  uploadFile(event, index: number): void {
     const formData = new FormData();
     formData.append('files', event.file);
     this.subscription$.add(
-      this._packageService.uploadImage(this.hotelId, formData).subscribe(
-        (response) => {
-          // this.addRoomTypeForm
-          //   .get('imageUrl')
-          //   .patchValue(response.fileDownloadUri);
-          // this.addRoomTypeForm.get('imageName').patchValue(response.fileName);
-          this.imageUrl.push(response.fileDownloadUri);
-          // this.imageName.push(response.fileName);
-          // if (!this.imageUrl.includes(response.fileDownloadUri)) {
-          //   this.imageUrl.push(response.fileDownloadUri);
-          //   if (this.imageUrl.length == 2) {
-          //     this.imageUrl.splice(0, 1);
-          //   }
-          // }
-          // this.onChange(this.imageUrl);
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.SUCCESS.CATEGORY_IMAGE_UPLOADED',
-                priorityMessage: 'Category image uploaded successfully.',
-              },
-              '',
-              { panelClass: 'success' }
-            )
-            .subscribe();
-        },
-        ({ error }) => {
-          this._snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      )
+      this._userDetailsService
+        .uploadImage(this.hotelId, formData, this.path)
+        .subscribe(
+          (response) => {
+            this.imageUrl.splice(index, 1, response.fileDownloadUri);
+            this.tempImageUrl = [...this.imageUrl, ''];
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: 'messages.SUCCESS.IMAGE_UPLOADED',
+                  priorityMessage: 'image uploaded successfully.',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe();
+          },
+          ({ error }) => {
+            this._snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
+          }
+        )
     );
     this.onChange(this.imageUrl);
-    console.log(this.imageUrl);
+  }
+
+  deleteFile(index: number) {
+    this.imageUrl.splice(index, 1);
+    this.tempImageUrl = [...this.imageUrl, ''];
   }
 
   ngOnDestroy(): void {

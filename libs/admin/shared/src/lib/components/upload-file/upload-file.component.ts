@@ -17,6 +17,7 @@ export class UploadFileComponent implements OnInit {
   @Input() pageType: string;
   @Input() documentType: string;
   @Input() isDisable = false;
+  @Input() doNotSave = false;
   @Input('fileUploadData') set fileUploadData(value: {}) {
     this._fileUploadData = { ...this.defaultValue, ...value };
   }
@@ -47,7 +48,7 @@ export class UploadFileComponent implements OnInit {
       ) {
         reader.onload = (_event) => {
           const result = reader.result as string;
-          this.url = result;
+          if(!this.doNotSave) this.url = result;
           const data = {
             file: file,
             imageUrl: this.url,

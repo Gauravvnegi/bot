@@ -4,7 +4,7 @@ export class Amenities {
   compAmenities: Amenity[];
   paidAmenities: Amenity[];
   deserialize(input) {
-    this.compAmenities = new Array();
+    this.compAmenities = new Array<Amenity>();
     this.paidAmenities = new Array<Amenity>();
     input.forEach((item) => {
       item.type == 'Complimentary' &&
@@ -23,17 +23,13 @@ export class Amenity {
   imageUrl: string;
   type: string;
   rate?: string;
-  // currency?: string;
-  // price?:
-
   deserialize(input) {
     Object.assign(
       this,
       set({}, 'id', get(input, 'id', '')),
-      set({}, 'label', get(input, 'name', '')),
+      set({}, 'name', get(input, 'name', '')),
       set({}, 'imageUrl', get(input, 'imageUrl', '')),
       set({}, 'type', get(input, 'type', ''))
-      // set({}, 'rate', get(input, 'rate', ''))
     );
 
     this.rate = get(input, 'currency', '') + get(input, 'rate', '');

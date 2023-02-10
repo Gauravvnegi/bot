@@ -1,25 +1,18 @@
 <div class="wrapper">
-  <header class="wrapper-header">
-    <mat-icon (click)="back()" class="material-icons" matSuffix
-      >keyboard_backspace</mat-icon
-    >
-    <p class="label">
-      Add a Room Type
-    </p>
-  </header>
-  <p class="drafted-text">Drafted on Mar 20,2022 10:30pm</p>
-
-  <form [formGroup]="addRoomTypeForm" (ngSubmit)="saveDetails()">
+  <hospitality-bot-custom-header
+    label="Add a Room Type"
+  ></hospitality-bot-custom-header>
+  <form [formGroup]="addRoomTypeForm">
     <div class="wrapper-form">
       <mat-label class="mat-label">Type Name :</mat-label>
-      <mat-form-field class="mat-fields">
+      <mat-form-field class="room-type-name">
         <input
           class="input-field"
           type="text"
           placeholder=""
           matInput
           spellcheck="false"
-          formControlName="typeName"
+          formControlName="name"
         />
       </mat-form-field>
     </div>
@@ -28,41 +21,12 @@
       <div class="upload-image-text">
         Room's Images* : (Uploading at least 1 image is mandatory)
       </div>
-      <div class="upload-image-boxes">
-        <!-- <button (click)="uploadMore()">upload more</button> -->
-        <div class="image-box" formArrayName="imageUrl">
-          <!-- <hospitality-bot-upload-file
-            [fileUploadData]="fileUploadData"
-            [isDisable]="false"
-            (fileData)="uploadFile($event)"
-          >
-          </hospitality-bot-upload-file>
-        </div>
-        <div *ngFor="let i of imageUrl">
-          <div class="image-box">
-            <div ngFor = index>
-            <hospitality-bot-upload-file
-              [fileUploadData]="fileUploadData"
-              [isDisable]="false"
-              (fileData)="uploadFile($event)"
-            >
-            </hospitality-bot-upload-file>
-          </div> -->
-          <ng-container *ngFor="let url of testArray.controls">
-            <hospitality-bot-custom-file-upload
-              formControlName="imageUrl"
-            ></hospitality-bot-custom-file-upload>
-          </ng-container>
-        </div>
-        <!-- <div class="image-box">
-          <hospitality-bot-custom-file-upload
-            formControlName="imageUrl"
-          ></hospitality-bot-custom-file-upload> -->
-        <!-- </div> -->
-      </div>
+      <hospitality-bot-custom-file-upload
+        formControlName="imageUrls"
+        [multipleFileUpload]="true"
+      ></hospitality-bot-custom-file-upload>
     </div>
     <p class="upload-image-note">Recommended Ratio : 16:9 | 1 MB Max Size</p>
-    <button (click)="uploadMore()">upload more</button>
     <div class="room-description">
       <div class="room-description-text">
         Room Description:
@@ -70,7 +34,7 @@
       <div class="ck-editor">
         <hospitality-bot-template-editor
           [parentFG]="addRoomTypeForm"
-          [name]="'message'"
+          [name]="'description'"
         ></hospitality-bot-template-editor>
       </div>
     </div>
@@ -80,29 +44,28 @@
         Amenities : (Complimentary)
       </div>
       <hospitality-bot-custom-select
-        formControlName="compAmenities"
-        [itemsList]="compAmenities"
+        formControlName="complimentaryAmenities"
+        [itemList]="compAmenities"
         [selectProperties]="selectProperty"
       ></hospitality-bot-custom-select>
     </div>
     <div class="amenities">
       <div class="amenities-text">
-        Amenities :
-        <br />
-        (Paid)
+        Amenities : (Paid)
       </div>
       <hospitality-bot-custom-select
         formControlName="paidAmenities"
-        [itemsList]="paidAmenities"
+        [itemList]="paidAmenities"
         [selectProperties]="selectProperty"
+        [paid]="true"
       ></hospitality-bot-custom-select>
     </div>
 
     <div class="bottom-form-fields">
       <div class="field">
-        <mat-label class="mat-label">Original Price:</mat-label>
+        <mat-label class="label">Base Price:</mat-label>
         <mat-form-field class="currency">
-          <mat-select>
+          <mat-select formControlName="currency">
             <mat-option
               *ngFor="let currency of currency"
               [value]="currency.key"
@@ -110,7 +73,7 @@
             >
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="rate">
+        <mat-form-field>
           <input
             type="number"
             formControlName="originalPrice"
@@ -119,44 +82,74 @@
           />
         </mat-form-field>
       </div>
+
       <div class="field">
-        <mat-label class="mat-label">Discount Type:</mat-label>
+        <mat-label class="label"
+          >Variable Price:<mat-icon
+            matTooltip="Enter extra occupancy charge per occupant"
+            class="info-icon"
+            >info</mat-icon
+          ></mat-label
+        >
         <mat-form-field class="currency">
-          <button mat-icon-button matPrefix>
-            <mat-icon>percentage</mat-icon>
-          </button>
-          <mat-select>
-            <mat-option *ngFor="let dis of discount" [value]="dis.key">{{
-              dis.value
-            }}</mat-option>
+          <mat-select formControlName="variablePriceCurrency">
+            <mat-option
+              *ngFor="let currency of currency"
+              [value]="currency.value"
+              >{{ currency.key }}</mat-option
+            >
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="rate">
-          <button mat-icon-button matSuffix>
-            <mat-icon>percentage</mat-icon>
-          </button>
-          <input
-            type="number"
-            formControlName="discountType"
-            matInput
-            autocomplete="off"
-          />
+        <mat-form-field>
+          <input matInput autocomplete="off" formControlName="variablePrice" />
         </mat-form-field>
       </div>
     </div>
     <div class="bottom-form-fields">
       <div class="field">
-        <mat-label class="mat-label">Discounted Price:</mat-label>
+        <mat-label class="label">Discount Type:</mat-label>
         <mat-form-field class="currency">
-          <mat-select>
+          <mat-select formControlName="discountType">
+            <mat-option *ngFor="let dis of discount" [value]="dis.value">{{
+              dis.key
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            type="number"
+            formControlName="discountTypeValue"
+            matInput
+            autocomplete="off"
+          />
+          <mat-error
+            *ngIf="
+              addRoomTypeForm.controls['discountTypeValue'].hasError('max')
+            "
+            >Percentage can not be more than 100</mat-error
+          >
+          <mat-error
+            *ngIf="
+              addRoomTypeForm.controls['discountTypeValue'].hasError(
+                'incorrect'
+              )
+            "
+            >Amount can not be more than base price</mat-error
+          >
+        </mat-form-field>
+      </div>
+      <div class="field">
+        <mat-label class="label">Discounted Price:</mat-label>
+        <mat-form-field class="currency">
+          <mat-select formControlName="discountedPriceCurrency">
             <mat-option
               *ngFor="let currency of currency"
-              [value]="currency.key"
-              >{{ currency.value }}</mat-option
+              [value]="currency.value"
+              >{{ currency.key }}</mat-option
             >
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="rate">
+        <mat-form-field>
           <input
             formControlName="discountedPrice"
             matInput
@@ -167,37 +160,69 @@
     </div>
     <div class="bottom-form-fields">
       <div class="field">
-        <mat-label class="mat-label">Max Occupancy:</mat-label>
-        <mat-form-field class="rate">
-          <input matInput placeholder="Enter Max Occupancy" />
+        <mat-label class="label">Max Occupancy:</mat-label>
+        <mat-form-field class="input">
+          <input
+            type="number"
+            matInput
+            placeholder="Enter Max Occupancy"
+            formControlName="maxOccupancy"
+          />
         </mat-form-field>
       </div>
       <div class="field">
-        <mat-label class="mat-label">Max Children:</mat-label>
-        <mat-form-field class="rate">
-          <input matInput placeholder="Enter Max Kid Occupancy" />
+        <mat-label class="label">Max Children:</mat-label>
+        <mat-form-field class="input">
+          <input
+            type="number"
+            matInput
+            placeholder="Enter Max Kid Occupancy"
+            formControlName="maxChildren"
+          />
         </mat-form-field>
       </div>
     </div>
     <div class="bottom-form-fields">
       <div class="field">
-        <mat-label class="mat-label">Max Adult:</mat-label>
-        <mat-form-field class="rate">
-          <input matInput placeholder="Enter Max Adult Occupancy" />
+        <mat-label class="label">Max Adult:</mat-label>
+        <mat-form-field class="input">
+          <input
+            type="number"
+            matInput
+            placeholder="Enter Max Adult Occupancy"
+            formControlName="maxAdult"
+          />
+          <mat-error
+            *ngIf="addRoomTypeForm.controls['maxAdult'].hasError('incorrect')"
+            >Max adult can not be more than max occupancy</mat-error
+          >
         </mat-form-field>
       </div>
       <div class="field">
-        <mat-label class="mat-label">Room Area:</mat-label>
-        <mat-form-field class="rate">
-          <input matInput placeholder="Enter Room Area" />
+        <mat-label class="label">Room Area:</mat-label>
+        <mat-form-field class="input">
+          <input
+            type="number"
+            matInput
+            placeholder="Enter Room Area"
+            formControlName="area"
+          />
         </mat-form-field>
         (sqft.)
       </div>
     </div>
-    <div class="footer_button">
-      <button type="submit" mat-button>
-        Save
-      </button>
-    </div>
   </form>
+  <div class="footer_button" *ngIf="mode == 'Save'">
+    <button mat-button (click)="saveDetails()">
+      <i *ngIf="isSavingDetails" class="fa fa-spinner fa-spin"></i>
+      {{ isSavingDetails ? 'Saving Details' : 'Save' }}
+    </button>
+  </div>
+
+  <div class="footer_button" *ngIf="mode == 'Update'">
+    <button mat-button (click)="updateDetails()">
+      <i *ngIf="isUpdatingDetails" class="fa fa-spinner fa-spin"></i>
+      {{ isUpdatingDetails ? 'Updating Details' : 'Update' }}
+    </button>
+  </div>
 </div>

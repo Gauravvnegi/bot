@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -59,7 +60,8 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     private roomService: RoomService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    protected snackbarService: SnackBarService
+    protected snackbarService: SnackBarService,
+    private _router: Router
   ) {
     super(fb, tabFilterService);
   }
@@ -250,6 +252,14 @@ export class RoomDataTableComponent extends BaseDatatableComponent
       )
       .subscribe();
   };
+
+  handleRowClick(rowData) {
+    const selectedRoute =
+      this.selectedTable === 'room' ? routes.addRoom : routes.addRoomType;
+    this._router.navigate([`/pages/inventory/room/${selectedRoute}`], {
+      queryParams: { id: rowData.id },
+    });
+  }
 
   /**
    * @function ngOnDestroy unsubscribe subscription

@@ -12,6 +12,7 @@ import { AdminRoomRoutingModule } from './admin-room.routing.module';
 import { RoomService } from './services/room.service';
 
 import { PackageService } from 'libs/admin/packages/src/lib/services/package.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -20,6 +21,7 @@ import { PackageService } from 'libs/admin/packages/src/lib/services/package.ser
     AdminSharedModule,
     FormsModule,
     ReactiveFormsModule,
+    MatTooltipModule,
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['room'])),
   ],
   declarations: [...AdminRoomRoutingModule.components],

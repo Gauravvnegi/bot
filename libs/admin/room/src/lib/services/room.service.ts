@@ -84,4 +84,18 @@ export class RoomService extends ApiService {
       }`
     );
   }
+
+  createRoomType(hotelId: string, data: any) {
+    return this.post(`/api/v1/entity/${hotelId}/inventory/room-type`, data);
+  }
+
+  getRoomTypeById(hotelId: string, roomTypeId: string) {
+    return this.get(
+      `/api/v1/entity/${hotelId}/inventory/room-type/${roomTypeId}`
+    );
+  }
+
+  updateRoomType(hotelId: string, roomTypeId: string, data: any) {
+    return this.put(`/api/v1/entity/${hotelId}/inventory/room-type`, data);
+  }
 }

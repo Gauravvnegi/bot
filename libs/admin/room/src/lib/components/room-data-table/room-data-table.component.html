@@ -114,7 +114,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row">
+    <tr class="data-table-row" (click)="handleRowClick(rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"

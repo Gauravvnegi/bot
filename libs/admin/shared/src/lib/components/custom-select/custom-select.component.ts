@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import * as _ from 'lodash';
@@ -18,26 +18,54 @@ import * as _ from 'lodash';
 export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   constructor() {}
 
-  @Input() itemsList: any[];
-  // {value:'value',label:'show'//'name'}
-  @Input() selectProperties: any;
-  @Input() itemType: string;
-  // labels? 'label' | 'paid'
-  // label? (label)
-  // @Input() selectedLabels: string | string[] = ['label'];
+  options: any[] = [];
+  @Input() selectProperties: string;
+  @Input() extraProperties: string[];
+
+  @Input() paid: string;
+  @Input() set itemList(value: Record<string, any>[]) {
+    this.options = value.map((item) => {
+      let checked = false;
+      if (this.value.length) {
+        checked =
+          this.value.findIndex(
+            (res) => res[this.selectProperties] === item[this.selectProperties]
+          ) > -1;
+      }
+      return { ...item, checked };
+    });
+  }
 
   value: any[] = [];
-  selectedItems: any[] = [];
-  modifiedValue: any[];
-  isChecked: boolean;
-
   ngOnInit(): void {}
 
-  onChange: (value: any[]) => void;
-  onTouched: (value: any[]) => void;
+  onChange = (value: any[]) => {};
+  onTouched = () => {};
 
   writeValue(controlValue: any): void {
-    this.value = controlValue;
+    if (this.options.length) {
+      this.options = this.options.map((item) => {
+        let checked =
+          controlValue.findIndex(
+            (res) => res[this.selectProperties] === item[this.selectProperties]
+          ) > -1;
+
+        return {
+          ...item,
+          checked,
+        };
+      });
+    }
+
+    const allProps: string[] = this.extraProperties;
+    allProps?.unshift(this.selectProperties);
+
+    if (allProps) {
+      this.value = _.map(controlValue, (e) => _.pick(e, allProps));
+    } else {
+      this.value = _.map(controlValue, this.selectProperties);
+    }
+    this.onChange(this.value);
   }
 
   registerOnChange(fn: any): void {
@@ -49,22 +77,33 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   }
 
   getItems(event: MatCheckboxChange, i: number) {
+    const allProps = this.extraProperties;
+    allProps?.unshift(this.selectProperties);
+    const valueItem = this.options[i];
     if (event.checked == true) {
-      this.selectedItems.push(this.itemsList[i]);
+      valueItem.checked = true;
+
+      if (allProps) {
+        this.value.push(_.pick(valueItem, allProps));
+      } else {
+        this.value.push(valueItem[this.selectProperties]);
+      }
     } else {
-      let index = this.selectedItems.findIndex((x) => x == this.itemsList[i]);
-      this.selectedItems.splice(index, 1);
+      valueItem.checked = false;
+
+      let index: number;
+      if (allProps) {
+        index = this.value.findIndex(
+          (item) =>
+            item[this.selectProperties] === valueItem[this.selectProperties]
+        );
+      } else {
+        index = this.value.findIndex(
+          (item) => item === valueItem[this.selectProperties]
+        );
+      }
+      this.value.splice(index, 1);
     }
-    if (Array.isArray(this.selectProperties)) {
-      this.modifiedValue = _.map(this.selectedItems, (e) =>
-        _.pick(e, this.selectProperties)
-      );
-      this.onChange(this.modifiedValue);
-    } else if (typeof this.selectProperties == 'string') {
-      this.modifiedValue = _.map(this.selectedItems, this.selectProperties);
-      this.onChange(this.modifiedValue);
-    } else {
-      this.onChange(this.selectedItems);
-    }
+    this.onChange(this.value);
   }
 }

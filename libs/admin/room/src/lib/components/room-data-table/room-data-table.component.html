@@ -32,7 +32,7 @@
                 *ngIf="selectedTable === 'room'"
                 label="{{ 'room.addSingle' | translate }}"
                 variant="text"
-                link="/pages/inventory/room/{{ routes.addRoom }}"
+                link="/pages/inventory/room/{{ routes.addRoom }}/single"
               ></hospitality-bot-button>
               <hospitality-bot-button
                 *ngIf="selectedTable === 'roomType'"
@@ -42,7 +42,7 @@
               <hospitality-bot-button
                 *ngIf="selectedTable === 'room'"
                 label="{{ 'room.addMultiple' | translate }}"
-                link="/pages/inventory/room/{{ routes.addMultipleRooms }}"
+                link="/pages/inventory/room/{{ routes.addRoom }}/multiple"
               ></hospitality-bot-button>
               <hospitality-bot-export-list
                 (onDocumentActions)="onDocumentActions()"
@@ -114,7 +114,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row">
+    <tr class="data-table-row" (click)="openEditForm(rowData)">
       <td class="table--checkbox">
         <p-tableCheckbox
           [value]="rowData"

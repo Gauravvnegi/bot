@@ -1,0 +1,39 @@
+@import 'main';
+
+$defaultColor: $mat-tab-label;
+$primaryColor: $primary-purple;
+$error: #f44336;
+
+.wrapper {
+  position: relative;
+
+  &__vertical {
+  }
+
+  &__horizontal {
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+    gap: 10%;
+  }
+}
+
+.input-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+::ng-deep .p-error {
+  left: 0;
+  bottom: -14px;
+  font-size: 10px;
+  position: absolute;
+  color: $error;
+}
+
+.label {
+  color: $defaultColor;
+  &__static {
+  }
+}

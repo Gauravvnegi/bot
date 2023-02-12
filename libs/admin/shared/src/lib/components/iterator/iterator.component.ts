@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IteratorField } from '../../types/fields.type';
+import { FormProps } from '../../types/form.type';
 
 @Component({
   selector: 'hospitality-bot-iterator',
@@ -10,24 +11,29 @@ import { IteratorField } from '../../types/fields.type';
 export class IteratorComponent implements OnInit {
   constructor(private fb: FormBuilder) {}
 
+  props: FormProps = {
+    height: '35px',
+    fontSize: '14px',
+  };
+
   @Input() fields: IteratorField[];
-
-  fieldConfig: Record<string, string | number>;
-
   @Input() useFormArray: FormArray;
+  @ViewChild('main') main: ElementRef;
 
   ngOnInit(): void {
-    this.initNewField();
+    this.createNewFields();
   }
 
   /**
-   * @function initNewField To get the initial value config
+   * @function createNewFields To get the initial value config
    */
-  initNewField() {
-    this.fieldConfig = this.fields.reduce((prev, curr) => {
-      prev[curr.name] = '';
+  createNewFields() {
+    const data = this.fields.reduce((prev, curr) => {
+      const value = curr.required ? ['', Validators.required] : [''];
+      prev[curr.name] = value;
       return prev;
     }, {});
+    this.useFormArray.push(this.fb.group(data));
   }
 
   get width() {
@@ -39,7 +45,15 @@ export class IteratorComponent implements OnInit {
    * Handle addition of new field to array
    */
   addNewField() {
-    this.useFormArray.push(this.fb.group(this.fieldConfig));
+    if (this.useFormArray.invalid) {
+      this.useFormArray.markAllAsTouched();
+      return;
+    }
+    this.createNewFields();
+    setTimeout(() => {
+      this.main.nativeElement.scrollIntoView({ behavior: 'smooth' });
+      this.main.nativeElement.scrollTop = this.main.nativeElement.scrollHeight;
+    }, 1000);
   }
 
   /**
@@ -48,7 +62,7 @@ export class IteratorComponent implements OnInit {
    */
   removeField(index: number) {
     if (this.useFormArray.length === 1) {
-      this.useFormArray.at(0).patchValue(this.fieldConfig);
+      this.useFormArray.at(0).reset();
       return;
     }
     this.useFormArray.removeAt(index);

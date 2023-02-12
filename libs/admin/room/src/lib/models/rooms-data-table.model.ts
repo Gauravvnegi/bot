@@ -89,6 +89,8 @@ export class RoomType {
   amenities: string[];
   occupancy: string;
   status: { label: string; value: string };
+  price: number;
+  currency: string;
 
   deserialize(input: RoomTypeResponse) {
     this.id = input.id;
@@ -103,6 +105,10 @@ export class RoomType {
       label: input.status ? Status.ACTIVE : Status.INACTIVE,
       value: input.status ? 'ACTIVE' : 'INACTIVE',
     };
+
+    // mapping discounted price
+    this.price = input.discountedPrice;
+    this.currency = input.currency;
 
     return this;
   }
@@ -129,13 +135,15 @@ export class RoomTypeRecordsCount {
  * @returns formatted date
  */
 function getModifiedData(value: string) {
-  const [date, time] = value.split(' ');
-  const [yy, mm, dd] = date.split('-');
-  const newDate = `${dd}/${mm}/${yy.substring(2)}`;
+  // const [date, time] = value.split(' ');
+  // const [yy, mm, dd] = date.split('-');
+  // const newDate = `${dd}/${mm}/${yy.substring(2)}`;
 
-  const [hr, min] = time.split(':');
-  const hour = +hr % 24;
-  const newTime = `${hour % 12 || 12}:${min} ${hour < 12 ? 'AM' : 'PM'}`;
+  // const [hr, min] = time.split(':');
+  // const hour = +hr % 24;
+  // const newTime = `${hour % 12 || 12}:${min} ${hour < 12 ? 'AM' : 'PM'}`;
 
-  return `${newDate} at ${newTime}`;
+  // return `${newDate} at ${newTime}`;
+
+  return value;
 }

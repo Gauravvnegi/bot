@@ -3,11 +3,14 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/operators';
 import { stats } from '../constant/response';
+import { MultipleRoom, SingleRoom } from '../models/room.model';
 import { QueryConfig, TableValue } from '../types/room';
 import {
   RoomListResponse,
   RoomTypeListResponse,
   RoomStatus,
+  RoomResponse,
+  AddRoomsResponse,
 } from '../types/service-response';
 
 @Injectable()
@@ -37,9 +40,8 @@ export class RoomService extends ApiService {
     hotelId: string,
     config?: QueryConfig
   ): Observable<RoomTypeListResponse> {
-    const { params } = config;
     return this.get(
-      `/api/v1/entity/${hotelId}/inventory/room-type${params ?? ''}`
+      `/api/v1/entity/${hotelId}/inventory/room-type${config?.params ?? ''}`
     ).pipe(
       map((res) => {
         return {
@@ -61,26 +63,41 @@ export class RoomService extends ApiService {
     hotelId: string,
     config?: QueryConfig
   ): Observable<RoomListResponse> {
-    const { params } = config;
-    return this.get(`/api/v1/entity/${hotelId}/inventory/rooms${params ?? ''}`);
+    return this.get(
+      `/api/v1/entity/${hotelId}/inventory/rooms${config?.params ?? ''}`
+    );
   }
 
   updateStatus(
     hotelId: string,
     table: TableValue,
     data: { id: string; status?: boolean; roomStatus?: RoomStatus }
-  ) {
+  ): Observable<RoomResponse | RoomListResponse> {
     return this.patch(
       `/api/v1/entity/${hotelId}/inventory/${this.list[table]}`,
       data
     );
   }
 
+  addRooms(
+    hotelId: string,
+    data: SingleRoom[] | MultipleRoom[]
+  ): Observable<AddRoomsResponse> {
+    return this.post(`/api/v1/entity/${hotelId}/inventory/room`, data);
+  }
+
+  updateRoom(hotelId: string, data: SingleRoom): Observable<RoomResponse> {
+    return this.put(`/api/v1/entity/${hotelId}/inventory/room`, data);
+  }
+
+  getRoomById(hotelId: string, roomId: string): Observable<RoomResponse> {
+    return this.get(`/api/v1/entity/${hotelId}/inventory/room/${roomId}`);
+  }
+
   exportCSV(hotelId: string, table: TableValue, config?: QueryConfig) {
-    const { params } = config;
     return this.get(
       `/api/v1/entity/${hotelId}/inventory/${this.list[table]}/export${
-        params ?? ''
+        config.params ?? ''
       }`
     );
   }

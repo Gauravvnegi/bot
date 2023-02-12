@@ -1,0 +1,59 @@
+@import '../form.component.scss';
+
+::ng-deep .p-dropdown {
+  width: 100%;
+  height: 100%;
+  margin-left: 0% !important;
+  padding: 0.9em 0.6em;
+  font-size: inherit;
+}
+
+::ng-deep .p-dropdown-label {
+  padding: 0;
+}
+
+::ng-deep .p-dropdown-panel {
+  width: 100%;
+}
+
+:host ::ng-deep .input {
+  width: 100%;
+  height: 100%;
+
+  .p-dropdown {
+    border-color: $defaultColor;
+    &:hover {
+      border-color: $primaryColor;
+    }
+  }
+
+  &__error {
+    .p-dropdown {
+      border-color: $error;
+    }
+  }
+
+  &__static {
+  }
+
+  &__standard {
+    .p-dropdown {
+      // border-color: $defaultColor;
+      border-width: 0 0 1px 0;
+      border-radius: unset;
+    }
+    .p-focus {
+      margin-bottom: -1px;
+      border-width: 0 0 2px 0;
+      border-color: $primaryColor;
+      box-shadow: none;
+    }
+  }
+}
+
+.loading {
+  position: absolute;
+  &__static {
+    top: 65%;
+  }
+}

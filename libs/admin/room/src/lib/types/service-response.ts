@@ -101,3 +101,8 @@ export type RoomTypeListResponse = {
     INACTIVE: number;
   };
 };
+
+export type AddRoomsResponse = {
+  errorMessages: string[];
+  rooms: RoomResponse[];
+};

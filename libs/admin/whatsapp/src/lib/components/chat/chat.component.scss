@@ -39,6 +39,7 @@
 
 .mr-10 {
   display: flex;
+  margin-right: 0px !important;
   .req_button {
     display: flex;
     gap: 20px;
@@ -91,7 +92,7 @@
   height: calc(100% - 186px);
   background: $c-gray-98;
   overflow-y: auto;
-  padding: 20px;
+  padding: 15px;
   position: relative;
   width: 100%;
 }

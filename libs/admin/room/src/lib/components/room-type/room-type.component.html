@@ -2,7 +2,7 @@
   <hospitality-bot-custom-header
     label="Add a Room Type"
   ></hospitality-bot-custom-header>
-  <form [formGroup]="addRoomTypeForm">
+  <form [formGroup]="useForm">
     <div class="wrapper-form">
       <mat-label class="mat-label"
         >{{ 'label.roomType' | translate }} :</mat-label
@@ -18,8 +18,8 @@
         />
         <mat-error
           *ngIf="
-            addRoomTypeForm.controls['name'].touched &&
-            addRoomTypeForm.controls['name'].hasError('required')
+            useForm.controls['name'].touched &&
+            useForm.controls['name'].hasError('required')
           "
           >{{ 'validationErrors.roomTypeRequired' | translate }}.</mat-error
         >
@@ -43,7 +43,7 @@
       </div>
       <div class="ck-editor">
         <hospitality-bot-template-editor
-          [parentFG]="addRoomTypeForm"
+          [parentFG]="useForm"
           [name]="'description'"
         ></hospitality-bot-template-editor>
       </div>
@@ -63,8 +63,8 @@
     <mat-error
       class="amenities-validation-text"
       *ngIf="
-        addRoomTypeForm.controls['complimentaryAmenities'].touched &&
-        addRoomTypeForm.controls['complimentaryAmenities'].hasError('required')
+        useForm.controls['complimentaryAmenities'].touched &&
+        useForm.controls['complimentaryAmenities'].hasError('required')
       "
       >{{ 'validationErrors.compAmenitiesRequired' | translate }}.</mat-error
     >
@@ -82,8 +82,8 @@
     <mat-error
       class="amenities-validation-text"
       *ngIf="
-        addRoomTypeForm.controls['paidAmenities'].touched &&
-        addRoomTypeForm.controls['paidAmenities'].hasError('required')
+        useForm.controls['paidAmenities'].touched &&
+        useForm.controls['paidAmenities'].hasError('required')
       "
       >{{ 'validationErrors.paidAmenitiesRequired' | translate }}.</mat-error
     >
@@ -111,8 +111,8 @@
           />
           <mat-error
             *ngIf="
-              addRoomTypeForm.controls['originalPrice'].touched &&
-              addRoomTypeForm.controls['originalPrice'].hasError('required')
+              useForm.controls['originalPrice'].touched &&
+              useForm.controls['originalPrice'].hasError('required')
             "
             >{{ 'validationErrors.basePriceRequired' | translate }}.</mat-error
           >
@@ -161,17 +161,11 @@
             autocomplete="off"
           />
           <mat-error
-            *ngIf="
-              addRoomTypeForm.controls['discountTypeValue'].hasError('max')
-            "
+            *ngIf="useForm.controls['discountTypeValue'].hasError('max')"
             >{{ 'validationErrors.percentageError' | translate }}</mat-error
           >
           <mat-error
-            *ngIf="
-              addRoomTypeForm.controls['discountTypeValue'].hasError(
-                'incorrect'
-              )
-            "
+            *ngIf="useForm.controls['discountTypeValue'].hasError('incorrect')"
             >{{ 'validationErrors.amountError' | translate }}</mat-error
           >
         </mat-form-field>
@@ -212,8 +206,8 @@
           />
           <mat-error
             *ngIf="
-              addRoomTypeForm.controls['maxOccupancy'].touched &&
-              addRoomTypeForm.controls['maxOccupancy'].hasError('required')
+              useForm.controls['maxOccupancy'].touched &&
+              useForm.controls['maxOccupancy'].hasError('required')
             "
             >{{
               'validationErrors.maxOccupancyRequired' | translate
@@ -246,7 +240,7 @@
             formControlName="maxAdult"
           />
           <mat-error
-            *ngIf="addRoomTypeForm.controls['maxAdult'].hasError('incorrect')"
+            *ngIf="useForm.controls['maxAdult'].hasError('incorrect')"
             >{{ 'validationErrors.maxAdultError' | translate }}</mat-error
           >
         </mat-form-field>
@@ -262,8 +256,8 @@
           />
           <mat-error
             *ngIf="
-              addRoomTypeForm.controls['area'].touched &&
-              addRoomTypeForm.controls['area'].hasError('required')
+              useForm.controls['area'].touched &&
+              useForm.controls['area'].hasError('required')
             "
             >{{ 'validationErrors.areaRequired' | translate }}.</mat-error
           >
@@ -272,17 +266,17 @@
       </div>
     </div>
   </form>
-  <div class="footer_button" *ngIf="mode == 'Save'">
+  <div class="footer_button" *ngIf="!roomTypeId">
     <button mat-button (click)="saveDetails()">
-      <i *ngIf="isSavingDetails" class="fa fa-spinner fa-spin"></i>
-      {{ isSavingDetails ? 'Saving Details' : 'Save' }}
+      <i *ngIf="loader" class="fa fa-spinner fa-spin"></i>
+      {{ loader ? 'Saving Details' : 'Save' }}
     </button>
   </div>
 
-  <div class="footer_button" *ngIf="mode == 'Update'">
+  <div class="footer_button" *ngIf="roomTypeId">
     <button mat-button (click)="updateDetails()">
-      <i *ngIf="isUpdatingDetails" class="fa fa-spinner fa-spin"></i>
-      {{ isUpdatingDetails ? 'Updating Details' : 'Update' }}
+      <i *ngIf="loader" class="fa fa-spinner fa-spin"></i>
+      {{ loader ? 'Updating Details' : 'Update' }}
     </button>
   </div>
 </div>

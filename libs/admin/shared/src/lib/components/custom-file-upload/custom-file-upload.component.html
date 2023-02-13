@@ -1,0 +1,37 @@
+<div class="upload-image-boxes" *ngIf="multipleFileUpload">
+  <div *ngFor="let url of tempFileUrl; let i = index">
+    <div class="image-box">
+      <mat-icon
+        mat-icon-button
+        class="delete-icon"
+        *ngIf="i !== tempFileUrl.length - 1"
+        matTooltip="Delete File"
+        (click)="deleteFile(i)"
+        >close</mat-icon
+      >
+
+      <hospitality-bot-upload-file
+        [fileUploadData]="fileUploadData"
+        [isDisable]="false"
+        (fileData)="uploadFile($event, i)"
+        [url]="url"
+        [doNotSave]="i === tempFileUrl.length - 1"
+      >
+      </hospitality-bot-upload-file>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="!multipleFileUpload"
+  class="image-box"
+  [ngClass]="{ 'ml-40': !multipleFileUpload }"
+>
+  <hospitality-bot-upload-file
+    [fileUploadData]="fileUploadData"
+    [isDisable]="false"
+    (fileData)="uploadFile($event, 0)"
+    [url]="imageUrl[0]"
+  >
+  </hospitality-bot-upload-file>
+</div>

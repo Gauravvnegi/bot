@@ -3,6 +3,7 @@ import { Route, RouterModule } from '@angular/router';
 import { AddRoomComponent } from './components/add-room/add-room.component';
 import { MainComponent } from './components/main/main.component';
 import { RoomDataTableComponent } from './components/room-data-table/room-data-table.component';
+import { RoomTypeComponent } from './components/room-type/room-type.component';
 import { RoomComponent } from './components/room/room.component';
 import routes from './config/routes';
 
@@ -19,6 +20,11 @@ export const adminRoomRoutes: Route[] = [
         path: `${routes.addRoom}/:type`,
         component: AddRoomComponent,
       },
+
+      {
+        path: routes.addRoomType,
+        component: RoomTypeComponent,
+      },
     ],
   },
 ];
@@ -33,5 +39,7 @@ export class AdminRoomRoutingModule {
     RoomDataTableComponent,
     MainComponent,
     AddRoomComponent,
+
+    RoomTypeComponent,
   ];
 }

@@ -3,6 +3,7 @@ import { UserConfig, UserService } from '@hospitality-bot/admin/shared';
 import { AuthService } from 'apps/admin/src/app/core/auth/services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
+import { CreateWithService } from '../../services/create-with.service';
 
 @Component({
   selector: 'hospitality-bot-create-with-main',
@@ -16,7 +17,8 @@ export class MainComponent implements OnInit, OnDestroy {
   constructor(
     private _authService: AuthService,
     private cookieService: CookieService,
-    private userService: UserService
+    private userService: UserService,
+    private createWithService: CreateWithService
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +63,8 @@ export class MainComponent implements OnInit, OnDestroy {
         domain: 'botshot.ai',
       });
     });
+
+    this.createWithService.$isCookiesLoaded.next(true);
   }
 
   ngOnDestroy(): void {

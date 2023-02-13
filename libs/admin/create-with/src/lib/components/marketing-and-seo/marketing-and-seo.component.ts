@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@hospitality-bot/admin/environment';
+import { CreateWithService } from '../../services/create-with.service';
 
 @Component({
   selector: 'hospitality-bot-create-with-marketing-and-seo',
@@ -9,7 +10,11 @@ import { environment } from '@hospitality-bot/admin/environment';
 export class MarketingAndSeoComponent implements OnInit {
   onboardingUrl = `${environment.createWithUrl}/admin/marketing-seo`;
 
-  constructor() {}
+  constructor(private createWithService: CreateWithService) {}
+
+  get isLoaded() {
+    return this.createWithService.$isCookiesLoaded.value;
+  }
 
   ngOnInit(): void {}
 }

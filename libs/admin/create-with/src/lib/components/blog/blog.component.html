@@ -1,8 +1,10 @@
-<iframe
-  [src]="onboardingUrl | safeUrl"
-  height="100%"
-  loading="eager"
-  width="100%"
-  allowFullScreen
-  frameBorder="{0}"
-></iframe>
+<ng-container *ngIf="isLoaded">
+  <iframe
+    [src]="onboardingUrl | safeUrl"
+    height="100%"
+    loading="lazy"
+    width="100%"
+    allowFullScreen
+    frameBorder="{0}"
+  ></iframe>
+</ng-container>

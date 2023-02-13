@@ -68,6 +68,11 @@
   width: 100%;
 }
 
+.amenities-validation-text {
+  margin: 6px 0 0 209px;
+  font-size: 90%;
+}
+
 .amenities-text {
   width: 140px;
   font-family: Roboto;
@@ -155,4 +160,12 @@
   top: 22px;
   margin-left: 5px;
   color: #9eaeb8;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
 }

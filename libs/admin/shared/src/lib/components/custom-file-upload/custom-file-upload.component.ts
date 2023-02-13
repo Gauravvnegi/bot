@@ -1,8 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { PackageService } from 'libs/admin/packages/src/lib/services/package.service';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../services/user-detail.service';
 
@@ -22,32 +20,29 @@ export class CustomFileUploadComponent
   implements OnInit, ControlValueAccessor, OnDestroy {
   constructor(
     private _snackbarService: SnackBarService,
-    private _globalService: GlobalFilterService,
     private _userDetailsService: UserService
   ) {}
 
   subscription$ = new Subscription();
-  hotelId: string;
-  imageUrl: any[] = [];
-  tempImageUrl: any[] = [];
+  fileUrl: string[] = [];
+  tempFileUrl: string[] = [];
 
   @Input() multipleFileUpload: boolean = false;
   @Input() path = 'static-content/files';
+  @Input() hotelId: string;
 
   fileUploadData = {
     fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
   };
 
-  ngOnInit(): void {
-    this.hotelId = this._globalService.hotelId;
-  }
+  ngOnInit(): void {}
 
   onChange = (value: any[]) => {};
   onTouched = () => {};
 
   writeValue(controlValue: any[]): void {
-    this.imageUrl = controlValue;
-    this.tempImageUrl = [...this.imageUrl, ''];
+    this.fileUrl = controlValue;
+    this.tempFileUrl = [...this.fileUrl, ''];
   }
 
   registerOnChange(fn: any): void {
@@ -66,8 +61,8 @@ export class CustomFileUploadComponent
         .uploadImage(this.hotelId, formData, this.path)
         .subscribe(
           (response) => {
-            this.imageUrl.splice(index, 1, response.fileDownloadUri);
-            this.tempImageUrl = [...this.imageUrl, ''];
+            this.fileUrl.splice(index, 1, response.fileDownloadUri);
+            this.tempFileUrl = [...this.fileUrl, ''];
             this._snackbarService
               .openSnackBarWithTranslate(
                 {
@@ -92,12 +87,12 @@ export class CustomFileUploadComponent
           }
         )
     );
-    this.onChange(this.imageUrl);
+    this.onChange(this.fileUrl);
   }
 
   deleteFile(index: number) {
-    this.imageUrl.splice(index, 1);
-    this.tempImageUrl = [...this.imageUrl, ''];
+    this.fileUrl.splice(index, 1);
+    this.tempFileUrl = [...this.fileUrl, ''];
   }
 
   ngOnDestroy(): void {

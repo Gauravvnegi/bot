@@ -63,6 +63,9 @@
       padding: 10px;
       display: flex;
       border-bottom: solid 1px $border;
+      &:hover{
+        background-color: #f1f1f1;
+      }
       cursor: pointer;
       &-avt {
         height: 46px;
@@ -102,12 +105,28 @@
             margin-left: 10px;
           }
         }
-        &-title {
-          font-size: 12px;
-          font-weight: bold;
-          letter-spacing: 0.72px;
-          color: $dark-blue;
-          margin-bottom: 5px;
+        &-wrapper{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          &-title {
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 0.72px;
+            color: $dark-blue;
+            margin-bottom: 5px;
+  
+  
+          }
+          &-requestTime {
+            font-family: Roboto;
+            font-size: $font10;
+            font-weight: normal;
+            letter-spacing: 0.6px;
+            text-align: right;
+            color: $light-grey2;
+          }
+
         }
         &-subtitle {
           color: $c-gray-55;

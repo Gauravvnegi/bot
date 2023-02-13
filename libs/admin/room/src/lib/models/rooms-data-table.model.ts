@@ -1,3 +1,4 @@
+import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set } from 'lodash';
 import { Status } from '../constant/data-table';
 import {
@@ -31,11 +32,22 @@ export class Room {
     this.id = input.id;
     this.type = input.roomTypeDetails.name;
     this.roomNo = input.roomNumber;
-    this.date = getModifiedData(input.updatedAt);
+    this.date = input.updated ?? input.created;
     this.price = `${input.currency} ${input.price}`;
     this.status = { label: Status[input.roomStatus], value: input.roomStatus };
 
     return this;
+  }
+
+  /**
+   * Return the formatted date
+   */
+  getFormattedDate(timezone = '+05:30', format = 'DD/MM/YY, h:mm a') {
+    return DateService.getDateFromTimeStamp(
+      this.date,
+      format,
+      timezone
+    ).replace(',', ' at');
   }
 }
 
@@ -127,23 +139,4 @@ export class RoomTypeRecordsCount {
     );
     return this;
   }
-}
-
-/**
- * @function getModifiedData handle the date modification
- * @param value date as string
- * @returns formatted date
- */
-function getModifiedData(value: string) {
-  // const [date, time] = value.split(' ');
-  // const [yy, mm, dd] = date.split('-');
-  // const newDate = `${dd}/${mm}/${yy.substring(2)}`;
-
-  // const [hr, min] = time.split(':');
-  // const hour = +hr % 24;
-  // const newTime = `${hour % 12 || 12}:${min} ${hour < 12 ? 'AM' : 'PM'}`;
-
-  // return `${newDate} at ${newTime}`;
-
-  return value;
 }

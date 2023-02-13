@@ -16,8 +16,8 @@ export type RoomResponse = {
   source: string;
   price: number;
   currency: string;
-  createdAt: string;
-  updatedAt: string;
+  created: string;
+  updated: string;
 };
 
 export type RoomListResponse = {

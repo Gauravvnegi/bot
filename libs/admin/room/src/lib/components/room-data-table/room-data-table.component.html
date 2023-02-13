@@ -174,7 +174,7 @@
   </td>
   <td>
     <div class="cell-content" *ngIf="rowData.date; else emptyCell">
-      {{ rowData.date }}
+      {{ rowData.getFormattedDate() }}
     </div>
   </td>
   <td>

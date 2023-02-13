@@ -37,6 +37,7 @@
   </div>
 
   <hospitality-bot-button
+    *ngIf="!maxLimit || maxLimit > useFormArray.length"
     class="action-btn"
     label="Add More"
     (onClick)="addNewField()"

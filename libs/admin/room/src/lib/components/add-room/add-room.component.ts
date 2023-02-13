@@ -33,7 +33,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   useFormArray: FormArray;
   fields: IteratorField[];
 
-  roomTypes: RoomTypeOption[];
+  roomTypes: RoomTypeOption[] = [];
   submissionType: AddRoomTypes;
 
   props: FormProps = {

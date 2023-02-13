@@ -20,6 +20,9 @@ export class IteratorComponent implements OnInit {
   @Input() useFormArray: FormArray;
   @ViewChild('main') main: ElementRef;
 
+  // Zero maxLimit means there is no limit
+  @Input() maxLimit = 0;
+
   ngOnInit(): void {
     this.createNewFields();
   }

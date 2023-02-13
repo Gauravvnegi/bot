@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   templateUrl: './custom-header.component.html',
   styleUrls: ['./custom-header.component.scss'],
 })
-export class CustomHeaderComponent {
+export class CustomHeaderComponent implements OnInit {
   draftDate: string;
 
   months = [
@@ -26,10 +26,14 @@ export class CustomHeaderComponent {
 
   @Input() label: string;
   @Input() set dateTime(value: number | undefined) {
-    this.setDraftTime(value ? new Date() : new Date());
+    if (value) this.setDraftTime(new Date(value));
   }
 
   constructor(private location: Location) {}
+
+  ngOnInit(): void {
+    if (!this.draftDate) this.setDraftTime(new Date());
+  }
 
   setDraftTime(date: Date) {
     const currentDate = date.getDate();

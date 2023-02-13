@@ -159,29 +159,65 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   }
 
   /**
+   * @function handleRoomStatus handle the room status toggle
+   * @param status room status
+   * @param id room id
+   */
+  handleRoomStatus(status: RoomStatus, id: string) {
+    this.loading = true;
+
+    this.$subscription.add(
+      this.roomService
+        .updateRoomStatus(this.hotelId, {
+          id,
+          roomStatus: status,
+        })
+        .subscribe(() => this.handleStatusSuccess(status, id), this.handleError)
+    );
+  }
+
+  /**
+   * @function handleRoomStatus handle the room type status toggle
+   * @param status room type status
+   * @param id room type id
+   */
+  handleRoomTypeStatus(status: RoomStatus, id: string) {
+    this.loading = true;
+
+    this.$subscription.add(
+      this.roomService
+        .updateRoomTypeStatus(this.hotelId, {
+          id,
+          status: status === 'ACTIVE',
+        })
+        .subscribe(() => this.handleStatusSuccess(status, id), this.handleError)
+    );
+  }
+
+  /**
    * @function handleStatus To handle the status change
-   * @param status
+   * @param status status value
    */
   handleStatus(status: RoomStatus, rowData) {
-    const statusData =
-      this.selectedTable === 'room'
-        ? { roomStatus: status }
-        : { status: status === 'ACTIVE' };
-
-    this.loading = true;
-    this.roomService
-      .updateStatus(this.hotelId, this.selectedTable, {
-        id: rowData.id,
-        ...statusData,
-      })
-      .subscribe((res) => {
-        this.loading = false;
-        this.values.find((item) => item.id === rowData.id).status = {
-          label: Status[status],
-          value: status,
-        };
-      }, this.handleError);
+    if (this.selectedTable === 'room') {
+      this.handleRoomStatus(status, rowData.id);
+    } else {
+      this.handleRoomTypeStatus(status, rowData.id);
+    }
   }
+
+  /**
+   * @function handleStatusSuccess To update the status after successful update
+   * @param status
+   * @param rowData
+   */
+  handleStatusSuccess = (status: RoomStatus, id: string) => {
+    this.loading = false;
+    this.values.find((item) => item.id === id).status = {
+      label: Status[status],
+      value: status,
+    };
+  };
 
   /**
    * @function onSelectedTabFilterChange To handle the tab filter change.

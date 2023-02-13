@@ -11,6 +11,7 @@ import {
   RoomStatus,
   RoomResponse,
   AddRoomsResponse,
+  RoomTypeResponse,
 } from '../types/service-response';
 
 @Injectable()
@@ -68,15 +69,18 @@ export class RoomService extends ApiService {
     );
   }
 
-  updateStatus(
+  updateRoomStatus(
     hotelId: string,
-    table: TableValue,
-    data: { id: string; status?: boolean; roomStatus?: RoomStatus }
-  ): Observable<RoomResponse | RoomListResponse> {
-    return this.patch(
-      `/api/v1/entity/${hotelId}/inventory/${this.list[table]}`,
-      data
-    );
+    data: { id: string; roomStatus: RoomStatus }
+  ): Observable<RoomResponse> {
+    return this.patch(`/api/v1/entity/${hotelId}/inventory/room`, data);
+  }
+
+  updateRoomTypeStatus(
+    hotelId: string,
+    data: { id: string; status: boolean }
+  ): Observable<RoomTypeResponse> {
+    return this.patch(`/api/v1/entity/${hotelId}/inventory/room-type`, data);
   }
 
   addRooms(

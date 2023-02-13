@@ -10,7 +10,7 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { AdminRoomRoutingModule } from './admin-room.routing.module';
 import { RoomService } from './services/room.service';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,6 +19,7 @@ import { RoomService } from './services/room.service';
     AdminSharedModule,
     FormsModule,
     ReactiveFormsModule,
+    MatTooltipModule,
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['room'])),
   ],
   declarations: [...AdminRoomRoutingModule.components],

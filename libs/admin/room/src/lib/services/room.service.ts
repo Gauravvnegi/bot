@@ -6,11 +6,12 @@ import { stats } from '../constant/response';
 import { MultipleRoom, SingleRoom } from '../models/room.model';
 import { QueryConfig, TableValue } from '../types/room';
 import {
-  RoomListResponse,
-  RoomTypeListResponse,
-  RoomStatus,
-  RoomResponse,
   AddRoomsResponse,
+  AmenityResponse,
+  RoomListResponse,
+  RoomResponse,
+  RoomStatus,
+  RoomTypeListResponse,
   RoomTypeResponse,
 } from '../types/service-response';
 
@@ -29,7 +30,7 @@ export class RoomService extends ApiService {
     );
   }
 
-  getAmenities(hotelId: string): Observable<any> {
+  getAmenities(hotelId: string): Observable<AmenityResponse> {
     return this.get(`/api/v1/packages?hotelId=${hotelId}`);
   }
 
@@ -107,5 +108,22 @@ export class RoomService extends ApiService {
         config.params ?? ''
       }`
     );
+  }
+
+  createRoomType(hotelId: string, data: any): Observable<RoomTypeResponse> {
+    return this.post(`/api/v1/entity/${hotelId}/inventory/room-type`, data);
+  }
+
+  getRoomTypeById(
+    hotelId: string,
+    roomTypeId: string
+  ): Observable<RoomTypeResponse> {
+    return this.get(
+      `/api/v1/entity/${hotelId}/inventory/room-type/${roomTypeId}`
+    );
+  }
+
+  updateRoomType(hotelId: string, data: any): Observable<RoomTypeResponse> {
+    return this.put(`/api/v1/entity/${hotelId}/inventory/room-type`, data);
   }
 }

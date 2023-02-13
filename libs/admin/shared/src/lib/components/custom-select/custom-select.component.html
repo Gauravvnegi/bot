@@ -1,0 +1,22 @@
+<div class="item-boxes">
+  <div class="item-box" *ngFor="let item of options; index as i">
+    <div class="image-wrapper">
+      <img [src]="item.imageUrl" class="upload__box__child" alt="image" />
+    </div>
+    <div class="content">
+      <mat-checkbox
+        #checkbox
+        [(ngModel)]="item.checked"
+        class="checkbox"
+        (change)="getItems($event, i)"
+      ></mat-checkbox>
+      <p
+        class="item-name"
+        *ngFor="let label of selectedLabel"
+        [matTooltip]="item[label]"
+      >
+        {{ item[label] }}
+      </p>
+    </div>
+  </div>
+</div>

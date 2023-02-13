@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CKEditorModule } from 'ckeditor4-angular';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { ButtonModule } from 'primeng/button/';
@@ -15,7 +16,9 @@ import { TableModule } from 'primeng/table';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { ButtonComponent } from './components/button/button.component';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
+import { CustomFileUploadComponent } from './components/custom-file-upload/custom-file-upload.component';
 import { CustomHeaderComponent } from './components/custom-header/custom-header.component';
+import { CustomSelectComponent } from './components/custom-select/custom-select.component';
 import { CustomSizeInputComponent } from './components/custom-size-input/custom-size-input.component';
 import { DashboardErrorComponent } from './components/dashboard-error/dashboard-error.component';
 import { DatatableComponent } from './components/datatable/datatable.component';
@@ -48,6 +51,7 @@ import { LinkDetector } from './pipes/linkDetector.pipe';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SafeUrlPipe } from './pipes/safe-url-pipe';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -64,6 +68,7 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     MatChipsModule,
     MatAutocompleteModule,
     CKEditorModule,
+    MatTooltipModule,
     DialogModule,
   ],
   declarations: [
@@ -93,6 +98,8 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     MentionDirective,
     CustomSizeInputComponent,
     SafeUrlPipe,
+    CustomSelectComponent,
+    CustomFileUploadComponent,
     StatsCardComponent,
     FilterChipsComponent,
     ExportListComponent,
@@ -138,6 +145,8 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     UnsubscribeFeatureComponent,
     SafeHtmlPipe,
     SafeUrlPipe,
+    CustomSelectComponent,
+    CustomFileUploadComponent,
     StatsCardComponent,
     FilterChipsComponent,
     ExportListComponent,
@@ -147,6 +156,7 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     InputComponent,
     SelectComponent,
     CustomHeaderComponent,
+    MatTooltipModule,
     ModalComponent,
   ],
 })

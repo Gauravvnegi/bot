@@ -1,9 +1,14 @@
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
+import {
+  IteratorField,
+  ModalAction,
+  ModalContent,
+} from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormProps } from 'libs/admin/shared/src/lib/types/form.type';
 import { Subscription } from 'rxjs';
 import { iteratorFields } from '../../constant/form';
@@ -38,6 +43,11 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   isRoomTypesLoading = false;
   isRoomInfoLoading = false;
 
+  // modal value
+  showModal = false;
+  modalContent: ModalContent;
+  modalAction: ModalAction[];
+
   $subscription = new Subscription();
 
   constructor(
@@ -45,7 +55,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     private roomService: RoomService,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {
     this.initForm();
     this.submissionType = this.route.snapshot.paramMap.get(
@@ -66,6 +77,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     if (this.roomId) this.initRoomDetails();
   }
 
+  /**
+   * @function initForm Initialize form
+   */
   initForm() {
     this.useFormArray = this.fb.array([]);
 
@@ -79,6 +93,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.registerRoomTypeChangesListener();
   }
 
+  /**
+   * @function initRoomTypes Initialize room types options
+   */
   initRoomTypes() {
     this.isRoomTypesLoading = true;
     this.$subscription.add(
@@ -98,6 +115,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * @function initRoomDetails Initialize room details
+   */
   initRoomDetails() {
     this.isRoomInfoLoading = true;
     this.$subscription.add(
@@ -124,6 +144,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * @function patchRoomTypeValue Updates room types value
+   */
   patchRoomTypeValue() {
     if (this.roomTypeId && this.roomTypes.length) {
       this.useForm.patchValue({
@@ -132,10 +155,16 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Get loading state
+   */
   get loading() {
     return this.isRoomInfoLoading && this.isRoomTypesLoading;
   }
 
+  /**
+   * @function registerRoomTypeChangesListener To listen to selected room type
+   */
   registerRoomTypeChangesListener() {
     this.useForm
       .get('roomType')
@@ -147,6 +176,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * @function handleSubmit Handle submission
+   */
   handleSubmit() {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
@@ -161,28 +193,37 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @function updateRoom To update the room data
+   */
   updateRoom() {
     const data = this.useForm.getRawValue();
 
-    this.roomService
-      .updateRoom(
-        this.hotelId,
-        new SingleRoomList().deserialize({ id: this.roomId, ...data }).list[0]
-      )
-      .subscribe((res) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.success.updatedRoom`,
-              priorityMessage: '',
-            },
-            '',
-            { panelClass: 'success' }
-          )
-          .subscribe();
-      }, this.handleError);
+    this.$subscription.add(
+      this.roomService
+        .updateRoom(
+          this.hotelId,
+          new SingleRoomList().deserialize({ id: this.roomId, ...data }).list[0]
+        )
+        .subscribe((res) => {
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: `messages.success.updatedRoom`,
+                priorityMessage: '',
+              },
+              '',
+              { panelClass: 'success' }
+            )
+            .subscribe();
+          this.location.back();
+        }, this.handleError)
+    );
   }
 
+  /**
+   * @function addRooms To add the rooms
+   */
   addRooms() {
     const data = this.useForm.getRawValue();
 
@@ -195,19 +236,38 @@ export class AddRoomComponent implements OnInit, OnDestroy {
             : new MultipleRoomList().deserialize(data).list
         )
         .subscribe((res) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.success.addSingleRoom`,
-                priorityMessage: res.errorMessages[0],
-              },
-              '',
-              { panelClass: res.errorMessages?.length ? 'danger' : 'success' }
-            )
-            .subscribe();
+          if (res.errorMessages.length) {
+            this.showModal = true;
+            this.modalContent = {
+              heading: 'Rooms not added',
+              description: res.errorMessages,
+            };
+          }
+          if (res.rooms.length) {
+            this.$subscription.add(
+              this.snackbarService
+                .openSnackBarWithTranslate(
+                  {
+                    translateKey: `messages.success.addSingleRoom`,
+                    priorityMessage: '',
+                  },
+                  '',
+                  { panelClass: 'success' }
+                )
+                .subscribe()
+            );
+          }
+          this.initForm();
         }, this.handleError)
     );
   }
+
+  /**
+   * @function closeModal To close the modal
+   */
+  closeModal = () => {
+    this.showModal = false;
+  };
 
   /**
    * @function handleError to show the error

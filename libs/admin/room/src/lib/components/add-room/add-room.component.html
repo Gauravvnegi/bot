@@ -36,3 +36,10 @@
     ></hospitality-bot-button>
   </div>
 </div>
+
+<hospitality-bot-modal
+  [show]="showModal"
+  [actions]="modalAction"
+  [content]="modalContent"
+  (onClose)="closeModal()"
+></hospitality-bot-modal>

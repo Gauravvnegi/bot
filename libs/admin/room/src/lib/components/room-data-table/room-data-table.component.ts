@@ -12,6 +12,10 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
+import {
+  ModalAction,
+  ModalContent,
+} from 'libs/admin/shared/src/lib/types/fields.type';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import routes from '../../config/routes';
@@ -53,6 +57,11 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   tabFilterItems = filter;
   tabFilterIdx: number = 0;
   selectedTable: TableValue;
+
+  // modal value
+  showModal = false;
+  modalContent: ModalContent;
+  modalAction: ModalAction[];
 
   constructor(
     public fb: FormBuilder,
@@ -181,18 +190,28 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param status room type status
    * @param id room type id
    */
-  handleRoomTypeStatus(status: RoomStatus, id: string) {
+  handleRoomTypeStatus(status: boolean, id: string) {
     this.loading = true;
 
     this.$subscription.add(
       this.roomService
         .updateRoomTypeStatus(this.hotelId, {
           id,
-          status: status === 'ACTIVE',
+          status,
         })
-        .subscribe(() => this.handleStatusSuccess(status, id), this.handleError)
+        .subscribe(
+          () => this.handleStatusSuccess(status ? 'ACTIVE' : 'INACTIVE', id),
+          this.handleError
+        )
     );
   }
+
+  /**
+   * @function closeModal To close the modal
+   */
+  closeModal = () => {
+    this.showModal = false;
+  };
 
   /**
    * @function handleStatus To handle the status change
@@ -201,8 +220,48 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   handleStatus(status: RoomStatus, rowData) {
     if (this.selectedTable === 'room') {
       this.handleRoomStatus(status, rowData.id);
-    } else {
-      this.handleRoomTypeStatus(status, rowData.id);
+    }
+
+    if (this.selectedTable === 'roomType') {
+      const roomTypeStatus = status === 'ACTIVE';
+      if (!roomTypeStatus) {
+        const soldOut = rowData.roomCount.soldOut;
+
+        if (soldOut) {
+          this.modalContent = {
+            heading: 'Unpublish Page',
+            description: [
+              `${soldOut} rooms are already sold out in this category`,
+              'You can not mark this room type inactive',
+            ],
+          };
+          this.modalAction = undefined;
+        } else {
+          this.modalContent = {
+            heading: 'In-active Room Type',
+            description: [
+              `There are ${rowData.roomCount.active} rooms in this room type`,
+              'You are about to mark this room type in-active.',
+              'Are you Sure?',
+            ],
+          };
+          this.modalAction = [
+            { label: 'No', onClick: this.closeModal, variant: 'outlined' },
+            {
+              label: 'Yes',
+              onClick: () => {
+                this.handleRoomTypeStatus(roomTypeStatus, rowData.id);
+                this.closeModal();
+              },
+              variant: 'contained',
+            },
+          ];
+        }
+
+        this.showModal = true;
+      } else {
+        this.handleRoomTypeStatus(roomTypeStatus, rowData.id);
+      }
     }
   }
 

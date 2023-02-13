@@ -13,3 +13,5 @@ export type ModalAction = {
   onClick: () => void;
   variant: ButtonVariant;
 };
+
+export type ModalContent = { heading: string; description: string[] };

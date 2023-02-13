@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ModalAction } from '../../types/fields.type';
+import { ModalAction, ModalContent } from '../../types/fields.type';
 
 @Component({
   selector: 'hospitality-bot-modal',
@@ -10,25 +10,27 @@ export class ModalComponent implements OnInit {
   displayModal = false;
 
   heading: string = 'Notification';
-  descriptions: string[] = ['You are about to perform an action'];
+  descriptions: string[] = ['Are you sure?'];
 
-  @Input() actions: ModalAction[] = [
-    {
-      label: 'Okay',
-      onClick: () => {
-        this.close();
-      },
-      variant: 'contained',
+  defaultAction: ModalAction = {
+    label: 'Okay',
+    onClick: () => {
+      this.close();
     },
-  ];
+    variant: 'contained',
+  };
+
+  @Input() actions: ModalAction[];
 
   @Input() set show(value: boolean) {
     this.displayModal = value;
   }
 
-  @Input() set content(val: { heading: string; description: string[] }) {
-    this.heading = val.heading;
-    this.descriptions = val.description;
+  @Input() set content(value: ModalContent) {
+    if (value) {
+      this.heading = value.heading;
+      this.descriptions = value.description;
+    }
   }
 
   @Output() onClose = new EventEmitter();

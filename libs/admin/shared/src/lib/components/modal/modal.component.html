@@ -25,13 +25,23 @@
       </div>
 
       <div class="actions">
-        <hospitality-bot-button
-          *ngFor="let action of actions"
-          [label]="action.label"
-          (onClick)="action.onClick()"
-          [variant]="action.variant"
-        ></hospitality-bot-button>
+        <ng-container *ngIf="!!actions?.length; else defaultCTA">
+          <hospitality-bot-button
+            *ngFor="let action of actions"
+            [label]="action.label"
+            (onClick)="action.onClick()"
+            [variant]="action.variant"
+          ></hospitality-bot-button>
+        </ng-container>
       </div>
     </div>
   </div>
 </p-dialog>
+
+<ng-template #defaultCTA>
+  <hospitality-bot-button
+    [label]="defaultAction.label"
+    (onClick)="defaultAction.onClick()"
+    [variant]="defaultAction.variant"
+  ></hospitality-bot-button>
+</ng-template>

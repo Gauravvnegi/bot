@@ -51,7 +51,10 @@ export class RoomService extends ApiService {
             roomCount: {
               active: Math.floor(Math.random() * 100),
               unavailable: Math.floor(Math.random() * 100),
-              soldOut: Math.floor(Math.random() * 100),
+              soldOut:
+                Math.floor(Math.random() * 100) > 40
+                  ? Math.floor(Math.random() * 100)
+                  : 0,
             },
           })),
           roomTypeStatusCount: res.roomTypeStatusCount,

@@ -173,7 +173,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   saveDetails() {
     this.isSavingDetails = true;
     if (this.addRoomTypeForm.valid) {
-      debugger;
       const data = this.deserializeFormValue(
         this.addRoomTypeForm.getRawValue()
       );

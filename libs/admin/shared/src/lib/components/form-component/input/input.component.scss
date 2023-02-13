@@ -6,7 +6,7 @@
   padding: 1em 0.6em;
 }
 
-:host ::ng-deep .p-inputtext.ng-dirty.ng-invalid {
+::ng-deep .p-inputtext.ng-dirty.ng-invalid {
   border-color: $error;
   &:focus {
     border-color: $primaryColor;

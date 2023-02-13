@@ -96,10 +96,10 @@ export class RoomTypeList {
 export class RoomType {
   id: string;
   name: string;
-  area: string;
+  area: number;
   roomCount: RoomRecordsCount;
   amenities: string[];
-  occupancy: string;
+  occupancy: number;
   status: { label: string; value: string };
   price: number;
   currency: string;
@@ -107,12 +107,12 @@ export class RoomType {
   deserialize(input: RoomTypeResponse) {
     this.id = input.id;
     this.name = input.name;
-    this.area = `${input.area} Sq.Ft.`;
+    this.area = input.area;
     this.roomCount = new RoomRecordsCount().deserialize(input.roomCount);
     this.amenities = input.paidAmenities
       .map((item) => item.name)
       .concat(input.complimentaryAmenities.map((item) => item.name));
-    this.occupancy = `${input.totalOccupancy} people`;
+    this.occupancy = input.maxOccupancy;
     this.status = {
       label: input.status ? Status.ACTIVE : Status.INACTIVE,
       value: input.status ? 'ACTIVE' : 'INACTIVE',

@@ -7,11 +7,7 @@ import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormProps } from 'libs/admin/shared/src/lib/types/form.type';
 import { Subscription } from 'rxjs';
 import { iteratorFields } from '../../constant/form';
-import {
-  MultipleRoomList,
-  SingleRoom,
-  SingleRoomList,
-} from '../../models/room.model';
+import { MultipleRoomList, SingleRoomList } from '../../models/room.model';
 import { RoomTypeList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { AddRoomTypes, RoomTypeOption } from '../../types/room';
@@ -22,8 +18,7 @@ import { AddRoomTypes, RoomTypeOption } from '../../types/room';
   styleUrls: ['./add-room.component.scss'],
 })
 export class AddRoomComponent implements OnInit, OnDestroy {
-  // this is needed to be udpated
-  updatedAt: string;
+  draftDate: string;
 
   roomId: string;
   roomTypeId: string;
@@ -58,7 +53,10 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     ) as AddRoomTypes;
     this.fields = iteratorFields[this.submissionType];
     this.route.queryParams.subscribe((res) => {
-      this.roomId = res.id;
+      if (res.id) {
+        this.roomId = res.id;
+        this.fields[0].disabled = true;
+      }
     });
   }
 
@@ -107,7 +105,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         .getRoomById(this.hotelId, this.roomId)
         .subscribe((res) => {
           this.roomTypeId = res.roomTypeDetails.id;
-
+          this.draftDate = res.updated ?? res.created;
           this.useForm.patchValue({
             roomType: res.roomTypeDetails,
             price: res.price,

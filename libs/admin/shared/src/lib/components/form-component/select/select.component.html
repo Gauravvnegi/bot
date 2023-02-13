@@ -26,7 +26,7 @@
         input__disabled: isDisabled
       }"
       [style.fontSize]="fontSize"
-      [disabled]="isDisabled"
+      [attr.disabled]="isDisabled || null"
       [options]="options"
       [placeholder]="placeholder"
       [optionLabel]="optionLabel"

@@ -6,13 +6,8 @@ import { Component, Input, OnInit } from '@angular/core';
   templateUrl: './custom-header.component.html',
   styleUrls: ['./custom-header.component.scss'],
 })
-export class CustomHeaderComponent implements OnInit {
-  @Input() label: string;
-  @Input() dateTime: number;
-
-  constructor(private location: Location) {}
-
-  updatedAt: string;
+export class CustomHeaderComponent {
+  draftDate: string;
 
   months = [
     'January',
@@ -29,13 +24,14 @@ export class CustomHeaderComponent implements OnInit {
     'December',
   ];
 
-  ngOnInit(): void {
-    this.dateTime
-      ? this.getCurrentDateAndTime(new Date(this.dateTime))
-      : this.getCurrentDateAndTime(new Date());
+  @Input() label: string;
+  @Input() set dateTime(value: number | undefined) {
+    this.setDraftTime(value ? new Date() : new Date());
   }
 
-  getCurrentDateAndTime(date: Date) {
+  constructor(private location: Location) {}
+
+  setDraftTime(date: Date) {
     const currentDate = date.getDate();
     const currentMonth = date.getMonth();
     const currentYear = date.getFullYear();
@@ -48,7 +44,7 @@ export class CustomHeaderComponent implements OnInit {
       hour12: true,
     });
 
-    this.updatedAt = `${fullDate} ${currentTime}`;
+    this.draftDate = `${fullDate} ${currentTime}`;
   }
 
   back() {

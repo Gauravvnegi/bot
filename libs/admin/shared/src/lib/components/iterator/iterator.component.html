@@ -24,11 +24,13 @@
             *ngSwitchCase="'input'"
             [controlName]="field.name"
             [props]="props"
+            [disabled]="field.disabled"
           ></hospitality-bot-input>
           <hospitality-bot-select
             *ngSwitchCase="'dropdown'"
             [controlName]="field.name"
             [props]="props"
+            [disabled]="field.disabled"
           ></hospitality-bot-select>
         </div>
         <mat-icon class="delete" (click)="removeField(i)">clear</mat-icon>

@@ -28,7 +28,7 @@
         input__disabled: isDisabled
       }"
       [style.fontSize]="fontSize"
-      [disabled]="isDisabled"
+      [attr.disabled]="isDisabled || null"
       [formControlName]="controlName"
       [id]="controlName"
       type="text"

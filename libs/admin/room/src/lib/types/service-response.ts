@@ -88,9 +88,9 @@ export type RoomTypeResponse = {
   };
   maxChildren: number;
   maxAdult: number;
-  area: string;
+  area: number;
   status: boolean;
-  totalOccupancy: number;
+  maxOccupancy: number;
 };
 
 export type RoomTypeListResponse = {

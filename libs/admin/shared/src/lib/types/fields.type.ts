@@ -3,4 +3,5 @@ export type IteratorField = {
   name: string;
   type: 'input' | 'dropdown';
   required?: boolean;
+  disabled?: boolean;
 };

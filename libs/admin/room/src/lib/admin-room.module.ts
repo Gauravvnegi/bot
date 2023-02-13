@@ -10,8 +10,6 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { AdminRoomRoutingModule } from './admin-room.routing.module';
 import { RoomService } from './services/room.service';
-
-import { PackageService } from 'libs/admin/packages/src/lib/services/package.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
@@ -25,6 +23,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['room'])),
   ],
   declarations: [...AdminRoomRoutingModule.components],
-  providers: [RoomService, PackageService],
+  providers: [RoomService],
 })
 export class AdminRoomModule {}

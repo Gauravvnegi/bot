@@ -1,4 +1,12 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IteratorField } from '../../types/fields.type';
 import { FormProps } from '../../types/form.type';
@@ -8,7 +16,7 @@ import { FormProps } from '../../types/form.type';
   templateUrl: './iterator.component.html',
   styleUrls: ['./iterator.component.scss'],
 })
-export class IteratorComponent implements OnInit {
+export class IteratorComponent implements OnChanges {
   constructor(private fb: FormBuilder) {}
 
   props: FormProps = {
@@ -23,8 +31,10 @@ export class IteratorComponent implements OnInit {
   // Zero maxLimit means there is no limit
   @Input() maxLimit = 0;
 
-  ngOnInit(): void {
-    this.createNewFields();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes?.useFormArray?.currentValue.length) {
+      this.createNewFields();
+    }
   }
 
   /**

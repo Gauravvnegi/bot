@@ -12,3 +12,5 @@ export type FormProps = {
   width?: string;
   fontSize?: string;
 };
+
+export type ButtonVariant = 'text' | 'contained' | 'outlined';

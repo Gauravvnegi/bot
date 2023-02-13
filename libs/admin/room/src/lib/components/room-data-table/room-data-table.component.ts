@@ -12,6 +12,10 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
+import {
+  ModalAction,
+  ModalContent,
+} from 'libs/admin/shared/src/lib/types/fields.type';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import routes from '../../config/routes';
@@ -53,6 +57,11 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   tabFilterItems = filter;
   tabFilterIdx: number = 0;
   selectedTable: TableValue;
+
+  // modal value
+  showModal = false;
+  modalContent: ModalContent;
+  modalAction: ModalAction[];
 
   constructor(
     public fb: FormBuilder,
@@ -159,29 +168,115 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   }
 
   /**
+   * @function handleRoomStatus handle the room status toggle
+   * @param status room status
+   * @param id room id
+   */
+  handleRoomStatus(status: RoomStatus, id: string) {
+    this.loading = true;
+
+    this.$subscription.add(
+      this.roomService
+        .updateRoomStatus(this.hotelId, {
+          id,
+          roomStatus: status,
+        })
+        .subscribe(() => this.handleStatusSuccess(status, id), this.handleError)
+    );
+  }
+
+  /**
+   * @function handleRoomStatus handle the room type status toggle
+   * @param status room type status
+   * @param id room type id
+   */
+  handleRoomTypeStatus(status: boolean, id: string) {
+    this.loading = true;
+
+    this.$subscription.add(
+      this.roomService
+        .updateRoomTypeStatus(this.hotelId, {
+          id,
+          status,
+        })
+        .subscribe(
+          () => this.handleStatusSuccess(status ? 'ACTIVE' : 'INACTIVE', id),
+          this.handleError
+        )
+    );
+  }
+
+  /**
+   * @function closeModal To close the modal
+   */
+  closeModal = () => {
+    this.showModal = false;
+  };
+
+  /**
    * @function handleStatus To handle the status change
-   * @param status
+   * @param status status value
    */
   handleStatus(status: RoomStatus, rowData) {
-    const statusData =
-      this.selectedTable === 'room'
-        ? { roomStatus: status }
-        : { status: status === 'ACTIVE' };
+    if (this.selectedTable === 'room') {
+      this.handleRoomStatus(status, rowData.id);
+    }
 
-    this.loading = true;
-    this.roomService
-      .updateStatus(this.hotelId, this.selectedTable, {
-        id: rowData.id,
-        ...statusData,
-      })
-      .subscribe((res) => {
-        this.loading = false;
-        this.values.find((item) => item.id === rowData.id).status = {
-          label: Status[status],
-          value: status,
-        };
-      }, this.handleError);
+    if (this.selectedTable === 'roomType') {
+      const roomTypeStatus = status === 'ACTIVE';
+      if (!roomTypeStatus) {
+        const soldOut = rowData.roomCount.soldOut;
+
+        if (soldOut) {
+          this.modalContent = {
+            heading: 'Unpublish Page',
+            description: [
+              `${soldOut} rooms are already sold out in this category`,
+              'You can not mark this room type inactive',
+            ],
+          };
+          this.modalAction = undefined;
+        } else {
+          this.modalContent = {
+            heading: 'In-active Room Type',
+            description: [
+              `There are ${rowData.roomCount.active} rooms in this room type`,
+              'You are about to mark this room type in-active.',
+              'Are you Sure?',
+            ],
+          };
+          this.modalAction = [
+            { label: 'No', onClick: this.closeModal, variant: 'outlined' },
+            {
+              label: 'Yes',
+              onClick: () => {
+                this.handleRoomTypeStatus(roomTypeStatus, rowData.id);
+                this.closeModal();
+              },
+              variant: 'contained',
+            },
+          ];
+        }
+
+        this.showModal = true;
+      } else {
+        this.handleRoomTypeStatus(roomTypeStatus, rowData.id);
+      }
+    }
   }
+
+  /**
+   * @function handleStatusSuccess To update the status after successful update
+   * @param status
+   * @param rowData
+   */
+  handleStatusSuccess = (status: RoomStatus, id: string) => {
+    this.loading = false;
+    this.values.find((item) => item.id === id).status = {
+      label: Status[status],
+      value: status,
+    };
+  };
 
   /**
    * @function onSelectedTabFilterChange To handle the tab filter change.

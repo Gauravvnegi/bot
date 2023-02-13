@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { ButtonVariant } from '../../types/form.type';
 
 @Component({
   selector: 'hospitality-bot-button',
@@ -7,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./button.component.scss'],
 })
 export class ButtonComponent {
-  @Input() variant: 'text' | 'contained' | 'outlined' = 'contained';
+  @Input() variant: ButtonVariant = 'contained';
   @Input() color: string;
   @Input() label: string;
   @Input() type: string = 'button';

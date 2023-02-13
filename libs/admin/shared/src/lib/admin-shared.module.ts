@@ -7,6 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CKEditorModule } from 'ckeditor4-angular';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { ButtonModule } from 'primeng/button/';
+import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
@@ -28,6 +29,7 @@ import { InputComponent } from './components/form-component/input/input.componen
 import { SelectComponent } from './components/form-component/select/select.component';
 import { IteratorComponent } from './components/iterator/iterator.component';
 import { MentionDirective, MentionListComponent } from './components/mention';
+import { ModalComponent } from './components/modal/modal.component';
 import { MultipleDropdownComponent } from './components/multiple-dropdown/multiple-dropdown.component';
 import { StatsCardComponent } from './components/stats-card/stats-card.component';
 import { TabGroupComponent } from './components/tab-group/tab-group.component';
@@ -67,6 +69,7 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     MatAutocompleteModule,
     CKEditorModule,
     MatTooltipModule,
+    DialogModule,
   ],
   declarations: [
     DatatableComponent,
@@ -106,6 +109,7 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     InputComponent,
     SelectComponent,
     CustomHeaderComponent,
+    ModalComponent,
   ],
   exports: [
     DatatableComponent,
@@ -153,6 +157,7 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     SelectComponent,
     CustomHeaderComponent,
     MatTooltipModule,
+    ModalComponent,
   ],
 })
 export class AdminSharedModule {}

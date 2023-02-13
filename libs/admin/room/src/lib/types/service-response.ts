@@ -16,8 +16,8 @@ export type RoomResponse = {
   source: string;
   price: number;
   currency: string;
-  createdAt: string;
-  updatedAt: string;
+  created: string;
+  updated: string;
 };
 
 export type RoomListResponse = {
@@ -88,9 +88,9 @@ export type RoomTypeResponse = {
   };
   maxChildren: number;
   maxAdult: number;
-  area: string;
+  area: number;
   status: boolean;
-  totalOccupancy: number;
+  maxOccupancy: number;
 };
 
 export type RoomTypeListResponse = {
@@ -100,4 +100,9 @@ export type RoomTypeListResponse = {
     ACTIVE: number;
     INACTIVE: number;
   };
+};
+
+export type AddRoomsResponse = {
+  errorMessages: string[];
+  rooms: RoomResponse[];
 };

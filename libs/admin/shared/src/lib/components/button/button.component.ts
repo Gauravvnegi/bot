@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./button.component.scss'],
 })
 export class ButtonComponent {
-  @Input() variant: 'text' | 'contained' = 'contained';
+  @Input() variant: 'text' | 'contained' | 'outlined' = 'contained';
   @Input() color: string;
   @Input() label: string;
   @Input() type: string = 'button';

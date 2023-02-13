@@ -61,7 +61,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    private _router: Router
+    private router: Router
   ) {
     super(fb, tabFilterService);
   }
@@ -201,6 +201,20 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   customSort(event: SortEvent): void {}
 
   /**
+   * @function openEditForm handle the room or room type form open
+   * @param rowData clicked row data
+   */
+  openEditForm(rowData) {
+    const selectedRoute =
+      this.selectedTable === 'room'
+        ? `${routes.addRoom}/single`
+        : routes.addRoomType;
+    this.router.navigate([`/pages/inventory/room/${selectedRoute}`], {
+      queryParams: { id: rowData.id },
+    });
+  }
+
+  /**
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
    *
    */
@@ -252,14 +266,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
       )
       .subscribe();
   };
-
-  handleRowClick(rowData) {
-    const selectedRoute =
-      this.selectedTable === 'room' ? routes.addRoom : routes.addRoomType;
-    this._router.navigate([`/pages/inventory/room/${selectedRoute}`], {
-      queryParams: { id: rowData.id },
-    });
-  }
 
   /**
    * @function ngOnDestroy unsubscribe subscription

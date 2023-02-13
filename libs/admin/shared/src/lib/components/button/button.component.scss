@@ -21,4 +21,11 @@
     color: $primary-purple;
     background-color: $white;
   }
+
+  &__outlined {
+    color: $primary-purple;
+    background-color: $white;
+    border: 1px solid;
+    border-color: $primary-purple;
+  }
 }

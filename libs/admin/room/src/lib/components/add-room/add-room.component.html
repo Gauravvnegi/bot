@@ -1,8 +1,38 @@
 <div class="wrapper">
-  <hospitality-bot-iterator [fields]="fields" [useFormArray]="useFormArray">
-  </hospitality-bot-iterator>
-  <hospitality-bot-button
-    label="Save"
-    (onClick)="handleSubmit()"
-  ></hospitality-bot-button>
+  <div class="main">
+    <hospitality-bot-custom-header
+      [label]="'Add ' + submissionType + ' room'"
+      [dateTime]="draftDate"
+    ></hospitality-bot-custom-header>
+    <div class="input-fields" [formGroup]="useForm">
+      <hospitality-bot-select
+        class="input"
+        controlName="roomType"
+        label="Room Type"
+        [options]="roomTypes"
+        [props]="props"
+        [loading]="loading"
+      ></hospitality-bot-select>
+      <hospitality-bot-input
+        class="input"
+        controlName="price"
+        [label]="'Price(' + useForm.get('currency').value + ')'"
+        [props]="props"
+        disabled="true"
+      ></hospitality-bot-input>
+    </div>
+    <hospitality-bot-iterator
+      class="iterator"
+      [fields]="fields"
+      [useFormArray]="useFormArray"
+      [maxLimit]="roomId ? 1 : 0"
+    >
+    </hospitality-bot-iterator>
+  </div>
+  <div class="save-footer">
+    <hospitality-bot-button
+      label="Save"
+      (onClick)="handleSubmit()"
+    ></hospitality-bot-button>
+  </div>
 </div>

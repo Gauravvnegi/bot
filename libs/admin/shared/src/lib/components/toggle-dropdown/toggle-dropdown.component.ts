@@ -63,7 +63,8 @@ export class ToggleDropdownComponent {
 
   constructor() {}
 
-  toggleState() {
+  toggleState(event: Event) {
+    event.stopPropagation();
     const currentIdx = this.items.findIndex(
       (item) => item.value === this.value
     );

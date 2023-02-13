@@ -3,5 +3,14 @@
     "createType": "+Create Room Type",
     "addMultiple": "+Add Multiple Rooms",
     "addSingle": "+Add Single Room"
+  },
+  "messages": {
+    "error": {
+      "undefined": "Fetching Stats failed"
+    },
+    "success": {
+      "addSingleRoom": "Rooms Added Successfully",
+      "updatedRoom": "Room details updated Successfully"
+    }
   }
 }

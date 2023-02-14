@@ -106,7 +106,10 @@ export class RoomService extends ApiService {
     return this.get(
       `/api/v1/entity/${hotelId}/inventory/${this.list[table]}/export${
         config.params ?? ''
-      }`
+      }`,
+      {
+        responseType: 'blob',
+      }
     );
   }
 

@@ -290,12 +290,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function customSort To sort the rows of the table.
-   * @param event The event for sort click action.
-   */
-  customSort(event: SortEvent): void {}
-
-  /**
    * @function openEditForm handle the room or room type form open
    * @param rowData clicked row data
    */

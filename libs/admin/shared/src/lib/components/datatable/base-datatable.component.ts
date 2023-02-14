@@ -184,6 +184,22 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   /**
+   * @function customSort To sort the rows of the table.
+   * @param event The event for sort click action.
+   */
+  customSort(event: SortEvent): void {
+    const col = this.cols.filter((data) => data.field === event.field)[0];
+    const field =
+      event.field[event.field.length - 1] === ')'
+        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
+        : event.field;
+
+    event.data.sort((data1, data2) =>
+      this.sortOrder(event, field, data1, data2, col)
+    );
+  }
+
+  /**
    * @function updatePaginations To update the pagination variable values.
    * @param event The lazy load event for the table.
    */

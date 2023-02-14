@@ -100,7 +100,7 @@ export const filter: Filter<TableValue, string>[] = [
 export const cols: Record<TableValue, Cols[]> = {
   room: [
     {
-      field: 'roomType',
+      field: 'type',
       header: 'Room / Type',
       isSort: true,
       sortType: 'string',
@@ -119,7 +119,7 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'date',
       header: 'Date',
       isSort: true,
-      sortType: 'string',
+      sortType: 'date',
       dynamicWidth: true,
       width: '32%',
     },
@@ -127,12 +127,12 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'price',
       header: 'Price',
       isSort: true,
-      sortType: 'string',
+      sortType: 'number',
       dynamicWidth: true,
       width: '18%',
     },
     {
-      field: 'status',
+      field: 'status.value',
       header: 'Action / Status',
       isSort: true,
       sortType: 'string',
@@ -142,7 +142,7 @@ export const cols: Record<TableValue, Cols[]> = {
   ],
   roomType: [
     {
-      field: 'type',
+      field: 'name',
       header: 'Type',
       isSort: true,
       sortType: 'string',
@@ -153,7 +153,7 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'area',
       header: 'Area',
       isSort: true,
-      sortType: 'string',
+      sortType: 'number',
       dynamicWidth: true,
       width: '13%',
     },
@@ -177,12 +177,12 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'occupancy',
       header: 'Occupancy',
       isSort: true,
-      sortType: 'string',
+      sortType: 'number',
       dynamicWidth: true,
       width: '17%',
     },
     {
-      field: 'active',
+      field: 'status.value',
       header: 'Active',
       isSort: true,
       sortType: 'string',

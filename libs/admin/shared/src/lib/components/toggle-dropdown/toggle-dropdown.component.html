@@ -1,7 +1,7 @@
-<div class="wrapper">
+<div class="wrapper" (click)="stopEvent($event)">
   <p-splitButton
     [label]="label"
-    (onClick)="toggleState($event)"
+    (onClick)="toggleState()"
     [model]="items"
     [styleClass]="styleClass"
   ></p-splitButton>

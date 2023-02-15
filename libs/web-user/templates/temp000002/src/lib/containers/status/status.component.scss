@@ -68,7 +68,6 @@
 .status--heading {
   @include flex-space-between();
   align-items: center;
-  padding: 5px;
 
   margin: $margin-large 0;
   .heading {
@@ -86,7 +85,7 @@
     align-items: center;
     cursor: pointer;
     img {
-      margin: 0 8px;
+      margin-left: $margin-large;
       height: 20px;
       filter: invert(40%) sepia(11%) saturate(443%) hue-rotate(196deg)
         brightness(99%) contrast(89%);
@@ -110,7 +109,7 @@
 
 .section--content {
   @include flex-space-between();
-  margin: 0 $margin-medium;
+  padding:$margin-medium;
   &--health {
     flex-direction: column;
     margin: $margin-small $margin-medium;
@@ -127,7 +126,7 @@
           margin-left: $margin5;
         }
         @media screen and (max-width: $tab-size) {
-          margin-left: 0;
+          margin-left: $margin-medium;
         }
       }
       mat-icon {
@@ -269,16 +268,16 @@
   }
 }
 
-:host ::ng-deep .ng-star-inserted {
-  padding: 0 $padding20 $padding20;
+// :host ::ng-deep .ng-star-inserted {
+//   padding: 0 $padding20 $padding20;
 
-  @media screen and (max-width: $S) {
-    padding: 0 2px $padding5;
-  }
-  @media screen and (max-width: $tab-size) {
-    padding: 0 $padding10 $padding10;
-  }
-}
+//   @media screen and (max-width: $S) {
+//     padding: 0 2px $padding5;
+//   }
+//   @media screen and (max-width: $tab-size) {
+//     padding: 0 $padding10 $padding10;
+//   }
+// }
 
 :host ::ng-deep .mat-dialog-container {
   padding: inherit !important;

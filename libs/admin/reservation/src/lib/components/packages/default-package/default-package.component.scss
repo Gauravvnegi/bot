@@ -79,8 +79,6 @@
 .data-wrapper {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
   margin: $margin20 3px;
   .field {
     width: 20%;
@@ -92,6 +90,7 @@
     .value {
       margin-top: $margin10;
       color: $primary-black;
+      word-break: break-word;
     }
   }
 }

@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { DateService } from '@hospitality-bot/shared/utils';
 import { SnackBarService } from 'libs/shared/material/src';
+import { MetaData } from '../../../models/guest-table.model';
 import { ReservationService } from '../../../services/reservation.service';
 
 @Component({
@@ -10,8 +12,11 @@ import { ReservationService } from '../../../services/reservation.service';
 export class DefaultPackageComponent implements OnInit {
   @Input() parentForm;
   @Input() paidAmenityFG;
-  @Input() config;
   @Input() index;
+  metaDataList: MetaData[] = [];
+  @Input() set config(value) {
+    this.getMetaDataList(value);
+  }
 
   constructor(
     protected snackbarService: SnackBarService,
@@ -59,5 +64,26 @@ export class DefaultPackageComponent implements OnInit {
             .subscribe();
         }
       );
+  }
+
+  getMetaDataList(value) {
+    let format: string = 'DD-MM-YYYY , HH:mm A';
+    this.metaDataList = Object.entries(value.metaData as MetaData).map(
+      ([key, value]) => ({
+        label: (key.charAt(0).toUpperCase() + key.slice(1)).replace(
+          /([A-Z])/g,
+          ' $1'
+        ),
+        value:
+          key == 'pickupTime' ? this.convertEpochToDate(value, format) : value,
+      })
+    );
+  }
+
+  convertEpochToDate(epochTime: any, format: string) {
+    return DateService.getDateFromTimeStamp(epochTime * 1000, format).replace(
+      ',',
+      'at'
+    );
   }
 }

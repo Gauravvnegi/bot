@@ -43,8 +43,9 @@
     "basePriceRequired":"Base price is required",
     "percentageError":"Percentage can not be more than 100",
     "amountError":"Amount can not be more than base price",
-    "maxAdultError":"Max adult can not be more than max occupancy",
+    "maxAdultError":"Max adult is invalid or can not be more than max occupancy",
     "areaRequired":"Room area is required",
-    "maxOccupancyRequired":"Max occupancy is required"
+    "maxOccupancyRequired":"Max occupancy is required",
+    "maxOccupancyInvalid":"Max occupancy is invalid"
  }
 }

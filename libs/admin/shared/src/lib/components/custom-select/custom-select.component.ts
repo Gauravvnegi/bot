@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import * as _ from 'lodash';
 
 @Component({
@@ -24,16 +24,19 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   @Input() optionalProperties: string[];
   @Input() selectedLabel: string[];
   @Input() set itemList(value: Record<string, any>[]) {
-    this.options = value.map((item) => {
-      let checked = false;
-      if (this.value.length) {
-        checked =
-          this.value.findIndex(
-            (res) => res[this.requiredProperty] === item[this.requiredProperty]
-          ) > -1;
-      }
-      return { ...item, checked };
-    });
+    if (!!value) {
+      this.options = value.map((item) => {
+        let checked = false;
+        if (this.value.length) {
+          checked =
+            this.value.findIndex(
+              (res) =>
+                res[this.requiredProperty] === item[this.requiredProperty]
+            ) > -1;
+        }
+        return { ...item, checked };
+      });
+    }
   }
 
   ngOnInit(): void {}
@@ -75,11 +78,11 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  getItems(event: MatCheckboxChange, i: number) {
+  selectItems(i: number) {
     const selectedProps = this.optionalProperties;
     selectedProps?.unshift(this.requiredProperty);
     const valueItem = this.options[i];
-    if (event.checked == true) {
+    if (!valueItem.checked) {
       valueItem.checked = true;
 
       if (selectedProps) {

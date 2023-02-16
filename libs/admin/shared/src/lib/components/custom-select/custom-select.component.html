@@ -1,17 +1,18 @@
 <div class="item-boxes">
-  <div class="item-box" *ngFor="let item of options; index as i">
+  <div
+    class="item-box"
+    *ngFor="let item of options; index as i"
+    (click)="selectItems(i)"
+  >
     <div class="image-wrapper">
       <img [src]="item.imageUrl" class="upload__box__child" alt="image" />
     </div>
     <div class="content">
-      <mat-checkbox
-        #checkbox
-        [(ngModel)]="item.checked"
-        class="checkbox"
-        (change)="getItems($event, i)"
-      ></mat-checkbox>
+      <div class="icon-wrapper">
+        <img src="assets/svg/tick.svg" *ngIf="item.checked" />
+      </div>
       <p
-        class="item-name"
+        class="labels"
         *ngFor="let label of selectedLabel"
         [matTooltip]="item[label]"
       >

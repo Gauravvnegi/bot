@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -48,33 +48,33 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.roomTypeId = res.id;
     });
     this.initAddRoomTypeForm();
-    this.getAmenities();
     this.getConfigByHotelID();
-    if (this.roomTypeId) this.getRoomTypeById();
+    this.getAmenities();
   }
-
   initAddRoomTypeForm() {
     this.useForm = this.fb.group({
       name: ['', [Validators.required]],
       imageUrls: [[], []],
       description: ['', [Validators.required]],
-      complimentaryAmenities: [[], [Validators.required]],
+      complimentaryAmenities: [[], []],
       paidAmenities: [[], [Validators.required]],
       originalPrice: ['', [Validators.required]],
       discountType: ['', []],
-      discountTypeValue: ['', []],
+      discountValue: ['', []],
       discountedPrice: ['', []],
       variablePriceCurrency: ['', []],
       currency: ['', []],
-      variablePrice: ['', []],
+      variableAmount: ['', []],
       discountedPriceCurrency: ['', []],
       maxOccupancy: ['', [Validators.required]],
       maxChildren: ['', []],
       maxAdult: ['', []],
       area: ['', [Validators.required]],
     });
-
     this.disableControls();
+  }
+
+  attachUseFormListener() {
     this.useForm.controls['originalPrice'].valueChanges.subscribe((res) => {
       this.onBasePriceChange();
     });
@@ -83,7 +83,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.onDiscountTypeChange();
     });
 
-    this.useForm.controls['discountTypeValue'].valueChanges.subscribe((res) => {
+    this.useForm.controls['discountValue'].valueChanges.subscribe((res) => {
       this.OnDiscountValueChange();
     });
 
@@ -91,8 +91,18 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.useForm.controls['discountedPriceCurrency'].setValue(res);
       this.useForm.controls['variablePriceCurrency'].setValue(res);
     });
-    this.onMaxOccupancyChange();
-    this.onMaxAdultChange();
+
+    this.useForm.controls['maxOccupancy'].valueChanges.subscribe(
+      (res: number) => {
+        this.onMaxOccupancyChange(res);
+      }
+    );
+
+    this.useForm.controls['maxAdult'].valueChanges.subscribe((res) => {
+      this.onMaxAdultChange(res);
+    });
+
+    if (this.roomTypeId) this.getRoomTypeById();
   }
 
   getAmenities() {
@@ -118,6 +128,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       this.configService
         .getColorAndIconConfig(this.hotelId)
         .subscribe((response) => {
+          this.attachUseFormListener();
           this.setCurrencyOptions(response.currencyConfiguration);
           this.setDiscountOptions(response.roomDiscountConfig);
         })
@@ -179,7 +190,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   disableControls() {
     this.useForm.controls['discountType'].disable();
-    this.useForm.controls['discountTypeValue'].disable();
+    this.useForm.controls['discountValue'].disable();
     this.useForm.controls['discountedPriceCurrency'].disable();
     this.useForm.controls['discountedPrice'].disable();
     this.useForm.controls['maxChildren'].disable();
@@ -188,22 +199,22 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   onBasePriceChange() {
     this.useForm.controls['discountType'].enable();
-    this.useForm.controls['discountTypeValue'].enable();
-    this.useForm.controls['discountTypeValue'].setValue(null);
+    this.useForm.controls['discountValue'].enable();
+    this.useForm.controls['discountValue'].setValue(null);
     this.setDiscountedPrice(this.getControlValue('discountType'));
   }
 
   onDiscountTypeChange() {
-    this.useForm.controls['discountTypeValue'].setValue(null);
+    this.useForm.controls['discountValue'].setValue(null);
     if (this.getControlValue('discountType') == this.discount[1].value) {
-      this.useForm.controls['discountTypeValue'].clearValidators();
-      this.useForm.controls['discountTypeValue'].updateValueAndValidity();
+      this.useForm.controls['discountValue'].clearValidators();
+      this.useForm.controls['discountValue'].updateValueAndValidity();
       this.setDiscountedPrice(this.getControlValue('discountType'));
     } else {
-      this.useForm.controls['discountTypeValue'].setValidators([
+      this.useForm.controls['discountValue'].setValidators([
         Validators.max(100),
       ]);
-      this.useForm.controls['discountTypeValue'].markAsTouched();
+      this.useForm.controls['discountValue'].markAsTouched();
       this.setDiscountedPrice(this.getControlValue('discountType'));
     }
   }
@@ -212,11 +223,11 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     if (this.getControlValue('discountType') == this.discount[1].value) {
       if (
         this.getControlValue('originalPrice') >=
-        this.getControlValue('discountTypeValue')
+        this.getControlValue('discountValue')
       ) {
         this.setDiscountedPrice(this.getControlValue('discountType'));
       } else {
-        this.useForm.controls['discountTypeValue'].setErrors({
+        this.useForm.controls['discountValue'].setErrors({
           incorrect: true,
         });
       }
@@ -231,37 +242,37 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       discountedPrice =
         this.getControlValue('originalPrice') -
         (this.getControlValue('originalPrice') *
-          this.getControlValue('discountTypeValue')) /
+          this.getControlValue('discountValue')) /
           100;
       this.useForm.controls['discountedPrice'].setValue(discountedPrice);
     } else if (discountType == this.discount[1].value) {
       discountedPrice =
         this.getControlValue('originalPrice') -
-        this.getControlValue('discountTypeValue');
+        this.getControlValue('discountValue');
       this.useForm.controls['discountedPrice'].setValue(discountedPrice);
     }
   }
 
-  onMaxOccupancyChange() {
-    this.useForm.controls['maxOccupancy'].valueChanges.subscribe((res) => {
-      this.useForm.controls['maxAdult'].enable();
-      this.useForm.controls['maxChildren'].patchValue(null);
-      this.useForm.patchValue({ maxAdult: null }, { emitEvent: false });
-    });
+  onMaxOccupancyChange(maxOccupancy: number) {
+    this.useForm.controls['maxAdult'].enable();
+    this.useForm.controls['maxChildren'].patchValue(null);
+    this.useForm.patchValue({ maxAdult: null }, { emitEvent: false });
+    if (maxOccupancy != null && maxOccupancy <= 0) {
+      this.useForm.controls['maxOccupancy'].setErrors({ incorrect: true });
+      this.useForm.controls['maxOccupancy'].markAsTouched();
+    }
   }
 
-  onMaxAdultChange() {
-    this.useForm.controls['maxAdult'].valueChanges.subscribe((res) => {
-      if (this.getControlValue('maxOccupancy') >= res) {
-        const maxChildren = this.getControlValue('maxOccupancy') - res;
-        this.useForm.controls['maxChildren'].setValue(maxChildren);
-      } else {
-        this.useForm.controls['maxAdult'].setErrors({
-          incorrect: true,
-        });
-        this.useForm.controls['maxAdult'].markAsTouched();
-      }
-    });
+  onMaxAdultChange(maxAdult: number) {
+    if (!(maxAdult <= 0) && this.getControlValue('maxOccupancy') >= maxAdult) {
+      const maxChildren = this.getControlValue('maxOccupancy') - maxAdult;
+      this.useForm.controls['maxChildren'].setValue(maxChildren);
+    } else if (maxAdult != null) {
+      this.useForm.controls['maxAdult'].setErrors({
+        incorrect: true,
+      });
+      this.useForm.controls['maxAdult'].markAsTouched();
+    }
   }
 
   getRoomTypeById() {

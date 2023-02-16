@@ -1,45 +1,44 @@
 import {
-  AfterViewChecked,
   Component,
-  ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   OnDestroy,
   OnInit,
   Output,
-  ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { AdminUtilityService, UserService } from 'libs/admin/shared/src/index';
-import { NotificationService } from '../../services/notification.service';
+import { ModalService } from 'libs/shared/material/src';
+import * as moment from 'moment';
+import { Subscription } from 'rxjs';
 import {
   Notification,
   NotificationList,
 } from '../../data-models/notifications.model';
 import { GlobalFilterService } from '../../services/global-filters.service';
 import { FirebaseMessagingService } from '../../services/messaging.service';
-import { ModalService } from 'libs/shared/material/src';
-import { MatDialogConfig } from '@angular/material/dialog';
-import * as moment from 'moment';
+import { NotificationService } from '../../services/notification.service';
 import { NotificationDetailComponent } from './notification-detail/notification-detail.component';
+
 @Component({
   selector: 'admin-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
 })
-export class NotificationComponent
-  implements OnInit, OnDestroy, AfterViewChecked {
+export class NotificationComponent implements OnInit, OnDestroy {
   @Input() notificationFilterData;
   @Output() onCloseNotification = new EventEmitter();
   @Output() filterData = new EventEmitter();
-  @ViewChild('notificationList') private myScrollContainer: ElementRef;
+
   scrollView;
   filterFG: FormGroup;
   isCustomizeVisible = false;
   isFilterVisible = false;
+
   limit = 20;
+  paginationDisabled = false;
+
   notifications: Notification[];
   private $subscription = new Subscription();
 
@@ -66,13 +65,6 @@ export class NotificationComponent
       .subscribe((_) => this.getNotifications());
   }
 
-  ngAfterViewChecked() {
-    if (this.myScrollContainer && this.scrollView) {
-      this.myScrollContainer.nativeElement.scrollTop = this.scrollView;
-      this.scrollView = undefined;
-    }
-  }
-
   initFG(): void {
     this.filterFG = this.fb.group({
       status: this.fb.group({
@@ -97,25 +89,12 @@ export class NotificationComponent
         .getNotificationHistory(this.userService.getLoggedInUserid(), config)
         .subscribe((response) => {
           this.notifications = new NotificationList().deserialize(response);
-          this.limit =
-            response.length < this.limit
-              ? this.limit
-              : (this.limit = this.limit + 20);
+          this.paginationDisabled = response.length < this.limit;
+          this.limit = this.paginationDisabled
+            ? this.limit
+            : (this.limit = this.limit + 20);
         })
     );
-  }
-
-  @HostListener('window:scroll', ['$event'])
-  onScroll(_) {
-    if (
-      this.myScrollContainer &&
-      this.myScrollContainer.nativeElement.offsetHeight +
-        this.myScrollContainer.nativeElement.scrollTop ===
-        this.myScrollContainer.nativeElement.scrollHeight &&
-      this.limit > this.notifications.length
-    ) {
-      this.getNotifications();
-    }
   }
 
   closePopup() {

@@ -42,6 +42,8 @@ export class ChatComponent
   liveChatFG: FormGroup;
   isLoading = false;
   limit = 20;
+  paginationDisabled = false;
+
   $subscription = new Subscription();
   scrollBottom = true;
   scrollView;
@@ -216,7 +218,8 @@ export class ChatComponent
   }
 
   updatePagination(messageLength, limit) {
-    this.limit = messageLength < limit ? messageLength : this.limit + 20;
+    this.paginationDisabled = messageLength < limit;
+    this.limit = this.paginationDisabled ? messageLength : this.limit + 20;
   }
 
   handleChatResponse(response) {
@@ -274,13 +277,8 @@ export class ChatComponent
     return messages;
   }
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event) {
-    if (
-      this.myScrollContainer &&
-      this.myScrollContainer.nativeElement.scrollTop === 0 &&
-      this.limit > this.getMessagesFromTimeList().length
-    )
+  loadMore() {
+    if (this.limit > this.getMessagesFromTimeList().length)
       this.getChat(
         { offset: 0, limit: this.limit },
         this.myScrollContainer.nativeElement.scrollHeight

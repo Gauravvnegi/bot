@@ -35,6 +35,7 @@ import { LinkDetector } from './pipes/linkDetector.pipe';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SafeUrlPipe } from './pipes/safe-url-pipe';
+import { InfiniteScroll } from './directives/infinite-scroll.directive';
 
 @NgModule({
   imports: [
@@ -62,6 +63,7 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     InternalSubscriptionDirective,
     FeatureDirective,
     ClickableDirective,
+    InfiniteScroll,
     ClickStopPropagation,
     UploadCsvComponent,
     UploadVideoComponent,
@@ -97,6 +99,7 @@ import { SafeUrlPipe } from './pipes/safe-url-pipe';
     InternalSubscriptionDirective,
     FeatureDirective,
     ClickableDirective,
+    InfiniteScroll,
     UploadVideoComponent,
     TopicDropdownComponent,
     TemplateEditorComponent,

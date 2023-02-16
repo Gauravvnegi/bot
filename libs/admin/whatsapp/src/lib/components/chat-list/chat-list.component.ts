@@ -27,19 +27,19 @@ import { MessageService } from '../../services/messages.service';
   templateUrl: './chat-list.component.html',
   styleUrls: ['./chat-list.component.scss'],
 })
-export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class ChatListComponent implements OnInit, OnDestroy {
   @Input() selected;
   @Output() selectedChat = new EventEmitter();
-  @ViewChild('contactList') private myScrollContainer: ElementRef;
   limit = 20;
   hotelId: string;
   chatList: IContactList;
   $subscription = new Subscription();
   contactFG: FormGroup;
-  scrollView;
   showFilter = false;
   filterData = {};
   autoSearched = false;
+  paginationDisabled = false;
+
   constructor(
     private messageService: MessageService,
     private globalFilterService: GlobalFilterService,
@@ -73,13 +73,6 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     });
   }
 
-  ngAfterViewChecked() {
-    if (this.myScrollContainer && this.scrollView) {
-      this.myScrollContainer.nativeElement.scrollTop = this.scrollView;
-      this.scrollView = undefined;
-    }
-  }
-
   listenForQueryParam() {
     this.$subscription.add(
       this.route.queryParams.subscribe((response) => {
@@ -106,7 +99,6 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   listenForRefreshData() {
     this.messageService.refreshData$.subscribe((response) => {
       if (response) {
-        this.scrollView = this.myScrollContainer.nativeElement.scrollTop;
         this.loadChatList();
         this.messageService.refreshData$.next(false);
       }
@@ -174,8 +166,10 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   updatePagination(responseLength) {
-    this.limit =
-      responseLength < this.limit ? this.limit : (this.limit = this.limit + 20);
+    this.paginationDisabled = responseLength < this.limit;
+    this.limit = this.paginationDisabled
+      ? this.limit
+      : (this.limit = this.limit + 20);
   }
 
   onChatSelect(value) {
@@ -212,17 +206,9 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
     }
   }
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event) {
-    if (
-      this.myScrollContainer &&
-      this.myScrollContainer.nativeElement.offsetHeight +
-        this.myScrollContainer.nativeElement.scrollTop ===
-        this.myScrollContainer.nativeElement.scrollHeight &&
-      this.limit > this.chatList.contacts.length
-    ) {
+  loadMore() {
+    if (!this.paginationDisabled) {
       if (this.contactFG.get('search').value.length < 3) {
-        this.scrollView = this.myScrollContainer.nativeElement.scrollHeight;
         this.loadChatList();
       } else this.loadSearchList(this.contactFG.get('search').value);
     }
@@ -244,8 +230,8 @@ export class ChatListComponent implements OnInit, OnDestroy, AfterViewChecked {
         .subscribe(
           (response) => {
             if (response) {
-              this.limit =
-                response.length < this.limit ? this.limit : this.limit + 20;
+              this.updatePagination(response.length);
+
               this.chatList = new ContactList().deserialize(
                 response,
                 this.globalFilterService.timezone

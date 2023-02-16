@@ -169,6 +169,13 @@
     color: $primary-gray;
     opacity: 1;
   }
+  &:focus {
+    border: 1px solid $primary-purple;
+    box-shadow: none;
+  }
+  &:hover {
+    border-color: $primary-purple;
+  }
 }
 
 .cursor-pointer {

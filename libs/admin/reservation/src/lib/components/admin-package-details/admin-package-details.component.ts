@@ -46,9 +46,7 @@ export class AdminPackageDetailsComponent implements OnChanges, AfterViewInit {
     this.detailsData.amenitiesDetails.paidPackages.forEach(
       (paidPackage, index) => {
         this.paidAmenityFA.push(this.getPaidAmenitiesFG());
-        this.paidAmenityFA
-          .at(index)
-          .patchValue(this.detailsData.amenitiesDetails.paidPackages[index]);
+        this.paidAmenityFA.at(index).patchValue(paidPackage);
       }
     );
   }
@@ -59,7 +57,6 @@ export class AdminPackageDetailsComponent implements OnChanges, AfterViewInit {
         (paidPackage) => paidPackage.id === paidAmenity.get('id').value
       );
       if (componentPackageMapping[paidPackage.type]) {
-        //create a specifi package
         this.createComponent(
           componentPackageMapping[paidPackage.type],
           paidPackage,
@@ -89,7 +86,7 @@ export class AdminPackageDetailsComponent implements OnChanges, AfterViewInit {
     return this._fb.group({
       id: [''],
       status: [''],
-      remarks: ['', , [Validators.maxLength(200)]],
+      remarks: ['', [Validators.maxLength(200)]],
       type: [''],
       name: [''],
       description: [''],

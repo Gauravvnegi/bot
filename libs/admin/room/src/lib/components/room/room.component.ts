@@ -23,7 +23,7 @@ export class RoomComponent implements OnInit {
     this.listenForGlobalFilter();
   }
 
-  listenForGlobalFilter() {
+  listenForGlobalFilter(): void {
     this.hotelId = this.globalFilterService.hotelId;
 
     this.$subscription.add(

@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { map } from 'lodash';
 import { MenuItem } from 'primeng/api';
-import { Alignment, InputVariant, FormProps } from '../../types/form.type';
+import { Alignment, FormProps, InputVariant } from '../../types/form.type';
 
 @Component({ template: '' })
-export class FormComponent implements OnInit {
+export class FormComponent {
   float = false;
   isLoading = false;
   isSearch = false;
@@ -43,8 +43,6 @@ export class FormComponent implements OnInit {
   }
 
   constructor(public controlContainer: ControlContainer) {}
-
-  ngOnInit(): void {}
 
   get error() {
     const errors = this.controlContainer.control.get(this.controlName).errors;

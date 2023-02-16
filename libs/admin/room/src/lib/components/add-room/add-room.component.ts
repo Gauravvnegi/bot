@@ -80,7 +80,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   /**
    * @function initForm Initialize form
    */
-  initForm() {
+  initForm(): void {
     this.useFormArray = this.fb.array([]);
 
     this.useForm = this.fb.group({
@@ -96,7 +96,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   /**
    * @function initRoomTypes Initialize room types options
    */
-  initRoomTypes() {
+  initRoomTypes(): void {
     this.isRoomTypesLoading = true;
     this.$subscription.add(
       this.roomService.getRoomsTypeList(this.hotelId).subscribe((res) => {
@@ -118,7 +118,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   /**
    * @function initRoomDetails Initialize room details
    */
-  initRoomDetails() {
+  initRoomDetails(): void {
     this.isRoomInfoLoading = true;
     this.$subscription.add(
       this.roomService
@@ -147,7 +147,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   /**
    * @function patchRoomTypeValue Updates room types value
    */
-  patchRoomTypeValue() {
+  patchRoomTypeValue(): void {
     if (this.roomTypeId && this.roomTypes.length) {
       this.useForm.patchValue({
         roomType: this.roomTypes.find((item) => item.id === this.roomTypeId),
@@ -165,7 +165,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   /**
    * @function registerRoomTypeChangesListener To listen to selected room type
    */
-  registerRoomTypeChangesListener() {
+  registerRoomTypeChangesListener(): void {
     this.useForm
       .get('roomType')
       .valueChanges.subscribe((value: RoomTypeOption) => {
@@ -179,7 +179,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   /**
    * @function handleSubmit Handle submission
    */
-  handleSubmit() {
+  handleSubmit(): void {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText('Invalid Login form');
@@ -196,7 +196,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   /**
    * @function updateRoom To update the room data
    */
-  updateRoom() {
+  updateRoom(): void {
     const data = this.useForm.getRawValue();
 
     this.$subscription.add(
@@ -224,7 +224,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   /**
    * @function addRooms To add the rooms
    */
-  addRooms() {
+  addRooms(): void {
     const data = this.useForm.getRawValue();
 
     this.$subscription.add(
@@ -265,7 +265,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   /**
    * @function closeModal To close the modal
    */
-  closeModal = () => {
+  closeModal = (): void => {
     this.showModal = false;
   };
 
@@ -273,7 +273,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    * @function handleError to show the error
    * @param param0
    */
-  handleError = ({ error }) => {
+  handleError = ({ error }): void => {
     this.snackbarService
       .openSnackBarWithTranslate(
         {

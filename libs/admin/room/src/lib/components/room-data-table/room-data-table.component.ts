@@ -139,7 +139,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * Get table related data from service
    * @param table selected table value
    */
-  getDataTableValue(table: TableValue) {
+  getDataTableValue(table: TableValue): void {
     this.loading = true;
 
     if (table === 'room')
@@ -172,7 +172,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param status room status
    * @param id room id
    */
-  handleRoomStatus(status: RoomStatus, id: string) {
+  handleRoomStatus(status: RoomStatus, id: string): void {
     this.loading = true;
 
     this.$subscription.add(
@@ -190,7 +190,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param status room type status
    * @param id room type id
    */
-  handleRoomTypeStatus(status: boolean, id: string) {
+  handleRoomTypeStatus(status: boolean, id: string): void {
     this.loading = true;
 
     this.$subscription.add(
@@ -209,7 +209,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   /**
    * @function closeModal To close the modal
    */
-  closeModal = () => {
+  closeModal = (): void => {
     this.showModal = false;
   };
 
@@ -217,7 +217,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function handleStatus To handle the status change
    * @param status status value
    */
-  handleStatus(status: RoomStatus, rowData) {
+  handleStatus(status: RoomStatus, rowData): void {
     if (this.selectedTable === 'room') {
       this.handleRoomStatus(status, rowData.id);
     }
@@ -270,7 +270,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param status
    * @param rowData
    */
-  handleStatusSuccess = (status: RoomStatus, id: string) => {
+  handleStatusSuccess = (status: RoomStatus, id: string): void => {
     this.loading = false;
     this.values.find((item) => item.id === id).status = {
       label: Status[status],
@@ -293,7 +293,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function openEditForm handle the room or room type form open
    * @param rowData clicked row data
    */
-  openEditForm(rowData) {
+  openEditForm(rowData): void {
     const selectedRoute =
       this.selectedTable === 'room'
         ? `${routes.addRoom}/single`
@@ -307,7 +307,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
    *
    */
-  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }) {
+  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }): void {
     this.tabFilterItems[this.tabFilterIdx].chips = chips;
     this.changePage(0);
   }
@@ -320,9 +320,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
 
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
-        // {
-        //   order: sharedConfig.defaultOrder,
-        // },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -343,7 +340,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function handleError to show the error
    * @param param0
    */
-  handleError = ({ error }) => {
+  handleError = ({ error }): void => {
     this.loading = false;
     this.snackbarService
       .openSnackBarWithTranslate(

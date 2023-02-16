@@ -30,7 +30,6 @@ export class SingleRoom {
   roomNumber: string;
   floorNumber: string;
   roomStatus: RoomStatus;
-  // source: string;
   currency: string;
   price: number;
   roomTypeId: string;
@@ -70,7 +69,6 @@ export class MultipleRoom {
   to: string;
   floorNumber: number;
   roomStatus: string;
-  // source: string;
   currency: string;
   price: number;
   roomTypeId: string;

@@ -86,11 +86,19 @@
 :host ::ng-deep .container__title {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   color: $primary-black;
   font-weight: 500;
   letter-spacing: 0.84px;
   margin-right: 0 !important;
+  position: relative;
+  .booking_title {
+    width: 25%;
+
+    @media only screen and (max-width: $XL) {
+      font-size: $font14;
+      width: 27%;
+    }
+  }
   .booking_number:hover {
     color: rgb(75, 86, 192);
   }
@@ -98,6 +106,9 @@
 
 :host ::ng-deep .expand-icon {
   color: $primary-purple;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 :host ::ng-deep .mat-expansion-indicator {
@@ -110,6 +121,12 @@
 
 :host ::ng-deep .mat-expansion-panel-header:focus {
   background: $accordian-background 0% 0% no-repeat padding-box;
+}
+
+:host ::ng-deep .mat-expansion-panel-header {
+  @media only screen and (min-width: $XL) {
+    padding: 0px 10px !important;
+  }
 }
 
 .booking__container {
@@ -233,10 +250,11 @@
     padding-left: 2px;
     margin-left: 3px;
   }
-@media screen and (max-width: $L) {
-  @include width(170px);
-}
-
+  @media screen and (max-width: $XL) {
+    @include width(145px);
+    margin: unset;
+    padding: unset;
+  }
 }
 
 .mat-expansion-panel {
@@ -251,5 +269,19 @@
 }
 
 .visit-padding {
-  padding: 0 0 0 10px !important;
+  padding: 0 0 0 20px !important;
+  width: 33%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media only screen and(max-width:$XL) {
+    width: 36%;
+    font-size: $font14;
+    padding: 0 10px 0 10px !important;
+  }
+
+  &:hover {
+    text-overflow: clip;
+  }
 }

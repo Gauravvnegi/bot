@@ -79,8 +79,13 @@
                 {{ item.priority }}
               </div>
             </div>
-            <div class="content-wrap-title">
-              {{ item.guestDetails.primaryGuest.getFullName() }}
+            <div class="content-wrap-wrapper">
+              <div class="content-wrap-wrapper-title">
+                {{ item.guestDetails.primaryGuest.getFullName() }}
+              </div>
+              <div class="content-wrap-wrapper-requestTime">
+                {{ item.requestTime | date:'EEEE'}}
+              </div>
             </div>
             <div class="content-wrap-subtitle">
               {{ item.itemName }}

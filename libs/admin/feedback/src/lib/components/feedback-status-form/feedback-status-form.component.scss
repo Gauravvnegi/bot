@@ -30,10 +30,73 @@ button {
     position: relative;
     right: 20%;
   }
+
+  &-status{
+    padding: 6px 9px;
+    border-radius: 14px;
+    border: solid 1px #4b56c0;
+    background-color: #fff;
+    cursor: pointer;
+    &_text{
+      font-family: Roboto;
+      font-size: 12px;
+      font-weight: normal;
+      letter-spacing: 0.72px;
+      text-align: left;
+      color: #4b56c0;
+    }
+  }
+
+  &-horizontalLine{
+    border: 1px solid $manually-contacts;
+    width: 100%;
+    margin: 10px 0;
+    opacity: 0.1;
+  }
+
+  &-viewDetails{
+    font-size:$font12;
+    font-weight: normal;
+    letter-spacing: 0.72px;
+    color: #002046;
+    cursor: pointer;
+  }
+}
+:host ::ng-deep .mat-form-field-wrapper{
+  position: relative;
+  padding-bottom: unset !important;
+  margin-bottom: 13px;
+  border-radius: 2px;
+  background-color: #cccccc33;
 }
 
-.comment {
+:host ::ng-deep .mat-form-field-infix{
+  padding-top: 12px !important;
+  border-top: none;
+  textarea{
+    height: 72px !important;
+    resize: none;
+    padding: 7px;
+  }
+}
+
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex{
+  padding: unset;
+}
+
+.textarea {
   width: 100%;
+  font-family: Roboto;
+  font-size: $font12;
+  font-weight: normal;
+  letter-spacing: 0.6px;
+  text-align: left;
+  color: #93989c;
+  margin-bottom:13px;
+
+  ::-webkit-scrollbar {
+    width: 2px;
+  }
 }
 
 .material-icons {
@@ -47,38 +110,6 @@ button {
 }
 
 .disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   pointer-events: none;
-}
-
-.cdk-overlay-container {
-  position: absolute;
-  z-index: 1000;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  top: 0;
-  left: 0;
-}
-
-.cdk-overlay-connected-position-bounding-box {
-  position: absolute;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  min-width: 1px;
-  min-height: 1px;
-}
-
-.cdk-overlay-pane {
-  position: absolute;
-  box-sizing: border-box;
-  z-index: 1000;
-  display: flex;
-  max-width: 100%;
-  max-height: 100%;
-  pointer-events: auto;
-  box-shadow: 0 2px 12px 0 rgba(10, 50, 70, 0.35);
-  border-radius: 8px;
-  background-color: $white;
 }

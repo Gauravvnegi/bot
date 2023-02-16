@@ -8,6 +8,11 @@
   height: 90px;
 }
 
+.main-checkbox {
+  width: 5%;
+  @include align-checkbox();
+}
+
 .room-no {
   font-size: 12px;
   letter-spacing: 0.72px;

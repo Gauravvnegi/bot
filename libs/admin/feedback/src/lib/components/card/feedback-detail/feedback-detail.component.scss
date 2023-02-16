@@ -63,6 +63,7 @@
 
 .mr-10 {
   display: flex;
+  margin-right: 0px !important;
   .req_button {
     display: flex;
     gap: 20px;
@@ -171,7 +172,7 @@
   display: flex;
   font-size: 12px;
   border-radius: 5px;
-  margin: 20px 0 30px 0;
+  margin: 15px 0 30px 0;
   .rating__box {
     width: 54px;
     display: flex;

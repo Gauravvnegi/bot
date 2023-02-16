@@ -68,12 +68,12 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">{{ 'datatable.no_data' | translate }}</p>
+    <p class="no-data-found">{{ 'messages.noData' | translate }}</p>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns class="table_head">
     <tr>
-      <th id="select" class="tableHeading" pResizableColumn>
+      <th id="select" class="table-search-head main-checkbox" pResizableColumn>
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th
@@ -101,7 +101,7 @@
         <input
           pInputText
           type="text"
-          (input)="onFilterTypeTextChange($event.target.value, col.field)"
+          (input)="onFilterTypeTextChange($event, col.field)"
           class="p-column-filter"
         />
       </th>
@@ -179,7 +179,7 @@
   </td>
   <td>
     <div class="cell-content" *ngIf="rowData.price; else emptyCell">
-      {{ rowData.price }}
+      {{ rowData.currency }} {{ rowData.price }}
     </div>
   </td>
   <td>

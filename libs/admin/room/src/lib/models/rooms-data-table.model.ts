@@ -26,14 +26,16 @@ export class Room {
   type: string;
   roomNo: string;
   date: string;
-  price: string;
+  price: number;
+  currency: string;
   status: { label: string; value: string };
   deserialize(input: RoomResponse) {
     this.id = input.id;
     this.type = input.roomTypeDetails.name;
     this.roomNo = input.roomNumber;
     this.date = input.updated ?? input.created;
-    this.price = `${input.currency} ${input.price}`;
+    this.price = input.price;
+    this.currency = input.currency;
     this.status = { label: Status[input.roomStatus], value: input.roomStatus };
 
     return this;

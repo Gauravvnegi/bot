@@ -251,3 +251,8 @@ export class GuestReservation {
     return this;
   }
 }
+
+export type MetaData = {
+  label: string;
+  value: string | Date | number;
+};

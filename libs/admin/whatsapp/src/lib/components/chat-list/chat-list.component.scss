@@ -10,7 +10,7 @@
   .search-filter-wrapper {
     height: 62px;
     padding: 10px 15px;
-    border-bottom: 1px solid $primary-gray;
+    border-bottom: 1px solid $light-gray;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -168,6 +168,13 @@
     letter-spacing: 0.48px;
     color: $primary-gray;
     opacity: 1;
+  }
+  &:focus {
+    border: 1px solid $primary-purple;
+    box-shadow: none;
+  }
+  &:hover {
+    border-color: $primary-purple;
   }
 }
 

@@ -88,6 +88,10 @@ export class EditPackageComponent implements OnInit, OnDestroy {
       autoAccept: [false],
       category: ['', [Validators.required]],
     });
+
+    this.packageForm.controls['type'].valueChanges.subscribe((res) => {
+      this.removeValidations(res);
+    });
   }
 
   disableForm(packageData): void {
@@ -103,6 +107,25 @@ export class EditPackageComponent implements OnInit, OnDestroy {
   enableEditableFields(): void {
     this.packageForm.get('status').enable();
     this.packageForm.get('rate').enable();
+  }
+
+  removeValidations(packageType: string) {
+    const currencyControl = this.packageForm.controls['currency'];
+    const rateControl = this.packageForm.controls['rate'];
+    if (packageType == 'Complimentary') {
+      currencyControl.clearValidators();
+      currencyControl.updateValueAndValidity();
+      rateControl.clearValidators();
+      rateControl.updateValueAndValidity();
+    } else {
+      currencyControl.setValidators([Validators.required]);
+      currencyControl.updateValueAndValidity();
+      rateControl.setValidators([
+        Validators.required,
+        Validators.pattern(Regex.DECIMAL_REGEX),
+      ]);
+      rateControl.updateValueAndValidity();
+    }
   }
 
   /**

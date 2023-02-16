@@ -14,16 +14,7 @@
 }
 
 .add-user {
-  background: transparent;
-  border: none;
-  outline: none;
-  margin-right: $margin20;
-  color: $primary-gray;
-  font-size: $font14;
-  &:hover {
-    cursor: pointer;
-    color: $primary-purple;
-  }
+@include tableCreateButton();
 }
 :host ::ng-deep .name {
   .package_image_wrapper {
@@ -64,6 +55,7 @@
 :host ::ng-deep .service-details {
   font-size: $font12;
   color: $primary-black;
+  white-space: pre-line !important;
 
   p {
     color: $primary-gray;

@@ -74,7 +74,14 @@ export class RoomDataTableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.initSelectedTable('room');
+
+    this.roomService.selectedTable.subscribe((value) => {
+      this.tabFilterIdx = this.tabFilterItems.findIndex(
+        (item) => item.value === value
+      );
+      this.selectedTable = value;
+      this.initSelectedTable(this.selectedTable);
+    });
   }
 
   loadData(event: LazyLoadEvent): void {
@@ -86,7 +93,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    */
   initSelectedTable(table: TableValue) {
     this.cols = cols[table];
-    this.selectedTable = table;
     this.tableName = title[table];
     this.getDataTableValue(this.selectedTable);
   }
@@ -293,10 +299,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param event The material tab change event.
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.tabFilterIdx = event.index;
-    this.selectedTable = this.tabFilterItems[this.tabFilterIdx].value;
-    this.initSelectedTable(this.selectedTable);
-    // this.changePage(+this.tabFilterItems[event.index].lastPage);
+    this.roomService.selectedTable.next(this.tabFilterItems[event.index].value);
   }
 
   /**

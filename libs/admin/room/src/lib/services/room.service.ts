@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
+import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { map } from 'rxjs/operators';
 import { stats } from '../constant/response';
@@ -17,6 +18,8 @@ import {
 
 @Injectable()
 export class RoomService extends ApiService {
+  selectedTable = new BehaviorSubject<TableValue>('room');
+
   list: Record<TableValue, string> = {
     roomType: 'room-type',
     room: 'room',

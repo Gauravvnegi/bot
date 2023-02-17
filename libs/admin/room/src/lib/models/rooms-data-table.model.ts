@@ -14,7 +14,8 @@ export class RoomList {
   records: Room[];
   count: RoomRecordsCount;
   deserialize(input: RoomListResponse) {
-    this.records = input.rooms.map((item) => new Room().deserialize(item));
+    this.records =
+      input.rooms?.map((item) => new Room().deserialize(item)) ?? [];
     this.count = new RoomRecordsCount().deserialize(input.roomStatusCount);
 
     return this;
@@ -30,12 +31,12 @@ export class Room {
   currency: string;
   status: { label: string; value: string };
   deserialize(input: RoomResponse) {
-    this.id = input.id;
-    this.type = input.roomTypeDetails.name;
-    this.roomNo = input.roomNumber;
-    this.date = input.updated ?? input.created;
-    this.price = input.price;
-    this.currency = input.currency;
+    this.id = input.id ?? '';
+    this.type = input.roomTypeDetails.name ?? '';
+    this.roomNo = input.roomNumber ?? '';
+    this.date = input.updated ?? input.created ?? '';
+    this.price = input.price ?? null;
+    this.currency = input.currency ?? '';
     this.status = { label: Status[input.roomStatus], value: input.roomStatus };
 
     return this;
@@ -107,22 +108,23 @@ export class RoomType {
   currency: string;
 
   deserialize(input: RoomTypeResponse) {
-    this.id = input.id;
-    this.name = input.name;
+    this.id = input.id ?? '';
+    this.name = input.name ?? '';
     this.area = input.area;
     this.roomCount = new RoomRecordsCount().deserialize(input.roomCount);
-    this.amenities = input.paidAmenities
-      .map((item) => item.name)
-      .concat(input.complimentaryAmenities.map((item) => item.name));
-    this.occupancy = input.maxOccupancy;
+    this.amenities =
+      input.paidAmenities
+        ?.map((item) => item.name)
+        .concat(input.complimentaryAmenities.map((item) => item.name)) ?? [];
+    this.occupancy = input.maxOccupancy ?? null;
     this.status = {
       label: input.status ? Status.ACTIVE : Status.INACTIVE,
       value: input.status ? 'ACTIVE' : 'INACTIVE',
     };
 
     // mapping discounted price
-    this.price = input.discountedPrice;
-    this.currency = input.currency;
+    this.price = input.discountedPrice ?? null;
+    this.currency = input.currency ?? '';
 
     return this;
   }

@@ -35,13 +35,13 @@ export class SingleRoom {
   roomTypeId: string;
 
   deserialize(input: SingleRoomData) {
-    this.id = input.id;
-    this.roomNumber = input.roomNo;
-    this.floorNumber = input.floorNo;
-    this.roomStatus = input.status;
-    this.currency = input.currency;
-    this.price = input.price;
-    this.roomTypeId = input.roomType.id;
+    this.id = input.id ?? '';
+    this.roomNumber = input.roomNo ?? '';
+    this.floorNumber = input.floorNo ?? '';
+    this.roomStatus = input.status ?? 'ACTIVE';
+    this.currency = input.currency ?? '';
+    this.price = input.price ?? null;
+    this.roomTypeId = input.roomType.id ?? '';
     return this;
   }
 }
@@ -68,19 +68,19 @@ export class MultipleRoom {
   from: string;
   to: string;
   floorNumber: number;
-  roomStatus: string;
+  roomStatus: RoomStatus;
   currency: string;
   price: number;
   roomTypeId: string;
 
   deserialize(input: MultipleRoomData) {
-    this.from = input.from;
-    this.to = input.to;
-    this.floorNumber = input.floorNo;
-    this.roomStatus = input.status;
-    this.currency = input.currency;
+    this.from = input.from ?? '';
+    this.to = input.to ?? '';
+    this.floorNumber = input.floorNo ?? null;
+    this.roomStatus = input.status ?? 'ACTIVE';
+    this.currency = input.currency ?? '';
     this.price = input.price;
-    this.roomTypeId = input.roomType.id;
+    this.roomTypeId = input.roomType.id ?? '';
     return this;
   }
 }

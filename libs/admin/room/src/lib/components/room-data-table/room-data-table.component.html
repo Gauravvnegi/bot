@@ -60,7 +60,7 @@
           </div>
         </div>
         <hospitality-bot-filter-chips
-          [chips]="tabFilterItems[tabFilterIdx].chips"
+          [chips]="filterChips"
           (onChange)="toggleQuickReplyFilter($event)"
         ></hospitality-bot-filter-chips>
       </form>
@@ -124,13 +124,13 @@
       </td>
 
       <ng-container
-        *ngIf="selectedTable === 'room'"
+        *ngIf="values.length && values[0].roomNo"
         [ngTemplateOutlet]="roomCell"
         [ngTemplateOutletContext]="{ $implicit: rowData }"
       >
       </ng-container>
       <ng-container
-        *ngIf="selectedTable === 'roomType'"
+        *ngIf="values.length && values[0].name"
         [ngTemplateOutlet]="roomTypeCell"
         [ngTemplateOutletContext]="{ $implicit: rowData }"
       >

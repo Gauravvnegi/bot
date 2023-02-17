@@ -53,11 +53,12 @@ export class RoomDataTableComponent extends BaseDatatableComponent
 
   hotelId: string;
   $subscription = new Subscription();
-  cols: Cols[];
+  cols: Cols[] = [];
   tableName: string;
   tabFilterItems = filter;
   tabFilterIdx: number = 0;
   selectedTable: TableValue;
+  filterChips: Chip<string>[] = [];
 
   constructor(
     public fb: FormBuilder,
@@ -80,20 +81,11 @@ export class RoomDataTableComponent extends BaseDatatableComponent
         (item) => item.value === value
       );
       this.selectedTable = value;
-      this.initSelectedTable(this.selectedTable);
+      this.getDataTableValue(this.selectedTable);
     });
   }
 
   loadData(event: LazyLoadEvent): void {
-    this.initSelectedTable(this.selectedTable);
-  }
-
-  /**
-   * Initial selection of table
-   */
-  initSelectedTable(table: TableValue) {
-    this.cols = cols[table];
-    this.tableName = title[table];
     this.getDataTableValue(this.selectedTable);
   }
 
@@ -139,6 +131,15 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   }
 
   /**
+   * Initial selection of table
+   */
+  initTableDetails = () => {
+    this.cols = cols[this.selectedTable];
+    this.tableName = title[this.selectedTable];
+    this.filterChips = filter[this.tabFilterIdx].chips;
+  };
+
+  /**
    * Get table related data from service
    * @param table selected table value
    */
@@ -149,24 +150,32 @@ export class RoomDataTableComponent extends BaseDatatableComponent
       this.$subscription.add(
         this.roomService
           .getRoomsList(this.hotelId, this.getQueryConfig())
-          .subscribe((res) => {
-            const roomList = new RoomList().deserialize(res);
-            this.values = roomList.records;
-            this.setRecordsCount(roomList.count);
-            this.loading = false;
-          })
+          .subscribe(
+            (res) => {
+              const roomList = new RoomList().deserialize(res);
+              this.values = roomList.records;
+              this.setRecordsCount(roomList.count);
+              this.loading = false;
+            },
+            this.handleError,
+            this.initTableDetails
+          )
       );
 
     if (table === 'roomType')
       this.$subscription.add(
         this.roomService
           .getRoomsTypeList(this.hotelId, this.getQueryConfig())
-          .subscribe((res) => {
-            const roomTypesList = new RoomTypeList().deserialize(res);
-            this.values = roomTypesList.records;
-            this.setRecordsCount(roomTypesList.count);
-            this.loading = false;
-          })
+          .subscribe(
+            (res) => {
+              const roomTypesList = new RoomTypeList().deserialize(res);
+              this.values = roomTypesList.records;
+              this.setRecordsCount(roomTypesList.count);
+              this.loading = false;
+            },
+            this.handleError,
+            this.initTableDetails
+          )
       );
   }
 
@@ -208,13 +217,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
         )
     );
   }
-
-  /**
-   * @function closeModal To close the modal
-   */
-  closeModal = (): void => {
-    // this.showModal = false;
-  };
 
   /**
    * @function handleStatus To handle the status change

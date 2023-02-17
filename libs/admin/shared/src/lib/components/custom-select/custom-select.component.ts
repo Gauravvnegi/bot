@@ -15,7 +15,7 @@ import * as _ from 'lodash';
     },
   ],
 })
-export class CustomSelectComponent implements OnInit, ControlValueAccessor {
+export class CustomSelectComponent implements ControlValueAccessor {
   constructor() {}
 
   options: any[] = [];
@@ -38,8 +38,6 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
       });
     }
   }
-
-  ngOnInit(): void {}
 
   onChange = (value: any[]) => {};
   onTouched = () => {};

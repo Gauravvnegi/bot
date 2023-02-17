@@ -249,7 +249,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
               heading: 'Rooms not added',
               description: res.errorMessages,
             };
-          }
+          } else this.location.back();
+
           if (res.rooms.length) {
             this.$subscription.add(
               this.snackbarService
@@ -264,7 +265,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
                 .subscribe()
             );
           }
-          this.initForm();
         }, this.handleError)
     );
   }

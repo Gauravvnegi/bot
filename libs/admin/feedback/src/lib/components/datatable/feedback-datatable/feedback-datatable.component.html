@@ -634,6 +634,7 @@
       </ng-container>
       <ng-template #stayTable>
         <tr
+          (click)="openDetailPage($event, rowData)"
           class="data-table-row"
           [style.background]="rowData?.read ? '' : 'rgba(174, 209, 251, .1)'"
         >

@@ -271,7 +271,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
   /**
    * @function handleError to show the error
-   * @param param0
+   * @param param0 network error
    */
   handleError = ({ error }): void => {
     this.snackbarService

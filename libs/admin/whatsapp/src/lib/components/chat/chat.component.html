@@ -58,7 +58,6 @@
   </div>
   <div
     class="scrollChat"
-    (scroll)="onScroll($event)"
     *ngIf="chatDates.length; else noChat"
     [ngStyle]="
       chatFG && chatList.receiver[selectedChat.receiverId]?.checkEnableSend()
@@ -66,6 +65,10 @@
         : { height: 'calc(100% - 124px)' }
     "
     #scrollMe
+    infiniteScroll
+    (scrolled)="loadMore()"
+    [toggleScrollListener]="paginationDisabled"
+    [scrollSettings]="{ reverse: true }"
   >
     <ng-container *ngFor="let date of chatDates">
       <div class="chatDate">

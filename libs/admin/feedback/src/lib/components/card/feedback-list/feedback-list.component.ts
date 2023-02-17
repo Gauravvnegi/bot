@@ -48,7 +48,8 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   pagination = card.pagination;
   totalRecords = card.totalRecords;
   outletChangeSubscribed = false;
-  fetchingPaginationData = false;
+
+  paginationDisabled = false;
 
   constructor(
     private globalFilterService: GlobalFilterService,
@@ -206,7 +207,6 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
    * @function loadInitialData To load the initial data for feedback list.
    */
   loadInitialData(queries = []) {
-    this.fetchingPaginationData = true;
     if (this.feedbackList && !this.feedbackList.length) this.loading = true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
@@ -233,6 +233,9 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
             this.cardService.$tabValues.next(response.entityTypeCounts);
           response.entityStateCounts &&
             this.updateTabFilterCounts(response.entityStateCounts);
+
+          this.paginationDisabled =
+            this.pagination.limit > response.records.length;
         },
         ({ error }) =>
           this.snackbarService
@@ -246,7 +249,6 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
             .subscribe(),
         () => {
           this.loading = false;
-          this.fetchingPaginationData = false;
         }
       )
     );
@@ -408,26 +410,11 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * @function onScroll Function to load data on scrolling.
-   */
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event) {
-    if (!this.search.length)
-      if (
-        this.myScrollContainer &&
-        this.myScrollContainer.nativeElement.offsetHeight +
-          this.myScrollContainer.nativeElement.scrollTop >
-          this.myScrollContainer.nativeElement.scrollHeight - 1
-      ) {
-        if (
-          this.totalRecords > this.feedbackList.length &&
-          !this.fetchingPaginationData
-        ) {
-          this.pagination.offset = this.feedbackList.length;
-          this.loadData();
-        }
-      }
+  loadMore() {
+    if (!this.search.length) {
+      this.pagination.offset = this.feedbackList.length;
+      this.loadData();
+    }
   }
 
   /**

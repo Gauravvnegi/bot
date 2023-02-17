@@ -47,8 +47,9 @@
   </ng-template>
   <div
     class="right-side-body"
-    #requestList
-    (scroll)="onScroll($event)"
+    infiniteScroll
+    (scrolled)="loadMore()"
+    [toggleScrollListener]="paginationDisabled"
     *ngIf="!loading; else loader"
   >
     <ng-container *ngIf="listData?.length; else noList">
@@ -84,7 +85,7 @@
                 {{ item.guestDetails.primaryGuest.getFullName() }}
               </div>
               <div class="content-wrap-wrapper-requestTime">
-                {{ item.requestTime | date:'EEEE'}}
+                {{ item.requestTime | date: 'EEEE' }}
               </div>
             </div>
             <div class="content-wrap-subtitle">
@@ -115,7 +116,9 @@
                 {{ 'requestDetail.sla' | translate }}: {{ item.getSLA() }}
               </div>
               <div class="content-wrap-r2-divider"></div>
-              <div class="content-wrap-job-duration">JD:- {{ item.jobDuration }}m</div>
+              <div class="content-wrap-job-duration">
+                JD:- {{ item.jobDuration }}m
+              </div>
             </div>
           </div>
         </div>

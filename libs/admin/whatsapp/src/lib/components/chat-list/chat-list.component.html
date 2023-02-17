@@ -21,7 +21,12 @@
     </div>
   </div>
   <ng-container *ngIf="chatList?.contacts.length; else noContact">
-    <div class="chatlist-contact" #contactList (scroll)="onScroll($event)">
+    <div
+      class="chatlist-contact"
+      infiniteScroll
+      [toggleScrollListener]="paginationDisabled"
+      (scrolled)="loadMore()"
+    >
       <div
         class="chatlist-item-wrapper"
         [ngStyle]="

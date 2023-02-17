@@ -26,7 +26,6 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
   styleUrls: ['./request-list.component.scss'],
 })
 export class RequestListComponent implements OnInit, OnDestroy {
-  @ViewChild('requestList') private myScrollContainer: ElementRef;
   $subscription = new Subscription();
   requestConfig = request;
   entityType = 'Inhouse';
@@ -38,6 +37,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
     priorityType: '',
   };
   loading = false;
+  paginationDisabled = false;
+
   globalQueries = [];
   listData;
   offset = 0;
@@ -238,25 +239,18 @@ export class RequestListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function onScroll To handle request list scroll.
-   * @param event The scroll event.
+   * @function loadMore To handle request list scroll.
    */
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event): void {
-    if (!this.enableSearchField)
-      if (
-        this.myScrollContainer &&
-        this.myScrollContainer.nativeElement.offsetHeight +
-          this.myScrollContainer.nativeElement.scrollTop ===
-          this.myScrollContainer.nativeElement.scrollHeight
-      ) {
-        if (this.totalData > this.listData.length) {
-          this.offset = this.listData.length;
-          if (this.parentFG.get('search').value.trim().length)
-            this.getRequestWithSearchAndFilter(this.offset, this.limit);
-          else this.loadData(this.offset, this.limit);
-        }
+  loadMore(): void {
+    if (!this.enableSearchField) {
+      this.paginationDisabled = this.totalData <= this.listData.length;
+      if (!this.paginationDisabled) {
+        this.offset = this.listData.length;
+        if (this.parentFG.get('search').value.trim().length)
+          this.getRequestWithSearchAndFilter(this.offset, this.limit);
+        else this.loadData(this.offset, this.limit);
       }
+    }
   }
 
   /**

@@ -32,8 +32,10 @@
   <div
     class="body"
     [style.height]="search.length ? '480px' : '520px'"
-    #feedbackListContainer
-    (scroll)="onScroll($event)"
+    infiniteScroll
+    (scrolled)="loadMore()"
+    [toggleScrollListener]="paginationDisabled"
+    [scrollSettings]="{ throttle: 6000 }"
     *ngIf="!loading; else loader"
   >
     <ng-container *ngIf="feedbackList?.length; else noList">

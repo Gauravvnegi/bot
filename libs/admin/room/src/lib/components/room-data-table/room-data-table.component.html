@@ -225,7 +225,12 @@
   </td>
   <td>
     <div class="cell-content" *ngIf="rowData.amenities; else emptyCell">
-      {{ rowData.amenities }}
+      {{ rowData.amenities.slice(0, 3) }}
+      {{
+        rowData.amenities?.length - 2 > 0
+          ? '+'.concat(rowData.amenities?.length - 2)
+          : ''
+      }}
     </div>
   </td>
   <td>

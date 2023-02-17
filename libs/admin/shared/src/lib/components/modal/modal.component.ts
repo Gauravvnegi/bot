@@ -6,9 +6,7 @@ import { ModalAction, ModalContent } from '../../types/fields.type';
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
 })
-export class ModalComponent implements OnInit {
-  displayModal = false;
-
+export class ModalComponent {
   heading: string = 'Notification';
   descriptions: string[] = ['Are you sure?'];
 
@@ -22,10 +20,6 @@ export class ModalComponent implements OnInit {
 
   @Input() actions: ModalAction[];
 
-  @Input() set show(value: boolean) {
-    this.displayModal = value;
-  }
-
   @Input() set content(value: ModalContent) {
     if (value) {
       this.heading = value.heading;
@@ -37,10 +31,7 @@ export class ModalComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
-
   close() {
-    this.displayModal = false;
     this.onClose.emit();
   }
 }

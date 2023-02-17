@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -10,13 +11,13 @@ import {
   Cols,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import * as FileSaver from 'file-saver';
 import {
-  ModalAction,
-  ModalContent,
-} from 'libs/admin/shared/src/lib/types/fields.type';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
+import * as FileSaver from 'file-saver';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import routes from '../../config/routes';
 import {
@@ -52,16 +53,12 @@ export class RoomDataTableComponent extends BaseDatatableComponent
 
   hotelId: string;
   $subscription = new Subscription();
-  cols: Cols[];
+  cols: Cols[] = [];
   tableName: string;
   tabFilterItems = filter;
   tabFilterIdx: number = 0;
   selectedTable: TableValue;
-
-  // modal value
-  showModal = false;
-  modalContent: ModalContent;
-  modalAction: ModalAction[];
+  filterChips: Chip<string>[] = [];
 
   constructor(
     public fb: FormBuilder,
@@ -70,27 +67,25 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    private modalService: ModalService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.initSelectedTable('room');
+
+    this.roomService.selectedTable.subscribe((value) => {
+      this.tabFilterIdx = this.tabFilterItems.findIndex(
+        (item) => item.value === value
+      );
+      this.selectedTable = value;
+      this.getDataTableValue(this.selectedTable);
+    });
   }
 
   loadData(event: LazyLoadEvent): void {
-    this.initSelectedTable(this.selectedTable);
-  }
-
-  /**
-   * Initial selection of table
-   */
-  initSelectedTable(table: TableValue) {
-    this.cols = cols[table];
-    this.selectedTable = table;
-    this.tableName = title[table];
     this.getDataTableValue(this.selectedTable);
   }
 
@@ -136,34 +131,51 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   }
 
   /**
+   * Initial selection of table
+   */
+  initTableDetails = () => {
+    this.cols = cols[this.selectedTable];
+    this.tableName = title[this.selectedTable];
+    this.filterChips = filter[this.tabFilterIdx].chips;
+  };
+
+  /**
    * Get table related data from service
    * @param table selected table value
    */
-  getDataTableValue(table: TableValue) {
+  getDataTableValue(table: TableValue): void {
     this.loading = true;
 
     if (table === 'room')
       this.$subscription.add(
         this.roomService
           .getRoomsList(this.hotelId, this.getQueryConfig())
-          .subscribe((res) => {
-            const roomList = new RoomList().deserialize(res);
-            this.values = roomList.records;
-            this.setRecordsCount(roomList.count);
-            this.loading = false;
-          })
+          .subscribe(
+            (res) => {
+              const roomList = new RoomList().deserialize(res);
+              this.values = roomList.records;
+              this.setRecordsCount(roomList.count);
+              this.loading = false;
+            },
+            this.handleError,
+            this.initTableDetails
+          )
       );
 
     if (table === 'roomType')
       this.$subscription.add(
         this.roomService
           .getRoomsTypeList(this.hotelId, this.getQueryConfig())
-          .subscribe((res) => {
-            const roomTypesList = new RoomTypeList().deserialize(res);
-            this.values = roomTypesList.records;
-            this.setRecordsCount(roomTypesList.count);
-            this.loading = false;
-          })
+          .subscribe(
+            (res) => {
+              const roomTypesList = new RoomTypeList().deserialize(res);
+              this.values = roomTypesList.records;
+              this.setRecordsCount(roomTypesList.count);
+              this.loading = false;
+            },
+            this.handleError,
+            this.initTableDetails
+          )
       );
   }
 
@@ -172,7 +184,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param status room status
    * @param id room id
    */
-  handleRoomStatus(status: RoomStatus, id: string) {
+  handleRoomStatus(status: RoomStatus, id: string): void {
     this.loading = true;
 
     this.$subscription.add(
@@ -190,7 +202,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param status room type status
    * @param id room type id
    */
-  handleRoomTypeStatus(status: boolean, id: string) {
+  handleRoomTypeStatus(status: boolean, id: string): void {
     this.loading = true;
 
     this.$subscription.add(
@@ -207,17 +219,10 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function closeModal To close the modal
-   */
-  closeModal = () => {
-    this.showModal = false;
-  };
-
-  /**
    * @function handleStatus To handle the status change
    * @param status status value
    */
-  handleStatus(status: RoomStatus, rowData) {
+  handleStatus(status: RoomStatus, rowData): void {
     if (this.selectedTable === 'room') {
       this.handleRoomStatus(status, rowData.id);
     }
@@ -225,19 +230,26 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     if (this.selectedTable === 'roomType') {
       const roomTypeStatus = status === 'ACTIVE';
       if (!roomTypeStatus) {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.disableClose = true;
+        const togglePopupCompRef = this.modalService.openDialog(
+          ModalComponent,
+          dialogConfig
+        );
+
         const soldOut = rowData.roomCount.soldOut;
 
         if (soldOut) {
-          this.modalContent = {
+          togglePopupCompRef.componentInstance.content = {
             heading: 'Unpublish Page',
             description: [
               `${soldOut} rooms are already sold out in this category`,
               'You can not mark this room type inactive',
             ],
           };
-          this.modalAction = undefined;
+          togglePopupCompRef.componentInstance.actions = undefined;
         } else {
-          this.modalContent = {
+          togglePopupCompRef.componentInstance.content = {
             heading: 'In-active Room Type',
             description: [
               `There are ${rowData.roomCount.active} rooms in this room type`,
@@ -245,20 +257,26 @@ export class RoomDataTableComponent extends BaseDatatableComponent
               'Are you Sure?',
             ],
           };
-          this.modalAction = [
-            { label: 'No', onClick: this.closeModal, variant: 'outlined' },
+          togglePopupCompRef.componentInstance.actions = [
+            {
+              label: 'No',
+              onClick: () => this.modalService.close(),
+              variant: 'outlined',
+            },
             {
               label: 'Yes',
               onClick: () => {
                 this.handleRoomTypeStatus(roomTypeStatus, rowData.id);
-                this.closeModal();
+                this.modalService.close();
               },
               variant: 'contained',
             },
           ];
         }
 
-        this.showModal = true;
+        togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+          this.modalService.close();
+        });
       } else {
         this.handleRoomTypeStatus(roomTypeStatus, rowData.id);
       }
@@ -270,7 +288,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param status
    * @param rowData
    */
-  handleStatusSuccess = (status: RoomStatus, id: string) => {
+  handleStatusSuccess = (status: RoomStatus, id: string): void => {
     this.loading = false;
     this.values.find((item) => item.id === id).status = {
       label: Status[status],
@@ -283,17 +301,14 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param event The material tab change event.
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.tabFilterIdx = event.index;
-    this.selectedTable = this.tabFilterItems[this.tabFilterIdx].value;
-    this.initSelectedTable(this.selectedTable);
-    // this.changePage(+this.tabFilterItems[event.index].lastPage);
+    this.roomService.selectedTable.next(this.tabFilterItems[event.index].value);
   }
 
   /**
    * @function openEditForm handle the room or room type form open
    * @param rowData clicked row data
    */
-  openEditForm(rowData) {
+  openEditForm(rowData): void {
     const selectedRoute =
       this.selectedTable === 'room'
         ? `${routes.addRoom}/single`
@@ -307,7 +322,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
    *
    */
-  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }) {
+  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }): void {
     this.tabFilterItems[this.tabFilterIdx].chips = chips;
     this.changePage(0);
   }
@@ -320,9 +335,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
 
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
-        // {
-        //   order: sharedConfig.defaultOrder,
-        // },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -343,7 +355,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function handleError to show the error
    * @param param0
    */
-  handleError = ({ error }) => {
+  handleError = ({ error }): void => {
     this.loading = false;
     this.snackbarService
       .openSnackBarWithTranslate(

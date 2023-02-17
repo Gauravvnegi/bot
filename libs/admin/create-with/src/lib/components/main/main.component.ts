@@ -51,7 +51,7 @@ export class MainComponent implements OnInit, OnDestroy {
         email: this.adminDetails.email,
       }),
       'x-userId': this._authService.getTokenByName('x-userId'),
-      websiteUrl: 'dev.createwith.io',
+      websiteUrl: this.adminDetails.websiteUrl,
       hotelId: this.adminDetails.branchName,
     };
 

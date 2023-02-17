@@ -1,0 +1,51 @@
+<div
+  class="wrapper"
+  [style.height]="height"
+  [ngClass]="{
+    'p-input-icon-left': isSearch,
+    'p-input-icon-right': isLoading,
+    'p-float-label': float,
+    'p-field': true,
+    wrapper__vertical: alignment === 'vertical',
+    wrapper__horizontal: alignment === 'horizontal'
+  }"
+  [formGroup]="controlContainer.control"
+>
+  <label
+    *ngIf="label && !float"
+    class="label label__static"
+    [for]="controlName"
+    >{{ label }}</label
+  >
+  <i class="pi pi-search" *ngIf="isSearch"></i>
+  <div class="input-wrapper">
+    <input
+      class="input"
+      [ngClass]="{
+        input__static: label && alignment === 'vertical',
+        input__standard: variant === 'standard',
+        input__error: error,
+        input__disabled: isDisabled
+      }"
+      [style.fontSize]="fontSize"
+      [attr.disabled]="isDisabled || null"
+      [formControlName]="controlName"
+      [id]="controlName"
+      type="text"
+      pInputText
+      [placeholder]="placeholder"
+    />
+    <small *ngIf="error" class="p-error"> {{ error }}</small>
+  </div>
+
+  <label *ngIf="label && float" [for]="controlName" class="label">{{
+    label
+  }}</label>
+  <i
+    *ngIf="isLoading"
+    class="pi pi-spin pi-spinner"
+    [ngClass]="{
+      loading__static: label && !float
+    }"
+  ></i>
+</div>

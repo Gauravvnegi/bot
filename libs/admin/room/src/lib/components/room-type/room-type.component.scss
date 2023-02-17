@@ -1,0 +1,182 @@
+@import 'main';
+
+.wrapper {
+  padding: 30px 99px 39px 26px;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  &-form {
+    margin: 5px 0 0 40px;
+  }
+}
+
+.mat-label {
+  margin-right: 80px;
+  font-family: Roboto;
+  font-size: 14px;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: #b5b5c3;
+}
+
+.room-type-name {
+  padding-top: 15px;
+  width: 300px;
+}
+
+.upload-image {
+  display: flex;
+  margin: 40px 0 0px 40px;
+}
+
+.upload-image-text {
+  width: 128px;
+  font-family: Roboto;
+  font-size: 14px;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: #9eaeb8;
+}
+
+.upload-image-boxes {
+  display: flex;
+  margin-left: 40px;
+  flex-wrap: wrap;
+  gap: 13.8px;
+}
+
+.image-box {
+  width: 219px;
+  height: 160px;
+  border-radius: 5px;
+  border: 1px solid #d9d9d9;
+  background-color: #fff;
+}
+
+.upload-image-note {
+  margin: 15px 12px 60px 208px;
+  font-family: Roboto;
+  font-size: 14px;
+  letter-spacing: 0.84px;
+  color: #9eaeb8;
+  align-items: center;
+}
+
+.amenities {
+  display: flex;
+  margin: 40px 0 0px 40px;
+}
+
+.amenities-validation-text {
+  margin: 6px 0 0 209px;
+  font-size: 90%;
+}
+
+.amenities-text {
+  width: 140px;
+  font-family: Roboto;
+  font-size: 14px;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: #b5b5c3;
+  min-width: 140px;
+}
+
+.bottom-form {
+  margin-top: 58px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.room-description {
+  display: flex;
+  margin: 40px 0 0 40px;
+  width: 100%;
+}
+
+.room-description-text {
+  width: 88px;
+  font-family: Roboto;
+  font-size: 14px;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: #9eaeb8;
+}
+
+.ck-editor {
+  width: 100%;
+  margin-left: 30px;
+}
+
+.bottom-form-fields {
+  display: flex;
+  flex-basis: 50%;
+  margin: 20px 0 0 40px;
+  width: 100%;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.field {
+  display: flex;
+  flex: 1 1 20rem;
+  align-items: center;
+  position: relative;
+}
+
+.label {
+  flex-basis: 30%;
+  font-family: Roboto;
+  font-size: 14px;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: #b5b5c3;
+}
+
+.currency {
+  flex-basis: 100px;
+  margin-right: 5px;
+  width: 100px;
+}
+
+.footer_button {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+  margin-top: 50px;
+  button {
+    @include admin-panel-button();
+    padding: 0;
+    font-weight: 400;
+  }
+}
+
+.input {
+  margin-right: 5px;
+  width: 285px;
+}
+
+.info-icon {
+  position: relative;
+  top: 2px;
+  margin: 0 0 0 5px;
+  color: #9eaeb8;
+  width: 14px;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+::ng-deep .mat-tooltip {
+  font: normal normal normal 12px/16px Roboto;
+  background-color: $white;
+  border: 1px solid $border;
+  padding: 10px;
+  color: $tooltip !important;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 0px $border;
+}

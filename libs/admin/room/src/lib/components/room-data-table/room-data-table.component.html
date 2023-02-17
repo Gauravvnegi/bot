@@ -1,0 +1,251 @@
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginaton"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [selectionMode]="selectionMode"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (sortFunction)="customSort($event)"
+  [customSort]="isCustomSort"
+  (onFilter)="onDataFilter()"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption__wrapper">
+      <form [formGroup]="tableFG">
+        <div class="caption__wrapper--tabmenu">
+          <div class="header">
+            <p class="heading">{{ tableName }}</p>
+            <div class="options">
+              <hospitality-bot-button
+                *ngIf="selectedTable === 'room'"
+                label="{{ 'room.addSingle' | translate }}"
+                variant="text"
+                link="/pages/inventory/room/{{ routes.addRoom }}/single"
+              ></hospitality-bot-button>
+              <hospitality-bot-button
+                *ngIf="selectedTable === 'roomType'"
+                label="{{ 'room.createType' | translate }}"
+                link="/pages/inventory/room/{{ routes.addRoomType }}"
+              ></hospitality-bot-button>
+              <hospitality-bot-button
+                *ngIf="selectedTable === 'room'"
+                label="{{ 'room.addMultiple' | translate }}"
+                link="/pages/inventory/room/{{ routes.addRoom }}/multiple"
+              ></hospitality-bot-button>
+              <hospitality-bot-export-list
+                (onDocumentActions)="onDocumentActions()"
+                [documentTypes]="documentTypes"
+                [documentActionTypes]="documentActionTypes"
+              ></hospitality-bot-export-list>
+            </div>
+          </div>
+          <div *ngIf="isTabFilters">
+            <hospitality-bot-tab-group
+              [listItems]="tabFilterItems"
+              [selectedIndex]="tabFilterIdx"
+              (selectedTabChange)="onSelectedTabFilterChange($event)"
+            ></hospitality-bot-tab-group>
+          </div>
+        </div>
+        <hospitality-bot-filter-chips
+          [chips]="filterChips"
+          (onChange)="toggleQuickReplyFilter($event)"
+        ></hospitality-bot-filter-chips>
+      </form>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <p class="no-data-found">{{ 'messages.noData' | translate }}</p>
+  </ng-template>
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns class="table_head">
+    <tr>
+      <th id="select" class="table-search-head main-checkbox" pResizableColumn>
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th
+        [id]="col.field"
+        class="table-data-head"
+        pResizableColumn
+        [pSortableColumn]="col.field"
+        *ngFor="let col of columns; let i = index"
+        [ngStyle]="col.dynamicWidth ? { width: col.width } : {}"
+      >
+        <div>
+          <p class="table-header-text">{{ col.header }}</p>
+          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
+        </div>
+      </th>
+    </tr>
+
+    <tr class="table-search-head">
+      <th id="search-checbox" class="table-search-head"></th>
+      <th
+        class="table-search-head"
+        [id]="'search-' + col.field"
+        *ngFor="let col of columns; let i = index"
+      >
+        <input
+          pInputText
+          type="text"
+          (input)="onFilterTypeTextChange($event, col.field)"
+          class="p-column-filter"
+        />
+      </th>
+    </tr>
+  </ng-template>
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <tr class="data-table-row" (click)="openEditForm(rowData)">
+      <td class="table--checkbox">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
+      </td>
+
+      <ng-container
+        *ngIf="values.length && values[0].roomNo"
+        [ngTemplateOutlet]="roomCell"
+        [ngTemplateOutletContext]="{ $implicit: rowData }"
+      >
+      </ng-container>
+      <ng-container
+        *ngIf="values.length && values[0].name"
+        [ngTemplateOutlet]="roomTypeCell"
+        [ngTemplateOutletContext]="{ $implicit: rowData }"
+      >
+      </ng-container>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="summary">
+    <p-paginator
+      #paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+    ></p-paginator>
+  </ng-template>
+</p-table>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>
+
+<ng-template #roomCell let-rowData>
+  <td>
+    <div
+      class="room-no"
+      [ngClass]="{
+        'room-no__active': rowData.status.value === 'ACTIVE',
+        'room-no__soldOut': rowData.status.value === 'SOLD_OUT',
+        'room-no__unavailable': rowData.status.value === 'UNAVAILABLE'
+      }"
+      *ngIf="rowData.type; else emptyCell"
+    >
+      {{ rowData.type }}
+    </div>
+  </td>
+  <td>
+    <div class="cell-content" *ngIf="rowData.roomNo; else emptyCell">
+      {{ rowData.roomNo }}
+    </div>
+  </td>
+  <td>
+    <div class="cell-content" *ngIf="rowData.date; else emptyCell">
+      {{ rowData.getFormattedDate() }}
+    </div>
+  </td>
+  <td>
+    <div class="cell-content" *ngIf="rowData.price; else emptyCell">
+      {{ rowData.currency }} {{ rowData.price }}
+    </div>
+  </td>
+  <td>
+    <div class="" *ngIf="rowData.status; else emptyCell">
+      <hospitality-bot-toggle-dropdown
+        [listItem]="status.room"
+        (onClick)="handleStatus($event, rowData)"
+        [status]="rowData.status"
+      >
+      </hospitality-bot-toggle-dropdown>
+    </div>
+  </td>
+</ng-template>
+
+<ng-template #roomTypeCell let-rowData>
+  <td>
+    <div class="cell-content" *ngIf="rowData.name; else emptyCell">
+      {{ rowData.name }}
+    </div>
+  </td>
+  <td>
+    <div class="cell-content" *ngIf="rowData.area; else emptyCell">
+      {{ rowData.area }} Sq.Ft.
+    </div>
+  </td>
+  <td>
+    <div
+      class="cell-content room-count"
+      *ngIf="rowData.roomCount; else emptyCell"
+    >
+      <div
+        class="room-no"
+        [ngClass]="{
+          'room-no__active': item.key === 'active',
+          'room-no__soldOut': item.key === 'soldOut',
+          'room-no__unavailable': item.key === 'unavailable'
+        }"
+        *ngFor="let item of rowData.roomCount | keyvalue"
+      >
+        {{ item.value }} - {{ item.key }}
+      </div>
+    </div>
+  </td>
+  <td>
+    <div class="cell-content" *ngIf="rowData.amenities; else emptyCell">
+      {{ rowData.amenities.slice(0, 3) }}
+      {{
+        rowData.amenities?.length - 2 > 0
+          ? '+'.concat(rowData.amenities?.length - 2)
+          : ''
+      }}
+    </div>
+  </td>
+  <td>
+    <div class="cell-content" *ngIf="rowData.occupancy; else emptyCell">
+      {{ rowData.occupancy }} people
+    </div>
+  </td>
+  <td>
+    <div class="" *ngIf="rowData.status; else emptyCell">
+      <hospitality-bot-toggle-dropdown
+        [listItem]="status.roomType"
+        (onClick)="handleStatus($event, rowData)"
+        [status]="rowData.status"
+      >
+      </hospitality-bot-toggle-dropdown>
+    </div>
+  </td>
+</ng-template>

@@ -9,6 +9,8 @@ import { Table } from 'primeng/table';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { TableService } from '../../services/table.service';
+import { Cols } from '../../types/table.type';
+
 interface Import {
   name: string;
   code: string;
@@ -22,7 +24,7 @@ export class BaseDatatableComponent implements OnInit {
   @ViewChild('dt') table: Table; //reference to data-table
   tableName = 'Datatable'; //table name
 
-  @Input() cols = [
+  @Input() cols: Cols[] = [
     { field: 'vin', header: 'Vin' },
     { field: 'year', header: 'Year' },
     { field: 'brand', header: 'Brand' },
@@ -175,8 +177,35 @@ export class BaseDatatableComponent implements OnInit {
     //rows - Number of rows to display per page.
     //event.page: Index of the new page
     //event.pageCount: Total number of pages
+
     this.currentPage = event.page;
+    this.updatePaginations(event);
     this.loadData(event);
+  }
+
+  /**
+   * @function customSort To sort the rows of the table.
+   * @param event The event for sort click action.
+   */
+  customSort(event: SortEvent): void {
+    const col = this.cols.filter((data) => data.field === event.field)[0];
+    const field =
+      event.field[event.field.length - 1] === ')'
+        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
+        : event.field;
+
+    event.data.sort((data1, data2) =>
+      this.sortOrder(event, field, data1, data2, col)
+    );
+  }
+
+  /**
+   * @function updatePaginations To update the pagination variable values.
+   * @param event The lazy load event for the table.
+   */
+  updatePaginations(event: LazyLoadEvent): void {
+    this.first = event.first;
+    this.rowsPerPage = event.rows;
   }
 
   loadData(event: LazyLoadEvent) {

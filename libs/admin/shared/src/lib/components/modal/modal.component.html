@@ -1,0 +1,37 @@
+<div class="detail--container">
+  <div class="header">
+    <div class="header__title">
+      <mat-icon class="alert">warning</mat-icon>
+      <div>{{ heading }}</div>
+    </div>
+    <div (click)="close()" class="header__close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="body">
+    <div class="descriptions">
+      <div class="text" *ngFor="let text of descriptions">
+        {{ text }}
+      </div>
+    </div>
+
+    <div class="actions">
+      <ng-container *ngIf="!!actions?.length; else defaultCTA">
+        <hospitality-bot-button
+          *ngFor="let action of actions"
+          [label]="action.label"
+          (onClick)="action.onClick()"
+          [variant]="action.variant"
+        ></hospitality-bot-button>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #defaultCTA>
+  <hospitality-bot-button
+    [label]="defaultAction.label"
+    (onClick)="defaultAction.onClick()"
+    [variant]="defaultAction.variant"
+  ></hospitality-bot-button>
+</ng-template>

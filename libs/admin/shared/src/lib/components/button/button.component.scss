@@ -1,0 +1,31 @@
+@import 'main';
+
+.button {
+  height: 36px;
+  min-width: 145px;
+
+  padding: 9.5px 18.5px;
+  font-size: 14px;
+  font-weight: 500;
+
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+
+  &__contained {
+    color: $white;
+    background-color: $primary-purple;
+  }
+
+  &__text {
+    color: $primary-purple;
+    background-color: $white;
+  }
+
+  &__outlined {
+    color: $primary-purple;
+    background-color: $white;
+    border: 1px solid;
+    border-color: $primary-purple;
+  }
+}

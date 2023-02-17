@@ -12,14 +12,14 @@ export class TemplateEditorComponent implements OnInit {
   @Input() template = '';
   @Input() disabled = false;
   @Input() hybrid = true;
-  @Input() height = '500';
+  @Input() height: number = 400;
   @ViewChild('plainTextControl') plainTextControl;
   richText = true;
   ckeConfig = {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
     readOnly: false,
-    height: 400,
+    height: this.height,
   };
 
   constructor() {}
@@ -30,6 +30,7 @@ export class TemplateEditorComponent implements OnInit {
 
   ngOnChanges() {
     this.ckeConfig['readOnly'] = this.disabled;
+    this.ckeConfig['height'] = this.height;
   }
 
   changeField(value: boolean) {

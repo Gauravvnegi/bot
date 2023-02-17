@@ -59,4 +59,11 @@ export class UserService extends ApiService {
   getMentionList(hotelId: string) {
     return this.get(`/api/v1/hotel/${hotelId}/users?mention=true`);
   }
+
+  uploadImage(hotelId: string, data: any, path: string) {
+    return this.post(
+      `/api/v1/uploads?folder_name=hotel/${hotelId}/${path}`,
+      data
+    );
+  }
 }

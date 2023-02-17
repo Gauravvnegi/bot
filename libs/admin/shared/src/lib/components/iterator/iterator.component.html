@@ -1,0 +1,48 @@
+<div class="wrapper">
+  <div class="main" #main>
+    <div class="header">
+      <div
+        *ngFor="let field of fields"
+        [style.flexBasis]="width"
+        class="header__cell"
+      >
+        {{ field.label }}
+      </div>
+    </div>
+
+    <div
+      [formArray]="useFormArray"
+      *ngFor="let controls of useFormArray.controls; let i = index"
+    >
+      <div [formGroup]="controls" class="values-row">
+        <div
+          *ngFor="let field of fields"
+          [style.flexBasis]="width"
+          [ngSwitch]="field.type"
+        >
+          <hospitality-bot-input
+            *ngSwitchCase="'input'"
+            [controlName]="field.name"
+            [props]="props"
+            [disabled]="field.disabled"
+          ></hospitality-bot-input>
+          <hospitality-bot-select
+            *ngSwitchCase="'dropdown'"
+            [controlName]="field.name"
+            [props]="props"
+            [disabled]="field.disabled"
+          ></hospitality-bot-select>
+        </div>
+        <mat-icon class="delete" (click)="removeField(i)">clear</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <hospitality-bot-button
+    *ngIf="!maxLimit || maxLimit > useFormArray.length"
+    class="action-btn"
+    label="Add More"
+    (onClick)="addNewField()"
+    variant="outlined"
+  ></hospitality-bot-button>
+</div>

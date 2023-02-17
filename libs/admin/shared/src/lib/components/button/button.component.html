@@ -1,0 +1,13 @@
+<button
+  [type]="type"
+  (click)="handleClick()"
+  [disabled]="disabled"
+  class="button"
+  [ngClass]="{
+    button__text: variant === 'text',
+    button__contained: variant === 'contained',
+    button__outlined: variant === 'outlined'
+  }"
+>
+  {{ label }}
+</button>

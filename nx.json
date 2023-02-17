@@ -155,6 +155,9 @@
     },
     "admin-finance": {
       "tags": []
+    },
+    "admin-room": {
+      "tags": []
     }
   }
 }

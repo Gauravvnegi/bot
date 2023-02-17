@@ -107,7 +107,8 @@
       "@hospitality-bot/admin/unsubscribed": [
         "libs/admin/unsubscribed/src/index.ts"
       ],
-      "@hospitality-bot/admin/finance": ["libs/admin/finance/src/index.ts"]
+      "@hospitality-bot/admin/finance": ["libs/admin/finance/src/index.ts"],
+      "@hospitality-bot/admin/room": ["libs/admin/room/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

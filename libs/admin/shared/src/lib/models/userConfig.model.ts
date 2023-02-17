@@ -17,6 +17,7 @@ export class UserConfig implements IDeserializable {
   profileUrl;
   timezone;
   hotelAccess;
+  websiteUrl;
   deserialize(input) {
     Object.assign(
       this,
@@ -36,6 +37,7 @@ export class UserConfig implements IDeserializable {
     this.brandName = input?.hotelAccess?.chains[0]?.id;
     this.branchName = input?.hotelAccess?.chains[0]?.hotels[length - 1]?.id;
     this.timezone = input?.hotelAccess?.chains[0]?.hotels[length - 1]?.timezone;
+    this.websiteUrl = input?.hotelAccess?.chains[0]?.hotels[length - 1]?.domain;
 
     this.products = this.departments.map(({ productLabel, productType }) => ({
       label: productLabel,

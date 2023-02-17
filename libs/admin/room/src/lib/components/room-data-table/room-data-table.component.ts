@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -10,13 +11,13 @@ import {
   Cols,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import * as FileSaver from 'file-saver';
 import {
-  ModalAction,
-  ModalContent,
-} from 'libs/admin/shared/src/lib/types/fields.type';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
+import * as FileSaver from 'file-saver';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import routes from '../../config/routes';
 import {
@@ -58,11 +59,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   tabFilterIdx: number = 0;
   selectedTable: TableValue;
 
-  // modal value
-  showModal = false;
-  modalContent: ModalContent;
-  modalAction: ModalAction[];
-
   constructor(
     public fb: FormBuilder,
     protected tabFilterService: TableService,
@@ -70,7 +66,8 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    private modalService: ModalService
   ) {
     super(fb, tabFilterService);
   }
@@ -210,7 +207,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function closeModal To close the modal
    */
   closeModal = (): void => {
-    this.showModal = false;
+    // this.showModal = false;
   };
 
   /**
@@ -225,19 +222,26 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     if (this.selectedTable === 'roomType') {
       const roomTypeStatus = status === 'ACTIVE';
       if (!roomTypeStatus) {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.disableClose = true;
+        const togglePopupCompRef = this.modalService.openDialog(
+          ModalComponent,
+          dialogConfig
+        );
+
         const soldOut = rowData.roomCount.soldOut;
 
         if (soldOut) {
-          this.modalContent = {
+          togglePopupCompRef.componentInstance.content = {
             heading: 'Unpublish Page',
             description: [
               `${soldOut} rooms are already sold out in this category`,
               'You can not mark this room type inactive',
             ],
           };
-          this.modalAction = undefined;
+          togglePopupCompRef.componentInstance.actions = undefined;
         } else {
-          this.modalContent = {
+          togglePopupCompRef.componentInstance.content = {
             heading: 'In-active Room Type',
             description: [
               `There are ${rowData.roomCount.active} rooms in this room type`,
@@ -245,20 +249,26 @@ export class RoomDataTableComponent extends BaseDatatableComponent
               'Are you Sure?',
             ],
           };
-          this.modalAction = [
-            { label: 'No', onClick: this.closeModal, variant: 'outlined' },
+          togglePopupCompRef.componentInstance.actions = [
+            {
+              label: 'No',
+              onClick: () => this.modalService.close(),
+              variant: 'outlined',
+            },
             {
               label: 'Yes',
               onClick: () => {
                 this.handleRoomTypeStatus(roomTypeStatus, rowData.id);
-                this.closeModal();
+                this.modalService.close();
               },
               variant: 'contained',
             },
           ];
         }
 
-        this.showModal = true;
+        togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+          this.modalService.close();
+        });
       } else {
         this.handleRoomTypeStatus(roomTypeStatus, rowData.id);
       }

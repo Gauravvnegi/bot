@@ -1,14 +1,15 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
-  IteratorField,
-  ModalAction,
-  ModalContent,
-} from 'libs/admin/shared/src/lib/types/fields.type';
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { FormProps } from 'libs/admin/shared/src/lib/types/form.type';
 import { Subscription } from 'rxjs';
 import { iteratorFields } from '../../constant/form';
@@ -43,11 +44,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   isRoomTypesLoading = false;
   isRoomInfoLoading = false;
 
-  // modal value
-  showModal = false;
-  modalContent: ModalContent;
-  modalAction: ModalAction[];
-
   $subscription = new Subscription();
 
   constructor(
@@ -56,7 +52,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private modalService: ModalService
   ) {
     this.initForm();
     this.submissionType = this.route.snapshot.paramMap.get(
@@ -236,9 +233,19 @@ export class AddRoomComponent implements OnInit, OnDestroy {
             : new MultipleRoomList().deserialize(data).list
         )
         .subscribe((res) => {
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.disableClose = true;
+          const togglePopupCompRef = this.modalService.openDialog(
+            ModalComponent,
+            dialogConfig
+          );
+
+          togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+            this.modalService.close();
+          });
+
           if (res.errorMessages.length) {
-            this.showModal = true;
-            this.modalContent = {
+            togglePopupCompRef.componentInstance.content = {
               heading: 'Rooms not added',
               description: res.errorMessages,
             };
@@ -263,13 +270,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function closeModal To close the modal
-   */
-  closeModal = (): void => {
-    this.showModal = false;
-  };
-
-  /**
    * @function handleError to show the error
    * @param param0
    */
@@ -287,5 +287,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+    this.fields[0].disabled = false;
   }
 }

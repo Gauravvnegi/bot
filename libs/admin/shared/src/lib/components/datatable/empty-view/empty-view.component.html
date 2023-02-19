@@ -1,0 +1,15 @@
+<div class="wrapper">
+  <div class="img-wrapper">
+    <img [src]="imageSrc" class="img" alt="empty-table" />
+  </div>
+  <div>
+    <div class="heading">{{ heading }}</div>
+    <div class="description">{{ description }}</div>
+    <hospitality-bot-button
+      variant="text"
+      [label]="actionName"
+      (onClick)="onActionClick()"
+    >
+    </hospitality-bot-button>
+  </div>
+</div>

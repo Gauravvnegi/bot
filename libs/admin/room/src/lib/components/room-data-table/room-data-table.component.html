@@ -60,6 +60,7 @@
           </div>
         </div>
         <hospitality-bot-filter-chips
+          *ngIf="isQuickFilters"
           [chips]="filterChips"
           (onChange)="toggleQuickReplyFilter($event)"
         ></hospitality-bot-filter-chips>

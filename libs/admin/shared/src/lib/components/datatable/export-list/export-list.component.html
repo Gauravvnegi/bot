@@ -1,29 +1,43 @@
-<div
-  [formGroup]="controlContainer?.control.get(controlName)"
-  class="dropdown--wrapper"
->
-  <p-dropdown
-    class="export"
-    [options]="documentActionTypes"
-    formControlName="documentActionType"
+<div class="options">
+  <ng-container *ngIf="!!additionalActionItems.length">
+    <div class="icons">
+      <img
+        *ngFor="let act of additionalActionItems"
+        [src]="act.icon"
+        [alt]="act.value"
+        (click)="handleActionEmission(act.value)"
+        class="svg"
+      />
+    </div>
+    <div class="seperator"></div>
+  </ng-container>
+  <div
+    [formGroup]="controlContainer?.control.get(controlGroupName)"
+    class="dropdown--wrapper"
   >
-    <ng-template let-documentActionItem pTemplate="selectedItem">
-      <img src="assets/svg/Export.svg" alt="export" />
-      <span class="databaseActionLabel">{{ documentActionItem.label }}</span>
-    </ng-template>
-  </p-dropdown>
-  <div class="divider"></div>
-  <p-dropdown
-    class="export"
-    [options]="documentTypes"
-    formControlName="documentType"
-  >
-    <ng-template let-documentTypeItem pTemplate="selectedItem">
-      <img src="assets/svg/CSV.svg" alt="csv" />
-      <span class="databaseActionLabel">{{ documentTypeItem.label }}</span>
-    </ng-template>
-  </p-dropdown>
-  <button class="go" (click)="handleSubmission()">
-    <mat-icon class="material-icons" matSuffix>east</mat-icon>
-  </button>
+    <p-dropdown
+      class="export"
+      [options]="documentActionTypes"
+      [formControlName]="documentActionTypeName"
+    >
+      <ng-template let-documentActionItem pTemplate="selectedItem">
+        <img src="assets/svg/Export.svg" alt="export" />
+        <span class="databaseActionLabel">{{ documentActionItem.label }}</span>
+      </ng-template>
+    </p-dropdown>
+    <div class="divider"></div>
+    <p-dropdown
+      class="export"
+      [options]="documentTypes"
+      [formControlName]="documentTypesName"
+    >
+      <ng-template let-documentTypeItem pTemplate="selectedItem">
+        <img src="assets/svg/CSV.svg" alt="csv" />
+        <span class="databaseActionLabel">{{ documentTypeItem.label }}</span>
+      </ng-template>
+    </p-dropdown>
+    <button class="go" (click)="handleSubmission()">
+      <mat-icon class="material-icons" matSuffix>east</mat-icon>
+    </button>
+  </div>
 </div>

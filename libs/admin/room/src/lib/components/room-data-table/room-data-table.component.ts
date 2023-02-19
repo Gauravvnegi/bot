@@ -59,6 +59,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   tabFilterIdx: number = 0;
   selectedTable: TableValue;
   filterChips: Chip<string>[] = [];
+  isQuickFilters = true;
 
   constructor(
     public fb: FormBuilder,

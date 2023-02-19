@@ -38,6 +38,7 @@ export class BaseDatatableComponent implements OnInit {
   isQuickFilters = false;
   isTabFilters = true;
   isCustomSort = true;
+  isSelectable = true;
 
   tableFG: FormGroup;
 
@@ -76,7 +77,7 @@ export class BaseDatatableComponent implements OnInit {
 
   selectedExport2: Import;
 
-  dataSource = [
+  dataSource: Record<string, any>[] = [
     {
       vin: 1,
       year: 2020,

@@ -34,7 +34,7 @@ export class ToggleDropdownComponent {
         this.onClick.emit('inactive');
       },
       value: 'INACTIVE',
-      type: 'rejected',
+      type: 'failed',
     },
   ];
 

@@ -1,10 +1,10 @@
-<div class="caption__wrapper--buttons">
+<div class="caption__wrapper--buttons" [formGroup]="controlContainer.control">
   <div class="button__wrapper">
     <mat-chip-list
       multiple
       #chipList
       aria-label="Quick Reply selection"
-      [formControlName]="controlContainer?.control.get(controlName)"
+      [formControlName]="controlName"
     >
       <mat-chip
         *ngFor="let chip of chips; let chipIdx = index"

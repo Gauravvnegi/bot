@@ -9,7 +9,14 @@ export const templateConfig = {
         disabled: false,
         total: 0,
         chips: [
-          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+          {
+            label: 'All',
+            icon: '',
+            value: 'ALL',
+            total: 0,
+            isSelected: true,
+            type: 'default',
+          },
           {
             label: 'Active',
             icon: '',
@@ -57,7 +64,14 @@ export const templateConfig = {
       },
     ],
     chips: [
-      { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+      {
+        label: 'All',
+        icon: '',
+        value: 'ALL',
+        total: 0,
+        isSelected: true,
+        type: 'default',
+      },
       {
         label: 'Active',
         icon: '',

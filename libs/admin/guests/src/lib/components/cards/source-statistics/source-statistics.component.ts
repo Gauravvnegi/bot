@@ -41,7 +41,16 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
     Options: chartConfig.options.source,
   };
 
-  chips: any = [{ label: 'All', icon: '', value: 'ALL', isSelected: true }];
+  chips: any = [
+    {
+      label: 'All',
+      icon: '',
+      value: 'ALL',
+      isSelected: true,
+      type: 'default',
+      type: 'default',
+    },
+  ];
 
   tabFilterItems = [
     {

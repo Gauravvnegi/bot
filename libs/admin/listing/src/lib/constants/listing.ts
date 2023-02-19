@@ -60,6 +60,7 @@ export const listingConfig = {
         isSort: false,
         sortType: 'string',
         dynamicWidth: false,
+        isSearchDisabled: true,
       },
       {
         field: ``,
@@ -67,6 +68,7 @@ export const listingConfig = {
         isSort: false,
         sortType: 'string',
         dynamicWidth: false,
+        isSearchDisabled: true,
       },
       {
         field: '',
@@ -74,6 +76,7 @@ export const listingConfig = {
         isSort: false,
         sortType: 'number',
         dynamicWidth: true,
+        isSearchDisabled: true,
       },
     ],
   },

@@ -147,13 +147,6 @@ export const assetConfig = {
         isSearchDisabled: true,
       },
     ],
-
-    emptyViewContent: {
-      imageSrc: 'assets/images/empty-view.png',
-      heading: 'Add New Asset',
-      description: 'Assets need to be created first',
-      actionName: '+ Create Assets',
-    },
   },
   fileUploadData: {
     fileSize: 3145728,

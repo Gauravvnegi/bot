@@ -35,7 +35,6 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AssetDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  readonly emptyViewContent = assetConfig.datatable.emptyViewContent;
   tableName = assetConfig.datatable.title;
   @Input() tabFilterItems;
   @Input() tabFilterIdx = 0;

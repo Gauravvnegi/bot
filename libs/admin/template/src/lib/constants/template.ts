@@ -61,6 +61,7 @@ export const templateConfig = {
         header: 'Active',
         isSort: false,
         dynamicWidth: true,
+        isSearchDisabled: true,
       },
     ],
     chips: [

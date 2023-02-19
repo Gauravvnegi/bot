@@ -7,7 +7,14 @@ export const tabFilterItems = {
       disabled: false,
       total: 0,
       chips: [
-        { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+        {
+          label: 'All',
+          icon: '',
+          value: 'ALL',
+          total: 0,
+          isSelected: true,
+          type: 'default',
+        },
         {
           label: 'New',
           icon: '',
@@ -103,7 +110,14 @@ export const tabFilterItems = {
       disabled: false,
       total: 0,
       chips: [
-        { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+        {
+          label: 'All',
+          icon: '',
+          value: 'ALL',
+          total: 0,
+          isSelected: true,
+          type: 'default',
+        },
         {
           label: 'Checkout_Pending',
           icon: '',
@@ -157,7 +171,15 @@ export const tabFilterItems = {
       disabled: false,
       total: 0,
       chips: [
-        { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+        {
+          label: 'All',
+          icon: '',
+          value: 'ALL',
+          total: 0,
+          isSelected: true,
+
+          type: 'default',
+        },
         {
           label: 'New',
           icon: '',

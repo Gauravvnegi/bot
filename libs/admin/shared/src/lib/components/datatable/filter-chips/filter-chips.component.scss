@@ -5,6 +5,10 @@
   font-weight: 400;
 }
 
+.status-default {
+  background-color: $white !important;
+}
+
 .status-selected-new {
   background-color: $light-blue !important;
   opacity: 1;
@@ -29,6 +33,6 @@
 }
 
 .status-selected-default {
-  background-color: $default;
+  background-color: $default !important;
   opacity: 1;
 }

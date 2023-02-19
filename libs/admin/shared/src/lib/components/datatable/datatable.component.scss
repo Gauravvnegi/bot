@@ -514,10 +514,10 @@ th {
   }
 }
 
-:host ::ng-deep .status-default {
-  background-color: $c-gray-103;
-  color: $dark-grey;
-}
+// :host ::ng-deep .status-default {
+//   background-color: $c-gray-103;
+//   color: $dark-grey;
+// }
 
 :host ::ng-deep .chipSelected {
   color: $white !important;

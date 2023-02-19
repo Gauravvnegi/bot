@@ -11,8 +11,9 @@
         selectable="true"
         (click)="toggleQuickReplyFilter(chipIdx)"
         [ngClass]="{
-          'chipSelected status-selected-default': chip.isSelected,
+          chipSelected: chip.isSelected,
           'status-default': chip.type === 'default',
+          'status-selected-default': chip.type === 'default' && chip.isSelected,
 
           'status-opacity-new status-text-new': chip.type === 'new',
           'status-selected-new': chip.type === 'new' && chip.isSelected,

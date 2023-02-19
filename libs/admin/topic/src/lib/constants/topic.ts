@@ -61,6 +61,7 @@ export const topicConfig = {
         header: 'Active',
         isSort: false,
         dynamicWidth: true,
+        isSearchDisabled: true,
       },
     ],
   },

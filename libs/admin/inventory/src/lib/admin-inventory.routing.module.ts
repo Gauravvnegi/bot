@@ -7,7 +7,6 @@ import {
   routesFactory,
 } from '@hospitality-bot/admin/shared';
 import { InventoryComponent } from './components/inventory/inventory.component';
-import { DatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/datatable.component';
 
 const appRoutes: CRoutes = [
   {
@@ -20,11 +19,6 @@ const appRoutes: CRoutes = [
         name: ModuleNames.ROOM,
         loadChildren: () =>
           import('@hospitality-bot/admin/room').then((m) => m.AdminRoomModule),
-      },
-      {
-        path: 'dummy',
-        name: ModuleNames.ROOM,
-        component: DatatableComponent,
       },
     ],
   },

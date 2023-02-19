@@ -320,15 +320,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   *
-   */
-  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }): void {
-    this.tabFilterItems[this.tabFilterIdx].chips = chips;
-    this.changePage(0);
-  }
-
-  /**
    * @function exportCSV To export CSV report of the table.
    */
   exportCSV(): void {

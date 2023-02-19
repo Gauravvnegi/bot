@@ -410,14 +410,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   */
-  toggleQuickReplyFilter({ chips }): void {
-    this.tabFilterItems[this.tabFilterIdx].chips = chips;
-    this.changePage(0);
-  }
-
-  /**
    * @function campaignConfiguration returns campaignConfig object.
    * @returns campaignConfig object.
    */

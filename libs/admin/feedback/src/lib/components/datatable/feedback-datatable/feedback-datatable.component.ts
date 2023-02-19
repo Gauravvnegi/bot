@@ -622,14 +622,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   */
-  toggleQuickReplyFilter({ chips }): void {
-    this.tabFilterItems[this.tabFilterIdx].chips = chips;
-    this.changePage(0);
-  }
-
-  /**
    * @function downloadFeedbackPdf To download feedback pdf of a feedback.
    * @param event The mouse click event.
    * @param id The outlet id.

@@ -62,15 +62,6 @@ export class DatatableComponent extends BaseDatatableComponent
     },
   ];
 
-  /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   *
-   */
-  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }): void {
-    this.tabFilterItems[this.tabFilterIdx].chips = chips;
-    this.changePage(0);
-  }
-
   addEntry() {
     this.values = rowValues.users;
   }

@@ -364,14 +364,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   */
-  toggleQuickReplyFilter({ chips }): void {
-    this.tabFilterItems[this.tabFilterIdx].chips = chips;
-    this.changePage(0);
-  }
-
-  /**
    * @function openDetailPage To open the detail modal for a reservation.
    * @param event The mouse click event.
    * @param rowData The data of the clicked row.

@@ -323,14 +323,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   */
-  toggleQuickReplyFilter({ chips }): void {
-    this.tabFilterItems[this.tabFilterIdx].chips = chips;
-    this.changePage(0);
-  }
-
   openDetailPage(event, rowData?, tabKey?): void {
     event.stopPropagation();
     if (rowData) {

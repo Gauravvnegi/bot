@@ -622,31 +622,10 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function toggleQuickReplyFilter To toggle chip selection.
-   * @param quickReplyTypeIdx The selected chip index.
-   * @param quickReplyType The selected chip.
+   * @function toggleQuickReplyFilter To handle the chip click for a tab.
    */
-  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
-    if (quickReplyTypeIdx === 0) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'GTM') {
-          chip.isSelected = false;
-        }
-      });
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    }
-
+  toggleQuickReplyFilter({ chips }): void {
+    this.tabFilterItems[this.tabFilterIdx].chips = chips;
     this.changePage(0);
   }
 

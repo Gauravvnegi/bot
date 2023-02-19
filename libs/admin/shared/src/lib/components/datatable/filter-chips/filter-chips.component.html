@@ -35,7 +35,7 @@
         }"
       >
         <span> {{ chip.label }}</span>
-        <span *ngIf="chip.total"> ({{ chip.total }})</span>
+        <span *ngIf="chip.total >= 0"> ({{ chip.total }})</span>
       </mat-chip>
     </mat-chip-list>
     <img src="assets/svg/Filter-Icon.svg" alt="filter" />

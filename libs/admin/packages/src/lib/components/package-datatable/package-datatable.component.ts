@@ -32,6 +32,7 @@ export class PackageDatatableComponent extends BaseDatatableComponent
   tabFilterIdx = 1;
   $subscription = new Subscription();
   hotelId;
+  isQuickFilters = false;
 
   cols = [
     { field: 'name', header: 'Package Name', sortType: 'string', isSort: true },
@@ -48,8 +49,19 @@ export class PackageDatatableComponent extends BaseDatatableComponent
       isSort: true,
     },
     { field: 'type', header: 'Type', sortType: 'string', isSort: true },
-    { field: 'rate', header: 'Amount', sortType: 'string', isSort: true },
-    { field: 'status', header: 'Active', isSort: false },
+    {
+      field: 'rate',
+      header: 'Amount',
+      sortType: 'string',
+      isSort: true,
+      isSearchDisabled: true,
+    },
+    {
+      field: 'status',
+      header: 'Active',
+      isSort: false,
+      isSearchDisabled: true,
+    },
   ];
 
   constructor(

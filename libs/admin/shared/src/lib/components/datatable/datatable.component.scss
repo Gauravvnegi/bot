@@ -187,6 +187,12 @@
   }
 }
 
+.action-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 :host ::ng-deep .p-inputtext {
   color: $dark-blue;
 }

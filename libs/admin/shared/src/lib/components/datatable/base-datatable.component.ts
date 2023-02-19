@@ -35,7 +35,7 @@ export class BaseDatatableComponent implements OnInit {
    * Action Buttons & filters visibility
    */
   isActionButtons = false;
-  isQuickFilters = false;
+  isQuickFilters = true;
   isTabFilters = true;
   isCustomSort = true;
   isSelectable = true;

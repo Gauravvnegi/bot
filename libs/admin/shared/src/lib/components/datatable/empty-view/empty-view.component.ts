@@ -22,7 +22,12 @@ export class EmptyViewComponent {
 
   @Output() create = new EventEmitter();
 
-  constructor() {}
+  constructor() {
+    this.imageSrc = 'assets/images/empty-view.png';
+    this.heading = 'No Data';
+    this.description = 'No list found!. Add new entries';
+    this.actionName = '+ Create New';
+  }
 
   /**
    * Trigger create action

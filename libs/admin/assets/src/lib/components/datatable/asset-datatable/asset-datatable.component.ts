@@ -8,6 +8,7 @@ import * as FileSaver from 'file-saver';
 
 import {
   BaseDatatableComponent,
+  Chip,
   sharedConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
@@ -34,6 +35,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AssetDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
+  readonly emptyViewContent = assetConfig.datatable.emptyViewContent;
   tableName = assetConfig.datatable.title;
   @Input() tabFilterItems;
   @Input() tabFilterIdx = 0;
@@ -346,31 +348,10 @@ export class AssetDatatableComponent extends BaseDatatableComponent
 
   /**
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   * @param quickReplyTypeIdx The chip index.
-   * @param quickReplyType The chip type.
+   *
    */
-  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
-    //toggle isSelected
-    if (quickReplyTypeIdx === 0) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== assetConfig.datatable.chipValue.all) {
-          chip.isSelected = false;
-        }
-      });
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    }
-
+  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }): void {
+    this.tabFilterItems[this.tabFilterIdx].chips = chips;
     this.changePage(0);
   }
 

@@ -2,9 +2,9 @@ export const assetConfig = {
   datatable: {
     title: 'Asset',
     limit: 5,
-    chipValue:{
-      all:'ALL'
-    }, 
+    chipValue: {
+      all: 'ALL',
+    },
     tabFilterItems: [
       {
         label: 'All',
@@ -123,8 +123,16 @@ export const assetConfig = {
         isSort: false,
         sortType: 'number',
         dynamicWidth: true,
+        isSearchDisabled: true,
       },
     ],
+
+    emptyViewContent: {
+      imageSrc: 'assets/images/empty-view.png',
+      heading: 'Add New Asset',
+      description: 'Assets need to be created first',
+      actionName: '+ Create Assets',
+    },
   },
   fileUploadData: {
     fileSize: 3145728,

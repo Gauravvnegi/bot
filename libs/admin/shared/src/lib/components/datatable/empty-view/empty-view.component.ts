@@ -11,6 +11,8 @@ export class EmptyViewComponent {
   description: string;
   actionName: string;
 
+  @Input() variant: 'default' | 'standard' = 'default';
+
   /**
    * Set Content of the empty view.
    */
@@ -38,8 +40,8 @@ export class EmptyViewComponent {
 }
 
 type Content = {
-  imageSrc: string;
-  heading: string;
-  description: string;
-  actionName: string;
+  imageSrc?: string;
+  heading?: string;
+  description?: string;
+  actionName?: string;
 };

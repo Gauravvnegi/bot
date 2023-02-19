@@ -1,4 +1,13 @@
 @import 'main';
+:host ::ng-deep .no-data-found {
+  display: block;
+  width: 90vw;
+  text-align: center;
+  padding: $padding10 0;
+  @media screen and (max-width: $L) {
+    width: 85vw;
+  }
+}
 
 .wrapper {
   display: flex;

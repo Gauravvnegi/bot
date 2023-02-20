@@ -28,60 +28,16 @@
         <form [formGroup]="tableFG">
           <div class="caption__wrapper--tabmenu">
             <div class="header">
-              <!-- <div class="header--text"> -->
               <div>
                 <p class="heading">{{ tableName }}</p>
               </div>
-              <div class="requestDataWrapper">
-                <div class="options">
-                  <div *ngIf="isActionButtons" class="icons">
-                    <img src="assets/svg/Download.svg" class="svg" />
-                    <img src="assets/svg/google-docs.svg" class="svg" />
-                    <img src="assets/svg/card.svg" class="svg" />
-                  </div>
-                  <div *ngIf="isActionButtons" class="seperator"></div>
-                  <div
-                    formGroupName="documentActions"
-                    class="dropdown--wrapper"
-                  >
-                    <p-dropdown
-                      class="export"
-                      [options]="documentActionTypes"
-                      formControlName="documentActionType"
-                    >
-                      <ng-template
-                        let-documentActionItem
-                        pTemplate="selectedItem"
-                      >
-                        <img src="assets/svg/Export.svg" />
-                        <span class="requestDataActionLabel">{{
-                          documentActionItem.label
-                        }}</span>
-                      </ng-template>
-                    </p-dropdown>
-                    <div class="divider"></div>
-                    <p-dropdown
-                      class="export"
-                      [options]="documentTypes"
-                      formControlName="documentType"
-                    >
-                      <ng-template
-                        let-documentTypeItem
-                        pTemplate="selectedItem"
-                      >
-                        <img src="assets/svg/CSV.svg" />
-                        <span class="requestDataActionLabel">{{
-                          documentTypeItem.label
-                        }}</span>
-                      </ng-template>
-                    </p-dropdown>
-                    <button class="go" (click)="onDocumentActions()">
-                      <mat-icon class="material-icons" matSuffix>east</mat-icon>
-                    </button>
-                  </div>
-                </div>
+              <div class="action-wrapper">
+                <hospitality-bot-export-list
+                  (onDocumentActions)="onDocumentActions()"
+                  [documentTypes]="documentTypes"
+                  [documentActionTypes]="documentActionTypes"
+                ></hospitality-bot-export-list>
               </div>
-              <!-- <p class="selected">2 record(s) are selected</p> -->
             </div>
             <div *ngIf="isTabFilters">
               <hospitality-bot-tab-group

@@ -1,4 +1,4 @@
-<div class="options">
+<div class="wrapper">
   <ng-container *ngIf="!!additionalActionItems.length">
     <div class="icons">
       <img
@@ -9,14 +9,14 @@
         class="svg"
       />
     </div>
-    <div class="seperator"></div>
+    <div class="separator"></div>
   </ng-container>
   <div
     [formGroup]="controlContainer?.control.get(controlGroupName)"
-    class="dropdown--wrapper"
+    class="form-group-wrapper"
   >
     <p-dropdown
-      class="export"
+      class="export-dropdown"
       [options]="documentActionTypes"
       [formControlName]="documentActionTypeName"
     >
@@ -27,7 +27,7 @@
     </p-dropdown>
     <div class="divider"></div>
     <p-dropdown
-      class="export"
+      class="export-dropdown"
       [options]="documentTypes"
       [formControlName]="documentTypesName"
     >

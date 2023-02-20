@@ -30,7 +30,7 @@
     margin-bottom: 10px;
     font-size: 25px;
   }
-  ::ng-deep .p-inputtext {
+  :host ::ng-deep .p-inputtext {
     align-items: center !important;
     justify-content: space-between !important;
     gap: 8px;

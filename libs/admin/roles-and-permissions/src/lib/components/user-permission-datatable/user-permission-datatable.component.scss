@@ -1,16 +1,7 @@
 @import 'main';
 
 .add-user {
-  background: transparent;
-  border: none;
-  outline: none;
-  margin-right: 20px;
-  color: $primary-gray;
-  font-size: 14px;
-  &:hover {
-    cursor: pointer;
-    color: $primary-purple;
-  }
+ @include tableCreateButton();
 }
 .close {
   display: flex;

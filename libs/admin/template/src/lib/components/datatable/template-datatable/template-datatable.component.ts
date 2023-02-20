@@ -415,36 +415,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   * @param quickReplyTypeIdx The chip index.
-   * @param quickReplyType The chip type.
-   */
-  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
-    //toggle isSelected
-    if (quickReplyTypeIdx === 0) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== templateConfig.selectedTopic.all) {
-          chip.isSelected = false;
-        }
-      });
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    }
-
-    this.changePage(0);
-  }
-
-  /**
    * @function templateConfiguration returns templateConfig object.
    * @returns templateConfig object.
    */

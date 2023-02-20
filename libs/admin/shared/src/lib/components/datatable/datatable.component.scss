@@ -503,17 +503,6 @@ th {
   }
 }
 
-:host ::ng-deep .mat-chip {
-  border: 1px solid !important;
-  display: inline-block;
-  text-align: center;
-  font-weight: 400;
-  background-color: $white;
-  &:hover {
-    cursor: pointer;
-  }
-}
-
 // :host ::ng-deep .status-default {
 //   background-color: $c-gray-103;
 //   color: $dark-grey;

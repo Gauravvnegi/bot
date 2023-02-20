@@ -109,7 +109,7 @@
 
 .section--content {
   @include flex-space-between();
-  padding:$margin-medium;
+  padding: $margin-medium;
   &--health {
     flex-direction: column;
     margin: $margin-small $margin-medium;
@@ -267,17 +267,6 @@
     height: 30px;
   }
 }
-
-// :host ::ng-deep .ng-star-inserted {
-//   padding: 0 $padding20 $padding20;
-
-//   @media screen and (max-width: $S) {
-//     padding: 0 2px $padding5;
-//   }
-//   @media screen and (max-width: $tab-size) {
-//     padding: 0 $padding10 $padding10;
-//   }
-// }
 
 :host ::ng-deep .mat-dialog-container {
   padding: inherit !important;

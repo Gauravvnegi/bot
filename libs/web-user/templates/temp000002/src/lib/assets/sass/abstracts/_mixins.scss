@@ -45,24 +45,6 @@
   }
 }
 
-@mixin footer-next() {
-  @include primary-button();
-  box-shadow: 0px 3px 6px #4b56c059;
-  @media only screen and (max-width: $M) {
-    width: 50vw;
-    border-radius: 0px;
-  }
-}
-
-@mixin footer-back() {
-  @include secondary-button();
-  @media only screen and (max-width: $M) {
-    width: 50vw;
-    margin-right: 0px;
-    border-radius: 0px;
-  }
-}
-
 @mixin mat-icon() {
   margin-right: $margin-small;
   width: 20px;
@@ -93,7 +75,7 @@
   transform: translateY(-50%);
 }
 
-@mixin flex-col-center-align{
+@mixin flex-col-center-align {
   display: flex;
   flex-direction: column;
   align-items: center;

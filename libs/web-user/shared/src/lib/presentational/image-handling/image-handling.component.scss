@@ -1,15 +1,7 @@
 @import 'main';
-@import 'temp000002';
-
-@mixin commonButtonStyle() {
-  font-size: 16px;
-  font-family: Montserrat;
-  border-radius: 28px;
-  margin: 0px 10px;
-}
 
 .webhandling-wrapper {
-  padding:10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -50,7 +42,6 @@
     img {
       width: 100%;
     }
-   
   }
 
   .button-wrapper {
@@ -58,7 +49,7 @@
     justify-content: center;
     margin-top: 15px;
     margin-bottom: 20px;
-      .back-button {
+    .back-button {
       @include footer-back();
       display: flex;
       align-items: center;
@@ -75,7 +66,7 @@
         @include commonButtonStyle();
       }
     }
-      .next-button {
+    .next-button {
       @include footer-next();
       display: flex;
       align-items: center;

@@ -31,19 +31,19 @@ export class User implements IDeserializable {
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'userId', get(input, ['id'])),
-      set({}, 'parentId', get(input, ['parentId'])),
-      set({}, 'firstName', get(input, ['firstName'])),
-      set({}, 'lastName', get(input, ['lastName'])),
-      set({}, 'jobTitle', get(input, ['title'])),
-      set({}, 'departments', get(input, ['departments'])),
-      set({}, 'cc', this.getNationality(get(input, ['cc']))),
-      set({}, 'phoneNumber', get(input, ['phoneNumber'])),
-      set({}, 'profileUrl', get(input, ['profileUrl'])),
-      set({}, 'email', get(input, ['email'])),
-      set({}, 'hotelAccess', get(input, ['hotelAccess'])),
-      set({}, 'status', get(input, ['status'])),
-      set({}, 'permissionConfigs', get(input, ['permissions']))
+      set({}, 'userId', get(input, ['id'], '')),
+      set({}, 'parentId', get(input, ['parentId'], '')),
+      set({}, 'firstName', get(input, ['firstName'], '')),
+      set({}, 'lastName', get(input, ['lastName'], '')),
+      set({}, 'jobTitle', get(input, ['title'], '')),
+      set({}, 'departments', get(input, ['departments'], '')),
+      set({}, 'cc', this.getNationality(get(input, ['cc'], ''))),
+      set({}, 'phoneNumber', get(input, ['phoneNumber'], '')),
+      set({}, 'profileUrl', get(input, ['profileUrl'], '')),
+      set({}, 'email', get(input, ['email'], '')),
+      set({}, 'hotelAccess', get(input, ['hotelAccess'], '')),
+      set({}, 'status', get(input, ['status'], '')),
+      set({}, 'permissionConfigs', get(input, ['permissions'], ''))
     );
     return this;
   }
@@ -57,7 +57,10 @@ export class User implements IDeserializable {
   }
 
   getBrandAndBranchName() {
-    return `${this.hotelAccess.chains[0].name},${this.hotelAccess.chains[0].hotels[0].name} `;
+    if (this.hotelAccess?.chains?.length) {
+      return `${this.hotelAccess.chains[0].name},${this.hotelAccess.chains[0].hotels[0].name} `;
+    }
+    return '';
   }
 
   getAvailablePermissions() {

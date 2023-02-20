@@ -23,50 +23,17 @@
       <form [formGroup]="tableFG">
         <div class="caption__wrapper--tabmenu">
           <div class="header">
-            <!-- <div class="header--text"> -->
             <p class="heading">{{ tableName }}</p>
-            <!-- <p class="selected">2 record(s) are selected</p> -->
-
-            <div class="options">
-              <button class="add-user" (click)="redirectToAddCategory()">
-                + Add Category
-              </button>
-              <div *ngIf="isActionButtons" class="icons">
-                <img src="assets/svg/Download.svg" class="svg" />
-                <img src="assets/svg/google-docs.svg" class="svg" />
-                <img src="assets/svg/card.svg" class="svg" />
-              </div>
-              <div *ngIf="isActionButtons" class="seperator"></div>
-              <div formGroupName="documentActions" class="dropdown--wrapper">
-                <p-dropdown
-                  class="export"
-                  [options]="documentActionTypes"
-                  formControlName="documentActionType"
-                >
-                  <ng-template let-documentActionItem pTemplate="selectedItem">
-                    <img src="assets/svg/Export.svg" />
-                    <span class="categoriesItemLabel">{{
-                      documentActionItem.label
-                    }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <div class="divider"></div>
-                <p-dropdown
-                  class="export"
-                  [options]="documentTypes"
-                  formControlName="documentType"
-                >
-                  <ng-template let-documentTypeItem pTemplate="selectedItem">
-                    <img src="assets/svg/CSV.svg" />
-                    <span class="categoriesItemLabel">{{
-                      documentTypeItem.label
-                    }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <button class="go" (click)="onDocumentActions()">
-                  <mat-icon class="material-icons" matSuffix>east</mat-icon>
-                </button>
-              </div>
+            <div class="action-wrapper">
+              <hospitality-bot-button
+                (click)="redirectToAddCategory()"
+                label="+ Add Category"
+              ></hospitality-bot-button>
+              <hospitality-bot-export-list
+                (onDocumentActions)="onDocumentActions()"
+                [documentTypes]="documentTypes"
+                [documentActionTypes]="documentActionTypes"
+              ></hospitality-bot-export-list>
             </div>
           </div>
           <div *ngIf="isTabFilters">
@@ -77,55 +44,17 @@
             ></hospitality-bot-tab-group>
           </div>
         </div>
-        <div
-          *ngIf="isTabFilters && tabFilterItems[tabFilterIdx].chips.length"
-          class="caption__wrapper--buttons"
-        >
-          <!-- <button class="filter">
-          All
-        </button> -->
-          <div class="button__wrapper">
-            <mat-chip-list
-              multiple
-              #chipList
-              aria-label="Quick Reply selection"
-              formControlName="quickReplyActionFilters"
-            >
-              <mat-chip
-                *ngFor="
-                  let quickReplyType of tabFilterItems[tabFilterIdx].chips;
-                  let quickReplyTypeIdx = index
-                "
-                selectable="true"
-                [ngClass]="{ chipSelected: quickReplyType.isSelected }"
-                [selected]="isQuickReplyFilterSelected(quickReplyType)"
-                (click)="
-                  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
-                "
-              >
-                {{ quickReplyType.label }}
-              </mat-chip>
-            </mat-chip-list>
-          </div>
-
-          <!-- {{ selectedQuickReplyFilters | json }} -->
-          <!-- <div
-          class="button__wrapper"
-          *ngFor="let quickReplyType of quickReplyTypes"
-        >
-          <button
-            pButton
-            type="button"
-            [label]="quickReplyType.label"
-          ></button>
-        </div> -->
-        </div>
+        <hospitality-bot-filter-chips
+          *ngIf="isQuickFilters"
+          [chips]="tabFilterItems[tabFilterIdx].chips"
+          (onChange)="toggleQuickReplyFilter($event)"
+        ></hospitality-bot-filter-chips>
       </form>
     </div>
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">No data available in table</p>
+    <hospitality-bot-empty-view></hospitality-bot-empty-view>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>

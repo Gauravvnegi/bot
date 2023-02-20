@@ -1,6 +1,6 @@
 @import 'main';
 
-.options {
+.wrapper {
   display: flex;
   align-items: center;
   padding: 0 17px;
@@ -21,13 +21,14 @@
     }
   }
 }
-.seperator {
+
+.separator {
   height: 35px;
   border: 1px solid lightgray;
   margin: 0px 15px;
 }
 
-.dropdown--wrapper {
+.form-group-wrapper {
   display: flex;
   align-items: center;
   padding: 5px;
@@ -67,13 +68,12 @@
   margin-left: 0.5em;
   font-weight: 500;
   width: 5%;
-  background-color: $c-gray-93;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
 }
 
-:host ::ng-deep .export {
+:host ::ng-deep .export-dropdown {
   .p-dropdown .p-inputtext {
     padding: 5px;
     align-items: baseline;

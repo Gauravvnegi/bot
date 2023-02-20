@@ -29,7 +29,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   public normalFontColor: string;
   public dividerBgColor: string;
   public headerBgColor: string;
-  @Input() isExpanded: boolean = true;
+  @Input() isExpanded: boolean = false;
   status = true;
   $subscription = new Subscription();
   branchConfig;
@@ -120,9 +120,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       .filter((item) => item.isView)
       .map((product) => {
         let menuItem = new MenuItem().deserialize(product);
-        if (this.router.url.includes(menuItem.path)) {
-          this.handleRouteChange(menuItem);
-        }
+
         return menuItem;
       });
   }

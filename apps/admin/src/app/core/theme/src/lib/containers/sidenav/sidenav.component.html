@@ -40,6 +40,7 @@
       #rla="routerLinkActive"
       [routerLinkActiveOptions]="{ exact: false }"
       [ngClass]="rla.isActive ? 'active' : ''"
+      (mouseenter)="handleRouteChange(menuItem)"
     >
       <div
         class="overlay-link"
@@ -57,12 +58,15 @@
         [style.padding]="'10px 15px'"
         (click)="handleRouteChange(menuItem)"
         ><div class="sidenav_logo">
-          <ng-container *ngIf="menuItem.urlColor; else imageurl">
-            <img [src]="rla.isActive ? menuItem.urlColor : menuItem.url" />
+          <ng-container *ngIf="menuItem.urlColor; else imageUrl">
+            <img
+              [src]="rla.isActive ? menuItem.urlColor : menuItem.url"
+              [alt]="menuItem.name"
+            />
           </ng-container>
-          <ng-template #imageurl
-            ><img [src]="menuItem.url" class="svg-icon"
-          /></ng-template>
+          <ng-template #imageUrl>
+            <img [src]="menuItem.url" class="svg-icon" [alt]="menuItem.name" />
+          </ng-template>
         </div>
         <div class="icon-label">{{ menuItem.title }}</div>
       </a>

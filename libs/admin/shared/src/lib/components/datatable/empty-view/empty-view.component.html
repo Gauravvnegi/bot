@@ -1,18 +1,24 @@
-<div class="no-data-found">
-  <div class="wrapper" *ngIf="variant === 'standard'">
-    <div class="img-wrapper">
-      <img [src]="imageSrc" class="img" alt="empty-table" />
+<tr>
+  <td colspan="2">
+    <div class="wrapper">
+      <div class="wrapper__main" *ngIf="variant === 'standard'">
+        <div class="img-wrapper">
+          <img [src]="imageSrc" class="img" alt="empty-table" />
+        </div>
+        <div>
+          <div class="heading">{{ heading }}</div>
+          <div class="description">{{ description }}</div>
+          <hospitality-bot-button
+            variant="text"
+            [label]="actionName"
+            (onClick)="onActionClick()"
+          >
+          </hospitality-bot-button>
+        </div>
+      </div>
+      <div class="wrapper__default" *ngIf="variant === 'default'">
+        <p>No data available in table</p>
+      </div>
     </div>
-    <div>
-      <div class="heading">{{ heading }}</div>
-      <div class="description">{{ description }}</div>
-      <hospitality-bot-button
-        variant="text"
-        [label]="actionName"
-        (onClick)="onActionClick()"
-      >
-      </hospitality-bot-button>
-    </div>
-  </div>
-  <p *ngIf="variant === 'default'">No data available in table</p>
-</div>
+  </td>
+</tr>

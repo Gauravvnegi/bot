@@ -10,7 +10,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { chartConfig } from '../../../constants/chart';
-import { guest } from '../../../constants/guest';
+import { guest, SourceChipsType } from '../../../constants/guest';
 import { Source } from '../../../data-models/statistics.model';
 import { StatisticsService } from '../../../services/statistics.service';
 import { GuestDatatableModalComponent } from '../../modal/guest-datatable/guest-datatable.component';
@@ -47,7 +47,6 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
       icon: '',
       value: 'ALL',
       isSelected: true,
-      type: 'default',
       type: 'default',
     },
   ];
@@ -174,7 +173,7 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
         icon: '',
         value: stat.label.toUpperCase(),
         isSelected: false,
-        type: stat.label.toUpperCase(),
+        type: SourceChipsType[stat.label],
       });
     });
     if (!this.chart.Data[0].length) {

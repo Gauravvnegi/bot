@@ -47,3 +47,18 @@
   background-color: $default !important;
   opacity: 1;
 }
+
+.status-text-warning {
+  color: $text-email !important;
+}
+
+.status-opacity-warning {
+  background-color: transparent !important;
+  opacity: 0.4;
+}
+
+.status-selected-warning {
+  background-color: $text-email !important;
+  color: $white !important;
+  opacity: 1;
+}

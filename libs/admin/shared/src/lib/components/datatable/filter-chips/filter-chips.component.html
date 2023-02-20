@@ -32,7 +32,10 @@
             chip.type === 'completed' && chip.isSelected,
 
           'status-opacity-reject status-text-reject': chip.type === 'failed',
-          'status-selected-reject': chip.type === 'failed' && chip.isSelected
+          'status-selected-reject': chip.type === 'failed' && chip.isSelected,
+
+          'status-opacity-warning status-text-warning': chip.type === 'warning',
+          'status-selected-warning': chip.type === 'warning' && chip.isSelected
         }"
       >
         <span> {{ chip.label }}</span>

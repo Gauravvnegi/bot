@@ -7,7 +7,7 @@ export const chips = {
       value: 'INITIATED',
       total: 0,
       isSelected: false,
-      type: 'EMAIL',
+      type: 'warning',
     },
     {
       label: 'Pending ',
@@ -42,7 +42,7 @@ export const chips = {
       value: 'FULLYRECIEVED',
       total: 0,
       isSelected: false,
-      type: 'MICROSITE',
+      type: 'new',
     },
     {
       label: 'Partially Recieved ',
@@ -50,7 +50,7 @@ export const chips = {
       value: 'PARTIALLYRECIEVED',
       total: 0,
       isSelected: false,
-      type: 'EMAIL',
+      type: 'warning',
     },
     {
       label: 'Not Recieved ',
@@ -134,6 +134,14 @@ export const chips = {
     },
   ],
 };
+
+export enum SourceChipsType {
+  Bot = 'warning',
+  Email = 'warning',
+  Microsite = 'new',
+  Others = 'pending',
+  Whatsapp = 'completed',
+}
 
 export const guest = {
   tabFilterItems: {

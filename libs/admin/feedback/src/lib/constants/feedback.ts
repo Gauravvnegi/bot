@@ -220,8 +220,8 @@ export const feedback = {
         label: 'All',
         icon: '',
         value: 'ALL',
-        total: 0,
         isSelected: true,
+        type: 'default',
       },
       {
         label: 'High Potential ',

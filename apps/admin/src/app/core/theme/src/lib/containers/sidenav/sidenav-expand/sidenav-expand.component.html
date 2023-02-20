@@ -1,6 +1,6 @@
 <div
   class="sideNav-expand-box"
-  *ngIf="isExpanded && submenuItems !== null"
+  *ngIf="isExpanded && submenuItems?.length"
   [@slideInOut]
 >
   <div
@@ -35,8 +35,9 @@
         [style.border-right]="rla.isActive ? '3.2px solid #4B56C0' : ''"
         [style.width]="'100%'"
         [style.padding]="'0px 15px'"
+        [style.margin-right]="rla.isActive ? '-3.2px' : ''"
         ><div class="sidenav_logo" *ngIf="!!subItem.url">
-          <img [src]="subItem.url" class="svg-icon" />
+          <img [src]="subItem.url" class="svg-icon" [alt]="subItem.title" />
         </div>
         <span class="icon-label">{{ subItem.title }}</span>
       </a>
@@ -45,6 +46,6 @@
 </div>
 <div
   class="overlay-container"
-  (click)="toggleSideNav()"
+  (mouseenter)="toggleSideNav()"
   *ngIf="isExpanded && submenuItems !== null"
 ></div>

@@ -19,7 +19,7 @@ import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import * as FileSaver from 'file-saver';
 import { analytics } from '@hospitality-bot/admin/shared';
-import { TranslateService } from '@ngx-translate/core';
+import { ChipType } from '../../constant/datatable';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-datatable',
@@ -124,16 +124,16 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
 
   addQuickReplyFilter(entityStateCounts, total) {
     this.tabFilterItems[this.tabFilterIdx].chips[0].total = total;
-    Object.keys(entityStateCounts).forEach((key) =>
+    Object.keys(entityStateCounts).forEach((key) => {
       this.tabFilterItems[this.tabFilterIdx].chips.push({
         label: key,
         icon: '',
         value: key,
         total: entityStateCounts[key],
         isSelected: false,
-        type: key,
-      })
-    );
+        type: ChipType[key],
+      });
+    });
   }
 
   getSelectedQuickReplyFilters() {
@@ -217,27 +217,6 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
-  }
-
-  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
-    if (quickReplyTypeIdx === 0) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') chip.isSelected = false;
-      });
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    }
-    this.changePage(0);
   }
 
   customSort(event: SortEvent) {

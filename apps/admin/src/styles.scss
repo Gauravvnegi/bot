@@ -166,6 +166,14 @@ body {
   border-right: 2px solid #e8f3fe;
   padding-right: 15px;
   overflow-y: auto;
+
+  &::-webkit-scrollbar{
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb
+  {
+    border-radius: 4px;
+  }
 }
 .details-wrapper {
   background-color: white;

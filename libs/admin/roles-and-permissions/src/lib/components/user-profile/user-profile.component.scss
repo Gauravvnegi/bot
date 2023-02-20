@@ -242,25 +242,12 @@
 }
 
 .add-user {
-  background: transparent;
-  border: none;
-  outline: none;
-  margin-right: $margin20;
-  color: $primary-gray;
-  font-size: $font14;
-  &:hover {
-    cursor: pointer;
-    color: $primary-purple;
-  }
+  @include tableCreateButton();
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-}
-
-.add-user {
-  color: #4b56c0;
 }
 
 .all-user {

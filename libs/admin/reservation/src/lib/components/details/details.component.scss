@@ -509,10 +509,10 @@
 
 .tab-buttons {
   width: 18%;
-  padding: $padding4;
+  padding: $padding10;
   position: absolute;
   top: 52px;
-  right: 0;
+  right: 10px;
   height: 85%;
   z-index: 22;
   background-color: $white;
@@ -587,7 +587,9 @@
   @media screen and (max-width: 1100px) {
     padding: 10px;
   }
-  @media screen and (max-width: $L) {right: 10px;}
+  @media screen and (max-width: $L) {
+    right: 10px;
+  }
 }
 
 .loader {

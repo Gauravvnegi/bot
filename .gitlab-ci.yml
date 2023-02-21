@@ -20,7 +20,7 @@ sonarqube_check:
       - .sonar/cache
   script:
     - sonar-scanner -Dsonar.projectKey=Hospitality_Bot -Dsonar.sources=. -Dsonar.host.url=http://138.197.70.44:9000 -Dsonar.login=88f0490eaf5091f843ddab8263e77a74b3d85d1b
-  allow_failure: true
+  allow_failure: false
   tags:
     - k8s
 

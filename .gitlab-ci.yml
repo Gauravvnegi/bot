@@ -6,8 +6,10 @@ variables:
   #DOCKER_TLS_CERTDIR: ""
 
 stages:
-  - deploy
   - sonar_report
+  - deploy_admin
+  - deploy_web
+
 
 sonarqube_check:
   stage: sonar_report
@@ -31,7 +33,7 @@ sonarqube_check:
 
 
 Deploy_Admin:
-  stage: deploy
+  stage: deploy_admin
   environment:
     name: k8s
   when: on_success
@@ -55,7 +57,7 @@ Deploy_Admin:
     - k8s
 
 Deploy_Web:
-  stage: deploy
+  stage: deploy_web
   environment:
     name: k8s_web
   when: on_success

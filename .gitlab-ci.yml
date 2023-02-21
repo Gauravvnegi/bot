@@ -7,6 +7,28 @@ variables:
 
 stages:
   - deploy
+  - sonar_report
+
+sonarqube_check:
+  stage: sonar_report
+  when: manual
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - sonar-scanner -Dsonar.projectKey=Hospitality_Bot -Dsonar.sources=. -Dsonar.host.url=http://138.197.70.44:9000 -Dsonar.login=88f0490eaf5091f843ddab8263e77a74b3d85d1b
+
+  allow_failure: true
+  tags:
+    - k8s-dev
+
 
 Deploy_Admin:
   stage: deploy

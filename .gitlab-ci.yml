@@ -5,8 +5,6 @@ stages:
   - sonar_report
   - deploy_admin
   - deploy_web
-
-
 sonarqube_check:
   stage: sonar_report
   when: manual

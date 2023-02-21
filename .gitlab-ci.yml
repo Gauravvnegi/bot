@@ -1,10 +1,6 @@
 variables:
   IMAGE_TAG: $CI_COMMIT_SHA
   BRANCH: $CI_COMMIT_REF_NAME
- # DOCKER_DRIVER: overlay2
-  #DOCKER_HOST: tcp://docker:2375
-  #DOCKER_TLS_CERTDIR: ""
-
 stages:
   - sonar_report
   - deploy_admin
@@ -26,10 +22,9 @@ sonarqube_check:
       - .sonar/cache
   script:
     - sonar-scanner -Dsonar.projectKey=Hospitality_Bot -Dsonar.sources=. -Dsonar.host.url=http://138.197.70.44:9000 -Dsonar.login=88f0490eaf5091f843ddab8263e77a74b3d85d1b
-
   allow_failure: true
   tags:
-    - k8s-dev
+    - k8s
 
 
 Deploy_Admin:
@@ -44,10 +39,7 @@ Deploy_Admin:
   script:
     - docker build -t $CI_IMAGE_NAME .
     - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG 
-    #- docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
-    #- docker push $CI_REGISTRY_IMAGE_URL:latest
     - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
-
     - cat "$DEPLOYMENT_FILE" > deployment.yaml
     - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
     - export KUBECONFIG=k8s-config.yaml
@@ -65,16 +57,12 @@ Deploy_Web:
     - echo $(git rev-parse HEAD) | cut -c 1-7
     - ls -l
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_URL
-    #- sed -i "s/admin:build/web-user:build/g" Dockerfile
     - sed -i "s/admin/web-user/g" Dockerfile
     - sed -i "s/admin/web/g" deploy/nginx.conf
   script:
     - docker build -t $CI_IMAGE_NAME .
     - docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG 
-    #- docker tag $CI_IMAGE_NAME $CI_REGISTRY_IMAGE_URL:latest
-    #- docker push $CI_REGISTRY_IMAGE_URL:latest
     - docker push $CI_REGISTRY_IMAGE_URL:$IMAGE_TAG
-
     - cat "$DEPLOYMENT_FILE" > deployment.yaml
     - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
     - export KUBECONFIG=k8s-config.yaml

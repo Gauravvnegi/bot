@@ -13,6 +13,7 @@
     font: normal normal bold 16px/21px Roboto;
     letter-spacing: 0.96px;
     color: $dark-blue;
+    margin-bottom: 20px;
   }
   &__subheading {
     font: normal normal medium 12px/16px Roboto;
@@ -23,65 +24,7 @@
     font-weight: 500;
     margin: 20px 192.1px 30.3px 0;
   }
-  .info-icon {
-    position: relative;
-    top: -24px;
-    left: 110px;
-    img {
-      margin: 3px 5px 0;
-      width: 14px;
-      height: 100%;
-      cursor: pointer;
-    }
-    .tooltip {
-      position: absolute;
-      font: normal normal normal 12px/16px Roboto;
-      background-color: $white;
-      min-width: 160px;
-      border: 1px solid $c-gray-85;
-      padding: 10px;
-      top: 140%;
-      left: -9%;
-      color: $tooltip;
-      border-radius: 5px;
-      box-shadow: 0px 0px 10px 0px $c-gray-85;
-      display: none;
-      z-index: 100;
-      max-width: 150px;
 
-      .arrow {
-        position: absolute;
-        top: -10px;
-        width: 0;
-        height: 0;
-        border-left: 7px solid transparent;
-        border-right: 7px solid transparent;
-        border-bottom: 10px solid $c-gray-85;
-        left: 40%;
-        transform: translate(-50%);
-
-        &::before {
-          content: '';
-          top: 1px;
-          width: 0;
-          height: 0;
-          border-left: 6px solid transparent;
-          border-right: 6px solid transparent;
-          border-bottom: 9px solid $white;
-          left: -6px;
-          z-index: 3;
-          position: absolute;
-        }
-      }
-    }
-
-    &:hover {
-      .tooltip {
-        display: block;
-        cursor: pointer;
-      }
-    }
-  }
   &__body {
     display: flex;
     align-items: center;

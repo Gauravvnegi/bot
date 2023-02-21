@@ -6,7 +6,6 @@
         [alt]="dashboardConfig.images.inhouse.headerIcon.alt"
       />
     </div>
-    <div class="stat-title">{{ 'card.inhouse.title_text' | translate }}</div>
     <!-- <div class="info-icon">
       <img
         [src]="dashboardConfig.images.info.url"
@@ -17,12 +16,13 @@
         {{ 'card.inhouse.tooltip' | translate }}
       </div>
     </div> -->
-    <div class="info-icon">
-      <img src="assets/svg/info.svg" alt="info-icon" />
-      <div class="tooltip">
-        <span class="arrow"> </span> Total request count and request status. <br> Total number of In-house rooms for the selected date range.
-      </div>
-    </div>
+    <hospitality-bot-custom-tooltip
+      [text]="
+        'Total request count and request status. Total number of In-house rooms for the selected date range.'
+      "
+    >
+      <div class="stat-title">{{ 'card.inhouse.title_text' | translate }}</div>
+    </hospitality-bot-custom-tooltip>
   </div>
   <mat-tab-group>
     <mat-tab label="{{ 'card.inhouse.tab.request.title_text' | translate }}">

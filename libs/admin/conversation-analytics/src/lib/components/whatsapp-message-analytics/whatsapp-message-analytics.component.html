@@ -1,15 +1,12 @@
 <div class="graphContainer">
   <div class="messageAnalytics">
-    <div class="analyticsHeading">
-      <p>Notification</p>
-      <div class="info-icon">
-        <img src="assets/svg/info.svg" alt="info-icon" />
-        <div class="tooltip">
-          <span class="arrow"></span>
-          Number of messages per message status for running two days
-        </div>
+    <hospitality-bot-custom-tooltip
+      [text]="'Number of messages per message status for running two days'"
+    >
+      <div class="analyticsHeading">
+        <p>Notification</p>
       </div>
-    </div>
+    </hospitality-bot-custom-tooltip>
     <div class="messageRequests">
       <div class="requestCircle">
         <div
@@ -117,16 +114,15 @@
     </div>
   </div>
   <div class="sentAnalytics">
-    <div class="analyticsHeading">
-      <p>SENT V/S DELIVERED</p>
-      <div class="info-icon">
-        <img src="assets/svg/info.svg" alt="info-icon" />
-        <div class="tooltip">
-          <span class="arrow"></span>
-          Number of messages sent VS delivered in a specific hours of the day.
-        </div>
+    <hospitality-bot-custom-tooltip
+      [text]="
+        'Number of messages sent VS delivered in a specific hours of the day.'
+      "
+    >
+      <div class="analyticsHeading">
+        <p>SENT V/S DELIVERED</p>
       </div>
-    </div>
+    </hospitality-bot-custom-tooltip>
     <div class="line-chart">
       <canvas
         baseChart

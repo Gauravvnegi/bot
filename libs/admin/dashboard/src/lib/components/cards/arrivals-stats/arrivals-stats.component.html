@@ -6,17 +6,11 @@
         [alt]="dashboardConfig.images.arrivals.headerIcon.alt"
       />
     </div>
-    <div class="stat-title">{{ 'card.arrivals.title_text' | translate }}</div>
-    <div class="info-icon">
-      <img
-        [src]="dashboardConfig.images.info.url"
-        [alt]="dashboardConfig.images.info.alt"
-      />
-      <div class="tooltip">
-        <span class="arrow"></span>
-        {{ 'card.arrivals.tooltip_text' | translate }}
-      </div>
-    </div>
+    <hospitality-bot-custom-tooltip
+      [text]="'card.arrivals.tooltip_text' | translate"
+    >
+      <div class="stat-title">{{ 'card.arrivals.title_text' | translate }}</div>
+    </hospitality-bot-custom-tooltip>
   </div>
   <div class="stat-val-container">
     <div class="stat-val-wrapper">

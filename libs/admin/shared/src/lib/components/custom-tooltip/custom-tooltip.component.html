@@ -1,0 +1,24 @@
+<div class="wrapper" [ngClass]="{ 'info-icon': onlyContent }">
+  <div
+    [ngClass]="{ 'info-icon': !onlyContent }"
+    [ngStyle]="{ order: orientation == 'Right' ? '2' : '' }"
+  >
+    <img src="assets/svg/info.svg" alt="info-icon" *ngIf="!onlyContent" />
+    <div
+      class="tooltip"
+      [ngStyle]="{
+        top: onlyContent == true ? '102%' : '',
+        left: orientation == 'Right' ? '-80px' : ''
+      }"
+    >
+      <span
+        class="arrow"
+        [ngStyle]="{ left: orientation == 'Right' ? '86px' : '' }"
+      ></span
+      >{{ textMsg }}
+    </div>
+  </div>
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+</div>

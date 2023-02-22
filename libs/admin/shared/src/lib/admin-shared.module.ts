@@ -53,6 +53,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SafeUrlPipe } from './pipes/safe-url-pipe';
 import { InfiniteScroll } from './directives/infinite-scroll.directive';
 import { EmptyViewComponent } from './components/datatable/empty-view/empty-view.component';
+import { CustomTooltipComponent } from './components/custom-tooltip/custom-tooltip.component';
 
 @NgModule({
   imports: [
@@ -114,6 +115,7 @@ import { EmptyViewComponent } from './components/datatable/empty-view/empty-view
     CustomHeaderComponent,
     ModalComponent,
     EmptyViewComponent,
+    CustomTooltipComponent,
   ],
   exports: [
     DatatableComponent,
@@ -164,6 +166,7 @@ import { EmptyViewComponent } from './components/datatable/empty-view/empty-view
     MatTooltipModule,
     ModalComponent,
     EmptyViewComponent,
+    CustomTooltipComponent,
   ],
 })
 export class AdminSharedModule {}

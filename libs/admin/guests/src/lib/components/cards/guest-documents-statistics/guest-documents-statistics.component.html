@@ -6,16 +6,9 @@
         [alt]="guestConfig.images.document.alt"
       />
     </div>
-    <div class="stat-title">{{ 'document.title' | translate }}</div>
-    <div class="info-icon">
-      <img
-        [src]="guestConfig.images.tooltip.url"
-        [alt]="guestConfig.images.tooltip.alt"
-      />
-      <div class="tooltip">
-        <span class="arrow"> </span> {{ 'document.tooltip' | translate }}
-      </div>
-    </div>
+    <hospitality-bot-custom-tooltip [text]="'document.tooltip' | translate">
+      <div class="stat-title">{{ 'document.title' | translate }}</div>
+    </hospitality-bot-custom-tooltip>
   </div>
   <div class="graph-container">
     <div class="graph">

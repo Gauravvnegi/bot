@@ -1,16 +1,12 @@
 <div class="stats" click-allow (click)="openTableModal()">
   <div class="stats__head" [formGroup]="rategraphFG">
-    <div>
+    <hospitality-bot-custom-tooltip
+      [text]="'Response Breakdown as per feedback shared'"
+    >
       <div class="stats__head__title">
         {{ 'shared.title' | translate }}
       </div>
-      <div class="info-icon">
-        <img src="assets/svg/info.svg" alt="info-icon" />
-        <div class="tooltip">
-          <span class="arrow"> </span> Response Breakdown as per feedback shared
-        </div>
-      </div>
-    </div>
+    </hospitality-bot-custom-tooltip>
     <div>
       <mat-select
         (click)="stopOpenModal($event)"

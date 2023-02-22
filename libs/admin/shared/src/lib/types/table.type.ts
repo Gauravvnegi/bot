@@ -22,6 +22,7 @@ export type Cols = {
   sortType?: string;
   dynamicWidth?: boolean;
   width?: string;
+  isSearchDisabled?: boolean;
 };
 
 export type Filter<T extends string, K extends string> = {

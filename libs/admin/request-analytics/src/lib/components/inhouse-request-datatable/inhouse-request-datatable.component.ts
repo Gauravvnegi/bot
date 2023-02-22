@@ -7,19 +7,18 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { analytics } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { DateService } from '@hospitality-bot/shared/utils';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
+import { ChipType } from '../../constant/datatable';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
-import { analytics } from '@hospitality-bot/admin/shared';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-datatable',
@@ -128,7 +127,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         value: key,
         total: entityStateCounts[key],
         isSelected: false,
-        type: key,
+        type: ChipType[key],
       })
     );
   }
@@ -213,27 +212,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
-  }
-
-  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
-    if (quickReplyTypeIdx === 0) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') chip.isSelected = false;
-      });
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    }
-    this.changePage(0);
   }
 
   customSort(event: SortEvent) {

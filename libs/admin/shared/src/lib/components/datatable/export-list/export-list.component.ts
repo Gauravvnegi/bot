@@ -16,14 +16,43 @@ export class ExportListComponent {
     defaultLabel: string;
   }[];
 
+  @Input() additionalActionItems: {
+    icon: string;
+    value: string;
+  }[] = [];
+
+  @Output() onActionsClick = new EventEmitter();
+
   /**
    * documentActions is used for Data table control
    */
-  @Input() public controlName: string = 'documentActions';
+  controlGroupName = 'documentActions';
+  documentActionTypeName = 'documentActionType';
+  documentTypesName = 'documentType';
+
+  /**
+   * To change the setting of control names
+   */
+  @Input() set formControlName(value: FormControlName) {
+    Object.entries(value).forEach(([key, name]) => {
+      this[key] = name;
+    });
+  }
 
   constructor(public controlContainer: ControlContainer) {}
 
   handleSubmission() {
     this.onDocumentActions.emit();
   }
+
+  handleActionEmission(value: string) {
+    debugger;
+    this.onActionsClick.emit(value);
+  }
 }
+
+type FormControlName = {
+  controlGroupName: string;
+  documentActionTypeName: string;
+  documentTypesName: string;
+};

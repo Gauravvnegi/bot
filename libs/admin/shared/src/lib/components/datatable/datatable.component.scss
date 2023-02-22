@@ -97,6 +97,11 @@
   text-align: center;
 }
 
+.select-box {
+  width: 5%;
+  @include align-checkbox();
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -180,6 +185,12 @@
     font-size: 14px;
     font-weight: 700;
   }
+}
+
+.action-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 :host ::ng-deep .p-inputtext {
@@ -405,6 +416,7 @@
 }
 
 :host ::ng-deep .no-data-found {
+  display: block;
   width: 90vw;
   text-align: center;
   padding: $padding10 0;
@@ -491,21 +503,10 @@ th {
   }
 }
 
-:host ::ng-deep .mat-chip {
-  border: 1px solid !important;
-  display: inline-block;
-  text-align: center;
-  font-weight: 400;
-  background-color: $white;
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-:host ::ng-deep .status-default {
-  background-color: $c-gray-103;
-  color: $dark-grey;
-}
+// :host ::ng-deep .status-default {
+//   background-color: $c-gray-103;
+//   color: $dark-grey;
+// }
 
 :host ::ng-deep .chipSelected {
   color: $white !important;

@@ -19,7 +19,7 @@ export const cols = {
       sortType: 'string',
     },
     {
-      field: `guests.primaryGuest.getPhoneNumber()`,
+      field: `guests.primaryGuest.phoneNumber`,
       header: 'Phone No.',
       isSort: true,
       sortType: 'string',
@@ -29,24 +29,28 @@ export const cols = {
       header: 'Arrival/ Departure',
       isSort: true,
       sortType: 'date',
+      isSearchDisabled: true,
     },
     {
       field: 'payment.totalAmount',
       header: 'Amount Due/Total(INR)',
       isSort: true,
       sortType: 'number',
+      isSearchDisabled: true,
     },
     {
       field: 'package',
       header: 'Package',
       isSort: false,
       sortType: 'number',
+      isSearchDisabled: true,
     },
     {
       field: 'stageAndourney',
       header: 'Stage/Journey',
       isSort: false,
       sortType: 'number',
+      isSearchDisabled: true,
     },
   ],
 };

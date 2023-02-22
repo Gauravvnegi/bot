@@ -9,7 +9,7 @@ import { Table } from 'primeng/table';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { TableService } from '../../services/table.service';
-import { Cols } from '../../types/table.type';
+import { Chip, Cols, Filter } from '../../types/table.type';
 
 interface Import {
   name: string;
@@ -35,9 +35,10 @@ export class BaseDatatableComponent implements OnInit {
    * Action Buttons & filters visibility
    */
   isActionButtons = false;
-  isQuickFilters = false;
+  isQuickFilters = true;
   isTabFilters = true;
   isCustomSort = true;
+  isSelectable = true;
 
   tableFG: FormGroup;
 
@@ -60,11 +61,8 @@ export class BaseDatatableComponent implements OnInit {
   @Input() loading = false;
   initialLoading = true;
 
-  tabFilterItems = [
-    { label: 'Inhouse', content: '', value: 'INHOUSE' },
-    { label: 'Arrival', content: '', value: 'ARRIVAL' },
-    { label: 'Departure', content: '', value: 'DEPARTURE' },
-  ];
+  tabFilterItems;
+  tabFilterIdx;
 
   values = [];
 
@@ -76,7 +74,7 @@ export class BaseDatatableComponent implements OnInit {
 
   selectedExport2: Import;
 
-  dataSource = [
+  dataSource: Record<string, any>[] = [
     {
       vin: 1,
       year: 2020,
@@ -313,7 +311,13 @@ export class BaseDatatableComponent implements OnInit {
     return true;
   }
 
-  // toggleQuickReplyFilter(quickReplyFilter) {}
+  /**
+   * @function toggleQuickReplyFilter To handle the chip click for a tab.
+   */
+  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }): void {
+    this.tabFilterItems[this.tabFilterIdx].chips = chips;
+    this.changePage(0);
+  }
 
   onRowSelect(event) {
     this.documentActionTypes.forEach((item) => {

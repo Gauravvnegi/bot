@@ -220,8 +220,8 @@ export const feedback = {
         label: 'All',
         icon: '',
         value: 'ALL',
-        total: 0,
         isSelected: true,
+        type: 'default',
       },
       {
         label: 'High Potential ',
@@ -440,9 +440,10 @@ export const feedback = {
           isSort: false,
           sortType: 'string',
           dynamicWidth: true,
+          isSearchDisabled: true,
         },
         {
-          field: 'guest.getFullName()',
+          field: 'guest.fullName',
           header: 'Name/Phone No./ Email',
           isSort: true,
           sortType: 'string',
@@ -454,6 +455,7 @@ export const feedback = {
           isSort: true,
           sortType: 'date',
           dynamicWidth: false,
+          isSearchDisabled: true,
         },
         {
           field: 'guestData.overAllNps',
@@ -461,6 +463,7 @@ export const feedback = {
           isSort: true,
           sortType: 'number',
           dynamicWidth: false,
+          isSearchDisabled: true,
         },
         {
           field: 'guestData.churnProbalilty',
@@ -468,8 +471,14 @@ export const feedback = {
           isSort: false,
           sortType: 'string',
           dynamicWidth: false,
+          isSearchDisabled: true,
         },
-        { field: 'actions', header: 'Actions', dynamicWidth: false },
+        {
+          field: 'actions',
+          header: 'Actions',
+          dynamicWidth: false,
+          isSearchDisabled: true,
+        },
       ],
     },
   },

@@ -32,6 +32,7 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
   tabFilterIdx = 1;
   $subscription = new Subscription();
   hotelId;
+  isQuickFilters = false;
 
   cols = [
     {

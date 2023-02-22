@@ -59,6 +59,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   tabFilterIdx: number = 0;
   selectedTable: TableValue;
   filterChips: Chip<string>[] = [];
+  isQuickFilters = true;
 
   constructor(
     public fb: FormBuilder,
@@ -316,15 +317,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.router.navigate([`/pages/inventory/room/${selectedRoute}`], {
       queryParams: { id: rowData.id },
     });
-  }
-
-  /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   *
-   */
-  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }): void {
-    this.tabFilterItems[this.tabFilterIdx].chips = chips;
-    this.changePage(0);
   }
 
   /**

@@ -1,7 +1,7 @@
 export const listingConfig = {
   datatable: {
     title: 'Listings',
-    limit:5,
+    limit: 5,
     tabFilterItems: [
       {
         label: 'All',
@@ -10,7 +10,15 @@ export const listingConfig = {
         disabled: false,
         total: 0,
         chips: [
-          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+          {
+            label: 'All',
+            icon: '',
+            value: 'ALL',
+            total: 0,
+            isSelected: true,
+            type: 'default',
+          },
+
           {
             label: 'Active',
             icon: '',
@@ -52,6 +60,7 @@ export const listingConfig = {
         isSort: false,
         sortType: 'string',
         dynamicWidth: false,
+        isSearchDisabled: true,
       },
       {
         field: ``,
@@ -59,6 +68,7 @@ export const listingConfig = {
         isSort: false,
         sortType: 'string',
         dynamicWidth: false,
+        isSearchDisabled: true,
       },
       {
         field: '',
@@ -66,14 +76,15 @@ export const listingConfig = {
         isSort: false,
         sortType: 'number',
         dynamicWidth: true,
+        isSearchDisabled: true,
       },
     ],
   },
-  list:{
-    limit:50,
-    entityState:'ACTIVE',
-    chipValue:{
-      all:'ALL'
+  list: {
+    limit: 50,
+    entityState: 'ACTIVE',
+    chipValue: {
+      all: 'ALL',
     },
   },
   images: {

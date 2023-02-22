@@ -1,0 +1,27 @@
+@import 'main';
+
+.wrapper {
+  &__main {
+    display: flex;
+    background-color: $white;
+    height: 200px;
+    margin: auto;
+    justify-content: center;
+
+    .img-wrapper {
+      .img {
+        height: 100%;
+      }
+    }
+  }
+
+  &__default {
+    display: block;
+    width: 90vw;
+    text-align: center;
+    padding: $padding10 0;
+    @media screen and (max-width: $L) {
+      width: 85vw;
+    }
+  }
+}

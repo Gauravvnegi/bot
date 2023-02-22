@@ -1,13 +1,13 @@
 export const chips = {
   documents: [
-    { label: 'All', icon: '', value: 'ALL', isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true, type: 'default' },
     {
       label: 'Initiated',
       icon: '',
       value: 'INITIATED',
       total: 0,
       isSelected: false,
-      type: 'EMAIL',
+      type: 'warning',
     },
     {
       label: 'Pending ',
@@ -35,14 +35,14 @@ export const chips = {
     },
   ],
   payments: [
-    { label: 'All', icon: '', value: 'ALL', isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true, type: 'default' },
     {
       label: 'Fully Recieved',
       icon: '',
       value: 'FULLYRECIEVED',
       total: 0,
       isSelected: false,
-      type: 'MICROSITE',
+      type: 'new',
     },
     {
       label: 'Partially Recieved ',
@@ -50,7 +50,7 @@ export const chips = {
       value: 'PARTIALLYRECIEVED',
       total: 0,
       isSelected: false,
-      type: 'EMAIL',
+      type: 'warning',
     },
     {
       label: 'Not Recieved ',
@@ -62,7 +62,7 @@ export const chips = {
     },
   ],
   status: [
-    { label: 'All', icon: '', value: 'ALL', isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true, type: 'default' },
     {
       label: 'New',
       icon: '',
@@ -107,7 +107,7 @@ export const chips = {
     },
   ],
   datatable: [
-    { label: 'All', icon: '', value: 'ALL', isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true, type: 'default' },
     {
       label: 'VIP',
       icon: '',
@@ -134,6 +134,14 @@ export const chips = {
     },
   ],
 };
+
+export enum SourceChipsType {
+  Bot = 'warning',
+  Email = 'warning',
+  Microsite = 'new',
+  Others = 'pending',
+  Whatsapp = 'completed',
+}
 
 export const guest = {
   tabFilterItems: {
@@ -303,7 +311,7 @@ export const guest = {
   cols: {
     datatable: [
       {
-        field: 'getFullName()',
+        field: 'fullName',
         header: 'Guest/ Company',
         isSort: true,
         sortType: 'string',
@@ -313,6 +321,7 @@ export const guest = {
         header: 'Arrival/ Departure',
         isSort: true,
         sortType: 'date',
+        isSearchDisabled: true,
       },
       {
         field: 'booking.bookingNumber',
@@ -325,12 +334,14 @@ export const guest = {
         header: 'Phone No.',
         isSort: false,
         sortType: 'string',
+        isSearchDisabled: true,
       },
       {
         field: 'payment.totalAmount',
         header: 'Amount Due/ Total Spend',
         isSort: true,
         sortType: 'number',
+        isSearchDisabled: true,
       },
       {
         field: 'guestAttributes.overAllNps',
@@ -344,7 +355,11 @@ export const guest = {
         isSort: true,
         sortType: 'number',
       },
-      { field: 'stageAndourney', header: 'Stage/ Channels' },
+      {
+        field: 'stageAndourney',
+        header: 'Stage/ Channels',
+        isSearchDisabled: true,
+      },
     ],
   },
   chartTypes: {

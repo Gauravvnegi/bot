@@ -39,6 +39,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
+  isQuickFilters = false;
   isTabFilters = true;
   tabFilterItems = [
     { label: 'All', content: '', value: 'ALL' },

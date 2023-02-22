@@ -1,8 +1,23 @@
 @import 'main';
 
+:host ::ng-deep .mat-chip {
+  border: 1px solid !important;
+  display: inline-block;
+  text-align: center;
+  font-weight: 400;
+  background-color: $white;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .chipSelected {
   color: $white !important;
   font-weight: 400;
+}
+
+.status-default {
+  background-color: $white !important;
 }
 
 .status-selected-new {
@@ -29,6 +44,21 @@
 }
 
 .status-selected-default {
-  background-color: $default;
+  background-color: $default !important;
+  opacity: 1;
+}
+
+.status-text-warning {
+  color: $text-email !important;
+}
+
+.status-opacity-warning {
+  background-color: transparent !important;
+  opacity: 0.4;
+}
+
+.status-selected-warning {
+  background-color: $text-email !important;
+  color: $white !important;
   opacity: 1;
 }

@@ -1,18 +1,19 @@
-<div class="caption__wrapper--buttons">
+<div class="caption__wrapper--buttons" [formGroup]="controlContainer.control">
   <div class="button__wrapper">
     <mat-chip-list
       multiple
       #chipList
       aria-label="Quick Reply selection"
-      [formControlName]="controlContainer?.control.get(controlName)"
+      [formControlName]="controlName"
     >
       <mat-chip
         *ngFor="let chip of chips; let chipIdx = index"
         selectable="true"
         (click)="toggleQuickReplyFilter(chipIdx)"
         [ngClass]="{
-          'chipSelected status-selected-default': chip.isSelected,
+          chipSelected: chip.isSelected,
           'status-default': chip.type === 'default',
+          'status-selected-default': chip.type === 'default' && chip.isSelected,
 
           'status-opacity-new status-text-new': chip.type === 'new',
           'status-selected-new': chip.type === 'new' && chip.isSelected,
@@ -31,11 +32,14 @@
             chip.type === 'completed' && chip.isSelected,
 
           'status-opacity-reject status-text-reject': chip.type === 'failed',
-          'status-selected-reject': chip.type === 'failed' && chip.isSelected
+          'status-selected-reject': chip.type === 'failed' && chip.isSelected,
+
+          'status-opacity-warning status-text-warning': chip.type === 'warning',
+          'status-selected-warning': chip.type === 'warning' && chip.isSelected
         }"
       >
         <span> {{ chip.label }}</span>
-        <span> ({{ chip.total }})</span>
+        <span *ngIf="chip.total >= 0"> ({{ chip.total }})</span>
       </mat-chip>
     </mat-chip-list>
     <img src="assets/svg/Filter-Icon.svg" alt="filter" />

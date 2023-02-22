@@ -410,27 +410,6 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   * @param quickReplyTypeIdx The chip index.
-   */
-  toggleQuickReplyFilter(quickReplyTypeIdx: number): void {
-    this.tabFilterItems[
-      this.tabFilterIdx
-    ].chips[0].isSelected = this.tabFilterItems[this.tabFilterIdx].chips.reduce(
-      (value, chip, idx) => {
-        if (!quickReplyTypeIdx) {
-          chip.isSelected = chip.value === campaignConfig.chipValue.all;
-        } else if (quickReplyTypeIdx === idx) {
-          chip.isSelected = !chip.isSelected;
-        }
-        return value && !chip.isSelected;
-      },
-      true
-    );
-    this.changePage(0);
-  }
-
-  /**
    * @function campaignConfiguration returns campaignConfig object.
    * @returns campaignConfig object.
    */

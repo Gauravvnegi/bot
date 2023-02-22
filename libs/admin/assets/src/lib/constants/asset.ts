@@ -2,9 +2,9 @@ export const assetConfig = {
   datatable: {
     title: 'Asset',
     limit: 5,
-    chipValue:{
-      all:'ALL'
-    }, 
+    chipValue: {
+      all: 'ALL',
+    },
     tabFilterItems: [
       {
         label: 'All',
@@ -13,7 +13,14 @@ export const assetConfig = {
         disabled: false,
         total: 0,
         chips: [
-          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+          {
+            label: 'All',
+            icon: '',
+            value: 'ALL',
+            total: 0,
+            isSelected: true,
+            type: 'default',
+          },
           {
             label: 'Active',
             icon: '',
@@ -40,7 +47,14 @@ export const assetConfig = {
         disabled: false,
         total: 0,
         chips: [
-          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+          {
+            label: 'All',
+            icon: '',
+            value: 'ALL',
+            total: 0,
+            isSelected: true,
+            type: 'default',
+          },
           {
             label: 'Active',
             icon: '',
@@ -67,7 +81,14 @@ export const assetConfig = {
         disabled: false,
         total: 0,
         chips: [
-          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+          {
+            label: 'All',
+            icon: '',
+            value: 'ALL',
+            total: 0,
+            isSelected: true,
+            type: 'default',
+          },
           {
             label: 'Active',
             icon: '',
@@ -123,6 +144,7 @@ export const assetConfig = {
         isSort: false,
         sortType: 'number',
         dynamicWidth: true,
+        isSearchDisabled: true,
       },
     ],
   },

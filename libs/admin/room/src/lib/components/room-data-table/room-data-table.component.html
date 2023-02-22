@@ -27,7 +27,7 @@
         <div class="caption__wrapper--tabmenu">
           <div class="header">
             <p class="heading">{{ tableName }}</p>
-            <div class="options">
+            <div class="action-wrapper">
               <hospitality-bot-button
                 *ngIf="selectedTable === 'room'"
                 label="{{ 'room.addSingle' | translate }}"
@@ -60,6 +60,7 @@
           </div>
         </div>
         <hospitality-bot-filter-chips
+          *ngIf="isQuickFilters"
           [chips]="filterChips"
           (onChange)="toggleQuickReplyFilter($event)"
         ></hospitality-bot-filter-chips>
@@ -68,7 +69,7 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">{{ 'messages.noData' | translate }}</p>
+    <hospitality-bot-empty-view></hospitality-bot-empty-view>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns class="table_head">

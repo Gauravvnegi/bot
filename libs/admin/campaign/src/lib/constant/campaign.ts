@@ -10,7 +10,14 @@ export const campaignConfig = {
         disabled: false,
         total: 0,
         chips: [
-          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+          {
+            label: 'All',
+            icon: '',
+            value: 'ALL',
+            total: 0,
+            isSelected: true,
+            type: 'default',
+          },
           {
             label: 'Active',
             icon: '',
@@ -79,6 +86,7 @@ export const campaignConfig = {
         isSort: false,
         sortType: 'string',
         dynamicWidth: true,
+        isSearchDisabled: true,
         width: '26%',
       },
       {
@@ -86,6 +94,7 @@ export const campaignConfig = {
         header: 'Active',
         isSort: false,
         dynamicWidth: true,
+        isSearchDisabled: true,
         width: '10%',
       },
       {
@@ -94,6 +103,7 @@ export const campaignConfig = {
         isSort: false,
         sortType: 'string',
         dynamicWidth: true,
+        isSearchDisabled: true,
         width: '8%',
       },
     ],

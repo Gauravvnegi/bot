@@ -52,6 +52,7 @@ import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SafeUrlPipe } from './pipes/safe-url-pipe';
 import { InfiniteScroll } from './directives/infinite-scroll.directive';
+import { EmptyViewComponent } from './components/datatable/empty-view/empty-view.component';
 
 @NgModule({
   imports: [
@@ -112,6 +113,7 @@ import { InfiniteScroll } from './directives/infinite-scroll.directive';
     SelectComponent,
     CustomHeaderComponent,
     ModalComponent,
+    EmptyViewComponent,
   ],
   exports: [
     DatatableComponent,
@@ -161,6 +163,7 @@ import { InfiniteScroll } from './directives/infinite-scroll.directive';
     CustomHeaderComponent,
     MatTooltipModule,
     ModalComponent,
+    EmptyViewComponent,
   ],
 })
 export class AdminSharedModule {}

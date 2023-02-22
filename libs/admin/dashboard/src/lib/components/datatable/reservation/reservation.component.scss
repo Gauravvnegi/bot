@@ -1,15 +1,5 @@
 @import 'main';
 
-.documentActionItemLabel {
-  margin-left: 0.5em;
-  font-weight: 500;
-}
-.tableHeading {
-  width: 5%;
-  background-color: $c-gray-93 !important;
-  @include align-checkbox();
-}
-
 .icon-wrapper {
   @include flex-space-between();
   flex-wrap: wrap;
@@ -239,5 +229,4 @@
     white-space: break-spaces !important;
     word-break: break-word !important;
   }
-
 }

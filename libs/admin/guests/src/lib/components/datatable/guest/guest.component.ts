@@ -323,29 +323,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType): void {
-    if (quickReplyTypeIdx === 0) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') {
-          chip.isSelected = false;
-        }
-      });
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    }
-    this.changePage(0);
-  }
-
   openDetailPage(event, rowData?, tabKey?): void {
     event.stopPropagation();
     if (rowData) {

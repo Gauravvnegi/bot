@@ -44,7 +44,7 @@ Deploy_Admin:
     - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
     - kubectl apply -f deployment.yaml --validate=false
   tags:
-    - k8s
+    - k8s-dev
 
 Deploy_Web:
   stage: deploy_web
@@ -67,7 +67,7 @@ Deploy_Web:
     - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
     - kubectl apply -f deployment.yaml --validate=false
   tags:
-    - k8s
+    - k8s-dev
 
 #test_project:
 #    stage: test

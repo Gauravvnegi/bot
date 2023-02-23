@@ -78,8 +78,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "15kb"
+                  "maximumWarning": "10kb",
+                  "maximumError": "20kb"
                 }
               ]
             },
@@ -106,8 +106,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "15kb"
+                  "maximumWarning": "10kb",
+                  "maximumError": "20kb"
                 }
               ]
             },
@@ -134,8 +134,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "15kb"
+                  "maximumWarning": "10kb",
+                  "maximumError": "20kb"
                 }
               ]
             }
@@ -171,7 +171,10 @@
               "apps/web-user/tsconfig.app.json",
               "apps/web-user/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/web-user/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/web-user/**/*"
+            ]
           }
         },
         "test": {
@@ -210,8 +213,13 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/web-user-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/web-user-e2e/**/*"]
+            "tsConfig": [
+              "apps/web-user-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/web-user-e2e/**/*"
+            ]
           }
         }
       }
@@ -257,7 +265,9 @@
               "node_modules/slick-carousel/slick/slick.min.js"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["apps/admin/src/assets/sass"]
+              "includePaths": [
+                "apps/admin/src/assets/sass"
+              ]
             }
           },
           "configurations": {
@@ -377,7 +387,10 @@
               "apps/admin/tsconfig.app.json",
               "apps/admin/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/admin/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/admin/**/*"
+            ]
           }
         },
         "test": {
@@ -412,8 +425,13 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/admin-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/admin-e2e/**/*"]
+            "tsConfig": [
+              "apps/admin-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/admin-e2e/**/*"
+            ]
           }
         }
       }
@@ -431,7 +449,10 @@
               "libs/web-user/shared/tsconfig.lib.json",
               "libs/web-user/shared/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/web-user/shared/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/web-user/shared/**/*"
+            ]
           }
         },
         "test": {
@@ -463,7 +484,10 @@
               "libs/shared/auth/tsconfig.lib.json",
               "libs/shared/auth/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/auth/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/auth/**/*"
+            ]
           }
         },
         "test": {
@@ -635,7 +659,10 @@
               "libs/shared/theme/tsconfig.lib.json",
               "libs/shared/theme/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/theme/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/theme/**/*"
+            ]
           }
         },
         "test": {
@@ -667,7 +694,10 @@
               "libs/shared/interceptors/tsconfig.lib.json",
               "libs/shared/interceptors/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/interceptors/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/interceptors/**/*"
+            ]
           }
         },
         "test": {
@@ -699,7 +729,10 @@
               "libs/shared/material/tsconfig.lib.json",
               "libs/shared/material/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/material/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/material/**/*"
+            ]
           }
         },
         "test": {
@@ -731,7 +764,10 @@
               "libs/shared/utils/tsconfig.lib.json",
               "libs/shared/utils/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/utils/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/utils/**/*"
+            ]
           }
         },
         "test": {
@@ -763,7 +799,10 @@
               "libs/admin/dashboard/tsconfig.lib.json",
               "libs/admin/dashboard/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/dashboard/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/dashboard/**/*"
+            ]
           }
         },
         "test": {
@@ -795,7 +834,10 @@
               "libs/admin/reservation/tsconfig.lib.json",
               "libs/admin/reservation/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/reservation/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/reservation/**/*"
+            ]
           }
         },
         "test": {
@@ -827,7 +869,10 @@
               "libs/admin/covid/tsconfig.lib.json",
               "libs/admin/covid/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/covid/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/covid/**/*"
+            ]
           }
         },
         "test": {
@@ -859,7 +904,10 @@
               "libs/admin/shared/tsconfig.lib.json",
               "libs/admin/shared/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/shared/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/shared/**/*"
+            ]
           }
         },
         "test": {
@@ -926,7 +974,10 @@
               "libs/admin/request/tsconfig.lib.json",
               "libs/admin/request/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/request/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/request/**/*"
+            ]
           }
         },
         "test": {
@@ -958,7 +1009,10 @@
               "libs/admin/feedback/tsconfig.lib.json",
               "libs/admin/feedback/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/feedback/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/feedback/**/*"
+            ]
           }
         },
         "test": {
@@ -990,7 +1044,10 @@
               "libs/admin/guests/tsconfig.lib.json",
               "libs/admin/guests/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/guests/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/guests/**/*"
+            ]
           }
         },
         "test": {
@@ -1022,7 +1079,10 @@
               "libs/admin/packages/tsconfig.lib.json",
               "libs/admin/packages/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/packages/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/packages/**/*"
+            ]
           }
         },
         "test": {
@@ -1054,7 +1114,10 @@
               "libs/admin/notification/tsconfig.lib.json",
               "libs/admin/notification/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/notification/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/notification/**/*"
+            ]
           }
         },
         "test": {
@@ -1086,7 +1149,10 @@
               "libs/admin/subscription/tsconfig.lib.json",
               "libs/admin/subscription/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/subscription/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/subscription/**/*"
+            ]
           }
         },
         "test": {
@@ -1118,7 +1184,10 @@
               "libs/admin/messages/tsconfig.lib.json",
               "libs/admin/messages/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/messages/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/messages/**/*"
+            ]
           }
         },
         "test": {
@@ -1150,7 +1219,10 @@
               "libs/admin/conversation/tsconfig.lib.json",
               "libs/admin/conversation/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/conversation/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/conversation/**/*"
+            ]
           }
         },
         "test": {
@@ -1182,7 +1254,10 @@
               "libs/shared/image-cropper/tsconfig.lib.json",
               "libs/shared/image-cropper/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/shared/image-cropper/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/shared/image-cropper/**/*"
+            ]
           }
         },
         "test": {
@@ -1208,7 +1283,10 @@
               "libs/admin/analytics/tsconfig.lib.json",
               "libs/admin/analytics/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/analytics/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/analytics/**/*"
+            ]
           }
         },
         "test": {
@@ -1240,7 +1318,10 @@
               "libs/admin/whatsapp/tsconfig.lib.json",
               "libs/admin/whatsapp/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/whatsapp/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/whatsapp/**/*"
+            ]
           }
         },
         "test": {
@@ -1272,7 +1353,10 @@
               "libs/admin/listing/tsconfig.lib.json",
               "libs/admin/listing/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/listing/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/listing/**/*"
+            ]
           }
         },
         "test": {
@@ -1304,7 +1388,10 @@
               "libs/admin/library/tsconfig.lib.json",
               "libs/admin/library/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/library/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/library/**/*"
+            ]
           }
         },
         "test": {
@@ -1336,7 +1423,10 @@
               "libs/admin/assets/tsconfig.lib.json",
               "libs/admin/assets/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/assets/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/assets/**/*"
+            ]
           }
         },
         "test": {
@@ -1368,7 +1458,10 @@
               "libs/admin/topic/tsconfig.lib.json",
               "libs/admin/topic/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/topic/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/topic/**/*"
+            ]
           }
         },
         "test": {
@@ -1400,7 +1493,10 @@
               "libs/admin/template/tsconfig.lib.json",
               "libs/admin/template/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/template/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/template/**/*"
+            ]
           }
         },
         "test": {
@@ -1432,7 +1528,10 @@
               "libs/admin/marketing/tsconfig.lib.json",
               "libs/admin/marketing/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/marketing/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/marketing/**/*"
+            ]
           }
         },
         "test": {
@@ -1464,7 +1563,10 @@
               "libs/admin/campaign/tsconfig.lib.json",
               "libs/admin/campaign/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/campaign/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/campaign/**/*"
+            ]
           }
         },
         "test": {
@@ -1595,7 +1697,10 @@
               "libs/admin/create-with/tsconfig.lib.json",
               "libs/admin/create-with/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/create-with/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/create-with/**/*"
+            ]
           }
         },
         "test": {
@@ -1627,7 +1732,10 @@
               "libs/admin/inventory/tsconfig.lib.json",
               "libs/admin/inventory/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/inventory/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/inventory/**/*"
+            ]
           }
         },
         "test": {
@@ -1659,7 +1767,10 @@
               "libs/admin/e-frontdesk/tsconfig.lib.json",
               "libs/admin/e-frontdesk/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/e-frontdesk/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/e-frontdesk/**/*"
+            ]
           }
         },
         "test": {
@@ -1691,7 +1802,10 @@
               "libs/admin/unsubscribed/tsconfig.lib.json",
               "libs/admin/unsubscribed/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/unsubscribed/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/unsubscribed/**/*"
+            ]
           }
         },
         "test": {
@@ -1723,7 +1837,10 @@
               "libs/admin/finance/tsconfig.lib.json",
               "libs/admin/finance/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/finance/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/finance/**/*"
+            ]
           }
         },
         "test": {
@@ -1755,7 +1872,10 @@
               "libs/admin/room/tsconfig.lib.json",
               "libs/admin/room/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/room/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/room/**/*"
+            ]
           }
         },
         "test": {

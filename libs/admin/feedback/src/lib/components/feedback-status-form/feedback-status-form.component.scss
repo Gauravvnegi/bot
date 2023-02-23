@@ -31,13 +31,13 @@ button {
     right: 20%;
   }
 
-  &-status{
+  &-status {
     padding: 6px 9px;
     border-radius: 14px;
     border: solid 1px #4b56c0;
     background-color: #fff;
     cursor: pointer;
-    &_text{
+    &_text {
       font-family: Roboto;
       font-size: 12px;
       font-weight: normal;
@@ -47,40 +47,40 @@ button {
     }
   }
 
-  &-horizontalLine{
+  &-horizontalLine {
     border: 1px solid $manually-contacts;
     width: 100%;
-    margin: 10px 0;
+    margin: 8px 0;
     opacity: 0.1;
   }
 
-  &-viewDetails{
-    font-size:$font12;
+  &-viewDetails {
+    font-size: $font12;
     font-weight: normal;
     letter-spacing: 0.72px;
     color: #002046;
     cursor: pointer;
   }
 }
-:host ::ng-deep .mat-form-field-wrapper{
+:host ::ng-deep .mat-form-field-wrapper {
   position: relative;
   padding-bottom: unset !important;
-  margin-bottom: 13px;
+  margin-bottom: 9px;
   border-radius: 2px;
   background-color: #cccccc33;
 }
 
-:host ::ng-deep .mat-form-field-infix{
+:host ::ng-deep .mat-form-field-infix {
   padding-top: 12px !important;
   border-top: none;
-  textarea{
+  textarea {
     height: 72px !important;
     resize: none;
     padding: 7px;
   }
 }
 
-:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex{
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
   padding: unset;
 }
 
@@ -92,7 +92,6 @@ button {
   letter-spacing: 0.6px;
   text-align: left;
   color: #93989c;
-  margin-bottom:13px;
 
   ::-webkit-scrollbar {
     width: 2px;

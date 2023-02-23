@@ -362,3 +362,9 @@ $XL: 1500px;
     border-radius: 0px;
   }
 }
+
+@mixin align-checkbox() {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  text-align: center !important;
+}

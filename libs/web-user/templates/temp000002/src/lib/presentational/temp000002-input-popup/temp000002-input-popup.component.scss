@@ -29,7 +29,7 @@
   }
 }
 .cross_holder {
-  position: absolute;
+  position: sticky;
   width: 100%;
   top: 0;
   left: 0;
@@ -40,9 +40,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 1;
 
   @media screen and (max-width: $S) {
-    padding: 10px 5px;
+    padding: 10px;
   }
   .cross {
     background-color: transparent;
@@ -69,13 +70,12 @@
 }
 @media screen and (max-width: $S) {
   .popup__wrapper {
-    padding: 0 $padding-large;
     width: 15rem;
     min-height: 42vh !important;
     margin: 0 auto;
     .cross_holder {
       .cross {
-        padding-right: 5px;
+        padding-right: unset;
       }
     }
   }

@@ -62,11 +62,11 @@
     ></image-cropper>
   </div>
   <div class="button-wrapper">
-    <div class="btn" (click)="onModalClose.emit({ status: false })">
-      <div class="btn-text">Back</div>
+    <div class="back-button" (click)="onModalClose.emit({ status: false })">
+      Back
     </div>
-    <div class="btn" (click)="sendCroppedImage()">
-      <div class="btn-text">Confirm</div>
+    <div class="next-button" (click)="sendCroppedImage()">
+      Confirm
     </div>
   </div>
 </div>

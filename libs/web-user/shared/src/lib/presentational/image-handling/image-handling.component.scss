@@ -1,6 +1,7 @@
 @import 'main';
 
 .webhandling-wrapper {
+  padding: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -41,10 +42,6 @@
     img {
       width: 100%;
     }
-
-    @media only screen and (max-width: 575px) {
-      width: 100%;
-    }
   }
 
   .button-wrapper {
@@ -52,36 +49,38 @@
     justify-content: center;
     margin-top: 15px;
     margin-bottom: 20px;
-
-    .btn {
-      cursor: pointer;
-      border-radius: 10px;
-      width: 150px;
-      height: 50px;
-      border: 2px solid #ff8008;
-      color: #ff8008;
-      margin-right: 10px;
+    .back-button {
+      @include footer-back();
       display: flex;
-      justify-content: center;
       align-items: center;
-
+      justify-content: center;
       @media only screen and (max-width: 767px) {
         width: 120px;
         height: 35px;
+        @include commonButtonStyle();
       }
 
       @media only screen and (max-width: 575px) {
         width: 100px;
         height: 35px;
+        @include commonButtonStyle();
       }
-      .btn-text {
-        font: normal normal 600 18px/30px Montserrat;
-        letter-spacing: 0px;
-        opacity: 1;
+    }
+    .next-button {
+      @include footer-next();
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @media only screen and (max-width: 767px) {
+        width: 120px;
+        height: 35px;
+        @include commonButtonStyle();
+      }
 
-        @media only screen and (max-width: 767px) {
-          font: normal normal 600 16px/28px Montserrat;
-        }
+      @media only screen and (max-width: 575px) {
+        width: 100px;
+        height: 35px;
+        @include commonButtonStyle();
       }
     }
   }

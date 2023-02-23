@@ -31,7 +31,7 @@
   right: 14px;
   top: 0px;
   @media screen and (max-width: $S) {
-    right: 5px;
+    right: 15px;
   }
 }
 
@@ -99,6 +99,7 @@
 .modal-body {
   max-height: calc(90vh - 120px);
   overflow-y: auto;
+  padding:32px;
   &::-webkit-scrollbar {
     width: 4px;
   }

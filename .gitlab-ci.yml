@@ -29,7 +29,7 @@ Deploy_Admin:
   stage: deploy_admin
   environment:
     name: k8s
-  when: on_success
+  when: manual
   before_script:
     - echo $(git rev-parse HEAD) | cut -c 1-7
     - ls -l
@@ -50,7 +50,7 @@ Deploy_Web:
   stage: deploy_web
   environment:
     name: k8s_web
-  when: on_success
+  when: manual
   before_script:
     - echo $(git rev-parse HEAD) | cut -c 1-7
     - ls -l

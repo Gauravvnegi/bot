@@ -94,10 +94,6 @@ Deploy_Web:
 #    - ssh -p "$ssh_port" "$ssh_user"@"$server_ip" "sleep 40; rm -rf $web_user_work_dir/*.sh; rm -rf $web_user_work_dir/*.tar; ls $web_user_work_dir && netstat -tnlp"
 #  only:
 #    - dev-deploy
-
-
-
-
 #deploy to ndevelopment-admin:
 #  stage: deploy
 #  environment:

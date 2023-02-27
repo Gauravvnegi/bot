@@ -47,7 +47,6 @@ Deploy_Web:
     - kubectl apply -f deployment.yaml --validate=false
   tags:
     - k8s-old
-
 #test_project:
 #    stage: test
 #    script:

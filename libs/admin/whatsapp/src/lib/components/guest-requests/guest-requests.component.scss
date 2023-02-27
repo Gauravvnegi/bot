@@ -4,6 +4,9 @@
   padding: 15px 0;
   max-height: calc(100vh - 310px);
   overflow-y: auto;
+  &::-webkit-scrollbar{
+    width: 2px;
+  }
   &-title {
     padding: 0 15px;
     font-family: Roboto;

@@ -5,7 +5,7 @@
   height: calc(100vh - 307px);
   overflow-y: auto;
   .person-title {
-    font: normal normal bold 14px/18px 'Roboto';
+    font-size: $font14;
     letter-spacing: 0.84px;
   }
   .person-image {
@@ -25,24 +25,24 @@
   }
   .guest-name {
     margin-left: 15px;
-    font: normal normal normal 12px/14px 'Roboto';
+    font-size: $font12;
     letter-spacing: 0.72px;
   }
   .contact-detials {
     margin-top: 15px;
-    font: normal normal normal 14px/18px 'Roboto';
+    font-size: $font14;
     letter-spacing: 0.84px;
     color: $mat-tab-label;
   }
   .label {
-    font: normal normal bold 10px/14px 'Roboto';
+    font-size: $font10;
     letter-spacing: 0.6px;
     text-align: left;
     color: $c-gray-61;
     margin-top: 15px;
   }
   .label-text {
-    font: normal normal bold 12px/14px 'Roboto';
+    font-size: $font12;
     letter-spacing: 0.72px;
     text-align: left;
     margin-top: 5px;

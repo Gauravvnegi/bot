@@ -12,7 +12,7 @@
   justify-content: space-between;
   align-items: center;
   &-text {
-    font: normal normal medium 16px/21px Roboto;
+    font-size: $font16;
     letter-spacing: 0.64px;
     color: $dark-blue;
     opacity: 1;
@@ -77,9 +77,9 @@
         padding: 8px 15px;
         cursor: pointer;
         .sortItem {
-          font: normal normal normal 14px/19px Roboto;
+          font-size: $font14;
           letter-spacing: 0.84px;
-          color: $dark-blue;
+          color: 'ffffff';
         }
       }
     }
@@ -119,9 +119,7 @@
   .applyBtn {
     width: 138px;
     height: 36px;
-    background: $button-blue 0% 0% no-repeat padding-box;
-    border-radius: 100px;
-    color: $white;
+    @include primaryButton();
     display: flex;
     justify-content: center;
     align-items: center;
@@ -129,7 +127,7 @@
   }
 }
 .priority {
-  font: normal normal bold 14px/19px Roboto;
+  font-size: $font14;
   letter-spacing: 0.84px;
   color: $dark-blue;
   opacity: 1;

@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -26,6 +27,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   hotelId: string;
   @Output() guestInfo = new EventEmitter();
+  @Input() guestInfoEnable;
 
   requestFG: FormGroup;
   constructor(

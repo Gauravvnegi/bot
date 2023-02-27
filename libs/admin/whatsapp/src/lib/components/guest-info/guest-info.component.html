@@ -1,14 +1,17 @@
 <div class="guest-info">
-  <mat-icon (click)="closeGuestInfo()" class="material-icons" matSuffix
+  <!-- <mat-icon (click)="closeGuestInfo()" class="material-icons" matSuffix
     >keyboard_backspace
-  </mat-icon>
-  <div>Guest Info</div>
+  </mat-icon> -->
+  <div  (click)="closeGuestInfo()" class="cross">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </div>
+  <div class="guest-info-heading">Guest Info</div>
 </div>
 <div
   class="guestInfoWrapper"
   [ngStyle]="{
     'border-bottom': buttonConfig[selectedIndex].button
-      ? '1px solid #9eaeb8'
+      ? '1px solid #e0e0e0'
       : ''
   }"
 >

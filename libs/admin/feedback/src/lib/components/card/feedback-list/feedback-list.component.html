@@ -48,91 +48,35 @@
             selectedFeedback.id === feedbackItem.id && { background: '#f1f1f1' }
           "
         >
-          <div class="item__logo" [style.backgroundColor]="feedbackItem.color">
-            {{ feedbackItem.getProfileNickName() }}
-          </div>
-          <div class="item__body">
-            <div class="item__body__roomAndService">
-              <div class="item__body__room">
-                <div>
-                  {{
-                    feedbackItem.getTableOrRoomNo(getFeedbackType(feedbackType))
-                  }}
-                </div>
-                <div
-                  class="rating"
-                  [style.background]="
-                    getRatingColorCode(feedbackItem.feedback.ratings)
-                  "
-                >
-                  {{ feedbackItem.feedback.ratings }}
-                </div>
-              </div>
-              <div
-                class="item__body__services"
-                *ngIf="
-                  getFeedbackType(feedbackType) === 'TRANSACTIONALFEEDBACK' &&
-                    feedbackItem.feedback.services.services?.length;
-                  else stayFeedback
-                "
-              >
-                <div class="item__body__services__name">
-                  {{ feedbackItem.feedback.services.services[0]?.serviceName }}
-                </div>
-                <div
-                  class="item__body__services__length"
-                  *ngIf="feedbackItem.feedback.services.services.length > 1"
-                >
-                  +{{ feedbackItem.feedback.services.services.length - 1 }}
-                </div>
-              </div>
-              <ng-template #stayFeedback>
-                <div
-                  class="item__body__services"
-                  *ngIf="feedbackItem.feedback.services?.length"
-                >
-                  <div class="item__body__services__name">
-                    {{ feedbackItem.feedback.services[0]?.serviceName }}
-                  </div>
-                  <div
-                    class="item__body__services__length"
-                    *ngIf="feedbackItem.feedback.services.length > 1"
-                  >
-                    +{{ feedbackItem.feedback.services.length - 1 }}
-                  </div>
-                </div>
-              </ng-template>
-            </div>
+          <hospitality-bot-chat-card
+            [content]="{
+              cardType: 'feedback',
+              name: feedbackItem?.feedback.guest.getFullName(),
+              roomNo: feedbackItem?.getTableOrRoomNo(
+                getFeedbackType(feedbackType)
+              ),
 
-            <div class="item__body__name">
-              {{ feedbackItem.feedback.guest.getFullName() }}
-            </div>
-            <div class="item__body__remarks">
-              <ng-container
-                *ngIf="
-                  feedbackItem.feedback.comments &&
-                    feedbackItem.feedback.comments.length;
-                  else noContent
-                "
-                >{{ feedbackItem.feedback.comments }}</ng-container
-              >
-            </div>
-            <div class="item__body__status">
-              <div>{{ feedbackItem.getStatus(cardTabFilterItems) }}</div>
-              <div class="divider"></div>
-              <div>SLA: {{ feedbackItem.getSLA() }}</div>
-              <div class="divider"></div>
-              <div>JD: {{ feedbackItem.jobDuration }}m</div>
-            </div>
-            <div class="item__body__assignee">
-              <div>
-                {{ feedbackItem.userName }} ({{ feedbackItem.departmentLabel }})
-              </div>
-              <div class="item__body__assignee__date">
-                {{ feedbackItem.getTime(globalFilterService.timezone) }}
-              </div>
-            </div>
-          </div>
+              taskStatus: {
+                action: feedbackItem?.getStatus(cardTabFilterItems),
+                jd: feedbackItem?.getSLA(),
+                sla: feedbackItem?.jobDuration
+              },
+              rating: feedbackItem?.feedback.ratings,
+              time: feedbackItem?.getTime(globalFilterService.timezone),
+              remark: feedbackItem?.feedback.comments,
+              department: {
+                userName: feedbackItem.userName,
+                label: feedbackItem.departmentLabel
+              },
+              feedbackType: feedbackType,
+              colorMap: colorMap,
+              serviceTag:
+                getFeedbackType(feedbackType) === 'TRANSACTIONALFEEDBACK' &&
+                feedbackItem.feedback.services.services?.length
+                  ? (feedbackItem?.feedback.services.services)[0]?.serviceName
+                  : feedbackItem.feedback.services[0]?.serviceName
+            }"
+          ></hospitality-bot-chat-card>
         </div>
       </ng-container>
     </ng-container>

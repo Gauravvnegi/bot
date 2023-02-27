@@ -1,5 +1,5 @@
 <div class="sortFilt">
-  <div>Sort & Filters</div>
+  <div className="sortFilt-heading">Sort & Filters</div>
   <div class="sortFilt-clear">
     <div class="sortFilt-clear-all" (click)="clearFilter()">
       <p class="filter">Clear All</p>
@@ -22,12 +22,16 @@
           sortControl?.value.label === item.value &&
           sortControl?.value.order === item.order
             ? {
-                background: '#0020461a 0% 0% no-repeat padding-box',
-                border: '1px solid #0020464d'
+                background: '#5f38f9',
+                border: '1px solid #5f38f9',
+                color: '#ffffff',
+                fontSize: '14px'
               }
             : {
-                background: '#AEAEAE1A 0% 0% no-repeat padding-box',
-                border: '1px solid #AEAEAE1A'
+                background: '#ffffff',
+                border: '1px solid #5f38f9',
+                color: '#5f38f9',
+                fontSize: '14px'
               }
         "
         class="sortItemWrapper"
@@ -41,16 +45,8 @@
     </div>
   </div>
   <div class="applyBtnWrapper">
-    <div
-      class="applyBtn"
-      [ngStyle]="
-        parentFG && parentFG.untouched
-          ? { opacity: '0.3', 'pointer-events': 'none' }
-          : { opacity: '1', cursor: 'pointer' }
-      "
-      (click)="applyFilter()"
-    >
-      <div>Apply</div>
+    <div class="applyBtn" (click)="applyFilter()">
+      <div class="applyBtn-text">Apply</div>
     </div>
   </div>
 </div>

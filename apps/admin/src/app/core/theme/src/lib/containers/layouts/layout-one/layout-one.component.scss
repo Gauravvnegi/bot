@@ -2,7 +2,7 @@
 
 .layoutMessageCheck {
   @include flex-between-center();
-  @include width(75%);
+  @include width(74%);
   .margBtm {
     margin-bottom: -6px;
   }
@@ -164,9 +164,10 @@
             font-size: $font10;
           }
         }
-        .filter-icon{
-          &:hover{
-           filter:invert(90%) sepia(141%) saturate(1362%) hue-rotate(221deg) brightness(80%) contrast(124%)
+        .filter-icon {
+          &:hover {
+            filter: invert(90%) sepia(141%) saturate(1362%) hue-rotate(221deg)
+              brightness(80%) contrast(124%);
           }
         }
         .material-icons {
@@ -188,7 +189,6 @@
           font-weight: bold;
           color: #fff;
         }
-        
       }
       .notification-icon {
         margin-right: 20px;
@@ -232,6 +232,11 @@
           color: $dark-blue;
         }
         span {
+          font-family: Roboto;
+          font-size: $font14;
+          font-weight: 500;
+          letter-spacing: 0.84px;
+          text-align: left;
           color: $dark-blue;
         }
       }
@@ -254,9 +259,8 @@
       }
 
       .router__wrapper {
-        min-height: calc(100vh - 12.5vh);
-        @include padding(0 1.5rem);
-        @include padding-top(1.5rem);
+        @include padding(5px);
+        // @include padding-top(1.5rem);
         @media only screen and (max-width: 1300px) {
           @include padding(0 10px);
           @include padding-top(10px);

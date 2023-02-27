@@ -1,6 +1,5 @@
 @import 'main';
 .list-container {
-  width: 345px;
   height: 100%;
   opacity: 1;
   border-right: 2px solid $c-gray-102;
@@ -23,20 +22,13 @@
     overflow-y: auto;
     // height: calc(100% - 117px);
     &::-webkit-scrollbar {
-      width: 13px;
-      &:hover {
-        cursor: pointer;
-      }
+      width: 4px;
     }
     &::-webkit-scrollbar-track {
-      background: transparent;
+      background: $c-gray-98;
     }
-
     &::-webkit-scrollbar-thumb {
-      &:hover {
-        background: $c-gray-53;
-      }
-      background: $c-gray-76;
+      background: $light-gray;
       border-radius: 10px;
     }
     .item {

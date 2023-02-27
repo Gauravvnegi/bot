@@ -20,33 +20,22 @@
 
       .feedback-body-left {
         position: relative;
-        .blackscreen {
-          position: absolute;
-          height: 100%;
-          width: 100%;
-          opacity: 0.3;
-          background-color: $black;
-          z-index: 4;
-          display: none;
+        width: 27%;
+
+        @media only screen and (max-width: 1180px) {
+          width: 35%;
         }
       }
+
       .feedback-body-right {
         position: relative;
-        .blackscreen {
-          position: absolute;
-          height: 100%;
-          width: calc(100% - 233px);
-          opacity: 0.3;
-          background-color: $black;
-          z-index: 4;
-          display: none;
-        }
+        width: 73%;
       }
       .guest-info-enable {
         position: absolute;
         right: 24px;
         background: $white;
-        width: 24%;
+        width: 57%;
         max-width: 259px;
         border-radius: 5px;
         box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.12);

@@ -33,6 +33,7 @@ import * as FileSaver from 'file-saver';
 export class ChatComponent
   implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() selectedChat;
+  @Input() guestInfoEnable;
   @Input() data;
   @Output() guestInfo = new EventEmitter();
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;

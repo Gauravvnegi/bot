@@ -11,7 +11,10 @@
 ::ng-deep .daterangepicker td.active{
   background-color: $auth-color;
 }
+::ng-deep .daterangepicker td.active:hover{
+  background-color: $auth-color;
 
+}
 ::ng-deep .drp-buttons{
   .cancelBtn{
     @include secondaryButton();

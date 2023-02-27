@@ -94,15 +94,15 @@ export class RoomService extends ApiService {
     hotelId: string,
     data: SingleRoom[] | MultipleRoom[]
   ): Observable<AddRoomsResponse> {
-    return this.post(`/api/v1/entity/${hotelId}/inventory/room`, data);
+    return this.post(`/api/v1/entity/${hotelId}/inventory?type=ROOM`, data);
   }
 
   updateRoom(hotelId: string, data: SingleRoom): Observable<RoomResponse> {
-    return this.put(`/api/v1/entity/${hotelId}/inventory/room`, data);
+    return this.put(`/api/v1/entity/${hotelId}/inventory?type=ROOM`, data);
   }
 
   getRoomById(hotelId: string, roomId: string): Observable<RoomResponse> {
-    return this.get(`/api/v1/entity/${hotelId}/inventory/room/${roomId}`);
+    return this.get(`/api/v1/entity/${hotelId}/inventory/${roomId}?type=ROOM`);
   }
 
   exportCSV(hotelId: string, table: TableValue, config?: QueryConfig) {
@@ -117,7 +117,10 @@ export class RoomService extends ApiService {
   }
 
   createRoomType(hotelId: string, data: any): Observable<RoomTypeResponse> {
-    return this.post(`/api/v1/entity/${hotelId}/inventory/room-type`, data);
+    return this.post(
+      `/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`,
+      data
+    );
   }
 
   getRoomTypeById(
@@ -125,11 +128,11 @@ export class RoomService extends ApiService {
     roomTypeId: string
   ): Observable<RoomTypeResponse> {
     return this.get(
-      `/api/v1/entity/${hotelId}/inventory/room-type/${roomTypeId}`
+      `/api/v1/entity/${hotelId}/inventory/${roomTypeId}?type=ROOM_TYPE`
     );
   }
 
   updateRoomType(hotelId: string, data: any): Observable<RoomTypeResponse> {
-    return this.put(`/api/v1/entity/${hotelId}/inventory/room-type`, data);
+    return this.put(`/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`, data);
   }
 }

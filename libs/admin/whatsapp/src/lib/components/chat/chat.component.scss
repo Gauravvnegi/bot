@@ -95,18 +95,23 @@
   padding: 15px;
   position: relative;
   width: 100%;
+
+  &::-webkit-scrollbar{
+    width: 4px;
+  }
 }
 .chatDate {
   text-align: center;
   margin-bottom: 10px;
   font-family: Roboto;
   font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
   letter-spacing: 0.72px;
   color: $dark-blue;
+  margin: auto;
+  background:rgba(174, 174, 174, 0.1);
+  padding: 6px;
+  border-radius: 12px;
+  width: fit-content;
 }
 .noChat {
   height: calc(100% - 124px);

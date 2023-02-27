@@ -4,13 +4,13 @@
   display: flex;
   justify-content: space-between;
 }
-@mixin flex-space-btw-wrap{
+@mixin flex-space-btw-wrap {
   @include flex-space-between;
   flex-wrap: wrap;
 }
-@mixin flex-space-between-cen-Algn{
-@include flex-space-between;
-align-items: center;
+@mixin flex-space-between-cen-Algn {
+  @include flex-space-between;
+  align-items: center;
 }
 @mixin flex-item-center() {
   display: flex;
@@ -241,45 +241,66 @@ align-items: center;
 
 // table checkbox align mixin
 
-@mixin align-checkbox(){
+@mixin align-checkbox() {
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center !important;
 }
 
-@mixin buttonWrapper(){
-
+@mixin buttonWrapper() {
 }
 
-@mixin primaryButton(){
+@mixin primaryButton() {
   color: $white;
   font-size: $font14;
-  font-weight: 400;
-  background-color: $auth-color;
+  background-color: $primary-btn;
   width: 10vw;
   border: none;
-  border-radius: 25px;
-  &:hover{
-    cursor: pointer;
-    box-shadow: 0px 4px 4px #4b56c04d;
-    font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+  &:hover {
+    background-color: $primary-hover;
+  }
+  &:active :focus {
+    background-color: $primary-pressed;
   }
 }
 
-@mixin secondaryButton(){
+@mixin secondaryButton() {
   @include primaryButton();
-  border: 1px solid $auth-color;
+  border: 1px solid $primary-btn;
   background-color: $white;
-  color: $auth-color;
+  color: $primary-btn;
+
+  &:hover {
+    background-color: $white;
+    color: $primary-hover;
+  }
+
+  &:focus :active {
+    color: $primary-pressed;
+  }
 }
 
-@mixin tableCreateButton(){
+@mixin chatList() {
+  height: auto;
+  padding: 12px 15px;
+  display: flex;
+  border-bottom: 1px solid $c-gray-95;
+
+  &:hover {
+    background-color: $c-gray-98;
+  }
+  cursor: pointer;
+}
+
+@mixin tableCreateButton() {
   @include primaryButton();
-  width:8vw;
-  padding:8px;
+  width: 8vw;
+  padding: 8px;
   margin-right: 15px;
-  &:hover{
-     cursor: pointer;
-     font-weight: normal;
+  &:hover {
+    cursor: pointer;
+    font-weight: normal;
   }
 }

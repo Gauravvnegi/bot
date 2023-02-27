@@ -12,3 +12,14 @@
 
 // components input
 @import 'components/input';
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: $c-gray-98;
+}
+::-webkit-scrollbar-thumb {
+  background: $light-gray;
+  border-radius: 10px;
+}

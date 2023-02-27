@@ -51,6 +51,8 @@ import { LinkDetector } from './pipes/linkDetector.pipe';
 import { NumberFormatterPipe } from './pipes/number-formatter.pipe';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { SafeUrlPipe } from './pipes/safe-url-pipe';
+import { ChatCardComponent } from './components/chat-card/chat-card.component';
+import { ChatHeaderComponent } from './components/chat-header/chat-header.component';
 import { InfiniteScroll } from './directives/infinite-scroll.directive';
 import { EmptyViewComponent } from './components/datatable/empty-view/empty-view.component';
 import { CustomTooltipComponent } from './components/custom-tooltip/custom-tooltip.component';
@@ -102,6 +104,8 @@ import { CustomTooltipComponent } from './components/custom-tooltip/custom-toolt
     MentionDirective,
     CustomSizeInputComponent,
     SafeUrlPipe,
+    ChatCardComponent,
+    ChatHeaderComponent,
     CustomSelectComponent,
     CustomFileUploadComponent,
     StatsCardComponent,
@@ -152,6 +156,8 @@ import { CustomTooltipComponent } from './components/custom-tooltip/custom-toolt
     UnsubscribeFeatureComponent,
     SafeHtmlPipe,
     SafeUrlPipe,
+    ChatCardComponent,
+    ChatHeaderComponent,
     CustomSelectComponent,
     CustomFileUploadComponent,
     StatsCardComponent,

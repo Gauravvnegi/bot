@@ -250,10 +250,8 @@
     padding-left: 2px;
     margin-left: 3px;
   }
-  @media screen and (max-width: $XL) {
-    @include width(145px);
-    margin: unset;
-    padding: unset;
+  @media screen and (max-width: $L) {
+    @include width(170px);
   }
 }
 

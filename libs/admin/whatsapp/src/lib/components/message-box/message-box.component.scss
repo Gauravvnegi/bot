@@ -1,7 +1,7 @@
 @import 'main';
 
 .chatRecieve {
-  height: 124px;
+  height: 62px;
   width: 100%;
   background: $white;
   padding: 10px 15px;
@@ -24,6 +24,11 @@
         height: 100%;
         width: 100%;
         outline: none;
+        resize: none;
+
+        &::-webkit-scrollbar{
+          width: 2px;
+        }
       }
       .smileImg {
         position: absolute;
@@ -41,11 +46,14 @@
   height: 62px;
   width: 100%;
   background: $white;
-  padding: 10px 20px;
+  padding: 20px 0px;
   display: flex !important;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  font: normal normal normal 14px/19px Roboto;
   letter-spacing: 0.84px;
   color: $closed;
+  font-family: Roboto;
+  font-size: $font14;
+  letter-spacing: 0.84px;
+  text-align: center;
 }

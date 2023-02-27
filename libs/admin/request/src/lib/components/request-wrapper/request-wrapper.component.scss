@@ -11,7 +11,7 @@
 }
 .request-wrapper-header {
   height: 65px;
-  padding:10px 42px 10px 15px;
+  padding: 10px 42px 10px 15px;
   background-color: $white;
   display: flex;
   justify-content: space-between;
@@ -22,12 +22,10 @@
   &-btnwrap {
     display: flex;
     &-btn {
+      @include primaryButton();
       width: 142px;
       height: 36px;
       padding: 8px 18px 8.2px 18.3px;
-      border-radius: 100px;
-      border: solid 1px $c-gray-87;
-      background-color: $button-blue;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -60,9 +58,9 @@
     @include margin-top(15px);
   }
   &-left {
-    width: 360px;
-    @media (max-width: $tablet) {
-      @include width(30.3%);
+    width: 27%;
+    @media (max-width: 1180px) {
+      @include width(35%);
     }
     position: relative;
     .blackscreen {
@@ -94,11 +92,11 @@
 }
 
 .guest-info-enable {
-  width: 23%;
+  width: 27%;
   height: 100%;
-  background: $white;
-  border-left: 1px solid $primary-gray;
-  max-width: 259px;
+  border-radius: 5px;
+  box-shadow: 0 3px 12px 0 rgb(0 0 0 / 12%);
+  background-color: #ffffff;
 }
 
 ::ng-deep .mat-tab-labels {
@@ -113,10 +111,4 @@
 :host ::ng-deep .mat-tab-nav-bar,
 .mat-tab-header {
   border: none !important;
-}
-.disabled {
-  pointer-events: none;
-  .blackscreen {
-    display: block !important;
-  }
 }

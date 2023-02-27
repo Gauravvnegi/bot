@@ -29,7 +29,12 @@
         </mat-select>
       </div>
       <div class="man-icon" (click)="openGuestInfo()">
-        <img class="icon" src="assets/images/guest-info-icon .png" [alt]="" />
+        <img
+          class="icon"
+          src="assets/images/guest-info-icon .png"
+          [alt]=""
+          *ngIf="!guestInfoEnable"
+        />
       </div>
     </div>
   </div>

@@ -159,6 +159,10 @@ td {
         }
       }
     }
+
+    &::-webkit-scrollbar{
+      width: 2px;
+    }
   }
 }
 

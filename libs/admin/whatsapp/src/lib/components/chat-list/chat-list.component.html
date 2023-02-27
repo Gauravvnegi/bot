@@ -33,52 +33,24 @@
           selected && selected.receiverId === contact.receiverId
             ? {
                 'pointer-events': 'none',
-                background: '#f1f1f1 0% 0% no-repeat padding-box'
+                background: '#f1f1f1'
               }
             : {}
         "
         *ngFor="let contact of chatList?.contacts"
         (click)="onChatSelect(contact)"
       >
-        <div
-          class="chatlist-item-wrapper-image"
-          [style.background]="contact.color"
-        >
-          <img
-            [src]="contact.profileUrl"
-            *ngIf="contact.profileUrl; else defaultAvatar"
-          />
-          <ng-template #defaultAvatar
-            ><div>{{ contact.getProfileNickName() }}</div></ng-template
-          >
-        </div>
-        <div class="chatlist-item-wrapper-content">
-          <div class="chatlist-item-wrapper-content-rnodate">
-            <div class="rno-number" *ngIf="contact.roomNo; else noRoom">
-              RNO: {{ contact.roomNo }}
-            </div>
-            <ng-template #noRoom><div class="rno-number"></div></ng-template>
-            <div class="time">
-              {{ contact.getTime(globalFilterService.timezone) }}
-            </div>
-          </div>
-          <div class="persons">
-            {{ contact.name || contact.phone }}
-          </div>
-          <div class="persons-about">
-            <div class="description-message">
-              {{
-                contact.descriptionMessage &&
-                contact.descriptionMessage.length > 31
-                  ? (contact.descriptionMessage | slice: 0:30) + '...'
-                  : contact.descriptionMessage
-              }}
-            </div>
-            <div class="unread-count" *ngIf="contact.unreadCount">
-              {{ contact.unreadCount }}
-            </div>
-          </div>
-        </div>
+        <hospitality-bot-chat-card
+          [content]="{
+            cardType: 'message',
+            roomNo: contact.roomNo,
+            userImg: contact.profileUrl,
+            name: contact.name || contact.phone,
+            remark: contact.descriptionMessage,
+            time: contact.getTime(globalFilterService.timezone),
+            unReadCount: contact?.unReadCount
+          }"
+        ></hospitality-bot-chat-card>
       </div>
     </div>
   </ng-container>

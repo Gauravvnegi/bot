@@ -7,6 +7,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  &-heading {
+    font-family: Roboto;
+    font-size: $font16;
+    font-weight: 500;
+    letter-spacing: 0.64px;
+    text-align: left;
+    color: $dark-blue;
+  }
   &-clear {
     display: flex;
     align-items: center;
@@ -36,7 +45,7 @@
   }
 }
 .cross {
-  font-size: 22px;
+  font-size: 16px;
   cursor: pointer;
   color: $primary-gray;
   &:hover {
@@ -71,9 +80,10 @@
         padding: 8px 15px;
         cursor: pointer;
         .sortItem {
-          font: normal normal normal 14px/19px Roboto;
+          font-family: Roboto;
+          font-size: $font14;
           letter-spacing: 0.84px;
-          color: $dark-blue;
+          text-align: left;
         }
       }
     }
@@ -105,7 +115,7 @@
     }
   }
   .applyBtnWrapper {
-    height: 62px;
+    height: 46px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -113,12 +123,18 @@
   .applyBtn {
     width: 138px;
     height: 36px;
-    background: $primary-purple 0% 0% no-repeat padding-box;
-    border-radius: 100px;
-    color: $white;
+    @include primaryButton();
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &-text {
+      font-family: Roboto;
+      font-size: $font14;
+      letter-spacing: 0.66px;
+      text-align: left;
+      color: $white;
+    }
   }
 }
 

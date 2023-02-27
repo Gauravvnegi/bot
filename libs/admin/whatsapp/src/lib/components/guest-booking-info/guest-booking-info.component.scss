@@ -3,6 +3,9 @@
 .container {
   height: calc(100vh - 307px);
   overflow-y: auto;
+  &::-webkit-scrollbar{
+    width: 2px;
+  }
   .booking-title {
     font-family: Roboto;
     font-size: 14px;

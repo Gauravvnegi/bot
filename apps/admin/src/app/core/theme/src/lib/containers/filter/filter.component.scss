@@ -74,17 +74,25 @@
   color: #c5c5c5;
   min-width: 3rem !important;
   .svg path {
-    fill:#c5c5c5; 
+    fill: #c5c5c5;
+  }
+
+  &:hover {
+    background-color: $list-item-hover;
   }
 }
 
 :host ::ng-deep .mat-tab-label-active {
-  background-color: #e8eef5;
+  background-color: #e8eef5 !important;
   color: $primary-purple;
   border-bottom: 1px solid $primary-purple;
   border-top: 1px solid $primary-purple;
   .svg path {
     fill: $primary-purple !important;
+  }
+
+  &:hover {
+    pointer-events: auto;
   }
 }
 
@@ -96,19 +104,12 @@
   display: block;
 }
 
-
 :host ::ng-deep .mat-ink-bar {
   display: none;
 }
 
 .apply-button {
-  background-color: $primary-purple;
-  border: none;
-  outline: none;
-  color: white;
-  font-size: $font14;
-  font-weight: $medium;
-  border-radius: 25px;
+  @include primaryButton();
   padding: 12px 0px;
   width: 155px;
   margin-bottom: 28px;

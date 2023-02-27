@@ -23,31 +23,9 @@
           <img src="assets/svg/CSV.svg" alt="csv" />
           <div>Export Chat</div>
         </div>
-        <div
-          class="guestInfoEditWrapper"
-          isFeatureSubscribed
-          [paths]="[productName.request]"
-        >
-          <div
-            class="guestInfoEditContainer"
-            *ngIf="buttonConfig[selectedIndex].button"
-            (click)="handleButtonClick()"
-          >
-            <img [src]="buttonConfig[selectedIndex].icon" alt="" />
-            <div class="guestInfoEditText">
-              {{ buttonConfig[selectedIndex].label }}
-            </div>
-          </div>
-        </div>
-        <mat-slide-toggle
-          featureSubscribed
-          [feature]="productName.whatsappBot"
-          formControlName="status"
-          (change)="onLiveChatChange()"
-          [disabled]="liveChatStatus.value"
-          >Hand Over to Bot</mat-slide-toggle
-        >
+    
         <img
+        *ngIf="!guestInfoEnable"
           class="icon"
           src="assets/images/guest-info-icon .png"
           [alt]=""
@@ -61,7 +39,7 @@
     *ngIf="chatDates.length; else noChat"
     [ngStyle]="
       chatFG && chatList.receiver[selectedChat.receiverId]?.checkEnableSend()
-        ? { height: 'calc(100% - 186px)' }
+        ? { height: 'calc(100% - 125px)' }
         : { height: 'calc(100% - 124px)' }
     "
     #scrollMe

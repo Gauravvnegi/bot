@@ -260,6 +260,7 @@
 
       .router__wrapper {
         @include padding(5px);
+        min-height: calc(100vh - 12.5vh);
         // @include padding-top(1.5rem);
         @media only screen and (max-width: 1300px) {
           @include padding(0 10px);

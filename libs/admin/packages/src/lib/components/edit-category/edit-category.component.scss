@@ -150,10 +150,6 @@
   }
 }
 
-:host ::ng-deep .upload__box {
-  border: 1px dashed $light-grey;
-}
-
 :host ::ng-deep .mat-select-value-text {
   font-size: $font14;
   color: $dark-blue;

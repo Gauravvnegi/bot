@@ -32,8 +32,8 @@
       </div>
       <hospitality-bot-custom-file-upload
         formControlName="imageUrls"
-        [multipleFileUpload]="true"
         [hotelId]="hotelId"
+        [limit]="4"
       ></hospitality-bot-custom-file-upload>
     </div>
     <p class="upload-image-note">{{ 'note.imageNote' | translate }}</p>

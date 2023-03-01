@@ -1,37 +1,79 @@
-<div class="upload-image-boxes" *ngIf="multipleFileUpload">
-  <div *ngFor="let url of tempFileUrl; let i = index">
-    <div class="image-box">
-      <mat-icon
-        mat-icon-button
-        class="delete-icon"
-        *ngIf="i !== tempFileUrl.length - 1"
-        matTooltip="Delete File"
-        (click)="deleteFile(i)"
-        >close</mat-icon
-      >
+<input
+  #fileInput
+  type="file"
+  [accept]="
+    baseType == 'image' ? 'image/*' : baseType == 'video' ? 'video/*' : ''
+  "
+  (click)="fileInput.value = null"
+  [disabled]="isDisable"
+  (change)="onSelectFile($event)"
+  class="input-upload"
+  style="display: none;"
+/>
 
-      <hospitality-bot-upload-file
-        [fileUploadData]="fileUploadData"
-        [isDisable]="false"
-        (fileData)="uploadFile($event, i)"
-        [url]="url"
-        [doNotSave]="i === tempFileUrl.length - 1"
-      >
-      </hospitality-bot-upload-file>
+<div class="wrapper">
+  <div class="label" *ngIf="label != ''">{{ label }}</div>
+  <div *ngIf="limit !== 1" class="description">{{ description }}</div>
+
+  <div class="upload-boxes">
+    <div
+      [ngClass]="{ 'd-flex': limit == 1 }"
+      *ngFor="let url of fileUrls; let i = index"
+    >
+      <div>
+        <img
+          file-upload-css
+          loading="'lazy'"
+          [src]="baseType == 'image' ? url : thumbUrl"
+          class="box"
+          [style.display]="url != defaultImage || thumbUrl ? 'block' : 'none'"
+        />
+        <div class="box" *ngIf="url == defaultImage && !thumbUrl">
+          <img class="upload-icon" [src]="url" alt="upload-icon" />
+        </div>
+      </div>
+
+      <div [style.display]="limit == 1 ? 'flex' : ''" class="right-content">
+        <div *ngIf="limit == 1" class="content">{{ description }}</div>
+        <div [style.width]="limit == 1 ? '302px' : '200px'" class="hint">
+          {{ hint }}
+        </div>
+        <div
+          class="upload-button"
+          [style.margin-top]="limit == 1 ? 'auto' : ''"
+          [ngStyle]="{
+            'margin-top': limit == 1 ? 'auto' : '',
+            'justify-content':
+              limit !== 1 && url !== defaultImage ? 'center' : 'space-between'
+          }"
+        >
+          <div *ngIf="url == defaultImage && !thumbUrl">
+            <p class="btn" (click)="uploadFiles(i)">Upload</p>
+          </div>
+          <div *ngIf="url !== defaultImage || thumbUrl">
+            <p class="btn" (click)="uploadFiles(i)">Change</p>
+          </div>
+          <div *ngIf="url !== defaultImage || thumbUrl">
+            <p
+              *ngIf="limit == 1"
+              class="remove-image-button"
+              (click)="removeImage(i)"
+            >
+              Remove
+              {{ this.baseType.charAt(0).toUpperCase() + baseType.slice(1) }}
+            </p>
+            <div>
+              <img
+                class="delete-icon"
+                *ngIf="limit !== 1"
+                (click)="removeImage(i)"
+                src="assets/images/delete-icon.png"
+                alt=""
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-
-<div
-  *ngIf="!multipleFileUpload"
-  class="image-box"
-  [ngClass]="{ 'ml-40': !multipleFileUpload }"
->
-  <hospitality-bot-upload-file
-    [fileUploadData]="fileUploadData"
-    [isDisable]="false"
-    (fileData)="uploadFile($event, 0)"
-    [url]="imageUrl[0]"
-  >
-  </hospitality-bot-upload-file>
 </div>

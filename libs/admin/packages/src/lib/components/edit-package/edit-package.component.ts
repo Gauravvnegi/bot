@@ -14,6 +14,7 @@ import {
 } from '../../data-models/packageConfig.model';
 import { PackageService } from '../../services/package.service';
 import { ConfigService } from '@hospitality-bot/admin/shared';
+import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-type.model';
 
 @Component({
   selector: 'hospitality-bot-edit-package',
@@ -24,13 +25,9 @@ export class EditPackageComponent implements OnInit, OnDestroy {
   @Input() id: string;
 
   private $subscription: Subscription = new Subscription();
-
-  fileUploadData = {
-    fileSize: 3145728,
-    fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
-  };
-
   currency: IpackageOptions[];
+  fileUploadType = FileUploadType;
+  pathToUploadFile = 'static-content/packages';
 
   packageType: IpackageOptions[] = [
     { key: 'Complimentary', value: 'Complimentary' },
@@ -273,40 +270,6 @@ export class EditPackageComponent implements OnInit, OnDestroy {
 
   redirectToPackages() {
     this.router.navigate(['/pages/library/package']);
-  }
-
-  uploadFile(event): void {
-    const formData = new FormData();
-    formData.append('files', event.file);
-    this.$subscription.add(
-      this.packageService.uploadImage(this.hotelId, formData).subscribe(
-        (response) => {
-          this.packageForm.get('imageUrl').patchValue(response.fileDownloadUri);
-          this.packageForm.get('imageName').patchValue(response.fileName);
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.SUCCESS.PACKAGE_IMAGE_UPLOADED',
-                priorityMessage: 'Package image uploaded successfully.',
-              },
-              '',
-              { panelClass: 'success' }
-            )
-            .subscribe();
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      )
-    );
   }
 
   updatePackage(): void {

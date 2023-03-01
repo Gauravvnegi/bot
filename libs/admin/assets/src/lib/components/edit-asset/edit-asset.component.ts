@@ -9,6 +9,7 @@ import { Asset } from '../../data-models/assetConfig.model';
 import { AssetService } from '../../services/asset.service';
 import { TranslateService } from '@ngx-translate/core';
 import { assetConfig } from '../../constants/asset';
+import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-type.model';
 
 @Component({
   selector: 'hospitality-bot-edit-asset',
@@ -26,6 +27,8 @@ export class EditAssetComponent implements OnInit, OnDestroy {
   hotelId: any;
   globalQueries = [];
   assetId: string;
+  fileUploadType = FileUploadType;
+  pathToUploadFile = 'static-content/assets';
 
   constructor(
     private router: Router,
@@ -178,87 +181,6 @@ export class EditAssetComponent implements OnInit, OnDestroy {
    */
   redirectToAssets() {
     this._location.back();
-  }
-
-  /**
-   * @function uploadFile To upload image and video file.
-   * @param event url of uploadFile.
-   */
-  uploadFile(event): void {
-    const formData = new FormData();
-    formData.append('files', event.file);
-    if (this.assetType === assetConfig.type.video) {
-      const thumbnailData = new FormData();
-      thumbnailData.append('files', event.thumbnailFile);
-      this.$subscription.add(
-        forkJoin({
-          videoFile: this.assetService.uploadImage(this.hotelId, formData),
-          thumbnail: this.assetService.uploadImage(this.hotelId, thumbnailData),
-        }).subscribe(
-          (response) => {
-            this.assetForm.patchValue({
-              url: response.videoFile.fileDownloadUri,
-              thumbnailUrl: response.thumbnail.fileDownloadUri,
-            });
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'message.success.upload',
-                  priorityMessage: 'Asset Uploaded Successfully.',
-                },
-                '',
-                {
-                  panelClass: 'success',
-                }
-              )
-              .subscribe();
-          },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'message.error.upload_fail',
-                  priorityMessage: error.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
-        )
-      );
-    } else {
-      this.$subscription.add(
-        this.assetService.uploadImage(this.hotelId, formData).subscribe(
-          (response) => {
-            this.assetForm.get('url').patchValue(response.fileDownloadUri);
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'message.success.upload',
-                  priorityMessage: 'Asset Uploaded Successfully.',
-                },
-                '',
-                {
-                  panelClass: 'success',
-                }
-              )
-              .subscribe();
-            this.isSavingasset = false;
-          },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'message.error.upload_fail',
-                  priorityMessage: error.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
-        )
-      );
-    }
   }
 
   /**

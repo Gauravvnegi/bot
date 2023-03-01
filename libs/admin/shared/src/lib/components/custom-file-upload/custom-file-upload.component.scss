@@ -1,30 +1,90 @@
-.image-box {
-  width: 219px;
-  height: 160px;
-  border-radius: 5px;
-  border: 1px solid #d9d9d9;
-  background-color: #fff;
-  position: relative;
+.right-content {
+  flex-direction: column;
 }
 
-.upload-image-boxes {
+.d-flex {
   display: flex;
-  margin-left: 40px;
-  flex-wrap: wrap;
-  gap: 13.8px;
+  gap: 20px;
 }
 
-.ml-40 {
-  margin-left: 40px;
+.remove-image-button {
+  color: #e80000;
+  cursor: pointer;
 }
 
 .delete-icon {
+  color: #e80000;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+}
+
+.content {
+  width: 324px;
+}
+
+.label {
+  opacity: 0.75;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+  color: #00162b;
+}
+
+.description {
+  margin-top: 12px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: normal;
+  color: #002046;
+}
+
+.upload-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.box {
+  width: 245px;
+  height: 187px;
+  border-radius: 6px;
+  background-color: #e5e5e5;
+  position: relative;
+}
+.upload-icon {
   position: absolute;
-  top: 0;
-  right: 2px;
-  z-index: 10;
-  color: white;
-  cursor: grab;
-  filter: brightness(200%);
-  box-shadow: inset 0 0 10px #000000;
+  top: 79px;
+  left: 103px;
+  right: 103.6px;
+  bottom: 79.2px;
+  width: 38.4px;
+  height: 28.8px;
+  object-fit: contain;
+}
+
+.hint {
+  margin-top: 10px;
+  font-family: Roboto;
+  font-size: 14px;
+  color: #9eaeb8;
+  word-wrap: break-word;
+}
+
+.upload-button {
+  margin-top: 15px;
+  max-width: 245px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn {
+  padding: 12px 25.6px 13px 26px;
+  border: solid 1px #5f38f9;
+  border-radius: 8px;
+  color: #5f38f9;
+  cursor: pointer;
 }

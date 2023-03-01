@@ -11,6 +11,7 @@ import {
 import { Package } from '../../data-models/packageConfig.model';
 import { CategoriesService } from '../../services/category.service';
 import { PackageService } from '../../services/package.service';
+import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-type.model';
 
 @Component({
   selector: 'hospitality-bot-edit-category',
@@ -19,12 +20,6 @@ import { PackageService } from '../../services/package.service';
 })
 export class EditCategoryComponent implements OnInit, OnDestroy {
   private $subscription: Subscription = new Subscription();
-
-  fileUploadData = {
-    fileSize: 3145728,
-    fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
-  };
-
   categoryForm: FormGroup;
   hotelCategory: CategoryDetail;
   categoryId: string;
@@ -33,14 +28,16 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   subPackages: IPackage[];
   globalQueries = [];
 
+  fileUploadType = FileUploadType;
+  pathToUploadFile = 'static-content/packages';
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
-    private categoriesService: CategoriesService,
-    private packageService: PackageService
+    private categoriesService: CategoriesService
   ) {
     this.initAddCategoryForm();
   }
@@ -222,42 +219,6 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
-  }
-
-  uploadFile(event): void {
-    const formData = new FormData();
-    formData.append('files', event.file);
-    this.$subscription.add(
-      this.packageService.uploadImage(this.hotelId, formData).subscribe(
-        (response) => {
-          this.categoryForm
-            .get('imageUrl')
-            .patchValue(response.fileDownloadUri);
-          this.categoryForm.get('imageName').patchValue(response.fileName);
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.SUCCESS.CATEGORY_IMAGE_UPLOADED',
-                priorityMessage: 'Category image uploaded successfully.',
-              },
-              '',
-              { panelClass: 'success' }
-            )
-            .subscribe();
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      )
-    );
   }
 
   redirectToCategories() {

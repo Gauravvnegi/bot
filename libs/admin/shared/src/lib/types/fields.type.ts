@@ -15,3 +15,8 @@ export type ModalAction = {
 };
 
 export type ModalContent = { heading: string; description: string[] };
+
+export type UploadFileData = {
+  maxFileSize: number;
+  fileType: string[];
+};

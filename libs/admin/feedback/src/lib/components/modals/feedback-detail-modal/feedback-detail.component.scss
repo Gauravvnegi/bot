@@ -42,16 +42,15 @@
       background-color: $booking-feedback-opacity;
     }
 
-    .feedback-container{
+    .feedback-container {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      width:max-content;
+      width: max-content;
 
-     &-data{
-        margin-right:20px;
+      &-data {
+        margin-right: 20px;
       }
-      
     }
   }
 }
@@ -125,7 +124,6 @@
       letter-spacing: 0.84px;
       text-align: left;
       color: $button-blue;
-
     }
   }
   .guestInfoEditWrapper {
@@ -466,11 +464,13 @@
       padding: 4px 10px;
       display: flex;
       align-items: center;
-      margin-right:20px;
+      margin-right: 20px;
       &__text {
         color: $booking-feedback;
         padding-top: 2px;
         margin-right: 12px !important;
+        white-space: normal;
+        word-break: break-all;
       }
     }
     &__comment {

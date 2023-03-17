@@ -495,6 +495,8 @@
       &__text {
         color: $primary-purple;
         padding-top: 2px;
+        white-space: normal;
+        word-break: break-all;
       }
     }
     &__comment {

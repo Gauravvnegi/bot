@@ -422,6 +422,8 @@
       &__text {
         color: $primary-purple;
         padding-top: 2px;
+        white-space: normal;
+        word-break: break-all;
       }
     }
     &__comment {
@@ -504,7 +506,6 @@
 
   @media screen and (max-width: 1050px) {
     margin: 0;
-    margin-top: 7px;
     .feedback-icon {
       height: 12px;
     }

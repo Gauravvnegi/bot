@@ -9,6 +9,12 @@
   @media only screen and (max-width: $M) {
     padding: $padding-small;
   }
+  &--logo {
+    height: 70px;
+    img {
+      max-height: 100%;
+    }
+  }
 }
 
 .template__header--heading {

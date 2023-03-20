@@ -9,13 +9,11 @@
   @media only screen and (max-width: $M) {
     padding: $padding-small;
   }
-  &--logo{
-    @media only screen and (max-width: $M) {
-      img{
-        width: 100%;
-      }
+  &--logo {
+    height: 70px;
+    img {
+      height: 100%;
     }
-  
   }
 }
 

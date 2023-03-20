@@ -43,6 +43,8 @@ Deploy_Web:
     - cat "$DEPLOYMENT_FILE" > deployment.yaml
     - cat "$KUBE_CONFIG_FILE" > k8s-config.yaml
     - export KUBECONFIG=k8s-config.yaml
+    - kubectl get pods
+    - cat deployment.yaml
     - sed -i "s/latest/${IMAGE_TAG}/g" deployment.yaml
     - kubectl apply -f deployment.yaml --validate=false
   tags:

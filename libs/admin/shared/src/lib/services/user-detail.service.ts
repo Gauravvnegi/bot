@@ -1,14 +1,23 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
-import { UserConfig } from '../../../../shared/src/lib/models/userConfig.model';
+import {
+  Hotel,
+  Hotels,
+  UserConfig,
+} from '../../../../shared/src/lib/models/userConfig.model';
+import { UserData } from '../types/user.type';
+
 @Injectable({ providedIn: 'root' })
 export class UserService extends ApiService {
-  userDetails;
+  userDetails: UserConfig;
   userPermissions;
+  hotels: Hotels;
 
   initUserDetails(data) {
     this.userDetails = new UserConfig().deserialize(data);
+    if (data.hotelAccess?.chains[0]?.hotels?.length)
+      this.hotels = new Hotels().deserialize(data.hotelAccess.chains[0].hotels);
   }
 
   setLoggedInUserId(userId) {
@@ -34,7 +43,7 @@ export class UserService extends ApiService {
     );
   }
 
-  getUserDetailsById(userId): Observable<any> {
+  getUserDetailsById(userId): Observable<UserData> {
     return this.get(`/api/v1/user/${userId}`);
   }
 

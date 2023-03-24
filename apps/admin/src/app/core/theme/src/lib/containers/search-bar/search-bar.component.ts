@@ -158,7 +158,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
 
   openEditPackage(id: string) {
     this.searchDropdownVisible = false;
-    this.router.navigateByUrl(`/pages/library/package/edit/${id}`);
+    this.router.navigateByUrl(`/pages/library/packages/edit/${id}`);
   }
 
   clearSearch() {

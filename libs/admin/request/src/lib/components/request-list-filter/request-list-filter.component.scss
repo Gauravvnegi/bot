@@ -36,7 +36,7 @@
         color: $primary-gray;
         margin-right: 5px;
         &:hover {
-          color: $primary-purple;
+          color: $primary-cta;
         }
       }
     }
@@ -47,7 +47,7 @@
   cursor: pointer;
   color: $primary-gray;
   &:hover {
-    color: $primary-purple;
+    color: $primary-cta;
   }
 }
 .sortFilterWrapper {
@@ -142,7 +142,7 @@
 .material-icon {
   color: $primary-gray;
   &:hover {
-    color: $primary-purple;
+    color: $primary-cta;
   }
 }
 

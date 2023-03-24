@@ -194,7 +194,7 @@
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
 }
 
 :host ::ng-deep .data-table-row {
@@ -211,4 +211,9 @@
 }
 :host ::ng-deep .table-header-text {
   color: $dark-blue !important;
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include table-cell-padding(0.3em);
 }

@@ -4,13 +4,13 @@
   width: 100%;
   input {
     padding-left: 10px;
-  background: $c-gray-100 0% 0% no-repeat padding-box;
-  border: 1px solid $c-gray-84;
-  border-radius: 5px;
-  opacity: 1;
-  height: 45px;
-  width: 100%;
-  outline: none;
+    background: $c-gray-100 0% 0% no-repeat padding-box;
+    border: 1px solid $c-gray-84;
+    border-radius: 5px;
+    opacity: 1;
+    height: 45px;
+    width: 100%;
+    outline: none;
     &::placeholder {
       font-style: italic;
       font-size: 12px;
@@ -25,11 +25,11 @@
       }
     }
     &:focus {
-      border: 1px solid $primary-purple;
+      border: 1px solid $primary-cta;
       box-shadow: none;
     }
     &:hover {
-      border-color: $primary-purple;
+      border-color: $primary-cta;
     }
   }
 }

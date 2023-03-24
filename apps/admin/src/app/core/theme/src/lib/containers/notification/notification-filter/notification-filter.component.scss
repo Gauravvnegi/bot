@@ -6,7 +6,7 @@
   height: 100%;
   .header {
     font-size: 14px;
-    color: $primary-purple;
+    color: $primary-cta;
     cursor: pointer;
     @include flex-between-center();
     &--title {
@@ -20,7 +20,7 @@
       font-size: 14px;
       color: #b5b5c3;
       &:hover {
-        color: $primary-purple;
+        color: $primary-cta;
       }
       img {
         height: 29px;
@@ -57,7 +57,7 @@
     width: 172px;
     height: 46px;
     border-radius: 23px;
-    background-color: $primary-purple;
+    background-color: $primary-cta;
     color: #ffffff;
     font-size: 16px;
     font-weight: 500;
@@ -81,7 +81,7 @@
     color: #00162b;
   }
   .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-    background-color: $primary-purple;
+    background-color: $primary-cta;
   }
   .mat-checkbox-background {
     background-color: #e5e5e5;

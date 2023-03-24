@@ -4,10 +4,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { TranslateService } from '@ngx-translate/core';
+import { NavRouteOptions } from 'libs/admin/shared/src/lib/types/common.type';
 import { Subscription } from 'rxjs';
 import { Topic } from '../../data-models/topicConfig.model';
 import { TopicService } from '../../services/topic.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-edit-topic',
@@ -24,6 +25,14 @@ export class EditTopicComponent implements OnInit, OnDestroy {
   hotelId: string;
   isSavingTopic = false;
   globalQueries = [];
+
+  navRoutes: NavRouteOptions = [
+    { label: 'Library', link: './' },
+    { label: 'Topics', link: '/pages/library/packages' },
+    { label: 'Create Topic', link: './' },
+  ];
+
+  pageTitle = 'Create Topic';
 
   constructor(
     private _fb: FormBuilder,
@@ -147,6 +156,8 @@ export class EditTopicComponent implements OnInit, OnDestroy {
         if (params['id']) {
           this.topicId = params['id'];
           this.getTopicDetails(this.topicId);
+          this.pageTitle = 'Edit Topic';
+          this.navRoutes[2].label = 'Edit Topic';
         } else if (this.id) {
           this.topicId = this.id;
           this.getTopicDetails(this.topicId);

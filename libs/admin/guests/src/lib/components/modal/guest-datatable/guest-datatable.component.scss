@@ -25,7 +25,7 @@
   text-align: center;
   @include font-size(25);
   font-weight: $bolder;
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 .spinner {
@@ -35,7 +35,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 
   border-radius: 100%;
   display: inline-block;
@@ -166,5 +166,12 @@
   &:hover {
     cursor: pointer;
     background: $table-popup-background !important;
+  }
+}
+
+// added for now
+:host ::ng-deep .p-datatable {
+  .p-datatable-thead {
+    position: static !important;
   }
 }

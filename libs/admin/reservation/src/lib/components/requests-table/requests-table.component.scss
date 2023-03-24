@@ -50,6 +50,7 @@
 }
 
 :host ::ng-deep .message {
+  white-space: normal !important;
   p {
     margin-bottom: 10px;
   }
@@ -188,4 +189,12 @@
 }
 :host::ng-deep .p-datatable-resizable > .p-datatable-wrapper {
   margin-bottom: 1rem !important;
+}
+
+
+:host ::ng-deep .p-datatable {
+  .p-datatable-thead {
+    position: static !important;
+  }
+  @include table-cell-padding(0.3em);
 }

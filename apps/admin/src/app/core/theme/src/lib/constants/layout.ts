@@ -1,15 +1,36 @@
+export enum UserDropdown {
+  PROFILE = 'profile',
+  LOGOUT = 'logout',
+  MANAGE_SITES = 'manageSites',
+}
+
 export const layoutConfig = {
   profile: [
-    { label: 'Profile', value: 'profile' },
-    { label: 'Logout', value: 'logout' },
+    { label: 'Go to my Profile', value: UserDropdown.PROFILE },
+    { label: 'Manage Sites', value: UserDropdown.MANAGE_SITES },
+    { label: 'Logout', value: UserDropdown.LOGOUT },
   ],
-  userDropdown: {
-    profile: 'profile',
-    logout: 'logout',
-  },
+
   feedback: {
     transactional: 'TRANSACTIONALFEEDBACK',
     stay: 'STAYFEEDBACK',
   },
-  notificationDelayTime:5
+  notificationDelayTime: 5,
 };
+
+/**
+ * @constant defaultProduct  [Menu Items]
+ * These are default products, that are not subscription based
+ * Add to get subscription api
+ */
+export const defaultProduct = [
+  {
+    name: 'SETTINGS',
+    label: 'Settings',
+    description: 'Settings Page',
+    icon: 'assets/svg/settings.svg',
+    config: [],
+    isSubscribed: true,
+    isView: true,
+  },
+];

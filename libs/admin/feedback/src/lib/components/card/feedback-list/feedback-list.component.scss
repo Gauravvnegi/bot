@@ -33,7 +33,7 @@
     }
     .item {
       border-bottom: 1px solid $c-gray-102;
-      padding: 10px;
+      padding: 10px 5px;
       display: flex;
       cursor: pointer;
       &__logo {
@@ -156,8 +156,8 @@
     height: 53px !important;
   }
   .mat-tab-label-active {
-    border-bottom: 2px solid $primary-purple;
-    color: $primary-purple;
+    border-bottom: none;
+    color: $primary-cta;
   }
   .mat-tab-header {
     border-bottom: 2px solid $c-gray-102 !important;
@@ -172,7 +172,7 @@
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 .spinner {
@@ -182,7 +182,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 
   border-radius: 100%;
   display: inline-block;

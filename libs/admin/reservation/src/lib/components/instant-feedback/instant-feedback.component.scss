@@ -69,7 +69,7 @@
 }
 
 .data-seperator {
-  border: 2px solid $primary-purple;
+  border: 2px solid $primary-cta;
   margin: $margin20 0px;
   opacity: 0.1;
 }
@@ -95,7 +95,7 @@
 }
 
 :host ::ng-deep .expand-icon {
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 :host ::ng-deep .mat-expansion-indicator {
@@ -204,7 +204,7 @@
   margin: 0 50px 0 60px;
   padding: 0px 0px 0px 10px;
   border-radius: 6px;
-  border: solid 1px $primary-purple;
+  border: solid 1px $primary-cta;
   background-color: $c-gray-93;
   display: flex;
   justify-content: left;
@@ -218,9 +218,9 @@
     line-height: normal;
     letter-spacing: 0.66px;
     text-align: right;
-    color: $primary-purple;
+    color: $primary-cta;
     padding-right: 10px;
-    border-right: solid 2px $primary-purple;
+    border-right: solid 2px $primary-cta;
     height: 20px;
     padding-top: 4px;
     img {

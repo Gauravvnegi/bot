@@ -57,7 +57,7 @@
 }
 
 @mixin admin-panel-button() {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   border: none;
   outline: none;
   color: white;
@@ -67,7 +67,7 @@
   padding: 12px 0px;
   width: $normal-button-width;
   opacity: 0.85;
-  box-shadow: 0px 0px 5px 0px $primary-purple;
+  box-shadow: 0px 0px 5px 0px $primary-cta;
   &:hover {
     cursor: pointer;
     opacity: 1;
@@ -247,30 +247,27 @@
   text-align: center !important;
 }
 
-@mixin buttonWrapper() {
-}
-
 @mixin primaryButton() {
   color: $white;
   font-size: $font14;
-  background-color: $primary-btn;
+  background-color: $primary-cta;
   width: 10vw;
   border: none;
-  border-radius: 2px;
+  border-radius: 3px;
   cursor: pointer;
   &:hover {
     background-color: $primary-hover;
   }
   &:active :focus {
-    background-color: $primary-pressed;
+    background-color: $primary-active;
   }
 }
 
 @mixin secondaryButton() {
   @include primaryButton();
-  border: 1px solid $primary-btn;
+  border: 1px solid $primary-cta;
   background-color: $white;
-  color: $primary-btn;
+  color: $primary-cta;
 
   &:hover {
     background-color: $white;
@@ -278,13 +275,13 @@
   }
 
   &:focus :active {
-    color: $primary-pressed;
+    color: $primary-active;
   }
 }
 
 @mixin chatList() {
   height: auto;
-  padding: 12px 15px;
+  padding: 10.5px 15px;
   display: flex;
   border-bottom: 1px solid $c-gray-95;
 
@@ -302,5 +299,99 @@
   &:hover {
     cursor: pointer;
     font-weight: normal;
+  }
+}
+
+@mixin formBlock() {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 25px 4% 25px;
+  column-gap: 6%;
+  row-gap: 40px;
+  border-radius: 8px;
+
+  background-color: $white;
+
+  .code {
+    flex-basis: 65%;
+    color: $dark-blue2;
+
+    &__label {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.96px;
+    }
+
+    &__hash {
+      font-size: 14px;
+      letter-spacing: 0.84px;
+    }
+  }
+
+  .des-template {
+    flex-basis: 100%;
+
+    &__label {
+      color: $dark-blue2;
+      font-size: 16px;
+      letter-spacing: 0.96px;
+      font-weight: 500;
+    }
+
+    &__input {
+      margin-top: 17px;
+    }
+  }
+
+  /* To be used as wrapper */
+  /* Input in single line with less width */
+  .container {
+    display: flex;
+    flex-basis: 100%;
+  }
+
+  .status {
+    flex-grow: 1;
+  }
+
+  .half-width {
+    flex-basis: 47%;
+  }
+
+  .full-width {
+    flex-basis: 100%;
+  }
+
+  .three-fourth {
+    flex-basis: 29%;
+  }
+
+  .upload {
+    flex-basis: 100%;
+  }
+
+  .create-btn {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@mixin table-cell-padding($horizontalPadding) {
+  .p-datatable-tbody {
+    tr {
+      td {
+        padding: 10px $horizontalPadding !important;
+      }
+    }
+  }
+
+  .p-datatable-thead {
+    tr {
+      th {
+        padding: 10px $horizontalPadding !important;
+      }
+    }
   }
 }

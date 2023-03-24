@@ -10,14 +10,27 @@ export type RoomResponse = {
     roomCount: number;
     maxChildren: number;
     maxAdult: number;
-    totalOccupancy: number;
+    totalOccupancy?: number; // Is it not required
+    activeRoomCount: number;
+    soldOutCount: number;
+    soldOut: boolean;
+    unavailableRoomCount: number;
   };
   roomStatus: RoomStatus;
-  source: string;
+  source?: string;
   price: number;
   currency: string;
-  created: string;
-  updated: string;
+  created: number;
+  updated: number;
+};
+
+export type RoomByIdResponse = {
+  rooms: RoomResponse[];
+  roomCount: number;
+  soldOutCount: number;
+  maxChildren: number;
+  maxAdult: number;
+  soldOut: boolean;
 };
 
 export type RoomListResponse = {
@@ -40,11 +53,10 @@ export type RoomTypeResponse = {
   currency: string;
   originalPrice: number;
   discountedPrice: number;
-  roomCount: {
-    active: number;
-    unavailable: number;
-    soldOut: number;
-  };
+  roomCount: number;
+  activeRoomCount: number;
+  unavailableRoomCount: number;
+  soldOutCount: number;
   maxChildren: number;
   maxAdult: number;
   area: number;
@@ -74,6 +86,11 @@ export type AmenityResponse = {
   entityTypeLabels: string[];
   entityStateLabels: string[];
   entityCategory: string;
+};
+
+export type ServiceResponse = {
+  paidPackages: Amenity[];
+  complimentaryPackages: Amenity[];
 };
 
 export type Amenity = {

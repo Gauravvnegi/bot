@@ -1,0 +1,32 @@
+<div class="wrapper">
+  <div class="form-block" [formGroup]="useForm">
+    <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      label="Category Name"
+      maxLength="60"
+    ></hospitality-bot-input>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="active"
+      label="Status"
+    ></hospitality-bot-toggle-switch>
+    <hospitality-bot-input
+      class="full-width"
+      controlName="description"
+      label="Description"
+    ></hospitality-bot-input>
+    <hospitality-bot-custom-file-upload
+      class="full-width"
+      class="upload"
+      formControlName="imageUrl"
+      description="Optional to add an image"
+      [hotelId]="hotelId"
+    ></hospitality-bot-custom-file-upload>
+    <hospitality-bot-button
+      class="create-btn"
+      label="Create"
+      (onClick)="create()"
+    ></hospitality-bot-button>
+  </div>
+</div>

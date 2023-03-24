@@ -1,6 +1,6 @@
 export const contactConfig = {
   datatable: {
-    title:'Manage Contacts',
+    title: 'Manage Contacts',
     cols: [
       {
         field: 'email',
@@ -8,7 +8,7 @@ export const contactConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: true,
-        width: '30%',
+        width: '17.5%',
       },
       {
         field: 'salutation',
@@ -16,7 +16,7 @@ export const contactConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: true,
-        width: '100px',
+        width: '15%',
       },
       {
         field: 'firstName',
@@ -24,7 +24,7 @@ export const contactConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: false,
-        width: '',
+        width: '15%',
       },
       {
         field: 'lastName',
@@ -32,7 +32,7 @@ export const contactConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: false,
-        width: '',
+        width: '15%',
       },
       {
         field: 'companyName',
@@ -40,7 +40,7 @@ export const contactConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: false,
-        width: '',
+        width: '17.5%',
       },
       {
         field: 'mobile',
@@ -48,16 +48,16 @@ export const contactConfig = {
         isSort: true,
         sortType: 'number',
         dynamicWidth: true,
-        width: '170px',
+        width: '20%',
       },
     ],
-    dialogWidth:'550',
-    salutationList : [
+    dialogWidth: '550',
+    salutationList: [
       { name: 'Mr.', value: 'Mr.' },
       { name: 'Mrs.', value: 'Mrs.' },
       { name: 'Miss', value: 'Miss' },
     ],
-    fileUploadData : {
+    fileUploadData: {
       fileSize: 3145728,
       fileType: ['csv'],
     },

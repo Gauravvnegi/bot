@@ -21,7 +21,7 @@
   padding: 8px 49px 9px 50px;
   margin: 30px auto;
   border-radius: 18px;
-  border: solid 1px $primary-purple;
+  border: solid 1px $primary-cta;
   font-family: Roboto;
   font-size: 13px;
   font-weight: 500;
@@ -30,7 +30,7 @@
   line-height: normal;
   letter-spacing: 0.78px;
   text-align: center;
-  color: $primary-purple;
+  color: $primary-cta;
   cursor: pointer;
 }
 
@@ -44,7 +44,7 @@
   padding: 8px 44px 9px 45px;
   margin: 30px auto;
   border-radius: 18px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   font-family: Roboto;
   font-size: 13px;
   font-weight: 500;
@@ -147,7 +147,7 @@
       line-height: normal;
       letter-spacing: 0.78px;
       text-align: right;
-      color: $primary-purple;
+      color: $primary-cta;
       cursor: pointer;
     }
   }

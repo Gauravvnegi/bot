@@ -81,11 +81,11 @@
     opacity: 1;
   }
   &:focus {
-    border: 1px solid $primary-purple;
+    border: 1px solid $primary-cta;
     box-shadow: none;
   }
   &:hover {
-    border-color: $primary-purple;
+    border-color: $primary-cta;
   }
 }
 

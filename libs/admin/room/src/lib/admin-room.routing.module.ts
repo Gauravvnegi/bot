@@ -5,7 +5,8 @@ import { MainComponent } from './components/main/main.component';
 import { RoomDataTableComponent } from './components/room-data-table/room-data-table.component';
 import { RoomTypeComponent } from './components/room-type/room-type.component';
 import { RoomComponent } from './components/room/room.component';
-import routes from './config/routes';
+import { ServicesComponent } from './components/services/services.component';
+import routes from './constant/routes';
 
 export const adminRoomRoutes: Route[] = [
   {
@@ -23,7 +24,22 @@ export const adminRoomRoutes: Route[] = [
 
       {
         path: routes.addRoomType,
-        component: RoomTypeComponent,
+        component: MainComponent,
+        children: [
+          {
+            path: routes.services,
+            component: ServicesComponent,
+            pathMatch: 'full',
+          },
+          {
+            path: ':id',
+            component: RoomTypeComponent,
+          },
+          {
+            path: '',
+            component: RoomTypeComponent,
+          },
+        ],
       },
     ],
   },
@@ -39,7 +55,7 @@ export class AdminRoomRoutingModule {
     RoomDataTableComponent,
     MainComponent,
     AddRoomComponent,
-
     RoomTypeComponent,
+    ServicesComponent,
   ];
 }

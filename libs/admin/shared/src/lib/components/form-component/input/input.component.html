@@ -1,14 +1,7 @@
 <div
-  class="wrapper"
-  [style.height]="height"
-  [ngClass]="{
-    'p-input-icon-left': isSearch,
-    'p-input-icon-right': isLoading,
-    'p-float-label': float,
-    'p-field': true,
-    wrapper__vertical: alignment === 'vertical',
-    wrapper__horizontal: alignment === 'horizontal'
-  }"
+  class="wrapper p-field"
+  [style.fontSize]="fontSize"
+  [ngClass]="wrapperNgClasses"
   [formGroup]="controlContainer.control"
 >
   <label
@@ -17,26 +10,28 @@
     [for]="controlName"
     >{{ label }}</label
   >
-  <i class="pi pi-search" *ngIf="isSearch"></i>
-  <div class="input-wrapper">
-    <input
-      class="input"
-      [ngClass]="{
-        input__static: label && alignment === 'vertical',
-        input__standard: variant === 'standard',
-        input__error: error,
-        input__disabled: isDisabled
-      }"
-      [style.fontSize]="fontSize"
-      [attr.disabled]="isDisabled || null"
-      [formControlName]="controlName"
-      [id]="controlName"
-      type="text"
-      pInputText
-      [placeholder]="placeholder"
-    />
-    <small *ngIf="error" class="p-error"> {{ error }}</small>
-  </div>
+
+  <hospitality-bot-custom-tooltip
+    *ngIf="additionalInfo"
+    [text]="additionalInfo"
+    class="additional-info"
+    mode="standalone"
+  ></hospitality-bot-custom-tooltip>
+
+  <input
+    class="input"
+    [ngClass]="inputNgClasses"
+    [attr.disabled]="isDisabled || null"
+    [formControlName]="controlName"
+    [id]="controlName"
+    [attr.type]="type"
+    pInputText
+    [maxlength]="maxLength"
+    [min]="min"
+    [max]="max"
+    [placeholder]="placeholder"
+  />
+  <small *ngIf="error" class="p-error"> {{ error }}</small>
 
   <label *ngIf="label && float" [for]="controlName" class="label">{{
     label
@@ -44,8 +39,6 @@
   <i
     *ngIf="isLoading"
     class="pi pi-spin pi-spinner"
-    [ngClass]="{
-      loading__static: label && !float
-    }"
+    [ngClass]="iconNgClass"
   ></i>
 </div>

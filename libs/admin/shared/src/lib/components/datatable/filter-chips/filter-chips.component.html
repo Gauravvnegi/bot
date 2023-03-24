@@ -12,30 +12,31 @@
         (click)="toggleQuickReplyFilter(chipIdx)"
         [ngClass]="{
           chipSelected: chip.isSelected,
-          'status-default': chip.type === 'default',
-          'status-selected-default': chip.type === 'default' && chip.isSelected,
+          'chip-default': chip.type === 'default',
+          'chip-selected-default': chip.type === 'default' && chip.isSelected,
 
-          'status-opacity-new status-text-new': chip.type === 'new',
-          'status-selected-new': chip.type === 'new' && chip.isSelected,
+          'chip-new': chip.type === 'new',
+          'chip-selected-new': chip.type === 'new' && chip.isSelected,
 
-          'status-opacity-initiated status-text-initiated':
-            chip.type === 'initiated',
-          'status-selected-initiated':
+          'chip-initiated': chip.type === 'initiated',
+          'chip-selected-initiated':
             chip.type === 'initiated' && chip.isSelected,
 
-          'status-opacity-pending status-text-pending': chip.type === 'pending',
-          'status-selected-pending': chip.type === 'pending' && chip.isSelected,
+          'chip-pending': chip.type === 'pending',
+          'chip-selected-pending': chip.type === 'pending' && chip.isSelected,
 
-          'status-opacity-success status-text-success':
-            chip.type === 'completed',
-          'status-selected-completed':
+          'chip-completed': chip.type === 'completed',
+          'chip-selected-completed':
             chip.type === 'completed' && chip.isSelected,
 
-          'status-opacity-reject status-text-reject': chip.type === 'failed',
-          'status-selected-reject': chip.type === 'failed' && chip.isSelected,
+          'chip-reject': chip.type === 'failed',
+          'chip-selected-reject': chip.type === 'failed' && chip.isSelected,
 
-          'status-opacity-warning status-text-warning': chip.type === 'warning',
-          'status-selected-warning': chip.type === 'warning' && chip.isSelected
+          'chip-warning': chip.type === 'warning',
+          'chip-selected-warning': chip.type === 'warning' && chip.isSelected,
+
+          'chip-standard': chip.type === 'standard',
+          'chip-selected-standard': chip.type === 'standard' && chip.isSelected
         }"
       >
         <span> {{ chip.label }}</span>

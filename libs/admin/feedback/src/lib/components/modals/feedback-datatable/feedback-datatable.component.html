@@ -76,209 +76,16 @@
       </ng-template>
 
       <ng-template pTemplate="emptymessage">
-        <hospitality-bot-empty-view></hospitality-bot-empty-view>
+        <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
       </ng-template>
       <!-- *******************************HEADER WITH SEARCH******************************* -->
       <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th class="tableHeading" pResizableColumn>
-            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-          </th>
-          <th
-            class="table-data-head"
-            pResizableColumn
-            [pSortableColumn]="col.field"
-            *ngFor="let col of columns; let i = index"
-            [ngStyle]="col.dynamicWidth ? { width: '225px' } : {}"
-          >
-            <div>
-              <p class="table-header-text">{{ col.header }}</p>
-              <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-            </div>
-          </th>
-        </tr>
-        <ng-container
-          *ngIf="
-            feedbackType === globalFeedbackConfig.types.transactional;
-            else stayTableSearch
-          "
-        >
-          <tr class="table-search-head">
-            <th class="table-search-head"></th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="
-                  onFilterTypeTextChange(
-                    $event.target.value,
-                    'tableOrRoomNumber'
-                  )
-                "
-                class="p-column-filter"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="
-                  onFilterTypeTextChange($event.target.value, 'guest.firstName')
-                "
-                class="p-column-filter"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="
-                  onFilterTypeTextChange(
-                    $event.target.value,
-                    'booking.bookingNumber'
-                  )
-                "
-                class="p-column-filter"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="
-                  onFilterTypeTextChange($event.target.value, 'guest.place')
-                "
-                class="p-column-filter"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-                class="p-column-filter"
-                disabled="true"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-                class="p-column-filter"
-                disabled="true"
-              />
-            </th>
-            <th class="table-search-head" *ngIf="tableName === 'Response Rate'">
-              <input
-                pInputText
-                type="text"
-                (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-                class="p-column-filter"
-                disabled="true"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-                class="p-column-filter"
-                disabled="true"
-              />
-            </th>
-          </tr>
-        </ng-container>
-        <ng-template #stayTableSearch
-          ><tr class="table-search-head">
-            <th class="table-search-head"></th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="
-                  onFilterTypeTextChange(
-                    $event.target.value,
-                    'bookingDetails.tableOrRoomNumber'
-                  )
-                "
-                class="p-column-filter"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="
-                  onFilterTypeTextChange(
-                    $event.target.value,
-                    'booking.bookingNumber'
-                  )
-                "
-                disabled="true"
-                class="p-column-filter"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="
-                  onFilterTypeTextChange($event.target.value, 'guest.firstName')
-                "
-                class="p-column-filter"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="
-                  onFilterTypeTextChange($event.target.value, 'guest.place')
-                "
-                class="p-column-filter"
-                disabled="true"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-                class="p-column-filter"
-                disabled="true"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="
-                  onFilterTypeTextChange($event.target.value, 'comments')
-                "
-                class="p-column-filter"
-                disabled="true"
-              />
-            </th>
-            <th class="table-search-head" *ngIf="tableName === 'Response Rate'">
-              <input
-                pInputText
-                type="text"
-                (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-                class="p-column-filter"
-                disabled="true"
-              />
-            </th>
-            <th class="table-search-head">
-              <input
-                pInputText
-                type="text"
-                (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-                class="p-column-filter"
-                disabled="true"
-              />
-            </th></tr
-        ></ng-template>
+        <tr
+          hospitality-bot-table-header
+          [columns]="columns"
+          [showCheckbox]="isSelectable"
+          (search)="handleFieldSearch($event)"
+        ></tr>
       </ng-template>
       <!-- **************************************BODY********************************* -->
       <ng-template
@@ -295,7 +102,7 @@
         >
           <tr
             class="data-table-row"
-            [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
+            [style.background]="rowData.read ? '' : ''"
           >
             <!-- <tr class="data-table-row"> -->
             <td class="table--checkbox">
@@ -372,7 +179,8 @@
                       <div class="feedback-service__container" *ngIf="i < 2">
                         <div class="feedback-service__container__label">
                           <div class="feedback-service__container__label__text">
-                            {{ service.serviceName | titlecase }}
+                            <!-- {{ service.serviceName | titlecase }} -->
+                            {{ service.getServiceName() }}
                           </div>
                         </div>
                         <!-- <div
@@ -558,7 +366,7 @@
         <ng-template #stayTable>
           <tr
             class="data-table-row"
-            [style.background]="rowData.read ? '' : 'rgba(174, 209, 251, .1)'"
+            [style.background]="rowData.read ? '' : ''"
           >
             <!-- <tr class="data-table-row"> -->
             <td class="table--checkbox">
@@ -610,7 +418,8 @@
                       <div class="feedback-service__container" *ngIf="i < 2">
                         <div class="feedback-service__container__label others">
                           <div class="feedback-service__container__label__text">
-                            {{ service.serviceName | titlecase }}
+                            <!-- {{ service.serviceName | titlecase }} -->
+                            {{ service.getServiceName() }}
                           </div>
                         </div>
                         <div
@@ -765,6 +574,8 @@
           [totalRecords]="totalRecords"
           [rowsPerPageOptions]="rowsPerPageOptions"
           (onPageChange)="paginate($event)"
+          [currentPageReportTemplate]="reportTemplate"
+          showCurrentPageReport="true"
         ></p-paginator>
       </ng-template>
     </p-table>

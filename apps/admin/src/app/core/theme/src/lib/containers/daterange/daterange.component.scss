@@ -2,25 +2,24 @@
 
 ::ng-deep .ranges {
   ul {
-    .active{
-      background-color: $auth-color !important;
+    .active {
+      background-color: $primary-cta !important;
     }
   }
 }
 
-::ng-deep .daterangepicker td.active{
-  background-color: $auth-color;
+::ng-deep .daterangepicker td.active {
+  background-color: $primary-cta;
 }
-::ng-deep .daterangepicker td.active:hover{
-  background-color: $auth-color;
-
+::ng-deep .daterangepicker td.active:hover {
+  background-color: $primary-cta;
 }
-::ng-deep .drp-buttons{
-  .cancelBtn{
+::ng-deep .drp-buttons {
+  .cancelBtn {
     @include secondaryButton();
     width: 6vw;
   }
-  .applyBtn{
+  .applyBtn {
     @include primaryButton();
     width: 6vw;
   }
@@ -30,7 +29,7 @@
   margin-left: 5px;
 }
 
-:host ::ng-deep .date-range-input{
+:host ::ng-deep .date-range-input {
   font-size: 12px;
   font-weight: 600;
   @media only screen and (max-width: 1200px) {
@@ -53,7 +52,7 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-start {
-  border-color: $primary-purple;
+  border-color: $primary-cta;
 }
 
 :host
@@ -62,7 +61,7 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-end {
-  border-color: $primary-purple;
+  border-color: $primary-cta;
 }
 
 :host
@@ -71,7 +70,7 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-gap {
-  border-color: $primary-purple;
+  border-color: $primary-cta;
   border-top-color: transparent;
 }
 
@@ -91,15 +90,15 @@
   align-items: center;
   padding: 5px 0;
   border: none;
-  input{
+  input {
     height: 36px;
   }
 }
 
-:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex{
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
   padding: 0 10px;
 }
 
-:host ::ng-deep .mat-form-field{
+:host ::ng-deep .mat-form-field {
   width: 100%;
 }

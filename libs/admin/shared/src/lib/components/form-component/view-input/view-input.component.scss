@@ -1,0 +1,28 @@
+@import '../form.component.scss';
+
+.text {
+  font-weight: 600;
+  letter-spacing: 0.96px;
+  text-align: left;
+  color: #53d397;
+
+  &__wrapper {
+    padding: 12px;
+    border-radius: 5px;
+    margin-top: $label-gap;
+    background-color: #f0f0f0;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-start;
+    align-items: center;
+    height: $form-input-height;
+  }
+
+  &__strike {
+    font-family: ProximaNova;
+    font-size: 0.8em;
+    letter-spacing: 0.78px;
+    color: $c-gray-47;
+    text-decoration: line-through;
+  }
+}

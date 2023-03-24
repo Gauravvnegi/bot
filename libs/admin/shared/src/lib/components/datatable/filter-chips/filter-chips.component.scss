@@ -1,64 +1,195 @@
 @import 'main';
 
-:host ::ng-deep .mat-chip {
-  border: 1px solid !important;
-  display: inline-block;
-  text-align: center;
-  font-weight: 400;
-  background-color: $white;
-  &:hover {
+:host ::ng-deep .mat-standard-chip:focus::after {
+  display: none;
+}
+
+:host ::ng-deep .caption__wrapper {
+  &--buttons {
+    display: flex;
+    align-items: center;
+    background-color: $white;
+    padding: 16px 16px 10px 16px;
+
+    .filter {
+      padding: 4px 15px;
+      border: 1px solid $white;
+      background-color: $progress-bar-messages-base;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+      color: $c-gray-47;
+      &:hover {
+        cursor: pointer;
+        background-color: $c-gray-47;
+        color: $white;
+      }
+    }
+  }
+}
+
+.button__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 45px;
+
+  .mat-chip-list {
+    width: 94%;
+  }
+  .p-button {
+    background-color: $progress-bar-messages-base;
+    padding: 6px 15px;
+    margin-left: 15px;
+    font-size: 14px;
+    color: $c-gray-47;
+    border: 1px solid $white;
+    border-radius: 20px;
+    &:hover {
+      background-color: $c-gray-47;
+      color: $white;
+      cursor: pointer;
+    }
+  }
+  img:hover {
     cursor: pointer;
   }
 }
 
+:host ::ng-deep .mat-chip-list-wrapper {
+  overflow: auto;
+  $white-space: nowrap;
+  overflow-x: scroll;
+  width: 100%;
+  flex-wrap: nowrap;
+  display: inline-flex;
+  gap: 12px;
+
+  .mat-chip {
+    display: flex;
+    white-space: nowrap;
+  }
+
+  .mat-standard-chip {
+    margin: 0px;
+  }
+
+  &::-webkit-scrollbar {
+    height: 6px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: transparent;
+  }
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      background: darkgray;
+      border-radius: 10px;
+    }
+  }
+}
+
+:host ::ng-deep .mat-chip {
+  cursor: pointer;
+  height: 39px;
+  padding: 10px 15px;
+  border-radius: 19.5px;
+  font-family: 'Poppins';
+  font-size: 14px;
+  font-weight: normal;
+  letter-spacing: 0.84px;
+  text-align: left;
+  border: 1px solid;
+  background-color: $white;
+}
+
+:host ::ng-deep.mat-chip.mat-standard-chip::after {
+  background: none;
+}
+
+//default styling for selected chip
 .chipSelected {
-  color: $white !important;
-  font-weight: 400;
+  color: $white;
 }
 
-.status-default {
-  background-color: $white !important;
+// chip styling for inactive
+.chip-pending {
+  border-color: $draft-state;
+  color: $draft-state;
 }
 
-.status-selected-new {
-  background-color: $light-blue !important;
-  opacity: 1;
+.chip-initiated {
+  border-color: $active-state;
+  color: $active-state;
 }
 
-.status-selected-pending {
-  background-color: $pending !important;
-  opacity: 1;
-}
-.status-selected-initiated {
-  background-color: $initiated !important;
-  opacity: 1;
-}
-.status-selected-completed {
-  background-color: $completed !important;
-  opacity: 1;
+.chip-completed {
+  border-color: $success-state;
+  color: $success-state;
 }
 
-.status-selected-reject {
-  background-color: $reject !important;
-  opacity: 1;
+.chip-reject {
+  border-color: $inactive-state;
+  color: $inactive-state;
 }
 
-.status-selected-default {
-  background-color: $default !important;
-  opacity: 1;
+.chip-warning {
+  border-color: $unavailable-state;
+  color: $unavailable-state;
 }
 
-.status-text-warning {
-  color: $text-email !important;
+.chip-standard {
+  border-color: $primary-cta;
+  color: $primary-cta;
 }
 
-.status-opacity-warning {
-  background-color: transparent !important;
-  opacity: 0.4;
+.chip-default {
+  border-color: $auth-gray;
+  color: $c-black;
 }
 
-.status-selected-warning {
-  background-color: $text-email !important;
-  color: $white !important;
-  opacity: 1;
+.chip-new {
+  border-color: $active-state;
+  color: $active-state;
+}
+
+//chip styling for inactive
+
+.chip-selected-pending {
+  background: $draft-state;
+}
+
+.chip-selected-initiated {
+  background-color: $active-state;
+}
+.chip-selected-completed {
+  background: $success-state;
+}
+
+.chip-selected-reject {
+  background: $inactive-state;
+}
+
+.chip-selected-warning {
+  background-color: $unavailable-state;
+}
+
+.chip-selected-standard {
+  background: $primary-cta;
+}
+
+.chip-selected-default {
+  background: $auth-gray;
+}
+
+.chip-selected-new {
+  background: $active-state;
 }

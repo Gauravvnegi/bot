@@ -57,7 +57,7 @@
     </ng-template>
 
     <ng-template pTemplate="emptymessage">
-      <hospitality-bot-empty-view></hospitality-bot-empty-view>
+      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
     </ng-template>
 
     <ng-template pTemplate="header" let-columns>
@@ -243,6 +243,8 @@
         [totalRecords]="totalRecords"
         [rowsPerPageOptions]="rowsPerPageOptions"
         (onPageChange)="paginate($event)"
+        [currentPageReportTemplate]="reportTemplate"
+        showCurrentPageReport="true"
       ></p-paginator>
     </ng-template>
   </p-table>

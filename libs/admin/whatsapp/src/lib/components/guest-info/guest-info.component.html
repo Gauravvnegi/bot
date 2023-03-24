@@ -2,10 +2,10 @@
   <!-- <mat-icon (click)="closeGuestInfo()" class="material-icons" matSuffix
     >keyboard_backspace
   </mat-icon> -->
-  <div  (click)="closeGuestInfo()" class="cross">
-    <i class="fa fa-times" aria-hidden="true"></i>
-  </div>
   <div class="guest-info-heading">Guest Info</div>
+  <div (click)="closeGuestInfo()" class="cross">
+    <img src="assets/svg/back.svg" alt="back" />
+  </div>
 </div>
 <div
   class="guestInfoWrapper"
@@ -57,14 +57,10 @@
   </mat-tab-group>
 </div>
 <div class="guestInfoEditWrapper" *ngIf="!(selectedIndex === 2)">
-  <div
-    class="guestInfoEditContainer"
+  <hospitality-bot-button
+    [label]="buttonConfig[selectedIndex].label"
     *ngIf="buttonConfig[selectedIndex].button"
     (click)="handleButtonCLick()"
-  >
-    <img [src]="buttonConfig[selectedIndex].icon" alt="" />
-    <div class="guestInfoEditText">
-      {{ buttonConfig[selectedIndex].label }}
-    </div>
-  </div>
+    [img]="buttonConfig[selectedIndex].icon"
+  ></hospitality-bot-button>
 </div>

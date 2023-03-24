@@ -27,9 +27,10 @@
             [disabled]="field.disabled"
           ></hospitality-bot-input>
           <hospitality-bot-select
-            *ngSwitchCase="'dropdown'"
+            *ngSwitchCase="'select'"
             [controlName]="field.name"
             [props]="props"
+            [options]="field.options"
             [disabled]="field.disabled"
           ></hospitality-bot-select>
         </div>
@@ -41,8 +42,8 @@
   <hospitality-bot-button
     *ngIf="!maxLimit || maxLimit > useFormArray.length"
     class="action-btn"
-    label="Add More"
+    [label]="ctaLabel"
     (onClick)="addNewField()"
-    variant="outlined"
+    variant="text"
   ></hospitality-bot-button>
 </div>

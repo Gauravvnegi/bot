@@ -1889,6 +1889,142 @@
         }
       },
       "schematics": {}
+    },
+    "admin-services": {
+      "projectType": "library",
+      "root": "libs/admin/services",
+      "sourceRoot": "libs/admin/services/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/services/tsconfig.lib.json",
+              "libs/admin/services/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/services/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/services/jest.config.js",
+            "tsConfig": "libs/admin/services/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/services/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-offers": {
+      "projectType": "library",
+      "root": "libs/admin/offers",
+      "sourceRoot": "libs/admin/offers/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+
+              "libs/admin/offers/tsconfig.lib.json",
+              "libs/admin/offers/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/offers/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+
+            "jestConfig": "libs/admin/manage-sites/jest.config.js",
+            "tsConfig": "libs/admin/manage-sites/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/manage-sites/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-manage-sites": {
+      "projectType": "library",
+      "root": "libs/admin/manage-sites",
+      "sourceRoot": "libs/admin/manage-sites/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/manage-sites/tsconfig.lib.json",
+              "libs/admin/manage-sites/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/manage-sites/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/manage-sites/jest.config.js",
+            "tsConfig": "libs/admin/manage-sites/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/manage-sites/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-settings": {
+      "projectType": "library",
+      "root": "libs/admin/settings",
+      "sourceRoot": "libs/admin/settings/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/settings/tsconfig.lib.json",
+              "libs/admin/settings/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/settings/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+              "jestConfig": "libs/admin/settings/jest.config.js",
+              "tsConfig": "libs/admin/settings/tsconfig.spec.json",
+              "passWithNoTests": true,
+              "setupFile": "libs/admin/settings/src/test-setup.ts"
+            }
+          }
+        },
+        "schematics": {
+          "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

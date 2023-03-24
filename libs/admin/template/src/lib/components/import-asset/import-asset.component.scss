@@ -132,11 +132,11 @@
       }
     }
     &:focus {
-      border: 2px solid $primary-purple;
+      border: 2px solid $primary-cta;
       box-shadow: none;
     }
     &:hover {
-      border-color: $primary-purple;
+      border-color: $primary-cta;
     }
   }
 }

@@ -22,6 +22,8 @@ export class ChatCardComponent implements OnInit {
   subTitle?: string;
   colorMap?: any;
   feedbackType?: string;
+  profileNickName?: string;
+  backgroundColor?: any;
 
   /**
    * Set Content of the empty view.
@@ -68,4 +70,6 @@ type Content = {
   subTitle?: string;
   colorMap?: any;
   feedbackType?: string;
+  profileNickName?: string;
+  backgroundColor?: any;
 };

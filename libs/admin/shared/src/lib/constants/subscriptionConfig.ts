@@ -17,6 +17,7 @@ export enum ModuleNames {
   REQUEST_DASHBOARD = 'REQUEST_DASHBOARD',
   REQUEST = 'REQUEST',
   RESERVATION = 'RESERVATION',
+  ADD_RESERVATION = 'ADD_RESERVATION',
 
   // Freddie
   FREDDIE = 'FREDDIE',
@@ -42,6 +43,9 @@ export enum ModuleNames {
   TOPIC = 'TOPIC',
   ASSET = 'ASSET',
   TEMPLATE = 'TEMPLATE',
+  SERVICES = 'SERVICES',
+  OFFERS = 'OFFERS',
+  PACKAGE = 'PACKAGE',
 
   // Inventory
   INVENTORY = 'INVENTORY',
@@ -56,7 +60,8 @@ export enum ModuleNames {
   RESIDENT = 'RESIDENT',
   NON_RESIDENT = 'NON_RESIDENT',
 
-  // SUBSCRIPTION
+  //Settings
+  SETTINGS = 'SETTINGS',
   SUBSCRIPTION = 'SUBSCRIPTION',
 }
 

@@ -312,20 +312,20 @@ export const guest = {
     datatable: [
       {
         field: 'fullName',
-        header: 'Guest/ Company',
+        header: 'Guest / Company',
         isSort: true,
         sortType: 'string',
       },
       {
         field: 'booking.getArrivalTimeStamp()',
-        header: 'Arrival/ Departure',
+        header: 'Arrival / Departure',
         isSort: true,
         sortType: 'date',
         isSearchDisabled: true,
       },
       {
         field: 'booking.bookingNumber',
-        header: 'Booking No./ Feedback',
+        header: 'Booking No. / Feedback',
         isSort: true,
         sortType: 'number',
       },
@@ -351,7 +351,7 @@ export const guest = {
       },
       {
         field: 'guestAttributes.churnProbalilty',
-        header: 'Churn Prob/ Prediction',
+        header: 'Churn Prob / Prediction',
         isSort: true,
         sortType: 'number',
       },

@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
+import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth/services/auth.service';
@@ -24,7 +25,8 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     private _userService: UserService,
     private _router: Router,
     private loadingService: LoadingService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private cookieService: CookieService
   ) {}
   intercept(
     req: HttpRequest<any>,
@@ -128,6 +130,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     this._authService.logout(this._userService.getLoggedInUserid()).subscribe(
       (response) => {
         this._authService.clearToken();
+        this._authService.deletePlatformRefererTokens(this.cookieService);
         this._router.navigate(['/auth']);
         this.loadingService?.close();
       },

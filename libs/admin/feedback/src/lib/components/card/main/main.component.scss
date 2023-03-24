@@ -9,7 +9,7 @@
   }
   .body {
     background: $c-gray-102;
-    padding: 5px 8px;
+    padding: 5px 0;
     &__container {
       height: 655px;
       background: 0% 0% no-repeat padding-box $white;
@@ -20,16 +20,25 @@
 
       .feedback-body-left {
         position: relative;
-        width: 27%;
+        width: 32%;
 
         @media only screen and (max-width: 1180px) {
           width: 35%;
+        }
+        @media only screen and (min-width: 1450px) {
+          width: 25%;
         }
       }
 
       .feedback-body-right {
         position: relative;
-        width: 73%;
+        width: 68%;
+        @media only screen and (max-width: 1180px) {
+          width: 65%;
+        }
+        @media only screen and (min-width: 1450px) {
+          width: 75%;
+        }
       }
       .guest-info-enable {
         position: absolute;
@@ -55,8 +64,8 @@
     height: 65px !important;
   }
   .mat-tab-label-active {
-    border-bottom: 2px solid $primary-purple;
-    color: $primary-purple;
+    border-bottom: 2px solid $primary-cta;
+    color: $primary-cta;
   }
   .mat-tab-header {
     border-bottom: none !important;

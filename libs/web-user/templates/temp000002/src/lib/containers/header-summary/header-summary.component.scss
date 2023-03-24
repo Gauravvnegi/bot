@@ -99,7 +99,7 @@
 .modal-body {
   max-height: calc(90vh - 120px);
   overflow-y: auto;
-  padding:32px;
+  padding: 32px;
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -111,5 +111,12 @@
   &::-webkit-scrollbar-thumb {
     background: darkgray;
     border-radius: 10px;
+  }
+
+  @media screen and (max-width: $S) {
+    padding: 14px;
+  }
+  @media screen and (max-width: $L) {
+    padding: 14px;
   }
 }

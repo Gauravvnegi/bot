@@ -15,6 +15,7 @@ import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notificati
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  Cols,
   ConfigService,
   FeedbackService,
   HotelDetailService,
@@ -71,7 +72,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   rowsPerPage = 25;
   colorMap;
   responseRate;
-  cols = feedback.cols.feedbackDatatable.transactional;
+  cols: Cols[] = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
   tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
   chips = feedback.chips.feedbackDatatable;

@@ -70,7 +70,7 @@ export const campaignConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: true,
-        width: '23%',
+        width: '20%',
       },
       {
         field: 'templateName',
@@ -78,7 +78,7 @@ export const campaignConfig = {
         isSort: true,
         sortType: 'string',
         dynamicWidth: false,
-        width: '18%',
+        width: '15%',
       },
       {
         field: 'stats',
@@ -95,7 +95,7 @@ export const campaignConfig = {
         isSort: false,
         dynamicWidth: true,
         isSearchDisabled: true,
-        width: '10%',
+        width: '13%',
       },
       {
         field: 'action',
@@ -104,7 +104,7 @@ export const campaignConfig = {
         sortType: 'string',
         dynamicWidth: true,
         isSearchDisabled: true,
-        width: '8%',
+        width: '11%',
       },
     ],
     templateTypes: [

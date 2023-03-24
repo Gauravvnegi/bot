@@ -9,11 +9,13 @@ import { DropdownModule } from 'primeng/dropdown';
 // import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { CookieService } from 'ngx-cookie-service';
 import { InputTextModule } from 'primeng/inputtext';
+import { MenuModule } from 'primeng/menu';
 import { TabViewModule } from 'primeng/tabview';
 import { DaterangeComponent } from './containers/daterange/daterange.component';
 import { FilterComponent } from './containers/filter/filter.component';
 import { FooterComponent } from './containers/footer/footer.component';
 import { LayoutOneComponent } from './containers/layouts/layout-one/layout-one.component';
+import { LayoutTwoComponent } from './containers/layouts/layout-two/layout-two.component';
 import { MessageTabMenuComponent } from './containers/message-tab-menu/message-tab-menu.component';
 import { NotificationPopupComponent } from './containers/notification-popup/notification-popup.component';
 import { NotificationDetailComponent } from './containers/notification/notification-detail/notification-detail.component';
@@ -26,6 +28,7 @@ import { SearchBarComponent } from './containers/search-bar/search-bar.component
 import { SettingsComponent } from './containers/settings/settings.component';
 import { SidenavExpandComponent } from './containers/sidenav/sidenav-expand/sidenav-expand.component';
 import { SidenavComponent } from './containers/sidenav/sidenav.component';
+import { SiteActionComponent } from './containers/site-action/site-action.component';
 import { ScrollPagination } from './directives/scroll-pagination.directive';
 
 @NgModule({
@@ -39,12 +42,15 @@ import { ScrollPagination } from './directives/scroll-pagination.directive';
     DropdownModule,
     SharedMaterialModule,
     TabViewModule,
+    MenuModule,
     AngularFireMessagingModule,
   ],
   declarations: [
     SidenavComponent,
+    SiteActionComponent,
     SidenavExpandComponent,
     LayoutOneComponent,
+    LayoutTwoComponent,
     SettingsComponent,
     DaterangeComponent,
     ProfileDropdownComponent,
@@ -63,8 +69,10 @@ import { ScrollPagination } from './directives/scroll-pagination.directive';
   providers: [CookieService],
   exports: [
     SidenavComponent,
+    SiteActionComponent,
     SidenavExpandComponent,
     LayoutOneComponent,
+    LayoutTwoComponent,
     SettingsComponent,
     DaterangeComponent,
     ProfileDropdownComponent,

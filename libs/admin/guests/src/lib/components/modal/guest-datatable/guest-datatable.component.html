@@ -617,6 +617,8 @@
           [totalRecords]="totalRecords"
           [rowsPerPageOptions]="rowsPerPageOptions"
           (onPageChange)="paginate($event)"
+          [currentPageReportTemplate]="reportTemplate"
+          showCurrentPageReport="true"
         ></p-paginator>
       </ng-template>
     </p-table>

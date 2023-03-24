@@ -9,23 +9,22 @@ import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { CategoriesService } from './services/category.service';
 import { AdminPackagesRoutingModule } from './admin-packages.routing.module';
+import { PackagesService } from './services/packages.service';
+import { MainComponent } from './components/main/main.component';
 
 @NgModule({
-  imports: [ 
-    CommonModule, 
+  imports: [
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    AdminSharedModule, 
+    AdminSharedModule,
     RouterModule,
     TableModule,
     SharedMaterialModule,
     DropdownModule,
-    AdminPackagesRoutingModule
+    AdminPackagesRoutingModule,
   ],
   declarations: [...AdminPackagesRoutingModule.components],
-  providers: [
-    PackageService,
-    CategoriesService
-  ]
+  providers: [PackageService, CategoriesService, PackagesService],
 })
 export class AdminPackagesModule {}

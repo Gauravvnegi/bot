@@ -65,6 +65,7 @@
   .flex-wrapper {
     .text {
       color: var(--stepper-font-color, $stepper-font-color);
+      text-shadow: -1px 0 #ffffff, 0 1px #ffffff, 1px 0 #ffffff, 0 -1px #ffffff;
     }
   }
 
@@ -74,6 +75,7 @@
 
   .percentage {
     fill: var(--stepper-font-color, $stepper-font-color);
+    text-shadow: -1px 0 #ffffff, 0 1px #ffffff, 1px 0 #ffffff, 0 -1px #ffffff;
   }
 }
 
@@ -83,10 +85,10 @@
   }
 }
 
-
-
-:host ::ng-deep{
-  .mat-step-header.cdk-keyboard-focused, .mat-step-header.cdk-program-focused, .mat-step-header:hover{
+:host ::ng-deep {
+  .mat-step-header.cdk-keyboard-focused,
+  .mat-step-header.cdk-program-focused,
+  .mat-step-header:hover {
     background-color: transparent;
   }
 }

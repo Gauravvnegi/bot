@@ -1,0 +1,17 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header heading="Setting">
+  </hospitality-bot-navigation-header>
+  <div class="main">
+    <div
+      *ngFor="let setting of settings"
+      class="setting"
+      (click)="selectSetting(setting.name)"
+    >
+      <div class="setting__header">
+        <img [src]="setting.icon" [alt]="setting.title" />
+        <div>{{ setting.title }}</div>
+      </div>
+      <div class="setting__description">{{ setting.description }}</div>
+    </div>
+  </div>
+</div>

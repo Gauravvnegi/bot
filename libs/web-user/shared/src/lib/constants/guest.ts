@@ -12,7 +12,7 @@ export enum GuestRole {
 
 export const RequiredFields = {
   primary: ['firstName', 'lastName', 'country', 'email', 'phone'],
-  sharer: ['firstName', 'lastName'],
+  sharer: ['firstName', 'lastName', 'country', 'email', 'phone'],
   accompany: [],
   kids: [],
 };

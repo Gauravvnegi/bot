@@ -43,7 +43,7 @@
 .stats--wrapper {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   gap: 15px;
   @media (max-width: $tablet) {
     gap: 10px;

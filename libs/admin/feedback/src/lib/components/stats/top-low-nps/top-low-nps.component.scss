@@ -112,7 +112,7 @@
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
   @media screen and (max-width: $L) {
     font-size: $font14 !important;
   }

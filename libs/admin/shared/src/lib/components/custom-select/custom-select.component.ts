@@ -1,6 +1,5 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import * as _ from 'lodash';
 
 @Component({
@@ -16,55 +15,48 @@ import * as _ from 'lodash';
   ],
 })
 export class CustomSelectComponent implements ControlValueAccessor {
-  constructor() {}
+  options: Record<string, any>[] = [];
+  value: string[] = [];
 
-  options: any[] = [];
-  value: any[] = [];
-  @Input() requiredProperty: string;
-  @Input() optionalProperties: string[];
-  @Input() selectedLabel: string[];
-  @Input() set itemList(value: Record<string, any>[]) {
-    if (!!value) {
-      this.options = value.map((item) => {
+  @Input() label: string;
+  @Input() description: string;
+
+  @Input() optionValue: string = 'id';
+  @Input() optionLabel: string = 'name';
+
+  @Input() fullView: boolean = false;
+  @Input() noMoreData: boolean = false;
+
+  @Output() loadMoreData = new EventEmitter();
+  @Output() viewAll = new EventEmitter();
+
+  @Input() set itemList(options: Record<string, any>[]) {
+    this.options =
+      options?.map((item) => {
         let checked = false;
-        if (this.value.length) {
-          checked =
-            this.value.findIndex(
-              (res) =>
-                res[this.requiredProperty] === item[this.requiredProperty]
-            ) > -1;
-        }
+
+        checked = this.value?.includes(item[this.optionValue]);
         return { ...item, checked };
-      });
-    }
+      }) ?? [];
   }
+
+  @Input() emptyMessage = 'No Data Available';
+  @Input() noRecordsAction: { name: string; link: string };
+
+  constructor() {}
 
   onChange = (value: any[]) => {};
   onTouched = () => {};
 
   writeValue(controlValue: any): void {
-    if (this.options.length) {
+    if (this.options.length && controlValue) {
       this.options = this.options.map((item) => {
-        let checked =
-          controlValue.findIndex(
-            (res) => res[this.requiredProperty] === item[this.requiredProperty]
-          ) > -1;
-
-        return {
-          ...item,
-          checked,
-        };
+        let checked = controlValue?.includes(item[this.optionValue]);
+        return { ...item, checked };
       });
     }
 
-    const selectedProps: string[] = this.optionalProperties;
-    selectedProps?.unshift(this.requiredProperty);
-
-    if (selectedProps) {
-      this.value = _.map(controlValue, (e) => _.pick(e, selectedProps));
-    } else {
-      this.value = _.map(controlValue, this.requiredProperty);
-    }
+    this.value = controlValue;
     this.onChange(this.value);
   }
 
@@ -77,32 +69,20 @@ export class CustomSelectComponent implements ControlValueAccessor {
   }
 
   selectItems(i: number) {
-    const selectedProps = this.optionalProperties;
-    selectedProps?.unshift(this.requiredProperty);
     const valueItem = this.options[i];
     if (!valueItem.checked) {
-      valueItem.checked = true;
-
-      if (selectedProps) {
-        this.value.push(_.pick(valueItem, selectedProps));
-      } else {
-        this.value.push(valueItem[this.requiredProperty]);
-      }
+      this.value.push(valueItem[this.optionValue]);
     } else {
-      valueItem.checked = false;
-      let index: number;
-      if (selectedProps) {
-        index = this.value.findIndex(
-          (item) =>
-            item[this.requiredProperty] === valueItem[this.requiredProperty]
-        );
-      } else {
-        index = this.value.findIndex(
-          (item) => item === valueItem[this.requiredProperty]
-        );
-      }
+      let index = this.value.findIndex(
+        (item) => item === valueItem[this.optionValue]
+      );
       this.value.splice(index, 1);
     }
+    valueItem.checked = !valueItem.checked;
     this.onChange(this.value);
+  }
+
+  loadMore() {
+    this.loadMoreData.emit();
   }
 }

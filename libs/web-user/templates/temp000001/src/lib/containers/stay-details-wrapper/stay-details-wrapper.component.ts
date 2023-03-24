@@ -101,7 +101,10 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
   saveStayDetails(): void {
     if (this.parentForm.invalid) {
       this.parentForm.markAllAsTouched();
-      if (this._hotelService.hotelConfig?.showAddress)
+      if (
+        this._hotelService.hotelConfig?.showAddress &&
+        this.parentForm.get('address').invalid
+      )
         this.openPanels(this.addressFields.panelList.toArray());
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       return;

@@ -182,6 +182,8 @@
 
 :host ::ng-deep .save-button {
   @include primary-button();
+  font-weight: 400;
+  background-color: #4b56c0;
 }
 .subPackage_img {
   width: 50px;

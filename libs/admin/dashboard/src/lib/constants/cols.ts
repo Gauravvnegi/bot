@@ -8,13 +8,13 @@ export const cols = {
     },
     {
       field: 'booking.bookingNumber',
-      header: 'Booking No./Feedback',
+      header: 'Booking No. / Feedback',
       isSort: true,
       sortType: 'number',
     },
     {
       field: `guests.primaryGuest.fullName`,
-      header: 'Guest/company',
+      header: 'Guest / Company',
       isSort: true,
       sortType: 'string',
     },
@@ -26,14 +26,14 @@ export const cols = {
     },
     {
       field: 'booking.getArrivalTimeStamp()',
-      header: 'Arrival/ Departure',
+      header: 'Arrival / Departure',
       isSort: true,
       sortType: 'date',
       isSearchDisabled: true,
     },
     {
       field: 'payment.totalAmount',
-      header: 'Amount Due/Total(INR)',
+      header: 'Amount Due / Total(INR)',
       isSort: true,
       sortType: 'number',
       isSearchDisabled: true,

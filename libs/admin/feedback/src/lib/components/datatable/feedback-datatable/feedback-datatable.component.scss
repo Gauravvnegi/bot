@@ -74,6 +74,9 @@
 :host ::ng-deep .status-image {
   padding: 5px !important;
   text-align: center !important;
+  button {
+    padding-left: 15px;
+  }
 }
 
 :host ::ng-deep .booking-number {
@@ -193,7 +196,7 @@
   width: 87px;
   padding: 6px 2px 6px 2px;
   border-radius: 14px;
-  border: solid 1px $primary-purple;
+  border: solid 1px $primary-cta;
   background-color: $white;
   font-size: 12px;
   font-weight: 500;
@@ -202,14 +205,14 @@
   line-height: 1.25;
   letter-spacing: 0.72px;
   text-align: center;
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 .add-notes {
   width: 75px;
   padding: 6px 2px 6px 2px;
   border-radius: 14px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.25;
@@ -341,7 +344,7 @@
   height: 36px;
   padding: 11px 0 10px;
   border-radius: 100px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   cursor: pointer;
   margin-right: 10px;
   &:active {
@@ -390,15 +393,17 @@
 .feedback {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   .pdf {
-    width: 24px;
+    width: 10%;
   }
 }
 .feedback-service {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  width: calc(100% - 24px);
+  // width: calc(100% - 10%);
+
   &__container {
     display: flex;
     align-items: center;
@@ -412,18 +417,18 @@
     &__label {
       font-size: 11px;
       font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
       letter-spacing: 0.66px;
       text-align: center;
       border-radius: 20px;
       background-color: $list-popup;
       padding: 4px 10px;
+      max-width: 100%;
       &__text {
-        color: $primary-purple;
+        color: $primary-cta;
         padding-top: 2px;
+        word-break: break-word;
         white-space: normal;
-        word-break: break-all;
+        text-align: left;
       }
     }
     &__comment {
@@ -449,7 +454,7 @@
         letter-spacing: 0.66px;
         text-align: center;
         text-decoration: underline;
-        color: $primary-purple;
+        color: $primary-cta;
       }
       &:hover {
         .service-list-popup {
@@ -462,7 +467,7 @@
 
 .stay-booking-feedback {
   display: flex;
-  align-items: end;
+  align-items: center;
   justify-content: center;
   padding: 0px;
   border-radius: 10px;
@@ -495,13 +500,16 @@
     margin: 0 2px;
   }
   .number {
-    padding: 5px 0;
     color: $white;
     margin: 0 0px;
     text-align: center;
-    min-width: 20px;
+    min-width: 18px;
     border-radius: 50%;
     font-size: $font8;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   @media screen and (max-width: 1050px) {
@@ -530,12 +538,12 @@
 }
 
 .others {
-  display: -webkit-box;
+  display: flex;
   align-items: center;
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
 }
 :host ::ng-deep .heading {
   color: $dark-blue !important;
@@ -568,7 +576,7 @@
   img {
     height: 15px;
   }
-  // border: 2px solid $primary-purple;
+  // border: 2px solid $primary-cta;
 }
 .labl > input {
   /* HIDE RADIO */
@@ -586,7 +594,7 @@
 }
 
 .labl > input:checked + .image {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   img {
     filter: invert(0);
   }
@@ -609,4 +617,9 @@
     @include height(28px);
     align-items: center;
   }
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include table-cell-padding(0.3em);
 }

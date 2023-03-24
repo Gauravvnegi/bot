@@ -33,12 +33,12 @@
         color: $primary-gray;
         margin-right: 5px;
         &:hover {
-          color: $primary-purple;
+          color: $primary-cta;
         }
       }
       .material-icon {
         &:hover {
-          color: $primary-purple;
+          color: $primary-cta;
         }
       }
     }
@@ -49,7 +49,7 @@
   cursor: pointer;
   color: $primary-gray;
   &:hover {
-    color: $primary-purple;
+    color: $primary-cta;
   }
 }
 
@@ -115,7 +115,7 @@
     }
   }
   .applyBtnWrapper {
-    height: 46px;
+    height: 64px;
     display: flex;
     justify-content: center;
     align-items: center;

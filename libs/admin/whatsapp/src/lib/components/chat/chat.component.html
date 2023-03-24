@@ -4,13 +4,20 @@
       <div class="guestInfoAvatar" [style.background]="selectedChat?.color">
         <img
           [src]="chat?.receiver?.profileUrl"
-          *ngIf="chat?.receiver?.profileUrl; else defaultAvatar"
+          *ngIf="chat?.receiver?.profileUrl"
         />
-        <ng-template #defaultAvatar
-          ><div class="label">
-            {{ selectedChat?.getProfileNickName() }}
-          </div></ng-template
+        <div
+          class="guestInfoAvatar_nickName"
+          *ngIf="selectedChat?.getProfileNickName(); else defaultAvatar"
         >
+          {{ selectedChat?.getProfileNickName() }}
+        </div>
+        <ng-template #defaultAvatar
+          ><img
+            src="assets/svg/defaultUser.svg"
+            alt="default"
+            class="guestInfoAvatar_default"
+        /></ng-template>
       </div>
       <div class="selectedChat">
         {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}
@@ -20,14 +27,37 @@
     <div class="mr-10" [formGroup]="liveChatFG">
       <div class="req_button">
         <div class="export-chat" (click)="exportChat()">
-          <img src="assets/svg/CSV.svg" alt="csv" />
+          <img src="assets/svg/documentColor.svg" alt="csv" />
           <div>Export Chat</div>
         </div>
-    
+        <div
+          class="guestInfoEditWrapper"
+          isFeatureSubscribed
+          [paths]="[productName.request]"
+        >
+          <div
+            class="guestInfoEditContainer"
+            *ngIf="buttonConfig[selectedIndex].button"
+            (click)="handleButtonClick()"
+          >
+            <img [src]="buttonConfig[selectedIndex].icon" alt="" />
+            <div class="guestInfoEditText">
+              {{ buttonConfig[selectedIndex].label }}
+            </div>
+          </div>
+        </div>
+        <mat-slide-toggle
+          featureSubscribed
+          [feature]="productName.whatsappBot"
+          formControlName="status"
+          (change)="onLiveChatChange()"
+          [disabled]="liveChatStatus.value"
+          >Hand Over to Bot</mat-slide-toggle
+        >
         <img
-        *ngIf="!guestInfoEnable"
+          *ngIf="!guestInfoEnable"
           class="icon"
-          src="assets/images/guest-info-icon .png"
+          src="assets/svg/hamBurger.svg"
           [alt]=""
           (click)="openGuestInfo()"
         />
@@ -77,7 +107,10 @@
             "
           >
             <ng-container *ngIf="message.text; else media">
-              <p [innerHTML]="message.text | linkDetector"></p>
+              <p
+                [innerHTML]="message.text | linkDetector"
+                class="messageText"
+              ></p>
             </ng-container>
             <ng-template #media>
               <hospitality-bot-media-chat

@@ -1,9 +1,10 @@
-import { ButtonVariant } from './form.type';
+import { ButtonVariant, Option } from './form.type';
 
 export type IteratorField = {
   label: string;
   name: string;
-  type: 'input' | 'dropdown';
+  type: 'input' | 'select';
+  options?: Option[];
   required?: boolean;
   disabled?: boolean;
 };

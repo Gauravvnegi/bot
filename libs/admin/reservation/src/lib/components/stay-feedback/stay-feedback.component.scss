@@ -21,9 +21,6 @@
   display: flex;
   align-items: center;
   margin-bottom: 15px;
-  // img {
-  //   margin-left: 10px;
-  // }
 }
 
 .fields-wrapper {
@@ -105,7 +102,7 @@
 }
 
 :host ::ng-deep .expand-icon {
-  color: $primary-purple;
+  color: $primary-cta;
   position: absolute;
   top: 0;
   right: 0;
@@ -150,11 +147,8 @@
       justify-content: space-around;
       padding: 2px;
       margin: 0 10px;
-      // margin-top: 7px;
       border-radius: 25px;
       position: relative;
-      // min-width: 20px;
-      // min-height: 20px;
       &:hover {
         cursor: pointer;
         .feedback-msg {
@@ -220,15 +214,14 @@
   width: 160px;
   height: 33px;
   margin: 0 94px 0 40px;
-  padding: 0px 0px 0px 10px;
   border-radius: 6px;
   border: solid 1px $button-blue;
   background-color: $c-gray-93;
   display: flex;
-  justify-content: left;
+  justify-content: center;
   align-items: center;
   .view-feedback {
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 11px;
     font-weight: bold;
     font-stretch: normal;
@@ -241,6 +234,7 @@
     padding-right: 10px;
     padding-top: 4px;
     height: 20px;
+    margin-right: 5px;
     img {
       width: 18px !important;
       margin-right: 3px;
@@ -250,8 +244,9 @@
     padding-left: 2px;
     margin-left: 3px;
   }
-  @media screen and (max-width: $L) {
-    @include width(170px);
+  @media screen and (max-width: $XL) {
+    @include width(180px);
+    margin: 0 40px 0 10px;
   }
 }
 

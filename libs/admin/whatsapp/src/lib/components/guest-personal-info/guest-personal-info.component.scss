@@ -23,11 +23,26 @@
     .default {
       width: 40px;
       height: 40px;
-      background: chartreuse;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
+
+      img {
+        width: 40px;
+        height: 40px;
+      }
+
+      &_nickName {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: $font14;
+        color: $white;
+      }
     }
   }
   .guest-name {

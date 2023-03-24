@@ -19,12 +19,8 @@
     align-items: center;
     .title {
       margin-left: 10px;
-      font-family: Roboto;
-      font-size: 16px;
+      font-size: $font16;
       font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
       color: $primary-black;
@@ -43,12 +39,8 @@
   height: calc(100% - 51.7px);
   padding: 18px;
   &__text {
-    font-family: Roboto;
-    font-size: 16px;
+    font-size: $font16;
     font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.96px;
     text-align: center;
     color: $primary-black;
@@ -63,49 +55,41 @@
       width: 113px;
       height: 35px;
       margin: 0 0 0 27px;
-      border-radius: 17.5px;
+      border-radius: 3px;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
       &__yes {
-        background-color: $button-blue;
+        background-color: $primary-cta;
         &__text {
-          font-family: Roboto;
-          font-size: 13px;
+          font-size: $font12;
           font-weight: 500;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
           letter-spacing: 0.78px;
           text-align: center;
           color: $white;
         }
         &:active {
-          transform: scale(0.95);
+          background-color: $primary-pressed;
         }
         &:hover {
-          transform: scale(0.97);
+          background-color: $primary-hover;
         }
       }
       &__no {
-        border: solid 1px $button-blue;
+        border: 1px solid $primary-cta;
         &__text {
-          font-family: Roboto;
-          font-size: 13px;
+          font-size: $font12;
           font-weight: 500;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
           letter-spacing: 0.78px;
           text-align: center;
-          color: $button-blue;
+          color: $primary-cta;
         }
         &:active {
-          transform: scale(0.95);
+          border: 1px solid $primary-pressed;
         }
         &:hover {
-          transform: scale(0.97);
+          border: 1px solid $primary-hover;
         }
       }
     }

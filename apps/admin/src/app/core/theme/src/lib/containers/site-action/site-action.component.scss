@@ -1,0 +1,38 @@
+@import 'main';
+
+:host ::ng-deep .site-wrapper {
+  .p-menu {
+    left: auto !important;
+    width: min-content;
+    min-width: 150px;
+
+    .p-menuitem {
+      .p-menuitem-link {
+        padding: 1em;
+        font-size: 14px;
+        white-space: nowrap;
+      }
+    }
+
+    .p-menu-overlay {
+    }
+  }
+}
+
+.site-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-color: $light-grey;
+  border-width: 1px;
+  border-style: solid;
+  padding: 1em;
+  font-size: 12px;
+  border-radius: 6px;
+  min-width: 150px;
+  height: 42px;
+  cursor: pointer;
+  .pi-angle-down {
+    border-color: $light-grey;
+  }
+}

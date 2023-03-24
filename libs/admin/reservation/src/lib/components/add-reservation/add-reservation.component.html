@@ -1,0 +1,193 @@
+<div [formGroup]="useForm" class="wrapper">
+  <hospitality-bot-navigation-header
+    heading="Add Reservation"
+    [routes]="routes"
+  >
+  </hospitality-bot-navigation-header>
+  <div class="main">
+    <p-accordion [multiple]="true">
+      <p-accordionTab header="Booking Information" [selected]="true">
+        <div class="form-block" formGroupName="bookingInformation">
+          <hospitality-bot-date
+            class="half-width"
+            controlName="checkIn"
+            label="Check In - Date"
+          ></hospitality-bot-date>
+          <hospitality-bot-date
+            class="half-width"
+            controlName="checkOut"
+            label="Check In - Date"
+          ></hospitality-bot-date>
+          <hospitality-bot-select
+            class="half-width"
+            controlName="reservationType"
+            label="Reservation Type"
+            [options]="reservationTypes"
+          ></hospitality-bot-select>
+          <hospitality-bot-select
+            class="half-width"
+            controlName="bookingSource"
+            label="Booking Source"
+            [options]="bookingSources"
+          ></hospitality-bot-select>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="businessSource"
+            label="Business Source"
+          ></hospitality-bot-input>
+          <hospitality-bot-select
+            class="half-width"
+            controlName="marketSource"
+            label="Market Source"
+            [options]="marketSegments"
+          ></hospitality-bot-select>
+        </div>
+      </p-accordionTab>
+      <p-accordionTab class="room-info" header="Room Information">
+        <hospitality-bot-iterator
+          class="iterator"
+          [fields]="roomFields"
+          [useFormArray]="useFormArray"
+          ctaLabel="+ Add Room"
+        >
+        </hospitality-bot-iterator>
+      </p-accordionTab>
+      <p-accordionTab header="Guest Information">
+        <div class="form-block" formGroupName="guestInformation">
+          <hospitality-bot-input
+            class="half-width"
+            controlName="firstName"
+            label="First Name"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="lastName"
+            label="Last Name"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="email"
+            label="Email Address"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="phoneNumber"
+            label="Phone"
+          ></hospitality-bot-input>
+        </div>
+      </p-accordionTab>
+      <p-accordionTab header="Billing Address">
+        <div class="form-block" formGroupName="billingAddress">
+          <hospitality-bot-input
+            class="half-width"
+            controlName="city"
+            label="First Name"
+          ></hospitality-bot-input>
+          <hospitality-bot-select
+            class="half-width"
+            controlName="country"
+            label="Last Name"
+            [options]="options"
+          ></hospitality-bot-select>
+          <hospitality-bot-input
+            class="full-width"
+            controlName="address"
+            label="Address"
+          ></hospitality-bot-input>
+          <hospitality-bot-select
+            class="half-width"
+            controlName="state"
+            label="State"
+            [options]="options"
+          ></hospitality-bot-select>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="postalCode"
+            label="Postal Code"
+          ></hospitality-bot-input>
+        </div>
+      </p-accordionTab>
+      <p-accordionTab header="Payment Method">
+        <div class="form-block" formGroupName="paymentMethod">
+          <hospitality-bot-select-group
+            class="payment"
+            controlName="paymentOption"
+            label=""
+            [options]="paymentOptions"
+          ></hospitality-bot-select-group>
+          <hospitality-bot-input
+            class="full-width"
+            controlName="remarks"
+            label="Your Inclusions/remarks :"
+          ></hospitality-bot-input>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+    <div class="bk-summary">
+      <div class="bk-summary_heading">Booking Summary</div>
+      <p class="divider"></p>
+      <div class="bk-summary_subheading">
+        <span class=""></span><span></span>
+      </div>
+      <div class="bk-summary_subheading_label">
+        The Leela , New Delhi, 210003
+      </div>
+
+      <div class="bk-summary_roomInfo">
+        <div class="bk-summary_roomInfo_checkoutInfo">
+          <p class="bk-summary_roomInfo_checkoutInfo_heading">
+            Checkin - Checkout
+          </p>
+          <p class="bk-summary_roomInfo_checkoutInfo_subText">
+            {{
+              useForm.get('bookingInformation.checkIn').value
+                | date: 'mediumDate'
+            }}
+            {{
+              useForm.get('bookingInformation.checkOut').value
+                | date: 'mediumDate'
+            }}
+          </p>
+        </div>
+        <div class="bk-summary_roomInfo_guestInfo">
+          <p class="bk-summary_roomInfo_guestInfo_heading">
+            Rooms & Guests
+          </p>
+          <p class="bk-summary_roomInfo_guestInfo_subText">
+            {{ useForm.get('roomInformation.0.noRoom').value }} Room,
+            {{ useForm.get('roomInformation.0.adults').value }} Adult,
+            {{ useForm.get('roomInformation.0.kids').value }} Kid
+          </p>
+        </div>
+      </div>
+      <div class="bk-summary_priceInfo">
+        <p class="bk-summary_priceInfo_perNight">
+          <span class="bk-summary_priceInfo_perNight_label">Per Night</span>
+          <span class="bk-summary_priceInfo_perNight_amount">$1800</span>
+        </p>
+        <p class="bk-summary_priceInfo_person">
+          <span class="bk-summary_priceInfo_perNight_label"
+            >For 2 Adults & 1 Child</span
+          >
+          <span class="bk-summary_priceInfo_perNight_amount">$1200</span>
+        </p>
+        <p class="bk-summary_priceInfo_taxFair">
+          <span class="bk-summary_priceInfo_perNight_label"
+            >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
+          ></span>
+          <span class="bk-summary_priceInfo_perNight_amount">+ $1,242</span>
+        </p>
+      </div>
+      <p class="divider"></p>
+      <div class="bk-summary_total">
+        <p class="bk-summary_total_label">Total Amount to be paid</p>
+        <p class="bk-summary_total_amount">$7662</p>
+      </div>
+      <div class="bk-summary_btnwrapper">
+        <hospitality-bot-button
+          label="Proceed to Checkout"
+        ></hospitality-bot-button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -126,7 +126,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  handleError({ error }) {
+  handleError = ({ error }) => {
     this.snackbarService
       .openSnackBarWithTranslate(
         {
@@ -136,7 +136,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
         ''
       )
       .subscribe();
-  }
+  };
 
   /**
    * @function ngOnDestroy to unsubscribe subscription

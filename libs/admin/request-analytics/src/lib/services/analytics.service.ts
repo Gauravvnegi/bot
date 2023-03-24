@@ -60,7 +60,7 @@ export class AnalyticsService extends ApiService {
   }
 
   getPackageList(hotelId: string) {
-    return this.get(`/api/v1/hotel/${hotelId}/packages`);
+    return this.get(`/api/v1/entity/${hotelId}/packages`);
   }
 
   updatePreArrivalRequest(id, data) {

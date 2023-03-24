@@ -46,7 +46,6 @@ export class ExportListComponent {
   }
 
   handleActionEmission(value: string) {
-    debugger;
     this.onActionsClick.emit(value);
   }
 }

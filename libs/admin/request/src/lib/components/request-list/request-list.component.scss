@@ -123,7 +123,7 @@
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 .spinner {
@@ -133,7 +133,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 
   border-radius: 100%;
   display: inline-block;
@@ -221,5 +221,5 @@
   ::ng-deep
   .mat-tab-header-pagination-controls-enabled
   .mat-tab-header-pagination {
-  display: flex;
+  display: none;
 }

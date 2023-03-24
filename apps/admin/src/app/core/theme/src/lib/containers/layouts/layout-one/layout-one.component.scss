@@ -2,7 +2,7 @@
 
 .layoutMessageCheck {
   @include flex-between-center();
-  @include width(74%);
+  @include width(75%);
   .margBtm {
     margin-bottom: -6px;
   }
@@ -23,6 +23,7 @@
 .sidebar-panel {
   position: relative;
   height: $full;
+  z-index: $left-side-panel-z;
   -webkit-transition: all 500ms;
   -moz-transition: all 500ms;
   -ms-transition: all 500ms;
@@ -30,7 +31,7 @@
   transition: all 500ms;
   @media (max-width: $tablet) {
     position: absolute;
-    z-index: 99;
+    z-index: $left-side-panel-z;
   }
 }
 
@@ -39,7 +40,7 @@
   @include flex-justify-center();
   left: 80px;
   right: 0;
-  z-index: 2222;
+  z-index: $right-side-panel-z;
   top: 16px;
   p {
     max-width: 70%;
@@ -115,7 +116,7 @@
     padding: 6px 0 6px $padding10;
     position: relative;
     @media (max-width: $tablet) {
-      @include width(93%);
+      @include width(90%);
       @include margin-left(auto);
     }
     .options {
@@ -146,7 +147,7 @@
         @include height(42px);
         border: none;
         font-size: 12px;
-        color: $primary-purple;
+        color: $primary-cta;
         @include flex-between-center();
         background-color: $white;
         border-radius: $borderRadius5;
@@ -182,7 +183,7 @@
           border: solid 1px #fff;
           border-radius: 16px;
           background-color: #ffa329;
-          padding: 2px 6px;
+          padding: 0px 6px;
           top: 0;
           left: 50%;
           font-size: 12px;
@@ -198,20 +199,20 @@
         top: -1vh;
         right: 0;
         height: 100vh;
-        box-shadow: 0px 0px 3px 0px $primary-purple;
+        box-shadow: 0px 0px 3px 0px $primary-cta;
         @include width(299px);
         background-color: $white;
-        z-index: 22;
+        z-index: $right-side-panel-z;
       }
       .notification {
         position: absolute;
         top: 0;
         right: 0;
         height: 100vh;
-        box-shadow: 0px 0px 3px 0px $primary-purple;
+        box-shadow: 0px 0px 3px 0px $primary-cta;
         @include width(299px);
         background-color: $white;
-        z-index: 22;
+        z-index: $right-side-panel-z;
       }
       .date-range {
         @media screen and (max-width: 800px) {
@@ -223,7 +224,7 @@
       .breadcrums {
         @include width(25%);
         @include padding(14.5px 20px);
-        font: normal normal normal 14px/19px Roboto;
+        font-size: $font14;
         letter-spacing: 0.84px;
         color: $light-grey2;
         opacity: 1;
@@ -232,12 +233,17 @@
           color: $dark-blue;
         }
         span {
-          font-family: Roboto;
           font-size: $font14;
           font-weight: 500;
           letter-spacing: 0.84px;
           text-align: left;
           color: $dark-blue;
+        }
+        @media screen and (max-width: 800px) {
+          @include width(35%);
+        }
+        @media (max-width: $L) {
+          @include width(32%);
         }
       }
     }
@@ -246,32 +252,32 @@
     .main {
       max-height: calc(100vh - 60px);
       overflow-x: hidden;
-      background-color: #f4f5f6;
       position: relative;
+      background-color: $layout-background;
       .blackscreen {
         position: absolute;
         height: 100%;
-        width: 100%;
+        right: 0;
+        left: 0;
         opacity: 0.3;
         background-color: black;
-        z-index: 4;
+        z-index: $main-overlay-z;
         display: none;
       }
 
       .router__wrapper {
-        @include padding(5px);
-        min-height: calc(100vh - 12.5vh);
+        @include padding(20px);
+        min-height: calc(100vh - 110px);
         // @include padding-top(1.5rem);
         @media only screen and (max-width: 1300px) {
-          @include padding(0 10px);
-          @include padding-top(10px);
+          @include padding(20px);
         }
         @media only screen and (max-width: 1100px) {
           min-height: calc(100vh - 9.5vh);
         }
         @media (max-width: $tablet) {
           padding: 1.3%;
-          @include width(93%);
+          @include width(92.2%);
           @include margin-left(auto);
         }
       }
@@ -288,7 +294,7 @@
   &--icon {
     @include flex-item-center();
     font-size: $font13;
-    color: $primary-purple;
+    color: $primary-cta;
     font-weight: 500;
     &:hover {
       cursor: pointer;
@@ -340,6 +346,10 @@
   display: flex;
   align-items: center;
   padding: 0 10px;
+}
+
+.site-select {
+  margin-left: 5px;
 }
 
 .options2 {

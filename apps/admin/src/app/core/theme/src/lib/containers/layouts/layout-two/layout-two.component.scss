@@ -1,0 +1,43 @@
+@import 'main';
+
+.main {
+  background-color: $layout-background;
+  overflow: auto;
+  height: calc(100vh - 65px);
+}
+
+.router-wrapper {
+  padding: 20px;
+}
+
+:host ::ng-deep .footer {
+  width: 100% !important;
+  position: sticky;
+  top: 2000px;
+}
+
+/** app heading **/
+
+.app-header {
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $white;
+}
+
+.logo-wrapper {
+  width: 74px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $nav-bg-color;
+  img {
+    height: 80%;
+  }
+}
+
+.profile-wrapper {
+  margin: 0 24px;
+}

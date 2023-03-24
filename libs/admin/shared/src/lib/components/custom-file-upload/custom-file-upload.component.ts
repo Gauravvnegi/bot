@@ -4,14 +4,12 @@ import {
   Input,
   OnChanges,
   OnDestroy,
+  Optional,
+  Self,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormGroup,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { ControlValueAccessor, FormGroup, NgControl } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { forkJoin, Subscription } from 'rxjs';
 import { fileUploadConfiguration } from '../../constants';
@@ -22,21 +20,10 @@ import { UploadFileData } from '../../types/fields.type';
   selector: 'hospitality-bot-custom-file-upload',
   templateUrl: './custom-file-upload.component.html',
   styleUrls: ['./custom-file-upload.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: CustomFileUploadComponent,
-      multi: true,
-    },
-  ],
+  providers: [],
 })
 export class CustomFileUploadComponent
   implements ControlValueAccessor, OnChanges, OnDestroy {
-  constructor(
-    private snackbarService: SnackBarService,
-    private userDetailsService: UserService
-  ) {}
-
   subscription$ = new Subscription();
   url: string = '';
   thumbUrl: string;
@@ -68,15 +55,25 @@ export class CustomFileUploadComponent
 
   @Input() label: string = '';
   @Input() description: string = 'Mandatory to add at least 1 image';
-  @Input() hint: string = 'Recommended Ratio : 16:9 | 1 MB Max Size';
+  @Input() hint: string = 'Recommended Ratio : 16:9 | 3 MB Max Size';
+  @Input() validationErrMsg: string = 'Image is required.';
   indexToBeUpload: number;
   fileUrls: string[];
+
+  constructor(
+    private snackbarService: SnackBarService,
+    private userDetailsService: UserService,
+    @Self() @Optional() public control: NgControl
+  ) {
+    if (this.control) this.control.valueAccessor = this;
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && this.parentFG) {
       this.thumbUrl = this.parentFG.controls['thumbnailUrl'].value;
     }
-    this.fileUrls = Array(this.limit).fill(this.defaultImage);
+    if (!this.fileUrls)
+      this.fileUrls = Array(this.limit).fill(this.defaultImage);
     this.defaultValue['fileType'] = fileUploadConfiguration[this.baseType];
   }
 
@@ -84,11 +81,14 @@ export class CustomFileUploadComponent
   onTouched = () => {};
 
   writeValue(controlValue: string[] | string): void {
-    const arr: string[] = [];
-    if (typeof controlValue == 'string' && controlValue != '')
+    if (typeof controlValue == 'string' && controlValue != '') {
       this.fileUrls = [controlValue];
-    else if (controlValue.length !== arr.length) {
-      this.fileUrls = controlValue as string[];
+    } else if (typeof controlValue === 'object' && controlValue?.length) {
+      this.fileUrls = Array(this.limit)
+        .fill(this.defaultImage)
+        .map((item, idx) => {
+          return controlValue[idx] ?? item;
+        });
     }
   }
 
@@ -257,6 +257,10 @@ export class CustomFileUploadComponent
 
   removeImage(index: number) {
     this.fileUrls[index] = this.defaultImage;
+    if (this.limit == 1) {
+      this.onChange('');
+      this.control.control.markAsTouched();
+    }
     if (this.baseType == 'video') {
       this.parentFG.controls['url'].setValue('');
       this.parentFG.controls['thumbnailUrl'].setValue('');

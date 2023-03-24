@@ -1,0 +1,10 @@
+<th [id]="col.field" class="table-search-field" *ngFor="let col of columns">
+  <input
+    pInputText
+    type="text"
+    (input)="onSearch($event.target.value, col)"
+    [placeholder]="col.placeholder ? col.placeholder : ''"
+    [disabled]="col.isSearchDisabled"
+    class="p-column-filter"
+  />
+</th>

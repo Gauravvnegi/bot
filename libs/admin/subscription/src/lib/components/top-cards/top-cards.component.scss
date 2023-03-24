@@ -7,33 +7,32 @@
   .card {
     flex-grow: 1;
     flex-shrink: 1;
-    height: 108px;
     background: 0% 0% no-repeat padding-box $white;
     box-shadow: 0px 3px 6px $progress-bar-messages;
     border-radius: 5px;
     padding: 25px 15px;
     &__title {
-      font: normal normal normal 14px/19px Roboto;
+      font-size: $font14;
       letter-spacing: 0.28px;
       color: $tooltip;
       margin-bottom: 10px;
       @media (max-width: 992px) {
-        font: normal normal bold 12px/19px Roboto;
+        font-size: $font12;
       }
     }
     &__details {
       display: flex;
       justify-content: space-between;
       &__label {
-        font: normal normal bold 25px/29px Roboto;
+        font-size: $font16;
         letter-spacing: 0.5px;
         color: $dark-blue;
         align-items: center;
         @media screen and (max-width: 1100px) {
-          font: normal normal bold 15px/29px Roboto;
+          font-size: $font15;
         }
         @media (max-width: 992px) {
-          font: normal normal bold 12px/29px Roboto;
+          font-size: $font12;
         }
         img {
           padding: 0 6px;
@@ -41,21 +40,22 @@
       }
       &__button {
         outline: none;
-        width: 90px;
         height: 28px;
-        background: $accordian-background 0% 0% no-repeat padding-box;
-        border-radius: 24px;
+        background: $primary-text-bg;
+        border-radius: 3px;
         border: 1px solid $accordian-background;
-        color: $button-blue;
+        color: $primary-cta;
         display: flex;
         align-items: center;
         text-decoration: none;
         justify-content: center;
         font-weight: 600;
-        font-size: 12px;
+        font-size: $font12;
+        padding: 6px;
+        margin-left: 8px;
         cursor: pointer;
         &:hover {
-          background: $button-blue;
+          background: $primary-hover;
           color: $white;
         }
         @media (max-width: 992px) {

@@ -27,7 +27,7 @@
     "editListing": "Edit Listing"
   },
 
-  "+createListing": "+Create Listing",
+  "+createListing": "+ Create Listing",
 
   "validationMessage": {
     "name": "Name is required",
@@ -49,7 +49,7 @@
 
   "contact": {
     "import": "Import Contact",
-    "add": "+Add Contact"
+    "add": "+ Add Contact"
   },
 
   "addContact": "Add Contacts",

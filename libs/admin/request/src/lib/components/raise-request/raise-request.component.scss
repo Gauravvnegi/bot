@@ -8,7 +8,7 @@
   display: flex;
   justify-content: space-between;
   background: transparent
-    linear-gradient(180deg, #a09fe5d9 0%, $primary-purple 100%) 0% 0% no-repeat
+    linear-gradient(180deg, #a09fe5d9 0%, $primary-cta 100%) 0% 0% no-repeat
     padding-box;
   position: sticky;
   top: 0;
@@ -89,6 +89,7 @@
   bottom: 0;
   padding: 15px 30px;
   background: $white;
+  gap: 15px;
   &-cancel {
     width: 113px;
     height: 35px;

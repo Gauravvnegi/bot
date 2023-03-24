@@ -330,9 +330,12 @@
         <span *ngIf="hasPageState('view')">
           Permissions
         </span>
-        <div (click)="addUser()" class="add-user" *ngIf="hasPageState('view')">
-          + Add New User
-        </div>
+        <hospitality-bot-button
+          label="+ Add New User"
+          (click)="addUser()"
+          *ngIf="hasPageState('view')"
+        >
+        </hospitality-bot-button>
       </div>
       <div *ngIf="userToModDetails?.products" class="tabs">
         <hospitality-bot-tab-group
@@ -430,10 +433,12 @@
         class="permission-button-wrapper"
         *ngIf="hasPageState('edit', 'add', 'view')"
       >
-        <button (click)="savePermission()" *ngIf="hasPageState('edit', 'add')">
-          <i *ngIf="isUpdatingPermissions" class="fa fa-spinner fa-spin"></i>
-          {{ isUpdatingPermissions ? 'Updating User Permissions' : 'Save' }}
-        </button>
+        <hospitality-bot-button
+          [label]="isUpdatingPermissions ? 'Updating User Permissions' : 'Save'"
+          (click)="savePermission()"
+          [showLoader]="isUpdatingPermissions"
+          *ngIf="hasPageState('edit', 'add')"
+        ></hospitality-bot-button>
       </div>
     </div>
   </form>

@@ -9,11 +9,16 @@ import { SharedMaterialModule } from 'libs/shared/material/src';
 import { ButtonModule } from 'primeng/button/';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { InputSwitchModule } from 'primeng/inputswitch';
 import { TableModule } from 'primeng/table';
 import { TabMenuModule } from 'primeng/tabmenu';
+import { AccordionModule } from 'primeng/accordion';
 import { ButtonComponent } from './components/button/button.component';
 import { ComingSoonComponent } from './components/coming-soon/coming-soon.component';
 import { CustomFileUploadComponent } from './components/custom-file-upload/custom-file-upload.component';
@@ -42,6 +47,7 @@ import { UploadCsvComponent } from './components/upload-csv/upload-csv.component
 import { UploadFileComponent } from './components/upload-file/upload-file.component';
 import { UploadVideoComponent } from './components/upload-video/upload-video.component';
 import { ClickableDirective } from './directives/clickable.directive';
+import { ImageDirective } from './directives/image.directive';
 import { FeatureDirective } from './directives/feature.directive';
 import { InternalSubscriptionDirective } from './directives/internal-subscription.directive';
 import { NumberDirective } from './directives/number.directive';
@@ -56,6 +62,18 @@ import { ChatHeaderComponent } from './components/chat-header/chat-header.compon
 import { InfiniteScroll } from './directives/infinite-scroll.directive';
 import { EmptyViewComponent } from './components/datatable/empty-view/empty-view.component';
 import { CustomTooltipComponent } from './components/custom-tooltip/custom-tooltip.component';
+import { MultiSelectComponent } from './components/form-component/multi-select/multi-select.component';
+import { DateComponent } from './components/form-component/date/date.component';
+import { PrefixFieldComponent } from './components/form-component/prefix-field/prefix-field.component';
+import { SelectGroupComponent } from './components/form-component/select-group/select-group.component';
+import { ViewSharedComponentsComponent } from './components/view-shared-components/view-shared-components.component';
+import { ToggleSwitchComponent } from './components/form-component/toggle-switch/toggle-switch.component';
+import { TableHeaderComponent } from './components/datatable/table-header/table-header.component';
+import { TableSearchComponent } from './components/datatable/table-search/table-search.component';
+import { NavigationHeaderComponent } from './components/navigation-header/navigation-header.component';
+import { CategoryFormComponent } from './view/category-form/category-form.component';
+import { AutoCompleteComponent } from './components/form-component/auto-complete/auto-complete.component';
+import { ViewInputComponent } from './components/form-component/view-input/view-input.component';
 
 @NgModule({
   imports: [
@@ -67,9 +85,14 @@ import { CustomTooltipComponent } from './components/custom-tooltip/custom-toolt
     ButtonModule,
     PaginatorModule,
     TabMenuModule,
+    AccordionModule,
     SplitButtonModule,
+    InputSwitchModule,
     InputTextModule,
     DropdownModule,
+    CalendarModule,
+    MultiSelectModule,
+    AutoCompleteModule,
     MatChipsModule,
     MatAutocompleteModule,
     CKEditorModule,
@@ -87,6 +110,7 @@ import { CustomTooltipComponent } from './components/custom-tooltip/custom-toolt
     InternalSubscriptionDirective,
     FeatureDirective,
     ClickableDirective,
+    ImageDirective,
     InfiniteScroll,
     ClickStopPropagation,
     UploadCsvComponent,
@@ -120,6 +144,18 @@ import { CustomTooltipComponent } from './components/custom-tooltip/custom-toolt
     ModalComponent,
     EmptyViewComponent,
     CustomTooltipComponent,
+    MultiSelectComponent,
+    DateComponent,
+    PrefixFieldComponent,
+    SelectGroupComponent,
+    ViewSharedComponentsComponent,
+    ToggleSwitchComponent,
+    TableHeaderComponent,
+    TableSearchComponent,
+    NavigationHeaderComponent,
+    CategoryFormComponent,
+    AutoCompleteComponent,
+    ViewInputComponent,
   ],
   exports: [
     DatatableComponent,
@@ -130,9 +166,14 @@ import { CustomTooltipComponent } from './components/custom-tooltip/custom-toolt
     ButtonModule,
     PaginatorModule,
     TabMenuModule,
+    AccordionModule,
     SplitButtonModule,
+    InputSwitchModule,
     InputTextModule,
     DropdownModule,
+    CalendarModule,
+    MultiSelectModule,
+    AutoCompleteModule,
     CKEditorModule,
     NumberDirective,
     MultipleDropdownComponent,
@@ -141,6 +182,7 @@ import { CustomTooltipComponent } from './components/custom-tooltip/custom-toolt
     InternalSubscriptionDirective,
     FeatureDirective,
     ClickableDirective,
+    ImageDirective,
     InfiniteScroll,
     UploadVideoComponent,
     TopicDropdownComponent,
@@ -173,6 +215,18 @@ import { CustomTooltipComponent } from './components/custom-tooltip/custom-toolt
     ModalComponent,
     EmptyViewComponent,
     CustomTooltipComponent,
+    MultiSelectComponent,
+    DateComponent,
+    PrefixFieldComponent,
+    SelectGroupComponent,
+    ViewSharedComponentsComponent,
+    ToggleSwitchComponent,
+    TableHeaderComponent,
+    TableSearchComponent,
+    NavigationHeaderComponent,
+    CategoryFormComponent,
+    AutoCompleteComponent,
+    ViewInputComponent,
   ],
 })
 export class AdminSharedModule {}

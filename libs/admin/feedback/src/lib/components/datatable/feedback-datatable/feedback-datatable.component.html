@@ -1,86 +1,53 @@
 <div
-  class="caption__wrapper"
-  [ngClass]="{
-    'header-background': tableFG?.get('tableType').value !== 'card'
-  }"
+  class="action-header"
+  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+  [formGroup]="tableFG"
 >
-  <form [formGroup]="tableFG">
-    <div class="caption__wrapper--tabmenu">
-      <div class="header">
-        <!-- <div class="header--text"> -->
-        <img src="assets/svg/surveyor.svg" alt="" /> &nbsp;
-        <p class="heading">
-          {{ tableName }}
-        </p>
-        <div class="mark-btn-container">
-          <!-- <div class="request-btn" (click)="openFeedbackRequestPage($event)">
-            <div class="request-btn__wrap">
-              {{ 'request_feedback_label' | translate }}
-            </div>
-          </div> -->
-          <div class="btn read" *ngIf="selectedRows.length > 0">
-            <img
-              [src]="globalFeedbackConfig.images.datatable.mark_as_read.url"
-              [alt]="globalFeedbackConfig.images.datatable.mark_as_read.alt"
-              (click)="updateFeedbackStatus(true)"
-            />
-            <span class="btn_text">
-              {{ 'datatable.mark_as_read' | translate }}
-            </span>
-          </div>
-          <div class="btn" *ngIf="selectedRows.length > 0">
-            <img
-              [src]="globalFeedbackConfig.images.datatable.mark_as_unread.url"
-              [alt]="globalFeedbackConfig.images.datatable.mark_as_unread.alt"
-              (click)="this.updateFeedbackStatus(false)"
-            />
-            <span class="btn_text">
-              {{ 'datatable.mark_as_unread' | translate }}
-            </span>
-          </div>
-        </div>
-        <div class="action-wrapper">
-          <div class="pull-right">
-            <label class="labl" *ngFor="let option of tableTypes">
-              <input
-                type="radio"
-                formControlName="tableType"
-                [value]="option.value"
-                (click)="setTableType(option.value)"
-              />
-              <div class="image">
-                <img [src]="option.url" [alt]="option.value" />
-              </div>
-            </label>
-          </div>
-          <hospitality-bot-export-list
-            (onDocumentActions)="onDocumentActions()"
-            [documentTypes]="documentTypes"
-            [documentActionTypes]="documentActionTypes"
-          ></hospitality-bot-export-list>
-        </div>
-      </div>
-      <div
-        *ngIf="
-          isTabFilters &&
-          tabFilterItems &&
-          tableFG?.get('tableType').value !== 'card'
-        "
-      >
-        <hospitality-bot-tab-group
-          [listItems]="tabFilterItems"
-          [selectedIndex]="tabFilterIdx"
-          (selectedTabChange)="onSelectedTabFilterChange($event)"
-        ></hospitality-bot-tab-group>
-      </div>
+  <div class="heading">
+    <img src="assets/svg/surveyor.svg" alt="" /> &nbsp;{{ tableName }}
+  </div>
+  <div class="action-wrapper">
+    <div class="btn read" *ngIf="selectedRows.length > 0">
+      <img
+        [src]="globalFeedbackConfig.images.datatable.mark_as_read.url"
+        [alt]="globalFeedbackConfig.images.datatable.mark_as_read.alt"
+        (click)="updateFeedbackStatus(true)"
+      />
+      <span class="btn_text">
+        {{ 'datatable.mark_as_read' | translate }}
+      </span>
     </div>
-    <hospitality-bot-filter-chips
-      *ngIf="isQuickFilters && tableFG?.get('tableType').value !== 'card'"
-      [chips]="tabFilterItems[tabFilterIdx].chips"
-      (onChange)="toggleQuickReplyFilter($event)"
-    ></hospitality-bot-filter-chips>
-  </form>
+    <div class="btn" *ngIf="selectedRows.length > 0">
+      <img
+        [src]="globalFeedbackConfig.images.datatable.mark_as_unread.url"
+        [alt]="globalFeedbackConfig.images.datatable.mark_as_unread.alt"
+        (click)="this.updateFeedbackStatus(false)"
+      />
+      <span class="btn_text">
+        {{ 'datatable.mark_as_unread' | translate }}
+      </span>
+    </div>
+    <div class="pull-right">
+      <label class="labl" *ngFor="let option of tableTypes">
+        <input
+          type="radio"
+          formControlName="tableType"
+          [value]="option.value"
+          (click)="setTableType(option.value)"
+        />
+        <div class="image">
+          <img [src]="option.url" [alt]="option.value" />
+        </div>
+      </label>
+    </div>
+    <hospitality-bot-export-list
+      (onDocumentActions)="onDocumentActions()"
+      [documentTypes]="documentTypes"
+      [documentActionTypes]="documentActionTypes"
+    ></hospitality-bot-export-list>
+  </div>
 </div>
+
 <ng-container
   *ngIf="tableFG?.get('tableType').value === 'card'; else tableView"
 >
@@ -88,6 +55,7 @@
     <hospitality-bot-main #cardComponent></hospitality-bot-main>
   </div>
 </ng-container>
+
 <ng-template #tableView>
   <p-table
     #dt
@@ -114,139 +82,38 @@
     (onFilter)="onDataFilter($event)"
   >
     <!-- <ng-template pTemplate="caption"> </ng-template> -->
+    <ng-template pTemplate="caption">
+      <div class="caption__wrapper" [formGroup]="tableFG">
+        <hospitality-bot-tab-group
+          *ngIf="
+            isTabFilters &&
+            tabFilterItems &&
+            tableFG?.get('tableType').value !== 'card'
+          "
+          [listItems]="tabFilterItems"
+          [selectedIndex]="tabFilterIdx"
+          (selectedTabChange)="onSelectedTabFilterChange($event)"
+        ></hospitality-bot-tab-group>
+
+        <hospitality-bot-filter-chips
+          *ngIf="isQuickFilters && tableFG?.get('tableType').value !== 'card'"
+          [chips]="tabFilterItems[tabFilterIdx].chips"
+          (onChange)="toggleQuickReplyFilter($event)"
+        ></hospitality-bot-filter-chips>
+      </div>
+    </ng-template>
 
     <ng-template pTemplate="emptymessage">
-      <hospitality-bot-empty-view></hospitality-bot-empty-view>
+      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
     </ng-template>
     <!-- *******************************HEADER WITH SEARCH******************************* -->
     <ng-template pTemplate="header" let-columns>
-      <tr>
-        <th
-          *ngIf="isSelectable"
-          id="select-all"
-          class="table-search-head select-box"
-          pResizableColumn
-        >
-          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-        </th>
-        <th
-          [id]="col.fields"
-          class="table-data-head"
-          pResizableColumn
-          [pSortableColumn]="col.field"
-          *ngFor="let col of columns; let i = index"
-          [ngStyle]="col.dynamicWidth ? { width: '225px' } : {}"
-        >
-          <div>
-            <p class="table-header-text">{{ col.header }}</p>
-            <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-          </div>
-        </th>
-      </tr>
-
-      <ng-container
-        *ngIf="
-          tabFilterItems[tabFilterIdx]?.value ===
-            globalFeedbackConfig.types.transactional;
-          else stayTableSearch
-        "
-      >
-        <tr class="table-search-head">
-          <th class="table-search-head"></th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="
-                onFilterTypeTextChange($event.target.value, 'tableOrRoomNumber')
-              "
-              class="p-column-filter"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="
-                onFilterTypeTextChange($event.target.value, 'guest.fullName')
-              "
-              class="p-column-filter"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="
-                onFilterTypeTextChange(
-                  $event.target.value,
-                  'booking.bookingNumber'
-                )
-              "
-              class="p-column-filter"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="
-                onFilterTypeTextChange($event.target.value, 'guest.place')
-              "
-              class="p-column-filter"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-              class="p-column-filter"
-              disabled="true"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-              class="p-column-filter"
-              disabled="true"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-              class="p-column-filter"
-              disabled="true"
-            />
-          </th>
-        </tr>
-      </ng-container>
-      <ng-template #stayTableSearch>
-        <tr>
-          <th
-            class="table-search-head"
-            id="select-box"
-            *ngIf="isSelectable"
-          ></th>
-          <th
-            [id]="col.field"
-            class="table-search-head"
-            *ngFor="let col of columns"
-          >
-            <input
-              pInputText
-              type="text"
-              (input)="onFilterTypeTextChange($event.target.value, col.field)"
-              class="p-column-filter"
-              [disabled]="col.isSearchDisabled"
-            />
-          </th>
-        </tr>
-      </ng-template>
+      <tr
+        hospitality-bot-table-header
+        [columns]="columns"
+        [showCheckbox]="isSelectable"
+        (search)="handleFieldSearch($event)"
+      ></tr>
     </ng-template>
     <!-- **************************************BODY********************************* -->
     <ng-template
@@ -262,12 +129,8 @@
           else stayTable
         "
       >
-        <tr
-          class="data-table-row"
-          [style.background]="rowData?.read ? '' : 'rgba(174, 209, 251, .1)'"
-        >
-          <!-- <tr class="data-table-row"> -->
-          <td class="table--checkbox">
+        <tr class="table-row" [style.background]="rowData?.read ? '' : ''">
+          <td class="table-row__checkbox">
             <p-tableCheckbox
               [value]="rowData"
               [index]="rowIndex"
@@ -340,7 +203,7 @@
                     <div class="feedback-service__container" *ngIf="i < 2">
                       <div class="feedback-service__container__label">
                         <div class="feedback-service__container__label__text">
-                          {{ service.serviceName | titlecase }}
+                          {{ service.getServiceName() }}
                         </div>
                       </div>
                       <div
@@ -485,11 +348,10 @@
       <ng-template #stayTable>
         <tr
           (click)="openDetailPage($event, rowData)"
-          class="data-table-row"
-          [style.background]="rowData?.read ? '' : 'rgba(174, 209, 251, .1)'"
+          class="table-row"
+          [style.background]="rowData?.read ? '' : ''"
         >
-          <!-- <tr class="data-table-row"> -->
-          <td class="table--checkbox">
+          <td class="table-row__checkbox">
             <p-tableCheckbox
               [value]="rowData"
               [index]="rowIndex"
@@ -501,7 +363,9 @@
             <div class="guest-status" *ngIf="rowData?.timeOut">
               <img src="assets/svg/timeout.svg" alt="timeout" />
             </div>
-            <div>{{ rowData?.tableOrRoomNumber }}</div>
+            <div>
+              {{ rowData?.tableOrRoomNumber }}
+            </div>
           </td>
           <td class="service-feedback">
             <div class="feedback">
@@ -542,7 +406,7 @@
                     <div class="feedback-service__container" *ngIf="i < 2">
                       <div class="feedback-service__container__label others">
                         <div class="feedback-service__container__label__text">
-                          {{ service.serviceName | titlecase }}
+                          {{ service.getServiceName() }}
                         </div>
                       </div>
                       <div class="stay-booking-feedback status-opacity-success">
@@ -664,6 +528,8 @@
         [totalRecords]="totalRecords"
         [rowsPerPageOptions]="rowsPerPageOptions"
         (onPageChange)="paginate($event)"
+        [currentPageReportTemplate]="reportTemplate"
+        showCurrentPageReport="true"
       ></p-paginator>
     </ng-template>
   </p-table>

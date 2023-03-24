@@ -104,7 +104,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  border: 2px solid $primary-purple;
+  border: 2px solid $primary-cta;
 }
 .labl > input {
   /* HIDE RADIO */
@@ -123,7 +123,7 @@
 }
 
 .labl > input:checked + .image {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   img {
     filter: invert(1);
   }

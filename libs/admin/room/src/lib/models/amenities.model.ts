@@ -1,39 +1,29 @@
-import { get, set } from 'lodash';
+import { Amenity } from '../types/service-response';
 
-export class Amenities {
-  compAmenities: Amenity[];
-  paidAmenities: Amenity[];
+export class Services {
+  services = new Array<Service>();
+
   deserialize(input) {
-    this.compAmenities = new Array<Amenity>();
-    this.paidAmenities = new Array<Amenity>();
-    input.forEach((item) => {
-      item.type == 'Complimentary' &&
-        this.compAmenities.push(new Amenity().deserialize(item));
-      item.type == 'Paid' &&
-        this.paidAmenities.push(new Amenity().deserialize(item));
+    input.forEach((x) => {
+      this.services.push(new Service().deserialize(x));
     });
 
     return this;
   }
 }
 
-export class Amenity {
+export class Service {
   id: string;
   name: string;
   imageUrl: string;
   type: string;
   rate?: string;
-  deserialize(input) {
-    Object.assign(
-      this,
-      set({}, 'id', get(input, 'id', '')),
-      set({}, 'name', get(input, 'name', '')),
-      set({}, 'imageUrl', get(input, 'imageUrl', '')),
-      set({}, 'type', get(input, 'type', ''))
-    );
-
-    this.rate = get(input, 'currency', '') + get(input, 'rate', '');
-
+  deserialize(input: Amenity) {
+    this.id = input.id;
+    this.name = input.name;
+    this.imageUrl = input.imageUrl;
+    this.type = input.type;
+    this.rate = `${input.currency}${input.rate}`;
     return this;
   }
 }

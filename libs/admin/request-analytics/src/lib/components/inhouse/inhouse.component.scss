@@ -9,7 +9,7 @@
     opacity: 1;
   }
   .mat-tab-label-active {
-    color: $primary-purple;
+    color: $primary-cta;
   }
 }
 
@@ -87,7 +87,7 @@
     }
     .go {
       outline: none;
-      color: $primary-purple;
+      color: $primary-cta;
       background: $go-btn-default;
       border: none;
       font-size: 10px;
@@ -95,7 +95,7 @@
       display: flex;
       margin-left: 10px;
       &:hover {
-        background-color: $primary-purple;
+        background-color: $primary-cta;
         color: $white;
         cursor: pointer;
       }

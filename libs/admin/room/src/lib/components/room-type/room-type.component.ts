@@ -1,342 +1,430 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ConfigService } from '@hospitality-bot/admin/shared';
-import { IpackageOptions } from 'libs/admin/packages/src/lib/data-models/packageConfig.model';
+import { ConfigService, DiscountType } from '@hospitality-bot/admin/shared';
+import { NavRouteOptions, Option } from 'libs/admin/shared/src';
+import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-import routes from '../../config/routes';
-import { Amenities, Amenity } from '../../models/amenities.model';
+import {
+  errorMessages,
+  noRecordAction,
+  RoomTypeFormData,
+  ServicesTypeValue,
+} from '../../constant/form';
+import routes from '../../constant/routes';
+import { Service, Services } from '../../models/amenities.model';
 import { RoomService } from '../../services/room.service';
+
 @Component({
   selector: 'hospitality-bot-room-type',
   templateUrl: './room-type.component.html',
   styleUrls: ['./room-type.component.scss'],
 })
 export class RoomTypeComponent implements OnInit, OnDestroy {
+  readonly inputValidationProps = { errorMessages, type: 'number' };
+  readonly noRecordAction = noRecordAction;
+
+  subscription$ = new Subscription();
+
+  useForm: FormGroup;
+  loading: boolean = false;
+  roomTypeId: string;
+  hotelId: string;
+  defaultImage: string = 'assets/images/image-upload.png';
+
+  pageTitle = 'Add Room Type';
+  navRoutes: NavRouteOptions = [
+    { label: 'Inventory', link: './' },
+    { label: 'Rooms', link: '/pages/inventory/room' },
+    { label: 'Add Room Type', link: './' },
+  ];
+
+  /* Dropdown Options */
+  paidServices: Service[] = [];
+  compServices: Service[] = [];
+  currencies: Option[] = [];
+  discountTypes: Option[] = [];
+
   constructor(
     private fb: FormBuilder,
     private roomService: RoomService,
     private globalService: GlobalFilterService,
     private configService: ConfigService,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private snackbarService: SnackBarService
-  ) {}
-
-  selectProperty: any = 'id';
-  extraProperty: string[] = ['name'];
-  subscription$ = new Subscription();
-  paidAmenities: Amenity[];
-  compAmenities: Amenity[];
-  amenities: Amenities;
-  currency: IpackageOptions[];
-  discount: IpackageOptions[];
-  dateTimeValue: number = 1238544816452;
-  useForm: FormGroup;
-  loader: boolean = false;
-  roomTypeId: string;
-  hotelId: string;
-  paidSelectedLabel: string[] = ['name', 'rate'];
-  compSelectedLabel: string[] = ['name'];
+  ) {
+    this.roomTypeId = this.route.snapshot.paramMap.get('id');
+  }
 
   ngOnInit(): void {
     this.hotelId = this.globalService.hotelId;
-    this.activatedRoute.queryParams.subscribe((res) => {
-      this.roomTypeId = res.id;
-    });
-    this.initAddRoomTypeForm();
-    this.getConfigByHotelID();
-    this.getAmenities();
+    this.initForm();
+    this.initOptionConfig();
   }
-  initAddRoomTypeForm() {
+
+  get inputControl() {
+    return this.useForm.controls as Record<
+      keyof RoomTypeFormData,
+      AbstractControl
+    >;
+  }
+
+  /**
+   * @function initForm Initialize form
+   */
+  initForm() {
+    const occupancyValidation = [
+      Validators.required,
+      Validators.min(0),
+      CustomValidators.notAllowedChr('.'),
+    ];
+
     this.useForm = this.fb.group({
       name: ['', [Validators.required]],
-      imageUrls: [[], []],
+      imageUrls: [[], [Validators.required]],
       description: ['', [Validators.required]],
-      complimentaryAmenities: [[], []],
-      paidAmenities: [[], [Validators.required]],
-      originalPrice: ['', [Validators.required]],
-      discountType: ['', []],
-      discountValue: ['', []],
-      discountedPrice: ['', []],
-      variablePriceCurrency: ['', []],
-      currency: ['', []],
-      variableAmount: ['', []],
-      discountedPriceCurrency: ['', []],
-      maxOccupancy: ['', [Validators.required]],
-      maxChildren: ['', []],
-      maxAdult: ['', []],
-      area: ['', [Validators.required]],
-    });
-    this.disableControls();
-  }
-
-  attachUseFormListener() {
-    this.useForm.controls['originalPrice'].valueChanges.subscribe((res) => {
-      this.onBasePriceChange();
+      complimentaryAmenities: [[]],
+      paidAmenities: [[]],
+      originalPrice: ['', [Validators.required, Validators.min(0)]],
+      discountType: ['', [Validators.required]],
+      discountValue: ['', [Validators.required, Validators.min(0)]],
+      discountedPrice: [{ value: '', disabled: true }],
+      variablePriceCurrency: [{ value: '', disabled: true }],
+      currency: ['', [Validators.required, Validators.min(0)]],
+      variableAmount: ['', [Validators.min(0)]],
+      discountedPriceCurrency: [{ value: '', disabled: true }],
+      maxOccupancy: [null, occupancyValidation],
+      maxChildren: [{ value: null, disabled: true }, occupancyValidation],
+      maxAdult: [{ value: null, disabled: true }, occupancyValidation],
+      area: ['', [Validators.required, Validators.min(0)]],
     });
 
-    this.useForm.controls['discountType'].valueChanges.subscribe((res) => {
-      this.onDiscountTypeChange();
-    });
+    // If Data is already present
+    if (this.roomService.roomTypeFormState) {
+      this.useForm.patchValue(this.roomService.roomTypeFormData);
+    }
 
-    this.useForm.controls['discountValue'].valueChanges.subscribe((res) => {
-      this.OnDiscountValueChange();
-    });
+    // Patch the form value if service id present
+    if (this.roomTypeId) {
+      this.pageTitle = 'Update Room Type';
+      this.navRoutes[2].label = 'Update Room Type';
 
-    this.useForm.controls['currency'].valueChanges.subscribe((res) => {
-      this.useForm.controls['discountedPriceCurrency'].setValue(res);
-      this.useForm.controls['variablePriceCurrency'].setValue(res);
-    });
-
-    this.useForm.controls['maxOccupancy'].valueChanges.subscribe(
-      (res: number) => {
-        this.onMaxOccupancyChange(res);
+      if (!this.roomService.roomTypeFormState) {
+        this.subscription$.add(
+          this.roomService
+            .getRoomTypeById(this.hotelId, this.roomTypeId)
+            .subscribe(
+              (res) => {
+                this.useForm.patchValue(res);
+              },
+              (err) => {
+                this.snackbarService.openSnackBarAsText(err.error.message);
+              }
+            )
+        );
       }
-    );
+    }
 
-    this.useForm.controls['maxAdult'].valueChanges.subscribe((res) => {
-      this.onMaxAdultChange(res);
-    });
-
-    if (this.roomTypeId) this.getRoomTypeById();
+    /* Value changes subscription */
+    this.initFormSubscription();
   }
 
-  getAmenities() {
+  /**
+   * @function initOptionsConfig To get all the dropdown options
+   */
+  initOptionConfig() {
+    const modOption = ({ key, value }) => ({ label: value, value: key });
+
     this.subscription$.add(
-      this.roomService
-        .getAmenities(this.hotelId)
-        .pipe(map((x) => x.records.filter((x) => x.active == true)))
-        .subscribe(
-          (res) => {
-            this.amenities = new Amenities().deserialize(res);
-            this.paidAmenities = this.amenities.paidAmenities;
-            this.compAmenities = this.amenities.compAmenities;
-          },
-          (error) => {
-            this.snackbarService.openSnackBarAsText(error.error.message);
-          }
-        )
-    );
-  }
-
-  getConfigByHotelID() {
-    this.subscription$.add(
-      this.configService
-        .getColorAndIconConfig(this.hotelId)
-        .subscribe((response) => {
-          this.attachUseFormListener();
-          this.setCurrencyOptions(response.currencyConfiguration);
-          this.setDiscountOptions(response.roomDiscountConfig);
-        })
-    );
-  }
-
-  setCurrencyOptions(data) {
-    this.currency = new Array<IpackageOptions>();
-    data.forEach((d) => this.currency.push({ key: d.key, value: d.value }));
-    this.useForm.controls['currency'].setValue(this.currency[0].value);
-    this.useForm.controls['discountedPriceCurrency'].setValue(
-      this.currency[0].value
-    );
-    this.useForm.controls['variablePriceCurrency'].setValue(
-      this.currency[0].value
-    );
-  }
-
-  setDiscountOptions(data) {
-    this.discount = new Array<IpackageOptions>();
-    data.forEach((d) =>
-      this.discount.push({
-        key: d.key,
-        value: d.value,
+      this.configService.$config.subscribe((value) => {
+        if (value) {
+          const { currencyConfiguration, roomDiscountConfig } = value;
+          this.currencies = currencyConfiguration.map(modOption);
+          this.discountTypes = roomDiscountConfig.map(({ value }) => ({
+            label: DiscountType[value],
+            value,
+          }));
+        }
       })
     );
-    this.useForm.controls['discountType'].setValue(this.discount[0].value);
-    this.useForm.controls['discountedPrice'].setValue(null);
+
+    this.getServices(ServicesTypeValue.PAID);
+    this.getServices(ServicesTypeValue.COMPLIMENTARY);
   }
 
-  saveDetails() {
-    this.loader = true;
-    if (this.useForm.valid) {
-      const data = this.setFormValue();
-      this.subscription$.add(
-        this.roomService.createRoomType(this.hotelId, data).subscribe(
+  /**
+   * @function initFormSubscription Initialize the subscription of form value change
+   */
+  initFormSubscription() {
+    this.registerRateAndDiscountChange();
+    this.registerOccupancyChanges();
+  }
+
+  /**
+   * @function registerRateAndDiscountChange Subscribe to rate and discount value subscription to get discounted price
+   */
+  registerRateAndDiscountChange() {
+    const {
+      originalPrice,
+      discountType,
+      discountedPriceCurrency,
+      discountValue,
+      currency,
+      variablePriceCurrency,
+    } = this.inputControl;
+
+    /**
+     * @function setDiscountValueAndErrors To update the discount value
+     * @returns error type
+     */
+    const setDiscountValueAndErrors = () => {
+      const price = +originalPrice.value;
+      const discount = +(discountValue.value ?? 0);
+      const type = discountType.value;
+
+      if (price && type)
+        this.useForm.patchValue({
+          discountedPrice:
+            type === 'NUMBER'
+              ? price - discount
+              : Math.round(
+                  (price - (price * discount) / 100 + Number.EPSILON) * 100
+                ) / 100,
+        });
+
+      if (type === 'NUMBER' && discount > price) {
+        return 'isNumError';
+      }
+
+      if (type === 'PERCENTAGE' && discount > 100) {
+        return 'isPercentError';
+      }
+    };
+
+    const clearError = () => {
+      originalPrice.setErrors(null);
+      discountValue.setErrors(null);
+    };
+
+    /* Original price Subscription */
+    originalPrice.valueChanges.subscribe(() => {
+      clearError();
+      const error = setDiscountValueAndErrors();
+      if (error === 'isNumError') {
+        originalPrice.setErrors({ isPriceLess: true });
+      }
+      if (error === 'isPercentError') {
+        discountValue.setErrors({ moreThan100: true });
+      }
+    });
+
+    /**
+     * @function discountSubscription To handle changes in discount value
+     */
+    const discountSubscription = () => {
+      clearError();
+      const error = setDiscountValueAndErrors();
+      if (error === 'isNumError') {
+        discountValue.setErrors({ isDiscountMore: true });
+      }
+      if (error === 'isPercentError') {
+        discountValue.setErrors({ moreThan100: true });
+      }
+    };
+
+    /* Discount Subscription */
+    discountValue.valueChanges.subscribe(discountSubscription);
+    discountType.valueChanges.subscribe(discountSubscription);
+
+    /* Currency Subscription */
+    currency.valueChanges.subscribe((res) => {
+      discountedPriceCurrency.setValue(res);
+      variablePriceCurrency.setValue(res);
+    });
+  }
+
+  /**
+   * @function registerOccupancyChanges Subscribe to rate and discount value subscription to get discounted price
+   */
+  registerOccupancyChanges() {
+    const { maxOccupancy, maxChildren, maxAdult } = this.inputControl;
+    const doNotEmit = { emitEvent: false };
+
+    const setOccupancyAndError = (
+      res: number,
+      type: 'maxAdult' | 'maxChildren'
+    ) => {
+      const isError = +maxOccupancy.value < +res;
+      this.useForm.patchValue(
+        { [type]: isError ? 0 : maxOccupancy.value - res },
+        doNotEmit
+      );
+      return isError;
+    };
+
+    maxOccupancy.valueChanges.subscribe((res) => {
+      if (res) {
+        maxChildren.enable(doNotEmit);
+        maxAdult.enable(doNotEmit);
+      } else {
+        maxChildren.disable(doNotEmit);
+        maxAdult.disable(doNotEmit);
+      }
+      maxChildren.setValue(null, doNotEmit);
+      maxAdult.setValue(null, doNotEmit);
+    });
+
+    maxChildren.valueChanges.subscribe((res) => {
+      if (setOccupancyAndError(res, 'maxAdult')) {
+        maxChildren.setErrors({ maxOccupancy: true });
+      }
+    });
+
+    maxAdult.valueChanges.subscribe((res) => {
+      if (setOccupancyAndError(res, 'maxChildren')) {
+        maxAdult.setErrors({ maxOccupancy: true });
+      }
+    });
+  }
+
+  /**
+   * @function getServices to get amenities (paid and services)
+   * @param serviceType
+   */
+  getServices(serviceType: ServicesTypeValue) {
+    this.subscription$.add(
+      this.roomService
+        .getServices(this.hotelId, {
+          params: `?limit=5&type=SERVICE&serviceType=${serviceType}&status=true`,
+        })
+        .subscribe(
           (res) => {
-            this.loader = false;
-            this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);
-            this.snackbarService.openSnackBarAsText(
-              'Room type is created successfully',
-              '',
-              { panelClass: 'success' }
-            );
+            if (serviceType == ServicesTypeValue.PAID && res.paidPackages) {
+              this.paidServices = new Services().deserialize(
+                res.paidPackages
+              ).services;
+            }
+            if (
+              serviceType === ServicesTypeValue.COMPLIMENTARY &&
+              res.complimentaryPackages
+            ) {
+              this.compServices = new Services().deserialize(
+                res.complimentaryPackages
+              ).services;
+            }
           },
           (error) => {
             this.snackbarService.openSnackBarAsText(error.error.message);
-            this.loader = false;
           }
         )
+    );
+  }
+
+  /**
+   *@function saveRoomTypeData Save room type form data that is to be used in services section
+   */
+  saveRoomTypeData(serviceType) {
+    const data = this.useForm.getRawValue();
+    this.roomService.initRoomTypeFormData(data, serviceType, true);
+    this.router.navigate(['/pages/inventory/room/add-room-type/services']);
+  }
+
+  /**
+   * @function submitForm handle submission of room type data
+   */
+  submitForm() {
+    if (this.useForm.invalid) {
+      this.loading = false;
+      this.snackbarService.openSnackBarAsText(
+        'Invalid Form: Please fix the errors'
       );
-    } else {
-      this.loader = false;
-      this.snackbarService.openSnackBarAsText('Invalid Form');
       this.useForm.markAllAsTouched();
       return;
     }
-  }
 
-  disableControls() {
-    this.useForm.controls['discountType'].disable();
-    this.useForm.controls['discountValue'].disable();
-    this.useForm.controls['discountedPriceCurrency'].disable();
-    this.useForm.controls['discountedPrice'].disable();
-    this.useForm.controls['maxChildren'].disable();
-    this.useForm.controls['maxAdult'].disable();
-  }
-
-  onBasePriceChange() {
-    this.useForm.controls['discountType'].enable();
-    this.useForm.controls['discountValue'].enable();
-    this.useForm.controls['discountValue'].setValue(null);
-    this.setDiscountedPrice(this.getControlValue('discountType'));
-  }
-
-  onDiscountTypeChange() {
-    this.useForm.controls['discountValue'].setValue(null);
-    if (this.getControlValue('discountType') == this.discount[1].value) {
-      this.useForm.controls['discountValue'].clearValidators();
-      this.useForm.controls['discountValue'].updateValueAndValidity();
-      this.setDiscountedPrice(this.getControlValue('discountType'));
+    this.loading = true;
+    if (!!this.roomTypeId) {
+      this.updateDetails();
     } else {
-      this.useForm.controls['discountValue'].setValidators([
-        Validators.max(100),
-      ]);
-      this.useForm.controls['discountValue'].markAsTouched();
-      this.setDiscountedPrice(this.getControlValue('discountType'));
+      this.saveDetails();
     }
   }
 
-  OnDiscountValueChange() {
-    if (this.getControlValue('discountType') == this.discount[1].value) {
-      if (
-        this.getControlValue('originalPrice') >=
-        this.getControlValue('discountValue')
-      ) {
-        this.setDiscountedPrice(this.getControlValue('discountType'));
-      } else {
-        this.useForm.controls['discountValue'].setErrors({
-          incorrect: true,
-        });
-      }
-    } else {
-      this.setDiscountedPrice(this.getControlValue('discountType'));
-    }
-  }
-
-  setDiscountedPrice(discountType: string) {
-    let discountedPrice: number;
-    if (discountType == this.discount[0].value) {
-      discountedPrice =
-        this.getControlValue('originalPrice') -
-        (this.getControlValue('originalPrice') *
-          this.getControlValue('discountValue')) /
-          100;
-      this.useForm.controls['discountedPrice'].setValue(discountedPrice);
-    } else if (discountType == this.discount[1].value) {
-      discountedPrice =
-        this.getControlValue('originalPrice') -
-        this.getControlValue('discountValue');
-      this.useForm.controls['discountedPrice'].setValue(discountedPrice);
-    }
-  }
-
-  onMaxOccupancyChange(maxOccupancy: number) {
-    this.useForm.controls['maxAdult'].enable();
-    this.useForm.controls['maxChildren'].patchValue(null);
-    this.useForm.patchValue({ maxAdult: null }, { emitEvent: false });
-    if (maxOccupancy != null && maxOccupancy <= 0) {
-      this.useForm.controls['maxOccupancy'].setErrors({ incorrect: true });
-      this.useForm.controls['maxOccupancy'].markAsTouched();
-    }
-  }
-
-  onMaxAdultChange(maxAdult: number) {
-    if (!(maxAdult <= 0) && this.getControlValue('maxOccupancy') >= maxAdult) {
-      const maxChildren = this.getControlValue('maxOccupancy') - maxAdult;
-      this.useForm.controls['maxChildren'].setValue(maxChildren);
-    } else if (maxAdult != null) {
-      this.useForm.controls['maxAdult'].setErrors({
-        incorrect: true,
-      });
-      this.useForm.controls['maxAdult'].markAsTouched();
-    }
-  }
-
-  getRoomTypeById() {
-    this.roomService.getRoomTypeById(this.hotelId, this.roomTypeId).subscribe(
-      (res) => {
-        this.useForm.patchValue(res);
-      },
-      (err) => {
-        this.snackbarService.openSnackBarAsText(err.error.message);
-      }
+  saveDetails() {
+    const data = this.getRoomTypeModData();
+    this.subscription$.add(
+      this.roomService.createRoomType(this.hotelId, data).subscribe(
+        (res) => {
+          this.loading = false;
+          this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);
+          this.snackbarService.openSnackBarAsText(
+            'Room type is created successfully',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        (error) => {
+          this.snackbarService.openSnackBarAsText(error.error.message);
+          this.loading = false;
+        }
+      )
     );
   }
 
   updateDetails() {
-    this.loader = true;
-    if (this.useForm.valid) {
-      const data = {
-        ...this.setFormValue(),
-        id: this.roomTypeId,
-      };
-      this.subscription$.add(
-        this.roomService.updateRoomType(this.hotelId, data).subscribe(
-          (res) => {
-            this.loader = false;
-            this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);
-            this.snackbarService.openSnackBarAsText(
-              'Room type is updated successfully',
-              '',
-              { panelClass: 'success' }
-            );
-          },
-          (error) => {
-            this.loader = false;
-            this.snackbarService.openSnackBarAsText(error.error.message);
-          }
-        )
-      );
-    } else {
-      this.loader = false;
-      this.snackbarService.openSnackBarAsText('Invalid Form');
-      this.useForm.markAllAsTouched();
-      return;
-    }
+    const data = {
+      ...this.getRoomTypeModData(),
+      id: this.roomTypeId,
+    };
+
+    this.subscription$.add(
+      this.roomService.updateRoomType(this.hotelId, data).subscribe(
+        (res) => {
+          this.loading = false;
+          this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);
+          this.snackbarService.openSnackBarAsText(
+            'Room type is updated successfully',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        (error) => {
+          this.loading = false;
+          this.snackbarService.openSnackBarAsText(error.error.message);
+        }
+      )
+    );
   }
 
-  setFormValue() {
+  getRoomTypeModData() {
     const {
       complimentaryAmenities,
       paidAmenities,
       discountedPriceCurrency,
       variablePriceCurrency,
+      imageUrls,
       ...rest
-    } = this.useForm.getRawValue();
+    } = this.useForm.getRawValue() as RoomTypeFormData;
 
     const data = {
       ...rest,
       roomAmenityIds: complimentaryAmenities.concat(paidAmenities),
+      imageUrls: imageUrls.filter((x: string) => x !== this.defaultImage),
       status: true,
     };
     return data;
   }
 
-  getControlValue(control: string) {
-    return this.useForm.get(control).value;
+  resetForm() {
+    this.useForm.reset({}, { emitEvent: true });
   }
 
   ngOnDestroy(): void {

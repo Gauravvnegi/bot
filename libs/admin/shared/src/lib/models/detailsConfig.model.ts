@@ -139,7 +139,7 @@ export class GuestDetailDS implements IDeserializable {
     this.guests = new Array<GuestDetailsConfig>();
     const keys = Object.keys(input);
 
-    keys.forEach((key) => {
+    keys?.forEach((key) => {
       if (!['allGuest', 'secondaryGuest', 'pmsSharerGuest'].includes(key)) {
         if (key === 'primaryGuest') {
           this.guests.push(
@@ -164,7 +164,7 @@ export class GuestDetailDS implements IDeserializable {
               : GuestRole.kids;
           const label = key === 'sharerGuests' ? 'Sharer' : 'Accomanied / Kids';
           input[key] &&
-            input[key].forEach((guest) => {
+            input[key]?.forEach((guest) => {
               this.guests.push(
                 new GuestDetailsConfig().deserialize(
                   {
@@ -214,7 +214,7 @@ export class GuestDetailsConfig implements IDeserializable {
       input.contactDetails
     );
     const documents = new Array<DocumentDetailsConfig>();
-    input.documents.forEach((document) => {
+    input.documents?.forEach((document) => {
       documents.push(new DocumentDetailsConfig().deserialize(document));
     });
     Object.assign(
@@ -458,15 +458,15 @@ export class RegCardConfig implements IDeserializable {
 }
 
 export class PackageDetailsConfig implements IDeserializable {
-  complimentryPackages = new Array<Package>();
+  complimentaryPackages = new Array<Package>();
   paidPackages = new Array<Package>();
 
   deserialize(input: any) {
-    input.complimentryPackages.forEach((packageObj) => {
-      this.complimentryPackages.push(new Package().deserialize(packageObj));
+    input.complimentaryPackages.forEach((packageObj) => {
+      this.complimentaryPackages.push(new Package().deserialize(packageObj));
     });
 
-    input.paidPackages.forEach((packageObj) => {
+    input.paidPackages?.forEach((packageObj) => {
       this.paidPackages.push(new Package().deserialize(packageObj));
     });
     return this;

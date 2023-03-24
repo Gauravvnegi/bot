@@ -7,10 +7,10 @@
 .tableHeading {
   width: 5%;
   background-color: $c-gray-93;
- @include align-checkbox();
+  @include align-checkbox();
 }
 .rowsData {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
 }
 
 .close {
@@ -32,6 +32,9 @@
 :host ::ng-deep .p-datatable {
   margin: 10px 1.5% !important;
   box-shadow: none !important;
+  .p-datatable-thead {
+    position: static !important; // added for now
+  }
 }
 
 // :host ::ng-deep .details_wrapper{
@@ -54,7 +57,7 @@
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 .spinner {
@@ -64,7 +67,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 
   border-radius: 100%;
   display: inline-block;
@@ -112,4 +115,3 @@
     background: $table-popup-background !important;
   }
 }
-

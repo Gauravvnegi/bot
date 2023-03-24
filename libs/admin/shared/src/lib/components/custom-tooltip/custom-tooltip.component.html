@@ -1,4 +1,15 @@
-<div class="wrapper" [ngClass]="{ 'info-icon': onlyContent }">
+<div
+  class="info-wrapper"
+  *ngIf="mode === 'wrapper'; else tooltip"
+  [ngClass]="{ 'info-icon': onlyContent }"
+>
+  <ng-container *ngTemplateOutlet="tooltip"></ng-container>
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+</div>
+
+<ng-template #tooltip>
   <div
     [ngClass]="{ 'info-icon': !onlyContent }"
     [ngStyle]="{ order: orientation == 'Right' ? '2' : '' }"
@@ -18,7 +29,4 @@
       >{{ textMsg }}
     </div>
   </div>
-  <div class="content">
-    <ng-content></ng-content>
-  </div>
-</div>
+</ng-template>

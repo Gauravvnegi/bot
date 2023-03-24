@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { get } from 'lodash';
 import * as moment from 'moment';
@@ -9,7 +9,7 @@ import { Table } from 'primeng/table';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { TableService } from '../../services/table.service';
-import { Chip, Cols, Filter } from '../../types/table.type';
+import { Chip, Cols, TableFieldSearch } from '../../types/table.type';
 
 interface Import {
   name: string;
@@ -20,6 +20,7 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
+  isScrolledUp = false;
   currentPage = 0;
   @ViewChild('dt') table: Table; //reference to data-table
   tableName = 'Datatable'; //table name
@@ -61,13 +62,14 @@ export class BaseDatatableComponent implements OnInit {
   @Input() loading = false;
   initialLoading = true;
 
-  tabFilterItems;
-  tabFilterIdx;
+  tabFilterItems = [];
+  tabFilterIdx = 0;
+  filterChips = []; //Chips setting, When there is no tabItem
 
   values = [];
 
-  TabItems: MenuItem[];
-
+  TabItems: MenuItem[] = [];
+  additionalActionItems = [];
   buttons = [];
 
   selectedExport1: Import;
@@ -125,6 +127,7 @@ export class BaseDatatableComponent implements OnInit {
     { label: 'Express Check-In (10)', icon: '', isSelected: false },
   ];
 
+  reportTemplate = 'Showing {first} to {last} of {totalRecords} entries';
   tempFirst;
   tempRowsPerPage;
   isSearchSet = false;
@@ -135,6 +138,9 @@ export class BaseDatatableComponent implements OnInit {
     protected tabFilterService: TableService
   ) {
     this.initTableFG();
+    document
+      .getElementById('main-layout')
+      ?.addEventListener('scroll', this.onScroll);
   }
 
   initTableFG() {
@@ -226,9 +232,17 @@ export class BaseDatatableComponent implements OnInit {
     ).pipe(delay(this.dataSource.length ? 2000 : 500));
   }
 
+  // this will be replace with handleFieldSearch function
   onFilterTypeTextChange(event, field, matchMode = 'startsWith') {
     const value = event.target.value && event.target.value.trim();
     this.table.filter(value, field, matchMode);
+  }
+
+  /**
+   * To filter the data with respect to field
+   */
+  handleFieldSearch({ value, field, matchMode }: TableFieldSearch) {
+    this.table.filter(value.trim(), field, matchMode);
   }
 
   onDocumentActions() {
@@ -315,11 +329,38 @@ export class BaseDatatableComponent implements OnInit {
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
    */
   toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }): void {
-    this.tabFilterItems[this.tabFilterIdx].chips = chips;
+    // If multiple tab filter chips
+    if (this.tabFilterItems[this.tabFilterIdx])
+      this.tabFilterItems[this.tabFilterIdx].chips = chips;
+
+    // If no tab to switch (singleFilter)
+    if (this.filterChips) this.filterChips = chips;
+
     this.changePage(0);
   }
 
-  onRowSelect(event) {
+  /**
+   * @function updateStatusAndCount To change the count without reloading the table
+   */
+  updateStatusAndCount = (prevStatus, currStatus) => {
+    /* for single filterChips */
+
+    if (this.filterChips) {
+      this.filterChips.forEach((item) => {
+        if (!isNaN(item.total)) {
+          if (item.value === prevStatus) {
+            item.total = item.total - 1;
+          }
+          if (item.value === currStatus) {
+            item.total = item.total + 1;
+          }
+        }
+      });
+    }
+    /* for multiple tab chip */
+  };
+
+  onRowSelect = (event) => {
     this.documentActionTypes.forEach((item) => {
       if (item.type === 'countType') {
         item.label = `Export (${this.selectedRows.length})`;
@@ -329,9 +370,9 @@ export class BaseDatatableComponent implements OnInit {
           .patchValue('export');
       }
     });
-  }
+  };
 
-  onRowUnselect(event?) {
+  onRowUnselect = (event?) => {
     this.documentActionTypes.forEach((item) => {
       if (item.type === 'countType') {
         item.label =
@@ -345,6 +386,16 @@ export class BaseDatatableComponent implements OnInit {
             .get('documentActionType')
             .patchValue('exportAll');
         }
+      }
+    });
+  };
+
+  onToggleSelectAll(event: { originalEvent: PointerEvent; checked: false }) {
+    this.documentActionTypes.forEach((item) => {
+      if (event.checked) {
+        this.onRowSelect(event);
+      } else {
+        this.onRowUnselect(event);
       }
     });
   }
@@ -440,4 +491,12 @@ export class BaseDatatableComponent implements OnInit {
   changePage(pageNo?) {
     this.paginator.changePage(pageNo || 0);
   }
+
+  /**
+   * @function onScroll Handle the scrolled to show changes is UI
+   */
+  onScroll = () => {
+    const { top } = this.table.el.nativeElement.getBoundingClientRect();
+    this.isScrolledUp = top < 120;
+  };
 }

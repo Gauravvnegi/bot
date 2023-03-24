@@ -205,11 +205,11 @@
 }
 
 .rowData {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
 }
 
 :host ::ng-deep .data-table-row {
@@ -229,4 +229,9 @@
     white-space: break-spaces !important;
     word-break: break-word !important;
   }
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include table-cell-padding(0.3em);
 }

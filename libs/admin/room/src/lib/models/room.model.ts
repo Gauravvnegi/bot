@@ -41,7 +41,7 @@ export class SingleRoom {
     this.roomStatus = input.status ?? 'ACTIVE';
     this.currency = input.currency ?? '';
     this.price = input.price ?? null;
-    this.roomTypeId = input.roomType.id ?? '';
+    this.roomTypeId = input.roomTypeId ?? '';
     return this;
   }
 }
@@ -80,7 +80,7 @@ export class MultipleRoom {
     this.roomStatus = input.status ?? 'ACTIVE';
     this.currency = input.currency ?? '';
     this.price = input.price;
-    this.roomTypeId = input.roomType.id ?? '';
+    this.roomTypeId = input.roomTypeId ?? '';
     return this;
   }
 }

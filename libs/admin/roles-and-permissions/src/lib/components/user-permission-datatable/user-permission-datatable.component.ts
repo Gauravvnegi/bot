@@ -49,7 +49,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
 
   cols = [
     {
-      field: 'getFullName()',
+      field: 'firstName',
       header: 'Name/Mobile & Email',
       sortType: 'string',
       isSort: true,
@@ -59,8 +59,14 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       header: 'Hotel Name & Job title',
       sortType: 'string',
       isSort: true,
+      isSearchDisabled: true,
     },
-    { field: 'package', header: 'Active', isSort: false },
+    {
+      field: 'package',
+      header: 'Active',
+      isSort: false,
+      isSearchDisabled: true,
+    },
   ];
 
   $subscription = new Subscription();

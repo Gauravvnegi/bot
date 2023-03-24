@@ -1,13 +1,7 @@
 <div
   class="wrapper"
-  [style.height]="height"
-  [ngClass]="{
-    'p-input-icon-left': isSearch,
-    'p-input-icon-right': isLoading,
-    'p-float-label': float,
-    wrapper__vertical: alignment === 'vertical',
-    wrapper__horizontal: alignment === 'horizontal'
-  }"
+  [ngClass]="wrapperNgClasses"
+  [style.fontSize]="fontSize"
   [formGroup]="controlContainer.control"
 >
   <label
@@ -16,36 +10,26 @@
     [for]="controlName"
     >{{ label }}</label
   >
-  <div class="input-wrapper">
-    <p-dropdown
-      class="input"
-      [ngClass]="{
-        input__static: label && alignment === 'vertical',
-        input__standard: variant === 'standard',
-        input__error: error,
-        input__disabled: isDisabled
-      }"
-      [style.fontSize]="fontSize"
-      [attr.disabled]="isDisabled || null"
-      [options]="options"
-      [placeholder]="placeholder"
-      [optionLabel]="optionLabel"
-      [showClear]="showClear"
-      [formControlName]="controlName"
-      [id]="controlName"
-      [autoDisplayFirst]="false"
-      [dropdownIcon]="dropdownIcon"
-    >
-      <ng-template pTemplate="selectedItem">
-        <div class="selected-option" [style.fontSize]="fontSize">
-          {{ controlContainer.control.get(controlName).value[optionLabel] }}
-        </div>
-      </ng-template>
-      <ng-template let-option pTemplate="item">
-        <div class="option-label">{{ option[optionLabel] }}</div>
-      </ng-template>
-    </p-dropdown>
-    <small *ngIf="error" class="p-error">{{ error }}</small>
-  </div>
+
+  <p-dropdown
+    class="input"
+    [ngClass]="inputNgClasses"
+    [disabled]="isDisabled || null"
+    [options]="menuOptions"
+    [placeholder]="placeholder"
+    [showClear]="showClear"
+    [formControlName]="controlName"
+    [id]="controlName"
+    [autoDisplayFirst]="false"
+    [dropdownIcon]="dropdownIcon"
+    (onShow)="onMenuOpen()"
+    (onHide)="onMenuClose()"
+    [filter]="isAsync"
+    [filterBy]="stopEmission ? 'label' : 'nothing'"
+    [filterMatchMode]="stopEmission ? 'contains' : 'notEquals'"
+  >
+  </p-dropdown>
+
+  <small *ngIf="error" class="p-error">{{ error }}</small>
   <label *ngIf="label && float" [for]="controlName">{{ label }}</label>
 </div>

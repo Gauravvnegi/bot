@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@hospitality-bot/admin/environment';
-import { CreateWithService } from '../../services/create-with.service';
+import { CookiesSettingsService } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-create-with-pages',
@@ -8,13 +8,15 @@ import { CreateWithService } from '../../services/create-with.service';
   styleUrls: ['./pages.component.scss'],
 })
 export class PagesComponent implements OnInit {
+  isLoaded: boolean;
+
   onboardingUrl = `${environment.createWithUrl}/admin/page`;
 
-  constructor(private createWithService: CreateWithService) {}
+  constructor(private cookiesSettingService: CookiesSettingsService) {}
 
-  get isLoaded() {
-    return this.createWithService.$isCookiesLoaded.value;
+  ngOnInit(): void {
+    this.cookiesSettingService.$isPlatformCookiesLoaded.subscribe((res) => {
+      this.isLoaded = res;
+    });
   }
-
-  ngOnInit(): void {}
 }

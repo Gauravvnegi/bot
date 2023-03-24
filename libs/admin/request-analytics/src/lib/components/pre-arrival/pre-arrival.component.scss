@@ -8,12 +8,11 @@
     opacity: 1;
   }
   .mat-tab-label-active {
-    color: $primary-purple;
+    color: $primary-cta;
   }
 }
 
 .analyticsWrapper {
-  margin-top: 15px;
   background: 0% 0% no-repeat padding-box $white;
   box-shadow: 0px 3px 6px $progress-bar-messages;
   padding: 20px;
@@ -86,7 +85,7 @@
     }
     .go {
       outline: none;
-      color: $primary-purple;
+      color: $primary-cta;
       background: $go-btn-default;
       border: none;
       font-size: 10px;
@@ -94,7 +93,7 @@
       display: flex;
       margin-left: 10px;
       &:hover {
-        background-color: $primary-purple;
+        background-color: $primary-cta;
         color: $white;
         cursor: pointer;
       }

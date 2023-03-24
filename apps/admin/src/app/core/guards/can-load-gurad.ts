@@ -30,9 +30,18 @@ export class CanLoadGuard implements CanLoad {
         .getUserDetailsById(this.userService.getLoggedInUserid())
         .pipe(
           switchMap((res) => {
-            return this.subscriptionService.getSubscriptionPlan(
-              res.hotelAccess.chains[0].hotels[0].id
-            );
+            const hotels = res.hotelAccess?.chains[0]?.hotels;
+            const hasHotel = !!hotels?.length;
+            if (hasHotel) {
+              return this.subscriptionService.getSubscriptionPlan(
+                hotels[hotels.length - 1].id
+              );
+            } else {
+              this.loadingService.close();
+
+              this.router.navigate(['/dashboard']);
+              return of(false);
+            }
           }),
           switchMap((response) => {
             this.subscriptionService.initSubscriptionDetails(response);

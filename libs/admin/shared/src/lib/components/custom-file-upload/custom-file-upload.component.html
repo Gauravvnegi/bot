@@ -27,6 +27,7 @@
           [src]="baseType == 'image' ? url : thumbUrl"
           class="box"
           [style.display]="url != defaultImage || thumbUrl ? 'block' : 'none'"
+          alt="uploaded image"
         />
         <div class="box" *ngIf="url == defaultImage && !thumbUrl">
           <img class="upload-icon" [src]="url" alt="upload-icon" />
@@ -44,24 +45,37 @@
           [ngStyle]="{
             'margin-top': limit == 1 ? 'auto' : '',
             'justify-content':
-              limit !== 1 && url !== defaultImage ? 'center' : 'space-between'
+              limit !== 1 && url !== defaultImage
+                ? 'flex-start'
+                : 'space-between'
           }"
         >
-          <div *ngIf="url == defaultImage && !thumbUrl">
-            <p class="btn" (click)="uploadFiles(i)">Upload</p>
-          </div>
+          <hospitality-bot-button
+            label="Upload"
+            (click)="uploadFiles(i)"
+            *ngIf="url == defaultImage && !thumbUrl"
+            variant="outlined"
+          ></hospitality-bot-button>
+          <hospitality-bot-button
+            label="Change"
+            (click)="uploadFiles(i)"
+            *ngIf="url !== defaultImage || thumbUrl"
+            variant="outlined"
+          ></hospitality-bot-button>
+
           <div *ngIf="url !== defaultImage || thumbUrl">
-            <p class="btn" (click)="uploadFiles(i)">Change</p>
-          </div>
-          <div *ngIf="url !== defaultImage || thumbUrl">
-            <p
-              *ngIf="limit == 1"
-              class="remove-image-button"
+            <hospitality-bot-button
+              [label]="
+                'Remove ' +
+                this.baseType.charAt(0).toUpperCase() +
+                baseType.slice(1)
+              "
               (click)="removeImage(i)"
-            >
-              Remove
-              {{ this.baseType.charAt(0).toUpperCase() + baseType.slice(1) }}
-            </p>
+              *ngIf="limit == 1"
+              variant="text"
+              severity="reset"
+            ></hospitality-bot-button>
+
             <div>
               <img
                 class="delete-icon"
@@ -77,3 +91,10 @@
     </div>
   </div>
 </div>
+
+<p
+  class="validation-error"
+  *ngIf="control?.errors?.required && control?.touched"
+>
+  {{ validationErrMsg }}
+</p>

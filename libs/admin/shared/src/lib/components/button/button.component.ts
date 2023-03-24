@@ -9,17 +9,22 @@ import { ButtonVariant } from '../../types/form.type';
 })
 export class ButtonComponent {
   @Input() variant: ButtonVariant = 'contained';
-  @Input() color: string;
+  @Input() severity: 'reset' | 'secondary' | 'primary' = 'primary';
   @Input() label: string;
+  @Input() target: '_blank' | '_self' = '_blank';
   @Input() type: string = 'button';
   @Input() disabled: boolean = false;
   @Input() link: string = null;
-  @Output() onClick = new EventEmitter();
+  @Input() href: string = null;
+  @Output() onClick = new EventEmitter<Event>();
+  @Input() showLoader: boolean = false;
+  @Input() icon: any;
 
   constructor(private router: Router) {}
 
-  handleClick() {
-    this.onClick.emit();
+  handleClick(event) {
+    this.onClick.emit(event);
+    if (this.href) window.open(this.href, this.target);
     if (this.link) this.router.navigate([this.link]);
   }
 }

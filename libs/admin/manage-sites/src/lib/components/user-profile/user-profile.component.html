@@ -1,0 +1,50 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header
+    heading="My Profile"
+  ></hospitality-bot-navigation-header>
+  <div class="form-block" [formGroup]="useForm">
+    <hospitality-bot-custom-file-upload
+      class="upload"
+      formControlName="profileUrl"
+      [hotelId]="userId"
+      path="static-content/user-profile"
+      description="Add your profile image"
+    ></hospitality-bot-custom-file-upload>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="firstName"
+      label="First Name"
+      maxLength="60"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="lastName"
+      label="Last Name"
+      maxLength="60"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="email"
+      label="Email"
+      [props]="{
+        errorMessages: {
+          required: 'Email is required',
+          email: 'Please enter valid email'
+        }
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-prefix-field
+      class="half-width"
+      [options]="code"
+      preControlName="cc"
+      postControlName="phoneNumber"
+      label="Contact"
+      [defaultProps]="{ post: { type: 'number' } }"
+    ></hospitality-bot-prefix-field>
+    <hospitality-bot-button
+      class="create-btn"
+      label="Save"
+      (onClick)="handleSave()"
+    ></hospitality-bot-button>
+  </div>
+</div>

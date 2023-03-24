@@ -106,8 +106,13 @@ export class LoginComponent implements OnInit {
     data.password = data.password?.trim();
     this._authService.login(data).subscribe(
       (response) => {
+        const hasHotel = !!response.hotelAccess?.chains[0]?.hotels?.length;
         this._userService.setLoggedInUserId(response?.id);
-        this._router.navigate([`/pages`]);
+        if (hasHotel) {
+          this._router.navigate([`/pages`]);
+        } else {
+          this._router.navigate([`/dashboard`]);
+        }
       },
       ({ error }) => {
         this.isSigningIn = false;

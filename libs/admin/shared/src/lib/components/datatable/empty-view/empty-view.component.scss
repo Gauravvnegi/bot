@@ -1,9 +1,13 @@
 @import 'main';
 
+.hidden-overflow {
+  overflow: hidden;
+}
+
 .wrapper {
   &__main {
     display: flex;
-    background-color: $white;
+    // background-color: $white;
     height: 200px;
     margin: auto;
     justify-content: center;
@@ -16,12 +20,52 @@
   }
 
   &__default {
-    display: block;
-    width: 90vw;
+    font-size: $font14;
+    font-weight: 500;
+    letter-spacing: 0.84px;
+    color: $dark-blue;
+    margin: auto;
     text-align: center;
+    padding: 10px;
+  }
+
+  &__standard {
+    display: flex;
+    align-items: center;
+    max-width: 666.3px;
+    text-align: center;
+    width: 93vw;
     padding: $padding10 0;
-    @media screen and (max-width: $L) {
-      width: 85vw;
+    margin: auto 50%;
+    min-height: 400px;
+
+    @media screen and (max-width: $tabAir) {
+      max-width: 51vw;
+      width: 80vw;
+      margin: auto 34%;
+    }
+
+    &_imageWrapper {
+      margin-right: 20px;
+    }
+
+    &_contentWrapper {
+      &_heading {
+        font-size: $font14;
+        font-weight: 500;
+        letter-spacing: 0.84px;
+        text-align: left;
+        color: $dark-blue;
+        margin-bottom: 10px;
+      }
+
+      &_subText {
+        font-size: $font14;
+        letter-spacing: 0.84px;
+        text-align: left;
+        color: $dark-blue;
+        line-height: 24px;
+      }
     }
   }
 }

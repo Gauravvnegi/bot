@@ -1,13 +1,19 @@
 <button
   [type]="type"
-  (click)="handleClick()"
+  (click)="handleClick($event)"
   [disabled]="disabled"
   class="button"
   [ngClass]="{
     button__text: variant === 'text',
     button__contained: variant === 'contained',
-    button__outlined: variant === 'outlined'
+    button__outlined: variant === 'outlined',
+    color__primary: severity === 'primary',
+    color__secondary: severity === 'secondary',
+    color__reset: severity === 'reset',
+    button__disabled: disabled,
+    button__img: icon
   }"
 >
-  {{ label }}
+  <i *ngIf="showLoader" class="fa fa-spinner fa-spin"></i>
+  <img [src]="icon" alt="buttonImage" *ngIf="icon" /> {{ label }}
 </button>

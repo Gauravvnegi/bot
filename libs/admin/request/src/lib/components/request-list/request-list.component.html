@@ -63,6 +63,7 @@
           "
         >
           <hospitality-bot-chat-card
+            [ngStyle]="{ width: '100%' }"
             [content]="{
               cardType: 'request',
               roomNo: item.rooms[0]?.roomNumber,
@@ -76,7 +77,9 @@
                 slaValue: item.getSLAvalue()
               },
               priority: item.priority,
-              subTitle: item.itemName
+              subTitle: item.itemName,
+              profileNickName: item.guestDetails.primaryGuest.getProfileNickName(),
+              backgroundColor: item.color
             }"
           ></hospitality-bot-chat-card>
         </div>

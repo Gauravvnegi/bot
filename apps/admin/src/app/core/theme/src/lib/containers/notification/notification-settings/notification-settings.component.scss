@@ -7,7 +7,7 @@
   .header {
     @include flex-item-center();
     font-size: 14px;
-    color: $primary-purple;
+    color: $primary-cta;
     cursor: pointer;
     width: fit-content;
     mat-icon {

@@ -78,26 +78,25 @@
     margin: 0 60px 0 0;
     padding: 11.9px 26px 13px;
     border-radius: 23px;
-    border: solid 1px $primary-purple;
+    border: solid 1px $primary-cta;
     background-color: $white;
     cursor: pointer;
     &:active {
       transform: scale(0.97);
     }
     &__text {
-
       font-size: $font16;
       font-weight: 500;
       letter-spacing: 0.96px;
       text-align: left;
-      color: $primary-purple;
+      color: $primary-cta;
     }
   }
   .send {
     height: 46px;
     padding: 12px 43px 13px;
     border-radius: 23px;
-    background-color: $primary-purple;
+    background-color: $primary-cta;
     cursor: pointer;
     &:active {
       transform: scale(0.97);
@@ -127,7 +126,7 @@
   bottom: 5px;
   right: 0;
   .carbon-copy {
-    color: $primary-purple;
+    color: $primary-cta;
     cursor: pointer;
   }
   .text-number {
@@ -168,5 +167,3 @@
 :host ::ng-deep .mat-input-element {
   max-width: calc(100% - 80px) !important;
 }
-
-

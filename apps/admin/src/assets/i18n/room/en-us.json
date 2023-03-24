@@ -1,8 +1,8 @@
 {
   "room": {
-    "createType": "+Create Room Type",
-    "addMultiple": "+Add Multiple Rooms",
-    "addSingle": "+Add Single Room"
+    "createType": "+ Create Room Type",
+    "addMultiple": "+ Add Multiple Rooms",
+    "addSingle": "+ Add Single Room"
   },
   "messages": {
     "error": {

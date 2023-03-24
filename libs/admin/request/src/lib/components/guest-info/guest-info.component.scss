@@ -42,7 +42,7 @@
   }
 }
 .guestInfoEditText {
-  font: normal normal normal 11px/15px Roboto;
+  font-size: $font11;
   letter-spacing: 0.66px;
   color: $white;
   opacity: 1;
@@ -55,6 +55,7 @@
   display: flex;
   align-items: center;
   padding: 20px;
+  justify-content: space-between;
 
   .cross {
     font-size: 16px;
@@ -62,7 +63,7 @@
     cursor: pointer;
     color: $primary-gray;
     &:hover {
-      color: $primary-purple;
+      color: $primary-cta;
     }
   }
 }

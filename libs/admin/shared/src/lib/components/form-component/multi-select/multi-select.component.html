@@ -1,0 +1,36 @@
+<div
+  class="wrapper"
+  [ngClass]="wrapperNgClasses"
+  [formGroup]="controlContainer.control"
+>
+  <label
+    *ngIf="label && !float"
+    class="label label__static"
+    [for]="controlName"
+    >{{ label }}</label
+  >
+
+  <p-multiSelect
+    class="input"
+    [ngClass]="inputNgClasses"
+    [attr.disabled]="isDisabled || null"
+    [formControlName]="controlName"
+    [inputId]="controlName"
+    [options]="menuOptions"
+    [dropdownIcon]="dropdownIcon"
+    (onPanelShow)="onMenuOpen()"
+    (onPanelHide)="onMenuClose()"
+  >
+    <ng-template let-value pTemplate="selectedItems">
+      <div class="chips">
+        <div class="chip" [click-stop-propagation] *ngFor="let val of value">
+          <div>{{ dictionary[val] }}</div>
+          <i class="pi pi-times" (click)="handleClear(val)"></i>
+        </div>
+      </div>
+    </ng-template>
+  </p-multiSelect>
+
+  <small *ngIf="error" class="p-error">{{ error }}</small>
+  <label *ngIf="label && float" [for]="controlName">{{ label }}</label>
+</div>

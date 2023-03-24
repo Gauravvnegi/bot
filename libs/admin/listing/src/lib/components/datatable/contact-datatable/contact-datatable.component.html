@@ -1,3 +1,31 @@
+<div
+  class="action-header"
+  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+  [formGroup]="tableFG"
+>
+  <div class="heading">{{ tableName }}</div>
+  <div class="action-wrapper">
+    <img
+      class="delete"
+      src="assets/images/delete.png"
+      alt="Delete"
+      (click)="deleteContact()"
+      *ngIf="selectedRows.length"
+    />
+
+    <div class="import" (click)="openImportContact($event)">
+      <img src="assets/svg/import.svg" alt="import" />
+      {{ 'contact.import' | translate }}
+    </div>
+
+    <hospitality-bot-button
+      label="{{ 'contact.add' | translate }}"
+      (onClick)="openAddContact($event)"
+    >
+    </hospitality-bot-button>
+  </div>
+</div>
+
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"
@@ -17,97 +45,13 @@
   [(selection)]="selectedRows"
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
+  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
 >
   <ng-template pTemplate="caption">
-    <div class="caption__wrapper">
-      <form [formGroup]="tableFG">
-        <div class="caption__wrapper--tabmenu">
-          <div class="header">
-            <p class="heading">{{ tableName }}</p>
-            <div class="manage-contacts">
-              <img
-                class="delete"
-                src="assets/images/delete.png"
-                alt="Delete"
-                (click)="deleteContact()"
-                *ngIf="selectedRows.length"
-              />
-              <div class="import" (click)="openImportContact($event)">
-                <img src="assets/svg/import.svg" alt="import" />
-                {{ 'contact.import' | translate }}
-              </div>
-              <div class="add" (click)="openAddContact($event)">
-                <div class="add-contact">
-                  {{ 'contact.add' | translate }}
-                </div>
-              </div>
-              <div class="options" *ngIf="!add">
-                <div *ngIf="isActionButtons" class="icons">
-                  <img
-                    [src]="listingConfiguration.images.download.url"
-                    [alt]="listingConfiguration.images.download.alt"
-                    class="svg"
-                  />
-                  <img
-                    [src]="listingConfiguration.images.googleDoc.url"
-                    [alt]="listingConfiguration.images.googleDoc.alt"
-                    class="svg"
-                  />
-                  <img
-                    [src]="listingConfiguration.images.card.url"
-                    [alt]="listingConfiguration.images.card.alt"
-                    class="svg"
-                  />
-                </div>
-                <div *ngIf="isActionButtons" class="seperator"></div>
-                <div formGroupName="documentActions" class="dropdown--wrapper">
-                  <p-dropdown
-                    class="export"
-                    [options]="documentActionTypes"
-                    formControlName="documentActionType"
-                  >
-                    <ng-template
-                      let-documentActionItem
-                      pTemplate="selectedItem"
-                    >
-                      <img
-                        [src]="listingConfiguration.images.export.url"
-                        [alt]="listingConfiguration.images.export.alt"
-                      />
-                      <span class="documentActionItemLabel">{{
-                        documentActionItem.label
-                      }}</span>
-                    </ng-template>
-                  </p-dropdown>
-                  <div class="divider"></div>
-                  <p-dropdown
-                    class="export"
-                    [options]="documentTypes"
-                    formControlName="documentType"
-                  >
-                    <ng-template let-documentTypeItem pTemplate="selectedItem">
-                      <img
-                        [src]="listingConfiguration.images.csv.url"
-                        [alt]="listingConfiguration.images.csv.alt"
-                      />
-                      <span class="documentActionItemLabel">{{
-                        documentTypeItem.label
-                      }}</span>
-                    </ng-template>
-                  </p-dropdown>
-                  <button class="go" (click)="onDocumentActions()">
-                    <mat-icon class="material-icons" matSuffix>east</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
+    <div class="caption__wrapper" [formGroup]="tableFG"></div>
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
@@ -115,97 +59,19 @@
       <td class="table--checkbox">
         <p-tableCheckbox disabled="true"></p-tableCheckbox>
       </td>
-      <td>
-        <div class="emptyCell">--/--</div>
-      </td>
-      <td>
-        <div class="emptyCell">--/--</div>
-      </td>
-      <td>
-        <div class="emptyCell">--/--</div>
-      </td>
-      <td>
-        <div class="emptyCell">--/--</div>
-      </td>
-      <td>
-        <div class="emptyCell">--/--</div>
-      </td>
-      <td>
+      <td *ngFor="let col of cols">
         <div class="emptyCell">--/--</div>
       </td>
     </tr>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
-    <tr>
-      <th class="tableHeading" pResizableColumn>
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
-      <th
-        class="table-data-head"
-        pResizableColumn
-        [pSortableColumn]="col.field"
-        *ngFor="let col of columns"
-        [ngStyle]="col.dynamicWidth ? { width: col.width } : {}"
-      >
-        <div>
-          <p class="table-header-text">{{ col.header }}</p>
-          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-        </div>
-      </th>
-    </tr>
-
-    <tr class="table-search-head">
-      <th class="table-search-head"></th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'email')"
-          class="p-column-filter"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'salutation')"
-          class="p-column-filter"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'firstName')"
-          class="p-column-filter"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'lastName')"
-          class="p-column-filter"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'companyName')"
-          class="p-column-filter"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'mobile')"
-          class="p-column-filter"
-        />
-      </th>
-    </tr>
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="isSelectable"
+      (search)="handleFieldSearch($event)"
+    ></tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->
   <ng-template
@@ -214,8 +80,8 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row">
-      <td class="table--checkbox">
+    <tr class="table-row">
+      <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"
           [index]="rowIndex"
@@ -250,6 +116,8 @@
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="rowsPerPageOptions"
       (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
     ></p-paginator>
   </ng-template>
 </p-table>

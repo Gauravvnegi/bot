@@ -26,7 +26,7 @@ export class Room {
   id: string;
   type: string;
   roomNo: string;
-  date: string;
+  date: number;
   price: number;
   currency: string;
   status: { label: string; value: string };
@@ -34,7 +34,7 @@ export class Room {
     this.id = input.id ?? '';
     this.type = input.roomTypeDetails.name ?? '';
     this.roomNo = input.roomNumber ?? '';
-    this.date = input.updated ?? input.created ?? '';
+    this.date = input.updated ?? input.created ?? null;
     this.price = input.price ?? null;
     this.currency = input.currency ?? '';
     this.status = { label: Status[input.roomStatus], value: input.roomStatus };
@@ -60,18 +60,11 @@ export class RoomRecordsCount {
   unavailable: number;
   soldOut: number;
 
-  deserialize(input) {
-    Object.assign(
-      this,
-      set({}, 'total', get(input, ['all']) ?? get(input, ['ALL'])),
-      set({}, 'active', get(input, ['active']) ?? get(input, ['ACTIVE'])),
-      set(
-        {},
-        'unavailable',
-        get(input, ['unavailable']) ?? get(input, ['UNAVAILABLE'])
-      ),
-      set({}, 'soldOut', get(input, ['soldOut']) ?? get(input, ['SOLD_OUT']))
-    );
+  deserialize(input: RoomListResponse['roomStatusCount']) {
+    this.total = input.ALL;
+    this.unavailable = input.UNAVAILABLE;
+    this.active = input.ACTIVE;
+    this.soldOut = input.SOLD_OUT;
 
     if (!this.total) delete this.total;
     return this;
@@ -85,9 +78,8 @@ export class RoomTypeList {
   count: RoomTypeRecordsCount;
 
   deserialize(input: RoomTypeListResponse) {
-    this.records = input.roomTypes.map((item) =>
-      new RoomType().deserialize(item)
-    );
+    this.records =
+      input?.roomTypes.map((item) => new RoomType().deserialize(item)) ?? [];
     this.count = new RoomTypeRecordsCount().deserialize(
       input.roomTypeStatusCount
     );
@@ -111,7 +103,12 @@ export class RoomType {
     this.id = input.id ?? '';
     this.name = input.name ?? '';
     this.area = input.area;
-    this.roomCount = new RoomRecordsCount().deserialize(input.roomCount);
+    this.roomCount = new RoomRecordsCount().deserialize({
+      ALL: null,
+      ACTIVE: input.activeRoomCount,
+      UNAVAILABLE: input.unavailableRoomCount,
+      SOLD_OUT: input.soldOutCount,
+    });
     this.amenities =
       input.paidAmenities
         ?.map((item) => item.name)
@@ -123,7 +120,7 @@ export class RoomType {
     };
 
     // mapping discounted price
-    this.price = input.discountedPrice ?? null;
+    this.price = input.discountedPrice ?? input.originalPrice;
     this.currency = input.currency ?? '';
 
     return this;
@@ -134,13 +131,10 @@ export class RoomTypeRecordsCount {
   total: number;
   active: number;
   inactive: number;
-  deserialize(input) {
-    Object.assign(
-      this,
-      set({}, 'total', get(input, ['all']) ?? get(input, ['ALL'])),
-      set({}, 'active', get(input, ['active']) ?? get(input, ['ACTIVE'])),
-      set({}, 'inactive', get(input, ['inactive']) ?? get(input, ['INACTIVE']))
-    );
+  deserialize(input: RoomTypeListResponse['roomTypeStatusCount']) {
+    this.total = input.ALL;
+    this.inactive = input.INACTIVE;
+    this.active = input.ACTIVE;
     return this;
   }
 }

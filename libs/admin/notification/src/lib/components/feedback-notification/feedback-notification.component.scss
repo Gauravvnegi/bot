@@ -42,7 +42,7 @@
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 .spinner {
@@ -52,7 +52,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 
   border-radius: 100%;
   display: inline-block;
@@ -293,14 +293,14 @@
 }
 
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 }
 
 :host
   ::ng-deep
   .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent
   .mat-ripple-element {
-  background: $primary-purple;
+  background: $primary-cta;
 }
 
 :host ::ng-deep .mat-checkbox-frame {
@@ -313,7 +313,7 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-start {
-  border-color: $primary-purple;
+  border-color: $primary-cta;
 }
 
 :host
@@ -322,7 +322,7 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-end {
-  border-color: $primary-purple;
+  border-color: $primary-cta;
 }
 
 .disabled-btn {

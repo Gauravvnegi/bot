@@ -238,7 +238,7 @@
       border-radius: 23px;
       cursor: pointer;
       box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
-      background-color: $primary-purple;
+      background-color: $primary-cta;
     }
 
     .view {
@@ -428,7 +428,7 @@
 }
 
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 }
 .asset-enable {
   position: absolute;

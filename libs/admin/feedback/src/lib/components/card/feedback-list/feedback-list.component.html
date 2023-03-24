@@ -69,6 +69,8 @@
                 label: feedbackItem.departmentLabel
               },
               feedbackType: feedbackType,
+              profileNickName: feedbackItem.getProfileNickName(),
+              backgroundColor: feedbackItem.color,
               colorMap: colorMap,
               serviceTag:
                 getFeedbackType(feedbackType) === 'TRANSACTIONALFEEDBACK' &&

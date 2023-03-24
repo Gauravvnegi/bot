@@ -1,3 +1,23 @@
+<div
+  class="action-header"
+  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+  [formGroup]="tableFG"
+>
+  <div class="heading">{{ tableName }}</div>
+  <div class="action-wrapper">
+    <hospitality-bot-button
+      (click)="openCreateAsset()"
+      label=" {{ 'createAsset' | translate }}"
+    ></hospitality-bot-button>
+    <hospitality-bot-export-list
+      [additionalActionItems]="additionalActionItems"
+      (onDocumentActions)="onDocumentActions()"
+      [documentTypes]="documentTypes"
+      [documentActionTypes]="documentActionTypes"
+    ></hospitality-bot-export-list>
+  </div>
+</div>
+
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"
@@ -17,93 +37,39 @@
   [(selection)]="selectedRows"
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
+  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
 >
   <ng-template pTemplate="caption">
-    <div class="caption__wrapper">
-      <form [formGroup]="tableFG">
-        <div class="caption__wrapper--tabmenu">
-          <div class="header">
-            <p class="heading">{{ tableName }}</p>
+    <div class="caption__wrapper" [formGroup]="tableFG">
+      <hospitality-bot-tab-group
+        *ngIf="isTabFilters"
+        [listItems]="tabFilterItems"
+        [selectedIndex]="tabFilterIdx"
+        (selectedTabChange)="onSelectedTabFilterChange($event)"
+      ></hospitality-bot-tab-group>
 
-            <div class="action-wrapper">
-              <hospitality-bot-button
-                (click)="openCreateAsset()"
-                label=" {{ 'createAsset' | translate }}"
-              ></hospitality-bot-button>
-              <hospitality-bot-export-list
-                (onDocumentActions)="onDocumentActions()"
-                [documentTypes]="documentTypes"
-                [documentActionTypes]="documentActionTypes"
-              ></hospitality-bot-export-list>
-            </div>
-          </div>
-          <div *ngIf="isTabFilters">
-            <hospitality-bot-tab-group
-              [listItems]="tabFilterItems"
-              [selectedIndex]="tabFilterIdx"
-              (selectedTabChange)="onSelectedTabFilterChange($event)"
-            ></hospitality-bot-tab-group>
-          </div>
-        </div>
-        <hospitality-bot-filter-chips
-          *ngIf="isQuickFilters"
-          [chips]="tabFilterItems[tabFilterIdx].chips"
-          (onChange)="toggleQuickReplyFilter($event)"
-        ></hospitality-bot-filter-chips>
-      </form>
+      <hospitality-bot-filter-chips
+        *ngIf="isQuickFilters"
+        [chips]="tabFilterItems[tabFilterIdx].chips"
+        (onChange)="toggleQuickReplyFilter($event)"
+      ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <hospitality-bot-empty-view
-      (create)="openCreateAsset()"
-    ></hospitality-bot-empty-view>
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
-    <tr>
-      <th
-        *ngIf="isSelectable"
-        id="select-all"
-        class="table-search-head select-box"
-        pResizableColumn
-      >
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
-      <th
-        [id]="col.fields"
-        class="table-data-head"
-        pResizableColumn
-        [pSortableColumn]="col.field"
-        *ngFor="let col of columns; let i = index"
-        [ngStyle]="col.dynamicWidth ? { width: '100px' } : {}"
-      >
-        <div>
-          <p class="table-header-text">{{ col.header }}</p>
-          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-        </div>
-      </th>
-    </tr>
-
-    <tr>
-      <th class="table-search-head" id="select-box" *ngIf="isSelectable"></th>
-      <th
-        [id]="col.field"
-        class="table-search-head"
-        *ngFor="let col of columns"
-      >
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, col.field)"
-          class="p-column-filter"
-          [disabled]="col.isSearchDisabled"
-        />
-      </th>
-    </tr>
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="isSelectable"
+      (search)="handleFieldSearch($event)"
+    ></tr>
   </ng-template>
 
   <!-- **************************************BODY********************************* -->
@@ -113,51 +79,48 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openAssetDetails(rowData, $event)">
-      <td class="table--checkbox">
+    <tr class="table-row" (click)="openAssetDetails(rowData, $event)">
+      <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"
           [index]="rowIndex"
           (click)="onCheckboxClicked($event)"
         ></p-tableCheckbox>
       </td>
-      <td class="name">
-        <div class="package_image_wrapper">
-          <div class="image">
+      <td>
+        <div class="row-display">
+          <div class="image-icon">
             <img
-              class="package-image"
-              src="{{
-                rowData.thumbnailUrl ? rowData.thumbnailUrl : rowData.url
-              }}"
+              [src]="rowData.thumbnailUrl ? rowData.thumbnailUrl : rowData.url"
               [alt]="rowData.name"
             />
           </div>
-          <div class="text">
-            <div>{{ rowData.name }}</div>
+          <div class="primary-text">{{ rowData.name }}</div>
+        </div>
+      </td>
+
+      <td>
+        <div class="primary-text">{{ rowData.description }}</div>
+      </td>
+      <td>
+        <div class="primary-text">{{ rowData.type }}</div>
+      </td>
+      <td>
+        <div class="cell-content">
+          <div class="primary-text hide-text-overflow">{{ rowData.url }}</div>
+          <div (click)="onCheckboxClicked($event)">
+            <img
+              class="float-right"
+              [src]="assetConfiguration.images.copy.url"
+              [alt]="assetConfiguration.images.copy.alt"
+              [cdkCopyToClipboard]="rowData.url"
+              (click)="handleCopyToClipboard($event)"
+            />
           </div>
         </div>
       </td>
 
-      <td class="guest">
-        {{ rowData.description }}
-      </td>
-      <td class="service-details">
-        {{ rowData.type }}
-      </td>
-      <td class="service-details">
-        <div class="image_url">{{ rowData.url }}</div>
-        <div (click)="onCheckboxClicked($event)">
-          <img
-            class="copy"
-            [src]="assetConfiguration.images.copy.url"
-            [alt]="assetConfiguration.images.copy.alt"
-            [cdkCopyToClipboard]="rowData.url"
-            (click)="handleCopyToClipboard($event)"
-          />
-        </div>
-      </td>
-
-      <td class="status">
+      <td class="center-align">
         <label (click)="onCheckboxClicked($event)" class="switch">
           <mat-slide-toggle
             [checked]="rowData.status"
@@ -176,6 +139,8 @@
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="rowsPerPageOptions"
       (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
     ></p-paginator>
   </ng-template>
 </p-table>

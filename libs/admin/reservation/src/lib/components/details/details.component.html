@@ -298,94 +298,82 @@
           <ng-template #PRECHECKIN>
             <ng-container [ngSwitch]="details.currentJourneyDetails.status">
               <ng-container *ngSwitchCase="'PENDING'">
-                <button
+                <hospitality-bot-button
+                  label="Activate & Generate PreCheckIn Link"
                   (click)="activateAndgenerateJourney('PRECHECKIN')"
-                  class="button"
-                >
-                  Activate & Generate PreCheckIn Link
-                </button>
+                  variant="outlined"
+                ></hospitality-bot-button>
               </ng-container>
               <ng-container *ngSwitchCase="'INITIATED'">
-                <button
+                <hospitality-bot-button
+                  label="Activate & Generate PreCheckIn Link"
                   (click)="activateAndgenerateJourney('PRECHECKIN')"
-                  class="button"
-                >
-                  Activate & Generate PreCheckIn Link
-                </button>
+                  variant="outlined"
+                ></hospitality-bot-button>
               </ng-container>
               <ng-container *ngSwitchCase="'COMPLETED'">
-                <button
+                <hospitality-bot-button
+                  label="Activate & Generate PreCheckIn Link"
                   (click)="activateAndgenerateJourney('PRECHECKIN')"
-                  class="button"
-                >
-                  Activate & Generate PreCheckIn Link
-                </button>
+                  variant="outlined"
+                ></hospitality-bot-button>
               </ng-container>
               <ng-container *ngSwitchCase="'FAILED'">
-                <button
+                <hospitality-bot-button
+                  label="Activate & Generate PreCheckIn Link"
                   (click)="activateAndgenerateJourney('PRECHECKIN')"
-                  class="button"
-                >
-                  Activate & Generate PreCheckIn Link
-                </button>
+                  variant="outlined"
+                ></hospitality-bot-button>
               </ng-container>
             </ng-container>
           </ng-template>
           <ng-template #CHECKIN>
             <ng-container [ngSwitch]="details.currentJourneyDetails.status">
               <ng-container *ngSwitchCase="'PENDING'">
-                <button
+                <hospitality-bot-button
                   (click)="activateAndgenerateJourney('CHECKIN')"
-                  class="button"
-                >
-                  Generate CheckIn Link
-                </button>
+                  label="Generate CheckIn Link"
+                  variant="outlined"
+                ></hospitality-bot-button>
               </ng-container>
               <ng-container *ngSwitchCase="'INITIATED'">
-                <button
+                <hospitality-bot-button
                   (click)="activateAndgenerateJourney('CHECKIN')"
-                  class="button"
-                >
-                  Generate CheckIn Link
-                </button>
-
-                <button class="button" (click)="verifyAllDocuments()">
-                  Confirm All Docs
-                </button>
-
-                <button (click)="downloadInvoice()" class="button">
-                  Download Invoice/Folio
-                </button>
+                  label="Generate CheckIn Link"
+                  variant="outlined"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  (click)="verifyAllDocuments()"
+                  label="Confirm All Docs"
+                  variant="outlined"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  (click)="downloadInvoice()"
+                  label="Download Invoice/Folio"
+                  variant="outlined"
+                ></hospitality-bot-button>
                 <!-- ---------------------------------------------------------------------------------------------- -->
-                <button
-                  button-dependency
-                  [id]="'confirmAndNotifyCheckin'"
-                  [context]="self"
-                  [parentForm]="detailsForm"
-                  [data]="details"
-                  [handler]="{
-                    fn_name: 'confirmAndNotifyCheckin',
-                    args: []
-                  }"
-                  class="button"
-                >
-                  Confirm And Notify Checkin
-                </button>
+                <hospitality-bot-button
+                  (click)="confirmAndNotifyCheckin()"
+                  label="Confirm And Notify Checkin"
+                  variant="outlined"
+                ></hospitality-bot-button>
               </ng-container>
               <ng-container *ngSwitchCase="'COMPLETED'">
                 <!-- initiate force checkout -->
                 <!-- download invoice -->
               </ng-container>
               <ng-container *ngSwitchCase="'FAILED'">
-                <button
+                <hospitality-bot-button
+                  label="Generate CheckIn Link"
                   (click)="activateAndgenerateJourney('CHECKIN')"
-                  class="button"
-                >
-                  Generate CheckIn Link
-                </button>
-                <button (click)="downloadInvoice()" class="button">
-                  Download Invoice/Folio
-                </button>
+                  variant="outlined"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  label="Download Invoice/Folio"
+                  (click)="downloadInvoice()"
+                  variant="outlined"
+                ></hospitality-bot-button>
               </ng-container>
             </ng-container>
           </ng-template>
@@ -395,15 +383,17 @@
                 <ng-container
                   *ngIf="details.invoicePrepareRequest; else prepareInvoiceBtn"
                 >
-                  <button
+                  <hospitality-bot-button
+                    label="Activate & Generate Checkout Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
-                    class="button"
-                  >
-                    Activate & Generate Checkout Link
-                  </button>
-                  <button (click)="downloadInvoice()" class="button">
-                    Download Invoice/Folio
-                  </button>
+                    variant="outlined"
+                  ></hospitality-bot-button>
+
+                  <hospitality-bot-button
+                    label="Download Invoice/Folio"
+                    (click)="downloadInvoice()"
+                    variant="outlined"
+                  ></hospitality-bot-button>
                 </ng-container>
                 <ng-template #prepareInvoiceBtn>
                   <button class="button" (click)="prepareInvoice()">

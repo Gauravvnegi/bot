@@ -1,0 +1,77 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+  </hospitality-bot-navigation-header>
+  <div class="form-block" [formGroup]="useForm">
+    <div class="code">
+      <span class="code__label"> Code: </span>
+      <span class="code__hash"> {{ code }} </span>
+    </div>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="active"
+      label="Status:"
+    ></hospitality-bot-toggle-switch>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      label="Service Name"
+      maxLength="60"
+    ></hospitality-bot-input>
+    <hospitality-bot-select
+      class="half-width"
+      controlName="parentId"
+      label="Category"
+      [options]="categories"
+      [props]="{ isAsync: true, createPrompt: '+ Add New Category' }"
+      [loading]="loadingCategory"
+      (paginate)="loadMoreCategories()"
+      (onSearch)="searchCategories($event)"
+      [stopEmission]="noMoreCategories"
+      (onCreate)="createCategory()"
+    ></hospitality-bot-select>
+    <hospitality-bot-custom-file-upload
+      class="upload"
+      formControlName="imageUrl"
+      [hotelId]="hotelId"
+    ></hospitality-bot-custom-file-upload>
+    <hospitality-bot-select
+      [ngClass]="{
+        'three-fourth': isSelectedTypePaid,
+        'half-width': !isSelectedTypePaid
+      }"
+      controlName="serviceType"
+      label="Type"
+      [options]="types"
+    ></hospitality-bot-select>
+    <hospitality-bot-prefix-field
+      *ngIf="isSelectedTypePaid"
+      class="three-fourth"
+      [options]="currencies"
+      label="Original Price"
+      preControlName="currency"
+      postControlName="rate"
+      [defaultProps]="{ post: { type: 'number' } }"
+      [props]="{
+        errorMessages: {
+          required: 'This is a required field.',
+          min: 'Value must be greater than 0.'
+        }
+      }"
+    >
+    </hospitality-bot-prefix-field>
+    <hospitality-bot-select
+      [ngClass]="{
+        'three-fourth': isSelectedTypePaid,
+        'half-width': !isSelectedTypePaid
+      }"
+      controlName="unit"
+      label="Unit"
+      [options]="units"
+    ></hospitality-bot-select>
+    <hospitality-bot-button
+      class="create-btn"
+      [label]="serviceId ? 'Update' : 'Create'"
+      (onClick)="handleSubmit()"
+    ></hospitality-bot-button>
+  </div>
+</div>

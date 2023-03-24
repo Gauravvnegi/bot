@@ -20,12 +20,12 @@ export class IteratorComponent implements OnChanges {
   constructor(private fb: FormBuilder) {}
 
   props: FormProps = {
-    height: '35px',
     fontSize: '14px',
   };
 
   @Input() fields: IteratorField[];
   @Input() useFormArray: FormArray;
+  @Input() ctaLabel: '+ Add More';
   @ViewChild('main') main: ElementRef;
 
   // Zero maxLimit means there is no limit

@@ -3,16 +3,19 @@
 :host ::ng-deep .mat-tab-label {
   color: $mat-tab-label;
   font-size: $font14;
+  @media screen and (max-width: $XL) {
+    min-width: 155px;
+  }
 }
 
 :host ::ng-deep .mat-tab-label-active {
-  color: $primary-purple;
+  color: $primary-cta;
   font-size: $font16;
   font-weight: $bolder;
 }
 
 :host ::ng-deep .mat-ink-bar {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 }
 
 .detailComponentCurrent {
@@ -37,7 +40,7 @@
 }
 
 :host ::ng-deep .header {
-  background: $primary-purple;
+  background: $primary-cta;
   position: sticky;
   top: 0;
   z-index: 999;
@@ -530,20 +533,24 @@
     flex-direction: column;
     align-items: center;
     height: 35vh;
+    gap: 15px;
+
     .button {
-      border: 1px solid $primary-purple;
+      height: 46px;
+      min-width: 145px;
+      border: 1px solid $primary-cta;
+      padding: 9.5px 18.5px;
       font-size: $font12;
-      outline: none;
-      padding: 10px 5px;
-      margin: 5px 0;
-      background-color: transparent;
-      width: 100%;
-      color: $primary-purple;
-      border-radius: 25px;
+      font-weight: 500;
+      border-radius: 4px;
+      @include flex-all-center;
+      color: $primary-cta;
+      border-radius: 3px;
+      background-color: $white;
       &:hover {
         cursor: pointer;
-        background-color: $primary-purple;
-        color: $white;
+        border: 1px solid $primary-hover;
+        color: $primary-hover;
       }
     }
   }
@@ -572,7 +579,7 @@
         }
         &:hover {
           cursor: pointer;
-          background-color: $primary-purple;
+          background-color: $primary-cta;
           height: 25px;
           width: 25px;
           img {
@@ -601,7 +608,7 @@
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 .spinner {
@@ -611,7 +618,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 
   border-radius: 100%;
   display: inline-block;
@@ -670,7 +677,7 @@
   }
 }
 :host ::ng-deep .item {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
 }
 .flx {
   display: flex;
@@ -680,4 +687,14 @@
   @extend .flx;
   margin: 15px 0;
   padding: 0 30px 20px;
+}
+
+:host ::ng-deep .button {
+  font-size: $font12 !important;
+  min-width: 200px !important;
+  border-radius: 25px !important;
+  max-width: 200px;
+  @media screen and (max-width: 1450px) {
+    min-width: 175px !important;
+  }
 }

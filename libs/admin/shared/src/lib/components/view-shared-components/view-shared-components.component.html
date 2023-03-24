@@ -1,0 +1,148 @@
+<div [formGroup]="useForm">
+  <hospitality-bot-datatable></hospitality-bot-datatable>
+
+  <div class="wrapper">
+    <div class="heading">Radio and Checkbox</div>
+
+    <div class="form-block" formGroupName="selectField">
+      <hospitality-bot-select-group
+        class="full-width"
+        controlName="checkbox"
+        label="Select Checkbox"
+        [options]="options"
+        fieldType="checkbox"
+      ></hospitality-bot-select-group>
+      <hospitality-bot-select-group
+        class="half-width"
+        controlName="radio"
+        label="Select Radio"
+        [options]="options"
+        fieldType="radio"
+      ></hospitality-bot-select-group>
+      <hospitality-bot-toggle-switch label="Status" controlName="toggleSwitch">
+      </hospitality-bot-toggle-switch>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <div class="heading">Outlined Inputs</div>
+    <div class="form-block" formGroupName="outlinedField">
+      <hospitality-bot-input
+        class="full-width"
+        controlName="input"
+        label="Input Email Error"
+        [props]="{
+          errorMessages: {
+            required: 'Email is Required',
+            maxlength: 'Email cannot be more than 10 letters',
+            pattern: 'Email pattern does not match'
+          },
+          placeholder: 'Enter Email'
+        }"
+        [loading]="true"
+      ></hospitality-bot-input>
+
+      <hospitality-bot-date
+        class="half-width"
+        controlName="date"
+        label="Date Input"
+      ></hospitality-bot-date>
+
+      <hospitality-bot-select
+        class="half-width"
+        controlName="select"
+        label="Select Input"
+        [options]="options"
+      ></hospitality-bot-select>
+
+      <hospitality-bot-multi-select
+        class="half-width"
+        controlName="multiSelect"
+        label="Multi Select Input"
+        [options]="options"
+      ></hospitality-bot-multi-select>
+
+      <hospitality-bot-prefix-field
+        class="half-width"
+        preControlName="preInput"
+        postControlName="postInput"
+        label="Prefix Field"
+        [options]="options"
+      ></hospitality-bot-prefix-field>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <div class="heading">Standard Input</div>
+    <div class="form-block" formGroupName="standardField">
+      <hospitality-bot-input
+        class="full-width"
+        controlName="input"
+        label="Input Text Field"
+        [props]="props"
+        [loading]="true"
+      ></hospitality-bot-input>
+
+      <hospitality-bot-date
+        class="half-width"
+        controlName="date"
+        label="Date Input"
+        [props]="props"
+      ></hospitality-bot-date>
+
+      <hospitality-bot-select
+        class="half-width"
+        controlName="select"
+        label="Select Input"
+        [options]="options"
+        [props]="props"
+      ></hospitality-bot-select>
+
+      <hospitality-bot-multi-select
+        class="half-width"
+        controlName="multiSelect"
+        label="Multi Select Input"
+        [options]="options"
+        [props]="props"
+      ></hospitality-bot-multi-select>
+
+      <hospitality-bot-prefix-field
+        class="half-width"
+        preControlName="preInput"
+        postControlName="postInput"
+        label="Prefix Field"
+        [options]="options"
+        [props]="props"
+      ></hospitality-bot-prefix-field>
+    </div>
+  </div>
+
+  <div class="wrapper">
+    <div class="heading">Buttons</div>
+
+    <div class="form-block">
+      <hospitality-bot-button
+        label="Contained"
+        variant="contained"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        label="Outlined"
+        variant="outlined"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        label="Text Button"
+        variant="text"
+      ></hospitality-bot-button>
+      <hospitality-bot-toggle-dropdown
+        [listItem]="listItem"
+        (onClick)="handleStatus($event)"
+        [status]="currentStatus"
+      >
+      </hospitality-bot-toggle-dropdown>
+    </div>
+  </div>
+</div>
+
+<div>
+  <tr hospitality-bot-empty-view [noOfColumns]="3"></tr>
+</div>

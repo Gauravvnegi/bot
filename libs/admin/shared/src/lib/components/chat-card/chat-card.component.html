@@ -1,6 +1,13 @@
 <div class="card-wrapper">
   <div class="card-wrapper_image">
-    <img [src]="userImg" *ngIf="userImg; else defaultAvatar" />
+    <img [src]="userImg" *ngIf="userImg" />
+    <div
+      *ngIf="profileNickName; else defaultAvatar"
+      class="card-wrapper_image-nickName"
+      [style.background]="backgroundColor"
+    >
+      {{ profileNickName }}
+    </div>
     <ng-template #defaultAvatar
       ><img src="assets/svg/defaultUser.svg" alt="default"
     /></ng-template>
@@ -8,8 +15,8 @@
   <div class="card-wrapper_information">
     <div class="card-wrapper_information_roomInfoWrapper">
       <div class="card-wrapper_information_roomInfoWrapper_roomNumber">
-        RNO:
-        {{ roomNo }}
+        {{ cardType !== 'feedback' ? 'RNO:' : '' }}
+        {{ roomNo || '---' }}
       </div>
       <div
         class="card-wrapper_information_roomInfoWrapper_rating"
@@ -30,23 +37,15 @@
       >
         {{ priority }}
       </div>
-      <div
-        class="card-wrapper_information_roomInfoWrapper_serviceTag"
-        *ngIf="cardType === 'feedback'"
-      >
-        {{ serviceTag }}
-      </div>
     </div>
     <div class="card-wrapper_information_name">
-      {{ name }}
+      {{ name || '---' }}
     </div>
     <div *ngIf="subTitle" class="card-wrapper_information_subtitle">
       {{ subTitle }}
     </div>
     <div class="card-wrapper_information_remark">{{ remark || '---' }}</div>
-    <div class="card-wrapper_information_unread-count" *ngIf="unReadCount">
-      {{ unReadCount }}
-    </div>
+
     <div class="content-wrap" *ngIf="taskStatus">
       <div class="content-wrap-r2">
         <div
@@ -70,7 +69,7 @@
           {{ 'SLA' }}: {{ taskStatus?.sla }}
         </div>
         <div class="content-wrap-r2-divider"></div>
-        <div class="content-wrap-job-duration">JD:- {{ taskStatus?.jd }}m</div>
+        <div class="content-wrap-job-duration">JD: {{ taskStatus?.jd }}m</div>
       </div>
     </div>
     <div
@@ -80,7 +79,16 @@
       {{ department.userName }} ({{ department.label }})
     </div>
   </div>
-  <div class="card-wrapper_time">
+  <div
+    class="card-wrapper_time"
+    [ngClass]="cardType === 'feedback' ? 'feedback_time' : ''"
+  >
     {{ time }}
+    <div class="card-wrapper_time_unread-count" *ngIf="unReadCount">
+      {{ unReadCount }}
+    </div>
+    <div class="card-wrapper_time_serviceTag" *ngIf="cardType === 'feedback'">
+      {{ serviceTag }}
+    </div>
   </div>
 </div>

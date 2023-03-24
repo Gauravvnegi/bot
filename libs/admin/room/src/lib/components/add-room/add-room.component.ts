@@ -2,21 +2,27 @@ import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  LibrarySearchItem,
+  LibraryService,
+} from '@hospitality-bot/admin/library';
 import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
+import routes from '../../constant/routes';
+import { NavRouteOptions } from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import { FormProps } from 'libs/admin/shared/src/lib/types/form.type';
 import { Subscription } from 'rxjs';
 import { iteratorFields } from '../../constant/form';
 import { MultipleRoomList, SingleRoomList } from '../../models/room.model';
-import { RoomTypeList } from '../../models/rooms-data-table.model';
+import { RoomType, RoomTypeList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { AddRoomTypes, RoomTypeOption } from '../../types/room';
+import { RoomTypeListResponse } from '../../types/service-response';
 
 @Component({
   selector: 'hospitality-bot-add-room',
@@ -24,10 +30,9 @@ import { AddRoomTypes, RoomTypeOption } from '../../types/room';
   styleUrls: ['./add-room.component.scss'],
 })
 export class AddRoomComponent implements OnInit, OnDestroy {
-  draftDate: string;
+  draftDate: number | string = Date.now();
 
   roomId: string;
-  roomTypeId: string;
   hotelId: string;
 
   useForm: FormGroup;
@@ -37,12 +42,20 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   roomTypes: RoomTypeOption[] = [];
   submissionType: AddRoomTypes;
 
-  props: FormProps = {
-    variant: 'standard',
-  };
+  pageTitle = 'Add rooms';
+  navRoutes: NavRouteOptions = [
+    { label: 'Inventory', link: './' },
+    { label: 'Rooms', link: '/pages/inventory/room' },
+    { label: 'Add Rooms', link: './' },
+  ];
 
-  isRoomTypesLoading = false;
   isRoomInfoLoading = false;
+
+  /* roomTypes options variable */
+  roomTypeOffSet = 0;
+  loadingRoomTypes = false;
+  noMoreRoomTypes = false;
+  roomTypeLimit = 10;
 
   $subscription = new Subscription();
 
@@ -52,25 +65,31 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private libraryService: LibraryService
   ) {
     this.initForm();
     this.submissionType = this.route.snapshot.paramMap.get(
       'type'
     ) as AddRoomTypes;
+
+    this.pageTitle = `Add ${this.submissionType} room`;
     this.fields = iteratorFields[this.submissionType];
     this.route.queryParams.subscribe((res) => {
       if (res.id) {
         this.roomId = res.id;
         this.fields[0].disabled = true;
+        this.pageTitle = 'Edit Room';
+        this.navRoutes[2].label = 'Edit Room';
       }
     });
   }
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.initRoomTypes();
+    this.initOptionsConfig();
     if (this.roomId) this.initRoomDetails();
   }
 
@@ -81,7 +100,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.useFormArray = this.fb.array([]);
 
     this.useForm = this.fb.group({
-      roomType: ['', Validators.required],
+      roomTypeId: ['', Validators.required],
       price: [''],
       currency: [''],
       rooms: this.useFormArray,
@@ -91,25 +110,89 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function initRoomTypes Initialize room types options
+   * @function initOptionsConfig Initialize room types options
    */
-  initRoomTypes(): void {
-    this.isRoomTypesLoading = true;
-    this.$subscription.add(
-      this.roomService.getRoomsTypeList(this.hotelId).subscribe((res) => {
-        this.roomTypes = new RoomTypeList()
-          .deserialize(res)
-          .records.map((item) => ({
-            id: item.id,
-            label: item.name,
-            price: item.price,
-            currency: item.currency,
-          }));
+  initOptionsConfig(): void {
+    this.getRoomTypes();
+  }
 
-        this.patchRoomTypeValue();
-        this.isRoomTypesLoading = false;
-      })
+  /**
+   * @function getCategories to get room type options
+   */
+  getRoomTypes(): void {
+    this.loadingRoomTypes = true;
+    this.$subscription.add(
+      this.roomService
+        .getList<RoomTypeListResponse>(this.hotelId, {
+          params: `?type=ROOM_TYPE&offset=${this.roomTypeOffSet}&limit=${this.roomTypeLimit}`,
+        })
+        .subscribe(
+          (res) => {
+            const data = new RoomTypeList()
+              .deserialize(res)
+              .records.map((item) => ({
+                label: item.name,
+                value: item.id,
+                price: item.price,
+                currency: item.currency,
+              }));
+            this.roomTypes = [...this.roomTypes, ...data];
+            this.noMoreRoomTypes = data.length < this.roomTypeLimit;
+          },
+          this.handleError,
+          () => {
+            this.loadingRoomTypes = false;
+          }
+        )
     );
+  }
+
+  /**
+   * @function searchRoomTypes To search categories
+   * @param text search text
+   */
+  searchRoomTypes(text: string) {
+    if (text) {
+      this.loadingRoomTypes = true;
+      this.libraryService
+        .searchLibraryItem(this.hotelId, {
+          params: `?key=${text}&type=${LibrarySearchItem.ROOM_TYPE}`,
+        })
+        .subscribe(
+          (res) => {
+            const data = res && res[LibrarySearchItem.ROOM_TYPE];
+            this.roomTypes =
+              data
+                ?.filter((item) => item.status)
+                .map((item) => {
+                  const roomType = new RoomType().deserialize(item);
+
+                  return {
+                    label: roomType.name,
+                    value: roomType.id,
+                    price: roomType.price,
+                    currency: roomType.currency,
+                  };
+                }) ?? [];
+          },
+          this.handleError,
+          () => {
+            this.loadingRoomTypes = false;
+          }
+        );
+    } else {
+      this.roomTypeOffSet = 0;
+      this.roomTypes = [];
+      this.getRoomTypes();
+    }
+  }
+
+  /**
+   * @function loadMoreRoomTypes load more categories options
+   */
+  loadMoreRoomTypes() {
+    this.roomTypeOffSet = this.roomTypeOffSet + 10;
+    this.getRoomTypes();
   }
 
   /**
@@ -121,56 +204,53 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       this.roomService
         .getRoomById(this.hotelId, this.roomId)
         .subscribe((res) => {
-          this.roomTypeId = res.roomTypeDetails.id;
-          this.draftDate = res.updated ?? res.created;
+          const roomDetails = res.rooms[0];
+          this.draftDate = roomDetails.updated ?? roomDetails.created;
           this.useForm.patchValue({
-            roomType: res.roomTypeDetails,
-            price: res.price,
-            currency: res.currency,
+            roomTypeId: roomDetails.roomTypeDetails.id,
+            price: roomDetails.price,
+            currency: roomDetails.currency,
             rooms: [
               {
-                roomNo: res.roomNumber,
-                floorNo: res.floorNumber,
+                roomNo: roomDetails.roomNumber,
+                floorNo: roomDetails.floorNumber,
               },
             ],
           });
 
-          this.patchRoomTypeValue();
           this.isRoomInfoLoading = false;
         })
     );
   }
 
   /**
-   * @function patchRoomTypeValue Updates room types value
-   */
-  patchRoomTypeValue(): void {
-    if (this.roomTypeId && this.roomTypes.length) {
-      this.useForm.patchValue({
-        roomType: this.roomTypes.find((item) => item.id === this.roomTypeId),
-      });
-    }
-  }
-
-  /**
    * Get loading state
    */
   get loading() {
-    return this.isRoomInfoLoading && this.isRoomTypesLoading;
+    return this.isRoomInfoLoading || this.loadingRoomTypes;
   }
 
   /**
    * @function registerRoomTypeChangesListener To listen to selected room type
    */
   registerRoomTypeChangesListener(): void {
-    this.useForm
-      .get('roomType')
-      .valueChanges.subscribe((value: RoomTypeOption) => {
-        this.useForm.patchValue({
-          currency: value.currency,
-          price: value.price,
-        });
+    this.useForm.get('roomTypeId').valueChanges.subscribe((value: string) => {
+      const selectedRoomType = this.roomTypes.find(
+        (item) => item.value === value
+      );
+
+      this.useForm.patchValue({
+        currency: selectedRoomType.currency,
+        price: selectedRoomType.price,
       });
+    });
+  }
+
+  /**
+   * @function addRoomType Add room type
+   */
+  createRoomType() {
+    this.router.navigate([`/pages/inventory/room/${routes.addRoomType}`]);
   }
 
   /**
@@ -198,10 +278,12 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
     this.$subscription.add(
       this.roomService
-        .updateRoom(
-          this.hotelId,
-          new SingleRoomList().deserialize({ id: this.roomId, ...data }).list[0]
-        )
+        .updateRoom(this.hotelId, {
+          rooms: [
+            new SingleRoomList().deserialize({ id: this.roomId, ...data })
+              .list[0],
+          ],
+        })
         .subscribe((res) => {
           this.snackbarService
             .openSnackBarWithTranslate(
@@ -226,12 +308,12 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
     this.$subscription.add(
       this.roomService
-        .addRooms(
-          this.hotelId,
-          this.submissionType === 'single'
-            ? new SingleRoomList().deserialize(data).list
-            : new MultipleRoomList().deserialize(data).list
-        )
+        .addRooms(this.hotelId, {
+          rooms:
+            this.submissionType === 'single'
+              ? new SingleRoomList().deserialize(data).list
+              : new MultipleRoomList().deserialize(data).list,
+        })
         .subscribe((res) => {
           const dialogConfig = new MatDialogConfig();
           dialogConfig.disableClose = true;

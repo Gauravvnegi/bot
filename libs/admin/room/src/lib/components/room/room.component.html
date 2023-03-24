@@ -1,10 +1,32 @@
 <div class="wrapper">
   <div class="stats-wrapper">
-    <hospitality-bot-stats-card
-      class="stats-box"
-      *ngFor="let stats of statsArr"
-      [stats]="stats"
-    ></hospitality-bot-stats-card>
+    <hospitality-bot-stats-card class="stats-box" [stats]="statsArr[0]">
+      <div>
+        <canvas id="average-room-rate"></canvas>
+      </div>
+    </hospitality-bot-stats-card>
+    <hospitality-bot-stats-card class="stats-box" [stats]="statsArr[1]">
+      <div>
+        <canvas id="myChart" #myChart></canvas>
+      </div>
+    </hospitality-bot-stats-card>
+    <hospitality-bot-stats-card [stats]="statsArr[2]" class="stats-box">
+      <div class="p-relative">
+        <canvas id="remaining-inventory"></canvas>
+        <div class="text-center">
+          <p>{{ 20 }}</p>
+          <p>{{ 'Rooms' }}</p>
+        </div>
+      </div>
+    </hospitality-bot-stats-card>
+    <hospitality-bot-stats-card [stats]="statsArr[3]" class="stats-box">
+      <div class="p-relative">
+        <canvas id="remaining-inventory-cost"></canvas>
+        <div class="text-center">
+          <p>{{ statsArr[2].score }}K</p>
+        </div>
+      </div></hospitality-bot-stats-card
+    >
   </div>
 
   <hospitality-bot-room-data-table></hospitality-bot-room-data-table>

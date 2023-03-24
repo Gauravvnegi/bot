@@ -4,7 +4,7 @@
   overflow-x: unset !important;
 }
 
-.data-table-row {
+.table-row {
   height: 90px;
 }
 
@@ -18,7 +18,7 @@
   letter-spacing: 0.72px;
   padding: 7px;
   font-size: 12px;
-  border-radius: 25px;
+  border-radius: 4px;
   text-align: center;
   filter: alpha(opacity=80);
 
@@ -50,4 +50,13 @@
   flex-direction: column;
   gap: 10px;
   padding: 5% 15%;
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include table-cell-padding(1em);
+}
+
+.amenities {
+  white-space: normal;
 }

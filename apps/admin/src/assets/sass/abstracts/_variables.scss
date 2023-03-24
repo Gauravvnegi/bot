@@ -1,13 +1,20 @@
 // color-variables
+
+//state color
+$active-state: #1468f9;
+$inactive-state: #e31717;
+$draft-state: #bebebe;
+$success-state: #30ce0b;
+$unavailable-state: #e39117;
+
+$nav-bg-color: #010034;
+$layout-background: #f4f5f6;
 $resolved: #31bb92;
 $spl-req: #52b33f;
 $other-req: #3994d6;
 $auth-color: #4b56c0;
 $quote-color: #6d7580;
-$primary-purple: #4b56c0;
-$primary-btn: #5f38f9;
-$primary-hover: #4423c6;
-$primary-pressed: #341a9c;
+
 $navy-blue: rgb(0 32 70);
 $primary-gray: #9eaeb8;
 $primary-gray1: rgba(158, 174, 184);
@@ -17,6 +24,7 @@ $light-grey: #d9d9d9;
 $light-grey2: #c5c5c5;
 $initiated: #6bacf8;
 $reject: #f00d2a;
+$electric-purple: #8831fa;
 $completed: #53b33e;
 $success: #2a8853;
 $light-gray: #e0e0e0;
@@ -56,6 +64,27 @@ $booking-feedback-opacity: #0030b51a;
 $list-popup: #cfd9f5;
 $arrival-time: #b2b7bc;
 $accordian-background: #e8eef5;
+$buttons-hover:#00000070;
+// NEW STYLE GUIDE COLOR VARIABLES
+
+$primary-cta: #5f38f9;
+$primary-hover: #4423c6;
+$primary-active: #341a9c;
+$primary-pressed: #341a9c;
+$title: #001037;
+$subtitle: #6d7580;
+$inActiveTab: #b5b5c3;
+$message-background: #f7f8fa;
+$primary-text-bg: #e8e2ff;
+$amount: #2e3440;
+$totalAmount: #53d397;
+$background-grey: #f8f9fb;
+$accordian-header: #f1f2f7;
+$accordian-label: #787c9e;
+$cross: #e80000;
+$white-three: #efefef;
+$greyish: #aaaaaa;
+$snackbarSuccess: #ecf6ea;
 
 // grey palet
 $c-white: white;
@@ -153,7 +182,7 @@ $red: #ff0000;
 $no-received: #ffec8c;
 $tab-menu-link: #2187d5;
 $vip-stat-label: #0239cf;
-$chat-background: #6173f4;
+$chat-background: #8161ff;
 $greenyellow: greenyellow;
 $received-dot: #31bb92;
 $data-separator: #218af3;

@@ -1,0 +1,28 @@
+@mixin input {
+  display: block;
+}
+
+.wrapper {
+}
+
+.main {
+  display: flex;
+  align-items: flex-end;
+  gap: 1em;
+}
+
+.pre-input {
+  @include input();
+  flex-basis: 15%;
+}
+
+.post-input {
+  @include input();
+  flex-basis: 85%;
+}
+
+:host ::ng-deep .label {
+  display: block;
+  width: 0;
+  white-space: nowrap;
+}

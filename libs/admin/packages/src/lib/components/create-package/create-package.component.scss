@@ -1,0 +1,9 @@
+@import 'main';
+
+.wrapper {
+  padding: 0 10px;
+}
+
+.form-block {
+  @include formBlock();
+}

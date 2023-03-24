@@ -152,7 +152,7 @@ export class Feedback {
 
   getTableOrRoomNo(feedbackType) {
     return feedbackType === feedback.types.stay
-      ? `RNO: ${this.tableOrRoomNumber}`
+      ? `Room No/Table No: ${this.tableOrRoomNumber}`
       : `TNO: ${this.tableOrRoomNumber}`;
   }
 
@@ -240,6 +240,10 @@ export class Service {
       }
     }
     return this;
+  }
+
+  getServiceName() {
+    return this.serviceName.split('_').join(' ');
   }
 }
 
@@ -506,7 +510,7 @@ export class StayFeedback {
 
   getTableOrRoomNo(feedbackType) {
     return feedbackType === feedback.types.stay
-      ? `RNO: ${this.tableOrRoomNumber}`
+      ? `Room No/Table No: ${this.tableOrRoomNumber}`
       : `TNO: ${this.tableOrRoomNumber}`;
   }
 

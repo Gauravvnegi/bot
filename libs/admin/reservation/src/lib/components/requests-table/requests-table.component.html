@@ -100,9 +100,13 @@
             <p
               *ngIf="rowData.message.status"
               [ngClass]="{
-                closed: rowData.message.status == 'Closed' || rowData.message.status=='Accept',
+                closed:
+                  rowData.message.status == 'Closed' ||
+                  rowData.message.status == 'Accept',
                 resolved: rowData.message.status == 'RESOLVED',
-                timeOut: rowData.message.status == 'Timeout'|| rowData.message.status=='Reject',
+                timeOut:
+                  rowData.message.status == 'Timeout' ||
+                  rowData.message.status == 'Reject',
                 pending: rowData.message.status == 'Pending'
               }"
             >
@@ -152,6 +156,8 @@
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="rowsPerPageOptions"
       (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
     ></p-paginator>
   </ng-template> -->
   </p-table>

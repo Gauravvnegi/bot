@@ -1,0 +1,27 @@
+<div
+  class="wrapper p-field"
+  [style.fontSize]="fontSize"
+  [ngClass]="wrapperNgClasses"
+  [formGroup]="controlContainer.control"
+>
+  <label
+    *ngIf="label && !float"
+    class="label label__static"
+    [for]="controlName"
+    >{{ label }}</label
+  >
+
+  <div class="input text__wrapper" [ngClass]="inputNgClasses">
+    <ng-container *ngIf="value">
+      <div class="text">{{ suffix }} {{ value }}</div>
+      <div class="text__strike">{{ strikeValue }}</div>
+    </ng-container>
+  </div>
+  <small *ngIf="error" class="p-error"> {{ error }}</small>
+
+  <i
+    *ngIf="isLoading"
+    class="pi pi-spin pi-spinner"
+    [ngClass]="iconNgClass"
+  ></i>
+</div>

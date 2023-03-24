@@ -12,6 +12,10 @@ import { Router } from '@angular/router';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
+import {
+  ModuleNames,
+  routes,
+} from '../../../../../../../../../../libs/admin/shared/src/index';
 import { MenuItem } from '../../data-models/menu.model';
 import { GlobalFilterService } from '../../services/global-filters.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
@@ -109,8 +113,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   private initSideNavConfigs(config = {}) {
-    this.activeFontColor = '#4B56C0';
-    this.normalFontColor = '#C5C5C5';
+    this.activeFontColor = '#ffffff';
+    this.normalFontColor = '#ffffff';
     this.dividerBgColor = 'white';
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
@@ -120,12 +124,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
       .filter((item) => item.isView)
       .map((product) => {
         let menuItem = new MenuItem().deserialize(product);
-
         return menuItem;
       });
   }
 
-  toggleMenuButton() {
+  toggleMenuButton(menuItem?: MenuItem) {
+    if (menuItem?.name === ModuleNames.SETTINGS) {
+      this.router.navigate([`/pages/${routes.SETTINGS}`]);
+    }
     this.isExpanded = !this.isExpanded;
     this.navToggle.emit(this.isExpanded);
   }

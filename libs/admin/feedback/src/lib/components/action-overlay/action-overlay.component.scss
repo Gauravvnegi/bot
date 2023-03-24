@@ -11,6 +11,7 @@ button {
   background-color: $white;
   padding: 4px;
   color: $button-blue;
+  padding-left: 16px;
   cursor: pointer;
   @media screen and (max-width: $L) {
     @include font-size(10);

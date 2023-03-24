@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { defaultProduct } from '../constants/layout';
 import {
   ProductSubscription,
   Subscriptions,
@@ -14,7 +16,12 @@ export class SubscriptionPlanService extends ApiService {
   private productSubscription: ProductSubscription;
 
   getSubscriptionPlan(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/subscriptions/`);
+    return this.get(`/api/v1/hotel/${hotelId}/subscriptions/`).pipe(
+      map((res) => {
+        res.products = [...res.products, ...defaultProduct];
+        return res;
+      })
+    );
   }
 
   initSubscriptionDetails(data) {

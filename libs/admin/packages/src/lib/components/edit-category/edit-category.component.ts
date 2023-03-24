@@ -144,7 +144,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
             )
             .subscribe();
           this.router.navigate([
-            '/pages/library/package/category',
+            '/pages/library/packages/category',
             this.hotelCategory.category.id,
           ]);
           this.isSavingCategory = false;
@@ -196,7 +196,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
               )
               .subscribe();
             this.router.navigate([
-              '/pages/library/package/category',
+              '/pages/library/packages/category',
               this.hotelCategory.category.id,
             ]);
             this.isSavingCategory = false;
@@ -222,7 +222,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   }
 
   redirectToCategories() {
-    this.router.navigate(['/pages/library/package/']);
+    this.router.navigate(['/pages/library/packages/']);
   }
 
   private performActionIfNotValid(status: any[]): any[] {

@@ -3,7 +3,13 @@ import { FormBuilder } from '@angular/forms';
 import { TableService } from '../../services/table.service';
 import { Chip, Cols } from '../../types/table.type';
 import { BaseDatatableComponent } from './base-datatable.component';
-import { filters, columns, TableValue, rowValues } from './constant/datatable';
+import {
+  filters,
+  columns,
+  TableValue,
+  rowValues,
+  status,
+} from '../../constants/datatable';
 interface Import {
   name: string;
   code: string;
@@ -21,20 +27,13 @@ enum Status {
 })
 export class DatatableComponent extends BaseDatatableComponent
   implements OnInit {
-  constructor(
-    public fb: FormBuilder,
-    protected tabFilterService: TableService
-  ) {
-    super(fb, tabFilterService);
-  }
-
   tableName: string;
   cols: Cols[] = columns.users;
   tabFilterItems = filters;
   tabFilterIdx: number = 0;
   selectedTable: TableValue;
   filterChips: Chip<string>[] = filters[0].chips;
-  dataSource = [];
+  dataSource = rowValues.users;
 
   isActionButtons = true;
   isQuickFilters = true;
@@ -46,6 +45,8 @@ export class DatatableComponent extends BaseDatatableComponent
       'Changed a URL or want to send traffic somewhere else?  Set up a 301 redirect so your visitors don’t get lost.',
     actionName: '+ Create New Redirect',
   };
+
+  status = status;
 
   additionalActionItems = [
     {
@@ -62,9 +63,14 @@ export class DatatableComponent extends BaseDatatableComponent
     },
   ];
 
-  addEntry() {
-    this.values = rowValues.users;
+  constructor(
+    public fb: FormBuilder,
+    protected tabFilterService: TableService
+  ) {
+    super(fb, tabFilterService);
   }
+
+  addEntry() {}
 
   handleStatus = (status, name: string): void => {
     this.values.find((item) => item.name === name).action = {

@@ -158,6 +158,18 @@
     },
     "admin-room": {
       "tags": []
+    },
+    "admin-services": {
+      "tags": []
+    },
+    "admin-manage-sites": {
+      "tags": []
+    },
+    "admin-settings": {
+      "tags": []
+    },
+    "admin-offers": {
+      "tags": []
     }
   }
 }

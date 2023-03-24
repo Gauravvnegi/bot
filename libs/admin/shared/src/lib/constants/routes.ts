@@ -18,6 +18,7 @@ export const routes = {
   [ModuleNames.FRONT_DESK_DASHBOARD]: 'efrontdesk/dashboard',
   [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/request-analytics',
   [ModuleNames.REQUEST]: 'efrontdesk/request',
+  [ModuleNames.ADD_RESERVATION]: 'efrontdesk/add-reservation',
 
   // Freddie
   [ModuleNames.FREDDIE]: 'freddie',
@@ -35,11 +36,14 @@ export const routes = {
 
   // Library
   [ModuleNames.LIBRARY]: 'library',
-  [ModuleNames.PACKAGES]: 'library/package',
+  [ModuleNames.PACKAGES]: 'library/packages',
   [ModuleNames.LISTING]: 'library/listing',
   [ModuleNames.TOPIC]: 'library/topic',
   [ModuleNames.ASSET]: 'library/assets',
   [ModuleNames.TEMPLATE]: 'library/template',
+  [ModuleNames.PACKAGE]: 'library/package',
+  [ModuleNames.SERVICES]: 'library/services',
+  [ModuleNames.OFFERS]: 'library/offers',
 
   // Inventory
   [ModuleNames.INVENTORY]: 'inventory',
@@ -53,6 +57,7 @@ export const routes = {
   [ModuleNames.GUESTS_DASHBOARD]: 'guest/dashboard',
 
   // SUBSCRIPTION
+  [ModuleNames.SETTINGS]: 'settings',
   [ModuleNames.SUBSCRIPTION]: 'subscription',
 
   RoleAndPermission: 'roles-permissions',

@@ -6,6 +6,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { Topics } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,8 +22,16 @@ export class CreateListingComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
   hotelId: string;
   globalQueries = [];
-  topicList = [];
+  topicList: Option[] = [];
   isSaving = false;
+  pageTitle = 'Create Listing';
+
+  navRoutes: NavRouteOptions = [
+    { label: 'Library', link: './' },
+    { label: 'Listing', link: '/pages/library/listing' },
+    { label: 'Create Listing', link: './' },
+  ];
+
   constructor(
     private _fb: FormBuilder,
     private listingService: ListingService,
@@ -82,8 +91,12 @@ export class CreateListingComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this.listingService.getTopicList(hotelId, config).subscribe(
-        (response) =>
-          (this.topicList = new Topics().deserialize(response).records),
+        (response) => {
+          const data = new Topics()
+            .deserialize(response)
+            .records.map((item) => ({ label: item.name, value: item.id }));
+          this.topicList = [...this.topicList, ...data];
+        },
         ({ error }) => {
           this.snackbarService
             .openSnackBarWithTranslate(

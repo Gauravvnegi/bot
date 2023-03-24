@@ -39,11 +39,11 @@
       cursor: pointer;
     }
     .cancel {
-      border: 1px solid $primary-purple;
-      color: $primary-purple;
+      border: 1px solid $primary-cta;
+      color: $primary-cta;
     }
     .save {
-      background: $primary-purple 0% 0% no-repeat padding-box;
+      background: $primary-cta 0% 0% no-repeat padding-box;
       color: $white;
     }
   }

@@ -1,0 +1,28 @@
+<th id="select-all" class="select-box" *ngIf="showCheckbox">
+  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+</th>
+<th
+  [id]="col.fields"
+  [pSortableColumn]="col.field"
+  *ngFor="let col of columns"
+  [ngStyle]="col.dynamicWidth ? { width: col.width } : {}"
+>
+  <div class="table-head">
+    <div class="table-head__field">
+      <div class="col-heading">{{ col.header }}</div>
+      <div class="col-sort" *ngIf="col.isSort">
+        <p-sortIcon [field]="col.field"></p-sortIcon>
+      </div>
+    </div>
+    <div class="table-head__search" click-stop-propagation>
+      <input
+        pInputText
+        type="text"
+        (input)="onSearch($event.target.value, col)"
+        [placeholder]="col.placeholder ? col.placeholder : ''"
+        [disabled]="col.isSearchDisabled"
+        class="p-column-filter"
+      />
+    </div>
+  </div>
+</th>

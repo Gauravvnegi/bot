@@ -10,7 +10,7 @@
   @include flex-justify-center;
   align-items: center;
   border-radius: 50%;
-  border: 2px solid $primary-purple;
+  border: 2px solid $primary-cta;
 }
 .labl > input {
   /* HIDE RADIO */
@@ -29,7 +29,7 @@
 }
 
 .labl > input:checked + .image {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   img {
     filter: grayscale(100%);
     height: 12px;
@@ -166,5 +166,5 @@
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
 }

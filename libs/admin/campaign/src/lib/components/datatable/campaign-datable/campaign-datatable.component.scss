@@ -73,11 +73,6 @@
   font-size: $font12 !important;
 }
 
-:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
-  padding: 0.8rem 0.5rem !important;
-  background-color: $c-gray-93;
-}
-
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   text-align: center !important;
 }
@@ -95,7 +90,7 @@
   }
 }
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
   font-size: $font16 !important;
 }
 
@@ -220,4 +215,9 @@
 }
 .guest {
   font-size: 14px;
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include table-cell-padding(1em);
 }

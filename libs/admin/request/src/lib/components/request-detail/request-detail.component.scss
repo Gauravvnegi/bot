@@ -27,7 +27,8 @@ td {
   padding: 15px;
   text-align: left;
 }
-th:first-child,th:last-child{
+th:first-child,
+th:last-child {
   border-radius: 5px;
 }
 th {
@@ -39,7 +40,7 @@ th {
   line-height: 1.14;
   letter-spacing: normal;
   text-align: left;
-  
+
   color: #002046;
   @media screen and (max-width: $L) {
     font-size: $font14;
@@ -86,12 +87,17 @@ td {
         height: 28px;
         width: 28px;
         border-radius: 50%;
-        background-color: $chocolate;
         margin-right: 15px;
         justify-content: center;
         align-items: center;
         display: flex;
-        font-size: 12px;
+        font-size: $font12;
+        background-color: $chocolate;
+
+        img {
+          height: 28px;
+          width: 28px;
+        }
       }
       &-title {
         font-family: Roboto;
@@ -160,7 +166,7 @@ td {
       }
     }
 
-    &::-webkit-scrollbar{
+    &::-webkit-scrollbar {
       width: 2px;
     }
   }

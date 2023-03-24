@@ -3,16 +3,17 @@
     Personal Info
   </div>
   <div class="person-image">
-    <div class="default">
-      <img
-        [src]="data.profileUrl"
-        *ngIf="data.profileUrl; else defaultAvatar"
-      />
-      <ng-template #defaultAvatar
-        ><div>
-          {{ data.getProfileNickName() }}
-        </div></ng-template
+    <div class="default" [style.background]="data?.color">
+      <img [src]="data.profileUrl" *ngIf="data.profileUrl" />
+      <div
+        class="default_nickName"
+        *ngIf="data?.getProfileNickName(); else defaultAvatar"
       >
+        {{ data.getProfileNickName() }}
+      </div>
+      <ng-template #defaultAvatar
+        ><img src="assets/svg/defaultUser.svg" alt="defaultUser"
+      /></ng-template>
     </div>
     <div class="guest-name">
       {{ data.firstName || 'Unknown Person' }}

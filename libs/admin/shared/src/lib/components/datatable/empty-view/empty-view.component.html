@@ -1,24 +1,28 @@
-<tr>
-  <td colspan="2">
-    <div class="wrapper">
-      <div class="wrapper__main" *ngIf="variant === 'standard'">
-        <div class="img-wrapper">
-          <img [src]="imageSrc" class="img" alt="empty-table" />
-        </div>
-        <div>
-          <div class="heading">{{ heading }}</div>
-          <div class="description">{{ description }}</div>
-          <hospitality-bot-button
-            variant="text"
-            [label]="actionName"
-            (onClick)="onActionClick()"
-          >
-          </hospitality-bot-button>
-        </div>
+<td [attr.colspan]="noOfColumns + 1">
+  <div class="wrapper">
+    <div class="wrapper__default" *ngIf="variant === 'default'">
+      No Data Available
+    </div>
+    <div class="wrapper__standard" *ngIf="variant === 'standard'">
+      <div class="wrapper__standard_imageWrapper">
+        <img src="assets/svg/tableEmptyView.svg" alt="emptyViewImage" />
       </div>
-      <div class="wrapper__default" *ngIf="variant === 'default'">
-        <p>No data available in table</p>
+      <div class="wrapper__standard_contentWrapper">
+        <p class="wrapper__standard_contentWrapper_heading">
+          Redirect visitors to the right page
+        </p>
+        <p class="wrapper__standard_contentWrapper_subText">
+          Changed a URL or want to send traffic somewhere else? Set up a 301
+          redirect so your visitors don’t get lost.
+        </p>
+        <div
+          style="display: flex; justify-content: flex-start; margin-top: 10px;"
+        >
+          <hospitality-bot-button
+            label="Redirect button"
+          ></hospitality-bot-button>
+        </div>
       </div>
     </div>
-  </td>
-</tr>
+  </div>
+</td>

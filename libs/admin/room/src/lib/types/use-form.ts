@@ -5,12 +5,7 @@ import { RoomStatus } from './service-response';
  */
 export type BaseRoomForm = {
   id?: string;
-  roomType: {
-    id: string;
-    label: string;
-    price: number;
-    currency: string;
-  };
+  roomTypeId: string;
   price: number;
   currency: string;
 };

@@ -11,7 +11,6 @@
     align-items: center;
     justify-content: space-between;
     .title {
-      font-family: Roboto;
       font-size: 16px;
       font-weight: 500;
       font-stretch: normal;
@@ -81,25 +80,23 @@
   max-width: calc(100% - 80px) !important;
 }
 
-
-
 .btn-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 40px 0;
+  gap: 15px;
   .cancel {
     height: 35px;
     margin: 0 27px 0 0;
     padding: 8px 35px 9px 34px;
     border-radius: 17.5px;
-    border: solid 1px $primary-purple;
+    border: solid 1px $primary-cta;
     cursor: pointer;
     &:active {
       transform: scale(0.97);
     }
     &__text {
-      font-family: Roboto;
       font-size: 13px;
       font-weight: 500;
       font-stretch: normal;
@@ -107,20 +104,19 @@
       line-height: normal;
       letter-spacing: 0.78px;
       text-align: center;
-      color: $primary-purple;
+      color: $primary-cta;
     }
   }
   .send {
     height: 35px;
     padding: 10px 43px 13px;
     border-radius: 23px;
-    background-color: $primary-purple;
+    background-color: $primary-cta;
     cursor: pointer;
     &:active {
       transform: scale(0.97);
     }
     &__text {
-      font-family: Roboto;
       font-size: 13px;
       font-weight: 500;
       font-stretch: normal;

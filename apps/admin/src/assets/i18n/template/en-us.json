@@ -21,7 +21,7 @@
     "enable": "Enable"
   },
 
-  "createTemplate": "+Create Template",
+  "createTemplate": "+ Create Template",
 
   "templateForm": {
     "createTemplate": "Template Name",

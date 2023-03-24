@@ -70,7 +70,7 @@
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 .spinner {
@@ -80,7 +80,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 
   border-radius: 100%;
   display: inline-block;
@@ -140,4 +140,11 @@
 }
 .flx {
   display: flex;
+}
+
+// added for now
+:host ::ng-deep .p-datatable {
+  .p-datatable-thead {
+    position: static !important;
+  }
 }

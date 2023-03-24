@@ -45,22 +45,24 @@
     >
     </canvas>
     <div class="stat-vals-container">
-      <div
-        class="stat-val"
-        [class.text-decoration]="textCut"
-        *ngFor="let key of stats; let i = index"
-        (click)="legendOnClick(i, $event)"
-      >
-        <div class="label">
-          <input class="legends" type="checkbox" />
-          <img
-            [src]="getFilteredConfig(graphData[key].label)?.icon"
-            [alt]="graphData[key].label"
-          />
-          <span>{{ graphData[key].label }}</span>
+      <ng-container *ngFor="let key of stats; let i = index">
+        <div
+          class="stat-val"
+          *ngIf="graphData[key].label"
+          [class.text-decoration]="textCut"
+          (click)="legendOnClick(i, $event)"
+        >
+          <div class="label">
+            <input class="legends" type="checkbox" />
+            <img
+              [src]="getFilteredConfig(graphData[key].label)?.icon"
+              [alt]="graphData[key].label"
+            />
+            <span>{{ graphData[key].label }}</span>
+          </div>
+          <div class="value">{{ graphData[key].totalCount }}</div>
         </div>
-        <div class="value">{{ graphData[key].totalCount }}</div>
-      </div>
+      </ng-container>
     </div>
   </div>
   <div class="days-label">In 30 Days</div>

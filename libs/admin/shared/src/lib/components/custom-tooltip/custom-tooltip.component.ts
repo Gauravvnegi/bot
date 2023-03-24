@@ -6,6 +6,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
   styleUrls: ['./custom-tooltip.component.scss'],
 })
 export class CustomTooltipComponent implements OnChanges {
+  @Input() mode: 'wrapper' | 'standalone' = 'wrapper';
   @Input() text: string;
   @Input() orientation: 'Right' | 'Left' = 'Right';
   @Input() onlyContent: boolean = false;

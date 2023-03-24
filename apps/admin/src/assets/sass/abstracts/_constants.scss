@@ -1,9 +1,9 @@
-//z-indexes
-$left-side-panel-z: 3200;
-$right-side-panel-z: 2200;
-$global-header-z: 1200;
-$main-overlay-z: 800;
-$profile-dropdown-z: 990;
+// ** z-indexes ** [Should not be above 999]
+$left-side-panel-z: 620;
+$right-side-panel-z: 620;
+$global-header-z: 420;
+$main-overlay-z: 220;
+$header-menu-dropdown-z: 220;
 $nav-action-header-z: 110;
 
 // Constant Variables

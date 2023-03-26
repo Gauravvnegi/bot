@@ -5,13 +5,15 @@ import {
   OnInit,
   OnDestroy,
   Output,
+  ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { DetailsComponent as BookingDetailComponent } from 'libs/admin/reservation/src/lib/components/details/details.component';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
-import { empty, Subscription } from 'rxjs';
+import { empty, Subscription, of } from 'rxjs';
 import { catchError, debounceTime, switchMap } from 'rxjs/operators';
 import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/lib/services/snackbar.service';
 import { SearchResultDetail } from '../../data-models/search-bar-config.model';
@@ -29,6 +31,9 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   @Input() name: string;
   @Input() parentSearchVisible: boolean;
   @Output() parentFilterVisible = new EventEmitter();
+  @ViewChild('searchResult') searchResult;
+  @ViewChild('searchBar') searchBar: ElementRef;
+
   hotelId: string;
 
   searchOptions: SearchResultDetail[];
@@ -77,20 +82,26 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     formChanges$
       .pipe(
         debounceTime(1000),
-        switchMap((formValue) =>
-          findSearch$(formValue).pipe(
-            catchError((err) => {
-              return empty();
-            })
-          )
-        )
+        switchMap((formValue) => {
+          if (formValue?.search?.length > 2) {
+            return findSearch$(formValue).pipe(
+              catchError((err) => {
+                return empty();
+              })
+            );
+          } else return of('minThreeChar');
+        })
       )
       .subscribe(
         (response) => {
+          if (response === 'minThreeChar') {
+            return;
+          }
           this.results = new SearchResultDetail().deserialize(response);
 
           this.searchOptions = [];
           this.searchDropdownVisible = true;
+
           this.searchValue = true;
           if (
             this.results.searchResults &&
@@ -116,7 +127,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
 
   setOptionSelection(searchData) {
     this.searchDropdownVisible = false;
-    // this.selectedSearchOption.next(searchData);
+    this.searchResult.hide();
     this.openDetailsPage(searchData);
   }
 
@@ -158,6 +169,8 @@ export class SearchBarComponent implements OnInit, OnDestroy {
 
   openEditPackage(id: string) {
     this.searchDropdownVisible = false;
+    this.searchResult.hide();
+
     this.router.navigateByUrl(`/pages/library/packages/edit/${id}`);
   }
 
@@ -165,6 +178,8 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     this.searchOptions = [];
     this.parentForm.get('search').patchValue('');
     this.searchDropdownVisible = false;
+    this.searchResult.hide();
+
     this.searchValue = false;
   }
 

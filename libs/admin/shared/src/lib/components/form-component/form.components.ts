@@ -94,6 +94,7 @@ export class FormComponent implements OnInit {
 
   constructor(public controlContainer: ControlContainer) {}
 
+  // Do add these function call if overridden
   ngOnInit(): void {
     this.initInputControl();
   }
@@ -103,6 +104,7 @@ export class FormComponent implements OnInit {
    */
   initInputControl() {
     this.inputControl = this.controlContainer.control.get(this.controlName);
+    this.addRequiredAsterisk();
   }
 
   /**
@@ -174,6 +176,18 @@ export class FormComponent implements OnInit {
       return this.errorMessages[priorityError];
     }
     return false;
+  }
+
+  /**
+   * @function addRequiredAsterisk to add [*] in required field
+   */
+  addRequiredAsterisk() {
+    const validators = this.inputControl?.validator;
+    const isRequired =
+      validators && validators({} as AbstractControl)?.required;
+    if (this.label && isRequired) {
+      this.label = this.label + ' *';
+    }
   }
 
   /**

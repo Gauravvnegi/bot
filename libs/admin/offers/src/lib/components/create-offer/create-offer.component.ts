@@ -73,7 +73,7 @@ export class CreateOfferComponent implements OnInit {
 
   initUseForm() {
     this.useForm = this.fb.group({
-      active: [true, []],
+      active: [true],
       name: ['', [Validators.required]],
       libraryItems: [[], [Validators.required]],
       imageUrl: ['', [Validators.required]],

@@ -25,8 +25,9 @@
       routerLinkActive
       #rla="routerLinkActive"
       [routerLinkActiveOptions]="{ exact: false }"
-      [ngClass]="rla.isActive ? 'active' : ''"
+      [ngClass]="selectedModule == menuItem.name ? 'active' : ''"
       (mouseenter)="handleRouteChange(menuItem)"
+      (mouseleave)="handleRouteChangeOnLeave()"
     >
       <div
         class="overlay-link"
@@ -37,9 +38,13 @@
         class="main_heading_anchor"
         [routerLink]="[menuItem.path]"
         [style.background-color]="
-          rla.isActive ? 'rgba(255, 255, 255, 0.24)' : 'transparent'
+          selectedModule == menuItem.name
+            ? 'rgba(255, 255, 255, 0.24)'
+            : 'transparent'
         "
-        [style.color]="rla.isActive ? activeFontColor : normalFontColor"
+        [style.color]="
+          selectedModule == menuItem.name ? activeFontColor : normalFontColor
+        "
         [style.padding]="'10px 0px'"
         (click)="handleRouteChange(menuItem)"
         ><div class="sidenav_logo">

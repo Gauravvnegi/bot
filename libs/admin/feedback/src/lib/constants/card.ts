@@ -19,8 +19,8 @@ export const card = {
         total: 0,
       },
       {
-        label: 'Timeout',
-        value: 'TIMEOUT',
+        label: 'In-Progress',
+        value: 'INPROGRESS',
         total: 0,
       },
       {
@@ -29,15 +29,17 @@ export const card = {
         total: 0,
       },
       {
+        label: 'Timed-Out',
+        value: 'TIMEOUT',
+        total: 0,
+      },
+
+      {
         label: 'No-Action',
         value: 'NOACTION',
         total: 0,
       },
-      {
-        label: 'In-Progress',
-        value: 'INPROGRESS',
-        total: 0,
-      },
+
       {
         label: 'All',
         value: 'ALL',

@@ -7,11 +7,18 @@
     ></hospitality-bot-tab-group>
   </div>
   <div class="request-wrapper-header-btnwrap">
-    <hospitality-bot-button
-      [label]="'raiseRequest' | translate"
-      [icon]="requestConfig.images.raiseRequest.url"
+
+
+    <div
+      class="guestInfoEditContainer"
+      *ngIf="buttonConfig[selectedIndex].button"
       (click)="openRaiseRequest()"
-    ></hospitality-bot-button>
+    >
+      <img [src]="buttonConfig[selectedIndex].icon" alt="" />
+      <div class="guestInfoEditText">
+        {{ buttonConfig[selectedIndex].label }}
+      </div>
+    </div>
   </div>
 </div>
 

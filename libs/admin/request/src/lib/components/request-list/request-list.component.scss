@@ -210,16 +210,20 @@
   border-bottom: solid 1px $light-gray !important;
 }
 :host ::ng-deep .mat-tab-list {
-  width: 100%;
-  padding: 5px;
+  // width: 100%;
 }
 :host ::ng-deep .mat-tab-labels {
   display: flex;
   justify-content: space-between;
 }
+
+:host ::ng-deep .example-stretched-tabs {
+  height: 60px;
+}
+
 :host
   ::ng-deep
   .mat-tab-header-pagination-controls-enabled
   .mat-tab-header-pagination {
-  display: none;
+  display: flex;
 }

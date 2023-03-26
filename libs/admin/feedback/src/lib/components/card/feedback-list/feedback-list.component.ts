@@ -301,7 +301,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
    * @function clearSearch function to clear search
    */
   clearSearch() {
-    this.parentFG.patchValue({ search: '' });
+    this.parentFG.patchValue({ search: '' }, { emitEvent: false });
     this.enableSearchField = false;
     this.loading = true;
   }

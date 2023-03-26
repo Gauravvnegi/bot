@@ -11,6 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 import { TabViewModule } from 'primeng/tabview';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { DaterangeComponent } from './containers/daterange/daterange.component';
 import { FilterComponent } from './containers/filter/filter.component';
 import { FooterComponent } from './containers/footer/footer.component';
@@ -42,6 +43,7 @@ import { ScrollPagination } from './directives/scroll-pagination.directive';
     DropdownModule,
     SharedMaterialModule,
     TabViewModule,
+    OverlayPanelModule,
     MenuModule,
     AngularFireMessagingModule,
   ],

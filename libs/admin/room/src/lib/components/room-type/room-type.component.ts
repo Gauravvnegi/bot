@@ -20,6 +20,7 @@ import {
 } from '../../constant/form';
 import routes from '../../constant/routes';
 import { Service, Services } from '../../models/amenities.model';
+import { RoomTypeForm } from '../../models/room.model';
 import { RoomService } from '../../services/room.service';
 
 @Component({
@@ -88,14 +89,15 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     ];
 
     this.useForm = this.fb.group({
+      status: [true],
       name: ['', [Validators.required]],
       imageUrls: [[], [Validators.required]],
       description: ['', [Validators.required]],
       complimentaryAmenities: [[]],
       paidAmenities: [[]],
       originalPrice: ['', [Validators.required, Validators.min(0)]],
-      discountType: ['', [Validators.required]],
-      discountValue: ['', [Validators.required, Validators.min(0)]],
+      discountType: [''],
+      discountValue: [{ value: '', disabled: true }, [Validators.min(0)]],
       discountedPrice: [{ value: '', disabled: true }],
       variablePriceCurrency: [{ value: '', disabled: true }],
       currency: ['', [Validators.required, Validators.min(0)]],
@@ -123,7 +125,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             .getRoomTypeById(this.hotelId, this.roomTypeId)
             .subscribe(
               (res) => {
-                this.useForm.patchValue(res);
+                this.useForm.patchValue(new RoomTypeForm().deserialize(res));
               },
               (err) => {
                 this.snackbarService.openSnackBarAsText(err.error.message);
@@ -190,7 +192,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       const discount = +(discountValue.value ?? 0);
       const type = discountType.value;
 
-      if (price && type)
+      if (price)
         this.useForm.patchValue({
           discountedPrice:
             type === 'NUMBER'
@@ -230,6 +232,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
      * @function discountSubscription To handle changes in discount value
      */
     const discountSubscription = () => {
+      discountValue.enable({ emitEvent: false });
       clearError();
       const error = setDiscountValueAndErrors();
       if (error === 'isNumError') {
@@ -418,7 +421,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       ...rest,
       roomAmenityIds: complimentaryAmenities.concat(paidAmenities),
       imageUrls: imageUrls.filter((x: string) => x !== this.defaultImage),
-      status: true,
     };
     return data;
   }

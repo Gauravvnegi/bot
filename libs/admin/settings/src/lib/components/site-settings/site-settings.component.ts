@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '@hospitality-bot/admin/environment';
 import { CookiesSettingsService } from '@hospitality-bot/admin/shared';
@@ -9,7 +9,7 @@ import { SettingOptions, siteUrl } from '../../constant/settings-menu';
   templateUrl: './site-settings.component.html',
   styleUrls: ['./site-settings.component.scss'],
 })
-export class SiteSettingsComponent implements OnInit {
+export class SiteSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoaded = false;
   onboardingUrl = `${environment.createWithUrl}${
     siteUrl[SettingOptions.BUSINESS_INFO]
@@ -27,5 +27,13 @@ export class SiteSettingsComponent implements OnInit {
     this.cookiesSettingService.$isPlatformCookiesLoaded.subscribe((res) => {
       this.isLoaded = res;
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.cookiesSettingService.afterEmbeddedFrameView();
+  }
+
+  ngOnDestroy(): void {
+    this.cookiesSettingService.onEmbeddedFrameViewDestroy();
   }
 }

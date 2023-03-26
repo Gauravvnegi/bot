@@ -29,7 +29,7 @@ export class CategoryFormComponent implements OnInit {
   initForm(): void {
     this.useForm = this.fb.group({
       name: ['', Validators.required],
-      active: [true, Validators.required],
+      active: [true],
       imageUrl: [''],
       description: ['', Validators.required],
     });

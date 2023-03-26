@@ -1,11 +1,4 @@
-<div class="wrapper">
-  <div [ngClass]="{ 'header-wrapper__sticky': isScrolledUp }">
-    <header class="header" #header>
-      <i (click)="back()" class="pi pi-arrow-left"></i>
-      <div class="label">{{ heading }}</div>
-    </header>
-    <div class="draft-date" *ngIf="draftDate">Drafted on {{ draftDate }}</div>
-  </div>
+<div class="nav-header-wrapper" #header>
   <div
     class="nav-wrapper"
     *ngIf="routes.length"
@@ -24,5 +17,15 @@
 
       <i *ngIf="idx < routes.length - 1" class="pi pi-angle-right"></i>
     </div>
+  </div>
+  <div
+    class="header__wrapper"
+    [ngClass]="{ header__wrapper__sticky: isScrolledUp }"
+  >
+    <header class="header">
+      <i (click)="back()" class="pi pi-arrow-left"></i>
+      <div class="label">{{ heading }}</div>
+    </header>
+    <div class="header__date" *ngIf="draftDate">Drafted on {{ draftDate }}</div>
   </div>
 </div>

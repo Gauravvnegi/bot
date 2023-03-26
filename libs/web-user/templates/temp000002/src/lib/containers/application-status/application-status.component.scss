@@ -266,3 +266,12 @@
     padding-bottom: $padding30;
   }
 }
+
+:host ::ng-deep {
+  .section--content--label {
+    .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+    .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+      background-color: #2186d4 !important;
+    }
+  }
+}

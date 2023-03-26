@@ -395,3 +395,11 @@
     }
   }
 }
+
+@mixin createWithContainer {
+  height: calc(100vh - 65px);
+  overflow: hidden;
+  iframe {
+    border: none;
+  }
+}

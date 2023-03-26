@@ -38,6 +38,7 @@ export class DateComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initInputControl();
+
     this.inputControl.valueChanges.subscribe((res) => {
       /* Epoch Date conversion to Date */
       this.dateValue = new Date(res);

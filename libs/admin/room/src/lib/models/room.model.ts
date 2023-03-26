@@ -1,4 +1,5 @@
-import { RoomStatus } from '../types/service-response';
+import { RoomTypeFormData } from '../constant/form';
+import { RoomStatus, RoomTypeResponse } from '../types/service-response';
 import {
   MultipleRoomData,
   MultipleRoomForm,
@@ -16,7 +17,6 @@ export class SingleRoomList {
         new SingleRoom().deserialize({
           ...item,
           ...rest,
-          status: 'ACTIVE',
         })
       );
     });
@@ -56,7 +56,6 @@ export class MultipleRoomList {
         new MultipleRoom().deserialize({
           ...item,
           ...rest,
-          status: 'ACTIVE',
         })
       );
     });
@@ -81,6 +80,51 @@ export class MultipleRoom {
     this.currency = input.currency ?? '';
     this.price = input.price;
     this.roomTypeId = input.roomTypeId ?? '';
+    return this;
+  }
+}
+
+export class RoomTypeForm {
+  status: boolean;
+  name: string;
+  imageUrls: string[];
+  description: string;
+  complimentaryAmenities: string[];
+  paidAmenities: string[];
+  originalPrice: number;
+  discountType: string;
+  discountValue: number;
+  discountedPrice: number;
+  variablePriceCurrency: string;
+  currency: string;
+  variableAmount: number;
+  discountedPriceCurrency: string;
+  maxOccupancy: number;
+  maxChildren: number;
+  maxAdult: number;
+  area: number;
+
+  deserialize(input: RoomTypeResponse): RoomTypeFormData {
+    this.status = input.status;
+    this.name = input.name;
+    this.imageUrls = input.imageUrls;
+    this.description = input.description;
+    this.complimentaryAmenities =
+      input.complimentaryAmenities?.map((item) => item.id) ?? [];
+    this.paidAmenities = input.paidAmenities?.map((item) => item.id) ?? [];
+    this.originalPrice = input.originalPrice;
+    this.discountType = input.discountType;
+    this.discountValue = input.discountValue;
+    this.discountedPrice = input.discountedPrice;
+    this.variablePriceCurrency = input.currency;
+    this.currency = input.currency;
+    this.variableAmount = input.variableAmount;
+    this.discountedPriceCurrency = input.currency;
+    this.maxOccupancy = input.maxOccupancy;
+    this.maxChildren = input.maxChildren;
+    this.maxAdult = input.maxAdult;
+    this.area = input.area;
+
     return this;
   }
 }

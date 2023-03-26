@@ -32,3 +32,12 @@
     }
   }
 }
+
+.search-icon {
+  transform: translate(-50%, -50%);
+  position: absolute;
+  right: 0;
+  top: 50%;
+  color: $primary-gray;
+  cursor: pointer;
+}

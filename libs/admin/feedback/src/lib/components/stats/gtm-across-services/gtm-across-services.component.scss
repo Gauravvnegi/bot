@@ -44,6 +44,9 @@
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0px;
   color: $comparison;
+  .arrow {
+    transform: rotate(180deg);
+  }
 }
 .stat-value-comparisonPercent-day {
   font: normal normal normal 10px/13px Roboto;
@@ -96,7 +99,7 @@
 }
 
 .comparison-positive {
-  color: $comparison-positive;
+  color: $comparison-negative;
 }
 .clickable-card {
   cursor: pointer;

@@ -11,7 +11,7 @@
     padding: 10px;
     border-bottom: 2px solid $c-gray-102;
     &__search {
-      width: 289px;
+      flex-grow: 0.85;
     }
     &__filter {
       cursor: pointer;

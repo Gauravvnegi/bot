@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ManageSiteStatus } from '../../../../../../../../../../libs/admin/manage-sites/src/lib/constant/manage-site';
 import { CookiesSettingsService } from '../../../../../../../../../../libs/admin/shared/src/index';
 import { GlobalFilterService } from '../../services/global-filters.service';
 

@@ -142,6 +142,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
+          this.values = [];
           this.snackbarService
             .openSnackBarWithTranslate(
               {
@@ -247,6 +248,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
+          this.values = [];
           this.snackbarService
             .openSnackBarWithTranslate(
               {

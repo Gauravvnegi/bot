@@ -1,15 +1,25 @@
 @import 'main';
 
-.header-wrapper {
-  &__sticky {
-    margin-bottom: 61px;
-  }
-}
-
 .header {
   display: flex;
   gap: 10px;
   align-items: center;
+  padding: 20px 0;
+
+  &__wrapper {
+    &__sticky {
+      padding-top: 20px;
+    }
+  }
+
+  &__date {
+    opacity: 0.5;
+    font-family: Poppins;
+    font-size: 16px;
+    padding-left: 32px;
+    letter-spacing: 0.96px;
+    color: $dark-blue;
+  }
 }
 
 .label {
@@ -19,15 +29,6 @@
 
   letter-spacing: 1.56px;
   color: $dark-blue2;
-}
-
-.draft-date {
-  opacity: 0.5;
-  font-family: Poppins;
-  font-size: 16px;
-  padding-left: 32px;
-  letter-spacing: 0.96px;
-  color: $dark-blue;
 }
 
 .pi-arrow-left {
@@ -42,8 +43,6 @@
 
 .nav-wrapper {
   display: flex;
-  padding: 20px 0;
-  transition: box-shadow 2s;
 
   .link {
     display: flex;
@@ -71,6 +70,7 @@
   }
 
   &__sticky {
+    transition: box-shadow 1s ease-in;
     background-color: $layout-background;
     position: fixed;
     inset: 60px 0 auto 80px;

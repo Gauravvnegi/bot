@@ -44,12 +44,13 @@ export const iteratorFields: Record<AddRoomTypes, IteratorField[]> = {
 };
 
 export type RoomTypeFormData = {
+  status: boolean;
   name: string;
   imageUrls: string[];
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  originalPrice: string;
+  originalPrice: number;
   discountType: string;
   discountValue: number;
   discountedPrice: number;
@@ -60,7 +61,7 @@ export type RoomTypeFormData = {
   maxOccupancy: number;
   maxChildren: number;
   maxAdult: number;
-  area: string;
+  area: number;
 };
 
 export type RoomTypeData = Omit<

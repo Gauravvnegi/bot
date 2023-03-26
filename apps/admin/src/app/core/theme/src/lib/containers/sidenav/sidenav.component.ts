@@ -40,6 +40,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   menuItemChildren = [];
   @Output() submenuItems = new EventEmitter<any>();
   @Output() navToggle = new EventEmitter<boolean>();
+  selectedModule: ModuleNames;
 
   constructor(
     private _breakpointObserver: BreakpointObserver,
@@ -61,12 +62,28 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
     this.toggleSidenavForTablet();
     this.listenForTabPortrait();
+    this.listenToRouteChange();
+  }
+
+  listenToRouteChange() {
+    this.router.events.subscribe((res) => {
+      this.setSelectedModuleBasedOnRoute();
+    });
   }
 
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this.globalFilterService.selectedModule.subscribe((name) => {
+        if (name) {
+          this.selectedModule = name;
+        } else {
+          this.setSelectedModuleBasedOnRoute();
+        }
+      })
+    );
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         const { hotelName: brandId, branchName: branchId } = data[
@@ -91,6 +108,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  setSelectedModuleBasedOnRoute() {
+    this.selectedModule = this.menuItems.find((item) =>
+      this.router.url.includes(item?.path)
+    )?.name;
   }
 
   listenForTabPortrait() {
@@ -126,12 +149,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
         let menuItem = new MenuItem().deserialize(product);
         return menuItem;
       });
+
+    this.setSelectedModuleBasedOnRoute();
   }
 
   toggleMenuButton(menuItem?: MenuItem) {
     if (menuItem?.name === ModuleNames.SETTINGS) {
       this.router.navigate([`/pages/${routes.SETTINGS}`]);
     }
+    this.globalFilterService.selectedModule.next(menuItem?.name ?? '');
     this.isExpanded = !this.isExpanded;
     this.navToggle.emit(this.isExpanded);
   }
@@ -153,9 +179,16 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   handleRouteChange(menuItem) {
+    this.globalFilterService.selectedModule.next(menuItem.name);
     this.isExpanded =
       menuItem.children && menuItem.children.length ? true : false;
     this.navToggle.emit(this.isExpanded);
     this.subSideNav(menuItem.title, menuItem.children);
+  }
+
+  handleRouteChangeOnLeave() {
+    if (!this.isExpanded) {
+      this.setSelectedModuleBasedOnRoute();
+    }
   }
 }

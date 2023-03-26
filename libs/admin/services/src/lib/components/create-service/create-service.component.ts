@@ -89,7 +89,7 @@ export class CreateServiceComponent implements OnInit {
    */
   initForm(): void {
     this.useForm = this.fb.group({
-      active: [true, Validators.required],
+      active: [true],
       // currency: [''],
       parentId: ['', Validators.required],
       categoryName: [''],

@@ -16,12 +16,14 @@
   flex-grow: inherit !important;
   flex-basis: inherit !important;
   min-width: auto;
+  align-items: flex-end;
 
   .mat-tab-label-content {
     font-size: 16px;
     font-weight: bold;
     letter-spacing: 0.96px;
     color: $mat-tab-label;
+    line-height: 55px;
     @media (max-width: 1024px) {
       font-size: 12px;
     }

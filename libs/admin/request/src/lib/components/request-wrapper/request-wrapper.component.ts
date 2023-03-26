@@ -41,6 +41,11 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
 
   tabFilterIdx = 0;
 
+  selectedIndex = 0;
+  buttonConfig = [
+    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
+  ];
+
   constructor(
     private _modal: ModalService,
     private _requestService: RequestService

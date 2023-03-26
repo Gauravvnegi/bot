@@ -5,12 +5,12 @@
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $dark-blue;
+  // color: $dark-blue;
   font-size: 14px;
   font-weight: bold;
 }
 .request-wrapper-header {
-  height: 65px;
+  // height: 65px;
   padding: 10px 42px 10px 15px;
   background-color: $white;
   display: flex;
@@ -21,23 +21,28 @@
   }
   &-btnwrap {
     display: flex;
-    &-btn {
-      @include primaryButton();
-      width: 147px;
+    
+    .guestInfoEditContainer {
+      width: 138px;
       height: 36px;
-      padding: 8px 18px 8.2px 18.3px;
+      background: $primary-cta 0% 0% no-repeat padding-box;
+      border: 1px solid $c-gray-87;
+      border-radius: 10px;
+      opacity: 1;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       cursor: pointer;
-      &-name {
-        font-size: $font11;
-        letter-spacing: 0.66px;
-        text-align: left;
-        color: $white;
-      }
       img {
         filter: brightness(0) invert(1);
+         margin-right:10px;
+      }
+
+      .guestInfoEditText {
+        font: normal normal normal 11px/15px Roboto;
+        letter-spacing: 0.66px;
+        color: $white;
+        opacity: 1;
       }
     }
   }

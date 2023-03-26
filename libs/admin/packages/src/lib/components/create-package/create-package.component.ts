@@ -87,7 +87,7 @@ export class CreatePackageComponent implements OnInit {
    */
   initForm(): void {
     this.useForm = this.fb.group({
-      active: [true, Validators.required],
+      active: [true],
       name: ['', Validators.required],
       parentId: ['', Validators.required],
       categoryName: [''],

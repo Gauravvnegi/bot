@@ -12,17 +12,18 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import routes from '../../constant/routes';
 import { NavRouteOptions } from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
 import { iteratorFields } from '../../constant/form';
+import routes from '../../constant/routes';
 import { MultipleRoomList, SingleRoomList } from '../../models/room.model';
 import { RoomType, RoomTypeList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { AddRoomTypes, RoomTypeOption } from '../../types/room';
 import { RoomTypeListResponse } from '../../types/service-response';
+import { SingleRoomForm } from '../../types/use-form';
 
 @Component({
   selector: 'hospitality-bot-add-room',
@@ -103,6 +104,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       roomTypeId: ['', Validators.required],
       price: [''],
       currency: [''],
+      status: ['ACTIVE'],
       rooms: this.useFormArray,
     });
 
@@ -206,17 +208,20 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         .subscribe((res) => {
           const roomDetails = res.rooms[0];
           this.draftDate = roomDetails.updated ?? roomDetails.created;
-          this.useForm.patchValue({
+          const data: SingleRoomForm = {
             roomTypeId: roomDetails.roomTypeDetails.id,
             price: roomDetails.price,
             currency: roomDetails.currency,
+            status: roomDetails.roomStatus,
             rooms: [
               {
                 roomNo: roomDetails.roomNumber,
                 floorNo: roomDetails.floorNumber,
               },
             ],
-          });
+          };
+
+          this.useForm.patchValue(data);
 
           this.isRoomInfoLoading = false;
         })

@@ -36,8 +36,6 @@ export class PrefixFieldComponent extends FormComponent {
     }
   }
 
-  ngOnInit(): void {}
-
   getProps(type: keyof PrePostType<FormProps>): FormProps {
     const newProps = this.defaultProps ? this.defaultProps[type] : {};
     return {

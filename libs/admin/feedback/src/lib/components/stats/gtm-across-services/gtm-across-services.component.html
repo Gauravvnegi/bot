@@ -27,10 +27,10 @@
             }"
           >
             ({{ statistics?.comparisonPercent }}%)
-            <img
+            <img class='arrow'
               [src]="
                 statistics?.comparisonPercent >= 0
-                  ? 'assets/svg/uparrow.svg'
+                  ? 'assets/svg/down-percentage.svg'
                   : 'assets/svg/down-percentage.svg'
               "
               alt="uparrow"

@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { get } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
+import { ModuleNames } from 'libs/admin/shared/src/index';
 import { DateRangeFilterService } from './daterange-filter.service';
 import { FilterService } from './filter.service';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalFilterService {
+  selectedModule = new BehaviorSubject<ModuleNames | ''>('');
   globalFilter$ = new BehaviorSubject({});
   timezone: string;
   hotelId: string;

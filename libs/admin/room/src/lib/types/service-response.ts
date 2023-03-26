@@ -62,6 +62,9 @@ export type RoomTypeResponse = {
   area: number;
   status: boolean;
   maxOccupancy: number;
+  discountType: string;
+  discountValue: number;
+  variableAmount: number;
 };
 
 export type RoomTypeListResponse = {

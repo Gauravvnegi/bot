@@ -15,6 +15,4 @@ export class InputComponent extends FormComponent {
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
   }
-
-  ngOnInit(): void {}
 }

@@ -1,3 +1,1 @@
-
-            export * from './lib/admin-offers.module';
-            
+export * from './lib/admin-offers.module';

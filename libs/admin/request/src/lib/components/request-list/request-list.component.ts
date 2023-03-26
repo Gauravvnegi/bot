@@ -274,7 +274,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
    * @function clearSearch To clear search field.
    */
   clearSearch(): void {
-    this.parentFG.patchValue({ search: '' });
+    this.parentFG.patchValue({ search: '' }, { emitEvent: false });
     this.enableSearchField = false;
     this.loading = true;
     this.loadData(0, 10);

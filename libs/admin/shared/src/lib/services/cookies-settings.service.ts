@@ -101,4 +101,22 @@ export class CookiesSettingsService {
       }
     );
   }
+
+  /**
+   * To remove extra padding and footer for iframe
+   */
+  afterEmbeddedFrameView() {
+    document
+      .getElementById('main-router')
+      ?.setAttribute('style', 'padding:0px');
+
+    document
+      .getElementById('main-footer')
+      ?.setAttribute('style', 'display:none');
+  }
+
+  onEmbeddedFrameViewDestroy() {
+    document.getElementById('main-router')?.removeAttribute('style');
+    document.getElementById('main-footer')?.removeAttribute('style');
+  }
 }

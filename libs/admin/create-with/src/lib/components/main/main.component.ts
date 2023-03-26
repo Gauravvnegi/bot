@@ -14,14 +14,10 @@ export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    document
-      .getElementsByClassName('router__wrapper')[0]
-      ?.setAttribute('style', 'padding:0px');
+    this.cookiesSettingService.afterEmbeddedFrameView();
   }
 
   ngOnDestroy(): void {
-    document
-      .getElementsByClassName('router__wrapper')[0]
-      ?.removeAttribute('style');
+    this.cookiesSettingService.onEmbeddedFrameViewDestroy();
   }
 }

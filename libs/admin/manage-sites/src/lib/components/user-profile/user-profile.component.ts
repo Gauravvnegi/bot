@@ -27,7 +27,7 @@ export class UserProfileComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.userService.getLoggedInUserid();
+    this.userId = this.userService.getLoggedInUserId();
     this.initForm();
   }
 

@@ -216,9 +216,10 @@ export const MockData = {
     imgSrcPositive: 'assets/images/word-cloud.jpg',
   },
   topicsOverTime: {
-    title: 'Topics over time',
-    tooltip: '',
-    totalTopics: 2010,
+    label: 'Topics over time',
+    score: 20,
+    comparisonPercent: 10,
+    totalCount: 2010,
     dateRange: '1 May - 2 May',
     rate: {
       value: 10,
@@ -252,12 +253,10 @@ export const MockData = {
     },
   },
   sentimentsByRatings: {
-    label: 'Sentiment by ratings',
-    tooltip: '',
+    label: 'Topics over time',
     score: 20,
-    comparisonPercent: 10,
-    additionalData: '2.01 K',
-    rate: { value: '10', status: 'increasing' },
+    comparisonPercent: 20,
+    totalCount: 2010,
     graphData: {
       '1': {
         positive: '5',
@@ -327,9 +326,10 @@ export const MockData = {
     },
   },
   sentimentsOverTime: {
-    title: 'Sentiment Over Time',
-    totalSentiments: '2.01 K',
-    dateRange: '1 May - 2 May',
+    label: 'Sentiment Over Time',
+    score: 20,
+    comparisonPercent: 20,
+    totalCount: 2010,
     graphData: {
       '0': {
         positive: '60',

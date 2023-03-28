@@ -10,18 +10,12 @@ import { SentimentOverTime } from '../../data-models/sentiment.model';
 })
 export class SentimentsOverTimeComponent implements OnInit {
   chartData = SentimentalChart.sentimentOverTime;
-  data = {
-    label: 'Sentiment Over Time',
-    score: 20,
-    comparisonPercent: 10,
-    additionalData: '2.01 K',
-  };
   graphData: SentimentOverTime;
   constructor() {}
 
   ngOnInit(): void {
     this.graphData = new SentimentOverTime().deserialize(
-      MockData.sentimentsOverTime.graphData,
+      MockData.sentimentsOverTime,
       colorConfig
     );
     this.initChartData();

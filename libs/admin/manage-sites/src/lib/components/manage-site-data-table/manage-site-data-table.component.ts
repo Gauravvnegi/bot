@@ -58,7 +58,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   }
 
   ngOnInit(): void {
-    this.userId = this.userService.getLoggedInUserid();
+    this.userId = this.userService.getLoggedInUserId();
     this.initTableValue();
   }
 

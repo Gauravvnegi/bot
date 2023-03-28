@@ -12,13 +12,15 @@ export class UserDetailResolver implements Resolve<any> {
 
     private loadingService: LoadingService
   ) {}
-  resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
-    if (!this.userService.getLoggedInUserid()) {
+  resolve(
+    _route: ActivatedRouteSnapshot
+  ): Observable<any> | Promise<any> | any {
+    if (!this.userService.getLoggedInUserId()) {
       this._router.navigate(['/auth']);
     }
     this.loadingService.open();
     return this.userService.getUserDetailsById(
-      this.userService.getLoggedInUserid()
+      this.userService.getLoggedInUserId()
     );
   }
 }

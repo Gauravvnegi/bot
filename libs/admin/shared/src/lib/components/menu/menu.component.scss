@@ -1,0 +1,34 @@
+@import 'main';
+
+.mat-menu-item {
+  @include flex-space-between-cen-Algn;
+  gap: 20px;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: normal;
+  .mat-icon {
+    margin-right: unset;
+  }
+  .mat-icon.checked {
+    display: none;
+    pointer-events: none;
+    color: $primary-cta;
+  }
+  .mat-icon.empty {
+    pointer-events: none;
+  }
+}
+.mat-menu-item.selected {
+  color: $primary-cta;
+  font-weight: 500;
+  .mat-icon.empty {
+    display: none;
+  }
+  .mat-icon.checked {
+    display: unset;
+  }
+}
+
+.bottom-border {
+  border-bottom: 1px solid #707070;
+}

@@ -1,0 +1,45 @@
+@import 'main';
+.tot-container {
+  .title {
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.96px;
+    margin-top: 4px;
+  }
+  .graph {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    &__canvas {
+      max-width: 1440px;
+    }
+    canvas {
+      margin: auto;
+      height: 100%;
+    }
+  }
+}
+:host ::ng-deep {
+  .wrapper {
+    box-shadow: unset !important;
+    background-color: unset !important;
+    max-width: unset !important;
+    padding: 20px;
+    height: 100%;
+    .header-content {
+      .stats_text {
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: 0.96px;
+      }
+    }
+    .info {
+      margin-top: 20px;
+    }
+    .graph {
+      height: calc(100% - 105px);
+      margin: 0;
+    }
+  }
+}

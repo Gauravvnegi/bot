@@ -43,7 +43,7 @@ export class BaseDatatableComponent implements OnInit {
 
   tableFG: FormGroup;
 
-  isPaginaton = false;
+  isPaginator = false;
   rowsPerPage = 5;
   showCurrentPageReport = true;
   rowsPerPageOptions = [5, 10, 25, 50];

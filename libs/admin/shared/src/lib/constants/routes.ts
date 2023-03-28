@@ -28,6 +28,7 @@ export const routes = {
   // Hedda
   [ModuleNames.HEDA]: 'heda',
   [ModuleNames.HEDA_DASHBOARD]: 'heda/analytics',
+  [ModuleNames.SENTIMENTAL_ANALYSIS]: 'heda/sentimental-analysis',
 
   // eMarkt_IT
   [ModuleNames.EMARK_IT]: 'marketing',

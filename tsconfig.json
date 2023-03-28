@@ -109,10 +109,11 @@
       ],
       "@hospitality-bot/admin/finance": ["libs/admin/finance/src/index.ts"],
       "@hospitality-bot/admin/room": ["libs/admin/room/src/index.ts"],
-      "@hospitality-bot/admin/services": ["libs/admin/services/src/index.ts"],
-      "@hospitality-bot/admin/offers": [
-        "libs/admin/offers/src/index.ts"
+      "@hospitality-bot/admin/sentimental-analysis": [
+        "libs/admin/sentimental-analysis/src/index.ts"
       ],
+      "@hospitality-bot/admin/services": ["libs/admin/services/src/index.ts"],
+      "@hospitality-bot/admin/offers": ["libs/admin/offers/src/index.ts"],
       "@hospitality-bot/admin/partner-dashboard": [
         "libs/admin/partner-dashboard/src/index.ts"
       ],

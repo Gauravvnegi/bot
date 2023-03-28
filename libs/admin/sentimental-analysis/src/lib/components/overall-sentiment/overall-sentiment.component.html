@@ -1,0 +1,43 @@
+<div class="os-container">
+  <div class="title">Overall Sentiment</div>
+  <div class="graph">
+    <div class="graph__img">
+      <canvas
+        baseChart
+        [chartType]="graphData.type"
+        [datasets]="graphData.data.datasets"
+        [labels]="graphData.data.labels"
+        [options]="graphData.options"
+        [legend]="graphData.legend"
+      >
+      </canvas>
+    </div>
+    <div class="graph__data">
+      <div class="value">{{ sentimentData.total }}</div>
+      <div class="text">Total Comments</div>
+    </div>
+  </div>
+  <div class="details">
+    <div class="details__item">
+      <div class="dot" [style.background]="colors.positive"></div>
+      <div class="content">
+        <div class="value">{{ sentimentData.positive }}%</div>
+        <div class="label">Positive</div>
+      </div>
+    </div>
+    <div class="details__item">
+      <div class="dot" [style.background]="colors.neutral"></div>
+      <div class="content">
+        <div class="value">{{ sentimentData.neutral }}%</div>
+        <div class="label">Neutral</div>
+      </div>
+    </div>
+    <div class="details__item">
+      <div class="dot" [style.background]="colors.negative"></div>
+      <div class="content">
+        <div class="value">{{ sentimentData.negative }}%</div>
+        <div class="label">Negative</div>
+      </div>
+    </div>
+  </div>
+</div>

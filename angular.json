@@ -1890,6 +1890,41 @@
       },
       "schematics": {}
     },
+    "admin-sentimental-analysis": {
+      "projectType": "library",
+      "root": "libs/admin/sentimental-analysis",
+      "sourceRoot": "libs/admin/sentimental-analysis/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/sentimental-analysis/tsconfig.lib.json",
+              "libs/admin/sentimental-analysis/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/sentimental-analysis/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/sentimental-analysis/jest.config.js",
+            "tsConfig": "libs/admin/sentimental-analysis/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/sentimental-analysis/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
     "admin-services": {
       "projectType": "library",
       "root": "libs/admin/services",
@@ -1935,7 +1970,6 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-
               "libs/admin/offers/tsconfig.lib.json",
               "libs/admin/offers/tsconfig.spec.json"
             ],
@@ -1948,11 +1982,10 @@
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-
-            "jestConfig": "libs/admin/manage-sites/jest.config.js",
-            "tsConfig": "libs/admin/manage-sites/tsconfig.spec.json",
+            "jestConfig": "libs/admin/offers/jest.config.js",
+            "tsConfig": "libs/admin/offers/tsconfig.spec.json",
             "passWithNoTests": true,
-            "setupFile": "libs/admin/manage-sites/src/test-setup.ts"
+            "setupFile": "libs/admin/offers/src/test-setup.ts"
           }
         }
       },
@@ -1975,7 +2008,10 @@
               "libs/admin/manage-sites/tsconfig.lib.json",
               "libs/admin/manage-sites/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/manage-sites/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/manage-sites/**/*"
+            ]
           }
         },
         "test": {
@@ -2007,21 +2043,24 @@
               "libs/admin/settings/tsconfig.lib.json",
               "libs/admin/settings/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/admin/settings/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/settings/**/*"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-              "jestConfig": "libs/admin/settings/jest.config.js",
-              "tsConfig": "libs/admin/settings/tsconfig.spec.json",
-              "passWithNoTests": true,
-              "setupFile": "libs/admin/settings/src/test-setup.ts"
-            }
+            "jestConfig": "libs/admin/settings/jest.config.js",
+            "tsConfig": "libs/admin/settings/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/settings/src/test-setup.ts"
           }
-        },
-        "schematics": {
-          "@nrwl/angular:component": {
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
           "style": "scss"
         }
       }

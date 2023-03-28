@@ -14,7 +14,11 @@
         <p-sortIcon [field]="col.field"></p-sortIcon>
       </div>
     </div>
-    <div class="table-head__search" click-stop-propagation>
+    <div
+      class="table-head__search"
+      click-stop-propagation
+      *ngIf="isSearchActive"
+    >
       <input
         pInputText
         type="text"

@@ -1,3 +1,5 @@
+import { ValueFormatter } from '../utils/valueFormatter';
+
 export const analytics = {
   chart: {
     Labels: ['No Data'],
@@ -456,4 +458,150 @@ export const analytics = {
       src: 'sent',
     },
   ],
+  stackedGraph: {
+    type: 'bar',
+    legend: false,
+    labels: [],
+    options: {
+      responsive: true,
+      cornerRadius: 10,
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+        callbacks: {
+          label: function (tooltipItem, data) {
+            const datasetLabel =
+              data.datasets[tooltipItem.datasetIndex].label || '';
+            return `${datasetLabel}: ${ValueFormatter(tooltipItem.yLabel, 2)}`;
+          },
+        },
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+              callback: function (value, index, ticks) {
+                return ValueFormatter(value, 2);
+              },
+            },
+            gridLines: {
+              drawOnChartArea: false,
+            },
+          },
+        ],
+        xAxes: [
+          {
+            gridLines: {
+              drawOnChartArea: false,
+            },
+          },
+        ],
+      },
+    },
+    datasets: [],
+    colors: [
+      { backgroundColor: '#4bc0c0' },
+      { backgroundColor: '#feac02' },
+      { backgroundColor: '#fa586d' },
+    ],
+  },
+  doughnut: {
+    type: 'doughnut',
+    data: {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      legend: {
+        display: true,
+        position: 'right',
+      },
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
+    },
+    legend: false,
+  },
+  lineGraph: {
+    datasets: <any>[],
+    labels: [],
+    options: {
+      responsive: true,
+      elements: {
+        line: {
+          tension: 0,
+        },
+        point: {
+          radius: 6,
+          hitRadius: 5,
+          hoverRadius: 8,
+          hoverBorderWidth: 2,
+          borderWidth: 2,
+          borderColor: 'white',
+        },
+      },
+      scales: {
+        xAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+              callback: function (value, index, ticks) {
+                return ValueFormatter(value, 2);
+              },
+            },
+            gridLines: {
+              drawOnChartArea: false,
+            },
+          },
+        ],
+      },
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+        callbacks: {
+          label: function (tooltipItem, data) {
+            const datasetLabel =
+              data.datasets[tooltipItem.datasetIndex].label || '';
+            return `${datasetLabel}: ${ValueFormatter(tooltipItem.yLabel, 2)}`;
+          },
+        },
+      },
+    },
+    colors: [],
+    legend: false,
+    type: 'line',
+  },
 };

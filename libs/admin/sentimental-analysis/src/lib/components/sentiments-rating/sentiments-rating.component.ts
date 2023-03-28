@@ -10,13 +10,12 @@ import { SentimentsByRatings } from '../../data-models/sentiment.model';
 })
 export class SentimentsRatingComponent implements OnInit {
   chart = SentimentalChart.stackedGraph;
-  data = MockData.sentimentsByRatings;
   graphData: SentimentsByRatings;
   constructor() {}
 
   ngOnInit(): void {
     this.graphData = new SentimentsByRatings().deserialize(
-      MockData.sentimentsByRatings.graphData
+      MockData.sentimentsByRatings
     );
     this.initChartData();
   }

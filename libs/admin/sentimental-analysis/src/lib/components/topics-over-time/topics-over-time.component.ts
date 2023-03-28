@@ -14,12 +14,6 @@ import { TopicsOverTimes } from '../../data-models/sentiment.model';
 export class TopicsOverTimeComponent implements OnInit {
   mockData = MockData.topicsOverTime;
   chart = SentimentalChart.topicsOverTime;
-  data = {
-    label: 'Topics over time',
-    score: 20,
-    comparisonPercent: 10,
-    additionalData: '2.01 K',
-  };
   graphData: TopicsOverTimes;
   $subscription = new Subscription();
   constructor(
@@ -41,7 +35,7 @@ export class TopicsOverTimeComponent implements OnInit {
           this.globalFilterService.timezone
         );
         this.graphData = new TopicsOverTimes().deserialize(
-          MockData.topicsOverTime.graphData,
+          MockData.topicsOverTime,
           colorConfig
         );
         this.initGraphData();

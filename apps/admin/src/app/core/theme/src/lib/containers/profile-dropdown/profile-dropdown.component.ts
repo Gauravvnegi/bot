@@ -55,14 +55,14 @@ export class ProfileDropdownComponent implements OnInit {
       this._router.navigate([
         `/pages/${
           routes.RoleAndPermission
-        }/${this.userService.getLoggedInUserid()}`,
+        }/${this.userService.getLoggedInUserId()}`,
       ]);
     }
   }
 
   logoutUser() {
     this._authService
-      .logout(this.userService.getLoggedInUserid())
+      .logout(this.userService.getLoggedInUserId())
       .subscribe(() => {
         this.firebaseMessagingService.destroySubscription();
         this._authService.clearToken();

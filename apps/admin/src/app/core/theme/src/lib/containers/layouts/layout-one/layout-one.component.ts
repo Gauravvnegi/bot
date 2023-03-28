@@ -82,7 +82,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private firebaseMessagingService: FirebaseMessagingService,
     private subscriptionPlanService: SubscriptionPlanService,
     private loadingService: LoadingService,
-    private notificatonService: NotificationService,
+    private notificationService: NotificationService,
     private configService: ConfigService
   ) {
     this.initFG();
@@ -118,7 +118,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   initFirebaseMessaging(entityId?) {
     const requestPermissionData = {
       hotelId: entityId,
-      userId: this._userService.getLoggedInUserid(),
+      userId: this._userService.getLoggedInUserId(),
     };
     this.firebaseMessagingService.requestPermission(requestPermissionData);
     this.$firebaseMessagingSubscription.add(
@@ -340,8 +340,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   getNotificationUnreadCount() {
-    this.notificatonService
-      .getUnreadCount(this._userService.getLoggedInUserid())
+    this.notificationService
+      .getUnreadCount(this._userService.getLoggedInUserId())
       .subscribe((response) => (this.unreadCount = response?.unreadCount));
   }
 

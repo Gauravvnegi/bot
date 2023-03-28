@@ -127,14 +127,15 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   }
 
   logoutUser() {
-    this._authService.logout(this._userService.getLoggedInUserid()).subscribe(
-      (response) => {
+    this._authService.logout(this._userService.getLoggedInUserId()).subscribe(
+      (_) => {
         this._authService.clearToken();
         this._authService.deletePlatformRefererTokens(this.cookieService);
         this._router.navigate(['/auth']);
         this.loadingService?.close();
       },
       (error) => {
+        this.loadingService?.close();
         this._authService.clearToken();
         this._router.navigate(['/auth']);
       }
@@ -146,16 +147,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
       'x-access-token',
       tokenConfig['x-access-token']
     );
-
-    // this._authService.setTokenByName(
-    //   'x-refresh-authorization',
-    //   tokenConfig['x-refresh-authorization']
-    // );
-
-    // this._authService.setTokenByName(
-    //   'x-access-refresh-token',
-    //   tokenConfig['x-access-refresh-token']
-    // );
 
     this._authService.setTokenByName('x-userId', tokenConfig['x-userId']);
   }

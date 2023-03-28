@@ -24,7 +24,7 @@ export class SettingsMenuComponent implements OnInit {
     switch (settingName) {
       case SettingOptions.ROLES_AND_PERMISSION:
         this.router.navigate([
-          `/pages/roles-permissions/${this.userService.getLoggedInUserid()}`,
+          `/pages/roles-permissions/${this.userService.getLoggedInUserId()}`,
         ]);
         break;
       case SettingOptions.NOTIFICATION:

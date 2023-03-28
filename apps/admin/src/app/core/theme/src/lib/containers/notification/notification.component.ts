@@ -86,7 +86,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this.notificationService
-        .getNotificationHistory(this.userService.getLoggedInUserid(), config)
+        .getNotificationHistory(this.userService.getLoggedInUserId(), config)
         .subscribe((response) => {
           this.notifications = new NotificationList().deserialize(response);
           this.paginationDisabled = response.length < this.limit;
@@ -121,7 +121,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this.notificationService
-        .deleteNotification(this.userService.getLoggedInUserid(), config)
+        .deleteNotification(this.userService.getLoggedInUserId(), config)
         .subscribe((_) => this.getNotifications())
     );
   }
@@ -133,7 +133,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
       };
       this.$subscription.add(
         this.notificationService
-          .deleteNotification(this.userService.getLoggedInUserid(), config)
+          .deleteNotification(this.userService.getLoggedInUserId(), config)
           .subscribe((_) => this.getNotifications())
       );
     }
@@ -176,7 +176,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     event.stopPropagation();
     this.$subscription.add(
       this.notificationService
-        .updateNotificationStatus(this.userService.getLoggedInUserid(), item.id)
+        .updateNotificationStatus(this.userService.getLoggedInUserId(), item.id)
         .subscribe((_) => this.getNotifications())
     );
     this.openNotificationDetail(item);

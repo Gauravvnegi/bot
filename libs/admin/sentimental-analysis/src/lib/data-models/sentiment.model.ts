@@ -1,13 +1,29 @@
+import { ValueFormatter } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { get, set } from 'lodash';
 
 export class SentimentsByRatings {
   stats: Sentiment[];
   labels: string[];
+  score: number;
+  comparisonPercent: number;
+  additionalData: string;
+  label: string;
   deserialize(input) {
-    this.labels = Object.keys(input);
+    this.labels = Object.keys(input.graphData);
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'score', get(input, ['score'])),
+      set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
+      set(
+        {},
+        'additionalData',
+        ValueFormatter(get(input, ['totalCount'], 0), 2)
+      )
+    );
     this.stats = this.labels.map((key) =>
       new Sentiment().deserialize({
-        ...input[key],
+        ...input.graphData[key],
       })
     );
     return this;
@@ -100,13 +116,28 @@ export class TopicsOverTimes {
   colors: BarGraphColor[];
   defaultDataset: IStackItem[];
   labels: string[];
+  score: number;
+  comparisonPercent: number;
+  additionalData: string;
+  label: string;
   deserialize(input, colorConfig) {
     this.labels = new Array<string>();
-    const keys = Object.keys(input);
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'score', get(input, ['score'])),
+      set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
+      set(
+        {},
+        'additionalData',
+        ValueFormatter(get(input, ['totalCount'], 0), 2)
+      )
+    );
+    const keys = Object.keys(input.graphData);
     this.topics = keys.map((key) => {
       this.labels.push(key);
       return new TopicsOverTime().deserialize({
-        data: input[key],
+        data: input.graphData[key],
       });
     });
     this.defaultDataset = this.topics[0].data.map((item) => {
@@ -116,7 +147,7 @@ export class TopicsOverTimes {
         stack: 'a',
       };
     });
-    this.colors = Object.keys(input[keys[0]]).map((key) =>
+    this.colors = Object.keys(input.graphData[keys[0]]).map((key) =>
       new BarGraphColor().deserialize({
         backgroundColor: colorConfig[key.toLowerCase().split(' ').join('')],
       })
@@ -150,15 +181,30 @@ export class SentimentOverTime {
   colors: any[];
   labels: string[];
   defaultDataset: any[];
+  score: number;
+  comparisonPercent: number;
+  additionalData: string;
+  label: string;
   deserialize(input, colorConfig) {
     this.labels = new Array<string>();
-    this.stats = Object.keys(input).map((key) => {
+    this.stats = Object.keys(input.graphData).map((key) => {
       this.labels.push(key);
       return new Sentiment().deserialize({
-        ...input[key],
+        ...input.graphData[key],
         label: key,
       });
     });
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'score', get(input, ['score'])),
+      set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
+      set(
+        {},
+        'additionalData',
+        ValueFormatter(get(input, ['totalCount'], 0), 2)
+      )
+    );
     this.colors = [
       {
         borderColor: colorConfig.positive,

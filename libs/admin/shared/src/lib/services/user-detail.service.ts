@@ -24,7 +24,7 @@ export class UserService extends ApiService {
     localStorage.setItem('userId', userId);
   }
 
-  getLoggedInUserid() {
+  getLoggedInUserId() {
     return localStorage.getItem('userId');
   }
 
@@ -55,7 +55,7 @@ export class UserService extends ApiService {
 
   getUserPermission(feedbackType: string) {
     return this.get(
-      `/api/v1/user/${this.getLoggedInUserid()}/module-permission?module=${feedbackType}`
+      `/api/v1/user/${this.getLoggedInUserId()}/module-permission?module=${feedbackType}`
     );
   }
 

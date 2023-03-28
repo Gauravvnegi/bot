@@ -496,7 +496,7 @@ export class UserProfileComponent implements OnInit {
 
     if (this.pageState.value === 'add')
       this._managePermissionService
-        .addNewUser(this._userService.getLoggedInUserid(), {
+        .addNewUser(this._userService.getLoggedInUserId(), {
           ...data,
           status: true,
         })
@@ -506,7 +506,7 @@ export class UserProfileComponent implements OnInit {
       this._managePermissionService
         .updateUserDetailsById({
           ...data,
-          parentId: this._userService.getLoggedInUserid(),
+          parentId: this._userService.getLoggedInUserId(),
         })
         .subscribe(handleSuccess, handleError);
   }

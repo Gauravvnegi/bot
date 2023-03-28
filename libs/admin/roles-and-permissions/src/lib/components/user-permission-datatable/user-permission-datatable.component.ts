@@ -124,7 +124,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     queries.push(defaultProps);
     const config: QueryConfig = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
-      loggedInUserId: this.userService.getLoggedInUserid(),
+      loggedInUserId: this.userService.getLoggedInUserId(),
       hotelId: this.hotelId,
     };
 
@@ -182,7 +182,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.userId })),
       ]),
-      loggedInUserId: this.userService.getLoggedInUserid(),
+      loggedInUserId: this.userService.getLoggedInUserId(),
       hotelId: this.hotelId,
     };
 

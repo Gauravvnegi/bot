@@ -74,6 +74,8 @@ import { NavigationHeaderComponent } from './components/navigation-header/naviga
 import { CategoryFormComponent } from './view/category-form/category-form.component';
 import { AutoCompleteComponent } from './components/form-component/auto-complete/auto-complete.component';
 import { ViewInputComponent } from './components/form-component/view-input/view-input.component';
+import { MenuComponent } from './components/menu/menu.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   imports: [
@@ -98,6 +100,7 @@ import { ViewInputComponent } from './components/form-component/view-input/view-
     CKEditorModule,
     MatTooltipModule,
     DialogModule,
+    MatMenuModule,
   ],
   declarations: [
     DatatableComponent,
@@ -156,6 +159,7 @@ import { ViewInputComponent } from './components/form-component/view-input/view-
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    MenuComponent,
   ],
   exports: [
     DatatableComponent,
@@ -227,6 +231,8 @@ import { ViewInputComponent } from './components/form-component/view-input/view-
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    MatMenuModule,
+    MenuComponent,
   ],
 })
 export class AdminSharedModule {}

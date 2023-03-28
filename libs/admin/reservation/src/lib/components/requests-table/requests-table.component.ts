@@ -31,7 +31,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
-  isPaginaton = false;
+  isPaginator = false;
 
   cols = [
     { field: 'vin', header: 'Date/Time' },

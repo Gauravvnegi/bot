@@ -698,3 +698,8 @@
     min-width: 175px !important;
   }
 }
+
+:host ::ng-deep .button {
+  font-size: $font12 !important;
+  min-width: 200px !important;
+}

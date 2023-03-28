@@ -1,0 +1,14 @@
+<hospitality-bot-stats-card [stats]="data" class="tot-container">
+  <div class="graph">
+    <canvas
+      baseChart
+      [chartType]="chart.type"
+      [datasets]="chart.datasets"
+      [labels]="chart.labels"
+      [options]="chart.options"
+      [legend]="chart.legend"
+      [colors]="chart.colors"
+    >
+    </canvas>
+  </div>
+</hospitality-bot-stats-card>

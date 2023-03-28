@@ -11,6 +11,7 @@ export class TableHeaderComponent {
   @Input() showCheckbox: boolean;
   @Input() rowSpan = 2;
   @Input() columns: Cols[];
+  @Input() isSearchActive = true;
   @Output() search = new EventEmitter<TableFieldSearch>();
 
   constructor() {}

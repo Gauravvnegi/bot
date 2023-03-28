@@ -32,6 +32,10 @@ export class DateService {
     return moment(date1).utcOffset(timezone).diff(moment(date2), 'days');
   }
 
+  static getMonthDifference(date1, date2, timezone = '+05:30') {
+    return moment(date1).utcOffset(timezone).diff(moment(date2), 'months');
+  }
+
   static getMonthFromDate(timestamp, timezone = '+05:30') {
     return moment
       .unix(timestamp / 1000)
@@ -121,29 +125,20 @@ export class DateService {
       endDate,
       timezone
     );
+    const monthDiff = DateService.getMonthDifference(
+      startDate,
+      endDate,
+      timezone
+    );
     if (dateDiff === 0) {
       return 'day';
-    } else if (dateDiff > 0 && dateDiff <= 7) {
+    } else if (dateDiff > 0 && dateDiff <= 14) {
       return 'date';
-    } else if (dateDiff > 7 && dateDiff < 30) {
+    } else if (dateDiff > 14 && dateDiff <= 98) {
       return 'week';
-    } else if (dateDiff >= 30 && dateDiff < 365) {
-      if (
-        DateService.getMonthFromDate(startDate, timezone) ===
-          DateService.getMonthFromDate(endDate, timezone) &&
-        DateService.getYearFromDate(startDate, timezone) ===
-          DateService.getYearFromDate(endDate, timezone)
-      ) {
-        return 'week';
-      }
+    } else if (dateDiff > 98 && monthDiff <= 14) {
       return 'month';
     } else {
-      if (
-        DateService.getYearFromDate(startDate, timezone) ===
-        DateService.getYearFromDate(endDate, timezone)
-      ) {
-        return 'month';
-      }
       return 'year';
     }
   }

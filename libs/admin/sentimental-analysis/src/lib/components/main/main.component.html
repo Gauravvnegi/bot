@@ -1,0 +1,40 @@
+<hospitality-bot-navigation-header
+  [heading]="'Welcome to your Dashboard'"
+  [routes]="routes"
+></hospitality-bot-navigation-header>
+<div class="main-container">
+  <div class="row">
+    <div class="card sentiment__dataTable">
+      <hospitality-bot-sentiment-datatable></hospitality-bot-sentiment-datatable>
+    </div>
+    <div class="graphs">
+      <div class="card">
+        <hospitality-bot-overall-sentiment></hospitality-bot-overall-sentiment>
+      </div>
+      <div class="card">
+        <hospitality-bot-word-cloud></hospitality-bot-word-cloud>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card topicsOverTime">
+      <hospitality-bot-topics-over-time></hospitality-bot-topics-over-time>
+    </div>
+    <div class="card sentimentsByRating">
+      <hospitality-bot-sentiments-rating></hospitality-bot-sentiments-rating>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card equal-width">
+      <hospitality-bot-topics></hospitality-bot-topics>
+    </div>
+    <div class="card equal-width">
+      <hospitality-bot-sentiments-by-topics></hospitality-bot-sentiments-by-topics>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card sentimentOverTime">
+      <hospitality-bot-sentiments-over-time></hospitality-bot-sentiments-over-time>
+    </div>
+  </div>
+</div>

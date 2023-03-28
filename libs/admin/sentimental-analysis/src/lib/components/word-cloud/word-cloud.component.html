@@ -1,0 +1,20 @@
+<div class="wc-container">
+  <div class="title">
+    <div class="label">Word Cloud</div>
+    <hospitality-bot-menu
+      [selectedItems]="topicsSelected"
+      [menuItems]="menuItems"
+      (itemSelection)="selectTopic($event)"
+    ></hospitality-bot-menu>
+  </div>
+  <div class="tab-container">
+    <hospitality-bot-tab-group
+      [listItems]="tabFilterItems"
+      [selectedIndex]="tabFilterIdx"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+  </div>
+  <div class="image">
+    <img [src]="wordCloudImg" alt="word-cloud" />
+  </div>
+</div>

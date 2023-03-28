@@ -18,7 +18,6 @@ export class ViewInputComponent extends FormComponent {
 
   ngOnInit(): void {
     this.initInputControl();
-
     this.value = this.inputControl.value;
     this.inputControl.valueChanges.subscribe((val) => {
       this.value = val;

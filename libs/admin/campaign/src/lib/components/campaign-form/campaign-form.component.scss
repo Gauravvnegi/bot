@@ -1,25 +1,20 @@
 @import 'main';
 
 .wrapper-header {
-  @include flex-between-center;
-  .back {
-    @include flex-item-center;
-    .label {
-      @include normalText;
-      font-weight: $bold;
-    }
-    .material-icons {
-      margin-right: 15px;
-      &:hover {
-        cursor: pointer;
-      }
-    }
+  @include formBlock();
+  .one-fourth {
+    flex-basis: 8%;
+  }
+  .three-fourth {
+    flex-basis: 85%;
   }
   .option {
-    @include flex-item-center();
     cursor: pointer;
+    display: flex;
+    align-items: center;
     height: 15px;
     position: relative;
+    justify-content: flex-end;
     .icon {
       width: 8px;
       height: 8px;
@@ -35,23 +30,17 @@
     }
   }
 }
-.sent-details {
-  @include flex-item-center;
-  margin-left: 38px;
-  opacity: 0.5;
-}
 
 .dropdown {
   display: none;
-  padding: 10px;
   position: absolute;
   width: 203px;
   border-radius: 10px;
   box-shadow: 0 6px 12px 0 $dropdown-box-shadow;
   background-color: $white;
   right: 0;
-  top: 0;
-  @include normalText;
+  top: 15px;
+  font-size: 16px;
   font-weight: normal;
   color: $dark-blue;
   z-index: 141;
@@ -63,211 +52,26 @@
   }
 }
 
-.body {
-  padding-top: 30px;
-}
-
-.fields {
-  @include flex-space-between-cen-Algn;
-  margin-top: 10px;
-  width: $full;
-  @media (max-width: $tablet) {
-    flex-wrap: wrap;
-    gap: 60px;
-  }
-  .field {
-    @include flex-item-center();
-    margin-right: 1.5%;
-    width: 45%;
-    @media (max-width: $tablet) {
-       width:42.6%;
-    }
-    .mat-label {
-      width: 150px;
-      color: $mat-tab-label;
-      font-size: 14px;
-    }
-    .cc-width {
-      width: $full;
-    }
-  }
-}
-
-:host ::ng-deep mat-form-field {
-  width: $full;
-}
-
-.full-width {
-  width: calc(100% - 200px) !important;
-}
-
-.chip-list {
-  width: $full;
-}
-
-.btn-wrapper {
-  @include flex-all-center;
-  margin: 40px 0;
-  .schedule {
-    height: 46px;
-    margin: 0 60px 0 0;
-    padding: 11.9px 26px 13px;
-    border-radius: 23px;
-    border: solid 1px $primary-cta;
-    background-color: $white;
-    cursor: pointer;
-    &:active {
-      transform: scale(0.97);
-    }
-    &__text {
-        @include normalText;
-
-      color: $primary-cta;
-    }
-  }
-  .send {
-    height: 46px;
-    padding: 12px 43px 13px;
-    border-radius: 23px;
-    background-color: $primary-cta;
-    cursor: pointer;
-    &:active {
-      transform: scale(0.97);
-    }
-    &__text {
-        @include normalText;
-
-      color: $white;
-    }
-  }
-}
-
-:host ::ng-deep .full-width {
-  width: $full !important;
-}
-
-:host ::ng-deep .full-width .mat-label {
-  width: 130px !important;
-}
-
-.full-width p {
-  padding-right: 8px;
-  text-align: right;
-  position: absolute;
-  top: 5px;
-  right: 0;
-  .carbon-copy {
-    color: $primary-cta;
-    cursor: pointer;
-  }
-  .text-number {
-    cursor: pointer;
-    color: $dark-blue;
-  }
-}
-
-.chip-remove-btn {
-  height: 30px;
-  border: none;
-  background: transparent;
-  margin-top: 2px;
-}
-
-.message-error {
-  font-size: 13px;
-  margin-left: 90px;
-}
-
-:host
-  ::ng-deep
-  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
-  .mat-form-field-label,
-.mat-form-field-appearance-legacy.mat-form-field-can-float
-  .mat-input-server:focus
-  + .mat-form-field-label-wrapper
-  .mat-form-field-label {
-  display: none !important;
-}
-
-:host ::ng-deep .mat-input-element {
-  max-width: calc(100% - 80px) !important;
-}
-
-.email-field-container {
-  width: $full;
+.email-style {
   position: relative;
-  .text-number {
-    padding-right: 8px;
-    text-align: right;
+  .style-click {
     position: absolute;
-    top: 5px;
-    right: 0;
-  }
-  .email-style {
-    display: flex;
-    position: absolute;
-    right: 0;
-    bottom: 32px;
     color: $button-blue;
-    .style-click {
-      margin-left: 10px;
-      cursor: pointer;
-    }
-  }
-}
-
-.personalization {
-  width: 203px;
-  padding: 8px;
-  border-radius: 10px;
-  box-shadow: 0 6px 12px 0 $dropdown-box-shadow;
-  background-color: $white;
-  position: absolute;
-  top: 35px;
-  right: 0;
-  z-index: 121;
-  display: none;
-  .title {
-    padding: 0 37px 8.2px 30.5px;
-   @include normalText;
-
-    color: $dark-blue;
-    border-bottom: 1px solid $black;
-  }
-  .body {
-    padding: 15px 10px;
-    .item {
-      padding: 5px 10px;
-      cursor: pointer;
-      &:hover {
-        background-color: aliceblue;
-      }
-    }
-  }
-}
-
-.subject-personalization {
-  position: relative;
-}
-
-.previewText-personalization {
-  position: relative;
-}
-.description-style {
-  position: absolute;
-  right: 0;
-  top: 0;
-  .style-subject {
+    right: 10px;
+    top: 41px;
     @include flex-item-center();
-    .subject-options {
-      margin-right: 3px;
+    gap: 5px;
+    span {
+      cursor: pointer;
     }
   }
-}
-
-.name-field {
-  width: 25vw;
-}
-:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
-  height: 1px !important;
+  .error {
+    position: absolute;
+    left: 0;
+    bottom: -1.8em;
+    font-size: 0.7em;
+    height: 1.5em;
+    position: absolute;
+    color: #f44336;
+  }
 }

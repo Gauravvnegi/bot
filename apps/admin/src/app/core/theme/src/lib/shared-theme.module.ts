@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { DropdownModule } from 'primeng/dropdown';
-// import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { CookieService } from 'ngx-cookie-service';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';

@@ -216,15 +216,22 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  updateRolesStatus(event, userData) {
+  updateRolesStatus(status, userData) {
     const data = {
       id: userData.userId,
-      status: event.checked,
+      status: status,
     };
     this._managePermissionService
       .updateRolesStatus(userData.parentId, data)
       .subscribe(
-        (response) => {
+        (_) => {
+          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+          this.updateStatusAndCount(
+            statusValue(userData.status),
+            statusValue(status)
+          );
+          this.values.find((item) => item.id === userData.id).status = status;
+
           this.snackbarService.openSnackBarWithTranslate(
             {
               translateKey: `messages.SUCCESS.STATUS_UPDATED`,

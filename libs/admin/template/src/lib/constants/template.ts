@@ -118,10 +118,20 @@ export const templateConfig = {
     filter: { url: 'assets/svg/Filter-Icon.svg', alt: 'Filter' },
     edit: { url: 'assets/svg/edit8278.svg', alt: 'edit' },
     view: { url: 'assets/svg/view8280.svg', alt: 'view' },
-    delete: { url: 'assets/svg/delete8279.svg', alt: 'delete' },
+    delete: { url: 'assets/svg/delete-transparent.svg', alt: 'delete' },
     saved: { url: 'assets/svg/diskette.svg', alt: 'saved' },
     inbuilt: { url: 'assets/svg/web-design.svg', alt: 'inbuilt' },
     editTemplate: { url: 'assets/svg/design.svg', alt: 'edit Template' },
     import: { url: 'assets/svg/import.svg', alt: 'import' },
   },
+};
+
+export type TemplateFormData = {
+  name: string;
+  topicId: string;
+  description: string;
+  status: boolean;
+  templateType: string;
+  htmlTemplate: string;
+  isShared: string;
 };

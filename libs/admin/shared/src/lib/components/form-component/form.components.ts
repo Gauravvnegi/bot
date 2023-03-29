@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, ControlContainer } from '@angular/forms';
-
 import { Cancelable, debounce, map } from 'lodash';
 import {
   Alignment,

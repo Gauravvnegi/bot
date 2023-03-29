@@ -1,217 +1,120 @@
-<mat-horizontal-stepper [@.disabled]="true" #stepper>
-  <mat-step></mat-step>
-  <mat-step></mat-step>
-  <mat-step></mat-step>
-</mat-horizontal-stepper>
-<ng-container [ngSwitch]="stepper?.selectedIndex">
-  <div class="wrapper" *ngSwitchCase="0">
-    <header class="wrapper-header">
-      <div class="back">
-        <mat-icon class="material-icons" matSuffix (click)="goBack()"
-          >keyboard_backspace</mat-icon
-        >
-      </div>
-      <div class="name-field" [formGroup]="templateForm">
-        <mat-form-field class="input">
-          <input
-            matInput
-            placeholder="Enter Template Name"
-            formControlName="name"
-          />
-          <mat-error
-            *ngIf="
-              templateForm.get('name').touched &&
-              templateForm.get('name').hasError('required')
-            "
-          >
-            {{ 'validationMessage.name' | translate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </header>
-    <div class="sent-details" *ngIf="template">
+<hospitality-bot-navigation-header
+  [heading]="pageTitle"
+  [routes]="navRoutes"
+  [dateTime]="draftDate"
+>
+</hospitality-bot-navigation-header>
+
+<form class="form-block" [formGroup]="templateForm">
+  <div class="half-width"></div>
+  <hospitality-bot-toggle-switch
+    class="status"
+    controlName="status"
+    label="Status:"
+  ></hospitality-bot-toggle-switch>
+  <hospitality-bot-input
+    class="half-width"
+    controlName="name"
+    label="Name"
+  ></hospitality-bot-input>
+  <hospitality-bot-select
+    class="half-width"
+    label="Topic"
+    controlName="topicId"
+    [options]="topicList"
+  ></hospitality-bot-select>
+  <hospitality-bot-input
+    class="full-width"
+    label="Description"
+    controlName="description"
+  ></hospitality-bot-input>
+
+  <ng-container *ngIf="htmlTemplate?.value; else createContent">
+    <div class="full-width">
       <div>
-        {{ 'createdOn' | translate }}
-        {{
-          template?.getDraftDate(
-            globalFilterService.timezone,
-            'MMM DD, YYYY hh:mm a'
-          )
-        }}
+        {{ 'contentForm.editContent' | translate }}
+      </div>
+      <div class="manually-add">
+        <div class="manually-add-templates">
+          <div class="manually-add-templates-import">
+            <div [innerHTML]="htmlTemplate?.value"></div>
+          </div>
+          <div class="logos">
+            <div mat-raised-button (click)="moveToEditor(true)">
+              <img
+                [src]="templateConfiguration.images.view.url"
+                [alt]="templateConfiguration.images.view.alt"
+              />
+            </div>
+            <div mat-raised-button (click)="moveToEditor(false)">
+              <img
+                [src]="templateConfiguration.images.edit.url"
+                [alt]="templateConfiguration.images.edit.alt"
+              />
+            </div>
+            <div (click)="deleteTemplate()">
+              <img
+                [src]="templateConfiguration.images.delete.url"
+                [alt]="templateConfiguration.images.delete.alt"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <form [formGroup]="templateForm">
-      <div class="wrapper-form">
-        <div class="fields">
-          <div class="field">
-            <div class="field-topic">
-              <hospitality-bot-topic-dropdown
-                [name]="'topicId'"
-                [parentForm]="templateForm"
-                [hotelId]="hotelId"
-                [id]="true"
-                [state]="templateId ? 'ALL' : 'ACTIVE'"
-              ></hospitality-bot-topic-dropdown>
-            </div>
-          </div>
-        </div>
-        <div class="fields-description">
-          <mat-label class="mat-description">{{
-            'formFieldLabels.description' | translate
-          }}</mat-label>
-          <mat-form-field class="description">
-            <input
-              matInput
-              placeholder="Write Your Description Here"
-              formControlName="description"
-            />
-            <mat-error
-              *ngIf="
-                templateForm.get('description').touched &&
-                templateForm.get('description').hasError('required')
-              "
-            >
-              {{ 'validationMessage.description' | translate }}
-            </mat-error>
-          </mat-form-field>
-        </div>
+  </ng-container>
+  <ng-template #createContent>
+    <div class="full-width">
+      <div>
+        {{ 'contentForm.createContent' | translate }}
       </div>
-
-      <ng-container *ngIf="htmlTemplate?.value; else createContent">
-        <div class="wrapper-text">
-          <div class="add-text">
-            {{ 'contentForm.editContent' | translate }}
-          </div>
-          <div class="manually-add">
-            <div class="manually-templates">
-              <div class="manually-import">
-                <div [innerHTML]="htmlTemplate?.value"></div>
-              </div>
-              <div class="logos">
-                <div
-                  class="logos__logo"
-                  mat-raised-button
-                  (click)="moveToEditor(true)"
-                >
-                  <img
-                    [src]="templateConfiguration.images.view.url"
-                    [alt]="templateConfiguration.images.view.alt"
-                  />
-                </div>
-                <div
-                  class="logos__logo"
-                  mat-raised-button
-                  (click)="moveToEditor(false)"
-                >
-                  <img
-                    [src]="templateConfiguration.images.edit.url"
-                    [alt]="templateConfiguration.images.edit.alt"
-                  />
-                </div>
-                <div class="logos__logo" (click)="deleteTemplate()">
-                  <img
-                    [src]="templateConfiguration.images.delete.url"
-                    [alt]="templateConfiguration.images.delete.alt"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-      <ng-template #createContent>
-        <div class="wrapper-text">
-          <div class="add-text">
-            {{ 'contentForm.createContent' | translate }}
-          </div>
-          <div class="manually-add">
-            <div
-              class="manually-templates"
-              mat-raised-button
-              (click)="openCreateContent(false, 'SAVEDTEMPLATE')"
-            >
-              <img
-                [src]="templateConfiguration.images.saved.url"
-                [alt]="templateConfiguration.images.saved.alt"
-              />
-              <div class="manually-import">
-                {{ 'createContent.savedTemplate' | translate }}
-              </div>
-            </div>
-            <div
-              class="manually-templates"
-              mat-raised-button
-              (click)="openCreateContent(false, 'PREDESIGNTEMPLATE')"
-            >
-              <img
-                class="built-template"
-                [src]="templateConfiguration.images.inbuilt.url"
-                [alt]="templateConfiguration.images.inbuilt.alt"
-              />
-              <div class="manually-import">
-                {{ 'createContent.inBuiltTemplate' | translate }}
-              </div>
-            </div>
-            <div
-              class="manually-templates"
-              mat-raised-button
-              (click)="openCreateContent(true)"
-            >
-              <img
-                class="built-template"
-                [src]="templateConfiguration.images.editTemplate.url"
-                [alt]="templateConfiguration.images.editTemplate.alt"
-              />
-              <div class="manually-import">
-                {{ 'createContent.createNew' | translate }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-template>
-
-      <div class="wrapper-form">
-        <div class="fields">
-          <div class="toggle_wrapper">
-            <mat-label class="mat-label">{{
-              'formFieldLabels.active' | translate
-            }}</mat-label>
-            <div class="status status--left">Disable</div>
-            <mat-slide-toggle formControlName="status"></mat-slide-toggle>
-            <div class="status status--right">Enable</div>
-          </div>
-        </div>
-      </div>
-      <div class="save-section">
+      <div class="manually-add">
         <div
-          class="save-button"
-          (click)="handleSubmit($event)"
-          [ngClass]="{ active: !isSaving, disabled: isSaving }"
+          class="manually-add-templates"
+          mat-raised-button
+          (click)="openCreateContent(false, 'SAVEDTEMPLATE')"
         >
-          <div class="save-text">
-            <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
-            {{ isSaving ? 'Saving' : 'Save' }}
+          <img
+            [src]="templateConfiguration.images.saved.url"
+            [alt]="templateConfiguration.images.saved.alt"
+          />
+          <div>
+            {{ 'createContent.savedTemplate' | translate }}
+          </div>
+        </div>
+        <div
+          class="manually-add-templates"
+          mat-raised-button
+          (click)="openCreateContent(false, 'PREDESIGNTEMPLATE')"
+        >
+          <img
+            [src]="templateConfiguration.images.inbuilt.url"
+            [alt]="templateConfiguration.images.inbuilt.alt"
+          />
+          <div>
+            {{ 'createContent.inBuiltTemplate' | translate }}
+          </div>
+        </div>
+        <div
+          class="manually-add-templates"
+          mat-raised-button
+          (click)="openCreateContent(true)"
+        >
+          <img
+            [src]="templateConfiguration.images.editTemplate.url"
+            [alt]="templateConfiguration.images.editTemplate.alt"
+          />
+          <div class="manually-import">
+            {{ 'createContent.createNew' | translate }}
           </div>
         </div>
       </div>
-    </form>
-  </div>
-  <div *ngSwitchCase="1">
-    <hospitality-bot-template-list-container
-      (change)="handleTemplateListChange($event)"
-      [hotelId]="hotelId"
-      [templateForm]="templateForm"
-      [templateType]="typeOfTemplate"
-    ></hospitality-bot-template-list-container>
-  </div>
-  <hospitality-bot-template-html-editor
-    *ngSwitchCase="2"
-    [isDisabled]="contentNotEditable"
-    [openEditor]="stepper.selectedIndex === 2"
-    [templateForm]="templateForm"
-    [template]="template"
-    [templateId]="templateId"
-    (goBack)="handleBackFromEditor()"
-    (saveTemplate)="handleSubmit($event)"
-  ></hospitality-bot-template-html-editor>
-</ng-container>
+    </div>
+  </ng-template>
+  <hospitality-bot-button
+    class="create-btn"
+    [label]="isSaving ? 'Saving' : 'Save'"
+    [ngClass]="{ active: !isSaving, disabled: isSaving }"
+    (click)="handleSubmit($event)"
+  ></hospitality-bot-button>
+</form>

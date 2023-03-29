@@ -376,3 +376,21 @@
     border: none;
   }
 }
+@mixin import() {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.07;
+  letter-spacing: 0.84px;
+  text-align: left;
+  color: $button-blue;
+  margin-right: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  img {
+    margin-right: 5px;
+    width: 15px;
+    height: 24px;
+    padding-bottom: 8px;
+  }
+}

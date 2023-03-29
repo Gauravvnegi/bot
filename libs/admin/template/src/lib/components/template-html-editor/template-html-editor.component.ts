@@ -1,56 +1,98 @@
-import {
-  Component,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, EventEmitter, HostListener } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { trim } from 'lodash';
-import { Template } from '../../data-models/templateConfig.model';
 import { templateConfig } from '../../constants/template';
 import { TranslateService } from '@ngx-translate/core';
+import { AdminUtilityService, NavRouteOptions } from 'libs/admin/shared/src';
+import { EditTemplateComponent } from '../edit-template/edit-template.component';
+import { Router, ActivatedRoute } from '@angular/router';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { TemplateService } from '../../services/template.service';
+import { trim } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-template-html-editor',
   templateUrl: './template-html-editor.component.html',
   styleUrls: ['./template-html-editor.component.scss'],
 })
-export class TemplateHtmlEditorComponent implements OnInit {
-  id: string;
-  @Input() templateForm: FormGroup;
-  @Input() isDisabled = false;
-  @Input() openEditor = false;
-  @Input() templateId: string;
-  @Output() goBack = new EventEmitter();
-  @Output() saveTemplate = new EventEmitter();
-  template: Template;
-  hotelId: string;
-  globalQueries = [];
-  topicList = [];
-  isSaving = false;
-  enableAssetImport = false;
-  constructor(
-    private snackbarService: SnackBarService,
-    protected translateService: TranslateService
-  ) {}
+export class TemplateHtmlEditorComponent extends EditTemplateComponent {
+  goBack = new EventEmitter();
+  saveTemplate = new EventEmitter();
 
-  ngOnInit(): void {}
+  enableAssetImport = false;
+
+  navRoutes: NavRouteOptions = [
+    { label: 'Library', link: './' },
+    { label: 'Template', link: '/pages/library/template' },
+    { label: 'Create Template', link: '/pages/library/template/create' },
+    { label: 'HTML Template', link: './' },
+  ];
+
+  constructor(
+    protected _fb: FormBuilder,
+    protected globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService,
+    protected templateService: TemplateService,
+    protected _router: Router,
+    protected activatedRoute: ActivatedRoute,
+    protected translateService: TranslateService,
+    protected adminUtilityService: AdminUtilityService
+  ) {
+    super(
+      _fb,
+      globalFilterService,
+      snackbarService,
+      templateService,
+      _router,
+      activatedRoute,
+      translateService,
+      adminUtilityService
+    );
+  }
+
+  /**
+   * @function getAssetId to get template Id from routes query param.
+   */
+  getTemplateId(): void {
+    if (this._router.url.includes('view')) this.isDisabled = true;
+    this.$subscription.add(
+      this.activatedRoute.parent.params.subscribe((params) => {
+        if (params['id']) {
+          this.templateId = params['id'];
+          this.pageTitle = 'Edit Template';
+          this.navRoutes[2].label = 'Edit Template';
+        } else if (this.id) {
+          this.templateId = this.id;
+        }
+      })
+    );
+    this.listenForFormData();
+  }
+
+  listenForFormData(): void {
+    this.$subscription.add(
+      this.templateService.templateFormData.subscribe((response) => {
+        if (response.name) {
+          this.templateForm?.patchValue(response);
+        } else {
+          this._router.navigate(['/pages/library/template/create']);
+        }
+      })
+    );
+  }
 
   /**
    * @function saveAndPreview function to save and preview tempalte.
    */
   saveAndPreview() {
-    this.saveTemplate.emit({ data: { redirectToForm: false, preview: true } });
+    this.handleSubmit({ data: { redirectToForm: false, preview: true } });
   }
 
   /**
    * @function save function to save template.
    */
   save() {
-    this.saveTemplate.emit({ data: { redirectToForm: false, preview: false } });
+    this.handleSubmit({ data: { redirectToForm: false, preview: false } });
   }
 
   /**
@@ -70,7 +112,7 @@ export class TemplateHtmlEditorComponent implements OnInit {
       this.goBack.emit();
       return;
     }
-    this.saveTemplate.emit({ data: { redirectToForm: true, preview: false } });
+    this.handleSubmit({ data: { redirectToForm: true, preview: false } });
   }
 
   @HostListener('document:click', ['$event'])
@@ -92,12 +134,5 @@ export class TemplateHtmlEditorComponent implements OnInit {
    */
   get templateConfiguration() {
     return templateConfig;
-  }
-
-  /**
-   * @function back function to move back.
-   */
-  back() {
-    this.goBack.emit();
   }
 }

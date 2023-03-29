@@ -94,3 +94,9 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   text-align: center;
   color: #006fde;
 }
+
+.additional-info {
+  position: absolute;
+  right: 0;
+  top: -2em;
+}

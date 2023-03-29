@@ -1,43 +1,27 @@
 @import 'main';
 
 .wrapper {
-  padding: $padding20;
-  background-color: $white;
-  border-radius: 5px;
-  &-header {
-    @include flex-space-between-cen-Algn;
-    .back {
-      @include flex-item-center();
-      .label {
-        @include normalText;
-
-        font-weight: $bold;
-      }
-      .material-icons {
-        margin-right: $margin15;
-        &:hover {
-          cursor: pointer;
-        }
-      }
-    }
-  }
-  .body {
-    @include flex-spaceAround-centerAlgn();
-    margin: 50px 0;
-    @include normalText;
-
-    color: $primary-gray;
-    font-weight: bold;
-    .btn {
-      width: 255px;
-      height: 159px;
-      padding: 30px 18px;
+  @include formBlock();
+  .manually-add {
+    display: flex;
+    justify-content: space-evenly;
+    &-templates {
       border-radius: 4px;
-      border: solid 1px $btnBorder;
-      @include flex-col-centerAlgn();
+      border: solid 1px $manually-contacts;
+      width: 255px;
+      height: 136px;
+      opacity: 0.9;
+      margin: 30px 31px 15px 0;
       cursor: pointer;
-      .text {
-        margin-top: 18px;
+      text-align: center;
+      color: $primary-gray;
+      letter-spacing: 0.96px;
+      font-weight: bold;
+      position: relative;
+      img {
+        width: 50px;
+        height: 50px;
+        margin: 30px 0 17px;
       }
     }
   }

@@ -54,10 +54,7 @@ export class UserProfileComponent implements OnInit {
 
   userToModDetails;
   adminToModDetails;
-
-  private _onOpenedChange = new Subject();
-  onOpenedChange = this._onOpenedChange.asObservable();
-  isOptionsOpenedChanged = true;
+  panelOpenState = true;
   @Output() optionChange = new EventEmitter();
 
   adminPermissions: Permission[];
@@ -87,8 +84,11 @@ export class UserProfileComponent implements OnInit {
         this.adminToModDetails = new UserConfig().deserialize(this.adminData);
 
         this.products = this.adminToModDetails.products;
-        this.departments = this.adminToModDetails.departments;
-
+        this.departments = this.adminToModDetails.departments.map((item) => ({
+          ...item,
+          label: item.departmentLabel,
+          value: item.department,
+        }));
         this.initStateSubscription();
       });
 
@@ -125,13 +125,17 @@ export class UserProfileComponent implements OnInit {
           const { departments, products, ...rest } = this.userToModDetails;
           this.userForm.patchValue({
             ...rest,
+            phoneNumber: this.userToModDetails.phoneNumber.substring(
+              this.userToModDetails?.phoneNumber.lastIndexOf(' ') + 1,
+              this.userToModDetails?.phoneNumber.length
+            ),
             products: products.map((item) => item.value),
             departments: departments.map((item) => item.department),
           });
           this.userForm.disable();
           this.initAfterFormLoaded();
-
           break;
+
         case 'add':
           this.userForm.patchValue({
             firstName: '',
@@ -143,6 +147,7 @@ export class UserProfileComponent implements OnInit {
           });
           this.userForm.enable();
           break;
+
         case 'edit':
           this.userForm.patchValue({
             ...this.userToModDetails,
@@ -226,10 +231,6 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  openedChange(event) {
-    this._onOpenedChange.next(event);
-  }
-
   trackByFn(index, item) {
     return index;
   }
@@ -292,7 +293,11 @@ export class UserProfileComponent implements OnInit {
       this.departments = this.adminToModDetails.departments.filter(
         (item: any) => products.includes(item.productType)
       );
-
+      this.departments = this.departments.map((item) => ({
+        ...item,
+        label: item.departmentLabel,
+        value: item.department,
+      }));
       const currentDepartments = this.departments
         .filter((item: any) => departmentValue?.includes(item.department))
         .map((item) => item.department);
@@ -373,8 +378,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   initUserPermissions() {
-    // this.permissionConfigsFA.clear();
-
     const formArray = this.userForm.get('permissionConfigs') as FormArray;
 
     formArray.clear();
@@ -462,9 +465,8 @@ export class UserProfileComponent implements OnInit {
 
     const data = this._managePermissionService.modifyPermissionDetailsForEdit(
       this.value,
-      this.departments
+      this.departments.map(({ label, value, ...rest }) => ({ ...rest }))
     );
-
     const handleError = (error) => {
       this.snackbarService
         .openSnackBarWithTranslate(
@@ -506,6 +508,7 @@ export class UserProfileComponent implements OnInit {
       this._managePermissionService
         .updateUserDetailsById({
           ...data,
+          status: true,
           parentId: this._userService.getLoggedInUserId(),
         })
         .subscribe(handleSuccess, handleError);

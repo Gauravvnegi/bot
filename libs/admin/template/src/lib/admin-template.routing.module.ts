@@ -9,9 +9,35 @@ import { TemplateListContainerComponent } from './components/template-list-conta
 import { TopicTemplatesComponent } from './components/topic-templates/topic-templates.component';
 
 const appRoutes: Route[] = [
-  { path: '', component: TemplateComponent },
-  { path: 'create', component: EditTemplateComponent },
-  { path: 'edit/:id', component: EditTemplateComponent },
+  {
+    path: '',
+    component: TemplateComponent,
+    children: [
+      { path: '', component: TemplateDatatableComponent },
+      {
+        path: 'create',
+        component: TemplateComponent,
+        children: [
+          { path: '', component: EditTemplateComponent },
+          { path: 'saved', component: TemplateListContainerComponent },
+          { path: 'pre-designed', component: TemplateListContainerComponent },
+          { path: 'html-editor', component: TemplateHtmlEditorComponent },
+        ],
+      },
+      {
+        path: 'edit/:id',
+        component: TemplateComponent,
+        children: [
+          { path: '', component: EditTemplateComponent },
+          { path: 'saved', component: TemplateListContainerComponent },
+          { path: 'pre-designed', component: TemplateListContainerComponent },
+          { path: 'html-editor', component: TemplateHtmlEditorComponent },
+          { path: 'edit/html-editor', component: TemplateHtmlEditorComponent },
+          { path: 'view/html-editor', component: TemplateHtmlEditorComponent },
+        ],
+      },
+    ],
+  },
 ];
 
 @NgModule({

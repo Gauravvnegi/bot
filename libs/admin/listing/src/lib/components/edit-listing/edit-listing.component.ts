@@ -5,9 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { IList, List } from '../../data-models/listing.model';
+import { IList, List, Topics } from '../../data-models/listing.model';
 import { ListingService } from '../../services/listing.service';
 import { TranslateService } from '@ngx-translate/core';
+import {
+  AdminUtilityService,
+  NavRouteOptions,
+  Option,
+} from 'libs/admin/shared/src';
+import { listingConfig } from '../../constants/listing';
 
 @Component({
   selector: 'hospitality-bot-edit-listing',
@@ -17,13 +23,21 @@ import { TranslateService } from '@ngx-translate/core';
 export class EditListingComponent implements OnInit, OnDestroy {
   listFG: FormGroup;
   listData: IList;
-  private $subscription = new Subscription();
   hotelId: string;
-  globalQueries = [];
-  topicList = [];
   listId: string;
   isSaving = false;
   loading = false;
+  globalQueries = [];
+  topicList: Option[] = [];
+
+  pageTitle = 'Create Listing';
+  navRoutes: NavRouteOptions = [
+    { label: 'Library', link: './' },
+    { label: 'Listing', link: '/pages/library/listing' },
+    { label: 'Create Listing', link: './' },
+  ];
+  private $subscription = new Subscription();
+
   constructor(
     private _fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -32,7 +46,8 @@ export class EditListingComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private _location: Location,
     protected _translateService: TranslateService,
-    private _router: Router
+    private _router: Router,
+    private adminUtilityService: AdminUtilityService
   ) {
     this.initFG();
   }
@@ -63,8 +78,45 @@ export class EditListingComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
         ];
         this.hotelId = this.globalFilterService.hotelId;
+        this.getTopicList(this.hotelId);
         this.getListingId();
       })
+    );
+  }
+
+  /**
+   * @function getTopicList To get topic record list.
+   * @param hotelId The hotel id for which getTopicList will be done.
+   */
+  getTopicList(hotelId) {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          entityState: listingConfig.list.entityState,
+          limit: listingConfig.list.limit,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this._listingService.getTopicList(hotelId, config).subscribe(
+        (response) => {
+          const data = new Topics()
+            .deserialize(response)
+            .records.map((item) => ({ label: item.name, value: item.id }));
+          this.topicList = [...this.topicList, ...data];
+        },
+        ({ error }) => {
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.topicList_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
+        }
+      )
     );
   }
 
@@ -77,6 +129,8 @@ export class EditListingComponent implements OnInit, OnDestroy {
         if (params['id']) {
           this.listId = params['id'];
           this.getListDetails(this.listId);
+          this.pageTitle = 'Edit Listing';
+          this.navRoutes[2].label = 'Edit Listing';
         }
       })
     );
@@ -108,6 +162,76 @@ export class EditListingComponent implements OnInit, OnDestroy {
             .subscribe();
         }
       )
+    );
+  }
+
+  /**
+   * @function createList To create a new listing record.
+   */
+  createList() {
+    if (
+      this.listFG.invalid ||
+      this.listFG.get('marketingContacts').value.length === 0
+    ) {
+      this.snackbarService
+        .openSnackBarWithTranslate(
+          {
+            translateKey: `message.validation.INVALID_FORM`,
+            priorityMessage: 'Invalid Form.',
+          },
+          ''
+        )
+        .subscribe();
+      return;
+    }
+    const data = this.listFG.getRawValue();
+    data.marketingContacts = data.marketingContacts.map((contact) => {
+      const {
+        firstName,
+        lastName,
+        salutation,
+        companyName,
+        mobile,
+        email,
+      } = contact;
+      return {
+        firstName,
+        lastName,
+        salutation,
+        companyName,
+        mobile,
+        email,
+      };
+    });
+    this.isSaving = true;
+    this._listingService.createList(this.hotelId, data).subscribe(
+      (response) => {
+        this.snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.success.listing_created',
+              priorityMessage: `${response.name} is Created.`,
+            },
+            '',
+            {
+              panelClass: 'success',
+            }
+          )
+          .subscribe();
+        this._router.navigate([`pages/library/listing`]);
+      },
+      ({ error }) => {
+        this.snackbarService
+          .openSnackBarWithTranslate(
+            {
+              translateKey: 'message.error.listing_not_created',
+              priorityMessage: error.message,
+            },
+            ''
+          )
+          .subscribe();
+      },
+      () => (this.isSaving = false)
     );
   }
 
@@ -184,14 +308,9 @@ export class EditListingComponent implements OnInit, OnDestroy {
    * @param event The event for which updation will be done.
    */
   updateContactList(event) {
-    this.getListDetails(this.listId);
-  }
-
-  /**
-   * @function redirectToTable To navigate back to data table page.
-   */
-  redirectToTable() {
-    this._location.back();
+    if (event.add && !this.listId)
+      this.listFG.patchValue({ marketingContacts: event.data });
+    else this.getListDetails(this.listId);
   }
 
   /**

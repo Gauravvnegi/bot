@@ -2,11 +2,9 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 import { ManagePermissionComponent } from './components/manage-permission/manage-permission.component';
-import { UserPermissionDatatableComponent } from './components/user-permission-datatable/user-permission-datatable.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 const appRoutes: Route[] = [
-  // { path: '', redirectTo: ':id' },
   {
     path: '',
     component: ManagePermissionComponent,

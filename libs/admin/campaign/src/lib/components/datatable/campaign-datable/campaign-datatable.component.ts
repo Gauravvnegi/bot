@@ -169,16 +169,23 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param event active & inactive event check.
    * @param campaignId The campaign id for which status update action will be done.
    */
-  updateCampaignStatus(event: MatSlideToggleChange, campaignId: string): void {
+  updateCampaignStatus(status: boolean, userData): void {
     const data = {
-      active: event.checked,
+      active: status,
     };
     this.loading = true;
     this.$subscription.add(
       this.campaignService
-        .updateCampaignStatus(this.hotelId, data, campaignId)
+        .updateCampaignStatus(this.hotelId, data, userData.id)
         .subscribe(
           (_response) => {
+            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+            this.updateStatusAndCount(
+              statusValue(userData.status),
+              statusValue(status)
+            );
+            this.values.find((item) => item.id === userData.id).status = status;
+
             this.showMessage(
               {
                 key: 'messages.success.status_updated',

@@ -34,8 +34,8 @@
   padding: $padding-large;
   height: auto;
   opacity: 1;
-  background-color: $payment-tab-background;
-  color: $payment-tab-dark-color;
+  background-color: $tabBg;
+  color: $warm-grey;
   svg path {
     fill: $payment-tab-color !important;
   }
@@ -60,7 +60,8 @@
 }
 
 :host ::ng-deep .amount {
-  font-size: 23px;
+  font-size: 38px;
+  font-weight: $bold;
   @media only screen and (max-width: $M) {
     font-size: 14px;
   }
@@ -75,6 +76,9 @@
   @media only screen and (max-width: $M) {
     padding-bottom: 0;
   }
+  .mat-tab-label-content {
+    font-weight: normal;
+  }
 }
 
 :host ::ng-deep .mat-ink-bar {
@@ -82,7 +86,8 @@
 }
 
 :host ::ng-deep .mat-tab-label-active {
-  color: #000000;
+  color: $heading-black;
+
   background-color: $accordian-header-background-color;
   border-radius: 10px 0px 0px 0px;
   border-bottom: 3px solid $primary-blue;
@@ -138,8 +143,9 @@
 
 :host ::ng-deep .payment__wrapper__heading {
   padding: $padding-medium;
-  font-size: $font-large;
+  font-size: 25px;
   font-weight: $bolder;
+  color: $heading-black;
   @media only screen and (max-width: $tab-size) {
     font-size: $font-medium;
     padding: $padding-small;
@@ -178,11 +184,11 @@
 }
 
 :host ::ng-deep .info-label {
-  font-size: 18px;
-  color: #9eaeb8;
+  font-size: 21px;
+  color: $warm-grey;
   padding-top: 8px;
 }
 
 :host ::ng-deep .mat-tab-label-content {
-  font-size: 26px !important;
+  font-size: 28px !important;
 }

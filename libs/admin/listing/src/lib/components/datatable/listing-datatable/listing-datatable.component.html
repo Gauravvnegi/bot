@@ -103,12 +103,14 @@
           {{ rowData.stats.scheduleCampaign }}
         </div>
       </td>
-      <td (click)="onCheckboxClicked($event)">
-        <div class="center-align">
-          <mat-slide-toggle
-            [checked]="rowData.active"
-            (change)="updateStatus($event, rowData)"
-          ></mat-slide-toggle>
+      <td>
+        <div class="cell-content" (click)="onCheckboxClicked($event)">
+          <hospitality-bot-toggle-dropdown
+            class="toggle-btn"
+            (onClick)="updateStatus($event, rowData)"
+            [status]="rowData.active"
+          >
+          </hospitality-bot-toggle-dropdown>
         </div>
       </td>
     </tr>

@@ -1,14 +1,7 @@
-<div class="wrapper">
-  <header class="wrapper-header">
-    <div class="back">
-      <mat-icon class="material-icons" matSuffix (click)="redirectToTable()"
-        >keyboard_backspace</mat-icon
-      >
-      <p class="label">
-        {{ 'listingForm.editListing' | translate }}
-      </p>
-    </div>
-  </header>
+<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+</hospitality-bot-navigation-header>
+
+<ng-container *ngIf="listId">
   <div class="stats-container">
     <div class="stats">
       <div class="stats__value">{{ listData?.stats.totalContacts }}</div>
@@ -31,97 +24,47 @@
       <div class="stats__text">{{ 'stats.scheduleCampaign' | translate }}</div>
     </div>
   </div>
-  <form [formGroup]="listFG">
-    <div class="wrapper-form">
-      <div class="fields">
-        <div class="field">
-          <mat-label class="mat-label">{{
-            'formFieldLabels.name' | translate
-          }}</mat-label>
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="Enter Listing Name"
-              formControlName="name"
-            />
-            <mat-error
-              *ngIf="
-                listFG.get('name').touched &&
-                listFG.get('name').hasError('required')
-              "
-            >
-              {{ 'validationMessage.name' | translate }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="field">
-          <hospitality-bot-topic-dropdown
-            [hotelId]="hotelId"
-            [name]="'topicName'"
-            [parentForm]="listFG"
-          ></hospitality-bot-topic-dropdown>
-        </div>
-      </div>
-      <div class="fields">
-        <div class="field">
-          <mat-label class="mat-label">{{
-            'formFieldLabels.description' | translate
-          }}</mat-label>
-          <mat-form-field class="description">
-            <input
-              matInput
-              placeholder="Write Your Description Here"
-              formControlName="description"
-            />
-            <mat-error
-              *ngIf="
-                listFG.get('description').touched &&
-                listFG.get('description').hasError('required')
-              "
-            >
-              {{ 'validationMessage.description' | translate }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-    </div>
-    <div class="wrapper-text" *ngIf="!loading">
-      <hospitality-bot-contact-datatable
-        [add]="false"
-        [dataSource]="listFG?.get('marketingContacts')?.value"
-        [totalRecords]="listFG?.get('marketingContacts')?.value.length"
-        [hotelId]="hotelId"
-        [list]="listFG?.getRawValue()"
-        (updateContacts)="updateContactList($event)"
-      ></hospitality-bot-contact-datatable>
-    </div>
-    <div class="wrapper-form">
-      <div class="fields">
-        <div class="toggle_wrapper">
-          <mat-label class="mat-label">{{
-            'formFieldLabels.active' | translate
-          }}</mat-label>
-          <div class="status status--left">
-            {{ 'active.disable' | translate }}
-          </div>
-          <mat-slide-toggle formControlName="active"></mat-slide-toggle>
-          <div class="status status--right">
-            {{ 'active.enable' | translate }}
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="save-section">
-      <div
-        class="save-button"
-        (click)="updateList()"
-        [ngClass]="{ active: !isSaving, disabled: isSaving }"
-      >
-        <div class="save-text">
-          <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
-          {{ isSaving ? 'Saving' : 'Save' }}
-        </div>
-      </div>
-    </div>
-  </form>
+</ng-container>
+
+<form class="form-block" [formGroup]="listFG">
+  <div class="half-width"></div>
+  <hospitality-bot-toggle-switch
+    class="status"
+    controlName="active"
+    label="Status:"
+  ></hospitality-bot-toggle-switch>
+  <hospitality-bot-input
+    class="half-width"
+    controlName="name"
+    label="Name"
+  ></hospitality-bot-input>
+  <hospitality-bot-select
+    class="half-width"
+    label="Topic"
+    controlName="topicName"
+    [options]="topicList"
+  ></hospitality-bot-select>
+  <hospitality-bot-input
+    class="full-width"
+    label="Description"
+    controlName="description"
+  ></hospitality-bot-input>
+</form>
+
+<div class="table-block" *ngIf="!loading">
+  <hospitality-bot-contact-datatable
+    [add]="listId ? false : true"
+    [dataSource]="listFG?.get('marketingContacts')?.value"
+    [totalRecords]="listFG?.get('marketingContacts')?.value.length"
+    [hotelId]="hotelId"
+    [list]="listId ? listFG?.getRawValue() : ''"
+    (updateContacts)="updateContactList($event)"
+  ></hospitality-bot-contact-datatable>
+
+  <hospitality-bot-button
+    class="create-btn"
+    [label]="isSaving ? 'Saving' : 'Save'"
+    [ngClass]="{ active: !isSaving, disabled: isSaving }"
+    (click)="listId ? updateList() : createList()"
+  ></hospitality-bot-button>
 </div>

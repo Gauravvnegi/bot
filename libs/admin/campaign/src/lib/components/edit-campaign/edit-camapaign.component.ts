@@ -50,7 +50,9 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   campaign: Campaign;
   createContentType = '';
   datamapped = true;
+
   @ViewChild('stepper') stepper: MatStepper;
+
   private $autoSaveSubscription = new Subscription();
   private $formChangeDetection = new Subscription();
   constructor(

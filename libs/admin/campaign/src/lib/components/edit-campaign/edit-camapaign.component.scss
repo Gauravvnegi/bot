@@ -1,63 +1,24 @@
 @import 'main';
 
 .wrapper {
-  padding: 20px;
-  background-color: $white;
-  border-radius: 5px;
-  @include normalText;
-  color: $dark-blue;
-}
-
-.btn-wrapper {
-  @include flex-all-center();
-  margin: 40px 0;
-  gap: 15px;
-  @include normalText;
-
-  .schedule {
-    height: 46px;
-    margin: 0 60px 0 0;
-    padding: 11.9px 26px 13px;
-    border-radius: 23px;
-    border: solid 1px $primary-cta;
-    background-color: $white;
-    cursor: pointer;
-    &:active {
-      transform: scale(0.97);
-    }
-    &__text {
-      letter-spacing: 0.96px;
-      color: $primary-cta;
-    }
-  }
-  .send {
-    height: 46px;
-    padding: 12px 43px 13px;
-    border-radius: 23px;
-    background-color: $primary-cta;
-    cursor: pointer;
-    &:active {
-      transform: scale(0.97);
-    }
-    &__text {
-      letter-spacing: 0.96px;
-      color: $white;
-    }
+  .footer {
+    @include flex-all-center;
+    margin-top: 20px;
+    gap: 15px;
   }
 }
 
-:host ::ng-deep .mat-step-icon {
-  display: none;
-}
-
-:host ::ng-deep .mat-stepper-horizontal-line {
-  display: none;
-}
-
-:host ::ng-deep .mat-horizontal-stepper-header-container {
-  display: none;
-}
-
-:host ::ng-deep .mat-horizontal-content-container {
-  padding: inherit;
+:host ::ng-deep {
+  .mat-step-icon {
+    display: none;
+  }
+  .mat-stepper-horizontal-line {
+    display: none;
+  }
+  .mat-horizontal-stepper-header-container {
+    display: none;
+  }
+  .mat-horizontal-content-container {
+    padding: inherit;
+  }
 }

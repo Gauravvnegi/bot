@@ -34,32 +34,20 @@
   }
 }
 
-.fields {
-  @include flex-space-between-cen-Algn;
-  margin-top: 30px;
-  width: $full;
-  @media (max-width: $tablet) {
-    flex-wrap: wrap;
-    gap: 60px;
+.field {
+  @include formBlock();
+  padding: 0;
+  align-items: flex-start;
+  .one-fourth {
+    flex-basis: 8%;
   }
-  .field {
-    display: flex;
-    margin-right: 1.5%;
-    width: 45%;
-    @media (max-width: $tablet) {
-      width: 42.6%;
-    }
-    .mat-label {
-      width: 150px;
-      color: $mat-tab-label;
-      font-size: 14px;
-    }
+  .three-fourth {
+    flex-basis: 85%;
   }
 }
 
 .add-content {
-  height: 157px;
-  width: $full;
+  flex-basis: 85%;
   opacity: 0.4;
   border-radius: 4px;
   border: solid 1px $manually-contacts;
@@ -73,12 +61,4 @@
     margin-top: 20px;
     cursor: pointer;
   }
-}
-
-:host ::ng-deep mat-form-field {
-  width: $full;
-}
-
-.full-width {
-  width: $full !important;
 }

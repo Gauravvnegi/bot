@@ -96,16 +96,16 @@
             <p>{{ rowData.jobTitle }}</p>
           </td>
 
-          <td class="">
-            <label (click)="onCheckboxClicked($event)" class="switch">
-              <input type="checkbox" [checked]="rowData.status" />
-              <mat-slide-toggle
-                [checked]="rowData.status"
-                (change)="updateRolesStatus($event, rowData)"
+          <td>
+            <div class="cell-content">
+              <hospitality-bot-toggle-dropdown
+                class="toggle-btn"
+                (onClick)="updateRolesStatus($event, rowData)"
+                [status]="rowData.status"
                 [disabled]="tabFilterItems[tabFilterIdx].value === 'ALL'"
               >
-              </mat-slide-toggle>
-            </label>
+              </hospitality-bot-toggle-dropdown>
+            </div>
           </td>
         </tr>
       </ng-template>

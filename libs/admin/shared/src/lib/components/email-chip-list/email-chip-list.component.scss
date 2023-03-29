@@ -1,8 +1,6 @@
 @import 'main';
 
-mat-form-field {
-  width: 100%;
-}
+@import '../../components/form-component/input/input.component.scss';
 
 :host
   ::ng-deep
@@ -16,19 +14,33 @@ mat-form-field {
 }
 
 :host ::ng-deep .mat-input-element {
-  max-width: calc(100% - 80px) !important;
+  border: 1px solid #d9d9d9;
 }
-
 
 :host ::ng-deep {
   .mat-chip-remove {
     outline: none;
     border: none;
     background: transparent;
+    font-size: 1em;
+    margin-top: 0.3em;
+    cursor: pointer;
   }
   .mat-standard-chip .mat-chip-remove,
   .mat-standard-chip .mat-chip-trailing-icon {
     width: unset;
     height: unset;
   }
+}
+
+.chip {
+  display: flex;
+  gap: 1em;
+  background-color: #e8e2ff;
+  font-family: Roboto;
+  font-size: 0.7em;
+  padding: 0.4em 0.6em;
+  letter-spacing: 0.08em;
+  color: #5f38f9;
+  border-radius: 4px;
 }

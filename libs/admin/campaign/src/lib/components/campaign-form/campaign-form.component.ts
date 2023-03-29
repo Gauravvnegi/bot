@@ -7,9 +7,8 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ModalService,
@@ -23,6 +22,7 @@ import { CampaignService } from '../../services/campaign.service';
 import { EmailService } from '../../services/email.service';
 import { SendTestComponent } from '../send-test/send-test.component';
 import { TranslateService } from '@ngx-translate/core';
+import { Option, NavRouteOptions } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-campaign-form',
@@ -38,7 +38,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   @Output() save = new EventEmitter();
   templateData = '';
   templateList = [];
-  fromEmailList = [];
+  fromEmailList: Option[] = [];
   isSending = false;
   visible = true;
   private $subscription = new Subscription();
@@ -49,17 +49,29 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
     extraAllowedContent: '*(*);*{*}',
   };
   config = campaignConfig;
+  draftDate: number | string = Date.now();
+  pageTitle = 'Create Campaign';
+  navRoutes: NavRouteOptions = [
+    { label: 'Marketing', link: './' },
+    { label: 'Campaign', link: '/pages/marketing/campaign' },
+    { label: 'Create Campaign', link: './' },
+  ];
+
   constructor(
     private snackbarService: SnackBarService,
     private _emailService: EmailService,
     private _modalService: ModalService,
-    private _router: Router,
     public globalFilterService: GlobalFilterService,
     private campaignService: CampaignService,
     protected _translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
+    if (this.campaignId) {
+      this.pageTitle = 'Edit Campaign';
+      this.navRoutes[2].label = 'Edit Campaign';
+    }
+    this.draftDate = this.campaign?.updatedAt ?? this.campaign?.createdAt;
     this.getFromEmails();
   }
 
@@ -70,7 +82,9 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._emailService.getFromEmail(this.hotelId).subscribe(
         (response) => {
-          this.fromEmailList = new EmailList().deserialize(response);
+          this.fromEmailList = new EmailList()
+            .deserialize(response)
+            .map((item) => ({ label: item.email, value: item.id }));
         },
         ({ error }) => {
           this.snackbarService

@@ -21,6 +21,7 @@ import { EmailService } from '../../services/email.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { SendTestComponent } from '../send-test/send-test.component';
 import { TranslateService } from '@ngx-translate/core';
+import { Option, NavRouteOptions } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-view-campaign',
@@ -30,7 +31,6 @@ import { TranslateService } from '@ngx-translate/core';
 export class ViewCampaignComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
   globalQueries = [];
-  fromEmailList = [];
   campaignId: string;
   campaignFG: FormGroup;
   hotelId: string;
@@ -39,6 +39,16 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
     extraAllowedContent: '*(*);*{*}',
   };
   campaign: Campaign;
+  fromEmailList: Option[] = [];
+
+  draftDate: number | string = Date.now();
+  pageTitle = 'View Campaign';
+  navRoutes: NavRouteOptions = [
+    { label: 'Marketing', link: './' },
+    { label: 'Campaign', link: '/pages/marketing/campaign' },
+    { label: 'View Campaign', link: './' },
+  ];
+
   constructor(
     private location: Location,
     private _fb: FormBuilder,
@@ -98,7 +108,9 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._emailService.getFromEmail(this.hotelId).subscribe(
         (response) =>
-          (this.fromEmailList = new EmailList().deserialize(response)),
+          (this.fromEmailList = new EmailList()
+            .deserialize(response)
+            .map((item) => ({ label: item.email, value: item.id }))),
         ({ error }) =>
           this.snackbarService
             .openSnackBarWithTranslate(
@@ -137,6 +149,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
         .getCampaignById(this.hotelId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
+          this.draftDate = this.campaign?.updatedAt ?? this.campaign?.createdAt;
           if (this.campaign.cc)
             this.campaignFG.addControl('cc', this._fb.array([]));
           if (this.campaign.bcc)

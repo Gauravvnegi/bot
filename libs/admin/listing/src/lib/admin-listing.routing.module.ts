@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
-import { CreateListingComponent } from './components/create-listing/create-listing.component';
 import { ListingDatatableComponent } from './components/datatable/listing-datatable/listing-datatable.component';
 import { EditContactComponent } from './components/edit-contact/edit-contact.component';
 import { ImportContactComponent } from './components/import-contact/import-contact.component';
@@ -12,7 +11,7 @@ const appRoutes: Route[] = [
   { path: '', component: ListingComponent },
   {
     path: 'create',
-    component: CreateListingComponent,
+    component: EditListingComponent,
   },
   {
     path: 'edit/:id',
@@ -27,7 +26,6 @@ const appRoutes: Route[] = [
 export class AdminListingRoutingModule {
   static components = [
     ListingComponent,
-    CreateListingComponent,
     EditListingComponent,
     EditContactComponent,
     ListingDatatableComponent,

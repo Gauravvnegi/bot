@@ -1,31 +1,37 @@
 <ng-container *ngIf="disabled; else normalField">
-  <div class="form-field disabled">
+  <div class="disabledBtn">
     <div class="chips">
       <div class="chip" *ngFor="let chip of chipList">
-        <span class="chip--text">{{ chip.data?.name }}</span>
-        <span class="chip--button"><mat-icon>cancel</mat-icon></span>
+        {{ chip.data?.name }}
+        <i class="pi pi-times"></i>
       </div>
     </div>
   </div>
 </ng-container>
 <ng-template #normalField>
-  <div class="form-field" (click)="enableReceiverField($event)">
-    <div class="chips">
-      <div class="chip" *ngFor="let chip of chipList; let i = index">
-        <span class="chip--text">{{ chip.data?.name }}</span>
-        <span class="chip--button" (click)="removeChip(i, $event)"
-          ><mat-icon>cancel</mat-icon></span
-        >
+  <div (click)="enableReceiverField($event)">
+    <div
+      class="chips wrapper p-field"
+      [style.fontSize]="fontSize"
+      [ngClass]="wrapperNgClasses"
+    >
+      <label class="label label__static" [for]="'fieldId'">Add Recipient</label>
+      <input
+        #receiverField
+        pInputText
+        class="input"
+        [ngClass]="inputNgClasses"
+        (keydown)="addChip($event)"
+        (keyup)="searchKey($event)"
+        [id]="'fieldId'"
+      />
+      <div class="chips">
+        <span class="chip" *ngFor="let chip of chipList; let i = index"
+          >{{ chip.data?.name }}
+          <i class="pi pi-times" (click)="removeChip(i, $event)"></i
+        ></span>
       </div>
-      <div class="field">
-        <input
-          #receiverField
-          placeholder="Add Recipient"
-          class="chip-input"
-          (keydown)="addChip($event)"
-          (keyup)="searchKey($event)"
-        />
-      </div>
+
       <div class="dropdown" *ngIf="enableDropdown" click-stop-propagation>
         <hospitality-bot-to-dropdown
           [value]="receiverField?.nativeElement?.value"

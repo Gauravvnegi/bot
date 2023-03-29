@@ -1,70 +1,5 @@
 @import 'main';
-
-.form-field {
-  width: $full;
-  height: auto;
-  min-height: 52px;
-  cursor: text;
-  @include flex-wrap;
-  position: relative;
-  padding-bottom: 1.25em;
-  .field {
-    width: $full;
-  }
-}
-
-.form-field .chips .chip {
-  display: inline-block;
-  width: auto;
-  background-color: $light-gray;
-  color: $black;
-  border-radius: 18px;
-  margin: 2px;
-  overflow: hidden;
-  &:hover {
-    background-color: $receiver-chip-bg;
-  }
-}
-.form-field .chips .chip {
-  display: flex;
-}
-
-.form-field .chips .chip .chip--button {
-  padding: 4px 10px;
-  cursor: pointer;
-  display: inline-block;
-  color: $gray;
-  line-height: 18px;
-}
-.form-field .chips .chip .chip--text {
-  padding: 4px 12px;
-  cursor: none;
-  display: inline-block;
-  pointer-events: none;
-  line-height: 29px;
-}
-
-.form-field > .chips > .field > input {
-  display: block !important;
-  box-sizing: border-box;
-  width: $full;
-  border: none;
-  display: inline-block;
-  background-color: transparent;
-  outline: none;
-  margin-top: 17px;
-  font-size: 18px;
-  font-family: 'Roboto';
-  padding: 7px 0 5px 0;
-}
-
-.chips {
-  width: $full;
-  @include flex-wrap;
-  border-bottom: 1px solid $c-gray-46;
-  padding-bottom: 6px;
-  padding-right: 65px;
-}
+@import '../../../../../shared/src/lib/components/form-component/input/input.component.scss';
 
 .dropdown {
   width: $full;
@@ -78,6 +13,33 @@
   padding: $padding15;
 }
 
-.disabled {
+.disabledBtn {
   opacity: 0.8;
+}
+
+.chips {
+  flex-basis: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1em;
+  row-gap: 0.5em;
+  cursor: auto;
+
+  .pi-times {
+    font-size: 1em;
+    margin-top: 0.3em;
+    cursor: pointer;
+  }
+}
+
+.chip {
+  display: flex;
+  gap: 1em;
+  background-color: #e8e2ff;
+  font-family: Roboto;
+  font-size: 0.7em;
+  padding: 0.4em 0.6em;
+  letter-spacing: 0.08em;
+  color: #5f38f9;
+  border-radius: 4px;
 }

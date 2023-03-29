@@ -1,44 +1,56 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
 import { TemplateService } from '../../services/template.service';
-import { Location } from '@angular/common';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Template } from '../../data-models/templateConfig.model';
-import { MatStepper } from '@angular/material/stepper';
+import { Template, Topics } from '../../data-models/templateConfig.model';
 import { templateConfig } from '../../constants/template';
 import { TranslateService } from '@ngx-translate/core';
+import {
+  AdminUtilityService,
+  NavRouteOptions,
+  Option,
+} from 'libs/admin/shared/src';
+
 @Component({
   selector: 'hospitality-bot-edit-template',
   templateUrl: './edit-template.component.html',
   styleUrls: ['./edit-template.component.scss'],
 })
 export class EditTemplateComponent implements OnInit, OnDestroy {
-  id: string;
   templateForm: FormGroup;
-  private $subscription = new Subscription();
-  hotelId: string;
-  globalQueries = [];
-  topicList = [];
-  isSaving = false;
-  templateId: string;
   template: Template;
+  id: string;
+  templateId: string;
+  hotelId: string;
+  isDisabled = false;
+  globalQueries = [];
+  topicList: Option[] = [];
+  isSaving = false;
+
   imgTemplate;
-  contentNotEditable: boolean;
-  createNewHtml = false;
   typeOfTemplate;
-  @ViewChild('stepper') stepper: MatStepper;
+  draftDate: number | string;
+
+  pageTitle = 'Create Template';
+  navRoutes: NavRouteOptions = [
+    { label: 'Library', link: './' },
+    { label: 'Template', link: '/pages/library/template' },
+    { label: 'Create Template', link: './' },
+  ];
+
+  protected $subscription = new Subscription();
   constructor(
-    private _fb: FormBuilder,
-    private globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService,
-    private templateService: TemplateService,
-    private location: Location,
-    private _router: Router,
-    private activatedRoute: ActivatedRoute,
-    protected translateService: TranslateService
+    protected _fb: FormBuilder,
+    protected globalFilterService: GlobalFilterService,
+    protected snackbarService: SnackBarService,
+    protected templateService: TemplateService,
+    protected _router: Router,
+    protected activatedRoute: ActivatedRoute,
+    protected translateService: TranslateService,
+    protected adminUtilityService: AdminUtilityService
   ) {
     this.initFG();
   }
@@ -71,7 +83,44 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
         ];
         this.hotelId = this.globalFilterService.hotelId;
         this.getTemplateId();
+        this.getTopicList(this.hotelId);
       })
+    );
+  }
+
+  /**
+   * @function getTopicList To get topic record list.
+   * @param hotelId The hotel id for which getTopicList will be done.
+   */
+  getTopicList(hotelId) {
+    const config = {
+      queryObj: this.adminUtilityService.makeQueryParams([
+        {
+          entityState: templateConfig.topicConfig.active,
+          limit: templateConfig.topicConfig.limit,
+        },
+      ]),
+    };
+    this.$subscription.add(
+      this.templateService.getTopicList(hotelId, config).subscribe(
+        (response) => {
+          const data = new Topics()
+            .deserialize(response)
+            .records.map((item) => ({ label: item.name, value: item.id }));
+          this.topicList = [...this.topicList, ...data];
+        },
+        ({ error }) => {
+          this.snackbarService
+            .openSnackBarWithTranslate(
+              {
+                translateKey: 'message.error.topicList_fail',
+                priorityMessage: error.message,
+              },
+              ''
+            )
+            .subscribe();
+        }
+      )
     );
   }
 
@@ -83,10 +132,23 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
       this.activatedRoute.params.subscribe((params) => {
         if (params['id']) {
           this.templateId = params['id'];
+          this.pageTitle = 'Edit Template';
+          this.navRoutes[2].label = 'Edit Template';
           this.getTemplateDetails(this.templateId);
         } else if (this.id) {
           this.templateId = this.id;
           this.getTemplateDetails(this.templateId);
+        }
+      })
+    );
+    this.listenForFormData();
+  }
+
+  listenForFormData(): void {
+    this.$subscription.add(
+      this.templateService.templateFormData.subscribe((response) => {
+        if (response) {
+          this.templateForm?.patchValue(response);
         }
       })
     );
@@ -102,7 +164,11 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
         .getTemplateDetails(this.hotelId, topicId)
         .subscribe((response) => {
           this.template = new Template().deserialize(response);
-          this.templateForm.patchValue(this.template);
+          this.draftDate = this.template.updatedAt ?? this.template.createdAt;
+          this.templateForm?.patchValue(this.template);
+          this.templateService?.templateFormData.next(
+            this.templateForm.getRawValue()
+          );
           this.imgTemplate = response.htmlTemplate;
         })
     );
@@ -144,8 +210,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
               .subscribe();
             this.templateForm.patchValue(response);
             if (!event.data) this._router.navigate(['/pages/library/template']);
-            if (event.data.redirectToForm) this.stepper.selectedIndex = 0;
-            if (event.data.preview) this.contentNotEditable = true;
+            if (event.data.preview) this.isDisabled = true;
           },
           ({ error }) => {
             this.snackbarService
@@ -224,29 +289,22 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function move function to move to particular index.
-   * @param index particular page index.
-   */
-  move(index: number) {
-    this.stepper.selectedIndex = index;
-  }
-
-  /**
    * @function moveToEditor function to move to editor.
    * @param disabled content not editable.
    */
   moveToEditor(disabled) {
-    this.contentNotEditable = disabled;
-    this.stepper.selectedIndex = this.htmlTemplate.value ? 2 : 1;
-  }
-
-  /**
-   * @function handleBackFromEditor function to move back from editor.
-   */
-  handleBackFromEditor() {
-    this.stepper.selectedIndex = 0;
-    this.createNewHtml = false;
-    this.contentNotEditable = false;
+    this.templateService?.templateFormData.next(
+      this.templateForm?.getRawValue()
+    );
+    if (disabled) {
+      this._router.navigate(['view/html-editor'], {
+        relativeTo: this.activatedRoute,
+      });
+    } else {
+      this._router.navigate(['edit/html-editor'], {
+        relativeTo: this.activatedRoute,
+      });
+    }
   }
 
   /**
@@ -258,7 +316,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
         this.templateService
           .deleteTemplateContent(this.hotelId, this.templateId)
           .subscribe(
-            (response) => {
+            (_) => {
               this.templateForm.patchValue({ htmlTemplate: '' });
               this.snackbarService
                 .openSnackBarWithTranslate(
@@ -293,28 +351,33 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
    */
   openCreateContent(newContent: boolean, type?: string) {
     this.typeOfTemplate = type;
-    this.createNewHtml = newContent;
-    this.stepper.selectedIndex = newContent ? 2 : 1;
-  }
-
-  /**
-   * @function handleTemplateListChange function to handle template list change.
-   */
-  handleTemplateListChange(event) {
-    if (event.status) {
-      this.templateForm.patchValue({ htmlTemplate: event.data });
-      this.move(2);
-      return;
+    this.templateService?.templateFormData.next(
+      this.templateForm?.getRawValue()
+    );
+    if (newContent) {
+      this._router.navigate(['html-editor'], {
+        relativeTo: this.activatedRoute,
+      });
     }
-    this.move(0);
+    if (!newContent && type === 'SAVEDTEMPLATE') {
+      this._router.navigate(['saved'], { relativeTo: this.activatedRoute });
+    } else if (!newContent)
+      this._router.navigate(['pre-designed'], {
+        relativeTo: this.activatedRoute,
+      });
   }
 
-  /**
-   * @function goBack function to move back to previous page.
-   */
-  goBack() {
-    this.location.back();
-  }
+  // /**
+  //  * @function handleTemplateListChange function to handle template list change.
+  //  */
+  // handleTemplateListChange(event) {
+  //   if (event.status) {
+  //     this.templateForm.patchValue({ htmlTemplate: event.data });
+  //     this.move(2);
+  //     return;
+  //   }
+  //   this.move(0);
+  // }
 
   /**
    * @function htmlTemplate function to get html template.

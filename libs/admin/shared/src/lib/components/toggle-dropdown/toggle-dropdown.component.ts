@@ -29,6 +29,7 @@ export class ToggleDropdownComponent {
       type: 'failed',
     },
   ];
+  @Input() disabled: boolean = false;
 
   @Input() set status(value: string) {
     this.value = value;

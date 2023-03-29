@@ -28,7 +28,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
 
   navRoutes: NavRouteOptions = [
     { label: 'Library', link: './' },
-    { label: 'Topics', link: '/pages/library/packages' },
+    { label: 'Topics', link: '/pages/library/topic' },
     { label: 'Create Topic', link: './' },
   ];
 

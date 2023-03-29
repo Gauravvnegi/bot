@@ -17,6 +17,8 @@
     </ng-container>
     <ng-container *ngSwitchCase="1">
       <hospitality-bot-create-content
+        [campaignId]="campaignId"
+        [campaign]="campaign"
         (changeStep)="handleCreateContentChange($event)"
       ></hospitality-bot-create-content>
     </ng-container>
@@ -29,7 +31,7 @@
     </ng-container>
   </ng-container>
 
-  <div class="btn-wrapper" *ngIf="stepper.selectedIndex === 0">
+  <div class="footer" *ngIf="stepper.selectedIndex === 0">
     <hospitality-bot-button
       label="Schedule"
       [disabled]="isSending"

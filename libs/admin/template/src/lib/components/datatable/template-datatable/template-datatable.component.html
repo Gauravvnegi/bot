@@ -94,14 +94,15 @@
       <td>
         <div class="primary-text">{{ rowData.description }}</div>
       </td>
-      <td class="center-align">
-        <label (click)="onCheckboxClicked($event)" class="switch">
-          <mat-slide-toggle
-            class="active"
-            [checked]="rowData.status"
-            (change)="updateTemplateStatus($event, rowData.id)"
-          ></mat-slide-toggle>
-        </label>
+      <td>
+        <div class="cell-content" (click)="onCheckboxClicked($event)">
+          <hospitality-bot-toggle-dropdown
+            class="toggle-btn"
+            (onClick)="updateTemplateStatus($event, rowData)"
+            [status]="rowData.status"
+          >
+          </hospitality-bot-toggle-dropdown>
+        </div>
       </td>
     </tr>
   </ng-template>

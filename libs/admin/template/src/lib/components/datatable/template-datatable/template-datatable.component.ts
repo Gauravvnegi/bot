@@ -219,14 +219,21 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    * @param event active & inactive event check.
    * @param templateId The template id for which status update action will be done.
    */
-  updateTemplateStatus(event, templateId): void {
+  updateTemplateStatus(status, userData): void {
     const data = {
-      active: event.checked,
+      active: status,
     };
     this.templateService
-      .updateTemplateStatus(this.hotelId, data, templateId)
+      .updateTemplateStatus(this.hotelId, data, userData.id)
       .subscribe(
-        (response) => {
+        (_) => {
+          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+          this.updateStatusAndCount(
+            statusValue(userData.status),
+            statusValue(status)
+          );
+          this.values.find((item) => item.id === userData.id).status = status;
+
           this.snackbarService.openSnackBarWithTranslate(
             {
               translateKey: `messages.SUCCESS.STATUS_UPDATED`,

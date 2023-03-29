@@ -349,13 +349,19 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    * @param event Active & InActive event check.
    * @param rowData The data of row for which status update action will be done.
    */
-  updateStatus(event, rowData) {
-    event.stopPropagation();
+  updateStatus(status, rowData) {
     this.$subscription.add(
       this.listingService
-        .updateListStatus(this.hotelId, rowData.id, { status: event.checked })
+        .updateListStatus(this.hotelId, rowData.id, { status: status })
         .subscribe(
-          (response) => {
+          (_) => {
+            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+            this.updateStatusAndCount(
+              statusValue(rowData.active),
+              statusValue(status)
+            );
+            this.values.find((item) => item.id === rowData.id).active = status;
+
             this.snackbarService
               .openSnackBarWithTranslate(
                 {

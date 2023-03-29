@@ -1,7 +1,7 @@
 @import 'main';
 
 .import {
-  @include import();
+  @include import;
 }
 :host ::ng-deep .data-table-row {
   height: 80px;
@@ -9,5 +9,5 @@
 
 // *** over ride the table style ***
 :host ::ng-deep .p-datatable {
-  @include table-cell-padding(0.8em);
+  @include tableCellPadding(0.8em);
 }

@@ -1,7 +1,7 @@
 @import 'main';
 
 .wrapper-header {
-  @include formBlock();
+  @include form-block;
   .one-fourth {
     flex-basis: 8%;
   }

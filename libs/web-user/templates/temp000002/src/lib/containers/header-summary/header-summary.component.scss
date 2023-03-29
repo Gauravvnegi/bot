@@ -20,7 +20,7 @@
 .modal-header {
   padding: 20px 0px;
   display: flex;
-  padding-bottom: $padding-small;
+  padding-bottom: 10px;
   width: 100%;
   position: relative;
   background-color: #f4f5f7;
@@ -49,7 +49,7 @@
   text-align: center;
   width: 33%;
   .title {
-    margin-bottom: $margin-small;
+    margin-bottom: 10px;
   }
   p {
     text-align: center;
@@ -92,7 +92,7 @@
   width: 75vw;
   @media screen and (max-width: $S) {
     margin: 0 auto;
-    width: $full;
+    width: 100%;
   }
 }
 

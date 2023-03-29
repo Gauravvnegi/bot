@@ -145,7 +145,7 @@
 }
 
 .button {
-  @include admin-panel-button();
+  @include admin-panel-button;
   &:hover {
     cursor: pointer;
   }

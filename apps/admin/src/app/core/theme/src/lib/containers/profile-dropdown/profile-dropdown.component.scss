@@ -2,7 +2,7 @@
 
 .profile__dropdown {
   position: relative;
-  @include flex-item-center();
+  @include flex-item-center;
   height: 42px;
   padding-right: 25px;
   &:hover {
@@ -27,7 +27,7 @@
   align-items: center;
   padding: 10px;
   border-radius: 50%;
-  @include flex-justify-center();
+  @include flex-justify-center;
 
   .profile-initial {
     font-size: 12px;

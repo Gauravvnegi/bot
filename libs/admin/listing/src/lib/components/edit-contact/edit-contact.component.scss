@@ -68,7 +68,7 @@ td {
     background-color: $primary-cta;
     cursor: pointer;
     .save {
-      @include normalText;
+      @include normal-text;
       color: $white;
     }
   }

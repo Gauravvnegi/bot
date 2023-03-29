@@ -7,7 +7,7 @@
   @include flex-space-between-cen-Algn;
 
   &-heading {
-    @include normalText;
+    @include normal-text;
     color: $dark-blue;
   }
   &-clear {
@@ -109,7 +109,7 @@
   .applyBtn {
     width: 138px;
     height: 36px;
-    @include primaryButton();
+    @include primary-button;
     @include flex-all-center;
 
     &-text {

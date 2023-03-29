@@ -73,7 +73,7 @@
         justify-content: space-between;
         align-items: center;
         @media screen and (max-width: $L) {
-          font-size:12px;
+          font-size: 12px;
           div {
             color: $quote-color;
           }
@@ -85,7 +85,7 @@
       .progress {
         height: 10px;
         border-radius: 5px;
-        @include flex-item-center();
+        @include flex-item-center;
         background-color: rgb(20, 149, 164, 0.1);
         .high-risk {
           background-color: #e61042;

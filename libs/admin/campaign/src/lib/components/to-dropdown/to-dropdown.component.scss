@@ -1,16 +1,16 @@
 @import 'main';
 :host ::ng-deep {
   .mat-tab-header {
-    padding-bottom: $padding10;
+    padding-bottom: 10px;
     border-bottom: 1px solid $manually-contacts !important;
   }
   .mat-tab-label-content {
-    @include normalText;
+    @include normal-text;
     font-weight: normal;
     color: $mat-tab-label;
   }
   .mat-tab-label-active > .mat-tab-label-content {
-    @include normalText;
+    @include normal-text;
     color: $button-blue !important;
   }
   .mat-form-field-underline {
@@ -35,20 +35,20 @@
     margin-bottom: 7px;
   }
   .description {
-   @include flex-item-center;
+    @include flex-item-center;
     color: $c-gray-65;
   }
   .listing {
-   @include flex-space-between-cen-Algn;
+    @include flex-space-between-cen-Algn;
   }
 }
 
 .container {
-  @include normalText;
+  @include normal-text;
   font-weight: normal;
   .header {
-     @include flex-item-center;
-    width: $full;
+    @include flex-item-center;
+    width: 100%;
     .tab-group {
       width: calc(100% - 30px);
     }
@@ -72,7 +72,7 @@
     max-height: 170px;
     overflow-y: auto;
     .item-container {
-      @include flex-space-between();
+      @include flex-space-between;
       padding: 7px 15px;
       cursor: pointer;
       .data {

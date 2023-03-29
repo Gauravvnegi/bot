@@ -9,7 +9,7 @@
     background-color: $c-gray-103;
     @include flex-space-between-cen-Algn;
     .title {
-      @include normalText;
+      @include normal-text;
       color: $tooltip;
     }
     .close {
@@ -25,13 +25,13 @@
 .fields {
   @include flex-space-between-cen-Algn;
   margin-top: 10px;
-  width: $full;
+  width: 100%;
   @media (max-width: $tablet) {
     flex-wrap: wrap;
     gap: 60px;
   }
   .full-width {
-    width: $full !important;
+    width: 100% !important;
     .width {
       width: calc(100% - 150px);
     }
@@ -50,7 +50,7 @@
       font-size: 14px;
     }
     mat-form-field {
-      width: $full;
+      width: 100%;
     }
   }
 }

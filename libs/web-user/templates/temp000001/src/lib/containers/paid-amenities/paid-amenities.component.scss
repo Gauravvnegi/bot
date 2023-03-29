@@ -41,11 +41,11 @@
   box-shadow: 0px 0px 1px 0px lightgray;
   .slider__image {
     height: 200px;
-    width: $full-width;
+    width: 100%;
     position: relative;
     img {
       height: 100%;
-      width: $full-width;
+      width: 100%;
     }
     .amount {
       position: absolute;
@@ -57,12 +57,12 @@
     }
   }
   .slider__text {
-    padding: $padding-small;
+    padding: 10px;
     min-height: 86px;
     .label {
       font-size: $font-medium;
       font-weight: $bolder;
-      margin-bottom: $margin-small;
+      margin-bottom: 10px;
     }
     .description {
       font-size: $font-responsive-small;
@@ -204,8 +204,8 @@
   top: 8px;
   right: 8px;
   img {
-    height: $full-width;
-    width: $full-width;
+    height: 100%;
+    width: 100%;
   }
 }
 
@@ -225,7 +225,6 @@
     margin: 5px 25px 5px 10px;
     cursor: pointer;
   }
-  
 }
 .more-services {
   font-size: 18px;
@@ -241,7 +240,6 @@
   margin-bottom: 10px;
   transform: scale(1.1);
 }
-
 
 .mat-select-placeholder {
   color: #121212;

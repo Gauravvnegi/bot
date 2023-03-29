@@ -20,7 +20,7 @@
       height: 100%;
       width: 100%;
       z-index: 1;
-      @include flex-col-justCenter;
+      @include flex-col-justify-center;
       align-items: center;
       color: #002046;
       .text {

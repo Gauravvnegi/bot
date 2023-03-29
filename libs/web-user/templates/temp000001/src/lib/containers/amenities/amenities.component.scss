@@ -1,60 +1,60 @@
 @import 'temp000001';
-  .expand-icon {
-    margin-left: auto;
+.expand-icon {
+  margin-left: auto;
+}
+
+.hotel__services--images {
+  @include flex-all-center;
+  margin: 25px 0px;
+  flex-wrap: wrap;
+  @media only screen and (max-width: 900px) {
+    font-size: $font-responsive-small;
   }
-  
-  .hotel__services--images {
-    @include flex-all-center();
-    margin: 25px 0px;
-    flex-wrap: wrap;
+}
+
+.hotel-services-images {
+  width: 80px;
+
+  @media only screen and (max-width: 900px) {
+    width: 50px;
+  }
+}
+
+.img-with-text {
+  @include flex-item-center;
+  width: 25%;
+  flex-direction: column;
+  font-size: $font-medium;
+  font-weight: $bold;
+  @media only screen and (max-width: 900px) {
+    width: 50%;
+  }
+}
+
+.img-with-text {
+  .image {
+    border-radius: 50%;
+    background-color: #f3f3f3;
+    padding: 20px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  p {
+    margin-top: 20px;
     @media only screen and (max-width: 900px) {
-      font-size: $font-responsive-small;
+      font-size: $font-small;
+      margin: 10px auto;
     }
   }
+}
 
-  .hotel-services-images {
-    width: 80px;
-  
-    @media only screen and (max-width: 900px) {
-      width: 50px;
-    }
+:host ::ng-deep .mat-expansion-panel-body {
+  @media only screen and (max-width: $M) {
+    padding: 20px 5px !important;
   }
-
-  .img-with-text {
-    @include flex-item-center();
-    width: $quarter-width;
-    flex-direction: column;
-    font-size: $font-medium;
-    font-weight: $bold;
-    @media only screen and (max-width: 900px) {
-      width: 50%;
-    }
-  }
-
-  .img-with-text {
-    .image {
-      border-radius: $half-width;
-      background-color: #f3f3f3;
-      padding: $padding-large;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    p {
-      margin-top: $margin-large;
-      @media only screen and (max-width: 900px) {
-        font-size: $font-small;
-        margin: $margin-small auto;
-      }
-    }
-  }
-
-  :host ::ng-deep .mat-expansion-panel-body{
-    @media only screen and (max-width: $M) {
-      padding: $padding-large 5px !important;
-    }
-  }
-  :host ::ng-deep .mat-form-field-infix {
-    font-size: 18px !important;
-    color:#121212 !important;
-  }
+}
+:host ::ng-deep .mat-form-field-infix {
+  font-size: 18px !important;
+  color: #121212 !important;
+}

@@ -43,7 +43,7 @@
   align-items: center;
   margin: 25px;
   @media only screen and (max-width: $M) {
-    margin: $margin-medium;
+    margin: 15px;
   }
 }
 
@@ -96,7 +96,7 @@
   -webkit-border-radius: 25px;
   -moz-border-radius: 25px;
   border-radius: 50%;
-  background: #4B56C0;
+  background: #4b56c0;
 }
 
 .labl > input:checked + div > .circle {

@@ -20,7 +20,7 @@
 .modal-header {
   padding: 2px 8px;
   display: flex;
-  padding-bottom: $padding-small;
+  padding-bottom: 10px;
   width: 100%;
   position: relative;
   box-sizing: border-box;
@@ -29,9 +29,8 @@
 .close_wrapper {
   position: absolute;
   right: 14px;
-  
-    top: 0;
-  
+
+  top: 0;
 }
 
 .temp-div {
@@ -43,9 +42,9 @@
 
 .modal-title {
   text-align: center;
-  width:  auto;
+  width: auto;
   .title {
-    margin-bottom: $margin-small;
+    margin-bottom: 10px;
     margin-top: 0.75rem;
   }
   p {
@@ -60,18 +59,14 @@
   }
   @media only screen and (max-width: $M) {
     font-size: $font-responsive-small;
-
-   
   }
-  @media screen and (max-width:700px) {
+  @media screen and (max-width: 700px) {
     width: 60%;
   }
-  
-  @media screen and (min-width:$M) {
+
+  @media screen and (min-width: $M) {
     width: 38%;
-    
   }
- 
 }
 
 .close {

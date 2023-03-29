@@ -13,10 +13,10 @@
   background-color: $header-background;
   @include flex-space-between-cen-Algn;
   &__title-container {
-    @include flex-item-center();
+    @include flex-item-center;
     .title {
       margin-left: 10px;
-      @include normalText;
+      @include normal-text;
 
       color: $primary-black;
     }
@@ -28,17 +28,17 @@
 }
 
 .body {
-  @include flex-col-spaceAround;
+  @include flex-col-space-around;
   height: calc(100% - 51.7px);
   padding: 18px;
   &__text {
-    @include normalText;
+    @include normal-text;
     text-align: center;
     color: $primary-black;
     margin: 19px 0;
   }
   .btn-container {
-    @include flex-all-center();
+    @include flex-all-center;
     margin: 22px 0;
     .btn {
       width: 113px;
@@ -86,7 +86,7 @@
 .allow-body {
   padding: 26px 36px 51px 58px;
   &__text {
-    @include normalText;
+    @include normal-text;
     color: $primary-black;
     margin: 0 0 30px 20px;
   }

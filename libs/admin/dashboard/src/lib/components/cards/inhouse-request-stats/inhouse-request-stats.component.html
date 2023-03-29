@@ -1,7 +1,13 @@
 <div class="chart__wrapper">
   <div class="chart__wrapper--container">
     <div class="labels">
-      <div class="val">{{ inhouseRequest.pending+inhouseRequest.completed +  inhouseRequest.timeout}}</div>
+      <div class="val">
+        {{
+          inhouseRequest.pending +
+            inhouseRequest.completed +
+            inhouseRequest.timeout
+        }}
+      </div>
       <div class="label">Total Count</div>
     </div>
     <canvas
@@ -20,7 +26,7 @@
     <div>
       <div class="inhouse--chart-rightblock--status">
         <div class="inhouse--chart-rightblock--status--sqaure complete"></div>
-        <div class="inhouse--chart-rightblock--status--normaltext">
+        <div class="inhouse--chart-rightblock--status--normal-text">
           {{ inhouseRequest.completed }}
         </div>
         <div
@@ -40,18 +46,18 @@
             alt="uparrow"
           />
         </div>
-        <div class="inhouse--chart-rightblock--status--normaltext-2">
+        <div class="inhouse--chart-rightblock--status--normal-text-2">
           {{ 'compareDays_text' | translate }}
         </div>
       </div>
-      <div class="inhouse--chart-rightblock--normaltext2">
+      <div class="inhouse--chart-rightblock--normal-text2">
         {{ 'card.inhouse.tab.request.completed' | translate }}
       </div>
     </div>
     <div class="inhouseWrapper">
       <div class="inhouse--chart-rightblock--status">
         <div class="inhouse--chart-rightblock--status--sqaure pending"></div>
-        <div class="inhouse--chart-rightblock--status--normaltext">
+        <div class="inhouse--chart-rightblock--status--normal-text">
           {{ inhouseRequest.pending }}
         </div>
         <div
@@ -71,18 +77,18 @@
             alt="uparrow"
           />
         </div>
-        <div class="inhouse--chart-rightblock--status--normaltext-2">
+        <div class="inhouse--chart-rightblock--status--normal-text-2">
           {{ 'compareDays_text' | translate }}
         </div>
       </div>
-      <div class="inhouse--chart-rightblock--normaltext2">
+      <div class="inhouse--chart-rightblock--normal-text2">
         {{ 'card.inhouse.tab.request.pending' | translate }}
       </div>
     </div>
     <div>
       <div class="inhouse--chart-rightblock--status">
         <div class="inhouse--chart-rightblock--status--sqaure timeout"></div>
-        <div class="inhouse--chart-rightblock--status--normaltext">
+        <div class="inhouse--chart-rightblock--status--normal-text">
           {{ inhouseRequest.timeout }}
         </div>
         <div
@@ -102,11 +108,11 @@
             alt="uparrow"
           />
         </div>
-        <div class="inhouse--chart-rightblock--status--normaltext-2">
+        <div class="inhouse--chart-rightblock--status--normal-text-2">
           {{ 'compareDays_text' | translate }}
         </div>
       </div>
-      <div class="inhouse--chart-rightblock--normaltext2">
+      <div class="inhouse--chart-rightblock--normal-text2">
         {{ 'card.inhouse.tab.request.timeout' | translate }}
       </div>
     </div>

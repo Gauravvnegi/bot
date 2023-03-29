@@ -65,7 +65,7 @@
     display: flex;
     align-items: center;
     button {
-      margin: 0 $margin10;
+      margin: 0 10px;
       border: none;
       outline: none;
       background: transparent;
@@ -79,7 +79,7 @@
 .data-wrapper {
   display: flex;
   flex-wrap: wrap;
-  margin: $margin20 3px;
+  margin: 20px 3px;
   .field {
     width: 20%;
     font-weight: 500;
@@ -88,7 +88,7 @@
       color: $primary-gray;
     }
     .value {
-      margin-top: $margin10;
+      margin-top: 10px;
       color: $primary-black;
       word-break: break-word;
     }

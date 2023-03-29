@@ -2,15 +2,15 @@
 @import '../../../../../shared/src/lib/components/form-component/input/input.component.scss';
 
 .dropdown {
-  width: $full;
+  width: 100%;
   position: absolute;
   top: calc(100% - 12px);
   left: 0px;
   z-index: 112;
-  border-radius: $border10;
+  border-radius: 10px;
   box-shadow: 3px 9px 20px 0 $dropdown-hover-background;
   background-color: $white;
-  padding: $padding15;
+  padding: 15px;
 }
 
 .disabledBtn {

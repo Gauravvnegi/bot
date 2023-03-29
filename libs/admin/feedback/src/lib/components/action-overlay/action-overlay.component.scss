@@ -26,11 +26,11 @@ button {
   border-radius: 4px;
   box-shadow: 2px 6px 12px 0 $exampleList-box-shadow;
   background-color: $white;
-  @include flex-col-spaceBetween-centerAlgn;
+  @include flex-col-space-between-center-algn;
 }
 
 .comment {
-  width: $full;
+  width: 100%;
 }
 
 .material-icons {

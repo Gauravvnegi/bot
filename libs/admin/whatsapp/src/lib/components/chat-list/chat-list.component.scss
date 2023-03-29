@@ -24,7 +24,7 @@
     height: calc(100% - 62px);
     overflow: auto;
     .chatlist-item-wrapper {
-      @include chatList();
+      @include chat-list;
     }
   }
   .no-contact {

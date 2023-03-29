@@ -21,7 +21,7 @@
   }
   &--heading {
     white-space: nowrap;
-    margin: $margin-medium 0px;
+    margin: 15px 0px;
     font-weight: $bolder;
     padding-left: 1rem;
     @media screen and (max-width: 500px) {
@@ -45,7 +45,7 @@
 }
 
 :host ::ng-deep .mat-form-field {
-  width: $full-width;
+  width: 100%;
 }
 
 :host ::ng-deep .mat-form-field-infix > textarea::placeholder {
@@ -69,7 +69,7 @@
 }
 
 .user-button {
-  @include flex-justify-center();
+  @include flex-justify-center;
   margin-top: 1rem;
   @media screen and (max-width: 600px) {
     margin-top: 0;
@@ -77,7 +77,7 @@
 }
 
 :host ::ng-deep .mat-raised-button {
-  @include primary-button();
+  @include primary-button;
 }
 :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
   margin-left: 1rem;
@@ -87,7 +87,7 @@
 @media screen and (max-width: 650px) {
   .popup__wrapper {
     position: relative;
-    width: $full !important;
+    width: 100% !important;
   }
 }
 

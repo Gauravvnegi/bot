@@ -19,38 +19,37 @@
 }
 
 mat-icon {
-  @include mat-icon();
+  @include mat-icon;
   color: $primary-blue;
   padding: 10px;
 }
 
 .example-button-row {
-  @include template-footer-button();
+  @include template-footer-button;
 }
 
 :host ::ng-deep .back-button {
-  @include footer-back();
+  @include footer-back;
 }
 :host ::ng-deep .next-button {
-  @include footer-next();
+  @include footer-next;
 }
 
 @media only screen and (max-width: $M) {
   .user-button {
-    width: $half-width;
+    width: 50%;
   }
 }
 
-
-:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple{
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
   background-color: $primary-blue;
 }
 
-:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-label{
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
   color: $primary-blue;
 }
 
-:host ::ng-deep .mat-form-field.mat-focused .material-icons{
+:host ::ng-deep .mat-form-field.mat-focused .material-icons {
   color: $primary-blue;
 }
 

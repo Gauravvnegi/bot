@@ -12,7 +12,7 @@
   justify-content: space-between;
   align-items: center;
   &-text {
-    @include normalText;
+    @include normal-text;
     color: $dark-blue;
     opacity: 1;
   }
@@ -26,7 +26,7 @@
       .filter {
         font-size: 14px;
         font-weight: 500;
-        
+
         letter-spacing: 0.56px;
         color: $primary-gray;
         margin-right: 5px;
@@ -114,7 +114,7 @@
   .applyBtn {
     width: 138px;
     height: 36px;
-    @include primaryButton();
+    @include primary-button;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -140,5 +140,3 @@
     color: $primary-cta;
   }
 }
-
-

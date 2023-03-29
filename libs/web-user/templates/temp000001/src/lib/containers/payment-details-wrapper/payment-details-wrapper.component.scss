@@ -1,9 +1,5 @@
 @import 'temp000001';
 
-
-
-
-
 :host ::ng-deep .svg-payment > svg {
   height: 48px;
   width: 48px;
@@ -15,18 +11,18 @@
 
 .payment-wrapper {
   background-color: $white;
-  border-radius: 0 0 $border-radius-small $border-radius-small;
+  border-radius: 0 0 10px 10px;
   padding-bottom: 20px;
 }
 
 :host ::ng-deep .mat-tab-header {
-  border-radius: $border-radius-small $border-radius-small 0 0;
+  border-radius: 10px 10px 0 0;
   border-bottom: none;
   background-color: white;
 }
 
 :host ::ng-deep .mat-tab-label {
-  padding: $padding-large;
+  padding: 20px;
   height: auto;
   width: 100%;
   opacity: 1;
@@ -39,7 +35,7 @@
     filter: contrast(0);
   }
   @media only screen and (max-width: $M) {
-    padding: $padding-small;
+    padding: 10px;
   }
 }
 
@@ -123,12 +119,12 @@
 }
 
 :host ::ng-deep .payment__wrapper__heading {
-  padding: $padding-medium;
+  padding: 15px;
   font-size: $font-large;
   font-weight: $bolder;
   @media only screen and (max-width: $tab-size) {
     font-size: $font-medium;
-    padding: $padding-small;
+    padding: 10px;
   }
 }
 

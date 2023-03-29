@@ -1,6 +1,6 @@
 // Mixins
 
-@mixin half-circle() {
+@mixin half-circle {
   content: '';
   width: 15px;
   height: 20px;
@@ -12,7 +12,7 @@
   transform: translateY(-50%);
 }
 
-@mixin primary-button() {
+@mixin primary-button {
   background: var(
     --primary-button-background-color,
     $primary-button-background-color
@@ -28,7 +28,7 @@
   }
 }
 
-@mixin secondary-button() {
+@mixin secondary-button {
   color: var(--secondary-button-font-color, $secondary-button-font-color);
   width: 200px;
   height: 45px;
@@ -45,35 +45,24 @@
   }
 }
 
-@mixin mat-icon() {
-  margin-right: $margin-small;
+@mixin mat-icon {
+  margin-right: 10px;
   width: 20px;
   height: 20px;
   font-size: $font-medium;
 }
 
-@mixin template-footer-button() {
+@mixin template-footer-button {
   display: flex;
   justify-content: center;
   @media only screen and (max-width: $M) {
     position: fixed;
     bottom: 0px;
-    width: $full-width;
+    width: 100%;
     z-index: 222;
   }
 }
 
-@mixin payment-body() {
-  content: '';
-  width: 15px;
-  height: 20px;
-  position: absolute;
-  background-color: $white;
-  border: 2px solid #e6e6e6;
-  top: 50%;
-  box-sizing: border-box;
-  transform: translateY(-50%);
-}
 
 @mixin flex-col-center-align {
   display: flex;

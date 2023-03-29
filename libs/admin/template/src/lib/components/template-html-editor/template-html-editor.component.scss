@@ -1,7 +1,7 @@
 @import 'main';
 
 .form-block {
-  @include formBlock();
+  @include form-block;
   .shared-field {
     color: $primary-gray;
     mat-label {
@@ -13,7 +13,7 @@
     }
   }
   .import {
-    @include import();
+    @include import;
     justify-content: flex-end;
   }
   .asset-enable {

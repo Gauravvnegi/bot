@@ -10,7 +10,7 @@
   height: 100%;
   position: relative;
   &-stats-header {
-    @include normalText;
+    @include normal-text;
     text-align: center;
     color: $tooltip;
   }
@@ -27,10 +27,10 @@
       top: 0;
       left: 0;
       @include flex-all-center;
-      @include fullImg;
+      @include full-img;
     }
     &-total {
-      @include fullImg;
+      @include full-img;
       @include flex-col-all-Center;
       letter-spacing: 0.96px;
       text-align: center;
@@ -60,7 +60,7 @@
           color: $quote-color;
         }
         .value {
-          @include flex-row-justEnd;
+          @include flex-row-justify-end;
           font-size: 12px;
           font-weight: bold;
           letter-spacing: 0.72px;
@@ -86,7 +86,7 @@
   &-footer {
     position: absolute;
     bottom: 20px;
-    @include normalText;
+    @include normal-text;
     color: $c-gray-72;
     font-size: 10px;
     @media screen and(max-width:$L) {

@@ -26,7 +26,7 @@
     .heading {
       font-size: 35px;
       font-weight: $bold;
-      margin: $margin-large 0;
+      margin: 20px 0;
       @media only screen and (max-width: $M) {
         font-size: 25px;
       }
@@ -34,7 +34,7 @@
     .sub_heading {
       font-size: 28px;
       font-weight: 500;
-      margin-bottom: $margin-large;
+      margin-bottom: 20px;
       @media only screen and (max-width: $T) {
         font-size: 16px;
       }
@@ -45,14 +45,14 @@
       min-width: 70%;
       justify-content: center;
       p {
-        margin-left: $margin-medium;
+        margin-left: 15px;
       }
     }
   }
 }
 
 :host ::ng-deep .next-button {
-  @include footer-next();
+  @include footer-next;
   @media only screen and (max-width: $M) {
     width: 100vw !important;
   }

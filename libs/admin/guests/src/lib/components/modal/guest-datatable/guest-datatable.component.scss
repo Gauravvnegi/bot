@@ -7,7 +7,7 @@
 .tableHead {
   width: 5%;
   background-color: $c-gray-93 !important;
-  @include align-checkbox();
+  @include align-checkbox;
 }
 
 .table-container {

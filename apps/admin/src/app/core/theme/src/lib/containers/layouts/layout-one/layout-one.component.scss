@@ -1,7 +1,7 @@
 @import 'main';
 
 .layoutMessageCheck {
-  @include flex-between-center();
+  @include flex-between-center;
   width: 75%;
   .margBtm {
     margin-bottom: -6px;
@@ -37,7 +37,7 @@
 
 .flash-notification {
   position: absolute;
-  @include flex-justify-center();
+  @include flex-justify-center;
   left: 80px;
   right: 0;
   z-index: $right-side-panel-z;
@@ -54,7 +54,7 @@
 .filter-range-wrapper {
   width: 30%;
 
-  @include flex-between-center();
+  @include flex-between-center;
   @media (max-width: $L) {
     @include flex-start;
     gap: 2%;
@@ -76,7 +76,7 @@
 }
 
 .notification-wrapper {
-  @include flex-between-center();
+  @include flex-between-center;
   .temp-width {
     width: 100%;
     @media only screen and (max-width: 800px) {
@@ -111,14 +111,14 @@
   overflow-x: hidden;
   overflow-y: hidden;
   &--header {
-    padding: 6px 0 6px $padding10;
+    padding: 6px 0 6px 10px;
     position: relative;
     @media (max-width: $tablet) {
       width: 90%;
       margin-left: auto;
     }
     .options {
-      @include flex-between-center();
+      @include flex-between-center;
       @media (max-width: $tablet) {
         height: 53px;
         @include flex-start;
@@ -126,7 +126,7 @@
         gap: 1.4%;
       }
       .search-bar-wrapper {
-        @include flex-item-center();
+        @include flex-item-center;
       }
       .global_search {
         position: relative;
@@ -145,7 +145,7 @@
         border: none;
         font-size: 12px;
         color: $primary-cta;
-        @include flex-between-center();
+        @include flex-between-center;
         background-color: $white;
         border-radius: 5px;
         position: relative;
@@ -284,10 +284,10 @@
 }
 
 .refresh__wrapper {
-  @include flex-item-center();
+  @include flex-item-center;
   padding: 0 13px;
   &--icon {
-    @include flex-item-center();
+    @include flex-item-center;
     font-size: 13px;
     color: $primary-cta;
     font-weight: $medium;
@@ -315,7 +315,7 @@
 .sidebar-background {
   position: absolute;
   z-index: 0;
-  @include fullImg-cover;
+  @include full-img-cover;
   display: block;
   top: 0;
   left: 0;
@@ -345,7 +345,7 @@
 }
 
 .options2 {
-  @include flex-row-justEnd;
+  @include flex-row-justify-end;
   flex: 2;
 }
 

@@ -4,7 +4,7 @@
   @include flex-col-all-Center;
 }
 .stat-val-wrapper {
-  @include flex-item-center();
+  @include flex-item-center;
 }
 .stat-value {
   font: normal normal bold 35px/46px Roboto;
@@ -58,7 +58,7 @@
 }
 
 .progress-info-labels {
-  @include flex-item-center();
+  @include flex-item-center;
   color: $dark-blue;
   .label {
     letter-spacing: 0.72px;

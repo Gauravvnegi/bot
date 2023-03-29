@@ -79,8 +79,8 @@
 }
 
 .empty {
-  height: $full;
-  width: $full;
+  height: 100%;
+  width: 100%;
   @include flex-col-all-Center;
   &__img {
     img {
@@ -90,7 +90,7 @@
   }
   &__title {
     margin: 12px 0;
-    @include normalText;
+    @include normal-text;
     font-weight: bold;
     color: $dark-blue;
   }

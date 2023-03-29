@@ -16,11 +16,11 @@
 }
 ::ng-deep .drp-buttons {
   .cancelBtn {
-    @include secondaryButton();
+    @include secondary-button;
     width: 6vw;
   }
   .applyBtn {
-    @include primaryButton();
+    @include primary-button;
     width: 6vw;
   }
 }

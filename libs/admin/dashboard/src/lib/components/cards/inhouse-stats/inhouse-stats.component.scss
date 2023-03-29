@@ -12,7 +12,7 @@
   }
   &--container {
     width: 45%;
-    height: $full;
+    height: 100%;
     transform: scale(1.5) translateY(17%);
 
     @media only screen and (min-width: $XL) {
@@ -27,10 +27,10 @@
     }
   }
   .chartDetailsWrapper {
-    @include flex-col-spaceBetween;
+    @include flex-col-space-between;
     height: 124px;
     .currentChart {
-      @include flex-item-center();
+      @include flex-item-center;
       .currentChartHeading {
         text-align: center;
         font: normal normal bold 35px/46px Roboto;
@@ -62,7 +62,7 @@
     .chartsubDetailsWrapper {
       display: flex;
       .chartsubDetail {
-        @include flex-item-center();
+        @include flex-item-center;
         margin-right: 25px;
         @media (max-width: $tablet) {
           margin-right: 10px;
@@ -97,7 +97,7 @@
         opacity: 1;
       }
       .chartsubRightDetail {
-        @include flex-item-center();
+        @include flex-item-center;
       }
     }
   }
@@ -110,7 +110,7 @@
 
 .progress-info-labels {
   letter-spacing: 0.72px;
-  @include flex-baseAlgn;
+  @include flex-base-algn;
   font-size: 12px;
   .stat-image {
     height: 23px;
@@ -119,7 +119,7 @@
 }
 
 .progress-info-labels-container {
-  @include flex-space-around();
+  @include flex-space-around;
 }
 
 // ===================Semi Donut Chart model-1========================
@@ -134,7 +134,7 @@
   font-size: 22px;
   overflow: hidden;
   color: var(--fill);
-  @include flex-justify-center-endAlgn();
+  @include flex-justify-center-end-algn();
   box-sizing: border-box;
   &:after {
     content: '';
@@ -143,7 +143,7 @@
     border: 20px solid;
     border-color: $semiDonut-border $semiDonut-border var(--fill) var(--fill);
     position: absolute;
-    border-radius: $half;
+    border-radius: 50%;
     left: 0;
     top: 0;
     box-sizing: border-box;
@@ -171,7 +171,7 @@
 }
 
 .progress-detail-contaner {
-  @include flex-col-centerAlgn;
+  @include flex-col-center-algn;
 }
 
 .stat-value {
@@ -193,9 +193,9 @@
 }
 
 :host ::ng-deep .mat-tab-label {
-  width: $half;
+  width: 50%;
 
-  min-width: $half;
+  min-width: 50%;
   padding: 0 12px;
 }
 
@@ -218,7 +218,7 @@
 @media screen and (max-width: $L) {
   :host::ng-deep {
     .mat-tab-label {
-      min-width: $half;
+      min-width: 50%;
       padding: 0 12px;
     }
     .mat-tab-label-active {

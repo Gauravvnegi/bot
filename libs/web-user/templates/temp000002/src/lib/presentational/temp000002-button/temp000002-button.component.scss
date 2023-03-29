@@ -1,10 +1,10 @@
 @import 'temp000002';
 
 :host ::ng-deep .back-button {
-  @include footer-back();
+  @include footer-back;
 }
 :host ::ng-deep .next-button {
-  @include footer-next();
+  @include footer-next;
 }
 
 :host ::ng-deep .mat-button-wrapper {

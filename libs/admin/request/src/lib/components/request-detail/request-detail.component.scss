@@ -94,7 +94,7 @@ td {
         }
       }
       &-title {
-        @include normalText;
+        @include normal-text;
         font-size: 14px;
         color: $dark-blue;
       }
@@ -186,14 +186,14 @@ td {
   }
   &__title {
     margin: 12px 0;
-    @include normalText;
+    @include normal-text;
     color: $dark-blue;
     font-weight: bold;
   }
   &__description {
     font-size: 12px;
     font-weight: bold;
-   
+
     letter-spacing: 0.72px;
     text-align: left;
     color: $c-gray-77;

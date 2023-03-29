@@ -82,7 +82,7 @@
 }
 
 .nationality-wrapper {
-  @include flex-baseAlgn;
+  @include flex-base-algn;
   .text {
     color: $primary-gray;
     margin-right: 7px;
@@ -137,7 +137,7 @@
 .pending-button-wrapper {
   @include flex-space-between-cen-Algn;
   .decision-button-wrapper {
-   @include flex-item-center;
+    @include flex-item-center;
     margin-right: 10px;
     button {
       margin: 0 10px;
@@ -159,7 +159,7 @@
     font-weight: $bolder;
     margin-right: 15px;
   }
-  @include flex-baseAlgn;
+  @include flex-base-algn;
 }
 
 :host ::ng-deep .remark {

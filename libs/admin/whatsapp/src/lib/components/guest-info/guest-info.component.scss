@@ -29,7 +29,7 @@
 .guestInfoEditContainer {
   width: 138px;
   height: 36px;
-  @include primaryButton();
+  @include primary-button;
   display: flex;
   align-items: center;
   justify-content: center;

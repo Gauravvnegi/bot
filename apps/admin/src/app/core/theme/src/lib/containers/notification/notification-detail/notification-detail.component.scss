@@ -1,12 +1,12 @@
 @import 'main';
 .detail--container {
   .header {
-    @include flex-between-center();
+    @include flex-between-center;
     padding: 14px 17px 12.7px 24px;
     background-color: $header-background;
     &__title {
-      @include flex-item-center();
-      @include normalText;
+      @include flex-item-center;
+      @include normal-text;
       color: $tooltip;
       img {
         margin-right: 10px;
@@ -21,11 +21,11 @@
     min-width: 550px;
     .message {
       padding: 7px 0 27px 0;
-      @include normalText;
+      @include normal-text;
       color: $tooltip;
     }
     .footer {
-      @include flex-justify-center();
+      @include flex-justify-center;
       .redirect-btn {
         padding: 10px;
         border-radius: 18px;
@@ -35,7 +35,7 @@
         font-weight: $medium;
         cursor: pointer;
         min-width: 180px;
-        @include flex-justify-center();
+        @include flex-justify-center;
         &:active {
           transform: scale(0.98);
         }

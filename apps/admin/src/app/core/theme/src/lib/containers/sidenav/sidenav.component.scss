@@ -21,7 +21,7 @@
     height: 40px;
     width: 65px;
     img {
-      @include fullImg;
+      @include full-img;
     }
   }
   @media screen and (max-width: $tablet) {
@@ -81,7 +81,7 @@
         height: 18px;
         margin: auto;
         img {
-          @include fullImg;
+          @include full-img;
         }
       }
     }
@@ -135,7 +135,7 @@
     width: 18px;
     height: 18px;
     img {
-      @include fullImg;
+      @include full-img;
     }
   }
 }
@@ -171,7 +171,7 @@
     }
   }
   img {
-    @include fullImg;
+    @include full-img;
   }
 }
 

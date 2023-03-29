@@ -1,11 +1,11 @@
 @import 'main';
 
 .header {
-  @include flex-space-between();
+  @include flex-space-between;
 }
 
 .option {
-  @include flex-item-center();
+  @include flex-item-center;
   cursor: pointer;
   height: 30px;
   position: relative;
@@ -14,7 +14,7 @@
     height: 8px;
     margin-left: 7px;
     background-color: $c-gray-18;
-    border-radius: $half;
+    border-radius: 50%;
   }
   &:hover {
     .dropdown {
@@ -66,7 +66,7 @@
 }
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
   color: $primary-cta !important;
-  font-size: 16 !important;
+  font-size: 16px !important;
 }
 
 :host ::ng-deep .header {
@@ -95,7 +95,7 @@
 }
 
 .stats-container {
-  @include flex-wrap-centerAlgn();
+  @include flex-wrap-center-algn;
 }
 
 .stat-chip {
@@ -103,7 +103,7 @@
   padding: 6.6px 7.4px 6.6px 9.7px;
   border-radius: 15.5px;
   background-color: $navy-blue1;
-  @include flex-item-center();
+  @include flex-item-center;
   margin: 0 10px 10px 0;
   &__value {
     margin-left: 3px;
@@ -189,10 +189,10 @@
 
 // *** over ride the table style ***
 :host ::ng-deep .p-datatable {
-  @include table-cell-padding(1em);
+  @include tableCellPadding(1em);
 }
 
 // *** over ride the table style ***
 :host ::ng-deep .p-datatable {
-  @include table-cell-padding(1em);
+  @include tableCellPadding(1em);
 }

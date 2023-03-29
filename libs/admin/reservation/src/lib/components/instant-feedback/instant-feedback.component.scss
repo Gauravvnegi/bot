@@ -46,7 +46,7 @@
       font-family: Roboto;
       font-size: 12px;
       font-weight: bold;
-      
+
       letter-spacing: 0.24px;
       color: $question;
       margin: 5px 0;
@@ -54,10 +54,10 @@
     .answer {
       font-family: Roboto;
       font-size: 12px;
-      
+
       line-height: 1.67;
       letter-spacing: 0.24px;
-    
+
       color: $quote-color;
     }
   }
@@ -65,7 +65,7 @@
 
 .data-seperator {
   border: 2px solid $primary-cta;
-  margin: $margin20 0px;
+  margin: 20px 0px;
   opacity: 0.1;
 }
 

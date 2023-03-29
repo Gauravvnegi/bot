@@ -5,7 +5,7 @@
   grid-template-columns: 33% 33% 33%;
   align-items: center;
   background-color: var(--footer-background-color, $footer-background-color);
-  padding: $padding-medium;
+  padding: 15px;
   @media screen and (min-width: $M) {
     position: fixed;
     bottom: 0;
@@ -15,14 +15,14 @@
   }
   &--text {
     font-size: $font-responsive-small;
-    @include flex-justify-center();
+    @include flex-justify-center;
     flex-direction: column;
-    margin: 0px $margin-small;
-       
-    @media only screen and (max-width:$S) {
-      margin: $margin-small 0;
+    margin: 0px 10px;
+
+    @media only screen and (max-width: $S) {
+      margin: 10px 0;
     }
-  
+
     .footer-privacy-text {
       text-align: center;
       color: var(--footer-font-color, $footer-font-color);
@@ -37,17 +37,17 @@
     }
 
     .social_icons {
-      @include flex-justify-center();
+      @include flex-justify-center;
 
       align-items: center;
-      margin-bottom: $margin-small;
+      margin-bottom: 10px;
       .icon {
         height: 30px;
         width: 30px;
         margin: 0px 5px;
         img {
-          height: $full-width;
-          width: $full-width;
+          height: 100%;
+          width: 100%;
         }
       }
     }
@@ -61,7 +61,6 @@
           width: 25px;
           margin: 0px 2px;
         }
-       
       }
     }
   }
@@ -94,10 +93,8 @@
       }
     }
     @media only screen and (max-width: $M) {
-      
       white-space: nowrap;
-      
-     
+
       // margin: 0 0 3rem;
       .text {
         font-size: $font-responsive-smaller;
@@ -108,18 +105,18 @@
         margin: 10px;
       }
     }
-    @media only screen and (max-width:$S) {
+    @media only screen and (max-width: $S) {
       justify-content: center;
     }
   }
   @media only screen and (max-width: $M) {
     // grid-template-columns: 25% 25% 50%;
-  margin-bottom: 45px !important;
+    margin-bottom: 45px !important;
   }
-  @media only screen and (max-width:$S) {
+  @media only screen and (max-width: $S) {
     grid-template-columns: 100%;
     text-align: center;
     margin-bottom: 2rem;
-    padding: $padding-medium 0;
+    padding: 15px 0;
   }
 }

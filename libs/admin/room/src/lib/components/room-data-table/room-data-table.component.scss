@@ -10,7 +10,7 @@
 
 .main-checkbox {
   width: 5%;
-  @include align-checkbox();
+  @include align-checkbox;
 }
 
 .room-no {
@@ -54,7 +54,7 @@
 
 // *** over ride the table style ***
 :host ::ng-deep .p-datatable {
-  @include table-cell-padding(1em);
+  @include tableCellPadding(1em);
 }
 
 .amenities {

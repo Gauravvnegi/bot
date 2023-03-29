@@ -6,7 +6,7 @@
   .icon {
     width: 32%;
     margin: 6% 0.5%;
-    @include flex-col-centerAlgn();
+    @include flex-col-center-algn();
     z-index: 2;
     .table-body-journey-icon {
       height: 14px;
@@ -132,8 +132,8 @@ img {
   }
   .feedback-msg {
     position: absolute;
-    width: $full;
-    top: $half;
+    width: 100%;
+    top: 50%;
     font-size: 12px;
     color: $dark-grey;
     background-color: $white;
@@ -153,7 +153,7 @@ img {
     margin: 0 2px;
     text-align: center;
     min-width: 23px;
-    border-radius: $half;
+    border-radius: 50%;
     font-size: 12px;
   }
   @media screen and (max-width: 1050px) {
@@ -180,7 +180,7 @@ img {
 .tableHeading {
   width: 5%;
   background-color: $c-gray-93 !important;
-  @include align-checkbox();
+  @include align-checkbox;
 }
 
 :host ::ng-deep input[disabled='true'] {
@@ -283,7 +283,7 @@ img {
 }
 
 .mark-btn-container {
-  @include flex-centerAlgn-justEnd;
+  @include flex-center-algn-justify-end;
   flex: 1;
   @media (max-width: 992px) {
     min-width: 193px;
@@ -306,13 +306,13 @@ img {
       position: absolute;
       z-index: 1;
       bottom: 150%;
-      left: $half;
+      left: 50%;
       margin-left: -60px;
       &::after {
         content: '';
         position: absolute;
-        top: $full;
-        left: $half;
+        top: 100%;
+        left: 50%;
         margin-left: -5px;
         border-width: 5px;
         border-style: solid;
@@ -383,7 +383,7 @@ img {
   }
 }
 .feedback-service {
-  @include flex-wrap-centerAlgn;
+  @include flex-wrap-center-algn;
   &__container {
     @include flex-item-center;
     padding: 2px 0;
@@ -400,7 +400,7 @@ img {
       border-radius: 20px;
       background-color: $list-popup;
       padding: 4px 10px;
-      max-width: $full;
+      max-width: 100%;
       &__text {
         color: $primary-cta;
         padding-top: 2px;
@@ -454,8 +454,8 @@ img {
   }
   .feedback-msg {
     position: absolute;
-    width: $full;
-    top: $half;
+    width: 100%;
+    top: 50%;
     font-size: 12px;
     color: $dark-grey;
     background-color: $white;
@@ -474,9 +474,9 @@ img {
     margin: 0 0px;
     text-align: center;
     min-width: 18px;
-    border-radius: $half;
+    border-radius: 50%;
     font-size: 8px;
-    height: $full;
+    height: 100%;
     @include flex-all-center;
   }
 
@@ -536,7 +536,7 @@ img {
   height: 38px;
   width: 38px;
   @include flex-all-center;
-  border-radius: $half;
+  border-radius: 50%;
   img {
     height: 15px;
   }
@@ -584,5 +584,5 @@ img {
 
 // *** over ride the table style ***
 :host ::ng-deep .p-datatable {
-  @include table-cell-padding(0.3em);
+  @include tableCellPadding(0.3em);
 }

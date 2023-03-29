@@ -11,7 +11,7 @@
 }
 
 .form-block {
-  @include formBlock();
+  @include form-block;
 }
 
 .payment-form {
@@ -20,7 +20,7 @@
   border-radius: 5px;
 
   &__header {
-    @include formHeader();
+    @include form-header;
     padding: $form-padding-y $form-padding-x;
     height: 74px;
     display: flex;
@@ -95,7 +95,7 @@
 :host ::ng-deep .form-accordion {
   .p-accordion {
     .p-accordion-header-link {
-      @include formHeader();
+      @include form-header;
       &:focus {
         background: white;
       }

@@ -8,8 +8,8 @@
   top: 0;
   left: 0;
   z-index: -1;
-  min-width: $full-width;
-  min-height: $full-width;
+  min-width: 100%;
+  min-height: 100%;
   @media only screen and (max-width: $M) {
     background: white;
   }
@@ -40,10 +40,10 @@
 }
 
 :host ::ng-deep .main-template-button {
-  @include template-footer-button();
+  @include template-footer-button;
   @media only screen and (max-width: $M) {
     hospitality-bot-temp000002-button {
-      width: $full-width;
+      width: 100%;
     }
     left: 0;
   }
@@ -52,7 +52,7 @@
 :host ::ng-deep .container {
   max-width: 100%;
   margin: 0 auto;
-  margin-bottom: $margin-large;
+  margin-bottom: 20px;
 
   &__title {
     font-size: 25px;
@@ -60,10 +60,10 @@
     color: var(--accordian-font-color, $accordian-font-color);
   }
   @media only screen and (max-width: $M) {
-    margin: $margin-small;
+    margin: 10px;
     overflow: scroll;
     overflow-x: hidden;
-    border-radius: $border-radius-smaller;
+    border-radius: 5px;
     height: auto;
   }
   @media only screen and (max-width: $S) {
@@ -113,7 +113,7 @@
     width: 30px;
   }
   &-expansion-panel {
-    margin-bottom: $margin-large !important;
+    margin-bottom: 20px !important;
     background: var(--accordian-background-color, $accordian-background-color);
     border-radius: 0 !important;
     box-shadow: none !important;
@@ -133,7 +133,7 @@
     }
   }
   &-expansion-panel-body {
-    padding: $padding-large $padding30 !important;
+    padding: 20px 30px !important;
     position: relative;
     margin: 0;
     border: 1px solid #d9d9d9;

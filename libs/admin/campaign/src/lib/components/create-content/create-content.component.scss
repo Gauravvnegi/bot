@@ -1,7 +1,7 @@
 @import 'main';
 
 .wrapper {
-  @include formBlock();
+  @include form-block;
   .manually-add {
     display: flex;
     justify-content: space-evenly;

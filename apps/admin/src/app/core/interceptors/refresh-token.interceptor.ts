@@ -45,6 +45,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
             this.modalService.close();
             this.logoutUser();
           }
+          this.loadingService.close();
 
           return throwError(err);
         }
@@ -52,13 +53,14 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
         // If error status is different than 401 we want to skip refresh token
         // So we check that and throw the error if it's the case
         if (err.status !== 401) {
+          this.loadingService.close();
           return throwError(err);
         }
 
         if (this.refreshTokenInProgress) {
           // If refreshTokenInProgress is true, we will wait until refreshTokenSubject has a non-null value
           // – which means the new token is ready and we can retry the request again
-          console.log('Refresh tokken in progress');
+          console.log('Refresh token in progress');
           return this.refreshTokenSubject.pipe(
             filter((result) => result !== null),
             take(1),

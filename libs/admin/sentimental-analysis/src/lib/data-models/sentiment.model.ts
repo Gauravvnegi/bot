@@ -8,10 +8,12 @@ export class SentimentsByRatings {
   comparisonPercent: number;
   additionalData: string;
   label: string;
+  tooltip: string;
   deserialize(input) {
     this.labels = Object.keys(input.graphData);
     Object.assign(
       this,
+      set({}, 'tooltip', get(input, ['tooltip'])),
       set({}, 'label', get(input, ['label'])),
       set({}, 'score', get(input, ['score'])),
       set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),
@@ -79,10 +81,17 @@ export class Topic {
 export class Topics {
   topics: Topic[];
   colors: string[];
+  label: string;
+  tooltip: string;
   deserialize(input, colorConfig) {
     this.topics = new Array<Topic>();
     this.colors = new Array<string>();
-    input.forEach((item) => {
+    Object.assign(
+      this,
+      set({}, 'label', get(input, ['label'])),
+      set({}, 'tooltip', get(input, ['tooltip']))
+    );
+    input.topics.forEach((item) => {
       this.topics.push(new Topic().deserialize(item));
       this.colors.push(
         colorConfig[item.label.toLowerCase().split(' ').join('')]
@@ -120,10 +129,12 @@ export class TopicsOverTimes {
   comparisonPercent: number;
   additionalData: string;
   label: string;
+  tooltip: string;
   deserialize(input, colorConfig) {
     this.labels = new Array<string>();
     Object.assign(
       this,
+      set({}, 'tooltip', get(input, ['tooltip'])),
       set({}, 'label', get(input, ['label'])),
       set({}, 'score', get(input, ['score'])),
       set({}, 'comparisonPercent', get(input, ['comparisonPercent'])),

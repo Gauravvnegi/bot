@@ -2064,6 +2064,73 @@
           "style": "scss"
         }
       }
+    },
+    "admin-tax": {
+      "projectType": "library",
+      "root": "libs/admin/tax",
+      "sourceRoot": "libs/admin/tax/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/tax/tsconfig.lib.json",
+              "libs/admin/tax/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/tax/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/tax/jest.config.js",
+            "tsConfig": "libs/admin/tax/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/tax/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-manage-reservation": {
+      "projectType": "library",
+      "root": "libs/admin/manage-reservation",
+      "sourceRoot": "libs/admin/manage-reservation/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/manage-reservation/tsconfig.lib.json",
+              "libs/admin/manage-reservation/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/manage-reservation/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/manage-reservation/jest.config.js",
+            "tsConfig": "libs/admin/manage-reservation/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/manage-reservation/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

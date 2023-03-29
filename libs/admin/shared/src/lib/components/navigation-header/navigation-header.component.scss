@@ -4,11 +4,11 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  padding: 20px 0;
+  padding-bottom: 20px;
 
   &__wrapper {
     &__sticky {
-      padding-top: 20px;
+      padding-top: 40px;
     }
   }
 
@@ -45,6 +45,7 @@
   display: flex;
 
   .link {
+    padding-bottom: 20px;
     display: flex;
     opacity: 0.6;
     font-family: Poppins;
@@ -65,11 +66,20 @@
     }
   }
 
+  .nav-actions {
+    flex-grow: 1;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 2%;
+  }
+
   .pi-angle-right {
     line-height: 1.3;
   }
 
   &__sticky {
+    height: 61px;
     transition: box-shadow 1s ease-in;
     background-color: $layout-background;
     position: fixed;

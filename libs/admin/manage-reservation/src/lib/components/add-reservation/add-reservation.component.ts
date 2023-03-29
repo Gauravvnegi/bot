@@ -11,7 +11,6 @@ import { FormProps, NavRouteOptions } from 'libs/admin/shared/src';
 export class AddReservationComponent implements OnInit {
   useForm: FormGroup;
   useFormArray: FormArray;
-
   roomFields: IteratorField[] = [
     {
       label: 'Room Type',

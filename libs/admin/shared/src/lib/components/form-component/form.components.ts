@@ -29,7 +29,8 @@ export class FormComponent implements OnInit {
   type: InputType = 'text';
   dropdownIcon = 'pi pi-chevron-down'; // Arrow icon for dropdown inputs
   isAsync = false; // To register load-more/search option query
-  additionalInfo: string = '';
+  additionalInfo: string = ''; // Info icon text
+  subtitle = ''; // subtitle text
   createPrompt: string; // To add cta in dropdown
   @Output() onCreate = new EventEmitter(); // createPrompt on click emitter
 
@@ -123,6 +124,7 @@ export class FormComponent implements OnInit {
       dropdownIcon: this.dropdownIcon,
       additionalInfo: this.additionalInfo,
       type: this.type,
+      subtitle: this.subtitle,
     };
   }
 

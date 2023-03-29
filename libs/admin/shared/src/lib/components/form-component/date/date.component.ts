@@ -22,7 +22,7 @@ export class DateComponent extends FormComponent implements OnInit {
   /**
    * @Input to change default date setting
    */
-  @Input() set dateSetting(value: DateSetting) {
+  @Input() set settings(value: DateSetting) {
     Object.entries(value)?.forEach(([key, value]) => {
       this[key] = value;
     });

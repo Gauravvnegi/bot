@@ -137,8 +137,12 @@
         <div class="input-fields">
           <hospitality-bot-input
             controlName="area"
-            label="Room Area (Sq. Ft)"
-            [props]="inputValidationProps"
+            label="Room Area"
+            [props]="{
+              errorMessages: inputValidationProps.errorMessages,
+              type: 'number',
+              subtitle: 'Sq. Ft'
+            }"
           ></hospitality-bot-input>
         </div>
       </div>

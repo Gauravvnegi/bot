@@ -628,7 +628,7 @@ $table-hover-color: #f3f3f3;
     position: sticky;
     top: 65px;
     z-index: 10;
-    background-color: #f1f2f7;
+    background-color: $table-header;
 
     tr {
       th {

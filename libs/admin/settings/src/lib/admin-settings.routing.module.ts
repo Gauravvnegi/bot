@@ -22,6 +22,11 @@ const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'tax',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/tax').then((m) => m.AdminTaxModule),
+      },
+      {
         path: ':settingOption',
         component: SiteSettingsComponent,
       },

@@ -95,6 +95,15 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   color: #006fde;
 }
 
+/** additional text inside input */
+.subtitle {
+  position: absolute;
+  bottom: 0.8em;
+  right: 0.8em;
+  font-size: 0.8em;
+  color: $border-color;
+}
+
 .additional-info {
   position: absolute;
   right: 0;

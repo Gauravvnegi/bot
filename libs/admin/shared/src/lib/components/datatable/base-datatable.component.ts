@@ -40,6 +40,7 @@ export class BaseDatatableComponent implements OnInit {
   isTabFilters = true;
   isCustomSort = true;
   isSelectable = true;
+  isSearchable = true;
 
   tableFG: FormGroup;
 

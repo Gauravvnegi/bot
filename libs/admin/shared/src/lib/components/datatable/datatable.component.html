@@ -56,11 +56,7 @@
       hospitality-bot-table-header
       [columns]="columns"
       [showCheckbox]="isSelectable"
-    ></tr>
-
-    <tr
-      hospitality-bot-table-search
-      [columns]="columns"
+      [showSearch]="isSearchable"
       (search)="handleFieldSearch($event)"
     ></tr>
   </ng-template>

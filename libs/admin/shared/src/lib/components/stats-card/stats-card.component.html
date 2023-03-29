@@ -1,8 +1,18 @@
 <div class="wrapper">
   <div class="header-content">
-    <div class="stats_text">
-      {{ label }}
-    </div>
+    <hospitality-bot-custom-tooltip
+      [text]="tooltip"
+      *ngIf="tooltip; else title"
+    >
+      <div class="stat-title">
+        {{ label }}
+      </div>
+    </hospitality-bot-custom-tooltip>
+    <ng-template #title
+      ><div class="stats_text">
+        {{ label }}
+      </div></ng-template
+    >
     <div><img [src]="imageUrls[title]" alt="" /></div>
   </div>
   <div class="info">

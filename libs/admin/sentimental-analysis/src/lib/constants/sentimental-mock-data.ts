@@ -221,6 +221,7 @@ export const MockData = {
     comparisonPercent: 10,
     totalCount: 2010,
     dateRange: '1 May - 2 May',
+    tooltip: 'Topics over time chart',
     rate: {
       value: 10,
       status: 'increasing',
@@ -253,10 +254,11 @@ export const MockData = {
     },
   },
   sentimentsByRatings: {
-    label: 'Topics over time',
+    label: 'Sentiment by ratings',
     score: 20,
     comparisonPercent: 20,
     totalCount: 2010,
+    tooltip: 'Sentiment by ratings chart',
     graphData: {
       '1': {
         positive: '5',
@@ -287,6 +289,7 @@ export const MockData = {
   },
   topics: {
     label: 'Topics',
+    tooltip: 'Sentiment topics',
     topics: [
       { label: 'Topic 1', value: '120' },
       { label: 'Topic 2', value: '230' },

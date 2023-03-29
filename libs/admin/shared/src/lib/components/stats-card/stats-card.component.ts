@@ -15,6 +15,7 @@ export class StatsCardComponent implements OnInit {
   additionalData: string;
   comparisonPercent: number;
   imageUrls = RoomStatsImgUrls;
+  tooltip: string;
 
   @Input() set stats(value) {
     this.title = value.label;
@@ -22,6 +23,7 @@ export class StatsCardComponent implements OnInit {
     this.score = value.score;
     this.comparisonPercent = value.comparisonPercent;
     this.additionalData = value.additionalData;
+    this.tooltip = value.tooltip;
   }
 
   constructor() {}

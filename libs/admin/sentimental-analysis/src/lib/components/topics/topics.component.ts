@@ -9,16 +9,12 @@ import { Topics } from '../../data-models/sentiment.model';
   styleUrls: ['./topics.component.scss'],
 })
 export class TopicsComponent implements OnInit {
-  data = MockData.topics;
   chart = SentimentalChart.topicsBarGraph;
   graphData: Topics;
   constructor() {}
 
   ngOnInit(): void {
-    this.graphData = new Topics().deserialize(
-      MockData.topics.topics,
-      colorConfig
-    );
+    this.graphData = new Topics().deserialize(MockData.topics, colorConfig);
     this.initChartData();
   }
 

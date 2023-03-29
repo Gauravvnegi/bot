@@ -29,7 +29,8 @@
     }
     &__text {
       div {
-        color: #080808;
+        color: $heading-black;
+font-size: 20px;
         margin: 20px 0;
         margin-left: 20px;
         font-weight: 600;

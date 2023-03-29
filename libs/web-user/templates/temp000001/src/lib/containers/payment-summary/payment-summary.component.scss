@@ -29,7 +29,8 @@
     }
     &__text {
       div {
-        color: #080808;
+        color: $heading-black;
+
         margin: 20px 0;
         margin-left: 20px;
         font-weight: 600;
@@ -177,6 +178,7 @@
 :host ::ng-deep .mat-header-row {
   @media screen and (max-width: 600px) {
     height: 24px;
+  
    
   }
 }

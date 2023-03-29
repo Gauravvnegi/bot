@@ -6,6 +6,7 @@ export enum SettingOptions {
   SUBSCRIPTION = 'subscription',
   LEGAL_POLICIES = 'legal-policies',
   ROLES_AND_PERMISSION = 'roles-and-permissions',
+  TAX = 'tax',
 }
 
 export const siteUrl = {
@@ -13,6 +14,7 @@ export const siteUrl = {
   [SettingOptions.WEBSITE_SETTING]: '/admin/website-settings',
   [SettingOptions.ACCEPT_PAYMENTS]: '/admin/onboard-payment',
   [SettingOptions.LEGAL_POLICIES]: '/admin/legal-policy',
+  [SettingOptions.TAX]: '/admin/tax',
 };
 
 export const settingsMenuOptions: SettingsMenuComponent[] = [
@@ -56,6 +58,13 @@ export const settingsMenuOptions: SettingsMenuComponent[] = [
   {
     name: SettingOptions.LEGAL_POLICIES,
     title: 'Legal Policies',
+    description:
+      'Invite people to work on this site and set their permissions.',
+    icon: 'assets/svg/insurance.svg',
+  },
+  {
+    name: SettingOptions.TAX,
+    title: 'Tax',
     description:
       'Invite people to work on this site and set their permissions.',
     icon: 'assets/svg/insurance.svg',

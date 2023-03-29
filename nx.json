@@ -182,6 +182,12 @@
     },
     "admin-offers": {
       "tags": []
+    },
+    "admin-tax": {
+      "tags": []
+    },
+    "admin-manage-reservation": {
+      "tags": []
     }
   }
 }

@@ -1,0 +1,122 @@
+<div
+  class="action-header"
+  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+  [formGroup]="tableFG"
+>
+  <div class="heading">{{ tableName }}</div>
+  <div class="action-wrapper">
+    <hospitality-bot-button
+      label="Create New Tax"
+      link="pages/settings/tax/{{ routes.createTax.route }}"
+    ></hospitality-bot-button>
+    <hospitality-bot-export-list
+      [additionalActionItems]="additionalActionItems"
+      (onDocumentActions)="onDocumentActions()"
+      [documentTypes]="documentTypes"
+      [documentActionTypes]="documentActionTypes"
+    ></hospitality-bot-export-list>
+  </div>
+</div>
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginator"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+>
+  <ng-template pTemplate="caption">
+    <div class="caption__wrapper" [formGroup]="tableFG">
+      <hospitality-bot-filter-chips
+        *ngIf="isQuickFilters"
+        [chips]="filterChips"
+        (onChange)="toggleQuickReplyFilter($event)"
+      ></hospitality-bot-filter-chips>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+  </ng-template>
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns>
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="isSelectable"
+      (search)="handleFieldSearch($event)"
+    ></tr>
+  </ng-template>
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <tr class="table-row" (click)="editTax(rowData.id)">
+      <td class="table-row__checkbox">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.countryName; else emptyCell">
+          <div class="primary-text">
+            {{ rowData.countryName }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.taxType; else emptyCell">
+          <div class="primary-text">
+            {{ rowData.taxType }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.taxRate; else emptyCell">
+          <div class="primary-text">
+            {{ rowData.taxRate }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content">
+          <hospitality-bot-toggle-dropdown
+            class="toggle-btn"
+            (onClick)="handleStatus($event, rowData)"
+            [status]="rowData.status"
+          >
+          </hospitality-bot-toggle-dropdown>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <!-- *********************************FOOTER******************************* -->
+  <ng-template pTemplate="summary">
+    <p-paginator
+      #paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
+    ></p-paginator>
+  </ng-template>
+</p-table>

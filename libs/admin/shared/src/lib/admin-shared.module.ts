@@ -13,6 +13,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { PaginatorModule } from 'primeng/paginator';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -31,6 +32,7 @@ import { ExportListComponent } from './components/datatable/export-list/export-l
 import { FilterChipsComponent } from './components/datatable/filter-chips/filter-chips.component';
 import { EmailChipListComponent } from './components/email-chip-list/email-chip-list.component';
 import { InputComponent } from './components/form-component/input/input.component';
+import { TextAreaComponent } from './components/form-component/text-area/text-area.component';
 import { SelectComponent } from './components/form-component/select/select.component';
 import { IteratorComponent } from './components/iterator/iterator.component';
 import { MentionDirective, MentionListComponent } from './components/mention';
@@ -91,6 +93,7 @@ import { MatMenuModule } from '@angular/material/menu';
     SplitButtonModule,
     InputSwitchModule,
     InputTextModule,
+    InputTextareaModule,
     DropdownModule,
     CalendarModule,
     MultiSelectModule,
@@ -142,6 +145,7 @@ import { MatMenuModule } from '@angular/material/menu';
     ToggleDropdownComponent,
     IteratorComponent,
     InputComponent,
+    TextAreaComponent,
     SelectComponent,
     CustomHeaderComponent,
     ModalComponent,
@@ -174,6 +178,7 @@ import { MatMenuModule } from '@angular/material/menu';
     SplitButtonModule,
     InputSwitchModule,
     InputTextModule,
+    InputTextareaModule,
     DropdownModule,
     CalendarModule,
     MultiSelectModule,
@@ -213,6 +218,7 @@ import { MatMenuModule } from '@angular/material/menu';
     ToggleDropdownComponent,
     IteratorComponent,
     InputComponent,
+    TextAreaComponent,
     SelectComponent,
     CustomHeaderComponent,
     MatTooltipModule,

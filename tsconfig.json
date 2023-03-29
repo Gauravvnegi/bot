@@ -120,7 +120,11 @@
       "@hospitality-bot/admin/manage-sites": [
         "libs/admin/manage-sites/src/index.ts"
       ],
-      "@hospitality-bot/admin/settings": ["libs/admin/settings/src/index.ts"]
+      "@hospitality-bot/admin/settings": ["libs/admin/settings/src/index.ts"],
+      "@hospitality-bot/admin/tax": ["libs/admin/tax/src/index.ts"],
+      "@hospitality-bot/admin/manage-reservation": [
+        "libs/admin/manage-reservation/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

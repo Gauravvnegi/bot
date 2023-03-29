@@ -20,6 +20,7 @@
     [dropdownIcon]="dropdownIcon"
     (onPanelShow)="onMenuOpen()"
     (onPanelHide)="onMenuClose()"
+    [showHeader]="showHeader"
   >
     <ng-template let-value pTemplate="selectedItems">
       <div class="chips">

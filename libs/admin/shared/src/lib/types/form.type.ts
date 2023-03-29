@@ -21,6 +21,7 @@ export type FormProps = {
   dropdownIcon?: string;
   additionalInfo?: string;
   addNewPrompt?: string;
+  subtitle?: string;
 };
 
 export type ButtonVariant = 'text' | 'contained' | 'outlined';

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { Option } from '../../../types/form.type';
 import { FormComponent } from '../form.components';
@@ -11,6 +11,17 @@ import { FormComponent } from '../form.components';
 export class MultiSelectComponent extends FormComponent {
   menuClass = 'p-multiselect-items-wrapper';
   searchInputClass = 'p-multiselect-filter';
+
+  showHeader = true;
+
+  /**
+   * @Input to change default date setting
+   */
+  @Input() set settings(value: MultiSelectSettings) {
+    Object.entries(value)?.forEach(([key, value]) => {
+      this[key] = value;
+    });
+  }
 
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
@@ -32,3 +43,7 @@ export class MultiSelectComponent extends FormComponent {
     }, {});
   }
 }
+
+type MultiSelectSettings = {
+  showHeader: boolean;
+};

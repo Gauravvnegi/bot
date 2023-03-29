@@ -50,6 +50,7 @@ export class CookiesSettingsService {
       user: JSON.stringify({
         id: userDetails.id,
         firstName: userDetails.firstName,
+        lastName: userDetails.lastName,
         email: userDetails.email,
       }),
       'x-userId': this._authService.getTokenByName('x-userId'),

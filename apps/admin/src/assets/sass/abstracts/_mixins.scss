@@ -282,13 +282,24 @@
   }
 }
 
+@mixin formHeader() {
+  padding: 25px $form-padding-x 25px;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.96px;
+  color: $dark-blue2 !important;
+}
+
 @mixin formBlock() {
-  @include flex-wrap-centerAlgn;
-  padding: 25px 4% 25px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: $form-padding-y $form-padding-x;
   column-gap: 6%;
   row-gap: 40px;
   border-radius: 8px;
-
+  box-shadow: $form-shadow;
   background-color: $white;
 
   .code {
@@ -302,6 +313,10 @@
     &__hash {
       font-size: 14px;
       letter-spacing: 0.84px;
+    }
+
+    &__right {
+      text-align: right;
     }
   }
 
@@ -376,6 +391,7 @@
     border: none;
   }
 }
+
 @mixin import() {
   font-size: 14px;
   font-weight: 500;
@@ -393,4 +409,7 @@
     height: 24px;
     padding-bottom: 8px;
   }
+}
+
+@mixin accordion {
 }

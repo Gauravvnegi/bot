@@ -28,10 +28,7 @@
 }
 
 :host ::ng-deep .p-accordion-header-text {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.96px;
-  color: $dark-blue2;
+  @include formHeader();
 }
 
 :host ::ng-deep .p-accordion-content {

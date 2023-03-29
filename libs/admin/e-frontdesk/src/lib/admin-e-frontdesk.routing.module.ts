@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, ROUTES } from '@angular/router';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import { ModuleNames } from '@hospitality-bot/admin/shared';
-import { AddReservationComponent } from 'libs/admin/reservation/src/lib/components/add-reservation/add-reservation.component';
 import { CRoutes, routesFactory } from 'libs/admin/shared/src';
 import { EFrontDeskComponent } from './components/e-front-desk/e-front-desk.component';
 
@@ -38,9 +37,12 @@ const appRoutes: CRoutes = [
           ),
       },
       {
-        path: 'add-reservation',
+        path: 'manage-reservation',
         name: ModuleNames.ADD_RESERVATION,
-        component: AddReservationComponent,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/manage-reservation').then(
+            (m) => m.AdminManageReservationModule
+          ),
       },
     ],
   },

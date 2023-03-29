@@ -109,7 +109,7 @@ $XL: 1500px;
 
 @mixin auth-quote() {
   font-weight: 400;
-  font-size: $font16;
+  font-size: 16px;
   color: $quote-color;
   letter-spacing: 0.54px;
   line-height: 25px;
@@ -123,7 +123,7 @@ $XL: 1500px;
   border: none;
   outline: none;
   color: white;
-  font-size: $font14;
+  font-size: 14px;
   font-weight: $medium;
   border-radius: 25px;
   padding: 12px 0px;
@@ -303,7 +303,7 @@ $XL: 1500px;
 
 @mixin primaryButton() {
   color: $white;
-  font-size: $font14;
+  font-size: 14px;
   font-weight: 400;
   background-color: $auth-color;
   width: 10vw;

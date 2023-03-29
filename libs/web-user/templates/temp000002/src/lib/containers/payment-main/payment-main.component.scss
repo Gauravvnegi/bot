@@ -19,7 +19,7 @@
 
 .status-container {
   min-height: 60.6vh;
-  
+
   .wrapper {
     background-color: $white;
     margin: 40px;
@@ -114,11 +114,6 @@
   }
 }
 
-// @media only screen and (max-width: $tab-size) {
-//   .user-button {
-//     width: $half-width;
-//   }
-// }
 
 .actions_wrapper {
   display: flex;
@@ -171,8 +166,6 @@
     }
   }
 }
-
-
 
 .payment-button {
   @media only screen and (max-width: $M) {

@@ -12,27 +12,27 @@
     border-radius: 5px;
     padding: 25px 15px;
     &__title {
-      font-size: $font14;
+      font-size: 14px;
       letter-spacing: 0.28px;
       color: $tooltip;
       margin-bottom: 10px;
       @media (max-width: 992px) {
-        font-size: $font12;
+        font-size: 12px;
       }
     }
     &__details {
       display: flex;
       justify-content: space-between;
       &__label {
-        font-size: $font16;
+        font-size: 16px;
         letter-spacing: 0.5px;
         color: $dark-blue;
         align-items: center;
         @media screen and (max-width: 1100px) {
-          font-size: $font15;
+          font-size: 15px;
         }
         @media (max-width: 992px) {
-          font-size: $font12;
+          font-size: 12px;
         }
         img {
           padding: 0 6px;
@@ -50,7 +50,7 @@
         text-decoration: none;
         justify-content: center;
         font-weight: 600;
-        font-size: $font12;
+        font-size: 12px;
         padding: 6px;
         margin-left: 8px;
         cursor: pointer;

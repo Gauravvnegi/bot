@@ -21,23 +21,21 @@
     .sub-title {
       font-size: 12px;
       font-weight: 500;
-      color: #b5b5c3;
+      color: $inActiveTab;
       margin-top: 10px;
     }
   }
   .customize--form {
-    display: flex;
-    flex-direction: column;
+    @include flex-col;
     gap: 25px;
     margin-top: 20px;
     font-size: 14px;
-    color: #b5b5c3;
+    color: $inActiveTab;
     .field {
       margin-top: 20px;
-      @include flex-space-between();
-      align-items: center;
+      @include flex-space-between-cen-Algn();
       &--title {
-        color: #000000;
+        color: $c-black;
       }
     }
   }
@@ -59,7 +57,7 @@
       left: 2px;
       transform: translate3d(30px, 0, 0);
       .mat-slide-toggle-thumb {
-        background-color: white;
+        background-color: $white;
       }
     }
   }

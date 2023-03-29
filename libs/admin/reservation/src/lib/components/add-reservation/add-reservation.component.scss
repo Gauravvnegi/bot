@@ -62,18 +62,14 @@
   margin-left: 19px;
 
   &_heading {
-    font-size: $font16;
+    @include normalText;
     font-weight: 600;
-    letter-spacing: 0.96px;
-    text-align: left;
     color: $dark-blue2;
   }
 
   &_subheading {
-    font-size: $font16;
+    @include normalText;
     font-weight: bold;
-    letter-spacing: 0.96px;
-    text-align: left;
     color: $c-gray-18;
 
     &_label {
@@ -98,13 +94,13 @@
       background-color: $background-grey;
 
       &_heading {
-        font-size: $font14;
+        font-size: 14px;
         font-weight: 500;
         text-align: left;
         color: $c-gray-18;
       }
       &_subText {
-        font-size: $font12;
+        font-size: 12px;
         letter-spacing: 0.72px;
         text-align: left;
         color: $c-gray-18;
@@ -117,13 +113,13 @@
       display: flex;
       justify-content: space-between;
       &_label {
-        font-size: $font12;
+        font-size: 12px;
         font-weight: 500;
         text-align: left;
         color: $c-gray-18;
       }
       &_amount {
-        font-size: $font12;
+        font-size: 12px;
         letter-spacing: 0.72px;
         text-align: right;
         color: $c-gray-47;
@@ -134,13 +130,13 @@
       justify-content: space-between;
       margin-bottom: 10px;
       &_label {
-        font-size: $font12;
+        font-size: 12px;
         font-weight: 500;
         text-align: left;
         color: $c-gray-18;
       }
       &_amount {
-        font-size: $font16;
+        font-size: 16px;
         font-weight: bold;
         letter-spacing: 0.96px;
         text-align: right;
@@ -152,13 +148,13 @@
       display: flex;
       justify-content: space-between;
       &_label {
-        font-size: $font12;
+        font-size: 12px;
         font-weight: 500;
         text-align: left;
         color: $c-gray-18;
       }
       &_amount {
-        font-size: $font12;
+        font-size: 12px;
         letter-spacing: 0.72px;
         text-align: right;
         color: $c-gray-47;
@@ -171,13 +167,13 @@
     justify-content: space-between;
     margin-bottom: 33px;
     &_label {
-      font-size: $font12;
+      font-size: 12px;
       font-weight: 500;
       text-align: left;
       color: $c-gray-18;
     }
     &_amount {
-      font-size: $font16;
+      font-size: 16px;
       font-weight: bold;
       letter-spacing: 0.96px;
       text-align: right;

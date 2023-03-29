@@ -3,12 +3,11 @@
   .header {
     @include flex-between-center();
     padding: 14px 17px 12.7px 24px;
-    background-color: #f4f5f7;
+    background-color: $header-background;
     &__title {
       @include flex-item-center();
-      font-size: 16px;
-      font-weight: 500;
-      color: #484848;
+      @include normalText;
+      color: $tooltip;
       img {
         margin-right: 10px;
       }
@@ -22,9 +21,8 @@
     min-width: 550px;
     .message {
       padding: 7px 0 27px 0;
-      font-size: 16px;
-      font-weight: 500;
-      color: #484848;
+      @include normalText;
+      color: $tooltip;
     }
     .footer {
       @include flex-justify-center();
@@ -32,9 +30,9 @@
         padding: 10px;
         border-radius: 18px;
         background-color: $primary-cta;
-        color: #ffffff;
+        color: $white;
         font-size: 13px;
-        font-weight: 500;
+        font-weight: $medium;
         cursor: pointer;
         min-width: 180px;
         @include flex-justify-center();

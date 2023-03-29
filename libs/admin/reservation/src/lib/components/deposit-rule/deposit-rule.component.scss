@@ -11,7 +11,7 @@
 }
 
 :host ::ng-deep .mat-label {
-  font-size: $font14;
+  font-size: 14px;
   color: $primary-gray;
   letter-spacing: 0.84px;
   margin-right: 10px;
@@ -28,23 +28,21 @@
 .field-payment {
   display: flex;
   .value {
-    font-size: $font14;
+    font-size: 14px;
     color: $tooltip;
   }
 }
 
 .button-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 2px solid rgb(33, 138, 243, 0.1);
+  @include flex-all-center;
+  border-top: 2px solid $btn-border;
   padding: 10px 0;
   button {
     outline: none;
     border: none;
     background: transparent;
     color: $primary-gray;
-    font-size: $font14;
+    font-size: 14px;
     letter-spacing: 0.84px;
     &:hover {
       cursor: pointer;

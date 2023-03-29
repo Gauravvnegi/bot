@@ -1,7 +1,7 @@
 @import 'main';
 
 .wrapper {
-  padding: $padding20;
+  padding: 20px;
   background-color: $white;
   border-radius: 5px;
   height: calc(100vh - 9.5%);
@@ -17,12 +17,12 @@
       .label {
         letter-spacing: 0.96px;
         font-weight: $bold;
-        font-size: $font16;
+        font-size: 16px;
         cursor: default;
       }
 
       .material-icons {
-        margin-right: $margin15;
+        margin-right: 15px;
 
         &:hover {
           cursor: pointer;
@@ -32,7 +32,7 @@
   }
 
   &-form {
-    padding-left: $padding20;
+    padding-left: 20px;
 
     .fields {
       display: flex;
@@ -49,7 +49,7 @@
         min-width: 35%;
 
         .status {
-          font-size: $font14;
+          font-size: 14px;
           margin-right: 20px;
         }
 
@@ -65,7 +65,7 @@
 
       .note {
         color: $primary-gray;
-        font-size: $font12;
+        font-size: 12px;
         padding-left: 11%;
         margin-bottom: 20px;
       }
@@ -77,7 +77,7 @@
         margin-right: 1.5%;
 
         @media (max-width: $tablet) {
-          @include width(42.6%);
+          width: 42.6%;
         }
 
         ::ng-deep .mat-form-field-infix {
@@ -99,7 +99,7 @@
 
         // margin-right: 1.5%;
         @media (max-width: $tablet) {
-          @include width(42.6%);
+          width: 42.6%;
         }
 
         ::ng-deep .mat-form-field-infix {
@@ -120,13 +120,8 @@
 
     .description {
       margin: 11px 57px 22px 10%;
-      font-family: Roboto;
+      font-family: 'Roboto';
       font-size: 14px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.84px;
       color: $primary-gray;
     }
     .import-assets {
@@ -160,14 +155,8 @@
     padding-left: $padding20;
 
     .add-text {
-      font-family: Roboto;
-      font-size: $font16;
+      @include normalText;
       font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
       color: $dark-blue;
     }
   }
@@ -185,7 +174,6 @@
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      // justify-content: center;
       padding-top: 30px;
       align-items: center;
       color: $primary-gray;
@@ -217,13 +205,7 @@
       cursor: pointer;
 
       .save-text {
-        font-size: $font16;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.96px;
-        text-align: left;
+        @include normalText;
         color: $button-blue;
       }
     }
@@ -242,13 +224,7 @@
     }
 
     .view {
-      font-size: $font16;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
+      @include normalText;
       color: $white;
     }
   }
@@ -292,17 +268,17 @@
 }
 
 .mat-label {
-  font-size: $font14;
+  font-size: 14px;
   color: $primary-gray;
   margin-right: 10px;
   width: 30%;
 
   @media only screen and (max-width: 1300px) {
-    font-size: $font13;
+    font-size: 13px;
   }
 
   @media only screen and (max-width: 1080px) {
-    font-size: $font10;
+    font-size: 10px;
   }
 }
 
@@ -346,12 +322,12 @@
 }
 
 :host ::ng-deep .mat-select-value-text {
-  font-size: $font14;
+  font-size: 14px;
   color: $dark-blue;
 }
 
 :host ::ng-deep input.mat-input-element {
-  font-size: $font16;
+  font-size: 16px;
   color: $dark-blue;
 }
 
@@ -410,14 +386,8 @@
 }
 
 .import-assets {
-  font-family: Roboto;
+  @include normalText;
   font-size: 14px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.07;
-  letter-spacing: 0.84px;
-  text-align: left;
   color: $button-blue;
   margin-left: 15rem;
   cursor: pointer;

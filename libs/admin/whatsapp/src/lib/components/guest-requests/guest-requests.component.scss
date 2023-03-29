@@ -4,45 +4,38 @@
   padding: 15px 0;
   max-height: calc(100vh - 310px);
   overflow-y: auto;
-  &::-webkit-scrollbar{
+  font-family: 'Roboto';
+
+  &::-webkit-scrollbar {
     width: 2px;
   }
   &-title {
     padding: 0 15px;
-    font-family: Roboto;
     font-size: 14px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.84px;
   }
   &-items-wrap {
     overflow-y: auto;
     &-item {
       padding: 0 15px;
-      font-family: Roboto;
       font-size: 12px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
       &-row {
         margin: 15px 0;
         .item-code {
           font-size: 14px;
-          font-weight: bold;
+          font-weight: $bold;
           letter-spacing: 0.84px;
-          text-align: left;
           color: $mat-tab-label;
         }
       }
       .intiated-row {
-        font-weight: 500;
+        font-weight: $medium;
         letter-spacing: 0.72px;
       }
       .nail-utter-row {
         margin-top: 10px;
-        font-weight: 500;
+        font-weight: $medium;
         letter-spacing: 0.72px;
         color: $dark-blue;
       }
@@ -71,16 +64,10 @@
   }
 }
 .no-request {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include flex-col-centerAlgn;
   &-msg {
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.72px;
     color: $dark-grey;
     margin-top: 15px;
@@ -111,15 +98,11 @@
 .priority {
   font-size: 10px;
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
   letter-spacing: 0.6px;
   color: $c-gray-61;
   margin-top: 3px;
   margin-bottom: 13px;
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   &-status {
     padding: 2px 5px 3px;
     border-radius: 5px;
@@ -129,8 +112,7 @@
 }
 
 .row {
-  @include flex-space-between();
-  align-items: center;
+  @include flex-space-between-cen-Algn;
 }
 
 .status {

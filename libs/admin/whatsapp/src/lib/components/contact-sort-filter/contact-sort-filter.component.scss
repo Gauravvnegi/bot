@@ -4,31 +4,21 @@
   height: 62px;
   padding: 10px 15px;
   border-bottom: 1px solid $primary-gray;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
 
   &-heading {
-    font-family: Roboto;
-    font-size: $font16;
-    font-weight: 500;
-    letter-spacing: 0.64px;
-    text-align: left;
+    @include normalText;
     color: $dark-blue;
   }
   &-clear {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     &-all {
-      display: flex;
-      align-items: center;
+      @include flex-item-center;
+
       cursor: pointer;
       .filter {
         font-size: 14px;
         font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
         letter-spacing: 0.56px;
         color: $primary-gray;
         margin-right: 5px;
@@ -68,10 +58,9 @@
       margin-bottom: 10px;
     }
     .sortTypes {
-      display: flex;
       height: auto;
       width: 100%;
-      flex-wrap: wrap;
+      @include flex-wrap;
       .sortItemWrapper {
         border-radius: 1000px;
         opacity: 1;
@@ -80,8 +69,8 @@
         padding: 8px 15px;
         cursor: pointer;
         .sortItem {
-          font-family: Roboto;
-          font-size: $font14;
+          font-family: 'Roboto';
+          font-size: 14;
           letter-spacing: 0.84px;
           text-align: left;
         }
@@ -99,8 +88,7 @@
     }
     .filterItemWrapper {
       margin: 8px 0;
-      display: flex;
-      align-items: center;
+      @include flex-item-center;
     }
     .filterCheckbox {
       margin-right: 10px;
@@ -116,21 +104,17 @@
   }
   .applyBtnWrapper {
     height: 64px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-all-center;
   }
   .applyBtn {
     width: 138px;
     height: 36px;
     @include primaryButton();
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-all-center;
 
     &-text {
-      font-family: Roboto;
-      font-size: $font14;
+      font-family: 'Roboto';
+      font-size: 14px;
       letter-spacing: 0.66px;
       text-align: left;
       color: $white;

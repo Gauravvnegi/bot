@@ -20,18 +20,14 @@
 
 .app-header {
   height: 65px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @include flex-space-between-cen-Algn;
   background-color: $white;
 }
 
 .logo-wrapper {
   width: 74px;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+ @include flex-all-center;
   background-color: $nav-bg-color;
   img {
     height: 80%;

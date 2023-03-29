@@ -1,11 +1,10 @@
 @import 'main';
 
 .stats {
-  display: flex;
-  flex-direction: column;
-  border-radius: 5px;
-  padding: 20px;
-  height: 100%;
+  @include flex-col;
+  border-radius: $border5;
+  padding: $padding20;
+  height: $full;
   @media screen and (max-width: 800px) {
     height: 185px;
   }
@@ -26,23 +25,20 @@
   }
 
   &__body {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     margin: 45px 0;
     @media screen and (max-width: 1024px) {
       margin: 10px 0 !important;
       flex-direction: row;
-      justify-content: center;
-      align-items: center;
+      @include flex-all-center;
     }
     .graph-container {
-      width: 50%;
+      width: $half;
       height: 200px;
       position: relative;
       @media screen and (max-width: 1024px) {
         width: auto;
-        display: flex;
-        align-items: center;
+       @include flex-item-center;
       }
       &__graph {
         position: absolute;
@@ -61,25 +57,19 @@
       }
     }
     &__detail {
-      width: 50%;
+      width: $half;
       @media screen and (max-width: 1024px) {
         width: auto;
         margin-left: 30px;
       }
       &__shared {
-        display: flex;
-        align-items: center;
+       @include flex-item-center;
         font: normal normal bold 35px/46px Roboto;
         letter-spacing: 2.1px;
         color: $dark-blue;
         &__p {
           font-size: 12px;
-          font-weight: normal;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: normal;
-          margin-left: 5px;
+          margin-left: $margin5;
         }
       }
       &__sharedtitle {
@@ -93,8 +83,7 @@
 .received-wrap {
   margin-top: 20px;
   &__container {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     &__dot {
       width: 14px;
       height: 14px;
@@ -105,16 +94,16 @@
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0px;
       color: $dark-blue;
-      margin: 0 5px;
+      margin: 0 $margin5;
     }
     &__percentChange-img {
-      margin-left: 5px;
+      margin-left: $margin5;
     }
     &__date {
       font: normal normal normal 10px/14px Roboto;
       letter-spacing: 0.72px;
       color: $quote-color;
-      margin: 0 5px;
+      margin: 0 $margin5;
     }
   }
   &__recived-title {
@@ -125,8 +114,7 @@
   &__no-recived {
     margin-top: 20px;
     &__container {
-      display: flex;
-      align-items: center;
+     @include flex-item-center;
       &__dot {
         width: 14px;
         height: 14px;
@@ -137,13 +125,13 @@
         font: normal normal bold 16px/21px Roboto;
         letter-spacing: 0px;
         color: $dark-blue;
-        margin: 0 5px;
+        margin: 0 $margin5;
       }
       &__date {
         font: normal normal normal 10px/14px Roboto;
         letter-spacing: 0.72px;
         color: $quote-color;
-        margin: 0 5px;
+        margin: 0 $margin5;
       }
     }
     &__title {

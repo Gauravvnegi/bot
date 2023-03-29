@@ -14,7 +14,7 @@
       .label {
         letter-spacing: 0.96px;
         font-weight: $bold;
-        font-size: $font16;
+        font-size: 16px;
       }
       .material-icons {
         margin-right: $margin15;
@@ -33,7 +33,7 @@
       margin-top: 2%;
       .note {
         color: $primary-gray;
-        font-size: $font12;
+        font-size: 12px;
         padding-left: 13%;
         margin-bottom: 20px;
       }
@@ -50,49 +50,14 @@
         }
       }
     }
-    // .image-wrapper {
-    //   display: flex;
-    //   align-items: center;
-    //   justify-content: inherit;
-    //   padding-left: 13%;
-    //   .image {
-    //     height: 150px;
-    //     width: 200px;
-    //   }
-    // }
+  
     .image-button {
       display: flex;
       align-items: baseline;
-      // .text {
-      //   font-size: $font14;
-      //   color: $primary-gray;
-      // }
       .image {
         height: 150px;
         width: 200px;
       }
-      // .button {
-      //   border-radius: 20px;
-      //   padding: 10px 35px;
-      //   opacity: 0.85;
-      //   outline: none;
-      //   color: $primary-cta;
-      //   background-color: $white;
-      //   font-size: $font14;
-      //   margin-right: 15px;
-      //   border: 1.5px solid $primary-cta;
-      //   &:hover {
-      //     cursor: pointer;
-      //     background-color: $primary-cta;
-      //     color: $white;
-      //     opacity: 1;
-      //   }
-      // }
-      // .image-name {
-      //   font-size: $font14;
-      //   letter-spacing: 0.96px;
-      //   color: $dark-blue;
-      // }
     }
     .margin-adjust {
       padding: 20px 0;
@@ -113,7 +78,7 @@
 }
 
 :host ::ng-deep .mat-label {
-  font-size: $font14;
+  font-size: 14px;
   color: $primary-gray;
   margin-right: 10px;
   min-width: 9vw;
@@ -151,11 +116,11 @@
 }
 
 :host ::ng-deep .mat-select-value-text {
-  font-size: $font14;
+  font-size: 14px;
   color: $dark-blue;
 }
 
 :host ::ng-deep input.mat-input-element {
-  font-size: $font14;
+  font-size: 14px;
   color: $dark-blue;
 }

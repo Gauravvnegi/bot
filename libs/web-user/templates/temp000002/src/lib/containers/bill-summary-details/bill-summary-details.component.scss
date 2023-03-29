@@ -38,7 +38,7 @@
   &--details {
     @include flex-between-center();
     width: 31%;
-    font-size: $font16;
+    font-size: 16px;
     font-weight: $bolder;
     label {
       color: #929292;
@@ -158,7 +158,7 @@
   }
   td {
     padding: 10px;
-    font-size: $font16;
+    font-size: 16px;
     font-weight: $bold;
     @media screen and (max-width: 600px) {
       padding: 4px;
@@ -168,7 +168,7 @@
   .room-data {
     text-align: left;
     padding-left: 14px;
-    font-size: $font16;
+    font-size: 16px;
     .room {
       font-weight: $bold;
     }
@@ -214,10 +214,6 @@
 .change-color {
   color: #09a053;
 }
-
-// .description-table-wrapper {
-//   margin-bottom: $margin-large;
-// }
 
 .description-table {
   width: $full-width;

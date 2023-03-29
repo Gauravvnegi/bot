@@ -1,23 +1,20 @@
 @import 'main';
 .footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
   padding: 10px 3rem;
-  border-top: 2px solid #d4d4d4;
+  border-top: 2px solid $light-grey3;
   @media (max-width: $tablet) {
-    @include width(93%);
-    @include margin-left(auto);
-    @include padding(10px 1rem);
+    width: 93%;
+    margin-left: auto;
+    padding: 10px 1rem;
   }
   p {
     margin: 0;
   }
   .links {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     a {
-      color: black;
+      color: $black;
       margin-right: 20px;
       text-decoration: none;
     }

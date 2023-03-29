@@ -2,23 +2,10 @@
 
 // todo remove whole ng-deep from code and use host with the perfect solution
 
-
 .example-button-row {
   @include flex-justify-center();
 }
 
-// @media only screen and (max-width: $tab-size) {
-//   .user-button {
-//     width: $half-width;
-//   }
-// }
-
-// :host ::ng-deep .back-button {
-//   @include footer-back();
-// }
-// :host ::ng-deep .next-button {
-//   @include footer-next();
-// }
 
 .payment-wrapper {
   background-color: $white;
@@ -34,10 +21,10 @@
 }
 
 .modal-header {
-  padding:$padding-large;
+  padding: $padding-large;
   @include flex-space-between();
   // padding-bottom: $padding-large;
-  background-color: #F4F5F7;
+  background-color: #f4f5f7;
   position: relative;
 }
 
@@ -202,14 +189,13 @@
 
 ::ng-deep .mat-tab-label-content {
   font-weight: $bolder;
-  font-size: $font16;
+  font-size: 16px;
 }
 
-::ng-deep .mat-dialog-container{
+::ng-deep .mat-dialog-container {
   padding: 0px !important;
 }
 
-
-::ng-deep .mat-tab-label-active{
+::ng-deep .mat-tab-label-active {
   background-color: white !important;
- }
+}

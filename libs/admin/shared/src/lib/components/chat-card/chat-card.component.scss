@@ -13,15 +13,14 @@
     margin-right: 15px;
     @include flex-all-center;
     img {
-      width: 100%;
-      height: 100%;
+      @include fullImg;
     }
     &-nickName {
       width: 48px;
       height: 48px;
       border-radius: $half;
       @include flex-all-center;
-      font-size: $font16;
+      font-size: 16px;
       color: $white;
       background-color: $olivedrab;
     }
@@ -36,7 +35,7 @@
       align-items: center;
       margin-bottom: 4px;
       &_roomNumber {
-        font-size: $font10;
+        font-size: 10px;
         font-weight: bold;
         letter-spacing: 0.6px;
         text-align: left;
@@ -48,13 +47,13 @@
         border-radius: 2px;
         color: $white;
         width: fit-content;
-        font-size: $font11;
+        font-size: 11px;
       }
       &_rating {
         padding: 4px;
         border-radius: 3px;
         color: $white;
-        font-size: $font10;
+        font-size: 10px;
         height: 20px;
         width: 21px;
         display: flex;
@@ -67,7 +66,7 @@
       justify-content: space-between;
       align-items: center;
       color: $c-gray-45;
-      font-size: $font12;
+      font-size: 12px;
       margin-bottom: 4px;
     }
     &_name {
@@ -86,7 +85,7 @@
     }
 
     &_remark {
-      font-size: $font12;
+      font-size: 12px;
       letter-spacing: 0.72px;
       color: $dark-blue;
       white-space: nowrap;
@@ -108,7 +107,7 @@
       display: flex;
       align-items: center;
       @media (max-width: $tablet) {
-        @include margin-bottom(10px);
+        margin-bottom: 10px;
       }
       &-status {
         padding: 2px 5px 3px;
@@ -129,7 +128,7 @@
         margin-bottom: 4px;
       }
       &-requestTime {
-        font-size: $font10;
+        font-size: 10px;
         font-weight: normal;
         letter-spacing: 0.6px;
         text-align: right;
@@ -162,15 +161,13 @@
         border: 1px solid $border;
         margin: 0 10px;
         @media (max-width: $tablet) {
-          @include margin(0 5px);
+          margin: 0 5px;
         }
       }
     }
     &-job-duration {
+      @include normalText;
       font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.72px;
-      text-align: left;
       color: $dark-blue;
     }
   }
@@ -198,13 +195,13 @@
       align-items: center;
       justify-content: center;
       color: $white;
-      font-size: $font12;
+      font-size: 12px;
     }
 
     &_serviceTag {
       background-color: $c-gray-105;
       padding: 4px;
-      font-size: $font10;
+      font-size: 10px;
       font-weight: 400;
       background-color: $primary-text-bg;
       color: $primary-cta;

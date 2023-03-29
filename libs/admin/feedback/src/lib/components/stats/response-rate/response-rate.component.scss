@@ -82,8 +82,8 @@
         }
       }
       @media screen and (max-width: $L) {
-        @include width(55%);
-        @include height($full);
+        width: 55%;
+        height: 100%;
         @include flex-all-center;
       }
     }
@@ -104,7 +104,7 @@
         color: $quote-color;
       }
       @media screen and (max-width: $L) {
-        @include width(45%);
+        width: 45%;
       }
     }
   }
@@ -186,14 +186,8 @@
   width: 46px;
   height: 19px;
   margin: 0 28px 0 0;
-  font-family: Roboto;
   font-size: 14px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.07;
-  letter-spacing: 0.84px;
-  text-align: left;
+  @include normalText;
   color: #00162b;
   text-overflow: ellipsis;
 }

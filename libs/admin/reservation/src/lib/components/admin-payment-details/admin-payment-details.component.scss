@@ -1,18 +1,14 @@
 @import 'main';
 
 .payment-header {
-  display: flex;
-  margin-bottom: $margin20;
-  align-items: center;
+  @include flex-item-center;
+  margin-bottom: 20px;
   margin-top: 15px;
   .heading {
-    font-size: $font16;
-    margin-right: $margin20;
+    font-size: 16px;
+    margin-right: 20px;
     font-weight: $bolder;
   }
-  // img {
-  //   margin-left: 10px;
-  // }
 }
 
 .deposit-box {
@@ -25,26 +21,24 @@
 }
 
 .fields-wrapper {
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   margin-top: 20px;
   .field {
     width: 30%;
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     .label {
       width: 44%;
       font-size: 12px;
       color: $primary-gray;
       letter-spacing: 0.84px;
-      font-weight: 600;
+      font-weight: $bold;
     }
     .value {
       width: 56%;
       font-size: 12px;
       color: $primary-black;
       letter-spacing: 0.84px;
-      font-weight: 600;
+      font-weight: $bold;
     }
     @media screen and (max-width: 1100px) {
       .label {
@@ -76,22 +70,19 @@
 }
 
 .heading {
-  font-size: $font16;
-  margin-right: $margin20;
+  font-size: 16px;
+  margin-right: 20px;
   font-weight: $bolder;
 }
 
 .special-request-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @include flex-space-between-cen-Algn;
   margin: 20px 0;
 
   .images {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     button {
-      margin: 0 $margin10;
+      margin: 0 10px;
       border: none;
       outline: none;
       background: transparent;
@@ -104,18 +95,18 @@
 
 :host ::ng-deep th,
 td {
-  border-bottom: 2px solid #218af31a;
+  border-bottom: 2px solid $tableCol-border;
 }
 
 :host ::ng-deep th {
   color: $primary-black;
-  font-weight: 500;
+  font-weight: $medium;
   font-size: 13px;
 }
 
 :host ::ng-deep td {
   color: $primary-black;
-  font-weight: 500;
+  font-weight: $medium;
   font-size: 13px;
 }
 
@@ -124,11 +115,9 @@ td {
   padding: 0 15px;
   .total {
     margin-bottom: 15px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    @include flex-centerAlgn-justEnd;
     color: $primary-black;
-    font-weight: 500;
+    font-weight: $medium;
     .label {
       width: 15%;
       text-align: left;
@@ -156,16 +145,14 @@ td {
   margin-top: 10px;
   .heading {
     color: $primary-black;
-    font-weight: 500;
+    font-weight: $medium;
     letter-spacing: 0.84px;
   }
   .image-wrapper {
     background-color: $c-gray-98;
     margin-top: 15px;
     height: 70px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-all-center;
     border-radius: 5px;
     img {
       height: 20px;
@@ -184,20 +171,18 @@ td {
 }
 
 :host ::ng-deep .mat-expansion-panel-header-title {
-  font-weight: 500;
+  font-weight: $medium;
   color: $primary-black;
 }
 
 .data-seperator {
   border: 2px solid $data-separator;
-  margin: $margin20 0px;
+  margin: 20 0px;
   opacity: 0.1;
 }
 
 .status-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @include flex-space-between-cen-Algn;
   margin: 15px 0;
   .status {
     letter-spacing: 0.84px;
@@ -206,10 +191,9 @@ td {
     font-size: 12px;
   }
   .images {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     button {
-      margin: 0 $margin10;
+      margin: 0 10;
       border: none;
       outline: none;
       background: transparent;
@@ -221,11 +205,9 @@ td {
 }
 
 :host ::ng-deep .container__title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+@include flex-space-between-cen-Algn;
   color: $primary-black;
-  font-weight: 500;
+  font-weight: $medium;
   letter-spacing: 0.84px;
 }
 

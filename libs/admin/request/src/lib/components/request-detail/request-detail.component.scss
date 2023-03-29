@@ -32,26 +32,20 @@ th:last-child {
   border-radius: 5px;
 }
 th {
-  font-family: Roboto;
+  font-family: 'Roboto';
   font-size: 14px;
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
   line-height: 1.14;
-  letter-spacing: normal;
-  text-align: left;
 
   color: #002046;
   @media screen and (max-width: $L) {
-    font-size: $font14;
+    font-size: 14px;
   }
 }
 
 td {
-  font-family: Roboto;
+  font-family: 'Roboto';
   font-size: 12px;
-  font-weight: normal;
-  line-height: normal;
   letter-spacing: 0.72px;
   color: $dark-blue;
 }
@@ -91,7 +85,7 @@ td {
         justify-content: center;
         align-items: center;
         display: flex;
-        font-size: $font12;
+        font-size: 12px;
         background-color: $chocolate;
 
         img {
@@ -100,13 +94,8 @@ td {
         }
       }
       &-title {
-        font-family: Roboto;
+        @include normalText;
         font-size: 14px;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        letter-spacing: 0.84px;
-        text-align: left;
         color: $dark-blue;
       }
     }
@@ -119,10 +108,8 @@ td {
     height: calc(100% - 65px);
     overflow: auto;
     padding: 20px 25px;
-    font-family: Roboto;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+    font-family: 'Roboto';
+
     &-title {
       font-size: 24px;
       font-weight: bold;
@@ -199,21 +186,14 @@ td {
   }
   &__title {
     margin: 12px 0;
-    font-size: 16px;
-    font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
-    text-align: left;
+    @include normalText;
     color: $dark-blue;
+    font-weight: bold;
   }
   &__description {
     font-size: 12px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+   
     letter-spacing: 0.72px;
     text-align: left;
     color: $c-gray-77;

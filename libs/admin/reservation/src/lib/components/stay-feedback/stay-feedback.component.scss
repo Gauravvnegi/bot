@@ -30,12 +30,12 @@
   .field {
     .label {
       letter-spacing: 0.72px;
-      font-size: $font12;
+      font-size: 12px;
       color: $primary-gray;
     }
     .value {
       letter-spacing: 0.84px;
-      font-size: $font14;
+      font-size: 14px;
       margin-top: $margin10;
       font-weight: $medium;
     }
@@ -43,23 +43,19 @@
       font-family: Roboto;
       font-size: 12px;
       font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
+   
       letter-spacing: 0.24px;
-      text-align: left;
+
       color: $question;
       margin: 5px 0;
     }
     .answer {
       font-family: Roboto;
       font-size: 12px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
+     
       line-height: 1.67;
       letter-spacing: 0.24px;
-      text-align: left;
+
       color: $quote-color;
     }
   }
@@ -74,7 +70,7 @@
 }
 
 :host ::ng-deep .mat-head {
-  font-size: $font16;
+  font-size: 16px;
   font-weight: $bolder;
   color: $dark-blue;
   letter-spacing: 0.96px;
@@ -92,7 +88,7 @@
     width: 25%;
 
     @media only screen and (max-width: $XL) {
-      font-size: $font14;
+      font-size: 14px;
       width: 27%;
     }
   }
@@ -137,7 +133,7 @@
   }
   .feedback {
     color: $white;
-    font-size: $font10;
+    font-size: 10px;
     display: flex;
     align-items: center;
     .booking-feedback {
@@ -224,9 +220,7 @@
     font-family: 'Roboto';
     font-size: 11px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+    
     letter-spacing: 0.66px;
     text-align: right;
     color: $button-blue;
@@ -245,7 +239,7 @@
     margin-left: 3px;
   }
   @media screen and (max-width: $XL) {
-    @include width(180px);
+    width: 180px;
     margin: 0 40px 0 10px;
   }
 }
@@ -270,7 +264,7 @@
 
   @media only screen and(max-width:$XL) {
     width: 36%;
-    font-size: $font14;
+    font-size: 14px;
     padding: 0 10px 0 10px !important;
   }
 

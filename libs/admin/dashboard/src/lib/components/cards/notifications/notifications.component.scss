@@ -2,30 +2,20 @@
 .notifications {
   background: $white;
   box-shadow: $box-shadow-1;
-  border-radius: $borderRadius5;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  @include padding(20px);
-  // &:hover{
-  //   border: 0.5px solid rgb(103, 103, 224);
-  //   cursor: pointer;
-  // }
+  border-radius: 5px;
+  height: $full;
+  @include flex-col-spaceBetween;
+  padding: 20px;
+
   &-header {
     @include flex-item-center();
     position: relative;
     &-icon {
-      @include margin-right(10px);
+      margin-right: 10px;
     }
     &-text {
-      font-size: $font16;
+      @include normalText;
       font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
       color: $dark-blue;
     }
     &-channel {
@@ -46,19 +36,14 @@
       position: absolute;
       top: 0;
       left: 0;
-      display: flex;
-      width: 100%;
-      height: 100%;
-      justify-content: center;
-      align-items: center;
+      width: $full;
+      height: $full;
+      @include flex-all-center;
     }
     &-total {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      width: $full;
+      height: $full;
+      @include flex-col-all-Center;
       color: $dark-blue;
     }
     &-number-color {
@@ -73,12 +58,9 @@
   }
 
   &-items {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-space-between-cen-Algn;
     margin: 7.5px 0;
-    align-items: center;
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 12px;
     color: $button-blue;
     &-item {
@@ -87,7 +69,7 @@
       &-dot {
         width: 10px;
         height: 10px;
-        border-radius: 50%;
+        border-radius: $half;
         margin-right: 10px;
       }
       &-status {
@@ -105,7 +87,7 @@
     img {
       margin: 3px 5px 0;
       width: 14px;
-      height: 100%;
+      height: $full;
       cursor: pointer;
     }
     .tooltip {

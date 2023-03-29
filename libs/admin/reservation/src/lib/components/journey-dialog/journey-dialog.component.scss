@@ -13,7 +13,7 @@
       @include flex-item-center();
     }
     .heading {
-      font-size: $font14;
+      font-size: 14px;
       color: $primary-black;
       font-weight: $medium;
     }
@@ -35,7 +35,7 @@
     padding: 20px 0px;
     p {
       color: $primary-black;
-      font-size: $font14;
+      font-size: 14px;
       margin: 3px 0;
       font-weight: $medium;
     }
@@ -45,7 +45,7 @@
       button {
         margin: 0 7px;
         color: $white;
-        font-size: $font12;
+        font-size: 12px;
         font-weight: 400;
         width: $popup-button-width;
         border-radius: 25px;

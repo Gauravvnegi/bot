@@ -1,41 +1,31 @@
 @import 'main';
 
 .wrapper {
-  padding: $padding20;
+  padding: 20px;
   background-color: $white;
-  margin: $margin20 0px;
+  margin: 20px 0px;
   border-radius: 5px;
-  font-family: Roboto;
-  font-size: 16px;
+  @include normalText;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0.96px;
-  text-align: left;
   color: $dark-blue;
   &-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-space-between-cen-Algn;
     .back {
-      display: flex;
-      align-items: center;
+      @include flex-item-center();
       .label {
         letter-spacing: 0.96px;
         font-weight: $bold;
-        font-size: $font16;
+        font-size: 16px;
       }
       .material-icons {
-        margin-right: $margin15;
+        margin-right: 15px;
         &:hover {
           cursor: pointer;
         }
       }
     }
     .option {
-      display: flex;
-      align-items: center;
+      @include flex-item-center();
       cursor: pointer;
       height: 15px;
       position: relative;
@@ -44,7 +34,7 @@
         height: 8px;
         margin-left: 7px;
         background-color: $c-gray-18;
-        border-radius: 50%;
+        border-radius: $half;
       }
       &:hover {
         .dropdown {
@@ -54,8 +44,7 @@
     }
   }
   .sent-details {
-    display: flex;
-    align-items: center;
+    @include flex-item-center();
     margin-left: 30px;
     opacity: 0.5;
     .icon {
@@ -63,7 +52,7 @@
       height: 8px;
       margin: 0 10px;
       background-color: $sent-icon;
-      border-radius: 50%;
+      border-radius: $half;
     }
   }
 }
@@ -74,24 +63,18 @@
   position: absolute;
   width: 203px;
   border-radius: 10px;
-  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.27);
+  box-shadow: 0 6px 12px 0 $dropdown-box-shadow;
   background-color: $white;
   right: 0;
-  top: 100%;
-  font-family: Roboto;
-  font-size: 16px;
+  top: $full;
+  @include normalText;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0.96px;
-  text-align: left;
   color: $dark-blue;
   z-index: 141;
   &__item {
     padding: 18px 18px 12px 20px;
     &:hover {
-      background-color: rgba(232, 238, 245, 0.25);
+      background-color: $dropdown-hover-background;
     }
   }
 }
@@ -101,33 +84,30 @@
 }
 
 .fields {
-  display: flex;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
   margin-top: 10px;
-  width: 100%;
-  justify-content: space-between;
+  width: $full;
   @media (max-width: $tablet) {
     flex-wrap: wrap;
     gap: 60px;
   }
   .field {
-    display: flex;
-    align-items: center;
+    @include flex-item-center();
     margin-right: 1.5%;
     width: 45%;
     @media (max-width: $tablet) {
-      @include width(42.6%);
+      width: 42.6%;
     }
     .mat-label {
       width: 150px;
       color: $mat-tab-label;
-      font-size: $font14;
+      font-size: 14px;
     }
   }
 }
 
 :host ::ng-deep mat-form-field {
-  width: 100%;
+  width: $full;
 }
 
 .full-width {
@@ -135,13 +115,11 @@
 }
 
 .chip-list {
-  width: 100%;
+  width: $full;
 }
 
 .btn-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-all-center;
   margin: 40px 0;
   .schedule {
     height: 46px;
@@ -155,14 +133,7 @@
       transform: scale(0.97);
     }
     &__text {
-      font-family: Roboto;
-      font-size: $font16;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
+      @include normalText;
       color: $primary-cta;
     }
   }
@@ -176,21 +147,14 @@
       transform: scale(0.97);
     }
     &__text {
-      font-family: Roboto;
-      font-size: $font16;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
+      @include normalText;
       color: $white;
     }
   }
 }
 
 :host ::ng-deep .full-width {
-  width: 100% !important;
+  width: $full !important;
 }
 
 :host ::ng-deep .full-width .mat-label {
@@ -241,7 +205,7 @@
 }
 
 .email-field-container {
-  width: 100%;
+  width: $full;
   position: relative;
   .text-number {
     padding-right: 8px;
@@ -255,8 +219,8 @@
 .personalization {
   width: 203px;
   padding: 8px;
-  border-radius: 10px;
-  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.27);
+  border-radius: $border10;
+  box-shadow: 0 6px 12px 0 $dropdown-box-shadow;
   background-color: $white;
   position: absolute;
   top: 35px;
@@ -265,21 +229,14 @@
   display: none;
   .title {
     padding: 0 37px 8.2px 30.5px;
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
-    text-align: left;
+    @include normalText;
     color: $dark-blue;
-    border-bottom: 1px solid$black;
+    border-bottom: 1px solid $black;
   }
   .body {
-    padding: 15px 10px;
+    padding: $padding15 $padding10;
     .item {
-      padding: 5px 10px;
+      padding: $padding5 $padding10;
       cursor: pointer;
       &:hover {
         background-color: aliceblue;
@@ -297,25 +254,15 @@
 }
 
 .info-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
   color: $tooltip;
   margin-bottom: 3px;
-  font-family: Roboto;
-  font-size: 16px;
+  @include normalText;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0.96px;
-  text-align: left;
 }
 
 .stats-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
   margin: 35px 0;
   .stats {
     width: 169px;
@@ -323,12 +270,10 @@
     padding: 24px 47px 22px 48px;
     opacity: 0.55;
     border-radius: 5px;
-    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 6px 0 $container-box-shadow;
     border: solid 1px $manually-contacts;
     background-color: $white;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    @include flex-col-centerAlgn;
     &__text {
       margin-top: 6px;
     }

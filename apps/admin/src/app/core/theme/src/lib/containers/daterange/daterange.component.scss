@@ -31,7 +31,7 @@
 
 :host ::ng-deep .date-range-input {
   font-size: 12px;
-  font-weight: 600;
+  font-weight: $bold;
   @media only screen and (max-width: 1200px) {
     font-size: 12px;
   }
@@ -41,9 +41,7 @@
 }
 
 .wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
 }
 
 :host
@@ -86,8 +84,7 @@
 }
 
 :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   padding: 5px 0;
   border: none;
   input {

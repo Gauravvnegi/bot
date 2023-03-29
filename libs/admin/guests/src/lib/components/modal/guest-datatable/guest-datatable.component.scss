@@ -12,9 +12,9 @@
 
 .table-container {
   max-height: 75vh;
-  @include margin(20);
+  margin: 20;
   overflow: auto;
-  @include margin-bottom(0);
+  margin-bottom: 0;
 }
 
 .loader {
@@ -23,7 +23,7 @@
 
 .loading {
   text-align: center;
-  @include font-size(25);
+  font-size: 25px;
   font-weight: $bolder;
   color: $primary-cta;
 }
@@ -82,7 +82,7 @@
   justify-content: flex-end;
   margin: 0 20px;
   .close {
-    @include margin-top(20);
+    margin-top: 20px;
     cursor: pointer;
   }
 }

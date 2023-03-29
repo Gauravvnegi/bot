@@ -37,13 +37,8 @@
 }
 
 .days-label {
-  font-family: Roboto;
+  @include normalText;
   font-size: 10px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
   color: $c-gray-72;
   align-self: flex-start;
 }
@@ -51,7 +46,7 @@
 :host ::ng-deep .mat-tab-label {
   min-width: 12vw !important;
   @media screen and (max-width: $L) {
-    @include padding(0 6px);
+    padding: 0 6px;
   }
 }
 :host
@@ -86,14 +81,9 @@
     justify-content: space-between;
     align-items: center;
     &-title {
-      font-family: Roboto;
-      font-size: 16px;
+      @include normalText;
       font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
+
       color: $dark-blue;
       display: flex;
       align-items: center;
@@ -128,8 +118,7 @@
     @include flex-between-center;
     font-family: Roboto;
     font-size: 12px;
-    font-stretch: normal;
-    font-style: normal;
+
     line-height: 1.17;
     letter-spacing: 0.72px;
     .label {

@@ -1,15 +1,12 @@
 @import 'main';
 
 .icon-wrapper {
-  @include flex-space-between();
-  flex-wrap: wrap;
-
+  @include flex-space-btw-wrap();
   position: relative;
   .icon {
     width: 32%;
     margin: 6% 0.5%;
-    @include flex-item-center();
-    flex-direction: column;
+    @include flex-col-centerAlgn();
 
     .table-body-journey-icon {
       height: 14px;
@@ -52,7 +49,7 @@
 }
 
 :host ::ng-deep .arrival-time {
-  font-size: $font12;
+  font-size: 12px;
   color: $c-gray-72;
   margin-top: 2px;
   @media screen and (max-width: 800px) {
@@ -61,20 +58,16 @@
 }
 
 :host ::ng-deep .arrival-date {
-  font-size: $font12;
+  font-size: 12px;
   color: $dark-grey;
   @media screen and (max-width: 800px) {
     font-size: 8px;
   }
 }
 
-:host ::ng-deep .status-image {
-  padding: 5px !important;
-}
-
 :host ::ng-deep .booking-number {
   color: $quote-color;
-  font-size: $font12;
+  font-size: 12px;
   text-align: center;
   @media screen and (max-width: 800px) {
     font-size: 8px;
@@ -83,15 +76,13 @@
 
 :host ::ng-deep .package {
   color: $dark-grey;
-  font-size: $font12;
+  font-size: 12px;
   position: relative;
   @media screen and (max-width: 800px) {
     font-size: 10px;
   }
   span {
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    @include txt-Ellipsis;
     max-width: 98%;
 
     @media screen and (max-width: 540px) {
@@ -110,7 +101,7 @@
 :host ::ng-deep .tabel-room-no {
   padding: 7px;
   font-size: 12px;
-  background-color: rgb(72, 192, 72, 0.1);
+  background-color: $table-room-bg;
   border-radius: 25px;
   text-align: center;
   color: $comparison;
@@ -123,8 +114,8 @@
 :host ::ng-deep .p-datatable {
   margin-top: 20px;
   @media (max-width: $tablet) {
-    @include width(100%);
-    @include margin(10px auto);
+    width: 100%;
+    margin: 10px auto;
     box-shadow: none;
   }
   @media (max-width: $XL) {
@@ -142,9 +133,7 @@
 }
 
 :host ::ng-deep .booking-feedback {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-all-center;
   padding: 7px;
   margin: 0 10px;
   margin-top: 7px;
@@ -179,8 +168,8 @@
     margin: 0 2px;
     text-align: center;
     min-width: 23px;
-    border-radius: 50%;
-    font-size: $font12;
+    border-radius: $half;
+    font-size: 12px;
   }
   @media screen and (max-width: 1050px) {
     margin: 0;
@@ -212,23 +201,10 @@
   color: $primary-cta !important;
 }
 
-:host ::ng-deep .data-table-row {
-  &:hover {
-    cursor: pointer;
-    background: $table-hover-background !important;
-  }
-}
-:host ::ng-deep .header {
-  color: $dark-blue !important;
-  font-size: 16px;
-  font-weight: bold;
-}
-:host ::ng-deep {
-  .table-data-head {
-    color: $dark-blue !important;
-    white-space: break-spaces !important;
-    word-break: break-word !important;
-  }
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include table-cell-padding(0.3em);
 }
 
 // *** over ride the table style ***

@@ -9,9 +9,7 @@
     height: 51.7px;
     padding: 14px 22.5px 16.7px 20.5px;
     background-color: $c-gray-103;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-space-between-cen-Algn;
     .close {
       cursor: pointer;
     }
@@ -20,17 +18,14 @@
     padding: 12px 6px;
     display: flex;
     .left-container {
-      width: 50%;
+      width: $half;
     }
     .right-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      @include flex-col-centerAlgn;
       margin-top: 55px;
-      width: 50%;
+      width: $half;
       .field-container {
-        display: flex;
-        align-items: center;
+        @include flex-item-center();
         margin-bottom: 20px;
         img {
           width: 27.5px;
@@ -53,9 +48,7 @@
   }
 }
 .btn-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-all-center;
   margin: 40px 0;
   .schedule {
     height: 46px;
@@ -69,14 +62,7 @@
       transform: scale(0.97);
     }
     &__text {
-      font-family: Roboto;
-      font-size: $font16;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
+      @include normalText;
       color: $primary-cta;
     }
   }
@@ -90,14 +76,7 @@
       transform: scale(0.97);
     }
     &__text {
-      font-family: Roboto;
-      font-size: $font16;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
+      @include normalText;
       color: $white;
     }
   }

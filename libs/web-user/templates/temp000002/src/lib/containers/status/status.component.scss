@@ -174,7 +174,7 @@
       width: 44%;
     }
     &--title {
-      font-size: $font16;
+      font-size: 16px;
       color: #8d8d8d;
       margin-bottom: $margin-medium;
       b {
@@ -191,7 +191,7 @@
         font-size: 17px;
       }
       @media screen and (max-width: $tab-size) {
-        font-size: $font14;
+        font-size: 14px;
       }
     }
     &--value--container {

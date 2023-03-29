@@ -20,7 +20,7 @@
   border-radius: 0 0 $border-radius-small $border-radius-small;
   padding-bottom: 20px;
   @media only screen and (min-width: $M) {
-     padding-bottom: $padding50;
+    padding-bottom: 50px;
   }
 }
 
@@ -66,7 +66,7 @@
   }
 
   @media screen and (max-width: $tab-size) {
-    font-size: $font16;
+    font-size: 16px;
   }
 }
 

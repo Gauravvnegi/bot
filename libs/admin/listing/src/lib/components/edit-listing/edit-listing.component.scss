@@ -1,7 +1,7 @@
 @import 'main';
 
 .wrapper {
-  padding: $padding20;
+  padding: 20px;
   background-color: $white;
   border-radius: 5px;
   &-header {
@@ -14,7 +14,7 @@
       .label {
         letter-spacing: 0.96px;
         font-weight: $bold;
-        font-size: $font16;
+        font-size: 16px;
       }
       .material-icons {
         margin-right: $margin15;
@@ -25,7 +25,7 @@
     }
   }
   &-form {
-    padding-left: $padding20;
+    padding-left: 20px;
     .fields {
       display: flex;
       align-items: center;
@@ -40,7 +40,7 @@
         align-items: center;
         min-width: 35%;
         .status {
-          font-size: $font16;
+          font-size: 16px;
           margin-right: 20px;
         }
         .status--left {
@@ -53,7 +53,7 @@
       }
       .note {
         color: $primary-gray;
-        font-size: $font12;
+        font-size: 12px;
         padding-left: 11%;
         margin-bottom: 20px;
       }
@@ -63,7 +63,7 @@
         width: 31.5%;
         margin-right: 1.5%;
         @media (max-width: $tablet) {
-          @include width(42.6%);
+          width: 42.6%;
         }
         ::ng-deep .mat-form-field-infix {
           @media (max-width: 1024px) {
@@ -77,7 +77,7 @@
         width: 100%;
         margin-right: 1.5%;
         @media (max-width: $tablet) {
-          @include width(42.6%);
+          width: 42.6%;
         }
         ::ng-deep .mat-form-field-infix {
           @media (max-width: 1024px) {
@@ -101,21 +101,15 @@
       }
     }
     .margin-adjust {
-      padding: $padding20 0;
+      padding: 20px 0;
     }
   }
   .wrapper-text {
     margin: 15px 0;
-    padding-left: $padding20;
+    padding-left: 20px;
     .add-text {
-      font-family: Roboto;
-      font-size: $font16;
+      @include normalText;
       font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
       color: $dark-blue;
     }
   }
@@ -160,13 +154,7 @@
       background-color: $primary-cta;
       cursor: pointer;
       .save-text {
-        font-size: $font16;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.96px;
-        text-align: left;
+        @include normalText;
         color: $white;
       }
     }
@@ -209,15 +197,15 @@
 }
 
 :host ::ng-deep .mat-label {
-  font-size: $font16;
+  font-size: 16px;
   color: $primary-gray;
   margin-right: 10px;
   width: 165px;
   @media only screen and (max-width: 1300px) {
-    font-size: $font13;
+    font-size: 13px;
   }
   @media only screen and (max-width: 1080px) {
-    font-size: $font10;
+    font-size: 10px;
   }
 }
 
@@ -263,27 +251,15 @@
     justify-content: center;
     align-items: center;
     &__value {
-      font-family: Roboto;
-      font-size: 16px;
+      @include normalText;
       font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
       color: $dark-blue;
       opacity: 0.5;
     }
     &__text {
-      font-family: Roboto;
-      font-size: 16px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
+      @include normalText;
       color: $dark-blue;
+      font-weight: normal;
       opacity: 0.5;
     }
   }
@@ -303,12 +279,12 @@
 }
 
 :host ::ng-deep .mat-select-value-text {
-  font-size: $font16;
+  font-size: 16px;
   color: $dark-blue;
 }
 
 :host ::ng-deep input.mat-input-element {
-  font-size: $font16;
+  font-size: 16px;
   color: $dark-blue;
 }
 

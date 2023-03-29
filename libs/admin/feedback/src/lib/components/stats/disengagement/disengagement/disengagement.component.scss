@@ -73,7 +73,7 @@
         justify-content: space-between;
         align-items: center;
         @media screen and (max-width: $L) {
-          @include font-size(12);
+          font-size:12px;
           div {
             color: $quote-color;
           }

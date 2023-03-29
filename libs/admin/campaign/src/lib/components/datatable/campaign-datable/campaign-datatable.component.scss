@@ -1,13 +1,11 @@
 @import 'main';
 
 .header {
-  display: flex;
-  justify-content: space-between;
+  @include flex-space-between();
 }
 
 .option {
-  display: flex;
-  align-items: center;
+  @include flex-item-center();
   cursor: pointer;
   height: 30px;
   position: relative;
@@ -16,7 +14,7 @@
     height: 8px;
     margin-left: 7px;
     background-color: $c-gray-18;
-    border-radius: 50%;
+    border-radius: $half;
   }
   &:hover {
     .dropdown {
@@ -30,11 +28,10 @@
   position: absolute;
   width: 203px;
   border-radius: 4px;
-  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.27);
+  box-shadow: 0 6px 12px 0 $dropdown-box-shadow;
   background-color: $white;
   right: 0;
   font-size: 16px;
-  font-weight: normal;
   letter-spacing: 0.96px;
   padding: 10px;
   z-index: 10000;
@@ -42,7 +39,7 @@
   &__item {
     padding: 18px 14px 10px 14px;
     &:hover {
-      background-color: rgba(232, 238, 245, 0.25);
+      background-color: $dropdown-hover-background;
     }
   }
 }
@@ -70,7 +67,7 @@
 }
 
 :host ::ng-deep .name {
-  font-size: $font12 !important;
+  font-size: 12px !important;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
@@ -82,7 +79,7 @@
 }
 :host ::ng-deep .data-table-row {
   td {
-    padding: $padding20 !important;
+    padding: 20px !important;
   }
   &:hover {
     cursor: pointer;
@@ -91,12 +88,12 @@
 }
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
   color: $primary-cta !important;
-  font-size: $font16 !important;
+  font-size: 16 !important;
 }
 
 :host ::ng-deep .header {
   color: $dark-blue !important;
-  font-size: $font16;
+  font-size: 16px;
   font-weight: bold;
 }
 
@@ -110,30 +107,25 @@
 
 .stats {
   font-size: 12px;
-  font-weight: normal;
   letter-spacing: 0.66px;
 
   .stats-container {
     max-width: 500px;
     gap: 5px;
-    display: flex;
-    flex-wrap: wrap;
+    @include flex-wrap;
   }
 }
 
 .stats-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  @include flex-wrap-centerAlgn();
 }
 
 .stat-chip {
   height: 30.9px;
   padding: 6.6px 7.4px 6.6px 9.7px;
   border-radius: 15.5px;
-  background-color: rgba(0, 48, 181, 0.1);
-  display: flex;
-  align-items: center;
+  background-color: $navy-blue1;
+  @include flex-item-center();
   margin: 0 10px 10px 0;
   &__value {
     margin-left: 3px;
@@ -144,7 +136,7 @@
 }
 
 .delivered {
-  background-color: rgba(0, 48, 181, 0.1);
+  background-color: $navy-blue1;
   color: $booking-feedback;
   &__value {
     color: $white;
@@ -153,38 +145,38 @@
 }
 
 .opened {
-  background-color: rgba(37, 162, 226, 0.1);
-  color: rgba(37, 162, 226);
+  background-color: $opened-bg;
+  color: $opened-txt;
   &__value {
     color: $white;
-    background-color: rgba(37, 162, 226);
+    background-color: $opened-txt;
   }
 }
 
 .unopened {
-  background-color: rgba(255, 143, 0, 0.1);
-  color: rgba(255, 143, 0, 1);
+  background-color: $unopened-bg;
+  color: $unopened-txt;
   &__value {
     color: $white;
-    background-color: rgba(255, 143, 0, 1);
+    background-color: $unopened-txt;
   }
 }
 
 .clicked {
-  background-color: rgba(82, 179, 63, 0.1);
-  color: rgba(82, 179, 63, 1);
+  background-color: $clicked-bg;
+  color: $clicked-txt;
   &__value {
     color: $white;
-    background-color: rgba(82, 179, 63, 1);
+    background-color: $clicked-txt;
   }
 }
 
 .failed {
-  background-color: rgba(240, 13, 42, 0.1);
-  color: rgba(240, 13, 42, 1);
+  background-color: $failed-bg;
+  color: $failed-txt;
   &__value {
     color: $white;
-    background-color: rgba(240, 13, 42, 1);
+    background-color: $failed-txt;
   }
 }
 
@@ -215,6 +207,11 @@
 }
 .guest {
   font-size: 14px;
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include table-cell-padding(1em);
 }
 
 // *** over ride the table style ***

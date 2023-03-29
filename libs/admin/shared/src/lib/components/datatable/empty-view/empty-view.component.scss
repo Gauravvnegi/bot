@@ -6,11 +6,9 @@
 
 .wrapper {
   &__main {
-    display: flex;
-    // background-color: $white;
     height: 200px;
     margin: auto;
-    justify-content: center;
+    @include flex-justify-center;
 
     .img-wrapper {
       .img {
@@ -20,7 +18,7 @@
   }
 
   &__default {
-    font-size: $font14;
+    font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.84px;
     color: $dark-blue;
@@ -30,8 +28,7 @@
   }
 
   &__standard {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     max-width: 666.3px;
     text-align: center;
     width: 93vw;
@@ -51,18 +48,16 @@
 
     &_contentWrapper {
       &_heading {
-        font-size: $font14;
+        font-size: 14px;
         font-weight: 500;
         letter-spacing: 0.84px;
-        text-align: left;
         color: $dark-blue;
         margin-bottom: 10px;
       }
 
       &_subText {
-        font-size: $font14;
+        font-size: 14px;
         letter-spacing: 0.84px;
-        text-align: left;
         color: $dark-blue;
         line-height: 24px;
       }

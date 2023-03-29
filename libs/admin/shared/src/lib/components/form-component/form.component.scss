@@ -52,7 +52,7 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
 
 .label {
   color: $primary-text-color;
-  font-size: $font16;
+  font-size: 16px;
   letter-spacing: 0.96px;
   font-weight: 500;
 
@@ -88,7 +88,7 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
 :host ::ng-deep .dropdown-action-cta {
   border-top: 1px solid $border-color;
   padding: 1em;
-  font-family: Roboto;
+  font-family: 'Roboto';
   font-size: 14px;
   letter-spacing: 0.84px;
   text-align: center;

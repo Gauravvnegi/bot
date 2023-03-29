@@ -1,7 +1,7 @@
 @import 'main';
 
 .wrapper {
-  padding: $padding20;
+  padding: 20px;
   background-color: $white;
   border-radius: 5px;
   height: 740px;
@@ -13,12 +13,12 @@
       align-items: center;
       .label {
         letter-spacing: 0.96px;
-        font-weight: $bold;
-        font-size: $font16;
+        font-size: 16px;
         cursor: default;
+        font-weight: $bold;
       }
       .material-icons {
-        margin-right: $margin15;
+        margin-right: 15px;
         &:hover {
           cursor: pointer;
         }
@@ -49,7 +49,7 @@
         display: flex;
         min-width: 35%;
         .status {
-          font-size: $font14;
+          font-size: 14px;
           margin-right: 20px;
         }
         .status--left {
@@ -62,7 +62,7 @@
       }
       .note {
         color: $primary-gray;
-        font-size: $font12;
+        font-size: 12px;
         padding-left: 11%;
         margin-bottom: 20px;
       }
@@ -74,7 +74,7 @@
         gap: 10px;
 
         @media (max-width: $tablet) {
-          @include width(42.6%);
+          width: 42.6%;
         }
         ::ng-deep .mat-form-field-infix {
           @media (max-width: 1024px) {
@@ -98,21 +98,15 @@
       }
     }
     .margin-adjust {
-      padding: $padding20 0;
+      padding: 20px 0;
     }
   }
   .wrapper-text {
     margin: 20px 0;
-    padding-left: $padding20;
+    padding-left: 20px;
     .add-text {
-      font-family: Roboto;
-      font-size: $font16;
+      @include normalText;
       font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
       color: $dark-blue;
     }
   }
@@ -129,7 +123,6 @@
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      // justify-content: center;
       padding-top: 30px;
       align-items: center;
       color: $primary-gray;
@@ -172,13 +165,7 @@
       background-color: $primary-cta;
       cursor: pointer;
       .save-text {
-        font-size: $font16;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.96px;
-        text-align: left;
+        @include normalText;
         color: $white;
       }
     }
@@ -234,16 +221,16 @@
 }
 
 :host ::ng-deep .mat-label {
-  font-size: $font16;
+  font-size: 16px;
   color: $primary-gray;
   margin-right: 10px;
   min-width: 24%;
   margin-bottom: 17px;
   @media only screen and (max-width: 1300px) {
-    font-size: $font13;
+    font-size: 13px;
   }
   @media only screen and (max-width: 1080px) {
-    font-size: $font10;
+    font-size: 10px;
   }
   ::ng-deep .mat-form-field-infix.description {
     width: 100% !important;
@@ -276,12 +263,12 @@
 }
 
 :host ::ng-deep .mat-select-value-text {
-  font-size: $font16;
+  font-size: 16px;
   color: $dark-blue;
 }
 
 :host ::ng-deep input.mat-input-element {
-  font-size: $font16;
+  font-size: 16px;
   color: $dark-blue;
 }
 
@@ -316,16 +303,16 @@
   padding: inherit;
 }
 :host ::ng-deep .mat-description {
-  font-size: $font16;
+  font-size: 16px;
   color: $primary-gray;
   min-width: 2% !important;
   width: 8.7%;
   margin-bottom: 19px;
   @media only screen and (max-width: 1300px) {
-    font-size: $font13;
+    font-size: 13px;
   }
   @media only screen and (max-width: 1080px) {
-    font-size: $font10;
+    font-size: 10px;
   }
   ::ng-deep .mat-form-field-infix.description {
     width: 100% !important;

@@ -17,13 +17,8 @@
       cursor: pointer;
     }
     .title {
-      font-family: Roboto;
+      @include normalText;
       font-size: 14px;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.84px;
       color: $dark-blue;
     }
   }
@@ -59,8 +54,7 @@
         font-family: Roboto;
         font-size: 12px;
         font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
+      
         color: $button-blue;
         display: flex;
         align-items: center;
@@ -101,7 +95,7 @@
   border-bottom: solid 1px $light-gray;
   .cross_icon {
     color: $c-gray-77;
-    font-size: $font20;
+    font-size: 20px;
     position: absolute;
     right: 0;
     top: 25%;

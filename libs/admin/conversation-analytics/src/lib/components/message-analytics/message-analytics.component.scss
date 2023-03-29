@@ -16,19 +16,16 @@
   background: 0% 0% no-repeat padding-box $white;
   box-shadow: 0px 3px 6px $progress-bar-messages;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: $border5;
   opacity: 1;
   .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @include flex-space-between-cen-Algn;
     .dropdown-label {
       margin-left: 0.5em;
       font-weight: 500;
     }
     .title-container {
-      display: flex;
-      align-items: center;
+      @include flex-item-center;
 
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0.96px;
@@ -55,13 +52,12 @@
       margin-left: 3%;
     }
     .options {
-      display: flex;
-      align-items: center;
+      @include flex-item-center;
       padding: 0 17px;
 
       .icons {
-        display: flex;
-        align-items: center;
+        @include flex-item-center;
+
         .svg {
           padding: 0 12px;
           height: auto;
@@ -82,11 +78,11 @@
     }
 
     .dropdown--wrapper {
-      display: flex;
-      align-items: center;
+      @include flex-item-center;
+
       padding: 5px;
       border: 2px solid $light-grey;
-      border-radius: 5px;
+      border-radius: $border5;
 
       .divider {
         height: 20px;

@@ -1,31 +1,26 @@
 @import 'main';
 
 .legends-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  @include flex-wrap-centerAlgn;
   .legend {
-    width: 50%;
+    width: $half;
   }
 }
 
 .stat-val-container {
-  width: 100%;
+  width: $full;
   height: 25px;
   opacity: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
   padding: 15px 11px;
   margin: 5px;
   .label {
-    display: flex;
-    align-items: center;
+    @include flex-item-center();
     .icon {
       width: 10px;
       height: 10px;
       margin: 0 10px 0 0;
-      border-radius: 50%;
+      border-radius: $half;
     }
     .text {
       font: normal normal medium 12px/15px Roboto;
@@ -47,33 +42,27 @@
   display: flex;
   .graph {
     height: 176px;
-    display: flex;
-    justify-content: center;
+    @include flex-justify-center();
     position: relative;
-    width: 50%;
+    width: $half;
     transform: scale(0.8);
 
     .graph-canvas {
       z-index: 2;
-      justify-content: center;
-      display: flex;
-      align-items: center;
+      @include flex-all-center;
       &-base-chart {
         height: 176px;
       }
     }
     .labels {
-    z-index: 1;
-    position: absolute;
-    height: 100%;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    transform: scale(1.1);
-    text-align: center;
-    bottom: 0;
+      z-index: 1;
+      position: absolute;
+      height: $full;
+      top: 0;
+      @include flex-col-all-Center;
+      transform: scale(1.1);
+      text-align: center;
+      bottom: 0;
       .val {
         font: normal normal bold 25px/30px Roboto;
         letter-spacing: 1.5px;
@@ -85,12 +74,10 @@
         letter-spacing: 0.72px;
         opacity: 1;
         // color: $dark-blue;
-        color:$gray-total;
+        color: $gray-total;
         word-wrap: break-word;
         width: 77px;
       }
     }
   }
 }
-
-

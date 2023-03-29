@@ -20,9 +20,7 @@
 }
 
 .site-button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+ @include flex-space-between-cen-Algn;
   border-color: $light-grey;
   border-width: 1px;
   border-style: solid;

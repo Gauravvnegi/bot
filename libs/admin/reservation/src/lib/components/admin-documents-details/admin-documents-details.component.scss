@@ -2,12 +2,12 @@
 
 :host ::ng-deep .mat-tab-label {
   color: $mat-tab-label;
-  font-size: $font14;
+  font-size: 14px;
 }
 
 :host ::ng-deep .mat-tab-label-active {
   color: $primary-cta;
-  font-size: $font16;
+  font-size: 16px;
 }
 
 :host ::ng-deep .mat-ink-bar {
@@ -15,8 +15,7 @@
 }
 
 .document-name-nationality {
-  display: flex;
-  justify-content: space-between;
+  @include flex-justify-center;
   margin-bottom: 20px;
 }
 
@@ -26,7 +25,7 @@
   outline: none;
   border: 1px solid $white;
   border-radius: 5px;
-  padding: 6px $padding20;
+  padding: 6px 20px;
   .p-inputtext {
     color: $white;
   }
@@ -34,10 +33,6 @@
     border-color: $white;
   }
 }
-
-// :host ::ng-deep .pi {
-//   color: $white;
-// }
 
 .svg-wrapper {
   padding-left: 5px;
@@ -50,59 +45,22 @@
   }
 }
 
-// :host ::ng-deep .mat-head {
-//   font-size: $font16;
-//   font-weight: $bolder;
-//   color: $dark-blue;
-//   letter-spacing: 0.96px;
-// }
-
 .data-seperator {
   background: none;
   border: none;
-  margin: $margin20 0px;
+  margin: 20px 0px;
 }
 
-// .fields-wrapper {
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   margin: 30px 0px;
-//   padding: 0px 30px;
-//   .field {
-//     .label {
-//       letter-spacing: 0.72px;
-//       font-size: $font12;
-//       color: $primary-gray;
-//     }
-//     .value {
-//       letter-spacing: 0.84px;
-//       font-size: $font14;
-//       color: $primary-black;
-//       margin-top: $margin10;
-//     }
-//   }
-// }
-
-// .form-wrapper {
-//   display: flex;
-// }
-// .gap {
-//   margin-top: $margin15;
-// }
-
 .document-header {
-  display: flex;
-  margin-bottom: $margin20;
-  margin-top: $margin15;
-  align-items: center;
-  justify-content: space-between;
+  @include flex-space-between-cen-Algn;
+  margin-bottom: 20px;
+  margin-top: 15px;
+
   .heading {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     .label {
-      font-size: $font16;
-      margin-right: $margin20;
+      font-size: 16px;
+      margin-right: 20px;
       font-weight: $bolder;
     }
   }
@@ -119,17 +77,12 @@
   border-top: none;
 }
 
-// :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
-//   display: none;
-// }
-
 :host ::ng-deep .mat-select-value-text {
   font-size: 14px;
 }
 
 .nationality-wrapper {
-  display: flex;
-  align-items: baseline;
+  @include flex-baseAlgn;
   .text {
     color: $primary-gray;
     margin-right: 7px;
@@ -137,7 +90,7 @@
 }
 
 :host ::ng-deep .nationality > .mat-form-field-wrapper > .mat-form-field-flex {
-  padding: 5px $padding10;
+  padding: 5px 10px;
   border-radius: 5px;
   border: 1px solid $light-grey;
 }
@@ -149,9 +102,9 @@
 .health-status {
   letter-spacing: 0.84px;
   color: $primary-gray;
-  font-size: $font14;
+  font-size: 14px;
   font-weight: $bolder;
-  margin: $margin20 30px;
+  margin: 20px 30px;
   .accepted {
     color: $completed;
   }
@@ -161,12 +114,11 @@
 }
 
 .upload-image-wrapper {
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   .upload-image {
     width: 31%;
     text-align: center;
-    font-size: $font12;
+    font-size: 12px;
     margin: 1%;
     border: 1px dashed $light-grey;
     border-radius: 8px;
@@ -176,22 +128,19 @@
       width: 100%;
     }
     .text {
-      margin: $margin10 0;
-      font-size: $font14;
+      margin: 10px 0;
+      font-size: 14px;
     }
   }
 }
 
 .pending-button-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @include flex-space-between-cen-Algn;
   .decision-button-wrapper {
-    display: flex;
-    align-items: center;
-    margin-right: $margin10;
+   @include flex-item-center;
+    margin-right: 10px;
     button {
-      margin: 0 $margin10;
+      margin: 0 10px;
       border: none;
       outline: none;
       background: transparent;
@@ -206,12 +155,11 @@
   .text {
     letter-spacing: 0.84px;
     color: $primary-gray;
-    font-size: $font14;
+    font-size: 14px;
     font-weight: $bolder;
     margin-right: 15px;
   }
-  display: flex;
-  align-items: baseline;
+  @include flex-baseAlgn;
 }
 
 :host ::ng-deep .remark {
@@ -235,8 +183,7 @@
 .download {
   font-size: 12px;
   color: $button-blue !important;
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   p {
     padding-top: 4px;
   }

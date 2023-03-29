@@ -2,7 +2,7 @@
 
 .layoutMessageCheck {
   @include flex-between-center();
-  @include width(75%);
+  width: 75%;
   .margBtm {
     margin-bottom: -6px;
   }
@@ -10,19 +10,19 @@
 
 .layoutFilterContent {
   color: $light-grey;
-  font-size: $font12;
+  font-size: 12px;
 }
 
 .wrapper {
-  @include height(100vh);
+  height: 100vh;
   display: flex;
-  width: $full;
+  width: 100%;
   flex: 1;
 }
 
 .sidebar-panel {
   position: relative;
-  height: $full;
+  height: 100%;
   z-index: $left-side-panel-z;
   -webkit-transition: all 500ms;
   -moz-transition: all 500ms;
@@ -53,12 +53,12 @@
 
 .filter-range-wrapper {
   width: 30%;
-  @include width(30%);
+
   @include flex-between-center();
   @media (max-width: $L) {
-    justify-content: flex-start;
+    @include flex-start;
     gap: 2%;
-    @include width(35%);
+    width: 35%;
   }
   .positionRel {
     position: relative;
@@ -66,12 +66,11 @@
   .temp-width {
     width: 100%;
     @media only screen and (max-width: 800px) {
-      @include width(100%);
+      width: 100%;
     }
     @media (max-width: 1024px) {
-      @include width(35%);
-      display: flex;
-      justify-content: flex-start;
+      width: 35%;
+      @include flex-start;
     }
   }
 }
@@ -81,12 +80,11 @@
   .temp-width {
     width: 100%;
     @media only screen and (max-width: 800px) {
-      @include width(100%);
+      width: 100%;
     }
     @media (max-width: 1024px) {
-      @include width(35%);
-      display: flex;
-      justify-content: flex-start;
+      width: 35%;
+      @include flex-start;
     }
   }
 }
@@ -96,19 +94,19 @@
 }
 
 :host ::ng-deep .p-dropdown {
-  @include margin-left(4%);
+  margin-left: 4%;
 }
 
 :host ::ng-deep .p-dropdown .p-inputtext {
   .material-icons {
-    font-size: $font16;
-    @include width(auto);
-    @include height(auto);
+    font-size: 16px;
+    width: auto;
+    height: auto;
   }
 }
 
 .main-panel {
-  width: $full;
+  width: 100%;
   flex: 1;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -116,15 +114,15 @@
     padding: 6px 0 6px $padding10;
     position: relative;
     @media (max-width: $tablet) {
-      @include width(90%);
-      @include margin-left(auto);
+      width: 90%;
+      margin-left: auto;
     }
     .options {
-      display: flex;
       @include flex-between-center();
       @media (max-width: $tablet) {
-        @include height(53px);
-        justify-content: flex-start;
+        height: 53px;
+        @include flex-start;
+
         gap: 1.4%;
       }
       .search-bar-wrapper {
@@ -133,24 +131,23 @@
       .global_search {
         position: relative;
         width: 30%;
-        @include width(30%);
         @media screen and (max-width: 800px) {
-          @include width(31%);
+          width: 31%;
         }
         @media (max-width: $L) {
-          @include width(35%);
+          width: 35%;
         }
       }
 
       .header--button {
-        padding: 0px $padding10;
-        @include height(42px);
+        padding: 0px 10px;
+        height: 42px;
         border: none;
         font-size: 12px;
         color: $primary-cta;
         @include flex-between-center();
         background-color: $white;
-        border-radius: $borderRadius5;
+        border-radius: 5px;
         position: relative;
         &:hover {
           cursor: pointer;
@@ -160,9 +157,9 @@
         }
         .filter-button--text {
           color: $dark-blue2;
-          font-weight: 500;
+          font-weight: $medium;
           @media only screen and (max-width: 1200px) {
-            font-size: $font10;
+            font-size: 10px;
           }
         }
         .filter-icon {
@@ -172,23 +169,23 @@
           }
         }
         .material-icons {
-          @include margin-left(15px);
+          margin-left: 15px;
         }
         @media screen and (max-width: 800px) {
-          @include width(95%);
+          width: 95%;
         }
         .notification-count {
           position: absolute;
           height: 20px;
-          border: solid 1px #fff;
+          border: solid 1px $white;
           border-radius: 16px;
-          background-color: #ffa329;
+          background-color: $notificationBg;
           padding: 0px 6px;
           top: 0;
           left: 50%;
           font-size: 12px;
           font-weight: bold;
-          color: #fff;
+          color: $white;
         }
       }
       .notification-icon {
@@ -200,7 +197,7 @@
         right: 0;
         height: 100vh;
         box-shadow: 0px 0px 3px 0px $primary-cta;
-        @include width(299px);
+        width: 299px;
         background-color: $white;
         z-index: $right-side-panel-z;
       }
@@ -210,40 +207,39 @@
         right: 0;
         height: 100vh;
         box-shadow: 0px 0px 3px 0px $primary-cta;
-        @include width(299px);
+        width: 299px;
         background-color: $white;
         z-index: $right-side-panel-z;
       }
       .date-range {
         @media screen and (max-width: 800px) {
-          @include width(20%);
+          width: 20%;
         }
       }
 
       // message headers
       .breadcrums {
-        @include width(25%);
-        @include padding(14.5px 20px);
-        font-size: $font14;
+        width: 25%;
+        padding: 14.5px 20px;
+        font-size: 14px;
         letter-spacing: 0.84px;
         color: $light-grey2;
         opacity: 1;
         &_messages {
-          font-weight: 600;
+          font-weight: $bold;
           color: $dark-blue;
         }
         span {
-          font-size: $font14;
-          font-weight: 500;
+          font-size: 14px;
+          font-weight: $medium;
           letter-spacing: 0.84px;
-          text-align: left;
           color: $dark-blue;
         }
         @media screen and (max-width: 800px) {
-          @include width(35%);
+          width: 35%;
         }
         @media (max-width: $L) {
-          @include width(32%);
+          width: 32%;
         }
       }
     }
@@ -260,25 +256,24 @@
         right: 0;
         left: 0;
         opacity: 0.3;
-        background-color: black;
+        background-color: $black;
         z-index: $main-overlay-z;
         display: none;
       }
 
       .router__wrapper {
-        @include padding(20px);
+        padding: 20px;
         min-height: calc(100vh - 110px);
-        // @include padding-top(1.5rem);
         @media only screen and (max-width: 1300px) {
-          @include padding(20px);
+          padding: 20px;
         }
         @media only screen and (max-width: 1100px) {
           min-height: calc(100vh - 9.5vh);
         }
         @media (max-width: $tablet) {
           padding: 1.3%;
-          @include width(92.2%);
-          @include margin-left(auto);
+          width: 92.2%;
+          margin-left: auto;
         }
       }
       @media only screen and (max-width: 1070px) {
@@ -290,12 +285,12 @@
 
 .refresh__wrapper {
   @include flex-item-center();
-  @include padding(0 13px);
+  padding: 0 13px;
   &--icon {
     @include flex-item-center();
-    font-size: $font13;
+    font-size: 13px;
     color: $primary-cta;
-    font-weight: 500;
+    font-weight: $medium;
     &:hover {
       cursor: pointer;
     }
@@ -304,28 +299,26 @@
     }
   }
   .seperator {
-    @include margin(0 10px);
-    @include height(18px);
+    margin: 0 10px;
+    height: 18px;
     border: 0.5px solid $primary-gray;
   }
   .status {
     color: $primary-gray;
-    font-weight: 500;
-    font-size: $font13;
+    font-weight: $medium;
+    font-size: 13px;
     letter-spacing: 0.5px;
-    @include margin(0);
+    margin: 0;
   }
 }
 
 .sidebar-background {
   position: absolute;
   z-index: 0;
-  @include height(100%);
-  @include width(100%);
+  @include fullImg-cover;
   display: block;
   top: 0;
   left: 0;
-  background-size: cover;
   background-position: center center;
   opacity: 0.2;
   filter: alpha(opacity=10);
@@ -343,8 +336,7 @@
 }
 .options1 {
   flex: 9;
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   padding: 0 10px;
 }
 
@@ -353,8 +345,7 @@
 }
 
 .options2 {
-  display: flex;
-  justify-content: flex-end;
+  @include flex-row-justEnd;
   flex: 2;
 }
 
@@ -372,13 +363,13 @@
   }
 }
 ::-webkit-scrollbar-track {
-  background: rgb(238, 233, 233);
+  background: $scrollBar-track;
 }
 
 ::-webkit-scrollbar-thumb {
   &:hover {
-    background: #8f8f8f;
+    background: $scrollBar-thumb;
   }
-  background: #c3c2c2;
+  background: $c-gray-76;
   border-radius: 10px;
 }

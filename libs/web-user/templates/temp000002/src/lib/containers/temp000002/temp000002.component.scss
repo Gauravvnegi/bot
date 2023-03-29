@@ -50,12 +50,12 @@
 }
 
 :host ::ng-deep .container {
-  max-width: $full;
+  max-width: 100%;
   margin: 0 auto;
   margin-bottom: $margin-large;
 
   &__title {
-    font-size: $font25;
+    font-size: 25px;
     font-weight: $bold;
     color: var(--accordian-font-color, $accordian-font-color);
   }
@@ -71,7 +71,7 @@
     overflow-x: inherit;
   }
   @media screen and (width: $M) {
-    padding-bottom: $padding30;
+    padding-bottom: 30px;
   }
   form {
     .mat-expansion-panel-header-title,
@@ -84,12 +84,12 @@
 ::ng-deep .mat {
   &-horizontal-stepper-header-container {
     padding: 0 4%;
-    max-width: $full;
+    max-width: 100%;
     margin: 0 auto;
   }
   &-step-label {
     font-weight: $bold;
-    font-size: $font16;
+    font-size: 16px;
     color: $white;
   }
   &-select-panel {

@@ -1,27 +1,16 @@
 @import 'main';
 :host ::ng-deep {
   .mat-tab-header {
-    padding-bottom: 10px;
+    padding-bottom: $padding10;
     border-bottom: 1px solid $manually-contacts !important;
   }
   .mat-tab-label-content {
-    font-family: Roboto;
-    font-size: 16px;
+    @include normalText;
     font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
     color: $mat-tab-label;
   }
   .mat-tab-label-active > .mat-tab-label-content {
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
+    @include normalText;
     color: $button-blue !important;
   }
   .mat-form-field-underline {
@@ -46,29 +35,20 @@
     margin-bottom: 7px;
   }
   .description {
-    display: flex;
-    align-items: center;
+   @include flex-item-center;
     color: $c-gray-65;
   }
   .listing {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+   @include flex-space-between-cen-Algn;
   }
 }
 
 .container {
-  font-family: Roboto;
-  font-size: 16px;
+  @include normalText;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0.96px;
   .header {
-    display: flex;
-    align-items: center;
-    width: 100%;
+     @include flex-item-center;
+    width: $full;
     .tab-group {
       width: calc(100% - 30px);
     }
@@ -92,8 +72,7 @@
     max-height: 170px;
     overflow-y: auto;
     .item-container {
-      display: flex;
-      justify-content: space-between;
+      @include flex-space-between();
       padding: 7px 15px;
       cursor: pointer;
       .data {

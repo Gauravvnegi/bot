@@ -41,7 +41,7 @@
     }
   }
   .rate-divider {
-    font-size: $font41;
+    font-size: 41px;
     font-weight: 300;
     line-height: 0.95;
     color: $dark-grey;
@@ -134,8 +134,8 @@
   color: $button-blue;
   cursor: pointer;
   @media screen and (max-width: $L) {
-    @include font-size(12);
-    @include padding($padding4);
+    font-size: 12px;
+    padding: 4px;
   }
 }
 .flx {

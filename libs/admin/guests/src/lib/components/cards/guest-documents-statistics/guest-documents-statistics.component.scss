@@ -44,11 +44,11 @@
 }
 .stat {
   @media screen and (max-width: $L) {
-    @include height(65px);
+    height: 65px;
     overflow-y: auto;
-    @include padding-right(20px);
+    padding-right: 20px;
     &::-webkit-scrollbar {
-      @include width(1px);
+      width: 1px;
       background-color: $c-gray-84;
     }
   }
@@ -78,7 +78,7 @@
       color: $quote-color;
       opacity: 1;
       @media (max-width: $tablet) {
-        @include padding-left(19px);
+        padding-left: 19px;
       }
     }
   }

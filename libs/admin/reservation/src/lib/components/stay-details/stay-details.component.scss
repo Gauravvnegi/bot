@@ -14,28 +14,26 @@
   .field {
     .label {
       letter-spacing: 0.72px;
-      font-size: $font12;
+      font-size: 12px;
       color: $primary-gray;
     }
     .value {
       letter-spacing: 0.84px;
-      font-size: $font14;
-      margin-top: $margin10;
+      font-size: 14px;
+      margin-top: 10px;
       font-weight: $medium;
     }
   }
 }
 
 .label-wrapper {
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   margin-bottom: 15px;
   margin-top: 15px;
   .heading {
-    font-size: 16px;
-    font-weight: 700;
+    @include normalText;
+    font-weight: $bolder;
     color: $dark-blue;
-    letter-spacing: 0.96px;
   }
 }
 

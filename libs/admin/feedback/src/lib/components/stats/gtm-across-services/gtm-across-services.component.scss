@@ -27,8 +27,8 @@
   opacity: 1;
   margin: 0 10px;
   @media (max-width: $tablet) {
-    font-size: $tabfont25;
-    @include margin-left(0);
+    font-size: 25px;
+    margin-left: 0;
   }
 }
 

@@ -17,6 +17,7 @@ export class AuthService extends ApiService {
   /**
    * @function login To login the user.
    * @param loginParams Data for login.
+    font-weight: $medium;
    * @returns An Observable with the user data.
    */
   login(loginParams: LoginParam): Observable<any> {

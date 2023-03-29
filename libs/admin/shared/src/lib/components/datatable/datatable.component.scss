@@ -12,7 +12,7 @@
   padding: 6px 13px 5px;
   border-radius: 5px;
   border: 1px solid $white-three;
-  font-size: $font12;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.72px;
   font-family: 'Poppins-regular';
@@ -238,7 +238,7 @@
 
 :host ::ng-deep .guest {
   color: $primary-black;
-  font-size: $font12;
+  font-size: 12px;
   position: relative;
   &:hover {
     cursor: pointer;
@@ -825,7 +825,7 @@ $table-hover-color: #f3f3f3;
     background-color: $white;
     display: inline-flex;
     align-items: center;
-    font-size: $font14;
+    font-size: 14px;
     font-weight: 500;
     line-height: 1.07;
     letter-spacing: 0.84px;
@@ -835,7 +835,7 @@ $table-hover-color: #f3f3f3;
     order: 1;
   }
   .p-paginator-current {
-    font-size: $font12;
+    font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.72px;
     text-align: right;
@@ -906,7 +906,7 @@ $table-hover-color: #f3f3f3;
   border-radius: 5px;
   border: 1px solid $white-three;
   color: $inActiveTab;
-  font-size: $font12;
+  font-size: 12px;
   font-weight: 500;
   font-family: 'Poppins-regular';
   order: 3;

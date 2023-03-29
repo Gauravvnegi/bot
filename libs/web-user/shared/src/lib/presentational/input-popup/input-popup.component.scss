@@ -18,13 +18,12 @@
     @media screen and (max-width: 500px) {
       right: -15px;
       top: 0px;
-      margin:0 $padding5;
+      margin:0 5px;
     }
   }
   &--heading {
     white-space: nowrap;
     margin: $margin-medium 0px;
-    // margin-bottom: 25px;
     font-weight: $bolder;
     padding-left: 1rem;
     @media screen and (max-width: 500px) {
@@ -32,7 +31,6 @@
     }
   }
   @media screen and (max-width: 500px) {
-    // padding: 0 $padding-large;
 
     min-height: 40vh;
     box-sizing: border-box;
@@ -67,7 +65,7 @@
 }
 
 :host ::ng-deep mat-label {
-  font-size: $font16;
+  font-size: 16px;
   font-weight: $bold;
 }
 

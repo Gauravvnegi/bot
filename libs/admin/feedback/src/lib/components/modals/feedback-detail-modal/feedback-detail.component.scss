@@ -23,14 +23,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 12px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+
     letter-spacing: 0.72px;
-    text-align: left;
+
     color: $c-gray-61;
     .overall {
       width: 107.7px;
@@ -91,11 +89,9 @@
         font-family: Roboto;
         font-size: 14px;
         font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
+
         line-height: 1.07;
         letter-spacing: 0.84px;
-        text-align: left;
         color: $button-blue;
       }
       .paper {
@@ -115,14 +111,13 @@
       margin-right: 5px;
     }
     &__text {
-      font-family: Roboto;
+      font-family: 'Roboto';
       font-size: 14px;
       font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
+
       line-height: 1.07;
       letter-spacing: 0.84px;
-      text-align: left;
+
       color: $button-blue;
     }
   }
@@ -159,14 +154,12 @@
 .rating__card {
   padding-top: 20px;
   .rating__name {
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 16px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+
     letter-spacing: 0.32px;
-    text-align: left;
+
     color: $primary-gray;
   }
   .rating__comment {
@@ -218,10 +211,7 @@
     height: 13px;
     font-family: Roboto;
     font-size: 10px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+
     letter-spacing: 0.6px;
     text-align: right;
     color: $c-gray-78;
@@ -230,7 +220,7 @@
   .comment {
     display: flex;
     align-items: center;
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 12px;
     word-break: break-all;
     letter-spacing: 0.72px;
@@ -262,12 +252,9 @@
 .chatDate {
   text-align: center;
   margin-bottom: 10px;
-  font-family: Roboto;
+  font-family: 'Roboto';
   font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
+
   letter-spacing: 0.72px;
   color: $dark-blue;
 }
@@ -293,23 +280,16 @@
   }
   &__title {
     margin: 12px 0;
-    font-size: 16px;
+    @include normalText;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
-    text-align: left;
     color: $dark-blue;
   }
   &__description {
     font-size: 12px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+
     letter-spacing: 0.72px;
-    text-align: left;
+
     color: $c-gray-77;
   }
 }
@@ -453,7 +433,7 @@
       }
     }
     &__label {
-      font-size: $font11;
+      font-size: 11px;
       letter-spacing: 0.66px;
       text-align: center;
       border-radius: 3px;
@@ -471,9 +451,7 @@
     &__comment {
       display: none;
       font-size: 11px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
+
       letter-spacing: 0.66px;
       text-align: center;
       border-radius: 14px;
@@ -484,9 +462,7 @@
       position: relative;
       .label {
         font-size: 11px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
+
         line-height: 0;
         letter-spacing: 0.66px;
         text-align: center;
@@ -542,7 +518,7 @@
     margin: 2px 0 3.2px 9.5px;
     padding: 4px 9.3px 5.3px 10px;
     border: solid 1px $priority-asap;
-    font-size: $font12;
+    font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.72px;
     text-align: center;
@@ -553,7 +529,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: $font10;
+    font-size: 10px;
     letter-spacing: 0.6px;
     text-align: center;
     color: $white;
@@ -592,14 +568,9 @@
   padding: 20px 15px;
 }
 .txt {
-  font-size: 16px;
-  font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0.96px;
-  text-align: left;
+  @include normalText;
   color: $dark-blue;
+  font-weight: bold;
 }
 
 .click {
@@ -648,7 +619,7 @@
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2);
   background: $white;
   .time {
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 10px;
     letter-spacing: 0.6px;
     text-align: right;
@@ -658,14 +629,11 @@
   .comment {
     display: flex;
     align-items: center;
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+   
     letter-spacing: 0.72px;
-    text-align: left;
+    
     color: $c-black;
   }
   .userImage {

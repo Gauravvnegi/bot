@@ -12,8 +12,7 @@
   }
 
   @media screen and (max-width: $L) {
-    justify-content: space-between;
-    align-items: center;
+    @include flex-space-between-cen-Algn;
     position: relative;
   }
 
@@ -21,10 +20,7 @@
     width: 50%;
     height: 100%;
     transform: scale(1.5) translateY(17%);
-    //transform: unset;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-all-center;
 
     @media only screen and (min-width: $XL) {
       transform: unset;
@@ -47,10 +43,7 @@
 
 .stat-val-container {
   height: 180px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
 }
 
 .progress-info-labels {
@@ -62,16 +55,12 @@
 
 .progress-info-labels-container {
   padding-top: 22px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  @include flex-col-spaceBetween;
   height: calc(100% - 22px);
 }
 
 .progress-detail-contaner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include flex-col-centerAlgn;
 }
 
 .stat-value {
@@ -94,7 +83,7 @@
 
 svg text.label {
   fill: $black;
-  font: 15px;
+  font-size: 15px;
   font-weight: 400;
   text-anchor: middle;
 }
@@ -130,8 +119,7 @@ svg text.label {
     height: auto;
   }
   &--status {
-    display: flex;
-    align-items: center;
+    @include flex-item-center();
 
     // complete text
     &--sqaure {
@@ -202,8 +190,7 @@ svg text.label {
 
 :host ::ng-deep svg {
   @media only screen and (max-width: 1150px) {
-    height: 100%;
-    width: 100%;
+    @include fullImg;
   }
 }
 
@@ -222,10 +209,7 @@ svg text.label {
   position: absolute;
   color: $gray-total;
   font: normal normal bold 11px/12px Roboto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  @include flex-col-all-Center;
   z-index: 1;
 }
 :host ::ng-deep .labels .val {

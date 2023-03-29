@@ -1,16 +1,15 @@
 @import 'main';
 
 .form-field {
-  width: 100%;
+  width: $full;
   height: auto;
   min-height: 52px;
   cursor: text;
-  display: flex;
-  flex-wrap: wrap;
+  @include flex-wrap;
   position: relative;
   padding-bottom: 1.25em;
   .field {
-    width: 100%;
+    width: $full;
   }
 }
 
@@ -48,36 +47,35 @@
 .form-field > .chips > .field > input {
   display: block !important;
   box-sizing: border-box;
-  width: 100%;
+  width: $full;
   border: none;
   display: inline-block;
   background-color: transparent;
   outline: none;
   margin-top: 17px;
   font-size: 18px;
-  font-family: Roboto;
+  font-family: 'Roboto';
   padding: 7px 0 5px 0;
 }
 
 .chips {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
+  width: $full;
+  @include flex-wrap;
   border-bottom: 1px solid $c-gray-46;
   padding-bottom: 6px;
   padding-right: 65px;
 }
 
 .dropdown {
-  width: 100%;
+  width: $full;
   position: absolute;
   top: calc(100% - 12px);
   left: 0px;
   z-index: 112;
-  border-radius: 10px;
-  box-shadow: 3px 9px 20px 0 rgba(0, 0, 0, 0.25);
+  border-radius: $border10;
+  box-shadow: 3px 9px 20px 0 $dropdown-hover-background;
   background-color: $white;
-  padding: 15px;
+  padding: $padding15;
 }
 
 .disabled {

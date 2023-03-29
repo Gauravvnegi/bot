@@ -1,9 +1,9 @@
 @import 'main';
 
 .wrapper {
-  padding: $padding20;
+  padding: 20px;
   background-color: $white;
-  margin: $margin20 0px;
+  margin: 20px 0px;
   border-radius: 5px;
   &-header {
     display: flex;
@@ -15,10 +15,10 @@
       .label {
         letter-spacing: 0.96px;
         font-weight: $bold;
-        font-size: $font16;
+        font-size: 16px;
       }
       .material-icons {
-        margin-right: $margin15;
+        margin-right: 15px;
         &:hover {
           cursor: pointer;
         }
@@ -26,8 +26,7 @@
     }
   }
   &-form {
-    padding-left: $margin20;
-    // border-bottom: 2px solid rgb(61, 187, 230, 0.1);
+    padding-left: 20px;
     .fields {
       display: flex;
       align-items: center;
@@ -41,22 +40,22 @@
         align-items: center;
         min-width: 35%;
         .status {
-          font-size: $font16;
-          margin-right: $margin20;
+          font-size: 16px;
+          margin-right: 20px;
         }
         .status--left {
           color: $primary-gray;
         }
         .status--right {
           color: $primary-black;
-          margin-left: $margin20;
+          margin-left: 20px;
         }
       }
       .note {
         color: $primary-gray;
-        font-size: $font12;
+        font-size: 12px;
         padding-left: 11%;
-        margin-bottom: $margin20;
+        margin-bottom: 20px;
       }
       .field {
         display: flex;
@@ -64,7 +63,7 @@
         width: 31.5%;
         margin-right: 1.5%;
         @media (max-width: $tablet) {
-          @include width(42.6%);
+          width: 42.6%;
         }
         ::ng-deep .mat-form-field-infix {
           @media (max-width: 1024px) {
@@ -73,56 +72,19 @@
         }
       }
       .material-icons {
-        margin-left: $margin15;
+        margin-left: 15px;
         &:hover {
           cursor: pointer;
         }
       }
     }
-    // .image-wrapper {
-    //   display: flex;
-    //   align-items: center;
-    //   justify-content: inherit;
-    //   padding-left: 11%;
-    //   .image {
-    //     height: 150px;
-    //     width: 200px;
-    //   }
-    // }
     .image-button {
       display: flex;
       align-items: baseline;
-      // .text {
-      //   font-size: $font14;
-      //   color: $primary-gray;
-      // }
       .image {
         height: 150px;
         width: 200px;
       }
-      // .button {
-      //   border-radius: 20px;
-      //   padding: 10px 35px;
-      //   opacity: 0.85;
-      //   outline: none;
-      //   color: $primary-cta;
-      //   background-color: $white;
-      //   font-size: $font14;
-      //   margin-right: 15px;
-      //   border: 1.5px solid $primary-cta;
-
-      //   &:hover {
-      //     cursor: pointer;
-      //     background-color: $primary-cta;
-      //     color: $white;
-      //     opacity: 1;
-      //   }
-      // }
-      // .image-name {
-      //   font-size: $font14;
-      //   letter-spacing: 0.96px;
-      //   color: $dark-blue;
-      // }
     }
     .margin-adjust {
       padding: $padding20 0;
@@ -165,9 +127,9 @@
 }
 
 :host ::ng-deep .mat-label {
-  font-size: $font14;
+  font-size: 14;
   color: $primary-gray;
-  margin-right: $margin10;
+  margin-right: 10px;
   min-width: 31%;
   @media only screen and (max-width: 1300px) {
     font-size: 13px;
@@ -193,7 +155,7 @@
 .footer_button {
   display: flex;
   justify-content: center;
-  margin: $margin15 0;
+  margin: 15px 0;
   margin-top: 50px;
   button {
     @include admin-panel-button();
@@ -212,11 +174,11 @@
 }
 
 :host ::ng-deep .mat-select-value-text {
-  font-size: $font14;
+  font-size: 14px;
   color: $dark-blue;
 }
 
 :host ::ng-deep input.mat-input-element {
-  font-size: $font14;
+  font-size: 14px;
   color: $dark-blue;
 }

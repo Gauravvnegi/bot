@@ -5,19 +5,19 @@
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  // color: $dark-blue;
+ 
   font-size: 14px;
   font-weight: bold;
 }
 .request-wrapper-header {
-  // height: 65px;
+
   padding: 10px 42px 10px 15px;
   background-color: $white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   @media (max-width: $tablet) {
-    @include margin(0);
+    margin: 0;
   }
   &-btnwrap {
     display: flex;
@@ -33,6 +33,12 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      &-name {
+        font-size: 11px;
+        letter-spacing: 0.66px;
+        text-align: left;
+        color: $white;
+      }
       img {
         filter: brightness(0) invert(1);
         margin-right: 10px;
@@ -53,14 +59,14 @@
   height: calc(100vh - 182px);
   display: flex;
   @media (max-width: $tablet) {
-    @include width(100%);
-    @include margin-left(0);
-    @include margin-top(15px);
+    width: 100%;
+    margin-left: 0;
+    margin-top: 15px;
   }
   &-left {
     width: 26%;
     @media (max-width: 1180px) {
-      @include width(35%);
+      width: 35%;
     }
     position: relative;
     .blackscreen {
@@ -76,7 +82,7 @@
   &-right {
     width: calc(100% - 337px);
     @media (max-width: $tablet) {
-      @include width(100%);
+      width: 100%;
     }
     position: relative;
     .blackscreen {
@@ -101,7 +107,7 @@
 
 ::ng-deep .mat-tab-labels {
   @media (max-width: $tablet) {
-    @include height(63px);
+    height: 63px;
     align-items: center;
   }
 }

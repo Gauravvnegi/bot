@@ -7,13 +7,12 @@
     justify-content: space-around;
   }
   @media screen and (max-width: $L) {
-    justify-content: space-between;
-    align-items: center;
+    @include flex-space-between-cen-Algn;
     overflow: hidden;
   }
   &--container {
     width: 45%;
-    height: 100%;
+    height: $full;
     transform: scale(1.5) translateY(17%);
 
     @media only screen and (min-width: $XL) {
@@ -28,22 +27,18 @@
     }
   }
   .chartDetailsWrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    @include flex-col-spaceBetween;
     height: 124px;
     .currentChart {
-      display: flex;
-      align-items: center;
+      @include flex-item-center();
       .currentChartHeading {
-        font: normal normal bold 38px/46px Roboto;
         text-align: center;
         font: normal normal bold 35px/46px Roboto;
         letter-spacing: 2.1px;
         color: $dark-blue;
         margin: 5px 10px 5px 0;
         @media (max-width: $tablet) {
-          font-size: $tabfont25;
+          font-size: 25px;
         }
       }
       .chartPercent {
@@ -67,11 +62,10 @@
     .chartsubDetailsWrapper {
       display: flex;
       .chartsubDetail {
-        display: flex;
-        align-items: center;
+        @include flex-item-center();
         margin-right: 25px;
         @media (max-width: $tablet) {
-          @include margin-right(10px);
+          margin-right: 10px;
         }
         &__logo {
           margin-right: 8px;
@@ -98,13 +92,12 @@
       .chartDetailRightBlock {
         width: 14px;
         height: 14px;
-        background: #4ba0f5 0% 0% no-repeat padding-box;
+        background: $chartDetail-bg 0% 0% no-repeat padding-box;
         border-radius: 2px;
         opacity: 1;
       }
       .chartsubRightDetail {
-        display: flex;
-        align-items: center;
+        @include flex-item-center();
       }
     }
   }
@@ -112,16 +105,12 @@
 
 .stat-val-container {
   height: 180px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  @include flex-col-all-Center;
 }
 
 .progress-info-labels {
   letter-spacing: 0.72px;
-  display: flex;
-  align-items: baseline;
+  @include flex-baseAlgn;
   font-size: 12px;
   .stat-image {
     height: 23px;
@@ -130,8 +119,7 @@
 }
 
 .progress-info-labels-container {
-  display: flex;
-  justify-content: space-around;
+  @include flex-space-around();
 }
 
 // ===================Semi Donut Chart model-1========================
@@ -146,18 +134,16 @@
   font-size: 22px;
   overflow: hidden;
   color: var(--fill);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  @include flex-justify-center-endAlgn();
   box-sizing: border-box;
   &:after {
     content: '';
     width: 223px;
     height: 223px;
     border: 20px solid;
-    border-color: #7c21f333 #7c21f333 var(--fill) var(--fill);
+    border-color: $semiDonut-border $semiDonut-border var(--fill) var(--fill);
     position: absolute;
-    border-radius: 50%;
+    border-radius: $half;
     left: 0;
     top: 0;
     box-sizing: border-box;
@@ -185,9 +171,7 @@
 }
 
 .progress-detail-contaner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include flex-col-centerAlgn;
 }
 
 .stat-value {
@@ -209,7 +193,7 @@
 }
 
 :host ::ng-deep .mat-tab-label {
-  width: 50%;
+  width: $half;
 
   min-width: $half;
   padding: 0 12px;
@@ -238,7 +222,7 @@
       padding: 0 12px;
     }
     .mat-tab-label-active {
-      font-size: $font18;
+      font-size: 18px;
     }
     .mat-tab-body-content {
       overflow-x: hidden;

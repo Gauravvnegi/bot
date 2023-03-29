@@ -46,7 +46,7 @@ mat-icon {
 
 :host ::ng-deep .mat-form-field-infix {
   @media only screen and (max-width: $tab-size) {
-    font-size: $font17;
+    font-size: 17px;
   }
 }
 
@@ -54,22 +54,20 @@ mat-icon {
   z-index: 22;
 }
 
-:host ::ng-deep .material-icons{
+:host ::ng-deep .material-icons {
   color: #7f7f7f;
-  // font-size: $font-medium;
   padding: 10px;
 }
 
-
-:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple{
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
   background-color: $primary-blue;
 }
 
-:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-label{
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
   color: $primary-blue;
 }
 
-:host ::ng-deep .mat-form-field.mat-focused .material-icons{
+:host ::ng-deep .mat-form-field.mat-focused .material-icons {
   color: $primary-blue;
 }
 

@@ -1,16 +1,14 @@
 @import 'main';
 .filter-container {
   border-right: solid 1px $light-gray;
-  height: 100%;
+  height: $full;
   overflow-y: auto;
 }
 .sortFilt {
   height: 62px;
   padding: 10px 15px;
   border-bottom: 1px solid $primary-gray;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
   &-text {
     font: normal normal medium 16px/21px Roboto;
     letter-spacing: 0.64px;
@@ -20,18 +18,14 @@
     font-weight: 500;
   }
   &-clear {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     &-all {
-      display: flex;
-      align-items: center;
+      @include flex-item-center;
+
       cursor: pointer;
       .filter {
         font-size: 14px;
         font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
         letter-spacing: 0.56px;
         color: $primary-gray;
         margin-right: 5px;
@@ -54,11 +48,11 @@
   height: calc(100% - 62px);
 }
 .sortFilterWrapper {
-  height: 100%;
-  width: 100%;
+  height: $full;
+  width: $full;
   .sortFilterContainer {
     height: calc(100% - 62px);
-    width: 100%;
+    width: $full;
     border-bottom: 1px solid $primary-gray;
     padding: 15px;
     .sortBy {
@@ -68,10 +62,9 @@
       margin-bottom: 10px;
     }
     .sortTypes {
-      display: flex;
       height: auto;
-      width: 100%;
-      flex-wrap: wrap;
+      width: $full;
+      @include flex-wrap;
       .sortItemWrapper {
         border-radius: 1000px;
         opacity: 1;
@@ -97,8 +90,7 @@
     }
     .filterItemWrapper {
       margin: 8px 0;
-      display: flex;
-      align-items: center;
+      @include flex-item-center;
     }
     .filterCheckbox {
       margin-right: 10px;
@@ -121,22 +113,18 @@
   }
   .applyBtnWrapper {
     height: 62px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-all-center;
   }
   .applyBtn {
     width: 138px;
     height: 36px;
     @include primaryButton();
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-all-center;
     cursor: pointer;
   }
 }
 .priority {
-  font-size: $font14;
+  font-size: 14px;
   letter-spacing: 0.84px;
   color: $dark-blue;
   opacity: 1;

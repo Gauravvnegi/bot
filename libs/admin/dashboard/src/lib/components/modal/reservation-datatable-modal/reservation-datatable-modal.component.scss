@@ -2,7 +2,7 @@
 
 .documentActionItem {
   margin-left: 0.5em;
-  font-weight: 500;
+  font-weight: $medium;
 }
 .tableHeading {
   width: 5%;
@@ -14,12 +14,8 @@
 }
 
 .close {
-  display: flex;
-  justify-content: flex-end;
+  @include flex-row-justEnd;
   width: 100%;
-  // position: absolute;
-  // top: 5px;
-  // right: 10px;
   i {
     color: $gray;
     margin: 0 10px;
@@ -37,11 +33,6 @@
   }
 }
 
-// :host ::ng-deep .details_wrapper{
-//   background-color: $white;
-//   max-height: 85vh;
-// }
-
 .table-container {
   max-height: 79vh;
   overflow: auto;
@@ -49,11 +40,9 @@
 
 .loader {
   margin: 40px 0;
-  // height: 120px;
 }
 
 .loading {
-  // margin: 20px auto;
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;

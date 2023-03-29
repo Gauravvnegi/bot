@@ -4,6 +4,29 @@
   display: flex;
   justify-content: space-between;
 }
+@mixin flex-space-around() {
+  display: flex;
+  justify-content: space-around;
+}
+
+@mixin flex-start {
+  display: flex;
+  justify-content: flex-start;
+}
+@mixin flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin flex-baseAlgn {
+  display: flex;
+  align-items: baseline;
+}
+@mixin flex-wrap-evenSpace {
+  @include flex-wrap();
+  justify-content: space-evenly;
+}
+
 @mixin flex-space-btw-wrap {
   @include flex-space-between;
   flex-wrap: wrap;
@@ -12,18 +35,89 @@
   @include flex-space-between;
   align-items: center;
 }
+@mixin flex-space-between-cen-Algn-wrap {
+  @include flex-space-between-cen-Algn;
+  flex-wrap: wrap;
+}
+@mixin flex-space-between-base-Algn {
+  @include flex-space-between-cen-Algn();
+  align-items: baseline;
+}
+@mixin flex-space-evenly-cen-Algn {
+  @include flex-space-between-cen-Algn;
+  justify-content: space-evenly;
+}
+@mixin flex-space-around-cen-Algn {
+  @include flex-item-center();
+  justify-content: space-around;
+}
+
 @mixin flex-item-center() {
   display: flex;
   align-items: center;
+}
+@mixin flex-wrap-centerAlgn {
+  @include flex-item-center();
+  @include flex-wrap();
 }
 
 @mixin flex-justify-center() {
   display: flex;
   justify-content: center;
 }
-@mixin flex-col-justCenter {
-  @include flex-justify-center;
+@mixin flex-justify-center-endAlgn() {
+  @include flex-justify-center();
+  align-items: flex-end;
+}
+
+@mixin flex-col {
+  display: flex;
   flex-direction: column;
+}
+@mixin flex-col-justCenter {
+  @include flex-col;
+  justify-content: center;
+}
+@mixin flex-col-justEnd {
+  @include flex-col;
+  justify-content: flex-end;
+}
+@mixin flex-row-justEnd {
+  @include flex-col-justEnd;
+  flex-direction: row;
+}
+@mixin flex-centerAlgn-justEnd {
+  @include flex-row-justEnd;
+  align-items: center;
+}
+@mixin flex-col-spaceAround {
+  @include flex-col;
+  justify-content: space-around;
+}
+@mixin flex-col-centerAlgn {
+  @include flex-col;
+  align-items: center;
+}
+@mixin flex-col-spaceBetween {
+  @include flex-col;
+  justify-content: space-between;
+}
+@mixin flex-col-spaceBetween-centerAlgn {
+  @include flex-col-spaceBetween();
+  align-items: center;
+}
+@mixin flex-col-endAlgn {
+  @include flex-col;
+  align-items: flex-end;
+}
+
+@mixin flex-col-startAlgn {
+  @include flex-col();
+  align-items: flex-start;
+}
+@mixin flex-col-all-Center {
+  @include flex-col-centerAlgn;
+  justify-content: center;
 }
 @mixin flex-between-center() {
   display: flex;
@@ -33,6 +127,20 @@
 @mixin flex-all-center {
   @include flex-justify-center;
   align-items: center;
+}
+@mixin flex-wrap-all-center {
+  @include flex-all-center();
+  flex-wrap: wrap;
+}
+@mixin flex-justify-center-wrap {
+  @include flex-justify-center();
+  flex-wrap: wrap;
+}
+
+@mixin flex-spaceAround-centerAlgn {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 @mixin auth-heading() {
@@ -47,7 +155,7 @@
 
 @mixin auth-quote() {
   font-weight: 400;
-  font-size: $font16;
+  font-size: 16px;
   color: $quote-color;
   letter-spacing: 0.54px;
   line-height: 25px;
@@ -61,7 +169,7 @@
   border: none;
   outline: none;
   color: white;
-  font-size: $font14;
+  font-size: 14px;
   font-weight: $medium;
   border-radius: 25px;
   padding: 12px 0px;
@@ -73,6 +181,33 @@
     opacity: 1;
   }
 }
+@mixin normalText {
+  font-family: 'Roboto';
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.96px;
+}
+
+@mixin txt-Ellipsis {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin fullImg {
+  width: 100%;
+  height: 100%;
+}
+
+@mixin fullImg-contain {
+  @include fullImg();
+  object-fit: contain;
+}
+
+@mixin fullImg-cover {
+  @include fullImg();
+  object-fit: cover;
+}
 
 @mixin inhouse-popup-status {
   display: inline-flex;
@@ -82,161 +217,6 @@
   color: #fff;
   align-items: center;
   justify-content: center;
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .mt-#{$i} {
-    margin-top: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .mb-#{$i} {
-    margin-bottom: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .ml-#{$i} {
-    margin-left: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .mr-#{$i} {
-    margin-right: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .m-#{$i} {
-    margin: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .p-#{$i} {
-    padding: 1px * $i !important;
-  }
-}
-
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .pt-#{$i} {
-    padding-top: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .pb-#{$i} {
-    padding-bottom: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .pl-#{$i} {
-    padding-left: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .pr-#{$i} {
-    padding-right: 1px * $i !important;
-  }
-}
-//Padding variables
-@mixin padding-percentage($padding) {
-  padding: $padding;
-}
-@mixin padding($padding) {
-  @if length($padding) == 1 {
-    padding: $padding;
-  }
-  @if length($padding) == 2 {
-    padding: nth($padding, 1) nth($padding, 2);
-  }
-  @if length($padding) == 3 {
-    padding: nth($padding, 1) nth($padding, 2) nth($padding, 3);
-  }
-  @if length($padding) == 4 {
-    padding: nth($padding, 1)
-      nth($padding, 2)
-      nth($padding, 3)
-      nth($padding, 4);
-  }
-}
-@mixin padding-top($padding) {
-  padding-top: $padding;
-}
-@mixin padding-right($padding) {
-  padding-right: $padding;
-}
-@mixin padding-bottom($padding) {
-  padding-bottom: $padding;
-}
-@mixin padding-left($padding) {
-  padding-left: $padding;
-}
-//Height and width
-@mixin height($size) {
-  height: $size;
-}
-@mixin min-height($size) {
-  min-height: $size;
-}
-@mixin max-height($size) {
-  max-height: $size;
-}
-@mixin width($size) {
-  width: $size;
-}
-@mixin width-percentage($size) {
-  width: $size;
-}
-@mixin min-width($size) {
-  min-width: $size;
-}
-@mixin max-width($size) {
-  max-width: $size;
-}
-//margin variables
-@mixin margin($margin) {
-  @if length($margin) == 1 {
-    margin: $margin;
-  }
-  @if length($margin) == 2 {
-    margin: nth($margin, 1) nth($margin, 2);
-  }
-  @if length($margin) == 3 {
-    margin: nth($margin, 1) nth($margin, 2) nth($margin, 3);
-  }
-  @if length($margin) == 4 {
-    margin: nth($margin, 1) +
-      px
-      nth($margin, 2) +
-      px
-      nth($margin, 3) +
-      px
-      nth($margin, 4) +
-      px;
-  }
-}
-@mixin margin-top($margin) {
-  margin-top: $margin;
-}
-@mixin margin-right($margin) {
-  margin-right: $margin;
-}
-@mixin margin-bottom($margin) {
-  margin-bottom: $margin;
-}
-@mixin margin-left($margin) {
-  margin-left: $margin;
-}
-
-//font size
-@mixin font-size($size) {
-  font-size: $size + px;
 }
 
 // table checkbox align mixin
@@ -249,7 +229,7 @@
 
 @mixin primaryButton() {
   color: $white;
-  font-size: $font14;
+  font-size: 14px;
   background-color: $primary-cta;
   width: 10vw;
   border: none;
@@ -303,9 +283,7 @@
 }
 
 @mixin formBlock() {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  @include flex-wrap-centerAlgn;
   padding: 25px 4% 25px;
   column-gap: 6%;
   row-gap: 40px;
@@ -318,9 +296,7 @@
     color: $dark-blue2;
 
     &__label {
-      font-size: 16px;
-      font-weight: 500;
-      letter-spacing: 0.96px;
+      @include normalText();
     }
 
     &__hash {
@@ -334,9 +310,7 @@
 
     &__label {
       color: $dark-blue2;
-      font-size: 16px;
-      letter-spacing: 0.96px;
-      font-weight: 500;
+      @include normalText();
     }
 
     &__input {
@@ -373,8 +347,7 @@
 
   .create-btn {
     flex-basis: 100%;
-    display: flex;
-    justify-content: center;
+    @include flex-justify-center();
   }
 }
 

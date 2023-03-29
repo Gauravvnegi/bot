@@ -7,17 +7,9 @@
     height: 51.7px;
     padding: 14px 17px 16.7px 20px;
     background-color: $c-gray-103;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @include flex-space-between-cen-Algn;
     .title {
-      font-size: 16px;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
+      @include normalText;
       color: $tooltip;
     }
     .close {
@@ -31,36 +23,34 @@
 }
 
 .fields {
-  display: flex;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
   margin-top: 10px;
-  width: 100%;
-  justify-content: space-between;
+  width: $full;
   @media (max-width: $tablet) {
     flex-wrap: wrap;
     gap: 60px;
   }
   .full-width {
-    width: 100% !important;
+    width: $full !important;
     .width {
       width: calc(100% - 150px);
     }
   }
   .field {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
+
     margin-right: 1.5%;
     width: 45%;
     @media (max-width: $tablet) {
-      @include width(42.6%);
+      width: 42.6%;
     }
     .mat-label {
       width: 150px;
       color: $mat-tab-label;
-      font-size: $font14;
+      font-size: 14px;
     }
     mat-form-field {
-      width: 100%;
+      width: $full;
     }
   }
 }
@@ -81,9 +71,7 @@
 }
 
 .btn-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-all-center;
   margin: 40px 0;
   gap: 15px;
   .cancel {
@@ -99,9 +87,6 @@
     &__text {
       font-size: 13px;
       font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
       letter-spacing: 0.78px;
       text-align: center;
       color: $primary-cta;
@@ -119,9 +104,6 @@
     &__text {
       font-size: 13px;
       font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
       letter-spacing: 0.78px;
       text-align: center;
       color: $white;

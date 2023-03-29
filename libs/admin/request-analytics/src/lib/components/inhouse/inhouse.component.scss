@@ -123,8 +123,8 @@
       border-radius: 5px;
       border: solid 1px $c-gray-89;
       @media (max-width: $tablet) {
-        @include width(38%);
-        @include margin-right(0);
+        width: 38%;
+        margin-right: 0;
       }
     }
     &__Sentiments {
@@ -132,7 +132,7 @@
       border-radius: 5px;
       border: solid 1px $c-gray-89;
       @media (max-width: $tablet) {
-        @include width(60.7%);
+        width: 60.7%;
       }
     }
   }

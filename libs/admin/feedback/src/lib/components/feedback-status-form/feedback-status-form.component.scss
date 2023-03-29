@@ -58,7 +58,7 @@ button {
   }
 
   &-viewDetails {
-    font-size: $font12;
+    font-size: 12px;
     font-weight: normal;
     letter-spacing: 0.72px;
     color: $primary-cta;
@@ -97,8 +97,8 @@ button {
 
 .textarea {
   width: 100%;
-  font-family: Roboto;
-  font-size: $font12;
+  font-family: 'Roboto';
+  font-size: 12px;
   font-weight: normal;
   letter-spacing: 0.6px;
   text-align: left;

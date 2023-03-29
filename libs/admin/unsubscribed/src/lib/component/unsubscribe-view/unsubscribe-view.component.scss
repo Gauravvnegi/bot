@@ -9,25 +9,21 @@
   }
   .head {
     padding: 37px 0 14px;
-    font-size: $font22;
+    font-size: 22px;
     font-weight: bold;
     letter-spacing: 1.32px;
-    color: #1f4380;
+    color: $unsubscribe-Head;
   }
   .subhead {
     opacity: 0.35;
-    font-size: $font16;
-    font-weight: 500;
-    line-height: 1.56;
+    @include normalText;
     color: $dark-blue;
   }
   .visit {
     padding-top: 7px;
     text-decoration: underline;
-    font-size: $font16;
-    font-weight: 500;
-    line-height: 1;
-    color: #166dff;
+    @include normalText;
+    color: $unsubscribe-Visit;
     cursor: pointer;
   }
 }

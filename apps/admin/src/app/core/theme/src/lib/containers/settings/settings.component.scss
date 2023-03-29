@@ -1,4 +1,7 @@
+@import 'main';
+
 .sidebar-btn {
+
   background-color: transparent;
   border: none;
   outline: none;
@@ -18,7 +21,7 @@
 }
 
 .btn-hover:hover {
-  border-color: rgba(0, 187, 255, 0.5);
+  border-color: $btn-hover;
   -webkit-transition: all 400ms;
   -moz-transition: all 400ms;
   -ms-transition: all 400ms;
@@ -27,12 +30,11 @@
 }
 
 .active {
-  border-color: #00bbff;
+  border-color: $active-border;
 }
 
 .dot-row {
-  display: flex;
-  justify-content: center;
+ @include flex-item-center;
   margin: 20px 0 40px 0;
 }
 
@@ -46,40 +48,40 @@
 }
 
 .purple {
-  background-color: #9c27b0;
+  background-color: $purple;
 }
 
 .blue {
-  background-color: #00bcd4;
+  background-color: $magenta;
 }
 
 .dodgerblue {
-  background-color: dodgerblue;
+  background-color: $dodgerblue;
 }
 
 .green {
-  background-color: #4caf50;
+  background-color: $green1;
 }
 
 .orange {
-  background-color: #ff9800;
+  background-color: $orange;
 }
 
 .red {
-  background-color: #f44336;
+  background-color: $red1;
 }
 
 .white {
-  background-color: rgba(200, 200, 200, 0.2);
+  background-color: $brushedMetal;
 }
 
 .rose {
-  background-color: #e91e63;
+  background-color: $rose;
 }
 
 .black {
-  background-color: #000;
+  background-color: $c-black;
 }
-.row{
+.row {
   margin-top: 30px;
 }

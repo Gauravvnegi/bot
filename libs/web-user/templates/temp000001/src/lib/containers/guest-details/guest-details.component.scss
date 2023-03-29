@@ -56,7 +56,7 @@ mat-icon {
 
 :host ::ng-deep .material-icons{
   color: #7f7f7f;
-  // font-size: $font-medium;
+  
 }
 
 :host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple{
@@ -87,6 +87,4 @@ mat-icon {
   }
 
 }
-// :host ::ng-deep .mat-form-field.mat-form-field-invalid .material-icons{
-//   color: #f44336;
-// }
+

@@ -21,6 +21,31 @@
   }
 }
 
+.search-field {
+  width: calc(100% - 26px);
+  height: 45px;
+  margin: 13px;
+  opacity: 0.3;
+  border-radius: 5px;
+  input {
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    background-color: #d9d9d9;
+    padding: 0 30px;
+  }
+  .icon-container {
+    margin-left: -25px;
+    button {
+      border: none;
+      outline: none;
+      position: relative;
+      width: 0;
+      background-color: #fff;
+    }
+  }
+}
+
 .box {
   height: 29.6px;
   padding: 7px auto;

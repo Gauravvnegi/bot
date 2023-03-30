@@ -5,7 +5,7 @@ export const MockData = {
       {
         rating: '5',
         comment:
-          'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonum Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed',
+          'Lorem ipsum dolor test sit amet, consetetur sadipscing elitr, sed diam nonumy Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonum Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed',
         sentiment: 'neutral',
         topics: ['Product', 'Feedback', 'Everything'],
       },

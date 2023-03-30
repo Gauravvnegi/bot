@@ -41,6 +41,14 @@ export class SentimentDatatableComponent extends BaseDatatableComponent
     this.loadInitialData();
   }
 
+  search(event, field): void {
+    this.handleFieldSearch({
+      value: event.target.value,
+      field,
+      matchMode: 'contains',
+    });
+  }
+
   ngOnDestroy(): void {
     this.subscription$.unsubscribe();
   }

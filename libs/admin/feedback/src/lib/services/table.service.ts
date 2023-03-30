@@ -75,25 +75,18 @@ export class FeedbackTableService extends ApiService {
       endDate,
       timezone
     );
+    const monthDiff = DateService.getMonthDifference(
+      startDate,
+      endDate,
+      timezone
+    );
     if (dateDiff >= 0 && dateDiff < 30) {
       return 'date';
-    } else if (dateDiff >= 30 && dateDiff < 365) {
-      if (
-        DateService.getMonthFromDate(startDate, timezone) ===
-          DateService.getMonthFromDate(endDate, timezone) &&
-        DateService.getYearFromDate(startDate, timezone) ===
-          DateService.getYearFromDate(endDate, timezone)
-      ) {
-        return 'week';
-      }
+    } else if (dateDiff >= 30 && dateDiff <= 98) {
+      return 'week';
+    } else if (dateDiff > 98 && monthDiff <= 14) {
       return 'month';
     } else {
-      if (
-        DateService.getYearFromDate(startDate, timezone) ===
-        DateService.getYearFromDate(endDate, timezone)
-      ) {
-        return 'month';
-      }
       return 'year';
     }
   }

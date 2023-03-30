@@ -484,7 +484,7 @@
 
 .stay-booking-feedback {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: center;
 
   margin: 0 3px;
@@ -631,9 +631,9 @@
     align-items: center;
     font-family: 'Roboto';
     font-size: 12px;
-   
+
     letter-spacing: 0.72px;
-    
+
     color: $c-black;
   }
   .userImage {

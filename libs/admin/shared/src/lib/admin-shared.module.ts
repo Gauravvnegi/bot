@@ -78,6 +78,8 @@ import { AutoCompleteComponent } from './components/form-component/auto-complete
 import { ViewInputComponent } from './components/form-component/view-input/view-input.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { SkeletonShapeComponent } from './components/skeleton/skeleton-shape/skeleton-shape.component';
+import { SkeletonDirective } from './directives/skeleton.directive';
 
 @NgModule({
   imports: [
@@ -164,6 +166,8 @@ import { MatMenuModule } from '@angular/material/menu';
     AutoCompleteComponent,
     ViewInputComponent,
     MenuComponent,
+    SkeletonShapeComponent,
+    SkeletonDirective,
   ],
   exports: [
     DatatableComponent,
@@ -239,6 +243,8 @@ import { MatMenuModule } from '@angular/material/menu';
     ViewInputComponent,
     MatMenuModule,
     MenuComponent,
+    SkeletonDirective,
+    SkeletonShapeComponent,
   ],
 })
 export class AdminSharedModule {}

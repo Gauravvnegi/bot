@@ -1,5 +1,8 @@
 <div class="container" click-allow (click)="openTableModal()">
-  <div class="title-container">
+  <div
+    class="title-container"
+    *skeleton="distribution == undefined; height: '25px'; width: '170px'"
+  >
     <div class="icon">
       <img
         [src]="feedbackConfig.images.distribution.url"
@@ -8,10 +11,19 @@
     </div>
     <div class="stat-title">{{ 'distribution.title' | translate }}</div>
   </div>
-  <div class="graph-container" *ngIf="!loading">
+  <div
+    class="graph-container"
+    [style.height]="distribution == undefined ? '150px' : '125px'"
+  >
     <div class="graph">
       <canvas
         baseChart
+        *skeleton="
+          distribution == undefined;
+          height: '150px';
+          width: '150px';
+          borderRadius: '50%'
+        "
         class="height-125"
         [data]="chart.data"
         [labels]="chart.labels"
@@ -27,35 +39,37 @@
       <div class="label">{{ 'distribution.total_response' | translate }}</div>
     </div>
   </div>
-  <div *ngIf="keyLabels.length" class="mt-30">
-    <div
-      class="stat-val-container"
-      *ngFor="let value of keyLabels; let i = index"
-    >
-      <div class="stat-lable-container">
-        <div class="icon" [style.background]="value.color"></div>
-        <div class="stat-lable">{{ value.label }} ({{ value.scale }})</div>
-      </div>
-      <div class="stat-val">
-        {{ value.count }}
-        <span
-          class="positive"
-          [ngClass]="{
-            'comparison-positive': value.comparePercent >= 0,
-            'comparison-negative': value.comparePercent < 0
-          }"
-        >
-          ({{ value.comparePercent }}%)
-          <img
-            class="upArrow"
-            [src]="
-              value.comparePercent >= 0
-                ? 'assets/svg/uparrow.svg'
-                : 'assets/svg/down-percentage.svg'
-            "
-            alt="uparrow"
-          />
-        </span>
+  <div class="mt-30">
+    <div *skeleton="distribution == undefined; height: '100px'; width: '100%'">
+      <div
+        class="stat-val-container"
+        *ngFor="let value of keyLabels; let i = index"
+      >
+        <div class="stat-lable-container">
+          <div class="icon" [style.background]="value.color"></div>
+          <div class="stat-lable">{{ value.label }} ({{ value.scale }})</div>
+        </div>
+        <div class="stat-val">
+          {{ value.count }}
+          <span
+            class="positive"
+            [ngClass]="{
+              'comparison-positive': value.comparePercent >= 0,
+              'comparison-negative': value.comparePercent < 0
+            }"
+          >
+            ({{ value.comparePercent }}%)
+            <img
+              class="upArrow"
+              [src]="
+                value.comparePercent >= 0
+                  ? 'assets/svg/uparrow.svg'
+                  : 'assets/svg/down-percentage.svg'
+              "
+              alt="uparrow"
+            />
+          </span>
+        </div>
       </div>
     </div>
   </div>

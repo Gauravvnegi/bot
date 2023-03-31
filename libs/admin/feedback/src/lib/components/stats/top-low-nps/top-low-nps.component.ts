@@ -18,7 +18,7 @@ import { StatisticsService } from '../../../services/feedback-statistics.service
 })
 export class TopLowNpsComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
-  tabfeedbackType: string;
+  tabFeedbackType: string;
   globalQueries;
   performanceNPS: PerformanceNPS;
   protected $subscription = new Subscription();
@@ -72,7 +72,7 @@ export class TopLowNpsComponent implements OnInit, OnDestroy {
         ) {
           this.globalFeedbackFilterType =
             data['filter'].value.feedback.feedbackType;
-          this.tabfeedbackType = undefined;
+          this.tabFeedbackType = undefined;
           this.tabFilterItems =
             this.globalFeedbackFilterType === feedback.types.stay ||
             this.globalFeedbackFilterType === feedback.types.both
@@ -110,7 +110,7 @@ export class TopLowNpsComponent implements OnInit, OnDestroy {
           response.type === feedback.types.transactional
             ? feedback.tabFilterItems.topLowNPS.transactional
             : feedback.tabFilterItems.topLowNPS.stay;
-        this.tabfeedbackType = response.type;
+        this.tabFeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {
             element.entityIds = this.statisticsService.outletIds;
@@ -173,14 +173,14 @@ export class TopLowNpsComponent implements OnInit, OnDestroy {
   }
 
   getFeedbackType() {
-    if (this.tabfeedbackType === undefined) {
+    if (this.tabFeedbackType === undefined) {
       return this.globalFeedbackFilterType === this.feedbackConfig.types.both
         ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
-    return this.tabfeedbackType === this.feedbackConfig.types.both
+    return this.tabFeedbackType === this.feedbackConfig.types.both
       ? feedback.types.transactional
-      : this.tabfeedbackType;
+      : this.tabFeedbackType;
   }
 
   ngOnDestroy(): void {

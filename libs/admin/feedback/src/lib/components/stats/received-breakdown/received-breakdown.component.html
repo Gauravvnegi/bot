@@ -6,7 +6,14 @@
     >
       {{ 'bifurcation.title' | translate }}
     </div>
-    <div>
+    <div
+      *skeleton="
+        stats == undefined;
+        height: '33px';
+        width: '115px';
+        borderRadius: '5px'
+      "
+    >
       <mat-select
         (click)="stopOpenModal($event)"
         class="stats__head__select"

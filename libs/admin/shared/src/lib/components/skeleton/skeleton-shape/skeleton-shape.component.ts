@@ -14,6 +14,7 @@ import { Component, ElementRef, OnInit } from '@angular/core';
         height: var(--skeleton-rect-height);
         border-radius: var(--skeleton-rect-borderRadius);
         background: rgb(239, 241, 246) no-repeat;
+        margin: var(--skeleton-margin);
       }
     `,
   ],
@@ -23,7 +24,7 @@ export class SkeletonShapeComponent implements OnInit {
   height: string;
   borderRadius: string;
   className: string;
-
+  margin: string;
   constructor(private host: ElementRef<HTMLElement>) {}
 
   ngOnInit() {
@@ -39,5 +40,6 @@ export class SkeletonShapeComponent implements OnInit {
       '--skeleton-rect-borderRadius',
       this.borderRadius ?? '10px'
     );
+    host.style.setProperty('--skeleton-margin', this.margin ?? '0');
   }
 }

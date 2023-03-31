@@ -1,10 +1,16 @@
 <div class="card-container">
   <div class="left">
-    <div class="left__title">
+    <div
+      class="left__title"
+      *skeleton="disengagement == undefined; height: '25px'; width: '80%'"
+    >
       What drivers are leading to disengagement at All Outlets ?
     </div>
-    <div class="left__graph" *ngIf="!loading">
-      <div class="outer">
+    <div class="left__graph">
+      <div
+        class="outer"
+        *skeleton="loading; height: '25vw'; width: '25vw'; borderRadius: '50%'"
+      >
         <canvas
           baseChart
           class="graph-base-chart"
@@ -17,7 +23,7 @@
         >
         </canvas>
       </div>
-      <div class="inner">
+      <div class="inner" *ngIf="!loading">
         <canvas
           baseChart
           class="graph-base-chart"
@@ -31,7 +37,7 @@
         >
         </canvas>
       </div>
-      <div class="left__graph__stat">
+      <div class="left__graph__stat" *ngIf="!loading">
         <div class="text">
           {{ total }}
         </div>
@@ -39,43 +45,58 @@
     </div>
   </div>
   <div class="right">
-    <div class="right__title">
+    <div
+      class="right__title"
+      *skeleton="
+        disengagement == undefined;
+        height: '25px';
+        width: '80%';
+        margin: '0 0 30px 0'
+      "
+    >
       {{ selectedDepartment.label }}
     </div>
-    <div class="right__sub-title">
+    <div
+      class="right__sub-title"
+      *skeleton="disengagement == undefined; height: '20px'; width: '200px'"
+    >
       Guest to meet Break-down
     </div>
     <div class="right__top">
       <div class="progress">
         <div
           class="high-risk"
-          *ngIf="disengagement?.gtmbreakDown?.HIGH_RISK"
+          *ngIf="disengagement?.gtmBreakDown?.HIGH_RISK"
           [style.width]="
             getPercentage(
-              disengagement?.gtmbreakDown?.HIGH_RISK,
-              disengagement?.gtmbreakDown?.MEDIUM_RISK
+              disengagement?.gtmBreakDown?.HIGH_RISK,
+              disengagement?.gtmBreakDown?.MEDIUM_RISK
             ) + '%'
           "
         ></div>
         <div
           class="medium-risk"
-          *ngIf="disengagement?.gtmbreakDown?.MEDIUM_RISK"
+          *ngIf="disengagement?.gtmBreakDown?.MEDIUM_RISK"
           [style.width]="
             getPercentage(
-              disengagement?.gtmbreakDown?.MEDIUM_RISK,
-              disengagement?.gtmbreakDown?.HIGH_RISK
+              disengagement?.gtmBreakDown?.MEDIUM_RISK,
+              disengagement?.gtmBreakDown?.HIGH_RISK
             ) + '%'
           "
         ></div>
       </div>
       <div class="right__top__stat-container">
-        <div>
+        <div
+          *skeleton="disengagement == undefined; height: '25px'; width: '85px'"
+        >
           High Risk
-          <span>{{ disengagement?.gtmbreakDown?.HIGH_RISK || 0 }}</span>
+          <span>{{ disengagement?.gtmBreakDown?.HIGH_RISK || 0 }}</span>
         </div>
-        <div>
+        <div
+          *skeleton="disengagement == undefined; height: '25px'; width: '85px'"
+        >
           Medium Risk
-          <span>{{ disengagement?.gtmbreakDown?.MEDIUM_RISK || 0 }}</span>
+          <span>{{ disengagement?.gtmBreakDown?.MEDIUM_RISK || 0 }}</span>
         </div>
       </div>
     </div>

@@ -33,7 +33,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
   loading = false;
   tabFilterItems = [];
   tabFilterIdx = 0;
-  tabfeedbackType;
+  tabFeedbackType;
   chartTypes = [feedback.chartType.bar, feedback.chartType.sentiment];
 
   documentActionTypes = [
@@ -97,7 +97,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
             data['filter'].value.feedback.feedbackType;
           this.tabFilterItems = [];
           this.tabFilterIdx = 0;
-          this.tabfeedbackType = undefined;
+          this.tabFeedbackType = undefined;
         }
         this.setEntityId(data['filter'].value.feedback.feedbackType);
         if (this.tabFilterItems.length === 0) this.getNPSDepartments();
@@ -114,10 +114,10 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
             element.entityIds = this._statisticService.outletIds;
           }
         });
-        if (response.status !== this.tabfeedbackType) {
+        if (response.status !== this.tabFeedbackType) {
           this.tabFilterItems = [];
           this.tabFilterIdx = 0;
-          this.tabfeedbackType = response.type;
+          this.tabFeedbackType = response.type;
           this.getNPSDepartments();
         } else {
           this.getNPSChartData();
@@ -401,14 +401,14 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
   }
 
   getFeedbackType() {
-    if (this.tabfeedbackType === undefined) {
+    if (this.tabFeedbackType === undefined) {
       return this.globalFeedbackFilterType === this.feedbackConfig.types.both
         ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
-    return this.tabfeedbackType === this.feedbackConfig.types.both
+    return this.tabFeedbackType === this.feedbackConfig.types.both
       ? feedback.types.transactional
-      : this.tabfeedbackType;
+      : this.tabFeedbackType;
   }
 
   /**

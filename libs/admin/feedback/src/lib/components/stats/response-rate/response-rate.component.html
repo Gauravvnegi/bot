@@ -1,13 +1,23 @@
 <div class="stats" click-allow (click)="openTableModal()">
-  <div class="stats__head" [formGroup]="rategraphFG">
+  <div class="stats__head" [formGroup]="rateGraphFG">
     <hospitality-bot-custom-tooltip
       [text]="'Response Breakdown as per feedback shared'"
     >
-      <div class="stats__head__title">
+      <div
+        class="stats__head__title"
+        *skeleton="stats == undefined; height: '20px'; width: '150px'"
+      >
         {{ 'shared.title' | translate }}
       </div>
     </hospitality-bot-custom-tooltip>
-    <div>
+    <div
+      *skeleton="
+        stats == undefined;
+        height: '33px';
+        width: '115px';
+        borderRadius: '5px'
+      "
+    >
       <mat-select
         (click)="stopOpenModal($event)"
         class="stats__head__select"
@@ -20,14 +30,17 @@
       </mat-select>
     </div>
   </div>
-  <!-- <div class="stats__subheading">
-    {{ 'shared.sub_title' | translate }}
-  </div>  -->
   <div class="stats__body">
     <div class="graph-container">
       <div class="graphcontainer__graph">
         <canvas
           baseChart
+          *skeleton="
+            stats == undefined;
+            height: '200px';
+            width: '200px';
+            borderRadius: '50%'
+          "
           class="graphcontainer__graph-canvas"
           [data]="chart.data"
           [labels]="chart.labels"
@@ -39,7 +52,15 @@
         </canvas>
       </div>
     </div>
-    <div class="stats__body__detail">
+    <div
+      class="stats__body__detail"
+      *skeleton="
+        stats == undefined;
+        height: '240px';
+        width: '150px';
+        margin: '10px 0'
+      "
+    >
       <div class="stats__body__detail__shared">
         {{ stats?.totalResponse }}
       </div>

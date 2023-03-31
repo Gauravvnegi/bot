@@ -25,7 +25,7 @@ import { StatisticsService } from '../../../services/feedback-statistics.service
 export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   entityType = 'GTM';
-  tabfeedbackType: string;
+  tabFeedbackType: string;
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
@@ -163,7 +163,7 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
   listenForOutletChanged() {
     this._statisticService.$outletChange.subscribe((response) => {
       if (response.status) {
-        this.tabfeedbackType = response.type;
+        this.tabFeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {
             element.entityIds = this._statisticService.outletIds;
@@ -231,14 +231,14 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
   }
 
   getFeedbackType() {
-    if (this.tabfeedbackType === undefined) {
+    if (this.tabFeedbackType === undefined) {
       return this.globalFeedbackFilterType === feedback.types.both
         ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
-    return this.tabfeedbackType === feedback.types.both
+    return this.tabFeedbackType === feedback.types.both
       ? ''
-      : this.tabfeedbackType;
+      : this.tabFeedbackType;
   }
 
   openTableModal(event) {

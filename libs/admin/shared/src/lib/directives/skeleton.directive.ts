@@ -19,6 +19,7 @@ export class SkeletonDirective {
   @Input('skeletonHeight') height: string;
   @Input('skeletonClassName') className: string;
   @Input('skeletonBorderRadius') borderRadius: string;
+  @Input('skeletonMargin') margin: string;
 
   constructor(
     private templateRef: TemplateRef<any>,
@@ -41,6 +42,7 @@ export class SkeletonDirective {
             height: this.height,
             borderRadius: this.borderRadius,
             className: this.className,
+            margin: this.margin,
           });
         });
       } else {

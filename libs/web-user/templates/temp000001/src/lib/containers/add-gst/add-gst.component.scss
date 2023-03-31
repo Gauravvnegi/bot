@@ -20,7 +20,7 @@
 .modal-header {
   padding: 2px 8px;
   display: flex;
-  padding-bottom: $padding-small;
+  padding-bottom: 10px;
   width: 100%;
   position: relative;
 }
@@ -35,7 +35,7 @@
   text-align: center;
   width: 33%;
   .title {
-    margin-bottom: $margin-small;
+    margin-bottom: 10px;
   }
   p {
     text-align: center;

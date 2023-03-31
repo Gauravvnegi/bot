@@ -8,7 +8,7 @@
 .card {
   &--heading {
     color: $navy-blue !important;
-    @include auth-heading();
+    @include auth-heading;
 
     @media screen and (max-width: $tablet) {
       font-size: 30px;
@@ -18,7 +18,7 @@
     }
   }
   &--quote {
-    @include auth-quote();
+    @include auth-quote;
     @media screen and (max-width: $tablet) {
       margin-bottom: 0;
       letter-spacing: 0.48px;
@@ -85,7 +85,7 @@
 
 .form-row {
   position: relative;
-  @include flex-item-center();
+  @include flex-item-center;
   margin-top: 30px;
   @media screen and (max-width: $tablet) {
     margin-top: 45px;
@@ -111,13 +111,13 @@
 }
 
 .card-footer button {
-  @include primaryButton();
+  @include primary-button;
   &:hover {
     cursor: pointer;
     box-shadow: 0px 4px 4px $btn-shadow;
   }
   @media screen and (max-width: $tablet) {
-    @include normalText;
+    @include normal-text;
     height: 4.5vw;
     @include flex-all-center;
     width: 14vw;

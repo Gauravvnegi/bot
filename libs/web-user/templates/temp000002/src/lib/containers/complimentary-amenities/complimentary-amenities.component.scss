@@ -19,7 +19,7 @@
   align-items: center;
   font-size: $font-medium;
   font-weight: $bold;
-  margin-bottom: $margin-large;
+  margin-bottom: 20px;
   @media only screen and (max-width: 900px) {
     width: 50%;
   }
@@ -49,11 +49,11 @@
     // }
   }
   p {
-    margin-top: $margin-large;
+    margin-top: 20px;
     text-align: center !important;
     @media only screen and (max-width: 900px) {
       font-size: $font-small;
-      margin: $margin-small auto;
+      margin: 10px auto;
     }
   }
 }

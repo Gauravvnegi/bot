@@ -7,7 +7,7 @@
 .tableHeading {
   width: 5%;
   background-color: $c-gray-93;
-  @include align-checkbox();
+  @include align-checkbox;
 }
 .rowsData {
   color: $button-blue;

@@ -1,7 +1,7 @@
 @import 'temp000002';
 
 :host ::ng-deep .next-button {
-  @include footer-next();
+  @include footer-next;
   margin-bottom: 20px;
   @media only screen and (max-width: $M) {
     margin-bottom: 0;
@@ -23,10 +23,10 @@
   .wrapper {
     background-color: $white;
     margin: 40px;
-    border-radius: $border-radius-medium;
+    border-radius: 15px;
     padding: 25px;
     .image {
-      @include flex-justify-center();
+      @include flex-justify-center;
       @media only screen and (max-width: $M) {
         height: 40px;
         img {
@@ -36,14 +36,14 @@
     }
     .text {
       text-align: center;
-      margin: $margin-large 0px;
+      margin: 20px 0px;
       margin-bottom: 5%;
       .label {
         font-size: 40px;
         font-weight: $bold;
       }
       .note {
-        margin-top: $margin-small;
+        margin-top: 10px;
         font-size: $font-large;
         color: #949494;
         b {
@@ -53,7 +53,7 @@
       .error_code {
         color: #212121;
         font-size: $font-large;
-        margin-top: $margin-small;
+        margin-top: 10px;
         font-weight: $medium;
       }
       @media only screen and (max-width: $M) {
@@ -71,12 +71,12 @@
       }
     }
     .detail-box-wrapper {
-      @include flex-justify-center();
+      @include flex-justify-center;
       .detail-box {
         border: 2px dashed lightgray;
-        padding: $padding-medium 40px;
+        padding: 15px 40px;
         width: 75%;
-        @include flex-between-center();
+        @include flex-between-center;
         .detail {
           font-weight: $bolder;
           font-size: $font-medium;
@@ -88,12 +88,12 @@
           }
         }
         .seperator {
-          height: $full-width;
+          height: 100%;
           border-right: 2px dashed $light-gray;
         }
         @media only screen and (max-width: $M) {
           width: 90%;
-          padding: $padding-small;
+          padding: 10px;
           .detail {
             font-size: $font-responsive-smaller;
             .value {
@@ -104,16 +104,15 @@
       }
     }
     @media only screen and (max-width: $M) {
-      border-radius: $border-radius-smaller;
-      margin: 22% $margin-small;
-      padding: 40px $padding-small;
+      border-radius: 5px;
+      margin: 22% 10px;
+      padding: 40px 10px;
     }
   }
   @media only screen and (max-width: 1100px) {
     min-height: 72.6vh;
   }
 }
-
 
 .actions_wrapper {
   display: flex;
@@ -128,7 +127,7 @@
     &__icon {
       width: 11vw;
       height: 40px;
-      @include flex-all-center();
+      @include flex-all-center;
       img {
         height: 25px;
         filter: invert(62%) sepia(0%) saturate(631%) hue-rotate(163deg)
@@ -174,7 +173,7 @@
 }
 
 :host ::ng-deep .back-button {
-  @include secondary-button();
+  @include secondary-button;
   @media only screen and (max-width: $M) {
     width: 100px;
   }

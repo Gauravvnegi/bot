@@ -8,11 +8,11 @@
   border-bottom: 1px solid $light-gray;
   cursor: pointer;
   &-guest-wrap {
-    @include flex-item-center();
+    @include flex-item-center;
   }
   .feedback_labels {
     width: 100%;
-    @include flex-item-center();
+    @include flex-item-center;
     font-size: 12px;
     font-weight: bold;
     letter-spacing: 0.72px;
@@ -49,7 +49,7 @@
     font-size: 12px;
     @include txt-Ellipsis;
   }
-  
+
   img {
     width: 28px;
     height: 28px;
@@ -67,9 +67,9 @@
   margin-right: 0px !important;
   .req_button {
     gap: 20px;
-    @include flex-item-center();
+    @include flex-item-center;
     .export {
-      @include flex-item-center();
+      @include flex-item-center;
 
       p {
         font-size: 14px;
@@ -87,7 +87,7 @@
     }
   }
   .view-feedback-btn {
-    @include flex-item-center();
+    @include flex-item-center;
     margin: 0 20px;
     img {
       width: 16px;
@@ -179,7 +179,7 @@
 }
 
 .guestComment {
-  @include flex-space-between();
+  @include flex-space-between;
   width: 313px;
   margin: 14.6px 7px 17.4px 14px;
   padding: 8px 8px 8px 8px;
@@ -194,7 +194,7 @@
     color: $c-gray-78;
   }
   .comment {
-    @include flex-item-center();
+    @include flex-item-center;
 
     font-size: 12px;
     letter-spacing: 0.72px;
@@ -230,7 +230,7 @@
     color: $c-gray-78;
   }
   .comment {
-    @include flex-wrap-centerAlgn;
+    @include flex-wrap-center-algn;
     font-size: 12px;
     letter-spacing: 0.72px;
 
@@ -286,8 +286,8 @@
   }
   &__title {
     margin: 12px 0;
-    @include normalText;
-    
+    @include normal-text;
+
     font-weight: bold;
     color: $dark-blue;
   }
@@ -420,7 +420,7 @@
   }
 }
 .feedback-service {
-  @include flex-wrap-centerAlgn;
+  @include flex-wrap-center-algn;
   width: calc(100% - 24px);
   &__container {
     @include flex-item-center;
@@ -478,7 +478,7 @@
   white-space: nowrap !important;
 }
 .stay-booking-feedback {
-  @include flex-justify-center-endAlgn();
+  @include flex-justify-center-end-algn();
 
   &:hover {
     cursor: pointer;
@@ -564,5 +564,5 @@
   border: solid 1px $light-grey;
 }
 .userChat {
-  @include flex-row-justEnd;
+  @include flex-row-justify-end;
 }

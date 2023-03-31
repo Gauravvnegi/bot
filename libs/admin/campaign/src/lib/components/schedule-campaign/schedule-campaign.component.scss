@@ -18,14 +18,14 @@
     padding: 12px 6px;
     display: flex;
     .left-container {
-      width: $half;
+      width: 50%;
     }
     .right-container {
-      @include flex-col-centerAlgn;
+      @include flex-col-center-algn;
       margin-top: 55px;
-      width: $half;
+      width: 50%;
       .field-container {
-        @include flex-item-center();
+        @include flex-item-center;
         margin-bottom: 20px;
         img {
           width: 27.5px;
@@ -62,7 +62,7 @@
       transform: scale(0.97);
     }
     &__text {
-      @include normalText;
+      @include normal-text;
       color: $primary-cta;
     }
   }
@@ -76,7 +76,7 @@
       transform: scale(0.97);
     }
     &__text {
-      @include normalText;
+      @include normal-text;
       color: $white;
     }
   }

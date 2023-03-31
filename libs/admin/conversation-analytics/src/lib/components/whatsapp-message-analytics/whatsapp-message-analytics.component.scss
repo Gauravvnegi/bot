@@ -2,7 +2,7 @@
 
 .graphContainer {
   display: flex;
-  height: $full;
+  height: 100%;
   @media (max-width: $tablet) {
     gap: 1.3%;
   }
@@ -22,13 +22,13 @@
     border-radius: 5px;
     padding: 20px;
     opacity: 1;
-    @include flex-col-spaceBetween;
+    @include flex-col-space-between;
     @media (max-width: $tablet) {
       margin-right: 0;
       width: 38%;
     }
     .messageRequests {
-      @include flex-space-around();
+      @include flex-space-around;
       margin-bottom: 20px;
       @media (max-width: $tablet) {
         align-items: center;
@@ -39,9 +39,9 @@
         height: 173px;
       }
       .growth {
-        @include flex-col-justCenter;
+        @include flex-col-justify-center;
         .growthCell {
-          @include flex-item-center();
+          @include flex-item-center;
           margin-bottom: 15px;
           &__Img {
             margin-right: 10px;
@@ -72,13 +72,13 @@
       .detail {
         display: flex;
         height: 70px;
-        width: $half;
+        width: 50%;
         .divide {
           height: 70px;
           margin-right: 10px;
         }
         .compareLast {
-          @include flex-col-spaceBetween;
+          @include flex-col-space-between;
           height: 70px;
           .detailHeading {
             font-size: 14px;
@@ -112,7 +112,7 @@
     border-radius: 5px;
     padding: 20px;
     opacity: 1;
-    @include flex-col-spaceBetween;
+    @include flex-col-space-between;
     @media (max-width: $tablet) {
       width: 60.7%;
     }
@@ -122,8 +122,8 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: $full;
-  height: $full;
+  width: 100%;
+  height: 100%;
   @include flex-all-center;
   &__total {
     font: normal normal bold 25px/30px Roboto;
@@ -146,7 +146,7 @@
 }
 
 .stat-val-container {
-  @include flex-col-justEnd;
+  @include flex-col-justify-end;
   padding: 3px 0;
 }
 
@@ -176,7 +176,7 @@
   cursor: pointer;
   height: 28px;
   margin: 0 5px;
-  @include flex-space-between();
+  @include flex-space-between;
   position: relative;
   .no-border {
     display: none;
@@ -220,7 +220,7 @@
   width: auto;
   height: 290px;
   padding: 0 10px;
-  max-width: $full;
+  max-width: 100%;
   .canvas {
     max-height: 290px;
   }
@@ -239,7 +239,7 @@
   height: 25px;
   width: 25px;
   @include flex-all-center;
-  border-radius: $half;
+  border-radius: 50%;
   border: 2px solid $primary-cta;
 }
 .labl > input {
@@ -265,15 +265,15 @@
 }
 
 .pull-right {
-  @include flex-row-justEnd;
+  @include flex-row-justify-end;
   margin-top: 5px;
 }
 
 .stat-label > input {
   opacity: 0;
   position: absolute; /* Remove input from document flow */
-  width: $full;
-  height: $full;
+  width: 100%;
+  height: 100%;
   top: 0;
   left: 0;
   z-index: 5;

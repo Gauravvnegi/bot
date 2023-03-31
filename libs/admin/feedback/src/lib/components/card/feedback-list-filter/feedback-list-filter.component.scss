@@ -1,7 +1,7 @@
 @import 'main';
 .filter-container {
   border-right: solid 1px $light-gray;
-  height: $full;
+  height: 100%;
   overflow-y: auto;
 }
 .sortFilt {
@@ -48,11 +48,11 @@
   height: calc(100% - 62px);
 }
 .sortFilterWrapper {
-  height: $full;
-  width: $full;
+  height: 100%;
+  width: 100%;
   .sortFilterContainer {
     height: calc(100% - 62px);
-    width: $full;
+    width: 100%;
     border-bottom: 1px solid $primary-gray;
     padding: 15px;
     .sortBy {
@@ -63,7 +63,7 @@
     }
     .sortTypes {
       height: auto;
-      width: $full;
+      width: 100%;
       @include flex-wrap;
       .sortItemWrapper {
         border-radius: 1000px;
@@ -118,7 +118,7 @@
   .applyBtn {
     width: 138px;
     height: 36px;
-    @include primaryButton();
+    @include primary-button;
     @include flex-all-center;
     cursor: pointer;
   }

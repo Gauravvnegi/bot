@@ -280,7 +280,7 @@
   }
   &__title {
     margin: 12px 0;
-    @include normalText;
+    @include normal-text;
     font-weight: bold;
     color: $dark-blue;
   }
@@ -568,7 +568,7 @@
   padding: 20px 15px;
 }
 .txt {
-  @include normalText;
+  @include normal-text;
   color: $dark-blue;
   font-weight: bold;
 }

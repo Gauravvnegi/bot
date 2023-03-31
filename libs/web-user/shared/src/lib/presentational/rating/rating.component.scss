@@ -7,17 +7,17 @@
   position: relative;
   border-right: 1px solid lightgray;
   border-left: 1px solid lightgray;
-  @include flex-all-center();
+  @include flex-all-center;
 }
 
 .rating__container {
-  @include flex-item-center();
+  @include flex-item-center;
   flex-direction: column;
 }
 
 .rating-scale {
   text-align: center;
-  @include flex-justify-center();
+  @include flex-justify-center;
   z-index: 3;
   &:hover {
     cursor: pointer;
@@ -30,8 +30,8 @@
 
 .rating-scale-bar {
   text-align: center;
-  @include flex-justify-center();
-  margin: $margin-small 0;
+  @include flex-justify-center;
+  margin: 10px 0;
   padding: 3px;
   color: white;
   border-radius: 5px;

@@ -14,7 +14,7 @@
     @include flex-justify-center-wrap;
     .img-with-text {
       width: 25%;
-      @include flex-col-centerAlgn;
+      @include flex-col-center-algn;
       font-size: 18px;
       font-weight: $bold;
     }
@@ -49,7 +49,7 @@
 
 .package-label {
   color: $dark-blue;
-  @include normalText;
+  @include normal-text;
   font-weight: 600;
 }
 

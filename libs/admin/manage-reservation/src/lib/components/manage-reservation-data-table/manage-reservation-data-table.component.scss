@@ -1,5 +1,5 @@
 @import 'main';
 // *** over ride the table style ***
 :host ::ng-deep .p-datatable {
-    @include table-cell-padding(0.3em);
+    @include tableCellPadding(0.3em);
 }

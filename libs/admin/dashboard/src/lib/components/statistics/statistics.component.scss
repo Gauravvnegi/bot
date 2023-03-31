@@ -1,18 +1,18 @@
 @import 'main';
 
 :host ::ng-deep .container {
-  @include fullImg;
+  @include full-img;
   background: $white;
   box-shadow: 0px 3px 6px $progress-bar-messages;
   border-radius: 5px;
   padding: 20px;
-  @include flex-col-spaceBetween;
+  @include flex-col-space-between;
   @media (max-width: $L) {
     box-shadow: none;
     padding: 10px;
   }
   .title-container {
-    @include flex-item-center();
+    @include flex-item-center;
 
     .icon {
       margin-right: 10px;

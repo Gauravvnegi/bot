@@ -5,14 +5,14 @@
 }
 
 mat-icon {
-  @include mat-icon();
+  @include mat-icon;
 }
 
 .container__body--info {
   &-primary {
     width: 55%;
-    @include flex-space-between();
-    @include display-block-on-breakpoint($tab-size);
+    @include flex-space-between;
+    @include displayBlockOnBreakPoint($tab-size);
     @media only screen and (max-width: $tab-size) {
       width: 97%;
       padding-left: 5px;
@@ -36,9 +36,9 @@ mat-icon {
     }
   }
 
-  @include flex-space-between();
-  @include display-block-on-breakpoint($tab-size);
-  @include full-width-on-breakpoint($tab-size);
+  @include flex-space-between;
+  @include displayBlockOnBreakPoint($tab-size);
+  @include fullWidthOnBreakPoint($tab-size);
   @media only screen and (max-width: $tab-size) {
     flex-direction: column;
   }

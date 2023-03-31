@@ -5,7 +5,7 @@
 }
 
 .form-block {
-  @include formBlock();
+  @include form-block;
 }
 
 :host ::ng-deep .plain-text-container {

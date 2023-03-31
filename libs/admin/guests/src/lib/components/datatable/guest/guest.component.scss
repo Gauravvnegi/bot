@@ -8,18 +8,18 @@
 .tableHead {
   width: 5%;
   background-color: $c-gray-93 !important;
-  @include align-checkbox();
+  @include align-checkbox;
 }
 
 .icon-wrapper {
-  @include flex-space-between();
+  @include flex-space-between;
   flex-wrap: wrap;
 
   position: relative;
   .icon {
     width: 32%;
     margin: 6% 0.5%;
-    @include flex-item-center();
+    @include flex-item-center;
     flex-direction: column;
 
     .table-body-journey-icon {
@@ -215,5 +215,5 @@
 
 // *** over ride the table style ***
 :host ::ng-deep .p-datatable {
-  @include table-cell-padding(0.3em);
+  @include tableCellPadding(0.3em);
 }

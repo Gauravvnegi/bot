@@ -1,6 +1,6 @@
 @import 'main';
 .list-container {
-  height: $full;
+  height: 100%;
   opacity: 1;
   border-right: 2px solid $c-gray-102;
   .header {
@@ -35,13 +35,13 @@
       &__logo {
         height: 45px;
         width: 45px;
-        border-radius: $half;
+        border-radius: 50%;
         background-color: $olivedrab;
         @include flex-all-center;
       }
       &__body {
         width: calc(100% - 65px);
-        @include flex-col-spaceBetween;
+        @include flex-col-space-between;
         margin-left: 10px;
         font-family: 'Roboto';
         font-size: 12px;
@@ -83,7 +83,7 @@
             color: $white;
             margin: 0 0px;
             text-align: center;
-            border-radius: $half;
+            border-radius: 50%;
             font-size: 9px;
             background-color: $initiated-2;
           }
@@ -201,7 +201,7 @@
 }
 
 .no-contact {
-  height: $full;
+  height: 100%;
   @include flex-col-all-Center;
   font-size: 14px;
   line-height: 20px;
@@ -214,7 +214,7 @@
   }
   &__title {
     margin: 12px 0;
-    @include normalText;
+    @include normal-text;
     font-weight: bold;
     color: $dark-blue;
   }

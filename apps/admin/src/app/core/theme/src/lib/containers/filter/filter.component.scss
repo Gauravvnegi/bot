@@ -4,7 +4,7 @@
   background-color: $primary-cta;
   padding: 15px 10px;
   color: $c-white;
-  @include flex-between-center();
+  @include flex-between-center;
   border-bottom: 1px solid $primary-cta;
   .close--wrapper {
     @include flex-item-center;
@@ -107,7 +107,7 @@
 }
 
 .apply-button {
-  @include primaryButton();
+  @include primary-button;
   padding: 12px 0px;
   width: 155px;
   margin-bottom: 28px;
@@ -151,7 +151,7 @@
   background-color: $accordian-background;
   color: $title;
   padding: 15px;
-  @include normalText;
+  @include normal-text;
   border-bottom: 1px solid $primary-cta;
   &__padding {
     padding: 15px;
@@ -162,7 +162,7 @@
 }
 :host ::ng-deep .hotel-branch {
   color: $subtitle;
-  margin-bottom: $margin20;
+  margin-bottom: 20px;
   font-size: 14px;
 }
 
@@ -181,7 +181,7 @@
 
 :host ::ng-deep .guest-title {
   color: $subtitle;
-  margin-bottom: $margin20;
+  margin-bottom: 20px;
   font-size: 14px;
 }
 

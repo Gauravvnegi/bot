@@ -11,7 +11,7 @@
   padding: 11px 22px 14px 20px;
   border-radius: 23px;
   background-color: $button-blue;
-  @include normalText;
+  @include normal-text;
   color: $white;
   cursor: pointer;
 }
@@ -71,7 +71,7 @@
       background-color: $button-blue;
       cursor: pointer;
       .save {
-        @include normalText;
+        @include normal-text;
         color: $white;
       }
     }

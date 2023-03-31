@@ -4,7 +4,7 @@
   flex-direction: column;
   gap: 20px;
   .row {
-    @include flex-space-between();
+    @include flex-space-between;
     gap: 20px;
     .sentiment__dataTable {
       width: 58%;
@@ -12,7 +12,7 @@
     .graphs {
       width: calc(100% - 58%);
       gap: 20px;
-      @include flex-col-justCenter();
+      @include flex-col-justify-center();
       height: 100%;
     }
     .sentimentOverTime {

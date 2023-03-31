@@ -7,16 +7,16 @@
   &_image {
     width: 48px;
     height: 48px;
-    border-radius: $half;
+    border-radius: 50%;
     margin-right: 15px;
     @include flex-all-center;
     img {
-      @include fullImg;
+      @include full-img;
     }
     &-nickName {
       width: 48px;
       height: 48px;
-      border-radius: $half;
+      border-radius: 50%;
       @include flex-all-center;
       font-size: 16px;
       color: $white;
@@ -160,7 +160,7 @@
       }
     }
     &-job-duration {
-      @include normalText;
+      @include normal-text;
       font-size: 12px;
       color: $dark-blue;
     }

@@ -7,11 +7,11 @@
 
 .detail--container {
   .header {
-    @include flex-between-center();
+    @include flex-between-center;
     padding: 14px 17px 12.7px 24px;
     background-color: #f4f5f7;
     &__title {
-      @include flex-item-center();
+      @include flex-item-center;
       font-size: 16px;
       font-weight: 500;
       color: $tooltip;
@@ -42,7 +42,7 @@
     }
 
     .actions {
-      @include flex-justify-center();
+      @include flex-justify-center;
       gap: 20px;
     }
   }

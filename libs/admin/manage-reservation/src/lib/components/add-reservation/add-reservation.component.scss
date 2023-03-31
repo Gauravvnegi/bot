@@ -28,7 +28,7 @@
 }
 
 :host ::ng-deep .p-accordion-header-text {
-  @include formHeader();
+  @include form-header;
 }
 
 :host ::ng-deep .p-accordion-content {
@@ -59,13 +59,13 @@
   margin-left: 19px;
 
   &_heading {
-    @include normalText;
+    @include normal-text;
     font-weight: 600;
     color: $dark-blue2;
   }
 
   &_subheading {
-    @include normalText;
+    @include normal-text;
     font-weight: bold;
     color: $c-gray-18;
 

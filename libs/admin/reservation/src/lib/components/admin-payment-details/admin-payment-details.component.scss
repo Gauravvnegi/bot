@@ -115,7 +115,7 @@ td {
   padding: 0 15px;
   .total {
     margin-bottom: 15px;
-    @include flex-centerAlgn-justEnd;
+    @include flex-center-algn-justify-end;
     color: $primary-black;
     font-weight: $medium;
     .label {
@@ -205,7 +205,7 @@ td {
 }
 
 :host ::ng-deep .container__title {
-@include flex-space-between-cen-Algn;
+  @include flex-space-between-cen-Algn;
   color: $primary-black;
   font-weight: $medium;
   letter-spacing: 0.84px;

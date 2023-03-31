@@ -1,7 +1,7 @@
 @import 'main';
 
 .form-block {
-  @include formBlock();
+  @include form-block;
   margin-bottom: 10px;
   padding-bottom: 50px;
 }

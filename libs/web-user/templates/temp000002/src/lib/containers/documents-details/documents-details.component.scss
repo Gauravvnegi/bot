@@ -45,10 +45,10 @@
 }
 
 mat-icon {
-  @include mat-icon();
+  @include mat-icon;
 }
 .citizen__info {
-  @include flex-space-between();
+  @include flex-space-between;
   &--country {
     width: 45%;
   }
@@ -57,13 +57,13 @@ mat-icon {
   }
 }
 .doc__upload__section {
-  @include flex-space-between();
+  @include flex-space-between;
   &--doc {
     width: 45%;
   }
 }
 .doc__warning_section {
-  margin-top: $margin-large;
+  margin-top: 20px;
   & mat-icon {
     transform: rotate(180deg);
     margin-right: 5px;
@@ -71,13 +71,12 @@ mat-icon {
   }
   & p {
     display: flex;
-    margin: $margin-small 0px;
+    margin: 10px 0px;
     color: $paragraph-color;
     align-items: center;
     & span {
-      margin-left: $margin-small;
+      margin-left: 10px;
     }
-
   }
 }
 
@@ -85,19 +84,19 @@ mat-icon {
   .citizen__info {
     flex-direction: column;
     &--country {
-      width: $full-width;
+      width: 100%;
     }
     &--doc {
-      width: $full-width;
+      width: 100%;
     }
   }
   .doc__upload__section {
     flex-direction: column;
     &--doc {
-      width: $full-width;
+      width: 100%;
     }
     .extra-gap {
-      margin-bottom: $margin-large;
+      margin-bottom: 20px;
     }
   }
   .doc__warning_section {

@@ -2,9 +2,9 @@
 
 .stats {
   @include flex-col;
-  border-radius: $border5;
-  padding: $padding20;
-  height: $full;
+  border-radius: 5px;
+  padding : 20px;
+  height: 100%;
   @media screen and (max-width: 800px) {
     height: 185px;
   }
@@ -33,12 +33,12 @@
       @include flex-all-center;
     }
     .graph-container {
-      width: $half;
+      width: 50%;
       height: 200px;
       position: relative;
       @media screen and (max-width: 1024px) {
         width: auto;
-       @include flex-item-center;
+        @include flex-item-center;
       }
       &__graph {
         position: absolute;
@@ -57,19 +57,19 @@
       }
     }
     &__detail {
-      width: $half;
+      width: 50%;
       @media screen and (max-width: 1024px) {
         width: auto;
         margin-left: 30px;
       }
       &__shared {
-       @include flex-item-center;
+        @include flex-item-center;
         font: normal normal bold 35px/46px Roboto;
         letter-spacing: 2.1px;
         color: $dark-blue;
         &__p {
           font-size: 12px;
-          margin-left: $margin5;
+          margin-left: 5px;
         }
       }
       &__sharedtitle {
@@ -94,16 +94,16 @@
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0px;
       color: $dark-blue;
-      margin: 0 $margin5;
+      margin: 0 5px;
     }
     &__percentChange-img {
-      margin-left: $margin5;
+      margin-left: 5px;
     }
     &__date {
       font: normal normal normal 10px/14px Roboto;
       letter-spacing: 0.72px;
       color: $quote-color;
-      margin: 0 $margin5;
+      margin: 0 5px;
     }
   }
   &__recived-title {
@@ -114,7 +114,7 @@
   &__no-recived {
     margin-top: 20px;
     &__container {
-     @include flex-item-center;
+      @include flex-item-center;
       &__dot {
         width: 14px;
         height: 14px;
@@ -125,13 +125,13 @@
         font: normal normal bold 16px/21px Roboto;
         letter-spacing: 0px;
         color: $dark-blue;
-        margin: 0 $margin5;
+        margin: 0 5px;
       }
       &__date {
         font: normal normal normal 10px/14px Roboto;
         letter-spacing: 0.72px;
         color: $quote-color;
-        margin: 0 $margin5;
+        margin: 0 5px;
       }
     }
     &__title {

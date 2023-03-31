@@ -114,7 +114,7 @@
 @media only screen and (max-width: 500px) {
   :host ::ng-deep .mat-expansion-panel-body {
     margin: 0px 5px 16px;
-    padding: $padding-large $padding-medium !important;
+    padding: 20px 15px !important;
   }
 }
 
@@ -126,7 +126,7 @@
     position: absolute;
     height: 70px;
     width: 70px;
-    border-radius: $half-width;
+    border-radius: 50%;
     letter-spacing: 1px;
     background: transparent;
     top: 28px;
@@ -139,7 +139,7 @@
     font-weight: $bold;
   }
   .flex-wrapper {
-    @include flex-item-center();
+    @include flex-item-center;
     .text {
       color: var(--stepper-font-color, $stepper-font-color);
       font-weight: $bold;
@@ -147,7 +147,7 @@
   }
   .single-chart {
     width: 19%;
-    margin: 8% $margin-medium;
+    margin: 8% 15px;
   }
 
   .circular-chart {

@@ -6,7 +6,7 @@
   padding: 5px 5px;
   height: 68px;
   .logo {
-    @include fullImg;
+    @include full-img;
     @media screen and (max-width: 1180px) {
       width: 91%;
     }
@@ -14,7 +14,7 @@
 
   .logo-image {
     img {
-      @include fullImg;
+      @include full-img;
     }
   }
 
@@ -87,7 +87,7 @@
     width: 18px;
     height: 18px;
     img {
-      @include fullImg;
+      @include full-img;
     }
   }
 

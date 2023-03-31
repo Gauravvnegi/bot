@@ -134,7 +134,7 @@
 }
 
 .button {
-  @include admin-panel-button();
+  @include admin-panel-button;
   padding: 16px 0px !important;
   &:hover {
     cursor: pointer;

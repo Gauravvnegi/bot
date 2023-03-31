@@ -64,7 +64,7 @@
   }
 }
 .no-request {
-  @include flex-col-centerAlgn;
+  @include flex-col-center-algn;
   &-msg {
     font-family: 'Roboto';
     font-size: 12px;

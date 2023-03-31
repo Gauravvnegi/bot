@@ -10,7 +10,7 @@
     padding: 10px;
     background-color: $c-gray-103;
     .title-container {
-      @include flex-item-center();
+      @include flex-item-center;
     }
     .heading {
       font-size: 14px;
@@ -56,7 +56,7 @@
       }
       .cancel {
         background-color: $white;
-        margin-right: $margin20;
+        margin-right: 20px;
         color: $primary-cta;
         border: 1px solid $primary-cta;
       }

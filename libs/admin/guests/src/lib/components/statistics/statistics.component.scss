@@ -4,14 +4,14 @@
   width: 100%;
   height: 100%;
   padding: 20px;
-  @include flex-col-spaceBetween();
+  @include flex-col-space-between();
   background: $white;
   border-radius: 5px;
   @media (max-width: $tablet) {
     box-shadow: $box-shadow-1;
   }
   .title-container {
-    @include flex-item-center();
+    @include flex-item-center;
     .icon {
       margin-right: 10px;
       img {

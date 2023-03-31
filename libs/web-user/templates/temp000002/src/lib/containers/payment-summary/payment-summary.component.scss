@@ -30,7 +30,7 @@
     &__text {
       div {
         color: $heading-black;
-font-size: 20px;
+        font-size: 20px;
         margin: 20px 0;
         margin-left: 20px;
         font-weight: 600;
@@ -45,8 +45,8 @@ font-size: 20px;
     }
     &__table {
       table {
-        padding-top: $padding-small;
-        width: $full-width;
+        padding-top: 10px;
+        width: 100%;
         border: none;
 
         th {
@@ -88,7 +88,7 @@ font-size: 20px;
             }
           }
         }
-        
+
         @media only screen and (max-width: $M) {
           border-width: 1px;
         }
@@ -118,12 +118,12 @@ font-size: 20px;
 }
 
 .payment__wrapper--header {
-  padding: $padding-medium;
+  padding: 15px;
   font-size: $font-large;
   font-weight: $bolder;
   @media only screen and (max-width: $tab-size) {
     font-size: $font-medium;
-    padding: $padding-small;
+    padding: 10px;
   }
 }
 
@@ -178,7 +178,6 @@ font-size: 20px;
 :host ::ng-deep .mat-header-row {
   @media screen and (max-width: 600px) {
     height: 24px;
-    
   }
 }
 
@@ -189,8 +188,6 @@ font-size: 20px;
 .due__amount {
   color: $primary-blue !important;
 }
-
-
 
 .text-center {
   text-align: center;

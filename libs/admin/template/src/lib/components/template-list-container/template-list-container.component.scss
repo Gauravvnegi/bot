@@ -1,7 +1,7 @@
 @import 'main';
 
 .container {
-  @include formBlock();
+  @include form-block;
   font-size: 18px;
   font-weight: bold;
 }

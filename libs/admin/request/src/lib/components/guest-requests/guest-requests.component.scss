@@ -125,7 +125,7 @@
 }
 
 .row {
-  @include flex-space-between();
+  @include flex-space-between;
   align-items: center;
 }
 

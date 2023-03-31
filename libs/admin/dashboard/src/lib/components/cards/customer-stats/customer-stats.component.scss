@@ -1,26 +1,26 @@
 @import 'main';
 
 .legends-container {
-  @include flex-wrap-centerAlgn;
+  @include flex-wrap-center-algn;
   .legend {
-    width: $half;
+    width: 50%;
   }
 }
 
 .stat-val-container {
-  width: $full;
+  width: 100%;
   height: 25px;
   opacity: 1;
   @include flex-space-between-cen-Algn;
   padding: 15px 11px;
   margin: 5px;
   .label {
-    @include flex-item-center();
+    @include flex-item-center;
     .icon {
       width: 10px;
       height: 10px;
       margin: 0 10px 0 0;
-      border-radius: $half;
+      border-radius: 50%;
     }
     .text {
       font: normal normal medium 12px/15px Roboto;
@@ -42,9 +42,9 @@
   display: flex;
   .graph {
     height: 176px;
-    @include flex-justify-center();
+    @include flex-justify-center;
     position: relative;
-    width: $half;
+    width: 50%;
     transform: scale(0.8);
 
     .graph-canvas {
@@ -57,7 +57,7 @@
     .labels {
       z-index: 1;
       position: absolute;
-      height: $full;
+      height: 100%;
       top: 0;
       @include flex-col-all-Center;
       transform: scale(1.1);

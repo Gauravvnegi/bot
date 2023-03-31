@@ -17,7 +17,7 @@
 }
 
 .template-container {
-  @include flex-wrap-evenSpace;
+  @include flex-wrap-even-space;
   .topic-cards {
     padding-left: 5px;
     margin-bottom: 2rem;
@@ -53,7 +53,7 @@
 }
 
 .show-button {
-  @include flex-justify-center();
+  @include flex-justify-center;
   .button {
     @include flex-all-center;
     width: 250px;
@@ -62,7 +62,7 @@
     border-radius: 23px;
     box-shadow: 0 3px 6px 0 $showBtn-shadow;
     border: solid 1px $button-blue;
-    @include normalText;
+    @include normal-text;
     color: $button-blue;
     background-color: $white;
     cursor: pointer;

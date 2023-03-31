@@ -4,7 +4,7 @@
   background-color: $primary-cta;
   padding: 15px 10px;
   color: $c-white;
-  @include flex-between-center();
+  @include flex-between-center;
   border-bottom: 1px solid $primary-cta;
   .close--wrapper {
     @include flex-item-center;
@@ -57,11 +57,11 @@
 }
 .notification--customize {
   padding: 16px 11px;
-  @include flex-between-center();
+  @include flex-between-center;
   color: $primary-cta;
   font-size: 14px;
   .customize {
-    @include flex-between-center();
+    @include flex-between-center;
     img {
       height: 14px;
       margin-right: 5px;
@@ -72,7 +72,7 @@
     }
   }
   .dismiss {
-    @include flex-between-center();
+    @include flex-between-center;
     color: $primary-gray;
     &:hover {
       color: $primary-cta;
@@ -88,7 +88,7 @@
 }
 .empty-view {
   margin-top: 60px;
-  @include flex-col-spaceBetween-centerAlgn();
+  @include flex-col-space-between-center-algn();
 
   &--title {
     font-size: 16px;
@@ -105,9 +105,9 @@
 .notification--form {
   height: calc(100vh - 116.14px);
   .notification {
-    @include fullImg;
+    @include full-img;
     overflow-y: auto;
-    @include flex-col-centerAlgn();
+    @include flex-col-center-algn();
     gap: 7px;
     &::-webkit-scrollbar {
       width: 16px;
@@ -133,7 +133,7 @@
       border: solid 1px $notificationBorder;
       padding: 11px 10px;
       width: 100%;
-      @include flex-item-center();
+      @include flex-item-center;
       cursor: pointer;
       .profile {
         width: 38px;
@@ -146,11 +146,11 @@
         margin-right: 15px;
       }
       &--details {
-        @include flex-col-centerAlgn();
+        @include flex-col-center-algn();
         gap: 5px;
         width: calc(100% - 53px);
         .title--container {
-          @include flex-between-center();
+          @include flex-between-center;
           width: 100%;
           .title {
             font-size: 12px;
@@ -287,7 +287,7 @@
   background-color: $accordian-background;
   color: $primary-cta;
   padding: 15px;
-  @include normalText;
+  @include normal-text;
   border-bottom: 1px solid $primary-cta;
   &__padding {
     padding: 15px;

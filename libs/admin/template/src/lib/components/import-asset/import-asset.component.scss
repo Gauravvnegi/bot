@@ -17,7 +17,7 @@
       cursor: pointer;
     }
     .title {
-      @include normalText;
+      @include normal-text;
       font-size: 14px;
       color: $dark-blue;
     }
@@ -54,7 +54,7 @@
         font-family: Roboto;
         font-size: 12px;
         font-weight: 500;
-      
+
         color: $button-blue;
         display: flex;
         align-items: center;

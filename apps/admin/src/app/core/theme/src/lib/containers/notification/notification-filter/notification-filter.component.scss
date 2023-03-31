@@ -8,15 +8,15 @@
     font-size: 14px;
     color: $primary-cta;
     cursor: pointer;
-    @include flex-between-center();
+    @include flex-between-center;
     &--title {
-      @include flex-item-center();
+      @include flex-item-center;
       mat-icon {
         margin-right: 7px;
       }
     }
     &--clear {
-      @include flex-item-center();
+      @include flex-item-center;
       font-size: 14px;
       color: $inActiveTab;
       &:hover {
@@ -40,7 +40,7 @@
     color: $inActiveTab;
     .date {
       .fields {
-        @include flex-item-center();
+        @include flex-item-center;
         gap: 12px;
         margin-top: 12px;
         .date-field {
@@ -58,9 +58,9 @@
     border-radius: 23px;
     background-color: $primary-cta;
     color: $white;
-    @include normalText;
+    @include normal-text;
     cursor: pointer;
-    @include flex-justify-center();
+    @include flex-justify-center;
     align-items: center;
     &:active {
       transform: scale(0.99);
@@ -69,7 +69,7 @@
 }
 
 .status {
-  @include flex-item-center();
+  @include flex-item-center;
   gap: 20px;
 }
 

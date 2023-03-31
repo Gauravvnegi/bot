@@ -1,6 +1,6 @@
 @import 'main';
 .footer {
-  width: $full;
+  width: 100%;
   @include flex-space-evenly-cen-Algn;
   padding-left: 15px;
   padding-right: 15px;
@@ -8,19 +8,19 @@
   .nickname {
     padding: 8px 6px;
     background-color: $user-orange;
-    border-radius: $full;
+    border-radius: 100%;
     @include flex-all-center;
     width: 38px;
     height: 38px;
   }
   .button {
-    @include primaryButton();
+    @include primary-button;
     width: 112px;
     height: 30px;
     padding: 9px 10px;
     margin: 0 15px;
     font-size: 12px;
-  @include flex-item-center;
+    @include flex-item-center;
     cursor: pointer;
   }
   .input {

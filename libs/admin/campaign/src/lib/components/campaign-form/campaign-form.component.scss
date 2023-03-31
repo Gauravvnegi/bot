@@ -1,7 +1,7 @@
 @import 'main';
 
 .wrapper-header {
-  @include formBlock();
+  @include form-block;
   .one-fourth {
     flex-basis: 8%;
   }
@@ -20,7 +20,7 @@
       height: 8px;
       margin-left: 7px;
       background-color: $c-gray-18;
-      border-radius: $half;
+      border-radius: 50%;
     }
     &:hover {
       .dropdown {
@@ -59,7 +59,7 @@
     color: $button-blue;
     right: 10px;
     top: 41px;
-    @include flex-item-center();
+    @include flex-item-center;
     gap: 5px;
     span {
       cursor: pointer;

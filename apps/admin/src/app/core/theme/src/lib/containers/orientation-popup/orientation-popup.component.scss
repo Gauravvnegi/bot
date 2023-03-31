@@ -1,7 +1,7 @@
 @import 'main';
 
 .popup-wrapper {
-  @include flex-col-centerAlgn;
+  @include flex-col-center-algn;
   padding: 20px;
   .heading {
     color: $primary-black;

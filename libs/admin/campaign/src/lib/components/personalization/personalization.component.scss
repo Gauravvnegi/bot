@@ -16,7 +16,7 @@
     z-index: 121;
     .title {
       padding: 0 37px 8.2px 30.5px;
-      @include normalText;
+      @include normal-text;
       color: $dark-blue;
       border-bottom: 1px solid $black;
     }

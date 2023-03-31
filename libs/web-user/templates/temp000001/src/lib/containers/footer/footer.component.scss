@@ -4,16 +4,16 @@
   display: grid;
   grid-template-columns: 33% 33% 33%;
   background-color: var(--footer-background-color, $footer-background-color);
-  padding: $padding-medium;
+  padding: 15px;
   &--text {
     font-size: $font-responsive-small;
     font-weight: $bold;
-    @include flex-justify-center();
+    @include flex-justify-center;
     flex-direction: column;
-    margin: 0px $margin-small;
+    margin: 0px 10px;
 
     @media only screen and (max-width: $S) {
-      margin: $margin-small 0;
+      margin: 10px 0;
     }
 
     .footer-privacy-text {
@@ -30,17 +30,17 @@
     }
 
     .social_icons {
-      @include flex-justify-center();
+      @include flex-justify-center;
 
       align-items: center;
-      margin-bottom: $margin-small;
+      margin-bottom: 10px;
       .icon {
         height: 30px;
         width: 30px;
         margin: 0px 5px;
         img {
-          height: $full-width;
-          width: $full-width;
+          height: 100%;
+          width: 100%;
         }
       }
     }
@@ -98,11 +98,10 @@
   @media only screen and (max-width: $S) {
     grid-template-columns: 100%;
     text-align: center;
-    
   }
 }
-@media screen and (max-width:$S) {
-  .footer__wrapper--contact-details{
+@media screen and (max-width: $S) {
+  .footer__wrapper--contact-details {
     justify-content: center !important;
   }
 }

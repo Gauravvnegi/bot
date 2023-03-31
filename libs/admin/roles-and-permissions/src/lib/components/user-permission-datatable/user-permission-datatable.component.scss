@@ -1,7 +1,7 @@
 @import 'main';
 
 .add-user {
-  @include tableCreateButton();
+  @include table-create-button;
 }
 .close {
   display: flex;

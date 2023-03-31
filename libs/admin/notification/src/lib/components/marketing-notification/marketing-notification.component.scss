@@ -85,7 +85,7 @@
       transform: scale(0.97);
     }
     &__text {
-      @include normalText;
+      @include normal-text;
       color: $primary-cta;
     }
   }
@@ -99,7 +99,7 @@
       transform: scale(0.97);
     }
     &__text {
-      @include normalText;
+      @include normal-text;
       color: $white;
     }
   }

@@ -1,7 +1,7 @@
 @import 'main';
 
 .form-block {
-  @include formBlock();
+  @include form-block;
 }
 .manually-add {
   display: flex;
@@ -36,7 +36,7 @@
       width: 100%;
       top: 0;
       bottom: 0;
-      @include flex-item-center();
+      @include flex-item-center;
       justify-content: space-evenly;
       img {
         width: 36px;

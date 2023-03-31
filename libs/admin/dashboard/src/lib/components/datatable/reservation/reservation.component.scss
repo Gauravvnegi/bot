@@ -6,7 +6,7 @@
   .icon {
     width: 32%;
     margin: 6% 0.5%;
-    @include flex-col-centerAlgn();
+    @include flex-col-center-algn();
 
     .table-body-journey-icon {
       height: 14px;
@@ -168,7 +168,7 @@
     margin: 0 2px;
     text-align: center;
     min-width: 23px;
-    border-radius: $half;
+    border-radius: 50%;
     font-size: 12px;
   }
   @media screen and (max-width: 1050px) {
@@ -201,13 +201,12 @@
   color: $primary-cta !important;
 }
 
-
 // *** over ride the table style ***
 :host ::ng-deep .p-datatable {
-  @include table-cell-padding(0.3em);
+  @include tableCellPadding(0.3em);
 }
 
 // *** over ride the table style ***
 :host ::ng-deep .p-datatable {
-  @include table-cell-padding(0.3em);
+  @include tableCellPadding(0.3em);
 }

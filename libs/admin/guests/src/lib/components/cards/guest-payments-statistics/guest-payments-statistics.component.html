@@ -1,18 +1,35 @@
 <div class="container" (click)="openTableModal()">
   <div class="title-container">
-    <div class="icon">
+    <div
+      class="icon"
+      *skeleton="
+        payment == undefined;
+        height: '43px';
+        width: '33px';
+        margin: '0 10px 0 0'
+      "
+    >
       <img
         [src]="guestConfig.images.payment.url"
         [alt]="guestConfig.images.payment.alt"
       />
     </div>
-    <hospitality-bot-custom-tooltip [text]="'payment.tooltip' | translate">
+    <hospitality-bot-custom-tooltip
+      [text]="'payment.tooltip' | translate"
+      *skeleton="payment == undefined; height: '25px'; width: '170px'"
+    >
       <div class="stat-title">{{ 'payment.title' | translate }}</div>
     </hospitality-bot-custom-tooltip>
   </div>
   <div class="graph-container">
     <div class="graph">
       <canvas
+        *skeleton="
+          payment == undefined;
+          height: '138px';
+          width: '138px';
+          borderRadius: '50%'
+        "
         baseChart
         class="graph-base-chart"
         [data]="chart.Data"
@@ -24,19 +41,35 @@
       >
       </canvas>
     </div>
-    <div>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </div>
     <div class="detail-container">
-      <div class="val">{{ payment?.totalCount }}</div>
-      <div class="label">{{ 'total_users' | translate }}</div>
+      <div
+        class="val"
+        *skeleton="payment == undefined; height: '30px'; width: '30px'"
+      >
+        {{ payment?.totalCount }}
+      </div>
+      <div
+        class="label"
+        *skeleton="
+          payment == undefined;
+          height: '14px';
+          width: '70px';
+          margin: '5px 0'
+        "
+      >
+        {{ 'total_users' | translate }}
+      </div>
     </div>
   </div>
   <div class="stat-vals-container">
-    <div class="stat-val-container" *ngFor="let stat of payment?.statistics">
-      <div class="icon" [style.background-color]="stat.color"></div>
-      <div class="stat-val">{{ stat.value }}</div>
-      <div class="stat-lable">{{ stat.label }}</div>
-    </div>
+    <ng-container
+      *skeleton="payment == undefined; height: '78px'; width: '30%'; repeat: 3"
+    >
+      <div class="stat-val-container" *ngFor="let stat of payment?.statistics">
+        <div class="icon" [style.background-color]="stat.color"></div>
+        <div class="stat-val">{{ stat.value }}</div>
+        <div class="stat-lable">{{ stat.label }}</div>
+      </div>
+    </ng-container>
   </div>
 </div>

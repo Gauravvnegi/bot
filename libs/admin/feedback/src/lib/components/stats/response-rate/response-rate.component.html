@@ -52,57 +52,69 @@
         </canvas>
       </div>
     </div>
-    <div
-      class="stats__body__detail"
-      *skeleton="
-        stats == undefined;
-        height: '240px';
-        width: '150px';
-        margin: '10px 0'
-      "
-    >
-      <div class="stats__body__detail__shared">
-        {{ stats?.totalResponse }}
-      </div>
-      <div class="stats__body__detail__sharedtitle">
-        Overall Shared
-      </div>
-      <ng-container *ngIf="stats?.feedbacks">
-        <div class="received-wrap" *ngFor="let item of stats.feedbacks">
-          <div class="received-wrap__container">
-            <div
-              class="received-wrap__container__dot"
-              [style.background]="item.color"
-            ></div>
-            <div class="received-wrap__container__count">
-              {{ item.count }}
-            </div>
-            <div>
-              <span
-                class="percentChange"
-                [ngClass]="{
-                  'comparison-positive': item.comparePercent >= 0,
-                  'comparison-negative': item.comparePercent < 0
-                }"
-                >({{ item.comparePercent }}%)</span
-              ><img
-                class="received-wrap__container__percentChange-img"
-                [src]="
-                  item.comparePercent >= 0
-                    ? 'assets/svg/uparrow.svg'
-                    : 'assets/svg/down-percentage.svg'
-                "
-                alt="uparrow"
-              />
-            </div>
-            <div class="received-wrap__container__date">
-              {{ 'in_thirty_days' | translate }}
-            </div>
-          </div>
-          <div class="received-wrap__recived-title">
-            {{ item.label }}
-          </div>
+    <div class="stats__body__detail">
+      <ng-container
+        *skeleton="
+          stats === undefined;
+          height: '60px';
+          width: '150px';
+          margin: '0 0 10px 0'
+        "
+      >
+        <div class="stats__body__detail__shared">
+          {{ stats?.totalResponse }}
         </div>
+        <div class="stats__body__detail__sharedtitle">
+          Overall Shared
+        </div>
+      </ng-container>
+
+      <ng-container
+        *skeleton="
+          stats === undefined;
+          height: '41px';
+          width: '80%';
+          repeat: 4;
+          margin: '10px 0'
+        "
+      >
+        <ng-container *ngIf="stats?.feedbacks">
+          <div class="received-wrap" *ngFor="let item of stats.feedbacks">
+            <div class="received-wrap__container">
+              <div
+                class="received-wrap__container__dot"
+                [style.background]="item.color"
+              ></div>
+              <div class="received-wrap__container__count">
+                {{ item.count }}
+              </div>
+              <div>
+                <span
+                  class="percentChange"
+                  [ngClass]="{
+                    'comparison-positive': item.comparePercent >= 0,
+                    'comparison-negative': item.comparePercent < 0
+                  }"
+                  >({{ item.comparePercent }}%)</span
+                ><img
+                  class="received-wrap__container__percentChange-img"
+                  [src]="
+                    item.comparePercent >= 0
+                      ? 'assets/svg/uparrow.svg'
+                      : 'assets/svg/down-percentage.svg'
+                  "
+                  alt="uparrow"
+                />
+              </div>
+              <div class="received-wrap__container__date">
+                {{ 'in_thirty_days' | translate }}
+              </div>
+            </div>
+            <div class="received-wrap__recived-title">
+              {{ item.label }}
+            </div>
+          </div>
+        </ng-container>
       </ng-container>
     </div>
   </div>

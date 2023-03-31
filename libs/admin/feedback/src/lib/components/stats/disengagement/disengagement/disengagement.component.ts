@@ -20,7 +20,7 @@ export class DisengagementComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   disengagement: Disengagement;
   feedbackConfig = feedback;
-  tabfeedbackType: string;
+  tabFeedbackType: string;
   selectedInterval: string;
   loading = false;
   globalQueries = [];
@@ -141,7 +141,7 @@ export class DisengagementComponent implements OnInit {
         .subscribe(
           (response) => {
             this.disengagement = new Disengagement().deserialize(response);
-            const index = this.disengagement.disengagmentDrivers.findIndex(
+            const index = this.disengagement.disengagementDrivers.findIndex(
               (item) => item.selected
             );
             this.selectedDepartment.index = index > 0 ? index : 0;
@@ -159,14 +159,14 @@ export class DisengagementComponent implements OnInit {
   }
 
   getFeedbackType() {
-    if (this.tabfeedbackType === undefined) {
+    if (this.tabFeedbackType === undefined) {
       return this.globalFeedbackFilterType === this.feedbackConfig.types.both
         ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
-    return this.tabfeedbackType === this.feedbackConfig.types.both
+    return this.tabFeedbackType === this.feedbackConfig.types.both
       ? feedback.types.transactional
-      : this.tabfeedbackType;
+      : this.tabFeedbackType;
   }
 
   setEntityId(feedbackType) {
@@ -190,7 +190,7 @@ export class DisengagementComponent implements OnInit {
   listenForOutletChanged() {
     this.statisticsService.$outletChange.subscribe((response) => {
       if (response.status) {
-        this.tabfeedbackType = response.type;
+        this.tabFeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {
             element.entityIds = this.statisticsService.outletIds;
@@ -223,7 +223,7 @@ export class DisengagementComponent implements OnInit {
       this.circularTransparentGraph.Labels = [];
       this.circularTransparentGraph.Colors[0].backgroundColor = [];
       this.circularTransparentGraph.Colors[0].borderColor = [];
-      this.disengagement.disengagmentDrivers.forEach((item, index) => {
+      this.disengagement.disengagementDrivers.forEach((item, index) => {
         this.circularGraph.Data[0].push(item.score);
         this.circularGraph.Labels.push(item.label);
         this.circularTransparentGraph.Data[0].push(item.score);
@@ -274,7 +274,7 @@ export class DisengagementComponent implements OnInit {
   }
 
   private initGTMBreakdown(status = true) {
-    const obj = this.disengagement.disengagmentDrivers[
+    const obj = this.disengagement.disengagementDrivers[
       this.selectedDepartment.index
     ];
     if (status) this.selectedDepartment.key = obj?.key;

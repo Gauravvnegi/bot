@@ -50,6 +50,9 @@
       height: 200px;
       margin: 10px 0;
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       @media screen and (max-width: 1024px) {
         width: auto;
       }

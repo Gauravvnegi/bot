@@ -27,7 +27,7 @@ import { ChartTypeOption } from '../../../types/feedback.type';
 })
 export class NetPromoterScoreComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
-  tabfeedbackType: string;
+  tabFeedbackType: string;
   feedbackConfig = feedback;
   npsFG: FormGroup;
   documentTypes = [{ label: 'CSV', value: 'csv' }];
@@ -140,7 +140,7 @@ export class NetPromoterScoreComponent implements OnInit, OnDestroy {
   listenForOutletChanged() {
     this._statisticService.$outletChange.subscribe((response) => {
       if (response.status) {
-        this.tabfeedbackType = response.type;
+        this.tabFeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {
             element.entityIds = this._statisticService.outletIds;
@@ -275,14 +275,14 @@ export class NetPromoterScoreComponent implements OnInit, OnDestroy {
   }
 
   getFeedbackType() {
-    if (this.tabfeedbackType === undefined) {
+    if (this.tabFeedbackType === undefined) {
       return this.globalFeedbackFilterType === this.feedbackConfig.types.both
         ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
-    return this.tabfeedbackType === this.feedbackConfig.types.both
+    return this.tabFeedbackType === this.feedbackConfig.types.both
       ? feedback.types.transactional
-      : this.tabfeedbackType;
+      : this.tabFeedbackType;
   }
 
   ngOnDestroy(): void {

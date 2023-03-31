@@ -1,13 +1,22 @@
 <div class="container">
   <div class="stat-header">
     <div class="title-container">
-      <div class="icon">
+      <div
+        class="icon"
+        *skeleton="
+          customerData == undefined;
+          height: '43px';
+          width: '33px';
+          margin: '0 10px 0 0'
+        "
+      >
         <img
           [src]="guestConfig.images.vip.url"
           [alt]="guestConfig.images.vip.alt"
         />
       </div>
       <mat-select
+        *skeleton="customerData == undefined; height: '25px'; width: '170px'"
         class="stat-title"
         [(value)]="guestType"
         (selectionChange)="handleGuestTypeChange($event)"
@@ -21,16 +30,29 @@
     <div class="status-right">
       <div class="stat-labels-container">
         <ng-container
-          *ngFor="let legend of legendData; let legendIndex = index"
+          *skeleton="
+            customerData == undefined;
+            height: '28px';
+            width: '80px';
+            margin: '0 5px';
+            repeat: 4
+          "
         >
-          <div class="stat-label" (click)="legendOnClick(legendIndex, $event)">
-            <input class="legends" type="checkbox" />
-            <span
-              [style.background-color]="legend.bubbleColor"
-              class="bubble"
-            ></span>
-            <p class="stat-label-title">{{ legend.label }}</p>
-          </div>
+          <ng-container
+            *ngFor="let legend of legendData; let legendIndex = index"
+          >
+            <div
+              class="stat-label"
+              (click)="legendOnClick(legendIndex, $event)"
+            >
+              <input class="legends" type="checkbox" />
+              <span
+                [style.background-color]="legend.bubbleColor"
+                class="bubble"
+              ></span>
+              <p class="stat-label-title">{{ legend.label }}</p>
+            </div>
+          </ng-container>
         </ng-container>
       </div>
       <form>
@@ -58,6 +80,12 @@
   <div class="stat-val-container">
     <div class="line-chart">
       <canvas
+        *skeleton="
+          customerData == undefined;
+          height: '70vh';
+          width: '100%';
+          margin: '5px 0 0 0'
+        "
         baseChart
         class="line-chart-base-chart"
         [datasets]="chart.chartData"

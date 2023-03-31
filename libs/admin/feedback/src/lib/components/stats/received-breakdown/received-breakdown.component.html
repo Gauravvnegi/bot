@@ -1,9 +1,19 @@
-<div class="stats" *ngIf="stats" click-allow (click)="openTableModal($event)">
+<div class="stats" click-allow (click)="openTableModal($event)">
   <div class="stats__head" [formGroup]="bifurcationFG">
-    <div class="stats__head__title">
+    <div
+      class="stats__head__title"
+      *skeleton="stats == undefined; height: '20px'; width: '150px'"
+    >
       {{ 'bifurcation.title' | translate }}
     </div>
-    <div>
+    <div
+      *skeleton="
+        stats == undefined;
+        height: '33px';
+        width: '115px';
+        borderRadius: '5px'
+      "
+    >
       <mat-select
         (click)="stopOpenModal($event)"
         class="stats__head__select"
@@ -20,6 +30,12 @@
     <div class="stats__container__graph">
       <div class="stats__container__graph__canvas">
         <canvas
+          *skeleton="
+            stats == undefined;
+            height: '200px';
+            width: '200px';
+            borderRadius: '50%'
+          "
           baseChart
           height="220px"
           z-index="2"
@@ -33,48 +49,38 @@
         </canvas>
       </div>
       <div class="stats__container__graph__labels">
-        <div class="val">{{ stats.totalCount }}</div>
-        <div class="label">{{ stats.label }}</div>
+        <div class="val">{{ stats?.totalCount }}</div>
+        <div class="label">{{ stats?.label }}</div>
       </div>
     </div>
     <div class="stats__container__actions">
-      <div
-        *ngFor="let action of stats.feedbacks"
-        class="stats__container__actions__action"
+      <ng-container
+        *skeleton="
+          stats === undefined;
+          height: '30px';
+          width: '150px';
+          repeat: 4;
+          margin: '10px 0'
+        "
       >
-        <div class="stats__container__actions__action__record">
-          <div
-            class="stats__container__actions__action__record__dot"
-            [style.background-color]="action.color"
-          ></div>
-          <div class="stats__container__actions__action__record__stat">
-            {{ action.score }}
+        <div
+          *ngFor="let action of stats?.feedbacks"
+          class="stats__container__actions__action"
+        >
+          <div class="stats__container__actions__action__record">
+            <div
+              class="stats__container__actions__action__record__dot"
+              [style.background-color]="action.color"
+            ></div>
+            <div class="stats__container__actions__action__record__stat">
+              {{ action.score }}
+            </div>
           </div>
-          <!-- <div
-            class="stats__container__actions__action__record__compare"
-            [ngClass]="{
-              'comparison-positive': action.comparisonPercent >= 0,
-              'comparison-negative': action.comparisonPercent < 0
-            }"
-          >
-            ({{ action.comparisonPercent }}%)<img
-              class="upArrow"
-              [src]="
-                action.comparisonPercent >= 0
-                  ? 'assets/svg/uparrow.svg'
-                  : 'assets/svg/down-percentage.svg'
-              "
-              alt="uparrow"
-            />
+          <div class="stats__container__actions__action__label">
+            {{ action.label }}
           </div>
-          <div class="stats__container__actions__action__record__days">
-            {{ 'in_thirty_days' | translate }}
-          </div> -->
         </div>
-        <div class="stats__container__actions__action__label">
-          {{ action.label }}
-        </div>
-      </div>
+      </ng-container>
     </div>
   </div>
 </div>

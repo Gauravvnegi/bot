@@ -1,6 +1,9 @@
 <div class="container" *ngIf="npsFG">
   <div class="header" [formGroup]="npsFG">
-    <div class="title-container">
+    <div
+      class="title-container"
+      *skeleton="npsChartData == undefined; height: '37px'; width: '210px'"
+    >
       <div class="icon">
         <img
           [src]="feedbackConfig.images.nps.url"
@@ -9,7 +12,10 @@
       </div>
       <div class="stat-title">{{ 'nps.title' | translate }}</div>
     </div>
-    <div class="menu-container">
+    <div
+      class="menu-container"
+      *skeleton="npsChartData == undefined; height: '46px'; width: '410px'"
+    >
       <div class="pull-right">
         <label class="labl" *ngFor="let option of chartTypes">
           <input
@@ -59,6 +65,7 @@
   </div>
   <div class="line-chart">
     <canvas
+      *skeleton="npsChartData == undefined; height: '65vh'; width: '100%'"
       baseChart
       class="line-chart__canvas"
       [datasets]="chart.data"

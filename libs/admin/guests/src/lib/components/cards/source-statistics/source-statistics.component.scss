@@ -7,14 +7,14 @@
 }
 
 .graph-container {
-  height: 138px;
+  height: 150px;
   display: flex;
   justify-content: center;
   position: relative;
   .graph {
     z-index: 2;
     &-base-chart {
-      height: 138px;
+      height: 150px;
     }
   }
   .labels {

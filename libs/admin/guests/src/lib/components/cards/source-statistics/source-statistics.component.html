@@ -1,18 +1,35 @@
 <div class="container" (click)="openTableModal()">
   <div class="title-container">
-    <div class="icon">
+    <div
+      class="icon"
+      *skeleton="
+        sourceGraphData == undefined;
+        height: '43px';
+        width: '33px';
+        margin: '0 10px 0 0'
+      "
+    >
       <img
         [src]="guestConfig.images.source.url"
         [alt]="guestConfig.images.source.alt"
       />
     </div>
-    <hospitality-bot-custom-tooltip [text]="'source.tooltip' | translate">
+    <hospitality-bot-custom-tooltip
+      [text]="'source.tooltip' | translate"
+      *skeleton="sourceGraphData == undefined; height: '25px'; width: '170px'"
+    >
       <div class="stat-title">{{ 'source.title' | translate }}</div>
     </hospitality-bot-custom-tooltip>
   </div>
   <div class="graph-container">
     <div class="graph">
       <canvas
+        *skeleton="
+          sourceGraphData == undefined;
+          height: '150px';
+          width: '150px';
+          borderRadius: '50%'
+        "
         baseChart
         class="graph-base-chart"
         [data]="chart.Data"
@@ -30,15 +47,25 @@
     </div>
   </div>
   <div class="stat">
-    <div
-      class="stat-val-container"
-      *ngFor="let item of sourceGraphData?.statistics"
+    <ng-container
+      *skeleton="
+        sourceGraphData == undefined;
+        height: '25px';
+        width: '100%';
+        margin: '2.5px 0';
+        repeat: 5
+      "
     >
-      <div class="stat-lable-container">
-        <div class="icon" [style.background]="item.color"></div>
-        <div class="stat-lable">{{ item.label | titlecase }}</div>
+      <div
+        class="stat-val-container"
+        *ngFor="let item of sourceGraphData?.statistics"
+      >
+        <div class="stat-lable-container">
+          <div class="icon" [style.background]="item.color"></div>
+          <div class="stat-lable">{{ item.label | titlecase }}</div>
+        </div>
+        <div class="stat-val">{{ item.value }}</div>
       </div>
-      <div class="stat-val">{{ item.value }}</div>
-    </div>
+    </ng-container>
   </div>
 </div>

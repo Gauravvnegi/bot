@@ -557,22 +557,22 @@ export class Bifurcations {
 
 export class Disengagement {
   gtmClosureGraph: GtmClosureGraph;
-  gtmbreakDown: GtmBreakdown;
-  disengagmentDrivers: Status[];
+  gtmBreakDown: GtmBreakdown;
+  disengagementDrivers: Status[];
   total: number;
   selectedItemColor: string;
 
   deserialize(input) {
     this.total = 0;
-    this.disengagmentDrivers = new Array<Status>();
+    this.disengagementDrivers = new Array<Status>();
     this.gtmClosureGraph = new GtmClosureGraph().deserialize({
       closerGraph: input.gtmClosedRate?.closerGraph?.closerGraphStats,
       gtmGraph: input.gtmClosedRate?.gtmGraph?.gtmGraphStats,
     });
-    this.gtmbreakDown = new GtmBreakdown().deserialize(input.gtmbreakDown);
+    this.gtmBreakDown = new GtmBreakdown().deserialize(input.gtmbreakDown);
     this.selectedItemColor = '#4b56c0';
     Object.keys(input.disengagmentDrivers).forEach((key, i) => {
-      this.disengagmentDrivers.push(
+      this.disengagementDrivers.push(
         new Status().deserialize({
           label: input.departmenList[key],
           score: input.disengagmentDrivers[key],

@@ -19,13 +19,12 @@ import { StatisticsService } from '../../../services/feedback-statistics.service
 })
 export class ArtComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType;
-  loading = false;
-  tabfeedbackType: string;
+  tabFeedbackType: string;
   $subscription = new Subscription();
   feedbackConfig = feedback;
   globalQueries = [];
   chartData: ARTGraph;
-
+  dataLoaded = false;
   public chart = {
     datasets: [
       {
@@ -78,7 +77,7 @@ export class ArtComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        //set-global query everytime global filter changes
+        //set-global query every time global filter changes
         this.globalQueries = [
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
@@ -112,7 +111,7 @@ export class ArtComponent implements OnInit, OnDestroy {
   listenForOutletChanged() {
     this.statisticsService.$outletChange.subscribe((response) => {
       if (response.status) {
-        this.tabfeedbackType = response.type;
+        this.tabFeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {
             element.entityIds = this.statisticsService.outletIds;
@@ -135,8 +134,8 @@ export class ArtComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.statisticsService.getARTGraphData(config).subscribe((response) => {
         this.chartData = new ARTGraph().deserialize(response);
-        if (this.chartData.data.length) this.loading = true;
         this.initChartData();
+        this.dataLoaded = true;
       })
     );
   }
@@ -151,7 +150,6 @@ export class ArtComponent implements OnInit, OnDestroy {
     if (!this.chartData.data.length) {
       return;
     }
-    this.loading = true;
     this.chart.datasets[0].data = [this.chartData.average];
     this.chart.datasets[1].data = [0];
     this.chart.labels = [''];
@@ -176,20 +174,19 @@ export class ArtComponent implements OnInit, OnDestroy {
         this.chart.datasets[1].backgroundColor.push(item.colorCode);
         this.chart.datasets[1].hoverBackgroundColor.push(item.colorCode);
         this.chart.datasets[1].borderColor.push(item.colorCode);
-        this.loading = false;
       }
     });
   }
 
   getFeedbackType() {
-    if (this.tabfeedbackType === undefined) {
+    if (this.tabFeedbackType === undefined) {
       return this.globalFeedbackFilterType === this.feedbackConfig.types.both
         ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
-    return this.tabfeedbackType === this.feedbackConfig.types.both
+    return this.tabFeedbackType === this.feedbackConfig.types.both
       ? feedback.types.transactional
-      : this.tabfeedbackType;
+      : this.tabFeedbackType;
   }
 
   ngOnDestroy() {

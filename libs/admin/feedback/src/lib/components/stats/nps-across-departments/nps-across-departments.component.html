@@ -1,6 +1,9 @@
 <div class="container" [formGroup]="npsFG">
   <div class="header">
-    <div class="title-container">
+    <div
+      class="title-container"
+      *skeleton="npsChartData == undefined; height: '37px'; width: '210px'"
+    >
       <div class="icon">
         <img
           [src]="feedbackConfig.images.nps_departments.url"
@@ -11,7 +14,10 @@
         {{ 'nps_across_department.title' | translate }}
       </div>
     </div>
-    <div class="menu-container">
+    <div
+      class="menu-container"
+      *skeleton="npsChartData == undefined; height: '46px'; width: '410px'"
+    >
       <div class="pull-right">
         <label class="labl" *ngFor="let option of chartTypes">
           <input
@@ -61,6 +67,7 @@
   </div>
   <div class="tab-group">
     <hospitality-bot-tab-group
+      *skeleton="npsChartData == undefined; height: '57px'; width: '100%'"
       [listItems]="tabFilterItems"
       [selectedIndex]="tabFilterIdx"
       (selectedTabChange)="onSelectedTabFilterChange($event)"
@@ -68,7 +75,15 @@
   </div>
   <ng-container [ngSwitch]="npsFG?.get('npsChartType')?.value">
     <ng-container *ngSwitchCase="'bar'">
-      <div class="button__wrapper">
+      <div
+        class="button__wrapper"
+        *skeleton="
+          npsChartData == undefined;
+          height: '50px';
+          width: '40%';
+          margin: '5px 0 0 0'
+        "
+      >
         <mat-chip-list
           multiple
           #chipList
@@ -97,6 +112,12 @@
         </mat-chip-list>
       </div>
       <hospitality-bot-department-bar-graph
+        *skeleton="
+          npsChartData == undefined;
+          height: '530px';
+          width: 'calc(100% - 40px)';
+          margin: '30px 20px 0 20px'
+        "
         [npsChartData]="npsChartData"
       ></hospitality-bot-department-bar-graph>
     </ng-container>

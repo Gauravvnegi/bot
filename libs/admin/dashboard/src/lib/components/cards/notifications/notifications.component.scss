@@ -28,7 +28,7 @@
       right: 0;
     }
   }
-  &-graph-wraper {
+  &-graph-wrapper {
     margin: 0 25px;
     position: relative;
     height: 204px;
@@ -139,12 +139,12 @@
     }
   }
 }
-.notifications-graph-wraper-number-color {
+.notifications-graph-wrapper-number-color {
   color: $dark-blue;
   font-weight: 700;
   font-size: 25px;
 }
-.notifications-graph-wraper-text-color {
+.notifications-graph-wrapper-text-color {
   color: $note1;
   font: normal normal 700 12px/14px Roboto;
 }

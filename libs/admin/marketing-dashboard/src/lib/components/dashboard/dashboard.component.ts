@@ -1,9 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  AdminUtilityService,
-  ModuleNames,
-} from '@hospitality-bot/admin/shared';
+import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
@@ -21,7 +18,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   hotelId: string;
   config: any;
-
+  loading = false;
   rateGraph: GraphData = {
     title: 'rateGraph.title',
     chart: {},
@@ -102,10 +99,12 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
    * @function subscriberGraphStats To get subscriber graph data.
    */
   subscriberGraphStats(): void {
+    this.loading = true;
     this.$subscription.add(
       this.statsService
         .subscriberGraphStats(this.hotelId, this.config)
         .subscribe((response) => {
+          this.loading = false;
           const graph = new ComparisonGraphStats().deserialize(response);
           this.subscriberGraph.chart = {
             chartLabels: graph.labels,
@@ -136,6 +135,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
         ''
       )
       .subscribe();
+    this.loading = false;
   };
 
   /**

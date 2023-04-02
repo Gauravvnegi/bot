@@ -1,38 +1,60 @@
 <div class="contact">
-  <div class="contact-stats-header">
+  <div
+    class="contact-stats-header"
+    *skeleton="contactStats == undefined; height: '25px'; width: '100%'"
+  >
     {{ 'contact-stats.title' | translate }}
   </div>
-  <div class="contact-graph-wraper">
-    <div
-      class="contact-graph-wraper-graph"
-      *ngFor="let item of contactStats?.stats"
+  <div class="contact-graph-wrapper">
+    <ng-container
+      *skeleton="
+        contactStats == undefined;
+        height: '200px';
+        width: '200px';
+        margin: '0 0 35px 0';
+        borderRadius: '50%'
+      "
     >
-      <circle-progress
-        [radius]="item.radius"
-        [percent]="item.score"
-        [space]="-5"
-        [outerStrokeWidth]="5"
-        [innerStrokeWidth]="5"
-        [outerStrokeColor]="item.colorCode"
-        [innerStrokeColor]="'#e7e8ea'"
-        [outerStrokeLinecap]="'square'"
-        [animation]="true"
-        [animationDuration]="300"
-        [showTitle]="false"
-        [showSubtitle]="false"
-        [showUnits]="false"
-        [showZeroOuterStroke]="false"
-      ></circle-progress>
-    </div>
-    <div class="contact-graph-wraper-total">
-      <div class="contact-graph-wraper-total-number">
-        {{ contactStats?.totalContact }}
+      <div
+        class="contact-graph-wrapper-graph"
+        *ngFor="let item of contactStats?.stats"
+      >
+        <circle-progress
+          [radius]="item.radius"
+          [percent]="item.score"
+          [space]="-5"
+          [outerStrokeWidth]="5"
+          [innerStrokeWidth]="5"
+          [outerStrokeColor]="item.colorCode"
+          [innerStrokeColor]="'#e7e8ea'"
+          [outerStrokeLinecap]="'square'"
+          [animation]="true"
+          [animationDuration]="300"
+          [showTitle]="false"
+          [showSubtitle]="false"
+          [showUnits]="false"
+          [showZeroOuterStroke]="false"
+        ></circle-progress>
       </div>
-      <div class="contact-graph-wraper-total-text">
-        {{ 'contact-stats.total' | translate }}
+      <div class="contact-graph-wrapper-total">
+        <div class="contact-graph-wrapper-total-number">
+          {{ contactStats?.totalContact }}
+        </div>
+        <div class="contact-graph-wrapper-total-text">
+          {{ 'contact-stats.total' | translate }}
+        </div>
       </div>
-    </div>
-    <div class="stat-val-container">
+    </ng-container>
+    <div
+      class="stat-val-container"
+      *skeleton="
+        contactStats == undefined;
+        height: '34px';
+        width: '100%';
+        margin: '10px 0 0 0';
+        repeat: 3
+      "
+    >
       <div
         class="stat-val"
         *ngFor="let item of contactStats?.stats"

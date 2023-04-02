@@ -5,7 +5,7 @@
   background: 0% 0% no-repeat padding-box $white;
   border: 1px solid $c-gray-89;
   border-radius: 5px;
-  @include flex-col-all-Center;
+  @include flex-col;
   width: 244px;
   height: 100%;
   position: relative;
@@ -15,7 +15,7 @@
     color: $tooltip;
   }
 
-  &-graph-wraper {
+  &-graph-wrapper {
     margin-top: 20px;
     position: relative;
     font-family: 'Roboto';

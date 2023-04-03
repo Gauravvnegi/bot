@@ -1,9 +1,7 @@
 <div class="wrapper">
   <div class="stats-container">
     <div class="stats">
-      <ng-container
-        *skeleton="stats == undefined; height: '100%'; width: '100%'"
-      >
+      <ng-container *skeleton="loading; height: '100%'; width: '100%'">
         <div class="stats__text">{{ 'stats.totalEmailSent' | translate }}</div>
         <div class="stats__value">
           {{ stats?.TOTAL_EMAIL_SENT?.score | numberFormat }}
@@ -11,9 +9,7 @@
       </ng-container>
     </div>
     <div class="stats">
-      <ng-container
-        *skeleton="stats == undefined; height: '100%'; width: '100%'"
-      >
+      <ng-container *skeleton="loading; height: '100%'; width: '100%'">
         <div class="stats__text">{{ 'stats.totalOpen' | translate }}</div>
         <div class="stats__value">
           {{ stats?.TOTAL_OPEN_RATE?.score }}
@@ -51,9 +47,7 @@
       </ng-container>
     </div>
     <div class="stats">
-      <ng-container
-        *skeleton="stats == undefined; height: '100%'; width: '100%'"
-      >
+      <ng-container *skeleton="loading; height: '100%'; width: '100%'">
         <div class="stats__text">{{ 'stats.conversionRate' | translate }}</div>
         <div class="stats__value">
           {{ stats?.CONVERSION_RATE?.score }}
@@ -91,9 +85,7 @@
       </ng-container>
     </div>
     <div class="stats">
-      <ng-container
-        *skeleton="stats == undefined; height: '100%'; width: '100%'"
-      >
+      <ng-container *skeleton="loading; height: '100%'; width: '100%'">
         <div class="stats__text">{{ 'stats.totalClicks' | translate }}</div>
         <div class="stats__value">
           {{ stats?.TOTAL_CLICKS?.score | numberFormat }}
@@ -101,9 +93,7 @@
       </ng-container>
     </div>
     <div class="stats">
-      <ng-container
-        *skeleton="stats == undefined; height: '100%'; width: '100%'"
-      >
+      <ng-container *skeleton="loading; height: '100%'; width: '100%'">
         <div class="stats__text">{{ 'stats.ctr' | translate }}</div>
         <div class="stats__value">
           {{ stats?.CTR?.score }}

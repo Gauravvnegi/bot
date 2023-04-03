@@ -1,14 +1,13 @@
 <hospitality-bot-stats-card [stats]="graphData" class="os-container">
-  <div class="graph">
-    <canvas
-      baseChart
-      [chartType]="chart.type"
-      [datasets]="chart.datasets"
-      [labels]="chart.labels"
-      [options]="chart.options"
-      [legend]="chart.legend"
-      [colors]="chart.colors"
-    >
-    </canvas>
-  </div>
+  <canvas
+    *skeleton="graphData == undefined; width: '100%'; height: '23vw'"
+    baseChart
+    [chartType]="chart.type"
+    [datasets]="chart.datasets"
+    [labels]="chart.labels"
+    [options]="chart.options"
+    [legend]="chart.legend"
+    [colors]="chart.colors"
+  >
+  </canvas>
 </hospitality-bot-stats-card>

@@ -14,11 +14,13 @@ export class SentimentsOverTimeComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.graphData = new SentimentOverTime().deserialize(
-      MockData.sentimentsOverTime,
-      colorConfig
-    );
-    this.initChartData();
+    setTimeout(() => {
+      this.graphData = new SentimentOverTime().deserialize(
+        MockData.sentimentsOverTime,
+        colorConfig
+      );
+      this.initChartData();
+    }, 2000);
   }
 
   initChartData(): void {

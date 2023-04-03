@@ -14,10 +14,12 @@ export class SentimentsRatingComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.graphData = new SentimentsByRatings().deserialize(
-      MockData.sentimentsByRatings
-    );
-    this.initChartData();
+    setTimeout(() => {
+      this.graphData = new SentimentsByRatings().deserialize(
+        MockData.sentimentsByRatings
+      );
+      this.initChartData();
+    }, 2000);
   }
 
   initChartData(): void {

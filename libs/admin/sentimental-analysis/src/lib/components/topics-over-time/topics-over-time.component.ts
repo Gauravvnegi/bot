@@ -34,11 +34,13 @@ export class TopicsOverTimeComponent implements OnInit {
           data['dateRange'].queryValue[1].fromDate,
           this.globalFilterService.timezone
         );
-        this.graphData = new TopicsOverTimes().deserialize(
-          MockData.topicsOverTime,
-          colorConfig
-        );
-        this.initGraphData();
+        setTimeout(() => {
+          this.graphData = new TopicsOverTimes().deserialize(
+            MockData.topicsOverTime,
+            colorConfig
+          );
+          this.initGraphData();
+        }, 2000);
       })
     );
   }

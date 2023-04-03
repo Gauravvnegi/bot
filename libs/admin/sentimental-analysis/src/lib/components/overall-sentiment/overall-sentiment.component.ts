@@ -16,10 +16,12 @@ export class OverallSentimentComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.sentimentData = new OverallSentiments().deserialize(
-      MockData.overallSentiments
-    );
-    this.initGraphData();
+    setTimeout(() => {
+      this.sentimentData = new OverallSentiments().deserialize(
+        MockData.overallSentiments
+      );
+      this.initGraphData();
+    }, 2000);
   }
 
   initGraphData(): void {

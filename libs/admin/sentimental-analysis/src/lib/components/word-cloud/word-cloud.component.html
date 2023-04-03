@@ -15,6 +15,15 @@
     ></hospitality-bot-tab-group>
   </div>
   <div class="image">
-    <img [src]="wordCloudImg" alt="word-cloud" />
+    <img
+      *skeleton="
+        wordCloudImg == undefined;
+        height: '17vw';
+        width: '100%';
+        margin: '10px 0 0 0'
+      "
+      [src]="wordCloudImg"
+      alt="word-cloud"
+    />
   </div>
 </div>

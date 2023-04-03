@@ -21,8 +21,8 @@ export class StatsCardComponent {
     this.title = value?.label;
     this.label = value?.label?.replace(/([A-Z])/g, ' $1').trim();
     this.score = value?.score;
-    this.comparisonPercent = value?.comparisonPercent;
-    this.additionalData = value?.additionalData;
+    this.comparisonPercent = value?.comparisonPercent || '';
+    this.additionalData = value?.additionalData || '';
     this.tooltip = value?.tooltip;
   }
 }

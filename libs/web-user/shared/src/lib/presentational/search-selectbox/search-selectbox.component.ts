@@ -68,7 +68,6 @@ export class SearchSelectboxComponent extends BaseComponent {
 
   private _filter(value: string) {
     const filterValue = value.toLowerCase();
-    console.log(filterValue);
     return this.settings.options?.filter((option) =>
       option.value.toLowerCase().includes(filterValue)
     );

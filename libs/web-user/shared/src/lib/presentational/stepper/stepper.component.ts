@@ -70,55 +70,58 @@ export class StepperComponent extends BaseComponent {
   }
 
   registerListeners() {
-    this.listenForSelectedindex();
+    this.listenForSelectedIndex();
   }
 
   toggleStepperClass() {
     let stepperElement = document.getElementsByClassName('mat-step-header');
-    let horizontalLinesEle=document.getElementsByClassName('mat-stepper-horizontal-line');
-     console.log("this",this.selectedIndex)
+    let horizontalLinesEle = document.getElementsByClassName(
+      'mat-stepper-horizontal-line'
+    );
     if (this.selectedIndex === 0) {
       for (let j = 0; j < horizontalLinesEle.length; j++) {
         horizontalLinesEle[j].classList.add('disable-bar');
       }
       for (let i = 1; i < stepperElement.length; i++) {
         stepperElement[i].classList.add('step-disable');
-        stepperElement[i].classList.add('disable-before')
-        stepperElement[i-1].classList.add('disable-after')
+        stepperElement[i].classList.add('disable-before');
+        stepperElement[i - 1].classList.add('disable-after');
       }
     }
-   if(this.selectedIndex === stepperElement.length-1){
-    for (let j = horizontalLinesEle.length-1; j >=0; j--) {
-      horizontalLinesEle[j].classList.remove('disable-bar');
+    if (this.selectedIndex === stepperElement.length - 1) {
+      for (let j = horizontalLinesEle.length - 1; j >= 0; j--) {
+        horizontalLinesEle[j].classList.remove('disable-bar');
+      }
+      for (let i = stepperElement.length - 1; i >= 1; i--) {
+        stepperElement[i].classList.remove('step-disable');
+        stepperElement[i].classList.remove('disable-before');
+        stepperElement[i - 1].classList.remove('disable-after');
+      }
     }
-    for (let i = stepperElement.length-1; i >=1; i--) {
-      stepperElement[i].classList.remove('step-disable');
-      stepperElement[i].classList.remove('disable-before')
-      stepperElement[i-1].classList.remove('disable-after')
+    if (
+      this.selectedIndex > 0 &&
+      this.selectedIndex < stepperElement.length - 1
+    ) {
+      for (let j = this.selectedIndex - 1; j >= 0; j--) {
+        horizontalLinesEle[j].classList.remove('disable-bar');
+      }
+      for (let i = this.selectedIndex; i >= 1; i--) {
+        stepperElement[i].classList.remove('step-disable');
+        stepperElement[i].classList.remove('disable-before');
+        stepperElement[i - 1].classList.remove('disable-after');
+      }
+      for (let j = this.selectedIndex; j < horizontalLinesEle.length; j++) {
+        horizontalLinesEle[j].classList.add('disable-bar');
+      }
+      for (let i = this.selectedIndex + 1; i < stepperElement.length; i++) {
+        stepperElement[i].classList.add('step-disable');
+        stepperElement[i].classList.add('disable-before');
+        stepperElement[i - 1].classList.add('disable-after');
+      }
     }
-   }
-   if(this.selectedIndex > 0 && this.selectedIndex < (stepperElement.length-1)){
-    for (let j = this.selectedIndex-1; j >=0; j--) {
-      horizontalLinesEle[j].classList.remove('disable-bar');
-    }
-    for (let i = this.selectedIndex; i >=1; i--) {
-      stepperElement[i].classList.remove('step-disable');
-      stepperElement[i].classList.remove('disable-before')
-      stepperElement[i-1].classList.remove('disable-after')
-    }
-    for (let j = this.selectedIndex; j < horizontalLinesEle.length; j++) {
-      horizontalLinesEle[j].classList.add('disable-bar');
-    }
-    for (let i = this.selectedIndex+1; i < stepperElement.length; i++) {
-      stepperElement[i].classList.add('step-disable');
-      stepperElement[i].classList.add('disable-before')
-      stepperElement[i-1].classList.add('disable-after')
-    }
-   }
-   
   }
 
-  listenForSelectedindex() {
+  listenForSelectedIndex() {
     this.stepperService.stepperSelectedIndex$.subscribe((index) => {
       this.toggleStepperClass();
       this.selectedIndex = index;
@@ -126,27 +129,9 @@ export class StepperComponent extends BaseComponent {
   }
 
   ngAfterViewInit() {
-    // this.initStepperLayout();
     this.isComponentRendered.next(true);
     this.toggleStepperClass();
   }
-  ngOnChanges() {}
-
-  initStepperLayout() {
-    //this.initStepperVariables();
-  }
-
-  // initStepperVariables() {
-  //   let cssText = '';
-  //   for (let stepperLayoutVariable in this.stepperConfig.layout_variables) {
-  //     cssText +=
-  //       stepperLayoutVariable +
-  //       ':' +
-  //       this.stepperConfig.layout_variables[stepperLayoutVariable] +
-  //       ';';
-  //   }
-  //   this.elementRef.nativeElement.ownerDocument.body.style.cssText = cssText;
-  // }
 
   onStepChange(event: any): void {
     this.stepperService.setSelectedIndex(event.selectedIndex);

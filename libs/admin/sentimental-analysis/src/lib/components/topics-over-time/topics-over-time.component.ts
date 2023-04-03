@@ -29,7 +29,7 @@ export class TopicsOverTimeComponent implements OnInit {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        const calenderType = this.dateService.getCalendarType(
+        const calendarType = this.dateService.getCalendarType(
           data['dateRange'].queryValue[0].toDate,
           data['dateRange'].queryValue[1].fromDate,
           this.globalFilterService.timezone
@@ -46,13 +46,15 @@ export class TopicsOverTimeComponent implements OnInit {
   }
 
   initGraphData(): void {
-    this.chart.labels = this.graphData.labels;
-    this.chart.datasets = this.graphData.defaultDataset;
-    this.chart.colors = this.graphData.colors;
-    this.graphData.topics.forEach((item, index) => {
-      item.data.forEach((barData) => {
-        this.chart.datasets[index].data.push(barData.value);
+    if (this.graphData) {
+      this.chart.labels = this.graphData.labels;
+      this.chart.datasets = this.graphData.defaultDataset;
+      this.chart.colors = this.graphData.colors;
+      this.graphData.topics.forEach((item, index) => {
+        item.data.forEach((barData) => {
+          this.chart.datasets[index].data.push(barData.value);
+        });
       });
-    });
+    }
   }
 }

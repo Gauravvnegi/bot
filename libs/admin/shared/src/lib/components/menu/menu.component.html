@@ -5,8 +5,9 @@
 >
   <mat-icon
     [ngClass]="{
-      'rotate': alignment === 'horizontal'
-    }">
+      rotate: alignment === 'horizontal'
+    }"
+  >
     more_vert
   </mat-icon>
 </button>
@@ -14,8 +15,12 @@
   <button
     mat-menu-item
     *ngFor="let item of menuItems; let i = index"
-    (click)=" type==='checkbox'? handleItemSelection($event, item) : handleClick($event, item)"
-    [ngClass]="{ 
+    (click)="
+      type === 'checkbox'
+        ? handleItemSelection($event, item)
+        : handleClick($event, item)
+    "
+    [ngClass]="{
       'border-bottom': i < menuItems.length - 1
     }"
     [ngStyle]="{
@@ -41,7 +46,7 @@
       >check_box_outline_blank</mat-icon
     >
     <mat-icon
-    *ngIf="type === 'checkbox'"
+      *ngIf="type === 'checkbox'"
       [style.display]="
         selectedItems.includes(item.value) ||
         selectedItems.length == menuItems.length - 1
@@ -52,5 +57,3 @@
     >
   </button>
 </mat-menu>
-
-

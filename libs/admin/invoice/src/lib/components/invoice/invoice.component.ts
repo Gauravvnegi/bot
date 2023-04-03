@@ -11,7 +11,6 @@ import { invoiceRoutes } from '../../constants/routes';
 import { InvoiceForm } from '../../types/forms.types';
 import { cols } from '../../constants/payment';
 import { PaymentField } from '../../types/forms.types';
-import { throwMatDialogContentAlreadyAttachedError } from '@angular/material/dialog';
 import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
 
 @Component({
@@ -39,6 +38,8 @@ export class InvoiceComponent implements OnInit {
   paidAmount = 0;
   totalDiscount = 0;
   dueAmount = 0;
+  // #Convert the above in form structure (paymentForm_) - add type also
+
   editMode = false;
   viewDiscountTab = false;
   paidInput = false;
@@ -48,6 +49,8 @@ export class InvoiceComponent implements OnInit {
   /**Table Variable */
   selectedRows;
   cols = cols;
+
+  // #Move to constant, give type here and in menu component, initialise ngInit - initOptionsConfig
   addDiscount = [{ label: 'Add Discount', value: 'Add Discount' }];
   editDiscount = [
     { label: 'Edit Discount', value: 'Edit Discount' },
@@ -59,6 +62,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   get inputControl() {
+    // #change name to something (add get paymentForm control)
     return this.useForm.controls as Record<keyof InvoiceForm, AbstractControl>;
   }
 
@@ -108,6 +112,8 @@ export class InvoiceComponent implements OnInit {
     this.tableFormArray = this.useForm.get('tableData') as FormArray;
     this.addNewFieldTableForm();
     this.initDetails();
+
+    //# initFormSubscription
     this.useForm.valueChanges.subscribe((res) => {
       // console.log(res);
     });
@@ -120,6 +126,7 @@ export class InvoiceComponent implements OnInit {
     this.tableValue = [{ id: 1 }];
     this.useForm.patchValue({
       tableData: [
+        // call api service - dummy response
         {
           description: 'Room',
           unit: 1,
@@ -140,6 +147,7 @@ export class InvoiceComponent implements OnInit {
    */
   initOptionsConfig() {
     this.taxes = [
+      // Move to constant
       { label: 'CGST @12%', value: 'CGST' },
       { label: 'SGST @12%', value: 'SGST' },
       { label: 'VAT', value: 'VAT' },
@@ -184,6 +192,7 @@ export class InvoiceComponent implements OnInit {
     const setAmount = () => {
       let discount = 0;
       for (let i of tax.value) {
+        // #Check it option service (manage)
         if (i === 'SGST' || i === 'CGST' || i === 'VAT') {
           discount += 12;
         } else if (i === 'GST') {
@@ -194,8 +203,9 @@ export class InvoiceComponent implements OnInit {
       }
 
       const amount = unit.value * unitPrice.value;
-      const totalAmount = Math.round(
-        (amount + (amount * discount) / 100 + Number.EPSILON) * 100
+      const totalAmount =
+        Math.round(
+          (amount + (amount * discount) / 100 + Number.EPSILON) * 100
         ) / 100;
 
       if (amount) {
@@ -221,7 +231,9 @@ export class InvoiceComponent implements OnInit {
     const { discountType, discount } = this.useForm.controls;
 
     const setError = () => {
-      if (discount.value > this.currentAmount && discountType.value === 'Flat'
+      if (
+        discount.value > this.currentAmount &&
+        discountType.value === 'Flat'
       ) {
         return 'isNumError';
       }
@@ -285,7 +297,7 @@ export class InvoiceComponent implements OnInit {
 
   onSaveDiscount() {
     this.viewDiscountTab = false;
-    const{ discountType, discount} = this.useForm.controls;
+    const { discountType, discount } = this.useForm.controls;
 
     if (discount.value > 0) {
       this.editMode = true;
@@ -294,8 +306,7 @@ export class InvoiceComponent implements OnInit {
       this.discountedAmount -= discount.value;
       this.totalDiscount = this.currentAmount - this.discountedAmount;
       this.dueAmount = this.discountedAmount;
-    } 
-    else {
+    } else {
       this.discountedAmount -= (this.discountedAmount * discount.value) / 100;
       this.totalDiscount =
         Math.round(
@@ -356,7 +367,9 @@ export class InvoiceComponent implements OnInit {
     });
 
     this.dueAmount =
-      Math.round((this.discountedAmount - this.paidAmount  + Number.EPSILON) * 100) / 100;
+      Math.round(
+        (this.discountedAmount - this.paidAmount + Number.EPSILON) * 100
+      ) / 100;
   }
 
   /**

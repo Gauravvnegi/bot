@@ -14,12 +14,7 @@
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ]
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
       }
     }
   },
@@ -29,18 +24,14 @@
     },
     "web-user-e2e": {
       "tags": [],
-      "implicitDependencies": [
-        "web-user"
-      ]
+      "implicitDependencies": ["web-user"]
     },
     "admin": {
       "tags": []
     },
     "admin-e2e": {
       "tags": [],
-      "implicitDependencies": [
-        "admin"
-      ]
+      "implicitDependencies": ["admin"]
     },
     "admin-shared": {
       "tags": []
@@ -187,6 +178,9 @@
       "tags": []
     },
     "admin-manage-reservation": {
+      "tags": []
+    },
+    "admin-invoice": {
       "tags": []
     }
   }

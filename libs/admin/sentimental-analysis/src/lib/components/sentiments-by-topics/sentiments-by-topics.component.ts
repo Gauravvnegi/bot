@@ -16,8 +16,10 @@ export class SentimentsByTopicsComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.graphData = new SentimentByTopic().deserialize(
-      MockData.sentimentsByTopic.graphData
-    );
+    setTimeout(() => {
+      this.graphData = new SentimentByTopic().deserialize(
+        MockData.sentimentsByTopic.graphData
+      );
+    }, 2000);
   }
 }

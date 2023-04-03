@@ -11,13 +11,16 @@ export class WordCloudComponent implements OnInit {
   tabFilterItems = Sentiment.tabFilterItems;
   tabFilterIdx = 0;
   data = MockData.wordCloud;
-  wordCloudImg = this.data.imgSrcPositive;
+  wordCloudImg: string;
   isDropdownActive = false;
   topicsSelected = [];
   menuItems = Sentiment.menuItems;
   constructor() {}
 
   ngOnInit(): void {
+    setTimeout(() => {
+      this.wordCloudImg = this.data.imgSrcPositive;
+    }, 2000);
     this.topicsSelected = this.menuItems
       .map((item) => item.value)
       .filter((item) => item != 'ALL');

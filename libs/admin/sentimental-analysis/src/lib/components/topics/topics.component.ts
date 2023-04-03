@@ -14,8 +14,10 @@ export class TopicsComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.graphData = new Topics().deserialize(MockData.topics, colorConfig);
-    this.initChartData();
+    setTimeout(() => {
+      this.graphData = new Topics().deserialize(MockData.topics, colorConfig);
+      this.initChartData();
+    }, 2000);
   }
 
   initChartData(): void {

@@ -1,5 +1,8 @@
 <div class="wrapper">
   <div class="header-content">
+    <ng-container
+      *skeleton="label == undefined; height: '25px'; width: '200px'"
+    ></ng-container>
     <hospitality-bot-custom-tooltip
       [text]="tooltip"
       *ngIf="tooltip; else title"
@@ -15,7 +18,15 @@
     >
     <div><img [src]="imageUrls[title]" alt="" /></div>
   </div>
-  <div class="info">
+  <div
+    class="info"
+    *skeleton="
+      additionalData == undefined;
+      height: '48px';
+      width: '200px';
+      margin: '30px 0 0 0'
+    "
+  >
     <div class="amount">{{ additionalData }}</div>
     <div>
       <div class="percent">

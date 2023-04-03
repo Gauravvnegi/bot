@@ -68,7 +68,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
         };
 
         this.hotelId = this.globalFilterService.hotelId;
-
+        this.loading = true;
         this.rateGraphStats();
         this.subscriberGraphStats();
       })
@@ -83,6 +83,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
       this.statsService
         .rateGraphStats(this.hotelId, this.config)
         .subscribe((response) => {
+          this.loading = false;
           const graph = new ComparisonGraphStats().deserialize(response);
           this.rateGraph.chart = {
             chartLabels: graph.labels,
@@ -99,7 +100,6 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
    * @function subscriberGraphStats To get subscriber graph data.
    */
   subscriberGraphStats(): void {
-    this.loading = true;
     this.$subscription.add(
       this.statsService
         .subscriberGraphStats(this.hotelId, this.config)

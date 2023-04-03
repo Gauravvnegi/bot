@@ -8,8 +8,8 @@
   }
   .graph {
     position: relative;
-    display: flex;
-    justify-content: center;
+    @include flex-justify-center;
+    align-items: center;
     height: 100%;
     &__canvas {
       max-width: 1440px;
@@ -25,7 +25,7 @@
     box-shadow: unset !important;
     background-color: unset !important;
     max-width: unset !important;
-    padding: 20px;
+    padding: 20px !important;
     height: 100%;
     .header-content {
       .stats_text {
@@ -38,8 +38,17 @@
       margin-top: 20px;
     }
     .graph {
+      position: relative;
+      @include flex-justify-center;
+      align-items: center;
       height: calc(100% - 105px);
       margin: 0;
+      &__canvas {
+        max-width: 1440px;
+      }
+      canvas {
+        margin: auto;
+      }
     }
   }
   .stat-title {

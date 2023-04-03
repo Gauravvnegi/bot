@@ -6,21 +6,13 @@
     letter-spacing: 0.96px;
     margin-top: 4px;
   }
-  .graph {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    &__canvas {
-      max-width: 1440px;
-    }
-  }
 }
 :host ::ng-deep {
   .wrapper {
     box-shadow: unset !important;
     background-color: unset !important;
     max-width: unset !important;
-    padding: 20px;
+    padding: 20px !important;
     .header-content {
       .stats_text {
         font-size: 16px;
@@ -32,7 +24,11 @@
       margin-top: 20px;
     }
     .graph {
+      position: relative;
       margin: 20px 0;
+      &__canvas {
+        max-width: 1440px;
+      }
     }
   }
   .stat-title {

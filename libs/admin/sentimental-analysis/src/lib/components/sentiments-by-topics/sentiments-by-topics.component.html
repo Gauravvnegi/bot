@@ -1,5 +1,8 @@
 <hospitality-bot-stats-card [stats]="data" class="os-container">
-  <div class="chart-container">
+  <div
+    class="chart-container"
+    *skeleton="graphData == undefined; width: '100%'; height: '21.6vw'"
+  >
     <div *ngFor="let item of graphData" class="topic-progress">
       <div class="title">
         {{ item.label }}

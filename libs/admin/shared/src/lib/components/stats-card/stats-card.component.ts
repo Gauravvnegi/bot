@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { RoomStatsImgUrls, sharedConfig } from '../../constants';
 
 @Component({
@@ -6,7 +6,7 @@ import { RoomStatsImgUrls, sharedConfig } from '../../constants';
   templateUrl: './stats-card.component.html',
   styleUrls: ['./stats-card.component.scss'],
 })
-export class StatsCardComponent implements OnInit {
+export class StatsCardComponent {
   adminSharedConfig = sharedConfig;
 
   title: string;
@@ -18,15 +18,11 @@ export class StatsCardComponent implements OnInit {
   tooltip: string;
 
   @Input() set stats(value) {
-    this.title = value.label;
-    this.label = value.label.replace(/([A-Z])/g, ' $1').trim();
-    this.score = value.score;
-    this.comparisonPercent = value.comparisonPercent || '';
-    this.additionalData = value.additionalData || '';
-    this.tooltip = value.tooltip;
+    this.title = value?.label;
+    this.label = value?.label?.replace(/([A-Z])/g, ' $1').trim();
+    this.score = value?.score;
+    this.comparisonPercent = value?.comparisonPercent;
+    this.additionalData = value?.additionalData;
+    this.tooltip = value?.tooltip;
   }
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

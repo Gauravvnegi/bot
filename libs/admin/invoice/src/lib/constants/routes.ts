@@ -15,7 +15,7 @@ export const invoiceRoutes: Record<
   createInvoice: {
     route: 'create-invoice',
     navRoutes: [],
-    title: 'Invoice',
+    title: 'Create Invoice',
   },
 
   editInvoice: {

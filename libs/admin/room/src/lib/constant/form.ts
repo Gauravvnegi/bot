@@ -83,6 +83,7 @@ export const errorMessages = {
   maxOccupancy: 'Value cannot be more than max occupancy.',
   notAllowedChr: 'Decimal are not allowed.',
   min: 'Value can not be less than 0.',
+  moreThanTotal: 'Cannot be more than total'
 };
 
 export const noRecordAction = {

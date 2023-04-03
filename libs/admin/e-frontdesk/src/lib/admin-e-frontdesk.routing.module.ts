@@ -44,6 +44,14 @@ const appRoutes: CRoutes = [
             (m) => m.AdminManageReservationModule
           ),
       },
+      {
+        path: 'invoice',
+        name: ModuleNames.ADD_RESERVATION,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/invoice').then(
+            (m) => m.AdminInvoiceModule
+          ),
+      },
     ],
   },
 ];

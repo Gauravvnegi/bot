@@ -3,14 +3,21 @@
   [matMenuTriggerFor]="menu"
   aria-label="Select Topic button"
 >
-  <mat-icon>more_vert</mat-icon>
+  <mat-icon
+    [ngClass]="{
+      'rotate': alignment === 'horizontal'
+    }">
+    more_vert
+  </mat-icon>
 </button>
 <mat-menu #menu="matMenu">
   <button
     mat-menu-item
     *ngFor="let item of menuItems; let i = index"
-    (click)="handleItemSelection($event, item)"
-    [ngClass]="{ 'border-bottom': i < menuItems.length - 1 }"
+    (click)=" type==='checkbox'? handleItemSelection($event, item) : handleClick($event, item)"
+    [ngClass]="{ 
+      'border-bottom': i < menuItems.length - 1
+    }"
     [ngStyle]="{
       color:
         selectedItems.includes(item.value) ||
@@ -23,6 +30,7 @@
   >
     {{ item.label }}
     <mat-icon
+      *ngIf="type === 'checkbox'"
       class="empty"
       [style.display]="
         selectedItems.includes(item.value) ||
@@ -33,7 +41,7 @@
       >check_box_outline_blank</mat-icon
     >
     <mat-icon
-      class="checked"
+    *ngIf="type === 'checkbox'"
       [style.display]="
         selectedItems.includes(item.value) ||
         selectedItems.length == menuItems.length - 1
@@ -44,3 +52,5 @@
     >
   </button>
 </mat-menu>
+
+

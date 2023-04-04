@@ -2,10 +2,10 @@
   <div class="stats__head" [formGroup]="rateGraphFG">
     <hospitality-bot-custom-tooltip
       [text]="'Response Breakdown as per feedback shared'"
-    >
+   *skeleton="stats == undefined; height: '25px'; width: '180px'" >
       <div
         class="stats__head__title"
-        *skeleton="stats == undefined; height: '20px'; width: '150px'"
+        
       >
         {{ 'shared.title' | translate }}
       </div>

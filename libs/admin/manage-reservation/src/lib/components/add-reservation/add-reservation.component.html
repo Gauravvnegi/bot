@@ -1,8 +1,5 @@
-<div [formGroup]="useForm" class="wrapper">
-  <hospitality-bot-navigation-header
-    heading="Add Reservation"
-    [routes]="routes"
-  >
+<div [formGroup]="userForm" class="wrapper">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="routes">
   </hospitality-bot-navigation-header>
   <div class="main">
     <p-accordion [multiple]="true">
@@ -10,13 +7,15 @@
         <div class="form-block" formGroupName="bookingInformation">
           <hospitality-bot-date
             class="half-width"
-            controlName="checkIn"
-            label="Check In - Date"
+            controlName="from"
+            label="Check In- Date"
+            [minDate]="startMinDate"
           ></hospitality-bot-date>
           <hospitality-bot-date
             class="half-width"
-            controlName="checkOut"
-            label="Check In - Date"
+            controlName="to"
+            label="Check Out- Date"
+            [minDate]="endMinDate"
           ></hospitality-bot-date>
           <hospitality-bot-select
             class="half-width"
@@ -26,19 +25,19 @@
           ></hospitality-bot-select>
           <hospitality-bot-select
             class="half-width"
-            controlName="bookingSource"
+            controlName="source"
             label="Booking Source"
             [options]="bookingSources"
           ></hospitality-bot-select>
           <hospitality-bot-input
             class="half-width"
-            controlName="businessSource"
-            label="Business Source"
+            controlName="sourceName"
+            label="Booking Source Name"
           ></hospitality-bot-input>
           <hospitality-bot-select
             class="half-width"
-            controlName="marketSource"
-            label="Market Source"
+            controlName="marketSegment"
+            label="Market Segment"
             [options]="marketSegments"
           ></hospitality-bot-select>
         </div>
@@ -47,8 +46,7 @@
         <hospitality-bot-iterator
           class="iterator"
           [fields]="roomFields"
-          [useFormArray]="useFormArray"
-          ctaLabel="+ Add Room"
+          [useFormArray]="userFormArray"
         >
         </hospitality-bot-iterator>
       </p-accordionTab>
@@ -69,37 +67,38 @@
             controlName="email"
             label="Email Address"
           ></hospitality-bot-input>
-          <hospitality-bot-input
+          <hospitality-bot-prefix-field
             class="half-width"
-            controlName="phoneNumber"
+            [options]="countries"
+            preControlName="countryCode"
+            postControlName="phoneNumber"
             label="Phone"
-          ></hospitality-bot-input>
+            [defaultProps]="{ post: { type: 'string' } }"
+          ></hospitality-bot-prefix-field>
         </div>
       </p-accordionTab>
       <p-accordionTab header="Billing Address">
-        <div class="form-block" formGroupName="billingAddress">
+        <div class="form-block" formGroupName="address">
           <hospitality-bot-input
             class="half-width"
             controlName="city"
-            label="First Name"
+            label="City"
           ></hospitality-bot-input>
-          <hospitality-bot-select
+          <hospitality-bot-input
             class="half-width"
-            controlName="country"
-            label="Last Name"
-            [options]="options"
-          ></hospitality-bot-select>
+            controlName="countryCode"
+            label="Country"
+          ></hospitality-bot-input>
           <hospitality-bot-input
             class="full-width"
-            controlName="address"
+            controlName="addressLine1"
             label="Address"
           ></hospitality-bot-input>
-          <hospitality-bot-select
+          <hospitality-bot-input
             class="half-width"
             controlName="state"
             label="State"
-            [options]="options"
-          ></hospitality-bot-select>
+          ></hospitality-bot-input>
           <hospitality-bot-input
             class="half-width"
             controlName="postalCode"
@@ -111,83 +110,175 @@
         <div class="form-block" formGroupName="paymentMethod">
           <hospitality-bot-select-group
             class="payment"
-            controlName="paymentOption"
-            label=""
+            controlName="paymentMethod"
             [options]="paymentOptions"
           ></hospitality-bot-select-group>
           <hospitality-bot-input
-            class="full-width"
-            controlName="remarks"
-            label="Your Inclusions/remarks :"
+            class="half-width"
+            controlName="totalPaidAmount"
+            label="Payment Recieved"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="paymentRemark"
+            label="Your Inclusions/remakrs :"
           ></hospitality-bot-input>
         </div>
       </p-accordionTab>
     </p-accordion>
     <div class="bk-summary">
-      <div class="bk-summary_heading">Booking Summary</div>
-      <p class="divider"></p>
-      <div class="bk-summary_subheading">
-        <span class=""></span><span></span>
-      </div>
-      <div class="bk-summary_subheading_label">
-        The Leela , New Delhi, 210003
-      </div>
+      <ng-container *ngIf="!displayBookingOffer; else bookingOffer">
+        <div class="bk-summary_heading">Booking Summary</div>
+        <p class="divider"></p>
+        <div class="bk-summary_subheading">
+          {{ summaryData?.roomTypeName }}
+        </div>
+        <div class="bk-summary_subheading_label">
+          {{ summaryData?.location }}
+        </div>
 
-      <div class="bk-summary_roomInfo">
-        <div class="bk-summary_roomInfo_checkoutInfo">
-          <p class="bk-summary_roomInfo_checkoutInfo_heading">
-            Checkin - Checkout
-          </p>
-          <p class="bk-summary_roomInfo_checkoutInfo_subText">
-            {{
-              useForm.get('bookingInformation.checkIn').value
-                | date: 'mediumDate'
-            }}
-            {{
-              useForm.get('bookingInformation.checkOut').value
-                | date: 'mediumDate'
-            }}
-          </p>
+        <div class="bk-summary_roomInfo">
+          <div class="bk-summary_roomInfo_checkoutInfo">
+            <p class="bk-summary_roomInfo_checkoutInfo_heading">
+              Checkin - Checkout
+            </p>
+            <p class="bk-summary_roomInfo_checkoutInfo_subText">
+              {{
+                userForm.get('bookingInformation.from').value
+                  | date: 'mediumDate'
+              }}
+              {{
+                userForm.get('bookingInformation.to').value | date: 'mediumDate'
+              }}
+            </p>
+          </div>
+          <div class="bk-summary_roomInfo_guestInfo">
+            <p class="bk-summary_roomInfo_guestInfo_heading">
+              Rooms & Guests
+            </p>
+            <p class="bk-summary_roomInfo_guestInfo_subText">
+              {{ userForm.get('roomInformation.0.roomCount').value }} Room,
+              {{ userForm.get('roomInformation.0.adultCount').value }} Adult,
+              {{ userForm.get('roomInformation.0.childCount').value }} Kid
+            </p>
+          </div>
         </div>
-        <div class="bk-summary_roomInfo_guestInfo">
-          <p class="bk-summary_roomInfo_guestInfo_heading">
-            Rooms & Guests
-          </p>
-          <p class="bk-summary_roomInfo_guestInfo_subText">
-            {{ useForm.get('roomInformation.0.noRoom').value }} Room,
-            {{ useForm.get('roomInformation.0.adults').value }} Adult,
-            {{ useForm.get('roomInformation.0.kids').value }} Kid
-          </p>
+        <div class="bk-summary_offerInfo">
+          <ng-container *ngIf="userForm.get('offerId').value; else selectOffer">
+            <p>
+              Offer Applied
+            </p>
+            <div class="offer">
+              <div
+                [innerHtml]="selectedOffer.description"
+                class="offer_card"
+              ></div>
+              <div class="offer_gift">
+                <img src="assets/svg/offer_gift.svg" alt="offer gift" />
+              </div>
+              <div class="offer_cross" (click)="offerSelect()">
+                <img src="assets/images/cross.png" alt="cross" />
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #selectOffer>
+            <p>
+              Have an Offer?
+              <span (click)="handleOfferView()">Apply Offer</span>
+            </p>
+          </ng-template>
         </div>
-      </div>
-      <div class="bk-summary_priceInfo">
-        <p class="bk-summary_priceInfo_perNight">
-          <span class="bk-summary_priceInfo_perNight_label">Per Night</span>
-          <span class="bk-summary_priceInfo_perNight_amount">$1800</span>
-        </p>
-        <p class="bk-summary_priceInfo_person">
-          <span class="bk-summary_priceInfo_perNight_label"
-            >For 2 Adults & 1 Child</span
+        <div class="bk-summary_priceInfo">
+          <p class="bk-summary_priceInfo_perNight">
+            <span class="bk-summary_priceInfo_perNight_label">Per Night</span>
+            <s
+              class="bk-summary_priceInfo_perNight_amount"
+              *ngIf="summaryData?.offerAmount"
+              >{{
+                summaryData?.basePrice + summaryData?.offerAmount
+                  | currency: 'INR'
+              }}</s
+            >
+          </p>
+          <p class="bk-summary_priceInfo_person">
+            <span class="bk-summary_priceInfo_perNight_label"
+              >For
+              {{ userForm.get('roomInformation.0.adultCount').value }} Adult,
+              Adults &
+              {{ userForm.get('roomInformation.0.childCount').value }} Kid
+              Child</span
+            >
+            <span class="bk-summary_priceInfo_perNight_amount">{{
+              summaryData?.basePrice | currency: 'INR'
+            }}</span>
+          </p>
+          <p
+            class="bk-summary_priceInfo_taxFair"
+            *ngIf="summaryData?.offerAmount"
           >
-          <span class="bk-summary_priceInfo_perNight_amount">$1200</span>
-        </p>
-        <p class="bk-summary_priceInfo_taxFair">
-          <span class="bk-summary_priceInfo_perNight_label"
-            >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
-          ></span>
-          <span class="bk-summary_priceInfo_perNight_amount">+ $1,242</span>
-        </p>
-      </div>
-      <p class="divider"></p>
-      <div class="bk-summary_total">
-        <p class="bk-summary_total_label">Total Amount to be paid</p>
-        <p class="bk-summary_total_amount">$7662</p>
-      </div>
-      <div class="bk-summary_btnwrapper">
-        <hospitality-bot-button
-          label="Proceed to Checkout"
-        ></hospitality-bot-button>
-      </div>
+            <span class="bk-summary_priceInfo_perNight_label"
+              >Discount<i class="fa fa-info-circle" aria-hidden="true"></i
+            ></span>
+            <span class="bk-summary_priceInfo_perNight_amount">{{
+              summaryData?.offerAmount | currency: 'INR'
+            }}</span>
+          </p>
+          <p class="bk-summary_priceInfo_taxFair">
+            <span class="bk-summary_priceInfo_perNight_label"
+              >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
+            ></span>
+            <span class="bk-summary_priceInfo_perNight_amount"
+              >+{{ summaryData?.taxAndFees | currency: 'INR' }}</span
+            >
+          </p>
+        </div>
+        <p class="divider"></p>
+        <div class="bk-summary_total">
+          <p class="bk-summary_total_label">Total Amount to be paid</p>
+          <p class="bk-summary_total_amount">
+            {{ summaryData?.totalAmount | currency: 'INR' }}
+          </p>
+        </div>
+        <div
+          class="bk-summary_btnwrapper"
+          *ngIf="
+            !reservationId ||
+            userForm.get('bookingInformation.reservationType').value === 'DRAFT'
+          "
+        >
+          <hospitality-bot-button
+            (click)="HandleBooking()"
+            label="Confirm Booking"
+            [disabled]="userForm.invalid"
+          ></hospitality-bot-button>
+        </div>
+      </ng-container>
+      <ng-template #bookingOffer>
+        <div class="bk-summary_heading">
+          <mat-icon (click)="handleOfferView()">arrow_back</mat-icon> Offers
+        </div>
+        <p class="divider"></p>
+        <ng-container *ngIf="offersList?.records?.length; else emptyOffer">
+          <div *ngFor="let item of offersList?.records" class="offerList">
+            <div class="offer" (click)="offerSelect(item)">
+              <div [innerHtml]="item.description" class="offer_card"></div>
+              <div class="offer_gift">
+                <img src="assets/svg/offer_gift.svg" alt="offer gift" />
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #emptyOffer>
+          <div class="offerList">
+            <div class="offerList_box">
+              <img src="assets/svg/empty_box.svg" alt="empty box" />
+            </div>
+            <div class="offerList_text">
+              Currently You do not have any Offer
+            </div>
+          </div>
+        </ng-template>
+      </ng-template>
     </div>
   </div>
 </div>

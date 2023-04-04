@@ -17,4 +17,3 @@ export const taxRoutes: Record<'tax' | 'createTax', PageRoutes> = {
     title: 'Create Service',
   },
 };
-

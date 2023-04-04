@@ -16,8 +16,8 @@ export const manageReservationRoutes: Record<
     route: '',
     navRoutes: [],
     title: 'Reservation',
-  }, 
-  
+  },
+
   addReservation: {
     route: 'add-reservation',
     navRoutes: [

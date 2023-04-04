@@ -40,7 +40,7 @@
   </div>
 
   <hospitality-bot-button
-    *ngIf="!maxLimit || maxLimit > useFormArray.length"
+    *ngIf="ctaLabel && (!maxLimit || maxLimit > useFormArray.length)"
     class="action-btn"
     [label]="ctaLabel"
     (onClick)="addNewField()"

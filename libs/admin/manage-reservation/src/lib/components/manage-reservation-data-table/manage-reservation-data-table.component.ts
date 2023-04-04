@@ -13,34 +13,45 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { chips, cols, filters, ReservationItem, reservationStatus,
-         ReservationStatusType, ReservationTableValue, title} from '../../constants/reservation-table';
+import {
+  chips,
+  cols,
+  filters,
+  ReservationSearchItem,
+  reservationStatus,
+  ReservationStatusType,
+  ReservationTableValue,
+  title,
+} from '../../constants/reservation-table';
 import { manageReservationRoutes } from '../../constants/routes';
-import { ReservationList } from '../../models/reservations.model'; 
-import { ManageReservationService } from '../../services/manage-reservation.service'; 
-import { ReservationListResponse, ReservationResponse } from '../../types/response.type'; 
+import { ReservationList } from '../../models/reservations.model';
+import { ManageReservationService } from '../../services/manage-reservation.service';
+import {
+  ReservationListResponse,
+  ReservationResponse,
+} from '../../types/response.type';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
   templateUrl: './manage-reservation-data-table.component.html',
-  styleUrls: [  
+  styleUrls: [
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
-    './manage-reservation-data-table.component.scss'
-  ]
+    './manage-reservation-data-table.component.scss',
+  ],
 })
-
 export class ManageReservationDataTableComponent extends BaseDatableComponent {
   readonly manageReservationRoutes = manageReservationRoutes;
-  hotelId!:string;
+  hotelId!: string;
   tabFilterItems = filters;
   statusValues = reservationStatus;
-  selectedTable: ReservationTableValue; 
+  selectedTable: ReservationTableValue;
   tableName = title;
   filterChips = chips;
   cols = cols;
-  isQuickFilters = true; 
-  reservationLists!:ReservationList;
+  isQuickFilters = true;
+  reservationLists!: ReservationList;
   $subscription = new Subscription();
+  globalQueries = [];
 
   constructor(
     public fb: FormBuilder,
@@ -48,7 +59,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private manageReservationService: ManageReservationService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    protected snackbarService: SnackBarService, 
+    protected snackbarService: SnackBarService,
     private router: Router
   ) {
     super(fb, tabFilterService);
@@ -56,25 +67,31 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.listenToTableChange();
+    this.listenForGlobalFilters();
   }
 
-   /**
-   * @function listenToTableChange  To listen to table changes
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
-   listenToTableChange() {
-    this.manageReservationService.selectedTable.subscribe((value) => {
-      this.selectedTable = value; 
-      this.initTableValue();
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      // set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+      this.listenToTableChange();
     });
   }
 
-   /**
-   * @function loadData Fetch data as paginates
-   * @param event
+  /**
+   * @function listenToTableChange  To listen to table changes
    */
-   loadData(event: LazyLoadEvent): void {
-    this.initTableValue();
+  listenToTableChange() {
+    this.manageReservationService.selectedTable.subscribe((value) => {
+      this.selectedTable = value;
+      this.initTableValue();
+    });
   }
 
   /**
@@ -83,11 +100,11 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   initTableValue() {
     this.loading = true;
     this.manageReservationService
-      .getReservationItems<ReservationListResponse>(this.hotelId, this.getQueryConfig())
+      .getReservationItems<ReservationListResponse>(this.getQueryConfig())
       .subscribe(
-        (res) => {            
-          this.reservationLists = new ReservationList().deserialize(res); 
-          this.values = this.reservationLists.reservationData; 
+        (res) => {
+          this.reservationLists = new ReservationList().deserialize(res);
+          this.values = this.reservationLists.reservationData;
           this.totalRecords = this.reservationLists.total;
           this.filterChips.forEach((item) => {
             item.total = this.reservationLists.entityStateCounts[item.value];
@@ -102,61 +119,65 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    * @function handleStatus To handle the status change
    * @param status status value
    */
-  handleStatus(status: ReservationStatusType, reservationData): void { 
-    this.loading = true;  
+  handleStatus(status: ReservationStatusType, reservationData): void {
+    this.loading = true;
     this.$subscription.add(
       this.manageReservationService
-        .updateReservation<Partial<ReservationList>, ReservationResponse>(
-          reservationData.id, 
-          reservationData,
-          { params: '?type=RESERVATION' }
-        )
+        .updateBookingStatus(reservationData.id, this.hotelId, {
+          reservationType: status,
+        })
         .subscribe(
-          (res) => { 
-            this.values.find((item) => item.id === reservationData.id).status = status;
-            this.snackbarService.openSnackBarAsText('Booking '+status+' changes successfully', '', 
-            { panelClass: 'success' }
-          );  
-          }, 
+          (res) => {
+            this.values.find(
+              (item) => item.id === reservationData.id
+            ).status = status;
+            this.snackbarService.openSnackBarAsText(
+              'Booking ' + status + ' changes successfully',
+              '',
+              { panelClass: 'success' }
+            );
+          },
           this.handleError,
           this.handleFinal
-          )
-        ); 
+        )
+    );
   }
 
   /**
    * @function getSelectedQuickReplyFilters To return the selected chip list.
    * @returns The selected chips.
    */
-  getSelectedQuickReplyFilters() {  
+  getSelectedQuickReplyFilters() {
     const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );  
-    let chipsValue = chips.map((item)=>item.value); 
-    return [{selectedStatus:chipsValue}];
+      (item) => item?.isSelected && item?.value !== 'ALL'
+    );
+    let chipsValue = chips.map((item) => item?.value);
+    return [{ entityState: chipsValue }];
   }
 
   /**
    * @function editReservation To navigate at edit page
    */
   editReservation(id: string) {
-    this.router.navigate([ 
-      `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.editReservation.route}/${id}`
+    this.router.navigate([
+      `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.editReservation.route}/${id}`,
     ]);
   }
-  
-   /**
+
+  /**
    * @function getQueryConfig to configuration
    */
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
         ...this.getSelectedQuickReplyFilters(),
         {
-          type: ReservationItem.reservation,
-          reservationType: this.selectedTable, 
+          type: ReservationSearchItem.ROOM_TYPE,
+          entityType: this.selectedTable,
+          entityId: this.hotelId,
           offset: this.first,
-          limit: this.rowsPerPage, 
+          limit: this.rowsPerPage,
         },
       ]),
     };
@@ -167,13 +188,15 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    * @function onSelectedTabFilterChange To handle the tab filter change.
    * @param event The material tab change event.
    */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {  
-    let reservationType = this.tabFilterItems[event.index].value; 
+  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
+    this.selectedTable = this.tabFilterItems[event.index].value;
     this.manageReservationService
-      .getReservationItemsByCategory<ReservationListResponse>(this.hotelId, this.getQueryConfig(),reservationType)
+      .getReservationItemsByCategory<ReservationListResponse>(
+        this.getQueryConfig()
+      )
       .subscribe(
-        (res) => {  
-          this.reservationLists = new ReservationList().deserialize(res);  
+        (res) => {
+          this.reservationLists = new ReservationList().deserialize(res);
           this.values = this.reservationLists.reservationData;
           this.totalRecords = this.reservationLists.total;
           this.filterChips.forEach((item) => {
@@ -182,14 +205,14 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         },
         this.handleError,
         this.handleFinal
-      ); 
+      );
   }
 
   /**
    * @function exportCSV To export CSV report of the table.
    */
   exportCSV(): void {
-    this.loading = true; 
+    this.loading = true;
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
@@ -210,8 +233,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     );
   }
 
-
-  
   /**
    * @function handleError to show the error
    * @param param network error
@@ -236,5 +257,4 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
- 
 }

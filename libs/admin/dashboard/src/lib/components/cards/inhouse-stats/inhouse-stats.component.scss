@@ -229,3 +229,11 @@
     }
   }
 }
+
+.skeletonFlx {
+  @include flex-space-between;
+  .stats {
+    width: 50%;
+    @include flex-col-space-evenly;
+  }
+}

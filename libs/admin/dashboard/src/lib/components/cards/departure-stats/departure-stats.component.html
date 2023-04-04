@@ -1,5 +1,13 @@
 <div class="container" (click)="openModal()">
-  <div class="title-container">
+  <div
+    class="title-container"
+    *skeleton="
+      departures == undefined;
+      height: '35px';
+      width: '170px';
+      margin: '0  0 2.5px 0'
+    "
+  >
     <div class="icon">
       <img
         [src]="dashboardConfig.images.departures.headerIcon.url"
@@ -14,22 +22,23 @@
       </div>
     </hospitality-bot-custom-tooltip>
   </div>
-  <div class="stat-val-container">
+
+  <div class="stat-val-container" *ngIf="departures">
     <div class="stat-row">
       <div class="stat-val-title">
         {{ 'card.departure.expected_checkout' | translate }}
       </div>
-      <div class="stat-val">{{ departures.expected.totalCount }}</div>
+      <div class="stat-val">{{ departures?.expected?.totalCount }}</div>
     </div>
     <div class="stat-row">
       <div class="stat-val-title">{{ 'card.departure.adult' | translate }}</div>
-      <div class="stat-val">{{ departures.expected.adults }}</div>
+      <div class="stat-val">{{ departures?.expected?.adults }}</div>
     </div>
     <div class="stat-row">
       <div class="stat-val-title">
         {{ 'card.departure.children' | translate }}
       </div>
-      <div class="stat-val">{{ departures.expected.kids }}</div>
+      <div class="stat-val">{{ departures?.expected?.kids }}</div>
     </div>
     <div class="division">
       <hr class="divionLine" />
@@ -38,17 +47,45 @@
       <div class="stat-val-title">
         {{ 'card.departure.already_checkout' | translate }}
       </div>
-      <div class="stat-val">{{ departures.actual.totalCount }}</div>
+      <div class="stat-val">{{ departures?.actual?.totalCount }}</div>
     </div>
     <div class="stat-row">
       <div class="stat-val-title">{{ 'card.departure.adult' | translate }}</div>
-      <div class="stat-val">{{ departures.actual.adults }}</div>
+      <div class="stat-val">{{ departures?.actual?.adults }}</div>
     </div>
     <div class="stat-row">
       <div class="stat-val-title">
         {{ 'card.departure.children' | translate }}
       </div>
-      <div class="stat-val">{{ departures.actual.kids }}</div>
+      <div class="stat-val">{{ departures?.actual?.kids }}</div>
     </div>
+  </div>
+  <div *ngIf="departures == undefined">
+    <div
+      *skeleton="
+        departures == undefined;
+        height: '20px';
+        width: '100%';
+        margin: '2.5px 0';
+        repeat: 3
+      "
+    ></div>
+    <div
+      *skeleton="
+        departures == undefined;
+        height: '2px';
+        width: '100%';
+        margin: '5px 0 15px 0'
+      "
+    ></div>
+    <div
+      *skeleton="
+        departures == undefined;
+        height: '20px';
+        width: '100%';
+        margin: '2.5px 0';
+        repeat: 3
+      "
+    ></div>
   </div>
 </div>

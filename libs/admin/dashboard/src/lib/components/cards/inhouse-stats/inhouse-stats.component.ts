@@ -46,8 +46,8 @@ export class InhouseStatisticsComponent implements OnChanges {
    */
   private initGraphData(): void {
     this.chart.data = [[]];
-    this.chart.data[0][0] = this.inhouse.kidsCount;
-    this.chart.data[0][1] = this.inhouse.adultCount;
+    this.chart.data[0][0] = this.inhouse?.kidsCount;
+    this.chart.data[0][1] = this.inhouse?.adultCount;
 
     if (this.chart.data[0].reduce((acc, curr) => acc + curr, 0)) {
       this.setChartOptions();

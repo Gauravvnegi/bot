@@ -68,11 +68,11 @@
       }
     }
     .detailsWrapper {
-      @include flex-wrap;
+      @include flex-wrap-even-space;
       .detail {
         display: flex;
         height: 70px;
-        width: 50%;
+        width: 40%;
         .divide {
           height: 70px;
           margin-right: 10px;
@@ -315,3 +315,4 @@
     }
   }
 }
+

@@ -3,12 +3,28 @@
     <hospitality-bot-custom-tooltip
       [text]="'Number of messages per message status for running two days'"
     >
-      <div class="analyticsHeading">
+      <div
+        class="analyticsHeading"
+        *skeleton="
+          sentReceivedChartData == undefined;
+          height: '25px';
+          width: '110px'
+        "
+      >
         <p>Notification</p>
       </div>
     </hospitality-bot-custom-tooltip>
     <div class="messageRequests">
-      <div class="requestCircle">
+      <div
+        class="requestCircle"
+        *skeleton="
+          sentReceivedChartData == undefined;
+          height: '175px';
+          width: '175px';
+          borderRadius: '50%';
+          margin: '0 0 0 20px'
+        "
+      >
         <div
           class="center-circle-progress"
           *ngFor="let item of messageOverallAnalytics?.stat"
@@ -44,6 +60,17 @@
         </div>
       </div>
       <div class="growth">
+        <ng-container
+          *skeleton="
+            sentReceivedChartData == undefined;
+            height: '25px';
+            width: '122px';
+            repeat: 4;
+            margin: '0 0 10px 0'
+          "
+          style="display: flex; flex-direction: column;"
+        ></ng-container>
+
         <div
           class="growthCell"
           *ngFor="let item of messageOverallAnalytics?.stat"
@@ -92,7 +119,24 @@
         </div>
       </div>
     </div>
-    <div class="detailsWrapper">
+    <div
+      class="detailsWrapper"
+      [style.justify-content]="
+        sentReceivedChartData == undefined ? 'space-evenly' : ''
+      "
+    >
+      <ng-container
+        *skeleton="
+          sentReceivedChartData == undefined;
+          height: '70px';
+          width: '40%';
+          repeat: 4;
+          margin: '0 0 10px 0'
+        "
+        style="display: flex; flex-wrap: wrap;"
+      >
+      </ng-container>
+
       <div
         class="detail"
         *ngFor="let item of messageOverallAnalytics?.stat; let i = index"
@@ -119,11 +163,25 @@
         'Number of messages sent VS delivered in a specific hours of the day.'
       "
     >
-      <div class="analyticsHeading">
+      <div
+        class="analyticsHeading"
+        *skeleton="
+          sentReceivedChartData == undefined;
+          height: '25px';
+          width: '190px'
+        "
+      >
         <p>SENT V/S DELIVERED</p>
       </div>
     </hospitality-bot-custom-tooltip>
-    <div class="line-chart">
+    <div
+      class="line-chart"
+      *skeleton="
+        sentReceivedChartData == undefined;
+        height: '290px';
+        width: '100%'
+      "
+    >
       <canvas
         baseChart
         class="canvas"
@@ -143,10 +201,21 @@
         (click)="legendOnClick(legendIndex)"
         *ngFor="let legend of legendData; let legendIndex = index"
       >
-        <input class="legends" type="checkbox" />
+        <input
+          class="legends"
+          type="checkbox"
+          *skeleton="
+            sentReceivedChartData == undefined;
+            height: '35px';
+            width: '90px';
+            margin: '0 0 10px 0'
+          "
+        />
         <img src="assets/svg/{{ legend.src }}.svg" />
 
-        <p class="stat-label-title">{{ legend.label }}</p>
+        <p class="stat-label-title" *ngIf="sentReceivedChartData">
+          {{ legend.label }}
+        </p>
       </div>
     </div>
   </div>

@@ -51,11 +51,12 @@
       z-index: 2;
       @include flex-all-center;
       &-base-chart {
-        height: 176px;
+        max-height: 176px !important;
+        width: auto !important;
       }
     }
     .labels {
-      z-index: 1;
+      z-index: -1;
       position: absolute;
       height: 100%;
       top: 0;

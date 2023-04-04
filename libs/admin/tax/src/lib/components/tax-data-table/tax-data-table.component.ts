@@ -203,7 +203,6 @@ export class TaxDataTableComponent extends BaseDatatableComponent
       .subscribe();
   };
 
-
   /**
    * @function editTax
    * @description To edit the tax
@@ -213,17 +212,13 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     this.router.navigate(['']);
   }
 
-
   /**
    *  @function handleFinal
    * @description To handle the loading status
    */
-
   handleFinal = () => {
     this.loading = false;
   };
-
-
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

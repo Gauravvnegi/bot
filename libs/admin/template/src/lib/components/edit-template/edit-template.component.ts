@@ -125,7 +125,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function getAssetId to get template Id from routes query param.
+   * @function getTemplateId to get template Id from routes query param.
    */
   getTemplateId(): void {
     this.$subscription.add(

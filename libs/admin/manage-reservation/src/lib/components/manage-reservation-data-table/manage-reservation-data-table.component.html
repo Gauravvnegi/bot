@@ -6,7 +6,7 @@
   <div class="heading">{{ tableName }}</div>
   <div class="action-wrapper">
     <hospitality-bot-button
-      label="+ Create Reservation"
+      label="+ Create Booking"
       link="/pages/efrontdesk/manage-reservation/{{
         manageReservationRoutes.addReservation.route
       }}"
@@ -92,20 +92,21 @@
       <td>
         <div class="cell-content">
           <div class="contained__primary">
-            {{ rowData.rooms }} - {{ rowData.roomType }}
+            {{ rowData.roomCount }} - {{ rowData.roomType }}
           </div>
         </div>
       </td>
       <td>
         <div class="center-align">
-          <div class="primary-text">#{{ rowData.confirmationNo }}</div>
+          <div class="primary-text">#{{ rowData.reservationNumber }}</div>
         </div>
       </td>
 
       <td>
         <div class="cell-content">
           <div class="primary-text">
-            {{ rowData.guestName }}
+            {{ rowData.firstName }}
+            {{ rowData.lastName }}
           </div>
           <div class="secondary-text">
             {{ rowData.guestCompany }}
@@ -123,22 +124,28 @@
       <td>
         <div class="center-align">
           <div class="primary-text">
-            {{ rowData.amount | currency: 'INR' }}
+            {{ rowData.totalDueAmount | currency: 'INR' }}
           </div>
         </div>
       </td>
       <td>
         <div class="center-align">
           <div class="primary-text">
-            {{ rowData.type }}
+            {{ rowData.source }}
           </div>
+        </div>
+        <div class="secondary-text">
+          {{ rowData.guestCompany }}
         </div>
       </td>
 
       <td>
         <div class="center-align">
           <div class="primary-text">
-            {{ rowData.payment }}
+            {{ rowData.paymentMethod }}
+          </div>
+          <div class="secondary-text">
+            {{ rowData.totalPaidAmount | currency: 'INR' }}
           </div>
         </div>
       </td>

@@ -1,14 +1,14 @@
 <div class="notification">
-  <hospitality-bot-custom-tooltip [text]="'Bifurcation as per Journey'">
-    <div
-      class="notification-title"
-      *skeleton="
-        stats == undefined;
-        height: '25px';
-        width: '110px';
-        margin: '0 0 10px 0'
-      "
-    >
+  <hospitality-bot-custom-tooltip
+    [text]="'Bifurcation as per Journey'"
+    *skeleton="
+      stats == undefined;
+      height: '25px';
+      width: '110px';
+      margin: '0 0 10px 0'
+    "
+  >
+    <div class="notification-title">
       Notification
     </div>
   </hospitality-bot-custom-tooltip>

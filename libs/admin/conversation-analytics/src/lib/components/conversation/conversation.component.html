@@ -1,13 +1,13 @@
 <div class="stats">
-  <hospitality-bot-custom-tooltip [text]="'Bifurcation as per messages'">
-    <div
-      class="stats__title"
-      *skeleton="stats == undefined; height: '25px'; width: '125px'"
-    >
+  <hospitality-bot-custom-tooltip
+    [text]="'Bifurcation as per messages'"
+    *skeleton="stats == undefined; height: '25px'; width: '125px'"
+  >
+    <div class="stats__title">
       Conversation
     </div>
   </hospitality-bot-custom-tooltip>
-  
+
   <div class="stats__body">
     <div class="graph-container">
       <div class="graphcontainer__graph">

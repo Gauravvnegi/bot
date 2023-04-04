@@ -2,15 +2,13 @@
   <div class="messageAnalytics">
     <hospitality-bot-custom-tooltip
       [text]="'Number of messages per message status for running two days'"
+      *skeleton="
+        sentReceivedChartData == undefined;
+        height: '25px';
+        width: '110px'
+      "
     >
-      <div
-        class="analyticsHeading"
-        *skeleton="
-          sentReceivedChartData == undefined;
-          height: '25px';
-          width: '110px'
-        "
-      >
+      <div class="analyticsHeading">
         <p>Notification</p>
       </div>
     </hospitality-bot-custom-tooltip>
@@ -162,15 +160,13 @@
       [text]="
         'Number of messages sent VS delivered in a specific hours of the day.'
       "
+      *skeleton="
+        sentReceivedChartData == undefined;
+        height: '25px';
+        width: '190px'
+      "
     >
-      <div
-        class="analyticsHeading"
-        *skeleton="
-          sentReceivedChartData == undefined;
-          height: '25px';
-          width: '190px'
-        "
-      >
+      <div class="analyticsHeading">
         <p>SENT V/S DELIVERED</p>
       </div>
     </hospitality-bot-custom-tooltip>
@@ -211,8 +207,10 @@
             margin: '0 0 10px 0'
           "
         />
-        <img src="assets/svg/{{ legend.src }}.svg" />
-
+        <img
+          src="assets/svg/{{ legend.src }}.svg"
+          *ngIf="sentReceivedChartData"
+        />
         <p class="stat-label-title" *ngIf="sentReceivedChartData">
           {{ legend.label }}
         </p>

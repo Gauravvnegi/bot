@@ -46,7 +46,10 @@
         <div class="dot" [style.background]="colors.neutral"></div>
         <div class="content">
           <div class="value">{{ sentimentData.neutral }}%</div>
-          <div class="label">Neutral</div>
+          <div class="label">
+            Neutral<hospitality-bot-custom-tooltip [text]="'Neutral sentiment'">
+            </hospitality-bot-custom-tooltip>
+          </div>
         </div>
       </div>
       <div class="details__item">

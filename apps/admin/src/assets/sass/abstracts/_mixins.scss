@@ -94,6 +94,10 @@
   @include flex-col;
   justify-content: space-around;
 }
+@mixin flex-col-space-evenly {
+  @include flex-col;
+  justify-content: space-evenly;
+}
 @mixin flex-col-center-algn {
   @include flex-col;
   align-items: center;

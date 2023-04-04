@@ -1,41 +1,63 @@
 <div class="notification">
   <hospitality-bot-custom-tooltip [text]="'Bifurcation as per Journey'">
-    <div class="notification-title">
+    <div
+      class="notification-title"
+      *skeleton="
+        stats == undefined;
+        height: '25px';
+        width: '110px';
+        margin: '0 0 10px 0'
+      "
+    >
       Notification
     </div>
   </hospitality-bot-custom-tooltip>
-
-  <canvas
-    baseChart
-    class="notification-baseChart"
-    [datasets]="chart.chartData"
-    [labels]="chart.chartLabels"
-    [options]="chart.chartOptions"
-    [colors]="chart.chartColors"
-    [legend]="chart.chartLegend"
-    [chartType]="chart.chartType"
-  >
-  </canvas>
-  <div class="notification-check-wrap">
-    <div
-      class="notification-check-wrap-items"
-      *ngFor="let label of labels; let i = index"
-      (click)="legendOnClick(i, $event)"
+  <ng-container *skeleton="stats == undefined; height: '220px'; width: '100%'">
+    <canvas
+      baseChart
+      class="notification-baseChart"
+      [datasets]="chart.chartData"
+      [labels]="chart.chartLabels"
+      [options]="chart.chartOptions"
+      [colors]="chart.chartColors"
+      [legend]="chart.chartLegend"
+      [chartType]="chart.chartType"
     >
+    </canvas
+  ></ng-container>
+
+  <div class="notification-check-wrap">
+    <ng-container
+      *skeleton="stats == undefined; height: '22px'; width: '109px'; repeat: 3"
+    >
+    </ng-container>
+    <ng-container *ngIf="stats">
       <div
-        class="notification-check-wrap-items-dot"
-        [style.backgroundColor]="colors[i]"
-      ></div>
-      <div class="notification-check-wrap-items-label">
-        {{ label }}
+        class="notification-check-wrap-items"
+        *ngFor="let label of labels; let i = index"
+        (click)="legendOnClick(i, $event)"
+      >
+        <div
+          class="notification-check-wrap-items-dot"
+          [style.backgroundColor]="colors[i]"
+        ></div>
+        <div class="notification-check-wrap-items-label">
+          {{ label }}
+        </div>
       </div>
-    </div>
+    </ng-container>
   </div>
   <div class="notification-footer">
-    <div class="notification-footer-title">
+    <div
+      class="notification-footer-title"
+      *skeleton="stats == undefined; height: '63px'; width: '113px'"
+    >
       Total Templates Sent
     </div>
-    <div class="notification-footer-values">
+    <div
+      class="notification-footer-values"
+      *skeleton="stats == undefined; height: '56px'; width: '100px'"
+    >
       <div class="notification-footer-values-t-value">
         {{ stats?.total }}
       </div>

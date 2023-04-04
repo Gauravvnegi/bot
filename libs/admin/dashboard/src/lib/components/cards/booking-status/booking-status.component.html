@@ -1,19 +1,36 @@
 <div class="container">
   <div class="stat-header">
     <div class="title-container">
-      <div class="icon">
+      <div
+        class="icon"
+        *skeleton="
+          customerData == undefined;
+          height: '30px';
+          width: '30px';
+          margin: '0 10px 0 0'
+        "
+      >
         <img
           [src]="dashboardConfig.images.bookingStatus.headerIcon.url"
           [alt]="dashboardConfig.images.bookingStatus.headerIcon.alt"
         />
       </div>
-      <div class="stat-title">
+      <div
+        class="stat-title"
+        *skeleton="customerData == undefined; height: '25px'; width: '170px'"
+      >
         {{ 'card.booking_status.title_text' | translate }}
       </div>
     </div>
   </div>
   <div class="line-chart">
     <canvas
+      *skeleton="
+        customerData == undefined;
+        height: '200px';
+        width: '100%';
+        margin: '0 0 10px 0'
+      "
       baseChart
       class="line-chart-base-chart"
       [datasets]="chart.data"
@@ -31,7 +48,16 @@
         <ng-container
           *ngFor="let legend of legendData; let legendIndex = index"
         >
-          <div class="stat-label" (click)="legendOnClick(legendIndex)">
+          <div
+            class="stat-label"
+            (click)="legendOnClick(legendIndex)"
+            *skeleton="
+              customerData == undefined;
+              height: '25px';
+              width: '90px';
+              margin: '0 0 10px 0'
+            "
+          >
             <input class="legends" type="checkbox" />
             <div
               [ngClass]="{
@@ -52,6 +78,12 @@
             class="stat-label"
             [style.background-color]="legend.backgroundColor"
             (click)="legendOnClick(legendIndex)"
+            *skeleton="
+              customerData == undefined;
+              height: '25px';
+              width: '90px';
+              margin: '0 0 10px 0'
+            "
           >
             <input class="legends" type="checkbox" />
             <span class="legend-border no-border"></span>

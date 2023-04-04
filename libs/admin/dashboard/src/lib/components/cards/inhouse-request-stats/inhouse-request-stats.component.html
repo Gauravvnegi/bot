@@ -1,5 +1,13 @@
 <div class="chart__wrapper">
-  <div class="chart__wrapper--container">
+  <div
+    class="chart__wrapper--container"
+    *skeleton="
+      inhouseRequest == undefined;
+      height: '200px';
+      width: '200px';
+      borderRadius: '50%'
+    "
+  >
     <div class="labels">
       <div class="val">
         {{
@@ -22,7 +30,16 @@
     >
     </canvas>
   </div>
-  <div class="inhouse--chart-rightblock">
+  <div
+    class="inhouse--chart-rightblock"
+    *skeleton="
+      inhouseRequest == undefined;
+      height: '36px';
+      width: '50%';
+      margin: '5px 0';
+      repeat: '3'
+    "
+  >
     <div>
       <div class="inhouse--chart-rightblock--status">
         <div class="inhouse--chart-rightblock--status--sqaure complete"></div>

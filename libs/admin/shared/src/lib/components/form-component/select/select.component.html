@@ -28,6 +28,21 @@
     [filterBy]="stopEmission ? 'label' : 'nothing'"
     [filterMatchMode]="stopEmission ? 'contains' : 'notEquals'"
   >
+    <ng-template let-option pTemplate="item">
+      <div class="option-item">
+        <img *ngIf="option.icon" [src]="option.icon" class="option-image" />
+        <span class="option-label">{{ option.label }}</span>
+      </div>
+    </ng-template>
+
+    <ng-template let-option pTemplate="selectedItem">
+      <div class="option-item">
+        <div>
+          <img *ngIf="option.icon" [src]="option.icon" class="selected-image" />
+        </div>
+        <span class="option-label">{{ option.label }}</span>
+      </div>
+    </ng-template>
   </p-dropdown>
 
   <small *ngIf="error" class="p-error">{{ error }}</small>

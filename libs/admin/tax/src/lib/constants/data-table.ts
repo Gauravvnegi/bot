@@ -8,7 +8,7 @@ export const cols: Cols[] = [
     header: 'Country',
     sortType: 'string',
     dynamicWidth: true,
-    width: '30%',
+    width: '23.75%',
     isSort: true,
   },
   {
@@ -17,7 +17,15 @@ export const cols: Cols[] = [
     sortType: 'string',
     isSort: true,
     dynamicWidth: true,
-    width: '20%',
+    width: '23.75%',
+  },
+  {
+    field: 'category',
+    header: 'Category',
+    sortType: 'string',
+    isSort: true,
+    dynamicWidth: true,
+    width: '23.75%',
   },
   {
     field: 'taxRate',
@@ -25,7 +33,7 @@ export const cols: Cols[] = [
     sortType: 'number',
     isSort: true,
     dynamicWidth: true,
-    width: '20%',
+    width: '23.75%',
   },
   {
     field: 'status',
@@ -33,7 +41,7 @@ export const cols: Cols[] = [
     isSort: false,
     isSearchDisabled: true,
     dynamicWidth: true,
-    width: '15%',
+    width: '23.75%',
   },
 ];
 
@@ -60,5 +68,3 @@ export const filtersChips: Chip<'ALL' | 'ACTIVE' | 'INACTIVE'>[] = [
     type: 'failed',
   },
 ];
-
-

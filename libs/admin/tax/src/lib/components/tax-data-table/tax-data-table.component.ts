@@ -71,10 +71,12 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   initTableValue(): void {
     this.loading = true;
     this.$subscription.add(
-      this.taxService.getTax(this.hotelId).subscribe(
+      this.taxService.getTaxList(this.hotelId, this.getQueryConfig()).subscribe(
         (res) => {
           const taxList = new TaxList().deserialize(res);
+
           this.values = taxList.records;
+
           this.totalRecords = taxList.total;
 
           this.filterChips.forEach((item) => {
@@ -126,8 +128,8 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     );
     return [
       chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'ACTIVE' },
+        ? { entityState: null }
+        : { entityState: chips[0].value === 'ACTIVE' },
     ];
   }
 
@@ -138,23 +140,25 @@ export class TaxDataTableComponent extends BaseDatatableComponent
 
   handleStatus(status: boolean, rowData): void {
     this.loading = true;
-    this.taxService.updateTax(this.hotelId).subscribe(
-      (res) => {
-        const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-        this.updateStatusAndCount(
-          statusValue(rowData.status),
-          statusValue(status)
-        );
-        this.values.find((item) => item.id === rowData.id).status = status;
-        this.snackbarService.openSnackBarAsText(
-          'Status changes successfully',
-          '',
-          { panelClass: 'success' }
-        );
-      },
-      this.handleError,
-      this.handleFinal
-    );
+    this.taxService
+      .updateTax(this.hotelId, rowData.id, { status: status })
+      .subscribe(
+        (res) => {
+          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+          this.updateStatusAndCount(
+            statusValue(rowData.status),
+            statusValue(status)
+          );
+          this.values.find((item) => item.id === rowData.id).status = status;
+          this.snackbarService.openSnackBarAsText(
+            'Status changes successfully',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        this.handleError,
+        this.handleFinal
+      );
   }
 
   /**
@@ -173,7 +177,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     };
 
     this.$subscription.add(
-      this.taxService.exportCSV(this.hotelId).subscribe(
+      this.taxService.exportCSV(this.hotelId, config).subscribe(
         (res) => {
           FileSaver.saveAs(
             res,
@@ -209,7 +213,9 @@ export class TaxDataTableComponent extends BaseDatatableComponent
    */
 
   editTax(id: string): void {
-    this.router.navigate(['']);
+    this.router.navigate([
+      `/pages/settings/tax/${this.routes.createTax.route}/${id}`,
+    ]);
   }
 
   /**

@@ -6,6 +6,7 @@ export type Option = {
   label: string;
   value: string;
   inactive?: boolean;
+  icon ?: string;
 } & Record<string, any>;
 
 export type FormProps = {

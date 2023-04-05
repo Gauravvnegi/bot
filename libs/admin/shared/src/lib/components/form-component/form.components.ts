@@ -47,7 +47,6 @@ export class FormComponent implements OnInit {
   @Input() stopEmission = false;
   @Output() paginate = new EventEmitter();
   @Output() onSearch = new EventEmitter<string>();
-
   @Input() label: string;
   @Input() controlName: string;
 

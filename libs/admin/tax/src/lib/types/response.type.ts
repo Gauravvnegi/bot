@@ -1,8 +1,9 @@
 export type TaxResponse = {
   id: string;
-  name: string;
+  country: string;
   taxType: string;
-  taxRate: string;
+  category: string;
+  taxValue: string;
   status: boolean;
 };
 

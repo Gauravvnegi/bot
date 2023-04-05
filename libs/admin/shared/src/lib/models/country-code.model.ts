@@ -1,3 +1,5 @@
+import { CountryCodeResponse } from '../types/response';
+
 export interface Country {
   value: string;
   label: string;
@@ -10,7 +12,25 @@ export class CountryCode {
 
   // country code + phone no.  eg -- +93(AF)
 }
+export class CountryCodeOne {
+  label: string;
+  value: string;
+  icon: string;
+  deserialize(input: CountryCodeResponse) {
+    this.label = input.value;
+    this.value = input.value;
+    this.icon = input.srcImg;
+    return this;
+  }
+}
 
+export class CountryCodeList {
+  records: CountryCodeOne[];
+  deserialize(input: CountryCodeResponse[]) {
+    this.records = input.map((item) => new CountryCodeOne().deserialize(item));
+    return this;
+  }
+}
 export const countryLists: Array<Country> = [
   {
     label: '+93 Afghanistan',

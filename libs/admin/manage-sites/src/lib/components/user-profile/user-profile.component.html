@@ -36,9 +36,11 @@
     <hospitality-bot-prefix-field
       class="half-width"
       [options]="code"
+      [props]="{ isAsync: true }"
       preControlName="cc"
       postControlName="phoneNumber"
       label="Contact"
+      stopEmission="true"
       [defaultProps]="{ post: { type: 'number' } }"
     ></hospitality-bot-prefix-field>
     <hospitality-bot-button

@@ -367,6 +367,11 @@
               <ng-container *ngSwitchCase="'COMPLETED'">
                 <!-- initiate force checkout -->
                 <!-- download invoice -->
+                <hospitality-bot-button
+                  label="Manage Invoice"
+                  (click)="prepareInvoice()"
+                  variant="outlined"
+                ></hospitality-bot-button>
               </ng-container>
               <ng-container *ngSwitchCase="'FAILED'">
                 <hospitality-bot-button
@@ -401,68 +406,68 @@
                   ></hospitality-bot-button>
                 </ng-container>
                 <ng-template #prepareInvoiceBtn>
-                  <button class="button" (click)="prepareInvoice()">
-                    Prepare Invoice
-                  </button>
+                  <hospitality-bot-button
+                    label="Manage Invoice"
+                    (click)="prepareInvoice()"
+                    variant="outlined"
+                  ></hospitality-bot-button>
                 </ng-template>
               </ng-container>
               <ng-container *ngSwitchCase="'INITIATED'">
-                <button
-                  (click)="activateAndgenerateJourney('CHECKOUT')"
-                  class="button"
+                <ng-container
+                  *ngIf="details.invoicePrepareRequest; else prepareInvoiceBtn"
                 >
-                  Activate & Generate Checkout Link
-                </button>
-                <button (click)="downloadInvoice()" class="button">
-                  Download Invoice/Folio
-                </button>
+                  <hospitality-bot-button
+                    label="Activate & Generate Checkout Link"
+                    (click)="activateAndgenerateJourney('CHECKOUT')"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+
+                  <hospitality-bot-button
+                    label="Download Invoice/Folio"
+                    (click)="downloadInvoice()"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                </ng-container>
+                <ng-template #prepareInvoiceBtn>
+                  <hospitality-bot-button
+                    label="Manage Invoice"
+                    (click)="prepareInvoice()"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                </ng-template>
               </ng-container>
               <ng-container *ngSwitchCase="'COMPLETED'">
-                <button (click)="downloadInvoice()" class="button">
-                  Download Invoice/Folio
-                </button>
-                <button class="button" (click)="sendInvoice()">
-                  Send Invoice
-                </button>
+                <hospitality-bot-button
+                  label="Download Invoice/Folio"
+                  (click)="downloadInvoice()"
+                  variant="outlined"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  label="Send Invoice"
+                  (click)="sendInvoice()"
+                  variant="outlined"
+                ></hospitality-bot-button>
               </ng-container>
               <ng-container *ngSwitchCase="'FAILED'">
-                <button
+                <hospitality-bot-button
+                  label="Activate & Generate Checkout Link"
                   (click)="activateAndgenerateJourney('CHECKOUT')"
-                  class="button"
-                >
-                  Activate & Generate Checkout Link
-                </button>
-                <button (click)="downloadInvoice()" class="button">
-                  Download Invoice/Folio
-                </button>
+                  variant="outlined"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  label="Download Invoice/Folio"
+                  (click)="downloadInvoice()"
+                  variant="outlined"
+                ></hospitality-bot-button>
               </ng-container>
             </ng-container>
           </ng-template>
         </div>
-        <!-- <div>
-          <p class="contact">Contact Guest</p>
-          <div class="right-bottom-icons">
-            <ng-container *ngFor="let icon of shareIconList">
-              <div
-                class="social-icons"
-                (click)="openSendNotification(icon.label.toLowerCase())"
-                *ngIf="icon.label != 'MANUAL'"
-              >
-                <div class="icon">
-                  <img [src]="icon.iconUrl" />
-                </div>
-              </div>
-            </ng-container>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
 </div>
-
-<!-- <pre>
-  {{ details | json }}
-</pre> -->
 
 <ng-template #detailsLoader>
   <div class="loader">

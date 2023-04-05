@@ -52,6 +52,7 @@ export class HotelBranch implements IDeserializable {
   timezone: string;
   outlets;
   websiteUrl;
+  pmsEnable: boolean;
   deserialize(input) {
     Object.assign(
       this,
@@ -65,7 +66,8 @@ export class HotelBranch implements IDeserializable {
       set({}, 'nationality', get(input, ['nationality'])),
       set({}, 'timezone', get(input, ['timezone'])),
       set({}, 'outlets', get(input, ['outlets'])),
-      set({}, 'websiteUrl', get(input, ['websiteUrl']))
+      set({}, 'websiteUrl', get(input, ['websiteUrl'])),
+      set({}, 'pmsEnable', get(input, ['pmsEnable']))
     );
 
     return this;

@@ -10,7 +10,11 @@ export const adminInvoiceRoutes: Route[] = [
     component: MainComponent,
     children: [
       {
-        path: invoiceRoutes.createInvoice.route, // # /id
+        path: `${invoiceRoutes.createInvoice.route}/:id`,
+        component: InvoiceComponent,
+      },
+      {
+        path: `${invoiceRoutes.editInvoice.route}/:id`,
         component: InvoiceComponent,
       },
     ],

@@ -10,6 +10,18 @@ export type InvoiceForm = {
     roomType: string;
     adults: string;
     children: string;
+
+    currentAmount: number;
+    discountedAmount: number;
+    totalDiscount: number;
+    paidAmount: number;
+    dueAmount: number;
+
+    discountType: string;
+    discount: number;
+
+    paidValue: number;
+    paid: number;
   };
   
   export type PaymentField = {
@@ -20,10 +32,6 @@ export type InvoiceForm = {
     tax: string;
     totalAmount: number;
   };
-  
-  export type PaymentForm = {
-    table: {
-      de;
-    };
-  };
+
+
   

@@ -22,8 +22,10 @@ export class InvoiceComponent implements OnInit {
   readonly errorMessages = errorMessages;
   pageTitle: string;
   navRoutes: NavRouteOptions;
+
   tableFormArray: FormArray;
   useForm: FormGroup;
+  
   taxes: Option[] = [];
   tableValue = [];
   discountOption: Option[] = [
@@ -32,17 +34,9 @@ export class InvoiceComponent implements OnInit {
   ];
   editPaidAmount: Option[] = [{ label: 'Edit', value: 'Edit' }];
 
-  /* Payment Variables */
-  currentAmount = 0;
-  discountedAmount = 0;
-  paidAmount = 0;
-  totalDiscount = 0;
-  dueAmount = 0;
-  // #Convert the above in form structure (paymentForm_) - add type also
-
   editMode = false;
   viewDiscountTab = false;
-  paidInput = false;
+  viewPaidTab = false;
   isValidDiscount = true;
   isValidPaid = true;
 
@@ -53,8 +47,8 @@ export class InvoiceComponent implements OnInit {
   // #Move to constant, give type here and in menu component, initialise ngInit - initOptionsConfig
   addDiscount = [{ label: 'Add Discount', value: 'Add Discount' }];
   editDiscount = [
-    { label: 'Edit Discount', value: 'Edit Discount' },
-    { label: 'Remove Discount', value: 'Remove Discount' },
+    { label: 'Edit Discount', value: 'editDiscount' },
+    { label: 'Remove Discount', value: 'removeDiscount' },
   ];
 
   constructor(private fb: FormBuilder) {
@@ -62,8 +56,35 @@ export class InvoiceComponent implements OnInit {
   }
 
   get inputControl() {
-    // #change name to something (add get paymentForm control)
     return this.useForm.controls as Record<keyof InvoiceForm, AbstractControl>;
+  }
+
+  get currentAmount() {
+    return this.useForm.get('currentAmount');
+  }
+  get discountedAmount() {
+    return this.useForm.get('discountedAmount');
+  }
+  get totalDiscount() {
+    return this.useForm.get('totalDiscount');
+  }
+  get paidAmount() {
+    return this.useForm.get('paidAmount');
+  }
+  get dueAmount() {
+    return this.useForm.get('dueAmount');
+  }
+  get discount() {
+    return this.useForm.get('discount');
+  }
+  get discountType() {
+    return this.useForm.get('discountType');
+  }
+  get paidValue() {
+    return this.useForm.get('paidValue');
+  }
+  get paid() {
+    return this.useForm.get('paid');
   }
 
   ngOnInit(): void {
@@ -93,6 +114,18 @@ export class InvoiceComponent implements OnInit {
       additionalNote: [''],
       tableData: new FormArray([]),
 
+      currentAmount: [''],
+      discountedAmount: [''],
+      totalDiscount: [''],
+      paidAmount: [''],
+      dueAmount: [''],
+
+      discount: [''],
+      discountType: [''],
+
+      paidValue: [''],
+      paid: [''],
+
       cashierName: ['', Validators.required],
       invoiceDate: ['', Validators.required],
       arrivalDate: ['', Validators.required],
@@ -101,22 +134,18 @@ export class InvoiceComponent implements OnInit {
       roomType: ['', Validators.required],
       adults: ['', Validators.required],
       children: ['', Validators.required],
-
-      discountType: ['', Validators.required],
-      discount: [''],
-
-      paid: [''],
-      paidAmount: [''],
     });
 
     this.tableFormArray = this.useForm.get('tableData') as FormArray;
-    this.addNewFieldTableForm();
-    this.initDetails();
 
-    //# initFormSubscription
+    this.addNewFieldTableForm();
+
+    this.initDetails();
+    this.initFormSubscription();
     this.useForm.valueChanges.subscribe((res) => {
       // console.log(res);
     });
+
   }
 
   /**
@@ -136,12 +165,23 @@ export class InvoiceComponent implements OnInit {
           totalAmount: 448,
         },
       ],
+      currentAmount: 448,
+      totalDiscount: 0,
+      discountedAmount: 448,
+      paidAmount: 50,
+      dueAmount: 398,  
+
       discountType: '%Off',
       discount: 0,
+      paidValue: 50,
       paid: 0,
     });
   }
-
+  
+  initFormSubscription(){
+    this.registerDiscountChanges();
+    this.registerPaidChanges();
+  }
   /**
    * @function initForm Initialize tax options
    */
@@ -184,6 +224,7 @@ export class InvoiceComponent implements OnInit {
    * @function registerUnitPriceChange To handle changes in new charges
    */
   registerUnitPriceChange() {
+
     const currentFormGroup = this.tableFormArray.at(
       this.tableFormArray.controls.length - 1
     ) as FormGroup;
@@ -192,7 +233,6 @@ export class InvoiceComponent implements OnInit {
     const setAmount = () => {
       let discount = 0;
       for (let i of tax.value) {
-        // #Check it option service (manage)
         if (i === 'SGST' || i === 'CGST' || i === 'VAT') {
           discount += 12;
         } else if (i === 'GST') {
@@ -203,49 +243,54 @@ export class InvoiceComponent implements OnInit {
       }
 
       const amount = unit.value * unitPrice.value;
-      const totalAmount =
-        Math.round(
-          (amount + (amount * discount) / 100 + Number.EPSILON) * 100
-        ) / 100;
+      const totalValue = amount + (amount * discount) / 100;
 
       if (amount) {
         currentFormGroup.patchValue({
           amount: amount,
-          totalAmount: totalAmount,
+          totalAmount: totalValue,
         });
-        this.currentAmount = totalAmount;
-        this.discountedAmount = totalAmount;
-        this.dueAmount = totalAmount;
       }
-    };
-
+    }; 
     unit.valueChanges.subscribe(setAmount);
     unitPrice.valueChanges.subscribe(setAmount);
     tax.valueChanges.subscribe(setAmount);
+
+
+    this.tableFormArray.valueChanges.subscribe((values)=>{
+      const prices = values.map((value)=>value.totalAmount);
+      const totalValue = prices.reduce((acc, price)=> acc+ price, 0);
+
+      this.currentAmount.setValue(totalValue);
+      this.discountedAmount.setValue(this.currentAmount.value - this.totalDiscount.value);
+      this.dueAmount.setValue(this.discountedAmount.value - this.paidValue.value);
+    })
   }
 
   /**
    * @function registerDiscountChanges To handle changes in discount tab
    */
   registerDiscountChanges() {
-    const { discountType, discount } = this.useForm.controls;
-
     const setError = () => {
       if (
-        discount.value > this.currentAmount &&
-        discountType.value === 'Flat'
+        this.discount.value > this.currentAmount.value &&
+        this.discountType.value === 'Flat'
       ) {
         return 'isNumError';
       }
 
-      if (discount.value > 100 && discountType.value === '%Off') {
+      if (this.discount.value > 100 && this.discountType.value === '%Off') {
         return 'isPercentError';
+      }
+
+      if(this.discountedAmount.value<this.paidAmount.value){
+        return 'maxOccupancy';
       }
     };
 
     const clearError = () => {
-      if (discount.value > 0) {
-        discount.setErrors(null);
+      if (this.discount.value > 0) {
+        this.discount.setErrors(null);
         this.isValidDiscount = true;
       }
     };
@@ -254,80 +299,97 @@ export class InvoiceComponent implements OnInit {
       clearError();
       const error = setError();
       if (error === 'isNumError') {
-        discount.setErrors({ isPriceLess: true });
+        this.discount.setErrors({ isPriceLess: true });
         this.isValidDiscount = false;
       }
       if (error === 'isPercentError') {
-        discount.setErrors({ moreThan100: true });
+        this.discount.setErrors({ moreThan100: true });
         this.isValidDiscount = false;
       }
+      if(error === 'maxOccupancy'){
+        this.discount.setErrors({ maxOccupancy: true})
+        this.isValidDiscount = false;
+      }
+
+      this.handleDiscount();
+
     };
 
-    discountType.valueChanges.subscribe(discountSubscription);
-    discount.valueChanges.subscribe(discountSubscription);
+    this.discountType.valueChanges.subscribe(discountSubscription);
+    this.discount.valueChanges.subscribe(discountSubscription);
+    this.discountedAmount.valueChanges.subscribe(discountSubscription);
+    this.paidAmount.valueChanges.subscribe(discountSubscription);
   }
 
   /**
    * @function registerUnitPriceChange To handle changes in new charges
    */
   registerPaidChanges() {
-    const { paid, paidAmount } = this.useForm.controls;
+    // const { paidValue, paid, discountedAmount } = this.inputControl;
     const setError = () => {
-      if (paid.value + +paidAmount.value > this.discountedAmount) {
+      if (this.paidValue.value + +this.paid.value > this.discountedAmount.value) {
         return 'moreThanTotal';
       }
     };
-
     const clearError = () => {
-      if (paidAmount.value > 0) {
-        paidAmount.setErrors(null);
+      if (this.paid.value > 0) {
+        this.paid.setErrors(null);
         this.isValidPaid = true;
       }
     };
 
-    paidAmount.valueChanges.subscribe(() => {
+    this.paid.valueChanges.subscribe(() => {
       clearError();
       const error = setError();
       if (error === 'moreThanTotal') {
-        paidAmount.setErrors({ moreThanTotal: true });
+        this.paid.setErrors({ moreThanTotal: true });
         this.isValidPaid = false;
       }
+      this.handlePaidAmount();
     });
   }
 
   onSaveDiscount() {
     this.viewDiscountTab = false;
-    const { discountType, discount } = this.useForm.controls;
+  }
 
-    if (discount.value > 0) {
+  handleDiscount(){
+    if (this.discount.value > 0) {
       this.editMode = true;
     }
-    if (discountType.value === 'Flat') {
-      this.discountedAmount -= discount.value;
-      this.totalDiscount = this.currentAmount - this.discountedAmount;
-      this.dueAmount = this.discountedAmount;
-    } else {
-      this.discountedAmount -= (this.discountedAmount * discount.value) / 100;
-      this.totalDiscount =
-        Math.round(
-          (this.currentAmount - this.discountedAmount + Number.EPSILON) * 100
-        ) / 100;
-      this.dueAmount = this.discountedAmount;
+
+    const calculateDiscount = (value, type) =>{
+      if(type === 'Flat'){
+        return value;
+      }
+      else{
+        return this.currentAmount.value*value/100;
+      }
     }
+
+    this.discount.valueChanges.subscribe((discount: number) => {
+        const total = calculateDiscount(discount, this.discountType.value);
+        this.totalDiscount.setValue(total);
+        this.discountedAmount.setValue(this.currentAmount.value - total);
+        this.dueAmount.setValue(this.discountedAmount.value - this.paidAmount.value);
+      })
+
+    this.discountType.valueChanges.subscribe((discountType: string) => {
+        const total = calculateDiscount(this.discount.value, discountType);
+        this.totalDiscount.setValue(total);
+        this.discountedAmount.setValue(this.currentAmount.value - total);
+        this.dueAmount.setValue(this.discountedAmount.value - this.paidAmount.value);
+    })
   }
 
   onAddDiscount(e) {
     this.viewDiscountTab = true;
-    this.registerDiscountChanges();
   }
 
   onEditDiscount(e) {
-    if (e.item.value === 'Edit Discount') {
+    if (e.item.value === 'editDiscount') {
       this.editMode = false;
       this.viewDiscountTab = true;
-      this.totalDiscount = 0;
-      this.discountedAmount = this.currentAmount;
-      this.dueAmount = this.currentAmount;
     } else {
       this.resetDiscount();
     }
@@ -338,38 +400,32 @@ export class InvoiceComponent implements OnInit {
       this.viewDiscountTab = false;
     }
     this.editMode = false;
-    this.useForm.patchValue({
-      discountType: '%Off',
-      discount: 0,
-    });
-    this.totalDiscount = 0;
-    this.discountedAmount = this.currentAmount;
-    this.dueAmount = this.currentAmount;
+
+    this.discountType.patchValue('%Off');
+    this.discount.patchValue(0);
+    this.totalDiscount.patchValue(0);
+    this.discountedAmount.patchValue(this.currentAmount.value);
+    this.dueAmount.patchValue(this.currentAmount.value - this.paidAmount.value);
   }
 
   onEditPaid(e) {
     if (e.item.value === 'Edit') {
-      this.paidInput = true;
-      this.registerPaidChanges();
+      this.viewPaidTab = true;
     }
   }
 
   savePaidAmount() {
-    if (this.paidInput) {
-      this.paidInput = false;
+    if (this.viewPaidTab) {
+      this.viewPaidTab = false;
     }
-    const paidValue = +this.useForm.get('paidAmount').value;
+  }
 
-    this.paidAmount += paidValue;
-    this.useForm.patchValue({
-      paid: this.paidAmount,
-      paidAmount: 0,
-    });
-
-    this.dueAmount =
-      Math.round(
-        (this.discountedAmount - this.paidAmount + Number.EPSILON) * 100
-      ) / 100;
+  handlePaidAmount(){
+    this.paid.valueChanges.subscribe((value)=>{
+      const total = +value + this.paidValue.value;
+      this.paidAmount.setValue(total);
+      this.dueAmount.setValue(this.discountedAmount.value - this.paidAmount.value);
+    })
   }
 
   /**

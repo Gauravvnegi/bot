@@ -38,15 +38,6 @@
       <div class="header-seperator"></div>
       <div class="guest_data">
         <div class="guest_data__field">
-          <div class="label" *ngIf="guestData.guestAttributes.overAllNps">
-            {{ guestData.guestAttributes.overAllNps }}/10
-          </div>
-          <div class="label" *ngIf="!guestData.guestAttributes.overAllNps">
-            -
-          </div>
-          <div class="value">Overall NPS</div>
-        </div>
-        <div class="guest_data__field">
           <div class="label">
             {{ guestData.guestAttributes.churnProbalilty }}
           </div>

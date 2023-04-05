@@ -366,7 +366,8 @@
 
   .create-btn {
     flex-basis: 100%;
-    @include flex-justify-center;
+    @include flex-justify-center();
+    gap: 10%;
   }
 }
 

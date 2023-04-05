@@ -1,1 +1,51 @@
-<p>create-tax works!</p>
+<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+</hospitality-bot-navigation-header>
+
+<form class="wrapper" [formGroup]="useForm">
+  <div class="wrapper-header full-width">Tax</div>
+  <div class="half-width">
+    <img src="assets/images/tax.png" alt="tax image" />
+  </div>
+  <div class="half-width">
+    <hospitality-bot-select
+      label="Country"
+      controlName="country"
+      [props]="{ isAsync: true }"
+      [options]="countries"
+      [stopEmission]="true"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      label="Tax Type"
+      controlName="taxType"
+      [options]="taxTypeList"
+      [disabled]="!useForm.get('country').value"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      label="Category"
+      controlName="category"
+      [options]="categoryList"
+      [disabled]="!useForm.get('taxType').value"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      label="Tax%"
+      controlName="taxValue"
+      [options]="taxValueList"
+      [disabled]="!useForm.get('category').value"
+    ></hospitality-bot-select>
+  </div>
+</form>
+
+<div class="footer">
+  <hospitality-bot-button
+    severity="reset"
+    variant="outlined"
+    [label]="'Reset'"
+    (onClick)="handleReset()"
+  >
+  </hospitality-bot-button>
+
+  <hospitality-bot-button
+    [label]="taxId ? 'Update' : 'Create'"
+    (onClick)="handleSubmit()"
+  ></hospitality-bot-button>
+</div>

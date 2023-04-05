@@ -89,10 +89,15 @@
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.taxRate; else emptyCell">
+        <div class="cell-content" *ngIf="rowData.category; else emptyCell">
           <div class="primary-text">
-            {{ rowData.taxRate }}
+            {{ rowData.category }}
           </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.taxRate; else emptyCell">
+          <div class="primary-text">{{ rowData.taxRate }}%</div>
         </div>
       </td>
       <td>

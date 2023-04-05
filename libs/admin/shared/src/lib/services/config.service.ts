@@ -42,4 +42,8 @@ export class ConfigService extends ApiService {
   getColorAndIconConfig(hotelId: string): Observable<any> {
     return this.get(`/api/v1/cms/hotel/${hotelId}/configuration`);
   }
+
+  getCountryCode(): Observable<any> {
+    return this.get('/api/v1/config?key=COUNTRYCODE');
+  }
 }

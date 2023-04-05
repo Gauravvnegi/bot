@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserData, UserService } from '@hospitality-bot/admin/shared';
+import {
+  ConfigService,
+  CountryCode,
+  CountryCodeList,
+  UserData,
+  UserService,
+} from '@hospitality-bot/admin/shared';
 import { Option } from 'libs/admin/shared/src/lib/types/form.type';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { ManageSitesService } from '../../services/manage-sites.service';
@@ -12,16 +18,14 @@ import { ManageSitesService } from '../../services/manage-sites.service';
 })
 export class UserProfileComponent implements OnInit {
   useForm: FormGroup;
-  code: Option[] = [
-    { label: '+91', value: '+91' },
-    { label: '+1', value: '+1' },
-  ];
+  code: Option[] = [];
   userId: string;
   userData: UserData;
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
+    private configService: ConfigService,
     private snackbarService: SnackBarService,
     private manageSitesService: ManageSitesService
   ) {}
@@ -29,6 +33,7 @@ export class UserProfileComponent implements OnInit {
   ngOnInit(): void {
     this.userId = this.userService.getLoggedInUserId();
     this.initForm();
+    this.getCountryCode();
   }
 
   initForm() {
@@ -53,6 +58,15 @@ export class UserProfileComponent implements OnInit {
       });
     }, this.handleError);
   }
+
+  getCountryCode() {
+    this.configService.getCountryCode().subscribe((res) => {
+      const data = new CountryCodeList().deserialize(res);
+      this.code = data.records;
+    });
+  }
+
+
 
   handleSave() {
     if (this.useForm.invalid) {

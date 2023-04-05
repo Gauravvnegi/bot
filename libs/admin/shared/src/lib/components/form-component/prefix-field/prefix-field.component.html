@@ -1,11 +1,13 @@
 <div class="wrapper p-field" [formGroup]="controlContainer.control">
+  <label *ngIf="label" class="label label__static" [for]="controlName">{{
+    label
+  }}</label>
   <div class="main" [id]="postControlName">
     <ng-container [ngSwitch]="preFieldType">
       <hospitality-bot-input
         *ngSwitchCase="'input'"
         class="input pre-input"
         [controlName]="preControlName"
-        [label]="label"
         [props]="getProps('pre')"
         [disabled]="inputDisabled.pre || isDisabled"
       ></hospitality-bot-input>
@@ -13,10 +15,10 @@
         *ngSwitchCase="'select'"
         class="input pre-input"
         [controlName]="preControlName"
-        [label]="label"
         [props]="getProps('pre')"
         [disabled]="inputDisabled.pre || isDisabled"
         [options]="preOptions"
+        [stopEmission]="stopEmission"
       ></hospitality-bot-select>
     </ng-container>
 

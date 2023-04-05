@@ -16,17 +16,12 @@ export const adminTaxRoutes: Route[] = [
       },
       {
         path: taxRoutes.createTax.route,
-        component: MainComponent,
-        children: [
-          {
-            path: '',
-            component: CreateTaxComponent,
-          },
-          {
-            path: ':id',
-            component: CreateTaxComponent,
-          },
-        ],
+        component: CreateTaxComponent,
+      },
+
+      {
+        path: `${taxRoutes.editTax.route}/:id`,
+        component: CreateTaxComponent,
       },
     ],
   },

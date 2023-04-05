@@ -2,11 +2,6 @@
 </hospitality-bot-navigation-header>
 
 <form class="form-block" [formGroup]="templateForm">
-  <hospitality-bot-input
-    class="half-width"
-    controlName="name"
-    label="Name"
-  ></hospitality-bot-input>
   <div class="shared-field full-width" *ngIf="!isDisabled">
     <div>
       <mat-label>{{ 'sharedTemplates' | translate }}</mat-label>

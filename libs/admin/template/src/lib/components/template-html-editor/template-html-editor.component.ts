@@ -59,7 +59,6 @@ export class TemplateHtmlEditorComponent extends EditTemplateComponent {
       this.activatedRoute.parent.params.subscribe((params) => {
         if (params['id']) {
           this.templateId = params['id'];
-          this.pageTitle = 'Edit Template';
           this.navRoutes[2].label = 'Edit Template';
         } else if (this.id) {
           this.templateId = this.id;
@@ -74,6 +73,7 @@ export class TemplateHtmlEditorComponent extends EditTemplateComponent {
       this.templateService.templateFormData.subscribe((response) => {
         if (response.name) {
           this.templateForm?.patchValue(response);
+          this.pageTitle = this.templateForm?.get('name').value;
         } else {
           this._router.navigate(['/pages/library/template/create']);
         }

@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   AdminUtilityService,
   CountryCode,
+  NavRouteOptions,
   Regex,
   UserService,
 } from '@hospitality-bot/admin/shared';
@@ -60,6 +61,9 @@ export class UserProfileComponent implements OnInit {
   adminPermissions: Permission[];
   userPermissions: Permission[];
 
+  pageTitle: string;
+  navRoutes: NavRouteOptions = [];
+
   constructor(
     private _fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -69,8 +73,7 @@ export class UserProfileComponent implements OnInit {
     private _managePermissionService: ManagePermissionService,
     private snackbarService: SnackBarService,
     private _route: ActivatedRoute,
-    private _location: Location,
-    private _router: Router
+    private _location: Location
   ) {
     this.initUserForm();
   }
@@ -132,6 +135,16 @@ export class UserProfileComponent implements OnInit {
             products: products.map((item) => item.value),
             departments: departments.map((item) => item.department),
           });
+          this.pageTitle = 'User Profile';
+          this.navRoutes = [
+            {
+              label:
+                this.userForm.get('firstName')?.value +
+                ' ' +
+                (this.userForm.get('lastName')?.value ?? ''),
+              link: './',
+            },
+          ];
           this.userForm.disable();
           this.initAfterFormLoaded();
           break;
@@ -146,6 +159,14 @@ export class UserProfileComponent implements OnInit {
             id: '',
           });
           this.userForm.enable();
+          this.navRoutes = [
+            {
+              label: 'User Profile',
+              link: './',
+            },
+            { label: 'Add User', link: './' },
+          ];
+          this.pageTitle = 'Add New User';
           break;
 
         case 'edit':
@@ -158,6 +179,21 @@ export class UserProfileComponent implements OnInit {
           });
           this.userForm.enable();
           this.initAfterFormLoaded();
+          this.navRoutes = [
+            {
+              label: 'User Profile',
+              link: './',
+            },
+            {
+              label:
+                'Edit ' +
+                this.userForm.get('firstName')?.value +
+                ' ' +
+                (this.userForm.get('lastName')?.value ?? ''),
+              link: './',
+            },
+          ];
+          this.pageTitle = 'Edit User';
           break;
         default:
           break;
@@ -435,6 +471,7 @@ export class UserProfileComponent implements OnInit {
   savePermission() {
     if (!this.userForm.valid) {
       this.snackbarService.openSnackBarAsText('Invalid Form');
+      this.userForm.markAllAsTouched();
       return;
     }
     const formValue = this.userForm.getRawValue();

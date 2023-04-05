@@ -51,12 +51,11 @@
         [listItems]="tabFilterItems"
         (selectedTabChange)="onSelectedTabFilterChange($event)"
       ></hospitality-bot-tab-group>
-
-      <hospitality-bot-filter-chips
+      <!-- <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
-      ></hospitality-bot-filter-chips>
+      ></hospitality-bot-filter-chips> -->
     </div>
   </ng-template>
 
@@ -117,7 +116,7 @@
       <td>
         <div class="center-align">
           <div class="primary-text">
-            {{ rowData.date }}
+            {{ rowData.from | date: 'dd/MM/yyyy' }}
           </div>
         </div>
       </td>
@@ -151,11 +150,11 @@
       </td>
 
       <td>
-        <div class="" *ngIf="rowData.status; else emptyCell">
+        <div class="" *ngIf="rowData.reservationType; else emptyCell">
           <hospitality-bot-toggle-dropdown
             [listItem]="statusValues"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.status"
+            [status]="rowData.reservationType"
           >
           </hospitality-bot-toggle-dropdown>
         </div>

@@ -21,7 +21,6 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
   topicFG: FormGroup;
   templateTopicList = [];
 
-  pageTitle = 'Create Template';
   navRoutes: NavRouteOptions = [
     { label: 'Library', link: './' },
     { label: 'Template', link: '/pages/library/template' },
@@ -95,11 +94,12 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
     this.navRoutes[2].link = '/pages/library/template/create';
     this.navRoutes.push({ label: this.templateLabel, link: './' });
 
+    this.pageTitle = this.templateLabel;
+
     this.$subscription.add(
       this.activatedRoute.parent.params.subscribe((params) => {
         if (params['id']) {
           this.templateId = params['id'];
-          this.pageTitle = 'Edit Template';
           this.navRoutes[2].label = 'Edit Template';
           this.navRoutes[2].link = '/pages/library/template/edit';
         } else if (this.id) {

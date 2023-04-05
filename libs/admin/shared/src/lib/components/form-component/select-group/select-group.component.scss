@@ -4,15 +4,14 @@
   display: flex;
   gap: 1em;
   width: 100%;
-  margin: top;
-
+  flex-wrap: wrap;
   &__static {
     margin-top: $label-gap;
   }
 }
 
 .option-btn {
-  flex-basis: 100%;
+  flex-basis: 22%;
   height: $form-input-height;
   padding: 0.9em;
   display: flex;

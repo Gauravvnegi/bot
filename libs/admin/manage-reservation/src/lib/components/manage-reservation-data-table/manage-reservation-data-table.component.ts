@@ -130,7 +130,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           (res) => {
             this.values.find(
               (item) => item.id === reservationData.id
-            ).status = status;
+            ).reservationType = status;
             this.snackbarService.openSnackBarAsText(
               'Booking ' + status + ' changes successfully',
               '',

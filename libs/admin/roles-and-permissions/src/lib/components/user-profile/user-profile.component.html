@@ -1,79 +1,60 @@
-<form class="wrapper" [formGroup]="userForm">
-  <header class="header full-width">
-    <div class="back">
-      <mat-icon (click)="goBack()" matSuffix>keyboard_backspace</mat-icon>
-      <p class="label" *ngIf="hasPageState('view', 'edit')">
-        {{ pageState.value }}
-        {{ userForm.get('firstName').value }}
-        {{ userForm.get('lastName').value }} Details
-      </p>
-      <p class="label" *ngIf="hasPageState('add')">
-        Add New User
-      </p>
-    </div>
-    <div class="edit-wrapper" *ngIf="hasPageState('edit', 'add')">
-      <div class="manage-box">
-        <p>
-          Manage By : {{ managedBy.firstName }} {{ managedBy.lastName }},
-          {{ managedBy.jobTitle }}
-        </p>
-      </div>
-    </div>
-  </header>
+<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+</hospitality-bot-navigation-header>
 
-  <div class="one-width">First Name :</div>
+<form class="wrapper" [formGroup]="userForm">
   <hospitality-bot-input
     class="third-width"
     controlName="firstName"
+    label="First Name :"
   ></hospitality-bot-input>
 
-  <div class="one-width">Last Name :</div>
   <hospitality-bot-input
     class="third-width"
     controlName="lastName"
+    label="Last Name :"
   ></hospitality-bot-input>
 
-  <div class="one-width">Product Type :</div>
   <hospitality-bot-multi-select
     class="third-width"
     controlName="products"
     [options]="products"
+    label="Product Type :"
   ></hospitality-bot-multi-select>
 
-  <div class="one-width">Dept :</div>
   <hospitality-bot-multi-select
-    class="third-width"
+    class="full-width"
     controlName="departments"
     [options]="departments"
+    label="Dept :"
   ></hospitality-bot-multi-select>
 
-  <div class="one-width">Job Title :</div>
   <hospitality-bot-input
     class="third-width"
     controlName="jobTitle"
+    label="Job Title :"
   ></hospitality-bot-input>
 
-  <div class="one-width">Hotel :</div>
   <hospitality-bot-select
     class="third-width"
     controlName="branchName"
     [options]="branchNames"
+    label="Hotel :"
   ></hospitality-bot-select>
 
-  <div class="one-width">Phone# :</div>
   <hospitality-bot-prefix-field
     class="third-width phoneNo"
     [options]="countries"
     preControlName="cc"
     postControlName="phoneNumber"
     [defaultProps]="{ post: { type: 'string' } }"
+    label="Phone# :"
   ></hospitality-bot-prefix-field>
 
-  <div class="one-width">Brand :</div>
   <hospitality-bot-select
     class="third-width"
     controlName="brandName"
     [options]="brandNames"
+    label="Brand :"
   ></hospitality-bot-select>
 
   <ng-container *ngIf="hasPageState('view') && !!totalTeamMember">
@@ -107,10 +88,10 @@
     View All Users
   </div>
 
-  <div class="one-width">Email ID :</div>
   <hospitality-bot-input
     class="third-width"
     controlName="email"
+    label="Email ID :"
   ></hospitality-bot-input>
 
   <!-- ****************Permission Wrapper**************** -->

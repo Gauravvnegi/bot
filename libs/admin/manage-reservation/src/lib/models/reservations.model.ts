@@ -25,6 +25,8 @@ export class Reservation {
   paymentMethod: string;
   totalPaidAmount: number;
   roomCount: number;
+  reservationType: string;
+  from: number;
 
   deserialize(input: ReservationResponse) {
     this.id = input.id;
@@ -47,6 +49,8 @@ export class Reservation {
     this.paymentMethod = input?.paymentMethod;
     this.totalPaidAmount = input?.totalPaidAmount;
     this.roomCount = input?.roomCount;
+    this.reservationType = input?.reservationType;
+    this.from = input?.from;
     return this;
   }
 }
@@ -258,6 +262,7 @@ export class PaymentMethod {
 }
 
 export class SummaryData {
+  originalPrice: number;
   basePrice: number;
   id: string;
   location: string;
@@ -265,15 +270,22 @@ export class SummaryData {
   roomTypeName: string;
   taxAndFees: number;
   totalAmount: number;
+  adultCount: number;
+  childCount: number;
+  roomCount: number;
 
   deserialize(input): this {
     this.id = input?.id;
     this.location = input?.location;
     this.offerAmount = input?.offerAmount;
     this.roomTypeName = input?.roomTypeName;
+    this.originalPrice = input?.originalPrice;
     this.basePrice = input?.basePrice;
     this.taxAndFees = input?.taxAndFees;
     this.totalAmount = input?.totalAmount;
+    this.adultCount = input?.adultCount;
+    this.childCount = input?.childCount;
+    this.roomCount = input?.roomCount;
     return this;
   }
 }

@@ -40,7 +40,6 @@ export const Reservation = {
   reservationTypes: [
     { label: 'Draft', value: 'DRAFT' },
     { label: 'Confirmed', value: 'CONFIRMED' },
-    { label: 'Cancelled', value: 'CANCELED' },
   ],
 
   bookingSources: [

@@ -7,7 +7,7 @@
     flex-basis: 10%;
   }
   .third-width {
-    flex-basis: 19%;
+    flex-basis: 32%;
   }
   .one-half-width {
     flex-basis: 1%;
@@ -17,19 +17,6 @@
   }
   .header {
     @include flex-space-between-cen-Algn;
-    .back {
-      @include flex-item-center;
-      mat-icon {
-        margin-right: 15px;
-        cursor: pointer;
-      }
-      .label {
-        letter-spacing: 0.96px;
-        font-weight: $bold;
-        font-size: 16px;
-        text-transform: capitalize;
-      }
-    }
     .edit-wrapper {
       @include flex-item-center;
       .manage-box {
@@ -159,7 +146,7 @@
       text-overflow: unset;
     }
     .post-input {
-      flex-basis: 56%;
+      flex-basis: 64%;
     }
     .pre-input {
       max-width: 37%;
@@ -202,7 +189,7 @@
 
 .member {
   @include flex-space-between-cen-Algn;
-  width: 70px;
+  width: 80px;
   flex-direction: row-reverse;
   position: relative;
   .member-name {
@@ -211,6 +198,9 @@
     top: -32px;
     padding: 14px;
     border-radius: 50%;
+    width: 60px;
+    text-align: center;
+    text-transform: uppercase;
     border: solid 4px #fff;
     background-color: #f04949;
     color: #fff;

@@ -30,7 +30,7 @@ export class SelectGroupComponent extends FormComponent implements OnInit {
     this.inputControl.valueChanges.subscribe((res) => {
       this.defaultOptions = this.menuOptions.map((item) => ({
         ...item,
-        isSelected: !!res.includes(item.value),
+        isSelected: res.includes(item.value),
       }));
     });
   }

@@ -9,12 +9,14 @@
             class="half-width"
             controlName="from"
             label="Check In- Date"
+            [settings]="{ enableTime: false }"
             [minDate]="startMinDate"
           ></hospitality-bot-date>
           <hospitality-bot-date
             class="half-width"
             controlName="to"
             label="Check Out- Date"
+            [settings]="{ enableTime: false }"
             [minDate]="endMinDate"
           ></hospitality-bot-date>
           <hospitality-bot-select
@@ -109,7 +111,7 @@
       <p-accordionTab header="Payment Method">
         <div class="form-block" formGroupName="paymentMethod">
           <hospitality-bot-select-group
-            class="payment"
+            class="full-width"
             controlName="paymentMethod"
             [options]="paymentOptions"
           ></hospitality-bot-select-group>
@@ -147,6 +149,7 @@
                 userForm.get('bookingInformation.from').value
                   | date: 'mediumDate'
               }}
+              -
               {{
                 userForm.get('bookingInformation.to').value | date: 'mediumDate'
               }}
@@ -193,11 +196,8 @@
             <span class="bk-summary_priceInfo_perNight_label">Per Night</span>
             <s
               class="bk-summary_priceInfo_perNight_amount"
-              *ngIf="summaryData?.offerAmount"
-              >{{
-                summaryData?.basePrice + summaryData?.offerAmount
-                  | currency: 'INR'
-              }}</s
+              *ngIf="summaryData?.originalPrice"
+              >{{ summaryData?.originalPrice | currency: 'INR' }}</s
             >
           </p>
           <p class="bk-summary_priceInfo_person">
@@ -231,6 +231,16 @@
               >+{{ summaryData?.taxAndFees | currency: 'INR' }}</span
             >
           </p>
+          <p
+            class="bk-summary_priceInfo_perNight"
+            *ngIf="userForm.get('paymentMethod.totalPaidAmount').value"
+          >
+            <span class="bk-summary_priceInfo_perNight_label">Paid Amount</span>
+            <span class="bk-summary_priceInfo_perNight_amount">{{
+              userForm.get('paymentMethod.totalPaidAmount').value
+                | currency: 'INR'
+            }}</span>
+          </p>
         </div>
         <p class="divider"></p>
         <div class="bk-summary_total">
@@ -239,13 +249,7 @@
             {{ summaryData?.totalAmount | currency: 'INR' }}
           </p>
         </div>
-        <div
-          class="bk-summary_btnwrapper"
-          *ngIf="
-            !reservationId ||
-            userForm.get('bookingInformation.reservationType').value === 'DRAFT'
-          "
-        >
+        <div class="bk-summary_btnwrapper">
           <hospitality-bot-button
             (click)="HandleBooking()"
             label="Confirm Booking"

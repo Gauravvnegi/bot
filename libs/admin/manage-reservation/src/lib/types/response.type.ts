@@ -28,4 +28,6 @@ export type ReservationResponse = {
   paymentMethod: string;
   totalPaidAmount: number;
   roomCount: number;
+  reservationType: string;
+  from: number;
 };

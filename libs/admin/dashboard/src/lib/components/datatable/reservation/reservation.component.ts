@@ -394,23 +394,25 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         // remove loader for detail close
-        this.loadInitialData(
-          [
-            ...this.globalQueries,
+        if (res) {
+          this.loadInitialData(
+            [
+              ...this.globalQueries,
+              {
+                order: sharedConfig.defaultOrder,
+                entityType: this.tabFilterItems[this.tabFilterIdx].value,
+              },
+              ...this.getSelectedQuickReplyFilters(),
+            ],
+            false,
             {
-              order: sharedConfig.defaultOrder,
-              entityType: this.tabFilterItems[this.tabFilterIdx].value,
-            },
-            ...this.getSelectedQuickReplyFilters(),
-          ],
-          false,
-          {
-            offset: this.tempFirst,
-            limit: this.tempRowsPerPage
-              ? this.tempRowsPerPage
-              : this.rowsPerPage,
-          }
-        );
+              offset: this.tempFirst,
+              limit: this.tempRowsPerPage
+                ? this.tempRowsPerPage
+                : this.rowsPerPage,
+            }
+          );
+        }
         detailCompRef.close();
       })
     );

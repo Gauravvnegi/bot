@@ -24,6 +24,7 @@ export type OfferResponse = {
   discountValue: number;
   discountedPrice: number;
   subPackages: any[];
+  roomTypes: any[];
 };
 
 export type SearchResult = {

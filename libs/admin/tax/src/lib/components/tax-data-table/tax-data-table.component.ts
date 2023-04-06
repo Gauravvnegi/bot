@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -37,6 +38,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   tabFilterIdx = 1;
   globalQueries = [];
   $subscription = new Subscription();
+  navRoutes: NavRouteOptions;
 
   constructor(
     public fb: FormBuilder,
@@ -48,6 +50,8 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     protected tabFilterService: TableService
   ) {
     super(fb, tabFilterService);
+    const { navRoutes } = taxRoutes['tax'];
+    this.navRoutes = navRoutes;
   }
 
   ngOnInit(): void {

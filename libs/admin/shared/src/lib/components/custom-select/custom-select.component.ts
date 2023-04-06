@@ -1,25 +1,30 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import * as _ from 'lodash';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Optional,
+  Output,
+  Self,
+} from '@angular/core';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  NgControl,
+} from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-custom-select',
   templateUrl: './custom-select.component.html',
   styleUrls: ['./custom-select.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: CustomSelectComponent,
-      multi: true,
-    },
-  ],
 })
-export class CustomSelectComponent implements ControlValueAccessor {
+export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   options: Record<string, any>[] = [];
   value: string[] = [];
 
   @Input() label: string;
   @Input() description: string;
+  @Input() validationErrMsg: string = 'This is required field.';
 
   @Input() optionValue: string = 'id';
   @Input() optionLabel: string = 'name';
@@ -43,7 +48,13 @@ export class CustomSelectComponent implements ControlValueAccessor {
   @Input() emptyMessage = 'No Data Available';
   @Input() noRecordsAction: { name: string; link: string };
 
-  constructor() {}
+  constructor(@Self() @Optional() public control: NgControl) {
+    if (this.control) this.control.valueAccessor = this;
+  }
+
+  ngOnInit(): void {
+    this.addRequiredAsterisk();
+  }
 
   onChange = (value: any[]) => {};
   onTouched = () => {};
@@ -80,6 +91,15 @@ export class CustomSelectComponent implements ControlValueAccessor {
     }
     valueItem.checked = !valueItem.checked;
     this.onChange(this.value);
+  }
+
+  addRequiredAsterisk() {
+    const validators = this.control.control?.validator;
+    const isRequired =
+      validators && validators({} as AbstractControl)?.required;
+    if (this.label && isRequired) {
+      this.label = this.label + ' *';
+    }
   }
 
   loadMore() {

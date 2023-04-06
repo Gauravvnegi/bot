@@ -77,15 +77,12 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="row-display" *ngIf="rowData.name; else emptyCell">
-          <div class="image-icon">
-            <img
-              [src]="rowData.imageUrl ? rowData.imageUrl : null"
-              [alt]="rowData.name"
-            />
-          </div>
+        <div class="cell-content" *ngIf="rowData.name; else emptyCell">
           <div class="primary-text">
             <div>{{ rowData.name }}</div>
+          </div>
+          <div class="secondary-text">
+            {{ rowData?.appliedOn.join(',') }}
           </div>
         </div>
       </td>

@@ -6,7 +6,7 @@ export type Option = {
   label: string;
   value: string;
   inactive?: boolean;
-  icon ?: string;
+  icon?: string;
 } & Record<string, any>;
 
 export type FormProps = {
@@ -23,6 +23,7 @@ export type FormProps = {
   additionalInfo?: string;
   addNewPrompt?: string;
   subtitle?: string;
+  isAutoFocusFilter?: boolean;
 };
 
 export type ButtonVariant = 'text' | 'contained' | 'outlined';

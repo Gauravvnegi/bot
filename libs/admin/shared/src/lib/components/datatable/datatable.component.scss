@@ -746,6 +746,14 @@ $table-hover-color: #f3f3f3;
         font-size: 12px;
         letter-spacing: 0.72px;
         color: $arrival-time;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:hover {
+          overflow: visible;
+          text-overflow: unset;
+          white-space: normal;
+        }
       }
 
       .hide-text-overflow {

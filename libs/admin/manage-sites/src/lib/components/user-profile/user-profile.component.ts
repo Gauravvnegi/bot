@@ -65,9 +65,6 @@ export class UserProfileComponent implements OnInit {
       this.code = data.records;
     });
   }
-
-
-
   handleSave() {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();

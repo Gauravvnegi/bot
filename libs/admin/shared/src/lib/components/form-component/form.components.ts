@@ -32,6 +32,8 @@ export class FormComponent implements OnInit {
   additionalInfo: string = ''; // Info icon text
   subtitle = ''; // subtitle text
   createPrompt: string; // To add cta in dropdown
+  isAutoFocusFilter: boolean = false; // To focus on search input
+
   @Output() onCreate = new EventEmitter(); // createPrompt on click emitter
 
   /* Main Props */
@@ -124,6 +126,7 @@ export class FormComponent implements OnInit {
       additionalInfo: this.additionalInfo,
       type: this.type,
       subtitle: this.subtitle,
+      isAutoFocusFilter: this.isAutoFocusFilter,
     };
   }
 

@@ -4,7 +4,7 @@ import { Cols } from '@hospitality-bot/admin/shared';
 export const cols: Cols[] = [
   {
     field: 'name',
-    header: 'Name',
+    header: 'Name/Applied on',
     isSort: true,
     sortType: 'string',
     dynamicWidth: true,

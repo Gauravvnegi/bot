@@ -14,6 +14,7 @@ export class Offer {
   status: boolean;
   discountValue: number;
   discountType: string;
+  appliedOn: string[] = [];
 
   deserialize(input: OfferResponse) {
     this.id = input.id;
@@ -27,6 +28,12 @@ export class Offer {
     this.status = input.active;
     this.discountType = input.discountType;
     this.discountValue = input.discountValue;
+    if (input.subPackages) {
+      input.subPackages?.forEach((item) => this.appliedOn.push(item.name));
+    }
+    if (input.roomTypes) {
+      input.roomTypes?.forEach((item) => this.appliedOn.push(item.name));
+    }
     return this;
   }
 

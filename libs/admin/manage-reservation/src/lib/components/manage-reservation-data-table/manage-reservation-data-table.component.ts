@@ -7,11 +7,11 @@ import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
+  ConfigService,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
-import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import {
   chips,
@@ -24,12 +24,12 @@ import {
   title,
 } from '../../constants/reservation-table';
 import { manageReservationRoutes } from '../../constants/routes';
-import { ReservationList } from '../../models/reservations.model';
-import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
-  ReservationListResponse,
-  ReservationResponse,
-} from '../../types/response.type';
+  BookingConfig,
+  ReservationList,
+} from '../../models/reservations.model';
+import { ManageReservationService } from '../../services/manage-reservation.service';
+import { ReservationListResponse } from '../../types/response.type';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -44,7 +44,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   hotelId!: string;
   tabFilterItems = filters;
   statusValues = reservationStatus;
-  selectedTable: ReservationTableValue;
+  selectedTable;
   tableName = title;
   filterChips = chips;
   cols = cols;
@@ -52,6 +52,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   reservationLists!: ReservationList;
   $subscription = new Subscription();
   globalQueries = [];
+  configData: BookingConfig;
 
   constructor(
     public fb: FormBuilder,
@@ -60,14 +61,37 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
-    private router: Router
+    private router: Router,
+    private configService: ConfigService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
+    this.getConfigData();
     this.listenForGlobalFilters();
+  }
+
+  getConfigData(): void {
+    this.configService
+      .getColorAndIconConfig(this.hotelId)
+      .subscribe((response) => {
+        this.configData = new BookingConfig().deserialize(
+          response.bookingConfig
+        );
+
+        const data = this.configData.source.map((item) => {
+          return {
+            ...item,
+            content: '',
+            disabled: false,
+            total: 0,
+          };
+        });
+
+        this.tabFilterItems = [...this.tabFilterItems, ...data];
+      });
   }
 
   /**
@@ -90,14 +114,14 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   listenToTableChange() {
     this.manageReservationService.selectedTable.subscribe((value) => {
       this.selectedTable = value;
-      this.initTableValue();
+      this.loadData();
     });
   }
 
   /**
    * @function initTableValue initializing data into value of table
    */
-  initTableValue() {
+  loadData() {
     this.loading = true;
     this.manageReservationService
       .getReservationItems<ReservationListResponse>(this.getQueryConfig())
@@ -190,22 +214,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.selectedTable = this.tabFilterItems[event.index].value;
-    this.manageReservationService
-      .getReservationItemsByCategory<ReservationListResponse>(
-        this.getQueryConfig()
-      )
-      .subscribe(
-        (res) => {
-          this.reservationLists = new ReservationList().deserialize(res);
-          this.values = this.reservationLists.reservationData;
-          this.totalRecords = this.reservationLists.total;
-          this.filterChips.forEach((item) => {
-            item.total = this.reservationLists.entityStateCounts[item.value];
-          });
-        },
-        this.handleError,
-        this.handleFinal
-      );
+    this.loadData();
   }
 
   /**

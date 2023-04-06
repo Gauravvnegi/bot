@@ -30,4 +30,6 @@ export type ReservationResponse = {
   roomCount: number;
   reservationType: string;
   from: number;
+  totalAmount: number;
+  fullName: string;
 };

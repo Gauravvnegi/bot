@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
 import {
   AdminUtilityService,
   ConfigService,
-  CountryCode,
   CountryCodeList,
   NavRouteOptions,
   Option,
@@ -20,6 +19,7 @@ import {
 } from '../../constants/reservation';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
+  BookingConfig,
   OfferData,
   OfferList,
   PaymentMethodList,
@@ -29,6 +29,7 @@ import {
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ReservationFormData } from '../../models/reservations.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -37,11 +38,12 @@ import { ReservationFormData } from '../../models/reservations.model';
 })
 export class AddReservationComponent implements OnInit {
   userForm: FormGroup;
-  userFormArray: FormArray;
   hotelId: string;
   reservationId: string;
   roomTypes: RoomFieldTypeOption[] = [];
   paymentOptions: Option[] = [];
+  currencies: Option[] = [];
+  reservationTypes: Option[] = [];
   offersList: OfferList;
   selectedOffer: OfferData;
   globalQueries = [];
@@ -49,15 +51,13 @@ export class AddReservationComponent implements OnInit {
   roomTypeLimit = 50;
   countries;
   summaryData: SummaryData;
+  configData: BookingConfig;
   roomFields = roomFields;
-  reservationTypes = Reservation.reservationTypes;
-  bookingSources = Reservation.bookingSources;
-  marketSegments = Reservation.marketSegments;
 
   displayBookingOffer: boolean = false;
   formValueChanges = false;
   startMinDate = new Date();
-  endMinDate = new Date(Date.now() - 1000 * 60);
+  endMinDate = new Date();
 
   pageTitle = 'Add Booking';
   routes: NavRouteOptions = [
@@ -77,6 +77,8 @@ export class AddReservationComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     private configService: ConfigService
   ) {
+    this.endMinDate.setDate(this.startMinDate.getDate() + 1);
+    this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
     this.initForm();
   }
 
@@ -90,21 +92,21 @@ export class AddReservationComponent implements OnInit {
    * @function initForm Initialize form
    */
   initForm(): void {
-    this.userFormArray = this.fb.array([]);
+    const startTime = moment(this.startMinDate).unix() * 1000;
+    const endTime = moment(this.endMinDate).unix() * 1000;
 
     this.userForm = this.fb.group({
       bookingInformation: this.fb.group({
-        from: ['', Validators.required],
-        to: ['', Validators.required],
+        from: [startTime, Validators.required],
+        to: [endTime, Validators.required],
         reservationType: ['', Validators.required],
         source: ['', Validators.required],
         sourceName: ['', [Validators.required, Validators.maxLength(60)]],
         marketSegment: ['', Validators.required],
       }),
-      roomInformation: this.userFormArray,
       guestInformation: this.fb.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
+        firstName: ['', [Validators.required, Validators.maxLength(60)]],
+        lastName: ['', [Validators.required, Validators.maxLength(60)]],
         email: [
           '',
           [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)],
@@ -116,14 +118,18 @@ export class AddReservationComponent implements OnInit {
         ],
       }),
       address: this.fb.group({
-        addressLine1: ['', [Validators.required, Validators.maxLength(60)]],
-        city: ['', [Validators.required, Validators.maxLength(60)]],
-        countryCode: ['', [Validators.required, Validators.maxLength(60)]],
-        state: ['', [Validators.required, Validators.maxLength(60)]],
-        postalCode: ['', [Validators.required, Validators.maxLength(60)]],
+        addressLine1: ['', [Validators.required]],
+        city: ['', [Validators.required]],
+        countryCode: ['', [Validators.required]],
+        state: ['', [Validators.required]],
+        postalCode: ['', [Validators.required]],
       }),
       paymentMethod: this.fb.group({
-        totalPaidAmount: ['', [Validators.pattern(Regex.NUMBER_REGEX)]],
+        totalPaidAmount: [
+          '',
+          [Validators.required, Validators.pattern(Regex.NUMBER_REGEX)],
+        ],
+        currency: ['INR'],
         paymentMethod: ['', Validators.required],
         paymentRemark: ['', [Validators.maxLength(60)]],
       }),
@@ -132,9 +138,25 @@ export class AddReservationComponent implements OnInit {
   }
 
   getCountryCode() {
+    this.configService
+      .getColorAndIconConfig(this.hotelId)
+      .subscribe((response) => {
+        this.configData = new BookingConfig().deserialize(
+          response.bookingConfig
+        );
+      });
     this.configService.getCountryCode().subscribe((res) => {
       const data = new CountryCodeList().deserialize(res);
       this.countries = data.records;
+    });
+    this.configService.$config.subscribe((value) => {
+      if (value) {
+        const { currencyConfiguration } = value;
+        this.currencies = currencyConfiguration.map(({ key, value }) => ({
+          label: key,
+          value,
+        }));
+      }
     });
   }
 
@@ -158,15 +180,7 @@ export class AddReservationComponent implements OnInit {
    */
   listenForFormChanges(): void {
     this.userForm
-      .get('bookingInformation.from')
-      .valueChanges.subscribe((res) => {
-        const date = new Date(res);
-        this.endMinDate = new Date(res - 1000 * 60);
-        this.endMinDate.setDate(date.getDate() + 1);
-      });
-    this.userForm
-      .get('roomInformation.0')
-      ?.get('roomTypeId')
+      .get('roomInformation.roomTypeId')
       ?.valueChanges.subscribe((res) => {
         if (res) {
           this.userForm.get('offerId').reset();
@@ -175,32 +189,30 @@ export class AddReservationComponent implements OnInit {
         }
       });
     this.userForm
-      .get('roomInformation.0.adultCount')
+      .get('roomInformation.adultCount')
       ?.valueChanges.subscribe((res) => {
         if (res) {
           this.getSummaryData();
         }
       });
     this.userForm
-      .get('roomInformation.0.childCount')
+      .get('roomInformation.childCount')
       ?.valueChanges.subscribe((res) => {
         if (res) {
           this.getSummaryData();
         }
       });
     this.userForm
-      .get('roomInformation.0.roomCount')
+      .get('roomInformation.roomCount')
       ?.valueChanges.subscribe((res) => {
         if (res) {
           if (
-            this.userForm.get('roomInformation.0.roomCount').value >
-            this.userForm.get('roomInformation.0.adultCount').value
+            this.userForm.get('roomInformation.roomCount').value >
+            this.userForm.get('roomInformation.adultCount').value
           )
             this.userForm
-              .get('roomInformation.0.adultCount')
-              .patchValue(
-                this.userForm.get('roomInformation.0.roomCount').value
-              );
+              .get('roomInformation.adultCount')
+              .patchValue(this.userForm.get('roomInformation.roomCount').value);
           this.getSummaryData();
         }
       });
@@ -250,7 +262,11 @@ export class AddReservationComponent implements OnInit {
           this.reservationId = params['id'];
           this.pageTitle = 'Edit Booking';
           this.routes[2].label = 'Edit Booking';
-          this.reservationTypes.push({ label: 'Cancelled', value: 'CANCELED' });
+          this.reservationTypes = [
+            { label: 'Draft', value: 'DRAFT' },
+            { label: 'Confirmed', value: 'CONFIRMED' },
+            { label: 'Cancelled', value: 'CANCELED' },
+          ];
           this.getReservationDetails();
           this.userForm.valueChanges.subscribe((_) => {
             if (!this.formValueChanges) {
@@ -259,12 +275,16 @@ export class AddReservationComponent implements OnInit {
             }
           });
         } else
-          this.userForm.valueChanges.subscribe((_) => {
-            if (!this.formValueChanges) {
-              this.formValueChanges = true;
-              this.listenForFormChanges();
-            }
-          });
+          this.reservationTypes = [
+            { label: 'Draft', value: 'DRAFT' },
+            { label: 'Confirmed', value: 'CONFIRMED' },
+          ];
+        this.userForm.valueChanges.subscribe((_) => {
+          if (!this.formValueChanges) {
+            this.formValueChanges = true;
+            this.listenForFormChanges();
+          }
+        });
       })
     );
   }
@@ -288,6 +308,11 @@ export class AddReservationComponent implements OnInit {
           .getOfferByRoomType(this.hotelId, id)
           .subscribe((response) => {
             this.offersList = new OfferList().deserialize(response);
+            if (this.userForm.get('offerId').value) {
+              this.selectedOffer = this.offersList.records.filter(
+                (item) => item.id === this.userForm.get('offerId').value
+              )[0];
+            }
           }, this.handleError)
       );
   }
@@ -310,12 +335,10 @@ export class AddReservationComponent implements OnInit {
         type: 'ROOM_TYPE',
         fromDate: this.userForm.get('bookingInformation.from')?.value,
         toDate: this.userForm.get('bookingInformation.to')?.value,
-        adultCount:
-          this.userForm.get('roomInformation.0.adultCount')?.value || 1,
-        roomCount: this.userForm.get('roomInformation.0.roomCount')?.value || 1,
-        childCount:
-          this.userForm.get('roomInformation.0.childCount')?.value || 0,
-        roomType: this.userForm.get('roomInformation.0.roomTypeId')?.value,
+        adultCount: this.userForm.get('roomInformation.adultCount')?.value || 1,
+        roomCount: this.userForm.get('roomInformation.roomCount')?.value || 1,
+        childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
+        roomType: this.userForm.get('roomInformation.roomTypeId')?.value,
         offerId: this.userForm.get('offerId')?.value,
         entityId: this.hotelId,
       },
@@ -323,14 +346,14 @@ export class AddReservationComponent implements OnInit {
     const config = {
       params: this.adminUtilityService.makeQueryParams(defaultProps),
     };
-    if (this.userForm.get('roomInformation.0.roomTypeId')?.value)
+    if (this.userForm.get('roomInformation.roomTypeId')?.value)
       this.$subscription.add(
         this.manageReservationService
           .getSummaryData(config)
           .subscribe((res) => {
             this.summaryData = new SummaryData().deserialize(res);
             this.userForm
-              .get('roomInformation.0')
+              .get('roomInformation')
               .patchValue(this.summaryData, { emitEvent: false });
           }, this.handleError)
       );
@@ -349,11 +372,8 @@ export class AddReservationComponent implements OnInit {
       this.manageReservationService
         .createReservation(this.hotelId, data)
         .subscribe((_) => {
-          this.snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: `Reservation created Successfully.`,
-              priorityMessage: 'Reservation created Successfully.',
-            },
+          this.snackbarService.openSnackBarAsText(
+            'Reservation created Successfully.',
             '',
             { panelClass: 'success' }
           );
@@ -367,11 +387,8 @@ export class AddReservationComponent implements OnInit {
       this.manageReservationService
         .updateReservation(this.hotelId, this.reservationId, data)
         .subscribe((_) => {
-          this.snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: `Reservation updated Successfully.`,
-              priorityMessage: 'Reservation updated Successfully.',
-            },
+          this.snackbarService.openSnackBarAsText(
+            'Reservation updated Successfully.',
             '',
             { panelClass: 'success' }
           );

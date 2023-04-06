@@ -3,6 +3,7 @@ import {
   ReservationListResponse,
   ReservationResponse,
 } from '../types/response.type';
+import { Option } from '@hospitality-bot/admin/shared';
 /* Reservation */
 export class Reservation {
   id: string;
@@ -27,6 +28,8 @@ export class Reservation {
   roomCount: number;
   reservationType: string;
   from: number;
+  totalAmount: number;
+  fullName: string;
 
   deserialize(input: ReservationResponse) {
     this.id = input.id;
@@ -51,6 +54,8 @@ export class Reservation {
     this.roomCount = input?.roomCount;
     this.reservationType = input?.reservationType;
     this.from = input?.from;
+    this.totalAmount = input?.totalAmount;
+    this.fullName = this.firstName + ' ' + this.lastName;
     return this;
   }
 }
@@ -155,7 +160,7 @@ export class ReservationFormData {
     this.guestInformation = new GuestInfo().deserialize(input);
     this.address = new AddressInfo().deserialize(input.address);
     this.paymentMethod = new PaymentInfo().deserialize(input);
-    this.roomInformation = [new RoomTypeInfo().deserialize(input)];
+    this.roomInformation = new RoomTypeInfo().deserialize(input);
     this.offerId = input?.offerId;
     return this;
   }
@@ -287,5 +292,41 @@ export class SummaryData {
     this.childCount = input?.childCount;
     this.roomCount = input?.roomCount;
     return this;
+  }
+}
+
+export class BookingConfig {
+  marketSegment: Option[];
+  source: Option[];
+  type: Option[];
+  deserialize(input): this {
+    this.marketSegment = input?.marketSegment.map((item) => ({
+      label: item,
+      value: item,
+    }));
+    this.type = input?.type.map((item) => ({
+      label: this.toCamelCase(item),
+      value: item,
+    }));
+    this.source = input?.source.map((item) => ({
+      label: this.toCamelCase(item),
+      value: item,
+    }));
+    return this;
+  }
+
+  toCamelCase(txt) {
+    switch (txt) {
+      case 'CREATE_WITH':
+        return 'Booking Engine';
+      case 'OTA':
+        return 'OTA';
+      case 'WALK_IN':
+        return 'Walk In';
+      case 'OFFLINE_SALES':
+        return 'Offline Sales';
+      default:
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    }
   }
 }

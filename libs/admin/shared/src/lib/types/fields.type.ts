@@ -7,6 +7,7 @@ export type IteratorField = {
   options?: Option[];
   required?: boolean;
   disabled?: boolean;
+  placeholder?: string;
 };
 
 export type ModalAction = {

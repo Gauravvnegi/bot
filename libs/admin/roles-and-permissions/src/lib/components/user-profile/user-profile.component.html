@@ -57,6 +57,18 @@
     label="Brand :"
   ></hospitality-bot-select>
 
+  <hospitality-bot-input
+    class="third-width"
+    controlName="email"
+    label="Email ID :"
+    [props]="{
+      errorMessages: {
+        required: 'This is a required field.',
+        pattern: 'Enter valid email address'
+      }
+    }"
+  ></hospitality-bot-input>
+
   <ng-container *ngIf="hasPageState('view') && !!totalTeamMember">
     <div class="one-width">Team :</div>
     <div class="third-width">
@@ -87,12 +99,6 @@
   >
     View All Users
   </div>
-
-  <hospitality-bot-input
-    class="third-width"
-    controlName="email"
-    label="Email ID :"
-  ></hospitality-bot-input>
 
   <!-- ****************Permission Wrapper**************** -->
   <div

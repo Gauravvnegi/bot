@@ -12,7 +12,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService, SnackBarService } from 'libs/shared/material/src';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { PageState, Permission, PermissionMod } from '../../types';

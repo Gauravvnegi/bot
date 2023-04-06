@@ -83,6 +83,7 @@ export type DateSetting = {
   dateFormat: string;
   readonlyInput: boolean;
   enableButtonBar: boolean;
+  dateValue: Date;
 };
 
 /**

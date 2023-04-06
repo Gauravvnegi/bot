@@ -7,24 +7,28 @@ export const roomFields: IteratorField[] = [
     type: 'select',
     options: [],
     required: false,
+    placeholder: 'Select',
   },
   {
     label: 'Number of rooms',
     name: 'roomCount',
     type: 'input',
     required: true,
+    placeholder: 'Enter',
   },
   {
     label: 'Adult',
     name: 'adultCount',
     type: 'input',
     required: true,
+    placeholder: 'Enter',
   },
   {
     label: 'Kids',
     name: 'childCount',
     type: 'input',
     required: false,
+    placeholder: 'Enter',
   },
 ];
 
@@ -37,11 +41,6 @@ export type RoomFieldTypeOption = {
 };
 
 export const Reservation = {
-  reservationTypes: [
-    { label: 'Draft', value: 'DRAFT' },
-    { label: 'Confirmed', value: 'CONFIRMED' },
-  ],
-
   bookingSources: [
     { label: 'OTA', value: 'OTA' },
     { label: 'Agent', value: 'AGENT' },

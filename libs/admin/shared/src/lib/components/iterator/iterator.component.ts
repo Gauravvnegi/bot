@@ -16,7 +16,7 @@ import { FormProps } from '../../types/form.type';
   styleUrls: ['./iterator.component.scss'],
 })
 export class IteratorComponent implements OnChanges {
-  constructor(private fb: FormBuilder) {}
+  constructor(protected fb: FormBuilder) {}
 
   props: FormProps = {
     fontSize: '14px',

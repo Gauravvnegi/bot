@@ -5,6 +5,7 @@ import { MainComponent } from './components/main/main.component';
 import { ManageReservationDataTableComponent } from './components/manage-reservation-data-table/manage-reservation-data-table.component';
 import { manageReservationRoutes } from './constants/routes';
 import { InvoiceComponent } from './components/invoice/invoice.component';
+import { RoomIteratorComponent } from './components/room-iterator/room-iterator.component';
 
 export const adminManageReservationRoutes: Route[] = [
   {
@@ -41,5 +42,6 @@ export class AdminManageReservationRoutingModule {
     MainComponent,
     ManageReservationDataTableComponent,
     InvoiceComponent,
+    RoomIteratorComponent,
   ];
 }

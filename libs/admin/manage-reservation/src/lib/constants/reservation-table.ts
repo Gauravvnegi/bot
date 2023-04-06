@@ -26,53 +26,53 @@ export enum ReservationTableValue {
   AGENT = 'AGENT',
   WALK_IN = 'WALK_IN',
   OFFLINE_SALES = 'OFFLINE_SALES',
-  BOOKING_ENGINE = 'BOOKING_ENGINE',
+  BOOKING_ENGINE = 'CREATE_WITH',
 }
 
 /* Reservation Filters */
-export const filters: Filter<ReservationTableValue, string>[] = [
+export const filters = [
   {
     label: 'All',
-    value: ReservationTableValue.ALL,
+    value: 'ALL',
     content: '',
     disabled: false,
     total: 0,
   },
-  {
-    label: 'OTA',
-    value: ReservationTableValue.OTA,
-    content: '',
-    disabled: false,
-    total: 0,
-  },
-  {
-    label: 'Agent',
-    value: ReservationTableValue.AGENT,
-    content: '',
-    disabled: false,
-    total: 0,
-  },
-  {
-    label: 'Walk-in',
-    value: ReservationTableValue.WALK_IN,
-    content: '',
-    disabled: false,
-    total: 0,
-  },
-  {
-    label: 'Offline Sales',
-    value: ReservationTableValue.OFFLINE_SALES,
-    content: '',
-    disabled: false,
-    total: 0,
-  },
-  {
-    label: 'Booking Engine',
-    value: ReservationTableValue.BOOKING_ENGINE,
-    content: '',
-    disabled: false,
-    total: 0,
-  },
+  // {
+  //   label: 'OTA',
+  //   value: ReservationTableValue.OTA,
+  //   content: '',
+  //   disabled: false,
+  //   total: 0,
+  // },
+  // {
+  //   label: 'Agent',
+  //   value: ReservationTableValue.AGENT,
+  //   content: '',
+  //   disabled: false,
+  //   total: 0,
+  // },
+  // {
+  //   label: 'Walk-in',
+  //   value: ReservationTableValue.WALK_IN,
+  //   content: '',
+  //   disabled: false,
+  //   total: 0,
+  // },
+  // {
+  //   label: 'Offline Sales',
+  //   value: ReservationTableValue.OFFLINE_SALES,
+  //   content: '',
+  //   disabled: false,
+  //   total: 0,
+  // },
+  // {
+  //   label: 'Booking Engine',
+  //   value: ReservationTableValue.BOOKING_ENGINE,
+  //   content: '',
+  //   disabled: false,
+  //   total: 0,
+  // },
 ];
 
 export const cols: Cols[] = [
@@ -87,15 +87,17 @@ export const cols: Cols[] = [
     field: 'confirmation',
     header: 'Confirmation No',
     isSort: true,
-    sortType: 'string',
+    sortType: 'number',
     dynamicWidth: true,
+    isSearchDisabled: false,
   },
   {
     field: 'guest',
-    header: 'Guest/Company',
+    header: 'Guest',
     isSort: true,
     sortType: 'string',
     dynamicWidth: true,
+    isSearchDisabled: false,
   },
   {
     field: 'date',
@@ -103,11 +105,12 @@ export const cols: Cols[] = [
     isSort: true,
     sortType: 'string',
     dynamicWidth: true,
+    isSearchDisabled: false,
   },
   {
     field: 'amount',
     header: 'Amount Due/Total (INR)',
-    isSort: true,
+    isSort: false,
     sortType: 'string',
     dynamicWidth: true,
     isSearchDisabled: true,
@@ -123,7 +126,7 @@ export const cols: Cols[] = [
   {
     field: 'payment',
     header: 'Payment',
-    isSort: true,
+    isSort: false,
     sortType: 'string',
     dynamicWidth: true,
     isSearchDisabled: true,

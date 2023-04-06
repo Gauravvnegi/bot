@@ -94,10 +94,10 @@ export class ManageReservationService extends ApiService {
       countryCode: formValue?.guestInformation?.countryCode ?? '',
       phoneNumber: formValue?.guestInformation?.phoneNumber ?? '',
     };
-    reservationData.roomTypeId = formValue.roomInformation[0]?.roomTypeId ?? '';
-    reservationData.adultCount = formValue.roomInformation[0]?.adultCount ?? 0;
-    reservationData.childCount = formValue.roomInformation[0]?.childCount ?? 0;
-    reservationData.roomCount = formValue.roomInformation[0]?.roomCount ?? 0;
+    reservationData.roomTypeId = formValue.roomInformation?.roomTypeId ?? '';
+    reservationData.adultCount = formValue.roomInformation?.adultCount ?? 0;
+    reservationData.childCount = formValue.roomInformation?.childCount ?? 0;
+    reservationData.roomCount = formValue.roomInformation?.roomCount ?? 0;
     reservationData.from = formValue.bookingInformation.from ?? 0;
     reservationData.to = formValue.bookingInformation.to ?? 0;
     reservationData.reservationType =

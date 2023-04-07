@@ -36,7 +36,7 @@ export class Reservation {
     this.hotelId = input.hotelId;
     this.rooms = input.rooms;
     this.roomType = input.roomType;
-    this.confirmationNo = input.confirmationNo;
+    this.confirmationNo = input.reservationNumber;
     this.guestName = input.name;
     this.guestCompany = input.company;
     this.date = input.date;
@@ -88,12 +88,12 @@ export class EntityStateCounts {
   ALL: number;
   DRAFT: number;
   CONFIRMED: number;
-  CANCELLED: number;
+  CANCELED: number;
   deserialize(input: EntityStateCountsResponse, total) {
     this.ALL = total ?? 0;
     this.DRAFT = input?.DRAFT;
     this.CONFIRMED = input?.CONFIRMED;
-    this.CANCELLED = input?.CANCELED;
+    this.CANCELED = input?.CANCELED;
     return this;
   }
 }
@@ -296,9 +296,9 @@ export class SummaryData {
 }
 
 export class BookingConfig {
-  marketSegment: Option[];
-  source: Option[];
-  type: Option[];
+  marketSegment: Option[] = [];
+  source: Option[] = [];
+  type: Option[] = [];
   deserialize(input): this {
     this.marketSegment = input?.marketSegment.map((item) => ({
       label: item,

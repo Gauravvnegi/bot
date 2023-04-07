@@ -27,7 +27,7 @@
 }
 
 :host ::ng-deep .p-accordion-content {
-  padding: 5px 80px 30px 30px;
+  padding: 5px 80px 45px 30px;
 }
 
 :host ::ng-deep {
@@ -59,7 +59,7 @@
 // booking summary div styling
 
 .bk-summary {
-  width: 55%;
+  min-width: 32%;
   min-height: 480px;
   height: fit-content;
   padding: 17px 16px 0px 16px;

@@ -1,4 +1,4 @@
-import { Cols, Filter, Status } from '@hospitality-bot/admin/shared';
+import { Cols, Status } from '@hospitality-bot/admin/shared';
 import { Chip } from '@hospitality-bot/admin/shared';
 /**
  * Reservation item type value
@@ -38,53 +38,18 @@ export const filters = [
     disabled: false,
     total: 0,
   },
-  // {
-  //   label: 'OTA',
-  //   value: ReservationTableValue.OTA,
-  //   content: '',
-  //   disabled: false,
-  //   total: 0,
-  // },
-  // {
-  //   label: 'Agent',
-  //   value: ReservationTableValue.AGENT,
-  //   content: '',
-  //   disabled: false,
-  //   total: 0,
-  // },
-  // {
-  //   label: 'Walk-in',
-  //   value: ReservationTableValue.WALK_IN,
-  //   content: '',
-  //   disabled: false,
-  //   total: 0,
-  // },
-  // {
-  //   label: 'Offline Sales',
-  //   value: ReservationTableValue.OFFLINE_SALES,
-  //   content: '',
-  //   disabled: false,
-  //   total: 0,
-  // },
-  // {
-  //   label: 'Booking Engine',
-  //   value: ReservationTableValue.BOOKING_ENGINE,
-  //   content: '',
-  //   disabled: false,
-  //   total: 0,
-  // },
 ];
 
 export const cols: Cols[] = [
   {
-    field: 'rooms',
+    field: 'roomCount',
     header: 'Rooms/Type',
     isSort: true,
-    sortType: 'string',
+    sortType: 'number',
     dynamicWidth: true,
   },
   {
-    field: 'confirmation',
+    field: 'confirmationNo',
     header: 'Confirmation No',
     isSort: true,
     sortType: 'number',
@@ -92,7 +57,7 @@ export const cols: Cols[] = [
     isSearchDisabled: false,
   },
   {
-    field: 'guest',
+    field: 'fullName',
     header: 'Guest',
     isSort: true,
     sortType: 'string',
@@ -100,10 +65,10 @@ export const cols: Cols[] = [
     isSearchDisabled: false,
   },
   {
-    field: 'date',
+    field: 'from',
     header: 'Date',
     isSort: true,
-    sortType: 'string',
+    sortType: 'number',
     dynamicWidth: true,
     isSearchDisabled: false,
   },
@@ -132,7 +97,7 @@ export const cols: Cols[] = [
     isSearchDisabled: true,
   },
   {
-    field: 'actions',
+    field: 'reservationType',
     header: 'Actions',
     isSort: true,
     sortType: 'string',

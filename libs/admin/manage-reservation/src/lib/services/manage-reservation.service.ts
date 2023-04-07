@@ -10,6 +10,7 @@ import {
   RoomTypeListResponse,
 } from 'libs/admin/room/src/lib/types/service-response';
 import { ReservationFormData } from '../types/forms.types';
+import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
@@ -50,6 +51,20 @@ export class ManageReservationService extends ApiService {
     return this.put(
       `/api/v1/booking/${reservationId}?bookingType=ROOM_TYPE&entityId=${hotelId}`,
       data
+    );
+  }
+
+  /**
+   * @function searchLibraryItem To search library item
+   * @param config  Will have type and search query
+   *
+   */
+  searchLibraryItem(
+    hotelId: string,
+    config?: QueryConfig
+  ): Observable<SearchResultResponse> {
+    return this.get(
+      `/api/v1/entity/${hotelId}/library/search${config?.params ?? ''}`
     );
   }
 

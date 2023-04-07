@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Clipboard } from '@angular/cdk/clipboard';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
 import {
   AdminUtilityService,
@@ -12,17 +16,14 @@ import {
   Regex,
 } from 'libs/admin/shared/src';
 import { Subscription, forkJoin } from 'rxjs';
-import {
-  Reservation,
-  roomFields,
-  RoomFieldTypeOption,
-} from '../../constants/reservation';
+import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
   BookingConfig,
   OfferData,
   OfferList,
   PaymentMethodList,
+  RoomTypeOption,
   RoomTypeOptionList,
   SummaryData,
 } from '../../models/reservations.model';
@@ -30,6 +31,9 @@ import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ReservationFormData } from '../../models/reservations.model';
 import * as moment from 'moment';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { ReservationResponse } from '../../types/response.type';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -48,8 +52,8 @@ export class AddReservationComponent implements OnInit {
   selectedOffer: OfferData;
   globalQueries = [];
   roomTypeOffSet = 0;
-  roomTypeLimit = 50;
-  countries;
+  roomTypeLimit = 10;
+  countries: Option[] = [];
   summaryData: SummaryData;
   configData: BookingConfig;
   roomFields = roomFields;
@@ -75,7 +79,9 @@ export class AddReservationComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private location: Location,
     protected activatedRoute: ActivatedRoute,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private modalService: ModalService,
+    private _clipboard: Clipboard
   ) {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
@@ -127,22 +133,25 @@ export class AddReservationComponent implements OnInit {
       paymentMethod: this.fb.group({
         totalPaidAmount: [
           '',
-          [Validators.required, Validators.pattern(Regex.NUMBER_REGEX)],
+          [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
         ],
         currency: ['INR'],
-        paymentMethod: ['', Validators.required],
+        paymentMethod: [''],
         paymentRemark: ['', [Validators.maxLength(60)]],
       }),
       offerId: [''],
     });
   }
 
-  getCountryCode() {
+  getCountryCode(): void {
     this.configService
       .getColorAndIconConfig(this.hotelId)
       .subscribe((response) => {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
+        );
+        this.configData.source = this.configData.source.filter(
+          (item) => item.value !== 'CREATE_WITH' && item.value !== 'OTHERS'
         );
       });
     this.configService.getCountryCode().subscribe((res) => {
@@ -170,7 +179,8 @@ export class AddReservationComponent implements OnInit {
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.getInitialData(this.globalQueries);
+      this.getInitialData();
+      this.getRoomType(this.globalQueries);
       this.getReservationId();
     });
   }
@@ -218,40 +228,15 @@ export class AddReservationComponent implements OnInit {
       });
   }
 
-  getInitialData(queries): void {
-    const defaultProps = {
-      type: 'ROOM_TYPE',
-      offset: this.roomTypeOffSet,
-      limit: this.roomTypeLimit,
-    };
-    queries.push(defaultProps);
-    const config = {
-      params: this.adminUtilityService.makeQueryParams(queries),
-    };
+  getInitialData(): void {
     this.$subscription.add(
-      forkJoin({
-        paymentMethods: this.manageReservationService.getPaymentMethod(
-          this.hotelId
-        ),
-        roomData: this.manageReservationService.getRoomTypeList<
-          RoomTypeListResponse
-        >(this.hotelId, config),
-      }).subscribe((response) => {
-        this.paymentOptions = new PaymentMethodList()
-          .deserialize(response.paymentMethods)
-          .records.map((item) => ({ label: item.label, value: item.label }));
-        const data = new RoomTypeOptionList()
-          .deserialize(response.roomData)
-          .records.map((item) => ({
-            label: item.name,
-            value: item.id,
-            roomCount: item.roomCount,
-            maxChildren: item.maxChildren,
-            maxAdult: item.maxAdult,
-          }));
-        this.roomTypes = [...this.roomTypes, ...data];
-        roomFields[0].options = this.roomTypes;
-      }, this.handleError)
+      this.manageReservationService
+        .getPaymentMethod(this.hotelId)
+        .subscribe((response) => {
+          this.paymentOptions = new PaymentMethodList()
+            .deserialize(response)
+            .records.map((item) => ({ label: item.label, value: item.label }));
+        }, this.handleError)
     );
   }
 
@@ -355,6 +340,12 @@ export class AddReservationComponent implements OnInit {
             this.userForm
               .get('roomInformation')
               .patchValue(this.summaryData, { emitEvent: false });
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .setValidators([Validators.max(this.summaryData.totalAmount)]);
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .updateValueAndValidity();
           }, this.handleError)
       );
   }
@@ -371,13 +362,8 @@ export class AddReservationComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService
         .createReservation(this.hotelId, data)
-        .subscribe((_) => {
-          this.snackbarService.openSnackBarAsText(
-            'Reservation created Successfully.',
-            '',
-            { panelClass: 'success' }
-          );
-          this.location.back();
+        .subscribe((res: ReservationResponse) => {
+          this.bookingConfirmationPopup(res?.reservationNumber);
         }, this.handleError)
     );
   }
@@ -386,15 +372,54 @@ export class AddReservationComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService
         .updateReservation(this.hotelId, this.reservationId, data)
-        .subscribe((_) => {
-          this.snackbarService.openSnackBarAsText(
-            'Reservation updated Successfully.',
-            '',
-            { panelClass: 'success' }
-          );
-          this.location.back();
+        .subscribe((res: ReservationResponse) => {
+          this.bookingConfirmationPopup(res?.reservationNumber);
         }, this.handleError)
     );
+  }
+
+  /**
+   * @function bookingConfirmationPopup
+   */
+  bookingConfirmationPopup(number?): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const togglePopupCompRef = this.modalService.openDialog(
+      ModalComponent,
+      dialogConfig
+    );
+    togglePopupCompRef.componentInstance.content = {
+      heading: `Booking ${this.reservationId ? 'Updated' : 'Confirmed'}`,
+      description: [
+        `Your booking is successfully ${
+          this.reservationId ? 'Updated' : 'Confirmed'
+        }`,
+        `Your booking confirmation number is ${number}`,
+      ],
+    };
+    togglePopupCompRef.componentInstance.actions = [
+      {
+        label: 'Okay',
+        onClick: () => {
+          this.modalService.close();
+          this.location.back();
+        },
+        variant: 'outlined',
+      },
+      {
+        label: 'Copy Confirmation number',
+        onClick: () => {
+          this._clipboard.copy(number);
+          this.modalService.close();
+          this.location.back();
+        },
+        variant: 'contained',
+      },
+    ];
+    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+      this.modalService.close();
+      this.location.back();
+    });
   }
 
   /**
@@ -413,8 +438,86 @@ export class AddReservationComponent implements OnInit {
       .subscribe();
   };
 
+  /**
+   * @function handleOfferView handle offer view.
+   */
   handleOfferView(): void {
     this.displayBookingOffer = !this.displayBookingOffer;
+  }
+
+  /**
+   * @function searchRoomTypes To search categories
+   * @param text search text
+   */
+  searchRoomTypes(text: string): void {
+    if (text) {
+      this.manageReservationService
+        .searchLibraryItem(this.hotelId, {
+          params: `?key=${text}&type=ROOM_TYPE`,
+        })
+        .subscribe((res: any) => {
+          const data = res;
+          this.roomTypes =
+            data.ROOM_TYPE?.filter((item) => item.status).map((item) => {
+              new RoomTypeOption().deserialize(item);
+              return {
+                label: item.name,
+                value: item.id,
+                roomCount: item.roomCount,
+                maxChildren: item.maxChildren,
+                maxAdult: item.maxAdult,
+              };
+            }) ?? [];
+          roomFields[0].options = this.roomTypes;
+        }, this.handleError);
+    } else {
+      this.roomTypeOffSet = 0;
+      this.roomTypes = [];
+      this.getRoomType(this.globalQueries);
+    }
+  }
+
+  /**
+   * @function loadMoreRoomTypes load more categories options
+   */
+  loadMoreRoomTypes(): void {
+    this.roomTypeOffSet = this.roomTypeOffSet + 10;
+    this.getRoomType(this.globalQueries);
+  }
+
+  /**
+   * @function getRoomType to get room types.
+   * @param queries global Queries.
+   */
+  getRoomType(queries): void {
+    queries = [
+      ...queries,
+      {
+        type: 'ROOM_TYPE',
+        offset: this.roomTypeOffSet,
+        limit: this.roomTypeLimit,
+      },
+    ];
+    const config = {
+      params: this.adminUtilityService.makeQueryParams(queries),
+    };
+    this.$subscription.add(
+      this.manageReservationService
+        .getRoomTypeList<RoomTypeListResponse>(this.hotelId, config)
+        .subscribe((response) => {
+          const data = new RoomTypeOptionList()
+            .deserialize(response)
+            .records.map((item) => ({
+              label: item.name,
+              value: item.id,
+              roomCount: item.roomCount,
+              maxChildren: item.maxChildren,
+              maxAdult: item.maxAdult,
+            }));
+          this.roomTypes = [...this.roomTypes, ...data];
+          roomFields[0].options = this.roomTypes;
+        })
+    );
   }
 
   /**

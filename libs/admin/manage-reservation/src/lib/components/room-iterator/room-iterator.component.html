@@ -30,6 +30,7 @@
             placeholder: field.placeholder,
             isAsync: true
           }"
+          (paginate)="loadMoreRoomTypes()"
           (onSearch)="searchRoomTypes($event)"
           [options]="field.options"
           [disabled]="field.disabled"

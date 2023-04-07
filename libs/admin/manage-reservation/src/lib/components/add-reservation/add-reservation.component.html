@@ -33,7 +33,7 @@
             class="half-width"
             controlName="source"
             label="Booking Source"
-            [options]="configData.source"
+            [options]="configData?.source"
             [props]="{ placeholder: 'Select' }"
           ></hospitality-bot-select>
           <hospitality-bot-input
@@ -53,7 +53,7 @@
             class="half-width"
             controlName="marketSegment"
             label="Market Segment"
-            [options]="configData.marketSegment"
+            [options]="configData?.marketSegment"
             [props]="{ placeholder: 'Select' }"
           ></hospitality-bot-select>
         </div>
@@ -62,6 +62,8 @@
         <hospitality-bot-room-iterator
           [fields]="roomFields"
           [userFormGroup]="userForm"
+          (paginate)="loadMoreRoomTypes()"
+          (onSearch)="searchRoomTypes($event)"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>
@@ -161,14 +163,15 @@
           <hospitality-bot-prefix-field
             class="half-width"
             [options]="currencies"
-            label="Payment Recieved"
+            label="Payment Received"
             preControlName="currency"
             postControlName="totalPaidAmount"
             [defaultProps]="{ post: { type: 'number' } }"
             [props]="{
               errorMessages: {
                 required: 'This is a required field.',
-                min: 'Value must be greater than or equal to 0.'
+                min: 'Value must be greater than 0.',
+                max: 'Value must be less than or equal Total amount to be paid.'
               }
             }"
           >
@@ -294,17 +297,23 @@
             *ngIf="userForm.get('paymentMethod.totalPaidAmount').value"
           >
             <span class="bk-summary_priceInfo_perNight_label">Paid Amount</span>
-            <span class="bk-summary_priceInfo_perNight_amount">{{
-              userForm.get('paymentMethod.totalPaidAmount').value
-                | currency: 'INR'
-            }}</span>
+            <span class="bk-summary_priceInfo_perNight_amount"
+              >-{{
+                userForm.get('paymentMethod.totalPaidAmount').value
+                  | currency: 'INR'
+              }}</span
+            >
           </p>
         </div>
         <p class="divider"></p>
         <div class="bk-summary_total">
           <p class="bk-summary_total_label">Total Amount to be paid</p>
           <p class="bk-summary_total_amount">
-            {{ summaryData?.totalAmount | currency: 'INR' }}
+            {{
+              summaryData?.totalAmount -
+                userForm.get('paymentMethod.totalPaidAmount').value
+                | currency: 'INR'
+            }}
           </p>
         </div>
         <div class="bk-summary_btnwrapper">

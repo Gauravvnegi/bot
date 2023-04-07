@@ -64,9 +64,12 @@
   height: fit-content;
   padding: 17px 16px 0px 16px;
   border-radius: 5px;
-  border: solid 1px rgba(112, 112, 112, 0.35);
-  background-color: #fff;
+  border: solid 1px $btnBorder;
+  background-color: $white;
   margin-left: 19px;
+  font-size: 12px;
+  letter-spacing: 0.72px;
+  color: $c-gray-18;
 
   .offerList {
     &_box {
@@ -75,19 +78,14 @@
       margin: 60px auto;
       margin-bottom: 22px;
       img {
-        width: 100%;
-        height: 100%;
+        @include full-img;
       }
     }
     &_text {
       width: fit-content;
       margin: 0 auto 120px;
-      font-size: 12px;
       font-weight: bold;
-      letter-spacing: 0.96px;
-      text-align: left;
       opacity: 0.6;
-      color: $c-gray-18;
     }
   }
 
@@ -95,32 +93,25 @@
     @include normal-text;
     font-weight: 600;
     color: $dark-blue2;
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     mat-icon {
       cursor: pointer;
       width: 29px;
-      color: #4b56c0 !important;
+      color: $button-blue !important;
     }
   }
 
   &_subheading {
     @include normal-text;
     font-weight: bold;
-    color: $c-gray-18;
 
     &_label {
-      font-size: 12px;
-      letter-spacing: 0.72px;
-      text-align: left;
-      color: $c-gray-18;
       margin-bottom: 9px;
     }
   }
 
   &_roomInfo {
-    display: flex;
-    justify-content: space-between;
+    @include flex-space-between;
     margin-bottom: 19px;
     gap: 10px;
     &_checkoutInfo,
@@ -134,22 +125,12 @@
       &_heading {
         font-size: 14px;
         font-weight: 500;
-        text-align: left;
-        color: $c-gray-18;
-      }
-      &_subText {
-        font-size: 12px;
-        letter-spacing: 0.72px;
-        text-align: left;
-        color: $c-gray-18;
       }
     }
   }
 
   &_offerInfo {
-    font-size: 12px;
     font-weight: 500;
-    color: $c-gray-18;
     margin-bottom: 16px;
     span {
       cursor: pointer;
@@ -159,52 +140,37 @@
 
   &_priceInfo {
     &_perNight {
-      display: flex;
-      justify-content: space-between;
+      @include flex-space-between;
       &_label {
-        font-size: 12px;
         font-weight: 500;
-        text-align: left;
-        color: $c-gray-18;
       }
       &_amount {
-        font-size: 12px;
-        letter-spacing: 0.72px;
         text-align: right;
         color: $c-gray-47;
       }
     }
     &_person {
-      display: flex;
-      justify-content: space-between;
+      @include flex-space-between;
+
       margin-bottom: 10px;
       &_label {
-        font-size: 12px;
         font-weight: 500;
-        text-align: left;
-        color: $c-gray-18;
       }
       &_amount {
-        font-size: 16px;
+        @include normal-text;
         font-weight: bold;
-        letter-spacing: 0.96px;
         text-align: right;
         color: $amount;
       }
     }
 
     &_taxFair {
-      display: flex;
-      justify-content: space-between;
+      @include flex-space-between;
+
       &_label {
-        font-size: 12px;
         font-weight: 500;
-        text-align: left;
-        color: $c-gray-18;
       }
       &_amount {
-        font-size: 12px;
-        letter-spacing: 0.72px;
         text-align: right;
         color: $c-gray-47;
       }
@@ -212,26 +178,22 @@
   }
 
   &_total {
-    display: flex;
-    justify-content: space-between;
+    @include flex-space-between;
+
     margin-bottom: 33px;
     &_label {
-      font-size: 12px;
       font-weight: 500;
-      text-align: left;
-      color: $c-gray-18;
     }
     &_amount {
-      font-size: 16px;
+      @include normal-text;
       font-weight: bold;
-      letter-spacing: 0.96px;
       text-align: right;
       color: $totalAmount;
     }
   }
   &_btnwrapper {
-    display: flex;
-    justify-content: center;
+    @include flex-justify-center;
+
     margin-bottom: 21px;
   }
 }
@@ -256,8 +218,7 @@
     font-weight: bold;
     line-height: 1.33;
     letter-spacing: 0.36px;
-    text-align: left;
-    color: #fff;
+    color: $white;
   }
   &_gift {
     width: 64.6px;
@@ -266,8 +227,8 @@
     right: 7px;
     bottom: 0;
     img {
-      width: 100%;
-      height: 100%;
+           @include full-img;
+
     }
   }
   &_cross {
@@ -278,8 +239,7 @@
     width: 30px;
     height: 30px;
     img {
-      width: 100%;
-      height: 100%;
+      @include full-img;
     }
   }
 }

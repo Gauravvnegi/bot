@@ -110,10 +110,10 @@
 
 .section--content {
   @include flex-space-between;
-  margin: 20px 15px;
+  margin: 20px 4px;
   &--health {
     flex-direction: column;
-    margin: 10px 15px;
+    margin: 10px 4px;
     &--message {
       height: 35px;
       font-size: larger;
@@ -263,7 +263,7 @@
 
 :host ::ng-deep .ng-star-inserted {
   @media screen and (width: $M) {
-    padding-bottom: 30px;
+    padding-bottom: 0px;
   }
 }
 

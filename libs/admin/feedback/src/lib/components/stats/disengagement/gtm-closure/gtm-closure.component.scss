@@ -64,3 +64,14 @@
 .stat-label > input:checked + p {
   text-decoration: line-through;
 }
+
+.graphTitle {
+  color: #002046;
+  @include normal-text;
+  font-weight: bold;
+}
+
+.labelWrapper {
+  margin-top: 20px;
+  display: flex;
+}

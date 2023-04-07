@@ -15,8 +15,7 @@
   }
   &--text {
     font-size: $font-responsive-small;
-    @include flex-justify-center;
-    flex-direction: column;
+    @include flex-col-justify-center;
     margin: 0px 10px;
 
     @media only screen and (max-width: $S) {
@@ -37,9 +36,7 @@
     }
 
     .social_icons {
-      @include flex-justify-center;
-
-      align-items: center;
+      @include flex-all-center;
       margin-bottom: 10px;
       .icon {
         height: 30px;
@@ -69,7 +66,6 @@
     justify-content: flex-end;
 
     .wrap-details {
-      // width: 100%;
       @media only screen and (max-width: $M) {
         display: block;
       }
@@ -78,8 +74,7 @@
       }
       .text {
         font-size: $font-responsive-small;
-        display: flex;
-        align-items: center;
+        @include flex-item-center;
         color: var(--footer-font-color, $footer-font-color);
         @media only screen and (max-width: $S) {
           justify-content: center;
@@ -95,7 +90,6 @@
     @media only screen and (max-width: $M) {
       white-space: nowrap;
 
-      // margin: 0 0 3rem;
       .text {
         font-size: $font-responsive-smaller;
       }
@@ -109,8 +103,7 @@
       justify-content: center;
     }
   }
-  @media only screen and (max-width: $M) {
-    // grid-template-columns: 25% 25% 50%;
+  @media only screen and (max-width: $tablet) {
     margin-bottom: 45px !important;
   }
   @media only screen and (max-width: $S) {

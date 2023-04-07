@@ -47,19 +47,20 @@
     }
 
     &_contentWrapper {
+      font-size: 14px;
+      letter-spacing: 0.84px;
+      color: $dark-blue;
       &_heading {
-        font-size: 14px;
         font-weight: 500;
-        letter-spacing: 0.84px;
-        color: $dark-blue;
         margin-bottom: 10px;
       }
 
       &_subText {
-        font-size: 14px;
-        letter-spacing: 0.84px;
-        color: $dark-blue;
         line-height: 24px;
+      }
+      .redirectBtnWrapper {
+        @include flex-start;
+        margin-top: 10px;
       }
     }
   }

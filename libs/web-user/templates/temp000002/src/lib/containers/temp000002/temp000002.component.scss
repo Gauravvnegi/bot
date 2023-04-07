@@ -31,7 +31,7 @@
   height: -webkit-fill-available;
   overflow-y: auto;
   @media only screen and (min-width: $M) {
-    padding: 2rem 20px 7rem;
+    padding: 2rem 20px 8rem;
   }
 }
 
@@ -41,6 +41,13 @@
 
 :host ::ng-deep .main-template-button {
   @include template-footer-button;
+  @media screen and (max-width: $tablet) {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    z-index: 222;
+    left: 0;
+  }
   @media only screen and (max-width: $M) {
     hospitality-bot-temp000002-button {
       width: 100%;

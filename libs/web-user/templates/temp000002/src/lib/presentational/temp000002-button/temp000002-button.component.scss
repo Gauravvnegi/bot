@@ -2,15 +2,22 @@
 
 :host ::ng-deep .back-button {
   @include footer-back;
+  @media screen and (max-width: $tablet) {
+    width: 50vw;
+    margin-right: 0px;
+    border-radius: 0px;
+  }
 }
 :host ::ng-deep .next-button {
   @include footer-next;
+  @media screen and (max-width: $tablet) {
+    width: 50vw;
+    border-radius: 0px;
+  }
 }
 
 :host ::ng-deep .mat-button-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-all-center;
   .fa {
     margin-right: 3px;
   }

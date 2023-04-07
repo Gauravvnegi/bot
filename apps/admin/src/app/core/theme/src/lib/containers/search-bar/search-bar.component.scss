@@ -41,7 +41,7 @@
       width: 200%;
       left: 0;
       top: 104%;
-      z-index: 9;
+      z-index: $global-header-z !important;
       box-shadow: 0 0 5px 0 #a9a9a9;
       .p-overlaypanel-content {
         padding: 10px 10px 0;

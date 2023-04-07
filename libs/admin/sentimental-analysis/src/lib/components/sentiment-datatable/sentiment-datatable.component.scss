@@ -3,7 +3,7 @@
   .action-header {
     position: unset !important;
     background-color: #fff !important;
-    border-radius: 8px;
+    border-radius: 8px 8px 0 0;
     .heading {
       font-size: 16px !important;
       font-weight: bold !important;
@@ -13,10 +13,23 @@
   .p-datatable {
     border: none !important;
     .p-datatable-thead {
-      position: unset !important;
+      top: 0 !important;
       tr th {
         padding: 19px 3% !important;
       }
+    }
+  }
+  .p-datatable-wrapper {
+    max-height: 65vh;
+    overflow-y: auto;
+    @media screen and (max-width: 1280px) {
+      max-height: 57vh;
+    }
+    @media screen and (max-width: $tabAir) {
+      max-height: 50vh;
+    }
+    @media screen and (max-width: $tablet) {
+      max-height: 42vh;
     }
   }
 }

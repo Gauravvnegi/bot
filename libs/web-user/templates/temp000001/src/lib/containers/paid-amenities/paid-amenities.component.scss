@@ -5,7 +5,13 @@
     font-size: $font-medium;
   }
 }
-
+.tab-group__wrapper {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  width: 100%;
+}
 :host ::ng-deep .draggable {
   margin-top: 3%;
   height: 46vh;
@@ -216,11 +222,7 @@
   .tab-item {
     font-size: 18px;
     font-weight: 600;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: left;
+    
     color: #121212;
     margin: 5px 25px 5px 10px;
     cursor: pointer;
@@ -257,14 +259,6 @@
   > .mat-form-field-underline {
   display: none !important;
 }
-//  :host ::ng-deep .mat-select-panel {
-//   max-height: 80px !important;
-// }
-
-// :host ::ng-deep  #mat-select-2-panel{
-//   max-height: 80px !important;
-
-// }
 :host ::ng-deep .mat-select-panel-wrap > .mat-select-panel {
   max-height: 80px !important;
 }

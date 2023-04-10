@@ -59,6 +59,8 @@
 // booking summary div styling
 
 .bk-summary {
+  position: sticky;
+  top: 65px;
   min-width: 32%;
   min-height: 480px;
   height: fit-content;
@@ -114,6 +116,7 @@
     @include flex-space-between;
     margin-bottom: 19px;
     gap: 10px;
+    flex-wrap: wrap;
     &_checkoutInfo,
     &_guestInfo {
       min-width: 182px;
@@ -227,8 +230,7 @@
     right: 7px;
     bottom: 0;
     img {
-           @include full-img;
-
+      @include full-img;
     }
   }
   &_cross {

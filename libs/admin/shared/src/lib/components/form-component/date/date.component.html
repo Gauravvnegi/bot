@@ -32,6 +32,7 @@
     [yearNavigator]="true"
     yearRange="2000:2030"
     (onBlur)="markAsTouched()"
+    [disabled]="isDisabled"
   ></p-calendar>
   <small *ngIf="error" class="p-error">{{ error }} </small>
 

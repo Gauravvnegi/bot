@@ -16,8 +16,8 @@ export const cols: {
     width: '10%',
   },
   {
-    field: 'unitPrice',
-    header: 'Unit Price',
+    field: 'unitValue',
+    header: 'Unit Value',
     width: '10%',
   },
   {
@@ -36,3 +36,11 @@ export const cols: {
     width: '15%',
   },
 ];
+
+export const taxes = [
+  { label: 'CGST @12%', value: 'CGST' },
+  { label: 'SGST @12%', value: 'SGST' },
+  { label: 'VAT', value: 'VAT' },
+  { label: 'GST @18%', value: 'GST' },
+  { label: 'None', value: 'none' }
+]

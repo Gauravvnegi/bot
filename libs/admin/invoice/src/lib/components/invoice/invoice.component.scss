@@ -14,6 +14,13 @@
   @include form-block;
 }
 
+.button{
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  margin: 20px;
+}
+
 .payment-form {
   background-color: white;
   box-shadow: $form-shadow;
@@ -75,16 +82,16 @@
   }
 }
 
-:host ::ng-deep hospitality-bot-button .button{
+.input-field{
+  display: flex;
+  flex-basis: 50%;
+  gap: 15px;
+  align-items: center
+}
+
+:host ::ng-deep .span-block{  hospitality-bot-button  .button{
     min-width: 60px;
-}
-
-.discount-input{
-  flex-basis: 55%;
-}
-
-.paid-input{
-  flex-basis: 20%;
+  }
 }
 
 :host ::ng-deep .span-block{ .p-error{
@@ -93,8 +100,8 @@
   margin-bottom: 3px;
 }}
 
-:host ::ng-deep hospitality-bot-menu .mat-menu-panel.mat-menu-content{
-  padding: 0px;
+:host ::ng-deep .mat-menu-content{
+    padding: 0px;
 }
 
 :host ::ng-deep .p-datatable {

@@ -343,11 +343,11 @@
                   label="Confirm All Docs"
                   variant="outlined"
                 ></hospitality-bot-button>
-                <hospitality-bot-button
+                <!-- <hospitality-bot-button
                   (click)="downloadInvoice()"
                   label="Download Invoice/Folio"
                   variant="outlined"
-                ></hospitality-bot-button>
+                ></hospitality-bot-button> -->
                 <!-- ---------------------------------------------------------------------------------------------- -->
                 <hospitality-bot-button
                   (click)="confirmAndNotifyCheckin()"
@@ -359,7 +359,11 @@
                 <!-- initiate force checkout -->
                 <!-- download invoice -->
                 <hospitality-bot-button
-                  label="Manage Invoice"
+                  [label]="
+                    branchConfig.pmsEnable
+                      ? 'Prepare Invoice'
+                      : 'Manage Invoice'
+                  "
                   (click)="prepareInvoice()"
                   variant="outlined"
                 ></hospitality-bot-button>
@@ -370,11 +374,11 @@
                   (click)="activateAndgenerateJourney('CHECKIN')"
                   variant="outlined"
                 ></hospitality-bot-button>
-                <hospitality-bot-button
+                <!-- <hospitality-bot-button
                   label="Download Invoice/Folio"
                   (click)="downloadInvoice()"
                   variant="outlined"
-                ></hospitality-bot-button>
+                ></hospitality-bot-button> -->
               </ng-container>
             </ng-container>
           </ng-template>
@@ -398,7 +402,11 @@
                 </ng-container>
                 <ng-template #prepareInvoiceBtn>
                   <hospitality-bot-button
-                    label="Manage Invoice"
+                    [label]="
+                      branchConfig.pmsEnable
+                        ? 'Prepare Invoice'
+                        : 'Manage Invoice'
+                    "
                     (click)="prepareInvoice()"
                     variant="outlined"
                   ></hospitality-bot-button>
@@ -422,7 +430,11 @@
                 </ng-container>
                 <ng-template #prepareInvoiceBtn>
                   <hospitality-bot-button
-                    label="Manage Invoice"
+                    [label]="
+                      branchConfig.pmsEnable
+                        ? 'Prepare Invoice'
+                        : 'Manage Invoice'
+                    "
                     (click)="prepareInvoice()"
                     variant="outlined"
                   ></hospitality-bot-button>

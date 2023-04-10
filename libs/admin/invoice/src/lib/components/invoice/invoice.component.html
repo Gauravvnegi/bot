@@ -4,7 +4,9 @@
       variant="outlined"
       label="Preview"
     ></hospitality-bot-button>
-    <hospitality-bot-button label="Generate"></hospitality-bot-button>
+    <hospitality-bot-button 
+      label="Generate"
+    ></hospitality-bot-button>
   </hospitality-bot-navigation-header>
   <div class="form-wrapper" [formGroup]="useForm">
     <div class="form-block">
@@ -75,7 +77,9 @@
             let-columns="columns"
             let-rowIndex="rowIndex"
           >
-            <tr [formGroupName]="rowIndex">
+            <tr [formGroupName]="rowIndex"
+               [disabled]="true"
+            >
               <td>
                 <p-tableCheckbox
                   [value]="rowData"
@@ -86,18 +90,21 @@
               <td>
                 <hospitality-bot-input
                   controlName="description"
+                  [disabled]="rowIndex === 0"
                 ></hospitality-bot-input>
               </td>
               <td>
                 <hospitality-bot-input
                   controlName="unit"
                   [props]="{ type: 'number' }"
+                  [disabled]="rowIndex === 0"
                 ></hospitality-bot-input>
               </td>
               <td>
                 <hospitality-bot-input
-                  controlName="unitPrice"
+                  controlName="unitValue"
                   [props]="{ type: 'number' }"
+                  [disabled]="rowIndex === 0"
                 ></hospitality-bot-input>
               </td>
               <td>
@@ -112,6 +119,7 @@
                   controlName="tax"
                   [options]="taxes"
                   [settings]="{ showHeader: false }"
+                  [disabled]="rowIndex === 0"
                 ></hospitality-bot-multi-select>
               </td>
               <td>
@@ -144,13 +152,15 @@
           <span class="span-block">
             <span>INR {{ totalDiscount.value | number:'1.1-1' }}</span>
             <ng-container *ngIf="viewDiscountTab">
-              <hospitality-bot-prefix-field
-                class="discount-input"
-                [options]="discountOption"
-                preControlName="discountType"
-                postControlName="discount"
-                [props]="{ errorMessages: errorMessages }"
-              ></hospitality-bot-prefix-field>
+              <span class="input-field">
+                <hospitality-bot-prefix-field
+                  class="three-fourth"
+                  [options]="discountOption"
+                  preControlName="discountType"
+                  postControlName="discount"
+                  [props]="{ errorMessages: errorMessages, type: 'number' }"
+                ></hospitality-bot-prefix-field>
+              </span>
               <hospitality-bot-button
                 label="Save"
                 variant="text"
@@ -177,24 +187,26 @@
           <span class="span-block">
             <span>INR {{ paidAmount.value | number:'1.1-1' }}</span>
             <ng-container *ngIf="viewPaidTab">
-              <hospitality-bot-input
-                class="paid-input"
-                controlName="paidValue"
-                [disabled]="true"
-              ></hospitality-bot-input>
-              <span> + </span>
-              <hospitality-bot-input
-                class="paid-input"
-                controlName="paid"
-                [props]="{ errorMessages: errorMessages }"
-              ></hospitality-bot-input>
-              <hospitality-bot-button
-                label="Save"
-                variant="text"
-                (onClick)="savePaidAmount()"
-                [disabled]="!isValidPaid"
-              ></hospitality-bot-button>
-            </ng-container>
+                <span class="input-field">
+                  <hospitality-bot-input
+                    class="three-fourth"
+                    controlName="paidValue"
+                    [disabled]="true"
+                  ></hospitality-bot-input>
+                  <span> + </span>
+                  <hospitality-bot-input
+                    class="three-fourth"
+                    controlName="paid"
+                    [props]="{ errorMessages: errorMessages, type: 'number' }"
+                  ></hospitality-bot-input>
+                </span>
+                  <hospitality-bot-button
+                    label="Save"
+                    variant="text"
+                    (onClick)="savePaidAmount()"
+                    [disabled]="!isValidPaid"
+                  ></hospitality-bot-button>
+              </ng-container>
             <hospitality-bot-menu
               *ngIf="!viewPaidTab"
               type="button"
@@ -263,5 +275,17 @@
         </div>
       </p-accordionTab>
     </p-accordion>
+    <div class="button">
+      <hospitality-bot-button
+        label="Reset All"
+        variant="text"
+        severity="reset"
+        (onClick)="handleReset()"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        label="Save"
+        (onClick)="handleSave()"
+      ></hospitality-bot-button>
+    </div>
   </div>
 </div>

@@ -261,7 +261,9 @@ export class AddReservationComponent implements OnInit {
       this.manageReservationService
         .getReservationDataById(this.reservationId, this.hotelId)
         .subscribe((response) => {
+          console.log(response);
           const data = new ReservationFormData().deserialize(response);
+          console.log(data);
           this.userForm.patchValue(data);
           this.summaryData = new SummaryData().deserialize(response);
           this.setFormDisability(data.bookingInformation);

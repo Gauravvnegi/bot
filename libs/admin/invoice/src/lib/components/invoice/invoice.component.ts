@@ -6,12 +6,18 @@ import {
   Validators,
   FormArray,
 } from '@angular/forms';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import { AdminUtilityService, NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
 import { invoiceRoutes } from '../../constants/routes';
 import { InvoiceForm } from '../../types/forms.types';
-import { cols } from '../../constants/payment';
+import { cols, taxes } from '../../constants/payment';
 import { PaymentField } from '../../types/forms.types';
 import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { InvoiceService } from '../../services/invoice.service';
+import { Invoice } from '../../models/invoice.model';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -22,11 +28,13 @@ export class InvoiceComponent implements OnInit {
   readonly errorMessages = errorMessages;
   pageTitle: string;
   navRoutes: NavRouteOptions;
-
+  hotelId: string;
+  reservationId: string;
+  globalQueries = [];
   tableFormArray: FormArray;
   useForm: FormGroup;
-  
-  taxes: Option[] = [];
+
+  taxes: Option[];
   tableValue = [];
   discountOption: Option[] = [
     { label: '%Off', value: '%Off' },
@@ -40,6 +48,8 @@ export class InvoiceComponent implements OnInit {
   isValidDiscount = true;
   isValidPaid = true;
 
+  $subscription = new Subscription();
+
   /**Table Variable */
   selectedRows;
   cols = cols;
@@ -51,7 +61,14 @@ export class InvoiceComponent implements OnInit {
     { label: 'Remove Discount', value: 'removeDiscount' },
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private globalFilterService: GlobalFilterService,
+    private activatedRoute: ActivatedRoute,
+    private invoiceService: InvoiceService,
+    private adminUtilityService: AdminUtilityService,
+    private snackbarService: SnackBarService,
+  ) {
     this.initPageHeaders();
   }
 
@@ -88,6 +105,9 @@ export class InvoiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.hotelId = this.globalFilterService.hotelId;
+    console.log(this.hotelId);
+    this.listenForGlobalFilters();
     this.initForm();
     this.initOptionsConfig();
   }
@@ -138,14 +158,27 @@ export class InvoiceComponent implements OnInit {
 
     this.tableFormArray = this.useForm.get('tableData') as FormArray;
 
-    this.addNewFieldTableForm();
-
     this.initDetails();
+    this.addNewFieldTableForm();
     this.initFormSubscription();
     this.useForm.valueChanges.subscribe((res) => {
       // console.log(res);
     });
+  }
 
+  listenForGlobalFilters(): void{
+    this.globalFilterService.globalFilter$.subscribe((data)=>{
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+      this.getReservationId();
+    })
+  }
+
+  getReservationId(): void{
+    const id = this.activatedRoute.snapshot.paramMap.get('id')
+    this.reservationId = id;
   }
 
   /**
@@ -153,47 +186,23 @@ export class InvoiceComponent implements OnInit {
    */
   initDetails() {
     this.tableValue = [{ id: 1 }];
-    this.useForm.patchValue({
-      tableData: [
-        // call api service - dummy response
-        {
-          description: 'Room',
-          unit: 1,
-          unitPrice: 400,
-          amount: 400,
-          tax: ['CGST'],
-          totalAmount: 448,
-        },
-      ],
-      currentAmount: 448,
-      totalDiscount: 0,
-      discountedAmount: 448,
-      paidAmount: 50,
-      dueAmount: 398,  
-
-      discountType: '%Off',
-      discount: 0,
-      paidValue: 50,
-      paid: 0,
-    });
+    this.invoiceService.getInvoiceData(this.reservationId).subscribe((res)=>{
+      const data = new Invoice().deserialize(res);
+      this.useForm.patchValue(data);
+    })
+    this.discountType.patchValue('%Off')
   }
-  
+
   initFormSubscription(){
     this.registerDiscountChanges();
     this.registerPaidChanges();
   }
+
   /**
    * @function initForm Initialize tax options
    */
   initOptionsConfig() {
-    this.taxes = [
-      // Move to constant
-      { label: 'CGST @12%', value: 'CGST' },
-      { label: 'SGST @12%', value: 'SGST' },
-      { label: 'VAT', value: 'VAT' },
-      { label: 'GST @18%', value: 'GST' },
-      { label: 'None', value: 'none' },
-    ];
+    this.taxes = taxes;
   }
 
   /**
@@ -203,11 +212,12 @@ export class InvoiceComponent implements OnInit {
     const data: Record<keyof PaymentField, any> = {
       description: ['', Validators.required],
       unit: [''],
-      unitPrice: [''],
+      unitValue: [''],
       amount: [''],
       tax: [[]],
       totalAmount: [''],
     };
+
     this.tableFormArray.push(this.fb.group({ ...data }));
     this.registerUnitPriceChange();
   }
@@ -224,26 +234,27 @@ export class InvoiceComponent implements OnInit {
    * @function registerUnitPriceChange To handle changes in new charges
    */
   registerUnitPriceChange() {
-
     const currentFormGroup = this.tableFormArray.at(
-      this.tableFormArray.controls.length - 1
+      this.tableFormArray.controls.length-1
     ) as FormGroup;
-    const { unit, unitPrice, tax } = currentFormGroup.controls;
+    const { unit, unitValue, tax } = currentFormGroup.controls;
 
     const setAmount = () => {
-      let discount = 0;
+      let taxRate = 0;
       for (let i of tax.value) {
-        if (i === 'SGST' || i === 'CGST' || i === 'VAT') {
-          discount += 12;
+        if (i === 'SGST' || i === 'CGST') {
+          taxRate += 12;
+        } else if(i === 'VAT'){
+          taxRate += 20;
         } else if (i === 'GST') {
-          discount += 18;
+          taxRate += 18;
         } else {
-          discount = 0;
+          taxRate = 0;
         }
       }
 
-      const amount = unit.value * unitPrice.value;
-      const totalValue = amount + (amount * discount) / 100;
+      const amount = unit.value * unitValue.value;
+      const totalValue = amount + (amount * taxRate) / 100;
 
       if (amount) {
         currentFormGroup.patchValue({
@@ -253,7 +264,7 @@ export class InvoiceComponent implements OnInit {
       }
     }; 
     unit.valueChanges.subscribe(setAmount);
-    unitPrice.valueChanges.subscribe(setAmount);
+    unitValue.valueChanges.subscribe(setAmount);
     tax.valueChanges.subscribe(setAmount);
 
 
@@ -307,25 +318,19 @@ export class InvoiceComponent implements OnInit {
         this.isValidDiscount = false;
       }
       if(error === 'maxOccupancy'){
-        this.discount.setErrors({ maxOccupancy: true})
+        this.discount.setErrors({ maxOccupancy: true});
         this.isValidDiscount = false;
       }
-
-      this.handleDiscount();
-
     };
 
     this.discountType.valueChanges.subscribe(discountSubscription);
     this.discount.valueChanges.subscribe(discountSubscription);
-    this.discountedAmount.valueChanges.subscribe(discountSubscription);
-    this.paidAmount.valueChanges.subscribe(discountSubscription);
   }
 
   /**
    * @function registerUnitPriceChange To handle changes in new charges
    */
   registerPaidChanges() {
-    // const { paidValue, paid, discountedAmount } = this.inputControl;
     const setError = () => {
       if (this.paidValue.value + +this.paid.value > this.discountedAmount.value) {
         return 'moreThanTotal';
@@ -345,12 +350,12 @@ export class InvoiceComponent implements OnInit {
         this.paid.setErrors({ moreThanTotal: true });
         this.isValidPaid = false;
       }
-      this.handlePaidAmount();
     });
   }
 
   onSaveDiscount() {
     this.viewDiscountTab = false;
+    this.handleDiscount();
   }
 
   handleDiscount(){
@@ -367,19 +372,10 @@ export class InvoiceComponent implements OnInit {
       }
     }
 
-    this.discount.valueChanges.subscribe((discount: number) => {
-        const total = calculateDiscount(discount, this.discountType.value);
-        this.totalDiscount.setValue(total);
-        this.discountedAmount.setValue(this.currentAmount.value - total);
-        this.dueAmount.setValue(this.discountedAmount.value - this.paidAmount.value);
-      })
-
-    this.discountType.valueChanges.subscribe((discountType: string) => {
-        const total = calculateDiscount(this.discount.value, discountType);
-        this.totalDiscount.setValue(total);
-        this.discountedAmount.setValue(this.currentAmount.value - total);
-        this.dueAmount.setValue(this.discountedAmount.value - this.paidAmount.value);
-    })
+    const total = calculateDiscount(this.discount.value , this.discountType.value);
+    this.totalDiscount.setValue(total);
+    this.discountedAmount.setValue(this.currentAmount.value - total);
+    this.dueAmount.setValue(this.discountedAmount.value - this.paidAmount.value);
   }
 
   onAddDiscount(e) {
@@ -413,19 +409,18 @@ export class InvoiceComponent implements OnInit {
       this.viewPaidTab = true;
     }
   }
-
+  
   savePaidAmount() {
     if (this.viewPaidTab) {
       this.viewPaidTab = false;
     }
+    this.handlePaidAmount();
   }
 
   handlePaidAmount(){
-    this.paid.valueChanges.subscribe((value)=>{
-      const total = +value + this.paidValue.value;
-      this.paidAmount.setValue(total);
-      this.dueAmount.setValue(this.discountedAmount.value - this.paidAmount.value);
-    })
+    const total = +this.paid.value + this.paidValue.value;
+    this.paidAmount.setValue(total);
+    this.dueAmount.setValue(this.discountedAmount.value - this.paidAmount.value);
   }
 
   /**
@@ -454,4 +449,48 @@ export class InvoiceComponent implements OnInit {
     //   this.selectedRows = this.selectedRows.shift();
     // }
   }
+
+  handleSave(): void{
+    if (this.useForm.invalid) {
+      this.useForm.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix the errors.'
+      );
+      return;
+    }
+    const data = this.invoiceService.mapInvoiceData(
+      this.useForm.getRawValue()
+    );
+    this.updateInvoiceData(data);
+    // formate data in InvoiceResponse
+  }
+
+  handleReset(){
+    this.useForm.reset();
+  }
+
+  createInvoiceData(data): void{
+    this.$subscription.add(
+      this.invoiceService.createInvoice(this.reservationId, data)
+      .subscribe((_)=>{
+        console.log("Invoice Created");
+      })
+    )
+  }
+
+  updateInvoiceData(data): void{
+    this.$subscription.add(
+      this.invoiceService.updateInvoice(this.reservationId, data)
+      .subscribe((res)=>{
+        console.log("Invoice Updated");
+      })
+    )
+  }
+
+    /**
+   * @function ngOnDestroy to unsubscribe subscription.
+   */
+    ngOnDestroy(): void {
+      this.$subscription.unsubscribe();
+    }
 }

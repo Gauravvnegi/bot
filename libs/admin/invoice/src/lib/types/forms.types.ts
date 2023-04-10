@@ -1,4 +1,5 @@
-export type InvoiceForm = {
+
+export class InvoiceForm {
     invoiceNumber: string;
     confirmationNumber: string;
     guestName: string;
@@ -11,6 +12,7 @@ export type InvoiceForm = {
     adults: string;
     children: string;
 
+    tableData: PaymentField[];
     currentAmount: number;
     discountedAmount: number;
     totalDiscount: number;
@@ -27,11 +29,12 @@ export type InvoiceForm = {
   export type PaymentField = {
     description: string;
     unit: number;
-    unitPrice: number;
+    unitValue: number;
     amount: number;
-    tax: string;
+    tax: string[];
     totalAmount: number;
   };
+  
 
 
   

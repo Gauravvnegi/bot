@@ -5,7 +5,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output,
+  Output
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -276,7 +276,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
 
   openUserDetails(rowData) {
     if (this.tabFilterItems[this.tabFilterIdx].value === 'REPORTING')
-      this.closeModal(rowData);
+      this.closeModal(rowData.userId);
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
@@ -298,10 +298,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function closeModal Emits the close click event for the modal
+   * @function closeModal To emit user id on close modal
+   * @param userId
    */
-  closeModal(userData?: string): void {
-    this.onModalClose.emit(userData);
+  closeModal(userId?: string): void {
+    this.onModalClose.emit(userId);
   }
 
   ngOnDestroy() {

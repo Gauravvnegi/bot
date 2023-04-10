@@ -36,7 +36,7 @@
     ></hospitality-bot-custom-file-upload>
     <hospitality-bot-select
       [ngClass]="{
-        'three-fourth': isSelectedTypePaid,
+        'one-third-width': isSelectedTypePaid,
         'half-width': !isSelectedTypePaid
       }"
       controlName="serviceType"
@@ -45,7 +45,7 @@
     ></hospitality-bot-select>
     <hospitality-bot-prefix-field
       *ngIf="isSelectedTypePaid"
-      class="three-fourth"
+      class="one-third-width"
       [options]="currencies"
       label="Original Price"
       preControlName="currency"
@@ -61,7 +61,7 @@
     </hospitality-bot-prefix-field>
     <hospitality-bot-select
       [ngClass]="{
-        'three-fourth': isSelectedTypePaid,
+        'one-third-width': isSelectedTypePaid,
         'half-width': !isSelectedTypePaid
       }"
       controlName="unit"

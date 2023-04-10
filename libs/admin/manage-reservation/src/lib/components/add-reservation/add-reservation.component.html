@@ -11,7 +11,8 @@
             label="Check-In Date"
             [settings]="{
               enableTime: false,
-              dateValue: startMinDate
+              dateValue: startMinDate,
+              isDisabled: disabledForm
             }"
             [minDate]="startMinDate"
           ></hospitality-bot-date>
@@ -19,7 +20,11 @@
             class="half-width"
             controlName="to"
             label="Check-Out Date"
-            [settings]="{ enableTime: false, dateValue: endMinDate }"
+            [settings]="{
+              enableTime: false,
+              dateValue: endMinDate,
+              isDisabled: disabledForm
+            }"
             [minDate]="endMinDate"
           ></hospitality-bot-date>
           <hospitality-bot-select
@@ -40,6 +45,7 @@
             class="half-width maxlength"
             controlName="sourceName"
             label="Booking Source Name"
+            maxLength="60"
             [props]="{
               placeholder: 'Enter',
               subtitle: 'Max 60',
@@ -64,6 +70,7 @@
           [userFormGroup]="userForm"
           (paginate)="loadMoreRoomTypes()"
           (onSearch)="searchRoomTypes($event)"
+          (refreshData)="getSummaryData()"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>
@@ -73,6 +80,7 @@
             class="half-width maxlength"
             controlName="firstName"
             label="First Name"
+            maxLength="60"
             [props]="{
               placeholder: 'Enter',
               subtitle: 'Max 60',
@@ -86,6 +94,7 @@
             class="half-width maxlength"
             controlName="lastName"
             label="Last Name"
+            maxLength="60"
             [props]="{
               placeholder: 'Enter ',
               subtitle: 'Max 60',
@@ -320,7 +329,7 @@
           <hospitality-bot-button
             (click)="HandleBooking()"
             label="Confirm Booking"
-            [disabled]="userForm.invalid"
+            [disabled]="userForm.invalid || disabledForm"
           ></hospitality-bot-button>
         </div>
       </ng-container>

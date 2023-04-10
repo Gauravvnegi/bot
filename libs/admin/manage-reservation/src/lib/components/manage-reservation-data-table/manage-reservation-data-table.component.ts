@@ -9,6 +9,7 @@ import {
   BaseDatatableComponent as BaseDatableComponent,
   ConfigService,
   TableService,
+  sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
@@ -18,9 +19,7 @@ import {
   cols,
   filters,
   ReservationSearchItem,
-  reservationStatus,
   ReservationStatusType,
-  ReservationTableValue,
   title,
 } from '../../constants/reservation-table';
 import { manageReservationRoutes } from '../../constants/routes';
@@ -43,7 +42,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   readonly manageReservationRoutes = manageReservationRoutes;
   hotelId!: string;
   tabFilterItems = filters;
-  statusValues = reservationStatus;
   selectedTable;
   tableName = title;
   filterChips = chips;
@@ -128,7 +126,12 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       .subscribe(
         (res) => {
           this.reservationLists = new ReservationList().deserialize(res);
-          this.values = this.reservationLists.reservationData;
+          this.values = this.reservationLists.reservationData.map((item) => {
+            return {
+              ...item,
+              statusValues: this.getStatusValues(item.reservationType),
+            };
+          });
           this.totalRecords = this.reservationLists.total;
           this.filterChips.forEach((item) => {
             item.total = this.reservationLists.entityStateCounts[item.value];
@@ -137,6 +140,32 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         this.handleError,
         this.handleFinal
       );
+  }
+
+  /**
+   * @function getStatusValues To get status value.
+   */
+  getStatusValues(status) {
+    return [
+      {
+        label: 'Draft',
+        value: ReservationStatusType.DRAFT,
+        type: 'warning',
+        disabled: status === ReservationStatusType.DRAFT ? true : false,
+      },
+      {
+        label: 'Cancel',
+        value: ReservationStatusType.CANCELLED,
+        type: 'failed',
+        disabled: status === ReservationStatusType.CANCELLED ? true : false,
+      },
+      {
+        label: 'Confirm',
+        value: ReservationStatusType.CONFIRMED,
+        type: 'new',
+        disabled: status === ReservationStatusType.CONFIRMED ? true : false,
+      },
+    ];
   }
 
   /**
@@ -155,6 +184,12 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
             this.values.find(
               (item) => item.id === reservationData.id
             ).reservationType = status;
+            this.values = this.values.map((item) => {
+              return {
+                ...item,
+                statusValues: this.getStatusValues(item.reservationType),
+              };
+            });
             this.snackbarService.openSnackBarAsText(
               'Booking ' + status + ' changes successfully',
               '',
@@ -224,12 +259,16 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.loading = true;
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        {
+          order: sharedConfig.defaultOrder,
+        },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { type: LibraryItem.service },
+        { type: 'ROOM_TYPE', entityId: this.hotelId },
       ]),
     };
     this.$subscription.add(
-      this.manageReservationService.exportCSV(this.hotelId, config).subscribe(
+      this.manageReservationService.exportCSV(config).subscribe(
         (res) => {
           FileSaver.saveAs(
             res,

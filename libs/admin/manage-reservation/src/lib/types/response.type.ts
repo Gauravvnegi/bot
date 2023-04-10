@@ -1,4 +1,7 @@
-import { EntityStateCountsResponse } from '../models/reservations.model';
+import {
+  EntityStateCountsResponse,
+  Status,
+} from '../models/reservations.model';
 /* Reservation List Response Types deceleration */
 export type ReservationListResponse = {
   reservationData?: ReservationResponse[];
@@ -30,6 +33,10 @@ export type ReservationResponse = {
   roomCount: number;
   reservationType: string;
   from: number;
+  to: number;
   totalAmount: number;
   fullName: string;
+  roomNumber: number;
+  statusValues: Status[];
+  sourceName: string;
 };

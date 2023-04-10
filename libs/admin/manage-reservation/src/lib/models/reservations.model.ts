@@ -3,7 +3,7 @@ import {
   ReservationListResponse,
   ReservationResponse,
 } from '../types/response.type';
-import { Option } from '@hospitality-bot/admin/shared';
+import { FlagType, Option } from '@hospitality-bot/admin/shared';
 /* Reservation */
 export class Reservation {
   id: string;
@@ -28,8 +28,12 @@ export class Reservation {
   roomCount: number;
   reservationType: string;
   from: number;
+  to: number;
   totalAmount: number;
   fullName: string;
+  roomNumber: number;
+  statusValues: Status[];
+  sourceName: string;
 
   deserialize(input: ReservationResponse) {
     this.id = input.id;
@@ -54,11 +58,21 @@ export class Reservation {
     this.roomCount = input?.roomCount;
     this.reservationType = input?.reservationType;
     this.from = input?.from;
+    this.to = input?.to;
     this.totalAmount = input?.totalAmount;
     this.fullName = this.firstName + ' ' + this.lastName;
+    this.roomNumber = input?.roomNumber;
+    this.sourceName = input?.sourceName;
     return this;
   }
 }
+
+export type Status = {
+  label: string;
+  value: string | boolean;
+  type: FlagType;
+  disabled?: boolean;
+};
 
 /* Lists of all type Reservations*/
 export class ReservationList {
@@ -153,7 +167,7 @@ export class ReservationFormData {
   address: AddressInfo;
   paymentMethod: PaymentInfo;
   offerId: string;
-  roomInformation;
+  roomInformation: RoomTypeInfo;
 
   deserialize(input): this {
     this.bookingInformation = new BookingInfo().deserialize(input);
@@ -284,8 +298,8 @@ export class SummaryData {
     this.location = input?.location;
     this.offerAmount = input?.offerAmount;
     this.roomTypeName = input?.roomTypeName;
-    this.originalPrice = input?.originalPrice;
-    this.basePrice = input?.basePrice;
+    this.originalPrice = input?.originalPrice || input?.roomOriginalPrice;
+    this.basePrice = input?.basePrice || input?.roomBasePrice;
     this.taxAndFees = input?.taxAndFees;
     this.totalAmount = input?.totalAmount;
     this.adultCount = input?.adultCount;

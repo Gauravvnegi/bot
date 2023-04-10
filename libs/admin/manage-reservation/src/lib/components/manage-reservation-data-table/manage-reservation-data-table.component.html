@@ -92,7 +92,7 @@
       <td>
         <div class="cell-content">
           <div class="contained__primary">
-            {{ rowData.roomCount }} - {{ rowData.roomType }}
+            {{ rowData.roomNumber || 'xx' }} - {{ rowData.roomType }}
           </div>
         </div>
       </td>
@@ -112,27 +112,37 @@
 
       <td>
         <div class="center-align">
-          <div class="primary-text">
-            {{ rowData.from | date: 'dd/MM/yyyy' }}
+          <div class="primary-text txtSize">
+            {{ rowData.from | date: 'dd/MM/yy' }}-{{
+              rowData.to | date: 'dd/MM/yy'
+            }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="center-align">
+          <div class="primary-text txtSize">
+            <span
+              [ngClass]="{
+                'status-text-reject':
+                  rowData.totalDueAmount > 0 &&
+                  rowData.totalDueAmount <= rowData.totalAmount,
+                'status-text-success': rowData.totalDueAmount === 0
+              }"
+              >{{ rowData.totalDueAmount | currency: 'INR' }}</span
+            >
+            /{{ rowData.totalAmount | currency: 'INR' }}
           </div>
         </div>
       </td>
       <td>
         <div class="center-align">
           <div class="primary-text">
-            {{ rowData.totalDueAmount | currency: 'INR' }} /
-            {{ rowData.totalAmount | currency: 'INR' }}
+            {{ rowData.sourceName }}
           </div>
-        </div>
-      </td>
-      <td>
-        <div class="center-align">
-          <div class="primary-text">
+          <div class="secondary-text">
             {{ rowData.source }}
           </div>
-        </div>
-        <div class="secondary-text">
-          {{ rowData.guestCompany }}
         </div>
       </td>
 
@@ -150,7 +160,7 @@
       <td>
         <div class="" *ngIf="rowData.reservationType; else emptyCell">
           <hospitality-bot-toggle-dropdown
-            [listItem]="statusValues"
+            [listItem]="rowData.statusValues"
             (onClick)="handleStatus($event, rowData)"
             [status]="rowData.reservationType"
           >

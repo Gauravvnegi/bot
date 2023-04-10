@@ -20,6 +20,7 @@ import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
   BookingConfig,
+  BookingInfo,
   OfferData,
   OfferList,
   PaymentMethodList,
@@ -60,6 +61,7 @@ export class AddReservationComponent implements OnInit {
 
   displayBookingOffer: boolean = false;
   formValueChanges = false;
+  disabledForm = false;
   startMinDate = new Date();
   endMinDate = new Date();
 
@@ -199,20 +201,6 @@ export class AddReservationComponent implements OnInit {
         }
       });
     this.userForm
-      .get('roomInformation.adultCount')
-      ?.valueChanges.subscribe((res) => {
-        if (res) {
-          this.getSummaryData();
-        }
-      });
-    this.userForm
-      .get('roomInformation.childCount')
-      ?.valueChanges.subscribe((res) => {
-        if (res) {
-          this.getSummaryData();
-        }
-      });
-    this.userForm
       .get('roomInformation.roomCount')
       ?.valueChanges.subscribe((res) => {
         if (res) {
@@ -223,7 +211,6 @@ export class AddReservationComponent implements OnInit {
             this.userForm
               .get('roomInformation.adultCount')
               .patchValue(this.userForm.get('roomInformation.roomCount').value);
-          this.getSummaryData();
         }
       });
   }
@@ -253,23 +240,18 @@ export class AddReservationComponent implements OnInit {
             { label: 'Cancelled', value: 'CANCELED' },
           ];
           this.getReservationDetails();
+        } else {
+          this.reservationTypes = [
+            { label: 'Draft', value: 'DRAFT' },
+            { label: 'Confirmed', value: 'CONFIRMED' },
+          ];
           this.userForm.valueChanges.subscribe((_) => {
             if (!this.formValueChanges) {
               this.formValueChanges = true;
               this.listenForFormChanges();
             }
           });
-        } else
-          this.reservationTypes = [
-            { label: 'Draft', value: 'DRAFT' },
-            { label: 'Confirmed', value: 'CONFIRMED' },
-          ];
-        this.userForm.valueChanges.subscribe((_) => {
-          if (!this.formValueChanges) {
-            this.formValueChanges = true;
-            this.listenForFormChanges();
-          }
-        });
+        }
       })
     );
   }
@@ -283,9 +265,40 @@ export class AddReservationComponent implements OnInit {
           const data = new ReservationFormData().deserialize(response);
           console.log(data);
           this.userForm.patchValue(data);
-          this.userForm.get('bookingInformation.source').disable();
+          this.summaryData = new SummaryData().deserialize(response);
+          this.setFormDisability(data.bookingInformation);
+          if (data.offerId)
+            this.getOfferByRoomType(
+              this.userForm.get('roomInformation.roomTypeId').value
+            );
+          this.userForm.valueChanges.subscribe((_) => {
+            if (!this.formValueChanges) {
+              this.formValueChanges = true;
+              this.listenForFormChanges();
+            }
+          });
         }, this.handleError)
     );
+  }
+
+  setFormDisability(data: BookingInfo): void {
+    this.userForm.get('bookingInformation.source').disable();
+    switch (true) {
+      case data.reservationType === 'CONFIRMED':
+        this.userForm.disable();
+        this.disabledForm = true;
+        break;
+      case data.reservationType === 'CANCELED':
+        this.userForm.disable();
+        this.disabledForm = true;
+        break;
+      case data.source === 'CREATE_WITH':
+        this.disabledForm = true;
+        break;
+      case data.source === 'OTHERS':
+        this.disabledForm = true;
+        break;
+    }
   }
 
   getOfferByRoomType(id: string): void {
@@ -391,11 +404,11 @@ export class AddReservationComponent implements OnInit {
       dialogConfig
     );
     togglePopupCompRef.componentInstance.content = {
-      heading: `Booking ${this.reservationId ? 'Updated' : 'Confirmed'}`,
+      heading: `Booking ${this.reservationId ? 'Updated' : 'Created'}`,
       description: [
-        `Your booking is successfully ${
-          this.reservationId ? 'Updated' : 'Confirmed'
-        }`,
+        `Your booking has ${
+          this.reservationId ? 'updated' : 'created'
+        } successfully `,
         `Your booking confirmation number is ${number}`,
       ],
     };
@@ -411,9 +424,7 @@ export class AddReservationComponent implements OnInit {
       {
         label: 'Copy Confirmation number',
         onClick: () => {
-          this._clipboard.copy(number);
-          this.modalService.close();
-          this.location.back();
+          this.copiedConfirmationNumber(number);
         },
         variant: 'contained',
       },
@@ -421,6 +432,13 @@ export class AddReservationComponent implements OnInit {
     togglePopupCompRef.componentInstance.onClose.subscribe(() => {
       this.modalService.close();
       this.location.back();
+    });
+  }
+
+  copiedConfirmationNumber(number): void {
+    this._clipboard.copy(number);
+    this.snackbarService.openSnackBarAsText('Confirmation number copied', '', {
+      panelClass: 'success',
     });
   }
 

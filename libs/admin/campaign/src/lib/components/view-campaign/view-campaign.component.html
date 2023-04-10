@@ -39,7 +39,7 @@
 
   <div class="one-fourth">{{ 'formFieldLabels.from' | translate }}</div>
   <hospitality-bot-select
-    class="three-fourth"
+    class="one-third-width"
     controlName="from"
     [options]="fromEmailList"
     [disabled]="true"
@@ -47,7 +47,7 @@
 
   <div class="one-fourth">{{ 'formFieldLabels.to' | translate }}</div>
   <hospitality-bot-to-receiver-field
-    class="three-fourth"
+    class="one-third-width"
     [name]="'to'"
     [hotelId]="hotelId"
     [chipList]="campaignFG.get('to')?.value || []"
@@ -59,7 +59,7 @@
   <ng-container *ngIf="campaignFG?.get('cc')">
     <div class="one-fourth">{{ 'formFieldLabels.cc' | translate }}</div>
     <hospitality-bot-email-chip-list
-      class="three-fourth"
+      class="one-third-width"
       [parentFG]="campaignFG"
       [name]="'cc'"
       [disabled]="true"
@@ -69,7 +69,7 @@
   <ng-container *ngIf="campaignFG?.get('bcc')">
     <div class="one-fourth">{{ 'formFieldLabels.bcc' | translate }}</div>
     <hospitality-bot-email-chip-list
-      class="three-fourth"
+      class="one-third-width"
       [parentFG]="campaignFG"
       [name]="'bcc'"
       [disabled]="true"
@@ -78,7 +78,7 @@
 
   <div class="one-fourth">{{ 'formFieldLabels.subject' | translate }}</div>
   <hospitality-bot-input
-    class="three-fourth"
+    class="one-third-width"
     controlName="subject"
   ></hospitality-bot-input>
 
@@ -86,7 +86,7 @@
     {{ 'formFieldLabels.previewText' | translate }}
   </div>
   <hospitality-bot-input
-    class="three-fourth"
+    class="one-third-width"
     controlName="previewText"
   ></hospitality-bot-input>
 

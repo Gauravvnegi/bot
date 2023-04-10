@@ -11,6 +11,7 @@ export class RoomIteratorComponent extends IteratorComponent {
   @Input() userFormGroup: FormGroup;
   @Output() onSearch = new EventEmitter();
   @Output() paginate = new EventEmitter();
+  @Output() refreshData = new EventEmitter();
 
   constructor(protected fb: FormBuilder) {
     super(fb);
@@ -34,5 +35,9 @@ export class RoomIteratorComponent extends IteratorComponent {
 
   searchRoomTypes(event): void {
     this.onSearch.emit(event);
+  }
+
+  getSummaryData(): void {
+    this.refreshData.emit();
   }
 }

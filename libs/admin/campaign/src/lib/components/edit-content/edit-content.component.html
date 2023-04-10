@@ -2,7 +2,7 @@
   <div class="field full-width">
     <div class="one-fourth">{{ 'content.add' | translate }} :</div>
     <div
-      class="ck-editor three-fourth"
+      class="ck-editor one-third-width"
       *ngIf="campaignFG?.get('message')?.value; else createTemplate"
     >
       <div class="info-container" *ngIf="campaignDetails">
@@ -80,7 +80,7 @@
 <ng-template #viewModeContent>
   <div class="field full-width">
     <div class="one-fourth">{{ 'content.view' | translate }} :</div>
-    <div class="ck-editor three-fourth">
+    <div class="ck-editor one-third-width">
       <div class="info-container" *ngIf="campaignDetails">
         <div>
           {{ campaignDetails.templateName }}

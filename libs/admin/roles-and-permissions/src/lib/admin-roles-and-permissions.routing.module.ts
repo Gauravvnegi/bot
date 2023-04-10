@@ -1,20 +1,25 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
-import { ManagePermissionComponent } from './components/manage-permission/manage-permission.component';
+import { MainComponent } from './components/main/main.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { managePermissionRoutes, navRoute } from './constants/routes';
 
 const appRoutes: Route[] = [
   {
     path: '',
-    component: ManagePermissionComponent,
+    component: MainComponent,
     children: [
       {
-        path: '',
-        component: DashboardErrorComponent,
+        path: managePermissionRoutes.userProfile.route,
+        component: UserProfileComponent,
       },
       {
-        path: ':id',
+        path: managePermissionRoutes.addNewUser.route,
+        component: UserProfileComponent,
+      },
+      {
+        path: managePermissionRoutes.editUser.route,
         component: UserProfileComponent,
       },
       { path: '**', redirectTo: '404' },
@@ -27,4 +32,6 @@ const appRoutes: Route[] = [
   imports: [RouterModule.forChild(appRoutes)],
   exports: [RouterModule],
 })
-export class AdminRolesAndPermissionsRoutingModule {}
+export class AdminRolesAndPermissionsRoutingModule {
+  static components = [UserProfileComponent, MainComponent];
+}

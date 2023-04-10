@@ -31,14 +31,14 @@
   </div>
   <div class="one-fourth">{{ 'formFieldLabels.from' | translate }}</div>
   <hospitality-bot-select
-    class="three-fourth"
+    class="one-third-width"
     label="Select email"
     controlName="from"
     [options]="fromEmailList"
   ></hospitality-bot-select>
 
   <div class="one-fourth">{{ 'formFieldLabels.to' | translate }}</div>
-  <div class="email-style three-fourth">
+  <div class="email-style one-third-width">
     <hospitality-bot-to-receiver-field
       [name]="'to'"
       [hotelId]="hotelId"
@@ -65,7 +65,7 @@
   <ng-container *ngIf="campaignFG?.get('cc')">
     <div class="one-fourth">{{ 'formFieldLabels.cc' | translate }}</div>
     <hospitality-bot-email-chip-list
-      class="three-fourth"
+      class="one-third-width"
       [parentFG]="campaignFG"
       [name]="'cc'"
     ></hospitality-bot-email-chip-list>
@@ -73,14 +73,14 @@
   <ng-container *ngIf="campaignFG?.get('bcc')">
     <div class="one-fourth">{{ 'formFieldLabels.bcc' | translate }}</div>
     <hospitality-bot-email-chip-list
-      class="three-fourth"
+      class="one-third-width"
       [parentFG]="campaignFG"
       [name]="'bcc'"
     ></hospitality-bot-email-chip-list>
   </ng-container>
 
   <div class="one-fourth">{{ 'formFieldLabels.subject' | translate }}</div>
-  <div class="email-style three-fourth">
+  <div class="email-style one-third-width">
     <hospitality-bot-input
       controlName="subject"
       label="Enter Subject"
@@ -109,7 +109,7 @@
   <div class="one-fourth">
     {{ 'formFieldLabels.previewText' | translate }}
   </div>
-  <div class="email-style three-fourth">
+  <div class="email-style one-third-width">
     <hospitality-bot-input
       controlName="previewText"
       label="Enter Preview Text (optional)"

@@ -1,85 +1,96 @@
 <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+  <hospitality-bot-button
+    *ngIf="hasPageState('userProfile')"
+    label="+ Add New User"
+    (click)="addUser()"
+  ></hospitality-bot-button>
 </hospitality-bot-navigation-header>
 
 <form class="wrapper" [formGroup]="userForm">
-  <hospitality-bot-input
-    class="third-width"
-    controlName="firstName"
-    label="First Name :"
-  ></hospitality-bot-input>
+  <div class="form-block">
+    <hospitality-bot-input
+      class="one-third-width"
+      controlName="firstName"
+      label="First Name"
+    ></hospitality-bot-input>
 
-  <hospitality-bot-input
-    class="third-width"
-    controlName="lastName"
-    label="Last Name :"
-  ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="one-third-width"
+      controlName="lastName"
+      label="Last Name"
+    ></hospitality-bot-input>
 
-  <hospitality-bot-multi-select
-    class="third-width"
-    controlName="products"
-    [options]="products"
-    label="Product Type :"
-  ></hospitality-bot-multi-select>
+    <hospitality-bot-input
+      class="one-third-width"
+      controlName="email"
+      label="Email ID"
+      [props]="{
+        errorMessages: {
+          required: 'This is a required field.',
+          pattern: 'Enter valid email address'
+        }
+      }"
+    ></hospitality-bot-input>
 
-  <hospitality-bot-multi-select
-    class="full-width"
-    controlName="departments"
-    [options]="departments"
-    label="Dept :"
-  ></hospitality-bot-multi-select>
+    <hospitality-bot-input
+      class="one-third-width"
+      controlName="jobTitle"
+      label="Job Title"
+    ></hospitality-bot-input>
 
-  <hospitality-bot-input
-    class="third-width"
-    controlName="jobTitle"
-    label="Job Title :"
-  ></hospitality-bot-input>
+    <hospitality-bot-multi-select
+      class="two-third-width"
+      controlName="products"
+      [options]="products"
+      label="Product Type"
+    ></hospitality-bot-multi-select>
 
-  <hospitality-bot-select
-    class="third-width"
-    controlName="branchName"
-    [options]="branchNames"
-    label="Hotel :"
-  ></hospitality-bot-select>
+    <hospitality-bot-multi-select
+      class="full-width"
+      controlName="departments"
+      [options]="departments"
+      label="Departments"
+    ></hospitality-bot-multi-select>
 
-  <hospitality-bot-prefix-field
-    class="third-width phoneNo"
-    [options]="countries"
-    preControlName="cc"
-    postControlName="phoneNumber"
-    [defaultProps]="{ post: { type: 'string' } }"
-    label="Phone# :"
-  ></hospitality-bot-prefix-field>
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="branchName"
+      [options]="branchNames"
+      label="Hotel"
+    ></hospitality-bot-select>
 
-  <hospitality-bot-select
-    class="third-width"
-    controlName="brandName"
-    [options]="brandNames"
-    label="Brand :"
-  ></hospitality-bot-select>
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="brandName"
+      [options]="brandNames"
+      label="Brand"
+    ></hospitality-bot-select>
 
-  <hospitality-bot-input
-    class="third-width"
-    controlName="email"
-    label="Email ID :"
-    [props]="{
-      errorMessages: {
-        required: 'This is a required field.',
-        pattern: 'Enter valid email address'
-      }
-    }"
-  ></hospitality-bot-input>
+    <hospitality-bot-prefix-field
+      class="one-third-width"
+      [options]="countries"
+      preControlName="cc"
+      postControlName="phoneNumber"
+      [defaultProps]="{ post: { type: 'string' } }"
+      label="Phone"
+    ></hospitality-bot-prefix-field>
 
-  <ng-container *ngIf="hasPageState('view') && !!totalTeamMember">
-    <div class="one-width">Team :</div>
-    <div class="third-width">
-      <div class="member">
-        <div
-          *ngFor="let item of teamMember; let index = index"
-          (click)="openTableModal()"
-        >
+    <!-- <hospitality-bot-custom-file-upload
+      class="two-third-width"
+      formControlName="profileUrl"
+      [hotelId]="userToModDetails.id"
+      path="static-content/profile"
+    ></hospitality-bot-custom-file-upload> -->
+
+    <div
+      class="two-third-width member-container"
+      *ngIf="hasPageState('userProfile') && !!totalTeamMember"
+    >
+      <div class="label">Team</div>
+      <div class="member" (click)="openTableModal()">
+        <div *ngFor="let item of teamMember; let index = index">
           <div
             class="member-name"
-            [style.margin-left]="'calc(indexpx + 48px)'"
             *ngIf="index < 3"
             [style.background]="item.color"
           >
@@ -87,45 +98,35 @@
           </div>
         </div>
       </div>
-      <div *ngIf="totalTeamMember > 3" class="total-member">
-        + {{ totalTeamMember - 3 }}
+      <div class="total-member">
+        <ng-container *ngIf="totalTeamMember > 3">
+          + {{ totalTeamMember - 3 }}
+        </ng-container>
       </div>
     </div>
-  </ng-container>
-  <div
-    *ngIf="!totalTeamMember"
-    class="all-user two-third-width"
-    (click)="openTableModal()"
-  >
-    View All Users
+
+    <div
+      *ngIf="!totalTeamMember"
+      class="all-user one-third-width"
+      (click)="openTableModal()"
+    >
+      View All Users
+    </div>
   </div>
 
   <!-- ****************Permission Wrapper**************** -->
-  <div
-    class="wrapper-manage-permission full-width"
-    (click)="handleManage($event)"
-  >
+  <div class="wrapper-manage-permission" (click)="handleManage($event)">
     <div class="header">
-      <span *ngIf="hasPageState('add', 'edit')">
+      <span *ngIf="hasPageState('addNewUser', 'editUser')">
         Manage Permissions
       </span>
-      <span *ngIf="hasPageState('view')">
+      <span *ngIf="hasPageState('userProfile')">
         Permissions
       </span>
-      <hospitality-bot-button
-        label="+ Add New User"
-        (click)="addUser()"
-        *ngIf="hasPageState('view')"
-      >
-      </hospitality-bot-button>
     </div>
 
     <mat-accordion>
-      <mat-expansion-panel
-        (opened)="panelOpenState = true"
-        (closed)="panelOpenState = false"
-        expanded
-      >
+      <mat-expansion-panel expanded>
         <mat-expansion-panel-header>
           <mat-panel-title>
             <div *ngIf="userToModDetails?.products" class="tabs">
@@ -224,9 +225,12 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <div class="permission-button-wrapper" *ngIf="hasPageState('edit', 'add')">
+    <div
+      class="permission-button-wrapper"
+      *ngIf="hasPageState('editUser', 'addNewUser')"
+    >
       <hospitality-bot-button
-        [label]="isUpdatingPermissions ? 'Updating User Permissions' : 'Save'"
+        [label]="isUpdatingPermissions ? 'Saving...' : 'Save'"
         (click)="savePermission()"
         [showLoader]="isUpdatingPermissions"
       ></hospitality-bot-button>

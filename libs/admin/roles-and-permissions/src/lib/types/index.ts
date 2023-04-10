@@ -1,3 +1,5 @@
+import { managePermissionRoutes } from '../constants/routes';
+
 export type Permission = {
   entity: string;
   label: string;
@@ -17,7 +19,7 @@ export type PermissionMod = Permission & {
   };
 };
 
-export type PageState = 'view' | 'edit' | 'add';
+export type PageState = keyof typeof managePermissionRoutes;
 
 export type QueryConfig = {
   queryObj?: string;

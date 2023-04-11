@@ -190,7 +190,7 @@ export class InvoiceComponent implements OnInit {
       const data = new Invoice().deserialize(res);
       this.useForm.patchValue(data);
     })
-    this.discountType.patchValue('%Off')
+    this.discountType.patchValue('%Off');
   }
 
   initFormSubscription(){

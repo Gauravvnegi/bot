@@ -1,20 +1,11 @@
 import { get, set } from 'lodash';
 import * as moment from 'moment';
+import { UserListResponse, UserResponse } from '../types/response';
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
-export class UserPermissionTable implements IDeserializable {
-  records: User[];
-  deserialize(input: any) {
-    this.records = input.records.map((record) =>
-      new User().deserialize(record)
-    );
-    return this;
-  }
-}
-
-export class User implements IDeserializable {
+export class User{
   firstName;
   lastName;
   jobTitle;
@@ -28,23 +19,20 @@ export class User implements IDeserializable {
   hotelAccess;
   status;
   permissionConfigs;
-  deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'userId', get(input, ['id'], '')),
-      set({}, 'parentId', get(input, ['parentId'], '')),
-      set({}, 'firstName', get(input, ['firstName'], '')),
-      set({}, 'lastName', get(input, ['lastName'], '')),
-      set({}, 'jobTitle', get(input, ['title'], '')),
-      set({}, 'departments', get(input, ['departments'], '')),
-      set({}, 'cc', this.getNationality(get(input, ['cc'], ''))),
-      set({}, 'phoneNumber', get(input, ['phoneNumber'], '')),
-      set({}, 'profileUrl', get(input, ['profileUrl'], '')),
-      set({}, 'email', get(input, ['email'], '')),
-      set({}, 'hotelAccess', get(input, ['hotelAccess'], '')),
-      set({}, 'status', get(input, ['status'], '')),
-      set({}, 'permissionConfigs', get(input, ['permissions'], ''))
-    );
+  deserialize(input: UserResponse) {
+    this.firstName = input.firstName;
+    this.lastName = input.lastName;
+    this.jobTitle = input.title;
+    this.departments = input.departments;
+    this.cc = input.cc;
+    this.phoneNumber = input.phoneNumber;
+    this.email = input.email;
+    this.profileUrl = input.profileUrl;
+    this.userId = input.id;
+    this.parentId = input.parentId;
+    this.hotelAccess = input.hotelAccess;
+    this.status = input.status;
+    this.permissionConfigs = input.permissions;
     return this;
   }
 
@@ -59,6 +47,13 @@ export class User implements IDeserializable {
   getBrandAndBranchName() {
     if (this.hotelAccess?.chains?.length) {
       return `${this.hotelAccess.chains[0].name},${this.hotelAccess.chains[0].hotels[0].name} `;
+    }
+    return '';
+  }
+
+  getDepartments(){
+    if(this.departments.length){
+      return `${this.departments[0].departmentLabel}`;
     }
     return '';
   }
@@ -99,6 +94,12 @@ export class User implements IDeserializable {
   }
 }
 
-// export class Manager implements IDeserializable{
-
-// }
+export class UserPermissionTable{
+  records: User[];
+  deserialize(input: UserListResponse) {
+    this.records = input.records.map((record) =>
+      new User().deserialize(record)
+    );
+    return this;
+  }
+}

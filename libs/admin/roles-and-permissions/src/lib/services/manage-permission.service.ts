@@ -28,6 +28,7 @@ export class ManagePermissionService extends ApiService {
       phoneNumber: value.phoneNumber,
       profileUrl: value.profileUrl,
       permissions: value.permissionConfigs,
+      departments: value.departments,
       hotelAccess: {
         chains: [
           {

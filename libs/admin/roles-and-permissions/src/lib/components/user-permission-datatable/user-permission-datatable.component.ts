@@ -20,6 +20,7 @@ import { Observable, Subscription } from 'rxjs';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { QueryConfig } from '../../types';
+import { chips, cols, tableName } from '../../constants/data-table';
 
 @Component({
   selector: 'hospitality-bot-user-permission-datatable',
@@ -34,7 +35,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   @Output() onModalClose = new EventEmitter();
   @Input() tabFilterIdx = 1;
 
-  tableName = 'My Team';
+  tableName = tableName;
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
@@ -42,32 +43,12 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   isQuickFilters = false;
   isTabFilters = true;
   tabFilterItems = [
-    { label: 'All', content: '', value: 'ALL' },
-    { label: 'Reporting to me', content: '', value: 'REPORTING' },
+    { label: 'All', content: '', value: 'ALL', disabled: true, total: 0, chips: [] },
+    { label: 'Reporting to me', content: '', value: 'REPORTING', disabled: false, total: 0, chips: [] },
   ];
-  hotelId;
-
-  cols = [
-    {
-      field: 'firstName',
-      header: 'Name/Mobile & Email',
-      sortType: 'string',
-      isSort: true,
-    },
-    {
-      field: 'getBrandAndBranchName()',
-      header: 'Hotel Name & Job title',
-      sortType: 'string',
-      isSort: true,
-      isSearchDisabled: true,
-    },
-    {
-      field: 'package',
-      header: 'Active',
-      isSort: false,
-      isSearchDisabled: true,
-    },
-  ];
+  hotelId: string;
+  filterChips = chips;
+  cols = cols;
 
   $subscription = new Subscription();
 
@@ -98,6 +79,9 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
           this.values = new UserPermissionTable().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
+          this.tabFilterItems.forEach((tab)=>{
+            tab.total = this.totalRecords;
+          });
           this.loading = false;
         },
         (error) => {

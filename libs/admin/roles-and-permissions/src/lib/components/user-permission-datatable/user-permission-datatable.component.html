@@ -51,7 +51,7 @@
           ></hospitality-bot-tab-group>
           <hospitality-bot-filter-chips
             *ngIf="isQuickFilters"
-            [chips]="tabFilterItems[tabFilterIdx].chips"
+            [chips]="filterChips"
             (onChange)="toggleQuickReplyFilter($event)"
           ></hospitality-bot-filter-chips>
         </div>
@@ -84,18 +84,21 @@
               (click)="onCheckboxClicked($event)"
             ></p-tableCheckbox>
           </td>
-          <td class="name">
-            <div class="data">
-              {{ rowData.getFullName() }}
-              <p>{{ rowData.getContactDetails() }}</p>
-              <p>{{ rowData.email }}</p>
+          <td>
+            <div class="cell-content">
+              <div class="primary-text">{{ rowData.getFullName() }}</div>
+              <div class="secondary-text">
+                <p>{{ rowData.getContactDetails() }}</p>
+                <p>{{ rowData.email }}</p>
+              </div>
             </div>
           </td>
-          <td class="brand-name">
-            {{ rowData.getBrandAndBranchName() }}
-            <p>{{ rowData.jobTitle }}</p>
+          <td class="primary-text">
+            {{ rowData.getDepartments() }}
           </td>
-
+          <td class="primary-text">
+            {{ rowData.jobTitle }}
+          </td>
           <td>
             <div class="cell-content">
               <hospitality-bot-toggle-dropdown

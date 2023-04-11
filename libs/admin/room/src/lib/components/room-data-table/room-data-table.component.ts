@@ -359,6 +359,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param param0
    */
   handleError = ({ error }): void => {
+    this.values = [];
     this.loading = false;
     this.snackbarService
       .openSnackBarWithTranslate(

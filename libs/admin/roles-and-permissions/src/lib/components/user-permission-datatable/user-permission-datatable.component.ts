@@ -5,7 +5,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -101,6 +101,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         (error) => {
+          this.values = [];
           this.loading = false;
           this.snackbarService
             .openSnackBarWithTranslate(
@@ -150,6 +151,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.snackbarService
             .openSnackBarWithTranslate(

@@ -66,14 +66,29 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     this.subscription$.add(
       this.offerService
         .getLibraryItems<OfferListResponse>(this.hotelId, this.getQueryConfig())
-        .subscribe((res) => {
-          const offerList = new OfferList().deserialize(res);
-          this.values = offerList.records;
-          this.totalRecords = offerList.total;
-          this.filterChips.forEach((item) => {
-            item.total = offerList.entityStateCounts[item.value];
-          });
-        })
+        .subscribe(
+          (res) => {
+            const offerList = new OfferList().deserialize(res);
+            this.values = offerList.records;
+            this.totalRecords = offerList.total;
+            this.filterChips.forEach((item) => {
+              item.total = offerList.entityStateCounts[item.value];
+            });
+          },
+          ({ error }) => {
+            this.values = [];
+            this.loading = false;
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.error.${error?.type}`,
+                  priorityMessage: error?.message,
+                },
+                ''
+              )
+              .subscribe();
+          }
+        )
     );
   }
 

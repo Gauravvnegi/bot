@@ -100,8 +100,10 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => this.setRecords(data),
-        ({ error }) =>
-          this.showMessage({ ...error, key: 'messages.error.loadData' }),
+        ({ error }) => {
+          this.values = [];
+          this.showMessage({ ...error, key: 'messages.error.loadData' });
+        },
         () => (this.loading = false)
       )
     );
@@ -318,8 +320,10 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         }
       ).subscribe(
         (data) => this.setRecords(data),
-        ({ error }) =>
-          this.showMessage({ ...error, key: 'messages.error.fetch' }),
+        ({ error }) => {
+          this.values = [];
+          this.showMessage({ ...error, key: 'messages.error.fetch' });
+        },
         () => (this.loading = false)
       )
     );

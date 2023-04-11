@@ -118,6 +118,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
             this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.snackbarService
             .openSnackBarWithTranslate({
@@ -223,6 +224,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.snackbarService
             .openSnackBarWithTranslate({

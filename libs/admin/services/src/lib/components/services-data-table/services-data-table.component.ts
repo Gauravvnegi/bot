@@ -230,6 +230,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
    * @param param0 network error
    */
   handleError = ({ error }): void => {
+    this.values = [];
     this.loading = false;
     this.snackbarService
       .openSnackBarWithTranslate(

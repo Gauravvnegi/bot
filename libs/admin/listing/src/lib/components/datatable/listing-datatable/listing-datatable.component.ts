@@ -112,6 +112,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
           this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.snackbarService
             .openSnackBarWithTranslate(
@@ -202,6 +203,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
           this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.snackbarService
             .openSnackBarWithTranslate(

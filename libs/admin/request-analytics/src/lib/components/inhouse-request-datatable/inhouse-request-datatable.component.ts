@@ -103,6 +103,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.snackbarService
             .openSnackBarWithTranslate(
@@ -194,6 +195,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.snackbarService
             .openSnackBarWithTranslate(

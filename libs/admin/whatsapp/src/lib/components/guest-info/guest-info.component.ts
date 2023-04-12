@@ -41,21 +41,9 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   guestData: IContact;
   hotelId: string;
   isLoading = false;
-  selectedIndex = 0;
+  selectedTab = 0;
   requestList;
-  buttonConfig = [
-    {
-      button: true,
-      label: 'Edit Details',
-      icon: 'assets/svg/user.svg',
-    },
-    {
-      button: true,
-      label: 'Map Details',
-      icon: 'assets/svg/user.svg',
-    },
-    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
-  ];
+
   constructor(
     private modalService: ModalService,
     private messageService: MessageService,
@@ -175,18 +163,12 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   onTabChanged(event) {
-    this.selectedIndex = event.index;
+    this.selectedTab = event.index;
+    console.log(this.selectedTab);
   }
 
   handleButtonCLick(): void {
-    switch (this.selectedIndex) {
-      case 0:
-        this.updateGuestDetails();
-        break;
-      case 1:
-        this.updateGuestDetails();
-        break;
-    }
+    this.updateGuestDetails();
   }
 
   updateGuestDetails() {

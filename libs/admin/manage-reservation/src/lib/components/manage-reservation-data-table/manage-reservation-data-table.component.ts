@@ -286,6 +286,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    * @param param network error
    */
   handleError = ({ error }): void => {
+    this.values = [];
     this.loading = false;
     this.snackbarService
       .openSnackBarWithTranslate(

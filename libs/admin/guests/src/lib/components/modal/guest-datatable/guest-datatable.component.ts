@@ -82,6 +82,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.snackbarService
             .openSnackBarWithTranslate(
@@ -147,6 +148,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.snackbarService
             .openSnackBarWithTranslate(

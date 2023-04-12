@@ -115,6 +115,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.snackbarService
             .openSnackBarWithTranslate(
@@ -274,6 +275,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
+          this.values = [];
           this.snackbarService
             .openSnackBarWithTranslate(
               {

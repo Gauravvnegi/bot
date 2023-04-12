@@ -271,6 +271,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.showErrorMessage(error);
         }
@@ -376,6 +377,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
           this.showErrorMessage(error);
         }

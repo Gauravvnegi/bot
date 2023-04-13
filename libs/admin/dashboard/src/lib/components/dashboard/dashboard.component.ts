@@ -5,6 +5,7 @@ import {
   DetailsComponent,
   Reservation,
 } from '@hospitality-bot/admin/reservation';
+import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
 import { NotificationService } from 'apps/admin/src/app/core/theme/src/lib/services/notification.service';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
@@ -21,6 +22,8 @@ import { Subscription } from 'rxjs';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   tables = TableNames;
+  welcomeMessage = 'Welcome To Your Dashboard';
+  navRoutes: NavRouteOptions = [{ label: 'eFrontdesk Dashboard', link: './' }];
   private $subscription = new Subscription();
   constructor(
     private reservationService: ReservationService,

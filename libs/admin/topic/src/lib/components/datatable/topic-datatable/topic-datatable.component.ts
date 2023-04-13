@@ -25,6 +25,7 @@ import { TopicService } from '../../../services/topic.service';
 import { Topics } from '../../../data-models/topicConfig.model';
 import { topicConfig } from '../../../constants/topic';
 import { TranslateService } from '@ngx-translate/core';
+import { TopicRoutes } from '../../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-topic-datatable',
@@ -199,7 +200,9 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    * @function openCreateTopic navigate to create topic page.
    */
   openCreateTopic() {
-    this._router.navigate(['create'], { relativeTo: this.route });
+    this._router.navigate([TopicRoutes.createTopic.route], {
+      relativeTo: this.route,
+    });
   }
 
   /**
@@ -209,7 +212,9 @@ export class TopicDatatableComponent extends BaseDatatableComponent
    */
   openTopic(event, topic): void {
     event.stopPropagation();
-    this._router.navigate([`edit/${topic.id}`], { relativeTo: this.route });
+    this._router.navigate([`${TopicRoutes.createTopic.route}/${topic.id}`], {
+      relativeTo: this.route,
+    });
   }
 
   /**

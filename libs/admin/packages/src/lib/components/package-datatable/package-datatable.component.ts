@@ -11,11 +11,11 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { LazyLoadEvent } from 'primeng/api/public_api';
 import { Subscription } from 'rxjs';
 import { chips, cols, title } from '../../constant/data-table';
-import routes from '../../constant/routes';
 import { PackageList } from '../../models/packages.model';
 import { PackagesService } from '../../services/packages.service';
 import { PackageData } from '../../types/package';
 import { PackageListResponse, PackageResponse } from '../../types/response';
+import { packagesRoutes } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-package-datatable',
@@ -27,7 +27,7 @@ import { PackageListResponse, PackageResponse } from '../../types/response';
 })
 export class PackageDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  readonly routes = routes;
+  readonly routes = packagesRoutes;
 
   hotelId: string;
   tableName = title;
@@ -206,7 +206,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
    */
   editPackage(id: string) {
     this.router.navigate([
-      `/pages/library/packages/${routes.createPackage}/${id}`,
+      `/pages/library/packages/${packagesRoutes.createPackage.route}/${id}`,
     ]);
   }
 

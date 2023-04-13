@@ -15,6 +15,8 @@ import { GraphData } from '../types/stats';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class MarketingDashboardComponent implements OnInit, OnDestroy {
+  welcomeMessage = 'Welcome To eMark-IT';
+  navRoutes = [{ label: 'eMark-IT Stats', link: './' }];
   $subscription = new Subscription();
   hotelId: string;
   config: any;

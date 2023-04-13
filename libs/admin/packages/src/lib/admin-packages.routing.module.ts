@@ -8,11 +8,11 @@ import { EditCategoryComponent } from './components/edit-category/edit-category.
 import { EditPackageComponent } from './components/edit-package/edit-package.component';
 import { MainComponent } from './components/main/main.component';
 import { PackageDataTableComponent } from './components/package-datatable/package-datatable.component';
-import routes from './constant/routes';
+import { packagesRoutes } from './constant/routes';
 
 export const adminPackagesRoutes: Route[] = [
   {
-    path: '',
+    path: packagesRoutes.packages.route,
     component: MainComponent,
     children: [
       {
@@ -20,7 +20,7 @@ export const adminPackagesRoutes: Route[] = [
         component: PackageDataTableComponent,
       },
       {
-        path: routes.createPackage,
+        path: packagesRoutes.createPackage.route,
         component: MainComponent,
         children: [
           {
@@ -34,7 +34,7 @@ export const adminPackagesRoutes: Route[] = [
         ],
       },
       {
-        path: routes.createCategory,
+        path: packagesRoutes.createCategory.route,
         component: CreateCategoryComponent,
       },
     ],

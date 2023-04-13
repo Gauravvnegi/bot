@@ -6,6 +6,7 @@ export const navRoute = {
   addReservation: { label: 'Create Reservation', link: './' },
   editReservation: { label: 'Edit Reservation', link: './' },
   invoice: { label: 'Invoice', link: './' },
+  createInvoice: { label: 'Create Invoice', link: './' },
 };
 
 export const invoiceRoutes: Record<
@@ -14,7 +15,7 @@ export const invoiceRoutes: Record<
 > = {
   createInvoice: {
     route: 'create-invoice',
-    navRoutes: [],
+    navRoutes: [navRoute.eFrontdesk, navRoute.invoice, navRoute.createInvoice],
     title: 'Create Invoice',
   },
 

@@ -1,10 +1,5 @@
-<div
-  class="action-header"
-  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
-  [formGroup]="tableFG"
->
-  <div class="heading">{{ tableName }}</div>
-  <div class="action-wrapper">
+<div [formGroup]="tableFG" class="wrapper">
+  <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes">
     <hospitality-bot-button
       label="Create New Tax"
       link="pages/settings/tax/{{ routes.createTax.route }}"
@@ -15,7 +10,7 @@
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
     ></hospitality-bot-export-list>
-  </div>
+  </hospitality-bot-navigation-header>
 </div>
 <p-table
   #dt

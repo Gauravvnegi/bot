@@ -25,6 +25,7 @@ import { ListingService } from '../../../services/listing.service';
 import { ListTable } from '../../../data-models/listing.model';
 import * as FileSaver from 'file-saver';
 import { TranslateService } from '@ngx-translate/core';
+import { listingRoutes } from '../../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-listing-datatable',
@@ -316,7 +317,9 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    * @function openCreateListing To navigate to create listing page.
    */
   openCreateListing() {
-    this.router.navigate(['create'], { relativeTo: this.route });
+    this.router.navigate([listingRoutes.createListing.route], {
+      relativeTo: this.route,
+    });
   }
 
   /**
@@ -363,7 +366,9 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    */
   openList(event, id) {
     event.stopPropagation();
-    this.router.navigate([`edit/${id}`], { relativeTo: this.route });
+    this.router.navigate([listingRoutes.editListing.route.replace(':id', id)], {
+      relativeTo: this.route,
+    });
   }
 
   /**

@@ -9,6 +9,8 @@ export type ServiceFormData = {
   unit: string;
   active: boolean;
   categoryName: string;
+  enableVisibility: string[];
+  serviceTax: number;
 };
 
 export type ServiceData = ServiceFormData & {

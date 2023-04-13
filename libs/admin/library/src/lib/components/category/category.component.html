@@ -1,0 +1,13 @@
+<hospitality-bot-select
+  class="half-width"
+  [controlName]="controlName"
+  label="Category"
+  [options]="categories"
+  [props]="{ isAsync: true, createPrompt: '+ Add New Category' }"
+  [loading]="loadingCategory"
+  (paginate)="loadMoreCategories()"
+  (onSearch)="searchCategories($event)"
+  [stopEmission]="noMoreCategories"
+  (onCreate)="create()"
+>
+</hospitality-bot-select>

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { LibraryService } from '@hospitality-bot/admin/library';
+import { LibraryService, QueryConfig } from '@hospitality-bot/admin/library';
 import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { TableValue } from '../constant/data-table';
-import { ServiceResponse } from '../types/response';
-import { ServiceData } from '../types/service';
+import { TaxListResponse } from '../types/response';
 
 @Injectable()
 export class ServicesService extends LibraryService {
@@ -13,4 +12,11 @@ export class ServicesService extends LibraryService {
    * It can either be 'ALL' | 'PAID' | 'COMPLIMENTARY'
    */
   selectedTable = new BehaviorSubject<TableValue>(TableValue.ALL);
+
+  getTaxList(
+    hotelId: string,
+    config: QueryConfig = { params: '?order=DESC&limit=100' }
+  ): Observable<TaxListResponse> {
+    return this.get(`/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`);
+  }
 }

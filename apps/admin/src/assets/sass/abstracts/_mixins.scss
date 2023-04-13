@@ -422,3 +422,8 @@
 
 @mixin accordion {
 }
+
+@mixin header-fixed-position {
+  inset: 60px 0 auto 80px;
+  position: fixed;
+}

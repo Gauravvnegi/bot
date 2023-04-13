@@ -141,17 +141,7 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
             .deserialize(response)
             .records.map((item) => ({ label: item.name, value: item.id }));
           this.topicList.unshift({ label: 'All', value: 'All' });
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        }
       )
     );
   }

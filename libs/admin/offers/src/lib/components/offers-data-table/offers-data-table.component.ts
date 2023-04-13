@@ -119,12 +119,12 @@ export class OffersDataTableComponent extends BaseDatatableComponent
               'Status changes successfully',
               '',
               { panelClass: 'success' }
-            );
-          },
-          this.handleError,
+            ); 
+            this.loading=false;
+          }, 
           this.handleFinal
         )
-    );
+    ); 
   }
 
   /**
@@ -189,28 +189,11 @@ export class OffersDataTableComponent extends BaseDatatableComponent
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
           this.loading = false;
-        },
-        this.handleError,
+        }, 
         this.handleFinal
       )
     );
   }
-
-  /**
-   * @function handleError to show the error
-   * @param param0 network error
-   */
-  handleError = ({ error }): void => {
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
-  };
 
   handleFinal = () => {
     this.loading = false;

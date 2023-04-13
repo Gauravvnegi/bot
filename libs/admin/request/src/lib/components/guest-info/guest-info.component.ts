@@ -111,16 +111,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           this.guestData = new Guest().deserialize(response);
           this.loadGuestReservations();
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.closeDetails();
         }
       )
@@ -138,18 +129,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
 
           this.isGuestReservationFetched = true;
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-          this.closeDetails();
-        }
+        ({ error }) => {  }
       )
     );
   }
@@ -163,17 +143,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   loadGuestRequests() {
     this.$subscription.add(
       this.requestService.getGuestRequestData(this.guestId).subscribe(
-        (response) => (this.requestList = new Requests().deserialize(response)),
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        (response) => (this.requestList = new Requests().deserialize(response))
       )
     );
   }

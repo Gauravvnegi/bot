@@ -417,16 +417,7 @@ export class UserProfileComponent implements OnInit {
       { ...formValue, permissionConfigs },
       this.departments.map(({ label, value, ...rest }) => ({ ...rest }))
     );
-    const handleError = (error) => {
-      this.snackbarService
-        .openSnackBarWithTranslate(
-          {
-            translateKey: `messages.error.${error?.type}`,
-            priorityMessage: error?.message,
-          },
-          ''
-        )
-        .subscribe();
+    const handleError = (error) => { 
       this.isUpdatingPermissions = false;
     };
 

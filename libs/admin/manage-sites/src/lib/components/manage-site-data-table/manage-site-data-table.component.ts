@@ -212,16 +212,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
    * @param param0 network error
    */
   handleError = ({ error }) => {
-    this.values = [];
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
+    this.values = []; 
     this.loading = false;
   };
 

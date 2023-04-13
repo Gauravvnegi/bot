@@ -83,16 +83,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
           this.closeModal();
         }
       )
@@ -149,16 +140,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
           this.closeModal();
         }
       )
@@ -190,16 +172,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
         }
       )
     );

@@ -143,17 +143,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     this.$subscription.add(
       this.messageService.getRequestByConfNo(config).subscribe(
         (response) =>
-          (this.requestList = new RequestList().deserialize(response).data),
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+          (this.requestList = new RequestList().deserialize(response).data)
       )
     );
   }
@@ -209,17 +199,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
                 .subscribe(
                   (response) => {
                     this.messageService.refreshData$.next(true);
-                  },
-                  ({ error }) =>
-                    this.snackbarService
-                      .openSnackBarWithTranslate(
-                        {
-                          translateKey: `messages.error.${error?.type}`,
-                          priorityMessage: error?.message,
-                        },
-                        ''
-                      )
-                      .subscribe()
+                  }                  
                 )
             );
           }

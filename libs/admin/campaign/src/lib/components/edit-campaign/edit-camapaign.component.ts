@@ -166,17 +166,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
           }
           this.$formChangeDetection.unsubscribe();
           this.listenForAutoSave();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        }
       );
   }
 
@@ -288,15 +278,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
                 `/pages/marketing/campaign/edit/${response.id}`
               );
             }
-          },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate({
-                translateKey: 'messages.error.fail',
-                priorityMessage: error.message,
-              })
-              .subscribe();
-          }
+          } 
         );
       })
     );
@@ -379,16 +361,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
       this.$subscription.add(
         this.autoSave(this.campaignFG.getRawValue()).subscribe(
           (_response) => this._router.navigate(['/pages/marketing/campaign']),
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
+          ({ error }) => { 
             this._router.navigate(['/pages/marketing/campaign']);
           }
         )
@@ -440,17 +413,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
                   { panelClass: 'success' }
                 );
                 this._router.navigate(['pages/marketing/campaign']);
-              },
-              ({ error }) =>
-                this.snackbarService
-                  .openSnackBarWithTranslate(
-                    {
-                      translateKey: `messages.error.${error?.type}`,
-                      priorityMessage: error?.message,
-                    },
-                    ''
-                  )
-                  .subscribe()
+              } 
             )
         );
       } else this.scheduleFG.reset();
@@ -495,15 +458,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
             .subscribe();
           this._router.navigate(['pages/marketing/campaign']);
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.loadData',
-              priorityMessage: error.message,
-            })
-            .subscribe();
-        },
-        () => (this.isSending = false)
+        ({ error }) => {this.isSending = false}
       )
     );
   }

@@ -106,17 +106,7 @@ export class FrontdeskStatComponent implements OnInit, OnDestroy {
         (resposne) => {
           this.graphData = new FrontDeskGraph().deserialize(resposne);
           this.initGraphData();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        }
       )
     );
   }

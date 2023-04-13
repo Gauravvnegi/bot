@@ -56,17 +56,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
       this.campaignService.getTopicList(this.hotelId, config).subscribe(
         (response) => {
           this.topicList = new Topics().deserialize(response).records;
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        } 
       )
     );
   }

@@ -113,17 +113,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
                 total: 0,
               });
           });
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        } 
       )
     );
   }
@@ -145,17 +135,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
           this.graphData = new InhouseSentiments().deserialize(response);
           this.updatePackageCount(response.packageTotalCounts);
           this.initGraphData();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        }        
       )
     );
   }

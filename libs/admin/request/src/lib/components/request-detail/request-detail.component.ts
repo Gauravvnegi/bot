@@ -133,16 +133,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
             .subscribe(),
 
         ({ error }) => {
-          this.requestFG.patchValue({ status: this.data.action });
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.requestFG.patchValue({ status: this.data.action }); 
         }
       )
     );

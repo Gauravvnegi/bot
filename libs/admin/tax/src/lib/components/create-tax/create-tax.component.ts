@@ -179,14 +179,7 @@ export class CreateTaxComponent implements OnInit {
    * @function handleError To show error message
    * @param param0  network error
    */
-  handelError = ({ error }): void => {
-    this.snackbarService
-      .openSnackBarWithTranslate({
-        translateKey: `messages.error.${error?.type}`,
-        priorityMessage: error?.message,
-      })
-      .subscribe();
-
+  handelError = ({ error }): void => { 
     this.loading = false;
   };
 

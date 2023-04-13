@@ -61,17 +61,6 @@ export class LoginComponent implements OnInit {
         if (this.platformReferer == 'CREATE_WITH') {
           this._router.navigate(['/pages/create-with']);
         }
-      },
-      ({ error }) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
       }
     );
   }
@@ -115,16 +104,7 @@ export class LoginComponent implements OnInit {
         }
       },
       ({ error }) => {
-        this.isSigningIn = false;
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
+        this.isSigningIn = false; 
       }
     );
   }

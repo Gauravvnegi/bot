@@ -312,16 +312,7 @@ export class CreateServiceComponent implements OnInit {
    * @function handleError to show the error
    * @param param0 network error
    */
-  handleError = ({ error }): void => {
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
+  handleError = ({ error }): void => { 
     this.closeLoading();
   };
 

@@ -125,16 +125,7 @@ export class MarketingDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  handleError = ({ error }) => {
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
+  handleError = ({ error }) => { 
     this.loading = false;
   };
 

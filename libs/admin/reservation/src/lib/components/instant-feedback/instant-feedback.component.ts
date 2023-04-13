@@ -68,17 +68,7 @@ export class InstantFeedbackComponent implements OnInit, OnDestroy {
           link.download = response.fileName;
           link.click();
           link.remove();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        } 
       )
     );
   }

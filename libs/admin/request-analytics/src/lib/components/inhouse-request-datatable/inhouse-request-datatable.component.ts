@@ -104,16 +104,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
         }
       )
     );
@@ -196,16 +187,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
         }
       )
     );
@@ -254,16 +236,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
         }
       )
     );
@@ -312,17 +285,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           '',
           { panelClass: 'success' }
         );
-      },
-      ({ error }) =>
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe()
+      }
     );
   }
 

@@ -175,16 +175,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
 
           this.isSavingasset = false;
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.asset_not_created',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.isSavingasset = false;
         }
       )
@@ -229,16 +220,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
 
             this.isSavingasset = false;
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'message.error.asset_not_updated',
-                  priorityMessage: error.message,
-                },
-                ''
-              )
-              .subscribe();
+          ({ error }) => { 
             this.isSavingasset = false;
           }
         )

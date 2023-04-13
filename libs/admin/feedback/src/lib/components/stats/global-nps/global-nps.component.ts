@@ -166,16 +166,7 @@ export class GlobalNpsComponent implements OnInit, OnDestroy {
         this.initGraphData(this.globalNps);
       },
       ({ error }) => {
-        this.loading = false;
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
+        this.loading = false; 
       }
     );
   }

@@ -131,16 +131,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
           this._router.navigate(['/pages/library/topic']);
           this.isSavingTopic = false;
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.topic_not_created',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.isSavingTopic = false;
         }
       )
@@ -211,16 +202,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
             this._router.navigate(['/pages/library/topic']);
             this.isSavingTopic = false;
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'message.error.topic_not_updated',
-                  priorityMessage: error.message,
-                },
-                ''
-              )
-              .subscribe();
+          ({ error }) => { 
             this.isSavingTopic = false;
           }
         )

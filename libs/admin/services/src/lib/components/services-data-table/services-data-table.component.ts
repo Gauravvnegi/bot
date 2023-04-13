@@ -105,9 +105,9 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
           this.totalRecords = serviceList.total;
           this.filterChips.forEach((item) => {
             item.total = serviceList.entityStateCounts[item.value];
-          });
+          }); 
         },
-        this.handleError,
+        ()=>{},
         this.handleFinal
       );
   }
@@ -139,9 +139,9 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
               'Status changes successfully',
               '',
               { panelClass: 'success' }
-            );
+            ); 
           },
-          this.handleError,
+          (error)=>{this.loading=false;},
           this.handleFinal
         )
     );
@@ -218,8 +218,8 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
             res,
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
-        },
-        this.handleError,
+        }, 
+        ()=>{},
         this.handleFinal
       )
     );
@@ -231,16 +231,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
    */
   handleError = ({ error }): void => {
     this.values = [];
-    this.loading = false;
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
+    this.loading = false; 
   };
 
   handleFinal = () => {

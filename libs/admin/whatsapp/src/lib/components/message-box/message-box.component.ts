@@ -134,17 +134,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
             update: true,
           });
           this.mentions = [];
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        }        
       )
     );
   }

@@ -150,17 +150,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
               this.chatList.unreadContacts
             );
             if (this.selected) this.markChatAsRead(this.selected);
-          },
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          }          
         )
     );
   }
@@ -191,17 +181,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
             this.messageService.setWhatsappUnreadContactCount(
               this.chatList.unreadContacts
             );
-          },
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          }
         );
     }
   }
@@ -254,17 +234,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
               );
               this.autoSearched = false;
             }
-          },
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          }          
         )
     );
   }

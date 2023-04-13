@@ -161,8 +161,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
           this.updateTabFilterCount(response.entityStateCounts);
           this.totalData = response.total;
           this.loading = false;
-        },
-        ({ error }) => this.showError(error)
+        } 
       )
     );
   }
@@ -211,8 +210,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
           this.totalData = response.total;
           this.updateTabFilterCount(response.entityStateCounts);
           this.loading = false;
-        },
-        ({ error }) => this.showError(error)
+        } 
       )
     );
   }
@@ -332,27 +330,11 @@ export class RequestListComponent implements OnInit, OnDestroy {
         (response) =>
           (this.listData = new InhouseTable().deserialize({
             records: response,
-          }).records),
-        ({ error }) => this.showError(error)
+          }).records) 
       );
   }
 
-  /**
-   * @function showError To show error with translation.
-   * @param error The error object.
-   */
-  showError(error) {
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: 'messages.error.some_thing_wrong',
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
-  }
-
+ 
   resetFilter() {
     this.filterData = {
       sort: '',

@@ -202,16 +202,7 @@ export class ChatComponent
             },
             ({ error }) => {
               this.isLoading = false;
-              this.chat = new Chats();
-              this.snackbarService
-                .openSnackBarWithTranslate(
-                  {
-                    translateKey: `messages.error.${error?.type}`,
-                    priorityMessage: error?.message,
-                  },
-                  ''
-                )
-                .subscribe();
+              this.chat = new Chats(); 
             }
           )
       );
@@ -331,17 +322,7 @@ export class ChatComponent
           this.selectedChat.phone
         )
         .subscribe(
-          (response) => this.liveChatFG.patchValue(response),
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          (response) => this.liveChatFG.patchValue(response)
         )
     );
   }
@@ -355,17 +336,7 @@ export class ChatComponent
           this.liveChatFG.getRawValue()
         )
         .subscribe(
-          (response) => this.liveChatFG.patchValue(response),
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          (response) => this.liveChatFG.patchValue(response)
         )
     );
   }
@@ -387,17 +358,7 @@ export class ChatComponent
       this.messageService.getRequestByConfNo(config).subscribe(
         (response) => {
           this.requestList = new RequestList().deserialize(response).data;
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        }
       )
     );
   }
@@ -424,17 +385,7 @@ export class ChatComponent
                 .subscribe(
                   (response) => {
                     this.messageService.refreshData$.next(true);
-                  },
-                  ({ error }) =>
-                    this.snackbarService
-                      .openSnackBarWithTranslate(
-                        {
-                          translateKey: `messages.error.${error?.type}`,
-                          priorityMessage: error?.message,
-                        },
-                        ''
-                      )
-                      .subscribe()
+                  }
                 )
             );
           }
@@ -456,17 +407,7 @@ export class ChatComponent
                 .split(' ')
                 .join('_')}_export_${new Date().getTime()}.csv`
             );
-          },
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          }
         )
     );
   }

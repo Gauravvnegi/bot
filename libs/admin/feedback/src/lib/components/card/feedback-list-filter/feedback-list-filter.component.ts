@@ -74,17 +74,7 @@ export class FeedbackListFilterComponent implements OnInit, OnDestroy {
           (response) => {
             this.assigneeList = response.childUser;
             this.userService.userPermissions = response;
-          },
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          }
         )
     );
   }

@@ -145,18 +145,7 @@ export class TopLowNpsComponent implements OnInit, OnDestroy {
       (response) => {
         this.performanceNPS = new PerformanceNPS().deserialize(response);
         // this.initData();
-      },
-      ({ error }) =>
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe()
-    );
+      });
   }
 
   /**

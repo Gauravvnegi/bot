@@ -272,8 +272,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false;
-          this.showErrorMessage(error);
+          this.loading = false; 
         }
       )
     );
@@ -378,8 +377,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false;
-          this.showErrorMessage(error);
+          this.loading = false; 
         }
       )
     );
@@ -440,17 +438,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           { order: sharedConfig.defaultOrder },
           ...this.getSelectedQuickReplyFilters(),
         ]);
-      },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
       }
     );
   }
@@ -559,8 +546,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.showErrorMessage(error);
+          this.loading = false; 
         }
       )
     );
@@ -617,8 +603,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.showErrorMessage(error);
+          this.loading = false; 
         }
       )
     );
@@ -641,8 +626,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           link.download = response.fileName;
           link.click();
           link.remove();
-        },
-        (error) => this.showErrorMessage(error)
+        }
       )
     );
   }
@@ -680,21 +664,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  /**
-   * @function showErrorMessage To show error message via snackbar.
-   * @param error The error object from api.
-   */
-  showErrorMessage(error): void {
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: 'messages.error.some_thing_wrong',
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
-  }
+ 
 
   /**
    * @function openDetailPage To open the detail modal for a reservation.

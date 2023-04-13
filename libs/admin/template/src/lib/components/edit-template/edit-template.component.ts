@@ -108,17 +108,6 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
             .deserialize(response)
             .records.map((item) => ({ label: item.name, value: item.id }));
           this.topicList = [...this.topicList, ...data];
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.topicList_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -212,17 +201,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
             if (!event.data) this._router.navigate(['/pages/library/template']);
             if (event.data.preview) this.isDisabled = true;
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
-          },
+          ({ error }) => {},
           () => (this.isSaving = false)
         )
       );
@@ -245,14 +224,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
               .subscribe();
             this._router.navigate(['/pages/library/template']);
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate({
-                translateKey: 'messages.error.createTemplate',
-                priorityMessage: error.message,
-              })
-              .subscribe();
-          },
+          ({ error }) => {},
           () => (this.isSaving = false)
         )
       );

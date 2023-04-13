@@ -149,16 +149,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
           ]);
           this.isSavingCategory = false;
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.isSavingCategory = false;
         }
       )
@@ -201,16 +192,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
             ]);
             this.isSavingCategory = false;
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
+          ({ error }) => { 
             this.isSavingCategory = false;
           }
         )

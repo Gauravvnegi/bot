@@ -39,8 +39,12 @@
       <div class="guest_data">
         <div class="guest_data__field">
           <div class="label">
-            {{ guestData.guestAttributes.churnProbalilty }}
+            {{ guestData.guestAttributes.overAllNps !== 0 ? guestData.guestAttributes.overAllNps : '-'  }}/10
           </div>
+          <div class="value">Overall NPS</div>
+        </div>
+        <div class="guest_data__field">
+          <div class="label">{{ guestData.guestAttributes.churnProbalilty }}</div>
           <div class="value">Churn Probability</div>
         </div>
         <div class="guest_data__field">

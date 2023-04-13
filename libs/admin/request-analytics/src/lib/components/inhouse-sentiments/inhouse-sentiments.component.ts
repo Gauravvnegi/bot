@@ -91,17 +91,7 @@ export class InhouseSentimentsComponent implements OnInit, OnDestroy {
         (response) => {
           this.graphData = new InhouseSentiments().deserialize(response);
           this.initGraphData();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        }
       )
     );
   }

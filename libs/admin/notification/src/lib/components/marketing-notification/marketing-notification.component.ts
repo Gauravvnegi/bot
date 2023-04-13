@@ -75,17 +75,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     this.$subscription.add(
       this._emailService.getFromEmail(this.hotelId).subscribe(
         (response) =>
-          (this.fromEmailList = new EmailList().deserialize(response)),
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+          (this.fromEmailList = new EmailList().deserialize(response)) 
       )
     );
     this.to.push(this._fb.control(this.email));
@@ -95,17 +85,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     this.$subscription.add(
       this._emailService.getTopicList(this.hotelId).subscribe(
         (response) =>
-          (this.topicList = new Topics().deserialize(response).records),
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+          (this.topicList = new Topics().deserialize(response).records) 
       )
     );
   }
@@ -202,16 +182,7 @@ export class MarketingNotificationComponent extends NotificationComponent
             .subscribe();
           this.onModalClose.emit();
         },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe(),
+        ({ error }) => {},
         () => (this.isSending = false)
       )
     );

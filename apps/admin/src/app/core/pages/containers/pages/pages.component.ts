@@ -62,17 +62,6 @@ export class PagesComponent implements OnInit {
 
   getConfigData(hotelId) {
     this._configService.getColorAndIconConfig(hotelId).subscribe(
-      (response) => this._configService.$config.next(response),
-      ({ error }) =>
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe()
-    );
+      (response) => this._configService.$config.next(response));
   }
 }

@@ -116,16 +116,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.loading_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
         }
       )
     );
@@ -200,17 +191,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
           .subscribe();
         this.changePage(this.currentPage);
       },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.topic_status_update_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      }
+      ({ error }) => { }
     );
   }
 
@@ -275,16 +256,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.values = [];
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.loading_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.values = []; 
         }
       )
     );
@@ -373,16 +345,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.exportCSV_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
         }
       )
     );

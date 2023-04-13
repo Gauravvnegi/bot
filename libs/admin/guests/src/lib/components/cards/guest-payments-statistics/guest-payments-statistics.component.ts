@@ -85,18 +85,7 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
         (response) => {
           this.payment = new Payment().deserialize(response);
           this.initGraphData();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
-      )
+        })
     );
   }
 

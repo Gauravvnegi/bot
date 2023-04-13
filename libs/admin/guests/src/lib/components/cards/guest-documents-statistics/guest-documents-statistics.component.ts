@@ -86,18 +86,7 @@ export class GuestDocumentsStatisticsComponent implements OnInit, OnDestroy {
         (response) => {
           this.document = new Document().deserialize(response);
           this.initGraphData();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
-      )
+        })
     );
   }
 

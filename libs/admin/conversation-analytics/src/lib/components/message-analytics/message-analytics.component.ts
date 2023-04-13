@@ -109,17 +109,7 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
           FileSaver.saveAs(
             res,
             'Message_Analytics_export_' + new Date().getTime() + '.csv'
-          ),
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+          )
       )
     );
   }

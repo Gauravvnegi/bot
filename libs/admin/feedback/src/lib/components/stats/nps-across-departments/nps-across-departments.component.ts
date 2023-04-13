@@ -179,13 +179,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
           this.setTabFilterItems(response).then((res) => {
             this.getNPSChartData();
           }),
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            })
-            .subscribe(),
+        ({ error }) => {},
         () => (this.loading = false)
       )
     );
@@ -349,17 +343,8 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
               this.tabFilterItems[this.tabFilterIdx].chips = res;
             });
         },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe(),
-        () => (this.loading = false)
+        ({ error }) => {},
+        () => {this.loading = false}
       )
     );
   }
@@ -385,18 +370,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
             response,
             'NPS_Across_Departments_export_' + new Date().getTime() + '.csv'
           );
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
-      )
+        })
     );
   }
 

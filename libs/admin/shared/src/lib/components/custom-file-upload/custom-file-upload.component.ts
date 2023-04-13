@@ -236,17 +236,6 @@ export class CustomFileUploadComponent
           });
           this.snackbarService;
           this.showSnackbarMessages('success', 'Video Uploaded Successfully.');
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.upload_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );

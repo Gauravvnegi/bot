@@ -102,9 +102,8 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         (data) => this.setRecords(data),
         ({ error }) => {
           this.values = [];
-          this.showMessage({ ...error, key: 'messages.error.loadData' });
         },
-        () => (this.loading = false)
+        () => {this.loading = false}
       )
     );
   }
@@ -120,6 +119,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
     data.entityStateCounts &&
       this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.loading=false;
   }
 
   /**
@@ -197,9 +197,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
             );
             this.changePage(this.currentPage);
           },
-          ({ error }) =>
-            this.showMessage({ ...error, key: 'messages.error.loadData' }),
-          () => (this.loading = false)
+          ({ error }) => () => (this.loading = false)
         )
     );
   }
@@ -413,9 +411,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
             response,
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           ),
-        ({ error }) =>
-          this.showMessage({ ...error, key: 'messages.error.exportCSV' }),
-        () => (this.loading = false)
+        ({ error }) => this.loading = false
       )
     );
   }

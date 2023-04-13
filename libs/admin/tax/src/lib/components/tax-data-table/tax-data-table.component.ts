@@ -89,16 +89,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
         },
         this.handleFinal
       )
@@ -160,8 +151,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
             '',
             { panelClass: 'success' }
           );
-        },
-        this.handleError,
+        }, 
         this.handleFinal
       );
   }
@@ -188,29 +178,11 @@ export class TaxDataTableComponent extends BaseDatatableComponent
             res,
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
-        },
-        this.handleError,
+        }, 
         this.handleFinal
       )
     );
   }
-
-  /**
-   * @function handleError to show the error
-   * @param param0 network error
-   */
-  handleError = ({ error }): void => {
-    this.loading = false;
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
-  };
 
   /**
    * @function editTax

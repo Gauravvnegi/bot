@@ -104,19 +104,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
             .deserialize(response)
             .records.map((item) => ({ label: item.name, value: item.id }));
           this.topicList = [...this.topicList, ...data];
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.topicList_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      )
+        })
     );
   }
 
@@ -150,16 +138,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
           this.listFG.patchValue(this.listData);
         },
         ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.listing_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
         }
       )
     );
@@ -220,17 +199,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
           .subscribe();
         this._router.navigate([`pages/library/listing`]);
       },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.listing_not_created',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      },
+      ({ error }) => { },
       () => (this.isSaving = false)
     );
   }
@@ -288,17 +257,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
           .subscribe();
         this._router.navigate([`pages/library/listing`]);
       },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.listing_not_updated',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      },
+      ({ error }) => {  },
       () => (this.isSaving = false)
     );
   }

@@ -89,17 +89,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
             (this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
               response?.messageCounts,
               { comparison: false }
-            )),
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'messages.error.some_thing_wrong',
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+            ))
         )
     );
   }

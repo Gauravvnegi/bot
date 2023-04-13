@@ -159,13 +159,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.loadData',
-              priorityMessage: error.message,
-            })
-            .subscribe();
+          this.loading = false; 
         }
       )
     );
@@ -246,13 +240,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
           this.changePage(this.currentPage);
         },
         ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.loadData',
-              priorityMessage: error.message,
-            })
-            .subscribe();
+          this.loading = false; 
         }
       );
   }
@@ -316,13 +304,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.loadData',
-              priorityMessage: error.message,
-            })
-            .subscribe();
+          this.loading = false; 
         }
       )
     );
@@ -411,13 +393,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.exportCSV',
-              priorityMessage: error.message,
-            })
-            .subscribe();
+          this.loading = false; 
         }
       )
     );

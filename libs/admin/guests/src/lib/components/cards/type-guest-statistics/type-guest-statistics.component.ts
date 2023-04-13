@@ -178,17 +178,7 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
             this.customerData = new VIP().deserialize(response);
             this.initGraphData();
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'messages.error.some_thing_wrong',
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
+          ({ error }) => {  }
         )
       )
     );

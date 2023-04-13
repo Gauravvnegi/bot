@@ -222,17 +222,7 @@ export class NetPromoterScoreComponent implements OnInit, OnDestroy {
           this.npsChartData = new NPS().deserialize(response);
           this.initGraphData();
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => { }
       )
     );
   }
@@ -259,17 +249,7 @@ export class NetPromoterScoreComponent implements OnInit, OnDestroy {
             'NPS_export_' + new Date().getTime() + '.csv'
           );
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => { }
       )
     );
   }

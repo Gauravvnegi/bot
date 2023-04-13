@@ -167,16 +167,7 @@ export class FeedbackDistributionComponent implements OnInit, OnDestroy {
         this.initChartData();
       },
       ({ error }) => {
-        this.loading = false;
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
+        this.loading = false; 
       }
     );
   }

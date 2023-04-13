@@ -110,17 +110,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
         (response) =>
           (this.fromEmailList = new EmailList()
             .deserialize(response)
-            .map((item) => ({ label: item.email, value: item.id }))),
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+            .map((item) => ({ label: item.email, value: item.id })))
       )
     );
   }
@@ -236,14 +226,6 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
               '',
               { panelClass: 'success' }
             );
-          },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate({
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error.message,
-              })
-              .subscribe();
           }
         )
     );
@@ -284,15 +266,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
                       }
                     )
                     .subscribe();
-                },
-                ({ error }) => {
-                  this.snackbarService
-                    .openSnackBarWithTranslate({
-                      translateKey: `messages.error.${error?.type}`,
-                      priorityMessage: error.message,
-                    })
-                    .subscribe();
-                }
+                }  
               )
             );
           }

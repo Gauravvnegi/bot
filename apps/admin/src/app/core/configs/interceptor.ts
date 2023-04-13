@@ -4,6 +4,7 @@ import { RefreshTokenInterceptor } from '../interceptors/refresh-token.intercept
 import { TimezoneInterceptor } from '../interceptors/timezone.interceptor';
 import { TokenRetievalInterceptor } from '../interceptors/token-retrieval.interceptor';
 import { TokenInterceptor } from '../interceptors/token.interceptor';
+import { ErrorHandlerInterceptor } from '../theme/src/lib/interceptor/message-handler.interceptor';
 import { ProgressSpinnerInterceptor } from '../theme/src/lib/interceptor/progress-spinner.interceptor';
 
 export default [
@@ -30,6 +31,11 @@ export default [
   {
     provide: HTTP_INTERCEPTORS,
     useClass: ProgressSpinnerInterceptor,
+    multi: true,
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: ErrorHandlerInterceptor,
     multi: true,
   },
 ];

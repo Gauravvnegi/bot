@@ -52,17 +52,7 @@ export class DefaultPackageComponent implements OnInit {
             { panelClass: 'success' }
           );
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => { }
       );
   }
 

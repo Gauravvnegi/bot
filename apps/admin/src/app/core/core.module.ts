@@ -20,7 +20,7 @@ import { EnsureModuleLoadedOnceGuard } from './ensure-module-loaded-once.guard';
     CommonModule,
     RouterModule,
     TranslateModule.forRoot(
-      getTranslationConfigs([HttpClient], ['core', 'auth'])
+      getTranslationConfigs([HttpClient], ['core', 'auth', 'errors'])
     ),
   ],
   providers: [...systemInterceptors],

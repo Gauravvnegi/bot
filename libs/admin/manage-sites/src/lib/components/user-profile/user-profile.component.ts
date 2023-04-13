@@ -56,7 +56,7 @@ export class UserProfileComponent implements OnInit {
         phoneNumber: this.userData.phoneNumber,
         profileUrl: this.userData.profileUrl,
       });
-    }, this.handleError);
+    }, (error)=>{});
   }
 
   getCountryCode() {
@@ -84,18 +84,6 @@ export class UserProfileComponent implements OnInit {
         '',
         { panelClass: 'success' }
       );
-    }, this.handleError);
+    }, (error)=>{});
   }
-
-  handleError = ({ error }) => {
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
-  };
 }

@@ -81,16 +81,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
         this.loading = false;
       },
       ({ error }) => {
-        this.loading = false;
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
+        this.loading = false; 
       }
     );
   }
@@ -137,17 +128,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
             { panelClass: 'success' }
           );
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => {  }
       );
   }
 

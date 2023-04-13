@@ -103,16 +103,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           this.guestData = new Guest().deserialize(response);
           this.loadGuestReservations();
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.closeDetails();
         }
       )
@@ -133,15 +124,6 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
           this.isGuestReservationFetched = true;
         },
         ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
           this.closeDetails();
         }
       )

@@ -60,17 +60,7 @@ export class SearchComponent implements OnInit {
           this.search.emit({
             status: this.parentFG.get('search').value.trim().length,
             response,
-          }),
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+          }) 
       );
   }
 

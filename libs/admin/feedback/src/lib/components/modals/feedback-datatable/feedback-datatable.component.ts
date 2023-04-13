@@ -252,17 +252,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
           ...this.getSelectedQuickReplyFilters(),
         ]);
       },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      }
+      ({ error }) => { }
     );
   }
 
@@ -337,8 +327,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.showErrorMessage(error);
+          this.loading = false; 
         }
       )
     );
@@ -405,8 +394,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.showErrorMessage(error);
+          this.loading = false; 
         }
       )
     );

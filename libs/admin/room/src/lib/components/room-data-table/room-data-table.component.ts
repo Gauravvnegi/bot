@@ -166,8 +166,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
               this.values = roomList.records;
               this.setRecordsCount(roomList.count);
               this.loading = false;
-            },
-            this.handleError,
+            }, 
             this.initTableDetails
           )
       );
@@ -182,8 +181,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
               this.values = roomTypesList.records;
               this.setRecordsCount(roomTypesList.count);
               this.loading = false;
-            },
-            this.handleError,
+            }, 
             this.initTableDetails
           )
       );
@@ -202,7 +200,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
         .updateRoomStatus(this.hotelId, {
           rooms: [{ id, roomStatus: status }],
         })
-        .subscribe(() => this.handleStatusSuccess(status, id), this.handleError)
+        .subscribe(() => this.handleStatusSuccess(status, id))
     );
   }
 
@@ -221,8 +219,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           status,
         })
         .subscribe(
-          () => this.handleStatusSuccess(status ? 'ACTIVE' : 'INACTIVE', id),
-          this.handleError
+          () => this.handleStatusSuccess(status ? 'ACTIVE' : 'INACTIVE', id)
         )
     );
   }
@@ -350,7 +347,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
           this.loading = false;
-        }, this.handleError)
+        })
     );
   }
 
@@ -360,16 +357,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    */
   handleError = ({ error }): void => {
     this.values = [];
-    this.loading = false;
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
+    this.loading = false; 
   };
 
   /**

@@ -252,16 +252,7 @@ export class EditPackageComponent implements OnInit, OnDestroy {
           ]);
           this.isSavingPackage = false;
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.isSavingPackage = false;
         }
       )
@@ -308,16 +299,7 @@ export class EditPackageComponent implements OnInit, OnDestroy {
             ]);
             this.isSavingPackage = false;
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
+          ({ error }) => { 
             this.isSavingPackage = false;
           }
         )

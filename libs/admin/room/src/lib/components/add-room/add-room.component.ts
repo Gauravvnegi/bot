@@ -141,7 +141,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
             this.roomTypes = [...this.roomTypes, ...data];
             this.noMoreRoomTypes = data.length < this.roomTypeLimit;
           },
-          this.handleError,
+          (error)=>{},
           () => {
             this.loadingRoomTypes = false;
           }
@@ -177,7 +177,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
                   };
                 }) ?? [];
           },
-          this.handleError,
+          (error)=>{},
           () => {
             this.loadingRoomTypes = false;
           }
@@ -301,7 +301,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
             )
             .subscribe();
           this.location.back();
-        }, this.handleError)
+        }, (error)=>{})
     );
   }
 
@@ -352,25 +352,10 @@ export class AddRoomComponent implements OnInit, OnDestroy {
                 .subscribe()
             );
           }
-        }, this.handleError)
+        }, (error)=>{})
     );
   }
 
-  /**
-   * @function handleError to show the error
-   * @param param0 network error
-   */
-  handleError = ({ error }): void => {
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
-  };
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

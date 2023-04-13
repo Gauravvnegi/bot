@@ -219,7 +219,7 @@ export class CreateOfferComponent implements OnInit {
                 return [...prev, ...data];
               }, [])
             : [];
-        }, this.handleError);
+        });
     }
   }
 
@@ -282,7 +282,7 @@ export class CreateOfferComponent implements OnInit {
             },
             { params: '?type=OFFER' }
           )
-          .subscribe(this.handleSuccess, this.handleError, this.handleFinal)
+          .subscribe(this.handleSuccess, this.handleFinal)
       );
     } else {
       this.subscription$.add(
@@ -293,7 +293,7 @@ export class CreateOfferComponent implements OnInit {
             type: 'OFFER',
             source: 1,
           })
-          .subscribe(this.handleSuccess, this.handleError, this.handleFinal)
+          .subscribe(this.handleSuccess, this.handleFinal)
       );
     }
   }
@@ -326,8 +326,7 @@ export class CreateOfferComponent implements OnInit {
             };
             this.useForm.patchValue(data);
             this.packageCode = packageCode;
-          },
-          this.handleError,
+          }, 
           this.handleFinal
         )
     );
@@ -346,22 +345,6 @@ export class CreateOfferComponent implements OnInit {
     this.router.navigate([`pages/library/${routes.offers}`]);
   };
 
-  /**
-   * @function handleError to show the error
-   * @param param network error
-   */
-  handleError = ({ error }): void => {
-    this.loading = false;
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
-  };
 
   /**
    * @function handleFinal

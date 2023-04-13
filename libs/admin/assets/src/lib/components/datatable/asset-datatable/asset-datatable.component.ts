@@ -118,15 +118,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         ({ error }) => {
           this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.loading_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -184,15 +175,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         ({ error }) => {
           this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.loading_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -259,16 +241,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.exportCSV_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
         }
       )
     );
@@ -299,17 +272,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           .subscribe();
         this.changePage(this.currentPage);
       },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.asset_status_update_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      }
+      ({ error }) => { }
     );
   }
 

@@ -63,17 +63,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
           this.subscriptionData
         );
         this.getSubscriptionUsage(this.hotelId);
-      },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
       }
     );
   }

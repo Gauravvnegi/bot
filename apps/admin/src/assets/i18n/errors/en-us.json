@@ -1,0 +1,17 @@
+{
+  "messages": { 
+    "error": {
+      "unknownErr": "Something went wrong",
+      "exportCSV": "Failed to export CSV",
+      "loadData": "Failed to load data",
+      "fail": "Try again.",
+      "fetch": "Failed to fetch",
+      "asset_not_created": "Asset Not Created.",
+      "asset_not_updated": "Asset Not Updated.",
+      "asset_status_update_fail": "Status Not Updated.",
+      "exportCSV_fail": "Export CSV Failed.",
+      "loading_fail": "Loading Fail.",
+      "upload_fail": "Asset Not Uploaded"
+    }
+  }
+}

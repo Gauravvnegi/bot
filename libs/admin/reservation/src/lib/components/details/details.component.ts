@@ -163,16 +163,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.guestData = new Guest().deserialize(response);
           this.loadGuestReservations();
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.closeDetails();
         }
       )
@@ -191,16 +182,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.initGuestReservationDropdownList();
           this.isGuestReservationFetched = true;
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.closeDetails();
         }
       )
@@ -218,16 +200,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.mapValuesInForm();
           this.isReservationDetailFetched = true;
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.closeDetails();
         }
       )
@@ -324,17 +297,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
               panelClass: 'success',
             }
           );
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       );
   }
@@ -366,17 +328,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
                 { panelClass: 'success' }
               )
               .subscribe(),
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
+          ({ error }) => { }
         )
     );
   }
@@ -397,17 +349,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
               );
             }
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
+          ({ error }) => { }
         )
     );
   }
@@ -436,17 +378,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
                 )
                 .subscribe();
             },
-            ({ error }) => {
-              this.snackbarService
-                .openSnackBarWithTranslate(
-                  {
-                    translateKey: `messages.error.${error?.type}`,
-                    priorityMessage: error?.message,
-                  },
-                  ''
-                )
-                .subscribe();
-            }
+            ({ error }) => { }
           )
       );
   }
@@ -554,17 +486,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
               break;
           }
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => { }
       );
   }
 
@@ -613,15 +535,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
               },
               ({ error }) => {
                 manualCheckinCompRef.componentInstance.loading = false;
-                this.snackbarService
-                  .openSnackBarWithTranslate(
-                    {
-                      translateKey: `messages.error.${error?.type}`,
-                      priorityMessage: error?.message,
-                    },
-                    ''
-                  )
-                  .subscribe();
               }
             )
         );
@@ -674,17 +587,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             )
             .subscribe();
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => { }
       );
   }
 

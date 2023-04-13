@@ -50,17 +50,7 @@ export class CreateCategoryComponent implements OnInit {
             );
             this.router.navigate(['/pages/library/packages']);
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
+          ({ error }) => {  }
         )
     );
   }

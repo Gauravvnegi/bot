@@ -223,7 +223,7 @@ export class AddReservationComponent implements OnInit {
           this.paymentOptions = new PaymentMethodList()
             .deserialize(response)
             .records.map((item) => ({ label: item.label, value: item.label }));
-        }, this.handleError)
+        }, (error)=>{})
     );
   }
 
@@ -277,7 +277,7 @@ export class AddReservationComponent implements OnInit {
               this.listenForFormChanges();
             }
           });
-        }, this.handleError)
+        }, (error)=>{})
     );
   }
 
@@ -313,7 +313,7 @@ export class AddReservationComponent implements OnInit {
                 (item) => item.id === this.userForm.get('offerId').value
               )[0];
             }
-          }, this.handleError)
+          }, (error)=>{})
       );
   }
 
@@ -361,7 +361,7 @@ export class AddReservationComponent implements OnInit {
             this.userForm
               .get('paymentMethod.totalPaidAmount')
               .updateValueAndValidity();
-          }, this.handleError)
+          }, (error)=>{})
       );
   }
 
@@ -379,7 +379,7 @@ export class AddReservationComponent implements OnInit {
         .createReservation(this.hotelId, data)
         .subscribe((res: ReservationResponse) => {
           this.bookingConfirmationPopup(res?.reservationNumber);
-        }, this.handleError)
+        }, (error)=>{})
     );
   }
 
@@ -389,7 +389,7 @@ export class AddReservationComponent implements OnInit {
         .updateReservation(this.hotelId, this.reservationId, data)
         .subscribe((res: ReservationResponse) => {
           this.bookingConfirmationPopup(res?.reservationNumber);
-        }, this.handleError)
+        }, (error)=>{})
     );
   }
 
@@ -443,22 +443,6 @@ export class AddReservationComponent implements OnInit {
   }
 
   /**
-   * @function handleError to show the error
-   * @param param0 network error
-   */
-  handleError = ({ error }): void => {
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
-  };
-
-  /**
    * @function handleOfferView handle offer view.
    */
   handleOfferView(): void {
@@ -489,7 +473,7 @@ export class AddReservationComponent implements OnInit {
               };
             }) ?? [];
           roomFields[0].options = this.roomTypes;
-        }, this.handleError);
+        }, (error)=>{});
     } else {
       this.roomTypeOffSet = 0;
       this.roomTypes = [];

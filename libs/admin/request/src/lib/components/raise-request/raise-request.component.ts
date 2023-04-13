@@ -121,17 +121,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
             a.itemName.trim().localeCompare(b.itemName.trim())
           );
           this.listenForItemNameChange();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        } 
       )
     );
   }
@@ -198,16 +188,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
           this.close({ status: true, data: this.reservation });
         },
         ({ error }) => {
-          this.isRaisingRequest = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.isRaisingRequest = false; 
         }
       )
     );
@@ -258,17 +239,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
                   this.requestFG.get('firstName').enable();
                   this.requestFG.get('lastName').enable();
                 }
-              },
-              ({ error }) =>
-                this.snackbarService
-                  .openSnackBarWithTranslate(
-                    {
-                      translateKey: 'messages.error.some_thing_wrong',
-                      priorityMessage: error?.message,
-                    },
-                    ''
-                  )
-                  .subscribe()
+              }
             )
         );
       else this.reservation = {};

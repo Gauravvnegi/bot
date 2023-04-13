@@ -6,7 +6,6 @@ $main-overlay-z: 220;
 $header-menu-dropdown-z: 220;
 $nav-action-header-z: 110;
 
-
 // Breakpoint variables
 
 $S: 480px;
@@ -16,8 +15,10 @@ $XL: 1500px;
 $tablet: 1024px;
 $tabAir: 1180px;
 
-
 // form
 $form-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.05);
 $form-padding-y: 25px;
 $form-padding-x: 4%;
+
+//datatable and form
+$sticky-header-height: 61px;

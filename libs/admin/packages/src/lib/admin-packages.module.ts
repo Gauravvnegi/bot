@@ -11,6 +11,7 @@ import { CategoriesService } from './services/category.service';
 import { AdminPackagesRoutingModule } from './admin-packages.routing.module';
 import { PackagesService } from './services/packages.service';
 import { MainComponent } from './components/main/main.component';
+import { AdminLibraryModule } from '@hospitality-bot/admin/library';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { MainComponent } from './components/main/main.component';
     SharedMaterialModule,
     DropdownModule,
     AdminPackagesRoutingModule,
+    AdminLibraryModule,
   ],
   declarations: [...AdminPackagesRoutingModule.components],
   providers: [PackageService, CategoriesService, PackagesService],

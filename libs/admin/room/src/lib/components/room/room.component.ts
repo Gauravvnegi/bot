@@ -46,7 +46,8 @@ export class RoomComponent implements OnInit, AfterViewInit {
       additionalData: '200K',
     },
   ];
-
+  welcomeMessage = 'Welcome To Room Dashboard';
+  navRoutes: NavRouteOptions = [{ label: 'Room Dashboard', link: './' }];
   hotelId: string;
   $subscription = new Subscription();
   chart: any;

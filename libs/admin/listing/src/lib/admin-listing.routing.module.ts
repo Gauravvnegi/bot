@@ -6,15 +6,19 @@ import { ImportContactComponent } from './components/import-contact/import-conta
 import { ListingComponent } from './components/listing/listing.component';
 import { ContactDatatableComponent } from './components/datatable/contact-datatable/contact-datatable.component';
 import { EditListingComponent } from './components/edit-listing/edit-listing.component';
+import { listingRoutes } from './constants/routes';
 
 const appRoutes: Route[] = [
-  { path: '', component: ListingComponent },
   {
-    path: 'create',
+    path: listingRoutes.listing.route,
+    component: ListingComponent,
+  },
+  {
+    path: listingRoutes.createListing.route,
     component: EditListingComponent,
   },
   {
-    path: 'edit/:id',
+    path: listingRoutes.editListing.route,
     component: EditListingComponent,
   },
 ];

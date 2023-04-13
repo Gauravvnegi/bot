@@ -18,18 +18,13 @@
       maxLength="60"
     ></hospitality-bot-input>
 
-    <hospitality-bot-select
-      class="half-width"
+    <hospitality-bot-category
       controlName="parentId"
-      label="Category"
-      [options]="categories"
-      [props]="{ isAsync: true, createPrompt: '+ Add New Category' }"
-      [loading]="loadingCategory"
-      (paginate)="loadMoreCategories()"
-      (onSearch)="searchCategories($event)"
-      [stopEmission]="noMoreCategories"
-      (onCreate)="create('category')"
-    ></hospitality-bot-select>
+      class="half-width"
+      type="PACKAGE_CATEGORY"
+    >
+    </hospitality-bot-category>
+
     <hospitality-bot-multi-select
       class="full-width"
       controlName="serviceIds"

@@ -8,9 +8,7 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
-  Categories,
   LibraryItem,
-  LibrarySearchItem,
   ServiceTypeOptionValue,
 } from '@hospitality-bot/admin/library';
 import { ConfigService } from '@hospitality-bot/admin/shared';
@@ -56,6 +54,8 @@ export class CreateServiceComponent implements OnInit {
   ];
   categories: Option[] = [];
   currencies: Option[] = [];
+  visibilities: Option[] = [];
+  tax: Option[] = [];
 
   isSelectedTypePaid = false;
 
@@ -98,6 +98,8 @@ export class CreateServiceComponent implements OnInit {
       serviceType: ['', Validators.required],
       // rate: [''],
       unit: ['', Validators.required],
+      enableVisibility: [[], Validators.required],
+      serviceTax: ['', Validators.required],
     });
 
     this.updateFormControlSubscription();
@@ -152,99 +154,37 @@ export class CreateServiceComponent implements OnInit {
   initOptionsConfig() {
     this.configService.$config.subscribe((value) => {
       if (value) {
-        const { currencyConfiguration } = value;
+        const { currencyConfiguration, packageVisibility } = value;
         this.currencies = currencyConfiguration.map(({ key, value }) => ({
           label: key,
           value,
         }));
+        this.visibilities = packageVisibility.map(({ key, value }) => ({
+          label: value,
+          value: key,
+        }));
       }
     });
 
-    this.getCategories();
+    this.getTax();
   }
-
   /**
-   * @function getCategories to get categories options
+   * @function getTax to get tax options
+   * @returns void
    */
-  getCategories() {
-    this.loadingCategory = true;
+  getTax() {
     this.$subscription.add(
-      this.servicesService
-        .getCategories(this.hotelId, {
-          params: `?type=SERVICE_CATEGORY&offset=${this.categoryOffSet}&limit=10&status=true`,
-        })
-        .subscribe(
-          (res) => {
-            const data = new Categories().deserialize(res).records;
-            this.categories = [...this.categories, ...data];
-            this.noMoreCategories = data.length < 10;
-            this.patchSelectedCategories();
-            this.loadingCategory = false;
-          },
-          this.handleError,
-          this.handleFinal
-        )
+      this.servicesService.getTaxList(this.hotelId).subscribe(({ records }) => {
+        records = records.filter(
+          (item) => item.category === 'service' && item.status
+        );
+        this.tax = records.map((item) => ({
+          label: item.taxType + ' ' + item.taxValue + '%',
+          value: item.taxValue,
+        }));
+      })
     );
   }
-
-  /**
-   * @function searchCategories To search categories
-   * @param text search text
-   */
-  searchCategories(text: string) {
-    if (text) {
-      this.loadingCategory = true;
-      this.servicesService
-        .searchLibraryItem(this.hotelId, {
-          params: `?key=${text}&type=${LibrarySearchItem.PACKAGE_CATEGORY}`,
-        })
-        .subscribe(
-          (res) => {
-            this.loadingCategory = false;
-            const data = res && res[LibrarySearchItem.PACKAGE_CATEGORY];
-            this.categories =
-              data
-                ?.filter((item) => item.active)
-                .map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) ?? [];
-            this.patchSelectedCategories();
-          },
-          this.handleError,
-          this.handleFinal
-        );
-    } else {
-      this.categoryOffSet = 0;
-      this.categories = [];
-      this.getCategories();
-    }
-  }
-
-  /**
-   * @function loadMoreCategories load more categories options
-   */
-  loadMoreCategories() {
-    this.categoryOffSet = this.categoryOffSet + 10;
-    this.getCategories();
-  }
-
-  /**
-   *@function patchSelectedCategories To Patch the selected Category in Options
-   */
-  patchSelectedCategories() {
-    if (this.serviceId) {
-      const option = {
-        label: this.useForm.get('categoryName').value,
-        value: this.useForm.get('parentId').value,
-      };
-
-      if (!this.categories.find((item) => item.value === option.value)) {
-        this.categories = [option, ...this.categories];
-      }
-    }
-  }
-
   /**
    * @function createCategory
    */

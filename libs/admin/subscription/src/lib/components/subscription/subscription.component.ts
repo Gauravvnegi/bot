@@ -17,6 +17,8 @@ import {
   styleUrls: ['./subscription.component.scss'],
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
+  welcomeMessage = 'Welcome To Subscription';
+  navRoutes = [{ label: 'Subscription', link: './' }];
   $subscription = new Subscription();
   loading = false;
   subscriptionPlanUsage;

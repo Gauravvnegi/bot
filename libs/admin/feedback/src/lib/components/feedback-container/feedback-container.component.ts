@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./feedback-container.component.scss'],
 })
 export class FeedbackContainerComponent implements OnInit {
+  welcomeMessage = 'Welcome To Heda Dashboard';
+  navRoutes = [{ label: 'Heda Dashboard', link: './' }];
   constructor() {}
 
   ngOnInit(): void {}

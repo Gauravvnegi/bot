@@ -495,7 +495,8 @@ $table-hover-color: #f3f3f3;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 0 25px;
+  margin: 15px 0px 15px;
+  padding: 7px 0px;
   position: sticky;
   top: 0;
   z-index: $nav-action-header-z;
@@ -503,10 +504,11 @@ $table-hover-color: #f3f3f3;
   transition: box-shadow 0.5s, padding-bottom 0.5s;
 
   &__sticky {
-    margin: 0px -20px;
-    padding: 10px 20px;
-
+    @include header-fixed-position;
+    margin: 0px -16px 0 -25px;
+    padding: 20px 48px;
     box-shadow: 1px 7px 8px -7px rgba(181, 181, 181, 1);
+    height: $sticky-header-height;
   }
 
   .heading {
@@ -626,7 +628,7 @@ $table-hover-color: #f3f3f3;
   /*** table header **/
   .p-datatable-thead {
     position: sticky;
-    top: 65px;
+    top: 60px; //65px
     z-index: 10;
     background-color: $table-header;
 
@@ -950,4 +952,8 @@ $table-hover-color: #f3f3f3;
 :host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background: $primary-text-bg !important;
   color: $primary-cta;
+}
+
+.sticky-header-gap {
+  height: $sticky-header-height;
 }

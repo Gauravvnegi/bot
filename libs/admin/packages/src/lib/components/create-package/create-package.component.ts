@@ -2,11 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  Categories,
-  LibraryItem,
-  LibrarySearchItem,
-} from '@hospitality-bot/admin/library';
+import { LibraryItem, LibrarySearchItem } from '@hospitality-bot/admin/library';
 import { ConfigService, DiscountType } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
@@ -16,10 +12,10 @@ import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { Subscription } from 'rxjs';
 import { errorMessages } from '../../constant/packages';
-import routes from '../../constant/routes';
 import { PackagesService } from '../../services/packages.service';
 import { PackageData, PackageFormData } from '../../types/package';
 import { PackageResponse } from '../../types/response';
+import { packagesRoutes } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-create-package',
@@ -35,11 +31,7 @@ export class CreatePackageComponent implements OnInit {
   code: string = '# will be auto generated';
 
   pageTitle = 'Create Package';
-  navRoutes: NavRouteOptions = [
-    { label: 'Library', link: './' },
-    { label: 'Packages', link: '/pages/library/packages' },
-    { label: 'Create Package', link: './' },
-  ];
+  navRoutes: NavRouteOptions;
 
   loading = false;
   $subscription = new Subscription();
@@ -74,6 +66,11 @@ export class CreatePackageComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.packageId = this.route.snapshot.paramMap.get('id');
+    const { navRoutes, title } = packagesRoutes[
+      this.packageId ? 'editPackage' : 'createPackage'
+    ];
+    this.navRoutes = navRoutes;
+    this.pageTitle = title;
   }
 
   ngOnInit(): void {
@@ -105,11 +102,8 @@ export class CreatePackageComponent implements OnInit {
       enableVisibility: [[], Validators.required],
     });
 
-    /* Patch the form value if service id present */
+    /* Patch the form value if serv id present */
     if (this.packageId) {
-      this.pageTitle = 'Edit Package';
-      this.navRoutes[2].label = 'Edit Package';
-
       this.$subscription.add(
         this.packagesService
           .getLibraryItemById<PackageResponse>(this.hotelId, this.packageId, {
@@ -181,8 +175,6 @@ export class CreatePackageComponent implements OnInit {
         }));
       }
     });
-
-    this.getCategories();
     this.getServices();
   }
 
@@ -295,30 +287,6 @@ export class CreatePackageComponent implements OnInit {
   }
 
   /**
-   * @function getCategories to get categories options
-   */
-  getCategories() {
-    this.loadingCategory = true;
-    this.$subscription.add(
-      this.packagesService
-        .getCategories(this.hotelId, {
-          params: `?type=PACKAGE_CATEGORY&offset=${this.categoryOffSet}&limit=10&status=true`,
-        })
-        .subscribe(
-          (res) => {
-            const data = new Categories().deserialize(res).records;
-            this.categories = [...this.categories, ...data];
-            this.noMoreCategories = data.length < 10;
-            this.patchSelectedCategories();
-            this.loadingCategory = false;
-          },
-          this.handleError,
-          this.handleFinal
-        )
-    );
-  }
-
-  /**
    * @function getServices to get services options
    */
   getServices() {
@@ -351,40 +319,6 @@ export class CreatePackageComponent implements OnInit {
           this.handleFinal
         )
     );
-  }
-
-  /**
-   * @function searchCategories To search categories
-   * @param text search text
-   */
-  searchCategories(text: string) {
-    if (text) {
-      this.loadingCategory = true;
-      this.packagesService
-        .searchLibraryItem(this.hotelId, {
-          params: `?key=${text}&type=${LibrarySearchItem.PACKAGE_CATEGORY}`,
-        })
-        .subscribe(
-          (res) => {
-            this.loadingCategory = false;
-            const data = res && res[LibrarySearchItem.PACKAGE_CATEGORY];
-            this.categories =
-              data
-                ?.filter((item) => item.active)
-                .map((item) => ({
-                  label: item.name,
-                  value: item.id,
-                })) ?? [];
-            this.patchSelectedCategories();
-          },
-          this.handleError,
-          this.handleFinal
-        );
-    } else {
-      this.categoryOffSet = 0;
-      this.categories = [];
-      this.getCategories();
-    }
   }
 
   /**
@@ -427,14 +361,6 @@ export class CreatePackageComponent implements OnInit {
   }
 
   /**
-   * @function loadMoreCategories load more categories options
-   */
-  loadMoreCategories() {
-    this.categoryOffSet = this.categoryOffSet + 10;
-    this.getCategories();
-  }
-
-  /**
    * @function loadMoreServices load more services options
    */
   loadMoreServices() {
@@ -443,28 +369,12 @@ export class CreatePackageComponent implements OnInit {
   }
 
   /**
-   *@function patchSelectedCategories To Patch the selected Category in Options
-   */
-  patchSelectedCategories() {
-    if (this.packageId) {
-      const option = {
-        label: this.useForm.get('categoryName').value,
-        value: this.useForm.get('parentId').value,
-      };
-
-      if (!this.categories.find((item) => item.value === option.value)) {
-        this.categories = [option, ...this.categories];
-      }
-    }
-  }
-
-  /**
    * @function create Reroute to create service or create package category
    */
   create(path: 'service' | 'category') {
     this.router.navigate([
       path === 'category'
-        ? `/pages/library/packages/${routes.createCategory}`
+        ? `/pages/library/packages/${packagesRoutes.createCategory.route}`
         : `/pages/library/services/create-service`,
     ]);
   }

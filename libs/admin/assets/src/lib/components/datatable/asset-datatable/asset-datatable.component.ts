@@ -24,6 +24,7 @@ import { assetConfig } from '../../../constants/asset';
 import { AssetService } from '../../../services/asset.service';
 import { Assets } from '../../../data-models/assetConfig.model';
 import { TranslateService } from '@ngx-translate/core';
+import { AssetsRoutes } from '../../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-asset-datatable',
@@ -359,7 +360,9 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    * @function openCreateAsset navigate to create Asset form.
    */
   openCreateAsset() {
-    this._router.navigate(['create'], { relativeTo: this.route });
+    this._router.navigate([AssetsRoutes.createAssets.route], {
+      relativeTo: this.route,
+    });
   }
 
   /**
@@ -369,7 +372,12 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    */
   openAssetDetails(asset, event): void {
     event.stopPropagation();
-    this._router.navigate([`edit/${asset.id}`], { relativeTo: this.route });
+    this._router.navigate(
+      [AssetsRoutes.editAssets.route.replace(':id', asset.id)],
+      {
+        relativeTo: this.route,
+      }
+    );
   }
 
   /**

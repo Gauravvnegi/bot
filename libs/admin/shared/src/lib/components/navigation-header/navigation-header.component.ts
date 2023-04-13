@@ -22,6 +22,7 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
 
   @Input() heading: string;
   @Input() routes: NavRouteOptions = [];
+  @Input() isBack: boolean = true;
   @Input() set dateTime(value: number) {
     if (value) {
       this.setDraftTime(new Date(value));
@@ -69,6 +70,6 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
 
   onScroll = () => {
     const { top } = this.header?.nativeElement.getBoundingClientRect();
-    this.isScrolledUp = top < 80;
+    this.isScrolledUp = top < 60;
   };
 }

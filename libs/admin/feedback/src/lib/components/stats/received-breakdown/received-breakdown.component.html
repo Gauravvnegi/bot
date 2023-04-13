@@ -63,24 +63,61 @@
           margin: '10px 0'
         "
       >
-        <div
-          *ngFor="let action of stats?.feedbacks"
-          class="stats__container__actions__action"
-        >
-          <div class="stats__container__actions__action__record">
-            <div
-              class="stats__container__actions__action__record__dot"
-              [style.background-color]="action.color"
-            ></div>
-            <div class="stats__container__actions__action__record__stat">
-              {{ action.score }}
+        <ng-container *ngFor="let action of stats?.feedbacks">
+          <div
+            *ngIf="action.label !== 'Timeout'"
+            class="stats__container__actions__action"
+          >
+            <div class="stats__container__actions__action__record">
+              <div
+                class="stats__container__actions__action__record__dot"
+                [style.background-color]="action.color"
+              ></div>
+              <div class="stats__container__actions__action__record__stat">
+                {{ action.score }}
+              </div>
+            </div>
+            <div class="stats__container__actions__action__label">
+              {{ action.label }}
             </div>
           </div>
-          <div class="stats__container__actions__action__label">
-            {{ action.label }}
-          </div>
-        </div>
+        </ng-container>
       </ng-container>
+    </div>
+  </div>
+
+  <div>
+    <div class="progress progress-bar-height">
+      <div
+        aria-valuemax="100"
+        aria-valuemin="10"
+        aria-valuenow="100"
+        class="progress-bar progress-color"
+        role="progressbar"
+        [style.width]="progress + '%'"
+      ></div>
+    </div>
+    <div class="progress-info">
+      <div
+        class="progress-info-labels"
+        *skeleton="stats == undefined; height: '18px'; width: '72px'"
+      >
+        <span class="label"
+          >{{ 'Timed-Out' }}&nbsp;<strong>{{
+            timeout
+          }}</strong></span
+        >
+      </div>
+      <div
+        class="progress-info-labels"
+        *skeleton="stats == undefined; height: '18px'; width: '72px'"
+      >
+        <span class="label"
+          >{{ 'Remaining' }}&nbsp;<b>{{
+            total - timeout
+          }}</b></span
+        >
+      </div>
     </div>
   </div>
 </div>

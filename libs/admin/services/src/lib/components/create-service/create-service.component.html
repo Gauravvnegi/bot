@@ -62,12 +62,14 @@
       label="Unit"
       [options]="units"
     ></hospitality-bot-select>
-    <hospitality-bot-select
-      class="half-width"
-      controlName="serviceTax"
-      label="Service Tax"
-      [options]="tax"
-    ></hospitality-bot-select>
+    <div class="container">
+      <hospitality-bot-select
+        class="half-width"
+        controlName="serviceTax"
+        label="Tax"
+        [options]="tax"
+      ></hospitality-bot-select>
+    </div>
     <hospitality-bot-select-group
       class="half-width"
       controlName="enableVisibility"

@@ -11,10 +11,11 @@
 }
 
 .option-btn {
-  flex-basis: 22%;
   height: $form-input-height;
   padding: 0.9em;
   display: flex;
+  gap: 1em;
+  flex-grow: 1;
 
   color: $primary-text-color;
   font-size: inherit;

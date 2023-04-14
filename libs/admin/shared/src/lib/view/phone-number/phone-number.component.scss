@@ -1,0 +1,28 @@
+@import '../../components/form-component/form.component.scss';
+
+.main {
+  display: flex;
+  gap: 1em;
+  margin-top: $label-gap;
+}
+.pre-input {
+  flex-basis: 15%;
+}
+.post-input {
+  flex-basis: 85%;
+}
+:host ::ng-deep .label {
+  display: block;
+  width: 0;
+  white-space: nowrap;
+}
+:host ::ng-deep .p-dropdown-panel {
+  width: fit-content !important;
+}
+
+:host ::ng-deep .p-dropdown-panel .p-dropdown-header .p-dropdown-filter {
+  @include search-input();
+}
+:host ::ng-deep .input__static .p-dropdown {
+  margin-top: 0px !important;
+}

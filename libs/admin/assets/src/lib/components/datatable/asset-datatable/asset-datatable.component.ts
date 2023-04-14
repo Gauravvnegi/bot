@@ -242,7 +242,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -273,7 +273,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           .subscribe();
         this.changePage(this.currentPage);
       },
-      ({ error }) => { }
+      ({ error }) => {}
     );
   }
 

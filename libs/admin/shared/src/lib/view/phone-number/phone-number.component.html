@@ -1,0 +1,54 @@
+<div class="wrapper p-field" [formGroup]="controlContainer.control">
+  <label *ngIf="label" class="label label__static" [for]="preControlName">{{
+    label
+  }}</label>
+
+  <div class="main" [id]="preControlName">
+    <p-dropdown
+      class="pre-input"
+      [ngClass]="inputNgClasses"
+      [options]="code"
+      [placeholder]="placeholder"
+      [showClear]="showClear"
+      [formControlName]="preControlName"
+      [id]="controlName"
+      [autoDisplayFirst]="false"
+      [dropdownIcon]="dropdownIcon"
+      [autofocusFilter]="false"
+      [filter]="true"
+      [filterBy]="'label'"
+      [filterMatchMode]="'contains'"
+    >
+      <ng-template let-option pTemplate="item">
+        <div class="option-item">
+          <img
+            *ngIf="option.icon"
+            [src]="option.icon"
+            [alt]="option.label"
+            class="option-image"
+          />
+          <span class="option-label">{{ option.label }}</span>
+        </div>
+      </ng-template>
+
+      <ng-template let-option pTemplate="selectedItem">
+        <div class="option-item">
+          <div>
+            <img
+              *ngIf="option.icon"
+              [src]="option.icon"
+              class="selected-image"
+            />
+          </div>
+          <span class="option-label">({{ option.value }})</span>
+        </div>
+      </ng-template>
+    </p-dropdown>
+
+    <hospitality-bot-input
+      class="input post-input"
+      [controlName]="postControlName"
+      [loading]="loading"
+    ></hospitality-bot-input>
+  </div>
+</div>

@@ -114,7 +114,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -196,7 +196,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -307,7 +307,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -354,7 +354,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
               .subscribe();
             this.changePage(this.currentPage);
           },
-          ({ error }) => {  }
+          ({ error }) => {}
         )
     );
   }

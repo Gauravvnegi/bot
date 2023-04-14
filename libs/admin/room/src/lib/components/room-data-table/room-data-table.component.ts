@@ -167,6 +167,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
               this.setRecordsCount(roomList.count);
               this.loading = false;
             }, 
+            ()=>{},
             this.initTableDetails
           )
       );
@@ -182,6 +183,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
               this.setRecordsCount(roomTypesList.count);
               this.loading = false;
             }, 
+            ()=>{},
             this.initTableDetails
           )
       );

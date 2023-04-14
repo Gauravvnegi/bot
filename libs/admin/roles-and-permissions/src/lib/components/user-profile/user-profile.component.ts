@@ -214,7 +214,7 @@ export class UserProfileComponent implements OnInit {
       departments: [[], Validators.required],
       branchName: ['', Validators.required],
       cc: [''],
-      phoneNumber: [''],
+      phoneNumber: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       profileUrl: [''],
       permissionConfigs: this._fb.array([]),

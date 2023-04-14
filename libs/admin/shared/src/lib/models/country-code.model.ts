@@ -17,7 +17,7 @@ export class CountryCodeOne {
   value: string;
   icon: string;
   deserialize(input: CountryCodeResponse) {
-    this.label = input.value;
+    this.label = input.countryName;
     this.value = input.value;
     this.icon = input.srcImg;
     return this;

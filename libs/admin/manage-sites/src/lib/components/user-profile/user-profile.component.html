@@ -33,16 +33,11 @@
         }
       }"
     ></hospitality-bot-input>
-    <hospitality-bot-prefix-field
-      class="half-width"
-      [options]="code"
-      [props]="{ isAsync: true, isAutoFocusFilter: true }"
+    <hospitality-bot-phone-number
       preControlName="cc"
       postControlName="phoneNumber"
-      label="Contact"
-      stopEmission="true"
-      [defaultProps]="{ post: { type: 'number' } }"
-    ></hospitality-bot-prefix-field>
+      class="half-width"
+    ></hospitality-bot-phone-number>
     <hospitality-bot-button
       class="create-btn"
       label="Save"

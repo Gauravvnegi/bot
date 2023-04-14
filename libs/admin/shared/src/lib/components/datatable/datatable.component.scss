@@ -501,7 +501,7 @@ $table-hover-color: #f3f3f3;
   top: 0;
   z-index: $nav-action-header-z;
   background-color: $layout-background;
-  transition: box-shadow 0.5s, padding-bottom 0.5s;
+  transition: box-shadow 0.5s;
 
   &__sticky {
     @include header-fixed-position;

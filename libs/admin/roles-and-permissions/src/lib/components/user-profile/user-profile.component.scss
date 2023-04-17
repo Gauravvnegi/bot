@@ -13,8 +13,8 @@
       .manage-box {
         padding: 10px 15px;
         font-size: 12px;
-        color: $dark-grey;
-        background-color: $c-gray-103;
+        color: $subtitle;
+        background-color: $whiteDeep;
         border-radius: 25px;
       }
     }
@@ -70,7 +70,7 @@
             width: 50%;
             height: 132px;
             margin: 5px 10px;
-            background-color: $c-gray-100;
+            background-color: $whiteDeep;
             border-radius: 5px;
             position: relative;
             text-align: center;
@@ -86,7 +86,7 @@
               }
             }
             .paragraph {
-              color: $c-gray-47;
+              color: $grayMedium;
               font-size: 15px;
               letter-spacing: 0.9px;
               margin: 0 auto;
@@ -102,7 +102,7 @@
               @include flex-justify-center;
               border-radius: 50%;
               box-shadow: 0px 0px 5px 0px darkgray;
-              background-color: $c-gray-100;
+              background-color: $whiteDeep;
               z-index: 10;
               position: absolute;
               top: -30%;
@@ -217,7 +217,7 @@
 }
 
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-  background-color: $completed;
+  background-color: $posCompare;
 }
 
 :host ::ng-deep .mat-checkbox-background {
@@ -226,6 +226,6 @@
 
 :host ::ng-deep .mat-checkbox-disabled {
   .mat-checkbox-background {
-    background-color: $pending;
+    background-color: $draft-state;
   }
 }

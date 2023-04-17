@@ -7,7 +7,7 @@
     font-size: 14px;
     letter-spacing: 0.84px;
     font-weight: bold;
-    color: $dark-blue;
+    color: $secondary;
   }
   .person-image {
     margin: 15px 0;
@@ -30,7 +30,7 @@
         @include flex-all-center;
         font-size: 14px;
         color: $white;
-        background-color: $olivedrab;
+        background-color: olivedrab;
       }
     }
   }
@@ -43,13 +43,13 @@
     margin-top: 15px;
     font-size: 14px;
     letter-spacing: 0.84px;
-    color: $mat-tab-label;
+    color: $inActiveTab;
   }
   .label {
     font-size: 10px;
     letter-spacing: 0.6px;
     text-align: left;
-    color: $c-gray-61;
+    color: $grayMedium;
     margin-top: 15px;
     font-weight: bold;
   }
@@ -58,9 +58,9 @@
     letter-spacing: 0.72px;
     text-align: left;
     margin-top: 5px;
-    color: $dark-blue;
+    color: $secondary;
   }
   .border-line {
-    border: solid 1px $light-gray;
+    border: solid 1px $grayLight;
   }
 }

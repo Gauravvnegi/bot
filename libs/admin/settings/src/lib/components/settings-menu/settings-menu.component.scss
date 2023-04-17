@@ -16,13 +16,13 @@
   padding: 25px;
   width: 264px;
   font-family: Poppins;
-  color: $dark-blue2;
+  color: $secondary2;
   border-radius: 8px;
   cursor: pointer;
 
   &:hover {
     border-radius: 8px;
-    background-color: $progress-bar-messages-base;
+    background-color: $blackPrime-base;
   }
 
   &__header {

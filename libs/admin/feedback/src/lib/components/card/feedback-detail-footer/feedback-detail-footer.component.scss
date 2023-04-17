@@ -7,7 +7,7 @@
 
   .nickname {
     padding: 8px 6px;
-    background-color: $user-orange;
+    background-color: #feba1b;
     border-radius: 100%;
     @include flex-all-center;
     width: 38px;
@@ -29,7 +29,7 @@
     margin: 0 17px 0 0;
     padding: 13px 20px;
     border-radius: 21px;
-    border: solid 1px $c-gray-84;
+    border: solid 1px $borderCol;
     background-color: $white;
     outline: none;
   }

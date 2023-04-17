@@ -75,10 +75,10 @@
         @media screen and (max-width: $L) {
           font-size: 12px;
           div {
-            color: $quote-color;
+            color: $subtitle;
           }
           span {
-            color: $navy-blue;
+            color: $secondary;
           }
         }
       }
@@ -114,7 +114,7 @@
   width: 115px;
   padding: 5px 11px 5px;
   border-radius: 5px;
-  border: solid 1px $c-gray-85;
+  border: solid 1px $borderCol;
 }
 
 :host ::ng-deep {

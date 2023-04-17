@@ -5,19 +5,19 @@
   margin-right: 10px;
   padding: 10px 14px;
   font-size: 16px;
-  color: $dark-blue;
+  color: $secondary;
   letter-spacing: 0.32px;
-  border: 1px solid $c-gray-81;
+  border: 1px solid $borderCol;
   border-radius: 5px;
 
   ::placeholder {
-    color: $primary-gray;
+    color: $grayMedium;
   }
 }
 
 table {
   border-radius: 5px;
-  border: solid 1px $c-gray-92;
+  border: solid 1px #e5e9f2;
   width: 100%;
   border-spacing: unset;
 }
@@ -47,11 +47,11 @@ td {
   font-family: 'Roboto';
   font-size: 12px;
   letter-spacing: 0.72px;
-  color: $dark-blue;
+  color: $secondary;
 }
 
 .priority-low {
-  background-color: $priority-low;
+  background-color: $success-state;
 }
 
 .priority-medium {
@@ -63,7 +63,7 @@ td {
 }
 
 .priority-asap {
-  background-color: $priority-asap;
+  background-color: $darkRed;
 }
 .request-items {
   height: 100%;
@@ -86,7 +86,7 @@ td {
         align-items: center;
         display: flex;
         font-size: 12px;
-        background-color: $chocolate;
+        background-color: chocolate;
 
         img {
           height: 28px;
@@ -96,7 +96,7 @@ td {
       &-title {
         @include normal-text;
         font-size: 14px;
-        color: $dark-blue;
+        color: $secondary;
       }
     }
     &-right {
@@ -114,22 +114,22 @@ td {
       font-size: 24px;
       font-weight: bold;
       letter-spacing: 1.44px;
-      color: $dark-blue;
+      color: $secondary;
       margin-bottom: 10px;
     }
     &-subtitle {
       font-size: 16px;
       font-weight: normal;
       letter-spacing: 0.96px;
-      color: $c-gray-55;
+      color: $grayMedium;
       margin-bottom: 30px;
     }
     &-card {
       margin-bottom: 20px;
       table {
         .tr {
-          border-bottom: 1px solid $c-gray-92;
-          background-color: $c-gray-105;
+          border-bottom: 1px solid #e5e9f2;
+          background-color: $whiteDeep;
         }
       }
       &-status {
@@ -144,7 +144,7 @@ td {
         margin-top: 15px;
         padding: 6px 14px 6px 13px;
         border-radius: 1000px;
-        background-color: $room-type-opacity;
+        background-color: #fc9d031a;
         color: $initiated-2;
         width: fit-content;
         @media screen and (max-width: $L) {
@@ -160,7 +160,7 @@ td {
 }
 
 .sla-new {
-  color: $priority-low;
+  color: $success-state;
 }
 
 .sla-pending {
@@ -168,7 +168,7 @@ td {
 }
 
 .sla-timeout {
-  color: $priority-asap;
+  color: $darkRed;
 }
 
 .no-data {
@@ -187,7 +187,7 @@ td {
   &__title {
     margin: 12px 0;
     @include normal-text;
-    color: $dark-blue;
+    color: $secondary;
     font-weight: bold;
   }
   &__description {
@@ -196,7 +196,7 @@ td {
 
     letter-spacing: 0.72px;
     text-align: left;
-    color: $c-gray-77;
+    color: $grayLight;
   }
 }
 .man-icon {

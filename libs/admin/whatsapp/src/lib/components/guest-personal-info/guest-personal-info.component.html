@@ -27,13 +27,19 @@
     Phone No.
   </div>
   <div>
-    <a href="tel:+{{ data.phone }}" class="label-text">+{{ data.phone }}</a>
+    <a href="tel:+{{ data.phone }}" class="label-text" target="blank"
+      >+{{ data.phone }}</a
+    >
   </div>
   <div class="label">
     Email
   </div>
   <div>
-    <a href="mailto: {{ data.email || 'Unknown' }}" class="label-text">
+    <a
+      href="mailto: {{ data.email || 'Unknown' }}"
+      class="label-text"
+      target="blank"
+    >
       {{ data.email || 'Unknown' }}</a
     >
   </div>

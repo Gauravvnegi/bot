@@ -22,7 +22,7 @@
       @include flex-all-center;
       top: 0;
       left: 0;
-      background: $black-light;
+      background: rgba(0, 0, 0, 0.25);
       .btn {
         margin: 0 17px;
         img {
@@ -50,12 +50,12 @@
   flex-basis: 85%;
   opacity: 0.4;
   border-radius: 4px;
-  border: solid 1px $manually-contacts;
+  border: solid 1px $grayMedium;
   @include flex-col-all-Center;
   padding: 30px;
   &__btn {
     height: 53px;
-    border: solid 1px $manually-contacts;
+    border: solid 1px $grayMedium;
     border-radius: 3px;
     padding: 14px 30px;
     margin-top: 20px;

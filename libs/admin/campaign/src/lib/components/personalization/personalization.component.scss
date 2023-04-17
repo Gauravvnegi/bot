@@ -8,7 +8,7 @@
     width: 203px;
     padding: 8px;
     border-radius: 10px;
-    box-shadow: 0 6px 12px 0 $dropdown-box-shadow;
+    box-shadow: 0 6px 12px 0 $blackPrime;
     background-color: $white;
     position: absolute;
     top: 35px;
@@ -17,7 +17,7 @@
     .title {
       padding: 0 37px 8.2px 30.5px;
       @include normal-text;
-      color: $dark-blue;
+      color: $secondary;
       border-bottom: 1px solid $black;
     }
     .body {

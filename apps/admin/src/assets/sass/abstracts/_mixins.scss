@@ -150,7 +150,7 @@
 @mixin auth-heading {
   font-weight: $medium;
   font-size: 35px;
-  color: $auth-color;
+  color: $secondary;
   margin-bottom: 15px;
   @media only screen and (max-width: 1300px) {
     font-size: 25px;
@@ -160,7 +160,7 @@
 @mixin auth-quote {
   font-weight: 400;
   font-size: 16px;
-  color: $quote-color;
+  color: $subtitle;
   letter-spacing: 0.54px;
   line-height: 25px;
   @media only screen and (max-width: 800px) {
@@ -267,10 +267,10 @@
   height: auto;
   padding: 10.5px 15px;
   display: flex;
-  border-bottom: 1px solid $c-gray-95;
+  border-bottom: 1px solid #ededed;
 
   &:hover {
-    background-color: $c-gray-98;
+    background-color: $whiteDeep;
   }
   cursor: pointer;
 }
@@ -292,7 +292,7 @@
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.96px;
-  color: $dark-blue2 !important;
+  color: $secondary2 !important;
 }
 
 @mixin form-block {
@@ -308,7 +308,7 @@
 
   .code {
     flex-basis: 65%;
-    color: $dark-blue2;
+    color: $secondary2;
 
     &__label {
       @include normal-text;
@@ -328,7 +328,7 @@
     flex-basis: 100%;
 
     &__label {
-      color: $dark-blue2;
+      color: $secondary2;
       @include normal-text();
     }
 

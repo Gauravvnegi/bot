@@ -29,7 +29,7 @@
 .label {
   margin-bottom: 12px;
   opacity: 0.75;
-  color: $dark-blue2;
+  color: $secondary2;
   font-size: 16px;
   letter-spacing: 0.96px;
   font-weight: 500;
@@ -93,7 +93,7 @@
 }
 
 .validation-error {
-  color: #f44336;
+  color: $lightRed;
   font-size: 0.7em;
   height: 1.5em;
   position: absolute;

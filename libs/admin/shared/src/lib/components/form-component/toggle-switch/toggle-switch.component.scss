@@ -4,8 +4,7 @@
 :host ::ng-deep .p-inputswitch {
   &:not(.p-disabled):hover {
     .p-inputswitch-slider {
-      // background: $primary-form-color;
-      // opacity: 0.8;
+      
     }
   }
   &.p-inputswitch-checked {
@@ -40,7 +39,7 @@
   font-family: Roboto;
   font-size: 14px;
   font-weight: 500;
-  color: $dark-blue;
+  color: $secondary;
   letter-spacing: 0.84px;
   opacity: 0.6;
 }

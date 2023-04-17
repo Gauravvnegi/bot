@@ -8,7 +8,7 @@
     width: 617px;
     height: 51.7px;
     padding: 14px 22.5px 16.7px 20.5px;
-    background-color: $c-gray-103;
+    background-color: $whiteDeep;
     @include flex-space-between-cen-Algn;
     .close {
       cursor: pointer;
@@ -37,7 +37,7 @@
           padding: 8px 160.6px 9px 14px;
           opacity: 0.2;
           border-radius: 4px;
-          border: solid 1px $manually-contacts;
+          border: solid 1px $grayMedium;
           background-color: $white;
         }
         .time {

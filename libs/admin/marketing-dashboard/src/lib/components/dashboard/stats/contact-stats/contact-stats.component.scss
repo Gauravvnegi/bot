@@ -3,7 +3,7 @@
 .contact {
   padding: 20px;
   background: 0% 0% no-repeat padding-box $white;
-  border: 1px solid $c-gray-89;
+  border: 1px solid $borderCol;
   border-radius: 5px;
   @include flex-col;
   width: 244px;
@@ -51,13 +51,13 @@
         margin-top: 10px;
         padding: 0 15px;
         border-radius: 5px;
-        background-color: $stat-legend-bg;
+        background-color: $headingBg;
 
         .label {
           font-size: 10px;
           font-weight: $medium;
           letter-spacing: 0.6px;
-          color: $quote-color;
+          color: $subtitle;
         }
         .value {
           @include flex-row-justify-end;
@@ -65,7 +65,7 @@
           font-weight: bold;
           letter-spacing: 0.72px;
           text-align: right;
-          color: $dark-blue;
+          color: $secondary;
           &__percent {
             display: flex;
             &__width {
@@ -87,7 +87,7 @@
     position: absolute;
     bottom: 20px;
     @include normal-text;
-    color: $c-gray-72;
+    color: $grayLight;
     font-size: 10px;
     @media screen and(max-width:$L) {
       bottom: 5px;

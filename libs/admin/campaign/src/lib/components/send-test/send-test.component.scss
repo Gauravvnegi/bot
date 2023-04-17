@@ -6,7 +6,7 @@
     width: 550px;
     height: 51.7px;
     padding: 14px 17px 16.7px 20px;
-    background-color: $c-gray-103;
+    background-color: $whiteDeep;
     @include flex-space-between-cen-Algn;
     .title {
       @include normal-text;
@@ -46,7 +46,7 @@
     }
     .mat-label {
       width: 150px;
-      color: $mat-tab-label;
+      color: $inActiveTab;
       font-size: 14px;
     }
     mat-form-field {

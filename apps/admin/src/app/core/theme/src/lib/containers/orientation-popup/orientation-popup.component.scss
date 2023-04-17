@@ -11,13 +11,13 @@
   }
   button {
     margin-top: 2rem;
-    color: $c-white;
+    color: white;
     font-size: 12px;
     font-weight: 400;
     width: $popup-button-width;
     border-radius: 25px;
     background-color: $primary-cta;
-    color: $c-white;
+    color: white;
     &:hover {
       cursor: pointer;
       box-shadow: 0px 4px 4px $btn-shadow;

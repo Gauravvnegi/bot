@@ -77,7 +77,7 @@
   text-align: center;
   font: normal normal bold 12px/16px Roboto;
   letter-spacing: 0.72px;
-  color: $quote-color;
+  color: $subtitle;
   opacity: 1;
 }
 
@@ -93,7 +93,7 @@ svg text.label {
   text-align: left;
   font: normal normal bold 25px/33px Roboto;
   letter-spacing: 1.5px;
-  color: $approved;
+  color: #2f1dce;
   opacity: 1;
 }
 
@@ -108,7 +108,7 @@ svg text.label {
 
 .subtitle-label {
   font-size: 14px;
-  color: $quote-color;
+  color: $subtitle;
   @media only screen and (max-width: 1150px) {
     font-size: 11px;
   }
@@ -130,37 +130,37 @@ svg text.label {
     }
 
     .complete {
-      background: $completed 0% 0% no-repeat padding-box;
+      background: $posCompare 0% 0% no-repeat padding-box;
     }
 
     // pending square
     .pending {
-      background: $pending 0% 0% no-repeat padding-box;
+      background: $draft-state 0% 0% no-repeat padding-box;
     }
 
     // pending square
     .timeout {
-      background: $reject 0% 0% no-repeat padding-box;
+      background: $mediumRed 0% 0% no-repeat padding-box;
     }
 
     &--normal-text {
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0px;
-      color: $dark-blue;
+      color: $secondary;
       opacity: 1;
       margin: 0 10px;
     }
     &--normal-text-2 {
       font: normal normal normal 10px/13px Roboto;
       letter-spacing: 0px;
-      color: $pending;
+      color: $draft-state;
       opacity: 1;
       margin: 0 10px;
     }
     &--completetext {
       font: normal normal normal 12px/16px Roboto;
       letter-spacing: 0px;
-      color: $completed;
+      color: $posCompare;
       opacity: 1;
     }
   }
@@ -168,21 +168,21 @@ svg text.label {
   &--normal-text2 {
     font: normal normal normal 12px/16px Roboto;
     letter-spacing: 0.72px;
-    color: $quote-color;
+    color: $subtitle;
     opacity: 1;
   }
 
   &-pending {
     font: normal normal normal 10px/13px Roboto;
     letter-spacing: 0px;
-    color: $pending;
+    color: $draft-state;
     opacity: 1;
     margin: 0 10px;
 
     &--squrae {
       font: normal normal normal 12px/16px Roboto;
       letter-spacing: 0.72px;
-      color: $quote-color;
+      color: $subtitle;
       opacity: 1;
     }
   }
@@ -199,21 +199,21 @@ svg text.label {
 }
 
 .comparison-negative {
-  color: $comparison-negative;
+  color: $darkRed;
 }
 
 .comparison-positive {
-  color: $comparison-positive;
+  color: $posCompare;
 }
 :host ::ng-deep .labels {
   position: absolute;
-  color: $gray-total;
+  color: $grayMedium;
   font: normal normal bold 11px/12px Roboto;
   @include flex-col-all-Center;
   z-index: 1;
 }
 :host ::ng-deep .labels .val {
   text-align: center;
-  color: $dark-blue;
+  color: $secondary;
   font: normal normal bold 21px/24px Roboto;
 }

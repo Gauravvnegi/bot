@@ -2,7 +2,7 @@
 .stat-title {
   font: normal normal bold 16px/19px Roboto;
   letter-spacing: 0.96px;
-  color: $dark-blue;
+  color: $secondary;
   opacity: 1;
 }
 
@@ -31,14 +31,14 @@
     .val {
       font: normal normal bold 25px/30px Roboto;
       letter-spacing: 1.5px;
-      color: $dark-blue;
+      color: $secondary;
       opacity: 1;
     }
     .label {
       font: normal normal bold 12px/14px Roboto;
       letter-spacing: 0.72px;
       opacity: 1;
-      color: $note1;
+      color: $grayMedium;
     }
   }
 }
@@ -50,7 +50,7 @@
     padding-right: 20px;
     &::-webkit-scrollbar {
       width: 1px;
-      background-color: $c-gray-84;
+      background-color: $borderCol;
     }
   }
 }
@@ -76,7 +76,7 @@
       text-align: left;
       font: normal normal medium 12px/14px Roboto;
       letter-spacing: 0.72px;
-      color: $quote-color;
+      color: $subtitle;
       opacity: 1;
       @media (max-width: $tablet) {
         padding-left: 19px;

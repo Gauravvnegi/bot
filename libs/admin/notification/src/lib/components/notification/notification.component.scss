@@ -142,11 +142,11 @@
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
-  background-color: $primary-gray;
+  background-color: $grayMedium;
 }
 
 :host ::ng-deep .mat-select-arrow {
-  border-top-color: $primary-gray;
+  border-top-color: $grayMedium;
 }
 
 .file-input {
@@ -209,7 +209,7 @@
   position: relative;
   overflow: hidden;
   width: 100%;
-  border-bottom: 1px solid $primary-gray;
+  border-bottom: 1px solid $grayMedium;
   .attachment {
     width: 100%;
     display: flex;
@@ -232,11 +232,8 @@
 .close {
   display: flex;
   justify-content: flex-end;
-  // position: absolute;
-  // top: 5px;
-  // right: 10px;
   i {
-    color: $gray;
+    color: gray;
     margin: 0 10px;
   }
   &:hover {

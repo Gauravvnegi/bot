@@ -19,7 +19,7 @@
         width: 6px;
         height: 6px;
         margin-top: 4px;
-        background-color: $c-gray-18;
+        background-color: $grayMedium;
         border-radius: 50%;
       }
       .dropdown {
@@ -31,7 +31,7 @@
         right: 20px;
         font-size: 16px;
         letter-spacing: 0.96px;
-        color: $dark-blue;
+        color: $secondary;
         z-index: 141;
         &__item {
           padding: 15px 20px;

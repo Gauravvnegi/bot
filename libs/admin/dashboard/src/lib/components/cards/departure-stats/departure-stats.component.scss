@@ -22,7 +22,7 @@
 .stat-val-title {
   letter-spacing: 0.72px;
   font-size: 14px;
-  color: $quote-color;
+  color: $subtitle;
   @media only screen and (max-width: 1100px) {
     font-size: 12px;
   }
@@ -31,7 +31,7 @@
   display: flex;
 }
 .stat-val {
-  color: $dark-blue;
+  color: $secondary;
   font-size: 13px;
   font-weight: bold;
   @media only screen and (max-width: 1100px) {
@@ -42,6 +42,6 @@
 .stat-percent {
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0px;
-  color: $comparison;
+  color: $posCompare;
   margin: 0 5px;
 }

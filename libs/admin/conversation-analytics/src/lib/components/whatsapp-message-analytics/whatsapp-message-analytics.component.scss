@@ -9,7 +9,7 @@
   .analyticsHeading {
     font: normal normal bold 16px/21px Roboto;
     letter-spacing: 0.96px;
-    color: $dark-blue;
+    color: $secondary;
     opacity: 1;
     @include flex-item-center;
     margin-bottom: 20px;
@@ -18,7 +18,7 @@
     width: 40%;
     margin-right: 15px;
     background: 0% 0% no-repeat padding-box $white;
-    border: 1px solid $c-gray-89;
+    border: 1px solid $borderCol;
     border-radius: 5px;
     padding: 20px;
     opacity: 1;
@@ -61,7 +61,7 @@
           .day {
             font: normal normal normal 10px/13px Roboto;
             letter-spacing: 0px;
-            color: $c-gray-77;
+            color: $grayLight;
             opacity: 1;
           }
         }
@@ -85,7 +85,7 @@
             line-height: 19px;
             font-family: 'Roboto';
             letter-spacing: 0.84px;
-            color: $quote-color;
+            color: $subtitle;
             font-weight: 500;
           }
           .detailText {
@@ -94,10 +94,10 @@
             line-height: 16px;
             font-family: 'Roboto';
             letter-spacing: 0.72px;
-            color: $dark-blue;
+            color: $secondary;
             &__days {
               font-size: 12px;
-              color: $c-gray-77;
+              color: $grayLight;
               font-weight: 500;
             }
           }
@@ -108,7 +108,7 @@
   .sentAnalytics {
     width: 60%;
     background: 0% 0% no-repeat padding-box $white;
-    border: 1px solid $c-gray-89;
+    border: 1px solid $borderCol;
     border-radius: 5px;
     padding: 20px;
     opacity: 1;
@@ -128,7 +128,7 @@
   &__total {
     font: normal normal bold 25px/30px Roboto;
     letter-spacing: 1.5px;
-    color: $dark-blue;
+    color: $secondary;
     opacity: 1;
   }
   &__text {
@@ -137,11 +137,11 @@
     opacity: 1;
     width: 70px;
     text-align: center;
-    color: $note1;
+    color: $tabStats;
   }
   .centerText {
     @include flex-col-all-Center;
-    color: $dark-blue;
+    color: $secondary;
   }
 }
 
@@ -163,7 +163,7 @@
   text-align: left;
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0.72px;
-  color: $stat-legend-title;
+  color: $whiteDeep;
   opacity: 1;
 }
 
@@ -195,7 +195,7 @@
   text-align: left;
   font: normal normal normal 12px/14px Roboto;
   letter-spacing: 0.72px;
-  color: $quote-color;
+  color: $subtitle;
   margin: 7px;
   opacity: 1;
   @media screen and (max-width: 1070px) {
@@ -286,10 +286,10 @@
   text-decoration: line-through;
 }
 .percentGreen {
-  color: $comparison-positive;
+  color: $posCompare;
 }
 .percentRed {
-  color: $comparison-negative;
+  color: $darkRed;
 }
 .conversation-notification {
   display: flex;
@@ -299,7 +299,7 @@
   }
   &-conversation {
     width: 55%;
-    border: solid 1px $c-gray-89;
+    border: solid 1px $borderCol;
     border-radius: 5px;
     background: 0% 0% no-repeat padding-box $white;
     margin-right: 15px;
@@ -315,4 +315,3 @@
     }
   }
 }
-

@@ -13,7 +13,7 @@
     width: 8px;
     height: 8px;
     margin-left: 7px;
-    background-color: $c-gray-18;
+    background-color: $grayMedium;
     border-radius: 50%;
   }
   &:hover {
@@ -28,7 +28,7 @@
   position: absolute;
   width: 203px;
   border-radius: 4px;
-  box-shadow: 0 6px 12px 0 $dropdown-box-shadow;
+  box-shadow: 0 6px 12px 0 $blackPrime;
   background-color: $white;
   right: 0;
   font-size: 16px;
@@ -39,7 +39,7 @@
   &__item {
     padding: 18px 14px 10px 14px;
     &:hover {
-      background-color: $dropdown-hover-background;
+      background-color: $hoverBGlight;
     }
   }
 }
@@ -61,7 +61,7 @@
   }
   &:hover {
     cursor: pointer;
-    background: $table-hover-background !important;
+    background: $hoverBG !important;
   }
 }
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
@@ -70,17 +70,17 @@
 }
 
 :host ::ng-deep .header {
-  color: $dark-blue !important;
+  color: $secondary !important;
   font-size: 16px;
   font-weight: bold;
 }
 
 :host ::ng-deep .table-data-head {
-  color: $dark-blue !important;
+  color: $secondary !important;
 }
 
 :host ::ng-deep thead.p-datatable-thead {
-  border-top: solid 1px $c-gray-90 !important;
+  border-top: solid 1px #e3e3e3 !important;
 }
 
 .stats {
@@ -102,7 +102,6 @@
   height: 30.9px;
   padding: 6.6px 7.4px 6.6px 9.7px;
   border-radius: 15.5px;
-  background-color: $navy-blue1;
   @include flex-item-center;
   margin: 0 10px 10px 0;
   &__value {
@@ -114,47 +113,47 @@
 }
 
 .delivered {
-  background-color: $navy-blue1;
-  color: $booking-feedback;
+  background-color: rgba(0, 48, 181, 0.1);
+  color: $primaryBlue;
   &__value {
     color: $white;
-    background-color: $booking-feedback;
+    background-color: $primaryBlue;
   }
 }
 
 .opened {
-  background-color: $opened-bg;
-  color: $opened-txt;
+  background-color: rgba(37, 162, 226, 0.1);
+  color: $load-more;
   &__value {
     color: $white;
-    background-color: $opened-txt;
+    background-color: $load-more;
   }
 }
 
 .unopened {
-  background-color: $unopened-bg;
-  color: $unopened-txt;
+  background-color: rgba(255, 143, 0, 0.1);
+  color: rgba(255, 143, 0, 1);
   &__value {
     color: $white;
-    background-color: $unopened-txt;
+    background-color: rgba(255, 143, 0, 1);
   }
 }
 
 .clicked {
-  background-color: $clicked-bg;
-  color: $clicked-txt;
+  background-color: rgba(82, 179, 63, 0.1);
+  color: $posCompare;
   &__value {
     color: $white;
-    background-color: $clicked-txt;
+    background-color: $posCompare;
   }
 }
 
 .failed {
-  background-color: $failed-bg;
-  color: $failed-txt;
+  background-color: rgba(240, 13, 42, 0.1);
+  color: $mediumRed;
   &__value {
     color: $white;
-    background-color: $failed-txt;
+    background-color: $mediumRed;
   }
 }
 

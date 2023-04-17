@@ -39,7 +39,7 @@
 }
 
 .material-icons {
-  color: $light-grey;
+  color: $grayLight;
 }
 
 .dropdown-list {
@@ -51,16 +51,16 @@
   background-color: $white;
   z-index: $header-menu-dropdown-z;
   border-radius: 5px;
-  box-shadow: 0px 0px 5px 0px $light-grey;
+  box-shadow: 0px 0px 5px 0px $grayLight;
   .list-item {
     text-decoration: none;
     padding: 10px;
     font-size: 14px;
     width: 100%;
-    color: $dark-blue;
+    color: $secondary;
     font-weight: $medium;
     &:hover {
-      background-color: $dropdown-hover-background;
+      background-color: $hoverBGlight;
     }
   }
 }

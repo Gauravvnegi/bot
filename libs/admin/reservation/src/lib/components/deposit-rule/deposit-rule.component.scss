@@ -12,17 +12,17 @@
 
 :host ::ng-deep .mat-label {
   font-size: 14px;
-  color: $primary-gray;
+  color: $grayMedium;
   letter-spacing: 0.84px;
   margin-right: 10px;
 }
 
 :host ::ng-deep .mat-form-field-underline {
-  background-color: $primary-gray;
+  background-color: $grayMedium;
 }
 
 :host ::ng-deep .mat-select-arrow {
-  color: $primary-gray;
+  color: $grayMedium;
 }
 
 .field-payment {
@@ -35,13 +35,13 @@
 
 .button-wrapper {
   @include flex-all-center;
-  border-top: 2px solid $btn-border;
+  border-top: 2px solid rgba(33, 138, 243, 0.1);
   padding: 10px 0;
   button {
     outline: none;
     border: none;
     background: transparent;
-    color: $primary-gray;
+    color: $grayMedium;
     font-size: 14px;
     letter-spacing: 0.84px;
     &:hover {
@@ -56,6 +56,6 @@
     color: $black;
   }
   .mat-select-disabled {
-    color: $primary-gray;
+    color: $grayMedium;
   }
 }

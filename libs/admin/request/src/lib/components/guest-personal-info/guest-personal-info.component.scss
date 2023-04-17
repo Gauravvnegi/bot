@@ -27,7 +27,7 @@
         height: 40px;
         border-radius: 50%;
         @include flex-all-center;
-        background-color: $olivedrab;
+        background-color: olivedrab;
       }
     }
   }
@@ -40,13 +40,13 @@
     margin-top: 15px;
     font-size: 14px;
     letter-spacing: 0.84px;
-    color: $mat-tab-label;
+    color: $inActiveTab;
   }
   .label {
     font-size: 10px;
     letter-spacing: 0.6px;
 
-    color: $c-gray-61;
+    color: $grayMedium;
     margin-top: 15px;
   }
   .label-text {
@@ -56,6 +56,6 @@
     margin-top: 5px;
   }
   .border-line {
-    border: solid 1px $light-gray;
+    border: solid 1px $grayLight;
   }
 }

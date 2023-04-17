@@ -86,7 +86,7 @@
 
 :host ::ng-deep .stat-title {
   letter-spacing: 0.96px;
-  color: $dark-blue;
+  color: $secondary;
   font-weight: 700;
   @media screen and (max-width: 800px) {
     font-size: 12px;
@@ -101,7 +101,7 @@
   &__shared {
     width: calc(50% - 7.5px);
     margin-right: 15px;
-    border: solid 1px $c-gray-89;
+    border: solid 1px $borderCol;
     border-radius: 5px;
     background: 0% 0% no-repeat padding-box $white;
     @media (max-width: $tablet) {
@@ -110,7 +110,7 @@
   }
   &__received-bifurcation {
     width: calc(50% - 7.5px);
-    border: solid 1px $c-gray-89;
+    border: solid 1px $borderCol;
     border-radius: 5px;
     background: 0% 0% no-repeat padding-box $white;
   }
@@ -125,8 +125,8 @@
     width: 32.33%;
     margin: 0.5%;
     background: $white;
-    border: solid 1px $c-gray-89;
-    box-shadow: 0px 3px 6px $progress-bar-messages;
+    border: solid 1px $borderCol;
+    box-shadow: 0px 3px 6px $boxShadow;
     border-radius: 5px;
     @media screen and (max-width: 800px) {
       // height: 185px;
@@ -169,14 +169,12 @@
   border: 1px solid $primary-cta;
   border-radius: 5px;
 }
-// :host ::ng-deep .mat-tab-label-active .mat-tab-label-content{
-//   color: rgb(75, 86, 192) !important;
-// }
+
 
 :host ::ng-deep .data-table-row {
   &:hover {
     cursor: pointer;
-    background: $table-hover-dark-background !important;
+    background: $hoverBG !important;
   }
 }
 

@@ -2,8 +2,8 @@
 
 .container {
   background: $white;
-  border: solid 1px $c-gray-89;
-  box-shadow: 0px 3px 6px $progress-bar-messages;
+  border: solid 1px $borderCol;
+  box-shadow: 0px 3px 6px $boxShadow;
   border-radius: 5px;
   height: 100%;
   width: 100%;
@@ -23,7 +23,7 @@
   // height: 46px;
   font: normal normal bold 35px/46px Roboto;
   letter-spacing: 0px;
-  color: $dark-blue;
+  color: $secondary;
   opacity: 1;
   margin: 0 10px;
   @media (max-width: $tablet) {
@@ -37,13 +37,13 @@
   text-align: center;
   font: normal normal bold 12px/16px Roboto;
   letter-spacing: 0.72px;
-  color: $quote-color;
+  color: $subtitle;
   opacity: 1;
 }
 .stat-value-comparisonPercent {
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0px;
-  color: $comparison;
+  color: $posCompare;
   .arrow {
     transform: rotate(180deg);
   }
@@ -51,7 +51,7 @@
 .stat-value-comparisonPercent-day {
   font: normal normal normal 10px/13px Roboto;
   letter-spacing: 0px;
-  color: $c-gray-77;
+  color: $grayLight;
   opacity: 1;
 }
 
@@ -77,12 +77,11 @@
 }
 
 .progress-info-labels {
-  //   letter-spacing: 0.72px;
   display: flex;
   align-items: center;
   .label {
     letter-spacing: 0.72px;
-    color: $quote-color;
+    color: $subtitle;
     margin-right: 5px;
     font-size: 12px;
     b {
@@ -95,11 +94,11 @@
 }
 
 .comparison-negative {
-  color: $comparison-negative;
+  color: $darkRed;
 }
 
 .comparison-positive {
-  color: $comparison-negative;
+  color: $darkRed;
 }
 .clickable-card {
   cursor: pointer;

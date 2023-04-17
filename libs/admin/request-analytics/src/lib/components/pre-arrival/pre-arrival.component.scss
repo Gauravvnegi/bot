@@ -4,7 +4,7 @@
     font: normal normal bold 14px/19px Roboto;
     height: 40px;
     letter-spacing: 0.84px;
-    color: $mat-tab-label;
+    color: $inActiveTab;
     opacity: 1;
   }
   .mat-tab-label-active {
@@ -14,7 +14,7 @@
 
 .analyticsWrapper {
   background: 0% 0% no-repeat padding-box $white;
-  box-shadow: 0px 3px 6px $progress-bar-messages;
+  box-shadow: 0px 3px 6px $blackPrime;
   padding: 20px;
   border-radius: 5px;
   opacity: 1;
@@ -24,7 +24,7 @@
       @include flex-item-center;
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0.96px;
-      color: $dark-blue;
+      color: $secondary;
       opacity: 1;
       &__icon {
         margin-right: 10px;
@@ -41,7 +41,7 @@
     }
     .selected {
       font-size: 20px;
-      color: $c-gray-47;
+      color: $grayMedium;
       font-style: italic;
       margin-bottom: 0;
       margin-left: 3%;
@@ -57,7 +57,7 @@
           height: auto;
           width: auto;
           path {
-            fill: $default;
+            fill: $grayMedium;
           }
           &:hover {
             cursor: pointer;
@@ -74,19 +74,19 @@
     .dropdown--wrapper {
       @include flex-item-center;
       padding: 5px;
-      border: 2px solid $light-grey;
+      border: 2px solid $grayLight;
       border-radius: 5px;
 
       .divider {
         height: 20px;
-        border: 1px solid $light-grey;
+        border: 1px solid $grayLight;
         margin: 0px 15px;
       }
     }
     .go {
       outline: none;
       color: $primary-cta;
-      background: $go-btn-default;
+      background: $btnDefault;
       border: none;
       font-size: 10px;
       padding: 5px;
@@ -119,7 +119,7 @@
       width: 24.55%;
       margin-right: 0.9%;
       border-radius: 5px;
-      border: solid 1px $c-gray-89;
+      border: solid 1px $borderCol;
       @media (max-width: $tablet) {
         width: 38%;
         margin-right: 0;
@@ -128,7 +128,7 @@
     &__Sentiments {
       width: 100%;
       border-radius: 5px;
-      border: solid 1px $c-gray-89;
+      border: solid 1px $borderCol;
       @media (max-width: $tablet) {
         width: 60.7%;
       }

@@ -2,8 +2,8 @@
 
 :host ::ng-deep {
   .mat-tab-labels {
-    background-color: $c-gray-103 !important;
-    border-bottom: solid 1px $light-gray;
+    background-color: $whiteDeep !important;
+    border-bottom: solid 1px $grayLight;
   }
   .mat-tab-label-active {
     border-bottom: 2px solid $black !important;

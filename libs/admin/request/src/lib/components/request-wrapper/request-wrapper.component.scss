@@ -5,12 +5,10 @@
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
- 
   font-size: 14px;
   font-weight: bold;
 }
 .request-wrapper-header {
-
   padding: 10px 42px 10px 15px;
   background-color: $white;
   display: flex;
@@ -26,7 +24,7 @@
       width: 138px;
       height: 36px;
       background: $primary-cta 0% 0% no-repeat padding-box;
-      border: 1px solid $c-gray-87;
+      border: 1px solid $borderCol;
       border-radius: 10px;
       opacity: 1;
       display: flex;

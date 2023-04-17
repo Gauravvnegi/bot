@@ -44,7 +44,7 @@
           margin-right: 20px;
         }
         .status--left {
-          color: $primary-gray;
+          color: $grayMedium;
         }
         .status--right {
           color: $primary-black;
@@ -52,7 +52,7 @@
         }
       }
       .note {
-        color: $primary-gray;
+        color: $grayMedium;
         font-size: 12px;
         padding-left: 11%;
         margin-bottom: 20px;
@@ -101,7 +101,7 @@
 }
 
 :host ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-  background-color: $completed;
+  background-color: $posCompare;
 }
 
 :host ::ng-deep .mat-slide-toggle.mat-checked {
@@ -119,7 +119,7 @@
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
-  background-color: $primary-gray;
+  background-color: $grayMedium;
 }
 
 :host ::ng-deep .mat-form-field-disabled .mat-form-field-underline {
@@ -128,7 +128,7 @@
 
 :host ::ng-deep .mat-label {
   font-size: 14;
-  color: $primary-gray;
+  color: $grayMedium;
   margin-right: 10px;
   min-width: 31%;
   @media only screen and (max-width: 1300px) {
@@ -140,7 +140,7 @@
 }
 
 :host ::ng-deep .mat-select-arrow {
-  border-top-color: $primary-gray;
+  border-top-color: $grayMedium;
 }
 
 :host ::ng-deep .mat-form-field {
@@ -175,10 +175,10 @@
 
 :host ::ng-deep .mat-select-value-text {
   font-size: 14px;
-  color: $dark-blue;
+  color: $secondary;
 }
 
 :host ::ng-deep input.mat-input-element {
   font-size: 14px;
-  color: $dark-blue;
+  color: $secondary;
 }

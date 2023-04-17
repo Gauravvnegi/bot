@@ -7,7 +7,7 @@
   .heading {
     font: normal normal medium 14px/17px Roboto;
     letter-spacing: 0.84px;
-    color: $quote-color;
+    color: $subtitle;
     margin-bottom: 20px;
   }
   .progress-bars {
@@ -36,11 +36,11 @@
       align-items: center;
       flex-direction: column;
       .label {
-        color: $dark-blue;
+        color: $secondary;
         font-size: 25px;
       }
       .value {
-        color: $quote-color;
+        color: $subtitle;
         display: flex;
         margin-top: 12px;
         font-size: 12px;
@@ -61,7 +61,7 @@
     .limit {
       font: normal normal normal 12px/14px Roboto;
       letter-spacing: 0.72px;
-      color: $c-gray-75;
+      color: #c0c0c0;
     }
     .added-margin {
       margin-right: 20px;
@@ -86,7 +86,7 @@
         text-align: center;
         font: normal normal normal 12px/14px Roboto;
         letter-spacing: 0.72px;
-        color: $quote-color;
+        color: $subtitle;
       }
     }
   }

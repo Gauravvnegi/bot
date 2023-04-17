@@ -23,7 +23,7 @@
     margin: 19px 7px 47px 0;
     border-radius: 5px;
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
-    border: solid 1px $manually-contacts;
+    border: solid 1px $grayMedium;
     background-color: $white;
     display: flex;
     flex-direction: column;
@@ -34,7 +34,7 @@
       font-weight: normal;
       letter-spacing: 0.96px;
       text-align: left;
-      color: $dark-blue;
+      color: $secondary;
       opacity: 0.5;
     }
     &__text {
@@ -42,7 +42,7 @@
       font-weight: normal;
       letter-spacing: 0.96px;
       text-align: center;
-      color: $dark-blue;
+      color: $secondary;
       font-weight: normal;
       opacity: 0.5;
     }

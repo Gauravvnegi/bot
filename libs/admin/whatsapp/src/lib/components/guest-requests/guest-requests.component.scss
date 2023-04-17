@@ -26,7 +26,7 @@
           font-size: 14px;
           font-weight: $bold;
           letter-spacing: 0.84px;
-          color: $mat-tab-label;
+          color: $inActiveTab;
         }
       }
       .intiated-row {
@@ -37,20 +37,20 @@
         margin-top: 10px;
         font-weight: $medium;
         letter-spacing: 0.72px;
-        color: $dark-blue;
+        color: $secondary;
       }
       .gsb-row {
         margin-top: 5px;
         line-height: 1.17;
         letter-spacing: 0.72px;
-        color: $arrival-time;
+        color: $grayLight;
       }
       .date-time-row {
         display: flex;
         margin-top: 10px;
         line-height: normal;
         letter-spacing: 0.72px;
-        color: $dark-blue;
+        color: $secondary;
         &-img {
           width: 13px;
           height: 13px;
@@ -58,7 +58,7 @@
       }
       &-under-line {
         margin: 15px -15px;
-        border: solid 1px $light-gray;
+        border: solid 1px $grayLight;
       }
     }
   }
@@ -69,18 +69,18 @@
     font-family: 'Roboto';
     font-size: 12px;
     letter-spacing: 0.72px;
-    color: $dark-grey;
+    color: $subtitle;
     margin-top: 15px;
   }
   &-underline {
     margin: 20px 15px;
-    border: solid 1px $light-gray;
+    border: solid 1px $grayLight;
     width: 100%;
   }
 }
 
 .priority-low {
-  background-color: $priority-low;
+  background-color: $success-state;
 }
 
 .priority-medium {
@@ -92,14 +92,14 @@
 }
 
 .priority-asap {
-  background-color: $priority-asap;
+  background-color: $darkRed;
 }
 
 .priority {
   font-size: 10px;
   font-weight: bold;
   letter-spacing: 0.6px;
-  color: $c-gray-61;
+  color: $grayMedium;
   margin-top: 3px;
   margin-bottom: 13px;
   @include flex-item-center;
@@ -119,5 +119,5 @@
   margin-top: 10px;
   padding: 5px;
   border-radius: 5px;
-  border: solid 1px $light-grey;
+  border: solid 1px $grayLight;
 }

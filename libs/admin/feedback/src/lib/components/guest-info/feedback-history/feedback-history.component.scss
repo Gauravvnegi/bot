@@ -17,7 +17,7 @@
     justify-content: space-between;
     .room-no {
       font-size: 14px;
-      color: $mat-tab-label;
+      color: $inActiveTab;
       font-weight: bold;
     }
   }
@@ -29,7 +29,7 @@
   .comment {
     font-size: 12px;
     font-weight: 500;
-    color: $quote-color;
+    color: $subtitle;
     margin: 10px 0;
   }
   .date {
@@ -49,7 +49,7 @@
   padding: 0px;
   border-radius: 5px;
   position: relative;
-  background-color: $booking-feedback;
+  background-color: $primaryBlue;
   min-width: 21px;
   height: 20px;
   margin: 0 3px;
@@ -83,6 +83,6 @@
 }
 
 .line {
-  border: solid 1px $light-gray;
+  border: solid 1px $grayLight;
   margin: 0 -15px;
 }

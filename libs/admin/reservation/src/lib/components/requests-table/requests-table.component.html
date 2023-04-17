@@ -1,4 +1,3 @@
-<!-- <p>requests-table works!</p> -->
 <div class="material-body">
   <div class="activity-wrapper">
     <div class="activity-wrapper--header">
@@ -19,7 +18,6 @@
     <div class="go-requests">
       Go to Requests
     </div>
-    <!-- <p class="go-to">Go to Requests</p> -->
   </div>
   <p-table
     *ngIf="!showEmptyView; else emptyView"
@@ -44,23 +42,11 @@
     (onRowUnselect)="onRowUnselect($event)"
   >
     <ng-template pTemplate="emptymessage">
-      <p class="no-data-found">No data available in table</p>
+      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
     </ng-template>
     <!-- *******************************HEADER WITH SEARCH******************************* -->
     <ng-template pTemplate="header" let-columns>
-      <tr>
-        <th
-          class="table-data-head"
-          pResizableColumn
-          [pSortableColumn]="col.field"
-          *ngFor="let col of columns"
-        >
-          <div>
-            <p class="table-header-text">{{ col.header }}</p>
-            <p-sortIcon [field]="col.field"></p-sortIcon>
-          </div>
-        </th>
-      </tr>
+      <tr hospitality-bot-table-header [columns]="columns"></tr>
     </ng-template>
     <!-- **************************************BODY********************************* -->
     <ng-template
@@ -69,7 +55,6 @@
       let-columns="columns"
       let-rowIndex="rowIndex"
     >
-      <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
       <tr class="data-table-row">
         <td class="date-time">
           <p class="date">

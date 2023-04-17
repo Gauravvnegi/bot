@@ -8,7 +8,7 @@
   padding: 15px;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid $light-gray;
+  border-bottom: 1px solid $grayLight;
   cursor: pointer;
   &-guest-wrap {
     display: flex;
@@ -42,7 +42,7 @@
 .selectedChat {
   font-size: 14px;
   letter-spacing: 0.84px;
-  color: $dark-blue;
+  color: $secondary;
   opacity: 1;
 }
 
@@ -75,7 +75,7 @@
         width: 138px;
         height: 36px;
         background: $primary-cta 0% 0% no-repeat padding-box;
-        border: 1px solid $c-gray-87;
+        border: 1px solid $borderCol;
         border-radius: 10px;
         opacity: 1;
         display: flex;
@@ -116,7 +116,7 @@
   font-family: Roboto;
   font-size: 12px;
   letter-spacing: 0.72px;
-  color: $dark-blue;
+  color: $secondary;
   margin: auto;
   background: rgba(174, 174, 174, 0.1);
   padding: 6px;
@@ -125,14 +125,14 @@
 }
 .noChat {
   height: calc(100% - 124px);
-  background: $c-gray-98;
+  background: $whiteDeep;
   overflow-y: auto;
   padding: 20px;
   position: relative;
 }
 .no-data {
   height: calc(100% - 124px);
-  background: $c-gray-98;
+  background: $whiteDeep;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -148,7 +148,7 @@
     margin: 12px 0;
     font-weight: bold;
     @include normal-text;
-    color: $dark-blue;
+    color: $secondary;
   }
   &__description {
     font-size: 12px;
@@ -156,7 +156,7 @@
 
     letter-spacing: 0.72px;
     text-align: left;
-    color: $c-gray-77;
+    color: $grayLight;
   }
 }
 .chatRecieve {
@@ -193,13 +193,13 @@
   align-items: center;
   font: normal normal normal 14px/19px Roboto;
   letter-spacing: 0.84px;
-  color: $closed;
+  color: $lightRed;
 }
 
 .message-field-input {
   padding-left: 20px;
-  background: $c-gray-100 0% 0% no-repeat padding-box;
-  border: 1px solid $c-gray-84;
+  background: $whiteDeep 0% 0% no-repeat padding-box;
+  border: 1px solid $borderCol;
   border-radius: 20px;
   opacity: 1;
   height: 100%;
@@ -248,7 +248,7 @@
     font-family: Roboto;
     font-size: 12px;
 
-    color: $dark-blue;
+    color: $secondary;
     word-wrap: break-word;
     width: calc(100% - 60px);
     $white-space: break-word;
@@ -262,7 +262,7 @@
   align-self: flex-end;
   font-size: 10px;
   letter-spacing: 0.6px;
-  color: $c-gray-78;
+  color: $grayLight;
   padding-left: 10px;
   width: 60px;
 }
@@ -274,7 +274,7 @@
 }
 
 :host ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-  background-color: $completed;
+  background-color: $posCompare;
 }
 
 :host ::ng-deep .mat-slide-toggle.mat-checked {

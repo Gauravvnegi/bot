@@ -34,7 +34,7 @@
     position: absolute;
     height: 2px;
     width: 72%;
-    background-color: $alice-blue;
+    background-color: $whiteDeep;
     right: 17px;
     @media screen and (max-width: 800px) {
       width: 62%;
@@ -50,7 +50,7 @@
 
 :host ::ng-deep .arrival-time {
   font-size: 12px;
-  color: $c-gray-72;
+  color: $tabStats;
   margin-top: 2px;
   @media screen and (max-width: 800px) {
     font-size: 8px;
@@ -59,14 +59,14 @@
 
 :host ::ng-deep .arrival-date {
   font-size: 12px;
-  color: $dark-grey;
+  color: $subtitle;
   @media screen and (max-width: 800px) {
     font-size: 8px;
   }
 }
 
 :host ::ng-deep .booking-number {
-  color: $quote-color;
+  color: $subtitle;
   font-size: 12px;
   text-align: center;
   @media screen and (max-width: 800px) {
@@ -75,7 +75,7 @@
 }
 
 :host ::ng-deep .package {
-  color: $dark-grey;
+  color: $subtitle;
   font-size: 12px;
   position: relative;
   @media screen and (max-width: 800px) {
@@ -104,7 +104,7 @@
   background-color: $table-room-bg;
   border-radius: 25px;
   text-align: center;
-  color: $comparison;
+  color: $posCompare;
   @media screen and (max-width: 800px) {
     font-size: 10px;
     padding: 5px;
@@ -112,7 +112,6 @@
 }
 
 :host ::ng-deep .p-datatable {
-  margin-top: 20px;
   @media (max-width: $tablet) {
     width: 100%;
     margin: 10px auto;
@@ -150,11 +149,11 @@
     width: 100%;
     top: 50%;
     font-size: 12px;
-    color: $dark-grey;
+    color: $subtitle;
     background-color: $white;
     left: 0%;
     padding: 7px;
-    box-shadow: 0px 0px 5px 0px $light-grey;
+    box-shadow: 0px 0px 5px 0px $grayLight;
     border-radius: 5px;
     display: none;
   }

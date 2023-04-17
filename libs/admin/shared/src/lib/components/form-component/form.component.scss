@@ -2,10 +2,10 @@
 
 $input-padding-vertical: 0.9em;
 $input-padding-horizontal: 0.6em;
-$primary-text-color: $dark-blue2;
-$secondary-text-color: $primary-gray;
+$primary-text-color: $secondary2;
+$secondary-text-color: $grayMedium;
 $primary-form-color: $primary-cta;
-$border-color: $light-grey;
+$border-color: $grayLight;
 $form-error-color: #f44336;
 $form-input-height: 45px;
 $label-gap: 0.75em;
@@ -62,7 +62,7 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
 
 .input {
   font-size: 1em;
-  // transition-delay: 1000ms;
+  
 }
 
 .icon {

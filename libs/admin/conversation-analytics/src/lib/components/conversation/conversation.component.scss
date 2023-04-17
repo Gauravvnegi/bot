@@ -3,7 +3,7 @@
 .stats {
   @include flex-col;
   border-radius: 5px;
-  padding : 20px;
+  padding: 20px;
   height: 100%;
   @media screen and (max-width: 800px) {
     height: 185px;
@@ -11,13 +11,13 @@
   &__title {
     font: normal normal bold 16px/21px Roboto;
     letter-spacing: 0.96px;
-    color: $dark-blue;
+    color: $secondary;
     margin-bottom: 20px;
   }
   &__subheading {
     font: normal normal medium 12px/16px Roboto;
     letter-spacing: 0px;
-    color: $quote-color;
+    color: $subtitle;
     margin: 10px 0;
     font-size: 12px;
     font-weight: 500;
@@ -66,7 +66,7 @@
         @include flex-item-center;
         font: normal normal bold 35px/46px Roboto;
         letter-spacing: 2.1px;
-        color: $dark-blue;
+        color: $secondary;
         &__p {
           font-size: 12px;
           margin-left: 5px;
@@ -75,7 +75,7 @@
       &__sharedtitle {
         font: normal normal bold 12px/16px Roboto;
         letter-spacing: 0.72px;
-        color: $quote-color;
+        color: $subtitle;
       }
     }
   }
@@ -87,13 +87,13 @@
     &__dot {
       width: 14px;
       height: 14px;
-      background: $received-dot 0% 0% no-repeat padding-box;
+      background: $resolved 0% 0% no-repeat padding-box;
       border-radius: 2px;
     }
     &__count {
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0px;
-      color: $dark-blue;
+      color: $secondary;
       margin: 0 5px;
     }
     &__percentChange-img {
@@ -102,14 +102,14 @@
     &__date {
       font: normal normal normal 10px/14px Roboto;
       letter-spacing: 0.72px;
-      color: $quote-color;
+      color: $subtitle;
       margin: 0 5px;
     }
   }
   &__recived-title {
     font: normal normal normal 12px/16px Roboto;
     letter-spacing: 0.72px;
-    color: $quote-color;
+    color: $subtitle;
   }
   &__no-recived {
     margin-top: 20px;
@@ -124,20 +124,20 @@
       &__count {
         font: normal normal bold 16px/21px Roboto;
         letter-spacing: 0px;
-        color: $dark-blue;
+        color: $secondary;
         margin: 0 5px;
       }
       &__date {
         font: normal normal normal 10px/14px Roboto;
         letter-spacing: 0.72px;
-        color: $quote-color;
+        color: $subtitle;
         margin: 0 5px;
       }
     }
     &__title {
       font: normal normal normal 12px/16px Roboto;
       letter-spacing: 0.72px;
-      color: $quote-color;
+      color: $subtitle;
     }
   }
 }

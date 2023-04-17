@@ -3,7 +3,7 @@
 .form-block {
   @include form-block;
   .shared-field {
-    color: $primary-gray;
+    color: $grayMedium;
     mat-label {
       margin-right: 10px;
     }

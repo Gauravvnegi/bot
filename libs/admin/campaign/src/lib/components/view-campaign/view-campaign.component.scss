@@ -19,7 +19,7 @@
       width: 8px;
       height: 8px;
       margin-left: 7px;
-      background-color: $c-gray-18;
+      background-color: $grayMedium;
       border-radius: 50%;
     }
     &:hover {
@@ -38,7 +38,7 @@
       opacity: 0.55;
       border-radius: 5px;
       box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
-      border: solid 1px $manually-contacts;
+      border: solid 1px $grayMedium;
       background-color: $white;
       display: flex;
       align-items: center;
@@ -55,7 +55,7 @@
   position: absolute;
   width: fit-content;
   border-radius: 10px;
-  box-shadow: 0 6px 12px 0 $dropdown-box-shadow;
+  box-shadow: 0 6px 12px 0 $blackPrime;
   background-color: $white;
   right: 0;
   top: 15px;
@@ -63,12 +63,12 @@
   font-weight: normal;
   letter-spacing: 0.96px;
   text-align: left;
-  color: $dark-blue;
+  color: $secondary;
   z-index: 141;
   &__item {
     padding: 18px 18px 12px 20px;
     &:hover {
-      background-color: $dropdown-hover-background;
+      background-color: $hoverBGlight;
     }
   }
 }

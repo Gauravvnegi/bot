@@ -80,6 +80,8 @@ import { MenuComponent } from './components/menu/menu.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { SkeletonShapeComponent } from './components/skeleton/skeleton-shape/skeleton-shape.component';
 import { SkeletonDirective } from './directives/skeleton.directive';
+import { LoaderBounceComponent } from './components/loader-bounce/loader-bounce.component';
+import { PhoneNumberComponent } from './view/phone-number/phone-number.component';
 
 @NgModule({
   imports: [
@@ -168,6 +170,8 @@ import { SkeletonDirective } from './directives/skeleton.directive';
     MenuComponent,
     SkeletonShapeComponent,
     SkeletonDirective,
+    LoaderBounceComponent,
+    PhoneNumberComponent,
   ],
   exports: [
     DatatableComponent,
@@ -245,6 +249,8 @@ import { SkeletonDirective } from './directives/skeleton.directive';
     MenuComponent,
     SkeletonDirective,
     SkeletonShapeComponent,
+    LoaderBounceComponent,
+    PhoneNumberComponent,
   ],
 })
 export class AdminSharedModule {}

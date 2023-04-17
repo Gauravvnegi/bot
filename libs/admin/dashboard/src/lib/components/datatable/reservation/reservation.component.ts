@@ -142,7 +142,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.values = []; 
+          this.values = [];
         }
       )
     );
@@ -239,7 +239,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.values = []; 
+          this.values = [];
         }
       )
     );
@@ -332,7 +332,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -389,6 +389,32 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         detailCompRef.close();
       })
     );
+  }
+
+  getStatusStyle(type: string, state: string): string {
+    switch (type) {
+      case 'INITIATED':
+        return `status-${state}-initiated`;
+      case 'PENDING':
+        return `status-${state}-pending`;
+      case 'FAILED':
+        return `status-${state}-reject`;
+      case 'COMPLETED':
+        return `status-${state}-success`;
+    }
+  }
+
+  getRoomStatus(type: string): string {
+    switch (type) {
+      case 'CL':
+        return 'status-text-success';
+      case 'DI':
+        return 'status-text-reject';
+      case 'IN':
+        return 'status-text-initiated';
+      case 'PI':
+        return 'status-text-pending';
+    }
   }
 
   ngOnDestroy(): void {

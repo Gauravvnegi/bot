@@ -145,12 +145,12 @@
       <div class="payment-form__amount">
         <div class="py-row">
           <span>Current Amount</span>
-          <span> INR {{ currentAmount.value | number:'1.1-1' }}</span>
+          <span> INR {{ currentAmount.value | number: '1.1-1' }}</span>
         </div>
         <div class="py-row stretch">
           <span>Discount</span>
           <span class="span-block">
-            <span>INR {{ totalDiscount.value | number:'1.1-1' }}</span>
+            <span>INR {{ totalDiscount.value | number: '1.1-1' }}</span>
             <ng-container *ngIf="viewDiscountTab">
               <span class="input-field">
                 <hospitality-bot-prefix-field
@@ -180,12 +180,13 @@
           </span>
         </div>
         <div class="py-row invert">
-          <span>Total Amount</span><span>INR {{ discountedAmount.value | number:'1.1-1' }}</span>
+          <span>Total Amount</span
+          ><span>INR {{ discountedAmount.value | number: '1.1-1' }}</span>
         </div>
         <div class="py-row stretch">
           <span>Paid Amount</span>
           <span class="span-block">
-            <span>INR {{ paidAmount.value | number:'1.1-1' }}</span>
+            <span>INR {{ paidAmount.value | number: '1.1-1' }}</span>
             <ng-container *ngIf="viewPaidTab">
                 <span class="input-field">
                   <hospitality-bot-input
@@ -217,7 +218,8 @@
           </span>
         </div>
         <div class="py-row">
-          <span>Due Amount</span><span>INR {{ dueAmount.value | number:'1.1-1' }}</span>
+          <span>Due Amount</span
+          ><span>INR {{ dueAmount.value | number: '1.1-1' }}</span>
         </div>
       </div>
       <div class="payment-form__note">

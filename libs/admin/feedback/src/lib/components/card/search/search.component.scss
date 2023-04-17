@@ -4,8 +4,8 @@
   width: 100%;
   input {
     padding-left: 10px;
-    background: $c-gray-100 0% 0% no-repeat padding-box;
-    border: 1px solid $c-gray-84;
+    background: $whiteDeep 0% 0% no-repeat padding-box;
+    border: 1px solid $borderCol;
     border-radius: 5px;
     opacity: 1;
     height: 45px;
@@ -15,7 +15,7 @@
       font-style: italic;
       font-size: 12px;
       letter-spacing: 0.48px;
-      color: $primary-gray;
+      color: $grayMedium;
       opacity: 1;
       @media only screen and (max-width: 1250px) {
         font-size: 10px;
@@ -39,6 +39,6 @@
   position: absolute;
   right: 0;
   top: 50%;
-  color: $primary-gray;
+  color: $grayMedium;
   cursor: pointer;
 }

@@ -18,6 +18,8 @@
     </button>
   </span>
 </div>
+<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
+
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"

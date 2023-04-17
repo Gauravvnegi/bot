@@ -9,10 +9,10 @@
       label="+ Create Category"
       variant="text"
       severity="secondary"
-      link="/pages/library/packages/{{ routes.createCategory }}"
+      link="/pages/library/packages/{{ routes.createCategory.route }}"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      link="/pages/library/packages/{{ routes.createPackage }}"
+      link="/pages/library/packages/{{ routes.createPackage.route }}"
       label="+ Add Package"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
@@ -22,6 +22,7 @@
     ></hospitality-bot-export-list>
   </div>
 </div>
+<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <p-table
   #dt

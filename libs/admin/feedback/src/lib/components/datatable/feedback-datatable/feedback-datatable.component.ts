@@ -268,11 +268,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
+          this.initialLoading = false;
           this.setRecords(data);
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -377,7 +378,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -418,28 +419,26 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       notes: event.comment,
     };
     const id = event.id;
-    this.tableService.updateFeedbackState(id, data).subscribe(
-      (response) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.SUCCESS.STATUS_UPDATED',
-              priorityMessage: 'Status Updated Successfully..',
-            },
-            '',
-            {
-              panelClass: 'success',
-            }
-          )
-          .subscribe();
-        this.tableService.$disableContextMenus.next(true);
-        this.loadInitialData([
-          ...this.globalQueries,
-          { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFilters(),
-        ]);
-      }
-    );
+    this.tableService.updateFeedbackState(id, data).subscribe((response) => {
+      this.snackbarService
+        .openSnackBarWithTranslate(
+          {
+            translateKey: 'messages.SUCCESS.STATUS_UPDATED',
+            priorityMessage: 'Status Updated Successfully..',
+          },
+          '',
+          {
+            panelClass: 'success',
+          }
+        )
+        .subscribe();
+      this.tableService.$disableContextMenus.next(true);
+      this.loadInitialData([
+        ...this.globalQueries,
+        { order: sharedConfig.defaultOrder },
+        ...this.getSelectedQuickReplyFilters(),
+      ]);
+    });
   }
 
   /**
@@ -546,7 +545,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -603,7 +602,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -618,16 +617,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     event.stopPropagation();
 
     this.$subscription.add(
-      this.tableService.getFeedbackPdf(id).subscribe(
-        (response) => {
-          const link = document.createElement('a');
-          link.href = response.fileDownloadUri;
-          link.target = '_blank';
-          link.download = response.fileName;
-          link.click();
-          link.remove();
-        }
-      )
+      this.tableService.getFeedbackPdf(id).subscribe((response) => {
+        const link = document.createElement('a');
+        link.href = response.fileDownloadUri;
+        link.target = '_blank';
+        link.download = response.fileName;
+        link.click();
+        link.remove();
+      })
     );
   }
 
@@ -663,8 +660,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       })
     );
   }
-
- 
 
   /**
    * @function openDetailPage To open the detail modal for a reservation.

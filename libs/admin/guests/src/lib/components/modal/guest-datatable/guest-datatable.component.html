@@ -4,17 +4,10 @@
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
   </div>
-  <ng-template #loader>
-    <div class="loader">
-      <p class="loading">Loading</p>
-      <div class="spinner">
-        <div class="bounce1"></div>
-        <div class="bounce2"></div>
-        <div class="bounce3"></div>
-      </div>
-    </div>
-  </ng-template>
   <div class="table-container">
+    <ng-template #loader>
+      <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
+    </ng-template>
     <p-table
       #dt
       [styleClass]="tableConfig.styleClass"
@@ -72,113 +65,16 @@
       </ng-template>
 
       <ng-template pTemplate="emptymessage">
-        <p class="no-data-found">No data available in table</p>
+        <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
       </ng-template>
       <!-- *******************************HEADER WITH SEARCH******************************* -->
       <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th class="tableHead" pResizableColumn>
-            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-          </th>
-          <th
-            class="table-data-head"
-            pResizableColumn
-            [pSortableColumn]="col.field"
-            *ngFor="let col of columns"
-          >
-            <div>
-              <p class="table-header-text">{{ col.header }}</p>
-              <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-            </div>
-          </th>
-        </tr>
-
-        <tr class="table-search-head">
-          <th class="table-search-head"></th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="onFilterTypeTextChange($event.target.value, 'firstName')"
-              class="p-column-filter"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-              class="p-column-filter"
-              disabled="true"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="
-                onFilterTypeTextChange(
-                  $event.target.value,
-                  'booking.bookingNumber'
-                )
-              "
-              class="p-column-filter"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-              class="p-column-filter"
-              disabled="true"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-              class="p-column-filter"
-              disabled="true"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="
-                onFilterTypeTextChange(
-                  $event.target.value,
-                  'guestAttributes.overAllNps'
-                )
-              "
-              class="p-column-filter"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="
-                onFilterTypeTextChange(
-                  $event.target.value,
-                  'guestAttributes.churnProbalilty'
-                )
-              "
-              class="p-column-filter"
-            />
-          </th>
-          <th class="table-search-head">
-            <input
-              pInputText
-              type="text"
-              (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-              class="p-column-filter"
-              disabled="true"
-            />
-          </th>
-        </tr>
+        <tr
+          hospitality-bot-table-header
+          [columns]="columns"
+          [showCheckbox]="isSelectable"
+          (search)="handleFieldSearch($event)"
+        ></tr>
       </ng-template>
       <!-- **************************************BODY********************************* -->
       <ng-template
@@ -187,7 +83,6 @@
         let-columns="columns"
         let-rowIndex="rowIndex"
       >
-        <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
         <tr
           class="data-table-row hover-background"
           (click)="openDetailPage($event, rowData)"
@@ -235,17 +130,19 @@
             <div
               *ngIf="['COMPLETED'].includes(rowData.feedback.status)"
               class="booking-feedback"
-              [ngClass]="{
-                'status-opacity-reject': rowData.feedback.rating < 5,
-                'status-opacity-success': rowData.feedback.rating >= 5
-              }"
+              [ngClass]="
+                rowData.feedback.rating < 5
+                  ? 'status-opacity-reject'
+                  : 'status-opacity-success'
+              "
             >
               <p
                 class="number"
-                [ngClass]="{
-                  'status-background-reject': rowData.feedback.rating < 5,
-                  'status-background-success': rowData.feedback.rating >= 5
-                }"
+                [ngClass]="
+                  rowData.feedback.rating < 5
+                    ? 'status-background-reject'
+                    : 'status-background-success'
+                "
               >
                 {{ rowData.feedback.rating }}
               </p>
@@ -257,10 +154,11 @@
                 >
                   <img
                     class="feedback-icon"
-                    [ngClass]="{
-                      'status-image-reject': rowData.feedback.rating < 5,
-                      'status-image-success': rowData.feedback.rating >= 5
-                    }"
+                    [ngClass]="
+                      rowData.feedback.rating < 5
+                        ? 'status-image-reject'
+                        : 'status-image-success'
+                    "
                     [src]="feedbackService.getServiceUrl(suggestion.id)"
                   />
                 </ng-container>
@@ -340,12 +238,11 @@
           <td class="package">
             <span
               >{{ rowData.guestAttributes.churnProbalilty }}/<span
-                [ngClass]="{
-                  'status-text-success':
-                    rowData.guestAttributes.churnPrediction === 'No',
-                  'status-text-reject':
-                    rowData.guestAttributes.churnPrediction === 'Yes'
-                }"
+                [ngClass]="
+                  rowData.guestAttributes.churnPrediction === 'No'
+                    ? 'status-text-success'
+                    : 'status-text-reject'
+                "
                 >{{ rowData.guestAttributes.churnPrediction }}</span
               >
             </span>
@@ -361,29 +258,18 @@
                 <img
                   class="table-body-journey-icon"
                   src="assets/svg/Document.svg"
-                  [ngClass]="{
-                    'status-image-initiated':
-                      rowData.status.stepsStatus.documents === 'INITIATED',
-                    'status-image-pending':
-                      rowData.status.stepsStatus.feedback === 'PENDING',
-                    'status-image-reject':
-                      rowData.status.stepsStatus.documents === 'FAILED',
-                    'status-image-success':
-                      rowData.status.stepsStatus.documents === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(
+                      rowData.status.stepsStatus.documents,
+                      'image'
+                    )
+                  "
                 />
                 <p
                   class="label"
-                  [ngClass]="{
-                    'status-text-initiated':
-                      rowData.status.stepsStatus.documents === 'INITIATED',
-                    'status-text-pending':
-                      rowData.status.stepsStatus.documents === 'PENDING',
-                    'status-text-reject':
-                      rowData.status.stepsStatus.documents === 'FAILED',
-                    'status-text-success':
-                      rowData.status.stepsStatus.documents === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(rowData.status.stepsStatus.documents, 'text')
+                  "
                 >
                   Document
                 </p>
@@ -395,29 +281,15 @@
                 <img
                   class="table-body-journey-icon"
                   src="assets/svg/Payment.svg"
-                  [ngClass]="{
-                    'status-image-initiated':
-                      rowData.status.stepsStatus.payment === 'INITIATED',
-                    'status-image-pending':
-                      rowData.status.stepsStatus.feedback === 'PENDING',
-                    'status-image-reject':
-                      rowData.status.stepsStatus.payment === 'FAILED',
-                    'status-image-success':
-                      rowData.status.stepsStatus.payment === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(rowData.status.stepsStatus.payment, 'image')
+                  "
                 />
                 <p
                   class="label"
-                  [ngClass]="{
-                    'status-text-initiated':
-                      rowData.status.stepsStatus.payment === 'INITIATED',
-                    'status-text-pending':
-                      rowData.status.stepsStatus.payment === 'PENDING',
-                    'status-text-reject':
-                      rowData.status.stepsStatus.payment === 'FAILED',
-                    'status-text-success':
-                      rowData.status.stepsStatus.payment === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(rowData.status.stepsStatus.payment, 'text')
+                  "
                 >
                   Payment
                 </p>
@@ -429,29 +301,15 @@
                 <img
                   class="table-body-journey-icon"
                   src="assets/svg/Feedback.svg"
-                  [ngClass]="{
-                    'status-image-initiated':
-                      rowData.status.stepsStatus.feedback === 'INITIATED',
-                    'status-image-pending':
-                      rowData.status.stepsStatus.feedback === 'PENDING',
-                    'status-image-reject':
-                      rowData.status.stepsStatus.feedback === 'FAILED',
-                    'status-image-success':
-                      rowData.status.stepsStatus.feedback === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(rowData.status.stepsStatus.feedback, 'image')
+                  "
                 />
                 <p
                   class="label"
-                  [ngClass]="{
-                    'status-text-initiated':
-                      rowData.status.stepsStatus.feedback === 'INITIATED',
-                    'status-text-pending':
-                      rowData.status.stepsStatus.feedback === 'PENDING',
-                    'status-text-reject':
-                      rowData.status.stepsStatus.feedback === 'FAILED',
-                    'status-text-success':
-                      rowData.status.stepsStatus.feedback === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(rowData.status.stepsStatus.feedback, 'text')
+                  "
                 >
                   Feedback
                 </p>
@@ -463,30 +321,16 @@
                 <img
                   class="table-body-journey-icon"
                   src="assets/svg/New-Journey.svg"
-                  [ngClass]="{
-                    'status-image-initiated':
-                      rowData.status.journeyStatus.new === 'INITIATED',
-                    'status-image-pending':
-                      rowData.status.journeyStatus.new === 'PENDING',
-                    'status-image-reject':
-                      rowData.status.journeyStatus.new === 'FAILED',
-                    'status-image-success':
-                      rowData.status.journeyStatus.new === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(rowData.status.journeyStatus.new, 'image')
+                  "
                 />
                 <p
                   *ngIf="rowData.currentJourney.currentJourneyName === 'NEW'"
                   class="label"
-                  [ngClass]="{
-                    'status-text-initiated':
-                      rowData.status.journeyStatus.new === 'INITIATED',
-                    'status-text-pending':
-                      rowData.status.journeyStatus.new === 'PENDING',
-                    'status-text-reject':
-                      rowData.status.journeyStatus.new === 'FAILED',
-                    'status-text-success':
-                      rowData.status.journeyStatus.new === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(rowData.status.journeyStatus.new, 'text')
+                  "
                 >
                   New
                 </p>
@@ -498,32 +342,24 @@
                 <img
                   class="table-body-journey-icon"
                   src="assets/svg/precheckin.svg"
-                  [ngClass]="{
-                    'status-image-initiated':
-                      rowData.status.journeyStatus.preCheckin === 'INITIATED',
-                    'status-image-pending':
-                      rowData.status.journeyStatus.preCheckin === 'PENDING',
-                    'status-image-reject':
-                      rowData.status.journeyStatus.preCheckin === 'FAILED',
-                    'status-image-success':
-                      rowData.status.journeyStatus.preCheckin === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(
+                      rowData.status.journeyStatus.preCheckin,
+                      'image'
+                    )
+                  "
                 />
                 <p
                   *ngIf="
                     rowData.currentJourney.currentJourneyName === 'PRECHECKIN'
                   "
                   class="label"
-                  [ngClass]="{
-                    'status-text-initiated':
-                      rowData.status.journeyStatus.preCheckin === 'INITIATED',
-                    'status-text-pending':
-                      rowData.status.journeyStatus.preCheckin === 'PENDING',
-                    'status-text-reject':
-                      rowData.status.journeyStatus.preCheckin === 'FAILED',
-                    'status-text-success':
-                      rowData.status.journeyStatus.preCheckin === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(
+                      rowData.status.journeyStatus.preCheckin,
+                      'text'
+                    )
+                  "
                 >
                   PreCheck-in
                 </p>
@@ -535,32 +371,21 @@
                 <img
                   class="table-body-journey-icon"
                   src="assets/svg/checkin.svg"
-                  [ngClass]="{
-                    'status-image-initiated':
-                      rowData.status.journeyStatus.checkin === 'INITIATED',
-                    'status-image-pending':
-                      rowData.status.journeyStatus.checkin === 'PENDING',
-                    'status-image-reject':
-                      rowData.status.journeyStatus.checkin === 'FAILED',
-                    'status-image-success':
-                      rowData.status.journeyStatus.checkin === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(
+                      rowData.status.journeyStatus.checkin,
+                      'image'
+                    )
+                  "
                 />
                 <p
                   *ngIf="
                     rowData.currentJourney.currentJourneyName === 'CHECKIN'
                   "
                   class="label"
-                  [ngClass]="{
-                    'status-text-initiated':
-                      rowData.status.journeyStatus.checkin === 'INITIATED',
-                    'status-text-pending':
-                      rowData.status.journeyStatus.checkin === 'PENDING',
-                    'status-text-reject':
-                      rowData.status.journeyStatus.checkin === 'FAILED',
-                    'status-text-success':
-                      rowData.status.journeyStatus.checkin === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(rowData.status.journeyStatus.checkin, 'text')
+                  "
                 >
                   Check-In
                 </p>
@@ -572,32 +397,24 @@
                 <img
                   class="table-body-journey-icon"
                   src="assets/svg/checkout.svg"
-                  [ngClass]="{
-                    'status-image-initiated':
-                      rowData.status.journeyStatus.checkout === 'INITIATED',
-                    'status-image-pending':
-                      rowData.status.journeyStatus.checkout === 'PENDING',
-                    'status-image-reject':
-                      rowData.status.journeyStatus.checkout === 'FAILED',
-                    'status-image-success':
-                      rowData.status.journeyStatus.checkout === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(
+                      rowData.status.journeyStatus.checkout,
+                      'image'
+                    )
+                  "
                 />
                 <p
                   *ngIf="
                     rowData.currentJourney.currentJourneyName === 'CHECKOUT'
                   "
                   class="label"
-                  [ngClass]="{
-                    'status-text-initiated':
-                      rowData.status.journeyStatus.checkout === 'INITIATED',
-                    'status-text-pending':
-                      rowData.status.journeyStatus.checkout === 'PENDING',
-                    'status-text-reject':
-                      rowData.status.journeyStatus.checkout === 'FAILED',
-                    'status-text-success':
-                      rowData.status.journeyStatus.checkout === 'COMPLETED'
-                  }"
+                  [ngClass]="
+                    getStatusStyle(
+                      rowData.status.journeyStatus.checkout,
+                      'text'
+                    )
+                  "
                 >
                   Check-Out
                 </p>

@@ -119,7 +119,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -298,7 +298,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -336,6 +336,19 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           detailCompRef.close();
         })
       );
+    }
+  }
+
+  getStatusStyle(type: string, state: string): string {
+    switch (type) {
+      case 'INITIATED':
+        return `status-${state}-initiated`;
+      case 'PENDING':
+        return `status-${state}-pending`;
+      case 'FAILED':
+        return `status-${state}-reject`;
+      case 'COMPLETED':
+        return `status-${state}-success`;
     }
   }
 

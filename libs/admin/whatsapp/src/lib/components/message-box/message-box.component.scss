@@ -18,7 +18,7 @@
       .message-field-input {
         padding: 10px 20px;
         background: $white;
-        border: 1px solid $c-gray-84;
+        border: 1px solid $borderCol;
         border-radius: 21px;
         opacity: 1;
         height: 100%;
@@ -54,9 +54,12 @@
   justify-content: center;
   align-items: center;
   letter-spacing: 0.84px;
-  color: $closed;
+  color: $lightRed;
   font-family: Roboto;
   font-size: 14px;
   letter-spacing: 0.84px;
   text-align: center;
 }
+
+
+

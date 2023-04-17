@@ -2,11 +2,11 @@
 .list-container {
   height: 100%;
   opacity: 1;
-  border-right: 2px solid $c-gray-102;
+  border-right: 2px solid $borderCol;
   .header {
     @include flex-space-between-cen-Algn;
     padding: 10px;
-    border-bottom: 2px solid $c-gray-102;
+    border-bottom: 2px solid $borderCol;
     &__search {
       flex-grow: 0.85;
     }
@@ -21,14 +21,14 @@
       width: 4px;
     }
     &::-webkit-scrollbar-track {
-      background: $c-gray-98;
+      background: $whiteDeep;
     }
     &::-webkit-scrollbar-thumb {
-      background: $light-gray;
+      background: $grayLight;
       border-radius: 10px;
     }
     .item {
-      border-bottom: 1px solid $c-gray-102;
+      border-bottom: 1px solid $borderCol;
       padding: 10px 5px;
       display: flex;
       cursor: pointer;
@@ -36,7 +36,7 @@
         height: 45px;
         width: 45px;
         border-radius: 50%;
-        background-color: $olivedrab;
+        background-color: olivedrab;
         @include flex-all-center;
       }
       &__body {
@@ -56,7 +56,7 @@
           font-weight: bold;
 
           letter-spacing: 0.6px;
-          color: $c-gray-61;
+          color: $grayMedium;
           margin-top: 3px;
           margin-bottom: 13px;
           @include flex-item-center;
@@ -71,7 +71,7 @@
           letter-spacing: 0.66px;
           text-align: center;
           border-radius: 20px;
-          background-color: $c-gray-105;
+          background-color: $whiteDeep;
           padding: 4px 10px;
           gap: 7px;
           @include flex-item-center;
@@ -92,7 +92,7 @@
           font-size: 12px;
           font-weight: 700;
           letter-spacing: 0.72px;
-          color: $dark-blue;
+          color: $secondary;
           margin-bottom: 5px;
         }
         .labels {
@@ -101,19 +101,19 @@
           font-size: 12px;
         }
         &__remarks {
-          color: $dark-blue;
+          color: $secondary;
         }
         &__status {
           @include flex-item-center;
           .divider {
             height: 15px;
-            border: 1px solid $light-gray;
+            border: 1px solid $grayLight;
             margin: 0 10px;
           }
         }
         &__assignee {
           @include flex-space-between-cen-Algn;
-          color: $c-gray-45;
+          color: $grayMedium;
           &__date {
             width: 62px;
           }
@@ -136,7 +136,7 @@
     color: $primary-cta;
   }
   .mat-tab-header {
-    border-bottom: 2px solid $c-gray-102 !important;
+    border-bottom: 2px solid $borderCol !important;
   }
 }
 
@@ -216,13 +216,13 @@
     margin: 12px 0;
     @include normal-text;
     font-weight: bold;
-    color: $dark-blue;
+    color: $secondary;
   }
   &__description {
     font-size: 12px;
     font-weight: bold;
     letter-spacing: 0.72px;
-    color: $c-gray-77;
+    color: $grayLight;
   }
 }
 

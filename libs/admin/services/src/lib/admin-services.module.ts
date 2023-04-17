@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminServicesRoutingModule } from './admin-services.routing.module';
 import { ServicesService } from './services/services.service';
+import { AdminLibraryModule } from '@hospitality-bot/admin/library';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { ServicesService } from './services/services.service';
     AdminSharedModule,
     FormsModule,
     ReactiveFormsModule,
+    AdminLibraryModule,
   ],
   declarations: [...AdminServicesRoutingModule.components],
   providers: [ServicesService],

@@ -5,6 +5,7 @@
   gap: 10px;
   align-items: center;
   padding-bottom: 20px;
+  margin-top: -15px;
 
   &__wrapper {
     &__sticky {
@@ -18,7 +19,7 @@
     font-size: 16px;
     padding-left: 32px;
     letter-spacing: 0.96px;
-    color: $dark-blue;
+    color: $secondary;
   }
 }
 
@@ -28,7 +29,7 @@
   font-family: Poppins;
 
   letter-spacing: 1.56px;
-  color: $dark-blue2;
+  color: $secondary2;
 }
 
 .pi-arrow-left {
@@ -51,7 +52,7 @@
     font-family: Poppins;
     font-size: 14px;
     font-weight: 500;
-    color: $dark-blue2;
+    color: $secondary2;
     letter-spacing: 0.84px;
 
     &__active {
@@ -79,13 +80,16 @@
   }
 
   &__sticky {
-    height: 61px;
+    @include header-fixed-position;
+    height: $sticky-header-height;
     transition: box-shadow 1s ease-in;
     background-color: $layout-background;
-    position: fixed;
-    inset: 60px 0 auto 80px;
-    padding: 20px 33px;
+    padding: 20px 22px;
     z-index: $nav-action-header-z;
     box-shadow: 1px 7px 8px -7px rgba(181, 181, 181, 1);
   }
+}
+
+.nav-header-wrapper {
+  padding-top: 20px;
 }

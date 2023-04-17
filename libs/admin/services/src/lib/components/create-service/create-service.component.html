@@ -17,18 +17,12 @@
       label="Service Name"
       maxLength="60"
     ></hospitality-bot-input>
-    <hospitality-bot-select
-      class="half-width"
+    <hospitality-bot-category
       controlName="parentId"
-      label="Category"
-      [options]="categories"
-      [props]="{ isAsync: true, createPrompt: '+ Add New Category' }"
-      [loading]="loadingCategory"
-      (paginate)="loadMoreCategories()"
-      (onSearch)="searchCategories($event)"
-      [stopEmission]="noMoreCategories"
-      (onCreate)="createCategory()"
-    ></hospitality-bot-select>
+      class="half-width"
+      type="SERVICE_CATEGORY"
+    >
+    </hospitality-bot-category>
     <hospitality-bot-custom-file-upload
       class="upload"
       formControlName="imageUrl"
@@ -68,6 +62,22 @@
       label="Unit"
       [options]="units"
     ></hospitality-bot-select>
+    <div class="container">
+      <hospitality-bot-select
+        class="half-width"
+        controlName="serviceTax"
+        label="Tax"
+        [options]="tax"
+      ></hospitality-bot-select>
+    </div>
+    <hospitality-bot-select-group
+      class="half-width"
+      controlName="enableVisibility"
+      label="Visibility On"
+      [options]="visibilities"
+      fieldType="checkbox"
+    ></hospitality-bot-select-group>
+
     <hospitality-bot-button
       class="create-btn"
       [label]="serviceId ? 'Update' : 'Create'"

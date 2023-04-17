@@ -27,4 +27,21 @@ export type ServiceResponse = {
   hasChild: boolean;
   parentId: string;
   categoryName: string;
+  enableVisibility: string[];
+  serviceTax: number;
+};
+
+export type TaxResponse = {
+  id: string;
+  country: string;
+  taxType: string;
+  category: string;
+  taxValue: string;
+  status: boolean;
+};
+
+export type TaxListResponse = {
+  records: TaxResponse[];
+  total: number;
+  entityStateCounts: EntityStateCountsResponse;
 };

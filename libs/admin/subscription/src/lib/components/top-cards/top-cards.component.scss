@@ -8,7 +8,7 @@
     flex-grow: 1;
     flex-shrink: 1;
     background: 0% 0% no-repeat padding-box $white;
-    box-shadow: 0px 3px 6px $progress-bar-messages;
+    box-shadow: 0px 3px 6px $boxShadow;
     border-radius: 5px;
     padding: 25px 15px;
     &__title {
@@ -26,7 +26,7 @@
       &__label {
         font-size: 16px;
         letter-spacing: 0.5px;
-        color: $dark-blue;
+        color: $secondary;
         align-items: center;
         @media screen and (max-width: 1100px) {
           font-size: 15px;

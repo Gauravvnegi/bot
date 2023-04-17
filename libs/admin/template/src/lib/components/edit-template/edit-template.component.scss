@@ -7,14 +7,14 @@
   display: flex;
   &-templates {
     border-radius: 4px;
-    border: solid 1px $manually-contacts;
+    border: solid 1px $grayMedium;
     width: 255px;
     height: 136px;
     opacity: 0.9;
     margin: 0.75em 31px 15px 0;
     cursor: pointer;
     text-align: center;
-    color: $primary-gray;
+    color: $grayMedium;
     letter-spacing: 0.96px;
     font-weight: bold;
     position: relative;

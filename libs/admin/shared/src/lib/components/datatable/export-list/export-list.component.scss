@@ -12,7 +12,7 @@
       height: auto;
       width: auto;
       path {
-        fill: $default;
+        fill: $grayMedium;
       }
       &:hover {
         cursor: pointer;
@@ -31,13 +31,13 @@
   display: flex;
   align-items: center;
   padding: 5px;
-  border: 2px solid $light-grey;
+  border: 2px solid $grayLight;
   border-radius: 5px;
   background-color: $white;
 
   .divider {
     height: 20px;
-    border: 1px solid $light-grey;
+    border: 1px solid $grayLight;
     margin: 0px 15px;
   }
 }
@@ -45,7 +45,7 @@
 .go {
   outline: none;
   color: $primary-cta;
-  background: $go-btn-default;
+  background: $btnDefault;
   border: none;
   font-size: 10px;
   padding: 5px;

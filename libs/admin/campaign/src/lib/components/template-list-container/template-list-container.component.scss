@@ -4,7 +4,7 @@
   @include flex-col;
   height: fit-content;
   border-radius: 5px;
-  box-shadow: 0 0 6px 0 $container-box-shadow;
+  box-shadow: 0 0 6px 0 $boxShadow;
   background-color: $white;
   .header {
     @include flex-space-between-cen-Algn;
@@ -38,7 +38,7 @@
         padding-right: 12px;
         @include normal-text;
         font-weight: bold;
-        color: $dark-blue;
+        color: $secondary;
       }
     }
   }
@@ -66,7 +66,7 @@
       height: 46px;
       margin: 56px 37px 32px 38px;
       border-radius: 23px;
-      box-shadow: 0 3px 6px 0 $showBtn-shadow;
+      box-shadow: $button-shadow;
       border: solid 1px $button-blue;
       @include normal-text;
       color: $button-blue;
@@ -85,7 +85,7 @@
   opacity: 0.2;
   font-size: 16px;
   border-radius: 4px;
-  border: solid 1.7px $c-gray-17;
+  border: solid 1.7px #262626;
   background-color: $white;
   .mat-form-field-label {
     border-bottom: none;
@@ -122,7 +122,7 @@
     font-size: 25px;
     font-weight: bold;
     letter-spacing: 1.5px;
-    color: $dark-blue;
+    color: $secondary;
   }
 }
 
@@ -149,7 +149,7 @@
     height: 46px;
     margin: 56px 37px 32px 38px;
     border-radius: 23px;
-    box-shadow: 0 3px 6px 0 $showBtn-shadow;
+    box-shadow: $button-shadow;
     border: solid 1px $button-blue;
     @include normal-text;
     color: $button-blue;
@@ -158,7 +158,7 @@
 }
 
 .line {
-  border: 1px solid $primary-gray;
+  border: 1px solid $grayMedium;
   width: 100%;
   opacity: 0.3;
 }
@@ -170,7 +170,7 @@
 :host ::ng-deep .template-name {
   @include normal-text;
   font-weight: bold;
-  color: $dark-blue !important;
+  color: $secondary !important;
   .template-option {
     border: none !important;
   }
@@ -180,10 +180,10 @@
   height: 22px;
   @include normal-text;
   font-weight: bold;
-  color: $dark-blue !important;
+  color: $secondary !important;
 }
 .line {
-  border: 1px solid $primary-gray;
+  border: 1px solid $grayMedium;
   opacity: 0.3;
   margin: 0 2rem;
   width: 94%;

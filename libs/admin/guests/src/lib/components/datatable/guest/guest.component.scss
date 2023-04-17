@@ -7,7 +7,7 @@
 
 .tableHead {
   width: 5%;
-  background-color: $c-gray-93 !important;
+  background-color: $accordian-header !important;
   @include align-checkbox;
 }
 
@@ -48,7 +48,7 @@
     position: absolute;
     height: 2px;
     width: 72%;
-    background-color: $alice-blue;
+    background-color: $whiteDeep;
     right: 17px;
     @media screen and (max-width: 800px) {
       width: 62%;
@@ -70,7 +70,7 @@
 
 :host ::ng-deep .arrival-time {
   font-size: 12px;
-  color: $c-gray-71;
+  color: $tabStats;
   margin-top: 2px;
   @media screen and (max-width: 800px) {
     font-size: 8px;
@@ -79,7 +79,7 @@
 
 :host ::ng-deep .arrival-date {
   font-size: 12px;
-  color: $dark-grey;
+  color: $subtitle;
   @media screen and (max-width: 800px) {
     font-size: 8px;
   }
@@ -90,7 +90,7 @@
 }
 
 :host ::ng-deep .booking-number {
-  color: $dark-grey;
+  color: $subtitle;
   font-size: 12px;
   text-align: center;
   @media screen and (max-width: 800px) {
@@ -99,7 +99,7 @@
 }
 
 :host ::ng-deep .package {
-  color: $dark-grey;
+  color: $subtitle;
   font-size: 12px;
   position: relative;
   @media screen and (max-width: 800px) {
@@ -154,11 +154,11 @@
     width: 100%;
     top: 50%;
     font-size: 12px;
-    color: $dark-grey;
+    color: $subtitle;
     background-color: $white;
     left: 0%;
     padding: 7px;
-    box-shadow: 0px 0px 5px 0px $c-gray-93;
+    box-shadow: 0px 0px 5px 0px $whiteDeep;
     border-radius: 5px;
     display: none;
   }
@@ -200,17 +200,17 @@
 :host ::ng-deep .data-table-row {
   &:hover {
     cursor: pointer;
-    background: $table-hover-background !important;
+    background: $hoverBG !important;
   }
 }
 
 :host ::ng-deep .heading {
-  color: $dark-blue !important;
+  color: $secondary !important;
   font-size: 16px;
   font-weight: bold;
 }
 :host ::ng-deep .table-header-text {
-  color: $dark-blue !important;
+  color: $secondary !important;
 }
 
 // *** over ride the table style ***

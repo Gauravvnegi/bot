@@ -16,7 +16,6 @@ body {
 
 .mat-dialog-container {
   overflow: hidden !important;
-  // max-height: 100vh !important;
   padding: 0 !important;
 }
 
@@ -72,7 +71,7 @@ body {
 }
 
 .status-text-pending {
-  color: $pending !important;
+  color: $draft-state !important;
 }
 
 .status-text-initiated {
@@ -80,11 +79,11 @@ body {
 }
 
 .status-text-reject {
-  color: $reject !important;
+  color: $mediumRed !important;
 }
 
 .status-text-success {
-  color: $success !important;
+  color: #2a8853 !important;
 }
 
 .status-opacity-pending {
@@ -108,7 +107,7 @@ body {
 }
 
 .status-background-pending {
-  background-color: $pending;
+  background-color: $draft-state;
 }
 
 .status-background-initiated {
@@ -116,7 +115,7 @@ body {
 }
 
 .status-background-reject {
-  background-color: $reject;
+  background-color: $mediumRed;
 }
 
 .status-background-moderate {
@@ -124,7 +123,7 @@ body {
 }
 
 .status-background-success {
-  background-color: $completed;
+  background-color: $posCompare;
 }
 
 .notification {
@@ -172,11 +171,11 @@ body {
 }
 
 .comparison-negative {
-  color: $comparison-negative;
+  color: $darkRed;
 }
 
 .comparison-positive {
-  color: $comparison-positive;
+  color: $posCompare;
 }
 
 /****  Snackbar styling          ****/
@@ -193,12 +192,12 @@ body {
 
 .danger {
   background-color: #fee6e9 !important;
-  color: $reject;
+  color: $mediumRed;
 }
 
 .success {
-  background-color: $snackbarSuccess !important;
-  color: $comparison;
+  background-color: $whiteDeep !important;
+  color: $posCompare;
 }
 
 .pulse {

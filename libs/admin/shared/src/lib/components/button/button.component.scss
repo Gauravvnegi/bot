@@ -63,7 +63,7 @@
 
       /* Secondary Color Setting -- Text Variant */
       &__secondary {
-        color: $primary-gray;
+        color: $grayMedium;
         &:hover {
           color: $primary-cta;
         }
@@ -73,7 +73,7 @@
       }
       /* Reset Color Setting -- Text Variant */
       &__reset {
-        color: $cross;
+        color: $darkRed;
       }
     }
   }
@@ -91,7 +91,7 @@
         &:hover {
           border-color: $primary-hover;
           color: $primary-hover;
-          box-shadow: 1px 1px 1px 0px $buttons-hover;
+          box-shadow: 1px 1px 1px 0px $blackPrime;
         }
         &:active {
           border-color: $primary-active;
@@ -104,10 +104,10 @@
       }
       /* Reset Color Setting  -- Outlined Variant */
       &__reset {
-        color: $cross;
-        border-color: $cross;
+        color: $darkRed;
+        border-color: $darkRed;
         &:hover {
-          box-shadow: 1px 1px 1px 0px $buttons-hover;
+          box-shadow: 1px 1px 1px 0px $blackPrime;
         }
       }
     }

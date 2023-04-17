@@ -6,7 +6,7 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: $c-gray-93;
+  background-color: $whiteDeep;
   @include align-checkbox;
 }
 .rowsData {
@@ -17,7 +17,7 @@
   @include flex-row-justify-end;
   width: 100%;
   i {
-    color: $gray;
+    color: gray;
     margin: 0 10px;
   }
   &:hover {
@@ -41,6 +41,6 @@
 :host ::ng-deep .data-table-row.hover-background {
   &:hover {
     cursor: pointer;
-    background: $table-popup-background !important;
+    background: $hoverBG !important;
   }
 }

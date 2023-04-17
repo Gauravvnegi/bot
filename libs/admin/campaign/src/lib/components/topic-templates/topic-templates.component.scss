@@ -12,7 +12,7 @@
     font-size: 25px;
     font-weight: bold;
     letter-spacing: 1.5px;
-    color: $dark-blue;
+    color: $secondary;
   }
 }
 
@@ -26,8 +26,9 @@
       cursor: pointer;
       overflow-y: hidden;
       overflow-x: hidden;
-      box-shadow: $card-shadow1 1px -3px 0px -3px,
-        $card-shadow2 0px -1px 4px -2px, $card-shadow3 0px 3px 14px 2px;
+      box-shadow: rgb(82 82 82 / 10%) 1px -3px 0px -3px,
+        rgb(87 86 86 / 10%) 0px -1px 4px -2px,
+        rgb(70 70 70 / 10%) 0px 3px 14px 2px;
       border-radius: 5px;
       width: 255px;
       height: 273px;
@@ -60,7 +61,7 @@
     height: 46px;
     margin: 0px 37px 32px 38px;
     border-radius: 23px;
-    box-shadow: 0 3px 6px 0 $showBtn-shadow;
+    box-shadow: $button-shadow;
     border: solid 1px $button-blue;
     @include normal-text;
     color: $button-blue;

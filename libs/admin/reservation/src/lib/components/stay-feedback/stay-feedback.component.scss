@@ -14,7 +14,7 @@
   cursor: pointer;
   font: normal normal medium 14px/19px Roboto;
   letter-spacing: 0.56px;
-  color: $primary-gray;
+  color: $grayMedium;
 }
 
 .label-wrapper {
@@ -31,7 +31,7 @@
     .label {
       letter-spacing: 0.72px;
       font-size: 12px;
-      color: $primary-gray;
+      color: $grayMedium;
     }
     .value {
       letter-spacing: 0.84px;
@@ -56,13 +56,12 @@
       line-height: 1.67;
       letter-spacing: 0.24px;
 
-      color: $quote-color;
+      color: $subtitle;
     }
   }
 }
 
 .data-seperator {
-  // border: 2px solid $button-blue;
   margin: 20px 0px;
   opacity: 0.1;
   background: $button-blue;
@@ -72,7 +71,7 @@
 :host ::ng-deep .mat-head {
   font-size: 16px;
   font-weight: $bolder;
-  color: $dark-blue;
+  color: $secondary;
   letter-spacing: 0.96px;
 }
 
@@ -127,7 +126,6 @@
 }
 
 .booking-id-wrapper {
-  // margin-top: 20px;
   .booking-id {
     text-align: center;
   }
@@ -139,7 +137,6 @@
     .booking-feedback {
       display: flex;
       align-items: center;
-      // background-color: $completed;
       justify-content: space-around;
       padding: 2px;
       margin: 0 10px;
@@ -156,7 +153,7 @@
         width: 100%;
         top: 50%;
         font-size: 12px;
-        color: $dark-grey;
+        color: $subtitle;
         background-color: $white;
         left: 0%;
         padding: 7px;
@@ -199,7 +196,7 @@
 
 .header-seperator {
   height: 20px;
-  border: 1px solid $c-gray-74;
+  border: 1px solid $grayLight;
 }
 
 ::ng-deep .d-flex {
@@ -212,7 +209,7 @@
   margin: 0 94px 0 40px;
   border-radius: 6px;
   border: solid 1px $button-blue;
-  background-color: $c-gray-93;
+  background-color: $whiteDeep;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -246,7 +243,7 @@
 
 .mat-expansion-panel {
   box-shadow: none !important;
-  border: solid 1px $light-grey;
+  border: solid 1px $grayLight;
 }
 :host ::ng-deep .mat-expansion-panel-header.mat-expanded:hover {
   background: $accordian-background;

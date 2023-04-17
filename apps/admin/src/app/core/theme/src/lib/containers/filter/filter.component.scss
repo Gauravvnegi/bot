@@ -3,13 +3,13 @@
 .filter--header {
   background-color: $primary-cta;
   padding: 15px 10px;
-  color: $c-white;
+  color: white;
   @include flex-between-center;
   border-bottom: 1px solid $primary-cta;
   .close--wrapper {
     @include flex-item-center;
     .material-icon {
-      color: $c-gray-77;
+      color: $grayLight;
       font-size: 20px;
       margin-right: 15px;
       height: auto;
@@ -26,25 +26,25 @@
   }
   .reset-wrapper {
     @include flex-item-center;
-    color: $c-gray-77;
+    color: $grayLight;
     .material-icon {
-      color: $c-gray-77;
+      color: $grayLight;
       font-size: 20px;
       height: auto;
       width: auto;
       margin-left: 10px;
       &:hover {
-        color: $c-white;
+        color: white;
         cursor: pointer;
       }
     }
     .filter {
       font-weight: 400;
       margin: 0;
-      color: $c-gray-77;
+      color: $grayLight;
       font-size: 16px;
       &:hover {
-        color: $c-white;
+        color: white;
         cursor: pointer;
       }
     }
@@ -60,7 +60,7 @@
 :host ::ng-deep .mat-tab-group {
   flex-direction: initial;
   position: relative;
-  background-color: $c-white;
+  background-color: white;
 }
 
 :host ::ng-deep .mat-tab-label {
@@ -69,14 +69,14 @@
   padding: 20px;
   opacity: 1;
   height: auto;
-  color: $c-gray-77;
+  color: $grayLight;
   min-width: 3rem !important;
   .svg path {
-    fill: $c-gray-77;
+    fill: $grayLight;
   }
 
   &:hover {
-    background-color: $list-item-hover;
+    background-color: #8080801a;
   }
 }
 
@@ -127,15 +127,15 @@
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
-  background-color: $c-gray-77;
+  background-color: $grayLight;
 }
 
 :host ::ng-deep .mat-select-arrow {
-  color: $c-gray-77;
+  color: $grayLight;
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
-  color: $c-gray-77;
+  color: $grayLight;
 }
 
 :host ::ng-deep .mat-tab-header {

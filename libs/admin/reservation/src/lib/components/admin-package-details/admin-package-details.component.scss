@@ -6,7 +6,7 @@
     margin-top: 15px;
     .go-to-package {
       font-weight: $medium;
-      color: $primary-gray;
+      color: $grayMedium;
     }
   }
   &--images-wrapper {
@@ -22,7 +22,7 @@
     .img-with-text {
       .image {
         border-radius: 50%;
-        background-color: $c-gray-102;
+        background-color: $borderCol;
         padding: 15px;
         padding-bottom: 10px;
         img {
@@ -43,12 +43,12 @@
   border: none;
   margin: 20px 0px;
   // opacity: 0.1;
-  background: $light-grey;
+  background: $grayLight;
   height: 1px;
 }
 
 .package-label {
-  color: $dark-blue;
+  color: $secondary;
   @include normal-text;
   font-weight: 600;
 }
@@ -77,5 +77,5 @@
 :host ::ng-deep .mat-expansion-panel {
   margin-top: 20px !important;
   box-shadow: none;
-  border: solid 1px $light-grey;
+  border: solid 1px $grayLight;
 }

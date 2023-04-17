@@ -1,7 +1,7 @@
 @import 'main';
 
 :host ::ng-deep .mat-tab-label {
-  color: $mat-tab-label;
+  color: $inActiveTab;
   font-size: 14px;
 }
 
@@ -15,7 +15,7 @@
 }
 
 .document-name-nationality {
-  @include flex-space-between;;
+  @include flex-space-between;
   margin-bottom: 20px;
 }
 
@@ -67,7 +67,7 @@
   .download {
     font: normal normal medium 14px/19px Roboto;
     letter-spacing: 0.84px;
-    color: $primary-gray;
+    color: $grayMedium;
     opacity: 1;
     cursor: pointer;
   }
@@ -84,7 +84,7 @@
 .nationality-wrapper {
   @include flex-base-algn;
   .text {
-    color: $primary-gray;
+    color: $grayMedium;
     margin-right: 7px;
   }
 }
@@ -92,7 +92,7 @@
 :host ::ng-deep .nationality > .mat-form-field-wrapper > .mat-form-field-flex {
   padding: 5px 10px;
   border-radius: 5px;
-  border: 1px solid $light-grey;
+  border: 1px solid $grayLight;
 }
 
 .border-none {
@@ -101,15 +101,15 @@
 
 .health-status {
   letter-spacing: 0.84px;
-  color: $primary-gray;
+  color: $grayMedium;
   font-size: 14px;
   font-weight: $bolder;
   margin: 20px 30px;
   .accepted {
-    color: $completed;
+    color: $posCompare;
   }
   .pending {
-    color: $primary-gray;
+    color: $grayMedium;
   }
 }
 
@@ -120,7 +120,7 @@
     text-align: center;
     font-size: 12px;
     margin: 1%;
-    border: 1px dashed $light-grey;
+    border: 1px dashed $grayLight;
     border-radius: 8px;
     img {
       border-radius: 8px;
@@ -154,7 +154,7 @@
 .remark-wrapper {
   .text {
     letter-spacing: 0.84px;
-    color: $primary-gray;
+    color: $grayMedium;
     font-size: 14px;
     font-weight: $bolder;
     margin-right: 15px;
@@ -169,15 +169,15 @@
   margin-left: 0;
 }
 .red-color {
-  color: $reject;
+  color: $mediumRed;
 }
 
 :host ::ng-deep {
   .mat-select-value-text {
-    color: $c-black;
+    color: black;
   }
   .mat-select-arrow {
-    color: $c-black;
+    color: black;
   }
 }
 .download {

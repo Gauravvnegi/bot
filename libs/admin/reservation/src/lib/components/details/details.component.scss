@@ -1,7 +1,7 @@
 @import 'main';
 
 :host ::ng-deep .mat-tab-label {
-  color: $mat-tab-label;
+  color: $inActiveTab;
   font-size: 14px;
   @media screen and (max-width: $XL) {
     min-width: 155px;
@@ -125,7 +125,7 @@
         }
         .value {
           font-size: 11px;
-          color: $c-gray-74;
+          color: $grayLight;
           letter-spacing: 0.66px;
           margin-top: 5px;
           font-weight: 500;
@@ -143,7 +143,7 @@
         margin-top: 10px;
         .booking-feedback {
           @include flex-space-around-cen-Algn;
-          background-color: $c-gray-103;
+          background-color: $whiteDeep;
           padding: 2px;
           margin: 0 10px;
           border-radius: 25px;
@@ -159,7 +159,7 @@
             width: auto;
             top: 50%;
             font-size: 12px;
-            color: $dark-grey;
+            color: $subtitle;
             background-color: $white;
             left: 0%;
             padding: 7px;
@@ -287,7 +287,7 @@ mat-option {
     li.cricle {
       width: 30px;
       height: 30px;
-      background: $red;
+      background: #ff0000;
       border-radius: 15px;
       border: solid 2px $white;
       text-align: center;
@@ -323,11 +323,11 @@ mat-option {
   font-size: 16px;
   margin-right: 20px;
   font-weight: $bolder;
-  color: $dark-blue;
+  color: $secondary;
 }
 
 .data-seperator {
-  border: 2px solid $c-gray-93;
+  border: 2px solid $whiteDeep;
   margin: 20px 0px;
   opacity: 0.1;
 }
@@ -340,7 +340,7 @@ mat-option {
     .label {
       letter-spacing: 0.72px;
       font-size: 12px;
-      color: $primary-gray;
+      color: $grayMedium;
     }
     .value {
       letter-spacing: 0.84px;
@@ -367,7 +367,7 @@ mat-option {
     font-weight: $bolder;
   }
   .fa {
-    color: $pending;
+    color: $draft-state;
   }
 }
 
@@ -395,10 +395,10 @@ mat-option {
   font-weight: $bolder;
   margin: 20px 30px;
   .accepted {
-    color: $completed;
+    color: $posCompare;
   }
   .pending {
-    color: $primary-gray;
+    color: $grayMedium;
   }
 }
 
@@ -409,7 +409,7 @@ mat-option {
     text-align: center;
     font-size: 12px;
     margin: 1%;
-    border: 1px dashed $light-grey;
+    border: 1px dashed $grayLight;
     border-radius: 8px;
     img {
       border-radius: 8px;
@@ -428,7 +428,7 @@ mat-option {
   margin: 20px 25px;
   margin-right: 0;
   height: 49vh;
-  border-right: 2px solid $c-gray-93;
+  border-right: 2px solid $whiteDeep;
   padding-right: 15px;
   overflow-y: auto;
   @media screen and (max-width: 1100px) {
@@ -472,7 +472,7 @@ mat-option {
       margin-top: 12px;
     }
     .note {
-      color: $primary-gray;
+      color: $grayMedium;
       font-weight: 500;
       letter-spacing: 0.84px;
       margin-top: 10px;
@@ -494,7 +494,7 @@ mat-option {
   overflow-x: hidden;
   .contact {
     font-size: 11px;
-    color: $primary-gray;
+    color: $grayMedium;
     text-align: center;
     margin-bottom: 7px;
   }
@@ -530,7 +530,7 @@ mat-option {
       @include flex-all-center;
       .icon {
         padding: 5px;
-        background-color: $c-gray-102;
+        background-color: $borderCol;
         border-radius: 50%;
         height: 23px;
         width: 23px;
@@ -651,5 +651,3 @@ mat-option {
     min-width: 175px !important;
   }
 }
-
-

@@ -16,7 +16,7 @@
     .analyticsHeading {
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0.96px;
-      color: $dark-blue;
+      color: $secondary;
       opacity: 1;
       display: flex;
       align-items: center;
@@ -47,11 +47,11 @@
           justify-content: center;
           flex-direction: column;
           align-items: center;
-          color: $dark-blue;
+          color: $secondary;
           .val {
             font: normal normal bold 25px/30px Roboto;
             letter-spacing: 1.5px;
-            color: $dark-blue;
+            color: $secondary;
             opacity: 1;
             padding-top: 7px;
           }
@@ -61,7 +61,7 @@
             letter-spacing: 0.72px;
             opacity: 1;
             line-height: 1.17;
-            color: $quote-color;
+            color: $subtitle;
             text-align: center;
           }
         }
@@ -75,7 +75,7 @@
         margin-top: 10px;
         padding: 0 15px;
         border-radius: 5px;
-        background-color: $stat-legend-bg;
+        background-color: $headingBg;
         align-items: center;
         justify-content: space-between;
         font-family: Roboto;
@@ -86,14 +86,14 @@
           font-size: 10px;
           font-weight: 500;
           letter-spacing: 0.6px;
-          color: $quote-color;
+          color: $subtitle;
         }
         .value {
           font-size: 12px;
           font-weight: bold;
           letter-spacing: 0.72px;
           text-align: right;
-          color: $dark-blue;
+          color: $secondary;
         }
       }
     }
@@ -107,7 +107,7 @@
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: $c-gray-72;
+    color: $grayLight;
     margin: 0 0 20px 20px;
     align-self: flex-start;
   }

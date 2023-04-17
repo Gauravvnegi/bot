@@ -6,7 +6,7 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: $c-gray-93;
+  background-color: $whiteDeep;
   @include align-checkbox;
 }
 .rowsData {
@@ -18,7 +18,7 @@
   justify-content: flex-end;
   width: 100%;
   i {
-    color: $gray;
+    color: gray;
     margin: 0 10px;
   }
   &:hover {
@@ -44,7 +44,7 @@
     font-size: 41px;
     font-weight: 300;
     line-height: 0.95;
-    color: $dark-grey;
+    color: $subtitle;
     opacity: 0.35;
   }
   .opacImage {

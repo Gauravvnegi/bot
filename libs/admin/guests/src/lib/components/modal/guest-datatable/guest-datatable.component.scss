@@ -6,7 +6,7 @@
 }
 .tableHead {
   width: 5%;
-  background-color: $c-gray-93 !important;
+  background-color: $accordian-header !important;
   @include align-checkbox;
 }
 
@@ -63,11 +63,11 @@
 }
 
 .status-text-others {
-  color: $timeout !important;
+  color: $lightRed !important;
 }
 
 .status-selected-others {
-  background-color: $timeout !important;
+  background-color: $lightRed !important;
   color: $white !important;
   opacity: 1;
 }
@@ -93,11 +93,11 @@
 }
 
 .status-text-whatsapp {
-  color: $accepted !important;
+  color: $success-stated !important;
 }
 
 .status-selected-whatsapp {
-  background-color: $accepted !important;
+  background-color: $success-stated !important;
   color: $white !important;
   opacity: 1;
 }
@@ -105,7 +105,7 @@
 :host ::ng-deep .data-table-row.hover-background {
   &:hover {
     cursor: pointer;
-    background: $table-popup-background !important;
+    background: $hoverBG !important;
   }
 }
 

@@ -20,8 +20,8 @@
 }
 
 .site-button {
- @include flex-space-between-cen-Algn;
-  border-color: $light-grey;
+  @include flex-space-between-cen-Algn;
+  border-color: $grayLight;
   border-width: 1px;
   border-style: solid;
   padding: 1em;
@@ -31,6 +31,6 @@
   height: 42px;
   cursor: pointer;
   .pi-angle-down {
-    border-color: $light-grey;
+    border-color: $grayLight;
   }
 }

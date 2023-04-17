@@ -7,7 +7,7 @@
 }
 .categorieTableHead {
   width: 5%;
-  background-color: $c-gray-93;
+  background-color: $whiteDeep;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
@@ -47,7 +47,7 @@
   color: $primary-black;
 
   p {
-    color: $primary-gray;
+    color: $grayMedium;
     margin-top: 5px;
   }
 }
@@ -58,7 +58,7 @@
   white-space: pre-line !important;
 
   p {
-    color: $primary-gray;
+    color: $grayMedium;
     margin-top: 5px;
   }
 }
@@ -73,10 +73,10 @@
     width: 0;
     height: 0;
     &:checked + .slider {
-      background-color: $completed;
+      background-color: $posCompare;
     }
     &:focus + .slider {
-      box-shadow: 0 0 1px $completed;
+      box-shadow: 0 0 1px $posCompare;
     }
     &:checked + .slider:before {
       -webkit-transform: translateX(40px);
@@ -93,7 +93,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: $c-gray-80;
+  background-color: $grayLight;
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -124,26 +124,26 @@
 :host ::ng-deep .data-table-row {
   &:hover {
     cursor: pointer;
-    background: $table-hover-background !important;
+    background: $hoverBG !important;
   }
 }
 :host ::ng-deep .heading {
-  color: $dark-blue;
+  color: $secondary;
   font-size: 16px;
   font-weight: bold;
 }
 
 :host ::ng-deep .table-header-text {
-  color: $dark-blue;
+  color: $secondary;
 }
 
 :host ::ng-deep thead.p-datatable-thead {
-  border-top: solid 1px $c-gray-90;
+  border-top: solid 1px #e3e3e3;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
   text-align: center;
-  background: $c-gray-93 !important;
+  background: $whiteDeep !important;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-tbody > tr {

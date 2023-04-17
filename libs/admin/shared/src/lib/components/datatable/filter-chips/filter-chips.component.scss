@@ -14,14 +14,14 @@
     .filter {
       padding: 4px 15px;
       border: 1px solid $white;
-      background-color: $progress-bar-messages-base;
+      background-color: $blackPrime-base;
       border-radius: 20px;
       outline: none;
       font-size: 14px;
-      color: $c-gray-47;
+      color: $grayMedium;
       &:hover {
         cursor: pointer;
-        background-color: $c-gray-47;
+        background-color: $grayMedium;
         color: $white;
       }
     }
@@ -39,15 +39,15 @@
     width: 94%;
   }
   .p-button {
-    background-color: $progress-bar-messages-base;
+    background-color: $blackPrime-base;
     padding: 6px 15px;
     margin-left: 15px;
     font-size: 14px;
-    color: $c-gray-47;
+    color: $grayMedium;
     border: 1px solid $white;
     border-radius: 20px;
     &:hover {
-      background-color: $c-gray-47;
+      background-color: $grayMedium;
       color: $white;
       cursor: pointer;
     }
@@ -152,8 +152,8 @@
 }
 
 .chip-default {
-  border-color: $auth-gray;
-  color: $c-black;
+  border-color: $grayAuth;
+  color: $black;
 }
 
 .chip-new {
@@ -187,7 +187,7 @@
 }
 
 .chip-selected-default {
-  background: $auth-gray;
+  background: $grayAuth;
 }
 
 .chip-selected-new {

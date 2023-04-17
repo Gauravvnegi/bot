@@ -24,7 +24,7 @@ button {
   width: 175px;
   padding: 7px 8px 7px 8px;
   border-radius: 4px;
-  box-shadow: 2px 6px 12px 0 $exampleList-box-shadow;
+  box-shadow: 2px 6px 12px 0 $boxShadow;
   background-color: $white;
   @include flex-col-space-between-center-algn;
 }

@@ -128,7 +128,7 @@
     }
   }
   &:hover {
-    background-color: $dropdown-hover-background;
+    background-color: $hoverBGlight;
     border-radius: 3px;
   }
   .sidenav_logo {
@@ -141,7 +141,7 @@
 }
 
 .parent-active {
-  background-color: $parent-active;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .change .bar2 {
@@ -190,7 +190,7 @@
   height: 1px;
   left: 15px;
   width: calc(100% - 30px);
-  background-color: $divider;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-wrapper {

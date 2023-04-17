@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';

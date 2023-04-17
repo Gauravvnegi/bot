@@ -84,12 +84,7 @@
       <td>
         <p
           class="tabel-room-no"
-          [ngClass]="{
-            'status-text-success': rowData.booking.roomStatus === 'CL',
-            'status-text-reject': rowData.booking.roomStatus === 'DI',
-            'status-text-initiated': rowData.booking.roomStatus === 'IN',
-            'status-text-pending': rowData.booking.roomStatus === 'PI'
-          }"
+          [ngClass]="getRoomStatus(rowData.booking.roomStatus)"
         >
           {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}
         </p>
@@ -99,17 +94,19 @@
         <div
           *ngIf="['COMPLETED'].includes(rowData.feedback.status)"
           class="booking-feedback"
-          [ngClass]="{
-            'status-opacity-reject': rowData.feedback.rating < 5,
-            'status-opacity-success': rowData.feedback.rating >= 5
-          }"
+          [ngClass]="
+            rowData.feedback.rating < 5
+              ? 'status-opacity-reject'
+              : 'status-opacity-success'
+          "
         >
           <p
             class="number"
-            [ngClass]="{
-              'status-background-reject': rowData.feedback.rating < 5,
-              'status-background-success': rowData.feedback.rating >= 5
-            }"
+            [ngClass]="
+              rowData.feedback.rating < 5
+                ? 'status-background-reject'
+                : 'status-background-success'
+            "
           >
             {{ rowData.feedback.rating }}
           </p>
@@ -235,29 +232,15 @@
               class="table-body-journey-icon"
               [src]="dashboardConfig.images.document.url"
               [alt]="dashboardConfig.images.document.alt"
-              [ngClass]="{
-                'status-image-initiated':
-                  rowData.status.stepsStatus.documents === 'INITIATED',
-                'status-image-pending':
-                  rowData.status.stepsStatus.documents === 'PENDING',
-                'status-image-reject':
-                  rowData.status.stepsStatus.documents === 'FAILED',
-                'status-image-success':
-                  rowData.status.stepsStatus.documents === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.stepsStatus.documents, 'image')
+              "
             />
             <p
               class="label"
-              [ngClass]="{
-                'status-text-initiated':
-                  rowData.status.stepsStatus.documents === 'INITIATED',
-                'status-text-pending':
-                  rowData.status.stepsStatus.documents === 'PENDING',
-                'status-text-reject':
-                  rowData.status.stepsStatus.documents === 'FAILED',
-                'status-text-success':
-                  rowData.status.stepsStatus.documents === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.stepsStatus.documents, 'text')
+              "
             >
               {{ 'datatable.document' | translate }}
             </p>
@@ -273,29 +256,15 @@
               class="table-body-journey-icon"
               [src]="dashboardConfig.images.payment.url"
               [alt]="dashboardConfig.images.payment.alt"
-              [ngClass]="{
-                'status-image-initiated':
-                  rowData.status.stepsStatus.payment === 'INITIATED',
-                'status-image-pending':
-                  rowData.status.stepsStatus.payment === 'PENDING',
-                'status-image-reject':
-                  rowData.status.stepsStatus.payment === 'FAILED',
-                'status-image-success':
-                  rowData.status.stepsStatus.payment === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.stepsStatus.payment, 'image')
+              "
             />
             <p
               class="label"
-              [ngClass]="{
-                'status-text-initiated':
-                  rowData.status.stepsStatus.payment === 'INITIATED',
-                'status-text-pending':
-                  rowData.status.stepsStatus.payment === 'PENDING',
-                'status-text-reject':
-                  rowData.status.stepsStatus.payment === 'FAILED',
-                'status-text-success':
-                  rowData.status.stepsStatus.payment === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.stepsStatus.payment, 'text')
+              "
             >
               {{ 'datatable.payment' | translate }}
             </p>
@@ -308,29 +277,15 @@
               class="table-body-journey-icon"
               [src]="dashboardConfig.images.feedback.url"
               [alt]="dashboardConfig.images.feedback.alt"
-              [ngClass]="{
-                'status-image-initiated':
-                  rowData.status.stepsStatus.feedback === 'INITIATED',
-                'status-image-pending':
-                  rowData.status.stepsStatus.feedback === 'PENDING',
-                'status-image-reject':
-                  rowData.status.stepsStatus.feedback === 'FAILED',
-                'status-image-success':
-                  rowData.status.stepsStatus.feedback === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.stepsStatus.feedback, 'image')
+              "
             />
             <p
               class="label"
-              [ngClass]="{
-                'status-text-initiated':
-                  rowData.status.stepsStatus.feedback === 'INITIATED',
-                'status-text-pending':
-                  rowData.status.stepsStatus.feedback === 'PENDING',
-                'status-text-reject':
-                  rowData.status.stepsStatus.feedback === 'FAILED',
-                'status-text-success':
-                  rowData.status.stepsStatus.feedback === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.stepsStatus.feedback, 'text')
+              "
             >
               {{ 'datatable.feedback' | translate }}
             </p>
@@ -343,30 +298,16 @@
               class="table-body-journey-icon"
               [src]="dashboardConfig.images.newJourney.url"
               [alt]="dashboardConfig.images.newJourney.alt"
-              [ngClass]="{
-                'status-image-initiated':
-                  rowData.status.journeyStatus.new === 'INITIATED',
-                'status-image-pending':
-                  rowData.status.journeyStatus.new === 'PENDING',
-                'status-image-reject':
-                  rowData.status.journeyStatus.new === 'FAILED',
-                'status-image-success':
-                  rowData.status.journeyStatus.new === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.journeyStatus.new, 'image')
+              "
             />
             <p
               *ngIf="rowData.currentJourney.currentJourneyName === 'NEW'"
               class="label"
-              [ngClass]="{
-                'status-text-initiated':
-                  rowData.status.journeyStatus.new === 'INITIATED',
-                'status-text-pending':
-                  rowData.status.journeyStatus.new === 'PENDING',
-                'status-text-reject':
-                  rowData.status.journeyStatus.new === 'FAILED',
-                'status-text-success':
-                  rowData.status.journeyStatus.new === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.journeyStatus.new, 'text')
+              "
             ></p>
             <div class="tooltip">
               {{ 'datatable.new' | translate }}
@@ -377,30 +318,16 @@
               class="table-body-journey-icon"
               [src]="dashboardConfig.images.preCheckin.url"
               [alt]="dashboardConfig.images.preCheckin.alt"
-              [ngClass]="{
-                'status-image-initiated':
-                  rowData.status.journeyStatus.preCheckin === 'INITIATED',
-                'status-image-pending':
-                  rowData.status.journeyStatus.preCheckin === 'PENDING',
-                'status-image-reject':
-                  rowData.status.journeyStatus.preCheckin === 'FAILED',
-                'status-image-success':
-                  rowData.status.journeyStatus.preCheckin === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.journeyStatus.preCheckin, 'image')
+              "
             />
             <p
               *ngIf="rowData.currentJourney.currentJourneyName === 'PRECHECKIN'"
               class="label"
-              [ngClass]="{
-                'status-text-initiated':
-                  rowData.status.journeyStatus.preCheckin === 'INITIATED',
-                'status-text-pending':
-                  rowData.status.journeyStatus.preCheckin === 'PENDING',
-                'status-text-reject':
-                  rowData.status.journeyStatus.preCheckin === 'FAILED',
-                'status-text-success':
-                  rowData.status.journeyStatus.preCheckin === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.journeyStatus.preCheckin, 'text')
+              "
             ></p>
             <div class="tooltip">
               {{ 'datatable.pre_checkin' | translate }}
@@ -411,30 +338,16 @@
               class="table-body-journey-icon"
               [src]="dashboardConfig.images.checkin.url"
               [alt]="dashboardConfig.images.checkin.alt"
-              [ngClass]="{
-                'status-image-initiated':
-                  rowData.status.journeyStatus.checkin === 'INITIATED',
-                'status-image-pending':
-                  rowData.status.journeyStatus.checkin === 'PENDING',
-                'status-image-reject':
-                  rowData.status.journeyStatus.checkin === 'FAILED',
-                'status-image-success':
-                  rowData.status.journeyStatus.checkin === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.journeyStatus.checkin, 'image')
+              "
             />
             <p
               *ngIf="rowData.currentJourney.currentJourneyName === 'CHECKIN'"
               class="label"
-              [ngClass]="{
-                'status-text-initiated':
-                  rowData.status.journeyStatus.checkin === 'INITIATED',
-                'status-text-pending':
-                  rowData.status.journeyStatus.checkin === 'PENDING',
-                'status-text-reject':
-                  rowData.status.journeyStatus.checkin === 'FAILED',
-                'status-text-success':
-                  rowData.status.journeyStatus.checkin === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.journeyStatus.checkin, 'text')
+              "
             ></p>
             <div class="tooltip">
               {{ 'datatable.checkin' | translate }}
@@ -445,30 +358,16 @@
               class="table-body-journey-icon"
               [src]="dashboardConfig.images.checkout.url"
               [alt]="dashboardConfig.images.checkout.alt"
-              [ngClass]="{
-                'status-image-initiated':
-                  rowData.status.journeyStatus.checkout === 'INITIATED',
-                'status-image-pending':
-                  rowData.status.journeyStatus.checkout === 'PENDING',
-                'status-image-reject':
-                  rowData.status.journeyStatus.checkout === 'FAILED',
-                'status-image-success':
-                  rowData.status.journeyStatus.checkout === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.journeyStatus.checkout, 'image')
+              "
             />
             <p
               *ngIf="rowData.currentJourney.currentJourneyName === 'CHECKOUT'"
               class="label"
-              [ngClass]="{
-                'status-text-initiated':
-                  rowData.status.journeyStatus.checkout === 'INITIATED',
-                'status-text-pending':
-                  rowData.status.journeyStatus.checkout === 'PENDING',
-                'status-text-reject':
-                  rowData.status.journeyStatus.checkout === 'FAILED',
-                'status-text-success':
-                  rowData.status.journeyStatus.checkout === 'COMPLETED'
-              }"
+              [ngClass]="
+                getStatusStyle(rowData.status.journeyStatus.checkout, 'text')
+              "
             ></p>
             <div class="tooltip">
               {{ 'datatable.checkout' | translate }}

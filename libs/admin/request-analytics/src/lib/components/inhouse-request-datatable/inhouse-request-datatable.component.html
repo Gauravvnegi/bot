@@ -1,5 +1,6 @@
 <div class="popup__wrap">
   <div (click)="closeModal()" class="popup__wrap__close">&#10006;</div>
+
   <p-table
     #dt
     [styleClass]="tableConfig.styleClass"
@@ -54,112 +55,28 @@
       </div>
     </ng-template>
 
+    <!-- *******************************EMPTY TABLE VIEW******************************* -->
     <ng-template pTemplate="emptymessage">
-      <p class="no-data-found">No data available in table</p>
+      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
     </ng-template>
 
+    <!-- *******************************HEADER WITH SEARCH******************************* -->
     <ng-template pTemplate="header" let-columns>
-      <tr>
-        <th class="requestDataTableHead" pResizableColumn>
-          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-        </th>
-        <th
-          class="table-data-head"
-          pResizableColumn
-          [pSortableColumn]="col.field"
-          *ngFor="let col of columns"
-        >
-          <div>
-            <p class="table-header-text">{{ col.header }}</p>
-            <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-          </div>
-        </th>
-      </tr>
-
-      <tr class="table-search-head">
-        <th class="table-search-head"></th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'itemCode')"
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange($event.target.value, 'confirmationNumber')
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange(
-                $event.target.value,
-                'guestDetails.primaryGuest.firstName'
-              )
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange(
-                $event.target.value,
-                'guestDetails.primaryGuest.email'
-              )
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'itemName')"
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange($event.target.value, 'rooms.roomNumber')
-            "
-            class="p-column-filter"
-            disabled="true"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-            class="p-column-filter"
-            disabled="true"
-          />
-        </th>
-      </tr>
+      <tr
+        hospitality-bot-table-header
+        [columns]="columns"
+        [showCheckbox]="isSelectable"
+        (search)="handleFieldSearch($event)"
+      ></tr>
     </ng-template>
 
+    <!-- **************************************BODY********************************* -->
     <ng-template
       pTemplate="body"
       let-rowData
       let-columns="columns"
       let-rowIndex="rowIndex"
     >
-      <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
       <tr class="data-table-row">
         <td class="table--checkbox">
           <p-tableCheckbox

@@ -116,27 +116,11 @@
         <ng-template #chipStats>
           <div class="stats-container">
             <div
-              class="stat-chip"
+              class="stat-chip {{ key }}"
               *ngFor="let key of getStatsCampaignChips(rowData)"
-              [ngClass]="{
-                delivered: key === 'delivered',
-                unopened: key === 'unopened',
-                opened: key === 'opened',
-                clicked: key === 'clicked',
-                failed: key === 'failed'
-              }"
             >
               <div>{{ key | titlecase }}</div>
-              <div
-                class="stat-chip__value"
-                [ngClass]="{
-                  delivered__value: key === 'delivered',
-                  unopened__value: key === 'unopened',
-                  opened__value: key === 'opened',
-                  clicked__value: key === 'clicked',
-                  failed__value: key === 'failed'
-                }"
-              >
+              <div class="stat-chip__value {{ key }}__value">
                 {{ rowData.statsCampaign[key] }}
               </div>
             </div>

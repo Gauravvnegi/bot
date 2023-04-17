@@ -80,6 +80,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { SkeletonShapeComponent } from './components/skeleton/skeleton-shape/skeleton-shape.component';
 import { SkeletonDirective } from './directives/skeleton.directive';
+import { LoaderBounceComponent } from './components/loader-bounce/loader-bounce.component';
 import { PhoneNumberComponent } from './view/phone-number/phone-number.component';
 
 @NgModule({
@@ -169,6 +170,7 @@ import { PhoneNumberComponent } from './view/phone-number/phone-number.component
     MenuComponent,
     SkeletonShapeComponent,
     SkeletonDirective,
+    LoaderBounceComponent,
     PhoneNumberComponent,
   ],
   exports: [
@@ -247,6 +249,7 @@ import { PhoneNumberComponent } from './view/phone-number/phone-number.component
     MenuComponent,
     SkeletonDirective,
     SkeletonShapeComponent,
+    LoaderBounceComponent,
     PhoneNumberComponent,
   ],
 })

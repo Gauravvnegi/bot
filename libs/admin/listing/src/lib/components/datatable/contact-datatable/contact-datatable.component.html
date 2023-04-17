@@ -55,14 +55,7 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <tr class="data-table-row">
-      <td class="table--checkbox">
-        <p-tableCheckbox disabled="true"></p-tableCheckbox>
-      </td>
-      <td *ngFor="let col of cols">
-        <div class="emptyCell">--/--</div>
-      </td>
-    </tr>
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>

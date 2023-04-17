@@ -70,8 +70,8 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new GuestTable().deserialize(data).records;
           this.initialLoading = false;
+          this.values = new GuestTable().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
           data.entityTypeCounts &&
@@ -83,7 +83,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
           this.closeModal();
         }
       )
@@ -140,7 +140,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
           this.closeModal();
         }
       )
@@ -172,7 +172,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );

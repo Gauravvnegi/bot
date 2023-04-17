@@ -10,6 +10,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { Observable } from 'rxjs';
 import { RequestTable } from '../../models/request-table.model';
 import { ReservationService } from '../../services/reservation.service';
+import { cols } from '../../constants/request-table';
 
 @Component({
   selector: 'hospitality-bot-requests-table',
@@ -33,12 +34,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
   triggerInitialData = false;
   isPaginator = false;
 
-  cols = [
-    { field: 'vin', header: 'Date/Time' },
-    { field: 'bookingNumber', header: 'Booking No.' },
-    { field: 'type', header: 'Type' },
-    { field: 'vin', header: 'Message/Status' },
-  ];
+  cols = cols;
 
   showEmptyView = false;
 

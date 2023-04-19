@@ -236,6 +236,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
 
           this.paginationDisabled =
             this.pagination.limit > response.records.length;
+            this.loading = false;
         },
         ({ error }) => {
           this.loading = false;

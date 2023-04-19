@@ -95,6 +95,7 @@
         class="progress-bar progress-color"
         role="progressbar"
         [style.width]="progress + '%'"
+        [ngStyle]="{ 'background-color': timeoutColor }"
       ></div>
     </div>
     <div class="progress-info">

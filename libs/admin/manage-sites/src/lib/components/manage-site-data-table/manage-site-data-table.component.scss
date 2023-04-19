@@ -67,3 +67,8 @@
     display: none;
   }
 }
+
+:host ::ng-deep .action-header__sticky {
+  margin: 0px -16px 0 -80px;
+  padding: 20px 45px 20px 20px;
+}

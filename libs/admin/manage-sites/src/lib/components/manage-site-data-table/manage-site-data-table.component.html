@@ -125,9 +125,10 @@
         <td>
           <div class="" *ngIf="rowData.status; else emptyCell">
             <hospitality-bot-toggle-dropdown
-              [listItem]="getStatusList(rowData.status)"
+              [listItem]="getStatusList(rowData)"
               (onClick)="handleStatus($event, rowData)"
               [status]="rowData.status"
+              [disabled]="rowData.status==='DELETE'"
             >
             </hospitality-bot-toggle-dropdown>
           </div>

@@ -1,7 +1,7 @@
 import { Chip, Cols, Status } from '@hospitality-bot/admin/shared';
 import { ManageSiteStatus } from './manage-site';
 
-export const status: Status[] = [
+export const status = [
   {
     label: 'Draft',
     value: ManageSiteStatus.DRAFT,
@@ -13,8 +13,13 @@ export const status: Status[] = [
     type: 'new',
   },
   {
-    label: 'Inactive',
-    value: ManageSiteStatus.INACTIVE,
+    label: 'Trash',
+    value: ManageSiteStatus.TRASH,
+    type: 'failed',
+  },
+  {
+    label: 'Delete',
+    value: ManageSiteStatus.DELETE,
     type: 'failed',
   },
 ];
@@ -42,8 +47,8 @@ export const chips: Chip<ManageSiteStatus | 'ALL'>[] = [
     type: 'warning',
   },
   {
-    label: 'Inactive',
-    value: ManageSiteStatus.INACTIVE,
+    label: 'Trash',
+    value: ManageSiteStatus.TRASH,
     total: 0,
     isSelected: false,
     type: 'failed',

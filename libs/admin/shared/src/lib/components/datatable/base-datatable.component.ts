@@ -497,7 +497,9 @@ export class BaseDatatableComponent implements OnInit {
    * @function onScroll Handle the scrolled to show changes is UI
    */
   onScroll = () => {
-    const { top } = this.table.el.nativeElement.getBoundingClientRect();
-    this.isScrolledUp = top < 120;
+    if (this.table) {
+      const { top } = this.table?.el?.nativeElement.getBoundingClientRect();
+      this.isScrolledUp = top < 120;
+    }
   };
 }

@@ -183,17 +183,19 @@
       class="cell-content room-count"
       *ngIf="rowData.roomCount; else emptyCell"
     >
-      <div
-        class="room-no"
-        [ngClass]="{
-          'room-no__active': item.key === 'active',
-          'room-no__soldOut': item.key === 'soldOut',
-          'room-no__unavailable': item.key === 'unavailable'
-        }"
-        *ngFor="let item of rowData.roomCount | keyvalue"
-      >
-        <div>{{ item.value }} - {{ item.key }}</div>
-      </div>
+      <ng-container *ngFor="let item of rowData.roomCount | keyvalue">
+        <div
+          class="room-no"
+          [ngClass]="{
+            'room-no__active': item.key === 'ACTIVE',
+            'room-no__soldOut': item.key === 'SOLD_OUT',
+            'room-no__unavailable': item.key === 'UNAVAILABLE'
+          }"
+          *ngIf="item.key !== 'ALL'"
+        >
+          <div>{{ item.value }} - {{ item.key }}</div>
+        </div>
+      </ng-container>
     </div>
   </td>
   <td>

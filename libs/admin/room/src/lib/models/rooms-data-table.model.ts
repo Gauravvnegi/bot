@@ -12,10 +12,12 @@ import {
 export class RoomList {
   records: Room[];
   count: RoomRecordsCount;
+  typeCount: RoomTypeCounts;
   deserialize(input: RoomListResponse) {
     this.records =
       input.rooms?.map((item) => new Room().deserialize(item)) ?? [];
-    this.count = new RoomRecordsCount().deserialize(input.roomStatusCount);
+    this.count = new RoomRecordsCount().deserialize(input.entityStateCounts);
+    this.typeCount = new RoomTypeCounts().deserialize(input.entityTypeCounts);
 
     return this;
   }
@@ -54,18 +56,17 @@ export class Room {
 }
 
 export class RoomRecordsCount {
-  total: number;
-  active: number;
-  unavailable: number;
-  soldOut: number;
+  ALL: number;
+  ACTIVE: number;
+  UNAVAILABLE: number;
+  SOLD_OUT: number;
 
-  deserialize(input: RoomListResponse['roomStatusCount']) {
-    this.total = input.ALL;
-    this.unavailable = input.UNAVAILABLE;
-    this.active = input.ACTIVE;
-    this.soldOut = input.SOLD_OUT;
+  deserialize(input: RoomListResponse['entityStateCounts']) {
+    this.ALL = Number(Object.values(input).reduce((a, b) => a + b, 0));
+    this.UNAVAILABLE = input.UNAVAILABLE;
+    this.ACTIVE = input.ACTIVE;
+    this.SOLD_OUT = input.SOLD_OUT;
 
-    if (!this.total) delete this.total;
     return this;
   }
 }
@@ -74,14 +75,14 @@ export class RoomRecordsCount {
 
 export class RoomTypeList {
   records: RoomType[];
-  count: RoomTypeRecordsCount;
+  count: RoomStateCounts;
+  typeCount: RoomTypeCounts;
 
   deserialize(input: RoomTypeListResponse) {
     this.records =
       input?.roomTypes.map((item) => new RoomType().deserialize(item)) ?? [];
-    this.count = new RoomTypeRecordsCount().deserialize(
-      input.roomTypeStatusCount
-    );
+    this.count = new RoomStateCounts().deserialize(input.entityStateCounts);
+    this.typeCount = new RoomTypeCounts().deserialize(input.entityTypeCounts);
 
     return this;
   }
@@ -126,14 +127,23 @@ export class RoomType {
   }
 }
 
-export class RoomTypeRecordsCount {
-  total: number;
-  active: number;
-  inactive: number;
-  deserialize(input: RoomTypeListResponse['roomTypeStatusCount']) {
-    this.total = input.ALL;
-    this.inactive = input.INACTIVE;
-    this.active = input.ACTIVE;
+export class RoomStateCounts {
+  ALL: number;
+  ACTIVE: number;
+  INACTIVE: number;
+  deserialize(input: RoomTypeListResponse['entityStateCounts']) {
+    this.ALL = Number(Object.values(input).reduce((a, b) => a + b, 0));
+    this.INACTIVE = input.INACTIVE;
+    this.ACTIVE = input.ACTIVE;
+    return this;
+  }
+}
+export class RoomTypeCounts {
+  ROOM_TYPE: number;
+  ROOM: number;
+  deserialize(input: RoomTypeListResponse['entityTypeCounts']) {
+    this.ROOM_TYPE = input.ROOM_TYPE;
+    this.ROOM = input.ROOM;
     return this;
   }
 }

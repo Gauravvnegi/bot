@@ -5,7 +5,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import {
   RoomRecordsCount,
-  RoomTypeRecordsCount,
+  RoomStateCounts,
 } from '../models/rooms-data-table.model';
 
 export enum Status {
@@ -36,28 +36,28 @@ export const roomFilter: Filter<TableValue, keyof RoomRecordsCount> = {
   chips: [
     {
       label: 'All',
-      value: 'total',
+      value: 'ALL',
       total: 0,
       isSelected: true,
       type: 'default',
     },
     {
       label: 'Active',
-      value: 'active',
+      value: 'ACTIVE',
       total: 0,
       isSelected: false,
       type: 'new',
     },
     {
       label: 'Unavailable ',
-      value: 'unavailable',
+      value: 'UNAVAILABLE',
       total: 0,
       isSelected: false,
       type: 'warning',
     },
     {
       label: 'Sold Out',
-      value: 'soldOut',
+      value: 'SOLD_OUT',
       total: 0,
       isSelected: false,
       type: 'failed',
@@ -65,7 +65,7 @@ export const roomFilter: Filter<TableValue, keyof RoomRecordsCount> = {
   ],
 };
 
-export const roomTypeFilter: Filter<TableValue, keyof RoomTypeRecordsCount> = {
+export const roomTypeFilter: Filter<TableValue, keyof RoomStateCounts> = {
   label: 'Room Type',
   value: TableValue.roomType,
   content: '',
@@ -74,21 +74,21 @@ export const roomTypeFilter: Filter<TableValue, keyof RoomTypeRecordsCount> = {
   chips: [
     {
       label: 'All',
-      value: 'total',
+      value: 'ALL',
       total: 0,
       isSelected: true,
       type: 'default',
     },
     {
       label: 'Active',
-      value: 'active',
+      value: 'ACTIVE',
       total: 0,
       isSelected: false,
       type: 'new',
     },
     {
       label: 'Inactive ',
-      value: 'inactive',
+      value: 'INACTIVE',
       total: 0,
       isSelected: false,
       type: 'failed',

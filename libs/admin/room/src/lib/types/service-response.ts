@@ -35,7 +35,11 @@ export type RoomByIdResponse = {
 
 export type RoomListResponse = {
   rooms: RoomResponse[];
-  roomStatusCount: {
+  entityTypeCounts: {
+    ROOM_TYPE: number;
+    ROOM: number;
+  };
+  entityStateCounts: {
     ALL: number;
     ACTIVE: number;
     SOLD_OUT: number;
@@ -69,7 +73,11 @@ export type RoomTypeResponse = {
 
 export type RoomTypeListResponse = {
   roomTypes: RoomTypeResponse[];
-  roomTypeStatusCount: {
+  entityTypeCounts: {
+    ROOM_TYPE: number;
+    ROOM: number;
+  };
+  entityStateCounts: {
     ALL: number;
     ACTIVE: number;
     INACTIVE: number;

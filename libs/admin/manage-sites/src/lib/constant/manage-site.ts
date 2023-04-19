@@ -1,5 +1,6 @@
 export enum ManageSiteStatus {
   PUBLISHED = 'PUBLISHED',
-  INACTIVE = 'INACTIVE',
   DRAFT = 'DRAFT',
+  TRASH = 'TRASH',
+  DELETE = 'DELETE',
 }

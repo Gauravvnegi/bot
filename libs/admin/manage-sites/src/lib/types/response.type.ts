@@ -5,6 +5,7 @@ export type ManageSiteResponse = {
   thumbnail: string;
   siteName: string;
   url: string;
+  nextState: ManageSiteStatus[];
   expiryDate: number;
   status: ManageSiteStatus;
   created: number;

@@ -9,6 +9,7 @@ export class ManageSite {
   thumbnail: string;
   siteName: string;
   url: string;
+  nextState: ManageSiteStatus[];
   expiryDate: number;
   status: ManageSiteStatus;
   created: number;
@@ -18,17 +19,17 @@ export class ManageSite {
     this.thumbnail = input.thumbnail;
     this.siteName = input.siteName;
     this.url = input.url;
+    this.nextState = input.nextState;
     this.expiryDate = input.expiryDate;
     this.status = input.status;
     this.created = input.created;
-
     return this;
   }
 }
 
 export class ManageSiteList {
   total: number;
-  entityTypeCounts: Record<ManageSiteStatus, number>;
+  entityTypeCounts: EntityStateCounts;
   records: ManageSite[];
 
   deserialize(input: ManageSiteListResponse) {
@@ -40,9 +41,21 @@ export class ManageSiteList {
     this.entityTypeCounts = {
       DRAFT: input.entityTypeCounts.DRAFT,
       PUBLISHED: input.entityTypeCounts.PUBLISHED,
-      INACTIVE: input.entityTypeCounts.INACTIVE,
+      TRASH: input.entityTypeCounts.INACTIVE,
     };
 
     return this;
   }
 }
+
+export type EntityStateCounts = {
+  DRAFT: number;
+  PUBLISHED: number;
+  TRASH: number;
+};
+
+export type NextState = {
+  id: string;
+  status: ManageSiteStatus;
+  value: ManageSiteStatus[];
+};

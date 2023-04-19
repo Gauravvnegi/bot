@@ -5,24 +5,27 @@ import {
   BaseDatatableComponent,
   CookiesSettingsService,
   TableService,
-  UserService,
+  UserService
 } from '@hospitality-bot/admin/shared';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
+import { MatDialogConfig } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { SettingOptions } from '@hospitality-bot/admin/settings';
 import {
-  SnackBarService,
-  ModalService,
+  ModalService, SnackBarService
 } from '@hospitality-bot/shared/material';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { chips, cols, status } from '../../constant/data-table';
 import { ManageSiteStatus } from '../../constant/manage-site';
-import { ManageSite, ManageSiteList } from '../../models/data-table.model';
+import {
+  ManageSite,
+  ManageSiteList,
+  NextState
+} from '../../models/data-table.model';
 import { ManageSitesService } from '../../services/manage-sites.service';
 import { QueryConfig } from '../../types/manage-site.type';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { SettingOptions } from '@hospitality-bot/admin/settings';
 
 @Component({
   selector: 'hospitality-bot-manage-site-data-table',
@@ -40,7 +43,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   isSelectable = false;
   tableName = 'Partner Dashboard';
   userId: string;
-
+  nextState: NextState[];
   $subscription = new Subscription();
 
   constructor(
@@ -86,53 +89,54 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
           (res) => {
             const manageSiteData = new ManageSiteList().deserialize(res);
             this.values = manageSiteData.records;
+            this.nextState = this.values.map((item) => ({
+              id: item.id,
+              status: item.status,
+              value: item.nextState,
+            }));
             this.totalRecords = manageSiteData.total;
             this.filterChips.forEach((item) => {
               item.total = manageSiteData.entityTypeCounts[item.value];
             });
           },
-          this.handleError,
+          () => {
+            this.values = [];
+          },
           this.handleFinal
         )
     );
   }
 
   selectSite(rowData) {
-    if (rowData.id) {
+    if (rowData.id && rowData.status !== ManageSiteStatus.DELETE) {
       this.cookiesSettingService.initPlatformChange(rowData.id, '/pages');
     }
   }
 
   handleStatus(status: ManageSiteStatus, rowData: ManageSite) {
-    if (
-      status === ManageSiteStatus.PUBLISHED &&
-      rowData.status === ManageSiteStatus.DRAFT
-    ) {
-      /** If Site is in draft state */
-      this.handlePublish(rowData.id);
-    } else {
-      this.loading = true;
-      this.$subscription.add(
-        this.manageSiteService
-          .updateSiteStatus(this.userId, rowData.id, status)
-          .subscribe(
-            () => {
-              this.loading = false;
-              this.snackbarService.openSnackBarAsText(
-                'Status changes successfully',
-                '',
-                { panelClass: 'success' }
-              );
-              this.updateStatusAndCount(rowData.status, status);
-              this.values.find(
-                (item) => item.id === rowData.id
-              ).status = status;
-            },
-            this.handleError,
-            this.handleFinal
-          )
-      );
-    }
+    this.loading = true;
+    this.$subscription.add(
+      this.manageSiteService
+        .updateSiteStatus(this.userId, rowData.id, status)
+        .subscribe(
+          () => {
+            this.loading = false;
+            this.snackbarService.openSnackBarAsText(
+              'Status changes successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.updateStatusAndCount(rowData.status, status);
+            this.initTableValue();
+          },
+          ({ err }) => {
+            if (err.error?.type === 'DOMAIN_NOT_EXIST') {
+              this.handlePublish(rowData.id);
+            }
+            this.loading = false
+          }
+        )
+    );
   }
 
   /**
@@ -148,9 +152,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
 
     togglePopupCompRef.componentInstance.content = {
       heading: 'Cannot publish Page',
-      description: [
-        'You Cannot publish your page until you publish your website first.',
-      ],
+      description: ['Connect your domain to publish your website'],
     };
     togglePopupCompRef.componentInstance.actions = [
       {
@@ -196,15 +198,13 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
     return config;
   }
 
-  getStatusList(currentStatus: ManageSiteStatus) {
-    return this.status.map((item) => ({
-      ...item,
-      disabled:
-        (currentStatus !== ManageSiteStatus.DRAFT &&
-          item.value === ManageSiteStatus.DRAFT) ||
-        (currentStatus === ManageSiteStatus.DRAFT &&
-          item.value === ManageSiteStatus.INACTIVE),
-    }));
+  getStatusList(currentStatus: ManageSite) {
+    return this.status.filter((item) => {
+      const next = this.nextState.find((item) => item.id === currentStatus.id)
+        .value;
+      next.push(currentStatus.status);
+      return next.includes(item.value);
+    });
   }
 
   /**
@@ -212,7 +212,6 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
    * @param param0 network error
    */
   handleError = ({ error }) => {
-    this.values = []; 
     this.loading = false;
   };
 

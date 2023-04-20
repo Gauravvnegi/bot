@@ -50,6 +50,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   isGuestInfoPatched = false;
   primaryGuest;
   isReservationDetailFetched = false;
+  isFirstTimeFetch = true;
   isGuestReservationFetched = false;
   shareIconList;
   colorMap;
@@ -202,6 +203,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
         },
         ({ error }) => { 
           this.closeDetails();
+        },
+        ()=>{
+          this.isFirstTimeFetch = false
         }
       )
     );
@@ -698,6 +702,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  setTab(event){
+    this.tabKey = this.detailsConfig.find(
+      (tabConfig) => tabConfig.index === event.index
+    )?.key;
+    console.log(event,'event')
+  }
+
   get bookingCount() {
     let count = 0;
     count += this.guestReservations.records.length;
@@ -737,5 +748,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();
+    this.isFirstTimeFetch = true
   }
 }

@@ -1,4 +1,4 @@
-<div class="details-wrapper ng-star-inserted" style_ngcontent-bpq-c336>
+<div [ngClass]="{ 'details-wrapper': !isFirstTimeFetch }">
   <div class="header">
     <div (click)="closeDetails()" class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -39,12 +39,18 @@
       <div class="guest_data">
         <div class="guest_data__field">
           <div class="label">
-            {{ guestData.guestAttributes.overAllNps !== 0 ? guestData.guestAttributes.overAllNps : '-'  }}/10
+            {{
+              guestData.guestAttributes.overAllNps !== 0
+                ? guestData.guestAttributes.overAllNps
+                : '-'
+            }}/10
           </div>
           <div class="value">Overall NPS</div>
         </div>
         <div class="guest_data__field">
-          <div class="label">{{ guestData.guestAttributes.churnProbalilty }}</div>
+          <div class="label">
+            {{ guestData.guestAttributes.churnProbalilty }}
+          </div>
           <div class="value">Churn Probability</div>
         </div>
         <div class="guest_data__field">
@@ -67,7 +73,7 @@
         <mat-select
           class="past-booking"
           formControlName="booking"
-          (selectionChange)="getReservationDetails()"
+          (selectionChange)="handleBookingChange($event)"
         >
           <mat-option
             [value]="item.bookingId"
@@ -211,200 +217,163 @@
       </div>
     </div>
   </div>
-  <div
-    *ngIf="isReservationDetailFetched; else detailsLoader"
-    class="details-wrapper"
-  >
-    <div class="mat-group">
-      <mat-tab-group [selectedIndex]="tabIndex">
-        <mat-tab label="Guest Details">
-          <hospitality-bot-admin-guest-details
-            *ngIf="isReservationDetailFetched"
-            [parentForm]="detailsForm"
-            [data]="details"
-            (addFGEvent)="addFGEvent($event)"
-            (isGuestInfoPatched)="guestInfoPatched($event)"
-            [guestData]="guestData"
-          ></hospitality-bot-admin-guest-details>
-        </mat-tab>
-        <mat-tab label="Documents" *ngIf="guestReservationDropdownList.length">
-          <hospitality-bot-admin-documents-details
-            *ngIf="
-              isReservationDetailFetched && guestReservationDropdownList.length
-            "
-            #adminDocumentsDetailsComponent
-            [parentForm]="detailsForm"
-            [data]="details"
-            (addFGEvent)="addFGEvent($event)"
-          ></hospitality-bot-admin-documents-details>
-        </mat-tab>
-        <mat-tab [label]="getVisitDetaillabel()">
-          <hospitality-bot-stay-details
-            *ngIf="isReservationDetailFetched"
-            #adminStayDetailsComponent
-            [parentForm]="detailsForm"
-            [data]="details"
-            [guestReservations]="guestReservations.records"
-            [bookingNumber]="bookingNumber"
-            [colorMap]="colorMap"
-            (addFGEvent)="addFGEvent($event)"
-          ></hospitality-bot-stay-details>
-        </mat-tab>
-        <mat-tab label="Package" *ngIf="guestReservationDropdownList.length">
-          <hospitality-bot-admin-package-details
-            *ngIf="isReservationDetailFetched"
-            [parentForm]="detailsForm"
-            [data]="details"
-          ></hospitality-bot-admin-package-details>
-        </mat-tab>
-        <mat-tab label="Payment" *ngIf="guestReservationDropdownList.length">
-          <hospitality-bot-admin-payment-details
-            *ngIf="isReservationDetailFetched"
-            [parentForm]="detailsForm"
-            [data]="details"
-            (addFGEvent)="addFGEvent($event)"
-          ></hospitality-bot-admin-payment-details>
-        </mat-tab>
-        <mat-tab
-          label="Activities"
-          *ngIf="guestReservationDropdownList.length"
+
+  <div [ngClass]="{ 'details-wrapper': !isFirstTimeFetch }">
+    <ng-container *ngIf="isReservationDetailFetched; else detailsLoader">
+      <div class="mat-group">
+        <mat-tab-group
+          [selectedIndex]="tabIndex"
+          (selectedTabChange)="setTab($event)"
         >
-          <hospitality-bot-requests-table
-            *ngIf="isReservationDetailFetched"
-            [parentForm]="detailsForm"
-            [data]="details"
-            [colorMap]="colorMap"
-          ></hospitality-bot-requests-table>
-        </mat-tab>
-      </mat-tab-group>
-      <div
-        *ngIf="
-          isReservationDetailFetched && guestReservationDropdownList.length
-        "
-        class="tab-buttons"
-      >
-        <div class="button-wrapper">
-          <ng-container [ngSwitch]="details.currentJourneyDetails.journey">
-            <ng-container *ngSwitchCase="'PRECHECKIN'">
-              <ng-container *ngTemplateOutlet="PRECHECKIN"></ng-container>
-            </ng-container>
-            <ng-container *ngSwitchCase="'CHECKIN'">
-              <ng-container *ngTemplateOutlet="CHECKIN"></ng-container>
-            </ng-container>
-            <ng-container *ngSwitchCase="'CHECKOUT'">
-              <ng-container *ngTemplateOutlet="CHECKOUT"></ng-container>
-            </ng-container>
-          </ng-container>
-          <ng-template #PRECHECKIN>
-            <ng-container [ngSwitch]="details.currentJourneyDetails.status">
-              <ng-container *ngSwitchCase="'PENDING'">
-                <hospitality-bot-button
-                  label="Activate & Generate PreCheckIn Link"
-                  (click)="activateAndgenerateJourney('PRECHECKIN')"
-                  variant="outlined"
-                ></hospitality-bot-button>
+          <mat-tab label="Guest Details">
+            <hospitality-bot-admin-guest-details
+              *ngIf="isReservationDetailFetched"
+              [parentForm]="detailsForm"
+              [data]="details"
+              (addFGEvent)="addFGEvent($event)"
+              (isGuestInfoPatched)="guestInfoPatched($event)"
+              [guestData]="guestData"
+            ></hospitality-bot-admin-guest-details>
+          </mat-tab>
+          <mat-tab
+            label="Documents"
+            *ngIf="guestReservationDropdownList.length"
+          >
+            <hospitality-bot-admin-documents-details
+              *ngIf="
+                isReservationDetailFetched &&
+                guestReservationDropdownList.length
+              "
+              #adminDocumentsDetailsComponent
+              [parentForm]="detailsForm"
+              [data]="details"
+              (addFGEvent)="addFGEvent($event)"
+            ></hospitality-bot-admin-documents-details>
+          </mat-tab>
+          <mat-tab [label]="getVisitDetaillabel()">
+            <hospitality-bot-stay-details
+              *ngIf="isReservationDetailFetched"
+              #adminStayDetailsComponent
+              [parentForm]="detailsForm"
+              [data]="details"
+              [guestReservations]="guestReservations.records"
+              [bookingNumber]="bookingNumber"
+              [colorMap]="colorMap"
+              (addFGEvent)="addFGEvent($event)"
+            ></hospitality-bot-stay-details>
+          </mat-tab>
+          <mat-tab label="Package" *ngIf="guestReservationDropdownList.length">
+            <hospitality-bot-admin-package-details
+              *ngIf="isReservationDetailFetched"
+              [parentForm]="detailsForm"
+              [data]="details"
+            ></hospitality-bot-admin-package-details>
+          </mat-tab>
+          <mat-tab label="Payment" *ngIf="guestReservationDropdownList.length">
+            <hospitality-bot-admin-payment-details
+              *ngIf="isReservationDetailFetched"
+              [parentForm]="detailsForm"
+              [data]="details"
+              (addFGEvent)="addFGEvent($event)"
+            ></hospitality-bot-admin-payment-details>
+          </mat-tab>
+          <mat-tab
+            label="Activities"
+            *ngIf="guestReservationDropdownList.length"
+          >
+            <hospitality-bot-requests-table
+              *ngIf="isReservationDetailFetched"
+              [parentForm]="detailsForm"
+              [data]="details"
+              [colorMap]="colorMap"
+            ></hospitality-bot-requests-table>
+          </mat-tab>
+        </mat-tab-group>
+        <div
+          *ngIf="
+            isReservationDetailFetched && guestReservationDropdownList.length
+          "
+          class="tab-buttons"
+        >
+          <div class="button-wrapper">
+            <ng-container [ngSwitch]="details.currentJourneyDetails.journey">
+              <ng-container *ngSwitchCase="'PRECHECKIN'">
+                <ng-container *ngTemplateOutlet="PRECHECKIN"></ng-container>
               </ng-container>
-              <ng-container *ngSwitchCase="'INITIATED'">
-                <hospitality-bot-button
-                  label="Activate & Generate PreCheckIn Link"
-                  (click)="activateAndgenerateJourney('PRECHECKIN')"
-                  variant="outlined"
-                ></hospitality-bot-button>
+              <ng-container *ngSwitchCase="'CHECKIN'">
+                <ng-container *ngTemplateOutlet="CHECKIN"></ng-container>
               </ng-container>
-              <ng-container *ngSwitchCase="'COMPLETED'">
-                <hospitality-bot-button
-                  label="Activate & Generate PreCheckIn Link"
-                  (click)="activateAndgenerateJourney('PRECHECKIN')"
-                  variant="outlined"
-                ></hospitality-bot-button>
-              </ng-container>
-              <ng-container *ngSwitchCase="'FAILED'">
-                <hospitality-bot-button
-                  label="Activate & Generate PreCheckIn Link"
-                  (click)="activateAndgenerateJourney('PRECHECKIN')"
-                  variant="outlined"
-                ></hospitality-bot-button>
-              </ng-container>
-            </ng-container>
-          </ng-template>
-          <ng-template #CHECKIN>
-            <ng-container [ngSwitch]="details.currentJourneyDetails.status">
-              <ng-container *ngSwitchCase="'PENDING'">
-                <hospitality-bot-button
-                  (click)="activateAndgenerateJourney('CHECKIN')"
-                  label="Generate CheckIn Link"
-                  variant="outlined"
-                ></hospitality-bot-button>
-              </ng-container>
-              <ng-container *ngSwitchCase="'INITIATED'">
-                <hospitality-bot-button
-                  (click)="activateAndgenerateJourney('CHECKIN')"
-                  label="Generate CheckIn Link"
-                  variant="outlined"
-                ></hospitality-bot-button>
-                <hospitality-bot-button
-                  (click)="verifyAllDocuments()"
-                  label="Confirm All Docs"
-                  variant="outlined"
-                ></hospitality-bot-button>
-                <!-- <hospitality-bot-button
-                  (click)="downloadInvoice()"
-                  label="Download Invoice/Folio"
-                  variant="outlined"
-                ></hospitality-bot-button> -->
-                <!-- ---------------------------------------------------------------------------------------------- -->
-                <hospitality-bot-button
-                  (click)="confirmAndNotifyCheckin()"
-                  label="Confirm And Notify Checkin"
-                  variant="outlined"
-                ></hospitality-bot-button>
-              </ng-container>
-              <ng-container *ngSwitchCase="'COMPLETED'">
-                <!-- initiate force checkout -->
-                <!-- download invoice -->
-                <hospitality-bot-button
-                  [label]="
-                    branchConfig.pmsEnable
-                      ? 'Prepare Invoice'
-                      : 'Manage Invoice'
-                  "
-                  (click)="prepareInvoice()"
-                  variant="outlined"
-                ></hospitality-bot-button>
-              </ng-container>
-              <ng-container *ngSwitchCase="'FAILED'">
-                <hospitality-bot-button
-                  label="Generate CheckIn Link"
-                  (click)="activateAndgenerateJourney('CHECKIN')"
-                  variant="outlined"
-                ></hospitality-bot-button>
-                <!-- <hospitality-bot-button
-                  label="Download Invoice/Folio"
-                  (click)="downloadInvoice()"
-                  variant="outlined"
-                ></hospitality-bot-button> -->
+              <ng-container *ngSwitchCase="'CHECKOUT'">
+                <ng-container *ngTemplateOutlet="CHECKOUT"></ng-container>
               </ng-container>
             </ng-container>
-          </ng-template>
-          <ng-template #CHECKOUT
-            ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
-              <ng-container *ngSwitchCase="'PENDING'">
-                <ng-container
-                  *ngIf="details.invoicePrepareRequest; else prepareInvoiceBtn"
-                >
+            <ng-template #PRECHECKIN>
+              <ng-container [ngSwitch]="details.currentJourneyDetails.status">
+                <ng-container *ngSwitchCase="'PENDING'">
                   <hospitality-bot-button
-                    label="Activate & Generate Checkout Link"
-                    (click)="activateAndgenerateJourney('CHECKOUT')"
-                    variant="outlined"
-                  ></hospitality-bot-button>
-
-                  <hospitality-bot-button
-                    label="Download Invoice/Folio"
-                    (click)="downloadInvoice()"
+                    label="Activate & Generate PreCheckIn Link"
+                    (click)="activateAndgenerateJourney('PRECHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
                 </ng-container>
-                <ng-template #prepareInvoiceBtn>
+                <ng-container *ngSwitchCase="'INITIATED'">
+                  <hospitality-bot-button
+                    label="Activate & Generate PreCheckIn Link"
+                    (click)="activateAndgenerateJourney('PRECHECKIN')"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                </ng-container>
+                <ng-container *ngSwitchCase="'COMPLETED'">
+                  <hospitality-bot-button
+                    label="Activate & Generate PreCheckIn Link"
+                    (click)="activateAndgenerateJourney('PRECHECKIN')"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                </ng-container>
+                <ng-container *ngSwitchCase="'FAILED'">
+                  <hospitality-bot-button
+                    label="Activate & Generate PreCheckIn Link"
+                    (click)="activateAndgenerateJourney('PRECHECKIN')"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                </ng-container>
+              </ng-container>
+            </ng-template>
+            <ng-template #CHECKIN>
+              <ng-container [ngSwitch]="details.currentJourneyDetails.status">
+                <ng-container *ngSwitchCase="'PENDING'">
+                  <hospitality-bot-button
+                    (click)="activateAndgenerateJourney('CHECKIN')"
+                    label="Generate CheckIn Link"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                </ng-container>
+                <ng-container *ngSwitchCase="'INITIATED'">
+                  <hospitality-bot-button
+                    (click)="activateAndgenerateJourney('CHECKIN')"
+                    label="Generate CheckIn Link"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                  <hospitality-bot-button
+                    (click)="verifyAllDocuments()"
+                    label="Confirm All Docs"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                  <!-- <hospitality-bot-button
+                  (click)="downloadInvoice()"
+                  label="Download Invoice/Folio"
+                  variant="outlined"
+                ></hospitality-bot-button> -->
+                  <!-- ---------------------------------------------------------------------------------------------- -->
+                  <hospitality-bot-button
+                    (click)="confirmAndNotifyCheckin()"
+                    label="Confirm And Notify Checkin"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                </ng-container>
+                <ng-container *ngSwitchCase="'COMPLETED'">
+                  <!-- initiate force checkout -->
+                  <!-- download invoice -->
                   <hospitality-bot-button
                     [label]="
                       branchConfig.pmsEnable
@@ -414,75 +383,118 @@
                     (click)="prepareInvoice()"
                     variant="outlined"
                   ></hospitality-bot-button>
-                </ng-template>
+                </ng-container>
+                <ng-container *ngSwitchCase="'FAILED'">
+                  <hospitality-bot-button
+                    label="Generate CheckIn Link"
+                    (click)="activateAndgenerateJourney('CHECKIN')"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                  <!-- <hospitality-bot-button
+                  label="Download Invoice/Folio"
+                  (click)="downloadInvoice()"
+                  variant="outlined"
+                ></hospitality-bot-button> -->
+                </ng-container>
               </ng-container>
-              <ng-container *ngSwitchCase="'INITIATED'">
-                <ng-container
-                  *ngIf="details.invoicePrepareRequest; else prepareInvoiceBtn"
-                >
+            </ng-template>
+            <ng-template #CHECKOUT
+              ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
+                <ng-container *ngSwitchCase="'PENDING'">
+                  <ng-container
+                    *ngIf="
+                      details.invoicePrepareRequest;
+                      else prepareInvoiceBtn
+                    "
+                  >
+                    <hospitality-bot-button
+                      label="Activate & Generate Checkout Link"
+                      (click)="activateAndgenerateJourney('CHECKOUT')"
+                      variant="outlined"
+                    ></hospitality-bot-button>
+
+                    <hospitality-bot-button
+                      label="Download Invoice/Folio"
+                      (click)="downloadInvoice()"
+                      variant="outlined"
+                    ></hospitality-bot-button>
+                  </ng-container>
+                  <ng-template #prepareInvoiceBtn>
+                    <hospitality-bot-button
+                      [label]="
+                        branchConfig.pmsEnable
+                          ? 'Prepare Invoice'
+                          : 'Manage Invoice'
+                      "
+                      (click)="prepareInvoice()"
+                      variant="outlined"
+                    ></hospitality-bot-button>
+                  </ng-template>
+                </ng-container>
+                <ng-container *ngSwitchCase="'INITIATED'">
+                  <ng-container
+                    *ngIf="
+                      details.invoicePrepareRequest;
+                      else prepareInvoiceBtn
+                    "
+                  >
+                    <hospitality-bot-button
+                      label="Activate & Generate Checkout Link"
+                      (click)="activateAndgenerateJourney('CHECKOUT')"
+                      variant="outlined"
+                    ></hospitality-bot-button>
+
+                    <hospitality-bot-button
+                      label="Download Invoice/Folio"
+                      (click)="downloadInvoice()"
+                      variant="outlined"
+                    ></hospitality-bot-button>
+                  </ng-container>
+                  <ng-template #prepareInvoiceBtn>
+                    <hospitality-bot-button
+                      [label]="
+                        branchConfig.pmsEnable
+                          ? 'Prepare Invoice'
+                          : 'Manage Invoice'
+                      "
+                      (click)="prepareInvoice()"
+                      variant="outlined"
+                    ></hospitality-bot-button>
+                  </ng-template>
+                </ng-container>
+                <ng-container *ngSwitchCase="'COMPLETED'">
+                  <hospitality-bot-button
+                    label="Download Invoice/Folio"
+                    (click)="downloadInvoice()"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                  <hospitality-bot-button
+                    label="Send Invoice"
+                    (click)="sendInvoice()"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                </ng-container>
+                <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button
                     label="Activate & Generate Checkout Link"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
                   ></hospitality-bot-button>
-
                   <hospitality-bot-button
                     label="Download Invoice/Folio"
                     (click)="downloadInvoice()"
                     variant="outlined"
                   ></hospitality-bot-button>
                 </ng-container>
-                <ng-template #prepareInvoiceBtn>
-                  <hospitality-bot-button
-                    [label]="
-                      branchConfig.pmsEnable
-                        ? 'Prepare Invoice'
-                        : 'Manage Invoice'
-                    "
-                    (click)="prepareInvoice()"
-                    variant="outlined"
-                  ></hospitality-bot-button>
-                </ng-template>
               </ng-container>
-              <ng-container *ngSwitchCase="'COMPLETED'">
-                <hospitality-bot-button
-                  label="Download Invoice/Folio"
-                  (click)="downloadInvoice()"
-                  variant="outlined"
-                ></hospitality-bot-button>
-                <hospitality-bot-button
-                  label="Send Invoice"
-                  (click)="sendInvoice()"
-                  variant="outlined"
-                ></hospitality-bot-button>
-              </ng-container>
-              <ng-container *ngSwitchCase="'FAILED'">
-                <hospitality-bot-button
-                  label="Activate & Generate Checkout Link"
-                  (click)="activateAndgenerateJourney('CHECKOUT')"
-                  variant="outlined"
-                ></hospitality-bot-button>
-                <hospitality-bot-button
-                  label="Download Invoice/Folio"
-                  (click)="downloadInvoice()"
-                  variant="outlined"
-                ></hospitality-bot-button>
-              </ng-container>
-            </ng-container>
-          </ng-template>
+            </ng-template>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-container>
   </div>
 </div>
 
 <ng-template #detailsLoader>
-  <div class="loader">
-    <p class="loading">Loading</p>
-    <div class="spinner">
-      <div class="bounce1"></div>
-      <div class="bounce2"></div>
-      <div class="bounce3"></div>
-    </div>
-  </div>
+  <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
 </ng-template>

@@ -32,7 +32,7 @@ export const campaignConfig = {
             value: 'INACTIVE',
             total: 0,
             isSelected: false,
-            type: 'pending',
+            type: 'failed',
           },
           {
             label: 'Draft',
@@ -40,7 +40,7 @@ export const campaignConfig = {
             value: 'DRAFT',
             total: 0,
             isSelected: false,
-            type: 'failed',
+            type: 'warning',
           },
           {
             label: 'Sent',

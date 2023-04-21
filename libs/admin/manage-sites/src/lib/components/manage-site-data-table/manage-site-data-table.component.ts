@@ -89,15 +89,18 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
           (res) => {
             const manageSiteData = new ManageSiteList().deserialize(res);
             this.values = manageSiteData.records;
+           
             this.nextState = this.values.map((item) => ({
               id: item.id,
               status: item.status,
               value: item.nextState,
             }));
-            this.totalRecords = manageSiteData.total;
-            this.filterChips.forEach((item) => {
-              item.total = manageSiteData.entityTypeCounts[item.value];
-            });
+            // this.totalRecords = manageSiteData.total;
+            // this.filterChips.forEach((item) => {
+            //   item.total = manageSiteData.entityTypeCounts[item.value];
+            // });
+            this.updateQuickReplyFilterCount(res.entityTypeCounts);
+            this.updateTotalRecords();
           },
           () => {
             this.values = [];

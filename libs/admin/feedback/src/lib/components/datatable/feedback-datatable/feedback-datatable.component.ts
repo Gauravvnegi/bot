@@ -292,35 +292,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function updateTabFilterCount To update tab data count.
-   * @param countObj The Tab count object.
-   * @param currentTabCount The current tab data count.
-   */
-  updateTabFilterCount(countObj, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update chip count.
-   * @param countObj The chip count data.
-   */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.chips.forEach((chip) => {
-          chip.total = countObj[chip.value];
-        });
-      });
-    }
-  }
-
-  /**
    * @function fetchDataFrom To fetch api data.
    * @param queries The filter data.
    * @param defaultProps The default page data.
@@ -409,6 +380,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.tabFilterItems[this.tabFilterIdx].total = data.total;
     data.entityTypeCounts &&
       this.updateQuickReplyFilterCount(data.entityTypeCounts);
+    this.updateTotalRecords();
 
     this.loading = false;
   }

@@ -102,7 +102,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         ({ error }) => {
           this.values = [];
         },
-        () => {this.loading = false}
+        () => {
+          this.loading = false;
+        }
       )
     );
   }
@@ -113,39 +115,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   setRecords(data: Record<string, any>): void {
     this.values = new Campaigns().deserialize(data).records;
-    this.totalRecords = data.total;
     data.entityTypeCounts &&
-      this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+      this.updateTabFilterCount(data.entityTypeCounts, data.total);
     data.entityStateCounts &&
       this.updateQuickReplyFilterCount(data.entityStateCounts);
-    this.loading=false;
-  }
-
-  /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
-   */
-  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        chip.total = countObj[chip.value];
-      });
-    }
+    this.updateTotalRecords();
+    this.loading = false;
   }
 
   /**
@@ -410,7 +385,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
             response,
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           ),
-        ({ error }) => this.loading = false
+        ({ error }) => (this.loading = false)
       )
     );
   }

@@ -20,7 +20,7 @@ export type TableFieldSearch = {
 export type Chip<T extends string> = {
   label: string;
   value: T;
-  total: number;
+  total?: number;
   isSelected: boolean;
   type: FlagType;
 };

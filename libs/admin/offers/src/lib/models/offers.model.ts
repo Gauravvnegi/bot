@@ -53,7 +53,8 @@ export class OfferList {
     this.records = input.offers?.map((item) => new Offer().deserialize(item));
     this.total = input.total;
     this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts
+      input?.entityStateCounts,
+      input?.total
     );
     return this;
   }

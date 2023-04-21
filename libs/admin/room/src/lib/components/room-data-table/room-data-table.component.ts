@@ -97,21 +97,21 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.getDataTableValue(this.selectedTable);
   }
 
-  /**
-   * @function setRecordsCount To set the total no. of records
-   * @param recordCounts
-   */
-  setRecordsCount(recordCounts: RoomRecordsCount | RoomStateCounts) {
-    this.tabFilterItems[this.tabFilterIdx].chips.forEach((item) => {
-      item.total = recordCounts[item.value];
-    });
-  }
+  // /**
+  //  * @function setRecordsCount To set the total no. of records
+  //  * @param recordCounts
+  //  */
+  // setRecordsCount(recordCounts: RoomRecordsCount | RoomStateCounts) {
+  //   this.tabFilterItems[this.tabFilterIdx].chips.forEach((item) => {
+  //     item.total = recordCounts[item.value];
+  //   });
+  // }
 
-  setTypeCounts(recordCounts: RoomTypeCounts) {
-    this.tabFilterItems.forEach((item) => {
-      item.total = recordCounts[item.value];
-    });
-  }
+  // setTypeCounts(recordCounts: RoomTypeCounts) {
+  //   this.tabFilterItems.forEach((item) => {
+  //     item.total = recordCounts[item.value];
+  //   });
+  // }
 
   /**
    * @function getSelectedQuickReplyFilters To return the selected chip list.
@@ -171,8 +171,9 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             (res) => {
               const roomList = new RoomList().deserialize(res);
               this.values = roomList.records;
-              this.setRecordsCount(roomList.count);
-              this.setTypeCounts(roomList.typeCount);
+              this.updateQuickReplyFilterCount(res.entityStateCounts);
+              this.updateTabFilterCount(res.entityTypeCounts, res.total);
+              this.updateTotalRecords();
               this.loading = false;
             },
             () => {},
@@ -188,8 +189,9 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             (res) => {
               const roomTypesList = new RoomTypeList().deserialize(res);
               this.values = roomTypesList.records;
-              this.setRecordsCount(roomTypesList.count);
-              this.setTypeCounts(roomTypesList.typeCount);
+              this.updateQuickReplyFilterCount(res.entityStateCounts);
+              this.updateTabFilterCount(res.entityTypeCounts, res.total);
+              this.updateTotalRecords();
 
               this.loading = false;
             },

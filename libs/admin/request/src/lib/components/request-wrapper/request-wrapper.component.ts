@@ -34,7 +34,6 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
       content: '',
       value: 'INHOUSE',
       disabled: false,
-      total: 0,
       chips: [],
     },
   ];

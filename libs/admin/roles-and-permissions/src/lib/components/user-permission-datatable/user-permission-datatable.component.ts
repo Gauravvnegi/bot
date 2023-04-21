@@ -43,8 +43,22 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   isQuickFilters = false;
   isTabFilters = true;
   tabFilterItems = [
-    { label: 'All', content: '', value: 'ALL', disabled: true, total: 0, chips: [] },
-    { label: 'Reporting to me', content: '', value: 'REPORTING', disabled: false, total: 0, chips: [] },
+    {
+      label: 'All',
+      content: '',
+      value: 'ALL',
+      disabled: false,
+      total: 0,
+      chips: [],
+    },
+    {
+      label: 'Reporting to me',
+      content: '',
+      value: 'REPORTING',
+      disabled: false,
+      total: 0,
+      chips: [],
+    },
   ];
   hotelId: string;
   filterChips = chips;
@@ -79,14 +93,14 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
           this.values = new UserPermissionTable().deserialize(data).records;
           //set pagination
           this.totalRecords = data.total;
-          this.tabFilterItems.forEach((tab)=>{
+          this.tabFilterItems.forEach((tab) => {
             tab.total = this.totalRecords;
           });
           this.loading = false;
         },
         (error) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -127,7 +141,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -169,7 +183,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
             this.loading = false;
           },
           (error) => {
-            this.loading = false; 
+            this.loading = false;
           }
         )
     );
@@ -200,7 +214,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
             { panelClass: 'success' }
           );
         },
-        ({ error }) => {  }
+        ({ error }) => {}
       );
   }
 

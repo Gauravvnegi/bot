@@ -1,5 +1,6 @@
 import {
   EntityStateCountsResponse,
+  EntityTypeCountsResponse,
   Status,
 } from '../models/reservations.model';
 /* Reservation List Response Types deceleration */
@@ -7,6 +8,7 @@ export type ReservationListResponse = {
   reservationData?: ReservationResponse[];
   total: number;
   entityStateCounts: EntityStateCountsResponse;
+  entityTypeCounts: EntityTypeCountsResponse;
 };
 
 /* Reservation Response Types Deceleration*/

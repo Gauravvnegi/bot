@@ -18,23 +18,6 @@ export const listingConfig = {
             isSelected: true,
             type: 'default',
           },
-
-          {
-            label: 'Active',
-            icon: '',
-            value: 'ACTIVE',
-            total: 0,
-            isSelected: false,
-            type: 'new',
-          },
-          {
-            label: 'In-Active ',
-            icon: '',
-            value: 'INACTIVE',
-            total: 0,
-            isSelected: false,
-            type: 'pending',
-          },
         ],
         lastPage: 0,
       },

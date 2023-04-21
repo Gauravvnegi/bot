@@ -45,7 +45,6 @@ export class FeedbackComponent implements OnInit, OnDestroy {
       content: '',
       value: 'ALL',
       disabled: false,
-      total: 0,
       chips: [],
       type: 'Both',
     },
@@ -153,7 +152,6 @@ export class FeedbackComponent implements OnInit, OnDestroy {
       content: '',
       value: 'ALL',
       disabled: false,
-      total: 0,
       chips: [],
       type: feedback.types.transactional,
     });
@@ -172,7 +170,6 @@ export class FeedbackComponent implements OnInit, OnDestroy {
       content: '',
       value: item.id,
       disabled: false,
-      total: 0,
       chips: [],
       type: type,
     };

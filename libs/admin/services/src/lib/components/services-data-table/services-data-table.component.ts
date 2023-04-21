@@ -101,13 +101,11 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
               this.values = serviceList.complimentaryService;
               break;
           }
-
-          this.totalRecords = serviceList.total;
-          this.filterChips.forEach((item) => {
-            item.total = serviceList.entityStateCounts[item.value];
-          }); 
+          this.updateTabFilterCount(res.entityTypeCounts, res.total);
+          this.updateQuickReplyFilterCount(res.entityStateCounts);
+          this.updateTotalRecords();
         },
-        ()=>{},
+        () => {},
         this.handleFinal
       );
   }
@@ -139,9 +137,11 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
               'Status changes successfully',
               '',
               { panelClass: 'success' }
-            ); 
+            );
           },
-          (error)=>{this.loading=false;},
+          (error) => {
+            this.loading = false;
+          },
           this.handleFinal
         )
     );
@@ -218,8 +218,8 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
             res,
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
-        }, 
-        ()=>{},
+        },
+        () => {},
         this.handleFinal
       )
     );
@@ -231,7 +231,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
    */
   handleError = ({ error }): void => {
     this.values = [];
-    this.loading = false; 
+    this.loading = false;
   };
 
   handleFinal = () => {

@@ -71,15 +71,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       this.fetchDataFrom(queries).subscribe(
         (data) => {
           this.initialLoading = false;
-          this.values = new GuestTable().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.values = [];
@@ -88,6 +80,13 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         }
       )
     );
+  }
+  setRecords(data): void {
+    this.values = new GuestTable().deserialize(data).records;
+    this.updateTabFilterCount(data.entityTypeCounts, data.total);
+    this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.updateTotalRecords();
+    this.loading = false;
   }
 
   fetchDataFrom(
@@ -128,15 +127,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new GuestTable().deserialize(data).records;
-
-          //set pagination
-          this.totalRecords = data.total;
-          //check for update tabs and quick reply filters
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.values = [];

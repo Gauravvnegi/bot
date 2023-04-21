@@ -155,14 +155,12 @@ export class RequestListComponent implements OnInit, OnDestroy {
   loadInitialRequestList(queries = []): void {
     this.loading = true;
     this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
-        (response) => {
-          this.listData = new InhouseTable().deserialize(response).records;
-          this.updateTabFilterCount(response.entityStateCounts);
-          this.totalData = response.total;
-          this.loading = false;
-        } 
-      )
+      this.fetchDataFrom(queries).subscribe((response) => {
+        this.listData = new InhouseTable().deserialize(response).records;
+        this.updateTabFilterCount(response.entityStateCounts , response.total);
+        this.totalData = response.total;
+        this.loading = false;
+      })
     );
   }
 
@@ -194,24 +192,22 @@ export class RequestListComponent implements OnInit, OnDestroy {
           entityType: this.entityType,
           actionType: this.tabFilterItems[this.tabFilterIdx].value,
         },
-      ]).subscribe(
-        (response) => {
-          if (offset === 0)
-            this.listData = new InhouseTable().deserialize(response).records;
-          else
-            this.listData = [
-              ...new Map(
-                [
-                  ...this.listData,
-                  ...new InhouseTable().deserialize(response).records,
-                ].map((item) => [item.id, item])
-              ).values(),
-            ];
-          this.totalData = response.total;
-          this.updateTabFilterCount(response.entityStateCounts);
-          this.loading = false;
-        } 
-      )
+      ]).subscribe((response) => {
+        if (offset === 0)
+          this.listData = new InhouseTable().deserialize(response).records;
+        else
+          this.listData = [
+            ...new Map(
+              [
+                ...this.listData,
+                ...new InhouseTable().deserialize(response).records,
+              ].map((item) => [item.id, item])
+            ).values(),
+          ];
+        this.totalData = response.total;
+        this.updateTabFilterCount(response.entityStateCounts , response.total);
+        this.loading = false;
+      })
     );
   }
 
@@ -219,10 +215,12 @@ export class RequestListComponent implements OnInit, OnDestroy {
    * @function updateTabFilterCount To update tab filter count.
    * @param countObj The object tab data count.
    */
-  updateTabFilterCount(countObj): void {
+  updateTabFilterCount(countObj, total): void {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
-        if (tab.value !== 'ALL') tab.total = countObj[tab.value];
+        tab.value === 'ALL'
+          ? (tab.total = total)
+          : (tab.total = countObj[tab.value]);
       });
     }
   }
@@ -330,11 +328,10 @@ export class RequestListComponent implements OnInit, OnDestroy {
         (response) =>
           (this.listData = new InhouseTable().deserialize({
             records: response,
-          }).records) 
+          }).records)
       );
   }
 
- 
   resetFilter() {
     this.filterData = {
       sort: '',

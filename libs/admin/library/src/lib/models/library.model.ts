@@ -8,13 +8,32 @@ export class EntityStateCounts {
   ALL: number;
   INACTIVE: number;
   ACTIVE: number;
-  deserialize(input: EntityStateCountsResponse) {
-    this.ALL = input.All;
+  deserialize(input: EntityStateCountsResponse, total) {
+    this.ALL = input.Active + input.Inactive ?? 0;
     this.ACTIVE = input.Active;
     this.INACTIVE = input.Inactive;
     return this;
   }
 }
+
+export class EntityTypeCounts {
+  ALL: number;
+  PAID: number;
+  COMPLIMENTARY: number;
+
+  deserialize(input: EntityTypeCountsResponse, total) {
+    this.ALL = total ?? 0;
+    this.PAID = input.PAID ?? 0;
+    this.COMPLIMENTARY = input.COMPLIMENTARY ?? 0;
+    return this;
+  }
+}
+
+export type EntityTypeCountsResponse = {
+  ALL: number;
+  PAID: number;
+  COMPLIMENTARY: number;
+};
 
 export class Categories {
   records: Category[];

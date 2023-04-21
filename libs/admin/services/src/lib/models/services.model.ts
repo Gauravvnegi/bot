@@ -1,4 +1,7 @@
-import { EntityStateCounts } from '@hospitality-bot/admin/library';
+import {
+  EntityStateCounts,
+  EntityTypeCounts,
+} from '@hospitality-bot/admin/library';
 import {
   ServiceListResponse,
   ServiceResponse,
@@ -39,6 +42,7 @@ export class ServiceList {
   complimentaryService: Service[];
   total: number;
   entityStateCounts: EntityStateCounts;
+  entityTypeCounts: EntityTypeCounts;
 
   deserialize(input: ServiceListResponse) {
     this.allService =
@@ -55,8 +59,14 @@ export class ServiceList {
     this.total = input.total;
 
     this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts
+      input.entityStateCounts,
+      input.total
     );
+    this.entityTypeCounts = new EntityTypeCounts().deserialize(
+      input.entityTypeCounts,
+      input.total
+    );
+
     return this;
   }
 }
@@ -87,7 +97,8 @@ export class TaxList {
       input?.records?.map((item) => new Tax().deserialize(item)) ?? [];
     this.total = input?.total ?? 0;
     this.entityStateCounts = new EntityStateCounts().deserialize(
-      input?.entityStateCounts
+      input?.entityStateCounts,
+      input?.total
     );
     return this;
   }

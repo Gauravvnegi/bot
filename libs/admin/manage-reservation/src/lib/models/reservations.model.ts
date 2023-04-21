@@ -79,20 +79,54 @@ export class ReservationList {
   reservationData: Reservation[];
   total: number;
   entityStateCounts: EntityStateCounts;
+  entityTypeCounts: EntityTypeCounts;
   deserialize(input: ReservationListResponse | any) {
     this.reservationData =
       input.records?.map((item) => new Reservation().deserialize(item)) ?? [];
     this.total = input.total;
     this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts,
+      input.entityStateCounts
+    );
+    this.entityTypeCounts = new EntityTypeCounts().deserialize(
+      input.entityTypeCounts,
       this.total
     );
     return this;
   }
 }
 
+export class EntityTypeCounts {
+  ALL: number;
+  AGENT: number;
+  CREATE_WITH: number;
+  OFFLINE_SALES: number;
+  OTA: number;
+  OTHERS: number;
+  WALK_IN: number;
+  deserialize(input: EntityTypeCountsResponse, total) {
+    this.ALL = total ?? 0;
+    this.AGENT = input?.AGENT;
+    this.CREATE_WITH = input?.CREATE_WITH;
+    this.OFFLINE_SALES = input?.OFFLINE_SALES;
+    this.OTA = input?.OTA;
+    this.OTHERS = input?.OTHERS;
+    this.WALK_IN = input?.WALK_IN;
+    return this;
+  }
+}
+
+export type EntityTypeCountsResponse = {
+  ALL: number;
+  AGENT: number;
+  CREATE_WITH: number;
+  OFFLINE_SALES: number;
+  OTA: number;
+  OTHERS: number;
+  WALK_IN: number;
+};
+
 export type EntityStateCountsResponse = {
-  All: number;
+  ALL: number;
   DRAFT: number;
   CONFIRMED: number;
   CANCELED: number;
@@ -103,8 +137,8 @@ export class EntityStateCounts {
   DRAFT: number;
   CONFIRMED: number;
   CANCELED: number;
-  deserialize(input: EntityStateCountsResponse, total) {
-    this.ALL = total ?? 0;
+  deserialize(input: EntityStateCountsResponse) {
+    this.ALL = Number(Object.values(input).reduce((a, b) => a + b, 0));
     this.DRAFT = input?.DRAFT;
     this.CONFIRMED = input?.CONFIRMED;
     this.CANCELED = input?.CANCELED;

@@ -45,6 +45,7 @@ export type RoomListResponse = {
     SOLD_OUT: number;
     UNAVAILABLE: number;
   };
+  total: number;
 };
 
 export type RoomTypeResponse = {
@@ -82,6 +83,7 @@ export type RoomTypeListResponse = {
     ACTIVE: number;
     INACTIVE: number;
   };
+  total: number;
 };
 
 export type AddRoomsResponse = {

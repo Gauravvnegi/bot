@@ -173,6 +173,7 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
         icon: '',
         value: stat.label.toUpperCase(),
         isSelected: false,
+        total: 0,
         type: SourceChipsType[stat.label],
       });
     });

@@ -23,32 +23,104 @@ const appRoutes: CRoutes = [
       {
         path: 'dashboard',
         name: ModuleNames.CREATE_WITH_DASHBOARD,
-        component: DashboardComponent,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            name: ModuleNames.CREATE_WITH_DASHBOARD,
+            component: DashboardComponent,
+          },
+          {
+            path: '**',
+            name: ModuleNames.CREATE_WITH_DASHBOARD,
+            component: DashboardComponent,
+          },
+        ],
       },
       {
         path: 'marketing-seo',
         name: ModuleNames.SEO_FRIENDLY,
-        component: MarketingAndSeoComponent,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            name: ModuleNames.SEO_FRIENDLY,
+            component: MarketingAndSeoComponent,
+          },
+          {
+            path: '**',
+            name: ModuleNames.SEO_FRIENDLY,
+            component: MarketingAndSeoComponent,
+          },
+        ],
       },
       {
         path: 'theme',
         name: ModuleNames.THEME,
-        component: ThemeComponent,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            name: ModuleNames.THEME,
+            component: ThemeComponent,
+          },
+          {
+            path: '**',
+            name: ModuleNames.THEME,
+            component: ThemeComponent,
+          },
+        ],
       },
       {
         path: 'page',
         name: ModuleNames.PAGES,
-        component: PagesComponent,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            name: ModuleNames.PAGES,
+            component: PagesComponent,
+          },
+          {
+            path: '**',
+            name: ModuleNames.PAGES,
+            component: PagesComponent,
+          },
+        ],
       },
       {
         path: 'blog',
         name: ModuleNames.BLOG,
-        component: BlogComponent,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            name: ModuleNames.BLOG,
+            component: BlogComponent,
+          },
+          {
+            path: '**',
+            name: ModuleNames.BLOG,
+            component: BlogComponent,
+          },
+        ],
       },
       {
         path: 'booking-engine',
         name: ModuleNames.BOOKING_ENGINE,
-        component: ComingSoonComponent,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            name: ModuleNames.BOOKING_ENGINE,
+            component: ComingSoonComponent,
+          },
+          {
+            path: '**',
+            name: ModuleNames.BOOKING_ENGINE,
+            component: ComingSoonComponent,
+          },
+        ],
       },
     ],
   },

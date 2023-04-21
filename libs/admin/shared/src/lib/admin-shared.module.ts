@@ -82,6 +82,7 @@ import { SkeletonShapeComponent } from './components/skeleton/skeleton-shape/ske
 import { SkeletonDirective } from './directives/skeleton.directive';
 import { LoaderBounceComponent } from './components/loader-bounce/loader-bounce.component';
 import { PhoneNumberComponent } from './view/phone-number/phone-number.component';
+import { CreateWithViewComponent } from './view/create-with-view/create-with-view.component';
 
 @NgModule({
   imports: [
@@ -172,6 +173,7 @@ import { PhoneNumberComponent } from './view/phone-number/phone-number.component
     SkeletonDirective,
     LoaderBounceComponent,
     PhoneNumberComponent,
+    CreateWithViewComponent,
   ],
   exports: [
     DatatableComponent,
@@ -251,6 +253,7 @@ import { PhoneNumberComponent } from './view/phone-number/phone-number.component
     SkeletonShapeComponent,
     LoaderBounceComponent,
     PhoneNumberComponent,
+    CreateWithViewComponent,
   ],
 })
 export class AdminSharedModule {}

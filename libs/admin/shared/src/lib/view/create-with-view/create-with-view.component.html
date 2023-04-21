@@ -1,0 +1,10 @@
+<ng-container *ngIf="isLoaded">
+  <iframe
+    [src]="onboardingUrl | safeUrl"
+    height="100%"
+    loading="eager"
+    width="100%"
+    allowFullScreen
+    title="Dashboard"
+  ></iframe>
+</ng-container>

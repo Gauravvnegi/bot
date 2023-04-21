@@ -1,10 +1,5 @@
-<ng-container *ngIf="isLoaded">
-  <iframe
-    [src]="onboardingUrl | safeUrl"
-    height="100%"
-    loading="lazy"
-    width="100%"
-    allowFullScreen
-    title="Blog"
-  ></iframe>
-</ng-container>
+<hospitality-bot-create-with-view
+  [isLoaded]="isLoaded"
+  [onboardingUrl]="onboardingUrl"
+>
+</hospitality-bot-create-with-view>

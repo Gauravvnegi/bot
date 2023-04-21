@@ -129,8 +129,8 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
             this.updateStatusAndCount(rowData.status, status);
             this.initTableValue();
           },
-          ({ err }) => {
-            if (err.error?.type === 'DOMAIN_NOT_EXIST') {
+          ({ error }) => {
+            if (error?.type === 'DOMAIN_NOT_EXIST' || error?.code === "BOTSHOT1057") {
               this.handlePublish(rowData.id);
             }
             this.loading = false

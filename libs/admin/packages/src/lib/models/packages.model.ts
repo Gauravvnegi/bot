@@ -39,7 +39,8 @@ export class PackageList {
     );
     this.total = input.total;
     this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts
+      input?.entityStateCounts,
+      input?.total
     );
     return this;
   }

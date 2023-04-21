@@ -197,7 +197,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
             value: departmentKey,
             content: '',
             disabled: false,
-            total: 0,
+
             lastPage: 0,
             chips: [
               {

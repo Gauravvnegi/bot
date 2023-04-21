@@ -21,7 +21,8 @@ export class GuestTable implements IDeserializable {
   deserialize(input: any) {
     Object.assign(this, set({}, 'total', get(input, ['total'])));
     this.entityTypeCounts = new EntityTypeCounts().deserialize(
-      input.entityTypeCounts
+      input.entityTypeCounts,
+      input.total
     );
     this.entityStateCounts = new EntityStateCounts().deserialize(
       input.entityStateCounts
@@ -34,12 +35,13 @@ export class GuestTable implements IDeserializable {
 }
 
 export class EntityTypeCounts {
+  ALL: number;
   ARRIVAL: number;
   OUTGUEST: number;
   INHOUSE: number;
   DEPARTURE: number;
 
-  deserialize(data) {
+  deserialize(data, total) {
     Object.assign(
       this,
       set({}, 'ARRIVAL', get(data, ['ARRIVAL'])),
@@ -47,6 +49,7 @@ export class EntityTypeCounts {
       set({}, 'INHOUSE', get(data, ['INHOUSE'])),
       set({}, 'DEPARTURE', get(data, ['DEPARTURE']))
     );
+    this.ALL = total ?? 0;
     return this;
   }
 }

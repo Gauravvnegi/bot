@@ -80,16 +80,12 @@ export class TaxDataTableComponent extends BaseDatatableComponent
           const taxList = new TaxList().deserialize(res);
 
           this.values = taxList.records;
-
-          this.totalRecords = taxList.total;
-
-          this.filterChips.forEach((item) => {
-            item.total = taxList.entityStateCounts[item.value];
-          });
+          this.updateQuickReplyFilterCount(res.entityStateCounts);
+          this.updateTotalRecords();
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         },
         this.handleFinal
       )
@@ -151,7 +147,8 @@ export class TaxDataTableComponent extends BaseDatatableComponent
             '',
             { panelClass: 'success' }
           );
-        }, 
+        },
+        ({ error }) => {},
         this.handleFinal
       );
   }
@@ -172,15 +169,12 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     };
 
     this.$subscription.add(
-      this.taxService.exportCSV(this.hotelId, config).subscribe(
-        (res) => {
-          FileSaver.saveAs(
-            res,
-            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-          );
-        }, 
-        this.handleFinal
-      )
+      this.taxService.exportCSV(this.hotelId, config).subscribe((res) => {
+        FileSaver.saveAs(
+          res,
+          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+        );
+      }, this.handleFinal)
     );
   }
 

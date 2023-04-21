@@ -148,48 +148,29 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new Templates().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
   }
 
   /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
+   * @function setRecords To set records after getting reponse from an api.
+   * @param data The data is a response which comes from an api call.
    */
-  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        chip.total = countObj[chip.value];
-      });
-    }
+  setRecords(data): void {
+    const responseData = new Templates().deserialize(data);
+    this.values = responseData.records;
+    data.entityTypeCounts &&
+      this.updateTabFilterCount(data.entityTypeCounts, data.total);
+    data.entityStateCounts &&
+      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.updateTotalRecords();
+    this.loading = false;
   }
 
   /**
@@ -240,7 +221,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
           this.changePage(this.currentPage);
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       );
   }
@@ -294,17 +275,11 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         }
       ).subscribe(
         (data) => {
-          this.values = new Templates().deserialize(data).records;
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -393,7 +368,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );

@@ -151,6 +151,7 @@ export const guest = {
         content: '',
         value: 'ALL',
         disabled: false,
+        total: 0,
         chips: chips.documents,
         lastPage: 0,
       },

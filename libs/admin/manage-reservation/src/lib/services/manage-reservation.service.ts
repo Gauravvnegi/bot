@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { BehaviorSubject, Observable, ObservedValuesFromArray } from 'rxjs';
-import { ReservationTableValue } from '../constants/reservation-table';
-import { QueryConfig } from '../types/reservation.type';
-import { map } from 'rxjs/operators';
-import { APIManipulator } from '../models/dummy.model';
+import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 import {
   RoomListResponse,
-  RoomTypeListResponse,
+  RoomTypeListResponse
 } from 'libs/admin/room/src/lib/types/service-response';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { ReservationTableValue } from '../constants/reservation-table';
 import { ReservationFormData } from '../types/forms.types';
-import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
+import { QueryConfig } from '../types/reservation.type';
 
 @Injectable()
 export class ManageReservationService extends ApiService {

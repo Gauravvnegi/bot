@@ -339,6 +339,86 @@ export class BaseDatatableComponent implements OnInit {
 
     this.changePage(0);
   }
+  /**
+   * @function calculateTotalChipsCount To calculate the total count of the chips.
+   * @param chips The chips array.
+   * @returns The total count of the chips.
+   */
+  calculateTotalChipsCount(chips) {
+    return chips
+      ?.filter((chip) => chip?.isSelected)
+      ?.reduce((total, chip) => total + (chip?.total ?? 0), 0);
+  }
+
+  /**
+   * @function updateTotalRecords To update the total records count.
+   * @param chips The chips array.
+   */
+  updateTotalRecords() {
+    if (this.tabFilterItems[this.tabFilterIdx]?.chips.length) {
+      this.totalRecords = this.calculateTotalChipsCount(
+        this.tabFilterItems[this.tabFilterIdx]?.chips
+      );
+    } else if (this.filterChips?.length) {
+      this.totalRecords = this.calculateTotalChipsCount(this.filterChips);
+    } else {
+      this.totalRecords = this.tabFilterItems[this.tabFilterIdx].total;
+    }
+  }
+
+  /**
+   * @function updateTabFilterCount To update the count for the tabs.
+   * @param countObj The object with count for all the tab.
+   * @param currentTabCount The count for current selected tab.
+   */
+  updateTabFilterCount(countObj, currentTabCount: number): void {
+    if (countObj) {
+      this.tabFilterItems.forEach((tab) => {
+        tab.value === 'ALL'
+          ? (tab.total = currentTabCount ?? 0)
+          : (tab.total = countObj[tab.value] ?? 0);
+      });
+    } else {
+      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
+    }
+  }
+
+  /**
+   * @function setFilterChips To set the total count for the chips.
+   * @param chips The chips array.
+   * @param countObj The object with count for all the chip.
+   */
+  setFilterChips(chips, countObj) {
+    countObj = Object.entries(countObj).reduce((acc, [key, value]) => {
+      acc[key.toUpperCase()] = value;
+      return acc;
+    }, {});
+    chips.forEach((chip) => {
+      chip.value === 'ALL'
+        ? (chip.total =
+            Number(
+              Object.values(countObj).reduce((a: number, b: number) => a + b, 0)
+            ) ?? 0)
+        : (chip.total = countObj[chip.value] ?? 0);
+    });
+  }
+
+  /**
+   * @function updateQuickReplyFilterCount To update the count for chips.
+   * @param countObj The object with count for all the chip.
+   */
+  updateQuickReplyFilterCount(countObj): void {
+    if (countObj) {
+      if (this.tabFilterItems[this.tabFilterIdx]?.chips.length) {
+        this.setFilterChips(
+          this.tabFilterItems[this.tabFilterIdx]?.chips,
+          countObj
+        );
+      } else if (this.filterChips?.length) {
+        this.setFilterChips(this.filterChips, countObj);
+      }
+    }
+  }
 
   /**
    * @function updateStatusAndCount To change the count without reloading the table

@@ -99,8 +99,9 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
 
   getPackageList() {
     this.$subscription.add(
-      this.analyticsService.getPackageList(this.hotelId).subscribe(
-        (response) => {
+      this.analyticsService
+        .getPackageList(this.hotelId)
+        .subscribe((response) => {
           const packages = response.paidPackages || [];
 
           packages.forEach((item) => {
@@ -113,8 +114,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
                 total: 0,
               });
           });
-        } 
-      )
+        })
     );
   }
 
@@ -130,13 +130,11 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
     };
 
     this.$subscription.add(
-      this.analyticsService.getSentimentsStats(config).subscribe(
-        (response) => {
-          this.graphData = new InhouseSentiments().deserialize(response);
-          this.updatePackageCount(response.packageTotalCounts);
-          this.initGraphData();
-        }        
-      )
+      this.analyticsService.getSentimentsStats(config).subscribe((response) => {
+        this.graphData = new InhouseSentiments().deserialize(response);
+        this.updatePackageCount(response.packageTotalCounts);
+        this.initGraphData();
+      })
     );
   }
 

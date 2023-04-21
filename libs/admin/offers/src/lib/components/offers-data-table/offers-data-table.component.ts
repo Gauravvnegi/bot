@@ -68,12 +68,9 @@ export class OffersDataTableComponent extends BaseDatatableComponent
         .getLibraryItems<OfferListResponse>(this.hotelId, this.getQueryConfig())
         .subscribe(
           (res) => {
-            const offerList = new OfferList().deserialize(res);
-            this.values = offerList.records;
-            this.totalRecords = offerList.total;
-            this.filterChips.forEach((item) => {
-              item.total = offerList.entityStateCounts[item.value];
-            });
+            this.values = new OfferList().deserialize(res).records;
+            this.updateQuickReplyFilterCount(res.entityStateCounts);
+            this.updateTotalRecords();
           },
           ({ error }) => {
             this.values = [];
@@ -106,25 +103,22 @@ export class OffersDataTableComponent extends BaseDatatableComponent
           { active: status },
           { params: '?type=OFFER' }
         )
-        .subscribe(
-          () => {
-            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-            this.updateStatusAndCount(
-              statusValue(rowData.status),
-              statusValue(status)
-            );
-            this.values.find((item) => item.id === rowData.id).status = status;
+        .subscribe(() => {
+          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+          this.updateStatusAndCount(
+            statusValue(rowData.status),
+            statusValue(status)
+          );
+          this.values.find((item) => item.id === rowData.id).status = status;
 
-            this.snackbarService.openSnackBarAsText(
-              'Status changes successfully',
-              '',
-              { panelClass: 'success' }
-            ); 
-            this.loading=false;
-          }, 
-          this.handleFinal
-        )
-    ); 
+          this.snackbarService.openSnackBarAsText(
+            'Status changes successfully',
+            '',
+            { panelClass: 'success' }
+          );
+          this.loading = false;
+        }, this.handleFinal)
+    );
   }
 
   /**
@@ -182,16 +176,13 @@ export class OffersDataTableComponent extends BaseDatatableComponent
       ]),
     };
     this.subscription$.add(
-      this.offerService.exportCSV(this.hotelId, config).subscribe(
-        (res) => {
-          FileSaver.saveAs(
-            res,
-            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-          );
-          this.loading = false;
-        }, 
-        this.handleFinal
-      )
+      this.offerService.exportCSV(this.hotelId, config).subscribe((res) => {
+        FileSaver.saveAs(
+          res,
+          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+        );
+        this.loading = false;
+      }, this.handleFinal)
     );
   }
 

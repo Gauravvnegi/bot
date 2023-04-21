@@ -97,25 +97,34 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
-          this.values = new InhouseTable().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          this.setRecords(data);
           if (this.tabFilterItems[this.tabFilterIdx].chips.length === 1)
             this.addQuickReplyFilter(data.entityStateCounts, this.totalRecords);
           else this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
   }
 
+  setRecords(data): void {
+    this.values = new InhouseTable().deserialize(data).records;
+    this.updateTabFilterCount(data.entityTypeCounts, data.total);
+    this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.updateTotalRecords();
+    this.loading = false;
+  }
+
   addQuickReplyFilter(entityStateCounts, total) {
-    this.tabFilterItems[this.tabFilterIdx].chips[0].total = total;
+    this.tabFilterItems[this.tabFilterIdx].chips[0].total = Number(
+      Object?.values(entityStateCounts)?.reduce(
+        (a: number, b: number) => a + b,
+        0
+      )
+    );
     Object.keys(entityStateCounts).forEach((key) => {
       this.tabFilterItems[this.tabFilterIdx].chips.push({
         label: key,
@@ -134,22 +143,6 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
       .map((item) => ({
         actionType: item.value,
       }));
-  }
-
-  updateTabFilterCount(countObj, currentTabCount) {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => (tab.total = countObj[tab.value]));
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  updateQuickReplyFilterCount(countObj) {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach(
-        (chip) => (chip.total = countObj[chip.value])
-      );
-    }
   }
 
   fetchDataFrom(
@@ -182,17 +175,11 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = new InhouseTable().deserialize(data).records;
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          //set pagination
-          this.totalRecords = data.total;
-          //check for update tabs and quick reply filters
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.values = [];
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
@@ -255,36 +242,34 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     };
     this.analyticsService
       .updatePreArrivalRequest(data.id, requestData)
-      .subscribe(
-        (response) => {
-          this.loadInitialData(
-            [
-              ...this.globalQueries,
-              {
-                order: 'DESC',
-                entityType: this.entityType,
-                packageId: this.packageId,
-              },
-              ...this.getSelectedQuickReplyFilters(),
-            ],
-            false,
+      .subscribe((response) => {
+        this.loadInitialData(
+          [
+            ...this.globalQueries,
             {
-              offset: this.tempFirst,
-              limit: this.tempRowsPerPage
-                ? this.tempRowsPerPage
-                : this.rowsPerPage,
-            }
-          );
-          this.snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
-              priorityMessage: 'Request status updated',
+              order: 'DESC',
+              entityType: this.entityType,
+              packageId: this.packageId,
             },
-            '',
-            { panelClass: 'success' }
-          );
-        } 
-      );
+            ...this.getSelectedQuickReplyFilters(),
+          ],
+          false,
+          {
+            offset: this.tempFirst,
+            limit: this.tempRowsPerPage
+              ? this.tempRowsPerPage
+              : this.rowsPerPage,
+          }
+        );
+        this.snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
+            priorityMessage: 'Request status updated',
+          },
+          '',
+          { panelClass: 'success' }
+        );
+      });
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {

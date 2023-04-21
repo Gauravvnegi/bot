@@ -87,7 +87,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
             total: 0,
           };
         });
-
         this.tabFilterItems = [...this.tabFilterItems, ...data];
       });
   }
@@ -132,11 +131,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
               statusValues: this.getStatusValues(item.reservationType),
             };
           });
-          this.totalRecords = this.reservationLists.total;
-          this.filterChips.forEach((item) => {
-            item.total = this.reservationLists.entityStateCounts[item.value];
-          });
-        }, 
+          this.updateTabFilterCount(res.entityTypeCounts, res.total);
+          this.updateQuickReplyFilterCount(res.entityStateCounts);
+          this.updateTotalRecords();
+        },
         this.handleError,
         this.handleFinal
       );
@@ -195,7 +193,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
               '',
               { panelClass: 'success' }
             );
-          }, 
+          },
           this.handleError,
           this.handleFinal
         )
@@ -274,7 +272,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
             res,
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
-        }, 
+        },
         this.handleError,
         this.handleFinal
       )
@@ -287,7 +285,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   handleError = ({ error }): void => {
     this.values = [];
-    this.loading = false; 
+    this.loading = false;
   };
 
   handleFinal = () => {

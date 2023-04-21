@@ -58,7 +58,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   cols = cols.reservation;
 
   @Input() tabFilterItems = tabFilterItems.reservation;
-  @Input() tabFilterIdx = 1;
+  @Input() tabFilterIdx = 0;
 
   globalQueries = [];
   $subscription = new Subscription();
@@ -127,18 +127,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
-          this.values = new ReservationTable().deserialize(
-            data,
-            this.globalFilterService.timezone
-          ).records;
-          this.initialLoading = false;
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;
@@ -161,33 +150,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
-   */
-  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        chip.total = countObj[chip.value];
-      });
-    }
-  }
-
-  /**
    * @function fetchDataFrom Returns an observable for the reservation list api call.
    * @param queries The filter list with date and hotel filters.
    * @param defaultProps The default table props to control data fetching.
@@ -204,6 +166,18 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     };
 
     return this._reservationService.getReservationDetails(config);
+  }
+
+  setRecords(data): void {
+    this.values = new ReservationTable().deserialize(
+      data,
+      this.globalFilterService.timezone
+    ).records;
+    this.updateTabFilterCount(data.entityTypeCounts, data.total);
+    this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.updateTotalRecords();
+    console.log(this.totalRecords);
+    this.loading = false;
   }
 
   /**
@@ -226,16 +200,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = new ReservationTable().deserialize(
-            data,
-            this.globalFilterService.timezone
-          ).records;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.totalRecords = data.total;
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;

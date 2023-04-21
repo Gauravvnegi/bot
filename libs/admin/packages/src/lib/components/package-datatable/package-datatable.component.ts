@@ -95,14 +95,12 @@ export class PackageDataTableComponent extends BaseDatatableComponent
           (res) => {
             const packageList = new PackageList().deserialize(res);
             this.values = packageList.records;
-            this.totalRecords = packageList.total;
-            this.filterChips.forEach((item) => {
-              item.total = packageList.entityStateCounts[item.value];
-            });
+            this.updateQuickReplyFilterCount(res.entityStateCounts);
+            this.updateTotalRecords();
           },
           ({ error }) => {
             this.values = [];
-            this.loading = false; 
+            this.loading = false;
           },
           this.handleFinal
         )
@@ -155,15 +153,12 @@ export class PackageDataTableComponent extends BaseDatatableComponent
     };
 
     this.$subscription.add(
-      this.packagesService.exportCSV(this.hotelId, config).subscribe(
-        (res) => {
-          FileSaver.saveAs(
-            res,
-            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-          );
-        }, 
-        this.handleFinal
-      )
+      this.packagesService.exportCSV(this.hotelId, config).subscribe((res) => {
+        FileSaver.saveAs(
+          res,
+          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+        );
+      }, this.handleFinal)
     );
   }
 
@@ -195,7 +190,8 @@ export class PackageDataTableComponent extends BaseDatatableComponent
               '',
               { panelClass: 'success' }
             );
-          }, 
+          },
+          ({ error }) => {},
           this.handleFinal
         )
     );

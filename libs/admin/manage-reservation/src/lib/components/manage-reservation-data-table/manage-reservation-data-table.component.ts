@@ -177,11 +177,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    * @function handleStatus To handle the status change
    * @param status status value
   */
-  handleStatus(status: ReservationStatusType, reservationData): void {
-    if (
-      status === ReservationStatusType.CANCELLED ||
-      status === ReservationStatusType.DRAFT
-    ) {
+  handleStatus(status: ReservationStatusType, reservationData): void { 
       const dialogConfig = new MatDialogConfig();
         dialogConfig.disableClose = true;
         const togglePopupCompRef = this.modalService.openDialog(
@@ -216,9 +212,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         togglePopupCompRef.componentInstance.onClose.subscribe(() => {
           this.modalService.close();
         });
-    }else{
-      this.changeStatus(status,reservationData);
-    }
   }
   changeStatus(status:ReservationStatusType,reservationData){
     this.loading = true;

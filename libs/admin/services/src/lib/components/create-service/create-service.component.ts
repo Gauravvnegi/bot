@@ -99,7 +99,7 @@ export class CreateServiceComponent implements OnInit {
       // rate: [''],
       unit: ['', Validators.required],
       enableVisibility: [[], Validators.required],
-      serviceTax: ['', Validators.required],
+      taxIds: [[]],
     });
 
     this.updateFormControlSubscription();
@@ -180,7 +180,7 @@ export class CreateServiceComponent implements OnInit {
         );
         this.tax = records.map((item) => ({
           label: item.taxType + ' ' + item.taxValue + '%',
-          value: item.taxValue,
+          value: item.id,
         }));
       })
     );
@@ -207,7 +207,6 @@ export class CreateServiceComponent implements OnInit {
     }
 
     const data = this.useForm.getRawValue() as ServiceFormData;
-
     if (this.serviceId) {
       this.$subscription.add(
         // ** refactor ** patch not working
@@ -234,6 +233,10 @@ export class CreateServiceComponent implements OnInit {
     }
   }
 
+  createTax() {
+    this.router.navigate(['pages/settings/tax/create-tax']);
+  }
+
   handleSuccess = () => {
     this.snackbarService.openSnackBarAsText(
       `Service ${this.serviceId ? 'edited' : 'created'} successfully`,
@@ -252,7 +255,7 @@ export class CreateServiceComponent implements OnInit {
    * @function handleError to show the error
    * @param param0 network error
    */
-  handleError = ({ error }): void => { 
+  handleError = ({ error }): void => {
     this.closeLoading();
   };
 

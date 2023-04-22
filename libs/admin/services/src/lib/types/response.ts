@@ -30,7 +30,7 @@ export type ServiceResponse = {
   parentId: string;
   categoryName: string;
   enableVisibility: string[];
-  serviceTax: number;
+  taxIds: string[];
 };
 
 export type TaxResponse = {

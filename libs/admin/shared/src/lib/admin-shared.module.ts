@@ -179,6 +179,7 @@ import { CreateWithViewComponent } from './view/create-with-view/create-with-vie
     DatatableComponent,
     TabGroupComponent,
     UploadFileComponent,
+    ComingSoonComponent,
     SharedMaterialModule,
     TableModule,
     ButtonModule,

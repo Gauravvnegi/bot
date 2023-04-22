@@ -70,7 +70,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        width: 30%;
+        width: 35%;
         gap: 8px;
         margin-right: 25px;
       }
@@ -89,10 +89,14 @@
   align-items: center
 }
 
-:host ::ng-deep .span-block{  hospitality-bot-button  .button{
+:host ::ng-deep .span-block{  hospitality-bot-button .button{
     min-width: 60px;
   }
 }
+
+:host ::ng-deep .discount-field{ .main{
+  margin-top: 0px;
+}}
 
 :host ::ng-deep .span-block{ .p-error{
   width: max-content;

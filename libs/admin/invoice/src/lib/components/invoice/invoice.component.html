@@ -152,9 +152,8 @@
           <span class="span-block">
             <span>INR {{ totalDiscount.value | number: '1.1-1' }}</span>
             <ng-container *ngIf="viewDiscountTab">
-              <span class="input-field">
+              <span class="input-field discount-field">
                 <hospitality-bot-prefix-field
-                  class="three-fourth"
                   [options]="discountOption"
                   preControlName="discountType"
                   postControlName="discount"
@@ -190,13 +189,11 @@
             <ng-container *ngIf="viewPaidTab">
                 <span class="input-field">
                   <hospitality-bot-input
-                    class="three-fourth"
                     controlName="paidValue"
                     [disabled]="true"
                   ></hospitality-bot-input>
                   <span> + </span>
                   <hospitality-bot-input
-                    class="three-fourth"
                     controlName="paid"
                     [props]="{ errorMessages: errorMessages, type: 'number' }"
                   ></hospitality-bot-input>

@@ -127,7 +127,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         togglePopupCompRef.componentInstance.content = {
           heading: 'Manage Site ',
           description: [ 
-            `You are about to mark this booking staus ${status}`,
+            `You are about to mark this booking status ${status}`,
             'Are you Sure?',
           ],
         };

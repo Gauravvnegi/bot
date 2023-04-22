@@ -176,7 +176,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
               this.updateTotalRecords();
               this.loading = false;
             },
-            () => {},
+            () => {this.loading=false;},
             this.initTableDetails
           )
       );
@@ -195,7 +195,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
 
               this.loading = false;
             },
-            () => {},
+            () => {this.loading=false;},
             this.initTableDetails
           )
       );

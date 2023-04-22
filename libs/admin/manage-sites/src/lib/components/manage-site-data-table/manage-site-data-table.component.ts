@@ -117,6 +117,44 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   }
 
   handleStatus(status: ManageSiteStatus, rowData: ManageSite) {
+    const dialogConfig = new MatDialogConfig();
+        dialogConfig.disableClose = true;
+        const togglePopupCompRef = this.modalService.openDialog(
+          ModalComponent,
+          dialogConfig
+        );
+
+        togglePopupCompRef.componentInstance.content = {
+          heading: 'Manage Site ',
+          description: [ 
+            `You are about to mark this booking staus ${status}`,
+            'Are you Sure?',
+          ],
+        };
+        togglePopupCompRef.componentInstance.actions = [
+          {
+            label: 'No',
+            onClick: () => this.modalService.close(),
+            variant: 'outlined',
+          },
+          {
+            label: 'Yes',
+            onClick: () => { 
+              this.changeStatus(status,rowData);
+              this.modalService.close();
+            },
+            variant: 'contained',
+          },
+        ];
+        
+
+        togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+          this.modalService.close();
+        });
+  }
+
+
+  changeStatus(status:ManageSiteStatus,rowData: ManageSite){
     this.loading = true;
     this.$subscription.add(
       this.manageSiteService
@@ -141,7 +179,6 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         )
     );
   }
-
   /**
    * @function handlePublish Handle Publishing of site
    */

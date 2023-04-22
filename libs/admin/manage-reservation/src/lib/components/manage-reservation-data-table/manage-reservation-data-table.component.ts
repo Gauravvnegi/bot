@@ -11,7 +11,10 @@ import {
   TableService,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
 import {
@@ -29,6 +32,8 @@ import {
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationListResponse } from '../../types/response.type';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -60,7 +65,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     private router: Router,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private modalService: ModalService
   ) {
     super(fb, tabFilterService);
   }
@@ -138,6 +144,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         this.handleError,
         this.handleFinal
       );
+    this.loading = false;
   }
 
   /**
@@ -169,8 +176,51 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   /**
    * @function handleStatus To handle the status change
    * @param status status value
-   */
+  */
   handleStatus(status: ReservationStatusType, reservationData): void {
+    if (
+      status === ReservationStatusType.CANCELLED ||
+      status === ReservationStatusType.DRAFT
+    ) {
+      const dialogConfig = new MatDialogConfig();
+        dialogConfig.disableClose = true;
+        const togglePopupCompRef = this.modalService.openDialog(
+          ModalComponent,
+          dialogConfig
+        );
+
+        togglePopupCompRef.componentInstance.content = {
+          heading: 'Booking Status Change',
+          description: [ 
+            `You are about to mark this booking staus ${status}`,
+            'Are you Sure?',
+          ],
+        };
+        togglePopupCompRef.componentInstance.actions = [
+          {
+            label: 'No',
+            onClick: () => this.modalService.close(),
+            variant: 'outlined',
+          },
+          {
+            label: 'Yes',
+            onClick: () => { 
+              this.changeStatus(status,reservationData);
+              this.modalService.close();
+            },
+            variant: 'contained',
+          },
+        ];
+        
+
+        togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+          this.modalService.close();
+        });
+    }else{
+      this.changeStatus(status,reservationData);
+    }
+  }
+  changeStatus(status:ReservationStatusType,reservationData){
     this.loading = true;
     this.$subscription.add(
       this.manageReservationService
@@ -178,7 +228,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           reservationType: status,
         })
         .subscribe(
-          (res) => {
+          (res) => { 
             this.values.find(
               (item) => item.id === reservationData.id
             ).reservationType = status;
@@ -284,7 +334,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    * @param param network error
    */
   handleError = ({ error }): void => {
-    this.values = [];
+    // this.values = [];
     this.loading = false;
   };
 

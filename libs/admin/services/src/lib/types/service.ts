@@ -10,7 +10,7 @@ export type ServiceFormData = {
   active: boolean;
   categoryName: string;
   enableVisibility: string[];
-  serviceTax: number;
+  taxIds: string[];
 };
 
 export type ServiceData = ServiceFormData & {

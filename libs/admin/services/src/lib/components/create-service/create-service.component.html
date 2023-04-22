@@ -63,12 +63,18 @@
       [options]="units"
     ></hospitality-bot-select>
     <div class="container">
-      <hospitality-bot-select
-        class="half-width"
-        controlName="serviceTax"
+      <hospitality-bot-multi-select
+        *ngIf="isSelectedTypePaid"
+        class="one-third-width"
+        controlName="taxIds"
         label="Tax"
         [options]="tax"
-      ></hospitality-bot-select>
+        [props]="{
+          isAsync: true,
+          createPrompt: '+ Create New Tax'
+        }"
+        (onCreate)="createTax()"
+      ></hospitality-bot-multi-select>
     </div>
     <hospitality-bot-select-group
       class="half-width"

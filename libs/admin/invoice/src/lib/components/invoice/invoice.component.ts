@@ -18,6 +18,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InvoiceService } from '../../services/invoice.service';
 import { Invoice } from '../../models/invoice.model';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -37,10 +38,10 @@ export class InvoiceComponent implements OnInit {
   taxes: Option[];
   tableValue = [];
   discountOption: Option[] = [
-    { label: '%Off', value: '%Off' },
-    { label: 'Flat', value: 'Flat' },
+    { label: '%Off', value: 'off' },
+    { label: 'Flat', value: 'flat' },
   ];
-  editPaidAmount: Option[] = [{ label: 'Edit', value: 'Edit' }];
+  editPaidAmount: Option[] = [{ label: 'Edit', value: 'edit' }];
 
   editMode = false;
   viewDiscountTab = false;
@@ -55,7 +56,7 @@ export class InvoiceComponent implements OnInit {
   cols = cols;
 
   // #Move to constant, give type here and in menu component, initialise ngInit - initOptionsConfig
-  addDiscount = [{ label: 'Add Discount', value: 'Add Discount' }];
+  addDiscount = [{ label: 'Add Discount', value: 'addDiscount' }];
   editDiscount = [
     { label: 'Edit Discount', value: 'editDiscount' },
     { label: 'Remove Discount', value: 'removeDiscount' },
@@ -162,7 +163,6 @@ export class InvoiceComponent implements OnInit {
     this.addNewFieldTableForm();
     this.initFormSubscription();
     this.useForm.valueChanges.subscribe((res) => {
-      // console.log(res);
     });
   }
 
@@ -174,11 +174,13 @@ export class InvoiceComponent implements OnInit {
       ];
       this.getReservationId();
     })
+    console.log(this.reservationId);
   }
 
   getReservationId(): void{
     const id = this.activatedRoute.snapshot.paramMap.get('id')
     this.reservationId = id;
+    console.log(this.reservationId)
   }
 
   /**
@@ -219,21 +221,22 @@ export class InvoiceComponent implements OnInit {
     };
 
     this.tableFormArray.push(this.fb.group({ ...data }));
-    this.registerUnitPriceChange();
   }
-
+  
   /**
    * To add new charged
-   */
-  addNewCharges() {
-    this.addNewFieldTableForm();
-    this.tableValue.push({ id: this.tableValue.length + 1 });
+  */
+ addNewCharges() {
+   this.addNewFieldTableForm();
+   this.tableValue.push({ id: this.tableValue.length + 1 });
+   this.registerUnitPriceChange();
   }
 
   /**
    * @function registerUnitPriceChange To handle changes in new charges
    */
   registerUnitPriceChange() {
+    console.log(this.tableFormArray.controls.length);
     const currentFormGroup = this.tableFormArray.at(
       this.tableFormArray.controls.length-1
     ) as FormGroup;
@@ -267,10 +270,9 @@ export class InvoiceComponent implements OnInit {
     unitValue.valueChanges.subscribe(setAmount);
     tax.valueChanges.subscribe(setAmount);
 
-
     this.tableFormArray.valueChanges.subscribe((values)=>{
-      const prices = values.map((value)=>value.totalAmount);
-      const totalValue = prices.reduce((acc, price)=> acc+ price, 0);
+      const prices = values.map((value)=> Number(value.totalAmount));
+      const totalValue = prices.reduce((acc, price)=> acc + price, 0);
 
       this.currentAmount.setValue(totalValue);
       this.discountedAmount.setValue(this.currentAmount.value - this.totalDiscount.value);
@@ -294,7 +296,7 @@ export class InvoiceComponent implements OnInit {
         return 'isPercentError';
       }
 
-      if(this.discountedAmount.value<this.paidAmount.value){
+      if(this.discountedAmount.value<this.paidAmount.value || this.dueAmount.value < 0){
         return 'maxOccupancy';
       }
     };
@@ -379,6 +381,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   onAddDiscount(e) {
+    if(e.item.value === 'addDiscount')
     this.viewDiscountTab = true;
   }
 
@@ -405,7 +408,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   onEditPaid(e) {
-    if (e.item.value === 'Edit') {
+    if (e.item.value === 'edit') {
       this.viewPaidTab = true;
     }
   }

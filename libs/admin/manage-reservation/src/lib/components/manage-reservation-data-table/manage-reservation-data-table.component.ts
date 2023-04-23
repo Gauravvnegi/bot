@@ -156,19 +156,18 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         label: 'Draft',
         value: ReservationStatusType.DRAFT,
         type: 'warning',
-        disabled: status === ReservationStatusType.DRAFT ? true : false,
+        disabled: status === ReservationStatusType.CANCELLED || status === ReservationStatusType.CONFIRMED,
       },
       {
         label: 'Cancel',
         value: ReservationStatusType.CANCELLED,
         type: 'failed',
-        disabled: status === ReservationStatusType.CANCELLED ? true : false,
       },
       {
         label: 'Confirm',
         value: ReservationStatusType.CONFIRMED,
         type: 'new',
-        disabled: status === ReservationStatusType.CONFIRMED ? true : false,
+        disabled: status === ReservationStatusType.CANCELLED,
       },
     ];
   }

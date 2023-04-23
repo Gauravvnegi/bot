@@ -186,9 +186,9 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         );
 
         togglePopupCompRef.componentInstance.content = {
-          heading: 'Booking Status Change',
+          heading: `Mark Booking As ${status.charAt(0).toUpperCase()+status.slice(1).toLowerCase()}`,
           description: [ 
-            `You are about to mark this booking status ${status}`,
+            `You are about to mark this booking as ${status}`,
             'Are you Sure?',
           ],
         };

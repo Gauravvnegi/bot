@@ -5,7 +5,7 @@ import {
   BaseDatatableComponent,
   CookiesSettingsService,
   TableService,
-  UserService
+  UserService,
 } from '@hospitality-bot/admin/shared';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
@@ -13,7 +13,8 @@ import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SettingOptions } from '@hospitality-bot/admin/settings';
 import {
-  ModalService, SnackBarService
+  ModalService,
+  SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
@@ -22,7 +23,7 @@ import { ManageSiteStatus } from '../../constant/manage-site';
 import {
   ManageSite,
   ManageSiteList,
-  NextState
+  NextState,
 } from '../../models/data-table.model';
 import { ManageSitesService } from '../../services/manage-sites.service';
 import { QueryConfig } from '../../types/manage-site.type';
@@ -89,7 +90,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
           (res) => {
             const manageSiteData = new ManageSiteList().deserialize(res);
             this.values = manageSiteData.records;
-           
+
             this.nextState = this.values.map((item) => ({
               id: item.id,
               status: item.status,
@@ -118,43 +119,41 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
 
   handleStatus(status: ManageSiteStatus, rowData: ManageSite) {
     const dialogConfig = new MatDialogConfig();
-        dialogConfig.disableClose = true;
-        const togglePopupCompRef = this.modalService.openDialog(
-          ModalComponent,
-          dialogConfig
-        );
+    dialogConfig.disableClose = true;
+    const togglePopupCompRef = this.modalService.openDialog(
+      ModalComponent,
+      dialogConfig
+    );
 
-        togglePopupCompRef.componentInstance.content = {
-          heading: 'Manage Site ',
-          description: [ 
-            `You are about to mark this booking status ${status}`,
-            'Are you Sure?',
-          ],
-        };
-        togglePopupCompRef.componentInstance.actions = [
-          {
-            label: 'No',
-            onClick: () => this.modalService.close(),
-            variant: 'outlined',
-          },
-          {
-            label: 'Yes',
-            onClick: () => { 
-              this.changeStatus(status,rowData);
-              this.modalService.close();
-            },
-            variant: 'contained',
-          },
-        ];
-        
-
-        togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+    togglePopupCompRef.componentInstance.content = {
+      heading: `Mark As ${status.charAt(0).toUpperCase()+status.slice(1).toLowerCase()}`,
+      description: [
+        `You are about to mark this site ${status}`,
+        'Are you Sure?',
+      ],
+    };
+    togglePopupCompRef.componentInstance.actions = [
+      {
+        label: 'No',
+        onClick: () => this.modalService.close(),
+        variant: 'outlined',
+      },
+      {
+        label: 'Yes',
+        onClick: () => {
+          this.changeStatus(status, rowData);
           this.modalService.close();
-        });
+        },
+        variant: 'contained',
+      },
+    ];
+
+    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+      this.modalService.close();
+    });
   }
 
-
-  changeStatus(status:ManageSiteStatus,rowData: ManageSite){
+  changeStatus(status: ManageSiteStatus, rowData: ManageSite) {
     this.loading = true;
     this.$subscription.add(
       this.manageSiteService
@@ -171,10 +170,13 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
             this.initTableValue();
           },
           ({ error }) => {
-            if (error?.type === 'DOMAIN_NOT_EXIST' || error?.code === "BOTSHOT1057") {
+            if (
+              error?.type === 'DOMAIN_NOT_EXIST' ||
+              error?.code === 'BOTSHOT1057'
+            ) {
               this.handlePublish(rowData.id);
             }
-            this.loading = false
+            this.loading = false;
           }
         )
     );

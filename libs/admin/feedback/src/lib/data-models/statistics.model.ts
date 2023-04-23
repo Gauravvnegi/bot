@@ -570,7 +570,7 @@ export class Disengagement {
       gtmGraph: input.gtmClosedRate?.gtmGraph?.gtmGraphStats,
     });
     this.gtmBreakDown = new GtmBreakdown().deserialize(input.gtmbreakDown);
-    this.selectedItemColor = '#4b56c0';
+    this.selectedItemColor = '#e61042';
     Object.keys(input.disengagmentDrivers).forEach((key, i) => {
       this.disengagementDrivers.push(
         new Status().deserialize({

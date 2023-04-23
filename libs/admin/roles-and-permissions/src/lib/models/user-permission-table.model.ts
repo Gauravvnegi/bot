@@ -1,24 +1,23 @@
-import { get, set } from 'lodash';
-import * as moment from 'moment';
 import { UserListResponse, UserResponse } from '../types/response';
+import { Department, Permission, HotelAccess } from '../types';
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
 export class User{
-  firstName;
-  lastName;
-  jobTitle;
-  departments;
-  cc;
-  phoneNumber;
-  email;
-  profileUrl;
-  userId;
-  parentId;
-  hotelAccess;
-  status;
-  permissionConfigs;
+  firstName: string;
+  lastName: string;
+  jobTitle: string;
+  departments: Department[];
+  cc: string;
+  phoneNumber: string;
+  email: string;
+  profileUrl: string;
+  userId: string;
+  parentId: string;
+  hotelAccess: HotelAccess;
+  status: boolean;
+  permissionConfigs: Permission[];
   deserialize(input: UserResponse) {
     this.firstName = input.firstName;
     this.lastName = input.lastName;
@@ -60,7 +59,7 @@ export class User{
 
   getAvailablePermissions() {
     const availablePermissions = [];
-    this.permissionConfigs.forEach((config) => {
+    this.permissionConfigs.forEach((config: Permission) => {
       for (let permissionType in config.permissions) {
         if (config.permissions[permissionType] === 1) {
           availablePermissions.push(
@@ -86,7 +85,7 @@ export class User{
     };
   }
 
-  getNationality(cc) {
+  getNationality(cc: string) {
     if (cc && cc.length) {
       return cc.includes('+') ? cc : `+${cc}`;
     }

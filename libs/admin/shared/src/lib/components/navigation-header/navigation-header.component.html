@@ -10,7 +10,7 @@
         [routerLink]="route.link"
         [ngClass]="{
           link__disabled: route.link === './' || route.isDisabled,
-          link__active: route.link !== './'
+          link__active: route.link !== './' && !route.isDisabled
         }"
         >{{ route.label }}</span
       >

@@ -1,3 +1,5 @@
+import { Department, HotelAccess } from ".";
+
 export type UserResponse = {
   id: string;
   firstName: string;
@@ -20,43 +22,10 @@ export type UserResponse = {
 
   parentId: string;
   status: boolean;
-  departments: {
-    parentId: string;
-    id: string;
-    view: -1 | 0 | 1;
-    manage: -1 | 0 | 1;
-    module: string;
-    department: string;
-    entityId: string;
-    userId: string;
-    created: number;
-    updated: number;
-    productType: string;
-    departmentLabel: string;
-    productLabel: string;
-  }[];
+  departments: Department[];
 
   agent: boolean;
-  hotelAccess: {
-    chains: {
-      id: string;
-      name: string;
-      hotels: {
-        id: string;
-        name: string;
-        imageUrl: string;
-        logo: string;
-        footerLogo: string;
-        bgColor: string;
-        nationality: string;
-        timezone: string;
-        outlets: [];
-        txnFbId: string;
-        domain: string;
-        pmsEnable: boolean;
-      }[];
-    }[];
-  };
+  hotelAccess: HotelAccess;
 };
 
 export type UserListResponse = {

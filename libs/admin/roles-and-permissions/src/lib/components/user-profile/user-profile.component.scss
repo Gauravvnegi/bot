@@ -133,13 +133,15 @@
 
 :host ::ng-deep {
   .mat-expansion-panel-header {
-    border-bottom: 1px solid #cdcdcd;
+    border-top: 1px solid #cdcdcd;
   }
   .mat-expansion-panel-header {
     flex-basis: 100%;
+    padding: 5px;
+    border-radius: 0px;
   }
-  .mat-expansion-panel-body {
-    margin-top: 65px;
+  .mat-expansion-panel-body{
+    padding: 0;
   }
   .mat-expansion-panel:not([class*='mat-elevation-z']) {
     box-shadow: none !important;
@@ -165,7 +167,6 @@
 
 .member-container {
   margin-bottom: 20px;
-
   & :hover {
     .member-name {
       box-shadow: 1px 1px 1px 1px #28272b5e;
@@ -175,7 +176,7 @@
   .member {
     @include flex-space-between-cen-Algn;
     width: 80px;
-    flex-direction: row-reverse;
+    flex-direction: row;
     position: relative;
     margin: 10px 0;
 
@@ -228,4 +229,16 @@
   .mat-checkbox-background {
     background-color: $draft-state;
   }
+}
+
+.tabs{
+  border-bottom: 1px solid #cdcdcd;
+  margin-bottom: 50px;
+}
+
+.managed-by{
+  padding: 10px 12px;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  flex-basis: 21% !important;
 }

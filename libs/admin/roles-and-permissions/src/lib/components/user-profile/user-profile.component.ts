@@ -38,13 +38,16 @@ export class UserProfileComponent implements OnInit {
   isUpdatingPermissions = false;
   userForm: FormGroup;
 
+  isEdited = false;
+  isLoading = true;
+
   teamMember: { initial: string; color: string }[] = [];
   totalTeamMember: number = 0;
 
   manageProduct: string;
 
-  userToModDetails;
-  adminToModDetails;
+  userToModDetails: UserConfig;
+  adminToModDetails: UserConfig;
 
   @Output() optionChange = new EventEmitter();
 
@@ -99,7 +102,7 @@ export class UserProfileComponent implements OnInit {
       .getUserDetailsById(this.loggedInUserId)
       .subscribe((data) => {
         this.adminToModDetails = new UserConfig().deserialize(data);
-
+        
         this.products = this.adminToModDetails.products;
         this.departments = this.adminToModDetails.departments.map((item) => ({
           ...item,
@@ -154,7 +157,6 @@ export class UserProfileComponent implements OnInit {
       case 'addNewUser':
         this.userToModDetails = this.adminToModDetails;
         this.initFormValues();
-        this.userForm.disable();
         this.initAfterFormLoaded();
         this.initUserPermissions();
 
@@ -171,6 +173,10 @@ export class UserProfileComponent implements OnInit {
           this.userForm.enable();
         } else {
           this.userForm.disable();
+          this.userForm.get('firstName').enable();
+          this.userForm.get('lastName').enable();
+          this.userForm.get('phoneNumber').enable();
+          this.isFormEdited();
         }
 
         break;
@@ -195,12 +201,19 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
+  isFormEdited(){
+    this.userForm.valueChanges.subscribe(() => {
+      this.isEdited = true;
+    });
+  }
+
   hasPageState(...args: PageState[]) {
     return args.includes(this.state);
   }
 
   initAfterFormLoaded() {
     this.onSelectedTabFilterChange({ index: 0 });
+    this.isLoading = false;
   }
 
   initUserForm() {
@@ -417,6 +430,9 @@ export class UserProfileComponent implements OnInit {
       { ...formValue, permissionConfigs },
       this.departments.map(({ label, value, ...rest }) => ({ ...rest }))
     );
+
+    const userProfileData = this._managePermissionService.modifyUserDetailsForEdit(formValue);
+
     const handleError = (error) => { 
       this.isUpdatingPermissions = false;
     };
@@ -436,6 +452,17 @@ export class UserProfileComponent implements OnInit {
     };
 
     this.isUpdatingPermissions = true;
+
+    if(this.state === 'userProfile'){
+      this._managePermissionService
+      .editUserDetails({
+        ...userProfileData,
+        status: true,
+        userId: this._userService.getLoggedInUserId()
+      })
+      .subscribe(handleSuccess ,handleError)
+      this.isEdited = false;
+    }
 
     if (this.state === 'addNewUser')
       this._managePermissionService

@@ -8,6 +8,51 @@
 
 <form class="wrapper" [formGroup]="userForm">
   <div class="form-block">
+    <hospitality-bot-custom-file-upload
+      class="two-third-width"
+      controlName="profileUrl"
+      [hotelId]="loggedInUserId"
+      path="static-content/user-profile"
+      description="Add your profile image"
+    ></hospitality-bot-custom-file-upload>
+
+    <div *ngIf="hasPageState('userProfile')">
+      <div
+        class="member-container"
+        *ngIf= "!!totalTeamMember"
+      >
+        <div class="label">Team</div>
+        <div class="member" (click)="openTableModal()">
+          <div *ngFor="let item of teamMember; let index = index">
+            <div
+              class="member-name"
+              *ngIf="index < 3"
+              [style.background]="item.color"
+            >
+              {{ item.initial }}
+            </div>
+          </div>
+        </div>
+        <div class="total-member">
+          <ng-container *ngIf="totalTeamMember > 3">
+            + {{ totalTeamMember - 3 }}
+          </ng-container>
+        </div>
+      </div>
+      <div
+        *ngIf="!totalTeamMember && !isLoading"
+        class="all-user one-third-width"
+        (click)="openTableModal()"
+        >
+        View All Users
+      </div>
+    </div>
+
+    <div class="one-third-width managed-by" *ngIf="hasPageState('addNewUser') && userToModDetails">
+      Manage  By:  {{ userToModDetails.firstName }}  {{ userToModDetails.lastName }},  Admin
+    </div>
+    <div class="one-third-width" *ngIf="!userToModDetails"></div>
+
     <hospitality-bot-input
       class="one-third-width"
       controlName="firstName"
@@ -70,165 +115,128 @@
       class="third-width"
     ></hospitality-bot-phone-number>
 
-    <!-- <hospitality-bot-custom-file-upload
-      class="two-third-width"
-      formControlName="profileUrl"
-      [hotelId]="userToModDetails.id"
-      path="static-content/profile"
-    ></hospitality-bot-custom-file-upload> -->
-
-    <div
-      class="two-third-width member-container"
-      *ngIf="hasPageState('userProfile') && !!totalTeamMember"
-    >
-      <div class="label">Team</div>
-      <div class="member" (click)="openTableModal()">
-        <div *ngFor="let item of teamMember; let index = index">
-          <div
-            class="member-name"
-            *ngIf="index < 3"
-            [style.background]="item.color"
-          >
-            {{ item.initial }}
-          </div>
-        </div>
-      </div>
-      <div class="total-member">
-        <ng-container *ngIf="totalTeamMember > 3">
-          + {{ totalTeamMember - 3 }}
-        </ng-container>
-      </div>
-    </div>
-
-    <div
-      *ngIf="!totalTeamMember"
-      class="all-user one-third-width"
-      (click)="openTableModal()"
-    >
-      View All Users
-    </div>
-  </div>
-
   <!-- ****************Permission Wrapper**************** -->
-  <div class="wrapper-manage-permission" (click)="handleManage($event)">
-    <div class="header">
-      <span *ngIf="hasPageState('addNewUser', 'editUser')">
-        Manage Permissions
-      </span>
-      <span *ngIf="hasPageState('userProfile')">
-        Permissions
-      </span>
-    </div>
 
-    <mat-accordion>
-      <mat-expansion-panel expanded>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <div *ngIf="userToModDetails?.products" class="tabs">
-              <hospitality-bot-tab-group
-                [listItems]="tabListItems"
-                [selectedIndex]="tabIdx"
-                (selectedTabChange)="onSelectedTabFilterChange($event)"
-              ></hospitality-bot-tab-group>
-            </div>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="permission-table-header">
-          <div class="left-table">
-            <div class="image">
-              <img src="assets/svg/roles.svg" alt="roles" />
-            </div>
-            <p class="left-table-header">Entity</p>
-            <ng-container *ngIf="userForm.get('products').value?.length">
-              <ng-container
-                *ngFor="
-                  let userPermissionFG of permissionConfigsFA['controls'];
-                  let index = index
-                "
-              >
-                <p
-                  *ngIf="
-                    manageProduct === userPermissionFG.get('productType').value
-                  "
-                  class="left-table-entity"
-                  [ngClass]="{ 'color-added': 0 === index % 2 }"
-                >
-                  {{ userPermissionFG.get('label').value }}
-                </p>
-              </ng-container>
-            </ng-container>
+    <div class="wrapper-manage-permission full-width" (click)="handleManage($event)">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="!hasPageState('userProfile')">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <div class="header">
+                <span *ngIf="hasPageState('addNewUser', 'editUser')">
+                  Manage Permissions
+                </span>
+                <span *ngIf="hasPageState('userProfile')">
+                  Permissions
+                </span>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+  
+          <div *ngIf="userToModDetails?.products" class="tabs">
+            <hospitality-bot-tab-group
+              [listItems]="tabListItems"
+              [selectedIndex]="tabIdx"
+              (selectedTabChange)="onSelectedTabFilterChange($event)"
+            ></hospitality-bot-tab-group>
           </div>
-          <div class="right-table">
-            <div class="box-wrapper">
-              <div class="box">
-                <p class="label">View</p>
-                <p class="paragraph">View General & Sensitive Info</p>
-                <div class="float-box">
-                  <img src="assets/svg/View.svg" alt="view" />
-                </div>
+          <div class="permission-table-header">
+            <div class="left-table">
+              <div class="image">
+                <img src="assets/svg/roles.svg" alt="roles" />
               </div>
-              <div class="box">
-                <p class="label">Manage</p>
-                <p class="paragraph">Create/Delete/Edit</p>
-                <div class="float-box">
-                  <img src="assets/svg/Manage.svg" alt="manage" />
-                </div>
-              </div>
+              <p class="left-table-header">Entity</p>
+              <ng-container *ngIf="userForm.get('products').value?.length">
+                <ng-container
+                  *ngFor="
+                    let userPermissionFG of permissionConfigsFA['controls'];
+                    let index = index
+                  "
+                >
+                  <p
+                    *ngIf="
+                      manageProduct === userPermissionFG.get('productType').value
+                    "
+                    class="left-table-entity"
+                    [ngClass]="{ 'color-added': 0 === index % 2 }"
+                  >
+                    {{ userPermissionFG.get('label').value }}
+                  </p>
+                </ng-container>
+              </ng-container>
             </div>
-            <div
-              formArrayName="permissionConfigs"
-              *ngIf="userForm.get('products').value?.length"
-            >
+            <div class="right-table">
+              <div class="box-wrapper">
+                <div class="box">
+                  <p class="label">View</p>
+                  <p class="paragraph">View General & Sensitive Info</p>
+                  <div class="float-box">
+                    <img src="assets/svg/View.svg" alt="view" />
+                  </div>
+                </div>
+                <div class="box">
+                  <p class="label">Manage</p>
+                  <p class="paragraph">Create/Delete/Edit</p>
+                  <div class="float-box">
+                    <img src="assets/svg/Manage.svg" alt="manage" />
+                  </div>
+                </div>
+              </div>
               <div
-                *ngFor="
-                  let userPermissionFG of permissionConfigsFA['controls'];
-                  let userPermissionIdx = index
-                "
-                [ngClass]="{ 'color-added': 0 === userPermissionIdx % 2 }"
+                formArrayName="permissionConfigs"
+                *ngIf="userForm.get('products').value?.length"
               >
                 <div
-                  formGroupName="{{ userPermissionIdx }}"
-                  *ngIf="
-                    manageProduct === userPermissionFG.get('productType').value
+                  *ngFor="
+                    let userPermissionFG of permissionConfigsFA['controls'];
+                    let userPermissionIdx = index
                   "
+                  [ngClass]="{ 'color-added': 0 === userPermissionIdx % 2 }"
                 >
-                  <div formGroupName="permissions" class="checkbox-wrapper">
-                    <mat-checkbox
-                      formControlName="view"
-                      [checked]="
-                        userPermissionFG.get('permissions').get('view')
-                          .value === 1
-                          ? true
-                          : false
-                      "
-                    ></mat-checkbox>
-                    <mat-checkbox
-                      formControlName="manage"
-                      [checked]="
-                        userPermissionFG.get('permissions').get('manage')
-                          .value == 1
-                          ? true
-                          : false
-                      "
-                    ></mat-checkbox>
+                  <div
+                    formGroupName="{{ userPermissionIdx }}"
+                    *ngIf="
+                      manageProduct === userPermissionFG.get('productType').value
+                    "
+                  >
+                    <div formGroupName="permissions" class="checkbox-wrapper">
+                      <mat-checkbox
+                        formControlName="view"
+                        [checked]="
+                          userPermissionFG.get('permissions').get('view')
+                            .value === 1
+                            ? true
+                            : false
+                        "
+                      ></mat-checkbox>
+                      <mat-checkbox
+                        formControlName="manage"
+                        [checked]="
+                          userPermissionFG.get('permissions').get('manage')
+                            .value == 1
+                            ? true
+                            : false
+                        "
+                      ></mat-checkbox>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <div
-      class="permission-button-wrapper"
-      *ngIf="hasPageState('editUser', 'addNewUser')"
-    >
-      <hospitality-bot-button
-        [label]="isUpdatingPermissions ? 'Saving...' : 'Save'"
-        (click)="savePermission()"
-        [showLoader]="isUpdatingPermissions"
-      ></hospitality-bot-button>
+        </mat-expansion-panel>
+      </mat-accordion>
+      <div
+        class="permission-button-wrapper"
+      >
+        <hospitality-bot-button
+          [label]="isUpdatingPermissions ? 'Saving...' : 'Save'"
+          (click)="savePermission()"
+          [showLoader]="isUpdatingPermissions"
+          [disabled]="hasPageState('userProfile') && !isEdited"
+        ></hospitality-bot-button>
+      </div>
     </div>
   </div>
+
 </form>

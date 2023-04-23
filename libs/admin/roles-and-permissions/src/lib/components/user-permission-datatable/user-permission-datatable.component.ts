@@ -16,7 +16,7 @@ import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-ut
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { SortEvent } from 'primeng/api';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, forkJoin } from 'rxjs';
 import { UserPermissionTable } from '../../models/user-permission-table.model';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { QueryConfig } from '../../types';
@@ -63,7 +63,8 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   hotelId: string;
   filterChips = chips;
   cols = cols;
-
+  allUsersValues;
+  manageUsersValues;
   $subscription = new Subscription();
 
   constructor(
@@ -89,21 +90,33 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
-        (data) => {
-          this.values = new UserPermissionTable().deserialize(data).records;
+        ([allUsersData, manageUsersData]) => {
+          this.allUsersValues = new UserPermissionTable().deserialize(
+            allUsersData
+          ).records;
+          this.manageUsersValues = new UserPermissionTable().deserialize(
+            manageUsersData
+          ).records;
           //set pagination
-          this.totalRecords = data.total;
-          this.tabFilterItems.forEach((tab) => {
-            tab.total = this.totalRecords;
-          });
+          this.setTableValues();
+
+          this.tabFilterItems[0].total = allUsersData.total;
+          this.tabFilterItems[1].total = manageUsersData.total;
           this.loading = false;
         },
         (error) => {
-          this.values = [];
+          this.allUsersValues = [];
+          this.manageUsersValues = [];
           this.loading = false;
         }
       )
     );
+  }
+
+  setTableValues() {
+    this.values =
+      this.tabFilterIdx === 0 ? this.allUsersValues : this.manageUsersValues;
+    this.totalRecords = this.tabFilterItems[this.tabFilterIdx].total;
   }
 
   fetchDataFrom(
@@ -117,44 +130,26 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       loggedInUserId: this.userService.getLoggedInUserId(),
       hotelId: this.hotelId,
     };
+    console.log(this.tabFilterIdx);
+    const allUsers$ = this._managePermissionService.getAllUsers(config);
+    const managedUsers$ = this._managePermissionService.getManagedUsers(config);
 
-    return this._managePermissionService.getManagedUsers(
-      config,
-      this.tabFilterItems[this.tabFilterIdx].value === 'ALL'
-    );
+    return forkJoin([allUsers$, managedUsers$]);
   }
+
+  /** not used */
 
   loadData(event) {
     this.loading = true;
     this.updatePaginations(event);
-    this.$subscription.add(
-      this.fetchDataFrom([], {
-        offset: this.first,
-        limit: this.rowsPerPage,
-      }).subscribe(
-        (data) => {
-          this.values = new UserPermissionTable().deserialize(data).records;
-
-          //set pagination
-          this.totalRecords = data.total;
-          this.loading = false;
-        },
-        ({ error }) => {
-          this.values = [];
-          this.loading = false;
-        }
-      )
-    );
+    this.loadInitialData();
   }
 
   onSelectedTabFilterChange({ index }) {
     this.tabFilterIdx = index;
-    this.loadInitialData();
-  }
+    this.setTableValues();
 
-  updatePaginations(event) {
-    this.first = event.first;
-    this.rowsPerPage = event.rows;
+    // this.loadInitialData();
   }
 
   exportCSV() {
@@ -189,7 +184,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  updateRolesStatus(status, userData) {
+  updateRolesStatus(status: boolean, userData) {
     const data = {
       id: userData.userId,
       status: status,
@@ -203,7 +198,12 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
             statusValue(userData.status),
             statusValue(status)
           );
-          this.values.find((item) => item.id === userData.id).status = status;
+          this.allUsersValues.find(
+            (item) => item.id === userData.id
+          ).status = status;
+          this.manageUsersValues.find(
+            (item) => item.id === userData.id
+          ).status = status;
 
           this.snackbarService.openSnackBarWithTranslate(
             {

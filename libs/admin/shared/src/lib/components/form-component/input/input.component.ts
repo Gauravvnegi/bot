@@ -12,6 +12,7 @@ export class InputComponent extends FormComponent {
   @Input() maxLength: number;
   @Input() min: number;
   @Input() max: number;
+  @Input() controlName: string;
   inputLength = 0;
 
   constructor(public controlContainer: ControlContainer) {
@@ -20,14 +21,13 @@ export class InputComponent extends FormComponent {
 
   ngOnInit(): void {
     if(!this.subtitle && this.maxLength){
-      this.controlContainer.control.valueChanges
-      .subscribe((value)=>{
-        this.inputLength = value.sourceName.length;
+      const control = this.controlContainer.control.get(this.controlName);
+      control.valueChanges.subscribe((value)=>{
+        this.inputLength = value.length;
         this.subtitle =  `${this.inputLength}/${this.maxLength}`
       })
     }
+    
     this.initInputControl();
   }
-
-
 }

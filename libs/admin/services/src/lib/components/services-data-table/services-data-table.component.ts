@@ -103,13 +103,15 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
           }
           this.updateTabFilterCount(res.entityTypeCounts, res.total);
           this.updateQuickReplyFilterCount(res.entityStateCounts);
-          this.updateTotalRecords(); 
+          this.updateTotalRecords();
         },
-        () => {this.loading=false;},
+        () => {
+          this.loading = false;
+        },
         this.handleFinal
       );
 
-      this.loading=false;
+    this.loading = false;
   }
 
   /**

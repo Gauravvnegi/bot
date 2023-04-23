@@ -126,3 +126,34 @@ export type Amenity = {
   hasChild: boolean;
   parentId: string;
 };
+
+export interface AverageRoomRateResponse {
+  label: string;
+  score: number;
+  comparisonPercent: number;
+  averageRoomRateGraph: any;
+}
+
+export interface OccupancyResponse{
+  label: string;
+  score: number;
+  comparisonPercent: number;
+  occupancyGraph: any;
+}
+
+export interface InventoryRemainingResponse {
+  label: string;
+  occupied: number;
+  remaining: number;
+}
+
+export interface InventoryCostRemainingResponse{
+  label: string;
+  spent: number;
+  remaining: number;
+}
+
+export type GraphData = {
+  label: string;
+  value: number;
+}

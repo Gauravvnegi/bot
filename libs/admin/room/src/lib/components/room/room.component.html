@@ -6,33 +6,87 @@
 </hospitality-bot-navigation-header>
 <div class="wrapper">
   <div class="stats-wrapper">
-    <hospitality-bot-stats-card class="stats-box" [stats]="statsArr[0]">
+    <hospitality-bot-stats-card [stats]="roomStat" class="stats-box">
       <div>
-        <canvas id="average-room-rate"></canvas>
+        <canvas 
+          *skeleton="
+          averageRoomRateGraph == undefined;
+          height: '65vh';
+          width: '100%'
+          "
+          baseChart
+          [datasets]="averageRoomRateGraph.data"
+          [labels]="averageRoomRateGraph.labels"
+          [options]="averageRoomRateGraph.options"
+          [chartType]="averageRoomRateGraph.type"  
+        ></canvas>
       </div>
     </hospitality-bot-stats-card>
-    <hospitality-bot-stats-card class="stats-box" [stats]="statsArr[1]">
+    <hospitality-bot-stats-card [stats]="occupancyStat" class="stats-box">
       <div>
-        <canvas id="myChart" #myChart></canvas>
+        <canvas 
+          *skeleton="
+          occupancyGraph == undefined;
+          height: '65vh';
+          width: '100%'
+          "
+          baseChart
+          [datasets]="occupancyGraph.data"
+          [options]="occupancyGraph.options"
+          [colors]="occupancyGraph.colors"
+          [labels]="occupancyGraph.labels"
+          [chartType]="occupancyGraph.type"
+        ></canvas>
       </div>
     </hospitality-bot-stats-card>
-    <hospitality-bot-stats-card [stats]="statsArr[2]" class="stats-box">
+    <hospitality-bot-stats-card
+      [stats]="remainingInventoryStat"
+      class="stats-box">
       <div class="p-relative">
-        <canvas id="remaining-inventory"></canvas>
+        <canvas 
+          baseChart 
+          *skeleton="
+          remainingCost == undefined;
+          height: '150px';
+          width: '150px';
+          borderRadius: '50%'
+          "
+          [data]="remainingInventoryChart.data"
+          [labels]="remainingInventoryChart.labels"
+          [chartType]="remainingInventoryChart.type"
+          [colors]="remainingInventoryChart.colors"
+          [options]="remainingInventoryChart.options">
+        </canvas>
         <div class="text-center">
-          <p>{{ 20 }}</p>
+          <p>{{ remainingInventory?.occupied + remainingInventory?.remaining }}</p>
           <p>{{ 'Rooms' }}</p>
         </div>
       </div>
     </hospitality-bot-stats-card>
-    <hospitality-bot-stats-card [stats]="statsArr[3]" class="stats-box">
+    <hospitality-bot-stats-card
+      [stats]="remainingCostStat"
+      class="stats-box">
       <div class="p-relative">
-        <canvas id="remaining-inventory-cost"></canvas>
+        <canvas 
+          baseChart 
+          *skeleton="
+          remainingCost == undefined;
+          height: '150px';
+          width: '150px';
+          borderRadius: '50%'
+          "
+          [data]="remainingCostChart.data"
+          [labels]="remainingCostChart.labels"
+          [chartType]="remainingCostChart.type"
+          [colors]="remainingCostChart.colors"
+          [options]="remainingCostChart.options"
+        ></canvas>
         <div class="text-center">
-          <p>{{ statsArr[2].score }}K</p>
+          <p>{{ format(remainingCost?.spent + remainingCost?.remaining) }}</p>
         </div>
-      </div></hospitality-bot-stats-card
-    >
+      </div>
+    </hospitality-bot-stats-card>
+    
   </div>
 
   <hospitality-bot-room-data-table></hospitality-bot-room-data-table>

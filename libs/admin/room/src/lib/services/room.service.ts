@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from '@hospitality-bot/shared/utils';
+import { ApiService, DateService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { TableValue } from '../constant/data-table';
@@ -54,8 +54,8 @@ export class RoomService extends ApiService {
     this.selectedService = undefined;
   }
 
-  getStats(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/inventory/stats?type=ROOM`);
+  getStats(hotelId: string, config): Observable<any> {
+    return this.get(`/api/v1/entity/${hotelId}/stats/inventory/room${config.queryObj}`);
   }
 
   getServices(

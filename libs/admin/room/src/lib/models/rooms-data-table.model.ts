@@ -1,6 +1,11 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Status } from '../constant/data-table';
 import {
+  AverageRoomRateResponse,
+  GraphData,
+  InventoryCostRemainingResponse,
+  InventoryRemainingResponse,
+  OccupancyResponse,
   RoomListResponse,
   RoomResponse,
   RoomTypeListResponse,
@@ -146,4 +151,74 @@ export class RoomTypeCounts {
     this.ROOM = input.ROOM;
     return this;
   }
+}
+
+export class RoomStatGraph {
+  label: string;
+  comparisonPercent: number;
+  additionalData: string;
+  graph: any;
+
+  deserialize(input: AverageRoomRateResponse){
+    this.label = input.label;
+    this.additionalData = shortenNumber(input.score);
+    this.comparisonPercent = input.comparisonPercent;
+    this.graph = input.averageRoomRateGraph;
+    return this;
+  }
+}
+export class OccupancyGraph {
+  label: string;
+  comparisonPercent: number;
+  additionalData: string;
+  graph: any;
+
+  deserialize(input: OccupancyResponse){
+    this.label = input.label;
+    this.additionalData = `${input.score}%`;
+    this.comparisonPercent = input.comparisonPercent;
+    this.graph = input.occupancyGraph;
+    return this;
+  }
+}
+
+
+export class RemainingInventory {
+  label: string;
+  occupied?: number;
+  remaining?: number;
+  additionalData: string;
+
+  deserialize(input: InventoryRemainingResponse){
+    this.label = input.label;
+    this.occupied = input.occupied;
+    this.remaining = input.remaining;
+    this.additionalData = `${input.remaining} Rooms`;
+    return this;
+  }
+}
+
+export class RemainingInventoryCost{
+  label: string;
+  spent?: number;
+  remaining?: number;
+  additionalData: string;
+
+  deserialize(input: InventoryCostRemainingResponse){
+    this.label = input.label;
+    this.spent = input.spent;
+    this.remaining = input.remaining;
+    this.additionalData = shortenNumber(input.remaining);
+    return this;
+  }
+}
+
+function shortenNumber(value: number): string {
+  const suffixes = ['', 'K', 'M', 'B', 'T', 'P', 'E'];
+  const suffixNum = Math.floor(('' + value).length / 3);
+  let shortValue = parseFloat((suffixNum !== 0 ? (value / Math.pow(1000, suffixNum)) : value).toFixed(2));
+  if (shortValue % 1 !== 0) {
+    shortValue = parseFloat(shortValue.toFixed(2));
+  }
+  return shortValue + suffixes[suffixNum];
 }

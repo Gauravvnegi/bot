@@ -116,16 +116,11 @@
               }
             }"
           ></hospitality-bot-input>
-          <hospitality-bot-prefix-field
-            class="half-width countryflag"
-            [options]="countries"
-            [props]="{ isAsync: true }"
+          <hospitality-bot-phone-number
             preControlName="countryCode"
             postControlName="phoneNumber"
-            label="Phone"
-            stopEmission="true"
-            [defaultProps]="{ post: { type: 'number' } }"
-          ></hospitality-bot-prefix-field>
+            class="half-width"
+          ></hospitality-bot-phone-number>
         </div>
       </p-accordionTab>
       <p-accordionTab header="Billing Address">

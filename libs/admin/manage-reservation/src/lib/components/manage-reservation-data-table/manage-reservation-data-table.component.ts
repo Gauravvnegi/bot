@@ -176,44 +176,47 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   /**
    * @function handleStatus To handle the status change
    * @param status status value
-  */
-  handleStatus(status: ReservationStatusType, reservationData): void { 
-      const dialogConfig = new MatDialogConfig();
-        dialogConfig.disableClose = true;
-        const togglePopupCompRef = this.modalService.openDialog(
-          ModalComponent,
-          dialogConfig
-        );
+   */
+  handleStatus(status: ReservationStatusType, reservationData): void {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const togglePopupCompRef = this.modalService.openDialog(
+      ModalComponent,
+      dialogConfig
+    );
 
-        togglePopupCompRef.componentInstance.content = {
-          heading: `Mark Booking As ${status.charAt(0).toUpperCase()+status.slice(1).toLowerCase()}`,
-          description: [ 
-            `You are about to mark this booking as ${status}`,
-            'Are you Sure?',
-          ],
-        };
-        togglePopupCompRef.componentInstance.actions = [
-          {
-            label: 'No',
-            onClick: () => this.modalService.close(),
-            variant: 'outlined',
-          },
-          {
-            label: 'Yes',
-            onClick: () => { 
-              this.changeStatus(status,reservationData);
-              this.modalService.close();
-            },
-            variant: 'contained',
-          },
-        ];
-        
+    togglePopupCompRef.componentInstance.content = {
+      heading: `Mark Booking As ${
+        status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
+      }`,
+      description: [
+        `You are about to mark this booking as ${status}`,
+        'Are you Sure?',
+      ],
+    };
 
-        togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+    togglePopupCompRef.componentInstance.actions = [
+      {
+        label: 'No',
+        onClick: () => this.modalService.close(),
+        variant: 'outlined',
+      },
+      {
+        label: 'Yes',
+        onClick: () => {
+          this.changeStatus(status, reservationData);
           this.modalService.close();
-        });
+        },
+        variant: 'contained',
+      },
+    ];
+
+    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+      this.modalService.close();
+    });
   }
-  changeStatus(status:ReservationStatusType,reservationData){
+
+  changeStatus(status: ReservationStatusType, reservationData) {
     this.loading = true;
     this.$subscription.add(
       this.manageReservationService
@@ -221,7 +224,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           reservationType: status,
         })
         .subscribe(
-          (res) => { 
+          (res) => {
             this.values.find(
               (item) => item.id === reservationData.id
             ).reservationType = status;

@@ -355,7 +355,7 @@ export class BaseDatatableComponent implements OnInit {
    * @param chips The chips array.
    */
   updateTotalRecords() {
-    if (this.tabFilterItems[this.tabFilterIdx]?.chips.length) {
+    if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
       this.totalRecords = this.calculateTotalChipsCount(
         this.tabFilterItems[this.tabFilterIdx]?.chips
       );
@@ -372,15 +372,11 @@ export class BaseDatatableComponent implements OnInit {
    * @param currentTabCount The count for current selected tab.
    */
   updateTabFilterCount(countObj, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.value === 'ALL'
-          ? (tab.total = currentTabCount ?? 0)
-          : (tab.total = countObj[tab.value] ?? 0);
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
+    this.tabFilterItems.forEach((tab) => {
+      tab.value === 'ALL'
+        ? (tab.total = currentTabCount ?? 0)
+        : (tab.total = countObj[tab.value] ?? 0);
+    });
   }
 
   /**
@@ -409,7 +405,7 @@ export class BaseDatatableComponent implements OnInit {
    */
   updateQuickReplyFilterCount(countObj): void {
     if (countObj) {
-      if (this.tabFilterItems[this.tabFilterIdx]?.chips.length) {
+      if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
         this.setFilterChips(
           this.tabFilterItems[this.tabFilterIdx]?.chips,
           countObj

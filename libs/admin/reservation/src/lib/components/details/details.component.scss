@@ -651,3 +651,8 @@ mat-option {
     min-width: 175px !important;
   }
 }
+:host ::ng-deep .tab-buttons{
+  right: 0;
+  width: 20%;
+}
+

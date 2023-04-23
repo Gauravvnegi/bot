@@ -5,7 +5,7 @@ import {
   HttpRequest, 
 } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, forkJoin } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import * as _ from 'lodash';
 import {
@@ -39,12 +39,16 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
             });
             return translationToBeShown;
           }; 
-          translateService
-            .get( translateKey1,translateKey2)
-            .pipe(
-              map((msg1,msg2) => handleTranslation(msg1 | msg2))
-            )
-            .subscribe();
+          
+          forkJoin([
+            translateService.get(translateKey1),
+            translateService.get(translateKey2)
+          ]).subscribe(([msg1, msg2]) => {
+            handleTranslation(msg1);
+            handleTranslation(msg2);
+          });
+
+          
         } catch {
           console.error('Error: Translation Text is not available');
         }

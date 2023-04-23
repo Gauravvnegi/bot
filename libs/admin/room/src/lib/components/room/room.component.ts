@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnInit,
@@ -9,184 +10,210 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
 import { RoomService } from '../../services/room.service';
 import { Chart } from 'chart.js';
-import { NavRouteOptions } from 'libs/admin/shared/src';
+import { BaseChartDirective } from 'ng2-charts';
+import { AdminUtilityService, NavRouteOptions } from 'libs/admin/shared/src';
+import {
+  OccupancyGraph,
+  RemainingInventory,
+  RemainingInventoryCost,
+  RoomStatGraph,
+} from '../../models/rooms-data-table.model';
+import { DateService } from '@hospitality-bot/shared/utils';
+import { chartConfig } from '../../constant/chart';
 
 @Component({
   selector: 'hospitality-bot-room',
   templateUrl: './room.component.html',
   styleUrls: ['./room.component.scss'],
 })
-export class RoomComponent implements OnInit, AfterViewInit {
+export class RoomComponent implements OnInit {
   constructor(
     private globalFilterService: GlobalFilterService,
-    private roomService: RoomService
+    private roomService: RoomService,
+    private _adminUtilityService: AdminUtilityService,
+    private _dateService: DateService
   ) {}
 
-  statsArr: any[] = [
-    {
-      label: 'AverageRoomRate',
-      score: 12,
-      comparisonPercent: 10,
-      additionalData: '2.01K',
-    },
-    {
-      label: 'Occupancy',
-      score: 20,
-      comparisonPercent: 10,
-      additionalData: '59%',
-    },
-    {
-      label: 'InventoryRemaining',
-      score: 100,
-      additionalData: '3 Rooms',
-    },
-    {
-      label: 'RemainingInventoryCost',
-      score: 34,
-      additionalData: '200K',
-    },
-  ];
+  roomStat: RoomStatGraph;
+  occupancyStat: OccupancyGraph;
+  remainingInventory: RemainingInventory;
+  remainingCost: RemainingInventoryCost;
+
+  @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
+
+  selectedInterval: string;
+  id: string;
+  dataValue: number[];
+  labels: string[];
+  globalQueries = [];
+
+  remainingInventoryStat: RemainingInventory;
+  remainingCostStat: RemainingInventoryCost;
+
+  remainingInventoryChart = {
+    labels: chartConfig.doughnutChart.data.labels,
+    data: chartConfig.doughnutChart.data.datasets[0].data,
+    type: chartConfig.doughnutChart.type,
+    options: chartConfig.doughnutChart.options,
+    colors: chartConfig.doughnutChart.colors,
+  };
+
+  remainingCostChart = {
+    labels: chartConfig.doughnutChart.data.labels,
+    data: chartConfig.doughnutChart.data.datasets[0].data,
+    type: chartConfig.doughnutChart.type,
+    options: chartConfig.doughnutChart.options,
+    colors: chartConfig.doughnutChart.colors,
+  };
+
+  occupancyGraph = {
+    data: chartConfig.occupancyStat.data.datasets,
+    labels: [],
+    options: chartConfig.occupancyStat.options,
+    colors: chartConfig.occupancyStat.colors,
+    legend: false,
+    type: 'line',
+  };
+
+  averageRoomRateGraph = {
+    data: chartConfig.averageRoomStat.data.datasets,
+    labels: [],
+    options: chartConfig.averageRoomStat.options,
+    type: 'bar',
+    legend: false,
+  };
+
   welcomeMessage = 'Welcome To Room Dashboard';
   navRoutes: NavRouteOptions = [{ label: 'Room Dashboard', link: './' }];
   hotelId: string;
   $subscription = new Subscription();
   chart: any;
-  @ViewChild('myChart') myChart: ElementRef;
-
-  ngAfterViewInit(): void {
-    this.setOccupancyChartConfig();
-    this.setAvgRoomRateChartConfig();
-  }
 
   ngOnInit(): void {
     this.listenForGlobalFilter();
-    this.setDoughnutChartConfig(
-      'remaining-inventory-cost',
-      [300, 50],
-      ['Spent', 'Remaining']
-    );
-    this.setDoughnutChartConfig(
-      'remaining-inventory',
-      [3000, 500],
-      ['Occupied', 'Remaining']
-    );
   }
 
   listenForGlobalFilter(): void {
     this.hotelId = this.globalFilterService.hotelId;
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      const calenderType = {
+        calenderType: this._dateService.getCalendarType(
+          data['dateRange'].queryValue[0].toDate,
+          data['dateRange'].queryValue[1].fromDate,
+          this.globalFilterService.timezone
+        ),
+      };
+      this.selectedInterval = calenderType.calenderType;
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+        calenderType,
+      ];
+      this.getStats();
+    });
+  }
 
+  getStats(): void {
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+      ]),
+    };
     this.$subscription.add(
-      this.roomService.getStats(this.hotelId).subscribe((res) => {
-        // currently using dummy data
-        Object.entries(res).map(([key, value]) => {
-          this.statsArr.push(value);
-        });
+      this.roomService.getStats(this.hotelId, config).subscribe((res) => {
+        this.roomStat = new RoomStatGraph().deserialize(
+          res.averageRoomRateStat
+        );
+        this.occupancyStat = new OccupancyGraph().deserialize(
+          res.occupancyStat
+        );
+        this.remainingInventory = new RemainingInventory().deserialize(
+          res.inventoryRemainingStat
+        );
+        this.remainingCost = new RemainingInventoryCost().deserialize(
+          res.remainingInventoryCostStat
+        );
+
+        this.remainingInventoryStat = new RemainingInventory();
+        this.remainingInventoryStat.label = 'Inventory Remaining';
+        this.remainingInventoryStat.additionalData = this.remainingInventory.additionalData;
+
+        this.remainingCostStat = new RemainingInventoryCost();
+        this.remainingCostStat.label = 'Remaining Inventory Cost';
+        this.remainingCostStat.additionalData = this.remainingCost.additionalData;
+
+        this.setAvgRoomRateGraphConfig();
+        this.setOccupancyGraphConfig();
+
+        this.setRemainingInventoryConfig(
+          [this.remainingInventory.occupied, this.remainingInventory.remaining],
+          ['Occupied', 'Remaining']
+        );
+        this.setRemainingCostConfig(
+          [this.remainingCost.spent, this.remainingCost.remaining],
+          ['Spent', 'Remaining']
+        );
       })
     );
   }
 
-  setDoughnutChartConfig(id: string, dataValue: number[], labels: string[]) {
-    this.chart = new Chart(id, {
-      type: 'doughnut',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            data: dataValue,
-            backgroundColor: ['#FF6283', '#FFCD56'],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        legend: {
-          display: true,
-          position: 'right',
-        },
-      },
+  setRemainingInventoryConfig(dataValue: number[], labels: string[]) {
+    this.remainingInventoryChart.labels = [...labels];
+    this.remainingInventoryChart.data = [dataValue];
+  }
+
+  setRemainingCostConfig(dataValue: number[], labels: string[]) {
+    this.remainingCostChart.labels = [...labels];
+    this.remainingCostChart.data = [dataValue];
+  }
+
+  setOccupancyGraphConfig() {
+    const timestamps = Object.keys(this.occupancyStat.graph);
+    this.occupancyGraph.data[0].data = [];
+    this.occupancyGraph.labels = [];
+    timestamps.forEach((timestamp, i) => {
+      this.occupancyGraph.labels.push(
+        this._dateService.convertTimestampToLabels(
+          this.selectedInterval,
+          timestamp,
+          this.globalFilterService.timezone,
+          this._adminUtilityService.getDateFormatFromInterval(
+            this.selectedInterval
+          ),
+          this.selectedInterval === 'week'
+            ? this._adminUtilityService.getToDate(this.globalQueries)
+            : null
+        )
+      );
+      this.occupancyGraph.data[0].data.push(
+        this.occupancyStat.graph[timestamp]
+      );
     });
   }
 
-  setOccupancyChartConfig() {
-    const canvas = this.myChart.nativeElement;
-    const ctx = canvas.getContext('2d');
-
-    this.chart = new Chart(ctx, {
-      type: 'line',
-
-      data: {
-        datasets: [
-          {
-            label: 'Occupancy',
-            backgroundColor: '#AAE8D1',
-            borderColor: '#5FD1A7',
-            fill: true,
-            data: [
-              { x: 0, y: 0 },
-              { x: 500, y: 400 },
-              { x: 1000, y: 1000 },
-              { x: 1500, y: 800 },
-              { x: 2500, y: 1800 },
-              { x: 3500, y: 2000 },
-            ],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        scales: {
-          xAxes: [
-            {
-              type: 'linear',
-              position: 'bottom',
-            },
-          ],
-          yAxes: [
-            {
-              type: 'linear',
-            },
-          ],
-        },
-      },
-    });
-  }
-
-  setAvgRoomRateChartConfig() {
-    this.chart = new Chart('average-room-rate', {
-      type: 'bar',
-      data: {
-        labels: ['1 May', '8 May', '10 May'],
-        datasets: [
-          {
-            label: 'Average Room Rate',
-            data: [10, 100, 3],
-            backgroundColor: '#8064FA',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            hoverBorderColor: 'red',
-            borderWidth: 0,
-            barThickness: 6,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          xAxes: [
-            {
-              gridLines: {
-                display: false,
-              },
-            },
-          ],
-          yAxes: [
-            {
-              gridLines: {
-                display: true,
-              },
-            },
-          ],
-        },
-      },
-    });
+  setAvgRoomRateGraphConfig() {
+    const graphArray = Object.entries(this.roomStat.graph).map(
+      ([label, value]) => ({
+        label,
+        value,
+      })
+    );
+    const labels = graphArray.map((data) =>
+      this._dateService.convertTimestampToLabels(
+        this.selectedInterval,
+        data.label,
+        this.globalFilterService.timezone,
+        this._adminUtilityService.getDateFormatFromInterval(
+          this.selectedInterval
+        ),
+        this.selectedInterval === 'week'
+          ? this._adminUtilityService.getToDate(this.globalQueries)
+          : null
+      )
+    );
+    const data = graphArray.map((data) => data.value);
+    this.averageRoomRateGraph.data[0].data = data;
+    this.averageRoomRateGraph.labels = labels;
   }
 
   /**
@@ -194,5 +221,9 @@ export class RoomComponent implements OnInit, AfterViewInit {
    */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  format(value) {
+    return AdminUtilityService.valueFormatter(value, 2);
   }
 }

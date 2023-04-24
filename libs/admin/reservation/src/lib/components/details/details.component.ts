@@ -358,12 +358,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  manageInvoice(){
+    this.onDetailsClose.next(false);
+    this.router.navigate([
+      `pages/efrontdesk/invoice/create-invoice/${this.bookingId}`,
+    ]);
+  }
+
   prepareInvoice() {
     if (!this.branchConfig.pmsEnable) {
-      this.onDetailsClose.next(false);
-      this.router.navigate([
-        `pages/efrontdesk/invoice/create-invoice/${this.bookingId}`,
-      ]);
+      this.manageInvoice()
     } else
       this.$subscription.add(
         this._reservationService

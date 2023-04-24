@@ -124,7 +124,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
                 value: key,
                 total: data.entityStateCounts[key],
                 isSelected: false,
-                type: key === "INACTIVE" ? 'failed': 'new',
+                type: key === 'INACTIVE' ? 'failed' : 'new',
               }))
           );
           this.tabFilterItems[this.tabFilterIdx].chips = chipsData;

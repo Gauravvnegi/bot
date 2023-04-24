@@ -56,6 +56,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   $subscription = new Subscription();
   globalQueries = [];
   configData: BookingConfig;
+  tabFilterIdx: number = 0;
 
   constructor(
     public fb: FormBuilder,
@@ -144,7 +145,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         this.handleError,
         this.handleFinal
       );
-    this.loading = false;
   }
 
   /**
@@ -156,7 +156,9 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         label: 'Draft',
         value: ReservationStatusType.DRAFT,
         type: 'warning',
-        disabled: status === ReservationStatusType.CANCELLED || status === ReservationStatusType.CONFIRMED,
+        disabled:
+          status === ReservationStatusType.CANCELLED ||
+          status === ReservationStatusType.CONFIRMED,
       },
       {
         label: 'Cancel',
@@ -292,6 +294,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.selectedTable = this.tabFilterItems[event.index].value;
+    this.tabFilterIdx = event.index;
     this.loadData();
   }
 

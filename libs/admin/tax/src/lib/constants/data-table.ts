@@ -44,6 +44,15 @@ export const cols: Cols[] = [
     width: '23.75%',
   },
 ];
+export const tabFilterItems = [
+  {
+    label: 'All',
+    content: '',
+    value: 'ALL',
+    disabled: false,
+    total: 0,
+  },
+];
 
 export const filtersChips: Chip<'ALL' | 'ACTIVE' | 'INACTIVE'>[] = [
   {

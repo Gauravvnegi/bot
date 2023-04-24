@@ -10,7 +10,12 @@ import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { taxRoutes } from '../../constants/routes';
-import { cols, title, filtersChips } from '../../constants/data-table';
+import {
+  cols,
+  title,
+  filtersChips,
+  tabFilterItems,
+} from '../../constants/data-table';
 import { Subscription } from 'rxjs';
 import { TaxService } from '../../services/tax.service';
 import { LazyLoadEvent } from 'primeng/api/public_api';
@@ -35,10 +40,11 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   isCustomSort = true;
   triggerInitialData = false;
   filterChips = filtersChips;
-  tabFilterIdx = 1;
+  tabFilterIdx = 0;
   globalQueries = [];
   $subscription = new Subscription();
   navRoutes: NavRouteOptions;
+  tabFilterItems = tabFilterItems;
 
   constructor(
     public fb: FormBuilder,
@@ -80,6 +86,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
           const taxList = new TaxList().deserialize(res);
 
           this.values = taxList.records;
+          this.updateTabFilterCount(res.entityTypeCounts, res.total);
           this.updateQuickReplyFilterCount(res.entityStateCounts);
           this.updateTotalRecords();
         },

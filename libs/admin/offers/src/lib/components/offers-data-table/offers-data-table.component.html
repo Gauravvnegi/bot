@@ -14,6 +14,7 @@
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </div>
 </div>
@@ -39,9 +40,11 @@
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
   (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+  *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
         [chips]="filterChips"
@@ -129,4 +132,30 @@
 
 <ng-template #emptyCell>
   <div class="emptyCell">&mdash;</div>
+</ng-template>
+
+<ng-template #emptyTable>
+  <div class="caption__wrapper">
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      link="pages/library/offers/{{ routes.createOffer }}"
+      [content]="{
+        description:
+          'No offers found. Tap the +Create Offers to create enticing offers to attract guests and boost bookings.',
+        imageSrc: 'assets/images/empty-table-offer.png',
+        actionName: '+Create Offers'
+      }"
+    >
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+    </hospitality-bot-empty-table>
+  </div>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
 </ng-template>

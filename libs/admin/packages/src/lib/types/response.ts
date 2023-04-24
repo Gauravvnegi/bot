@@ -33,4 +33,5 @@ export type PackageListResponse = {
   paidPackages: PackageResponse[];
   total: number;
   entityStateCounts: EntityStateCountsResponse;
+  entityTypeCounts: any;
 };

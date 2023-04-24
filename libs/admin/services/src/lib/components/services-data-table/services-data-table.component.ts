@@ -110,8 +110,6 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
         },
         this.handleFinal
       );
-
-    this.loading = false;
   }
 
   /**
@@ -201,6 +199,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     this.servicesService.selectedTable.next(
       this.tabFilterItems[event.index].value
     );
+    this.tabFilterIdx = event.index;
   }
 
   /**

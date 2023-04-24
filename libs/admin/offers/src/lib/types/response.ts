@@ -4,6 +4,7 @@ export type OfferListResponse = {
   offers: OfferResponse[];
   total: number;
   entityStateCounts: EntityStateCountsResponse;
+  entityTypeCounts: any;
 };
 
 export type OfferResponse = {

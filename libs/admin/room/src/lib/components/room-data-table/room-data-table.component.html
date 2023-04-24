@@ -26,6 +26,7 @@
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </div>
 </div>
@@ -54,15 +55,12 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
+  *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
-      <hospitality-bot-tab-group
-        *ngIf="isTabFilters"
-        [listItems]="tabFilterItems"
-        [selectedIndex]="tabFilterIdx"
-        (selectedTabChange)="onSelectedTabFilterChange($event)"
-      ></hospitality-bot-tab-group>
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
         [chips]="filterChips"
@@ -216,4 +214,40 @@
       {{ rowData.occupancy }} people
     </div>
   </td>
+</ng-template>
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    [link]="
+      selectedTable === 'ROOM'
+        ? '/pages/inventory/room/add-room/multiple'
+        : '/pages/inventory/room/add-room-type'
+    "
+    [content]="
+      selectedTable === 'ROOM'
+        ? {
+            description:
+              'No Room found. Tap the + Add Multiple Rooms to create Room',
+            actionName: '+ Add Multiple Rooms',
+            imageSrc: 'assets/images/empty-table-service.png'
+          }
+        : {
+            description:
+              'No Room Type found. Tap the +Create Room Type to create Room Type',
+            actionName: '+ Create Room Type',
+            imageSrc: 'assets/images/empty-table-service.png'
+          }
+    "
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
 </ng-template>

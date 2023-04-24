@@ -1,5 +1,24 @@
 <div class="popup__wrap">
   <div (click)="closeModal()" class="popup__wrap__close">&#10006;</div>
+  <div class="caption__wrapper">
+    <form [formGroup]="tableFG">
+      <div class="caption__wrapper--tabmenu">
+        <div class="header">
+          <div>
+            <p class="heading">{{ tableName }}</p>
+          </div>
+          <div class="action-wrapper">
+            <hospitality-bot-export-list
+              (onDocumentActions)="onDocumentActions()"
+              [documentTypes]="documentTypes"
+              [documentActionTypes]="documentActionTypes"
+              [isDisable]="values.length === 0"
+            ></hospitality-bot-export-list>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
   <p-table
     #dt
     [styleClass]="tableConfig.styleClass"
@@ -22,37 +41,16 @@
     (onRowUnselect)="onRowUnselect($event)"
     (sortFunction)="customSort($event)"
     [customSort]="isCustomSort"
+    *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
   >
     <ng-template pTemplate="caption">
-      <div class="caption__wrapper">
-        <form [formGroup]="tableFG">
-          <div class="caption__wrapper--tabmenu">
-            <div class="header">
-              <div>
-                <p class="heading">{{ tableName }}</p>
-              </div>
-              <div class="action-wrapper">
-                <hospitality-bot-export-list
-                  (onDocumentActions)="onDocumentActions()"
-                  [documentTypes]="documentTypes"
-                  [documentActionTypes]="documentActionTypes"
-                ></hospitality-bot-export-list>
-              </div>
-            </div>
-            <div *ngIf="isTabFilters">
-              <hospitality-bot-tab-group
-                [listItems]="tabFilterItems"
-                [selectedIndex]="tabFilterIdx"
-                (selectedTabChange)="onSelectedTabFilterChange($event)"
-              ></hospitality-bot-tab-group>
-            </div>
-          </div>
-          <hospitality-bot-filter-chips
-            *ngIf="isQuickFilters"
-            [chips]="tabFilterItems[tabFilterIdx].chips"
-            (onChange)="toggleQuickReplyFilter($event)"
-          ></hospitality-bot-filter-chips>
-        </form>
+      <div class="caption__wrapper" [formGroup]="tableFG">
+        <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+        <hospitality-bot-filter-chips
+          *ngIf="isQuickFilters"
+          [chips]="tabFilterItems[tabFilterIdx].chips"
+          (onChange)="toggleQuickReplyFilter($event)"
+        ></hospitality-bot-filter-chips>
       </div>
     </ng-template>
 
@@ -165,3 +163,23 @@
     </ng-template>
   </p-table>
 </div>
+
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [content]="{
+      description: 'No pre-arrival requests from guests.',
+      imageSrc: 'assets/images/empty-table-in-house.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+</ng-template>

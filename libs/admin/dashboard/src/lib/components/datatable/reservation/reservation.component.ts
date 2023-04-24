@@ -176,8 +176,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.updateTabFilterCount(data.entityTypeCounts, data.total);
     this.updateQuickReplyFilterCount(data.entityStateCounts);
     this.updateTotalRecords();
-    console.log(this.totalRecords);
     this.loading = false;
+    this.initialLoading = false;
   }
 
   /**

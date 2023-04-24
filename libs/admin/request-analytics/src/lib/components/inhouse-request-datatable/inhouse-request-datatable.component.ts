@@ -107,9 +107,8 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   }
 
   setRecords(data): void {
-    this.values = new InhouseTable().deserialize(data).records;
-    this.updateTabFilterCount(data.entityTypeCounts, data.total);
-    this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.values = new InhouseTable().deserialize(data)?.records;
+    this.updateTabFilterCount(data?.entityTypeCounts, data.total);
     this.updateTotalRecords();
     this.loading = false;
   }

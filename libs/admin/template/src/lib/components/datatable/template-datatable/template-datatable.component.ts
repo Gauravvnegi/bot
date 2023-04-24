@@ -1,31 +1,27 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router, ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import * as FileSaver from 'file-saver';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   BaseDatatableComponent,
-  sharedConfig,
   TableService,
+  sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import {
-  SnackBarService,
   ModalService,
+  SnackBarService,
 } from '@hospitality-bot/shared/material';
-import {
-  SelectedEntityState,
-  EntityType,
-  EntityState,
-} from 'libs/admin/dashboard/src/lib/types/dashboard.type';
+import { TranslateService } from '@ngx-translate/core';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import * as FileSaver from 'file-saver';
+import { SelectedEntityState } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { TopicService } from 'libs/admin/shared/src/lib/services/topic.service';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
-import { TemplateService } from '../../../services/template.service';
-import { Templates } from '../../../data-models/templateConfig.model';
 import { templateConfig } from '../../../constants/template';
-import { TopicService } from 'libs/admin/shared/src/lib/services/topic.service';
-import { TranslateService } from '@ngx-translate/core';
+import { Templates } from '../../../data-models/templateConfig.model';
+import { TemplateService } from '../../../services/template.service';
 
 @Component({
   selector: 'hospitality-bot-template-datatable',
@@ -315,7 +311,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
-    this.changePage(+this.tabFilterItems[event.index].lastPage);
+    this.changePage(+this.tabFilterItems[event.index]?.lastPage);
   }
 
   /**

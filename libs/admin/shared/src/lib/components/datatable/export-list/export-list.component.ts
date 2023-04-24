@@ -9,6 +9,7 @@ import { ControlContainer } from '@angular/forms';
 export class ExportListComponent {
   @Output() onDocumentActions = new EventEmitter();
   @Input() documentTypes: { label: string; value: string }[];
+  @Input() isDisable: boolean = false;
   @Input() documentActionTypes: {
     label: string;
     value: string;

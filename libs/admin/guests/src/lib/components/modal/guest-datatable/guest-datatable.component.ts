@@ -39,6 +39,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   @Input() guestFilter: string;
   @Input() exportURL: string;
   @Output() onModalClose = new EventEmitter();
+  imageSrc: string;
   constructor(
     public fb: FormBuilder,
     protected _guestTableService: GuestTableService,
@@ -63,6 +64,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
 
   ngOnInit(): void {
     this.registerListeners();
+    this.setEmptyViewImage();
   }
 
   loadInitialData(queries = [], loading = true) {
@@ -87,6 +89,16 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     this.updateQuickReplyFilterCount(data.entityStateCounts);
     this.updateTotalRecords();
     this.loading = false;
+  }
+
+  setEmptyViewImage() {
+    if (this.tableName === 'Guest Source') {
+      this.imageSrc = 'assets/images/empty-table-guest-scource.png';
+    } else if (this.tableName === 'Guest Documents') {
+      this.imageSrc = 'assets/images/empty-table-guest-documents.png';
+    } else {
+      this.imageSrc = 'assets/images/empty-table-guest-payment.png';
+    }
   }
 
   fetchDataFrom(

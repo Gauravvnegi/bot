@@ -12,7 +12,7 @@ import * as FileSaver from 'file-saver';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { LazyLoadEvent } from 'primeng/api/lazyloadevent';
 import { Subscription } from 'rxjs';
-import { chips, cols, title } from '../../constant/data-table';
+import { chips, cols, tabFilterItems, title } from '../../constant/data-table';
 import routes from '../../constant/routes';
 import { Offer, OfferList } from '../../models/offers.model';
 import { OffersServices } from '../../services/offers.service';
@@ -48,6 +48,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
   readonly routes = routes;
   iQuickFilters = true;
   subscription$ = new Subscription();
+  tabFilterItems = tabFilterItems;
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
@@ -63,28 +64,21 @@ export class OffersDataTableComponent extends BaseDatatableComponent
   }
 
   initTableValue() {
+    this.loading = true;
     this.subscription$.add(
       this.offerService
         .getLibraryItems<OfferListResponse>(this.hotelId, this.getQueryConfig())
         .subscribe(
           (res) => {
             this.values = new OfferList().deserialize(res).records;
+            this.updateTabFilterCount(res.entityTypeCounts, res.total);
             this.updateQuickReplyFilterCount(res.entityStateCounts);
             this.updateTotalRecords();
           },
           ({ error }) => {
             this.values = [];
-            this.loading = false;
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
+          },
+          this.handleFinal
         )
     );
   }

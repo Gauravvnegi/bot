@@ -128,7 +128,7 @@
               [listItem]="getStatusList(rowData)"
               (onClick)="handleStatus($event, rowData)"
               [status]="rowData.status"
-              [disabled]="rowData.status==='DELETE'"
+              [disabled]="rowData.status === 'DELETE'"
             >
             </hospitality-bot-toggle-dropdown>
           </div>

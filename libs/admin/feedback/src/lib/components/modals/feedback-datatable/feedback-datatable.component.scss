@@ -85,6 +85,6 @@
 // added for now
 :host ::ng-deep .p-datatable {
   .p-datatable-thead {
-    position: static !important;
+    top: 0;
   }
 }

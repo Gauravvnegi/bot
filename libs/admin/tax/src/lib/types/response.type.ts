@@ -11,6 +11,7 @@ export type TaxListResponse = {
   records: TaxResponse[];
   total: number;
   entityStateCounts: EntityStateCountsResponse;
+  entityTypeCounts: any;
 };
 
 export type EntityStateCountsResponse = {

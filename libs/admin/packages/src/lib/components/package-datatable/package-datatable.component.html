@@ -19,6 +19,7 @@
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </div>
 </div>
@@ -43,15 +44,11 @@
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
   (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+  *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
-      <hospitality-bot-tab-group
-        *ngIf="isTabFilters"
-        [listItems]="tabFilterItems"
-        [selectedIndex]="tabFilterIdx"
-        (selectedTabChange)="onSelectedTabFilterChange($event)"
-      ></hospitality-bot-tab-group>
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
 
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
@@ -151,3 +148,27 @@
     ></p-paginator>
   </ng-template>
 </p-table>
+
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    link="/pages/library/packages/{{ routes.createPackage.route }}"
+    [content]="{
+      description:
+        'No packages found. Tap the +Add Packages to Create and manage special packages and promotions to attract guests and increase bookings.',
+      actionName: '+Add Package',
+      imageSrc: 'assets/images/empty-table-package.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+</ng-template>

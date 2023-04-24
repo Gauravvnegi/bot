@@ -16,6 +16,7 @@
       link="/pages/library/services/{{ servicesRoutes.createService.route }}"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
+      [isDisable]="values.length === 0"
       [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
@@ -48,14 +49,11 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
+  *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
-      <hospitality-bot-tab-group
-        *ngIf="isTabFilters"
-        [listItems]="tabFilterItems"
-        (selectedTabChange)="onSelectedTabFilterChange($event)"
-      ></hospitality-bot-tab-group>
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
 
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
@@ -157,4 +155,28 @@
 
 <ng-template #emptyCell>
   <div class="emptyCell">&mdash;</div>
+</ng-template>
+
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    link="/pages/library/services/{{ servicesRoutes.createService.route }}"
+    [content]="{
+      description:
+        'No services found. Tap the +Create Services to create & manage the services offered by your hotel',
+      actionName: '+Create Service',
+      imageSrc: 'assets/images/empty-table-service.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
 </ng-template>

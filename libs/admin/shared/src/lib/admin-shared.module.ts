@@ -82,6 +82,8 @@ import { SkeletonShapeComponent } from './components/skeleton/skeleton-shape/ske
 import { SkeletonDirective } from './directives/skeleton.directive';
 import { LoaderBounceComponent } from './components/loader-bounce/loader-bounce.component';
 import { PhoneNumberComponent } from './view/phone-number/phone-number.component';
+import { EmptyTableComponent } from './components/datatable/empty-table/empty-table.component';
+import { EmptyViewDirective } from './directives/empty-view.directive';
 import { CreateWithViewComponent } from './view/create-with-view/create-with-view.component';
 
 @NgModule({
@@ -173,10 +175,12 @@ import { CreateWithViewComponent } from './view/create-with-view/create-with-vie
     SkeletonDirective,
     LoaderBounceComponent,
     PhoneNumberComponent,
+    EmptyTableComponent,
+    EmptyViewDirective,
     CreateWithViewComponent,
   ],
+
   exports: [
-    DatatableComponent,
     TabGroupComponent,
     UploadFileComponent,
     ComingSoonComponent,
@@ -254,6 +258,8 @@ import { CreateWithViewComponent } from './view/create-with-view/create-with-vie
     SkeletonShapeComponent,
     LoaderBounceComponent,
     PhoneNumberComponent,
+    EmptyTableComponent,
+    EmptyViewDirective,
     CreateWithViewComponent,
   ],
 })

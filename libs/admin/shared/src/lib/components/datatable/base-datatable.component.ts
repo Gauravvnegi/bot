@@ -372,7 +372,8 @@ export class BaseDatatableComponent implements OnInit {
    * @param currentTabCount The count for current selected tab.
    */
   updateTabFilterCount(countObj, currentTabCount: number): void {
-    this.tabFilterItems.forEach((tab) => {
+    countObj = countObj ?? {};
+    this.tabFilterItems?.forEach((tab) => {
       tab.value === 'ALL'
         ? (tab.total = currentTabCount ?? 0)
         : (tab.total = countObj[tab.value] ?? 0);
@@ -566,7 +567,7 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   changePage(pageNo?) {
-    this.paginator.changePage(pageNo || 0);
+    this.paginator?.changePage(pageNo || 0);
   }
 
   /**
@@ -575,7 +576,7 @@ export class BaseDatatableComponent implements OnInit {
   onScroll = () => {
     if (this.table) {
       const { top } = this.table?.el?.nativeElement.getBoundingClientRect();
-      this.isScrolledUp = top < 120;
+      this.isScrolledUp = top < 110;
     }
   };
 }

@@ -19,6 +19,7 @@
       class="export-dropdown"
       [options]="documentActionTypes"
       [formControlName]="documentActionTypeName"
+      [disabled]="isDisable"
     >
       <ng-template let-documentActionItem pTemplate="selectedItem">
         <img src="assets/svg/Export.svg" alt="export" />
@@ -30,6 +31,7 @@
       class="export-dropdown"
       [options]="documentTypes"
       [formControlName]="documentTypesName"
+      [disabled]="isDisable"
     >
       <ng-template let-documentTypeItem pTemplate="selectedItem">
         <img src="assets/svg/CSV.svg" alt="csv" />

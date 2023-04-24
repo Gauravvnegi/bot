@@ -26,3 +26,7 @@
 :host ::ng-deep .input__static .p-dropdown {
   margin-top: 0px !important;
 }
+
+:host ::ng-deep .p-dropdown:not(.p-disabled):hover {
+  border-color: $primary-form-color;
+}

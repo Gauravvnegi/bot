@@ -10,7 +10,7 @@ import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { LazyLoadEvent } from 'primeng/api/public_api';
 import { Subscription } from 'rxjs';
-import { chips, cols, title } from '../../constant/data-table';
+import { chips, cols, tabFilterItems, title } from '../../constant/data-table';
 import { PackageList } from '../../models/packages.model';
 import { PackagesService } from '../../services/packages.service';
 import { PackageData } from '../../types/package';
@@ -34,10 +34,11 @@ export class PackageDataTableComponent extends BaseDatatableComponent
 
   isCustomSort = true;
   triggerInitialData = false;
-  isTabFilters = false;
+  tabFilterItems = tabFilterItems;
+  isTabFilters = true;
   filterChips = chips;
   globalQueries = [];
-  tabFilterIdx = 1;
+  tabFilterIdx = 0;
   $subscription = new Subscription();
 
   cols = cols;
@@ -95,6 +96,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
           (res) => {
             const packageList = new PackageList().deserialize(res);
             this.values = packageList.records;
+            this.updateTabFilterCount(res.entityTypeCounts, res.total);
             this.updateQuickReplyFilterCount(res.entityStateCounts);
             this.updateTotalRecords();
           },

@@ -77,7 +77,7 @@ export const analytics = {
     {
       label: 'All',
       content: '',
-      value: '',
+      value: 'ALL',
       disabled: false,
       total: 0,
       chips: [
@@ -316,7 +316,7 @@ export const analytics = {
     {
       label: 'All',
       content: '',
-      value: '',
+      value: 'ALL',
       disabled: false,
       total: 0,
       chips: [

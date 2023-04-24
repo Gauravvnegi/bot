@@ -16,6 +16,7 @@
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </div>
 </div>
@@ -44,14 +45,12 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
+  *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
-      <hospitality-bot-tab-group
-        *ngIf="isTabFilters"
-        [listItems]="tabFilterItems"
-        (selectedTabChange)="onSelectedTabFilterChange($event)"
-      ></hospitality-bot-tab-group>
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+
       <hospitality-bot-filter-chips
         class="filterIcon"
         *ngIf="isQuickFilters"
@@ -184,11 +183,27 @@
     ></p-paginator>
   </ng-template>
 </p-table>
-<!-- <hospitality-bot-empty-table
-  *ngIf="values.length === 0"
-  [description]="
-    'changeed url some were else you want to redirect changeed url some were else you want to redirect'
-  "
-  title="Blog"
-  btnLabel="+ Create New Redirect"
-></hospitality-bot-empty-table> -->
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    link="/pages/efrontdesk/manage-reservation/{{
+      manageReservationRoutes.addReservation.route
+    }}"
+    [content]="{
+      description:
+        'No Booking found. Tap the +Create Booking to create & manage the booking offered by your hotel',
+      actionName: '+ Create Booking',
+      imageSrc: 'assets/images/empty-table-package.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+</ng-template>

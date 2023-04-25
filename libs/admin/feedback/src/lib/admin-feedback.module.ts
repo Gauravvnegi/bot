@@ -16,6 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FeedbackTableService } from './services/table.service';
 import { CardService } from './services/card.service';
 import { StatisticsService } from './services/feedback-statistics.service';
+import { GaugeChartModule } from 'angular-gauge-chart';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { StatisticsService } from './services/feedback-statistics.service';
     AdminFeedbackRoutingModule,
     FlexLayoutModule,
     SlickCarouselModule,
+    GaugeChartModule,
     NgCircleProgressModule.forRoot(),
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['feedback'])),
   ],

@@ -9,8 +9,8 @@ import { Status } from '../../types/table.type';
 })
 export class ToggleDropdownComponent {
   label = 'Active';
-  value = 'ACTIVE';
-  styleClass = 'newButton';
+  value: string | boolean = true;
+  styleClass = 'newButton';   
   items: (Status & { command: () => void })[] = [
     {
       label: 'Active',
@@ -32,10 +32,16 @@ export class ToggleDropdownComponent {
   @Input() disabled: boolean = false;
 
   @Input() set status(value: string) {
-    this.value = value;
-    const selectedItem = this.items?.find((item) => item.value == this.value);
-    this.label = selectedItem.label;
-    if (selectedItem) this.styleClass = `${selectedItem.type}Button`;
+    this.value = value; 
+    this.items.forEach((item) => {
+      if (item.value == this.value) {
+        this.label = item.label;
+        this.styleClass = `${item.type}Button`;
+        item['styleClass'] = 'activeClass';
+      } else {
+        item['styleClass'] = '';
+      }
+    }); 
   }
 
   @Input() set listItem(input: Status[]) {
@@ -46,6 +52,7 @@ export class ToggleDropdownComponent {
       },
       type: item.type,
       value: item.value,
+      styleClass: item.value === this.value ? 'activeClass' : '',
       disabled: item.disabled,
     }));
 

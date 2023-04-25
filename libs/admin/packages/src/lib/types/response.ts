@@ -19,7 +19,7 @@ export type PackageResponse = {
   autoAccept: boolean;
   hasChild: boolean;
   parentId: string;
-  categoryName: string;
+  category: string;
   // category: string;
   discountType: string;
   discountValue: number;

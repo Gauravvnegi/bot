@@ -20,8 +20,13 @@ export class TableHeaderComponent {
   onSearch(value: string, cols: Cols) {
     this.search.emit({
       value,
-      field: cols.field,
-      matchMode: cols.matchMode ?? 'startsWith',
+      field: cols.searchField ?? cols.field,
+      matchMode: cols.matchMode ?? 'contains',
     });
   }
 }
+
+/**
+ * Match Modes
+ * "startsWith" | "contains" | "endsWith" | "equals"
+ */

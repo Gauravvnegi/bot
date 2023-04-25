@@ -59,9 +59,9 @@ export const cols: Cols[] = [
   {
     field: 'thumbnail',
     header: 'Thumbnail',
-    isSort: false,
+    isSortDisabled: true,
     sortType: 'string',
-    dynamicWidth: true,
+
     isSearchDisabled: true,
 
     width: '15%',
@@ -69,34 +69,34 @@ export const cols: Cols[] = [
   {
     field: 'siteName',
     header: 'Hotel site name',
-    isSort: true,
+
     sortType: 'string',
-    dynamicWidth: true,
+
     width: '18%',
   },
   {
     field: 'url',
     header: 'URL',
-    isSort: true,
+
     sortType: 'string',
-    dynamicWidth: true,
+
     width: '32%',
   },
   {
     field: 'expiry',
     header: 'Expiry',
-    isSort: true,
+
     sortType: 'number',
-    dynamicWidth: true,
+
     width: '15%',
     isSearchDisabled: true,
   },
   {
     field: 'status',
     header: 'Actions',
-    isSort: true,
+
     sortType: 'string',
-    dynamicWidth: true,
+
     width: '20%',
   },
 ];

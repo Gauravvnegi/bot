@@ -7,40 +7,36 @@ export const cols: Cols[] = [
     field: 'countryName',
     header: 'Country',
     sortType: 'string',
-    dynamicWidth: true,
+
     width: '23.75%',
-    isSort: true,
   },
   {
     field: 'taxType',
     header: 'Tax Type',
     sortType: 'string',
-    isSort: true,
-    dynamicWidth: true,
+
     width: '23.75%',
   },
   {
     field: 'category',
     header: 'Category',
     sortType: 'string',
-    isSort: true,
-    dynamicWidth: true,
+
     width: '23.75%',
   },
   {
     field: 'taxRate',
     header: 'Tax%',
     sortType: 'number',
-    isSort: true,
-    dynamicWidth: true,
+
     width: '23.75%',
   },
   {
     field: 'status',
     header: 'Actions',
-    isSort: false,
+    isSortDisabled: true,
     isSearchDisabled: true,
-    dynamicWidth: true,
+
     width: '23.75%',
   },
 ];

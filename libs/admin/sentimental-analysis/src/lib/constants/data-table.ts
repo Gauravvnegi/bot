@@ -5,36 +5,36 @@ export const cols: Cols[] = [
   {
     field: 'rating',
     header: 'Rating',
-    isSort: false,
+    isSortDisabled: true,
     sortType: 'number',
-    dynamicWidth: true,
+
     width: '20%',
     isSearchDisabled: true,
   },
   {
     field: 'comment',
     header: 'Text',
-    isSort: false,
+    isSortDisabled: true,
     sortType: 'string',
-    dynamicWidth: true,
+
     width: '40%',
     isSearchDisabled: true,
   },
   {
     field: 'sentiment',
     header: 'Sentiment',
-    isSort: false,
+    isSortDisabled: true,
     sortType: 'string',
-    dynamicWidth: true,
+
     width: '20%',
     isSearchDisabled: true,
   },
   {
     field: 'topic',
     header: 'Topic',
-    isSort: false,
+    isSortDisabled: true,
     sortType: 'string',
-    dynamicWidth: true,
+
     width: '20%',
     isSearchDisabled: true,
   },

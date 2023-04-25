@@ -177,6 +177,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
               this.loading = false;
             },
             () => {
+              this.values = [];
               this.loading = false;
             },
             this.initTableDetails
@@ -374,7 +375,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param param0
    */
   handleError = ({ error }): void => {
-    this.values = [];
     this.loading = false;
   };
 

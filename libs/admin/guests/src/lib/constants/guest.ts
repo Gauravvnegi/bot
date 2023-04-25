@@ -314,47 +314,51 @@ export const guest = {
       {
         field: 'fullName',
         header: 'Guest / Company',
-        isSort: true,
         sortType: 'string',
+        searchField: ['fullName'],
       },
       {
         field: 'booking.getArrivalTimeStamp()',
         header: 'Arrival / Departure',
-        isSort: true,
         sortType: 'date',
         isSearchDisabled: true,
       },
       {
         field: 'booking.bookingNumber',
         header: 'Booking No. / Feedback',
-        isSort: true,
         sortType: 'number',
+        searchField: [
+          'booking.bookingNumber',
+          'feedback.comments',
+          'feedback.rating',
+        ],
       },
       {
         field: `getPhoneNumber()`,
         header: 'Phone No.',
-        isSort: false,
+        isSortDisabled: true,
         sortType: 'string',
         isSearchDisabled: true,
       },
       {
         field: 'payment.totalAmount',
         header: 'Amount Due/ Total Spend',
-        isSort: true,
         sortType: 'number',
         isSearchDisabled: true,
       },
       {
         field: 'guestAttributes.overAllNps',
         header: 'Overall NPS',
-        isSort: true,
         sortType: 'number',
       },
       {
         field: 'guestAttributes.churnProbalilty',
         header: 'Churn Prob / Prediction',
-        isSort: true,
         sortType: 'number',
+        searchField: [
+          'guestAttributes.churnProbalilty',
+          'guestAttributes.churnPrediction',
+        ],
       },
       {
         field: 'stageAndourney',

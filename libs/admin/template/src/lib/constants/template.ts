@@ -44,22 +44,18 @@ export const templateConfig = {
       {
         field: 'name',
         header: 'Name',
-        isSort: true,
         sortType: 'string',
-        dynamicWidth: false,
       },
       {
         field: 'description',
         header: 'Description',
-        isSort: true,
         sortType: 'string',
-        dynamicWidth: false,
       },
       {
         field: 'active',
         header: 'Active',
-        isSort: false,
-        dynamicWidth: true,
+        isSortDisabled: true,
+
         isSearchDisabled: true,
       },
     ],

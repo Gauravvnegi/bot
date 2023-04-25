@@ -3,29 +3,25 @@ import { Cols } from '@hospitality-bot/admin/shared';
 export const cols: Cols[] = [
   {
     field: 'requestTimeStamp',
-    header: 'Date/Time',
-    isSort: true,
+    header: 'Date / Time',
     sortType: 'Date',
     isSearchDisabled: true,
   },
   {
     field: 'bookingNumber',
     header: 'Booking No.',
-    isSort: true,
     sortType: 'number',
     isSearchDisabled: true,
   },
   {
     field: 'type',
     header: 'Type',
-    isSort: true,
     sortType: 'string',
     isSearchDisabled: true,
   },
   {
     field: 'message.status',
-    header: 'Message/Status',
-    isSort: true,
+    header: 'Message / Status',
     sortType: 'string',
     isSearchDisabled: true,
   },

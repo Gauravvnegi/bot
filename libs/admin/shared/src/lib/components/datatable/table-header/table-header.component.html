@@ -3,15 +3,15 @@
 </th>
 <th
   [id]="col.fields"
-  [pSortableColumn]="col.field"
+  [pSortableColumn]="col.isSortDisabled ? '' : col.sortField || col.field"
   *ngFor="let col of columns"
-  [ngStyle]="col.dynamicWidth ? { width: col.width } : {}"
+  [ngStyle]="col.width ? { width: col.width } : {}"
 >
   <div class="table-head">
     <div class="table-head__field">
       <div class="col-heading">{{ col.header }}</div>
-      <div class="col-sort" *ngIf="col.isSort">
-        <p-sortIcon [field]="col.field"></p-sortIcon>
+      <div class="col-sort" *ngIf="!col.isSortDisabled">
+        <p-sortIcon [field]="col.sortField || col.field"></p-sortIcon>
       </div>
     </div>
     <div

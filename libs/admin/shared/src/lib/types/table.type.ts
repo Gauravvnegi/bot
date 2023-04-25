@@ -13,7 +13,7 @@ export type MatchModes = 'startsWith' | 'contains' | 'endsWith' | 'equals';
 
 export type TableFieldSearch = {
   value: string;
-  field: string;
+  field: string | string[];
   matchMode: MatchModes;
 };
 
@@ -25,16 +25,33 @@ export type Chip<T extends string> = {
   type: FlagType;
 };
 
-export type TableSortType = 'number' | 'string' | 'date';
+export type TableSortType = number | string | Date;
 
+/**
+ * Table value column fields
+ * @property [header] Text for the column heading
+ * @property [field] Field name for both sorting and filtering
+ * @property [isSortDisabled]
+ * @property [sortField] Field name for the sort filter and is prioritize over "field property"
+ * @property [sortType] to select which sort logic to follow
+ * @property [dynamicWidth]
+ * @property [width]
+ * @property [isSearchDisabled]
+ * @property [searchField] All Fields for the search filter and is prioritize over "field property"
+ * @property [matchMode] Matching criteria for search
+ * @property [placeholder] Search placeholder text
+ *
+ */
 export type Cols = {
   field: string;
   header: string;
-  isSort?: boolean;
-  // sortType?: TableSortType;
-  sortType?: string;
-  dynamicWidth?: boolean;
+
+  isSortDisabled?: boolean;
+  sortField?: string;
+  sortType?: TableSortType;
   width?: string;
+
+  searchField?: string[];
   isSearchDisabled?: boolean;
   matchMode?: MatchModes;
   placeholder?: string;

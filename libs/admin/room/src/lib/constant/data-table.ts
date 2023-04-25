@@ -106,41 +106,32 @@ export const cols: Record<TableValue, Cols[]> = {
     {
       field: 'type',
       header: 'Room / Type',
-      isSort: true,
       sortType: 'string',
-      dynamicWidth: true,
       width: '15%',
+      searchField: ['type'],
     },
     {
       field: 'roomNo',
       header: 'Room No.',
-      isSort: true,
       sortType: 'string',
-      dynamicWidth: true,
       width: '15%',
     },
     {
       field: 'date',
       header: 'Date',
-      isSort: true,
       sortType: 'date',
-      dynamicWidth: true,
       width: '28%',
     },
     {
       field: 'price',
       header: 'Price',
-      isSort: true,
       sortType: 'number',
-      dynamicWidth: true,
       width: '18%',
     },
     {
       field: 'status.value',
       header: 'Action / Status',
-      isSort: true,
       sortType: 'string',
-      dynamicWidth: true,
       width: '18%',
     },
   ],
@@ -148,49 +139,49 @@ export const cols: Record<TableValue, Cols[]> = {
     {
       field: 'name',
       header: 'Type',
-      isSort: true,
+
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '14%',
     },
     {
       field: 'area',
       header: 'Area',
-      isSort: true,
+
       sortType: 'number',
-      dynamicWidth: true,
+
       width: '13%',
     },
     {
       field: 'roomCount',
       header: 'Room Count',
-      isSort: true,
+
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '17%',
     },
     {
       field: 'amenities',
       header: 'Amenities',
-      isSort: true,
+
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '18%',
     },
     {
       field: 'occupancy',
       header: 'Occupancy',
-      isSort: true,
+
       sortType: 'number',
-      dynamicWidth: true,
+
       width: '17%',
     },
     {
       field: 'status.value',
       header: 'Active',
-      isSort: true,
+
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '16%',
     },
   ],

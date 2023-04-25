@@ -39,19 +39,16 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
       field: 'name',
       header: 'Category Name',
       sortType: 'string',
-      isSort: true,
     },
     {
       field: 'description',
       header: 'Description',
       sortType: 'string',
-      isSort: true,
     },
     {
       field: 'subPackageNameList',
       header: 'Packages',
       sortType: 'string',
-      isSort: true,
     },
   ];
 

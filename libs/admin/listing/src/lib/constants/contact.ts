@@ -5,49 +5,49 @@ export const contactConfig = {
       {
         field: 'email',
         header: 'Email',
-        isSort: true,
+
         sortType: 'string',
-        dynamicWidth: true,
+
         width: '17.5%',
       },
       {
         field: 'salutation',
         header: 'Salutation',
-        isSort: true,
+
         sortType: 'string',
-        dynamicWidth: true,
+
         width: '15%',
       },
       {
         field: 'firstName',
         header: 'First Name',
-        isSort: true,
+
         sortType: 'string',
-        dynamicWidth: false,
+
         width: '15%',
       },
       {
         field: 'lastName',
         header: 'Last Name',
-        isSort: true,
+
         sortType: 'string',
-        dynamicWidth: false,
+
         width: '15%',
       },
       {
         field: 'companyName',
         header: 'Company Name',
-        isSort: true,
+
         sortType: 'string',
-        dynamicWidth: false,
+
         width: '17.5%',
       },
       {
         field: 'mobile',
         header: 'Mobile',
-        isSort: true,
+
         sortType: 'number',
-        dynamicWidth: true,
+
         width: '20%',
       },
     ],

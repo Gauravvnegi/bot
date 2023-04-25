@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
+import { QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
@@ -142,7 +142,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           this.updateQuickReplyFilterCount(res.entityStateCounts);
           this.updateTotalRecords();
         },
-        this.handleError,
+        ({ error }) => {
+          this.values = [];
+          this.handleError;
+        },
         this.handleFinal
       );
   }
@@ -332,7 +335,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    * @param param network error
    */
   handleError = ({ error }): void => {
-    // this.values = [];
     this.loading = false;
   };
 

@@ -106,6 +106,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
           this.updateTotalRecords();
         },
         () => {
+          this.values = [];
           this.loading = false;
         },
         this.handleFinal
@@ -233,7 +234,6 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
    * @param param0 network error
    */
   handleError = ({ error }): void => {
-    this.values = [];
     this.loading = false;
   };
 

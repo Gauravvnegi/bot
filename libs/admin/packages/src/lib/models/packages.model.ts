@@ -23,7 +23,7 @@ export class Package {
     this.currency = input.currency;
     this.unit = input.unit;
     this.status = input.active;
-    this.category = input.categoryName;
+    this.category = input.category;
 
     return this;
   }

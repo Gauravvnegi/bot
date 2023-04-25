@@ -240,10 +240,17 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   /**
-   * To filter the data with respect to field
+   * @function handleFieldSearch To filter the data with respect to fields
+   * @param param0 has value field names and match mode for searching
    */
   handleFieldSearch({ value, field, matchMode }: TableFieldSearch) {
-    this.table.filter(value.trim(), field, matchMode);
+    const searchValue = value.trim();
+    if (typeof field === 'string') {
+      this.table.filter(searchValue, field, matchMode);
+    } else {
+      (this.table.globalFilterFields = field),
+        this.table.filterGlobal(searchValue, matchMode);
+    }
   }
 
   onDocumentActions() {

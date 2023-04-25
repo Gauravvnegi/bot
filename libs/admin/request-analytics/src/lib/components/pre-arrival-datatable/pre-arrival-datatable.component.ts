@@ -272,9 +272,6 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
-    // value = value && value.trim();
-    // this.table.filter(value, field, matchMode);
-
     if (!!value && !this.isSearchSet) {
       this.tempFirst = this.first;
       this.tempRowsPerPage = this.rowsPerPage;

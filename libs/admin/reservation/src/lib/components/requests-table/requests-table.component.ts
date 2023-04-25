@@ -77,7 +77,8 @@ export class RequestsTableComponent extends BaseDatatableComponent {
         this.loading = false;
       },
       ({ error }) => {
-        this.loading = false; 
+        this.values = [];
+        this.loading = false;
       }
     );
   }
@@ -98,6 +99,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
   }
 
   updateRequest(status, journey, id) {
+    this.loading = true;
     this._reservationService
       .updateRequest(
         this.parentForm.get('reservationDetails').get('bookingId').value,
@@ -123,8 +125,11 @@ export class RequestsTableComponent extends BaseDatatableComponent {
             '',
             { panelClass: 'success' }
           );
+          this.loading = false;
         },
-        ({ error }) => {  }
+        ({ error }) => {
+          this.loading = false;
+        }
       );
   }
 

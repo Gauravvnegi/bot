@@ -6,41 +6,36 @@ export const columns: Record<TableValue, Cols[]> = {
     {
       field: 'name',
       header: 'Username',
-      isSort: true,
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '15%',
     },
     {
       field: 'date',
       header: 'Date Registered',
-      isSort: true,
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '15%',
     },
     {
       field: 'role',
       header: 'Role',
-      isSort: true,
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '15%',
     },
     {
       field: 'status',
       header: 'Status',
-      isSort: true,
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '15%',
     },
     {
       field: 'action',
       header: 'Actions',
-      isSort: true,
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '15%',
     },
   ],

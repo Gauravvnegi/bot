@@ -1,13 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { Option } from '@hospitality-bot/admin/shared';
 import {
   Categories,
   CategoryData,
   LibrarySearchItem,
+  LibraryService,
 } from '@hospitality-bot/admin/library';
-import { LibraryService } from '@hospitality-bot/admin/library';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Option } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -30,6 +31,7 @@ export class CategoryComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private libraryService: LibraryService,
     private router: Router,
+    private snackbarService: SnackBarService,
     private route: ActivatedRoute
   ) {}
 
@@ -103,11 +105,25 @@ export class CategoryComponent implements OnInit {
    * @description navigate to create category page
    * @returns void
    */
-  create() {
-    this.router.navigate(['../create-category'], {
-      relativeTo: this.route.parent,
-      replaceUrl: true,
-    });
+  create(event) {
+    this.$subscription.add(
+      this.libraryService
+        .createCategory(this.hotelId, {
+          name: event,
+          source: 1,
+          imageUrl: '',
+          type: 'PACKAGE_CATEGORY',
+        })
+        .subscribe(() => {
+          this.snackbarService.openSnackBarAsText(
+            'Category created successfully',
+            '',
+            { panelClass: 'success' }
+          );
+          this.categoryOffSet = 0;
+          this.getCategories();
+        })
+    );
   }
 
   ngOnDestroy() {

@@ -115,10 +115,11 @@ export class CreateServiceComponent implements OnInit {
             params: `?type=${LibraryItem.service}`,
           })
           .subscribe((res) => {
-            const { type, ...rest } = res;
+            const { type, taxes, ...rest } = res;
             this.useForm.patchValue({
               serviceType: type,
               ...rest,
+              taxIds: taxes.map((item) => item.id),
             });
             this.code = res.packageCode;
           }, this.handleError)

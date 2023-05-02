@@ -63,6 +63,14 @@ const appRoutes: CRoutes = [
           ),
       },
       {
+        path: 'booking-source',
+        name: ModuleNames.BOOKING_SOURCE,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/booking-source').then(
+            (m) => m.AdminBookingSourceModule
+          ),
+      },
+      {
         path: 'offers',
         name: ModuleNames.OFFERS,
         loadChildren: () =>

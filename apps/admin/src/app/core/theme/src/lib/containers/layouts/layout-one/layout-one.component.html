@@ -79,7 +79,7 @@
               (removeVisibility)="disableFilter()"
             ></hospitality-bot-daterange>
           </div>
-          <div class="site-select">
+          <div class="site-select" *ngIf="isSitesAvailable">
             <admin-site-action></admin-site-action>
           </div>
         </div>

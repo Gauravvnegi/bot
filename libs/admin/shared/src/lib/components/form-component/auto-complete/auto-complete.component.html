@@ -20,12 +20,12 @@
     [formControlName]="controlName"
     [id]="controlName"
     (completeMethod)="searchData($event)"
-    [multiple]="true"
+    [multiple]="multiple"
     field="label"
     dataKey="value"
     minLength="2"
-    [forceSelection]="true"
-    emptyMessage="No result found."
+    [forceSelection]="!freeSolo"
+    [emptyMessage]="showEmptyMessage ? 'No result found.' : null"
   >
     <ng-template let-option pTemplate="item">
       <div class="label">

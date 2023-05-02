@@ -90,6 +90,7 @@ export class AuthService extends ApiService {
       'userId',
       'x-access-refresh-token',
       'hotelId',
+      'siteId',
     ];
     tokensToRemove.forEach((token) => localStorage.removeItem(token));
   }

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '@hospitality-bot/admin/shared';
-import { routes } from 'libs/admin/shared/src/index';
+import { HotelDetailService, routes } from 'libs/admin/shared/src/index';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from '../../../../../auth/services/auth.service';
 import { layoutConfig, UserDropdown } from '../../constants/layout';
@@ -15,21 +15,31 @@ import { FirebaseMessagingService } from '../../services/messaging.service';
 export class ProfileDropdownComponent implements OnInit {
   items = [];
   onManageSite = false;
+  isSiteAvailable: boolean = false;
 
   constructor(
     private _router: Router,
     private _authService: AuthService,
     public userService: UserService,
     private firebaseMessagingService: FirebaseMessagingService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private hotelDetailsService: HotelDetailService
   ) {
     this.onManageSite = this._router.url.includes('manage-sites');
-    this.items = layoutConfig.profile.filter(
-      (item) => !(item.value === UserDropdown.MANAGE_SITES && this.onManageSite)
-    );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isSiteAvailable = !!this.hotelDetailsService.hotelDetails.sites
+      ?.length;
+
+    this.items = layoutConfig.profile.filter(
+      (item) =>
+        !(
+          item.value === UserDropdown.MANAGE_SITES &&
+          (this.onManageSite || !this.isSiteAvailable)
+        )
+    );
+  }
 
   profileAction(event) {
     const itemType = event;

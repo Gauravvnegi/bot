@@ -11,6 +11,7 @@ export const topicConfig = {
         content: '',
         value: 'ALL',
         disabled: false,
+        isSelected: false,
         total: 0,
         chips: [
           {
@@ -35,7 +36,7 @@ export const topicConfig = {
             value: 'INACTIVE',
             total: 0,
             isSelected: false,
-            type: 'pending',
+            type: 'failed',
           },
         ],
         lastPage: 0,
@@ -45,22 +46,18 @@ export const topicConfig = {
       {
         field: 'name',
         header: 'Name',
-        isSort: true,
         sortType: 'string',
-        dynamicWidth: false,
       },
       {
         field: 'description',
         header: 'Description',
-        isSort: true,
         sortType: 'string',
-        dynamicWidth: false,
       },
       {
         field: 'active',
         header: 'Active',
-        isSort: false,
-        dynamicWidth: true,
+        isSortDisabled: true,
+
         isSearchDisabled: true,
       },
     ],

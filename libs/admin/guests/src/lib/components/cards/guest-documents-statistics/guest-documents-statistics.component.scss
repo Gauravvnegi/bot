@@ -2,7 +2,7 @@
 .stat-title {
   font: normal normal bold 16px/19px Roboto;
   letter-spacing: 0.96px;
-  color: $dark-blue;
+  color: $secondary;
   opacity: 1;
 }
 
@@ -13,6 +13,7 @@
   position: relative;
   .graph {
     z-index: 2;
+    position: relative !important;
     &-base-chart {
       height: 138px;
     }
@@ -30,25 +31,25 @@
     .val {
       font: normal normal bold 25px/30px Roboto;
       letter-spacing: 1.5px;
-      color: $dark-blue;
+      color: $secondary;
       opacity: 1;
     }
     .label {
       font: normal normal bold 12px/14px Roboto;
       letter-spacing: 0.72px;
       opacity: 1;
-      color: $note1;
+      color: $grayMedium;
     }
   }
 }
 .stat {
   @media screen and (max-width: $L) {
-    @include height(65px);
+    height: 65px;
     overflow-y: auto;
-    @include padding-right(20px);
+    padding-right: 20px;
     &::-webkit-scrollbar {
-      @include width(1px);
-      background-color: $c-gray-84;
+      width: 1px;
+      background-color: $borderCol;
     }
   }
 }
@@ -74,10 +75,10 @@
       text-align: left;
       font: normal normal medium 12px/14px Roboto;
       letter-spacing: 0.72px;
-      color: $quote-color;
+      color: $subtitle;
       opacity: 1;
       @media (max-width: $tablet) {
-        @include padding-left(19px);
+        padding-left: 19px;
       }
     }
   }
@@ -85,7 +86,7 @@
     text-align: right;
     font: normal normal bold 12px/14px Roboto;
     letter-spacing: 0.72px;
-    color: $primary-purple;
+    color: $primary-cta;
     opacity: 1;
   }
 }

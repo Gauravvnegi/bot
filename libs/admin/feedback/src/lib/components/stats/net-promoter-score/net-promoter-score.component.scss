@@ -16,8 +16,8 @@
 
 .container {
   background: $white;
-  border: solid 1px $c-gray-89;
-  box-shadow: 0px 3px 6px $box-shadow;
+  border: solid 1px $borderCol;
+  box-shadow: 0px 3px 6px $boxShadow;
   border-radius: 5px;
 }
 
@@ -31,7 +31,7 @@
   }
   .selected {
     font-size: 20px;
-    color: $c-gray-47;
+    color: $grayMedium;
     font-style: italic;
     margin-bottom: 0;
     margin-left: 3%;
@@ -49,7 +49,7 @@
         height: auto;
         width: auto;
         path {
-          fill: $default;
+          fill: $grayMedium;
         }
         &:hover {
           cursor: pointer;
@@ -59,7 +59,7 @@
   }
   .seperator {
     height: 35px;
-    border: 1px solid $light-grey;
+    border: 1px solid $grayLight;
     margin: 0px 15px;
   }
 
@@ -67,26 +67,26 @@
     display: flex;
     align-items: center;
     padding: 5px;
-    border: 2px solid $light-grey;
+    border: 2px solid $grayLight;
     border-radius: 5px;
 
     .divider {
       height: 20px;
-      border: 1px solid $light-grey;
+      border: 1px solid $grayLight;
       margin: 0px 15px;
     }
   }
   .go {
     outline: none;
-    color: $primary-purple;
-    background: $go-btn-default;
+    color: $primary-cta;
+    background: $btnDefault;
     border: none;
     font-size: 10px;
     padding: 5px;
     display: flex;
     margin-left: 10px;
     &:hover {
-      background-color: $primary-purple;
+      background-color: $primary-cta;
       color: $white;
       cursor: pointer;
     }
@@ -122,7 +122,7 @@
   img {
     height: 15px;
   }
-  // border: 2px solid $primary-purple;
+  // border: 2px solid $primary-cta;
 }
 .labl > input {
   /* HIDE RADIO */
@@ -140,7 +140,7 @@
 }
 
 .labl > input:checked + .image {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   img {
     filter: invert(0);
   }

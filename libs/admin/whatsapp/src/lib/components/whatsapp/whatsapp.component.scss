@@ -14,7 +14,7 @@
   &-sidebar {
     width: 27%;
     height: 100%;
-    border-right: 1px solid $light-gray;
+    border-right: 1px solid $grayLight;
     position: relative;
     .blackscreen {
       position: absolute;
@@ -22,7 +22,7 @@
       width: 100%;
       opacity: 0.3;
       background-color: $black;
-      z-index: 4;
+      z-index: 200;
       display: none;
     }
     @media screen and (max-width: 1180px) {
@@ -54,7 +54,7 @@
       line-height: normal;
       letter-spacing: 0.96px;
       text-align: left;
-      color: $dark-blue;
+      color: $secondary;
     }
     &__description {
       font-size: 12px;
@@ -64,7 +64,7 @@
       line-height: normal;
       letter-spacing: 0.72px;
       text-align: left;
-      color: $c-gray-77;
+      color: $grayLight;
     }
   }
   .guest-info-enable {
@@ -92,7 +92,7 @@
     width: 100%;
     opacity: 0.3;
     background-color: $black;
-    z-index: 4;
+    z-index: 200;
     display: none;
   }
 }

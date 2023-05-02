@@ -1,3 +1,5 @@
-.main_container {
-  height: calc(100vh - 100px);
+@import 'main';
+
+:host ::ng-deep .main_container {
+  @include create-with-container;
 }

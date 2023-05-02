@@ -51,17 +51,7 @@ export class TopicDropdownComponent implements OnInit, OnDestroy {
         (response) => {
           this.topicList = new Topics().deserialize(response).records;
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => { }
       )
     );
   }

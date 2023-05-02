@@ -1,4 +1,29 @@
-<!-- <p (click)="redirectToAddPackage()">+Add Package</p> -->
+<div
+  class="action-header"
+  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+  [formGroup]="tableFG"
+>
+  <div class="heading">{{ tableName }}</div>
+  <div class="action-wrapper">
+    <hospitality-bot-button
+      label="+ Create Category"
+      variant="text"
+      severity="secondary"
+      link="/pages/library/packages/{{ routes.createCategory.route }}"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      link="/pages/library/packages/{{ routes.createPackage.route }}"
+      label="+ Add Package"
+    ></hospitality-bot-button>
+    <hospitality-bot-export-list
+      (onDocumentActions)="onDocumentActions()"
+      [documentTypes]="documentTypes"
+      [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
+    ></hospitality-bot-export-list>
+  </div>
+</div>
+<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <p-table
   #dt
@@ -8,96 +33,42 @@
   [loading]="loading"
   [columns]="cols"
   [value]="values"
-  [paginator]="isPaginaton"
+  [paginator]="isPaginator"
   [rows]="rowsPerPage"
   [showCurrentPageReport]="showCurrentPageReport"
   [rowsPerPageOptions]="rowsPerPageOptions"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
   [(first)]="first"
   [totalRecords]="totalRecords"
   [filterDelay]="0"
   [(selection)]="selectedRows"
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
+  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+  *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
 >
   <ng-template pTemplate="caption">
-    <div class="caption__wrapper">
-      <form [formGroup]="tableFG">
-        <div class="caption__wrapper--tabmenu">
-          <div class="header">
-            <p class="heading">{{ tableName }}</p>
-            <div class="action-wrapper">
-              <hospitality-bot-button
-                (click)="redirectToAddPackage()"
-                label="+ Add Package"
-              ></hospitality-bot-button>
-              <hospitality-bot-export-list
-                (onDocumentActions)="onDocumentActions()"
-                [documentTypes]="documentTypes"
-                [documentActionTypes]="documentActionTypes"
-              ></hospitality-bot-export-list>
-            </div>
-          </div>
-          <div *ngIf="isTabFilters">
-            <hospitality-bot-tab-group
-              [listItems]="tabFilterItems"
-              [selectedIndex]="tabFilterIdx"
-              (selectedTabChange)="onSelectedTabFilterChange($event)"
-            ></hospitality-bot-tab-group>
-          </div>
-        </div>
-        <hospitality-bot-filter-chips
-          *ngIf="isQuickFilters"
-          [chips]="tabFilterItems[tabFilterIdx].chips"
-          (onChange)="toggleQuickReplyFilter($event)"
-        ></hospitality-bot-filter-chips>
-      </form>
+    <div class="caption__wrapper" [formGroup]="tableFG">
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+
+      <hospitality-bot-filter-chips
+        *ngIf="isQuickFilters"
+        [chips]="filterChips"
+        (onChange)="toggleQuickReplyFilter($event)"
+      ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <hospitality-bot-empty-view></hospitality-bot-empty-view>
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
-    <tr>
-      <th
-        *ngIf="isSelectable"
-        id="select-all"
-        class="table-search-head select-box"
-        pResizableColumn
-      >
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
-      <th
-        [id]="col.fields"
-        class="table-data-head"
-        pResizableColumn
-        [pSortableColumn]="col.field"
-        *ngFor="let col of columns"
-      >
-        <div>
-          <p class="table-header-text">{{ col.header }}</p>
-          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-        </div>
-      </th>
-    </tr>
-    <tr>
-      <th class="table-search-head" id="select-box" *ngIf="isSelectable"></th>
-      <th
-        [id]="col.field"
-        class="table-search-head"
-        *ngFor="let col of columns"
-      >
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, col.field)"
-          class="p-column-filter"
-          [disabled]="col.isSearchDisabled"
-        />
-      </th>
-    </tr>
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="isSelectable"
+      (search)="handleFieldSearch($event)"
+    ></tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->
   <ng-template
@@ -106,82 +77,98 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openPackageDetails(rowData)">
-      <td class="table--checkbox">
+    <tr class="table-row" (click)="editPackage(rowData.id)">
+      <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"
           [index]="rowIndex"
           (click)="onCheckboxClicked($event)"
         ></p-tableCheckbox>
       </td>
-      <td class="name">
-        <!-- <div class="profile">
-          <img src="assets/bg.png" />
-        </div> -->
-        <div class="package_image_wrapper">
-          <div class="image">
-            <img class="package-image" src="{{ rowData.imageUrl }}" />
+      <td>
+        <div class="cell-content" *ngIf="rowData.name; else emptyCell">
+          <div class="primary-text">
+            {{ rowData.name }}
           </div>
-          <div class="text">
-            <div>{{ rowData.name }}</div>
-            <p *ngIf="rowData.categoryName">{{ rowData.categoryName }}</p>
+          <div class="secondary-text">
+            {{ rowData.category }}
           </div>
         </div>
-        <!-- <div class="data">
-          {{ rowData.name }}
-          <p>{{ rowData.categoryName }}</p>
-          <img class="package-image" src="{{rowData.imageUrl}}" />
-        </div> -->
       </td>
       <td>
-        <div class="brand-name">
-          <div>{{ rowData.packageCode }}</div>
-          <p>{{ rowData.packageSource }}</p>
+        <div class="cell-content" *ngIf="rowData.code; else emptyCell">
+          <div class="primary-text">
+            {{ rowData.code }}
+          </div>
+          <div class="secondary-text">
+            {{ rowData.source }}
+          </div>
         </div>
       </td>
-      <td class="guest">
-        {{ rowData.description }}
-        <!-- <div
-          *ngIf="rowData.guests.secondaryGuest.length > 0"
-          [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
-        >
-          <div
-            *ngFor="
-              let secondaryGuest of rowData.guests.secondaryGuest;
-              let guestIdx = index
-            "
-          >
-            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+      <td>
+        <div class="cell-content" *ngIf="rowData.amount; else emptyCell">
+          <div class="primary-text">
+            <div *ngIf="rowData.discountedPrice" class="primary-text">
+              {{ rowData.currency }} {{ rowData.discountedPrice }}
+            </div>
+            <div
+              [ngClass]="{
+                'strike-text': rowData.discountedPrice,
+                'secondary-text': rowData.discountedPrice,
+                'primary-text': !rowData.discountedPrice
+              }"
+            >
+              {{ rowData.currency }} {{ rowData.amount }}
+            </div>
           </div>
-        </div> -->
+        </div>
       </td>
-      <td class="service-details">
-        {{ rowData.type }}
-      </td>
-      <td class="amount_wrapper">
-        <p class="amount">
-          {{ rowData.currency }}{{ rowData.rate }}/{{ rowData.unit }}
-        </p>
-      </td>
-      <td class="">
-        <label (click)="onCheckboxClicked($event)" class="switch">
-          <input type="checkbox" [checked]="rowData.status" />
-          <!-- <span class="slider round" (click)="updatePackageStatus($event)"></span> -->
-          <mat-slide-toggle
-            [checked]="rowData.status"
-            (change)="updatePackageStatus($event, rowData.id)"
-          ></mat-slide-toggle>
-        </label>
+      <td>
+        <div class="cell-content">
+          <hospitality-bot-toggle-dropdown
+            class="toggle-btn"
+            (onClick)="handleStatus($event, rowData)"
+            [status]="rowData.status"
+          >
+          </hospitality-bot-toggle-dropdown>
+        </div>
       </td>
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->
   <ng-template pTemplate="summary">
     <p-paginator
+      #paginator
       [rows]="rowsPerPage"
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="rowsPerPageOptions"
       (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
     ></p-paginator>
   </ng-template>
 </p-table>
+
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    link="/pages/library/packages/{{ routes.createPackage.route }}"
+    [content]="{
+      description:
+        'No packages found. Tap the +Add Packages to Create and manage special packages and promotions to attract guests and increase bookings.',
+      actionName: '+Add Package',
+      imageSrc: 'assets/images/empty-table-package.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+</ng-template>

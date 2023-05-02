@@ -7,10 +7,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { get } from 'lodash';
-import { CookieService } from 'ngx-cookie-service';
 import { Subscription } from 'rxjs';
-import { routes } from '../../../../../../../../../../../libs/admin/shared/src/index';
-import { AuthService } from '../../../../../../auth/services/auth.service';
 import { layoutConfig } from '../../../constants/layout';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
@@ -44,7 +41,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   menuTitle: string;
   logoUrl: string;
   bgColor: string;
-  profile = layoutConfig.profile;
   outlets = [];
   lastUpdatedAt: string;
   isGlobalFilterVisible = false;
@@ -81,15 +77,13 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     public progressSpinnerService: ProgressSpinnerService,
     public globalFilterService: GlobalFilterService,
     private _hotelDetailService: HotelDetailService,
-    private _authService: AuthService,
     private _userService: UserService,
     private fb: FormBuilder,
     private firebaseMessagingService: FirebaseMessagingService,
     private subscriptionPlanService: SubscriptionPlanService,
     private loadingService: LoadingService,
-    private notificatonService: NotificationService,
-    private configService: ConfigService,
-    private cookieService: CookieService
+    private notificationService: NotificationService,
+    private configService: ConfigService
   ) {
     this.initFG();
   }
@@ -124,7 +118,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   initFirebaseMessaging(entityId?) {
     const requestPermissionData = {
       hotelId: entityId,
-      userId: this._userService.getLoggedInUserid(),
+      userId: this._userService.getLoggedInUserId(),
     };
     this.firebaseMessagingService.requestPermission(requestPermissionData);
     this.$firebaseMessagingSubscription.add(
@@ -179,7 +173,17 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   setInitialFilterValue() {
     const brand = get(this._hotelDetailService.hotelDetails, ['brands', '0']);
     const branches = brand?.['branches'];
-    const branch = get(branches, [branches.length - 1]);
+
+    // Selecting the last available branch(hotel) in login details
+    let branch = get(branches, [branches.length - 1]);
+
+    // Updating the branch if it is in local storage
+    const selectedBranch = localStorage.getItem('hotelId');
+    if (selectedBranch) {
+      const currentBranch = branches.find((item) => item.id === selectedBranch);
+      if (currentBranch) branch = currentBranch;
+    } else localStorage.setItem('hotelId', branch?.['id']);
+
     this.logoUrl = branch?.['logoUrl'];
     this.bgColor = branch?.['headerBgColor'];
     this.outlets = branch?.['outlets'];
@@ -311,40 +315,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.dateRangeFilterService.emitDateRangeFilterValue$.next(event);
   }
 
-  profileAction(event) {
-    const itemType = event;
-
-    switch (itemType) {
-      case layoutConfig.userDropdown.profile:
-        this.displayProfile();
-        break;
-      case layoutConfig.userDropdown.logout:
-        this.logoutUser();
-        break;
-      default:
-        return;
-    }
-  }
-
-  displayProfile() {
-    this._router.navigate([
-      `/pages/${
-        routes.RoleAndPermission
-      }/${this._userService.getLoggedInUserid()}`,
-    ]);
-  }
-
-  logoutUser() {
-    this._authService
-      .logout(this._userService.getLoggedInUserid())
-      .subscribe(() => {
-        this.firebaseMessagingService.destroySubscription();
-        this._authService.clearToken();
-        this._authService.deletePlatformRefererTokens(this.cookieService);
-        location.reload();
-      });
-  }
-
   checkForTransactionFeedbackSubscribed() {
     return this.subscriptionPlanService.checkModuleSubscription(
       ModuleNames.FEEDBACK_TRANSACTIONAL
@@ -370,8 +340,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   getNotificationUnreadCount() {
-    this.notificatonService
-      .getUnreadCount(this._userService.getLoggedInUserid())
+    this.notificationService
+      .getUnreadCount(this._userService.getLoggedInUserId())
       .subscribe((response) => (this.unreadCount = response?.unreadCount));
   }
 

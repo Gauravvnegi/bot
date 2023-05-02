@@ -236,18 +236,9 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
 
           this.paginationDisabled =
             this.pagination.limit > response.records.length;
+            this.loading = false;
         },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe(),
-        () => {
+        ({ error }) => {
           this.loading = false;
         }
       )
@@ -301,7 +292,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
    * @function clearSearch function to clear search
    */
   clearSearch() {
-    this.parentFG.patchValue({ search: '' });
+    this.parentFG.patchValue({ search: '' }, { emitEvent: false });
     this.enableSearchField = false;
     this.loading = true;
   }
@@ -384,17 +375,9 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
                 this.feedbackType,
                 this.colorMap
               ).records),
-            ({ error }) =>
-              this.snackbarService
-                .openSnackBarWithTranslate(
-                  {
-                    translateKey: `messages.error.${error?.type}`,
-                    priorityMessage: error?.message,
-                  },
-                  ''
-                )
-                .subscribe(),
-            () => (this.loading = false)
+            ({ error }) =>{
+              this.loading = false;
+            }
           )
       );
     } else {

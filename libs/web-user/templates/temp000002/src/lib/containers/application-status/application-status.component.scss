@@ -66,11 +66,11 @@
 }
 
 .status--heading {
-  @include flex-space-between();
+  @include flex-space-between;
   align-items: center;
   padding: 5px;
 
-  margin: $margin-large 0;
+  margin: 20px 0;
   .heading {
     font-weight: $bolder;
     font-size: $font-large;
@@ -95,25 +95,25 @@
 }
 
 .section--heading {
-  padding: $padding-small;
+  padding: 10px;
   background-color: $primary-blue;
   color: white;
-  border-radius: $border-radius-small;
+  border-radius: 10px;
   font-weight: $bolder;
   font-size: $font-large;
   margin: 25px 0;
   @media screen and (max-width: 700px) {
-    font-size: $font16;
+    font-size: 16px;
     margin: 15px 0;
   }
 }
 
 .section--content {
-  @include flex-space-between();
-  margin: $margin20 $margin-medium;
+  @include flex-space-between;
+  margin: 20px 4px;
   &--health {
     flex-direction: column;
-    margin: $margin-small $margin-medium;
+    margin: 10px 4px;
     &--message {
       height: 35px;
       font-size: larger;
@@ -133,7 +133,7 @@
       }
     }
     &--disclaimer {
-      margin-top: $margin-medium;
+      margin-top: 15px;
       color: #8d8d8d;
       @media screen and (max-width: 700px) {
         font-size: 12px;
@@ -166,9 +166,9 @@
       width: 43%;
     }
     &--title {
-      font-size: $font16;
+      font-size: 16px;
       color: #8d8d8d;
-      margin-bottom: $margin-medium;
+      margin-bottom: 15px;
       b {
         color: black;
       }
@@ -180,28 +180,28 @@
       font-size: $font-large;
       font-weight: $bolder;
       @media only screen and (max-width: $tab-size) {
-        font-size: $font17;
+        font-size: 17px;
       }
     }
     &--value--container {
       font-size: $font-large;
       font-weight: $bolder;
-      margin-bottom: $margin-small;
-      @include flex-item-center();
+      margin-bottom: 10px;
+      @include flex-item-center;
       .element {
         margin-right: 35px;
         @media screen and (max-width: 700px) {
           margin-right: 0;
         }
         @media only screen and (max-width: $tab-size) {
-          font-size: $font17;
+          font-size: 17px;
         }
       }
       @media screen and (max-width: 700px) {
         justify-content: space-between;
       }
       @media only screen and (max-width: $tab-size) {
-        font-size: $font17;
+        font-size: 17px;
       }
     }
     @media screen and (max-width: $M) {
@@ -263,6 +263,15 @@
 
 :host ::ng-deep .ng-star-inserted {
   @media screen and (width: $M) {
-    padding-bottom: $padding30;
+    padding-bottom: 0px;
+  }
+}
+
+:host ::ng-deep {
+  .section--content--label {
+    .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+    .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+      background-color: #2186d4 !important;
+    }
   }
 }

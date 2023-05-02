@@ -61,17 +61,6 @@ export class LoginComponent implements OnInit {
         if (this.platformReferer == 'CREATE_WITH') {
           this._router.navigate(['/pages/create-with']);
         }
-      },
-      ({ error }) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
       }
     );
   }
@@ -106,20 +95,16 @@ export class LoginComponent implements OnInit {
     data.password = data.password?.trim();
     this._authService.login(data).subscribe(
       (response) => {
+        const hasHotel = !!response.hotelAccess?.chains[0]?.hotels?.length;
         this._userService.setLoggedInUserId(response?.id);
-        this._router.navigate([`/pages`]);
+        if (hasHotel) {
+          this._router.navigate([`/pages`]);
+        } else {
+          this._router.navigate([`/dashboard`]);
+        }
       },
       ({ error }) => {
-        this.isSigningIn = false;
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
+        this.isSigningIn = false; 
       }
     );
   }

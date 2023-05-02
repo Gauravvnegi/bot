@@ -9,29 +9,24 @@
     height: 56px;
     display: flex;
     align-items: center;
-    border-bottom: solid 1px $light-gray;
+    border-bottom: solid 1px $grayLight;
     .close {
       margin: 0 13px;
-      color: $primary-gray;
+      color: $grayMedium;
       font-size: 16px;
       cursor: pointer;
     }
     .title {
-      font-family: Roboto;
+      @include normal-text;
       font-size: 14px;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.84px;
-      color: $dark-blue;
+      color: $secondary;
     }
   }
   .body {
     padding: 25px 7px;
     display: flex;
     flex-wrap: wrap;
-    border-bottom: solid 1px $light-gray;
+    border-bottom: solid 1px $grayLight;
     height: calc(100vh - 150px);
     overflow-y: auto;
     .img-container {
@@ -55,12 +50,11 @@
       .copy {
         width: 100%;
         height: 29px;
-        background-color: $c-gray-103;
+        background-color: $whiteDeep;
         font-family: Roboto;
         font-size: 12px;
         font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
+
         color: $button-blue;
         display: flex;
         align-items: center;
@@ -98,10 +92,10 @@
 .global-search {
   position: relative;
   padding: 15px;
-  border-bottom: solid 1px $light-gray;
+  border-bottom: solid 1px $grayLight;
   .cross_icon {
-    color: $c-gray-77;
-    font-size: $font20;
+    color: $grayLight;
+    font-size: 20px;
     position: absolute;
     right: 0;
     top: 25%;
@@ -116,7 +110,7 @@
   input {
     border: none;
     padding: 5px;
-    border: 1px solid $light-grey;
+    border: 1px solid $grayLight;
     border-radius: 5px;
     width: 100%;
     font-size: 12px;
@@ -132,11 +126,11 @@
       }
     }
     &:focus {
-      border: 2px solid $primary-purple;
+      border: 2px solid $primary-cta;
       box-shadow: none;
     }
     &:hover {
-      border-color: $primary-purple;
+      border-color: $primary-cta;
     }
   }
 }
@@ -148,6 +142,6 @@
   text-align: center;
   font-weight: bold;
   &:hover {
-    background-color: $c-gray-94;
+    background-color: #eaf3fa;
   }
 }

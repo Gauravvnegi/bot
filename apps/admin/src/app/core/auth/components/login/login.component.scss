@@ -1,26 +1,26 @@
 @import 'main';
 
 .material-icons {
-  margin-right: $margin15;
-  color: $dark-grey;
+  margin-right: 15px;
+  color: $subtitle;
 }
 
 .card {
   &--heading {
-    color: $navy-blue !important;
-    @include auth-heading();
+    @include auth-heading;
+    color: $secondary;
 
     @media screen and (max-width: $tablet) {
-      font-size: $font30;
+      font-size: 30px;
       font-weight: bold;
-      @include margin-bottom(20px);
+      margin-bottom: 20px;
       letter-spacing: 0.9px;
     }
   }
   &--quote {
-    @include auth-quote();
+    @include auth-quote;
     @media screen and (max-width: $tablet) {
-      @include margin-bottom(0);
+      margin-bottom: 0;
       letter-spacing: 0.48px;
     }
   }
@@ -45,22 +45,22 @@
 }
 
 .social-btns i {
-  @include font-size(21);
+  font-size: 21px;
   color: $white;
 }
 
 .social-btns button {
-  @include margin(0px 8px);
+  margin: 0px 8px;
 }
 
 .forgot__block {
-  width: $full;
+  width: 100%;
   text-align: left;
 
   .forgot--password {
     text-decoration: none;
-    color: $auth-color;
-    font-size: $font14;
+    color: $authColor;
+    font-size: 14px;
     font-weight: $medium;
     letter-spacing: 0.56px;
     &:hover {
@@ -70,27 +70,28 @@
 }
 
 .tip {
-  @include margin-top(-20px);
+  margin-top: -20px;
 }
 
 .form-row,
 .card-form,
 .mat-form-field {
-  width: $full;
+  width: 100%;
 }
 
 .card-form {
-  @include padding(5px);
+  padding: 5px;
 }
 
 .form-row {
   position: relative;
-  @include flex-item-center();
-  @include margin-top(30px);
+  @include flex-item-center;
+  margin-top: 30px;
   @media screen and (max-width: $tablet) {
-    @include margin-top(45px);
+    margin-top: 45px;
     input {
-      color: $navy-blue !important;
+      color: $secondary !important;
+
       letter-spacing: 0.48px;
     }
   }
@@ -99,45 +100,44 @@
 .form-row i {
   position: relative;
   top: -5px;
-  @include margin-right(15px);
-  color: $auth-gray;
+  margin-right: 15px;
+  color: $grayAuth;
 }
 
 .card-footer {
-  @include margin-top(2rem);
-  @media (max-width: 1024px) {
-    @include margin-top(50px);
+  margin-top: 2rem;
+  @media (max-width: $tablet) {
+    margin-top: 50px;
   }
 }
 
 .card-footer button {
- @include primaryButton();
+  @include primary-button;
   &:hover {
     cursor: pointer;
-    box-shadow: 0px 4px 4px #4b56c04d;
+    box-shadow: 0px 4px 4px $btn-shadow;
   }
   @media screen and (max-width: $tablet) {
-    font-size: $font16;
-    font-weight: $medium;
-    letter-spacing: 0.48px;
+    @include normal-text;
     height: 4.5vw;
     @include flex-all-center;
     width: 14vw;
   }
 }
 :host ::ng-deep .mat-form-field-label {
-  @media (max-width: 1024px) {
-    font-size: $font14 !important;
-    color: $primary-gray !important;
+  @media (max-width: $tablet) {
+    font-size: 14px !important;
+    color: $grayMedium !important;
+
     letter-spacing: 0.42px;
-    @include margin-bottom(33px);
+    margin-bottom: 33px;
   }
 }
 
 @media screen and (max-width: $tablet) {
   :host ::ng-deep {
     .mat-form-field-underline {
-      background-color: $quote-color !important;
+      background-color: $subtitle !important;
     }
   }
 }

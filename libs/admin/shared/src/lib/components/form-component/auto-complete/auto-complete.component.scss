@@ -1,0 +1,139 @@
+@import '../form.component.scss';
+
+:host ::ng-deep .p-autocomplete {
+  @include input-default();
+  position: relative;
+  padding: 0;
+}
+
+:host ::ng-deep .p-autocomplete-label {
+  padding: 0;
+}
+
+:host ::ng-deep .p-autocomplete-label-container {
+  overflow: visible;
+  margin-top: -0.3em;
+}
+
+:host ::ng-deep .input {
+  width: 100%;
+  height: 100%;
+
+  .p-autocomplete-multiple-container:not(.p-disabled).p-focus {
+    box-shadow: 0px 0px 0px 1px $primary-form-color !important;
+    border-color: $primary-form-color !important;
+  }
+
+  .p-autocomplete-loader {
+    color: $border-color;
+  }
+
+  .p-autocomplete-input-token {
+    padding: 0.2em 0 !important;
+    font-size: 1em !important;
+    width: 60px;
+  }
+
+  .p-inputtext {
+    min-height: $form-input-height;
+    /* to be handle form padding variable*/
+    padding: 0.4em $input-padding-horizontal !important;
+
+    height: min-content;
+    position: absolute;
+    inset: 0 0 0 0;
+    border-color: $border-color;
+
+    &:hover {
+      border-color: $primary-form-color !important;
+    }
+
+    &.p-focus {
+      box-shadow: inset 0 0 0 1px $primary-form-color !important;
+    }
+  }
+
+  &__error {
+    .p-inputtext {
+      border-color: $form-error-color !important;
+    }
+  }
+
+  &__static {
+    .p-autocomplete {
+      margin-top: $label-gap;
+    }
+    .p-autocomplete-loader {
+      color: $border-color;
+    }
+  }
+
+  &__outlined {
+    .p-autocomplete-open {
+      border-width: 1px;
+    }
+  }
+
+  &__standard {
+    .p-autocomplete {
+      // border-color: $primary-text-color;
+      border-width: 0 0 1px 0;
+      border-radius: unset;
+    }
+    .p-autocomplete-open {
+      margin-bottom: -1px;
+      border-width: 0 0 2px 0;
+      border-color: $primary-form-color;
+      box-shadow: none;
+    }
+  }
+
+  /* Menu */
+  .p-autocomplete-panel {
+    right: 0;
+    left: 0;
+  }
+
+  /* Chips Container */
+  .p-autocomplete-multiple-container {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 0.3em;
+  }
+
+  /* Chips */
+  .p-autocomplete-token {
+    &-label {
+      // max-width: 100px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    display: flex;
+    background-color: #e8e2ff !important;
+    font-family: Roboto;
+    font-size: 0.7em;
+    padding: 0.4em 0.6em !important;
+    letter-spacing: 0.08em;
+    color: #5f38f9 !important;
+    border-radius: 4px;
+  }
+}
+
+/* menu option item */
+.label {
+  display: flex;
+  justify-content: space-between;
+  &__main {
+    flex-basis: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  &__subtitle {
+    flex-basis: 20%;
+    font-style: italic;
+    font-size: 0.8em;
+    color: $secondary-text-color;
+    text-align: right;
+  }
+}

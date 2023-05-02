@@ -1,70 +1,73 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
-import * as _ from 'lodash';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Optional,
+  Output,
+  Self,
+} from '@angular/core';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  NgControl,
+} from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-custom-select',
   templateUrl: './custom-select.component.html',
   styleUrls: ['./custom-select.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: CustomSelectComponent,
-      multi: true,
-    },
-  ],
 })
-export class CustomSelectComponent implements ControlValueAccessor {
-  constructor() {}
+export class CustomSelectComponent implements OnInit, ControlValueAccessor {
+  options: Record<string, any>[] = [];
+  value: string[] = [];
 
-  options: any[] = [];
-  value: any[] = [];
-  @Input() requiredProperty: string;
-  @Input() optionalProperties: string[];
-  @Input() selectedLabel: string[];
-  @Input() set itemList(value: Record<string, any>[]) {
-    if (!!value) {
-      this.options = value.map((item) => {
+  @Input() label: string;
+  @Input() description: string;
+  @Input() validationErrMsg: string = 'This is required field.';
+
+  @Input() optionValue: string = 'id';
+  @Input() optionLabel: string = 'name';
+
+  @Input() fullView: boolean = false;
+  @Input() noMoreData: boolean = false;
+
+  @Output() loadMoreData = new EventEmitter();
+  @Output() viewAll = new EventEmitter();
+
+  @Input() set itemList(options: Record<string, any>[]) {
+    this.options =
+      options?.map((item) => {
         let checked = false;
-        if (this.value.length) {
-          checked =
-            this.value.findIndex(
-              (res) =>
-                res[this.requiredProperty] === item[this.requiredProperty]
-            ) > -1;
-        }
+
+        checked = this.value?.includes(item[this.optionValue]);
         return { ...item, checked };
-      });
-    }
+      }) ?? [];
+  }
+
+  @Input() emptyMessage = 'No Data Available';
+  @Input() noRecordsAction: { name: string; link: string };
+
+  constructor(@Self() @Optional() public control: NgControl) {
+    if (this.control) this.control.valueAccessor = this;
+  }
+
+  ngOnInit(): void {
+    this.addRequiredAsterisk();
   }
 
   onChange = (value: any[]) => {};
   onTouched = () => {};
 
   writeValue(controlValue: any): void {
-    if (this.options.length) {
+    if (this.options.length && controlValue) {
       this.options = this.options.map((item) => {
-        let checked =
-          controlValue.findIndex(
-            (res) => res[this.requiredProperty] === item[this.requiredProperty]
-          ) > -1;
-
-        return {
-          ...item,
-          checked,
-        };
+        let checked = controlValue?.includes(item[this.optionValue]);
+        return { ...item, checked };
       });
     }
 
-    const selectedProps: string[] = this.optionalProperties;
-    selectedProps?.unshift(this.requiredProperty);
-
-    if (selectedProps) {
-      this.value = _.map(controlValue, (e) => _.pick(e, selectedProps));
-    } else {
-      this.value = _.map(controlValue, this.requiredProperty);
-    }
+    this.value = controlValue;
     this.onChange(this.value);
   }
 
@@ -77,32 +80,29 @@ export class CustomSelectComponent implements ControlValueAccessor {
   }
 
   selectItems(i: number) {
-    const selectedProps = this.optionalProperties;
-    selectedProps?.unshift(this.requiredProperty);
     const valueItem = this.options[i];
     if (!valueItem.checked) {
-      valueItem.checked = true;
-
-      if (selectedProps) {
-        this.value.push(_.pick(valueItem, selectedProps));
-      } else {
-        this.value.push(valueItem[this.requiredProperty]);
-      }
+      this.value.push(valueItem[this.optionValue]);
     } else {
-      valueItem.checked = false;
-      let index: number;
-      if (selectedProps) {
-        index = this.value.findIndex(
-          (item) =>
-            item[this.requiredProperty] === valueItem[this.requiredProperty]
-        );
-      } else {
-        index = this.value.findIndex(
-          (item) => item === valueItem[this.requiredProperty]
-        );
-      }
+      let index = this.value.findIndex(
+        (item) => item === valueItem[this.optionValue]
+      );
       this.value.splice(index, 1);
     }
+    valueItem.checked = !valueItem.checked;
     this.onChange(this.value);
+  }
+
+  addRequiredAsterisk() {
+    const validators = this.control.control?.validator;
+    const isRequired =
+      validators && validators({} as AbstractControl)?.required;
+    if (this.label && isRequired) {
+      this.label = this.label + ' *';
+    }
+  }
+
+  loadMore() {
+    this.loadMoreData.emit();
   }
 }

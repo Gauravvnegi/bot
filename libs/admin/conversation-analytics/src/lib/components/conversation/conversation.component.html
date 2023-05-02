@@ -1,31 +1,52 @@
 <div class="stats">
-  <hospitality-bot-custom-tooltip [text]="'Bifurcation as per messages'">
+  <hospitality-bot-custom-tooltip
+    [text]="'Bifurcation as per messages'"
+    *skeleton="stats == undefined; height: '25px'; width: '125px'"
+  >
     <div class="stats__title">
       Conversation
     </div>
   </hospitality-bot-custom-tooltip>
-  <!-- <div class="stats__subheading">
-    Bifurcation as per messages
-  </div> -->
+
   <div class="stats__body">
     <div class="graph-container">
       <div class="graphcontainer__graph">
-        <canvas
-          baseChart
-          width="200px"
-          class="graphcontainer__graph-canvas"
-          [data]="chart.Data"
-          [labels]="chart.Labels"
-          [chartType]="chart.Type"
-          [legend]="chart.Legend"
-          [colors]="chart.Colors"
-          [options]="chart.Options"
+        <ng-container
+          *skeleton="
+            stats == undefined;
+            height: '161px';
+            width: '161px';
+            borderRadius: '50%';
+            margin: '30px 0 0 50px'
+          "
         >
-        </canvas>
+          <canvas
+            baseChart
+            width="200px"
+            class="graphcontainer__graph-canvas"
+            [data]="chart.Data"
+            [labels]="chart.Labels"
+            [chartType]="chart.Type"
+            [legend]="chart.Legend"
+            [colors]="chart.Colors"
+            [options]="chart.Options"
+          >
+          </canvas>
+        </ng-container>
       </div>
     </div>
-    <div class="stats__body__detail" *ngIf="stats">
-      <div class="stats__body__detail__shared">
+    <div class="stats__body__detail">
+      <ng-container
+        *skeleton="
+          stats == undefined;
+          height: '70px';
+          width: '100%';
+          repeat: 3;
+          margin: '0 0 10px 0'
+        "
+      ></ng-container>
+
+      <div class="stats__body__detail__shared" *ngIf="stats">
         <div>{{ stats?.totalResponse }}</div>
         <div>
           <div class="stats__body__detail__shared__p">
@@ -54,7 +75,7 @@
           </div>
         </div>
       </div>
-      <div class="stats__body__detail__sharedtitle">
+      <div class="stats__body__detail__sharedtitle" *ngIf="stats">
         Overall
       </div>
       <ng-container *ngIf="stats?.statistics">

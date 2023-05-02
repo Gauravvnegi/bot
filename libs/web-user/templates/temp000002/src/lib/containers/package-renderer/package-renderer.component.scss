@@ -177,11 +177,11 @@
 }
 
 :host ::ng-deep .back-button {
-  @include secondary-button();
+  @include secondary-button;
 }
 
 :host ::ng-deep .save-button {
-  @include primary-button();
+  @include primary-button;
   font-weight: 400;
   background-color: #4b56c0;
 }

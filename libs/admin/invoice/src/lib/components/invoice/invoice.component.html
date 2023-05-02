@@ -1,0 +1,290 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+    <hospitality-bot-button
+      variant="outlined"
+      label="Preview"
+    ></hospitality-bot-button>
+    <hospitality-bot-button 
+      label="Generate"
+    ></hospitality-bot-button>
+  </hospitality-bot-navigation-header>
+  <div class="form-wrapper" [formGroup]="useForm">
+    <div class="form-block">
+      <div class="half-width">
+        <span class="code__label"> Invoice Number: </span>
+        <span class="code__hash">
+          {{ inputControl.invoiceNumber.value }}
+        </span>
+      </div>
+      <div class="half-width code__right">
+        <span class="code__label"> Confirmation Number: </span>
+        <span class="code__hash">
+          {{ inputControl.confirmationNumber.value }}
+        </span>
+      </div>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="guestName"
+        label="Guest Name"
+        maxLength="60"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="companyName"
+        label="Company Name"
+        maxLength="60"
+      ></hospitality-bot-input>
+    </div>
+
+    <div class="payment-form">
+      <div class="payment-form__header">
+        <span>Payment Detail</span>
+        <div
+          *ngIf="selectedRows?.length"
+          class="delete-icon"
+          (click)="removeSelectedCharges()"
+        >
+          <img src="assets/svg/delete.svg" alt="delete" />
+        </div>
+      </div>
+      <div class="payment-form__details" formArrayName="tableData">
+        <p-table
+          #dt
+          [columns]="cols"
+          [value]="tableValue"
+          [(selection)]="selectedRows"
+          (onRowSelect)="onRowSelect($event)"
+          (onRowUnselect)="onRowUnselect($event)"
+          (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+        >
+          <ng-template pTemplate="header" let-columns #header>
+            <tr class="header">
+              <th id="select-all" class="select-box">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th
+                *ngFor="let col of columns"
+                [id]="col.header"
+                [ngStyle]="{ width: col.width }"
+              >
+                <div class="col-heading">{{ col.header }}</div>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template
+            pTemplate="body"
+            let-rowData
+            let-columns="columns"
+            let-rowIndex="rowIndex"
+          >
+            <tr [formGroupName]="rowIndex"
+               [disabled]="true"
+            >
+              <td>
+                <p-tableCheckbox
+                  [value]="rowData"
+                  [index]="rowIndex"
+                  [disabled]="rowIndex === 0"
+                ></p-tableCheckbox>
+              </td>
+              <td>
+                <hospitality-bot-input
+                  controlName="description"
+                  [disabled]="rowIndex === 0"
+                ></hospitality-bot-input>
+              </td>
+              <td>
+                <hospitality-bot-input
+                  controlName="unit"
+                  [props]="{ type: 'number' }"
+                  [disabled]="rowIndex === 0"
+                ></hospitality-bot-input>
+              </td>
+              <td>
+                <hospitality-bot-input
+                  controlName="unitValue"
+                  [props]="{ type: 'number' }"
+                  [disabled]="rowIndex === 0"
+                ></hospitality-bot-input>
+              </td>
+              <td>
+                <hospitality-bot-input
+                  controlName="amount"
+                  [props]="{ type: 'number' }"
+                  [disabled]="true"
+                ></hospitality-bot-input>
+              </td>
+              <td>
+                <hospitality-bot-multi-select
+                  controlName="tax"
+                  [options]="taxes"
+                  [settings]="{ showHeader: false }"
+                  [disabled]="rowIndex === 0"
+                ></hospitality-bot-multi-select>
+              </td>
+              <td>
+                <hospitality-bot-input
+                  controlName="totalAmount"
+                  [props]="{ type: 'number' }"
+                  [disabled]="true"
+                ></hospitality-bot-input>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="summary">
+            <hospitality-bot-button
+              label="+ Add New"
+              variant="text"
+              (onClick)="addNewCharges()"
+            ></hospitality-bot-button>
+          </ng-template>
+        </p-table>
+      </div>
+
+      <div class="payment-form__amount">
+        <div class="py-row">
+          <span>Current Amount</span>
+          <span> INR {{ currentAmount.value | number: '1.1-1' }}</span>
+        </div>
+        <div class="py-row stretch">
+          <span>Discount</span>
+          <span class="span-block">
+            <span>INR {{ totalDiscount.value | number: '1.1-1' }}</span>
+            <ng-container *ngIf="viewDiscountTab">
+              <span class="input-field discount-field">
+                <hospitality-bot-prefix-field
+                  [options]="discountOption"
+                  preControlName="discountType"
+                  postControlName="discount"
+                  [props]="{ errorMessages: errorMessages, type: 'number' }"
+                ></hospitality-bot-prefix-field>
+              </span>
+              <hospitality-bot-button
+                label="Save"
+                variant="text"
+                (onClick)="onSaveDiscount($event)"
+                [disabled]="!isValidDiscount"
+              ></hospitality-bot-button>
+            </ng-container>
+            <hospitality-bot-menu
+              *ngIf="!viewDiscountTab"
+              type="button"
+              alignment="horizontal"
+              (onClickItem)="
+                editMode ? onEditDiscount($event) : onAddDiscount($event)
+              "
+              [menuItems]="editMode ? editDiscount : addDiscount"
+            ></hospitality-bot-menu>
+          </span>
+        </div>
+        <div class="py-row invert">
+          <span>Total Amount</span
+          ><span>INR {{ discountedAmount.value | number: '1.1-1' }}</span>
+        </div>
+        <div class="py-row stretch">
+          <span>Paid Amount</span>
+          <span class="span-block">
+            <span>INR {{ paidAmount.value | number: '1.1-1' }}</span>
+            <ng-container *ngIf="viewPaidTab">
+                <span class="input-field">
+                  <hospitality-bot-input
+                    controlName="paidValue"
+                    [disabled]="true"
+                  ></hospitality-bot-input>
+                  <span> + </span>
+                  <hospitality-bot-input
+                    controlName="paid"
+                    [props]="{ errorMessages: errorMessages, type: 'number' }"
+                  ></hospitality-bot-input>
+                </span>
+                  <hospitality-bot-button
+                    label="Save"
+                    variant="text"
+                    (onClick)="savePaidAmount()"
+                    [disabled]="!isValidPaid"
+                  ></hospitality-bot-button>
+              </ng-container>
+            <hospitality-bot-menu
+              *ngIf="!viewPaidTab"
+              type="button"
+              alignment="horizontal"
+              (onClickItem)="onEditPaid($event)"
+              [menuItems]="editPaidAmount"
+            ></hospitality-bot-menu>
+          </span>
+        </div>
+        <div class="py-row">
+          <span>Due Amount</span
+          ><span>INR {{ dueAmount.value | number: '1.1-1' }}</span>
+        </div>
+      </div>
+      <div class="payment-form__note">
+        <hospitality-bot-text-area
+          controlName="additionalNote"
+          label="Additional Note"
+        ></hospitality-bot-text-area>
+      </div>
+    </div>
+
+    <p-accordion class="form-accordion" [multiple]="true">
+      <p-accordionTab header="Booking Information" [selected]="true">
+        <div class="form-block">
+          <hospitality-bot-input
+            class="half-width"
+            controlName="cashierName"
+            label="Cashier Name"
+            maxLength="60"
+          ></hospitality-bot-input>
+          <hospitality-bot-date
+            class="half-width"
+            controlName="invoiceDate"
+            label="Invoice Date"
+          ></hospitality-bot-date>
+          <hospitality-bot-date
+            class="half-width"
+            controlName="arrivalDate"
+            label="Arrival"
+          ></hospitality-bot-date>
+          <hospitality-bot-date
+            class="half-width"
+            controlName="departureDate"
+            label="Departure"
+          ></hospitality-bot-date>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="roomNumber"
+            label="Room No"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="roomType"
+            label="Room Type"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="adults"
+            label="No. of Adults"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="children"
+            label="No. of Children"
+          ></hospitality-bot-input>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+    <div class="button">
+      <hospitality-bot-button
+        label="Reset All"
+        variant="text"
+        severity="reset"
+        (onClick)="handleReset()"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        label="Save"
+        (onClick)="handleSave()"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="os-container">
+  <div class="title">Overall Sentiment</div>
+  <div class="graph">
+    <div class="graph__img">
+      <canvas
+        baseChart
+        *skeleton="
+          sentimentData == undefined;
+          height: '18vw';
+          width: '18vw';
+          borderRadius: '50%'
+        "
+        [chartType]="graphData.type"
+        [datasets]="graphData.data.datasets"
+        [labels]="graphData.data.labels"
+        [options]="graphData.options"
+        [legend]="graphData.legend"
+      >
+      </canvas>
+    </div>
+    <div class="graph__data">
+      <div class="value">{{ sentimentData?.total }}</div>
+      <div class="text">Total Comments</div>
+    </div>
+  </div>
+
+  <div class="details">
+    <ng-container
+      *skeleton="
+        sentimentData == undefined;
+        height: '43px';
+        width: '75px';
+        repeat: 3
+      "
+    >
+    </ng-container>
+    <ng-container *ngIf="sentimentData">
+      <div class="details__item">
+        <div class="dot" [style.background]="colors.positive"></div>
+        <div class="content">
+          <div class="value">{{ sentimentData.positive }}%</div>
+          <div class="label">Positive</div>
+        </div>
+      </div>
+      <div class="details__item">
+        <div class="dot" [style.background]="colors.neutral"></div>
+        <div class="content">
+          <div class="value">{{ sentimentData.neutral }}%</div>
+          <div class="label">
+            Neutral<hospitality-bot-custom-tooltip [text]="'Neutral sentiment'">
+            </hospitality-bot-custom-tooltip>
+          </div>
+        </div>
+      </div>
+      <div class="details__item">
+        <div class="dot" [style.background]="colors.negative"></div>
+        <div class="content">
+          <div class="value">{{ sentimentData.negative }}%</div>
+          <div class="label">Negative</div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

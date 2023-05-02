@@ -1,50 +1,50 @@
 // Mixins
 
-@mixin flex-space-between() {
+@mixin flex-space-between {
   display: flex;
   justify-content: space-between;
 }
 
-@mixin flex-item-center() {
+@mixin flex-item-center {
   display: flex;
   align-items: center;
 }
 
-@mixin flex-justify-center() {
+@mixin flex-justify-center {
   display: flex;
   justify-content: center;
 }
 
-@mixin flex-between-center() {
+@mixin flex-between-center {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-@mixin flex-all-center() {
+@mixin flex-all-center {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-@mixin flex-wrap() {
+@mixin flex-wrap {
   display: flex;
   flex-wrap: wrap;
 }
 
-@mixin full-width-on-breakpoint($breakpoint) {
+@mixin fullWidthOnBreakPoint($breakpoint) {
   @media only screen and (max-width: $breakpoint) {
     width: 100%;
   }
 }
 
-@mixin display-block-on-breakpoint($breakpoint) {
+@mixin displayBlockOnBreakPoint($breakpoint) {
   @media only screen and (max-width: $breakpoint) {
     width: 100%;
   }
 }
 
-@mixin primary-button() {
+@mixin primary-button {
   background: var(
     --primary-button-background-color,
     $primary-button-background-color
@@ -58,7 +58,7 @@
   }
 }
 
-@mixin secondary-button() {
+@mixin secondary-button {
   color: var(--secondary-button-font-color, $secondary-button-font-color);
   width: 150px;
   font-weight: $bolder;
@@ -87,17 +87,17 @@ $XL: 1500px;
   @include flex-space-between;
   align-items: center;
 }
-@mixin flex-col-justCenter {
+@mixin flex-col-justify-center {
   @include flex-justify-center;
   flex-direction: column;
 }
-@mixin flex-between-center() {
+@mixin flex-between-center {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-@mixin auth-heading() {
+@mixin auth-heading {
   font-weight: $medium;
   font-size: 35px;
   color: $auth-color;
@@ -107,9 +107,9 @@ $XL: 1500px;
   }
 }
 
-@mixin auth-quote() {
+@mixin auth-quote {
   font-weight: 400;
-  font-size: $font16;
+  font-size: 16px;
   color: $quote-color;
   letter-spacing: 0.54px;
   line-height: 25px;
@@ -118,18 +118,18 @@ $XL: 1500px;
   }
 }
 
-@mixin admin-panel-button() {
-  background-color: $primary-purple;
+@mixin admin-panel-button {
+  background-color: $primary-cta;
   border: none;
   outline: none;
   color: white;
-  font-size: $font14;
+  font-size: 14px;
   font-weight: $medium;
   border-radius: 25px;
   padding: 12px 0px;
   width: $normal-button-width;
   opacity: 0.85;
-  box-shadow: 0px 0px 5px 0px $primary-purple;
+  box-shadow: 0px 0px 5px 0px $primary-cta;
   &:hover {
     cursor: pointer;
     opacity: 1;
@@ -145,165 +145,11 @@ $XL: 1500px;
   align-items: center;
   justify-content: center;
 }
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .mt-#{$i} {
-    margin-top: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .mb-#{$i} {
-    margin-bottom: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .ml-#{$i} {
-    margin-left: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .mr-#{$i} {
-    margin-right: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .m-#{$i} {
-    margin: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .p-#{$i} {
-    padding: 1px * $i !important;
-  }
-}
 
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .pt-#{$i} {
-    padding-top: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .pb-#{$i} {
-    padding-bottom: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .pl-#{$i} {
-    padding-left: 1px * $i !important;
-  }
-}
-@for $i from 1 through 20 {
-  $i: $i * 5;
-  .pr-#{$i} {
-    padding-right: 1px * $i !important;
-  }
-}
-//Padding variables
-@mixin padding-percentage($padding) {
-  padding: $padding;
-}
-@mixin padding($padding) {
-  @if length($padding) == 1 {
-    padding: $padding;
-  }
-  @if length($padding) == 2 {
-    padding: nth($padding, 1) nth($padding, 2);
-  }
-  @if length($padding) == 3 {
-    padding: nth($padding, 1) nth($padding, 2) nth($padding, 3);
-  }
-  @if length($padding) == 4 {
-    padding: nth($padding, 1)
-      nth($padding, 2)
-      nth($padding, 3)
-      nth($padding, 4);
-  }
-}
-@mixin padding-top($padding) {
-  padding-top: $padding;
-}
-@mixin padding-right($padding) {
-  padding-right: $padding;
-}
-@mixin padding-bottom($padding) {
-  padding-bottom: $padding;
-}
-@mixin padding-left($padding) {
-  padding-left: $padding;
-}
-//Height and width
-@mixin height($size) {
-  height: $size;
-}
-@mixin min-height($size) {
-  min-height: $size;
-}
-@mixin max-height($size) {
-  max-height: $size;
-}
-@mixin width($size) {
-  width: $size;
-}
-@mixin width-percentage($size) {
-  width: $size;
-}
-@mixin min-width($size) {
-  min-width: $size;
-}
-@mixin max-width($size) {
-  max-width: $size;
-}
-//margin variables
-@mixin margin($margin) {
-  @if length($margin) == 1 {
-    margin: $margin;
-  }
-  @if length($margin) == 2 {
-    margin: nth($margin, 1) nth($margin, 2);
-  }
-  @if length($margin) == 3 {
-    margin: nth($margin, 1) nth($margin, 2) nth($margin, 3);
-  }
-  @if length($margin) == 4 {
-    margin: nth($margin, 1) +
-      px
-      nth($margin, 2) +
-      px
-      nth($margin, 3) +
-      px
-      nth($margin, 4) +
-      px;
-  }
-}
-@mixin margin-top($margin) {
-  margin-top: $margin;
-}
-@mixin margin-right($margin) {
-  margin-right: $margin;
-}
-@mixin margin-bottom($margin) {
-  margin-bottom: $margin;
-}
-@mixin margin-left($margin) {
-  margin-left: $margin;
-}
 
-//font size
-@mixin font-size($size) {
-  font-size: $size + px;
-}
-
-@mixin primaryButton() {
+@mixin primary-button {
   color: $white;
-  font-size: $font14;
+  font-size: 14px;
   font-weight: 400;
   background-color: $auth-color;
   width: 10vw;
@@ -316,22 +162,22 @@ $XL: 1500px;
   }
 }
 
-@mixin secondaryButton() {
-  @include primaryButton();
+@mixin secondary-button {
+  @include primary-button;
   border: 1px solid $auth-color;
   background-color: $white;
   color: $auth-color;
 }
 
-@mixin commonButtonStyle() {
+@mixin common-button-style {
   font-size: 16px;
   font-family: Montserrat;
   border-radius: 28px;
   margin: 0px 10px;
 }
 
-@mixin footer-next() {
-  @include primaryButton();
+@mixin footer-next {
+  @include primary-button;
   width: 200px;
   height: 45px;
   box-shadow: 0px 3px 6px #4b56c059;
@@ -346,8 +192,8 @@ $XL: 1500px;
   }
 }
 
-@mixin footer-back() {
-  @include secondaryButton();
+@mixin footer-back {
+  @include secondary-button;
   width: 200px;
   height: 45px;
   margin-right: 30px;
@@ -363,7 +209,7 @@ $XL: 1500px;
   }
 }
 
-@mixin align-checkbox() {
+@mixin align-checkbox {
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center !important;

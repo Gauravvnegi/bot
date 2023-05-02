@@ -6,7 +6,6 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { TranslateService } from '@ngx-translate/core';
@@ -57,17 +56,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
       this.campaignService.getTopicList(this.hotelId, config).subscribe(
         (response) => {
           this.topicList = new Topics().deserialize(response).records;
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        } 
       )
     );
   }

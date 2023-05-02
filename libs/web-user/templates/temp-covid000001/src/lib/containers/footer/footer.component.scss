@@ -11,17 +11,17 @@
   .text {
     text-align: center;
     p {
-      margin-bottom: $margin-medium;
+      margin-bottom: 15px;
     }
     .tagline {
       font-size: $font-large;
       font-weight: $bold;
-      letter-spacing: $large-spacing;
+      letter-spacing: 6px;
       color: $white;
     }
     .heading {
-      font-size: $heading-font;
-      letter-spacing: $small-spacing;
+      font-size: 35px;
+      letter-spacing: 2px;
       font-weight: $bold;
       color: $white;
     }
@@ -32,17 +32,17 @@
     top: 227px;
     right: -5px;
     left: -5px;
-    @include flex-space-between();
+    @include flex-space-between;
   }
   @media only screen and (max-width: $M) {
     height: auto;
-    background-size: $full-width;
-    padding: $padding-small;
+    background-size: 100%;
+    padding: 10px;
     padding-left: 0px;
     margin-bottom: 0px;
     .text {
       p {
-        margin-bottom: $margin-small;
+        margin-bottom: 10px;
       }
       .tagline {
         font-size: $font-responsive-small;
@@ -54,11 +54,11 @@
     .video_slider {
       top: 73px;
       .next {
-        @include slider-buttons-responsive();
+        @include slider-buttons-responsive;
         right: 12px;
       }
       .prev {
-        @include slider-buttons-responsive();
+        @include slider-buttons-responsive;
         left: 12px;
       }
     }
@@ -70,8 +70,8 @@
   width: 350px;
   position: relative;
   img {
-    height: $full-width;
-    width: $full-width;
+    height: 100%;
+    width: 100%;
   }
   &--text {
     position: absolute;
@@ -107,7 +107,7 @@
   width: 111%;
   padding: 50px 0px;
   @media only screen and (max-width: $M) {
-    padding: $padding-medium 0px;
+    padding: 15px 0px;
   }
   @media only screen and (max-width: 450px) {
     width: 104%;

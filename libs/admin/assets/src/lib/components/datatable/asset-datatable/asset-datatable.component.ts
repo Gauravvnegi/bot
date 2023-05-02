@@ -1,29 +1,25 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import * as FileSaver from 'file-saver';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 
 import {
   BaseDatatableComponent,
-  Chip,
   sharedConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import {
-  SelectedEntityState,
-  EntityType,
-  EntityState,
-} from 'libs/admin/dashboard/src/lib/types/dashboard.type';
+import { TranslateService } from '@ngx-translate/core';
+import { SelectedEntityState } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { assetConfig } from '../../../constants/asset';
-import { AssetService } from '../../../services/asset.service';
+import { AssetsRoutes } from '../../../constants/routes';
 import { Assets } from '../../../data-models/assetConfig.model';
-import { TranslateService } from '@ngx-translate/core';
+import { AssetService } from '../../../services/asset.service';
 
 @Component({
   selector: 'hospitality-bot-asset-datatable',
@@ -106,29 +102,26 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new Assets().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.loading_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
+  }
+
+  /**
+   * @function setRecords To set records after getting reponse from an api.
+   * @param data The data is a response which comes from an api call.
+   */
+  setRecords(data): void {
+    this.values = new Assets().deserialize(data).records;
+    this.updateTabFilterCount(data.entityTypeCounts, data.total);
+    this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.updateTotalRecords();
+    this.loading = false;
   }
 
   /**
@@ -171,26 +164,11 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         }
       ).subscribe(
         (data) => {
-          this.values = new Assets().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.loading_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -258,15 +236,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.exportCSV_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -297,17 +266,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           .subscribe();
         this.changePage(this.currentPage);
       },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'message.error.asset_status_update_fail',
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      }
+      ({ error }) => {}
     );
   }
 
@@ -357,7 +316,9 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    * @function openCreateAsset navigate to create Asset form.
    */
   openCreateAsset() {
-    this._router.navigate(['create'], { relativeTo: this.route });
+    this._router.navigate([AssetsRoutes.createAssets.route], {
+      relativeTo: this.route,
+    });
   }
 
   /**
@@ -367,34 +328,12 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    */
   openAssetDetails(asset, event): void {
     event.stopPropagation();
-    this._router.navigate([`edit/${asset.id}`], { relativeTo: this.route });
-  }
-
-  /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
-   */
-  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        chip.total = countObj[chip.value];
-      });
-    }
+    this._router.navigate(
+      [AssetsRoutes.editAssets.route.replace(':id', asset.id)],
+      {
+        relativeTo: this.route,
+      }
+    );
   }
 
   /**

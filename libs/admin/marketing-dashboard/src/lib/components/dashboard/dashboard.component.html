@@ -1,3 +1,9 @@
+<hospitality-bot-navigation-header
+  [heading]="welcomeMessage"
+  [routes]="navRoutes"
+  [isBack]="false"
+>
+</hospitality-bot-navigation-header>
 <hospitality-bot-stats-view></hospitality-bot-stats-view>
 <div class="container">
   <div class="rate-contact-stat">
@@ -6,15 +12,19 @@
         [charts]="rateGraph.chart"
         [legendData]="rateGraph.legendData"
         [title]="rateGraph.title"
+        [loading]="loading"
       ></hospitality-bot-comparison-graph>
     </div>
-    <hospitality-bot-contact-stats></hospitality-bot-contact-stats>
+    <div>
+      <hospitality-bot-contact-stats></hospitality-bot-contact-stats>
+    </div>
   </div>
   <div class="subscriberGraph">
     <hospitality-bot-comparison-graph
       [charts]="subscriberGraph.chart"
       [legendData]="subscriberGraph.legendData"
       [title]="subscriberGraph.title"
+      [loading]="loading"
     ></hospitality-bot-comparison-graph>
   </div>
 </div>

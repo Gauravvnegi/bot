@@ -1,7 +1,7 @@
 @import 'temp000002';
 
 .payment-summary-wrapper {
-  padding: 0px $padding-medium;
+  padding: 0px 15px;
   @media only screen and (max-width: $M) {
     padding: 0px;
   }
@@ -9,8 +9,8 @@
 
 .summary-details-wrapper {
   background: var(--accordian-background-color, $accordian-background-color);
-  padding: $padding-large;
-  border-radius: $border-radius-small;
+  padding: 20px;
+  border-radius: 10px;
   &--title {
     color: $primary-blue;
     font-weight: $bolder;
@@ -33,12 +33,12 @@
 }
 
 .user__info {
-  @include flex-between-center();
-  margin-top: $margin-large;
+  @include flex-between-center;
+  margin-top: 20px;
   &--details {
-    @include flex-between-center();
+    @include flex-between-center;
     width: 31%;
-    font-size: $font16;
+    font-size: 16px;
     font-weight: $bolder;
     label {
       color: #929292;
@@ -51,7 +51,7 @@
     @media only screen and (max-width: $M) {
       width: auto;
       font-size: $font-small;
-      margin-bottom: $margin-large;
+      margin-bottom: 20px;
       p {
         text-align: right;
       }
@@ -72,9 +72,9 @@
 }
 
 .total__details {
-  @include flex-space-between();
-  margin: $margin-large 0px;
-  padding: 0px $padding-large;
+  @include flex-space-between;
+  margin: 20px 0px;
+  padding: 0px 20px;
   &--manager {
     width: 30%;
     font-weight: $bolder;
@@ -85,10 +85,10 @@
       color: #a1a1a1;
     }
     &--name {
-      margin-top: $margin-small;
+      margin-top: 10px;
     }
     &--signature {
-      margin-top: $margin-large;
+      margin-top: 20px;
     }
   }
   &--amounts {
@@ -96,9 +96,9 @@
     font-weight: $bolder;
 
     &--wrapper {
-      @include flex-between-center();
+      @include flex-between-center;
       font-size: $font-large;
-      margin-top: $margin-large;
+      margin-top: 20px;
       .label {
         text-align: right;
         min-width: 35%;
@@ -158,7 +158,7 @@
   }
   td {
     padding: 10px;
-    font-size: $font16;
+    font-size: 16px;
     font-weight: $bold;
     @media screen and (max-width: 600px) {
       padding: 4px;
@@ -168,7 +168,7 @@
   .room-data {
     text-align: left;
     padding-left: 14px;
-    font-size: $font16;
+    font-size: 16px;
     .room {
       font-weight: $bold;
     }
@@ -188,12 +188,12 @@
 }
 
 .add__more__gst {
-  @include flex-between-center();
+  @include flex-between-center;
 
   font-size: $font-large;
   font-weight: $bolder;
-  padding: 0px $padding-large;
-  margin: $margin-large 0px;
+  padding: 0px 20px;
+  margin: 20px 0px;
 
   @media only screen and (max-width: $M) {
     font-size: $font-small;
@@ -215,26 +215,22 @@
   color: #09a053;
 }
 
-// .description-table-wrapper {
-//   margin-bottom: $margin-large;
-// }
-
 .description-table {
-  width: $full-width;
+  width: 100%;
   border-collapse: collapse;
   tr {
     border: 0;
-    @include flex-between-center();
+    @include flex-between-center;
   }
   .header {
     background-color: $primary-blue;
     font-size: $font-medium;
     font-weight: $bold;
     color: white;
-    border-radius: $border-radius-small;
+    border-radius: 10px;
 
     td {
-      padding: $padding-medium;
+      padding: 15px;
       width: 16%;
       text-align: center;
     }
@@ -245,7 +241,7 @@
     font-weight: $bold;
     border-bottom: 1px solid darkgray;
     td {
-      padding: $padding-medium;
+      padding: 15px;
       width: 16%;
       text-align: center;
       p {
@@ -259,7 +255,7 @@
       color: $primary-blue;
       text-align: right;
       font-weight: $bold;
-      padding: $padding-large;
+      padding: 20px;
       b {
         color: black;
         font-weight: $bolder;
@@ -287,7 +283,7 @@
   border: none;
   border-radius: 5px;
   height: 36px;
-  @include footer-next();
+  @include footer-next;
   &:focus {
     border: none;
     outline: none;
@@ -311,7 +307,7 @@
   @media only screen and (max-width: $M) {
     display: block;
     text-align: right;
-    margin-bottom: $margin-large;
+    margin-bottom: 20px;
   }
 }
 

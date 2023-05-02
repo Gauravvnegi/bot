@@ -5,14 +5,10 @@ import { RoomStatus } from './service-response';
  */
 export type BaseRoomForm = {
   id?: string;
-  roomType: {
-    id: string;
-    label: string;
-    price: number;
-    currency: string;
-  };
+  roomTypeId: string;
   price: number;
   currency: string;
+  status: RoomStatus;
 };
 
 //  ******** Single Room Interface ********
@@ -23,10 +19,7 @@ export type SingleRoomForm = BaseRoomForm & {
   rooms: SingleRoomBase[];
 };
 
-export type SingleRoomData = SingleRoomBase &
-  BaseRoomForm & {
-    status: RoomStatus;
-  };
+export type SingleRoomData = SingleRoomBase & BaseRoomForm;
 
 //  ******** Multiple Room Interface ********
 
@@ -40,7 +33,4 @@ export type MultipleRoomForm = BaseRoomForm & {
   rooms: MultipleRoomBase[];
 };
 
-export type MultipleRoomData = MultipleRoomBase &
-  BaseRoomForm & {
-    status: RoomStatus;
-  };
+export type MultipleRoomData = MultipleRoomBase & BaseRoomForm;

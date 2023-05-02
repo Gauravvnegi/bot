@@ -2,12 +2,12 @@
 
 .profile__dropdown {
   position: relative;
-  @include flex-item-center();
-  @include height(42px);
+  @include flex-item-center;
+  height: 42px;
   padding-right: 25px;
   &:hover {
     cursor: pointer;
-    border-radius: $borderRadius5;
+    border-radius: 5px;
     .dropdown-list {
       display: block;
     }
@@ -15,68 +15,67 @@
       transform: rotate(180deg);
     }
   }
-  span{
+  span {
     vertical-align: middle;
   }
 }
 
 :host ::ng-deep .profile__dropdown__image {
-  @include width(33px);
-  @include height(33px);
-  background-color: $primary-purple;
+  width: 33px;
+  height: 33px;
+  background-color: $primary-cta;
   align-items: center;
-  @include padding(10px);
-  border-radius: $borderRadius50P;
-  @include flex-justify-center();
+  padding: 10px;
+  border-radius: 50%;
+  @include flex-justify-center;
 
   .profile-initial {
-    font-size: $font12;
+    font-size: 12px;
     color: $white;
     @media (max-width: $tablet) {
-      @include padding(10px);
+      padding: 10px;
     }
   }
 }
 
 .material-icons {
-  color: $light-grey;
+  color: $grayLight;
 }
 
 .dropdown-list {
   position: absolute;
-  @include width(90%);
+  width: 90%;
   left: 10px;
   top: 95%;
   display: none;
   background-color: $white;
-  z-index: 999;
-  border-radius: $borderRadius5;
-  box-shadow: 0px 0px 5px 0px $light-grey;
+  z-index: $header-menu-dropdown-z;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 0px $grayLight;
   .list-item {
     text-decoration: none;
-    @include padding(10px);
-    font-size: $font14;
-    @include width(100%);
-    color: $dark-blue;
-    font-weight: 500;
+    padding: 10px;
+    font-size: 14px;
+    width: 100%;
+    color: $secondary;
+    font-weight: $medium;
     &:hover {
-      background-color: rgba(232, 238, 245, 0.25);
-      // color: $primary-purple;
+      background-color: $hoverBGlight;
     }
   }
 }
 
 .dropdown-text {
-  font-size: $font12;
+  font-size: 12px;
   white-space: nowrap;
-  @include margin(0 7 0 5);
-  font-weight: 500;
+  margin: 0 7px 0 5px;
+  font-weight: $medium;
   @media only screen and (max-width: 1200px) {
-    font-size: $font12;
+    font-size: 12px;
   }
   @media only screen and (max-width: $tablet) {
-    font-size: $font12;
-    @include margin(0 5px);
+    font-size: 12px;
+    margin: 0 5px;
     white-space: nowrap;
   }
 }

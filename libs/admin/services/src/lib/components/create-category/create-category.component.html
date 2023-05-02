@@ -1,0 +1,9 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoute">
+  </hospitality-bot-navigation-header>
+  <hospitality-bot-category-form
+    [hotelId]="hotelId"
+    (onSave)="handleSubmit($event)"
+  >
+  </hospitality-bot-category-form>
+</div>

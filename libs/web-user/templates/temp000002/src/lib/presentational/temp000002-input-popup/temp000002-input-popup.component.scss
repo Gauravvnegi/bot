@@ -8,7 +8,7 @@
 }
 
 :host ::ng-deep .mat-raised-button {
-  @include primary-button();
+  @include primary-button;
 }
 
 .cross {
@@ -19,13 +19,11 @@
 }
 
 .popup__wrapper {
-  position: relative;
   width: 21rem;
-  min-height: 35vh !important;
+
   margin: 0 auto;
 
   @media screen and (max-width: $tab-size) {
-    min-height: 30vh !important;
   }
 }
 .cross_holder {
@@ -56,11 +54,9 @@
   }
 }
 .req_wrapper {
-  position: absolute;
-  top: 90px;
   box-sizing: border-box;
-  width: $full;
-  padding-bottom: $padding20;
+  width: 100%;
+  padding-bottom: 20px;
   @media screen and (max-width: $L) {
     left: 0;
   }
@@ -71,7 +67,6 @@
 @media screen and (max-width: $S) {
   .popup__wrapper {
     width: 15rem;
-    min-height: 42vh !important;
     margin: 0 auto;
     .cross_holder {
       .cross {

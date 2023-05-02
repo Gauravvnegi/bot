@@ -1,118 +1,124 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from '@hospitality-bot/shared/utils';
-import { BehaviorSubject } from 'rxjs';
+import { ApiService, DateService } from '@hospitality-bot/shared/utils';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
-import { map } from 'rxjs/operators';
-import { stats } from '../constant/response';
+import { TableValue } from '../constant/data-table';
+import {
+  RoomTypeData,
+  RoomTypeFormData,
+  ServicesTypeValue,
+} from '../constant/form';
 import { MultipleRoom, SingleRoom } from '../models/room.model';
-import { QueryConfig, TableValue } from '../types/room';
+import { QueryConfig } from '../types/room';
 import {
   AddRoomsResponse,
-  AmenityResponse,
+  RoomByIdResponse,
   RoomListResponse,
   RoomResponse,
   RoomStatus,
   RoomTypeListResponse,
   RoomTypeResponse,
+  ServiceResponse,
 } from '../types/service-response';
 
 @Injectable()
 export class RoomService extends ApiService {
-  selectedTable = new BehaviorSubject<TableValue>('room');
+  /** [ROOM | ROOM_TYPE] Selected Table */
+  selectedTable = new BehaviorSubject<TableValue>(TableValue.roomType);
 
-  list: Record<TableValue, string> = {
-    roomType: 'room-type',
-    room: 'room',
+  /** [PAID | COMPLIMENTARY] Selected service to be shown in service page  */
+  selectedService: ServicesTypeValue;
+  /** Represent is room type form data is available */
+  roomTypeFormState: boolean = false;
+  /** State to handle syncing of services and room type form data */
+  roomTypeFormData: Partial<RoomTypeFormData> = {
+    complimentaryAmenities: [],
+    paidAmenities: [],
   };
 
-  getStats(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/packages?hotelId=${hotelId}`).pipe(
-      map((res) => {
-        return stats;
-      })
-    );
+  initRoomTypeFormData(
+    input: Partial<RoomTypeFormData>,
+    service: ServicesTypeValue,
+    roomTypeFormState: boolean
+  ) {
+    this.roomTypeFormData = { ...this.roomTypeFormData, ...input };
+    this.selectedService = service;
+    this.roomTypeFormState = roomTypeFormState;
   }
 
-  getAmenities(hotelId: string): Observable<AmenityResponse> {
-    return this.get(`/api/v1/packages?hotelId=${hotelId}`);
+  resetRoomTypeFormState() {
+    this.roomTypeFormState = false;
+  }
+
+  resetSelectedService() {
+    this.selectedService = undefined;
+  }
+
+  getStats(hotelId: string, config): Observable<any> {
+    return this.get(`/api/v1/entity/${hotelId}/stats/inventory/room${config.queryObj}`);
+  }
+
+  getServices(
+    hotelId: string,
+    config?: QueryConfig
+  ): Observable<ServiceResponse> {
+    return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
   }
 
   getRoomTypes(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/inventory/room-type`);
+    return this.get(`/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`);
   }
 
-  getRoomsTypeList(
+  getList<T extends RoomTypeListResponse | RoomListResponse>(
     hotelId: string,
     config?: QueryConfig
-  ): Observable<RoomTypeListResponse> {
+  ): Observable<T> {
     return this.get(
-      `/api/v1/entity/${hotelId}/inventory/room-type${config?.params ?? ''}`
-    ).pipe(
-      map((res) => {
-        return {
-          roomTypes: res.roomTypes.map((item) => ({
-            ...item,
-            roomCount: {
-              active: Math.floor(Math.random() * 100),
-              unavailable: Math.floor(Math.random() * 100),
-              soldOut:
-                Math.floor(Math.random() * 100) > 40
-                  ? Math.floor(Math.random() * 100)
-                  : 0,
-            },
-          })),
-          roomTypeStatusCount: res.roomTypeStatusCount,
-        };
-      })
-    );
-  }
-
-  getRoomsList(
-    hotelId: string,
-    config?: QueryConfig
-  ): Observable<RoomListResponse> {
-    return this.get(
-      `/api/v1/entity/${hotelId}/inventory/rooms${config?.params ?? ''}`
+      `/api/v1/entity/${hotelId}/inventory${config?.params ?? ''}`
     );
   }
 
   updateRoomStatus(
     hotelId: string,
-    data: { id: string; roomStatus: RoomStatus }
+    data: { rooms: [{ id: string; roomStatus: RoomStatus }] }
   ): Observable<RoomResponse> {
-    return this.patch(`/api/v1/entity/${hotelId}/inventory/room`, data);
+    return this.patch(`/api/v1/entity/${hotelId}/inventory?type=ROOM`, data);
   }
 
   updateRoomTypeStatus(
     hotelId: string,
     data: { id: string; status: boolean }
   ): Observable<RoomTypeResponse> {
-    return this.patch(`/api/v1/entity/${hotelId}/inventory/room-type`, data);
+    return this.patch(
+      `/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`,
+      data
+    );
   }
 
   addRooms(
     hotelId: string,
-    data: SingleRoom[] | MultipleRoom[]
+    data: { rooms: SingleRoom[] | MultipleRoom[] }
   ): Observable<AddRoomsResponse> {
     return this.post(`/api/v1/entity/${hotelId}/inventory?type=ROOM`, data);
   }
 
-  updateRoom(hotelId: string, data: SingleRoom): Observable<RoomResponse> {
+  updateRoom(
+    hotelId: string,
+    data: { rooms: SingleRoom[] }
+  ): Observable<RoomResponse> {
     return this.put(`/api/v1/entity/${hotelId}/inventory?type=ROOM`, data);
   }
 
-  getRoomById(hotelId: string, roomId: string): Observable<RoomResponse> {
+  getRoomById(hotelId: string, roomId: string): Observable<RoomByIdResponse> {
     return this.get(`/api/v1/entity/${hotelId}/inventory/${roomId}?type=ROOM`);
   }
 
   exportCSV(hotelId: string, table: TableValue, config?: QueryConfig) {
     return this.get(
-      `/api/v1/entity/${hotelId}/inventory/${this.list[table]}/export${
-        config.params ?? ''
-      }`,
-      {
-        responseType: 'blob',
-      }
+      `/api/v1/entity/${hotelId}/inventory/${
+        table === TableValue.room ? 'room' : 'room-type'
+      }/export${config.params ?? ''}`,
+      { responseType: 'blob' }
     );
   }
 
@@ -132,7 +138,10 @@ export class RoomService extends ApiService {
     );
   }
 
-  updateRoomType(hotelId: string, data: any): Observable<RoomTypeResponse> {
+  updateRoomType(
+    hotelId: string,
+    data: RoomTypeData
+  ): Observable<RoomTypeResponse> {
     return this.put(`/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`, data);
   }
 }

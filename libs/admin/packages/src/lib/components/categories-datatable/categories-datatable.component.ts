@@ -39,19 +39,16 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
       field: 'name',
       header: 'Category Name',
       sortType: 'string',
-      isSort: true,
     },
     {
       field: 'description',
       header: 'Description',
       sortType: 'string',
-      isSort: true,
     },
     {
       field: 'subPackageNameList',
       header: 'Packages',
       sortType: 'string',
-      isSort: true,
     },
   ];
 
@@ -115,16 +112,8 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.values = [];
+          this.loading = false; 
         }
       )
     );
@@ -165,16 +154,8 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.values = [];
+          this.loading = false; 
         }
       )
     );
@@ -207,16 +188,7 @@ export class CategoriesDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false; 
         }
       )
     );

@@ -199,18 +199,15 @@
     </div>
   </div>
   <div class="request-popup-btnwrap">
-    <div
-      class="button request-popup-btnwrap-cancel"
+    <hospitality-bot-button
+      label="Cancel"
       (click)="close({ status: false })"
-    >
-      Cancel
-    </div>
-    <div
-      class="button request-popup-btnwrap-save"
+      variant="outlined"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      label="Save"
       (click)="raiseRequest()"
-      [ngClass]="{ 'disabled-btn': isRaisingRequest }"
-    >
-      Save
-    </div>
+      [disabled]="isRaisingRequest"
+    ></hospitality-bot-button>
   </div>
 </div>

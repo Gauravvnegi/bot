@@ -8,15 +8,13 @@
   </div>
   <div class="request-wrapper-header-btnwrap">
     <div
-      class="request-wrapper-header-btnwrap-btn"
+      class="guestInfoEditContainer"
+      *ngIf="buttonConfig[selectedIndex].button"
       (click)="openRaiseRequest()"
     >
-      <img
-        [src]="requestConfig.images.raiseRequest.url"
-        [alt]="requestConfig.images.raiseRequest.alt"
-      />
-      <div class="request-wrapper-header-btnwrap-btn-name">
-        {{ 'raiseRequest' | translate }}
+      <img [src]="buttonConfig[selectedIndex].icon" alt="" />
+      <div class="guestInfoEditText">
+        {{ buttonConfig[selectedIndex].label }}
       </div>
     </div>
   </div>

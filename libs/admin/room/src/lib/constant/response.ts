@@ -1,23 +1,24 @@
 export const stats = [
   {
-    title: 'Self Through Rate',
-    score: '54%',
-    comparisonStats: {
-      score: '10%',
-      isNegative: false,
-      time: 'in 30 Days',
-    },
+    label: 'AverageRoomRate',
+    score: 12,
+    comparisonPercent: 10,
+    additionalData: '2.01K',
   },
   {
-    title: 'Average Room Rate',
-    score: '2.01k',
+    label: 'Occupancy',
+    score: 20,
+    comparisonPercent: 10,
+    additionalData: '59%',
   },
   {
-    title: 'Total Inventory cost',
-    score: '200K',
+    label: 'InventoryRemaining',
+    score: 100,
+    additionalData: '3 Rooms',
   },
   {
-    title: 'Day of Inventory Remaining',
-    score: '3 Days',
+    label: 'RemainingInventoryCost',
+    score: 34,
+    additionalData: '200K',
   },
 ];

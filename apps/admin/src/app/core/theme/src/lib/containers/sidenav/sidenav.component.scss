@@ -1,11 +1,10 @@
 @import 'main';
 .logo {
-  color: #fff;
+  color: $white;
   font-size: 18px;
   text-align: center;
   position: relative;
-  display: flex;
-  justify-content: center;
+  @include flex-justify-center;
 }
 
 .change .bar1 {
@@ -13,23 +12,20 @@
 }
 
 .sidenav-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-all-center;
   width: 100%;
   padding: 10px 15px;
-  background: rgb(75, 86, 192);
-  height: 60px;
+  background: $nav-bg-color;
+  height: 68px;
   .logo {
     height: 40px;
     width: 65px;
     img {
-      height: 100%;
-      width: 100%;
+      @include full-img;
     }
   }
   @media screen and (max-width: $tablet) {
-    @include height(65px);
+    height: 65px;
   }
 }
 
@@ -45,58 +41,47 @@
   &__container {
     overflow-y: auto;
     height: calc(100vh - 60px);
+    background: $nav-bg-color;
     &::-webkit-scrollbar {
-      width: 3px;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    &::-webkit-scrollbar-track {
-      background: transparent;
+      width: 0px;
     }
 
-    &::-webkit-scrollbar-thumb {
-      background: transparent;
-    }
-    &:hover {
-      &::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.8);
-        border-radius: 10px;
-      }
-    }
     .main_heading {
       position: relative;
-      margin-bottom: 9px;
+      margin: 4px 3px;
       &_anchor {
         display: block;
         text-align: center;
-        color: rgba(255, 255, 255, 0.8);
+        color: $subItem_heading;
         border: none;
         -webkit-transition: all 400ms;
         -moz-transition: all 400ms;
         -ms-transition: all 400ms;
         -o-transition: all 400ms;
         transition: all 400ms;
-        height: 50px;
+        height: 56px;
         text-decoration: none;
+        border-radius: 3px;
+        border-radius: 3px;
+        width: 76px;
         @media (max-width: $tablet) {
-          font-size: $font14;
+          font-size: 14px;
         }
         span {
           margin-left: 20px;
-          font-weight: 500;
+          font-weight: $medium;
         }
       }
       &:hover {
-        background-color: $list-item-hover;
+        background-color: $subItem_heading_hover;
+        border-radius: 3px;
       }
       .sidenav_logo {
         width: 18px;
         height: 18px;
         margin: auto;
         img {
-          width: 100%;
-          height: 100%;
+          @include full-img;
         }
       }
     }
@@ -117,8 +102,7 @@
   max-height: 500px !important;
   transition: visibility 1.5s, max-height 1.5s, opacity 1.5s linear !important;
   .subitems_heading {
-    display: flex !important;
-    align-items: center;
+    @include flex-item-center;
   }
 }
 
@@ -126,9 +110,9 @@
   margin-bottom: 9px;
   cursor: pointer;
   &_anchor {
-    display: flex;
-    align-items: center;
-    color: rgba(255, 255, 255, 0.8);
+    @include flex-item-center;
+
+    color: $subItem_heading;
     border: none;
     -webkit-transition: all 400ms;
     -moz-transition: all 400ms;
@@ -139,19 +123,19 @@
     text-decoration: none;
     span {
       margin-left: 12px;
-      font-weight: 500;
+      font-weight: $medium;
       width: 4.5rem;
     }
   }
   &:hover {
-    background-color: rgba(232, 238, 245, 0.25);
+    background-color: $hoverBGlight;
+    border-radius: 3px;
   }
   .sidenav_logo {
     width: 18px;
     height: 18px;
     img {
-      width: 100%;
-      height: 100%;
+      @include full-img;
     }
   }
 }
@@ -172,8 +156,9 @@
 }
 
 .menu_button {
-  width: 16px;
-  height: 16px;
+  width: 35px;
+  height: 65px;
+  margin-top: 15px;
   .onHoverHide {
     display: none;
   }
@@ -186,8 +171,7 @@
     }
   }
   img {
-    width: 100%;
-    height: 100%;
+    @include full-img;
   }
 }
 
@@ -206,7 +190,7 @@
   height: 1px;
   left: 15px;
   width: calc(100% - 30px);
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-wrapper {
@@ -215,8 +199,7 @@
 }
 
 .active a .svg-icon {
-  filter: invert(75%) sepia(23%) saturate(3170%) hue-rotate(209deg)
-    brightness(90%) contrast(89%);
+  filter: brightness(0) invert(1);
 }
 
 .svg-icon {
@@ -227,7 +210,9 @@
 
 .icon-label {
   margin-top: 5px;
-  font-size: 8px !important;
+  font-size: 10px !important;
+  letter-spacing: 0.6px;
+  font-weight: 500;
 }
 
 .collapse-a {
@@ -238,7 +223,7 @@
   position: absolute;
   right: 0px;
   top: 24px;
-  color: #fff;
+  color: $white;
   -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
@@ -267,8 +252,3 @@
 }
 
 // tablet
-
-@media screen and (max-width: $tablet) {
-  .sidenav-header {
-  }
-}

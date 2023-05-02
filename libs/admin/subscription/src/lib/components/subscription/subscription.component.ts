@@ -17,6 +17,8 @@ import {
   styleUrls: ['./subscription.component.scss'],
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
+  welcomeMessage = 'Welcome To Subscription';
+  navRoutes = [{ label: 'Subscription', link: './' }];
   $subscription = new Subscription();
   loading = false;
   subscriptionPlanUsage;
@@ -63,17 +65,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
           this.subscriptionData
         );
         this.getSubscriptionUsage(this.hotelId);
-      },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
       }
     );
   }

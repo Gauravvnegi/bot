@@ -1,0 +1,13 @@
+@import 'main';
+
+.wrapper {
+  padding: 0 10px;
+}
+
+.form-block {
+  @include form-block;
+}
+
+:host ::ng-deep .plain-text-container {
+  height: auto !important;
+}

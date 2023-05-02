@@ -114,17 +114,10 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         (data) => {
           this.initialLoading = false;
           this.setRecords(data);
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            })
-            .subscribe();
         }
       )
     );
@@ -136,10 +129,12 @@ export class GuestDatatableComponent extends BaseDatatableComponent
    */
   setRecords(data): void {
     this.values = new GuestTable().deserialize(data).records;
-    this.totalRecords = data.total;
     this.loading = false;
     data.entityStateCounts &&
       this.updateQuickReplyFilterCount(data.entityStateCounts);
+    data.entityTypeCounts &&
+      this.updateTabFilterCount(data.entityTypeCounts, data.total);
+    this.updateTotalRecords();
   }
 
   /**
@@ -152,33 +147,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       .map((item) => ({
         entityState: item.value,
       }));
-  }
-
-  /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
-   */
-  updateTabFilterCount(countObj, currentTabCount): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj): void {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') chip.total = countObj[chip.value];
-      });
-    }
   }
 
   /**
@@ -223,13 +191,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            })
-            .subscribe();
         }
       )
     );
@@ -309,15 +272,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -355,6 +309,19 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           detailCompRef.close();
         })
       );
+    }
+  }
+
+  getStatusStyle(type: string, state: string): string {
+    switch (type) {
+      case 'INITIATED':
+        return `status-${state}-initiated`;
+      case 'PENDING':
+        return `status-${state}-pending`;
+      case 'FAILED':
+        return `status-${state}-reject`;
+      case 'COMPLETED':
+        return `status-${state}-success`;
     }
   }
 

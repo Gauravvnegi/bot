@@ -55,9 +55,9 @@ body {
   }
 }
 .mat-dialog-container {
-  padding: $padding-large !important;
+  padding: 20px !important;
   @media only screen and (max-width: $M) {
-    padding: $padding-small !important;
+    padding: 10px !important;
   }
 }
 
@@ -67,5 +67,3 @@ body {
     width: 80vw !important;
   }
 }
-
-

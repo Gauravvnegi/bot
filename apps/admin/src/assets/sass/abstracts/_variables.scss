@@ -1,194 +1,121 @@
 // color-variables
-$resolved: #31bb92;
-$spl-req: #52b33f;
-$other-req: #3994d6;
-$auth-color: #4b56c0;
-$quote-color: #6d7580;
-$primary-purple: #4b56c0;
-$primary-btn: #5f38f9;
-$primary-hover: #4423c6;
-$primary-pressed: #341a9c;
-$navy-blue: rgb(0 32 70);
-$primary-gray: #9eaeb8;
-$primary-gray1: rgba(158, 174, 184);
-$primary-black: #484848;
-$dark-grey: #727272;
-$light-grey: #d9d9d9;
-$light-grey2: #c5c5c5;
-$initiated: #6bacf8;
-$reject: #f00d2a;
-$completed: #53b33e;
-$success: #2a8853;
-$light-gray: #e0e0e0;
-$medium-gray: #b8bbbe;
-$manually-contacts: #707070;
-$pending: #c2c2c2;
-$default: #959ea7;
-$dark-blue: #002046;
-$dark-blue2: #00162b;
-$list-item-hover: #8080801a;
+
+// white palate
+
+$layout-background: #f4f5f6;
+$message-background: #f7f8fa;
+$primary-text-bg: #e8e2ff;
+$background-grey: #f8f9fb;
+$accordian-header: #f1f2f7;
+$headingBg: #edeef1;
+$table-header: #f1f2f7;
+$header-background: #f4f5f7;
+$border: #eee;
 $white: #ffffff;
-$button-blue: #4b56c0;
-$auth-gray: #555555;
-$note: #9ea3aa;
-$note1: #8995a3;
+$notification: #fee6e9;
+$accordian-background: #e8eef5;
+$progress-bar-arrivals-base: #e7f4f6;
+$blackPrime-base: #f7f7f7;
+
+//state color
+$active-state: #1468f9;
+$inactive-state: #e31717;
+$draft-state: #bebebe;
+$success-state: #30ce0b;
+$unavailable-state: #e39117;
+
+// linear-gradients
+
+$login-freda-bg: linear-gradient(132deg, #01a4e9 1%, #0074a6 106%);
+$login-heda-bg: linear-gradient(312deg, #ac14b7 99%, #765bd5 1%);
+$secondaryGradient-bg: linear-gradient(to bottom, #8b0eaa, #4414a5);
+$primaryGradient-bg: transparent
+  linear-gradient(180deg, #6462e0 0%, #303db4 100%) 0% 0% no-repeat padding-box;
+
+// red palate
+
+$darkRed: #e80000;
+$mediumRed: #e31717;
+$lightRed: #f04949;
+
+// grey palate
+
+$whiteDeep: #f1f1f1;
+$borderCol: #e2e2e2;
+$grayLight: #d4d4d4;
+$tabStats: #b4b4b4;
+$grayMedium: #8995a3;
+$grayAuth: #555555;
+$inActive: #b5b5c3;
+$scrollBar-thumb: #8f8f8f;
+$subtitle: #6d7580;
+$inActiveTab: #b5b5c3;
+$paginator: #aaa;
+$subItem_heading: rgba(255, 255, 255, 0.8);
+
+// black palate
+
 $black: #000;
+$blackPrime: #00000070;
+$question: #545454;
+$amount: #2e3440;
+$hoverBG: rgba(0, 0, 0, 0.03);
+$boxShadow: #0000000d;
+$hoverBGlight: rgba(232, 238, 245, 0.25);
+$table-room-bg: rgb(72, 192, 72, 0.1);
+$primary-black: #484848;
+$subtitle: #727272;
 $tooltip: #484848;
+$blackPrime-1: 0px 0px 6px #b8bbbe;
+$subItem_heading_hover: rgba(255, 255, 255, 0.24);
+
+// green palate
+// $success-state: #119e0c;
+$posCompare: #52b33f;
+$resolved: #31bb92;
+$success-state: #30ce0b;
+
+// blue palate
+
+$success-stated: #389f99;
+$progress-bar-arrivals: #1495a4;
+$priority-medium: #25a2e2;
+$load-more: rgba(37, 162, 226);
+$initiated: #6bacf8;
+$light-blue: #3e8ef7;
+$tab-menu-link: #2187d5;
+$reset-link: #5391d4;
+$unsubscribe-Visit: #166dff;
+$text-bot: #745af2;
+$primary: #5f38f9;
+$primaryBlue: #0239cf;
+$authColor: #4b56c0;
+$button-blue: #4b56c0;
+$secondary: #002046;
+$btn-shadow: #4b56c04d;
+$hover-box-shadow: #0368ff42;
+$btnShadow: rgba(75, 86, 192, 0.16);
+$btnDefault: #4b56c033;
+$primary-cta: #5f38f9;
+$primary-hover: #4423c6;
+$primary-active: #341a9c;
+$primary-pressed: #341a9c;
+$nav-bg-color: #010034;
+$backColor: #020229;
+$title: #001037;
+$secondary2: #00162b;
+$mat-icon: #5f65b0;
+$tableCol-border: #218af31a;
+$unsubscribe-Head: #1f4380;
+$unsubscribe-Visit: #166dff;
+$accordian-label: #787c9e;
+$chat-background: #8161ff;
+
+// yellow palate
+
+$initiated-2: #ff8f00;
+$priority-high: #f8b633;
+$text-email: #faa700;
 $warning: #f6b155;
 $dark-warning: #fc9d03;
-$user-orange: #feba1b;
-$notification: #fee6e9;
-$approved: #2f1dce;
-$btn-shadow: #4b56c04d;
-$box-shadow: #0000000d;
-$hover-box-shadow: #0368ff42;
-$chocolate: chocolate;
-$olivedrab: olivedrab;
-$timeout: #0bb2d4;
-$accept: #119e0c;
-$closed: #fb3d4e;
-$light-blue: #3e8ef7;
-$gray-total: #8995a3;
-$text-email: #faa700;
-$text-bot: #745af2;
-$booking-feedback: #0030b5;
-$booking-feedback-opacity: #0030b51a;
-$list-popup: #cfd9f5;
-$arrival-time: #b2b7bc;
-$accordian-background: #e8eef5;
-
-// grey palet
-$c-white: white;
-$c-gray-105: #f5f6fa;
-$c-gray-103: #f5f5f5;
-$c-gray-102: #f3f3f3;
-$c-gray-100: #f2f6f8;
-$c-gray-98: #f1f1f1;
-$c-gray-95: #ededed;
-$c-gray-94: #eaf3fa;
-$c-gray-93: #eaf0f6;
-$c-gray-92: #e5e9f2;
-$c-gray-91: #e4e4e4;
-$c-gray-90: #e3e3e3;
-$c-gray-89: #e2e2e2;
-$c-gray-88: #e1e1f8;
-$c-gray-87: #e1e1f2;
-$c-gray-85: #d9d9d9;
-$c-gray-84: #d5e0e6;
-$c-gray-83: #d3d3d3;
-$c-gray-82: #d1d1d1;
-$c-gray-81: #ced5d9;
-$c-gray-80: #cccccc;
-$c-gray-78: #c7c7c7;
-$c-gray-77: #c5c5c5;
-$c-gray-76: #c3c2c2;
-$c-gray-75: #c0c0c0;
-$c-gray-74: #b8bbbe;
-$c-gray-72: #b4b4b4;
-$c-gray-71: #b2b7bc;
-$c-gray-70: #b0b0b0;
-$c-gray-68: #a9a8a9;
-$c-gray-65: #a3a3a3;
-$c-gray-61: #99a6b5;
-$c-gray-60: #999999;
-$c-gray-55: #909090;
-$c-gray-53: #868686;
-$c-gray-50: #808080;
-$c-gray-47: #7e7e7e;
-$c-gray-46: #737679;
-$c-gray-45: #727272;
-$c-gray-40: #696969;
-$c-gray-30: #4d4d4d;
-$c-gray-20: #363636;
-$c-gray-18: #3b3b3b;
-$c-gray-17: #262626;
-$c-gray-15: #222222;
-$c-gray-10: #171717;
-$c-black: #000000;
-// popup button width
-
-$border: #eee;
-$comparison: #52b33f;
-$progress-bar-arrivals-base: #e7f4f6;
-$progress-bar-arrivals: #1495a4;
-$progress-bar-messages-base: #f7f7f7;
-$progress-bar-messages: #0000000d;
-$comparison-positive: #52b33f;
-$comparison-negative: #cc052b;
-$rejected: #ee1044;
-$pending-2: #38649f;
-$accepted: #389f99;
-$initiated-2: #ff8f00;
-$tab-bottom-border: rgba(0, 0, 0, 0.12);
-$table-hover-background: rgba(0, 0, 0, 0.01);
-$table-popup-background: rgba(0, 0, 0, 0.04);
-$table-hover-dark-background: rgba(0, 0, 0, 0.03);
-$go-btn-default: #4b56c033;
-$priority-low: #119e0c;
-$priority-medium: #25a2e2;
-$email: #faa700;
-$pacific-blue: #0bb2d4;
-$dodger-blue: #3e8ef7;
-$blue-magenta: #745af2;
-$alice-blue: #edf1f5;
-$room-type: #f8dd8c;
-$room-type-opacity: #fc9d031a;
-$dropdown-selected-value: #673ab7;
-$popup-button-width: 10vw;
-$normal-button-width: 15vw;
-$box-shadow-1: 0px 0px 6px $c-gray-71;
-$priority-high: #f8b633;
-$priority-asap: #ce0c0c;
-$mat-tab-label: #b5b5c3;
-$reset-link: #5391d4;
-$question: #545454;
-$stat-legend-bg: #f9fafa;
-$stat-legend-title: #c6f0ef;
-$receiver-chip-bg: #ccc7c7;
-$load-more: #0099ff;
-$sent-icon: #00e30f;
-$cornsilk: cornsilk;
-$mat-icon: #5f65b0;
-$red: #ff0000;
 $no-received: #ffec8c;
-$tab-menu-link: #2187d5;
-$vip-stat-label: #0239cf;
-$chat-background: #6173f4;
-$greenyellow: greenyellow;
-$received-dot: #31bb92;
-$data-separator: #218af3;
-$gray: gray;
-$palettes: (
-  red: (
-    600: #c6002b,
-    500: #cd212e,
-    400: #e22c3a,
-    300: #f4747c,
-    200: #f79096,
-    100: #f4adb1,
-  ),
-  blue: (
-    600: #0055b7,
-    500: #509da7,
-    400: #30bac6,
-    300: #68c8d5,
-    200: #84dae5,
-    100: #a3e2eb,
-  ),
-  grey: (
-    600: #27292d,
-    500: #3f4447,
-    400: #717277,
-    300: #a9afb2,
-    200: #e6eaed,
-    100: #f6f8f9,
-  ),
-);
-:root {
-  @each $colorname, $palette in $palettes {
-    @each $key, $value in $palette {
-      $keyname: '--palette-' + $colorname + '-' + $key;
-      #{$keyname}: #{$value};
-    }
-  }
-}

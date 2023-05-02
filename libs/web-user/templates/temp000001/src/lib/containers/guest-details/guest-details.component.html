@@ -50,7 +50,9 @@
                 </div>
                 <div class="container__body--info">
                   <div class="container__body--info-primary">
-                    <div class="container__body--info-primary-prefix country-id">
+                    <div
+                      class="container__body--info-primary-prefix country-id"
+                    >
                       <web-user-select-box
                         [parentForm]="guestFormGroup"
                         [name]="'nationality'"
@@ -124,6 +126,35 @@
                       [name]="'lastName'"
                       [settings]="guestFieldConfig[i].lastName"
                     ></web-user-input>
+                  </div>
+                </div>
+                <div class="container__body--info">
+                  <div class="container__body--info-primary">
+                    <div
+                      class="container__body--info-primary-prefix country-id"
+                    >
+                      <web-user-select-box
+                        [parentForm]="guestFormGroup"
+                        [name]="'nationality'"
+                        [settings]="guestFieldConfig[i].country"
+                      ></web-user-select-box>
+                    </div>
+                    <div class="container__body--info-primary-main">
+                      <web-user-input
+                        [parentForm]="guestFormGroup"
+                        [name]="'mobileNumber'"
+                        [settings]="guestFieldConfig[i].phone"
+                      >
+                      </web-user-input>
+                    </div>
+                  </div>
+                  <div class="container__body--info-secondary">
+                    <web-user-input
+                      [parentForm]="guestFormGroup"
+                      [name]="'email'"
+                      [settings]="guestFieldConfig[i].email"
+                    >
+                    </web-user-input>
                   </div>
                 </div>
                 <ng-container

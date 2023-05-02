@@ -50,37 +50,37 @@
     margin-top: 15px;
     margin-bottom: 20px;
     .back-button {
-      @include footer-back();
+      @include footer-back;
       display: flex;
       align-items: center;
       justify-content: center;
       @media only screen and (max-width: 767px) {
         width: 120px;
         height: 35px;
-        @include commonButtonStyle();
+        @include common-button-style;
       }
 
       @media only screen and (max-width: 575px) {
         width: 100px;
         height: 35px;
-        @include commonButtonStyle();
+        @include common-button-style;
       }
     }
     .next-button {
-      @include footer-next();
+      @include footer-next;
       display: flex;
       align-items: center;
       justify-content: center;
       @media only screen and (max-width: 767px) {
         width: 120px;
         height: 35px;
-        @include commonButtonStyle();
+        @include common-button-style;
       }
 
       @media only screen and (max-width: 575px) {
         width: 100px;
         height: 35px;
-        @include commonButtonStyle();
+        @include common-button-style;
       }
     }
   }

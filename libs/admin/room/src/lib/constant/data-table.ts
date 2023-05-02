@@ -5,9 +5,8 @@ import {
 } from '@hospitality-bot/admin/shared';
 import {
   RoomRecordsCount,
-  RoomTypeRecordsCount,
+  RoomStateCounts,
 } from '../models/rooms-data-table.model';
-import { TableValue } from '../types/room';
 
 export enum Status {
   ACTIVE = 'Active',
@@ -23,37 +22,42 @@ export enum StatusEntity {
   unavailable = 'UNAVAILABLE',
 }
 
+export enum TableValue {
+  room = 'ROOM',
+  roomType = 'ROOM_TYPE',
+}
+
 export const roomFilter: Filter<TableValue, keyof RoomRecordsCount> = {
   label: 'Room',
-  value: 'room',
+  value: TableValue.room,
   content: '',
   disabled: false,
   total: 0,
   chips: [
     {
       label: 'All',
-      value: 'total',
+      value: 'ALL',
       total: 0,
       isSelected: true,
       type: 'default',
     },
     {
       label: 'Active',
-      value: 'active',
+      value: 'ACTIVE',
       total: 0,
       isSelected: false,
       type: 'new',
     },
     {
       label: 'Unavailable ',
-      value: 'unavailable',
+      value: 'UNAVAILABLE',
       total: 0,
       isSelected: false,
-      type: 'pending',
+      type: 'warning',
     },
     {
       label: 'Sold Out',
-      value: 'soldOut',
+      value: 'SOLD_OUT',
       total: 0,
       isSelected: false,
       type: 'failed',
@@ -61,33 +65,33 @@ export const roomFilter: Filter<TableValue, keyof RoomRecordsCount> = {
   ],
 };
 
-export const roomTypeFilter: Filter<TableValue, keyof RoomTypeRecordsCount> = {
+export const roomTypeFilter: Filter<TableValue, keyof RoomStateCounts> = {
   label: 'Room Type',
-  value: 'roomType',
+  value: TableValue.roomType,
   content: '',
   disabled: false,
   total: 0,
   chips: [
     {
       label: 'All',
-      value: 'total',
+      value: 'ALL',
       total: 0,
       isSelected: true,
       type: 'default',
     },
     {
       label: 'Active',
-      value: 'active',
+      value: 'ACTIVE',
       total: 0,
       isSelected: false,
       type: 'new',
     },
     {
       label: 'Inactive ',
-      value: 'inactive',
+      value: 'INACTIVE',
       total: 0,
       isSelected: false,
-      type: 'pending',
+      type: 'failed',
     },
   ],
 };
@@ -98,107 +102,98 @@ export const filter: Filter<TableValue, string>[] = [
 ];
 
 export const cols: Record<TableValue, Cols[]> = {
-  room: [
+  [TableValue.room]: [
     {
       field: 'type',
       header: 'Room / Type',
-      isSort: true,
       sortType: 'string',
-      dynamicWidth: true,
       width: '15%',
+      searchField: ['type'],
     },
     {
       field: 'roomNo',
       header: 'Room No.',
-      isSort: true,
       sortType: 'string',
-      dynamicWidth: true,
       width: '15%',
     },
     {
       field: 'date',
       header: 'Date',
-      isSort: true,
       sortType: 'date',
-      dynamicWidth: true,
-      width: '32%',
+      width: '28%',
     },
     {
       field: 'price',
       header: 'Price',
-      isSort: true,
       sortType: 'number',
-      dynamicWidth: true,
       width: '18%',
     },
     {
       field: 'status.value',
       header: 'Action / Status',
-      isSort: true,
       sortType: 'string',
-      dynamicWidth: true,
-      width: '15%',
+      width: '18%',
     },
   ],
-  roomType: [
+  [TableValue.roomType]: [
     {
       field: 'name',
       header: 'Type',
-      isSort: true,
+
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '14%',
     },
     {
       field: 'area',
       header: 'Area',
-      isSort: true,
+
       sortType: 'number',
-      dynamicWidth: true,
+
       width: '13%',
     },
     {
       field: 'roomCount',
       header: 'Room Count',
-      isSort: true,
+
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '17%',
     },
     {
       field: 'amenities',
       header: 'Amenities',
-      isSort: true,
+
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '18%',
     },
     {
       field: 'occupancy',
       header: 'Occupancy',
-      isSort: true,
+
       sortType: 'number',
-      dynamicWidth: true,
+
       width: '17%',
     },
     {
       field: 'status.value',
       header: 'Active',
-      isSort: true,
+
       sortType: 'string',
-      dynamicWidth: true,
+
       width: '16%',
     },
   ],
 };
 
 export const title: Record<TableValue, string> = {
-  room: 'Room',
-  roomType: 'Room Type',
+  [TableValue.room]: 'Room',
+  [TableValue.roomType]: 'Room Type',
 };
 
 export const status: Record<TableValue, StatusType[]> = {
-  room: [
+  [TableValue.room]: [
     {
       label: Status.ACTIVE,
       value: 'ACTIVE',
@@ -213,9 +208,10 @@ export const status: Record<TableValue, StatusType[]> = {
       label: Status.SOLD_OUT,
       value: 'SOLD_OUT',
       type: 'failed',
+      disabled: true,
     },
   ],
-  roomType: [
+  [TableValue.roomType]: [
     {
       label: Status.ACTIVE,
       value: 'ACTIVE',

@@ -1,40 +1,28 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { sharedConfig } from '../../constants';
-
-type Stats = {
-  title: string;
-  score: string;
-  comparisonStats: {
-    score: string;
-    isNegative: boolean;
-    time: string;
-  };
-};
+import { Component, Input } from '@angular/core';
+import { RoomStatsImgUrls, sharedConfig } from '../../constants';
 
 @Component({
   selector: 'hospitality-bot-stats-card',
   templateUrl: './stats-card.component.html',
   styleUrls: ['./stats-card.component.scss'],
 })
-export class StatsCardComponent implements OnInit {
+export class StatsCardComponent {
   adminSharedConfig = sharedConfig;
 
   title: string;
+  label: string;
   score: string;
-
-  comparisonStats: {
-    score: string;
-    isNegative: string;
-    time: string;
-  };
+  additionalData: string;
+  comparisonPercent: number;
+  imageUrls = RoomStatsImgUrls;
+  tooltip: string;
 
   @Input() set stats(value) {
-    this.title = value.title;
-    this.score = value.score;
-    this.comparisonStats = value.comparisonStats;
+    this.title = value?.label;
+    this.label = value?.label?.replace(/([A-Z])/g, ' $1').trim();
+    this.score = value?.score;
+    this.comparisonPercent = value?.comparisonPercent || '';
+    this.additionalData = value?.additionalData || '';
+    this.tooltip = value?.tooltip;
   }
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

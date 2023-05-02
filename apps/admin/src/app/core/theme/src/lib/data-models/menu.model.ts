@@ -1,10 +1,10 @@
 import { get, set } from 'lodash';
-import { routes } from '../../../../../../../../../libs/admin/shared/src/index';
+import { ModuleNames, routes } from 'libs/admin/shared/src/index';
 
 export class SubMenuItem {
   path: string;
   title: string;
-  name: string;
+  name: ModuleNames;
   url: string;
 
   deserialize(input: any) {
@@ -24,7 +24,7 @@ export class SubMenuItem {
 export class MenuItem {
   path: string;
   title: string;
-  name: string;
+  name: ModuleNames;
   children: SubMenuItem[];
   url: string;
 

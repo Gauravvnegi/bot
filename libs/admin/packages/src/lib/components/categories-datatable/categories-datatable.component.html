@@ -6,7 +6,7 @@
   [loading]="loading"
   [columns]="cols"
   [value]="values"
-  [paginator]="isPaginaton"
+  [paginator]="isPaginator"
   [rows]="rowsPerPage"
   [showCurrentPageReport]="showCurrentPageReport"
   [rowsPerPageOptions]="rowsPerPageOptions"
@@ -17,6 +17,7 @@
   [(selection)]="selectedRows"
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
+  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper">
@@ -54,7 +55,7 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <hospitality-bot-empty-view></hospitality-bot-empty-view>
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
@@ -150,6 +151,8 @@
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="rowsPerPageOptions"
       (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
     ></p-paginator>
   </ng-template>
 </p-table>

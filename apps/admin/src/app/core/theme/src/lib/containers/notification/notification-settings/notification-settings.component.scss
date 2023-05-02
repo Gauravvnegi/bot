@@ -5,9 +5,9 @@
   position: relative;
   height: 100%;
   .header {
-    @include flex-item-center();
+    @include flex-item-center;
     font-size: 14px;
-    color: $primary-purple;
+    color: $primary-cta;
     cursor: pointer;
     width: fit-content;
     mat-icon {
@@ -21,23 +21,21 @@
     .sub-title {
       font-size: 12px;
       font-weight: 500;
-      color: #b5b5c3;
+      color: $inActiveTab;
       margin-top: 10px;
     }
   }
   .customize--form {
-    display: flex;
-    flex-direction: column;
+    @include flex-col;
     gap: 25px;
     margin-top: 20px;
     font-size: 14px;
-    color: #b5b5c3;
+    color: $inActiveTab;
     .field {
       margin-top: 20px;
-      @include flex-space-between();
-      align-items: center;
+      @include flex-space-between-cen-Algn();
       &--title {
-        color: #000000;
+        color: $black;
       }
     }
   }
@@ -52,14 +50,14 @@
     }
   }
   .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-    background-color: $completed;
+    background-color: $posCompare;
   }
   .mat-slide-toggle.mat-checked {
     .mat-slide-toggle-thumb-container {
       left: 2px;
       transform: translate3d(30px, 0, 0);
       .mat-slide-toggle-thumb {
-        background-color: white;
+        background-color: $white;
       }
     }
   }

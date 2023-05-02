@@ -124,3 +124,34 @@ export class Department {
     return this;
   }
 }
+
+export class Hotels {
+  records: Hotel[];
+  total: number;
+  deserialize(chains: any[]) {
+    this.records = chains.map((item) => new Hotel().deserialize(item));
+    this.total = chains?.length ?? 0;
+    return this;
+  }
+}
+
+export class Hotel {
+  id: string;
+  thumbnail: string;
+  bgColor: string;
+  name: string;
+  url: string;
+  expiry: number;
+  status: string;
+
+  deserialize(input) {
+    this.id = input.id;
+    this.name = input.name;
+    this.thumbnail = input.logo;
+    this.bgColor = input.bgColor;
+    this.url = input.domain;
+    this.expiry = input.expiry;
+    this.status = 'published';
+    return this;
+  }
+}

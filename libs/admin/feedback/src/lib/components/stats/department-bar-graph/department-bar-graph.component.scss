@@ -50,7 +50,7 @@
       top: 49.6%;
       right: 0;
       left: 0;
-      border: 1px solid $c-gray-84;
+      border: 1px solid $borderCol;
       z-index: inherit;
     }
   }
@@ -102,13 +102,13 @@
                 .journey {
                   font: normal normal bold 16px/19px Roboto;
                   letter-spacing: 0.96px;
-                  color: $c-gray-71;
+                  color: $grayLight;
                   margin-bottom: 5px;
                 }
                 .service {
                   font: normal normal bold 16px/19px Roboto;
                   letter-spacing: 0.96px;
-                  color: $dark-blue;
+                  color: $secondary;
                 }
                 .details_box {
                   margin-top: 15px;
@@ -120,18 +120,18 @@
                       width: 8px;
                       height: 8px;
                       border-radius: 50%;
-                      background-color: $rejected;
+                      background-color: $mediumRed    ;
                     }
                     &__label {
                       font: normal normal normal 12px/14px Roboto;
                       letter-spacing: 0.72px;
-                      color: $quote-color;
+                      color: $subtitle;
                       margin: 0 8px;
                     }
                     .percentage {
                       font: normal normal bold 12px/14px Roboto;
                       letter-spacing: 0.72px;
-                      color: $dark-blue;
+                      color: $secondary;
                     }
                   }
                 }

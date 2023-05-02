@@ -1,13 +1,36 @@
 @import 'main';
 
-$defaultColor: $mat-tab-label;
-$primaryColor: $primary-purple;
-$error: #f44336;
+$input-padding-vertical: 0.9em;
+$input-padding-horizontal: 0.6em;
+$primary-text-color: $secondary2;
+$secondary-text-color: $grayMedium;
+$primary-form-color: $primary-cta;
+$border-color: $grayLight;
+$form-error-color: #f44336;
+$form-input-height: 45px;
+$label-gap: 0.75em;
+$input-padding: $input-padding-vertical $input-padding-horizontal;
+
+@mixin input-default() {
+  width: 100%;
+  height: $form-input-height;
+  margin-left: 0%;
+  padding: $input-padding;
+  font-size: inherit;
+}
+
+@mixin search-input() {
+  box-shadow: none !important;
+  background: $layout-background !important;
+  border: none !important;
+  color: $secondary-text-color;
+}
 
 .wrapper {
   position: relative;
 
   &__vertical {
+    // margin-top: 2em;
   }
 
   &__horizontal {
@@ -18,22 +41,71 @@ $error: #f44336;
   }
 }
 
-.input-wrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
 ::ng-deep .p-error {
   left: 0;
-  bottom: -14px;
-  font-size: 10px;
+  bottom: -1.8em;
+  font-size: 0.7em;
+  height: 1.5em;
   position: absolute;
-  color: $error;
+  color: $form-error-color;
 }
 
 .label {
-  color: $defaultColor;
+  color: $primary-text-color;
+  font-size: 16px;
+  letter-spacing: 0.96px;
+  font-weight: 500;
+
   &__static {
   }
+}
+
+.input {
+  font-size: 1em;
+  
+}
+
+.icon {
+  position: absolute;
+  right: 1em;
+  color: $border-color;
+
+  &__static {
+    top: 3.1em;
+  }
+  &__float {
+  }
+}
+
+/** additional info icon **/
+.additional-info {
+  position: absolute;
+  right: 0;
+  top: -2em;
+}
+
+/** add/create new cta in dropdown */
+:host ::ng-deep .dropdown-action-cta {
+  border-top: 1px solid $border-color;
+  padding: 1em;
+  font-family: 'Roboto';
+  font-size: 14px;
+  letter-spacing: 0.84px;
+  text-align: center;
+  color: #006fde;
+}
+
+/** additional text inside input */
+.subtitle {
+  position: absolute;
+  bottom: 0.8em;
+  right: 0.8em;
+  font-size: 0.8em;
+  color: $border-color;
+}
+
+.additional-info {
+  position: absolute;
+  right: 0;
+  top: -2em;
 }

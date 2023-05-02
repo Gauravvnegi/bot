@@ -107,18 +107,8 @@ export class FeedbackNotificationComponent extends NotificationComponent
                 this.notificationForm.get('channel').value === 'email'
                   ? this.modifyTemplate(response.template)
                   : response.template
-              ),
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
               )
-              .subscribe()
-        )
+            )
     );
   }
 
@@ -169,16 +159,7 @@ export class FeedbackNotificationComponent extends NotificationComponent
             this.closeModal();
           },
           ({ error }) => {
-            this.isSending = false;
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
+            this.isSending = false; 
           }
         )
     );

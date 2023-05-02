@@ -8,5 +8,5 @@
 }
 
 :host ::ng-deep .mat-raised-button {
-  @include primary-button();
+  @include primary-button;
 }

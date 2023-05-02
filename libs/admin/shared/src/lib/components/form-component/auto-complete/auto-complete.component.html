@@ -1,0 +1,45 @@
+<div
+  class="wrapper"
+  [ngClass]="wrapperNgClasses"
+  [style.fontSize]="fontSize"
+  [formGroup]="controlContainer.control"
+>
+  <label
+    *ngIf="label && !float"
+    class="label label__static"
+    [for]="controlName"
+    >{{ label }}</label
+  >
+
+  <p-autoComplete
+    class="input"
+    [ngClass]="inputNgClasses"
+    [disabled]="isDisabled || null"
+    [suggestions]="menuOptions"
+    [placeholder]="placeholder"
+    [formControlName]="controlName"
+    [id]="controlName"
+    (completeMethod)="searchData($event)"
+    [multiple]="true"
+    field="label"
+    dataKey="value"
+    minLength="2"
+    [forceSelection]="true"
+    emptyMessage="No result found."
+  >
+    <ng-template let-option pTemplate="item">
+      <div class="label">
+        <div class="label__main">
+          {{ option.label }}
+        </div>
+        <div class="label__subtitle">
+          {{ option.type }}
+        </div>
+      </div>
+    </ng-template>
+  </p-autoComplete>
+
+  <small *ngIf="error" class="p-error">{{ error }}</small>
+
+  <label *ngIf="label && float" [for]="controlName">{{ label }}</label>
+</div>

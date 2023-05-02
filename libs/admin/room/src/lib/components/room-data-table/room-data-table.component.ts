@@ -19,24 +19,30 @@ import * as FileSaver from 'file-saver';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import routes from '../../config/routes';
 import {
+  Status,
+  StatusEntity,
+  TableValue,
   cols,
   filter,
-  Status,
   status,
-  StatusEntity,
   title,
 } from '../../constant/data-table';
+import routes from '../../constant/routes';
 import {
   RoomList,
   RoomRecordsCount,
+  RoomStateCounts,
+  RoomTypeCounts,
   RoomTypeList,
-  RoomTypeRecordsCount,
 } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
-import { QueryConfig, TableValue } from '../../types/room';
-import { RoomStatus } from '../../types/service-response';
+import { QueryConfig } from '../../types/room';
+import {
+  RoomListResponse,
+  RoomStatus,
+  RoomTypeListResponse,
+} from '../../types/service-response';
 
 @Component({
   selector: 'hospitality-bot-room-data-table',
@@ -76,6 +82,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
+    this.roomService.resetRoomTypeFormState();
 
     this.roomService.selectedTable.subscribe((value) => {
       this.tabFilterIdx = this.tabFilterItems.findIndex(
@@ -90,16 +97,21 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.getDataTableValue(this.selectedTable);
   }
 
-  /**
-   * @function setRecordsCount To set the total no. of records
-   * @param recordCounts
-   */
-  setRecordsCount(recordCounts: RoomRecordsCount | RoomTypeRecordsCount) {
-    this.tabFilterItems[this.tabFilterIdx].chips.forEach((item) => {
-      item.total = recordCounts[item.value];
-    });
-    this.totalRecords = recordCounts.total;
-  }
+  // /**
+  //  * @function setRecordsCount To set the total no. of records
+  //  * @param recordCounts
+  //  */
+  // setRecordsCount(recordCounts: RoomRecordsCount | RoomStateCounts) {
+  //   this.tabFilterItems[this.tabFilterIdx].chips.forEach((item) => {
+  //     item.total = recordCounts[item.value];
+  //   });
+  // }
+
+  // setTypeCounts(recordCounts: RoomTypeCounts) {
+  //   this.tabFilterItems.forEach((item) => {
+  //     item.total = recordCounts[item.value];
+  //   });
+  // }
 
   /**
    * @function getSelectedQuickReplyFilters To return the selected chip list.
@@ -107,14 +119,14 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    */
   getSelectedQuickReplyFilters() {
     const chips = this.tabFilterItems[this.tabFilterIdx].chips.filter(
-      (item) => item.isSelected && item.value !== 'total'
+      (item) => item.isSelected && item.value !== 'ALL'
     );
-    return this.selectedTable === 'room'
-      ? chips.map((item) => ({ roomStatus: StatusEntity[item.value] }))
+    return this.selectedTable === 'ROOM'
+      ? chips.map((item) => ({ roomStatus: item.value }))
       : [
           chips.length !== 1
             ? { roomTypeStatus: null }
-            : { roomTypeStatus: chips[0].value === 'active' },
+            : { roomTypeStatus: chips[0].value === 'ACTIVE' },
         ];
   }
 
@@ -123,6 +135,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
       params: this.adminUtilityService.makeQueryParams([
         ...this.getSelectedQuickReplyFilters(),
         {
+          type: this.selectedTable,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -138,6 +151,9 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.cols = cols[this.selectedTable];
     this.tableName = title[this.selectedTable];
     this.filterChips = filter[this.tabFilterIdx].chips;
+    this.totalRecords = this.filterChips
+      .filter((item) => item.isSelected)
+      .reduce((p, c) => p + c.total, 0);
   };
 
   /**
@@ -147,34 +163,44 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   getDataTableValue(table: TableValue): void {
     this.loading = true;
 
-    if (table === 'room')
+    if (table === TableValue.room)
       this.$subscription.add(
         this.roomService
-          .getRoomsList(this.hotelId, this.getQueryConfig())
+          .getList<RoomListResponse>(this.hotelId, this.getQueryConfig())
           .subscribe(
             (res) => {
               const roomList = new RoomList().deserialize(res);
               this.values = roomList.records;
-              this.setRecordsCount(roomList.count);
+              this.updateQuickReplyFilterCount(res.entityStateCounts);
+              this.updateTabFilterCount(res.entityTypeCounts, res.total);
+              this.updateTotalRecords();
               this.loading = false;
             },
-            this.handleError,
+            () => {
+              this.values = [];
+              this.loading = false;
+            },
             this.initTableDetails
           )
       );
 
-    if (table === 'roomType')
+    if (table === TableValue.roomType)
       this.$subscription.add(
         this.roomService
-          .getRoomsTypeList(this.hotelId, this.getQueryConfig())
+          .getList<RoomTypeListResponse>(this.hotelId, this.getQueryConfig())
           .subscribe(
             (res) => {
               const roomTypesList = new RoomTypeList().deserialize(res);
               this.values = roomTypesList.records;
-              this.setRecordsCount(roomTypesList.count);
+              this.updateQuickReplyFilterCount(res.entityStateCounts);
+              this.updateTabFilterCount(res.entityTypeCounts, res.total);
+              this.updateTotalRecords();
+
               this.loading = false;
             },
-            this.handleError,
+            () => {
+              this.loading = false;
+            },
             this.initTableDetails
           )
       );
@@ -191,10 +217,9 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.roomService
         .updateRoomStatus(this.hotelId, {
-          id,
-          roomStatus: status,
+          rooms: [{ id, roomStatus: status }],
         })
-        .subscribe(() => this.handleStatusSuccess(status, id), this.handleError)
+        .subscribe(() => this.handleStatusSuccess(status, id))
     );
   }
 
@@ -212,9 +237,8 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           id,
           status,
         })
-        .subscribe(
-          () => this.handleStatusSuccess(status ? 'ACTIVE' : 'INACTIVE', id),
-          this.handleError
+        .subscribe(() =>
+          this.handleStatusSuccess(status ? 'ACTIVE' : 'INACTIVE', id)
         )
     );
   }
@@ -224,11 +248,11 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param status status value
    */
   handleStatus(status: RoomStatus, rowData): void {
-    if (this.selectedTable === 'room') {
+    if (this.selectedTable === TableValue.room) {
       this.handleRoomStatus(status, rowData.id);
     }
 
-    if (this.selectedTable === 'roomType') {
+    if (this.selectedTable === TableValue.roomType) {
       const roomTypeStatus = status === 'ACTIVE';
       if (!roomTypeStatus) {
         const dialogConfig = new MatDialogConfig();
@@ -310,13 +334,16 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param rowData clicked row data
    */
   openEditForm(rowData): void {
-    const selectedRoute =
-      this.selectedTable === 'room'
-        ? `${routes.addRoom}/single`
-        : routes.addRoomType;
-    this.router.navigate([`/pages/inventory/room/${selectedRoute}`], {
-      queryParams: { id: rowData.id },
-    });
+    if (this.selectedTable === TableValue.room) {
+      this.router.navigate([`/pages/inventory/room/${routes.addRoom}/single`], {
+        queryParams: { id: rowData.id },
+      });
+    }
+    if (this.selectedTable === TableValue.roomType) {
+      this.router.navigate([
+        `/pages/inventory/room/${routes.addRoomType}/${rowData.id}`,
+      ]);
+    }
   }
 
   /**
@@ -339,7 +366,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
           this.loading = false;
-        }, this.handleError)
+        })
     );
   }
 
@@ -349,15 +376,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    */
   handleError = ({ error }): void => {
     this.loading = false;
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: `messages.error.${error?.type}`,
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
   };
 
   /**

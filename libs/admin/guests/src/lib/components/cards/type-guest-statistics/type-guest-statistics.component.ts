@@ -1,16 +1,10 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { AdminUtilityService } from '@hospitality-bot/admin/shared';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { TranslateService } from '@ngx-translate/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { Subscription } from 'rxjs';
-import { GuestDatatableModalComponent } from '../../modal/guest-datatable/guest-datatable.component';
 import { chartConfig } from '../../../constants/chart';
 import { guest } from '../../../constants/guest';
 import { VIP } from '../../../data-models/statistics.model';
@@ -25,7 +19,7 @@ import { ChartTypeOption } from '../../../types/guest.type';
 export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
   selectedInterval: any;
-  customerData: VIP = new VIP();
+  customerData: VIP;
   $subscription = new Subscription();
   globalQueries = [];
   tabFilterItems = guest.tabFilterItems.type;
@@ -68,9 +62,7 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
     private _statisticService: StatisticsService,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private _modal: ModalService,
-    private dateService: DateService,
-    private _translateService: TranslateService
+    private dateService: DateService
   ) {}
 
   ngOnInit(): void {
@@ -186,17 +178,7 @@ export class TypeGuestStatisticsComponent implements OnInit, OnDestroy {
             this.customerData = new VIP().deserialize(response);
             this.initGraphData();
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'messages.error.some_thing_wrong',
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
+          ({ error }) => {  }
         )
       )
     );

@@ -1,13 +1,11 @@
 @import 'temp000001';
 
-
 .expand-icon {
   margin-left: auto;
 }
 
 mat-icon {
-  @include mat-icon();
-
+  @include mat-icon;
 }
 .container__wrapper {
   max-width: 1300px;
@@ -16,7 +14,7 @@ mat-icon {
 
 :host ::ng-deep .mat-expansion-panel-body {
   border: none;
-  padding: 0px $padding30 !important;
+  padding: 0px 30px !important;
   &::after,
   &::before {
     content: none;
@@ -31,6 +29,6 @@ mat-icon {
   height: 48px;
 }
 
-:host ::ng-deep .mat-form-field-wrapper{
+:host ::ng-deep .mat-form-field-wrapper {
   padding-bottom: 0px;
 }

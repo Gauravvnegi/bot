@@ -2,7 +2,7 @@
   <div class="guestInfoOpen">
     <div class="guestInfoOpen-guest-wrap">
       <div class="guestInfoAvatar">
-        {{ feedback?.getProfileNickName() }}
+        {{ feedback.getProfileNickName() }}
       </div>
       <div class="selectedChat"></div>
       {{ feedback?.feedback.guest.getFullName() }}
@@ -10,7 +10,7 @@
     <div class="mr-10">
       <div class="req_button">
         <div class="export" (click)="exportCSV()">
-          <img class="paper" src="assets/images/paper.png" alt="" />
+          <img class="paper" src="assets/svg/documentColor.svg" alt="" />
           <p>{{ 'export.feedback' | translate }}</p>
         </div>
       </div>
@@ -26,7 +26,7 @@
       <img
         *ngIf="!guestInfoEnable"
         class=""
-        src="assets/images/guest-info-icon .png"
+        src="assets/svg/hamBurger.svg"
         [alt]=""
         (click)="openGuestInfo()"
       />
@@ -34,21 +34,28 @@
   </div>
   <div class="guestInfoOpen" [formGroup]="feedbackFG">
     <div class="feedback_labels">
-      <div *ngIf="feedback?.feedback.guestData.bookingNo">
-        BNO:{{ feedback?.feedback.guestData.bookingNo }}
+      <div
+        *ngIf="feedback?.feedback.guestData.bookingNo"
+        class="feedback_labels-bookingNo"
+      >
+        BNO: {{ feedback?.feedback.guestData.bookingNo }}
       </div>
-      <div>{{ feedback?.getTableOrRoomNo(feedbackType) }}</div>
-      <div>{{ feedback.getCreatedDate(globalFilterService.timezone) }}</div>
+      <div class="feedback_labels-roomNo">
+        {{ feedback?.getTableOrRoomNo(feedbackType) }}
+      </div>
+      <div class="feedback_labels-createdDate">
+        Date: {{ feedback.getCreatedDate(globalFilterService.timezone) }}
+      </div>
       <div class="feedback">
         <div class="feedback-service">
           <div class="feedback-service__container">
-            <div class="feedback-service__container__label others">
-              <div class="feedback-service__container__label__text">
+            <div class="feedback-service__container__label">
+              <div class="feedback-service__container__label__text others">
                 {{ 'OverAll' | translate }}
               </div>
               <div class="stay-booking-feedback">
                 <p
-                  class="number"
+                  class="additional-info"
                   *ngIf="
                     feedbackType === globalFeedbackConfig.types.transactional;
                     else stayFeedbakServiceLength
@@ -58,14 +65,14 @@
                 </p>
               </div>
               <ng-template #stayFeedbakServiceLength>
-                <p class="number round">
+                <p class="additional-info">
                   +{{ feedback.feedback.services.length }}
                 </p>
               </ng-template>
             </div>
             <div class="stay-booking-feedback status-opacity-success">
               <p
-                class="number status-background-success numPadding"
+                class="rating status-background-success"
                 [style.background]="
                   (colorMap?.stayFeedbacks)[feedback.feedback.ratings].colorCode
                 "
@@ -77,18 +84,18 @@
           </div>
         </div>
       </div>
-      <mat-select
-        class="assignee-dropdown"
-        [value]="feedbackFG?.get('assignee')?.value"
-        (selectionChange)="setAssignee($event)"
-        placeholder="Assignee"
-        [disabled]="assigneeList?.length === 0"
-      >
-        <mat-option *ngFor="let assignee of assigneeList" [value]="assignee.id">
-          {{ assignee.firstName }} {{ assignee.lastName }}
-        </mat-option>
-      </mat-select>
     </div>
+    <mat-select
+      class="assignee-dropdown"
+      [value]="feedbackFG?.get('assignee')?.value"
+      (selectionChange)="setAssignee($event)"
+      placeholder="Assignee"
+      [disabled]="assigneeList?.length === 0"
+    >
+      <mat-option *ngFor="let assignee of assigneeList" [value]="assignee.id">
+        {{ assignee.firstName }} {{ assignee.lastName }}
+      </mat-option>
+    </mat-select>
     <div class="guestInfoOpen-guest-wrap"></div>
   </div>
   <div class="feedback-chat" #feedbackChat>

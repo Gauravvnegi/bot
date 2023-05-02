@@ -1,25 +1,10 @@
-// Constant Variables
-
-$border5: 5px;
-$border10: 10px;
-$border15: 15px;
-$border20: 20px;
-$margin10: 10px;
-$margin15: 15px;
-$margin20: 20px;
-$full: 100%;
-$half: 50%;
-$quarter: 25%;
-$padding4: 4px;
-$padding5: 5px;
-$padding10: 10px;
-$padding15: 15px;
-$padding20: 20px;
-$padding30: 30px;
-$margin10: 10px;
-$margin15: 15px;
-$margin20: 20px;
-$margin5: 5px;
+// ** z-indexes ** [Should not be above 999]
+$left-side-panel-z: 620;
+$right-side-panel-z: 620;
+$global-header-z: 420;
+$main-overlay-z: 220;
+$header-menu-dropdown-z: 220;
+$nav-action-header-z: 110;
 
 // Breakpoint variables
 
@@ -28,15 +13,17 @@ $M: 768px;
 $L: 1170px;
 $XL: 1500px;
 $tablet: 1024px;
+$tabAir: 1180px;
 
-// letter-spacing
+// button size
+$popup-button-width: 10vw;
+$normal-button-width: 15vw;
+$button-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
 
-$spacing1: 1px;
-$spacing2: 2px;
-$spacing4: 4px;
-$spacing6: 6px;
+// form
+$form-shadow: 0 3px 25px 0 rgba(0, 0, 0, 0.05);
+$form-padding-y: 25px;
+$form-padding-x: 4%;
 
-// Border radius
-$borderRadius5: 5px;
-$borderRadius10: 10px;
-$borderRadius50P: 50%;
+//datatable and form
+$sticky-header-height: 61px;

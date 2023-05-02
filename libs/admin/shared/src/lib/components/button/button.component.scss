@@ -1,31 +1,119 @@
 @import 'main';
 
 .button {
-  height: 36px;
+  height: 46px;
   min-width: 145px;
-
+  @include flex-all-center;
   padding: 9.5px 18.5px;
   font-size: 14px;
   font-weight: 500;
 
-  border-radius: 18px;
+  border-radius: 4px;
   border: none;
   cursor: pointer;
 
+  &__img {
+    display: flex;
+    align-items: center;
+
+    img {
+      margin-right: 8px;
+      filter: brightness(0) invert(1);
+    }
+  }
+
   &__contained {
     color: $white;
-    background-color: $primary-purple;
+
+    &.color {
+      /* Primary Color Setting -- Contained Variant */
+      &__primary {
+        background-color: $primary-cta;
+        &:hover {
+          background-color: $primary-hover;
+        }
+        &:active {
+          background-color: $primary-active;
+        }
+      }
+
+      /* Secondary Color Setting -- Contained Variant */
+      &__secondary {
+      }
+      /* Reset Color Setting -- Contained Variant */
+      &__reset {
+      }
+    }
   }
 
   &__text {
-    color: $primary-purple;
-    background-color: $white;
+    background-color: transparent;
+
+    &.color {
+      /* Primary Color Setting -- Text Variant */
+      &__primary {
+        color: $primary-cta;
+        &:hover {
+          color: $primary-hover;
+        }
+        &:active {
+          color: $primary-active;
+        }
+      }
+
+      /* Secondary Color Setting -- Text Variant */
+      &__secondary {
+        color: $grayMedium;
+        &:hover {
+          color: $primary-cta;
+        }
+        &:active {
+          color: $primary-active;
+        }
+      }
+      /* Reset Color Setting -- Text Variant */
+      &__reset {
+        color: $darkRed;
+      }
+    }
   }
 
   &__outlined {
-    color: $primary-purple;
     background-color: $white;
     border: 1px solid;
-    border-color: $primary-purple;
+
+    &.color {
+      /* Primary Color Setting -- Outlined Variant */
+      &__primary {
+        color: $primary-cta;
+        border-color: $primary-cta;
+
+        &:hover {
+          border-color: $primary-hover;
+          color: $primary-hover;
+          box-shadow: 1px 1px 1px 0px $blackPrime;
+        }
+        &:active {
+          border-color: $primary-active;
+          color: $primary-active;
+        }
+      }
+
+      /* Secondary Color Setting -- Outlined Variant */
+      &__secondary {
+      }
+      /* Reset Color Setting  -- Outlined Variant */
+      &__reset {
+        color: $darkRed;
+        border-color: $darkRed;
+        &:hover {
+          box-shadow: 1px 1px 1px 0px $blackPrime;
+        }
+      }
+    }
+  }
+  &__disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }

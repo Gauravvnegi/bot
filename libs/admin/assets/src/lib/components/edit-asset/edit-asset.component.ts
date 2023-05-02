@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { forkJoin, Subscription } from 'rxjs';
+import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { Asset } from '../../data-models/assetConfig.model';
 import { AssetService } from '../../services/asset.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,16 +20,28 @@ import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-typ
 export class EditAssetComponent implements OnInit, OnDestroy {
   @Input() id: string;
   fileUploadData = assetConfig.fileUploadData;
-
+  hotelId: string;
   assetForm: FormGroup;
   isSavingasset = false;
   private $subscription: Subscription = new Subscription();
   hotelasset: Asset;
-  hotelId: any;
+
   globalQueries = [];
   assetId: string;
   fileUploadType = FileUploadType;
   pathToUploadFile = 'static-content/assets';
+  pageTitle = 'Create Asset';
+
+  navRoutes: NavRouteOptions = [
+    { label: 'Library', link: './' },
+    { label: 'Assets', link: '/pages/library/assets' },
+    { label: 'Create Asset', link: './' },
+  ];
+
+  fileType: Option[] = [
+    { label: 'Image', value: 'Image' },
+    { label: 'Video', value: 'Video' },
+  ];
 
   constructor(
     private router: Router,
@@ -105,6 +118,8 @@ export class EditAssetComponent implements OnInit, OnDestroy {
         if (params['id']) {
           this.assetId = params['id'];
           this.getAssetDetails(this.assetId);
+          this.pageTitle = 'Edit Asset';
+          this.navRoutes[2].label = 'Edit Asset';
         } else if (this.id) {
           this.assetId = this.id;
           this.getAssetDetails(this.assetId);
@@ -160,16 +175,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
 
           this.isSavingasset = false;
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.asset_not_created',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.isSavingasset = false;
         }
       )
@@ -214,16 +220,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
 
             this.isSavingasset = false;
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'message.error.asset_not_updated',
-                  priorityMessage: error.message,
-                },
-                ''
-              )
-              .subscribe();
+          ({ error }) => { 
             this.isSavingasset = false;
           }
         )

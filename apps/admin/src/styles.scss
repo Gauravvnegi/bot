@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 // @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import '~@fortawesome/fontawesome-free/css/all.min.css';
 @import 'main.scss';
 
@@ -16,7 +16,6 @@ body {
 
 .mat-dialog-container {
   overflow: hidden !important;
-  // max-height: 100vh !important;
   padding: 0 !important;
 }
 
@@ -54,17 +53,6 @@ body {
   }
 }
 
-// dialouge - box
-
-// to-do change classes for multiple pop-up
-
-// .cdk-overlay-pane {
-//   max-height: 85vh;
-//   @media screen and (max-width: 1100px) {
-//     max-height: 53vh;
-//   }
-// }
-
 .cdk-overlay-pane {
   @media screen and (max-width: $L) {
     max-width: 93vw !important;
@@ -83,7 +71,7 @@ body {
 }
 
 .status-text-pending {
-  color: $pending !important;
+  color: $draft-state !important;
 }
 
 .status-text-initiated {
@@ -91,11 +79,11 @@ body {
 }
 
 .status-text-reject {
-  color: $reject !important;
+  color: $mediumRed !important;
 }
 
 .status-text-success {
-  color: $success !important;
+  color: #2a8853 !important;
 }
 
 .status-opacity-pending {
@@ -119,7 +107,7 @@ body {
 }
 
 .status-background-pending {
-  background-color: $pending;
+  background-color: $draft-state;
 }
 
 .status-background-initiated {
@@ -127,7 +115,7 @@ body {
 }
 
 .status-background-reject {
-  background-color: $reject;
+  background-color: $mediumRed;
 }
 
 .status-background-moderate {
@@ -135,16 +123,7 @@ body {
 }
 
 .status-background-success {
-  background-color: $completed;
-}
-
-.danger {
-  background-color: $reject !important;
-}
-
-.success {
-  background-color: $completed !important;
-  color: $white;
+  background-color: $posCompare;
 }
 
 .notification {
@@ -155,7 +134,7 @@ body {
 .clickable-card {
   cursor: pointer;
   box-shadow: 0px 3px 20px #0368ff42;
-  border: 1px solid $primary-purple;
+  border: 1px solid $primary-cta;
   border-radius: 5px;
 }
 .material-body {
@@ -167,11 +146,10 @@ body {
   padding-right: 15px;
   overflow-y: auto;
 
-  &::-webkit-scrollbar{
+  &::-webkit-scrollbar {
     width: 8px;
   }
-  &::-webkit-scrollbar-thumb
-  {
+  &::-webkit-scrollbar-thumb {
     border-radius: 4px;
   }
 }
@@ -180,9 +158,9 @@ body {
   max-height: 94%;
 }
 
-.mat-option.mat-active {
-  color: $primary-gray1;
-}
+// .mat-option.mat-active {
+//   color: $primary-gray1;
+// }
 
 .active {
   pointer-events: visible;
@@ -193,9 +171,45 @@ body {
 }
 
 .comparison-negative {
-  color: $comparison-negative;
+  color: $darkRed;
 }
 
 .comparison-positive {
-  color: $comparison-positive;
+  color: $posCompare;
+}
+
+/****  Snackbar styling          ****/
+
+.mat-snack-bar-container {
+  border-radius: 5px !important;
+  font-size: 16px;
+  letter-spacing: 0.96px;
+  text-align: left;
+  display: flex !important;
+  flex-wrap: wrap;
+  max-width: 396px !important;
+}
+
+.danger {
+  background-color: #fee6e9 !important;
+  color: $mediumRed;
+}
+
+.success {
+  background-color: #ecf6ea !important;
+  color: $posCompare;
+}
+
+.pulse {
+  animation: animation-pulse 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation-delay: 0.5s;
+}
+
+@keyframes animation-pulse {
+  0% {
+    background-color: hsl(200, 20%, 80%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
 }

@@ -1,0 +1,359 @@
+<div [formGroup]="userForm" class="wrapper">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="routes">
+  </hospitality-bot-navigation-header>
+  <div class="main">
+    <p-accordion [multiple]="true">
+      <p-accordionTab header="Booking Information" [selected]="true">
+        <div class="form-block" formGroupName="bookingInformation">
+          <hospitality-bot-date
+            class="half-width"
+            controlName="from"
+            label="Check-In Date"
+            [settings]="{
+              enableTime: false,
+              dateValue: startMinDate,
+              isDisabled: disabledForm
+            }"
+            [minDate]="startMinDate"
+          ></hospitality-bot-date>
+          <hospitality-bot-date
+            class="half-width"
+            controlName="to"
+            label="Check-Out Date"
+            [settings]="{
+              enableTime: false,
+              dateValue: endMinDate,
+              isDisabled: disabledForm
+            }"
+            [minDate]="endMinDate"
+          ></hospitality-bot-date>
+          <hospitality-bot-select
+            class="half-width"
+            controlName="reservationType"
+            label="Reservation Type"
+            [options]="reservationTypes"
+            [props]="{ placeholder: 'Select' }"
+          ></hospitality-bot-select>
+          <hospitality-bot-select
+            class="half-width"
+            controlName="source"
+            label="Booking Source"
+            [options]="configData?.source"
+            [props]="{ placeholder: 'Select' }"
+          ></hospitality-bot-select>
+          <hospitality-bot-input
+            class="half-width maxlength"
+            controlName="sourceName"
+            label="Booking Source Name"
+            maxLength="60"
+            [props]="{
+              placeholder: 'Enter',
+              subtitle: 'Max 60',
+              errorMessages: {
+                required: 'This is a required field.',
+                maxlength: 'Maximum character limit is upto 60.'
+              }
+            }"
+          ></hospitality-bot-input>
+          <hospitality-bot-select
+            class="half-width"
+            controlName="marketSegment"
+            label="Market Segment"
+            [options]="configData?.marketSegment"
+            [props]="{ placeholder: 'Select' }"
+          ></hospitality-bot-select>
+        </div>
+      </p-accordionTab>
+      <p-accordionTab class="room-info" header="Room Information">
+        <hospitality-bot-room-iterator
+          [fields]="roomFields"
+          [userFormGroup]="userForm"
+          (paginate)="loadMoreRoomTypes()"
+          (onSearch)="searchRoomTypes($event)"
+          (refreshData)="getSummaryData()"
+        >
+        </hospitality-bot-room-iterator>
+      </p-accordionTab>
+      <p-accordionTab header="Guest Information">
+        <div class="form-block" formGroupName="guestInformation">
+          <hospitality-bot-input
+            class="half-width maxlength"
+            controlName="firstName"
+            label="First Name"
+            maxLength="60"
+            [props]="{
+              placeholder: 'Enter',
+              subtitle: 'Max 60',
+              errorMessages: {
+                required: 'This is a required field.',
+                maxlength: 'Maximum character limit is upto 60.'
+              }
+            }"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width maxlength"
+            controlName="lastName"
+            label="Last Name"
+            maxLength="60"
+            [props]="{
+              placeholder: 'Enter ',
+              subtitle: 'Max 60',
+              errorMessages: {
+                required: 'This is a required field.',
+                maxlength: 'Maximum character limit is upto 60.'
+              }
+            }"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="email"
+            label="Email Address"
+            [props]="{
+              placeholder: 'Enter ',
+              errorMessages: {
+                required: 'This is a required field.',
+                pattern: 'Enter valid email address'
+              }
+            }"
+          ></hospitality-bot-input>
+          <hospitality-bot-phone-number
+            preControlName="countryCode"
+            postControlName="phoneNumber"
+            class="half-width"
+          ></hospitality-bot-phone-number>
+        </div>
+      </p-accordionTab>
+      <p-accordionTab header="Billing Address">
+        <div class="form-block" formGroupName="address">
+          <hospitality-bot-input
+            class="half-width"
+            controlName="city"
+            label="City"
+            [props]="{ placeholder: 'Enter ' }"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="countryCode"
+            label="Country"
+            [props]="{ placeholder: 'Enter ' }"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="full-width"
+            controlName="addressLine1"
+            label="Address"
+            [props]="{ placeholder: 'Enter ' }"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="state"
+            label="State"
+            [props]="{ placeholder: 'Enter ' }"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="postalCode"
+            label="Postal Code"
+            [props]="{ placeholder: 'Enter' }"
+          ></hospitality-bot-input>
+        </div>
+      </p-accordionTab>
+      <p-accordionTab header="Payment Method">
+        <div class="form-block" formGroupName="paymentMethod">
+          <hospitality-bot-select-group
+            class="full-width"
+            controlName="paymentMethod"
+            [options]="paymentOptions"
+          ></hospitality-bot-select-group>
+          <hospitality-bot-prefix-field
+            class="half-width"
+            [options]="currencies"
+            label="Payment Received"
+            preControlName="currency"
+            postControlName="totalPaidAmount"
+            [defaultProps]="{ post: { type: 'number' } }"
+            [props]="{
+              errorMessages: {
+                required: 'This is a required field.',
+                min: 'Value must be greater than 0.',
+                max: 'Value must be less than or equal Total amount to be paid.'
+              }
+            }"
+          >
+          </hospitality-bot-prefix-field>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="paymentRemark"
+            label="Your Inclusions/remakrs :"
+            [props]="{ placeholder: 'Enter' }"
+          ></hospitality-bot-input>
+        </div>
+      </p-accordionTab>
+    </p-accordion>
+    <div class="bk-summary">
+      <ng-container *ngIf="!displayBookingOffer; else bookingOffer">
+        <div class="bk-summary_heading">Booking Summary</div>
+        <p class="divider"></p>
+        <div class="bk-summary_subheading">
+          {{ summaryData?.roomTypeName }}
+        </div>
+        <div class="bk-summary_subheading_label">
+          {{ summaryData?.location }}
+        </div>
+
+        <div class="bk-summary_roomInfo">
+          <div class="bk-summary_roomInfo_checkoutInfo">
+            <p class="bk-summary_roomInfo_checkoutInfo_heading">
+              Checkin - Checkout
+            </p>
+            <p class="bk-summary_roomInfo_checkoutInfo_subText">
+              {{
+                userForm.get('bookingInformation.from').value
+                  | date: 'dd/MM/yyyy'
+              }}
+              -
+              {{
+                userForm.get('bookingInformation.to').value | date: 'dd/MM/yyyy'
+              }}
+            </p>
+          </div>
+          <div class="bk-summary_roomInfo_guestInfo">
+            <p class="bk-summary_roomInfo_guestInfo_heading">
+              Rooms & Guests
+            </p>
+            <p class="bk-summary_roomInfo_guestInfo_subText">
+              {{ userForm.get('roomInformation.roomCount').value }} Room,
+              {{ userForm.get('roomInformation.adultCount').value }} Adult,
+              {{ userForm.get('roomInformation.childCount').value }} Kid
+            </p>
+          </div>
+        </div>
+        <div class="bk-summary_offerInfo">
+          <ng-container
+            *ngIf="
+              userForm.get('offerId').value && selectedOffer?.description;
+              else selectOffer
+            "
+          >
+            <p>
+              Offer Applied
+            </p>
+            <div class="offer">
+              <div
+                [innerHtml]="selectedOffer.description"
+                class="offer_card"
+              ></div>
+              <div class="offer_gift">
+                <img src="assets/svg/offer_gift.svg" alt="offer gift" />
+              </div>
+              <div class="offer_cross" (click)="offerSelect()">
+                <img src="assets/images/cross.png" alt="cross" />
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #selectOffer>
+            <p>
+              Have an Offer?
+              <span (click)="handleOfferView()">Apply Offer</span>
+            </p>
+          </ng-template>
+        </div>
+        <div class="bk-summary_priceInfo">
+          <p class="bk-summary_priceInfo_perNight">
+            <span class="bk-summary_priceInfo_perNight_label">Per Night</span>
+            <s
+              class="bk-summary_priceInfo_perNight_amount"
+              *ngIf="summaryData?.originalPrice"
+              >{{ summaryData?.originalPrice | currency: 'INR' }}</s
+            >
+          </p>
+          <p class="bk-summary_priceInfo_person">
+            <span class="bk-summary_priceInfo_perNight_label"
+              >For {{ userForm.get('roomInformation.adultCount').value }} Adult,
+              Adults &
+              {{ userForm.get('roomInformation.childCount').value }} Kid
+              Child</span
+            >
+            <span class="bk-summary_priceInfo_perNight_amount">{{
+              summaryData?.basePrice | currency: 'INR'
+            }}</span>
+          </p>
+          <p
+            class="bk-summary_priceInfo_taxFair"
+            *ngIf="summaryData?.offerAmount"
+          >
+            <span class="bk-summary_priceInfo_perNight_label"
+              >Discount<i class="fa fa-info-circle" aria-hidden="true"></i
+            ></span>
+            <span class="bk-summary_priceInfo_perNight_amount">{{
+              summaryData?.offerAmount | currency: 'INR'
+            }}</span>
+          </p>
+          <p class="bk-summary_priceInfo_taxFair">
+            <span class="bk-summary_priceInfo_perNight_label"
+              >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
+            ></span>
+            <span class="bk-summary_priceInfo_perNight_amount"
+              >+{{ summaryData?.taxAndFees | currency: 'INR' }}</span
+            >
+          </p>
+          <p
+            class="bk-summary_priceInfo_perNight"
+            *ngIf="userForm.get('paymentMethod.totalPaidAmount').value"
+          >
+            <span class="bk-summary_priceInfo_perNight_label">Paid Amount</span>
+            <span class="bk-summary_priceInfo_perNight_amount"
+              >-{{
+                userForm.get('paymentMethod.totalPaidAmount').value
+                  | currency: 'INR'
+              }}</span
+            >
+          </p>
+        </div>
+        <p class="divider"></p>
+        <div class="bk-summary_total">
+          <p class="bk-summary_total_label">Total Amount to be paid</p>
+          <p class="bk-summary_total_amount">
+            {{
+              summaryData?.totalAmount -
+                userForm.get('paymentMethod.totalPaidAmount').value
+                | currency: 'INR'
+            }}
+          </p>
+        </div>
+        <div class="bk-summary_btnwrapper">
+          <hospitality-bot-button
+            (click)="HandleBooking()"
+            label="Confirm Booking"
+            [disabled]="userForm.invalid || disabledForm"
+          ></hospitality-bot-button>
+        </div>
+      </ng-container>
+      <ng-template #bookingOffer>
+        <div class="bk-summary_heading">
+          <mat-icon (click)="handleOfferView()">arrow_back</mat-icon> Offers
+        </div>
+        <p class="divider"></p>
+        <ng-container *ngIf="offersList?.records?.length; else emptyOffer">
+          <div *ngFor="let item of offersList?.records" class="offerList">
+            <div class="offer" (click)="offerSelect(item)">
+              <div [innerHtml]="item.description" class="offer_card"></div>
+              <div class="offer_gift">
+                <img src="assets/svg/offer_gift.svg" alt="offer gift" />
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #emptyOffer>
+          <div class="offerList">
+            <div class="offerList_box">
+              <img src="assets/svg/empty_box.svg" alt="empty box" />
+            </div>
+            <div class="offerList_text">
+              Currently You do not have any Offer
+            </div>
+          </div>
+        </ng-template>
+      </ng-template>
+    </div>
+  </div>
+</div>

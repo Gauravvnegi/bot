@@ -1,5 +1,5 @@
 # Stage 1
-FROM node:14-alpine as build-step
+FROM node:16-alpine as build-step
 RUN mkdir -p /app
 WORKDIR /app
 COPY . .
@@ -15,3 +15,4 @@ FROM nginx:1.21.3-alpine
 COPY --from=build-step /app/dist/apps/admin /usr/share/nginx/html
 COPY ./deploy/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
+

@@ -1,0 +1,45 @@
+@import '../form.component.scss';
+
+// toggle styles override
+:host ::ng-deep .p-inputswitch {
+  &:not(.p-disabled):hover {
+    .p-inputswitch-slider {
+      
+    }
+  }
+  &.p-inputswitch-checked {
+    .p-inputswitch-slider {
+      background: $primary-form-color;
+      &::before {
+        background: $white;
+      }
+    }
+  }
+}
+
+.wrapper {
+  height: $form-input-height;
+  &__horizontal {
+    justify-content: flex-end;
+  }
+  &__vertical {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.state-label {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 500;
+  color: $secondary;
+  letter-spacing: 0.84px;
+  opacity: 0.6;
+}

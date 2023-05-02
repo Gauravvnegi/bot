@@ -23,7 +23,7 @@ export class NotificationDetailComponent {
   redirectToPage() {
     const { data } = this.data;
     this.router.navigate([
-      data['redirectUrl'].replace('https://n-devadmin.botshot.in', ''),
+      data['redirectUrl'].replace('https://dev.admin.botshot.ai', ''),
     ]);
     switch (this.data.notificationType.toUpperCase()) {
       case 'WHATSAPP':

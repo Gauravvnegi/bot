@@ -10,24 +10,42 @@ export type RoomResponse = {
     roomCount: number;
     maxChildren: number;
     maxAdult: number;
-    totalOccupancy: number;
+    totalOccupancy?: number; // Is it not required
+    activeRoomCount: number;
+    soldOutCount: number;
+    soldOut: boolean;
+    unavailableRoomCount: number;
   };
   roomStatus: RoomStatus;
-  source: string;
+  source?: string;
   price: number;
   currency: string;
-  created: string;
-  updated: string;
+  created: number;
+  updated: number;
+};
+
+export type RoomByIdResponse = {
+  rooms: RoomResponse[];
+  roomCount: number;
+  soldOutCount: number;
+  maxChildren: number;
+  maxAdult: number;
+  soldOut: boolean;
 };
 
 export type RoomListResponse = {
   rooms: RoomResponse[];
-  roomStatusCount: {
+  entityTypeCounts: {
+    ROOM_TYPE: number;
+    ROOM: number;
+  };
+  entityStateCounts: {
     ALL: number;
     ACTIVE: number;
     SOLD_OUT: number;
     UNAVAILABLE: number;
   };
+  total: number;
 };
 
 export type RoomTypeResponse = {
@@ -40,25 +58,32 @@ export type RoomTypeResponse = {
   currency: string;
   originalPrice: number;
   discountedPrice: number;
-  roomCount: {
-    active: number;
-    unavailable: number;
-    soldOut: number;
-  };
+  roomCount: number;
+  activeRoomCount: number;
+  unavailableRoomCount: number;
+  soldOutCount: number;
   maxChildren: number;
   maxAdult: number;
   area: number;
   status: boolean;
   maxOccupancy: number;
+  discountType: string;
+  discountValue: number;
+  variableAmount: number;
 };
 
 export type RoomTypeListResponse = {
   roomTypes: RoomTypeResponse[];
-  roomTypeStatusCount: {
+  entityTypeCounts: {
+    ROOM_TYPE: number;
+    ROOM: number;
+  };
+  entityStateCounts: {
     ALL: number;
     ACTIVE: number;
     INACTIVE: number;
   };
+  total: number;
 };
 
 export type AddRoomsResponse = {
@@ -74,6 +99,11 @@ export type AmenityResponse = {
   entityTypeLabels: string[];
   entityStateLabels: string[];
   entityCategory: string;
+};
+
+export type ServiceResponse = {
+  paidPackages: Amenity[];
+  complimentaryPackages: Amenity[];
 };
 
 export type Amenity = {
@@ -96,3 +126,34 @@ export type Amenity = {
   hasChild: boolean;
   parentId: string;
 };
+
+export interface AverageRoomRateResponse {
+  label: string;
+  score: number;
+  comparisonPercent: number;
+  averageRoomRateGraph: any;
+}
+
+export interface OccupancyResponse{
+  label: string;
+  score: number;
+  comparisonPercent: number;
+  occupancyGraph: any;
+}
+
+export interface InventoryRemainingResponse {
+  label: string;
+  occupied: number;
+  remaining: number;
+}
+
+export interface InventoryCostRemainingResponse{
+  label: string;
+  spent: number;
+  remaining: number;
+}
+
+export type GraphData = {
+  label: string;
+  value: number;
+}

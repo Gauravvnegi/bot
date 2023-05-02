@@ -33,7 +33,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
   loading = false;
   tabFilterItems = [];
   tabFilterIdx = 0;
-  tabfeedbackType;
+  tabFeedbackType;
   chartTypes = [feedback.chartType.bar, feedback.chartType.sentiment];
 
   documentActionTypes = [
@@ -97,7 +97,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
             data['filter'].value.feedback.feedbackType;
           this.tabFilterItems = [];
           this.tabFilterIdx = 0;
-          this.tabfeedbackType = undefined;
+          this.tabFeedbackType = undefined;
         }
         this.setEntityId(data['filter'].value.feedback.feedbackType);
         if (this.tabFilterItems.length === 0) this.getNPSDepartments();
@@ -114,10 +114,10 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
             element.entityIds = this._statisticService.outletIds;
           }
         });
-        if (response.status !== this.tabfeedbackType) {
+        if (response.status !== this.tabFeedbackType) {
           this.tabFilterItems = [];
           this.tabFilterIdx = 0;
-          this.tabfeedbackType = response.type;
+          this.tabFeedbackType = response.type;
           this.getNPSDepartments();
         } else {
           this.getNPSChartData();
@@ -179,13 +179,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
           this.setTabFilterItems(response).then((res) => {
             this.getNPSChartData();
           }),
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            })
-            .subscribe(),
+        ({ error }) => {},
         () => (this.loading = false)
       )
     );
@@ -203,7 +197,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
             value: departmentKey,
             content: '',
             disabled: false,
-            total: 0,
+
             lastPage: 0,
             chips: [
               {
@@ -349,17 +343,8 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
               this.tabFilterItems[this.tabFilterIdx].chips = res;
             });
         },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe(),
-        () => (this.loading = false)
+        ({ error }) => {},
+        () => {this.loading = false}
       )
     );
   }
@@ -385,30 +370,19 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
             response,
             'NPS_Across_Departments_export_' + new Date().getTime() + '.csv'
           );
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
-      )
+        })
     );
   }
 
   getFeedbackType() {
-    if (this.tabfeedbackType === undefined) {
+    if (this.tabFeedbackType === undefined) {
       return this.globalFeedbackFilterType === this.feedbackConfig.types.both
         ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
-    return this.tabfeedbackType === this.feedbackConfig.types.both
+    return this.tabFeedbackType === this.feedbackConfig.types.both
       ? feedback.types.transactional
-      : this.tabfeedbackType;
+      : this.tabFeedbackType;
   }
 
   /**

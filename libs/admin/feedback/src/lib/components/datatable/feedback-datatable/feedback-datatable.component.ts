@@ -15,6 +15,7 @@ import { FeedbackNotificationComponent } from '@hospitality-bot/admin/notificati
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  Cols,
   ConfigService,
   FeedbackService,
   HotelDetailService,
@@ -71,7 +72,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   rowsPerPage = 25;
   colorMap;
   responseRate;
-  cols = feedback.cols.feedbackDatatable.transactional;
+  cols: Cols[] = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
   tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
   chips = feedback.chips.feedbackDatatable;
@@ -267,11 +268,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
+          this.initialLoading = false;
           this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.showErrorMessage(error);
         }
       )
     );
@@ -287,35 +289,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       .map((item) => ({
         entityType: item.value,
       }));
-  }
-
-  /**
-   * @function updateTabFilterCount To update tab data count.
-   * @param countObj The Tab count object.
-   * @param currentTabCount The current tab data count.
-   */
-  updateTabFilterCount(countObj, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update chip count.
-   * @param countObj The chip count data.
-   */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.chips.forEach((chip) => {
-          chip.total = countObj[chip.value];
-        });
-      });
-    }
   }
 
   /**
@@ -375,8 +348,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.showErrorMessage(error);
         }
       )
     );
@@ -407,6 +380,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.tabFilterItems[this.tabFilterIdx].total = data.total;
     data.entityTypeCounts &&
       this.updateQuickReplyFilterCount(data.entityTypeCounts);
+    this.updateTotalRecords();
 
     this.loading = false;
   }
@@ -417,39 +391,26 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       notes: event.comment,
     };
     const id = event.id;
-    this.tableService.updateFeedbackState(id, data).subscribe(
-      (response) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.SUCCESS.STATUS_UPDATED',
-              priorityMessage: 'Status Updated Successfully..',
-            },
-            '',
-            {
-              panelClass: 'success',
-            }
-          )
-          .subscribe();
-        this.tableService.$disableContextMenus.next(true);
-        this.loadInitialData([
-          ...this.globalQueries,
-          { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFilters(),
-        ]);
-      },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      }
-    );
+    this.tableService.updateFeedbackState(id, data).subscribe((response) => {
+      this.snackbarService
+        .openSnackBarWithTranslate(
+          {
+            translateKey: 'messages.SUCCESS.STATUS_UPDATED',
+            priorityMessage: 'Status Updated Successfully..',
+          },
+          '',
+          {
+            panelClass: 'success',
+          }
+        )
+        .subscribe();
+      this.tableService.$disableContextMenus.next(true);
+      this.loadInitialData([
+        ...this.globalQueries,
+        { order: sharedConfig.defaultOrder },
+        ...this.getSelectedQuickReplyFilters(),
+      ]);
+    });
   }
 
   /**
@@ -557,7 +518,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.showErrorMessage(error);
         }
       )
     );
@@ -615,7 +575,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.showErrorMessage(error);
         }
       )
     );
@@ -630,17 +589,14 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     event.stopPropagation();
 
     this.$subscription.add(
-      this.tableService.getFeedbackPdf(id).subscribe(
-        (response) => {
-          const link = document.createElement('a');
-          link.href = response.fileDownloadUri;
-          link.target = '_blank';
-          link.download = response.fileName;
-          link.click();
-          link.remove();
-        },
-        (error) => this.showErrorMessage(error)
-      )
+      this.tableService.getFeedbackPdf(id).subscribe((response) => {
+        const link = document.createElement('a');
+        link.href = response.fileDownloadUri;
+        link.target = '_blank';
+        link.download = response.fileName;
+        link.click();
+        link.remove();
+      })
     );
   }
 
@@ -675,22 +631,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         detailCompRef.close();
       })
     );
-  }
-
-  /**
-   * @function showErrorMessage To show error message via snackbar.
-   * @param error The error object from api.
-   */
-  showErrorMessage(error): void {
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: 'messages.error.some_thing_wrong',
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
   }
 
   /**

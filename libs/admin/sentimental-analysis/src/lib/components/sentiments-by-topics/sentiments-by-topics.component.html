@@ -1,0 +1,42 @@
+<hospitality-bot-stats-card [stats]="data" class="os-container">
+  <div
+    class="chart-container"
+    *skeleton="graphData == undefined; width: '100%'; height: '21.6vw'"
+  >
+    <div *ngFor="let item of graphData" class="topic-progress">
+      <div class="title">
+        {{ item.label }}
+      </div>
+      <div class="stacked-progress-bar">
+        <div
+          class="bar positive"
+          [style.width]="item.positive + '%'"
+          *ngIf="item.positive > 0"
+        >
+          {{ item.positive }}
+        </div>
+        <div
+          *ngIf="item.negative > 0"
+          class="bar negative"
+          [ngStyle]="{
+            width: item.negative + '%',
+            left: item.positive + '%'
+          }"
+        >
+          {{ item.negative }}
+        </div>
+        <div
+          class="bar blank"
+          [ngStyle]="{
+            width: 'calc(100% - ' + (item.positive + item.negative) + '%)',
+            left: item.positive + item.negative + '%'
+          }"
+        ></div>
+      </div>
+    </div>
+    <div class="limits">
+      <div>0%</div>
+      <div>100%</div>
+    </div>
+  </div>
+</hospitality-bot-stats-card>

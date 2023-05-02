@@ -3,10 +3,12 @@ import { IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class Assets implements IDeserializable {
   records: Asset[];
+  total: number;
   deserialize(input: any) {
     this.records = input.records.map((record: any) =>
       new Asset().deserialize(record)
     );
+    this.total = input.total;
     return this;
   }
 }

@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
+import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
+import { TemplateFormData } from '../constants/template';
 import { Template } from '../data-models/templateConfig.model';
 
 @Injectable()
 export class TemplateService extends ApiService {
+  templateFormData = new BehaviorSubject(<TemplateFormData>{});
+
   /**
    *@function getTopicList function to get topic list.
    * @param id dynamically getting id into api.

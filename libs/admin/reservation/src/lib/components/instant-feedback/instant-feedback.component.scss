@@ -14,7 +14,7 @@
   cursor: pointer;
   font: normal normal medium 14px/19px Roboto;
   letter-spacing: 0.56px;
-  color: $primary-gray;
+  color: $grayMedium;
 }
 
 .label-wrapper {
@@ -33,51 +33,46 @@
   .field {
     .label {
       letter-spacing: 0.72px;
-      font-size: $font12;
-      color: $primary-gray;
+      font-size: 12px;
+      color: $grayMedium;
     }
     .value {
       letter-spacing: 0.84px;
-      font-size: $font14;
-      margin-top: $margin10;
+      font-size: 14px;
+      margin-top: 10px;
       font-weight: $medium;
     }
     .question {
       font-family: Roboto;
       font-size: 12px;
       font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
+
       letter-spacing: 0.24px;
-      text-align: left;
       color: $question;
       margin: 5px 0;
     }
     .answer {
       font-family: Roboto;
       font-size: 12px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
+
       line-height: 1.67;
       letter-spacing: 0.24px;
-      text-align: left;
-      color: $quote-color;
+
+      color: $subtitle;
     }
   }
 }
 
 .data-seperator {
-  border: 2px solid $primary-purple;
-  margin: $margin20 0px;
+  border: 2px solid $primary-cta;
+  margin: 20px 0px;
   opacity: 0.1;
 }
 
 :host ::ng-deep .mat-head {
-  font-size: $font16;
+  font-size: 16px;
   font-weight: $bolder;
-  color: $dark-blue;
+  color: $secondary;
   letter-spacing: 0.96px;
 }
 
@@ -95,7 +90,7 @@
 }
 
 :host ::ng-deep .expand-icon {
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 :host ::ng-deep .mat-expansion-indicator {
@@ -121,13 +116,13 @@
   }
   .feedback {
     color: $white;
-    font-size: $font10;
+    font-size: 10px;
     display: flex;
     align-items: center;
     .booking-feedback {
       display: flex;
       align-items: center;
-      background-color: $c-gray-103;
+      background-color: $whiteDeep;
       justify-content: space-around;
       padding: 0px;
       margin: 0 10px;
@@ -147,7 +142,7 @@
         width: 100%;
         top: 50%;
         font-size: 12px;
-        color: $dark-grey;
+        color: $subtitle;
         background-color: $white;
         left: 0%;
         padding: 7px;
@@ -191,7 +186,7 @@
 
 .header-seperator {
   height: 20px;
-  border: 1px solid $c-gray-74;
+  border: 1px solid $grayLight;
 }
 
 ::ng-deep .d-flex {
@@ -204,8 +199,8 @@
   margin: 0 50px 0 60px;
   padding: 0px 0px 0px 10px;
   border-radius: 6px;
-  border: solid 1px $primary-purple;
-  background-color: $c-gray-93;
+  border: solid 1px $primary-cta;
+  background-color: $whiteDeep;
   display: flex;
   justify-content: left;
   align-items: center;
@@ -218,9 +213,9 @@
     line-height: normal;
     letter-spacing: 0.66px;
     text-align: right;
-    color: $primary-purple;
+    color: $primary-cta;
     padding-right: 10px;
-    border-right: solid 2px $primary-purple;
+    border-right: solid 2px $primary-cta;
     height: 20px;
     padding-top: 4px;
     img {
@@ -237,7 +232,7 @@
 
 .mat-expansion-panel-spacing {
   box-shadow: none !important;
-  border: solid 1px $c-gray-85 !important;
+  border: solid 1px $borderCol !important;
 }
 
 :host ::ng-deep .mat-expansion-panel-header.mat-expanded:hover {

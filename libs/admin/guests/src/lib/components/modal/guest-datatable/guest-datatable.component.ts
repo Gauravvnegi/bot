@@ -39,6 +39,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   @Input() guestFilter: string;
   @Input() exportURL: string;
   @Output() onModalClose = new EventEmitter();
+  imageSrc: string;
   constructor(
     public fb: FormBuilder,
     protected _guestTableService: GuestTableService,
@@ -63,6 +64,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
 
   ngOnInit(): void {
     this.registerListeners();
+    this.setEmptyViewImage();
   }
 
   loadInitialData(queries = [], loading = true) {
@@ -70,32 +72,33 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new GuestTable().deserialize(data).records;
           this.initialLoading = false;
-          //set pagination
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
           this.closeModal();
         }
       )
     );
+  }
+  setRecords(data): void {
+    this.values = new GuestTable().deserialize(data).records;
+    this.updateTabFilterCount(data.entityTypeCounts, data.total);
+    this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.updateTotalRecords();
+    this.loading = false;
+  }
+
+  setEmptyViewImage() {
+    if (this.tableName === 'Guest Source') {
+      this.imageSrc = 'assets/images/empty-table-guest-scource.png';
+    } else if (this.tableName === 'Guest Documents') {
+      this.imageSrc = 'assets/images/empty-table-guest-documents.png';
+    } else {
+      this.imageSrc = 'assets/images/empty-table-guest-payment.png';
+    }
   }
 
   fetchDataFrom(
@@ -136,27 +139,11 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       ).subscribe(
         (data) => {
           this.values = new GuestTable().deserialize(data).records;
-
-          //set pagination
-          this.totalRecords = data.total;
-          //check for update tabs and quick reply filters
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
           this.closeModal();
         }
       )
@@ -189,15 +176,6 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );

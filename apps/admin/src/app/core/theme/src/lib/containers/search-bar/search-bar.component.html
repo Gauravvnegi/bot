@@ -1,4 +1,4 @@
-<div class="global_search">
+<div class="global_search" #searchBar (click)="searchResult.toggle($event)">
   <span class="p-input-icon-right">
     <i *ngIf="!searchValue" class="pi pi-search"></i>
     <mat-icon *ngIf="searchValue" (click)="clearSearch()" class="cross_icon"
@@ -14,6 +14,13 @@
       />
     </form>
   </span>
+</div>
+
+<p-overlayPanel
+  [ngStyle]="{ visibility: searchDropdownVisible ? 'visible' : 'hidden' }"
+  #searchResult
+  class="search-result__overlay"
+>
   <div
     *ngIf="searchDropdownVisible && parentSearchVisible"
     class="global_search__dropdown"
@@ -28,8 +35,6 @@
             >
               <div class="image"><img src="assets/svg/guest-tab.svg" /></div>
               <div class="detail">{{ option.label }}</div>
-              <!-- <div class="circle-divider"></div>
-              <div class="description">{{ option.description }}</div> -->
             </div>
           </ng-container>
           <ng-container *ngSwitchCase="'PACKAGES'">
@@ -39,7 +44,7 @@
             >
               <div class="image"><img src="assets/svg/box.svg" /></div>
               <div class="detail">{{ option.label }}</div>
-              <!-- <div class="circle-divider"></div> -->
+
               <div class="description">{{ option.description }}</div>
             </div>
           </ng-container>
@@ -71,4 +76,4 @@
       </div>
     </ng-container>
   </div>
-</div>
+</p-overlayPanel>

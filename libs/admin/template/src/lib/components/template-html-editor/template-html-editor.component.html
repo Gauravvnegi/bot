@@ -1,98 +1,57 @@
-<div class="wrapper">
-  <header class="wrapper-header">
-    <div class="back">
-      <mat-icon class="material-icons" matSuffix (click)="back()"
-        >keyboard_backspace</mat-icon
-      >
-    </div>
-    <div class="field" [formGroup]="templateForm">
-      <mat-form-field>
-        <input
-          matInput
-          placeholder="Enter Template Name"
-          formControlName="name"
-        />
-        <mat-error
-          *ngIf="
-            templateForm.get('name').touched &&
-            templateForm.get('name').hasError('required')
-          "
-        >
-          {{ 'validationMessage.name' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="sent-details" *ngIf="template">
-      <div>
-        {{ 'createdOn' | translate }}
-        {{
-          template?.getDraftDate(
-            globalFilterService.timezone,
-            'MMM DD, YYYY hh:mm a'
-          )
-        }}
-      </div>
-    </div>
-  </header>
+<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+</hospitality-bot-navigation-header>
 
-  <form [formGroup]="templateForm">
-    <div class="wrapper-form">
-      <div class="fields" *ngIf="!isDisabled">
-        <div class="field">
-          <mat-label class="mat-label">{{
-            'sharedTemplates' | translate
-          }}</mat-label>
-          <mat-checkbox formControlName="isShared"></mat-checkbox>
-        </div>
-      </div>
-      <div class="description" *ngIf="!isDisabled">
-        {{ 'descriptionMessage' | translate }}
-      </div>
-      <div class="import-assets" (click)="assetImportEnable($event)">
-        <img
-          class="import-image"
-          [src]="templateConfiguration.images.import.url"
-          [alt]="templateConfiguration.images.import.alt"
-        />
-        {{ 'importAsset' | translate }}
-      </div>
-      <div *ngIf="enableAssetImport" class="asset-enable">
-        <hospitality-bot-import-asset
-          (closeImport)="enableAssetImport = false"
-        ></hospitality-bot-import-asset>
-      </div>
+<form class="form-block" [formGroup]="templateForm">
+  <div class="shared-field full-width" *ngIf="!isDisabled">
+    <div>
+      <mat-label>{{ 'sharedTemplates' | translate }}</mat-label>
+      <mat-checkbox formControlName="isShared"></mat-checkbox>
     </div>
-    <div class="wrapper-editor">
-      <hospitality-bot-template-editor
-        *ngIf="openEditor"
-        [parentFG]="templateForm"
-        [name]="'htmlTemplate'"
-        [template]="template"
-        [hybrid]="false"
-        [disabled]="isDisabled"
-      ></hospitality-bot-template-editor>
-    </div>
-  </form>
-  <div class="save-section" *ngIf="!isDisabled">
-    <div class="save-button" (click)="saveAndPreview()" *ngIf="templateId">
-      <div class="save-text">
-        {{ 'editTemplateButtons.preview&Save' | translate }}
-      </div>
-    </div>
-    <div class="save-button" (click)="save()" *ngIf="templateId">
-      <div class="save-text">
-        {{ 'editTemplateButtons.saveChanges' | translate }}
-      </div>
-    </div>
-    <div
-      class="preview"
-      (click)="saveAndNext()"
-      [ngClass]="{ active: !isSaving, disabled: isSaving }"
-    >
-      <div class="view">
-        <i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i>
-        {{ 'editTemplateButtons.save&Next' | translate }}
-      </div>
+    <div class="description">
+      {{ 'descriptionMessage' | translate }}
     </div>
   </div>
-</div>
+  <div class="full-width import" (click)="assetImportEnable($event)">
+    <img
+      [src]="templateConfiguration.images.import.url"
+      [alt]="templateConfiguration.images.import.alt"
+    />
+    {{ 'importAsset' | translate }}
+  </div>
+  <div *ngIf="enableAssetImport" class="asset-enable">
+    <hospitality-bot-import-asset
+      (closeImport)="enableAssetImport = false"
+    ></hospitality-bot-import-asset>
+  </div>
+  <div class="full-width">
+    <hospitality-bot-template-editor
+      [parentFG]="templateForm"
+      [name]="'htmlTemplate'"
+      [template]="template"
+      [hybrid]="false"
+      [disabled]="isDisabled"
+    ></hospitality-bot-template-editor>
+  </div>
+  <div class="half-width footer" *ngIf="!isDisabled">
+    <hospitality-bot-button
+      *ngIf="templateId"
+      class="create-btn"
+      [variant]="'outlined'"
+      [label]="'Save and Preview '"
+      (click)="saveAndPreview()"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      *ngIf="templateId"
+      class="create-btn"
+      [variant]="'outlined'"
+      [label]="'Save Changes'"
+      (click)="save()"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      class="create-btn"
+      [label]="isSaving ? 'Saving' : 'Save and Next'"
+      [ngClass]="{ active: !isSaving, disabled: isSaving }"
+      (click)="saveAndNext()"
+    ></hospitality-bot-button>
+  </div>
+</form>

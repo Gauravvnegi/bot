@@ -1,16 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
-import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
-import { Observable, Subscription } from 'rxjs';
-import { Packages } from '../../data-models/packageConfig.model';
-import { PackageService } from '../../services/package.service';
+import { LazyLoadEvent } from 'primeng/api/public_api';
+import { Subscription } from 'rxjs';
+import { chips, cols, tabFilterItems, title } from '../../constant/data-table';
+import { PackageList } from '../../models/packages.model';
+import { PackagesService } from '../../services/packages.service';
+import { PackageData } from '../../types/package';
+import { PackageListResponse, PackageResponse } from '../../types/response';
+import { packagesRoutes } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-package-datatable',
@@ -20,54 +25,27 @@ import { PackageService } from '../../services/package.service';
     './package-datatable.component.scss',
   ],
 })
-export class PackageDatatableComponent extends BaseDatatableComponent
+export class PackageDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  tableName = 'Packages';
-  isResizableColumns = true;
-  isAutoLayout = false;
+  readonly routes = packagesRoutes;
+
+  hotelId: string;
+  tableName = title;
+
   isCustomSort = true;
   triggerInitialData = false;
-  isTabFilters = false;
+  tabFilterItems = tabFilterItems;
+  isTabFilters = true;
+  filterChips = chips;
   globalQueries = [];
-  tabFilterIdx = 1;
+  tabFilterIdx = 0;
   $subscription = new Subscription();
-  hotelId;
-  isQuickFilters = false;
 
-  cols = [
-    { field: 'name', header: 'Package Name', sortType: 'string', isSort: true },
-    {
-      field: 'packageCode',
-      header: 'Package Code/Source',
-      sortType: 'string',
-      isSort: true,
-    },
-    {
-      field: 'description',
-      header: 'Description',
-      sortType: 'string',
-      isSort: true,
-    },
-    { field: 'type', header: 'Type', sortType: 'string', isSort: true },
-    {
-      field: 'rate',
-      header: 'Amount',
-      sortType: 'string',
-      isSort: true,
-      isSearchDisabled: true,
-    },
-    {
-      field: 'status',
-      header: 'Active',
-      isSort: false,
-      isSearchDisabled: true,
-    },
-  ];
+  cols = cols;
 
   constructor(
     public fb: FormBuilder,
-    private packageService: PackageService,
-    private route: ActivatedRoute,
+    private packagesService: PackagesService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
@@ -86,208 +64,153 @@ export class PackageDatatableComponent extends BaseDatatableComponent
    */
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
-      //set-global query everytime global filter changes
+      this.hotelId = this.globalFilterService.hotelId;
+
+      //set-global query every time global filter changes
       this.globalQueries = [
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.hotelId = this.globalFilterService.hotelId;
       //fetch-api for records
-      this.loadInitialData([
-        ...this.globalQueries,
-        {
-          order: 'DESC',
-        },
-      ]);
+      this.initTableValue();
     });
   }
 
-  loadInitialData(queries = [], loading = true): void {
-    this.loading = loading && true;
+  /**
+   * @function loadData Fetch data as paginates
+   * @param event
+   */
+  loadData(event: LazyLoadEvent): void {
+    this.initTableValue();
+  }
+
+  initTableValue(): void {
+    this.loading = true;
     this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
-        (data) => {
-          this.values = new Packages().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          this.loading = false;
-        },
-        ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      )
+      this.packagesService
+        .getLibraryItems<PackageListResponse>(
+          this.hotelId,
+          this.getQueryConfig()
+        )
+        .subscribe(
+          (res) => {
+            const packageList = new PackageList().deserialize(res);
+            this.values = packageList.records;
+            this.updateTabFilterCount(res.entityTypeCounts, res.total);
+            this.updateQuickReplyFilterCount(res.entityStateCounts);
+            this.updateTotalRecords();
+          },
+          ({ error }) => {
+            this.values = [];
+            this.loading = false;
+          },
+          this.handleFinal
+        )
     );
   }
 
-  fetchDataFrom(
-    queries,
-    defaultProps = { offset: this.first, limit: this.rowsPerPage }
-  ): Observable<any> {
-    queries.push(defaultProps);
+  /**
+   * To get query params
+   */
+  getQueryConfig(): QueryConfig {
     const config = {
-      queryObj: this.adminUtilityService.makeQueryParams(queries),
-    };
-    return this.packageService.getHotelPackages(config);
-  }
-
-  loadData(event: LazyLoadEvent): void {
-    this.loading = true;
-    this.updatePaginations(event);
-    this.$subscription.add(
-      this.fetchDataFrom(
-        [
-          ...this.globalQueries,
-          {
-            order: 'DESC',
-          },
-        ],
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.getSelectedQuickReplyFilters(),
+        ...[...this.globalQueries, { order: 'DESC' }],
         {
+          type: LibraryItem.package,
           offset: this.first,
           limit: this.rowsPerPage,
-        }
-      ).subscribe(
-        (data) => {
-          this.values = new Packages().deserialize(data).records;
-
-          //set pagination
-          this.totalRecords = data.total;
-          this.loading = false;
         },
-        ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      )
-    );
+      ]),
+    };
+    return config;
   }
 
-  customSort(event: SortEvent) {
-    const col = this.cols.filter((data) => data.field === event.field)[0];
-    const field =
-      event.field[event.field.length - 1] === ')'
-        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
-        : event.field;
-    event.data.sort((data1, data2) =>
-      this.sortOrder(event, field, data1, data2, col)
+  /**
+   * @function getSelectedQuickReplyFilters To return the selected chip list.
+   * @returns The selected chips.
+   */
+  getSelectedQuickReplyFilters() {
+    const chips = this.filterChips.filter(
+      (item) => item.isSelected && item.value !== 'ALL'
     );
-  }
-
-  updatePaginations(event): void {
-    this.first = event.first;
-    this.rowsPerPage = event.rows;
+    return [
+      chips.length !== 1
+        ? { status: null }
+        : { status: chips[0].value === 'ACTIVE' },
+    ];
   }
 
   exportCSV(): void {
     this.loading = true;
 
-    const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        {
-          order: 'DESC',
-        },
+        { order: 'DESC' },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
+        { type: LibraryItem.package },
       ]),
     };
+
     this.$subscription.add(
-      this.packageService.exportCSV(config).subscribe(
-        (res) => {
-          FileSaver.saveAs(
-            res,
-            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-          );
-          this.loading = false;
-        },
-        ({ error }) => {
-          this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      )
+      this.packagesService.exportCSV(this.hotelId, config).subscribe((res) => {
+        FileSaver.saveAs(
+          res,
+          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+        );
+      }, this.handleFinal)
     );
   }
 
-  updatePackageStatus(event, packageId): void {
-    const packages = [];
-    packages.push(packageId);
-    this.packageService
-      .updatePackageStatus(this.hotelId, event.checked, packages)
-      .subscribe(
-        (response) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.SUCCESS.STATUS_UPDATED',
-                priorityMessage: 'Status Updated Successfully.',
-              },
+  /**
+   * @function handleStatus To handle the status change
+   * @param status status value
+   */
+  handleStatus(status: boolean, rowData): void {
+    // Not working
+    this.loading = true;
+    this.$subscription.add(
+      this.packagesService
+        .updateLibraryItem<Partial<PackageData>, PackageResponse>(
+          this.hotelId,
+          rowData.id,
+          { active: status },
+          { params: '?type=PACKAGE' }
+        )
+        .subscribe(
+          () => {
+            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+            this.updateStatusAndCount(
+              statusValue(rowData.status),
+              statusValue(status)
+            );
+            this.values.find((item) => item.id === rowData.id).status = status;
+            this.snackbarService.openSnackBarAsText(
+              'Status changes successfully',
               '',
               { panelClass: 'success' }
-            )
-            .subscribe();
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      );
+            );
+          },
+          ({ error }) => {},
+          this.handleFinal
+        )
+    );
   }
 
-  redirectToAddPackage(): void {
-    this.router.navigate(['add'], { relativeTo: this.route });
+  /**
+   * @function editPackage To Edit the service
+   */
+  editPackage(id: string) {
+    this.router.navigate([
+      `/pages/library/packages/${packagesRoutes.createPackage.route}/${id}`,
+    ]);
   }
 
-  openPackageDetails(amenity): void {
-    this.router.navigate([`edit/${amenity.id}`], { relativeTo: this.route });
-  }
-
-  onFilterTypeTextChange(value, field, matchMode = 'startsWith'): void {
-    // value = value && value.trim();
-    // this.table.filter(value, field, matchMode);
-
-    if (!!value && !this.isSearchSet) {
-      this.tempFirst = this.first;
-      this.tempRowsPerPage = this.rowsPerPage;
-      this.isSearchSet = true;
-    } else if (!!!value) {
-      this.isSearchSet = false;
-      this.first = this.tempFirst;
-      this.rowsPerPage = this.tempRowsPerPage;
-    }
-
-    value = value && value.trim();
-    this.table.filter(value, field, matchMode);
-  }
+  handleFinal = () => {
+    this.loading = false;
+  };
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();

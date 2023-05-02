@@ -41,6 +41,7 @@
         (click)="onChatSelect(contact)"
       >
         <hospitality-bot-chat-card
+          [ngStyle]="{ width: '100%' }"
           [content]="{
             cardType: 'message',
             roomNo: contact.roomNo,
@@ -48,7 +49,9 @@
             name: contact.name || contact.phone,
             remark: contact.descriptionMessage,
             time: contact.getTime(globalFilterService.timezone),
-            unReadCount: contact?.unReadCount
+            unReadCount: contact?.unreadCount,
+            profileNickName: contact.getProfileNickName(),
+            backgroundColor: contact.color
           }"
         ></hospitality-bot-chat-card>
       </div>

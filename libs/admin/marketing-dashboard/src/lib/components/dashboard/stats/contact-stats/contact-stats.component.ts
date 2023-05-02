@@ -71,16 +71,7 @@ export class ContactStatsComponent implements OnInit, OnDestroy {
         (response) => {
           this.contactStats = new ContactStat().deserialize(response);
         },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        ({ error }) =>{}
       )
     );
   }

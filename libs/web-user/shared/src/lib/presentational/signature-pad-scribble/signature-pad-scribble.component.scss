@@ -1,6 +1,5 @@
 @import 'main';
 
-
 .clearSign {
   display: flex;
   justify-content: flex-end;
@@ -15,9 +14,9 @@
 
 .signContainer {
   margin: 35px 35px 0 35px;
-  padding: $padding-large;
+  padding: 20px;
   background-color: rgb(243, 241, 241);
-  border-radius: $border-radius-small;
+  border-radius: 10px;
   height: 300px;
   @media only screen and (max-width: 780px) {
     padding: 5px;
@@ -35,8 +34,7 @@
   padding: 0px !important;
 }
 
-
-.sign-pad{
-   width: 85%; 
-   margin: 0 auto;
+.sign-pad {
+  width: 85%;
+  margin: 0 auto;
 }

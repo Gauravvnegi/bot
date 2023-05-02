@@ -5,24 +5,56 @@ export type FlagType =
   | 'pending'
   | 'completed'
   | 'failed'
-  | 'warning';
+  | 'warning'
+  | 'standard';
+
+// more modes can be added (take reference form primeNg filter)
+export type MatchModes = 'startsWith' | 'contains' | 'endsWith' | 'equals';
+
+export type TableFieldSearch = {
+  value: string;
+  field: string | string[];
+  matchMode: MatchModes;
+};
 
 export type Chip<T extends string> = {
   label: string;
   value: T;
-  total: number;
+  total?: number;
   isSelected: boolean;
   type: FlagType;
 };
 
+export type TableSortType = number | string | Date;
+
+/**
+ * Table value column fields
+ * @property [header] Text for the column heading
+ * @property [field] Field name for both sorting and filtering
+ * @property [isSortDisabled]
+ * @property [sortField] Field name for the sort filter and is prioritize over "field property"
+ * @property [sortType] to select which sort logic to follow
+ * @property [dynamicWidth]
+ * @property [width]
+ * @property [isSearchDisabled]
+ * @property [searchField] All Fields for the search filter and is prioritize over "field property"
+ * @property [matchMode] Matching criteria for search
+ * @property [placeholder] Search placeholder text
+ *
+ */
 export type Cols = {
   field: string;
   header: string;
-  isSort?: boolean;
-  sortType?: string;
-  dynamicWidth?: boolean;
+
+  isSortDisabled?: boolean;
+  sortField?: string;
+  sortType?: TableSortType;
   width?: string;
+
+  searchField?: string[];
   isSearchDisabled?: boolean;
+  matchMode?: MatchModes;
+  placeholder?: string;
 };
 
 export type Filter<T extends string, K extends string> = {
@@ -31,11 +63,12 @@ export type Filter<T extends string, K extends string> = {
   disabled: boolean;
   content: string;
   total: number;
-  chips: Chip<K>[];
+  chips?: Chip<K>[];
 };
 
 export type Status = {
   label: string;
-  value: string;
+  value: string | boolean;
   type: FlagType;
+  disabled?: boolean;
 };

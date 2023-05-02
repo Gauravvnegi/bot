@@ -8,14 +8,19 @@
     [style.color]="'#C5C5C5'"
     *ngIf="submenuItems !== null"
   >
-    <div class="logo" *ngIf="isExpanded" [style.background-color]="bgColor">
+    <div
+      class="logo"
+      *ngIf="isExpanded"
+      [ngClass]="isExpanded && 'sidenav-header_expanded'"
+    >
+      <!-- Botshot new expanded logo-->
       <div class="logo-image">
-        <img [src]="logoUrl" alt="logo" />
+        <img src="assets/images/botshotWhiteLogo.webp" alt="logo" />
       </div>
     </div>
   </div>
   <div class="backColor">
-    <div *ngIf="submenuItems !== null" class="heading">{{ title }}</div>
+    <!-- <div *ngIf="submenuItems !== null" class="heading">{{ title }}</div> -->
     <div
       *ngFor="let subItem of submenuItems"
       routerLinkActive
@@ -29,17 +34,17 @@
       <a
         class="subitems_heading_anchor"
         [style.display]="'flex'"
-        [style.background-color]="rla.isActive ? '#E8EEF5' : 'transparent'"
+        [style.background-color]="
+          rla.isActive ? 'rgba(255, 255, 255, 0.24)' : 'transparent'
+        "
         [style.justify-content]="'center'"
-        [style.color]="rla.isActive ? '#4B56C0' : '#C5C5C5'"
-        [style.border-right]="rla.isActive ? '3.2px solid #4B56C0' : ''"
+        [style.color]="rla.isActive ? '#ffffff' : '#ffffff'"
         [style.width]="'100%'"
         [style.padding]="'0px 15px'"
-        [style.margin-right]="rla.isActive ? '-3.2px' : ''"
-        ><div class="sidenav_logo" *ngIf="!!subItem.url">
-          <img [src]="subItem.url" class="svg-icon" [alt]="subItem.title" />
-        </div>
-        <span class="icon-label">{{ subItem.title }}</span>
+      >
+        <span class="icon-label" [ngStyle]="{ color: '#ffffff' }">{{
+          subItem.title
+        }}</span>
       </a>
     </div>
   </div>

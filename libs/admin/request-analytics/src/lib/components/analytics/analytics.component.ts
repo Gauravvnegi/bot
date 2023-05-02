@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { ConfigService } from 'libs/admin/shared/src/lib/services/config.service';
 import { Subscription } from 'rxjs';
@@ -10,6 +9,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./analytics.component.scss'],
 })
 export class AnalyticsComponent implements OnInit, OnDestroy {
+  welcomeMessage = 'Welcome To Request Analytics';
+  navRoutes = [{ label: 'Request Analytics', link: './' }];
   $subscription = new Subscription();
   hotelId: string;
   requestConfiguration;

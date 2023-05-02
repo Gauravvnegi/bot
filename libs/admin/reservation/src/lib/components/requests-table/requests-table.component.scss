@@ -2,10 +2,10 @@
 
 .date-time {
   font-size: 12px;
-  color: $dark-grey;
+  color: $subtitle;
   font-weight: 500;
   .time {
-    color: $primary-gray;
+    color: $grayMedium;
     margin-top: 5px;
   }
 }
@@ -13,7 +13,7 @@
 .booking-number {
   font-size: 12px;
   font-weight: normal;
-  color: $c-gray-45;
+  color: $grayMedium;
 }
 
 .activity-wrapper {
@@ -25,20 +25,20 @@
     display: flex;
     align-items: center;
     .heading {
-      font-size: $font16;
-      margin-right: $margin20;
+      font-size: 16px;
+      margin-right: 20px;
       font-weight: $bolder;
     }
   }
 
   .go-to {
-    color: $primary-gray;
-    font-size: $font16;
+    color: $grayMedium;
+    font-size: 16px;
     font-weight: $bolder;
   }
   .go-requests {
     font-size: 12px;
-    color: $primary-gray;
+    color: $grayMedium;
     cursor: pointer;
     display: none;
   }
@@ -50,6 +50,7 @@
 }
 
 :host ::ng-deep .message {
+  white-space: normal !important;
   p {
     margin-bottom: 10px;
   }
@@ -93,25 +94,23 @@
 }
 
 .booking-id-wrapper {
-  // margin-top: 20px;
   .booking-id {
     text-align: center;
   }
   .feedback {
     color: $white;
-    font-size: $font10;
+    font-size: 10px;
     display: flex;
     align-items: center;
     .booking-feedback {
       display: flex;
       align-items: center;
-      background-color: $c-gray-103;
+      background-color: $whiteDeep;
       justify-content: space-around;
       padding: 0px;
       margin: 0 10px;
       min-width: 20px;
       min-height: 20px;
-      // margin-top: 7px;
       border-radius: 25px;
       position: relative;
       &:hover {
@@ -125,7 +124,7 @@
         width: 100%;
         top: 50%;
         font-size: 12px;
-        color: $dark-grey;
+        color: $subtitle;
         background-color: $white;
         left: 0%;
         padding: 7px;
@@ -167,25 +166,29 @@
   }
 }
 .spl {
-  color: $spl-req;
+  color: $posCompare;
 }
 
 .other {
-  color: $other-req;
+  color: #3994d6;
 }
 
 .closed {
-  color: $completed;
+  color: $posCompare;
 }
 .resolved {
   color: $resolved;
 }
 .timeOut {
-  color: $reject;
+  color: $mediumRed;
 }
 .pending {
-  color: $pending;
+  color: $draft-state;
 }
-:host::ng-deep .p-datatable-resizable > .p-datatable-wrapper {
-  margin-bottom: 1rem !important;
+
+:host ::ng-deep .p-datatable {
+  .p-datatable-thead {
+    position: static !important;
+  }
+  @include tableCellPadding(0.3em);
 }

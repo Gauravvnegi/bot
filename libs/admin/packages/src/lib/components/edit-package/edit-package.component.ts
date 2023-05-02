@@ -247,21 +247,12 @@ export class EditPackageComponent implements OnInit, OnDestroy {
             )
             .subscribe();
           this.router.navigate([
-            '/pages/library/package/edit',
+            '/pages/library/packages/edit',
             this.hotelPackage.amenityPackage.id,
           ]);
           this.isSavingPackage = false;
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.isSavingPackage = false;
         }
       )
@@ -269,7 +260,7 @@ export class EditPackageComponent implements OnInit, OnDestroy {
   }
 
   redirectToPackages() {
-    this.router.navigate(['/pages/library/package']);
+    this.router.navigate(['/pages/library/packages']);
   }
 
   updatePackage(): void {
@@ -303,21 +294,12 @@ export class EditPackageComponent implements OnInit, OnDestroy {
               )
               .subscribe();
             this.router.navigate([
-              '/pages/library/package/edit',
+              '/pages/library/packages/edit',
               this.hotelPackage.amenityPackage.id,
             ]);
             this.isSavingPackage = false;
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
+          ({ error }) => { 
             this.isSavingPackage = false;
           }
         )

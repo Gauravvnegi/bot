@@ -3,11 +3,10 @@ import {
   ElementRef,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { IteratorField } from '../../types/fields.type';
 import { FormProps } from '../../types/form.type';
 
@@ -17,15 +16,15 @@ import { FormProps } from '../../types/form.type';
   styleUrls: ['./iterator.component.scss'],
 })
 export class IteratorComponent implements OnChanges {
-  constructor(private fb: FormBuilder) {}
+  constructor(protected fb: FormBuilder) {}
 
   props: FormProps = {
-    height: '35px',
     fontSize: '14px',
   };
 
   @Input() fields: IteratorField[];
   @Input() useFormArray: FormArray;
+  @Input() ctaLabel: '+ Add More';
   @ViewChild('main') main: ElementRef;
 
   // Zero maxLimit means there is no limit

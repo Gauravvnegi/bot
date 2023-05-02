@@ -1,11 +1,7 @@
 @import 'main';
-.documentActionItemLabel {
-  margin-left: 0.5em;
-  font-weight: 500;
-}
 
 :host ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-  background-color: $completed;
+  background-color: $posCompare;
 }
 
 :host ::ng-deep .mat-slide-toggle.mat-checked {
@@ -18,128 +14,6 @@
   }
 }
 
-:host ::ng-deep .name {
-  .package_image_wrapper {
-    display: flex;
-    align-items: center;
-    .image {
-      height: 50px;
-      width: 50px;
-      margin-right: 10px;
-      @media (max-width: 1024px) {
-        margin-right: 4px;
-      }
-      img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        @media (max-width: 1024px) {
-          width: 38px;
-          height: 38px;
-          display: flex;
-          align-items: center;
-        }
-      }
-    }
-    .text {
-      font-size: 12px;
-      color: $primary-black;
-      max-width: 60%;
-      div {
-        @media (max-width: 1024px) {
-          text-overflow: ellipsis;
-          overflow: hidden;
-        }
-      }
-      p {
-        color: $primary-gray;
-        margin-top: 5px;
-      }
-    }
-  }
-}
-
-.brand-name {
-  font-size: 12px;
-  color: $primary-black;
-  max-width: 60%;
-}
-
-.service-details {
-  font-size: 12px;
-  color: $primary-black;
-  max-width: 60%;
-  position: relative;
-  width: fit-content;
-  word-wrap: break-word;
-  .image_url {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    @media screen and (max-width: $L) {
-      @include max-width(90%);
-      white-space: nowrap !important;
-    }
-  }
-}
-
-.package-image {
-  width: 40%;
-  height: 40%;
-}
-
 :host ::ng-deep .mat-slide-toggle-bar {
   width: 50px;
-}
-
-:host ::ng-deep .caption__wrapper--buttons .button__wrapper img {
-  display: none;
-}
-
-:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
-}
-
-:host ::ng-deep .data-table-row {
-  &:hover {
-    cursor: pointer;
-    background: $table-hover-background !important;
-  }
-}
-
-:host ::ng-deep .header {
-  color: $dark-blue !important;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-:host ::ng-deep .table-data-head {
-  color: $dark-blue !important;
-}
-
-.data-table-row {
-  height: 80px;
-}
-
-:host ::ng-deep .tableHeading {
-  background-color: $c-gray-93 !important;
-}
-
-:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
-  text-align: center;
-  border-top: solid 1px $c-gray-92 !important
-  ;
-}
-
-:host ::ng-deep .mat-tab-label-active > .mat-tab-label-content {
-  font-size: $font14 !important;
-}
-
-.copy {
-  position: absolute;
-  right: 7px;
-  bottom: 7px;
-}
-
-.status {
-  text-align: center;
 }

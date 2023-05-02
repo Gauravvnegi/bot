@@ -1,60 +1,90 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 17px;
+  width: 100%;
+}
+
+.heading {
+  opacity: 0.75;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+  color: #00162b;
+}
+
+.sub-heading {
+  margin-top: 2px;
+  opacity: 0.45;
+  font-family: Roboto;
+  font-size: 12px;
+  text-align: left;
+  color: #00162b;
+}
+
 .item-boxes {
   display: flex;
-  margin-left: 30px;
   flex-wrap: wrap;
-  gap: 30px;
+  align-items: flex-start;
+  gap: 26.5px;
+  min-height: 157px;
+  width: 100%;
+  cursor: pointer;
 }
 
 .item-box {
+  width: 210px;
   position: relative;
-  width: 125px;
-  min-height: 112px;
-  border-radius: 4px;
-  border: solid 1px #707070;
-}
-
-.image-wrapper {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  inset: 0 0 0 0;
-  background-color: black;
-}
-.content {
-  position: relative;
-  height: 100%;
-  z-index: 1;
-  background-color: #00000087;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  padding: 30px 20px 20px;
-}
-
-.labels {
-  max-width: 13ch;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-family: Roboto;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.07;
-  letter-spacing: 0.84px;
-  text-align: center;
-  color: #9eaeb8;
-  filter: brightness(500%);
 }
 
 .icon-wrapper {
-  height: 20px;
-  width: 20px;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  filter: brightness(100%);
 }
 
-.upload__box__child {
-  filter: brightness(60%);
+.no-data {
   width: 100%;
-  height: 100%;
-  background-color: black;
+  text-align: center;
+  color: #00162b;
+}
+
+.selected {
+  filter: brightness(40%);
+  background-color: blueviolet;
+  border-radius: 4px;
+}
+
+.image-wrapper {
+  width: 210px;
+  height: 157px;
+}
+
+.show-image {
+  width: 208px;
+  height: 155px;
+  border-radius: 4px;
+}
+
+.text {
+  margin-top: 10px;
+  font-family: Poppins;
+  font-size: 14px;
+  text-align: center;
+  color: #002046;
+}
+
+.expandedView {
+  height: 400px;
+  overflow: auto;
+}
+.validation-error {
+  color: #f44336;
+  font-size: 0.7em;
+  height: 1.5em;
+  position: absolute;
 }

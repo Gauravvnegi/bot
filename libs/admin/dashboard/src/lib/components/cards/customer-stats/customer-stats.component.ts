@@ -100,17 +100,7 @@ export class CustomerStatisticsComponent implements OnInit, OnDestroy {
           this.statData = new ReservationStat().deserialize(response);
           this.initCheckinChart();
           this.initCheckoutChart();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        } 
       )
     );
   }

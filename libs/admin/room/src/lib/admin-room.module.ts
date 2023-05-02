@@ -11,6 +11,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AdminRoomRoutingModule } from './admin-room.routing.module';
 import { RoomService } from './services/room.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ChartsModule } from 'ng2-charts';
+import { LibraryService } from '@hospitality-bot/admin/library';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -18,11 +21,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     AdminRoomRoutingModule,
     AdminSharedModule,
     FormsModule,
+    ChartsModule,
     ReactiveFormsModule,
     MatTooltipModule,
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['room'])),
   ],
   declarations: [...AdminRoomRoutingModule.components],
-  providers: [RoomService],
+  providers: [RoomService, LibraryService],
 })
 export class AdminRoomModule {}

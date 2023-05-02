@@ -6,7 +6,7 @@
   [loading]="loading"
   [columns]="cols"
   [value]="values"
-  [paginator]="isPaginaton"
+  [paginator]="isPaginator"
   [rows]="rowsPerPage"
   [showCurrentPageReport]="showCurrentPageReport"
   [rowsPerPageOptions]="rowsPerPageOptions"
@@ -48,53 +48,17 @@
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <hospitality-bot-empty-view
-      [content]="emptyViewContent"
-      (create)="addEntry()"
-    ></hospitality-bot-empty-view>
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns #header>
-    <tr>
-      <th
-        id="select-all"
-        class="table-search-head select-box"
-        *ngIf="isSelectable"
-        pResizableColumn
-      >
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
-      <th
-        [id]="col.fields"
-        class="table-data-head"
-        pResizableColumn
-        [pSortableColumn]="col.field"
-        *ngFor="let col of columns"
-      >
-        <div>
-          <p>{{ col.header }}</p>
-          <p-sortIcon [field]="col.field"></p-sortIcon>
-        </div>
-      </th>
-    </tr>
-
-    <tr>
-      <th class="table-search-head" id="select-box" *ngIf="isSelectable"></th>
-      <th
-        [id]="col.field"
-        class="table-search-head"
-        *ngFor="let col of columns"
-      >
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, col.field)"
-          placeholder="Search by {{ col.field }}"
-          [disabled]="field.isSearchDisabled"
-          class="p-column-filter"
-        />
-      </th>
-    </tr>
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="isSelectable"
+      [showSearch]="isSearchable"
+      (search)="handleFieldSearch($event)"
+    ></tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->
   <ng-template
@@ -131,7 +95,8 @@
         <div class="cell-content">
           <hospitality-bot-toggle-dropdown
             (onClick)="handleStatus($event, rowData.name)"
-            [status]="rowData.action"
+            [status]="rowData.status"
+            [listItem]="status"
           >
           </hospitality-bot-toggle-dropdown>
         </div>
@@ -146,6 +111,8 @@
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="rowsPerPageOptions"
       (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
     ></p-paginator>
   </ng-template>
 </p-table>

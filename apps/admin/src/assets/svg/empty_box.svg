@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="185.117" height="165.978" viewBox="0 0 185.117 165.978">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f8f8f8;
+      }
+
+      .cls-2 {
+        fill: #f0efef;
+      }
+
+      .cls-3 {
+        fill: #dcdbdb;
+      }
+
+      .cls-4 {
+        fill: #ffede2;
+      }
+
+      .cls-5 {
+        fill: #f8e6ff;
+      }
+
+      .cls-5, .cls-7, .cls-8, .cls-9 {
+        stroke: #e08aff;
+        stroke-width: 2px;
+      }
+
+      .cls-5, .cls-6, .cls-7, .cls-8, .cls-9 {
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-5, .cls-6, .cls-9 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-6, .cls-7, .cls-8, .cls-9 {
+        fill: none;
+      }
+
+      .cls-6 {
+        stroke: #cfcfce;
+        stroke-width: 0.902px;
+      }
+
+      .cls-8 {
+        stroke-dasharray: 10.767 10.767;
+      }
+    </style>
+  </defs>
+  <g id="Group_9784" data-name="Group 9784" transform="translate(-1209.6 -155.281)">
+    <path id="Path_5855" data-name="Path 5855" class="cls-1" d="M1412.736,486.294a37.15,37.15,0,0,1-9.205-24.616v-.164c0-20.609-21.061-37.314-47.033-37.314-18.6,0-34.684,8.568-42.307,21a36.257,36.257,0,0,1-18.862,15.287c-16.561,5.774-28.129,18.9-28.129,34.17,0,20.609,21.061,37.314,47.033,37.314a57.491,57.491,0,0,0,19.746-3.431,36.166,36.166,0,0,1,27.759,1.356,46.072,46.072,0,0,0,19.417,4.171c21.2,0,38.382-13.643,38.382-30.451A26.165,26.165,0,0,0,1412.736,486.294Z" transform="translate(-44.97 -212.807)"/>
+    <path id="Path_5856" data-name="Path 5856" class="cls-2" d="M1439.1,372.4l-58.5,30.883,54.758,21.616,58.477-30.883Z" transform="translate(-135.07 -171.651)"/>
+    <path id="Path_5857" data-name="Path 5857" class="cls-3" d="M1720.038,394.016,1665.3,372.4v50.526Z" transform="translate(-361.272 -171.651)"/>
+    <path id="Path_5858" data-name="Path 5858" class="cls-4" d="M1705.577,543.7,1647.1,574.583v-66.1l58.477-30.882Z" transform="translate(-346.811 -255.235)"/>
+    <path id="Path_5859" data-name="Path 5859" class="cls-5" d="M1705.577,543.7,1647.1,574.583v-66.1l58.477-30.882Z" transform="translate(-346.811 -255.235)"/>
+    <path id="Path_5860" data-name="Path 5860" class="cls-5" d="M1304.028,323.537l-58.5,30.882-34.93-12.637,58.477-30.883Z" transform="translate(0 -122.787)"/>
+    <path id="Path_5861" data-name="Path 5861" class="cls-5" d="M1740.528,490.237l-58.5,30.882-34.93-12.637,58.477-30.882Z" transform="translate(-346.811 -255.235)"/>
+    <path id="Path_5862" data-name="Path 5862" class="cls-5" d="M1380.6,588.821l54.758,21.6v-66.1L1380.6,522.7Z" transform="translate(-135.07 -291.068)"/>
+    <path id="Path_5863" data-name="Path 5863" class="cls-5" d="M1261.421,522.7,1230.6,539.117l54.738,21.616,30.841-16.417Z" transform="translate(-15.891 -291.068)"/>
+    <path id="Path_5864" data-name="Path 5864" class="cls-5" d="M1696.141,292.5,1665.3,308.917l54.738,21.616,30.841-16.417Z" transform="translate(-361.272 -108.168)"/>
+    <path id="Path_5865" data-name="Path 5865" class="cls-6" d="M1722,477.6" transform="translate(-406.321 -255.235)"/>
+    <g id="Group_9783" data-name="Group 9783" transform="translate(1296.833 160.99)">
+      <g id="Group_9782" data-name="Group 9782" transform="translate(0 0)">
+        <path id="Path_5866" data-name="Path 5866" class="cls-7" d="M1665.3,328.26s.308-.267.822-.76" transform="translate(-1658.105 -296.967)"/>
+        <path id="Path_5867" data-name="Path 5867" class="cls-8" d="M1639.841,213.274c4.664-4.931,13.438-16.294-.473-20.486-12.082-3.637-10.541,7.479-4.459,9.226,7.952,2.3,14.034-9.822,7.561-16.314" transform="translate(-1630.283 -184.303)"/>
+        <path id="Path_5868" data-name="Path 5868" class="cls-7" d="M1682.1,179.558a10.192,10.192,0,0,0-.9-.658" transform="translate(-1670.738 -178.9)"/>
+      </g>
+    </g>
+    <ellipse id="Ellipse_1411" data-name="Ellipse 1411" class="cls-9" cx="1.541" cy="1.13" rx="1.541" ry="1.13" transform="translate(1302.056 159.121)"/>
+    <ellipse id="Ellipse_1412" data-name="Ellipse 1412" class="cls-9" cx="1.336" cy="0.678" rx="1.336" ry="0.678" transform="translate(1303.685 158.921) rotate(-57.845)"/>
+    <ellipse id="Ellipse_1413" data-name="Ellipse 1413" class="cls-9" cx="0.678" cy="1.336" rx="0.678" ry="1.336" transform="translate(1302.808 156.463) rotate(-4.416)"/>
+  </g>
+</svg>

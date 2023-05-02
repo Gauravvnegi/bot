@@ -1,283 +1,164 @@
 <div class="wrapper">
-  <hospitality-bot-custom-header
-    label="Add a Room Type"
-  ></hospitality-bot-custom-header>
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  ></hospitality-bot-navigation-header>
   <form [formGroup]="useForm">
-    <div class="wrapper-form">
-      <mat-label class="mat-label"
-        >{{ 'label.roomType' | translate }} :</mat-label
-      >
-      <mat-form-field class="room-type-name">
-        <input
-          class="input-field"
-          type="text"
-          placeholder=""
-          matInput
-          spellcheck="false"
-          formControlName="name"
-        />
-        <mat-error
-          *ngIf="
-            useForm.controls['name'].touched &&
-            useForm.controls['name'].hasError('required')
-          "
-          >{{ 'validationErrors.roomTypeRequired' | translate }}.</mat-error
-        >
-      </mat-form-field>
-    </div>
-
-    <div class="upload-image">
-      <div class="upload-image-text">
-        {{ 'label.roomImages' | translate }}
-      </div>
-      <hospitality-bot-custom-file-upload
-        formControlName="imageUrls"
-        [hotelId]="hotelId"
-        [limit]="4"
-      ></hospitality-bot-custom-file-upload>
-    </div>
-    <p class="upload-image-note">{{ 'note.imageNote' | translate }}</p>
-    <div class="room-description">
-      <div class="room-description-text">
-        {{ 'label.roomDescription' | translate }}:
-      </div>
-      <div class="ck-editor">
-        <hospitality-bot-template-editor
-          [parentFG]="useForm"
-          [name]="'description'"
-          [height]="250"
-        ></hospitality-bot-template-editor>
+    <div class="room-info-wrapper">
+      <div class="header">Room Information</div>
+      <hr />
+      <div class="room-info-form-wrapper">
+        <div class="room-type-name">
+          <hospitality-bot-input
+            controlName="name"
+            label="Room Type Name"
+          ></hospitality-bot-input>
+        </div>
+        <div class="file-upload-wrapper">
+          <hospitality-bot-custom-file-upload
+            formControlName="imageUrls"
+            label="Image"
+            description="Mandatory to add at least 1 image"
+            [limit]="4"
+            [hotelId]="hotelId"
+            path="static-content/room-types"
+          ></hospitality-bot-custom-file-upload>
+        </div>
+        <div class="room-des">
+          <p>Room Description</p>
+          <hospitality-bot-template-editor
+            [parentFG]="useForm"
+            [name]="'description'"
+            [height]="250"
+          ></hospitality-bot-template-editor>
+        </div>
       </div>
     </div>
 
-    <div class="amenities">
-      <div class="amenities-text">
-        {{ 'label.compAmenities' | translate }}
-      </div>
-      <hospitality-bot-custom-select
-        formControlName="complimentaryAmenities"
-        [itemList]="compAmenities"
-        [requiredProperty]="selectProperty"
-        [selectedLabel]="compSelectedLabel"
-      ></hospitality-bot-custom-select>
-    </div>
-    <div class="amenities">
-      <div class="amenities-text">
-        {{ 'label.paidAmenities' | translate }}
-      </div>
-      <hospitality-bot-custom-select
-        formControlName="paidAmenities"
-        [itemList]="paidAmenities"
-        [requiredProperty]="selectProperty"
-        [selectedLabel]="paidSelectedLabel"
-      ></hospitality-bot-custom-select>
-    </div>
-    <mat-error
-      class="amenities-validation-text"
-      *ngIf="
-        useForm.controls['paidAmenities'].touched &&
-        useForm.controls['paidAmenities'].hasError('required')
-      "
-      >{{ 'validationErrors.paidAmenitiesRequired' | translate }}.</mat-error
-    >
-
-    <div class="bottom-form-fields">
-      <div class="field">
-        <mat-label class="label">
-          {{ 'label.basePrice' | translate }}:</mat-label
-        >
-        <mat-form-field class="currency">
-          <mat-select formControlName="currency">
-            <mat-option
-              *ngFor="let currency of currency"
-              [value]="currency.key"
-              >{{ currency.value }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <input
-            type="number"
-            formControlName="originalPrice"
-            matInput
-            autocomplete="off"
-          />
-          <mat-error
-            *ngIf="
-              useForm.controls['originalPrice'].touched &&
-              useForm.controls['originalPrice'].hasError('required')
-            "
-            >{{ 'validationErrors.basePriceRequired' | translate }}.</mat-error
-          >
-        </mat-form-field>
-      </div>
-
-      <div class="field">
-        <mat-label class="label"
-          >{{ 'label.variablePrice' | translate }}:<img
-            matTooltip="Enter extra occupancy charge per occupant"
-            matTooltipClass="mat-tooltip"
-            class="info-icon"
-            src="assets/svg/info.svg"
-          />
-        </mat-label>
-        <mat-form-field class="currency">
-          <mat-select formControlName="variablePriceCurrency">
-            <mat-option
-              *ngFor="let currency of currency"
-              [value]="currency.value"
-              >{{ currency.key }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput autocomplete="off" formControlName="variableAmount" />
-        </mat-form-field>
+    <div class="room-pricing-wrapper">
+      <div class="header">Services</div>
+      <hr />
+      <div class="room-services-wrapper">
+        <hospitality-bot-custom-select
+          label="Complimentary Services"
+          description="This is a free of cost services"
+          formControlName="complimentaryAmenities"
+          [itemList]="compServices"
+          (viewAll)="saveRoomTypeData('COMPLIMENTARY')"
+          [noRecordsAction]="noRecordAction"
+        ></hospitality-bot-custom-select>
+        <div class="paid-services">
+          <hospitality-bot-custom-select
+            label="Paid Services"
+            description="Do not forget to add this cost in addition to the room cost"
+            formControlName="paidAmenities"
+            [itemList]="paidServices"
+            (viewAll)="saveRoomTypeData('PAID')"
+            [noRecordsAction]="noRecordAction"
+          ></hospitality-bot-custom-select>
+        </div>
       </div>
     </div>
-    <div class="bottom-form-fields">
-      <div class="field">
-        <mat-label class="label"
-          >{{ 'label.discountType' | translate }}:</mat-label
-        >
-        <mat-form-field class="currency">
-          <mat-select formControlName="discountType">
-            <mat-option *ngFor="let dis of discount" [value]="dis.value">{{
-              dis.key
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <input
-            type="number"
-            formControlName="discountValue"
-            matInput
-            autocomplete="off"
-          />
-          <mat-error
-            *ngIf="useForm.controls['discountValue'].hasError('max')"
-            >{{ 'validationErrors.percentageError' | translate }}</mat-error
-          >
-          <mat-error
-            *ngIf="useForm.controls['discountValue'].hasError('incorrect')"
-            >{{ 'validationErrors.amountError' | translate }}</mat-error
-          >
-        </mat-form-field>
-      </div>
-      <div class="field">
-        <mat-label class="label"
-          >{{ 'label.discountedPrice' | translate }}:</mat-label
-        >
-        <mat-form-field class="currency">
-          <mat-select formControlName="discountedPriceCurrency">
-            <mat-option
-              *ngFor="let currency of currency"
-              [value]="currency.value"
-              >{{ currency.key }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <input
-            formControlName="discountedPrice"
-            matInput
-            autocomplete="off"
-          />
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="bottom-form-fields">
-      <div class="field">
-        <mat-label class="label"
-          >{{ 'label.maxOccupancy' | translate }}:</mat-label
-        >
-        <mat-form-field class="input">
-          <input
-            type="number"
-            matInput
-            placeholder="Enter Max Occupancy"
-            formControlName="maxOccupancy"
-          />
-          <mat-error
-            *ngIf="
-              useForm.controls['maxOccupancy'].touched &&
-              useForm.controls['maxOccupancy'].hasError('required')
-            "
-            >{{
-              'validationErrors.maxOccupancyRequired' | translate
-            }}.</mat-error
-          >
-          <mat-error
-            *ngIf="
-              useForm.controls['maxOccupancy'].touched &&
-              useForm.controls['maxOccupancy'].hasError('incorrect')
-            "
-            >{{ 'validationErrors.maxOccupancyInvalid' | translate }}</mat-error
-          >
-        </mat-form-field>
-      </div>
-      <div class="field">
-        <mat-label class="label"
-          >{{ 'label.maxChildren' | translate }}:</mat-label
-        >
-        <mat-form-field class="input">
-          <input
-            type="number"
-            matInput
-            placeholder="Enter Max Kid Occupancy"
-            formControlName="maxChildren"
-          />
-        </mat-form-field>
+    <div class="room-pricing-wrapper">
+      <div class="header">Room Pricing</div>
+      <hr />
+      <div class="room-pricing-form-wrapper">
+        <div class="input-fields">
+          <hospitality-bot-prefix-field
+            preControlName="currency"
+            postControlName="originalPrice"
+            label="Base Price"
+            [options]="currencies"
+            [props]="inputValidationProps"
+            [defaultProps]="{ post: { type: 'number' } }"
+          ></hospitality-bot-prefix-field>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-prefix-field
+            preControlName="variablePriceCurrency"
+            postControlName="variableAmount"
+            label="Variable Price"
+            [options]="currencies"
+            [props]="{ errorMessages: inputValidationProps.errorMessages }"
+            [defaultProps]="{
+              post: {
+                type: 'number',
+                additionalInfo: 'Price per additional adult'
+              }
+            }"
+          ></hospitality-bot-prefix-field>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-prefix-field
+            preControlName="discountType"
+            postControlName="discountValue"
+            label="Discount Type"
+            [options]="discountTypes"
+            [props]="inputValidationProps"
+            [defaultProps]="{ post: { type: 'number' } }"
+          ></hospitality-bot-prefix-field>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-prefix-field
+            preControlName="discountedPriceCurrency"
+            postControlName="discountedPrice"
+            label="Discounted Price"
+            [options]="currencies"
+            [defaultProps]="{ post: { type: 'number' } }"
+          ></hospitality-bot-prefix-field>
+        </div>
       </div>
     </div>
-    <div class="bottom-form-fields">
-      <div class="field">
-        <mat-label class="label">{{ 'label.maxAdult' | translate }}:</mat-label>
-        <mat-form-field class="input">
-          <input
-            type="number"
-            matInput
-            placeholder="Enter Max Adult Occupancy"
-            formControlName="maxAdult"
-          />
-          <mat-error
-            *ngIf="useForm.controls['maxAdult'].hasError('incorrect')"
-            >{{ 'validationErrors.maxAdultError' | translate }}</mat-error
-          >
-        </mat-form-field>
-      </div>
-      <div class="field">
-        <mat-label class="label">{{ 'label.area' | translate }}:</mat-label>
-        <mat-form-field class="input">
-          <input
-            type="number"
-            matInput
-            placeholder="Enter Room Area"
-            formControlName="area"
-          />
-          <mat-error
-            *ngIf="
-              useForm.controls['area'].touched &&
-              useForm.controls['area'].hasError('required')
-            "
-            >{{ 'validationErrors.areaRequired' | translate }}.</mat-error
-          >
-        </mat-form-field>
-        (sqft.)
+    <div class="room-pricing-wrapper">
+      <div class="header">Room Occupancy</div>
+      <hr />
+      <div class="room-pricing-form-wrapper">
+        <div class="input-fields">
+          <hospitality-bot-input
+            controlName="maxOccupancy"
+            label="Max Occupancy"
+            [props]="inputValidationProps"
+          ></hospitality-bot-input>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-input
+            controlName="maxChildren"
+            label="Max Children"
+            [props]="inputValidationProps"
+          ></hospitality-bot-input>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-input
+            controlName="maxAdult"
+            label="Max Adult"
+            [props]="inputValidationProps"
+          ></hospitality-bot-input>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-input
+            controlName="area"
+            label="Room Area"
+            [props]="{
+              errorMessages: inputValidationProps.errorMessages,
+              type: 'number',
+              subtitle: 'Sq. Ft'
+            }"
+          ></hospitality-bot-input>
+        </div>
       </div>
     </div>
   </form>
-  <div class="footer_button" *ngIf="!roomTypeId">
-    <button mat-button (click)="saveDetails()">
-      <i *ngIf="loader" class="fa fa-spinner fa-spin"></i>
-      {{ loader ? 'Saving Details' : 'Save' }}
-    </button>
-  </div>
-
-  <div class="footer_button" *ngIf="roomTypeId">
-    <button mat-button (click)="updateDetails()">
-      <i *ngIf="loader" class="fa fa-spinner fa-spin"></i>
-      {{ loader ? 'Updating Details' : 'Update' }}
-    </button>
+  <div class="footer-buttons">
+    <hospitality-bot-button
+      label="Reset All"
+      (onClick)="resetForm()"
+      variant="outlined"
+      severity="reset"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      [label]="roomTypeId ? 'Update' : 'Create'"
+      (onClick)="submitForm()"
+      [showLoader]="loading"
+    ></hospitality-bot-button>
   </div>
 </div>

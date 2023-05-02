@@ -7,6 +7,7 @@ import {
   LoginParam,
   RefreshTokenParam,
 } from '../types/auth.type';
+import { CookiesData } from '@hospitality-bot/admin/shared';
 
 /**
  * @class To manage all the api call for authentication.
@@ -16,6 +17,7 @@ export class AuthService extends ApiService {
   /**
    * @function login To login the user.
    * @param loginParams Data for login.
+    font-weight: $medium;
    * @returns An Observable with the user data.
    */
   login(loginParams: LoginParam): Observable<any> {
@@ -87,6 +89,7 @@ export class AuthService extends ApiService {
       'x-access-token',
       'userId',
       'x-access-refresh-token',
+      'hotelId',
     ];
     tokensToRemove.forEach((token) => localStorage.removeItem(token));
   }
@@ -105,12 +108,12 @@ export class AuthService extends ApiService {
   }
 
   deletePlatformRefererTokens(cookieService) {
-    const tokensToRemove = [
-      'authorizationToken',
+    const tokensToRemove: (keyof CookiesData)[] = [
       'accessToken',
-      'refreshToken',
       'accessRefreshToken',
       'user',
+      'x-userId',
+      'hotelId',
     ];
 
     tokensToRemove.forEach((token) =>

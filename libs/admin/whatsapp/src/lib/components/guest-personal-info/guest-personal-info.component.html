@@ -3,14 +3,17 @@
     Personal Info
   </div>
   <div class="person-image">
-    <div class="default">
-      <img
-        [src]="data.profileUrl"
-        *ngIf="data.profileUrl; else defaultAvatar"
-      />
-      <ng-template #defaultAvatar
-        ><div>{{ data.getProfileNickName() }}</div></ng-template
+    <div class="default" [style.background]="data?.color">
+      <img [src]="data.profileUrl" *ngIf="data.profileUrl" />
+      <div
+        class="default_nickName"
+        *ngIf="data?.getProfileNickName(); else defaultAvatar"
       >
+        {{ data?.getProfileNickName() }}
+      </div>
+      <ng-template #defaultAvatar
+        ><img src="assets/svg/defaultUser.svg" alt="defaultAvatar"
+      /></ng-template>
     </div>
     <div class="guest-name">
       {{ data.name || 'Unknown Person' }}
@@ -23,13 +26,21 @@
   <div class="label">
     Phone No.
   </div>
-  <div class="label-text">
-    {{ data.phone }}
+  <div>
+    <a href="tel:+{{ data.phone }}" class="label-text" target="blank"
+      >+{{ data.phone }}</a
+    >
   </div>
   <div class="label">
     Email
   </div>
-  <div class="label-text">
-    {{ data.email || 'Unknown' }}
+  <div>
+    <a
+      href="mailto: {{ data.email || 'Unknown' }}"
+      class="label-text"
+      target="blank"
+    >
+      {{ data.email || 'Unknown' }}</a
+    >
   </div>
 </div>

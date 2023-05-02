@@ -58,7 +58,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   cols = cols.reservation;
 
   @Input() tabFilterItems = tabFilterItems.reservation;
-  @Input() tabFilterIdx = 1;
+  @Input() tabFilterIdx = 0;
 
   globalQueries = [];
   $subscription = new Subscription();
@@ -127,30 +127,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
-          this.values = new ReservationTable().deserialize(
-            data,
-            this.globalFilterService.timezone
-          ).records;
-          this.initialLoading = false;
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.values = [];
         }
       )
     );
@@ -166,33 +147,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       .map((item) => ({
         entityState: item.value,
       }));
-  }
-
-  /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
-   */
-  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        chip.total = countObj[chip.value];
-      });
-    }
   }
 
   /**
@@ -212,6 +166,18 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     };
 
     return this._reservationService.getReservationDetails(config);
+  }
+
+  setRecords(data): void {
+    this.values = new ReservationTable().deserialize(
+      data,
+      this.globalFilterService.timezone
+    ).records;
+    this.updateTabFilterCount(data.entityTypeCounts, data.total);
+    this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.updateTotalRecords();
+    this.loading = false;
+    this.initialLoading = false;
   }
 
   /**
@@ -234,28 +200,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = new ReservationTable().deserialize(
-            data,
-            this.globalFilterService.timezone
-          ).records;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.totalRecords = data.total;
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.values = [];
         }
       )
     );
@@ -349,15 +298,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -392,26 +332,54 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         // remove loader for detail close
-        this.loadInitialData(
-          [
-            ...this.globalQueries,
+        if (res) {
+          this.loadInitialData(
+            [
+              ...this.globalQueries,
+              {
+                order: sharedConfig.defaultOrder,
+                entityType: this.tabFilterItems[this.tabFilterIdx].value,
+              },
+              ...this.getSelectedQuickReplyFilters(),
+            ],
+            false,
             {
-              order: sharedConfig.defaultOrder,
-              entityType: this.tabFilterItems[this.tabFilterIdx].value,
-            },
-            ...this.getSelectedQuickReplyFilters(),
-          ],
-          false,
-          {
-            offset: this.tempFirst,
-            limit: this.tempRowsPerPage
-              ? this.tempRowsPerPage
-              : this.rowsPerPage,
-          }
-        );
+              offset: this.tempFirst,
+              limit: this.tempRowsPerPage
+                ? this.tempRowsPerPage
+                : this.rowsPerPage,
+            }
+          );
+        }
         detailCompRef.close();
       })
     );
+  }
+
+  getStatusStyle(type: string, state: string): string {
+    switch (type) {
+      case 'INITIATED':
+        return `status-${state}-initiated`;
+      case 'PENDING':
+        return `status-${state}-pending`;
+      case 'FAILED':
+        return `status-${state}-reject`;
+      case 'COMPLETED':
+        return `status-${state}-success`;
+    }
+  }
+
+  getRoomStatus(type: string): string {
+    switch (type) {
+      case 'CL':
+        return 'status-text-success';
+      case 'DI':
+        return 'status-text-reject';
+      case 'IN':
+        return 'status-text-initiated';
+      case 'PI':
+        return 'status-text-pending';
+    }
   }
 
   ngOnDestroy(): void {

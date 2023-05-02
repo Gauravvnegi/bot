@@ -14,67 +14,6 @@
   font-size: 14px;
 }
 
-.loader {
-  margin: 20px auto;
-}
-
-.loading {
-  // margin: 20px auto;
-  text-align: center;
-  font-size: 25px;
-  font-weight: $bolder;
-  color: $primary-purple;
-}
-
-.spinner {
-  text-align: center;
-}
-
-.spinner > div {
-  width: 18px;
-  height: 18px;
-  background-color: $primary-purple;
-
-  border-radius: 100%;
-  display: inline-block;
-  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-}
-
-.spinner .bounce1 {
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
-}
-
-.spinner .bounce2 {
-  -webkit-animation-delay: -0.16s;
-  animation-delay: -0.16s;
-}
-
-@-webkit-keyframes sk-bouncedelay {
-  0%,
-  80%,
-  100% {
-    -webkit-transform: scale(0);
-  }
-  40% {
-    -webkit-transform: scale(1);
-  }
-}
-
-@keyframes sk-bouncedelay {
-  0%,
-  80%,
-  100% {
-    -webkit-transform: scale(0);
-    transform: scale(0);
-  }
-  40% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -134,7 +73,7 @@
 }
 
 .button {
-  @include admin-panel-button();
+  @include admin-panel-button;
   padding: 16px 0px !important;
   &:hover {
     cursor: pointer;
@@ -142,11 +81,11 @@
 }
 
 :host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
-  background-color: $primary-gray;
+  background-color: $grayMedium;
 }
 
 :host ::ng-deep .mat-select-arrow {
-  border-top-color: $primary-gray;
+  border-top-color: $grayMedium;
 }
 
 .file-input {
@@ -209,7 +148,7 @@
   position: relative;
   overflow: hidden;
   width: 100%;
-  border-bottom: 1px solid $primary-gray;
+  border-bottom: 1px solid $grayMedium;
   .attachment {
     width: 100%;
     display: flex;
@@ -232,11 +171,8 @@
 .close {
   display: flex;
   justify-content: flex-end;
-  // position: absolute;
-  // top: 5px;
-  // right: 10px;
   i {
-    color: $gray;
+    color: gray;
     margin: 0 10px;
   }
   &:hover {
@@ -266,14 +202,14 @@
 }
 
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 }
 
 :host
   ::ng-deep
   .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent
   .mat-ripple-element {
-  background: $primary-purple;
+  background: $primary-cta;
 }
 
 :host ::ng-deep .mat-checkbox-frame {
@@ -286,7 +222,7 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-start {
-  border-color: $primary-purple;
+  border-color: $primary-cta;
 }
 
 :host
@@ -295,7 +231,7 @@
   .mat-form-field-flex:hover
   > .mat-form-field-outline-thick
   > .mat-form-field-outline-end {
-  border-color: $primary-purple;
+  border-color: $primary-cta;
 }
 
 .ckeditor {

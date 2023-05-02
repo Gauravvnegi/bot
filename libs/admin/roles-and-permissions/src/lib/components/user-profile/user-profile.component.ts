@@ -1,18 +1,18 @@
-import { Location } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AdminUtilityService,
   CountryCode,
+  NavRouteOptions,
+  Option,
   Regex,
   UserService,
 } from '@hospitality-bot/admin/shared';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService, SnackBarService } from 'libs/shared/material/src';
-import { BehaviorSubject, Subject } from 'rxjs';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
+import { managePermissionRoutes, navRoute } from '../../constants/routes';
 import { ManagePermissionService } from '../../services/manage-permission.service';
 import { PageState, Permission, PermissionMod } from '../../types';
 import { UserPermissionDatatableComponent } from '../user-permission-datatable/user-permission-datatable.component';
@@ -23,14 +23,12 @@ import { UserPermissionDatatableComponent } from '../user-permission-datatable/u
   styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
-  pageState = new BehaviorSubject<PageState>('view');
-  pageState$ = this.pageState.asObservable();
+  loggedInUserId: string;
 
-  brandNames: [];
-  branchNames: [];
-
-  departments: any[];
-  products: any[];
+  departments: Option[];
+  products: Option[];
+  brandNames: Option[];
+  branchNames: Option[];
 
   tabListItems: { label: string; value: string }[];
   tabIdx = 1;
@@ -39,71 +37,93 @@ export class UserProfileComponent implements OnInit {
 
   isUpdatingPermissions = false;
   userForm: FormGroup;
-  managedBy: {
-    firstName: string;
-    lastName: string;
-    jobTitle: string;
-  };
-  adminData;
-  value;
+
+  isEdited = false;
+  isLoading = true;
 
   teamMember: { initial: string; color: string }[] = [];
   totalTeamMember: number = 0;
 
   manageProduct: string;
 
-  userToModDetails;
-  adminToModDetails;
+  userToModDetails: UserConfig;
+  adminToModDetails: UserConfig;
 
-  private _onOpenedChange = new Subject();
-  onOpenedChange = this._onOpenedChange.asObservable();
-  isOptionsOpenedChanged = true;
   @Output() optionChange = new EventEmitter();
 
   adminPermissions: Permission[];
   userPermissions: Permission[];
 
+  pageTitle: string;
+  navRoutes: NavRouteOptions = [];
+  state: PageState;
+
   constructor(
     private _fb: FormBuilder,
-    private adminUtilityService: AdminUtilityService,
     private _modal: ModalService,
     private _userService: UserService,
     private _hotelDetailService: HotelDetailService,
     private _managePermissionService: ManagePermissionService,
     private snackbarService: SnackBarService,
-    private _route: ActivatedRoute,
-    private _location: Location,
-    private _router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.initUserForm();
   }
 
   ngOnInit(): void {
-    this.initAdminPermission();
-    this._managePermissionService
-      .getUserDetailsById(this._route.snapshot.paramMap.get('id'))
-      .subscribe((data) => {
-        this.adminData = data;
-        this.adminToModDetails = new UserConfig().deserialize(this.adminData);
-
-        this.products = this.adminToModDetails.products;
-        this.departments = this.adminToModDetails.departments;
-
-        this.initStateSubscription();
-      });
-
+    this.loggedInUserId = this._userService.getLoggedInUserId();
     this.brandNames = this._hotelDetailService.hotelDetails.brands;
+    this.initPageState();
+    this.initAdminUserDetails();
 
-    this.initManager();
     this.initTeamMember();
     this.registerListeners();
   }
 
+  /**
+   * @function initPageState To get the state of the page
+   * whether it is in view | edit | add mode
+   */
+  initPageState() {
+    const routeData = Object.entries(
+      managePermissionRoutes
+    ).find(([_, value]) => this.router.url.includes(value.route.split('/')[0]));
+    this.state = routeData[0] as PageState;
+    this.pageTitle = routeData[1].title;
+    this.navRoutes = routeData[1].navRoutes;
+  }
+
+  /**
+   * To initialize logged in user data
+   */
+  initAdminUserDetails() {
+    this._managePermissionService
+      .getUserDetailsById(this.loggedInUserId)
+      .subscribe((data) => {
+        this.adminToModDetails = new UserConfig().deserialize(data);
+        
+        this.products = this.adminToModDetails.products;
+        this.departments = this.adminToModDetails.departments.map((item) => ({
+          ...item,
+          label: item.departmentLabel,
+          value: item.department,
+        }));
+
+        const { permissionConfigs } = this._userService.userDetails;
+        this.adminPermissions = permissionConfigs;
+        this.initStateSubscription();
+      });
+  }
+
+  /**
+   * To get the initial of the team
+   */
   initTeamMember() {
     this._managePermissionService
       .getManagedUsers({
         queryObj: '?limit=3',
-        loggedInUserId: this._route.snapshot.paramMap.get('id'),
+        loggedInUserId: this.loggedInUserId,
       })
       .subscribe((res) => {
         const color = ['#99e6e6', '#4db380', '#e6331a'];
@@ -115,24 +135,32 @@ export class UserProfileComponent implements OnInit {
       });
   }
 
+  initFormValues() {
+    const { departments, products, ...rest } = this.userToModDetails;
+
+    this.userForm.patchValue({
+      ...rest,
+      phoneNumber: this.userToModDetails.phoneNumber.substring(
+        this.userToModDetails?.phoneNumber.lastIndexOf(' ') + 1,
+        this.userToModDetails?.phoneNumber.length
+      ),
+      products: products.map((item) => item.value),
+      departments: departments.map((item) => item.department),
+    });
+  }
+
   initStateSubscription() {
-    this.pageState$.subscribe((res) => {
-      this.tabIdx = 0;
+    this.tabIdx = 0;
 
-      switch (res) {
-        case 'view':
-          this.userToModDetails = this.adminToModDetails;
-          const { departments, products, ...rest } = this.userToModDetails;
-          this.userForm.patchValue({
-            ...rest,
-            products: products.map((item) => item.value),
-            departments: departments.map((item) => item.department),
-          });
-          this.userForm.disable();
-          this.initAfterFormLoaded();
+    switch (this.state) {
+      case 'userProfile':
+      case 'addNewUser':
+        this.userToModDetails = this.adminToModDetails;
+        this.initFormValues();
+        this.initAfterFormLoaded();
+        this.initUserPermissions();
 
-          break;
-        case 'add':
+        if (this.state === 'addNewUser') {
           this.userForm.patchValue({
             firstName: '',
             lastName: '',
@@ -141,41 +169,51 @@ export class UserProfileComponent implements OnInit {
             email: '',
             id: '',
           });
-          this.userForm.enable();
-          break;
-        case 'edit':
-          this.userForm.patchValue({
-            ...this.userToModDetails,
-            products: this.userToModDetails.products.map((item) => item.value),
-            departments: this.userToModDetails.departments.map(
-              (item) => item.department
-            ),
-          });
-          this.userForm.enable();
-          this.initAfterFormLoaded();
-          break;
-        default:
-          break;
-      }
 
-      this.initUserPermissions();
+          this.userForm.enable();
+        } else {
+          this.userForm.disable();
+          this.userForm.get('firstName').enable();
+          this.userForm.get('lastName').enable();
+          this.userForm.get('phoneNumber').enable();
+          this.isFormEdited();
+        }
+
+        break;
+
+      case 'editUser':
+        this._managePermissionService
+          .getUserDetailsById(this.route.snapshot.paramMap.get('id'))
+          .subscribe((data) => {
+            this.userToModDetails = new UserConfig().deserialize(data);
+            this.userPermissions = this.userToModDetails.permissionConfigs;
+            this.initFormValues();
+            this.initAfterFormLoaded();
+            this.initUserPermissions();
+            this.pageTitle = this.pageTitle.replace(
+              '{0}',
+              `${this.userToModDetails.firstName} ${this.userToModDetails.lastName}`
+            );
+          });
+        break;
+      default:
+        break;
+    }
+  }
+
+  isFormEdited(){
+    this.userForm.valueChanges.subscribe(() => {
+      this.isEdited = true;
     });
   }
 
   hasPageState(...args: PageState[]) {
-    return args.includes(this.pageState.value);
-  }
-
-  /**
-   * Setting the permission config of the admin
-   */
-  initAdminPermission() {
-    const { permissionConfigs } = this._userService.userDetails;
-    this.adminPermissions = permissionConfigs;
+    return args.includes(this.state);
   }
 
   initAfterFormLoaded() {
     this.onSelectedTabFilterChange({ index: 0 });
+    this.isLoading = false;
   }
 
   initUserForm() {
@@ -185,71 +223,15 @@ export class UserProfileComponent implements OnInit {
       lastName: [''],
       jobTitle: ['', Validators.required],
       brandName: ['', Validators.required],
-      products: ['', Validators.required],
+      products: [[], Validators.required],
       departments: [[], Validators.required],
       branchName: ['', Validators.required],
       cc: [''],
-      phoneNumber: [''],
+      phoneNumber: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       profileUrl: [''],
       permissionConfigs: this._fb.array([]),
     });
-  }
-
-  /**
-   * @function userProfileURL getter for image url.
-   */
-  get userProfileUrl(): string {
-    return this.userForm?.get('profileUrl').value || '';
-  }
-
-  uploadProfileImage(event): void {
-    const formData = new FormData();
-    formData.append('files', event.file);
-    const hotelId = this.userForm.get('branchName').value;
-    this._userService.uploadProfileImage(hotelId, formData).subscribe(
-      (response) => {
-        this.userForm.get('profileUrl').patchValue([response.fileDownloadUri]);
-        this.snackbarService.openSnackBarAsText('Profile uploaded', '', {
-          panelClass: 'success',
-        });
-      },
-      ({ error }) => {
-        this.snackbarService.openSnackBarAsText(error.message);
-      }
-    );
-  }
-
-  deleteFile() {
-    this.userForm.patchValue({
-      profileUrl: [''],
-    });
-  }
-
-  openedChange(event) {
-    this._onOpenedChange.next(event);
-  }
-
-  trackByFn(index, item) {
-    return index;
-  }
-
-  change(event) {
-    const selectData = {
-      selectEvent: event,
-      formControlName: 'cc',
-      formGroup: this.userForm,
-    };
-    this.optionChange.emit(selectData);
-  }
-
-  initManager() {
-    const { firstName, lastName, jobTitle } = this._userService.userDetails;
-    this.managedBy = {
-      firstName,
-      lastName,
-      jobTitle,
-    };
   }
 
   registerListeners() {
@@ -275,7 +257,7 @@ export class UserProfileComponent implements OnInit {
       const branches = currentBrand?.branches;
       if (branches) {
         this.branchNames = branches;
-        if (this.pageState.value !== 'view')
+        if (this.state !== 'userProfile')
           this.userForm.get('branchName').enable();
       }
     });
@@ -292,7 +274,11 @@ export class UserProfileComponent implements OnInit {
       this.departments = this.adminToModDetails.departments.filter(
         (item: any) => products.includes(item.productType)
       );
-
+      this.departments = this.departments.map((item) => ({
+        ...item,
+        label: item.departmentLabel,
+        value: item.department,
+      }));
       const currentDepartments = this.departments
         .filter((item: any) => departmentValue?.includes(item.department))
         .map((item) => item.department);
@@ -311,7 +297,7 @@ export class UserProfileComponent implements OnInit {
       },
     ];
 
-    if (this.pageState.value === 'view') {
+    if (this.state === 'userProfile') {
       return this._fb.group({
         manage: [
           {
@@ -329,7 +315,7 @@ export class UserProfileComponent implements OnInit {
       });
     }
 
-    if (this.pageState.value === 'add') {
+    if (this.state === 'addNewUser') {
       return this._fb.group({
         manage: [
           {
@@ -347,7 +333,7 @@ export class UserProfileComponent implements OnInit {
       });
     }
 
-    if (this.pageState.value === 'edit') {
+    if (this.state === 'editUser') {
       const userConfig = this.userPermissions.find(
         (item) => item.entity === config.entity
       );
@@ -373,12 +359,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   initUserPermissions() {
-    // this.permissionConfigsFA.clear();
-
     const formArray = this.userForm.get('permissionConfigs') as FormArray;
 
     formArray.clear();
-
     this.adminPermissions.forEach((config, index) => {
       formArray.push(
         this._fb.group({
@@ -406,32 +389,17 @@ export class UserProfileComponent implements OnInit {
     tableCompRef.componentInstance.tabFilterIdx =
       this.totalTeamMember === 0 ? 0 : 1;
 
-    tableCompRef.componentInstance.onModalClose.subscribe((userData) => {
+    tableCompRef.componentInstance.onModalClose.subscribe((userId) => {
       tableCompRef.close();
-
-      const {
-        userId,
-        jobTitle,
-        permissionConfigs,
-
-        ...rest
-      } = userData;
-
-      this.userToModDetails = new UserConfig().deserialize({
-        ...rest,
-        id: userId,
-        title: jobTitle,
-        permissions: permissionConfigs,
-      });
-      this.userPermissions = permissionConfigs;
-
-      this.pageState.next('edit');
+      if (userId)
+        this.router.navigate([navRoute.editUser.link.replace('{0}', userId)]);
     });
   }
 
   savePermission() {
     if (!this.userForm.valid) {
       this.snackbarService.openSnackBarAsText('Invalid Form');
+      this.userForm.markAllAsTouched();
       return;
     }
     const formValue = this.userForm.getRawValue();
@@ -458,29 +426,20 @@ export class UserProfileComponent implements OnInit {
       permissionConfigs.push(permission);
     });
 
-    this.value = { ...formValue, permissionConfigs };
-
     const data = this._managePermissionService.modifyPermissionDetailsForEdit(
-      this.value,
-      this.departments
+      { ...formValue, permissionConfigs },
+      this.departments.map(({ label, value, ...rest }) => ({ ...rest }))
     );
 
-    const handleError = (error) => {
-      this.snackbarService
-        .openSnackBarWithTranslate(
-          {
-            translateKey: `messages.error.${error?.type}`,
-            priorityMessage: error?.message,
-          },
-          ''
-        )
-        .subscribe();
+    const userProfileData = this._managePermissionService.modifyUserDetailsForEdit(formValue);
+
+    const handleError = (error) => { 
       this.isUpdatingPermissions = false;
     };
 
     const handleSuccess = (res) => {
       this.snackbarService.openSnackBarAsText(
-        this.hasPageState('add')
+        this.hasPageState('addNewUser')
           ? 'User Added Successfully'
           : 'User Edited Successfully',
         '',
@@ -489,44 +448,48 @@ export class UserProfileComponent implements OnInit {
         }
       );
       this.isUpdatingPermissions = false;
-      this.pageState.next('view');
+      this.router.navigate([navRoute.userProfile.link]);
     };
 
     this.isUpdatingPermissions = true;
 
-    if (this.pageState.value === 'add')
+    if(this.state === 'userProfile'){
       this._managePermissionService
-        .addNewUser(this._userService.getLoggedInUserid(), {
+      .editUserDetails({
+        ...userProfileData,
+        status: true,
+        userId: this._userService.getLoggedInUserId()
+      })
+      .subscribe(handleSuccess ,handleError)
+      this.isEdited = false;
+    }
+
+    if (this.state === 'addNewUser')
+      this._managePermissionService
+        .addNewUser(this._userService.getLoggedInUserId(), {
           ...data,
           status: true,
         })
         .subscribe(handleSuccess, handleError);
 
-    if (this.pageState.value === 'edit')
+    if (this.state === 'editUser')
       this._managePermissionService
         .updateUserDetailsById({
           ...data,
-          parentId: this._userService.getLoggedInUserid(),
+          status: true,
+          parentId: this._userService.getLoggedInUserId(),
         })
         .subscribe(handleSuccess, handleError);
   }
 
   addUser() {
-    this.pageState.next('add');
+    this.router.navigate([navRoute.addNewUser.link]);
   }
 
   handleManage(event) {
-    if (this.pageState.value === 'view') {
+    if (this.state === 'userProfile') {
       event.stopPropagation();
       event.preventDefault();
-    }
-  }
-
-  goBack() {
-    if (this.pageState.value !== 'view') {
-      this.pageState.next('view');
-    } else {
-      this._location.back();
     }
   }
 }

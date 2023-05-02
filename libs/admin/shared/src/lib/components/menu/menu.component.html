@@ -1,0 +1,59 @@
+<button
+  mat-icon-button
+  [matMenuTriggerFor]="menu"
+  aria-label="Select Topic button"
+>
+  <mat-icon
+    [ngClass]="{
+      rotate: alignment === 'horizontal'
+    }"
+  >
+    more_vert
+  </mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <button
+    mat-menu-item
+    *ngFor="let item of menuItems; let i = index"
+    (click)="
+      type === 'checkbox'
+        ? handleItemSelection($event, item)
+        : handleClick($event, item)
+    "
+    [ngClass]="{
+      'border-bottom': i < menuItems.length - 1
+    }"
+    [ngStyle]="{
+      color:
+        selectedItems.includes(item.value) ||
+        selectedItems.length == menuItems.length - 1
+          ? '#5e37f8'
+          : 'unset',
+      borderBottom:
+        i < menuItems.length - 1 ? '1px solid rgb(112, 112, 112,0.2)' : 'none'
+    }"
+  >
+    {{ item.label }}
+    <mat-icon
+      *ngIf="type === 'checkbox'"
+      class="empty"
+      [style.display]="
+        selectedItems.includes(item.value) ||
+        selectedItems.length == menuItems.length - 1
+          ? 'none'
+          : 'unset'
+      "
+      >check_box_outline_blank</mat-icon
+    >
+    <mat-icon
+      *ngIf="type === 'checkbox'"
+      [style.display]="
+        selectedItems.includes(item.value) ||
+        selectedItems.length == menuItems.length - 1
+          ? 'unset'
+          : 'none'
+      "
+      >check_box</mat-icon
+    >
+  </button>
+</mat-menu>

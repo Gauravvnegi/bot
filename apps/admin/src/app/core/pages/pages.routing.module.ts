@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
+import { ViewSharedComponentsComponent } from 'libs/admin/shared/src/lib/components/view-shared-components/view-shared-components.component';
+import { environment } from '../../../environments/environment';
 import { CanLoadGuard } from '../guards/can-load-gurad';
 import { RedirectGuard } from '../guards/redirect-guard';
 import { PagesComponent } from './containers/pages/pages.component';
@@ -20,6 +22,7 @@ const appRoutes: Route[] = [
     resolve: {
       adminDetails: AdminDetailResolver,
     },
+    canLoad: [CanLoadGuard],
     children: [
       {
         path: 'home',
@@ -76,6 +79,14 @@ const appRoutes: Route[] = [
         loadChildren: () =>
           import('@hospitality-bot/admin/subscription').then(
             (m) => m.AdminSubscriptionModule
+          ),
+        canLoad: [CanLoadGuard],
+      },
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/settings').then(
+            (m) => m.AdminSettingsModule
           ),
         canLoad: [CanLoadGuard],
       },
@@ -142,6 +153,16 @@ const appRoutes: Route[] = [
     ],
   },
 ];
+
+/**
+ * To view all the shared components for development
+ */
+if (!environment.production) {
+  appRoutes[1].children.unshift({
+    path: 'components',
+    component: ViewSharedComponentsComponent,
+  });
+}
 
 @NgModule({
   imports: [RouterModule.forChild(appRoutes)],

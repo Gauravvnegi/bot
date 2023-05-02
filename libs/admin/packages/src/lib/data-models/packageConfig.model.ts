@@ -87,6 +87,7 @@ export enum PackageSource {
 }
 
 export interface IpackageOptions {
-  key: string;
+  key?: string;
+  label?: string;
   value: string;
 }

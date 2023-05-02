@@ -1,5 +1,3 @@
-export type TableValue = 'room' | 'roomType';
-
 export type AddRoomTypes = 'single' | 'multiple';
 
 export type QueryConfig = {
@@ -7,8 +5,8 @@ export type QueryConfig = {
 };
 
 export type RoomTypeOption = {
-  id: string;
   label: string;
+  value: string;
   price: number;
   currency: string;
 };

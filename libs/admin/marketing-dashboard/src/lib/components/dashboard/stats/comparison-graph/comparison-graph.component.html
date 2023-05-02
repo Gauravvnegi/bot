@@ -1,10 +1,14 @@
 <div class="sentAnalytics">
-  <div class="analyticsHeading">
+  <div
+    class="analyticsHeading"
+    *skeleton="loading; height: '25px'; width: '200px'"
+  >
     <p>{{ title | translate }}</p>
   </div>
   <div class="line-chart">
     <canvas
       baseChart
+      *skeleton="loading; height: '30vw'; width: '100%'; margin: '10px 0 0 0'"
       class="canvas"
       [datasets]="charts.chartData"
       [labels]="charts.chartLabels"
@@ -15,16 +19,25 @@
     >
     </canvas>
   </div>
-
   <div class="stat-labels-container">
-    <div
-      class="stat-label"
-      (click)="legendOnClick(legendIndex)"
-      *ngFor="let legend of legendData; let legendIndex = index"
+    <ng-container
+      *skeleton="
+        loading;
+        height: '28px';
+        width: '115px';
+        margin: '0 10px 0 0';
+        repeat: 2
+      "
     >
-      <input class="legends" type="checkbox" />
-      <img src="{{ legend.src }}" alt="{{ legend.label }}" />
-      <p class="stat-label-title">{{ legend.label }}</p>
-    </div>
+      <div
+        class="stat-label"
+        (click)="legendOnClick(legendIndex)"
+        *ngFor="let legend of legendData; let legendIndex = index"
+      >
+        <input class="legends" type="checkbox" />
+        <img src="{{ legend.src }}" alt="{{ legend.label }}" />
+        <p class="stat-label-title">{{ legend.label }}</p>
+      </div>
+    </ng-container>
   </div>
 </div>

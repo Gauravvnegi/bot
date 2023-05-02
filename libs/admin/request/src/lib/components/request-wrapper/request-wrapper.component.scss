@@ -1,48 +1,52 @@
 @import 'main';
 
 :host ::ng-deep .mat-tab-label {
-  min-width: 6rem !important;
+  min-width: 5rem !important;
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $dark-blue;
   font-size: 14px;
   font-weight: bold;
 }
 .request-wrapper-header {
-  height: 65px;
   padding: 10px 42px 10px 15px;
   background-color: $white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   @media (max-width: $tablet) {
-    @include margin(0);
+    margin: 0;
   }
   &-btnwrap {
     display: flex;
-    &-btn {
-      @include primaryButton();
-      width: 142px;
+
+    .guestInfoEditContainer {
+      width: 138px;
       height: 36px;
-      padding: 8px 18px 8.2px 18.3px;
+      background: $primary-cta 0% 0% no-repeat padding-box;
+      border: 1px solid $borderCol;
+      border-radius: 10px;
+      opacity: 1;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       cursor: pointer;
       &-name {
-        font-family: Roboto;
         font-size: 11px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
         letter-spacing: 0.66px;
         text-align: left;
         color: $white;
       }
       img {
         filter: brightness(0) invert(1);
+        margin-right: 10px;
+      }
+
+      .guestInfoEditText {
+        font: normal normal normal 11px/15px Roboto;
+        letter-spacing: 0.66px;
+        color: $white;
+        opacity: 1;
       }
     }
   }
@@ -53,14 +57,14 @@
   height: calc(100vh - 182px);
   display: flex;
   @media (max-width: $tablet) {
-    @include width(100%);
-    @include margin-left(0);
-    @include margin-top(15px);
+    width: 100%;
+    margin-left: 0;
+    margin-top: 15px;
   }
   &-left {
-    width: 27%;
+    width: 26%;
     @media (max-width: 1180px) {
-      @include width(35%);
+      width: 35%;
     }
     position: relative;
     .blackscreen {
@@ -69,14 +73,14 @@
       width: 100%;
       opacity: 0.3;
       background-color: $black;
-      z-index: 4;
+      z-index: 200;
       display: none;
     }
   }
   &-right {
     width: calc(100% - 337px);
     @media (max-width: $tablet) {
-      @include width(100%);
+      width: 100%;
     }
     position: relative;
     .blackscreen {
@@ -85,7 +89,7 @@
       width: 100%;
       opacity: 0.3;
       background-color: $black;
-      z-index: 4;
+      z-index: 200;
       display: none;
     }
   }
@@ -101,7 +105,7 @@
 
 ::ng-deep .mat-tab-labels {
   @media (max-width: $tablet) {
-    @include height(63px);
+    height: 63px;
     align-items: center;
   }
 }

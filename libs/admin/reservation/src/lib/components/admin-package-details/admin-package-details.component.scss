@@ -2,52 +2,37 @@
 
 .service__wrapper {
   .heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @include flex-space-between-cen-Algn;
     margin-top: 15px;
     .go-to-package {
-      font-weight: 500;
-      color: $primary-gray;
+      font-weight: $medium;
+      color: $grayMedium;
     }
   }
   &--images-wrapper {
-    display: flex;
     margin: 25px 0px;
-    flex-wrap: wrap;
-    justify-content: center;
-    // align-items: center;
+    @include flex-justify-center-wrap;
     .img-with-text {
       width: 25%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: $font18;
+      @include flex-col-center-algn;
+      font-size: 18px;
       font-weight: $bold;
     }
 
     .img-with-text {
       .image {
         border-radius: 50%;
-        background-color: $c-gray-102;
-        padding: $padding15;
+        background-color: $borderCol;
+        padding: 15px;
         padding-bottom: 10px;
         img {
           height: 51px;
           width: 51px;
           border-radius: 50%;
         }
-        // &:hover {
-        //   cursor: pointer;
-        //   background-color: $primary-purple;
-        //   .hotel-services-images {
-        //     filter: invert(0%) sepia(100%) saturate(2%) hue-rotate(35deg)
-        //       brightness(126%) contrast(101%);
-        //   }
-        // }
       }
       p {
-        margin-top: $margin20;
+        margin-top: 20px;
         text-align: center;
       }
     }
@@ -56,33 +41,29 @@
 
 .data-seperator {
   border: none;
-  margin: $margin20 0px;
+  margin: 20px 0px;
   // opacity: 0.1;
-  background: $light-grey;
+  background: $grayLight;
   height: 1px;
 }
 
 .package-label {
-  color: $dark-blue;
+  color: $secondary;
+  @include normal-text;
   font-weight: 600;
-  letter-spacing: 0.96px;
-  font-size: 16px;
 }
 
 .special-request-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @include flex-space-between-cen-Algn;
   margin: 20px 0;
   .text {
-    font-size: $font14;
+    font-size: 14px;
     color: $primary-black;
   }
   .images {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     button {
-      margin: 0 $margin10;
+      margin: 0 10px;
       border: none;
       outline: none;
       background: transparent;
@@ -96,5 +77,5 @@
 :host ::ng-deep .mat-expansion-panel {
   margin-top: 20px !important;
   box-shadow: none;
-  border: solid 1px $light-grey;
+  border: solid 1px $grayLight;
 }

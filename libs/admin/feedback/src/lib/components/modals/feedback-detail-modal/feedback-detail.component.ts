@@ -124,17 +124,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
             response,
             `Feedback_export_${new Date().getTime()}.csv`
           );
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        }
       )
     );
   }
@@ -162,17 +152,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           this.cardService.$assigneeChange.next({ status: true });
           this.refreshFeedbackData();
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => { }
       );
   }
 
@@ -228,17 +208,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           this.feedbackFG.patchValue({ comment: '' });
           this.refreshFeedbackData();
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => { }
       );
   }
 
@@ -322,16 +292,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
           link.click();
           link.remove();
         },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        ({ error }) =>{}
       )
     );
   }
@@ -357,18 +318,7 @@ export class FeedbackDetailModalComponent implements OnInit, OnDestroy {
                 { panelClass: 'success' }
               )
               .subscribe();
-          },
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
-        )
+          })
     );
   }
 

@@ -96,6 +96,12 @@ export const ADMIN_ROUTES = [
         children: null,
         url: 'assets/svg/Analytics.svg',
       },
+      {
+        path: 'heda/sentimental-analysis',
+        title: 'Sentimental Analysis',
+        children: null,
+        url: 'assets/svg/Analytics.svg',
+      },
     ],
   },
   {
@@ -129,7 +135,7 @@ export const ADMIN_ROUTES = [
     url: 'assets/svg/library.svg',
     children: [
       {
-        path: 'library/package',
+        path: 'library/packages',
         title: 'Packages',
         children: null,
         url: 'assets/svg/box.svg',

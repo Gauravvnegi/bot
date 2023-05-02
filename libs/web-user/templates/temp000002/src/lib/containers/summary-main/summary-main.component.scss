@@ -3,10 +3,10 @@
 .summary-wrapper {
   background-color: $white;
   margin: 40px;
-  border-radius: $border-radius-medium;
+  border-radius: 15px;
   padding: 25px;
   &-header {
-    @include flex-space-between();
+    @include flex-space-between;
     align-items: center;
     &-equi-width {
       width: 33%;

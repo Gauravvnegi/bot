@@ -15,8 +15,8 @@
     }
   }
 
-  @include flex-between-center();
-  @include display-block-on-breakpoint($M);
+  @include flex-between-center;
+  @include displayBlockOnBreakPoint($M);
   @media only screen and (max-width: $M) {
     flex-direction: column;
     justify-content: inherit;
@@ -29,7 +29,7 @@
   }
 }
 
-.enter-below-details{
+.enter-below-details {
   padding-top: 60px;
   border-top: solid 2px $border-color;
   padding-bottom: 20px;

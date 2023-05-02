@@ -17,15 +17,14 @@
           !getDepartmentAllowed ||
           !feedbackStatusFG.get('comment')?.value?.length
       }"
-      class="example-list-status">
+      class="example-list-status"
+    >
       <div class="example-list-status_text" (click)="updateStatus()">
         {{ type }}
       </div>
     </div>
     <div class="example-list-horizontalLine"></div>
-    <div
-    class="example-list-viewDetails"
-      (click)="openDetailPage($event)">
+    <div class="example-list-viewDetails" (click)="openDetailPage($event)">
       {{ 'viewDetail' | translate }}
     </div>
   </div>

@@ -1,106 +1,101 @@
-<div class="fields">
-  <ng-container *ngIf="!viewMode; else viewModeContent">
-    <div class="field full-width">
-      <mat-label class="mat-label">{{ 'content.add' | translate }} :</mat-label>
-      <div
-        class="ck-editor"
-        *ngIf="campaignFG?.get('message')?.value; else createTemplate"
-      >
-        <div class="info-container" *ngIf="campaignDetails">
-          <div>
-            {{ campaignDetails.templateName }}
-          </div>
-          <div>{{ campaignDetails.topicName }}</div>
+<ng-container *ngIf="!viewMode; else viewModeContent">
+  <div class="field full-width">
+    <div class="one-fourth">{{ 'content.add' | translate }} :</div>
+    <div
+      class="ck-editor one-third-width"
+      *ngIf="campaignFG?.get('message')?.value; else createTemplate"
+    >
+      <div class="info-container" *ngIf="campaignDetails">
+        <div>
+          {{ campaignDetails.templateName }}
         </div>
-        <div class="ck-editor__container">
-          <ng-container [ngSwitch]="currentMode">
-            <ng-container *ngSwitchCase="'backdrop'">
-              <hospitality-bot-template-editor
-                [parentFG]="campaignFG"
-                [name]="'message'"
-                [template]="template"
-                [hybrid]="false"
-              ></hospitality-bot-template-editor>
-              <div class="controls">
-                <div class="btn">
-                  <img
-                    [src]="campaignConfiguration.images.view.url"
-                    [alt]="campaignConfiguration.images.view.alt"
-                    (click)="changeMode('view')"
-                  />
-                </div>
-                <div class="btn">
-                  <img
-                    [src]="campaignConfiguration.images.edit.url"
-                    [alt]="campaignConfiguration.images.edit.alt"
-                    (click)="changeMode('edit')"
-                  />
-                </div>
-                <div class="btn">
-                  <img
-                    [src]="campaignConfiguration.images.delete.url"
-                    [alt]="campaignConfiguration.images.delete.alt"
-                    (click)="deleteContent()"
-                  />
-                </div>
+        <div>{{ campaignDetails.topicName }}</div>
+      </div>
+      <div class="ck-editor__container">
+        <ng-container [ngSwitch]="currentMode">
+          <ng-container *ngSwitchCase="'backdrop'">
+            <hospitality-bot-template-editor
+              [parentFG]="campaignFG"
+              [name]="'message'"
+              [template]="template"
+              [hybrid]="false"
+            ></hospitality-bot-template-editor>
+            <div class="controls">
+              <div class="btn">
+                <img
+                  [src]="campaignConfiguration.images.view.url"
+                  [alt]="campaignConfiguration.images.view.alt"
+                  (click)="changeMode('view')"
+                />
               </div>
-            </ng-container>
-            <ng-container *ngSwitchCase="'view'">
-              <hospitality-bot-template-editor
-                [parentFG]="campaignFG"
-                [name]="'message'"
-                [template]="template"
-                [disabled]="true"
-              ></hospitality-bot-template-editor>
-            </ng-container>
-            <ng-container *ngSwitchCase="'edit'">
-              <hospitality-bot-template-editor
-                [parentFG]="campaignFG"
-                [name]="'message'"
-                [template]="template"
-              ></hospitality-bot-template-editor>
-            </ng-container>
+              <div class="btn">
+                <img
+                  [src]="campaignConfiguration.images.edit.url"
+                  [alt]="campaignConfiguration.images.edit.alt"
+                  (click)="changeMode('edit')"
+                />
+              </div>
+              <div class="btn">
+                <img
+                  [src]="campaignConfiguration.images.delete.url"
+                  [alt]="campaignConfiguration.images.delete.alt"
+                  (click)="deleteContent()"
+                />
+              </div>
+            </div>
           </ng-container>
-        </div>
-      </div>
-      <ng-template #createTemplate>
-        <div class="add-content">
-          <div>
-            <img
-              [src]="campaignConfiguration.images.preview.url"
-              [alt]="campaignConfiguration.images.preview.alt"
-            />
-          </div>
-          <div class="add-content__btn" (click)="openAddContent()">
-            {{ 'content.add' | translate }}
-          </div>
-        </div>
-      </ng-template>
-    </div>
-  </ng-container>
-  <ng-template #viewModeContent>
-    <div class="field full-width">
-      <mat-label class="mat-label">
-        {{ 'content.view' | translate }} :</mat-label
-      >
-      <div class="ck-editor">
-        <div class="info-container" *ngIf="campaignDetails">
-          <div>
-            {{ campaignDetails.templateName }}
-          </div>
-          <div>{{ campaignDetails.topicName }}</div>
-          <!-- <div>{{ campaignDetails | json }}</div> -->
-        </div>
-        <div class="ck-editor__container">
-          <hospitality-bot-template-editor
-            [parentFG]="campaignFG"
-            [name]="'message'"
-            [template]="template"
-            [disabled]="true"
-            [hybrid]="false"
-          ></hospitality-bot-template-editor>
-        </div>
+          <ng-container *ngSwitchCase="'view'">
+            <hospitality-bot-template-editor
+              [parentFG]="campaignFG"
+              [name]="'message'"
+              [template]="template"
+              [disabled]="true"
+            ></hospitality-bot-template-editor>
+          </ng-container>
+          <ng-container *ngSwitchCase="'edit'">
+            <hospitality-bot-template-editor
+              [parentFG]="campaignFG"
+              [name]="'message'"
+              [template]="template"
+            ></hospitality-bot-template-editor>
+          </ng-container>
+        </ng-container>
       </div>
     </div>
-  </ng-template>
-</div>
+    <ng-template #createTemplate>
+      <div class="add-content">
+        <div>
+          <img
+            [src]="campaignConfiguration.images.preview.url"
+            [alt]="campaignConfiguration.images.preview.alt"
+          />
+        </div>
+        <div class="add-content__btn" (click)="openAddContent()">
+          {{ 'content.add' | translate }}
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</ng-container>
+<ng-template #viewModeContent>
+  <div class="field full-width">
+    <div class="one-fourth">{{ 'content.view' | translate }} :</div>
+    <div class="ck-editor one-third-width">
+      <div class="info-container" *ngIf="campaignDetails">
+        <div>
+          {{ campaignDetails.templateName }}
+        </div>
+        <div>{{ campaignDetails.topicName }}</div>
+      </div>
+      <div class="ck-editor__container">
+        <hospitality-bot-template-editor
+          [parentFG]="campaignFG"
+          [name]="'message'"
+          [template]="template"
+          [disabled]="true"
+          [hybrid]="false"
+        ></hospitality-bot-template-editor>
+      </div>
+    </div>
+  </div>
+</ng-template>

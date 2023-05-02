@@ -2,7 +2,7 @@
 .stat-title {
   font: normal normal bold 16px/19px Roboto;
   letter-spacing: 0.96px;
-  color: $dark-blue;
+  color: $secondary;
   opacity: 1;
   @media (max-width: 1024px) {
     font-size: 12px;
@@ -30,17 +30,17 @@
     .val {
       font: normal normal bold 25px/29px Roboto;
       letter-spacing: 1.5px;
-      color: $dark-blue;
+      color: $secondary;
       opacity: 1;
     }
     .label {
       font: normal normal bold 12px/14px Roboto;
       letter-spacing: 0.72px;
-      color: $quote-color;
+      color: $subtitle;
       text-align: center;
       width: 80px;
       opacity: 1;
-      color: $note1;
+      color: $grayLight;
     }
   }
 }
@@ -64,20 +64,20 @@
       background: $initiated-2 0% 0% no-repeat padding-box;
     }
     .pending {
-      background: $pending-2 0% 0% no-repeat padding-box;
+      background: #38649f 0% 0% no-repeat padding-box;
     }
     .accepted {
-      background: $accepted 0% 0% no-repeat padding-box;
+      background: $success-stated 0% 0% no-repeat padding-box;
     }
     .rejected {
-      background: $rejected 0% 0% no-repeat padding-box;
+      background: $mediumRed 0% 0% no-repeat padding-box;
     }
     .stat-lable {
       padding-left: 10px;
       text-align: left;
       font: normal normal normal 12px/14px Roboto;
       letter-spacing: 0.72px;
-      color: $quote-color;
+      color: $subtitle;
       opacity: 1;
       @media (max-width: 1024px) {
         font-size: 10px;
@@ -88,12 +88,12 @@
     text-align: right;
     font: normal normal bold 12px/14px Roboto;
     letter-spacing: 0.72px;
-    color: $primary-purple;
+    color: $primary-cta;
     opacity: 1;
 
     span {
       font-weight: normal;
-      color: $comparison-positive;
+      color: $posCompare;
     }
   }
 }
@@ -102,7 +102,7 @@
   width: 100%;
   text-align: center;
   background-color: $white;
-  color: $c-gray-72;
+  color: $grayLight;
   position: relative;
   z-index: 1;
   display: block;
@@ -119,16 +119,15 @@
     height: 0.5px;
     top: 50%;
     left: 0%;
-    background-color: $c-gray-72;
+    background-color: $grayLight;
     transform: translateY(-50%);
     z-index: -1;
   }
 }
 .comparison-negative {
-  color: $comparison-negative;
+  color: $darkRed;
 }
 
 .comparison-positive {
-  color: $comparison-positive;
+  color: $posCompare;
 }
-

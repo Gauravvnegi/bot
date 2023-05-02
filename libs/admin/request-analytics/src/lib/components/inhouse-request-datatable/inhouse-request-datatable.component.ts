@@ -93,33 +93,33 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
-          this.values = new InhouseTable().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
           if (this.tabFilterItems[this.tabFilterIdx].chips.length === 1)
             this.addQuickReplyFilter(data.entityStateCounts, this.totalRecords);
           else this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
   }
 
+  setRecords(data): void {
+    this.values = new InhouseTable().deserialize(data)?.records;
+    this.updateTabFilterCount(data?.entityTypeCounts, data.total);
+    this.updateTotalRecords();
+    this.loading = false;
+  }
+
   addQuickReplyFilter(entityStateCounts, total) {
-    this.tabFilterItems[this.tabFilterIdx].chips[0].total = total;
+    this.tabFilterItems[this.tabFilterIdx].chips[0].total = Number(
+      Object.values(entityStateCounts).reduce(
+        (a: number, b: number) => a + b,
+        0
+      )
+    );
     Object.keys(entityStateCounts).forEach((key) =>
       this.tabFilterItems[this.tabFilterIdx].chips.push({
         label: key,
@@ -138,22 +138,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
       .map((item) => ({
         actionType: item.value,
       }));
-  }
-
-  updateTabFilterCount(countObj, currentTabCount) {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => (tab.total = countObj[tab.value]));
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  updateQuickReplyFilterCount(countObj) {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach(
-        (chip) => (chip.total = countObj[chip.value])
-      );
-    }
   }
 
   fetchDataFrom(
@@ -185,25 +169,11 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = new InhouseTable().deserialize(data).records;
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          //set pagination
-          this.totalRecords = data.total;
-          //check for update tabs and quick reply filters
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -253,15 +223,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -283,8 +244,9 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         },
       ]),
     };
-    this.analyticsService.closeRequest(config, requestData).subscribe(
-      (response) => {
+    this.analyticsService
+      .closeRequest(config, requestData)
+      .subscribe((response) => {
         this.loadInitialData(
           [
             ...this.globalQueries,
@@ -310,18 +272,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           '',
           { panelClass: 'success' }
         );
-      },
-      ({ error }) =>
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe()
-    );
+      });
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {

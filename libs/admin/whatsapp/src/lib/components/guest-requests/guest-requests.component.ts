@@ -66,16 +66,7 @@ export class GuestRequestsComponent implements OnChanges {
         ({ error }) => {
           this.requestFG.patchValue({
             [request.id]: request.action,
-          });
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          }); 
         }
       );
       return;
@@ -104,16 +95,7 @@ export class GuestRequestsComponent implements OnChanges {
         ({ error }) => {
           this.requestFG.patchValue({
             [request.id]: request.action,
-          });
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          }); 
         }
       );
   }

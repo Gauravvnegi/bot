@@ -57,9 +57,8 @@ export class HotelBranch implements IDeserializable {
     Object.assign(
       this,
       set({}, 'name', get(input, ['name'])),
-      set({}, 'value', get(input, ['id'])),
       set({}, 'id', get(input, ['id'])),
-      set({}, 'value', get(input, ['id'])),
+      set({}, 'value', get(input, ['name'])),
       set({}, 'label', get(input, ['name'])),
       set({}, 'logoUrl', get(input, ['logo'])),
       set({}, 'headerBgColor', get(input, ['bgColor'])),

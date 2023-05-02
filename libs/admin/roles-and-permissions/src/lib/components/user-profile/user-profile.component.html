@@ -17,10 +17,7 @@
     ></hospitality-bot-custom-file-upload>
 
     <div *ngIf="hasPageState('userProfile')">
-      <div
-        class="member-container"
-        *ngIf= "!!totalTeamMember"
-      >
+      <div class="member-container" *ngIf="!!totalTeamMember">
         <div class="label">Team</div>
         <div class="member" (click)="openTableModal()">
           <div *ngFor="let item of teamMember; let index = index">
@@ -43,13 +40,17 @@
         *ngIf="!totalTeamMember && !isLoading"
         class="all-user one-third-width"
         (click)="openTableModal()"
-        >
+      >
         View All Users
       </div>
     </div>
 
-    <div class="one-third-width managed-by" *ngIf="hasPageState('addNewUser') && userToModDetails">
-      Manage  By:  {{ userToModDetails.firstName }}  {{ userToModDetails.lastName }},  Admin
+    <div
+      class="one-third-width managed-by"
+      *ngIf="hasPageState('addNewUser') && userToModDetails"
+    >
+      Manage By: {{ userToModDetails.firstName }}
+      {{ userToModDetails.lastName }}, Admin
     </div>
     <div class="one-third-width" *ngIf="!userToModDetails"></div>
 
@@ -64,6 +65,10 @@
       controlName="lastName"
       label="Last Name"
     ></hospitality-bot-input>
+
+    <hospitality-bot-phone-number
+      class="one-third-width"
+    ></hospitality-bot-phone-number>
 
     <hospitality-bot-input
       class="one-third-width"
@@ -83,6 +88,20 @@
       label="Job Title"
     ></hospitality-bot-input>
 
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="brandName"
+      [options]="brandNames"
+      label="Brand"
+    ></hospitality-bot-select>
+
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="branchName"
+      [options]="branchNames"
+      label="Hotel"
+    ></hospitality-bot-select>
+
     <hospitality-bot-multi-select
       class="two-third-width"
       controlName="products"
@@ -97,27 +116,12 @@
       label="Departments"
     ></hospitality-bot-multi-select>
 
-    <hospitality-bot-select
-      class="one-third-width"
-      controlName="branchName"
-      [options]="branchNames"
-      label="Hotel"
-    ></hospitality-bot-select>
+    <!-- ****************Permission Wrapper**************** -->
 
-    <hospitality-bot-select
-      class="one-third-width"
-      controlName="brandName"
-      [options]="brandNames"
-      label="Brand"
-    ></hospitality-bot-select>
-
-    <hospitality-bot-phone-number
-      class="third-width"
-    ></hospitality-bot-phone-number>
-
-  <!-- ****************Permission Wrapper**************** -->
-
-    <div class="wrapper-manage-permission full-width" (click)="handleManage($event)">
+    <div
+      class="wrapper-manage-permission full-width"
+      (click)="handleManage($event)"
+    >
       <mat-accordion>
         <mat-expansion-panel [expanded]="!hasPageState('userProfile')">
           <mat-expansion-panel-header>
@@ -132,7 +136,7 @@
               </div>
             </mat-panel-title>
           </mat-expansion-panel-header>
-  
+
           <div *ngIf="userToModDetails?.products" class="tabs">
             <hospitality-bot-tab-group
               [listItems]="tabListItems"
@@ -155,7 +159,8 @@
                 >
                   <p
                     *ngIf="
-                      manageProduct === userPermissionFG.get('productType').value
+                      manageProduct ===
+                      userPermissionFG.get('productType').value
                     "
                     class="left-table-entity"
                     [ngClass]="{ 'color-added': 0 === index % 2 }"
@@ -196,7 +201,8 @@
                   <div
                     formGroupName="{{ userPermissionIdx }}"
                     *ngIf="
-                      manageProduct === userPermissionFG.get('productType').value
+                      manageProduct ===
+                      userPermissionFG.get('productType').value
                     "
                   >
                     <div formGroupName="permissions" class="checkbox-wrapper">
@@ -226,9 +232,7 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
-      <div
-        class="permission-button-wrapper"
-      >
+      <div class="permission-button-wrapper">
         <hospitality-bot-button
           [label]="isUpdatingPermissions ? 'Saving...' : 'Save'"
           (click)="savePermission()"
@@ -238,5 +242,4 @@
       </div>
     </div>
   </div>
-
 </form>

@@ -24,12 +24,13 @@ export const routes = {
   [ModuleNames.FREDDIE]: 'freddie',
   [ModuleNames.CONVERSATION_DASHBOARD]: 'freddie/conversation-analytics',
   [ModuleNames.LIVE_MESSAGING]: 'freddie/messages',
+  [ModuleNames.SENTIMENTAL_ANALYSIS_FREDDIE]: 'freddie/sentimental-analysis',
 
   // Hedda
   [ModuleNames.HEDA]: 'heda',
   [ModuleNames.HEDA_DASHBOARD]: 'heda/analytics',
-  [ModuleNames.SENTIMENTAL_ANALYSIS]: 'heda/sentimental-analysis',
-
+  [ModuleNames.SENTIMENTAL_ANALYSIS_HEDA]: 'heda/sentimental-analysis',
+  
   // eMarkt_IT
   [ModuleNames.EMARK_IT]: 'marketing',
   [ModuleNames.EMARK_IT_DASHBOARD]: 'marketing/analytics',

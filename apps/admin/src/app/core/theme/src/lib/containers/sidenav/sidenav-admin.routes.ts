@@ -82,6 +82,12 @@ export const ADMIN_ROUTES = [
         title: 'Messages',
         url: 'assets/svg/chatting.svg',
       },
+      {
+        path: 'freddie/sentimental-analysis',
+        title: 'Sentimental Analysis',
+        children: null,
+        url: 'assets/svg/Analytics.svg',
+      },
     ],
   },
   {
@@ -101,7 +107,7 @@ export const ADMIN_ROUTES = [
         title: 'Sentimental Analysis',
         children: null,
         url: 'assets/svg/Analytics.svg',
-      },
+      }
     ],
   },
   {

@@ -46,6 +46,7 @@ export const routes = {
   [ModuleNames.PACKAGE]: 'library/package',
   [ModuleNames.SERVICES]: 'library/services',
   [ModuleNames.OFFERS]: 'library/offers',
+  [ModuleNames.BOOKING_SOURCE]: 'library/booking-source',
 
   // Inventory
   [ModuleNames.INVENTORY]: 'inventory',

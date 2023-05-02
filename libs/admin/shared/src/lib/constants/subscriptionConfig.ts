@@ -48,6 +48,7 @@ export enum ModuleNames {
   SERVICES = 'SERVICES',
   OFFERS = 'OFFERS',
   PACKAGE = 'PACKAGE',
+  BOOKING_SOURCE = 'BOOKING_SOURCE',
 
   // Inventory
   INVENTORY = 'INVENTORY',

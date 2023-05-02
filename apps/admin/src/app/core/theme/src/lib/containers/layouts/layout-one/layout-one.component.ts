@@ -8,6 +8,7 @@ import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionCon
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { get } from 'lodash';
 import { Subscription } from 'rxjs';
+import { CookiesSettingsService } from '../../../../../../../../../../../libs/admin/shared/src/index';
 import { layoutConfig } from '../../../constants/layout';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
@@ -69,6 +70,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   unreadCount: number;
   private $firebaseMessagingSubscription = new Subscription();
   isGlobalSearchVisible = true;
+  isSitesAvailable: boolean;
 
   constructor(
     private _router: Router,
@@ -83,7 +85,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private subscriptionPlanService: SubscriptionPlanService,
     private loadingService: LoadingService,
     private notificationService: NotificationService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private cookiesSettingService: CookiesSettingsService
   ) {
     this.initFG();
   }
@@ -171,18 +174,39 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   setInitialFilterValue() {
-    const brand = get(this._hotelDetailService.hotelDetails, ['brands', '0']);
-    const branches = brand?.['branches'];
+    const selectedBranchId = localStorage.getItem('hotelId');
+    const selectedBrandId = this._hotelDetailService.hotelDetails.hotelsBrand[
+      selectedBranchId
+    ];
 
-    // Selecting the last available branch(hotel) in login details
+    const allBrands = this._hotelDetailService.hotelDetails.brands;
+    let brand = get(allBrands, [allBrands.length - 1]);
+    let branches = brand?.['branches'];
     let branch = get(branches, [branches.length - 1]);
 
-    // Updating the branch if it is in local storage
-    const selectedBranch = localStorage.getItem('hotelId');
-    if (selectedBranch) {
-      const currentBranch = branches.find((item) => item.id === selectedBranch);
-      if (currentBranch) branch = currentBranch;
+    if (selectedBranchId && selectedBrandId) {
+      const currentBrand = this._hotelDetailService.hotelDetails.brands.find(
+        (item) => item.id === selectedBrandId
+      );
+
+      const currentBranch = currentBrand.branches?.find(
+        (item) => item.id === selectedBranchId
+      );
+
+      if (currentBranch && currentBrand) {
+        brand = currentBrand;
+        branches = currentBrand?.['branches'];
+        branch = currentBranch;
+      }
     } else localStorage.setItem('hotelId', branch?.['id']);
+
+    // Selected Site logic
+    const sites = this._hotelDetailService.hotelDetails.sites;
+    this.isSitesAvailable = !!sites?.length;
+    const selectedSite = sites.find(
+      (item) => item.hotelBrandId === brand?.['id']
+    );
+    this._hotelDetailService.setSiteId(selectedSite?.id);
 
     this.logoUrl = branch?.['logoUrl'];
     this.bgColor = branch?.['headerBgColor'];
@@ -252,21 +276,35 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   applyFilter(event) {
     const values = event.values;
-    this.filterService.emitFilterValue$.next(values);
-    this.resetFilterCount();
-    this.getFilterCount({ ...values });
-    this.isGlobalFilterVisible = false;
     if (event.token.key) {
+      localStorage.setItem(event.token.key, event.token.value);
+
       const branch = this._hotelDetailService.hotelDetails.brands
         .filter((brand) => brand.id === values.property.hotelName)[0]
         .branches.filter((d) => d.id === values.property.branchName)[0];
       this.filterConfig.branchName = branch.name;
       this.globalFilterService.timezone = this.timezone = branch.timezone;
-      localStorage.setItem(event.token.key, event.token.value);
       this.$firebaseMessagingSubscription.unsubscribe();
       this.initFirebaseMessaging(values.property.branchName);
       this.globalFilterService.hotelId = branch?.['id'];
+      localStorage.setItem('hotelId', branch?.['id']);
+
+      //changing site
+      const siteId = this._hotelDetailService.hotelDetails.sites?.find(
+        (item) => item.hotelBrandId === event.values.property.hotelName
+      )?.id;
+
+      if (siteId && siteId !== this._hotelDetailService.siteId.value) {
+        this._hotelDetailService.setSiteId(siteId);
+        this.cookiesSettingService.$isPlatformCookiesLoaded.next(false);
+        this.cookiesSettingService.initCookiesForPlatform();
+      }
     }
+
+    this.filterService.emitFilterValue$.next(values);
+    this.resetFilterCount();
+    this.getFilterCount({ ...values });
+    this.isGlobalFilterVisible = false;
   }
 
   subMenuItem(data) {

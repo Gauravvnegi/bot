@@ -3,16 +3,42 @@ import { IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class HotelDetails implements IDeserializable {
   hotelAccess;
+  siteAccess: SiteAccess;
   brands;
+  sites: Sites;
+  hotelsBrand: Record<string, string>;
 
   deserialize(input) {
     Object.assign(this, set({}, 'hotelAccess', get(input, ['hotelAccess'])));
+    Object.assign(this, set({}, 'siteAccess', get(input, ['siteAccess'])));
 
     this.brands =
       this.hotelAccess &&
       this.hotelAccess?.chains?.map((brand) =>
         new HotelBrand().deserialize(brand)
       );
+
+    this.hotelsBrand = this.hotelAccess?.chains?.reduce((prev, curr) => {
+      curr.hotels.forEach((item) => {
+        prev[item.id] = curr.id;
+      });
+
+      return prev;
+    }, {});
+
+    this.sites =
+      this.siteAccess?.chains.reduce((prev, curr) => {
+        const sites = curr.hotels.map((item) => {
+          return {
+            name: item.name,
+            id: item.id,
+            hotelBrandId: curr.id,
+            hotelBrandName: curr.name,
+          };
+        });
+
+        return [...prev, ...sites];
+      }, []) ?? [];
     return this;
   }
 }
@@ -57,9 +83,8 @@ export class HotelBranch implements IDeserializable {
     Object.assign(
       this,
       set({}, 'name', get(input, ['name'])),
-      set({}, 'value', get(input, ['id'])),
       set({}, 'id', get(input, ['id'])),
-      set({}, 'value', get(input, ['id'])),
+      set({}, 'value', get(input, ['name'])),
       set({}, 'label', get(input, ['name'])),
       set({}, 'logoUrl', get(input, ['logo'])),
       set({}, 'headerBgColor', get(input, ['bgColor'])),
@@ -73,3 +98,38 @@ export class HotelBranch implements IDeserializable {
     return this;
   }
 }
+
+type Sites = {
+  name: string;
+  id: string;
+  hotelBrandId: string;
+  hotelBrandName: string;
+}[];
+
+type SiteAccess = {
+  chains: {
+    id: string;
+    name: string;
+    hotels: [
+      //hotels is actually a site
+      {
+        id: string;
+        name: string;
+        logo: string;
+        nationality: string;
+        timezone: string;
+        outlets: [];
+        domain: string;
+        address: {
+          id: string;
+          country: string;
+          latitude: string;
+          longitude: string;
+          pincode: string;
+          countryCode: string;
+        };
+        pmsEnable: false;
+      }
+    ];
+  }[];
+};

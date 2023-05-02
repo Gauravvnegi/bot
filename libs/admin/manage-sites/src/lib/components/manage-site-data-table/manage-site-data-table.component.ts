@@ -113,7 +113,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
 
   selectSite(rowData) {
     if (rowData.id && rowData.status !== ManageSiteStatus.DELETE) {
-      this.cookiesSettingService.initPlatformChange(rowData.id, '/pages');
+      this.cookiesSettingService.initPlatformChangeV2(rowData.id, '/pages');
     }
   }
 
@@ -126,7 +126,9 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
     );
 
     togglePopupCompRef.componentInstance.content = {
-      heading: `Mark As ${status.charAt(0).toUpperCase()+status.slice(1).toLowerCase()}`,
+      heading: `Mark As ${
+        status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
+      }`,
       description: [
         `You are about to mark this site ${status}`,
         'Are you Sure?',
@@ -201,8 +203,8 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         label: 'Go to Website Settings',
         onClick: () => {
           this.modalService.close();
-          this.cookiesSettingService.initPlatformChange(
-            hotelId,
+          this.cookiesSettingService.initPlatformChangeV2(
+            hotelId, // siteId
             `/pages/settings/${SettingOptions.WEBSITE_SETTING}`
           );
         },

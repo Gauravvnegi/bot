@@ -125,7 +125,10 @@
       "@hospitality-bot/admin/manage-reservation": [
         "libs/admin/manage-reservation/src/index.ts"
       ],
-      "@hospitality-bot/admin/invoice": ["libs/admin/invoice/src/index.ts"]
+      "@hospitality-bot/admin/invoice": ["libs/admin/invoice/src/index.ts"],
+      "@hospitality-bot/admin/booking-source": [
+        "libs/admin/booking-source/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -102,7 +102,6 @@ export class UserProfileComponent implements OnInit {
       .getUserDetailsById(this.loggedInUserId)
       .subscribe((data) => {
         this.adminToModDetails = new UserConfig().deserialize(data);
-        
         this.products = this.adminToModDetails.products;
         this.departments = this.adminToModDetails.departments.map((item) => ({
           ...item,
@@ -136,7 +135,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   initFormValues() {
-    const { departments, products, ...rest } = this.userToModDetails;
+    const {
+      departments,
+      products,
+      branchName,
+      ...rest
+    } = this.userToModDetails;
 
     this.userForm.patchValue({
       ...rest,
@@ -146,6 +150,8 @@ export class UserProfileComponent implements OnInit {
       ),
       products: products.map((item) => item.value),
       departments: departments.map((item) => item.department),
+      // branchName: branchName.map((item) => item.value),
+      branchName: branchName,
     });
   }
 
@@ -175,6 +181,7 @@ export class UserProfileComponent implements OnInit {
           this.userForm.disable();
           this.userForm.get('firstName').enable();
           this.userForm.get('lastName').enable();
+          this.userForm.get('cc').enable();
           this.userForm.get('phoneNumber').enable();
           this.isFormEdited();
         }
@@ -201,7 +208,7 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  isFormEdited(){
+  isFormEdited() {
     this.userForm.valueChanges.subscribe(() => {
       this.isEdited = true;
     });
@@ -225,7 +232,7 @@ export class UserProfileComponent implements OnInit {
       brandName: ['', Validators.required],
       products: [[], Validators.required],
       departments: [[], Validators.required],
-      branchName: ['', Validators.required],
+      branchName: [[], Validators.required],
       cc: [''],
       phoneNumber: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
@@ -256,7 +263,10 @@ export class UserProfileComponent implements OnInit {
       );
       const branches = currentBrand?.branches;
       if (branches) {
-        this.branchNames = branches;
+        this.branchNames = branches.map((item) => ({
+          label: item.name,
+          value: item.id,
+        }));
         if (this.state !== 'userProfile')
           this.userForm.get('branchName').enable();
       }
@@ -431,9 +441,11 @@ export class UserProfileComponent implements OnInit {
       this.departments.map(({ label, value, ...rest }) => ({ ...rest }))
     );
 
-    const userProfileData = this._managePermissionService.modifyUserDetailsForEdit(formValue);
+    const userProfileData = this._managePermissionService.modifyUserDetailsForEdit(
+      formValue
+    );
 
-    const handleError = (error) => { 
+    const handleError = (error) => {
       this.isUpdatingPermissions = false;
     };
 
@@ -453,14 +465,14 @@ export class UserProfileComponent implements OnInit {
 
     this.isUpdatingPermissions = true;
 
-    if(this.state === 'userProfile'){
+    if (this.state === 'userProfile') {
       this._managePermissionService
-      .editUserDetails({
-        ...userProfileData,
-        status: true,
-        userId: this._userService.getLoggedInUserId()
-      })
-      .subscribe(handleSuccess ,handleError)
+        .editUserDetails({
+          ...userProfileData,
+          status: true,
+          userId: this._userService.getLoggedInUserId(),
+        })
+        .subscribe(handleSuccess, handleError);
       this.isEdited = false;
     }
 

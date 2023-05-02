@@ -32,6 +32,7 @@ export class FormComponent implements OnInit {
   additionalInfo: string = ''; // Info icon text
   subtitle = ''; // subtitle text
   createPrompt: string; // To add cta in dropdown
+  inputPrompt: string; // To add input-save after add cta
   isAutoFocusFilter: boolean = true; // To focus on search input
 
   @Output() onCreate = new EventEmitter(); // createPrompt on click emitter
@@ -201,13 +202,41 @@ export class FormComponent implements OnInit {
     if (!document.getElementById(id) && this.createPrompt) {
       const newDiv = document.createElement('div');
       newDiv.innerText = this.createPrompt;
-      newDiv.addEventListener('click', () => {
-        this.onCreate.emit();
+      newDiv.addEventListener('click', (event: MouseEvent) => {
+        if (!this.inputPrompt) {
+          this.onCreate.emit();
+        } else {
+          event.stopPropagation();
+          this.addCreateInputCta();
+          newDiv.style.display = 'none'
+        }
       });
       newDiv.id = id;
       newDiv.className = 'dropdown-action-cta'; // styling class
       const menu = document.querySelector(`.${this.menuClass}`);
       menu?.parentElement.appendChild(newDiv);
+    }
+  };
+
+  addCreateInputCta = () => {
+    const id = `${this.controlName}-dropdown-input-cta`;
+    if (!document.getElementById(id) && this.createPrompt) {
+      const newDiv = document.createElement('div');
+      newDiv.innerHTML = `<input type="text" id="myInput" placeholder="${this.inputPrompt}"><button id="myButton" onclick="myFunction()">Save</button>`;
+      newDiv.id = id;
+      newDiv.className = 'dropdown-input-action-cta'; // styling class
+      const menu = document.querySelector(`.${this.menuClass}`);
+      menu?.parentElement.appendChild(newDiv);
+
+      const input = document.getElementById('myInput') as HTMLInputElement;
+      const button = document.getElementById('myButton');
+
+      input.addEventListener('click', (event: MouseEvent) => {
+        event.stopPropagation();
+      });
+      button.addEventListener('click', () => {
+        this.onCreate.emit(input.value);
+      });
     }
   };
 

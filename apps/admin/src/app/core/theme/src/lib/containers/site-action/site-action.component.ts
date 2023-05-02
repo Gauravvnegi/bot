@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CookiesSettingsService } from '../../../../../../../../../../libs/admin/shared/src/index';
-import { GlobalFilterService } from '../../services/global-filters.service';
+import {
+  CookiesSettingsService,
+  HotelDetailService,
+} from '../../../../../../../../../../libs/admin/shared/src/index';
 
 @Component({
   selector: 'admin-site-action',
@@ -10,34 +12,36 @@ import { GlobalFilterService } from '../../services/global-filters.service';
 export class SiteActionComponent implements OnInit {
   sites: { label: string; value: string; command: () => void }[];
   selectedSite = '';
+  selectedSiteId: string;
 
   constructor(
     private cookiesSettingService: CookiesSettingsService,
-    private globalFilterService: GlobalFilterService
+    private hotelDetailService: HotelDetailService
   ) {}
 
   ngOnInit(): void {
-    this.sites = this.cookiesSettingService.hotelAccessData?.map(
-      (item, idx) => {
-        return {
-          label: item.siteName,
-          value: item.id,
-          command: () => {
-            this.handleSite(idx);
-          },
-        };
-      }
-    );
+    this.sites = this.hotelDetailService.hotelDetails.sites.map((item, idx) => {
+      return {
+        label: item.name,
+        value: item.id,
+        command: () => {
+          this.handleSite(idx);
+        },
+      };
+    });
 
-    const currSite = this.sites?.find(
-      (site) => site.value === this.globalFilterService.hotelId
-    );
-
-    this.selectedSite = currSite?.label ?? 'Choose site';
+    this.hotelDetailService.siteId.subscribe((siteId) => {
+      const currSite = this.sites?.find((site) => site.value === siteId);
+      this.selectedSite = currSite?.label ?? 'Choose site';
+      this.selectedSiteId = currSite?.value;
+    });
   }
 
   handleSite = (index: number) => {
-    const hotelId = this.sites[index].value;
-    this.cookiesSettingService.initPlatformChange(hotelId);
+    const selectedSite = this.sites[index];
+    const siteId = selectedSite.value;
+
+    if (siteId !== this.selectedSiteId)
+      this.cookiesSettingService.initPlatformChangeV2(siteId);
   };
 }

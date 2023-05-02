@@ -94,7 +94,7 @@ export class RoomsDetails implements IDeserializable {
   rooms;
   totalRooms: number;
   deserialize(input: any) {
-    this.totalRooms = input.rooms.length;
+    this.totalRooms = input.rooms ? input.rooms.length : 0;
     return this;
   }
 }

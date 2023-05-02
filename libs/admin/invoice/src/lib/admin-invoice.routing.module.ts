@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { InvoiceComponent } from './components/invoice/invoice.component';
+import { PreviewComponent } from './components/preview/preview.component';
 import { MainComponent } from './components/main/main.component';
 import { invoiceRoutes } from './constants/routes';
+import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
 
 export const adminInvoiceRoutes: Route[] = [
   {
@@ -17,6 +19,14 @@ export const adminInvoiceRoutes: Route[] = [
         path: `${invoiceRoutes.editInvoice.route}/:id`,
         component: InvoiceComponent,
       },
+      {
+        path: `${invoiceRoutes.previewInvoice.route}/:id`,
+        component: PreviewComponent,
+      },
+      {
+        path: `${invoiceRoutes.paymentHistory.route}/:id`,
+        component: PaymentHistoryComponent,
+      },
     ],
   },
 ];
@@ -26,5 +36,5 @@ export const adminInvoiceRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminInvoiceRoutingModule {
-  static components = [MainComponent, InvoiceComponent];
+  static components = [MainComponent, InvoiceComponent, PreviewComponent, PaymentHistoryComponent];
 }

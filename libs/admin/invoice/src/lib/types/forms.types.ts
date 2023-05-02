@@ -1,4 +1,8 @@
 
+import {
+  Option,
+} from '@hospitality-bot/admin/shared';
+
 export class InvoiceForm {
     invoiceNumber: string;
     confirmationNumber: string;
@@ -7,10 +11,6 @@ export class InvoiceForm {
     invoiceDate: string;
     arrivalDate: string;
     departureDate: string;
-    roomNumber: string;
-    roomType: string;
-    adults: string;
-    children: string;
 
     tableData: PaymentField[];
     currentAmount: number;
@@ -31,10 +31,9 @@ export class InvoiceForm {
     unit: number;
     unitValue: number;
     amount: number;
-    tax: string[];
+    tax: Option[];
     totalAmount: number;
   };
-  
 
 
   

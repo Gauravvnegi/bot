@@ -39,6 +39,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.hotelId = this.globalFilterService.hotelId;
+
     this.registerListeners();
     this.initFG();
   }
@@ -133,7 +135,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
             .subscribe(),
 
         ({ error }) => {
-          this.requestFG.patchValue({ status: this.data.action }); 
+          this.requestFG.patchValue({ status: this.data.action });
         }
       )
     );

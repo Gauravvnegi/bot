@@ -1,24 +1,17 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Observable, Subscription } from 'rxjs';
+import { request } from '../../constants/request';
 import {
   InhouseData,
   InhouseTable,
 } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
-import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
-import { request } from '../../constants/request';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'hospitality-bot-request-list',
@@ -77,6 +70,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForNotification();
+    this.listenForRefreshData();
   }
 
   /**
@@ -157,7 +151,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe((response) => {
         this.listData = new InhouseTable().deserialize(response).records;
-        this.updateTabFilterCount(response.entityStateCounts , response.total);
+        this.updateTabFilterCount(response.entityStateCounts, response.total);
         this.totalData = response.total;
         this.loading = false;
       })
@@ -205,7 +199,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             ).values(),
           ];
         this.totalData = response.total;
-        this.updateTabFilterCount(response.entityStateCounts , response.total);
+        this.updateTabFilterCount(response.entityStateCounts, response.total);
         this.loading = false;
       })
     );

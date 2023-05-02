@@ -87,7 +87,7 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
         (res) => {
-          if (res.status) this._requestService.refreshData.next(res);
+          if (res.load) this._requestService.refreshData.next(res.load);
           raiseRequestCompRef.close();
         }
       )

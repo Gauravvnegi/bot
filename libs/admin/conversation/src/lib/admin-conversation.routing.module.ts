@@ -29,11 +29,12 @@ const appRoutes: CRoutes = [
       },
       {
         path: 'sentimental-analysis',
-        name: ModuleNames.SENTIMENTAL_ANALYSIS,
-        loadChildren: () => 
-         import('@hospitality-bot/admin/sentimental-analysis')
-        .then((m) => m.AdminSentimentalAnalysisModule)
-      }
+        name: ModuleNames.SENTIMENTAL_ANALYSIS_FREDDIE,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/sentimental-analysis').then(
+            (m) => m.AdminSentimentalAnalysisModule
+          ),
+      },
     ],
   },
 ];

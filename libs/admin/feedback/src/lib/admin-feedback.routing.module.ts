@@ -56,7 +56,7 @@ const appRoutes: CRoutes = [
   },
   {
     path: 'sentimental-analysis',
-    name: ModuleNames.SENTIMENTAL_ANALYSIS,
+    name: ModuleNames.SENTIMENTAL_ANALYSIS_HEDA,
     loadChildren: () =>
       import('@hospitality-bot/admin/sentimental-analysis').then(
         (m) => m.AdminSentimentalAnalysisModule

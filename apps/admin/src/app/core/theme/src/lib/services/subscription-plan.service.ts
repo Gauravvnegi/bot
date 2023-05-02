@@ -18,10 +18,9 @@ export class SubscriptionPlanService extends ApiService {
   getSubscriptionPlan(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/subscriptions/`).pipe(
       map((res) => {
-        console.log(res.products);
-        res.products
-          .find((item) => item.name === 'LIBRARY')
-          ?.config.push(customModule.bookingSource);
+        // res.products
+        //   .find((item) => item.name === 'LIBRARY')
+        //   ?.config.push(customModule.bookingSource);
         res.products = [...res.products, ...defaultProduct];
         return res;
       })

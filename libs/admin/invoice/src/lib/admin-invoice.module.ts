@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminInvoiceRoutingModule } from './admin-invoice.routing.module';
 import { InvoiceService } from './services/invoice.service';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ServicesService } from '../../../services/src/lib/services/services.service'
 
 @NgModule({
   imports: [
@@ -13,9 +15,10 @@ import { InvoiceService } from './services/invoice.service';
     AdminSharedModule,
     FormsModule,
     ReactiveFormsModule,
+    AutoCompleteModule,
     AdminInvoiceRoutingModule,
   ],
   declarations: [...AdminInvoiceRoutingModule.components],
-  providers: [InvoiceService],
+  providers: [InvoiceService, ServicesService],
 })
 export class AdminInvoiceModule {}

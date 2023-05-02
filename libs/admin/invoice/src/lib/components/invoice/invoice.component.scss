@@ -36,6 +36,7 @@
 
     .delete-icon {
       height: 30px;
+      cursor: pointer;
     }
   }
 
@@ -70,9 +71,9 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        width: 35%;
+        width: 50%;
         gap: 8px;
-        margin-right: 25px;
+        margin-right: 34px;
       }
     }
   }
@@ -84,7 +85,7 @@
 
 .input-field{
   display: flex;
-  flex-basis: 50%;
+  flex-basis: 35%;
   gap: 15px;
   align-items: center
 }
@@ -92,6 +93,13 @@
 :host ::ng-deep .span-block{  hospitality-bot-button .button{
     min-width: 60px;
   }
+}
+
+:host ::ng-deep .gst-btn{  
+  .button{
+    padding: 0 !important;
+    min-width: 55px !important; 
+  } 
 }
 
 :host ::ng-deep .discount-field{ .main{
@@ -161,4 +169,22 @@
       padding: 0;
     }
   }
+}
+
+.payment-method{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  .view-history-btn{
+    @include flex-item-center;
+  }
+}
+
+.gst-btn{
+  margin-top: -30px;
+}
+
+.line {
+  border-top: 1.8px solid black;
+  opacity: 0.25;
 }

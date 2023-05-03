@@ -4,5 +4,5 @@ export const environment = {
   ...defaultEnvironment,
   production: true,
   name: 'staging',
-  base_url: 'https://stageapi.botshot.in:8443',
+  base_url: 'https://stg.api.botshot.ai:32646',
 };

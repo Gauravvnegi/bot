@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   name: 'default',
-  base_url: 'https://testapi.botshot.in:32313',
+  base_url: 'https://testapi.botshot.in:8443',
   // base_url: 'https://api.botshot.in:8443',
   firebase: {
     apiKey: 'AIzaSyBVotX7FRNCpG7WakjyDnxnUmgYDerLyHI',

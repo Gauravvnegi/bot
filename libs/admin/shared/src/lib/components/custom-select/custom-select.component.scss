@@ -88,3 +88,7 @@
   height: 1.5em;
   position: absolute;
 }
+
+:host ::ng-deep .wrapper{
+  border: none !important;
+}

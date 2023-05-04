@@ -37,7 +37,7 @@
         (selectedTabChange)="onSelectedTabFilterChange($event)"
       ></hospitality-bot-tab-group>
       <form [formGroup]="useForm">
-        <div *ngIf="selectedService == 'PAID'">
+        <ng-container *ngIf="selectedService == 'PAID'">
           <hospitality-bot-custom-select
             formControlName="paidAmenities"
             [itemList]="paidServices"
@@ -45,9 +45,10 @@
             (loadMoreData)="loadMore()"
             [noMoreData]="noMorePaidServices || disablePagination"
             [noRecordsAction]="noRecordAction"
+            [loading]="loading || isPaidLoading"
           ></hospitality-bot-custom-select>
-        </div>
-        <div *ngIf="selectedService == 'COMPLIMENTARY'">
+        </ng-container>
+        <ng-container *ngIf="selectedService == 'COMPLIMENTARY'">
           <hospitality-bot-custom-select
             formControlName="complimentaryAmenities"
             [itemList]="compServices"
@@ -55,11 +56,19 @@
             (loadMoreData)="loadMore()"
             [noMoreData]="noMoreCompServices || disablePagination"
             [noRecordsAction]="noRecordAction"
+            [loading]="loading || isCompLoading"
           ></hospitality-bot-custom-select>
-        </div>
+        </ng-container>
       </form>
     </div>
-    <div class="footer-buttons">
+    <div
+      class="footer-buttons"
+      *ngIf="
+        !loading ||
+        isPaidLoading ||
+        (isCompLoading && (compServices.length || paidServices.length))
+      "
+    >
       <hospitality-bot-button
         (onClick)="resetForm()"
         label="Reset"

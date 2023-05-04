@@ -82,18 +82,18 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
     this.$subscription.add(
       forkJoin([
-        this.subscriptionService.getSubscriptionUsage(hotelId, config),
+        // this.subscriptionService.getSubscriptionUsage(hotelId, config),
         this.subscriptionService.getSubscriptionUsagePercentage(
           hotelId,
           config
         ),
       ]).subscribe((response) => {
         this.loading = false;
-        this.planUsageChartData = new PlanUsageCharts().deserialize(
-          response[0]
-        );
+        // this.planUsageChartData = new PlanUsageCharts().deserialize(
+        //   response[0]
+        // );
         this.planUsagePercentage = new PlanUsagePercentage().deserialize(
-          response[1]
+          response[0]
         );
       })
     );

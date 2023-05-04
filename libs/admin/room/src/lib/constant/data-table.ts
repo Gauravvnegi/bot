@@ -139,49 +139,38 @@ export const cols: Record<TableValue, Cols[]> = {
     {
       field: 'name',
       header: 'Type',
-
       sortType: 'string',
-
       width: '14%',
     },
     {
       field: 'area',
       header: 'Area',
-
       sortType: 'number',
-
       width: '13%',
     },
     {
       field: 'roomCount',
       header: 'Room Count',
-
       sortType: 'string',
-
+      isSearchDisabled: true,
       width: '17%',
     },
     {
       field: 'amenities',
-      header: 'Amenities',
-
-      sortType: 'string',
-
+      header: 'Services',
+      sortType: 'array',
       width: '18%',
     },
     {
       field: 'occupancy',
       header: 'Occupancy',
-
       sortType: 'number',
-
       width: '17%',
     },
     {
       field: 'status.value',
       header: 'Active',
-
       sortType: 'string',
-
       width: '16%',
     },
   ],

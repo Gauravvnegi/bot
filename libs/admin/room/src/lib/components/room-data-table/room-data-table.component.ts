@@ -326,6 +326,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param event The material tab change event.
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
+    this.resetTable();
     this.roomService.selectedTable.next(this.tabFilterItems[event.index].value);
   }
 

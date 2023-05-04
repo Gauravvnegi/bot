@@ -22,6 +22,7 @@
     infiniteScroll
     (scrolled)="loadMore()"
     [toggleScrollListener]="noMoreData"
+    *ngIf="!!options.length; else emptyTable"
   >
     <ng-container *ngFor="let item of options; index as i">
       <div class="item-box" (click)="selectItems(i)">
@@ -39,16 +40,16 @@
         </div>
       </div>
     </ng-container>
-    <div *ngIf="!options.length" class="no-data">
-      <div>{{ emptyMessage }}</div>
-      <hospitality-bot-button
-        *ngIf="noRecordsAction"
-        [label]="noRecordsAction.name"
-        [link]="noRecordsAction.link"
-        variant="text"
-      ></hospitality-bot-button>
-    </div>
   </div>
+
+  <ng-template #emptyTable>
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      [content]="noRecordsAction"
+    >
+    </hospitality-bot-empty-table>
+  </ng-template>
+
   <p
     class="validation-error"
     *ngIf="control?.errors?.required && control?.touched"

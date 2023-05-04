@@ -83,10 +83,13 @@ export const errorMessages = {
   maxOccupancy: 'Value cannot be more than max occupancy.',
   notAllowedChr: 'Decimal are not allowed.',
   min: 'Value can not be less than 0.',
-  moreThanTotal: 'Cannot be more than total'
+  moreThanTotal: 'Cannot be more than total',
 };
 
 export const noRecordAction = {
-  name: '+ Create New Service',
+  actionName: '+Create New Service',
   link: '/pages/library/services/create-service',
+  imageSrc: 'assets/images/empty-table-service.png',
+  description:
+    'No services found. Tap the +Create Services to create & manage the services offered by your hotel',
 };

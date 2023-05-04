@@ -226,9 +226,9 @@ export class StayDetailsService extends ApiService {
         ],
         city: stayDetails.address?.city,
         state: stayDetails.address?.state,
-        countryCode: countries?.filter(
+        countryCode: countries?.find(
           (item) => item.value === stayDetails.address?.country
-        )[0].key,
+        )?.key,
         postalCode: stayDetails.address?.postalCode,
       };
     }

@@ -4,7 +4,7 @@ import { Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { Angular2SignaturepadModule } from 'angular2-signaturepad';
+import { SignaturePadModule } from 'angular2-signaturepad';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
@@ -77,7 +77,7 @@ export interface IThemeConfig {
     FormsModule,
     ReactiveFormsModule,
     TextMaskModule,
-    Angular2SignaturepadModule,
+    SignaturePadModule,
     MatTabsModule,
     NgxMaterialTimepickerModule,
     SharedImageCropperModule,
@@ -133,7 +133,7 @@ export interface IThemeConfig {
     ReactiveFormsModule,
     FormsModule,
     NgxMaterialTimepickerModule,
-    Angular2SignaturepadModule,
+    SignaturePadModule,
     MatTabsModule,
     StepperComponent,
     RadioComponent,

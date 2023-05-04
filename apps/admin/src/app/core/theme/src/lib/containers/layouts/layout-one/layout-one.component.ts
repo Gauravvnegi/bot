@@ -175,6 +175,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   setInitialFilterValue() {
+    const selectedSiteId = this._hotelDetailService.siteId;
     const selectedHotelId = this._hotelDetailService.hotelId;
     const selectedHotelData = this._hotelDetailService.hotels.find(
       (item) => item.id === selectedHotelId
@@ -208,6 +209,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.timezone = selectedHotelData?.['timezone'];
     this.globalFilterService.timezone = this.timezone;
     this.globalFilterService.hotelId = selectedHotelId;
+    this.isSitesAvailable = !!selectedSiteId;
   }
 
   refreshDashboard() {
@@ -359,5 +361,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.firebaseMessagingService.destroySubscription();
+  }
+
+  get isCreateWithSubscribed() {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.CREATE_WITH
+    );
   }
 }

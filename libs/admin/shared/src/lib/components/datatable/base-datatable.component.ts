@@ -253,6 +253,14 @@ export class BaseDatatableComponent implements OnInit {
     }
   }
 
+  /**
+   * @function resetTable To reset the table
+   * @description This will reset the table to its initial state
+   */
+  resetTable() {
+    this.table.reset();
+  }
+
   onDocumentActions() {
     //check for selected. if true pass an option
     this.tableFG.value;
@@ -556,6 +564,8 @@ export class BaseDatatableComponent implements OnInit {
         return order * moment(+rawData1).diff(moment(+rawData2));
       case 'string':
         return order * rawData1.localeCompare(rawData2);
+      case 'array':
+        return order * rawData1.length - rawData2.length;
     }
   }
 

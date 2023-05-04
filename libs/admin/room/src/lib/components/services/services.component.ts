@@ -30,6 +30,8 @@ export class ServicesComponent implements OnInit, OnDestroy {
   useForm: FormGroup;
   searchForm: FormGroup;
   loading: boolean;
+  isCompLoading: boolean;
+  isPaidLoading: boolean;
   limit = 10;
 
   pageTitle = 'Services';
@@ -203,6 +205,8 @@ export class ServicesComponent implements OnInit, OnDestroy {
    */
   getServices(serviceType: ServicesTypeValue) {
     this.loading = true;
+    this.isCompLoading = true;
+    this.isPaidLoading = true;
     const config = this.getQueryConfig(
       serviceType === ServicesTypeValue.COMPLIMENTARY
         ? this.compOffset
@@ -236,6 +240,12 @@ export class ServicesComponent implements OnInit, OnDestroy {
         },
         () => {
           this.loading = false;
+          if (serviceType === ServicesTypeValue.COMPLIMENTARY) {
+            this.isCompLoading = false;
+          }
+          if (serviceType === ServicesTypeValue.PAID) {
+            this.isPaidLoading = false;
+          }
         }
       )
     );

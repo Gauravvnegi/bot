@@ -4,6 +4,9 @@
   overflow-x: unset !important;
 }
 
+$room-count-active-bg: rgb(232,246,252);
+$room-count-active: rgb(47,166,227);
+
 .table-row {
   height: 90px;
 }
@@ -23,8 +26,8 @@
   filter: alpha(opacity=80);
 
   &__active {
-    background-color: rgba($posCompare, 0.2);
-    color: $posCompare;
+    background-color: $room-count-active-bg;
+    color: $room-count-active;
   }
 
   &__soldOut {

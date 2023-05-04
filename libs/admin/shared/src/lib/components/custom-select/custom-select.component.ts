@@ -12,6 +12,7 @@ import {
   ControlValueAccessor,
   NgControl,
 } from '@angular/forms';
+import { EmptyViewType } from '../../types/table.type';
 
 @Component({
   selector: 'hospitality-bot-custom-select',
@@ -21,6 +22,8 @@ import {
 export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   options: Record<string, any>[] = [];
   value: string[] = [];
+  @Input() loading: boolean;
+  @Input() noRecordsAction: EmptyViewType;
 
   @Input() label: string;
   @Input() description: string;
@@ -46,7 +49,6 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   }
 
   @Input() emptyMessage = 'No Data Available';
-  @Input() noRecordsAction: { name: string; link: string };
 
   constructor(@Self() @Optional() public control: NgControl) {
     if (this.control) this.control.valueAccessor = this;

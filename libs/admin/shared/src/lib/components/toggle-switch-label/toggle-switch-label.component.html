@@ -1,0 +1,16 @@
+<div>
+  <label class="toggle">
+    <input type="checkbox" [checked]="isToggleOn" (change)="toggleSwitch()" />
+    <span
+      class="slider"
+      [ngStyle]="{
+        'background-color': isToggleOn ? toggleOnColor : toggleOffColor
+      }"
+    ></span>
+    <span
+      class="labels"
+      [ngClass]="isToggleOn ? 'labels__on' : 'labels__off'"
+      >{{ isToggleOn ? toggleOnLabel : toggleOffLabel }}</span
+    >
+  </label>
+</div>

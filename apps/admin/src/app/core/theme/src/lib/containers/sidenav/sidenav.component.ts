@@ -90,10 +90,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
           'filter'
         ].value.property;
 
-        const brandConfig = this._hotelDetailService.hotelDetails.brands.find(
+        const brandConfig = this._hotelDetailService.brands.find(
           (brand) => brand.id === brandId
         );
-        this.branchConfig = brandConfig.branches.find(
+        this.branchConfig = brandConfig.hotels.find(
           (branch) => branch.id === branchId
         );
       })

@@ -73,7 +73,10 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedInUserId = this._userService.getLoggedInUserId();
-    this.brandNames = this._hotelDetailService.hotelDetails.brands;
+    this.brandNames = this._hotelDetailService.brands.map((item) => ({
+      value: item.id,
+      label: item.name,
+    }));
     this.initPageState();
     this.initAdminUserDetails();
 
@@ -258,10 +261,10 @@ export class UserProfileComponent implements OnInit {
   listenForBrandChanges() {
     this.userForm.get('branchName').disable();
     this.userForm.get('brandName').valueChanges.subscribe((brandId) => {
-      const currentBrand: any = this.brandNames.find(
+      const currentBrand = this._hotelDetailService.brands.find(
         (brand) => brand['id'] === brandId
       );
-      const branches = currentBrand?.branches;
+      const branches = currentBrand?.hotels;
       if (branches) {
         this.branchNames = branches.map((item) => ({
           label: item.name,
@@ -284,6 +287,7 @@ export class UserProfileComponent implements OnInit {
       this.departments = this.adminToModDetails.departments.filter(
         (item: any) => products.includes(item.productType)
       );
+
       this.departments = this.departments.map((item) => ({
         ...item,
         label: item.departmentLabel,

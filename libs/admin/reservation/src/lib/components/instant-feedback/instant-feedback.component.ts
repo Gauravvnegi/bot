@@ -43,9 +43,9 @@ export class InstantFeedbackComponent implements OnInit, OnDestroy {
   }
 
   getOutlets(globalQueryValue) {
-    const branch = this._hotelDetailService.hotelDetails.brands
+    const branch = this._hotelDetailService.brands
       .find((brand) => brand.id === globalQueryValue.property.hotelName)
-      .branches.find(
+      .hotels.find(
         (branch) => branch['id'] === globalQueryValue.property.branchName
       );
     this.outlets = branch.outlets;
@@ -60,16 +60,14 @@ export class InstantFeedbackComponent implements OnInit, OnDestroy {
   downloadFeedback(event, id) {
     event.stopPropagation();
     this.$subscription.add(
-      this.reservationService.getFeedbackPdf(id).subscribe(
-        (response) => {
-          const link = document.createElement('a');
-          link.href = response.fileDownloadUri;
-          link.target = '_blank';
-          link.download = response.fileName;
-          link.click();
-          link.remove();
-        } 
-      )
+      this.reservationService.getFeedbackPdf(id).subscribe((response) => {
+        const link = document.createElement('a');
+        link.href = response.fileDownloadUri;
+        link.target = '_blank';
+        link.download = response.fileName;
+        link.click();
+        link.remove();
+      })
     );
   }
 

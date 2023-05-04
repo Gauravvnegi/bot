@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserData } from '@hospitality-bot/admin/shared';
+import { UserResponse } from '@hospitality-bot/admin/shared';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
 import { ManageSiteStatus } from '../constant/manage-site';
@@ -17,7 +17,7 @@ export class ManageSitesService extends ApiService {
     userId: string,
     config?: QueryConfig
   ): Observable<ManageSiteListResponse> {
-    return this.get(`/api/v1/user/${userId}/sites${config?.params ?? ''}`);
+    return this.get(`/api/v1/sites${config?.params ?? ''}`);
   }
 
   updateSiteStatus(
@@ -31,7 +31,7 @@ export class ManageSitesService extends ApiService {
     );
   }
 
-  updateUserDetails(data: Partial<UserData>): Observable<any> {
+  updateUserDetails(data: Partial<UserResponse>): Observable<any> {
     return this.put(`/api/v1/user/${data.parentId}`, data);
   }
 }

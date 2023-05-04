@@ -137,10 +137,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
         const { hotelName: brandId, branchName: branchId } = data[
           'filter'
         ].value.property;
-        const brandConfig = this._hotelDetailService.hotelDetails.brands.find(
+        const brandConfig = this._hotelDetailService.brands.find(
           (brand) => brand.id === brandId
         );
-        this.branchConfig = brandConfig.branches.find(
+        this.branchConfig = brandConfig.hotels.find(
           (branch) => branch.id === branchId
         );
         this.loadGuestInfo();
@@ -164,7 +164,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.guestData = new Guest().deserialize(response);
           this.loadGuestReservations();
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.closeDetails();
         }
       )
@@ -183,7 +183,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.initGuestReservationDropdownList();
           this.isGuestReservationFetched = true;
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.closeDetails();
         }
       )
@@ -201,11 +201,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.mapValuesInForm();
           this.isReservationDetailFetched = true;
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.closeDetails();
         },
-        ()=>{
-          this.isFirstTimeFetch = false
+        () => {
+          this.isFirstTimeFetch = false;
         }
       )
     );
@@ -291,18 +291,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.reservationDetailsFG.get('bookingId').value,
         journeyName
       )
-      .subscribe(
-        (res) => {
-          this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
-          this.snackbarService.openSnackBarAsText(
-            'Link copied successfully',
-            '',
-            {
-              panelClass: 'success',
-            }
-          );
-        }
-      );
+      .subscribe((res) => {
+        this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
+        this.snackbarService.openSnackBarAsText(
+          'Link copied successfully',
+          '',
+          {
+            panelClass: 'success',
+          }
+        );
+      });
   }
 
   generateCheckinLink() {}
@@ -332,7 +330,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
                 { panelClass: 'success' }
               )
               .subscribe(),
-          ({ error }) => { }
+          ({ error }) => {}
         )
     );
   }
@@ -353,12 +351,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
               );
             }
           },
-          ({ error }) => { }
+          ({ error }) => {}
         )
     );
   }
 
-  manageInvoice(){
+  manageInvoice() {
     this.onDetailsClose.next(false);
     this.router.navigate([
       `pages/efrontdesk/invoice/create-invoice/${this.bookingId}`,
@@ -367,7 +365,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   prepareInvoice() {
     if (!this.branchConfig.pmsEnable) {
-      this.manageInvoice()
+      this.manageInvoice();
     } else
       this.$subscription.add(
         this._reservationService
@@ -386,7 +384,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
                 )
                 .subscribe();
             },
-            ({ error }) => { }
+            ({ error }) => {}
           )
       );
   }
@@ -494,7 +492,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
               break;
           }
         },
-        ({ error }) => { }
+        ({ error }) => {}
       );
   }
 
@@ -595,7 +593,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             )
             .subscribe();
         },
-        ({ error }) => { }
+        ({ error }) => {}
       );
   }
 
@@ -706,11 +704,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
-  setTab(event){
+  setTab(event) {
     this.tabKey = this.detailsConfig.find(
       (tabConfig) => tabConfig.index === event.index
     )?.key;
-    console.log(event,'event')
+    console.log(event, 'event');
   }
 
   get bookingCount() {
@@ -752,6 +750,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();
-    this.isFirstTimeFetch = true
+    this.isFirstTimeFetch = true;
   }
 }

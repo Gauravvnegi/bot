@@ -29,8 +29,7 @@ export class ProfileDropdownComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isSiteAvailable = !!this.hotelDetailsService.hotelDetails.sites
-      ?.length;
+    this.isSiteAvailable = !!this.hotelDetailsService.sites?.length;
 
     this.items = layoutConfig.profile.filter(
       (item) =>

@@ -6,6 +6,7 @@ import {
   UserService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { tokensConfig } from 'libs/admin/shared/src/lib/constants/common';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { get } from 'lodash';
 import { SubscriptionPlanService } from '../../../theme/src/lib/services/subscription-plan.service';
@@ -40,10 +41,7 @@ export class PagesComponent implements OnInit {
       adminDetails['manageSiteList']
     );
 
-    this.getConfigData(
-      get(adminDetails, ['userDetail'])?.['hotelAccess']?.chains[0]?.hotels[0]
-        ?.id
-    );
+    this.getConfigData(localStorage.getItem(tokensConfig.hotelId));
     this._userService.initUserDetails(get(adminDetails, ['userDetail']));
 
     // Setting cookies when login/refresh after setting userDetails
@@ -61,7 +59,8 @@ export class PagesComponent implements OnInit {
   }
 
   getConfigData(hotelId) {
-    this._configService.getColorAndIconConfig(hotelId).subscribe(
-      (response) => this._configService.$config.next(response));
+    this._configService
+      .getColorAndIconConfig(hotelId)
+      .subscribe((response) => this._configService.$config.next(response));
   }
 }

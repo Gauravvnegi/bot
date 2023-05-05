@@ -20,12 +20,6 @@ export class SubscriptionPlanService extends ApiService {
   getSubscriptionPlan(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/subscriptions/`).pipe(
       map((res) => {
-        const subscriptionIdx = res.products.findIndex(
-          (item) => item.name === 'SUBSCRIPTION'
-        );
-        if (subscriptionIdx > -1) {
-          res.products[subscriptionIdx] = customModule.settings;
-        }
         return res;
       })
     );
@@ -78,9 +72,10 @@ export class SubscriptionPlanService extends ApiService {
     const settingModule =
       input.products.find((item) => item.name === ModuleNames.SETTINGS) ?? [];
 
-    this.settings = settingModule.config.map((item) =>
-      new SettingsMenuItem().deserialize(item)
-    );
+    this.settings =
+      settingModule?.config?.map((item) =>
+        new SettingsMenuItem().deserialize(item)
+      ) ?? [];
 
     return this;
   }

@@ -74,7 +74,7 @@ export class CookiesSettingsService {
   }
 
   initHotelAccessDetails(data: ManageSiteListResponse) {
-    this.hotelAccessData = data.records;
+    this.hotelAccessData = data?.records;
   }
 
   /**

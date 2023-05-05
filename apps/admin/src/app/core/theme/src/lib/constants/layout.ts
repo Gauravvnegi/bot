@@ -56,7 +56,7 @@ export const customModule = {
         isSubscribed: true,
         isView: true,
         label: 'Website settings',
-        name: 'WEBSITE_SETTING',
+        name: 'WEBSITE_SETTINGS',
       },
       {
         cost: {

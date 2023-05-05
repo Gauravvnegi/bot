@@ -201,7 +201,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
           this.modalService.close();
           this.cookiesSettingService.initPlatformChangeV2(
             hotelId, // siteId
-            `/pages/settings/${SettingOptions.WEBSITE_SETTING}`
+            `/pages/settings/${SettingOptions.WEBSITE_SETTINGS}`
           );
         },
         variant: 'contained',

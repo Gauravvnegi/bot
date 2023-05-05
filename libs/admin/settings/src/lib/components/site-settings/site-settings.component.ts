@@ -2,7 +2,11 @@ import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '@hospitality-bot/admin/environment';
 import { CookiesSettingsService } from '@hospitality-bot/admin/shared';
-import { SettingOptions, siteUrl } from '../../constant/settings-menu';
+import {
+  routeUrl,
+  SettingOptions,
+  siteUrl,
+} from '../../constant/settings-menu';
 
 @Component({
   selector: 'hospitality-bot-site-settings',
@@ -12,7 +16,7 @@ import { SettingOptions, siteUrl } from '../../constant/settings-menu';
 export class SiteSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoaded = false;
   onboardingUrl = `${environment.createWithUrl}${
-    siteUrl[SettingOptions.BUSINESS_INFO]
+    siteUrl[routeUrl[SettingOptions.BUSINESS_INFO]]
   }`;
 
   constructor(
@@ -20,7 +24,8 @@ export class SiteSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute
   ) {
     const settingOption = this.route.snapshot.paramMap.get('settingOption');
-    this.onboardingUrl = `${environment.createWithUrl}${siteUrl[settingOption]}`;
+    if (settingOption)
+      this.onboardingUrl = `${environment.createWithUrl}${siteUrl[settingOption]}`;
   }
 
   ngOnInit(): void {

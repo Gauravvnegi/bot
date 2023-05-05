@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
+import { BrandComponent } from './components/brand/brand.component';
 import { MainComponent } from './components/main/main.component';
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component';
 import { SiteSettingsComponent } from './components/site-settings/site-settings.component';
@@ -27,6 +28,19 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/tax').then((m) => m.AdminTaxModule),
       },
       {
+        path: 'business-info',
+        children: [
+          { path: '', component: SiteSettingsComponent },
+          {
+            path: 'brand',
+            children: [
+              { path: '', component: BrandComponent },
+              { path: 'hotel', component: BrandComponent },
+            ],
+          },
+        ],
+      },
+      {
         path: ':settingOption',
         component: SiteSettingsComponent,
       },
@@ -41,5 +55,5 @@ const appRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminSettingsRoutingModule {
-  static components = [MainComponent, SettingsMenuComponent];
+  static components = [MainComponent, SettingsMenuComponent, BrandComponent];
 }

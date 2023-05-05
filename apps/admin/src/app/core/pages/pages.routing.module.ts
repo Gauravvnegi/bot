@@ -4,6 +4,7 @@ import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
 import { ComingSoonComponent } from 'libs/admin/shared/src/lib/components/coming-soon/coming-soon.component';
 import { ViewSharedComponentsComponent } from 'libs/admin/shared/src/lib/components/view-shared-components/view-shared-components.component';
 import { environment } from '../../../environments/environment';
+import { CanActivateGuard } from '../guards/can-activate-guard';
 import { CanLoadGuard } from '../guards/can-load-gurad';
 import { RedirectGuard } from '../guards/redirect-guard';
 import { PagesComponent } from './containers/pages/pages.component';
@@ -35,6 +36,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminConversationModule
           ),
         canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'covid',
@@ -49,6 +51,7 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/roles-and-permissions').then(
             (m) => m.AdminRolesAndPermissionsModule
           ),
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'heda',
@@ -57,6 +60,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminFeedbackModule
           ),
         canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'efrontdesk',
@@ -65,6 +69,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminEFrontdeskModule
           ),
         canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'guest',
@@ -73,6 +78,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminGuestsModule
           ),
         canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'subscription',
@@ -81,6 +87,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminSubscriptionModule
           ),
         canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'settings',
@@ -89,6 +96,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminSettingsModule
           ),
         canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'library',
@@ -97,6 +105,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminLibraryModule
           ),
         canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'marketing',
@@ -105,6 +114,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminMarketingModule
           ),
         canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'builder',
@@ -117,6 +127,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminCreateWithModule
           ),
         canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'inventory',
@@ -125,6 +136,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminInventoryModule
           ),
         canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'finance',
@@ -133,6 +145,7 @@ const appRoutes: Route[] = [
             (m) => m.AdminFinanceModule
           ),
         canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'redirect',

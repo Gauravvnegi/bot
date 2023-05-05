@@ -6,7 +6,6 @@ import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { get } from 'lodash';
 import { Subscription } from 'rxjs';
 import { CookiesSettingsService } from '../../../../../../../../../../../libs/admin/shared/src/index';
 import { tokensConfig } from '../../../../../../../../../../../libs/admin/shared/src/lib/constants/common';
@@ -209,7 +208,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.timezone = selectedHotelData?.['timezone'];
     this.globalFilterService.timezone = this.timezone;
     this.globalFilterService.hotelId = selectedHotelId;
-    this.isSitesAvailable = !!selectedSiteId;
+    this.isSitesAvailable =
+      !!selectedSiteId && !!this._hotelDetailService.sites?.length;
   }
 
   refreshDashboard() {

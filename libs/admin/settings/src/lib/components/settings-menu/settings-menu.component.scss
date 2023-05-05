@@ -12,6 +12,15 @@
   background-color: #fff;
 }
 
+.heading {
+  padding-top: 20px;
+  font-size: 26px;
+  font-weight: 600;
+  font-family: Poppins;
+  letter-spacing: 1.56px;
+  color: $secondary2;
+}
+
 .setting {
   padding: 25px;
   width: 264px;
@@ -23,6 +32,13 @@
   &:hover {
     border-radius: 8px;
     background-color: $blackPrime-base;
+  }
+
+  &__disabled {
+    opacity: 0.6;
+    &:hover {
+      cursor: not-allowed;
+    }
   }
 
   &__header {

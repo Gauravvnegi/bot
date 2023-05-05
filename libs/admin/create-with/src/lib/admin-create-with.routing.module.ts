@@ -12,7 +12,6 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MainComponent } from './components/main/main.component';
 import { MarketingAndSeoComponent } from './components/marketing-and-seo/marketing-and-seo.component';
 import { PagesComponent } from './components/pages/pages.component';
-import { ThemeComponent } from './components/theme/theme.component';
 
 const appRoutes: CRoutes = [
   {
@@ -51,23 +50,6 @@ const appRoutes: CRoutes = [
             path: '**',
             name: ModuleNames.SEO_FRIENDLY,
             component: MarketingAndSeoComponent,
-          },
-        ],
-      },
-      {
-        path: 'theme',
-        name: ModuleNames.THEME,
-        component: MainComponent,
-        children: [
-          {
-            path: '',
-            name: ModuleNames.THEME,
-            component: ThemeComponent,
-          },
-          {
-            path: '**',
-            name: ModuleNames.THEME,
-            component: ThemeComponent,
           },
         ],
       },
@@ -144,7 +126,6 @@ export class AdminCreateWithRoutingModule {
     DashboardComponent,
     MainComponent,
     MarketingAndSeoComponent,
-    ThemeComponent,
     PagesComponent,
     BlogComponent,
   ];

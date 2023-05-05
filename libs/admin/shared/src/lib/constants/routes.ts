@@ -8,7 +8,6 @@ export const routes = {
   [ModuleNames.CREATE_WITH]: 'create-with',
   [ModuleNames.CREATE_WITH_DASHBOARD]: 'create-with/dashboard',
   [ModuleNames.SEO_FRIENDLY]: 'create-with/marketing-seo',
-  [ModuleNames.THEME]: 'create-with/theme',
   [ModuleNames.PAGES]: 'create-with/page',
   [ModuleNames.BLOG]: 'create-with/blog',
   [ModuleNames.BOOKING_ENGINE]: 'create-with/booking-engine',
@@ -30,7 +29,7 @@ export const routes = {
   [ModuleNames.HEDA]: 'heda',
   [ModuleNames.HEDA_DASHBOARD]: 'heda/analytics',
   [ModuleNames.SENTIMENTAL_ANALYSIS_HEDA]: 'heda/sentimental-analysis',
-  
+
   // eMarkt_IT
   [ModuleNames.EMARK_IT]: 'marketing',
   [ModuleNames.EMARK_IT_DASHBOARD]: 'marketing/analytics',
@@ -59,9 +58,8 @@ export const routes = {
   [ModuleNames.GUESTS]: 'guest',
   [ModuleNames.GUESTS_DASHBOARD]: 'guest/dashboard',
 
-  // SUBSCRIPTION
+  // SETTINGS
   [ModuleNames.SETTINGS]: 'settings',
-  [ModuleNames.SUBSCRIPTION]: 'subscription',
 
   RoleAndPermission: 'roles-permissions',
 };

@@ -3,9 +3,10 @@ import { ModuleNames } from '@hospitality-bot/admin/shared';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { customModule, defaultProduct } from '../constants/layout';
+import { customModule } from '../constants/layout';
 import {
   ProductSubscription,
+  SettingsMenuItem,
   Subscriptions,
 } from '../data-models/subscription-plan-config.model';
 
@@ -14,14 +15,17 @@ export class SubscriptionPlanService extends ApiService {
   subscription$ = new BehaviorSubject({});
   private subscriptions: Subscriptions;
   private productSubscription: ProductSubscription;
+  settings: SettingsMenuItem[];
 
   getSubscriptionPlan(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/subscriptions/`).pipe(
       map((res) => {
-        // res.products
-        //   .find((item) => item.name === 'LIBRARY')
-        //   ?.config.push(customModule.bookingSource);
-        res.products = [...res.products, ...defaultProduct];
+        const subscriptionIdx = res.products.findIndex(
+          (item) => item.name === 'SUBSCRIPTION'
+        );
+        if (subscriptionIdx > -1) {
+          res.products[subscriptionIdx] = customModule.settings;
+        }
         return res;
       })
     );
@@ -29,6 +33,7 @@ export class SubscriptionPlanService extends ApiService {
 
   initSubscriptionDetails(data) {
     this.setSubscription(data);
+    this.setSettings(data);
     this.subscription$.next(new ProductSubscription().deserialize(data));
   }
 
@@ -67,5 +72,16 @@ export class SubscriptionPlanService extends ApiService {
 
   checkModuleSubscription(productName: ModuleNames) {
     return this.productSubscription.subscribedModules.indexOf(productName) > -1;
+  }
+
+  setSettings(input) {
+    const settingModule =
+      input.products.find((item) => item.name === ModuleNames.SETTINGS) ?? [];
+
+    this.settings = settingModule.config.map((item) =>
+      new SettingsMenuItem().deserialize(item)
+    );
+
+    return this;
   }
 }

@@ -99,9 +99,10 @@ export class AuthService extends ApiService {
    * @param headers Http Headers
    */
   setTokens(headers: HttpHeaders) {
-    this.tokens.forEach((tokenName) =>
-      localStorage.setItem(tokenName, headers.get(tokenName))
-    );
+    this.tokens.forEach((tokenName) => {
+      const tokenValue = headers.get(tokenName);
+      if (tokenValue) localStorage.setItem(tokenName, tokenValue);
+    });
   }
 
   /**

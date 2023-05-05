@@ -10,25 +10,14 @@ import { ManageSiteListResponse } from '../types/response.type';
 export class ManageSitesService extends ApiService {
   /**
    * @function getSitesList Get all the site data
-   * @param userId User Id
    * @returns
    */
-  getSitesList(
-    userId: string,
-    config?: QueryConfig
-  ): Observable<ManageSiteListResponse> {
+  getSitesList(config?: QueryConfig): Observable<ManageSiteListResponse> {
     return this.get(`/api/v1/sites${config?.params ?? ''}`);
   }
 
-  updateSiteStatus(
-    userId: string,
-    hotelId: string,
-    status: ManageSiteStatus
-  ): Observable<any> {
-    return this.patch(
-      `/api/v1/user/${userId}/sites/${hotelId}?status=${status}`,
-      {}
-    );
+  updateSiteStatus(siteId: string, status: ManageSiteStatus): Observable<any> {
+    return this.patch(`/api/v1/sites/${siteId}?status=${status}`, {});
   }
 
   updateUserDetails(data: Partial<UserResponse>): Observable<any> {

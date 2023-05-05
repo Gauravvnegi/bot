@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from '@hospitality-bot/admin/shared';
 import {
-  SettingOptions,
-  settingsMenuOptions,
-} from '../../constant/settings-menu';
+  SettingsMenuItem,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
+import { SettingOptions } from '../../constant/settings-menu';
 
 @Component({
   selector: 'hospitality-bot-settings-menu',
@@ -12,15 +12,19 @@ import {
   styleUrls: ['./settings-menu.component.scss'],
 })
 export class SettingsMenuComponent implements OnInit {
-  readonly settings = settingsMenuOptions;
+  settings: SettingsMenuItem[];
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(
+    private router: Router,
+    private subscriptionService: SubscriptionPlanService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.settings = this.subscriptionService.settings;
+  }
 
-  selectSetting(settingName: SettingOptions) {
-    console.log(settingName);
-
+  selectSetting(settingName: SettingOptions, isDisabled: boolean) {
+    if (isDisabled) return;
     switch (settingName) {
       case SettingOptions.ROLES_AND_PERMISSION:
         this.router.navigate(['/pages/roles-permissions']);

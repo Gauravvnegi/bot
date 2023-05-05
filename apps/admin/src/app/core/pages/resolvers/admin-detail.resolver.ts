@@ -33,7 +33,7 @@ export class AdminDetailResolver implements Resolve<any> {
       .pipe(
         switchMap((res) => {
           if (hotelId) {
-            const manageSiteList = this.manageSite.getSitesList(res.id);
+            const manageSiteList = this.manageSite.getSitesList();
             let subscription: Observable<any> = of(undefined);
             if (!this.subscriptionPlanService.getSubscription()) {
               subscription = this.subscriptionPlanService.getSubscriptionPlan(

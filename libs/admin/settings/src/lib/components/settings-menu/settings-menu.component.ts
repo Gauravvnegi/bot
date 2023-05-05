@@ -4,7 +4,7 @@ import {
   SettingsMenuItem,
   SubscriptionPlanService,
 } from '@hospitality-bot/admin/core/theme';
-import { SettingOptions } from '../../constant/settings-menu';
+import { routeUrl, SettingOptions } from '../../constant/settings-menu';
 
 @Component({
   selector: 'hospitality-bot-settings-menu',
@@ -32,7 +32,7 @@ export class SettingsMenuComponent implements OnInit {
       case SettingOptions.NOTIFICATION:
         break;
       default:
-        this.router.navigate([`/pages/settings/${settingName}`]);
+        this.router.navigate([`/pages/settings/${routeUrl[settingName]}`]);
         break;
     }
   }

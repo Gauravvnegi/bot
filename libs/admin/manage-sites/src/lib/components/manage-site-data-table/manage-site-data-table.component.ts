@@ -84,30 +84,28 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
    */
   getSitesList() {
     this.$subscription.add(
-      this.manageSiteService
-        .getSitesList(this.userId, this.getQueryConfig())
-        .subscribe(
-          (res) => {
-            const manageSiteData = new ManageSiteList().deserialize(res);
-            this.values = manageSiteData.records;
+      this.manageSiteService.getSitesList(this.getQueryConfig()).subscribe(
+        (res) => {
+          const manageSiteData = new ManageSiteList().deserialize(res);
+          this.values = manageSiteData.records;
 
-            this.nextState = this.values.map((item) => ({
-              id: item.id,
-              status: item.status,
-              value: item.nextState,
-            }));
-            // this.totalRecords = manageSiteData.total;
-            // this.filterChips.forEach((item) => {
-            //   item.total = manageSiteData.entityTypeCounts[item.value];
-            // });
-            this.updateQuickReplyFilterCount(res.entityTypeCounts);
-            this.updateTotalRecords();
-          },
-          () => {
-            this.values = [];
-          },
-          this.handleFinal
-        )
+          this.nextState = this.values.map((item) => ({
+            id: item.id,
+            status: item.status,
+            value: item.nextState,
+          }));
+          // this.totalRecords = manageSiteData.total;
+          // this.filterChips.forEach((item) => {
+          //   item.total = manageSiteData.entityTypeCounts[item.value];
+          // });
+          this.updateQuickReplyFilterCount(res.entityTypeCounts);
+          this.updateTotalRecords();
+        },
+        () => {
+          this.values = [];
+        },
+        this.handleFinal
+      )
     );
   }
 
@@ -158,29 +156,27 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   changeStatus(status: ManageSiteStatus, rowData: ManageSite) {
     this.loading = true;
     this.$subscription.add(
-      this.manageSiteService
-        .updateSiteStatus(this.userId, rowData.id, status)
-        .subscribe(
-          () => {
-            this.loading = false;
-            this.snackbarService.openSnackBarAsText(
-              'Status changes successfully',
-              '',
-              { panelClass: 'success' }
-            );
-            this.updateStatusAndCount(rowData.status, status);
-            this.initTableValue();
-          },
-          ({ error }) => {
-            if (
-              error?.type === 'DOMAIN_NOT_EXIST' ||
-              error?.code === 'BOTSHOT1057'
-            ) {
-              this.handlePublish(rowData.id);
-            }
-            this.loading = false;
+      this.manageSiteService.updateSiteStatus(rowData.id, status).subscribe(
+        () => {
+          this.loading = false;
+          this.snackbarService.openSnackBarAsText(
+            'Status changes successfully',
+            '',
+            { panelClass: 'success' }
+          );
+          this.updateStatusAndCount(rowData.status, status);
+          this.initTableValue();
+        },
+        ({ error }) => {
+          if (
+            error?.type === 'DOMAIN_NOT_EXIST' ||
+            error?.code === 'BOTSHOT1057'
+          ) {
+            this.handlePublish(rowData.id);
           }
-        )
+          this.loading = false;
+        }
+      )
     );
   }
   /**

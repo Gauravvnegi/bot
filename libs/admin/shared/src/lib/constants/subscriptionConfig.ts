@@ -64,6 +64,7 @@ export enum ModuleNames {
 
   //Settings
   SETTINGS = 'SETTINGS',
+  SUBSCRIPTION = 'SUBSCRIPTION',
 }
 
 export enum Integrations {

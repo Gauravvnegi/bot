@@ -9,10 +9,22 @@ export enum SettingOptions {
   TAX = 'TAX',
 }
 
+export const routeUrl = {
+  [SettingOptions.BUSINESS_INFO]: 'business-info',
+  [SettingOptions.WEBSITE_SETTING]: 'website-settings',
+  [SettingOptions.ACCEPT_PAYMENTS]: 'accept-payments',
+  [SettingOptions.NOTIFICATION]: 'notifications',
+  [SettingOptions.SUBSCRIPTION]: 'subscription',
+  [SettingOptions.LEGAL_POLICIES]: 'legal-policies',
+  [SettingOptions.ROLES_AND_PERMISSION]: 'roles-and-permissions',
+  [SettingOptions.TAX]: 'tax',
+};
+
 export const siteUrl = {
-  [SettingOptions.BUSINESS_INFO]: '/admin/dashboard/edit-business-info',
-  [SettingOptions.WEBSITE_SETTING]: '/admin/website-settings',
-  [SettingOptions.ACCEPT_PAYMENTS]: '/admin/onboard-payment',
-  [SettingOptions.LEGAL_POLICIES]: '/admin/legal-policy',
-  [SettingOptions.TAX]: '/admin/tax',
+  [routeUrl[SettingOptions.BUSINESS_INFO]]:
+    '/admin/dashboard/edit-business-info',
+  [routeUrl[SettingOptions.WEBSITE_SETTING]]: '/admin/website-settings',
+  [routeUrl[SettingOptions.ACCEPT_PAYMENTS]]: '/admin/onboard-payment',
+  [routeUrl[SettingOptions.LEGAL_POLICIES]]: '/admin/legal-policy',
+  [routeUrl[SettingOptions.TAX]]: '/admin/tax',
 };

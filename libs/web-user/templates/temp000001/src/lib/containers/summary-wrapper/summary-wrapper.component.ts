@@ -8,6 +8,8 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { SnackBarService } from 'libs/shared/material/src';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-summary-wrapper',
@@ -30,7 +32,9 @@ export class SummaryWrapperComponent extends BaseWrapperComponent
     protected _stepperService: StepperService,
     protected router: Router,
     protected route: ActivatedRoute,
-    protected _snackbarService: SnackBarService
+    protected _snackbarService: SnackBarService,
+    protected _reservationService: ReservationService,
+    protected _translateService: TranslateService
   ) {
     super();
     this.self = this;
@@ -58,28 +62,57 @@ export class SummaryWrapperComponent extends BaseWrapperComponent
     };
   }
 
-  onCheckinSubmit() {
-    // if (!this.termsStatus) {
-    //   this._snackbarService.openSnackBarAsText(
-    //     'Please accept terms & condition'
-    //   );
-    //   return;
-    // }
-    const dialogRef = this.dialog.open(this.inputPopupComponent, {
-      disableClose: true,
-      autoFocus: true,
-      data: { pageValue: this.summaryDetails, termsStatus: this.termsStatus },
-    });
+  /**
+   * This was special request pop up , commenting it as of now
+   */
+  // onCheckinSubmit() {
+  //   // if (!this.termsStatus) {
+  //   //   this._snackbarService.openSnackBarAsText(
+  //   //     'Please accept terms & condition'
+  //   //   );
+  //   //   return;
+  //   // }
+  //   const dialogRef = this.dialog.open(this.inputPopupComponent, {
+  //     disableClose: true,
+  //     autoFocus: true,
+  //     data: { pageValue: this.summaryDetails, termsStatus: this.termsStatus },
+  //   });
 
+  //   this.$subscription.add(
+  //     dialogRef.afterClosed().subscribe((result) => {
+  //       // this.submit(result);
+  //       if (result.hasOwnProperty('state')) {
+  //         if (result.state === 'success') {
+  //           this.openThankyouPage('checkin');
+  //         }
+  //       }
+  //     })
+  //   );
+  // }
+
+  onCheckinSubmit() {
     this.$subscription.add(
-      dialogRef.afterClosed().subscribe((result) => {
-        // this.submit(result);
-        if (result.hasOwnProperty('state')) {
-          if (result.state === 'success') {
+      this._reservationService
+        .checkIn(this._reservationService.reservationData.id, {})
+        .subscribe(
+          (res) => {
+            this._translateService
+              .get(`MESSAGES.SUCCESS.CHECKIN_COMPLETE`)
+              .subscribe((translatedMsg) => {
+                this._snackbarService.openSnackBarAsText(translatedMsg, '', {
+                  panelClass: 'success',
+                });
+              });
             this.openThankyouPage('checkin');
+          },
+          ({ error }) => {
+            this._translateService
+              .get(`MESSAGES.ERROR.${error.type}`)
+              .subscribe((translatedMsg) => {
+                this._snackbarService.openSnackBarAsText(translatedMsg);
+              });
           }
-        }
-      })
+        )
     );
   }
 

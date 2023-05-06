@@ -1,5 +1,13 @@
 // Mixins
 
+@mixin title-header {
+  background-color: $title-header-background-color;
+  color: $title-header-font-color;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px;
+}
+
 @mixin half-circle {
   content: '';
   width: 15px;
@@ -62,7 +70,6 @@
     z-index: 222;
   }
 }
-
 
 @mixin flex-col-center-align {
   display: flex;

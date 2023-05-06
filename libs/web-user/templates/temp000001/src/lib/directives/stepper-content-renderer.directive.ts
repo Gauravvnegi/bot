@@ -45,6 +45,7 @@ export interface IComponentButton {
   settings: {
     isClickedTemplateSwitch: boolean;
     label: string;
+    loaderLabel?: string;
   };
 }
 

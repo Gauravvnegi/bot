@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.service';
 import { SummaryService } from 'libs/web-user/shared/src/lib/services/summary.service';
 import { SummaryWrapperComponent as BaseSummaryWrapperComponent } from 'libs/web-user/templates/temp000001/src/lib/containers/summary-wrapper/summary-wrapper.component';
@@ -19,7 +21,9 @@ export class SummaryWrapperComponent extends BaseSummaryWrapperComponent {
     stepperService: StepperService,
     router: Router,
     route: ActivatedRoute,
-    _snackbarService: SnackBarService
+    _snackbarService: SnackBarService,
+    _reservationService: ReservationService,
+    _translateService: TranslateService
   ) {
     super(
       dialog,
@@ -27,7 +31,9 @@ export class SummaryWrapperComponent extends BaseSummaryWrapperComponent {
       stepperService,
       router,
       route,
-      _snackbarService
+      _snackbarService,
+      _reservationService,
+      _translateService
     );
     this.self = this;
   }

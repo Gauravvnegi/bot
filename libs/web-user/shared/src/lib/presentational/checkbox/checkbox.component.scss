@@ -9,3 +9,9 @@
 .checkbox-margin {
   margin: 0 10px;
 }
+
+:host ::ng-deep .checkbox-wrapper {
+  .mat-checkbox-label {
+    white-space: normal;
+  }
+}

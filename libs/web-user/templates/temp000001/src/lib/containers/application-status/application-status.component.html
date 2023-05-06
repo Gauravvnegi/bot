@@ -264,13 +264,11 @@
             [parentForm]="summaryFG?.get('privacyPolicy')"
             [name]="'accept'"
             (onValueChange)="setPrivacyPolicy($event)"
+            [settings]="{
+              label: 'I agree to receive promotions on my email and phone no'
+            }"
           >
           </web-user-checkbox>
-          <div style="margin-left: 10px;">
-            <label>
-              I agree to receive promotions on my email and phone no</label
-            >
-          </div>
         </div>
       </div>
     </div>

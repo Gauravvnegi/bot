@@ -8,11 +8,11 @@ $payment-tab-color: #979797;
 $payment-tab-dark-color: #484848;
 $heading-black: #121212;
 $warm-grey: #9b9b9b;
-$tabBg:#eeeeee;
+$tabBg: #eeeeee;
 
 // Whole project primary-color
 
-$primary-blue: #4b56c0;
+$primary-blue: #5f38f9;
 
 $text-black: #302f2f;
 
@@ -23,22 +23,25 @@ $snack-bar-green: #7ab243; //--snack-bar-green
 
 // Radio
 
-$radio-button-color: #4b56c0; //--radio-button-color
+$radio-button-color: #5f38f9; //--radio-button-color
 
 // Button
 
-$primary-button-background-color: #4b56c0; //--primary-button-background-color
+$primary-button-background-color: #5f38f9; //--primary-button-background-color
 $primary-button-font-color: white; //--primary-button-font-color
 $secondary-button-background-color: white; //--secondary-button-background-color
-$secondary-button-font-color: #4b56c0; //--secondary-button-font-color
+$secondary-button-font-color: #5f38f9; //--secondary-button-font-color
 
 // Stepper
+$stepper-active-color: #5f38f9; //--stepper-active-color
+$stepper-completed-color: #2b2b2b; //--stepper-complete-color
+$stepper-pending-color: #c9c9c9; //--stepper-pending-color
 
-$stepper-background-color: #4b56c0; //--stepper-background-color
+$stepper-background-color: #5f38f9; //--stepper-background-color
 $stepper-icon-number-font-color: white; //--stepper-icon-font-color
 $stepper-icon-selected-font-color: white; //--stepper-icon-selected-font-color
 $stepper-font-color: #484848; //--stepper-font-color
-$stepper-border-color: #4b56c0; //--stepper-border-color
+$stepper-border-color: #2b2b2b; //--stepper-border-color
 $stepper-icon-done-font-color: white; // --stepper-icon-done-font-color
 
 // Faq--button-color
@@ -59,6 +62,10 @@ $header-background-color: #050d58; //--header-background-color
 $header-font-color: white; //--header-font-color
 $header-status-font-color: white; //--header-status-font-color
 
+// TITLE
+$title-header-background-color: #f1f2f8; //--title-header-background-color
+$title-header-font-color: #606a84;
+
 // FOOTER
 
 $footer-background-color: #050d58; //--footer-background-color
@@ -69,7 +76,7 @@ $footer-icon-color: white; //--footer-icon-color
 
 $accordian-background-color: white; //--accordian-background-color
 $accordian-font-color: #484848; //--accordian-font-color
-$accordian-icon-color: #4b56c0; //--accordian-icon-color
+$accordian-icon-color: #5f38f9; //--accordian-icon-color
 $accordian-header-background-color: #f1f5f9;
 
 // DROPDOWN
@@ -79,7 +86,7 @@ $dropdown-shadow: 0px 2px 4px -1px lightgray, 0px 4px 5px 0px lightgray,
 
 // CHECKBOX
 //@to-do -- payment - redo checkbox component
-$checkbox-background-color: #4b56c0; // --checkbox-background-color
+$checkbox-background-color: #5f38f9; // --checkbox-background-color
 $checkbox-icon-color: white; //--checkbox-icon-color
 
 // BACKGROUND

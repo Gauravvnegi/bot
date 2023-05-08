@@ -59,7 +59,8 @@
 
 :host ::ng-deep .next-button {
   @include footer-next;
-  @media only screen and (max-width: $M) {
+  @media only screen and (max-width: $tablet) {
     width: 100vw !important;
   }
+  border-radius: 0%;
 }

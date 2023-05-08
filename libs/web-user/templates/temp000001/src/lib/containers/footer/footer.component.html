@@ -6,37 +6,43 @@
     <div class="social_icons" *ngIf="showSocialIcons">
       <div *ngFor="let option of footerConfig.social" class="icon">
         <a [href]="option.redirectUrl" target="_blank" rel="noreferrer">
-          <img [src]="option.imageUrl" />
+          <img [src]="option.imageUrl" alt="" />
         </a>
       </div>
     </div>
     <div class="footer-privacy-text">
-      <a [href]="footerConfig.privacyPolicy" target="_blank" rel="noreferrer"
+      <a
+        class="basic-text"
+        [href]="footerConfig.privacyPolicy"
+        target="_blank"
+        rel="noreferrer"
         >Privacy Policy</a
       >
       <a
         [href]="footerConfig.termsAndConditions"
         target="_blank"
         rel="noreferrer"
+        class="basic-text"
         >Terms & Conditions</a
       >
     </div>
   </div>
   <div class="footer__wrapper--contact-details">
     <div class="wrap-details">
-      <a href="tel:{{ footerConfig.contactDetails.contactNo }}">
-        <div style="margin-bottom: 10px;" class="text">
-          <mat-icon class="material-icon" matSuffix>call</mat-icon
-          >{{ footerConfig.contactDetails.contactNo }}
-        </div>
+      <a
+        class="basic-text"
+        href="tel:{{ footerConfig.contactDetails.contactNo }}"
+      >
+        <mat-icon class="material-icon" matSuffix>call</mat-icon>
+
+        {{ footerConfig.contactDetails.contactNo }}
       </a>
-      <a href="mailto:{{ footerConfig.contactDetails.email }}">
-        <div class="text">
-          <mat-icon class="material-icon" matSuffix>email</mat-icon>
-          <p style="word-break: break-all;">
-            {{ footerConfig.contactDetails.email }}
-          </p>
-        </div>
+      <a
+        class="basic-text"
+        href="mailto:{{ footerConfig.contactDetails.email }}"
+      >
+        <mat-icon class="material-icon" matSuffix>email</mat-icon>
+        {{ footerConfig.contactDetails.email }}
       </a>
     </div>
   </div>

@@ -258,7 +258,7 @@ export class BaseDatatableComponent implements OnInit {
    * @description This will reset the table to its initial state
    */
   resetTable() {
-    this.table.reset();
+    this.table?.reset();
   }
 
   onDocumentActions() {

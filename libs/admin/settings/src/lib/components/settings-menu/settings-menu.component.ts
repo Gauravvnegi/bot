@@ -27,7 +27,7 @@ export class SettingsMenuComponent implements OnInit {
     if (isDisabled) return;
     switch (settingName) {
       case SettingOptions.ROLES_AND_PERMISSION:
-        this.router.navigate(['/pages/roles-permissions']);
+        this.router.navigate(['/pages/roles-permissions/manage-profile']);
         break;
       case SettingOptions.NOTIFICATION:
         break;

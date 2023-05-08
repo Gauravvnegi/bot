@@ -2063,6 +2063,38 @@
           "style": "scss"
         }
       }
+    },
+    "admin-business": {
+      "projectType": "library",
+      "root": "libs/admin/business",
+      "sourceRoot": "libs/admin/business/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/business/tsconfig.lib.json",
+              "libs/admin/business/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/business/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/business/jest.config.js",
+            "tsConfig": "libs/admin/business/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/business/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

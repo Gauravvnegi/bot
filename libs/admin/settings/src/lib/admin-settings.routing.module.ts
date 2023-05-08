@@ -33,10 +33,10 @@ const appRoutes: Route[] = [
           { path: '', component: SiteSettingsComponent },
           {
             path: 'brand',
-            children: [
-              { path: '', component: BrandComponent },
-              { path: 'hotel', component: BrandComponent },
-            ],
+            loadChildren: () =>
+              import('@hospitality-bot/admin/business').then(
+                (m) => m.AdminBusinessModule
+              ),
           },
         ],
       },

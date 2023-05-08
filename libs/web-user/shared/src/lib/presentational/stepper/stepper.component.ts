@@ -143,10 +143,26 @@ export class StepperComponent extends BaseComponent {
   }
 
   listenForSelectedIndex() {
+    let timeoutId;
+
     this.stepperService.nextStepIndex$.subscribe((index) => {
       this.nextStepIdx = index;
     });
+
     this.stepperService.stepperSelectedIndex$.subscribe((index) => {
+      //------ footer btn shift issue fix-------
+      clearTimeout(timeoutId);
+      const doc = document.getElementsByClassName('main-block');
+      for (let i = 0; i < doc.length; i++) {
+        doc[i].classList.add('main-container');
+      }
+      timeoutId = setTimeout(() => {
+        for (let i = 0; i < doc.length; i++) {
+          doc[i].classList.remove('main-container');
+        }
+      }, 1000);
+      //----------------
+
       this.selectedIndex = index;
       this.toggleStepperClass(index);
     });
@@ -158,6 +174,12 @@ export class StepperComponent extends BaseComponent {
   }
 
   onStepChange(event: any): void {
+    // scrolling to top to fix thi btn issue in template0002
+    const scrollEle = document.getElementsByClassName(
+      'mat-horizontal-content-container'
+    );
+    if (scrollEle.length > 0) scrollEle[0].scrollTop = 0;
+
     this.stepperService.setSelectedIndex(event.selectedIndex);
     this.selectionChange.emit(event);
   }

@@ -30,8 +30,8 @@
     &__text {
       div {
         color: $heading-black;
-        font-size: 20px;
-        margin: 20px 0;
+        font-size: 18px;
+        margin: 5px 0;
         margin-left: 20px;
         font-weight: 600;
         @media screen and (max-width: 600px) {
@@ -109,8 +109,9 @@
           font-weight: 600;
         }
         .value {
-          font-size: $font-large;
-          font-weight: 700;
+          font-size: 20px;
+          font-weight: 600;
+          margin-left: 0.4em;
         }
       }
     }

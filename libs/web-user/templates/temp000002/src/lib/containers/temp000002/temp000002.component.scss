@@ -37,7 +37,7 @@
     padding: 2rem 20px 8rem;
   }
   @media screen and (min-width: $tablet) {
-    height: calc(100vh - 290px);
+    height: calc(100vh - 260px);
     // position: relative;
     border: 4px;
     padding: 1rem;
@@ -57,7 +57,7 @@
     bottom: 73px;
     left: 1rem;
     background: white;
-    inset: auto 2rem 75px;
+    inset: auto 2rem 70px;
     box-shadow: 0px -2px 4px #08070738;
     z-index: 10;
   }
@@ -188,5 +188,12 @@
 :host ::ng-deep .mat-expansion-panel-header {
   @media screen and (min-width: $tablet) {
     padding: 0px;
+  }
+}
+
+:host ::ng-deep .main-container {
+  @media screen and (min-width: $tablet) {
+    height: calc(100vh - 177.5px);
+    position: relative;
   }
 }

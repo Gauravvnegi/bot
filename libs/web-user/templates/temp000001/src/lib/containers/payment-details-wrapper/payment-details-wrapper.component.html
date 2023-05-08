@@ -1,4 +1,4 @@
-<div *ngIf="isRendered">
+<div *ngIf="isRendered" class="main-container main-block">
   <div class="container" *ngIf="isConfigLoaded">
     <mat-tab-group #matTab dynamicHeight>
       <mat-tab
@@ -12,7 +12,7 @@
                 : 'custom-tab'
             "
           >
-            <div>
+            <div class="img-wrap">
               <img
                 [src]="header.imageUrl"
                 style="height: 53px;"

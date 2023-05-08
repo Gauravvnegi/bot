@@ -20,13 +20,9 @@ import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { chips, cols, status } from '../../constant/data-table';
 import { ManageSiteStatus } from '../../constant/manage-site';
-import {
-  ManageSite,
-  ManageSiteList,
-  NextState,
-} from '../../models/data-table.model';
+import { ManageSite, ManageSiteList } from '../../models/data-table.model';
 import { ManageSitesService } from '../../services/manage-sites.service';
-import { QueryConfig } from '../../types/manage-site.type';
+import { NextState, QueryConfig } from '../../types/manage-site.type';
 
 @Component({
   selector: 'hospitality-bot-manage-site-data-table',

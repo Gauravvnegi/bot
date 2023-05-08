@@ -17,7 +17,7 @@ export class ManageSitesService extends ApiService {
   }
 
   updateSiteStatus(siteId: string, status: ManageSiteStatus): Observable<any> {
-    return this.patch(`/api/v1/sites/${siteId}?status=${status}`, {});
+    return this.patch(`/api/v1/sites/${siteId}`, { status });
   }
 
   updateUserDetails(data: Partial<UserResponse>): Observable<any> {

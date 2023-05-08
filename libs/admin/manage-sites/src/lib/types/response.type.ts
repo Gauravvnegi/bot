@@ -2,21 +2,21 @@ import { ManageSiteStatus } from '../constant/manage-site';
 
 export type ManageSiteResponse = {
   id: string;
-  thumbnail: string;
-  siteName: string;
-  url: string;
+  logo: string;
+  name: string;
+  domain: string;
+  themeId: string;
   nextState: ManageSiteStatus[];
-  expiryDate: number;
   status: ManageSiteStatus;
-  created: number;
+  socialPlatforms: any[];
 };
 
 export type ManageSiteListResponse = {
   total: number;
   entityTypeCounts: {
     PUBLISHED: number;
-    INACTIVE: number;
     DRAFT: number;
+    TRASH: number;
   };
   records: ManageSiteResponse[];
 };

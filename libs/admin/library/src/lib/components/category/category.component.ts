@@ -112,7 +112,8 @@ export class CategoryComponent implements OnInit {
           name: event,
           source: 1,
           imageUrl: '',
-          type: 'PACKAGE_CATEGORY',
+          type: this.type,
+          active: true,
         })
         .subscribe(() => {
           this.snackbarService.openSnackBarAsText(

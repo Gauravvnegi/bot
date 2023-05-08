@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SummaryDetailsConfigI } from 'libs/web-user/shared/src/lib/data-models/billSummaryConfig.model';
@@ -34,7 +34,8 @@ export class SummaryWrapperComponent extends BaseWrapperComponent
     protected route: ActivatedRoute,
     protected _snackbarService: SnackBarService,
     protected _reservationService: ReservationService,
-    protected _translateService: TranslateService
+    protected _translateService: TranslateService,
+    private _fb: FormBuilder
   ) {
     super();
     this.self = this;
@@ -47,6 +48,13 @@ export class SummaryWrapperComponent extends BaseWrapperComponent
     super.ngOnInit();
     this.setFieldConfiguration();
     this.setDialogData();
+    this.initRequestForm();
+  }
+
+  initRequestForm() {
+    this.requestForm = this._fb.group({
+      request: [''],
+    });
   }
 
   setFieldConfiguration() {
@@ -91,9 +99,14 @@ export class SummaryWrapperComponent extends BaseWrapperComponent
   // }
 
   onCheckinSubmit() {
+    const data = {
+      special_remarks: this.requestForm.get('request').value,
+      // termsStatus: this.termsStatus,
+    };
+    debugger;
     this.$subscription.add(
       this._reservationService
-        .checkIn(this._reservationService.reservationData.id, {})
+        .checkIn(this._reservationService.reservationData.id, data)
         .subscribe(
           (res) => {
             this._translateService

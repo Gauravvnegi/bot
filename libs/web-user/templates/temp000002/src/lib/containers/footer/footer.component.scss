@@ -84,7 +84,7 @@
         color: var(--footer-icon-color, $footer-icon-color);
       }
     }
-    @media only screen and (max-width: $M) {
+    @media only screen and (max-width: $S) {
       white-space: nowrap;
 
       .text {

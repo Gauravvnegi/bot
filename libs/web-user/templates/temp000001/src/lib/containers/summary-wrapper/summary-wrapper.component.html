@@ -4,7 +4,15 @@
     (addFGEvent)="addFGEvent($event)"
     (termsStatus)="setTermsStatus($event)"
     *ngIf="reservationData"
-  ></hospitality-bot-summary>
+  >
+    <hospitality-bot-temp000002-textarea
+      class="special-request"
+      [parentForm]="requestForm"
+      [name]="'request'"
+      [settings]="summaryDetails.requestConfig"
+      *ngIf="reservationData"
+    ></hospitality-bot-temp000002-textarea>
+  </hospitality-bot-summary>
 
   <div class="main-template-button">
     <ng-container button-renderer [config]="buttonConfig" [context]="self">

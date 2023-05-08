@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -23,7 +24,8 @@ export class SummaryWrapperComponent extends BaseSummaryWrapperComponent {
     route: ActivatedRoute,
     _snackbarService: SnackBarService,
     _reservationService: ReservationService,
-    _translateService: TranslateService
+    _translateService: TranslateService,
+    _fb: FormBuilder
   ) {
     super(
       dialog,
@@ -33,7 +35,8 @@ export class SummaryWrapperComponent extends BaseSummaryWrapperComponent {
       route,
       _snackbarService,
       _reservationService,
-      _translateService
+      _translateService,
+      _fb
     );
     this.self = this;
   }

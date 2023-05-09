@@ -1,5 +1,5 @@
 <div class="wrapper" [formGroup]="useForm">
-  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+  <hospitality-bot-navigation-header [heading]="'Hotel'" [routes]="">
   </hospitality-bot-navigation-header>
 
   <div class="hotel-header">
@@ -7,13 +7,13 @@
       Hotel Information
     </div>
     <hospitality-bot-toggle-switch
-      class="status"
-      controlName="active"
-      label="Status:"
-    ></hospitality-bot-toggle-switch>
-  </div>
-  <div class="form-block">
-    <hospitality-bot-input
+    class="status"
+    controlName="active"
+    label="Status:"
+  ></hospitality-bot-toggle-switch>
+ </div>
+    <div class="form-block">
+       <hospitality-bot-input
       class="half-width"
       controlName="serviceName"
       label="Service Name"
@@ -40,35 +40,34 @@
       label="Address"
     ></hospitality-bot-input>
     <div class="file-upload-wrapper">
-      <hospitality-bot-custom-file-upload
-        formControlName="imageUrls"
-        label="Image"
-        isFeatureView="true"
-        description="Mandatory to add at least 1 image"
-        [limit]="imageLimit"
-        [hotelId]="hotelId"
-        path="static-content/room-types"
-      ></hospitality-bot-custom-file-upload>
-    </div>
-    <hospitality-bot-button
-      class="create-btn"
-      label="+Add More Images"
-      (onClick)="addMoreImage()"
-      variant="outlined"
+        <hospitality-bot-custom-file-upload
+          formControlName="imageUrls"
+          label="Image"
+          description="Mandatory to add at least 1 image"
+          [limit]="imageLimit"
+          [hotelId]="hotelId"
+          path="static-content/room-types"
+        ></hospitality-bot-custom-file-upload>
+      </div>
+        <hospitality-bot-button
+        class="create-btn"
+        label="+Add More Images"
+        (onClick)="addMoreImage()"
+       variant="outlined"
     ></hospitality-bot-button>
 
     <div class="des-template">
-      <div class="des-template__label">Description</div>
-      <div class="des-template__input">
-        <hospitality-bot-template-editor
-          [parentFG]="useForm"
-          [name]="'description'"
-          [height]="250"
-        ></hospitality-bot-template-editor>
+        <div class="des-template__label">Description</div>
+        <div class="des-template__input">
+          <hospitality-bot-template-editor
+            [parentFG]="useForm"
+            [name]="'description'"
+            [height]="250"
+          ></hospitality-bot-template-editor>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="hotel-wrapper">
+</div>
+<div class="hotel-wrapper">
     <div class="header">Services</div>
     <hr />
     <div class="hotel-services-wrapper">
@@ -78,15 +77,19 @@
         formControlName="complimentaryAmenities"
         [itemList]="compServices"
         (viewAll)="saveHotelData()"
-        [noRecordsAction]="noRecordAction"
+        [noRecordsAction]=""
       ></hospitality-bot-custom-select>
     </div>
   </div>
 
-  <hospitality-bot-social-media [parentFG]="useForm" class="full-width">
-  </hospitality-bot-social-media>
+    <hospitality-bot-social-media 
+    [parentFG]="useForm"
+    class="full-width">
+    </hospitality-bot-social-media>
+ 
 
-  <div class="footer-buttons">
+
+    <div class="footer-buttons">
     <hospitality-bot-button
       label="Reset All"
       (onClick)="resetForm()"
@@ -94,7 +97,7 @@
       severity="reset"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      [label]="hotelId ? 'Update' : 'Create'"
+      [label]="itemId ? 'Update' :'Create'"
       (onClick)="submitForm()"
       [showLoader]="loading"
     ></hospitality-bot-button>

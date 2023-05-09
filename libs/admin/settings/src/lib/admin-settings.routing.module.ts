@@ -5,6 +5,8 @@ import { BrandComponent } from './components/brand/brand.component';
 import { MainComponent } from './components/main/main.component';
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component';
 import { SiteSettingsComponent } from './components/site-settings/site-settings.component';
+import { HotelDataTableComponent } from './components/hotel-data-table/hotel-data-table.component';
+import { AddHotelComponent } from './components/add-hotel/add-hotel.component';
 
 const appRoutes: Route[] = [
   {
@@ -55,5 +57,11 @@ const appRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminSettingsRoutingModule {
-  static components = [MainComponent, SettingsMenuComponent, BrandComponent];
+  static components = [
+    MainComponent,
+    SettingsMenuComponent,
+    BrandComponent,
+    HotelDataTableComponent,
+    AddHotelComponent,
+  ];
 }

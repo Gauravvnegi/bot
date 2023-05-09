@@ -1,0 +1,58 @@
+<p-accordion>
+  <p-accordionTab header="Social Media">
+    <div class="form-block" [formGroup]="parentFG">
+      <div class="half-width social-media">
+        <img src="/assets/images/facebook.png" alt="img" class="facebook" />
+        <hospitality-bot-input
+          controlName="facebook"
+          class="input"
+        ></hospitality-bot-input>
+        <img
+          src="/assets/svg/cross.svg"
+          (click)="parentFG.get('facebook').setValue('')"
+          alt="cross"
+          class="svg"
+        />
+      </div>
+      <div class="half-width social-media">
+        <img src="/assets/images/facebook.png" alt="img" class="instagram" />
+        <hospitality-bot-input
+          controlName="instagram"
+          class="input"
+        ></hospitality-bot-input>
+        <img
+          src="/assets/svg/cross.svg"
+          (click)="parentFG.get('instagram').setValue('')"
+          alt="cross"
+          class="svg"
+        />
+      </div>
+      <div class="half-width social-media">
+        <img src="/assets/images/facebook.png" alt="img" class="twitter" />
+        <hospitality-bot-input
+          controlName="twitter"
+          class="input"
+        ></hospitality-bot-input>
+        <img
+          src="/assets/svg/cross.svg"
+          (click)="parentFG.get('twitter').setValue('')"
+          alt="cross"
+          class="svg"
+        />
+      </div>
+      <div class="half-width social-media">
+        <img src="assets/images/facebook.png" alt="img" class="youtube" />
+        <hospitality-bot-input
+          controlName="youtube"
+          class="input"
+        ></hospitality-bot-input>
+        <img
+          src="/assets/svg/cross.svg"
+          (click)="parentFG.get('youtube').setValue('')"
+          alt="cross"
+          class="svg"
+        />
+      </div>
+    </div>
+  </p-accordionTab>
+</p-accordion>

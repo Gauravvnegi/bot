@@ -8,9 +8,9 @@
   </div>
   <div class="action-wrapper">
     <hospitality-bot-button
-      label="+Add Hotels"
-      link="pages/settings/business-info/brand/{{ brandId }}/hotel"
-    ></hospitality-bot-button>
+    label="+Add Hotels"
+    link="pages/settings/business-info/brand/hotel"
+  ></hospitality-bot-button>
   </div>
 </div>
 <p-table
@@ -116,12 +116,11 @@
   </ng-template>
 </p-table>
 <ng-template #emptyTable>
-  <hospitality-bot-empty-table
-    [isLoading]="loading"
-    [content]="{
-      description: 'No Hotel Found',
-      imageSrc: 'assets/images/hotel.png'
-    }"
-  >
-  </hospitality-bot-empty-table>
-</ng-template>
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      [content]="{
+        description: 'No Hotel Found',
+        imageSrc: 'assets/images/hotel.png'
+      }"
+    > </hospitality-bot-empty-table>
+  </ng-template>

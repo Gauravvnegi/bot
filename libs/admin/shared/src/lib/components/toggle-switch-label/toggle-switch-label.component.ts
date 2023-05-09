@@ -8,8 +8,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class ToggleSwitchComponentLabel implements OnInit {
   @Input() isToggleOn: boolean = false;
   @Output() onToggleSwitch = new EventEmitter<boolean>();
-  toggleOnLabel: string = 'Auto';
-  toggleOffLabel: string = 'manual';
+  toggleOnLabel: string = 'Accept';
+  toggleOffLabel: string = 'Reject';
   toggleOnColor: string = '#2196F3';
   toggleOffColor: string = '#ccc';
 

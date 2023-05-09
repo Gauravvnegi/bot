@@ -2,13 +2,13 @@ import {
   EntityStateCountsResponse,
   InvoiceResponse,
   Item,
+  ItemList,
   PaymentHistoryListRespone,
   PaymentHistoryResponse,
   Tax,
 } from '../types/response.type';
 import { Option } from '@hospitality-bot/admin/shared';
 export class Invoice {
-  cashierName: string;
   invoiceDate: number;
   arrivalDate: number;
   guestName: string;
@@ -21,7 +21,6 @@ export class Invoice {
   totalDiscount: number;
 
   deserialize(input: InvoiceResponse) {
-    this.cashierName = input.cashier;
     this.invoiceDate = input.invoiceDate;
     this.guestName = input.primaryGuest.firstName;
     this.arrivalDate = input.reservation.arrivalTime;
@@ -37,26 +36,33 @@ export class Invoice {
 }
 
 export class TableData {
+  id: string;
   description: Option;
   unitValue: number;
   unit: number;
   amount: number;
   tax: Option[];
   totalAmount: number;
+  discountType: string;
+  discount: number;
 
   deserialize(input: Item) {
     this.description = {
       label: input.description,
-      value: input.description,
+      value: input.id,
+      amount: 0,
+      taxes: [],
     };
-    this.unitValue = input.unitValue;
+    this.unitValue = input.perUnitPrice;
     this.unit = input.unit;
-    this.amount = input.amount;
+    this.amount = input.unit * input.perUnitPrice;
     this.totalAmount = input.amount;
     this.tax = input.itemTax.map((tax) => ({
       label: `${tax.taxType} ${tax.taxValue}%`,
       value: tax.id,
     }));
+    this.discountType = input.discount?.type || '';
+    this.discount = input.discount?.value || 0;
     return this;
   }
 }

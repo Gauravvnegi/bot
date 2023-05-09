@@ -21,6 +21,10 @@
   margin: 20px;
 }
 
+:host ::ng-deep hospitality-bot-navigation-header .nav-wrapper__sticky{
+  padding: 20px 42px 20px 32px;
+}
+
 .payment-form {
   background-color: white;
   box-shadow: $form-shadow;
@@ -75,6 +79,12 @@
         gap: 8px;
         margin-right: 34px;
       }
+      .refund-block{
+        display: flex;
+        align-items: center;
+        max-width: 26%;
+        margin: -18px 0 -7px;
+      }
     }
   }
 
@@ -90,8 +100,10 @@
   align-items: center
 }
 
-:host ::ng-deep .span-block{  hospitality-bot-button .button{
-    min-width: 60px;
+:host ::ng-deep tr{ hospitality-bot-button .button{
+    min-width: 35px;
+    padding: 0;
+    margin: 0;
   }
 }
 
@@ -185,6 +197,20 @@
 }
 
 .line {
-  border-top: 1.8px solid black;
+  border-top: 2px solid black;
   opacity: 0.25;
+}
+
+.discount-row td {
+  align-items: center;
+  border-top: hidden;
+  padding: 0 1rem 15px;
+}
+
+:host ::ng-deep .prefix-field .p-field .main{
+  margin-top: 0px;
+}
+
+.negative-amount{
+  color: red;
 }

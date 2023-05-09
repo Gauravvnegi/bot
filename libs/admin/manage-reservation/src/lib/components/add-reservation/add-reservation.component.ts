@@ -58,7 +58,7 @@ export class AddReservationComponent implements OnInit {
   summaryData: SummaryData;
   configData: BookingConfig;
   roomFields = roomFields;
-
+  loading = false;
   displayBookingOffer: boolean = false;
   formValueChanges = false;
   disabledForm = false;
@@ -217,13 +217,14 @@ export class AddReservationComponent implements OnInit {
 
   getInitialData(): void {
     this.$subscription.add(
-      this.manageReservationService
-        .getPaymentMethod(this.hotelId)
-        .subscribe((response) => {
+      this.manageReservationService.getPaymentMethod(this.hotelId).subscribe(
+        (response) => {
           this.paymentOptions = new PaymentMethodList()
             .deserialize(response)
             .records.map((item) => ({ label: item.label, value: item.label }));
-        }, (error)=>{})
+        },
+        (error) => {}
+      )
     );
   }
 
@@ -260,24 +261,27 @@ export class AddReservationComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService
         .getReservationDataById(this.reservationId, this.hotelId)
-        .subscribe((response) => {
-          console.log(response);
-          const data = new ReservationFormData().deserialize(response);
-          console.log(data);
-          this.userForm.patchValue(data);
-          this.summaryData = new SummaryData().deserialize(response);
-          this.setFormDisability(data.bookingInformation);
-          if (data.offerId)
-            this.getOfferByRoomType(
-              this.userForm.get('roomInformation.roomTypeId').value
-            );
-          this.userForm.valueChanges.subscribe((_) => {
-            if (!this.formValueChanges) {
-              this.formValueChanges = true;
-              this.listenForFormChanges();
-            }
-          });
-        }, (error)=>{})
+        .subscribe(
+          (response) => {
+            console.log(response);
+            const data = new ReservationFormData().deserialize(response);
+            console.log(data);
+            this.userForm.patchValue(data);
+            this.summaryData = new SummaryData().deserialize(response);
+            this.setFormDisability(data.bookingInformation);
+            if (data.offerId)
+              this.getOfferByRoomType(
+                this.userForm.get('roomInformation.roomTypeId').value
+              );
+            this.userForm.valueChanges.subscribe((_) => {
+              if (!this.formValueChanges) {
+                this.formValueChanges = true;
+                this.listenForFormChanges();
+              }
+            });
+          },
+          (error) => {}
+        )
     );
   }
 
@@ -306,14 +310,17 @@ export class AddReservationComponent implements OnInit {
       this.$subscription.add(
         this.manageReservationService
           .getOfferByRoomType(this.hotelId, id)
-          .subscribe((response) => {
-            this.offersList = new OfferList().deserialize(response);
-            if (this.userForm.get('offerId').value) {
-              this.selectedOffer = this.offersList.records.filter(
-                (item) => item.id === this.userForm.get('offerId').value
-              )[0];
-            }
-          }, (error)=>{})
+          .subscribe(
+            (response) => {
+              this.offersList = new OfferList().deserialize(response);
+              if (this.userForm.get('offerId').value) {
+                this.selectedOffer = this.offersList.records.filter(
+                  (item) => item.id === this.userForm.get('offerId').value
+                )[0];
+              }
+            },
+            (error) => {}
+          )
       );
   }
 
@@ -348,9 +355,8 @@ export class AddReservationComponent implements OnInit {
     };
     if (this.userForm.get('roomInformation.roomTypeId')?.value)
       this.$subscription.add(
-        this.manageReservationService
-          .getSummaryData(config)
-          .subscribe((res) => {
+        this.manageReservationService.getSummaryData(config).subscribe(
+          (res) => {
             this.summaryData = new SummaryData().deserialize(res);
             this.userForm
               .get('roomInformation')
@@ -361,11 +367,14 @@ export class AddReservationComponent implements OnInit {
             this.userForm
               .get('paymentMethod.totalPaidAmount')
               .updateValueAndValidity();
-          }, (error)=>{})
+          },
+          (error) => {}
+        )
       );
   }
 
   HandleBooking(): void {
+    this.loading = true;
     const data = this.manageReservationService.mapReservationData(
       this.userForm.getRawValue()
     );
@@ -377,9 +386,13 @@ export class AddReservationComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService
         .createReservation(this.hotelId, data)
-        .subscribe((res: ReservationResponse) => {
-          this.bookingConfirmationPopup(res?.reservationNumber);
-        }, (error)=>{})
+        .subscribe(
+          (res: ReservationResponse) => {
+            this.bookingConfirmationPopup(res?.reservationNumber);
+          },
+          (error) => {},
+          () => (this.loading = false)
+        )
     );
   }
 
@@ -387,9 +400,12 @@ export class AddReservationComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService
         .updateReservation(this.hotelId, this.reservationId, data)
-        .subscribe((res: ReservationResponse) => {
-          this.bookingConfirmationPopup(res?.reservationNumber);
-        }, (error)=>{})
+        .subscribe(
+          (res: ReservationResponse) => {
+            this.bookingConfirmationPopup(res?.reservationNumber);
+          },
+          (error) => {}
+        )
     );
   }
 
@@ -459,21 +475,24 @@ export class AddReservationComponent implements OnInit {
         .searchLibraryItem(this.hotelId, {
           params: `?key=${text}&type=ROOM_TYPE`,
         })
-        .subscribe((res: any) => {
-          const data = res;
-          this.roomTypes =
-            data.ROOM_TYPE?.filter((item) => item.status).map((item) => {
-              new RoomTypeOption().deserialize(item);
-              return {
-                label: item.name,
-                value: item.id,
-                roomCount: item.roomCount,
-                maxChildren: item.maxChildren,
-                maxAdult: item.maxAdult,
-              };
-            }) ?? [];
-          roomFields[0].options = this.roomTypes;
-        }, (error)=>{});
+        .subscribe(
+          (res: any) => {
+            const data = res;
+            this.roomTypes =
+              data.ROOM_TYPE?.filter((item) => item.status).map((item) => {
+                new RoomTypeOption().deserialize(item);
+                return {
+                  label: item.name,
+                  value: item.id,
+                  roomCount: item.roomCount,
+                  maxChildren: item.maxChildren,
+                  maxAdult: item.maxAdult,
+                };
+              }) ?? [];
+            roomFields[0].options = this.roomTypes;
+          },
+          (error) => {}
+        );
     } else {
       this.roomTypeOffSet = 0;
       this.roomTypes = [];

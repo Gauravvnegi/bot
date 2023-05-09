@@ -373,3 +373,11 @@
   background: $grayLight;
   border-radius: 10px;
 }
+
+.progress-bar {
+  z-index: $progress-bar-z;
+  position: absolute;
+  height: 5px;
+  width: 100%;
+  top: 58px;
+}

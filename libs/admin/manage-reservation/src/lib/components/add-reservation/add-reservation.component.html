@@ -319,9 +319,10 @@
         </div>
         <div class="bk-summary_btnwrapper">
           <hospitality-bot-button
-            (click)="HandleBooking()"
-            label="Confirm Booking"
+            (click)="handleBooking()"
+            label="{{ this.reservationId ? 'Update' : 'Confirm' }} Booking"
             [disabled]="userForm.invalid || disabledForm"
+            [isLoading]="isBooking"
           ></hospitality-bot-button>
         </div>
       </ng-container>

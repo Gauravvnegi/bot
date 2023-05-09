@@ -64,6 +64,7 @@ export class AddReservationComponent implements OnInit {
   disabledForm = false;
   startMinDate = new Date();
   endMinDate = new Date();
+  isBooking = false;
 
   pageTitle = 'Add Booking';
   routes: NavRouteOptions = [
@@ -373,8 +374,8 @@ export class AddReservationComponent implements OnInit {
       );
   }
 
-  HandleBooking(): void {
-    this.loading = true;
+  handleBooking(): void {
+    this.isBooking = true;
     const data = this.manageReservationService.mapReservationData(
       this.userForm.getRawValue()
     );
@@ -391,7 +392,7 @@ export class AddReservationComponent implements OnInit {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {},
-          () => (this.loading = false)
+          () => (this.isBooking = false)
         )
     );
   }
@@ -404,7 +405,10 @@ export class AddReservationComponent implements OnInit {
           (res: ReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
-          (error) => {}
+          (error) => {},
+          () => {
+            this.isBooking = false;
+          }
         )
     );
   }

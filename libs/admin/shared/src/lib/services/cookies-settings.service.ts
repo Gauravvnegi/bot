@@ -114,11 +114,12 @@ export class CookiesSettingsService {
 
     const brands = currentSite?.brands;
     if (brands?.length) {
-      const currentBrand = brands[brands.length - 1];
+      // finding the brand which has hotel
+      const currentBrand = brands.find((item) => !!item.hotels?.length);
       const hotels = currentBrand?.hotels;
 
       if (hotels.length) {
-        const hotelId = hotels[hotels.length - 1].id;
+        const hotelId = hotels[0].id;
 
         this.tokenUpdateService.getUpdatedToken(hotelId).subscribe(
           (response) => {

@@ -141,7 +141,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
             this.roomTypes = [...this.roomTypes, ...data];
             this.noMoreRoomTypes = data.length < this.roomTypeLimit;
           },
-          (error)=>{},
+          (error) => {},
           () => {
             this.loadingRoomTypes = false;
           }
@@ -177,7 +177,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
                   };
                 }) ?? [];
           },
-          (error)=>{},
+          (error) => {},
           () => {
             this.loadingRoomTypes = false;
           }
@@ -289,19 +289,22 @@ export class AddRoomComponent implements OnInit, OnDestroy {
               .list[0],
           ],
         })
-        .subscribe((res) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.success.updatedRoom`,
-                priorityMessage: '',
-              },
-              '',
-              { panelClass: 'success' }
-            )
-            .subscribe();
-          this.location.back();
-        }, (error)=>{})
+        .subscribe(
+          (res) => {
+            this.snackbarService
+              .openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.success.updatedRoom`,
+                  priorityMessage: '',
+                },
+                '',
+                { panelClass: 'success' }
+              )
+              .subscribe();
+            this.location.back();
+          },
+          (error) => {}
+        )
     );
   }
 
@@ -319,43 +322,45 @@ export class AddRoomComponent implements OnInit, OnDestroy {
               ? new SingleRoomList().deserialize(data).list
               : new MultipleRoomList().deserialize(data).list,
         })
-        .subscribe((res) => {
-          const dialogConfig = new MatDialogConfig();
-          dialogConfig.disableClose = true;
-          const togglePopupCompRef = this.modalService.openDialog(
-            ModalComponent,
-            dialogConfig
-          );
-
-          togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-            this.modalService.close();
-          });
-
-          if (res.errorMessages.length) {
-            togglePopupCompRef.componentInstance.content = {
-              heading: 'Rooms not added',
-              description: res.errorMessages,
-            };
-          } else this.location.back();
-
-          if (res.rooms.length) {
-            this.$subscription.add(
-              this.snackbarService
-                .openSnackBarWithTranslate(
-                  {
-                    translateKey: `messages.success.addSingleRoom`,
-                    priorityMessage: '',
-                  },
-                  '',
-                  { panelClass: 'success' }
-                )
-                .subscribe()
+        .subscribe(
+          (res) => {
+            const dialogConfig = new MatDialogConfig();
+            dialogConfig.disableClose = true;
+            const togglePopupCompRef = this.modalService.openDialog(
+              ModalComponent,
+              dialogConfig
             );
-          }
-        }, (error)=>{})
+
+            togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+              this.modalService.close();
+            });
+
+            if (res.errorMessages.length) {
+              togglePopupCompRef.componentInstance.content = {
+                heading: 'Rooms not added',
+                description: res.errorMessages,
+              };
+            } else this.location.back();
+
+            if (res.rooms.length) {
+              this.$subscription.add(
+                this.snackbarService
+                  .openSnackBarWithTranslate(
+                    {
+                      translateKey: `messages.success.addSingleRoom`,
+                      priorityMessage: '',
+                    },
+                    '',
+                    { panelClass: 'success' }
+                  )
+                  .subscribe()
+              );
+            }
+          },
+          (error) => {}
+        )
     );
   }
-
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

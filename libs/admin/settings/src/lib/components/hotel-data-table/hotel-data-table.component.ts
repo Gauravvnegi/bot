@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -8,9 +8,9 @@ import { cols } from '../../constant/hotel-data-table';
 import { Subscription } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { HotelService } from '../../services/hotel.service';
+import { HotelService } from '../services/hotel.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-hotel-data-table',
@@ -28,8 +28,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   hotelId: string;
   loading: boolean = false;
   globalQueries = [];
-  tableFG;
-  @Input() brandId: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -38,8 +36,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     private hotelService: HotelService,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {
     super(fb, tabFilterService);
   }
@@ -126,10 +123,8 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   }
 
   editHotel(Id) {
-    console.log(Id);
-    this.router.navigate([
-      `pages/settings/business-info/brand/${this.brandId}/hotel/${Id}`,
-    ]);
+    console.log(Id)
+    this.router.navigate([`pages/settings/business-info/brand/hotel/${Id}`]);
   }
 
   handelFinal = () => {

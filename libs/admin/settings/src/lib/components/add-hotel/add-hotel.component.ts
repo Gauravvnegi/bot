@@ -1,63 +1,44 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { NavRouteOption, Option } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Option } from '@hospitality-bot/admin/shared';
+import { HotelService } from '../services/hotel.service';
 import { Subscription } from 'rxjs';
-import { businessRoute } from '../../constant/routes';
-import { Services, noRecordAction } from '../../models/hotel.models';
-import { HotelService } from '../../services/hotel.service';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Services } from '../models/hotel.models';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'hospitality-bot-hotel-info-form',
-  templateUrl: './hotel-info-form.component.html',
-  styleUrls: ['./hotel-info-form.component.scss'],
+  selector: 'hospitality-bot-add-hotel',
+  templateUrl: './add-hotel.component.html',
+  styleUrls: ['./add-hotel.component.scss'],
 })
-export class HotelInfoFormComponent implements OnInit {
+export class AddHotelComponent implements OnInit {
   hotelId: string;
+  itemId: string;
   useForm: FormGroup;
+  code: string = '#add-hotel';
   compServices = [];
   loading = false;
   imageLimit: number = 4;
   segmentList: Option[];
   $subscription = new Subscription();
-  navRoutes: NavRouteOption[];
-  pageTitle: string = 'Hotel';
-  brandId: string;
-  noRecordAction = noRecordAction;
   constructor(
     private fb: FormBuilder,
     private hotelService: HotelService,
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
+    private route: ActivatedRoute,
     private router: Router
-  ) {
-    this.router.events.subscribe(
-      ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
-        const hotelId = snapshot?.params['hotelId'];
-        const brandId = snapshot?.params['brandId'];
-        if (hotelId) this.hotelId = hotelId;
-        if (brandId) this.brandId = brandId;
-      }
-    );
-    const { navRoutes, title } = businessRoute[
-      this.hotelId ? 'editHotel' : 'hotel'
-    ];
-    this.pageTitle = title;
-    this.navRoutes = navRoutes;
-    this.navRoutes[2].link = `/pages/settings/business-info/brand/${this.brandId}`;
-  }
+  ) {}
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
     this.initForm();
     this.getSegmentList();
     this.getServices();
+
+    this.itemId = this.route.snapshot.params['id'];
   }
 
   initForm() {
@@ -65,7 +46,7 @@ export class HotelInfoFormComponent implements OnInit {
       active: [true],
       serviceName: ['', [Validators.required]],
       segment: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
+      email: [''],
       contact: ['', [Validators.required]],
       address: ['', [Validators.required]],
       imageUrls: [[], [Validators.required]],
@@ -114,6 +95,7 @@ export class HotelInfoFormComponent implements OnInit {
   }
 
   submitForm() {
+    console.log(this.useForm.getRawValue())
     if (this.useForm.invalid) {
       console.log(this.useForm.errors);
       this.loading = false;
@@ -123,15 +105,12 @@ export class HotelInfoFormComponent implements OnInit {
       this.useForm.markAllAsTouched();
       return;
     }
-    // const data = new HotelFormData().deserialize(this.useForm.getRawValue() , this.brandId);
-    // only for testing
     const data = {
       hotel: {
-        name: 'hotel Reddwe',
+        name: 'hotel Reddish',
         logo:
           'https://nyc3.digitaloceanspaces.com/botfiles/bot/bot/hotel/logos/static-content/hilltop/hiltop-logo2.png',
         timezone: 'Asia/Calcutta',
-        segment: 'hotel',
         address: {
           city: 'Noida',
           country: 'India',
@@ -161,11 +140,10 @@ export class HotelInfoFormComponent implements OnInit {
    */
   handleSuccess = () => {
     this.snackbarService.openSnackBarAsText(
-      `Hotel ${this.hotelId ? 'edited' : 'created'} successfully`,
+      `Tax ${this.hotelId ? 'edited' : 'created'} successfully`,
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate([`/pages/settings/brand/${this.brandId}`]);
   };
 
   /**

@@ -86,6 +86,7 @@ import { EmptyTableComponent } from './components/datatable/empty-table/empty-ta
 import { EmptyViewDirective } from './directives/empty-view.directive';
 import { CreateWithViewComponent } from './view/create-with-view/create-with-view.component';
 import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/toggle-switch-label.component';
+import { SocialMediaComponent } from './components/social-media/social-media.component';
 
 @NgModule({
   imports: [
@@ -179,7 +180,8 @@ import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/tog
     EmptyTableComponent,
     EmptyViewDirective,
     CreateWithViewComponent,
-    ToggleSwitchComponentLabel
+    ToggleSwitchComponentLabel,
+    SocialMediaComponent
   ],
 
   exports: [
@@ -263,7 +265,8 @@ import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/tog
     EmptyTableComponent,
     EmptyViewDirective,
     CreateWithViewComponent,
-    ToggleSwitchComponentLabel
+    ToggleSwitchComponentLabel,
+    SocialMediaComponent
   ],
 })
 export class AdminSharedModule {}

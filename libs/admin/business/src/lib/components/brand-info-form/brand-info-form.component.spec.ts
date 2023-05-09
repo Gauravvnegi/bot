@@ -8,9 +8,8 @@ describe('BrandInfoFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BrandInfoFormComponent ]
-    })
-    .compileComponents();
+      declarations: [BrandInfoFormComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

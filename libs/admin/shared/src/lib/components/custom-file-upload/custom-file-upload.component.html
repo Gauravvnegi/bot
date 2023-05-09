@@ -20,7 +20,7 @@
       [ngClass]="{ 'd-flex': limit == 1 }"
       *ngFor="let url of fileUrls; let i = index"
     >
-      <div>
+      <div class="image-wrapper">
         <img
           file-upload-css
           loading="'lazy'"
@@ -32,12 +32,23 @@
         <div class="box" *ngIf="url == defaultImage && !thumbUrl">
           <img class="upload-icon" [src]="url" alt="upload-icon" />
         </div>
+        <span class="banner" *ngIf="featureValue?.includes(i) && isFeatureView">
+          Featured Image</span
+        >
       </div>
 
       <div [style.display]="limit == 1 ? 'flex' : ''" class="right-content">
         <div *ngIf="limit == 1" class="content">{{ description }}</div>
         <div [style.width]="limit == 1 ? '302px' : '200px'" class="hint">
           {{ hint }}
+        </div>
+        <div class="checkbox" *ngIf="isFeatureView">
+          <input
+            type="checkbox"
+            [checked]="featureValue?.includes(i)"
+            (change)="onCheckbox($event, i)"
+          />
+          <label for="checkbox"> Make Featured Image</label><br />
         </div>
         <div
           class="upload-button"

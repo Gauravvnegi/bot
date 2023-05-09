@@ -150,13 +150,16 @@
         </div>
       </div>
     </div>
-    <mat-progress-bar
-      *ngIf="
-        progressSpinnerService.isProgressSpinnerVisible &&
-        !checkForMessageRoute()
-      "
-      mode="query"
-    ></mat-progress-bar>
+    <div class="progress-bar">
+      <mat-progress-bar
+        *ngIf="
+          progressSpinnerService.isProgressSpinnerVisible &&
+          !checkForMessageRoute()
+        "
+        mode="query"
+      ></mat-progress-bar>
+    </div>
+
     <div
       class="main-panel--container"
       [ngClass]="{

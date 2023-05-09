@@ -91,7 +91,7 @@
         </div>
       </td>
       <td>
-        <div class="primary-text">{{ rowData.description }}</div>
+        <div class="primary-text" [innerHTML]="rowData.description"></div>
       </td>
       <td>
         <div class="cell-content" (click)="onCheckboxClicked($event)">

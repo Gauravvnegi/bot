@@ -6,6 +6,7 @@ import { HotelInfoFormComponent } from './components/hotel-info-form/hotel-info-
 import { MainComponent } from './components/main/main.component';
 import { HotelDataTableComponent } from './components/hotel-data-table/hotel-data-table.component';
 import { businessRoute } from './constant/routes';
+import { SocialMediaComponent } from './components/social-media/social-media.component';
 
 const appRoutes: Route[] = [
   {
@@ -32,7 +33,10 @@ const appRoutes: Route[] = [
                 path: '',
                 component: HotelInfoFormComponent,
               },
-              { path: businessRoute.editHotel.route, component: HotelInfoFormComponent },
+              {
+                path: businessRoute.editHotel.route,
+                component: HotelInfoFormComponent,
+              },
             ],
           },
         ],
@@ -53,5 +57,6 @@ export class AdminBusinessRoutingModule {
     BrandInfoFormComponent,
     HotelInfoFormComponent,
     HotelDataTableComponent,
+    SocialMediaComponent,
   ];
 }

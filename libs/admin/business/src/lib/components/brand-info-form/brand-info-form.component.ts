@@ -58,11 +58,19 @@ export class BrandInfoFormComponent implements OnInit {
       active: [true],
       name: [''],
       description: [''],
-      facebook: [''],
-      twitter: [''],
-      instagram: [''],
-      youtube: [''],
+      socialPlatforms: this.fb.array([]),
     });
+
+    //patch value
+    if (this.brandId) {
+      this.loading = true;
+      this.$subscription.add(
+        this.brandService.getBrandById(this.brandId).subscribe((res) => {
+          this.useForm.patchValue(res);
+          this.handelFinal();
+        }, this.handelError)
+      );
+    }
   }
 
   handleSubmit() {
@@ -78,12 +86,24 @@ export class BrandInfoFormComponent implements OnInit {
       this.useForm.getRawValue(),
       this.siteId
     );
-    this.$subscription.add(
-      this.brandService.createBrand(data).subscribe((res) => {
-        this.handleSuccess();
-        this.router.navigate([`pages/settings/business-info/brand/${res.id}`]);
-      }, this.handelError)
-    );
+    console.log(this.useForm.getRawValue());
+    console.log(data);
+
+    if (this.brandId) {
+      this.$subscription.add(
+        this.brandService.updateBrand(this.brandId, data).subscribe((res) => {
+          this.handleSuccess();
+        }, this.handelError)
+      );
+    }
+    // else {
+    //   this.$subscription.add(
+    //     this.brandService.createBrand(data).subscribe((res) => {
+    //       this.handleSuccess();
+    //       this.router.navigate([`pages/settings/business-info/brand/${res.id}`]);
+    //     }, this.handelError)
+    //   );
+    // }
   }
   handleReset() {
     this.useForm.reset();

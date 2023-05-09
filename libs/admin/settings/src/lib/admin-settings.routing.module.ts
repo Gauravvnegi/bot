@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { DashboardErrorComponent } from '@hospitality-bot/admin/shared';
-import { BrandComponent } from './components/brand/brand.component';
 import { MainComponent } from './components/main/main.component';
 import { SettingsMenuComponent } from './components/settings-menu/settings-menu.component';
 import { SiteSettingsComponent } from './components/site-settings/site-settings.component';
-import { HotelDataTableComponent } from './components/hotel-data-table/hotel-data-table.component';
-import { AddHotelComponent } from './components/add-hotel/add-hotel.component';
 
 const appRoutes: Route[] = [
   {
@@ -60,8 +57,5 @@ export class AdminSettingsRoutingModule {
   static components = [
     MainComponent,
     SettingsMenuComponent,
-    BrandComponent,
-    HotelDataTableComponent,
-    AddHotelComponent,
   ];
 }

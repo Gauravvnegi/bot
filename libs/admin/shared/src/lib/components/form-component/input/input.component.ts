@@ -23,7 +23,7 @@ export class InputComponent extends FormComponent {
     if(!this.subtitle && this.maxLength){
       const control = this.controlContainer.control.get(this.controlName);
       control.valueChanges.subscribe((value)=>{
-        this.inputLength = value.length;
+        this.inputLength = value?.length || 0;
         this.subtitle =  `${this.inputLength}/${this.maxLength}`
       })
     }

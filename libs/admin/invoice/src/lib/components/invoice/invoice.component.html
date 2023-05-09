@@ -1,6 +1,6 @@
 <div class="wrapper">
+
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
-    
     <hospitality-bot-button
       *ngIf="isGenerated"
       variant="text"
@@ -11,15 +11,14 @@
     <hospitality-bot-button
       variant="outlined"
       label="Preview"
-      [routerLink]="['../../preview-invoice', reservationId]" 
+      [routerLink]="['../../preview-invoice', reservationId]"
       queryParamsHandling="preserve"
     ></hospitality-bot-button>
 
-    <hospitality-bot-button 
+    <hospitality-bot-button
       [label]="isGenerated ? 'Email Invoice' : 'Generate'"
       (onClick)="handleGenerate()"
     ></hospitality-bot-button>
-    
   </hospitality-bot-navigation-header>
 
   <div class="form-wrapper" [formGroup]="useForm">
@@ -53,7 +52,7 @@
         variant="text"
         [severity]="isAddingGST ? 'reset' : 'primary'"
         [label]="isAddingGST ? 'Remove' : 'Add GST/Bill to company'"
-        (onClick)="onAddGST()"
+        (onClick)="isAddingGST ? removeGST() : isAddingGST = !isAddingGST"
         class="gst-btn"
       ></hospitality-bot-button>
 
@@ -63,50 +62,50 @@
           class="one-third-width"
           controlName="gstNumber"
           label="GST Number"
-          [props]="{ placeholder: 'Enter' }"            
-        ></hospitality-bot-input>     
+          [props]="{ placeholder: 'Enter' }"
+        ></hospitality-bot-input>
         <hospitality-bot-input
           class="one-third-width"
           controlName="contactName"
           label="Contact Name"
-          [props]="{ placeholder: 'Enter' }"            
-        ></hospitality-bot-input>   
+          [props]="{ placeholder: 'Enter' }"
+        ></hospitality-bot-input>
         <hospitality-bot-input
           class="one-third-width"
           controlName="contactNumber"
           label="Contact Number"
-          [props]="{ placeholder: 'Enter' }"            
-        ></hospitality-bot-input>  
+          [props]="{ placeholder: 'Enter' }"
+        ></hospitality-bot-input>
         <hospitality-bot-input
           class="one-third-width"
           controlName="email"
           label="Email"
-          [props]="{ placeholder: 'Enter' }"            
-        ></hospitality-bot-input>   
+          [props]="{ placeholder: 'Enter' }"
+        ></hospitality-bot-input>
         <hospitality-bot-input
           class="one-third-width"
           controlName="address"
           label="Address"
-          [props]="{ placeholder: 'Enter' }"            
-        ></hospitality-bot-input>   
+          [props]="{ placeholder: 'Enter' }"
+        ></hospitality-bot-input>
         <hospitality-bot-input
           class="one-third-width"
           controlName="state"
           label="State"
-          [props]="{ placeholder: 'Enter' }"            
-        ></hospitality-bot-input>    
+          [props]="{ placeholder: 'Enter' }"
+        ></hospitality-bot-input>
         <hospitality-bot-input
           class="one-third-width"
           controlName="city"
           label="City"
-          [props]="{ placeholder: 'Enter' }"            
-        ></hospitality-bot-input>   
+          [props]="{ placeholder: 'Enter' }"
+        ></hospitality-bot-input>
         <hospitality-bot-input
           class="one-third-width"
           controlName="pin"
           label="Pin"
-          [props]="{ placeholder: 'Enter' }"            
-        ></hospitality-bot-input>   
+          [props]="{ placeholder: 'Enter' }"
+        ></hospitality-bot-input>
       </ng-container>
     </div>
 
@@ -151,70 +150,152 @@
             let-columns="columns"
             let-rowIndex="rowIndex"
           >
-            <tr [formGroupName]="rowIndex"
-               [disabled]="true"
+            <ng-container
+              [ngSwitch]="tableFormArray.at(rowIndex).get('type').value"
             >
-              <td>
-                <p-tableCheckbox
-                  [value]="rowData"
-                  [index]="rowIndex"
-                  [disabled]="rowIndex===0"
-                ></p-tableCheckbox>
-              </td>
-              <td>
-                <hospitality-bot-select
-                controlName="description"
-                [props]="{ isAsync: true, isAutoFocusFilter: false }"
-                [options]="serviceOptions"
-                [stopEmission]="true"
-                [loading]="loading"
-                [disabled]="rowIndex===0"
-              ></hospitality-bot-select>
-              </td>
-              <td>
-                <hospitality-bot-input
-                  controlName="unit"
-                  [props]="{ type: 'number' }"
-                  [disabled]="rowIndex===0"
-                ></hospitality-bot-input>
-              </td>
-              <td>
-                <hospitality-bot-input
-                  controlName="unitValue"
-                  [props]="{ type: 'number' }"
-                  [disabled]="rowIndex===0"
-                ></hospitality-bot-input>
-              </td>
-              <td>
-                <hospitality-bot-input
-                  controlName="amount"
-                  [props]="{ type: 'number' }"
+              <!-- Price type row -->
+              <ng-container *ngSwitchCase="'price'">
+                <tr [formGroupName]="rowIndex" [disabled]="true">
+                  <td>
+                    <p-tableCheckbox
+                      [value]="rowData"
+                      [index]="rowIndex"
+                      [disabled]="rowIndex === 0"
+                    ></p-tableCheckbox>
+                  </td>
+
+                  <td>
+                    <hospitality-bot-select
+                      controlName="description"
+                      [props]="{ isAsync: true, isAutoFocusFilter: false }"
+                      [options]="serviceOptions"
+                      [stopEmission]="true"
+                      [loading]="loading"
+                      [disabled]="rowIndex === 0"
+                    ></hospitality-bot-select>
+                  </td>
+
+                  <td>
+                    <hospitality-bot-input
+                      controlName="unit"
+                      [props]="{ type: 'number' }"
+                      [disabled]="rowIndex === 0"
+                    ></hospitality-bot-input>
+                  </td>
+
+                  <td>
+                    <hospitality-bot-input
+                      controlName="unitValue"
+                      [props]="{ type: 'number' }"
+                      [disabled]="true"
+                    ></hospitality-bot-input>
+                  </td>
+
+                  <td>
+                    <hospitality-bot-input
+                      controlName="amount"
+                      [props]="{ type: 'number' }"
+                      [disabled]="true"
+                    ></hospitality-bot-input>
+                  </td>
+
+                  <td>
+                    <hospitality-bot-multi-select
+                      controlName="tax"
+                      [options]="rowIndex === 0 ? defaultTax : tax"
+                      [settings]="{ showHeader: false }"
+                      [disabled]="true"
+                    ></hospitality-bot-multi-select>
+                  </td>
+
+                  <td>
+                    <hospitality-bot-input
+                      controlName="totalAmount"
+                      [props]="{ type: 'number' }"
+                      [disabled]="true"
+                    ></hospitality-bot-input>
+                  </td>
+                  <td>
+                    <hospitality-bot-menu
+                      type="button"
+                      alignment="horizontal"
+                      (onClickItem)="
+                        tableFormArray.at(rowIndex).get('menu').value
+                          ? onEditDiscount($event, rowIndex)
+                          : onAddDiscount('discount', rowIndex)
+                      "
+                      [menuItems]="
+                        tableFormArray.at(rowIndex).get('menu').value
+                          ? editDiscount
+                          : addDiscount
+                      "
+                    ></hospitality-bot-menu>
+                  </td>
+                </tr>
+              </ng-container>
+              <!-- Discount type row -->
+              <ng-container *ngSwitchCase="'discount'">
+                <tr
+                  [formGroupName]="rowIndex"
                   [disabled]="true"
-                ></hospitality-bot-input>
-              </td>
-              <td>
-                <hospitality-bot-multi-select
-                  controlName="tax"
-                  [options]="rowIndex === 0 ? defaultTax : tax"
-                  [settings]="{ showHeader: false }"
-                  [disabled]="true"
-                ></hospitality-bot-multi-select>
-              </td>
-              <td>
-                <hospitality-bot-input
-                  controlName="totalAmount"
-                  [props]="{ type: 'number' }"
-                  [disabled]="true"
-                ></hospitality-bot-input>
-              </td>
-            </tr>
+                  [ngClass]="{
+                    'discount-row':
+                      tableFormArray.at(rowIndex).get('type').value ===
+                      'discount'
+                  }"
+                >
+                  <td></td>
+                  <td>
+                    <p>Discount Amount</p>
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <hospitality-bot-prefix-field
+                      class="prefix-field"
+                      [disabled]="
+                        tableFormArray.at(rowIndex).get('isDisabled').value
+                      "
+                      [options]="discountOption"
+                      preControlName="discountType"
+                      postControlName="discount"
+                      [props]="{
+                        errorMessages: errorMessages,
+                        type: 'number'
+                      }"
+                    ></hospitality-bot-prefix-field>
+                  </td>
+                  <td>
+                    <hospitality-bot-input
+                      controlName="totalAmount"
+                      [props]="{ type: 'number' }"
+                      [disabled]="true"
+                    ></hospitality-bot-input>
+                  </td>
+                  <td>
+                    <hospitality-bot-button
+                      *ngIf="
+                        !tableFormArray.at(rowIndex).get('isDisabled').value;
+                        else saveDiscount
+                      "
+                      [disabled]="!isValidDiscount"
+                      label="Save"
+                      variant="text"
+                      (onClick)="onSaveDiscount(rowIndex)"
+                    ></hospitality-bot-button>
+                    <ng-template #saveDiscount> </ng-template>
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
           </ng-template>
 
           <ng-template pTemplate="summary">
             <hospitality-bot-button
               label="+ Add New"
               variant="text"
-              (onClick)="addNewCharges()"
+              (onClick)="addNewCharges('price')"
             ></hospitality-bot-button>
           </ng-template>
         </p-table>
@@ -223,83 +304,85 @@
       <div class="payment-form__amount">
         <div class="py-row">
           <span>Current Amount</span>
-          <span> INR {{ inputControl.currentAmount.value | number: '1.1-1' }}</span>
+          <span>
+            INR {{ inputControl.currentAmount.value | number: '1.1-1' }}</span
+          >
         </div>
-        <div class="py-row stretch">
+        <div class="py-row">
           <span>Discount</span>
+          <span
+            >INR {{ inputControl.totalDiscount.value | number: '1.1-1' }}</span
+          >
+        </div>
+        <div class="py-row invert stretch">
+          <span>Total Amount</span>
           <span class="span-block">
-            <span>INR {{ inputControl.totalDiscount.value | number: '1.1-1' }}</span>
-            <ng-container *ngIf="viewDiscountTab">
-              <span class="input-field discount-field">
-                <hospitality-bot-prefix-field
-                  [options]="discountOption"
-                  preControlName="discountType"
-                  postControlName="discount"
-                  [props]="{ errorMessages: errorMessages, type: 'number' }"
-                ></hospitality-bot-prefix-field>
-              </span>
-              <hospitality-bot-button
-                label="Save"
-                variant="text"
-                (onClick)="onSaveDiscount()"
-                [disabled]="!isValidDiscount"
-              ></hospitality-bot-button>
-            </ng-container>
+            <span
+              >INR
+              {{ inputControl.discountedAmount.value | number: '1.1-1' }}
+            </span>
             <hospitality-bot-menu
-              *ngIf="!viewDiscountTab"
               type="button"
               alignment="horizontal"
               (onClickItem)="
-                editMode ? onEditDiscount($event) : viewDiscountTab = true
+                this.viewRefundRow = true; this.isRefundSaved = false
               "
-              [menuItems]="editMode ? editDiscount : addDiscount"
+              [menuItems]="!isRefundSaved ? addRefund : editRefund"
             ></hospitality-bot-menu>
           </span>
         </div>
-        <div class="py-row invert">
-          <span>Total Amount</span
-          ><span>INR {{ inputControl.discountedAmount.value | number: '1.1-1' }}</span>
+        <div
+          class="py-row"
+          [ngClass]="{ stretch: !isRefundSaved }"
+          *ngIf="viewRefundRow"
+        >
+          <span>Refund Amount</span>
+          <span class="refund-block" *ngIf="!isRefundSaved">
+            <hospitality-bot-prefix-field
+              [options]="refundOption"
+              preControlName="currency"
+              postControlName="refundAmount"
+              [props]="{
+                errorMessages: errorMessages,
+                type: 'number'
+              }"
+            ></hospitality-bot-prefix-field>
+            <hospitality-bot-button
+              label="Save"
+              variant="text"
+              (onClick)="this.isRefundSaved = true"
+            ></hospitality-bot-button>
+          </span>
+          <span *ngIf="isRefundSaved">
+            INR {{ inputControl.refundAmount.value | number: '1.1-1' }}
+          </span>
         </div>
-        <div class="py-row stretch">
+        <hr class="line" />
+        <div class="py-row">
           <span>Paid Amount</span>
-          <span class="span-block">
-            <span>INR {{ inputControl.paidAmount.value | number: '1.1-1' }}</span>
-            <ng-container *ngIf="viewPaidTab">
-                <span class="input-field">
-                  <hospitality-bot-input
-                    controlName="paidValue"
-                    [disabled]="true"
-                  ></hospitality-bot-input>
-                  <span> + </span>
-                  <hospitality-bot-input
-                    controlName="paid"
-                    [props]="{ errorMessages: errorMessages, type: 'number' }"
-                  ></hospitality-bot-input>
-                </span>
-                <hospitality-bot-button
-                  label="Save"
-                  variant="text"
-                  (onClick)="onSavePaidAmount()"
-                  [disabled]="!isValidPaid"
-                ></hospitality-bot-button>
-            </ng-container>
-            <hospitality-bot-menu
-              *ngIf="!viewPaidTab"
-              type="button"
-              alignment="horizontal"
-              (onClickItem)="viewPaidTab = true"
-              [menuItems]="editPaidAmount"
-            ></hospitality-bot-menu>
+          <span
+            >INR {{ inputControl.paidAmount.value | number: '1.1-1' }}
           </span>
         </div>
         <div class="py-row">
           <span>Due Amount</span>
-          <span>INR
-            <span 
-              [ngStyle]="{ color: inputControl.dueAmount.value < 0 ? 'red' : 'inherit' }"
-              >{{ inputControl.dueAmount.value | number: '1.1-1' }}
+          <span
+            >INR
+            <span
+              [ngStyle]="{
+                color:
+                  inputControl.dueAmount.value -
+                    inputControl.refundAmount.value <
+                  0
+                    ? 'red'
+                    : 'inherit'
+              }"
+              >{{
+                inputControl.dueAmount.value - inputControl.refundAmount.value
+                  | number: '1.1-1'
+              }}
+            </span>
           </span>
-        </span>
         </div>
       </div>
       <div class="payment-form__note">
@@ -325,26 +408,18 @@
             label="Invoice Date"
             [disabled]="isGenerated"
           ></hospitality-bot-date>
-          <div class="payment-method">
-            <hospitality-bot-select-group
-              class="three-fourth"
-              controlName="paymentMethod"
-              label="Payment method"
-              [options]="paymentOptions"
-            ></hospitality-bot-select-group>
-            <hospitality-bot-button
-              variant="text"
-              class="view-history-btn"
-              label="View History"
-              [routerLink]="['../../payment-history', reservationId]" 
-              queryParamsHandling="preserve"
-            ></hospitality-bot-button>
-          </div>
+          <hospitality-bot-select-group
+            class="three-fourth"
+            controlName="paymentMethod"
+            label="Payment method"
+            [options]="paymentOptions"
+          ></hospitality-bot-select-group>
+          <div class="one-third-width"></div>
           <hospitality-bot-input
             class="one-third-width"
             [props]="{
               placeholder: 'Enter'
-            }"            
+            }"
             controlName="recievedPayment"
             label="Payment Recieved"
           ></hospitality-bot-input>
@@ -353,10 +428,10 @@
             [props]="{ placeholder: 'Enter' }"
             controlName="remarks"
             label="Your Inclusions/remarks:"
-          ></hospitality-bot-input>          
+          ></hospitality-bot-input>
           <hospitality-bot-input
             class="one-third-width"
-            [props]="{ placeholder: 'Enter' }"            
+            [props]="{ placeholder: 'Enter' }"
             controlName="transactionId"
             label="Transaction ID"
           ></hospitality-bot-input>
@@ -372,5 +447,3 @@
     </div>
   </div>
 </div>
-
-

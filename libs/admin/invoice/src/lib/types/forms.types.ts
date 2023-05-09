@@ -8,7 +8,8 @@ export class InvoiceForm {
   invoiceDate: string;
   arrivalDate: string;
   departureDate: string;
-
+  cashierName: string;
+  
   tableData: PaymentField[];
   currentAmount: number;
   discountedAmount: number;
@@ -16,8 +17,8 @@ export class InvoiceForm {
   paidAmount: number;
   dueAmount: number;
   refundAmount: number;
-  paidValue: number;
   paid: number;
+  paidValue: number;
 }
 
 

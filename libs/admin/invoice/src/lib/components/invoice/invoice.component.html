@@ -57,7 +57,7 @@
       ></hospitality-bot-button>
 
       <div class="two-third-width"></div>
-      <ng-container *ngIf="isAddingGST">
+      <ng-container *ngIf="isAddingGST" formGroupName="gstForm">
         <hospitality-bot-input
           class="one-third-width"
           controlName="gstNumber"

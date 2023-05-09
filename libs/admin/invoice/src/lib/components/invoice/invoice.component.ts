@@ -11,6 +11,7 @@ import {
   CookiesSettingsService,
   NavRouteOptions,
   Option,
+  UserService,
 } from '@hospitality-bot/admin/shared';
 import { invoiceRoutes } from '../../constants/routes';
 import { InvoiceForm } from '../../types/forms.types';
@@ -49,7 +50,7 @@ export class InvoiceComponent implements OnInit {
   reservationId: string;
   tableFormArray: FormArray;
   useForm: FormGroup;
-
+  gstForm: FormGroup;
   paymentOptions: Option[] = [
     { label: 'Razor Pay', value: 'razorPay' },
     { label: 'Cash', value: 'cash' },
@@ -108,8 +109,8 @@ export class InvoiceComponent implements OnInit {
     private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private servicesService: ServicesService,
-    private cookiesSettingService: CookiesSettingsService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private userService: UserService,
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -144,14 +145,16 @@ export class InvoiceComponent implements OnInit {
       guestName: ['', Validators.required],
       companyName: ['', Validators.required],
 
-      gstNumber: ['', Validators.required],
-      contactName: ['', Validators.required],
-      contactNumber: ['', Validators.required],
-      email: ['', Validators.required],
-      address: ['', Validators.required],
-      state: ['', Validators.required],
-      city: ['', Validators.required],
-      pin: ['', Validators.required],
+      gstData: this.fb.group({
+        gstNumber: ['', Validators.required],
+        contactName: ['', Validators.required],
+        contactNumber: ['', Validators.required],
+        email: ['', Validators.required],
+        address: ['', Validators.required],
+        state: ['', Validators.required],
+        city: ['', Validators.required],
+        pin: ['', Validators.required]
+      }),
 
       additionalNote: [''],
       tableData: new FormArray([]),
@@ -174,6 +177,7 @@ export class InvoiceComponent implements OnInit {
     });
 
     this.tableFormArray = this.useForm.get('tableData') as FormArray;
+    this.gstForm = this.useForm.get('gstData') as FormGroup;
     this.addNewFieldTableForm('price', 0);
     this.initDetails();
     this.initOptionsConfig();
@@ -244,6 +248,10 @@ export class InvoiceComponent implements OnInit {
       this.useForm.patchValue(data);
     });
     // this.inputControl.discountType.setValue('off');
+    let userId = this.userService.getLoggedInUserId();
+    this.userService.getUserDetailsById(userId).subscribe((res)=>{
+      this.inputControl.cashierName.patchValue(res.firstName);
+    });    
   }
 
 
@@ -770,18 +778,24 @@ export class InvoiceComponent implements OnInit {
     );
 
     togglePopupCompRef.componentInstance.content = {
-      heading: 'Cannot publish Page',
-      description: ['Are you sure you want to remove GST details'],
+      heading: 'Remove GST details',
+      description: ['Are you sure you want to remove GST details ?'],
     };
     togglePopupCompRef.componentInstance.actions = [
       {
-        label: 'Go to Website Settings',
+        label: 'No',
         onClick: () => {
           this.modalService.close();
         },
         variant: 'contained',
       },
-    ];
+      {
+        label: 'Yes',
+        onClick: () => {
+          this.gstForm.reset();
+        }
+      }
+    ];  
 
     togglePopupCompRef.componentInstance.onClose.subscribe(() => {
       this.modalService.close();

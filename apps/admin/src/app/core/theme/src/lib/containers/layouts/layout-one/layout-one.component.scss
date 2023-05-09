@@ -378,6 +378,5 @@
   z-index: $progress-bar-z;
   position: absolute;
   height: 5px;
-  width: 100%;
-  top: 58px;
+  inset: 58px 0 auto 0;
 }

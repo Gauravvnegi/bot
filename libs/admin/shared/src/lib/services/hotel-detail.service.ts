@@ -29,6 +29,26 @@ export class HotelDetailService {
       this.brands.find((item) => item.id === this.brandId)?.hotels ?? [];
   }
 
+  // initBrandAndHotel(brandId: string, hotelId: string) {
+  //   localStorage.setItem(tokensConfig.hotelId, hotelId);
+  //   localStorage.setItem(tokensConfig.brandId, brandId);
+
+  //   this.hotelId = hotelId;
+  //   this.brandId = brandId;
+
+  //   this.brands =
+  //     this.sites?.find((item) => item.id === this.siteId)?.brands ?? [];
+  //   this.hotels =
+  //     this.brands.find((item) => item.id === this.brandId)?.hotels ?? [];
+  // }
+
+  updateBusinessSession(businessInfo: BusinessInfo) {
+    Object.entries(businessInfo).forEach(([token, value]) => {
+      localStorage.setItem(token, value);
+    });
+    window.location.reload();
+  }
+
   setSiteId(siteId) {
     this.siteId = siteId;
     this.setLocalSiteId(siteId);
@@ -50,3 +70,10 @@ export class HotelDetailService {
 type Sites = UserResponse['sites'][0];
 type Brands = Sites['brands'][0];
 type Hotels = Brands['hotels'][0];
+
+type BusinessInfo = {
+  [tokensConfig.accessToken]: string;
+  [tokensConfig.hotelId]: string;
+  [tokensConfig.brandId]?: string;
+  [tokensConfig.siteId]?: string;
+};

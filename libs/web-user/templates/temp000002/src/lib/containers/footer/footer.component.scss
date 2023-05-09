@@ -19,6 +19,7 @@
   }
 
   &--logo {
+    align-self: center;
     height: 40px;
     padding: 0 10px;
     & img {
@@ -38,14 +39,8 @@
       display: flex;
       flex-direction: column;
       text-align: center;
+      align-items: center;
       color: var(--footer-font-color, $footer-font-color);
-      a {
-        text-decoration: none;
-        color: var(--footer-font-color, $footer-font-color);
-        @media only screen and (max-width: $M) {
-          margin-bottom: 5px;
-        }
-      }
     }
 
     .social_icons {
@@ -79,29 +74,17 @@
     justify-content: flex-end;
 
     .wrap-details {
-      @media only screen and (max-width: $M) {
-        display: block;
-      }
       a {
         text-decoration: none;
       }
-      .text {
-        margin-bottom: 0px !important;
-        font-size: $font-responsive-small;
-        @include flex-item-center;
-        color: var(--footer-font-color, $footer-font-color);
-        @media only screen and (max-width: $S) {
-          justify-content: center;
-        }
-      }
       .material-icons {
-        height: 23px;
+        height: 18px;
         width: 22px;
         font-size: $font-medium;
         color: var(--footer-icon-color, $footer-icon-color);
       }
     }
-    @media only screen and (max-width: $M) {
+    @media only screen and (max-width: $S) {
       white-space: nowrap;
 
       .text {
@@ -125,5 +108,18 @@
     text-align: center;
     margin-bottom: 2rem;
     padding: 15px 0;
+  }
+}
+
+.basic-text {
+  height: 18px;
+  display: flex;
+  color: var(--footer-font-color, $footer-font-color);
+  font-size: $font-small;
+  text-decoration: none;
+  align-items: center;
+  justify-content: flex-end;
+  @media only screen and (max-width: $S) {
+    justify-content: center;
   }
 }

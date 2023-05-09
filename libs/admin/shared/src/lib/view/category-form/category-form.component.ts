@@ -31,7 +31,7 @@ export class CategoryFormComponent implements OnInit {
       name: ['', Validators.required],
       active: [true],
       imageUrl: [''],
-      description: ['', Validators.required],
+      description: [''],
     });
   }
 

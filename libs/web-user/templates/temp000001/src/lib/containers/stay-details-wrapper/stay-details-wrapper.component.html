@@ -1,4 +1,4 @@
-<div *ngIf="isRendered">
+<div *ngIf="isRendered" class="main-container main-block">
   <div class="container">
     <hospitality-bot-stay-details
       [parentForm]="parentForm"
@@ -34,6 +34,22 @@
       [reservationData]="reservationData"
       (addFGEvent)="addFGEvent($event)"
     ></hospitality-bot-special-comments>
+
+    <ng-container [formGroup]="parentForm">
+      <div class="checkbox-wrapper" formGroupName="accept">
+        <mat-checkbox formControlName="disclaimer">
+          Please be aware that we may collect personally identifiable
+          information (PII) from you when you use our services. This information
+          may include your name, address, email address, telephone number, and
+          other information that can be used to identify you. We will use this
+          information for the purpose of providing you with our services and to
+          communicate with you regarding your use of our services. We will not
+          share your PII with any third party unless required to do so by law.
+          By checking the box, clicking next and using our services, you consent
+          to the collection and use of your PII as described in this disclaimer.
+        </mat-checkbox>
+      </div>
+    </ng-container>
   </div>
 
   <div class="main-template-button">

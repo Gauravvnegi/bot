@@ -36,6 +36,24 @@ export class SearchSelectboxComponent extends BaseComponent {
     this.optionChange.emit(selectData);
   }
 
+  /**
+   * To Reset the value in auto complete if the types value does not match either value or key
+   */
+  blur() {
+    const control = this.parentForm.get(this.name);
+    const filterValue = control.value?.toLowerCase();
+    const data =
+      this.settings.options?.find(
+        (option) => option.value.toLowerCase() == filterValue
+      ) ??
+      this.settings.options?.find(
+        (option) => option.key.toLowerCase() == filterValue
+      );
+
+    if (data) control.setValue(data.value);
+    else control.reset();
+  }
+
   ngOnChanges(): void {
     if (
       this.parentForm.get(this.name).value.trim().length &&

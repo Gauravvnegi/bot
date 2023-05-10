@@ -4,12 +4,20 @@ import {
   Input,
   OnChanges,
   OnDestroy,
+  OnInit,
   Optional,
   Self,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { ControlValueAccessor, FormGroup, NgControl } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  NgControl,
+} from '@angular/forms';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { forkJoin, Subscription } from 'rxjs';
 import { fileUploadConfiguration } from '../../constants';
@@ -23,7 +31,7 @@ import { UploadFileData } from '../../types/fields.type';
   providers: [],
 })
 export class CustomFileUploadComponent
-  implements ControlValueAccessor, OnChanges, OnDestroy {
+  implements ControlValueAccessor, OnChanges, OnDestroy, OnInit {
   subscription$ = new Subscription();
   url: string = '';
   thumbUrl: string;
@@ -59,13 +67,28 @@ export class CustomFileUploadComponent
   @Input() validationErrMsg: string = 'Image is required.';
   indexToBeUpload: number;
   fileUrls: string[];
+  featureValue: any[] = [0];
+  @Input() isFeatureView: boolean = false;
+  useForm: FormGroup;
+  formArray: FormArray;
 
   constructor(
     private snackbarService: SnackBarService,
     private userDetailsService: UserService,
+    private fb: FormBuilder,
     @Self() @Optional() public control: NgControl
   ) {
     if (this.control) this.control.valueAccessor = this;
+  }
+
+  ngOnInit(): void {}
+
+  onCheckbox(event, index) {
+    if (event.target.checked) {
+      this.featureValue?.push(index);
+    } else {
+      this.featureValue = this.featureValue?.filter((item) => item !== index);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -77,17 +100,27 @@ export class CustomFileUploadComponent
     this.defaultValue['fileType'] = fileUploadConfiguration[this.baseType];
   }
 
-  onChange = (value: string | string[]) => {};
+  onChange = (value: ValueType) => {};
   onTouched = () => {};
 
-  writeValue(controlValue: string[] | string): void {
+  writeValue(controlValue: ValueType): void {
     if (typeof controlValue == 'string' && controlValue != '') {
       this.fileUrls = [controlValue];
     } else if (typeof controlValue === 'object' && controlValue?.length) {
       this.fileUrls = Array(this.limit)
         .fill(this.defaultImage)
         .map((item, idx) => {
-          return controlValue[idx] ?? item;
+          const value = controlValue[idx];
+          if (value) {
+            if (typeof value === 'object') {
+              this.featureValue[idx] = value.isFeatured;
+              return value.url;
+            } else {
+              return value;
+            }
+          } else {
+            return item;
+          }
         });
     }
   }
@@ -113,7 +146,7 @@ export class CustomFileUploadComponent
               this.onChange(this.fileUrls[index]);
             } else {
               this.fileUrls.splice(index, 1, response.fileDownloadUri);
-              this.onChange(this.fileUrls);
+              this.onChange(this.getChangedData());
             }
             this.showSnackbarMessages(
               'success',
@@ -228,16 +261,14 @@ export class CustomFileUploadComponent
           thumbnailData,
           this.path
         ),
-      }).subscribe(
-        (response) => {
-          this.parentFG.patchValue({
-            url: response.videoFile.fileDownloadUri,
-            thumbnailUrl: response.thumbnail.fileDownloadUri,
-          });
-          this.snackbarService;
-          this.showSnackbarMessages('success', 'Video Uploaded Successfully.');
-        }
-      )
+      }).subscribe((response) => {
+        this.parentFG.patchValue({
+          url: response.videoFile.fileDownloadUri,
+          thumbnailUrl: response.thumbnail.fileDownloadUri,
+        });
+        this.snackbarService;
+        this.showSnackbarMessages('success', 'Video Uploaded Successfully.');
+      })
     );
   }
   checkFileType(extension: string) {
@@ -293,7 +324,20 @@ export class CustomFileUploadComponent
     }
   }
 
+  getChangedData() {
+    if (this.isFeatureView) {
+      const data: FeatureValue = this.fileUrls.map((item, index) => ({
+        url: item,
+        isFeatured: this.featureValue.includes(index),
+      }));
+      return data;
+    }
+    return this.fileUrls;
+  }
+
   ngOnDestroy(): void {
     this.subscription$.unsubscribe();
   }
 }
+type FeatureValue = { url: string; isFeatured: boolean }[];
+type ValueType = string | string[] | FeatureValue;

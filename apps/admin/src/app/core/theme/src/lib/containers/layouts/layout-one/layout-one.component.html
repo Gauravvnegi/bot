@@ -79,7 +79,10 @@
               (removeVisibility)="disableFilter()"
             ></hospitality-bot-daterange>
           </div>
-          <div class="site-select" *ngIf="isSitesAvailable">
+          <div
+            class="site-select"
+            *ngIf="isSitesAvailable && isCreateWithSubscribed"
+          >
             <admin-site-action></admin-site-action>
           </div>
         </div>
@@ -93,6 +96,7 @@
                 <img
                   class="filter-icon"
                   src="assets/svg/notification-bell.svg"
+                  alt="notification"
                 />
                 <div
                   class="notification-count"
@@ -120,7 +124,11 @@
           <div class="filter-range-wrapper">
             <div class="temp-width positionRel">
               <div (click)="enableGlobalFilter(main)" class="header--button">
-                <img class="filter-icon" src="assets/svg/Filter-Icon.svg" />
+                <img
+                  class="filter-icon"
+                  src="assets/svg/Filter-Icon.svg"
+                  alt="filter"
+                />
               </div>
               <div
                 class="filter-wrapper"
@@ -142,13 +150,16 @@
         </div>
       </div>
     </div>
-    <mat-progress-bar
-      *ngIf="
-        progressSpinnerService.isProgressSpinnerVisible &&
-        !checkForMessageRoute()
-      "
-      mode="query"
-    ></mat-progress-bar>
+    <div class="progress-bar">
+      <mat-progress-bar
+        *ngIf="
+          progressSpinnerService.isProgressSpinnerVisible &&
+          !checkForMessageRoute()
+        "
+        mode="query"
+      ></mat-progress-bar>
+    </div>
+
     <div
       class="main-panel--container"
       [ngClass]="{

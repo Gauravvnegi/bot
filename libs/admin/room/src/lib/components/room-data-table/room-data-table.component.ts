@@ -84,13 +84,15 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.hotelId = this.globalFilterService.hotelId;
     this.roomService.resetRoomTypeFormState();
 
-    this.roomService.selectedTable.subscribe((value) => {
-      this.tabFilterIdx = this.tabFilterItems.findIndex(
-        (item) => item.value === value
-      );
-      this.selectedTable = value;
-      this.getDataTableValue(this.selectedTable);
-    });
+    this.$subscription.add(
+      this.roomService.selectedTable.subscribe((value) => {
+        this.tabFilterIdx = this.tabFilterItems.findIndex(
+          (item) => item.value === value
+        );
+        this.selectedTable = value;
+        this.getDataTableValue(this.selectedTable);
+      })
+    );
   }
 
   loadData(event: LazyLoadEvent): void {
@@ -326,6 +328,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @param event The material tab change event.
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
+    this.resetTable();
     this.roomService.selectedTable.next(this.tabFilterItems[event.index].value);
   }
 

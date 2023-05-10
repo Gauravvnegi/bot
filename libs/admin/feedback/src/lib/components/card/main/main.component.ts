@@ -108,12 +108,12 @@ export class MainComponent implements OnInit, OnDestroy {
    * @param branchId The branch id.
    */
   getOutlets(branchId: string): void {
-    this.outlets = this._hotelDetailService.hotelDetails.brands[0].branches.find(
+    this.outlets = this._hotelDetailService.hotels.find(
       (branch) => branch['id'] === branchId
     ).outlets;
     this.outlets = [
       ...this.outlets,
-      ...this._hotelDetailService.hotelDetails.brands[0].branches.filter(
+      ...this._hotelDetailService.hotels.filter(
         (branch) => branch['id'] === branchId
       ),
     ];

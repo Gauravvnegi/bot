@@ -1,7 +1,7 @@
 <button
   [type]="type"
   (click)="handleClick($event)"
-  [disabled]="disabled"
+  [disabled]="disabled || isLoading"
   class="button"
   [ngClass]="{
     button__text: variant === 'text',
@@ -10,10 +10,10 @@
     color__primary: severity === 'primary',
     color__secondary: severity === 'secondary',
     color__reset: severity === 'reset',
-    button__disabled: disabled,
+    button__disabled: disabled || isLoading,
     button__img: icon
   }"
 >
-  <i *ngIf="showLoader" class="fa fa-spinner fa-spin"></i>
+  <i *ngIf="isLoading" class="fa fa-spinner fa-spin"></i>
   <img [src]="icon" alt="buttonImage" *ngIf="icon" /> {{ label }}
 </button>

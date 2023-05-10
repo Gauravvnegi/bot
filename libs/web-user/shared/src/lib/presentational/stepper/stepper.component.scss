@@ -15,7 +15,8 @@
   color: var(--stepper-font-color, $stepper-font-color);
 }
 
-::ng-deep .mat-horizontal-stepper-header {
+// disable pointer only at incomplete steps
+::ng-deep .mat-horizontal-stepper-header.step-disable {
   pointer-events: none !important;
 }
 

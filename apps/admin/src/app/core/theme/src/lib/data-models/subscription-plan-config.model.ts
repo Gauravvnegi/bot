@@ -230,3 +230,25 @@ export class ProductSubscription {
     }
   }
 }
+
+export class SettingsMenuItem {
+  name: string;
+  title: string;
+  description: string;
+  icon: string;
+  isActive: boolean;
+  isDisabled: boolean;
+
+  deserialize(input) {
+    Object.assign(
+      this,
+      set({}, 'name', get(input, ['name'])),
+      set({}, 'title', get(input, ['label'])),
+      set({}, 'description', get(input, ['description'])),
+      set({}, 'icon', get(input, ['icon'])),
+      set({}, 'isActive', get(input, ['isView'])),
+      set({}, 'isDisabled', !get(input, ['isSubscribed']))
+    );
+    return this;
+  }
+}

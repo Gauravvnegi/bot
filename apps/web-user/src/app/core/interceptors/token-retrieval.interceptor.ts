@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
 import { isEmpty } from 'lodash';
 import { AccessTokenService } from 'apps/web-user/src/app/core/services/access-token.service';
 @Injectable()
-export class TokenRetievalInterceptor implements HttpInterceptor {
+export class TokenRetrievalInterceptor implements HttpInterceptor {
   constructor(private _accessTokenService: AccessTokenService) {}
   intercept(
     req: HttpRequest<any>,

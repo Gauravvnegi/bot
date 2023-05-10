@@ -8,7 +8,7 @@ RUN npm install -g @angular/cli@15.0.1
 RUN rm -rf node_modules
 RUN npm i --legacy-peer-deps
 #RUN npm ci
-RUN ng run admin:build --configuration=staging --baseHref=/
+RUN ng run admin:build --configuration=development --baseHref=/
 #RUN ng run admin:build --configuration=development
 # Stage 2
 FROM nginx:1.21.3-alpine

@@ -4,7 +4,7 @@ import {
   ConfigService,
   CountryCode,
   CountryCodeList,
-  UserData,
+  UserResponse,
   UserService,
 } from '@hospitality-bot/admin/shared';
 import { Option } from 'libs/admin/shared/src/lib/types/form.type';
@@ -20,7 +20,7 @@ export class UserProfileComponent implements OnInit {
   useForm: FormGroup;
   code: Option[] = [];
   userId: string;
-  userData: UserData;
+  userData: UserResponse;
 
   constructor(
     private fb: FormBuilder,
@@ -72,7 +72,7 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
-    const data: UserData = {
+    const data: UserResponse = {
       ...this.userData,
       ...this.useForm.getRawValue(),
       parentId: this.userId,

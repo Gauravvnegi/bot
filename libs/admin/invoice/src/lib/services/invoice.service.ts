@@ -3,6 +3,7 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { PaymentHistoryValue } from '../constants/payment-history';
 import { QueryConfig } from '../types/invoice.type';
+import { InvoiceForm } from '../types/forms.types';
 
 @Injectable()
 export class InvoiceService extends ApiService {
@@ -26,7 +27,7 @@ export class InvoiceService extends ApiService {
 
   getInvoiceData(reservationId: string): Observable<any> {
     return this.get(
-      `/api/v1/reservation/${reservationId}/invoice?format=json&source=BOTSHOT_ADMIN&created=false`
+      `/api/v1/reservation/${reservationId}/invoice?format=json&source=BOTSHOT_ADMIN`
     );
   }
 
@@ -59,43 +60,92 @@ export class InvoiceService extends ApiService {
   //     return invoiceData;
   // }
   mapInvoiceData(formValue) {
-    const invoiceData = new CreateInvoice();
-    invoiceData.companyName = formValue.companyName;
-    invoiceData.cashier = formValue.cashierName;
-    invoiceData.invoiceDate = formValue.invoiceDate;
-    invoiceData.invoiceItems = formValue.tableData.map((tableRow) => ({
-      description: tableRow.description.label,
-      amount: tableRow.amount,
-      //   unit: tableRow.unit,
-      //   unitValue: tableRow.unitValue,
-      taxIds: tableRow.tax.map((tax) => (tax.value ? tax.value : '')),
-    }));
-    invoiceData.originalAmount = formValue.currentAmount;
-    invoiceData.totalAmount = formValue.discountedAmount;
-    invoiceData.paidAmount = formValue.paidAmount;
-    invoiceData.dueAmount = formValue.dueAmount;
+    const invoiceData = new InvoiceFormData();
+
+    invoiceData.companyDetails.companyName = formValue.companyName;
+    invoiceData.companyDetails.gstNumber = formValue.gstNumber;
+    invoiceData.companyDetails.contactNumber = formValue.contactNumber;
+    invoiceData.companyDetails.email = formValue.email;
+    invoiceData.companyDetails.address.city = formValue.city;
+    invoiceData.companyDetails.address.state = formValue.state;
+    invoiceData.companyDetails.address.addressLine1 = formValue.address;
+    invoiceData.companyDetails.address.postalCode = formValue.pin;
+    invoiceData.companyDetails.address.city = formValue.city;
+
+    invoiceData.payment.transactionId = formValue.transactionId;
+    invoiceData.payment.paymentMode = formValue.paymentMethod;
+    
+    invoiceData.invoiceItems = formValue.tableData.map((row)=>{
+      itemId: row.description.value
+      unit: row.unit
+      discountType: row.discountType.value
+      discountValue: row.discount
+    })
+    
+    // invoiceData.cashier = formValue.cashierName;
+    // invoiceData.invoiceDate = formValue.invoiceDate;
+    // invoiceData.invoiceItems = formValue.tableData.map((tableRow) => ({
+    //   description: tableRow.description.label,
+    //   amount: tableRow.amount,
+    //   //   unit: tableRow.unit,
+    //   //   unitValue: tableRow.unitValue,
+    //   taxIds: tableRow.tax.map((tax) => (tax.value ? tax.value : '')),
+    // }));
+    // invoiceData.originalAmount = formValue.currentAmount;
+    // invoiceData.totalAmount = formValue.discountedAmount;
+    // invoiceData.paidAmount = formValue.paidAmount;
+    // invoiceData.dueAmount = formValue.dueAmount;
     return invoiceData;
   }
 }
 
-export class CreateInvoice {
-  reservationId: string;
-  cashier: string;
-  comment: string;
-  companyName: string;
-  invoiceDate: number;
-  invoiceItems: InvoiceItemList[];
-  originalAmount: number;
-  paidAmount: number;
-  dueAmount: number;
-  totalAmount: number;
+
+export class InvoiceFormData {
+  id: string;
+  companyDetails: CompanyDetails;
+  payment: Payment;
+  invoiceItems: InvoiceItems[];
+  deleteInvoiceItems: string[];
 }
 
-export type InvoiceItemList = {
-  description: string;
+export type InvoiceItems = {
+  itemId: string;
+  unit: number;
+  discountType: 'NUMBER' | 'PERCENT'
+  discountValue: string;
+}
+
+export type Payment = {
+  entityId: string;
+  transactionId: string;
   amount: number;
-  // unit: number,
-  // unitValue: number,
-  transactionType: string;
-  taxIds: string[];
-};
+  currency: string;
+  status: string;
+  orderId: string;
+  payOnDesk: boolean;
+  paymentMode: string;
+  reservationId: string;
+}
+
+export type CompanyDetails = {
+  id: string;
+  gstNumber: string;
+  companyName: string;
+  email: string;
+  address: Address;
+  contactNumber: string;
+}
+
+export type Address = {
+  city: string;
+  country: string;
+  postalCode: string;
+  countryCode: string;
+  addressLine1: string;
+  addressLine2: string;
+  state: string;
+  reservationId: string;
+  guestId: string;
+  guestType: string;
+
+}

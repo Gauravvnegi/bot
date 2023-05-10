@@ -6,9 +6,10 @@ import { ConfigService, UserService } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import { get } from 'lodash';
 import { Subscription } from 'rxjs';
 import { CookiesSettingsService } from '../../../../../../../../../../../libs/admin/shared/src/index';
+import { tokensConfig } from '../../../../../../../../../../../libs/admin/shared/src/lib/constants/common';
+import { SnackBarService } from '../../../../../../../../../../../libs/shared/material/src/index';
 import { layoutConfig } from '../../../constants/layout';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
@@ -86,7 +87,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private loadingService: LoadingService,
     private notificationService: NotificationService,
     private configService: ConfigService,
-    private cookiesSettingService: CookiesSettingsService
+    private cookiesSettingService: CookiesSettingsService,
+    private snackBarService: SnackBarService
   ) {
     this.initFG();
   }
@@ -174,49 +176,25 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
   }
 
   setInitialFilterValue() {
-    const selectedBranchId = localStorage.getItem('hotelId');
-    const selectedBrandId = this._hotelDetailService.hotelDetails.hotelsBrand[
-      selectedBranchId
-    ];
-
-    const allBrands = this._hotelDetailService.hotelDetails.brands;
-    let brand = get(allBrands, [allBrands.length - 1]);
-    let branches = brand?.['branches'];
-    let branch = get(branches, [branches.length - 1]);
-
-    if (selectedBranchId && selectedBrandId) {
-      const currentBrand = this._hotelDetailService.hotelDetails.brands.find(
-        (item) => item.id === selectedBrandId
-      );
-
-      const currentBranch = currentBrand.branches?.find(
-        (item) => item.id === selectedBranchId
-      );
-
-      if (currentBranch && currentBrand) {
-        brand = currentBrand;
-        branches = currentBrand?.['branches'];
-        branch = currentBranch;
-      }
-    } else localStorage.setItem('hotelId', branch?.['id']);
-
-    // Selected Site logic
-    const sites = this._hotelDetailService.hotelDetails.sites;
-    this.isSitesAvailable = !!sites?.length;
-    const selectedSite = sites.find(
-      (item) => item.hotelBrandId === brand?.['id']
+    const selectedSiteId = this._hotelDetailService.siteId;
+    const selectedHotelId = this._hotelDetailService.hotelId;
+    const selectedHotelData = this._hotelDetailService.hotels.find(
+      (item) => item.id === selectedHotelId
     );
-    this._hotelDetailService.setSiteId(selectedSite?.id);
+    const selectedBrandId = this._hotelDetailService.brandId;
+    const selectedBrandData = this._hotelDetailService.brands.find(
+      (item) => item.id === selectedBrandId
+    );
 
-    this.logoUrl = branch?.['logoUrl'];
-    this.bgColor = branch?.['headerBgColor'];
-    this.outlets = branch?.['outlets'];
-    this.filterConfig.brandName = brand?.['label'];
-    this.filterConfig.branchName = branch?.['label'];
+    this.logoUrl = selectedHotelData?.['logoUrl'];
+    this.bgColor = selectedHotelData?.['headerBgColor'];
+    this.outlets = selectedHotelData?.['outlets'] ?? [];
+    this.filterConfig.brandName = selectedBrandData?.['name'];
+    this.filterConfig.branchName = selectedHotelData?.['name'];
     this.filterService.emitFilterValue$.next({
       property: {
-        hotelName: brand?.['id'],
-        branchName: branch?.['id'],
+        hotelName: selectedBrandData?.['id'],
+        branchName: selectedHotelData?.['id'],
       },
       feedback: {
         feedbackType: this.checkForTransactionFeedbackSubscribed()
@@ -228,10 +206,12 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         {}
       ),
     });
-    this.initFirebaseMessaging(branch?.['id']);
-    this.timezone = get(brand, ['branches', branches.length - 1, 'timezone']);
+    this.initFirebaseMessaging(selectedHotelData?.['id']);
+    this.timezone = selectedHotelData?.['timezone'];
     this.globalFilterService.timezone = this.timezone;
-    this.globalFilterService.hotelId = branch?.['id'];
+    this.globalFilterService.hotelId = selectedHotelId;
+    this.isSitesAvailable =
+      !!selectedSiteId && !!this._hotelDetailService.sites?.length;
   }
 
   refreshDashboard() {
@@ -276,29 +256,38 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   applyFilter(event) {
     const values = event.values;
-    if (event.token.key) {
-      localStorage.setItem(event.token.key, event.token.value);
+    const hotelId = values.property.branchName;
+    const brandId = values.property.hotelName;
+    if (event.token.key && event.token.value && hotelId && brandId) {
+      // localStorage.setItem(event.token.key, event.token.value);
 
-      const branch = this._hotelDetailService.hotelDetails.brands
-        .filter((brand) => brand.id === values.property.hotelName)[0]
-        .branches.filter((d) => d.id === values.property.branchName)[0];
-      this.filterConfig.branchName = branch.name;
-      this.globalFilterService.timezone = this.timezone = branch.timezone;
-      this.$firebaseMessagingSubscription.unsubscribe();
-      this.initFirebaseMessaging(values.property.branchName);
-      this.globalFilterService.hotelId = branch?.['id'];
-      localStorage.setItem('hotelId', branch?.['id']);
+      // const branch = this._hotelDetailService.brands
+      //   .find((item) => item.id === brandId)
+      //   ?.hotels?.find((item) => item.id === hotelId);
+      // this.filterConfig.branchName = branch.name;
+      // this.globalFilterService.timezone = this.timezone = branch.timezone;
+      // this.$firebaseMessagingSubscription.unsubscribe();
+      // this.initFirebaseMessaging(values.property.branchName);
+      // this.globalFilterService.hotelId = branch?.['id'];
 
-      //changing site
-      const siteId = this._hotelDetailService.hotelDetails.sites?.find(
-        (item) => item.hotelBrandId === event.values.property.hotelName
-      )?.id;
+      // // updating token
+      // localStorage.setItem(tokensConfig.hotelId, branch?.['id']);
+      // localStorage.setItem(tokensConfig.hotelId, brandId?.['id']);
 
-      if (siteId && siteId !== this._hotelDetailService.siteId.value) {
-        this._hotelDetailService.setSiteId(siteId);
-        this.cookiesSettingService.$isPlatformCookiesLoaded.next(false);
-        this.cookiesSettingService.initCookiesForPlatform();
-      }
+      // // reloading cookies
+      // this.cookiesSettingService.$isPlatformCookiesLoaded.next(false);
+      // this.cookiesSettingService.initCookiesForPlatform();
+
+      /**
+       * Update business session will update the local storage and reload to reset the data
+       */
+      this._hotelDetailService.updateBusinessSession({
+        [tokensConfig.accessToken]: event.token.value,
+        [tokensConfig.hotelId]: hotelId,
+        [tokensConfig.brandId]: brandId,
+      });
+    } else {
+      this.snackBarService.openSnackBarAsText('Error in applying filter');
     }
 
     this.filterService.emitFilterValue$.next(values);
@@ -385,5 +374,11 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.firebaseMessagingService.destroySubscription();
+  }
+
+  get isCreateWithSubscribed() {
+    return this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.CREATE_WITH
+    );
   }
 }

@@ -167,7 +167,7 @@
 
 <ng-template #roomTypeCell let-rowData>
   <td>
-    <div class="primary-text" *ngIf="rowData.name; else emptyCell">
+    <div class="contained__primary" *ngIf="rowData.name; else emptyCell">
       {{ rowData.name }}
     </div>
   </td>
@@ -201,12 +201,12 @@
       class="primary-text amenities"
       *ngIf="rowData.amenities; else emptyCell"
     >
-      {{ rowData.amenities.slice(0, 3).join(',') }}
-      {{
+      {{ rowData.amenities.join(', ') }}
+      <!-- {{
         rowData.amenities?.length - 2 > 0
           ? '+'.concat(rowData.amenities?.length - 2)
           : ''
-      }}
+      }} -->
     </div>
   </td>
   <td>

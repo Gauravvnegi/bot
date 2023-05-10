@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
 import {
-  Hotel,
   Hotels,
   UserConfig,
 } from '../../../../shared/src/lib/models/userConfig.model';
-import { UserData } from '../types/user.type';
+import { tokensConfig } from '../constants/common';
+import { UserResponse } from '../types/user.type';
 
 @Injectable({ providedIn: 'root' })
 export class UserService extends ApiService {
@@ -14,26 +14,24 @@ export class UserService extends ApiService {
   userPermissions;
   hotels: Hotels;
 
-  initUserDetails(data) {
+  initUserDetails(data: UserResponse) {
     this.userDetails = new UserConfig().deserialize(data);
-    if (data.hotelAccess?.chains[0]?.hotels?.length)
-      this.hotels = new Hotels().deserialize(data.hotelAccess.chains[0].hotels);
-  }
 
-  setLoggedInUserId(userId) {
-    localStorage.setItem('userId', userId);
+    const brandData =
+      data.sites?.find((item) => item.id === this.userDetails.siteName)
+        ?.brands ??
+      data.hotelAccess?.brands ??
+      [];
+
+    this.hotels = new Hotels().deserialize(brandData);
   }
 
   getLoggedInUserId() {
-    return localStorage.getItem('userId');
+    return localStorage.getItem(tokensConfig.userId);
   }
 
   getHotelId() {
-    return this.userDetails.branchName;
-  }
-
-  uploadProfile(data) {
-    return this.post(`/api/v1/uploads?folder_name=hotel/roseate/banner`, data);
+    return localStorage.getItem(tokensConfig.hotelId);
   }
 
   uploadProfileImage(hotelId: string, formData) {
@@ -43,7 +41,7 @@ export class UserService extends ApiService {
     );
   }
 
-  getUserDetailsById(userId): Observable<UserData> {
+  getUserDetailsById(userId): Observable<UserResponse> {
     return this.get(`/api/v1/user/${userId}`);
   }
 

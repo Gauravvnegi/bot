@@ -72,3 +72,10 @@ export type Status = {
   type: FlagType;
   disabled?: boolean;
 };
+
+export type EmptyViewType ={
+  description: string;
+  actionName?: string;
+  imageSrc: string;
+  link?: string;
+}

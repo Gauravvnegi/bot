@@ -1,4 +1,10 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import {
+  CookiesData,
+  Tokens,
+  UserResponse,
+} from '@hospitality-bot/admin/shared';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
 import {
@@ -7,20 +13,28 @@ import {
   LoginParam,
   RefreshTokenParam,
 } from '../types/auth.type';
-import { CookiesData } from '@hospitality-bot/admin/shared';
 
 /**
  * @class To manage all the api call for authentication.
  */
 @Injectable()
 export class AuthService extends ApiService {
+  tokens: Tokens[] = [
+    'x-access-token',
+    'x-access-refresh-token',
+    'x-userId',
+    'x-siteId',
+    'x-brandId',
+    'x-hotelId',
+  ];
+
   /**
    * @function login To login the user.
    * @param loginParams Data for login.
     font-weight: $medium;
    * @returns An Observable with the user data.
    */
-  login(loginParams: LoginParam): Observable<any> {
+  login(loginParams: LoginParam): Observable<UserResponse> {
     return this.post(`/api/v1/user/login`, loginParams);
   }
 
@@ -81,18 +95,21 @@ export class AuthService extends ApiService {
   }
 
   /**
+   * Setting tokens in local Storage
+   * @param headers Http Headers
+   */
+  setTokens(headers: HttpHeaders) {
+    this.tokens.forEach((tokenName) => {
+      const tokenValue = headers.get(tokenName);
+      if (tokenValue) localStorage.setItem(tokenName, tokenValue);
+    });
+  }
+
+  /**
    * @function clearToken To clear the auth tokens from localStorage.
    */
   clearToken() {
-    const tokensToRemove = [
-      'x-userId',
-      'x-access-token',
-      'userId',
-      'x-access-refresh-token',
-      'hotelId',
-      'siteId',
-    ];
-    tokensToRemove.forEach((token) => localStorage.removeItem(token));
+    this.tokens.forEach((token) => localStorage.removeItem(token));
   }
 
   /**
@@ -100,8 +117,8 @@ export class AuthService extends ApiService {
    * @param userId User id of the user to logout.
    * @returns An observable to subscribe.
    */
-  logout(userIdParam: string): Observable<any> {
-    return this.post(`/api/v1/user/${userIdParam}/logout`, {});
+  logout(userId: string): Observable<any> {
+    return this.post(`/api/v1/user/${userId}/logout`, {});
   }
 
   verifyPlatformAccessToken(data): Observable<any> {
@@ -115,6 +132,8 @@ export class AuthService extends ApiService {
       'user',
       'x-userId',
       'hotelId',
+      'siteId',
+      'brandId',
     ];
 
     tokensToRemove.forEach((token) =>

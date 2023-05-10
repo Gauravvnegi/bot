@@ -11,12 +11,18 @@
     label="Name"
     controlName="name"
     class="half-width"
+    maxLength="60"
   ></hospitality-bot-input>
-  <hospitality-bot-input
-    class="full-width"
-    label="Description"
-    controlName="description"
-  ></hospitality-bot-input>
+  <div class="des-template">
+    <div class="des-template__label">Description</div>
+    <div class="des-template__input">
+      <hospitality-bot-template-editor
+        [parentFG]="topicForm"
+        [name]="'description'"
+        [isSimpleEditor]="true"
+      ></hospitality-bot-template-editor>
+    </div>
+  </div>
   <hospitality-bot-button
     class="create-btn"
     [label]="isSavingTopic ? 'Saving' : 'Save'"

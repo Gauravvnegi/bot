@@ -236,7 +236,7 @@
         <hospitality-bot-button
           [label]="isUpdatingPermissions ? 'Saving...' : 'Save'"
           (click)="savePermission()"
-          [showLoader]="isUpdatingPermissions"
+          [isLoading]="isUpdatingPermissions"
           [disabled]="hasPageState('userProfile') && !isEdited"
         ></hospitality-bot-button>
       </div>

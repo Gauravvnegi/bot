@@ -1,8 +1,8 @@
 export class InvoiceResponse {
   id: string;
-  cashier: string;
-  invoiceCode: string;
   reservation: ReservationData;
+  companyDetails: CompanyDetails;
+  invoiceCode: string;
   primaryGuest: PrimaryGuest;
   invoiceDate: number;
   invoiceGenerated: boolean;
@@ -13,7 +13,32 @@ export class InvoiceResponse {
   roomNumber: number;
 }
 
-interface PrimaryGuest {
+type CompanyDetails = {
+  id: string;
+  companyName: string;
+  email: string;
+  address : Address;
+  contactNumber: string;
+  gstNumber: string;
+}
+
+type Address = {
+  created: number;
+  updated: number;
+  id: string;
+  city: string;
+  country: string;
+  countryCode: string;
+  postalCode: string;
+  addressLine1: string;
+  addressLine2: string;
+  state: string;
+  reservationId: string;
+  guestId: string | null;
+  guestType: string;
+}
+
+type PrimaryGuest = {
   id: string;
   firstName: string;
   lastName: string;
@@ -23,13 +48,13 @@ interface PrimaryGuest {
   documentRequired: boolean;
 }
 
-interface Contact {
+type Contact = {
   cc: string;
   contactNumber: string;
   emailId: string;
 }
 
-interface ReservationData {
+type ReservationData = {
   arrivalTime: number;
   departureTime: number;
   number: string;
@@ -45,15 +70,25 @@ interface ReservationData {
 export type ItemList = {
   items: Item[];
 };
+
 export type Item = {
   id: string;
+  created: number;
+  updated: number;
   description: string;
   unit: number;
-  unitValue: number;
+  billDate: number;
+  perUnitPrice: number;
   transactionType: string;
   amount: number;
+  discount?: Discount;
   itemTax: Tax[];
 };
+
+export type Discount = {
+  type?: string;
+  value?: number;
+}
 
 export type Tax = {
   created: number;

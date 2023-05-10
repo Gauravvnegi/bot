@@ -100,7 +100,7 @@ import { AddressComponent } from './containers/address/address.component';
     DefaultAmenityService,
     ThankYouService,
     GSTService,
-    AddressComponent
+    AddressComponent,
   ],
 })
 export class Temp000002Module {}

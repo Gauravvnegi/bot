@@ -27,6 +27,19 @@ const appRoutes: Route[] = [
           import('@hospitality-bot/admin/tax').then((m) => m.AdminTaxModule),
       },
       {
+        path: 'business-info',
+        children: [
+          { path: '', component: SiteSettingsComponent },
+          {
+            path: 'brand',
+            loadChildren: () =>
+              import('@hospitality-bot/admin/business').then(
+                (m) => m.AdminBusinessModule
+              ),
+          },
+        ],
+      },
+      {
         path: ':settingOption',
         component: SiteSettingsComponent,
       },
@@ -41,5 +54,8 @@ const appRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminSettingsRoutingModule {
-  static components = [MainComponent, SettingsMenuComponent];
+  static components = [
+    MainComponent,
+    SettingsMenuComponent,
+  ];
 }

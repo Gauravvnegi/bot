@@ -29,12 +29,13 @@ import {
   SummaryData,
 } from '../../models/reservations.model';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReservationFormData } from '../../models/reservations.model';
 import * as moment from 'moment';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { ReservationResponse } from '../../types/response.type';
+import { manageReservationRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -58,12 +59,13 @@ export class AddReservationComponent implements OnInit {
   summaryData: SummaryData;
   configData: BookingConfig;
   roomFields = roomFields;
-
+  loading = false;
   displayBookingOffer: boolean = false;
   formValueChanges = false;
   disabledForm = false;
   startMinDate = new Date();
   endMinDate = new Date();
+  isBooking = false;
 
   pageTitle = 'Add Booking';
   routes: NavRouteOptions = [
@@ -80,6 +82,7 @@ export class AddReservationComponent implements OnInit {
     private snackbarService: SnackBarService,
     private manageReservationService: ManageReservationService,
     private location: Location,
+    private router: Router,
     protected activatedRoute: ActivatedRoute,
     private configService: ConfigService,
     private modalService: ModalService,
@@ -217,13 +220,14 @@ export class AddReservationComponent implements OnInit {
 
   getInitialData(): void {
     this.$subscription.add(
-      this.manageReservationService
-        .getPaymentMethod(this.hotelId)
-        .subscribe((response) => {
+      this.manageReservationService.getPaymentMethod(this.hotelId).subscribe(
+        (response) => {
           this.paymentOptions = new PaymentMethodList()
             .deserialize(response)
             .records.map((item) => ({ label: item.label, value: item.label }));
-        }, (error)=>{})
+        },
+        (error) => {}
+      )
     );
   }
 
@@ -260,24 +264,27 @@ export class AddReservationComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService
         .getReservationDataById(this.reservationId, this.hotelId)
-        .subscribe((response) => {
-          console.log(response);
-          const data = new ReservationFormData().deserialize(response);
-          console.log(data);
-          this.userForm.patchValue(data);
-          this.summaryData = new SummaryData().deserialize(response);
-          this.setFormDisability(data.bookingInformation);
-          if (data.offerId)
-            this.getOfferByRoomType(
-              this.userForm.get('roomInformation.roomTypeId').value
-            );
-          this.userForm.valueChanges.subscribe((_) => {
-            if (!this.formValueChanges) {
-              this.formValueChanges = true;
-              this.listenForFormChanges();
-            }
-          });
-        }, (error)=>{})
+        .subscribe(
+          (response) => {
+            console.log(response);
+            const data = new ReservationFormData().deserialize(response);
+            console.log(data);
+            this.userForm.patchValue(data);
+            this.summaryData = new SummaryData().deserialize(response);
+            this.setFormDisability(data.bookingInformation);
+            if (data.offerId)
+              this.getOfferByRoomType(
+                this.userForm.get('roomInformation.roomTypeId').value
+              );
+            this.userForm.valueChanges.subscribe((_) => {
+              if (!this.formValueChanges) {
+                this.formValueChanges = true;
+                this.listenForFormChanges();
+              }
+            });
+          },
+          (error) => {}
+        )
     );
   }
 
@@ -306,14 +313,17 @@ export class AddReservationComponent implements OnInit {
       this.$subscription.add(
         this.manageReservationService
           .getOfferByRoomType(this.hotelId, id)
-          .subscribe((response) => {
-            this.offersList = new OfferList().deserialize(response);
-            if (this.userForm.get('offerId').value) {
-              this.selectedOffer = this.offersList.records.filter(
-                (item) => item.id === this.userForm.get('offerId').value
-              )[0];
-            }
-          }, (error)=>{})
+          .subscribe(
+            (response) => {
+              this.offersList = new OfferList().deserialize(response);
+              if (this.userForm.get('offerId').value) {
+                this.selectedOffer = this.offersList.records.filter(
+                  (item) => item.id === this.userForm.get('offerId').value
+                )[0];
+              }
+            },
+            (error) => {}
+          )
       );
   }
 
@@ -348,9 +358,8 @@ export class AddReservationComponent implements OnInit {
     };
     if (this.userForm.get('roomInformation.roomTypeId')?.value)
       this.$subscription.add(
-        this.manageReservationService
-          .getSummaryData(config)
-          .subscribe((res) => {
+        this.manageReservationService.getSummaryData(config).subscribe(
+          (res) => {
             this.summaryData = new SummaryData().deserialize(res);
             this.userForm
               .get('roomInformation')
@@ -361,11 +370,14 @@ export class AddReservationComponent implements OnInit {
             this.userForm
               .get('paymentMethod.totalPaidAmount')
               .updateValueAndValidity();
-          }, (error)=>{})
+          },
+          (error) => {}
+        )
       );
   }
 
-  HandleBooking(): void {
+  handleBooking(): void {
+    this.isBooking = true;
     const data = this.manageReservationService.mapReservationData(
       this.userForm.getRawValue()
     );
@@ -377,9 +389,13 @@ export class AddReservationComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService
         .createReservation(this.hotelId, data)
-        .subscribe((res: ReservationResponse) => {
-          this.bookingConfirmationPopup(res?.reservationNumber);
-        }, (error)=>{})
+        .subscribe(
+          (res: ReservationResponse) => {
+            this.bookingConfirmationPopup(res?.reservationNumber);
+          },
+          (error) => {},
+          () => (this.isBooking = false)
+        )
     );
   }
 
@@ -387,9 +403,15 @@ export class AddReservationComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService
         .updateReservation(this.hotelId, this.reservationId, data)
-        .subscribe((res: ReservationResponse) => {
-          this.bookingConfirmationPopup(res?.reservationNumber);
-        }, (error)=>{})
+        .subscribe(
+          (res: ReservationResponse) => {
+            this.bookingConfirmationPopup(res?.reservationNumber);
+          },
+          (error) => {},
+          () => {
+            this.isBooking = false;
+          }
+        )
     );
   }
 
@@ -404,20 +426,31 @@ export class AddReservationComponent implements OnInit {
       dialogConfig
     );
     togglePopupCompRef.componentInstance.content = {
-      heading: `Booking ${this.reservationId ? 'Updated' : 'Created'}`,
+      heading: `Booking ${
+        this.reservationId ? 'Updated' : 'Created'
+      } Successfully`,
+
       description: [
-        `Your booking has ${
+        `Congratulations! Your booking has been ${
           this.reservationId ? 'updated' : 'created'
-        } successfully `,
-        `Your booking confirmation number is ${number}`,
+        } successfully.`,
+        ` Your confirmation number is ${number}.`,
+        // "Keep this number safe as you'll need it for any future inquiries or changes to your reservation.",
       ],
     };
     togglePopupCompRef.componentInstance.actions = [
       {
-        label: 'Okay',
+        label: 'Continue Booking',
         onClick: () => {
+          this.router.navigate(
+            [
+              `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.addReservation.route}`,
+            ],
+            { replaceUrl: true }
+          );
+          // this.userForm.reset();
+          this.initForm();
           this.modalService.close();
-          this.location.back();
         },
         variant: 'outlined',
       },
@@ -425,6 +458,8 @@ export class AddReservationComponent implements OnInit {
         label: 'Copy Confirmation number',
         onClick: () => {
           this.copiedConfirmationNumber(number);
+          this.modalService.close();
+          this.location.back();
         },
         variant: 'contained',
       },
@@ -459,21 +494,24 @@ export class AddReservationComponent implements OnInit {
         .searchLibraryItem(this.hotelId, {
           params: `?key=${text}&type=ROOM_TYPE`,
         })
-        .subscribe((res: any) => {
-          const data = res;
-          this.roomTypes =
-            data.ROOM_TYPE?.filter((item) => item.status).map((item) => {
-              new RoomTypeOption().deserialize(item);
-              return {
-                label: item.name,
-                value: item.id,
-                roomCount: item.roomCount,
-                maxChildren: item.maxChildren,
-                maxAdult: item.maxAdult,
-              };
-            }) ?? [];
-          roomFields[0].options = this.roomTypes;
-        }, (error)=>{});
+        .subscribe(
+          (res: any) => {
+            const data = res;
+            this.roomTypes =
+              data.ROOM_TYPE?.filter((item) => item.status).map((item) => {
+                new RoomTypeOption().deserialize(item);
+                return {
+                  label: item.name,
+                  value: item.id,
+                  roomCount: item.roomCount,
+                  maxChildren: item.maxChildren,
+                  maxAdult: item.maxAdult,
+                };
+              }) ?? [];
+            roomFields[0].options = this.roomTypes;
+          },
+          (error) => {}
+        );
     } else {
       this.roomTypeOffSet = 0;
       this.roomTypes = [];

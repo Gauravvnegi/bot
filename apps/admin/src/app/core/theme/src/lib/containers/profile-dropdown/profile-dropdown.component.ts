@@ -1,11 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '@hospitality-bot/admin/shared';
-import { HotelDetailService, routes } from 'libs/admin/shared/src/index';
+import {
+  HotelDetailService,
+  ModuleNames,
+  routes,
+} from 'libs/admin/shared/src/index';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthService } from '../../../../../auth/services/auth.service';
 import { layoutConfig, UserDropdown } from '../../constants/layout';
 import { FirebaseMessagingService } from '../../services/messaging.service';
+import { SubscriptionPlanService } from '../../services/subscription-plan.service';
 
 @Component({
   selector: 'admin-profile-dropdown',
@@ -15,7 +20,6 @@ import { FirebaseMessagingService } from '../../services/messaging.service';
 export class ProfileDropdownComponent implements OnInit {
   items = [];
   onManageSite = false;
-  isSiteAvailable: boolean = false;
 
   constructor(
     private _router: Router,
@@ -23,20 +27,25 @@ export class ProfileDropdownComponent implements OnInit {
     public userService: UserService,
     private firebaseMessagingService: FirebaseMessagingService,
     private cookieService: CookieService,
-    private hotelDetailsService: HotelDetailService
+    private hotelDetailsService: HotelDetailService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {
     this.onManageSite = this._router.url.includes('manage-sites');
   }
 
   ngOnInit(): void {
-    this.isSiteAvailable = !!this.hotelDetailsService.hotelDetails.sites
-      ?.length;
+    const isSiteAvailable = !!this.hotelDetailsService.sites?.length;
 
+    const isCreateWithSubscribed = this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.CREATE_WITH
+    );
+
+    // filtering out the manage site - either on mange site or sites not available or createWith not subscribed
     this.items = layoutConfig.profile.filter(
       (item) =>
         !(
           item.value === UserDropdown.MANAGE_SITES &&
-          (this.onManageSite || !this.isSiteAvailable)
+          (this.onManageSite || !isSiteAvailable || !isCreateWithSubscribed)
         )
     );
   }

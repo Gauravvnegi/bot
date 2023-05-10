@@ -12,6 +12,9 @@
   border: none;
   cursor: pointer;
 
+  display: flex;
+  gap: 5px;
+
   &__img {
     display: flex;
     align-items: center;

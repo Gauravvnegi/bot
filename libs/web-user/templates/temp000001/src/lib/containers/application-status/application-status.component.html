@@ -95,25 +95,25 @@
             <ng-container *ngSwitchCase="'PENDING'">
               <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
-                Your documents are pending.
+                Documents are pending.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
               <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
-                Your documents verification is initiated.
+                Documents verification initiated.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
               <img class="conditional-icon" src="assets/Right.png" />
               <div class="section--content--health--message-detail">
-                Your documents are verified successfully.
+                Documents verification successful.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
               <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
-                Your documents verification failed.
+                Documents verification failed.
               </div>
             </ng-container>
           </ng-container>
@@ -130,7 +130,7 @@
       </div>
     </div>
     <div>
-      <div class="section--heading">Health Declaration Form</div>
+      <div class="section--heading">Health Declaration</div>
       <div class="section--content--health">
         <div class="section--content--health--message">
           <ng-container
@@ -139,25 +139,25 @@
             <ng-container *ngSwitchCase="'PENDING'">
               <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
-                Health Declaration form Pending.
+                Health Declaration Pending.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
               <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
-                Health Declaration form Initiated.
+                Health Declaration Initiated.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
               <img class="conditional-icon" src="assets/Right.png" />
               <div class="section--content--health--message-detail">
-                Health Declaration form has been signed.
+                Health Declaration has been signed.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
               <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
-                Health Declaration form verification failed.
+                Health Declaration verification failed.
               </div>
             </ng-container>
           </ng-container>
@@ -264,13 +264,11 @@
             [parentForm]="summaryFG?.get('privacyPolicy')"
             [name]="'accept'"
             (onValueChange)="setPrivacyPolicy($event)"
+            [settings]="{
+              label: 'I agree to receive promotions on my email and phone no'
+            }"
           >
           </web-user-checkbox>
-          <div style="margin-left: 10px;">
-            <label>
-              I agree to receive promotions on my email and phone no</label
-            >
-          </div>
         </div>
       </div>
     </div>

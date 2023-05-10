@@ -4,32 +4,67 @@ export type CookiesData = {
   user: string;
   'x-userId': string;
   hotelId: string;
+  siteId: string;
+  brandId: string;
 };
 
-export type UserData = {
+type SocialPlatforms = {
+  name: string;
+  socialPlatformType: string;
+  imageUrl: string;
+  redirectUrl: string;
+};
+
+type Brand = {
+  id: string;
+  name: string;
+  logo: string;
+  hotels: {
+    id: string;
+    name: string;
+    logo: string;
+    timezone: string;
+    outlets?: any[];
+    address: {
+      id: string;
+      city: string;
+      country: string;
+      latitude: number;
+      longitude: number;
+      pincode: number;
+    };
+    pmsEnable: boolean;
+  }[];
+  socialPlatforms: SocialPlatforms[];
+};
+
+export type UserResponse = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
   title: string;
+  otpVerified: boolean;
   cc: string;
   phoneNumber: string;
-  profileUrl: string;
+  hotelAccess: { brands: Brand[] };
   permissions: {
     entity: string;
     label: string;
     permissions: {
-      manage: number;
-      view: number;
+      manage: -1 | 0 | 1;
+      view: -1 | 0 | 1;
     };
     productType: string;
   }[];
-  parentId: string;
   status: boolean;
+  parentId?: boolean;
+  profileUrl?: string;
   departments: {
+    parentId: string;
     id: string;
-    view: number;
-    manage: number;
+    view: -1 | 0 | 1;
+    manage: -1 | 0 | 1;
     module: string;
     department: string;
     entityId: string;
@@ -40,25 +75,14 @@ export type UserData = {
     departmentLabel: string;
     productLabel: string;
   }[];
-
+  sites: {
+    id: string;
+    name: string;
+    domain: string;
+    themeId: string;
+    status: string;
+    brands: Brand[];
+    socialPlatforms: SocialPlatforms[];
+  }[];
   agent: boolean;
-  hotelAccess: {
-    chains: {
-      id: string;
-      name: string;
-      hotels: {
-        id: string;
-        name: string;
-        imageUrl: string;
-        logo: string;
-        footerLogo: string;
-        bgColor: string;
-        nationality: string;
-        timezone: string;
-        outlets: any[];
-        txnFbId: string;
-        domain: string;
-      }[];
-    }[];
-  };
 };

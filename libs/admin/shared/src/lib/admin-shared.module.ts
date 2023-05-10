@@ -85,6 +85,7 @@ import { PhoneNumberComponent } from './view/phone-number/phone-number.component
 import { EmptyTableComponent } from './components/datatable/empty-table/empty-table.component';
 import { EmptyViewDirective } from './directives/empty-view.directive';
 import { CreateWithViewComponent } from './view/create-with-view/create-with-view.component';
+import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/toggle-switch-label.component';
 
 @NgModule({
   imports: [
@@ -178,6 +179,7 @@ import { CreateWithViewComponent } from './view/create-with-view/create-with-vie
     EmptyTableComponent,
     EmptyViewDirective,
     CreateWithViewComponent,
+    ToggleSwitchComponentLabel,
   ],
 
   exports: [
@@ -261,6 +263,7 @@ import { CreateWithViewComponent } from './view/create-with-view/create-with-vie
     EmptyTableComponent,
     EmptyViewDirective,
     CreateWithViewComponent,
+    ToggleSwitchComponentLabel,
   ],
 })
 export class AdminSharedModule {}

@@ -17,7 +17,7 @@ export class ButtonComponent {
   @Input() link: string = null;
   @Input() href: string = null;
   @Output() onClick = new EventEmitter<Event>();
-  @Input() showLoader: boolean = false;
+  @Input() isLoading: boolean = false;
   @Input() icon: string;
 
   constructor(private router: Router) {}

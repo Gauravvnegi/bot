@@ -70,12 +70,14 @@
       </p>
       <div class="images">
         <!-- Flow to be decided by business team -->
-        <button (click)="updatePackageStatus('ACCEPT')" class="right">
+        <!-- <button (click)="updatePackageStatus('ACCEPT')" class="right">
           <img src="assets/svg/tick.svg" />
         </button>
         <button (click)="updatePackageStatus('REJECT')" class="right">
           <img src="assets/svg/cross.svg" />
-        </button>
+        </button> -->
+        <hospitality-bot-toggle-switch-with-label
+        ></hospitality-bot-toggle-switch-with-label>
       </div>
     </div>
   </mat-expansion-panel>

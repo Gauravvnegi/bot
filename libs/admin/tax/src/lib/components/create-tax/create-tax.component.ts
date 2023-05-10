@@ -72,9 +72,6 @@ export class CreateTaxComponent implements OnInit {
    */
   getTax() {
     this.loading = true;
-    this.pageTitle = 'Edit Tax';
-    this.navRoutes[2].label = 'Edit';
-
     this.$subscription.add(
       this.taxService
         .getTaxById(this.hotelId, this.taxId)
@@ -91,7 +88,7 @@ export class CreateTaxComponent implements OnInit {
    * @function initFormSubscription To initialize form subscription
    */
   initFormSubscription() {
-    this.useForm.get('country').valueChanges.subscribe((val) => { 
+    this.useForm.get('country').valueChanges.subscribe((val) => {
       this.useForm.get('taxType').reset();
       this.useForm.get('category').reset();
       this.useForm.get('taxValue').reset();
@@ -100,11 +97,11 @@ export class CreateTaxComponent implements OnInit {
       )?.taxType;
     });
     this.useForm.get('taxType').valueChanges.subscribe((val) => {
-      this.useForm.get('category').reset(); 
+      this.useForm.get('category').reset();
       this.useForm.get('taxValue').reset();
       this.categoryList = this.taxTypeList?.find(
         (item) => item.label === val
-      )?.categories; 
+      )?.categories;
     });
     this.useForm.get('category').valueChanges.subscribe((val) => {
       this.useForm.get('taxValue').reset();
@@ -154,7 +151,7 @@ export class CreateTaxComponent implements OnInit {
    * @function getTaxCountry To get all tax country
    * @returns void
    */
-  getTaxCountry() { 
+  getTaxCountry() {
     this.taxService.getTaxCountry().subscribe(
       (res) => {
         this.globalCountryData = new TaxCountryList().deserialize(res);
@@ -185,7 +182,7 @@ export class CreateTaxComponent implements OnInit {
    * @function handleError To show error message
    * @param param0  network error
    */
-  handelError = ({ error }): void => { 
+  handelError = ({ error }): void => {
     this.loading = false;
   };
 

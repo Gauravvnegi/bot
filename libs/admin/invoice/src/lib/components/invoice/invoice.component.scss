@@ -1,9 +1,5 @@
 @import 'main';
 
-.wrapper {
-  padding: 0 10px;
-}
-
 .form-wrapper {
   display: flex;
   flex-direction: column;
@@ -14,11 +10,15 @@
   @include form-block;
 }
 
-.button{
+.button {
   display: flex;
   justify-content: center;
   padding: 20px;
   margin: 20px;
+}
+
+:host ::ng-deep hospitality-bot-navigation-header .nav-wrapper__sticky {
+  padding: 20px 42px 20px 32px;
 }
 
 .payment-form {
@@ -59,21 +59,27 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      &.invert {  
+      &.invert {
         background: #727272;
         color: white;
       }
-      &.stretch{
+      &.stretch {
         padding-right: 0px;
       }
 
-      .span-block{
+      .span-block {
         display: flex;
         align-items: center;
         justify-content: flex-end;
         width: 50%;
         gap: 8px;
         margin-right: 34px;
+      }
+      .refund-block {
+        display: flex;
+        align-items: center;
+        max-width: 26%;
+        margin: -18px 0 -7px;
       }
     }
   }
@@ -83,37 +89,44 @@
   }
 }
 
-.input-field{
+.input-field {
   display: flex;
   flex-basis: 35%;
   gap: 15px;
-  align-items: center
+  align-items: center;
 }
 
-:host ::ng-deep .span-block{  hospitality-bot-button .button{
-    min-width: 60px;
+:host ::ng-deep tr {
+  hospitality-bot-button .button {
+    min-width: 35px;
+    padding: 0;
+    margin: 0;
   }
 }
 
-:host ::ng-deep .gst-btn{  
-  .button{
+:host ::ng-deep .gst-btn {
+  .button {
     padding: 0 !important;
-    min-width: 55px !important; 
-  } 
+    min-width: 55px !important;
+  }
 }
 
-:host ::ng-deep .discount-field{ .main{
-  margin-top: 0px;
-}}
+:host ::ng-deep .discount-field {
+  .main {
+    margin-top: 0px;
+  }
+}
 
-:host ::ng-deep .span-block{ .p-error{
-  width: max-content;
-  margin-left: -75px;
-  margin-bottom: 3px;
-}}
+:host ::ng-deep .span-block {
+  .p-error {
+    width: max-content;
+    margin-left: -75px;
+    margin-bottom: 3px;
+  }
+}
 
-:host ::ng-deep .mat-menu-content{
-    padding: 0px;
+:host ::ng-deep .mat-menu-content {
+  padding: 0px;
 }
 
 :host ::ng-deep .p-datatable {
@@ -171,20 +184,34 @@
   }
 }
 
-.payment-method{
+.payment-method {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  .view-history-btn{
+  .view-history-btn {
     @include flex-item-center;
   }
 }
 
-.gst-btn{
+.gst-btn {
   margin-top: -30px;
 }
 
 .line {
-  border-top: 1.8px solid black;
+  border-top: 2px solid black;
   opacity: 0.25;
+}
+
+.discount-row td {
+  align-items: center;
+  border-top: hidden;
+  padding: 0 1rem 15px;
+}
+
+:host ::ng-deep .prefix-field .p-field .main {
+  margin-top: 0px;
+}
+
+.negative-amount {
+  color: red;
 }

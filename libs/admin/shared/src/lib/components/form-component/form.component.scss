@@ -103,10 +103,12 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   display: flex;
   gap: 1em;
   input {
-    @include search-input();
     outline: none;
+    color: $secondary-text-color;
+    box-shadow: none !important;
+    background: $layout-background !important;
     flex-basis: 73.5%;
-    border: 1px solid $border-color;
+    border: 1px solid transparent;
     border-radius: 5px;
     padding: 0 10px;
     font-size: 1rem;
@@ -115,15 +117,15 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
       line-height: 1.07;
       letter-spacing: 0.84px;
       text-align: left;
-      color: $secondary2;
+      color: $secondary-text-color;
     }
-    // &:hover {
-    //   border-color: $primary-form-color !important;
-    // }
-    // &:focus {
-    //   border-color: $primary-form-color !important;
-    //   box-shadow: 0px 0px 0px 1px $primary-form-color;
-    // }
+    &:hover {
+      border-color: $primary-form-color !important;
+    }
+    &:focus {
+      border-color: $primary-form-color !important;
+      box-shadow: 0px 0px 0px 1px $primary-form-color;
+    }
   }
   button {
     flex-basis: 21.5%;

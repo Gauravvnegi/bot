@@ -179,7 +179,7 @@ import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/tog
     EmptyTableComponent,
     EmptyViewDirective,
     CreateWithViewComponent,
-    ToggleSwitchComponentLabel
+    ToggleSwitchComponentLabel,
   ],
 
   exports: [
@@ -263,7 +263,7 @@ import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/tog
     EmptyTableComponent,
     EmptyViewDirective,
     CreateWithViewComponent,
-    ToggleSwitchComponentLabel
+    ToggleSwitchComponentLabel,
   ],
 })
 export class AdminSharedModule {}

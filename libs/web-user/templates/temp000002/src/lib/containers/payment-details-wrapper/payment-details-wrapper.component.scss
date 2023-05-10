@@ -19,8 +19,12 @@
   background-color: $white;
   border-radius: 0 0 10px 10px;
   padding-bottom: 20px;
+
   @media only screen and (min-width: $M) {
     padding-bottom: 50px;
+  }
+  @media only screen and (min-width: $tablet) {
+    padding-bottom: 0px;
   }
 }
 
@@ -31,16 +35,21 @@
 }
 
 :host ::ng-deep .mat-tab-label {
-  padding: 20px;
+  padding: 15px;
   height: auto;
   opacity: 1;
   background-color: $tabBg;
   color: $warm-grey;
+  border-radius: 10px 10px 0 0;
   svg path {
     fill: $payment-tab-color !important;
   }
   img {
     filter: contrast(0);
+  }
+
+  &:hover {
+    background-color: #e8e2ff9e;
   }
   @media only screen and (max-width: $T) {
     padding: 10px;
@@ -113,10 +122,15 @@
   width: 42.6vw;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
   @media only screen and (max-width: $L) {
     width: 38.7vw;
+    align-items: center;
   }
+}
+
+.img-wrap {
+  height: 53px;
 }
 
 .inner-label {
@@ -124,11 +138,18 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  zoom: 0.7;
+  @media only screen and (max-width: $L) {
+    zoom: 1;
+  }
 }
 
 .type-label {
   display: flex;
   justify-content: space-between;
+  @media only screen and (min-width: $L) {
+    align-items: flex-end;
+  }
   @media only screen and (max-width: $M) {
     align-items: flex-end;
     flex-direction: column;
@@ -146,7 +167,7 @@
 
 :host ::ng-deep .payment__wrapper__heading {
   padding: 15px;
-  font-size: 25px;
+  font-size: 22px;
   font-weight: $bolder;
   color: $heading-black;
   @media only screen and (max-width: $tab-size) {

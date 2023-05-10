@@ -1,5 +1,13 @@
 // Mixins
 
+@mixin title-header {
+  background-color: $title-header-background-color;
+  color: $title-header-font-color;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px;
+}
+
 @mixin half-circle {
   content: '';
   width: 15px;
@@ -21,7 +29,7 @@
   height: 45px;
   font-weight: $bolder;
   box-shadow: 0px 3px 6px #4b56c059;
-  border-radius: 28px;
+  border-radius: 8px;
   color: var(--primary-button-font-color, $primary-button-font-color);
   &:hover {
     cursor: pointer;
@@ -62,7 +70,6 @@
     z-index: 222;
   }
 }
-
 
 @mixin flex-col-center-align {
   display: flex;

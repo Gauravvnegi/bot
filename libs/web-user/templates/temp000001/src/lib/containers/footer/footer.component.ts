@@ -9,6 +9,7 @@ export interface IFooterConfig {
     redirectUrl: string;
   }[];
   privacyPolicy: string;
+  termsAndConditions: string;
   contactDetails: {
     contactNo: string;
     email: string;
@@ -28,6 +29,7 @@ export class FooterComponent implements OnInit {
     },
     social: [],
     privacyPolicy: '',
+    termsAndConditions: '',
   };
   @Input() showSocialIcons = true;
 
@@ -43,6 +45,7 @@ export class FooterComponent implements OnInit {
       contactDetails,
       privacyPolicyUrl,
       socialPlatforms,
+      termsUrl,
     } = this._hotelService.hotelConfig;
     // TO-DO: remove union when backend fixes the hotelConfig data
     let { emailId, contactNumber, cc } =
@@ -52,5 +55,6 @@ export class FooterComponent implements OnInit {
     this.footerConfig.contactDetails.contactNo = cc + ' ' + contactNumber;
     this.footerConfig.contactDetails.email = emailId;
     this.footerConfig.privacyPolicy = privacyPolicyUrl;
+    this.footerConfig.termsAndConditions = termsUrl;
   }
 }

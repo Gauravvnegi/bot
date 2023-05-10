@@ -8,6 +8,7 @@ export class StepperService {
   totalSteps: number;
   isLastStep$: Subject<boolean> = new Subject();
   isFirstStep$: Subject<boolean> = new Subject();
+  nextStepIndex$ = new BehaviorSubject(-1);
 
   constructor() {
     this.registerListeners();
@@ -21,6 +22,13 @@ export class StepperService {
 
   setSelectedIndex(index) {
     this.stepperSelectedIndex$.next(index);
+    this.setNextStepIndex(index);
+  }
+
+  setNextStepIndex(number) {
+    if (number > this.nextStepIndex$.value) {
+      this.nextStepIndex$.next(number);
+    }
   }
 
   setIndex(command) {

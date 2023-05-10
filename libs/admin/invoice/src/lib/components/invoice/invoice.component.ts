@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import {
   AdminUtilityService,
+  CookiesSettingsService,
   NavRouteOptions,
   Option,
 } from '@hospitality-bot/admin/shared';
@@ -25,9 +26,15 @@ import {
   ServiceList,
   TableDataList,
 } from '../../models/invoice.model';
-import { SnackBarService } from '@hospitality-bot/shared/material';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { ServicesService } from 'libs/admin/services/src/lib/services/services.service';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { SettingOptions } from '@hospitality-bot/admin/settings';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -52,26 +59,33 @@ export class InvoiceComponent implements OnInit {
   ];
   loading = false;
 
+  tableLength = 0;
   tax: Option[] = [];
-  defaultTax: Option[] = [];
+  defaultTax: Option[] = []
   tableValue = [];
   discountOption: Option[] = [
-    { label: '%Off', value: 'off' },
-    { label: 'Flat', value: 'flat' },
+    { label: '%Off', value: 'PERCENT' },
+    { label: 'Flat', value: 'FLAT' },
   ];
-  editPaidAmount: Option[] = [{ label: 'Edit', value: 'edit' }];
+  refundOption = [{ label: 'INR', value: 'inr' }];
+  addRefund: Option[] = [{ label: 'Add Refund', value: 'addRefund' }];
+  editRefund: Option[] = [{ label: 'Edit Refund', value: 'editRefund' }];
 
-  editMode = false;
-  viewDiscountTab = false;
-  viewPaidTab = false;
+  isDiscountSaved = false;
+  isRefundSaved = false;
+  viewRefundRow = false;
   isValidDiscount = true;
-  isValidPaid = true;
   isGenerated = false;
   isAddingGST = false;
 
   $subscription = new Subscription();
+  typeSubscription: Subscription;
 
   serviceOptions = [
+    { label: 'se default', value: 'se default', amount: 0, taxes: [] },
+  ];
+
+  defaultServices = [
     { label: 'se default', value: 'se default', amount: 0, taxes: [] },
   ];
 
@@ -93,7 +107,9 @@ export class InvoiceComponent implements OnInit {
     private invoiceService: InvoiceService,
     private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
-    private servicesService: ServicesService
+    private servicesService: ServicesService,
+    private cookiesSettingService: CookiesSettingsService,
+    private modalService: ModalService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -140,43 +156,80 @@ export class InvoiceComponent implements OnInit {
       additionalNote: [''],
       tableData: new FormArray([]),
 
-      currentAmount: [''],
-      discountedAmount: [''],
-      totalDiscount: [''],
-      paidAmount: [''],
-      dueAmount: [''],
+      currentAmount: [0],
+      discountedAmount: [0],
+      totalDiscount: [0],
+      paidAmount: [0],
+      dueAmount: [0],
 
-      discount: [''],
-      discountType: [''],
-
-      paidValue: [''],
-      paid: [''],
+      currency: ['inr'],
+      refundAmount: [0],
 
       cashierName: ['', Validators.required],
       invoiceDate: ['', Validators.required],
-      paymentMethod: [''],
-      recievedPayment: [''],
-      remarks: [''],
-      transactionId: [''],
+      paymentMethod: ['', Validators.required],
+      recievedPayment: ['', Validators.required],
+      remarks: ['', Validators.required],
+      transactionId: ['', Validators.required],
     });
 
     this.tableFormArray = this.useForm.get('tableData') as FormArray;
+    this.addNewFieldTableForm('price', 0);
     this.initDetails();
     this.initOptionsConfig();
-    this.addNewFieldTableForm();
     this.initFormSubscription();
   }
 
   /**
    * @function initForm Initialize form
    */
+  // initDetails() {
+  //   this.tableValue = [{ id: 1 }];
+  //   this.invoiceService.getInvoiceData(this.reservationId).subscribe((res) => {
+  //     const data = new Invoice().deserialize(res);
+  //     const tableData = new TableDataList().deserialize(res.itemList).records;
+  //     this.defaultTax = tableData[0].tax;
+  //     let taxValues = this.defaultTax.map((item) => item.value);
+
+  //     const addCharges = () => this.addNewCharges();
+
+  //     if (tableData.length > 1) {
+  //       Array.from({ length: tableData.length - 1 }, () => addCharges());
+  //     }
+
+  //     tableData.forEach((data, i) => {
+  //       const rowData: Record<keyof PaymentField, any> = {
+  //         description: data.description,
+  //         unit: data.unit,
+  //         unitValue: data.unitValue,
+  //         amount: data.amount,
+  //         tax: data.tax,
+  //         totalAmount: data.totalAmount,
+  //         menu: '',
+  //         discount: data.discountValue || '',
+  //         discountType: data.discountType || 'off',
+  //         type: 'price',
+  //         isDisabled: false,
+  //         isSaved: false,
+  //       };
+
+  // //       this.tableFormArray.controls[i].setValue(rowData);
+  // //       this.tableFormArray.controls[i].get('tax').setValue(taxValues);
+  // //     });
+  // //     this.useForm.patchValue(data);
+  // //   });
+  // // }
+
   initDetails() {
     this.tableValue = [{ id: 1 }];
     this.invoiceService.getInvoiceData(this.reservationId).subscribe((res) => {
       const data = new Invoice().deserialize(res);
       const tableData = new TableDataList().deserialize(res.itemList).records;
-      this.defaultTax = tableData[0].tax;
-      let taxValues = this.defaultTax.map((item) => item.value);
+      console.log(tableData);
+      this.defaultTax = tableData[0]?.tax || [{label: '', value: ''}];
+      console.log(this.defaultTax);
+      // this.tax.push(tableData[0].tax)
+      let taxValues = this.defaultTax.map((item) => item?.value || '');
 
       const addCharges = () => this.addNewCharges();
 
@@ -190,18 +243,144 @@ export class InvoiceComponent implements OnInit {
       });
       this.useForm.patchValue(data);
     });
-    this.inputControl.discountType.setValue('off');
+    // this.inputControl.discountType.setValue('off');
   }
 
+
+  // initDetails() {
+  //   this.tableValue = [{ id: 1 }];
+  //   this.tableFormArray.clear();
+  //   this.invoiceService.getInvoiceData(this.reservationId).subscribe((res) => {
+  //     const data = new Invoice().deserialize(res);
+  //     const tableData = new TableDataList().deserialize(res.itemList).records;
+  //     this.tableLength = tableData.length;
+      
+  //     tableData.forEach((data, i) => {
+  //       let taxValues = this.tax.map((item) => item.value)
+  //       this.tableFormArray.at(i).get('tax').patchValue(taxValues);
+  //       if (data.discount !== 0 && data.discountType !== '') {
+  //         const priceRowData = this.getRowData('price', data);
+  //         const discountRowData = this.getRowData('discount', data);
+  //         this.tableFormArray.push(this.fb.group(priceRowData));
+  //         this.tableFormArray.push(this.fb.group(discountRowData));
+  //         this.addNewCharges('discount');
+  //       } else {
+  //         const rowData = this.getRowData('price', data);
+  //         console.log("Row Data", rowData);
+  //         this.addNewCharges();
+  //         this.tableFormArray.push(this.fb.group(rowData));
+  //         console.log("Table Form Array - ", this.tableFormArray)
+  //       }
+  //       if (data.tax.length) {
+  //         let taxes = data.tax.map((item) => ({label: item.label, value: item.value}));
+  //         this.tax.push(...taxes);
+  //       }
+  //     });
+  //     this.useForm.patchValue(data);
+  //   });
+  // }
+
+  // initDetails() {
+  //   this.tableValue = [{ id: 1 }];
+  //   const newTableFormArray = this.fb.array([]);
+  //   this.addNewCharges();
+  //   this.invoiceService.getInvoiceData(this.reservationId).subscribe((res) => {
+  //     const data = new Invoice().deserialize(res);
+  //     const tableData = new TableDataList().deserialize(res.itemList).records;
+  //     this.tableLength = tableData.length;
+  
+  //     const formGroups = tableData.map((data) => {
+  //       let taxValues = this.tax.map((item) => item.value);
+  //       const rowData = {
+  //         description: data.description,
+  //         unit: data.unit,
+  //         unitValue: data.unitValue,
+  //         amount: data.amount,
+  //         tax: taxValues,
+  //         totalAmount: data.totalAmount,
+  //         menu: true,
+  //         discount: data.discount,
+  //         discountType: data.discountType,
+  //         type: data.discount !== 0 && data.discountType !== '' ? 'discount' : 'price',
+  //         isDisabled: false,
+  //         isSaved: false,
+  //       };
+  //       return this.fb.group(rowData);
+  //     });
+  
+  //     for (let i = 0; i < formGroups.length; i++) {
+  //       const group = formGroups[i];
+  //       newTableFormArray.insert(i, group);
+  
+  //       if (group.value.type === 'discount') {
+  //         this.addNewCharges('discount');
+  //       } else {
+  //         this.addNewCharges();
+  //       }
+  
+  //       if (tableData[i].tax.length) {
+  //         let taxes = tableData[i].tax.map((item) => ({ label: item.label, value: item.value }));
+  //         this.tax.push(...taxes);
+  //       }
+  //     }
+  
+  //     this.tableFormArray = newTableFormArray;
+  //     this.useForm.patchValue(data);
+  //   });
+  // }
+  
+
+  getRowData(type, data) {
+    switch (type) {
+      case 'price':
+        const rowData: Record<keyof PaymentField, any> = {
+          description: data.description,
+          unit: data.unit,
+          unitValue: data.unitValue,
+          amount: data.amount,
+          tax: data.tax,
+          totalAmount: data.totalAmount,
+          menu: false,
+          discount: 0,
+          discountType: '',
+          type: 'price',
+          isDisabled: false,
+          isSaved: false,
+        };
+        return rowData;
+
+      case 'discount':
+        const discountRowData: Record<keyof PaymentField, any> = {
+          description: '',
+          unit: 0,
+          unitValue: 0,
+          amount: 0,
+          tax: [],
+          totalAmount: 0,
+          menu: true,
+          discount: data.discount,
+          discountType: data.discountType,
+          type: 'discount',
+          isDisabled: false,
+          isSaved: false,
+        };
+        return discountRowData;
+
+      default:
+        break;
+    }
+  }
+
+  getServiceOptions(rowIndex) {}
+
   initFormSubscription() {
-    this.registerDiscountChanges();
+    this.getTax();
   }
 
   /**
    * @function initForm Initialize tax options
    */
   initOptionsConfig() {
-    this.getTax();
   }
 
   getQueryConfig(): QueryConfig {
@@ -214,32 +393,83 @@ export class InvoiceComponent implements OnInit {
         },
       ]),
     };
-    console.log('Config - ', config);
     return config;
   }
 
   /**
    * Add new entry in the payment field
    */
-  addNewFieldTableForm() {
+  addNewFieldTableForm(type, rowIndex?) {
     const data: Record<keyof PaymentField, any> = {
       description: ['', Validators.required],
-      unit: [''],
-      unitValue: [''],
-      amount: [''],
+      unit: [0],
+      unitValue: [0],
+      amount: [0],
       tax: [[]],
-      totalAmount: [''],
+      totalAmount: [0],
+      menu: [true],
+      discount: [0],
+      discountType: ['PERCENT'],
+      type: [''],
+      isDisabled: [false],
+      isSaved: [false],
     };
-    this.tableFormArray.push(this.fb.group({ ...data }));
+
+    let formGroup;
+    if (type === 'discount') {
+      formGroup = this.fb.group({
+        description: data.description,
+        unit: '',
+        unitValue: '',
+        amount: '',
+        menu: true,
+        type: 'discount',
+        discount: data.discount,
+        discountType: data.discountType,
+        totalAmount: 0,
+        isDisabled: false,
+        isSaved: false,
+      });
+      this.tableFormArray.insert(rowIndex, formGroup);
+    } else {
+      this.tableFormArray.push(
+        this.fb.group({
+          ...data,
+          menu: false,
+          type: 'price',
+          discount: 0,
+          discountType: '',
+          isDisabled: false,
+          isSaved: false,
+        })
+      );
+      this.registerUnitPriceChange();
+    }
   }
 
   /**
    * To add new charged
    */
-  addNewCharges() {
-    this.addNewFieldTableForm();
-    this.tableValue.push({ id: this.tableValue.length + 1 });
-    this.registerUnitPriceChange();
+  addNewCharges(type = 'price', rowIndex?) {
+    // if (this.useForm.invalid) {
+    //   this.useForm.markAllAsTouched();
+    //   this.snackbarService.openSnackBarAsText(
+    //     'Invalid form: Please fix the errors.'
+    //   );
+    //   return;
+    // }
+    if (type === 'discount') {
+      this.addNewFieldTableForm(type, rowIndex + 1);
+      this.tableValue.push({ id: this.tableValue.length + 1 });
+    } else {
+      this.addNewFieldTableForm(type);
+      this.tableValue.push({ id: this.tableValue.length + 1 });
+    }
+  }
+
+  onAddDiscount(type, rowIndex) {
+    this.addNewCharges(type, rowIndex);
+    this.registerDiscountChanges(rowIndex);
   }
 
   /**
@@ -249,11 +479,7 @@ export class InvoiceComponent implements OnInit {
     const currentFormGroup = this.tableFormArray.at(
       this.tableFormArray.controls.length - 1
     ) as FormGroup;
-    const {
-      description,
-      unit,
-      unitValue,
-    } = currentFormGroup.controls;
+    const { description, unit, unitValue, type } = currentFormGroup.controls;
 
     let taxRate = 0;
 
@@ -293,151 +519,198 @@ export class InvoiceComponent implements OnInit {
     };
 
     unit.valueChanges.subscribe(unitChanges);
-    unitValue.valueChanges.subscribe(unitChanges);
-
-    this.tableFormArray.valueChanges.subscribe((values) => {
-      const prices = values.map((value) => Number(value.totalAmount));
-      const totalValue = prices.reduce((acc, price) => acc + price, 0);
-
-      this.inputControl.currentAmount.setValue(totalValue);
-      this.inputControl.discountedAmount.setValue(
-        this.inputControl.currentAmount.value -
-          this.inputControl.totalDiscount.value
-      );
-      this.inputControl.dueAmount.setValue(
-        this.inputControl.discountedAmount.value -
-          this.inputControl.paidValue.value
-      );
-    });
+    this.listenTableChanges('price');
   }
 
-  /**
-   * @function registerDiscountChanges To handle changes in discount tab
-   */
-  registerDiscountChanges() {
+  listenTableChanges(type, index?) {
+    if (this.typeSubscription) {
+      this.typeSubscription.unsubscribe();
+    }
+
+    this.typeSubscription = this.tableFormArray.valueChanges.subscribe(
+      (values) => {
+        const typeValues = values.filter((value) => value.type === type);
+        if (type === 'price') {
+          const prices = typeValues.map((value) => Number(value.totalAmount));
+          const totalValue = prices.reduce((acc, price) => acc + price, 0);
+          this.updateInputControls(totalValue, 0);
+        } else {
+          const totalDiscount = typeValues.reduce((acc, value) => {
+            if (value.isSaved) {
+              return acc + Number(value.totalAmount);
+            }
+            return acc;
+          }, 0);
+          this.updateInputControls(0, totalDiscount);
+          this.typeSubscription.unsubscribe();
+        }
+      }
+    );
+  }
+
+  updateInputControls(currentAmount, totalDiscount) {
+    if (currentAmount) {
+      this.inputControl.currentAmount.setValue(currentAmount);
+    }
+    if (totalDiscount) {
+      this.inputControl.totalDiscount.setValue(totalDiscount);
+    }
+    this.inputControl.discountedAmount.setValue(
+      this.inputControl.currentAmount.value -
+        this.inputControl.totalDiscount.value
+    );
+    this.inputControl.dueAmount.setValue(
+      this.inputControl.discountedAmount.value -
+        this.inputControl.paidAmount.value
+    );
+  }
+
+  // /**
+  //  * @function registerDiscountChanges To handle changes in discount tab
+  //  */
+  registerDiscountChanges(index) {
+    const currentFormGroup = this.tableFormArray.at(index + 1) as FormGroup;
+    const currentTotalAmount = this.tableFormArray.at(index).get('totalAmount');
+    const {
+      discount,
+      discountType,
+      totalAmount,
+      isDisabled,
+    } = currentFormGroup.controls;
+
     const setError = () => {
       if (
-        this.inputControl.discount.value >
-          this.inputControl.currentAmount.value &&
-        this.inputControl.discountType.value === 'flat'
+        discount.value > currentTotalAmount.value &&
+        discountType.value === 'FLAT'
       ) {
         return 'isNumError';
       }
-      if (
-        this.inputControl.discount.value > 100 &&
-        this.inputControl.discountType.value === 'off'
-      ) {
+      if (discount.value > 100 && discountType.value === 'PERCENT') {
         return 'isPercentError';
       }
     };
 
     const clearError = () => {
-      if (this.inputControl.discount.value > 0) {
-        this.inputControl.discount.setErrors(null);
+      if (discount.value > 0) {
+        discount.setErrors(null);
         this.isValidDiscount = true;
       }
     };
 
     const discountSubscription = () => {
       clearError();
+      discountType.value === 'FLAT'
+        ? totalAmount.setValue(discount.value)
+        : totalAmount.setValue(
+            ((discount.value * currentTotalAmount.value) / 100).toFixed(2)
+          );
       const error = setError();
       if (error === 'isNumError') {
-        this.inputControl.discount.setErrors({ isPriceLess: true });
+        discount.setErrors({ isPriceLess: true });
         this.isValidDiscount = false;
       }
       if (error === 'isPercentError') {
-        this.inputControl.discount.setErrors({ moreThan100: true });
+        discount.setErrors({ moreThan100: true });
         this.isValidDiscount = false;
       }
     };
 
-    this.inputControl.discountType.valueChanges.subscribe(discountSubscription);
-    this.inputControl.discount.valueChanges.subscribe(discountSubscription);
+    discountType.valueChanges.subscribe(discountSubscription);
+    discount.valueChanges.subscribe(discountSubscription);
   }
 
   /**
    * @function registerUnitPriceChange To handle changes in new charges
    */
 
-  onSaveDiscount() {
-    this.viewDiscountTab = false;
-    this.editMode = this.inputControl.discount.value > 0;
-
-    const calculateDiscount = (value, type) =>
-      type === 'flat'
-        ? value
-        : (this.inputControl.currentAmount.value * value) / 100;
-
-    const total = calculateDiscount(
-      this.inputControl.discount.value,
-      this.inputControl.discountType.value
-    );
-
-    this.inputControl.totalDiscount.setValue(total);
-    this.inputControl.discountedAmount.setValue(
-      this.inputControl.currentAmount.value - total
-    );
-    this.inputControl.dueAmount.setValue(
-      this.inputControl.discountedAmount.value -
-        this.inputControl.paidAmount.value
-    );
+  onSaveDiscount(index) {
+    let currentFormGroup = this.tableFormArray.at(index) as FormGroup;
+    let { isDisabled, isSaved } = currentFormGroup.controls;
+    isSaved.setValue(true);
+    this.listenTableChanges('discount', index);
+    isDisabled.setValue(true);
+    this.tableFormArray
+      .at(index - 1)
+      .get('menu')
+      .setValue(true);
   }
 
-  onEditDiscount(e) {
-    this.editMode = false;
-    e.item.value === 'editDiscount'
-      ? (this.viewDiscountTab = true)
-      : this.resetDiscount();
+  onEditDiscount(e, index) {
+    let editGroup = this.tableFormArray.at(index + 1) as FormGroup;
+    let { isDisabled, isSaved } = editGroup.controls;
+    isSaved.setValue(false);
+    isDisabled.setValue(false);
+    if (e.item.value === 'removeDiscount') this.resetDiscount(index);
   }
 
-  resetDiscount() {
-    this.inputControl.discountType.patchValue('off');
-    this.inputControl.discount.patchValue(0);
-    this.inputControl.totalDiscount.patchValue(0);
+  resetDiscount(index) {
+    this.tableFormArray.at(index).get('menu').setValue(false);
+    let totalAmount = this.tableFormArray.at(index + 1).get('totalAmount')
+      .value;
+    this.tableFormArray.removeAt(index + 1);
+    this.tableValue.splice(index + 1, 1);
+    let removedDiscount = this.inputControl.totalDiscount.value - totalAmount;
+    this.inputControl.totalDiscount.patchValue(removedDiscount);
     this.inputControl.discountedAmount.patchValue(
-      this.inputControl.currentAmount.value
+      this.inputControl.currentAmount.value -
+        this.inputControl.totalDiscount.value
     );
     this.inputControl.dueAmount.patchValue(
-      this.inputControl.currentAmount.value - this.inputControl.paidAmount.value
-    );
-  }
-
-  onSavePaidAmount() {
-    this.viewPaidTab = false;
-    const total =
-      +this.inputControl.paid.value + this.inputControl.paidValue.value;
-    this.inputControl.paidAmount.setValue(total);
-    this.inputControl.dueAmount.setValue(
       this.inputControl.discountedAmount.value -
         this.inputControl.paidAmount.value
     );
   }
 
-  /**
-   * To remove selected charges
-   */
   removeSelectedCharges() {
-    console.log('selected rows', this.selectedRows);
     const idsToRemove = this.selectedRows.map((row) => row.id);
-    const controls = this.tableFormArray.controls;
 
-    // removing in descending order
-    for (let i = controls.length - 1; i >= 0; i--) {
+    // Remove rows in descending order
+    for (let i = this.tableValue.length - 1; i >= 0; i--) {
       if (idsToRemove.includes(i + 1)) {
-        const indexToRemove = this.tableValue.findIndex(
-          (row) => row.id === i + 1
-        );
-        this.tableValue.splice(indexToRemove, 1);
-        this.tableFormArray.removeAt(i);
+        // Check if the next row is a discount row
+        const isNextRowDiscount =
+          i < this.tableValue.length - 1 &&
+          this.tableFormArray.at(i + 1).get('type').value === 'discount';
+        // Remove the current row and the next row if it's a discount row
+        if (isNextRowDiscount) {
+          this.tableValue.splice(i, 2);
+          this.registerOnDeleteChanges(i);
+          this.tableFormArray.removeAt(i);
+          this.tableFormArray.removeAt(i); // Remove the next row
+        } else {
+          this.tableValue.splice(i, 1);
+          this.registerOnDeleteChanges(i);
+          this.tableFormArray.removeAt(i);
+        }
       }
     }
 
-    // Updating the id in table value
+    // Update the IDs in tableValue
     this.tableValue.forEach((row, index) => {
       row.id = index + 1;
     });
 
     this.selectedRows = [];
+  }
+
+  registerOnDeleteChanges(index) {
+    let currentPriceValue = this.tableFormArray.at(index).get('totalAmount')
+      .value;
+    let currentDiscountValue =
+      this.tableFormArray.at(index + 1).get('discount').value || 0;
+    const {
+      currentAmount,
+      totalDiscount,
+      discountedAmount,
+      dueAmount,
+      paidAmount,
+    } = this.useForm.controls;
+    currentAmount.setValue(currentAmount.value - currentPriceValue);
+    if (currentDiscountValue) {
+      totalDiscount.setValue(totalDiscount.value - currentDiscountValue);
+      discountedAmount.setValue(currentAmount.value - totalDiscount.value);
+      dueAmount.setValue(discountedAmount.value - paidAmount.value);
+    }
   }
 
   onRowSelect(event) {
@@ -488,8 +761,31 @@ export class InvoiceComponent implements OnInit {
     );
   }
 
-  onAddGST() {
-    this.isAddingGST = !this.isAddingGST;
+  removeGST() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const togglePopupCompRef = this.modalService.openDialog(
+      ModalComponent,
+      dialogConfig
+    );
+
+    togglePopupCompRef.componentInstance.content = {
+      heading: 'Cannot publish Page',
+      description: ['Are you sure you want to remove GST details'],
+    };
+    togglePopupCompRef.componentInstance.actions = [
+      {
+        label: 'Go to Website Settings',
+        onClick: () => {
+          this.modalService.close();
+        },
+        variant: 'contained',
+      },
+    ];
+
+    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+      this.modalService.close();
+    });
   }
 
   getTax() {
@@ -515,7 +811,6 @@ export class InvoiceComponent implements OnInit {
       .getLibraryItems(this.hotelId, this.getQueryConfig())
       .subscribe((res) => {
         this.loading = false;
-        console.log(res);
         const servicesList = new ServiceList().deserialize(res);
         this.serviceOptions = servicesList.allService.map((item) => ({
           label: item.name,

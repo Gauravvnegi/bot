@@ -9,6 +9,7 @@ import { StepperService } from 'libs/web-user/shared/src/lib/services/stepper.se
 import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
+import { FormBuilder } from '@angular/forms';
 @Component({
   selector: 'hospitality-bot-stay-details-wrapper',
   templateUrl:
@@ -17,15 +18,16 @@ import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/do
 })
 export class StayDetailsWrapperComponent extends BaseStayDetailsWrapperComponent {
   constructor(
-     _stayDetailService: StayDetailsService,
-     _amenitiesService: AmenitiesService,
-     _hotelService: HotelService,
-     _reservationService: ReservationService,
-     _snackBarService: SnackBarService,
-     _translateService: TranslateService,
-     _stepperService: StepperService,
-     _buttonService: ButtonService,
-     _documentDetailService: DocumentDetailsService
+    _stayDetailService: StayDetailsService,
+    _amenitiesService: AmenitiesService,
+    _hotelService: HotelService,
+    _reservationService: ReservationService,
+    _snackBarService: SnackBarService,
+    _translateService: TranslateService,
+    _stepperService: StepperService,
+    _buttonService: ButtonService,
+    _documentDetailService: DocumentDetailsService,
+    fb: FormBuilder
   ) {
     super(
       _stayDetailService,
@@ -36,7 +38,8 @@ export class StayDetailsWrapperComponent extends BaseStayDetailsWrapperComponent
       _translateService,
       _stepperService,
       _buttonService,
-      _documentDetailService
+      _documentDetailService,
+      fb
     );
     this.self = this;
   }

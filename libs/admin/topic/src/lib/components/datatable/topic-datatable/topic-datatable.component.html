@@ -88,7 +88,7 @@
         <div class="primary-text">{{ rowData.name }}</div>
       </td>
       <td>
-        <div class="primary-text">{{ rowData.description }}</div>
+        <div class="primary-text" [innerHTML]="rowData.description"></div>
       </td>
       <td class="center-align">
         <label (click)="onCheckboxClicked($event)" class="switch">

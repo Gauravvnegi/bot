@@ -20,7 +20,7 @@ export class SiteActionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.sites = this.hotelDetailService.hotelDetails.sites.map((item, idx) => {
+    this.sites = this.hotelDetailService.sites.map((item, idx) => {
       return {
         label: item.name,
         value: item.id,
@@ -30,11 +30,11 @@ export class SiteActionComponent implements OnInit {
       };
     });
 
-    this.hotelDetailService.siteId.subscribe((siteId) => {
-      const currSite = this.sites?.find((site) => site.value === siteId);
-      this.selectedSite = currSite?.label ?? 'Choose site';
-      this.selectedSiteId = currSite?.value;
-    });
+    const currSite = this.sites?.find(
+      (site) => site.value === this.hotelDetailService.siteId
+    );
+    this.selectedSite = currSite?.label ?? 'Choose site';
+    this.selectedSiteId = currSite?.value;
   }
 
   handleSite = (index: number) => {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, Router, UrlSegment } from '@angular/router';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { HotelDetailService, UserService } from '@hospitality-bot/admin/shared';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { LoadingService } from '../theme/src/lib/services/loader.service';
@@ -12,7 +12,8 @@ export class CanLoadGuard implements CanLoad {
     private subscriptionService: SubscriptionPlanService,
     private userService: UserService,
     private router: Router,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private hotelDetailsService: HotelDetailService
   ) {}
 
   // can load will always return true (it is just use to get the subscription data if not present)
@@ -20,35 +21,28 @@ export class CanLoadGuard implements CanLoad {
     const subscription = this.subscriptionService.getSubscription();
 
     if (!subscription) {
-      if (!this.userService.getLoggedInUserId()) {
+      const userId = this.userService.getLoggedInUserId();
+      const hotelId = this.hotelDetailsService.getHotelId();
+
+      if (!userId) {
         this.router.navigate(['/auth']);
         return false;
       }
+
+      if (!hotelId) {
+        this.router.navigate(['/dashboard']);
+        return false;
+      }
+
       this.loadingService.open();
 
-      return this.userService
-        .getUserDetailsById(this.userService.getLoggedInUserId())
-        .pipe(
-          switchMap((res) => {
-            const hotels = res.hotelAccess?.chains[0]?.hotels;
-            const hasHotel = !!hotels?.length;
-            if (hasHotel) {
-              return this.subscriptionService.getSubscriptionPlan(
-                hotels[hotels.length - 1].id
-              );
-            } else {
-              this.loadingService.close();
-
-              this.router.navigate(['/dashboard']);
-              return of(false);
-            }
-          }),
-          switchMap((response) => {
-            this.subscriptionService.initSubscriptionDetails(response);
-            this.loadingService.close();
-            return of(true);
-          })
-        );
+      return this.subscriptionService.getSubscriptionPlan(hotelId).pipe(
+        switchMap((response) => {
+          this.subscriptionService.initSubscriptionDetails(response);
+          this.loadingService.close();
+          return of(true);
+        }),
+      );
     }
     return true;
   }

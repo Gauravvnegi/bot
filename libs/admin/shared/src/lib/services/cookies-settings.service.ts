@@ -10,6 +10,7 @@ import {
 } from 'libs/admin/manage-sites/src/lib/types/response.type';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject } from 'rxjs';
+import { tokensConfig } from '../constants/common';
 import { CookiesData } from '../types/user.type';
 import { HotelDetailService } from './hotel-detail.service';
 import { UserService } from './user-detail.service';
@@ -32,9 +33,10 @@ export class CookiesSettingsService {
 
   initCookiesForPlatform() {
     const hotelId =
-      this.globalFilterService.hotelId ?? localStorage.getItem('hotelId');
-    // this.hotelDetailsService.siteId.value ?? this.hotelDetailsService.getLocalSiteId();
-    // using site id instead hotel id
+      this.globalFilterService.hotelId ??
+      localStorage.getItem(tokensConfig.hotelId);
+    const siteId =
+      this.hotelDetailsService.siteId ?? this.hotelDetailsService.getSiteId();
 
     if (!hotelId) {
       this.$isPlatformCookiesLoaded.next(false);
@@ -55,6 +57,8 @@ export class CookiesSettingsService {
       }),
       'x-userId': this._authService.getTokenByName('x-userId'),
       hotelId: hotelId,
+      siteId: siteId,
+      brandId: this.hotelDetailsService.brandId,
     };
 
     Object.entries(keys).forEach(([name, value]) => {
@@ -70,7 +74,7 @@ export class CookiesSettingsService {
   }
 
   initHotelAccessDetails(data: ManageSiteListResponse) {
-    this.hotelAccessData = data.records;
+    this.hotelAccessData = data?.records;
   }
 
   /**
@@ -85,7 +89,7 @@ export class CookiesSettingsService {
         const hotelBasedToken = { key, value: response[key] };
         if (hotelBasedToken.key) {
           localStorage.setItem(hotelBasedToken.key, hotelBasedToken.value);
-          localStorage.setItem('hotelId', hotelId);
+          localStorage.setItem(tokensConfig.hotelId, hotelId);
 
           if (redirectUrl) {
             this.router.navigate([redirectUrl]);
@@ -104,18 +108,18 @@ export class CookiesSettingsService {
   }
 
   initPlatformChangeV2(siteId: string, redirectUrl?: string) {
-    const currentSite = this.hotelDetailsService.hotelDetails.sites.find(
+    const currentSite = this.hotelDetailsService.sites.find(
       (item) => item.id === siteId
     );
-    if (currentSite) {
-      const currentBrand = this.hotelDetailsService.hotelDetails.brands.find(
-        (item) => item.id === currentSite.hotelBrandId
-      );
 
-      const branches = currentBrand.branches;
+    const brands = currentSite?.brands;
+    if (brands?.length) {
+      // finding the brand which has hotel
+      const currentBrand = brands.find((item) => !!item.hotels?.length);
+      const hotels = currentBrand?.hotels;
 
-      if (branches?.length) {
-        const hotelId = branches[branches.length - 1].id;
+      if (hotels.length) {
+        const hotelId = hotels[0].id;
 
         this.tokenUpdateService.getUpdatedToken(hotelId).subscribe(
           (response) => {
@@ -123,7 +127,7 @@ export class CookiesSettingsService {
             const hotelBasedToken = { key, value: response[key] };
             if (hotelBasedToken.key) {
               localStorage.setItem(hotelBasedToken.key, hotelBasedToken.value);
-              localStorage.setItem('hotelId', hotelId);
+              localStorage.setItem(tokensConfig.hotelId, hotelId);
               this.hotelDetailsService.setSiteId(currentSite.id);
 
               if (redirectUrl) {
@@ -133,7 +137,7 @@ export class CookiesSettingsService {
               }
             } else
               this.snackbarService.openSnackBarAsText(
-                'Did not receive the access token'
+                'The access token was not received.'
               );
           },
           ({ error }) => {
@@ -142,12 +146,12 @@ export class CookiesSettingsService {
         );
       } else {
         this.snackbarService.openSnackBarAsText(
-          'Do not have any hotel register to this site.'
+          'There are no hotels registered with this site.'
         );
       }
     } else {
       this.snackbarService.openSnackBarAsText(
-        'Do not have access to this site.'
+        'There are no brands associated with this website.'
       );
     }
   }

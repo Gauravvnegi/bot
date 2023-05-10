@@ -8,7 +8,7 @@ export const cols: {
   {
     field: 'description',
     header: 'Description',
-    width: '30%',
+    width: '28%',
   },
   {
     field: 'unit',
@@ -33,6 +33,11 @@ export const cols: {
   {
     field: 'totalAmount',
     header: 'TotalAmount',
-    width: '15%',
+    width: '14%',
   },
+  {
+    field: 'menu',
+    header: '',
+    width: '5%',
+  }
 ];

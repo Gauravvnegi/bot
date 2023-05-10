@@ -12,6 +12,7 @@ export class MenuComponent {
   @Input() alignment: 'horizontal' | 'vertical' = 'vertical';
   @Output() itemSelection = new EventEmitter();
   @Output() onClickItem = new EventEmitter();
+  @Input() disabled = false;
 
   handleItemSelection(event, item): void {
     event.stopPropagation();

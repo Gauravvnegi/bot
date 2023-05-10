@@ -22,6 +22,7 @@
         [formControlName]="name"
         [placeholder]="settings.label"
         [matAutocomplete]="autoGroup"
+        (blur)="blur()"
         matInput
       />
       <mat-autocomplete

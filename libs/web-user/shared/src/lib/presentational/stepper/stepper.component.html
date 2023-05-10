@@ -11,8 +11,6 @@
     #stepper
     *ngIf="stepperConfig.position === 'horizontal'; else verticalStepper"
   >
-
-
     <div
       *ngFor="
         let formGroup of parentForm.controls;
@@ -30,6 +28,10 @@
           <ng-template matStepLabel
             >{{ stepperConfig.stepConfigs[stepperIndex].stepperName }}
           </ng-template>
+          <ng-template matStepperIcon="edit" let-index="index">{{
+            index + 1
+          }}</ng-template>
+
           <ng-container [stepperIndex]="stepperIndex" #stepperContent>
           </ng-container>
 

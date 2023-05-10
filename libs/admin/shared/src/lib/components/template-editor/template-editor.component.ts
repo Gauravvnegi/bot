@@ -12,7 +12,8 @@ export class TemplateEditorComponent implements OnInit {
   @Input() template = '';
   @Input() disabled = false;
   @Input() hybrid = true;
-  @Input() height: number = 400;
+  @Input() height: number = 250;
+  @Input() isSimpleEditor = false;
   @ViewChild('plainTextControl') plainTextControl;
   richText = true;
   ckeConfig = {
@@ -20,11 +21,21 @@ export class TemplateEditorComponent implements OnInit {
     extraAllowedContent: '*(*);*{*}',
     readOnly: false,
     height: this.height,
+    disallowedContent: 'img[src]',
   };
 
   constructor() {}
 
   ngOnInit(): void {
+    if (this.isSimpleEditor) {
+      this.ckeConfig['toolbar'] = [
+        ['Bold', 'Italic', 'Strike', 'RemoveFormat'],
+        ['NumberedList', 'BulletList', 'BlockQuote', 'Indent', 'Outdent'],
+        ['Link', 'Unlink', 'Anchor'],
+        ['Format', 'Styles', '-', 'Source'],
+      ];
+    }
+
     this.ckeConfig['readOnly'] = this.disabled;
   }
 

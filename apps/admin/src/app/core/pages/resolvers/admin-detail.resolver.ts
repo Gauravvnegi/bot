@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { ManageSitesService } from '@hospitality-bot/admin/manage-sites';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { HotelDetailService, UserService } from '@hospitality-bot/admin/shared';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { LoadingService } from '../../theme/src/lib/services/loader.service';
@@ -14,27 +14,30 @@ export class AdminDetailResolver implements Resolve<any> {
     private _router: Router,
     private subscriptionPlanService: SubscriptionPlanService,
     private loadingService: LoadingService,
-    private manageSite: ManageSitesService
+    private manageSite: ManageSitesService,
+    private hotelDetailsService: HotelDetailService
   ) {}
   resolve(
     _route: ActivatedRouteSnapshot
   ): Observable<any> | Promise<any> | any {
-    if (!this._userService.getLoggedInUserId()) {
+    const userId = this._userService.getLoggedInUserId();
+    const hotelId = this.hotelDetailsService.getHotelId();
+
+    if (!userId) {
       this._router.navigate(['/auth']);
     }
+
     this.loadingService.open();
     return this._userService
       .getUserDetailsById(this._userService.getLoggedInUserId())
       .pipe(
         switchMap((res) => {
-          const hasHotel = !!res.hotelAccess?.chains[0]?.hotels?.length;
-          if (hasHotel) {
-            const manageSiteList = this.manageSite.getSitesList(res.id);
+          if (hotelId) {
+            const manageSiteList = this.manageSite.getSitesList();
             let subscription: Observable<any> = of(undefined);
             if (!this.subscriptionPlanService.getSubscription()) {
-              const hotels = res.hotelAccess?.chains[0]?.hotels;
               subscription = this.subscriptionPlanService.getSubscriptionPlan(
-                hotels[hotels.length - 1].id
+                hotelId
               );
             }
 

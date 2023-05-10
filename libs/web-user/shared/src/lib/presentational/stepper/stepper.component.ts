@@ -41,6 +41,7 @@ export class StepperComponent extends BaseComponent {
   stepperConfig;
 
   @Input() selectedIndex;
+  nextStepIdx: number;
 
   @Output()
   selectionChange = new EventEmitter();
@@ -73,11 +74,31 @@ export class StepperComponent extends BaseComponent {
     this.listenForSelectedIndex();
   }
 
-  toggleStepperClass() {
+  toggleStepperClass(clickIndex = 100) {
+    // 100 is default as it will never satisfy any cond
     let stepperElement = document.getElementsByClassName('mat-step-header');
     let horizontalLinesEle = document.getElementsByClassName(
       'mat-stepper-horizontal-line'
     );
+
+    for (let i = 0; i < stepperElement.length; i++) {
+      if (this.selectedIndex !== i) {
+        if (this.nextStepIdx > i) {
+          stepperElement[i].classList.add('step-completed');
+          stepperElement[i].classList.remove('step-pending');
+        } else {
+          stepperElement[i].classList.add('step-pending');
+        }
+        stepperElement[i].classList.remove('step-active');
+      } else {
+        stepperElement[i].classList.add('step-active');
+      }
+    }
+
+    if (clickIndex <= this.nextStepIdx) {
+      return;
+    }
+
     if (this.selectedIndex === 0) {
       for (let j = 0; j < horizontalLinesEle.length; j++) {
         horizontalLinesEle[j].classList.add('disable-bar');
@@ -122,9 +143,28 @@ export class StepperComponent extends BaseComponent {
   }
 
   listenForSelectedIndex() {
+    let timeoutId;
+
+    this.stepperService.nextStepIndex$.subscribe((index) => {
+      this.nextStepIdx = index;
+    });
+
     this.stepperService.stepperSelectedIndex$.subscribe((index) => {
-      this.toggleStepperClass();
+      //------ footer btn shift issue fix-------
+      clearTimeout(timeoutId);
+      const doc = document.getElementsByClassName('main-block');
+      for (let i = 0; i < doc.length; i++) {
+        doc[i].classList.add('main-container');
+      }
+      timeoutId = setTimeout(() => {
+        for (let i = 0; i < doc.length; i++) {
+          doc[i].classList.remove('main-container');
+        }
+      }, 1000);
+      //----------------
+
       this.selectedIndex = index;
+      this.toggleStepperClass(index);
     });
   }
 
@@ -134,6 +174,12 @@ export class StepperComponent extends BaseComponent {
   }
 
   onStepChange(event: any): void {
+    // scrolling to top to fix thi btn issue in template0002
+    const scrollEle = document.getElementsByClassName(
+      'mat-horizontal-content-container'
+    );
+    if (scrollEle.length > 0) scrollEle[0].scrollTop = 0;
+
     this.stepperService.setSelectedIndex(event.selectedIndex);
     this.selectionChange.emit(event);
   }

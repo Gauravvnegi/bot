@@ -208,7 +208,7 @@ export class FormComponent implements OnInit {
         } else {
           event.stopPropagation();
           this.addCreateInputCta();
-          newDiv.style.display = 'none'
+          newDiv.style.display = 'none';
         }
       });
       newDiv.id = id;
@@ -230,6 +230,8 @@ export class FormComponent implements OnInit {
 
       const input = document.getElementById('myInput') as HTMLInputElement;
       const button = document.getElementById('myButton');
+
+      newDiv.focus();
 
       input.addEventListener('click', (event: MouseEvent) => {
         event.stopPropagation();

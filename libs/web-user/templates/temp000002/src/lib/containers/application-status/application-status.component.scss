@@ -95,12 +95,9 @@
 }
 
 .section--heading {
-  padding: 10px;
-  background-color: $primary-blue;
-  color: white;
   border-radius: 10px;
-  font-weight: $bolder;
-  font-size: $font-large;
+
+  @include title-header;
   margin: 25px 0;
   @media screen and (max-width: 700px) {
     font-size: 16px;
@@ -271,7 +268,10 @@
   .section--content--label {
     .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
     .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-      background-color: #2186d4 !important;
+      background-color: $primary-blue !important;
+    }
+    .mat-checkbox-label {
+      font-size: $font-medium;
     }
   }
 }

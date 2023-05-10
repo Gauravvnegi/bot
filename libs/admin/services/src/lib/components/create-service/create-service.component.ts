@@ -106,9 +106,6 @@ export class CreateServiceComponent implements OnInit {
 
     /* Patch the form value if service id present */
     if (this.serviceId) {
-      this.pageTitle = 'Edit Service';
-      this.navRoutes[2].label = 'Edit';
-
       this.$subscription.add(
         this.servicesService
           .getLibraryItemById<ServiceResponse>(this.hotelId, this.serviceId, {

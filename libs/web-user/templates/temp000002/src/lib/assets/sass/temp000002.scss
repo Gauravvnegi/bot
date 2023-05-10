@@ -14,3 +14,12 @@
 
 // components input
 @import 'components/input';
+
+@font-face {
+  font-family: 'Poppins-regular';
+  src: url('../../assets/fonts/Poppins-Regular.ttf');
+}
+
+*:not(mat-icon, i) {
+  font-family: 'Poppins-regular' !important;
+}

@@ -43,7 +43,6 @@ export class TemporaryRedirectPageComponent implements OnInit {
 
     this._authService.verifyPlatformAccessToken(data).subscribe(
       (response) => {
-        this._userService.setLoggedInUserId(response?.id);
         if (this.platformReferer == 'CREATE_WITH') {
           this._router.navigate(['/pages/create-with']);
         }

@@ -1,6 +1,6 @@
-<div *ngIf="isRendered">
+<div *ngIf="isRendered" class="main-container main-block">
   <hospitality-bot-guest-details
-  #guestDetailsComp
+    #guestDetailsComp
     [parentForm]="parentForm"
     (addFGEvent)="addFGEvent($event)"
     [reservationData]="reservationData"

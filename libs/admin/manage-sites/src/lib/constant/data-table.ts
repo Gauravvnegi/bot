@@ -61,42 +61,32 @@ export const cols: Cols[] = [
     header: 'Thumbnail',
     isSortDisabled: true,
     sortType: 'string',
-
     isSearchDisabled: true,
-
     width: '15%',
   },
   {
     field: 'siteName',
     header: 'Hotel site name',
-
     sortType: 'string',
-
     width: '18%',
   },
   {
     field: 'url',
     header: 'URL',
-
     sortType: 'string',
-
     width: '32%',
   },
-  {
-    field: 'expiry',
-    header: 'Expiry',
-
-    sortType: 'number',
-
-    width: '15%',
-    isSearchDisabled: true,
-  },
+  // {
+  //   field: 'expiry',
+  //   header: 'Expiry',
+  //   sortType: 'number',
+  //   width: '15%',
+  //   isSearchDisabled: true,
+  // },
   {
     field: 'status',
     header: 'Actions',
-
     sortType: 'string',
-
     width: '20%',
   },
 ];

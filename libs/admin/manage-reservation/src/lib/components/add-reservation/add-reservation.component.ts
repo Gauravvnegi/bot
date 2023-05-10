@@ -29,12 +29,13 @@ import {
   SummaryData,
 } from '../../models/reservations.model';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReservationFormData } from '../../models/reservations.model';
 import * as moment from 'moment';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { ReservationResponse } from '../../types/response.type';
+import { manageReservationRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -81,6 +82,7 @@ export class AddReservationComponent implements OnInit {
     private snackbarService: SnackBarService,
     private manageReservationService: ManageReservationService,
     private location: Location,
+    private router: Router,
     protected activatedRoute: ActivatedRoute,
     private configService: ConfigService,
     private modalService: ModalService,
@@ -424,20 +426,31 @@ export class AddReservationComponent implements OnInit {
       dialogConfig
     );
     togglePopupCompRef.componentInstance.content = {
-      heading: `Booking ${this.reservationId ? 'Updated' : 'Created'}`,
+      heading: `Booking ${
+        this.reservationId ? 'Updated' : 'Created'
+      } Successfully`,
+
       description: [
-        `Your booking has ${
+        `Congratulations! Your booking has been ${
           this.reservationId ? 'updated' : 'created'
-        } successfully `,
-        `Your booking confirmation number is ${number}`,
+        } successfully.`,
+        ` Your confirmation number is ${number}.`,
+        // "Keep this number safe as you'll need it for any future inquiries or changes to your reservation.",
       ],
     };
     togglePopupCompRef.componentInstance.actions = [
       {
-        label: 'Okay',
+        label: 'Continue Booking',
         onClick: () => {
+          this.router.navigate(
+            [
+              `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.addReservation.route}`,
+            ],
+            { replaceUrl: true }
+          );
+          // this.userForm.reset();
+          this.initForm();
           this.modalService.close();
-          this.location.back();
         },
         variant: 'outlined',
       },
@@ -445,6 +458,8 @@ export class AddReservationComponent implements OnInit {
         label: 'Copy Confirmation number',
         onClick: () => {
           this.copiedConfirmationNumber(number);
+          this.modalService.close();
+          this.location.back();
         },
         variant: 'contained',
       },

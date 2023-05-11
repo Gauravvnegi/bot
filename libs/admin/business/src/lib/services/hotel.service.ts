@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import {HotelConfiguration, HotelFormData} from './../types/hotel.type'
+import { BrandFormData } from '../types/brand.type';
 
 @Injectable()
 export class HotelService extends ApiService {
@@ -43,6 +45,7 @@ export class HotelService extends ApiService {
       status: 'Active',
     },
   ];
+
   getHotelList(
     hotelId,
     config = { params: '?order=DESC&limit=5' }
@@ -57,15 +60,13 @@ export class HotelService extends ApiService {
       })
     );
   }
-  updateHotel(
-    hotelId,
-    itemId = 'e44793eb-38b9-4944-a50d-b9fce62a4033',
-    data
-  ): Observable<any> {
-    return this.patch(`/api/v1/entity/${hotelId}/tax/${itemId}`, {
-      status: false,
-    });
-  }
+  /**
+   * @function getSegments
+   * @description get segments
+   * @param hotelId
+   * @returns
+   * @memberof HotelService
+   */
 
   getSegments(hotelId): Observable<any> {
     return this.get(`/api/v1/config`, { params: { key: 'THEME_TYPE' } });
@@ -74,11 +75,47 @@ export class HotelService extends ApiService {
   getServices(hotelId: string, config?): Observable<any> {
     return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
   }
+  /**
+   * @function createHotel
+   * @description create hotel
+   * @param brandId
+   * @param data
+   * @returns
+   * @memberof HotelService
+   */
 
-  createHotel(hotelId: string, data: any): Observable<any> {
+  createHotel(
+    brandId: string,
+    data: HotelFormData | any
+  ): Observable<HotelConfiguration> {
     return this.post(
       `/api/v2/entity/onboarding?source=CREATE_WITH&onboardingType=HOTEL`,
       data
     );
+  }
+
+  /**
+   * @function updateHotel
+   * @description update hotel
+   * @param hotelId
+   * @param data
+   * @returns
+   * @memberof HotelService
+   */
+
+  updateHotel(hotelId: string, data: HotelFormData | any): Observable<any> {
+    return this.put(`/api/v1/brand/${hotelId}`, data);
+  }
+
+  /**
+   * @function getHotelById
+   * @description get hotel by id
+   * @param hotelId
+   * @returns
+   * @memberof HotelService
+   */
+
+  getHotelById(hotelId: string): Observable<any> {
+    return this.get(`/api/v1/hotel/${hotelId}`);
   }
 }

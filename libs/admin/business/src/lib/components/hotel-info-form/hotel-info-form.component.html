@@ -1,4 +1,5 @@
 <div class="wrapper" [formGroup]="useForm">
+  <div [formGroup]="useForm.get('hotel')">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
   </hospitality-bot-navigation-header>
 
@@ -61,7 +62,7 @@
       <div class="des-template__label">Description</div>
       <div class="des-template__input">
         <hospitality-bot-template-editor
-          [parentFG]="useForm"
+          [parentFG]="useForm.get('hotel')"
           [name]="'description'"
           [height]="250"
         ></hospitality-bot-template-editor>
@@ -83,7 +84,9 @@
     </div>
   </div>
 
-  <hospitality-bot-social-media class="full-width">
+  <hospitality-bot-social-media 
+  controlName="socialPlatForms"
+  class="full-width">
   </hospitality-bot-social-media>
 
   <div class="footer-buttons">
@@ -100,3 +103,5 @@
     ></hospitality-bot-button>
   </div>
 </div>
+</div>
+```

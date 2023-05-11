@@ -6,6 +6,7 @@ import { AdminBusinessRoutingModule } from './admin-business.routing.module';
 import { HotelService } from './services/hotel.service';
 import { BrandService } from './services/brand.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SocialMediaService } from './services/social-media.service';
 
 @NgModule({
   imports: [
@@ -16,7 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [HotelService, BrandService],
+  providers: [HotelService, BrandService, SocialMediaService],
   declarations: [...AdminBusinessRoutingModule.components],
 })
 export class AdminBusinessModule {}

@@ -10,8 +10,15 @@ import { NavRouteOption, Option } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { businessRoute } from '../../constant/routes';
-import { Services, noRecordAction } from '../../models/hotel.models';
+import {
+  HotelResponse,
+  Services,
+  noRecordAction,
+} from '../../models/hotel.models';
 import { HotelService } from '../../services/hotel.service';
+import { BrandService } from '../../services/brand.service';
+import { SocialMediaService } from '../../services/social-media.service';
+import { HotelFormData } from '../../types/hotel.type';
 
 @Component({
   selector: 'hospitality-bot-hotel-info-form',
@@ -35,7 +42,8 @@ export class HotelInfoFormComponent implements OnInit {
     private hotelService: HotelService,
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
-    private router: Router
+    private router: Router,
+    private socialMediaService: SocialMediaService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -50,11 +58,10 @@ export class HotelInfoFormComponent implements OnInit {
     ];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
-    this.navRoutes[2].link = `/pages/settings/business-info/brand/${this.brandId}`;
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    // this.hotelId = this.globalFilterService.hotelId;
     this.initForm();
     this.getSegmentList();
     this.getServices();
@@ -62,20 +69,30 @@ export class HotelInfoFormComponent implements OnInit {
 
   initForm() {
     this.useForm = this.fb.group({
-      active: [true],
-      serviceName: ['', [Validators.required]],
-      segment: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      contact: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      imageUrls: [[], [Validators.required]],
-      description: ['', [Validators.required]],
-      complimentaryAmenities: [[], [Validators.required]],
-      facebook: [''],
-      twitter: [''],
-      instagram: [''],
-      youtube: [''],
+      hotel: this.fb.group({
+        active: [true],
+        serviceName: ['', [Validators.required]],
+        segment: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+        contact: ['', [Validators.required]],
+        address: ['', [Validators.required]],
+        imageUrls: [[], [Validators.required]],
+        description: ['', [Validators.required]],
+        complimentaryAmenities: [[]],
+        socialPlatForms: [[]],
+      }),
+      brandId: [this.brandId],
     });
+    this.navRoutes[2].link = `/pages/settings/business-info/brand/${this.brandId}`;
+
+    if (this.hotelId) {
+      this.hotelService.getHotelById(this.hotelId).subscribe((res) => {
+        const data = new HotelResponse().deserialize(res);
+        console.log(data);
+
+        this.useForm.patchValue(data);
+      });
+    }
   }
 
   saveHotelData() {}
@@ -123,8 +140,8 @@ export class HotelInfoFormComponent implements OnInit {
       this.useForm.markAllAsTouched();
       return;
     }
-    // const data = new HotelFormData().deserialize(this.useForm.getRawValue() , this.brandId);
-    // only for testing
+    this.socialMediaService.onSubmit.emit(true);
+    // const data = this.useForm.getRawValue() as HotelFormData;
     const data = {
       hotel: {
         name: 'hotel Reddwe',
@@ -141,14 +158,36 @@ export class HotelInfoFormComponent implements OnInit {
         },
         contactInfo: {},
       },
-      brandId: '3a3b06c6-e3cc-47a2-903a-22aa6c6f005e',
+      brandId: '27770ecf-5d89-477b-a9cb-81616a648f17',
     };
-    this.loading = true;
-    this.$subscription.add(
-      this.hotelService
-        .createHotel(this.hotelId, data)
-        .subscribe(this.handleSuccess, this.handelFinal)
-    );
+
+    if (this.hotelId) {
+      this.$subscription.add(
+        this.hotelService.updateHotel(this.hotelId, data).subscribe(
+          (res) => {
+            this.handleSuccess;
+            this.router.navigate([
+              `/pages/settings/business-info/brand/${this.brandId}/hotel`,
+            ]);
+          },
+
+          this.handelError
+        )
+      );
+    } else {
+      this.$subscription.add(
+        this.hotelService.createHotel(this.brandId, data).subscribe(
+          (res) => {
+            this.handleSuccess;
+            this.router.navigate([
+              `/pages/settings/business-info/brand/${this.brandId}/hotel/${res.id}`,
+            ]);
+          },
+
+          this.handelError
+        )
+      );
+    }
   }
 
   resetForm() {
@@ -165,14 +204,13 @@ export class HotelInfoFormComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate([`/pages/settings/brand/${this.brandId}`]);
   };
 
   /**
    * @function handelFinal To handel loading
    * @param param0  network error
    */
-  handelFinal = () => {
+  handelError = ({ error }): void => {
     this.loading = false;
   };
 }

@@ -13,6 +13,8 @@ export class DefaultPackageComponent implements OnInit {
   @Input() parentForm;
   @Input() paidAmenityFG;
   @Input() index;
+
+  isToggleOn: boolean = false;
   metaDataList: MetaData[] = [];
   @Input() set config(value) {
     this.getMetaDataList(value);
@@ -25,7 +27,11 @@ export class DefaultPackageComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  updatePackageStatus(status) {
+  onToggleSwitch(isAccepted: boolean) {
+    this.updatePackageStatus(isAccepted ? 'ACCEPT' : 'REJECT');
+  }
+
+  updatePackageStatus(status: string) {
     const data = {
       stepName: 'PACKAGE',
       state: status,
@@ -40,6 +46,8 @@ export class DefaultPackageComponent implements OnInit {
       )
       .subscribe(
         (response) => {
+          this.isToggleOn = status === 'ACCEPT';
+
           this.paidAmenityFG
             .get('status')
             .patchValue(status === 'ACCEPT' ? 'COMPLETED' : 'FAILED');
@@ -52,7 +60,7 @@ export class DefaultPackageComponent implements OnInit {
             { panelClass: 'success' }
           );
         },
-        ({ error }) => { }
+        ({ error }) => {}
       );
   }
 

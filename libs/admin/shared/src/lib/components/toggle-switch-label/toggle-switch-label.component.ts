@@ -10,7 +10,7 @@ export class ToggleSwitchComponentLabel implements OnInit {
   @Output() onToggleSwitch = new EventEmitter<boolean>();
   toggleOnLabel: string = 'Accept';
   toggleOffLabel: string = 'Reject';
-  toggleOnColor: string = '#2196F3';
+  toggleOnColor: string = '#65b340';
   toggleOffColor: string = '#ccc';
 
   @Input() set config(value) {

@@ -77,6 +77,8 @@
           <img src="assets/svg/cross.svg" />
         </button> -->
         <hospitality-bot-toggle-switch-with-label
+          [isToggleOn]="isToggleOn"
+          (onToggleSwitch)="onToggleSwitch($event)"
         ></hospitality-bot-toggle-switch-with-label>
       </div>
     </div>

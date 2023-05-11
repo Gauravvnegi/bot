@@ -8,79 +8,169 @@ import {
   Tax,
 } from '../types/response.type';
 import { Option } from '@hospitality-bot/admin/shared';
+
 export class Invoice {
-  invoiceDate: number;
-  arrivalDate: number;
+  invoiceId: string;
+  invoiceNumber: string;
+  confirmationNumber: string;
   guestName: string;
-  departureDate: number;
+  companyName: string;
+
+  gstNumber: string;
+  contactName: string;
+  contactNumber: string;
+  email: string;
+  address: string;
+  state: string;
+  city: string;
+  pin: string;
+
+  additionalNote: string;
+  tableData: TableData[];
+
   currentAmount: number;
-  paidAmount: number;
-  paidValue: number;
-  dueAmount: number;
   discountedAmount: number;
   totalDiscount: number;
+  paidAmount: number;
+  dueAmount: number;
 
-  deserialize(input: InvoiceResponse) {
-    this.invoiceDate = input.invoiceDate;
-    this.guestName = input.primaryGuest.firstName;
-    this.arrivalDate = input.reservation.arrivalTime;
-    this.departureDate = input.reservation.departureTime;
-    this.currentAmount = input.invoiceAmount;
-    this.paidAmount = input.invoicePaidAmount;
-    this.paidValue = input.invoicePaidAmount;
-    this.totalDiscount = input.originalAmount;
-    this.dueAmount = input.invoiceDueAmount;
+  currency: string;
+  refundAmount: number;
+
+  cashierName: string;
+  paymentMethod: string;
+  receivedPayment: number;
+  remarks: string;
+  transactionId: string;
+
+  deserialize(input: InvoiceResponse, data: { cashierName: string }) {
+    this.invoiceId = input.id;
+    this.invoiceNumber = input.invoiceCode;
+    this.confirmationNumber = input.reservation.number;
+    this.guestName =
+      (input.primaryGuest.firstName ?? '') +
+      (input.primaryGuest.lastName ?? '');
+    this.companyName = input.companyDetails?.companyName ?? '';
+    this.gstNumber = input.companyDetails?.gstNumber ?? '';
+    this.contactName = input.companyDetails?.contactName ?? '';
+    this.contactNumber = input.companyDetails?.contactNumber ?? '';
+    this.email = input.companyDetails?.email ?? '';
+    this.address = input.companyDetails?.address.addressLine1 ?? '';
+    this.state = input.companyDetails?.address.state ?? '';
+    this.city = input.companyDetails?.address.city ?? '';
+    this.pin = input.companyDetails?.address.postalCode ?? '';
+    this.additionalNote = '';
+
+    this.tableData = new TableList().deserialize(input.itemList).records;
+
+    this.currentAmount = 0;
+    this.totalDiscount = 0;
+
+    // calculation below
+    this.tableData.map((item) => {
+      if (item.type === 'discount') {
+        this.totalDiscount = item.totalAmount + this.totalDiscount;
+      }
+      if (item.type === 'price') {
+        this.currentAmount = item.totalAmount + this.currentAmount;
+      }
+    });
+
     this.discountedAmount = input.invoiceAmount;
+    this.paidAmount = input.invoicePaidAmount;
+    this.dueAmount = input.invoiceDueAmount;
+
+    this.currency = 'INR';
+    this.refundAmount = 0;
+
+    this.cashierName = data.cashierName;
+    this.paymentMethod = '';
+    this.receivedPayment = null;
+    this.remarks = '';
+    this.transactionId = '';
+
     return this;
   }
 }
 
-export class TableData {
-  id: string;
-  description: Option;
-  unitValue: number;
-  unit: number;
-  amount: number;
-  tax: Option[];
-  totalAmount: number;
-  discountType: string;
-  discount: number;
-
-  deserialize(input: Item) {
-    this.description = {
-      label: input.description,
-      value: input.id,
-      amount: 0,
-      taxes: [],
-    };
-    this.unitValue = input.perUnitPrice;
-    this.unit = input.unit;
-    this.amount = input.unit * input.perUnitPrice;
-    this.totalAmount = input.amount;
-    this.tax = input.itemTax.map((tax) => ({
-      label: `${tax.taxType} ${tax.taxValue}%`,
-      value: tax.id,
-    }));
-    this.discountType = input.discount?.type || '';
-    this.discount = input.discount?.value || 0;
-    return this;
-  }
-}
-
-export class TableDataList {
+export class TableList {
   records: TableData[];
-  deserialize(input) {
+  deserialize(input: InvoiceResponse['itemList']) {
     this.records = new Array<TableData>();
-    input.forEach((item) =>
-      this.records.push(new TableData().deserialize(item))
-    );
+
+    input.forEach((item) => {
+      const taxRate =
+        item.itemTax.reduce((acc, val) => acc + val.taxValue, 0) ?? 0;
+      const amount = item.unit * item.amount;
+
+      const priceItem = this.getTableData({
+        description: item.id,
+        unit: item.unit,
+        unitValue: item.amount,
+        amount: amount,
+        tax: item.itemTax.map((tax) => tax.id),
+        totalAmount: amount + (amount * taxRate) / 100,
+        type: 'price',
+        isDisabled: !item.isAddOn,
+        discountState: item.discount ? 'applied' : 'notApplied',
+      });
+
+      this.records.push(priceItem);
+
+      if (item.discount) {
+        const discountItem = this.getTableData({
+          description: 'Discount',
+          discountType: item.discount.type,
+          discount: item.discount.value,
+          type: 'discount',
+          totalAmount:
+            item.discount.type === 'FLAT'
+              ? item.discount.value
+              : amount * (item.discount.value / 100),
+          isDisabled: true,
+        });
+        this.records.push(discountItem);
+      }
+    });
+
     return this;
   }
+
+  getTableData(data: Partial<TableData>) {
+    const res: TableData = {
+      description: '',
+      unit: 0,
+      unitValue: 0,
+      amount: 0,
+      tax: [],
+      totalAmount: 0,
+      discount: 0,
+      discountType: 'PERCENT',
+      type: 'price',
+      isDisabled: false,
+      discountState: 'notApplied',
+      ...data,
+    };
+    return res;
+  }
 }
+export type TableData = {
+  description: string;
+  unit: number;
+  unitValue: number;
+  amount: number;
+  tax: string[];
+  totalAmount: number;
+  discount: number;
+  discountType: 'FLAT' | 'PERCENT';
+  type: 'price' | 'discount';
+  isDisabled: boolean;
+  discountState: 'notApplied' | 'editing' | 'applied';
+};
 
 export class Service {
-  id: string;
-  name: string;
+  value: string;
+  label: string;
   code: string;
   source: string;
   type: string;
@@ -92,12 +182,12 @@ export class Service {
   unit: string;
 
   deserialize(input) {
-    this.id = input.id;
-    this.name = input.name;
+    this.value = input.id;
+    this.label = input.name;
     this.code = input.packageCode;
     this.source = input.source;
     this.type = input.type;
-    this.amount = input.rate;
+    this.amount = input.discountedPrice ? input.discountedPrice : input.rate;
     this.taxes =
       input.taxes?.map((item) => ({
         taxType: item.taxType,
@@ -117,7 +207,7 @@ export class ServiceList {
 
   deserialize(input) {
     this.allService =
-      input.services?.map((item) => new Service().deserialize(item)) ?? [];
+      input.paidPackages?.map((item) => new Service().deserialize(item)) ?? [];
     return this;
   }
 }

@@ -6,7 +6,11 @@ import {
   Validators,
   FormArray,
 } from '@angular/forms';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import {
+  NavRouteOptions,
+  Option,
+  UserService,
+} from '@hospitality-bot/admin/shared';
 import { manageReservationRoutes } from '../../constants/routes';
 import { InvoiceForm } from '../../types/forms.types';
 import { cols } from '../../constants/payment';
@@ -30,7 +34,7 @@ export class InvoiceComponent implements OnInit {
   selectedRows;
   cols = cols;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private userService: UserService) {
     this.initPageHeaders();
   }
 
@@ -56,6 +60,8 @@ export class InvoiceComponent implements OnInit {
    * @function initForm Initialize form
    */
   initForm(): void {
+    const { firstName, lastName } = this.userService.userDetails;
+
     this.useForm = this.fb.group({
       invoiceNumber: ['#8544556CY'],
       confirmationNumber: ['#8544556CY'],
@@ -65,7 +71,7 @@ export class InvoiceComponent implements OnInit {
       additionalNote: [''],
       tableData: new FormArray([]),
 
-      cashierName: ['', Validators.required],
+      cashierName: [`${firstName} ${lastName}`, Validators.required],
       invoiceDate: ['', Validators.required],
       arrivalDate: ['', Validators.required],
       departureDate: ['', Validators.required],
@@ -142,7 +148,6 @@ export class InvoiceComponent implements OnInit {
 
   onRowSelect(event) {
     console.log('onRowSelect', event);
-    // debugger;
   }
 
   onRowUnselect(event) {

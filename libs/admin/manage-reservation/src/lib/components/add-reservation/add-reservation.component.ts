@@ -394,7 +394,7 @@ export class AddReservationComponent implements OnInit {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
           (error) => {},
-          () => (this.isBooking = false)
+          () => {this.isBooking = false}
         )
     );
   }

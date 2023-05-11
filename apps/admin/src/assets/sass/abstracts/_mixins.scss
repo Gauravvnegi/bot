@@ -305,6 +305,17 @@
   box-shadow: $form-shadow;
   background-color: $white;
 
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.96px;
+    color: $secondary2;
+  }
+
   .code {
     flex-basis: 65%;
     color: $secondary2;

@@ -20,7 +20,7 @@ export const adminInvoiceRoutes: Route[] = [
         component: InvoiceComponent,
       },
       {
-        path: `${invoiceRoutes.previewInvoice.route}/:id`,
+        path: `${invoiceRoutes.createInvoice.route}/preview-invoice/:id`,
         component: PreviewComponent,
       },
       {

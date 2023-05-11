@@ -1,11 +1,37 @@
-<ng-container *ngIf="isLoaded">
+<div class="wrapper">
+  <hospitality-bot-navigation-header
+    heading="Preview Invoice"
+    [routes]="navRoutes"
+  >
+    <hospitality-bot-button
+      label="Email Invoice"
+      (onClick)="handleEmailInvoice()"
+    ></hospitality-bot-button>
+
+    <hospitality-bot-button
+      *ngIf="isInvoiceGenerated"
+      variant="text"
+      label="Download PDF"
+      (onClick)="handleDownload()"
+    ></hospitality-bot-button>
+
+    <p-splitButton
+      *ngIf="!isInvoiceGenerated"
+      label="Generate"
+      (onClick)="handleGenerateInvoice()"
+      [model]="items"
+    ></p-splitButton>
+  </hospitality-bot-navigation-header>
+
+  <ng-container *ngIf="isLoaded" else loader>
     <iframe
       class="iframe"
       [src]="previewUrl | safeUrl"
       height="100%"
+      loading="eager"
       width="100%"
       allowFullScreen
-      title="Dashboard" 
+      title="Dashboard"
     ></iframe>
-</ng-container>
-
+  </ng-container>
+</div>

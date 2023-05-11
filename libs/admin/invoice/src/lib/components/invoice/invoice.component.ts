@@ -1,41 +1,48 @@
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
+  FormArray,
   FormBuilder,
   FormGroup,
   Validators,
-  FormArray,
 } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
-  CookiesSettingsService,
   NavRouteOptions,
   Option,
   UserService,
 } from '@hospitality-bot/admin/shared';
-import { invoiceRoutes } from '../../constants/routes';
-import { InvoiceForm } from '../../types/forms.types';
-import { cols } from '../../constants/payment';
-import { PaymentField } from '../../types/forms.types';
-import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
-import { GlobalFilterService, Item } from '@hospitality-bot/admin/core/theme';
-import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { InvoiceService } from '../../services/invoice.service';
-import {
-  Invoice,
-  ServiceList,
-  TableDataList,
-} from '../../models/invoice.model';
 import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
+import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
 import { ServicesService } from 'libs/admin/services/src/lib/services/services.service';
-import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { SettingOptions } from '@hospitality-bot/admin/settings';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { Subscription, from } from 'rxjs';
+import {
+  addDiscountMenu,
+  addRefundMenu,
+  DiscountActionItem,
+  discountOptions,
+  editDiscountMenu,
+  editRefundMenu,
+  paymentOptions,
+} from '../../constants/invoice.constant';
+import { cols } from '../../constants/payment';
+import { invoiceRoutes } from '../../constants/routes';
+import {
+  Invoice,
+  Service,
+  ServiceList,
+  TableData,
+} from '../../models/invoice.model';
+import { InvoiceService } from '../../services/invoice.service';
+import { InvoiceForm, PaymentField } from '../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -46,60 +53,53 @@ export class InvoiceComponent implements OnInit {
   readonly errorMessages = errorMessages;
   pageTitle: string;
   navRoutes: NavRouteOptions;
+
   hotelId: string;
   reservationId: string;
+  guestId: string;
+
   tableFormArray: FormArray;
   useForm: FormGroup;
-  gstForm: FormGroup;
-  paymentOptions: Option[] = [
-    { label: 'Razor Pay', value: 'razorPay' },
-    { label: 'Cash', value: 'cash' },
-    { label: 'Stripe', value: 'stripe' },
-    { label: 'Pay at desk', value: 'payAtDesk' },
-    { label: 'Bank Deposit', value: 'bankDeposit' },
-  ];
+
+  readonly paymentOptions = paymentOptions;
+  readonly discountOption = discountOptions;
+  readonly addRefund = addRefundMenu;
+  readonly editRefund = editRefundMenu;
+  readonly addDiscountMenu = addDiscountMenu;
+  readonly editDiscountMenu = editDiscountMenu;
+
   loading = false;
 
   tableLength = 0;
   tax: Option[] = [];
-  defaultTax: Option[] = []
-  tableValue = [];
-  discountOption: Option[] = [
-    { label: '%Off', value: 'PERCENT' },
-    { label: 'Flat', value: 'FLAT' },
-  ];
-  refundOption = [{ label: 'INR', value: 'inr' }];
-  addRefund: Option[] = [{ label: 'Add Refund', value: 'addRefund' }];
-  editRefund: Option[] = [{ label: 'Edit Refund', value: 'editRefund' }];
 
-  isDiscountSaved = false;
+  tableValue = [];
+  refundOption = [{ label: 'INR', value: 'INR' }];
+
   isRefundSaved = false;
   viewRefundRow = false;
   isValidDiscount = true;
-  isGenerated = false;
-  isAddingGST = false;
+
+  addGST = false;
+  addPayment = false;
+
+  isInvoiceGenerated = false;
 
   $subscription = new Subscription();
   typeSubscription: Subscription;
 
-  serviceOptions = [
-    { label: 'se default', value: 'se default', amount: 0, taxes: [] },
-  ];
+  serviceOptions: Option[];
 
-  defaultServices = [
-    { label: 'se default', value: 'se default', amount: 0, taxes: [] },
-  ];
+  descriptionOffSet = 0;
+  loadingDescription = false;
+  noMoreDescription = false;
+  selectedSearchIndex = -1;
+  descriptionOptions: Option[] = [];
+  defaultDescriptionOptions: Option[] = [];
 
   /**Table Variable */
   selectedRows;
   cols = cols;
-
-  // #Move to constant, give type here and in menu component, initialise ngInit - initOptionsConfig
-  addDiscount = [{ label: 'Add Discount', value: 'addDiscount' }];
-  editDiscount = [
-    { label: 'Edit Discount', value: 'editDiscount' },
-    { label: 'Remove Discount', value: 'removeDiscount' },
-  ];
 
   constructor(
     private fb: FormBuilder,
@@ -109,8 +109,9 @@ export class InvoiceComponent implements OnInit {
     private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private servicesService: ServicesService,
+    private router: Router,
     private modalService: ModalService,
-    private userService: UserService,
+    private userService: UserService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -123,7 +124,7 @@ export class InvoiceComponent implements OnInit {
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
     this.initForm();
-    this.getServices();
+    this.getDescriptionOptions();
   }
 
   /**
@@ -139,22 +140,23 @@ export class InvoiceComponent implements OnInit {
    * @function initForm Initialize form
    */
   initForm(): void {
-    this.useForm = this.fb.group({
-      invoiceNumber: ['#8544556CY'],
-      confirmationNumber: ['#8544556CY'],
-      guestName: ['', Validators.required],
-      companyName: ['', Validators.required],
+    const { firstName, lastName } = this.userService.userDetails;
 
-      gstData: this.fb.group({
-        gstNumber: ['', Validators.required],
-        contactName: ['', Validators.required],
-        contactNumber: ['', Validators.required],
-        email: ['', Validators.required],
-        address: ['', Validators.required],
-        state: ['', Validators.required],
-        city: ['', Validators.required],
-        pin: ['', Validators.required]
-      }),
+    this.useForm = this.fb.group({
+      invoiceId: [],
+      invoiceNumber: [],
+      confirmationNumber: [],
+      guestName: ['', Validators.required],
+      companyName: [''],
+
+      gstNumber: ['', Validators.required],
+      contactName: ['', Validators.required],
+      contactNumber: ['', Validators.required],
+      email: ['', Validators.required],
+      address: ['', Validators.required],
+      state: ['', Validators.required],
+      city: ['', Validators.required],
+      pin: ['', Validators.required],
 
       additionalNote: [''],
       tableData: new FormArray([]),
@@ -165,300 +167,170 @@ export class InvoiceComponent implements OnInit {
       paidAmount: [0],
       dueAmount: [0],
 
-      currency: ['inr'],
+      currency: ['INR'],
       refundAmount: [0],
 
-      cashierName: ['', Validators.required],
-      invoiceDate: ['', Validators.required],
+      cashierName: [`${firstName} ${lastName}`, Validators.required],
       paymentMethod: ['', Validators.required],
-      recievedPayment: ['', Validators.required],
+      receivedPayment: ['', Validators.required],
       remarks: ['', Validators.required],
       transactionId: ['', Validators.required],
     });
 
     this.tableFormArray = this.useForm.get('tableData') as FormArray;
-    this.gstForm = this.useForm.get('gstData') as FormGroup;
-    this.addNewFieldTableForm('price', 0);
-    this.initDetails();
-    this.initOptionsConfig();
+    // this.addNewCharges('price', 0);
+    this.gstValidation(false);
+    this.paymentValidation(false);
+    this.initFormDetails();
     this.initFormSubscription();
   }
 
   /**
-   * @function initForm Initialize form
+   * Patch the initial form values
    */
-  // initDetails() {
-  //   this.tableValue = [{ id: 1 }];
-  //   this.invoiceService.getInvoiceData(this.reservationId).subscribe((res) => {
-  //     const data = new Invoice().deserialize(res);
-  //     const tableData = new TableDataList().deserialize(res.itemList).records;
-  //     this.defaultTax = tableData[0].tax;
-  //     let taxValues = this.defaultTax.map((item) => item.value);
-
-  //     const addCharges = () => this.addNewCharges();
-
-  //     if (tableData.length > 1) {
-  //       Array.from({ length: tableData.length - 1 }, () => addCharges());
-  //     }
-
-  //     tableData.forEach((data, i) => {
-  //       const rowData: Record<keyof PaymentField, any> = {
-  //         description: data.description,
-  //         unit: data.unit,
-  //         unitValue: data.unitValue,
-  //         amount: data.amount,
-  //         tax: data.tax,
-  //         totalAmount: data.totalAmount,
-  //         menu: '',
-  //         discount: data.discountValue || '',
-  //         discountType: data.discountType || 'off',
-  //         type: 'price',
-  //         isDisabled: false,
-  //         isSaved: false,
-  //       };
-
-  // //       this.tableFormArray.controls[i].setValue(rowData);
-  // //       this.tableFormArray.controls[i].get('tax').setValue(taxValues);
-  // //     });
-  // //     this.useForm.patchValue(data);
-  // //   });
-  // // }
-
-  initDetails() {
-    this.tableValue = [{ id: 1 }];
+  initFormDetails() {
+    const { firstName, lastName } = this.userService.userDetails;
+    // this.tableValue = [{ id: 1 }];
     this.invoiceService.getInvoiceData(this.reservationId).subscribe((res) => {
-      const data = new Invoice().deserialize(res);
-      const tableData = new TableDataList().deserialize(res.itemList).records;
-      console.log(tableData);
-      this.defaultTax = tableData[0]?.tax || [{label: '', value: ''}];
-      console.log(this.defaultTax);
-      // this.tax.push(tableData[0].tax)
-      let taxValues = this.defaultTax.map((item) => item?.value || '');
+      this.invoiceService.initInvoiceData(res); // saving initial invoice data
 
-      const addCharges = () => this.addNewCharges();
-
-      if (tableData.length > 1) {
-        Array.from({ length: tableData.length - 1 }, addCharges);
-      }
-
-      tableData.forEach((data, i) => {
-        this.tableFormArray.controls[i].setValue(data);
-        this.tableFormArray.controls[i].get('tax').setValue(taxValues);
+      const data = new Invoice().deserialize(res, {
+        cashierName: `${firstName} ${lastName}`,
       });
-      this.useForm.patchValue(data);
+      // this.tableValue = data.tableData.map((_, idx) => ({ id: idx + 1 }));
+      // for (let i = 1; i < data.tableData.length; i++) {
+      //   this.addNewCharges(); // adding new table entry to patch data
+      // }
+
+      data.tableData.forEach((item, idx) => {
+        // this.tableValue.push({ id: idx + 1 });
+        this.addNewCharges(item.type, idx); // adding new table entry to patch data
+      });
+
+      this.useForm.patchValue(data, { emitEvent: false });
+
+      // Generating tax options
+      this.tax = res.itemList.reduce((prev, curr) => {
+        const taxes = curr.itemTax.map((item) => ({
+          label: `${item.taxType} [${item.taxValue}%]`,
+          value: item.id,
+        }));
+
+        return [...prev, ...taxes];
+      }, []);
+
+      // Generating default description options
+      res.itemList.forEach((item) => {
+        this.defaultDescriptionOptions.push({
+          label: item.description,
+          value: item.id,
+          amount: item.amount,
+          taxes: item.itemTax,
+        });
+      });
+
+      this.guestId = res.primaryGuest.id;
+      this.isInvoiceGenerated = res.invoiceGenerated;
     });
-    // this.inputControl.discountType.setValue('off');
-    let userId = this.userService.getLoggedInUserId();
-    this.userService.getUserDetailsById(userId).subscribe((res)=>{
-      this.inputControl.cashierName.patchValue(res.firstName);
-    });    
   }
 
-
-  // initDetails() {
-  //   this.tableValue = [{ id: 1 }];
-  //   this.tableFormArray.clear();
-  //   this.invoiceService.getInvoiceData(this.reservationId).subscribe((res) => {
-  //     const data = new Invoice().deserialize(res);
-  //     const tableData = new TableDataList().deserialize(res.itemList).records;
-  //     this.tableLength = tableData.length;
-      
-  //     tableData.forEach((data, i) => {
-  //       let taxValues = this.tax.map((item) => item.value)
-  //       this.tableFormArray.at(i).get('tax').patchValue(taxValues);
-  //       if (data.discount !== 0 && data.discountType !== '') {
-  //         const priceRowData = this.getRowData('price', data);
-  //         const discountRowData = this.getRowData('discount', data);
-  //         this.tableFormArray.push(this.fb.group(priceRowData));
-  //         this.tableFormArray.push(this.fb.group(discountRowData));
-  //         this.addNewCharges('discount');
-  //       } else {
-  //         const rowData = this.getRowData('price', data);
-  //         console.log("Row Data", rowData);
-  //         this.addNewCharges();
-  //         this.tableFormArray.push(this.fb.group(rowData));
-  //         console.log("Table Form Array - ", this.tableFormArray)
-  //       }
-  //       if (data.tax.length) {
-  //         let taxes = data.tax.map((item) => ({label: item.label, value: item.value}));
-  //         this.tax.push(...taxes);
-  //       }
-  //     });
-  //     this.useForm.patchValue(data);
-  //   });
-  // }
-
-  // initDetails() {
-  //   this.tableValue = [{ id: 1 }];
-  //   const newTableFormArray = this.fb.array([]);
-  //   this.addNewCharges();
-  //   this.invoiceService.getInvoiceData(this.reservationId).subscribe((res) => {
-  //     const data = new Invoice().deserialize(res);
-  //     const tableData = new TableDataList().deserialize(res.itemList).records;
-  //     this.tableLength = tableData.length;
-  
-  //     const formGroups = tableData.map((data) => {
-  //       let taxValues = this.tax.map((item) => item.value);
-  //       const rowData = {
-  //         description: data.description,
-  //         unit: data.unit,
-  //         unitValue: data.unitValue,
-  //         amount: data.amount,
-  //         tax: taxValues,
-  //         totalAmount: data.totalAmount,
-  //         menu: true,
-  //         discount: data.discount,
-  //         discountType: data.discountType,
-  //         type: data.discount !== 0 && data.discountType !== '' ? 'discount' : 'price',
-  //         isDisabled: false,
-  //         isSaved: false,
-  //       };
-  //       return this.fb.group(rowData);
-  //     });
-  
-  //     for (let i = 0; i < formGroups.length; i++) {
-  //       const group = formGroups[i];
-  //       newTableFormArray.insert(i, group);
-  
-  //       if (group.value.type === 'discount') {
-  //         this.addNewCharges('discount');
-  //       } else {
-  //         this.addNewCharges();
-  //       }
-  
-  //       if (tableData[i].tax.length) {
-  //         let taxes = tableData[i].tax.map((item) => ({ label: item.label, value: item.value }));
-  //         this.tax.push(...taxes);
-  //       }
-  //     }
-  
-  //     this.tableFormArray = newTableFormArray;
-  //     this.useForm.patchValue(data);
-  //   });
-  // }
-  
-
-  getRowData(type, data) {
-    switch (type) {
-      case 'price':
-        const rowData: Record<keyof PaymentField, any> = {
-          description: data.description,
-          unit: data.unit,
-          unitValue: data.unitValue,
-          amount: data.amount,
-          tax: data.tax,
-          totalAmount: data.totalAmount,
-          menu: false,
-          discount: 0,
-          discountType: '',
-          type: 'price',
-          isDisabled: false,
-          isSaved: false,
-        };
-        return rowData;
-
-      case 'discount':
-        const discountRowData: Record<keyof PaymentField, any> = {
-          description: '',
-          unit: 0,
-          unitValue: 0,
-          amount: 0,
-          tax: [],
-          totalAmount: 0,
-          menu: true,
-          discount: data.discount,
-          discountType: data.discountType,
-          type: 'discount',
-          isDisabled: false,
-          isSaved: false,
-        };
-        return discountRowData;
-
-      default:
-        break;
-    }
+  handleFocus(index: number) {
+    this.selectedSearchIndex = index;
   }
 
-  getServiceOptions(rowIndex) {}
+  handleBlur() {
+    this.selectedSearchIndex = -1;
+  }
 
+  /**
+   * Initialize Form Subscription
+   */
   initFormSubscription() {
-    this.getTax();
+    const totalCurrentAmount = this.useForm.get('currentAmount');
+    const totalDiscountControl = this.useForm.get('totalDiscount');
+    const totalDiscountedAmountControl = this.useForm.get('discountedAmount');
+    const paidAmountControl = this.useForm.get('paidAmount');
+    const dueAmountControl = this.useForm.get('dueAmount');
+
+    totalDiscountControl.valueChanges.subscribe((res) => {
+      const discountedAmount = totalCurrentAmount.value - res;
+      totalDiscountedAmountControl.patchValue(discountedAmount);
+    });
+
+    totalDiscountedAmountControl.valueChanges.subscribe((res) => {
+      const dueAmount = res - paidAmountControl.value;
+      dueAmountControl.patchValue(dueAmount);
+    });
   }
 
-  /**
-   * @function initForm Initialize tax options
-   */
-  initOptionsConfig() {
+  paymentValidation(addValidation: boolean = true) {
+    const paymentMethodControl = this.useForm.get('paymentMethod');
+    const receivedPaymentControl = this.useForm.get('receivedPayment');
+    const transactionIdControl = this.useForm.get('transactionId');
+    const remarksControl = this.useForm.get('remarks');
+
+    [
+      paymentMethodControl,
+      receivedPaymentControl,
+      transactionIdControl,
+      remarksControl,
+    ].forEach((item) => {
+      if (addValidation) item.setValidators([Validators.required]);
+      else {
+        item.clearValidators();
+        item.updateValueAndValidity();
+        item.reset();
+      }
+    });
   }
 
-  getQueryConfig(): QueryConfig {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        {
-          type: LibraryItem.service,
-          serviceType: 'ALL',
-          limit: 50,
-        },
-      ]),
-    };
-    return config;
-  }
+  gstValidation(addValidation: boolean = true) {
+    const companyNameControl = this.useForm.get('companyName');
 
-  /**
-   * Add new entry in the payment field
-   */
-  addNewFieldTableForm(type, rowIndex?) {
-    const data: Record<keyof PaymentField, any> = {
-      description: ['', Validators.required],
-      unit: [0],
-      unitValue: [0],
-      amount: [0],
-      tax: [[]],
-      totalAmount: [0],
-      menu: [true],
-      discount: [0],
-      discountType: ['PERCENT'],
-      type: [''],
-      isDisabled: [false],
-      isSaved: [false],
-    };
+    const gstNumberControl = this.useForm.get('gstNumber');
+    const contactNameControl = this.useForm.get('contactName');
+    const contactNumberControl = this.useForm.get('contactNumber');
+    const emailControl = this.useForm.get('email');
+    const addressControl = this.useForm.get('address');
+    const stateControl = this.useForm.get('state');
+    const cityControl = this.useForm.get('city');
+    const pinControl = this.useForm.get('pin');
 
-    let formGroup;
-    if (type === 'discount') {
-      formGroup = this.fb.group({
-        description: data.description,
-        unit: '',
-        unitValue: '',
-        amount: '',
-        menu: true,
-        type: 'discount',
-        discount: data.discount,
-        discountType: data.discountType,
-        totalAmount: 0,
-        isDisabled: false,
-        isSaved: false,
-      });
-      this.tableFormArray.insert(rowIndex, formGroup);
+    [
+      gstNumberControl,
+      contactNameControl,
+      contactNumberControl,
+      emailControl,
+      addressControl,
+      stateControl,
+      cityControl,
+      pinControl,
+    ].forEach((item) => {
+      if (addValidation) item.setValidators([Validators.required]);
+      else {
+        item.clearValidators();
+        item.updateValueAndValidity();
+        item.reset();
+      }
+    });
+
+    if (addValidation) {
+      companyNameControl.setValidators([Validators.required]);
+      companyNameControl.updateValueAndValidity();
     } else {
-      this.tableFormArray.push(
-        this.fb.group({
-          ...data,
-          menu: false,
-          type: 'price',
-          discount: 0,
-          discountType: '',
-          isDisabled: false,
-          isSaved: false,
-        })
-      );
-      this.registerUnitPriceChange();
+      companyNameControl.updateValueAndValidity();
+      companyNameControl.clearValidators();
+      companyNameControl.markAsUntouched();
     }
   }
 
   /**
-   * To add new charged
+   * Handle addition of table entry (New Charges)
    */
-  addNewCharges(type = 'price', rowIndex?) {
+  addNewCharges(type: 'price' | 'discount' = 'price', rowIndex?: number) {
+    const index = rowIndex ?? this.tableValue.length;
+    this.tableValue.push(index);
+
     // if (this.useForm.invalid) {
     //   this.useForm.markAllAsTouched();
     //   this.snackbarService.openSnackBarAsText(
@@ -466,71 +338,161 @@ export class InvoiceComponent implements OnInit {
     //   );
     //   return;
     // }
+    const data: Record<keyof PaymentField, any> = {
+      description: ['', Validators.required],
+      unit: [null],
+      unitValue: [null],
+      amount: [null],
+      tax: [[]],
+      totalAmount: [null],
+      discount: [null],
+      discountType: ['PERCENT'],
+      type: [type],
+      isDisabled: [false],
+      discountState: [type === 'discount' ? 'editing' : 'notApplied'],
+    };
+
+    const formGroup = this.fb.group(data);
+
     if (type === 'discount') {
-      this.addNewFieldTableForm(type, rowIndex + 1);
-      this.tableValue.push({ id: this.tableValue.length + 1 });
+      this.tableFormArray.insert(index, formGroup);
     } else {
-      this.addNewFieldTableForm(type);
-      this.tableValue.push({ id: this.tableValue.length + 1 });
+      this.tableFormArray.push(formGroup);
+      this.registerServiceSelection();
     }
+    // add row in table
   }
 
-  onAddDiscount(type, rowIndex) {
-    this.addNewCharges(type, rowIndex);
-    this.registerDiscountChanges(rowIndex);
+  updateTotalDiscount() {
+    const rowData = this.tableFormArray.getRawValue() as TableData[];
+    const totalDiscount = rowData.reduce((prev, curr) => {
+      return prev + (curr.type === 'discount' ? +curr.totalAmount : 0);
+    }, 0);
+
+    this.useForm.get('totalDiscount').patchValue(totalDiscount);
   }
 
   /**
-   * @function registerUnitPriceChange To handle changes in new charges
+   * To handle changes in service charges
    */
-  registerUnitPriceChange() {
+  registerServiceSelection() {
     const currentFormGroup = this.tableFormArray.at(
       this.tableFormArray.controls.length - 1
     ) as FormGroup;
-    const { description, unit, unitValue, type } = currentFormGroup.controls;
 
-    let taxRate = 0;
+    const { description, unit, unitValue } = currentFormGroup.controls;
 
-    const setValues = (amountValue: number) => {
-      const totalValue = amountValue + (amountValue * taxRate) / 100;
-      currentFormGroup.patchValue({
-        amount: amountValue,
-        totalAmount: totalValue,
+    const handlePriceRowUpdate = ({
+      serviceId,
+      unitQuantity,
+      unitPrice,
+    }: {
+      serviceId?: string;
+      unitQuantity?: number;
+      unitPrice?: number;
+    }) => {
+      let isMain = true;
+      let selectedService = this.descriptionOptions.find((item) => {
+        const id = serviceId ?? description.value;
+        return item.value === id;
       });
-    };
 
-    const setAmount = () => {
-      let serviceId = description.value;
-      let selectedService = this.serviceOptions.find(
-        (item) => item.value === serviceId
-      );
-      taxRate =
-        selectedService?.taxes.reduce((acc, val) => acc + val.taxValue, 0) ?? 0;
+      if (!selectedService) {
+        isMain = false;
+        selectedService = this.defaultDescriptionOptions.find((item) => {
+          const id = serviceId ?? description.value;
+          return item.value === id;
+        });
+      }
 
-      if (selectedService) {
-        currentFormGroup.patchValue({
-          unit: 1,
-          tax: selectedService.taxes.map((item) => item.id),
-          unitValue: selectedService.amount,
+      if (!selectedService) return;
+
+      if (serviceId && isMain) {
+        // adding selected default description
+        const newSelectedOption = {
+          label: selectedService.label,
+          value: selectedService.value,
           amount: selectedService.amount,
+          taxes: selectedService.taxes,
+        };
+
+        this.defaultDescriptionOptions = [
+          ...this.defaultDescriptionOptions,
+          newSelectedOption,
+        ];
+      }
+
+      const currentUnitQuantity = unitQuantity ?? unit.value ?? 1;
+      const currentUnitValue =
+        unitPrice ?? (serviceId ? selectedService.amount : unitValue.value);
+
+      const serviceTaxes = selectedService?.taxes;
+      const taxRate =
+        serviceTaxes?.reduce((acc, val) => acc + val.taxValue, 0) ?? 0;
+
+      const taxes =
+        serviceTaxes?.map((item) => ({
+          label: `${item.taxType} [${item.taxValue}%]`,
+          value: item.id,
+        })) ?? [];
+      this.tax = [...this.tax, ...taxes];
+
+      const amount = currentUnitValue * currentUnitQuantity;
+      const totalValue = amount + (amount * taxRate) / 100;
+
+      currentFormGroup.patchValue(
+        {
+          unit: currentUnitQuantity,
+          tax: serviceTaxes.map((item) => item.id),
+          unitValue: currentUnitValue,
+          amount: amount,
+          totalAmount: totalValue,
+        },
+        { emitEvent: false }
+      );
+
+      // ---- discount logic attach to price
+      const rowId = currentFormGroup.value.description;
+      const rowIdx = this.tableFormArray.value.findIndex(
+        (item) => item.description === rowId
+      );
+      const nextEntry = this.tableFormArray.at(rowIdx + 1);
+      const nextEntryValues = this.tableFormArray.at(rowIdx + 1)?.value;
+
+      if (
+        nextEntry &&
+        nextEntryValues &&
+        nextEntryValues.type === 'discount' &&
+        nextEntryValues.discountType === 'PERCENT'
+      ) {
+        const totalDiscountAmount =
+          totalValue * (nextEntryValues.discount / 100);
+
+        nextEntry.patchValue({
+          totalAmount:
+            Math.round((totalDiscountAmount + Number.EPSILON) * 100) / 100,
         });
 
-        setValues(selectedService.amount);
+        this.updateTotalDiscount();
       }
     };
 
-    description.valueChanges.subscribe(setAmount);
+    description.valueChanges.subscribe((serviceId) =>
+      handlePriceRowUpdate({ serviceId })
+    );
 
-    const unitChanges = () => {
-      let amountValue = unit.value * unitValue.value;
-      setValues(amountValue);
-    };
+    unit.valueChanges.subscribe((unitQuantity) => {
+      handlePriceRowUpdate({ unitQuantity });
+    });
 
-    unit.valueChanges.subscribe(unitChanges);
+    unitValue.valueChanges.subscribe((unitPrice) => {
+      handlePriceRowUpdate({ unitPrice });
+    });
+
     this.listenTableChanges('price');
   }
 
-  listenTableChanges(type, index?) {
+  listenTableChanges(type: 'price' | 'discount', index?: number) {
     if (this.typeSubscription) {
       this.typeSubscription.unsubscribe();
     }
@@ -544,7 +506,7 @@ export class InvoiceComponent implements OnInit {
           this.updateInputControls(totalValue, 0);
         } else {
           const totalDiscount = typeValues.reduce((acc, value) => {
-            if (value.isSaved) {
+            if (value.isDiscountApplied) {
               return acc + Number(value.totalAmount);
             }
             return acc;
@@ -573,18 +535,15 @@ export class InvoiceComponent implements OnInit {
     );
   }
 
-  // /**
-  //  * @function registerDiscountChanges To handle changes in discount tab
-  //  */
-  registerDiscountChanges(index) {
-    const currentFormGroup = this.tableFormArray.at(index + 1) as FormGroup;
-    const currentTotalAmount = this.tableFormArray.at(index).get('totalAmount');
-    const {
-      discount,
-      discountType,
-      totalAmount,
-      isDisabled,
-    } = currentFormGroup.controls;
+  /**
+   * To handle discount changes
+   */
+  registerDiscountChanges(index: number) {
+    const priceControls = this.getTableRowFormGroup(index);
+    const discountControls = this.getTableRowFormGroup(index + 1);
+
+    const { totalAmount: currentTotalAmount } = priceControls;
+    const { discount, discountType, totalAmount } = discountControls;
 
     const setError = () => {
       if (
@@ -628,45 +587,81 @@ export class InvoiceComponent implements OnInit {
   }
 
   /**
-   * @function registerUnitPriceChange To handle changes in new charges
+   * Handle saving discount
+   * @param index Row index
    */
-
-  onSaveDiscount(index) {
-    let currentFormGroup = this.tableFormArray.at(index) as FormGroup;
-    let { isDisabled, isSaved } = currentFormGroup.controls;
-    isSaved.setValue(true);
-    this.listenTableChanges('discount', index);
+  onSaveDiscount(index: number) {
+    const priceControls = this.getTableRowFormGroup(index - 1);
+    const discountControls = this.getTableRowFormGroup(index);
+    const { isDisabled } = discountControls;
+    const { discountState } = priceControls;
+    discountState.setValue('applied');
     isDisabled.setValue(true);
-    this.tableFormArray
-      .at(index - 1)
-      .get('menu')
-      .setValue(true);
+
+    this.updateTotalDiscount();
   }
 
-  onEditDiscount(e, index) {
-    let editGroup = this.tableFormArray.at(index + 1) as FormGroup;
-    let { isDisabled, isSaved } = editGroup.controls;
-    isSaved.setValue(false);
-    isDisabled.setValue(false);
-    if (e.item.value === 'removeDiscount') this.resetDiscount(index);
+  getTableRowFormGroup(index: number) {
+    const data = this.tableFormArray.at(index) as FormGroup;
+    const formControl = data.controls as Record<
+      keyof TableData,
+      AbstractControl
+    >;
+    return formControl;
   }
 
-  resetDiscount(index) {
-    this.tableFormArray.at(index).get('menu').setValue(false);
-    let totalAmount = this.tableFormArray.at(index + 1).get('totalAmount')
+  /**
+   * Handle discount flow
+   */
+  handleDiscount(
+    { item: { value } }: { item: { value: DiscountActionItem } },
+    index: number
+  ) {
+    const priceControls = this.getTableRowFormGroup(index);
+
+    if (value === DiscountActionItem.ADD_DISCOUNT) {
+      this.addNewCharges('discount', index + 1);
+      this.registerDiscountChanges(index);
+      const { discountState } = priceControls;
+      discountState.setValue('editing');
+    }
+
+    if (value === DiscountActionItem.EDIT_DISCOUNT) {
+      const discountControls = this.getTableRowFormGroup(index + 1);
+      this.registerDiscountChanges(index);
+      const { isDisabled } = discountControls;
+      const { discountState } = priceControls;
+      discountState.setValue('editing');
+      isDisabled.setValue(false);
+    }
+
+    if (value === DiscountActionItem.REMOVE_DISCOUNT) {
+      const { discountState } = priceControls;
+      discountState.setValue('notApplied');
+      this.removeDiscount(index);
+    }
+  }
+
+  /**
+   * Remove Discount logic
+   * @param index Row index
+   */
+  removeDiscount(index: number) {
+    const {
+      totalDiscount,
+      discountedAmount,
+      currentAmount,
+      dueAmount,
+      paidAmount,
+    } = this.inputControl;
+    const totalAmount = this.tableFormArray.at(index + 1).get('totalAmount')
       .value;
     this.tableFormArray.removeAt(index + 1);
     this.tableValue.splice(index + 1, 1);
-    let removedDiscount = this.inputControl.totalDiscount.value - totalAmount;
-    this.inputControl.totalDiscount.patchValue(removedDiscount);
-    this.inputControl.discountedAmount.patchValue(
-      this.inputControl.currentAmount.value -
-        this.inputControl.totalDiscount.value
-    );
-    this.inputControl.dueAmount.patchValue(
-      this.inputControl.discountedAmount.value -
-        this.inputControl.paidAmount.value
-    );
+    const removedDiscount = totalDiscount.value - totalAmount;
+    totalDiscount.patchValue(removedDiscount);
+    discountedAmount.patchValue(currentAmount.value - totalDiscount.value);
+    dueAmount.patchValue(discountedAmount.value - paidAmount.value);
   }
 
   removeSelectedCharges() {
@@ -678,7 +673,7 @@ export class InvoiceComponent implements OnInit {
         // Check if the next row is a discount row
         const isNextRowDiscount =
           i < this.tableValue.length - 1 &&
-          this.tableFormArray.at(i + 1).get('type').value === 'discount';
+          this.tableFormArray.at(i + 1)?.get('type').value === 'discount';
         // Remove the current row and the next row if it's a discount row
         if (isNextRowDiscount) {
           this.tableValue.splice(i, 2);
@@ -694,9 +689,7 @@ export class InvoiceComponent implements OnInit {
     }
 
     // Update the IDs in tableValue
-    this.tableValue.forEach((row, index) => {
-      row.id = index + 1;
-    });
+    this.tableValue.forEach((_, index) => index);
 
     this.selectedRows = [];
   }
@@ -705,7 +698,7 @@ export class InvoiceComponent implements OnInit {
     let currentPriceValue = this.tableFormArray.at(index).get('totalAmount')
       .value;
     let currentDiscountValue =
-      this.tableFormArray.at(index + 1).get('discount').value || 0;
+      this.tableFormArray.at(index + 1)?.get('discount').value || 0;
     const {
       currentAmount,
       totalDiscount,
@@ -721,32 +714,54 @@ export class InvoiceComponent implements OnInit {
     }
   }
 
-  onRowSelect(event) {
-    console.log('onRowSelect', event);
-  }
+  onRowSelect(event) {}
 
-  onRowUnselect(event) {
-    console.log('onRowUnselect', event);
-  }
+  onRowUnselect(event) {}
 
-  onToggleSelectAll({ checked }) {
-    console.log(
-      'onToggleSelectAll',
-      this.selectedRows?.length,
-      this.selectedRows
-    );
-  }
+  onToggleSelectAll({ checked }) {}
 
   handleSave(): void {
+    const markAsTouched = (control: AbstractControl) => {
+      if (control instanceof FormArray) {
+        control.controls.forEach((formGroup: FormGroup) => {
+          Object.values(formGroup.controls).forEach((control) =>
+            markAsTouched(control)
+          );
+        });
+      } else if (control instanceof FormGroup) {
+        Object.values(control.controls).forEach((control) =>
+          markAsTouched(control)
+        );
+      } else if (control.validator) {
+        control.markAsTouched();
+      }
+    };
+
+    markAsTouched(this.useForm);
+    markAsTouched(this.tableFormArray);
+
     if (this.useForm.invalid) {
-      this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
         'Invalid form: Please fix the errors.'
       );
       return;
     }
-    const data = this.invoiceService.mapInvoiceData(this.useForm.getRawValue());
-    this.updateInvoiceData(data);
+
+    const invoiceFormData = this.useForm.getRawValue() as Invoice;
+    const data = this.invoiceService.getPostInvoiceData(invoiceFormData, {
+      reservationId: this.reservationId,
+      hotelId: this.hotelId,
+      guestId: this.guestId,
+      currency: 'INR',
+    });
+
+    this.$subscription.add(
+      this.invoiceService
+        .updateInvoice(this.reservationId, data)
+        .subscribe((res) => {
+          console.log('Invoice Updated');
+        })
+    );
   }
 
   createInvoiceData(data): void {
@@ -759,17 +774,39 @@ export class InvoiceComponent implements OnInit {
     );
   }
 
-  updateInvoiceData(data): void {
-    this.$subscription.add(
-      this.invoiceService
-        .updateInvoice(this.reservationId, data)
-        .subscribe((res) => {
-          console.log('Invoice Updated');
-        })
-    );
+  onAddGST() {
+    if (this.addGST) {
+      this.removeDetails(
+        'Remove GST details',
+        'Are you sure you want to remove GST details?',
+        () => {
+          this.addGST = false;
+          this.gstValidation(false);
+        }
+      );
+    } else {
+      this.addGST = true;
+      this.gstValidation(true);
+    }
   }
 
-  removeGST() {
+  onAddPaymentDetails() {
+    if (this.addPayment) {
+      this.removeDetails(
+        'Remove Payment Details',
+        'Are you sure you want to remove payment details?',
+        () => {
+          this.addPayment = false;
+          this.paymentValidation(false);
+        }
+      );
+    } else {
+      this.addPayment = true;
+      this.paymentValidation(true);
+    }
+  }
+
+  removeDetails(heading: string, description: string, callback: () => void) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     const togglePopupCompRef = this.modalService.openDialog(
@@ -778,10 +815,19 @@ export class InvoiceComponent implements OnInit {
     );
 
     togglePopupCompRef.componentInstance.content = {
-      heading: 'Remove GST details',
-      description: ['Are you sure you want to remove GST details ?'],
+      heading: heading,
+      description: [description],
     };
+
     togglePopupCompRef.componentInstance.actions = [
+      {
+        label: 'Yes',
+        onClick: () => {
+          callback();
+          this.modalService.close();
+        },
+        variant: 'outlined',
+      },
       {
         label: 'No',
         onClick: () => {
@@ -789,91 +835,91 @@ export class InvoiceComponent implements OnInit {
         },
         variant: 'contained',
       },
-      {
-        label: 'Yes',
-        onClick: () => {
-          this.gstForm.reset();
-        }
-      }
-    ];  
-
+    ];
     togglePopupCompRef.componentInstance.onClose.subscribe(() => {
       this.modalService.close();
     });
   }
 
-  getTax() {
-    this.$subscription.add(
-      this.servicesService.getTaxList(this.hotelId).subscribe(({ records }) => {
-        records = records.filter(
-          (item) => item.category === 'service' && item.status
-        );
-        this.tax = records.map((item) => ({
-          label: `${item.taxType} ${item.taxValue}%`,
-          value: item.id,
-          taxType: item.taxType,
-          taxValue: item.taxValue,
-        }));
-      })
-    );
+  getQueryConfig(): QueryConfig {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: LibraryItem.service,
+          serviceType: 'ALL',
+          limit: 10,
+          offset: this.descriptionOffSet,
+          status: true,
+        },
+      ]),
+    };
+    return config;
   }
 
-  getServices() {
-    this.loading = true;
-    let config = '?type=SERVICE&serviceType=ALL';
+  /**
+   * Getting All Services (Description)
+   */
+  getDescriptionOptions() {
+    this.loadingDescription = true;
+
     this.servicesService
-      .getLibraryItems(this.hotelId, this.getQueryConfig())
-      .subscribe((res) => {
-        this.loading = false;
-        const servicesList = new ServiceList().deserialize(res);
-        this.serviceOptions = servicesList.allService.map((item) => ({
-          label: item.name,
-          value: item.id,
-          amount: item.amount,
-          taxes: item.taxes,
-        }));
-      });
-  }
+      .getLibraryItems(this.hotelId, {
+        params: `?&type=${LibraryItem.service}&serviceType=PAID&limit=10&offset=${this.descriptionOffSet}&status=true`,
+      })
+      .subscribe(
+        (res) => {
+          const data = new ServiceList().deserialize(res).allService;
 
-  handleGenerate() {
-    this.useForm.disable();
-    this.invoiceService
-      .updateInvoice(this.reservationId, { invoiceGenerated: true })
-      .subscribe((res) => {
-        this.isGenerated = true;
-        this.snackbarService.openSnackBarAsText(
-          'Invoice Generated Successfully',
-          '',
-          {
-            panelClass: 'success',
-          }
-        );
-      });
-  }
-
-  handleDownload() {
-    this.invoiceService.downloadPDF(this.reservationId).subscribe((res) => {
-      const fileUrl = res.file_download_url;
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', fileUrl, true);
-      xhr.setRequestHeader('Content-type', 'application/pdf');
-      xhr.responseType = 'blob';
-      xhr.onload = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          const blob = new Blob([xhr.response], { type: 'application/pdf' });
-          const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = 'invoice.pdf';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(url);
+          this.descriptionOptions = [...this.descriptionOptions, ...data];
+          this.noMoreDescription = data.length < 10;
+          this.loadingDescription = false;
+        },
+        (err) => {
+          this.loadingDescription = false;
         }
-      };
-      xhr.send();
-    });
+      );
   }
+
+  /**
+   * Load more service (pagination)
+   */
+  loadMoreDescription() {
+    this.descriptionOffSet = this.descriptionOffSet + 10;
+    this.getDescriptionOptions();
+  }
+
+  /**
+   * Search Services
+   * @param text input text
+   */
+  searchDescription(text: string) {
+    if (text) {
+      this.loadingDescription = true;
+      this.servicesService
+        .searchLibraryItem(this.hotelId, {
+          params: `?key=${text}&type=${LibraryItem.service}&serviceType=PAID`,
+        })
+        .subscribe((res) => {
+          this.loadingDescription = false;
+          const data = res && res[LibraryItem.service];
+          const serviceListData =
+            data
+              ?.filter((item) => item.active)
+              .map((item) => new Service().deserialize(item)) ?? [];
+
+          this.descriptionOptions = serviceListData;
+        });
+    }
+  }
+
+  /***
+   * Navigate to service form
+   */
+  createService() {}
+
+  /**
+   * Handle Invoice download
+   */
 
   /**
    * @function ngOnDestroy to unsubscribe subscription.
@@ -881,4 +927,23 @@ export class InvoiceComponent implements OnInit {
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
+
+  /**
+   * Getting tax list (will not be using it as values are not editable)
+   */
+  // getTax() {
+  //   this.$subscription.add(
+  //     this.servicesService.getTaxList(this.hotelId).subscribe(({ records }) => {
+  //       records = records.filter(
+  //         (item) => item.category === 'service' && item.status
+  //       );
+  //       this.tax = records.map((item) => ({
+  //         label: `${item.taxType} ${item.taxValue}%`,
+  //         value: item.id,
+  //         taxType: item.taxType,
+  //         taxValue: item.taxValue,
+  //       }));
+  //     })
+  //   );
+  // }
 }

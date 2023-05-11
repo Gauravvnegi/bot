@@ -1,4 +1,22 @@
+@import 'main';
+
 .iframe{
-    height: 85vh;
+    height: 72vh;
     width: 94vw;
 }
+  
+
+:host ::ng-deep .p-button{
+  background-color: $primary-cta !important;
+}
+
+:host ::ng-deep .p-splitbutton-defaultbutton:hover {
+  background-color: $primary-hover !important;
+}
+
+:host ::ng-deep .p-splitbutton-menubutton:hover {
+    background-color: $primary-hover !important;
+  }
+  
+
+  

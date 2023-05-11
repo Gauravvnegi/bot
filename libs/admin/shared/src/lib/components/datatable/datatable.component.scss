@@ -363,7 +363,6 @@
 }
 
 :host ::ng-deep .p-datatable {
- 
 }
 
 :host ::ng-deep td,
@@ -582,7 +581,7 @@ $table-hover-color: #f3f3f3;
   .p-datatable.p-datatable-hoverable-rows
   .p-datatable-tbody
   > tr:not(.p-highlight):hover {
-  background: #f3f3f3;
+  background: $table-hover-color;
 }
 
 /*** main table wrapper (p-datatable) **/
@@ -718,7 +717,18 @@ $table-hover-color: #f3f3f3;
           overflow: visible;
           text-overflow: unset;
           white-space: normal;
+          width: fit-content;
+          background: $table-hover-color;
+          position: relative;
         }
+      }
+
+      .url {
+        font-size: 14px;
+        letter-spacing: 0.84px;
+        color: $subtitle;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
 
       .secondary-text {

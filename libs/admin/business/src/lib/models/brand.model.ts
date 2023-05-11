@@ -1,21 +1,23 @@
-import { IBrandFormData } from "../types/brand.type";
+import { IBrandFormData , SocialPlaforms} from "../types/brand.type";
 
 export class BrandFormData {
          brand: {
            name: string;
            description: string;
+           status: boolean;
          } = {
            name: '',
            description: '',
+            status: true,
          };
          siteId: string;
-         status: boolean;
          socialPlatforms;
-         deserialize(input: IBrandFormData , siteId: string) {
+         deserialize(input: IBrandFormData, siteId: string) {
            this.brand.name = input.name;
            this.brand.description = input.description;
-           this.status = input.active;
-           this.socialPlatforms = new socialPlatforms().deserialize(input).socialPlatforms;
+          //  this.brand.socialPlatforms = new socialPlatforms().deserialize(
+          //    input.socialPlatforms
+          //  )
            this.siteId = siteId;
 
            return this;
@@ -24,24 +26,24 @@ export class BrandFormData {
         
        export class socialPlatforms{
 
-        socialPlatforms = new Array<socialPlatform>();
-        deserialize(input: IBrandFormData) {
-        this.socialPlatforms.push(new socialPlatform().deserialize(input));
+         deserialize(input) {
+          
+          //  this.socialPlatforms = input.map((item) => { 
+          //    new socialPlatform().deserialize(item);
+          //  });
         return this;
         }
 
        }
        export class socialPlatform{
-          facebook: string;
-          twitter: string;
-          instagram: string;
-          youtube: string;
-          deserialize(input: IBrandFormData) {
-            this.facebook = input.facebook;
-            this.twitter = input.twitter;
-            this.instagram = input.instagram;
-            this.youtube = input.youtube;
-            return this;
-          }
+        name: string;
+        imageUrl: string;
+        redirectUrl: string;
+        deserialize(input) {
+          this.name = 'facebook';
+        this.imageUrl = input.facebook;
+        this.redirectUrl = input.facebook;
+        return this;
+        }
        }
 

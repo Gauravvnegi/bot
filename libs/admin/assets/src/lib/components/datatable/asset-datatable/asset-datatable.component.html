@@ -98,14 +98,14 @@
       </td>
 
       <td>
-        <div class="primary-text">{{ rowData.description }}</div>
+        <div class="primary-text" [innerHTML]="rowData.description"></div>
       </td>
       <td>
         <div class="primary-text">{{ rowData.type }}</div>
       </td>
       <td>
         <div class="cell-content">
-          <div class="primary-text hide-text-overflow">{{ rowData.url }}</div>
+          <div class="url">{{ rowData.url }}</div>
           <div (click)="onCheckboxClicked($event)">
             <img
               class="float-right"

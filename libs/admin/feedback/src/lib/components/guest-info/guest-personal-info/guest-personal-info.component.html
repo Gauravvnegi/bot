@@ -24,12 +24,16 @@
   <div class="contact-detials">
     {{ 'guestData.contact' | translate }}
   </div>
+  
   <div class="label">
     {{ 'guestData.phone' | translate }}
   </div>
+ 
+  <a href="tel:{{data?.phoneNumber}}">
   <div class="label-text">
     {{ data.phoneNumber }}
   </div>
+   </a>
   <div class="label">
     {{ 'guestData.email' | translate }}
   </div>

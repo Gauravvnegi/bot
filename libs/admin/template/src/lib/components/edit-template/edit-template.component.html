@@ -16,6 +16,7 @@
     class="half-width"
     controlName="name"
     label="Name"
+    maxLength="60"
   ></hospitality-bot-input>
   <hospitality-bot-select
     class="half-width"
@@ -23,11 +24,16 @@
     controlName="topicId"
     [options]="topicList"
   ></hospitality-bot-select>
-  <hospitality-bot-input
-    class="full-width"
-    label="Description"
-    controlName="description"
-  ></hospitality-bot-input>
+  <div class="des-template">
+    <div class="des-template__label">Description</div>
+    <div class="des-template__input">
+      <hospitality-bot-template-editor
+        [parentFG]="templateForm"
+        [name]="'description'"
+        [isSimpleEditor]="true"
+      ></hospitality-bot-template-editor>
+    </div>
+  </div>
 
   <ng-container *ngIf="htmlTemplate?.value; else createContent">
     <div class="full-width">

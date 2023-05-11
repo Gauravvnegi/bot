@@ -1,0 +1,28 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+}
+
+.social-media {
+  display: flex;
+  align-items: center;
+  gap: 2%;
+}
+
+.img {
+  flex-basis: 18%;
+}
+
+.input {
+  flex-basis: 73%;
+}
+
+.svg {
+  cursor: pointer;
+}
+
+img {
+  width: 37px;
+  height: 37px;
+}

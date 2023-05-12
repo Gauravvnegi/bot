@@ -167,7 +167,7 @@ export class InvoiceComponent implements OnInit {
       currency: ['INR'],
       refundAmount: [0],
 
-      cashierName: [`${firstName} ${lastName}`, Validators.required],
+      cashierName: [{ value: `${firstName} ${lastName}`, disabled: true }, Validators.required],
       paymentMethod: ['', Validators.required],
       receivedPayment: ['', Validators.required],
       remarks: ['', Validators.required],

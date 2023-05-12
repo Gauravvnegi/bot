@@ -68,7 +68,6 @@ export class InvoiceComponent implements OnInit {
   readonly addDiscountMenu = addDiscountMenu;
   readonly editDiscountMenu = editDiscountMenu;
 
-  loading = false;
 
   tableLength = 0;
   tax: Option[] = [];
@@ -721,6 +720,7 @@ export class InvoiceComponent implements OnInit {
   onToggleSelectAll({ checked }) {}
 
   handleSave(): void {
+    if(!this.addGST) this.gstValidation(false);
     const markAsTouched = (control: AbstractControl) => {
       if (control instanceof FormArray) {
         control.controls.forEach((formGroup: FormGroup) => {

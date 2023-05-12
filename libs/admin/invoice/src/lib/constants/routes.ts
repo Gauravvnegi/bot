@@ -7,7 +7,7 @@ export const navRoute = {
   editReservation: { label: 'Edit Reservation', link: './' },
   invoice: { label: 'Invoice', link: './' },
   createInvoice: { label: 'Create Invoice', link: './' },
-  previewInvoice: { label: 'Preview Invoice', link: './invoice/create-invoice/:id'},
+  previewInvoice: { label: 'Preview Invoice', link: '././'},
   paymentHistory: { label: 'Payment History', link: './'},
 };
 

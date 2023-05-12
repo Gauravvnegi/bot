@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { DefaultAmenityConfigI } from 'libs/web-user/shared/src/lib/data-models/defaultAmenityConfig.model';
@@ -6,6 +6,7 @@ import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/def
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'hospitality-bot-default-amenity',
@@ -20,11 +21,14 @@ export class DefaultAmenityComponent implements OnInit {
 
   defaultForm: FormGroup;
   defaultAmenityConfig: DefaultAmenityConfigI;
+  @Output() onSave = new EventEmitter<string>();
+  @Output() onClose = new EventEmitter();
 
   constructor(
     protected _fb: FormBuilder,
     protected _paidService: PaidService,
-    protected _defaultService: DefaultAmenityService
+    protected _defaultService: DefaultAmenityService,
+    protected _snackBarService: SnackBarService
   ) {
     this.initDefaultForm();
   }
@@ -75,5 +79,20 @@ export class DefaultAmenityComponent implements OnInit {
     return (
       this.subPackageForm && (this.subPackageForm.get('metaData') as FormGroup)
     );
+  }
+
+  handleSave() {
+    if (this.subPackageForm.invalid) {
+      this.subPackageForm.markAllAsTouched();
+      this._snackBarService.openSnackBarAsText(
+        'Please fill the required values'
+      );
+      return;
+    }
+    this.onSave.emit(this.uniqueData.id);
+  }
+
+  handleClose() {
+    this.onClose.emit();
   }
 }

@@ -155,7 +155,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
       this.packageRendererComponentRefObj.instance.onPackageUpdate.subscribe(
         (response) => {
           this.packageRendererComponentRefObj.destroy();
-          this.openPackage(response.data.packageCode);
+          this.openPackage(response.data?.packageCode);
         }
       )
     );

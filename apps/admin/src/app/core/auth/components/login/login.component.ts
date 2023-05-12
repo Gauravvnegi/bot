@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Regex, routes, UserService } from '@hospitality-bot/admin/shared';
+import { Regex, UserService } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { authConstants } from '../../constants/auth';
 import { AuthService } from '../../services/auth.service';
@@ -55,25 +55,11 @@ export class LoginComponent implements OnInit {
       platformAccessToken: this.platformAccessToken,
     };
 
-    this._authService.verifyPlatformAccessToken(data).subscribe(
-      (response) => {
-        this._userService.setLoggedInUserId(response?.id);
-        if (this.platformReferer == 'CREATE_WITH') {
-          this._router.navigate(['/pages/create-with']);
-        }
-      },
-      ({ error }) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
+    this._authService.verifyPlatformAccessToken(data).subscribe((response) => {
+      if (this.platformReferer == 'CREATE_WITH') {
+        this._router.navigate(['/pages/create-with']);
       }
-    );
+    });
   }
 
   /**
@@ -106,20 +92,16 @@ export class LoginComponent implements OnInit {
     data.password = data.password?.trim();
     this._authService.login(data).subscribe(
       (response) => {
-        this._userService.setLoggedInUserId(response?.id);
-        this._router.navigate([`/pages`]);
+        const hasSites = !!response.sites?.length;
+        const hasBrands = response.hotelAccess?.brands?.length;
+        if (hasSites || hasBrands) {
+          this._router.navigate([`/pages`]);
+        } else {
+          this._router.navigate([`/dashboard`]);
+        }
       },
       ({ error }) => {
         this.isSigningIn = false;
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
       }
     );
   }

@@ -1,76 +1,20 @@
 @import 'main';
 
 .stat-val-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  @include flex-col-all-Center;
 }
 .stat-val-wrapper {
-  display: flex;
-  align-items: center;
-}
-.info-icon {
-  position: relative;
-  img {
-    margin: 3px 5px 0;
-    width: 14px;
-    height: 100%;
-  }
-  .tooltip {
-    position: absolute;
-    font: normal normal normal 12px/16px Roboto;
-    background-color: $white;
-    min-width: 160px;
-    border: 1px solid $border;
-    padding: 10px;
-    top: 120%;
-    left: -200%;
-    color: $tooltip;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px 0px $border;
-    display: none;
-    .arrow {
-      position: absolute;
-      top: -10px;
-      width: 0;
-      height: 0;
-      border-left: 7px solid transparent;
-      border-right: 7px solid transparent;
-      border-bottom: 10px solid $border;
-      left: 40%;
-      transform: translate(-50%);
-      &::before {
-        content: '';
-        top: 1px;
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-bottom: 9px solid $white;
-        left: -6px;
-        z-index: 3;
-        position: absolute;
-      }
-    }
-  }
-
-  &:hover {
-    .tooltip {
-      display: block;
-    }
-  }
+  @include flex-item-center;
 }
 .stat-value {
-  // height: 46px;
   font: normal normal bold 35px/46px Roboto;
   letter-spacing: 0px;
-  color: $dark-blue;
+  color: $secondary;
   opacity: 1;
   margin: 0 10px;
   @media (max-width: $tablet) {
-    font-size: $tabfont25;
-    @include margin-left(0);
+    font-size: 25px;
+    margin-left: 0;
   }
 }
 
@@ -79,26 +23,24 @@
   text-align: center;
   font: normal normal bold 12px/16px Roboto;
   letter-spacing: 0.72px;
-  color: $quote-color;
+  color: $subtitle;
   opacity: 1;
 }
 .stat-value-comparisonPercent {
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0px;
-  color: $comparison;
+  color: $posCompare;
 }
 .stat-value-comparisonPercent-day {
   font: normal normal normal 10px/13px Roboto;
   letter-spacing: 0px;
-  color: $c-gray-77;
+  color: $grayLight;
   opacity: 1;
 }
 
 .progress-info {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
 }
 
 .progress-bar-height {
@@ -116,13 +58,11 @@
 }
 
 .progress-info-labels {
-  //   letter-spacing: 0.72px;
-  display: flex;
-  align-items: center;
-  color: $dark-blue;
+  @include flex-item-center;
+  color: $secondary;
   .label {
     letter-spacing: 0.72px;
-    color: $quote-color;
+    color: $subtitle;
     margin-right: 5px;
     font-size: 12px;
     b {
@@ -135,9 +75,9 @@
 }
 
 .comparison-negative {
-  color: $comparison-negative;
+  color: $darkRed;
 }
 
 .comparison-positive {
-  color: $comparison-positive;
+  color: $posCompare;
 }

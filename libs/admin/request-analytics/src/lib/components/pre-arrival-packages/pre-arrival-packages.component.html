@@ -1,12 +1,12 @@
-<div class="pap-wraper">
-  <div class="pap-wraper-header">
-    <div class="pap-wraper-header-title">
+<div class="pap-wrapper">
+  <div class="pap-wrapper-header">
+    <div class="pap-wrapper-header-title">
       <p>Pre-Arrival Packages</p>
       <div class="info-icon">
         <img src="assets/svg/info.svg" alt="info-icon" />
       </div>
     </div>
-    <div class="pap-wraper-header-chart-type" [formGroup]="packageFG">
+    <div class="pap-wrapper-header-chart-type" [formGroup]="packageFG">
       <label
         class="labl"
         *ngFor="let option of chartTypes"
@@ -24,7 +24,7 @@
       </label>
     </div>
   </div>
-  <div class="pap-wraper-filter">
+  <div class="pap-wrapper-filter">
     <hospitality-bot-tab-group
       [listItems]="tabFilterItems"
       [selectedIndex]="tabFilterIdx"
@@ -45,22 +45,24 @@
     >
     </canvas>
     <div class="stat-vals-container">
-      <div
-        class="stat-val"
-        [class.text-decoration]="textCut"
-        *ngFor="let key of stats; let i = index"
-        (click)="legendOnClick(i, $event)"
-      >
-        <div class="label">
-          <input class="legends" type="checkbox" />
-          <img
-            [src]="getFilteredConfig(graphData[key].label)?.icon"
-            [alt]="graphData[key].label"
-          />
-          <span>{{ graphData[key].label }}</span>
+      <ng-container *ngFor="let key of stats; let i = index">
+        <div
+          class="stat-val"
+          *ngIf="graphData[key].label"
+          [class.text-decoration]="textCut"
+          (click)="legendOnClick(i, $event)"
+        >
+          <div class="label">
+            <input class="legends" type="checkbox" />
+            <img
+              [src]="getFilteredConfig(graphData[key].label)?.icon"
+              [alt]="graphData[key].label"
+            />
+            <span>{{ graphData[key].label }}</span>
+          </div>
+          <div class="value">{{ graphData[key].totalCount }}</div>
         </div>
-        <div class="value">{{ graphData[key].totalCount }}</div>
-      </div>
+      </ng-container>
     </div>
   </div>
   <div class="days-label">In 30 Days</div>

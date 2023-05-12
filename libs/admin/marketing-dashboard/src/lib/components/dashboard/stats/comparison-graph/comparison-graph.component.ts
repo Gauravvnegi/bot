@@ -13,6 +13,7 @@ export class ComparisonGraphComponent {
   _charts: typeof dashboardConfig.chart;
   @Input() title: string;
   @Input() legendData: LegendData[];
+  @Input() loading = false;
   @Input('charts') set charts(chart: Partial<typeof dashboardConfig.chart>) {
     this._charts = { ...dashboardConfig.chart, ...chart };
   }

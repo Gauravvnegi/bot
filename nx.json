@@ -155,6 +155,39 @@
     },
     "admin-finance": {
       "tags": []
+    },
+    "admin-room": {
+      "tags": []
+    },
+    "admin-sentimental-analysis": {
+      "tags": []
+    },
+    "admin-services": {
+      "tags": []
+    },
+    "admin-manage-sites": {
+      "tags": []
+    },
+    "admin-settings": {
+      "tags": []
+    },
+    "admin-offers": {
+      "tags": []
+    },
+    "admin-tax": {
+      "tags": []
+    },
+    "admin-manage-reservation": {
+      "tags": []
+    },
+    "admin-invoice": {
+      "tags": []
+    },
+    "admin-booking-source": {
+      "tags": []
+    },
+    "admin-business": {
+      "tags": []
     }
   }
 }

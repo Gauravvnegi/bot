@@ -7,8 +7,7 @@
     justify-content: space-around;
   }
   @media screen and (max-width: $L) {
-    justify-content: space-between;
-    align-items: center;
+    @include flex-space-between-cen-Algn;
     overflow: hidden;
   }
   &--container {
@@ -28,50 +27,45 @@
     }
   }
   .chartDetailsWrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    @include flex-col-space-between;
     height: 124px;
     .currentChart {
-      display: flex;
-      align-items: center;
+      @include flex-item-center;
       .currentChartHeading {
-        font: normal normal bold 38px/46px Roboto;
         text-align: center;
         font: normal normal bold 35px/46px Roboto;
         letter-spacing: 2.1px;
-        color: $dark-blue;
+        color: $secondary;
         margin: 5px 10px 5px 0;
         @media (max-width: $tablet) {
-          font-size: $tabfont25;
+          font-size: 25px;
         }
       }
       .chartPercent {
         font: normal normal normal 12px/16px Roboto;
         letter-spacing: 0px;
-        color: $completed;
+        color: $posCompare;
       }
       .chartDays {
         font: normal normal normal 10px/13px Roboto;
         letter-spacing: 0px;
-        color: $light-grey2;
+        color: $grayLight;
         opacity: 1;
       }
     }
     .totalGuestsHeading {
       font: normal normal bold 12px/16px Roboto;
       letter-spacing: 0.72px;
-      color: $quote-color;
+      color: $subtitle;
       opacity: 1;
     }
     .chartsubDetailsWrapper {
       display: flex;
       .chartsubDetail {
-        display: flex;
-        align-items: center;
+        @include flex-item-center;
         margin-right: 25px;
         @media (max-width: $tablet) {
-          @include margin-right(10px);
+          margin-right: 10px;
         }
         &__logo {
           margin-right: 8px;
@@ -87,12 +81,12 @@
       .chartDetailHeading {
         font: normal normal normal 12px/16px Roboto;
         letter-spacing: 0.72px;
-        color: $quote-color;
+        color: $subtitle;
       }
       .chartDetailText {
         font: normal normal bold 12px/16px Roboto;
         letter-spacing: 0.72px;
-        color: $dark-blue;
+        color: $secondary;
         margin-left: 5px;
       }
       .chartDetailRightBlock {
@@ -103,8 +97,7 @@
         opacity: 1;
       }
       .chartsubRightDetail {
-        display: flex;
-        align-items: center;
+        @include flex-item-center;
       }
     }
   }
@@ -112,16 +105,12 @@
 
 .stat-val-container {
   height: 180px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  @include flex-col-all-Center;
 }
 
 .progress-info-labels {
   letter-spacing: 0.72px;
-  display: flex;
-  align-items: baseline;
+  @include flex-base-algn;
   font-size: 12px;
   .stat-image {
     height: 23px;
@@ -130,8 +119,7 @@
 }
 
 .progress-info-labels-container {
-  display: flex;
-  justify-content: space-around;
+  @include flex-space-around;
 }
 
 // ===================Semi Donut Chart model-1========================
@@ -146,9 +134,7 @@
   font-size: 22px;
   overflow: hidden;
   color: var(--fill);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  @include flex-justify-center-end-algn();
   box-sizing: border-box;
   &:after {
     content: '';
@@ -185,9 +171,7 @@
 }
 
 .progress-detail-contaner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include flex-col-center-algn;
 }
 
 .stat-value {
@@ -204,71 +188,14 @@
   text-align: center;
   font: normal normal bold 12px/16px Roboto;
   letter-spacing: 0.72px;
-  color: $quote-color;
+  color: $subtitle;
   opacity: 1;
-}
-
-.info-icon {
-  position: relative;
-  cursor: pointer;
-
-  img {
-    margin: 3px 5px 0;
-    width: 14px;
-    height: 100%;
-  }
-  .tooltip {
-    position: absolute;
-    font: normal normal normal 12px/16px Roboto;
-    background-color: $white;
-    min-width: 232px;
-    border: 1px solid $border;
-    padding: 10px;
-    top: 120%;
-    left: -337%;
-    color: $tooltip;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px 0px $border;
-    display: none;
-    z-index: 99;
-
-    .arrow {
-      position: absolute;
-      top: -10px;
-      width: 0;
-      height: 0;
-      border-left: 7px solid transparent;
-      border-right: 7px solid transparent;
-      border-bottom: 10px solid $border;
-      left: 40%;
-      transform: translate(-50%);
-
-      &::before {
-        content: '';
-        top: 1px;
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-bottom: 9px solid $white;
-        left: -6px;
-        z-index: 3;
-        position: absolute;
-      }
-    }
-  }
-
-  &:hover {
-    .tooltip {
-      display: block;
-    }
-  }
 }
 
 :host ::ng-deep .mat-tab-label {
   width: 50%;
 
-  min-width: $half;
+  min-width: 50%;
   padding: 0 12px;
 }
 
@@ -281,24 +208,32 @@
 }
 
 .comparison-negative {
-  color: $comparison-negative;
+  color: $darkRed;
 }
 
 .comparison-positive {
-  color: $comparison-positive;
+  color: $posCompare;
 }
 
 @media screen and (max-width: $L) {
   :host::ng-deep {
     .mat-tab-label {
-      min-width: $half;
+      min-width: 50%;
       padding: 0 12px;
     }
     .mat-tab-label-active {
-      font-size: $font18;
+      font-size: 18px;
     }
     .mat-tab-body-content {
       overflow-x: hidden;
     }
+  }
+}
+
+.skeletonFlx {
+  @include flex-space-between;
+  .stats {
+    width: 50%;
+    @include flex-col-space-evenly;
   }
 }

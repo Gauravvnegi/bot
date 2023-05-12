@@ -1,8 +1,8 @@
 <div class="guest-info">
-  <mat-icon (click)="closeGuestInfo()" class="material-icons" matSuffix
-    >keyboard_backspace
-  </mat-icon>
   <div>Guest Info</div>
+  <div (click)="closeGuestInfo()" class="cross">
+    <img src="assets/svg/back.svg" alt="back" />
+  </div>
 </div>
 <div
   class="guestInfoWrapper"

@@ -1,24 +1,19 @@
 @import 'main';
 
 .container {
-  display: flex;
-  flex-direction: column;
+  @include flex-col;
   height: fit-content;
   border-radius: 5px;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 6px 0 $boxShadow;
   background-color: $white;
   .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @include flex-space-between-cen-Algn;
     margin: 11px 36px 0 27px;
     &__back {
-      display: flex;
-      align-items: center;
+      @include flex-item-center;
       .label {
-        letter-spacing: 0.96px;
+        @include normal-text;
         font-weight: $bold;
-        font-size: $font16;
       }
       .material-icons {
         &:hover {
@@ -27,9 +22,8 @@
       }
     }
     &__preDesigned {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      @include flex-space-between-cen-Algn;
+
       .head {
         padding-top: 8px;
         padding-right: 23px;
@@ -41,25 +35,17 @@
         width: 296px;
       }
       .topic {
-        font-size: 16px;
-        font-family: Roboto;
         padding-right: 12px;
+        @include normal-text;
         font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.96px;
-        color: $dark-blue;
+        color: $secondary;
       }
     }
   }
 
   .topic-cards {
     padding-left: 5px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+    @include flex-wrap-even-space;
 
     .card {
       cursor: pointer;
@@ -73,26 +59,18 @@
   }
 
   .show-button {
-    display: flex;
-    justify-content: center;
+    @include flex-justify-center;
     .button {
-      align-self: center;
+      @include flex-all-center;
       width: 250px;
       height: 46px;
       margin: 56px 37px 32px 38px;
       border-radius: 23px;
-      box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+      box-shadow: $button-shadow;
       border: solid 1px $button-blue;
-      font-family: Roboto;
-      font-size: 16px;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
+      @include normal-text;
       color: $button-blue;
       background-color: $white;
-      justify-content: center;
     }
   }
 }
@@ -107,7 +85,7 @@
   opacity: 0.2;
   font-size: 16px;
   border-radius: 4px;
-  border: solid 1.7px $c-gray-17;
+  border: solid 1.7px #262626;
   background-color: $white;
   .mat-form-field-label {
     border-bottom: none;
@@ -140,24 +118,17 @@
   p {
     height: 33px;
     margin: 44px 58px 31px 0;
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 25px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 1.5px;
-    text-align: left;
-    color: $dark-blue;
+    color: $secondary;
   }
 }
 
 .topic-cards {
   padding-left: 5px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
+  @include flex-wrap-even-space;
 
   .card {
     cursor: pointer;
@@ -171,31 +142,23 @@
 }
 
 .show-button {
-  display: flex;
-  justify-content: center;
+  @include flex-justify-center;
   .button {
-    align-self: center;
+    @include flex-all-center;
     width: 250px;
     height: 46px;
     margin: 56px 37px 32px 38px;
     border-radius: 23px;
-    box-shadow: 0 3px 6px 0 rgba(75, 86, 192, 0.16);
+    box-shadow: $button-shadow;
     border: solid 1px $button-blue;
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
+    @include normal-text;
     color: $button-blue;
     background-color: $white;
-    justify-content: center;
   }
 }
 
 .line {
-  border: 1px solid $primary-gray;
+  border: 1px solid $grayMedium;
   width: 100%;
   opacity: 0.3;
 }
@@ -205,35 +168,22 @@
 }
 
 :host ::ng-deep .template-name {
-  font-family: Roboto !important;
-  font-size: 16px !important;
+  @include normal-text;
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0.96px !important;
-  text-align: left;
-  color: $dark-blue !important;
+  color: $secondary !important;
   .template-option {
-    // display: none !important;
     border: none !important;
   }
 }
 .template-name {
   width: 210px;
   height: 22px;
-  font-size: 16px;
-  font-family: Roboto !important;
+  @include normal-text;
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0.96px !important;
-  text-align: left;
-  color: $dark-blue !important;
+  color: $secondary !important;
 }
 .line {
-  border: 1px solid $primary-gray;
+  border: 1px solid $grayMedium;
   opacity: 0.3;
   margin: 0 2rem;
   width: 94%;

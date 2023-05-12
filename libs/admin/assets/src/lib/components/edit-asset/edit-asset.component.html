@@ -1,153 +1,64 @@
-<div class="container">
-  <div class="create_Assets">
-    <mat-icon (click)="redirectToAssets()" class="material-icons back" matSuffix
-      >keyboard_backspace
-    </mat-icon>
+<div class="wrapper">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+  </hospitality-bot-navigation-header>
 
-    <p>
-      <ng-container *ngIf="assetId; else addAsset">
-        {{ 'assetForm.editAsset' | translate }}
-      </ng-container>
-      <ng-template #addAsset>
-        {{ 'assetForm.createAsset' | translate }}
-      </ng-template>
-    </p>
-  </div>
+  <div class="form-block" [formGroup]="assetForm" *ngIf="assetForm">
+    <div class="half-width"></div>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="status"
+      label="Status:"
+    ></hospitality-bot-toggle-switch>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      label="Name"
+      maxLength="60"
+    ></hospitality-bot-input>
 
-  <div class="wrapper-form" [formGroup]="assetForm" *ngIf="assetForm">
-    <div class="fields">
-      <div class="field">
-        <mat-label class="mat-label">{{
-          'formFieldLabels.name' | translate
-        }}</mat-label>
-        <mat-form-field>
-          <input matInput formControlName="name" placeholder="Random Image" />
-          <mat-error
-            *ngIf="
-              assetForm.get('name').touched &&
-              assetForm.get('name').hasError('required')
-            "
-          >
-            {{ 'validationMessage.name' | translate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
+    <hospitality-bot-select
+      class="half-width"
+      label="Type"
+      controlName="type"
+      [options]="fileType"
+    ></hospitality-bot-select>
 
-      <div class="field">
-        <mat-label class="mat-label">{{
-          'formFieldLabels.type' | translate
-        }}</mat-label>
-        <mat-form-field>
-          <mat-select
-            formControlName="type"
-            placeholder="Select"
-            (selectionChange)="handleAssetTypeChanged($event)"
-          >
-            <mat-option value="Image">{{
-              'type.image' | translate
-            }}</mat-option>
-            <mat-option value="Video">{{
-              'type.video' | translate
-            }}</mat-option>
-          </mat-select>
-          <mat-error
-            *ngIf="
-              assetForm.get('type').touched &&
-              assetForm.get('type').hasError('required')
-            "
-          >
-            {{ 'validationMessage.type' | translate }}
-          </mat-error>
-        </mat-form-field>
+    <ng-container
+      *ngIf="assetType === 'Image'; then imageControl; else videoControl"
+    ></ng-container>
+    <ng-template #imageControl>
+      <hospitality-bot-custom-file-upload
+        formControlName="url"
+        [hotelId]="hotelId"
+        [baseType]="fileUploadType.image"
+        [path]="pathToUploadFile"
+      ></hospitality-bot-custom-file-upload>
+    </ng-template>
+    <ng-template #videoControl
+      ><hospitality-bot-custom-file-upload
+        [parentFG]="assetForm"
+        [hotelId]="hotelId"
+        [baseType]="fileUploadType.video"
+        [path]="pathToUploadFile"
+        [description]="'Mandatory to add at least 1 video'"
+      ></hospitality-bot-custom-file-upload>
+    </ng-template>
+
+    <div class="des-template">
+      <div class="des-template__label">Description</div>
+      <div class="des-template__input">
+        <hospitality-bot-template-editor
+          [parentFG]="assetForm"
+          [name]="'description'"
+          [isSimpleEditor]="true"
+        ></hospitality-bot-template-editor>
       </div>
     </div>
 
-    <div class="full-width">
-      <mat-label class="mat-label">{{
-        'formFieldLabels.description' | translate
-      }}</mat-label>
-      <mat-form-field class="description">
-        <input
-          matInput
-          formControlName="description"
-          placeholder="Write your description here"
-        />
-        <mat-error
-          *ngIf="
-            assetForm.get('description').touched &&
-            assetForm.get('description').hasError('required')
-          "
-        >
-          {{ 'validationMessage.description' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div class="image_container">
-      <div class="fields margin-adjust">
-        <div class="upload_image">
-          <mat-label class="mat-label"
-            ><ng-container
-              *ngIf="assetType === 'Image'; then imageLabel; else videoLabel"
-            ></ng-container>
-            <ng-template #imageLabel
-              >{{ 'type.image' | translate }}:</ng-template
-            >
-            <ng-template #videoLabel
-              >{{ 'type.video' | translate }}:</ng-template
-            >
-          </mat-label>
-        </div>
-        <div class="image-button">
-          <div class="image">
-            <ng-container
-              *ngIf="
-                assetType === 'Image';
-                then imageControl;
-                else videoControl
-              "
-            ></ng-container>
-            <ng-template #imageControl
-              ><hospitality-bot-upload-file
-                [fileUploadData]="fileUploadData"
-                [url]="assetImageUrl"
-                [isDisable]="false"
-                (fileData)="uploadFile($event)"
-              >
-              </hospitality-bot-upload-file
-            ></ng-template>
-            <ng-template #videoControl
-              ><hospitality-bot-upload-video
-                [fileUploadData]="fileUploadData"
-                [url]="thumbnailUrl"
-                [isDisable]="false"
-                (fileData)="uploadFile($event)"
-              >
-              </hospitality-bot-upload-video>
-            </ng-template>
-          </div>
-          <div class="message">{{ 'uploadMessage' | translate }}</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="toggle_wrapper">
-      <mat-label class="mat-label">{{
-        'formFieldLabels.active' | translate
-      }}</mat-label>
-      <div class="status status--left">{{ 'active.disable' | translate }}</div>
-      <mat-slide-toggle formControlName="status"></mat-slide-toggle>
-      <div class="status status--right">{{ 'active.enable' | translate }}</div>
-    </div>
-  </div>
-
-  <div class="button">
-    <button
-      class="saveButton"
-      (click)="handleSubmit()"
-      [ngClass]="{ active: !isSavingasset, disabled: isSavingasset }"
-    >
-      <i *ngIf="isSavingasset" class="fa fa-spinner fa-spin"></i>
-      {{ isSavingasset ? 'Saving' : 'Save' }}
-    </button>
+    <hospitality-bot-button
+      class="create-btn"
+      [label]="isSavingasset ? 'Saving' : 'Save'"
+      (onClick)="handleSubmit()"
+    ></hospitality-bot-button>
   </div>
 </div>

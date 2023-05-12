@@ -1,0 +1,60 @@
+@import 'main';
+
+.main {
+  margin-top: 27px;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 20px;
+  column-gap: 30px;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+}
+
+.heading {
+  padding-top: 20px;
+  font-size: 26px;
+  font-weight: 600;
+  font-family: Poppins;
+  letter-spacing: 1.56px;
+  color: $secondary2;
+}
+
+.setting {
+  padding: 25px;
+  width: 264px;
+  font-family: Poppins;
+  color: $secondary2;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    border-radius: 8px;
+    background-color: $blackPrime-base;
+  }
+
+  &__disabled {
+    opacity: 0.6;
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
+
+  &__header {
+    display: flex;
+    gap: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.96px;
+  }
+
+  &__description {
+    display: flex;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.84px;
+    opacity: 0.5;
+  }
+}

@@ -7,19 +7,19 @@
 
 .tableHead {
   width: 5%;
-  background-color: $c-gray-93 !important;
-  @include align-checkbox();
+  background-color: $accordian-header !important;
+  @include align-checkbox;
 }
 
 .icon-wrapper {
-  @include flex-space-between();
+  @include flex-space-between;
   flex-wrap: wrap;
 
   position: relative;
   .icon {
     width: 32%;
     margin: 6% 0.5%;
-    @include flex-item-center();
+    @include flex-item-center;
     flex-direction: column;
 
     .table-body-journey-icon {
@@ -34,10 +34,10 @@
       }
     }
     .label {
-      @include font-size(6);
+      font-size: 6px;
       margin-top: 3px;
       @media screen and (max-width: 800px) {
-        @include font-size(3);
+        font-size: 3px;
       }
     }
   }
@@ -48,7 +48,7 @@
     position: absolute;
     height: 2px;
     width: 72%;
-    background-color: $alice-blue;
+    background-color: $whiteDeep;
     right: 17px;
     @media screen and (max-width: 800px) {
       width: 62%;
@@ -69,19 +69,19 @@
 }
 
 :host ::ng-deep .arrival-time {
-  @include font-size(12);
-  color: $c-gray-71;
-  @include margin-top(2);
+  font-size: 12px;
+  color: $tabStats;
+  margin-top: 2px;
   @media screen and (max-width: 800px) {
-    @include font-size(8);
+    font-size: 8px;
   }
 }
 
 :host ::ng-deep .arrival-date {
-  @include font-size(12);
-  color: $dark-grey;
+  font-size: 12px;
+  color: $subtitle;
   @media screen and (max-width: 800px) {
-    @include font-size(8);
+    font-size: 8px;
   }
 }
 
@@ -90,20 +90,20 @@
 }
 
 :host ::ng-deep .booking-number {
-  color: $dark-grey;
-  @include font-size(12);
+  color: $subtitle;
+  font-size: 12px;
   text-align: center;
   @media screen and (max-width: 800px) {
-    @include font-size(8);
+    font-size: 8px;
   }
 }
 
 :host ::ng-deep .package {
-  color: $dark-grey;
-  @include font-size(12);
+  color: $subtitle;
+  font-size: 12px;
   position: relative;
   @media screen and (max-width: 800px) {
-    @include font-size(10);
+    font-size: 10px;
   }
   span {
     @media screen and (max-width: 540px) {
@@ -116,20 +116,20 @@
 }
 
 :host ::ng-deep .amount {
-  @include font-size(12);
+  font-size: 12px;
   @media screen and (max-width: 800px) {
-    @include font-size(8);
+    font-size: 8px;
   }
 }
 
 :host ::ng-deep .tabel-room-no {
   padding: 7px;
-  @include font-size(12);
+  font-size: 12px;
   background-color: rgb(72, 192, 72, 0.2);
   border-radius: 25px;
   text-align: center;
   @media screen and (max-width: 800px) {
-    @include font-size(10);
+    font-size: 10px;
     padding: 5px;
   }
 }
@@ -153,12 +153,12 @@
     position: absolute;
     width: 100%;
     top: 50%;
-    @include font-size(12);
-    color: $dark-grey;
+    font-size: 12px;
+    color: $subtitle;
     background-color: $white;
     left: 0%;
     padding: 7px;
-    box-shadow: 0px 0px 5px 0px $c-gray-93;
+    box-shadow: 0px 0px 5px 0px $whiteDeep;
     border-radius: 5px;
     display: none;
   }
@@ -173,7 +173,7 @@
     text-align: center;
     min-width: 23px;
     border-radius: 50%;
-    @include font-size(12);
+    font-size: 12px;
   }
   @media screen and (max-width: 1050px) {
     margin: 0;
@@ -182,7 +182,7 @@
       height: 12px;
     }
     .number {
-      @include font-size(10);
+      font-size: 10px;
       padding: 2px 0;
       min-width: 15px;
     }
@@ -194,21 +194,26 @@
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
 }
 
 :host ::ng-deep .data-table-row {
   &:hover {
     cursor: pointer;
-    background: $table-hover-background !important;
+    background: $hoverBG !important;
   }
 }
 
 :host ::ng-deep .heading {
-  color: $dark-blue !important;
+  color: $secondary !important;
   font-size: 16px;
   font-weight: bold;
 }
 :host ::ng-deep .table-header-text {
-  color: $dark-blue !important;
+  color: $secondary !important;
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include tableCellPadding(0.3em);
 }

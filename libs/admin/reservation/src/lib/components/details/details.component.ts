@@ -12,34 +12,26 @@ import {
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
+import {
+  MarketingNotificationComponent,
+  NotificationComponent,
+} from '@hospitality-bot/admin/notification';
+import { ConfigService, ModuleNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
 import { FeedbackService } from 'libs/admin/shared/src/lib/services/feedback.service';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
-import {
-  ConfigService,
-  ModuleNames,
-  UserService,
-} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
-import {
-  Details,
-  ShareIconConfig,
-} from '../../../../../shared/src/lib/models/detailsConfig.model';
+import { Details } from '../../../../../shared/src/lib/models/detailsConfig.model';
+import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
+import { Guest } from '../../models/guest-table.model';
 import { ReservationService } from '../../services/reservation.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { ManualCheckinComponent } from '../manual-checkin/manual-checkin.component';
-import { Guest } from '../../models/guest-table.model';
-import { get } from 'lodash';
-import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
-import { GuestDetail, GuestDetails } from '../../models/guest-feedback.model';
-import {
-  NotificationComponent,
-  MarketingNotificationComponent,
-} from '@hospitality-bot/admin/notification';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -58,6 +50,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   isGuestInfoPatched = false;
   primaryGuest;
   isReservationDetailFetched = false;
+  isFirstTimeFetch = true;
   isGuestReservationFetched = false;
   shareIconList;
   colorMap;
@@ -144,10 +137,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
         const { hotelName: brandId, branchName: branchId } = data[
           'filter'
         ].value.property;
-        const brandConfig = this._hotelDetailService.hotelDetails.brands.find(
+        const brandConfig = this._hotelDetailService.brands.find(
           (brand) => brand.id === brandId
         );
-        this.branchConfig = brandConfig.branches.find(
+        this.branchConfig = brandConfig.hotels.find(
           (branch) => branch.id === branchId
         );
         this.loadGuestInfo();
@@ -172,15 +165,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.loadGuestReservations();
         },
         ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
           this.closeDetails();
         }
       )
@@ -200,15 +184,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.isGuestReservationFetched = true;
         },
         ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
           this.closeDetails();
         }
       )
@@ -227,16 +202,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
           this.isReservationDetailFetched = true;
         },
         ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
           this.closeDetails();
+        },
+        () => {
+          this.isFirstTimeFetch = false;
         }
       )
     );
@@ -322,29 +291,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.reservationDetailsFG.get('bookingId').value,
         journeyName
       )
-      .subscribe(
-        (res) => {
-          this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
-          this.snackbarService.openSnackBarAsText(
-            'Link copied successfully',
-            '',
-            {
-              panelClass: 'success',
-            }
-          );
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      );
+      .subscribe((res) => {
+        this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
+        this.snackbarService.openSnackBarAsText(
+          'Link copied successfully',
+          '',
+          {
+            panelClass: 'success',
+          }
+        );
+      });
   }
 
   generateCheckinLink() {}
@@ -374,17 +330,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
                 { panelClass: 'success' }
               )
               .subscribe(),
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
+          ({ error }) => {}
         )
     );
   }
@@ -405,52 +351,42 @@ export class DetailsComponent implements OnInit, OnDestroy {
               );
             }
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
+          ({ error }) => {}
         )
     );
   }
 
+  manageInvoice() {
+    this.onDetailsClose.next(false);
+    this.router.navigate([
+      `pages/efrontdesk/invoice/create-invoice/${this.bookingId}`,
+    ]);
+  }
+
   prepareInvoice() {
-    this.$subscription.add(
-      this._reservationService
-        .prepareInvoice(this.reservationDetailsFG.get('bookingId').value)
-        .subscribe(
-          (_) => {
-            this.details.invoicePrepareRequest = true;
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'messages.SUCCESS.INVOICE_TICKET_RAISED',
-                  priorityMessage: 'Payment accepted.',
-                },
-                '',
-                { panelClass: 'success' }
-              )
-              .subscribe();
-          },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
-        )
-    );
+    if (!this.branchConfig.pmsEnable) {
+      this.manageInvoice();
+    } else
+      this.$subscription.add(
+        this._reservationService
+          .prepareInvoice(this.reservationDetailsFG.get('bookingId').value)
+          .subscribe(
+            (_) => {
+              this.details.invoicePrepareRequest = true;
+              this.snackbarService
+                .openSnackBarWithTranslate(
+                  {
+                    translateKey: 'messages.SUCCESS.INVOICE_TICKET_RAISED',
+                    priorityMessage: 'Payment accepted.',
+                  },
+                  '',
+                  { panelClass: 'success' }
+                )
+                .subscribe();
+            },
+            ({ error }) => {}
+          )
+      );
   }
 
   downloadRegcard(regcardUrl) {
@@ -556,17 +492,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
               break;
           }
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => {}
       );
   }
 
@@ -615,15 +541,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
               },
               ({ error }) => {
                 manualCheckinCompRef.componentInstance.loading = false;
-                this.snackbarService
-                  .openSnackBarWithTranslate(
-                    {
-                      translateKey: `messages.error.${error?.type}`,
-                      priorityMessage: error?.message,
-                    },
-                    ''
-                  )
-                  .subscribe();
               }
             )
         );
@@ -676,17 +593,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             )
             .subscribe();
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => {}
       );
   }
 
@@ -797,6 +704,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  setTab(event) {
+    this.tabKey = this.detailsConfig.find(
+      (tabConfig) => tabConfig.index === event.index
+    )?.key;
+    console.log(event, 'event');
+  }
+
   get bookingCount() {
     let count = 0;
     count += this.guestReservations.records.length;
@@ -836,5 +750,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.$subscription.unsubscribe();
+    this.isFirstTimeFetch = true;
   }
 }

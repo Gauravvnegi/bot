@@ -168,17 +168,7 @@ export class BookingStatusComponent implements OnInit, OnDestroy {
         (res) => {
           this.customerData = new BookingStatus().deserialize(res);
           this.initGraphData();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        }
       )
     );
   }

@@ -6,19 +6,10 @@
     width: 550px;
     height: 51.7px;
     padding: 14px 17px 16.7px 20px;
-    background-color: $c-gray-103;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    background-color: $whiteDeep;
+    @include flex-space-between-cen-Algn;
     .title {
-      font-family: Roboto;
-      font-size: 16px;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
+      @include normal-text;
       color: $tooltip;
     }
     .close {
@@ -32,11 +23,9 @@
 }
 
 .fields {
-  display: flex;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
   margin-top: 10px;
   width: 100%;
-  justify-content: space-between;
   @media (max-width: $tablet) {
     flex-wrap: wrap;
     gap: 60px;
@@ -48,17 +37,17 @@
     }
   }
   .field {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
+
     margin-right: 1.5%;
     width: 45%;
     @media (max-width: $tablet) {
-      @include width(42.6%);
+      width: 42.6%;
     }
     .mat-label {
       width: 150px;
-      color: $mat-tab-label;
-      font-size: $font14;
+      color: $inActiveTab;
+      font-size: 14px;
     }
     mat-form-field {
       width: 100%;
@@ -81,51 +70,40 @@
   max-width: calc(100% - 80px) !important;
 }
 
-
-
 .btn-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-all-center;
   margin: 40px 0;
+  gap: 15px;
   .cancel {
     height: 35px;
     margin: 0 27px 0 0;
     padding: 8px 35px 9px 34px;
     border-radius: 17.5px;
-    border: solid 1px $primary-purple;
+    border: solid 1px $primary-cta;
     cursor: pointer;
     &:active {
       transform: scale(0.97);
     }
     &__text {
-      font-family: Roboto;
       font-size: 13px;
       font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
       letter-spacing: 0.78px;
       text-align: center;
-      color: $primary-purple;
+      color: $primary-cta;
     }
   }
   .send {
     height: 35px;
     padding: 10px 43px 13px;
     border-radius: 23px;
-    background-color: $primary-purple;
+    background-color: $primary-cta;
     cursor: pointer;
     &:active {
       transform: scale(0.97);
     }
     &__text {
-      font-family: Roboto;
       font-size: 13px;
       font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
       letter-spacing: 0.78px;
       text-align: center;
       color: $white;

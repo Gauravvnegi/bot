@@ -4,43 +4,49 @@
   display: grid;
   grid-template-columns: 33% 33% 33%;
   background-color: var(--footer-background-color, $footer-background-color);
-  padding: $padding-medium;
+  padding: 15px;
+  @media only screen and (min-width: $tablet) {
+    height: 70px;
+    padding: 0px;
+  }
+  &--logo {
+    align-self: center;
+    height: 40px;
+    padding: 0 10px;
+    & img {
+      height: inherit;
+    }
+  }
   &--text {
     font-size: $font-responsive-small;
     font-weight: $bold;
-    @include flex-justify-center();
-    flex-direction: column;
-    margin: 0px $margin-small;
+    @include flex-col-justify-center;
+    margin: 0px 10px;
 
     @media only screen and (max-width: $S) {
-      margin: $margin-small 0;
+      margin: 10px 0;
     }
 
     .footer-privacy-text {
+      display: flex;
+      flex-direction: column;
       text-align: center;
+      align-items: center;
       color: var(--footer-font-color, $footer-font-color);
-      a {
-        text-decoration: none;
-        color: var(--footer-font-color, $footer-font-color);
-        margin-bottom: 10px;
-        @media only screen and (max-width: $M) {
-          margin-bottom: 5px;
-        }
-      }
     }
 
     .social_icons {
-      @include flex-justify-center();
+      @include flex-justify-center;
 
       align-items: center;
-      margin-bottom: $margin-small;
+      margin-bottom: 10px;
       .icon {
         height: 30px;
         width: 30px;
         margin: 0px 5px;
         img {
-          height: $full-width;
-          width: $full-width;
+          height: 100%;
+          width: 100%;
         }
       }
     }
@@ -61,21 +67,13 @@
     display: flex;
     justify-content: flex-end;
     font-weight: $bold;
+    align-items: center;
     .wrap-details {
       a {
         text-decoration: none;
       }
-      .text {
-        font-size: $font-responsive-small;
-        display: flex;
-        align-items: center;
-        color: var(--footer-font-color, $footer-font-color);
-        @media only screen and (max-width: $S) {
-          justify-content: center;
-        }
-      }
       .material-icons {
-        height: 23px;
+        height: 18px;
         width: 22px;
         font-size: $font-medium;
         color: var(--footer-icon-color, $footer-icon-color);
@@ -98,11 +96,22 @@
   @media only screen and (max-width: $S) {
     grid-template-columns: 100%;
     text-align: center;
-    
   }
 }
-@media screen and (max-width:$S) {
-  .footer__wrapper--contact-details{
+@media screen and (max-width: $S) {
+  .footer__wrapper--contact-details {
     justify-content: center !important;
+  }
+}
+
+.basic-text {
+  display: flex;
+  color: var(--footer-font-color, $footer-font-color);
+  font-size: $font-small;
+  text-decoration: none;
+  align-items: center;
+  justify-content: flex-end;
+  @media only screen and (max-width: $S) {
+    justify-content: center;
   }
 }

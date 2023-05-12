@@ -34,7 +34,7 @@
   }
   @media only screen and (max-width: $M) {
     width: auto;
-    .cross{
+    .cross {
       top: -4px;
       right: 5px;
     }
@@ -54,7 +54,7 @@
     height: 2px;
     width: 100px;
     background-color: $primary-blue;
-    margin-top: $margin-medium;
+    margin-top: 15px;
   }
 }
 
@@ -70,7 +70,6 @@
   > .mat-form-field-outline-start {
   border-color: $primary-blue;
 }
-
 
 :host
   ::ng-deep

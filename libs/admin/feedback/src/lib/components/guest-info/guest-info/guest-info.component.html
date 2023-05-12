@@ -1,8 +1,8 @@
 <div class="guest-info">
-  <mat-icon (click)="closeGuestInfo()" class="close-icon" matSuffix
-    >keyboard_backspace
-  </mat-icon>
   <div>{{ 'guestData.info' | translate }}</div>
+  <div (click)="closeGuestInfo()" class="cross">
+    <img src="assets/svg/back.svg" alt="back" />
+  </div>
 </div>
 <div
   class="guestInfoWrapper"

@@ -1,0 +1,101 @@
+<hospitality-bot-navigation-header
+  [heading]="welcomeMessage"
+  [routes]="navRoutes"
+  [isBack]="false"
+>
+</hospitality-bot-navigation-header>
+<div class="wrapper">
+  <div class="stats-wrapper">
+    <hospitality-bot-stats-card [stats]="roomStat" class="stats-box">
+      <div>
+        <canvas 
+          *skeleton="
+          roomStat == undefined;
+          margin: '0px 20px';
+          height: '180px';
+          width: '250px'
+          "
+          baseChart
+          [datasets]="averageRoomRateGraph.data"
+          [labels]="averageRoomRateGraph.labels"
+          [options]="averageRoomRateGraph.options"
+          [chartType]="averageRoomRateGraph.type"  
+        ></canvas>
+      </div>
+    </hospitality-bot-stats-card>
+    <hospitality-bot-stats-card [stats]="occupancyStat" class="stats-box">
+      <div>
+        <canvas 
+          *skeleton="
+          occupancyStat == undefined;
+          margin: '0px 20px';
+          height: '180px';
+          width: '250px'
+          "
+          baseChart
+          [datasets]="occupancyGraph.data"
+          [options]="occupancyGraph.options"
+          [colors]="occupancyGraph.colors"
+          [labels]="occupancyGraph.labels"
+          [chartType]="occupancyGraph.type"
+        ></canvas>
+      </div>
+    </hospitality-bot-stats-card>
+    <hospitality-bot-stats-card
+      [stats]="remainingInventoryStat"
+      class="stats-box">
+      <div class="p-relative">
+        <canvas 
+          baseChart 
+          *skeleton="
+          remainingInventory == undefined;
+          margin: '48px 50px 0 0'
+          height: '150px';
+          width: '150px';   
+          borderRadius: '50%'
+          "
+          [data]="remainingInventoryChart.data"
+          [labels]="remainingInventoryChart.labels"
+          [chartType]="remainingInventoryChart.type"
+          [colors]="remainingInventoryChart.colors"
+          [options]="remainingInventoryChart.options">
+        </canvas>
+        <div class="text-center"
+        *skeleton="remainingInventory == undefined; height: '0px'; width: '115px'"
+        >
+          <p>{{ remainingInventory?.occupied + remainingInventory?.remaining }}</p>
+          <p>{{ 'Rooms' }}</p>
+        </div>
+      </div>
+    </hospitality-bot-stats-card>
+    <hospitality-bot-stats-card
+      [stats]="remainingCostStat"
+      class="stats-box">
+      <div class="p-relative">
+        <canvas 
+          baseChart 
+          *skeleton="
+          remainingCost == undefined;
+          margin: '48px 0 0 0'
+          height: '150px';
+          width: '150px';
+          borderRadius: '50%'
+          "
+          [data]="remainingCostChart.data"
+          [labels]="remainingCostChart.labels"
+          [chartType]="remainingCostChart.type"
+          [colors]="remainingCostChart.colors"
+          [options]="remainingCostChart.options"
+        ></canvas>
+        <div class="text-center"
+        *skeleton="remainingInventory == undefined; height: '0px'; width: '115px'"
+        >
+          <p>{{ format(remainingCost?.spent + remainingCost?.remaining) }}</p>
+        </div>
+      </div>
+    </hospitality-bot-stats-card>
+    
+  </div>
+
+  <hospitality-bot-room-data-table></hospitality-bot-room-data-table>
+</div>

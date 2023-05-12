@@ -14,7 +14,7 @@ export class AmenitiesService extends ApiService {
   }
 
   getHotelAmenities(reservationId) {
-    return this.get(`/api/v1/hotel/${reservationId}/packages`);
+    return this.get(`/api/v1/entity/${reservationId}/packages`);
   }
 
   get amenities() {

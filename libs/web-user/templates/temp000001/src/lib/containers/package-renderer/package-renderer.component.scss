@@ -178,11 +178,11 @@
 }
 
 :host ::ng-deep .back-button {
-  @include secondary-button();
+  @include secondary-button;
 }
 
 :host ::ng-deep .next-button {
-  @include primary-button();
+  @include primary-button;
   width: 150px !important;
 }
 

@@ -1,3 +1,5 @@
+import { ValueFormatter } from '../utils/valueFormatter';
+
 export const analytics = {
   chart: {
     Labels: ['No Data'],
@@ -29,51 +31,58 @@ export const analytics = {
     {
       field: 'itemCode',
       header: 'Item & Priority Code / Qty',
-      isSort: true,
       sortType: 'number',
+      searchField: ['itemCode', 'priority', 'quantity'],
     },
     {
       field: 'confirmationNumber',
       header: 'Booking No. / Rooms',
-      isSort: true,
       sortType: 'number',
+      searchField: ['confirmationNumber', 'rooms[0].roomNumber'],
     },
     {
       field: 'guestDetails.primaryGuest.getFullName()',
-      header: 'Guest/ company',
-      isSort: true,
+      header: 'Guest / company',
       sortType: 'string',
+      searchField: ['guestDetails.primaryGuest.getFullName'],
     },
     {
-      field: 'journey',
+      field: 'guestDetails.primaryGuest.phoneNumber',
       header: 'Phone No./ Email',
-      isSort: false,
+      isSortDisabled: true,
       sortType: 'string',
+      searchField: [
+        'guestDetails.primaryGuest.phoneNumber',
+        'guestDetails.primaryGuest.email',
+      ],
     },
     {
-      field: 'journey',
-      header: 'Item Name/ Desc./ Status/ Job Duration',
-      isSort: false,
+      field: 'itemName',
+      header: 'Item Name / Desc. / Status / Job Duration',
+      isSortDisabled: true,
       sortType: 'string',
+      searchField: ['itemName', 'remarks', 'action', 'jobDuration'],
     },
     {
       field: 'remarks',
-      header: 'Assigned To/ Op & Cl - Dt & Tm',
-      isSort: false,
+      header: 'Assigned To / Op & Cl - Dt & Tm',
+      isSortDisabled: true,
       sortType: 'string',
+      isSearchDisabled: true,
     },
     {
       field: '',
       header: 'Actions',
-      isSort: false,
+      isSortDisabled: true,
       sortType: '',
+      isSearchDisabled: true,
     },
   ],
   tabFilterItems: [
     {
       label: 'All',
       content: '',
-      value: '',
+      value: 'ALL',
       disabled: false,
       total: 0,
       chips: [
@@ -83,7 +92,7 @@ export const analytics = {
           value: 'ALL',
           total: 0,
           isSelected: true,
-          type: '',
+          type: 'default',
         },
       ],
     },
@@ -265,44 +274,47 @@ export const analytics = {
     {
       field: 'itemCode',
       header: 'Item & Priority Code / Qty',
-      isSort: true,
       sortType: 'number',
     },
     {
       field: 'confirmationNumber',
       header: 'Booking No. / Rooms',
-      isSort: true,
       sortType: 'number',
     },
     {
       field: 'guestDetails.primaryGuest.getFullName()',
-      header: 'Guest/ company',
-      isSort: true,
+      header: 'Guest / company',
       sortType: 'string',
     },
     {
-      field: 'journey',
-      header: 'Phone No./ Email',
+      field: 'guestDetails.primaryGuest.phoneNumber',
+      header: 'Phone No. / Email',
       isSort: false,
       sortType: 'string',
+      searchField: [
+        'guestDetails.primaryGuest.phoneNumber',
+        'guestDetails.primaryGuest.email',
+      ],
     },
     {
-      field: 'journey',
-      header: 'Item Name/ Desc./ Status/ Job Duration',
-      isSort: false,
+      field: 'itemName',
+      header: 'Item Name / Desc. / Status / Job Duration',
       sortType: 'string',
+      searchField: ['itemName', 'remarks', 'status', 'jobDuration'],
     },
     {
-      field: 'remarks',
+      field: '',
       header: 'Open & Close- Date & Time',
-      isSort: false,
+      isSortDisabled: true,
       sortType: 'string',
+      isSearchDisabled: true,
     },
     {
       field: '',
       header: 'Actions',
-      isSort: false,
+      isSortDisabled: true,
       sortType: '',
+      isSearchDisabled: true,
     },
   ],
 
@@ -310,7 +322,7 @@ export const analytics = {
     {
       label: 'All',
       content: '',
-      value: '',
+      value: 'ALL',
       disabled: false,
       total: 0,
       chips: [
@@ -320,7 +332,7 @@ export const analytics = {
           value: 'ALL',
           total: 0,
           isSelected: true,
-          type: '',
+          type: 'default',
         },
       ],
     },
@@ -456,4 +468,150 @@ export const analytics = {
       src: 'sent',
     },
   ],
+  stackedGraph: {
+    type: 'bar',
+    legend: false,
+    labels: [],
+    options: {
+      responsive: true,
+      cornerRadius: 10,
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+        callbacks: {
+          label: function (tooltipItem, data) {
+            const datasetLabel =
+              data.datasets[tooltipItem.datasetIndex].label || '';
+            return `${datasetLabel}: ${ValueFormatter(tooltipItem.yLabel, 2)}`;
+          },
+        },
+      },
+      scales: {
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+              callback: function (value, index, ticks) {
+                return ValueFormatter(value, 2);
+              },
+            },
+            gridLines: {
+              drawOnChartArea: false,
+            },
+          },
+        ],
+        xAxes: [
+          {
+            gridLines: {
+              drawOnChartArea: false,
+            },
+          },
+        ],
+      },
+    },
+    datasets: [],
+    colors: [
+      { backgroundColor: '#4bc0c0' },
+      { backgroundColor: '#feac02' },
+      { backgroundColor: '#fa586d' },
+    ],
+  },
+  doughnut: {
+    type: 'doughnut',
+    data: {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      legend: {
+        display: true,
+        position: 'right',
+      },
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+      },
+    },
+    legend: false,
+  },
+  lineGraph: {
+    datasets: <any>[],
+    labels: [],
+    options: {
+      responsive: true,
+      elements: {
+        line: {
+          tension: 0,
+        },
+        point: {
+          radius: 6,
+          hitRadius: 5,
+          hoverRadius: 8,
+          hoverBorderWidth: 2,
+          borderWidth: 2,
+          borderColor: 'white',
+        },
+      },
+      scales: {
+        xAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            ticks: {
+              beginAtZero: true,
+              callback: function (value, index, ticks) {
+                return ValueFormatter(value, 2);
+              },
+            },
+            gridLines: {
+              drawOnChartArea: false,
+            },
+          },
+        ],
+      },
+      tooltips: {
+        backgroundColor: 'white',
+        bodyFontColor: 'black',
+        borderColor: '#f4f5f6',
+        borderWidth: 3,
+        titleFontColor: 'black',
+        titleMarginBottom: 5,
+        xPadding: 10,
+        yPadding: 10,
+        callbacks: {
+          label: function (tooltipItem, data) {
+            const datasetLabel =
+              data.datasets[tooltipItem.datasetIndex].label || '';
+            return `${datasetLabel}: ${ValueFormatter(tooltipItem.yLabel, 2)}`;
+          },
+        },
+      },
+    },
+    colors: [],
+    legend: false,
+    type: 'line',
+  },
 };

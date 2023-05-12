@@ -1,0 +1,67 @@
+@import 'main';
+
+.info-icon {
+  position: relative;
+  cursor: pointer;
+  width: fit-content;
+
+  img {
+    width: 14px;
+    margin-top: 3.5px;
+  }
+  .tooltip {
+    position: absolute;
+    font: normal normal normal 12px/16px Roboto;
+    background-color: $white;
+    min-width: 160px;
+    border: 1px solid $border;
+    padding: 10px;
+    top: 26px;
+    left: -10px;
+    color: $tooltip;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px $border;
+    display: none;
+    z-index: 99;
+    max-width: 232px;
+    .arrow {
+      position: absolute;
+      top: -10px;
+      width: 0;
+      height: 0;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 10px solid $border;
+      left: 17px;
+      transform: translate(-50%);
+      &::before {
+        content: '';
+        top: 1px;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 9px solid $white;
+        left: -6px;
+        z-index: 3;
+        position: absolute;
+      }
+    }
+  }
+  &:hover {
+    .tooltip {
+      display: block;
+    }
+  }
+}
+
+.info-wrapper {
+  display: flex;
+  gap: 5px;
+  align-items: start;
+}
+
+.content {
+  height: 100%;
+  width: fit-content;
+}

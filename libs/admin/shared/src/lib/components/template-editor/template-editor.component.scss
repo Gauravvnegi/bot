@@ -1,7 +1,6 @@
 @import 'main';
 
 .text-field {
-  font-family: Roboto;
   font-size: 16px;
   font-weight: bold;
   font-stretch: normal;
@@ -11,7 +10,7 @@
   color: $button-blue;
   display: flex;
   justify-content: flex-end;
-  margin: 10px 0;
+  margin: 5px 0;
   cursor: pointer;
 }
 .editable {
@@ -21,9 +20,14 @@
 }
 
 .plain-text-container {
-  border: 1px solid $c-gray-82;
+  border: 1px solid #d1d1d1;
   padding: 15px;
   max-width: 100%;
   overflow: auto;
-  height: 500px;
+  min-height: 300px;
+}
+
+.message-error {
+  font-size: 0.7em;
+  margin-top: -30px;
 }

@@ -1,126 +1,28 @@
 @import 'main';
 
 .wrapper {
-  padding: $padding20;
-  background-color: $white;
-  margin: $margin20 0px;
-  border-radius: 5px;
-  &-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .back {
-      display: flex;
-      align-items: center;
-      .label {
-        letter-spacing: 0.96px;
-        font-weight: $bold;
-        font-size: $font16;
-        text-transform: capitalize;
-      }
-      .material-icons {
-        margin-right: $margin15;
-        &:hover {
-          cursor: pointer;
-        }
-      }
-    }
-    .edit-wrapper {
-      display: flex;
-      align-items: center;
+  .form-block {
+    @include form-block;
+    align-items: flex-start;
+  }
 
+  .header {
+    @include flex-space-between-cen-Algn;
+    .edit-wrapper {
+      @include flex-item-center;
       .manage-box {
-        padding: $padding10 $padding15;
-        font-size: $font12;
-        color: $dark-grey;
-        background-color: $c-gray-103;
+        padding: 10px 15px;
+        font-size: 12px;
+        color: $subtitle;
+        background-color: $whiteDeep;
         border-radius: 25px;
       }
-      .text {
-        margin-left: 15px;
-        font-size: $font14;
-        color: $primary-gray;
-        &:hover {
-          cursor: pointer;
-        }
-      }
     }
   }
-  &-form {
-    padding-bottom: 5%;
-    padding-left: 20px;
-    border-bottom: 2px solid rgb(61, 187, 230, 0.1);
-    .fields {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 5%;
-      .note {
-        color: $primary-gray;
-        font-size: $font14;
-        padding-left: 7%;
-        margin-bottom: 20px;
-      }
-      .field {
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-      }
-      .material-icons {
-        margin-left: 15px;
-        &:hover {
-          cursor: pointer;
-        }
-      }
-    }
-    .image-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: inherit;
-      padding-left: 7%;
-      .image {
-        height: 150px;
-        width: 200px;
-        img {
-          height: 100%;
-          width: 100%;
-        }
-      }
-    }
-    .image-button {
-      display: flex;
-      align-items: center;
-      .text {
-        font-size: $font14;
-        color: $primary-gray;
-      }
-      .button {
-        border-radius: 20px;
-        padding: 10px 35px;
-        background-color: $button-blue;
-        opacity: 0.85;
-        outline: none;
-        color: $white;
-        font-size: $font14;
-        margin: 0 52px;
-        border: none;
-        &:hover {
-          cursor: pointer;
-          opacity: 1;
-        }
-      }
-      .image-name {
-        font-size: $font16;
-        letter-spacing: 0.96px;
-      }
-    }
-    .margin-adjust {
-      margin-top: 20px;
-    }
-  }
+
   &-manage-permission {
     .header {
-      font-size: $font16;
+      font-size: 16px;
       font-weight: $bold;
       margin: 3.5% 0;
     }
@@ -130,7 +32,7 @@
         width: 22%;
         border-right: 2px solid rgb(61, 187, 230, 0.1);
         .image {
-          padding: 0 $padding15;
+          padding: 0 15px;
           margin: 5px 0;
           width: 100%;
           height: 132px;
@@ -140,29 +42,27 @@
           }
         }
         &-header {
-          font-size: $font16;
+          font-size: 16px;
           font-weight: $bold;
-          margin: $margin15 0px;
-          padding: 0 $padding15;
+          margin: 15px 0px;
+          padding: 0 15px;
         }
         &-entity {
-          padding: 0px $padding15;
-          font-size: $font14;
-          display: flex;
-          align-items: center;
+          @include flex-item-center;
+          padding: 0px 15px;
+          font-size: 14px;
           color: $primary-black;
           letter-spacing: 0.84px;
           height: 65px;
           @media only screen and (max-width: 1200px) {
-            font-size: $font12;
+            font-size: 12px;
           }
         }
       }
       .right-table {
         width: 100%;
         .box-wrapper {
-          display: flex;
-          align-items: center;
+          @include flex-item-center;
           margin-bottom: 44px;
           padding-left: 2%;
           justify-content: space-around;
@@ -170,40 +70,39 @@
             width: 50%;
             height: 132px;
             margin: 5px 10px;
-            background-color: $c-gray-100;
+            background-color: $whiteDeep;
             border-radius: 5px;
             position: relative;
             text-align: center;
-            padding: $padding10;
+            padding: 10px;
             .label {
               font-size: 18px;
               letter-spacing: 1px;
               font-weight: $bold;
               margin-top: 9%;
               @media only screen and (max-width: 1250px) {
-                font-size: $font12;
-                margin-top: 14%;
+                font-size: 12px;
+                margin-top: 10%;
               }
             }
             .paragraph {
-              color: $c-gray-47;
+              color: $grayMedium;
               font-size: 15px;
               letter-spacing: 0.9px;
               margin: 0 auto;
               width: 60%;
               padding: 15px 0;
               @media only screen and (max-width: 1200px) {
-                font-size: $font10;
+                font-size: 10px;
               }
             }
             .float-box {
               height: 61px;
               width: 61px;
-              display: flex;
-              justify-content: center;
+              @include flex-justify-center;
               border-radius: 50%;
               box-shadow: 0px 0px 5px 0px darkgray;
-              background-color: $c-gray-100;
+              background-color: $whiteDeep;
               z-index: 10;
               position: absolute;
               top: -30%;
@@ -222,11 +121,9 @@
           }
         }
         .checkbox-wrapper {
-          // padding: 15px;
           padding-left: 2%;
-          display: flex;
+          @include flex-item-center;
           justify-content: space-around;
-          align-items: center;
           height: 65px;
         }
       }
@@ -234,37 +131,32 @@
   }
 }
 
-::ng-deep .field-trio {
-  justify-content: flex-end;
-}
-::ng-deep .field-width {
-  width: 33%;
-}
-
-.add-user {
-  background: transparent;
-  border: none;
-  outline: none;
-  margin-right: $margin20;
-  color: $primary-gray;
-  font-size: $font14;
-  &:hover {
-    cursor: pointer;
-    color: $primary-purple;
+:host ::ng-deep {
+  .mat-expansion-panel-header {
+    border-top: 1px solid #cdcdcd;
+  }
+  .mat-expansion-panel-header {
+    flex-basis: 100%;
+    padding: 5px;
+    border-radius: 0px;
+  }
+  .mat-expansion-panel-body {
+    padding: 0;
+  }
+  .mat-expansion-panel:not([class*='mat-elevation-z']) {
+    box-shadow: none !important;
+  }
+  .mat-expansion-panel:not(.mat-expanded)
+    .mat-expansion-panel-header:hover:not([aria-disabled='true']) {
+    background: transparent;
+  }
+  .mat-tab-header {
+    border: none !important;
   }
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.add-user {
-  color: #4b56c0;
-}
-
 .all-user {
-  color: #4b56c0;
+  color: $primary;
   font-weight: 600;
   font-size: 14px;
   width: 100%;
@@ -273,74 +165,38 @@
   }
 }
 
-.tabs {
-  padding-bottom: 65px;
-}
-
-.member {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 70px;
-  flex-direction: row-reverse;
-  position: relative;
-}
-
-.total-member {
-  padding-left: 150px;
-  line-height: 0px;
-}
-
-.member-name {
-  cursor: pointer;
-  position: absolute;
-  top: -32px;
-  padding: 14px;
-  border-radius: 50%;
-  border: solid 4px #fff;
-  background-color: #f04949;
-  font-family: Roboto;
-  font-size: 19px;
-  font-weight: 500;
-  line-height: 1.16;
-  letter-spacing: 1.14px;
-  color: #fff;
-}
-
-:host ::ng-deep .mat-form-field-infix {
-  border-top: none;
-}
-
-:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
-  background-color: $primary-gray;
-}
-
-:host ::ng-deep .mat-form-field-disabled .mat-form-field-underline {
-  background-color: transparent;
-}
-
-:host ::ng-deep .mat-label {
-  flex-basis: 30%;
-  font-size: $font14;
-  color: $primary-gray1;
-  margin-right: 10px;
-  letter-spacing: 0.84pt;
-  @media only screen and (max-width: 1250px) {
-    font-size: 9px;
+.member-container {
+  margin-bottom: 20px;
+  & :hover {
+    .member-name {
+      box-shadow: 1px 1px 1px 1px #28272b5e;
+    }
   }
-}
 
-:host ::ng-deep .mat-select-arrow {
-  border-top-color: $primary-gray;
-}
+  .member {
+    @include flex-space-between-cen-Algn;
+    width: 80px;
+    flex-direction: row;
+    position: relative;
+    margin: 10px 0;
 
-:host ::ng-deep .phone-no-dropdown {
-  width: 20%;
-  margin-right: 9%;
-}
+    .member-name {
+      cursor: pointer;
+      position: absolute;
+      padding: 14px;
+      border-radius: 50%;
+      width: 60px;
+      text-align: center;
+      text-transform: uppercase;
+      border: solid 4px #fff;
+      color: #fff;
+    }
+  }
 
-:host ::ng-deep .phone-no-field {
-  width: 70% !important;
+  .total-member {
+    padding-left: 150px;
+    padding-top: 10px;
+  }
 }
 
 :host ::ng-deep .mat-checkbox-frame {
@@ -353,17 +209,16 @@
 }
 
 .permission-button-wrapper {
-  display: flex;
-  justify-content: center;
+  @include flex-justify-center;
   margin: 15px 0;
   margin-top: 50px;
   button {
-    @include admin-panel-button();
+    @include admin-panel-button;
   }
 }
 
 :host ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-  background-color: $completed;
+  background-color: $posCompare;
 }
 
 :host ::ng-deep .mat-checkbox-background {
@@ -372,22 +227,18 @@
 
 :host ::ng-deep .mat-checkbox-disabled {
   .mat-checkbox-background {
-    background-color: $pending;
+    background-color: $draft-state;
   }
 }
 
-.width-half {
-  flex-basis: 30%;
+.tabs {
+  border-bottom: 1px solid #cdcdcd;
+  margin-bottom: 50px;
 }
 
-.width-trio {
-  width: 37%;
-}
-
-.mat-fields {
-  flex-basis: 70%;
-}
-
-.color-added {
-  // background-color: #f8f8f8;
+.managed-by {
+  padding: 10px 12px;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  flex-basis: 21% !important;
 }

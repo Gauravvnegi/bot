@@ -2,26 +2,15 @@
 :host ::ng-deep {
   .mat-tab-header {
     padding-bottom: 10px;
-    border-bottom: 1px solid $manually-contacts !important;
+    border-bottom: 1px solid $grayMedium !important;
   }
   .mat-tab-label-content {
-    font-family: Roboto;
-    font-size: 16px;
+    @include normal-text;
     font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
-    color: $mat-tab-label;
+    color: $inActiveTab;
   }
   .mat-tab-label-active > .mat-tab-label-content {
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
+    @include normal-text;
     color: $button-blue !important;
   }
   .mat-form-field-underline {
@@ -39,35 +28,26 @@
   padding: 10px 15px;
   cursor: pointer;
   &:hover {
-    background-color: $c-gray-88;
+    background-color: #e1e1f8;
     border-radius: 5px;
   }
   .title {
     margin-bottom: 7px;
   }
   .description {
-    display: flex;
-    align-items: center;
-    color: $c-gray-65;
+    @include flex-item-center;
+    color: #a3a3a3;
   }
   .listing {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-space-between-cen-Algn;
   }
 }
 
 .container {
-  font-family: Roboto;
-  font-size: 16px;
+  @include normal-text;
   font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 0.96px;
   .header {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     width: 100%;
     .tab-group {
       width: calc(100% - 30px);
@@ -77,7 +57,7 @@
       text-align: center;
       mat-icon {
         cursor: pointer;
-        color: $gray;
+        color: gray;
         &:hover {
           color: $button-blue;
         }
@@ -86,19 +66,18 @@
   }
   .sub-title {
     margin: 20px 10px;
-    color: $c-gray-53;
+    color: $grayMedium;
   }
   .listing {
     max-height: 170px;
     overflow-y: auto;
     .item-container {
-      display: flex;
-      justify-content: space-between;
+      @include flex-space-between;
       padding: 7px 15px;
       cursor: pointer;
       .data {
         text-align: right;
-        color: $primary-gray;
+        color: $grayMedium;
       }
     }
   }
@@ -108,13 +87,13 @@
     line-height: 1.67;
     letter-spacing: 0.9px;
     text-align: center;
-    color: $primary-gray;
+    color: $grayMedium;
     max-width: 90%;
     margin: auto;
   }
   .division {
     margin: 10px 0;
-    border: 1px solid $manually-contacts;
+    border: 1px solid $grayMedium;
   }
   .load-more {
     padding: 5px 0;
@@ -123,7 +102,7 @@
     text-align: center;
     font-weight: bold;
     &:hover {
-      background-color: $c-gray-94;
+      background-color: #eaf3fa;
     }
   }
 }

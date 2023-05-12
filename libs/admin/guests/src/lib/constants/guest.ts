@@ -1,13 +1,13 @@
 export const chips = {
   documents: [
-    { label: 'All', icon: '', value: 'ALL', isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true, type: 'default' },
     {
       label: 'Initiated',
       icon: '',
       value: 'INITIATED',
       total: 0,
       isSelected: false,
-      type: 'EMAIL',
+      type: 'warning',
     },
     {
       label: 'Pending ',
@@ -35,14 +35,14 @@ export const chips = {
     },
   ],
   payments: [
-    { label: 'All', icon: '', value: 'ALL', isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true, type: 'default' },
     {
       label: 'Fully Recieved',
       icon: '',
       value: 'FULLYRECIEVED',
       total: 0,
       isSelected: false,
-      type: 'MICROSITE',
+      type: 'new',
     },
     {
       label: 'Partially Recieved ',
@@ -50,7 +50,7 @@ export const chips = {
       value: 'PARTIALLYRECIEVED',
       total: 0,
       isSelected: false,
-      type: 'EMAIL',
+      type: 'warning',
     },
     {
       label: 'Not Recieved ',
@@ -62,7 +62,7 @@ export const chips = {
     },
   ],
   status: [
-    { label: 'All', icon: '', value: 'ALL', isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true, type: 'default' },
     {
       label: 'New',
       icon: '',
@@ -107,7 +107,7 @@ export const chips = {
     },
   ],
   datatable: [
-    { label: 'All', icon: '', value: 'ALL', isSelected: true },
+    { label: 'All', icon: '', value: 'ALL', isSelected: true, type: 'default' },
     {
       label: 'VIP',
       icon: '',
@@ -135,6 +135,14 @@ export const chips = {
   ],
 };
 
+export enum SourceChipsType {
+  Bot = 'warning',
+  Email = 'warning',
+  Microsite = 'new',
+  Others = 'pending',
+  Whatsapp = 'completed',
+}
+
 export const guest = {
   tabFilterItems: {
     documents: [
@@ -143,6 +151,7 @@ export const guest = {
         content: '',
         value: 'ALL',
         disabled: false,
+        total: 0,
         chips: chips.documents,
         lastPage: 0,
       },
@@ -303,48 +312,58 @@ export const guest = {
   cols: {
     datatable: [
       {
-        field: 'getFullName()',
-        header: 'Guest/ Company',
-        isSort: true,
+        field: 'fullName',
+        header: 'Guest / Company',
         sortType: 'string',
+        searchField: ['fullName'],
       },
       {
         field: 'booking.getArrivalTimeStamp()',
-        header: 'Arrival/ Departure',
-        isSort: true,
+        header: 'Arrival / Departure',
         sortType: 'date',
+        isSearchDisabled: true,
       },
       {
         field: 'booking.bookingNumber',
-        header: 'Booking No./ Feedback',
-        isSort: true,
+        header: 'Booking No. / Feedback',
         sortType: 'number',
+        searchField: [
+          'booking.bookingNumber',
+          'feedback.comments',
+          'feedback.rating',
+        ],
       },
       {
         field: `getPhoneNumber()`,
         header: 'Phone No.',
-        isSort: false,
-        sortType: 'string',
+        sortType: 'number',
+        searchField: ['getPhoneNumber'],
       },
       {
         field: 'payment.totalAmount',
         header: 'Amount Due/ Total Spend',
-        isSort: true,
         sortType: 'number',
+        isSearchDisabled: true,
       },
       {
         field: 'guestAttributes.overAllNps',
         header: 'Overall NPS',
-        isSort: true,
         sortType: 'number',
       },
       {
         field: 'guestAttributes.churnProbalilty',
-        header: 'Churn Prob/ Prediction',
-        isSort: true,
+        header: 'Churn Prob / Prediction',
         sortType: 'number',
+        searchField: [
+          'guestAttributes.churnProbalilty',
+          'guestAttributes.churnPrediction',
+        ],
       },
-      { field: 'stageAndourney', header: 'Stage/ Channels' },
+      {
+        field: 'stageAndourney',
+        header: 'Stage/ Channels',
+        isSearchDisabled: true,
+      },
     ],
   },
   chartTypes: {

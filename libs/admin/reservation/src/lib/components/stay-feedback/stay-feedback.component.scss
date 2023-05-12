@@ -14,16 +14,13 @@
   cursor: pointer;
   font: normal normal medium 14px/19px Roboto;
   letter-spacing: 0.56px;
-  color: $primary-gray;
+  color: $grayMedium;
 }
 
 .label-wrapper {
   display: flex;
   align-items: center;
   margin-bottom: 15px;
-  // img {
-  //   margin-left: 10px;
-  // }
 }
 
 .fields-wrapper {
@@ -33,71 +30,77 @@
   .field {
     .label {
       letter-spacing: 0.72px;
-      font-size: $font12;
-      color: $primary-gray;
+      font-size: 12px;
+      color: $grayMedium;
     }
     .value {
       letter-spacing: 0.84px;
-      font-size: $font14;
-      margin-top: $margin10;
+      font-size: 14px;
+      margin-top: 10px;
       font-weight: $medium;
     }
     .question {
       font-family: Roboto;
       font-size: 12px;
       font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
+
       letter-spacing: 0.24px;
-      text-align: left;
+
       color: $question;
       margin: 5px 0;
     }
     .answer {
       font-family: Roboto;
       font-size: 12px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
+
       line-height: 1.67;
       letter-spacing: 0.24px;
-      text-align: left;
-      color: $quote-color;
+
+      color: $subtitle;
     }
   }
 }
 
 .data-seperator {
-  // border: 2px solid $button-blue;
-  margin: $margin20 0px;
+  margin: 20px 0px;
   opacity: 0.1;
   background: $button-blue;
   margin: 0 -30px -20px;
 }
 
 :host ::ng-deep .mat-head {
-  font-size: $font16;
+  font-size: 16px;
   font-weight: $bolder;
-  color: $dark-blue;
+  color: $secondary;
   letter-spacing: 0.96px;
 }
 
 :host ::ng-deep .container__title {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   color: $primary-black;
   font-weight: 500;
   letter-spacing: 0.84px;
   margin-right: 0 !important;
+  position: relative;
+  .booking_title {
+    width: 25%;
+
+    @media only screen and (max-width: $XL) {
+      font-size: 14px;
+      width: 27%;
+    }
+  }
   .booking_number:hover {
     color: rgb(75, 86, 192);
   }
 }
 
 :host ::ng-deep .expand-icon {
-  color: $primary-purple;
+  color: $primary-cta;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 :host ::ng-deep .mat-expansion-indicator {
@@ -112,32 +115,33 @@
   background: $accordian-background 0% 0% no-repeat padding-box;
 }
 
+:host ::ng-deep .mat-expansion-panel-header {
+  @media only screen and (min-width: $XL) {
+    padding: 0px 10px !important;
+  }
+}
+
 .booking__container {
   margin: 7.5px 0;
 }
 
 .booking-id-wrapper {
-  // margin-top: 20px;
   .booking-id {
     text-align: center;
   }
   .feedback {
     color: $white;
-    font-size: $font10;
+    font-size: 10px;
     display: flex;
     align-items: center;
     .booking-feedback {
       display: flex;
       align-items: center;
-      // background-color: $completed;
       justify-content: space-around;
       padding: 2px;
       margin: 0 10px;
-      // margin-top: 7px;
       border-radius: 25px;
       position: relative;
-      // min-width: 20px;
-      // min-height: 20px;
       &:hover {
         cursor: pointer;
         .feedback-msg {
@@ -149,7 +153,7 @@
         width: 100%;
         top: 50%;
         font-size: 12px;
-        color: $dark-grey;
+        color: $subtitle;
         background-color: $white;
         left: 0%;
         padding: 7px;
@@ -192,7 +196,7 @@
 
 .header-seperator {
   height: 20px;
-  border: 1px solid $c-gray-74;
+  border: 1px solid $grayLight;
 }
 
 ::ng-deep .d-flex {
@@ -203,20 +207,17 @@
   width: 160px;
   height: 33px;
   margin: 0 94px 0 40px;
-  padding: 0px 0px 0px 10px;
   border-radius: 6px;
   border: solid 1px $button-blue;
-  background-color: $c-gray-93;
+  background-color: $whiteDeep;
   display: flex;
-  justify-content: left;
+  justify-content: center;
   align-items: center;
   .view-feedback {
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 11px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+
     letter-spacing: 0.66px;
     text-align: right;
     color: $button-blue;
@@ -224,6 +225,7 @@
     padding-right: 10px;
     padding-top: 4px;
     height: 20px;
+    margin-right: 5px;
     img {
       width: 18px !important;
       margin-right: 3px;
@@ -233,15 +235,15 @@
     padding-left: 2px;
     margin-left: 3px;
   }
-@media screen and (max-width: $L) {
-  @include width(170px);
-}
-
+  @media screen and (max-width: $XL) {
+    width: 180px;
+    margin: 0 40px 0 10px;
+  }
 }
 
 .mat-expansion-panel {
   box-shadow: none !important;
-  border: solid 1px $light-grey;
+  border: solid 1px $grayLight;
 }
 :host ::ng-deep .mat-expansion-panel-header.mat-expanded:hover {
   background: $accordian-background;
@@ -251,5 +253,19 @@
 }
 
 .visit-padding {
-  padding: 0 0 0 10px !important;
+  padding: 0 0 0 20px !important;
+  width: 33%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media only screen and(max-width:$XL) {
+    width: 36%;
+    font-size: 14px;
+    padding: 0 10px 0 10px !important;
+  }
+
+  &:hover {
+    text-overflow: clip;
+  }
 }

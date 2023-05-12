@@ -108,17 +108,7 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
           (response) => {
             this.messageService.refreshData$.next(true);
             this.onModalClose.emit();
-          },
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          }          
         )
     );
   }

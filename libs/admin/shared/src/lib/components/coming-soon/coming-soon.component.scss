@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: center;
     background-color: $white;
-    height: 76vh;
+    height: calc(100vh - 85px);
     .label {
       color: $primary-black;
       font-weight: 500;
@@ -17,7 +17,7 @@
       margin-top: 25px;
     }
     .note {
-      color: $primary-gray;
+      color: $grayMedium;
       font-weight: 500;
       letter-spacing: 0.84px;
       margin-top: 10px;

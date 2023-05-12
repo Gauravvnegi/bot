@@ -4,57 +4,53 @@
   padding: 15px 0;
   max-height: calc(100vh - 310px);
   overflow-y: auto;
+  font-family: 'Roboto';
+
+  &::-webkit-scrollbar {
+    width: 2px;
+  }
   &-title {
     padding: 0 15px;
-    font-family: Roboto;
     font-size: 14px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.84px;
   }
   &-items-wrap {
     overflow-y: auto;
     &-item {
       padding: 0 15px;
-      font-family: Roboto;
       font-size: 12px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
       &-row {
         margin: 15px 0;
         .item-code {
           font-size: 14px;
-          font-weight: bold;
+          font-weight: $bold;
           letter-spacing: 0.84px;
-          text-align: left;
-          color: $mat-tab-label;
+          color: $inActiveTab;
         }
       }
       .intiated-row {
-        font-weight: 500;
+        font-weight: $medium;
         letter-spacing: 0.72px;
       }
       .nail-utter-row {
         margin-top: 10px;
-        font-weight: 500;
+        font-weight: $medium;
         letter-spacing: 0.72px;
-        color: $dark-blue;
+        color: $secondary;
       }
       .gsb-row {
         margin-top: 5px;
         line-height: 1.17;
         letter-spacing: 0.72px;
-        color: $arrival-time;
+        color: $grayLight;
       }
       .date-time-row {
         display: flex;
         margin-top: 10px;
         line-height: normal;
         letter-spacing: 0.72px;
-        color: $dark-blue;
+        color: $secondary;
         &-img {
           width: 13px;
           height: 13px;
@@ -62,35 +58,29 @@
       }
       &-under-line {
         margin: 15px -15px;
-        border: solid 1px $light-gray;
+        border: solid 1px $grayLight;
       }
     }
   }
 }
 .no-request {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include flex-col-center-algn;
   &-msg {
-    font-family: Roboto;
+    font-family: 'Roboto';
     font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     letter-spacing: 0.72px;
-    color: $dark-grey;
+    color: $subtitle;
     margin-top: 15px;
   }
   &-underline {
     margin: 20px 15px;
-    border: solid 1px $light-gray;
+    border: solid 1px $grayLight;
     width: 100%;
   }
 }
 
 .priority-low {
-  background-color: $priority-low;
+  background-color: $success-state;
 }
 
 .priority-medium {
@@ -102,21 +92,17 @@
 }
 
 .priority-asap {
-  background-color: $priority-asap;
+  background-color: $darkRed;
 }
 
 .priority {
   font-size: 10px;
   font-weight: bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
   letter-spacing: 0.6px;
-  color: $c-gray-61;
+  color: $grayMedium;
   margin-top: 3px;
   margin-bottom: 13px;
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   &-status {
     padding: 2px 5px 3px;
     border-radius: 5px;
@@ -126,13 +112,12 @@
 }
 
 .row {
-  @include flex-space-between();
-  align-items: center;
+  @include flex-space-between-cen-Algn;
 }
 
 .status {
   margin-top: 10px;
   padding: 5px;
   border-radius: 5px;
-  border: solid 1px $light-grey;
+  border: solid 1px $grayLight;
 }

@@ -1,0 +1,10 @@
+<div class="wrapper" *ngIf="isLoaded">
+  <iframe
+    title="setting"
+    [src]="onboardingUrl | safeUrl"
+    height="100%"
+    loading="eager"
+    width="100%"
+    allowFullScreen
+  ></iframe>
+</div>

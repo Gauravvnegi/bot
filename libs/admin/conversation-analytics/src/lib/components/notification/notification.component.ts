@@ -62,17 +62,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
         (response) => {
           this.stats = new Notification().deserialize(response);
           this.initGraphData();
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );

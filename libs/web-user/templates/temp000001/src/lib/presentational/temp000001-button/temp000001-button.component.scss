@@ -1,8 +1,8 @@
 @import 'temp000001';
 
 :host ::ng-deep .back-button {
-  @include footer-back();
-  @media (min-width:602px) and (max-width: 767px) {
+  @include footer-back;
+  @media (min-width: 602px) and (max-width: 767px) {
     left: -24px;
   }
   // @media (max-width: 767px) {
@@ -10,8 +10,8 @@
   // }
 }
 :host ::ng-deep .next-button {
-  @include footer-next();
-  @media (min-width:602px) and (max-width: 767px) {
+  @include footer-next;
+  @media (min-width: 602px) and (max-width: 767px) {
     left: -24px;
   }
   // @media (max-width: 767px) {
@@ -23,7 +23,7 @@
 //   :host ::ng-deep .next-button {
 //     left: inherit !important;
 //   }
-  
+
 // }
 
 :host ::ng-deep .mat-button-wrapper {

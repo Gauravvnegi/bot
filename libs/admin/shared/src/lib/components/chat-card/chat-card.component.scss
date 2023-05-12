@@ -1,0 +1,232 @@
+@import 'main';
+.card-wrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  &_image {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 15px;
+    @include flex-all-center;
+    img {
+      @include full-img;
+    }
+    &-nickName {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      @include flex-all-center;
+      font-size: 16px;
+      color: $white;
+      background-color: olivedrab;
+    }
+  }
+  &_information {
+    height: auto;
+    cursor: pointer;
+    width: calc(100% - 34%);
+    &_roomInfoWrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+      &_roomNumber {
+        font-size: 10px;
+        font-weight: bold;
+        letter-spacing: 0.6px;
+        text-align: left;
+        color: $grayMedium;
+        margin-right: 12px;
+      }
+      &_status {
+        padding: 1px 5px 2px;
+        border-radius: 2px;
+        color: $white;
+        width: fit-content;
+        font-size: 11px;
+      }
+      &_rating {
+        padding: 4px;
+        border-radius: 3px;
+        color: $white;
+        font-size: 10px;
+        height: 20px;
+        width: 21px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    &_department {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: $grayMedium;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    &_name {
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 0.72px;
+      color: $secondary;
+      margin-bottom: 4px;
+    }
+    &_subtitle {
+      color: $grayMedium;
+      font-weight: 500;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    &_remark {
+      font-size: 12px;
+      letter-spacing: 0.72px;
+      color: $secondary;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 175px;
+      margin-bottom: 4px;
+    }
+  }
+  .content-wrap {
+    &-r1 {
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 0.6px;
+      color: $grayMedium;
+      margin-top: 3px;
+      margin-bottom: 13px;
+      display: flex;
+      align-items: center;
+      @media (max-width: $tablet) {
+        margin-bottom: 10px;
+      }
+      &-status {
+        padding: 2px 5px 3px;
+        border-radius: 5px;
+        color: $white;
+        margin-left: 10px;
+      }
+    }
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      &-title {
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: 0.72px;
+        color: $secondary;
+        margin-bottom: 4px;
+      }
+      &-requestTime {
+        font-size: 10px;
+        font-weight: normal;
+        letter-spacing: 0.6px;
+        text-align: right;
+        color: $grayLight;
+      }
+    }
+    &-subtitle {
+      color: $grayMedium;
+      font-weight: 500;
+      font-size: 12px;
+    }
+    &-rank {
+      font-size: 12px;
+      font-weight: normal;
+      letter-spacing: 0.72px;
+      color: $grayMedium;
+      margin-bottom: 4px;
+    }
+    &-r2 {
+      display: flex;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.72px;
+      margin-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      &-divider {
+        height: 15px;
+        border: 1px solid $border;
+        margin: 0 10px;
+        @media (max-width: $tablet) {
+          margin: 0 5px;
+        }
+      }
+    }
+    &-job-duration {
+      @include normal-text;
+      font-size: 12px;
+      color: $secondary;
+    }
+  }
+  &_time {
+    font-size: 10px;
+    letter-spacing: 0.6px;
+    text-align: right;
+    color: $grayLight;
+    min-width: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &_unread-count {
+      padding: 5px;
+      text-align: center;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #00b7a8 0% 0% no-repeat padding-box;
+      opacity: 1;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $white;
+      font-size: 12px;
+    }
+    &_serviceTag {
+      background-color: $whiteDeep;
+      padding: 4px;
+      font-size: 10px;
+      font-weight: 400;
+      background-color: $primary-text-bg;
+      color: $primary-cta;
+    }
+  }
+}
+.priority-low {
+  background-color: $success-state;
+}
+.priority-medium {
+  background-color: $priority-medium;
+}
+.priority-high {
+  background-color: $priority-high;
+}
+.priority-asap {
+  background-color: $darkRed;
+}
+.sla-new {
+  color: $success-state;
+}
+.sla-pending {
+  color: $priority-high;
+}
+.sla-timeout {
+  color: $darkRed;
+}
+:host {
+  width: 100%;
+}
+.feedback_time {
+  height: 115px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  align-items: flex-end;
+}

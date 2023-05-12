@@ -74,13 +74,12 @@
         <div class="image-button">
           <mat-label class="mat-label">Upload Image:</mat-label>
           <div class="image">
-            <hospitality-bot-upload-file
-              [fileUploadData]="fileUploadData"
-              [url]="packageImageUrl"
-              [isDisable]="false"
-              (fileData)="uploadFile($event)"
-            >
-            </hospitality-bot-upload-file>
+            <hospitality-bot-custom-file-upload
+              formControlName="imageUrl"
+              [hotelId]="hotelId"
+              [baseType]="fileUploadType.image"
+              [path]="pathToUploadFile"
+            ></hospitality-bot-custom-file-upload>
           </div>
           <!-- <button class="button">Choose File</button> -->
           <!-- <p class="image-name">{{ packageForm.get('imageName').value }}</p> -->

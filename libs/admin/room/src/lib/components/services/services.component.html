@@ -1,0 +1,84 @@
+<div class="wrapper">
+  <div class="wrapper-header">
+    <div>
+      <hospitality-bot-navigation-header
+        [heading]="pageTitle"
+        [routes]="navRoutes"
+      ></hospitality-bot-navigation-header>
+    </div>
+    <div>
+      <hospitality-bot-button label="+ Add Services"></hospitality-bot-button>
+    </div>
+  </div>
+  <div class="services-wrapper">
+    <div class="inner-services-header">
+      <div>
+        <p>Services</p>
+      </div>
+      <div class="search-box">
+        <span class="p-input-icon-right">
+          <i class="pi pi-search"></i>
+          <form [formGroup]="searchForm">
+            <input
+              formControlName="searchText"
+              type="text"
+              pInputText
+              placeholder="Search"
+            />
+          </form>
+        </span>
+      </div>
+    </div>
+    <hr class="line-separator" />
+    <div class="tab-group">
+      <hospitality-bot-tab-group
+        [listItems]="tabItemList"
+        [selectedIndex]="tabItemIdx"
+        (selectedTabChange)="onSelectedTabFilterChange($event)"
+      ></hospitality-bot-tab-group>
+      <form [formGroup]="useForm">
+        <ng-container *ngIf="selectedService == 'PAID'">
+          <hospitality-bot-custom-select
+            formControlName="paidAmenities"
+            [itemList]="paidServices"
+            [fullView]="true"
+            (loadMoreData)="loadMore()"
+            [noMoreData]="noMorePaidServices || disablePagination"
+            [noRecordsAction]="noRecordAction"
+            [loading]="loading || isPaidLoading"
+          ></hospitality-bot-custom-select>
+        </ng-container>
+        <ng-container *ngIf="selectedService == 'COMPLIMENTARY'">
+          <hospitality-bot-custom-select
+            formControlName="complimentaryAmenities"
+            [itemList]="compServices"
+            [fullView]="true"
+            (loadMoreData)="loadMore()"
+            [noMoreData]="noMoreCompServices || disablePagination"
+            [noRecordsAction]="noRecordAction"
+            [loading]="loading || isCompLoading"
+          ></hospitality-bot-custom-select>
+        </ng-container>
+      </form>
+    </div>
+    <div
+      class="footer-buttons"
+      *ngIf="
+        !loading ||
+        isPaidLoading ||
+        (isCompLoading && (compServices.length || paidServices.length))
+      "
+    >
+      <hospitality-bot-button
+        (onClick)="resetForm()"
+        label="Reset"
+        variant="outlined"
+        severity="reset"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        (onClick)="saveForm()"
+        label="Save"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+</div>

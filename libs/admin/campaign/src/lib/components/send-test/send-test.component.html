@@ -23,18 +23,16 @@
     </div>
   </div>
   <div class="btn-wrapper">
-    <div class="cancel" (click)="close()">
-      <div class="cancel__text">{{ 'cancel' | translate }}</div>
-    </div>
-    <div
-      class="send"
+    <hospitality-bot-button
+      [label]="'cancel' | translate"
+      (click)="close()"
+      variant="outlined"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
       (click)="sendMail()"
-      [ngClass]="{ active: !isSending, disabled: isSending }"
-    >
-      <div class="send__text">
-        <i *ngIf="isSending" class="fa fa-spinner fa-spin"></i>
-        {{ isSending ? 'Sending' : 'Send' }}
-      </div>
-    </div>
+      [label]="isSending ? 'Sending' : 'Send'"
+      [disabled]="isSending"
+      [isLoading]="isSending"
+    ></hospitality-bot-button>
   </div>
 </div>

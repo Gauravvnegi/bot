@@ -12,8 +12,7 @@
   }
 
   @media screen and (max-width: $L) {
-    justify-content: space-between;
-    align-items: center;
+    @include flex-space-between-cen-Algn;
     position: relative;
   }
 
@@ -21,10 +20,7 @@
     width: 50%;
     height: 100%;
     transform: scale(1.5) translateY(17%);
-    //transform: unset;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-all-center;
 
     @media only screen and (min-width: $XL) {
       transform: unset;
@@ -47,10 +43,7 @@
 
 .stat-val-container {
   height: 180px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  @include flex-space-between-cen-Algn;
 }
 
 .progress-info-labels {
@@ -62,16 +55,12 @@
 
 .progress-info-labels-container {
   padding-top: 22px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  @include flex-col-space-between;
   height: calc(100% - 22px);
 }
 
 .progress-detail-contaner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include flex-col-center-algn;
 }
 
 .stat-value {
@@ -88,13 +77,13 @@
   text-align: center;
   font: normal normal bold 12px/16px Roboto;
   letter-spacing: 0.72px;
-  color: $quote-color;
+  color: $subtitle;
   opacity: 1;
 }
 
 svg text.label {
   fill: $black;
-  font: 15px;
+  font-size: 15px;
   font-weight: 400;
   text-anchor: middle;
 }
@@ -104,7 +93,7 @@ svg text.label {
   text-align: left;
   font: normal normal bold 25px/33px Roboto;
   letter-spacing: 1.5px;
-  color: $approved;
+  color: #2f1dce;
   opacity: 1;
 }
 
@@ -119,7 +108,7 @@ svg text.label {
 
 .subtitle-label {
   font-size: 14px;
-  color: $quote-color;
+  color: $subtitle;
   @media only screen and (max-width: 1150px) {
     font-size: 11px;
   }
@@ -130,8 +119,7 @@ svg text.label {
     height: auto;
   }
   &--status {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
 
     // complete text
     &--sqaure {
@@ -142,59 +130,59 @@ svg text.label {
     }
 
     .complete {
-      background: $completed 0% 0% no-repeat padding-box;
+      background: $posCompare 0% 0% no-repeat padding-box;
     }
 
     // pending square
     .pending {
-      background: $pending 0% 0% no-repeat padding-box;
+      background: $draft-state 0% 0% no-repeat padding-box;
     }
 
     // pending square
     .timeout {
-      background: $reject 0% 0% no-repeat padding-box;
+      background: $mediumRed 0% 0% no-repeat padding-box;
     }
 
-    &--normaltext {
+    &--normal-text {
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0px;
-      color: $dark-blue;
+      color: $secondary;
       opacity: 1;
       margin: 0 10px;
     }
-    &--normaltext-2 {
+    &--normal-text-2 {
       font: normal normal normal 10px/13px Roboto;
       letter-spacing: 0px;
-      color: $pending;
+      color: $draft-state;
       opacity: 1;
       margin: 0 10px;
     }
     &--completetext {
       font: normal normal normal 12px/16px Roboto;
       letter-spacing: 0px;
-      color: $completed;
+      color: $posCompare;
       opacity: 1;
     }
   }
 
-  &--normaltext2 {
+  &--normal-text2 {
     font: normal normal normal 12px/16px Roboto;
     letter-spacing: 0.72px;
-    color: $quote-color;
+    color: $subtitle;
     opacity: 1;
   }
 
   &-pending {
     font: normal normal normal 10px/13px Roboto;
     letter-spacing: 0px;
-    color: $pending;
+    color: $draft-state;
     opacity: 1;
     margin: 0 10px;
 
     &--squrae {
       font: normal normal normal 12px/16px Roboto;
       letter-spacing: 0.72px;
-      color: $quote-color;
+      color: $subtitle;
       opacity: 1;
     }
   }
@@ -202,8 +190,7 @@ svg text.label {
 
 :host ::ng-deep svg {
   @media only screen and (max-width: 1150px) {
-    height: 100%;
-    width: 100%;
+    @include full-img;
   }
 }
 
@@ -212,24 +199,21 @@ svg text.label {
 }
 
 .comparison-negative {
-  color: $comparison-negative;
+  color: $darkRed;
 }
 
 .comparison-positive {
-  color: $comparison-positive;
+  color: $posCompare;
 }
 :host ::ng-deep .labels {
   position: absolute;
-  color: $gray-total;
+  color: $grayMedium;
   font: normal normal bold 11px/12px Roboto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  @include flex-col-all-Center;
   z-index: 1;
 }
 :host ::ng-deep .labels .val {
   text-align: center;
-  color: $dark-blue;
+  color: $secondary;
   font: normal normal bold 21px/24px Roboto;
 }

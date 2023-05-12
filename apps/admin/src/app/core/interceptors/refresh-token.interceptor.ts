@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '@hospitality-bot/admin/shared';
 import { ModalService } from '@hospitality-bot/shared/material';
+import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../auth/services/auth.service';
@@ -24,7 +25,8 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     private _userService: UserService,
     private _router: Router,
     private loadingService: LoadingService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private cookieService: CookieService
   ) {}
   intercept(
     req: HttpRequest<any>,
@@ -43,6 +45,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
             this.modalService.close();
             this.logoutUser();
           }
+          this.loadingService.close();
 
           return throwError(err);
         }
@@ -50,13 +53,14 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
         // If error status is different than 401 we want to skip refresh token
         // So we check that and throw the error if it's the case
         if (err.status !== 401) {
+          this.loadingService.close();
           return throwError(err);
         }
 
         if (this.refreshTokenInProgress) {
           // If refreshTokenInProgress is true, we will wait until refreshTokenSubject has a non-null value
           // – which means the new token is ready and we can retry the request again
-          console.log('Refresh tokken in progress');
+          console.log('Refresh token in progress');
           return this.refreshTokenSubject.pipe(
             filter((result) => result !== null),
             take(1),
@@ -125,13 +129,15 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   }
 
   logoutUser() {
-    this._authService.logout(this._userService.getLoggedInUserid()).subscribe(
-      (response) => {
+    this._authService.logout(this._userService.getLoggedInUserId()).subscribe(
+      (_) => {
         this._authService.clearToken();
+        this._authService.deletePlatformRefererTokens(this.cookieService);
         this._router.navigate(['/auth']);
         this.loadingService?.close();
       },
       (error) => {
+        this.loadingService?.close();
         this._authService.clearToken();
         this._router.navigate(['/auth']);
       }
@@ -143,16 +149,6 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
       'x-access-token',
       tokenConfig['x-access-token']
     );
-
-    // this._authService.setTokenByName(
-    //   'x-refresh-authorization',
-    //   tokenConfig['x-refresh-authorization']
-    // );
-
-    // this._authService.setTokenByName(
-    //   'x-access-refresh-token',
-    //   tokenConfig['x-access-refresh-token']
-    // );
 
     this._authService.setTokenByName('x-userId', tokenConfig['x-userId']);
   }

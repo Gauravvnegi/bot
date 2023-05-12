@@ -1,0 +1,43 @@
+<div>
+  <div class="header">
+    <div
+      *ngFor="let field of fields"
+      [style.flexBasis]="width"
+      class="header__cell"
+    >
+      {{ field.label }}
+    </div>
+  </div>
+  <div [formGroup]="userFormGroup">
+    <div formGroupName="roomInformation" class="wrapper">
+      <div
+        *ngFor="let field of fields"
+        [style.flexBasis]="width"
+        [ngSwitch]="field.type"
+      >
+        <hospitality-bot-input
+          *ngSwitchCase="'input'"
+          [controlName]="field.name"
+          [props]="{
+            placeholder: field.placeholder
+          }"
+          [disabled]="field.disabled"
+          (focusout)="getSummaryData()"
+          (keyup.enter)="getSummaryData()"
+        ></hospitality-bot-input>
+        <hospitality-bot-select
+          *ngSwitchCase="'select'"
+          [controlName]="field.name"
+          [props]="{
+            placeholder: field.placeholder,
+            isAsync: true
+          }"
+          (paginate)="loadMoreRoomTypes()"
+          (onSearch)="searchRoomTypes($event)"
+          [options]="field.options"
+          [disabled]="field.disabled"
+        ></hospitality-bot-select>
+      </div>
+    </div>
+  </div>
+</div>

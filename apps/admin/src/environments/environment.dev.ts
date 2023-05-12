@@ -4,7 +4,7 @@ export const environment = {
   ...defaultEnvironment,
   production: true,
   name: 'dev',
-  base_url: 'https://testapi.botshot.in:32313',
+  base_url: 'https://dev.api.botshot.ai:8443',
   firebase: {
     apiKey: 'AIzaSyBVotX7FRNCpG7WakjyDnxnUmgYDerLyHI',
     authDomain: 'push-notification-6455a.firebaseapp.com',
@@ -16,5 +16,5 @@ export const environment = {
     measurementId: 'G-CV14FFBNNF',
   },
   guest_home: 'https://botshot.ai',
-  createWithUrl: 'https://createwith.botshot.ai',
+  createWithUrl: 'https://dev.createwith.botshot.ai',
 };

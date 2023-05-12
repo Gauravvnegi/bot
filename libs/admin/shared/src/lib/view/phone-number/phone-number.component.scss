@@ -1,0 +1,37 @@
+@import '../../components/form-component/form.component.scss';
+
+.main {
+  width: 100%;
+  display: flex;
+  gap: 1em;
+  margin-top: $label-gap;
+}
+.pre-input {
+  flex-basis: 15%;
+}
+.post-input {
+  flex-basis: 85%;
+}
+:host ::ng-deep .label {
+  display: block;
+  width: 0;
+  white-space: nowrap;
+}
+:host ::ng-deep .p-dropdown-panel {
+  width: 417px !important;
+}
+
+:host ::ng-deep .p-dropdown-panel .p-dropdown-header .p-dropdown-filter {
+  @include search-input();
+}
+:host ::ng-deep .input__static .p-dropdown {
+  margin-top: 0px !important;
+}
+
+:host ::ng-deep .p-dropdown:not(.p-disabled):hover {
+  border-color: $primary-form-color;
+}
+
+:host ::ng-deep .p-dropdown {
+  border-color: $grayLight;
+}

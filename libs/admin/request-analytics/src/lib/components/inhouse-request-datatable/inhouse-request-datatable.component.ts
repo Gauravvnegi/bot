@@ -7,19 +7,18 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { analytics } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
-import { DateService } from '@hospitality-bot/shared/utils';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
+import { ChipType } from '../../constant/datatable';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
-import { analytics } from '@hospitality-bot/admin/shared';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-datatable',
@@ -94,33 +93,33 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
-          this.values = new InhouseTable().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
           if (this.tabFilterItems[this.tabFilterIdx].chips.length === 1)
             this.addQuickReplyFilter(data.entityStateCounts, this.totalRecords);
           else this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
   }
 
+  setRecords(data): void {
+    this.values = new InhouseTable().deserialize(data)?.records;
+    this.updateTabFilterCount(data?.entityTypeCounts, data.total);
+    this.updateTotalRecords();
+    this.loading = false;
+  }
+
   addQuickReplyFilter(entityStateCounts, total) {
-    this.tabFilterItems[this.tabFilterIdx].chips[0].total = total;
+    this.tabFilterItems[this.tabFilterIdx].chips[0].total = Number(
+      Object.values(entityStateCounts).reduce(
+        (a: number, b: number) => a + b,
+        0
+      )
+    );
     Object.keys(entityStateCounts).forEach((key) =>
       this.tabFilterItems[this.tabFilterIdx].chips.push({
         label: key,
@@ -128,7 +127,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         value: key,
         total: entityStateCounts[key],
         isSelected: false,
-        type: key,
+        type: ChipType[key],
       })
     );
   }
@@ -139,22 +138,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
       .map((item) => ({
         actionType: item.value,
       }));
-  }
-
-  updateTabFilterCount(countObj, currentTabCount) {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => (tab.total = countObj[tab.value]));
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  updateQuickReplyFilterCount(countObj) {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach(
-        (chip) => (chip.total = countObj[chip.value])
-      );
-    }
   }
 
   fetchDataFrom(
@@ -186,25 +169,11 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = new InhouseTable().deserialize(data).records;
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          //set pagination
-          this.totalRecords = data.total;
-          //check for update tabs and quick reply filters
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -213,27 +182,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
-  }
-
-  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
-    if (quickReplyTypeIdx === 0) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') chip.isSelected = false;
-      });
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    }
-    this.changePage(0);
   }
 
   customSort(event: SortEvent) {
@@ -275,15 +223,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -305,8 +244,9 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         },
       ]),
     };
-    this.analyticsService.closeRequest(config, requestData).subscribe(
-      (response) => {
+    this.analyticsService
+      .closeRequest(config, requestData)
+      .subscribe((response) => {
         this.loadInitialData(
           [
             ...this.globalQueries,
@@ -332,18 +272,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           '',
           { panelClass: 'success' }
         );
-      },
-      ({ error }) =>
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe()
-    );
+      });
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {

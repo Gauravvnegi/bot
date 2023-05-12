@@ -1,16 +1,4 @@
 <span class="p-input-icon-right">
-  <!-- <mat-icon (click)="clearSearch()" class="cross_icon">cancel</mat-icon> -->
-  <mat-icon
-    (click)="clearSearch()"
-    class="cross_icon"
-    *ngIf="parentFG.get('search')?.value.length; else searchicon"
-    >{{ 'filter.cancel' | translate }}</mat-icon
-  >
-  <ng-template #searchicon>
-    <div class="cross_icon">
-      <img src="assets/svg/search.svg" alt="filter" />
-    </div>
-  </ng-template>
   <form [formGroup]="parentFG">
     <input
       type="text"
@@ -18,5 +6,6 @@
       formControlName="search"
       placeholder="Search by Name, Number..."
     />
+    <i class="pi pi-times-circle search-icon" (click)="clearSearch()"></i>
   </form>
 </span>

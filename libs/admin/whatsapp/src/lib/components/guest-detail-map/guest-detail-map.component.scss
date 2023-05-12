@@ -3,8 +3,7 @@
 .modal__header {
   width: 100%;
   height: 108px;
-  background: transparent linear-gradient(180deg, #6462e0 0%, #303db4 100%) 0%
-    0% no-repeat padding-box;
+  background: $primaryGradient-bg;
   opacity: 1;
   display: flex;
   justify-content: space-between;
@@ -39,11 +38,11 @@
       cursor: pointer;
     }
     .cancel {
-      border: 1px solid $primary-purple;
-      color: $primary-purple;
+      border: 1px solid $primary-cta;
+      color: $primary-cta;
     }
     .save {
-      background: $primary-purple 0% 0% no-repeat padding-box;
+      background: $primary-cta 0% 0% no-repeat padding-box;
       color: $white;
     }
   }
@@ -71,13 +70,13 @@
       width: 100%;
       padding: 14px 14px 14px 40px;
       font-size: 16px;
-      color: $dark-blue;
+      color: $secondary;
       letter-spacing: 0.32px;
-      border: 1px solid $c-gray-81;
+      border: 1px solid $borderCol;
       border-radius: 5px;
 
       ::placeholder {
-        color: $primary-gray;
+        color: $grayMedium;
       }
     }
     ::ng-deep {

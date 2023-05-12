@@ -16,7 +16,7 @@
   .stat-lable {
     text-align: center;
     letter-spacing: 0.6px;
-    color: $quote-color;
+    color: $subtitle;
     opacity: 1;
   }
 }
@@ -41,9 +41,8 @@
         width: 50%;
         margin-right: 10px;
         font-size: 12px;
-        // font: normal normal medium 10px Roboto;
         letter-spacing: 0.72px;
-        color: $quote-color;
+        color: $subtitle;
         @media (max-width: 1024px) {
           font-size: 10px;
         }
@@ -81,7 +80,7 @@
         font-size: 11px;
         font-weight: 500;
         letter-spacing: 0.6px;
-        color: $quote-color;
+        color: $subtitle;
       }
     }
   }
@@ -108,13 +107,13 @@
 }
 
 :host ::ng-deep .mat-tab-header {
-  border-bottom: 1px solid $tab-bottom-border;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
   @media screen and (max-width: $L) {
-    font-size: $font14 !important;
+    font-size: 14px !important;
   }
 }
 

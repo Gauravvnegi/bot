@@ -15,8 +15,8 @@
     }
   }
 
-  @include flex-between-center();
-  @include display-block-on-breakpoint($M);
+  @include flex-between-center;
+  @include displayBlockOnBreakPoint($M);
   @media only screen and (max-width: $M) {
     flex-direction: column;
     justify-content: inherit;
@@ -29,8 +29,23 @@
   }
 }
 
-.enter-below-details{
-  padding-top: 60px;
-  border-top: solid 2px $border-color;
-  padding-bottom: 20px;
+.enter-below-details {
+  padding: 20px 30px;
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+:host ::ng-deep .next-button {
+  margin-top: 10px;
+  @include primary-button;
+}
+
+:host ::ng-deep .close {
+  .mat-icon {
+    float: right;
+    cursor: pointer;
+  }
 }

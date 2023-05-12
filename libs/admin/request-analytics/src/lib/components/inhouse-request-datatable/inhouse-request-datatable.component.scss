@@ -3,9 +3,9 @@
   width: 75%;
   padding: 5px 10px;
   font-size: 16px;
-  color: $dark-blue;
+  color: $secondary;
   letter-spacing: 0.32px;
-  border: 1px solid $c-gray-81;
+  border: 1px solid $borderCol;
   border-radius: 5px;
   background: $white;
   ::placeholder {
@@ -16,7 +16,7 @@
     font-style: normal;
     line-height: 1.25;
     letter-spacing: 0.72px;
-    color: $primary-gray;
+    color: $grayMedium;
   }
 }
 .popup__wrap {
@@ -30,13 +30,13 @@
     margin-bottom: 10px;
     font-size: 25px;
   }
-  ::ng-deep .p-inputtext {
+  :host ::ng-deep .p-inputtext {
     align-items: center !important;
     justify-content: space-between !important;
     gap: 8px;
   }
   .requestDataTableHead {
-    background-color: $c-gray-93 !important;
+    background-color: $whiteDeep !important;
     width: 50px;
     text-align: center;
   }
@@ -55,7 +55,7 @@
 td {
   ::ng-deep p {
     font-size: 12px;
-    color: $c-gray-45;
+    color: $grayMedium;
     line-height: 16px;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -67,23 +67,23 @@ td {
       @include inhouse-popup-status;
     }
     &.asap {
-      background-color: $comparison-negative;
+      background-color: $darkRed;
       @include inhouse-popup-status;
     }
     &.low {
-      background-color: $priority-low;
+      background-color: $success-state;
       @include inhouse-popup-status;
     }
     &.light {
-      color: $c-gray-71;
+      color: $grayLight;
       text-overflow: ellipsis;
       overflow: hidden;
     }
     &.item-name {
-      color: $dark-blue;
+      color: $secondary;
     }
     &.date-time {
-      color: $dark-blue;
+      color: $secondary;
     }
   }
   .job-duration {
@@ -96,37 +96,18 @@ td {
   }
   mat-select {
     font-size: 12px;
-    color: $primary-gray;
+    color: $grayMedium;
   }
-}
-
-:host ::ng-deep .status-text-timeout {
-  background: $pacific-blue !important;
-  color: $white !important;
-}
-:host ::ng-deep .status-opacity-pending {
-  color: $pacific-blue;
-}
-:host ::ng-deep .status-opacity-initiated {
-  color: $closed !important;
-}
-:host ::ng-deep .status-text-closed {
-  background: $closed !important;
-  color: $white !important;
-}
-
-:host ::ng-deep .status-opacity-success {
-  color: $priority-low !important;
-}
-:host ::ng-deep .status-text-pending {
-  background: $priority-low !important;
-  color: $white !important;
-}
-:host ::ng-deep .requestDataActionLabel {
-  margin-left: 0.5em;
-  font-weight: 500;
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
   color: rgb(75, 86, 192) !important;
+}
+
+// added for now
+:host ::ng-deep .p-datatable {
+  .p-datatable-thead {
+    position: static !important;
+  }
+  @include tableCellPadding(0.3em);
 }

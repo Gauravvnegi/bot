@@ -1,0 +1,59 @@
+<div class="wrapper">
+  <div class="header">
+    <div>
+      <div class="heading" *ngIf="label">
+        {{ label }}
+      </div>
+      <div class="sub-heading" *ngIf="description">
+        {{ description }}
+      </div>
+    </div>
+    <div *ngIf="!fullView && options.length">
+      <hospitality-bot-button
+        label="View All"
+        (onClick)="viewAll.emit()"
+        variant="contained"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+  <div
+    class="item-boxes"
+    [ngClass]="{ expandedView: fullView }"
+    infiniteScroll
+    (scrolled)="loadMore()"
+    [toggleScrollListener]="noMoreData"
+    *ngIf="!!options.length; else emptyTable"
+  >
+    <ng-container *ngFor="let item of options; index as i">
+      <div class="item-box" (click)="selectItems(i)">
+        <div class="icon-wrapper">
+          <img src="assets/svg/tick.svg" *ngIf="item.checked" alt="checked" />
+        </div>
+        <div
+          class="image-wrapper"
+          [ngClass]="{ selected: item.checked == true }"
+        >
+          <img [src]="item.imageUrl" class="show-image" alt="image" appImage />
+        </div>
+        <div class="text">
+          <span>{{ item.name }}</span>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <ng-template #emptyTable>
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      [content]="noRecordsAction"
+    >
+    </hospitality-bot-empty-table>
+  </ng-template>
+
+  <p
+    class="validation-error"
+    *ngIf="control?.errors?.required && control?.touched"
+  >
+    {{ validationErrMsg }}
+  </p>
+</div>

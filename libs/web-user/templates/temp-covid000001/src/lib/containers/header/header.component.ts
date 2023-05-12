@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { RaiseRequestWrapperComponent } from '../raise-request-wrapper/raise-request-wrapper.component';
 import { HyperlinkElementService } from '../../../../../../shared/src/lib/services/hyperlink-element.service';
-import { debug } from 'util';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
 
 @Component({

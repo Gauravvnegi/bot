@@ -5,7 +5,11 @@
   grid-template-columns: 33% 33% 33%;
   align-items: center;
   background-color: var(--footer-background-color, $footer-background-color);
-  padding: $padding-medium;
+  padding: 15px;
+  @media only screen and (min-width: $tablet) {
+    height: 70px;
+    padding: 0px;
+  }
   @media screen and (min-width: $M) {
     position: fixed;
     bottom: 0;
@@ -13,41 +17,42 @@
     right: 0;
     z-index: 99;
   }
+
+  &--logo {
+    align-self: center;
+    height: 40px;
+    padding: 0 10px;
+    & img {
+      height: inherit;
+    }
+  }
   &--text {
     font-size: $font-responsive-small;
-    @include flex-justify-center();
-    flex-direction: column;
-    margin: 0px $margin-small;
-       
-    @media only screen and (max-width:$S) {
-      margin: $margin-small 0;
+    @include flex-col-justify-center;
+    margin: 0px 10px;
+
+    @media only screen and (max-width: $S) {
+      margin: 10px 0;
     }
-  
+
     .footer-privacy-text {
+      display: flex;
+      flex-direction: column;
       text-align: center;
+      align-items: center;
       color: var(--footer-font-color, $footer-font-color);
-      a {
-        text-decoration: none;
-        color: var(--footer-font-color, $footer-font-color);
-        margin-bottom: 10px;
-        @media only screen and (max-width: $M) {
-          margin-bottom: 5px;
-        }
-      }
     }
 
     .social_icons {
-      @include flex-justify-center();
-
-      align-items: center;
-      margin-bottom: $margin-small;
+      @include flex-all-center;
+      margin-bottom: 10px;
       .icon {
         height: 30px;
         width: 30px;
         margin: 0px 5px;
         img {
-          height: $full-width;
-          width: $full-width;
+          height: 100%;
+          width: 100%;
         }
       }
     }
@@ -61,7 +66,6 @@
           width: 25px;
           margin: 0px 2px;
         }
-       
       }
     }
   }
@@ -70,35 +74,19 @@
     justify-content: flex-end;
 
     .wrap-details {
-      // width: 100%;
-      @media only screen and (max-width: $M) {
-        display: block;
-      }
       a {
         text-decoration: none;
       }
-      .text {
-        font-size: $font-responsive-small;
-        display: flex;
-        align-items: center;
-        color: var(--footer-font-color, $footer-font-color);
-        @media only screen and (max-width: $S) {
-          justify-content: center;
-        }
-      }
       .material-icons {
-        height: 23px;
+        height: 18px;
         width: 22px;
         font-size: $font-medium;
         color: var(--footer-icon-color, $footer-icon-color);
       }
     }
-    @media only screen and (max-width: $M) {
-      
+    @media only screen and (max-width: $S) {
       white-space: nowrap;
-      
-     
-      // margin: 0 0 3rem;
+
       .text {
         font-size: $font-responsive-smaller;
       }
@@ -108,18 +96,30 @@
         margin: 10px;
       }
     }
-    @media only screen and (max-width:$S) {
+    @media only screen and (max-width: $S) {
       justify-content: center;
     }
   }
-  @media only screen and (max-width: $M) {
-    // grid-template-columns: 25% 25% 50%;
-  margin-bottom: 45px !important;
+  @media only screen and (max-width: $tablet) {
+    margin-bottom: 45px !important;
   }
-  @media only screen and (max-width:$S) {
+  @media only screen and (max-width: $S) {
     grid-template-columns: 100%;
     text-align: center;
     margin-bottom: 2rem;
-    padding: $padding-medium 0;
+    padding: 15px 0;
+  }
+}
+
+.basic-text {
+  height: 18px;
+  display: flex;
+  color: var(--footer-font-color, $footer-font-color);
+  font-size: $font-small;
+  text-decoration: none;
+  align-items: center;
+  justify-content: flex-end;
+  @media only screen and (max-width: $S) {
+    justify-content: center;
   }
 }

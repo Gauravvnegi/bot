@@ -29,7 +29,12 @@
         </mat-select>
       </div>
       <div class="man-icon" (click)="openGuestInfo()">
-        <img class="icon" src="assets/images/guest-info-icon .png" [alt]="" />
+        <img
+          class="icon"
+          src="assets/svg/hamBurger.svg"
+          [alt]=""
+          *ngIf="!guestInfoEnable"
+        />
       </div>
     </div>
   </div>
@@ -73,9 +78,11 @@
           </td>
           <td>-</td>
           <td>
+            <a href="tel:{{data.guestDetails.getPhoneNumbers()}}">
             <div>
               {{ data.guestDetails.getPhoneNumbers() }}
             </div>
+            </a>
           </td>
         </tr>
       </table>

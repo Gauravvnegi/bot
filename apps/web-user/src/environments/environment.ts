@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   name: 'default',
-  base_url: 'https://testapi.botshot.in:32313',
+  base_url: 'https://dev.api.botshot.ai:8443',
 };
 
 /*

@@ -1,0 +1,34 @@
+<div class="nav-header-wrapper" #header>
+  <div
+    class="nav-wrapper"
+    *ngIf="routes.length"
+    [ngClass]="{ 'nav-wrapper__sticky': isScrolledUp }"
+  >
+    <div class="link" *ngFor="let route of routes; let idx = index">
+      <span
+        [disabled]="route.isDisabled"
+        [routerLink]="route.link"
+        [ngClass]="{
+          link__disabled: route.link === './' || route.isDisabled,
+          link__active: route.link !== './' && !route.isDisabled
+        }"
+        >{{ route.label }}</span
+      >
+
+      <i *ngIf="idx < routes.length - 1" class="pi pi-angle-right"></i>
+    </div>
+    <div class="nav-actions">
+      <ng-content></ng-content>
+    </div>
+  </div>
+  <div
+    class="header__wrapper"
+    [ngClass]="{ header__wrapper__sticky: isScrolledUp }"
+  >
+    <header class="header">
+      <i *ngIf="isBack" (click)="back()" class="pi pi-arrow-left"></i>
+      <div class="label">{{ heading }}</div>
+    </header>
+    <div class="header__date" *ngIf="draftDate">Drafted on {{ draftDate }}</div>
+  </div>
+</div>

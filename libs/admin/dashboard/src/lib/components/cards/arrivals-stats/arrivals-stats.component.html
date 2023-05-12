@@ -1,25 +1,30 @@
 <div class="container" (click)="openModal()">
-  <div class="title-container">
+  <div
+    class="title-container"
+    *skeleton="arrivals == undefined; height: '31px'; width: '170px'"
+  >
     <div class="icon">
       <img
         [src]="dashboardConfig.images.arrivals.headerIcon.url"
         [alt]="dashboardConfig.images.arrivals.headerIcon.alt"
       />
     </div>
-    <div class="stat-title">{{ 'card.arrivals.title_text' | translate }}</div>
-    <div class="info-icon">
-      <img
-        [src]="dashboardConfig.images.info.url"
-        [alt]="dashboardConfig.images.info.alt"
-      />
-      <div class="tooltip">
-        <span class="arrow"></span>
-        {{ 'card.arrivals.tooltip_text' | translate }}
-      </div>
-    </div>
+    <hospitality-bot-custom-tooltip
+      [text]="'card.arrivals.tooltip_text' | translate"
+    >
+      <div class="stat-title">{{ 'card.arrivals.title_text' | translate }}</div>
+    </hospitality-bot-custom-tooltip>
   </div>
   <div class="stat-val-container">
-    <div class="stat-val-wrapper">
+    <div
+      class="stat-val-wrapper"
+      *skeleton="
+        arrivals == undefined;
+        height: '45px';
+        width: '94px';
+        margin: '0 0 10px 0'
+      "
+    >
       <div class="stat-value">{{ arrivals.maxExpected }}</div>
       <div>
         <div>
@@ -46,7 +51,10 @@
         </div>
       </div>
     </div>
-    <div class="stat-val-title">
+    <div
+      class="stat-val-title"
+      *skeleton="arrivals == undefined; height: '16px'; width: '80px'"
+    >
       {{ 'card.arrivals.total_arrival_text' | translate }}
     </div>
   </div>
@@ -62,14 +70,20 @@
       ></div>
     </div>
     <div class="progress-info">
-      <div class="progress-info-labels">
+      <div
+        class="progress-info-labels"
+        *skeleton="arrivals == undefined; height: '18px'; width: '72px'"
+      >
         <span class="label"
           >{{ 'card.arrivals.arrived_text' | translate }}&nbsp;<strong>{{
             arrivals.currentlyArrived
           }}</strong></span
         >
       </div>
-      <div class="progress-info-labels">
+      <div
+        class="progress-info-labels"
+        *skeleton="arrivals == undefined; height: '18px'; width: '72px'"
+      >
         <span class="label"
           >{{ 'card.arrivals.remaining_text' | translate }}&nbsp;<b>{{
             arrivals.currentlyExpected

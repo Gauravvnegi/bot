@@ -1,28 +1,29 @@
 @import 'main';
 
 .layoutMessageCheck {
-  @include flex-between-center();
-  @include width(75%);
+  @include flex-between-center;
+  width: 75%;
   .margBtm {
     margin-bottom: -6px;
   }
 }
 
 .layoutFilterContent {
-  color: $light-grey;
-  font-size: $font12;
+  color: $grayLight;
+  font-size: 12px;
 }
 
 .wrapper {
-  @include height(100vh);
+  height: 100vh;
   display: flex;
-  width: $full;
+  width: 100%;
   flex: 1;
 }
 
 .sidebar-panel {
   position: relative;
-  height: $full;
+  height: 100%;
+  z-index: $left-side-panel-z;
   -webkit-transition: all 500ms;
   -moz-transition: all 500ms;
   -ms-transition: all 500ms;
@@ -30,16 +31,16 @@
   transition: all 500ms;
   @media (max-width: $tablet) {
     position: absolute;
-    z-index: 99;
+    z-index: $left-side-panel-z;
   }
 }
 
 .flash-notification {
   position: absolute;
-  @include flex-justify-center();
+  @include flex-justify-center;
   left: 80px;
   right: 0;
-  z-index: 2222;
+  z-index: $right-side-panel-z;
   top: 16px;
   p {
     max-width: 70%;
@@ -52,12 +53,12 @@
 
 .filter-range-wrapper {
   width: 30%;
-  @include width(30%);
-  @include flex-between-center();
+
+  @include flex-between-center;
   @media (max-width: $L) {
-    justify-content: flex-start;
+    @include flex-start;
     gap: 2%;
-    @include width(35%);
+    width: 35%;
   }
   .positionRel {
     position: relative;
@@ -65,27 +66,25 @@
   .temp-width {
     width: 100%;
     @media only screen and (max-width: 800px) {
-      @include width(100%);
+      width: 100%;
     }
     @media (max-width: 1024px) {
-      @include width(35%);
-      display: flex;
-      justify-content: flex-start;
+      width: 35%;
+      @include flex-start;
     }
   }
 }
 
 .notification-wrapper {
-  @include flex-between-center();
+  @include flex-between-center;
   .temp-width {
     width: 100%;
     @media only screen and (max-width: 800px) {
-      @include width(100%);
+      width: 100%;
     }
     @media (max-width: 1024px) {
-      @include width(35%);
-      display: flex;
-      justify-content: flex-start;
+      width: 35%;
+      @include flex-start;
     }
   }
 }
@@ -95,61 +94,60 @@
 }
 
 :host ::ng-deep .p-dropdown {
-  @include margin-left(4%);
+  margin-left: 4%;
 }
 
 :host ::ng-deep .p-dropdown .p-inputtext {
   .material-icons {
-    font-size: $font16;
-    @include width(auto);
-    @include height(auto);
+    font-size: 16px;
+    width: auto;
+    height: auto;
   }
 }
 
 .main-panel {
-  width: $full;
+  width: 100%;
   flex: 1;
   overflow-x: hidden;
   overflow-y: hidden;
   &--header {
-    padding: 6px 0 6px $padding10;
+    padding: 6px 0 6px 10px;
     position: relative;
     @media (max-width: $tablet) {
-      @include width(93%);
-      @include margin-left(auto);
+      width: 90%;
+      margin-left: auto;
     }
     .options {
-      display: flex;
-      @include flex-between-center();
+      @include flex-between-center;
       @media (max-width: $tablet) {
-        @include height(53px);
-        justify-content: flex-start;
+        height: 53px;
+        @include flex-start;
+
         gap: 1.4%;
       }
       .search-bar-wrapper {
-        @include flex-item-center();
+        @include flex-item-center;
       }
       .global_search {
         position: relative;
         width: 30%;
-        @include width(30%);
         @media screen and (max-width: 800px) {
-          @include width(31%);
+          width: 31%;
         }
         @media (max-width: $L) {
-          @include width(35%);
+          width: 35%;
         }
       }
 
       .header--button {
-        padding: 0px $padding10;
-        @include height(42px);
+        padding: 0px 10px;
+        height: 42px;
         border: none;
         font-size: 12px;
-        color: $primary-purple;
-        @include flex-between-center();
+        color: $primary-cta;
+        @include flex-between-center;
         background-color: $white;
-        border-radius: $borderRadius5;
+        border-radius: 5px;
         position: relative;
         &:hover {
           cursor: pointer;
@@ -158,30 +156,36 @@
           outline: none;
         }
         .filter-button--text {
-          color: $dark-blue2;
-          font-weight: 500;
+          color: $secondary2;
+          font-weight: $medium;
           @media only screen and (max-width: 1200px) {
-            font-size: $font10;
+            font-size: 10px;
+          }
+        }
+        .filter-icon {
+          &:hover {
+            filter: invert(90%) sepia(141%) saturate(1362%) hue-rotate(221deg)
+              brightness(80%) contrast(124%);
           }
         }
         .material-icons {
-          @include margin-left(15px);
+          margin-left: 15px;
         }
         @media screen and (max-width: 800px) {
-          @include width(95%);
+          width: 95%;
         }
         .notification-count {
           position: absolute;
           height: 20px;
-          border: solid 1px #fff;
+          border: solid 1px $white;
           border-radius: 16px;
           background-color: #ffa329;
-          padding: 2px 6px;
+          padding: 0px 6px;
           top: 0;
           left: 50%;
           font-size: 12px;
           font-weight: bold;
-          color: #fff;
+          color: $white;
         }
       }
       .notification-icon {
@@ -192,41 +196,50 @@
         top: -1vh;
         right: 0;
         height: 100vh;
-        box-shadow: 0px 0px 3px 0px $primary-purple;
-        @include width(299px);
+        box-shadow: 0px 0px 3px 0px $primary-cta;
+        width: 299px;
         background-color: $white;
-        z-index: 22;
+        z-index: $right-side-panel-z;
       }
       .notification {
         position: absolute;
         top: 0;
         right: 0;
         height: 100vh;
-        box-shadow: 0px 0px 3px 0px $primary-purple;
-        @include width(299px);
+        box-shadow: 0px 0px 3px 0px $primary-cta;
+        width: 299px;
         background-color: $white;
-        z-index: 22;
+        z-index: $right-side-panel-z;
       }
       .date-range {
         @media screen and (max-width: 800px) {
-          @include width(20%);
+          width: 20%;
         }
       }
 
       // message headers
       .breadcrums {
-        @include width(25%);
-        @include padding(14.5px 20px);
-        font: normal normal normal 14px/19px Roboto;
+        width: 25%;
+        padding: 14.5px 20px;
+        font-size: 14px;
         letter-spacing: 0.84px;
-        color: $light-grey2;
+        color: $grayLight;
         opacity: 1;
         &_messages {
-          font-weight: 600;
-          color: $dark-blue;
+          font-weight: $bold;
+          color: $secondary;
         }
         span {
-          color: $dark-blue;
+          font-size: 14px;
+          font-weight: $medium;
+          letter-spacing: 0.84px;
+          color: $secondary;
+        }
+        @media screen and (max-width: 800px) {
+          width: 35%;
+        }
+        @media (max-width: $L) {
+          width: 32%;
         }
       }
     }
@@ -235,33 +248,29 @@
     .main {
       max-height: calc(100vh - 60px);
       overflow-x: hidden;
-      background-color: #f4f5f6;
       position: relative;
+      background-color: $layout-background;
       .blackscreen {
         position: absolute;
         height: 100%;
-        width: 100%;
+        right: 0;
+        left: 0;
         opacity: 0.3;
-        background-color: black;
-        z-index: 4;
+        background-color: $black;
+        z-index: $main-overlay-z;
         display: none;
       }
 
       .router__wrapper {
-        min-height: calc(100vh - 12.5vh);
-        @include padding(0 1.5rem);
-        @include padding-top(1.5rem);
-        @media only screen and (max-width: 1300px) {
-          @include padding(0 10px);
-          @include padding-top(10px);
-        }
+        padding: 0 20px 20px 20px;
+        min-height: calc(100vh - 110px);
         @media only screen and (max-width: 1100px) {
           min-height: calc(100vh - 9.5vh);
         }
         @media (max-width: $tablet) {
           padding: 1.3%;
-          @include width(93%);
-          @include margin-left(auto);
+          width: 92.2%;
+          margin-left: auto;
         }
       }
       @media only screen and (max-width: 1070px) {
@@ -272,13 +281,13 @@
 }
 
 .refresh__wrapper {
-  @include flex-item-center();
-  @include padding(0 13px);
+  @include flex-item-center;
+  padding: 0 13px;
   &--icon {
-    @include flex-item-center();
-    font-size: $font13;
-    color: $primary-purple;
-    font-weight: 500;
+    @include flex-item-center;
+    font-size: 13px;
+    color: $primary-cta;
+    font-weight: $medium;
     &:hover {
       cursor: pointer;
     }
@@ -287,28 +296,26 @@
     }
   }
   .seperator {
-    @include margin(0 10px);
-    @include height(18px);
-    border: 0.5px solid $primary-gray;
+    margin: 0 10px;
+    height: 18px;
+    border: 0.5px solid $grayMedium;
   }
   .status {
-    color: $primary-gray;
-    font-weight: 500;
-    font-size: $font13;
+    color: $grayMedium;
+    font-weight: $medium;
+    font-size: 13px;
     letter-spacing: 0.5px;
-    @include margin(0);
+    margin: 0;
   }
 }
 
 .sidebar-background {
   position: absolute;
   z-index: 0;
-  @include height(100%);
-  @include width(100%);
+  @include full-img-cover;
   display: block;
   top: 0;
   left: 0;
-  background-size: cover;
   background-position: center center;
   opacity: 0.2;
   filter: alpha(opacity=10);
@@ -326,14 +333,16 @@
 }
 .options1 {
   flex: 9;
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   padding: 0 10px;
 }
 
+.site-select {
+  margin-left: 5px;
+}
+
 .options2 {
-  display: flex;
-  justify-content: flex-end;
+  @include flex-row-justify-end;
   flex: 2;
 }
 
@@ -351,13 +360,20 @@
   }
 }
 ::-webkit-scrollbar-track {
-  background: rgb(238, 233, 233);
+  background: $whiteDeep;
 }
 
 ::-webkit-scrollbar-thumb {
   &:hover {
-    background: #8f8f8f;
+    background: $scrollBar-thumb;
   }
-  background: #c3c2c2;
+  background: $grayLight;
   border-radius: 10px;
+}
+
+.progress-bar {
+  z-index: $progress-bar-z;
+  position: absolute;
+  height: 5px;
+  inset: 58px 0 auto 0;
 }

@@ -1,61 +1,103 @@
 <div class="container">
   <div class="stat-header">
     <div class="title-container">
-      <div class="icon">
+      <div
+        class="icon"
+        *skeleton="
+          statData == undefined;
+          height: '30px';
+          width: '30px';
+          margin: '0 10px 0 0'
+        "
+      >
         <img
           [src]="dashboardConfig.images.reservationStat.headerIcon.url"
           [alt]="dashboardConfig.images.reservationStat.headerIcon.alt"
         />
       </div>
-      <div class="stat-title">{{ 'card.customer.title_text' | translate }}</div>
+      <div
+        class="stat-title"
+        *skeleton="statData == undefined; height: '25px'; width: '115px'"
+      >
+        {{ 'card.customer.title_text' | translate }}
+      </div>
     </div>
   </div>
   <div class="graph-container">
-    <div class="graph">
+    <div
+      class="graph"
+      [style.height]="statData == undefined ? '140px' : '125px'"
+    >
       <div class="graph-canvas">
-        <div class="labels">
+        <div class="labels" *ngIf="statData">
           <div class="val">{{ statData?.checkin?.totalCount }}</div>
-          <div class="label">
+          <div class="label" *ngIf="statData">
             {{ 'card.customer.total_user_checkin' | translate }}
           </div>
         </div>
-        <canvas
-          baseChart
-          class="graph-canvas-base-chart"
-          [data]="checkinChart.data"
-          [labels]="checkinChart.labels"
-          [chartType]="checkinChart.type"
-          [legend]="checkinChart.legend"
-          [colors]="checkinChart.colors"
-          [options]="checkinChart.options"
+        <ng-container
+          *skeleton="
+            statData == undefined;
+            height: '175px';
+            width: '175px';
+            borderRadius: '50%';
+            margin: '0 0 0 20px'
+          "
         >
-        </canvas>
+          <canvas
+            baseChart
+            class="graph-canvas-base-chart"
+            [data]="checkinChart.data"
+            [labels]="checkinChart.labels"
+            [chartType]="checkinChart.type"
+            [legend]="checkinChart.legend"
+            [colors]="checkinChart.colors"
+            [options]="checkinChart.options"
+          >
+          </canvas
+        ></ng-container>
       </div>
     </div>
-    <div class="graph">
+    <div
+      class="graph"
+      [style.height]="statData == undefined ? '140px' : '125px'"
+    >
       <div class="graph-canvas">
-        <div class="labels">
+        <div class="labels" *ngIf="statData">
           <div class="val">{{ statData?.checkout?.totalCount }}</div>
-          <div class="label">
+          <div class="label" *ngIf="statData">
             {{ 'card.customer.total_user_checkout' | translate }}
           </div>
         </div>
-        <canvas
-          baseChart
-          class="graph-canvas-base-chart"
-          [data]="checkoutChart.data"
-          [labels]="checkoutChart.labels"
-          [chartType]="checkoutChart.type"
-          [legend]="checkoutChart.legend"
-          [colors]="checkoutChart.colors"
-          [options]="checkoutChart.options"
+        <ng-container
+          *skeleton="
+            statData == undefined;
+            height: '175px';
+            width: '175px';
+            borderRadius: '50%';
+            margin: '0 0 0 20px'
+          "
         >
-        </canvas>
+          <canvas
+            baseChart
+            class="graph-canvas-base-chart"
+            [data]="checkoutChart.data"
+            [labels]="checkoutChart.labels"
+            [chartType]="checkoutChart.type"
+            [legend]="checkoutChart.legend"
+            [colors]="checkoutChart.colors"
+            [options]="checkoutChart.options"
+          >
+          </canvas>
+        </ng-container>
       </div>
     </div>
   </div>
   <div class="legends-container">
-    <div class="legend">
+    <div
+      class="legend"
+      *skeleton="statData == undefined; height: '65px'; width: '50%'"
+    >
       <div
         class="stat-val-container"
         *ngFor="let stat of (statData?.legends)[0]"
@@ -69,7 +111,15 @@
         <div class="value">{{ stat.value }}</div>
       </div>
     </div>
-    <div class="legend">
+    <div
+      class="legend"
+      *skeleton="
+        statData == undefined;
+        height: '65px';
+        width: '45%';
+        margin: '0 0 0 10px'
+      "
+    >
       <div
         class="stat-val-container"
         *ngFor="let stat of (statData?.legends)[1]"

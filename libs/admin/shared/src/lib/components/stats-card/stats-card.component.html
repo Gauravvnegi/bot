@@ -1,0 +1,58 @@
+<div class="wrapper">
+  <div class="header-content">
+    <ng-container
+      *skeleton="label == undefined; height: '25px'; width: '200px'"
+    ></ng-container>
+    <hospitality-bot-custom-tooltip
+      [text]="tooltip"
+      *ngIf="tooltip; else title"
+    >
+      <div class="stat-title">
+        {{ label }}
+      </div>
+    </hospitality-bot-custom-tooltip>
+    <ng-template #title
+      ><div class="stats_text">
+        {{ label }}
+      </div></ng-template
+    >
+    <div><img [src]="imageUrls[title]" alt="" /></div>
+  </div>
+  <div
+    class="info"
+    *skeleton="
+      additionalData == undefined;
+      height: '48px';
+      width: '200px';
+      margin: '30px 0 0 0'
+    "
+  >
+    <div class="amount">{{ additionalData }}</div>
+    <div>
+      <div class="percent">
+        <div class="comparison-percent" *ngIf="comparisonPercent">
+          ({{ comparisonPercent }}%)
+        </div>
+        <img
+          *ngIf="comparisonPercent"
+          [src]="
+            comparisonPercent < 0
+              ? adminSharedConfig.img.downArrow.url
+              : adminSharedConfig.img.upArrow.url
+          "
+          [alt]="
+            comparisonPercent < 0
+              ? adminSharedConfig.img.downArrow.alt
+              : adminSharedConfig.img.upArrow.alt
+          "
+        />
+      </div>
+      <div *ngIf="comparisonPercent" class="compared-dates">
+        Compared to 1 May - 2 May
+      </div>
+    </div>
+  </div>
+  <div class="graph">
+    <ng-content></ng-content>
+  </div>
+</div>

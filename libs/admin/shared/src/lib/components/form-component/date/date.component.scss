@@ -1,0 +1,171 @@
+@import '../form.component.scss';
+
+:host ::ng-deep .p-calendar {
+  width: 100%;
+  height: $form-input-height;
+  margin-left: 0%;
+  font-size: inherit;
+
+  .p-inputtext {
+    padding: $input-padding;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+:host ::ng-deep .p-calendar-label {
+  padding: 0;
+}
+
+:host ::ng-deep .p-calendar-panel {
+  width: 100%;
+}
+
+:host ::ng-deep .input {
+  width: 100%;
+  height: 100%;
+
+  .p-calendar {
+    .p-inputtext {
+      border-color: $border-color;
+      &:hover {
+        border-color: $primary-form-color;
+      }
+      &:enabled:focus {
+        border-color: $primary-form-color;
+      }
+    }
+  }
+
+  &__error {
+    .p-calendar {
+      .p-inputtext {
+        border-color: $form-error-color;
+      }
+    }
+  }
+
+  &__static {
+    .p-calendar {
+      margin-top: $label-gap;
+    }
+  }
+
+  &__outlined {
+    .p-calendar-open {
+      border-width: 2px;
+    }
+  }
+
+  &__standard {
+    .p-calendar {
+      // border-color: $primary-text-color;
+      border-width: 0 0 1px 0;
+      border-radius: unset;
+    }
+    .p-calendar-open {
+      margin-bottom: -1px;
+      border-width: 0 0 2px 0;
+      border-color: $primary-form-color;
+      box-shadow: none;
+    }
+  }
+}
+
+.loading {
+  position: absolute;
+  &__static {
+    top: 65%;
+  }
+}
+
+// main container
+
+// default calndar come from left
+:host ::ng-deep .p-calendar .p-datepicker {
+  display: flex;
+  z-index: 1;
+  min-width: unset;
+
+  table {
+    font-size: 14px;
+    margin: unset;
+  }
+}
+
+// makes calendar come from right
+:host ::ng-deep .right-class {
+  .p-calendar .p-datepicker {
+    left: unset !important;
+    right: 0px;
+  }
+}
+
+// styling for current date
+
+:host ::ng-deep .p-datepicker table td.p-datepicker-today > span {
+  border-color: $primary-cta;
+}
+
+// styling for selected date
+:host ::ng-deep .p-datepicker table td > span.p-highlight {
+  color: $white;
+  background: $primary-cta;
+}
+
+// common styling for date numbers
+:host ::ng-deep .p-datepicker table td > span {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 4px;
+  transition: none;
+  border: 1px solid transparent;
+}
+
+// current date box-shadow
+:host ::ng-deep .p-datepicker table td.p-datepicker-today > span {
+  box-shadow: unset;
+}
+
+// hover goes here for datepicker
+:host
+  ::ng-deep
+  .p-datepicker:not(.p-disabled)
+  table
+  td
+  span:not(.p-highlight):not(.p-disabled):hover {
+  background: $primary-cta;
+  color: $white;
+}
+
+// time picker class
+:host ::ng-deep .p-datepicker .p-timepicker {
+  border-top: none;
+
+  div {
+    padding: unset;
+
+    span {
+      font-size: 14px;
+    }
+  }
+}
+
+//months selection css
+
+:host
+  ::ng-deep
+  .p-datepicker
+  .p-datepicker-header
+  .p-datepicker-title
+  .p-datepicker-month {
+  font-size: 14px;
+  border-radius: 3px;
+  padding: 4px 2px;
+}
+
+:host ::ng-deep .p-datepicker .p-datepicker-header .p-datepicker-title select {
+  font-size: 14px;
+  border-radius: 3px;
+  padding: 4px 2px;
+}

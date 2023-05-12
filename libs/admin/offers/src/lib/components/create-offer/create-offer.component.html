@@ -1,0 +1,103 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header
+    [heading]="offerId ? 'Edit Offer' : 'Create Offer'"
+    [routes]="routes"
+  ></hospitality-bot-navigation-header>
+
+  <div class="form-block" [formGroup]="useForm">
+    <div class="code">
+      <span class="code__label"> Code: </span>
+      <span class="code__hash"> {{ packageCode }} </span>
+    </div>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="active"
+      label="Status:"
+    ></hospitality-bot-toggle-switch>
+    <div class="container">
+      <hospitality-bot-input
+        class="half-width"
+        controlName="name"
+        label="Offer Name"
+        maxLength="60"
+      ></hospitality-bot-input>
+    </div>
+    <hospitality-bot-auto-complete
+      class="full-width"
+      controlName="libraryItems"
+      label="Choose Package/Services/rooms"
+      [options]="libraryItems"
+      [loading]="loading"
+      (onSearch)="searchOptions($event)"
+    ></hospitality-bot-auto-complete>
+
+    <hospitality-bot-custom-file-upload
+      class="full-width"
+      formControlName="imageUrl"
+      [hotelId]="hotelId"
+      [label]="'Image'"
+      [description]="
+        'This image will also reflect on Webapp and on your services'
+      "
+    ></hospitality-bot-custom-file-upload>
+
+    <div class="des-template">
+      <div class="des-template__label">Offer Description</div>
+      <div class="des-template__input">
+        <hospitality-bot-template-editor
+          [parentFG]="useForm"
+          [name]="'description'"
+          [height]="250"
+        ></hospitality-bot-template-editor>
+      </div>
+    </div>
+
+    <hospitality-bot-date
+      class="half-width"
+      controlName="startDate"
+      label="Valid From"
+      [settings]="{ enableTime: false }"
+      [minDate]="startMinDate"
+    ></hospitality-bot-date>
+
+    <hospitality-bot-date
+      class="half-width"
+      controlName="endDate"
+      label="Valid Till"
+      [settings]="{ enableTime: false }"
+      [minDate]="endMinDate"
+    ></hospitality-bot-date>
+
+    <hospitality-bot-prefix-field
+      class="half-width"
+      preControlName="discountType"
+      postControlName="discountValue"
+      label="Discount Type"
+      [options]="discount"
+      [defaultProps]="{ post: { type: 'number' } }"
+      [props]="{
+        errorMessages: {
+          required: 'This is a required field.',
+          moreThan100: 'Value can not be more than 100.',
+          min: 'Value can must be grater than 0.',
+          isDiscountMore: 'Value can not be more than the total base price'
+        }
+      }"
+    ></hospitality-bot-prefix-field>
+
+    <hospitality-bot-view-input
+      class="half-width"
+      label="Discount Price"
+      controlName="discountedPrice"
+      [strikeValue]="useForm.get('rate').value"
+      [suffix]="currency"
+    >
+    </hospitality-bot-view-input>
+
+    <hospitality-bot-button
+      class="create-btn"
+      [label]="offerId ? 'Update' : 'Create'"
+      (onClick)="handleSubmit()"
+    ></hospitality-bot-button>
+  </div>
+</div>

@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./analytics.component.scss'],
 })
 export class AnalyticsComponent implements OnInit {
+  welcomeMessage = 'Welcome To Analytics';
+  navRoutes = [{ label: 'Freddie Analytics', link: './' }];
   constructor() {}
 
   ngOnInit(): void {}

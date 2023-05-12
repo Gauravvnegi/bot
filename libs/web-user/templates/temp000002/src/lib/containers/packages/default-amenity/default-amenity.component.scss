@@ -1,34 +1,48 @@
 @import 'temp000002';
 
+.heading {
+  margin-bottom: 20px;
+  font-weight: 600;
+  font-size: 18px;
+}
 
-  .heading{
-    margin-bottom: 20px;
-    font-weight: 600;
-    font-size: 18px;
-  }
-
-  .wrapper {
-    &__item {
-      width: 46%;
-      margin-bottom: 10px;
-      @media only screen and (max-width: $M) {
-        width: 100%;
-      }
-    }
-  
-    @include flex-between-center();
-    @include display-block-on-breakpoint($M);
+.wrapper {
+  &__item {
+    width: 46%;
+    margin-bottom: 10px;
     @media only screen and (max-width: $M) {
-      flex-direction: column;
-      justify-content: inherit;
+      width: 100%;
     }
   }
 
-  :host ::ng-deep .ngx-timepicker-control{
-    width: 75px !important;
+  @include flex-between-center;
+  @include displayBlockOnBreakPoint($M);
+  @media only screen and (max-width: $M) {
+    flex-direction: column;
+    justify-content: inherit;
   }
-  .enter-below-details{
-    padding-top: 60px;
-    border-top: solid 2px $border-color;
-    padding-bottom: 20px;
+}
+
+:host ::ng-deep .ngx-timepicker-control {
+  width: 75px !important;
+}
+.enter-below-details {
+  padding: 20px 30px;
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+:host ::ng-deep .next-button {
+  margin-top: 10px;
+  @include primary-button;
+}
+
+:host ::ng-deep .close {
+  .mat-icon {
+    float: right;
+    cursor: pointer;
   }
+}

@@ -98,11 +98,14 @@ export class FilterComponent implements OnChanges, OnInit {
       .get('property')
       .get('hotelName')
       .valueChanges.subscribe((brandId) => {
-        const { branches } = this.hotelList.find(
-          (brand) => brand['value'] === brandId
+        const { hotels } = this._hotelDetailService.brands.find(
+          (brand) => brand['id'] === brandId
         );
 
-        this.branchList = branches;
+        this.branchList = hotels.map((item) => ({
+          label: item.name,
+          value: item.id,
+        }));
       });
   }
 
@@ -111,9 +114,12 @@ export class FilterComponent implements OnChanges, OnInit {
       .get('property')
       .get('branchName')
       .valueChanges.subscribe((id) => {
-        const { outlets } = this.branchList.find(
-          (branch) => branch['id'] === id
-        );
+        const brandName = this.filterForm.get('property').get('hotelName')
+          .value;
+        const outlets =
+          this._hotelDetailService.brands
+            .find((item) => item.id === brandName)
+            ?.hotels.find((item) => item.id).outlets ?? [];
 
         this.outlets = outlets;
         this.updateOutletsFormControls(outlets);
@@ -145,7 +151,10 @@ export class FilterComponent implements OnChanges, OnInit {
   }
 
   setBrandLOV() {
-    this.hotelList = this._hotelDetailService.hotelDetails.brands;
+    this.hotelList = this._hotelDetailService.brands.map((item) => ({
+      label: item.name,
+      value: item.id,
+    }));
   }
 
   applyFilter() {

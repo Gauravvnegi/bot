@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { get } from 'lodash';
 import * as moment from 'moment';
@@ -9,6 +9,8 @@ import { Table } from 'primeng/table';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { TableService } from '../../services/table.service';
+import { Chip, Cols, TableFieldSearch } from '../../types/table.type';
+
 interface Import {
   name: string;
   code: string;
@@ -18,11 +20,12 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
+  isScrolledUp = false;
   currentPage = 0;
   @ViewChild('dt') table: Table; //reference to data-table
   tableName = 'Datatable'; //table name
 
-  @Input() cols = [
+  @Input() cols: Cols[] = [
     { field: 'vin', header: 'Vin' },
     { field: 'year', header: 'Year' },
     { field: 'brand', header: 'Brand' },
@@ -33,13 +36,15 @@ export class BaseDatatableComponent implements OnInit {
    * Action Buttons & filters visibility
    */
   isActionButtons = false;
-  isQuickFilters = false;
+  isQuickFilters = true;
   isTabFilters = true;
   isCustomSort = true;
+  isSelectable = true;
+  isSearchable = true;
 
   tableFG: FormGroup;
 
-  isPaginaton = false;
+  isPaginator = false;
   rowsPerPage = 5;
   showCurrentPageReport = true;
   rowsPerPageOptions = [5, 10, 25, 50];
@@ -58,23 +63,21 @@ export class BaseDatatableComponent implements OnInit {
   @Input() loading = false;
   initialLoading = true;
 
-  tabFilterItems = [
-    { label: 'Inhouse', content: '', value: 'INHOUSE' },
-    { label: 'Arrival', content: '', value: 'ARRIVAL' },
-    { label: 'Departure', content: '', value: 'DEPARTURE' },
-  ];
+  tabFilterItems = [];
+  tabFilterIdx = 0;
+  filterChips = []; //Chips setting, When there is no tabItem
 
   values = [];
 
-  TabItems: MenuItem[];
-
+  TabItems: MenuItem[] = [];
+  additionalActionItems = [];
   buttons = [];
 
   selectedExport1: Import;
 
   selectedExport2: Import;
 
-  dataSource = [
+  dataSource: Record<string, any>[] = [
     {
       vin: 1,
       year: 2020,
@@ -125,6 +128,7 @@ export class BaseDatatableComponent implements OnInit {
     { label: 'Express Check-In (10)', icon: '', isSelected: false },
   ];
 
+  reportTemplate = 'Showing {first} to {last} of {totalRecords} entries';
   tempFirst;
   tempRowsPerPage;
   isSearchSet = false;
@@ -135,6 +139,9 @@ export class BaseDatatableComponent implements OnInit {
     protected tabFilterService: TableService
   ) {
     this.initTableFG();
+    document
+      .getElementById('main-layout')
+      ?.addEventListener('scroll', this.onScroll);
   }
 
   initTableFG() {
@@ -175,8 +182,35 @@ export class BaseDatatableComponent implements OnInit {
     //rows - Number of rows to display per page.
     //event.page: Index of the new page
     //event.pageCount: Total number of pages
+
     this.currentPage = event.page;
+    this.updatePaginations(event);
     this.loadData(event);
+  }
+
+  /**
+   * @function customSort To sort the rows of the table.
+   * @param event The event for sort click action.
+   */
+  customSort(event: SortEvent): void {
+    const col = this.cols.filter((data) => data.field === event.field)[0];
+    const field =
+      event.field[event.field.length - 1] === ')'
+        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
+        : event.field;
+
+    event.data.sort((data1, data2) =>
+      this.sortOrder(event, field, data1, data2, col)
+    );
+  }
+
+  /**
+   * @function updatePaginations To update the pagination variable values.
+   * @param event The lazy load event for the table.
+   */
+  updatePaginations(event: LazyLoadEvent): void {
+    this.first = event.first;
+    this.rowsPerPage = event.rows;
   }
 
   loadData(event: LazyLoadEvent) {
@@ -199,9 +233,32 @@ export class BaseDatatableComponent implements OnInit {
     ).pipe(delay(this.dataSource.length ? 2000 : 500));
   }
 
+  // this will be replace with handleFieldSearch function
   onFilterTypeTextChange(event, field, matchMode = 'startsWith') {
     const value = event.target.value && event.target.value.trim();
     this.table.filter(value, field, matchMode);
+  }
+
+  /**
+   * @function handleFieldSearch To filter the data with respect to fields
+   * @param param0 has value field names and match mode for searching
+   */
+  handleFieldSearch({ value, field, matchMode }: TableFieldSearch) {
+    const searchValue = value.trim();
+    if (typeof field === 'string') {
+      this.table.filter(searchValue, field, matchMode);
+    } else {
+      (this.table.globalFilterFields = field),
+        this.table.filterGlobal(searchValue, matchMode);
+    }
+  }
+
+  /**
+   * @function resetTable To reset the table
+   * @description This will reset the table to its initial state
+   */
+  resetTable() {
+    this.table?.reset();
   }
 
   onDocumentActions() {
@@ -284,9 +341,119 @@ export class BaseDatatableComponent implements OnInit {
     return true;
   }
 
-  // toggleQuickReplyFilter(quickReplyFilter) {}
+  /**
+   * @function toggleQuickReplyFilter To handle the chip click for a tab.
+   */
+  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }): void {
+    // If multiple tab filter chips
+    if (this.tabFilterItems[this.tabFilterIdx])
+      this.tabFilterItems[this.tabFilterIdx].chips = chips;
 
-  onRowSelect(event) {
+    // If no tab to switch (singleFilter)
+    if (this.filterChips) this.filterChips = chips;
+
+    this.changePage(0);
+  }
+  /**
+   * @function calculateTotalChipsCount To calculate the total count of the chips.
+   * @param chips The chips array.
+   * @returns The total count of the chips.
+   */
+  calculateTotalChipsCount(chips) {
+    return chips
+      ?.filter((chip) => chip?.isSelected)
+      ?.reduce((total, chip) => total + (chip?.total ?? 0), 0);
+  }
+
+  /**
+   * @function updateTotalRecords To update the total records count.
+   * @param chips The chips array.
+   */
+  updateTotalRecords() {
+    if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
+      this.totalRecords = this.calculateTotalChipsCount(
+        this.tabFilterItems[this.tabFilterIdx]?.chips
+      );
+    } else if (this.filterChips?.length) {
+      this.totalRecords = this.calculateTotalChipsCount(this.filterChips);
+    } else {
+      this.totalRecords = this.tabFilterItems[this.tabFilterIdx].total;
+    }
+  }
+
+  /**
+   * @function updateTabFilterCount To update the count for the tabs.
+   * @param countObj The object with count for all the tab.
+   * @param currentTabCount The count for current selected tab.
+   */
+  updateTabFilterCount(countObj, currentTabCount: number): void {
+    countObj = countObj ?? {};
+    this.tabFilterItems?.forEach((tab) => {
+      tab.value === 'ALL'
+        ? (tab.total = currentTabCount ?? 0)
+        : (tab.total = countObj[tab.value] ?? 0);
+    });
+  }
+
+  /**
+   * @function setFilterChips To set the total count for the chips.
+   * @param chips The chips array.
+   * @param countObj The object with count for all the chip.
+   */
+  setFilterChips(chips, countObj) {
+    countObj = Object.entries(countObj).reduce((acc, [key, value]) => {
+      acc[key.toUpperCase()] = value;
+      return acc;
+    }, {});
+    chips.forEach((chip) => {
+      chip.value === 'ALL'
+        ? (chip.total =
+            Number(
+              Object.values(countObj).reduce((a: number, b: number) => a + b, 0)
+            ) ?? 0)
+        : (chip.total = countObj[chip.value] ?? 0);
+    });
+  }
+
+  /**
+   * @function updateQuickReplyFilterCount To update the count for chips.
+   * @param countObj The object with count for all the chip.
+   */
+  updateQuickReplyFilterCount(countObj): void {
+    if (countObj) {
+      if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
+        this.setFilterChips(
+          this.tabFilterItems[this.tabFilterIdx]?.chips,
+          countObj
+        );
+      } else if (this.filterChips?.length) {
+        this.setFilterChips(this.filterChips, countObj);
+      }
+    }
+  }
+
+  /**
+   * @function updateStatusAndCount To change the count without reloading the table
+   */
+  updateStatusAndCount = (prevStatus, currStatus) => {
+    /* for single filterChips */
+
+    if (this.filterChips) {
+      this.filterChips.forEach((item) => {
+        if (!isNaN(item.total)) {
+          if (item.value === prevStatus) {
+            item.total = item.total - 1;
+          }
+          if (item.value === currStatus) {
+            item.total = item.total + 1;
+          }
+        }
+      });
+    }
+    /* for multiple tab chip */
+  };
+
+  onRowSelect = (event) => {
     this.documentActionTypes.forEach((item) => {
       if (item.type === 'countType') {
         item.label = `Export (${this.selectedRows.length})`;
@@ -296,9 +463,9 @@ export class BaseDatatableComponent implements OnInit {
           .patchValue('export');
       }
     });
-  }
+  };
 
-  onRowUnselect(event?) {
+  onRowUnselect = (event?) => {
     this.documentActionTypes.forEach((item) => {
       if (item.type === 'countType') {
         item.label =
@@ -312,6 +479,16 @@ export class BaseDatatableComponent implements OnInit {
             .get('documentActionType')
             .patchValue('exportAll');
         }
+      }
+    });
+  };
+
+  onToggleSelectAll(event: { originalEvent: PointerEvent; checked: false }) {
+    this.documentActionTypes.forEach((item) => {
+      if (event.checked) {
+        this.onRowSelect(event);
+      } else {
+        this.onRowUnselect(event);
       }
     });
   }
@@ -387,6 +564,8 @@ export class BaseDatatableComponent implements OnInit {
         return order * moment(+rawData1).diff(moment(+rawData2));
       case 'string':
         return order * rawData1.localeCompare(rawData2);
+      case 'array':
+        return order * rawData1.length - rawData2.length;
     }
   }
 
@@ -405,6 +584,16 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   changePage(pageNo?) {
-    this.paginator.changePage(pageNo || 0);
+    this.paginator?.changePage(pageNo || 0);
   }
+
+  /**
+   * @function onScroll Handle the scrolled to show changes is UI
+   */
+  onScroll = () => {
+    if (this.table) {
+      const { top } = this.table?.el?.nativeElement.getBoundingClientRect();
+      this.isScrolledUp = top < 110;
+    }
+  };
 }

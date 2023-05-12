@@ -81,7 +81,22 @@ export class GuestDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
   getGuestFG(type: string, role: string): FormGroup {
     let fg;
-    if (type === GuestTypes.primary) {
+    if (role === GuestRole.accompany || role === GuestRole.kids) {
+      fg = {
+        ...this.defaultFG,
+        firstName: [
+          '',
+          [
+            customPatternValid({
+              pattern: Regex.NAME,
+              msg: 'Please enter a valid first name',
+            }),
+          ],
+        ],
+        age: ['', []],
+        lastName: ['', []],
+      };
+    } else {
       fg = {
         ...this.defaultFG,
         firstName: [
@@ -127,45 +142,6 @@ export class GuestDetailsComponent implements OnInit, OnChanges, OnDestroy {
           ],
         ],
         nationality: ['', [Validators.required]],
-      };
-    } else if (role === GuestRole.accompany || role === GuestRole.kids) {
-      fg = {
-        ...this.defaultFG,
-        firstName: [
-          '',
-          [
-            customPatternValid({
-              pattern: Regex.NAME,
-              msg: 'Please enter a valid first name',
-            }),
-          ],
-        ],
-        age: ['', []],
-        lastName: ['', []],
-      };
-    } else {
-      fg = {
-        ...this.defaultFG,
-        firstName: [
-          '',
-          [
-            Validators.required,
-            customPatternValid({
-              pattern: Regex.NAME,
-              msg: 'Please enter a valid first name',
-            }),
-          ],
-        ],
-        lastName: [
-          '',
-          [
-            Validators.required,
-            customPatternValid({
-              pattern: Regex.NAME,
-              msg: 'Please enter a valid last name',
-            }),
-          ],
-        ],
       };
     }
     return this._fb.group(fg);

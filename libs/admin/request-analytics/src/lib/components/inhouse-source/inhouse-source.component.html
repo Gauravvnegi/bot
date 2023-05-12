@@ -1,15 +1,10 @@
 <div class="graphContainer">
   <div class="messageAnalytics" *ngIf="graphData">
-    <div class="analyticsHeading">
-      <p>Total Request</p>
-      <div class="info-icon">
-        <img src="assets/svg/info.svg" alt="info-icon" />
-        <div class="tooltip">
-          <span class="arrow"></span>
-          Total number of requests in a selected time frame.
-        </div>
-      </div>
-    </div>
+    <hospitality-bot-custom-tooltip
+      [text]="' Total number of requests in a selected time frame.'"
+    >
+      <p class="analyticsHeading">Total Request</p>
+    </hospitality-bot-custom-tooltip>
     <div class="body">
       <div class="graph-container">
         <div class="graph">

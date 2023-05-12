@@ -1,0 +1,51 @@
+{
+  "room": {
+    "createType": "+ Create Room Type",
+    "addMultiple": "+ Add Multiple Rooms",
+    "addSingle": "+ Add Single Room"
+  },
+  "messages": {
+    "error": {
+      "undefined": "Fetching Stats failed"
+    },
+    "success": {
+      "addSingleRoom": "Rooms Added Successfully",
+      "updatedRoom": "Room details updated Successfully"
+    }
+  },
+  "label":{
+     "roomType":"Type Name",
+     "roomImages":"Room's Images* : (Uploading at least 1 image is mandatory)",
+     "roomDescription":"Room Description",
+     "compAmenities":"Amenities : (Complimentary)",
+     "paidAmenities":"Amenities : (Paid)",
+     "basePrice":"Base Price",
+     "variablePrice":"Variable Price",
+     "discountType":"Discount Type",
+     "discountedPrice":"Discounted Price",
+     "maxOccupancy":"Max Occupancy",
+     "maxChildren":"Max Children",
+     "maxAdult":"Max Adult",
+     "area":"Room Area",
+     "save":"Save",
+     "update":"Update",
+     "savingDetails":"Saving Details",
+     "updatingDetails":"Updating Details"
+  },
+  "note":{
+    "imageNote":"Recommended Ratio : 16:9 | 1 MB Max Size"
+
+  },
+  "validationErrors":{
+    "roomTypeRequired":"Room type name is required",
+    "compAmenitiesRequired":"Complimentary amenities is required",
+    "paidAmenitiesRequired":"Paid amenities is required",
+    "basePriceRequired":"Base price is required",
+    "percentageError":"Percentage can not be more than 100",
+    "amountError":"Amount can not be more than base price",
+    "maxAdultError":"Max adult is invalid or can not be more than max occupancy",
+    "areaRequired":"Room area is required",
+    "maxOccupancyRequired":"Max occupancy is required",
+    "maxOccupancyInvalid":"Max occupancy is invalid"
+ }
+}

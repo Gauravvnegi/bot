@@ -63,17 +63,6 @@ export class ConversationComponent implements OnInit, OnDestroy {
               0
             ) === 0
           );
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );

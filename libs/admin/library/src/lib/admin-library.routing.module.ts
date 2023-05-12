@@ -15,7 +15,15 @@ const appRoutes: CRoutes = [
     name: ModuleNames.LIBRARY,
     children: [
       {
-        path: 'package',
+        path: 'services',
+        name: ModuleNames.SERVICES,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/services').then(
+            (m) => m.AdminServicesModule
+          ),
+      },
+      {
+        path: 'packages',
         name: ModuleNames.PACKAGES,
         loadChildren: () =>
           import('@hospitality-bot/admin/packages').then(
@@ -52,6 +60,22 @@ const appRoutes: CRoutes = [
         loadChildren: () =>
           import('@hospitality-bot/admin/template').then(
             (m) => m.AdminTemplateModule
+          ),
+      },
+      {
+        path: 'booking-source',
+        name: ModuleNames.BOOKING_SOURCE,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/booking-source').then(
+            (m) => m.AdminBookingSourceModule
+          ),
+      },
+      {
+        path: 'offers',
+        name: ModuleNames.OFFERS,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/offers').then(
+            (m) => m.AdminOffersModule
           ),
       },
     ],

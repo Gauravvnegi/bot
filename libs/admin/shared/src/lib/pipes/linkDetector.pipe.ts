@@ -13,7 +13,7 @@ export class LinkDetector implements PipeTransform {
       return (
         '<a href="' +
         hyperlink +
-        '" target="_blank" rel="noopener noreferrer">' +
+        '" target="_blank" rel="noopener noreferrer" class="link_detector">' +
         url +
         '</a>'
       );

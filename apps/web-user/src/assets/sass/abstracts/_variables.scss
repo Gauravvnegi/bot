@@ -45,21 +45,15 @@ $faq-button-background-color: white; // --faq-button-background-color
 $faq-button-font-color: #939393; // --faq-button-font-color
 $faq-button-hover-background-color: #2187d5; // --faq-button-hover-background-color
 
-//padding
 
-$padding30: 30px;
 
-// responsive
-
-$M: 650px;
-$T: 850px;
-$XL: 1500px;
 
 // color-variables
 
 $auth-color: #4b56c0;
 $quote-color: #6d7580;
-$primary-purple: #4b56c0;
+$primary-cta: #4b56c0;
+$primary-cta: #5f38f9;
 $navy-blue: rgb(0 32 70);
 $primary-gray: #9eaeb8;
 $primary-gray1: rgba(158, 174, 184);
@@ -214,9 +208,9 @@ $spl-req: #52b33f;
 $other-req: #3994d6;
 $auth-color: #4b56c0;
 $quote-color: #6d7580;
-$primary-purple: #4b56c0;
+$primary-cta: #4b56c0;
 $navy-blue: rgb(0 32 70);
-$primary-gray: #9EAEB8;
+$primary-gray: #9eaeb8;
 $primary-gray1: rgba(158, 174, 184);
 $primary-black: #484848;
 $dark-grey: #727272;
@@ -394,3 +388,5 @@ $palettes: (
     }
   }
 }
+
+$list-item-hover: #8080801a;

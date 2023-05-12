@@ -1,11 +1,8 @@
 @import 'main';
 
-
-
 :host ::ng-deep .mat-step-header .mat-step-icon {
   background: var(--stepper-background-color, $stepper-background-color);
 }
-
 
 :host
   ::ng-deep
@@ -18,7 +15,8 @@
   color: var(--stepper-font-color, $stepper-font-color);
 }
 
-::ng-deep .mat-horizontal-stepper-header {
+// disable pointer only at incomplete steps
+::ng-deep .mat-horizontal-stepper-header.step-disable {
   pointer-events: none !important;
 }
 
@@ -29,11 +27,11 @@
   );
 }
 
-:host ::ng-deep .step-disable{
-  .mat-step-icon{
+:host ::ng-deep .step-disable {
+  .mat-step-icon {
     background: #c2c2c2 !important;
   }
-  .mat-step-label{
+  .mat-step-label {
     color: #c2c2c2 !important;
   }
 }
@@ -117,7 +115,7 @@
 @media only screen and (max-width: 500px) {
   :host ::ng-deep .mat-expansion-panel-body {
     margin: 0px 5px 16px;
-    padding: $padding-large $padding-medium !important;
+    padding: 20px 15px !important;
   }
 }
 
@@ -129,7 +127,7 @@
     position: absolute;
     height: 70px;
     width: 70px;
-    border-radius: $half-width;
+    border-radius: 50%;
     letter-spacing: 1px;
     background: transparent;
     top: 28px;
@@ -142,7 +140,7 @@
     font-weight: $bold;
   }
   .flex-wrapper {
-    @include flex-item-center();
+    @include flex-item-center;
     .text {
       color: var(--stepper-font-color, $stepper-font-color);
       font-weight: $bold;
@@ -150,7 +148,7 @@
   }
   .single-chart {
     width: 19%;
-    margin: 8% $margin-medium;
+    margin: 8% 15px;
   }
 
   .circular-chart {
@@ -180,6 +178,7 @@
     font-weight: $bolder;
     font-size: 6px;
     text-anchor: middle;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   }
 }
 
@@ -191,27 +190,23 @@
 
 :host ::ng-deep .current {
   font-size: $font-small;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 :host ::ng-deep .next {
   font-size: $font-responsive-small;
   margin-top: 5px;
   font-weight: $medium;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
-:host ::ng-deep .disable-before::before{
+:host ::ng-deep .disable-before::before {
   border-color: #c2c2c2 !important;
-  // left: 0;
-  //   border-top-width: 3px;
-  //   border-top-style: solid;
-  //   flex: auto;
-  //   height: 0;
-  //   min-width: 32px;
 }
-:host ::ng-deep .disable-after::after{
+:host ::ng-deep .disable-after::after {
   border-color: #c2c2c2 !important;
 }
 
-:host ::ng-deep .disable-bar{
+:host ::ng-deep .disable-bar {
   border-color: #c2c2c2 !important;
 }

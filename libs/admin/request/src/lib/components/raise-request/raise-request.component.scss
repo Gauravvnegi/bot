@@ -7,9 +7,7 @@
   height: 108px;
   display: flex;
   justify-content: space-between;
-  background: transparent
-    linear-gradient(180deg, #a09fe5d9 0%, $primary-purple 100%) 0% 0% no-repeat
-    padding-box;
+  background: $primaryGradient-bg;
   position: sticky;
   top: 0;
   z-index: 999;
@@ -48,13 +46,13 @@
       width: 100%;
       padding: 14px 14px 14px 40px;
       font-size: 16px;
-      color: $dark-blue;
+      color: $secondary;
       letter-spacing: 0.32px;
-      border: 1px solid $c-gray-81;
+      border: 1px solid $borderCol;
       border-radius: 5px;
 
       ::placeholder {
-        color: $primary-gray;
+        color: $grayMedium;
       }
     }
   }
@@ -89,6 +87,7 @@
   bottom: 0;
   padding: 15px 30px;
   background: $white;
+  gap: 15px;
   &-cancel {
     width: 113px;
     height: 35px;

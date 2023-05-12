@@ -1,0 +1,50 @@
+@import '../form.component.scss';
+
+:host ::ng-deep .input.p-inputtext {
+  @include input-default();
+}
+
+:host ::ng-deep .p-inputtext.ng-dirty.ng-invalid {
+  border-color: $form-error-color;
+  &:focus {
+    border-color: $primary-form-color;
+  }
+}
+
+.input {
+  border-color: $border-color;
+
+  &::placeholder {
+    font-size: 14px;
+    line-height: 1.07;
+    letter-spacing: 0.84px;
+    text-align: left;
+    color: $secondary2;
+  }
+  &:hover {
+    border-color: $primary-form-color;
+  }
+  &:focus {
+    border-color: $primary-form-color;
+    box-shadow: 0px 0px 0px 1px $primary-form-color;
+  }
+
+  &__error {
+    border-color: $form-error-color;
+  }
+
+  &__static {
+    margin-top: $label-gap;
+  }
+
+  &__standard {
+    border-radius: unset;
+    border-width: 0 0 1px 0;
+    &:focus {
+      margin-bottom: -1px;
+      border-width: 0 0 2px 0;
+      border-color: $primary-form-color;
+      box-shadow: none;
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '@hospitality-bot/admin/environment';
+import { CookiesSettingsService } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-create-with-dashboard',
@@ -7,9 +8,13 @@ import { environment } from '@hospitality-bot/admin/environment';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+  isLoaded: boolean;
   onboardingUrl = `${environment.createWithUrl}/admin/dashboard`;
 
-  constructor() {}
-
-  ngOnInit(): void {}
+  constructor(private cookiesSettingService: CookiesSettingsService) {}
+  ngOnInit(): void {
+    this.cookiesSettingService.$isPlatformCookiesLoaded.subscribe((res) => {
+      this.isLoaded = res;
+    });
+  }
 }

@@ -1,0 +1,233 @@
+<div
+  class="action-header"
+  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+  [formGroup]="tableFG"
+>
+  <div class="heading">{{ tableName }}</div>
+  <div class="action-wrapper">
+    <hospitality-bot-button
+      *ngIf="selectedTable === 'AGENT'"
+      label="+ Add Agent"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      *ngIf="selectedTable === 'COMPANY'"
+      label="+ Add Company"
+    ></hospitality-bot-button>
+    <hospitality-bot-export-list
+      [isDisable]="values.length === 0"
+      [additionalActionItems]="additionalActionItems"
+      (onDocumentActions)="onDocumentActions()"
+      [documentTypes]="documentTypes"
+      [documentActionTypes]="documentActionTypes"
+    ></hospitality-bot-export-list>
+  </div>
+</div>
+<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
+
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginator"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+  (sortFunction)="customSort($event)"
+  [customSort]="isCustomSort"
+  (onFilter)="onDataFilter()"
+  >
+  <!-- *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable" -->
+  <ng-template pTemplate="caption">
+    <div class="caption__wrapper" [formGroup]="tableFG">
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+
+      <hospitality-bot-filter-chips
+        *ngIf="isQuickFilters"
+        [chips]="filterChips"
+        (onChange)="toggleQuickReplyFilter($event)"
+      ></hospitality-bot-filter-chips>
+    </div>
+  </ng-template>
+
+  <!-- *******************************EMPTY TABLE VIEW******************************* -->
+  <ng-template pTemplate="emptymessage">
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+  </ng-template>
+
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns class="table_head">
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="isSelectable"
+      (search)="handleFieldSearch($event)"
+    ></tr>
+  </ng-template>
+
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+  <tr class="table-row" (click)="editBookingSource(rowData.id)">
+    <td class="table-row__checkbox">
+      <p-tableCheckbox
+        [value]="rowData"
+        [index]="rowIndex"
+        (click)="onCheckboxClicked($event)"
+      ></p-tableCheckbox>
+    </td>
+
+    <ng-container
+      *ngIf="values.length && values[0].companyCode"
+      [ngTemplateOutlet]="company"
+      [ngTemplateOutletContext]="{ $implicit: rowData}"
+    ></ng-container>
+
+    <ng-container
+      *ngIf="values.length && values[0].agentCode"
+      [ngTemplateOutlet]="agent"
+      [ngTemplateOutletContext]="{ $implicit: rowData}"
+    ></ng-container>
+
+    <td>
+      <div class="cell-content">
+        <hospitality-bot-toggle-dropdown
+          class="toggle-btn"
+          (onClick)="handleStatus($event, rowData)"
+          [status]="rowData.status"
+        ></hospitality-bot-toggle-dropdown>
+      </div>
+    </td>
+  </ng-template>
+
+  <ng-template pTemplate="summary">
+    <p-paginator
+      #paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
+    ></p-paginator>
+  </ng-template>
+</p-table>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>
+
+<ng-template #company let-rowData>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.companyCode }}</div>
+    </div>
+  </td>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.contactName }}</div>
+    </div>
+  </td>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.email }}</div>
+    </div>
+  </td>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.phone }}</div>
+    </div>
+  </td>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.salesPersonName }}</div>
+    </div>
+  </td>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.salesPersonNumber }}</div>
+    </div>
+  </td>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.commision }}</div>
+    </div>
+  </td>
+</ng-template>
+
+<ng-template #agent let-rowData>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.agentCode }}</div>
+    </div>
+  </td>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.agentName }}</div>
+    </div>
+  </td>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.email }}</div>
+    </div>
+  </td>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.phone }}</div>
+    </div>
+  </td>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.commision }}</div>
+    </div>
+  </td>
+</ng-template>
+
+  <!-- *********************************FOOTER******************************* -->
+  <ng-template #emptyTable>
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      [link]="
+        selectedTable==='AGENT'
+        ? ''
+        : ''
+      "
+      [content]="
+      selectedTable==='AGENT'
+      ? {
+        description:
+          'No Agent found'
+      }
+      : {
+        description:
+          'No Company found'
+      }
+      "
+    >
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+    </hospitality-bot-empty-table>
+  </ng-template>
+  
+  <ng-template #tabFilter>
+    <hospitality-bot-tab-group
+      [selectedIndex]="tabFilterIdx"
+      *ngIf="isTabFilters"
+      [listItems]="tabFilterItems"
+      (selectedTabChange)="onSelectedTabFilterChange($event)"
+    ></hospitality-bot-tab-group>
+  </ng-template>  

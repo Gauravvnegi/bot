@@ -107,7 +107,29 @@
       "@hospitality-bot/admin/unsubscribed": [
         "libs/admin/unsubscribed/src/index.ts"
       ],
-      "@hospitality-bot/admin/finance": ["libs/admin/finance/src/index.ts"]
+      "@hospitality-bot/admin/finance": ["libs/admin/finance/src/index.ts"],
+      "@hospitality-bot/admin/room": ["libs/admin/room/src/index.ts"],
+      "@hospitality-bot/admin/sentimental-analysis": [
+        "libs/admin/sentimental-analysis/src/index.ts"
+      ],
+      "@hospitality-bot/admin/services": ["libs/admin/services/src/index.ts"],
+      "@hospitality-bot/admin/offers": ["libs/admin/offers/src/index.ts"],
+      "@hospitality-bot/admin/partner-dashboard": [
+        "libs/admin/partner-dashboard/src/index.ts"
+      ],
+      "@hospitality-bot/admin/manage-sites": [
+        "libs/admin/manage-sites/src/index.ts"
+      ],
+      "@hospitality-bot/admin/settings": ["libs/admin/settings/src/index.ts"],
+      "@hospitality-bot/admin/tax": ["libs/admin/tax/src/index.ts"],
+      "@hospitality-bot/admin/manage-reservation": [
+        "libs/admin/manage-reservation/src/index.ts"
+      ],
+      "@hospitality-bot/admin/invoice": ["libs/admin/invoice/src/index.ts"],
+      "@hospitality-bot/admin/booking-source": [
+        "libs/admin/booking-source/src/index.ts"
+      ],
+      "@hospitality-bot/admin/business": ["libs/admin/business/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

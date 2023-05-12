@@ -40,7 +40,7 @@
     "createHtml": "Create New(HTML Editor)"
   },
   "campaign": {
-    "create": "+Create Campaign",
+    "create": "+ Create Campaign",
     "archive": "Archive Campaign",
     "clone": "Clone Campaign",
     "view": "View Campaign"

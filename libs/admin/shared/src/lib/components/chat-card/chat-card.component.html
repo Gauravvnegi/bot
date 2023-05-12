@@ -1,0 +1,94 @@
+<div class="card-wrapper">
+  <div class="card-wrapper_image">
+    <img [src]="userImg" *ngIf="userImg" />
+    <div
+      *ngIf="profileNickName; else defaultAvatar"
+      class="card-wrapper_image-nickName"
+      [style.background]="backgroundColor"
+    >
+      {{ profileNickName }}
+    </div>
+    <ng-template #defaultAvatar
+      ><img src="assets/svg/defaultUser.svg" alt="default"
+    /></ng-template>
+  </div>
+  <div class="card-wrapper_information">
+    <div class="card-wrapper_information_roomInfoWrapper">
+      <div class="card-wrapper_information_roomInfoWrapper_roomNumber">
+        {{ cardType !== 'feedback' ? 'RNO:' : '' }}
+        {{ roomNo || '---' }}
+      </div>
+      <div
+        class="card-wrapper_information_roomInfoWrapper_rating"
+        *ngIf="cardType === 'feedback' || rating"
+        [style.background]="getRatingColorCode(rating)"
+      >
+        {{ rating }}
+      </div>
+      <div
+        class="card-wrapper_information_roomInfoWrapper_status"
+        *ngIf="priority"
+        [ngClass]="{
+          'priority-low': priority === 'Low',
+          'priority-medium': priority === 'Medium',
+          'priority-high': priority === 'High',
+          'priority-asap': priority === 'ASAP'
+        }"
+      >
+        {{ priority }}
+      </div>
+    </div>
+    <div class="card-wrapper_information_name">
+      {{ name || '---' }}
+    </div>
+    <div *ngIf="subTitle" class="card-wrapper_information_subtitle">
+      {{ subTitle }}
+    </div>
+    <div class="card-wrapper_information_remark">{{ remark || '---' }}</div>
+
+    <div class="content-wrap" *ngIf="taskStatus">
+      <div class="content-wrap-r2">
+        <div
+          [ngClass]="{
+            'status-text-initiated': taskStatus?.action === 'Timeout',
+            'status-text-reject': taskStatus?.action === 'Pending',
+            'status-text-success': taskStatus?.action === 'Closed'
+          }"
+        >
+          {{ taskStatus?.action || '------' }}
+        </div>
+        <div class="content-wrap-r2-divider"></div>
+        <div
+          [ngClass]="{
+            'sla-timeout': taskStatus?.slaValue < 0,
+            'sla-pending':
+              taskStatus?.slaValue <= 5 && taskStatus?.slaValue >= 0,
+            'sla-new': taskStatus?.SlaStatus > 5
+          }"
+        >
+          {{ 'SLA' }}: {{ taskStatus?.sla }}
+        </div>
+        <div class="content-wrap-r2-divider"></div>
+        <div class="content-wrap-job-duration">JD: {{ taskStatus?.jd }}m</div>
+      </div>
+    </div>
+    <div
+      class="card-wrapper_information_department"
+      *ngIf="cardType === 'feedback' || department"
+    >
+      {{ department.userName }} ({{ department.label }})
+    </div>
+  </div>
+  <div
+    class="card-wrapper_time"
+    [ngClass]="cardType === 'feedback' ? 'feedback_time' : ''"
+  >
+    {{ time }}
+    <div class="card-wrapper_time_unread-count" *ngIf="unReadCount">
+      {{ unReadCount }}
+    </div>
+    <div class="card-wrapper_time_serviceTag" *ngIf="cardType === 'feedback'">
+      {{ serviceTag }}
+    </div>
+  </div>
+</div>

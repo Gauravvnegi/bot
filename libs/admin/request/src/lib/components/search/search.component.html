@@ -1,8 +1,4 @@
 <span class="p-input-icon-right">
-  <!-- <mat-icon (click)="clearSearch()" class="cross_icon">cancel</mat-icon> -->
-  <div class="cross_icon">
-    <img src="assets/svg/search.svg" alt="filter" />
-  </div>
   <form [formGroup]="parentFG">
     <input
       type="text"
@@ -10,5 +6,6 @@
       formControlName="search"
       placeholder="{{ 'searchPlaceHolder' | translate }}"
     />
+    <i class="pi pi-times-circle search-icon" (click)="clearSearch()"></i>
   </form>
 </span>

@@ -1,0 +1,89 @@
+@import 'main';
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  .icons {
+    display: flex;
+    align-items: center;
+    .svg {
+      padding: 0 12px;
+      height: auto;
+      width: auto;
+      path {
+        fill: $grayMedium;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.separator {
+  height: 35px;
+  border: 1px solid lightgray;
+  margin: 0px 15px;
+}
+
+.form-group-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border: 2px solid $grayLight;
+  border-radius: 5px;
+  background-color: $white;
+
+  .divider {
+    height: 20px;
+    border: 1px solid $grayLight;
+    margin: 0px 15px;
+  }
+}
+
+.go {
+  outline: none;
+  color: $primary-cta;
+  background: $btnDefault;
+  border: none;
+  font-size: 10px;
+  padding: 5px;
+  display: flex;
+  margin-left: 10px;
+  &:hover {
+    background-color: $primary-cta;
+    color: $white;
+    cursor: pointer;
+  }
+  .material-icons {
+    font-size: 16px;
+    height: auto;
+    width: auto;
+  }
+}
+
+.databaseActionLabel {
+  vertical-align: middle;
+  margin-left: 0.5em;
+  font-weight: 500;
+  width: 5%;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  text-align: center;
+}
+
+:host ::ng-deep .export-dropdown {
+  .p-dropdown .p-inputtext {
+    padding: 5px;
+    align-items: baseline;
+    display: flex;
+    font-size: 14px;
+
+    .material-icons {
+      font-size: 16px;
+      height: auto;
+      width: auto;
+    }
+  }
+}

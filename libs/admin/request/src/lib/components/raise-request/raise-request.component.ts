@@ -115,24 +115,14 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       ]),
     };
     this.$subscription.add(
-      this._requestService.getCMSServices(this.hotelId, config).subscribe(
-        (response) => {
+      this._requestService
+        .getCMSServices(this.hotelId, config)
+        .subscribe((response) => {
           this.cmsServices = response.cms_services.sort((a, b) =>
             a.itemName.trim().localeCompare(b.itemName.trim())
           );
           this.listenForItemNameChange();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
-      )
+        })
     );
   }
 
@@ -195,19 +185,10 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
                 .subscribe()
             );
           this.isRaisingRequest = false;
-          this.close({ status: true, data: this.reservation });
+          this.close({ status: false, data: this.reservation, load: true });
         },
         ({ error }) => {
           this.isRaisingRequest = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -217,7 +198,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
    * @function close To close the raise request modal.
    * @param closeData The status and reservation data.
    */
-  close(closeData: { status: boolean; data? }): void {
+  close(closeData: { status: boolean; data?; load: boolean }): void {
+    console.log(closeData);
     this.onRaiseRequestClose.emit(closeData);
   }
 
@@ -243,33 +225,21 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
                 },
               ])
             )
-            .subscribe(
-              (res) => {
-                if (res) {
-                  this.reservation = res;
-                  this.requestFG.patchValue({
-                    firstName: res.guestDetails.primaryGuest.firstName,
-                    lastName: res.guestDetails.primaryGuest.lastName,
-                  });
-                  this.requestFG.get('firstName').disable();
-                  this.requestFG.get('lastName').disable();
-                } else {
-                  this.reservation = {};
-                  this.requestFG.get('firstName').enable();
-                  this.requestFG.get('lastName').enable();
-                }
-              },
-              ({ error }) =>
-                this.snackbarService
-                  .openSnackBarWithTranslate(
-                    {
-                      translateKey: 'messages.error.some_thing_wrong',
-                      priorityMessage: error?.message,
-                    },
-                    ''
-                  )
-                  .subscribe()
-            )
+            .subscribe((res) => {
+              if (res) {
+                this.reservation = res;
+                this.requestFG.patchValue({
+                  firstName: res.guestDetails.primaryGuest.firstName,
+                  lastName: res.guestDetails.primaryGuest.lastName,
+                });
+                this.requestFG.get('firstName').disable();
+                this.requestFG.get('lastName').disable();
+              } else {
+                this.reservation = {};
+                this.requestFG.get('firstName').enable();
+                this.requestFG.get('lastName').enable();
+              }
+            })
         );
       else this.reservation = {};
     });

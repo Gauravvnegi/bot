@@ -6,7 +6,7 @@
 <div class="border"></div>
 <div
   class="usage-container"
-  *ngIf="subscriptionPlanUsage && planUsageChartData"
+  *ngIf="subscriptionPlanUsage"
 >
   <div class="title">Plan Usage</div>
   <div class="usages">
@@ -25,7 +25,7 @@
         </ng-template>
       </ng-template>
     </div>
-    <div class="usages__item">
+    <div class="usages__item" *ngIf="planUsageChartData">
       <hospitality-bot-ocr-usage
         [data]="subscriptionPlanUsage?.ocr"
         [chartData]="planUsageChartData.ocrCount"

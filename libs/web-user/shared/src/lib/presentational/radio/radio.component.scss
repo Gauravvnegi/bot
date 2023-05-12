@@ -9,15 +9,15 @@
 }
 
 .mat__field--heading {
-  font-size: $font16;
+  font-size: 16px;
   font-weight: $bolder;
-  letter-spacing: $very-small-spacing;
+  letter-spacing: 1px;
   line-height: 27px;
 }
 .radion__btn--group {
   font-size: 17px;
   font-weight: $bolder;
-  margin: $margin-large 0;
+  margin: 20px 0;
 }
 :host ::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle {
   background-color: var(--radio-button-color, $radio-button-color);

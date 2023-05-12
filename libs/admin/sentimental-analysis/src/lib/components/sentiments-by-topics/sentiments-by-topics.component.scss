@@ -1,0 +1,72 @@
+@import 'main';
+.topic-progress {
+  padding: 15px 0;
+  display: flex;
+  justify-content: space-between;
+  .title {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.84px;
+    color: #6d7580;
+    width: 90px;
+  }
+  .stacked-progress-bar {
+    width: calc(100% - 90px);
+    position: relative;
+    display: flex;
+    height: 23px;
+    .bar {
+      @include flex-all-center;
+      height: 100%;
+      border-radius: 0 11px 11px 0;
+      position: absolute;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.6px;
+      color: #fff;
+    }
+    .positive {
+      background-color: #4bc0c0;
+      left: 0;
+      z-index: 3;
+    }
+    .negative {
+      background-color: #fa586d;
+      margin-left: -10px;
+      z-index: 2;
+    }
+    .blank {
+      background-color: #f2f2f2;
+      margin-left: -20px;
+      position: absolute;
+      z-index: 1;
+    }
+  }
+}
+.limits {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 85px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.72px;
+  color: #6d7580;
+}
+:host ::ng-deep {
+  .wrapper {
+    box-shadow: unset !important;
+    background-color: unset !important;
+    max-width: unset !important;
+    padding: 20px !important;
+    .header-content {
+      .stats_text {
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: 0.96px;
+      }
+    }
+    .graph {
+      margin-top: 30px;
+    }
+  }
+}

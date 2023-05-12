@@ -29,7 +29,7 @@
   text-align: left;
   font: normal normal normal 10px/16px Roboto;
   letter-spacing: 0.72px;
-  color: $quote-color;
+  color: $subtitle;
   @media screen and (max-width: 1070px) {
     font: normal normal normal 8px/16px Roboto;
     letter-spacing: 0;
@@ -63,4 +63,15 @@
 
 .stat-label > input:checked + p {
   text-decoration: line-through;
+}
+
+.graphTitle {
+  color: #002046;
+  @include normal-text;
+  font-weight: bold;
+}
+
+.labelWrapper {
+  margin-top: 20px;
+  display: flex;
 }

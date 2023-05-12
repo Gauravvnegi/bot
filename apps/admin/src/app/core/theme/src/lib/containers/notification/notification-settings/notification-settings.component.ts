@@ -31,7 +31,7 @@ export class NotificationSettingsComponent implements OnInit {
     this.loading = true;
     this.$subscription.add(
       this.notificationService
-        .getNotificationSettings(this.userService.getLoggedInUserid())
+        .getNotificationSettings(this.userService.getLoggedInUserId())
         .subscribe((response) => {
           Object.keys(response).forEach((key) => {
             this.customizeFG.addControl(key, new FormGroup({}));
@@ -52,7 +52,7 @@ export class NotificationSettingsComponent implements OnInit {
     this.$subscription.add(
       this.notificationService
         .updateNotificationSetting(
-          this.userService.getLoggedInUserid(),
+          this.userService.getLoggedInUserId(),
           id,
           event.checked
         )

@@ -2,14 +2,14 @@
   <mat-expansion-panel #depositPanel2 [expanded]="openedState">
     <mat-expansion-panel-header class="accordian__header">
       <mat-panel-title class="container__title">
-        <p>
+        <div class="booking_title">
           {{ rowData.getTitle() }} -
           <span class="booking_number">{{
             rowData.booking.bookingNumber
           }}</span>
-        </p>
+        </div>
         <div class="header-seperator"></div>
-        <p class="visit-padding">
+        <div class="visit-padding">
           {{ rowData.booking.getArrivalDate(globalFilterService.timezone) }} -
           {{ rowData.booking.getDepartureDate(globalFilterService.timezone) }}
           ({{
@@ -19,21 +19,22 @@
           {{
             rowData.booking.getDaysAndNights(globalFilterService.timezone).days
           }}D)
-        </p>
+        </div>
         <ng-container *ngIf="rowData.visitDetail?.feedbackId">
           <div class="header-seperator"></div>
           <div
             class="booking-id-wrapper"
             *ngIf="rowData.visitDetail?.feedbackId"
+            [ngStyle]=""
           >
             <div class="feedback">
               <div class="booking-feedback">
-                <p
+                <div
                   class="number"
                   [style.backgroundColor]="rowData.visitDetail?.color"
                 >
                   {{ rowData.visitDetail?.intentToRecommends.rating }}
-                </p>
+                </div>
               </div>
             </div>
           </div>

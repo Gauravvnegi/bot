@@ -4,13 +4,20 @@
       <div class="guestInfoAvatar" [style.background]="selectedChat?.color">
         <img
           [src]="chat?.receiver?.profileUrl"
-          *ngIf="chat?.receiver?.profileUrl; else defaultAvatar"
+          *ngIf="chat?.receiver?.profileUrl"
         />
-        <ng-template #defaultAvatar
-          ><div class="label">
-            {{ selectedChat?.getProfileNickName() }}
-          </div></ng-template
+        <div
+          class="guestInfoAvatar_nickName"
+          *ngIf="selectedChat?.getProfileNickName(); else defaultAvatar"
         >
+          {{ selectedChat?.getProfileNickName() }}
+        </div>
+        <ng-template #defaultAvatar
+          ><img
+            src="assets/svg/defaultUser.svg"
+            alt="default"
+            class="guestInfoAvatar_default"
+        /></ng-template>
       </div>
       <div class="selectedChat">
         {{ selectedChat ? selectedChat?.name || selectedChat?.phone : '' }}
@@ -20,7 +27,7 @@
     <div class="mr-10" [formGroup]="liveChatFG">
       <div class="req_button">
         <div class="export-chat" (click)="exportChat()">
-          <img src="assets/svg/CSV.svg" alt="csv" />
+          <img src="assets/svg/documentColor.svg" alt="csv" />
           <div>Export Chat</div>
         </div>
         <div
@@ -48,8 +55,9 @@
           >Hand Over to Bot</mat-slide-toggle
         >
         <img
+          *ngIf="!guestInfoEnable"
           class="icon"
-          src="assets/images/guest-info-icon .png"
+          src="assets/svg/hamBurger.svg"
           [alt]=""
           (click)="openGuestInfo()"
         />
@@ -58,14 +66,17 @@
   </div>
   <div
     class="scrollChat"
-    (scroll)="onScroll($event)"
     *ngIf="chatDates.length; else noChat"
     [ngStyle]="
       chatFG && chatList.receiver[selectedChat.receiverId]?.checkEnableSend()
-        ? { height: 'calc(100% - 186px)' }
+        ? { height: 'calc(100% - 125px)' }
         : { height: 'calc(100% - 124px)' }
     "
     #scrollMe
+    infiniteScroll
+    (scrolled)="loadMore()"
+    [toggleScrollListener]="paginationDisabled"
+    [scrollSettings]="{ reverse: true }"
   >
     <ng-container *ngFor="let date of chatDates">
       <div class="chatDate">
@@ -96,7 +107,10 @@
             "
           >
             <ng-container *ngIf="message.text; else media">
-              <p [innerHTML]="message.text | linkDetector"></p>
+              <p
+                [innerHTML]="message.text | linkDetector"
+                class="messageText"
+              ></p>
             </ng-container>
             <ng-template #media>
               <hospitality-bot-media-chat

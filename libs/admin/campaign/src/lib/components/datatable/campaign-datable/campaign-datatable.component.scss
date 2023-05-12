@@ -1,69 +1,11 @@
 @import 'main';
 
-.documentActionItemLabel {
-  margin-left: 0.5em;
-  font-weight: 500;
-}
-
 .header {
-  display: flex;
-  justify-content: space-between;
+  @include flex-space-between;
 }
-.tableHeading {
-  width: 72px;
-  background-color: $c-gray-93;
-  @include align-checkbox();
-}
-.table_head {
-  background-color: $c-gray-93 !important;
-}
-.icon-wrapper {
-  @include flex-space-between();
-  flex-wrap: wrap;
 
-  position: relative;
-  .icon {
-    width: 32%;
-    margin: 6% 0.5%;
-    @include flex-item-center();
-    flex-direction: column;
-
-    .table-body-journey-icon {
-      height: 14px;
-      width: 14px;
-      &:hover {
-        cursor: pointer;
-      }
-      @media screen and (max-width: 800px) {
-        height: 10px;
-        width: 10px;
-      }
-    }
-    .label {
-      font-size: 6px;
-      margin-top: 3px;
-      @media screen and (max-width: 800px) {
-        font-size: 3px;
-      }
-    }
-  }
-  .extra-width {
-    width: 24%;
-  }
-  .line {
-    position: absolute;
-    height: 2px;
-    width: 72%;
-    background-color: $alice-blue;
-    right: 17px;
-    @media screen and (max-width: 800px) {
-      width: 62%;
-    }
-  }
-}
 .option {
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   cursor: pointer;
   height: 30px;
   position: relative;
@@ -71,7 +13,7 @@
     width: 8px;
     height: 8px;
     margin-left: 7px;
-    background-color: $c-gray-18;
+    background-color: $grayMedium;
     border-radius: 50%;
   }
   &:hover {
@@ -86,11 +28,10 @@
   position: absolute;
   width: 203px;
   border-radius: 4px;
-  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.27);
+  box-shadow: 0 6px 12px 0 $blackPrime;
   background-color: $white;
   right: 0;
   font-size: 16px;
-  font-weight: normal;
   letter-spacing: 0.96px;
   padding: 10px;
   z-index: 10000;
@@ -98,54 +39,13 @@
   &__item {
     padding: 18px 14px 10px 14px;
     &:hover {
-      background-color: rgba(232, 238, 245, 0.25);
-    }
-  }
-}
-
-.request-btn__wrap {
-  cursor: pointer;
-  .request-btn {
-    font-size: $font14;
-    width: 145px;
-    height: 36px;
-    margin: 0 20px 0 254px;
-    padding: 9.5px 12.5px 8.5px 13.5px;
-    border-radius: 18px;
-    background-color: $button-blue;
-    color: $white;
-  }
-}
-
-:host ::ng-deep .mat-slide-toggle-bar {
-  width: 50px;
-  height: 15px;
-  .mat-slide-toggle-thumb-container {
-    left: -2px;
-  }
-}
-
-:host ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-  background-color: $completed;
-}
-
-:host ::ng-deep .mat-slide-toggle.mat-checked {
-  .mat-slide-toggle-thumb-container {
-    left: 2px;
-    transform: translate3d(30px, 0, 0);
-    .mat-slide-toggle-thumb {
-      background-color: $white;
+      background-color: $hoverBGlight;
     }
   }
 }
 
 :host ::ng-deep .name {
-  font-size: $font12 !important;
-}
-
-:host ::ng-deep .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
-  padding: 0.8rem 0.5rem !important;
-  background-color: $c-gray-93;
+  font-size: 12px !important;
 }
 
 :host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
@@ -157,62 +57,56 @@
 }
 :host ::ng-deep .data-table-row {
   td {
-    padding: $padding20 !important;
+    padding: 20px !important;
   }
   &:hover {
     cursor: pointer;
-    background: $table-hover-background !important;
+    background: $hoverBG !important;
   }
 }
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
-  font-size: $font16 !important;
+  color: $primary-cta !important;
+  font-size: 16px !important;
 }
 
 :host ::ng-deep .header {
-  color: $dark-blue !important;
-  font-size: $font16;
+  color: $secondary !important;
+  font-size: 16px;
   font-weight: bold;
 }
 
 :host ::ng-deep .table-data-head {
-  color: $dark-blue !important;
+  color: $secondary !important;
 }
 
 :host ::ng-deep thead.p-datatable-thead {
-  border-top: solid 1px $c-gray-90 !important;
+  border-top: solid 1px #e3e3e3 !important;
 }
 
 .stats {
   font-size: 12px;
-  font-weight: normal;
   letter-spacing: 0.66px;
 
   .stats-container {
     max-width: 500px;
     gap: 5px;
-    display: flex;
-    flex-wrap: wrap;
+    @include flex-wrap;
   }
 }
 
 .stats-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  @include flex-wrap-center-algn;
 }
 
 .stat-chip {
   height: 30.9px;
   padding: 6.6px 7.4px 6.6px 9.7px;
   border-radius: 15.5px;
-  background-color: rgba(0, 48, 181, 0.1);
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   margin: 0 10px 10px 0;
   &__value {
     margin-left: 3px;
-    padding: 2.5px;
+    padding: 0 3.5px;
     border-radius: 12px;
     opacity: 1 !important;
   }
@@ -220,19 +114,19 @@
 
 .delivered {
   background-color: rgba(0, 48, 181, 0.1);
-  color: $booking-feedback;
+  color: $primaryBlue;
   &__value {
     color: $white;
-    background-color: $booking-feedback;
+    background-color: $primaryBlue;
   }
 }
 
 .opened {
   background-color: rgba(37, 162, 226, 0.1);
-  color: rgba(37, 162, 226);
+  color: $load-more;
   &__value {
     color: $white;
-    background-color: rgba(37, 162, 226);
+    background-color: $load-more;
   }
 }
 
@@ -247,19 +141,19 @@
 
 .clicked {
   background-color: rgba(82, 179, 63, 0.1);
-  color: rgba(82, 179, 63, 1);
+  color: $posCompare;
   &__value {
     color: $white;
-    background-color: rgba(82, 179, 63, 1);
+    background-color: $posCompare;
   }
 }
 
 .failed {
   background-color: rgba(240, 13, 42, 0.1);
-  color: rgba(240, 13, 42, 1);
+  color: $mediumRed;
   &__value {
     color: $white;
-    background-color: rgba(240, 13, 42, 1);
+    background-color: $mediumRed;
   }
 }
 
@@ -290,4 +184,14 @@
 }
 .guest {
   font-size: 14px;
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include tableCellPadding(1em);
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include tableCellPadding(1em);
 }

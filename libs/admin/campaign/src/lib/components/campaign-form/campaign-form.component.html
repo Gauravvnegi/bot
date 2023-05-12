@@ -1,24 +1,18 @@
-<header class="wrapper-header">
-  <div class="back">
-    <mat-icon class="material-icons" matSuffix (click)="goBack()"
-      >keyboard_backspace</mat-icon
-    >
-    <!-- <p class="label">{{ campaignId ? 'Edit' : 'Create' }} Campaign</p> -->
-    <div class="name-field" [formGroup]="campaignFG" *ngIf="campaignFG">
-      <mat-form-field class="description">
-        <input matInput formControlName="name" placeholder="Enter Name" />
-        <mat-error
-          *ngIf="
-            campaignFG.get('name').touched &&
-            campaignFG.get('name').hasError('required')
-          "
-        >
-          {{ 'nameRequired' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="option">
+<hospitality-bot-navigation-header
+  [heading]="pageTitle"
+  [routes]="navRoutes"
+  [dateTime]="draftDate"
+>
+</hospitality-bot-navigation-header>
+
+<form [formGroup]="campaignFG" class="wrapper-header">
+  <hospitality-bot-input
+    *ngIf="campaignFG"
+    class="half-width"
+    controlName="name"
+    label="Name"
+  ></hospitality-bot-input>
+  <div class="option half-width">
     <div class="icon"></div>
     <div class="icon"></div>
     <div class="icon"></div>
@@ -35,178 +29,116 @@
       </div>
     </div>
   </div>
-</header>
-<div class="sent-details" *ngIf="campaign">
-  <div>
-    {{ 'draftedOn' | translate }}
-    {{
-      campaign?.getDraftDate(
-        globalFilterService.timezone,
-        'MMM DD, YYYY hh:mm a'
-      )
-    }}
-  </div>
-</div>
-<div class="body" [formGroup]="campaignFG" *ngIf="campaignFG">
-  <div class="fields">
-    <div class="field">
-      <mat-label class="mat-label">{{
-        'formFieldLabels.from' | translate
-      }}</mat-label>
-      <mat-form-field>
-        <mat-select formControlName="from" placeholder="Select email">
-          <mat-option *ngFor="let item of fromEmailList" [value]="item.id">{{
-            item.email
-          }}</mat-option>
-        </mat-select>
-        <mat-error
-          *ngIf="
-            campaignFG.get('from').touched &&
-            campaignFG.get('from').hasError('required')
-          "
-        >
-          {{ 'validationMessage.from' | translate }}
-        </mat-error>
-      </mat-form-field>
+  <div class="one-fourth">{{ 'formFieldLabels.from' | translate }}</div>
+  <hospitality-bot-select
+    class="one-third-width"
+    label="Select email"
+    controlName="from"
+    [options]="fromEmailList"
+  ></hospitality-bot-select>
+
+  <div class="one-fourth">{{ 'formFieldLabels.to' | translate }}</div>
+  <div class="email-style one-third-width">
+    <hospitality-bot-to-receiver-field
+      [name]="'to'"
+      [hotelId]="hotelId"
+      [chipList]="campaignFG.get('to')?.value || []"
+      [disableInput]="(campaignFG.get('to')?.value || []).length"
+      (updateChipSet)="updateFieldData($event, campaignFG.get('to'))"
+    ></hospitality-bot-to-receiver-field>
+    <div class="style-click">
+      <span
+        (click)="enableEmailControl($event, 'bcc')"
+        *ngIf="!campaignFG?.get('bcc')"
+      >
+        Bcc
+      </span>
+      <span
+        (click)="enableEmailControl($event, 'cc')"
+        *ngIf="!campaignFG?.get('cc')"
+      >
+        Cc
+      </span>
     </div>
   </div>
-  <div class="fields">
-    <div class="field full-width">
-      <mat-label class="mat-label">{{
-        'formFieldLabels.to' | translate
-      }}</mat-label>
-      <div class="email-field-container">
-        <hospitality-bot-to-receiver-field
-          [name]="'to'"
-          [hotelId]="hotelId"
-          [chipList]="campaignFG.get('to')?.value || []"
-          [disableInput]="(campaignFG.get('to')?.value || []).length"
-          (updateChipSet)="updateFieldData($event, campaignFG.get('to'))"
-        ></hospitality-bot-to-receiver-field>
-        <div class="email-style">
-          <div
-            class="style-click"
-            (click)="enableEmailControl($event, 'bcc')"
-            *ngIf="!campaignFG?.get('bcc')"
-          >
-            Bcc
-          </div>
-          <div
-            class="style-click"
-            (click)="enableEmailControl($event, 'cc')"
-            *ngIf="!campaignFG?.get('cc')"
-          >
-            Cc
-          </div>
-        </div>
-      </div>
+
+  <ng-container *ngIf="campaignFG?.get('cc')">
+    <div class="one-fourth">{{ 'formFieldLabels.cc' | translate }}</div>
+    <hospitality-bot-email-chip-list
+      class="one-third-width"
+      [parentFG]="campaignFG"
+      [name]="'cc'"
+    ></hospitality-bot-email-chip-list>
+  </ng-container>
+  <ng-container *ngIf="campaignFG?.get('bcc')">
+    <div class="one-fourth">{{ 'formFieldLabels.bcc' | translate }}</div>
+    <hospitality-bot-email-chip-list
+      class="one-third-width"
+      [parentFG]="campaignFG"
+      [name]="'bcc'"
+    ></hospitality-bot-email-chip-list>
+  </ng-container>
+
+  <div class="one-fourth">{{ 'formFieldLabels.subject' | translate }}</div>
+  <div class="email-style one-third-width">
+    <hospitality-bot-input
+      controlName="subject"
+      label="Enter Subject"
+      [max]="config.validator.length"
+    ></hospitality-bot-input>
+    <div class="style-click">
+      <div>{{ campaignFG.get('subject')?.value.length }}/200</div>
+      <span>
+        <hospitality-bot-personalization
+          [name]="'subject'"
+          (personalization)="addPersonalization($event, 'subject')"
+        ></hospitality-bot-personalization
+      ></span>
+    </div>
+    <div
+      class="error"
+      *ngIf="
+        campaignFG.get('subject').touched &&
+        campaignFG.get('subject').hasError('maxlength')
+      "
+    >
+      {{ 'validationMessage.subjectLength' | translate }}
     </div>
   </div>
-  <div class="fields" *ngIf="campaignFG?.get('cc')">
-    <div class="field full-width">
-      <mat-label class="mat-label">{{
-        'formFieldLabels.cc' | translate
-      }}</mat-label>
-      <div class="cc-width">
-        <hospitality-bot-email-chip-list
-          [parentFG]="campaignFG"
-          [name]="'cc'"
-        ></hospitality-bot-email-chip-list>
-      </div>
-    </div>
+
+  <div class="one-fourth">
+    {{ 'formFieldLabels.previewText' | translate }}
   </div>
-  <div class="fields" *ngIf="campaignFG?.get('bcc')">
-    <div class="field full-width">
-      <mat-label class="mat-label">{{
-        'formFieldLabels.bcc' | translate
-      }}</mat-label>
-      <div class="cc-width">
-        <hospitality-bot-email-chip-list
-          [parentFG]="campaignFG"
-          [name]="'bcc'"
-        ></hospitality-bot-email-chip-list>
-      </div>
+  <div class="email-style one-third-width">
+    <hospitality-bot-input
+      controlName="previewText"
+      label="Enter Preview Text (optional)"
+      [max]="config.validator.length"
+    ></hospitality-bot-input>
+    <div class="style-click">
+      <div>{{ campaignFG.get('previewText')?.value.length }}/200</div>
+      <span
+        ><hospitality-bot-personalization
+          [name]="'previewText'"
+          (personalization)="addPersonalization($event, 'previewText')"
+        ></hospitality-bot-personalization
+      ></span>
     </div>
+    <mat-error
+      class="error"
+      *ngIf="
+        campaignFG.get('previewText').touched &&
+        campaignFG.get('previewText').hasError('maxlength')
+      "
+    >
+      {{ 'validationMessage.subjectLength' | translate }}
+    </mat-error>
   </div>
-  <div class="fields">
-    <div class="field full-width">
-      <mat-label class="mat-label">{{
-        'formFieldLabels.subject' | translate
-      }}</mat-label>
-      <mat-form-field class="description">
-        <input
-          matInput
-          formControlName="subject"
-          placeholder="Enter Subject"
-          [maxLength]="config.validator.length"
-        />
-        <div class="description-style">
-          <div class="style-subject">
-            <div class="subject-options">
-              {{ campaignFG.get('subject')?.value.length }}/200
-            </div>
-            <hospitality-bot-personalization
-              [name]="'subject'"
-              (personalization)="addPersonalization($event, 'subject')"
-            ></hospitality-bot-personalization>
-          </div>
-        </div>
-        <mat-error
-          *ngIf="
-            campaignFG.get('subject').touched &&
-            campaignFG.get('subject').hasError('required')
-          "
-        >
-          {{ 'validationMessage.subject' | translate }}
-        </mat-error>
-        <mat-error
-          *ngIf="
-            campaignFG.get('subject').touched &&
-            campaignFG.get('subject').hasError('maxlength')
-          "
-        >
-          {{ 'validationMessage.subjectLength' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="fields">
-    <div class="field full-width">
-      <mat-label class="mat-label">{{
-        'formFieldLabels.previewText' | translate
-      }}</mat-label>
-      <mat-form-field class="description">
-        <input
-          matInput
-          formControlName="previewText"
-          placeholder="Enter Preview Text (optional)"
-          [maxLength]="config.validator.length"
-        />
-        <div class="description-style">
-          <div class="style-subject">
-            <div class="subject-options">
-              {{ campaignFG.get('previewText')?.value.length }}/200
-            </div>
-            <hospitality-bot-personalization
-              [name]="'previewText'"
-              (personalization)="addPersonalization($event, 'previewText')"
-            ></hospitality-bot-personalization>
-          </div>
-        </div>
-        <mat-error
-          *ngIf="
-            campaignFG.get('previewText').touched &&
-            campaignFG.get('previewText').hasError('maxlength')
-          "
-        >
-          {{ 'validationMessage.subjectLength' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-  </div>
+
   <hospitality-bot-edit-content
+    class="full-width"
     [campaignFG]="campaignFG"
     [campaignDetails]="campaign"
     (addContent)="openAddContent()"
   ></hospitality-bot-edit-content>
-</div>
+</form>

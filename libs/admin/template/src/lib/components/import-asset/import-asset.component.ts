@@ -1,25 +1,21 @@
 import {
   Component,
-  ElementRef,
   EventEmitter,
-  HostListener,
   OnDestroy,
   OnInit,
   Output,
-  ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Subscription } from 'rxjs';
-import { debounceTime, filter } from 'rxjs/operators';
-import { TemplateService } from '../../services/template.service';
-import { templateConfig } from '../../constants/template';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { templateConfig } from '../../constants/template';
+import { TemplateService } from '../../services/template.service';
 
 @Component({
   selector: 'hospitality-bot-import-asset',
@@ -27,7 +23,6 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./import-asset.component.scss'],
 })
 export class ImportAssetComponent implements OnInit, OnDestroy {
-  @ViewChild('assetList') private myScrollContainer: ElementRef;
   @Output() closeImport = new EventEmitter();
   searchValue = false;
   hotelId: string;
@@ -128,27 +123,6 @@ export class ImportAssetComponent implements OnInit, OnDestroy {
     this.tabFilterItems.forEach((tab) => {
       tab.total = countObj[tab.value];
     });
-  }
-
-  /**
-   * @function HostListener for scroll event.
-   * @param event scroll event.
-   */
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event) {
-    if (
-      this.myScrollContainer &&
-      this.myScrollContainer.nativeElement.offsetHeight +
-        this.myScrollContainer.nativeElement.scrollTop ==
-        this.myScrollContainer.nativeElement.scrollHeight - 1 &&
-      this.assets.length < this.tabFilterItems[this.tabFilterIdx].total
-    ) {
-      this.loadAssetData([
-        {
-          offset: this.tabFilterItems[this.tabFilterIdx].page * this.limit,
-        },
-      ]);
-    }
   }
 
   loadSearchAsset(key) {

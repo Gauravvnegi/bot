@@ -10,6 +10,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { TranslateService } from '@ngx-translate/core';
 import { AddressComponent } from '../address/address.component';
 import { DocumentDetailsService } from 'libs/web-user/shared/src/lib/services/document-details.service';
+import { FormBuilder, Validators } from '@angular/forms';
 
 export interface IStayDetailsWrapper {
   saveStayDetails(): void;
@@ -34,7 +35,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     private _translateService: TranslateService,
     private _stepperService: StepperService,
     private _buttonService: ButtonService,
-    private _documentDetailService: DocumentDetailsService
+    private _documentDetailService: DocumentDetailsService,
+    protected fb: FormBuilder
   ) {
     super();
     this.self = this;
@@ -47,6 +49,17 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     this.getCountriesList();
   }
 
+  addDeclaimerCheckbox() {
+    const isFirstStepCompleted = this.reservationData.stateCompletedSteps > 0;
+    const form = this.fb.group({
+      disclaimer: [isFirstStepCompleted, Validators.requiredTrue],
+    });
+    this.addFGEvent({
+      name: 'accept',
+      value: form,
+    });
+  }
+
   fetchData(): void {
     this.getHotelAmenities();
   }
@@ -56,6 +69,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
       this.reservationData,
       this._hotelService.hotelConfig.timezone
     );
+
+    this.addDeclaimerCheckbox();
   }
 
   getHotelAmenities(): void {
@@ -99,13 +114,33 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
    * Function to save/update all the details for guest stay on Next button click
    */
   saveStayDetails(): void {
-    if (this.parentForm.invalid) {
+    const {
+      accept,
+      address,
+      amenities,
+      special_comments,
+      stayDetail,
+    } = this.parentForm.controls;
+    if (
+      accept.invalid ||
+      address.invalid ||
+      special_comments.invalid ||
+      stayDetail.invalid
+    ) {
       this.parentForm.markAllAsTouched();
-      if (this._hotelService.hotelConfig?.showAddress)
+      if (
+        this._hotelService.hotelConfig?.showAddress &&
+        this.parentForm.get('address').invalid
+      )
         this.openPanels(this.addressFields.panelList.toArray());
+
+      if (!this.parentForm.get('accept').get('disclaimer').value) {
+        this._snackBarService.openSnackBarAsText('Please accept disclaimer');
+      }
       this._buttonService.buttonLoading$.next(this.buttonRefs['nextButton']);
       return;
     }
+
     const formValue = this.parentForm.getRawValue();
     const data = this._stayDetailService.modifyStayDetails(
       formValue,

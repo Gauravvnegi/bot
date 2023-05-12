@@ -10,23 +10,14 @@
 .header {
   height: 51.7px;
   padding: 14px 17px 12.7px 24px;
-  background-color: #f4f5f7;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background-color: $header-background;
+  @include flex-space-between-cen-Algn;
   &__title-container {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     .title {
       margin-left: 10px;
-      font-family: Roboto;
-      font-size: 16px;
-      font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
+      @include normal-text;
+
       color: $primary-black;
     }
   }
@@ -37,75 +28,55 @@
 }
 
 .body {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  @include flex-col-space-around;
   height: calc(100% - 51.7px);
   padding: 18px;
   &__text {
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
+    @include normal-text;
     text-align: center;
     color: $primary-black;
     margin: 19px 0;
   }
   .btn-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-all-center;
     margin: 22px 0;
     .btn {
       width: 113px;
       height: 35px;
       margin: 0 0 0 27px;
-      border-radius: 17.5px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      border-radius: 3px;
+      @include flex-all-center;
       cursor: pointer;
       &__yes {
-        background-color: $button-blue;
+        background-color: $primary-cta;
         &__text {
-          font-family: Roboto;
-          font-size: 13px;
+          font-size: 12px;
           font-weight: 500;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
           letter-spacing: 0.78px;
           text-align: center;
           color: $white;
         }
         &:active {
-          transform: scale(0.95);
+          background-color: $primary-pressed;
         }
         &:hover {
-          transform: scale(0.97);
+          background-color: $primary-hover;
         }
       }
       &__no {
-        border: solid 1px $button-blue;
+        border: 1px solid $primary-cta;
         &__text {
-          font-family: Roboto;
-          font-size: 13px;
+          font-size: 12px;
           font-weight: 500;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
           letter-spacing: 0.78px;
           text-align: center;
-          color: $button-blue;
+          color: $primary-cta;
         }
         &:active {
-          transform: scale(0.95);
+          border: 1px solid $primary-pressed;
         }
         &:hover {
-          transform: scale(0.97);
+          border: 1px solid $primary-hover;
         }
       }
     }
@@ -115,13 +86,7 @@
 .allow-body {
   padding: 26px 36px 51px 58px;
   &__text {
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
+    @include normal-text;
     color: $primary-black;
     margin: 0 0 30px 20px;
   }
@@ -131,16 +96,11 @@
     height: 35px;
     border-radius: 17.5px;
     background-color: $button-blue;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-all-center;
     cursor: pointer;
     &__text {
       font-size: 13px;
       font-weight: 500;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
       letter-spacing: 0.78px;
       text-align: center;
       color: $white;

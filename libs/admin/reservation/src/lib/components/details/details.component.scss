@@ -1,18 +1,21 @@
 @import 'main';
 
 :host ::ng-deep .mat-tab-label {
-  color: $mat-tab-label;
-  font-size: $font14;
+  color: $inActiveTab;
+  font-size: 14px;
+  @media screen and (max-width: $XL) {
+    min-width: 155px;
+  }
 }
 
 :host ::ng-deep .mat-tab-label-active {
-  color: $primary-purple;
-  font-size: $font16;
+  color: $primary-cta;
+  font-size: 16px;
   font-weight: $bolder;
 }
 
 :host ::ng-deep .mat-ink-bar {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 }
 
 .detailComponentCurrent {
@@ -22,22 +25,21 @@
 
 .details-wrapper {
   background-color: $white;
-  max-height: 100%;
-  @media screen and (max-width: 1100px) {
+  // max-height: 100%;
+  // @media screen and (max-width: 1100px) {
     height: 85vh;
-  }
+  // }
 }
 
 :host ::ng-deep .p-dropdown .p-inputtext {
   padding: 5px;
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   font-size: 14px;
   padding-left: 0px;
 }
 
 :host ::ng-deep .header {
-  background: $primary-purple;
+  background: $primary-cta;
   position: sticky;
   top: 0;
   z-index: 999;
@@ -58,16 +60,13 @@
     opacity: 0.2;
   }
   .name-details {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-space-between-cen-Algn;
     color: $white;
-    font-size: $font16;
+    font-size: 16px;
     margin-bottom: 1.5rem;
     padding: 20px 20px 0 20px;
     .name-details-wrapper {
-      display: flex;
-      align-items: center;
+      @include flex-item-center;
       .profile-pic {
         width: 66px;
         height: 66px;
@@ -77,26 +76,23 @@
       }
       .details {
         .name {
-          display: flex;
-          align-items: baseline;
+          @include flex-base-algn;
         }
         .contact-details {
           color: $white;
-          font-size: $font10;
-          display: flex;
-          align-items: center;
-          margin-top: $margin10;
+          font-size: 10px;
+          @include flex-item-center;
+          margin-top: 10px;
           .call,
           .email {
-            display: flex;
-            align-items: center;
+            @include flex-item-center;
             text-decoration: none;
             color: $white;
             :hover {
               color: $white;
             }
             .material-icons {
-              font-size: $font12;
+              font-size: 12px;
               height: auto;
               width: auto;
               margin-right: 5px;
@@ -113,17 +109,13 @@
       }
     }
     .guest_data {
-      display: flex;
-      align-items: baseline;
+      @include flex-space-between-base-Algn;
       color: $white;
-      justify-content: space-between;
-      font-size: $font16;
+      font-size: 16px;
       padding-left: 5px;
       width: 70%;
       &__field {
-        display: flex;
-        flex-direction: column;
-        align-items: left;
+        @include flex-col-start-algn();
         margin-right: 5rem;
         .label {
           letter-spacing: 0.84px;
@@ -133,7 +125,7 @@
         }
         .value {
           font-size: 11px;
-          color: $c-gray-74;
+          color: $grayLight;
           letter-spacing: 0.66px;
           margin-top: 5px;
           font-weight: 500;
@@ -141,24 +133,19 @@
       }
     }
     .booking-id-wrapper {
-      // margin-top: 20px;
       .booking-id {
         text-align: center;
       }
       .feedback {
         color: $white;
-        font-size: $font10;
-        display: flex;
-        align-items: center;
+        font-size: 10px;
+        @include flex-item-center;
         margin-top: 10px;
         .booking-feedback {
-          display: flex;
-          align-items: center;
-          background-color: $c-gray-103;
-          justify-content: space-around;
+          @include flex-space-around-cen-Algn;
+          background-color: $whiteDeep;
           padding: 2px;
           margin: 0 10px;
-          // margin-top: 7px;
           border-radius: 25px;
           position: relative;
           &:hover {
@@ -172,7 +159,7 @@
             width: auto;
             top: 50%;
             font-size: 12px;
-            color: $dark-grey;
+            color: $subtitle;
             background-color: $white;
             left: 0%;
             padding: 7px;
@@ -211,11 +198,8 @@
   }
 
   .options-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    @include flex-space-between-cen-Algn;
     padding: 10px 20px 0;
-    // margin-top: 20px;
     .btn-wrapper {
       display: flex;
       .check-button {
@@ -223,25 +207,19 @@
         border: 1px solid $white;
         background: transparent;
         border: none;
-        display: flex;
-        align-items: center;
+        @include flex-item-center;
         border-radius: 5px;
-        padding: 6px $padding20;
-        font-family: Roboto;
-        font-weight: 500;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.84px;
+        padding: 6px 20px;
+        @include normal-text;
         text-align: center;
         color: $white;
         .material-icons {
-          margin-right: $margin15;
-          margin-left: $margin5;
+          margin-right: 15px;
+          margin-left: 5px;
         }
         .text {
           text-decoration: underline;
-          font-size: $font14;
+          font-size: 14px;
         }
         &:hover {
           cursor: pointer;
@@ -259,6 +237,11 @@
     margin-left: 15px;
   }
 }
+
+mat-option {
+  color: black !important;
+}  
+
 :host ::ng-deep .mat-select-panel:not([class*='mat-elevation-z']) {
   margin: 30px 0 0 15px !important;
   height: 80px !important;
@@ -270,7 +253,7 @@
   outline: none;
   border: 1px solid $white;
   border-radius: 5px;
-  padding: 6px $padding20;
+  padding: 6px 20px;
   .p-inputtext {
     color: $white;
   }
@@ -286,8 +269,7 @@
 .svg-wrapper {
   padding-left: 5px;
   color: $white;
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   .svg {
     path {
       fill: $white;
@@ -305,7 +287,7 @@
     li.cricle {
       width: 30px;
       height: 30px;
-      background: $red;
+      background: #ff0000;
       border-radius: 15px;
       border: solid 2px $white;
       text-align: center;
@@ -331,41 +313,40 @@
       background: $dark-warning;
       color: $white;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: $bold;
       cursor: pointer;
     }
   }
 }
 
 :host ::ng-deep .mat-head {
-  font-size: $font16;
-  margin-right: $margin20;
+  font-size: 16px;
+  margin-right: 20px;
   font-weight: $bolder;
-  color: $dark-blue;
+  color: $secondary;
 }
 
 .data-seperator {
-  border: 2px solid $c-gray-93;
-  margin: $margin20 0px;
+  border: 2px solid $whiteDeep;
+  margin: 20px 0px;
   opacity: 0.1;
 }
 
 .fields-wrapper {
-  display: flex;
-  justify-content: space-between;
+  @include flex-space-between;
   margin: 30px 0px;
   padding: 0px 30px;
   .field {
     .label {
       letter-spacing: 0.72px;
-      font-size: $font12;
-      color: $primary-gray;
+      font-size: 12px;
+      color: $grayMedium;
     }
     .value {
       letter-spacing: 0.84px;
-      font-size: $font14;
+      font-size: 14px;
       color: $primary-black;
-      margin-top: $margin10;
+      margin-top: 10px;
     }
   }
 }
@@ -374,20 +355,19 @@
   display: flex;
 }
 .gap {
-  margin-top: $margin15;
+  margin-top: 15px;
 }
 
 .document-header {
-  display: flex;
-  margin-bottom: $margin20;
-  align-items: center;
+  @include flex-item-center;
+  margin-bottom: 20px;
   .heading {
-    font-size: $font16;
-    margin-right: $margin20;
+    font-size: 16px;
+    margin-right: 20px;
     font-weight: $bolder;
   }
   .fa {
-    color: $pending;
+    color: $draft-state;
   }
 }
 
@@ -411,26 +391,25 @@
 .health-status {
   letter-spacing: 0.84px;
   color: $primary-black;
-  font-size: $font14;
+  font-size: 14px;
   font-weight: $bolder;
-  margin: $margin20 30px;
+  margin: 20px 30px;
   .accepted {
-    color: $completed;
+    color: $posCompare;
   }
   .pending {
-    color: $primary-gray;
+    color: $grayMedium;
   }
 }
 
 .upload-image-wrapper {
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   .upload-image {
     width: 31%;
     text-align: center;
-    font-size: $font12;
+    font-size: 12px;
     margin: 1%;
-    border: 1px dashed $light-grey;
+    border: 1px dashed $grayLight;
     border-radius: 8px;
     img {
       border-radius: 8px;
@@ -438,18 +417,18 @@
       width: 100%;
     }
     .text {
-      margin: $margin15 0;
-      font-size: $font14;
+      margin: 15px 0;
+      font-size: 14px;
     }
   }
 }
 
 :host ::ng-deep .material-body {
   width: 79%;
-  margin: $margin20 25px;
+  margin: 20px 25px;
   margin-right: 0;
   height: 49vh;
-  border-right: 2px solid $c-gray-93;
+  border-right: 2px solid $whiteDeep;
   padding-right: 15px;
   overflow-y: auto;
   @media screen and (max-width: 1100px) {
@@ -462,15 +441,12 @@
 }
 
 .pending-button-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  @include flex-space-between-cen-Algn;
   .decision-button-wrapper {
-    display: flex;
-    align-items: center;
-    margin-right: $margin10;
+    @include flex-item-center;
+    margin-right: 10px;
     button {
-      margin: 0 $margin10;
+      margin: 010px;
       border: none;
       outline: none;
       background: transparent;
@@ -484,9 +460,7 @@
 :host ::ng-deep .empty-view {
   padding: 12%;
   .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @include flex-col-center-algn;
     img {
       height: 80px;
     }
@@ -498,7 +472,7 @@
       margin-top: 12px;
     }
     .note {
-      color: $primary-gray;
+      color: $grayMedium;
       font-weight: 500;
       letter-spacing: 0.84px;
       margin-top: 10px;
@@ -509,10 +483,10 @@
 
 .tab-buttons {
   width: 18%;
-  padding: $padding4;
+  padding: 10px;
   position: absolute;
   top: 52px;
-  right: 0;
+  right: 10px;
   height: 85%;
   z-index: 22;
   background-color: $white;
@@ -520,59 +494,54 @@
   overflow-x: hidden;
   .contact {
     font-size: 11px;
-    color: $primary-gray;
+    color: $grayMedium;
     text-align: center;
     margin-bottom: 7px;
   }
   .button-wrapper {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
+    @include flex-col-all-Center;
     height: 35vh;
+    gap: 15px;
+
     .button {
-      border: 1px solid $primary-purple;
-      font-size: $font12;
-      outline: none;
-      padding: 10px 5px;
-      margin: 5px 0;
-      background-color: transparent;
-      width: 100%;
-      color: $primary-purple;
-      border-radius: 25px;
+      height: 46px;
+      min-width: 145px;
+      border: 1px solid $primary-cta;
+      padding: 9.5px 18.5px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 4px;
+      @include flex-all-center;
+      color: $primary-cta;
+      border-radius: 3px;
+      background-color: $white;
       &:hover {
         cursor: pointer;
-        background-color: $primary-purple;
-        color: $white;
+        border: 1px solid $primary-hover;
+        color: $primary-hover;
       }
     }
   }
   .right-bottom-icons {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
+    @include flex-wrap-all-center;
     .social-icons {
       width: 30%;
-      align-items: center;
-      display: flex;
       min-height: 28px;
-      justify-content: center;
+      @include flex-all-center;
       .icon {
         padding: 5px;
-        background-color: $c-gray-102;
+        background-color: $borderCol;
         border-radius: 50%;
         height: 23px;
         width: 23px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        @include flex-all-center;
+
         img {
           height: 22px;
         }
         &:hover {
           cursor: pointer;
-          background-color: $primary-purple;
+          background-color: $primary-cta;
           height: 25px;
           width: 25px;
           img {
@@ -587,7 +556,9 @@
   @media screen and (max-width: 1100px) {
     padding: 10px;
   }
-  @media screen and (max-width: $L) {right: 10px;}
+  @media screen and (max-width: $L) {
+    right: 10px;
+  }
 }
 
 .loader {
@@ -595,11 +566,10 @@
 }
 
 .loading {
-  // margin: 20px auto;
   text-align: center;
   font-size: 25px;
   font-weight: $bolder;
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 .spinner {
@@ -609,7 +579,7 @@
 .spinner > div {
   width: 18px;
   height: 18px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
 
   border-radius: 100%;
   display: inline-block;
@@ -653,14 +623,7 @@
 
 :host ::ng-deep {
   .mat-select-value-text {
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.88;
-    letter-spacing: 0.96px;
-    text-align: left;
+    @include normal-text;
     color: $white;
   }
   .mat-select-arrow {
@@ -668,14 +631,28 @@
   }
 }
 :host ::ng-deep .item {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
 }
 .flx {
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
 }
 .flxExt {
   @extend .flx;
   margin: 15px 0;
-  padding: 0 30px 20px;
+  padding: 0 30px 15px;
 }
+
+:host ::ng-deep .button {
+  font-size: 12px !important;
+  min-width: 200px !important;
+  border-radius: 25px !important;
+  max-width: 200px;
+  @media screen and (max-width: 1450px) {
+    min-width: 175px !important;
+  }
+}
+:host ::ng-deep .tab-buttons{
+  right: 0;
+  width: 20%;
+}
+

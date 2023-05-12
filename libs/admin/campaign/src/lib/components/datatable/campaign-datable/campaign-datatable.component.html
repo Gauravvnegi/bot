@@ -1,3 +1,26 @@
+<div
+  class="action-header"
+  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+  [formGroup]="tableFG"
+>
+  <div class="heading">
+    {{ tableName }}
+  </div>
+  <div class="action-wrapper">
+    <hospitality-bot-button
+      (click)="openCreateCampaign()"
+      label=" {{ 'campaign.create' | translate }}"
+    ></hospitality-bot-button>
+    <hospitality-bot-export-list
+      (onDocumentActions)="onDocumentActions()"
+      [documentTypes]="documentTypes"
+      [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
+    ></hospitality-bot-export-list>
+  </div>
+</div>
+<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
+
 <p-table
   #dt
   [styleClass]="tableConfig.styleClass"
@@ -6,7 +29,7 @@
   [loading]="loading"
   [columns]="cols"
   [value]="values"
-  [paginator]="isPaginaton"
+  [paginator]="isPaginator"
   [rows]="rowsPerPage"
   [showCurrentPageReport]="showCurrentPageReport"
   [rowsPerPageOptions]="rowsPerPageOptions"
@@ -17,216 +40,35 @@
   [(selection)]="selectedRows"
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
+  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
+  *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
 >
   <ng-template pTemplate="caption">
-    <div class="caption__wrapper">
-      <form [formGroup]="tableFG">
-        <div class="caption__wrapper--tabmenu">
-          <div class="header">
-            <p class="heading">{{ tableName }}</p>
-            <div class="options">
-              <div class="request-btn__wrap" (click)="openCreateCampaign()">
-                <div class="request-btn">
-                  {{ 'campaign.create' | translate }}
-                </div>
-              </div>
-              <div *ngIf="isActionButtons" class="icons">
-                <img
-                  [src]="campaignConfiguration.images.download.url"
-                  [alt]="campaignConfiguration.images.download.alt"
-                  class="svg"
-                />
-                <img
-                  [src]="campaignConfiguration.images.googleDoc.url"
-                  [alt]="campaignConfiguration.images.googleDoc.alt"
-                  class="svg"
-                />
-                <img
-                  [src]="campaignConfiguration.images.card.url"
-                  [alt]="campaignConfiguration.images.card.alt"
-                  class="svg"
-                />
-              </div>
-              <div *ngIf="isActionButtons" class="seperator"></div>
-              <div formGroupName="documentActions" class="dropdown--wrapper">
-                <p-dropdown
-                  class="export"
-                  [options]="documentActionTypes"
-                  formControlName="documentActionType"
-                >
-                  <ng-template let-documentActionItem pTemplate="selectedItem">
-                    <img
-                      [src]="campaignConfiguration.images.export.url"
-                      [alt]="campaignConfiguration.images.export.alt"
-                    />
-                    <span class="documentActionItemLabel">{{
-                      documentActionItem.label
-                    }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <div class="divider"></div>
-                <p-dropdown
-                  class="export"
-                  [options]="documentTypes"
-                  formControlName="documentType"
-                >
-                  <ng-template let-documentTypeItem pTemplate="selectedItem">
-                    <img
-                      [src]="campaignConfiguration.images.csv.url"
-                      [alt]="campaignConfiguration.images.csv.alt"
-                    />
-                    <span class="documentActionItemLabel">{{
-                      documentTypeItem.label
-                    }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <button class="go" (click)="onDocumentActions()">
-                  <mat-icon class="material-icons" matSuffix>east</mat-icon>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div *ngIf="isTabFilters">
-            <hospitality-bot-tab-group
-              [listItems]="tabFilterItems"
-              [selectedIndex]="tabFilterIdx"
-              (selectedTabChange)="onSelectedTabFilterChange($event)"
-            ></hospitality-bot-tab-group>
-          </div>
-        </div>
-        <div
-          *ngIf="tabFilterItems[tabFilterIdx]?.chips?.length"
-          class="caption__wrapper--buttons"
-        >
-          <div class="button__wrapper">
-            <mat-chip-list
-              multiple
-              #chipList
-              aria-label="Quick Reply selection"
-              formControlName="quickReplyActionFilters"
-            >
-              <mat-chip
-                *ngFor="
-                  let quickReplyType of tabFilterItems[tabFilterIdx].chips;
-                  let quickReplyTypeIdx = index
-                "
-                selectable="true"
-                [ngClass]="{
-                  'chipSelected status-selected-default':
-                    quickReplyType.isSelected,
-                  'status-opacity-new status-text-new':
-                    quickReplyType.type === 'new',
-                  'status-selected-new':
-                    quickReplyType.type === 'new' && quickReplyType.isSelected,
-                  'status-opacity-pending status-text-pending':
-                    quickReplyType.type === 'pending',
-                  'status-opacity-initiated status-text-initiated':
-                    quickReplyType.type === 'initiated',
-                  'status-opacity-success status-text-success':
-                    quickReplyType.type === 'completed',
-                  'status-opacity-reject status-text-reject':
-                    quickReplyType.type === 'failed',
-                  'status-default': quickReplyType.type === '',
-                  'status-selected-pending':
-                    quickReplyType.type === 'pending' &&
-                    quickReplyType.isSelected,
-                  'status-selected-initiated':
-                    quickReplyType.type === 'initiated' &&
-                    quickReplyType.isSelected,
-                  'status-selected-completed':
-                    quickReplyType.type === 'completed' &&
-                    quickReplyType.isSelected,
-                  'status-selected-reject':
-                    quickReplyType.type === 'failed' &&
-                    quickReplyType.isSelected
-                }"
-                [selected]="isQuickReplyFilterSelected(quickReplyType)"
-                (click)="toggleQuickReplyFilter(quickReplyTypeIdx)"
-              >
-                {{ quickReplyType.label }}
-                <span *ngIf="quickReplyType.value !== 'ALL'"> (</span
-                >{{ quickReplyType.value !== 'ALL' ? quickReplyType.total : ''
-                }}<span *ngIf="quickReplyType.value !== 'ALL'">)</span>
-              </mat-chip>
-            </mat-chip-list>
-          </div>
-        </div>
-      </form>
+    <div class="caption__wrapper" [formGroup]="tableFG">
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+
+      <hospitality-bot-filter-chips
+        *ngIf="isQuickFilters"
+        [chips]="tabFilterItems[tabFilterIdx].chips"
+        (onChange)="toggleQuickReplyFilter($event)"
+      ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">{{ 'datatable.no_data' | translate }}</p>
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
-  <ng-template pTemplate="header" let-columns class="table_head">
-    <tr>
-      <th class="tableHeading" pResizableColumn>
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
-      <th
-        class="table-data-head"
-        pResizableColumn
-        [pSortableColumn]="col.field"
-        *ngFor="let col of columns; let i = index"
-        [ngStyle]="col.dynamicWidth ? { width: col.width } : {}"
-      >
-        <div>
-          <p class="table-header-text">{{ col.header }}</p>
-          <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-        </div>
-      </th>
-    </tr>
-
-    <tr class="table-search-head">
-      <th class="table-search-head"></th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'name')"
-          class="p-column-filter"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'templateName')"
-          class="p-column-filter"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'stats')"
-          class="p-column-filter"
-          disabled="true"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'active')"
-          class="p-column-filter"
-          disabled="true"
-        />
-      </th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'action')"
-          class="p-column-filter"
-          disabled="true"
-        />
-      </th>
-    </tr>
+  <ng-template pTemplate="header" let-columns>
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="isSelectable"
+      (search)="handleFieldSearch($event)"
+    ></tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->
   <ng-template
@@ -235,8 +77,8 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="data-table-row" (click)="openEditCampaign(rowData, $event)">
-      <td class="table--checkbox">
+    <tr class="table-row" (click)="openEditCampaign(rowData, $event)">
+      <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"
           [index]="rowIndex"
@@ -271,27 +113,11 @@
         <ng-template #chipStats>
           <div class="stats-container">
             <div
-              class="stat-chip"
+              class="stat-chip {{ key }}"
               *ngFor="let key of getStatsCampaignChips(rowData)"
-              [ngClass]="{
-                delivered: key === 'delivered',
-                unopened: key === 'unopened',
-                opened: key === 'opened',
-                clicked: key === 'clicked',
-                failed: key === 'failed'
-              }"
             >
               <div>{{ key | titlecase }}</div>
-              <div
-                class="stat-chip__value"
-                [ngClass]="{
-                  delivered__value: key === 'delivered',
-                  unopened__value: key === 'unopened',
-                  opened__value: key === 'opened',
-                  clicked__value: key === 'clicked',
-                  failed__value: key === 'failed'
-                }"
-              >
+              <div class="stat-chip__value {{ key }}__value">
                 {{ rowData.statsCampaign[key] }}
               </div>
             </div>
@@ -305,13 +131,15 @@
         </ng-template>
       </td>
 
-      <td class="status">
-        <label (click)="onCheckboxClicked($event)" class="switch">
-          <mat-slide-toggle
-            [checked]="rowData.status"
-            (change)="updateCampaignStatus($event, rowData.id)"
-          ></mat-slide-toggle>
-        </label>
+      <td>
+        <div class="cell-content" (click)="onCheckboxClicked($event)">
+          <hospitality-bot-toggle-dropdown
+            class="toggle-btn"
+            (onClick)="updateCampaignStatus($event, rowData)"
+            [status]="rowData.status"
+          >
+          </hospitality-bot-toggle-dropdown>
+        </div>
       </td>
 
       <td class="action">
@@ -351,10 +179,35 @@
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="rowsPerPageOptions"
       (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
     ></p-paginator>
   </ng-template>
 </p-table>
 
 <ng-template #emptyCell>
   <div class="emptyCell">&mdash;</div>
+</ng-template>
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    link="/pages/marketing/campaign/create"
+    [content]="{
+      description:
+        'No Campaign found. Tap the +Create campaign to create campaign',
+      actionName: '+Create Campaign',
+      imageSrc: 'assets/images/empty-table-service.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
 </ng-template>

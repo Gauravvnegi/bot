@@ -1,5 +1,13 @@
 <div class="container">
-  <div class="title-container">
+  <div
+    class="title-container"
+    *skeleton="
+      globalNps == undefined;
+      height: '25px';
+      width: '150px';
+      margin: '0 0 20px 0'
+    "
+  >
     <div class="icon">
       <img
         [src]="feedbackConfig.images.globalNPS.url"
@@ -8,9 +16,16 @@
     </div>
     <div class="stat-title">{{ 'global_nps.title' | translate }}</div>
   </div>
-  <div class="graph-container" *ngIf="!loading">
+  <div class="graph-container">
     <div class="graph">
       <canvas
+        *skeleton="
+          globalNps == undefined;
+          height: '150px';
+          width: '150px';
+          borderRadius: '50%';
+          margin: '0 0 0 40px'
+        "
         class="height-138"
         baseChart
         [data]="chart.data"
@@ -22,8 +37,11 @@
       >
       </canvas>
     </div>
-    <div class="detail-container" *ngIf="globalNps">
-      <div class="wrapper-stats">
+    <div class="detail-container">
+      <div
+        class="wrapper-stats"
+        *skeleton="globalNps == undefined; height: '30px'; width: '80px'"
+      >
         <div class="val">{{ roundValue(globalNps.score) }}</div>
         <div
           class="comparisonPercent"
@@ -49,10 +67,20 @@
       </div>
     </div>
   </div>
-  <div class="stat-vals-container" *ngIf="globalNps">
+  <div class="stat-vals-container">
     <div class="stat-val-container">
       <div class="icon" [style.background]="'#EF1D45'"></div>
-      <div class="stat-val">{{ roundValue(globalNps.negative.score) }}%</div>
+      <div
+        class="stat-val"
+        *skeleton="
+          globalNps == undefined;
+          height: '30px';
+          width: '30px';
+          margin: '5px 0'
+        "
+      >
+        {{ roundValue(globalNps.negative.score) }}%
+      </div>
       <div class="stat-lable">Negative</div>
       <div
         class="stat-comparisonPercent"
@@ -60,6 +88,12 @@
           'comparison-positive': globalNps.negative.comparisonPercent >= 0,
           'comparison-negative': globalNps.negative.comparisonPercent < 0
         }"
+        *skeleton="
+          globalNps == undefined;
+          height: '15px';
+          width: '40px';
+          margin: '10px 0'
+        "
       >
         ({{ roundValue(globalNps.negative.comparisonPercent) }}%)
         <img
@@ -74,7 +108,17 @@
     </div>
     <div class="stat-val-container">
       <div class="icon" [style.background]="'#ff8f00'"></div>
-      <div class="stat-val">{{ roundValue(globalNps.neutral.score) }}%</div>
+      <div
+        class="stat-val"
+        *skeleton="
+          globalNps == undefined;
+          height: '30px';
+          width: '30px';
+          margin: '5px 0'
+        "
+      >
+        {{ roundValue(globalNps.neutral.score) }}%
+      </div>
       <div class="stat-lable">Neutral</div>
       <div
         class="stat-comparisonPercent"
@@ -82,6 +126,12 @@
           'comparison-positive': globalNps.neutral.comparisonPercent >= 0,
           'comparison-negative': globalNps.neutral.comparisonPercent < 0
         }"
+        *skeleton="
+          globalNps == undefined;
+          height: '15px';
+          width: '40px';
+          margin: '10px 0'
+        "
       >
         ({{ roundValue(globalNps.neutral.comparisonPercent) }}%)
         <img
@@ -96,7 +146,17 @@
     </div>
     <div class="stat-val-container">
       <div class="icon" [style.background]="'#508919'"></div>
-      <div class="stat-val">{{ roundValue(globalNps.positive.score) }}%</div>
+      <div
+        class="stat-val"
+        *skeleton="
+          globalNps == undefined;
+          height: '30px';
+          width: '30px';
+          margin: '5px 0'
+        "
+      >
+        {{ roundValue(globalNps.positive.score) }}%
+      </div>
       <div class="stat-lable">Positive</div>
       <div
         class="stat-comparisonPercent"
@@ -104,6 +164,12 @@
           'comparison-positive': globalNps.positive.comparisonPercent >= 0,
           'comparison-negative': globalNps.positive.comparisonPercent < 0
         }"
+        *skeleton="
+          globalNps == undefined;
+          height: '15px';
+          width: '40px';
+          margin: '10px 0'
+        "
       >
         ({{ roundValue(globalNps.positive.comparisonPercent) }}%)
         <img

@@ -2,7 +2,7 @@
   <div class="example-list" (click)="$event.stopPropagation()">
     <mat-form-field
       appearance="outline"
-      class="comment"
+      class="textarea"
       [ngClass]="{ disabled: !getDepartmentAllowed }"
     >
       <textarea
@@ -17,45 +17,14 @@
           !getDepartmentAllowed ||
           !feedbackStatusFG.get('comment')?.value?.length
       }"
-      style="
-        padding: 6px 9px;
-        border-radius: 14px;
-        border: solid 1px #4b56c0;
-        background-color: #fff;
-        cursor: pointer;
-      "
+      class="example-list-status"
     >
-      <div
-        style="
-          font-family: Roboto;
-          font-size: 12px;
-          font-weight: normal;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: normal;
-          letter-spacing: 0.72px;
-          text-align: left;
-          color: #4b56c0;
-        "
-        (click)="updateStatus()"
-      >
+      <div class="example-list-status_text" (click)="updateStatus()">
         {{ type }}
       </div>
     </div>
-    <div style="border: 1px solid #707070; width: 100%; margin: 10px 0;"></div>
-    <div
-      style="
-        font-size: 12px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.72px;
-        color: #002046;
-        cursor: pointer;
-      "
-      (click)="openDetailPage($event)"
-    >
+    <div class="example-list-horizontalLine"></div>
+    <div class="example-list-viewDetails" (click)="openDetailPage($event)">
       {{ 'viewDetail' | translate }}
     </div>
   </div>

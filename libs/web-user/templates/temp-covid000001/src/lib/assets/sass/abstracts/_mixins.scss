@@ -6,7 +6,7 @@
   z-index: 5;
   border-radius: 50%;
   top: 128px;
-  padding: $padding-small $padding-medium;
+  padding: 10px 15px;
   i::before {
     font-size: $font-large;
   }
@@ -18,7 +18,7 @@
   }
 }
 
-@mixin slider-buttons-responsive() {
+@mixin slider-buttons-responsive {
   padding: 2px 8px;
   top: 38px;
   i::before {
@@ -26,7 +26,7 @@
   }
 }
 
-@mixin about-section-font($size, $spacing) {
+@mixin aboutSectionFont($size, $spacing) {
   font-size: $size;
   font-weight: $bold;
   letter-spacing: $spacing;

@@ -20,7 +20,7 @@
 :host ::ng-deep .upload__box {
   position: relative;
   height: 160px;
-  border-bottom: 1px dashed $light-grey;
+  border-bottom: 1px dashed $grayLight;
 }
 
 .upload__box__child {
@@ -81,7 +81,7 @@
   justify-content: center;
   .upload-label {
     font-size: 10px;
-    color: $primary-gray;
+    color: $grayMedium;
     margin-top: 5px;
 
     img {

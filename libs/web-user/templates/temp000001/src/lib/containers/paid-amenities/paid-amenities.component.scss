@@ -5,7 +5,13 @@
     font-size: $font-medium;
   }
 }
-
+.tab-group__wrapper {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  width: 100%;
+}
 :host ::ng-deep .draggable {
   margin-top: 3%;
   height: 46vh;
@@ -24,12 +30,7 @@
       outline: none;
     }
   }
-  // .slick-current + .slick-active {
-  //   margin: 0px 30px;
-  //   @media only screen and (max-width: $M) {
-  //     margin: 0px;
-  //   }
-  // }
+
   @media only screen and (max-width: $M) {
     margin: 3% 15%;
   }
@@ -46,11 +47,11 @@
   box-shadow: 0px 0px 1px 0px lightgray;
   .slider__image {
     height: 200px;
-    width: $full-width;
+    width: 100%;
     position: relative;
     img {
       height: 100%;
-      width: $full-width;
+      width: 100%;
     }
     .amount {
       position: absolute;
@@ -62,12 +63,12 @@
     }
   }
   .slider__text {
-    padding: $padding-small;
+    padding: 10px;
     min-height: 86px;
     .label {
       font-size: $font-medium;
       font-weight: $bolder;
-      margin-bottom: $margin-small;
+      margin-bottom: 10px;
     }
     .description {
       font-size: $font-responsive-small;
@@ -209,8 +210,8 @@
   top: 8px;
   right: 8px;
   img {
-    height: $full-width;
-    width: $full-width;
+    height: 100%;
+    width: 100%;
   }
 }
 
@@ -221,16 +222,11 @@
   .tab-item {
     font-size: 18px;
     font-weight: 600;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: normal;
-    text-align: left;
+    
     color: #121212;
     margin: 5px 25px 5px 10px;
     cursor: pointer;
   }
-  
 }
 .more-services {
   font-size: 18px;
@@ -246,7 +242,6 @@
   margin-bottom: 10px;
   transform: scale(1.1);
 }
-
 
 .mat-select-placeholder {
   color: #121212;
@@ -264,14 +259,6 @@
   > .mat-form-field-underline {
   display: none !important;
 }
-//  :host ::ng-deep .mat-select-panel {
-//   max-height: 80px !important;
-// }
-
-// :host ::ng-deep  #mat-select-2-panel{
-//   max-height: 80px !important;
-
-// }
 :host ::ng-deep .mat-select-panel-wrap > .mat-select-panel {
   max-height: 80px !important;
 }

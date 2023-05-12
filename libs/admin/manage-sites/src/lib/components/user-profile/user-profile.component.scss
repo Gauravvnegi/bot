@@ -1,0 +1,10 @@
+@import 'main';
+
+.wrapper {
+  padding: 23px 20px;
+}
+
+.form-block {
+  margin-top: 33px;
+  @include form-block;
+}

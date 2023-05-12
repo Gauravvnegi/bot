@@ -1,20 +1,27 @@
 @import 'temp000002';
 
 .template__header {
+  height: 60px;
   display: grid;
   grid-template-columns: 33% 33% 33%;
   background-color: var(--header-background-color, $header-background-color);
-  padding: $padding-large;
+  padding: 5px;
   box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.2);
   @media only screen and (max-width: $M) {
-    padding: $padding-small;
+    padding: 10px;
+  }
+  &--logo {
+    height: 60px;
+    img {
+      max-height: 100%;
+    }
   }
 }
 
 .template__header--heading {
   font-size: $font-large;
   font-weight: $bold;
-  @include flex-justify-center();
+  @include flex-justify-center;
   align-items: center;
   color: var(--header-font-color, $header-font-color);
   @media only screen and (max-width: $M) {

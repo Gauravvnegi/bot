@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Route } from '@angular/router';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminNotificationModule } from 'libs/admin/notification/src/lib/admin-notification.module';
-import { EmailService } from 'libs/admin/notification/src/lib/services/email.service';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { DropdownModule } from 'primeng/dropdown';
 import { AdminReservationRoutingModule } from './admin-reservation.routing.module';

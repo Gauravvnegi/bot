@@ -1,0 +1,52 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+    [dateTime]="draftDate"
+  >
+  </hospitality-bot-navigation-header>
+  <div class="main">
+    <div class="sub-heading">
+      Room Information
+    </div>
+    <div class="form-block">
+      <div class="input-fields" [formGroup]="useForm">
+        <hospitality-bot-select
+          class="input"
+          controlName="roomTypeId"
+          label="Room Type"
+          [options]="roomTypes"
+          [props]="{ isAsync: true, createPrompt: '+ Add New Room Type' }"
+          [loading]="loadingRoomTypes"
+          (paginate)="loadMoreRoomTypes()"
+          (onSearch)="searchRoomTypes($event)"
+          [stopEmission]="noMoreRoomTypes"
+          (onCreate)="createRoomType()"
+        ></hospitality-bot-select>
+        <div class="price" *ngIf="useForm.get('price').value">
+          Price :
+          <span class="price__value">
+            {{ useForm.get('currency').value }}
+            {{ useForm.get('price').value }}
+          </span>
+        </div>
+      </div>
+
+      <hospitality-bot-iterator
+        class="iterator"
+        [fields]="fields"
+        [useFormArray]="useFormArray"
+        [maxLimit]="roomId ? 1 : 0"
+        ctaLabel="+ Add Another Room"
+      >
+      </hospitality-bot-iterator>
+
+      <div class="save-footer">
+        <hospitality-bot-button
+          label="Save"
+          (onClick)="handleSubmit()"
+        ></hospitality-bot-button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Regex } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { DefaultAmenityConfigI } from 'libs/web-user/shared/src/lib/data-models/defaultAmenityConfig.model';
+import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 import { DefaultAmenityService } from 'libs/web-user/shared/src/lib/services/default-amenity.service';
 import { PaidService } from 'libs/web-user/shared/src/lib/services/paid.service';
 import { customPatternValid } from 'libs/web-user/shared/src/lib/services/validator.service';

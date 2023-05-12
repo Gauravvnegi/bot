@@ -1,64 +1,46 @@
 @import 'main';
 
 .wrapper {
+  font-family: Roboto;
   .stats-container {
-    display: flex;
-    justify-content: space-between;
+    @include flex-space-between;
     .stats {
       height: 108px;
       width: 197px;
       padding: 25px 11px;
       border-radius: 5px;
-      box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.05);
+      box-shadow: 0 3px 6px 0 $boxShadow;
       background-color: $white;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      @include flex-col-all-Center;
       &__text {
-        font-family: Roboto;
         font-size: 14px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
         letter-spacing: 0.28px;
         text-align: center;
         color: $tooltip;
       }
       &__value {
-        font-family: Roboto;
         font-size: 25px;
-        font-stretch: normal;
-        font-style: normal;
         line-height: 2;
         letter-spacing: 0.5px;
         text-align: center;
         color: $tooltip;
-        display: flex;
-        justify-content: center;
+        @include flex-justify-center;
         .rating {
           padding: 0 4px;
           &__percentage {
             font-size: 12px;
-            font-weight: normal;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
           }
           &__days {
-            font-family: Roboto;
             font-size: 10px;
             font-weight: 500;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: normal;
-            letter-spacing: normal;
             text-align: center;
-            color: $c-gray-72;
+            color: $grayLight;
           }
         }
       }
     }
   }
+}
+.rating-wrapper {
+  @include flex-item-center;
 }

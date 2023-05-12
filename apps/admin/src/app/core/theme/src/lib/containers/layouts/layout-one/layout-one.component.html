@@ -49,10 +49,7 @@
             <admin-message-tab-menu></admin-message-tab-menu>
           </div>
           <div class="dropdown-wrapper">
-            <admin-profile-dropdown
-              [items]="profile"
-              (onProfileAction)="profileAction($event)"
-            ></admin-profile-dropdown>
+            <admin-profile-dropdown></admin-profile-dropdown>
           </div>
         </div>
       </div>
@@ -82,6 +79,12 @@
               (removeVisibility)="disableFilter()"
             ></hospitality-bot-daterange>
           </div>
+          <div
+            class="site-select"
+            *ngIf="isSitesAvailable && isCreateWithSubscribed"
+          >
+            <admin-site-action></admin-site-action>
+          </div>
         </div>
         <div class="options2">
           <div class="notification-wrapper">
@@ -93,6 +96,7 @@
                 <img
                   class="filter-icon"
                   src="assets/svg/notification-bell.svg"
+                  alt="notification"
                 />
                 <div
                   class="notification-count"
@@ -115,15 +119,16 @@
             </div>
           </div>
           <div class="dropdown-wrapper">
-            <admin-profile-dropdown
-              [items]="profile"
-              (onProfileAction)="profileAction($event)"
-            ></admin-profile-dropdown>
+            <admin-profile-dropdown></admin-profile-dropdown>
           </div>
           <div class="filter-range-wrapper">
             <div class="temp-width positionRel">
               <div (click)="enableGlobalFilter(main)" class="header--button">
-                <img class="filter-icon" src="assets/svg/Filter-Icon.svg" />
+                <img
+                  class="filter-icon"
+                  src="assets/svg/Filter-Icon.svg"
+                  alt="filter"
+                />
               </div>
               <div
                 class="filter-wrapper"
@@ -145,13 +150,16 @@
         </div>
       </div>
     </div>
-    <mat-progress-bar
-      *ngIf="
-        progressSpinnerService.isProgressSpinnerVisible &&
-        !checkForMessageRoute()
-      "
-      mode="query"
-    ></mat-progress-bar>
+    <div class="progress-bar">
+      <mat-progress-bar
+        *ngIf="
+          progressSpinnerService.isProgressSpinnerVisible &&
+          !checkForMessageRoute()
+        "
+        mode="query"
+      ></mat-progress-bar>
+    </div>
+
     <div
       class="main-panel--container"
       [ngClass]="{
@@ -160,12 +168,12 @@
           (isNotificationVisible && !checkForMessageRoute())
       }"
     >
-      <div class="main" #main>
+      <div id="main-layout" class="main" #main>
         <div class="blackscreen"></div>
-        <div class="router__wrapper">
+        <div id="main-router" class="router__wrapper">
           <router-outlet></router-outlet>
         </div>
-        <admin-footer></admin-footer>
+        <admin-footer id="main-footer"></admin-footer>
       </div>
     </div>
   </div>

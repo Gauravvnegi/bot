@@ -1,21 +1,21 @@
 @import 'main';
 
-:host ::ng-deep .p-paginator-first > .pi-angle-double-left:before {
-  content: 'FIRST';
-  font-size: 12px;
-  font-weight: 700;
-  margin: 10px;
-  font-family: 'roboto';
-  color:$dark-blue;
+@mixin removeDefaultStyle() {
+  background: unset;
+  color: unset;
+  border-color: unset;
 }
 
-:host ::ng-deep .p-paginator-last > .pi-angle-double-right:before {
-  content: 'LAST';
+@mixin paginationNextPrevious {
+  width: 82px;
+  height: 28px;
+  padding: 6px 13px 5px;
+  border-radius: 5px;
+  border: 1px solid #efefef;
   font-size: 12px;
-  margin: 10px;
-  font-weight: 700;
-  font-family: 'roboto';
-  color:$dark-blue;
+  font-weight: 500;
+  letter-spacing: 0.72px;
+  font-family: 'Poppins-regular';
 }
 
 :host ::ng-deep .p-datatable.p-datatable-lg .p-datatable-header {
@@ -27,7 +27,8 @@
 }
 
 :host ::ng-deep .table-data-head {
-  background-color: $c-gray-93 !important;
+  // will be removed
+  background-color: $table-header !important;
   color: $black !important;
   font-size: 14px;
   border-bottom: 0 !important;
@@ -46,18 +47,19 @@
       }
     }
     .table-header-text {
-      color: $quote-color !important;
+      color: $subtitle !important;
     }
   }
 }
 
-:host ::ng-deep .mat-ink-bar {
-  background-color: $primary-purple;
-  height: 1px;
+:host ::ng-deep .p-datatable-resizable {
+  .p-datatable-wrapper {
+    overflow-x: unset;
+  }
 }
 
 :host ::ng-deep .table-search-head {
-  background-color: $c-gray-93 !important;
+  background-color: $table-header !important;
   border-top: 0 !important;
   border-bottom: 0 !important;
   input {
@@ -65,13 +67,13 @@
     border-radius: 5px;
     outline: none;
     border: none;
-    background-color: $c-gray-105;
+    background-color: $background-grey;
     width: 100%;
   }
 }
 
 :host ::ng-deep .p-sortable-column-icon {
-  color: $c-gray-74 !important;
+  color: $grayLight !important;
   font-size: 13px;
 }
 
@@ -91,10 +93,15 @@
   margin-left: 0.5em;
   font-weight: 500;
   width: 5%;
-  background-color: $c-gray-93;
+  background-color: $whiteDeep;
   border-top: 0 !important;
   border-bottom: 0 !important;
   text-align: center;
+}
+
+.select-box {
+  width: 5%;
+  @include align-checkbox;
 }
 
 .header {
@@ -110,7 +117,7 @@
   }
   .selected {
     font-size: 20px;
-    color: $c-gray-47;
+    color: $grayMedium;
     font-style: italic;
     margin-bottom: 0;
     margin-left: 3%;
@@ -119,7 +126,7 @@
     display: flex;
     align-items: center;
     padding: 0 17px;
-
+    gap: 20px;
     .icons {
       display: flex;
       align-items: center;
@@ -128,7 +135,7 @@
         height: auto;
         width: auto;
         path {
-          fill: $default;
+          fill: $grayMedium;
         }
         &:hover {
           cursor: pointer;
@@ -146,26 +153,26 @@
     display: flex;
     align-items: center;
     padding: 5px;
-    border: 2px solid $light-grey;
+    border: 2px solid $grayLight;
     border-radius: 5px;
 
     .divider {
       height: 20px;
-      border: 1px solid $light-grey;
+      border: 1px solid $grayLight;
       margin: 0px 15px;
     }
   }
   .go {
     outline: none;
-    color: $primary-purple;
-    background: $go-btn-default;
+    color: $primary-cta;
+    background: $btnDefault;
     border: none;
     font-size: 10px;
     padding: 5px;
     display: flex;
     margin-left: 10px;
     &:hover {
-      background-color: $primary-purple;
+      background-color: $primary-cta;
       color: $white;
       cursor: pointer;
     }
@@ -182,8 +189,14 @@
   }
 }
 
+.action-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
 :host ::ng-deep .p-inputtext {
-  color: $dark-blue;
+  color: $secondary;
 }
 
 :host ::ng-deep .export {
@@ -200,81 +213,32 @@
     }
   }
 }
-
-:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
-  background-color: $primary-purple;
-  color: $white;
-  height: 2rem;
-  min-width: 2rem;
+:host ::ng-deep .p-dropdown {
+  &:hover {
+    border-color: unset !important;
+  }
+}
+:host ::ng-deep .p-dropdown:not(.p-disabled).p-focus {
+  box-shadow: unset !important;
 }
 
 :host ::ng-deep .pi-chevron-down:before {
-  color: $primary-gray;
+  color: $grayMedium;
 }
 
 :host ::ng-deep .table--checkbox {
   text-align: center !important;
 }
 
-:host ::ng-deep .caption__wrapper {
-  &--buttons {
-    display: flex;
-    align-items: center;
-    background-color: $white;
-    padding: 10px;
-
-    .filter {
-      padding: 4px 15px;
-      border: 1px solid $white;
-      background-color: $progress-bar-messages-base;
-      border-radius: 20px;
-      outline: none;
-      font-size: 14px;
-      color: $c-gray-47;
-      &:hover {
-        cursor: pointer;
-        background-color: $c-gray-47;
-        color: $white;
-      }
-    }
-    .button__wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      .mat-chip-list {
-        width: 94%;
-      }
-      .p-button {
-        background-color: $progress-bar-messages-base;
-        padding: 6px 15px;
-        margin-left: 15px;
-        font-size: 14px;
-        color: $c-gray-47;
-        border: 1px solid $white;
-        border-radius: 20px;
-        &:hover {
-          background-color: $c-gray-47;
-          color: $white;
-          cursor: pointer;
-        }
-      }
-      img:hover {
-        cursor: pointer;
-      }
-    }
-  }
-}
-
 :host ::ng-deep .message {
   font-size: 12px;
-  color: $dark-grey;
+  color: $subtitle;
   font-weight: 500;
 }
 
 :host ::ng-deep .guest {
   color: $primary-black;
-  font-size: $font12;
+  font-size: 12px;
   position: relative;
   &:hover {
     cursor: pointer;
@@ -295,7 +259,7 @@
     div {
       padding: 5px;
       &:hover {
-        color: $primary-purple;
+        color: $primary-cta;
       }
     }
   }
@@ -305,47 +269,13 @@
 }
 
 :host ::ng-deep .p-checkbox .p-checkbox-box {
-  border-color: $light-grey;
-}
-
-:host ::ng-deep .mat-chip-list-wrapper {
-  overflow: auto;
-  $white-space: nowrap;
-  overflow-x: scroll;
-  width: 100%;
-  padding: 10px;
-  flex-wrap: nowrap;
-  display: inline-flex;
-  .mat-chip {
-    display: flex;
-    white-space: nowrap;
-  }
-  &::-webkit-scrollbar {
-    height: 6px;
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: transparent;
-  }
-  &:hover {
-    &::-webkit-scrollbar-thumb {
-      background: darkgray;
-      border-radius: 10px;
-    }
-  }
+  border-color: $grayLight;
 }
 
 :host ::ng-deep .p-checkbox {
   .p-highlight {
-    background-color: $primary-purple !important;
-    border-color: $primary-purple !important;
+    background-color: $primary-cta !important;
+    border-color: $primary-cta !important;
   }
 }
 
@@ -400,14 +330,11 @@
   }
 }
 
-:host ::ng-deep .p-paginator-last:hover {
-  border-radius: 50%;
-}
-
 :host ::ng-deep .no-data-found {
+  display: block;
   width: 90vw;
   text-align: center;
-  padding: $padding10 0;
+  padding: 10px 0;
   @media screen and (max-width: $L) {
     width: 85vw;
   }
@@ -435,76 +362,18 @@
   }
 }
 
-:host ::ng-deep .p-paginator-first:hover {
-  border-radius: 50%;
-}
-
-:host ::ng-deep .p-paginator-next > .pi-angle-right:before {
-  content: 'NEXT';
-  font-size: 12px;
-  font-family: 'roboto';
-  color: $dark-blue;
-  font-weight: 700;
-  margin: 10px;
-}
-
-:host ::ng-deep .p-paginator {
-  justify-content: flex-start;
-  padding: 7px;
-}
-
-:host ::ng-deep .p-paginator-prev > .pi-angle-left:before {
-  content: 'PREVIOUS';
-  font-size: 12px;
-  margin: 10px;
-  font-weight: 700;
-  font-family: 'roboto';
-  color: $dark-blue;
-}
-
-:host ::ng-deep .p-paginator-pages {
-  margin: 0px 15px;
-}
-
 :host ::ng-deep .p-datatable {
-  box-shadow: 0px 0px 5px 0px lightgrey;
-  @media (max-width: $XL) {
-    tr {
-      td {
-        p,
-        span,
-        div {
-          white-space: break-spaces !important;
-          word-break: break-word !important;
-        }
-      }
-    }
-  }
 }
 
 :host ::ng-deep td,
 th {
   $white-space: break-spaces !important;
   overflow: inherit !important;
+  border-width: unset !important;
+  border: unset !important;
   @media screen and (max-width: 800px) {
     padding: 0 5px !important;
   }
-}
-
-:host ::ng-deep .mat-chip {
-  border: 1px solid !important;
-  display: inline-block;
-  text-align: center;
-  font-weight: 400;
-  background-color: $white;
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-:host ::ng-deep .status-default {
-  background-color: $c-gray-103;
-  color: $dark-grey;
 }
 
 :host ::ng-deep .chipSelected {
@@ -513,14 +382,12 @@ th {
 }
 
 :host ::ng-deep .emptyCell {
+  color: $subtitle;
+
   text-align: center !important;
   @media screen and (max-width: 800px) {
     font-size: 10px;
   }
-}
-
-:host ::ng-deep .mat-standard-chip:focus::after {
-  display: none;
 }
 
 .status-selected-new {
@@ -529,7 +396,7 @@ th {
 }
 
 .status-selected-pending {
-  background-color: $pending !important;
+  background-color: $draft-state !important;
   opacity: 1;
 }
 .status-selected-initiated {
@@ -537,17 +404,17 @@ th {
   opacity: 1;
 }
 .status-selected-completed {
-  background-color: $completed !important;
+  background-color: $posCompare !important;
   opacity: 1;
 }
 
 .status-selected-reject {
-  background-color: $reject !important;
+  background-color: $mediumRed !important;
   opacity: 1;
 }
 
 .status-selected-default {
-  background-color: $default;
+  background-color: $grayMedium;
   opacity: 1;
 }
 
@@ -571,7 +438,7 @@ th {
     padding: 7px;
     line-height: 1;
     box-shadow: 0 0 8px 0 rgb(0 0 0 / 30%);
-    color: $c-gray-45;
+    color: $grayMedium;
     display: none;
     min-width: 100px;
     text-align: center;
@@ -595,4 +462,485 @@ th {
       display: block;
     }
   }
+}
+
+/******** new table styling*************/
+
+/** variable **/
+$cell-padding: 10px 3%;
+$check-box-padding: 10px 2%;
+$table-border-color: rgba(112, 112, 112, 0.35);
+$table-hover-color: #f3f3f3;
+
+/****** Outside cta headers *******/
+.action-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0px 15px;
+  padding: 7px 0px;
+  position: sticky;
+  top: 0;
+  z-index: $nav-action-header-z;
+  background-color: $layout-background;
+  transition: box-shadow 0.5s;
+
+  &__sticky {
+    @include header-fixed-position;
+    margin: 0px -16px 0 -25px;
+    padding: 20px 48px;
+    box-shadow: 1px 7px 8px -7px rgba(181, 181, 181, 1);
+    height: $sticky-header-height;
+  }
+
+  .heading {
+    font-size: 26px;
+    font-weight: 600;
+
+    letter-spacing: 1.56px;
+
+    color: $title;
+  }
+  .selected {
+    font-size: 20px;
+    color: $grayMedium;
+    font-style: italic;
+    margin-bottom: 0;
+    margin-left: 3%;
+  }
+  .options {
+    display: flex;
+    align-items: center;
+    padding: 0 17px;
+    gap: 20px;
+    .icons {
+      display: flex;
+      align-items: center;
+      .svg {
+        padding: 0 12px;
+        height: auto;
+        width: auto;
+        path {
+          fill: $grayMedium;
+        }
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .seperator {
+    height: 35px;
+    border: 1px solid lightgray;
+    margin: 0px 15px;
+  }
+
+  .dropdown--wrapper {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border: 2px solid $grayLight;
+    border-radius: 5px;
+
+    .divider {
+      height: 20px;
+      border: 1px solid $grayLight;
+      margin: 0px 15px;
+    }
+  }
+  .go {
+    outline: none;
+    color: $primary-cta;
+    background: $btnDefault;
+    border: none;
+    font-size: 10px;
+    padding: 5px;
+    display: flex;
+    margin-left: 10px;
+    &:hover {
+      background-color: $primary-cta;
+      color: $white;
+      cursor: pointer;
+    }
+    .material-icons {
+      font-size: 16px;
+      height: auto;
+      width: auto;
+    }
+  }
+  .reset-link {
+    color: $reset-link;
+    font-size: 14px;
+    font-weight: 700;
+  }
+}
+
+/*** table row hover **/
+:host
+  ::ng-deep
+  .p-datatable.p-datatable-hoverable-rows
+  .p-datatable-tbody
+  > tr:not(.p-highlight):hover {
+  background: $table-hover-color;
+}
+
+/*** main table wrapper (p-datatable) **/
+:host ::ng-deep .p-datatable {
+  border: 1px solid $table-border-color;
+  border-radius: 5px;
+
+  .p-datatable-loading-overlay {
+    z-index: 15;
+  }
+
+  /*** Caption pTemplate **/
+  .p-datatable-header {
+    border-radius: 5px 5px 0px 0px;
+    background: white;
+    border: unset;
+    padding: 0;
+    .caption__wrapper {
+      min-height: 25px;
+    }
+  }
+
+  /*** table header **/
+  .p-datatable-thead {
+    position: sticky;
+    top: 60px; //65px
+    z-index: 10;
+    background-color: $table-header;
+
+    tr {
+      th {
+        background: transparent;
+        border: none;
+        padding: $cell-padding;
+        vertical-align: bottom;
+      }
+    }
+
+    .select-box {
+      width: 5%;
+      padding: $check-box-padding !important;
+      vertical-align: middle;
+    }
+
+    /*** Table heading **/
+    .table-head {
+      &__field {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        .col-heading {
+          word-break: break-word;
+          white-space: break-spaces;
+          font-size: 14px;
+          font-weight: 600;
+          letter-spacing: 0.84px;
+          color: #787c9e;
+          @media screen and (max-width: 800px) {
+            font-size: 10px;
+          }
+        }
+
+        .col-sort {
+        }
+      }
+
+      /** Search Input */
+      &__search {
+        margin-top: 12px;
+        border-top: 0 !important;
+        border-bottom: 0 !important;
+        input {
+          padding: 8px;
+          border-radius: 5px;
+          outline: none;
+          border: none;
+          width: 100%;
+        }
+
+        .p-inputtext:enabled:focus {
+          box-shadow: inset 0 0 0 1px $primary-cta;
+        }
+      }
+    }
+  }
+
+  /** table rows **/
+
+  .p-datatable-tbody {
+    tr {
+      border-bottom: 1px solid $table-border-color;
+      td {
+        padding: $cell-padding;
+      }
+    }
+
+    /* Cell Row Styles to choose form */
+    .table-row {
+      height: 80px;
+
+      &__checkbox {
+        padding: $check-box-padding !important;
+      }
+
+      .strike-text {
+        text-decoration: line-through;
+      }
+
+      &:hover {
+        cursor: pointer;
+        background: $table-hover-color;
+      }
+
+      .cell-content {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .row-display {
+        display: flex;
+        align-items: center;
+        gap: 5%;
+      }
+
+      .primary-text {
+        font-size: 14px;
+        letter-spacing: 0.84px;
+        color: $subtitle;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &:hover {
+          overflow: visible;
+          text-overflow: unset;
+          white-space: normal;
+          width: fit-content;
+          background: $table-hover-color;
+          position: relative;
+        }
+      }
+
+      .url {
+        font-size: 14px;
+        letter-spacing: 0.84px;
+        color: $subtitle;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      .secondary-text {
+        font-size: 12px;
+        letter-spacing: 0.72px;
+        color: $tabStats;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:hover {
+          overflow: visible;
+          text-overflow: unset;
+          white-space: normal;
+        }
+      }
+
+      .hide-text-overflow {
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      .contained {
+        &__primary {
+          text-align: center;
+          font-family: Roboto;
+          font-size: 12px;
+          letter-spacing: 0.72px;
+          color: $primary-cta;
+          padding: 7px 11.7px 7.5px 12px;
+          background-color: $primary-text-bg;
+          border-radius: 8px;
+        }
+      }
+
+      .image-icon {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0px 0px 1px 1px #c4c0c0;
+        border: 1px solid white;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .float-right {
+        float: right;
+      }
+      .float-left {
+        float: left;
+      }
+
+      .center-align {
+        text-align: center;
+      }
+
+      .toggle-btn {
+      }
+    }
+  }
+
+  /*** table footer **/
+  .p-datatable-footer {
+    border-radius: 0px 0px 5px 5px;
+    border: none;
+  }
+}
+/********* Pagination Styling    ***********/
+
+/* Container Element, dropdown to select page number and show current details and styling text for disable/enabled prev/next button styling */
+
+:host ::ng-deep .p-paginator {
+  justify-content: start;
+  align-items: baseline;
+  .p-inputwrapper-filled {
+    flex-grow: 1;
+  }
+  .p-paginator-rpp-options {
+    min-width: max-content;
+    height: 28px;
+    border-radius: 5px;
+    border: 1px solid $borderCol;
+    background-color: $white;
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.07;
+    letter-spacing: 0.84px;
+    text-align: left;
+    color: $secondary2;
+    margin-right: 16px;
+    order: 1;
+  }
+  .p-paginator-current {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.72px;
+    text-align: right;
+    color: $paginator;
+    order: 0;
+  }
+  .p-ripple {
+    .pi-angle-right:before,
+    .pi-angle-left:before {
+      color: $primary-cta;
+    }
+  }
+
+  .p-disabled {
+    opacity: inherit;
+    .p-paginator-icon {
+      cursor: not-allowed !important;
+    }
+    .pi-angle-right:before,
+    .pi-angle-left:before {
+      color: $paginator;
+    }
+  }
+}
+/* removing first and last button from pagination */
+
+:host ::ng-deep .p-paginator-first {
+  display: none;
+}
+
+:host ::ng-deep .p-paginator-last {
+  display: none;
+}
+
+/* Styling previous and next button for pagination  */
+
+:host ::ng-deep .p-paginator-prev {
+  border-radius: unset;
+  order: 2;
+
+  .pi-angle-left:before {
+    content: 'PREVIOUS';
+    @include paginationNextPrevious();
+  }
+}
+
+:host ::ng-deep .p-paginator-next {
+  border-radius: unset;
+  order: 4;
+
+  .pi-angle-right:before {
+    content: 'NEXT';
+    @include paginationNextPrevious();
+  }
+}
+
+//Container of page links.
+:host ::ng-deep .p-paginator-pages {
+  order: 3;
+}
+
+/* Styling page link for pagination  */
+
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page {
+  min-width: 28px;
+  height: 28px;
+  margin: 0 10px 0 10.1px;
+  border-radius: 5px;
+  border: 1px solid $whiteDeep;
+  color: $inActiveTab;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Poppins-regular';
+  order: 3;
+}
+
+/* Removing default hover styling for pagination  */
+
+:host
+  ::ng-deep
+  .p-paginator
+  .p-paginator-next:not(.p-disabled):not(.p-highlight):hover {
+  @include removeDefaultStyle();
+}
+:host
+  ::ng-deep
+  .p-paginator
+  .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover {
+  @include removeDefaultStyle();
+}
+
+/* Styling dropdown selected page for pagination  */
+
+:host
+  ::ng-deep
+  .p-dropdown-panel
+  .p-dropdown-items
+  .p-dropdown-item.p-highlight {
+  background: $primary-text-bg;
+}
+
+/* Highlight the selected button of pagination*/
+
+:host ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: $primary-text-bg !important;
+  color: $primary-cta;
+}
+
+.sticky-header-gap {
+  height: $sticky-header-height;
 }

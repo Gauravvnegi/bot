@@ -25,7 +25,7 @@ export class StatsViewComponent implements OnInit, OnDestroy {
   hotelId: string;
   stats: MarketingStats;
   $subscription = new Subscription();
-
+  loading = false;
   constructor(
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
@@ -67,6 +67,7 @@ export class StatsViewComponent implements OnInit, OnDestroy {
    * @function getMarketingCards To get data for stat cards.
    */
   getMarketingCards(): void {
+    this.loading = true;
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(this.globalQueries),
     };
@@ -74,17 +75,11 @@ export class StatsViewComponent implements OnInit, OnDestroy {
       this.marketingService.getMarketingCards(this.hotelId, config).subscribe(
         (response) => {
           this.stats = new MarketingStats().deserialize(response);
+          this.loading = false;
         },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        ({ error }) => {
+          this.loading = false; 
+        }
       )
     );
   }

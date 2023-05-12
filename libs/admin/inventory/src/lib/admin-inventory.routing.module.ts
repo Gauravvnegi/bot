@@ -6,17 +6,21 @@ import {
   ModuleNames,
   routesFactory,
 } from '@hospitality-bot/admin/shared';
-import { RoomComponent } from './components/room/room.component';
+import { InventoryComponent } from './components/inventory/inventory.component';
 
 const appRoutes: CRoutes = [
   {
-    path: 'room',
-    name: ModuleNames.ROOM,
-    component: RoomComponent,
-  },
-  {
     path: '',
-    redirectTo: 'room',
+    component: InventoryComponent,
+    name: ModuleNames.INVENTORY,
+    children: [
+      {
+        path: 'room',
+        name: ModuleNames.ROOM,
+        loadChildren: () =>
+          import('@hospitality-bot/admin/room').then((m) => m.AdminRoomModule),
+      },
+    ],
   },
 ];
 
@@ -34,5 +38,5 @@ const appRoutes: CRoutes = [
   exports: [RouterModule],
 })
 export class AdminInventoryRoutingModule {
-  static components = [RoomComponent];
+  static components = [InventoryComponent];
 }

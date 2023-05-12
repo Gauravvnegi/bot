@@ -57,18 +57,7 @@ export class RequestPasswordComponent implements OnInit {
           panelClass: 'success',
         });
         this._router.navigate(['/auth/resend-password']);
-      },
-      ({ error }) => {
-        this._snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
-      }
+      } 
     );
   }
 

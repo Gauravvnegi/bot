@@ -233,17 +233,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
             )
             .subscribe();
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        ({ error }) => {  }
       );
   }
 
@@ -299,16 +289,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
             this.isModal ? this.closeModal() : this._location.back();
           },
           ({ error }) => {
-            this.isSending = false;
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
+            this.isSending = false; 
           }
         )
     );
@@ -334,17 +315,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
                 .get('message')
                 .patchValue(this.modifyTemplate(response.template));
             },
-            ({ error }) => {
-              this.snackbarService
-                .openSnackBarWithTranslate(
-                  {
-                    translateKey: `messages.error.${error?.type}`,
-                    priorityMessage: error?.message,
-                  },
-                  ''
-                )
-                .subscribe();
-            }
+            ({ error }) => { }
           )
       );
     }

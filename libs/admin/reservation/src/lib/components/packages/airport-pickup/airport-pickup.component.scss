@@ -1,20 +1,17 @@
 @import 'main';
 
 .data-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  margin: $margin20 3px;
+  @include flex-space-between-cen-Algn-wrap;
+  margin: 20px 3px;
   .field {
     width: 20%;
-    font-weight: 500;
+    font-weight: $medium;
     .label {
-      font-size: $font12;
-      color: $primary-gray;
+      font-size: 12px;
+      color: $grayMedium;
     }
     .value {
-      margin-top: $margin10;
+      margin-top: 10px;
       color: $primary-black;
     }
   }

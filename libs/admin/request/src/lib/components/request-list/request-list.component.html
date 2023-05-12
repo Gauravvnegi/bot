@@ -7,7 +7,7 @@
   "
 >
   <div class="right-side-header">
-    <div>
+    <div class="right-side-header-search">
       <hospitality-bot-search
         [parentFG]="parentFG"
         [hotelId]="hotelId"
@@ -36,19 +36,13 @@
     </div>
   </div>
   <ng-template #loader>
-    <div class="loader">
-      <!-- <p class="loading">Loading</p> -->
-      <div class="spinner">
-        <div class="bounce1"></div>
-        <div class="bounce2"></div>
-        <div class="bounce3"></div>
-      </div>
-    </div>
+    <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
   </ng-template>
   <div
     class="right-side-body"
-    #requestList
-    (scroll)="onScroll($event)"
+    infiniteScroll
+    (scrolled)="loadMore()"
+    [toggleScrollListener]="paginationDisabled"
     *ngIf="!loading; else loader"
   >
     <ng-container *ngIf="listData?.length; else noList">
@@ -61,58 +55,26 @@
             selectedRequest.id === item.id && { background: '#f1f1f1' }
           "
         >
-          <div class="right-side-body-card-avt">
-            {{ item.guestDetails.primaryGuest.getProfileNickName() }}
-          </div>
-          <div class="content-wrap">
-            <div class="content-wrap-r1">
-              <div>RNO: {{ item.rooms[0]?.roomNumber }}</div>
-              <div
-                class="content-wrap-r1-status"
-                [ngClass]="{
-                  'priority-low': item.priority === 'Low',
-                  'priority-medium': item.priority === 'Medium',
-                  'priority-high': item.priority === 'High',
-                  'priority-asap': item.priority === 'ASAP'
-                }"
-              >
-                {{ item.priority }}
-              </div>
-            </div>
-            <div class="content-wrap-title">
-              {{ item.guestDetails.primaryGuest.getFullName() }}
-            </div>
-            <div class="content-wrap-subtitle">
-              {{ item.itemName }}
-            </div>
-            <div class="content-wrap-rank">
-              {{ item.remarks }}
-            </div>
-            <div class="content-wrap-r2">
-              <div
-                [ngClass]="{
-                  'status-text-initiated': item.action === 'Timeout',
-                  'status-text-reject': item.action === 'Pending',
-                  'status-text-success': item.action === 'Closed'
-                }"
-              >
-                {{ item.getAction() || '------' }}
-              </div>
-              <div class="content-wrap-r2-divider"></div>
-              <div
-                [ngClass]="{
-                  'sla-timeout': item.getSLAvalue() < 0,
-                  'sla-pending':
-                    item.getSLAvalue() <= 5 && item.getSLAvalue() >= 0,
-                  'sla-new': item.getSLAvalue() > 5
-                }"
-              >
-                {{ 'requestDetail.sla' | translate }}: {{ item.getSLA() }}
-              </div>
-              <div class="content-wrap-r2-divider"></div>
-              <div>JD:- {{ item.jobDuration }}m</div>
-            </div>
-          </div>
+          <hospitality-bot-chat-card
+            [ngStyle]="{ width: '100%' }"
+            [content]="{
+              cardType: 'request',
+              roomNo: item.rooms[0]?.roomNumber,
+              name: item.guestDetails.primaryGuest.getFullName(),
+              remark: item.remarks,
+              time: item.requestTime | date: 'EEEE',
+              taskStatus: {
+                action: item.action,
+                sla: item.getSLA(),
+                jd: item.jobDuration,
+                slaValue: item.getSLAvalue()
+              },
+              priority: item.priority,
+              subTitle: item.itemName,
+              profileNickName: item.guestDetails.primaryGuest.getProfileNickName(),
+              backgroundColor: item.color
+            }"
+          ></hospitality-bot-chat-card>
         </div>
       </ng-container>
     </ng-container>
@@ -138,7 +100,7 @@
       ? {
           visibility: 'visible',
           width: '100%',
-          marginRight: '1px solid $primary-gray'
+          marginRight: '1px solid $grayMedium'
         }
       : { visibility: 'hidden', height: '0px', overflow: 'hidden' }
   "

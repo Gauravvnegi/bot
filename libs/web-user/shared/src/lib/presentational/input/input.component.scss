@@ -1,24 +1,19 @@
 @import 'main';
 
-
 .mat__field--wrapper {
-  width: $full-width;
+  width: 100%;
   font-size: 17px;
   font-weight: $bolder;
   margin-bottom: 14px;
-  letter-spacing: $very-small-spacing;
+  letter-spacing: 1px;
 }
 input {
   padding-left: 7px;
 }
-// .wrapper__shared__comp__container {
-//   display: flex;
-//   flex-direction: column;
-// }
 
 .mat__field--heading {
-  font-size: $font16;
+  font-size: 16px;
   font-weight: $bolder;
-  letter-spacing: $very-small-spacing;
+  letter-spacing: 1px;
   line-height: 27px;
 }

@@ -1,0 +1,62 @@
+@import 'main';
+
+.hidden-overflow {
+  overflow: hidden;
+}
+
+.wrapper {
+  background-color: #ffff;
+  border: 1px solid rgba(112, 112, 112, 0.35);
+  border-radius: 5px;
+  height: 70vh;
+  &__default {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.84px;
+    // color: $dark-blue;
+    margin: auto;
+    text-align: center;
+    padding: 10px;
+  }
+
+  &__standard {
+    @include flex-all-center;
+    max-width: 792.3px;
+    text-align: center;
+    width: 93vw;
+    padding: 10px 0;
+    margin: auto;
+    min-height: 400px;
+    flex-direction: column;
+    gap: 2em;
+
+    @media screen and (max-width: $tabAir) {
+      max-width: 51vw;
+      width: 80vw;
+      margin: auto;
+    }
+
+    &-img {
+      height: 200px;
+    }
+
+    &-subText {
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 0.96px;
+      color: #b5b5c3;
+      line-height: 24px;
+    }
+    .redirectBtnWrapper {
+      @include flex-start;
+      margin-top: 10px;
+    }
+  }
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}

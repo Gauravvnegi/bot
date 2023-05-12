@@ -1,0 +1,68 @@
+@import 'main';
+
+.wrapper {
+  overflow: hidden;
+}
+
+.main {
+  width: 100%;
+  background-color: $white;
+  border-radius: 8px;
+  border: solid 1px rgba(112, 112, 112, 0.35);
+  overflow: auto;
+}
+
+.sub-heading {
+  padding: 25px 30px;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.96px;
+  color: $secondary2;
+  border-bottom: 1px solid #707070c1;
+}
+
+.form-block {
+  padding: 35px 50px 62px;
+}
+
+.input-fields {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  .input {
+    flex-basis: 50%;
+  }
+
+  .price {
+    opacity: 0.75;
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 0.94;
+    letter-spacing: 0.96px;
+    color: $secondary2;
+    &__value {
+      font-size: 14px;
+      line-height: 1.07;
+      letter-spacing: 0.84px;
+    }
+  }
+}
+
+:host ::ng-deep .iterator {
+  display: block;
+  overflow: auto;
+
+  .wrapper {
+    max-height: 55vh;
+  }
+}
+
+.save-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}

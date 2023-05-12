@@ -8,7 +8,7 @@
   padding: 15px;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid $primary-gray;
+  border-bottom: 1px solid $grayLight;
   cursor: pointer;
   &-guest-wrap {
     display: flex;
@@ -19,26 +19,36 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: chartreuse;
-  margin-right: 20px;
+  margin-right: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
-  .label {
-    font: normal normal normal 12px/16px Roboto;
-    text-overflow: ellipsis;
-    overflow: hidden;
+
+  &_default {
+    height: 28px;
+    width: 28px;
+  }
+  &_nickName {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: #ffffff;
   }
 }
 .selectedChat {
-  font: normal normal medium 14px/19px Roboto;
+  font-size: 14px;
   letter-spacing: 0.84px;
-  color: $dark-blue;
+  color: $secondary;
   opacity: 1;
 }
 
 .mr-10 {
   display: flex;
+  margin-right: 0px !important;
   .req_button {
     display: flex;
     gap: 20px;
@@ -48,8 +58,9 @@
       align-items: center;
       font-size: 14px;
       font-weight: 500;
-      color: $button-blue;
+      color: $primary-cta;
       gap: 6.5px;
+      letter-spacing: 0.84px;
       cursor: pointer;
       &:active {
         transform: scale(0.98);
@@ -63,9 +74,9 @@
       .guestInfoEditContainer {
         width: 138px;
         height: 36px;
-        background: $button-blue 0% 0% no-repeat padding-box;
-        border: 1px solid $c-gray-87;
-        border-radius: 100px;
+        background: $primary-cta 0% 0% no-repeat padding-box;
+        border: 1px solid $borderCol;
+        border-radius: 10px;
         opacity: 1;
         display: flex;
         align-items: center;
@@ -73,7 +84,7 @@
         cursor: pointer;
         img {
           filter: brightness(0) invert(1);
-          @include margin-right($margin10);
+          margin-right: 10px;
         }
 
         .guestInfoEditText {
@@ -89,34 +100,39 @@
 
 .scrollChat {
   height: calc(100% - 186px);
-  background: $c-gray-98;
+  background: $message-background;
   overflow-y: auto;
-  padding: 20px;
+  padding: 15px;
   position: relative;
   width: 100%;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
 }
 .chatDate {
   text-align: center;
   margin-bottom: 10px;
   font-family: Roboto;
   font-size: 12px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
   letter-spacing: 0.72px;
-  color: $dark-blue;
+  color: $secondary;
+  margin: auto;
+  background: rgba(174, 174, 174, 0.1);
+  padding: 6px;
+  border-radius: 12px;
+  width: fit-content;
 }
 .noChat {
   height: calc(100% - 124px);
-  background: $c-gray-98;
+  background: $whiteDeep;
   overflow-y: auto;
   padding: 20px;
   position: relative;
 }
 .no-data {
   height: calc(100% - 124px);
-  background: $c-gray-98;
+  background: $whiteDeep;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -130,24 +146,17 @@
   }
   &__title {
     margin: 12px 0;
-    font-size: 16px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
-    text-align: left;
-    color: $dark-blue;
+    @include normal-text;
+    color: $secondary;
   }
   &__description {
     font-size: 12px;
     font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
+
     letter-spacing: 0.72px;
     text-align: left;
-    color: $c-gray-77;
+    color: $grayLight;
   }
 }
 .chatRecieve {
@@ -184,13 +193,13 @@
   align-items: center;
   font: normal normal normal 14px/19px Roboto;
   letter-spacing: 0.84px;
-  color: $closed;
+  color: $lightRed;
 }
 
 .message-field-input {
   padding-left: 20px;
-  background: $c-gray-100 0% 0% no-repeat padding-box;
-  border: 1px solid $c-gray-84;
+  background: $whiteDeep 0% 0% no-repeat padding-box;
+  border: 1px solid $borderCol;
   border-radius: 20px;
   opacity: 1;
   height: 100%;
@@ -206,15 +215,11 @@
   padding: 10px;
   border-radius: 10px 10px 0 10px;
   color: $white;
+  border-radius: 10px;
   box-shadow: 0 3px 6px 0 rgba(97, 115, 244, 0.05);
   background-color: $chat-background;
   &__text {
-    font-family: Roboto;
     font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
     // letter-spacing: 0.72px;
     text-align: left;
     color: $white;
@@ -225,6 +230,9 @@
     overflow: hidden;
     max-width: 412px;
   }
+}
+:host ::ng-deep .link_detector {
+  color: #ffffff;
 }
 
 .left-message {
@@ -239,13 +247,8 @@
   &__text {
     font-family: Roboto;
     font-size: 12px;
-    font-weight: normal;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    // letter-spacing: 0.72px;
-    text-align: left;
-    color: $dark-blue;
+
+    color: $secondary;
     word-wrap: break-word;
     width: calc(100% - 60px);
     $white-space: break-word;
@@ -256,15 +259,10 @@
 }
 
 .message__time {
-  font-family: Roboto;
   align-self: flex-end;
   font-size: 10px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
   letter-spacing: 0.6px;
-  color: $c-gray-78;
+  color: $grayLight;
   padding-left: 10px;
   width: 60px;
 }
@@ -276,7 +274,7 @@
 }
 
 :host ::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-  background-color: $completed;
+  background-color: $posCompare;
 }
 
 :host ::ng-deep .mat-slide-toggle.mat-checked {

@@ -1,7 +1,7 @@
 export const listingConfig = {
   datatable: {
     title: 'Listings',
-    limit:5,
+    limit: 5,
     tabFilterItems: [
       {
         label: 'All',
@@ -10,22 +10,13 @@ export const listingConfig = {
         disabled: false,
         total: 0,
         chips: [
-          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
           {
-            label: 'Active',
+            label: 'All',
             icon: '',
-            value: 'ACTIVE',
+            value: 'ALL',
             total: 0,
-            isSelected: false,
-            type: 'new',
-          },
-          {
-            label: 'In-Active ',
-            icon: '',
-            value: 'INACTIVE',
-            total: 0,
-            isSelected: false,
-            type: 'pending',
+            isSelected: true,
+            type: 'default',
           },
         ],
         lastPage: 0,
@@ -35,45 +26,42 @@ export const listingConfig = {
       {
         field: 'name',
         header: 'Name/Topic',
-        isSort: true,
         sortType: 'string',
-        dynamicWidth: false,
+        searchField: ['name', 'topicName'],
       },
       {
         field: 'description',
         header: 'Description',
-        isSort: true,
         sortType: 'string',
-        dynamicWidth: false,
       },
       {
         field: ``,
         header: 'Unsubscribed/ bounce#',
-        isSort: false,
+        isSortDisabled: true,
         sortType: 'string',
-        dynamicWidth: false,
+        isSearchDisabled: true,
       },
       {
         field: ``,
         header: 'Send/Schedule Campaign#',
-        isSort: false,
+        isSortDisabled: true,
         sortType: 'string',
-        dynamicWidth: false,
+        isSearchDisabled: true,
       },
       {
         field: '',
         header: 'Active',
-        isSort: false,
+        isSortDisabled: true,
         sortType: 'number',
-        dynamicWidth: true,
+        isSearchDisabled: true,
       },
     ],
   },
-  list:{
-    limit:50,
-    entityState:'ACTIVE',
-    chipValue:{
-      all:'ALL'
+  list: {
+    limit: 50,
+    entityState: 'ACTIVE',
+    chipValue: {
+      all: 'ALL',
     },
   },
   images: {

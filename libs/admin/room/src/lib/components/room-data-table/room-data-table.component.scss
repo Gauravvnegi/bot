@@ -1,0 +1,65 @@
+@import 'main';
+
+::ng-deep .p-datatable-resizable > .p-datatable-wrapper {
+  overflow-x: unset !important;
+}
+
+$room-count-active-bg: rgb(232,246,252);
+$room-count-active: rgb(47,166,227);
+
+.table-row {
+  height: 90px;
+}
+
+.main-checkbox {
+  width: 5%;
+  @include align-checkbox;
+}
+
+.room-no {
+  font-size: 12px;
+  letter-spacing: 0.72px;
+  padding: 7px;
+  font-size: 12px;
+  border-radius: 4px;
+  text-align: center;
+  filter: alpha(opacity=80);
+
+  &__active {
+    background-color: $room-count-active-bg;
+    color: $room-count-active;
+  }
+
+  &__soldOut {
+    background-color: rgba($mediumRed, 0.2);
+    color: $mediumRed;
+  }
+
+  &__unavailable {
+    background-color: rgba($warning, 0.2);
+    color: $warning;
+  }
+}
+
+.cell-content {
+  text-align: center;
+  color: $subtitle;
+  font-size: 12px;
+  letter-spacing: 0.72px;
+}
+
+.room-count {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 5% 15%;
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include tableCellPadding(1em);
+}
+
+.amenities {
+  white-space: normal;
+}

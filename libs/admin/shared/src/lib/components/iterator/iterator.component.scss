@@ -1,0 +1,57 @@
+@import 'main';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  border: solid 1px rgba(112, 112, 112, 0.35);
+  border-radius: 8px;
+}
+
+.main {
+  position: relative;
+  overflow: auto;
+  box-shadow: inset 0px -12px 11px -12px #e8eef5;
+}
+
+.header {
+  position: sticky;
+  display: flex;
+
+  top: 0;
+  padding: 0 2%;
+  height: 48px;
+  gap: 2%;
+  background-color: $accordian-header;
+  border-radius: 4px;
+  z-index: 1;
+  &__cell {
+    font-size: 14px;
+    font-weight: 600;
+    color: $accordian-label;
+    margin: auto 0;
+  }
+}
+
+.values-row {
+  position: relative;
+  display: flex;
+  gap: 2%;
+  padding: 2%;
+  border-bottom: 2px solid;
+  border-color: $accordian-background;
+}
+
+.delete {
+  font-size: 25px;
+  font-weight: 900;
+  position: absolute;
+  right: 1%;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: $darkRed;
+}
+
+.action-btn {
+  margin: 2px 0;
+}

@@ -112,17 +112,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
               response.userCategoryPermission
             );
             this.userService.userPermissions = response;
-          },
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          }
         )
     );
   }
@@ -153,17 +143,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
               '',
               { panelClass: 'success' }
             );
-          },
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          } 
         )
     );
   }
@@ -197,17 +177,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
             response,
             `Feedback_export_${new Date().getTime()}.csv`
           );
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        } 
       )
     );
   }
@@ -229,17 +199,6 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
         );
         this.refreshFeedbackData(true);
         this.cardService.$refreshList.next(true);
-      },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
       }
     );
   }
@@ -296,17 +255,6 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
           this.feedbackFG.patchValue({ comment: '' });
           this.refreshFeedbackData(true);
           this.cardService.$refreshList.next(true);
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       );
   }
@@ -322,17 +270,7 @@ export class FeedbackDetailComponent implements OnInit, OnDestroy {
           link.download = response.fileName;
           link.click();
           link.remove();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        } 
       )
     );
   }

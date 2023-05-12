@@ -17,6 +17,8 @@ import {
   styleUrls: ['./subscription.component.scss'],
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
+  welcomeMessage = 'Welcome To Subscription';
+  navRoutes = [{ label: 'Subscription', link: './' }];
   $subscription = new Subscription();
   loading = false;
   subscriptionPlanUsage;
@@ -63,17 +65,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
           this.subscriptionData
         );
         this.getSubscriptionUsage(this.hotelId);
-      },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
       }
     );
   }
@@ -91,18 +82,18 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
     this.$subscription.add(
       forkJoin([
-        this.subscriptionService.getSubscriptionUsage(hotelId, config),
+        // this.subscriptionService.getSubscriptionUsage(hotelId, config),
         this.subscriptionService.getSubscriptionUsagePercentage(
           hotelId,
           config
         ),
       ]).subscribe((response) => {
         this.loading = false;
-        this.planUsageChartData = new PlanUsageCharts().deserialize(
-          response[0]
-        );
+        // this.planUsageChartData = new PlanUsageCharts().deserialize(
+        //   response[0]
+        // );
         this.planUsagePercentage = new PlanUsagePercentage().deserialize(
-          response[1]
+          response[0]
         );
       })
     );

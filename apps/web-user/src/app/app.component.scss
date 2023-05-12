@@ -1,9 +1,9 @@
+@import 'main';
+
 /*
  * Remove template code below
  */
 
 .flex {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+ @include flex-all-center;
 }

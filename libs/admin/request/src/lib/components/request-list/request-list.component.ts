@@ -1,24 +1,17 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Observable, Subscription } from 'rxjs';
+import { request } from '../../constants/request';
 import {
   InhouseData,
   InhouseTable,
 } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
-import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
-import { request } from '../../constants/request';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'hospitality-bot-request-list',
@@ -26,7 +19,6 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
   styleUrls: ['./request-list.component.scss'],
 })
 export class RequestListComponent implements OnInit, OnDestroy {
-  @ViewChild('requestList') private myScrollContainer: ElementRef;
   $subscription = new Subscription();
   requestConfig = request;
   entityType = 'Inhouse';
@@ -38,6 +30,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
     priorityType: '',
   };
   loading = false;
+  paginationDisabled = false;
+
   globalQueries = [];
   listData;
   offset = 0;
@@ -76,6 +70,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   registerListeners(): void {
     this.listenForGlobalFilters();
     this.listenForNotification();
+    this.listenForRefreshData();
   }
 
   /**
@@ -154,15 +149,12 @@ export class RequestListComponent implements OnInit, OnDestroy {
   loadInitialRequestList(queries = []): void {
     this.loading = true;
     this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
-        (response) => {
-          this.listData = new InhouseTable().deserialize(response).records;
-          this.updateTabFilterCount(response.entityStateCounts);
-          this.totalData = response.total;
-          this.loading = false;
-        },
-        ({ error }) => this.showError(error)
-      )
+      this.fetchDataFrom(queries).subscribe((response) => {
+        this.listData = new InhouseTable().deserialize(response).records;
+        this.updateTabFilterCount(response.entityStateCounts, response.total);
+        this.totalData = response.total;
+        this.loading = false;
+      })
     );
   }
 
@@ -194,25 +186,22 @@ export class RequestListComponent implements OnInit, OnDestroy {
           entityType: this.entityType,
           actionType: this.tabFilterItems[this.tabFilterIdx].value,
         },
-      ]).subscribe(
-        (response) => {
-          if (offset === 0)
-            this.listData = new InhouseTable().deserialize(response).records;
-          else
-            this.listData = [
-              ...new Map(
-                [
-                  ...this.listData,
-                  ...new InhouseTable().deserialize(response).records,
-                ].map((item) => [item.id, item])
-              ).values(),
-            ];
-          this.totalData = response.total;
-          this.updateTabFilterCount(response.entityStateCounts);
-          this.loading = false;
-        },
-        ({ error }) => this.showError(error)
-      )
+      ]).subscribe((response) => {
+        if (offset === 0)
+          this.listData = new InhouseTable().deserialize(response).records;
+        else
+          this.listData = [
+            ...new Map(
+              [
+                ...this.listData,
+                ...new InhouseTable().deserialize(response).records,
+              ].map((item) => [item.id, item])
+            ).values(),
+          ];
+        this.totalData = response.total;
+        this.updateTabFilterCount(response.entityStateCounts, response.total);
+        this.loading = false;
+      })
     );
   }
 
@@ -220,10 +209,12 @@ export class RequestListComponent implements OnInit, OnDestroy {
    * @function updateTabFilterCount To update tab filter count.
    * @param countObj The object tab data count.
    */
-  updateTabFilterCount(countObj): void {
+  updateTabFilterCount(countObj, total): void {
     if (countObj) {
       this.tabFilterItems.forEach((tab) => {
-        if (tab.value !== 'ALL') tab.total = countObj[tab.value];
+        tab.value === 'ALL'
+          ? (tab.total = total)
+          : (tab.total = countObj[tab.value]);
       });
     }
   }
@@ -238,25 +229,18 @@ export class RequestListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function onScroll To handle request list scroll.
-   * @param event The scroll event.
+   * @function loadMore To handle request list scroll.
    */
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event): void {
-    if (!this.enableSearchField)
-      if (
-        this.myScrollContainer &&
-        this.myScrollContainer.nativeElement.offsetHeight +
-          this.myScrollContainer.nativeElement.scrollTop ===
-          this.myScrollContainer.nativeElement.scrollHeight
-      ) {
-        if (this.totalData > this.listData.length) {
-          this.offset = this.listData.length;
-          if (this.parentFG.get('search').value.trim().length)
-            this.getRequestWithSearchAndFilter(this.offset, this.limit);
-          else this.loadData(this.offset, this.limit);
-        }
+  loadMore(): void {
+    if (!this.enableSearchField) {
+      this.paginationDisabled = this.totalData <= this.listData.length;
+      if (!this.paginationDisabled) {
+        this.offset = this.listData.length;
+        if (this.parentFG.get('search').value.trim().length)
+          this.getRequestWithSearchAndFilter(this.offset, this.limit);
+        else this.loadData(this.offset, this.limit);
       }
+    }
   }
 
   /**
@@ -280,7 +264,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
    * @function clearSearch To clear search field.
    */
   clearSearch(): void {
-    this.parentFG.patchValue({ search: '' });
+    this.parentFG.patchValue({ search: '' }, { emitEvent: false });
     this.enableSearchField = false;
     this.loading = true;
     this.loadData(0, 10);
@@ -338,25 +322,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
         (response) =>
           (this.listData = new InhouseTable().deserialize({
             records: response,
-          }).records),
-        ({ error }) => this.showError(error)
+          }).records)
       );
-  }
-
-  /**
-   * @function showError To show error with translation.
-   * @param error The error object.
-   */
-  showError(error) {
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: 'messages.error.some_thing_wrong',
-          priorityMessage: error?.message,
-        },
-        ''
-      )
-      .subscribe();
   }
 
   resetFilter() {

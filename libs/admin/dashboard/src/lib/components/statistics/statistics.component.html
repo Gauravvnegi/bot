@@ -1,4 +1,4 @@
-<div class="stats--wrapper" *ngIf="statistics">
+<div class="stats--wrapper">
   <div
     class="stats"
     isFeatureSubscribed
@@ -6,7 +6,7 @@
     click-allow
   >
     <hospitality-bot-arrivals-statistics
-      [arrivals]="statistics.arrivals"
+      [arrivals]="statistics?.arrivals || undefined"
     ></hospitality-bot-arrivals-statistics>
   </div>
   <div
@@ -15,10 +15,11 @@
     [paths]="[productName + '.cards.' + cardNames.INHOUSE]"
   >
     <hospitality-bot-inhouse-statistics
-      [inhouse]="statistics.inhouse"
-      [inhouseRequest]="statistics.inhouseRequest"
+      [inhouse]="statistics?.inhouse || undefined"
+      [inhouseRequest]="statistics?.inhouseRequest || undefined"
     ></hospitality-bot-inhouse-statistics>
   </div>
+  <!-- <ng-container *ngIf="statistics"> -->
   <div
     class="stats full-width"
     isFeatureSubscribed
@@ -26,7 +27,7 @@
     click-allow
   >
     <hospitality-bot-departure-statistics
-      [departures]="statistics.departures"
+      [departures]="statistics?.departures || undefined"
     ></hospitality-bot-departure-statistics>
   </div>
 
@@ -44,4 +45,5 @@
   >
     <hospitality-bot-customer-statistics></hospitality-bot-customer-statistics>
   </div>
+  <!-- </ng-container> -->
 </div>

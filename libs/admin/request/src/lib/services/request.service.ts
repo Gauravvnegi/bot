@@ -7,7 +7,7 @@ import { RequestData } from '../../../../notification/src/lib/data-models/reques
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
   selectedRequest = new BehaviorSubject(null);
-  refreshData = new BehaviorSubject(false);
+  refreshData = new BehaviorSubject<boolean>(false);
 
   getReservationDetails(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);

@@ -4,11 +4,48 @@ import { IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class Templates implements IDeserializable {
   records: ITemplate[];
+  entitySateCounts: IEntityStateCounts;
+  entityTypeCounts: IEntityTypeCounts;
+  total: number;
   deserialize(input) {
-    this.records = new Array<ITemplate>();
-    input?.records?.forEach((template) =>
-      this.records.push(new Template().deserialize(template))
+    this.records =
+      input?.records?.map((item) => new Template().deserialize(item)) ?? [];
+    // this.entityTypeCounts = new EntityTypeCounts().deserialize(
+    //   input?.entityTypeCounts ?? [],
+    //   input?.total
+    // );
+    // this.entitySateCounts = new EntityStateCounts().deserialize(
+    //   input?.entityStateCounts
+    // );
+    // this.total = input.total;
+    return this;
+  }
+}
+
+class EntityStateCounts {
+  ALL: number;
+  ACTIVE: number;
+  INACTIVE: number;
+  deserialize(input) {
+    console.log(input);
+    this.ALL = Number(
+      Object?.values(input)?.reduce((a: number, b: number) => a + b, 0)
     );
+    this.ACTIVE = input?.ACTIVE;
+    this.INACTIVE = input?.INACTIVE;
+    return this;
+  }
+}
+class EntityTypeCounts {
+  ALL: number;
+
+  deserialize(input, total) {
+    this.ALL = total;
+    console.log(EntityTypeCounts);
+    const obj = new EntityTypeCounts();
+    Object.keys(input).forEach((key) => {
+      obj[key] = input[key];
+    });
     return this;
   }
 }
@@ -91,3 +128,5 @@ export class Topic {
 export type ITemplate = Omit<Template, 'deserialize'>;
 export type ITopic = Omit<Topic, 'deserialize'>;
 export type ITopics = Omit<Topics, 'deserialize'>;
+export type IEntityStateCounts = Omit<EntityStateCounts, 'deserialize'>;
+export type IEntityTypeCounts = Omit<EntityTypeCounts, 'deserialize'>;

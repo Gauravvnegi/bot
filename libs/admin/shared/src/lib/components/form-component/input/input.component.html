@@ -1,0 +1,47 @@
+<div
+  class="wrapper p-field"
+  [style.fontSize]="fontSize"
+  [ngClass]="wrapperNgClasses"
+  [formGroup]="controlContainer.control"
+>
+  <label
+    *ngIf="label && !float"
+    class="label label__static"
+    [for]="controlName"
+    >{{ label }}</label
+  >
+
+  <hospitality-bot-custom-tooltip
+    *ngIf="additionalInfo"
+    [text]="additionalInfo"
+    class="additional-info"
+    mode="standalone"
+  ></hospitality-bot-custom-tooltip>
+
+  <input
+    class="input"
+    [ngClass]="inputNgClasses"
+    [attr.disabled]="isDisabled || null"
+    [formControlName]="controlName"
+    [id]="controlName"
+    [attr.type]="type"
+    pInputText
+    [maxlength]="maxLength"
+    [min]="min"
+    [max]="max"
+    [placeholder]="placeholder"
+  />
+
+  <small *ngIf="subtitle" class="subtitle"> {{ subtitle }}</small>
+
+  <small *ngIf="error" class="p-error"> {{ error }}</small>
+
+  <label *ngIf="label && float" [for]="controlName" class="label">{{
+    label
+  }}</label>
+  <i
+    *ngIf="isLoading"
+    class="pi pi-spin pi-spinner"
+    [ngClass]="iconNgClass"
+  ></i>
+</div>

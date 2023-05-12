@@ -33,6 +33,7 @@ import * as FileSaver from 'file-saver';
 export class ChatComponent
   implements OnInit, OnChanges, OnDestroy, AfterViewChecked {
   @Input() selectedChat;
+  @Input() guestInfoEnable;
   @Input() data;
   @Output() guestInfo = new EventEmitter();
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
@@ -42,6 +43,8 @@ export class ChatComponent
   liveChatFG: FormGroup;
   isLoading = false;
   limit = 20;
+  paginationDisabled = false;
+
   $subscription = new Subscription();
   scrollBottom = true;
   scrollView;
@@ -199,16 +202,7 @@ export class ChatComponent
             },
             ({ error }) => {
               this.isLoading = false;
-              this.chat = new Chats();
-              this.snackbarService
-                .openSnackBarWithTranslate(
-                  {
-                    translateKey: `messages.error.${error?.type}`,
-                    priorityMessage: error?.message,
-                  },
-                  ''
-                )
-                .subscribe();
+              this.chat = new Chats(); 
             }
           )
       );
@@ -216,7 +210,8 @@ export class ChatComponent
   }
 
   updatePagination(messageLength, limit) {
-    this.limit = messageLength < limit ? messageLength : this.limit + 20;
+    this.paginationDisabled = messageLength < limit;
+    this.limit = this.paginationDisabled ? messageLength : this.limit + 20;
   }
 
   handleChatResponse(response) {
@@ -274,13 +269,8 @@ export class ChatComponent
     return messages;
   }
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event) {
-    if (
-      this.myScrollContainer &&
-      this.myScrollContainer.nativeElement.scrollTop === 0 &&
-      this.limit > this.getMessagesFromTimeList().length
-    )
+  loadMore() {
+    if (this.limit > this.getMessagesFromTimeList().length)
       this.getChat(
         { offset: 0, limit: this.limit },
         this.myScrollContainer.nativeElement.scrollHeight
@@ -332,17 +322,7 @@ export class ChatComponent
           this.selectedChat.phone
         )
         .subscribe(
-          (response) => this.liveChatFG.patchValue(response),
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          (response) => this.liveChatFG.patchValue(response)
         )
     );
   }
@@ -356,17 +336,7 @@ export class ChatComponent
           this.liveChatFG.getRawValue()
         )
         .subscribe(
-          (response) => this.liveChatFG.patchValue(response),
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          (response) => this.liveChatFG.patchValue(response)
         )
     );
   }
@@ -388,17 +358,7 @@ export class ChatComponent
       this.messageService.getRequestByConfNo(config).subscribe(
         (response) => {
           this.requestList = new RequestList().deserialize(response).data;
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        }
       )
     );
   }
@@ -425,17 +385,7 @@ export class ChatComponent
                 .subscribe(
                   (response) => {
                     this.messageService.refreshData$.next(true);
-                  },
-                  ({ error }) =>
-                    this.snackbarService
-                      .openSnackBarWithTranslate(
-                        {
-                          translateKey: `messages.error.${error?.type}`,
-                          priorityMessage: error?.message,
-                        },
-                        ''
-                      )
-                      .subscribe()
+                  }
                 )
             );
           }
@@ -457,17 +407,7 @@ export class ChatComponent
                 .split(' ')
                 .join('_')}_export_${new Date().getTime()}.csv`
             );
-          },
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+          }
         )
     );
   }

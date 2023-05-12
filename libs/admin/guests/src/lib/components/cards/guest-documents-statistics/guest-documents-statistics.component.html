@@ -1,26 +1,36 @@
 <div class="container" (click)="openTableModal()">
   <div class="title-container">
-    <div class="icon">
+    <div
+      class="icon"
+      *skeleton="
+        document == undefined;
+        height: '43px';
+        width: '33px';
+        margin: '0 10px 0 0'
+      "
+    >
       <img
         [src]="guestConfig.images.document.url"
         [alt]="guestConfig.images.document.alt"
       />
     </div>
-    <div class="stat-title">{{ 'document.title' | translate }}</div>
-    <div class="info-icon">
-      <img
-        [src]="guestConfig.images.tooltip.url"
-        [alt]="guestConfig.images.tooltip.alt"
-      />
-      <div class="tooltip">
-        <span class="arrow"> </span> {{ 'document.tooltip' | translate }}
-      </div>
-    </div>
+    <hospitality-bot-custom-tooltip
+      [text]="'document.tooltip' | translate"
+      *skeleton="document == undefined; height: '25px'; width: '170px'"
+    >
+      <div class="stat-title">{{ 'document.title' | translate }}</div>
+    </hospitality-bot-custom-tooltip>
   </div>
   <div class="graph-container">
     <div class="graph">
       <canvas
         baseChart
+        *skeleton="
+          document == undefined;
+          height: '138px';
+          width: '138px';
+          borderRadius: '50%'
+        "
         class="graph-base-chart"
         [data]="chart.Data"
         [labels]="chart.Labels"
@@ -37,12 +47,22 @@
     </div>
   </div>
   <div class="stat">
-    <div class="stat-val-container" *ngFor="let stat of document?.statistics">
-      <div class="stat-lable-container">
-        <div class="icon" [style.background-color]="stat.color"></div>
-        <div class="stat-lable">{{ stat.label }}</div>
+    <ng-container
+      *skeleton="
+        document == undefined;
+        height: '25px';
+        width: '100%';
+        margin: '2.5px 0';
+        repeat: 4
+      "
+    >
+      <div class="stat-val-container" *ngFor="let stat of document?.statistics">
+        <div class="stat-lable-container">
+          <div class="icon" [style.background-color]="stat.color"></div>
+          <div class="stat-lable">{{ stat.label }}</div>
+        </div>
+        <div class="stat-val">{{ stat.value }}</div>
       </div>
-      <div class="stat-val">{{ stat.value }}</div>
-    </div>
+    </ng-container>
   </div>
 </div>

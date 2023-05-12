@@ -21,7 +21,7 @@
   "disable":"Disable"
 },
 
-  "createAsset": "+Create Asset",
+  "createAsset": "+ Create Asset",
 
   "assetForm": {
     "createAsset": "Create Asset",

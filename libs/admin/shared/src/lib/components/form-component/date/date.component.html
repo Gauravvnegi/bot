@@ -1,0 +1,42 @@
+<div
+  class="wrapper p-field"
+  [ngClass]="wrapperNgClasses"
+  [style.fontSize]="fontSize"
+>
+  <label
+    *ngIf="label && !float"
+    class="label label__static"
+    [for]="controlName"
+    >{{ label }}</label
+  >
+  <p-calendar
+    class="input"
+    [ngClass]="{
+      input__static: label && alignment === 'vertical',
+      input__standard: variant === 'standard',
+      input__outlined: variant === 'outlined',
+      input__error: error,
+      input__disabled: isDisabled
+    }"
+    [inputId]="controlName"
+    [(ngModel)]="dateValue"
+    (ngModelChange)="onDateChange($event)"
+    [showTime]="enableTime"
+    [showSeconds]="enableSeconds"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    [dateFormat]="dateFormat"
+    [hourFormat]="hourFormat"
+    [showButtonBar]="enableButtonBar"
+    [monthNavigator]="true"
+    [yearNavigator]="true"
+    yearRange="2000:2030"
+    (onBlur)="markAsTouched()"
+    [disabled]="isDisabled"
+  ></p-calendar>
+  <small *ngIf="error" class="p-error">{{ error }} </small>
+
+  <label *ngIf="label && float" [for]="controlName">{{ label }}</label>
+
+  <i class="pi" [ngClass]="modIconNgClasses"></i>
+</div>

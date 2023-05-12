@@ -1,31 +1,27 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router, ActivatedRoute } from '@angular/router';
-import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import * as FileSaver from 'file-saver';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   BaseDatatableComponent,
-  sharedConfig,
   TableService,
+  sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import {
-  SnackBarService,
   ModalService,
+  SnackBarService,
 } from '@hospitality-bot/shared/material';
-import {
-  SelectedEntityState,
-  EntityType,
-  EntityState,
-} from 'libs/admin/dashboard/src/lib/types/dashboard.type';
+import { TranslateService } from '@ngx-translate/core';
+import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import * as FileSaver from 'file-saver';
+import { SelectedEntityState } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
+import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { TopicService } from 'libs/admin/shared/src/lib/services/topic.service';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
-import { TemplateService } from '../../../services/template.service';
-import { Templates } from '../../../data-models/templateConfig.model';
 import { templateConfig } from '../../../constants/template';
-import { TopicService } from 'libs/admin/shared/src/lib/services/topic.service';
-import { TranslateService } from '@ngx-translate/core';
+import { Templates } from '../../../data-models/templateConfig.model';
+import { TemplateService } from '../../../services/template.service';
 
 @Component({
   selector: 'hospitality-bot-template-datatable',
@@ -148,53 +144,29 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
-          this.values = new Templates().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.loadData',
-              priorityMessage: error.message,
-            })
-            .subscribe();
         }
       )
     );
   }
 
   /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
+   * @function setRecords To set records after getting reponse from an api.
+   * @param data The data is a response which comes from an api call.
    */
-  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        chip.total = countObj[chip.value];
-      });
-    }
+  setRecords(data): void {
+    const responseData = new Templates().deserialize(data);
+    this.values = responseData.records;
+    data.entityTypeCounts &&
+      this.updateTabFilterCount(data.entityTypeCounts, data.total);
+    data.entityStateCounts &&
+      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.updateTotalRecords();
+    this.loading = false;
   }
 
   /**
@@ -219,14 +191,21 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    * @param event active & inactive event check.
    * @param templateId The template id for which status update action will be done.
    */
-  updateTemplateStatus(event, templateId): void {
+  updateTemplateStatus(status, userData): void {
     const data = {
-      active: event.checked,
+      active: status,
     };
     this.templateService
-      .updateTemplateStatus(this.hotelId, data, templateId)
+      .updateTemplateStatus(this.hotelId, data, userData.id)
       .subscribe(
-        (response) => {
+        (_) => {
+          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+          this.updateStatusAndCount(
+            statusValue(userData.status),
+            statusValue(status)
+          );
+          this.values.find((item) => item.id === userData.id).status = status;
+
           this.snackbarService.openSnackBarWithTranslate(
             {
               translateKey: `messages.SUCCESS.STATUS_UPDATED`,
@@ -239,12 +218,6 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.loadData',
-              priorityMessage: error.message,
-            })
-            .subscribe();
         }
       );
   }
@@ -298,22 +271,11 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         }
       ).subscribe(
         (data) => {
-          this.values = new Templates().deserialize(data).records;
-          this.totalRecords = data.total;
-          data.entityTypeCounts &&
-            this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.loadData',
-              priorityMessage: error.message,
-            })
-            .subscribe();
         }
       )
     );
@@ -349,7 +311,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
-    this.changePage(+this.tabFilterItems[event.index].lastPage);
+    this.changePage(+this.tabFilterItems[event.index]?.lastPage);
   }
 
   /**
@@ -403,45 +365,9 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate({
-              translateKey: 'messages.error.exportCSV',
-              priorityMessage: error.message,
-            })
-            .subscribe();
         }
       )
     );
-  }
-
-  /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   * @param quickReplyTypeIdx The chip index.
-   * @param quickReplyType The chip type.
-   */
-  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
-    //toggle isSelected
-    if (quickReplyTypeIdx === 0) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== templateConfig.selectedTopic.all) {
-          chip.isSelected = false;
-        }
-      });
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    }
-
-    this.changePage(0);
   }
 
   /**

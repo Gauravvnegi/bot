@@ -216,11 +216,11 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         this.outlets,
         this.colorMap
       ).records;
-    this.totalRecords = data.total;
     data.entityTypeCounts &&
-      this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+      this.updateTabFilterCount(data.entityTypeCounts, data.total);
     data.entityStateCounts &&
       this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.updateTotalRecords();
 
     this.loading = false;
   }
@@ -252,17 +252,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
           ...this.getSelectedQuickReplyFilters(),
         ]);
       },
-      ({ error }) => {
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error.message,
-            },
-            ''
-          )
-          .subscribe();
-      }
+      ({ error }) => {}
     );
   }
 
@@ -338,7 +328,6 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.showErrorMessage(error);
         }
       )
     );
@@ -406,7 +395,6 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.showErrorMessage(error);
         }
       )
     );

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
-import { UserService } from '@hospitality-bot/admin/shared';
+import { ManageSitesService } from '@hospitality-bot/admin/manage-sites';
+import { HotelDetailService, UserService } from '@hospitality-bot/admin/shared';
 import { forkJoin, Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { LoadingService } from '../../theme/src/lib/services/loader.service';
 import { SubscriptionPlanService } from '../../theme/src/lib/services/subscription-plan.service';
 
@@ -12,27 +13,48 @@ export class AdminDetailResolver implements Resolve<any> {
     private _userService: UserService,
     private _router: Router,
     private subscriptionPlanService: SubscriptionPlanService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private manageSite: ManageSitesService,
+    private hotelDetailsService: HotelDetailService
   ) {}
-  resolve(route: ActivatedRouteSnapshot): Observable<any> | Promise<any> | any {
-    if (!this._userService.getLoggedInUserid()) {
+  resolve(
+    _route: ActivatedRouteSnapshot
+  ): Observable<any> | Promise<any> | any {
+    const userId = this._userService.getLoggedInUserId();
+    const hotelId = this.hotelDetailsService.getHotelId();
+
+    if (!userId) {
       this._router.navigate(['/auth']);
     }
+
     this.loadingService.open();
     return this._userService
-      .getUserDetailsById(this._userService.getLoggedInUserid())
+      .getUserDetailsById(this._userService.getLoggedInUserId())
       .pipe(
         switchMap((res) => {
-          let subscription: Observable<any> = of(undefined);
-          if (!this.subscriptionPlanService.getSubscription())
-            subscription = this.subscriptionPlanService.getSubscriptionPlan(
-              res.hotelAccess.chains[0].hotels[0].id
-            );
+          if (hotelId) {
+            const manageSiteList = this.manageSite.getSitesList();
+            let subscription: Observable<any> = of(undefined);
+            if (!this.subscriptionPlanService.getSubscription()) {
+              subscription = this.subscriptionPlanService.getSubscriptionPlan(
+                hotelId
+              );
+            }
 
-          return forkJoin({
-            userDetail: of(res),
-            subscription,
-          });
+            return forkJoin({
+              userDetail: of(res),
+              subscription,
+              manageSiteList,
+            });
+          } else {
+            this.loadingService.close();
+            this._router.navigate(['/dashboard']);
+            return of(false);
+          }
+        }),
+        catchError((error) => {
+          this.loadingService.close();
+          return of(error);
         })
       );
   }

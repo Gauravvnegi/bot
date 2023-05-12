@@ -160,7 +160,7 @@ export class Contact {
     return moment(this.lastMessageAt).utcOffset(timezone).format('h:mm a');
   }
 
-  checkEnableSend(timezone = '+05:30') {
+  checkEnableSend(timezone = '+05:30') { 
     return (
       +moment()
         .utcOffset(timezone)

@@ -25,17 +25,21 @@ import { StatisticsService } from '../../../services/feedback-statistics.service
 export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
   entityType = 'GTM';
-  tabfeedbackType: string;
+  tabFeedbackType: string;
   $subscription = new Subscription();
   selectedInterval;
   globalQueries;
+  progress=0;
   stats: Bifurcation;
   bifurcationFG: FormGroup;
   keyLabels = [
     { label: 'GTM', key: 'GTM' },
     { label: 'ALL', key: 'ALL' },
-    { label: 'Others', key: 'OTHERS' },
+    { label: 'Others', key: 'OTHERS' }
   ];
+  timeout: number;
+  timeoutColor: string;
+  total: number;
   feedbackChart = {
     Labels: [],
     Data: [[]],
@@ -163,7 +167,7 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
   listenForOutletChanged() {
     this._statisticService.$outletChange.subscribe((response) => {
       if (response.status) {
-        this.tabfeedbackType = response.type;
+        this.tabFeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {
             element.entityIds = this._statisticService.outletIds;
@@ -192,14 +196,37 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
         .getBifurcationStats(config)
         .subscribe((response) => {
           this.stats = new Bifurcation().deserialize(response);
+          this.stats.feedbacks.forEach((feedback) => {
+            if (feedback.label === 'Timeout') {
+              this.timeout = feedback.score;
+              this.timeoutColor = feedback.color;
+            }
+          });
+          this.total = this.stats.totalCount;
           this.initFeedbackChart(
-            this.stats.feedbacks.reduce(
-              (accumulator, current) => accumulator + current.score,
-              0
+            this.stats.feedbacks
+            .filter((feedback) => feedback.label !== 'Timeout')
+            .reduce(
+              (accumulator, current) => accumulator + current.score, 0
             ) === 0
-          );
+            );
+          this.setProgress();
         })
     );
+  }
+
+  setProgress(){
+    if(this.timeout){
+      this.progress = Math.abs(
+        (this.timeout/
+        this.total) *100
+      )
+    }else if(this.timeout === 0 && this.total){
+      this.progress = 100;
+    }
+    else{
+      this.progress = 0;
+    }
   }
 
   /**
@@ -207,6 +234,7 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
    * @param defaultGraph The data status.
    */
   initFeedbackChart(defaultGraph: boolean): void {
+    console.log(defaultGraph);
     this.feedbackChart.Data[0].length = this.feedbackChart.Labels.length = this.feedbackChart.Colors[0].backgroundColor.length = this.feedbackChart.Colors[0].borderColor.length = 0;
     if (defaultGraph) {
       this._translateService
@@ -219,7 +247,7 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
       this.feedbackChart.Data = [[100]];
       return;
     }
-    const data = this.stats.feedbacks;
+    const data = this.stats.feedbacks.filter((feedback) => feedback.label !== 'Timeout');
     data.map((feedback) => {
       if (feedback.score) {
         this.feedbackChart.Data[0].push(feedback.score);
@@ -231,14 +259,14 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
   }
 
   getFeedbackType() {
-    if (this.tabfeedbackType === undefined) {
+    if (this.tabFeedbackType === undefined) {
       return this.globalFeedbackFilterType === feedback.types.both
         ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
-    return this.tabfeedbackType === feedback.types.both
+    return this.tabFeedbackType === feedback.types.both
       ? ''
-      : this.tabfeedbackType;
+      : this.tabFeedbackType;
   }
 
   openTableModal(event) {

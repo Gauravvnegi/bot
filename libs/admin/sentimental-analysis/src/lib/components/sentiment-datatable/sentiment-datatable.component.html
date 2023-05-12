@@ -1,0 +1,120 @@
+<div
+  class="action-header"
+  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+  [formGroup]="tableFG"
+>
+  <div class="heading">{{ tableName }}</div>
+</div>
+<div class="search-field">
+  <input
+    pInputText
+    type="text"
+    (input)="search($event, 'comment')"
+    [placeholder]="'Search'"
+  />
+  <span class="icon-container">
+    <button>
+      <i class="pi pi-search"></i>
+    </button>
+  </span>
+</div>
+<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
+
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginator"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+>
+  <ng-template pTemplate="emptymessage">
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+  </ng-template>
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns #header>
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="!isSelectable"
+      [isSearchActive]="false"
+    ></tr>
+  </ng-template>
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <tr class="table-row" (click)="editOffer(rowData)">
+      <td>
+        <div class="row-display" *ngIf="rowData.rating; else emptyCell">
+          <div class="primary-text">
+            <div>{{ rowData.rating }}</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.comment; else emptyCell">
+          <div class="primary-text">{{ rowData.comment }}</div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.sentiment; else emptyCell">
+          <div
+            class="primary-text"
+            [style.color]="colorsConfig[rowData.sentiment]"
+          >
+            <div class="box">
+              <div
+                class="box__bg"
+                [style.background]="colorsConfig[rowData.sentiment]"
+              ></div>
+              <div class="box__text">{{ rowData.sentiment | titlecase }}</div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" [style.gap]="'6px'">
+          <div class="box" *ngFor="let topic of rowData?.topics">
+            <div class="box__bg" [style.background]="colorsConfig[topic]"></div>
+            <div class="box__text" [style.color]="colorsConfig[topic]">
+              {{ topic | titlecase }}
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <!-- *********************************FOOTER******************************* -->
+  <ng-template pTemplate="summary">
+    <p-paginator
+      #paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
+    ></p-paginator>
+  </ng-template>
+</p-table>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>

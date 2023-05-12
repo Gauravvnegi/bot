@@ -3,3 +3,4 @@ export * from './guest';
 export * from './shared';
 export * from './regex';
 export * from './routes';
+export * from './date';

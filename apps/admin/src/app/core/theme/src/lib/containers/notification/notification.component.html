@@ -49,10 +49,11 @@
   </div>
   <div class="notification--form">
     <div
-      #notificationList
       class="notification"
       *ngIf="notifications && notifications.length; else emptyNotication"
-      (scroll)="onScroll($event)"
+      scrollPagination
+      (scrolled)="getNotifications()"
+      [toggleScrollListener]="paginationDisabled"
     >
       <div
         class="notification--item"

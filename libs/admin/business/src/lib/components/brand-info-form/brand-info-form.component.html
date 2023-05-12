@@ -1,0 +1,62 @@
+<div class="wrapper" [formGroup]="useForm">
+  <div [formGroup]="useForm.get('brand')">
+    <hospitality-bot-navigation-header
+      [heading]="pageTitle"
+      [routes]="navRoutes"
+    >
+    </hospitality-bot-navigation-header>
+    <div class="form-block">
+      <div class="code">
+        <span class="code__label"> Code: </span>
+        <span class="code__hash"> {{ code }} </span>
+      </div>
+      <hospitality-bot-toggle-switch
+        class="status"
+        controlName="active"
+        label="Status:"
+      ></hospitality-bot-toggle-switch>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="name"
+        label="Name"
+        maxLength="60"
+      ></hospitality-bot-input>
+      <div class="des-template">
+        <div class="des-template__label">Description</div>
+        <div class="des-template__input">
+          <hospitality-bot-template-editor
+            [parentFG]="useForm.get('brand')"
+            [name]="'description'"
+            [height]="250"
+          ></hospitality-bot-template-editor>
+        </div>
+      </div>
+    </div>
+    <div></div>
+    <hospitality-bot-social-media
+      controlName="socialPlatforms"
+      class="full-width"
+    >
+    </hospitality-bot-social-media>
+
+    <div class="footer">
+      <hospitality-bot-button
+        severity="reset"
+        variant="outlined"
+        [label]="'Reset'"
+        (onClick)="handleReset()"
+      >
+      </hospitality-bot-button>
+
+      <hospitality-bot-button
+        [label]="brandId ? 'Update' : 'Create'"
+        (onClick)="handleSubmit()"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+</div>
+
+<hospitality-bot-hotel-data-table
+  [brandId]="brandId"
+  *ngIf="brandId?.length"
+></hospitality-bot-hotel-data-table>

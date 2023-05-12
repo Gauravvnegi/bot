@@ -1,0 +1,43 @@
+<div class="wrapper p-field" [formGroup]="controlContainer.control">
+  <label *ngIf="label" class="label label__static" [for]="postControlName">{{
+    label
+  }}</label>
+  <div class="main" [id]="postControlName">
+    <ng-container [ngSwitch]="preFieldType">
+      <hospitality-bot-input
+        *ngSwitchCase="'input'"
+        class="input pre-input"
+        [controlName]="preControlName"
+        [props]="getProps('pre')"
+        [disabled]="inputDisabled.pre || isDisabled"
+      ></hospitality-bot-input>
+      <hospitality-bot-select
+        *ngSwitchCase="'select'"
+        class="input pre-input"
+        [controlName]="preControlName"
+        [props]="getProps('pre')"
+        [disabled]="inputDisabled.pre || isDisabled"
+        [options]="preOptions"
+        [stopEmission]="stopEmission"
+      ></hospitality-bot-select>
+    </ng-container>
+
+    <ng-container [ngSwitch]="postFieldType">
+      <hospitality-bot-input
+        *ngSwitchCase="'input'"
+        class="input post-input"
+        [controlName]="postControlName"
+        [props]="getProps('post')"
+        [disabled]="inputDisabled.post || isDisabled"
+      ></hospitality-bot-input>
+      <hospitality-bot-select
+        *ngSwitchCase="'select'"
+        class="input post-input"
+        [controlName]="postControlName"
+        [props]="getProps('post')"
+        [options]="postOptions"
+        [disabled]="inputDisabled.post || isDisabled"
+      ></hospitality-bot-select>
+    </ng-container>
+  </div>
+</div>

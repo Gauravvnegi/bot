@@ -20,7 +20,7 @@
 .modal-header {
   padding: 20px 0px;
   display: flex;
-  padding-bottom: $padding-small;
+  padding-bottom: 10px;
   width: 100%;
   position: relative;
   background-color: #f4f5f7;
@@ -31,7 +31,7 @@
   right: 14px;
   top: 0px;
   @media screen and (max-width: $S) {
-    right: 5px;
+    right: 15px;
   }
 }
 
@@ -49,7 +49,7 @@
   text-align: center;
   width: 33%;
   .title {
-    margin-bottom: $margin-small;
+    margin-bottom: 10px;
   }
   p {
     text-align: center;
@@ -66,7 +66,7 @@
     }
   }
   @media only screen and (max-width: $M) {
-    font-size: $font14;
+    font-size: 14px;
     width: 70%;
   }
   @media screen and (max-width: $S) {
@@ -92,13 +92,14 @@
   width: 75vw;
   @media screen and (max-width: $S) {
     margin: 0 auto;
-    width: $full;
+    width: 100%;
   }
 }
 
 .modal-body {
   max-height: calc(90vh - 120px);
   overflow-y: auto;
+  padding: 32px;
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -110,5 +111,12 @@
   &::-webkit-scrollbar-thumb {
     background: darkgray;
     border-radius: 10px;
+  }
+
+  @media screen and (max-width: $S) {
+    padding: 14px;
+  }
+  @media screen and (max-width: $L) {
+    padding: 14px;
   }
 }

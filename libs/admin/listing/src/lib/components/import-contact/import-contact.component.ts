@@ -105,16 +105,7 @@ export class ImportContactComponent implements OnInit, OnDestroy {
           });
           this.contactFA.controls.forEach((control) => control.disable());
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.contact_not_import',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
         }
       )
     );

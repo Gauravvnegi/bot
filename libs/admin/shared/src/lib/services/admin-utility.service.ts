@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import { has, isBoolean } from 'lodash';
 @Injectable({ providedIn: 'root' })
 export class AdminUtilityService {
   constructor() {}
@@ -8,19 +8,18 @@ export class AdminUtilityService {
     if (!queries.length) {
       return;
     }
-
     const queryObj = queries.reduce((acc, curr) => {
       for (let key in curr) {
         // TO_DO: Readme
-        if (curr[key]) {
-          if (acc[key]) {
-            acc[key] = [acc[key], curr[key]].join(',');
-          } else if (curr[key] !== null && curr[key] !== undefined) {
-            acc[key] = curr[key];
+        let currValue = curr[key];
+        if (currValue || isBoolean(currValue)) {
+          if (has(acc, key)) {
+            acc[key] = [acc[key], currValue].join(',');
+          } else if (currValue !== null && currValue !== undefined) {
+            acc[key] = currValue;
           }
         }
       }
-
       return { ...acc };
     }, {});
 

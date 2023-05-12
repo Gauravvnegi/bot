@@ -1,0 +1,31 @@
+@import '../form.component.scss';
+
+@mixin input {
+  display: block;
+}
+
+.wrapper {
+}
+
+.main {
+  display: flex;
+  gap: 1em;
+  margin-top: $label-gap
+
+}
+
+.pre-input {
+  @include input();
+  flex-basis: 15%;
+}
+
+.post-input {
+  @include input();
+  flex-basis: 85%;
+}
+
+:host ::ng-deep .label {
+  display: block;
+  width: 0;
+  white-space: nowrap;
+}

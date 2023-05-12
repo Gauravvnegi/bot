@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -26,6 +27,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   hotelId: string;
   @Output() guestInfo = new EventEmitter();
+  @Input() guestInfoEnable;
 
   requestFG: FormGroup;
   constructor(
@@ -37,6 +39,8 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.hotelId = this.globalFilterService.hotelId;
+
     this.registerListeners();
     this.initFG();
   }
@@ -132,15 +136,6 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
 
         ({ error }) => {
           this.requestFG.patchValue({ status: this.data.action });
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );

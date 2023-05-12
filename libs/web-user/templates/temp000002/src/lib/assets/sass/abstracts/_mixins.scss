@@ -1,6 +1,14 @@
 // Mixins
 
-@mixin half-circle() {
+@mixin title-header {
+  background-color: $title-header-background-color;
+  color: $title-header-font-color;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 10px;
+}
+
+@mixin half-circle {
   content: '';
   width: 15px;
   height: 20px;
@@ -12,7 +20,7 @@
   transform: translateY(-50%);
 }
 
-@mixin primary-button() {
+@mixin primary-button {
   background: var(
     --primary-button-background-color,
     $primary-button-background-color
@@ -21,14 +29,14 @@
   height: 45px;
   font-weight: $bolder;
   box-shadow: 0px 3px 6px #4b56c059;
-  border-radius: 28px;
+  border-radius: 8px;
   color: var(--primary-button-font-color, $primary-button-font-color);
   &:hover {
     cursor: pointer;
   }
 }
 
-@mixin secondary-button() {
+@mixin secondary-button {
   color: var(--secondary-button-font-color, $secondary-button-font-color);
   width: 200px;
   height: 45px;
@@ -45,55 +53,25 @@
   }
 }
 
-@mixin footer-next() {
-  @include primary-button();
-  box-shadow: 0px 3px 6px #4b56c059;
-  @media only screen and (max-width: $M) {
-    width: 50vw;
-    border-radius: 0px;
-  }
-}
-
-@mixin footer-back() {
-  @include secondary-button();
-  @media only screen and (max-width: $M) {
-    width: 50vw;
-    margin-right: 0px;
-    border-radius: 0px;
-  }
-}
-
-@mixin mat-icon() {
-  margin-right: $margin-small;
+@mixin mat-icon {
+  margin-right: 10px;
   width: 20px;
   height: 20px;
   font-size: $font-medium;
 }
 
-@mixin template-footer-button() {
+@mixin template-footer-button {
   display: flex;
   justify-content: center;
   @media only screen and (max-width: $M) {
     position: fixed;
     bottom: 0px;
-    width: $full-width;
+    width: 100%;
     z-index: 222;
   }
 }
 
-@mixin payment-body() {
-  content: '';
-  width: 15px;
-  height: 20px;
-  position: absolute;
-  background-color: $white;
-  border: 2px solid #e6e6e6;
-  top: 50%;
-  box-sizing: border-box;
-  transform: translateY(-50%);
-}
-
-@mixin flex-col-center-align{
+@mixin flex-col-center-align {
   display: flex;
   flex-direction: column;
   align-items: center;

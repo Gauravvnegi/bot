@@ -6,25 +6,22 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  sharedConfig,
   TableService,
+  sharedConfig,
 } from '@hospitality-bot/admin/shared';
 import {
-  SnackBarService,
   ModalService,
+  SnackBarService,
 } from '@hospitality-bot/shared/material';
-import {
-  SelectedEntityState,
-  EntityType,
-  EntityState,
-} from 'libs/admin/dashboard/src/lib/types/dashboard.type';
+import { TranslateService } from '@ngx-translate/core';
+import * as FileSaver from 'file-saver';
+import { SelectedEntityState } from 'libs/admin/dashboard/src/lib/types/dashboard.type';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
 import { listingConfig } from '../../../constants/listing';
-import { ListingService } from '../../../services/listing.service';
+import { listingRoutes } from '../../../constants/routes';
 import { ListTable } from '../../../data-models/listing.model';
-import * as FileSaver from 'file-saver';
-import { TranslateService } from '@ngx-translate/core';
+import { ListingService } from '../../../services/listing.service';
 
 @Component({
   selector: 'hospitality-bot-listing-datatable',
@@ -108,20 +105,35 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
+          const chipsData = [
+            {
+              label: 'All',
+              icon: '',
+              value: 'ALL',
+              total: 0,
+              isSelected: true,
+              type: 'default',
+            },
+          ];
+          chipsData.push(
+            ...Object.keys(data.entityStateCounts)
+              .sort()
+              .map((key) => ({
+                label: key,
+                icon: '',
+                value: key,
+                total: data.entityStateCounts[key],
+                isSelected: false,
+                type: key === 'INACTIVE' ? 'failed' : 'new',
+              }))
+          );
+          this.tabFilterItems[this.tabFilterIdx].chips = chipsData;
           this.initialLoading = false;
           this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -133,11 +145,9 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    */
   setRecords(data): void {
     this.values = new ListTable().deserialize(data).records;
-    this.totalRecords = data.total;
-    data.entityTypeCounts &&
-      this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
-    data.entityStateCounts &&
-      this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.updateTabFilterCount(data.entityTypeCounts, data.total);
+    this.updateQuickReplyFilterCount(data.entityStateCounts);
+    this.updateTotalRecords();
     this.loading = false;
   }
 
@@ -151,33 +161,6 @@ export class ListingDatatableComponent extends BaseDatatableComponent
       .map((item) => ({
         entityState: item.value,
       }));
-  }
-
-  /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
-   */
-  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        chip.total = countObj[chip.value];
-      });
-    }
   }
 
   /**
@@ -202,16 +185,8 @@ export class ListingDatatableComponent extends BaseDatatableComponent
           this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.error.some_thing_wrong',
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -323,54 +298,18 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'message.error.exportCSV_fail',
-                priorityMessage: error.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
   }
 
   /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   * @param quickReplyTypeIdx The chip index.
-   * @param quickReplyType The chip type.
-   */
-  toggleQuickReplyFilter(quickReplyTypeIdx: number, quickReplyType): void {
-    //toggle isSelected
-    if (quickReplyTypeIdx === 0) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== listingConfig.list.chipValue.all)
-          chip.isSelected = false;
-      });
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    }
-
-    this.changePage(0);
-  }
-
-  /**
    * @function openCreateListing To navigate to create listing page.
    */
   openCreateListing() {
-    this.router.navigate(['create'], { relativeTo: this.route });
+    this.router.navigate([listingRoutes.createListing.route], {
+      relativeTo: this.route,
+    });
   }
 
   /**
@@ -378,13 +317,19 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    * @param event Active & InActive event check.
    * @param rowData The data of row for which status update action will be done.
    */
-  updateStatus(event, rowData) {
-    event.stopPropagation();
+  updateStatus(status, rowData) {
     this.$subscription.add(
       this.listingService
-        .updateListStatus(this.hotelId, rowData.id, { status: event.checked })
+        .updateListStatus(this.hotelId, rowData.id, { status: status })
         .subscribe(
-          (response) => {
+          (_) => {
+            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+            this.updateStatusAndCount(
+              statusValue(rowData.active),
+              statusValue(status)
+            );
+            this.values.find((item) => item.id === rowData.id).active = status;
+
             this.snackbarService
               .openSnackBarWithTranslate(
                 {
@@ -399,17 +344,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
               .subscribe();
             this.changePage(this.currentPage);
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'message.error.listing_status_updated_fail',
-                  priorityMessage: error.message,
-                },
-                ''
-              )
-              .subscribe();
-          }
+          ({ error }) => {}
         )
     );
   }
@@ -421,7 +356,9 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    */
   openList(event, id) {
     event.stopPropagation();
-    this.router.navigate([`edit/${id}`], { relativeTo: this.route });
+    this.router.navigate([listingRoutes.editListing.route.replace(':id', id)], {
+      relativeTo: this.route,
+    });
   }
 
   /**

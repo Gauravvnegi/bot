@@ -44,28 +44,12 @@
         <mat-icon class="expand-icon" *ngIf="panel.expanded">remove</mat-icon>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <!-- <div class="data-wrapper">
-      <div class="field">
-        <p class="label">Airport Name</p>
-        <p class="value">Ms. Marry</p>
+    <div class="data-wrapper">
+      <div class="field" *ngFor="let list of metaDataList; index as i">
+        <p class="label">{{ list.label }}</p>
+        <p class="value">{{ list.value }}</p>
       </div>
-      <div class="field">
-        <p class="label">Terminal</p>
-        <p class="value">3</p>
-      </div>
-      <div class="field">
-        <p class="label">Flight No.</p>
-        <p class="value">AI 386</p>
-      </div>
-      <div class="field">
-        <p class="label">Pickup Time</p>
-        <p class="value">13:00</p>
-      </div>
-      <div class="field">
-        <p class="label">No. of Persons</p>
-        <p class="value">1</p>
-      </div>
-    </div> -->
+    </div>
     <div class="status-wrapper">
       <p class="status">
         Status :&nbsp;
@@ -92,6 +76,10 @@
         <button (click)="updatePackageStatus('REJECT')" class="right">
           <img src="assets/svg/cross.svg" />
         </button>
+        <!-- <hospitality-bot-toggle-switch-with-label
+          [isToggleOn]="isToggleOn"
+          (onToggleSwitch)="onToggleSwitch($event)"
+        ></hospitality-bot-toggle-switch-with-label> -->
       </div>
     </div>
   </mat-expansion-panel>

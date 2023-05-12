@@ -147,17 +147,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
             ? this.updateAllDocumentsStatus()
             : this.checkIfAllDocumentsVerified();
         },
-        (error) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
+        (error) => {}
       );
   }
 

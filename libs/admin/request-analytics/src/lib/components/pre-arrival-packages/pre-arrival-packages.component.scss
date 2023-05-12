@@ -10,7 +10,7 @@
   @include flex-justify-center;
   align-items: center;
   border-radius: 50%;
-  border: 2px solid $primary-purple;
+  border: 2px solid $primary-cta;
 }
 .labl > input {
   /* HIDE RADIO */
@@ -29,7 +29,7 @@
 }
 
 .labl > input:checked + .image {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   img {
     filter: grayscale(100%);
     height: 12px;
@@ -37,21 +37,16 @@
 }
 
 .days-label {
-  font-family: Roboto;
+  @include normal-text;
   font-size: 10px;
-  font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: normal;
-  color: $c-gray-72;
+  color: $grayLight;
   align-self: flex-start;
 }
 
 :host ::ng-deep .mat-tab-label {
   min-width: 12vw !important;
   @media screen and (max-width: $L) {
-    @include padding(0 6px);
+    padding: 0 6px;
   }
 }
 :host
@@ -74,7 +69,7 @@
   font-weight: 500;
   letter-spacing: 0.84px;
 }
-.pap-wraper {
+.pap-wrapper {
   padding: 20px;
   height: 100%;
   cursor: pointer;
@@ -86,15 +81,10 @@
     justify-content: space-between;
     align-items: center;
     &-title {
-      font-family: Roboto;
-      font-size: 16px;
+      @include normal-text;
       font-weight: bold;
-      font-stretch: normal;
-      font-style: normal;
-      line-height: normal;
-      letter-spacing: 0.96px;
-      text-align: left;
-      color: $dark-blue;
+
+      color: $secondary;
       display: flex;
       align-items: center;
     }
@@ -121,20 +111,19 @@
     height: 60px;
     padding: 20px 15px;
     border-radius: 5px;
-    background-color: $stat-legend-bg;
+    background-color: $headingBg;
     width: 49.25%;
     margin: 10px 0;
     position: relative;
     @include flex-between-center;
     font-family: Roboto;
     font-size: 12px;
-    font-stretch: normal;
-    font-style: normal;
+
     line-height: 1.17;
     letter-spacing: 0.72px;
     .label {
       font-weight: 500;
-      color: $quote-color;
+      color: $subtitle;
       display: flex;
       align-items: center;
       font-size: 12px;
@@ -157,7 +146,7 @@
     }
     .value {
       font-weight: bold;
-      color: $dark-blue;
+      color: $secondary;
     }
   }
 }
@@ -166,5 +155,5 @@
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
 }

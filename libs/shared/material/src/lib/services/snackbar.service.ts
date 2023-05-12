@@ -33,11 +33,18 @@ export class SnackBarService {
     action?: string,
     config?: MatSnackBarConfig
   ): MatSnackBarRef<SimpleSnackBar> {
+    const panelClass = _.get(config, ['panelClass'], 'danger');
+    const duration = _.get(
+      config,
+      ['duration'],
+      panelClass === 'danger' ? 3000 : 2000
+    );
+
     return this._snackBar.open(message, action, {
-      duration: _.get(config, ['duration'], 2000),
+      duration: duration,
       horizontalPosition: _.get(config, ['horizontalPosition'], 'right'),
       verticalPosition: _.get(config, ['verticalPosition'], 'top'),
-      panelClass: _.get(config, ['panelClass'], 'danger'),
+      panelClass: panelClass,
     });
   }
 
@@ -75,7 +82,7 @@ export class SnackBarService {
       this.openSnackBarAsText(translationToBeShown, action, config);
       return translationToBeShown;
     };
-
+    console.log(this._translateService, ' this._translateService');
     return this._translateService
       .get(translateKey)
       .pipe(map((msg) => handleTranslation(msg)));

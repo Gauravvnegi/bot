@@ -1,6 +1,4 @@
-<!-- <div (click)="openRegCardModal(content)">
-  <div>{{ settings.label }}<span [ngClass]="settings.styles.link">{{ settings.linkLabel }}</span></div>
-</div> -->
+
 <div class="reg-card-wrapper">
   <div [ngClass]="settings.modal.style.container">
     <div [ngClass]="settings.modal.style.header">
@@ -14,15 +12,7 @@
       </div>
     </div>
     <div [ngClass]="settings.modal.style.body">
-      <!-- <div [ngClass]="settings.modal.style.pdfHeader"> -->
-      <!-- <img [src]="" /> -->
-      <!-- <div></div> -->
-      <!-- <a [href]="regCard.src" [download]="regCard.fileName">
-          <mat-icon style="margin-right: 10px;">
-            {{ settings.modal.pdf.icon }}
-          </mat-icon>
-        </a> -->
-      <!-- </div> -->
+      
       <div [ngClass]="settings.styles.regCardContainer">
         <pdf-viewer
           [src]="settings.regcardUrl"

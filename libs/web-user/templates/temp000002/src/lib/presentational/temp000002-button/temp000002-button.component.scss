@@ -1,16 +1,30 @@
 @import 'temp000002';
 
 :host ::ng-deep .back-button {
-  @include footer-back();
+  @include footer-back;
+  @media screen and (min-width: $tablet) {
+    border-radius: 8px;
+  }
+  @media screen and (max-width: $tablet) {
+    width: 50vw;
+    margin-right: 0px;
+    border-radius: 0px;
+  }
 }
 :host ::ng-deep .next-button {
-  @include footer-next();
+  @include footer-next;
+  @media screen and (min-width: $tablet) {
+    border-radius: 8px;
+  }
+  @media screen and (max-width: $tablet) {
+    width: 50vw;
+    border-radius: 0px;
+  }
 }
 
 :host ::ng-deep .mat-button-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-family: 'Poppins-regular';
+  @include flex-all-center;
   .fa {
     margin-right: 3px;
   }

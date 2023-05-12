@@ -1,15 +1,12 @@
 @import 'main';
 
 .icon-wrapper {
-  @include flex-space-between();
-  flex-wrap: wrap;
-
+  @include flex-space-btw-wrap();
   position: relative;
   .icon {
     width: 32%;
     margin: 6% 0.5%;
-    @include flex-item-center();
-    flex-direction: column;
+    @include flex-col-center-algn();
     z-index: 2;
     .table-body-journey-icon {
       height: 14px;
@@ -37,7 +34,7 @@
     position: absolute;
     height: 2px;
     width: 72%;
-    background-color: $alice-blue;
+    background-color: $whiteDeep;
     right: 17px;
     @media screen and (max-width: 800px) {
       width: 62%;
@@ -52,33 +49,40 @@
 }
 
 :host ::ng-deep .arrival-time {
-  font-size: $font12;
-  color: $arrival-time;
+  font-size: 12px;
+  color: $tabStats;
   margin-top: 2px;
   @media screen and (max-width: 800px) {
-    font-size: 8px;
+    font-size: 8;
   }
 }
 .sideMargin {
   margin: 0 -20px;
 }
+img {
+  width: 28px;
+  height: 28px;
+}
 
 :host ::ng-deep .arrival-date {
-  font-size: $font12;
-  color: $dark-grey;
+  font-size: 12px;
+  color: $subtitle;
   @media screen and (max-width: 800px) {
-    font-size: 8px;
+    font-size: 8;
   }
 }
 
 :host ::ng-deep .status-image {
   padding: 5px !important;
   text-align: center !important;
+  button {
+    padding-left: 15px;
+  }
 }
 
 :host ::ng-deep .booking-number {
-  color: $dark-grey;
-  font-size: $font12;
+  color: $subtitle;
+  font-size: 12px;
   text-align: center;
   @media screen and (max-width: 800px) {
     font-size: 8px;
@@ -86,8 +90,8 @@
 }
 
 :host ::ng-deep .package {
-  color: $dark-grey;
-  font-size: $font12;
+  color: $subtitle;
+  font-size: 12px;
   position: relative;
   @media screen and (max-width: 800px) {
     font-size: 10px;
@@ -104,7 +108,7 @@
 :host ::ng-deep .tabel-room-no {
   padding: 7px;
   font-size: 12px;
-  background-color: rgb(72, 192, 72, 0.2);
+  background-color: $table-room-bg;
   border-radius: 25px;
   text-align: center;
   @media screen and (max-width: 800px) {
@@ -114,9 +118,7 @@
 }
 
 :host ::ng-deep .booking-feedback {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-all-center;
   padding: 7px;
   margin: 0 10px;
   margin-top: 7px;
@@ -133,11 +135,11 @@
     width: 100%;
     top: 50%;
     font-size: 12px;
-    color: $dark-grey;
+    color: $subtitle;
     background-color: $white;
     left: 0%;
     padding: 7px;
-    box-shadow: 0px 0px 5px 0px $light-grey;
+    box-shadow: 0px 0px 5px 0px $grayLight;
     border-radius: 5px;
     display: none;
   }
@@ -152,7 +154,7 @@
     text-align: center;
     min-width: 23px;
     border-radius: 50%;
-    font-size: $font12;
+    font-size: 12px;
   }
   @media screen and (max-width: 1050px) {
     margin: 0;
@@ -177,8 +179,8 @@
 }
 .tableHeading {
   width: 5%;
-  background-color: $c-gray-93 !important;
-  @include align-checkbox();
+  background-color: $whiteDeep !important;
+  @include align-checkbox;
 }
 
 :host ::ng-deep input[disabled='true'] {
@@ -193,23 +195,21 @@
   width: 87px;
   padding: 6px 2px 6px 2px;
   border-radius: 14px;
-  border: solid 1px $primary-purple;
+  border: solid 1px $primary-cta;
   background-color: $white;
   font-size: 12px;
   font-weight: 500;
-  font-stretch: normal;
-  font-style: normal;
   line-height: 1.25;
   letter-spacing: 0.72px;
   text-align: center;
-  color: $primary-purple;
+  color: $primary-cta;
 }
 
 .add-notes {
   width: 75px;
   padding: 6px 2px 6px 2px;
   border-radius: 14px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.25;
@@ -219,16 +219,16 @@
 }
 
 .guest {
-  color: $dark-grey;
+  color: $subtitle;
   font-weight: 500;
   &-status {
     margin-bottom: 6px;
   }
   &-name {
-    color: $dark-grey;
+    color: $subtitle;
   }
   &-phone {
-    color: $arrival-time;
+    color: $tabStats;
     font-weight: normal;
     margin-top: 8px;
     overflow-x: hidden;
@@ -237,42 +237,37 @@
 .service-feedback {
   width: 30%;
   &-service {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include flex-space-between-cen-Algn;
     .booking-feedback {
       padding: 7px 7px 7px 0px;
       margin: 0;
     }
     .amount {
-      color: $dark-grey;
+      color: $subtitle;
     }
   }
   &-amount-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    @include flex-space-btw-wrap;
     &-amount {
-      color: $arrival-time;
+      color: $grayLight;
       font-size: 12px;
-      font-weight: normal;
     }
   }
 }
 
 .package {
   &-date {
-    color: $dark-grey;
+    color: $subtitle;
     font-size: 12px;
   }
   &-city {
-    color: $arrival-time;
+    color: $grayLight;
     font-size: 12px;
     margin-top: 8px;
   }
 }
 .comments {
-  color: $dark-grey;
+  color: $subtitle;
   font-size: 12px;
   text-align: left;
 }
@@ -288,9 +283,7 @@
 }
 
 .mark-btn-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  @include flex-center-algn-justify-end;
   flex: 1;
   @media (max-width: 992px) {
     min-width: 193px;
@@ -305,7 +298,7 @@
       visibility: hidden;
       width: 120px;
       background-color: $white;
-      border: 1px solid $c-gray-80;
+      border: 1px solid $grayLight;
       color: $black;
       text-align: center;
       border-radius: 6px;
@@ -323,7 +316,7 @@
         margin-left: -5px;
         border-width: 5px;
         border-style: solid;
-        border-color: $c-gray-80 transparent transparent transparent;
+        border-color: $grayLight transparent transparent transparent;
       }
     }
 
@@ -341,7 +334,7 @@
   height: 36px;
   padding: 11px 0 10px;
   border-radius: 100px;
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   cursor: pointer;
   margin-right: 10px;
   &:active {
@@ -358,11 +351,9 @@
   width: 124px;
   height: 36px;
   border-radius: 100px;
-  border: solid 1px $c-gray-87;
-  background-color: $c-gray-105;
-  align-items: center;
-  display: flex;
-  justify-content: center;
+  border: solid 1px $borderCol;
+  background-color: $whiteDeep;
+  @include flex-all-center;
   margin-right: 10px;
   cursor: pointer;
   img {
@@ -375,10 +366,8 @@
     font-size: 11px;
     letter-spacing: 0.66px;
     text-align: center;
-    color: $dark-blue;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    color: $secondary;
+    @include flex-space-between-cen-Algn;
   }
 }
 
@@ -388,20 +377,15 @@
 }
 
 .feedback {
-  display: flex;
-  align-items: center;
+  @include flex-item-center;
   .pdf {
-    width: 24px;
+    width: 10%;
   }
 }
 .feedback-service {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  width: calc(100% - 24px);
+  @include flex-wrap-center-algn;
   &__container {
-    display: flex;
-    align-items: center;
+    @include flex-item-center;
     padding: 2px 0;
     position: relative;
     &:hover {
@@ -411,43 +395,38 @@
     }
     &__label {
       font-size: 11px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
       letter-spacing: 0.66px;
       text-align: center;
       border-radius: 20px;
-      background-color: $list-popup;
+      background-color: #cfd9f5;
       padding: 4px 10px;
+      max-width: 100%;
       &__text {
-        color: $primary-purple;
+        color: $primary-cta;
         padding-top: 2px;
+        word-break: break-word;
+        white-space: normal;
+        text-align: left;
       }
     }
     &__comment {
       display: none;
       font-size: 11px;
-      font-weight: normal;
-      font-stretch: normal;
-      font-style: normal;
       letter-spacing: 0.66px;
       text-align: center;
       border-radius: 14px;
-      background-color: $list-popup;
+      background-color: $whiteDeep;
       padding: 3px;
     }
     &__extra {
       position: relative;
       .label {
         font-size: 11px;
-        font-weight: normal;
-        font-stretch: normal;
-        font-style: normal;
         line-height: 0;
         letter-spacing: 0.66px;
         text-align: center;
         text-decoration: underline;
-        color: $primary-purple;
+        color: $primary-cta;
       }
       &:hover {
         .service-list-popup {
@@ -459,13 +438,11 @@
 }
 
 .stay-booking-feedback {
-  display: flex;
-  align-items: end;
-  justify-content: center;
+  @include flex-all-center;
   padding: 0px;
   border-radius: 10px;
   position: relative;
-  background-color: $booking-feedback;
+  background-color: $primaryBlue;
   min-width: 18px;
   height: 18px;
   margin: 0 3px;
@@ -480,11 +457,11 @@
     width: 100%;
     top: 50%;
     font-size: 12px;
-    color: $dark-grey;
+    color: $subtitle;
     background-color: $white;
     left: 0%;
     padding: 7px;
-    box-shadow: 0px 0px 5px 0px $light-grey;
+    box-shadow: 0px 0px 5px 0px $grayLight;
     border-radius: 5px;
     display: none;
   }
@@ -493,18 +470,18 @@
     margin: 0 2px;
   }
   .number {
-    padding: 5px 0;
     color: $white;
     margin: 0 0px;
     text-align: center;
-    min-width: 20px;
+    min-width: 18px;
     border-radius: 50%;
-    font-size: $font8;
+    font-size: 8px;
+    height: 100%;
+    @include flex-all-center;
   }
 
   @media screen and (max-width: 1050px) {
     margin: 0;
-    margin-top: 7px;
     .feedback-icon {
       height: 12px;
     }
@@ -517,7 +494,7 @@
 }
 
 .service-list-popup {
-  border: 1px solid $c-gray-87;
+  border: 1px solid $borderCol;
   border-radius: 12px;
   padding: 5px;
   z-index: 1;
@@ -529,15 +506,14 @@
 }
 
 .others {
-  display: -webkit-box;
-  align-items: center;
+  @include flex-item-center;
 }
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
-  color: $primary-purple !important;
+  color: $primary-cta !important;
 }
 :host ::ng-deep .heading {
-  color: $dark-blue !important;
+  color: $secondary !important;
   font-size: 16px;
   font-weight: bold;
 }
@@ -547,9 +523,8 @@
 }
 
 .pull-right {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  @include flex-item-center;
+
   margin: 0 20px;
 }
 
@@ -560,14 +535,11 @@
 .labl > .image {
   height: 38px;
   width: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include flex-all-center;
   border-radius: 50%;
   img {
     height: 15px;
   }
-  // border: 2px solid $primary-purple;
 }
 .labl > input {
   /* HIDE RADIO */
@@ -585,7 +557,7 @@
 }
 
 .labl > input:checked + .image {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   img {
     filter: invert(0);
   }
@@ -604,8 +576,13 @@
   cursor: pointer;
 
   @media screen and (max-width: $L) {
-    @include font-size(12);
-    @include height(28px);
+    font-size: 12px;
+    height: 28px;
     align-items: center;
   }
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include tableCellPadding(0.3em);
 }

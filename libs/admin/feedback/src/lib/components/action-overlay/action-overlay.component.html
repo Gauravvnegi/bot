@@ -1,4 +1,9 @@
-<button (click)="handleButtonClick($event)" type="button" #overlayHost>
+<button
+  class="btn"
+  (click)="handleButtonClick($event)"
+  type="button"
+  #overlayHost
+>
   {{ rowDataStatus }}
   <ng-container *ngIf="isOpen; else opened">
     <mat-icon class="material-icons" matSuffix>chevron_left</mat-icon>

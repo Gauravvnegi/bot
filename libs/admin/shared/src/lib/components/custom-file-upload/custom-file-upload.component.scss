@@ -1,0 +1,123 @@
+@import 'main';
+
+.right-content {
+  flex-direction: column;
+}
+
+.d-flex {
+  display: flex;
+  gap: 20px;
+}
+
+.remove-image-button {
+  color: $darkRed;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.delete-icon {
+  color: $darkRed;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+}
+
+.content {
+  width: 324px;
+}
+
+.label {
+  margin-bottom: 12px;
+  opacity: 0.75;
+  color: $secondary2;
+  font-size: 16px;
+  letter-spacing: 0.96px;
+  font-weight: 500;
+}
+
+.description {
+  margin-top: 12px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: normal;
+  color: $secondary;
+}
+
+.upload-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.box {
+  width: 245px;
+  height: 187px;
+  border-radius: 6px;
+  background-color: #e5e5e5;
+  position: relative;
+}
+.upload-icon {
+  position: absolute;
+  top: 79px;
+  left: 103px;
+  right: 103.6px;
+  bottom: 79.2px;
+  width: 38.4px;
+  height: 28.8px;
+  object-fit: contain;
+}
+
+.hint {
+  margin-top: 10px;
+  font-family: Roboto;
+  font-size: 14px;
+  color: #9eaeb8;
+  word-wrap: break-word;
+}
+
+.upload-button {
+  margin-top: 15px;
+  max-width: 245px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn {
+  padding: 12px 25.6px 13px 26px;
+  border: solid 1px $primary-cta;
+  border-radius: 8px;
+  color: $primary-cta;
+  cursor: pointer;
+}
+
+.validation-error {
+  color: $lightRed;
+  font-size: 0.7em;
+  height: 1.5em;
+  position: absolute;
+}
+
+.banner {
+  background: #efeaff;
+  color: $primary-cta;
+  padding: 3px 2px;
+  font-size: 8px;
+  letter-spacing: 0.48px;
+  font-family: Roboto;
+  position: absolute;
+  top: 7px;
+  left: 10px;
+}
+
+.checkbox {
+  label {
+    color: $secondary2;
+    font-size: 14px;
+  }
+}
+
+.image-wrapper {
+  position: relative;
+}

@@ -8,8 +8,8 @@
   top: 0;
   left: 0;
   z-index: -1;
-  min-width: $full-width;
-  min-height: $full-width;
+  min-width: 100%;
+  min-height: 100%;
   @media only screen and (max-width: $M) {
     background: white;
   }
@@ -22,6 +22,9 @@
   background-color: white;
   box-shadow: 0px 3px 6px #0000001a;
   margin-bottom: 2px;
+  @media only screen and (min-width: $M) {
+    zoom: 0.8;
+  }
 }
 
 :host ::ng-deep .mat-horizontal-content-container {
@@ -31,7 +34,13 @@
   height: -webkit-fill-available;
   overflow-y: auto;
   @media only screen and (min-width: $M) {
-    padding: 2rem 20px 7rem;
+    padding: 2rem 20px 8rem;
+  }
+  @media screen and (min-width: $tablet) {
+    height: calc(100vh - 260px);
+    // position: relative;
+    border: 4px;
+    padding: 1rem;
   }
 }
 
@@ -40,30 +49,52 @@
 }
 
 :host ::ng-deep .main-template-button {
-  @include template-footer-button();
+  @include template-footer-button;
+
+  @media screen and (min-width: $tablet) {
+    padding: 10px;
+    position: fixed;
+    bottom: 73px;
+    left: 1rem;
+    background: white;
+    inset: auto 2rem 70px;
+    box-shadow: 0px -2px 4px #08070738;
+    z-index: 10;
+  }
+
+  @media screen and (max-width: $tablet) {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    z-index: 222;
+    left: 0;
+  }
   @media only screen and (max-width: $M) {
     hospitality-bot-temp000002-button {
-      width: $full-width;
+      width: 100%;
     }
     left: 0;
   }
 }
 
 :host ::ng-deep .container {
-  max-width: $full;
+  max-width: 100%;
   margin: 0 auto;
-  margin-bottom: $margin-large;
+  margin-bottom: 20px;
+
+  @media screen and (min-width: $tablet) {
+    margin-bottom: 60px;
+  }
 
   &__title {
-    font-size: $font25;
-    font-weight: $bold;
-    color: var(--accordian-font-color, $accordian-font-color);
+    @include title-header;
+    height: 30px;
   }
   @media only screen and (max-width: $M) {
-    margin: $margin-small;
+    margin: 10px;
     overflow: scroll;
     overflow-x: hidden;
-    border-radius: $border-radius-smaller;
+    border-radius: 5px;
     height: auto;
   }
   @media only screen and (max-width: $S) {
@@ -71,12 +102,14 @@
     overflow-x: inherit;
   }
   @media screen and (width: $M) {
-    padding-bottom: $padding30;
+    padding-bottom: 30px;
   }
   form {
     .mat-expansion-panel-header-title,
     .mat-expansion-panel-header-description {
       align-items: center;
+      padding-right: 16px !important;
+      margin-right: 0px !important;
     }
   }
 }
@@ -84,12 +117,12 @@
 ::ng-deep .mat {
   &-horizontal-stepper-header-container {
     padding: 0 4%;
-    max-width: $full;
+    max-width: 100%;
     margin: 0 auto;
   }
   &-step-label {
     font-weight: $bold;
-    font-size: $font16;
+    font-size: 16px;
     color: $white;
   }
   &-select-panel {
@@ -103,7 +136,7 @@
     width: 20px;
     height: 20px;
     font-size: $font-medium;
-    color: var(--accordian-icon-color, $accordian-icon-color) !important;
+    color: var(--title-header-font-color, $title-header-font-color) !important;
   }
   &-expansion-indicator::after {
     display: none !important;
@@ -113,7 +146,7 @@
     width: 30px;
   }
   &-expansion-panel {
-    margin-bottom: $margin-large !important;
+    margin-bottom: 20px !important;
     background: var(--accordian-background-color, $accordian-background-color);
     border-radius: 0 !important;
     box-shadow: none !important;
@@ -133,7 +166,7 @@
     }
   }
   &-expansion-panel-body {
-    padding: $padding-large $padding30 !important;
+    padding: 20px 30px !important;
     position: relative;
     margin: 0;
     border: 1px solid #d9d9d9;
@@ -144,5 +177,23 @@
     &::before {
       display: none;
     }
+  }
+}
+
+:host ::ng-deep mat-label,
+.mat-input-element {
+  font-family: 'Poppins-regular';
+}
+
+:host ::ng-deep .mat-expansion-panel-header {
+  @media screen and (min-width: $tablet) {
+    padding: 0px;
+  }
+}
+
+:host ::ng-deep .main-container {
+  @media screen and (min-width: $tablet) {
+    height: calc(100vh - 177.5px);
+    position: relative;
   }
 }

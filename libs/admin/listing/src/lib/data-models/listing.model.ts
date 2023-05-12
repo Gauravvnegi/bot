@@ -3,12 +3,14 @@ import { IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class ListTable {
   records: IList[];
+  total: number;
 
   deserialize(input) {
     this.records = new Array<IList>();
     input?.records?.forEach((list, i) =>
       this.records.push(new List().deserialize(list, i))
     );
+    this.total = input.total;
     return this;
   }
 }

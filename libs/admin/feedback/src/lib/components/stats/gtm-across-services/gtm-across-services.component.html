@@ -1,27 +1,32 @@
 <div class="container" click-allow (click)="openTableModal()">
-  <div class="title-container">
+  <div
+    class="title-container"
+    *skeleton="statistics == undefined; height: '37px'; width: '210px'"
+  >
     <div class="icon">
       <img
         [src]="feedbackConfig.images.gtm_across_services.url"
         [alt]="feedbackConfig.images.gtm_across_services.alt"
       />
     </div>
-    <div class="stat-title">
-      {{ 'gtm_across_services.title_text' | translate }}
-    </div>
-    <div class="info-icon">
-      <img
-        [src]="feedbackConfig.images.info.url"
-        [alt]="feedbackConfig.images.info.alt"
-      />
-      <div class="tooltip">
-        <span class="arrow"></span>
-        {{ 'gtm_across_services.tooltip_text' | translate }}
+    <hospitality-bot-custom-tooltip
+      [text]="'gtm_across_services.tooltip_text' | translate"
+    >
+      <div class="stat-title">
+        {{ 'gtm_across_services.title_text' | translate }}
       </div>
-    </div>
+    </hospitality-bot-custom-tooltip>
   </div>
   <div class="stat-val-container">
-    <div class="stat-val-wrapper">
+    <div
+      class="stat-val-wrapper"
+      *skeleton="
+        statistics == undefined;
+        height: '45px';
+        width: '94px';
+        margin: '0 0 10px 0'
+      "
+    >
       <div class="stat-value">{{ statistics?.score }}</div>
       <div>
         <div>
@@ -34,9 +39,10 @@
           >
             ({{ statistics?.comparisonPercent }}%)
             <img
+              class="arrow"
               [src]="
                 statistics?.comparisonPercent >= 0
-                  ? 'assets/svg/uparrow.svg'
+                  ? 'assets/svg/down-percentage.svg'
                   : 'assets/svg/down-percentage.svg'
               "
               alt="uparrow"
@@ -48,7 +54,10 @@
         </div>
       </div>
     </div>
-    <div class="stat-val-title">
+    <div
+      class="stat-val-title"
+      *skeleton="statistics == undefined; height: '16px'; width: '233px'"
+    >
       {{ 'gtm_across_services.total_arrival_text' | translate }}
     </div>
   </div>
@@ -64,14 +73,20 @@
       ></div>
     </div>
     <div class="progress-info">
-      <div class="progress-info-labels">
+      <div
+        class="progress-info-labels"
+        *skeleton="statistics == undefined; height: '18px'; width: '72px'"
+      >
         <span class="label"
           >{{ 'gtm_across_services.closed_text' | translate }}&nbsp;<strong>{{
             statistics?.CLOSED
           }}</strong></span
         >
       </div>
-      <div class="progress-info-labels">
+      <div
+        class="progress-info-labels"
+        *skeleton="statistics == undefined; height: '18px'; width: '72px'"
+      >
         <span class="label"
           >{{ 'gtm_across_services.remaining_text' | translate }}&nbsp;<b>{{
             statistics?.REMAINING

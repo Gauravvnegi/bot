@@ -12,3 +12,33 @@
 
 // components input
 @import 'components/input';
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: $whiteDeep;
+}
+::-webkit-scrollbar-thumb {
+  background: $grayLight;
+  border-radius: 10px;
+}
+
+@font-face {
+  font-family: 'Poppins-regular';
+  src: url('../../assets/fonts/Poppins-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Poppins-medium';
+  src: url('../../assets/fonts/Poppins-Medium.ttf');
+}
+
+@font-face {
+  font-family: 'Poppins-SemiBold';
+  src: url('../../assets/fonts/Poppins-SemiBold.ttf');
+}
+
+*:not(mat-icon, i) {
+  font-family: 'Poppins-regular';
+}

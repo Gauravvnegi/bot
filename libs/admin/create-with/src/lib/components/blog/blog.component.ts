@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from '@hospitality-bot/admin/environment';
+import { CookiesSettingsService } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-create-with-blog',
@@ -6,7 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./blog.component.scss'],
 })
 export class BlogComponent implements OnInit {
-  constructor() {}
+  onboardingUrl = `${environment.createWithUrl}/admin/blog`;
+  isLoaded: boolean;
 
-  ngOnInit(): void {}
+  constructor(private cookiesSettingService: CookiesSettingsService) {}
+
+  ngOnInit(): void {
+    this.cookiesSettingService.$isPlatformCookiesLoaded.subscribe((res) => {
+      this.isLoaded = res;
+    });
+  }
 }

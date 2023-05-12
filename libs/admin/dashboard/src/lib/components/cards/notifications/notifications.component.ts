@@ -28,7 +28,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   constructor(
     private statisticsService: StatisticsService,
     private snackbarService: SnackBarService,
-    private adminutilityService: AdminUtilityService,
+    private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private fb: FormBuilder
   ) {}
@@ -79,7 +79,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
    */
   getConversationStats(queries): void {
     const config = {
-      queryObj: this.adminutilityService.makeQueryParams(queries),
+      queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
     this.$subscription.add(
       this.statisticsService
@@ -89,17 +89,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
             (this.messageOverallAnalytics = new MessageOverallAnalytics().deserialize(
               response?.messageCounts,
               { comparison: false }
-            )),
-          ({ error }) =>
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'messages.error.some_thing_wrong',
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe()
+            ))
         )
     );
   }

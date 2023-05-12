@@ -1,0 +1,66 @@
+@import '../form.component.scss';
+
+.input {
+  display: flex;
+  gap: 1em;
+  width: 100%;
+  flex-wrap: wrap;
+  &__static {
+    margin-top: $label-gap;
+  }
+}
+
+.option-btn {
+  height: $form-input-height;
+  padding: 0.9em;
+  display: flex;
+  gap: 1em;
+  flex-grow: 1;
+
+  color: $primary-text-color;
+  font-size: inherit;
+  font-weight: 500;
+
+  border: 1px solid;
+  border-color: $border-color;
+  border-radius: 4px;
+
+  &__checkbox {
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__radio {
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+}
+
+.option-selected {
+  &__checkbox {
+    // outline: 2px solid;
+    // outline-color: $primary-form-color;
+    .checkbox {
+      opacity: 1;
+    }
+  }
+
+  &__radio {
+    background-color: $primary-form-color;
+    color: $white;
+  }
+}
+
+.checkbox {
+  height: 1.4em;
+  background: $border-color;
+  width: 1.4em;
+  border-radius: 2px;
+  opacity: 0.8;
+  &__img {
+    height: 100%;
+    width: 100%;
+  }
+}

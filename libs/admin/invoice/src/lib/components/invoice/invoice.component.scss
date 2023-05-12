@@ -1,0 +1,231 @@
+@import 'main';
+
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.form-block {
+  @include form-block;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  margin: 20px;
+}
+
+:host ::ng-deep hospitality-bot-navigation-header .nav-wrapper__sticky {
+  padding: 20px 42px 20px 32px;
+}
+
+.payment-form {
+  background-color: white;
+  box-shadow: $form-shadow;
+  border-radius: 5px;
+
+  &__header {
+    @include form-header;
+    padding: $form-padding-y $form-padding-x;
+    height: 74px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .delete-icon {
+      height: 30px;
+      cursor: pointer;
+    }
+  }
+
+  &__details {
+    .header {
+      background: $table-header;
+    }
+  }
+
+  &__amount {
+    padding-bottom: 72px;
+    font-family: Poppins;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.84px;
+    border-bottom: 1px solid #d9d9d9;
+
+    .py-row {
+      padding: 14px 5.5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &.invert {
+        background: #727272;
+        color: white;
+      }
+      &.stretch {
+        padding-right: 0px;
+      }
+
+      .span-block {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        width: 50%;
+        gap: 8px;
+        margin-right: 34px;
+      }
+      .refund-block {
+        display: flex;
+        align-items: center;
+        max-width: 26%;
+        margin: -18px 0 -7px;
+      }
+    }
+  }
+
+  &__note {
+    padding: 12.5px $form-padding-x $form-padding-y;
+  }
+}
+
+.input-field {
+  display: flex;
+  flex-basis: 35%;
+  gap: 15px;
+  align-items: center;
+}
+
+:host ::ng-deep tr {
+  hospitality-bot-button .button {
+    min-width: 35px;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+:host ::ng-deep .gst-btn {
+  .button {
+    padding: 0 !important;
+    min-width: 55px !important;
+  }
+}
+
+:host ::ng-deep .discount-field {
+  .main {
+    margin-top: 0px;
+  }
+}
+
+:host ::ng-deep .span-block {
+  .p-error {
+    width: max-content;
+    margin-left: -75px;
+    margin-bottom: 3px;
+  }
+}
+
+:host ::ng-deep .mat-menu-content {
+  padding: 0px;
+}
+
+:host ::ng-deep .p-datatable {
+  .p-datatable-thead {
+    tr > th {
+      background: transparent;
+    }
+  }
+  .p-checkbox {
+    width: 22px;
+    height: 21px;
+
+    .p-checkbox-box {
+      width: 100%;
+      height: 100%;
+      border-radius: 5px;
+      border: solid 1px #cdcdcd;
+      background: #fff;
+
+      &.p-highlight {
+        border: none;
+        background: $primary-cta;
+        .p-checkbox-icon:before {
+          top: 9px;
+          left: 4px;
+        }
+      }
+    }
+  }
+}
+
+:host ::ng-deep .form-accordion {
+  .acc-block {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .p-accordion {
+    .p-accordion-header-link {
+      @include form-header;
+      background: white;
+      &:hover {
+        background: #e8e2ff !important;
+      }
+      .p-accordion-header-text{
+        color: $primary-cta;
+      }
+    }
+    .p-accordion-tab.p-accordion-tab-active {
+      margin-bottom: 0rem;
+      .p-accordion-header-text {
+        color: red;
+      }      
+    }
+
+    .p-accordion-tab {
+      box-shadow: $form-shadow;
+
+    }
+
+    .p-accordion-content {
+      margin-top: -20px;
+    }
+
+    .p-accordion-content {
+      padding: 0;
+    }
+  }
+}
+
+.payment-method {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  .view-history-btn {
+    @include flex-item-center;
+  }
+}
+
+.line {
+  border-top: 2px solid black;
+  opacity: 0.25;
+}
+
+.discount-row td {
+  align-items: center;
+  border-top: hidden;
+  padding: 0 1rem 15px;
+}
+
+:host ::ng-deep .prefix-field .p-field .main {
+  margin-top: 0px;
+}
+
+.negative-amount {
+  color: red;
+}
+
+.details-block{
+  justify-content: space-between;
+}
+

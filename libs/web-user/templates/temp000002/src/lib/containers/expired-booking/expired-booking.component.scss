@@ -26,7 +26,7 @@
     .heading {
       font-size: 35px;
       font-weight: $bold;
-      margin: $margin-large 0;
+      margin: 20px 0;
       color: $stepper-font-color;
       @media only screen and (max-width: $M) {
         font-size: 25px;
@@ -35,10 +35,10 @@
     .sub_heading {
       font-size: 28px;
       font-weight: 500;
-      margin-bottom: $margin-large;
+      margin-bottom: 20px;
       color: $stepper-font-color;
       @media only screen and (max-width: $T) {
-        font-size: $font16;
+        font-size: 16px;
       }
     }
     &__note {
@@ -47,10 +47,10 @@
       min-width: 70%;
       justify-content: center;
       p {
-        margin-left: $margin-medium;
+        margin-left: 15px;
         color: $stepper-font-color;
       }
-      img{
+      img {
         filter: contrast(0.5);
       }
     }
@@ -58,8 +58,9 @@
 }
 
 :host ::ng-deep .next-button {
-  @include footer-next();
-  @media only screen and (max-width: $M) {
+  @include footer-next;
+  @media only screen and (max-width: $tablet) {
     width: 100vw !important;
   }
+  border-radius: 0%;
 }

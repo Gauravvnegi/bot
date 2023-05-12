@@ -2,9 +2,9 @@ export const assetConfig = {
   datatable: {
     title: 'Asset',
     limit: 5,
-    chipValue:{
-      all:'ALL'
-    }, 
+    chipValue: {
+      all: 'ALL',
+    },
     tabFilterItems: [
       {
         label: 'All',
@@ -13,7 +13,14 @@ export const assetConfig = {
         disabled: false,
         total: 0,
         chips: [
-          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+          {
+            label: 'All',
+            icon: '',
+            value: 'ALL',
+            total: 0,
+            isSelected: true,
+            type: 'default',
+          },
           {
             label: 'Active',
             icon: '',
@@ -28,7 +35,7 @@ export const assetConfig = {
             value: 'INACTIVE',
             total: 0,
             isSelected: false,
-            type: 'pending',
+            type: 'failed',
           },
         ],
         lastPage: 0,
@@ -40,7 +47,14 @@ export const assetConfig = {
         disabled: false,
         total: 0,
         chips: [
-          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+          {
+            label: 'All',
+            icon: '',
+            value: 'ALL',
+            total: 0,
+            isSelected: true,
+            type: 'default',
+          },
           {
             label: 'Active',
             icon: '',
@@ -55,7 +69,7 @@ export const assetConfig = {
             value: 'INACTIVE',
             total: 0,
             isSelected: false,
-            type: 'pending',
+            type: 'failed',
           },
         ],
         lastPage: 0,
@@ -67,7 +81,14 @@ export const assetConfig = {
         disabled: false,
         total: 0,
         chips: [
-          { label: 'All', icon: '', value: 'ALL', total: 0, isSelected: true },
+          {
+            label: 'All',
+            icon: '',
+            value: 'ALL',
+            total: 0,
+            isSelected: true,
+            type: 'default',
+          },
           {
             label: 'Active',
             icon: '',
@@ -82,7 +103,7 @@ export const assetConfig = {
             value: 'INACTIVE',
             total: 0,
             isSelected: false,
-            type: 'pending',
+            type: 'failed',
           },
         ],
         lastPage: 0,
@@ -92,37 +113,30 @@ export const assetConfig = {
       {
         field: 'name',
         header: 'Name',
-        isSort: true,
         sortType: 'number',
-        dynamicWidth: false,
       },
       {
         field: 'description',
         header: 'Description',
-        isSort: true,
         sortType: 'number',
-        dynamicWidth: false,
       },
       {
         field: 'type',
         header: 'Type',
-        isSort: true,
         sortType: 'string',
-        dynamicWidth: false,
       },
       {
         field: 'url',
         header: 'URL',
-        isSort: true,
         sortType: 'string',
-        dynamicWidth: false,
       },
       {
         field: 'active',
         header: 'Active',
-        isSort: false,
+        isSortDisabled: true,
         sortType: 'number',
-        dynamicWidth: true,
+
+        isSearchDisabled: true,
       },
     ],
   },

@@ -1,0 +1,162 @@
+<div
+  class="action-header"
+  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+  [formGroup]="tableFG"
+>
+  <div class="heading">{{ tableName }}</div>
+  <div class="action-wrapper">
+    <hospitality-bot-button
+      label="Create Site"
+      href="https://dev.createwith.botshot.ai/theme/select?userId={{
+        userId
+      }}"
+      target="_self"
+    ></hospitality-bot-button>
+  </div>
+</div>
+<div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
+
+<ng-container *ngIf="!totalRecords">
+  <div class="empty-view__wrapper">
+    <ng-container *ngTemplateOutlet="siteHeader"></ng-container>
+
+    <div class="empty-view">
+      <div class="empty-view__caption">
+        <img src="assets/images/no-sites.png" alt="no-site" />
+        <span>
+          Currently you do not have any website
+        </span>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="totalRecords">
+  <p-table
+    #dt
+    [styleClass]="tableConfig.styleClass"
+    [resizableColumns]="isResizableColumns"
+    [autoLayout]="isAutoLayout"
+    [loading]="loading"
+    [columns]="cols"
+    [value]="values"
+    [paginator]="isPaginator"
+    [rows]="rowsPerPage"
+    [showCurrentPageReport]="showCurrentPageReport"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [(first)]="first"
+    [totalRecords]="totalRecords"
+    [filterDelay]="0"
+    [selectionMode]="selectionMode"
+    [(selection)]="selectedRows"
+    (onRowSelect)="onRowSelect($event)"
+    (onRowUnselect)="onRowUnselect($event)"
+    (sortFunction)="customSort($event)"
+    [customSort]="isCustomSort"
+    (onFilter)="onDataFilter()"
+  >
+    <ng-template pTemplate="caption">
+      <div class="caption__wrapper">
+        <form [formGroup]="tableFG">
+          <ng-container *ngTemplateOutlet="siteHeader"></ng-container>
+          <hospitality-bot-filter-chips
+            *ngIf="isQuickFilters"
+            [chips]="filterChips"
+            (onChange)="toggleQuickReplyFilter($event)"
+          ></hospitality-bot-filter-chips>
+        </form>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+    </ng-template>
+    <!-- *******************************HEADER WITH SEARCH******************************* -->
+    <ng-template pTemplate="header" let-columns class="table_head">
+      <tr
+        hospitality-bot-table-header
+        [columns]="columns"
+        [showCheckbox]="isSelectable"
+        (search)="handleFieldSearch($event)"
+      ></tr>
+    </ng-template>
+    <!-- **************************************BODY********************************* -->
+    <ng-template
+      pTemplate="body"
+      let-rowData
+      let-columns="columns"
+      let-rowIndex="rowIndex"
+    >
+      <tr class="table-row" (click)="selectSite(rowData)">
+        <td class="table--checkbox" *ngIf="isSelectable">
+          <p-tableCheckbox
+            [value]="rowData"
+            [index]="rowIndex"
+            (click)="onCheckboxClicked($event)"
+          ></p-tableCheckbox>
+        </td>
+
+        <td>
+          <div class="thumbnail" *ngIf="rowData.thumbnail; else emptyCell">
+            <div class="img-wrapper">
+              <img [src]="rowData.thumbnail" alt="logo" />
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="primary-text" *ngIf="rowData.siteName; else emptyCell">
+            {{ rowData.siteName }}
+          </div>
+        </td>
+        <td>
+          <div
+            class="primary-text hide-text-overflow"
+            *ngIf="rowData.url; else emptyCell"
+          >
+            {{ rowData.url }}
+          </div>
+        </td>
+        <!-- <td>
+          <div class="primary-text" *ngIf="rowData.expiryDate; else emptyCell">
+            {{ rowData.expiryDate | date: 'mediumDate' }}
+          </div>
+        </td> -->
+
+        <td>
+          <div class="" *ngIf="rowData.status; else emptyCell">
+            <hospitality-bot-toggle-dropdown
+              [listItem]="getStatusList(rowData)"
+              (onClick)="handleStatus($event, rowData)"
+              [status]="rowData.status"
+              [disabled]="rowData.status === 'DELETE'"
+            >
+            </hospitality-bot-toggle-dropdown>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <p-paginator
+        #paginator
+        [rows]="rowsPerPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (onPageChange)="paginate($event)"
+        [currentPageReportTemplate]="reportTemplate"
+        showCurrentPageReport="true"
+      ></p-paginator>
+    </ng-template>
+  </p-table>
+</ng-container>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>
+
+<ng-template #siteHeader>
+  <div class="site-header">
+    <img src="assets/svg/website.svg" alt="website-icon" />
+    <span> Manage Site </span>
+  </div>
+</ng-template>

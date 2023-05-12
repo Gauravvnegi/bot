@@ -1,5 +1,22 @@
 <div class="popup__wrap">
   <div (click)="closeModal()" class="popup__wrap__close">&#10006;</div>
+  <div class="caption__wrapper">
+    <form [formGroup]="tableFG">
+      <div class="caption__wrapper--tabmenu">
+        <div class="header">
+          <p class="heading">{{ tableName }}</p>
+          <div class="action-wrapper">
+            <hospitality-bot-export-list
+              (onDocumentActions)="onDocumentActions()"
+              [documentTypes]="documentTypes"
+              [documentActionTypes]="documentActionTypes"
+            ></hospitality-bot-export-list>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
   <p-table
     #dt
     [styleClass]="tableConfig.styleClass"
@@ -8,7 +25,7 @@
     [loading]="loading"
     [columns]="cols"
     [value]="values"
-    [paginator]="isPaginaton"
+    [paginator]="isPaginator"
     [rows]="rowsPerPage"
     [showCurrentPageReport]="showCurrentPageReport"
     [rowsPerPageOptions]="rowsPerPageOptions"
@@ -22,239 +39,42 @@
     (onRowUnselect)="onRowUnselect($event)"
     (sortFunction)="customSort($event)"
     [customSort]="isCustomSort"
+    *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
   >
-    <ng-template pTemplate="caption">
+    <ng-template pTemplate="caption" [formGroup]="tableFG">
       <div class="caption__wrapper">
-        <form [formGroup]="tableFG">
-          <div class="caption__wrapper--tabmenu">
-            <div class="header">
-              <!-- <div class="header--text"> -->
-              <div>
-                <p class="heading">{{ tableName }}</p>
-              </div>
-              <div class="requestDataWrapper">
-                <div class="options">
-                  <div *ngIf="isActionButtons" class="icons">
-                    <img src="assets/svg/Download.svg" class="svg" />
-                    <img src="assets/svg/google-docs.svg" class="svg" />
-                    <img src="assets/svg/card.svg" class="svg" />
-                  </div>
-                  <div *ngIf="isActionButtons" class="seperator"></div>
-                  <div
-                    formGroupName="documentActions"
-                    class="dropdown--wrapper"
-                  >
-                    <p-dropdown
-                      class="export"
-                      [options]="documentActionTypes"
-                      formControlName="documentActionType"
-                    >
-                      <ng-template
-                        let-documentActionItem
-                        pTemplate="selectedItem"
-                      >
-                        <img src="assets/svg/Export.svg" />
-                        <span class="requestDataActionLabel">{{
-                          documentActionItem.label
-                        }}</span>
-                      </ng-template>
-                    </p-dropdown>
-                    <div class="divider"></div>
-                    <p-dropdown
-                      class="export"
-                      [options]="documentTypes"
-                      formControlName="documentType"
-                    >
-                      <ng-template
-                        let-documentTypeItem
-                        pTemplate="selectedItem"
-                      >
-                        <img src="assets/svg/CSV.svg" />
-                        <span class="requestDataActionLabel">{{
-                          documentTypeItem.label
-                        }}</span>
-                      </ng-template>
-                    </p-dropdown>
-                    <button class="go" (click)="onDocumentActions()">
-                      <mat-icon class="material-icons" matSuffix>east</mat-icon>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <!-- <p class="selected">2 record(s) are selected</p> -->
-            </div>
-            <div *ngIf="isTabFilters">
-              <hospitality-bot-tab-group
-                [listItems]="tabFilterItems"
-                [selectedIndex]="tabFilterIdx"
-                (selectedTabChange)="onSelectedTabFilterChange($event)"
-              ></hospitality-bot-tab-group>
-            </div>
-          </div>
-          <div
-            *ngIf="tabFilterItems[tabFilterIdx].chips.length"
-            class="caption__wrapper--buttons"
-          >
-            <!-- <button class="filter">
-                All
-              </button> -->
-            <div class="button__wrapper">
-              <mat-chip-list
-                multiple
-                #chipList
-                aria-label="Quick Reply selection"
-                formControlName="quickReplyActionFilters"
-              >
-                <mat-chip
-                  *ngFor="
-                    let quickReplyType of tabFilterItems[tabFilterIdx].chips;
-                    let quickReplyTypeIdx = index
-                  "
-                  selectable="true"
-                  [ngClass]="{
-                    'chipSelected status-selected-default':
-                      quickReplyType.isSelected,
-                    'status-opacity-pending status-text-pending':
-                      quickReplyType.type === 'Timeout',
-                    'status-opacity-initiated status-text-initiated':
-                      quickReplyType.type === 'Closed',
-                    'status-opacity-success status-text-success':
-                      quickReplyType.type === 'Pending',
-                    'status-default': quickReplyType.type === '',
-                    'status-selected-pending status-text-timeout':
-                      quickReplyType.type === 'Timeout' &&
-                      quickReplyType.isSelected,
-                    'status-selected-initiated status-text-closed':
-                      quickReplyType.type === 'Closed' &&
-                      quickReplyType.isSelected,
-                    'status-selected-completed status-text-pending':
-                      quickReplyType.type === 'Pending' &&
-                      quickReplyType.isSelected
-                  }"
-                  [selected]="isQuickReplyFilterSelected(quickReplyType)"
-                  (click)="
-                    toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType)
-                  "
-                >
-                  {{ quickReplyType.label }}
-                  <span *ngIf="quickReplyType.value !== 'ALL'"> (</span
-                  >{{ quickReplyType.total
-                  }}<span *ngIf="quickReplyType.value !== 'ALL'">)</span>
-                </mat-chip>
-              </mat-chip-list>
-              <!-- <img src="assets/svg/Filter-Icon.svg" /> -->
-            </div>
-          </div>
-        </form>
+        <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+
+        <hospitality-bot-filter-chips
+          *ngIf="isQuickFilters"
+          [chips]="tabFilterItems[tabFilterIdx].chips"
+          (onChange)="toggleQuickReplyFilter($event)"
+        ></hospitality-bot-filter-chips>
       </div>
     </ng-template>
 
+    <!-- *******************************EMPTY TABLE VIEW******************************* -->
     <ng-template pTemplate="emptymessage">
-      <p class="no-data-found">No data available in table</p>
+      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
     </ng-template>
 
+    <!-- *******************************HEADER WITH SEARCH******************************* -->
     <ng-template pTemplate="header" let-columns>
-      <tr>
-        <th class="requestDataTableHead" pResizableColumn>
-          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-        </th>
-        <th
-          class="table-data-head"
-          pResizableColumn
-          [pSortableColumn]="col.field"
-          *ngFor="let col of columns"
-        >
-          <div>
-            <p class="table-header-text">{{ col.header }}</p>
-            <p-sortIcon *ngIf="col.isSort" [field]="col.field"></p-sortIcon>
-          </div>
-        </th>
-      </tr>
-
-      <tr class="table-search-head">
-        <th class="table-search-head"></th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'itemCode')"
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange($event.target.value, 'confirmationNumber')
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange(
-                $event.target.value,
-                'guestDetails.primaryGuest.firstName'
-              )
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange(
-                $event.target.value,
-                'guestDetails.primaryGuest.email'
-              )
-            "
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'itemName')"
-            class="p-column-filter"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="
-              onFilterTypeTextChange($event.target.value, 'rooms.roomNumber')
-            "
-            class="p-column-filter"
-            disabled="true"
-          />
-        </th>
-        <th class="table-search-head">
-          <input
-            pInputText
-            type="text"
-            (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-            class="p-column-filter"
-            disabled="true"
-          />
-        </th>
-      </tr>
+      <tr
+        hospitality-bot-table-header
+        [columns]="columns"
+        [showCheckbox]="isSelectable"
+        (search)="handleFieldSearch($event)"
+      ></tr>
     </ng-template>
 
+    <!-- **************************************BODY********************************* -->
     <ng-template
       pTemplate="body"
       let-rowData
       let-columns="columns"
       let-rowIndex="rowIndex"
     >
-      <!-- [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" -->
       <tr class="data-table-row">
         <td class="table--checkbox">
           <p-tableCheckbox
@@ -281,7 +101,9 @@
           <p>{{ rowData.guestDetails.primaryGuest.getFullName() }}</p>
         </td>
         <td>
+          <a href="tel:{{rowData.guestDetails.primaryGuest.phoneNumber}}">
           <p>{{ rowData.guestDetails.primaryGuest.phoneNumber }}</p>
+          </a>
           <p class="email">{{ rowData.guestDetails.primaryGuest.email }}</p>
         </td>
         <td>
@@ -336,7 +158,29 @@
         [totalRecords]="totalRecords"
         [rowsPerPageOptions]="rowsPerPageOptions"
         (onPageChange)="paginate($event)"
+        [currentPageReportTemplate]="reportTemplate"
+        showCurrentPageReport="true"
       ></p-paginator>
     </ng-template>
   </p-table>
 </div>
+
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [content]="{
+      description: 'No pending requests from in-house guests.',
+      imageSrc: 'assets/images/empty-table-in-house.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+</ng-template>

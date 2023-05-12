@@ -10,5 +10,6 @@
     [label]="tab.total > 0 ? tab.label.concat(' (', tab.total, ')') : tab.label"
     [disabled]="tab.disabled"
   >
+    <div>{{ tab }}</div>
   </mat-tab>
 </mat-tab-group>

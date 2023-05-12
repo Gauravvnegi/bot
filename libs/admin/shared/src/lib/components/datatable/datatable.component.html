@@ -6,7 +6,7 @@
   [loading]="loading"
   [columns]="cols"
   [value]="values"
-  [paginator]="isPaginaton"
+  [paginator]="isPaginator"
   [rows]="rowsPerPage"
   [showCurrentPageReport]="showCurrentPageReport"
   [rowsPerPageOptions]="rowsPerPageOptions"
@@ -21,116 +21,44 @@
       <form [formGroup]="tableFG">
         <div class="caption__wrapper--tabmenu">
           <div class="header">
-            <!-- <div class="header--text"> -->
             <p class="heading">{{ tableName }}</p>
-            <!-- <p class="selected">2 record(s) are selected</p> -->
-            <div class="options">
-              <div *ngIf="isActionButtons" class="icons">
-                <img src="assets/svg/Download.svg" class="svg" />
-                <img src="assets/svg/google-docs.svg" class="svg" />
-                <img src="assets/svg/card.svg" class="svg" />
-              </div>
-              <div *ngIf="isActionButtons" class="seperator"></div>
-              <div formGroupName="documentActions" class="dropdown--wrapper">
-                <p-dropdown
-                  class="export"
-                  [options]="documentActionTypes"
-                  formControlName="documentActionType"
-                >
-                  <ng-template let-documentActionItem pTemplate="selectedItem">
-                    <img src="assets/svg/Export.svg" />
-                    <span class="databaseActionLabel">{{
-                      documentActionItem.label
-                    }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <div class="divider"></div>
-                <p-dropdown
-                  class="export"
-                  [options]="documentTypes"
-                  formControlName="documentType"
-                >
-                  <ng-template let-documentTypeItem pTemplate="selectedItem">
-                    <img src="assets/svg/CSV.svg" />
-                    <span class="databaseActionLabel">{{
-                      documentTypeItem.label
-                    }}</span>
-                  </ng-template>
-                </p-dropdown>
-                <button class="go" (click)="onDocumentActions()">
-                  <mat-icon class="material-icons" matSuffix>east</mat-icon>
-                </button>
-              </div>
+            <div class="action-wrapper">
+              <hospitality-bot-button label="Create"></hospitality-bot-button>
+              <hospitality-bot-export-list
+                [additionalActionItems]="additionalActionItems"
+                (onDocumentActions)="onDocumentActions()"
+                [documentTypes]="documentTypes"
+                [documentActionTypes]="documentActionTypes"
+              ></hospitality-bot-export-list>
             </div>
           </div>
-          <div *ngIf="isTabFilters">
-            <hospitality-bot-tab-group
-              [listItems]="tabFilterItems"
-            ></hospitality-bot-tab-group>
-          </div>
+
+          <hospitality-bot-tab-group
+            *ngIf="isTabFilters"
+            [listItems]="tabFilterItems"
+          ></hospitality-bot-tab-group>
         </div>
-        <div *ngIf="isQuickFilters" class="caption__wrapper--buttons">
-          <!-- <button class="filter">
-            All
-          </button> -->
-          <div class="button__wrapper">
-            <mat-chip-list
-              multiple
-              #chipList
-              aria-label="Quick Reply selection"
-              formControlName="quickReplyActionFilters"
-            >
-              <mat-chip
-                *ngFor="let quickReplyType of quickReplyTypes"
-                selectable="true"
-                [selected]="isQuickReplyFilterSelected(quickReplyType)"
-                (click)="toggleQuickReplyFilter(quickReplyType)"
-              >
-                {{ quickReplyType.label }}
-              </mat-chip>
-            </mat-chip-list>
-            <img src="assets/svg/Filter-Icon.svg" />
-          </div>
-        </div>
+        <hospitality-bot-filter-chips
+          *ngIf="isQuickFilters"
+          [chips]="filterChips"
+          (onChange)="toggleQuickReplyFilter($event)"
+        ></hospitality-bot-filter-chips>
       </form>
-      {{ tableFG.value | json }}
     </div>
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
-    <p class="no-data-found">No data available in table</p>
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
   </ng-template>
   <!-- *******************************HEADER WITH SEARCH******************************* -->
-  <ng-template pTemplate="header" let-columns>
-    <tr>
-      <th class="databaseTableHead" pResizableColumn>
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
-      <th
-        class="table-data-head"
-        pResizableColumn
-        [pSortableColumn]="col.field"
-        *ngFor="let col of columns"
-      >
-        <div>
-          <p>{{ col.header }}</p>
-          <p-sortIcon [field]="col.field"></p-sortIcon>
-        </div>
-      </th>
-    </tr>
-
-    <tr>
-      <th class="table-search-head"></th>
-      <th class="table-search-head">
-        <input
-          pInputText
-          type="text"
-          (input)="onFilterTypeTextChange($event.target.value, 'vin')"
-          placeholder="Search by Name"
-          class="p-column-filter"
-        />
-      </th>
-    </tr>
+  <ng-template pTemplate="header" let-columns #header>
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="isSelectable"
+      [showSearch]="isSearchable"
+      (search)="handleFieldSearch($event)"
+    ></tr>
   </ng-template>
   <!-- **************************************BODY********************************* -->
   <ng-template
@@ -143,18 +71,48 @@
       <td class="table--checkbox">
         <p-tableCheckbox [value]="rowData" [index]="rowIndex"></p-tableCheckbox>
       </td>
-      <td *ngFor="let col of columns">
-        {{ rowData[col.field] }}
+      <td>
+        <div class="cell-content">
+          {{ rowData.name }}
+        </div>
+      </td>
+      <td>
+        <div class="cell-content">
+          {{ rowData.date }}
+        </div>
+      </td>
+      <td>
+        <div class="cell-content">
+          {{ rowData.role }}
+        </div>
+      </td>
+      <td>
+        <div class="cell-content">
+          {{ rowData.status }}
+        </div>
+      </td>
+      <td>
+        <div class="cell-content">
+          <hospitality-bot-toggle-dropdown
+            (onClick)="handleStatus($event, rowData.name)"
+            [status]="rowData.status"
+            [listItem]="status"
+          >
+          </hospitality-bot-toggle-dropdown>
+        </div>
       </td>
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->
   <ng-template pTemplate="summary">
     <p-paginator
+      #paginator
       [rows]="rowsPerPage"
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="rowsPerPageOptions"
       (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
     ></p-paginator>
   </ng-template>
 </p-table>

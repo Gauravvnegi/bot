@@ -1,20 +1,12 @@
 <div
-  style="
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: bold;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: normal;
-    letter-spacing: 0.96px;
-    text-align: left;
-    color: #002046;
-  "
+  class="graphTitle"
+  *skeleton="data == undefined; height: '25px'; width: '75%'"
 >
   How is Guest to Meet & Closure Rate varying over a period of time ?
 </div>
 <div style="margin-top: 25px;">
   <canvas
+    *skeleton="data == undefined; height: '18vw'; width: '100%'"
     baseChart
     #lineChart
     [datasets]="lineGraph.chartData"
@@ -26,7 +18,15 @@
   >
   </canvas>
 </div>
-<div style="margin-top: 20px; display: flex;">
+<div
+  class="labelWrapper"
+  *skeleton="
+    data == undefined;
+    height: '30px';
+    width: '150px';
+    margin: '20px 0 0 0'
+  "
+>
   <ng-container *ngFor="let legend of legends; let legendIndex = index">
     <div class="stat-label" (click)="legendOnClick(legendIndex)">
       <input class="legends" type="checkbox" />

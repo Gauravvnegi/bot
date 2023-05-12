@@ -1,44 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'apps/admin/src/app/core/auth/services/auth.service';
-import { CookieService } from 'ngx-cookie-service';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { CookiesSettingsService } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-create-with-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
 })
-export class MainComponent implements OnInit {
-  constructor(
-    private _authService: AuthService,
-    private cookieService: CookieService
-  ) {}
+export class MainComponent implements OnInit, AfterViewInit, OnDestroy {
+  constructor(private cookiesSettingService: CookiesSettingsService) {}
 
   ngOnInit(): void {
-    this.initCookiesForPlatform();
+    this.cookiesSettingService.initCookiesForPlatform();
   }
 
-  initCookiesForPlatform() {
-    const keys = {
-      accessToken: this._authService.getTokenByName('x-access-token'),
-      accessRefreshToken: this._authService.getTokenByName(
-        'x-access-refresh-token'
-      ),
-      user: JSON.stringify({
-        id: '52b3ea00-6058-4fad-b7f5-a119d47e6f25',
-        firstName: 'Ajay',
-        email: 'abc@gmail.com',
-      }),
-      'x-userId': this._authService.getTokenByName('x-userId'),
-      websiteUrl: 'dev.createwith.io',
-    };
+  ngAfterViewInit(): void {
+    this.cookiesSettingService.afterEmbeddedFrameView();
+  }
 
-    Object.entries(keys).forEach(([name, value]) => {
-      this.cookieService.set(name, value, {
-        sameSite: 'None',
-        secure: true,
-        path: '/',
-        domain: 'botshot.ai',
-      });
-    });
+  ngOnDestroy(): void {
+    this.cookiesSettingService.onEmbeddedFrameViewDestroy();
   }
 }

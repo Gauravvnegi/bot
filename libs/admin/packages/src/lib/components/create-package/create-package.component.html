@@ -1,0 +1,96 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+  </hospitality-bot-navigation-header>
+  <div class="form-block" [formGroup]="useForm">
+    <div class="code">
+      <span class="code__label"> Code: </span>
+      <span class="code__hash"> {{ code }} </span>
+    </div>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="active"
+      label="Status:"
+    ></hospitality-bot-toggle-switch>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      label="Package Name"
+      maxLength="60"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-category
+      controlName="parentId"
+      class="half-width"
+      type="PACKAGE_CATEGORY"
+    >
+    </hospitality-bot-category>
+
+    <hospitality-bot-multi-select
+      class="full-width"
+      controlName="serviceIds"
+      label="Choose Service"
+      [options]="services"
+      [props]="{
+        isAsync: true,
+        createPrompt: '+ Add New Service',
+        errorMessages: {
+          required: 'This is a required field.',
+          minValue: 'Select minimum of two values'
+        }
+      }"
+      [loading]="loadingCategory"
+      (paginate)="loadMoreServices()"
+      (onSearch)="searchServices($event)"
+      [stopEmission]="noMoreServices"
+      (onCreate)="create('service')"
+    ></hospitality-bot-multi-select>
+    <hospitality-bot-custom-file-upload
+      class="upload"
+      formControlName="imageUrl"
+      [hotelId]="hotelId"
+    ></hospitality-bot-custom-file-upload>
+
+    <hospitality-bot-prefix-field
+      class="one-third-width"
+      [options]="currencies"
+      label="Original Price"
+      preControlName="currency"
+      postControlName="rate"
+      [defaultProps]="{ post: { type: 'number' } }"
+      [props]="{ errorMessages: errorMessages }"
+    >
+    </hospitality-bot-prefix-field>
+    <hospitality-bot-prefix-field
+      class="one-third-width"
+      [options]="discountType"
+      label="Discount Type"
+      preControlName="discountType"
+      postControlName="discountValue"
+      [defaultProps]="{ post: { type: 'number' } }"
+      [props]="{ errorMessages: errorMessages }"
+    >
+    </hospitality-bot-prefix-field>
+    <hospitality-bot-prefix-field
+      class="one-third-width"
+      [options]="currencies"
+      label="Discount Price"
+      preControlName="discountedCurrency"
+      postControlName="discountedPrice"
+      [defaultProps]="{ post: { type: 'number' } }"
+      [disabled]="true"
+    >
+    </hospitality-bot-prefix-field>
+    <hospitality-bot-select-group
+      class="half-width"
+      controlName="enableVisibility"
+      label="Visibility On"
+      [options]="visibilities"
+      fieldType="checkbox"
+    ></hospitality-bot-select-group>
+    <hospitality-bot-button
+      class="create-btn"
+      [label]="packageId ? 'Update' : 'Create'"
+      (onClick)="handleSubmit()"
+    ></hospitality-bot-button>
+  </div>
+</div>

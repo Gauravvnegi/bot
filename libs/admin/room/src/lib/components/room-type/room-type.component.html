@@ -1,0 +1,164 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  ></hospitality-bot-navigation-header>
+  <form [formGroup]="useForm">
+    <div class="room-info-wrapper">
+      <div class="header">Room Information</div>
+      <hr />
+      <div class="room-info-form-wrapper">
+        <div class="room-type-name">
+          <hospitality-bot-input
+            controlName="name"
+            label="Room Type Name"
+          ></hospitality-bot-input>
+        </div>
+        <div class="file-upload-wrapper">
+          <hospitality-bot-custom-file-upload
+            formControlName="imageUrls"
+            label="Image"
+            description="Mandatory to add at least 1 image"
+            [limit]="4"
+            [hotelId]="hotelId"
+            path="static-content/room-types"
+          ></hospitality-bot-custom-file-upload>
+        </div>
+        <div class="room-des">
+          <p>Room Description</p>
+          <hospitality-bot-template-editor
+            [parentFG]="useForm"
+            [name]="'description'"
+            [height]="250"
+          ></hospitality-bot-template-editor>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-pricing-wrapper">
+      <div class="header">Services</div>
+      <hr />
+      <div class="room-services-wrapper">
+        <hospitality-bot-custom-select
+          label="Complimentary Services"
+          description="This is a free of cost services"
+          formControlName="complimentaryAmenities"
+          [itemList]="compServices"
+          (viewAll)="saveRoomTypeData('COMPLIMENTARY')"
+          [noRecordsAction]="noRecordAction"
+        ></hospitality-bot-custom-select>
+        <div class="paid-services">
+          <hospitality-bot-custom-select
+            label="Paid Services"
+            description="Do not forget to add this cost in addition to the room cost"
+            formControlName="paidAmenities"
+            [itemList]="paidServices"
+            (viewAll)="saveRoomTypeData('PAID')"
+            [noRecordsAction]="noRecordAction"
+          ></hospitality-bot-custom-select>
+        </div>
+      </div>
+    </div>
+    <div class="room-pricing-wrapper">
+      <div class="header">Room Pricing</div>
+      <hr />
+      <div class="room-pricing-form-wrapper">
+        <div class="input-fields">
+          <hospitality-bot-prefix-field
+            preControlName="currency"
+            postControlName="originalPrice"
+            label="Base Price"
+            [options]="currencies"
+            [props]="inputValidationProps"
+            [defaultProps]="{ post: { type: 'number' } }"
+          ></hospitality-bot-prefix-field>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-prefix-field
+            preControlName="variablePriceCurrency"
+            postControlName="variableAmount"
+            label="Variable Price"
+            [options]="currencies"
+            [props]="{ errorMessages: inputValidationProps.errorMessages }"
+            [defaultProps]="{
+              post: {
+                type: 'number',
+                additionalInfo: 'Price per additional adult'
+              }
+            }"
+          ></hospitality-bot-prefix-field>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-prefix-field
+            preControlName="discountType"
+            postControlName="discountValue"
+            label="Discount Type"
+            [options]="discountTypes"
+            [props]="inputValidationProps"
+            [defaultProps]="{ post: { type: 'number' } }"
+          ></hospitality-bot-prefix-field>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-prefix-field
+            preControlName="discountedPriceCurrency"
+            postControlName="discountedPrice"
+            label="Discounted Price"
+            [options]="currencies"
+            [defaultProps]="{ post: { type: 'number' } }"
+          ></hospitality-bot-prefix-field>
+        </div>
+      </div>
+    </div>
+    <div class="room-pricing-wrapper">
+      <div class="header">Room Occupancy</div>
+      <hr />
+      <div class="room-pricing-form-wrapper">
+        <div class="input-fields">
+          <hospitality-bot-input
+            controlName="maxOccupancy"
+            label="Max Occupancy"
+            [props]="inputValidationProps"
+          ></hospitality-bot-input>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-input
+            controlName="maxChildren"
+            label="Max Children"
+            [props]="inputValidationProps"
+          ></hospitality-bot-input>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-input
+            controlName="maxAdult"
+            label="Max Adult"
+            [props]="inputValidationProps"
+          ></hospitality-bot-input>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-input
+            controlName="area"
+            label="Room Area"
+            [props]="{
+              errorMessages: inputValidationProps.errorMessages,
+              type: 'number',
+              subtitle: 'Sq. Ft'
+            }"
+          ></hospitality-bot-input>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="footer-buttons">
+    <hospitality-bot-button
+      label="Reset All"
+      (onClick)="resetForm()"
+      variant="outlined"
+      severity="reset"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      [label]="roomTypeId ? 'Update' : 'Create'"
+      (onClick)="submitForm()"
+      [isLoading]="loading"
+    ></hospitality-bot-button>
+  </div>
+</div>

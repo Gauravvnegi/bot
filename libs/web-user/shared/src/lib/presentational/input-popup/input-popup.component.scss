@@ -1,9 +1,7 @@
 @import 'main';
 
 .popup__wrapper {
-  position: relative;
   width: 30rem !important;
-  min-height: 40vh !important;
   .cross {
     position: absolute;
     right: 10px;
@@ -18,13 +16,12 @@
     @media screen and (max-width: 500px) {
       right: -15px;
       top: 0px;
-      margin:0 $padding5;
+      margin: 0 5px;
     }
   }
   &--heading {
     white-space: nowrap;
-    margin: $margin-medium 0px;
-    // margin-bottom: 25px;
+    margin: 15px 0px;
     font-weight: $bolder;
     padding-left: 1rem;
     @media screen and (max-width: 500px) {
@@ -32,9 +29,6 @@
     }
   }
   @media screen and (max-width: 500px) {
-    // padding: 0 $padding-large;
-
-    min-height: 40vh;
     box-sizing: border-box;
   }
 }
@@ -51,7 +45,7 @@
 }
 
 :host ::ng-deep .mat-form-field {
-  width: $full-width;
+  width: 100%;
 }
 
 :host ::ng-deep .mat-form-field-infix > textarea::placeholder {
@@ -59,7 +53,10 @@
 }
 
 :host ::ng-deep .mat-form-field-infix > textarea {
-  min-height: 60px;
+  min-height: 100px;
+  @media screen and (max-width: 600px) {
+    min-height: 150px;
+  }
 }
 
 :host ::ng-deep .mat-form-field-infix {
@@ -67,12 +64,12 @@
 }
 
 :host ::ng-deep mat-label {
-  font-size: $font16;
+  font-size: 16px;
   font-weight: $bold;
 }
 
 .user-button {
-  @include flex-justify-center();
+  @include flex-justify-center;
   margin-top: 1rem;
   @media screen and (max-width: 600px) {
     margin-top: 0;
@@ -80,7 +77,7 @@
 }
 
 :host ::ng-deep .mat-raised-button {
-  @include primary-button();
+  @include primary-button;
 }
 :host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
   margin-left: 1rem;
@@ -90,7 +87,14 @@
 @media screen and (max-width: 650px) {
   .popup__wrapper {
     position: relative;
-    width: $full !important;
-    min-height: 50vh !important;
+    width: 100% !important;
+  }
+}
+
+:host::ng-deep {
+  textarea {
+    &::placeholder {
+      font-size: 16px !important;
+    }
   }
 }

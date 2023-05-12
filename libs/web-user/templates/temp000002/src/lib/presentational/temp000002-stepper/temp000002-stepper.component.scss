@@ -15,6 +15,35 @@
   );
 }
 
+:host ::ng-deep .step-completed.mat-step-header {
+  .mat-step-icon {
+    background: var(
+      --stepper-completed-color,
+      $stepper-completed-color
+    ) !important;
+  }
+}
+:host ::ng-deep .step-pending.mat-step-header {
+  .mat-step-icon {
+    background: var(--stepper-pending-color, $stepper-pending-color) !important;
+  }
+}
+:host ::ng-deep .step-active.mat-step-header {
+  .mat-step-icon {
+    background: var(--stepper-active-color, $stepper-active-color) !important;
+  }
+}
+
+:host ::ng-deep .mat-step-header {
+  .mat-step-icon {
+    background: var(--stepper-active-color, $stepper-active-color) !important;
+  }
+  .mat-step-label {
+    color: var(--stepper-completed-color, $stepper-completed-color) !important;
+    font-family: 'Poppins-regular';
+  }
+}
+
 :host ::ng-deep.mat-step-icon-state-number > div > span {
   color: var(--stepper-icon-number-font-color, $stepper-icon-number-font-color);
 }
@@ -65,6 +94,7 @@
   .flex-wrapper {
     .text {
       color: var(--stepper-font-color, $stepper-font-color);
+      text-shadow: -1px 0 #ffffff, 0 1px #ffffff, 1px 0 #ffffff, 0 -1px #ffffff;
     }
   }
 
@@ -74,6 +104,7 @@
 
   .percentage {
     fill: var(--stepper-font-color, $stepper-font-color);
+    text-shadow: -1px 0 #ffffff, 0 1px #ffffff, 1px 0 #ffffff, 0 -1px #ffffff;
   }
 }
 
@@ -83,10 +114,10 @@
   }
 }
 
-
-
-:host ::ng-deep{
-  .mat-step-header.cdk-keyboard-focused, .mat-step-header.cdk-program-focused, .mat-step-header:hover{
+:host ::ng-deep {
+  .mat-step-header.cdk-keyboard-focused,
+  .mat-step-header.cdk-program-focused,
+  .mat-step-header:hover {
     background-color: transparent;
   }
 }

@@ -19,7 +19,7 @@ import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import * as FileSaver from 'file-saver';
 import { analytics } from '@hospitality-bot/admin/shared';
-import { TranslateService } from '@ngx-translate/core';
+import { ChipType } from '../../constant/datatable';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-datatable',
@@ -97,43 +97,43 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
-          this.values = new InhouseTable().deserialize(data).records;
-          //set pagination
-          this.totalRecords = data.total;
-          this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+          this.setRecords(data);
           if (this.tabFilterItems[this.tabFilterIdx].chips.length === 1)
             this.addQuickReplyFilter(data.entityStateCounts, this.totalRecords);
           else this.updateQuickReplyFilterCount(data.entityStateCounts);
-          this.loading = false;
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
   }
 
+  setRecords(data): void {
+    this.values = new InhouseTable().deserialize(data).records;
+    this.updateTabFilterCount(data?.entityTypeCounts, data.total);
+    this.updateTotalRecords();
+    this.loading = false;
+  }
+
   addQuickReplyFilter(entityStateCounts, total) {
-    this.tabFilterItems[this.tabFilterIdx].chips[0].total = total;
-    Object.keys(entityStateCounts).forEach((key) =>
+    this.tabFilterItems[this.tabFilterIdx].chips[0].total = Number(
+      Object?.values(entityStateCounts)?.reduce(
+        (a: number, b: number) => a + b,
+        0
+      )
+    );
+    Object.keys(entityStateCounts).forEach((key) => {
       this.tabFilterItems[this.tabFilterIdx].chips.push({
         label: key,
         icon: '',
         value: key,
         total: entityStateCounts[key],
         isSelected: false,
-        type: key,
-      })
-    );
+        type: ChipType[key],
+      });
+    });
   }
 
   getSelectedQuickReplyFilters() {
@@ -142,22 +142,6 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
       .map((item) => ({
         actionType: item.value,
       }));
-  }
-
-  updateTabFilterCount(countObj, currentTabCount) {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => (tab.total = countObj[tab.value]));
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  updateQuickReplyFilterCount(countObj) {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach(
-        (chip) => (chip.total = countObj[chip.value])
-      );
-    }
   }
 
   fetchDataFrom(
@@ -190,25 +174,11 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
         (data) => {
-          this.values = new InhouseTable().deserialize(data).records;
-          data.entityStateCounts &&
-            this.updateQuickReplyFilterCount(data.entityStateCounts);
-          //set pagination
-          this.totalRecords = data.total;
-          //check for update tabs and quick reply filters
-          this.loading = false;
+          this.setRecords(data);
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -217,27 +187,6 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   updatePaginations(event) {
     this.first = event.first;
     this.rowsPerPage = event.rows;
-  }
-
-  toggleQuickReplyFilter(quickReplyTypeIdx, quickReplyType) {
-    if (quickReplyTypeIdx === 0) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        if (chip.value !== 'ALL') chip.isSelected = false;
-      });
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].chips[0].isSelected = false;
-      this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected = !this.tabFilterItems[this.tabFilterIdx].chips[
-        quickReplyTypeIdx
-      ].isSelected;
-    }
-    this.changePage(0);
   }
 
   customSort(event: SortEvent) {
@@ -280,15 +229,6 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.loading = false;
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
         }
       )
     );
@@ -301,52 +241,37 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     };
     this.analyticsService
       .updatePreArrivalRequest(data.id, requestData)
-      .subscribe(
-        (response) => {
-          this.loadInitialData(
-            [
-              ...this.globalQueries,
-              {
-                order: 'DESC',
-                entityType: this.entityType,
-                packageId: this.packageId,
-              },
-              ...this.getSelectedQuickReplyFilters(),
-            ],
-            false,
+      .subscribe((response) => {
+        this.loadInitialData(
+          [
+            ...this.globalQueries,
             {
-              offset: this.tempFirst,
-              limit: this.tempRowsPerPage
-                ? this.tempRowsPerPage
-                : this.rowsPerPage,
-            }
-          );
-          this.snackbarService.openSnackBarWithTranslate(
-            {
-              translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
-              priorityMessage: 'Request status updated',
+              order: 'DESC',
+              entityType: this.entityType,
+              packageId: this.packageId,
             },
-            '',
-            { panelClass: 'success' }
-          );
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
-      );
+            ...this.getSelectedQuickReplyFilters(),
+          ],
+          false,
+          {
+            offset: this.tempFirst,
+            limit: this.tempRowsPerPage
+              ? this.tempRowsPerPage
+              : this.rowsPerPage,
+          }
+        );
+        this.snackbarService.openSnackBarWithTranslate(
+          {
+            translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
+            priorityMessage: 'Request status updated',
+          },
+          '',
+          { panelClass: 'success' }
+        );
+      });
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
-    // value = value && value.trim();
-    // this.table.filter(value, field, matchMode);
-
     if (!!value && !this.isSearchSet) {
       this.tempFirst = this.first;
       this.tempRowsPerPage = this.rowsPerPage;

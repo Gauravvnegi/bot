@@ -1,23 +1,25 @@
 import { get, set } from 'lodash';
-import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { IDeserializable, UserResponse } from '@hospitality-bot/admin/shared';
+import { tokensConfig } from '../constants/common';
 
 export class UserConfig implements IDeserializable {
   id: string;
   firstName: string;
   lastName: string;
-  products;
-  permissionConfigs;
+  products: { label: string; value: string }[];
+  permissionConfigs: UserResponse['permissions'];
   departments;
-  jobTitle;
-  brandName;
-  branchName;
-  cc;
-  phoneNumber;
-  email;
-  profileUrl;
-  timezone;
-  hotelAccess;
-  deserialize(input) {
+  jobTitle: string;
+  brandName: string;
+  branchName: string;
+  siteName: string;
+  cc: string;
+  phoneNumber: string;
+  email: string;
+  profileUrl: string;
+  timezone: string;
+
+  deserialize(input: UserResponse) {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
@@ -32,10 +34,17 @@ export class UserConfig implements IDeserializable {
       set({}, 'email', get(input, ['email']))
     );
 
-    const length = input?.hotelAccess?.chains[0]?.hotels.length;
-    this.brandName = input?.hotelAccess?.chains[0]?.id;
-    this.branchName = input?.hotelAccess?.chains[0]?.hotels[length - 1]?.id;
-    this.timezone = input?.hotelAccess?.chains[0]?.hotels[length - 1]?.timezone;
+    this.brandName = localStorage.getItem(tokensConfig.brandId);
+    this.branchName = localStorage.getItem(tokensConfig.hotelId);
+    this.siteName = localStorage.getItem(tokensConfig.siteId);
+
+    const brands =
+      input.sites?.find((item) => item.id === this.siteName)?.brands ??
+      input.hotelAccess?.brands;
+
+    this.timezone = brands
+      ?.find((item) => item.id === this.brandName)
+      ?.hotels?.find((item) => item.id === this.branchName)?.timezone;
 
     this.products = this.departments.map(({ productLabel, productType }) => ({
       label: productLabel,
@@ -119,6 +128,37 @@ export class Department {
       set({}, 'departmentLabel', get(input, ['departmentLabel'], '')),
       set({}, 'department', get(input, ['department'], 'Hotel Department'))
     );
+    return this;
+  }
+}
+
+export class Hotels {
+  records: Hotel[];
+  total: number;
+  deserialize(chains: any[]) {
+    this.records = chains.map((item) => new Hotel().deserialize(item));
+    this.total = chains?.length ?? 0;
+    return this;
+  }
+}
+
+export class Hotel {
+  id: string;
+  thumbnail: string;
+  bgColor: string;
+  name: string;
+  url: string;
+  expiry: number;
+  status: string;
+
+  deserialize(input) {
+    this.id = input.id;
+    this.name = input.name;
+    this.thumbnail = input.logo;
+    this.bgColor = input.bgColor;
+    this.url = input.domain;
+    this.expiry = input.expiry;
+    this.status = 'published';
     return this;
   }
 }

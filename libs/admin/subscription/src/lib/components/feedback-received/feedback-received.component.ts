@@ -95,17 +95,7 @@ export class FeedbackReceivedComponent implements OnInit, OnDestroy {
         (resposne) => {
           this.graphData = new FeedbackReceived().deserialize(resposne);
           this.initGraphData();
-        },
-        ({ error }) =>
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe()
+        }
       )
     );
   }

@@ -143,16 +143,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
             this.loading = false;
           },
           ({ error }) => {
-            this.loading = false;
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: 'message.error.exportCSV_fail',
-                  priorityMessage: error.message,
-                },
-                ''
-              )
-              .subscribe();
+            this.loading = false; 
           }
         )
     );
@@ -186,17 +177,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
                 .subscribe();
               this.updateDataSourceAfterDelete(ids);
             },
-            ({ error }) => {
-              this.snackbarService
-                .openSnackBarWithTranslate(
-                  {
-                    translateKey: 'message.error.contact_not_delete',
-                    priorityMessage: error.message,
-                  },
-                  ''
-                )
-                .subscribe();
-            }
+            ({ error }) => { }
           )
       );
     } else this.updateDataSourceAfterDelete(ids, this.selectedRows);
@@ -248,17 +229,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
                   (response) => {
                     this.handleContactAddEvent(response);
                   },
-                  ({ error }) => {
-                    this.snackbarService
-                      .openSnackBarWithTranslate(
-                        {
-                          translateKey: 'message.error.contact_not_add',
-                          priorityMessage: error.message,
-                        },
-                        ''
-                      )
-                      .subscribe();
-                  }
+                  ({ error }) => { }
                 )
             );
           } else this.handleContactAddEvent(response.data);
@@ -352,17 +323,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
               this.changePage(this.currentPage);
               this.updateContacts.emit();
             },
-            ({ error }) => {
-              this.snackbarService
-                .openSnackBarWithTranslate(
-                  {
-                    translateKey: 'message.error.contact_not_import',
-                    priorityMessage: error.message,
-                  },
-                  ''
-                )
-                .subscribe();
-            }
+            ({ error }) => {  }
           )
       );
     }

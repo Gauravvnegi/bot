@@ -8,17 +8,17 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px;
-    background-color: $c-gray-103;
+    background-color: $whiteDeep;
     .title-container {
-      @include flex-item-center();
+      @include flex-item-center;
     }
     .heading {
-      font-size: $font14;
+      font-size: 14px;
       color: $primary-black;
       font-weight: $medium;
     }
     .warning {
-      color: $primary-gray;
+      color: $grayMedium;
       margin-right: 20px;
     }
     .clear {
@@ -35,7 +35,7 @@
     padding: 20px 0px;
     p {
       color: $primary-black;
-      font-size: $font14;
+      font-size: 14px;
       margin: 3px 0;
       font-weight: $medium;
     }
@@ -45,7 +45,7 @@
       button {
         margin: 0 7px;
         color: $white;
-        font-size: $font12;
+        font-size: 12px;
         font-weight: 400;
         width: $popup-button-width;
         border-radius: 25px;
@@ -56,12 +56,12 @@
       }
       .cancel {
         background-color: $white;
-        margin-right: $margin20;
-        color: $primary-purple;
-        border: 1px solid $primary-purple;
+        margin-right: 20px;
+        color: $primary-cta;
+        border: 1px solid $primary-cta;
       }
       .accept {
-        background-color: $primary-purple;
+        background-color: $primary-cta;
       }
     }
   }

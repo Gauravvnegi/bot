@@ -13,13 +13,13 @@
     font: normal normal normal 12px/16px Roboto;
     background-color: $white;
     min-width: 160px;
-    border: 1px solid $c-gray-85;
+    border: 1px solid $borderCol;
     padding: 10px;
     top: 120%;
     left: -200%;
     color: $tooltip;
     border-radius: 5px;
-    box-shadow: 0px 0px 10px 0px $c-gray-85;
+    box-shadow: 0px 0px 10px 0px $borderCol;
     display: none;
     z-index: 1024;
     &__arrow {
@@ -29,7 +29,7 @@
       height: 0;
       border-left: 7px solid transparent;
       border-right: 7px solid transparent;
-      border-bottom: 10px solid $c-gray-85;
+      border-bottom: 10px solid $borderCol;
       left: 40%;
       transform: translate(-50%);
 
@@ -69,7 +69,7 @@
     &__analyticsHeading {
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0.96px;
-      color: $dark-blue;
+      color: $secondary;
       opacity: 1;
       @include flex-between-center;
       &__title {
@@ -96,7 +96,7 @@
           height: 60px;
           padding: 20px 15px;
           border-radius: 5px;
-          background-color: $stat-legend-bg;
+          background-color: $headingBg;
           width: 49.25%;
           margin: 10px 0;
           @include flex-between-center;
@@ -109,7 +109,7 @@
           position: relative;
           .label {
             font-weight: 500;
-            color: $quote-color;
+            color: $subtitle;
             font-size: 12px;
             line-height: 1.25;
             letter-spacing: 0.72px;
@@ -132,7 +132,7 @@
           }
           .value {
             font-weight: bold;
-            color: $dark-blue;
+            color: $secondary;
           }
         }
       }
@@ -146,7 +146,7 @@
       line-height: normal;
       letter-spacing: normal;
       text-align: center;
-      color: $c-gray-72;
+      color: $grayLight;
       align-self: flex-start;
     }
   }
@@ -172,18 +172,11 @@
   text-align: left;
   font: normal normal normal 12px/16px Roboto;
   letter-spacing: 0.72px;
-  color: $stat-legend-title;
+  color: $whiteDeep;
   opacity: 1;
 }
 
-// .stat-label-content {
-//   height: 16px;
-//   text-align: right;
-//   font: normal normal bold 12px/16px Roboto;
-//   letter-spacing: 0.72px;
-//   color: $vip-stat-label;
-//   opacity: 1;
-// }
+
 
 .legend-border {
   border-top: 1px solid;
@@ -201,8 +194,7 @@
   width: auto;
   height: 290px;
   padding: 0 10px;
-  // padding: 5px 10px;
-  // max-width: 100%;
+  
 }
 
 .stat-header {
@@ -220,7 +212,7 @@
   @include flex-justify-center;
   align-items: center;
   border-radius: 50%;
-  border: 2px solid $primary-purple;
+  border: 2px solid $primary-cta;
 }
 .labl > input {
   /* HIDE RADIO */
@@ -239,29 +231,14 @@
 }
 
 .labl > input:checked + .image {
-  background-color: $primary-purple;
+  background-color: $primary-cta;
   img {
     filter: grayscale(100%);
     height: 12px;
   }
 }
 
-// .labl > div > .circle {
-//   display: none;
-//   position: absolute;
-//   top: -9px;
-//   right: -9px;
-//   width: 17px;
-//   height: 17px;
-//   -webkit-border-radius: 25px;
-//   -moz-border-radius: 25px;
-//   border-radius: 25px;
-//   background: #4bda82;
-// }
 
-// .labl > input:checked + div > .circle {
-//   display: unset;
-// }
 
 .stat-val > input {
   opacity: 0;
@@ -276,10 +253,6 @@
   }
 }
 
-// .stat-label > input + span{ /* DIV STYLES */
-//     position: relative;
-//     cursor:pointer;
-// }
 
 .stat-val > input:checked + div {
   text-decoration: line-through;

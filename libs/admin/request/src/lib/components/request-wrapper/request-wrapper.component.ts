@@ -34,12 +34,16 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
       content: '',
       value: 'INHOUSE',
       disabled: false,
-      total: 0,
       chips: [],
     },
   ];
 
   tabFilterIdx = 0;
+
+  selectedIndex = 0;
+  buttonConfig = [
+    { button: true, label: 'Raise Request', icon: 'assets/svg/requests.svg' },
+  ];
 
   constructor(
     private _modal: ModalService,
@@ -83,7 +87,7 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       raiseRequestCompRef.componentInstance.onRaiseRequestClose.subscribe(
         (res) => {
-          if (res.status) this._requestService.refreshData.next(res);
+          if (res.load) this._requestService.refreshData.next(res.load);
           raiseRequestCompRef.close();
         }
       )

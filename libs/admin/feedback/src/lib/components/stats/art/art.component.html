@@ -1,23 +1,16 @@
 <div class="container">
-  <div class="title-container">
+  <hospitality-bot-custom-tooltip
+    [text]="'art.tooltip_text' | translate"
+    *skeleton="!dataLoaded; height: '25px'; width: '280px'"
+  >
     <div class="stat-title">
       {{ 'art.title_text' | translate }}
     </div>
-    <div class="info-icon">
-      <img
-        [src]="feedbackConfig.images.info.url"
-        [alt]="feedbackConfig.images.info.alt"
-      />
-      <div class="tooltip">
-        <span class="arrow"></span>
-        {{ 'art.tooltip_text' | translate }}
-      </div>
-    </div>
-  </div>
+  </hospitality-bot-custom-tooltip>
   <div class="graph">
     <canvas
+      *skeleton="!dataLoaded; height: '22vw'; width: '100%'"
       baseChart
-      *ngIf="!loading"
       chartType="bar"
       [datasets]="chart.datasets"
       [labels]="chart.labels"

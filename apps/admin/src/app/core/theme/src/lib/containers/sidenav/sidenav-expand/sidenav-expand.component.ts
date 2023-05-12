@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { trigger, transition, animate, style } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { routes } from '@hospitality-bot/admin/shared';
+import { GlobalFilterService } from '../../../services/global-filters.service';
 
 @Component({
   selector: 'hospitality-bot-sidenav-expand',
@@ -27,6 +28,8 @@ export class SidenavExpandComponent implements OnInit {
 
   @Output() navToggle = new EventEmitter<boolean>();
 
+  constructor(private globalFilterService: GlobalFilterService) {}
+
   ngOnInit(): void {}
 
   get routes() {
@@ -36,5 +39,6 @@ export class SidenavExpandComponent implements OnInit {
   toggleSideNav() {
     this.isExpanded = !this.isExpanded;
     this.navToggle.emit(this.isExpanded);
+    this.globalFilterService.selectedModule.next('');
   }
 }

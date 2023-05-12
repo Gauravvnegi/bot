@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -100,9 +99,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => this.setRecords(data),
-        ({ error }) =>
-          this.showMessage({ ...error, key: 'messages.error.loadData' }),
-        () => (this.loading = false)
+        ({ error }) => {
+          this.values = [];
+        },
+        () => {
+          this.loading = false;
+        }
       )
     );
   }
@@ -113,38 +115,12 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    */
   setRecords(data: Record<string, any>): void {
     this.values = new Campaigns().deserialize(data).records;
-    this.totalRecords = data.total;
     data.entityTypeCounts &&
-      this.updateTabFilterCount(data.entityTypeCounts, this.totalRecords);
+      this.updateTabFilterCount(data.entityTypeCounts, data.total);
     data.entityStateCounts &&
       this.updateQuickReplyFilterCount(data.entityStateCounts);
-  }
-
-  /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
-   */
-  updateTabFilterCount(countObj: EntityType, currentTabCount: number): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.total = countObj[tab.value];
-      });
-    } else {
-      this.tabFilterItems[this.tabFilterIdx].total = currentTabCount;
-    }
-  }
-
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj: EntityState): void {
-    if (countObj) {
-      this.tabFilterItems[this.tabFilterIdx].chips.forEach((chip) => {
-        chip.total = countObj[chip.value];
-      });
-    }
+    this.updateTotalRecords();
+    this.loading = false;
   }
 
   /**
@@ -169,16 +145,23 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
    * @param event active & inactive event check.
    * @param campaignId The campaign id for which status update action will be done.
    */
-  updateCampaignStatus(event: MatSlideToggleChange, campaignId: string): void {
+  updateCampaignStatus(status: boolean, userData): void {
     const data = {
-      active: event.checked,
+      active: status,
     };
     this.loading = true;
     this.$subscription.add(
       this.campaignService
-        .updateCampaignStatus(this.hotelId, data, campaignId)
+        .updateCampaignStatus(this.hotelId, data, userData.id)
         .subscribe(
           (_response) => {
+            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+            this.updateStatusAndCount(
+              statusValue(userData.status),
+              statusValue(status)
+            );
+            this.values.find((item) => item.id === userData.id).status = status;
+
             this.showMessage(
               {
                 key: 'messages.success.status_updated',
@@ -188,9 +171,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
             );
             this.changePage(this.currentPage);
           },
-          ({ error }) =>
-            this.showMessage({ ...error, key: 'messages.error.loadData' }),
-          () => (this.loading = false)
+          ({ error }) => () => (this.loading = false)
         )
     );
   }
@@ -311,8 +292,10 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         }
       ).subscribe(
         (data) => this.setRecords(data),
-        ({ error }) =>
-          this.showMessage({ ...error, key: 'messages.error.fetch' }),
+        ({ error }) => {
+          this.values = [];
+          this.showMessage({ ...error, key: 'messages.error.fetch' });
+        },
         () => (this.loading = false)
       )
     );
@@ -402,32 +385,9 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
             response,
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           ),
-        ({ error }) =>
-          this.showMessage({ ...error, key: 'messages.error.exportCSV' }),
-        () => (this.loading = false)
+        ({ error }) => (this.loading = false)
       )
     );
-  }
-
-  /**
-   * @function toggleQuickReplyFilter To handle the chip click for a tab.
-   * @param quickReplyTypeIdx The chip index.
-   */
-  toggleQuickReplyFilter(quickReplyTypeIdx: number): void {
-    this.tabFilterItems[
-      this.tabFilterIdx
-    ].chips[0].isSelected = this.tabFilterItems[this.tabFilterIdx].chips.reduce(
-      (value, chip, idx) => {
-        if (!quickReplyTypeIdx) {
-          chip.isSelected = chip.value === campaignConfig.chipValue.all;
-        } else if (quickReplyTypeIdx === idx) {
-          chip.isSelected = !chip.isSelected;
-        }
-        return value && !chip.isSelected;
-      },
-      true
-    );
-    this.changePage(0);
   }
 
   /**

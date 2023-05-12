@@ -19,7 +19,7 @@ import { StatisticsService } from '../../../services/feedback-statistics.service
 })
 export class GlobalNpsComponent implements OnInit, OnDestroy {
   @Input() globalFeedbackFilterType: string;
-  tabfeedbackType: string;
+  tabFeedbackType: string;
   feedbackConfig = feedback;
   globalNps: GlobalNPS;
   color = feedback.colorConfig.globalNPS;
@@ -106,7 +106,7 @@ export class GlobalNpsComponent implements OnInit, OnDestroy {
   listenForOutletChanged() {
     this.statisticsService.$outletChange.subscribe((response) => {
       if (response.status) {
-        this.tabfeedbackType = response.type;
+        this.tabFeedbackType = response.type;
         this.globalQueries.forEach((element) => {
           if (element.hasOwnProperty('entityIds')) {
             element.entityIds = this.statisticsService.outletIds;
@@ -166,16 +166,7 @@ export class GlobalNpsComponent implements OnInit, OnDestroy {
         this.initGraphData(this.globalNps);
       },
       ({ error }) => {
-        this.loading = false;
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: 'messages.error.some_thing_wrong',
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
+        this.loading = false; 
       }
     );
   }
@@ -190,14 +181,14 @@ export class GlobalNpsComponent implements OnInit, OnDestroy {
   }
 
   getFeedbackType() {
-    if (this.tabfeedbackType === undefined) {
+    if (this.tabFeedbackType === undefined) {
       return this.globalFeedbackFilterType === this.feedbackConfig.types.both
         ? feedback.types.stay
         : this.globalFeedbackFilterType;
     }
-    return this.tabfeedbackType === this.feedbackConfig.types.both
+    return this.tabFeedbackType === this.feedbackConfig.types.both
       ? feedback.types.transactional
-      : this.tabfeedbackType;
+      : this.tabFeedbackType;
   }
 
   ngOnDestroy() {

@@ -5,14 +5,14 @@
 }
 
 mat-icon {
-  @include mat-icon();
+  @include mat-icon;
 }
 
 .container__body--info {
   &-primary {
     width: 55%;
-    @include flex-space-between();
-    @include display-block-on-breakpoint($tab-size);
+    @include flex-space-between;
+    @include displayBlockOnBreakPoint($tab-size);
     @media only screen and (max-width: $tab-size) {
       width: 97%;
       padding-left: 5px;
@@ -36,9 +36,9 @@ mat-icon {
     }
   }
 
-  @include flex-space-between();
-  @include display-block-on-breakpoint($tab-size);
-  @include full-width-on-breakpoint($tab-size);
+  @include flex-space-between;
+  @include displayBlockOnBreakPoint($tab-size);
+  @include fullWidthOnBreakPoint($tab-size);
   @media only screen and (max-width: $tab-size) {
     flex-direction: column;
   }
@@ -46,7 +46,7 @@ mat-icon {
 
 :host ::ng-deep .mat-form-field-infix {
   @media only screen and (max-width: $tab-size) {
-    font-size: $font17;
+    font-size: 17px;
   }
 }
 
@@ -54,25 +54,21 @@ mat-icon {
   z-index: 22;
 }
 
-:host ::ng-deep .material-icons{
+:host ::ng-deep .material-icons {
   color: #7f7f7f;
-  // font-size: $font-medium;
   padding: 10px;
 }
 
-
-:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple{
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-ripple {
   background-color: $primary-blue;
 }
 
-:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-label{
+:host ::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
   color: $primary-blue;
 }
 
-:host ::ng-deep .mat-form-field.mat-focused .material-icons{
+:host ::ng-deep .mat-form-field.mat-focused .material-icons {
   color: $primary-blue;
 }
 
-// :host ::ng-deep .mat-form-field.mat-form-field-invalid .material-icons{
-//   color: #f44336;
-// }
+

@@ -11,53 +11,53 @@
       margin-bottom: 18px;
     }
     .tagline {
-      @include about-section-font($font-large, $large-spacing);
+      @include aboutSectionFont($font-large, 6px);
     }
     .heading {
-      @include about-section-font($heading-font, $small-spacing);
+      @include aboutSectionFont(35px, 2px);
     }
   }
   .precautions {
     background-color: $white;
     box-shadow: 0px 1px 5px 1px lightgray;
-    border-radius: $border-radius-medium;
+    border-radius: 15px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: $padding30 $padding-large;
+    padding: 30px 20px;
 
     .image_with_text {
-      @include flex-item-center();
+      @include flex-item-center;
 
       flex-direction: column;
-      width: $quarter-width;
+      width: 25%;
       .precuation__image {
         height: 200px;
         width: 200px;
         img {
-          height: $full-width;
-          width: $full-width;
-          border-radius: $half-width;
+          height: 100%;
+          width: 100%;
+          border-radius: 50%;
         }
       }
       .precaution__text {
-        margin-top: $margin-large;
+        margin-top: 20px;
         font-size: 30px;
         text-align: center;
         font-weight: $bold;
         color: $heading-black;
       }
       @media only screen and (max-width: 800px) {
-        width: $half-width;
+        width: 50%;
       }
     }
   }
   @media only screen and (max-width: $M) {
-    padding: $padding-small $padding30;
+    padding: 10px 30px;
     background-size: 100% 50%;
     .heading--text {
       p {
-        margin-bottom: $margin-small;
+        margin-bottom: 10px;
       }
       .tagline {
         font-size: $font-responsive-small;
@@ -67,7 +67,7 @@
       }
     }
     .precautions {
-      padding: $padding-small;
+      padding: 10px;
 
       .image_with_text {
         .precuation__image {
@@ -75,7 +75,7 @@
           width: 100px;
         }
         .precaution__text {
-          margin-top: $margin-small;
+          margin-top: 10px;
           font-size: $font-small;
         }
       }

@@ -1,0 +1,43 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header
+    heading="Preview Invoice"
+    [routes]="navRoutes"
+  >
+    <hospitality-bot-button
+      label="Email Invoice"
+      variant="outlined"
+      (onClick)="handleEmailInvoice()"
+    ></hospitality-bot-button>
+
+    <hospitality-bot-button
+      *ngIf="isInvoiceGenerated"
+      variant="text"
+      label="Download PDF"
+      (onClick)="handleDownload()"
+    ></hospitality-bot-button>
+
+    <p-splitButton
+      *ngIf="!isInvoiceGenerated"
+      label="Generate"
+      (onClick)="handleGenerateInvoice()"
+      [model]="items"
+    ></p-splitButton>
+  </hospitality-bot-navigation-header>
+
+  <ng-container *ngIf="!isLoading; else loader">
+    <iframe
+      class="iframe"
+      [src]="previewUrl | safeUrl"
+      height="100%"
+      width="100%"
+      allowFullScreen
+      title="Dashboard"
+    ></iframe>
+  </ng-container>
+
+</div>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>
+

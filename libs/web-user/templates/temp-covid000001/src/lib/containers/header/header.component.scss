@@ -8,7 +8,7 @@
   // position: relative;
   box-shadow: 0px 1px 7px 1px darkgray;
   z-index: 22;
-  @include flex-space-between();
+  @include flex-space-between;
   align-items: center;
   .option__menu {
     position: absolute;
@@ -31,7 +31,7 @@
     display: block;
   }
   .logo_and_menu {
-    @include flex-item-center();
+    @include flex-item-center;
     .change .bar1 {
       transform: rotate(-45deg) translate(-8px, 7px);
     }
@@ -45,14 +45,14 @@
     }
     .menu_button {
       display: none;
-      margin-right: $margin-medium;
+      margin-right: 15px;
       .bar1,
       .bar2,
       .bar3 {
         width: 35px;
         height: 5px;
         background-color: $primary-blue;
-        border-radius: $border-radius-smaller;
+        border-radius: 5px;
         margin: 6px 0;
         transition: 0.4s;
       }
@@ -64,7 +64,7 @@
       height: 45px;
       cursor: pointer;
       img {
-        height: $full-width;
+        height: 100%;
       }
       @media only screen and (max-width: $M) {
         height: 25px;
@@ -116,11 +116,11 @@
       cursor: pointer;
     }
     @media only screen and (max-width: $M) {
-      padding: 12px $padding-medium;
+      padding: 12px 15px;
       font-size: $font-responsive-smaller;
     }
   }
   @media only screen and (max-width: $M) {
-    padding: $padding-small;
+    padding: 10px;
   }
 }

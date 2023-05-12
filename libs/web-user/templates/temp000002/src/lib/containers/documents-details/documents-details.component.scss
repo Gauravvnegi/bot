@@ -1,43 +1,43 @@
 @import 'temp000002';
-.container{
+.container {
   height: inherit;
 }
-.documentDetaiBottomWrapper{
+.documentDetaiBottomWrapper {
   min-height: 289px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
   margin-top: 30px;
-  .doWrapper{
+  .doWrapper {
     min-height: 289px;
   }
-  .doHeading{
+  .doHeading {
     font: normal normal 600 20px/24px Montserrat;
     letter-spacing: 0px;
     color: #121212;
     opacity: 1;
     margin-bottom: 10px;
   }
-  .doText{
-    
+  .doText {
     font: normal normal normal 14px/20px Montserrat;
     letter-spacing: 0px;
     color: #121212;
     opacity: 0.6;
     margin: 5px 0;
   }
-  .doImg{
-    margin-right: 10px; height: 16px; margin-top: 7px;
+  .doImg {
+    margin-right: 10px;
+    height: 16px;
+    margin-top: 7px;
   }
-  .referenceDoc{
+  .referenceDoc {
     max-height: 289px;
-    .referenceImg{
+    .referenceImg {
       max-height: 289px;
       width: 100%;
     }
   }
 }
-
 
 .expand-icon {
   margin-left: auto;
@@ -45,10 +45,10 @@
 }
 
 mat-icon {
-  @include mat-icon();
+  @include mat-icon;
 }
 .citizen__info {
-  @include flex-space-between();
+  @include flex-space-between;
   &--country {
     width: 45%;
   }
@@ -57,13 +57,13 @@ mat-icon {
   }
 }
 .doc__upload__section {
-  @include flex-space-between();
+  @include flex-space-between;
   &--doc {
     width: 45%;
   }
 }
 .doc__warning_section {
-  margin-top: $margin-large;
+  margin-top: 20px;
   & mat-icon {
     transform: rotate(180deg);
     margin-right: 5px;
@@ -71,15 +71,12 @@ mat-icon {
   }
   & p {
     display: flex;
-    margin: $margin-small 0px;
+    margin: 10px 0px;
     color: $paragraph-color;
     align-items: center;
     & span {
-      margin-left: $margin-small;
+      margin-left: 10px;
     }
-    // @include MQ(M){
-    //   font-size: $font-responsive-smaller;
-    // }
   }
 }
 
@@ -87,19 +84,19 @@ mat-icon {
   .citizen__info {
     flex-direction: column;
     &--country {
-      width: $full-width;
+      width: 100%;
     }
     &--doc {
-      width: $full-width;
+      width: 100%;
     }
   }
   .doc__upload__section {
     flex-direction: column;
     &--doc {
-      width: $full-width;
+      width: 100%;
     }
     .extra-gap {
-      margin-bottom: $margin-large;
+      margin-bottom: 20px;
     }
   }
   .doc__warning_section {

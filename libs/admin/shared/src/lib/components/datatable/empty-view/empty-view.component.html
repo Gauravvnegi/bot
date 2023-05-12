@@ -1,0 +1,28 @@
+<td [attr.colspan]="noOfColumns + 1">
+  <div class="wrapper">
+    <div class="wrapper__default" *ngIf="variant === 'default'">
+      No Data Available
+    </div>
+    <div class="wrapper__standard" *ngIf="variant === 'standard'">
+      <div class="wrapper__standard_imageWrapper">
+        <img src="assets/svg/tableEmptyView.svg" alt="emptyViewImage" />
+      </div>
+      <div class="wrapper__standard_contentWrapper">
+        <p class="wrapper__standard_contentWrapper_heading">
+          Redirect visitors to the right page
+        </p>
+        <p class="wrapper__standard_contentWrapper_subText">
+          Changed a URL or want to send traffic somewhere else? Set up a 301
+          redirect so your visitors don’t get lost.
+        </p>
+        <div
+          class="redirectBtnWrapper"
+        >
+          <hospitality-bot-button
+            label="Redirect button"
+          ></hospitality-bot-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</td>

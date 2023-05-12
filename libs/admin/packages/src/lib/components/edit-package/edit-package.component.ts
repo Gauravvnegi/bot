@@ -14,6 +14,7 @@ import {
 } from '../../data-models/packageConfig.model';
 import { PackageService } from '../../services/package.service';
 import { ConfigService } from '@hospitality-bot/admin/shared';
+import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-type.model';
 
 @Component({
   selector: 'hospitality-bot-edit-package',
@@ -24,13 +25,9 @@ export class EditPackageComponent implements OnInit, OnDestroy {
   @Input() id: string;
 
   private $subscription: Subscription = new Subscription();
-
-  fileUploadData = {
-    fileSize: 3145728,
-    fileType: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
-  };
-
   currency: IpackageOptions[];
+  fileUploadType = FileUploadType;
+  pathToUploadFile = 'static-content/packages';
 
   packageType: IpackageOptions[] = [
     { key: 'Complimentary', value: 'Complimentary' },
@@ -88,6 +85,10 @@ export class EditPackageComponent implements OnInit, OnDestroy {
       autoAccept: [false],
       category: ['', [Validators.required]],
     });
+
+    this.packageForm.controls['type'].valueChanges.subscribe((res) => {
+      this.removeValidations(res);
+    });
   }
 
   disableForm(packageData): void {
@@ -103,6 +104,25 @@ export class EditPackageComponent implements OnInit, OnDestroy {
   enableEditableFields(): void {
     this.packageForm.get('status').enable();
     this.packageForm.get('rate').enable();
+  }
+
+  removeValidations(packageType: string) {
+    const currencyControl = this.packageForm.controls['currency'];
+    const rateControl = this.packageForm.controls['rate'];
+    if (packageType == 'Complimentary') {
+      currencyControl.clearValidators();
+      currencyControl.updateValueAndValidity();
+      rateControl.clearValidators();
+      rateControl.updateValueAndValidity();
+    } else {
+      currencyControl.setValidators([Validators.required]);
+      currencyControl.updateValueAndValidity();
+      rateControl.setValidators([
+        Validators.required,
+        Validators.pattern(Regex.DECIMAL_REGEX),
+      ]);
+      rateControl.updateValueAndValidity();
+    }
   }
 
   /**
@@ -227,21 +247,12 @@ export class EditPackageComponent implements OnInit, OnDestroy {
             )
             .subscribe();
           this.router.navigate([
-            '/pages/library/package/edit',
+            '/pages/library/packages/edit',
             this.hotelPackage.amenityPackage.id,
           ]);
           this.isSavingPackage = false;
         },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+        ({ error }) => { 
           this.isSavingPackage = false;
         }
       )
@@ -249,41 +260,7 @@ export class EditPackageComponent implements OnInit, OnDestroy {
   }
 
   redirectToPackages() {
-    this.router.navigate(['/pages/library/package']);
-  }
-
-  uploadFile(event): void {
-    const formData = new FormData();
-    formData.append('files', event.file);
-    this.$subscription.add(
-      this.packageService.uploadImage(this.hotelId, formData).subscribe(
-        (response) => {
-          this.packageForm.get('imageUrl').patchValue(response.fileDownloadUri);
-          this.packageForm.get('imageName').patchValue(response.fileName);
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.SUCCESS.PACKAGE_IMAGE_UPLOADED',
-                priorityMessage: 'Package image uploaded successfully.',
-              },
-              '',
-              { panelClass: 'success' }
-            )
-            .subscribe();
-        },
-        ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
-        }
-      )
-    );
+    this.router.navigate(['/pages/library/packages']);
   }
 
   updatePackage(): void {
@@ -317,21 +294,12 @@ export class EditPackageComponent implements OnInit, OnDestroy {
               )
               .subscribe();
             this.router.navigate([
-              '/pages/library/package/edit',
+              '/pages/library/packages/edit',
               this.hotelPackage.amenityPackage.id,
             ]);
             this.isSavingPackage = false;
           },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate(
-                {
-                  translateKey: `messages.error.${error?.type}`,
-                  priorityMessage: error?.message,
-                },
-                ''
-              )
-              .subscribe();
+          ({ error }) => { 
             this.isSavingPackage = false;
           }
         )

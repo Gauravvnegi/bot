@@ -66,11 +66,11 @@
 }
 
 .status--heading {
-  @include flex-space-between();
+  @include flex-space-between;
   align-items: center;
   padding: 5px;
 
-  margin: $margin-large 0;
+  margin: 20px 0;
   .heading {
     font-weight: $bolder;
     font-size: $font-large;
@@ -95,27 +95,26 @@
 }
 
 .section--heading {
-  padding: $padding-small;
-  background-color: $primary-blue;
+  padding: 10px;
   color: white;
-  border-radius: $border-radius-small;
+  border-radius: 10px;
   font-weight: $bolder;
   font-size: $font-large;
   margin: 25px 0;
   @media screen and (max-width: 700px) {
-    font-size: $font16;
+    font-size: 16px;
     margin: 15px 0;
   }
 }
 
 .section--content {
-  @include flex-space-between();
+  @include flex-space-between;
   margin-top: 15px !important;
 
-  margin: 0 $margin-medium;
+  margin: 0 15px;
   &--health {
     flex-direction: column;
-    margin: $margin-small $margin-medium;
+    margin: 10px 15px;
     &--message {
       height: 35px;
       font-size: larger;
@@ -135,7 +134,7 @@
       }
     }
     &--disclaimer {
-      margin-top: $margin-medium;
+      margin-top: 15px;
       color: #8d8d8d;
       @media screen and (max-width: 700px) {
         font-size: 12px;
@@ -170,9 +169,9 @@
       width: 43%;
     }
     &--title {
-      font-size: $font16;
+      font-size: 16px;
       color: #8d8d8d;
-      margin-bottom: $margin-medium;
+      margin-bottom: 15px;
       b {
         color: black;
       }
@@ -190,8 +189,8 @@
     &--value--container {
       font-size: $font-large;
       font-weight: $bolder;
-      margin-bottom: $margin-small;
-      @include flex-item-center();
+      margin-bottom: 10px;
+      @include flex-item-center;
       .element {
         margin-right: 35px;
         @media screen and (max-width: 700px) {
@@ -268,13 +267,19 @@
   .mat-checkbox-checked.mat-accent .mat-checkbox-background {
     background-color: #2186d4 !important;
   }
+  .section--content--label {
+    .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+    .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+      background-color: #2186d4 !important;
+    }
+  }
   .mat-checkbox-inner-container {
     width: 30px;
     height: 30px;
   }
 }
-@media (min-width:769px) and (max-width:850px) {
-  .section--content--container--value{
+@media (min-width: 769px) and (max-width: 850px) {
+  .section--content--container--value {
     font-size: 17px;
   }
 }

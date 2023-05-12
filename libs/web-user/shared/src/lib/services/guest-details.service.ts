@@ -152,16 +152,13 @@ export class GuestDetailsService extends ApiService {
     data.firstName = (value.firstName || '').trim();
     data.lastName = (value.lastName || '').trim();
     data.nameTitle = value.nameTitle;
-    if (value.type === GuestTypes.primary) {
+    if (value.role === GuestRole.kids || value.role === GuestRole.accompany) {
+      data.age = value.age;
+    } else {
       data.contactDetails = new ContactDetails();
       data.contactDetails.cc = value.nationality;
       data.contactDetails.emailId = (value.email || '').trim();
       data.contactDetails.contactNumber = value.mobileNumber;
-    } else if (
-      value.role === GuestRole.kids ||
-      value.role === GuestRole.accompany
-    ) {
-      data.age = value.age;
     }
     return data;
   }

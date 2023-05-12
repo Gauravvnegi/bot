@@ -1,0 +1,31 @@
+<p-accordion>
+  <p-accordionTab header="Social Media" [formGroup]="useForm">
+    <div class="form-block" formArrayName="socialPlatforms">
+      <div
+        class="half-width"
+        *ngFor="let platform of socialMediaControl.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <div class="social-media">
+          <img
+            [src]="socialMediaControl.controls[i].get('imageUrl').value"
+            alt="img"
+            class="facebook"
+          />
+          <hospitality-bot-input
+            controlName="redirectUrl"
+            class="input"
+          ></hospitality-bot-input>
+          <img
+            src="/assets/svg/cross.svg"
+            (click)="
+              socialMediaControl.controls[i].get('redirectUrl').setValue('')
+            "
+            alt="cross"
+            class="cross"
+          />
+        </div>
+      </div>
+    </div>
+  </p-accordionTab>
+</p-accordion>

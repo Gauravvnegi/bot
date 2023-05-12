@@ -8,15 +8,13 @@
   </div>
   <div class="request-wrapper-header-btnwrap">
     <div
-      class="request-wrapper-header-btnwrap-btn"
+      class="guestInfoEditContainer"
+      *ngIf="buttonConfig[selectedIndex].button"
       (click)="openRaiseRequest()"
     >
-      <img
-        [src]="requestConfig.images.raiseRequest.url"
-        [alt]="requestConfig.images.raiseRequest.alt"
-      />
-      <div class="request-wrapper-header-btnwrap-btn-name">
-        {{ 'raiseRequest' | translate }}
+      <img [src]="buttonConfig[selectedIndex].icon" alt="" />
+      <div class="guestInfoEditText">
+        {{ buttonConfig[selectedIndex].label }}
       </div>
     </div>
   </div>
@@ -25,14 +23,13 @@
 <ng-container [ngSwitch]="tabFilterItems[tabFilterIdx]?.value">
   <ng-container *ngSwitchCase="'INHOUSE'">
     <div class="request-body">
-      <div class="request-body-left" [ngClass]="{ disabled: guestInfoEnable }">
-        <div class="blackscreen"></div>
+      <div class="request-body-left">
         <hospitality-bot-request-list></hospitality-bot-request-list>
       </div>
-      <div class="request-body-right" [ngClass]="{ disabled: guestInfoEnable }">
-        <div class="blackscreen"></div>
+      <div class="request-body-right">
         <hospitality-bot-request-detail
           (guestInfo)="openGuestInfo($event)"
+          [guestInfoEnable]="guestInfoEnable"
         ></hospitality-bot-request-detail>
       </div>
       <div class="guest-info-enable" *ngIf="guestInfoEnable" [@slideInOut]>

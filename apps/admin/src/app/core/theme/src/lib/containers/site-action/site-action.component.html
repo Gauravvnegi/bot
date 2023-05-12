@@ -1,0 +1,8 @@
+<div class="site-wrapper">
+  <div class="site-button" (click)="menu.toggle($event)">
+    <span> {{ selectedSite }}</span>
+    <i class="pi pi-angle-down"></i>
+  </div>
+
+  <p-menu #menu [popup]="true" [model]="sites"></p-menu>
+</div>

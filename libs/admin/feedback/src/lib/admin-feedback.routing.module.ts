@@ -54,6 +54,14 @@ const appRoutes: CRoutes = [
     name: ModuleNames.HEDA_DASHBOARD,
     component: FeedbackContainerComponent,
   },
+  {
+    path: 'sentimental-analysis',
+    name: ModuleNames.SENTIMENTAL_ANALYSIS_HEDA,
+    loadChildren: () =>
+      import('@hospitality-bot/admin/sentimental-analysis').then(
+        (m) => m.AdminSentimentalAnalysisModule
+      ),
+  },
 ];
 
 @NgModule({

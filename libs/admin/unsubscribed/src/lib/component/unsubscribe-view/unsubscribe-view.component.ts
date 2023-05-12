@@ -8,6 +8,6 @@ import { environment } from '@hospitality-bot/admin/environment';
 })
 export class UnsubscribeViewComponent {
   redirectToHomePage(): void {
-    window.location.href = environment.guest_home;
+    window.open(environment.guest_home, '_blank');
   }
 }

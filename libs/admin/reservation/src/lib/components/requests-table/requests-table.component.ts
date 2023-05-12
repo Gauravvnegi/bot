@@ -10,6 +10,7 @@ import { SnackBarService } from 'libs/shared/material/src';
 import { Observable } from 'rxjs';
 import { RequestTable } from '../../models/request-table.model';
 import { ReservationService } from '../../services/reservation.service';
+import { cols } from '../../constants/request-table';
 
 @Component({
   selector: 'hospitality-bot-requests-table',
@@ -31,14 +32,9 @@ export class RequestsTableComponent extends BaseDatatableComponent {
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
-  isPaginaton = false;
+  isPaginator = false;
 
-  cols = [
-    { field: 'vin', header: 'Date/Time' },
-    { field: 'bookingNumber', header: 'Booking No.' },
-    { field: 'type', header: 'Type' },
-    { field: 'vin', header: 'Message/Status' },
-  ];
+  cols = cols;
 
   showEmptyView = false;
 
@@ -81,16 +77,8 @@ export class RequestsTableComponent extends BaseDatatableComponent {
         this.loading = false;
       },
       ({ error }) => {
+        this.values = [];
         this.loading = false;
-        this.snackbarService
-          .openSnackBarWithTranslate(
-            {
-              translateKey: `messages.error.${error?.type}`,
-              priorityMessage: error?.message,
-            },
-            ''
-          )
-          .subscribe();
       }
     );
   }
@@ -111,6 +99,7 @@ export class RequestsTableComponent extends BaseDatatableComponent {
   }
 
   updateRequest(status, journey, id) {
+    this.loading = true;
     this._reservationService
       .updateRequest(
         this.parentForm.get('reservationDetails').get('bookingId').value,
@@ -136,17 +125,10 @@ export class RequestsTableComponent extends BaseDatatableComponent {
             '',
             { panelClass: 'success' }
           );
+          this.loading = false;
         },
         ({ error }) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: `messages.error.${error?.type}`,
-                priorityMessage: error?.message,
-              },
-              ''
-            )
-            .subscribe();
+          this.loading = false;
         }
       );
   }

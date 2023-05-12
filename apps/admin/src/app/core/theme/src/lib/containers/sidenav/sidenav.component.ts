@@ -12,6 +12,10 @@ import { Router } from '@angular/router';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
+import {
+  ModuleNames,
+  routes,
+} from '../../../../../../../../../../libs/admin/shared/src/index';
 import { MenuItem } from '../../data-models/menu.model';
 import { GlobalFilterService } from '../../services/global-filters.service';
 import { SubscriptionPlanService } from '../../services/subscription-plan.service';
@@ -29,13 +33,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
   public normalFontColor: string;
   public dividerBgColor: string;
   public headerBgColor: string;
-  @Input() isExpanded: boolean = true;
+  @Input() isExpanded: boolean = false;
   status = true;
   $subscription = new Subscription();
   branchConfig;
   menuItemChildren = [];
   @Output() submenuItems = new EventEmitter<any>();
   @Output() navToggle = new EventEmitter<boolean>();
+  selectedModule: ModuleNames;
 
   constructor(
     private _breakpointObserver: BreakpointObserver,
@@ -57,6 +62,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.listenForGlobalFilters();
     this.toggleSidenavForTablet();
     this.listenForTabPortrait();
+    this.listenToRouteChange();
+  }
+
+  listenToRouteChange() {
+    this.router.events.subscribe((res) => {
+      this.setSelectedModuleBasedOnRoute();
+    });
   }
 
   /**
@@ -64,15 +76,24 @@ export class SidenavComponent implements OnInit, OnDestroy {
    */
   listenForGlobalFilters(): void {
     this.$subscription.add(
+      this.globalFilterService.selectedModule.subscribe((name) => {
+        if (name) {
+          this.selectedModule = name;
+        } else {
+          this.setSelectedModuleBasedOnRoute();
+        }
+      })
+    );
+    this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         const { hotelName: brandId, branchName: branchId } = data[
           'filter'
         ].value.property;
 
-        const brandConfig = this._hotelDetailService.hotelDetails.brands.find(
+        const brandConfig = this._hotelDetailService.brands.find(
           (brand) => brand.id === brandId
         );
-        this.branchConfig = brandConfig.branches.find(
+        this.branchConfig = brandConfig.hotels.find(
           (branch) => branch.id === branchId
         );
       })
@@ -87,6 +108,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  setSelectedModuleBasedOnRoute() {
+    this.selectedModule = this.menuItems.find((item) =>
+      this.router.url.includes(item?.path)
+    )?.name;
   }
 
   listenForTabPortrait() {
@@ -109,8 +136,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   private initSideNavConfigs(config = {}) {
-    this.activeFontColor = '#4B56C0';
-    this.normalFontColor = '#C5C5C5';
+    this.activeFontColor = '#ffffff';
+    this.normalFontColor = '#ffffff';
     this.dividerBgColor = 'white';
     this.list_item_colour = '#E8EEF5';
     this.headerBgColor = config['headerBgColor'] || '#4B56C0';
@@ -120,14 +147,17 @@ export class SidenavComponent implements OnInit, OnDestroy {
       .filter((item) => item.isView)
       .map((product) => {
         let menuItem = new MenuItem().deserialize(product);
-        if (this.router.url.includes(menuItem.path)) {
-          this.handleRouteChange(menuItem);
-        }
         return menuItem;
       });
+
+    this.setSelectedModuleBasedOnRoute();
   }
 
-  toggleMenuButton() {
+  toggleMenuButton(menuItem?: MenuItem) {
+    if (menuItem?.name === ModuleNames.SETTINGS) {
+      this.router.navigate([`/pages/${routes.SETTINGS}`]);
+    }
+    this.globalFilterService.selectedModule.next(menuItem?.name ?? '');
     this.isExpanded = !this.isExpanded;
     this.navToggle.emit(this.isExpanded);
   }
@@ -149,9 +179,16 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   handleRouteChange(menuItem) {
+    this.globalFilterService.selectedModule.next(menuItem.name);
     this.isExpanded =
       menuItem.children && menuItem.children.length ? true : false;
     this.navToggle.emit(this.isExpanded);
     this.subSideNav(menuItem.title, menuItem.children);
+  }
+
+  handleRouteChangeOnLeave() {
+    if (!this.isExpanded) {
+      this.setSelectedModuleBasedOnRoute();
+    }
   }
 }

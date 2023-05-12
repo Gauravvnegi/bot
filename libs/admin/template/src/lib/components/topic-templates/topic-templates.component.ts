@@ -59,14 +59,6 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
               ...this.template.templates,
               ...response.records,
             ];
-          },
-          ({ error }) => {
-            this.snackbarService
-              .openSnackBarWithTranslate({
-                translateKey: 'messages.error.loadData',
-                priorityMessage: error.message,
-              })
-              .subscribe();
           }
         )
     );

@@ -5,7 +5,7 @@
 }
 
 :host ::ng-deep .mat-form-field-wrapper {
-  font-size: $font16;
+  font-size: 16px;
   // padding-bottom: 0px;
 }
 
@@ -24,8 +24,8 @@
     }
   }
 
-  @include flex-space-between();
-  @include display-block-on-breakpoint($M);
+  @include flex-space-between;
+  @include displayBlockOnBreakPoint($M);
   @media only screen and (max-width: $M) {
     flex-direction: column;
     justify-content: inherit;
@@ -34,13 +34,13 @@
 
 .wrapper__item--gender {
   width: 45%;
-  margin-bottom: $margin-large;
+  margin-bottom: 20px;
   &-heading {
     margin-top: -3px;
-    font-size: $font16;
+    font-size: 16px;
     margin-bottom: 5px;
   }
-  @include full-width-on-breakpoint($M);
+  @include fullWidthOnBreakPoint($M);
 }
 
 .wrapper__input {
@@ -54,10 +54,10 @@
   width: 45%;
 
   &--heading {
-    font-size: $font16;
+    font-size: 16px;
   }
   &--block {
-    @include flex-space-between();
+    @include flex-space-between;
 
     &-label {
       font-weight: $bold;
@@ -66,10 +66,10 @@
     &-item {
       width: 25%;
       align-items: center;
-      @include flex-space-between();
+      @include flex-space-between;
     }
   }
-  @include full-width-on-breakpoint($M);
+  @include fullWidthOnBreakPoint($M);
 }
 
 :host ::ng-deep .mat-form-field-underline {
@@ -114,8 +114,8 @@
   margin-right: 5rem;
   margin-bottom: 13px;
   @media only screen and (max-width: $M) {
-    margin-right: $margin-small;
-    margin-bottom: $margin-medium;
+    margin-right: 10px;
+    margin-bottom: 15px;
   }
 }
 
@@ -130,8 +130,8 @@
   border-top: 8px solid;
 }
 
-.required{
-  .astric{
+.required {
+  .astric {
     display: none;
   }
 }

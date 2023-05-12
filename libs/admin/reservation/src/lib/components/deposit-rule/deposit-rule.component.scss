@@ -11,44 +11,42 @@
 }
 
 :host ::ng-deep .mat-label {
-  font-size: $font14;
-  color: $primary-gray;
+  font-size: 14px;
+  color: $grayMedium;
   letter-spacing: 0.84px;
   margin-right: 10px;
 }
 
 :host ::ng-deep .mat-form-field-underline {
-  background-color: $primary-gray;
+  background-color: $grayMedium;
 }
 
 :host ::ng-deep .mat-select-arrow {
-  color: $primary-gray;
+  color: $grayMedium;
 }
 
 .field-payment {
   display: flex;
   .value {
-    font-size: $font14;
+    font-size: 14px;
     color: $tooltip;
   }
 }
 
 .button-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-top: 2px solid rgb(33, 138, 243, 0.1);
+  @include flex-all-center;
+  border-top: 2px solid rgba(33, 138, 243, 0.1);
   padding: 10px 0;
   button {
     outline: none;
     border: none;
     background: transparent;
-    color: $primary-gray;
-    font-size: $font14;
+    color: $grayMedium;
+    font-size: 14px;
     letter-spacing: 0.84px;
     &:hover {
       cursor: pointer;
-      color: $primary-purple;
+      color: $primary-cta;
     }
   }
 }
@@ -58,6 +56,6 @@
     color: $black;
   }
   .mat-select-disabled {
-    color: $primary-gray;
+    color: $grayMedium;
   }
 }

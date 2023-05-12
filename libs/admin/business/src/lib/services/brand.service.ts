@@ -1,7 +1,7 @@
-import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
+import { BrandFormData, BrandResponse, SocialPlatForms } from '../types/brand.type';
 
 @Injectable()
 export class BrandService extends ApiService {
@@ -11,8 +11,7 @@ export class BrandService extends ApiService {
    * @returns
    */
 
-  createBrand(data: any): Observable<any> {
-    console.log('data', data);
+  createBrand(data: BrandFormData): Observable<BrandResponse> {
     return this.post(
       `/api/v2/entity/onboarding?source=CREATE_WITH&onboardingType=BRAND`,
       data
@@ -25,7 +24,7 @@ export class BrandService extends ApiService {
    * @param id
    * @returns
    */
-  getBrandById(id: string): Observable<any> {
+  getBrandById(id: string): Observable<BrandResponse> {
     return this.get(`/api/v1/brand/${id}`);
   }
 
@@ -37,17 +36,10 @@ export class BrandService extends ApiService {
    * @returns
    */
 
-  updateBrand(brandId: string, data: any): Observable<any> {
+  updateBrand(brandId: string, data: any): Observable<BrandResponse> {
     return this.put(`/api/v1/brand/${brandId}`, data);
   }
 
-  /**
-   * @function getSocialMediaConfig
-   * @description get social media config
-   * @returns
-   */
-  getSocialMediaConfig(): Observable<any> {
-    return this.get(`/api/v1/config?key=SOCIAL_MEDIA_CONFIGURATION`);
-  }
+
 }
 

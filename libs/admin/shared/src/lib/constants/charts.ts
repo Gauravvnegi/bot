@@ -291,12 +291,16 @@ export const analytics = {
       header: 'Phone No. / Email',
       isSort: false,
       sortType: 'string',
+      searchField: [
+        'guestDetails.primaryGuest.phoneNumber',
+        'guestDetails.primaryGuest.email',
+      ],
     },
     {
       field: 'itemName',
       header: 'Item Name / Desc. / Status / Job Duration',
-      isSort: false,
       sortType: 'string',
+      searchField: ['itemName', 'remarks', 'status', 'jobDuration'],
     },
     {
       field: '',

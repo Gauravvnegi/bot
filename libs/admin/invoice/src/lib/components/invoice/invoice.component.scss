@@ -159,19 +159,32 @@
 }
 
 :host ::ng-deep .form-accordion {
+  .acc-block {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
   .p-accordion {
     .p-accordion-header-link {
       @include form-header;
-      &:focus {
-        background: white;
-      }
+      background: white;
       &:hover {
-        background: white;
+        background: #e8e2ff !important;
       }
+      .p-accordion-header-text{
+        color: $primary-cta;
+      }
+    }
+    .p-accordion-tab.p-accordion-tab-active {
+      margin-bottom: 0rem;
+      .p-accordion-header-text {
+        color: red;
+      }      
     }
 
     .p-accordion-tab {
       box-shadow: $form-shadow;
+
     }
 
     .p-accordion-content {
@@ -193,10 +206,6 @@
   }
 }
 
-.gst-btn {
-  margin-top: -30px;
-}
-
 .line {
   border-top: 2px solid black;
   opacity: 0.25;
@@ -215,3 +224,8 @@
 .negative-amount {
   color: red;
 }
+
+.details-block{
+  justify-content: space-between;
+}
+

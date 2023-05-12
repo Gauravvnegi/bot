@@ -10,9 +10,10 @@
       <div>
         <canvas 
           *skeleton="
-          averageRoomRateGraph == undefined;
-          height: '65vh';
-          width: '100%'
+          roomStat == undefined;
+          margin: '0px 20px';
+          height: '180px';
+          width: '250px'
           "
           baseChart
           [datasets]="averageRoomRateGraph.data"
@@ -26,9 +27,10 @@
       <div>
         <canvas 
           *skeleton="
-          occupancyGraph == undefined;
-          height: '65vh';
-          width: '100%'
+          occupancyStat == undefined;
+          margin: '0px 20px';
+          height: '180px';
+          width: '250px'
           "
           baseChart
           [datasets]="occupancyGraph.data"
@@ -46,9 +48,10 @@
         <canvas 
           baseChart 
           *skeleton="
-          remainingCost == undefined;
+          remainingInventory == undefined;
+          margin: '48px 50px 0 0'
           height: '150px';
-          width: '150px';
+          width: '150px';   
           borderRadius: '50%'
           "
           [data]="remainingInventoryChart.data"
@@ -57,7 +60,9 @@
           [colors]="remainingInventoryChart.colors"
           [options]="remainingInventoryChart.options">
         </canvas>
-        <div class="text-center">
+        <div class="text-center"
+        *skeleton="remainingInventory == undefined; height: '0px'; width: '115px'"
+        >
           <p>{{ remainingInventory?.occupied + remainingInventory?.remaining }}</p>
           <p>{{ 'Rooms' }}</p>
         </div>
@@ -71,6 +76,7 @@
           baseChart 
           *skeleton="
           remainingCost == undefined;
+          margin: '48px 0 0 0'
           height: '150px';
           width: '150px';
           borderRadius: '50%'
@@ -81,7 +87,9 @@
           [colors]="remainingCostChart.colors"
           [options]="remainingCostChart.options"
         ></canvas>
-        <div class="text-center">
+        <div class="text-center"
+        *skeleton="remainingInventory == undefined; height: '0px'; width: '115px'"
+        >
           <p>{{ format(remainingCost?.spent + remainingCost?.remaining) }}</p>
         </div>
       </div>

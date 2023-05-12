@@ -15,12 +15,12 @@ export const cols = {
       field: `guests.primaryGuest.fullName`,
       header: 'Guest / Company',
       sortType: 'string',
-      searchField: ['guests.primaryGuest.fullName'],
+      searchField: ['guests.primaryGuest.fullName' ,'guests.secondaryGuest.fullName'],
     },
     {
       field: `guests.primaryGuest.phoneNumber`,
       header: 'Phone No.',
-      sortType: 'string',
+      sortType: 'number',
     },
     {
       field: 'booking.getArrivalTimeStamp()',

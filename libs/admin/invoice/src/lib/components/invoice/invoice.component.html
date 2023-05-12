@@ -1,26 +1,12 @@
 <div class="wrapper">
-
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <hospitality-bot-button
-      *ngIf="isGenerated"
-      variant="text"
-      label="Download PDF"
-      (onClick)="handleDownload()"
-    ></hospitality-bot-button>
-
-    <hospitality-bot-button
       variant="outlined"
-      label="Preview"
-      [routerLink]="['../../preview-invoice', reservationId]"
+      label="Preview and Generate"
+      [routerLink]="['../preview-invoice', reservationId]"
       queryParamsHandling="preserve"
     ></hospitality-bot-button>
-
-    <hospitality-bot-button
-      [label]="isGenerated ? 'Email Invoice' : 'Generate'"
-      (onClick)="handleGenerate()"
-    ></hospitality-bot-button>
   </hospitality-bot-navigation-header>
-
   <div class="form-wrapper" [formGroup]="useForm">
     <div class="form-block">
       <div class="half-width">
@@ -44,20 +30,23 @@
       <hospitality-bot-input
         class="half-width"
         controlName="companyName"
-        label="Bill to individual/company"
+        label="Company"
         maxLength="60"
       ></hospitality-bot-input>
-      <div *ngIf="isAddingGST" class="line full-width"></div>
-      <hospitality-bot-button
-        variant="text"
-        [severity]="isAddingGST ? 'reset' : 'primary'"
-        [label]="isAddingGST ? 'Remove' : 'Add GST/Bill to company'"
-        (onClick)="isAddingGST ? removeGST() : isAddingGST = !isAddingGST"
-        class="gst-btn"
-      ></hospitality-bot-button>
+    </div>
 
-      <div class="two-third-width"></div>
-      <ng-container *ngIf="isAddingGST">
+    <div class="form-block">
+      <div class="full-width header">
+        <div class="header">GST Details</div>
+        <hospitality-bot-button
+          variant="text"
+          [severity]="addGST ? 'reset' : 'primary'"
+          [label]="addGST ? 'Remove GST' : '+Add GST'"
+          (onClick)="onAddGST()"
+        ></hospitality-bot-button>
+      </div>
+
+      <ng-container *ngIf="addGST">
         <hospitality-bot-input
           class="one-third-width"
           controlName="gstNumber"
@@ -133,7 +122,7 @@
           <ng-template pTemplate="header" let-columns #header>
             <tr class="header">
               <th id="select-all" class="select-box">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
               </th>
               <th
                 *ngFor="let col of columns"
@@ -151,27 +140,43 @@
             let-rowIndex="rowIndex"
           >
             <ng-container
-              [ngSwitch]="tableFormArray.at(rowIndex).get('type').value"
+              [ngSwitch]="tableFormArray.at(rowIndex)?.get('type').value"
             >
               <!-- Price type row -->
               <ng-container *ngSwitchCase="'price'">
                 <tr [formGroupName]="rowIndex" [disabled]="true">
                   <td>
                     <p-tableCheckbox
-                      [value]="rowData"
+                      [value]="tableFormArray.at(rowIndex)?.get('key').value"
                       [index]="rowIndex"
-                      [disabled]="rowIndex === 0"
+                      [disabled]="
+                        tableFormArray.at(rowIndex).get('isDisabled').value
+                      "
                     ></p-tableCheckbox>
                   </td>
 
                   <td>
                     <hospitality-bot-select
                       controlName="description"
-                      [props]="{ isAsync: true, isAutoFocusFilter: false }"
-                      [options]="serviceOptions"
-                      [stopEmission]="true"
-                      [loading]="loading"
-                      [disabled]="rowIndex === 0"
+                      [options]="
+                        rowIndex !== selectedSearchIndex
+                          ? defaultDescriptionOptions
+                          : descriptionOptions
+                      "
+                      [props]="{
+                        isAsync: true,
+                        createPrompt: '+ Add New Service'
+                      }"
+                      [loading]="loadingDescription"
+                      (paginate)="loadMoreDescription()"
+                      (onSearch)="searchDescription($event)"
+                      [stopEmission]="noMoreDescription"
+                      (onCreate)="createService($event)"
+                      [disabled]="
+                        tableFormArray.at(rowIndex).get('isDisabled').value
+                      "
+                      (onFocus)="handleFocus(rowIndex)"
+                      (onBlur)="handleBlur()"
                     ></hospitality-bot-select>
                   </td>
 
@@ -179,7 +184,9 @@
                     <hospitality-bot-input
                       controlName="unit"
                       [props]="{ type: 'number' }"
-                      [disabled]="rowIndex === 0"
+                      [disabled]="
+                        tableFormArray.at(rowIndex).get('isDisabled').value
+                      "
                     ></hospitality-bot-input>
                   </td>
 
@@ -187,7 +194,9 @@
                     <hospitality-bot-input
                       controlName="unitValue"
                       [props]="{ type: 'number' }"
-                      [disabled]="true"
+                      [disabled]="
+                        tableFormArray.at(rowIndex).get('isDisabled').value
+                      "
                     ></hospitality-bot-input>
                   </td>
 
@@ -202,7 +211,7 @@
                   <td>
                     <hospitality-bot-multi-select
                       controlName="tax"
-                      [options]="rowIndex === 0 ? defaultTax : tax"
+                      [options]="tax"
                       [settings]="{ showHeader: false }"
                       [disabled]="true"
                     ></hospitality-bot-multi-select>
@@ -219,15 +228,16 @@
                     <hospitality-bot-menu
                       type="button"
                       alignment="horizontal"
-                      (onClickItem)="
-                        tableFormArray.at(rowIndex).get('menu').value
-                          ? onEditDiscount($event, rowIndex)
-                          : onAddDiscount('discount', rowIndex)
-                      "
+                      (onClickItem)="handleDiscount($event, rowIndex)"
                       [menuItems]="
-                        tableFormArray.at(rowIndex).get('menu').value
-                          ? editDiscount
-                          : addDiscount
+                        tableFormArray.at(rowIndex).get('discountState')
+                          .value == 'notApplied'
+                          ? addDiscountMenu
+                          : editDiscountMenu
+                      "
+                      [disabled]="
+                        tableFormArray.at(rowIndex).get('discountState')
+                          .value == 'editing'
                       "
                     ></hospitality-bot-menu>
                   </td>
@@ -244,7 +254,13 @@
                       'discount'
                   }"
                 >
-                  <td></td>
+                <td>
+                  <p-tableCheckbox
+                    [value]="tableFormArray.at(rowIndex-1)?.get('key').value"
+                    [index]="rowIndex"
+                    [disable]="true"
+                  ></p-tableCheckbox>
+                </td>
                   <td>
                     <p>Discount Amount</p>
                   </td>
@@ -324,9 +340,7 @@
             <hospitality-bot-menu
               type="button"
               alignment="horizontal"
-              (onClickItem)="
-                this.viewRefundRow = true; this.isRefundSaved = false
-              "
+              (onClickItem)="viewRefundRow = true; this.isRefundSaved = false"
               [menuItems]="!isRefundSaved ? addRefund : editRefund"
             ></hospitality-bot-menu>
           </span>
@@ -393,56 +407,62 @@
       </div>
     </div>
 
-    <p-accordion class="form-accordion" [multiple]="true">
-      <p-accordionTab header="Booking Information" [selected]="true">
-        <div class="form-block">
-          <hospitality-bot-input
-            class="half-width"
-            controlName="cashierName"
-            label="Cashier Name"
-            maxLength="60"
-          ></hospitality-bot-input>
-          <hospitality-bot-date
-            class="half-width"
-            controlName="invoiceDate"
-            label="Invoice Date"
-            [disabled]="isGenerated"
-          ></hospitality-bot-date>
-          <hospitality-bot-select-group
-            class="three-fourth"
-            controlName="paymentMethod"
-            label="Payment method"
-            [options]="paymentOptions"
-          ></hospitality-bot-select-group>
-          <div class="one-third-width"></div>
-          <hospitality-bot-input
-            class="one-third-width"
-            [props]="{
-              placeholder: 'Enter'
-            }"
-            controlName="recievedPayment"
-            label="Payment Recieved"
-          ></hospitality-bot-input>
-          <hospitality-bot-input
-            class="one-third-width"
-            [props]="{ placeholder: 'Enter' }"
-            controlName="remarks"
-            label="Your Inclusions/remarks:"
-          ></hospitality-bot-input>
-          <hospitality-bot-input
-            class="one-third-width"
-            [props]="{ placeholder: 'Enter' }"
-            controlName="transactionId"
-            label="Transaction ID"
-          ></hospitality-bot-input>
+    <div class="form-block">
+      <div class="full-width header">
+        <div class="header">
+          Payment Details
         </div>
-      </p-accordionTab>
-    </p-accordion>
+        <hospitality-bot-button
+          variant="text"
+          [severity]="addPayment ? 'reset' : 'primary'"
+          [label]="addPayment ? 'Remove Payment' : '+Add Payment'"
+          (onClick)="onAddPaymentDetails()"
+        ></hospitality-bot-button>
+      </div>
+
+      <ng-container *ngIf="addPayment">
+        <hospitality-bot-input
+          class="half-width"
+          controlName="cashierName"
+          label="Cashier Name"
+          maxLength="60"
+        ></hospitality-bot-input>
+        <hospitality-bot-input
+          class="half-width"
+          [props]="{ placeholder: 'Enter' }"
+          controlName="remarks"
+          label="Your Inclusions/remarks:"
+        ></hospitality-bot-input>
+        <hospitality-bot-select-group
+          class="full-width"
+          controlName="paymentMethod"
+          label="Payment method"
+          [options]="paymentOptions"
+        ></hospitality-bot-select-group>
+        <!-- <div class="one-third-width"></div> -->
+        <hospitality-bot-input
+          class="half-width"
+          [props]="{
+            placeholder: 'Enter'
+          }"
+          controlName="receivedPayment"
+          label="Payment Recieved"
+        ></hospitality-bot-input>
+
+        <hospitality-bot-input
+          class="half-width"
+          [props]="{ placeholder: 'Enter' }"
+          controlName="transactionId"
+          label="Transaction ID"
+        ></hospitality-bot-input>
+      </ng-container>
+    </div>
+
     <div class="button">
       <hospitality-bot-button
-        label="Save"
+        label="Save Details"
         (onClick)="handleSave()"
-        [disabled]="isGenerated"
+        [disabled]="isInvoiceGenerated"
       ></hospitality-bot-button>
     </div>
   </div>

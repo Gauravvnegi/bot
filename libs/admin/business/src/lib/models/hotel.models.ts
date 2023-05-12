@@ -1,17 +1,63 @@
-import { HotelInfoForm } from "../types/hotel.type";
+import { HotelConfiguration } from '../types/hotel.type';
 
-export class HotelFormData {
+export class HotelResponse {
          hotel: {
-           name: string;
-           segment: string;
-           email: string;
+           active: boolean;
+           serviceName: string;
+           description: string;
+           address: {};
            contact: string;
-           address;
+           email: string;
+           imageUrls: string[];
+           segment: string;
+           socialPlatForms: any[];
+           complimentaryAmenities: string[];
+         } = {
+           active: true,
+           serviceName: '',
+           description: '',
+           address: {},
+           contact: '',
+           email: '',
+           imageUrls: [],
+           segment: '',
+           socialPlatForms: [],
+           complimentaryAmenities: [],
          };
          brandId: string;
-
-         deserialize(input: HotelInfoForm, brandId: string) {
-
+         deserialize(input: HotelConfiguration) {
+           this.hotel.active = input.status;
+           this.hotel.serviceName = input.serviceName;
+           this.hotel.description = input?.description ?? 'test description';
+           this.hotel.address = 'Noida';
+           this.hotel.contact = input?.contact ?? '34567888888889';
+           this.hotel.email = input?.email ?? 'test@test.com';
+           this.hotel.imageUrls = input.imageUrls ?? [
+             'assets/images/empty-table-service.png',
+           ];
+           this.hotel.segment = input?.segment ?? 'bnb';
+           this.hotel.socialPlatForms = input?.socialPlatForms ?? [
+             {
+               name: 'facebook',
+               imageUrl: 'assets/images/facebook.png',
+               redirectUrl: 'https://www.facebook.com',
+             },
+             {
+               redirectUrl: 'https://www.instagram.com',
+             },
+             {
+               redirectUrl: 'https://www.linkedIn.com',
+             },
+             {
+               redirectUrl: 'https://www.twitter.com',
+             },
+             {
+               redirectUrl: 'https://www.youtube.com',
+             },
+           ];
+           this.hotel.complimentaryAmenities = input?.complimentaryAmenities;
+           this.brandId = input.brand.id;
+           return this;
          }
        }
 export class Services {
@@ -49,4 +95,3 @@ export const noRecordAction = {
   description:
     'No services found. Tap the +Create Services to create & manage the services offered by your hotel',
 };
-

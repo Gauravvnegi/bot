@@ -7,6 +7,8 @@ import {
 } from '@angular/forms';
 import { BrandService } from '../../services/brand.service';
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
+import { set } from 'lodash';
+import { SocialMediaService } from '../../services/social-media.service';
 
 @Component({
   selector: 'hospitality-bot-social-media',
@@ -16,21 +18,21 @@ import { FormComponent } from 'libs/admin/shared/src/lib/components/form-compone
 export class SocialMediaComponent extends FormComponent implements OnInit {
   useForm: FormGroup;
   socialMediaControl: FormArray;
-  total: number = 0;
 
   constructor(
     private fb: FormBuilder,
     private brandService: BrandService,
-    public controlContainer: ControlContainer
+    public controlContainer: ControlContainer,
+    private socialMediaService: SocialMediaService
   ) {
     super(controlContainer);
   }
 
   ngOnInit(): void {
-    this.initForm();
     this.initInputControl();
+    this.initForm();
+    this.patchValueToSocialMediaControl();
     this.patchValue();
-
   }
 
   initForm(): void {
@@ -41,17 +43,26 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
     this.getSocailMediaConfig();
   }
 
-  patchValue(): void { 
-    console.log(this.inputControl);
-    this.useForm.valueChanges.subscribe((res) => { 
-            this.inputControl.setValue(res.socialPlatforms);
+  patchValue(): void {
+    this.socialMediaService.onSubmit.subscribe((res) => {
+      console.log(res);
+      if (res) {
+        this.inputControl?.patchValue(this.socialMediaControl.value);
+      }
     });
   }
 
+  patchValueToSocialMediaControl(): void {
+    console.log(this.inputControl?.value);
+    setTimeout(() => {
+      if (this.inputControl?.value)
+        this.socialMediaControl.patchValue(this.inputControl?.value);
+    }, 1000);
+  }
+
   getSocailMediaConfig() {
-    this.brandService.getSocialMediaConfig().subscribe((res) => {
-      this.total = res.length;
-      res.forEach((element) => {
+    this.socialMediaService.getSocialMediaConfig().subscribe((res) => {
+      res?.forEach((element) => {
         this.socialMediaControl.push(
           this.fb.group({
             name: [element.name],

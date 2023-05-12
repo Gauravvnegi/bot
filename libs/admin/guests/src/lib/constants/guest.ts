@@ -336,9 +336,8 @@ export const guest = {
       {
         field: `getPhoneNumber()`,
         header: 'Phone No.',
-        isSortDisabled: true,
-        sortType: 'string',
-        isSearchDisabled: true,
+        sortType: 'number',
+        searchField: ['getPhoneNumber'],
       },
       {
         field: 'payment.totalAmount',

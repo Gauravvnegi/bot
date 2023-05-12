@@ -314,6 +314,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    * @param serviceType
    */
   getServices(serviceType: ServicesTypeValue) {
+    this.loading = true;
     this.subscription$.add(
       this.roomService
         .getServices(this.hotelId, {
@@ -337,6 +338,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           },
           (error) => {
             this.snackbarService.openSnackBarAsText(error.error.message);
+            this.loading = false;
           }
         )
     );

@@ -718,52 +718,48 @@ export class InvoiceComponent implements OnInit {
     let currentAmount = 0;
     this.tableFormArray.getRawValue().map((item) => {
       if (item.type === 'discount') {
-        totalDiscount = +item.totalAmount + currentAmount;
-        // currentAmount: [0],
-        // discountedAmount: [0],
-        // totalDiscount: [0],
-        // paidAmount: [0],
-        // dueAmount: [0],
-        this.useForm.patchValue({ totalDiscount });
+        totalDiscount += +item.totalAmount;
       }
       if (item.type === 'price') {
-        currentAmount = +item.totalAmount + totalDiscount;
-        this.useForm.patchValue({ currentAmount });
+        currentAmount += +item.totalAmount;
       }
       const discountedAmount = currentAmount - totalDiscount;
+      const paidAmount = this.useForm.get('paidAmount').value;
 
+      this.useForm.patchValue({ currentAmount });
+      this.useForm.patchValue({ totalDiscount });
       this.useForm.patchValue({ discountedAmount });
-      this.useForm.patchValue({ dueAmount: discountedAmount - totalDiscount });
+      this.useForm.patchValue({ dueAmount: discountedAmount - paidAmount });
     });
 
     return;
 
-    // Remove rows in descending order
-    for (let i = this.tableValue.length - 1; i >= 0; i--) {
-      if (idsToRemove.includes(i)) {
-        // Check if the next row is a discount row
-        const isNextRowDiscount =
-          i < this.tableValue.length - 1 &&
-          this.tableFormArray.at(i + 1)?.get('type').value === 'discount';
-        console.log(isNextRowDiscount);
-        // Remove the current row and the next row if it's a discount row
-        if (isNextRowDiscount) {
-          this.tableValue.splice(i, 2);
-          this.registerOnDeleteChanges(i);
-          this.tableFormArray.removeAt(i);
-          this.tableFormArray.removeAt(i); // Remove the next row
-        } else {
-          this.tableValue.splice(i, 1);
-          this.registerOnDeleteChanges(i);
-          this.tableFormArray.removeAt(i);
-        }
-      }
-    }
+    // // Remove rows in descending order
+    // for (let i = this.tableValue.length - 1; i >= 0; i--) {
+    //   if (idsToRemove.includes(i)) {
+    //     // Check if the next row is a discount row
+    //     const isNextRowDiscount =
+    //       i < this.tableValue.length - 1 &&
+    //       this.tableFormArray.at(i + 1)?.get('type').value === 'discount';
+    //     console.log(isNextRowDiscount);
+    //     // Remove the current row and the next row if it's a discount row
+    //     if (isNextRowDiscount) {
+    //       this.tableValue.splice(i, 2);
+    //       this.registerOnDeleteChanges(i);
+    //       this.tableFormArray.removeAt(i);
+    //       this.tableFormArray.removeAt(i); // Remove the next row
+    //     } else {
+    //       this.tableValue.splice(i, 1);
+    //       this.registerOnDeleteChanges(i);
+    //       this.tableFormArray.removeAt(i);
+    //     }
+    //   }
+    // }
 
-    // Update the IDs in tableValue
-    this.tableValue.forEach((_, index) => index);
+    // // Update the IDs in tableValue
+    // this.tableValue.forEach((_, index) => index);
 
-    this.selectedRows = [];
+    // this.selectedRows = [];
   }
 
   registerOnDeleteChanges(index) {

@@ -98,12 +98,16 @@ export class TableList {
   deserialize(input: InvoiceResponse['itemList']) {
     this.records = new Array<TableData>();
 
+
     input.forEach((item) => {
       const taxRate =
         item.itemTax.reduce((acc, val) => acc + val.taxValue, 0) ?? 0;
       const amount = item.unit * item.amount;
 
+      const key = `${Date.now()}-${item.id}`;
+
       const priceItem = this.getTableData({
+        key:key,
         description: item.id,
         unit: item.unit,
         unitValue: item.amount,
@@ -119,6 +123,7 @@ export class TableList {
 
       if (item.discount) {
         const discountItem = this.getTableData({
+          key:key,
           description: 'Discount',
           discountType: item.discount.type,
           discount: item.discount.value,
@@ -138,6 +143,7 @@ export class TableList {
 
   getTableData(data: Partial<TableData>) {
     const res: TableData = {
+      key:'',
       description: '',
       unit: 0,
       unitValue: 0,
@@ -155,6 +161,7 @@ export class TableList {
   }
 }
 export type TableData = {
+  key: string;
   description: string;
   unit: number;
   unitValue: number;

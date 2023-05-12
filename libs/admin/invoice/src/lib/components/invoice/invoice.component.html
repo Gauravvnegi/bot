@@ -147,7 +147,7 @@
                 <tr [formGroupName]="rowIndex" [disabled]="true">
                   <td>
                     <p-tableCheckbox
-                      [value]="rowData"
+                      [value]="tableFormArray.at(rowIndex)?.get('key').value"
                       [index]="rowIndex"
                       [disabled]="
                         tableFormArray.at(rowIndex).get('isDisabled').value
@@ -254,7 +254,13 @@
                       'discount'
                   }"
                 >
-                  <td></td>
+                <td>
+                  <p-tableCheckbox
+                    [value]="tableFormArray.at(rowIndex-1)?.get('key').value"
+                    [index]="rowIndex"
+                    [disable]="true"
+                  ></p-tableCheckbox>
+                </td>
                   <td>
                     <p>Discount Amount</p>
                   </td>

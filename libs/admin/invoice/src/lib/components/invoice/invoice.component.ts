@@ -68,7 +68,6 @@ export class InvoiceComponent implements OnInit {
   readonly addDiscountMenu = addDiscountMenu;
   readonly editDiscountMenu = editDiscountMenu;
 
-
   tableLength = 0;
   tax: Option[] = [];
 
@@ -97,7 +96,7 @@ export class InvoiceComponent implements OnInit {
   defaultDescriptionOptions: Option[] = [];
 
   /**Table Variable */
-  selectedRows;
+  selectedRows = [];
   cols = cols;
 
   constructor(
@@ -338,6 +337,11 @@ export class InvoiceComponent implements OnInit {
     //   return;
     // }
     const data: Record<keyof PaymentField, any> = {
+      key: [
+        type === 'discount'
+          ? this.tableFormArray.at(index - 1)?.get('key').value
+          : `${Date.now()}`,
+      ],
       description: ['', Validators.required],
       unit: [null],
       unitValue: [null],
@@ -664,7 +668,68 @@ export class InvoiceComponent implements OnInit {
   }
 
   removeSelectedCharges() {
-    const idsToRemove = this.selectedRows.map((row) => row.id);
+    const idsToRemove = this.selectedRows;
+
+    // const newData = this.tableFormArray.getRawValue().filter((item) => {
+    //   return !idsToRemove.includes(item.key);
+    // });
+    this.selectedRows.forEach((item) => {});
+
+    const oldLength = this.tableFormArray.controls.length;
+
+    const idxToBeDeleted = this.tableFormArray
+      .getRawValue()
+      .reduce((prev, curr, idx) => {
+        if (idsToRemove.includes(curr.key)) {
+          prev.push(idx);
+        }
+
+        return prev;
+      }, []);
+
+    this.tableFormArray.controls = this.tableFormArray.controls.filter(
+      (item, idx) => !idxToBeDeleted.includes(idx)
+    );
+
+    this.tableValue = Array.from(Array(oldLength - idsToRemove.length).keys());
+
+    this.selectedRows = [];
+
+    // this.tableFormArray.value.findIndex(
+    //   (item) => item.description === rowId
+    // );
+
+    // this.tableFormArray.patchValue(newData);
+
+    // this.tableFormArray.controls.forEach(item=>{
+    //   item.
+    // })
+
+    // this.tableFormArray.pa
+
+    let totalDiscount = 0;
+    let currentAmount = 0;
+    this.tableFormArray.getRawValue().map((item) => {
+      if (item.type === 'discount') {
+        totalDiscount = +item.totalAmount + currentAmount;
+        // currentAmount: [0],
+        // discountedAmount: [0],
+        // totalDiscount: [0],
+        // paidAmount: [0],
+        // dueAmount: [0],
+        this.useForm.patchValue({ totalDiscount });
+      }
+      if (item.type === 'price') {
+        currentAmount = +item.totalAmount + totalDiscount;
+        this.useForm.patchValue({ currentAmount });
+      }
+      const discountedAmount = currentAmount - totalDiscount;
+
+      this.useForm.patchValue({ discountedAmount });
+      this.useForm.patchValue({ dueAmount: discountedAmount - totalDiscount });
+    });
+
+    return;
 
     // Remove rows in descending order
     for (let i = this.tableValue.length - 1; i >= 0; i--) {
@@ -713,14 +778,14 @@ export class InvoiceComponent implements OnInit {
     }
   }
 
-  onRowSelect(event) {}
+  onRowSelect({ data }) {}
 
-  onRowUnselect(event) {}
+  onRowUnselect({ data }) {}
 
   onToggleSelectAll({ checked }) {}
 
   handleSave(): void {
-    if(!this.addGST) this.gstValidation(false);
+    if (!this.addGST) this.gstValidation(false);
     const markAsTouched = (control: AbstractControl) => {
       if (control instanceof FormArray) {
         control.controls.forEach((formGroup: FormGroup) => {

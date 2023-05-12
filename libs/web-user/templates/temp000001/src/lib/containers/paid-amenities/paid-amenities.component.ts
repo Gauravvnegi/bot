@@ -66,7 +66,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.openPackage(this.tabFilterItems[this.tabFilterIdx].value);
+    this.openPackage(this.tabFilterItems[this.tabFilterIdx]?.value);
   }
 
   initPaidAmenitiesForm() {

@@ -91,7 +91,7 @@ export class PackageRendererComponent
   }
 
   setSubPackageConfiguration() {
-    this.subPackages.controls.forEach(() => {
+    this.subPackages?.controls?.forEach(() => {
       this.subPackageFieldConfig.push(this.setFieldConfiguration());
     });
   }
@@ -101,7 +101,7 @@ export class PackageRendererComponent
   }
 
   checkForSelectedPackage() {
-    this.subPackages.controls.forEach((subPackage) => {
+    this.subPackages?.controls?.forEach((subPackage) => {
       if (subPackage.get('isSelected').value === true) {
         // this.servicePackage(subPackage.get('packageCode').value);
       }
@@ -115,7 +115,7 @@ export class PackageRendererComponent
       component = this.packageDefaultComponent;
     }
     let subPackage;
-    this.subPackages.controls.forEach((control) => {
+    this.subPackages?.controls?.forEach((control) => {
       if (control.get('packageCode').value === subPackageCode) {
         subPackage = control.value;
       }
@@ -148,7 +148,7 @@ export class PackageRendererComponent
 
   getSubPackageForm(packageCode) {
     let subPackageForm;
-    this.subPackages.controls.forEach((subPackage) => {
+    this.subPackages?.controls?.forEach((subPackage) => {
       if (subPackage.get('packageCode').value === packageCode) {
         subPackageForm = subPackage;
       }
@@ -178,7 +178,7 @@ export class PackageRendererComponent
     // this.servicePackage(formGroup.get('packageCode').value);
 
     let subPackageCode = formGroup.get('packageCode').value;
-    let subPackageData = this.subPackages.controls.find(
+    let subPackageData = this.subPackages?.controls?.find(
       (control) => control.get('packageCode').value === subPackageCode
     )?.value;
 
@@ -420,7 +420,7 @@ export class PackageRendererComponent
   }
 
   get subPackages(): FormArray {
-    return this.parentForm.get('subPackages') as FormArray;
+    return this.parentForm?.get('subPackages') as FormArray;
   }
 
   get checkForUpdatePossibility() {

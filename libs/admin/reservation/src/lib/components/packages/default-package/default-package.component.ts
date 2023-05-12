@@ -27,9 +27,9 @@ export class DefaultPackageComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onToggleSwitch(isAccepted: boolean) {
-    this.updatePackageStatus(isAccepted ? 'ACCEPT' : 'REJECT');
-  }
+  // onToggleSwitch(isAccepted: boolean) {
+  //   this.updatePackageStatus(isAccepted ? 'ACCEPT' : 'REJECT');
+  // }
 
   updatePackageStatus(status: string) {
     const data = {

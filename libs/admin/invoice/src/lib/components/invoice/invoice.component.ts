@@ -107,7 +107,6 @@ export class InvoiceComponent implements OnInit {
     private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private servicesService: ServicesService,
-    private router: Router,
     private modalService: ModalService,
     private userService: UserService
   ) {
@@ -326,16 +325,24 @@ export class InvoiceComponent implements OnInit {
    * Handle addition of table entry (New Charges)
    */
   addNewCharges(type: 'price' | 'discount' = 'price', rowIndex?: number) {
+    if (this.tableFormArray.length > 0 && !rowIndex) {
+      const lastFormGroup = this.tableFormArray.at(
+        this.tableFormArray.length - 1
+      );
+      const rowType = lastFormGroup.get('type');
+      if (
+        rowType.value === 'price' &&
+        lastFormGroup.invalid &&
+        type === 'price'
+      ) {
+        this.markAsTouched(this.tableFormArray);
+        return;
+      }
+    }
+
     const index = rowIndex ?? this.tableValue.length;
     this.tableValue.push(index);
 
-    // if (this.useForm.invalid) {
-    //   this.useForm.markAllAsTouched();
-    //   this.snackbarService.openSnackBarAsText(
-    //     'Invalid form: Please fix the errors.'
-    //   );
-    //   return;
-    // }
     const data: Record<keyof PaymentField, any> = {
       key: [
         type === 'discount'
@@ -733,11 +740,12 @@ export class InvoiceComponent implements OnInit {
 
     // Remove rows in descending order
     for (let i = this.tableValue.length - 1; i >= 0; i--) {
-      if (idsToRemove.includes(i + 1)) {
+      if (idsToRemove.includes(i)) {
         // Check if the next row is a discount row
         const isNextRowDiscount =
           i < this.tableValue.length - 1 &&
           this.tableFormArray.at(i + 1)?.get('type').value === 'discount';
+        console.log(isNextRowDiscount);
         // Remove the current row and the next row if it's a discount row
         if (isNextRowDiscount) {
           this.tableValue.splice(i, 2);
@@ -784,26 +792,27 @@ export class InvoiceComponent implements OnInit {
 
   onToggleSelectAll({ checked }) {}
 
+  markAsTouched = (control: AbstractControl) => {
+    if (control instanceof FormArray) {
+      control.controls.forEach((formGroup: FormGroup) => {
+        Object.values(formGroup.controls).forEach((control) =>
+          this.markAsTouched(control)
+        );
+      });
+    } else if (control instanceof FormGroup) {
+      Object.values(control.controls).forEach((control) =>
+        this.markAsTouched(control)
+      );
+    } else if (control.validator) {
+      control.markAsTouched();
+    }
+  };
+
   handleSave(): void {
     if (!this.addGST) this.gstValidation(false);
-    const markAsTouched = (control: AbstractControl) => {
-      if (control instanceof FormArray) {
-        control.controls.forEach((formGroup: FormGroup) => {
-          Object.values(formGroup.controls).forEach((control) =>
-            markAsTouched(control)
-          );
-        });
-      } else if (control instanceof FormGroup) {
-        Object.values(control.controls).forEach((control) =>
-          markAsTouched(control)
-        );
-      } else if (control.validator) {
-        control.markAsTouched();
-      }
-    };
 
-    markAsTouched(this.useForm);
-    markAsTouched(this.tableFormArray);
+    this.markAsTouched(this.useForm);
+    this.markAsTouched(this.tableFormArray);
 
     if (this.useForm.invalid) {
       this.snackbarService.openSnackBarAsText(

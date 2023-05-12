@@ -237,7 +237,8 @@
                       "
                       [disabled]="
                         tableFormArray.at(rowIndex).get('discountState')
-                          .value == 'editing'
+                          .value === 'editing' ||
+                        tableFormArray.at(rowIndex).get('description').invalid
                       "
                     ></hospitality-bot-menu>
                   </td>
@@ -254,13 +255,15 @@
                       'discount'
                   }"
                 >
-                <td>
-                  <p-tableCheckbox
-                    [value]="tableFormArray.at(rowIndex-1)?.get('key').value"
-                    [index]="rowIndex"
-                    [disable]="true"
-                  ></p-tableCheckbox>
-                </td>
+                  <td>
+                    <p-tableCheckbox
+                      [value]="
+                        tableFormArray.at(rowIndex - 1)?.get('key').value
+                      "
+                      [index]="rowIndex"
+                      [disable]="true"
+                    ></p-tableCheckbox>
+                  </td>
                   <td>
                     <p>Discount Amount</p>
                   </td>

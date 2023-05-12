@@ -1,12 +1,17 @@
-:host ::ng-deep .ngx-timepicker{
-    border-bottom: none !important;
-    margin-bottom: 30px;
+:host ::ng-deep .ngx-timepicker {
+  border-bottom: none !important;
+  margin-bottom: 30px;
 }
 
-:host ::ng-deep .ngx-timepicker-control__input{
+:host ::ng-deep .ngx-timepicker-control__input {
   padding: 4px 6px 0px 0px !important;
 }
 
-:host ::ng-deep .period-control{
-    padding-top: 8px;
+:host ::ng-deep .period-control {
+  padding-top: 8px;
+}
+
+:host ::ng-deep .mat-error {
+  font-size: 14px;
+  margin-top: -10px;
 }

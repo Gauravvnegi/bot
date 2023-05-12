@@ -101,7 +101,7 @@ export class ButtonDirective {
 
   protected listenForButtonLoading(): void {
     this._buttonService.buttonLoading$.subscribe((buttonComponent) => {
-      buttonComponent['isTemplateVisible'] = false;
+      if (buttonComponent) buttonComponent['isTemplateVisible'] = false;
     });
   }
 }

@@ -101,7 +101,9 @@
           <p>{{ rowData.guestDetails.primaryGuest.getFullName() }}</p>
         </td>
         <td>
+          <a href="tel:{{rowData.guestDetails.primaryGuest.phoneNumber}}">
           <p>{{ rowData.guestDetails.primaryGuest.phoneNumber }}</p>
+          </a>
           <p class="email">{{ rowData.guestDetails.primaryGuest.email }}</p>
         </td>
         <td>

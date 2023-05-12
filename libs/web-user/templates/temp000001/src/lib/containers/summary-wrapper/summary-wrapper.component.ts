@@ -103,7 +103,7 @@ export class SummaryWrapperComponent extends BaseWrapperComponent
       special_remarks: this.requestForm.get('request').value,
       // termsStatus: this.termsStatus,
     };
-    debugger;
+
     this.$subscription.add(
       this._reservationService
         .checkIn(this._reservationService.reservationData.id, data)

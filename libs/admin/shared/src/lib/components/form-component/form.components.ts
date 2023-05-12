@@ -36,6 +36,8 @@ export class FormComponent implements OnInit {
   isAutoFocusFilter: boolean = true; // To focus on search input
 
   @Output() onCreate = new EventEmitter(); // createPrompt on click emitter
+  @Output() onFocus = new EventEmitter(); //handle focus
+  @Output() onBlur = new EventEmitter(); //handle focus
 
   /* Main Props */
   menuOptions: Option[] = [];
@@ -107,6 +109,14 @@ export class FormComponent implements OnInit {
   initInputControl() {
     this.inputControl = this.controlContainer.control.get(this.controlName);
     this.addRequiredAsterisk();
+  }
+
+  handleBlur() {
+    // this.onBlur.emit();
+  }
+
+  handleFocus() {
+    this.onFocus.emit();
   }
 
   /**
@@ -269,6 +279,10 @@ export class FormComponent implements OnInit {
 
     const registerSearch = () => {
       const input = document.querySelector(`.${this.searchInputClass}`);
+
+      if (input) {
+        (input as any).value = '';
+      }
       input?.addEventListener('input', (event: InputEvent) => {
         if (this.stopEmission) return;
         searchText = event.target['value'];
@@ -289,5 +303,7 @@ export class FormComponent implements OnInit {
   /**
    * @function onMenuClose To trigger on close
    */
-  onMenuClose() {}
+  onMenuClose() {
+    this.onBlur.emit();
+  }
 }

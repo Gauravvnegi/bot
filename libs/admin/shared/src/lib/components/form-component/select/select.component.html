@@ -25,13 +25,20 @@
     [autofocusFilter]="isAutoFocusFilter"
     (onShow)="onMenuOpen()"
     (onHide)="onMenuClose()"
+    (onFocus)="handleFocus()"
+    (onBlur)="handleBlur()"
     [filter]="isAsync"
     [filterBy]="stopEmission ? 'label' : 'nothing'"
     [filterMatchMode]="stopEmission ? 'contains' : 'notEquals'"
   >
     <ng-template let-option pTemplate="item">
-      <div class="option-item">
-        <img *ngIf="option.icon" [src]="option.icon" class="option-image" />
+      <div class="option-item" *ngIf="!option.hidden">
+        <img
+          *ngIf="option.icon"
+          [src]="option.icon"
+          class="option-image"
+          [alt]="option.label"
+        />
         <span class="option-label">{{ option.label }}</span>
       </div>
     </ng-template>
@@ -39,7 +46,12 @@
     <ng-template let-option pTemplate="selectedItem">
       <div class="option-item">
         <div>
-          <img *ngIf="option.icon" [src]="option.icon" class="selected-image" />
+          <img
+            *ngIf="option.icon"
+            [src]="option.icon"
+            class="selected-image"
+            [alt]="option.label"
+          />
         </div>
         <span class="option-label">{{ option.label }}</span>
       </div>

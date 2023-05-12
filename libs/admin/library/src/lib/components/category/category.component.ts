@@ -50,12 +50,17 @@ export class CategoryComponent implements OnInit {
         .getCategories(this.hotelId, {
           params: `?type=${this.type}&offset=${this.categoryOffSet}&limit=10&status=true`,
         })
-        .subscribe((res) => {
-          const data = new Categories().deserialize(res).records;
-          this.categories = [...this.categories, ...data];
-          this.noMoreCategories = data.length < 10;
-          this.loadingCategory = false;
-        })
+        .subscribe(
+          (res) => {
+            const data = new Categories().deserialize(res).records;
+            this.categories = [...this.categories, ...data];
+            this.noMoreCategories = data.length < 10;
+            this.loadingCategory = false;
+          },
+          (err) => {
+            this.loadingCategory = false;
+          }
+        )
     );
   }
 

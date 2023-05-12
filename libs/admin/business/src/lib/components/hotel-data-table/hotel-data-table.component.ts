@@ -104,25 +104,23 @@ export class HotelDataTableComponent extends BaseDatatableComponent
 
   handleStatus(status: boolean, rowData): void {
     this.loading = true;
-    this.hotelService
-      .updateHotel(this.hotelId, rowData.id, { status: status })
-      .subscribe(
-        (res) => {
-          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-          this.updateStatusAndCount(
-            statusValue(rowData.status),
-            statusValue(status)
-          );
-          this.values.find((item) => item.id === rowData.id).status = status;
-          this.snackbarService.openSnackBarAsText(
-            'Status changes successfully',
-            '',
-            { panelClass: 'success' }
-          );
-        },
-        ({ error }) => {},
-        this.handelFinal
-      );
+    this.hotelService.updateHotel(this.hotelId, { status: status }).subscribe(
+      (res) => {
+        const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+        this.updateStatusAndCount(
+          statusValue(rowData.status),
+          statusValue(status)
+        );
+        this.values.find((item) => item.id === rowData.id).status = status;
+        this.snackbarService.openSnackBarAsText(
+          'Status changes successfully',
+          '',
+          { panelClass: 'success' }
+        );
+      },
+      ({ error }) => {},
+      this.handelFinal
+    );
   }
 
   editHotel(Id) {

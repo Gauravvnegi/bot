@@ -10,7 +10,9 @@ import {
   HotelDetailService,
   NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
-import { BrandFormData } from '../../models/brand.model';
+import { BrandFormData } from '../../types/brand.type';
+import { BrandResponse } from '../../models/brand.model';
+import { SocialMediaService } from '../../services/social-media.service';
 
 @Component({
   selector: 'hospitality-bot-brand-info-form',
@@ -37,7 +39,8 @@ export class BrandInfoFormComponent implements OnInit {
     private brandService: BrandService,
     private route: ActivatedRoute,
     private router: Router,
-    private hotelDetailService: HotelDetailService
+    private hotelDetailService: HotelDetailService,
+    private socialMediaService: SocialMediaService
   ) {
     this.brandId = this.route.snapshot.paramMap.get('brandId');
     const { navRoutes, title } = businessRoute[
@@ -55,10 +58,13 @@ export class BrandInfoFormComponent implements OnInit {
 
   initForm(): void {
     this.useForm = this.fb.group({
-      active: [true],
-      name: [''],
-      description: [''],
-      socialPlatforms: this.fb.array([]),
+      brand: this.fb.group({
+        active: [true],
+        name: [''],
+        description: [''],
+        socialPlatforms: [[]],
+      }),
+      siteId: [this.siteId],
     });
 
     //patch value
@@ -66,7 +72,10 @@ export class BrandInfoFormComponent implements OnInit {
       this.loading = true;
       this.$subscription.add(
         this.brandService.getBrandById(this.brandId).subscribe((res) => {
-          this.useForm.patchValue(res);
+          const data: BrandFormData = new BrandResponse().deserialize(res);
+
+          this.useForm.patchValue(data);
+
           this.handelFinal();
         }, this.handelError)
       );
@@ -81,13 +90,8 @@ export class BrandInfoFormComponent implements OnInit {
       );
       return;
     }
-
-    const data = new BrandFormData().deserialize(
-      this.useForm.getRawValue(),
-      this.siteId
-    );
-    console.log(this.useForm.getRawValue());
-    console.log(data);
+    this.socialMediaService.onSubmit.emit(true);
+    const data = this.useForm.getRawValue() as BrandFormData;
 
     if (this.brandId) {
       this.$subscription.add(
@@ -95,15 +99,16 @@ export class BrandInfoFormComponent implements OnInit {
           this.handleSuccess();
         }, this.handelError)
       );
+    } else {
+      this.$subscription.add(
+        this.brandService.createBrand(data).subscribe((res) => {
+          this.handleSuccess();
+          this.router.navigate([
+            `pages/settings/business-info/brand/${res.id}`,
+          ]);
+        }, this.handelError)
+      );
     }
-    // else {
-    //   this.$subscription.add(
-    //     this.brandService.createBrand(data).subscribe((res) => {
-    //       this.handleSuccess();
-    //       this.router.navigate([`pages/settings/business-info/brand/${res.id}`]);
-    //     }, this.handelError)
-    //   );
-    // }
   }
   handleReset() {
     this.useForm.reset();

@@ -1,7 +1,7 @@
 import { PaymentField } from '../types/forms.types';
 
 export const cols: {
-  field: keyof PaymentField;
+  field: keyof PaymentField | 'menu';
   header: string;
   width: string;
 }[] = [
@@ -39,5 +39,5 @@ export const cols: {
     field: 'menu',
     header: '',
     width: '5%',
-  }
+  },
 ];

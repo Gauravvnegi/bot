@@ -38,6 +38,18 @@
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter($event)"
 >
+<ng-template pTemplate="summary" #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    [content]="{
+      description: 'No Hotel Found',
+      imageSrc: 'assets/images/empty-table-hotel.png'
+    }"
+  >
+  </hospitality-bot-empty-table>
+
+</ng-template>
+ 
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr
@@ -65,29 +77,33 @@
       <td>
         <div class="cell-content" *ngIf="rowData.name; else emptyCell">
           <div class="primary-text">
-            {{ rowData.name }}
+            {{ rowData?.name }}
           </div>
         </div>
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.segment; else emptyCell">
           <div class="primary-text">
-            {{ rowData.segment }}
+            {{ rowData?.segment }}
           </div>
         </div>
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.email; else emptyCell">
           <div class="primary-text">
-            {{ rowData.email }}
+            {{ rowData?.email }}
           </div>
         </div>
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.contact; else emptyCell">
+          <a href="tel:{{rowData?.contact?.cc}}
+            {{ rowData?.contact?.phoneNumber }}">
           <div class="primary-text">
-            {{ rowData.contact }}
+            {{rowData?.contact?.cc}}
+            {{ rowData?.contact?.phoneNumber }}
           </div>
+          </a>
         </div>
       </td>
       <td>
@@ -103,7 +119,7 @@
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->
-  <ng-template pTemplate="summary">
+  <ng-template pTemplate="summary" *ngIf="values.length; else emptyTable">
     <p-paginator
       #paginator
       [rows]="rowsPerPage"
@@ -115,13 +131,3 @@
     ></p-paginator>
   </ng-template>
 </p-table>
-<ng-template #emptyTable>
-  <hospitality-bot-empty-table
-    [isLoading]="loading"
-    [content]="{
-      description: 'No Hotel Found',
-      imageSrc: 'assets/images/hotel.png'
-    }"
-  >
-  </hospitality-bot-empty-table>
-</ng-template>

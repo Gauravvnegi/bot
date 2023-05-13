@@ -382,7 +382,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     data.entityTypeCounts &&
       this.updateQuickReplyFilterCount(data.entityTypeCounts);
     this.updateTotalRecords();
-
+  console.log(this.values);
     this.loading = false;
   }
 

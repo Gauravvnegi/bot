@@ -12,7 +12,7 @@
       </div>
       <hospitality-bot-toggle-switch
         class="status"
-        controlName="active"
+        controlName="status"
         label="Status:"
       ></hospitality-bot-toggle-switch>
       <hospitality-bot-input
@@ -36,6 +36,7 @@
     <hospitality-bot-social-media
       controlName="socialPlatforms"
       class="full-width"
+      [isLoading]="loading"
     >
     </hospitality-bot-social-media>
 

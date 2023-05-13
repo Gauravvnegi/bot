@@ -24,7 +24,7 @@ export const cols = [
            field: 'contact',
            header: 'contact',
            sortType: 'string',
-           searchField: ['string'],
+           searchField: ['number'],
            width: '23.75%',
          },
          {

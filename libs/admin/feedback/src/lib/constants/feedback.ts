@@ -401,7 +401,7 @@ export const feedback = {
           header: 'Name / Phone No. / Email',
           sortType: 'string',
           width: '20%',
-          searchField: ['guest.getFullName', 'guest.getPhoneNumber'],
+          searchField: ['string','number'],
         },
         {
           field: 'getServiceTypeAndTime()',

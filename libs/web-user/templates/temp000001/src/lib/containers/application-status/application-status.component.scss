@@ -96,7 +96,7 @@
 
 .section--heading {
   padding: 10px;
-  color: white;
+  // color: white;
   border-radius: 10px;
   font-weight: $bolder;
   font-size: $font-large;
@@ -281,5 +281,17 @@
 @media (min-width: 769px) and (max-width: 850px) {
   .section--content--container--value {
     font-size: 17px;
+  }
+}
+
+.amount {
+  @media screen and (max-width: 600px) {
+    flex-wrap: nowrap;
+    &__pay {
+      white-space: nowrap;
+      @media screen and (max-width: 360px) {
+        font-size: 12px;
+      }
+    }
   }
 }

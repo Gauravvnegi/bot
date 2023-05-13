@@ -1,9 +1,9 @@
 .parent_block {
   min-height: calc(100vh - 70px);
-  @media only screen and (max-width: 1100px) {
-    min-height: 92.5vh;
+  @media only screen and (max-width: 768px) {
+    min-height: calc(100vh - 114px);
   }
-  @media only screen and (max-width: 600px) {
-    min-height: auto;
+  @media only screen and (max-width: 480px) {
+    min-height: calc(100vh - 210px);
   }
 }

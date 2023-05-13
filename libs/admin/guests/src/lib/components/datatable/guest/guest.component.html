@@ -185,11 +185,11 @@
           </ng-container>
           <ng-template #singlePhone>
             <a
-              href="tel:{{ rowData.getPhoneNumber() }}"
+              href="tel:{{ rowData.countryCode }}{{ rowData.phoneNumber }}"
               class="email"
               (click)="openDetailPage($event)"
             >
-              <u> {{ rowData.getPhoneNumber() }}</u>
+              <u> {{rowData.countryCode}}-{{ rowData.phoneNumber }}</u>
             </a>
           </ng-template>
         </span>

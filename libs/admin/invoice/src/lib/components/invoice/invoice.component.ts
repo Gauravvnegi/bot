@@ -89,6 +89,7 @@ export class InvoiceComponent implements OnInit {
   serviceOptions: Option[];
 
   descriptionOffSet = 0;
+  loadingTableData = false;
   loadingDescription = false;
   noMoreDescription = false;
   selectedSearchIndex = -1;
@@ -167,7 +168,10 @@ export class InvoiceComponent implements OnInit {
       currency: ['INR'],
       refundAmount: [0],
 
-      cashierName: [{ value: `${firstName} ${lastName}`, disabled: true }, Validators.required],
+      cashierName: [
+        { value: `${firstName} ${lastName}`, disabled: true },
+        Validators.required,
+      ],
       paymentMethod: ['', Validators.required],
       receivedPayment: ['', Validators.required],
       remarks: ['', Validators.required],
@@ -186,49 +190,55 @@ export class InvoiceComponent implements OnInit {
    * Patch the initial form values
    */
   initFormDetails() {
+    this.loadingTableData = true;
     const { firstName, lastName } = this.userService.userDetails;
     // this.tableValue = [{ id: 1 }];
-    this.invoiceService.getInvoiceData(this.reservationId).subscribe((res) => {
-      this.invoiceService.initInvoiceData(res); // saving initial invoice data
+    this.invoiceService.getInvoiceData(this.reservationId).subscribe(
+      (res) => {
+        this.invoiceService.initInvoiceData(res); // saving initial invoice data
 
-      const data = new Invoice().deserialize(res, {
-        cashierName: `${firstName} ${lastName}`,
-      });
-      // this.tableValue = data.tableData.map((_, idx) => ({ id: idx + 1 }));
-      // for (let i = 1; i < data.tableData.length; i++) {
-      //   this.addNewCharges(); // adding new table entry to patch data
-      // }
-
-      data.tableData.forEach((item, idx) => {
-        // this.tableValue.push({ id: idx + 1 });
-        this.addNewCharges(item.type, idx); // adding new table entry to patch data
-      });
-
-      this.useForm.patchValue(data, { emitEvent: false });
-
-      // Generating tax options
-      this.tax = res.itemList.reduce((prev, curr) => {
-        const taxes = curr.itemTax.map((item) => ({
-          label: `${item.taxType} [${item.taxValue}%]`,
-          value: item.id,
-        }));
-
-        return [...prev, ...taxes];
-      }, []);
-
-      // Generating default description options
-      res.itemList.forEach((item) => {
-        this.defaultDescriptionOptions.push({
-          label: item.description,
-          value: item.id,
-          amount: item.amount,
-          taxes: item.itemTax,
+        const data = new Invoice().deserialize(res, {
+          cashierName: `${firstName} ${lastName}`,
         });
-      });
+        // this.tableValue = data.tableData.map((_, idx) => ({ id: idx + 1 }));
+        // for (let i = 1; i < data.tableData.length; i++) {
+        //   this.addNewCharges(); // adding new table entry to patch data
+        // }
 
-      this.guestId = res.primaryGuest.id;
-      this.isInvoiceGenerated = res.invoiceGenerated;
-    });
+        data.tableData.forEach((item, idx) => {
+          // this.tableValue.push({ id: idx + 1 });
+          this.addNewCharges(item.type, idx); // adding new table entry to patch data
+        });
+
+        this.useForm.patchValue(data, { emitEvent: false });
+
+        // Generating tax options
+        this.tax = res.itemList.reduce((prev, curr) => {
+          const taxes = curr.itemTax.map((item) => ({
+            label: `${item.taxType} [${item.taxValue}%]`,
+            value: item.id,
+          }));
+
+          return [...prev, ...taxes];
+        }, []);
+
+        // Generating default description options
+        res.itemList.forEach((item) => {
+          this.defaultDescriptionOptions.push({
+            label: item.description,
+            value: item.id,
+            amount: item.amount,
+            taxes: item.itemTax,
+          });
+        });
+
+        this.guestId = res.primaryGuest.id;
+        this.isInvoiceGenerated = res.invoiceGenerated;
+      },
+      () => {
+        this.loadingTableData = false;
+      }
+    );
   }
 
   handleFocus(index: number) {
@@ -350,12 +360,12 @@ export class InvoiceComponent implements OnInit {
           : `${Date.now()}`,
       ],
       description: ['', Validators.required],
-      unit: [null],
-      unitValue: [null],
+      unit: [null, [Validators.min(0)]],
+      unitValue: [null, [Validators.min(0)]],
       amount: [null],
       tax: [[]],
       totalAmount: [null],
-      discount: [null],
+      discount: [null, [Validators.min(0)]],
       discountType: ['PERCENT'],
       type: [type],
       isDisabled: [false],

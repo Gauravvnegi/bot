@@ -149,7 +149,11 @@
           </td>
           <td class="guest">
             <div class="guest-name">{{ rowData?.guest.getFullName() }}</div>
-            <a href="tel:{{rowData?.guest.getPhoneNumber()}}"><div class="guest-phone">{{ rowData?.guest.getPhoneNumber() }}</div></a>
+            <a href="tel:{{ rowData?.guest.getPhoneNumber() }}"
+              ><div class="guest-phone">
+                {{ rowData?.guest.getPhoneNumber() }}
+              </div></a
+            >
           </td>
           <td class="service-feedback">
             <div class="feedback">
@@ -483,7 +487,11 @@
           </td>
           <td class="guest">
             <div class="guest-name">{{ rowData?.guest.getFullName() }}</div>
-            <a href="tel:{{rowData?.guest.getPhoneNumber()}}"><div class="guest-phone">{{ rowData?.guest.getPhoneNumber() }}</div></a>
+            <a href="tel:{{ rowData?.guest.getPhoneNumber() }}"
+              ><div class="guest-phone">
+                {{ rowData?.guest.phoneNumber }}
+              </div></a
+            >
             <div class="guest-phone">{{ rowData?.guest.emailId }}</div>
           </td>
           <td class="package">

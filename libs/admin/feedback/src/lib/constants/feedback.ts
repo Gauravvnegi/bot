@@ -287,12 +287,7 @@ export const feedback = {
           header: 'Name / Phone No./ Email',
           sortType: 'string',
           width: '20%',
-          searchField: [
-            'guest.fullName',
-            'guest.phoneNumber',
-            'guest.emailId',
-            'guest.countryCode',
-          ],
+          searchField: ['guest.fullName', 'guest.phoneNumber', 'guest.emailId'],
         },
         {
           field: 'getServiceTypeAndTime()',
@@ -353,12 +348,7 @@ export const feedback = {
           header: 'Name / Phone No. / Email',
           sortType: 'string',
           width: '20%',
-          searchField: [
-            'guest.fullName',
-            'guest.phoneNumber',
-            'guest.emailId',
-            'guest.countryCode',
-          ],
+          searchField: ['guest.fullName', 'guest.phoneNumber', 'guest.emailId'],
         },
         {
           field: `guest.getCreatedDate()`,
@@ -407,12 +397,7 @@ export const feedback = {
           header: 'Name / Phone No. / Email',
           sortType: 'string',
           width: '20%',
-          searchField: [
-            'guest.fullName',
-            'guest.phoneNumber',
-            'guest.emailId',
-            'guest.countryCode',
-          ],
+          searchField: ['guest.fullName', 'guest.phoneNumber', 'guest.emailId'],
         },
         {
           field: 'getServiceTypeAndTime()',
@@ -466,12 +451,7 @@ export const feedback = {
           header: 'Name / Phone No./ Email',
           sortType: 'string',
           width: '20%',
-          searchField: [
-            'guest.fullName',
-            'guest.phoneNumber',
-            'guest.emailId',
-            'guest.countryCode',
-          ],
+          searchField: ['guest.fullName', 'guest.phoneNumber', 'guest.emailId'],
         },
         {
           field: `guest.getCreatedDate()`,

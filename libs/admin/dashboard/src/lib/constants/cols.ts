@@ -15,7 +15,9 @@ export const cols = {
       field: `guests.primaryGuest.fullName`,
       header: 'Guest / Company',
       sortType: 'string',
-      searchField: ['guests.primaryGuest.fullName' ,'guests.secondaryGuest.fullName'],
+      searchField: [
+        'guests.primaryGuest.fullName',
+      ],
     },
     {
       field: `guests.primaryGuest.phoneNumber`,

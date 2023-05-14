@@ -287,7 +287,12 @@ export const feedback = {
           header: 'Name / Phone No./ Email',
           sortType: 'string',
           width: '20%',
-          searchField: ['guest.getFullName', 'guest.getPhoneNumber', 'guest.getEmail'],
+          searchField: [
+            'guest.fullName',
+            'guest.phoneNumber',
+            'guest.emailId',
+            'guest.countryCode',
+          ],
         },
         {
           field: 'getServiceTypeAndTime()',
@@ -349,9 +354,10 @@ export const feedback = {
           sortType: 'string',
           width: '20%',
           searchField: [
-            'guest.getFullName',
-            'guest.getPhoneNumber',
+            'guest.fullName',
+            'guest.phoneNumber',
             'guest.emailId',
+            'guest.countryCode',
           ],
         },
         {
@@ -397,11 +403,16 @@ export const feedback = {
           searchField: ['bookingDetails.tableOrRoomNumber', 'outlet'],
         },
         {
-          field: 'guest.getFullName()',
+          field: 'guest.fullName',
           header: 'Name / Phone No. / Email',
           sortType: 'string',
           width: '20%',
-          searchField: ['guest.getFullName', 'guest.getPhoneNumber'],
+          searchField: [
+            'guest.fullName',
+            'guest.phoneNumber',
+            'guest.emailId',
+            'guest.countryCode',
+          ],
         },
         {
           field: 'getServiceTypeAndTime()',
@@ -456,9 +467,10 @@ export const feedback = {
           sortType: 'string',
           width: '20%',
           searchField: [
-            'guest.getFullName',
-            'guest.getPhoneNumber',
+            'guest.fullName',
+            'guest.phoneNumber',
             'guest.emailId',
+            'guest.countryCode',
           ],
         },
         {

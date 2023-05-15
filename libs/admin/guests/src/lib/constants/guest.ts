@@ -350,15 +350,15 @@ export const guest = {
                header: 'Overall NPS',
                sortType: 'number',
              },
-             {
-               field: 'guestAttributes.churnProbalilty',
-               header: 'Churn Prob / Prediction',
-               sortType: 'number',
-               searchField: [
-                 'guestAttributes.churnProbalilty',
-                 'guestAttributes.churnPrediction',
-               ],
-             },
+            //  {
+            //    field: 'guestAttributes.churnProbalilty',
+            //    header: 'Churn Prob / Prediction',
+            //    sortType: 'number',
+            //    searchField: [
+            //      'guestAttributes.churnProbalilty',
+            //      'guestAttributes.churnPrediction',
+            //    ],
+            //  },
              {
                field: 'stageAndourney',
                header: 'Stage/ Channels',

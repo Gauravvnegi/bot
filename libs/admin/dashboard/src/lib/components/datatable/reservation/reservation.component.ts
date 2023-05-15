@@ -33,6 +33,7 @@ import {
   EntityType,
   SelectedEntityState,
 } from '../../../types/dashboard.type';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -54,7 +55,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
   rowsPerPage = 200;
-
   cols = cols.reservation;
 
   @Input() tabFilterItems = tabFilterItems.reservation;
@@ -86,6 +86,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenInvoiceDetails();
   }
 
   /**
@@ -110,6 +111,18 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         ]);
       })
     );
+  }
+
+  listenInvoiceDetails() {
+    let number = this._reservationService.bookingNumber;
+    let id = this._reservationService.guestId;
+    console.log('Guest Details - ', number, id);
+    if (id && number) {
+      this.openDetailPage(undefined, undefined, 'payment_details', {
+        id,
+        number,
+      });
+    }
   }
 
   /**
@@ -310,12 +323,13 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    * @param tabKey The key of the tab to be opened in detail modal.
    */
   openDetailPage(
-    event: MouseEvent,
+    event?: MouseEvent,
     rowData?: Reservation,
-    tabKey?: string
+    tabKey?: string,
+    guestData?
   ): void {
-    event.stopPropagation();
-    if (!rowData) return;
+    event?.stopPropagation();
+    if (!rowData && !guestData) return;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -323,12 +337,13 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       DetailsComponent,
       dialogConfig
     );
-
-    detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
+    debugger;
+    detailCompRef.componentInstance.guestId =
+      rowData?.guests?.primaryGuest?.id ?? guestData?.id;
     detailCompRef.componentInstance.bookingNumber =
-      rowData.booking.bookingNumber;
+      rowData?.booking?.bookingNumber ?? guestData?.number;
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
-
+    debugger;
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         // remove loader for detail close
@@ -350,8 +365,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
                 : this.rowsPerPage,
             }
           );
+          debugger;
         }
+
         detailCompRef.close();
+        debugger;
       })
     );
   }

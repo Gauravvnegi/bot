@@ -44,6 +44,7 @@ import {
 import { InvoiceService } from '../../services/invoice.service';
 import { InvoiceForm, PaymentField } from '../../types/forms.types';
 import { catchError } from 'rxjs/operators';
+import { ReservationService } from '@hospitality-bot/admin/dashboard';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -112,7 +113,8 @@ export class InvoiceComponent implements OnInit {
     private servicesService: ServicesService,
     private modalService: ModalService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private reservationService: ReservationService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -176,7 +178,7 @@ export class InvoiceComponent implements OnInit {
         Validators.required,
       ],
       paymentMethod: ['', Validators.required],
-      receivedPayment: [0, Validators.required],
+      receivedPayment: ['', Validators.required],
       remarks: ['', Validators.required],
       transactionId: ['', Validators.required],
     });
@@ -203,6 +205,8 @@ export class InvoiceComponent implements OnInit {
         const data = new Invoice().deserialize(res, {
           cashierName: `${firstName} ${lastName}`,
         });
+        this.guestId = res.primaryGuest.id;
+        this.bookingNumber = res.reservation.number;
 
         if (data.gstNumber !== '') {
           this.onAddGST();
@@ -212,6 +216,14 @@ export class InvoiceComponent implements OnInit {
         // for (let i = 1; i < data.tableData.length; i++) {
         //   this.addNewCharges(); // adding new table entry to patch data
         // }
+
+        if (data.tableData.length === 0) {
+          console.log(this.guestId);
+          console.log(this.bookingNumber);
+          this.reservationService.bookingNumber = this.bookingNumber;
+          this.reservationService.guestId = this.guestId;
+          this.router.navigateByUrl('/pages/efrontdesk');
+        }
 
         data.tableData.forEach((item, idx) => {
           // this.tableValue.push({ id: idx + 1 });
@@ -240,14 +252,14 @@ export class InvoiceComponent implements OnInit {
           });
         });
 
-        this.guestId = res.primaryGuest.id;
-        this.bookingNumber = res.reservation.number;
         this.isInvoiceGenerated = res.invoiceGenerated;
         this.loadingData = false;
       },
       (error) => {
-        console.error('An error occurred while fetching invoice data:', error);
-        this.router.navigate(['./']);
+        console.error(error);
+        this.reservationService.bookingNumber = this.bookingNumber;
+        this.reservationService.guestId = this.guestId;
+        this.router.navigateByUrl('/pages/efrontdesk');
       }
     );
   }

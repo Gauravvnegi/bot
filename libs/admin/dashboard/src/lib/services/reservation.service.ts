@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 /**
  * @class Manages all the api call for reservation.
  */
 @Injectable({ providedIn: 'root' })
 export class ReservationService extends ApiService {
+
+  bookingNumber: string;
+  guestId: string;
+  
+
   /**
    * @function getReservationDetails To get reservation list for the current filters.
    * @param config The config for query parameters.

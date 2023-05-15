@@ -463,12 +463,19 @@
         <hospitality-bot-input
           class="half-width"
           controlName="receivedPayment"
+          [props]="{
+            placeholder: 'Enter Amount',
+            type: 'number'
+          }"
           label="Payment Recieved"
         ></hospitality-bot-input>
 
         <hospitality-bot-input
           class="half-width"
           controlName="transactionId"
+          [props]="{
+            placeholder: 'Enter'
+          }"
           label="Transaction ID"
         ></hospitality-bot-input>
       </ng-container>

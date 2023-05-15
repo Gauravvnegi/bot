@@ -1,16 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import { cols } from '../../constant/hotel-data-table';
-import { Subscription } from 'rxjs';
-import { FormBuilder } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { HotelService } from '../../services/hotel.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { cols } from '../../constant/hotel-data-table';
+import { BusinessService } from '../../services/business.service';
 
 @Component({
   selector: 'hospitality-bot-hotel-data-table',
@@ -35,11 +35,11 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     protected tabFilterService: TableService,
-    private hotelService: HotelService,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private businessService: BusinessService
   ) {
     super(fb, tabFilterService);
   }
@@ -52,11 +52,12 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   initTableValue() {
     this.loading = true;
     this.$subscription.add(
-      this.hotelService.getHotelList(this.hotelId).subscribe(
+      this.businessService.getHotelList(this.brandId).subscribe(
         (res) => {
           this.values = res.records;
         },
-        (err) => {
+        ({ error }) => {
+          this.values = [];
           this.loading = false;
         },
         this.handelFinal
@@ -104,23 +105,25 @@ export class HotelDataTableComponent extends BaseDatatableComponent
 
   handleStatus(status: boolean, rowData): void {
     this.loading = true;
-    this.hotelService.updateHotel(this.hotelId, { status: status }).subscribe(
-      (res) => {
-        const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-        this.updateStatusAndCount(
-          statusValue(rowData.status),
-          statusValue(status)
-        );
-        this.values.find((item) => item.id === rowData.id).status = status;
-        this.snackbarService.openSnackBarAsText(
-          'Status changes successfully',
-          '',
-          { panelClass: 'success' }
-        );
-      },
-      ({ error }) => {},
-      this.handelFinal
-    );
+    this.businessService
+      .updateHotel(this.hotelId, { status: status })
+      .subscribe(
+        (res) => {
+          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+          this.updateStatusAndCount(
+            statusValue(rowData.status),
+            statusValue(status)
+          );
+          this.values.find((item) => item.id === rowData.id).status = status;
+          this.snackbarService.openSnackBarAsText(
+            'Status changes successfully',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        ({ error }) => {},
+        this.handelFinal
+      );
   }
 
   editHotel(Id) {
@@ -133,4 +136,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   handelFinal = () => {
     this.loading = false;
   };
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

@@ -272,6 +272,21 @@
     }
     .mat-checkbox-label {
       font-size: $font-medium;
+      @media screen and (max-width: $S) {
+        font-size: $font-small;
+      }
+    }
+  }
+}
+
+.amount {
+  @media screen and (max-width: 600px) {
+    flex-wrap: nowrap;
+    &__pay {
+      white-space: nowrap;
+      @media screen and (max-width: 360px) {
+        font-size: 12px;
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "hospitality-bot",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "nx",
@@ -79,6 +79,7 @@
     "ng2-daterangepicker": "^3.0.1",
     "ng2-pdf-viewer": "^6.3.2",
     "ngx-cookie-service": "^12.0.3",
+    "ngx-google-places-autocomplete": "^2.0.5",
     "ngx-material-timepicker": "^5.5.3",
     "ngx-page-scroll": "^7.0.2",
     "ngx-slick-carousel": "^0.5.1",
@@ -106,6 +107,7 @@
     "@nrwl/cypress": "9.4.5",
     "@nrwl/jest": "9.4.5",
     "@nrwl/workspace": "9.4.5",
+    "@types/googlemaps": "^3.43.3",
     "@types/jest": "25.1.4",
     "@types/lodash": "4.14.74",
     "@types/node": "~8.9.4",

@@ -337,13 +337,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       DetailsComponent,
       dialogConfig
     );
-    debugger;
     detailCompRef.componentInstance.guestId =
       rowData?.guests?.primaryGuest?.id ?? guestData?.id;
     detailCompRef.componentInstance.bookingNumber =
       rowData?.booking?.bookingNumber ?? guestData?.number;
     tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
-    debugger;
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         // remove loader for detail close
@@ -365,11 +363,9 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
                 : this.rowsPerPage,
             }
           );
-          debugger;
         }
 
         detailCompRef.close();
-        debugger;
       })
     );
   }

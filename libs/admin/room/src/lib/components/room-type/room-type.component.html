@@ -46,6 +46,7 @@
           [itemList]="compServices"
           (viewAll)="saveRoomTypeData('COMPLIMENTARY')"
           [noRecordsAction]="noRecordAction"
+          [loading]="loading"
         ></hospitality-bot-custom-select>
         <div class="paid-services">
           <hospitality-bot-custom-select
@@ -55,6 +56,7 @@
             [itemList]="paidServices"
             (viewAll)="saveRoomTypeData('PAID')"
             [noRecordsAction]="noRecordAction"
+            [loading]="loading"
           ></hospitality-bot-custom-select>
         </div>
       </div>

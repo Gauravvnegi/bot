@@ -2,9 +2,21 @@
 import { PageRoutes } from '@hospitality-bot/admin/shared';
 
 export const navRoute = {
-         settings: { label: 'Settings', link: '/pages/settings' },
-         brand: { label: 'Brand', link: '/pages/settings/business-info/brand' },
-         hotel: { label: 'Hotel', link: '/pages/settings/business-info/hotel' },
+         settings: {
+           label: 'Settings',
+           link: '/pages/settings',
+         },
+         brand: {
+           label: 'Brand',
+           link: '/pages/settings/business-info/brand',
+           isDisabled: true,
+         },
+         hotel: {
+           label: 'Hotel',
+           link: '/pages/settings/business-info/hotel',
+           isDisabled: true,
+  },
+         
          editBrand: { label: 'Edit Brand', link: './' },
          bussinessInfo: {
            label: 'Business Info',

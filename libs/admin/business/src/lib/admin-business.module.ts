@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminBusinessRoutingModule } from './admin-business.routing.module';
-import { HotelService } from './services/hotel.service';
-import { BrandService } from './services/brand.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SocialMediaService } from './services/social-media.service';
+import { BusinessService } from './services/business.service';
+
+
 
 @NgModule({
   imports: [
@@ -17,7 +17,7 @@ import { SocialMediaService } from './services/social-media.service';
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [HotelService, BrandService, SocialMediaService],
+  providers: [BusinessService],
   declarations: [...AdminBusinessRoutingModule.components],
 })
 export class AdminBusinessModule {}

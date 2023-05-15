@@ -1,7 +1,6 @@
 <div class="wrapper">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <hospitality-bot-button
-      [isLoading]="loading"
       variant="outlined"
       label="Preview and Generate"
       [routerLink]="['../preview-invoice', reservationId]"
@@ -27,6 +26,7 @@
         controlName="guestName"
         label="Guest Name"
         maxLength="60"
+        [loading]="loadingData"
       ></hospitality-bot-input>
       <hospitality-bot-input
         class="half-width"
@@ -116,6 +116,7 @@
           [columns]="cols"
           [value]="tableValue"
           [(selection)]="selectedRows"
+          [loading]="loadingData"
           (onRowSelect)="onRowSelect($event)"
           (onRowUnselect)="onRowUnselect($event)"
           (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
@@ -148,7 +149,7 @@
                 <tr [formGroupName]="rowIndex" [disabled]="true">
                   <td>
                     <p-tableCheckbox
-                      [value]="rowData"
+                      [value]="tableFormArray.at(rowIndex)?.get('key').value"
                       [index]="rowIndex"
                       [disabled]="
                         tableFormArray.at(rowIndex).get('isDisabled').value
@@ -166,7 +167,8 @@
                       "
                       [props]="{
                         isAsync: true,
-                        createPrompt: '+ Add New Service'
+                        createPrompt: '+ Add New Service',
+                        placeholder: 'Select'
                       }"
                       [loading]="loadingDescription"
                       (paginate)="loadMoreDescription()"
@@ -184,7 +186,10 @@
                   <td>
                     <hospitality-bot-input
                       controlName="unit"
-                      [props]="{ type: 'number' }"
+                      [props]="{
+                        errorMessages: errorMessages,
+                        type: 'number'
+                      }"
                       [disabled]="
                         tableFormArray.at(rowIndex).get('isDisabled').value
                       "
@@ -194,7 +199,10 @@
                   <td>
                     <hospitality-bot-input
                       controlName="unitValue"
-                      [props]="{ type: 'number' }"
+                      [props]="{
+                        errorMessages: errorMessages,
+                        type: 'number'
+                      }"
                       [disabled]="
                         tableFormArray.at(rowIndex).get('isDisabled').value
                       "
@@ -238,7 +246,11 @@
                       "
                       [disabled]="
                         tableFormArray.at(rowIndex).get('discountState')
-                          .value == 'editing'
+                          .value === 'editing' ||
+                        tableFormArray.at(rowIndex).get('description')
+                          .invalid ||
+                        tableFormArray.at(rowIndex).get('unit').invalid ||
+                        tableFormArray.at(rowIndex).get('unitValue').invalid
                       "
                     ></hospitality-bot-menu>
                   </td>
@@ -255,7 +267,16 @@
                       'discount'
                   }"
                 >
-                  <td></td>
+                  <td>
+                    <p-tableCheckbox
+                      [value]="
+                        tableFormArray.at(rowIndex - 1)?.get('key').value
+                      "
+                      class="hide-checkbox"
+                      [index]="rowIndex"
+                      [disable]="true"
+                    ></p-tableCheckbox>
+                  </td>
                   <td>
                     <p>Discount Amount</p>
                   </td>
@@ -290,7 +311,10 @@
                         !tableFormArray.at(rowIndex).get('isDisabled').value;
                         else saveDiscount
                       "
-                      [disabled]="!isValidDiscount"
+                      [disabled]="
+                        !isValidDiscount ||
+                        tableFormArray.at(rowIndex).get('discount').invalid
+                      "
                       label="Save"
                       variant="text"
                       (onClick)="onSaveDiscount(rowIndex)"
@@ -366,7 +390,6 @@
             INR {{ inputControl.refundAmount.value | number: '1.1-1' }}
           </span>
         </div>
-        <hr class="line" />
         <div class="py-row">
           <span>Paid Amount</span>
           <span
@@ -376,16 +399,16 @@
         <div class="py-row">
           <span>Due Amount</span>
           <span
+          [ngStyle]="{
+            color:
+              inputControl.dueAmount.value -
+                inputControl.refundAmount.value <
+              0
+                ? 'red'
+                : 'inherit'
+          }"
             >INR
             <span
-              [ngStyle]="{
-                color:
-                  inputControl.dueAmount.value -
-                    inputControl.refundAmount.value <
-                  0
-                    ? 'red'
-                    : 'inherit'
-              }"
               >{{
                 inputControl.dueAmount.value - inputControl.refundAmount.value
                   | number: '1.1-1'
@@ -424,8 +447,10 @@
         ></hospitality-bot-input>
         <hospitality-bot-input
           class="half-width"
-          [props]="{ placeholder: 'Enter' }"
           controlName="remarks"
+          [props]="{
+            placeholder: 'Enter'
+          }"
           label="Your Inclusions/remarks:"
         ></hospitality-bot-input>
         <hospitality-bot-select-group
@@ -437,16 +462,12 @@
         <!-- <div class="one-third-width"></div> -->
         <hospitality-bot-input
           class="half-width"
-          [props]="{
-            placeholder: 'Enter'
-          }"
           controlName="receivedPayment"
           label="Payment Recieved"
         ></hospitality-bot-input>
 
         <hospitality-bot-input
           class="half-width"
-          [props]="{ placeholder: 'Enter' }"
           controlName="transactionId"
           label="Transaction ID"
         ></hospitality-bot-input>

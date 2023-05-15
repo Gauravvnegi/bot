@@ -39,15 +39,12 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter($event)"
+  *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
-      <hospitality-bot-tab-group
-        *ngIf="isTabFilters"
-        [listItems]="tabFilterItems"
-        [selectedIndex]="tabFilterIdx"
-        (selectedTabChange)="onSelectedTabFilterChange($event)"
-      ></hospitality-bot-tab-group>
+     <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+
 
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
@@ -185,11 +182,11 @@
           </ng-container>
           <ng-template #singlePhone>
             <a
-              href="tel:{{ rowData.getPhoneNumber() }}"
+              href="tel:{{ rowData.countryCode }}{{ rowData.phoneNumber }}"
               class="email"
               (click)="openDetailPage($event)"
             >
-              <u> {{ rowData.getPhoneNumber() }}</u>
+              <u> {{rowData.countryCode}}-{{ rowData.phoneNumber }}</u>
             </a>
           </ng-template>
         </span>
@@ -404,4 +401,24 @@
 
 <ng-template #emptyCell>
   <div class="emptyCell">&mdash;</div>
+</ng-template>
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    [content]="{
+      description:'No guest found.',
+      imageSrc: 'assets/images/empty-table-guest.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
 </ng-template>

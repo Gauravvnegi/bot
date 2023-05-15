@@ -7,18 +7,18 @@ export const navRoute = {
   editReservation: { label: 'Edit Reservation', link: './' },
   invoice: { label: 'Invoice', link: './' },
   createInvoice: { label: 'Create Invoice', link: './' },
-  previewInvoice: { label: 'Preview Invoice', link: './invoice/create-invoice/:id'},
+  previewInvoice: { label: 'Preview Invoice', link: '././'},
   paymentHistory: { label: 'Payment History', link: './'},
 };
 
 export const invoiceRoutes: Record<
-  'createInvoice' | 'editInvoice' | 'previewInvoice' | 'paymentHistory',
+  'invoice' | 'editInvoice' | 'previewInvoice' | 'paymentHistory',
   PageRoutes
 > = {
-  createInvoice: {
-    route: 'create-invoice',
-    navRoutes: [navRoute.eFrontdesk, navRoute.invoice, navRoute.createInvoice],
-    title: 'Create Invoice',
+  invoice: {
+    route: '',
+    navRoutes: [navRoute.eFrontdesk, navRoute.invoice],
+    title: 'Manage Invoice',
   },
 
   editInvoice: {
@@ -29,7 +29,7 @@ export const invoiceRoutes: Record<
 
   previewInvoice: {
     route: 'preview-invoice',
-    navRoutes: [navRoute.eFrontdesk, navRoute.invoice, navRoute.createInvoice, navRoute.previewInvoice],
+    navRoutes: [navRoute.eFrontdesk, navRoute.invoice, navRoute.previewInvoice],
     title: 'Preview Invoice',
   },
 

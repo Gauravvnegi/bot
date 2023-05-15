@@ -96,8 +96,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       complimentaryAmenities: [[], [Validators.required]],
       paidAmenities: [[]],
       originalPrice: ['', [Validators.required, Validators.min(0)]],
-      discountType: [''],
-      discountValue: [{ value: '', disabled: true }, [Validators.min(0)]],
+      discountType: ['PERCENTAGE'],
+      discountValue: ['0', [Validators.min(0)]],
       discountedPrice: [{ value: '', disabled: true }],
       variablePriceCurrency: [{ value: '', disabled: true }],
       currency: ['', [Validators.required, Validators.min(0)]],
@@ -154,6 +154,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             label: DiscountType[value],
             value,
           }));
+          console.log(this.discountTypes);
         }
       })
     );
@@ -209,6 +210,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       if (type === 'PERCENTAGE' && discount > 100) {
         return 'isPercentError';
       }
+      
+      if(discount < 0){
+        return 'isMinError';
+      }
     };
 
     const clearError = () => {
@@ -226,6 +231,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       if (error === 'isPercentError') {
         discountValue.setErrors({ moreThan100: true });
       }
+      if(originalPrice.value < 0) {
+        originalPrice.setErrors({ min: true});
+      }
     });
 
     /**
@@ -240,6 +248,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       }
       if (error === 'isPercentError') {
         discountValue.setErrors({ moreThan100: true });
+      }
+      if (error === 'isMinError') {
+        discountValue.setErrors({ min: true });
       }
     };
 
@@ -303,6 +314,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    * @param serviceType
    */
   getServices(serviceType: ServicesTypeValue) {
+    this.loading = true;
     this.subscription$.add(
       this.roomService
         .getServices(this.hotelId, {
@@ -326,6 +338,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           },
           (error) => {
             this.snackbarService.openSnackBarAsText(error.error.message);
+            this.loading = false;
           }
         )
     );

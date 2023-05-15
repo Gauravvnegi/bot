@@ -265,7 +265,7 @@ export class InvoiceService extends ApiService {
   getInvoiceData(reservationId: string): Observable<InvoiceResponse> {
     return this.get(
       `/api/v1/reservation/${reservationId}/invoice?format=json&source=BOTSHOT_ADMIN`
-    );
+    )
     // .pipe(
     //   map((res) => {
     //     return resPonse as InvoiceResponse;
@@ -280,7 +280,10 @@ export class InvoiceService extends ApiService {
   }
 
   emailInvoice(reservationId: string, data): Observable<any> {
-    return this.post(`api/v1/reservation/${reservationId}/send-invoice?source=BOTSHOT_ADMIN'`, data)
+    return this.post(
+      `api/v1/reservation/${reservationId}/send-invoice?source=BOTSHOT_ADMIN'`,
+      data
+    );
   }
 
   getPaymentHistory<T>(config?: QueryConfig): Observable<T> {

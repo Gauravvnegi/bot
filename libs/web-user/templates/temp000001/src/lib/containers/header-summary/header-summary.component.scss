@@ -80,6 +80,7 @@
 }
 
 .modal-body {
+  padding: 2%;
   max-height: calc(90vh - 100px);
   overflow-y: auto;
   &::-webkit-scrollbar {

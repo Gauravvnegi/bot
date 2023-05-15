@@ -12,7 +12,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 export class PreviewComponent implements OnInit {
   reservationId: string;
   previewUrl: string;
-  isLoaded = false;
+  isLoading = true;
   navRoutes = invoiceRoutes['previewInvoice'].navRoutes;
   isInvoiceGenerated = false;
   items = [
@@ -31,9 +31,9 @@ export class PreviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.getReservationId();
-    this.isLoaded = true;
     this.invoiceService.downloadPDF(this.reservationId).subscribe((res) => {
       this.previewUrl = res.file_download_url;
+      this.isLoading = false;
     });
   }
 

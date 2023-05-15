@@ -5,6 +5,7 @@
   >
     <hospitality-bot-button
       label="Email Invoice"
+      variant="outlined"
       (onClick)="handleEmailInvoice()"
     ></hospitality-bot-button>
 
@@ -23,15 +24,20 @@
     ></p-splitButton>
   </hospitality-bot-navigation-header>
 
-  <ng-container *ngIf="isLoaded" else loader>
+  <ng-container *ngIf="!isLoading; else loader">
     <iframe
       class="iframe"
       [src]="previewUrl | safeUrl"
       height="100%"
-      loading="eager"
       width="100%"
       allowFullScreen
       title="Dashboard"
     ></iframe>
   </ng-container>
+
 </div>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>
+

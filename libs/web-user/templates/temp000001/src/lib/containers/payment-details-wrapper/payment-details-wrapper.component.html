@@ -14,7 +14,7 @@
           >
             <div class="img-wrap">
               <img
-                [src]="header.imageUrl"
+                [src]="header?.imageUrl"
                 style="height: 53px;"
                 class="svg-payment"
                 [alt]="'image' + i"
@@ -23,7 +23,7 @@
             <div class="inner-label">
               <div class="type-label">
                 <div>
-                  <span>{{ header.type }}</span>
+                  <span>{{ header?.type }}</span>
                 </div>
                 <div class="amount">
                   <span
@@ -33,13 +33,13 @@
                 </div>
               </div>
               <div class="info-label">
-                {{ header.description }}
+                {{ header?.description }}
               </div>
             </div>
           </div>
         </ng-template>
         <div class="payment-wrapper">
-          <div *ngIf="header.type !== 'Pay At Desk'">
+          <div *ngIf="header?.type !== 'Pay At Desk'">
             <div class="payment__wrapper__heading">
               Payment Methods
             </div>

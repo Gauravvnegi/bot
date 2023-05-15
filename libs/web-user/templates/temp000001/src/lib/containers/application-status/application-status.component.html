@@ -179,7 +179,7 @@
     </div>
     <div>
       <div class="section--heading">Payment Info</div>
-      <div class="section--content">
+      <div class="section--content amount">
         <div class="section--content--label">
           <ng-container
             [ngSwitch]="summaryDetails.paymentSummary.statusMessage.status"
@@ -210,7 +210,7 @@
             </ng-container>
           </ng-container>
         </div>
-        <div class="section--content--label margin-added">
+        <div class="section--content--label amount__pay">
           Amount to pay :&nbsp;<span
             >{{ currencyCode }}
             {{ paymentDetails ? paymentDetails.payableAmount : 0 }}</span

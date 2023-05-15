@@ -30,7 +30,6 @@ export class GuestBookingInfoComponent implements OnInit, OnDestroy {
     this.pastBooking = this.reservationData.filter(
       (item) => item.subType === 'PAST'
     );
-    console.log(this.pastBooking);
     this.currentBooking = this.reservationData.filter(
       (item) => item.subType === 'CURRENT'
     );
@@ -61,15 +60,10 @@ export class GuestBookingInfoComponent implements OnInit, OnDestroy {
   }
 
   checkForNoBooking(): boolean {
-    console.log(
-      !this.pastBooking.length ||
-        !this.currentBooking.length ||
-        !this.upcomingBooking.length
-    );
     return (
-      !this.pastBooking.length &&
-      !this.currentBooking.length &&
-      !this.upcomingBooking.length
+      !!this.pastBooking.length &&
+      !!this.currentBooking.length &&
+      !!this.upcomingBooking.length
     );
   }
 

@@ -1,0 +1,15 @@
+<ng-container *ngIf="config.responsive; else nonResponsive">
+  <picture *ngIf="!sourceImage; else default" class="image_picture">
+    <source media="(min-width: 1300px)" [srcset]="url" />
+    <source media="(max-width: 599px)" [srcset]="mobileImage" />
+    <source media="(min-width: 600px)" [srcset]="tabImage" />
+    <img (error)="updateUrl($event)" alt="alternative" />
+  </picture>
+</ng-container>
+<ng-template #default>
+  <img class="default_image" [src]="this.config.defaultUrl" alt="alternative" />
+</ng-template>
+
+<ng-template #nonResponsive>
+  <img *ngIf="!config.responsive" [src]="url" alt="" />
+</ng-template>

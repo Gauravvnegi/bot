@@ -217,13 +217,13 @@ export class InvoiceComponent implements OnInit {
         //   this.addNewCharges(); // adding new table entry to patch data
         // }
 
-        if (data.tableData.length === 0) {
-          console.log(this.guestId);
-          console.log(this.bookingNumber);
-          this.reservationService.bookingNumber = this.bookingNumber;
-          this.reservationService.guestId = this.guestId;
-          this.router.navigateByUrl('/pages/efrontdesk');
-        }
+        // if (data.tableData.length === 0) {
+        //   console.log(this.guestId);
+        //   console.log(this.bookingNumber);
+        //   this.reservationService.bookingNumber = this.bookingNumber;
+        //   this.reservationService.guestId = this.guestId;
+        //   this.router.navigateByUrl('/pages/efrontdesk');
+        // }
 
         data.tableData.forEach((item, idx) => {
           // this.tableValue.push({ id: idx + 1 });

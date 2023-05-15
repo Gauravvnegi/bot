@@ -26,6 +26,7 @@
         controlName="guestName"
         label="Guest Name"
         maxLength="60"
+        [loading]="loadingData"
       ></hospitality-bot-input>
       <hospitality-bot-input
         class="half-width"
@@ -115,6 +116,7 @@
           [columns]="cols"
           [value]="tableValue"
           [(selection)]="selectedRows"
+          [loading]="loadingData"
           (onRowSelect)="onRowSelect($event)"
           (onRowUnselect)="onRowUnselect($event)"
           (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
@@ -183,7 +185,10 @@
                   <td>
                     <hospitality-bot-input
                       controlName="unit"
-                      [props]="{ type: 'number' }"
+                      [props]="{
+                        errorMessages: errorMessages,
+                        type: 'number'
+                      }"
                       [disabled]="
                         tableFormArray.at(rowIndex).get('isDisabled').value
                       "
@@ -193,7 +198,10 @@
                   <td>
                     <hospitality-bot-input
                       controlName="unitValue"
-                      [props]="{ type: 'number' }"
+                      [props]="{
+                        errorMessages: errorMessages,
+                        type: 'number'
+                      }"
                       [disabled]="
                         tableFormArray.at(rowIndex).get('isDisabled').value
                       "
@@ -238,7 +246,7 @@
                       [disabled]="
                         tableFormArray.at(rowIndex).get('discountState')
                           .value === 'editing' ||
-                        tableFormArray.at(rowIndex).get('description').invalid
+                        tableFormArray.at(rowIndex).invalid
                       "
                     ></hospitality-bot-menu>
                   </td>

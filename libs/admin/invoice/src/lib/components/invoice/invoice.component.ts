@@ -89,7 +89,7 @@ export class InvoiceComponent implements OnInit {
   serviceOptions: Option[];
 
   descriptionOffSet = 0;
-  loadingTableData = false;
+  loadingData = false;
   loadingDescription = false;
   noMoreDescription = false;
   selectedSearchIndex = -1;
@@ -129,7 +129,7 @@ export class InvoiceComponent implements OnInit {
    * Initialize page title and navigator
    */
   initPageHeaders() {
-    const { title, navRoutes } = invoiceRoutes['createInvoice'];
+    const { title, navRoutes } = invoiceRoutes['invoice'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
   }
@@ -190,7 +190,7 @@ export class InvoiceComponent implements OnInit {
    * Patch the initial form values
    */
   initFormDetails() {
-    this.loadingTableData = true;
+    this.loadingData = true;
     const { firstName, lastName } = this.userService.userDetails;
     // this.tableValue = [{ id: 1 }];
     this.invoiceService.getInvoiceData(this.reservationId).subscribe(
@@ -234,9 +234,7 @@ export class InvoiceComponent implements OnInit {
 
         this.guestId = res.primaryGuest.id;
         this.isInvoiceGenerated = res.invoiceGenerated;
-      },
-      () => {
-        this.loadingTableData = false;
+        this.loadingData=false;
       }
     );
   }
@@ -336,12 +334,16 @@ export class InvoiceComponent implements OnInit {
    */
   addNewCharges(type: 'price' | 'discount' = 'price', rowIndex?: number) {
     if (this.tableFormArray.length > 0 && !rowIndex) {
-      const lastFormGroup = this.tableFormArray.at(
+
+      let lastFormGroup = this.tableFormArray.at(
         this.tableFormArray.length - 1
       );
       const rowType = lastFormGroup.get('type');
+      if (rowType.value === 'discount') {
+        lastFormGroup = this.tableFormArray.at(this.tableFormArray.length - 2);
+      }
+      console.log(lastFormGroup);
       if (
-        rowType.value === 'price' &&
         lastFormGroup.invalid &&
         type === 'price'
       ) {
@@ -399,9 +401,10 @@ export class InvoiceComponent implements OnInit {
     const currentFormGroup = this.tableFormArray.at(
       this.tableFormArray.controls.length - 1
     ) as FormGroup;
-
+    
+    
     const { description, unit, unitValue } = currentFormGroup.controls;
-
+    
     const handlePriceRowUpdate = ({
       serviceId,
       unitQuantity,
@@ -442,6 +445,7 @@ export class InvoiceComponent implements OnInit {
         ];
       }
 
+      
       const currentUnitQuantity = unitQuantity ?? unit.value ?? 1;
       const currentUnitValue =
         unitPrice ?? (serviceId ? selectedService.amount : unitValue.value);
@@ -500,12 +504,14 @@ export class InvoiceComponent implements OnInit {
     description.valueChanges.subscribe((serviceId) =>
       handlePriceRowUpdate({ serviceId })
     );
-
+    
     unit.valueChanges.subscribe((unitQuantity) => {
+      if(unit.invalid || unitValue.invalid) return;
       handlePriceRowUpdate({ unitQuantity });
     });
 
     unitValue.valueChanges.subscribe((unitPrice) => {
+      if(unit.invalid || unitValue.invalid) return;
       handlePriceRowUpdate({ unitPrice });
     });
 
@@ -575,6 +581,9 @@ export class InvoiceComponent implements OnInit {
       if (discount.value > 100 && discountType.value === 'PERCENT') {
         return 'isPercentError';
       }
+      if (discount.value < 0){
+        return 'isLessThanZero';
+      }
     };
 
     const clearError = () => {
@@ -598,6 +607,10 @@ export class InvoiceComponent implements OnInit {
       }
       if (error === 'isPercentError') {
         discount.setErrors({ moreThan100: true });
+        this.isValidDiscount = false;
+      }
+      if (error === 'isLessThanZero') {
+        discount.setErrors({min: true});
         this.isValidDiscount = false;
       }
     };

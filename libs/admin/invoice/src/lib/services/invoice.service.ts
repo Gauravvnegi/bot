@@ -265,11 +265,12 @@ export class InvoiceService extends ApiService {
   getInvoiceData(reservationId: string): Observable<InvoiceResponse> {
     return this.get(
       `/api/v1/reservation/${reservationId}/invoice?format=json&source=BOTSHOT_ADMIN`
-    ).pipe(
-      map((res) => {
-        return resPonse as InvoiceResponse;
-      })
-    );
+    )
+    // .pipe(
+    //   map((res) => {
+    //     return resPonse as InvoiceResponse;
+    //   })
+    // );
   }
 
   downloadPDF(reservationId: string): Observable<any> {

@@ -4,7 +4,7 @@ import { Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { Angular2SignaturepadModule } from 'angular2-signaturepad';
+import { SignaturePadModule } from 'angular2-signaturepad';
 import { TextMaskModule } from 'angular2-text-mask';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MultiTranslateHttpLoader } from 'ngx-translate-multi-http-loader';
@@ -47,6 +47,7 @@ import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shar
 import { TabGroupComponent } from './presentational/tab-group/tab-group.component';
 import { BackgroundUrlPipe } from './pipes/background-url.pipe';
 import { SearchSelectboxComponent } from './presentational/search-selectbox/search-selectbox.component';
+import { ImageComponent } from './presentational/image/image.component';
 
 export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
   const { templateId } = injector.get('TEMPLATE_CONFIG');
@@ -77,7 +78,7 @@ export interface IThemeConfig {
     FormsModule,
     ReactiveFormsModule,
     TextMaskModule,
-    Angular2SignaturepadModule,
+    SignaturePadModule,
     MatTabsModule,
     NgxMaterialTimepickerModule,
     SharedImageCropperModule,
@@ -127,13 +128,14 @@ export interface IThemeConfig {
     TabGroupComponent,
     BackgroundUrlPipe,
     SearchSelectboxComponent,
+    ImageComponent,
   ],
   exports: [
     SharedMaterialModule,
     ReactiveFormsModule,
     FormsModule,
     NgxMaterialTimepickerModule,
-    Angular2SignaturepadModule,
+    SignaturePadModule,
     MatTabsModule,
     StepperComponent,
     RadioComponent,
@@ -171,6 +173,7 @@ export interface IThemeConfig {
     TabGroupComponent,
     BackgroundUrlPipe,
     SearchSelectboxComponent,
+    ImageComponent,
   ],
 })
 export class WebUserSharedModule {

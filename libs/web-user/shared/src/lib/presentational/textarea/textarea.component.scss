@@ -8,6 +8,9 @@ mat-label {
   font-size: 17px;
   padding: 13px 0;
   color: black;
+  @media screen and (max-width: 600px) {
+    font-size: 14px;
+  }
 }
 
 :host ::ng-deep .mat-form-field-outline-thick .mat-form-field-outline-start {

@@ -21,7 +21,7 @@ export class PaidService extends ApiService {
 
   private _paidServiceDetailDS: PaidServiceDetailDS;
 
-  initPaidAmenitiesDetailDS(amenities, selectedAmenities, arrivalTime) {
+  initPaidAmenitiesDetailDS(amenities = [], selectedAmenities, arrivalTime) {
     this._paidServiceDetailDS = new PaidServiceDetailDS().deserialize(
       amenities,
       selectedAmenities,

@@ -44,10 +44,12 @@
       <div [ngClass]="settings.modal.style.footer">
         <div class="save-button">
           <hospitality-bot-temp000002-button
-            [settings]="{ label: 'Save' }"
+            [settings]="{
+              label: isSubmit ? 'Save and checking' : 'Save'
+            }"
             [buttonClass]="'next-button'"
             class="user-button"
-            (click)="onClose()"
+            (click)="handleSave()"
           ></hospitality-bot-temp000002-button>
         </div>
       </div>

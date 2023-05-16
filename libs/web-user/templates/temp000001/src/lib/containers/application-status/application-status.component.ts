@@ -38,6 +38,10 @@ export class ApplicationStatusComponent implements OnInit, OnDestroy {
   @Input()
   context: any;
   @Output() termsStatus = new EventEmitter();
+  @Output() requiredDetails = new EventEmitter<{
+    regcardUrl: string;
+    signatureImageUrl: string;
+  }>();
 
   $subscription = new Subscription();
   isLoaderVisible = true;
@@ -105,6 +109,13 @@ export class ApplicationStatusComponent implements OnInit, OnDestroy {
             res,
             this._hotelService.hotelConfig.timezone
           );
+
+          this.requiredDetails.emit({
+            regcardUrl: this.summaryDetails.guestDetails.guests[0].regcardUrl,
+            signatureImageUrl: this.summaryDetails.guestDetails.guests[0]
+              .signatureUrl,
+          });
+
           if (res.guestDetails.primaryGuest.privacy !== undefined) {
             this.privacyFG.patchValue({
               accept: res.guestDetails.primaryGuest.privacy,
@@ -127,20 +138,30 @@ export class ApplicationStatusComponent implements OnInit, OnDestroy {
     }
   }
 
-  openRegCard() {
+  openRegComp(regUrl: string) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.id = 'modal-component';
-    if (this.summaryDetails.guestDetails.guests[0].regcardUrl) {
-      dialogConfig.data = {
-        regcardUrl: this.summaryDetails.guestDetails.guests[0].regcardUrl,
-        signatureImageUrl:
-          this.summaryDetails.guestDetails.guests[0].signatureUrl || '',
-      };
-      this._dialogRef = this._modal.openDialog(
-        this.regCardComponent,
-        dialogConfig
-      );
+
+    dialogConfig.data = {
+      regcardUrl: regUrl,
+      signatureImageUrl:
+        this.summaryDetails.guestDetails.guests[0].signatureUrl || '',
+    };
+    this._dialogRef = this._modal.openDialog(
+      this.regCardComponent,
+      dialogConfig
+    );
+
+    this._dialogRef.componentInstance.onSave.subscribe((res) => {
+      this._dialogRef.close();
+    });
+  }
+
+  openRegCard() {
+    const regUrl = this.summaryDetails.guestDetails.guests[0].regcardUrl;
+    if (regUrl) {
+      this.openRegComp(regUrl);
     } else {
       this.regCardLoading = true;
       this.$subscription.add(
@@ -149,17 +170,7 @@ export class ApplicationStatusComponent implements OnInit, OnDestroy {
           .subscribe(
             (res: FileData) => {
               this.regCardLoading = false;
-              dialogConfig.data = {
-                regcardUrl:
-                  this.summaryDetails.guestDetails.guests[0].regcardUrl ||
-                  res.file_download_url,
-                signatureImageUrl:
-                  this.summaryDetails.guestDetails.guests[0].signatureUrl || '',
-              };
-              this._dialogRef = this._modal.openDialog(
-                this.regCardComponent,
-                dialogConfig
-              );
+              this.openRegComp(res.file_download_url);
             },
             ({ error }) => {
               this.regCardLoading = false;

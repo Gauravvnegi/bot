@@ -210,8 +210,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       if (type === 'PERCENTAGE' && discount > 100) {
         return 'isPercentError';
       }
-      
-      if(discount < 0){
+
+      if (discount < 0) {
         return 'isMinError';
       }
     };
@@ -231,8 +231,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       if (error === 'isPercentError') {
         discountValue.setErrors({ moreThan100: true });
       }
-      if(originalPrice.value < 0) {
-        originalPrice.setErrors({ min: true});
+      if (originalPrice.value < 0) {
+        originalPrice.setErrors({ min: true });
       }
     });
 
@@ -338,6 +338,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           },
           (error) => {
             this.snackbarService.openSnackBarAsText(error.error.message);
+          },
+          () => {
             this.loading = false;
           }
         )

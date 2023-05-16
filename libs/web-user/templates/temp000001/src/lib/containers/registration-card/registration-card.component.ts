@@ -1,4 +1,12 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as JSZipUtils from 'jszip-utils';
@@ -48,6 +56,12 @@ export class RegistrationCardComponent implements OnInit, OnDestroy {
     regcardUrl: '',
     signatureImageUrl: '',
   };
+
+  @Input() isSubmit = false; // whether to check-in or not
+  @Output() onSave = new EventEmitter<{
+    regCardUrl: string;
+    isSave: boolean;
+  }>();
 
   @Input('settings') set settings(value) {
     this._settings = { ...this._defaultValue, ...value };
@@ -103,6 +117,7 @@ export class RegistrationCardComponent implements OnInit, OnDestroy {
         .subscribe(
           (res) => {
             this._utilityService.$signatureUploaded.next(true);
+            this._defaultValue.regcardUrl = res.fileDownloadUrl;
           },
           ({ error }) => {
             this._translateService
@@ -117,7 +132,21 @@ export class RegistrationCardComponent implements OnInit, OnDestroy {
   }
 
   onClose() {
-    this.dialogRef.close();
+    this.onSave.emit({
+      regCardUrl: this._defaultValue.regcardUrl,
+      isSave: false,
+    });
+  }
+
+  handleSave() {
+    if (this._utilityService.$signatureUploaded.value) {
+      this.onSave.emit({
+        regCardUrl: this._defaultValue.regcardUrl,
+        isSave: true,
+      });
+    } else {
+      this._snackBarService.openSnackBarAsText('Please sign reg card.');
+    }
   }
 
   ngOnDestroy() {

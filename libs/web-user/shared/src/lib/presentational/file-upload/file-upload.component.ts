@@ -26,6 +26,7 @@ export class FileUploadComponent extends BaseComponent {
   @Input() fileType: string[];
   @Input() documentType: string;
   @ViewChild('fileInput') inputRef: ElementRef;
+  @ViewChild('hiddenInput') hiddenFileInput: ElementRef;
 
   @Output()
   documentData = new EventEmitter();
@@ -115,8 +116,7 @@ export class FileUploadComponent extends BaseComponent {
         }
       }
       dialogRef.close();
-    }
-    );
+    });
   }
 
   /**
@@ -135,7 +135,9 @@ export class FileUploadComponent extends BaseComponent {
    */
   onDelete() {
     this.inputRef.nativeElement.value = null;
+    this.hiddenFileInput.nativeElement.value = null;
     this.url = null;
-    // this.documentData.emit({ status: false });
+    this.parentForm.get(this.name).docData.reset();
+    this.documentData.emit({ status: false, isDelete: true });
   }
 }

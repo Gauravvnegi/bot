@@ -251,7 +251,8 @@
                         tableFormArray.at(rowIndex).get('description')
                           .invalid ||
                         tableFormArray.at(rowIndex).get('unit').invalid ||
-                        tableFormArray.at(rowIndex).get('unitValue').invalid || isInvoiceGenerated
+                        tableFormArray.at(rowIndex).get('unitValue').invalid ||
+                        isInvoiceGenerated
                       "
                     ></hospitality-bot-menu>
                   </td>
@@ -402,14 +403,13 @@
         <div class="py-row">
           <span>Due Amount</span>
           <span
-          [ngStyle]="{
-            color:
-              inputControl.dueAmount.value -
-                inputControl.refundAmount.value <
-              0
-                ? 'red'
-                : 'inherit'
-          }"
+            [ngStyle]="{
+              color:
+                inputControl.dueAmount.value - inputControl.refundAmount.value <
+                0
+                  ? 'red'
+                  : 'inherit'
+            }"
             >INR
             <span
               >{{
@@ -468,8 +468,12 @@
           class="half-width"
           controlName="receivedPayment"
           [props]="{
-            placeholder: 'Enter Amount',
-            type: 'number'
+            placeholder: 'Enter',
+            type: 'number',
+            errorMessages: {
+              required: 'This is a required field.',
+              min: 'Value must be greater than 0.'
+            }
           }"
           label="Payment Recieved"
         ></hospitality-bot-input>

@@ -119,23 +119,45 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
       dialogConfig
     );
 
+    // let heading: string;
+    let description: string[];
+    let label: string;
+
+    console.log(status);
+    console.log(rowData);
+
+    if (status === ManageSiteStatus.DRAFT) {
+      description = [
+        'Are you sure you want to unpublish your website?',
+        ' Once unpublished, it wont be visible to visitors.',
+        'You can always Publish it again.',
+      ];
+      label = 'Unpublish';
+    }
+
+    if (status === ManageSiteStatus.TRASH) {
+      description = [
+        'Are you sure you want to move your website to the trash?',
+        'Once moved, it will become invisible and inactive.',
+        ' You can always restore it again.',
+      ];
+      label = 'Trash';
+    }
+
     togglePopupCompRef.componentInstance.content = {
       heading: `Mark As ${
         status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
       }`,
-      description: [
-        `You are about to mark this site ${status}`,
-        'Are you Sure?',
-      ],
+      description: description,
     };
     togglePopupCompRef.componentInstance.actions = [
       {
-        label: 'No',
+        label: 'Cancel',
         onClick: () => this.modalService.close(),
         variant: 'outlined',
       },
       {
-        label: 'Yes',
+        label: label,
         onClick: () => {
           this.changeStatus(status, rowData);
           this.modalService.close();

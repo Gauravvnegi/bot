@@ -119,6 +119,9 @@
     cursor: pointer;
     opacity: 1;
   }
+  &:disabled {
+    opacity: 0.6;
+  }
 }
 
 :host ::ng-deep .svg {

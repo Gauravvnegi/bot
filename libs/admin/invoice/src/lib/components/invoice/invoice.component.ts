@@ -23,7 +23,7 @@ import {
 import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
 import { ServicesService } from 'libs/admin/services/src/lib/services/services.service';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { Subscription, from } from 'rxjs';
+import { Subscription, from, throwError } from 'rxjs';
 import {
   addDiscountMenu,
   addRefundMenu,
@@ -43,6 +43,7 @@ import {
 } from '../../models/invoice.model';
 import { InvoiceService } from '../../services/invoice.service';
 import { InvoiceForm, PaymentField } from '../../types/forms.types';
+import { ReservationService } from '@hospitality-bot/admin/dashboard';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -57,6 +58,7 @@ export class InvoiceComponent implements OnInit {
   hotelId: string;
   reservationId: string;
   guestId: string;
+  bookingNumber: string;
 
   tableFormArray: FormArray;
   useForm: FormGroup;
@@ -109,7 +111,10 @@ export class InvoiceComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private servicesService: ServicesService,
     private modalService: ModalService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private reservationService: ReservationService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -173,7 +178,7 @@ export class InvoiceComponent implements OnInit {
         Validators.required,
       ],
       paymentMethod: ['', Validators.required],
-      receivedPayment: ['', Validators.required],
+      receivedPayment: ['', [Validators.required, Validators.min(0)]],
       remarks: ['', Validators.required],
       transactionId: ['', Validators.required],
     });
@@ -200,9 +205,24 @@ export class InvoiceComponent implements OnInit {
         const data = new Invoice().deserialize(res, {
           cashierName: `${firstName} ${lastName}`,
         });
+        this.guestId = res.primaryGuest.id;
+        this.bookingNumber = res.reservation.number;
+
+        if (data.gstNumber !== '') {
+          this.onAddGST();
+        }
+
         // this.tableValue = data.tableData.map((_, idx) => ({ id: idx + 1 }));
         // for (let i = 1; i < data.tableData.length; i++) {
         //   this.addNewCharges(); // adding new table entry to patch data
+        // }
+
+        // if (data.tableData.length === 0) {
+        //   console.log(this.guestId);
+        //   console.log(this.bookingNumber);
+        //   this.reservationService.bookingNumber = this.bookingNumber;
+        //   this.reservationService.guestId = this.guestId;
+        //   this.router.navigateByUrl('/pages/efrontdesk');
         // }
 
         data.tableData.forEach((item, idx) => {
@@ -211,7 +231,6 @@ export class InvoiceComponent implements OnInit {
         });
 
         this.useForm.patchValue(data, { emitEvent: false });
-
         // Generating tax options
         this.tax = res.itemList.reduce((prev, curr) => {
           const taxes = curr.itemTax.map((item) => ({
@@ -232,9 +251,16 @@ export class InvoiceComponent implements OnInit {
           });
         });
 
-        this.guestId = res.primaryGuest.id;
         this.isInvoiceGenerated = res.invoiceGenerated;
-        this.loadingData=false;
+        if (this.isInvoiceGenerated){
+          this.useForm.disable();
+        }
+        this.loadingData = false;
+      },
+      (error) => {
+        this.reservationService.bookingNumber = this.bookingNumber;
+        this.reservationService.guestId = this.guestId;
+        this.router.navigateByUrl('/pages/efrontdesk');
       }
     );
   }
@@ -322,9 +348,10 @@ export class InvoiceComponent implements OnInit {
     if (addValidation) {
       companyNameControl.setValidators([Validators.required]);
       companyNameControl.updateValueAndValidity();
+      companyNameControl.markAsUntouched();
     } else {
-      companyNameControl.updateValueAndValidity();
       companyNameControl.clearValidators();
+      companyNameControl.updateValueAndValidity();
       companyNameControl.markAsUntouched();
     }
   }
@@ -334,20 +361,11 @@ export class InvoiceComponent implements OnInit {
    */
   addNewCharges(type: 'price' | 'discount' = 'price', rowIndex?: number) {
     if (this.tableFormArray.length > 0 && !rowIndex) {
-
-      let lastFormGroup = this.tableFormArray.at(
-        this.tableFormArray.length - 1
-      );
-      const rowType = lastFormGroup.get('type');
-      if (rowType.value === 'discount') {
-        lastFormGroup = this.tableFormArray.at(this.tableFormArray.length - 2);
-      }
-      console.log(lastFormGroup);
-      if (
-        lastFormGroup.invalid &&
-        type === 'price'
-      ) {
+      if (this.tableFormArray.invalid) {
         this.markAsTouched(this.tableFormArray);
+        this.snackbarService.openSnackBarAsText(
+          'Invalid form: Please fix the errors.'
+        );
         return;
       }
     }
@@ -361,13 +379,16 @@ export class InvoiceComponent implements OnInit {
           ? this.tableFormArray.at(index - 1)?.get('key').value
           : `${Date.now()}`,
       ],
-      description: ['', Validators.required],
-      unit: [null, [Validators.min(0)]],
-      unitValue: [null, [Validators.min(0)]],
+      description: ['', type === 'price' ? [Validators.required] : null],
+      unit: [null, type === 'price' ? [Validators.min(0)] : null],
+      unitValue: [null, type === 'price' ? [Validators.min(0)] : null],
       amount: [null],
       tax: [[]],
       totalAmount: [null],
-      discount: [null, [Validators.min(0)]],
+      discount: [
+        null,
+        type === 'discount' ? [Validators.required, Validators.min(0)] : null,
+      ],
       discountType: ['PERCENT'],
       type: [type],
       isDisabled: [false],
@@ -401,10 +422,9 @@ export class InvoiceComponent implements OnInit {
     const currentFormGroup = this.tableFormArray.at(
       this.tableFormArray.controls.length - 1
     ) as FormGroup;
-    
-    
+
     const { description, unit, unitValue } = currentFormGroup.controls;
-    
+
     const handlePriceRowUpdate = ({
       serviceId,
       unitQuantity,
@@ -445,7 +465,6 @@ export class InvoiceComponent implements OnInit {
         ];
       }
 
-      
       const currentUnitQuantity = unitQuantity ?? unit.value ?? 1;
       const currentUnitValue =
         unitPrice ?? (serviceId ? selectedService.amount : unitValue.value);
@@ -504,14 +523,14 @@ export class InvoiceComponent implements OnInit {
     description.valueChanges.subscribe((serviceId) =>
       handlePriceRowUpdate({ serviceId })
     );
-    
+
     unit.valueChanges.subscribe((unitQuantity) => {
-      if(unit.invalid || unitValue.invalid) return;
+      if (unit.invalid || unitValue.invalid) return;
       handlePriceRowUpdate({ unitQuantity });
     });
 
     unitValue.valueChanges.subscribe((unitPrice) => {
-      if(unit.invalid || unitValue.invalid) return;
+      if (unit.invalid || unitValue.invalid) return;
       handlePriceRowUpdate({ unitPrice });
     });
 
@@ -581,7 +600,7 @@ export class InvoiceComponent implements OnInit {
       if (discount.value > 100 && discountType.value === 'PERCENT') {
         return 'isPercentError';
       }
-      if (discount.value < 0){
+      if (discount.value < 0) {
         return 'isLessThanZero';
       }
     };
@@ -610,7 +629,7 @@ export class InvoiceComponent implements OnInit {
         this.isValidDiscount = false;
       }
       if (error === 'isLessThanZero') {
-        discount.setErrors({min: true});
+        discount.setErrors({ min: true });
         this.isValidDiscount = false;
       }
     };
@@ -827,6 +846,17 @@ export class InvoiceComponent implements OnInit {
     }
   };
 
+  previewAndGenerate(): void {
+    if(!this.inputControl.paidAmount.value){
+      this.snackbarService.openSnackBarAsText(
+        'Paid amount is 0: Invoice cannot preview or generate'
+      )
+      return;
+    }
+
+    this.router.navigate(['../preview-invoice', this.reservationId], { relativeTo: this.route });
+  }
+
   handleSave(): void {
     if (!this.addGST) this.gstValidation(false);
 
@@ -852,7 +882,11 @@ export class InvoiceComponent implements OnInit {
       this.invoiceService
         .updateInvoice(this.reservationId, data)
         .subscribe((res) => {
-          console.log('Invoice Updated');
+          this.snackbarService.openSnackBarAsText(
+            'Invoice Updated Successfully',
+            '',
+            { panelClass: 'success' }
+          );
         })
     );
   }

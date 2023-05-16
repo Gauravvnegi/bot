@@ -3,7 +3,7 @@
     <hospitality-bot-button
       variant="outlined"
       label="Preview and Generate"
-      [routerLink]="['../preview-invoice', reservationId]"
+      (onClick)="previewAndGenerate()"
       queryParamsHandling="preserve"
     ></hospitality-bot-button>
   </hospitality-bot-navigation-header>
@@ -167,7 +167,8 @@
                       "
                       [props]="{
                         isAsync: true,
-                        createPrompt: '+ Add New Service'
+                        createPrompt: '+ Add New Service',
+                        placeholder: 'Select'
                       }"
                       [loading]="loadingDescription"
                       (paginate)="loadMoreDescription()"
@@ -246,7 +247,10 @@
                       [disabled]="
                         tableFormArray.at(rowIndex).get('discountState')
                           .value === 'editing' ||
-                        tableFormArray.at(rowIndex).invalid
+                        tableFormArray.at(rowIndex).get('description')
+                          .invalid ||
+                        tableFormArray.at(rowIndex).get('unit').invalid ||
+                        tableFormArray.at(rowIndex).get('unitValue').invalid
                       "
                     ></hospitality-bot-menu>
                   </td>
@@ -307,7 +311,10 @@
                         !tableFormArray.at(rowIndex).get('isDisabled').value;
                         else saveDiscount
                       "
-                      [disabled]="!isValidDiscount"
+                      [disabled]="
+                        !isValidDiscount ||
+                        tableFormArray.at(rowIndex).get('discount').invalid
+                      "
                       label="Save"
                       variant="text"
                       (onClick)="onSaveDiscount(rowIndex)"
@@ -336,7 +343,7 @@
             INR {{ inputControl.currentAmount.value | number: '1.1-1' }}</span
           >
         </div>
-        <div class="py-row">
+        <div class="py-row" *ngIf="inputControl.totalDiscount.value">
           <span>Discount</span>
           <span
             >INR {{ inputControl.totalDiscount.value | number: '1.1-1' }}</span
@@ -383,8 +390,7 @@
             INR {{ inputControl.refundAmount.value | number: '1.1-1' }}
           </span>
         </div>
-        <hr class="line" />
-        <div class="py-row">
+        <div class="py-row" *ngIf="inputControl.paidAmount.value">
           <span>Paid Amount</span>
           <span
             >INR {{ inputControl.paidAmount.value | number: '1.1-1' }}
@@ -393,16 +399,16 @@
         <div class="py-row">
           <span>Due Amount</span>
           <span
+          [ngStyle]="{
+            color:
+              inputControl.dueAmount.value -
+                inputControl.refundAmount.value <
+              0
+                ? 'red'
+                : 'inherit'
+          }"
             >INR
             <span
-              [ngStyle]="{
-                color:
-                  inputControl.dueAmount.value -
-                    inputControl.refundAmount.value <
-                  0
-                    ? 'red'
-                    : 'inherit'
-              }"
               >{{
                 inputControl.dueAmount.value - inputControl.refundAmount.value
                   | number: '1.1-1'
@@ -441,8 +447,10 @@
         ></hospitality-bot-input>
         <hospitality-bot-input
           class="half-width"
-          [props]="{ placeholder: 'Enter' }"
           controlName="remarks"
+          [props]="{
+            placeholder: 'Enter'
+          }"
           label="Your Inclusions/remarks:"
         ></hospitality-bot-input>
         <hospitality-bot-select-group
@@ -454,17 +462,20 @@
         <!-- <div class="one-third-width"></div> -->
         <hospitality-bot-input
           class="half-width"
-          [props]="{
-            placeholder: 'Enter'
-          }"
           controlName="receivedPayment"
+          [props]="{
+            placeholder: 'Enter Amount',
+            type: 'number'
+          }"
           label="Payment Recieved"
         ></hospitality-bot-input>
 
         <hospitality-bot-input
           class="half-width"
-          [props]="{ placeholder: 'Enter' }"
           controlName="transactionId"
+          [props]="{
+            placeholder: 'Enter'
+          }"
           label="Transaction ID"
         ></hospitality-bot-input>
       </ng-container>

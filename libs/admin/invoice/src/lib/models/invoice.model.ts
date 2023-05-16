@@ -77,7 +77,7 @@ export class Invoice {
     });
 
     this.discountedAmount = input.invoiceAmount;
-    this.paidAmount = input.invoicePaidAmount;
+    this.paidAmount = input.reservation.totalPaidAmount;
     this.dueAmount = input.invoiceDueAmount;
 
     this.currency = 'INR';

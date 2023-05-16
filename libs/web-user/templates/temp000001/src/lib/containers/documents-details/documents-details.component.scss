@@ -110,3 +110,12 @@ mat-icon {
     height: 20px;
   }
 }
+
+::ng-deep .primary-image-btn {
+  background-color: $primary-blue !important;
+  border-radius: 8px !important;
+}
+
+::ng-deep .secondary-image-btn {
+  border-radius: 8px !important;
+}

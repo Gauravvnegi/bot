@@ -16,6 +16,7 @@
       [src]="fileConfig.fileIcon"
     />
     <input
+      class="input-file"
       #fileInput
       type="file"
       accept="image/*"
@@ -23,7 +24,20 @@
       (click)="fileInput.value = null"
       (change)="onSelectFile($event)"
     />
-    <input type="hidden" [formControlName]="name" />
+    <div
+      class="overlay"
+      *ngIf="this.url && this.url.trim() && !isUploading"
+    >
+      <img class="edit" (click)="onEdit()" src="assets/edit.png" alt="edit" />
+      <img
+        class="delete"
+        (click)="onDelete()"
+        src="assets/delete.png"
+        alt="delete"
+      />
+    </div>
+    <input type="hidden" [formControlName]="name" #hiddenInput/>
+
     <mat-label *ngIf="settings"
       >{{ documentType }}{{ settings.label
       }}<span class="required" *ngIf="settings.required">*</span></mat-label

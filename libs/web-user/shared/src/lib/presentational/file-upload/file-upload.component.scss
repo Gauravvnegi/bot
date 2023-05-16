@@ -46,3 +46,43 @@ mat-label {
   transform: translate(-50%, -100%);
   left: 50%;
 }
+.upload__box:hover{
+  cursor: pointer;
+}
+.upload__box:hover .overlay {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  .delete {
+    opacity: 1;
+  }
+  .edit {
+    opacity: 1;
+  }
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  transition: backgrond 0.5s ease;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2%;
+
+
+  .delete {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    cursor: pointer;
+  }
+  .edit {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    cursor: pointer;
+  }
+}

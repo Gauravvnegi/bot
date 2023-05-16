@@ -85,3 +85,13 @@
     }
   }
 }
+
+:host ::ng-deep .next-button{
+  background-color: #673ab7!important;
+  border-radius: 8px !important;
+}
+
+:host ::ng-deep .back-button{
+  border-radius: 8px !important;
+}
+

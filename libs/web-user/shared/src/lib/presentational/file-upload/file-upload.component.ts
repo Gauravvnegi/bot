@@ -1,5 +1,12 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  Input,
+  EventEmitter,
+  Output,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { UtilityService } from '../../services/utility.service';
@@ -18,6 +25,7 @@ export class FileUploadComponent extends BaseComponent {
   @Input() isUploading: boolean;
   @Input() fileType: string[];
   @Input() documentType: string;
+  @ViewChild('fileInput') inputRef: ElementRef;
 
   @Output()
   documentData = new EventEmitter();
@@ -41,7 +49,6 @@ export class FileUploadComponent extends BaseComponent {
   }
 
   onSelectFile(event) {
-    this.url = '';
     if (event.target.files && event.target.files[0]) {
       // const reader = new FileReader();
       // reader.readAsDataURL(event.target.files[0]); // read file as data url
@@ -108,6 +115,27 @@ export class FileUploadComponent extends BaseComponent {
         }
       }
       dialogRef.close();
-    });
+    }
+    );
+  }
+
+  /**
+   * @function onEdit
+   * @description edit the file
+   */
+  onEdit() {
+    this.inputRef.nativeElement.dispatchEvent(
+      new MouseEvent('click', { bubbles: true })
+    );
+  }
+  
+  /**
+   * @function onDelete
+   * @description delete the file
+   */
+  onDelete() {
+    this.inputRef.nativeElement.value = null;
+    this.url = null;
+    // this.documentData.emit({ status: false });
   }
 }

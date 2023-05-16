@@ -178,7 +178,7 @@ export class InvoiceComponent implements OnInit {
         Validators.required,
       ],
       paymentMethod: ['', Validators.required],
-      receivedPayment: ['', Validators.required],
+      receivedPayment: ['', [Validators.required, Validators.min(0)]],
       remarks: ['', Validators.required],
       transactionId: ['', Validators.required],
     });
@@ -231,7 +231,8 @@ export class InvoiceComponent implements OnInit {
         });
 
         this.useForm.patchValue(data, { emitEvent: false });
-
+        console.log(data.paidAmount);
+        console.log(this.inputControl.paidAmount.value);
         // Generating tax options
         this.tax = res.itemList.reduce((prev, curr) => {
           const taxes = curr.itemTax.map((item) => ({
@@ -347,9 +348,10 @@ export class InvoiceComponent implements OnInit {
     if (addValidation) {
       companyNameControl.setValidators([Validators.required]);
       companyNameControl.updateValueAndValidity();
+      companyNameControl.markAsUntouched();
     } else {
-      companyNameControl.updateValueAndValidity();
       companyNameControl.clearValidators();
+      companyNameControl.updateValueAndValidity();
       companyNameControl.markAsUntouched();
     }
   }

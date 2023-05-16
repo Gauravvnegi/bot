@@ -343,7 +343,7 @@
             INR {{ inputControl.currentAmount.value | number: '1.1-1' }}</span
           >
         </div>
-        <div class="py-row">
+        <div class="py-row" *ngIf="inputControl.totalDiscount.value">
           <span>Discount</span>
           <span
             >INR {{ inputControl.totalDiscount.value | number: '1.1-1' }}</span
@@ -390,7 +390,7 @@
             INR {{ inputControl.refundAmount.value | number: '1.1-1' }}
           </span>
         </div>
-        <div class="py-row">
+        <div class="py-row" *ngIf="inputControl.paidAmount.value">
           <span>Paid Amount</span>
           <span
             >INR {{ inputControl.paidAmount.value | number: '1.1-1' }}

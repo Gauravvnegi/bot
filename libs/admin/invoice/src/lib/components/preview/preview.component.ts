@@ -80,7 +80,9 @@ export class PreviewComponent implements OnInit {
   }
 
   handleEmailInvoice() {
+    console.log("hi");
     this.invoiceService.emailInvoice(this.reservationId, {}).subscribe(()=>{
+      console.log("Hi");
       this.snackbarService.openSnackBarAsText(
         'Email Sent Successfully',
         '',

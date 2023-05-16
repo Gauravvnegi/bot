@@ -45,12 +45,11 @@ export class PreviewComponent implements OnInit {
 
   updateNavRoutes(): void {
     const invoiceRoute = `/pages/efrontdesk/invoice/${this.reservationId}`;
-    const previewInvoiceRoute = `/pages/efrontdesk/invoice/preview-invoice/${this.reservationId}`;
   
     this.navRoutes = [
       { label: 'eFrontdesk', link: '/pages/efrontdesk' },
       { label: 'Invoice', link: invoiceRoute },
-      { label: 'Preview Invoice', link: previewInvoiceRoute },
+      { label: 'Preview Invoice', link: './'},
     ];
   }
 

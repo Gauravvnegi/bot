@@ -3,7 +3,7 @@
     <hospitality-bot-button
       variant="outlined"
       label="Preview and Generate"
-      [routerLink]="['../preview-invoice', reservationId]"
+      (onClick)="previewAndGenerate()"
       queryParamsHandling="preserve"
     ></hospitality-bot-button>
   </hospitality-bot-navigation-header>

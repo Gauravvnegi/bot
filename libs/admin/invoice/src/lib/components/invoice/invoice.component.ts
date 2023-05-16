@@ -113,6 +113,7 @@ export class InvoiceComponent implements OnInit {
     private modalService: ModalService,
     private userService: UserService,
     private router: Router,
+    private route: ActivatedRoute,
     private reservationService: ReservationService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
@@ -251,6 +252,9 @@ export class InvoiceComponent implements OnInit {
         });
 
         this.isInvoiceGenerated = res.invoiceGenerated;
+        if (this.isInvoiceGenerated){
+          this.useForm.disable();
+        }
         this.loadingData = false;
       },
       (error) => {
@@ -841,6 +845,17 @@ export class InvoiceComponent implements OnInit {
       control.markAsTouched();
     }
   };
+
+  previewAndGenerate(): void {
+    if(!this.inputControl.paidAmount.value){
+      this.snackbarService.openSnackBarAsText(
+        'Paid amount is 0: Invoice cannot preview or generate'
+      )
+      return;
+    }
+
+    this.router.navigate(['../preview-invoice', this.reservationId], { relativeTo: this.route });
+  }
 
   handleSave(): void {
     if (!this.addGST) this.gstValidation(false);

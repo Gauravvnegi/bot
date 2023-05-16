@@ -4,9 +4,9 @@ export const navRoute = {
   eFrontdesk: { label: 'eFrontdesk', link: '/pages/efrontdesk' },
   addReservation: { label: 'Create Reservation', link: './' },
   editReservation: { label: 'Edit Reservation', link: './' },
-  invoice: { label: 'Invoice', link: '/pages/efrontdesk/invoice' },
+  invoice: { label: 'Invoice', link: './' },
   createInvoice: { label: 'Create Invoice', link: './' },
-  previewInvoice: { label: 'Preview Invoice', link: '././invoice/:id'},
+  previewInvoice: { label: 'Preview Invoice', link: '././'},
   paymentHistory: { label: 'Payment History', link: './'},
 };
 

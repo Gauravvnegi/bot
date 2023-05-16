@@ -120,16 +120,15 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
     );
 
     // let heading: string;
-    let description: string[];
-    let label: string;
-
-    console.log(status);
-    console.log(rowData);
+    let description: string[] = [
+      `You are about to mark this site ${ManageSiteStatus.DRAFT}`,
+    ];
+    let label: string = 'Confirm';
 
     if (status === ManageSiteStatus.DRAFT) {
       description = [
         'Are you sure you want to unpublish your website?',
-        ' Once unpublished, it wont be visible to visitors.',
+        'Once unpublished, it wont be visible to visitors.',
         'You can always Publish it again.',
       ];
       label = 'Unpublish';
@@ -139,7 +138,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
       description = [
         'Are you sure you want to move your website to the trash?',
         'Once moved, it will become invisible and inactive.',
-        ' You can always restore it again.',
+        'You can always restore it again.',
       ];
       label = 'Trash';
     }
@@ -150,6 +149,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
       }`,
       description: description,
     };
+
     togglePopupCompRef.componentInstance.actions = [
       {
         label: 'Cancel',

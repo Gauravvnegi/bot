@@ -43,7 +43,6 @@ import {
 } from '../../models/invoice.model';
 import { InvoiceService } from '../../services/invoice.service';
 import { InvoiceForm, PaymentField } from '../../types/forms.types';
-import { catchError } from 'rxjs/operators';
 import { ReservationService } from '@hospitality-bot/admin/dashboard';
 
 @Component({
@@ -231,8 +230,6 @@ export class InvoiceComponent implements OnInit {
         });
 
         this.useForm.patchValue(data, { emitEvent: false });
-        console.log(data.paidAmount);
-        console.log(this.inputControl.paidAmount.value);
         // Generating tax options
         this.tax = res.itemList.reduce((prev, curr) => {
           const taxes = curr.itemTax.map((item) => ({
@@ -257,7 +254,6 @@ export class InvoiceComponent implements OnInit {
         this.loadingData = false;
       },
       (error) => {
-        console.error(error);
         this.reservationService.bookingNumber = this.bookingNumber;
         this.reservationService.guestId = this.guestId;
         this.router.navigateByUrl('/pages/efrontdesk');

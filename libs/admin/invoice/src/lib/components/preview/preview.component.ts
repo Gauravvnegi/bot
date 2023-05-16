@@ -13,7 +13,7 @@ export class PreviewComponent implements OnInit {
   reservationId: string;
   previewUrl: string;
   isLoading = true;
-  navRoutes = invoiceRoutes['previewInvoice'].navRoutes;
+  navRoutes = [];
   isInvoiceGenerated = false;
   items = [
     {
@@ -35,11 +35,23 @@ export class PreviewComponent implements OnInit {
       this.previewUrl = res.file_download_url;
       this.isLoading = false;
     });
+    this.updateNavRoutes();
   }
 
   getReservationId(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.reservationId = id;
+  }
+
+  updateNavRoutes(): void {
+    const invoiceRoute = `/pages/efrontdesk/invoice/${this.reservationId}`;
+    const previewInvoiceRoute = `/pages/efrontdesk/invoice/preview-invoice/${this.reservationId}`;
+  
+    this.navRoutes = [
+      { label: 'eFrontdesk', link: '/pages/efrontdesk' },
+      { label: 'Invoice', link: invoiceRoute },
+      { label: 'Preview Invoice', link: previewInvoiceRoute },
+    ];
   }
 
   handleGenerateInvoice() {
@@ -80,16 +92,10 @@ export class PreviewComponent implements OnInit {
   }
 
   handleEmailInvoice() {
-    console.log("hi");
-    this.invoiceService.emailInvoice(this.reservationId, {}).subscribe(()=>{
-      console.log("Hi");
-      this.snackbarService.openSnackBarAsText(
-        'Email Sent Successfully',
-        '',
-        {
-          panelClass: 'success',
-        }
-      )
-    })
+    this.invoiceService.emailInvoice(this.reservationId, {}).subscribe((_) => {
+      this.snackbarService.openSnackBarAsText('Email Sent Successfully', '', {
+        panelClass: 'success',
+      });
+    });
   }
 }

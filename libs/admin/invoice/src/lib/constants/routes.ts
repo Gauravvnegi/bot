@@ -1,13 +1,12 @@
 import { PageRoutes } from '@hospitality-bot/admin/shared';
 
 export const navRoute = {
-  eFrontdesk: { label: 'eFrontdesk', link: './' },
-  reservation: { label: 'Reservation', link: '/pages/efrontdesk/reservation' },
+  eFrontdesk: { label: 'eFrontdesk', link: '/pages/efrontdesk' },
   addReservation: { label: 'Create Reservation', link: './' },
   editReservation: { label: 'Edit Reservation', link: './' },
-  invoice: { label: 'Invoice', link: './' },
+  invoice: { label: 'Invoice', link: '/pages/efrontdesk/invoice' },
   createInvoice: { label: 'Create Invoice', link: './' },
-  previewInvoice: { label: 'Preview Invoice', link: '././'},
+  previewInvoice: { label: 'Preview Invoice', link: '././invoice/:id'},
   paymentHistory: { label: 'Payment History', link: './'},
 };
 
@@ -16,7 +15,7 @@ export const invoiceRoutes: Record<
   PageRoutes
 > = {
   invoice: {
-    route: '',
+    route: 'invoice/:id',
     navRoutes: [navRoute.eFrontdesk, navRoute.invoice],
     title: 'Manage Invoice',
   },

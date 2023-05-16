@@ -279,9 +279,9 @@ export class InvoiceService extends ApiService {
     );
   }
 
-  emailInvoice(reservationId: string, data): Observable<any> {
+  emailInvoice(reservationId: string, data) {
     return this.post(
-      `api/v1/reservation/${reservationId}/send-invoice?source=BOTSHOT_ADMIN'`,
+      `api/v1/reservation/${reservationId}/send-invoice?source=BOTSHOT_ADMIN`,
       data
     );
   }

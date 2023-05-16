@@ -34,6 +34,7 @@ import {
   SelectedEntityState,
 } from '../../../types/dashboard.type';
 import { ActivatedRoute } from '@angular/router';
+import { ContactSortFilterComponent } from 'libs/admin/whatsapp/src/lib/components/contact-sort-filter/contact-sort-filter.component';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -86,7 +87,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   registerListeners(): void {
     this.listenForGlobalFilters();
-    this.listenInvoiceDetails();
+    this.listenGuestDetails();
   }
 
   /**
@@ -113,10 +114,11 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  listenInvoiceDetails() {
+  listenGuestDetails() {
+    // this._reservationService.bookingNumber = this.bookingNumber;
+    // this._reservationService.guestId = this.guestId;
     let number = this._reservationService.bookingNumber;
     let id = this._reservationService.guestId;
-    console.log('Guest Details - ', number, id);
     if (id && number) {
       this.openDetailPage(undefined, undefined, 'payment_details', {
         id,
@@ -337,6 +339,12 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       DetailsComponent,
       dialogConfig
     );
+
+    this._reservationService.bookingNumber =
+      rowData?.booking?.bookingNumber ?? guestData?.number;
+    this._reservationService.guestId =
+      rowData?.guests?.primaryGuest?.id ?? guestData?.id;
+
     detailCompRef.componentInstance.guestId =
       rowData?.guests?.primaryGuest?.id ?? guestData?.id;
     detailCompRef.componentInstance.bookingNumber =
@@ -363,8 +371,9 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
                 : this.rowsPerPage,
             }
           );
+          this._reservationService.bookingNumber = '';
+          this._reservationService.guestId = '';
         }
-
         detailCompRef.close();
       })
     );

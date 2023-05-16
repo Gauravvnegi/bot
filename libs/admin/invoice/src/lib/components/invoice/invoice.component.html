@@ -44,6 +44,7 @@
           [severity]="addGST ? 'reset' : 'primary'"
           [label]="addGST ? 'Remove GST' : '+Add GST'"
           (onClick)="onAddGST()"
+          [disabled]="isInvoiceGenerated"
         ></hospitality-bot-button>
       </div>
 
@@ -250,7 +251,7 @@
                         tableFormArray.at(rowIndex).get('description')
                           .invalid ||
                         tableFormArray.at(rowIndex).get('unit').invalid ||
-                        tableFormArray.at(rowIndex).get('unitValue').invalid
+                        tableFormArray.at(rowIndex).get('unitValue').invalid || isInvoiceGenerated
                       "
                     ></hospitality-bot-menu>
                   </td>
@@ -331,6 +332,7 @@
               label="+ Add New"
               variant="text"
               (onClick)="addNewCharges('price')"
+              [disabled]="isInvoiceGenerated"
             ></hospitality-bot-button>
           </ng-template>
         </p-table>
@@ -359,6 +361,7 @@
             <hospitality-bot-menu
               type="button"
               alignment="horizontal"
+              [disabled]="isInvoiceGenerated"
               (onClickItem)="viewRefundRow = true; this.isRefundSaved = false"
               [menuItems]="!isRefundSaved ? addRefund : editRefund"
             ></hospitality-bot-menu>
@@ -434,6 +437,7 @@
           variant="text"
           [severity]="addPayment ? 'reset' : 'primary'"
           [label]="addPayment ? 'Remove Payment' : '+Add Payment'"
+          [disabled]="isInvoiceGenerated"
           (onClick)="onAddPaymentDetails()"
         ></hospitality-bot-button>
       </div>

@@ -15,7 +15,7 @@ export const invoiceRoutes: Record<
   PageRoutes
 > = {
   invoice: {
-    route: 'invoice/:id',
+    route: '',
     navRoutes: [navRoute.eFrontdesk, navRoute.invoice],
     title: 'Manage Invoice',
   },

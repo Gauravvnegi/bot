@@ -317,28 +317,28 @@
               <ng-container [ngSwitch]="details.currentJourneyDetails.status">
                 <ng-container *ngSwitchCase="'PENDING'">
                   <hospitality-bot-button
-                    label="Activate & Generate PreCheckIn Link"
+                    label="Activate & Generate PreCheckIn"
                     (click)="activateAndgenerateJourney('PRECHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'INITIATED'">
                   <hospitality-bot-button
-                    label="Activate & Generate PreCheckIn Link"
+                    label="Activate & Generate PreCheckIn"
                     (click)="activateAndgenerateJourney('PRECHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'">
                   <hospitality-bot-button
-                    label="Activate & Generate PreCheckIn Link"
+                    label="Activate & Generate PreCheckIn"
                     (click)="activateAndgenerateJourney('PRECHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button
-                    label="Activate & Generate PreCheckIn Link"
+                    label="Activate & Generate PreCheckIn"
                     (click)="activateAndgenerateJourney('PRECHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
@@ -350,14 +350,14 @@
                 <ng-container *ngSwitchCase="'PENDING'">
                   <hospitality-bot-button
                     (click)="activateAndgenerateJourney('CHECKIN')"
-                    label="Generate CheckIn Link"
+                    label="Generate CheckIn"
                     variant="outlined"
                   ></hospitality-bot-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'INITIATED'">
                   <hospitality-bot-button
                     (click)="activateAndgenerateJourney('CHECKIN')"
-                    label="Generate CheckIn Link"
+                    label="Generate CheckIn"
                     variant="outlined"
                   ></hospitality-bot-button>
                   <hospitality-bot-button
@@ -389,7 +389,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button
-                    label="Generate CheckIn Link"
+                    label="Generate CheckIn"
                     (click)="activateAndgenerateJourney('CHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
@@ -411,7 +411,7 @@
                     "
                   >
                     <hospitality-bot-button
-                      label="Activate & Generate Checkout Link"
+                      label="Activate & Generate Checkout"
                       (click)="activateAndgenerateJourney('CHECKOUT')"
                       variant="outlined"
                     ></hospitality-bot-button>
@@ -439,7 +439,7 @@
                     "
                   >
                     <hospitality-bot-button
-                      label="Activate & Generate Checkout Link"
+                      label="Activate & Generate Checkout"
                       (click)="activateAndgenerateJourney('CHECKOUT')"
                       variant="outlined"
                     ></hospitality-bot-button>
@@ -476,7 +476,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button
-                    label="Activate & Generate Checkout Link"
+                    label="Activate & Generate Checkout"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
                   ></hospitality-bot-button>

@@ -137,7 +137,7 @@ export class FileUploadComponent extends BaseComponent {
     this.inputRef.nativeElement.value = null;
     this.hiddenFileInput.nativeElement.value = null;
     this.url = null;
-    this.parentForm.get(this.name).docData.reset();
+    this.parentForm.get(this.name).reset();
     this.documentData.emit({ status: false, isDelete: true });
   }
 }

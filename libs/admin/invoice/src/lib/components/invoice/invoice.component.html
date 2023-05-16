@@ -340,19 +340,19 @@
 
       <div class="payment-form__amount">
         <div class="py-row">
-          <span>Current Amount</span>
+          <span>Net Amount</span>
           <span>
             INR {{ inputControl.currentAmount.value | number: '1.1-1' }}</span
           >
         </div>
         <div class="py-row" *ngIf="inputControl.totalDiscount.value">
-          <span>Discount</span>
+          <span>Total Savings</span>
           <span
             >INR {{ inputControl.totalDiscount.value | number: '1.1-1' }}</span
           >
         </div>
         <div class="py-row invert stretch">
-          <span>Total Amount</span>
+          <span>Total Payable</span>
           <span class="span-block">
             <span
               >INR

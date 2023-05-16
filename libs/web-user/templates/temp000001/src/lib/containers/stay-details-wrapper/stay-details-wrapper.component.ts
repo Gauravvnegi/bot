@@ -78,11 +78,12 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
       this._amenitiesService
         .getHotelAmenities(this._hotelService.hotelId)
         .subscribe((response) => {
-          this.isAmenityDataAvl = !!response.total;
           this._amenitiesService.initAmenitiesDetailDS(
             response,
             this._stayDetailService.stayDetails.stayDetail.arrivalTime
           );
+          this.isAmenityDataAvl =
+            !!response.total || response.paidPackages?.length > 0; // response of total is wrong
         })
     );
   }

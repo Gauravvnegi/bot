@@ -114,7 +114,6 @@ export class InvoiceComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
-    private reservationService: ReservationService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -217,14 +216,6 @@ export class InvoiceComponent implements OnInit {
         //   this.addNewCharges(); // adding new table entry to patch data
         // }
 
-        // if (data.tableData.length === 0) {
-        //   console.log(this.guestId);
-        //   console.log(this.bookingNumber);
-        //   this.reservationService.bookingNumber = this.bookingNumber;
-        //   this.reservationService.guestId = this.guestId;
-        //   this.router.navigateByUrl('/pages/efrontdesk');
-        // }
-
         data.tableData.forEach((item, idx) => {
           // this.tableValue.push({ id: idx + 1 });
           this.addNewCharges(item.type, idx); // adding new table entry to patch data
@@ -258,8 +249,6 @@ export class InvoiceComponent implements OnInit {
         this.loadingData = false;
       },
       (error) => {
-        this.reservationService.bookingNumber = this.bookingNumber;
-        this.reservationService.guestId = this.guestId;
         this.router.navigateByUrl('/pages/efrontdesk');
       }
     );

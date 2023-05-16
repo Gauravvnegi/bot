@@ -43,7 +43,6 @@ import {
 } from '../../models/invoice.model';
 import { InvoiceService } from '../../services/invoice.service';
 import { InvoiceForm, PaymentField } from '../../types/forms.types';
-import { ReservationService } from '@hospitality-bot/admin/dashboard';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -177,7 +176,7 @@ export class InvoiceComponent implements OnInit {
         Validators.required,
       ],
       paymentMethod: ['', Validators.required],
-      receivedPayment: ['', [Validators.required, Validators.min(0)]],
+      receivedPayment: ['', [Validators.required, Validators.min(1)]],
       remarks: ['', Validators.required],
       transactionId: ['', Validators.required],
     });
@@ -295,7 +294,12 @@ export class InvoiceComponent implements OnInit {
       transactionIdControl,
       remarksControl,
     ].forEach((item) => {
-      if (addValidation) item.setValidators([Validators.required]);
+      if (addValidation) {
+        item.setValidators([Validators.required]);
+        if (item === receivedPaymentControl) {
+          item.setValidators([Validators.required, Validators.min(1)]);
+        }
+      }
       else {
         item.clearValidators();
         item.updateValueAndValidity();

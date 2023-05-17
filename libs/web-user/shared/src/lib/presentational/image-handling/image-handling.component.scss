@@ -49,39 +49,74 @@
     justify-content: center;
     margin-top: 15px;
     margin-bottom: 20px;
-    .back-button {
-      @include footer-back;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      @media only screen and (max-width: 767px) {
-        width: 120px;
-        height: 35px;
-        @include common-button-style;
+    // .back-button {
+    //   @include footer-back;
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: center;
+    //   @media only screen and (max-width: 767px) {
+    //     width: 120px;
+    //     height: 35px;
+    //     @include common-button-style;
+    //   }
+
+    //   @media only screen and (max-width: 575px) {
+    //     width: 100px;
+    //     height: 35px;
+    //     @include common-button-style;
+    //   }
+    // }
+    // .next-button {
+    //   @include footer-next;
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: center;
+    //   @media only screen and (max-width: 767px) {
+    //     width: 120px;
+    //     height: 35px;
+    //     @include common-button-style;
+    //   }
+
+    //   @media only screen and (max-width: 575px) {
+    //     width: 100px;
+    //     height: 35px;
+    //     @include common-button-style;
+    //   }
+    // }
+
+    .btn-default{
+      width: 200px;
+      height: 45px;
+      font-weight: $bolder;
+      border-radius: 8px;
+      box-shadow: 0px 3px 6px #4b56c059;
+
+      &:hover {
+        cursor: pointer;
       }
 
-      @media only screen and (max-width: 575px) {
-        width: 100px;
-        height: 35px;
-        @include common-button-style;
+      text-align: center;
+      line-height: 45px;
+
+      @media only screen and (max-width: 1024px) {
+        zoom: 0.8;
+      }
+
+      @media only screen and (max-width: 380px) {
+        zoom: 0.6;
       }
     }
-    .next-button {
-      @include footer-next;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      @media only screen and (max-width: 767px) {
-        width: 120px;
-        height: 35px;
-        @include common-button-style;
-      }
 
-      @media only screen and (max-width: 575px) {
-        width: 100px;
-        height: 35px;
-        @include common-button-style;
-      }
+    .secondary-image-btn {
+      color: #5f38f9;
+      background: white;
+      margin-right: 30px;
+      border: 1px solid #5f38f9;
+    }
+
+    .primary-image-btn {
+      background: #5f38f9;
+      color: white;
     }
   }
 }

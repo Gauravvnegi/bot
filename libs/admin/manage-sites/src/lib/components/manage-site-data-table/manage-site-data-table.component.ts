@@ -119,9 +119,12 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
       dialogConfig
     );
 
+    const currStatus =
+      status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+
     // let heading: string;
     let description: string[] = [
-      `You are about to mark this site ${ManageSiteStatus.DRAFT}`,
+      `You are about to mark this site ${currStatus}`,
     ];
     let label: string = 'Confirm';
 
@@ -144,9 +147,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
     }
 
     togglePopupCompRef.componentInstance.content = {
-      heading: `Mark As ${
-        status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
-      }`,
+      heading: `Mark As ${currStatus}`,
       description: description,
     };
 

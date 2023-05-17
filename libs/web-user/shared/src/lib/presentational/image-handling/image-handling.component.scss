@@ -47,44 +47,11 @@
   .button-wrapper {
     display: flex;
     justify-content: center;
+    gap: 2%;
     margin-top: 15px;
     margin-bottom: 20px;
-    // .back-button {
-    //   @include footer-back;
-    //   display: flex;
-    //   align-items: center;
-    //   justify-content: center;
-    //   @media only screen and (max-width: 767px) {
-    //     width: 120px;
-    //     height: 35px;
-    //     @include common-button-style;
-    //   }
 
-    //   @media only screen and (max-width: 575px) {
-    //     width: 100px;
-    //     height: 35px;
-    //     @include common-button-style;
-    //   }
-    // }
-    // .next-button {
-    //   @include footer-next;
-    //   display: flex;
-    //   align-items: center;
-    //   justify-content: center;
-    //   @media only screen and (max-width: 767px) {
-    //     width: 120px;
-    //     height: 35px;
-    //     @include common-button-style;
-    //   }
-
-    //   @media only screen and (max-width: 575px) {
-    //     width: 100px;
-    //     height: 35px;
-    //     @include common-button-style;
-    //   }
-    // }
-
-    .btn-default{
+    .btn-default {
       width: 200px;
       height: 45px;
       font-weight: $bolder;
@@ -110,7 +77,6 @@
     .secondary-image-btn {
       color: #5f38f9;
       background: white;
-      margin-right: 30px;
       border: 1px solid #5f38f9;
     }
 

@@ -50,7 +50,9 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   addDeclaimerCheckbox() {
-    const isFirstStepCompleted = this.reservationData.stateCompletedSteps > 0;
+    // const isFirstStepCompleted = this.reservationData.stateCompletedSteps > 0;
+    const isFirstStepCompleted = true; // Making it already
+
     const form = this.fb.group({
       disclaimer: [isFirstStepCompleted, Validators.requiredTrue],
     });

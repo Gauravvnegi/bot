@@ -88,8 +88,8 @@ export class FileUploadComponent extends BaseComponent {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.id = 'image-cropper-modal';
-    dialogConfig.width = '75vw';
-    dialogConfig.height = '80vh';
+    // dialogConfig.width = '75vw';
+    // dialogConfig.height = '80vh';
 
     const dialogRef = this.modalService.openDialog(
       ImageHandlingComponent,
@@ -128,7 +128,7 @@ export class FileUploadComponent extends BaseComponent {
       new MouseEvent('click', { bubbles: true })
     );
   }
-  
+
   /**
    * @function onDelete
    * @description delete the file

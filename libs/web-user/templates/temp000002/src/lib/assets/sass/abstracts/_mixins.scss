@@ -63,7 +63,7 @@
 @mixin template-footer-button {
   display: flex;
   justify-content: center;
-  @media only screen and (max-width: $M) {
+  @media only screen and (max-width: $mobile) {
     position: fixed;
     bottom: 0px;
     width: 100%;

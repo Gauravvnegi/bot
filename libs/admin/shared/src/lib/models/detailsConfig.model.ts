@@ -2,6 +2,9 @@ import { get, set } from 'lodash';
 import * as moment from 'moment';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { GuestRole } from '../constants/guest';
+import {
+  TransactionHistoryResponse,
+} from '../types/response';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -484,6 +487,7 @@ export class PaymentDetailsConfig implements IDeserializable {
   roomRates: RoomRateConfig;
   packages: IPackage[];
   depositRules: DepositRuleDetailsConfig;
+  transactionHistory: TransactionHistory[];
   printRate: boolean;
 
   deserialize(input: any) {
@@ -503,6 +507,59 @@ export class PaymentDetailsConfig implements IDeserializable {
     );
     //to-do
     this.roomRates = new RoomRateConfig().deserialize(input.roomRates);
+    if (Array.isArray(input.transactionsHistory)) {
+      this.transactionHistory = input.transactionsHistory.map((item: TransactionHistoryResponse) =>
+        new TransactionHistory().deserialize(item)
+      );
+    } else {
+      this.transactionHistory = [];
+    }
+    return this;
+  }
+}
+
+export class TransactionHistory {
+  amount: number;
+  bankReferenceNumber: string | null;
+  created: number;
+  currency: string;
+  failureMessage: string | null;
+  gateway: string | null;
+  id: string;
+  journey: number;
+  orderId: string | null;
+  payOnDesk: boolean;
+  paymentMode: string;
+  preAuth: boolean;
+  preAuthType: string | null;
+  remarks: string;
+  reservationId: string;
+  signatureUrl: string | null;
+  status: string;
+  transactionId: string | null;
+  updated: number;
+
+  deserialize(input: TransactionHistoryResponse) {
+    this.amount = input.amount;
+    this.bankReferenceNumber = input.bankReferenceNumber;
+    this.created = input.created;
+    this.currency = input.currency;
+    this.failureMessage = input.failureMessage;
+    this.gateway = input.gateway;
+    this.id = input.id;
+    this.journey = input.journey;
+    this.orderId = input.orderId;
+    this.payOnDesk = input.payOnDesk;
+    this.paymentMode = input.paymentMode;
+    this.preAuth = input.preAuth;
+    this.preAuthType = input.preAuthType;
+    this.remarks = input.remarks;
+    this.reservationId = input.reservationId;
+    this.signatureUrl = input.signatureUrl;
+    this.status = input.status;
+    this.transactionId = input.transactionId;
+    this.updated = input.updated;
+
     return this;
   }
 }

@@ -198,6 +198,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             response,
             this.globalFilterService.timezone
           );
+          console.log("Details-> ", this.details);
           this.mapValuesInForm();
           this.isReservationDetailFetched = true;
         },

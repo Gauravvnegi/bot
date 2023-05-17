@@ -262,7 +262,7 @@
               (addFGEvent)="addFGEvent($event)"
             ></hospitality-bot-stay-details>
           </mat-tab>
-          <mat-tab label="Package" *ngIf="guestReservationDropdownList.length">
+          <mat-tab label="Add-ons" *ngIf="guestReservationDropdownList.length">
             <hospitality-bot-admin-package-details
               *ngIf="isReservationDetailFetched"
               [parentForm]="detailsForm"

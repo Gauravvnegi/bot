@@ -840,12 +840,12 @@ export class InvoiceComponent implements OnInit {
   };
 
   previewAndGenerate(): void {
-    if(!this.inputControl.paidAmount.value){
-      this.snackbarService.openSnackBarAsText(
-        'Paid amount is 0: Invoice cannot preview or generate'
-      )
-      return;
-    }
+    // if(!this.inputControl.paidAmount.value){
+    //   this.snackbarService.openSnackBarAsText(
+    //     'Paid amount is 0: Invoice cannot preview or generate'
+    //   )
+    //   return;
+    // }
 
     this.router.navigate(['../preview-invoice', this.reservationId], { relativeTo: this.route });
   }

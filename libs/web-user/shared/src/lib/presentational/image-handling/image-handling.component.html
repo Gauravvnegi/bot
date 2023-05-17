@@ -1,7 +1,11 @@
 <div class="webhandling-wrapper">
   <div class="title">
     Crop Image
+    <div class="clear-icon" (click)="onModalClose.emit({ status: false })">
+      <mat-icon>clear</mat-icon>
+    </div>
   </div>
+
   <div class="crop-tools">
     <img
       src="assets/svg/rotate-left.svg"
@@ -63,12 +67,9 @@
   </div>
   <div class="button-wrapper">
     <div
-      class="back-button secondary-image-btn"
-      (click)="onModalClose.emit({ status: false })"
+      class="next-button primary-image-btn btn-default"
+      (click)="sendCroppedImage()"
     >
-      Cancel
-    </div>
-    <div class="next-button primary-image-btn" (click)="sendCroppedImage()">
       Confirm
     </div>
   </div>

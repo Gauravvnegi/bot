@@ -1,7 +1,8 @@
 <div *ngIf="isReservationData">
-    <div class="parent_block">
-      <hospitality-bot-header [headerName]="headerTitle"></hospitality-bot-header>
-      <div class="wrapper">
+  <div class="parent_block">
+    <hospitality-bot-header [headerName]="headerTitle"></hospitality-bot-header>
+    <div class="wrapper">
+      <div class="text-wrapper">
         <div class="image">
           <img [src]="config.icon" />
         </div>
@@ -11,17 +12,17 @@
         <div class="wrapper-description">
           <h2>{{ config.description }}</h2>
         </div>
-  
-        <div class="main-template-button">
-          <hospitality-bot-temp000002-button
-            (click)="explore()"
-            [settings]="{ label: 'Explore More' }"
-            [buttonClass]="'next-button'"
-            class="user-button"
-          ></hospitality-bot-temp000002-button>
-        </div>
+      </div>
+
+      <div class="main-template-button">
+        <hospitality-bot-temp000002-button
+          (click)="explore()"
+          [settings]="{ label: 'Explore More' }"
+          [buttonClass]="'next-button'"
+          class="user-button"
+        ></hospitality-bot-temp000002-button>
       </div>
     </div>
-    <hospitality-bot-footer></hospitality-bot-footer>
   </div>
-  
+  <hospitality-bot-footer></hospitality-bot-footer>
+</div>

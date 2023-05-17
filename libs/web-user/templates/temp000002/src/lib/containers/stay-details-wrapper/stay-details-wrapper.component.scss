@@ -1,7 +1,7 @@
 @import 'temp000002';
 
 :host ::ng-deep .next-button {
-  @media only screen and (max-width: $tablet) {
+  @media only screen and (max-width: $mobile) {
     width: 100vw !important;
   }
 }

@@ -1,8 +1,7 @@
 @import 'temp000001';
 
 .airport-container {
-  border-top: solid 2px #989696;
-  padding-top: 40px;
+  padding: 20px 30px;
 }
 
 .heading {
@@ -10,7 +9,7 @@
 }
 
 :host ::ng-deep .ngx-timepicker-control__input {
-  background-color: #f8f8f8;
+  background-color: transparent;
 }
 
 .wrapper {
@@ -34,5 +33,22 @@
   width: 31%;
   @media screen and (max-width: 780px) {
     width: 100%;
+  }
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+:host ::ng-deep .next-button {
+  margin-top: 10px;
+  @include primary-button;
+}
+
+:host ::ng-deep .close {
+  .mat-icon {
+    float: right;
+    cursor: pointer;
   }
 }

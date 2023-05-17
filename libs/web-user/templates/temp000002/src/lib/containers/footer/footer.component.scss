@@ -10,7 +10,7 @@
     height: 70px;
     padding: 0px;
   }
-  @media screen and (min-width: $M) {
+  @media screen and (min-width: $mobile) {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -31,7 +31,7 @@
     @include flex-col-justify-center;
     margin: 0px 10px;
 
-    @media only screen and (max-width: $S) {
+    @media only screen and (max-width: $mobile) {
       margin: 10px 0;
     }
 
@@ -83,7 +83,7 @@
         color: var(--footer-icon-color, $footer-icon-color);
       }
     }
-    @media only screen and (max-width: $S) {
+    @media only screen and (max-width: $mobile) {
       white-space: nowrap;
 
       .text {
@@ -95,14 +95,14 @@
         margin: 10px;
       }
     }
-    @media only screen and (max-width: $S) {
+    @media only screen and (max-width: $mobile) {
       justify-content: center;
     }
   }
-  @media only screen and (max-width: $tablet) {
-    margin-bottom: 45px !important;
-  }
-  @media only screen and (max-width: $S) {
+  // @media only screen and (max-width: $tablet) {
+  //   margin-bottom: 45px !important;
+  // }
+  @media only screen and (max-width: $mobile) {
     grid-template-columns: 100%;
     text-align: center;
     margin-bottom: 2rem;
@@ -118,7 +118,7 @@
   text-decoration: none;
   align-items: center;
   justify-content: flex-end;
-  @media only screen and (max-width: $S) {
+  @media only screen and (max-width: $mobile) {
     justify-content: center;
   }
 }

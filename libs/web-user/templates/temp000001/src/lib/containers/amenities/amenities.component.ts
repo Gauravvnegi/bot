@@ -38,13 +38,13 @@ export class AmenitiesComponent implements OnInit {
     });
   }
 
-  initPaidServiceDetailDS() {
+  initComplimentaryDetailDS() {
     this._complimentaryService.initComplimentaryAmenitiesDetailDS(
       this.amenities.complimentaryServicesDetail
     );
   }
 
-  initComplimentaryDetailDS() {
+  initPaidServiceDetailDS() {
     this._paidService.initPaidAmenitiesDetailDS(
       this.amenities.paidServicesDetail,
       this.reservationData.packages.paidPackages,

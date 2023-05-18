@@ -23,6 +23,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as FileSaver from 'file-saver';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HotelService } from 'libs/web-user/shared/src/lib/services/hotel.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 
 @Component({
   selector: 'hospitality-bot-application-status',
@@ -48,6 +49,8 @@ export class ApplicationStatusComponent implements OnInit, OnDestroy {
   regCardLoading = false;
   modalVisible = false;
 
+  isRegSigned = false;
+
   constructor(
     protected _modal: ModalService,
     protected _reservationService: ReservationService,
@@ -58,7 +61,8 @@ export class ApplicationStatusComponent implements OnInit, OnDestroy {
     protected _regCardService: RegCardService,
     protected _snackBarService: SnackBarService,
     protected _translateService: TranslateService,
-    protected _hotelService: HotelService
+    protected _hotelService: HotelService,
+    protected _utilityService: UtilityService
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +76,11 @@ export class ApplicationStatusComponent implements OnInit, OnDestroy {
     // this._stepperService.stepperSelectedIndex$.next(2);
   }
 
-  ngOnChanges(): void {}
+  ngOnChanges(): void {
+    this._utilityService.$signatureUploaded.subscribe((res) => {
+      this.isRegSigned = res;
+    });
+  }
 
   registerListeners() {
     this.listenForSummaryDetails();

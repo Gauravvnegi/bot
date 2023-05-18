@@ -55,6 +55,7 @@ body {
   }
 }
 .mat-dialog-container {
+  position: relative;
   padding: 20px !important;
   @media only screen and (max-width: $M) {
     padding: 10px !important;

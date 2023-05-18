@@ -4,16 +4,16 @@
     <div class="tab-group">
       <div
         class="tab-item"
-        *ngFor="let tab of tabFilterItems.slice(0, 4); let i = index"
+        *ngFor="let tab of tabFilterItems; let i = index"
         (click)="handleTabSelectionChange({ index: i })"
         [ngClass]="{ 'tab-active': tabFilterIdx === i }"
       >
         {{ tab.label }}
       </div>
-      <ng-container
+      <!-- <ng-container
         *ngIf="tabFilterItems.slice(4, tabFilterItems.length).length"
       >
-        <!-- <mat-form-field class="more-services"> -->
+        
         <mat-select
           class="more-services panel"
           placeholder="More Services"
@@ -27,8 +27,8 @@
             >{{ item.label }}</mat-option
           >
         </mat-select>
-        <!-- </mat-form-field> -->
-      </ng-container>
+
+      </ng-container> -->
     </div>
   </div>
   <ng-container #packageRenderer> </ng-container>

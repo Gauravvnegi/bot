@@ -100,13 +100,13 @@ export class PackageRendererComponent
     return this._paidService.setFieldConfigForSubPackageDetails();
   }
 
-  checkForSelectedPackage() {
-    this.subPackages?.controls?.forEach((subPackage) => {
-      if (subPackage.get('isSelected').value === true) {
-        // this.servicePackage(subPackage.get('packageCode').value);
-      }
-    });
-  }
+  // checkForSelectedPackage() {
+  //   this.subPackages?.controls?.forEach((subPackage) => {
+  //     if (subPackage.get('isSelected').value === true) {
+  //       this.servicePackage(subPackage.get('packageCode').value);
+  //     }
+  //   });
+  // }
 
   // servicePackage(subPackageCode) {
   //   this.selectedService = subPackageCode;
@@ -425,19 +425,19 @@ export class PackageRendererComponent
     return this.parentForm?.get('subPackages') as FormArray;
   }
 
-  get checkForUpdatePossibility() {
-    let isUpdatePossible = false;
-    this.slideData.subPackages?.forEach((subPackage) => {
-      if (subPackage.isSelected === true) {
-        isUpdatePossible = true;
-      }
-    });
+  // get checkForUpdatePossibility() {
+  //   let isUpdatePossible = false;
+  //   this.slideData.subPackages?.forEach((subPackage) => {
+  //     if (subPackage.isSelected === true) {
+  //       isUpdatePossible = true;
+  //     }
+  //   });
 
-    this.subPackages?.controls?.forEach((subPackage) => {
-      if (subPackage.get('isSelected').value === true) {
-        isUpdatePossible = true;
-      }
-    });
-    return isUpdatePossible;
-  }
+  //   this.subPackages?.controls?.forEach((subPackage) => {
+  //     if (subPackage.get('isSelected').value === true) {
+  //       isUpdatePossible = true;
+  //     }
+  //   });
+  //   return isUpdatePossible;
+  // }
 }

@@ -18,6 +18,11 @@
     z-index: 99;
   }
 
+  // for at 600 - position can not be fixed
+  @media screen and (max-width: $mobile) {
+    position: static !important;
+  }
+
   &--logo {
     align-self: center;
     height: 40px;

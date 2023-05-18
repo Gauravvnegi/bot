@@ -424,10 +424,10 @@ mat-option {
 }
 
 :host ::ng-deep .material-body {
-  width: 79%;
+  width: 77%;
   margin: 20px 25px;
   margin-right: 0;
-  height: 49vh;
+  height: calc(53vh - 60px);
   border-right: 2px solid $whiteDeep;
   padding-right: 15px;
   overflow-y: auto;
@@ -487,8 +487,8 @@ mat-option {
   position: absolute;
   top: 52px;
   right: 10px;
-  height: 85%;
-  z-index: 22;
+  height: 87%;
+  z-index: 1;
   background-color: $white;
   overflow-y: auto;
   overflow-x: hidden;

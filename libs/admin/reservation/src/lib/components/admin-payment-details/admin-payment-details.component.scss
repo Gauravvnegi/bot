@@ -22,7 +22,7 @@
 
 .status-button {
   display: inline-block;
-  padding: 5px 10px;
+  padding: 4px 10px;
   border-radius: 20px;
   background-color: #4bc0c0;
   color: #fff;
@@ -200,6 +200,12 @@ td {
   border: 1.5px solid #218af3;
   margin: 20px 0px;
   opacity: 0.1;
+}
+
+.seperator {
+  padding: 0 3px;
+  color: #707070;
+  font-weight: 500;
 }
 
 .status-wrapper {

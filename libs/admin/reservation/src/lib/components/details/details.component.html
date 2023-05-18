@@ -386,6 +386,12 @@
                     (click)="prepareInvoice()"
                     variant="outlined"
                   ></hospitality-bot-button>
+                  <hospitality-bot-button
+                    *ngIf="checkForGenerateFeedbackSubscribed()"
+                    label="Generate Feedback"
+                    (click)="generateFeedback()"
+                    variant="outlined"
+                  ></hospitality-bot-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button

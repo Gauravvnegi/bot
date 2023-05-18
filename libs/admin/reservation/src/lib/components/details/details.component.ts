@@ -198,7 +198,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
             response,
             this.globalFilterService.timezone
           );
-          console.log("Details-> ", this.details);
+
+          console.log('Details-> ', this.details);
           this.mapValuesInForm();
           this.isReservationDetailFetched = true;
         },
@@ -411,6 +412,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
       );
     }
   }
+
+  generateFeedback() {}
 
   sendInvoice() {}
 
@@ -700,6 +703,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
   checkForStayFeedbackSubscribed() {
     return this.subscriptionService.checkModuleSubscription(
       ModuleNames.FEEDBACK
+    );
+  }
+
+  checkForGenerateFeedbackSubscribed() {
+    return this.subscriptionService.checkModuleSubscription(
+      ModuleNames.HEDA
     );
   }
 

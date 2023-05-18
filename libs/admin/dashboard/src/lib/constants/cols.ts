@@ -36,7 +36,7 @@ export const cols = {
     },
     {
       field: 'package',
-      header: 'Package',
+      header: 'Add-ons',
       isSortDisabled: true,
       sortType: 'number',
       isSearchDisabled: true,

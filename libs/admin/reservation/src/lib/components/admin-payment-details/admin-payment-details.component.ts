@@ -53,40 +53,40 @@ export class AdminPaymentDetailsComponent implements OnInit {
     'totalAmount',
   ];
 
-  data = [
-    {
-      transactionId: 'ABC120202',
-      created: 1683716985376,
-      status: 'SUCCESS',
-      paymentMode: 'Mode',
-      remarks: 'Remark',
-      amount: 100
-    },
-    {
-      transactionId: 'ABC120202',
-      created: 1683716985376,
-      status: 'REFUND',
-      paymentMode: 'Mode',
-      remarks: 'Remark',
-      amount: 100
-    },
-    {
-      transactionId: 'ABC120202',
-      created: 1683716985376,
-      status: 'FAILED',
-      paymentMode: 'Mode',
-      remarks: 'Remark',
-      amount: 100
-    },
-    {
-      transactionId: 'ABC120202',
-      created: 1683716985376,
-      status: 'SUCCESS',
-      paymentMode: 'Mode',
-      remarks: 'Remark',
-      amount: 100
-    }
-  ]
+  // data = [
+  //   {
+  //     transactionId: 'ABC120202',
+  //     created: 1683716985376,
+  //     status: 'SUCCESS',
+  //     paymentMode: 'Mode',
+  //     remarks: 'Remark',
+  //     amount: 100
+  //   },
+  //   {
+  //     transactionId: 'ABC120202',
+  //     created: 1683716985376,
+  //     status: 'REFUND',
+  //     paymentMode: 'Mode',
+  //     remarks: 'Remark',
+  //     amount: 100
+  //   },
+  //   {
+  //     transactionId: 'ABC120202',
+  //     created: 1683716985376,
+  //     status: 'FAILED',
+  //     paymentMode: 'Mode',
+  //     remarks: 'Remark',
+  //     amount: 100
+  //   },
+  //   {
+  //     transactionId: 'ABC120202',
+  //     created: 1683716985376,
+  //     status: 'SUCCESS',
+  //     paymentMode: 'Mode',
+  //     remarks: 'Remark',
+  //     amount: 100
+  //   }
+  // ]
 
   paymentDetailForm: FormGroup;
   @Output() addFGEvent = new EventEmitter();
@@ -113,9 +113,9 @@ export class AdminPaymentDetailsComponent implements OnInit {
 
   getModifiedTransactionHistory() {
     this.transactionHistory = []; // Clear the array before populating it
-
-    this.transactionHistory = this.data.map(
-    // this.transactionHistory = this.detailsData.paymentDetails.transactionHistory.map(
+    console.log(this.detailsData.paymentDetails.transactionHistory);
+    // this.transactionHistory = this.data.map(
+    this.transactionHistory = this.detailsData.paymentDetails.transactionHistory.map(
       (transaction) => {
         const {
           transactionId,
@@ -125,7 +125,7 @@ export class AdminPaymentDetailsComponent implements OnInit {
           remarks,
           amount,
         } = transaction;
-        const cashierName = 'Name';
+        const cashierName = 'Cashier';
 
         return {
           transactionId,
@@ -191,11 +191,11 @@ export class AdminPaymentDetailsComponent implements OnInit {
   // }
 
   getPaymentStatus(): string {
-    const dueAmount = this.detailsData.paymentDetails.roomRates.totalAmount;
+    const dueAmount = this.detailsData.paymentDetails.dueAmount;
     if (dueAmount === 0) {
       return 'COMPLETED';
     } else {
-      return 'INITATED';
+      return 'INITIATED';
     }
   }
 

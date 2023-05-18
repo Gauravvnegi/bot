@@ -5,7 +5,7 @@
 }
 
 :host ::ng-deep .ngx-timepicker-control__input {
-  background-color: #f8f8f8;
+  background-color: transparent;
 }
 
 .wrapper {
@@ -29,5 +29,26 @@
   width: 31%;
   @media screen and (max-width: 780px) {
     width: 100%;
+  }
+}
+
+.airport-container {
+  padding: 20px 30px;
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+:host ::ng-deep .next-button {
+  margin-top: 10px;
+  @include primary-button;
+}
+
+:host ::ng-deep .close {
+  .mat-icon {
+    float: right;
+    cursor: pointer;
   }
 }

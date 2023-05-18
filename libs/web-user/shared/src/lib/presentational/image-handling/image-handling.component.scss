@@ -1,12 +1,13 @@
 @import 'main';
 
 .webhandling-wrapper {
-  padding: 10px;
+  padding: 2% 4% 2% 2%; // 4% is of right (crop package issue)
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow-y: auto;
   .title {
+    position: relative;
     font: normal normal 600 25px/30px Montserrat;
     letter-spacing: 0px;
     color: #121212;
@@ -28,75 +29,54 @@
       height: 25px;
       cursor: pointer;
       margin: 0 10px;
-
+      opacity: 0.65;
+      &:hover {
+        opacity: 1;
+      }
       @media only screen and (max-width: 767px) {
         height: 20px;
       }
     }
   }
   .crop-image-wrapper {
-    height: auto;
+    // height: auto;
     margin: 0 auto;
-    width: 70%;
+    // width: 70%;
 
     img {
       width: 100%;
     }
   }
 
+  .clear-icon {
+    position: absolute;
+    cursor: pointer;
+    height: 24px;
+    right: 1%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
   .button-wrapper {
     display: flex;
     justify-content: center;
+    gap: 2%;
     margin-top: 15px;
-    margin-bottom: 20px;
-    // .back-button {
-    //   @include footer-back;
-    //   display: flex;
-    //   align-items: center;
-    //   justify-content: center;
-    //   @media only screen and (max-width: 767px) {
-    //     width: 120px;
-    //     height: 35px;
-    //     @include common-button-style;
-    //   }
 
-    //   @media only screen and (max-width: 575px) {
-    //     width: 100px;
-    //     height: 35px;
-    //     @include common-button-style;
-    //   }
-    // }
-    // .next-button {
-    //   @include footer-next;
-    //   display: flex;
-    //   align-items: center;
-    //   justify-content: center;
-    //   @media only screen and (max-width: 767px) {
-    //     width: 120px;
-    //     height: 35px;
-    //     @include common-button-style;
-    //   }
-
-    //   @media only screen and (max-width: 575px) {
-    //     width: 100px;
-    //     height: 35px;
-    //     @include common-button-style;
-    //   }
-    // }
-
-    .btn-default{
+    .btn-default {
       width: 200px;
       height: 45px;
       font-weight: $bolder;
       border-radius: 8px;
       box-shadow: 0px 3px 6px #4b56c059;
+      background: #5f38f9;
+      color: white;
+      text-align: center;
+      line-height: 45px;
 
       &:hover {
         cursor: pointer;
       }
-
-      text-align: center;
-      line-height: 45px;
 
       @media only screen and (max-width: 1024px) {
         zoom: 0.8;
@@ -105,18 +85,6 @@
       @media only screen and (max-width: 380px) {
         zoom: 0.6;
       }
-    }
-
-    .secondary-image-btn {
-      color: #5f38f9;
-      background: white;
-      margin-right: 30px;
-      border: 1px solid #5f38f9;
-    }
-
-    .primary-image-btn {
-      background: #5f38f9;
-      color: white;
     }
   }
 }

@@ -145,7 +145,7 @@
         font-size: 12px;
       }
     }
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: $M) {
       font-size: 14px;
     }
   }
@@ -163,7 +163,7 @@
       height: auto;
       width: auto;
     }
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: $M) {
       font-size: 14px;
     }
   }

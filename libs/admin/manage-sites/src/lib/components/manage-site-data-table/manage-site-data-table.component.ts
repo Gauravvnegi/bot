@@ -23,6 +23,7 @@ import { ManageSiteStatus } from '../../constant/manage-site';
 import { ManageSite, ManageSiteList } from '../../models/data-table.model';
 import { ManageSitesService } from '../../services/manage-sites.service';
 import { NextState, QueryConfig } from '../../types/manage-site.type';
+import { environment } from '@hospitality-bot/admin/environment';
 
 @Component({
   selector: 'hospitality-bot-manage-site-data-table',
@@ -33,6 +34,8 @@ import { NextState, QueryConfig } from '../../types/manage-site.type';
   ],
 })
 export class ManageSiteDataTableComponent extends BaseDatatableComponent {
+  createSiteUrl: string;
+
   hotelId: string;
   filterChips = chips;
   cols = cols;
@@ -60,6 +63,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   ngOnInit(): void {
     this.userId = this.userService.getLoggedInUserId();
     this.initTableValue();
+    this.createSiteUrl = `${environment.createWithUrl}/theme/select?userId=${this.userId}&creatingNewSite=true`;
   }
 
   /**

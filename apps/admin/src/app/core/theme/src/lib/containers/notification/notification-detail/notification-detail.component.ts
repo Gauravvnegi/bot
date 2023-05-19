@@ -22,22 +22,29 @@ export class NotificationDetailComponent {
 
   redirectToPage() {
     const { data } = this.data;
-    this.router.navigate([
-      data['redirectUrl'].replace('https://dev.admin.botshot.ai', ''),
-    ]);
+    // this.router.navigate([
+    //   data['redirectUrl'].replace('https://dev.admin.botshot.ai', ''),
+    // ]);
     switch (this.data.notificationType.toUpperCase()) {
       case 'WHATSAPP':
-        this.notificationService.$whatsappNotification.next(
-          data['phoneNumber']
-        );
+        this.notificationService.$whatsappNotification.next(data['phoneNumber']);
+        this.router.navigate(['pages/freddie/request']);
         break;
+        
+      // case 'IN-HOUSE REQUEST':
+      //   this.router.navigate(['pages/freddie/request']);
+      //   break;
+
       case 'FEEDBACK':
         this.notificationService.$feedbackNotification.next(data['feedbackId']);
+        this.router.navigate(['pages/heda/analytics']);
         break;
-      case 'RESERVATION':
-        this.notificationService.$reservationNotification.next(
-          data['reservationId']
-        );
+      case 'CHECK -IN':
+        this.notificationService.$reservationNotification.next(data['reservationId']);
+        this.router.navigate(['pages/efrontdesk/dashboard']);
+        break;
+      default:
+        // Handle other notification types or add a default route
         break;
     }
     this.onNotificationClose.emit({ close: true, notificationClose: true });

@@ -23,9 +23,15 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
   @Input() heading: string;
   @Input() routes: NavRouteOptions = [];
   @Input() isBack: boolean = true;
-  @Input() set dateTime(value: number) {
-    if (value) {
-      this.setDraftTime(new Date(value));
+  @Input() dateTitle: string;
+  @Input() set dateTime(
+    value: number | { dateTitle: string; dateTime: number }
+  ) {
+    if (typeof value !== 'object') {
+      this.setDraftTime(new Date(value as number));
+    } else {
+      this.dateTitle = value.dateTitle;
+      this.dateTime = value.dateTime;
     }
   }
 

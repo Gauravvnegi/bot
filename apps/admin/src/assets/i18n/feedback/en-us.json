@@ -6,7 +6,7 @@
   "global_nps": { "title": "Global NPS" },
   "top_low_nps": {
     "label": "NPS",
-    "title": "Top/Low NPS",
+    "title": "Top/Low Feedback",
     "top_performing": "Top Performing",
     "low_performing": "Low Performing"
   },

@@ -81,8 +81,8 @@ export class CreateOfferComponent implements OnInit {
       startDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
       rate: [''],
-      discountType: ['', [Validators.required]],
-      discountValue: ['', [Validators.required, Validators.min(1)]],
+      discountType: ['PERCENTAGE', [Validators.required]],
+      discountValue: ['0', [Validators.required, Validators.min(0)]],
       discountedPrice: [''],
     });
 
@@ -304,31 +304,28 @@ export class CreateOfferComponent implements OnInit {
         .getLibraryItemById<OfferResponse>(this.hotelId, this.offerId, {
           params: '?type=OFFER',
         })
-        .subscribe(
-          (res) => {
-            this.routes[2].label = 'Edit Offer';
-            let { packageCode, subPackages, ...restData } = res;
+        .subscribe((res) => {
+          this.routes[2].label = 'Edit Offer';
+          let { packageCode, subPackages, ...restData } = res;
 
-            const data: OfferFormData = {
-              ...restData,
-              libraryItems: subPackages?.map((item) => {
-                let price =
-                  item.rate ?? item.discountedPrice ?? item.originalPrice;
-                return {
-                  label: `${item.name} ${
-                    price ? `[${item.currency} ${price}]` : ''
-                  }`,
-                  value: item.id,
-                  price: item.rate,
-                  type: item.type,
-                };
-              }),
-            };
-            this.useForm.patchValue(data);
-            this.packageCode = packageCode;
-          }, 
-          this.handleFinal
-        )
+          const data: OfferFormData = {
+            ...restData,
+            libraryItems: subPackages?.map((item) => {
+              let price =
+                item.rate ?? item.discountedPrice ?? item.originalPrice;
+              return {
+                label: `${item.name} ${
+                  price ? `[${item.currency} ${price}]` : ''
+                }`,
+                value: item.id,
+                price: item.rate,
+                type: item.type,
+              };
+            }),
+          };
+          this.useForm.patchValue(data);
+          this.packageCode = packageCode;
+        }, this.handleFinal)
     );
   }
 
@@ -344,7 +341,6 @@ export class CreateOfferComponent implements OnInit {
     );
     this.router.navigate([`pages/library/${routes.offers}`]);
   };
-
 
   /**
    * @function handleFinal

@@ -7,7 +7,7 @@
     {{ tableName }}
   </div>
   <div class="action-wrapper">
-    <div class="btn read" *ngIf="selectedRows.length > 0">
+    <!-- <div class="btn read" *ngIf="selectedRows.length > 0">
       <img
         [src]="globalFeedbackConfig.images.datatable.mark_as_read.url"
         [alt]="globalFeedbackConfig.images.datatable.mark_as_read.alt"
@@ -16,8 +16,8 @@
       <span class="btn_text">
         {{ 'datatable.mark_as_read' | translate }}
       </span>
-    </div>
-    <div class="btn" *ngIf="selectedRows.length > 0">
+    </div> -->
+    <!-- <div class="btn" *ngIf="selectedRows.length > 0">
       <img
         [src]="globalFeedbackConfig.images.datatable.mark_as_unread.url"
         [alt]="globalFeedbackConfig.images.datatable.mark_as_unread.alt"
@@ -26,7 +26,7 @@
       <span class="btn_text">
         {{ 'datatable.mark_as_unread' | translate }}
       </span>
-    </div>
+    </div> -->
     <div class="pull-right">
       <label class="labl" *ngFor="let option of tableTypes">
         <input
@@ -80,8 +80,7 @@
     (sortFunction)="customSort($event)"
     [customSort]="isCustomSort"
     (onFilter)="onDataFilter($event)"
-            *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
-
+    *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
   >
     <!-- <ng-template pTemplate="caption"> </ng-template> -->
     <ng-template pTemplate="caption">
@@ -96,14 +95,15 @@
           [selectedIndex]="tabFilterIdx"
           (selectedTabChange)="onSelectedTabFilterChange($event)"
         ></hospitality-bot-tab-group> -->
-        <ng-container 
-         *ngIf="
+        <ng-container
+          *ngIf="
             isTabFilters &&
             tabFilterItems &&
             tableFG?.get('tableType').value !== 'card'
           "
-        [ngTemplateOutlet]="tabFilter"> </ng-container>
-
+          [ngTemplateOutlet]="tabFilter"
+        >
+        </ng-container>
 
         <hospitality-bot-filter-chips
           *ngIf="isQuickFilters && tableFG?.get('tableType').value !== 'card'"
@@ -159,7 +159,11 @@
           </td>
           <td class="guest">
             <div class="guest-name">{{ rowData?.guest.getFullName() }}</div>
-            <a href="tel:{{rowData?.guest.getPhoneNumber()}}"><div class="guest-phone">{{ rowData?.guest.getPhoneNumber() }}</div></a>
+            <a href="tel:{{ rowData?.guest.getPhoneNumber() }}">
+              <div class="guest-phone">
+                {{ rowData?.guest.getPhoneNumber() }}
+              </div>
+            </a>
           </td>
           <td class="service-feedback">
             <div class="feedback">
@@ -493,7 +497,11 @@
           </td>
           <td class="guest">
             <div class="guest-name">{{ rowData?.guest.getFullName() }}</div>
-            <a href="tel:{{rowData?.guest.getPhoneNumber()}}"><div class="guest-phone">{{ rowData?.guest.getPhoneNumber() }}</div></a>
+            <a href="tel:{{ rowData?.guest.getPhoneNumber() }}">
+              <div class="guest-phone">
+                {{ rowData?.guest.getPhoneNumber() }}
+              </div>
+            </a>
             <div class="guest-phone">{{ rowData?.guest.emailId }}</div>
           </td>
           <td class="package">

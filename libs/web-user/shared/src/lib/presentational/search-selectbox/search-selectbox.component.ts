@@ -56,7 +56,7 @@ export class SearchSelectboxComponent extends BaseComponent {
 
       if (data) control.setValue(data.value);
       else control.reset();
-    }, 200);
+    }, 350);
   }
 
   ngOnChanges(): void {

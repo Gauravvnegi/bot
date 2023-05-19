@@ -5,10 +5,9 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { BrandService } from '../../services/brand.service';
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
-import { set } from 'lodash';
-import { SocialMediaService } from '../../services/social-media.service';
+import { Subscription } from 'rxjs';
+import { BusinessService } from '../../services/business.service';
 
 @Component({
   selector: 'hospitality-bot-social-media',
@@ -18,12 +17,13 @@ import { SocialMediaService } from '../../services/social-media.service';
 export class SocialMediaComponent extends FormComponent implements OnInit {
   useForm: FormGroup;
   socialMediaControl: FormArray;
+  $subscription = new Subscription();
+  @Input() isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
-    private brandService: BrandService,
     public controlContainer: ControlContainer,
-    private socialMediaService: SocialMediaService
+    private businessService: BusinessService
   ) {
     super(controlContainer);
   }
@@ -44,8 +44,7 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
   }
 
   patchValue(): void {
-    this.socialMediaService.onSubmit.subscribe((res) => {
-      console.log(res);
+    this.businessService.onSubmit.subscribe((res) => {
       if (res) {
         this.inputControl?.patchValue(this.socialMediaControl.value);
       }
@@ -53,15 +52,16 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
   }
 
   patchValueToSocialMediaControl(): void {
-    console.log(this.inputControl?.value);
-    setTimeout(() => {
-      if (this.inputControl?.value)
-        this.socialMediaControl.patchValue(this.inputControl?.value);
-    }, 1000);
+    this.$subscription.add(
+      this.inputControl.valueChanges.subscribe((res) => {
+        console.log(res);
+          this.socialMediaControl.patchValue(res);
+      })
+    );
   }
 
   getSocailMediaConfig() {
-    this.socialMediaService.getSocialMediaConfig().subscribe((res) => {
+    this.businessService.getSocialMediaConfig().subscribe((res) => {
       res?.forEach((element) => {
         this.socialMediaControl.push(
           this.fb.group({
@@ -73,4 +73,11 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
       });
     });
   }
+
+ 
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }
+
+

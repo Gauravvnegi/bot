@@ -6,7 +6,7 @@ import { ComplimentaryServiceDetailDS } from '../data-models/complimentaryServic
 export class ComplimentaryService extends ApiService {
   private _complimentaryServiceDetailDS: ComplimentaryServiceDetailDS;
 
-  initComplimentaryAmenitiesDetailDS(amenities = []) {
+  initComplimentaryAmenitiesDetailDS(amenities) {
     this._complimentaryServiceDetailDS = new ComplimentaryServiceDetailDS().deserialize(
       amenities
     );

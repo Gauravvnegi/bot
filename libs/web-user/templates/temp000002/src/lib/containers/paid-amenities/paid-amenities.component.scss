@@ -243,8 +243,9 @@
 }
 
 .tab-active {
-  border-bottom: 1px solid #ff9600;
-  color: #ff9600 !important;
+  border-bottom: 1px solid;
+  border-color: $primary-blue;
+  color: $primary-blue !important;
   margin-bottom: 10px;
   transform: scale(1.1);
 }

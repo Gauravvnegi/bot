@@ -286,10 +286,12 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         [tokensConfig.hotelId]: hotelId,
         [tokensConfig.brandId]: brandId,
       });
-    } else {
-      this.snackBarService.openSnackBarAsText('Error in applying filter');
-    }
+    } 
+    // else {
+    //   this.snackBarService.openSnackBarAsText('Error in applying filter');
+    // }
 
+  
     this.filterService.emitFilterValue$.next(values);
     this.resetFilterCount();
     this.getFilterCount({ ...values });

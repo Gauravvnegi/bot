@@ -10,6 +10,14 @@ import { BaseWrapperComponent } from '../../base/base-wrapper.component';
 import { SnackBarService } from 'libs/shared/material/src';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
+import { RegistrationCardComponent } from '../registration-card/registration-card.component';
+import { RegCardService } from 'libs/web-user/shared/src/lib/services/reg-card.service';
+import { FileData } from 'libs/web-user/shared/src/lib/data-models/file';
+import { SummaryDetails } from 'libs/web-user/shared/src/lib/data-models/summaryConfig.model';
+import { ButtonService } from 'libs/web-user/shared/src/lib/services/button.service';
+import { UtilityService } from 'libs/web-user/shared/src/lib/services/utility.service';
 
 @Component({
   selector: 'hospitality-bot-summary-wrapper',
@@ -19,14 +27,21 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class SummaryWrapperComponent extends BaseWrapperComponent
   implements OnInit, OnDestroy {
+  protected _dialogRef: MatDialogRef<any>;
+  protected regCardComponent = RegistrationCardComponent;
+  regCardLoading = false;
+
   requestForm: FormGroup;
   summaryConfig: SummaryDetailsConfigI;
   summaryDetails;
   termsStatus: boolean;
+  signatureUrl: string;
+  regCardUrl: string;
 
   protected inputPopupComponent = Temp000001InputPopupComponent;
 
   constructor(
+    protected _modal: ModalService,
     public dialog: MatDialog,
     protected _summaryService: SummaryService,
     protected _stepperService: StepperService,
@@ -35,7 +50,10 @@ export class SummaryWrapperComponent extends BaseWrapperComponent
     protected _snackbarService: SnackBarService,
     protected _reservationService: ReservationService,
     protected _translateService: TranslateService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    protected _regCardService: RegCardService,
+    protected _utilityService: UtilityService,
+    private _buttonService: ButtonService
   ) {
     super();
     this.self = this;
@@ -98,7 +116,65 @@ export class SummaryWrapperComponent extends BaseWrapperComponent
   //   );
   // }
 
-  onCheckinSubmit() {
+  openRegCard(regUrl: string) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'modal-component';
+
+    dialogConfig.data = {
+      regcardUrl: regUrl,
+      signatureImageUrl: this.signatureUrl,
+    };
+    this._dialogRef = this._modal.openDialog(
+      this.regCardComponent,
+      dialogConfig
+    );
+
+    this._dialogRef.componentInstance.isSubmit = true;
+    this._dialogRef.componentInstance.onSave.subscribe(
+      ({ regCardUrl, signatureUrl, isSave }) => {
+        if (regCardUrl) this.regCardUrl = regCardUrl;
+        if (signatureUrl) {
+          this.signatureUrl = signatureUrl;
+        }
+        if (isSave) {
+          this.handleCheckIn();
+        } else {
+          this.resetBtnState();
+        }
+        this._dialogRef.close();
+      }
+    );
+  }
+
+  handleRegCard() {
+    if (this.regCardUrl) {
+      this.openRegCard(this.regCardUrl);
+    } else {
+      this.regCardLoading = true;
+      this.$subscription.add(
+        this._regCardService
+          .getRegCard(this._reservationService.reservationId)
+          .subscribe(
+            (res: FileData) => {
+              this.regCardLoading = false;
+              this.openRegCard(res.file_download_url);
+            },
+            ({ error }) => {
+              this.resetBtnState();
+              this.regCardLoading = false;
+              this._translateService
+                .get(`MESSAGES.ERROR.${error.type}`)
+                .subscribe((translatedMsg) => {
+                  this._snackbarService.openSnackBarAsText(translatedMsg);
+                });
+            }
+          )
+      );
+    }
+  }
+
+  handleCheckIn() {
     const data = {
       special_remarks: this.requestForm.get('request').value,
       // termsStatus: this.termsStatus,
@@ -119,6 +195,7 @@ export class SummaryWrapperComponent extends BaseWrapperComponent
             this.openThankyouPage('checkin');
           },
           ({ error }) => {
+            this.resetBtnState();
             this._translateService
               .get(`MESSAGES.ERROR.${error.type}`)
               .subscribe((translatedMsg) => {
@@ -129,12 +206,29 @@ export class SummaryWrapperComponent extends BaseWrapperComponent
     );
   }
 
+  // this one is template function
+  onCheckinSubmit() {
+    if (this.signatureUrl || this._utilityService.$signatureUploaded.value) {
+      this.handleCheckIn();
+    } else this.handleRegCard();
+  }
+
+  // reset btn state if checking is not finalized
+  resetBtnState() {
+    this._buttonService.buttonLoading$.next(this.buttonRefs['checkinButton']);
+  }
+
   openThankyouPage(state) {
     this.router.navigateByUrl(
       `/thankyou?token=${this.route.snapshot.queryParamMap.get(
         'token'
       )}&entity=thankyou&state=${state}`
     );
+  }
+
+  handleRequiredDetails({ regcardUrl, signatureImageUrl }) {
+    this.regCardUrl = regcardUrl;
+    this.signatureUrl = signatureImageUrl;
   }
 
   setTermsStatus(event) {

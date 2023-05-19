@@ -50,7 +50,9 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
   }
 
   addDeclaimerCheckbox() {
-    const isFirstStepCompleted = this.reservationData.stateCompletedSteps > 0;
+    // const isFirstStepCompleted = this.reservationData.stateCompletedSteps > 0;
+    const isFirstStepCompleted = true; // Making it already
+
     const form = this.fb.group({
       disclaimer: [isFirstStepCompleted, Validators.requiredTrue],
     });
@@ -78,11 +80,12 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
       this._amenitiesService
         .getHotelAmenities(this._hotelService.hotelId)
         .subscribe((response) => {
-          this.isAmenityDataAvl = !!response.total;
           this._amenitiesService.initAmenitiesDetailDS(
             response,
             this._stayDetailService.stayDetails.stayDetail.arrivalTime
           );
+          this.isAmenityDataAvl =
+            !!response.total || response.paidPackages?.length > 0; // response of total is wrong
         })
     );
   }

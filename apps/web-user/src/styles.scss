@@ -55,6 +55,7 @@ body {
   }
 }
 .mat-dialog-container {
+  position: relative;
   padding: 20px !important;
   @media only screen and (max-width: $M) {
     padding: 10px !important;
@@ -62,6 +63,7 @@ body {
 }
 
 .cdk-overlay-pane {
+  max-height: 85vh !important;
   overflow-y: auto;
   @media only screen and (max-width: $M) {
     width: 80vw !important;

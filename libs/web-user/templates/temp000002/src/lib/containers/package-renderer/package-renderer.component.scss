@@ -45,7 +45,7 @@
       height: 119px;
       margin: 0 53px 60px 0;
       border-radius: 5px;
-      background-color: #f8f8f8;
+      background-color: $accordian-header-background-color;
       .image {
         height: 89px;
         width: 104px;
@@ -100,7 +100,7 @@
             width: 69px;
             height: 26px;
             border-radius: 4px;
-            background-color: #3588c4;
+            background-color: $primary-blue;
             font-family: Montserrat;
             font-size: 12px;
             font-weight: 600;

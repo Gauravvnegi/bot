@@ -8,3 +8,5 @@ export class BackgroundUrlPipe implements PipeTransform {
     return `url('${value}')`;
   }
 }
+
+//  `url('${value}') center center cover no-repeat fixed`;

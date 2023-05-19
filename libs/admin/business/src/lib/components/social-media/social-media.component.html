@@ -2,7 +2,7 @@
   <p-accordionTab header="Social Media" [formGroup]="useForm">
     <div class="form-block" formArrayName="socialPlatforms">
       <div
-        class="half-width"
+        class="one-third-width"
         *ngFor="let platform of socialMediaControl.controls; let i = index"
         [formGroupName]="i"
       >

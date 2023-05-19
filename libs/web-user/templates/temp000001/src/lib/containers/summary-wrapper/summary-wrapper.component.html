@@ -3,6 +3,7 @@
     [stepperIndex]="stepperIndex"
     (addFGEvent)="addFGEvent($event)"
     (termsStatus)="setTermsStatus($event)"
+    (requiredDetails)="handleRequiredDetails($event)"
     *ngIf="reservationData"
   >
     <hospitality-bot-temp000002-textarea

@@ -3,7 +3,7 @@ import { HotelConfiguration } from '../types/hotel.type';
 export class HotelResponse {
          hotel: {
            active: boolean;
-           serviceName: string;
+           name: string;
            description: string;
            address: {};
            contact: string;
@@ -14,7 +14,7 @@ export class HotelResponse {
            complimentaryAmenities: string[];
          } = {
            active: true,
-           serviceName: '',
+           name: '',
            description: '',
            address: {},
            contact: '',
@@ -26,17 +26,17 @@ export class HotelResponse {
          };
          brandId: string;
          deserialize(input: HotelConfiguration) {
-           this.hotel.active = input.status;
-           this.hotel.serviceName = input.serviceName;
+           this.hotel.active = input?.status;
+           this.hotel.name = input?.name;
            this.hotel.description = input?.description ?? 'test description';
-           this.hotel.address = 'Noida';
+           this.hotel.address = input?.address ?? {};
            this.hotel.contact = input?.contact ?? '34567888888889';
            this.hotel.email = input?.email ?? 'test@test.com';
            this.hotel.imageUrls = input.imageUrls ?? [
              'assets/images/empty-table-service.png',
            ];
            this.hotel.segment = input?.segment ?? 'bnb';
-           this.hotel.socialPlatForms = input?.socialPlatForms ?? [
+           this.hotel.socialPlatForms =  [
              {
                name: 'facebook',
                imageUrl: 'assets/images/facebook.png',
@@ -56,7 +56,7 @@ export class HotelResponse {
              },
            ];
            this.hotel.complimentaryAmenities = input?.complimentaryAmenities;
-           this.brandId = input.brand.id;
+           this.brandId = input?.id;
            return this;
          }
        }

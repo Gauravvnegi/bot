@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
-  ActivatedRoute,
   ActivatedRouteSnapshot,
-  Router,
+  Router
 } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { NavRouteOption, Option } from '@hospitality-bot/admin/shared';
@@ -15,10 +14,10 @@ import {
   Services,
   noRecordAction,
 } from '../../models/hotel.models';
-import { HotelService } from '../../services/hotel.service';
-import { BrandService } from '../../services/brand.service';
-import { SocialMediaService } from '../../services/social-media.service';
-import { HotelFormData } from '../../types/hotel.type';
+import { BusinessService } from '../../services/business.service';
+
+declare let google: any;
+
 
 @Component({
   selector: 'hospitality-bot-hotel-info-form',
@@ -37,13 +36,16 @@ export class HotelInfoFormComponent implements OnInit {
   pageTitle: string = 'Hotel';
   brandId: string;
   noRecordAction = noRecordAction;
+  options = {
+    types: [],
+    componentRestrictions: { country: 'IN' },
+  };
   constructor(
     private fb: FormBuilder,
-    private hotelService: HotelService,
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private router: Router,
-    private socialMediaService: SocialMediaService
+    private businessService: BusinessService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -53,11 +55,7 @@ export class HotelInfoFormComponent implements OnInit {
         if (brandId) this.brandId = brandId;
       }
     );
-    const { navRoutes, title } = businessRoute[
-      this.hotelId ? 'editHotel' : 'hotel'
-    ];
-    this.pageTitle = title;
-    this.navRoutes = navRoutes;
+   
   }
 
   ngOnInit(): void {
@@ -65,31 +63,43 @@ export class HotelInfoFormComponent implements OnInit {
     this.initForm();
     this.getSegmentList();
     this.getServices();
+    // this.getPlaceAutocomplete();
+    this.loadGoogleMaps();
   }
 
   initForm() {
     this.useForm = this.fb.group({
       hotel: this.fb.group({
         active: [true],
-        serviceName: ['', [Validators.required]],
+        name: ['', [Validators.required]],
         segment: ['', [Validators.required]],
         email: ['', [Validators.required, Validators.email]],
-        contact: ['', [Validators.required]],
-        address: ['', [Validators.required]],
+        contactInfo: this.fb.group({
+          cc: [''],
+          phoneNumber: [''],
+        }),
+        address: this.fb.group({
+          address: [[]],
+        }),
+
         imageUrls: [[], [Validators.required]],
         description: ['', [Validators.required]],
         complimentaryAmenities: [[]],
-        socialPlatForms: [[]],
+        socialPlatforms: [[]],
       }),
       brandId: [this.brandId],
     });
+
+     const { navRoutes, title } = businessRoute[
+       this.hotelId ? 'editHotel' : 'hotel'
+     ];
+     this.pageTitle = title;
+     this.navRoutes = navRoutes;
     this.navRoutes[2].link = `/pages/settings/business-info/brand/${this.brandId}`;
 
     if (this.hotelId) {
-      this.hotelService.getHotelById(this.hotelId).subscribe((res) => {
+      this.businessService.getHotelById(this.hotelId).subscribe((res) => {
         const data = new HotelResponse().deserialize(res);
-        console.log(data);
-
         this.useForm.patchValue(data);
       });
     }
@@ -102,8 +112,8 @@ export class HotelInfoFormComponent implements OnInit {
   }
 
   getSegmentList() {
-    this.hotelService.getSegments(this.hotelId).subscribe((res) => {
-      this.segmentList = res;
+    this.businessService.getSegments(this.hotelId).subscribe((res) => {
+      this.segmentList = res.category;
     });
   }
 
@@ -113,7 +123,7 @@ export class HotelInfoFormComponent implements OnInit {
    */
   getServices() {
     this.$subscription.add(
-      this.hotelService
+      this.businessService
         .getServices(this.hotelId, {
           params: `?limit=5&type=SERVICE&serviceType=COMPLIMENTARY&status=true`,
         })
@@ -131,6 +141,7 @@ export class HotelInfoFormComponent implements OnInit {
   }
 
   submitForm() {
+    this.loading = true;
     if (this.useForm.invalid) {
       console.log(this.useForm.errors);
       this.loading = false;
@@ -140,34 +151,16 @@ export class HotelInfoFormComponent implements OnInit {
       this.useForm.markAllAsTouched();
       return;
     }
-    this.socialMediaService.onSubmit.emit(true);
-    // const data = this.useForm.getRawValue() as HotelFormData;
-    const data = {
-      hotel: {
-        name: 'hotel Reddwe',
-        logo:
-          'https://nyc3.digitaloceanspaces.com/botfiles/bot/bot/hotel/logos/static-content/hilltop/hiltop-logo2.png',
-        timezone: 'Asia/Calcutta',
-        segment: 'hotel',
-        address: {
-          city: 'Noida',
-          country: 'India',
-          latitude: 0.0,
-          longitude: 0.0,
-          pincode: 0,
-        },
-        contactInfo: {},
-      },
-      brandId: '27770ecf-5d89-477b-a9cb-81616a648f17',
-    };
+
+    this.businessService.onSubmit.emit(true);
+    const data = this.useForm.getRawValue();
 
     if (this.hotelId) {
       this.$subscription.add(
-        this.hotelService.updateHotel(this.hotelId, data).subscribe(
+        this.businessService.updateHotel(this.hotelId, data.hotel).subscribe(
           (res) => {
-            this.handleSuccess;
             this.router.navigate([
-              `/pages/settings/business-info/brand/${this.brandId}/hotel`,
+              `/pages/settings/business-info/brand/${this.brandId}`,
             ]);
           },
 
@@ -176,11 +169,10 @@ export class HotelInfoFormComponent implements OnInit {
       );
     } else {
       this.$subscription.add(
-        this.hotelService.createHotel(this.brandId, data).subscribe(
+        this.businessService.createHotel(this.brandId, data).subscribe(
           (res) => {
-            this.handleSuccess;
             this.router.navigate([
-              `/pages/settings/business-info/brand/${this.brandId}/hotel/${res.id}`,
+              `/pages/settings/business-info/brand/${this.brandId}`,
             ]);
           },
 
@@ -192,6 +184,71 @@ export class HotelInfoFormComponent implements OnInit {
 
   resetForm() {
     this.useForm.reset({}, { emitEvent: true });
+  }
+  @ViewChild('addresstext') addresstext: any;
+
+  // searchOptions(text: string) {
+  //   if (text) {
+  //     const autocomplete = new google.maps.places.Autocomplete({
+  //       india: 'IN',
+  //       componentRestrictions: { country: 'US' },
+  //       types: ['establishment'], // 'establishment' / 'address' / 'geocode'
+  //     });
+
+  //     console.log(autocomplete);
+  //   }
+  // }
+
+  // private getPlaceAutocomplete() {
+  //   const autocomplete = new google.maps.places.Autocomplete(
+  //     this.addresstext.nativeElement,
+  //     {
+  //       componentRestrictions: { country: 'US' },
+  //       types: ['establishment'], // 'establishment' / 'address' / 'geocode'
+  //     }
+  //   );
+  //   google.maps.event.addListener(autocomplete, 'place_changed', () => {
+  //     const place = autocomplete.getPlace();
+  //     console.log(place);
+  //     // this.invokeEvent(place);
+  //   });
+  // }
+  google: any;
+  autocomplete: any;
+  private loadGoogleMaps() {
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyC42YgNcCSadoy8dxDKKEXZohJU9B5eM2M&libraries=places`;
+    script.defer = true;
+    script.async = true;
+    script.onload = () => {
+      this.google = window['google'];
+      this.initAutocomplete();
+    };
+    document.head.appendChild(script);
+  }
+
+  private initAutocomplete() {
+    this.autocomplete = new this.google.maps.places.Autocomplete(
+      document.getElementById('autocomplete'),
+      { types: ['geocode'] }
+    );
+
+    this.autocomplete.addListener('place_changed', () => {
+      const place = this.autocomplete.getPlace();
+      this.useForm.patchValue({
+        hotel: {
+          address: {
+            address: place.formatted_address,
+          }
+        }
+      });
+    });
+  }
+
+  searchOptions(text: string) {
+    if (text) {
+      this.initAutocomplete();
+    }
   }
 
   /**
@@ -205,6 +262,9 @@ export class HotelInfoFormComponent implements OnInit {
       { panelClass: 'success' }
     );
   };
+  handleAddressChange(address: any) {
+    console.log(address);
+  }
 
   /**
    * @function handelFinal To handel loading
@@ -213,4 +273,8 @@ export class HotelInfoFormComponent implements OnInit {
   handelError = ({ error }): void => {
     this.loading = false;
   };
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

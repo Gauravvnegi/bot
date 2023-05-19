@@ -28,6 +28,7 @@
   align-items: center;
   flex-direction: column;
 }
+
 mat-label {
   position: absolute;
   bottom: 10px;
@@ -39,10 +40,70 @@ mat-label {
   font-weight: $bolder;
   letter-spacing: 2px;
 }
+
+.input-file {
+  cursor: pointer;
+}
+
 .upload__box-file_icon {
   position: absolute;
   width: 41px;
   top: 50%;
   transform: translate(-50%, -100%);
   left: 50%;
+  cursor: pointer;
+}
+
+.upload__box:hover {
+  cursor: pointer;
+}
+
+.upload__box:hover .overlay {
+  cursor: default;
+
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  .delete {
+    opacity: 1;
+  }
+  .edit {
+    opacity: 1;
+  }
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.5s ease;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6%;
+
+  .delete,
+  .edit {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    cursor: pointer;
+  }
+
+  @media (hover: none) {
+    background: rgba(0, 0, 0, 0.3);
+    .delete,
+    .edit {
+      opacity: 1;
+    }
+  }
+
+  @media only screen and (max-width: 1024px) {
+    .delete,
+    .edit {
+      zoom: 0.8;
+    }
+  }
 }

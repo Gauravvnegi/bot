@@ -94,6 +94,12 @@
 }
 
 .section--heading {
+  display: flex;
+  align-items: center;
+  gap: 1%;
+  @media screen and (max-width: $mobile) {
+    gap: 2%;
+  }
   padding: 10px;
   background-color: $primary-blue;
   color: white;
@@ -114,7 +120,7 @@
   margin: 0 15px;
   &--health {
     flex-direction: column;
-    margin: 10px 15px;
+    // margin: 10px 15px;
     &--message {
       height: 35px;
       font-size: larger;
@@ -144,6 +150,7 @@
       font-size: 14px;
     }
   }
+
   &--label {
     align-items: center;
     display: flex;
@@ -250,8 +257,16 @@
 }
 
 :host ::ng-deep .conditional-icon {
-  height: 40px;
+  height: 23px;
   @media screen and (max-width: $M) {
-    height: 30px;
+    height: 20px;
   }
+}
+
+.status-failed {
+  color: #fc0f21;
+}
+
+.status-completed {
+  color: #02b956;
 }

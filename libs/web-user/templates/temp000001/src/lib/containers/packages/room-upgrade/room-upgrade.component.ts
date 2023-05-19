@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { DefaultAmenityConfigI } from 'libs/web-user/shared/src/lib/data-models/defaultAmenityConfig.model';
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
@@ -20,11 +21,14 @@ export class RoomUpgradeComponent implements OnInit {
 
   defaultForm: FormGroup;
   defaultAmenityConfig: DefaultAmenityConfigI;
+  @Output() onSave = new EventEmitter<string>();
+  @Output() onClose = new EventEmitter();
 
   constructor(
     protected _fb: FormBuilder,
     protected _paidService: PaidService,
-    protected _defaultService: DefaultAmenityService
+    protected _defaultService: DefaultAmenityService,
+    protected _snackBarService: SnackBarService
   ) {
     this.initDefaultForm();
   }
@@ -75,5 +79,20 @@ export class RoomUpgradeComponent implements OnInit {
     return (
       this.subPackageForm && (this.subPackageForm.get('metaData') as FormGroup)
     );
+  }
+
+  handleSave() {
+    if (this.subPackageForm.invalid) {
+      this.subPackageForm.markAllAsTouched();
+      this._snackBarService.openSnackBarAsText(
+        'Please fill the required values'
+      );
+      return;
+    }
+    this.onSave.emit(this.uniqueData.id);
+  }
+
+  handleClose() {
+    this.onClose.emit();
   }
 }

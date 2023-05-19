@@ -358,9 +358,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   manageInvoice() {
     this.onDetailsClose.next(false);
-    this.router.navigate([
-      `pages/efrontdesk/invoice/create-invoice/${this.bookingId}`,
-    ]);
+    this.router.navigateByUrl(`pages/efrontdesk/invoice/${this.bookingId}`);
   }
 
   prepareInvoice() {

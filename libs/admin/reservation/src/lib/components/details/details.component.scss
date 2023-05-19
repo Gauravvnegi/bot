@@ -112,7 +112,7 @@
       @include flex-space-between-base-Algn;
       color: $white;
       font-size: 16px;
-      padding-left: 5px;
+      // padding-left: 5px;
       width: 70%;
       &__field {
         @include flex-col-start-algn();

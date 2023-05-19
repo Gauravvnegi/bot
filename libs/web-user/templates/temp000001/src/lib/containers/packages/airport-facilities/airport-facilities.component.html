@@ -1,4 +1,7 @@
 <div class="airport-container">
+  <div class="close">
+    <mat-icon (click)="handleClose()">clear</mat-icon>
+  </div>
   <form [formGroup]="subPackageForm">
     <h3 class="heading">
       Enter below details to book {{ subPackageForm.get('label').value }}
@@ -37,4 +40,11 @@
       </div>
     </div>
   </form>
+  <div class="btn-wrapper" (click)="handleSave()">
+    <web-user-button
+      [settings]="{ label: 'Save' }"
+      [buttonClass]="'next-button'"
+      class="user-button"
+    ></web-user-button>
+  </div>
 </div>

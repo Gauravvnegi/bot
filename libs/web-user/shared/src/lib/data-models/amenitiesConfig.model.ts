@@ -25,9 +25,9 @@ export class AmenitiesDetail implements Deserializable {
       set(
         {},
         'complimentaryServicesDetail',
-        get(input, ['complimentaryPackages'])
+        get(input, ['complimentaryPackages'], [])
       ),
-      set({}, 'paidServicesDetail', get(input, ['paidPackages']))
+      set({}, 'paidServicesDetail', get(input, ['paidPackages'], []))
     );
     return this;
   }

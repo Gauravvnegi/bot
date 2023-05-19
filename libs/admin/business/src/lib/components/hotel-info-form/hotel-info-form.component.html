@@ -16,8 +16,8 @@
   <div class="form-block">
     <hospitality-bot-input
       class="half-width"
-      controlName="serviceName"
-      label="Service Name"
+      controlName="name"
+      label="Name"
     ></hospitality-bot-input>
     <hospitality-bot-select
       class="half-width"
@@ -30,16 +30,29 @@
       controlName="email"
       label="Email"
     ></hospitality-bot-input>
-    <hospitality-bot-input
-      class="half-width"
-      controlName="contact"
-      label="Contact"
-    ></hospitality-bot-input>
-    <hospitality-bot-input
+    <div  class="half-width" [formGroup]="useForm.get('hotel').get('contactInfo')">
+    <hospitality-bot-phone-number
+     
+    ></hospitality-bot-phone-number>
+    </div>
+    <div class="full-width" [formGroup]="useForm.get('hotel').get('address')">
+      <!-- <hospitality-bot-auto-complete
       class="full-width"
       controlName="address"
       label="Address"
-    ></hospitality-bot-input>
+      [options]=""
+      [loading]="loading"
+      (onSearch)="searchOptions($event)"
+    ></hospitality-bot-auto-complete> -->
+    <div class="full-width">
+        <label for="Adress">Address</label>
+
+        <input type="text" formControlName="address" class="adress-input" id="autocomplete">
+      </div>
+    </div>
+      
+
+
     <div class="file-upload-wrapper">
       <hospitality-bot-custom-file-upload
         formControlName="imageUrls"
@@ -85,7 +98,7 @@
   </div>
 
   <hospitality-bot-social-media 
-  controlName="socialPlatForms"
+  controlName="socialPlatforms"
   class="full-width">
   </hospitality-bot-social-media>
 
@@ -104,4 +117,3 @@
   </div>
 </div>
 </div>
-```

@@ -12,15 +12,11 @@ export const adminInvoiceRoutes: Route[] = [
     component: MainComponent,
     children: [
       {
-        path: `${invoiceRoutes.createInvoice.route}/:id`,
+        path: ':id',
         component: InvoiceComponent,
       },
       {
-        path: `${invoiceRoutes.editInvoice.route}/:id`,
-        component: InvoiceComponent,
-      },
-      {
-        path: `${invoiceRoutes.createInvoice.route}/preview-invoice/:id`,
+        path: 'preview-invoice/:id',
         component: PreviewComponent,
       },
       {

@@ -23,7 +23,7 @@ export class DefaultAmenityService extends ApiService {
       required: true,
     });
     defaultFormFieldSchema['remark'] = new FieldSchema().deserialize({
-      label: 'Remark',
+      label: 'Remarks',
       disable: false,
     });
 

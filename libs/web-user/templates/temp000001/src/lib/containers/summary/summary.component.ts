@@ -18,6 +18,10 @@ export class SummaryComponent implements OnInit {
   @Output()
   addFGEvent = new EventEmitter();
   @Output() termsStatus = new EventEmitter();
+  @Output() requiredDetails = new EventEmitter<{
+    regcardUrl: string;
+    signatureImageUrl: string;
+  }>();
 
   constructor(
     protected _stepperService: StepperService,
@@ -40,5 +44,9 @@ export class SummaryComponent implements OnInit {
 
   emitTermsStatus(event) {
     this.termsStatus.emit(event);
+  }
+
+  handleRequireDetails(data) {
+    this.requiredDetails.emit(data);
   }
 }

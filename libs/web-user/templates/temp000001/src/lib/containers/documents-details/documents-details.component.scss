@@ -42,6 +42,10 @@
   margin-left: auto;
 }
 
+::ng-deep .mat-dialog-container {
+  padding: 0px !important;
+}
+
 mat-icon {
   @include mat-icon;
 }
@@ -109,4 +113,13 @@ mat-icon {
   @media screen and (max-width: $M) {
     height: 20px;
   }
+}
+
+::ng-deep .primary-image-btn {
+  background-color: $primary-blue !important;
+  border-radius: 8px !important;
+}
+
+::ng-deep .secondary-image-btn {
+  border-radius: 8px !important;
 }

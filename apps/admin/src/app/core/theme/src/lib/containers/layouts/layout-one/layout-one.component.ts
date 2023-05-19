@@ -286,17 +286,16 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         [tokensConfig.hotelId]: hotelId,
         [tokensConfig.brandId]: brandId,
       });
-    } else {
-      this.snackBarService.openSnackBarAsText('Error in applying filter');
-    }
+    } 
+    // else {
+    //   this.snackBarService.openSnackBarAsText('Error in applying filter');
+    // }
 
-    /**
-     * Not need as reloading if filter is getting applied
-     */
-    // this.filterService.emitFilterValue$.next(values);
-    // this.resetFilterCount();
-    // this.getFilterCount({ ...values });
-    // this.isGlobalFilterVisible = false;
+  
+    this.filterService.emitFilterValue$.next(values);
+    this.resetFilterCount();
+    this.getFilterCount({ ...values });
+    this.isGlobalFilterVisible = false;
   }
 
   subMenuItem(data) {

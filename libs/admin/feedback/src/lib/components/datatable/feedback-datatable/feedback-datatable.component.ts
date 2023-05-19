@@ -333,9 +333,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @function loadData To load table data on a page change.
    * @param event The lazy load event.
    */
-  loadData(event: LazyLoadEvent): void {
+  loadData(): void {
     this.loading = true;
-    this.updatePaginations(event);
     this.$subscription.add(
       this.fetchDataFrom(
         [
@@ -382,7 +381,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     data.entityTypeCounts &&
       this.updateQuickReplyFilterCount(data.entityTypeCounts);
     this.updateTotalRecords();
-  console.log(this.values);
     this.loading = false;
   }
 
@@ -455,7 +453,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     if (this.tableFG?.get('tableType').value !== 'card') {
       this.setTableCols();
       this.values = [];
-      this.changePage(+this.tabFilterItems[event.index].lastPage);
+      this.loadData();
     }
   }
 

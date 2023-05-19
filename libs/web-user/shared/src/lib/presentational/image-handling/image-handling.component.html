@@ -1,49 +1,52 @@
 <div class="webhandling-wrapper">
-  <div class="title">
-    Crop Image
-    <div class="clear-icon" (click)="onModalClose.emit({ status: false })">
-      <mat-icon>clear</mat-icon>
+  <div class="webhandling-wrapper__header">
+    <div class="title">
+      Crop Image
+      <div class="clear-icon" (click)="onModalClose.emit({ status: false })">
+        <mat-icon>clear</mat-icon>
+      </div>
+    </div>
+
+    <div class="crop-tools">
+      <img
+        src="assets/svg/rotate-left.svg"
+        (click)="rotateLeft()"
+        class="icon"
+        alt="Rotate right"
+      />
+      <img
+        src="assets/svg/rotate-right.svg"
+        (click)="rotateRight()"
+        class="icon"
+        alt="Rotate right"
+      />
+      <img
+        src="assets/svg/horizontal-flip.svg"
+        (click)="flipHorizontal()"
+        class="icon"
+        alt="Flip Horizintally"
+      />
+      <img
+        src="assets/svg/flip-vertical.svg"
+        (click)="flipVertical()"
+        class="icon"
+        alt="Flip Vertically"
+      />
+      <img
+        src="assets/svg/zoom.svg"
+        (click)="zoomIn()"
+        class="icon"
+        alt="Zoom In"
+      />
+      <img
+        src="assets/svg/zoom-out.svg"
+        (click)="zoomOut()"
+        class="icon"
+        alt="Zoom Out"
+      />
     </div>
   </div>
 
-  <div class="crop-tools">
-    <img
-      src="assets/svg/rotate-left.svg"
-      (click)="rotateLeft()"
-      class="icon"
-      alt="Rotate right"
-    />
-    <img
-      src="assets/svg/rotate-right.svg"
-      (click)="rotateRight()"
-      class="icon"
-      alt="Rotate right"
-    />
-    <img
-      src="assets/svg/horizontal-flip.svg"
-      (click)="flipHorizontal()"
-      class="icon"
-      alt="Flip Horizintally"
-    />
-    <img
-      src="assets/svg/flip-vertical.svg"
-      (click)="flipVertical()"
-      class="icon"
-      alt="Flip Vertically"
-    />
-    <img
-      src="assets/svg/zoom.svg"
-      (click)="zoomIn()"
-      class="icon"
-      alt="Zoom In"
-    />
-    <img
-      src="assets/svg/zoom-out.svg"
-      (click)="zoomOut()"
-      class="icon"
-      alt="Zoom Out"
-    />
-  </div>
   <div class="crop-image-wrapper">
     <image-cropper
       [imageChangedEvent]="imageChangedEvent"

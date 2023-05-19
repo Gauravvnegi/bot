@@ -132,8 +132,11 @@ export class SummaryWrapperComponent extends BaseWrapperComponent
 
     this._dialogRef.componentInstance.isSubmit = true;
     this._dialogRef.componentInstance.onSave.subscribe(
-      ({ regCardUrl, isSave }) => {
+      ({ regCardUrl, signatureUrl, isSave }) => {
         if (regCardUrl) this.regCardUrl = regCardUrl;
+        if (signatureUrl) {
+          this.signatureUrl = signatureUrl;
+        }
         if (isSave) {
           this.handleCheckIn();
         } else {

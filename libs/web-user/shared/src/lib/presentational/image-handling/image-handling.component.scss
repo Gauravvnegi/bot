@@ -1,29 +1,41 @@
 @import 'main';
 
 .webhandling-wrapper {
+  // position: relative;
+  max-height: 80vh;
+  max-width: 750px;
+  min-width: 400px;
+
   padding: 2% 4% 2% 2%; // 4% is of right (crop package issue)
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow-y: auto;
+
+  &__header {
+    position: absolute;
+    inset: 0 0 auto 0;
+    background: #f1f5f9;
+    z-index: 1000;
+    padding: 5px;
+    box-shadow: 0px 0px 5px 1px #8080807d;
+  }
+
   .title {
     position: relative;
-    font: normal normal 600 25px/30px Montserrat;
+    font-size: 20px;
+    font-family: 'Poppins-regular' Montserrat;
+    font-weight: 900;
     letter-spacing: 0px;
     color: #121212;
     width: 100%;
     text-align: center;
-    margin-bottom: 20px;
-
-    @media only screen and (max-width: 767px) {
-      font: normal normal 600 21px/30px Montserrat;
-    }
   }
   .crop-tools {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin: 10px 0 5px;
 
     .icon {
       height: 25px;
@@ -38,10 +50,9 @@
       }
     }
   }
+
   .crop-image-wrapper {
-    // height: auto;
-    margin: 0 auto;
-    // width: 70%;
+    margin: 80px auto 60px;
 
     img {
       width: 100%;
@@ -58,11 +69,17 @@
   }
 
   .button-wrapper {
+    position: absolute;
+    background: white;
+    box-shadow: 0px 0px 5px 1px #8080807d;
+    z-index: 1000;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
-    gap: 2%;
-    margin-top: 15px;
-
     .btn-default {
       width: 200px;
       height: 45px;
@@ -77,14 +94,24 @@
       &:hover {
         cursor: pointer;
       }
+    }
+  }
 
-      @media only screen and (max-width: 1024px) {
-        zoom: 0.8;
-      }
+  @media only screen and (max-width: 767px) {
+    .title {
+      font-size: 18px;
+    }
 
-      @media only screen and (max-width: 380px) {
-        zoom: 0.6;
-      }
+    .crop-tools {
+      zoom: 0.9;
+    }
+
+    .crop-image-wrapper {
+      margin: 65px auto 47px;
+    }
+
+    .btn-default {
+      zoom: 0.8;
     }
   }
 }

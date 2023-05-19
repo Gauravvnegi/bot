@@ -59,8 +59,9 @@ export class RegistrationCardComponent implements OnInit, OnDestroy {
 
   @Input() isSubmit = false; // whether to check-in or not
   @Output() onSave = new EventEmitter<{
-    regCardUrl: string;
-    isSave: boolean;
+    signatureUrl?: string;
+    regCardUrl?: string;
+    isSave?: boolean;
   }>();
 
   @Input('settings') set settings(value) {
@@ -117,7 +118,7 @@ export class RegistrationCardComponent implements OnInit, OnDestroy {
         .subscribe(
           (res) => {
             this._utilityService.$signatureUploaded.next(true);
-            this._defaultValue.regcardUrl = res.fileDownloadUrl;
+            this._defaultValue.signatureImageUrl = res.fileDownloadUrl;
           },
           ({ error }) => {
             this._translateService
@@ -133,7 +134,8 @@ export class RegistrationCardComponent implements OnInit, OnDestroy {
 
   onClose() {
     this.onSave.emit({
-      regCardUrl: this._defaultValue.regcardUrl,
+      regCardUrl: this.settings.regcardUrl,
+      signatureUrl: this._defaultValue.signatureImageUrl,
       isSave: false,
     });
   }
@@ -141,7 +143,8 @@ export class RegistrationCardComponent implements OnInit, OnDestroy {
   handleSave() {
     if (this._utilityService.$signatureUploaded.value) {
       this.onSave.emit({
-        regCardUrl: this._defaultValue.regcardUrl,
+        regCardUrl: this.settings.regcardUrl,
+        signatureUrl: this._defaultValue.signatureImageUrl,
         isSave: true,
       });
     } else {

@@ -22,7 +22,6 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
-import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Observable, Subscription } from 'rxjs';
 import { cols } from '../../../constants/cols';
 import { dashboard } from '../../../constants/dashboard';
@@ -239,7 +238,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    * @function customSort To sort the rows of the table.
    * @param eventThe The event for sort click action.
    */
-  customSort(event: SortEvent): void {
+  customSort(event): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
     const field =
       event.field[event.field.length - 1] === ')'

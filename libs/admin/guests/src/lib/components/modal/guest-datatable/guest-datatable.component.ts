@@ -118,9 +118,9 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     return this._guestTableService[this.callingMethod](config);
   }
 
-  loadData(event: LazyLoadEvent) {
+  loadData() {
     this.loading = true;
-    this.updatePaginations(event);
+    // this.updatePaginations(event);
     this.$subscription.add(
       this.fetchDataFrom(
         [

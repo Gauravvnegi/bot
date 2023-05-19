@@ -201,6 +201,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
       this.tabFilterItems[event.index].value
     );
     this.tabFilterIdx = event.index;
+    this.initTableValue();
   }
 
   /**

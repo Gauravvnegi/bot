@@ -145,9 +145,8 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    * @function loadData To load data for the table after any event.
    * @param event The lazy load event for the table.
    */
-  loadData(event: LazyLoadEvent): void {
+  loadData(): void {
     this.loading = true;
-    this.updatePaginations(event);
     this.$subscription.add(
       this.fetchDataFrom(
         [
@@ -276,7 +275,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
-    this.changePage(+this.tabFilterItems[event.index].lastPage);
+    this.loadData();
   }
 
   /**

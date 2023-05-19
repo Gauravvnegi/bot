@@ -94,6 +94,13 @@
 }
 
 .section--heading {
+  display: flex;
+  align-items: center;
+  gap: 1%;
+  @media screen and (max-width: $mobile) {
+    gap: 2%;
+  }
+
   padding: 10px;
   background-color: $title-header-background-color;
   color: $title-header-font-color;
@@ -108,11 +115,16 @@
 }
 
 .section--content {
+  .document {
+    @media screen and (max-width: $M) {
+      margin-left: -5px;
+    }
+  }
   @include flex-space-between;
   padding: 15px;
   &--health {
     flex-direction: column;
-    margin: 10px 15px;
+    margin: 2%;
     &--message {
       height: 35px;
       font-size: larger;
@@ -126,7 +138,7 @@
           margin-left: 5px;
         }
         @media screen and (max-width: $tab-size) {
-          margin-left: 15px;
+          // margin-left: 15px;
         }
       }
       mat-icon {
@@ -140,12 +152,13 @@
     }
     &--disclaimer {
       margin-top: 15px;
+      // padding-left: 15px;
       color: #8d8d8d;
       @media screen and (max-width: 700px) {
         font-size: 12px;
       }
     }
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: $M) {
       font-size: 14px;
     }
   }
@@ -163,7 +176,7 @@
       height: auto;
       width: auto;
     }
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: $M) {
       font-size: 14px;
     }
   }
@@ -264,12 +277,20 @@
 }
 
 :host ::ng-deep .conditional-icon {
-  height: 40px;
+  height: 23px;
   @media screen and (max-width: $M) {
-    height: 30px;
+    height: 20px;
   }
 }
 
 :host ::ng-deep .mat-dialog-container {
   padding: inherit !important;
+}
+
+.status-failed {
+  color: #fc0f21;
+}
+
+.status-completed {
+  color: #02b956;
 }

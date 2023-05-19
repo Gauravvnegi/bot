@@ -232,7 +232,12 @@
         </div>
       </mat-tab>
     </mat-tab-group>
-    <button type="button" (click)="applyFilter()" class="apply-button">
+    <button
+      [disabled]="isDisabled || isTokenLoading"
+      type="button"
+      (click)="applyFilter()"
+      class="apply-button"
+    >
       Apply
     </button>
   </form>

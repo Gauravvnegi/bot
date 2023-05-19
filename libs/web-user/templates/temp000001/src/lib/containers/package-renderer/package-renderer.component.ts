@@ -47,7 +47,7 @@ export class PackageRendererComponent
   @Input() slideData;
   @Output() onPackageUpdate = new EventEmitter();
 
-  @ViewChild('packageMetadata', { read: ViewContainerRef }) packageContainer;
+  // @ViewChild('packageMetadata', { read: ViewContainerRef }) packageContainer;
   @ViewChild('saveButton') saveButton;
 
   protected $subscription: Subscription = new Subscription();
@@ -83,11 +83,11 @@ export class PackageRendererComponent
   }
 
   ngAfterViewInit() {
-    this.clearPackageContainer();
-    if (this.packageContainer) {
-      this.checkForSelectedPackage();
-      this._changeDetectorRef.detectChanges();
-    }
+    // this.clearPackageContainer();
+    // if (this.packageContainer) {
+    //   this.checkForSelectedPackage();
+    //   this._changeDetectorRef.detectChanges();
+    // }
   }
 
   setSubPackageConfiguration() {
@@ -100,51 +100,51 @@ export class PackageRendererComponent
     return this._paidService.setFieldConfigForSubPackageDetails();
   }
 
-  checkForSelectedPackage() {
-    this.subPackages?.controls?.forEach((subPackage) => {
-      if (subPackage.get('isSelected').value === true) {
-        // this.servicePackage(subPackage.get('packageCode').value);
-      }
-    });
-  }
+  // checkForSelectedPackage() {
+  //   this.subPackages?.controls?.forEach((subPackage) => {
+  //     if (subPackage.get('isSelected').value === true) {
+  //       this.servicePackage(subPackage.get('packageCode').value);
+  //     }
+  //   });
+  // }
 
-  servicePackage(subPackageCode) {
-    this.selectedService = subPackageCode;
-    let component = this.packageComponent[subPackageCode];
-    if (component === undefined) {
-      component = this.packageDefaultComponent;
-    }
-    let subPackage;
-    this.subPackages?.controls?.forEach((control) => {
-      if (control.get('packageCode').value === subPackageCode) {
-        subPackage = control.value;
-      }
-    });
-    this.createComponent(component, subPackage);
-  }
+  // servicePackage(subPackageCode) {
+  //   this.selectedService = subPackageCode;
+  //   let component = this.packageComponent[subPackageCode];
+  //   if (component === undefined) {
+  //     component = this.packageDefaultComponent;
+  //   }
+  //   let subPackage;
+  //   this.subPackages?.controls?.forEach((control) => {
+  //     if (control.get('packageCode').value === subPackageCode) {
+  //       subPackage = control.value;
+  //     }
+  //   });
+  //   this.createComponent(component, subPackage);
+  // }
 
-  createComponent(component, subPackageData) {
-    const factory = this._resolver.resolveComponentFactory(component);
-    this.packageComponentRefObj = this.packageContainer.createComponent(
-      factory
-    );
-    this.selectedSubPackageArray.push(subPackageData.packageCode);
-    this.addPropsToComponentInstance(subPackageData);
-  }
+  // createComponent(component, subPackageData) {
+  //   const factory = this._resolver.resolveComponentFactory(component);
+  //   this.packageComponentRefObj = this.packageContainer.createComponent(
+  //     factory
+  //   );
+  //   this.selectedSubPackageArray.push(subPackageData.packageCode);
+  //   this.addPropsToComponentInstance(subPackageData);
+  // }
 
-  addPropsToComponentInstance(subPackageData) {
-    this.packageComponentRefObj.instance.subPackageForm = this.getSubPackageForm(
-      subPackageData.packageCode
-    );
-    this.packageComponentRefObj.instance.uniqueData = {
-      code: subPackageData.packageCode,
-      id: subPackageData.id,
-    };
-    this.packageComponentRefObj.instance.amenityData = this.getAminityData(
-      subPackageData.packageCode
-    );
-    this.packageComponentRefObj.instance.quantity = subPackageData.quantity;
-  }
+  // addPropsToComponentInstance(subPackageData) {
+  //   this.packageComponentRefObj.instance.subPackageForm = this.getSubPackageForm(
+  //     subPackageData.packageCode
+  //   );
+  //   this.packageComponentRefObj.instance.uniqueData = {
+  //     code: subPackageData.packageCode,
+  //     id: subPackageData.id,
+  //   };
+  //   this.packageComponentRefObj.instance.amenityData = this.getAminityData(
+  //     subPackageData.packageCode
+  //   );
+  //   this.packageComponentRefObj.instance.quantity = subPackageData.quantity;
+  // }
 
   getSubPackageForm(packageCode) {
     let subPackageForm;
@@ -166,11 +166,11 @@ export class PackageRendererComponent
     return aminityData;
   }
 
-  clearPackageContainer() {
-    if (this.packageContainer) {
-      this.packageContainer.clear();
-    }
-  }
+  // clearPackageContainer() {
+  //   if (this.packageContainer) {
+  //     this.packageContainer.clear();
+  //   }
+  // }
 
   // new implementation -- popup
   onSubPackageStatusChange(formGroup) {
@@ -188,10 +188,12 @@ export class PackageRendererComponent
     dialogConfig.height = '1000px';
     dialogConfig.width = '50%';
 
-    this._dialogRef = this._modal.openDialog(
-      this.packageDefaultComponent,
-      dialogConfig
-    );
+    let component = this.packageComponent[subPackageCode];
+    if (component === undefined) {
+      component = this.packageDefaultComponent;
+    }
+
+    this._dialogRef = this._modal.openDialog(component, dialogConfig);
 
     const subPackageForm = this.getSubPackageForm(subPackageData.packageCode);
 
@@ -283,15 +285,15 @@ export class PackageRendererComponent
   //   formGroup.patchValue({ isSelected: false });
   // }
 
-  removeComponentFromContainer(packageCode) {
-    let componentIndex = this.selectedSubPackageArray.findIndex(
-      (code) => code === packageCode
-    );
-    if (componentIndex >= 0) {
-      this.packageContainer.remove(componentIndex);
-      this.selectedSubPackageArray.splice(componentIndex, 1);
-    }
-  }
+  // removeComponentFromContainer(packageCode) {
+  //   let componentIndex = this.selectedSubPackageArray.findIndex(
+  //     (code) => code === packageCode
+  //   );
+  //   if (componentIndex >= 0) {
+  //     this.packageContainer.remove(componentIndex);
+  //     this.selectedSubPackageArray.splice(componentIndex, 1);
+  //   }
+  // }
 
   listenForComponentRender() {
     this.$subscription.add(
@@ -423,19 +425,19 @@ export class PackageRendererComponent
     return this.parentForm?.get('subPackages') as FormArray;
   }
 
-  get checkForUpdatePossibility() {
-    let isUpdatePossible = false;
-    this.slideData.subPackages?.forEach((subPackage) => {
-      if (subPackage.isSelected === true) {
-        isUpdatePossible = true;
-      }
-    });
+  // get checkForUpdatePossibility() {
+  //   let isUpdatePossible = false;
+  //   this.slideData.subPackages?.forEach((subPackage) => {
+  //     if (subPackage.isSelected === true) {
+  //       isUpdatePossible = true;
+  //     }
+  //   });
 
-    this.subPackages?.controls?.forEach((subPackage) => {
-      if (subPackage.get('isSelected').value === true) {
-        isUpdatePossible = true;
-      }
-    });
-    return isUpdatePossible;
-  }
+  //   this.subPackages?.controls?.forEach((subPackage) => {
+  //     if (subPackage.get('isSelected').value === true) {
+  //       isUpdatePossible = true;
+  //     }
+  //   });
+  //   return isUpdatePossible;
+  // }
 }

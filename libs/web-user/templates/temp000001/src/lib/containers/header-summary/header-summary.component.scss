@@ -20,6 +20,7 @@
 .modal-header {
   padding: 2px 8px;
   display: flex;
+  justify-content: center;
   padding-bottom: 10px;
   width: 100%;
   position: relative;
@@ -31,13 +32,6 @@
   right: 14px;
 
   top: 0;
-}
-
-.temp-div {
-  width: 33%;
-  @media screen and (max-width: 700px) {
-    width: 15%;
-  }
 }
 
 .modal-title {

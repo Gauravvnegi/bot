@@ -23,7 +23,7 @@ import {
 import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
 import { ServicesService } from 'libs/admin/services/src/lib/services/services.service';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { Subscription, from } from 'rxjs';
+import { Subscription, from, throwError } from 'rxjs';
 import {
   addDiscountMenu,
   addRefundMenu,
@@ -57,6 +57,7 @@ export class InvoiceComponent implements OnInit {
   hotelId: string;
   reservationId: string;
   guestId: string;
+  bookingNumber: string;
 
   tableFormArray: FormArray;
   useForm: FormGroup;
@@ -89,6 +90,7 @@ export class InvoiceComponent implements OnInit {
   serviceOptions: Option[];
 
   descriptionOffSet = 0;
+  loadingData = false;
   loadingDescription = false;
   noMoreDescription = false;
   selectedSearchIndex = -1;
@@ -107,9 +109,10 @@ export class InvoiceComponent implements OnInit {
     private snackbarService: SnackBarService,
     private adminUtilityService: AdminUtilityService,
     private servicesService: ServicesService,
-    private router: Router,
     private modalService: ModalService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -129,7 +132,7 @@ export class InvoiceComponent implements OnInit {
    * Initialize page title and navigator
    */
   initPageHeaders() {
-    const { title, navRoutes } = invoiceRoutes['createInvoice'];
+    const { title, navRoutes } = invoiceRoutes['invoice'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
   }
@@ -168,9 +171,12 @@ export class InvoiceComponent implements OnInit {
       currency: ['INR'],
       refundAmount: [0],
 
-      cashierName: [`${firstName} ${lastName}`, Validators.required],
+      cashierName: [
+        { value: `${firstName} ${lastName}`, disabled: true },
+        Validators.required,
+      ],
       paymentMethod: ['', Validators.required],
-      receivedPayment: ['', Validators.required],
+      receivedPayment: ['', [Validators.required, Validators.min(1)]],
       remarks: ['', Validators.required],
       transactionId: ['', Validators.required],
     });
@@ -187,49 +193,64 @@ export class InvoiceComponent implements OnInit {
    * Patch the initial form values
    */
   initFormDetails() {
+    this.loadingData = true;
     const { firstName, lastName } = this.userService.userDetails;
     // this.tableValue = [{ id: 1 }];
-    this.invoiceService.getInvoiceData(this.reservationId).subscribe((res) => {
-      this.invoiceService.initInvoiceData(res); // saving initial invoice data
+    this.invoiceService.getInvoiceData(this.reservationId).subscribe(
+      (res) => {
+        this.invoiceService.initInvoiceData(res); // saving initial invoice data
 
-      const data = new Invoice().deserialize(res, {
-        cashierName: `${firstName} ${lastName}`,
-      });
-      // this.tableValue = data.tableData.map((_, idx) => ({ id: idx + 1 }));
-      // for (let i = 1; i < data.tableData.length; i++) {
-      //   this.addNewCharges(); // adding new table entry to patch data
-      // }
-
-      data.tableData.forEach((item, idx) => {
-        // this.tableValue.push({ id: idx + 1 });
-        this.addNewCharges(item.type, idx); // adding new table entry to patch data
-      });
-
-      this.useForm.patchValue(data, { emitEvent: false });
-
-      // Generating tax options
-      this.tax = res.itemList.reduce((prev, curr) => {
-        const taxes = curr.itemTax.map((item) => ({
-          label: `${item.taxType} [${item.taxValue}%]`,
-          value: item.id,
-        }));
-
-        return [...prev, ...taxes];
-      }, []);
-
-      // Generating default description options
-      res.itemList.forEach((item) => {
-        this.defaultDescriptionOptions.push({
-          label: item.description,
-          value: item.id,
-          amount: item.amount,
-          taxes: item.itemTax,
+        const data = new Invoice().deserialize(res, {
+          cashierName: `${firstName} ${lastName}`,
         });
-      });
+        this.guestId = res.primaryGuest.id;
+        this.bookingNumber = res.reservation.number;
 
-      this.guestId = res.primaryGuest.id;
-      this.isInvoiceGenerated = res.invoiceGenerated;
-    });
+        if (data.gstNumber !== '') {
+          this.onAddGST();
+        }
+
+        // this.tableValue = data.tableData.map((_, idx) => ({ id: idx + 1 }));
+        // for (let i = 1; i < data.tableData.length; i++) {
+        //   this.addNewCharges(); // adding new table entry to patch data
+        // }
+
+        data.tableData.forEach((item, idx) => {
+          // this.tableValue.push({ id: idx + 1 });
+          this.addNewCharges(item.type, idx); // adding new table entry to patch data
+        });
+
+        this.useForm.patchValue(data, { emitEvent: false });
+        // Generating tax options
+        this.tax = res.itemList.reduce((prev, curr) => {
+          const taxes = curr.itemTax.map((item) => ({
+            label: `${item.taxType} [${item.taxValue}%]`,
+            value: item.id,
+          }));
+
+          return [...prev, ...taxes];
+        }, []);
+
+        // Generating default description options
+        res.itemList.forEach((item) => {
+          this.defaultDescriptionOptions.push({
+            label: item.description,
+            value: item.id,
+            amount: item.amount,
+            taxes: item.itemTax,
+          });
+        });
+
+        this.isInvoiceGenerated = res.invoiceGenerated;
+        if (this.isInvoiceGenerated){
+          this.useForm.disable();
+        }
+        this.loadingData = false;
+      },
+      (error) => {
+        this.router.navigateByUrl('/pages/efrontdesk');
+      }
+    );
   }
 
   handleFocus(index: number) {
@@ -273,7 +294,12 @@ export class InvoiceComponent implements OnInit {
       transactionIdControl,
       remarksControl,
     ].forEach((item) => {
-      if (addValidation) item.setValidators([Validators.required]);
+      if (addValidation) {
+        item.setValidators([Validators.required]);
+        if (item === receivedPaymentControl) {
+          item.setValidators([Validators.required, Validators.min(1)]);
+        }
+      }
       else {
         item.clearValidators();
         item.updateValueAndValidity();
@@ -315,9 +341,10 @@ export class InvoiceComponent implements OnInit {
     if (addValidation) {
       companyNameControl.setValidators([Validators.required]);
       companyNameControl.updateValueAndValidity();
+      companyNameControl.markAsUntouched();
     } else {
-      companyNameControl.updateValueAndValidity();
       companyNameControl.clearValidators();
+      companyNameControl.updateValueAndValidity();
       companyNameControl.markAsUntouched();
     }
   }
@@ -326,29 +353,35 @@ export class InvoiceComponent implements OnInit {
    * Handle addition of table entry (New Charges)
    */
   addNewCharges(type: 'price' | 'discount' = 'price', rowIndex?: number) {
+    if (this.tableFormArray.length > 0 && !rowIndex) {
+      if (this.tableFormArray.invalid) {
+        this.markAsTouched(this.tableFormArray);
+        this.snackbarService.openSnackBarAsText(
+          'Invalid form: Please fix the errors.'
+        );
+        return;
+      }
+    }
+
     const index = rowIndex ?? this.tableValue.length;
     this.tableValue.push(index);
 
-    // if (this.useForm.invalid) {
-    //   this.useForm.markAllAsTouched();
-    //   this.snackbarService.openSnackBarAsText(
-    //     'Invalid form: Please fix the errors.'
-    //   );
-    //   return;
-    // }
     const data: Record<keyof PaymentField, any> = {
       key: [
         type === 'discount'
           ? this.tableFormArray.at(index - 1)?.get('key').value
           : `${Date.now()}`,
       ],
-      description: ['', Validators.required],
-      unit: [null],
-      unitValue: [null],
+      description: ['', type === 'price' ? [Validators.required] : null],
+      unit: [null, type === 'price' ? [Validators.min(0)] : null],
+      unitValue: [null, type === 'price' ? [Validators.min(0)] : null],
       amount: [null],
       tax: [[]],
       totalAmount: [null],
-      discount: [null],
+      discount: [
+        null,
+        type === 'discount' ? [Validators.required, Validators.min(0)] : null,
+      ],
       discountType: ['PERCENT'],
       type: [type],
       isDisabled: [false],
@@ -485,10 +518,12 @@ export class InvoiceComponent implements OnInit {
     );
 
     unit.valueChanges.subscribe((unitQuantity) => {
+      if (unit.invalid || unitValue.invalid) return;
       handlePriceRowUpdate({ unitQuantity });
     });
 
     unitValue.valueChanges.subscribe((unitPrice) => {
+      if (unit.invalid || unitValue.invalid) return;
       handlePriceRowUpdate({ unitPrice });
     });
 
@@ -558,6 +593,9 @@ export class InvoiceComponent implements OnInit {
       if (discount.value > 100 && discountType.value === 'PERCENT') {
         return 'isPercentError';
       }
+      if (discount.value < 0) {
+        return 'isLessThanZero';
+      }
     };
 
     const clearError = () => {
@@ -581,6 +619,10 @@ export class InvoiceComponent implements OnInit {
       }
       if (error === 'isPercentError') {
         discount.setErrors({ moreThan100: true });
+        this.isValidDiscount = false;
+      }
+      if (error === 'isLessThanZero') {
+        discount.setErrors({ min: true });
         this.isValidDiscount = false;
       }
     };
@@ -711,51 +753,48 @@ export class InvoiceComponent implements OnInit {
     let currentAmount = 0;
     this.tableFormArray.getRawValue().map((item) => {
       if (item.type === 'discount') {
-        totalDiscount = +item.totalAmount + currentAmount;
-        // currentAmount: [0],
-        // discountedAmount: [0],
-        // totalDiscount: [0],
-        // paidAmount: [0],
-        // dueAmount: [0],
-        this.useForm.patchValue({ totalDiscount });
+        totalDiscount += +item.totalAmount;
       }
       if (item.type === 'price') {
-        currentAmount = +item.totalAmount + totalDiscount;
-        this.useForm.patchValue({ currentAmount });
+        currentAmount += +item.totalAmount;
       }
       const discountedAmount = currentAmount - totalDiscount;
+      const paidAmount = this.useForm.get('paidAmount').value;
 
+      this.useForm.patchValue({ currentAmount });
+      this.useForm.patchValue({ totalDiscount });
       this.useForm.patchValue({ discountedAmount });
-      this.useForm.patchValue({ dueAmount: discountedAmount - totalDiscount });
+      this.useForm.patchValue({ dueAmount: discountedAmount - paidAmount });
     });
 
     return;
 
-    // Remove rows in descending order
-    for (let i = this.tableValue.length - 1; i >= 0; i--) {
-      if (idsToRemove.includes(i + 1)) {
-        // Check if the next row is a discount row
-        const isNextRowDiscount =
-          i < this.tableValue.length - 1 &&
-          this.tableFormArray.at(i + 1)?.get('type').value === 'discount';
-        // Remove the current row and the next row if it's a discount row
-        if (isNextRowDiscount) {
-          this.tableValue.splice(i, 2);
-          this.registerOnDeleteChanges(i);
-          this.tableFormArray.removeAt(i);
-          this.tableFormArray.removeAt(i); // Remove the next row
-        } else {
-          this.tableValue.splice(i, 1);
-          this.registerOnDeleteChanges(i);
-          this.tableFormArray.removeAt(i);
-        }
-      }
-    }
+    // // Remove rows in descending order
+    // for (let i = this.tableValue.length - 1; i >= 0; i--) {
+    //   if (idsToRemove.includes(i)) {
+    //     // Check if the next row is a discount row
+    //     const isNextRowDiscount =
+    //       i < this.tableValue.length - 1 &&
+    //       this.tableFormArray.at(i + 1)?.get('type').value === 'discount';
+    //     console.log(isNextRowDiscount);
+    //     // Remove the current row and the next row if it's a discount row
+    //     if (isNextRowDiscount) {
+    //       this.tableValue.splice(i, 2);
+    //       this.registerOnDeleteChanges(i);
+    //       this.tableFormArray.removeAt(i);
+    //       this.tableFormArray.removeAt(i); // Remove the next row
+    //     } else {
+    //       this.tableValue.splice(i, 1);
+    //       this.registerOnDeleteChanges(i);
+    //       this.tableFormArray.removeAt(i);
+    //     }
+    //   }
+    // }
 
-    // Update the IDs in tableValue
-    this.tableValue.forEach((_, index) => index);
+    // // Update the IDs in tableValue
+    // this.tableValue.forEach((_, index) => index);
 
-    this.selectedRows = [];
+    // this.selectedRows = [];
   }
 
   registerOnDeleteChanges(index) {
@@ -784,26 +823,38 @@ export class InvoiceComponent implements OnInit {
 
   onToggleSelectAll({ checked }) {}
 
+  markAsTouched = (control: AbstractControl) => {
+    if (control instanceof FormArray) {
+      control.controls.forEach((formGroup: FormGroup) => {
+        Object.values(formGroup.controls).forEach((control) =>
+          this.markAsTouched(control)
+        );
+      });
+    } else if (control instanceof FormGroup) {
+      Object.values(control.controls).forEach((control) =>
+        this.markAsTouched(control)
+      );
+    } else if (control.validator) {
+      control.markAsTouched();
+    }
+  };
+
+  previewAndGenerate(): void {
+    // if(!this.inputControl.paidAmount.value){
+    //   this.snackbarService.openSnackBarAsText(
+    //     'Paid amount is 0: Invoice cannot preview or generate'
+    //   )
+    //   return;
+    // }
+
+    this.router.navigate(['../preview-invoice', this.reservationId], { relativeTo: this.route });
+  }
+
   handleSave(): void {
     if (!this.addGST) this.gstValidation(false);
-    const markAsTouched = (control: AbstractControl) => {
-      if (control instanceof FormArray) {
-        control.controls.forEach((formGroup: FormGroup) => {
-          Object.values(formGroup.controls).forEach((control) =>
-            markAsTouched(control)
-          );
-        });
-      } else if (control instanceof FormGroup) {
-        Object.values(control.controls).forEach((control) =>
-          markAsTouched(control)
-        );
-      } else if (control.validator) {
-        control.markAsTouched();
-      }
-    };
 
-    markAsTouched(this.useForm);
-    markAsTouched(this.tableFormArray);
+    this.markAsTouched(this.useForm);
+    this.markAsTouched(this.tableFormArray);
 
     if (this.useForm.invalid) {
       this.snackbarService.openSnackBarAsText(
@@ -824,7 +875,11 @@ export class InvoiceComponent implements OnInit {
       this.invoiceService
         .updateInvoice(this.reservationId, data)
         .subscribe((res) => {
-          console.log('Invoice Updated');
+          this.snackbarService.openSnackBarAsText(
+            'Invoice Updated Successfully',
+            '',
+            { panelClass: 'success' }
+          );
         })
     );
   }

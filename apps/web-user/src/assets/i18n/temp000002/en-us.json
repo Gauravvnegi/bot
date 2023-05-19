@@ -11,7 +11,8 @@
     "SIGNATURE_MISSING": "Signature missing.",
     "SIGNATURE_PAD_PENDING": "Please enter signature on the signature pad",
     "SIGNATURE_NAME_PENDING": "Please enter your name",
-    "SIGNATURE_FILE_PENDING": "Please upload an image file"
+    "SIGNATURE_FILE_PENDING": "Please upload an image file",
+    "INVALID_IMAGE": "Invalid File"
   },
   "MESSAGES": {
     "SUCCESS": {

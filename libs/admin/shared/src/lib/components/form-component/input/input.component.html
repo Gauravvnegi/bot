@@ -32,8 +32,10 @@
     [placeholder]="placeholder"
   />
 
-  <small *ngIf="subtitle" class="subtitle"> {{ subtitle }}</small>
-
+  <ng-container *ngIf="!isLoading">
+    <small *ngIf="subtitle" class="subtitle">{{ subtitle }}</small>
+  </ng-container>
+  
   <small *ngIf="error" class="p-error"> {{ error }}</small>
 
   <label *ngIf="label && float" [for]="controlName" class="label">{{

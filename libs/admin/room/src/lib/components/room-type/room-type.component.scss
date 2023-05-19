@@ -87,3 +87,11 @@
 .paid-services {
   margin-top: 57px;
 }
+
+:host ::ng-deep .wrapper {
+height: fit-content !important;
+}
+
+:host ::ng-deep .loader{
+  height: 40vh !important;
+}

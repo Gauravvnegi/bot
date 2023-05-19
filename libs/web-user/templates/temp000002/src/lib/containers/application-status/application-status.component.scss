@@ -95,6 +95,13 @@
 }
 
 .section--heading {
+  display: flex;
+  align-items: center;
+  gap: 1%;
+  @media screen and (max-width: $mobile) {
+    gap: 2%;
+  }
+
   border-radius: 10px;
 
   @include title-header;
@@ -103,6 +110,14 @@
     font-size: 16px;
     margin: 15px 0;
   }
+}
+
+.status-failed {
+  color: #fc0f21;
+}
+
+.status-completed {
+  color: #02b956;
 }
 
 .section--content {
@@ -130,13 +145,14 @@
       }
     }
     &--disclaimer {
+      margin-left: 10px;
       margin-top: 15px;
       color: #8d8d8d;
       @media screen and (max-width: 700px) {
         font-size: 12px;
       }
     }
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: $M) {
       font-size: 14px;
     }
   }
@@ -153,7 +169,7 @@
       height: auto;
       width: auto;
     }
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: $M) {
       font-size: 14px;
     }
   }
@@ -252,9 +268,9 @@
 }
 
 :host ::ng-deep .conditional-icon {
-  height: 40px;
+  height: 23px;
   @media screen and (max-width: $M) {
-    height: 30px;
+    height: 20px;
   }
 }
 
@@ -287,6 +303,20 @@
       @media screen and (max-width: 360px) {
         font-size: 12px;
       }
+    }
+  }
+}
+
+:host ::ng-deep .privacy-checkbox {
+  margin-top: -20px;
+  margin-left: 10px;
+  @media screen and (max-width: $mobile) {
+    margin-top: -15px;
+  }
+  .mat-checkbox-label {
+    @media screen and (max-width: $M) {
+      font-size: 14px;
+      line-height: 16px;
     }
   }
 }

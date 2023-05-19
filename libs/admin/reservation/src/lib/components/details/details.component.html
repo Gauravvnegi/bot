@@ -496,16 +496,18 @@
               </ng-container>
             </ng-template>
           </div>
-          <div featureSubscribed feature="FREDDIE">
+          <div>
             <p class="contact">Contact Guest</p>
             <div class="right-bottom-icons">
-              <ng-container *ngFor="let icon of shareIconList">
+              <ng-container *ngFor="let channel of channels">
                 <div
                   class="social-icons"
-                  (click)="openSendNotification(icon.value)"
+                  (click)="openSendNotification(channel.value)"
+                  [style.display]="true ? 'block' : 'none'"
+                  [style.pointer-events]="true ? 'auto' : 'none'"
                 >
                   <div class="icon">
-                    <img [src]="icon.iconUrl" />
+                    <img [src]="getIconUrl(channel.name)" />
                   </div>
                 </div>
               </ng-container>

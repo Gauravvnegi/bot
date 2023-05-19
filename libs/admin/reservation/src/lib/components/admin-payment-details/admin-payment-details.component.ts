@@ -53,50 +53,12 @@ export class AdminPaymentDetailsComponent implements OnInit {
     'totalAmount',
   ];
 
-  // data = [
-  //   {
-  //     transactionId: 'ABC120202',
-  //     created: 1683716985376,
-  //     status: 'SUCCESS',
-  //     paymentMode: 'Mode',
-  //     remarks: 'Remark',
-  //     amount: 100
-  //   },
-  //   {
-  //     transactionId: 'ABC120202',
-  //     created: 1683716985376,
-  //     status: 'REFUND',
-  //     paymentMode: 'Mode',
-  //     remarks: 'Remark',
-  //     amount: 100
-  //   },
-  //   {
-  //     transactionId: 'ABC120202',
-  //     created: 1683716985376,
-  //     status: 'FAILED',
-  //     paymentMode: 'Mode',
-  //     remarks: 'Remark',
-  //     amount: 100
-  //   },
-  //   {
-  //     transactionId: 'ABC120202',
-  //     created: 1683716985376,
-  //     status: 'SUCCESS',
-  //     paymentMode: 'Mode',
-  //     remarks: 'Remark',
-  //     amount: 100
-  //   }
-  // ]
-
   paymentDetailForm: FormGroup;
   @Output() addFGEvent = new EventEmitter();
 
   constructor(private _fb: FormBuilder) {}
 
-  ngOnInit(): void {
-    console.log('Parent Form ->', this.parentForm);
-    console.log('Details Data ->', this.detailsData);
-  }
+  ngOnInit(): void {}
 
   ngOnChanges() {
     this.paymentDetailForm = this._fb.group({});
@@ -113,8 +75,6 @@ export class AdminPaymentDetailsComponent implements OnInit {
 
   getModifiedTransactionHistory() {
     this.transactionHistory = []; // Clear the array before populating it
-    console.log(this.detailsData.paymentDetails.transactionHistory);
-    // this.transactionHistory = this.data.map(
     this.transactionHistory = this.detailsData.paymentDetails.transactionHistory.map(
       (transaction) => {
         const {

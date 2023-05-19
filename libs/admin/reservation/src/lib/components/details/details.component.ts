@@ -53,6 +53,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   isFirstTimeFetch = true;
   isGuestReservationFetched = false;
   shareIconList;
+  channels;
   colorMap;
   bookingList = [
     { label: 'Advance Booking', icon: '' },
@@ -125,6 +126,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.channels = this.subscriptionService.getChannelSubscription();
+    console.log('Channels -> ', this.channels);
   }
 
   /**
@@ -154,6 +157,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.colorMap = response?.feedbackColorMap;
         this.shareIconList = response?.communicationChannels;
       }
+      console.log(this.shareIconList);
     });
   }
 
@@ -198,8 +202,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
             response,
             this.globalFilterService.timezone
           );
-
-          console.log('Details-> ', this.details);
           this.mapValuesInForm();
           this.isReservationDetailFetched = true;
         },
@@ -415,20 +417,20 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   generateFeedback(journeyName) {
     this._reservationService
-    .generateJourneyLink(
-      this.reservationDetailsFG.get('bookingId').value,
-      journeyName
-    )
-    .subscribe((res) => {
-      this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
-      this.snackbarService.openSnackBarAsText(
-        'Link copied successfully',
-        '',
-        {
-          panelClass: 'success',
-        }
-      );
-    });
+      .generateJourneyLink(
+        this.reservationDetailsFG.get('bookingId').value,
+        journeyName
+      )
+      .subscribe((res) => {
+        this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
+        this.snackbarService.openSnackBarAsText(
+          'Link copied successfully',
+          '',
+          {
+            panelClass: 'success',
+          }
+        );
+      });
   }
 
   sendInvoice() {}
@@ -710,6 +712,12 @@ export class DetailsComponent implements OnInit, OnDestroy {
     return label;
   }
 
+  getIconUrl(label: string){
+    const channelLabel = label.split('_')[0];
+    const sharedIcon = this.shareIconList.find((icon) => icon.label === channelLabel);
+    return sharedIcon && sharedIcon.isSubscribed ? sharedIcon.iconUrl : sharedIcon.disableIcon;
+  }
+
   checkForTransactionFeedbackSubscribed() {
     return this.subscriptionService.checkModuleSubscription(
       ModuleNames.FEEDBACK_TRANSACTIONAL
@@ -723,16 +731,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   checkForGenerateFeedbackSubscribed() {
-    return this.subscriptionService.checkModuleSubscription(
-      ModuleNames.HEDA
-    );
+    return this.subscriptionService.checkModuleSubscription(ModuleNames.HEDA);
   }
 
   setTab(event) {
     this.tabKey = this.detailsConfig.find(
       (tabConfig) => tabConfig.index === event.index
     )?.key;
-    console.log(event, 'event');
   }
 
   get bookingCount() {

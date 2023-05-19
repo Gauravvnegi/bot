@@ -95,8 +95,8 @@ export class CreatePackageComponent implements OnInit {
       imageUrl: ['', Validators.required],
       currency: ['INR', Validators.required],
       rate: ['', Validators.required],
-      discountType: ['', Validators.required],
-      discountValue: ['', [Validators.required, Validators.min(1)]],
+      discountType: ['PERCENTAGE', Validators.required],
+      discountValue: ['0', [Validators.required, Validators.min(0)]],
       discountedCurrency: ['INR', Validators.required],
       discountedPrice: ['', Validators.required],
       enableVisibility: [[], Validators.required],
@@ -450,7 +450,7 @@ export class CreatePackageComponent implements OnInit {
    * @function handleError to show the error
    * @param param0 network error
    */
-  handleError = ({ error }): void => { 
+  handleError = ({ error }): void => {
     this.closeLoading();
   };
 

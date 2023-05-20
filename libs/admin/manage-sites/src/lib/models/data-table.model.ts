@@ -14,7 +14,7 @@ export class ManageSite {
 
   deserialize(input: ManageSiteResponse) {
     this.id = input.id;
-    this.thumbnail = input.logo;
+    this.thumbnail = input.favIcon;
     this.siteName = input.name;
     this.url = input.domain;
     this.nextState = input.nextState;

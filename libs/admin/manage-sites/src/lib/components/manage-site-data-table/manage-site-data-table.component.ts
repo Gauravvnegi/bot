@@ -88,7 +88,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         (res) => {
           const manageSiteData = new ManageSiteList().deserialize(res);
           this.values = manageSiteData.records;
-
+          console.log(this.values);
           this.nextState = this.values.map((item) => ({
             id: item.id,
             status: item.status,

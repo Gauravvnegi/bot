@@ -120,7 +120,9 @@
         </div>
       </td>
       <td class="guest">
-        <span>{{ rowData.guests.primaryGuest.getFullName() }}</span>
+        <div class="primary-text">
+          {{ rowData.guests.primaryGuest.getFullName() }}
+        </div>
         <b class="rowData">{{
           rowData.guests.getSecGuestDisplayConfig().countString
         }}</b>

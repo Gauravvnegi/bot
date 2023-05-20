@@ -127,7 +127,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
   registerListeners(): void {
     this.listenForGlobalFilters();
     this.channels = this.subscriptionService.getChannelSubscription();
-    console.log('Channels -> ', this.channels);
   }
 
   /**
@@ -157,7 +156,6 @@ export class DetailsComponent implements OnInit, OnDestroy {
         this.colorMap = response?.feedbackColorMap;
         this.shareIconList = response?.communicationChannels;
       }
-      console.log(this.shareIconList);
     });
   }
 

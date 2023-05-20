@@ -1,14 +1,12 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
-
+import { UserService } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-admin-payment-details',
   templateUrl: './admin-payment-details.component.html',
   styleUrls: ['./admin-payment-details.component.scss'],
 })
-
-
 export class AdminPaymentDetailsComponent implements OnInit {
   @Input('data') detailsData;
   @Input() parentForm;
@@ -28,8 +26,8 @@ export class AdminPaymentDetailsComponent implements OnInit {
     },
     REFUND: {
       label: 'Refund',
-      class: 'status-button--refund'
-    }
+      class: 'status-button--refund',
+    },
   };
 
   displayedColumns: string[] = [
@@ -56,7 +54,7 @@ export class AdminPaymentDetailsComponent implements OnInit {
   paymentDetailForm: FormGroup;
   @Output() addFGEvent = new EventEmitter();
 
-  constructor(private _fb: FormBuilder) {}
+  constructor(private _fb: FormBuilder, private userService: UserService) {}
 
   ngOnInit(): void {}
 
@@ -85,7 +83,9 @@ export class AdminPaymentDetailsComponent implements OnInit {
           remarks,
           amount,
         } = transaction;
-        const cashierName = 'Cashier';
+        const { firstName, lastName } = this.userService.userDetails;
+
+        const cashierName = firstName;
 
         return {
           transactionId,
@@ -179,4 +179,3 @@ export class AdminPaymentDetailsComponent implements OnInit {
     return this.parentForm.get('regCardDetails') as FormGroup;
   }
 }
-

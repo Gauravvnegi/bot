@@ -298,19 +298,19 @@
       </div>
       <mat-accordion>
         <ng-container *ngFor="let transaction of transactionHistory">
-          <mat-expansion-panel #paymentHistoryPanel>
+          <mat-expansion-panel #paymentHistoryPanel *ngIf="transaction.amount">
             <mat-expansion-panel-header>
               <mat-panel-title class="container__title">
                 <p>
                   Transcation ID -
-                  {{ transaction.transactionId || 'ABC123456' }}
+                  {{ transaction.transactionId || '--' }}
                   <span class="seperator"> | </span> {{ transaction.amount }}
                   <span class="seperator"> | </span>
                   <span
                     class="status-button"
-                    [ngClass]="paymentStatus[transaction?.status].class"
+                    [ngClass]="paymentStatus[transaction?.status]?.class || '.status-button--success'"
                   >
-                    {{ paymentStatus[transaction?.status].label }}
+                    {{ paymentStatus[transaction?.status]?.label || '--'}}
                   </span>
                 </p>
                 <mat-icon
@@ -329,14 +329,14 @@
               <ng-container matColumnDef="transactionId">
                 <th mat-header-cell *matHeaderCellDef>Transaction Id</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.transactionId || 'ABC123456' }}
+                  {{ element?.transactionId || '--' }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="dateTime">
                 <th mat-header-cell *matHeaderCellDef>Date & Time</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.created | date: 'MMM d, h:mm a, z' }}
+                  {{ element?.created | date: 'MMM d, h:mm a, z' || '--' }}
                 </td>
               </ng-container>
 
@@ -345,9 +345,9 @@
                 <td mat-cell *matCellDef="let element">
                   <span
                     class="status-button"
-                    [ngClass]="paymentStatus[transaction?.status].class"
+                    [ngClass]="paymentStatus[transaction?.status]?.class"
                   >
-                    {{ paymentStatus[transaction?.status].label }}
+                    {{ paymentStatus[transaction?.status]?.label || '--' }}
                   </span>
                 </td>
               </ng-container>
@@ -355,28 +355,28 @@
               <ng-container matColumnDef="paymentMethod">
                 <th mat-header-cell *matHeaderCellDef>Payment Method</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.paymentMode }}
+                  {{ element?.paymentMode || '--' }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="remarks">
                 <th mat-header-cell *matHeaderCellDef>Remarks</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.remarks || '--' }}
+                  {{ element?.remarks || '--' }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="cashierName">
                 <th mat-header-cell *matHeaderCellDef>Cashier Name</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.cashierName }}
+                  {{ element?.cashierName }}
                 </td>
               </ng-container>
 
               <ng-container matColumnDef="totalAmount">
                 <th mat-header-cell *matHeaderCellDef>Total Amount</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.amount }}
+                  {{ element?.amount }}
                 </td>
               </ng-container>
 

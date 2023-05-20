@@ -28,7 +28,7 @@ export class NotificationDetailComponent {
     switch (this.data.notificationType.toUpperCase()) {
       case 'WHATSAPP':
         this.notificationService.$whatsappNotification.next(data['phoneNumber']);
-        this.router.navigate(['pages/freddie/request']);
+        this.router.navigate(['pages/freddie/messages']);
         break;
         
       // case 'IN-HOUSE REQUEST':
@@ -44,6 +44,7 @@ export class NotificationDetailComponent {
         this.router.navigate(['pages/efrontdesk/dashboard']);
         break;
       default:
+        this.router.navigate(['pages/efrontdesk/dashboard']);
         // Handle other notification types or add a default route
         break;
     }

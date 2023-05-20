@@ -633,13 +633,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
       dialogConfig.disableClose = false;
       dialogConfig.width = '100%';
       const notificationCompRef = this._modal.openDialog(
-        channel === 'email'
+        channel === 'EMAIL'
           ? MarketingNotificationComponent
           : NotificationComponent,
         dialogConfig
       );
-
-      if (channel === 'email') {
+      if (channel === 'WHATSAPP_LITE') {
+        this._modal.close();
+        this.router.navigateByUrl('/pages/freddie/messages');
+      }
+      if (channel === 'EMAIL') {
         notificationCompRef.componentInstance.isEmail = true;
         notificationCompRef.componentInstance.email = this.primaryGuest.email;
       } else {
@@ -651,6 +654,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           }
         );
       }
+
       notificationCompRef.componentInstance.hotelId = this.hotelId;
       notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
       notificationCompRef.componentInstance.isModal = true;
@@ -712,10 +716,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
     return label;
   }
 
-  getIconUrl(label: string){
-    const channelLabel = label.split('_')[0];
-    const sharedIcon = this.shareIconList.find((icon) => icon.label === channelLabel);
-    return sharedIcon && sharedIcon.isSubscribed ? sharedIcon.iconUrl : sharedIcon.disableIcon;
+  getIconUrl(channel) {
+    const channelLabel = channel.name.split('_')[0];
+    const sharedIcon = this.shareIconList.find(
+      (icon) => icon.label === channelLabel
+    );
+    return sharedIcon && channel.isSubscribed
+      ? sharedIcon.iconUrl
+      : sharedIcon.disableIcon;
   }
 
   checkForTransactionFeedbackSubscribed() {

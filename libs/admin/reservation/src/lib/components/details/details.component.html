@@ -502,12 +502,11 @@
               <ng-container *ngFor="let channel of channels">
                 <div
                   class="social-icons"
-                  (click)="openSendNotification(channel.value)"
-                  [style.display]="true ? 'block' : 'none'"
-                  [style.pointer-events]="true ? 'auto' : 'none'"
+                  (click)="openSendNotification(channel.name)"
+                  [style.display]="channel.isView ? 'block' : 'none'"
                 >
                   <div class="icon">
-                    <img [src]="getIconUrl(channel.name)" />
+                    <img [src]="getIconUrl(channel)" />
                   </div>
                 </div>
               </ng-container>

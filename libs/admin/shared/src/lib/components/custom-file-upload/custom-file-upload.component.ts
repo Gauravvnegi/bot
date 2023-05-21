@@ -113,7 +113,7 @@ export class CustomFileUploadComponent
           const value = controlValue[idx];
           if (value) {
             if (typeof value === 'object') {
-              this.featureValue[idx] = value.isFeatured;
+              this.featureValue[idx] = value.isFeatured ? idx : null;
               return value.url;
             } else {
               return value;

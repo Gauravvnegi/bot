@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  ActivatedRouteSnapshot,
-  Router
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { NavRouteOption, Option } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
@@ -15,9 +12,9 @@ import {
   noRecordAction,
 } from '../../models/hotel.models';
 import { BusinessService } from '../../services/business.service';
+import { AddressService } from '../../services/place.service';
 
 declare let google: any;
-
 
 @Component({
   selector: 'hospitality-bot-hotel-info-form',
@@ -36,6 +33,8 @@ export class HotelInfoFormComponent implements OnInit {
   pageTitle: string = 'Hotel';
   brandId: string;
   noRecordAction = noRecordAction;
+  addressList: any[] = [];
+  google: any;
   options = {
     types: [],
     componentRestrictions: { country: 'IN' },
@@ -45,7 +44,8 @@ export class HotelInfoFormComponent implements OnInit {
     private snackbarService: SnackBarService,
     private globalFilterService: GlobalFilterService,
     private router: Router,
-    private businessService: BusinessService
+    private businessService: BusinessService,
+    private addressService: AddressService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -55,64 +55,75 @@ export class HotelInfoFormComponent implements OnInit {
         if (brandId) this.brandId = brandId;
       }
     );
-   
   }
 
   ngOnInit(): void {
-    // this.hotelId = this.globalFilterService.hotelId;
     this.initForm();
     this.getSegmentList();
     this.getServices();
-    // this.getPlaceAutocomplete();
-    this.loadGoogleMaps();
   }
 
   initForm() {
     this.useForm = this.fb.group({
       hotel: this.fb.group({
-        active: [true],
+        status: [true],
         name: ['', [Validators.required]],
-        segment: ['', [Validators.required]],
-        email: ['', [Validators.required, Validators.email]],
-        contactInfo: this.fb.group({
-          cc: [''],
-          phoneNumber: [''],
+        propertyCategory: ['', [Validators.required]],
+        emailId: ['', [Validators.required, Validators.email]],
+        contact: this.fb.group({
+          countryCode: [''],
+          number: [''],
         }),
-        address: this.fb.group({
-          address: [[]],
-        }),
-
-        imageUrls: [[], [Validators.required]],
+        address: [[], [Validators.required]],
+        imageUrl: [[], [Validators.required]],
         description: ['', [Validators.required]],
-        complimentaryAmenities: [[]],
+        serviceIds: [[]],
         socialPlatforms: [[]],
       }),
       brandId: [this.brandId],
     });
 
-     const { navRoutes, title } = businessRoute[
-       this.hotelId ? 'editHotel' : 'hotel'
-     ];
-     this.pageTitle = title;
-     this.navRoutes = navRoutes;
+    const { navRoutes, title } = businessRoute[
+      this.hotelId ? 'editHotel' : 'hotel'
+    ];
+    this.pageTitle = title;
+    this.navRoutes = navRoutes;
     this.navRoutes[2].link = `/pages/settings/business-info/brand/${this.brandId}`;
 
     if (this.hotelId) {
       this.businessService.getHotelById(this.hotelId).subscribe((res) => {
-        const data = new HotelResponse().deserialize(res);
+        const { address, ...rest } = res;
+        this.addressList = [
+          {
+            label: address?.desc,
+            value: address?.place_id,
+          },
+        ];
+        const data = new HotelResponse().deserialize(rest);
         this.useForm.patchValue(data);
+        this.useForm
+          .get('hotel.address')
+          .setValue({ label: address?.desc, value: address?.place_id });
       });
     }
   }
 
-  saveHotelData() {}
-
+  /**
+   * @function addMoreImage to add more image
+   * @returns void
+   */
   addMoreImage() {
     this.imageLimit = this.imageLimit + 4;
   }
 
+  /**
+   * @function getSegmentList to get segment list
+   * @returns void
+   * @description to get segment list
+   */
+
   getSegmentList() {
-    this.businessService.getSegments(this.hotelId).subscribe((res) => {
+    this.businessService.getSegments().subscribe((res) => {
       this.segmentList = res.category;
     });
   }
@@ -123,25 +134,25 @@ export class HotelInfoFormComponent implements OnInit {
    */
   getServices() {
     this.$subscription.add(
-      this.businessService
-        .getServices(this.hotelId, {
-          params: `?limit=5&type=SERVICE&serviceType=COMPLIMENTARY&status=true`,
-        })
-        .subscribe(
-          (res) => {
-            this.compServices = new Services().deserialize(
-              res.complimentaryPackages
-            ).services;
-          },
-          (error) => {
-            this.snackbarService.openSnackBarAsText(error.error.message);
-          }
-        )
+      this.businessService.getServices().subscribe(
+        (res) => {
+          this.compServices = new Services().deserialize(res.service).services;
+        },
+        (error) => {
+          this.snackbarService.openSnackBarAsText(error.error.message);
+        }
+      )
     );
   }
 
+  saveHotelData() {}
+
+  /**
+   * @function submitForm to submit form
+   * @returns void
+   * @description to submit form
+   */
   submitForm() {
-    this.loading = true;
     if (this.useForm.invalid) {
       console.log(this.useForm.errors);
       this.loading = false;
@@ -151,103 +162,76 @@ export class HotelInfoFormComponent implements OnInit {
       this.useForm.markAllAsTouched();
       return;
     }
-
     this.businessService.onSubmit.emit(true);
+
     const data = this.useForm.getRawValue();
 
-    if (this.hotelId) {
-      this.$subscription.add(
-        this.businessService.updateHotel(this.hotelId, data.hotel).subscribe(
-          (res) => {
-            this.router.navigate([
-              `/pages/settings/business-info/brand/${this.brandId}`,
-            ]);
-          },
+    data.hotel.propertyCategory = this.segmentList.find(
+      (item) => item?.value === data.hotel.propertyCategory
+    );
+    const temp = data.hotel.address.label;
 
-          this.handelError
-        )
-      );
-    } else {
-      this.$subscription.add(
-        this.businessService.createHotel(this.brandId, data).subscribe(
-          (res) => {
-            this.router.navigate([
-              `/pages/settings/business-info/brand/${this.brandId}`,
-            ]);
-          },
+    this.addressService
+      .getAddressById(data.hotel.address?.value)
+      .then((res) => {
+        data.hotel.address = res;
+        data.hotel.address['desc'] = temp;
 
-          this.handelError
-        )
-      );
-    }
+        if (this.hotelId) {
+          this.$subscription.add(
+            this.businessService
+              .updateHotel(this.hotelId, data.hotel)
+              .subscribe(
+                (res) => {
+                  this.router.navigate([
+                    `/pages/settings/business-info/brand/${this.brandId}`,
+                  ]);
+                },
+
+                this.handelError,
+                this.handleSuccess
+              )
+          );
+        } else {
+          this.$subscription.add(
+            this.businessService.createHotel(this.brandId, data).subscribe(
+              (res) => {
+                this.router.navigate([
+                  `/pages/settings/business-info/brand/${this.brandId}`,
+                ]);
+              },
+              this.handelError,
+              this.handleSuccess
+            )
+          );
+        }
+      });
   }
 
   resetForm() {
     this.useForm.reset({}, { emitEvent: true });
   }
-  @ViewChild('addresstext') addresstext: any;
-
-  // searchOptions(text: string) {
-  //   if (text) {
-  //     const autocomplete = new google.maps.places.Autocomplete({
-  //       india: 'IN',
-  //       componentRestrictions: { country: 'US' },
-  //       types: ['establishment'], // 'establishment' / 'address' / 'geocode'
-  //     });
-
-  //     console.log(autocomplete);
-  //   }
-  // }
-
-  // private getPlaceAutocomplete() {
-  //   const autocomplete = new google.maps.places.Autocomplete(
-  //     this.addresstext.nativeElement,
-  //     {
-  //       componentRestrictions: { country: 'US' },
-  //       types: ['establishment'], // 'establishment' / 'address' / 'geocode'
-  //     }
-  //   );
-  //   google.maps.event.addListener(autocomplete, 'place_changed', () => {
-  //     const place = autocomplete.getPlace();
-  //     console.log(place);
-  //     // this.invokeEvent(place);
-  //   });
-  // }
-  google: any;
-  autocomplete: any;
-  private loadGoogleMaps() {
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyC42YgNcCSadoy8dxDKKEXZohJU9B5eM2M&libraries=places`;
-    script.defer = true;
-    script.async = true;
-    script.onload = () => {
-      this.google = window['google'];
-      this.initAutocomplete();
-    };
-    document.head.appendChild(script);
-  }
-
-  private initAutocomplete() {
-    this.autocomplete = new this.google.maps.places.Autocomplete(
-      document.getElementById('autocomplete'),
-      { types: ['geocode'] }
-    );
-
-    this.autocomplete.addListener('place_changed', () => {
-      const place = this.autocomplete.getPlace();
-      this.useForm.patchValue({
-        hotel: {
-          address: {
-            address: place.formatted_address,
-          }
-        }
-      });
-    });
-  }
 
   searchOptions(text: string) {
     if (text) {
-      this.initAutocomplete();
+      var placeServiceRequest = {
+        input: text,
+        types: ['establishment'],
+      };
+      var service = new google.maps.places.AutocompleteService();
+      service.getPlacePredictions(
+        placeServiceRequest,
+        (predictions, status) => {
+          if (status == google.maps.places.PlacesServiceStatus.OK) {
+            this.addressList = predictions.map((item) => {
+              return {
+                label: item.description,
+                value: item.place_id,
+              };
+            });
+          }
+        }
+      );
     }
   }
 

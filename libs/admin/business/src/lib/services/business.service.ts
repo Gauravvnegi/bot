@@ -10,52 +10,18 @@ import { map } from 'rxjs/operators';
 import { EventEmitter } from '@angular/core';
 
 export class BusinessService extends ApiService {
-  data = [
-    {
-      id: 1,
-      name: 'Hotel 1',
-      segment: '3 Star',
-      address: 'Gurgaon',
-      email: 'leela@gmail.com',
-      contact: '1234567890',
-      status: 'Active',
-    },
-    {
-      id: 2,
-      name: 'leela',
-      segment: '3 Star',
-      address: 'Gurgaon',
-      email: 'leela@gmail.com',
-      contact: '1234567890',
-      status: 'Active',
-    },
-    {
-      id: 3,
-      name: 'Hotel 3',
-      segment: '3 Star',
-      address: 'Gurgaon',
-      email: 'leela@gmail.com',
-      contact: '1234567890',
-      status: 'Active',
-    },
-    {
-      id: 4,
-      name: 'Hotel 4',
-      segment: '3 Star',
-      address: 'Gurgaon',
-      email: 'leela@gmail.com',
-      contact: '1234567890',
-      status: 'Active',
-    },
-  ];
+  /**
+   * @function getBrandList
+   * @description get brand list
+   * @returns
+   * @memberof BusinessService
+   */
 
   getHotelList(
     brandId: string,
     config = { params: '?order=DESC&limit=5' }
   ): Observable<any> {
-    return this.get(
-      `/api/v2/entity?type=HOTEL&parentId=${brandId}`
-    )
+    return this.get(`/api/v2/entity?type=HOTEL&parentId=${brandId}`);
   }
 
   /**
@@ -81,6 +47,7 @@ export class BusinessService extends ApiService {
   getBrandById(id: string): Observable<BrandResponse> {
     return this.get(`/api/v1/brand/${id}`);
   }
+
   /**
    * @function updateBrand
    * @description update brand by id
@@ -101,7 +68,7 @@ export class BusinessService extends ApiService {
    * @memberof HotelService
    */
 
-  getSegments(hotelId): Observable<any> {
+  getSegments(): Observable<any> {
     return this.get(`/api/v1/config`, {
       params: { key: 'PROPERTY_CONFIGURATION' },
     });
@@ -126,8 +93,8 @@ export class BusinessService extends ApiService {
    * @memberof HotelService
    */
 
-  updateHotel(hotelId: string, data: HotelFormData | any): Observable<any> {
-    return this.patch(`/api/v2/entity/${hotelId}`, data);
+  updateHotel(hotelId: string, data): Observable<any> {
+    return this.patch(`/api/v2/entity/${hotelId}?type=HOTEL`, data);
   }
 
   /**
@@ -139,9 +106,7 @@ export class BusinessService extends ApiService {
    */
 
   getHotelById(hotelId: string): Observable<any> {
-    return this.get(
-      `/api/v2/entity/${hotelId}?type=HOTEL`
-    );
+    return this.get(`/api/v2/entity/${hotelId}?type=HOTEL`);
   }
 
   onSubmit = new EventEmitter<boolean>(false);
@@ -154,7 +119,7 @@ export class BusinessService extends ApiService {
     return this.get(`/api/v1/config?key=SOCIAL_MEDIA_CONFIGURATION`);
   }
 
-  getServices(hotelId: string, config?): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
+  getServices(): Observable<any> {
+    return this.get(`/api/v1/config?key=SERVICE_CONFIGURATION`);
   }
 }

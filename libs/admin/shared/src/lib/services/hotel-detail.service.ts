@@ -29,33 +29,13 @@ export class HotelDetailService {
       this.brands.find((item) => item.id === this.brandId)?.hotels ?? [];
   }
 
-  // initBrandAndHotel(brandId: string, hotelId: string) {
-  //   localStorage.setItem(tokensConfig.hotelId, hotelId);
-  //   localStorage.setItem(tokensConfig.brandId, brandId);
-
-  //   this.hotelId = hotelId;
-  //   this.brandId = brandId;
-
-  //   this.brands =
-  //     this.sites?.find((item) => item.id === this.siteId)?.brands ?? [];
-  //   this.hotels =
-  //     this.brands.find((item) => item.id === this.brandId)?.hotels ?? [];
-  // }
-
-  updateBusinessSession(businessInfo: BusinessInfo) {
+  updateBusinessSession(businessInfo: BusinessInfo, reload = true) {
     Object.entries(businessInfo).forEach(([token, value]) => {
       localStorage.setItem(token, value);
     });
-    window.location.reload();
-  }
-
-  setSiteId(siteId) {
-    this.siteId = siteId;
-    this.setLocalSiteId(siteId);
-  }
-
-  setLocalSiteId(currSiteId) {
-    localStorage.setItem(tokensConfig.siteId, currSiteId);
+    if (reload) {
+      window.location.reload();
+    }
   }
 
   getSiteId() {

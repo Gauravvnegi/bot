@@ -79,35 +79,10 @@ export class CookiesSettingsService {
 
   /**
    * @function initPlatformChange Change cookies as per hotel Selected
-   * @param hotelId Hotel ID
+   * @param siteId Site ID
    * @param redirectUrl Redirect url if need to redirect
    */
-  initPlatformChange(hotelId: string, redirectUrl?: string) {
-    this.tokenUpdateService.getUpdatedToken(hotelId).subscribe(
-      (response) => {
-        const key = Object.keys(response)[0];
-        const hotelBasedToken = { key, value: response[key] };
-        if (hotelBasedToken.key) {
-          localStorage.setItem(hotelBasedToken.key, hotelBasedToken.value);
-          localStorage.setItem(tokensConfig.hotelId, hotelId);
-
-          if (redirectUrl) {
-            this.router.navigate([redirectUrl]);
-          } else {
-            window.location.reload();
-          }
-        } else
-          this.snackbarService.openSnackBarAsText(
-            'Did not receive the access token'
-          );
-      },
-      ({ error }) => {
-        this.snackbarService.openSnackBarAsText(error.message);
-      }
-    );
-  }
-
-  initPlatformChangeV2(siteId: string, redirectUrl?: string) {
+  initPlatformChange(siteId: string, redirectUrl?: string) {
     const currentSite = this.hotelDetailsService.sites.find(
       (item) => item.id === siteId
     );
@@ -126,18 +101,22 @@ export class CookiesSettingsService {
             const key = Object.keys(response)[0];
             const hotelBasedToken = { key, value: response[key] };
             if (hotelBasedToken.key) {
-              localStorage.setItem(hotelBasedToken.key, hotelBasedToken.value);
-              localStorage.setItem(tokensConfig.hotelId, hotelId);
-              this.hotelDetailsService.setSiteId(currentSite.id);
+              this.hotelDetailsService.updateBusinessSession(
+                {
+                  [tokensConfig.accessToken]: hotelBasedToken.value,
+                  [tokensConfig.hotelId]: hotelId,
+                  [tokensConfig.brandId]: currentBrand.id,
+                  [tokensConfig.siteId]: currentSite.id,
+                },
+                !redirectUrl
+              );
 
               if (redirectUrl) {
                 this.router.navigate([redirectUrl]);
-              } else {
-                window.location.reload();
               }
             } else
               this.snackbarService.openSnackBarAsText(
-                'The access token was not received.'
+                'Do not have access to the site.'
               );
           },
           ({ error }) => {

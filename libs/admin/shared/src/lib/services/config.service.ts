@@ -4,42 +4,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigService extends ApiService {
-  $config = new BehaviorSubject<Record<string, any>>({
-    currencyConfiguration: [
-      {
-        key: 'INR',
-        value: 'INR',
-        icon:
-          'https://nyc3.digitaloceanspaces.com/botfiles/bot/hotel/rupee/logos/black/static-content/rupee.png',
-      },
-    ],
-    packageVisibility: [
-      {
-        key: 'preArrival',
-        value: 'Pre-arrival',
-      },
-      {
-        key: 'checkIn',
-        value: 'Check-in',
-      },
-      {
-        key: 'checkOut',
-        value: 'Check-out',
-      },
-    ],
-    roomDiscountConfig: [
-      {
-        key: 'Percentage',
-        value: 'PERCENTAGE',
-      },
-      {
-        key: 'Number',
-        value: 'NUMBER',
-      },
-    ],
-  });
+  $config = new BehaviorSubject<Record<string, any>>({});
 
-  getColorAndIconConfig(hotelId: string): Observable<any> {
+  getColorAndIconConfig(
+    hotelId: string
+  ): Observable<Record<ConfigurationValue, any>> {
     return this.get(`/api/v1/cms/hotel/${hotelId}/configuration`);
   }
 
@@ -47,3 +16,19 @@ export class ConfigService extends ApiService {
     return this.get('/api/v1/config?key=COUNTRYCODE');
   }
 }
+
+type ConfigurationValue =
+  | 'settingsConfig'
+  | 'marketingDashboard'
+  | 'currencyConfiguration'
+  | 'responseRate'
+  | 'hotel_id'
+  | 'taskBreakdown'
+  | 'paymentSetting'
+  | 'requestModuleConfiguration'
+  | 'flashNotifications'
+  | 'roomDiscountConfig'
+  | 'communicationChannels'
+  | '_id'
+  | 'packageVisibility'
+  | 'bookingConfig';

@@ -50,7 +50,7 @@ export class CreatePackageComponent implements OnInit {
 
   categories: Option[] = [];
   services: (Option & { price: number })[] = [];
-  currencies: Option[] = [{ label: 'INR', value: 'INR' }];
+  currencies: Option[];
   discountType: Option[] = [];
   visibilities: Option[] = [];
 

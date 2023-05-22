@@ -40,6 +40,10 @@ export class AdminGuestDetailsComponent implements OnInit {
     }
   }
 
+  isContactAvailable(): boolean{
+    return Object.keys(this.guestData.contactDetails).length !== 0;
+  }
+
   addFormsControls() {
     this.healthCardDetailsForm = this.initHealthCardDetailsForm();
     this.stayDetailsForm = this.initStayDetailsForm();

@@ -3,6 +3,7 @@
 :host ::ng-deep .mat-tab-label {
   color: $inActiveTab;
   font-size: 14px;
+  height: 60px;
   @media screen and (max-width: $XL) {
     min-width: 155px;
   }
@@ -63,7 +64,7 @@
     @include flex-space-between-cen-Algn;
     color: $white;
     font-size: 16px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     padding: 20px 20px 0 20px;
     .name-details-wrapper {
       @include flex-item-center;
@@ -427,12 +428,15 @@ mat-option {
   width: 77%;
   margin: 20px 25px;
   margin-right: 0;
-  height: calc(53vh - 60px);
+  height: 48vh;
   border-right: 2px solid $whiteDeep;
   padding-right: 15px;
   overflow-y: auto;
   @media screen and (min-resolution: 125dpi) {
-    height: calc(53vh - 125px);
+    height: calc(53vh - 105px);
+  }
+  @media screen and (max-resolution: 110dpi) {
+    height: 52vh;
   }
 }
 
@@ -638,7 +642,7 @@ mat-option {
 }
 .flxExt {
   @extend .flx;
-  margin: 15px 0;
+  margin: 5px 0 0;
   padding: 0 30px 15px;
 }
 

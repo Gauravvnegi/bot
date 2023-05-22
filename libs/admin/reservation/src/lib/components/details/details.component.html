@@ -496,7 +496,7 @@
               </ng-container>
             </ng-template>
           </div>
-          <div>
+          <div *ngIf="channels.length>0">
             <p class="contact">Contact Guest</p>
             <div class="right-bottom-icons">
               <ng-container *ngFor="let channel of channels">

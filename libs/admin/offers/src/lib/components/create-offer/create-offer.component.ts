@@ -254,10 +254,13 @@ export class CreateOfferComponent implements OnInit {
         switch (type) {
           case LibrarySearchItem.SERVICE:
             prev.serviceIds.push(value);
+            break;
           case LibrarySearchItem.PACKAGE:
             prev.packageIds.push(value);
+            break;
           case LibrarySearchItem.ROOM_TYPE:
             prev.roomTypeIds.push(value);
+            break;
         }
         return prev;
       },

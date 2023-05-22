@@ -1,7 +1,7 @@
 <div class="material-body">
   <div class="payment-header">
     <mat-label class="heading">Payment Summary</mat-label>
-    <ng-container [ngSwitch]="'COMPLETED'">
+    <ng-container [ngSwitch]="getPaymentStatus()">
       <img *ngSwitchCase="'COMPLETED'" src="assets/svg/status/success.svg" />
 
       <img *ngSwitchCase="'FAILED'" src="assets/svg/status/fail.svg" />
@@ -119,11 +119,11 @@
             </td>
           </ng-container>
 
-          <!-- <ng-container matColumnDef="CGST">
+          <ng-container matColumnDef="CGST">
             <th mat-header-cell *matHeaderCellDef>CGST</th>
             <td mat-cell *matCellDef="let element">
               <ng-container *ngIf="element.cgstAmount >= 0; else emptyCell">
-                {{ element.currency }} {{ element.cgstAmount }}
+                {{ '%' + element.cgstAmount }}
               </ng-container>
             </td>
           </ng-container>
@@ -132,10 +132,10 @@
             <th mat-header-cell *matHeaderCellDef>SGST</th>
             <td mat-cell *matCellDef="let element">
               <ng-container *ngIf="element.sgstAmount >= 0; else emptyCell">
-                {{ element.currency }} {{ element.sgstAmount }}
+                {{ '%' + element.sgstAmount }}
               </ng-container>
             </td>
-          </ng-container> -->
+          </ng-container>
 
           <ng-container matColumnDef="discount">
             <th mat-header-cell *matHeaderCellDef>Discount</th>
@@ -158,50 +158,43 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
+        <div class="total-detail-wrapper">
+          <div class="total">
+            <mat-label class="label">Total Amount:</mat-label>
+            <span class="value"
+              >{{ detailsData.paymentDetails.currency }}
+              {{ detailsData.paymentDetails.totalAmount }}</span
+            >
+          </div>
+          <div class="total">
+            <mat-label class="label">Total Savings:</mat-label>
+            <span class="value"
+              >-{{ detailsData.paymentDetails.currency }}
+              {{ detailsData.paymentDetails.totalDiscount }}</span
+            >
+          </div>
+          <div class="green total">
+            <mat-label class="label">Paid Amount:</mat-label>
+            <span class="value"
+              >-{{ detailsData.paymentDetails.currency }}
+              {{ detailsData.paymentDetails.paidAmount }}</span
+            >
+          </div>
+          <div class="red total">
+            <mat-label class="label">Due Amount:</mat-label>
+            <span class="value"
+              >{{ detailsData.paymentDetails.currency }}
+              {{ detailsData.paymentDetails.dueAmount }}</span
+            >
+          </div>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <div class="total-detail-wrapper">
-      <div class="total">
-        <mat-label class="label">Total Amount:</mat-label>
-        <span class="value"
-          >{{ detailsData.paymentDetails.currency }}
-          {{ detailsData.paymentDetails.totalAmount }}</span
-        >
-      </div>
-      <div class="total">
-        <mat-label class="label">Total Savings:</mat-label>
-        <span class="value"
-          >-{{ detailsData.paymentDetails.currency }}
-          {{ detailsData.paymentDetails.totalDiscount }}</span
-        >
-      </div>
-      <div class="green total">
-        <mat-label class="label">Paid Amount:</mat-label>
-        <span class="value"
-          >-{{ detailsData.paymentDetails.currency }}
-          {{ detailsData.paymentDetails.paidAmount }}</span
-        >
-      </div>
-      <div class="red total">
-        <mat-label class="label">Due Amount:</mat-label>
-        <span class="value"
-          >{{ detailsData.paymentDetails.currency }}
-          {{ detailsData.paymentDetails.dueAmount }}</span
-        >
-      </div>
-    </div>
-    <!-- <div class="signature-wrapper">
-      <mat-label class="heading">Guest Signature</mat-label>
-      <div class="image-wrapper">
-        <img src="assets/signature.png" />
-      </div>
-    </div> -->
-    <!-- <hr class="data-seperator" /> -->
     <!-- <div>
       <p class="heading">Payment Details</p>
       <div class="status-wrapper">
         <p class="status">
-          Status :&nbsp;
+          Status :&nbsp;  
           <ng-container [ngSwitch]="'PENDING'">
             <b *ngSwitchCase="'COMPLETED'" class="status-text-success">
               COMPLETED
@@ -228,56 +221,169 @@
     <!-- </div>
     </div> -->
     <!-- <div>
-            <span>Guest Signature</span>
-            <img
-                src="https://nyc3.digitaloceanspaces.com/craterzone-backup/bot/c4cd8e80-d21b-4496-ac56-85edf9a4ca0d/aadhaar/tv.png">
-        </div>
-        <span>Payment Details</span>
-        <div>
-            <mat-label>Payment Method:</mat-label>
-            <span>Credit Card</span>
-            <mat-label>Card Holder Name:</mat-label>
-            <span>John Wick</span>
-        </div>
-        <div>
-            <mat-label>Card Number:</mat-label>
-            <span>xxxx xxxx xxxx xxxx</span>
-            <mat-label>Expiry Date:</mat-label>
-            <span>01/34</span>
-        </div>
-        <span>Transaction Details</span>
-        <div>
-            <mat-label>Receipt No.</mat-label>
-            <span>xxxxxxxxxxxxxxxxx</span>
-            <mat-label>Payment Amount:</mat-label>
-            <span>INR 3284</span>
-            <mat-label>Status:</mat-label>
-            <span>Approved</span>
-        </div> -->
-    <div class="deposit-box">
-      <mat-accordion>
-        <mat-expansion-panel #depositPanel [expanded]="detailsData">
-          <mat-expansion-panel-header>
-            <mat-panel-title class="container__title">
-              <p>
-                Deposit Rule
-              </p>
-              <mat-icon class="expand-icon" *ngIf="!depositPanel.expanded"
-                >add</mat-icon
+      <span>Guest Signature</span>
+      <img
+      src="https://nyc3.digitaloceanspaces.com/craterzone-backup/bot/c4cd8e80-d21b-4496-ac56-85edf9a4ca0d/aadhaar/tv.png">
+    </div> -->
+    <!-- <mat-accordion>
+      <mat-expansion-panel #depositPanel [expanded]="detailsData">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="container__title">
+            <p>
+              Deposit Rule
+            </p>
+            <mat-icon class="expand-icon" *ngIf="!depositPanel.expanded"
+              >add</mat-icon
               >
-              <mat-icon class="expand-icon" *ngIf="depositPanel.expanded"
-                >remove</mat-icon
-              >
-            </mat-panel-title>
-          </mat-expansion-panel-header>
+            <mat-icon class="expand-icon" *ngIf="depositPanel.expanded"
+            >remove</mat-icon
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        
+        <hospitality-bot-deposit-rule
+        [parentForm]="parentForm"
+        [data]="detailsData"
+        ></hospitality-bot-deposit-rule>
+      </mat-expansion-panel>
+    </mat-accordion> -->
 
-          <hospitality-bot-deposit-rule
-            [parentForm]="parentForm"
-            [data]="detailsData"
-          ></hospitality-bot-deposit-rule>
-        </mat-expansion-panel>
-      </mat-accordion>
+    <!-- <hr class="data-seperator" />
+
+      <div class="signature-wrapper">
+      <mat-label class="heading">Guest Signature</mat-label>
+      <div class="image-wrapper">
+        <img src="assets/signature.png" />
+        John Wick
+      </div>
     </div>
+
+    <hr class="data-seperator" /> -->
+
+    <!-- <div class="payment-header">
+      <mat-label class="heading">Payment Summary</mat-label>
+    </div>
+    <div class="fields-wrapper">
+      <div class="field">
+        <mat-label class="label">Payment Method:</mat-label>
+        <span class="value">
+          Credit Card
+        </span>
+      </div>
+      <div class="field">
+        <mat-label class="label">Amount:</mat-label>
+        <span class="value">
+          INR 423
+        </span>
+      </div>
+      <div class="field">
+        <mat-label class="label">Status:</mat-label>
+        <span class="value">
+          Pending
+        </span>
+      </div>
+    </div>
+    <div class="fields-wrapper">
+      <div class="field">
+        <div class="label">Manager Name:</div>
+        <div class="value">G. Murray</div>
+      </div>
+    </div>
+    
+    <hr class="data-seperator" /> -->
+    <ng-container *ngIf="detailsData.paymentDetails.transactionHistory.length>0">
+      <hr class="data-seperator" />
+      <div class="payment-header">
+        <mat-label class="heading">Payment History</mat-label>
+      </div>
+      <mat-accordion>
+        <ng-container *ngFor="let transaction of transactionHistory">
+          <mat-expansion-panel #paymentHistoryPanel *ngIf="transaction.amount">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="container__title">
+                <p>
+                  Transcation ID -
+                  {{ transaction.transactionId || '--' }}
+                  <span class="seperator"> | </span> {{ transaction.amount }}
+                  <span class="seperator"> | </span>
+                  <span [class.status-button]="transaction?.status" [ngClass]="paymentStatus[transaction?.status]?.class || ''">
+                    {{ transaction?.status ? paymentStatus[transaction?.status]?.label : '--' }}
+                  </span>
+                </p>
+                <mat-icon
+                  class="expand-icon"
+                  *ngIf="!paymentHistoryPanel.expanded"
+                  >add</mat-icon
+                >
+                <mat-icon
+                  class="expand-icon"
+                  *ngIf="paymentHistoryPanel.expanded"
+                  >remove</mat-icon
+                >
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table [dataSource]="[transaction]">
+              <ng-container matColumnDef="transactionId">
+                <th mat-header-cell *matHeaderCellDef>Transaction Id</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.transactionId || '--' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="dateTime">
+                <th mat-header-cell *matHeaderCellDef>Date & Time</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.created | date: 'MMM d, h:mm a, z' || '--' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let element">
+                  <span [class.status-button]="transaction?.status" [ngClass]="paymentStatus[transaction?.status]?.class || ''">
+                    {{ transaction?.status ? paymentStatus[transaction?.status]?.label : '--' }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="paymentMethod">
+                <th mat-header-cell *matHeaderCellDef>Payment Method</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.paymentMode || '--' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="remarks">
+                <th mat-header-cell *matHeaderCellDef>Remarks</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.remarks || '--' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="cashierName">
+                <th mat-header-cell *matHeaderCellDef>Cashier Name</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.cashierName }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="totalAmount">
+                <th mat-header-cell *matHeaderCellDef>Total Amount</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.amount }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="transactionHistoryCols"></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: transactionHistoryCols"
+              ></tr>
+            </table>
+          </mat-expansion-panel>
+        </ng-container>
+      </mat-accordion>
+    </ng-container>
   </div>
 </div>
 

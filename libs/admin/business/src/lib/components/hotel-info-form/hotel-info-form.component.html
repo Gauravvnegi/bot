@@ -1,119 +1,118 @@
 <div class="wrapper" [formGroup]="useForm">
   <div [formGroup]="useForm.get('hotel')">
-  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
-  </hospitality-bot-navigation-header>
+    <hospitality-bot-navigation-header
+      [heading]="pageTitle"
+      [routes]="navRoutes"
+    >
+    </hospitality-bot-navigation-header>
 
-  <div class="hotel-header">
-    <div class="header__title">
-      Hotel Information
+    <div class="hotel-header">
+      <div class="header__title">
+        Hotel Information
+      </div>
+      <hospitality-bot-toggle-switch
+        class="status"
+        controlName="status"
+        label="Status:"
+      ></hospitality-bot-toggle-switch>
     </div>
-    <hospitality-bot-toggle-switch
-      class="status"
-      controlName="active"
-      label="Status:"
-    ></hospitality-bot-toggle-switch>
-  </div>
-  <div class="form-block">
-    <hospitality-bot-input
-      class="half-width"
-      controlName="name"
-      label="Name"
-    ></hospitality-bot-input>
-    <hospitality-bot-select
-      class="half-width"
-      controlName="segment"
-      label="Segment"
-      [options]="segmentList"
-    ></hospitality-bot-select>
-    <hospitality-bot-input
-      class="half-width"
-      controlName="email"
-      label="Email"
-    ></hospitality-bot-input>
-    <div  class="half-width" [formGroup]="useForm.get('hotel').get('contactInfo')">
-    <hospitality-bot-phone-number
-     
-    ></hospitality-bot-phone-number>
+    <div class="form-block">
+      <hospitality-bot-input
+        class="half-width"
+        controlName="name"
+        label="Name"
+      ></hospitality-bot-input>
+      <hospitality-bot-select
+        class="half-width"
+        controlName="propertyCategory"
+        label="Segment"
+        [options]="segmentList"
+      ></hospitality-bot-select>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="emailId"
+        label="Email"
+      ></hospitality-bot-input>
+      <div class="half-width" [formGroup]="useForm.get('hotel').get('contact')">
+        <hospitality-bot-phone-number
+          preControlName="countryCode"
+          postControlName="number"
+        ></hospitality-bot-phone-number>
+      </div>
+      <hospitality-bot-auto-complete
+        class="full-width"
+        controlName="address"
+        label="Address"
+        [options]="addressList"
+        [loading]="loading"
+        (onSearch)="searchOptions($event)"
+        [settings]="{
+          multiple: false
+        }"
+      ></hospitality-bot-auto-complete>
+
+      <div class="file-upload-wrapper">
+        <hospitality-bot-custom-file-upload
+          formControlName="imageUrl"
+          label="Image"
+          isFeatureView="true"
+          description="Mandatory to add at least 1 image"
+          [limit]="imageLimit"
+          [hotelId]="hotelId"
+          path="static-content/room-types"
+        ></hospitality-bot-custom-file-upload>
+      </div>
+      <hospitality-bot-button
+        class="create-btn"
+        label="+Add More Images"
+        (onClick)="addMoreImage()"
+        variant="outlined"
+      ></hospitality-bot-button>
+
+      <div class="des-template">
+        <div class="des-template__label">Description</div>
+        <div class="des-template__input">
+          <hospitality-bot-template-editor
+            [parentFG]="useForm.get('hotel')"
+            [name]="'description'"
+            [height]="250"
+          ></hospitality-bot-template-editor>
+        </div>
+      </div>
     </div>
-    <div class="full-width" [formGroup]="useForm.get('hotel').get('address')">
-      <!-- <hospitality-bot-auto-complete
+    <div class="hotel-wrapper">
+      <div class="header">Services</div>
+      <hr />
+      <div class="hotel-services-wrapper">
+        <hospitality-bot-custom-select
+          label="Complimentary Services"
+          description="This is a free of cost services"
+          formControlName="serviceIds"
+          [itemList]="compServices"
+          (viewAll)="saveHotelData()"
+          [noRecordsAction]="noRecordAction"
+        ></hospitality-bot-custom-select>
+      </div>
+    </div>
+
+    <hospitality-bot-social-media
+      controlName="socialPlatforms"
       class="full-width"
-      controlName="address"
-      label="Address"
-      [options]=""
-      [loading]="loading"
-      (onSearch)="searchOptions($event)"
-    ></hospitality-bot-auto-complete> -->
-    <div class="full-width">
-        <label for="Adress">Address</label>
+    >
+    </hospitality-bot-social-media>
 
-        <input type="text" formControlName="address" class="adress-input" id="autocomplete">
-      </div>
-    </div>
-      
-
-
-    <div class="file-upload-wrapper">
-      <hospitality-bot-custom-file-upload
-        formControlName="imageUrls"
-        label="Image"
-        isFeatureView="true"
-        description="Mandatory to add at least 1 image"
-        [limit]="imageLimit"
-        [hotelId]="hotelId"
-        path="static-content/room-types"
-      ></hospitality-bot-custom-file-upload>
-    </div>
-    <hospitality-bot-button
-      class="create-btn"
-      label="+Add More Images"
-      (onClick)="addMoreImage()"
-      variant="outlined"
-    ></hospitality-bot-button>
-
-    <div class="des-template">
-      <div class="des-template__label">Description</div>
-      <div class="des-template__input">
-        <hospitality-bot-template-editor
-          [parentFG]="useForm.get('hotel')"
-          [name]="'description'"
-          [height]="250"
-        ></hospitality-bot-template-editor>
-      </div>
+    <div class="footer-buttons">
+      <hospitality-bot-button
+        label="Reset All"
+        (onClick)="resetForm()"
+        variant="outlined"
+        severity="reset"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        [label]="hotelId ? 'Update' : 'Create'"
+        (onClick)="submitForm()"
+        [isLoading]="loading"
+      ></hospitality-bot-button>
     </div>
   </div>
-  <div class="hotel-wrapper">
-    <div class="header">Services</div>
-    <hr />
-    <div class="hotel-services-wrapper">
-      <hospitality-bot-custom-select
-        label="Complimentary Services"
-        description="This is a free of cost services"
-        formControlName="complimentaryAmenities"
-        [itemList]="compServices"
-        (viewAll)="saveHotelData()"
-        [noRecordsAction]="noRecordAction"
-      ></hospitality-bot-custom-select>
-    </div>
-  </div>
-
-  <hospitality-bot-social-media 
-  controlName="socialPlatforms"
-  class="full-width">
-  </hospitality-bot-social-media>
-
-  <div class="footer-buttons">
-    <hospitality-bot-button
-      label="Reset All"
-      (onClick)="resetForm()"
-      variant="outlined"
-      severity="reset"
-    ></hospitality-bot-button>
-    <hospitality-bot-button
-      [label]="hotelId ? 'Update' : 'Create'"
-      (onClick)="submitForm()"
-      [isLoading]="loading"
-    ></hospitality-bot-button>
-  </div>
-</div>
 </div>

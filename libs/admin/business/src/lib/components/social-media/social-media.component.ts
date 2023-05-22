@@ -32,7 +32,6 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
     this.initInputControl();
     this.initForm();
     this.patchValueToSocialMediaControl();
-    this.patchValue();
   }
 
   initForm(): void {
@@ -43,19 +42,10 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
     this.getSocailMediaConfig();
   }
 
-  patchValue(): void {
-    this.businessService.onSubmit.subscribe((res) => {
-      if (res) {
-        this.inputControl?.patchValue(this.socialMediaControl.value);
-      }
-    });
-  }
-
   patchValueToSocialMediaControl(): void {
     this.$subscription.add(
       this.inputControl.valueChanges.subscribe((res) => {
-        console.log(res);
-          this.socialMediaControl.patchValue(res);
+        this.socialMediaControl.patchValue(res);
       })
     );
   }
@@ -71,13 +61,15 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
           })
         );
       });
+      this.businessService.onSubmit.subscribe((res) => {
+        if (res) {
+          this.inputControl?.patchValue(this.socialMediaControl.value);
+        }
+      });
     });
   }
 
- 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 }
-
-

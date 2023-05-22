@@ -30,9 +30,10 @@ export class MultiSelectComponent extends FormComponent {
   dictionary: Record<string, string> = {};
 
   handleClear(value: string) {
-    this.inputControl.setValue(
-      (this.inputControl.value as string[])?.filter((item) => item !== value)
-    );
+    if (!this.isDisabled)
+      this.inputControl.setValue(
+        (this.inputControl.value as string[])?.filter((item) => item !== value)
+      );
   }
 
   set options(input: Option[]) {

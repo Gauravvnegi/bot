@@ -7,9 +7,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { ModuleNames } from 'libs/admin/shared/src/lib/constants/subscriptionConfig';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { Subscription } from 'rxjs';
-import { CookiesSettingsService } from '../../../../../../../../../../../libs/admin/shared/src/index';
 import { tokensConfig } from '../../../../../../../../../../../libs/admin/shared/src/lib/constants/common';
-import { SnackBarService } from '../../../../../../../../../../../libs/shared/material/src/index';
 import { layoutConfig } from '../../../constants/layout';
 import { DateRangeFilterService } from '../../../services/daterange-filter.service';
 import { FilterService } from '../../../services/filter.service';
@@ -86,9 +84,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     private subscriptionPlanService: SubscriptionPlanService,
     private loadingService: LoadingService,
     private notificationService: NotificationService,
-    private configService: ConfigService,
-    private cookiesSettingService: CookiesSettingsService,
-    private snackBarService: SnackBarService
+    private configService: ConfigService
   ) {
     this.initFG();
   }
@@ -259,25 +255,6 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     const hotelId = values.property.branchName;
     const brandId = values.property.hotelName;
     if (event.token.key && event.token.value && hotelId && brandId) {
-      // localStorage.setItem(event.token.key, event.token.value);
-
-      // const branch = this._hotelDetailService.brands
-      //   .find((item) => item.id === brandId)
-      //   ?.hotels?.find((item) => item.id === hotelId);
-      // this.filterConfig.branchName = branch.name;
-      // this.globalFilterService.timezone = this.timezone = branch.timezone;
-      // this.$firebaseMessagingSubscription.unsubscribe();
-      // this.initFirebaseMessaging(values.property.branchName);
-      // this.globalFilterService.hotelId = branch?.['id'];
-
-      // // updating token
-      // localStorage.setItem(tokensConfig.hotelId, branch?.['id']);
-      // localStorage.setItem(tokensConfig.hotelId, brandId?.['id']);
-
-      // // reloading cookies
-      // this.cookiesSettingService.$isPlatformCookiesLoaded.next(false);
-      // this.cookiesSettingService.initCookiesForPlatform();
-
       /**
        * Update business session will update the local storage and reload to reset the data
        */
@@ -286,12 +263,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         [tokensConfig.hotelId]: hotelId,
         [tokensConfig.brandId]: brandId,
       });
-    } 
-    // else {
-    //   this.snackBarService.openSnackBarAsText('Error in applying filter');
-    // }
+    }
 
-  
     this.filterService.emitFilterValue$.next(values);
     this.resetFilterCount();
     this.getFilterCount({ ...values });

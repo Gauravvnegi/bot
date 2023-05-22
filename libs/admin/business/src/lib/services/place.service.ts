@@ -1,48 +1,57 @@
-// import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
+declare let google: any;
 
-// const GOOGLE_MAPS_API_KEY = 'AIzaSyCaKbVhcX_22R_pRKDYuNA7vox-PtGaDkI';
+@Injectable({
+  providedIn: 'root',
+})
+export class AddressService {
+  getAddressById(placeId) {
+    console.log(placeId, 'placeId');
+    return new Promise((resolve, reject) => {
+      var geocoder = new google.maps.Geocoder();
+      var geocodeRequest = {
+        placeId: placeId,
+      };
 
-// export type Maps = typeof google.maps;
+      geocoder.geocode(geocodeRequest, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+          var addressComponents = results[0].address_components;
+          var location = results[0].geometry.location;
+          var country, city, pincode, state;
 
-// @Injectable()
-// export class PlaceService {
-//   public readonly api = this.load();
+          for (var i = 0; i < addressComponents.length; i++) {
+            var component = addressComponents[i];
+            var componentType = component.types[0];
 
-//   private load(): Promise<Maps> {
-//     const script = document.createElement('script');
-//     script.type = 'text/javascript';
-//     script.async = true;
-//     script.defer = true;
-//     // tslint:disable-next-line:no-bitwise
-//     const callbackName = `GooglePlaces_cb_` + ((Math.random() * 1e9) >>> 0);
-//     script.src = this.getScriptSrc(callbackName);
+            if (componentType === 'country') {
+              country = component.long_name;
+            } else if (
+              componentType === 'locality' ||
+              componentType === 'administrative_area_level_1'
+            ) {
+              state = component.long_name;
+            } else if (componentType === 'postal_code') {
+              pincode = component.long_name;
+            } else if (componentType === 'locality') {
+              city = component.long_name;
+            }
+          }
 
-//     interface MyWindow {
-//       [name: string]: Function;
-//     }
-//     const myWindow: MyWindow = window as any;
+          var data = {
+            placeId: placeId,
+            country: country || '',
+            state: state || '',
+            latitude: location.lat(),
+            longitude: location.lng(),
+            pincode: pincode || '',
+            city: city || '',
+          };
 
-//     const promise = new Promise((resolve, reject) => {
-//       myWindow[callbackName] = resolve;
-//       script.onerror = reject;
-//     });
-//     document.body.appendChild(script);
-//     return promise.then(() => google.maps);
-//   }
-
-//   private getScriptSrc(callback: string): string {
-//     interface QueryParams {
-//       [key: string]: string;
-//     }
-//     const query: QueryParams = {
-//       v: '3',
-//       callback,
-//       key: GOOGLE_MAPS_API_KEY,
-//       libraries: 'places',
-//     };
-//     const params = Object.keys(query)
-//       .map((key) => `${key}=${query[key]}`)
-//       .join('&');
-//     return `//maps.googleapis.com/maps/api/js?${params}&language=fr`;
-//   }
-// }
+          resolve(data);
+        } else {
+          reject(new Error('Geocode request failed'));
+        }
+      });
+    });
+  }
+}

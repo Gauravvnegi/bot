@@ -172,7 +172,7 @@ export class Feature {
       set({}, 'description', get(input, ['description'])),
       set({}, 'currentUsage', get(input, ['currentUsage'])),
       set({}, 'isSubscribed', get(input, ['isSubscribed'])),
-      set({}, 'isSubscribed', get(input, ['isSubscribed']))
+      set({}, 'isView', get(input, ['isSubscribed']))
     );
     this.cost = new Cost().deserialize(input.cost);
     return this;

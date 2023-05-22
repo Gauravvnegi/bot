@@ -1,65 +1,45 @@
+import { SocialPlatForms } from '../types/brand.type';
 import { HotelConfiguration } from '../types/hotel.type';
 
 export class HotelResponse {
-         hotel: {
-           active: boolean;
-           name: string;
-           description: string;
-           address: {};
-           contact: string;
-           email: string;
-           imageUrls: string[];
-           segment: string;
-           socialPlatForms: any[];
-           complimentaryAmenities: string[];
-         } = {
-           active: true,
-           name: '',
-           description: '',
-           address: {},
-           contact: '',
-           email: '',
-           imageUrls: [],
-           segment: '',
-           socialPlatForms: [],
-           complimentaryAmenities: [],
-         };
-         brandId: string;
-         deserialize(input: HotelConfiguration) {
-           this.hotel.active = input?.status;
-           this.hotel.name = input?.name;
-           this.hotel.description = input?.description ?? 'test description';
-           this.hotel.address = input?.address ?? {};
-           this.hotel.contact = input?.contact ?? '34567888888889';
-           this.hotel.email = input?.email ?? 'test@test.com';
-           this.hotel.imageUrls = input.imageUrls ?? [
-             'assets/images/empty-table-service.png',
-           ];
-           this.hotel.segment = input?.segment ?? 'bnb';
-           this.hotel.socialPlatForms =  [
-             {
-               name: 'facebook',
-               imageUrl: 'assets/images/facebook.png',
-               redirectUrl: 'https://www.facebook.com',
-             },
-             {
-               redirectUrl: 'https://www.instagram.com',
-             },
-             {
-               redirectUrl: 'https://www.linkedIn.com',
-             },
-             {
-               redirectUrl: 'https://www.twitter.com',
-             },
-             {
-               redirectUrl: 'https://www.youtube.com',
-             },
-           ];
-           this.hotel.complimentaryAmenities = input?.complimentaryAmenities;
-           this.brandId = input?.id;
-           return this;
-         }
-       }
+  hotel: {
+    id: string;
+    status: boolean;
+    name: string;
+    description: string;
+    contact: string;
+    emailId: string;
+    imageUrl: string[];
+    propertyCategory: string;
+    socialPlatforms: SocialPlatForms[];
+    serviceIds: string[];
+  } = {
+    id: '',
+    status: true,
+    name: '',
+    description: '',
+    contact: '',
+    emailId: '',
+    imageUrl: [],
+    propertyCategory: '',
+    socialPlatforms: [],
+    serviceIds: [],
+  };
+  brandId: string;
+  deserialize(input) {
+    this.hotel.status = input?.status;
+    this.hotel.name = input?.name;
+    this.hotel.description = input?.description;
+    this.hotel.contact = input?.contact;
+    this.hotel.emailId = input?.emailId;
+    this.hotel.imageUrl = input?.imageUrl;
+    this.hotel.propertyCategory = input.propertyCategory.value;
+    this.hotel.socialPlatforms = input?.socialPlatforms ?? [];
+    this.hotel.serviceIds = input?.serviceIds ?? [];
+    this.brandId = input?.id;
+    return this;
+  }
+}
 export class Services {
   services = new Array<Service>();
 
@@ -82,7 +62,7 @@ export class Service {
     this.id = input.id;
     this.name = input.name;
     this.imageUrl = input.imageUrl;
-    this.type = input.type;
+    this.type = input.serviceType;
     this.rate = `${input.currency}${input.rate}`;
     return this;
   }

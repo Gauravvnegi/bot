@@ -81,9 +81,11 @@
       <td>
         <p
           class="tabel-room-no"
-          [ngClass]="getRoomStatus(rowData.booking.roomStatus)"
+          [ngClass]="getRoomStatus(rowData.rooms.roomStatus)"
         >
-          {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}
+          {{ rowData.rooms.roomNumber || '--' }}&nbsp;-&nbsp;{{
+            rowData.rooms.type
+          }}
         </p>
       </td>
       <td>
@@ -118,7 +120,9 @@
         </div>
       </td>
       <td class="guest">
-        <span>{{ rowData.guests.primaryGuest.getFullName() }}</span>
+        <div class="primary-text">
+          {{ rowData.guests.primaryGuest.getFullName() }}
+        </div>
         <b class="rowData">{{
           rowData.guests.getSecGuestDisplayConfig().countString
         }}</b>

@@ -72,10 +72,7 @@ export class BrandInfoFormComponent implements OnInit {
       this.loading = true;
       this.$subscription.add(
         this.businessService.getBrandById(this.brandId).subscribe((res) => {
-          const data: BrandFormData = new BrandResponse().deserialize(res);
-
-          this.useForm.patchValue(data);
-
+          this.useForm.get('brand').patchValue(res);
           this.code = res.code;
         }, this.handelError)
       );
@@ -96,20 +93,26 @@ export class BrandInfoFormComponent implements OnInit {
 
     if (this.brandId) {
       this.$subscription.add(
-        this.businessService
-          .updateBrand(this.brandId, data.brand)
-          .subscribe((res) => {
+        this.businessService.updateBrand(this.brandId, data.brand).subscribe(
+          (res) => {
             this.useForm.get('brand').patchValue(res);
-          }, this.handelError)
+          },
+          this.handelError,
+          this.handleSuccess
+        )
       );
     } else {
       this.$subscription.add(
-        this.businessService.createBrand(data).subscribe((res) => {
-          this.handleSuccess();
-          this.router.navigate([
-            `pages/settings/business-info/brand/${res.id}`,
-          ]);
-        }, this.handelError)
+        this.businessService.createBrand(data).subscribe(
+          (res) => {
+            this.handleSuccess();
+            this.router.navigate([
+              `pages/settings/business-info/brand/${res.id}`,
+            ]);
+          },
+          this.handelError,
+          this.handleSuccess
+        )
       );
     }
   }

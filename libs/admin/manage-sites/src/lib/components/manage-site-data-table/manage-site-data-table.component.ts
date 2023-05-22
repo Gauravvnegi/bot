@@ -88,7 +88,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         (res) => {
           const manageSiteData = new ManageSiteList().deserialize(res);
           this.values = manageSiteData.records;
-
+          console.log(this.values);
           this.nextState = this.values.map((item) => ({
             id: item.id,
             status: item.status,
@@ -111,7 +111,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
 
   selectSite(rowData) {
     if (rowData.id && rowData.status !== ManageSiteStatus.DELETE) {
-      this.cookiesSettingService.initPlatformChangeV2(rowData.id, '/pages');
+      this.cookiesSettingService.initPlatformChange(rowData.id, '/pages');
     }
   }
 
@@ -222,7 +222,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         label: 'Go to Website Settings',
         onClick: () => {
           this.modalService.close();
-          this.cookiesSettingService.initPlatformChangeV2(
+          this.cookiesSettingService.initPlatformChange(
             hotelId, // siteId
             `/pages/settings/${SettingOptions.WEBSITE_SETTINGS}`
           );

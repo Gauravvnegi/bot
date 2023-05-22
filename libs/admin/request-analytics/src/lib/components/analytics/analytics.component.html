@@ -4,9 +4,49 @@
   [isBack]="false"
 >
 </hospitality-bot-navigation-header>
-<hospitality-bot-pre-arrival
-  [requestConfiguration]="getFilteredConfig('preArrival')"
-></hospitality-bot-pre-arrival>
-<hospitality-bot-inhouse
-  [requestConfiguration]="getFilteredConfig('inhouse')"
-></hospitality-bot-inhouse>
+
+<div class="analytics-wrapper">
+  <ng-container
+    [ngTemplateOutlet]="header"
+    [ngTemplateOutletContext]="{ $implicit: 'Pre-Arrival' }"
+  >
+  </ng-container>
+  <div class="graph-container">
+    <hospitality-bot-pre-arrival-packages
+      [entityType]="'pre-arrival'"
+      [requestConfiguration]="requestConfiguration.preArrival"
+    ></hospitality-bot-pre-arrival-packages>
+  </div>
+</div>
+
+<div class="analytics-wrapper">
+  <ng-container
+    [ngTemplateOutlet]="header"
+    [ngTemplateOutletContext]="{ $implicit: 'In-House' }"
+  >
+  </ng-container>
+
+  <div class="graphs-wrapper">
+    <div class="graph-container one-fourth">
+      <hospitality-bot-inhouse-source
+        [requestConfiguration]="requestConfiguration.inhouse"
+      ></hospitality-bot-inhouse-source>
+    </div>
+    <div class="graph-container three-fourth">
+      <hospitality-bot-inhouse-sentiments
+        [requestConfiguration]="requestConfiguration.inhouse"
+      ></hospitality-bot-inhouse-sentiments>
+    </div>
+  </div>
+</div>
+
+<ng-template #header let-title>
+  <div class="header">
+    <div class="icon">
+      <img src="assets/svg/analytics-stat-icon.svg" alt="stats-icon" />
+    </div>
+    <div class="title">
+      {{ title }}
+    </div>
+  </div>
+</ng-template>

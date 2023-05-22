@@ -29,6 +29,8 @@
       <i *ngIf="isBack" (click)="back()" class="pi pi-arrow-left"></i>
       <div class="label">{{ heading }}</div>
     </header>
-    <div class="header__date" *ngIf="draftDate">Drafted on {{ draftDate }}</div>
+    <div class="header__date" *ngIf="draftDate">
+      {{ dateTitle || 'Drafted on' }} {{ draftDate }}
+    </div>
   </div>
 </div>

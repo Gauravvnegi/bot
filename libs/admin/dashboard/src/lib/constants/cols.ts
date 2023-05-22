@@ -2,8 +2,9 @@ export const cols = {
   reservation: [
     {
       field: 'rooms.roomNumber',
-      header: 'Rooms',
+      header: 'Room No / Type',
       sortType: 'number',
+      searchField: ['rooms.roomNumber', 'rooms.type']
     },
     {
       field: 'booking.bookingNumber',
@@ -15,7 +16,7 @@ export const cols = {
       field: `guests.primaryGuest.fullName`,
       header: 'Guest / Company',
       sortType: 'string',
-      searchField: ['guests.primaryGuest.fullName' ,'guests.secondaryGuest.fullName'],
+      searchField: ['guests.primaryGuest.fullName', 'guests.secondaryGuest.fullName'],
     },
     {
       field: `guests.primaryGuest.phoneNumber`,
@@ -36,7 +37,7 @@ export const cols = {
     },
     {
       field: 'package',
-      header: 'Package',
+      header: 'Add-ons',
       isSortDisabled: true,
       sortType: 'number',
       isSearchDisabled: true,

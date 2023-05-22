@@ -5,10 +5,8 @@ import { DynamicTabComponent } from './components/dynamic-tab/dynamic-tab.compon
 import { InhouseRequestDatatableComponent } from './components/inhouse-request-datatable/inhouse-request-datatable.component';
 import { InhouseSentimentsComponent } from './components/inhouse-sentiments/inhouse-sentiments.component';
 import { InhouseSourceComponent } from './components/inhouse-source/inhouse-source.component';
-import { InhouseComponent } from './components/inhouse/inhouse.component';
 import { PreArrivalDatatableComponent } from './components/pre-arrival-datatable/pre-arrival-datatable.component';
 import { PreArrivalPackagesComponent } from './components/pre-arrival-packages/pre-arrival-packages.component';
-import { PreArrivalComponent } from './components/pre-arrival/pre-arrival.component';
 
 const appRoutes: Route[] = [
   {
@@ -27,9 +25,7 @@ export class AdminRequestAnalyticsRoutingModule {
     DynamicTabComponent,
     InhouseSourceComponent,
     InhouseSentimentsComponent,
-    InhouseComponent,
     InhouseRequestDatatableComponent,
-    PreArrivalComponent,
     PreArrivalPackagesComponent,
     PreArrivalDatatableComponent,
   ];

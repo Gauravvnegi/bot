@@ -393,8 +393,12 @@ export class AddReservationComponent implements OnInit {
           (res: ReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
-          (error) => {},
-          () => {this.isBooking = false}
+          (error) => {
+            this.isBooking = false;
+          },
+          () => {
+            this.isBooking = false;
+          }
         )
     );
   }
@@ -407,7 +411,9 @@ export class AddReservationComponent implements OnInit {
           (res: ReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
-          (error) => {},
+          (error) => {
+            this.isBooking = false;
+          },
           () => {
             this.isBooking = false;
           }

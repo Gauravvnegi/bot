@@ -27,20 +27,28 @@ export class NotificationDetailComponent {
     // ]);
     switch (this.data.notificationType.toUpperCase()) {
       case 'WHATSAPP':
-        this.notificationService.$whatsappNotification.next(data['phoneNumber']);
+        this.notificationService.$whatsappNotification.next(
+          data['phoneNumber']
+        );
         this.router.navigate(['pages/freddie/messages']);
         break;
-        
-      // case 'IN-HOUSE REQUEST':
-      //   this.router.navigate(['pages/freddie/request']);
-      //   break;
+
+      case 'IN-HOUSE REQUEST':
+        // not comming from backend
+        this.notificationService.$reservationNotification.next(
+          data['reservationId']
+        );
+        this.router.navigate(['pages/efrontdesk/request']);
+        break;
 
       case 'FEEDBACK':
         this.notificationService.$feedbackNotification.next(data['feedbackId']);
         this.router.navigate(['pages/heda/analytics']);
         break;
       case 'CHECK -IN':
-        this.notificationService.$reservationNotification.next(data['reservationId']);
+        this.notificationService.$reservationNotification.next(
+          data['reservationId']
+        );
         this.router.navigate(['pages/efrontdesk/dashboard']);
         break;
       default:

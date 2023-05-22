@@ -57,14 +57,18 @@
                 </div>
                 <div class="field width-added">
                   <mat-label class="label">Phone No.</mat-label>
-                  <a href="tel:{{guestFormGroup.countryCode}}{{guestFormGroup.phoneNumber}}">
-                  <div
-                    *ngIf="guestFormGroup.phoneNumber; else emptyCell"
-                    class="value"
+                  <a
+                    href="tel:{{ guestFormGroup.countryCode }}{{
+                      guestFormGroup.phoneNumber
+                    }}"
                   >
-                    {{ guestFormGroup.countryCode }}
-                    {{ guestFormGroup.phoneNumber }}
-                  </div>
+                    <div
+                      *ngIf="isContactAvailable(); else emptyCell"
+                      class="value"
+                    >
+                      {{ guestFormGroup.countryCode }}
+                      {{ guestFormGroup.phoneNumber }}
+                    </div>
                   </a>
                 </div>
                 <div class="field width-added">

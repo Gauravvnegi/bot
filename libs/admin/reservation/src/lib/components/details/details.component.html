@@ -387,6 +387,11 @@
                     variant="outlined"
                   ></hospitality-bot-button>
                   <hospitality-bot-button
+                    label="Activate & Generate Checkout"
+                    (click)="activateAndgenerateJourney('CHECKOUT')"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                  <hospitality-bot-button
                     *ngIf="checkForGenerateFeedbackSubscribed()"
                     label="Generate Feedback"
                     (click)="generateFeedback('CHECKIN')"

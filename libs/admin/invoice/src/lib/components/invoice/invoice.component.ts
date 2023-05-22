@@ -12,6 +12,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
+  ConfigService,
   NavRouteOptions,
   Option,
   UserService,
@@ -73,7 +74,7 @@ export class InvoiceComponent implements OnInit {
   tax: Option[] = [];
 
   tableValue = [];
-  refundOption = [{ label: 'INR', value: 'INR' }];
+  refundOption: Option[] = [];
 
   isRefundSaved = false;
   viewRefundRow = false;
@@ -113,6 +114,7 @@ export class InvoiceComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
+    private configService: ConfigService,
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -124,8 +126,20 @@ export class InvoiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
+    this.initOptions();
     this.initForm();
     this.getDescriptionOptions();
+  }
+
+  initOptions(){
+    this.configService.$config.subscribe(config => {
+      if (config.currencyConfiguration) {
+        this.refundOption = config.currencyConfiguration.map(item => ({
+          label: item.key,
+          value: item.value
+        }));
+      } 
+    });
   }
 
   /**

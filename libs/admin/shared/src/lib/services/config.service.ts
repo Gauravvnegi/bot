@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigService extends ApiService {
-  $config = new BehaviorSubject<Record<string, any>>({});
+  $config = new BehaviorSubject<Record<string, any>>(null);
 
   getColorAndIconConfig(
     hotelId: string

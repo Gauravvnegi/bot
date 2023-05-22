@@ -20,7 +20,7 @@ export class AdminPaymentDetailsComponent implements OnInit {
       label: 'Paid',
       class: 'status-button--success',
     },
-    FAILED: {
+    FAILURE: {
       label: 'Failed',
       class: 'status-button--failure',
     },
@@ -152,10 +152,13 @@ export class AdminPaymentDetailsComponent implements OnInit {
 
   getPaymentStatus(): string {
     const dueAmount = this.detailsData.paymentDetails.dueAmount;
+    const paidAmount = this.detailsData.paymentDetails.paidAmount;
     if (dueAmount === 0) {
       return 'COMPLETED';
-    } else {
-      return 'INITIATED';
+    } else if(paidAmount === 0) {
+      return 'PENDING';
+    } else{
+      return 'INITIATED'
     }
   }
 

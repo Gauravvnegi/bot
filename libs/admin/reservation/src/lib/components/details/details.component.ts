@@ -719,9 +719,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
     const sharedIcon = this.shareIconList.find(
       (icon) => icon.label === channelLabel
     );
-    return sharedIcon && channel.isSubscribed
+
+    if(sharedIcon){
+      return channel.isSubscribed
       ? sharedIcon.iconUrl
       : sharedIcon.disableIcon;
+    }
+
+    return ''
   }
 
   checkForTransactionFeedbackSubscribed() {

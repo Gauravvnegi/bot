@@ -5,8 +5,15 @@ declare let google: any;
   providedIn: 'root',
 })
 export class AddressService {
-  getAddressById(placeId) {
-    console.log(placeId, 'placeId');
+  storeData;
+  getAddressById(placeId, isSameAddress) {
+    console.log(isSameAddress, 'isSameAddress');
+    if (isSameAddress) {
+      return new Promise((resolve, reject) => {
+        resolve(this.storeData);
+      });
+    }
+
     return new Promise((resolve, reject) => {
       var geocoder = new google.maps.Geocoder();
       var geocodeRequest = {
@@ -17,35 +24,61 @@ export class AddressService {
         if (status === google.maps.GeocoderStatus.OK) {
           var addressComponents = results[0].address_components;
           var location = results[0].geometry.location;
-          var country, city, pincode, state;
+          var formattedAddress = results[0].formatted_address;
+          var buildingName,
+            floor,
+            sector,
+            streetAddress,
+            city,
+            state,
+            country,
+            pincode,
+            apartment;
 
           for (var i = 0; i < addressComponents.length; i++) {
             var component = addressComponents[i];
             var componentType = component.types[0];
 
-            if (componentType === 'country') {
-              country = component.long_name;
+            if (componentType === 'premise') {
+              buildingName = component.long_name;
+            } else if (componentType === 'floor') {
+              floor = component.long_name;
+            } else if (componentType === 'sublocality_level_1') {
+              sector = component.long_name;
             } else if (
-              componentType === 'locality' ||
-              componentType === 'administrative_area_level_1'
+              componentType === 'route' ||
+              componentType === 'street_address'
             ) {
-              state = component.long_name;
-            } else if (componentType === 'postal_code') {
-              pincode = component.long_name;
+              streetAddress = component.long_name;
             } else if (componentType === 'locality') {
               city = component.long_name;
+            } else if (componentType === 'administrative_area_level_1') {
+              state = component.long_name;
+            } else if (componentType === 'country') {
+              country = component.long_name;
+            } else if (componentType === 'postal_code') {
+              pincode = component.long_name;
+            } else if (componentType === 'subpremise') {
+              apartment = component.long_name;
             }
           }
 
           var data = {
             placeId: placeId,
-            country: country || '',
+            formattedAddress: formattedAddress || '',
+            buildingName: buildingName || '',
+            floor: floor || '',
+            sector: sector || '',
+            street: streetAddress || '',
+            city: city || '',
             state: state || '',
+            country: country || '',
+            pincode: pincode || '',
             latitude: location.lat(),
             longitude: location.lng(),
-            pincode: pincode || '',
-            city: city || '',
           };
+
+          this.storeData = data;
 
           resolve(data);
         } else {

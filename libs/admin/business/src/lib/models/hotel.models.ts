@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import { SocialPlatForms } from '../types/brand.type';
 import { HotelConfiguration } from '../types/hotel.type';
 
@@ -75,3 +76,54 @@ export const noRecordAction = {
   description:
     'No services found. Tap the +Create Services to create & manage the services offered by your hotel',
 };
+
+export class SegmentList {
+  segmentList = new Array<any>();
+
+  deserialize(input) {
+    input.category.forEach((x) => {
+      this.segmentList.push(new Segment().deserialize(x));
+    });
+
+    return this;
+  }
+}
+
+export class Segment {
+  label: string;
+  value: string;
+  icon: string;
+  iconCount: number;
+  deserialize(input) {
+    this.label = input.label.split('_').join(' ');
+    this.value = input.value;
+    this.icon = this.getIcon(input.label[0]);
+    this.iconCount = input.label[0];
+    return this;
+  }
+
+  getIcon(value) {
+    switch (value) {
+      case '2':
+        return 'assets/images/2.svg';
+      case '3':
+        return 'assets/images/3 star.svg';
+      case '4':
+        return 'assets/images/4 star.svg';
+      case '5':
+        return 'assets/images/5star.svg';
+    }
+  }
+}
+
+export class ServiceIdList {
+  serviceIdList = new Array<any>();
+
+  deserialize(input) {
+    input.services.forEach((x) => {
+      this.serviceIdList.push(x.id);
+    });
+
+    return this;
+  }
+}

@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { HotelConfiguration, HotelFormData } from '../types/hotel.type';
 import { map } from 'rxjs/operators';
 import { EventEmitter } from '@angular/core';
+import { QueryConfig } from '@hospitality-bot/admin/library';
 
 export class BusinessService extends ApiService {
   /**
@@ -17,11 +18,13 @@ export class BusinessService extends ApiService {
    * @memberof BusinessService
    */
 
-  getHotelList(
-    brandId: string,
-    config = { params: '?order=DESC&limit=5' }
-  ): Observable<any> {
-    return this.get(`/api/v2/entity?type=HOTEL&parentId=${brandId}`);
+  getHotelList(brandId: string, config: QueryConfig): Observable<any> {
+    console.log(config, 'config');
+    return this.get(
+      `/api/v2/entity?type=HOTEL&parentId=${brandId}&${
+        config.params.slice(1) ?? ''
+      }`
+    );
   }
 
   /**
@@ -121,5 +124,40 @@ export class BusinessService extends ApiService {
 
   getServices(): Observable<any> {
     return this.get(`/api/v1/config?key=SERVICE_CONFIGURATION`);
+  }
+
+  getServiceList(
+    hotelId,
+    config = { params: '?type=SERVICE&serviceType=ALL&limit=5' }
+  ): Observable<any> {
+    return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
+  }
+  hotelInfoFormData = {
+    serviceIds: [],
+  };
+
+  initHotelInfoFormData(input: any) {
+    console.log(input, 'input');
+    this.hotelInfoFormData = { ...this.hotelInfoFormData, ...input };
+  }
+
+  /**
+   * @function searchLibraryItem To search library item
+   * @param config  Will have type and search query
+   *
+   */
+  searchLibraryItem(hotelId: string, config?: QueryConfig): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${hotelId}/library/search${config?.params ?? ''}`
+    );
+  }
+
+  exportCSV(hotelId: string, config: QueryConfig) {
+    return this.get(
+      `/api/v1/entity/${hotelId}/hotel/export${config.params ?? ''}`,
+      {
+        responseType: 'blob',
+      }
+    );
   }
 }

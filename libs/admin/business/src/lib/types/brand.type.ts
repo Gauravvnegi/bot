@@ -1,9 +1,8 @@
-
 export type SocialPlatForms = {
-    name: string;
-    imageUrl: string;
-    redirectUrl?: string;
-}
+  name: string;
+  imageUrl: string;
+  redirectUrl?: string;
+};
 
 export type BrandFormData = {
   brand: {
@@ -16,11 +15,12 @@ export type BrandFormData = {
 };
 
 export type BrandResponse = {
-  code:string
+  code: string;
   id: string;
   name: string;
   logo: string;
   description: string;
+  brandCode: string;
   address: {
     id: string;
     latitude: number;
@@ -36,4 +36,4 @@ export type BrandResponse = {
     redirectUrl: string;
   }[];
   status: boolean;
-}
+};

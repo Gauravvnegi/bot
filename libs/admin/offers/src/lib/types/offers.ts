@@ -3,7 +3,12 @@ import { LibrarySearchItem } from '@hospitality-bot/admin/library';
 export type OfferFormData = {
   active: boolean;
   name: string;
-  libraryItems: { label: string; value: string; type: LibrarySearchItem }[];
+  libraryItems: {
+    label: string;
+    value: string;
+    type: LibrarySearchItem;
+    price: number;
+  }[];
   imageUrl: string;
   description: string;
   startDate: number;

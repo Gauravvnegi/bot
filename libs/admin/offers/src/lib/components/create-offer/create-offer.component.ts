@@ -163,19 +163,41 @@ export class CreateOfferComponent implements OnInit {
    */
   registerServicesSelectedChange() {
     this.useForm.get('libraryItems').valueChanges.subscribe((res) => {
-      const totalPrice = res?.reduce((prev, curr) => {
-        if (!this.selectedServicePrice[curr.value]) {
-          this.selectedServicePrice = {
-            ...this.selectedServicePrice,
-            [curr.value]: this.libraryItems.find(
-              (item) => item.value === curr.value
-            )?.price,
-          };
-        }
-        return prev + this.selectedServicePrice[curr.value];
-      }, 0);
-      this.useForm.get('rate').setValue(totalPrice);
+      this.setDiscountPrice(res);
     });
+  }
+
+  setDiscountPrice(items) {
+    const totalPrice = items?.reduce((prev, curr) => {
+      if (!this.selectedServicePrice[curr.value]) {
+        this.selectedServicePrice = {
+          ...this.selectedServicePrice,
+          [curr.value]: this.libraryItems.find(
+            (item) => item.value === curr.value
+          )?.price,
+        };
+      }
+      return prev + this.selectedServicePrice[curr.value];
+    }, 0);
+    this.useForm.get('rate').setValue(totalPrice);
+    const rateValue = +this.useForm.get('rate').value;
+    const discountType = this.useForm.get('discountType').value;
+    const discountValue = +this.useForm.get('discountValue').value;
+
+    if (rateValue && discountType) {
+      const discountedPrice =
+        discountType === 'NUMBER'
+          ? `${rateValue - discountValue}`
+          : `${
+              Math.round(
+                (rateValue -
+                  (rateValue * discountValue) / 100 +
+                  Number.EPSILON) *
+                  100
+              ) / 100
+            }`;
+      this.useForm.get('discountedPrice').setValue(discountedPrice);
+    }
   }
 
   searchOptions(text: string) {
@@ -309,25 +331,51 @@ export class CreateOfferComponent implements OnInit {
         })
         .subscribe((res) => {
           this.routes[2].label = 'Edit Offer';
-          let { packageCode, subPackages, ...restData } = res;
+          let { packageCode, subPackages, roomTypes, ...restData } = res;
 
           const data: OfferFormData = {
             ...restData,
-            libraryItems: subPackages?.map((item) => {
-              let price =
-                item.rate ?? item.discountedPrice ?? item.originalPrice;
-              return {
+            libraryItems: [
+              ...subPackages?.map((item) => ({
                 label: `${item.name} ${
-                  price ? `[${item.currency} ${price}]` : ''
+                  item.rate || item.discountedPrice || item.originalPrice
+                    ? `[${item.currency} ${
+                        item.rate || item.discountedPrice || item.originalPrice
+                      }]`
+                    : ''
                 }`,
                 value: item.id,
-                price: item.rate,
+                price: item.rate || item.discountedPrice,
                 type: item.type,
-              };
-            }),
+              })),
+              ...roomTypes?.map((item) => ({
+                label: `${item.name} ${
+                  item.rate || item.discountedPrice || item.originalPrice
+                    ? `[${item.currency} ${
+                        item.rate || item.discountedPrice || item.originalPrice
+                      }]`
+                    : ''
+                }`,
+                value: item.id,
+                price: item.rate || item.discountedPrice,
+                type: item.type,
+              })),
+            ],
           };
           this.useForm.patchValue(data);
           this.packageCode = packageCode;
+
+          data.libraryItems.forEach((item) => {
+            if (
+              !this.libraryItems.some(
+                (libraryItem) => libraryItem.value === item.value
+              )
+            ) {
+              this.libraryItems.push(item);
+              this.selectedServicePrice[item.value] = item.price;
+            }
+          });
+          this.setDiscountPrice(this.libraryItems);
         }, this.handleFinal)
     );
   }

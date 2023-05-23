@@ -140,7 +140,7 @@ export class AddReservationComponent implements OnInit {
           '',
           [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
         ],
-        currency: ['INR'],
+        currency: [''],
         paymentMethod: [''],
         paymentRemark: ['', [Validators.maxLength(60)]],
       }),
@@ -170,6 +170,7 @@ export class AddReservationComponent implements OnInit {
           label: key,
           value,
         }));
+        this.userForm.get('currency').setValue(this.currencies[0].value);
       }
     });
   }
@@ -266,9 +267,7 @@ export class AddReservationComponent implements OnInit {
         .getReservationDataById(this.reservationId, this.hotelId)
         .subscribe(
           (response) => {
-            console.log(response);
             const data = new ReservationFormData().deserialize(response);
-            console.log(data);
             this.userForm.patchValue(data);
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.bookingInformation);

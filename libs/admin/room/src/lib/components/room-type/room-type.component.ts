@@ -99,10 +99,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       discountType: ['PERCENTAGE'],
       discountValue: ['0', [Validators.min(0)]],
       discountedPrice: [{ value: '', disabled: true }],
-      variablePriceCurrency: [{ value: 'INR', disabled: true }],
-      currency: ['INR', [Validators.required, Validators.min(0)]],
+      variablePriceCurrency: [{ value: '', disabled: true }],
+      currency: ['', [Validators.required, Validators.min(0)]],
       variableAmount: ['', [Validators.min(0)]],
-      discountedPriceCurrency: [{ value: 'INR', disabled: true }],
+      discountedPriceCurrency: [{ value: '', disabled: true }],
       maxOccupancy: [null, occupancyValidation],
       maxChildren: [{ value: null, disabled: true }, occupancyValidation],
       maxAdult: [{ value: null, disabled: true }, occupancyValidation],
@@ -154,7 +154,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             label: DiscountType[value],
             value,
           }));
-          console.log(this.discountTypes);
+          this.useForm.get('variablePriceCurrency').setValue(this.currencies[0].value);
+          this.useForm.get('currency').setValue(this.currencies[0].value);
+          this.useForm.get('discountedPriceCurrency').setValue(this.currencies[0].value);
+
         }
       })
     );

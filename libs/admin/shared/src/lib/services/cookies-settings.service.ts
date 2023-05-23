@@ -108,12 +108,9 @@ export class CookiesSettingsService {
                   [tokensConfig.brandId]: currentBrand.id,
                   [tokensConfig.siteId]: currentSite.id,
                 },
-                !redirectUrl
+                redirectUrl
               );
 
-              if (redirectUrl) {
-                this.router.navigate([redirectUrl]);
-              }
             } else
               this.snackbarService.openSnackBarAsText(
                 'Do not have access to the site.'

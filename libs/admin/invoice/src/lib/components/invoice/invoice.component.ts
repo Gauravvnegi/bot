@@ -114,7 +114,7 @@ export class InvoiceComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
-    private configService: ConfigService,
+    private configService: ConfigService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -131,14 +131,14 @@ export class InvoiceComponent implements OnInit {
     this.getDescriptionOptions();
   }
 
-  initOptions(){
-    this.configService.$config.subscribe(config => {
+  initOptions() {
+    this.configService.$config.subscribe((config) => {
       if (config.currencyConfiguration) {
-        this.refundOption = config.currencyConfiguration.map(item => ({
+        this.refundOption = config.currencyConfiguration.map((item) => ({
           label: item.key,
-          value: item.value
+          value: item.value,
         }));
-      } 
+      }
     });
   }
 
@@ -256,7 +256,7 @@ export class InvoiceComponent implements OnInit {
         });
 
         this.isInvoiceGenerated = res.invoiceGenerated;
-        if (this.isInvoiceGenerated){
+        if (this.isInvoiceGenerated) {
           this.useForm.disable();
         }
         this.loadingData = false;
@@ -313,8 +313,7 @@ export class InvoiceComponent implements OnInit {
         if (item === receivedPaymentControl) {
           item.setValidators([Validators.required, Validators.min(1)]);
         }
-      }
-      else {
+      } else {
         item.clearValidators();
         item.updateValueAndValidity();
         item.reset();
@@ -861,7 +860,9 @@ export class InvoiceComponent implements OnInit {
     //   return;
     // }
 
-    this.router.navigate(['../preview-invoice', this.reservationId], { relativeTo: this.route });
+    this.router.navigate(['../preview-invoice', this.reservationId], {
+      relativeTo: this.route,
+    });
   }
 
   handleSave(): void {
@@ -1043,13 +1044,19 @@ export class InvoiceComponent implements OnInit {
 
           this.descriptionOptions = serviceListData;
         });
+    } else {
+      this.descriptionOffSet = 0;
+      this.descriptionOptions = [];
+      this.getDescriptionOptions();
     }
   }
 
   /***
    * Navigate to service form
    */
-  createService() {}
+  createService() {
+    this.router.navigateByUrl('pages/library/services/create-service');
+  }
 
   /**
    * Handle Invoice download

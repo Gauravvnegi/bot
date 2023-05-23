@@ -165,8 +165,8 @@ export class InvoiceComponent implements OnInit {
       companyName: [''],
 
       gstNumber: ['', Validators.required],
-      contactName: ['', Validators.required],
-      contactNumber: ['', Validators.required],
+      // contactName: ['', Validators.required],
+      // contactNumber: ['', Validators.required],
       email: ['', Validators.required],
       address: ['', Validators.required],
       state: ['', Validators.required],
@@ -326,8 +326,8 @@ export class InvoiceComponent implements OnInit {
     const companyNameControl = this.useForm.get('companyName');
 
     const gstNumberControl = this.useForm.get('gstNumber');
-    const contactNameControl = this.useForm.get('contactName');
-    const contactNumberControl = this.useForm.get('contactNumber');
+    // const contactNameControl = this.useForm.get('contactName');
+    // const contactNumberControl = this.useForm.get('contactNumber');
     const emailControl = this.useForm.get('email');
     const addressControl = this.useForm.get('address');
     const stateControl = this.useForm.get('state');
@@ -336,8 +336,8 @@ export class InvoiceComponent implements OnInit {
 
     [
       gstNumberControl,
-      contactNameControl,
-      contactNumberControl,
+      // contactNameControl,
+      // contactNumberControl,
       emailControl,
       addressControl,
       stateControl,

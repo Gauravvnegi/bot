@@ -7,6 +7,13 @@
     {{ tableName }}
   </div>
   <div class="action-wrapper">
+    <hospitality-bot-export-list
+      [additionalActionItems]="additionalActionItems"
+      (onDocumentActions)="onDocumentActions()"
+      [documentTypes]="documentTypes"
+      [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
+    ></hospitality-bot-export-list>
     <hospitality-bot-button
       label="+Add Hotels"
       link="pages/settings/business-info/brand/{{ brandId }}/hotel"
@@ -83,7 +90,7 @@
       <td>
         <div class="" *ngIf="rowData.address.state; else emptyCell">
           <div class="primary-text">
-            {{ rowData?.address.state }}
+            {{ rowData?.address.city }}
           </div>
         </div>
       </td>
@@ -105,6 +112,16 @@
               {{ rowData?.contact?.number }}
             </div>
           </a>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content">
+          <hospitality-bot-toggle-dropdown
+            class="toggle-btn"
+            (onClick)="handleStatus($event, rowData)"
+            [status]="rowData.status"
+          >
+          </hospitality-bot-toggle-dropdown>
         </div>
       </td>
     </tr>

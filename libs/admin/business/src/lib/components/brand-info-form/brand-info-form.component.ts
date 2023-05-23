@@ -73,7 +73,7 @@ export class BrandInfoFormComponent implements OnInit {
       this.$subscription.add(
         this.businessService.getBrandById(this.brandId).subscribe((res) => {
           this.useForm.get('brand').patchValue(res);
-          this.code = res.code;
+          this.code = res.brandCode;
         }, this.handelError)
       );
     }
@@ -89,7 +89,6 @@ export class BrandInfoFormComponent implements OnInit {
     }
     this.businessService.onSubmit.emit(true);
     const data = this.useForm.getRawValue() as BrandFormData;
-    console.log('brandform', data);
 
     if (this.brandId) {
       this.$subscription.add(

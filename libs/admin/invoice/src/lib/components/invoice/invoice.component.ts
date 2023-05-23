@@ -126,19 +126,20 @@ export class InvoiceComponent implements OnInit {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.initOptions();
     this.initForm();
+    this.initOptions();
     this.getDescriptionOptions();
   }
 
-  initOptions() {
-    this.configService.$config.subscribe((config) => {
-      if (config.currencyConfiguration) {
-        this.refundOption = config.currencyConfiguration.map((item) => ({
+  initOptions(){
+    this.configService.$config.subscribe(config => {
+      if (config) {
+        this.refundOption = config.currencyConfiguration.map(item => ({
           label: item.key,
           value: item.value,
         }));
-      }
+        this.inputControl.currency.setValue(this.refundOption[0].value);
+      } 
     });
   }
 
@@ -182,7 +183,7 @@ export class InvoiceComponent implements OnInit {
       paidAmount: [0],
       dueAmount: [0],
 
-      currency: ['INR'],
+      currency: [''],
       refundAmount: [0],
 
       cashierName: [
@@ -235,6 +236,7 @@ export class InvoiceComponent implements OnInit {
         });
 
         this.useForm.patchValue(data, { emitEvent: false });
+        this.inputControl.guestName.patchValue(data.guestName, { emitEvent: true });
         // Generating tax options
         this.tax = res.itemList.reduce((prev, curr) => {
           const taxes = curr.itemTax.map((item) => ({

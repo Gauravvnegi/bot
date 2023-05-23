@@ -93,11 +93,11 @@ export class CreatePackageComponent implements OnInit {
         [Validators.required, CustomValidators.minArrayValueLength(2)],
       ],
       imageUrl: ['', Validators.required],
-      currency: ['INR', Validators.required],
+      currency: ['', Validators.required],
       rate: ['', Validators.required],
       discountType: ['PERCENTAGE', Validators.required],
       discountValue: ['0', [Validators.required, Validators.min(0)]],
-      discountedCurrency: ['INR', Validators.required],
+      discountedCurrency: ['', Validators.required],
       discountedPrice: ['', Validators.required],
       enableVisibility: [[], Validators.required],
     });
@@ -173,6 +173,8 @@ export class CreatePackageComponent implements OnInit {
           label: DiscountType[value],
           value,
         }));
+        this.useForm.get('currency').setValue(this.currencies[0].value);
+        this.useForm.get('discountedCurrency').setValue(this.currencies[0].value);
       }
     });
     this.getServices();

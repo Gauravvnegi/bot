@@ -29,13 +29,19 @@ export class HotelDetailService {
       this.brands.find((item) => item.id === this.brandId)?.hotels ?? [];
   }
 
-  updateBusinessSession(businessInfo: BusinessInfo, reload = true) {
+/**
+ * 
+ * @param businessInfo all the required tokens update
+ * @param redirectUrl default will be page -> will open the page on subscription priority
+ */
+  updateBusinessSession(businessInfo: BusinessInfo, redirectUrl: string = '/pages') {
     Object.entries(businessInfo).forEach(([token, value]) => {
       localStorage.setItem(token, value);
     });
-    if (reload) {
-      window.location.reload();
-    }
+
+    // if redirect url is present than change the window location
+    // as this will reload the website with redirect url (subscription api will needed to be get called)
+    window.location.href = redirectUrl;
   }
 
   getSiteId() {

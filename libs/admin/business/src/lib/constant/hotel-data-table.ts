@@ -17,7 +17,7 @@ export const cols = [
     field: 'address',
     header: 'Address',
     sortType: 'string',
-    searchField: ['address.state'],
+    searchField: ['address.city'],
     width: '23.75%',
   },
   {
@@ -32,6 +32,14 @@ export const cols = [
     header: 'contact',
     sortType: 'string',
     searchField: ['contact?.number'],
+    width: '23.75%',
+  },
+  {
+    field: 'status',
+    header: 'Actions',
+    isSortDisabled: true,
+    isSearchDisabled: true,
+
     width: '23.75%',
   },
 ];

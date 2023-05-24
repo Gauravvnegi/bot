@@ -48,6 +48,7 @@ import { TabGroupComponent } from './presentational/tab-group/tab-group.componen
 import { BackgroundUrlPipe } from './pipes/background-url.pipe';
 import { SearchSelectboxComponent } from './presentational/search-selectbox/search-selectbox.component';
 import { ImageComponent } from './presentational/image/image.component';
+import { SafeUrlPipe } from './pipes/safe-url-pipe';
 
 export function HttpLoaderFactory(http: HttpClient, injector: Injector) {
   const { templateId } = injector.get('TEMPLATE_CONFIG');
@@ -115,6 +116,7 @@ export interface IThemeConfig {
     CheckboxComponent,
     LinkifyTextPipe,
     SafeHtmlPipe,
+    SafeUrlPipe,
     FileUploadCssDirective,
     RepeaterPipe,
     TimePickerComponent,
@@ -161,6 +163,7 @@ export interface IThemeConfig {
     CheckboxComponent,
     LinkifyTextPipe,
     SafeHtmlPipe,
+    SafeUrlPipe,
     FileUploadCssDirective,
     RepeaterPipe,
     SlideComponent,

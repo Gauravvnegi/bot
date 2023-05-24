@@ -44,6 +44,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { QuestionnaireComponent } from './containers/questionnaire/questionnaire.component';
 import { RoomUpgradeComponent } from './containers/packages/room-upgrade/room-upgrade.component';
 import { AddressComponent } from './containers/address/address.component';
+import { PaymentInterceptor } from './interceptors/payment.interceptor';
 
 @NgModule({
   imports: [
@@ -76,6 +77,11 @@ import { AddressComponent } from './containers/address/address.component';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TimezoneInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: PaymentInterceptor,
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

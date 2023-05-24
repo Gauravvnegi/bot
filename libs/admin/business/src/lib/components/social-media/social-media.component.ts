@@ -65,8 +65,6 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
   getsocialMediaConfig() {
     this.$subscription.add(
       this.businessService.getSocialMediaConfig().subscribe((res) => {
-        debugger;
-
         res?.forEach((element) => {
           this.socialMediaControl.push(
             this.fb.group({

@@ -108,12 +108,15 @@
                 >
                 </p-tableCheckbox>
               </td>
-              <td class="guest">
-                <div class="guest-status" *ngIf="rowData?.timeOut">
-                  <img src="assets/svg/timeout.svg" alt="timeout" />
-                </div>
-                <div class="guest-name">
-                  {{ rowData.bookingDetails.tableOrRoomNumber }}
+              <td>
+                <div [roomStatus]="rowData.roomStatus">
+                  <div>
+                    {{
+                      rowData.bookingDetails.tableOrRoomNumber || '--'
+                    }}&nbsp;-&nbsp;{{
+                      rowData?.bookingDetails?.roomType || '--'
+                    }}
+                  </div>
                 </div>
                 <div class="guest-phone">{{ rowData.outlet }}</div>
               </td>
@@ -384,11 +387,14 @@
                 <p-tableCheckbox [value]="rowData" [index]="rowIndex">
                 </p-tableCheckbox>
               </td>
-              <td class="guest">
-                <div class="guest-status" *ngIf="rowData?.timeOut">
-                  <img src="assets/svg/timeout.svg" alt="timeout" />
+              <td>
+                <div [roomStatus]="rowData.roomStatus">
+                  <div>
+                    {{ rowData?.tableOrRoomNumber || '--' }}&nbsp;-&nbsp;{{
+                      rowData?.roomType || '--'
+                    }}
+                  </div>
                 </div>
-                <div>{{ rowData?.tableOrRoomNumber }}</div>
               </td>
               <td class="service-feedback">
                 <div class="feedback">

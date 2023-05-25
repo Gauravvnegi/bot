@@ -79,12 +79,9 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <p
-          class="tabel-room-no"
-          [ngClass]="getRoomStatus(rowData.rooms.roomStatus)"
-        >
+        <p class="tabel-room-no" [roomStatus]="rowData.roomStatus">
           {{ rowData.rooms.roomNumber || '--' }}&nbsp;-&nbsp;{{
-            rowData.rooms.type
+            rowData.rooms.type || '--'
           }}
         </p>
       </td>

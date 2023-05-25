@@ -34,7 +34,7 @@ export class HotelResponse {
     this.hotel.contact = input?.contact;
     this.hotel.emailId = input?.emailId;
     this.hotel.imageUrl = input?.imageUrl;
-    this.hotel.propertyCategory = input.propertyCategory.value;
+    this.hotel.propertyCategory = input?.propertyCategory?.value;
     this.hotel.socialPlatforms = input?.socialPlatforms ?? [];
     this.hotel.serviceIds = input?.serviceIds ?? [];
     this.brandId = input?.id;
@@ -70,11 +70,8 @@ export class Service {
 }
 
 export const noRecordAction = {
-  actionName: '+Create New Service',
-  link: '/pages/library/services/create-service',
   imageSrc: 'assets/images/empty-table-service.png',
-  description:
-    'No services found. Tap the +Create Services to create & manage the services offered by your hotel',
+  description: 'No services found',
 };
 
 export class SegmentList {

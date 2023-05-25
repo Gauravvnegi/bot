@@ -71,7 +71,7 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.name; else emptyCell">
+        <div class="cell-content" *ngIf="rowData?.name; else emptyCell">
           <div class="primary-text">
             {{ rowData?.name }}
           </div>
@@ -80,36 +80,39 @@
       <td>
         <div
           class="cell-content"
-          *ngIf="rowData.propertyCategory.label; else emptyCell"
+          *ngIf="rowData?.propertyCategory?.label; else emptyCell"
         >
           <div class="primary-text">
-            {{ rowData?.propertyCategory.label }}
+            {{ rowData?.propertyCategory?.label }}
           </div>
         </div>
       </td>
       <td>
-        <div class="" *ngIf="rowData.address.state; else emptyCell">
+        <div class="" *ngIf="rowData?.address?.city; else emptyCell">
           <div class="primary-text">
-            {{ rowData?.address.city }}
+            {{ rowData?.address?.city }}
           </div>
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.emailId; else emptyCell">
+        <div class="cell-content" *ngIf="rowData?.emailId; else emptyCell">
           <div class="primary-text">
             {{ rowData?.emailId }}
           </div>
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.contact; else emptyCell">
+        <div
+          class="cell-content"
+          *ngIf="rowData?.contact?.number; else emptyCell"
+        >
           <a
             href="tel:{{ rowData?.contact?.countryCode }}
             {{ rowData?.contact?.number }}"
           >
             <div class="primary-text">
-              {{ rowData?.contact?.countryCode }}-
-              {{ rowData?.contact?.number }}
+              {{ rowData?.contact?.countryCode || '-' }}-
+              {{ rowData?.contact?.number || '-' }}
             </div>
           </a>
         </div>

@@ -6,9 +6,7 @@
         [routes]="navRoutes"
       ></hospitality-bot-navigation-header>
     </div>
-    <div>
-      <hospitality-bot-button label="+ Add Services"></hospitality-bot-button>
-    </div>
+    <div></div>
   </div>
   <div class="services-wrapper">
     <div class="inner-services-header">
@@ -34,23 +32,14 @@
       <form [formGroup]="useForm">
         <hospitality-bot-custom-select
           formControlName="serviceIds"
-          [itemList]="compServices"
+          [itemList]="filteredServices"
           [fullView]="true"
-          (loadMoreData)="loadMore()"
-          [noMoreData]="noMoreCompServices || disablePagination"
           [noRecordsAction]="noRecordAction"
-          [loading]="loading || isCompLoading"
+          [loading]="loading"
         ></hospitality-bot-custom-select>
       </form>
     </div>
-    <div
-      class="footer-buttons"
-      *ngIf="
-        !loading ||
-        isPaidLoading ||
-        (isCompLoading && (compServices.length || paidServices.length))
-      "
-    >
+    <div class="footer-buttons" *ngIf="!loading && compServices.length > 0">
       <hospitality-bot-button
         (onClick)="resetForm()"
         label="Reset"

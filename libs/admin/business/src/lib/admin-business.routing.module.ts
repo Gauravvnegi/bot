@@ -35,6 +35,11 @@ const appRoutes: Route[] = [
                 component: HotelInfoFormComponent,
               },
               {
+                path: businessRoute.services.route,
+                component: ServicesComponent,
+                pathMatch: 'full',
+              },
+              {
                 path: businessRoute.editHotel.route,
                 component: MainComponent,
                 children: [
@@ -43,8 +48,9 @@ const appRoutes: Route[] = [
                     component: HotelInfoFormComponent,
                   },
                   {
-                    path: 'services',
+                    path: businessRoute.services.route,
                     component: ServicesComponent,
+                    pathMatch: 'full',
                   },
                 ],
               },

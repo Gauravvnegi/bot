@@ -1,72 +1,58 @@
+import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { NavRouteOptions } from 'libs/admin/shared/src';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { Cancelable } from 'lodash';
 import { Subscription } from 'rxjs';
-import { Location } from '@angular/common';
-import { Cancelable, debounce } from 'lodash';
-import {
-  LibrarySearchItem,
-  LibraryService,
-  QueryConfig,
-} from '@hospitality-bot/admin/library';
+import { businessRoute } from '../../constant/routes';
+import { Service, Services, noRecordAction } from '../../models/hotel.models';
 import { BusinessService } from '../../services/business.service';
-import { Services } from '../../models/hotel.models';
 @Component({
   selector: 'hospitality-bot-services',
   templateUrl: './services.component.html',
   styleUrls: ['./services.component.scss'],
 })
 export class ServicesComponent implements OnInit, OnDestroy {
-  noRecordAction = [];
-
+  noRecordAction = noRecordAction;
+  brandId: string;
   hotelId: string;
   $subscription = new Subscription();
   useForm: FormGroup;
   searchForm: FormGroup;
   loading: boolean;
-  isCompLoading: boolean;
-  isPaidLoading: boolean;
-  limit = 10;
-  selectedService: string;
-
   pageTitle = 'Services';
-  navRoutes: NavRouteOptions = [];
-
-  /** Paid Services Variable */
-  paidServices: any[] = [];
-  noMorePaidServices = false;
-  paidOffset = 0;
-
-  /** Complimentary Services Variable */
-  compServices: any[] = [];
-  noMoreCompServices = false;
-  compOffset = 0;
-
-  disablePagination = false;
+  navRoutes: NavRouteOptions;
+  compServices: Service[] = [];
+  filteredServices: any[] = [];
 
   constructor(
     private snackbarService: SnackBarService,
-    private adminUtilityService: AdminUtilityService,
     private fb: FormBuilder,
     private router: Router,
     private location: Location,
     private businessService: BusinessService,
     private route: ActivatedRoute
-  ) {}
-
-  ngOnInit(): void {
-    this.hotelId = this.route.snapshot.paramMap.get('brandId');
-    this.initForm();
-    this.initOptionConfig();
-    this.initSelectedService();
+  ) {
+    this.router.events.subscribe(
+      ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
+        const hotelId = snapshot?.params['hotelId'];
+        const brandId = snapshot?.params['brandId'];
+        if (hotelId) this.hotelId = hotelId;
+        if (brandId) this.brandId = brandId;
+      }
+    );
   }
 
-  initSelectedService() {
-    this.selectedService = 'COMPLIMENTARY';
+  ngOnInit(): void {
+    this.initForm();
+    this.initOptionConfig();
   }
 
   /**
@@ -81,6 +67,19 @@ export class ServicesComponent implements OnInit, OnDestroy {
       searchText: [''],
     });
 
+    const { navRoutes, title } = businessRoute[
+      this.hotelId ? 'editServices' : 'services'
+    ];
+    this.pageTitle = title;
+    this.navRoutes = navRoutes;
+    this.navRoutes[2].link.replace('brandId', this.brandId);
+    if (this.hotelId) {
+      this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}`;
+    } else {
+      this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel`;
+      this.navRoutes[3].isDisabled = false;
+    }
+
     this.registerSearch();
   }
 
@@ -92,41 +91,11 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
     this.searchForm.get('searchText').valueChanges.subscribe((res) => {
       if (res) {
-        debounceCall?.cancel();
-        debounceCall = debounce(() => {
-          this.loading = true;
-          this.disablePagination = true;
-          this.businessService
-            .searchLibraryItem(this.hotelId, {
-              params: `?key=${res}&type=${LibrarySearchItem.SERVICE}`,
-            })
-            .subscribe(
-              (res) => {
-                this.loading = false;
-                const data = res && res[LibrarySearchItem.SERVICE];
-                const compServices = [];
-
-                data?.forEach((item) => {
-                  if (item.type == 'Complimentary' && item.active) {
-                    compServices.push(item);
-                  }
-                });
-                this.compServices = compServices;
-              },
-              (error) => {
-                this.snackbarService.openSnackBarAsText(error.error.message);
-              },
-              () => {
-                this.loading = false;
-              }
-            );
-        }, 500);
-        debounceCall();
+        this.filteredServices = this.compServices.filter((service) =>
+          service.name.toLowerCase().includes(res.toLowerCase())
+        );
       } else {
-        this.compOffset = 0;
-        this.compServices = [];
-        this.getServices('COMPLIMENTARY');
-        this.disablePagination = false;
+        this.filteredServices = this.compServices;
       }
     });
   }
@@ -135,62 +104,40 @@ export class ServicesComponent implements OnInit, OnDestroy {
    * @function initOptionConfig Initialize dropdown options
    */
   initOptionConfig() {
-    this.getServices('COMPLIMENTARY');
+    this.getServices();
   }
-
-  getQueryConfig = (offset: number, type: 'COMPLIMENTARY'): QueryConfig => {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        {
-          offset: offset,
-          limit: this.limit,
-          type: 'SERVICE',
-          serviceType: type,
-          status: true,
-        },
-      ]),
-    };
-
-    return config;
-  };
 
   /**
    * @function getServices to get amenities (paid and services)
    * @param serviceType
    */
-  getServices(serviceType) {
+  getServices() {
     this.loading = true;
-    this.isCompLoading = true;
-    this.isPaidLoading = true;
-    const config = this.getQueryConfig(this.compOffset, serviceType);
-
     this.$subscription.add(
       this.businessService.getServices().subscribe(
         (res) => {
           this.compServices = new Services().deserialize(res.service).services;
+          this.filteredServices = this.compServices;
 
-          console.log(this.compServices, 'this.compServices');
-          console.log(
-            this.businessService.hotelInfoFormData,
-            'this.businessService.hotelInfoFormData'
-          );
           if (this.businessService.hotelInfoFormData)
             this.useForm.patchValue(this.businessService.hotelInfoFormData);
         },
         (error) => {
           this.snackbarService.openSnackBarAsText(error.error.message);
+          this.loading = false;
+        },
+        () => {
+          this.loading = false;
         }
       )
     );
   }
 
-  loadMore() {
-    this.compOffset = this.compOffset + this.limit;
-    this.getServices('COMPLIMENTARY');
-  }
-
   saveForm() {
-    this.businessService.initHotelInfoFormData(this.useForm.getRawValue());
+    this.businessService.initHotelInfoFormData(
+      this.useForm.getRawValue(),
+      true
+    );
     this.location.back();
   }
 

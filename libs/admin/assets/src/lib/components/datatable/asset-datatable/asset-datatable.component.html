@@ -105,16 +105,9 @@
       </td>
       <td>
         <div class="cell-content">
-          <div class="url">{{ rowData.url }}</div>
-          <div (click)="onCheckboxClicked($event)">
-            <img
-              class="float-right"
-              [src]="assetConfiguration.images.copy.url"
-              [alt]="assetConfiguration.images.copy.alt"
-              [cdkCopyToClipboard]="rowData.url"
-              (click)="handleCopyToClipboard($event)"
-            />
-          </div>
+          <hospitality-bot-copy-link
+            [url]="rowData.url"
+          ></hospitality-bot-copy-link>
         </div>
       </td>
 
@@ -151,7 +144,8 @@
     [isLoading]="loading"
     link="/pages/library/assets/create-asset"
     [content]="{
-      description: 'No assets found. Efficiently create, manage and maintain your hotel\'s assets to ensure smooth operations and prevent asset-related issues.',
+      description:
+        'No assets found. Efficiently create, manage and maintain your hotel\'s assets to ensure smooth operations and prevent asset-related issues.',
       actionName: '+Create Asset',
       imageSrc: 'assets/images/empty-table-service.png'
     }"

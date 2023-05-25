@@ -121,6 +121,10 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
           this.$subscription.add(
             getDropDownDocType$.subscribe(
               (response) => {
+                if (response.invalidNationality) {
+                  guest.nationality = '';
+                }
+
                 const documentsList = this._documentDetailService.setDocumentsList(
                   response.documentList
                 );
@@ -164,6 +168,10 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
           this.$subscription.add(
             getDropDownDocType$.subscribe(
               (response) => {
+                if (response.invalidNationality) {
+                  guest.nationality = '';
+                }
+
                 const documentsList = this._documentDetailService.setDocumentsList(
                   response.documentList
                 );

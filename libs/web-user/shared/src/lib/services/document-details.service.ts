@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { isEmpty } from 'lodash';
 import { Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { GuestRole } from '../constants/guest';
 import {
   DocumentDetailDS,
@@ -153,6 +154,17 @@ export class DocumentDetailsService extends ApiService {
   getDocumentsByNationality(hotelId, nationality) {
     return this.get(
       `/api/v1/hotel/${hotelId}/support-documents?nationality=${nationality}`
+    ).pipe(
+      map((res) => {
+        // modified the result for no content (for the wrong nationality)
+        return res
+          ? res
+          : {
+              documentList: [],
+              verifyAllDocuments: false,
+              invalidNationality: true,
+            };
+      })
     );
   }
 

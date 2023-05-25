@@ -27,6 +27,10 @@ export class BusinessService extends ApiService {
     );
   }
 
+  resetHotelFormState() {
+    this.hotelFormState = false;
+  }
+
   /**
    * @function getBrandList
    * @description get brand list
@@ -133,12 +137,18 @@ export class BusinessService extends ApiService {
     return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
   }
   hotelInfoFormData = {
+    address: {
+      value: '',
+    },
+    imageUrl: [],
     serviceIds: [],
   };
+  hotelFormState: boolean = false;
 
-  initHotelInfoFormData(input: any) {
+  initHotelInfoFormData(input: any, roomTypeFormState: boolean) {
     console.log(input, 'input');
     this.hotelInfoFormData = { ...this.hotelInfoFormData, ...input };
+    this.hotelFormState = roomTypeFormState;
   }
 
   /**

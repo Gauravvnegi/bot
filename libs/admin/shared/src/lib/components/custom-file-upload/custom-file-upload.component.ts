@@ -67,7 +67,7 @@ export class CustomFileUploadComponent
   @Input() validationErrMsg: string = 'Image is required.';
   indexToBeUpload: number;
   fileUrls: string[];
-  featureValue: any[] = [0];
+  featureValueIndex: number[] = [0];
   @Input() isFeatureView: boolean = false;
   useForm: FormGroup;
   formArray: FormArray;
@@ -85,10 +85,13 @@ export class CustomFileUploadComponent
 
   onCheckbox(event, index) {
     if (event.target.checked) {
-      this.featureValue?.push(index);
+      this.featureValueIndex.push(index);
     } else {
-      this.featureValue = this.featureValue?.filter((item) => item !== index);
+      this.featureValueIndex = this.featureValueIndex?.filter(
+        (item) => item !== index
+      );
     }
+    this.onChange(this.getChangedData());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -98,6 +101,14 @@ export class CustomFileUploadComponent
     if (!this.fileUrls)
       this.fileUrls = Array(this.limit).fill(this.defaultImage);
     this.defaultValue['fileType'] = fileUploadConfiguration[this.baseType];
+
+    if (!changes?.limit.firstChange) {
+      this.fileUrls.push(
+        ...Array(
+          changes?.limit.currentValue - changes?.limit.previousValue
+        ).fill(this.defaultImage)
+      );
+    }
   }
 
   onChange = (value: ValueType) => {};
@@ -113,7 +124,7 @@ export class CustomFileUploadComponent
           const value = controlValue[idx];
           if (value) {
             if (typeof value === 'object') {
-              this.featureValue[idx] = value.isFeatured ? idx : null;
+              if (value.isFeatured) this.featureValueIndex.push(idx);
               return value.url;
             } else {
               return value;
@@ -328,7 +339,7 @@ export class CustomFileUploadComponent
     if (this.isFeatureView) {
       const data: FeatureValue = this.fileUrls.map((item, index) => ({
         url: item,
-        isFeatured: this.featureValue.includes(index),
+        isFeatured: this.featureValueIndex.includes(index),
       }));
       return data;
     }

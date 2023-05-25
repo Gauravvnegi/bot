@@ -1,6 +1,11 @@
 <div *ngIf="isRendered" class="main-container main-block">
   <div class="container" *ngIf="isConfigLoaded">
-    <mat-tab-group #matTab dynamicHeight>
+    <mat-tab-group
+      #matTab
+      dynamicHeight
+      (selectedTabChange)="onTabChanged($event)"
+      [selectedIndex]="selectedIndex"
+    >
       <mat-tab
         *ngFor="let header of hotelPaymentConfig.paymentHeaders; let i = index"
       >
@@ -60,8 +65,20 @@
     </mat-tab-group>
   </div>
 
-  <div class="main-template-button">
-    <ng-container button-renderer [config]="buttonConfig" [context]="self">
+  <div *ngIf="selectedIndex === 0" class="main-template-button">
+    <ng-container
+      button-renderer
+      [config]="getUpdatedBtnConfig()"
+      [context]="self"
+    >
+    </ng-container>
+  </div>
+  <div *ngIf="selectedIndex === 1" class="main-template-button">
+    <ng-container
+      button-renderer
+      [config]="getUpdatedBtnConfig(true)"
+      [context]="self"
+    >
     </ng-container>
   </div>
   <div class="payment-form" style="display: hidden;"></div>

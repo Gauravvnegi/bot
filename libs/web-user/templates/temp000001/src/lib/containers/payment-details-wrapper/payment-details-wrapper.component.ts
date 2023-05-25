@@ -34,6 +34,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   isConfigLoaded = false;
   selectedPaymentOption: SelectedPaymentOption = new SelectedPaymentOption();
   paymentUrl: string;
+  selectedIndex: number = 0;
 
   constructor(
     private _paymentDetailsService: PaymentDetailsService,
@@ -60,6 +61,20 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       .subscribe((data) => {
         console.log(data);
       });
+  }
+
+  /**
+   * Handle getting the button Config with disabled state
+   * @param isNextDisabled to disable the next button
+   * @returns 
+   */
+  getUpdatedBtnConfig(isNextDisabled = false) {
+    this.buttonConfig[1].settings.disable = isNextDisabled;
+    return this.buttonConfig;
+  }
+
+  onTabChanged({ index }) {
+    this.selectedIndex = index;
   }
 
   initPaymentDetailsDS(hotelPaymentConfig) {

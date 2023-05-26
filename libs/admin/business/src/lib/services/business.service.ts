@@ -1,14 +1,13 @@
+import { EventEmitter } from '@angular/core';
+import { QueryConfig } from '@hospitality-bot/admin/library';
 import { ApiService } from '@hospitality-bot/shared/utils';
+import { Observable } from 'rxjs';
 import {
   BrandFormData,
   BrandResponse,
   SocialPlatForms,
 } from '../types/brand.type';
-import { Observable } from 'rxjs';
 import { HotelConfiguration, HotelFormData } from '../types/hotel.type';
-import { map } from 'rxjs/operators';
-import { EventEmitter } from '@angular/core';
-import { QueryConfig } from '@hospitality-bot/admin/library';
 
 export class BusinessService extends ApiService {
   /**

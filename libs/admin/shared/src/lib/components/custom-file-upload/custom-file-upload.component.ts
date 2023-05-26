@@ -41,8 +41,10 @@ export class CustomFileUploadComponent
   @Input() path = 'static-content/files';
   @Input() hotelId: string;
   @Input() limit: number = 1;
+  unit: number = 4;
   @Input() parentFG: FormGroup;
   @Input() isDisable = false;
+  @Input() isAddMore = false;
 
   @Input() baseType: keyof typeof fileUploadConfiguration = 'image';
 
@@ -83,7 +85,13 @@ export class CustomFileUploadComponent
 
   ngOnInit(): void {}
 
-  onCheckbox(event, index) {
+  /**
+   * @function processCheckboxChange
+   * @description process checkbox change
+   * @param event
+   * @param index
+   */
+  processCheckboxChange(event, index) {
     if (event.target.checked) {
       this.featureValueIndex.push(index);
     } else {
@@ -101,14 +109,6 @@ export class CustomFileUploadComponent
     if (!this.fileUrls)
       this.fileUrls = Array(this.limit).fill(this.defaultImage);
     this.defaultValue['fileType'] = fileUploadConfiguration[this.baseType];
-
-    if (!changes?.limit.firstChange) {
-      this.fileUrls.push(
-        ...Array(
-          changes?.limit.currentValue - changes?.limit.previousValue
-        ).fill(this.defaultImage)
-      );
-    }
   }
 
   onChange = (value: ValueType) => {};
@@ -118,7 +118,7 @@ export class CustomFileUploadComponent
     if (typeof controlValue == 'string' && controlValue != '') {
       this.fileUrls = [controlValue];
     } else if (typeof controlValue === 'object' && controlValue?.length) {
-      this.fileUrls = Array(this.limit)
+      this.fileUrls = Array(this.getImageLength(controlValue.length, this.unit))
         .fill(this.defaultImage)
         .map((item, idx) => {
           const value = controlValue[idx];
@@ -133,6 +133,15 @@ export class CustomFileUploadComponent
             return item;
           }
         });
+    }
+  }
+
+  getImageLength(currentLength: number, interval: number) {
+    if (currentLength >= 1 && currentLength <= interval) {
+      return interval;
+    } else {
+      const nextMultiple = Math.ceil(currentLength / interval) * interval;
+      return nextMultiple;
     }
   }
 
@@ -282,6 +291,7 @@ export class CustomFileUploadComponent
       })
     );
   }
+
   checkFileType(extension: string) {
     return this.uploadFileData.fileType.includes(extension);
   }
@@ -296,6 +306,8 @@ export class CustomFileUploadComponent
       this.parentFG.controls['url'].setValue('');
       this.parentFG.controls['thumbnailUrl'].setValue('');
       this.thumbUrl = '';
+    } else {
+      this.onChange(this.getChangedData());
     }
   }
 
@@ -341,9 +353,16 @@ export class CustomFileUploadComponent
         url: item,
         isFeatured: this.featureValueIndex.includes(index),
       }));
+      console.log(data, 'this.fileUrls');
       return data;
     }
     return this.fileUrls;
+  }
+
+  addMoreImages() {
+    this.limit++;
+    this.limit = this.limit * this.unit;
+    this.fileUrls.push(...Array(this.unit).fill(this.defaultImage));
   }
 
   ngOnDestroy(): void {

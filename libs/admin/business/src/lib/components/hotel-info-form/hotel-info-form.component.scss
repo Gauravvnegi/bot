@@ -92,11 +92,25 @@
 }
 
 .segment ::ng-deep .option-image {
-  width: 103px !important;
+  width: fit-content;
   height: 25px !important;
 }
 
 .segment ::ng-deep .selected-image {
-  width: 103px !important;
+  width: fit-content;
   height: 25px !important;
+}
+
+:host ::ng-deep .image-wrapper {
+  @include flex-all-center();
+
+  .show-image {
+    width: 90px;
+    height: 85px;
+    object-fit: contain;
+  }
+}
+
+:host ::ng-deep .selected {
+  background-color: #f5f5dc !important;
 }

@@ -121,3 +121,8 @@
 .image-wrapper {
   position: relative;
 }
+
+.create-btn {
+  margin-top: 3em;
+  @include flex-justify-center();
+}

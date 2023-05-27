@@ -99,9 +99,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       discountType: ['PERCENTAGE'],
       discountValue: ['0', [Validators.min(0)]],
       discountedPrice: [{ value: '', disabled: true }],
-      variablePriceCurrency: [{ value: '', disabled: true }],
+      // variablePriceCurrency: [{ value: '', disabled: true }],
       currency: ['', [Validators.required, Validators.min(0)]],
-      variableAmount: ['', [Validators.min(0)]],
+      // variableAmount: ['', [Validators.min(0)]],
       discountedPriceCurrency: [{ value: '', disabled: true }],
       maxOccupancy: [null, occupancyValidation],
       maxChildren: [{ value: null, disabled: true }, occupancyValidation],
@@ -154,7 +154,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             label: DiscountType[value],
             value,
           }));
-          this.useForm.get('variablePriceCurrency').setValue(this.currencies[0].value);
+          // this.useForm.get('variablePriceCurrency').setValue(this.currencies[0].value);
           this.useForm.get('currency').setValue(this.currencies[0].value);
           this.useForm.get('discountedPriceCurrency').setValue(this.currencies[0].value);
 
@@ -184,7 +184,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       discountedPriceCurrency,
       discountValue,
       currency,
-      variablePriceCurrency,
+      // variablePriceCurrency,
     } = this.inputControl;
 
     /**
@@ -264,7 +264,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     /* Currency Subscription */
     currency.valueChanges.subscribe((res) => {
       discountedPriceCurrency.setValue(res);
-      variablePriceCurrency.setValue(res);
+      // variablePriceCurrency.setValue(res);
     });
   }
 
@@ -430,7 +430,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       complimentaryAmenities,
       paidAmenities,
       discountedPriceCurrency,
-      variablePriceCurrency,
+      // variablePriceCurrency,
       imageUrls,
       ...rest
     } = this.useForm.getRawValue() as RoomTypeFormData;

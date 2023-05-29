@@ -91,8 +91,8 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    if (this.roomId) this.initRoomDetails();
     this.initOptionsConfig();
+    if (this.roomId) this.initRoomDetails();
   }
 
   /**
@@ -208,7 +208,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         .getRoomById(this.hotelId, this.roomId)
         .subscribe((res) => {
           const roomDetails = res.rooms[0];
-          console.log(roomDetails, 'roomDetails');
           this.draftDate = roomDetails.updated ?? roomDetails.created;
           this.dateTitle = roomDetails.updated ? 'Updated on' : 'Activated on';
           const data: SingleRoomForm = {
@@ -227,13 +226,13 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           if (
             this.roomTypes.findIndex(
               (item) => item.value === roomDetails.roomTypeDetails.id
-            ) > -1
+            ) === -1
           ) {
             this.roomTypes.push({
-              label: roomDetails.roomTypeDetails.name,
-              value: roomDetails.roomTypeDetails.id,
-              price: roomDetails.price,
-              currency: roomDetails.currency,
+              label: roomDetails?.roomTypeDetails?.name,
+              value: roomDetails?.roomTypeDetails?.id,
+              price: roomDetails?.price,
+              currency: roomDetails?.currency,
             });
           }
 

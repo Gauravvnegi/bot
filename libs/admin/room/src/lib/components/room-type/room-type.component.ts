@@ -156,8 +156,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           }));
           // this.useForm.get('variablePriceCurrency').setValue(this.currencies[0].value);
           this.useForm.get('currency').setValue(this.currencies[0].value);
-          this.useForm.get('discountedPriceCurrency').setValue(this.currencies[0].value);
-
+          this.useForm
+            .get('discountedPriceCurrency')
+            .setValue(this.currencies[0].value);
         }
       })
     );
@@ -438,7 +439,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     const data = {
       ...rest,
       roomAmenityIds: complimentaryAmenities.concat(paidAmenities),
-      imageUrls: imageUrls.filter((x: string) => x !== this.defaultImage),
     };
     return data;
   }

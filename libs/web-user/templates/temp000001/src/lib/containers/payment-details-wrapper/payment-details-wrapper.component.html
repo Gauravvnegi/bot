@@ -49,7 +49,7 @@
               Payment Methods
             </div> -->
             <web-user-payment-method
-              *ngIf="hotelPaymentConfig"
+              *ngIf="hotelPaymentConfig && this.reservationData.paymentSummary.payableAmount !== 0"
               [settings]="{ paymentConfigurations: paymentConfiguration }"
               (paymentMethod)="setPaymentMethodData($event)"
               [paymentUrl]="paymentUrl"

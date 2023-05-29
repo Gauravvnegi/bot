@@ -255,6 +255,10 @@
     text-overflow: ellipsis;
     overflow: hidden;
     max-width: 412px;
+
+    ::ng-deep .link_detector {
+      color: $light-blue;
+    }
   }
 }
 

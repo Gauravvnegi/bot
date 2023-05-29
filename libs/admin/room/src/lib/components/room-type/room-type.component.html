@@ -20,7 +20,10 @@
             formControlName="imageUrls"
             label="Image"
             description="Mandatory to add at least 1 image"
-            [limit]="4"
+            [settings]="{
+              limit: 1,
+              unit: 4
+            }"
             [hotelId]="hotelId"
             path="static-content/room-types"
           ></hospitality-bot-custom-file-upload>

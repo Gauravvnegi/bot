@@ -21,6 +21,7 @@
     (onPanelShow)="onMenuOpen()"
     (onPanelHide)="onMenuClose()"
     [showHeader]="showHeader"
+    [resetFilterOnHide]="true"
   >
     <ng-template let-value pTemplate="selectedItems">
       <div class="chips">

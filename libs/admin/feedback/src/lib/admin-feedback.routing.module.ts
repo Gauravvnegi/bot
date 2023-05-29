@@ -44,6 +44,7 @@ import {
   ResponseRateComponent,
   TopLowNpsComponent,
   TwoWayProgressComponent,
+  BifurcationStatsComponent,
 } from './components/stats';
 import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
 
@@ -117,5 +118,6 @@ export class AdminFeedbackRoutingModule {
     FeedbackStatusFormComponent,
     DisengagementComponent,
     GtmClosureComponent,
+    BifurcationStatsComponent,
   ];
 }

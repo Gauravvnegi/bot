@@ -10,3 +10,5 @@ export * from './gtm-across-services/gtm-across-services.component';
 export * from './art/art.component';
 export * from './disengagement/disengagement/disengagement.component';
 export * from './disengagement/gtm-closure/gtm-closure.component';
+export * from './bifurcation-stats/bifurcation-stats.component';
+

@@ -192,8 +192,8 @@ export class InvoiceComponent implements OnInit {
       ],
       paymentMethod: ['', Validators.required],
       receivedPayment: ['', [Validators.required, Validators.min(1)]],
-      remarks: ['', Validators.required],
-      transactionId: ['', Validators.required],
+      remarks: [''],
+      transactionId: [''],
     });
 
     this.tableFormArray = this.useForm.get('tableData') as FormArray;
@@ -301,14 +301,14 @@ export class InvoiceComponent implements OnInit {
   paymentValidation(addValidation: boolean = true) {
     const paymentMethodControl = this.useForm.get('paymentMethod');
     const receivedPaymentControl = this.useForm.get('receivedPayment');
-    const transactionIdControl = this.useForm.get('transactionId');
-    const remarksControl = this.useForm.get('remarks');
+    // const transactionIdControl = this.useForm.get('transactionId');
+    // const remarksControl = this.useForm.get('remarks');
 
     [
       paymentMethodControl,
       receivedPaymentControl,
-      transactionIdControl,
-      remarksControl,
+      // transactionIdControl,
+      // remarksControl,
     ].forEach((item) => {
       if (addValidation) {
         item.setValidators([Validators.required]);

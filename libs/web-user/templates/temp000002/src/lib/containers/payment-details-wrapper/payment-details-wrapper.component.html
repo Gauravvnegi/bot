@@ -38,13 +38,14 @@
         </ng-template>
         <div class="payment-wrapper">
           <div *ngIf="header?.type !== 'Pay At Desk'">
-            <div class="payment__wrapper__heading">
+            <!-- <div class="payment__wrapper__heading">
               Payment Methods
-            </div>
+            </div> -->
             <web-user-payment-method
               *ngIf="hotelPaymentConfig"
               [settings]="{ paymentConfigurations: paymentConfiguration }"
               (paymentMethod)="setPaymentMethodData($event)"
+              [paymentUrl]="paymentUrl"
             ></web-user-payment-method>
           </div>
           <hospitality-bot-payment-summary

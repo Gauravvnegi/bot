@@ -82,8 +82,9 @@ export class GuestDocumentsStatisticsComponent implements OnInit, OnDestroy {
     };
 
     this.$subscription.add(
-      this._statisticService.getDocumentStatistics(config).subscribe(
-        (response) => {
+      this._statisticService
+        .getDocumentStatistics(config)
+        .subscribe((response) => {
           this.document = new Document().deserialize(response);
           this.initGraphData();
         })
@@ -137,12 +138,10 @@ export class GuestDocumentsStatisticsComponent implements OnInit, OnDestroy {
     tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
     tableCompRef.componentInstance.guestFilter = 'GUESTDOCUMENTS';
     tableCompRef.componentInstance.exportURL = 'exportCSVStat';
-
-    this.$subscription.add(
-      tableCompRef.componentInstance.onModalClose.subscribe((res) => {
-        tableCompRef.close();
-      })
-    );
+    
+    tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+      tableCompRef.close();
+    });
   }
 
   ngOnDestroy(): void {

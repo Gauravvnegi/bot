@@ -83,6 +83,34 @@
   border-color: #5f38f9;
 }
 
-:host ng-deep .wrapper {
-  height: 50vh !important;
+:host ::ng-deep .label__main {
+  overflow: visible;
+  text-overflow: unset;
+  white-space: normal;
+  background: #f3f3f3;
+  position: relative;
+}
+
+.segment ::ng-deep .option-image {
+  width: fit-content;
+  height: 25px !important;
+}
+
+.segment ::ng-deep .selected-image {
+  width: fit-content;
+  height: 25px !important;
+}
+
+:host ::ng-deep .image-wrapper {
+  @include flex-all-center();
+
+  .show-image {
+    width: 90px;
+    height: 85px;
+    object-fit: contain;
+  }
+}
+
+:host ::ng-deep .selected {
+  background-color: #f5f5dc !important;
 }

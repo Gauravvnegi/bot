@@ -33,7 +33,12 @@
           class="image-wrapper"
           [ngClass]="{ selected: item.checked == true }"
         >
-          <img [src]="item.imageUrl" class="show-image" alt="image" appImage />
+          <img
+            [src]="item.imageUrl"
+            class="show-image"
+            [alt]="item.imageUrl"
+            appImage
+          />
         </div>
         <div class="text">
           <span>{{ item.name }}</span>

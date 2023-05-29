@@ -18,11 +18,12 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
-import { LazyLoadEvent } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { GuestTable } from '../../../data-models/guest-table.model';
 import { GuestTableService } from '../../../services/guest-table.service';
 import { GuestDatatableComponent } from '../../datatable/guest/guest.component';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable-modal',
@@ -48,7 +49,8 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     protected tabFilterService: TableService,
-    public feedbackService: FeedbackService
+    public feedbackService: FeedbackService,
+    private router: Router
   ) {
     super(
       fb,
@@ -65,6 +67,11 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   ngOnInit(): void {
     this.registerListeners();
     this.setEmptyViewImage();
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.closeModal();
+      });
   }
 
   loadInitialData(queries = [], loading = true) {
@@ -83,6 +90,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       )
     );
   }
+
   setRecords(data): void {
     this.values = new GuestTable().deserialize(data).records;
     this.updateTabFilterCount(data.entityTypeCounts, data.total);

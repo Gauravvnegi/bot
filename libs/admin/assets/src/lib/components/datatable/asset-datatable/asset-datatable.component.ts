@@ -336,26 +336,6 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function handleCopyToClipboard handling copy to clipboard functionality of urls.
-   * @param event event object for stoping propagation.
-   */
-  handleCopyToClipboard(event) {
-    event.stopPropagation();
-    this.snackbarService
-      .openSnackBarWithTranslate(
-        {
-          translateKey: 'message.success.asset_url',
-          priorityMessage: 'Asset Url Copied.',
-        },
-        '',
-        {
-          panelClass: 'success',
-        }
-      )
-      .subscribe();
-  }
-
-  /**
    * @function ngOnDestroy unsubscribe subscriiption
    */
   ngOnDestroy(): void {

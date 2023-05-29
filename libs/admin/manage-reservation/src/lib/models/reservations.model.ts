@@ -1,5 +1,6 @@
 import { RoomTypeResponse } from 'libs/admin/room/src/lib/types/service-response';
 import {
+  PaymentMethodConfig,
   ReservationListResponse,
   ReservationResponse,
 } from '../types/response.type';
@@ -296,20 +297,23 @@ export class RoomTypeInfo {
 export class PaymentMethodList {
   records: PaymentMethod[];
   deserialize(input) {
-    this.records =
-      input?.map((item) => new PaymentMethod().deserialize(item)) ?? [];
+    this.records = Object.keys(input).map((key) => {
+      return new PaymentMethod().deserialize(input[key]);
+    });
     return this;
   }
 }
 
 export class PaymentMethod {
-  id: string;
+  description: string;
+  iconUrl: string;
   label: string;
-  type: string;
+  type: PaymentMethodConfig[];
   deserialize(input): this {
-    this.id = input?.id;
+    this.description = input?.description;
+    this.iconUrl = input?.iconUrl;
     this.label = input?.label;
-    this.type = input?.type;
+    this.type = input?.type ?? [];
     return this;
   }
 }

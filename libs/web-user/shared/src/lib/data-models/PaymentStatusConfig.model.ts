@@ -34,7 +34,7 @@ export class PaymentMainStatus {
 			: 'An Error ocurred while processing your payment';
 	
 		if (status === "SUCCESS") {
-			this.next = 'View Summary';
+			this.next = 'Continue';
 			this.showBackButton = false;
 		} else {
 			this.next = 'Retry Payment';

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -60,7 +60,9 @@ export class BrandInfoFormComponent implements OnInit {
     this.useForm = this.fb.group({
       brand: this.fb.group({
         status: [true],
-        name: [''],
+        name: ['', Validators.required],
+        gstNumber: [''],
+        fssaiNumber: [''],
         description: [''],
         socialPlatforms: [[]],
       }),

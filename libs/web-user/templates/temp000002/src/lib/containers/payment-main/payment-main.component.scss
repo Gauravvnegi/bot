@@ -2,8 +2,7 @@
 
 :host ::ng-deep .next-button {
   @include footer-next;
-  margin-bottom: 20px;
-  @media only screen and (max-width: $M) {
+  @media only screen and (max-width: $mobile) {
     margin-bottom: 0;
     width: 100vw !important;
   }
@@ -18,7 +17,14 @@
 }
 
 .status-container {
-  min-height: 60.6vh;
+  min-height: 720px;
+  @media screen and (max-width: $tablet) {
+    min-height: 600px;
+
+  }
+  @media screen and (max-width: $mobile) {
+    min-height: calc(100vh - 330px);
+  }
 
   .wrapper {
     background-color: $white;
@@ -105,12 +111,12 @@
     }
     @media only screen and (max-width: $M) {
       border-radius: 5px;
-      margin: 22% 10px;
+      // margin: 22% 10px;
       padding: 40px 10px;
     }
   }
   @media only screen and (max-width: 1100px) {
-    min-height: 72.6vh;
+    // min-height: 72.6vh;
   }
 }
 
@@ -167,7 +173,7 @@
 }
 
 .payment-button {
-  @media only screen and (max-width: $M) {
+  @media only screen and (max-width: $mobile) {
     left: 0;
   }
 }

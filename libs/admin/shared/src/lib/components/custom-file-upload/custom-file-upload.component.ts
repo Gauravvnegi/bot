@@ -41,10 +41,24 @@ export class CustomFileUploadComponent
   @Input() path = 'static-content/files';
   @Input() hotelId: string;
   @Input() limit: number = 1;
+  unit: number = 1;
+  isMultiple: boolean = false;
   @Input() parentFG: FormGroup;
   @Input() isDisable = false;
 
   @Input() baseType: keyof typeof fileUploadConfiguration = 'image';
+
+  @Input() set settings(value: {
+    limit: number;
+    unit: number;
+    isMultiple: boolean;
+  }) {
+    for (const key in value) {
+      if (Object.prototype.hasOwnProperty.call(value, key)) {
+        this[key] = value[key];
+      }
+    }
+  }
 
   defaultValue: UploadFileData = {
     maxFileSize: 3145728,
@@ -67,7 +81,7 @@ export class CustomFileUploadComponent
   @Input() validationErrMsg: string = 'Image is required.';
   indexToBeUpload: number;
   fileUrls: string[];
-  featureValue: any[] = [0];
+  featureValueIndex: number[] = [0];
   @Input() isFeatureView: boolean = false;
   useForm: FormGroup;
   formArray: FormArray;
@@ -83,12 +97,21 @@ export class CustomFileUploadComponent
 
   ngOnInit(): void {}
 
-  onCheckbox(event, index) {
+  /**
+   * @function processCheckboxChange
+   * @description process checkbox change
+   * @param event
+   * @param index
+   */
+  processCheckboxChange(event, index) {
     if (event.target.checked) {
-      this.featureValue?.push(index);
+      this.featureValueIndex.push(index);
     } else {
-      this.featureValue = this.featureValue?.filter((item) => item !== index);
+      this.featureValueIndex = this.featureValueIndex?.filter(
+        (item) => item !== index
+      );
     }
+    this.onChange(this.getChangedData());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -96,7 +119,7 @@ export class CustomFileUploadComponent
       this.thumbUrl = this.parentFG.controls['thumbnailUrl'].value;
     }
     if (!this.fileUrls)
-      this.fileUrls = Array(this.limit).fill(this.defaultImage);
+      this.fileUrls = Array(this.limit * this.unit).fill(this.defaultImage);
     this.defaultValue['fileType'] = fileUploadConfiguration[this.baseType];
   }
 
@@ -107,13 +130,14 @@ export class CustomFileUploadComponent
     if (typeof controlValue == 'string' && controlValue != '') {
       this.fileUrls = [controlValue];
     } else if (typeof controlValue === 'object' && controlValue?.length) {
-      this.fileUrls = Array(this.limit)
+      if (this.isFeatureView) this.featureValueIndex = [];
+      this.fileUrls = Array(this.getImageLength(controlValue.length, this.unit))
         .fill(this.defaultImage)
         .map((item, idx) => {
           const value = controlValue[idx];
           if (value) {
             if (typeof value === 'object') {
-              this.featureValue[idx] = value.isFeatured ? idx : null;
+              if (value.isFeatured) this.featureValueIndex.push(idx);
               return value.url;
             } else {
               return value;
@@ -122,6 +146,15 @@ export class CustomFileUploadComponent
             return item;
           }
         });
+    }
+  }
+
+  getImageLength(currentLength: number, interval: number) {
+    if (currentLength >= 1 && currentLength <= interval) {
+      return interval;
+    } else {
+      const nextMultiple = Math.ceil(currentLength / interval) * interval;
+      return nextMultiple;
     }
   }
 
@@ -141,7 +174,7 @@ export class CustomFileUploadComponent
         .uploadImage(this.hotelId, formData, this.path)
         .subscribe(
           (response) => {
-            if (this.limit == 1) {
+            if (this.unit == 1) {
               this.fileUrls.splice(index, 1, response.fileDownloadUri);
               this.onChange(this.fileUrls[index]);
             } else {
@@ -271,6 +304,7 @@ export class CustomFileUploadComponent
       })
     );
   }
+
   checkFileType(extension: string) {
     return this.uploadFileData.fileType.includes(extension);
   }
@@ -285,6 +319,8 @@ export class CustomFileUploadComponent
       this.parentFG.controls['url'].setValue('');
       this.parentFG.controls['thumbnailUrl'].setValue('');
       this.thumbUrl = '';
+    } else {
+      this.onChange(this.getChangedData());
     }
   }
 
@@ -328,11 +364,17 @@ export class CustomFileUploadComponent
     if (this.isFeatureView) {
       const data: FeatureValue = this.fileUrls.map((item, index) => ({
         url: item,
-        isFeatured: this.featureValue.includes(index),
+        isFeatured: this.featureValueIndex.includes(index),
       }));
+      data.filter((item) => item.url !== this.defaultImage);
       return data;
     }
-    return this.fileUrls;
+    const fileUrls = this.fileUrls.filter((item) => item !== this.defaultImage);
+    return fileUrls;
+  }
+
+  addMoreImages() {
+    this.fileUrls.push(...Array(this.unit).fill(this.defaultImage));
   }
 
   ngOnDestroy(): void {

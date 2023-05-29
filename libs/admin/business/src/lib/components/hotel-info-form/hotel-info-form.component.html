@@ -24,7 +24,7 @@
         maxLength="60"
       ></hospitality-bot-input>
       <hospitality-bot-select
-        class="half-width"
+        class="half-width , segment"
         controlName="propertyCategory"
         label="Segment"
         [options]="segmentList"
@@ -40,8 +40,14 @@
           postControlName="number"
         ></hospitality-bot-phone-number>
       </div>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="gstNumber"
+        label="GST"
+        maxLength="15"
+      ></hospitality-bot-input>
       <hospitality-bot-auto-complete
-        class="full-width"
+        class="half-width"
         controlName="address"
         label="Address"
         [options]="addressList"
@@ -58,18 +64,15 @@
           label="Image"
           isFeatureView="true"
           description="Mandatory to add at least 1 image"
-          [limit]="imageLimit"
+          [settings]="{
+            limit: 1,
+            unit: 4,
+            isMultiple: true
+          }"
           [hotelId]="hotelId"
           path="static-content/room-types"
         ></hospitality-bot-custom-file-upload>
       </div>
-      <hospitality-bot-button
-        class="create-btn"
-        label="+Add More Images"
-        (onClick)="addMoreImage()"
-        variant="outlined"
-      ></hospitality-bot-button>
-
       <div class="des-template">
         <div class="des-template__label">Description</div>
         <div class="des-template__input">

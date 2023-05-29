@@ -223,6 +223,19 @@ export class AddRoomComponent implements OnInit, OnDestroy {
             ],
           };
 
+          if (
+            this.roomTypes.findIndex(
+              (item) => item.value === roomDetails.roomTypeDetails.id
+            ) === -1
+          ) {
+            this.roomTypes.push({
+              label: roomDetails?.roomTypeDetails?.name,
+              value: roomDetails?.roomTypeDetails?.id,
+              price: roomDetails?.price,
+              currency: roomDetails?.currency,
+            });
+          }
+
           this.useForm.patchValue(data);
 
           this.isRoomInfoLoading = false;

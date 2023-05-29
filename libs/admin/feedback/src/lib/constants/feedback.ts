@@ -287,7 +287,11 @@ export const feedback = {
           header: 'Name / Phone No./ Email',
           sortType: 'string',
           width: '20%',
-          searchField: ['guest.getFullName', 'guest.getPhoneNumber', 'guest.getEmail'],
+          searchField: [
+            'guest.getFullName',
+            'guest.getPhoneNumber',
+            'guest.getEmail',
+          ],
         },
         {
           field: 'getServiceTypeAndTime()',
@@ -333,8 +337,9 @@ export const feedback = {
       stay: [
         {
           field: 'tableOrRoomNumber',
-          header: 'Room No',
+          header: 'Room No / Type',
           sortType: 'string',
+          width: '18%',
         },
         {
           field: '',
@@ -401,7 +406,7 @@ export const feedback = {
           header: 'Name / Phone No. / Email',
           sortType: 'string',
           width: '20%',
-          searchField: ['string','number'],
+          searchField: ['string', 'number'],
         },
         {
           field: 'getServiceTypeAndTime()',
@@ -439,8 +444,9 @@ export const feedback = {
       stay: [
         {
           field: 'tableOrRoomNumber',
-          header: 'Room No',
+          header: 'Room No / Type',
           sortType: 'string',
+          width: '18%',
         },
         {
           field: '',

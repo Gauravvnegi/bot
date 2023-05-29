@@ -3,25 +3,31 @@
     <ng-container
       *skeleton="label == undefined; height: '25px'; width: '200px'"
     ></ng-container>
-    <hospitality-bot-custom-tooltip
-      [text]="tooltip"
-      *ngIf="tooltip; else title"
-    >
+    <hospitality-bot-custom-tooltip [text]="tooltip" *ngIf="tooltip; else body">
       <div class="stat-title">
         {{ label }}
       </div>
     </hospitality-bot-custom-tooltip>
-    <ng-template #title
-      ><div class="stats_text">
+    <ng-template #body
+      ><div class="stats-text">
         {{ label }}
       </div></ng-template
     >
-    <div><img [src]="imageUrls[title]" alt="" /></div>
+    <div
+      *skeleton="
+        title == undefined;
+        borderRadius: '50%';
+        height: '60px';
+        width: '60px'
+      "
+    >
+      <img class="icons" [src]="getImageUrl(title)" alt="" />
+    </div>
   </div>
   <div
     class="info"
     *skeleton="
-      additionalData == undefined;
+      additionalData === undefined;
       height: '48px';
       width: '200px';
       margin: '30px 0 0 0'
@@ -29,7 +35,7 @@
   >
     <div class="amount">{{ additionalData }}</div>
     <div>
-      <div class="percent">
+      <div class="percent" >
         <div class="comparison-percent" *ngIf="comparisonPercent">
           ({{ comparisonPercent }}%)
         </div>

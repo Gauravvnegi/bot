@@ -8,7 +8,13 @@
       ></hospitality-bot-tab-group>
     </div>
   </div>
+
   <div class="stats--wrapper">
+    <div class="bifurcation-container">
+      <hospitality-bot-bifurcation-stats
+        [globalFeedbackFilterType]="globalFeedbackFilterType"
+      ></hospitality-bot-bifurcation-stats>
+    </div>
     <div class="stats">
       <hospitality-bot-global-nps
         [globalFeedbackFilterType]="globalFeedbackFilterType"

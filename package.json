@@ -49,6 +49,7 @@
     "@angular/platform-browser": "^9.1.0",
     "@angular/platform-browser-dynamic": "^9.1.0",
     "@angular/router": "^9.1.0",
+    "@botshot-ecosystem/botpay-helpers": "^1.0.35",
     "@fireflysemantics/angular-stripe-service": "^1.0.0",
     "@fortawesome/fontawesome-free": "^5.13.1",
     "@ngx-translate/core": "^12.1.2",

@@ -1,0 +1,123 @@
+<div class="wrapper">
+  <div class="stats">
+    <div class="stats__head" [formGroup]="bifurcationFG">
+      <div
+        *skeleton="
+          stats == undefined;
+          height: '40px';
+          width: '90px';
+          margin: '10px'
+        "
+        class="stats__head__title"
+      >
+        {{ 'Feedback' }}
+      </div>
+    </div>
+    <div class="stats__body">
+      <div class="stats__body__detail">
+        <ng-container
+          *skeleton="
+            stats == undefined;
+            height: '60px';
+            width: '120px';
+            margin: '0 0 40px 0'
+          "
+        >
+          <div class="stats__body__detail__shared">
+            {{ noActionCount + gtmCount }}
+          </div>
+          <div class="stats__body__detail__sharedtitle">
+            Overall Shared
+          </div>
+        </ng-container>
+        <ng-container
+          *skeleton="
+            stats === undefined;
+            height: '41px';
+            width: '150px';
+            repeat: 2;
+            margin: '10px 0'
+          "
+        >
+          <ng-container>
+            <div class="received-wrap" *ngFor="let item of feedback">
+              <div class="received-wrap__container">
+                <div
+                  class="received-wrap__container__dot"
+                  [style.background]="item.color"
+                ></div>
+                <div class="received-wrap__container__count">
+                  {{ item.score }}
+                </div>
+                <div>
+                  <span
+                    class="percentChange"
+                    [ngClass]="{
+                      'comparison-positive': item.comparisonPercent >= 0,
+                      'comparison-negative': item.comparisonPercent < 0
+                    }"
+                    >({{ item.comparisonPercent }}%)</span
+                  ><img
+                    class="received-wrap__container__percentChange-img"
+                    [src]="
+                      item.comparisonPercent >= 0
+                        ? 'assets/svg/uparrow.svg'
+                        : 'assets/svg/down-percentage.svg'
+                    "
+                    alt="uparrow"
+                  />
+                </div>
+                <div class="received-wrap__container__date">
+                  {{ 'in_thirty_days' | translate }}
+                </div>
+              </div>
+              <div class="received-wrap__recived-title">
+                {{ item.label }}
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+      <div class="graph-container">
+        <div class="graph-container__graph">
+          <canvas
+            baseChart
+            *skeleton="
+              stats == undefined;
+              height: '200px';
+              width: '200px';
+              borderRadius: '50%';
+              margin: '0 100px'
+            "
+            class="graph-container__graph-canvas"
+            [data]="chart.data"
+            [labels]="chart.labels"
+            [chartType]="chart.type"
+            [legend]="chart.legend"
+            [colors]="chart.colors"
+            [options]="chart.options"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card-wrapper">
+    <hospitality-bot-stats-card
+      [stats]="statCard[0]"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+    <hospitality-bot-stats-card
+      [stats]="statCard[1]"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+    <hospitality-bot-stats-card
+      [stats]="statCard[2]"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+    <hospitality-bot-stats-card
+      [stats]="statCard[3]"
+      class="stat-card"
+    ></hospitality-bot-stats-card>
+  </div>
+</div>

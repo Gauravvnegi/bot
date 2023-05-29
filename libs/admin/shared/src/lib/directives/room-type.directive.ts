@@ -10,7 +10,6 @@ export class RoomTypeDirective {
 
   ngOnInit() {
     this.applyDefaultStyle(this.elementRef);
-    console.log(this.roomStatus, 'status');
   }
 
   @HostListener('mouseenter')

@@ -103,8 +103,8 @@ export class HotelInfoFormComponent implements OnInit {
     this.navRoutes[2].isDisabled = !this.brandId;
     this.navRoutes[3].isDisabled = true;
 
+    // if hotel form state is true then set form data
     if (this.businessService.hotelFormState) {
-      this.imageLimit = this.businessService.hotelInfoFormData?.imageUrl?.length;
       this.prevAddressId = this.businessService.hotelInfoFormData!.address.value;
       this.useForm
         .get('hotel')
@@ -174,9 +174,15 @@ export class HotelInfoFormComponent implements OnInit {
       this.useForm.getRawValue().hotel,
       true
     );
-    this.router.navigate([
-      `pages/settings/business-info/brand/${this.brandId}/hotel/services`,
-    ]);
+    if (this.hotelId) {
+      this.router.navigate([
+        `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}/services`,
+      ]);
+    } else {
+      this.router.navigate([
+        `pages/settings/business-info/brand/${this.brandId}/hotel/services`,
+      ]);
+    }
   }
 
   /**
@@ -269,10 +275,6 @@ export class HotelInfoFormComponent implements OnInit {
         }
       );
     }
-  }
-
-  HotelInfoModData() {
-    // const imageUrls = imageUrls.filter((x: string) => x !== this.defaultImage),
   }
 
   /**

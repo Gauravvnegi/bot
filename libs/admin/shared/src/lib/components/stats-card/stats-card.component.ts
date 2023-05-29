@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RoomStatsImgUrls, sharedConfig } from '../../constants';
+import { StatCardImageUrls, sharedConfig } from '../../constants';
 
 @Component({
   selector: 'hospitality-bot-stats-card',
@@ -14,7 +14,7 @@ export class StatsCardComponent {
   score: string;
   additionalData: string;
   comparisonPercent: number;
-  imageUrls = RoomStatsImgUrls;
+  imageUrls = StatCardImageUrls;
   tooltip: string;
 
   @Input() set stats(value) {
@@ -24,5 +24,11 @@ export class StatsCardComponent {
     this.comparisonPercent = value?.comparisonPercent || '';
     this.additionalData = value?.additionalData || '';
     this.tooltip = value?.tooltip;
+  }
+
+  getImageUrl(title: string): string {
+    if (title) {
+      return StatCardImageUrls[title];
+    }
   }
 }

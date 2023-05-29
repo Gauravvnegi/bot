@@ -51,6 +51,10 @@ export class ServicesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (!this.businessService.hotelFormState) {
+      this.location.back();
+      return;
+    }
     this.initForm();
     this.initOptionConfig();
   }
@@ -75,6 +79,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     this.navRoutes[2].link.replace('brandId', this.brandId);
     if (this.hotelId) {
       this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}`;
+      this.navRoutes[3].isDisabled = false;
     } else {
       this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel`;
       this.navRoutes[3].isDisabled = false;

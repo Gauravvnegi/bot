@@ -69,7 +69,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
    * @returns 
    */
   getUpdatedBtnConfig(isNextDisabled = false) {
-    this.buttonConfig[1].settings.disable = isNextDisabled;
+    this.buttonConfig[1].settings.disable = isNextDisabled && this.reservationData.paymentSummary.payableAmount !== 0;
     return this.buttonConfig;
   }
 

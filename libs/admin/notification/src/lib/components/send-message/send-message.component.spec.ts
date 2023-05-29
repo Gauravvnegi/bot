@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InhouseComponent } from './inhouse.component';
+import { SendMessageComponent } from './send-message.component';
 
-describe('InhouseComponent', () => {
-  let component: InhouseComponent;
-  let fixture: ComponentFixture<InhouseComponent>;
+describe('SendMessageComponent', () => {
+  let component: SendMessageComponent;
+  let fixture: ComponentFixture<SendMessageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InhouseComponent ]
+      declarations: [ SendMessageComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InhouseComponent);
+    fixture = TestBed.createComponent(SendMessageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

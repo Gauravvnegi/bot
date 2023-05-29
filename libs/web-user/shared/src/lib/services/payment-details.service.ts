@@ -58,6 +58,10 @@ export class PaymentDetailsService extends ApiService {
     );
   }
 
+  getPaymentConfigurationV2(hotelId: string) {
+    return this.get(`/api/v2/hotel/${hotelId}/payment-configuration`);
+  }
+
   initiatePayment(reservationId) {
     return this.get(`/api/v1/reservation/${reservationId}/payment/webhook?`);
   }

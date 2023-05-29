@@ -5,4 +5,6 @@ export const environment = {
   name: 'prod',
   production: true,
   base_url: 'https://api.botshot.in:8443',
+  host_url: 'https://web.botshot.ai'
+
 };

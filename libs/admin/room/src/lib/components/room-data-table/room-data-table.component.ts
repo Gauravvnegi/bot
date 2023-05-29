@@ -21,7 +21,6 @@ import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import {
   Status,
-  StatusEntity,
   TableValue,
   cols,
   filter,
@@ -31,9 +30,6 @@ import {
 import routes from '../../constant/routes';
 import {
   RoomList,
-  RoomRecordsCount,
-  RoomStateCounts,
-  RoomTypeCounts,
   RoomTypeList,
 } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
@@ -90,6 +86,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           (item) => item.value === value
         );
         this.selectedTable = value;
+        this.tableName = title[this.selectedTable];
         this.getDataTableValue(this.selectedTable);
       })
     );

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { FormComponent } from '../form.components';
 
@@ -12,7 +12,13 @@ export class SelectComponent extends FormComponent {
   menuClass = 'p-dropdown-items-wrapper';
   searchInputClass = 'p-dropdown-filter';
 
+  @Output() itemSelection: EventEmitter<any> = new EventEmitter<any>();
+
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
+  }
+
+  handleItemChange(event: any): void {
+    this.itemSelection.emit(event);
   }
 }

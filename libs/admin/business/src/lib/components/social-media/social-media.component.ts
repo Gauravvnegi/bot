@@ -29,10 +29,9 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initInputControl();
     this.initForm();
-    this.patchValueToSocialMediaControl();
-    this.patchValue();
+    this.initInputControl();
+    this.patchValueToParentComponent();
   }
 
   initForm(): void {
@@ -40,44 +39,47 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
       socialPlatforms: this.fb.array([]),
     });
     this.socialMediaControl = this.useForm.get('socialPlatforms') as FormArray;
-    this.getSocailMediaConfig();
-  }
-
-  patchValue(): void {
-    this.businessService.onSubmit.subscribe((res) => {
-      if (res) {
-        this.inputControl?.patchValue(this.socialMediaControl.value);
-      }
-    });
+    this.getsocialMediaConfig();
   }
 
   patchValueToSocialMediaControl(): void {
+    if (!!this.inputControl.value.length) {
+      this.socialMediaControl.patchValue(this.inputControl.value);
+    }
     this.$subscription.add(
       this.inputControl.valueChanges.subscribe((res) => {
-        console.log(res);
-          this.socialMediaControl.patchValue(res);
+        this.socialMediaControl.patchValue(this.inputControl.value);
       })
     );
   }
 
-  getSocailMediaConfig() {
-    this.businessService.getSocialMediaConfig().subscribe((res) => {
-      res?.forEach((element) => {
-        this.socialMediaControl.push(
-          this.fb.group({
-            name: [element.name],
-            imageUrl: [element.imageUrl],
-            redirectUrl: [''],
-          })
-        );
-      });
+  patchValueToParentComponent(): void {
+    this.businessService.onSubmit.subscribe((res) => {
+      if (res)
+        this.inputControl.patchValue(this.socialMediaControl.value, {
+          emitEvent: false,
+        });
     });
   }
 
- 
+  getsocialMediaConfig() {
+    this.$subscription.add(
+      this.businessService.getSocialMediaConfig().subscribe((res) => {
+        res?.forEach((element) => {
+          this.socialMediaControl.push(
+            this.fb.group({
+              name: [element.name],
+              imageUrl: [element.imageUrl],
+              redirectUrl: [''],
+            })
+          );
+        });
+        this.patchValueToSocialMediaControl();
+      })
+    );
+  }
+
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
 }
-
-

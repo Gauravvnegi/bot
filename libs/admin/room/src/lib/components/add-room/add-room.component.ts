@@ -32,6 +32,7 @@ import { SingleRoomForm } from '../../types/use-form';
 })
 export class AddRoomComponent implements OnInit, OnDestroy {
   draftDate: number | string = Date.now();
+  dateTitle: string;
 
   roomId: string;
   hotelId: string;
@@ -208,6 +209,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         .subscribe((res) => {
           const roomDetails = res.rooms[0];
           this.draftDate = roomDetails.updated ?? roomDetails.created;
+          this.dateTitle = roomDetails.updated ? 'Updated on' : 'Activated on';
           const data: SingleRoomForm = {
             roomTypeId: roomDetails.roomTypeDetails.id,
             price: roomDetails.price,
@@ -220,6 +222,19 @@ export class AddRoomComponent implements OnInit, OnDestroy {
               },
             ],
           };
+
+          if (
+            this.roomTypes.findIndex(
+              (item) => item.value === roomDetails.roomTypeDetails.id
+            ) === -1
+          ) {
+            this.roomTypes.push({
+              label: roomDetails?.roomTypeDetails?.name,
+              value: roomDetails?.roomTypeDetails?.id,
+              price: roomDetails?.price,
+              currency: roomDetails?.currency,
+            });
+          }
 
           this.useForm.patchValue(data);
 

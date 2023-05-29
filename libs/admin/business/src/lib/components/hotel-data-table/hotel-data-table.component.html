@@ -7,6 +7,13 @@
     {{ tableName }}
   </div>
   <div class="action-wrapper">
+    <hospitality-bot-export-list
+      [additionalActionItems]="additionalActionItems"
+      (onDocumentActions)="onDocumentActions()"
+      [documentTypes]="documentTypes"
+      [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
+    ></hospitality-bot-export-list>
     <hospitality-bot-button
       label="+Add Hotels"
       link="pages/settings/business-info/brand/{{ brandId }}/hotel"
@@ -37,19 +44,8 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter($event)"
+  *ngIf="values.length; else emptyTable"
 >
-<ng-template pTemplate="summary" #emptyTable>
-  <hospitality-bot-empty-table
-    [isLoading]="loading"
-    [content]="{
-      description: 'No Hotel Found',
-      imageSrc: 'assets/images/empty-table-hotel.png'
-    }"
-  >
-  </hospitality-bot-empty-table>
-
-</ng-template>
- 
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
     <tr
@@ -75,34 +71,49 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.name; else emptyCell">
+        <div class="cell-content" *ngIf="rowData?.name; else emptyCell">
           <div class="primary-text">
             {{ rowData?.name }}
           </div>
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.segment; else emptyCell">
+        <div
+          class="cell-content"
+          *ngIf="rowData?.propertyCategory?.label; else emptyCell"
+        >
           <div class="primary-text">
-            {{ rowData?.segment }}
+            {{ rowData?.propertyCategory?.label }}
           </div>
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.email; else emptyCell">
+        <div class="" *ngIf="rowData?.address?.city; else emptyCell">
           <div class="primary-text">
-            {{ rowData?.email }}
+            {{ rowData?.address?.city }}
           </div>
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.contact; else emptyCell">
-          <a href="tel:{{rowData?.contact?.cc}}
-            {{ rowData?.contact?.phoneNumber }}">
+        <div class="cell-content" *ngIf="rowData?.emailId; else emptyCell">
           <div class="primary-text">
-            {{rowData?.contact?.cc}}
-            {{ rowData?.contact?.phoneNumber }}
+            {{ rowData?.emailId }}
           </div>
+        </div>
+      </td>
+      <td>
+        <div
+          class="cell-content"
+          *ngIf="rowData?.contact?.number; else emptyCell"
+        >
+          <a
+            href="tel:{{ rowData?.contact?.countryCode }}
+            {{ rowData?.contact?.number }}"
+          >
+            <div class="primary-text">
+              {{ rowData?.contact?.countryCode || '-' }}-
+              {{ rowData?.contact?.number || '-' }}
+            </div>
           </a>
         </div>
       </td>
@@ -119,7 +130,7 @@
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->
-  <ng-template pTemplate="summary" *ngIf="values.length; else emptyTable">
+  <ng-template pTemplate="summary">
     <p-paginator
       #paginator
       [rows]="rowsPerPage"
@@ -131,3 +142,14 @@
     ></p-paginator>
   </ng-template>
 </p-table>
+
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    [content]="{
+      description: 'No Hotel Found',
+      imageSrc: 'assets/images/empty-table-hotel.png'
+    }"
+  >
+  </hospitality-bot-empty-table>
+</ng-template>

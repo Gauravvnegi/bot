@@ -81,7 +81,7 @@
           let-rowIndex="rowIndex"
         >
           <tr
-            class="data-table-row hover-background"
+            class="data-table-row hover-background table-row"
             (click)="openDetailPage($event, rowData)"
           >
             <td class="table--checkbox">
@@ -92,10 +92,7 @@
               ></p-tableCheckbox>
             </td>
             <td>
-              <p
-                class="tabel-room-no"
-                [ngClass]="getRoomStatus(rowData.booking.roomStatus)"
-              >
+              <p class="tabel-room-no" [roomStatus]="rowData.rooms.roomStatus">
                 {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{
                   rowData.rooms.type
                 }}
@@ -131,7 +128,9 @@
               </div>
             </td>
             <td class="guest">
-              <span>{{ rowData.guests.primaryGuest.getFullName() }}</span>
+              <div class="primary-text">
+                {{ rowData.guests.primaryGuest.getFullName() }}
+              </div>
               <b class="rowData">{{
                 rowData.guests.getSecGuestDisplayConfig().countString
               }}</b>
@@ -224,8 +223,8 @@
                     rowData.payment.dueAmount <= rowData.payment.totalAmount,
                   'status-text-success': rowData.payment.dueAmount === 0
                 }"
-                >{{ rowData.payment.dueAmount }}</span
-              >/ {{ rowData.payment.totalAmount }}
+                >{{ rowData.payment.dueAmount | currency: 'INR'  }}</span
+              >/ {{ rowData.payment.totalAmount | currency: 'INR' }}
             </td>
             <td class="package">
               <span

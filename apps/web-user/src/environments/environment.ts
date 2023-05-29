@@ -1,12 +1,14 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
+import { environment as defaultEnvironment } from './environment.default';
 
 export const environment = {
+  ...defaultEnvironment,
   production: false,
   name: 'default',
-  base_url: 'https://dev.api.botshot.ai:8443',
-  // base_url: 'https://api.botshot.in:8443',
+  base_url: 'https://stg.api.botshot.ai:31956',
+  host_url: 'https://stg.web.botshot.ai'
 };
 
 /*

@@ -14,7 +14,6 @@ import {
 import { ModalService } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from 'libs/shared/material/src';
-import { LazyLoadEvent } from 'primeng/api/public_api';
 import { SortEvent } from 'primeng/api/sortevent';
 import { Observable, Subscription } from 'rxjs';
 import { guest } from '../../../constants/guest';

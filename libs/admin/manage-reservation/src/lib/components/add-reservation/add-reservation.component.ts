@@ -140,7 +140,7 @@ export class AddReservationComponent implements OnInit {
           '',
           [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
         ],
-        currency: ['INR'],
+        currency: [''],
         paymentMethod: [''],
         paymentRemark: ['', [Validators.maxLength(60)]],
       }),
@@ -170,6 +170,9 @@ export class AddReservationComponent implements OnInit {
           label: key,
           value,
         }));
+        this.userForm.get('paymentMethod').patchValue({
+          currency: this.currencies[0].value,
+        });
       }
     });
   }
@@ -222,9 +225,16 @@ export class AddReservationComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService.getPaymentMethod(this.hotelId).subscribe(
         (response) => {
-          this.paymentOptions = new PaymentMethodList()
+          const types = new PaymentMethodList()
             .deserialize(response)
-            .records.map((item) => ({ label: item.label, value: item.label }));
+            .records.map((item) => item.type);
+          const labels = [].concat(
+            ...types.map((array) => array.map((item) => item.label))
+          );
+          this.paymentOptions = labels.map((label) => ({
+            label: label,
+            value: label,
+          }));
         },
         (error) => {}
       )
@@ -266,9 +276,7 @@ export class AddReservationComponent implements OnInit {
         .getReservationDataById(this.reservationId, this.hotelId)
         .subscribe(
           (response) => {
-            console.log(response);
             const data = new ReservationFormData().deserialize(response);
-            console.log(data);
             this.userForm.patchValue(data);
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.bookingInformation);
@@ -393,8 +401,12 @@ export class AddReservationComponent implements OnInit {
           (res: ReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
-          (error) => {},
-          () => {this.isBooking = false}
+          (error) => {
+            this.isBooking = false;
+          },
+          () => {
+            this.isBooking = false;
+          }
         )
     );
   }
@@ -407,7 +419,9 @@ export class AddReservationComponent implements OnInit {
           (res: ReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
           },
-          (error) => {},
+          (error) => {
+            this.isBooking = false;
+          },
           () => {
             this.isBooking = false;
           }

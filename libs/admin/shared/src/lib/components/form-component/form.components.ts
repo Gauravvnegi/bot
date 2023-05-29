@@ -48,6 +48,9 @@ export class FormComponent implements OnInit {
   menuClass: string;
   searchInputClass: string;
 
+  /** Internal setting values */
+  searchText: string;
+
   /** To handle api pagination & search call */
   @Input() stopEmission = false;
   @Output() paginate = new EventEmitter();
@@ -260,7 +263,6 @@ export class FormComponent implements OnInit {
     if (!this.isAsync) return;
 
     let debounceCall: (() => void) & Cancelable;
-    let searchText: string;
 
     const registerScroll = () => {
       const menu = document.querySelector(`.${this.menuClass}`);
@@ -269,7 +271,7 @@ export class FormComponent implements OnInit {
         if (this.stopEmission) return;
         if (
           !this.loading &&
-          !searchText &&
+          !this.searchText &&
           menu.scrollHeight - 251 < menu.scrollTop
         ) {
           this.paginate.emit();
@@ -280,15 +282,12 @@ export class FormComponent implements OnInit {
     const registerSearch = () => {
       const input = document.querySelector(`.${this.searchInputClass}`);
 
-      if (input) {
-        (input as any).value = '';
-      }
       input?.addEventListener('input', (event: InputEvent) => {
         if (this.stopEmission) return;
-        searchText = event.target['value'];
+        this.searchText = event.target['value'];
         debounceCall?.cancel();
         debounceCall = debounce(() => {
-          this.onSearch.emit(searchText);
+          this.onSearch.emit(this.searchText);
         }, 500);
         debounceCall();
       });
@@ -304,6 +303,10 @@ export class FormComponent implements OnInit {
    * @function onMenuClose To trigger on close
    */
   onMenuClose() {
+    if (this.searchText) { // empty search value trigger on menu close
+      this.onSearch.emit('');
+      this.searchText = '';
+    }
     this.onBlur.emit();
   }
 }

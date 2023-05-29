@@ -29,33 +29,19 @@ export class HotelDetailService {
       this.brands.find((item) => item.id === this.brandId)?.hotels ?? [];
   }
 
-  // initBrandAndHotel(brandId: string, hotelId: string) {
-  //   localStorage.setItem(tokensConfig.hotelId, hotelId);
-  //   localStorage.setItem(tokensConfig.brandId, brandId);
-
-  //   this.hotelId = hotelId;
-  //   this.brandId = brandId;
-
-  //   this.brands =
-  //     this.sites?.find((item) => item.id === this.siteId)?.brands ?? [];
-  //   this.hotels =
-  //     this.brands.find((item) => item.id === this.brandId)?.hotels ?? [];
-  // }
-
-  updateBusinessSession(businessInfo: BusinessInfo) {
+/**
+ * 
+ * @param businessInfo all the required tokens update
+ * @param redirectUrl default will be page -> will open the page on subscription priority
+ */
+  updateBusinessSession(businessInfo: BusinessInfo, redirectUrl: string = '/pages') {
     Object.entries(businessInfo).forEach(([token, value]) => {
       localStorage.setItem(token, value);
     });
-    window.location.reload();
-  }
 
-  setSiteId(siteId) {
-    this.siteId = siteId;
-    this.setLocalSiteId(siteId);
-  }
-
-  setLocalSiteId(currSiteId) {
-    localStorage.setItem(tokensConfig.siteId, currSiteId);
+    // if redirect url is present than change the window location
+    // as this will reload the website with redirect url (subscription api will needed to be get called)
+    window.location.href = redirectUrl;
   }
 
   getSiteId() {

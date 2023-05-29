@@ -42,6 +42,7 @@ import { Temp000001SignatureCaptureWrapperComponent } from './presentational/tem
 import { TokenInterceptor } from 'libs/web-user/templates/temp000001/src/lib/interceptors/token.interceptor';
 import { QuestionnaireComponent } from './containers/questionnaire/questionnaire.component';
 import { RoomUpgradeComponent } from './containers/packages/room-upgrade/room-upgrade.component';
+import { PaymentInterceptor } from './interceptors/payment.interceptor';
 
 @NgModule({
   imports: [
@@ -74,11 +75,11 @@ import { RoomUpgradeComponent } from './containers/packages/room-upgrade/room-up
       useClass: TimezoneInterceptor,
       multi: true,
     },
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: TokenRetievalInterceptor,
-    //   multi: true,
-    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: PaymentInterceptor,
+      multi: true,
+    },
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     ReservationService,
     HotelService,

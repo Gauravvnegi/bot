@@ -1,3 +1,4 @@
+<ng-container *ngIf="!initialLoading; else loader">
 <div class="details_wrapper">
   <div class="modal-header">
     <div (click)="closeModal()" class="close">
@@ -24,10 +25,6 @@
   </div>
 
   <div class="table-container">
-    <ng-template #loader>
-      <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
-    </ng-template>
-    <ng-container *ngIf="!initialLoading; else loader">
       <p-table
         #dt
         [styleClass]="tableConfig.styleClass"
@@ -220,8 +217,8 @@
                     rowData.payment.dueAmount <= rowData.payment.totalAmount,
                   'status-text-success': rowData.payment.dueAmount === 0
                 }"
-                >{{ rowData.payment.dueAmount }}</span
-              >/ {{ rowData.payment.totalAmount }}
+                >{{ rowData.payment.dueAmount | currency: 'INR' }}</span
+              >/ {{ rowData.payment.totalAmount | currency: 'INR' }}
             </td>
 
             <td class="package">
@@ -239,7 +236,7 @@
               </span>
             </td>
 
-            <td class="package">
+            <!-- <td class="package">
               <span
                 >{{ rowData.guestAttributes.churnProbalilty }}/<span
                   [ngClass]="
@@ -250,7 +247,7 @@
                   >{{ rowData.guestAttributes.churnPrediction }}</span
                 >
               </span>
-            </td>
+            </td> -->
             <td class="status-image">
               <div class="icon-wrapper">
                 <div class="line first"></div>
@@ -458,10 +455,10 @@
           ></p-paginator>
         </ng-template>
       </p-table>
-    </ng-container>
+    </div>
   </div>
-</div>
-
+</ng-container>
+  
 <ng-template #emptyCell>
   <div class="emptyCell">&mdash;</div>
 </ng-template>
@@ -484,4 +481,8 @@
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
+</ng-template>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
 </ng-template>

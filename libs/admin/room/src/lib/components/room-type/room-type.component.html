@@ -20,7 +20,10 @@
             formControlName="imageUrls"
             label="Image"
             description="Mandatory to add at least 1 image"
-            [limit]="4"
+            [settings]="{
+              limit: 1,
+              unit: 4
+            }"
             [hotelId]="hotelId"
             path="static-content/room-types"
           ></hospitality-bot-custom-file-upload>
@@ -76,7 +79,7 @@
             [defaultProps]="{ post: { type: 'number' } }"
           ></hospitality-bot-prefix-field>
         </div>
-        <div class="input-fields">
+        <!-- <div class="input-fields">
           <hospitality-bot-prefix-field
             preControlName="variablePriceCurrency"
             postControlName="variableAmount"
@@ -90,7 +93,7 @@
               }
             }"
           ></hospitality-bot-prefix-field>
-        </div>
+        </div> -->
         <div class="input-fields">
           <hospitality-bot-prefix-field
             preControlName="discountType"

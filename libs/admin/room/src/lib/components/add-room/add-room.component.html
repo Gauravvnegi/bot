@@ -2,7 +2,10 @@
   <hospitality-bot-navigation-header
     [heading]="pageTitle"
     [routes]="navRoutes"
-    [dateTime]="draftDate"
+    [dateTime]="{
+      dateTime: draftDate,
+      dateTitle: dateTitle
+    }"
   >
   </hospitality-bot-navigation-header>
   <div class="main">

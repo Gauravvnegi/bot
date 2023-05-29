@@ -27,9 +27,11 @@
     (onHide)="onMenuClose()"
     (onFocus)="handleFocus()"
     (onBlur)="handleBlur()"
+    (onChange)="handleItemChange($event)"
     [filter]="isAsync"
     [filterBy]="stopEmission ? 'label' : 'nothing'"
     [filterMatchMode]="stopEmission ? 'contains' : 'notEquals'"
+    [resetFilterOnHide]="true"
   >
     <ng-template let-option pTemplate="item">
       <div class="option-item" *ngIf="!option.hidden">

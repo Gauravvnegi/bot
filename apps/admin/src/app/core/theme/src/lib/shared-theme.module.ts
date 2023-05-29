@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { AdminSharedModule } from '../../../../../../../../libs/admin/shared/src/index';
 import { SharedMaterialModule } from 'libs/shared/material/src/lib/shared-material.module';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { DropdownModule } from 'primeng/dropdown';
@@ -41,6 +42,7 @@ import { ScrollPagination } from './directives/scroll-pagination.directive';
     InputTextModule,
     DropdownModule,
     SharedMaterialModule,
+    AdminSharedModule,
     TabViewModule,
     OverlayPanelModule,
     MenuModule,

@@ -54,7 +54,7 @@
           label="GST Number"
           [props]="{ placeholder: 'Enter' }"
         ></hospitality-bot-input>
-        <hospitality-bot-input
+        <!-- <hospitality-bot-input
           class="one-third-width"
           controlName="contactName"
           label="Contact Name"
@@ -65,7 +65,7 @@
           controlName="contactNumber"
           label="Contact Number"
           [props]="{ placeholder: 'Enter' }"
-        ></hospitality-bot-input>
+        ></hospitality-bot-input> -->
         <hospitality-bot-input
           class="one-third-width"
           controlName="email"
@@ -170,7 +170,9 @@
                         createPrompt: '+ Add New Service',
                         placeholder: 'Select'
                       }"
-                      [loading]="loadingDescription"
+                      [loading]="
+                        rowIndex === selectedSearchIndex && loadingDescription
+                      "
                       (paginate)="loadMoreDescription()"
                       (onSearch)="searchDescription($event)"
                       [stopEmission]="noMoreDescription"

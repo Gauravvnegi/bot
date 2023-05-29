@@ -12,6 +12,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
+  ConfigService,
   NavRouteOptions,
   Option,
   UserService,
@@ -73,7 +74,7 @@ export class InvoiceComponent implements OnInit {
   tax: Option[] = [];
 
   tableValue = [];
-  refundOption = [{ label: 'INR', value: 'INR' }];
+  refundOption: Option[] = [];
 
   isRefundSaved = false;
   viewRefundRow = false;
@@ -113,6 +114,7 @@ export class InvoiceComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
+    private configService: ConfigService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -125,7 +127,20 @@ export class InvoiceComponent implements OnInit {
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
     this.initForm();
+    this.initOptions();
     this.getDescriptionOptions();
+  }
+
+  initOptions(){
+    this.configService.$config.subscribe(config => {
+      if (config) {
+        this.refundOption = config.currencyConfiguration.map(item => ({
+          label: item.key,
+          value: item.value,
+        }));
+        this.inputControl.currency.setValue(this.refundOption[0].value);
+      } 
+    });
   }
 
   /**
@@ -151,8 +166,8 @@ export class InvoiceComponent implements OnInit {
       companyName: [''],
 
       gstNumber: ['', Validators.required],
-      contactName: ['', Validators.required],
-      contactNumber: ['', Validators.required],
+      // contactName: ['', Validators.required],
+      // contactNumber: ['', Validators.required],
       email: ['', Validators.required],
       address: ['', Validators.required],
       state: ['', Validators.required],
@@ -168,7 +183,7 @@ export class InvoiceComponent implements OnInit {
       paidAmount: [0],
       dueAmount: [0],
 
-      currency: ['INR'],
+      currency: [''],
       refundAmount: [0],
 
       cashierName: [
@@ -177,8 +192,8 @@ export class InvoiceComponent implements OnInit {
       ],
       paymentMethod: ['', Validators.required],
       receivedPayment: ['', [Validators.required, Validators.min(1)]],
-      remarks: ['', Validators.required],
-      transactionId: ['', Validators.required],
+      remarks: [''],
+      transactionId: [''],
     });
 
     this.tableFormArray = this.useForm.get('tableData') as FormArray;
@@ -221,6 +236,7 @@ export class InvoiceComponent implements OnInit {
         });
 
         this.useForm.patchValue(data, { emitEvent: false });
+        this.inputControl.guestName.patchValue(data.guestName, { emitEvent: true });
         // Generating tax options
         this.tax = res.itemList.reduce((prev, curr) => {
           const taxes = curr.itemTax.map((item) => ({
@@ -242,7 +258,7 @@ export class InvoiceComponent implements OnInit {
         });
 
         this.isInvoiceGenerated = res.invoiceGenerated;
-        if (this.isInvoiceGenerated){
+        if (this.isInvoiceGenerated) {
           this.useForm.disable();
         }
         this.loadingData = false;
@@ -285,22 +301,21 @@ export class InvoiceComponent implements OnInit {
   paymentValidation(addValidation: boolean = true) {
     const paymentMethodControl = this.useForm.get('paymentMethod');
     const receivedPaymentControl = this.useForm.get('receivedPayment');
-    const transactionIdControl = this.useForm.get('transactionId');
-    const remarksControl = this.useForm.get('remarks');
+    // const transactionIdControl = this.useForm.get('transactionId');
+    // const remarksControl = this.useForm.get('remarks');
 
     [
       paymentMethodControl,
       receivedPaymentControl,
-      transactionIdControl,
-      remarksControl,
+      // transactionIdControl,
+      // remarksControl,
     ].forEach((item) => {
       if (addValidation) {
         item.setValidators([Validators.required]);
         if (item === receivedPaymentControl) {
           item.setValidators([Validators.required, Validators.min(1)]);
         }
-      }
-      else {
+      } else {
         item.clearValidators();
         item.updateValueAndValidity();
         item.reset();
@@ -312,8 +327,8 @@ export class InvoiceComponent implements OnInit {
     const companyNameControl = this.useForm.get('companyName');
 
     const gstNumberControl = this.useForm.get('gstNumber');
-    const contactNameControl = this.useForm.get('contactName');
-    const contactNumberControl = this.useForm.get('contactNumber');
+    // const contactNameControl = this.useForm.get('contactName');
+    // const contactNumberControl = this.useForm.get('contactNumber');
     const emailControl = this.useForm.get('email');
     const addressControl = this.useForm.get('address');
     const stateControl = this.useForm.get('state');
@@ -322,8 +337,8 @@ export class InvoiceComponent implements OnInit {
 
     [
       gstNumberControl,
-      contactNameControl,
-      contactNumberControl,
+      // contactNameControl,
+      // contactNumberControl,
       emailControl,
       addressControl,
       stateControl,
@@ -847,7 +862,9 @@ export class InvoiceComponent implements OnInit {
     //   return;
     // }
 
-    this.router.navigate(['../preview-invoice', this.reservationId], { relativeTo: this.route });
+    this.router.navigate(['../preview-invoice', this.reservationId], {
+      relativeTo: this.route,
+    });
   }
 
   handleSave(): void {
@@ -1029,13 +1046,19 @@ export class InvoiceComponent implements OnInit {
 
           this.descriptionOptions = serviceListData;
         });
+    } else {
+      this.descriptionOffSet = 0;
+      this.descriptionOptions = [];
+      this.getDescriptionOptions();
     }
   }
 
   /***
    * Navigate to service form
    */
-  createService() {}
+  createService() {
+    this.router.navigateByUrl('pages/library/services/create-service');
+  }
 
   /**
    * Handle Invoice download

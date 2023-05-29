@@ -17,7 +17,8 @@ export class GtmClosureComponent implements OnInit {
   @Input() department: string;
   @Input() data: GtmClosureGraph;
   @Input() selectedInterval: string;
-  globalQueries = [];
+  @Input() globalQueries;
+  initialData: GtmClosureGraph;
   legends = [
     {
       label: 'GTM',
@@ -62,13 +63,17 @@ export class GtmClosureComponent implements OnInit {
     private _adminUtilityService: AdminUtilityService
   ) {}
 
-  ngOnInit(): void {}
-
-  ngOnChanges() {
-    this.initGTMClosureLineGraph();
+  ngOnInit(): void {
+    this.initialData = this.data;
   }
 
-  initGTMClosureLineGraph() {
+  ngOnChanges() {
+    if (this.data !== this.initialData) {
+      this.initGTMClosureLineGraph();
+      this.initialData = this.data; // Update previousData with the current data value
+    }  }
+
+  private initGTMClosureLineGraph() {
     if (this.data) {
       this.lineGraph.chartData[0].data = [];
       this.lineGraph.chartData[1].data = [];

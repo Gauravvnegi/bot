@@ -127,9 +127,10 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="/pages/library/tax/create-tax"
+    link="pages/settings/tax/{{ routes.createTax.route }}"
     [content]="{
-      description: 'No tax records found. Tap the Create Tax  to view preexisting tax ',
+      description:
+        'No tax records found. Tap the Create Tax  to view preexisting tax ',
       actionName: '+Create Tax',
       imageSrc: 'assets/images/empty-table-tax.png'
     }"

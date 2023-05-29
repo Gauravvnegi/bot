@@ -1,180 +1,244 @@
-<div class="container">
-  <div class="header">Send E-mail</div>
-  <div class="body" [formGroup]="emailFG" *ngIf="emailFG">
-    <div class="fields">
-      <div class="field">
-        <mat-label class="mat-label">From:</mat-label>
-        <mat-form-field>
-          <mat-select formControlName="fromId" placeholder="Select email">
-            <mat-option *ngFor="let item of fromEmailList" [value]="item.id">{{
-              item.email
-            }}</mat-option>
-          </mat-select>
-          <mat-error
-            *ngIf="
-              emailFG.get('fromId').touched &&
-              emailFG.get('fromId').hasError('required')
-            "
-          >
-            From is required
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="fields">
-      <div class="field">
-        <mat-label class="mat-label">Topic:</mat-label>
-        <div class="width">
-          <hospitality-bot-topic-dropdown
-            [hotelId]="hotelId"
-            [title]="false"
-            [id]="true"
-            [parentForm]="emailFG"
-            [name]="topicId"
-            (changeTopic)="handleTopicChange($event)"
-          ></hospitality-bot-topic-dropdown>
-        </div>
-      </div>
-      <div class="field">
-        <mat-label class="mat-label">Template:</mat-label>
-        <mat-form-field>
-          <mat-select
-            (selectionChange)="handleTemplateChange($event)"
-            placeholder="Select template"
-            formControlName="templateId"
-          >
-            <mat-option value="" *ngIf="templateList.length === 0" disabled
-              >NO DATA</mat-option
-            >
-            <mat-option
-              *ngFor="let template of templateList"
-              [value]="template"
-              >{{ template.name }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="fields">
-      <div class="field full-width">
-        <mat-label class="mat-label">To:</mat-label>
-        <mat-form-field>
-          <mat-chip-list #chipList [disabled]="true">
-            <mat-chip
-              *ngFor="let email of to.value"
-              (removed)="removeEmail(email, to)"
-            >
-              {{ email }}
-              <button matChipRemove class="chip-remove-btn">
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </mat-chip>
-            <input
-              placeholder="Enter Email"
-              [matChipInputFor]="chipList"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              [matChipInputAddOnBlur]="addOnBlur"
-              (matChipInputTokenEnd)="addEmail($event, to)"
-            />
-          </mat-chip-list>
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="fields">
-      <div class="field full-width">
-        <mat-label class="mat-label">Subject:</mat-label>
-        <mat-form-field class="description">
-          <input
-            matInput
-            formControlName="subject"
-            placeholder="Be specific & concise to spark interest"
-          />
-          <p class="text-number">
-            {{ emailFG.get('subject')?.value.length }}/200
-          </p>
-          <mat-error
-            *ngIf="
-              emailFG.get('subject').touched &&
-              emailFG.get('subject').hasError('required')
-            "
-          >
-            Subject is required
-          </mat-error>
-          <mat-error
-            *ngIf="
-              emailFG.get('subject').touched &&
-              emailFG.get('subject').hasError('maxlength')
-            "
-          >
-            Maximum length is 200 characters.
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="fields">
-      <div class="field full-width">
-        <mat-label class="mat-label">Preivew Text:</mat-label>
-        <mat-form-field class="description">
-          <input
-            matInput
-            formControlName="previewText"
-            placeholder="Write a summary of your email to display after the subject line"
-          />
-          <p class="text-number">
-            {{ emailFG.get('previewText')?.value.length }}/200
-          </p>
-          <mat-error
-            *ngIf="
-              emailFG.get('previewText').touched &&
-              emailFG.get('previewText').hasError('required')
-            "
-          >
-            Preivew Text is required
-          </mat-error>
-          <mat-error
-            *ngIf="
-              emailFG.get('previewText').touched &&
-              emailFG.get('previewText').hasError('maxlength')
-            "
-          >
-            Maximum length is 200 characters.
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div>
-      <div class="ck-editor">
-        <hospitality-bot-template-editor
-          [parentFG]="emailFG"
-          [name]="'message'"
-          [template]="template"
-          [hybrid]="false"
-          [disabled]="false"
-        ></hospitality-bot-template-editor>
-      </div>
-      <mat-error
-        *ngIf="
-          emailFG.get('message').touched &&
-          emailFG.get('message').hasError('required')
-        "
-        class="message-error"
-      >
-        Message is required
-      </mat-error>
+<div class="container" *ngIf="config; else loader">
+  <div class="modal-header">
+    <div></div>
+    <div class="modal-header__heading">Send Email</div>
+    <div (click)="closeModal()" class="close">
+      <i class="fa fa-times" aria-hidden="true"></i>
     </div>
   </div>
-  <div class="btn-wrapper">
-    <div
-      class="send"
-      (click)="sendMail()"
-      [ngClass]="{ active: !isSending, disabled: isSending }"
-    >
-      <div class="send__text">
-        <i *ngIf="isSending" class="fa fa-spinner fa-spin"></i>
-        {{ isSending ? 'Sending' : 'Send' }}
-      </div>
+  <div class="form-block" [formGroup]="emailFG" *ngIf="emailFG">
+    <!-- <hospitality-bot-select
+      label="From"
+      controlName="fromId"
+      [props]="{ placeholder: 'Select Email' }"
+      [options]="fromEmailList"
+      class="half-width"
+    ></hospitality-bot-select> -->
+    <!-- <div class="half-width"></div> -->
+    <hospitality-bot-select
+      label="Topic"
+      controlName="topicId"
+      [props]="{ placeholder: 'Select Topic' }"
+      class="half-width"
+      [options]="topicList"
+      (itemSelection)="onTopicChange($event.value)"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      [disabled]="isTemplateDisabled"
+      label="Template"
+      controlName="templateId"
+      [options]="templateList"
+      class="half-width"
+      [props]="{ placeholder: 'Select Template' }"
+    ></hospitality-bot-select>
+    <hospitality-bot-multi-select
+      class="full-width"
+      controlName="emailIds"
+      label="To"
+      [options]="to"
+      disabled="true"
+    ></hospitality-bot-multi-select>
+    <hospitality-bot-input
+      class="full-width"
+      label="Subject"
+      controlName="subject"
+      [props]="{ placeholder: 'Be specific & concise to spark interest' }"
+      maxLength="200"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="full-width"
+      label="Preview Text"
+      controlName="previewText"
+      [props]="{
+        placeholder:
+          'Write a summary of your email to display after the subject line'
+      }"
+      maxLength="200"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-template-editor
+      class="full-width"
+      [parentFG]="emailFG"
+      [name]="'message'"
+      [template]="template"
+      [hybrid]="true"
+      [disabled]="false"
+    ></hospitality-bot-template-editor>
+
+    <hospitality-bot-add-attachment
+      controlName="attachments"
+      class="full-width"
+      label="Attachment"
+      [options]="attachmentsList"
+      (onClick)="uploadAttachments($event)"
+      #attachmentComponent
+    ></hospitality-bot-add-attachment>
+    <div class="btn-wrapper">
+      <hospitality-bot-button
+        (onClick)="sendMail()"
+        [label]="isSending ? 'Sending' : 'Send'"
+        [disabled]="isSending"
+      >
+      </hospitality-bot-button>
     </div>
   </div>
 </div>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
+</ng-template>
+
+<!-- <div class="fields">
+  <div class="field">
+    <mat-label class="mat-label">From:</mat-label>
+    <mat-form-field>
+      <mat-select formControlName="fromId" placeholder="Select email">
+        <mat-option *ngFor="let item of fromEmailList" [value]="item.id">{{
+          item.email
+        }}</mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="
+          emailFG.get('fromId').touched &&
+          emailFG.get('fromId').hasError('required')
+        "
+      >
+        From is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="fields">
+  <div class="field">
+    <mat-label class="mat-label">Topic:</mat-label>
+    <div class="width">
+      <hospitality-bot-topic-dropdown
+        [hotelId]="hotelId"
+        [title]="false"
+        [id]="true"
+        [parentForm]="emailFG"
+        [name]="topicId"
+        (changeTopic)="handleTopicChange($event)"
+      ></hospitality-bot-topic-dropdown>
+    </div>
+  </div>
+  <div class="field">
+    <mat-label class="mat-label">Template:</mat-label>
+    <mat-form-field>
+      <mat-select
+        (selectionChange)="handleTemplateChange($event)"
+        placeholder="Select template"
+        formControlName="templateId"
+      >
+        <mat-option value="" *ngIf="templateList.length === 0" disabled
+          >NO DATA</mat-option
+        >
+        <mat-option
+          *ngFor="let template of templateList"
+          [value]="template"
+          >{{ template.name }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div> 
+<div class="fields">
+  <div class="field full-width">
+    <mat-label class="mat-label">To:</mat-label>
+    <mat-form-field>
+      <mat-chip-list #chipList [disabled]="true">
+        <mat-chip
+          *ngFor="let email of to.value"
+          (removed)="removeEmail(email, to)"
+        >
+          {{ email }}
+          <button matChipRemove class="chip-remove-btn">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+        <input
+          placeholder="Enter Email"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="addEmail($event, to)"
+        />
+      </mat-chip-list>
+    </mat-form-field>
+  </div>
+</div> 
+
+<div class="fields">
+  <div class="field full-width">
+    <mat-label class="mat-label">Subject:</mat-label>
+    <mat-form-field class="description">
+      <input
+        matInput
+        formControlName="subject"
+        placeholder="Be specific & concise to spark interest"
+      />
+      <p class="text-number">
+        {{ emailFG.get('subject')?.value.length }}/200
+      </p>
+      <mat-error
+        *ngIf="
+          emailFG.get('subject').touched &&
+          emailFG.get('subject').hasError('required')
+        "
+      >
+        Subject is required
+      </mat-error>
+      <mat-error
+        *ngIf="
+          emailFG.get('subject').touched &&
+          emailFG.get('subject').hasError('maxlength')
+        "
+      >
+        Maximum length is 200 characters.
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div> 
+
+<div class="fields">
+  <div class="field full-width">
+    <mat-label class="mat-label">Preivew Text:</mat-label>
+    <mat-form-field class="description">
+      <input
+        matInput
+        formControlName="previewText"
+        placeholder="Write a summary of your email to display after the subject line"
+      />
+      <p class="text-number">
+        {{ emailFG.get('previewText')?.value.length }}/200
+      </p>
+      <mat-error
+        *ngIf="
+          emailFG.get('previewText').touched &&
+          emailFG.get('previewText').hasError('required')
+        "
+      >
+        Preivew Text is required
+      </mat-error>
+      <mat-error
+        *ngIf="
+          emailFG.get('previewText').touched &&
+          emailFG.get('previewText').hasError('maxlength')
+        "
+      >
+        Maximum length is 200 characters.
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div> 
+<div
+  class="send"
+  (click)="sendMail()"
+  [ngClass]="{ active: !isSending, disabled: isSending }"
+  >
+  <div class="send__text">
+    <i *ngIf="isSending" class="fa fa-spinner fa-spin"></i>
+    {{ isSending ? 'Sending' : 'Send' }}
+  </div>
+</div> -->

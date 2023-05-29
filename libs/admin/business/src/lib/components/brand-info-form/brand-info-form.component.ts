@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -60,7 +60,9 @@ export class BrandInfoFormComponent implements OnInit {
     this.useForm = this.fb.group({
       brand: this.fb.group({
         status: [true],
-        name: [''],
+        name: ['', Validators.required],
+        gstNumber: [''],
+        fssaiNumber: [''],
         description: [''],
         socialPlatforms: [[]],
       }),
@@ -72,11 +74,8 @@ export class BrandInfoFormComponent implements OnInit {
       this.loading = true;
       this.$subscription.add(
         this.businessService.getBrandById(this.brandId).subscribe((res) => {
-          const data: BrandFormData = new BrandResponse().deserialize(res);
-
-          this.useForm.patchValue(data);
-
-          this.code = res.code;
+          this.useForm.get('brand').patchValue(res);
+          this.code = res.brandCode;
         }, this.handelError)
       );
     }
@@ -92,24 +91,29 @@ export class BrandInfoFormComponent implements OnInit {
     }
     this.businessService.onSubmit.emit(true);
     const data = this.useForm.getRawValue() as BrandFormData;
-    console.log('brandform', data);
 
     if (this.brandId) {
       this.$subscription.add(
-        this.businessService
-          .updateBrand(this.brandId, data.brand)
-          .subscribe((res) => {
+        this.businessService.updateBrand(this.brandId, data.brand).subscribe(
+          (res) => {
             this.useForm.get('brand').patchValue(res);
-          }, this.handelError)
+          },
+          this.handelError,
+          this.handleSuccess
+        )
       );
     } else {
       this.$subscription.add(
-        this.businessService.createBrand(data).subscribe((res) => {
-          this.handleSuccess();
-          this.router.navigate([
-            `pages/settings/business-info/brand/${res.id}`,
-          ]);
-        }, this.handelError)
+        this.businessService.createBrand(data).subscribe(
+          (res) => {
+            this.handleSuccess();
+            this.router.navigate([
+              `pages/settings/business-info/brand/${res.id}`,
+            ]);
+          },
+          this.handelError,
+          this.handleSuccess
+        )
       );
     }
   }

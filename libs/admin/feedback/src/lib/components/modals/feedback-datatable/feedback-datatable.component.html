@@ -108,21 +108,24 @@
                 >
                 </p-tableCheckbox>
               </td>
-              <td class="guest">
-                <div class="guest-status" *ngIf="rowData?.timeOut">
-                  <img src="assets/svg/timeout.svg" alt="timeout" />
-                </div>
-                <div class="guest-name">
-                  {{ rowData.bookingDetails.tableOrRoomNumber }}
+              <td>
+                <div [roomStatus]="rowData.roomStatus">
+                  <div>
+                    {{
+                      rowData.bookingDetails.tableOrRoomNumber || '--'
+                    }}&nbsp;-&nbsp;{{
+                      rowData?.bookingDetails?.roomType || '--'
+                    }}
+                  </div>
                 </div>
                 <div class="guest-phone">{{ rowData.outlet }}</div>
               </td>
               <td class="guest">
                 <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
-                <a href="tel:{{rowData.guest.getPhoneNumber()}}">
-                <div class="guest-phone">
-                  {{ rowData.guest.getPhoneNumber() }}
-                </div>
+                <a href="tel:{{ rowData.guest.getPhoneNumber() }}">
+                  <div class="guest-phone">
+                    {{ rowData.guest.phoneNumber }}
+                  </div>
                 </a>
               </td>
               <td class="service-feedback">
@@ -322,7 +325,7 @@
                 <!-- <div class="package-city">{{ rowData.guest.place }}</div> -->
               </td>
               <td class="comments">{{ rowData.guestData.overAllNps }}</td>
-              <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
+              <!-- <td class="comments">{{ rowData.guestData.churnProbalilty }}</td> -->
               <td class="comments" *ngIf="tableName === 'Response Rate'">
                 <div class="rate">
                   <div class="rate-images" *ngFor="let icon of responseRate">
@@ -384,11 +387,14 @@
                 <p-tableCheckbox [value]="rowData" [index]="rowIndex">
                 </p-tableCheckbox>
               </td>
-              <td class="guest">
-                <div class="guest-status" *ngIf="rowData?.timeOut">
-                  <img src="assets/svg/timeout.svg" alt="timeout" />
+              <td>
+                <div [roomStatus]="rowData.roomStatus">
+                  <div>
+                    {{ rowData?.tableOrRoomNumber || '--' }}&nbsp;-&nbsp;{{
+                      rowData?.roomType || '--'
+                    }}
+                  </div>
                 </div>
-                <div>{{ rowData?.tableOrRoomNumber }}</div>
               </td>
               <td class="service-feedback">
                 <div class="feedback">
@@ -524,11 +530,11 @@
                 </div>
               </td>
               <td class="guest">
-                <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
-                <a href="tel:{{rowData.guest.getPhoneNumber()}}">
-                <div class="guest-phone">
-                  {{ rowData.guest.getPhoneNumber() }}
-                </div>
+                <div class="guest-name">{{ rowData.guest.fullName }}</div>
+                <a href="tel:{{ rowData.guest.getPhoneNumber() }}">
+                  <div class="guest-phone">
+                    {{ rowData.guest.phoneNumber }}
+                  </div>
                 </a>
                 <div class="guest-phone">{{ rowData.guest.emailId }}</div>
               </td>
@@ -542,7 +548,7 @@
                 <p class="arrival-time">{{ rowData.guestData.guestCount }}G</p>
               </td>
               <td class="comments">{{ rowData.guestData.overAllNps }}</td>
-              <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
+              <!-- <td class="comments">{{ rowData.guestData.churnProbalilty }}</td> -->
               <td class="comments" *ngIf="tableName === 'Response Rate'">
                 <div class="rate">
                   <div class="rate-images" *ngFor="let icon of responseRate">

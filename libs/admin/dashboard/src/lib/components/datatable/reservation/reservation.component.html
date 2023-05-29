@@ -79,11 +79,10 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <p
-          class="tabel-room-no"
-          [ngClass]="getRoomStatus(rowData.booking.roomStatus)"
-        >
-          {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{ rowData.rooms.type }}
+        <p class="tabel-room-no" [roomStatus]="rowData.roomStatus">
+          {{ rowData.rooms.roomNumber || '--' }}&nbsp;-&nbsp;{{
+            rowData.rooms.type || '--'
+          }}
         </p>
       </td>
       <td>
@@ -118,7 +117,9 @@
         </div>
       </td>
       <td class="guest">
-        <span>{{ rowData.guests.primaryGuest.getFullName() }}</span>
+        <div class="primary-text">
+          {{ rowData.guests.primaryGuest.getFullName() }}
+        </div>
         <b class="rowData">{{
           rowData.guests.getSecGuestDisplayConfig().countString
         }}</b>
@@ -132,7 +133,7 @@
               let guestIdx = index
             "
           >
-            {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+            {{ secondaryGuest.fullName }}
           </div>
         </div>
       </td>

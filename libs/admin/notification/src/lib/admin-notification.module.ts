@@ -9,6 +9,7 @@ import { RequestService } from './services/request.service';
 import { FeedbackNotificationComponent } from './components/feedback-notification/feedback-notification.component';
 import { MarketingNotificationComponent } from './components/marketing-notification/marketing-notification.component';
 import { EmailService } from './services/email.service';
+import { SendMessageComponent } from './components/send-message/send-message.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { EmailService } from './services/email.service';
     NotificationComponent,
     MarketingNotificationComponent,
     FeedbackNotificationComponent,
+    SendMessageComponent,
   ],
   exports: [
     NotificationComponent,

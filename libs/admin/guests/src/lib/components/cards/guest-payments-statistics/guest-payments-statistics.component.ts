@@ -81,8 +81,9 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this._statisticService.getPaymentStatistics(config).subscribe(
-        (response) => {
+      this._statisticService
+        .getPaymentStatistics(config)
+        .subscribe((response) => {
           this.payment = new Payment().deserialize(response);
           this.initGraphData();
         })
@@ -139,11 +140,9 @@ export class GuestPaymentsStatisticsComponent implements OnInit, OnDestroy {
     tableCompRef.componentInstance.guestFilter = 'GUESTPAYMENTS';
     tableCompRef.componentInstance.exportURL = 'exportCSVStat';
 
-    this.$subscription.add(
-      tableCompRef.componentInstance.onModalClose.subscribe((res) => {
-        tableCompRef.close();
-      })
-    );
+    tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+      tableCompRef.close();
+    });
   }
 
   ngOnDestroy(): void {

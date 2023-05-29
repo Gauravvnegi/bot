@@ -170,7 +170,9 @@
                         createPrompt: '+ Add New Service',
                         placeholder: 'Select'
                       }"
-                      [loading]="loadingDescription"
+                      [loading]="
+                        rowIndex === selectedSearchIndex && loadingDescription
+                      "
                       (paginate)="loadMoreDescription()"
                       (onSearch)="searchDescription($event)"
                       [stopEmission]="noMoreDescription"

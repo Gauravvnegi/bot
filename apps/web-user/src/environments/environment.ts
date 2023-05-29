@@ -7,8 +7,8 @@ export const environment = {
   ...defaultEnvironment,
   production: false,
   name: 'default',
-  base_url: 'https://stg.api.botshot.ai:31956',
-  host_url: 'https://stg.web.botshot.ai'
+  base_url: 'https://api.botshot.ai:8443',
+  host_url: 'https://web.botshot.ai'
 };
 
 /*

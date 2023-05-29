@@ -17,7 +17,7 @@ export const environment = {
     measurementId: 'G-CV14FFBNNF',
   },
   guest_home: 'https://botshot.ai',
-  createWithUrl: 'https://stg.createwith.botshot.ai',
+  createWithUrl: 'https://createwith.botshot.ai',
 };
 
 /*

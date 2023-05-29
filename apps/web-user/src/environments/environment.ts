@@ -7,7 +7,7 @@ export const environment = {
   ...defaultEnvironment,
   production: false,
   name: 'default',
-  base_url: 'https://api.botshot.ai:8443',
+  base_url: 'https://api.botshot.in:8443',
   host_url: 'https://web.botshot.ai'
 };
 

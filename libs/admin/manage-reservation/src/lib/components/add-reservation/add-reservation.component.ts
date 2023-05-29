@@ -170,7 +170,9 @@ export class AddReservationComponent implements OnInit {
           label: key,
           value,
         }));
-        this.userForm.get('currency').setValue(this.currencies[0].value);
+        this.userForm.get('paymentMethod').patchValue({
+          currency: this.currencies[0].value,
+        });
       }
     });
   }
@@ -223,9 +225,16 @@ export class AddReservationComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService.getPaymentMethod(this.hotelId).subscribe(
         (response) => {
-          this.paymentOptions = new PaymentMethodList()
+          const types = new PaymentMethodList()
             .deserialize(response)
-            .records.map((item) => ({ label: item.label, value: item.label }));
+            .records.map((item) => item.type);
+          const labels = [].concat(
+            ...types.map((array) => array.map((item) => item.label))
+          );
+          this.paymentOptions = labels.map((label) => ({
+            label: label,
+            value: label,
+          }));
         },
         (error) => {}
       )

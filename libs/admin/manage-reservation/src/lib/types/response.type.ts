@@ -42,3 +42,28 @@ export type ReservationResponse = {
   statusValues: Status[];
   sourceName: string;
 };
+
+export type PaymentConfigResponse = {
+  label: string;
+  description: string;
+  iconUrl: string;
+  type: PaymentMethodConfig[];
+};
+
+export type PaymentMethodConfig = {
+  id: string;
+  hotelId: string;
+  merchantId?: string;
+  accessCode?: string;
+  chainId?: string;
+  secretKey?: string;
+  externalRedirect: boolean;
+  iconUrl: string;
+  currency?: string;
+  description: string;
+  status: boolean;
+  type: string;
+  imageUrl?: string;
+  label: string;
+  instructions?: any;
+};

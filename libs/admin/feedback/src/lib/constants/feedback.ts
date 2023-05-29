@@ -313,13 +313,13 @@ export const feedback = {
           sortType: 'number',
           isSearchDisabled: true,
         },
-        {
-          field: 'guestData.churnProbalilty',
-          header: 'Churn Prob / Prediction',
-          isSortDisabled: true,
-          sortType: 'string',
-          isSearchDisabled: true,
-        },
+        // {
+        //   field: 'guestData.churnProbalilty',
+        //   header: 'Churn Prob / Prediction',
+        //   isSortDisabled: true,
+        //   sortType: 'string',
+        //   isSearchDisabled: true,
+        // },
         {
           field: '',
           header: 'Shared on / Received on',
@@ -371,13 +371,13 @@ export const feedback = {
           sortType: 'number',
           isSearchDisabled: true,
         },
-        {
-          field: 'guestData.churnProbalilty',
-          header: 'Churn Prob / Prediction',
-          isSortDisabled: true,
-          sortType: 'string',
-          isSearchDisabled: true,
-        },
+        // {
+        //   field: 'guestData.churnProbalilty',
+        //   header: 'Churn Prob / Prediction',
+        //   isSortDisabled: true,
+        //   sortType: 'string',
+        //   isSearchDisabled: true,
+        // },
         {
           field: '',
           header: 'Shared on / Received on',
@@ -427,13 +427,13 @@ export const feedback = {
           sortType: 'number',
           isSearchDisabled: true,
         },
-        {
-          field: 'guestData.churnProbalilty',
-          header: 'Churn Prob/ Prediction',
-          isSortDisabled: true,
-          sortType: 'string',
-          isSearchDisabled: true,
-        },
+        // {
+        //   field: 'guestData.churnProbalilty',
+        //   header: 'Churn Prob/ Prediction',
+        //   isSortDisabled: true,
+        //   sortType: 'string',
+        //   isSearchDisabled: true,
+        // },
         {
           field: 'actions',
           header: 'Actions',
@@ -479,13 +479,13 @@ export const feedback = {
           sortType: 'number',
           isSearchDisabled: true,
         },
-        {
-          field: 'guestData.churnProbalilty',
-          header: 'Churn Prob/ Prediction',
-          isSortDisabled: true,
-          sortType: 'string',
-          isSearchDisabled: true,
-        },
+        // {
+        //   field: 'guestData.churnProbalilty',
+        //   header: 'Churn Prob/ Prediction',
+        //   isSortDisabled: true,
+        //   sortType: 'string',
+        //   isSearchDisabled: true,
+        // },
         {
           field: 'actions',
           header: 'Actions',

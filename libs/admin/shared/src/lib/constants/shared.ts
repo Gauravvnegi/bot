@@ -23,11 +23,16 @@ export const fileUploadConfiguration = {
   docs: ['pdf', 'csv'],
 };
 
-export enum RoomStatsImgUrls {
+export enum StatCardImageUrls {
   RemainingInventoryCost = 'assets/svg/remaining-inventory-cost.svg',
   InventoryRemaining = 'assets/svg/inventory-remaining.svg',
   Occupancy = 'assets/svg/occupancy.svg',
   AverageRoomRate = 'assets/svg/avg-room-rate.svg',
+  Total = 'assets/svg/total.svg',
+  ToDo = 'assets/svg/todo.svg',
+  Resolved = 'assets/svg/resolved.svg',
+  Timeout = 'assets/svg/timedout.svg',
+  InProgress = 'assets/svg/in-progress.svg'
 }
 
 export enum DiscountType {

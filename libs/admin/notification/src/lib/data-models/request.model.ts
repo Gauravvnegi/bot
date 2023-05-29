@@ -35,13 +35,35 @@ export class RequestData {
   }
 }
 
+export class RequestMessageData{
+  messageType: string;
+  templateId: string;
+  sources: string[];
+  roomNumbers: string[];
+  attachments: string[];
+  message: string;
+
+  deserialize(data){
+    this.messageType = data.messageType;
+    this.templateId = data.templateId;
+    this.roomNumbers = data.roomNumbers.map(item=>item.value);
+    this.message = data.message;
+    this.attachments = data.attachments;
+
+    if(data.social_channels = ['SMS']){
+      this.sources = ['MESSENGER_SUPPORT']
+    }
+    return this;
+  }
+}
+
 export class RequestConfig {
   channels: IChannels;
   messageTypes: IMessageType[];
 
   deserialize(data) {
     Object.assign(
-      this,
+      this, 
       set({}, 'channels', get(data, ['channels'])),
       set({}, 'messageTypes', get(data, ['messageTypes']))
     );
@@ -54,12 +76,15 @@ export interface IChannels {
   bot: {
     title: string;
     options: IOption[];
+    label: string;
   };
   email: {
     title: string;
+    label: string;
   };
   sms: {
     title: string;
+    label: string;
   };
 }
 

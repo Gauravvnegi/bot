@@ -131,8 +131,7 @@
               [ngClass]="{
                 'status-text-reject':
                   rowData.totalDueAmount > 0 &&
-                  rowData.totalDueAmount <= rowData.totalAmount,
-                'status-text-success': rowData.totalDueAmount === 0
+                  rowData.totalDueAmount <= rowData.totalAmount
               }"
               >{{ rowData.totalDueAmount | currency: 'INR' }}</span
             >

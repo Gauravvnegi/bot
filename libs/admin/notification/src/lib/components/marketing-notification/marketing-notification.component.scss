@@ -1,163 +1,229 @@
+
 @import 'main';
 
 .container {
-  background-color: $white;
-  padding: 20px 0 20px 20px;
+  background-color: $header-background;
   max-height: 85vh;
-  overflow-y: scroll;
-}
-
-.body {
-  height: calc(100% - 400px);
-  padding-top: 30px;
-}
-
-.header {
-  text-align: center;
-  padding: 20px 0;
-  font-size: 20px;
-  font-weight: bold;
-  letter-spacing: 1.2px;
-  position: fixed;
-  top: 10.1%;
-  right: 12%;
-  left: 12%;
-  background-color: $white !important;
-  color: $secondary;
-  z-index: 111;
-}
-
-.fields {
   display: flex;
-  align-items: center;
-  margin-top: 10px;
-  width: 100%;
+  flex-direction: column;
+}
+
+.form-block {
+  @include form-block;
+  overflow-y: scroll;
+  height: calc(100% - 400px);
+  flex: 1;
+  padding-top: 15px;
+}
+
+.modal-header{
+  display: flex;
   justify-content: space-between;
-  @media (max-width: $tablet) {
-    flex-wrap: wrap;
-    gap: 60px;
+  align-items: center;
+  padding: 10px 0;
+  &__heading {
+    padding: 20px 0;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    position: sticky;
+    color: $secondary;
+    text-align: center;
+    font-size: 20px;
   }
-  .field {
-    display: flex;
-    align-items: center;
-    margin-right: 1.5%;
-    width: 45%;
-    @media (max-width: $tablet) {
-      width: 42.6%;
+  .close{
+    bottom: 28px;
+    position: relative;
+    i {
+      color: gray;
+      margin: 0 10px;
     }
-    .width {
-      width: 100%;
-    }
-    .mat-label {
-      width: 150px;
-      color: $inActiveTab;
-      font-size: 14px;
+    &:hover {
+      cursor: pointer;
     }
   }
-}
-
-:host ::ng-deep mat-form-field {
-  width: 100%;
-}
-
-.full-width {
-  width: calc(100% - 200px) !important;
-}
-
-.chip-list {
-  width: 100%;
 }
 
 .btn-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 40px 0;
-  .schedule {
-    height: 46px;
-    margin: 0 60px 0 0;
-    padding: 11.9px 26px 13px;
-    border-radius: 23px;
-    border: solid 1px $primary-cta;
-    background-color: $white;
-    cursor: pointer;
-    &:active {
-      transform: scale(0.97);
-    }
-    &__text {
-      @include normal-text;
-      color: $primary-cta;
-    }
-  }
-  .send {
-    height: 46px;
-    padding: 12px 43px 13px;
-    border-radius: 23px;
-    background-color: $primary-cta;
-    cursor: pointer;
-    &:active {
-      transform: scale(0.97);
-    }
-    &__text {
-      @include normal-text;
-      color: $white;
-    }
-  }
+  margin: 10px 0;
+  width: 100%;
 }
 
-:host ::ng-deep .full-width {
-  width: 100% !important;
-}
+// .container {
+//   background-color: $header-background;
+//   max-height: 85vh;
+//   display: flex;
+//   flex-direction: column;
+// }
 
-:host ::ng-deep .full-width .mat-label {
-  width: 130px !important;
-}
+// .form-block {
+//   @include form-block;
+//   overflow-y: scroll;
+//   height: calc(100% - 400px);
+//   flex: 1;
+//   padding-top: 15px;
+// }
 
-.full-width p {
-  padding-right: 8px;
-  text-align: right;
-  position: absolute;
-  bottom: 5px;
-  right: 0;
-  .carbon-copy {
-    color: $primary-cta;
-    cursor: pointer;
-  }
-  .text-number {
-    cursor: pointer;
-    color: $secondary;
-  }
-}
+// .modal-header{
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   &__heading {
+//     padding: 20px 0;
+//     font-weight: bold;
+//     letter-spacing: 1.2px;
+//     position: sticky;
+//     background-color: $white !important;
+//     color: $secondary;
+//     text-align: center;
+//     font-size: 20px;
+//   }
+//   .close{
+//     top: -15px;
+//     position: relative;
+//     i {
+//       color: gray;
+//       margin: 0 10px;
+//     }
+//     &:hover {
+//       cursor: pointer;
+//     }
+//   }
+// }
 
-.chip-remove-btn {
-  height: 30px;
-  border: none;
-  background: transparent;
-  margin-top: 2px;
-}
+// .fields {
+//   display: flex;
+//   align-items: center;
+//   margin-top: 10px;
+//   width: 100%;
+//   justify-content: space-between;
+//   @media (max-width: $tablet) {
+//     flex-wrap: wrap;
+//     gap: 60px;
+//   }
+//   .field {
+//     display: flex;
+//     align-items: center;
+//     margin-right: 1.5%;
+//     width: 45%;
+//     @media (max-width: $tablet) {
+//       width: 42.6%;
+//     }
+//     .width {
+//       width: 100%;
+//     }
+//     .mat-label {
+//       width: 150px;
+//       color: $inActiveTab;
+//       font-size: 14px;
+//     }
+//   }
+// }
 
-.ck-editor {
-  width: calc(100% - 180px);
-  margin: 10px 90px 0 90px;
-  min-height: 310px;
-}
+// :host ::ng-deep mat-form-field {
+//   width: 100%;
+// }
 
-.message-error {
-  font-size: 13px;
-  margin-left: 90px;
-}
+// .full-width {
+//   width: calc(100% - 200px) !important;
+// }
 
-:host
-  ::ng-deep
-  .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
-  .mat-form-field-label,
-.mat-form-field-appearance-legacy.mat-form-field-can-float
-  .mat-input-server:focus
-  + .mat-form-field-label-wrapper
-  .mat-form-field-label {
-  display: none !important;
-}
+// .chip-list {
+//   width: 100%;
+// }
 
-:host ::ng-deep .mat-input-element {
-  max-width: calc(100% - 80px) !important;
-}
+// .btn-wrapper {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   margin: 20px 0;
+//   .schedule {
+//     height: 46px;
+//     margin: 0 60px 0 0;
+//     padding: 11.9px 26px 13px;
+//     border-radius: 23px;
+//     border: solid 1px $primary-cta;
+//     background-color: $white;
+//     cursor: pointer;
+//     &:active {
+//       transform: scale(0.97);
+//     }
+//     &__text {
+//       @include normal-text;
+//       color: $primary-cta;
+//     }
+//   }
+//   .send {
+//     height: 46px;
+//     padding: 12px 43px 13px;
+//     border-radius: 23px;
+//     background-color: $primary-cta;
+//     cursor: pointer;
+//     &:active {
+//       transform: scale(0.97);
+//     }
+//     &__text {
+//       @include normal-text;
+//       color: $white;
+//     }
+//   }
+// }
+
+// :host ::ng-deep .full-width {
+//   width: 100% !important;
+// }
+
+// :host ::ng-deep .full-width .mat-label {
+//   width: 130px !important;
+// }
+
+// .full-width p {
+//   padding-right: 8px;
+//   text-align: right;
+//   position: absolute;
+//   bottom: 5px;
+//   right: 0;
+//   .carbon-copy {
+//     color: $primary-cta;
+//     cursor: pointer;
+//   }
+//   .text-number {
+//     cursor: pointer;
+//     color: $secondary;
+//   }
+// }
+
+// .chip-remove-btn {
+//   height: 30px;
+//   border: none;
+//   background: transparent;
+//   margin-top: 2px;
+// }
+
+// .ck-editor {
+//   width: calc(100% - 180px);
+//   margin: 10px 90px 0 90px;
+//   min-height: 310px;
+// }
+
+// .message-error {
+//   font-size: 13px;
+//   margin-left: 90px;
+// }
+
+// :host
+//   ::ng-deep
+//   .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
+//   .mat-form-field-label,
+// .mat-form-field-appearance-legacy.mat-form-field-can-float
+//   .mat-input-server:focus
+//   + .mat-form-field-label-wrapper
+//   .mat-form-field-label {
+//   display: none !important;
+// }
+
+// :host ::ng-deep .mat-input-element {
+//   max-width: calc(100% - 80px) !important;
+// }

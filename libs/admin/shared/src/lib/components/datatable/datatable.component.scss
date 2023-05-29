@@ -384,7 +384,6 @@ th {
 :host ::ng-deep .emptyCell {
   color: $subtitle;
 
-  text-align: center !important;
   @media screen and (max-width: 800px) {
     font-size: 10px;
   }

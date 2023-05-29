@@ -489,9 +489,9 @@ mat-option {
   width: 18%;
   padding: 10px;
   position: absolute;
-  top: 52px;
+  top: 62px;
   right: 10px;
-  height: 87%;
+  height: 97%;
   z-index: 1;
   background-color: $white;
   overflow-y: auto;
@@ -504,7 +504,7 @@ mat-option {
   }
   .button-wrapper {
     @include flex-col-all-Center;
-    height: 35vh;
+    height: 32vh;
     gap: 15px;
 
     .button {

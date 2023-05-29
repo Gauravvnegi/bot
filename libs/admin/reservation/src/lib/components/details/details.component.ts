@@ -32,6 +32,7 @@ import { ReservationService } from '../../services/reservation.service';
 import { AdminDocumentsDetailsComponent } from '../admin-documents-details/admin-documents-details.component';
 import { JourneyDialogComponent } from '../journey-dialog/journey-dialog.component';
 import { ManualCheckinComponent } from '../manual-checkin/manual-checkin.component';
+import { SendMessageComponent } from 'libs/admin/notification/src/lib/components/send-message/send-message.component';
 
 @Component({
   selector: 'hospitality-bot-details',
@@ -633,7 +634,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       const notificationCompRef = this._modal.openDialog(
         channel === 'EMAIL'
           ? MarketingNotificationComponent
-          : NotificationComponent,
+          : SendMessageComponent,
         dialogConfig
       );
       if (channel === 'WHATSAPP_LITE') {
@@ -723,7 +724,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     if(sharedIcon){
       return channel.isSubscribed
       ? sharedIcon.iconUrl
-      : sharedIcon.disableIcon;
+      : sharedIcon.iconUrl;
     }
 
     return ''

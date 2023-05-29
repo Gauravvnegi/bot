@@ -11,14 +11,14 @@ export class EmailList {
 }
 
 export class Email {
-  id: string;
-  email: string;
+  value: string;
+  label: string;
 
   deserialize(input) {
     Object.assign(
       this,
-      set({}, 'id', get(input, 'id', '')),
-      set({}, 'email', get(input, 'smtpUserName', ''))
+      set({}, 'value', get(input, 'id', '')),
+      set({}, 'label', get(input, 'smtpUserName', ''))
     );
     return this;
   }
@@ -35,18 +35,18 @@ export class Topics {
 }
 
 export class Topic {
-  id: string;
+  value: string;
   status: boolean;
   description: string;
-  name: string;
+  label: string;
   hotelId: string;
   active: boolean;
 
   deserialize(input: any) {
     Object.assign(
       this,
-      set({}, 'id', get(input, ['id'])),
-      set({}, 'name', get(input, ['name'])),
+      set({}, 'value', get(input, ['id'])),
+      set({}, 'label', get(input, ['name'])),
       set({}, 'status', get(input, ['active'])),
       set({}, 'description', get(input, ['description'])),
       set({}, 'hotelId', get(input, ['hotelId'])),

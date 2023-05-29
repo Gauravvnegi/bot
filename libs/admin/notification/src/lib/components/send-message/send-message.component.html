@@ -1,0 +1,78 @@
+<div class="container" *ngIf="config; else loader">
+  <div class="modal-header">
+    <div></div>
+    <div class="modal-header__heading">Send Message</div>
+    <div (click)="closeModal()" class="close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="form-block" [formGroup]="messageFG" *ngIf="messageFG">
+    <hospitality-bot-multi-select
+      class="half-width"
+      controlName="socialChannels"
+      label="Channels"
+      [options]="channels"
+      [settings]="{ showHeader: false }"
+      defaultLabel="Select Channels"
+      [props]="{
+        placeholder: 'Select Channels'
+      }"
+    ></hospitality-bot-multi-select>
+    <div class="half-width"></div>
+    <hospitality-bot-select
+      class="half-width"
+      label="Messsage Type"
+      controlName="messageType"
+      [options]="messageTypes"
+      (itemSelection)="onMessageTypeChange($event.value)"
+      [props]="{
+        placeholder: 'Select Message Type'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      class="half-width"
+      controlName="templateId"
+      label="Template"
+      [disabled]="isTemplateDisabled"
+      [options]="templates"
+      [props]="{
+        placeholder: 'Select Template'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-auto-complete
+      class="full-width"
+      controlName="roomNumbers"
+      label="Room"
+      [options]="rooms"
+      [disabled]="true"  
+    ></hospitality-bot-auto-complete>
+    <hospitality-bot-template-editor
+      class="full-width"
+      [parentFG]="messageFG"
+      label="Input Message"
+      [name]="'message'"
+      [template]="template"
+      [hybrid]="true"
+    ></hospitality-bot-template-editor>
+    <hospitality-bot-add-attachment
+      controlName="attachments"
+      class="full-width"
+      label="Attachment"
+      [options]="attachmentsList"
+      (onClick)="uploadAttachments($event)"
+      #attachmentComponent
+    ></hospitality-bot-add-attachment>
+    <div class="btn-wrapper">
+      <hospitality-bot-button
+        (onClick)="sendMessage()"
+        [label]="isSending ? 'Sending' : 'Send'"
+        [disabled]="isSending"
+      >
+      </hospitality-bot-button>
+    </div>
+  </div>
+</div>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
+</ng-template>

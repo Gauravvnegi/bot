@@ -108,6 +108,7 @@ export const cols: Record<TableValue, Cols[]> = {
       header: 'Room No / Type',
       sortType: 'string',
       searchField: ['type', 'roomNo'],
+      width: '23%',
     },
     {
       field: 'date',
@@ -118,7 +119,7 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'price',
       header: 'Price',
       sortType: 'number',
-      width: '18%',
+      width: '23%',
     },
     {
       field: 'status.value',

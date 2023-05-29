@@ -124,7 +124,7 @@
                 <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
                 <a href="tel:{{ rowData.guest.getPhoneNumber() }}">
                   <div class="guest-phone">
-                    {{ rowData.guest.getPhoneNumber() }}
+                    {{ rowData.guest.phoneNumber }}
                   </div>
                 </a>
               </td>
@@ -530,10 +530,10 @@
                 </div>
               </td>
               <td class="guest">
-                <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
+                <div class="guest-name">{{ rowData.guest.fullName }}</div>
                 <a href="tel:{{ rowData.guest.getPhoneNumber() }}">
                   <div class="guest-phone">
-                    {{ rowData.guest.getPhoneNumber() }}
+                    {{ rowData.guest.phoneNumber }}
                   </div>
                 </a>
                 <div class="guest-phone">{{ rowData.guest.emailId }}</div>

@@ -4,7 +4,7 @@ export const cols = {
       field: 'rooms.roomNumber',
       header: 'Room No / Type',
       sortType: 'number',
-      searchField: ['rooms.roomNumber', 'rooms.type']
+      searchField: ['rooms.roomNumber', 'rooms.type'],
     },
     {
       field: 'booking.bookingNumber',
@@ -16,7 +16,10 @@ export const cols = {
       field: `guests.primaryGuest.fullName`,
       header: 'Guest / Company',
       sortType: 'string',
-      searchField: ['guests.primaryGuest.fullName', 'guests.secondaryGuest.fullName'],
+      searchField: [
+        'guests.primaryGuest.fullName',
+        'guests.secondaryGuest.fullName',
+      ],
     },
     {
       field: `guests.primaryGuest.phoneNumber`,

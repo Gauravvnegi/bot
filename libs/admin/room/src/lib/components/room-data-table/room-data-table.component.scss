@@ -4,8 +4,8 @@
   overflow-x: unset !important;
 }
 
-$room-count-active-bg: rgb(232,246,252);
-$room-count-active: rgb(47,166,227);
+$room-count-active-bg: rgb(232, 246, 252);
+$room-count-active: rgb(47, 166, 227);
 
 .table-row {
   height: 90px;
@@ -53,11 +53,6 @@ $room-count-active: rgb(47,166,227);
   flex-direction: column;
   gap: 10px;
   padding: 5% 15%;
-}
-
-// *** over ride the table style ***
-:host ::ng-deep .p-datatable {
-  @include tableCellPadding(1em);
 }
 
 .amenities {

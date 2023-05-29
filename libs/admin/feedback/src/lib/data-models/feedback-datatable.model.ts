@@ -299,10 +299,10 @@ export class Guest {
         )}`
       ),
       set({}, 'nameTitle', get(input, ['nameTitle'], '')),
-      set({}, 'phoneNumber', get(input, ['phoneNumber'], '')),
       set({}, 'place', get(input, ['place'], '')),
       set({}, 'spouseBirthDate', get(input, ['spouseBirthDate'], '')),
-      set({}, 'updated', get(input, ['updated'], ''))
+      set({}, 'updated', get(input, ['updated'], '')),
+      (this.phoneNumber = input.countryCode + ' ' + input.phoneNumber)
     );
     return this;
   }

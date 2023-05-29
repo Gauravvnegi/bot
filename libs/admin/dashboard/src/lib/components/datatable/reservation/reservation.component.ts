@@ -28,12 +28,8 @@ import { dashboard } from '../../../constants/dashboard';
 import { tabFilterItems } from '../../../constants/tabFilterItem';
 import { ReservationService } from '../../../services/reservation.service';
 import {
-  EntityState,
-  EntityType,
   SelectedEntityState,
 } from '../../../types/dashboard.type';
-import { ActivatedRoute } from '@angular/router';
-import { ContactSortFilterComponent } from 'libs/admin/whatsapp/src/lib/components/contact-sort-filter/contact-sort-filter.component';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',

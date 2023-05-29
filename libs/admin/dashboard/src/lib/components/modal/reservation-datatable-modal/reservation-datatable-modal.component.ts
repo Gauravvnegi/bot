@@ -12,6 +12,8 @@ import {
 } from '@hospitality-bot/shared/material';
 import { ReservationService } from '../../../services/reservation.service';
 import { ReservationDatatableComponent } from '../../datatable/reservation/reservation.component';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-reservation-modal',
@@ -34,7 +36,8 @@ export class ReservationDatatableModalComponent
     protected snackbarService: SnackBarService,
     protected _modal: ModalService,
     protected tabFilterService: TableService,
-    public feedbackService: FeedbackService
+    public feedbackService: FeedbackService,
+    private router: Router,
   ) {
     super(
       fb,
@@ -50,6 +53,11 @@ export class ReservationDatatableModalComponent
 
   ngOnInit(): void {
     this.registerListeners();
+    this.router.events
+    .pipe(filter(event => event instanceof NavigationEnd))
+    .subscribe(() => {
+      this.closeModal();
+    });
   }
 
   /**

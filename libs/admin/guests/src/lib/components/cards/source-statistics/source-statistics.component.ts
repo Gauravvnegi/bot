@@ -225,12 +225,10 @@ export class SourceStatisticsComponent implements OnInit, OnDestroy {
     tableCompRef.componentInstance.callingMethod = 'getAllGuestStats';
     tableCompRef.componentInstance.guestFilter = 'GUESTSOURCES';
     tableCompRef.componentInstance.exportURL = 'exportCSVStat';
-
-    this.$subscription.add(
-      tableCompRef.componentInstance.onModalClose.subscribe((res) => {
-        tableCompRef.close();
-      })
-    );
+    
+    tableCompRef.componentInstance.onModalClose.subscribe((res) => {
+      tableCompRef.close();
+    });
   }
 
   ngOnDestroy(): void {

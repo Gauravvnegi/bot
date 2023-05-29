@@ -373,12 +373,13 @@
             >
             </p-tableCheckbox>
           </td>
-          <td class="guest">
-            <div class="guest-status" *ngIf="rowData?.timeOut">
-              <img src="assets/svg/timeout.svg" alt="timeout" />
-            </div>
-            <div>
-              {{ rowData?.tableOrRoomNumber }}
+          <td>
+            <div [roomStatus]="rowData.roomStatus">
+              <div>
+                {{ rowData?.tableOrRoomNumber || '--' }}&nbsp;-&nbsp;{{
+                  rowData?.roomType || '--'
+                }}
+              </div>
             </div>
           </td>
           <td class="service-feedback">

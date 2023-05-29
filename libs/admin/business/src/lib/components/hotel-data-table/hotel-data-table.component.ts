@@ -54,7 +54,8 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.businessService.resetHotelFormState();
+
     this.initTableValue();
   }
 
@@ -133,13 +134,13 @@ export class HotelDataTableComponent extends BaseDatatableComponent
 
     // let heading: string;
     let description: string[] = [
-      `Are you sure you want to Deactive ${rowData.name}`,
+      `Are you sure you want to Deactive ${rowData?.name}`,
       ' Once Deactivated, you wont be to manage reservations and the hotel website will not be visible to visitors.',
     ];
     let label: string = 'Deactivate';
     if (status) {
       description = [
-        `Are you sure you want to Activate ${rowData.name}`,
+        `Are you sure you want to Activate ${rowData?.name}`,
         ' Once Activated, you will be able to manage reservations and the hotel website will be visible to visitors.',
       ];
       label = 'Activate';

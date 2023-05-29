@@ -1,14 +1,13 @@
+import { EventEmitter } from '@angular/core';
+import { QueryConfig } from '@hospitality-bot/admin/library';
 import { ApiService } from '@hospitality-bot/shared/utils';
+import { Observable } from 'rxjs';
 import {
   BrandFormData,
   BrandResponse,
   SocialPlatForms,
 } from '../types/brand.type';
-import { Observable } from 'rxjs';
 import { HotelConfiguration, HotelFormData } from '../types/hotel.type';
-import { map } from 'rxjs/operators';
-import { EventEmitter } from '@angular/core';
-import { QueryConfig } from '@hospitality-bot/admin/library';
 
 export class BusinessService extends ApiService {
   /**
@@ -25,6 +24,10 @@ export class BusinessService extends ApiService {
         config.params.slice(1) ?? ''
       }`
     );
+  }
+
+  resetHotelFormState() {
+    this.hotelFormState = false;
   }
 
   /**
@@ -133,12 +136,18 @@ export class BusinessService extends ApiService {
     return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
   }
   hotelInfoFormData = {
+    address: {
+      value: '',
+    },
+    imageUrl: [],
     serviceIds: [],
   };
+  hotelFormState: boolean = false;
 
-  initHotelInfoFormData(input: any) {
+  initHotelInfoFormData(input: any, roomTypeFormState: boolean) {
     console.log(input, 'input');
     this.hotelInfoFormData = { ...this.hotelInfoFormData, ...input };
+    this.hotelFormState = roomTypeFormState;
   }
 
   /**

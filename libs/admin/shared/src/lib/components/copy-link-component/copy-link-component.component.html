@@ -1,0 +1,11 @@
+<div class="url">{{ url }}</div>
+<div class="image">
+  <img
+    class="float-right"
+    src="assets/svg/copy.svg"
+    alt="copy"
+    [cdkCopyToClipboard]="url"
+    (click)="handleCopyToClipboard($event)"
+  />
+  <span class="tooltiptext">copy</span>
+</div>

@@ -135,11 +135,11 @@ export class RoomComponent implements OnInit {
         );
 
         this.remainingInventoryStat = new RemainingInventory();
-        this.remainingInventoryStat.label = 'Inventory Remaining';
+        this.remainingInventoryStat.label = 'InventoryRemaining';
         this.remainingInventoryStat.additionalData = this.remainingInventory.additionalData;
 
         this.remainingCostStat = new RemainingInventoryCost();
-        this.remainingCostStat.label = 'Remaining Inventory Cost';
+        this.remainingCostStat.label = 'RemainingInventoryCost';
         this.remainingCostStat.additionalData = this.remainingCost.additionalData;
 
         this.setAvgRoomRateGraphConfig();

@@ -157,6 +157,7 @@
       <p-accordionTab header="Payment Method">
         <div class="form-block" formGroupName="paymentMethod">
           <hospitality-bot-select-group
+            *ngIf="!!paymentOptions.length"
             class="full-width"
             controlName="paymentMethod"
             label="Payment Method"

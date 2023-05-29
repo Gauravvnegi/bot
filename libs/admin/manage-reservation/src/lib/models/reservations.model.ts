@@ -313,7 +313,7 @@ export class PaymentMethod {
     this.description = input?.description;
     this.iconUrl = input?.iconUrl;
     this.label = input?.label;
-    this.type = input?.type;
+    this.type = input?.type ?? [];
     return this;
   }
 }

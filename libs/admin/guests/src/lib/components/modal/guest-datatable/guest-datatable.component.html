@@ -217,8 +217,8 @@
                     rowData.payment.dueAmount <= rowData.payment.totalAmount,
                   'status-text-success': rowData.payment.dueAmount === 0
                 }"
-                >{{ rowData.payment.dueAmount }}</span
-              >/ {{ rowData.payment.totalAmount }}
+                >{{ rowData.payment.dueAmount | currency: 'INR' }}</span
+              >/ {{ rowData.payment.totalAmount | currency: 'INR' }}
             </td>
 
             <td class="package">
@@ -236,7 +236,7 @@
               </span>
             </td>
 
-            <td class="package">
+            <!-- <td class="package">
               <span
                 >{{ rowData.guestAttributes.churnProbalilty }}/<span
                   [ngClass]="
@@ -247,7 +247,7 @@
                   >{{ rowData.guestAttributes.churnPrediction }}</span
                 >
               </span>
-            </td>
+            </td> -->
             <td class="status-image">
               <div class="icon-wrapper">
                 <div class="line first"></div>

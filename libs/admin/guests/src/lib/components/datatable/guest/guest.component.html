@@ -199,8 +199,8 @@
               rowData.payment.dueAmount <= rowData.payment.totalAmount,
             'status-text-success': rowData.payment.dueAmount === 0
           }"
-          >{{ rowData.payment.dueAmount }}</span
-        >/ {{ rowData.payment.totalAmount }}
+          >{{ rowData.payment.dueAmount | currency: 'INR' }}</span
+        >/ {{ rowData.payment.totalAmount | currency: 'INR' }}
       </td>
       <td class="package">
         <span

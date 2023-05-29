@@ -160,7 +160,7 @@ export class RoomStatGraph {
   graph: any;
 
   deserialize(input: AverageRoomRateResponse){
-    this.label = input.label;
+    this.label = input.label.replace(/\s+/g, '');
     this.additionalData = shortenNumber(input.score);
     this.comparisonPercent = input.comparisonPercent;
     this.graph = input.averageRoomRateGraph;
@@ -174,14 +174,13 @@ export class OccupancyGraph {
   graph: any;
 
   deserialize(input: OccupancyResponse){
-    this.label = input.label;
+    this.label = input.label.replace(/\s+/g, '');
     this.additionalData = `${input.score}%`;
     this.comparisonPercent = input.comparisonPercent;
     this.graph = input.occupancyGraph;
     return this;
   }
 }
-
 
 export class RemainingInventory {
   label: string;
@@ -190,7 +189,7 @@ export class RemainingInventory {
   additionalData: string;
 
   deserialize(input: InventoryRemainingResponse){
-    this.label = input.label;
+    this.label = input.label.replace(/\s+/g, '');
     this.occupied = input.occupied;
     this.remaining = input.remaining;
     this.additionalData = `${input.remaining} Rooms`;
@@ -205,7 +204,7 @@ export class RemainingInventoryCost{
   additionalData: string;
 
   deserialize(input: InventoryCostRemainingResponse){
-    this.label = input.label;
+    this.label = input.label.replace(/\s+/g, '');
     this.spent = input.spent;
     this.remaining = input.remaining;
     this.additionalData = shortenNumber(input.remaining);

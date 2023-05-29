@@ -1,57 +1,65 @@
 <div *ngIf="isRendered">
-    <div class="container" *ngIf="isConfigLoaded">
-      <mat-tab-group #matTab dynamicHeight>
-        <mat-tab *ngFor="let header of hotelPaymentConfig.paymentHeaders">
-          <ng-template mat-tab-label>
-            <div [ngClass]="hotelPaymentConfig.paymentHeaders?.length < 2 ? 'custom-tab full_width' : 'custom-tab'">
-              <div>
-                <img [src]="header.imageUrl" style="height: 53px" class="svg-payment" />
-                <!-- <svg-icon [src]="header.imageUrl" class="svg-payment"></svg-icon> -->
+  <div class="container" *ngIf="isConfigLoaded">
+    <mat-tab-group #matTab dynamicHeight>
+      <mat-tab *ngFor="let header of hotelPaymentConfig.paymentHeaders">
+        <ng-template mat-tab-label>
+          <div
+            [ngClass]="
+              hotelPaymentConfig.paymentHeaders?.length < 2
+                ? 'custom-tab full_width'
+                : 'custom-tab'
+            "
+          >
+            <div>
+              <img
+                [src]="header?.imageUrl"
+                style="height: 53px;"
+                class="svg-payment"
+              />
+              <!-- <svg-icon [src]="header.imageUrl" class="svg-payment"></svg-icon> -->
+            </div>
+            <div class="inner-label">
+              <div class="type-label">
+                <div>
+                  <span>{{ header?.type }}</span>
+                </div>
+                <div class="amount">
+                  <span
+                    >{{ currencyCode }}
+                    {{ reservationData.paymentSummary.payableAmount }}</span
+                  >
+                </div>
               </div>
-              <div class="inner-label">
-                <div class="type-label">
-                  <div>
-                    <span>{{ header.type }}</span>
-                  </div>
-                  <div class="amount">
-                    <span
-                      >{{ currencyCode }}
-                      {{ reservationData.paymentSummary.payableAmount }}</span
-                    >
-                  </div>
-                </div>
-                <div class="info-label">
-                  {{ header.description }}
-                </div>
+              <div class="info-label">
+                {{ header.description }}
               </div>
             </div>
-          </ng-template>
-          <div class="payment-wrapper">
-            <div *ngIf="header.type !== 'Pay At Desk'">
-              <div
-                class="payment__wrapper__heading"
-              >
-                Payment Methods
-              </div>
-              <web-user-payment-method
-                *ngIf="hotelPaymentConfig"
-                [settings]="{ paymentConfigurations: paymentConfiguration }"
-                (paymentMethod)="setPaymentMethodData($event)"
-              ></web-user-payment-method>
-            </div>
-            <hospitality-bot-payment-summary
-              *ngIf="hotelPaymentConfig"
-              [parentForm]="parentForm"
-              [reservationData]="reservationData"
-            ></hospitality-bot-payment-summary>
           </div>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
-  
-    <div class="main-template-button">
-      <ng-container button-renderer [config]="buttonConfig" [context]="self">
-      </ng-container>
-    </div>
+        </ng-template>
+        <div class="payment-wrapper">
+          <div *ngIf="header?.type !== 'Pay At Desk'">
+            <!-- <div class="payment__wrapper__heading">
+              Payment Methods
+            </div> -->
+            <web-user-payment-method
+              *ngIf="hotelPaymentConfig"
+              [settings]="{ paymentConfigurations: paymentConfiguration }"
+              (paymentMethod)="setPaymentMethodData($event)"
+              [paymentUrl]="paymentUrl"
+            ></web-user-payment-method>
+          </div>
+          <hospitality-bot-payment-summary
+            *ngIf="hotelPaymentConfig"
+            [parentForm]="parentForm"
+            [reservationData]="reservationData"
+          ></hospitality-bot-payment-summary>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
-  
+
+  <div class="main-template-button">
+    <ng-container button-renderer [config]="buttonConfig" [context]="self">
+    </ng-container>
+  </div>
+</div>

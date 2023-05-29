@@ -50,7 +50,7 @@ export class CreatePackageComponent implements OnInit {
 
   categories: Option[] = [];
   services: (Option & { price: number })[] = [];
-  currencies: Option[] = [{ label: 'INR', value: 'INR' }];
+  currencies: Option[];
   discountType: Option[] = [];
   visibilities: Option[] = [];
 
@@ -93,11 +93,11 @@ export class CreatePackageComponent implements OnInit {
         [Validators.required, CustomValidators.minArrayValueLength(2)],
       ],
       imageUrl: ['', Validators.required],
-      currency: ['INR', Validators.required],
+      currency: ['', Validators.required],
       rate: ['', Validators.required],
-      discountType: ['', Validators.required],
-      discountValue: ['', [Validators.required, Validators.min(1)]],
-      discountedCurrency: ['INR', Validators.required],
+      discountType: ['PERCENTAGE', Validators.required],
+      discountValue: ['0', [Validators.required, Validators.min(0)]],
+      discountedCurrency: ['', Validators.required],
       discountedPrice: ['', Validators.required],
       enableVisibility: [[], Validators.required],
     });
@@ -173,6 +173,8 @@ export class CreatePackageComponent implements OnInit {
           label: DiscountType[value],
           value,
         }));
+        this.useForm.get('currency').setValue(this.currencies[0].value);
+        this.useForm.get('discountedCurrency').setValue(this.currencies[0].value);
       }
     });
     this.getServices();
@@ -450,7 +452,7 @@ export class CreatePackageComponent implements OnInit {
    * @function handleError to show the error
    * @param param0 network error
    */
-  handleError = ({ error }): void => { 
+  handleError = ({ error }): void => {
     this.closeLoading();
   };
 

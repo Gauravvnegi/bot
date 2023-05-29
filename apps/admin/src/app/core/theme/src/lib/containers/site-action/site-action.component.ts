@@ -20,9 +20,12 @@ export class SiteActionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.selectedSiteId = this.hotelDetailService.siteId;
     this.sites = this.hotelDetailService.sites.map((item, idx) => {
       return {
         label: item.name,
+        styleClass:
+          this.selectedSiteId === item.id ? 'selected' : 'un-selected',
         value: item.id,
         command: () => {
           this.handleSite(idx);
@@ -31,10 +34,9 @@ export class SiteActionComponent implements OnInit {
     });
 
     const currSite = this.sites?.find(
-      (site) => site.value === this.hotelDetailService.siteId
+      (site) => site.value === this.selectedSiteId
     );
     this.selectedSite = currSite?.label ?? 'Choose site';
-    this.selectedSiteId = currSite?.value;
   }
 
   handleSite = (index: number) => {
@@ -42,6 +44,6 @@ export class SiteActionComponent implements OnInit {
     const siteId = selectedSite.value;
 
     if (siteId !== this.selectedSiteId)
-      this.cookiesSettingService.initPlatformChangeV2(siteId);
+      this.cookiesSettingService.initPlatformChange(siteId);
   };
 }

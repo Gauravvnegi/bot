@@ -1,6 +1,11 @@
 <div *ngIf="isRendered" class="main-container main-block">
   <div class="container" *ngIf="isConfigLoaded">
-    <mat-tab-group #matTab dynamicHeight>
+    <mat-tab-group
+      #matTab
+      dynamicHeight
+      (selectedTabChange)="onTabChanged($event)"
+      [selectedIndex]="selectedIndex"
+    >
       <mat-tab
         *ngFor="let header of hotelPaymentConfig.paymentHeaders; let i = index"
       >
@@ -14,7 +19,7 @@
           >
             <div class="img-wrap">
               <img
-                [src]="header.imageUrl"
+                [src]="header?.imageUrl"
                 style="height: 53px;"
                 class="svg-payment"
                 [alt]="'image' + i"
@@ -23,7 +28,7 @@
             <div class="inner-label">
               <div class="type-label">
                 <div>
-                  <span>{{ header.type }}</span>
+                  <span>{{ header?.type }}</span>
                 </div>
                 <div class="amount">
                   <span
@@ -33,20 +38,21 @@
                 </div>
               </div>
               <div class="info-label">
-                {{ header.description }}
+                {{ header?.description }}
               </div>
             </div>
           </div>
         </ng-template>
         <div class="payment-wrapper">
-          <div *ngIf="header.type !== 'Pay At Desk'">
-            <div class="payment__wrapper__heading">
+          <div *ngIf="header?.type !== 'Pay At Desk'">
+            <!-- <div class="payment__wrapper__heading">
               Payment Methods
-            </div>
+            </div> -->
             <web-user-payment-method
-              *ngIf="hotelPaymentConfig"
+              *ngIf="hotelPaymentConfig && this.reservationData.paymentSummary.payableAmount !== 0"
               [settings]="{ paymentConfigurations: paymentConfiguration }"
               (paymentMethod)="setPaymentMethodData($event)"
+              [paymentUrl]="paymentUrl"
             ></web-user-payment-method>
           </div>
           <hospitality-bot-payment-summary
@@ -59,8 +65,20 @@
     </mat-tab-group>
   </div>
 
-  <div class="main-template-button">
-    <ng-container button-renderer [config]="buttonConfig" [context]="self">
+  <div *ngIf="selectedIndex === 0" class="main-template-button">
+    <ng-container
+      button-renderer
+      [config]="getUpdatedBtnConfig()"
+      [context]="self"
+    >
+    </ng-container>
+  </div>
+  <div *ngIf="selectedIndex === 1" class="main-template-button">
+    <ng-container
+      button-renderer
+      [config]="getUpdatedBtnConfig(true)"
+      [context]="self"
+    >
     </ng-container>
   </div>
   <div class="payment-form" style="display: hidden;"></div>

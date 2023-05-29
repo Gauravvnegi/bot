@@ -63,8 +63,8 @@
   }
 }
 
-@media only screen and (max-width: $M) {
-  .user-button {
-    width: 100%;
+:host ::ng-deep .user-button {
+  @media only screen and (max-width: $tablet) {
+    width: 100vw !important;
   }
 }

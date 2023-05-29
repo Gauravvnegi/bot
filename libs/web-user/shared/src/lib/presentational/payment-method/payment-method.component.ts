@@ -10,8 +10,10 @@ import { ValidatorService } from '../../services/validator.service';
 export class PaymentMethodComponent {
   private _settings;
   private _defaultValue = {
-    paymentConfigurations: { },
+    paymentConfigurations: {},
   };
+
+  @Input() paymentUrl: string;
 
   @Input('settings') set settings(value) {
     this._settings = { ...this._defaultValue, ...value };

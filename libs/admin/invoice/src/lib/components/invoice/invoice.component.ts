@@ -12,6 +12,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
+  ConfigService,
   NavRouteOptions,
   Option,
   UserService,
@@ -23,7 +24,7 @@ import {
 import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
 import { ServicesService } from 'libs/admin/services/src/lib/services/services.service';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { Subscription, from } from 'rxjs';
+import { Subscription, from, throwError } from 'rxjs';
 import {
   addDiscountMenu,
   addRefundMenu,
@@ -57,6 +58,7 @@ export class InvoiceComponent implements OnInit {
   hotelId: string;
   reservationId: string;
   guestId: string;
+  bookingNumber: string;
 
   tableFormArray: FormArray;
   useForm: FormGroup;
@@ -72,7 +74,7 @@ export class InvoiceComponent implements OnInit {
   tax: Option[] = [];
 
   tableValue = [];
-  refundOption = [{ label: 'INR', value: 'INR' }];
+  refundOption: Option[] = [];
 
   isRefundSaved = false;
   viewRefundRow = false;
@@ -89,6 +91,7 @@ export class InvoiceComponent implements OnInit {
   serviceOptions: Option[];
 
   descriptionOffSet = 0;
+  loadingData = false;
   loadingDescription = false;
   noMoreDescription = false;
   selectedSearchIndex = -1;
@@ -108,7 +111,10 @@ export class InvoiceComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private servicesService: ServicesService,
     private modalService: ModalService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private configService: ConfigService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -121,14 +127,27 @@ export class InvoiceComponent implements OnInit {
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
     this.initForm();
+    this.initOptions();
     this.getDescriptionOptions();
+  }
+
+  initOptions(){
+    this.configService.$config.subscribe(config => {
+      if (config) {
+        this.refundOption = config.currencyConfiguration.map(item => ({
+          label: item.key,
+          value: item.value,
+        }));
+        this.inputControl.currency.setValue(this.refundOption[0].value);
+      } 
+    });
   }
 
   /**
    * Initialize page title and navigator
    */
   initPageHeaders() {
-    const { title, navRoutes } = invoiceRoutes['createInvoice'];
+    const { title, navRoutes } = invoiceRoutes['invoice'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
   }
@@ -147,8 +166,8 @@ export class InvoiceComponent implements OnInit {
       companyName: [''],
 
       gstNumber: ['', Validators.required],
-      contactName: ['', Validators.required],
-      contactNumber: ['', Validators.required],
+      // contactName: ['', Validators.required],
+      // contactNumber: ['', Validators.required],
       email: ['', Validators.required],
       address: ['', Validators.required],
       state: ['', Validators.required],
@@ -164,14 +183,17 @@ export class InvoiceComponent implements OnInit {
       paidAmount: [0],
       dueAmount: [0],
 
-      currency: ['INR'],
+      currency: [''],
       refundAmount: [0],
 
-      cashierName: [{ value: `${firstName} ${lastName}`, disabled: true }, Validators.required],
+      cashierName: [
+        { value: `${firstName} ${lastName}`, disabled: true },
+        Validators.required,
+      ],
       paymentMethod: ['', Validators.required],
-      receivedPayment: ['', Validators.required],
-      remarks: ['', Validators.required],
-      transactionId: ['', Validators.required],
+      receivedPayment: ['', [Validators.required, Validators.min(1)]],
+      remarks: [''],
+      transactionId: [''],
     });
 
     this.tableFormArray = this.useForm.get('tableData') as FormArray;
@@ -186,49 +208,65 @@ export class InvoiceComponent implements OnInit {
    * Patch the initial form values
    */
   initFormDetails() {
+    this.loadingData = true;
     const { firstName, lastName } = this.userService.userDetails;
     // this.tableValue = [{ id: 1 }];
-    this.invoiceService.getInvoiceData(this.reservationId).subscribe((res) => {
-      this.invoiceService.initInvoiceData(res); // saving initial invoice data
+    this.invoiceService.getInvoiceData(this.reservationId).subscribe(
+      (res) => {
+        this.invoiceService.initInvoiceData(res); // saving initial invoice data
 
-      const data = new Invoice().deserialize(res, {
-        cashierName: `${firstName} ${lastName}`,
-      });
-      // this.tableValue = data.tableData.map((_, idx) => ({ id: idx + 1 }));
-      // for (let i = 1; i < data.tableData.length; i++) {
-      //   this.addNewCharges(); // adding new table entry to patch data
-      // }
-
-      data.tableData.forEach((item, idx) => {
-        // this.tableValue.push({ id: idx + 1 });
-        this.addNewCharges(item.type, idx); // adding new table entry to patch data
-      });
-
-      this.useForm.patchValue(data, { emitEvent: false });
-
-      // Generating tax options
-      this.tax = res.itemList.reduce((prev, curr) => {
-        const taxes = curr.itemTax.map((item) => ({
-          label: `${item.taxType} [${item.taxValue}%]`,
-          value: item.id,
-        }));
-
-        return [...prev, ...taxes];
-      }, []);
-
-      // Generating default description options
-      res.itemList.forEach((item) => {
-        this.defaultDescriptionOptions.push({
-          label: item.description,
-          value: item.id,
-          amount: item.amount,
-          taxes: item.itemTax,
+        const data = new Invoice().deserialize(res, {
+          cashierName: `${firstName} ${lastName}`,
         });
-      });
+        this.guestId = res.primaryGuest.id;
+        this.bookingNumber = res.reservation.number;
 
-      this.guestId = res.primaryGuest.id;
-      this.isInvoiceGenerated = res.invoiceGenerated;
-    });
+        if (data.gstNumber !== '') {
+          this.onAddGST();
+        }
+
+        // this.tableValue = data.tableData.map((_, idx) => ({ id: idx + 1 }));
+        // for (let i = 1; i < data.tableData.length; i++) {
+        //   this.addNewCharges(); // adding new table entry to patch data
+        // }
+
+        data.tableData.forEach((item, idx) => {
+          // this.tableValue.push({ id: idx + 1 });
+          this.addNewCharges(item.type, idx); // adding new table entry to patch data
+        });
+
+        this.useForm.patchValue(data, { emitEvent: false });
+        this.inputControl.guestName.patchValue(data.guestName, { emitEvent: true });
+        // Generating tax options
+        this.tax = res.itemList.reduce((prev, curr) => {
+          const taxes = curr.itemTax.map((item) => ({
+            label: `${item.taxType} [${item.taxValue}%]`,
+            value: item.id,
+          }));
+
+          return [...prev, ...taxes];
+        }, []);
+
+        // Generating default description options
+        res.itemList.forEach((item) => {
+          this.defaultDescriptionOptions.push({
+            label: item.description,
+            value: item.id,
+            amount: item.amount,
+            taxes: item.itemTax,
+          });
+        });
+
+        this.isInvoiceGenerated = res.invoiceGenerated;
+        if (this.isInvoiceGenerated) {
+          this.useForm.disable();
+        }
+        this.loadingData = false;
+      },
+      (error) => {
+        this.router.navigateByUrl('/pages/efrontdesk');
+      }
+    );
   }
 
   handleFocus(index: number) {
@@ -263,17 +301,21 @@ export class InvoiceComponent implements OnInit {
   paymentValidation(addValidation: boolean = true) {
     const paymentMethodControl = this.useForm.get('paymentMethod');
     const receivedPaymentControl = this.useForm.get('receivedPayment');
-    const transactionIdControl = this.useForm.get('transactionId');
-    const remarksControl = this.useForm.get('remarks');
+    // const transactionIdControl = this.useForm.get('transactionId');
+    // const remarksControl = this.useForm.get('remarks');
 
     [
       paymentMethodControl,
       receivedPaymentControl,
-      transactionIdControl,
-      remarksControl,
+      // transactionIdControl,
+      // remarksControl,
     ].forEach((item) => {
-      if (addValidation) item.setValidators([Validators.required]);
-      else {
+      if (addValidation) {
+        item.setValidators([Validators.required]);
+        if (item === receivedPaymentControl) {
+          item.setValidators([Validators.required, Validators.min(1)]);
+        }
+      } else {
         item.clearValidators();
         item.updateValueAndValidity();
         item.reset();
@@ -285,8 +327,8 @@ export class InvoiceComponent implements OnInit {
     const companyNameControl = this.useForm.get('companyName');
 
     const gstNumberControl = this.useForm.get('gstNumber');
-    const contactNameControl = this.useForm.get('contactName');
-    const contactNumberControl = this.useForm.get('contactNumber');
+    // const contactNameControl = this.useForm.get('contactName');
+    // const contactNumberControl = this.useForm.get('contactNumber');
     const emailControl = this.useForm.get('email');
     const addressControl = this.useForm.get('address');
     const stateControl = this.useForm.get('state');
@@ -295,8 +337,8 @@ export class InvoiceComponent implements OnInit {
 
     [
       gstNumberControl,
-      contactNameControl,
-      contactNumberControl,
+      // contactNameControl,
+      // contactNumberControl,
       emailControl,
       addressControl,
       stateControl,
@@ -314,9 +356,10 @@ export class InvoiceComponent implements OnInit {
     if (addValidation) {
       companyNameControl.setValidators([Validators.required]);
       companyNameControl.updateValueAndValidity();
+      companyNameControl.markAsUntouched();
     } else {
-      companyNameControl.updateValueAndValidity();
       companyNameControl.clearValidators();
+      companyNameControl.updateValueAndValidity();
       companyNameControl.markAsUntouched();
     }
   }
@@ -326,16 +369,11 @@ export class InvoiceComponent implements OnInit {
    */
   addNewCharges(type: 'price' | 'discount' = 'price', rowIndex?: number) {
     if (this.tableFormArray.length > 0 && !rowIndex) {
-      const lastFormGroup = this.tableFormArray.at(
-        this.tableFormArray.length - 1
-      );
-      const rowType = lastFormGroup.get('type');
-      if (
-        rowType.value === 'price' &&
-        lastFormGroup.invalid &&
-        type === 'price'
-      ) {
+      if (this.tableFormArray.invalid) {
         this.markAsTouched(this.tableFormArray);
+        this.snackbarService.openSnackBarAsText(
+          'Invalid form: Please fix the errors.'
+        );
         return;
       }
     }
@@ -349,13 +387,16 @@ export class InvoiceComponent implements OnInit {
           ? this.tableFormArray.at(index - 1)?.get('key').value
           : `${Date.now()}`,
       ],
-      description: ['', Validators.required],
-      unit: [null],
-      unitValue: [null],
+      description: ['', type === 'price' ? [Validators.required] : null],
+      unit: [null, type === 'price' ? [Validators.min(0)] : null],
+      unitValue: [null, type === 'price' ? [Validators.min(0)] : null],
       amount: [null],
       tax: [[]],
       totalAmount: [null],
-      discount: [null],
+      discount: [
+        null,
+        type === 'discount' ? [Validators.required, Validators.min(0)] : null,
+      ],
       discountType: ['PERCENT'],
       type: [type],
       isDisabled: [false],
@@ -492,10 +533,12 @@ export class InvoiceComponent implements OnInit {
     );
 
     unit.valueChanges.subscribe((unitQuantity) => {
+      if (unit.invalid || unitValue.invalid) return;
       handlePriceRowUpdate({ unitQuantity });
     });
 
     unitValue.valueChanges.subscribe((unitPrice) => {
+      if (unit.invalid || unitValue.invalid) return;
       handlePriceRowUpdate({ unitPrice });
     });
 
@@ -565,6 +608,9 @@ export class InvoiceComponent implements OnInit {
       if (discount.value > 100 && discountType.value === 'PERCENT') {
         return 'isPercentError';
       }
+      if (discount.value < 0) {
+        return 'isLessThanZero';
+      }
     };
 
     const clearError = () => {
@@ -588,6 +634,10 @@ export class InvoiceComponent implements OnInit {
       }
       if (error === 'isPercentError') {
         discount.setErrors({ moreThan100: true });
+        this.isValidDiscount = false;
+      }
+      if (error === 'isLessThanZero') {
+        discount.setErrors({ min: true });
         this.isValidDiscount = false;
       }
     };
@@ -804,6 +854,19 @@ export class InvoiceComponent implements OnInit {
     }
   };
 
+  previewAndGenerate(): void {
+    // if(!this.inputControl.paidAmount.value){
+    //   this.snackbarService.openSnackBarAsText(
+    //     'Paid amount is 0: Invoice cannot preview or generate'
+    //   )
+    //   return;
+    // }
+
+    this.router.navigate(['../preview-invoice', this.reservationId], {
+      relativeTo: this.route,
+    });
+  }
+
   handleSave(): void {
     if (!this.addGST) this.gstValidation(false);
 
@@ -829,7 +892,11 @@ export class InvoiceComponent implements OnInit {
       this.invoiceService
         .updateInvoice(this.reservationId, data)
         .subscribe((res) => {
-          console.log('Invoice Updated');
+          this.snackbarService.openSnackBarAsText(
+            'Invoice Updated Successfully',
+            '',
+            { panelClass: 'success' }
+          );
         })
     );
   }
@@ -979,13 +1046,19 @@ export class InvoiceComponent implements OnInit {
 
           this.descriptionOptions = serviceListData;
         });
+    } else {
+      this.descriptionOffSet = 0;
+      this.descriptionOptions = [];
+      this.getDescriptionOptions();
     }
   }
 
   /***
    * Navigate to service form
    */
-  createService() {}
+  createService() {
+    this.router.navigateByUrl('pages/library/services/create-service');
+  }
 
   /**
    * Handle Invoice download

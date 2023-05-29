@@ -18,7 +18,7 @@
 }
 
 :host ::ng-deep hospitality-bot-navigation-header .nav-wrapper__sticky {
-  padding: 20px 42px 20px 32px;
+  padding: 20px 32px 20px 22px;
 }
 
 .payment-form {
@@ -72,7 +72,7 @@
         align-items: center;
         justify-content: flex-end;
         width: 50%;
-        gap: 8px;
+        gap: 18px;
         margin-right: 34px;
       }
       .refund-block {
@@ -206,11 +206,6 @@
   }
 }
 
-.line {
-  border-top: 2px solid black;
-  opacity: 0.25;
-}
-
 .discount-row td {
   align-items: center;
   border-top: hidden;
@@ -221,9 +216,6 @@
   margin-top: 0px;
 }
 
-.negative-amount {
-  color: red;
-}
 
 .details-block{
   justify-content: space-between;

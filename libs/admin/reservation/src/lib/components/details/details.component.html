@@ -47,12 +47,12 @@
           </div>
           <div class="value">Overall NPS</div>
         </div>
-        <div class="guest_data__field">
+        <!-- <div class="guest_data__field">
           <div class="label">
             {{ guestData.guestAttributes.churnProbalilty }}
           </div>
           <div class="value">Churn Probability</div>
-        </div>
+        </div> -->
         <div class="guest_data__field">
           <div class="label">{{ guestData.guestAttributes.totalSpend }}</div>
           <div class="value">Overall Spent</div>
@@ -262,7 +262,7 @@
               (addFGEvent)="addFGEvent($event)"
             ></hospitality-bot-stay-details>
           </mat-tab>
-          <mat-tab label="Package" *ngIf="guestReservationDropdownList.length">
+          <mat-tab label="Add-ons" *ngIf="guestReservationDropdownList.length">
             <hospitality-bot-admin-package-details
               *ngIf="isReservationDetailFetched"
               [parentForm]="detailsForm"
@@ -317,28 +317,28 @@
               <ng-container [ngSwitch]="details.currentJourneyDetails.status">
                 <ng-container *ngSwitchCase="'PENDING'">
                   <hospitality-bot-button
-                    label="Activate & Generate PreCheckIn Link"
+                    label="Activate & Generate PreCheckIn"
                     (click)="activateAndgenerateJourney('PRECHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'INITIATED'">
                   <hospitality-bot-button
-                    label="Activate & Generate PreCheckIn Link"
+                    label="Activate & Generate PreCheckIn"
                     (click)="activateAndgenerateJourney('PRECHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'">
                   <hospitality-bot-button
-                    label="Activate & Generate PreCheckIn Link"
+                    label="Activate & Generate PreCheckIn"
                     (click)="activateAndgenerateJourney('PRECHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button
-                    label="Activate & Generate PreCheckIn Link"
+                    label="Activate & Generate PreCheckIn"
                     (click)="activateAndgenerateJourney('PRECHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
@@ -350,14 +350,14 @@
                 <ng-container *ngSwitchCase="'PENDING'">
                   <hospitality-bot-button
                     (click)="activateAndgenerateJourney('CHECKIN')"
-                    label="Generate CheckIn Link"
+                    label="Generate CheckIn"
                     variant="outlined"
                   ></hospitality-bot-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'INITIATED'">
                   <hospitality-bot-button
                     (click)="activateAndgenerateJourney('CHECKIN')"
-                    label="Generate CheckIn Link"
+                    label="Generate CheckIn"
                     variant="outlined"
                   ></hospitality-bot-button>
                   <hospitality-bot-button
@@ -386,10 +386,21 @@
                     (click)="prepareInvoice()"
                     variant="outlined"
                   ></hospitality-bot-button>
+                  <hospitality-bot-button
+                    label="Activate & Generate Checkout"
+                    (click)="activateAndgenerateJourney('CHECKOUT')"
+                    variant="outlined"
+                  ></hospitality-bot-button>
+                  <hospitality-bot-button
+                    *ngIf="checkForGenerateFeedbackSubscribed()"
+                    label="Generate Feedback"
+                    (click)="generateFeedback('CHECKIN')"
+                    variant="outlined"
+                  ></hospitality-bot-button>
                 </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button
-                    label="Generate CheckIn Link"
+                    label="Generate CheckIn"
                     (click)="activateAndgenerateJourney('CHECKIN')"
                     variant="outlined"
                   ></hospitality-bot-button>
@@ -411,7 +422,7 @@
                     "
                   >
                     <hospitality-bot-button
-                      label="Activate & Generate Checkout Link"
+                      label="Activate & Generate Checkout"
                       (click)="activateAndgenerateJourney('CHECKOUT')"
                       variant="outlined"
                     ></hospitality-bot-button>
@@ -439,7 +450,7 @@
                     "
                   >
                     <hospitality-bot-button
-                      label="Activate & Generate Checkout Link"
+                      label="Activate & Generate Checkout"
                       (click)="activateAndgenerateJourney('CHECKOUT')"
                       variant="outlined"
                     ></hospitality-bot-button>
@@ -476,7 +487,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'FAILED'">
                   <hospitality-bot-button
-                    label="Activate & Generate Checkout Link"
+                    label="Activate & Generate Checkout"
                     (click)="activateAndgenerateJourney('CHECKOUT')"
                     variant="outlined"
                   ></hospitality-bot-button>
@@ -489,6 +500,22 @@
                 </ng-container>
               </ng-container>
             </ng-template>
+          </div>
+          <div *ngIf="channels.length>0">
+            <p class="contact">Contact Guest</p>
+            <div class="right-bottom-icons">
+              <ng-container *ngFor="let channel of channels">
+                <div
+                  class="social-icons"
+                  (click)="openSendNotification(channel.name)"
+                  [style.display]="channel.isView ? 'flex' : 'none'"
+                >
+                  <div class="icon">
+                    <img [src]="getIconUrl(channel)" />
+                  </div>
+                </div>
+              </ng-container>
+            </div>
           </div>
         </div>
       </div>

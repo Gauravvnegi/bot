@@ -184,8 +184,9 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
     this.chart.chartColors = [];
     keys.forEach((key) => {
       if (!['label', 'totalCount', 'packageTotalCounts'].includes(key)) {
-        if (!this.chart.chartLabels.length)
+        if (!this.chart.chartLabels.length) {
           this.initChartLabels(this.graphData[key].stats);
+        }
         this.chart.chartData.push({
           data: Object.values(this.graphData[key].stats),
           label: this.graphData[key].label,

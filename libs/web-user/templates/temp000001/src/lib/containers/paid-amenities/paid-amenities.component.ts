@@ -66,7 +66,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.openPackage(this.tabFilterItems[this.tabFilterIdx].value);
+    this.openPackage(this.tabFilterItems[this.tabFilterIdx]?.value);
   }
 
   initPaidAmenitiesForm() {
@@ -77,26 +77,27 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     this.tabFilterItems = [];
     this.paidAmenities.forEach((slide, i) => {
       this.tabFilterItems.push({
-        value: slide.packageCode,
+        value: slide.id,
         label: slide.label,
         total: 0,
         index: i,
       });
-      this.parentForm.addControl(slide.packageCode, this.getAmenitiesFG());
+      this.parentForm.addControl(slide.id, this.getAmenitiesFG());
       if (slide.subPackages?.length > 0) {
         this.addSubPackageToAmenity(slide);
       }
-      this.getAminityForm(slide.packageCode).patchValue(slide);
-      if (this.packageRendererContainer && i === 0)
-        this.openPackage(slide.packageCode);
+
+      this.getAminityForm(slide.id).patchValue(slide);
+      if (this.packageRendererContainer && i === 0) this.openPackage(slide.id);
     });
   }
 
   addSubPackageToAmenity(slide) {
     slide.subPackages.forEach((subPackage) => {
       let subPackageFA = this.parentForm
-        .get(slide.packageCode)
+        .get(slide.id)
         .get('subPackages') as FormArray;
+
       subPackageFA.push(this.getAmenitiesFG());
     });
   }
@@ -122,12 +123,12 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     });
   }
 
-  openPackage(packageCode) {
-    this.selectedService = packageCode;
+  openPackage(id) {
+    this.selectedService = id;
     this.clearPackageRendererContainer();
-    let serviceFormGroup = this.getAminityForm(packageCode);
+    let serviceFormGroup = this.getAminityForm(id);
     this.selectedSlide = this.paidAmenities.find(
-      (slideData) => slideData.packageCode === packageCode
+      (slideData) => slideData.id === id
     );
     this.createComponent(
       this.packageRenderComponent,
@@ -155,7 +156,7 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
       this.packageRendererComponentRefObj.instance.onPackageUpdate.subscribe(
         (response) => {
           this.packageRendererComponentRefObj.destroy();
-          this.openPackage(response.data.packageCode);
+          this.openPackage(response.data?.id);
         }
       )
     );
@@ -171,8 +172,8 @@ export class PaidAmenitiesComponent implements OnInit, OnDestroy {
     return paidPackage['id'];
   }
 
-  getAminityForm(packageCode) {
-    return this.parentForm.get(packageCode) as FormGroup;
+  getAminityForm(id) {
+    return this.parentForm.get(id) as FormGroup;
   }
 
   ngOnDestroy() {

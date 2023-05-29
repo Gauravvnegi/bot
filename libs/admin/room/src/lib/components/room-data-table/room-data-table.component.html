@@ -142,13 +142,10 @@
 
 <ng-template #roomCell let-rowData>
   <td>
-    <div class="contained__primary" *ngIf="rowData.type; else emptyCell">
-      <div>{{ rowData.type }}</div>
-    </div>
-  </td>
-  <td>
-    <div *ngIf="rowData.roomNo; else emptyCell">
-      <div class="primary-text">{{ rowData.roomNo }}</div>
+    <div [roomStatus]="rowData.roomStatus" *ngIf="rowData.type; else emptyCell">
+      <div>
+        {{ rowData.roomNo || '--' }}&nbsp;-&nbsp;{{ rowData.type || '--' }}
+      </div>
     </div>
   </td>
   <td>
@@ -227,15 +224,15 @@
       selectedTable === 'ROOM'
         ? {
             description:
-              'No Room found. Tap the + Add Multiple Rooms to create Room',
+              'No rooms found. Tap the +Add Multiple Rooms to Manage and track your hotel\'s room inventory, rates, and availability',
             actionName: '+ Add Multiple Rooms',
-            imageSrc: 'assets/images/empty-table-service.png'
+            imageSrc: 'assets/images/empty-table-room-types.png'
           }
         : {
             description:
-              'No Room Type found. Tap the +Create Room Type to create Room Type',
+              'No room types found. Tap the +Create Room Type to easily manage and organize your hotel\'s room types for efficient room management and reservation processes.',
             actionName: '+ Create Room Type',
-            imageSrc: 'assets/images/empty-table-service.png'
+            imageSrc: 'assets/images/empty-table-room-types.png'
           }
     "
   >

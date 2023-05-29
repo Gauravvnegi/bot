@@ -357,7 +357,14 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
 
     this.setTableCols();
     this.values = [];
-    this.changePage(+this.tabFilterItems[event.index].lastPage);
+    this.loadInitialData(
+      [
+        ...this.globalQueries,
+        { order: sharedConfig.defaultOrder },
+        ...this.getSelectedQuickReplyFilters(),
+      ],
+      true
+    );
   }
 
   /**

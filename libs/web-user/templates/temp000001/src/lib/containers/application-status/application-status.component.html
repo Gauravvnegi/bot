@@ -84,7 +84,29 @@
       </div>
     </div>
     <div>
-      <div class="section--heading">Documents</div>
+      <div
+        class="section--heading"
+        [ngClass]="{
+          'status-failed':
+            summaryDetails.guestDetails.guests[0].statusMessage.status !==
+            'COMPLETED',
+          'status-completed':
+            summaryDetails.guestDetails.guests[0].statusMessage.status ===
+            'COMPLETED'
+        }"
+      >
+        <img
+          class="conditional-icon"
+          [src]="
+            summaryDetails.guestDetails.guests[0].statusMessage.status ===
+            'COMPLETED'
+              ? 'assets/Right.png'
+              : 'assets/Info.png'
+          "
+          alt="info"
+        />
+        Documents
+      </div>
       <div class="section--content">
         <div class="section--content--label">
           <ng-container
@@ -93,25 +115,21 @@
             "
           >
             <ng-container *ngSwitchCase="'PENDING'">
-              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Documents are pending.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Documents verification initiated.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <img class="conditional-icon" src="assets/Right.png" />
               <div class="section--content--health--message-detail">
                 Documents verification successful.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Documents verification failed.
               </div>
@@ -130,32 +148,50 @@
       </div>
     </div>
     <div>
-      <div class="section--heading">Health Declaration</div>
+      <div
+        class="section--heading"
+        [ngClass]="{
+          'status-failed':
+            summaryDetails.healthDeclaration.statusMessage.status !==
+            'COMPLETED',
+          'status-completed':
+            summaryDetails.healthDeclaration.statusMessage.status ===
+            'COMPLETED'
+        }"
+      >
+        <img
+          class="conditional-icon"
+          [src]="
+            summaryDetails.healthDeclaration.statusMessage.status ===
+            'COMPLETED'
+              ? 'assets/Right.png'
+              : 'assets/Info.png'
+          "
+          alt="info"
+        />
+        Health Declaration
+      </div>
       <div class="section--content--health">
         <div class="section--content--health--message">
           <ng-container
             [ngSwitch]="summaryDetails.healthDeclaration.statusMessage.status"
           >
             <ng-container *ngSwitchCase="'PENDING'">
-              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Health Declaration Pending.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Health Declaration Initiated.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <img class="conditional-icon" src="assets/Right.png" />
               <div class="section--content--health--message-detail">
                 Health Declaration has been signed.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Health Declaration verification failed.
               </div>
@@ -178,40 +214,55 @@
       </div>
     </div>
     <div>
-      <div class="section--heading">Payment Info</div>
-      <div class="section--content">
+      <div
+        class="section--heading"
+        [ngClass]="{
+          'status-failed':
+            summaryDetails.paymentSummary.statusMessage.status !== 'COMPLETED',
+          'status-completed':
+            summaryDetails.paymentSummary.statusMessage.status === 'COMPLETED'
+        }"
+      >
+        <img
+          class="conditional-icon"
+          [src]="
+            summaryDetails.paymentSummary.statusMessage.status === 'COMPLETED'
+              ? 'assets/Right.png'
+              : 'assets/Info.png'
+          "
+          alt="info"
+        />
+        Payment Info
+      </div>
+      <div class="section--content amount">
         <div class="section--content--label">
           <ng-container
             [ngSwitch]="summaryDetails.paymentSummary.statusMessage.status"
           >
             <ng-container *ngSwitchCase="'PENDING'">
-              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Payment Pending.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'INITIATED'">
-              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Payment Initiated.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'COMPLETED'">
-              <img class="conditional-icon" src="assets/Right.png" />
               <div class="section--content--health--message-detail">
                 Payment Success.
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="'FAILED'">
-              <img class="conditional-icon" src="assets/Info.png" />
               <div class="section--content--health--message-detail">
                 Payment Failed.
               </div>
             </ng-container>
           </ng-container>
         </div>
-        <div class="section--content--label margin-added">
-          Amount to pay :&nbsp;<span
+        <div class="section--content--label amount__pay">
+          Payable Amount :&nbsp;<span
             >{{ currencyCode }}
             {{ paymentDetails ? paymentDetails.payableAmount : 0 }}</span
           >
@@ -225,23 +276,22 @@
       </div>
     </div>
     <div>
-      <div class="section--heading">Registration Card</div>
+      <div
+        class="section--heading"
+        [ngClass]="{
+          'status-failed': !isRegSigned,
+          'status-completed': isRegSigned
+        }"
+      >
+        <img
+          class="conditional-icon"
+          [src]="isRegSigned ? 'assets/Right.png' : 'assets/Info.png'"
+          alt="reg"
+        />
+        Registration Card
+      </div>
       <div class="section--content">
         <div class="section--content--label">
-          <div>
-            <img
-              *ngIf="
-                summaryDetails.guestDetails.guests[0].signatureUrl !==
-                  undefined;
-                else error
-              "
-              class="conditional-icon"
-              src="assets/Right.png"
-            />
-            <ng-template #error>
-              <img class="conditional-icon" src="assets/Info.png" />
-            </ng-template>
-          </div>
           <div style="margin-left: 10px;">
             <label>
               Verify
@@ -255,7 +305,7 @@
     </div>
     <div>
       <div class="section--heading">Privacy Policy</div>
-      <div class="section--content">
+      <div class="section--content privacy-checkbox">
         <div
           class="section--content--label"
           *ngIf="summaryFG?.get('privacyPolicy')"

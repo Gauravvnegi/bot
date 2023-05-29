@@ -52,18 +52,20 @@
       Manage By: {{ userToModDetails.firstName }}
       {{ userToModDetails.lastName }}, Admin
     </div>
-    <div class="one-third-width" *ngIf="!userToModDetails"></div>
+    <div class="one-third-width" *ngIf="hasPageState('addNewUser') && !userToModDetails"></div>
 
     <hospitality-bot-input
       class="one-third-width"
       controlName="firstName"
       label="First Name"
+      maxLength="60"
     ></hospitality-bot-input>
 
     <hospitality-bot-input
       class="one-third-width"
       controlName="lastName"
       label="Last Name"
+      maxLength="60"
     ></hospitality-bot-input>
 
     <hospitality-bot-phone-number

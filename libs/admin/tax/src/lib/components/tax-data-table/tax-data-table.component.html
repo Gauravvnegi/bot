@@ -1,7 +1,7 @@
 <div [formGroup]="tableFG" class="wrapper">
   <hospitality-bot-navigation-header [heading]="tableName" [routes]="navRoutes">
     <hospitality-bot-button
-      label="Create New Tax"
+      label="+Create New Tax"
       link="pages/settings/tax/{{ routes.createTax.route }}"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
@@ -127,11 +127,12 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="/pages/library/tax/create-tax"
+    link="pages/settings/tax/{{ routes.createTax.route }}"
     [content]="{
-      description: 'No Tax found. Tap the +Create Tax to create tax',
+      description:
+        'No tax records found. Tap the Create Tax  to view preexisting tax ',
       actionName: '+Create Tax',
-      imageSrc: 'assets/images/empty-table-service.png'
+      imageSrc: 'assets/images/empty-table-tax.png'
     }"
   >
     <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>

@@ -6,7 +6,12 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { HotelDetailService } from 'libs/admin/shared/src/lib/services/hotel-detail.service';
 import { ModuleNames } from '../../../../../../../../../../libs/admin/shared/src/index';
 import { SnackBarService } from '../../../../../../../../../../libs/shared/material/src/index';
@@ -31,6 +36,7 @@ export class FilterComponent implements OnChanges, OnInit {
   hotelBasedToken = { key: null, value: null };
 
   filterForm: FormGroup;
+  isTokenLoading = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -49,8 +55,8 @@ export class FilterComponent implements OnChanges, OnInit {
   initFilterForm() {
     this.filterForm = this._fb.group({
       property: this._fb.group({
-        hotelName: [],
-        branchName: [''],
+        hotelName: ['', [Validators.required]],
+        branchName: ['', [Validators.required]],
       }),
       guest: this._fb.group({
         guestCategory: this._fb.group({
@@ -82,6 +88,10 @@ export class FilterComponent implements OnChanges, OnInit {
     this.filterForm.patchValue(this.initialFilterValue);
   }
 
+  get isDisabled() {
+    return this.filterForm.get('property').invalid;
+  }
+
   ngOnInit(): void {
     this.initLOV();
     this.registerListeners();
@@ -106,6 +116,17 @@ export class FilterComponent implements OnChanges, OnInit {
           label: item.name,
           value: item.id,
         }));
+
+        const currentBranch = this.filterForm.get('property').get('branchName')
+          .value;
+
+        if (
+          currentBranch &&
+          this.branchList.findIndex((item) => item.value === currentBranch) ===
+            -1
+        ) {
+          this.filterForm.get('property').patchValue({ branchName: '' }); //resetting hotel
+        }
       });
   }
 
@@ -176,6 +197,8 @@ export class FilterComponent implements OnChanges, OnInit {
   }
 
   handleHotelChange(event) {
+    this.isTokenLoading = true;
+
     this.tokenUpdateService.getUpdatedToken(event).subscribe(
       (response) => {
         const key = Object.keys(response)[0];
@@ -183,6 +206,9 @@ export class FilterComponent implements OnChanges, OnInit {
       },
       ({ error }) => {
         this.snackbarService.openSnackBarAsText(error.message);
+      },
+      () => {
+        this.isTokenLoading = false;
       }
     );
   }

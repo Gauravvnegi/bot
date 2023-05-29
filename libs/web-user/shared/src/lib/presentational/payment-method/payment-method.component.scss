@@ -31,10 +31,10 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin: 25px;
-  @media only screen and (max-width: $M) {
-    margin: 15px;
-  }
+  // margin: 25px;
+  // @media only screen and (max-width: $M) {
+  //   margin: 15px;
+  // }
 }
 
 .method-style {
@@ -121,5 +121,14 @@
       height: 100%;
       width: 100%;
     }
+  }
+}
+
+.iframe-wrapper{
+  width: 100%;
+  overflow: hidden;
+  iframe {
+    border: none;
+    margin-bottom: 46px;
   }
 }

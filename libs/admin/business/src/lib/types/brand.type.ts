@@ -1,46 +1,26 @@
-
-export type IBrandFormData = {
-  name: string;
-  description: string;
-  socialPlatforms: {
-    facebook: string;
-    twitter: string;
-    instagram: string;
-    youtube: string;
-  };
-
-  active: boolean;
-};
-
-export type BrnadType = {
-  brand: {
-    name: string;
-    description: string;
-    socialPlatforms: SocialPlatForms[];
-  };
-};
-
 export type SocialPlatForms = {
-    name: string;
-    imageUrl: string;
-    redirectUrl: string;
-}
+  name: string;
+  imageUrl: string;
+  redirectUrl?: string;
+};
 
 export type BrandFormData = {
   brand: {
     name: string;
     description: string;
     socialPlatforms: SocialPlatForms[];
-    active: boolean;
-  }
+    status: boolean;
+  };
   siteId: string;
-}
+};
 
 export type BrandResponse = {
+  code: string;
   id: string;
   name: string;
   logo: string;
   description: string;
+  brandCode: string;
   address: {
     id: string;
     latitude: number;
@@ -56,4 +36,4 @@ export type BrandResponse = {
     redirectUrl: string;
   }[];
   status: boolean;
-}
+};

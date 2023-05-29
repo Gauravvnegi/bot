@@ -52,19 +52,7 @@
   .apply {
     position: fixed;
     bottom: 20px;
-    right: 64px;
-    width: 172px;
-    height: 46px;
-    border-radius: 23px;
-    background-color: $primary-cta;
-    color: $white;
-    @include normal-text;
-    cursor: pointer;
-    @include flex-justify-center;
-    align-items: center;
-    &:active {
-      transform: scale(0.99);
-    }
+    right: 77px;
   }
 }
 

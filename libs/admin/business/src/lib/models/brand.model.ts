@@ -5,20 +5,20 @@ export class BrandResponse {
     name: string;
     description: string;
     socialPlatforms: SocialPlatForms[];
-    active: boolean;
+    status: boolean;
   } = {
     name: '',
     description: '',
     socialPlatforms: [],
-    active: false,
+    status: true,
   };
   siteId: string;
   deserialize(input: any) {
-    this.brand.name = input.name;
-    this.brand.description = input.description;
-    this.brand.socialPlatforms = input.socialPlatforms;
-    this.brand.active = input.active;
-    this.siteId = input.siteId;
+    this.brand.name = input?.name;
+    this.brand.description = input?.description;
+    this.brand.socialPlatforms = input?.socialPlatforms;
+    this.brand.status = input?.status;
+    this.siteId = input?.siteId;
     return this;
   }
 }

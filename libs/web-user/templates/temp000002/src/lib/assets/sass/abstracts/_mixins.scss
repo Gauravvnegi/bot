@@ -47,7 +47,7 @@
   );
   margin-right: 30px;
   border: 1px solid $primary-blue;
-  border-radius: 28px;
+  border-radius: 8px;
   &:hover {
     cursor: pointer;
   }
@@ -63,7 +63,7 @@
 @mixin template-footer-button {
   display: flex;
   justify-content: center;
-  @media only screen and (max-width: $M) {
+  @media only screen and (max-width: $mobile) {
     position: fixed;
     bottom: 0px;
     width: 100%;

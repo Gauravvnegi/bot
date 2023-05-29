@@ -46,6 +46,7 @@ export interface IComponentButton {
     isClickedTemplateSwitch: boolean;
     label: string;
     loaderLabel?: string;
+    disable?: boolean;
   };
 }
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AirportConfigI } from 'libs/web-user/shared/src/lib/data-models/airportConfig.model';
 import { AirportService } from 'libs/web-user/shared/src/lib/services/airport.service';
@@ -7,6 +7,7 @@ import { customPatternValid } from 'libs/web-user/shared/src/lib/services/valida
 import { Regex } from 'libs/web-user/shared/src/lib/data-models/regexConstant';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { Subscription } from 'rxjs';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 
 @Component({
   selector: 'hospitality-bot-airport-pickup',
@@ -24,11 +25,15 @@ export class AirportFacilitiesComponent implements OnInit, OnDestroy {
 
   protected $subscription: Subscription = new Subscription();
 
+  @Output() onSave = new EventEmitter<string>();
+  @Output() onClose = new EventEmitter();
+
   constructor(
     protected _fb: FormBuilder,
     protected _airportService: AirportService,
     protected _paidService: PaidService,
-    protected _dateService: DateService
+    protected _dateService: DateService,
+    protected _snackBarService: SnackBarService
   ) {
     this.initAirportForm();
   }
@@ -83,5 +88,20 @@ export class AirportFacilitiesComponent implements OnInit, OnDestroy {
     return (
       this.subPackageForm && (this.subPackageForm.get('metaData') as FormGroup)
     );
+  }
+
+  handleSave() {
+    if (this.subPackageForm.invalid) {
+      this.subPackageForm.markAllAsTouched();
+      this._snackBarService.openSnackBarAsText(
+        'Please fill the required values'
+      );
+      return;
+    }
+    this.onSave.emit(this.uniqueData.id);
+  }
+
+  handleClose() {
+    this.onClose.emit();
   }
 }

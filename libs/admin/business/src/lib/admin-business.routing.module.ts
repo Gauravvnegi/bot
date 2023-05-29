@@ -7,6 +7,7 @@ import { MainComponent } from './components/main/main.component';
 import { HotelDataTableComponent } from './components/hotel-data-table/hotel-data-table.component';
 import { businessRoute } from './constant/routes';
 import { SocialMediaComponent } from './components/social-media/social-media.component';
+import { ServicesComponent } from './components/services/services.component';
 
 const appRoutes: Route[] = [
   {
@@ -34,8 +35,24 @@ const appRoutes: Route[] = [
                 component: HotelInfoFormComponent,
               },
               {
+                path: businessRoute.services.route,
+                component: ServicesComponent,
+                pathMatch: 'full',
+              },
+              {
                 path: businessRoute.editHotel.route,
-                component: HotelInfoFormComponent,
+                component: MainComponent,
+                children: [
+                  {
+                    path: '',
+                    component: HotelInfoFormComponent,
+                  },
+                  {
+                    path: businessRoute.services.route,
+                    component: ServicesComponent,
+                    pathMatch: 'full',
+                  },
+                ],
               },
             ],
           },
@@ -58,5 +75,6 @@ export class AdminBusinessRoutingModule {
     HotelInfoFormComponent,
     HotelDataTableComponent,
     SocialMediaComponent,
+    ServicesComponent,
   ];
 }

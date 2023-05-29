@@ -13,11 +13,11 @@
 
 <div class="wrapper">
   <div class="label" *ngIf="label != ''">{{ label }}</div>
-  <div *ngIf="limit !== 1" class="description">{{ description }}</div>
+  <div *ngIf="unit !== 1" class="description">{{ description }}</div>
 
   <div class="upload-boxes">
     <div
-      [ngClass]="{ 'd-flex': limit == 1 }"
+      [ngClass]="{ 'd-flex': unit == 1 }"
       *ngFor="let url of fileUrls; let i = index"
     >
       <div class="image-wrapper">
@@ -32,31 +32,34 @@
         <div class="box" *ngIf="url == defaultImage && !thumbUrl">
           <img class="upload-icon" [src]="url" alt="upload-icon" />
         </div>
-        <span class="banner" *ngIf="featureValue?.includes(i) && isFeatureView">
+        <span
+          class="banner"
+          *ngIf="featureValueIndex?.includes(i) && isFeatureView"
+        >
           Featured Image</span
         >
       </div>
 
-      <div [style.display]="limit == 1 ? 'flex' : ''" class="right-content">
-        <div *ngIf="limit == 1" class="content">{{ description }}</div>
-        <div [style.width]="limit == 1 ? '302px' : '200px'" class="hint">
+      <div [style.display]="unit == 1 ? 'flex' : ''" class="right-content">
+        <div *ngIf="unit == 1" class="content">{{ description }}</div>
+        <div [style.width]="unit == 1 ? '302px' : '200px'" class="hint">
           {{ hint }}
         </div>
         <div class="checkbox" *ngIf="isFeatureView">
           <input
             type="checkbox"
-            [checked]="featureValue?.includes(i)"
-            (change)="onCheckbox($event, i)"
+            [checked]="featureValueIndex?.includes(i)"
+            (change)="processCheckboxChange($event, i)"
           />
           <label for="checkbox"> Make Featured Image</label><br />
         </div>
         <div
           class="upload-button"
-          [style.margin-top]="limit == 1 ? 'auto' : ''"
+          [style.margin-top]="unit == 1 ? 'auto' : ''"
           [ngStyle]="{
-            'margin-top': limit == 1 ? 'auto' : '',
+            'margin-top': unit == 1 ? 'auto' : '',
             'justify-content':
-              limit !== 1 && url !== defaultImage
+              unit !== 1 && url !== defaultImage
                 ? 'flex-start'
                 : 'space-between'
           }"
@@ -82,7 +85,7 @@
                 baseType.slice(1)
               "
               (click)="removeImage(i)"
-              *ngIf="limit == 1"
+              *ngIf="unit == 1"
               variant="text"
               severity="reset"
             ></hospitality-bot-button>
@@ -90,7 +93,7 @@
             <div>
               <img
                 class="delete-icon"
-                *ngIf="limit !== 1"
+                *ngIf="unit !== 1"
                 (click)="removeImage(i)"
                 src="assets/images/delete-icon.png"
                 alt=""
@@ -102,7 +105,13 @@
     </div>
   </div>
 </div>
-
+<hospitality-bot-button
+  class="create-btn"
+  label="+Add More Images"
+  (click)="addMoreImages()"
+  *ngIf="isMultiple"
+  variant="outlined"
+></hospitality-bot-button>
 <p
   class="validation-error"
   *ngIf="control?.errors?.required && control?.touched"

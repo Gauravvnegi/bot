@@ -1,11 +1,13 @@
 {
   "name": "hospitality-bot",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
     "nx": "nx",
+    "admin": "ng run admin:serve --port 4300",
+    "web": "ng run web-user:serve",
     "start": "ng serve",
     "start:admin": "ng run admin:serve",
     "start:web-user": "ng serve --project=web-user",
@@ -47,6 +49,7 @@
     "@angular/platform-browser": "^9.1.0",
     "@angular/platform-browser-dynamic": "^9.1.0",
     "@angular/router": "^9.1.0",
+    "@botshot-ecosystem/botpay-helpers": "^1.0.35",
     "@fireflysemantics/angular-stripe-service": "^1.0.0",
     "@fortawesome/fontawesome-free": "^5.13.1",
     "@ngx-translate/core": "^12.1.2",

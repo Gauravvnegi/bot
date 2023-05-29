@@ -12,7 +12,7 @@
       </div>
       <hospitality-bot-toggle-switch
         class="status"
-        controlName="active"
+        controlName="status"
         label="Status:"
       ></hospitality-bot-toggle-switch>
       <hospitality-bot-input
@@ -20,6 +20,19 @@
         controlName="name"
         label="Name"
         maxLength="60"
+      ></hospitality-bot-input>
+      <div class="half-width"></div>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="gstNumber"
+        label="GST"
+        maxLength="15"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="fssaiNumber"
+        label="FSSAI NO."
+        maxLength="14"
       ></hospitality-bot-input>
       <div class="des-template">
         <div class="des-template__label">Description</div>
@@ -36,6 +49,7 @@
     <hospitality-bot-social-media
       controlName="socialPlatforms"
       class="full-width"
+      [isLoading]="loading"
     >
     </hospitality-bot-social-media>
 

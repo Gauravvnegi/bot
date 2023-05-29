@@ -57,6 +57,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   ) {
     super(fb, tabFilterService);
     const { navRoutes } = taxRoutes['tax'];
+    navRoutes[1].isDisabled = true;
     this.navRoutes = navRoutes;
   }
 

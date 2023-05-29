@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { Subscription } from 'rxjs';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BrandService } from '../../services/brand.service';
-import { businessRoute } from '../../constant/routes';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   HotelDetailService,
   NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
-import { BrandFormData } from '../../types/brand.type';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Subscription } from 'rxjs';
+import { businessRoute } from '../../constant/routes';
 import { BrandResponse } from '../../models/brand.model';
-import { SocialMediaService } from '../../services/social-media.service';
+import { BusinessService } from '../../services/business.service';
+import { BrandFormData } from '../../types/brand.type';
 
 @Component({
   selector: 'hospitality-bot-brand-info-form',
@@ -21,7 +20,7 @@ import { SocialMediaService } from '../../services/social-media.service';
 })
 export class BrandInfoFormComponent implements OnInit {
   pageTitle: string = 'Create Brand';
-  code: string = '#8544556CY';
+  code: string = '# will be auto generated';
   useForm: FormGroup;
   $subscription = new Subscription();
   hotelId: string;
@@ -36,11 +35,10 @@ export class BrandInfoFormComponent implements OnInit {
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private brandService: BrandService,
     private route: ActivatedRoute,
     private router: Router,
     private hotelDetailService: HotelDetailService,
-    private socialMediaService: SocialMediaService
+    private businessService: BusinessService
   ) {
     this.brandId = this.route.snapshot.paramMap.get('brandId');
     const { navRoutes, title } = businessRoute[
@@ -56,11 +54,15 @@ export class BrandInfoFormComponent implements OnInit {
     this.initForm();
   }
 
+  socialPLatform: any;
+
   initForm(): void {
     this.useForm = this.fb.group({
       brand: this.fb.group({
-        active: [true],
-        name: [''],
+        status: [true],
+        name: ['', Validators.required],
+        gstNumber: [''],
+        fssaiNumber: [''],
         description: [''],
         socialPlatforms: [[]],
       }),
@@ -71,12 +73,9 @@ export class BrandInfoFormComponent implements OnInit {
     if (this.brandId) {
       this.loading = true;
       this.$subscription.add(
-        this.brandService.getBrandById(this.brandId).subscribe((res) => {
-          const data: BrandFormData = new BrandResponse().deserialize(res);
-
-          this.useForm.patchValue(data);
-
-          this.handelFinal();
+        this.businessService.getBrandById(this.brandId).subscribe((res) => {
+          this.useForm.get('brand').patchValue(res);
+          this.code = res.brandCode;
         }, this.handelError)
       );
     }
@@ -90,23 +89,31 @@ export class BrandInfoFormComponent implements OnInit {
       );
       return;
     }
-    this.socialMediaService.onSubmit.emit(true);
+    this.businessService.onSubmit.emit(true);
     const data = this.useForm.getRawValue() as BrandFormData;
 
     if (this.brandId) {
       this.$subscription.add(
-        this.brandService.updateBrand(this.brandId, data).subscribe((res) => {
-          this.handleSuccess();
-        }, this.handelError)
+        this.businessService.updateBrand(this.brandId, data.brand).subscribe(
+          (res) => {
+            this.useForm.get('brand').patchValue(res);
+          },
+          this.handelError,
+          this.handleSuccess
+        )
       );
     } else {
       this.$subscription.add(
-        this.brandService.createBrand(data).subscribe((res) => {
-          this.handleSuccess();
-          this.router.navigate([
-            `pages/settings/business-info/brand/${res.id}`,
-          ]);
-        }, this.handelError)
+        this.businessService.createBrand(data).subscribe(
+          (res) => {
+            this.handleSuccess();
+            this.router.navigate([
+              `pages/settings/business-info/brand/${res.id}`,
+            ]);
+          },
+          this.handelError,
+          this.handleSuccess
+        )
       );
     }
   }
@@ -119,7 +126,6 @@ export class BrandInfoFormComponent implements OnInit {
    * @returns void
    */
   handleSuccess = () => {
-    this.isBrandCreated = true;
     this.snackbarService.openSnackBarAsText(
       `Brand ${this.brandId ? 'edited' : 'created'} successfully`,
       '',
@@ -143,4 +149,8 @@ export class BrandInfoFormComponent implements OnInit {
   handelError = ({ error }): void => {
     this.loading = false;
   };
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

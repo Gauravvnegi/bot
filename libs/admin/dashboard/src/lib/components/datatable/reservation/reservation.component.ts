@@ -22,7 +22,6 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
-import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Observable, Subscription } from 'rxjs';
 import { cols } from '../../../constants/cols';
 import { dashboard } from '../../../constants/dashboard';
@@ -33,6 +32,8 @@ import {
   EntityType,
   SelectedEntityState,
 } from '../../../types/dashboard.type';
+import { ActivatedRoute } from '@angular/router';
+import { ContactSortFilterComponent } from 'libs/admin/whatsapp/src/lib/components/contact-sort-filter/contact-sort-filter.component';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable',
@@ -54,7 +55,6 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
   triggerInitialData = false;
   rowsPerPageOptions = [5, 10, 25, 50, 200];
   rowsPerPage = 200;
-
   cols = cols.reservation;
 
   @Input() tabFilterItems = tabFilterItems.reservation;
@@ -86,6 +86,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.listenGuestDetails();
   }
 
   /**
@@ -110,6 +111,19 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
         ]);
       })
     );
+  }
+
+  listenGuestDetails() {
+    // this._reservationService.bookingNumber = this.bookingNumber;
+    // this._reservationService.guestId = this.guestId;
+    let number = this._reservationService.bookingNumber;
+    let id = this._reservationService.guestId;
+    if (id && number) {
+      this.openDetailPage(undefined, undefined, 'payment_details', {
+        id,
+        number,
+      });
+    }
   }
 
   /**
@@ -184,9 +198,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    * @function loadData To load data for the table after any event.
    * @param event The lazy load event for the table.
    */
-  loadData(event: LazyLoadEvent): void {
+  loadData(): void {
     this.loading = true;
-    this.updatePaginations(event);
     this.$subscription.add(
       this.fetchDataFrom(
         [
@@ -225,7 +238,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    * @function customSort To sort the rows of the table.
    * @param eventThe The event for sort click action.
    */
-  customSort(event: SortEvent): void {
+  customSort(event): void {
     const col = this.cols.filter((data) => data.field === event.field)[0];
     const field =
       event.field[event.field.length - 1] === ')'
@@ -242,7 +255,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    */
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
-    this.changePage(+this.tabFilterItems[event.index].lastPage);
+    this.loadData();
   }
 
   /**
@@ -310,12 +323,13 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
    * @param tabKey The key of the tab to be opened in detail modal.
    */
   openDetailPage(
-    event: MouseEvent,
+    event?: MouseEvent,
     rowData?: Reservation,
-    tabKey?: string
+    tabKey?: string,
+    guestData?
   ): void {
-    event.stopPropagation();
-    if (!rowData) return;
+    event?.stopPropagation();
+    if (!rowData && !guestData) return;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.width = '100%';
@@ -324,11 +338,16 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
       dialogConfig
     );
 
-    detailCompRef.componentInstance.guestId = rowData.guests.primaryGuest.id;
-    detailCompRef.componentInstance.bookingNumber =
-      rowData.booking.bookingNumber;
-    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
+    this._reservationService.bookingNumber =
+      rowData?.booking?.bookingNumber ?? guestData?.number;
+    this._reservationService.guestId =
+      rowData?.guests?.primaryGuest?.id ?? guestData?.id;
 
+    detailCompRef.componentInstance.guestId =
+      rowData?.guests?.primaryGuest?.id ?? guestData?.id;
+    detailCompRef.componentInstance.bookingNumber =
+      rowData?.booking?.bookingNumber ?? guestData?.number;
+    tabKey && (detailCompRef.componentInstance.tabKey = tabKey);
     this.$subscription.add(
       detailCompRef.componentInstance.onDetailsClose.subscribe((res) => {
         // remove loader for detail close
@@ -350,6 +369,8 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
                 : this.rowsPerPage,
             }
           );
+          this._reservationService.bookingNumber = '';
+          this._reservationService.guestId = '';
         }
         detailCompRef.close();
       })

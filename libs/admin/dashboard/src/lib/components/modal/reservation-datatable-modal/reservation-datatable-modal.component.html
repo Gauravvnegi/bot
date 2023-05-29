@@ -8,444 +8,474 @@
     <ng-template #loader>
       <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
     </ng-template>
-    <p-table
-      #dt
-      [styleClass]="tableConfig.styleClass"
-      [resizableColumns]="isResizableColumns"
-      [autoLayout]="isAutoLayout"
-      [loading]="loading"
-      [columns]="cols"
-      [value]="values"
-      [paginator]="isPaginator"
-      [rows]="rowsPerPage"
-      [showCurrentPageReport]="showCurrentPageReport"
-      [rowsPerPageOptions]="rowsPerPageOptions"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-      [(first)]="first"
-      [totalRecords]="totalRecords"
-      [filterDelay]="0"
-      [selectionMode]="selectionMode"
-      [(selection)]="selectedRows"
-      (onRowSelect)="onRowSelect($event)"
-      (onRowUnselect)="onRowUnselect($event)"
-      (sortFunction)="customSort($event)"
-      [customSort]="isCustomSort"
-      (onFilter)="onDataFilter()"
-      *ngIf="!initialLoading; else loader"
-    >
-      <ng-template pTemplate="caption">
-        <div class="caption__wrapper">
-          <form [formGroup]="tableFG">
-            <div class="caption__wrapper--tabmenu">
-              <div class="header">
-                <p class="heading">{{ tableName }}</p>
-                <div class="action-wrapper">
-                  <hospitality-bot-export-list
-                    (onDocumentActions)="onDocumentActions()"
-                    [documentTypes]="documentTypes"
-                    [documentActionTypes]="documentActionTypes"
-                  ></hospitality-bot-export-list>
+    <ng-container *ngIf="!initialLoading; else loader">
+      <p-table
+        #dt
+        [styleClass]="tableConfig.styleClass"
+        [resizableColumns]="isResizableColumns"
+        [autoLayout]="isAutoLayout"
+        [loading]="loading"
+        [columns]="cols"
+        [value]="values"
+        [paginator]="isPaginator"
+        [rows]="rowsPerPage"
+        [showCurrentPageReport]="showCurrentPageReport"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [(first)]="first"
+        [totalRecords]="totalRecords"
+        [filterDelay]="0"
+        [selectionMode]="selectionMode"
+        [(selection)]="selectedRows"
+        (onRowSelect)="onRowSelect($event)"
+        (onRowUnselect)="onRowUnselect($event)"
+        (sortFunction)="customSort($event)"
+        [customSort]="isCustomSort"
+        (onFilter)="onDataFilter()"
+        *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+      >
+        <ng-template pTemplate="caption">
+          <div class="caption__wrapper">
+            <form [formGroup]="tableFG">
+              <div class="caption__wrapper--tabmenu">
+                <div class="header">
+                  <p class="heading">{{ tableName }}</p>
+                  <div class="action-wrapper">
+                    <hospitality-bot-export-list
+                      (onDocumentActions)="onDocumentActions()"
+                      [documentTypes]="documentTypes"
+                      [documentActionTypes]="documentActionTypes"
+                    ></hospitality-bot-export-list>
+                  </div>
+                </div>
+                <div *ngIf="isTabFilters">
+                  <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
                 </div>
               </div>
-              <div *ngIf="isTabFilters">
-                <hospitality-bot-tab-group
-                  [listItems]="tabFilterItems"
-                  [selectedIndex]="tabFilterIdx"
-                  (selectedTabChange)="onSelectedTabFilterChange($event)"
-                ></hospitality-bot-tab-group>
-              </div>
-            </div>
-            <hospitality-bot-filter-chips
-              *ngIf="isQuickFilters"
-              [chips]="tabFilterItems[tabFilterIdx].chips"
-              (onChange)="toggleQuickReplyFilter($event)"
-            ></hospitality-bot-filter-chips>
-          </form>
-        </div>
-      </ng-template>
+              <hospitality-bot-filter-chips
+                *ngIf="isQuickFilters"
+                [chips]="tabFilterItems[tabFilterIdx].chips"
+                (onChange)="toggleQuickReplyFilter($event)"
+              ></hospitality-bot-filter-chips>
+            </form>
+          </div>
+        </ng-template>
 
-      <ng-template pTemplate="emptymessage">
-        <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
-      </ng-template>
-      <!-- *******************************HEADER WITH SEARCH******************************* -->
-      <ng-template pTemplate="header" let-columns>
-        <tr
-          hospitality-bot-table-header
-          [columns]="columns"
-          [showCheckbox]="isSelectable"
-          (search)="handleFieldSearch($event)"
-        ></tr>
-      </ng-template>
-      <!-- **************************************BODY********************************* -->
-      <ng-template
-        pTemplate="body"
-        let-rowData
-        let-columns="columns"
-        let-rowIndex="rowIndex"
-      >
-        <tr
-          class="data-table-row hover-background"
-          (click)="openDetailPage($event, rowData)"
+        <ng-template pTemplate="emptymessage">
+          <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+        </ng-template>
+        <!-- *******************************HEADER WITH SEARCH******************************* -->
+        <ng-template pTemplate="header" let-columns>
+          <tr
+            hospitality-bot-table-header
+            [columns]="columns"
+            [showCheckbox]="isSelectable"
+            (search)="handleFieldSearch($event)"
+          ></tr>
+        </ng-template>
+        <!-- **************************************BODY********************************* -->
+        <ng-template
+          pTemplate="body"
+          let-rowData
+          let-columns="columns"
+          let-rowIndex="rowIndex"
         >
-          <td class="table--checkbox">
-            <p-tableCheckbox
-              [value]="rowData"
-              [index]="rowIndex"
-              (click)="onCheckboxClicked($event)"
-            ></p-tableCheckbox>
-          </td>
-          <td>
-            <p
-              class="tabel-room-no"
-              [ngClass]="getRoomStatus(rowData.booking.roomStatus)"
-            >
-              {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{
-                rowData.rooms.type
-              }}
-            </p>
-          </td>
-          <td>
-            <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
-            <div
-              *ngIf="['COMPLETED'].includes(rowData.feedback.status)"
-              class="booking-feedback"
-              [ngClass]="{
-                'status-opacity-reject': rowData.feedback.rating < 5,
-                'status-opacity-success': rowData.feedback.rating >= 5
-              }"
-            >
-              <p
-                class="number"
-                [ngClass]="{
-                  'status-background-reject': rowData.feedback.rating < 5,
-                  'status-background-success': rowData.feedback.rating >= 5
-                }"
-              >
-                {{ rowData.feedback.rating }}
+          <tr
+            class="data-table-row hover-background table-row"
+            (click)="openDetailPage($event, rowData)"
+          >
+            <td class="table--checkbox">
+              <p-tableCheckbox
+                [value]="rowData"
+                [index]="rowIndex"
+                (click)="onCheckboxClicked($event)"
+              ></p-tableCheckbox>
+            </td>
+            <td>
+              <p class="tabel-room-no" [roomStatus]="rowData.rooms.roomStatus">
+                {{ rowData.rooms.roomNumber }}&nbsp;-&nbsp;{{
+                  rowData.rooms.type
+                }}
               </p>
+            </td>
+            <td>
+              <p class="booking-number">{{ rowData.booking.bookingNumber }}</p>
               <div
-                *ngIf="rowData.feedback.comments"
+                *ngIf="['COMPLETED'].includes(rowData.feedback.status)"
+                class="booking-feedback"
                 [ngClass]="{
-                  'feedback-msg': rowData.feedback.comments.length > 0
+                  'status-opacity-reject': rowData.feedback.rating < 5,
+                  'status-opacity-success': rowData.feedback.rating >= 5
                 }"
               >
-                {{ rowData.feedback.comments }}
+                <p
+                  class="number"
+                  [ngClass]="{
+                    'status-background-reject': rowData.feedback.rating < 5,
+                    'status-background-success': rowData.feedback.rating >= 5
+                  }"
+                >
+                  {{ rowData.feedback.rating }}
+                </p>
+                <div
+                  *ngIf="rowData.feedback.comments"
+                  [ngClass]="{
+                    'feedback-msg': rowData.feedback.comments.length > 0
+                  }"
+                >
+                  {{ rowData.feedback.comments }}
+                </div>
               </div>
-            </div>
-          </td>
-          <td class="guest">
-            <span>{{ rowData.guests.primaryGuest.getFullName() }}</span>
-            <b class="rowData">{{
-              rowData.guests.getSecGuestDisplayConfig().countString
-            }}</b>
-            <div
-              *ngIf="rowData.guests.secondaryGuest.length > 0"
-              [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
-            >
+            </td>
+            <td class="guest">
+              <div class="primary-text">
+                {{ rowData.guests.primaryGuest.getFullName() }}
+              </div>
+              <b class="rowData">{{
+                rowData.guests.getSecGuestDisplayConfig().countString
+              }}</b>
               <div
-                *ngFor="
-                  let secondaryGuest of rowData.guests.secondaryGuest;
-                  let guestIdx = index
-                "
+                *ngIf="rowData.guests.secondaryGuest.length > 0"
+                [ngClass]="{ demo: rowData.guests.secondaryGuest.length > 0 }"
               >
-                {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+                <div
+                  *ngFor="
+                    let secondaryGuest of rowData.guests.secondaryGuest;
+                    let guestIdx = index
+                  "
+                >
+                  {{ rowData.guests.secondaryGuest[guestIdx].getFullName() }}
+                </div>
               </div>
-            </div>
-          </td>
-          <td class="package">
-            <span
-              *ngIf="
-                rowData.guests.getPhoneNumbers().length &&
-                  rowData.guests.getPhoneNumbers() !== ' ';
-                else emptyCell
-              "
-            >
-              <ng-container
+            </td>
+            <td class="package">
+              <span
                 *ngIf="
-                  rowData.guests.getPhoneNumbers().includes(',');
-                  else singlePhone
+                  rowData.guests.getPhoneNumbers().length &&
+                    rowData.guests.getPhoneNumbers() !== ' ';
+                  else emptyCell
                 "
               >
                 <ng-container
-                  *ngFor="
-                    let link of rowData.guests.getPhoneNumbers().split(',\n')
+                  *ngIf="
+                    rowData.guests.getPhoneNumbers().includes(',');
+                    else singlePhone
                   "
                 >
+                  <ng-container
+                    *ngFor="
+                      let link of rowData.guests.getPhoneNumbers().split(',\n')
+                    "
+                  >
+                    <a
+                      href="tel:{{ link }}"
+                      *ngIf="link"
+                      class="email"
+                      (click)="openDetailPage($event)"
+                    >
+                      <u> {{ link }}</u> </a
+                    ><br />
+                  </ng-container>
+                </ng-container>
+                <ng-template #singlePhone>
                   <a
-                    href="tel:{{ link }}"
-                    *ngIf="link"
+                    href="tel:{{ rowData.guests.getPhoneNumbers() }}"
                     class="email"
                     (click)="openDetailPage($event)"
                   >
-                    <u> {{ link }}</u> </a
-                  ><br />
-                </ng-container>
-              </ng-container>
-              <ng-template #singlePhone>
-                <a
-                  href="tel:{{ rowData.guests.getPhoneNumbers() }}"
-                  class="email"
-                  (click)="openDetailPage($event)"
-                >
-                  <u> {{ rowData.guests.getPhoneNumbers() }}</u>
-                </a>
-              </ng-template>
-            </span>
-          </td>
-          <td>
-            <p class="arrival-date">
-              {{
-                rowData.booking.getArrivalDate(globalFilterService.timezone)
-              }}-{{
-                rowData.booking.getDepartureDate(globalFilterService.timezone)
-              }}
-            </p>
+                    <u> {{ rowData.guests.getPhoneNumbers() }}</u>
+                  </a>
+                </ng-template>
+              </span>
+            </td>
+            <td>
+              <p class="arrival-date">
+                {{
+                  rowData.booking.getArrivalDate(globalFilterService.timezone)
+                }}-{{
+                  rowData.booking.getDepartureDate(globalFilterService.timezone)
+                }}
+              </p>
 
-            <p class="arrival-time">
-              {{
-                rowData.booking.getArrivalTime(globalFilterService.timezone)
-              }}-{{
-                rowData.booking.getDepartureTime(globalFilterService.timezone)
-              }}
-            </p>
-            <p class="arrival-time">
-              {{
-                rowData.booking.getDaysAndNights(globalFilterService.timezone)
-                  .nights
-              }}N |
-              {{
-                rowData.booking.getDaysAndNights(globalFilterService.timezone)
-                  .days
-              }}D
-            </p>
-          </td>
-          <td class="amount">
-            <span
-              [ngClass]="{
-                'status-text-reject':
-                  rowData.payment.dueAmount > 0 &&
-                  rowData.payment.dueAmount <= rowData.payment.totalAmount,
-                'status-text-success': rowData.payment.dueAmount === 0
-              }"
-              >{{ rowData.payment.dueAmount }}</span
-            >/ {{ rowData.payment.totalAmount }}
-          </td>
-          <td class="package">
-            <span
-              *ngIf="
-                rowData.packages.getPaidPackagesLabels().length;
-                else emptyCell
-              "
-              >{{ rowData.packages.getPaidPackagesLabels() }}
-            </span>
-          </td>
+              <p class="arrival-time">
+                {{
+                  rowData.booking.getArrivalTime(globalFilterService.timezone)
+                }}-{{
+                  rowData.booking.getDepartureTime(globalFilterService.timezone)
+                }}
+              </p>
+              <p class="arrival-time">
+                {{
+                  rowData.booking.getDaysAndNights(globalFilterService.timezone)
+                    .nights
+                }}N |
+                {{
+                  rowData.booking.getDaysAndNights(globalFilterService.timezone)
+                    .days
+                }}D
+              </p>
+            </td>
+            <td class="amount">
+              <span
+                [ngClass]="{
+                  'status-text-reject':
+                    rowData.payment.dueAmount > 0 &&
+                    rowData.payment.dueAmount <= rowData.payment.totalAmount,
+                  'status-text-success': rowData.payment.dueAmount === 0
+                }"
+                >{{ rowData.payment.dueAmount }}</span
+              >/ {{ rowData.payment.totalAmount }}
+            </td>
+            <td class="package">
+              <span
+                *ngIf="
+                  rowData.packages.getPaidPackagesLabels().length;
+                  else emptyCell
+                "
+                >{{ rowData.packages.getPaidPackagesLabels() }}
+              </span>
+            </td>
 
-          <!-- status-image-initiated -->
-          <td class="status-image">
-            <div class="icon-wrapper">
-              <div class="line first"></div>
-              <div class="line second"></div>
-              <div
-                (click)="openDetailPage($event, rowData, 'document_details')"
-                class="icon"
-              >
-                <img
-                  class="table-body-journey-icon"
-                  [src]="dashboardConfig.images.document.url"
-                  [alt]="dashboardConfig.images.document.alt"
-                  [ngClass]="
-                    getStatusStyle(
-                      rowData.status.stepsStatus.documents,
-                      'image'
-                    )
-                  "
-                />
-                <p
-                  class="label"
-                  [ngClass]="
-                    getStatusStyle(rowData.status.stepsStatus.documents, 'text')
-                  "
+            <!-- status-image-initiated -->
+            <td class="status-image">
+              <div class="icon-wrapper">
+                <div class="line first"></div>
+                <div class="line second"></div>
+                <div
+                  (click)="openDetailPage($event, rowData, 'document_details')"
+                  class="icon"
                 >
-                  {{ 'datatable.document' | translate }}
-                </p>
-                <div class="tooltip">
-                  {{ 'datatable.document' | translate }}
+                  <img
+                    class="table-body-journey-icon"
+                    [src]="dashboardConfig.images.document.url"
+                    [alt]="dashboardConfig.images.document.alt"
+                    [ngClass]="
+                      getStatusStyle(
+                        rowData.status.stepsStatus.documents,
+                        'image'
+                      )
+                    "
+                  />
+                  <p
+                    class="label"
+                    [ngClass]="
+                      getStatusStyle(
+                        rowData.status.stepsStatus.documents,
+                        'text'
+                      )
+                    "
+                  >
+                    {{ 'datatable.document' | translate }}
+                  </p>
+                  <div class="tooltip">
+                    {{ 'datatable.document' | translate }}
+                  </div>
+                </div>
+                <div
+                  (click)="openDetailPage($event, rowData, 'payment_details')"
+                  class="icon"
+                >
+                  <img
+                    class="table-body-journey-icon"
+                    [src]="dashboardConfig.images.payment.url"
+                    [alt]="dashboardConfig.images.payment.alt"
+                    [ngClass]="
+                      getStatusStyle(
+                        rowData.status.stepsStatus.payment,
+                        'image'
+                      )
+                    "
+                  />
+                  <p
+                    class="label"
+                    [ngClass]="
+                      getStatusStyle(rowData.status.stepsStatus.payment, 'text')
+                    "
+                  >
+                    {{ 'datatable.payment' | translate }}
+                  </p>
+                  <div class="tooltip">
+                    {{ 'datatable.payment' | translate }}
+                  </div>
+                </div>
+                <div class="icon">
+                  <img
+                    class="table-body-journey-icon"
+                    [src]="dashboardConfig.images.feedback.url"
+                    [alt]="dashboardConfig.images.feedback.alt"
+                    [ngClass]="
+                      getStatusStyle(
+                        rowData.status.stepsStatus.feedback,
+                        'image'
+                      )
+                    "
+                  />
+                  <p
+                    class="label"
+                    [ngClass]="
+                      getStatusStyle(
+                        rowData.status.stepsStatus.feedback,
+                        'text'
+                      )
+                    "
+                  >
+                    {{ 'datatable.feedback' | translate }}
+                  </p>
+                  <div class="tooltip">
+                    {{ 'datatable.feedback' | translate }}
+                  </div>
+                </div>
+                <div class="icon extra-width">
+                  <img
+                    class="table-body-journey-icon"
+                    [src]="dashboardConfig.images.newJourney.url"
+                    [alt]="dashboardConfig.images.newJourney.alt"
+                    [ngClass]="
+                      getStatusStyle(rowData.status.journeyStatus.new, 'image')
+                    "
+                  />
+                  <p
+                    *ngIf="rowData.currentJourney.currentJourneyName === 'NEW'"
+                    class="label"
+                    [ngClass]="
+                      getStatusStyle(rowData.status.journeyStatus.new, 'text')
+                    "
+                  >
+                    {{ 'datatable.new' | translate }}
+                  </p>
+                  <div class="tooltip">
+                    {{ 'datatable.new' | translate }}
+                  </div>
+                </div>
+                <div class="icon extra-width">
+                  <img
+                    class="table-body-journey-icon"
+                    [src]="dashboardConfig.images.preCheckin.url"
+                    [alt]="dashboardConfig.images.preCheckin.alt"
+                    [ngClass]="
+                      getStatusStyle(
+                        rowData.status.journeyStatus.preCheckin,
+                        'image'
+                      )
+                    "
+                  />
+                  <p
+                    *ngIf="
+                      rowData.currentJourney.currentJourneyName === 'PRECHECKIN'
+                    "
+                    class="label"
+                    [ngClass]="
+                      getStatusStyle(
+                        rowData.status.journeyStatus.preCheckin,
+                        'text'
+                      )
+                    "
+                  >
+                    {{ 'datatable.pre_checkin' | translate }}
+                  </p>
+                  <div class="tooltip">
+                    {{ 'datatable.pre_checkin' | translate }}
+                  </div>
+                </div>
+                <div class="icon extra-width">
+                  <img
+                    class="table-body-journey-icon"
+                    [src]="dashboardConfig.images.checkin.url"
+                    [alt]="dashboardConfig.images.checkin.alt"
+                    [ngClass]="
+                      getStatusStyle(
+                        rowData.status.journeyStatus.checkin,
+                        'image'
+                      )
+                    "
+                  />
+                  <p
+                    *ngIf="
+                      rowData.currentJourney.currentJourneyName === 'CHECKIN'
+                    "
+                    class="label"
+                    [ngClass]="
+                      getStatusStyle(
+                        rowData.status.journeyStatus.checkin,
+                        'text'
+                      )
+                    "
+                  >
+                    {{ 'datatable.checkin' | translate }}
+                  </p>
+                  <div class="tooltip">
+                    {{ 'datatable.checkin' | translate }}
+                  </div>
+                </div>
+                <div class="icon extra-width">
+                  <img
+                    class="table-body-journey-icon"
+                    [src]="dashboardConfig.images.checkout.url"
+                    [alt]="dashboardConfig.images.checkout.alt"
+                    [ngClass]="
+                      getStatusStyle(
+                        rowData.status.journeyStatus.checkout,
+                        'image'
+                      )
+                    "
+                  />
+                  <p
+                    *ngIf="
+                      rowData.currentJourney.currentJourneyName === 'CHECKOUT'
+                    "
+                    class="label"
+                    [ngClass]="
+                      getStatusStyle(
+                        rowData.status.journeyStatus.checkout,
+                        'text'
+                      )
+                    "
+                  >
+                    {{ 'datatable.checkout' | translate }}
+                  </p>
+                  <div class="tooltip">
+                    {{ 'datatable.checkout' | translate }}
+                  </div>
                 </div>
               </div>
-              <div
-                (click)="openDetailPage($event, rowData, 'payment_details')"
-                class="icon"
-              >
-                <img
-                  class="table-body-journey-icon"
-                  [src]="dashboardConfig.images.payment.url"
-                  [alt]="dashboardConfig.images.payment.alt"
-                  [ngClass]="
-                    getStatusStyle(rowData.status.stepsStatus.payment, 'image')
-                  "
-                />
-                <p
-                  class="label"
-                  [ngClass]="
-                    getStatusStyle(rowData.status.stepsStatus.payment, 'text')
-                  "
-                >
-                  {{ 'datatable.payment' | translate }}
-                </p>
-                <div class="tooltip">
-                  {{ 'datatable.payment' | translate }}
-                </div>
-              </div>
-              <div class="icon">
-                <img
-                  class="table-body-journey-icon"
-                  [src]="dashboardConfig.images.feedback.url"
-                  [alt]="dashboardConfig.images.feedback.alt"
-                  [ngClass]="
-                    getStatusStyle(rowData.status.stepsStatus.feedback, 'image')
-                  "
-                />
-                <p
-                  class="label"
-                  [ngClass]="
-                    getStatusStyle(rowData.status.stepsStatus.feedback, 'text')
-                  "
-                >
-                  {{ 'datatable.feedback' | translate }}
-                </p>
-                <div class="tooltip">
-                  {{ 'datatable.feedback' | translate }}
-                </div>
-              </div>
-              <div class="icon extra-width">
-                <img
-                  class="table-body-journey-icon"
-                  [src]="dashboardConfig.images.newJourney.url"
-                  [alt]="dashboardConfig.images.newJourney.alt"
-                  [ngClass]="
-                    getStatusStyle(rowData.status.journeyStatus.new, 'image')
-                  "
-                />
-                <p
-                  *ngIf="rowData.currentJourney.currentJourneyName === 'NEW'"
-                  class="label"
-                  [ngClass]="
-                    getStatusStyle(rowData.status.journeyStatus.new, 'text')
-                  "
-                >
-                  {{ 'datatable.new' | translate }}
-                </p>
-                <div class="tooltip">
-                  {{ 'datatable.new' | translate }}
-                </div>
-              </div>
-              <div class="icon extra-width">
-                <img
-                  class="table-body-journey-icon"
-                  [src]="dashboardConfig.images.preCheckin.url"
-                  [alt]="dashboardConfig.images.preCheckin.alt"
-                  [ngClass]="
-                    getStatusStyle(
-                      rowData.status.journeyStatus.preCheckin,
-                      'image'
-                    )
-                  "
-                />
-                <p
-                  *ngIf="
-                    rowData.currentJourney.currentJourneyName === 'PRECHECKIN'
-                  "
-                  class="label"
-                  [ngClass]="
-                    getStatusStyle(
-                      rowData.status.journeyStatus.preCheckin,
-                      'text'
-                    )
-                  "
-                >
-                  {{ 'datatable.pre_checkin' | translate }}
-                </p>
-                <div class="tooltip">
-                  {{ 'datatable.pre_checkin' | translate }}
-                </div>
-              </div>
-              <div class="icon extra-width">
-                <img
-                  class="table-body-journey-icon"
-                  [src]="dashboardConfig.images.checkin.url"
-                  [alt]="dashboardConfig.images.checkin.alt"
-                  [ngClass]="
-                    getStatusStyle(
-                      rowData.status.journeyStatus.checkin,
-                      'image'
-                    )
-                  "
-                />
-                <p
-                  *ngIf="
-                    rowData.currentJourney.currentJourneyName === 'CHECKIN'
-                  "
-                  class="label"
-                  [ngClass]="
-                    getStatusStyle(rowData.status.journeyStatus.checkin, 'text')
-                  "
-                >
-                  {{ 'datatable.checkin' | translate }}
-                </p>
-                <div class="tooltip">
-                  {{ 'datatable.checkin' | translate }}
-                </div>
-              </div>
-              <div class="icon extra-width">
-                <img
-                  class="table-body-journey-icon"
-                  [src]="dashboardConfig.images.checkout.url"
-                  [alt]="dashboardConfig.images.checkout.alt"
-                  [ngClass]="
-                    getStatusStyle(
-                      rowData.status.journeyStatus.checkout,
-                      'image'
-                    )
-                  "
-                />
-                <p
-                  *ngIf="
-                    rowData.currentJourney.currentJourneyName === 'CHECKOUT'
-                  "
-                  class="label"
-                  [ngClass]="
-                    getStatusStyle(
-                      rowData.status.journeyStatus.checkout,
-                      'text'
-                    )
-                  "
-                >
-                  {{ 'datatable.checkout' | translate }}
-                </p>
-                <div class="tooltip">
-                  {{ 'datatable.checkout' | translate }}
-                </div>
-              </div>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-      <!-- *********************************FOOTER******************************* -->
-      <ng-template pTemplate="summary">
-        <p-paginator
-          #paginator
-          [rows]="rowsPerPage"
-          [totalRecords]="totalRecords"
-          [rowsPerPageOptions]="rowsPerPageOptions"
-          (onPageChange)="paginate($event)"
-          [currentPageReportTemplate]="reportTemplate"
-          showCurrentPageReport="true"
-        ></p-paginator>
-      </ng-template>
-    </p-table>
-
+            </td>
+          </tr>
+        </ng-template>
+        <!-- *********************************FOOTER******************************* -->
+        <ng-template pTemplate="summary">
+          <p-paginator
+            #paginator
+            [rows]="rowsPerPage"
+            [totalRecords]="totalRecords"
+            [rowsPerPageOptions]="rowsPerPageOptions"
+            (onPageChange)="paginate($event)"
+            [currentPageReportTemplate]="reportTemplate"
+            showCurrentPageReport="true"
+          ></p-paginator>
+        </ng-template>
+      </p-table>
+    </ng-container>
     <ng-template #emptyCell>
       <div class="emptyCell">&mdash;</div>
     </ng-template>
   </div>
 </div>
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [content]="{
+      description: 'No data available to view',
+      imageSrc: 'assets/images/empty-table-guest-scource.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+</ng-template>

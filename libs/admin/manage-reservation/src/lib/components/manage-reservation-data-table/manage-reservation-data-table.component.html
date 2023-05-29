@@ -90,9 +90,11 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="cell-content">
-          <div class="contained__primary primary-text">
-            {{ rowData.roomNumber || 'xx' }} - {{ rowData.roomType }}
+        <div [roomStatus]="rowData?.roomStatus">
+          <div>
+            {{ rowData.roomNumber || '--' }}&nbsp;-&nbsp;{{
+              rowData.roomType || '--'
+            }}
           </div>
         </div>
       </td>

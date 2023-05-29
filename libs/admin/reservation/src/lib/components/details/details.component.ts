@@ -53,6 +53,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   isFirstTimeFetch = true;
   isGuestReservationFetched = false;
   shareIconList;
+  channels;
   colorMap;
   bookingList = [
     { label: 'Advance Booking', icon: '' },
@@ -125,6 +126,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    this.channels = this.subscriptionService.getChannelSubscription();
   }
 
   /**
@@ -358,9 +360,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   manageInvoice() {
     this.onDetailsClose.next(false);
-    this.router.navigate([
-      `pages/efrontdesk/invoice/create-invoice/${this.bookingId}`,
-    ]);
+    this.router.navigateByUrl(`pages/efrontdesk/invoice/${this.bookingId}`);
   }
 
   prepareInvoice() {
@@ -411,6 +411,24 @@ export class DetailsComponent implements OnInit, OnDestroy {
           '.pdf'
       );
     }
+  }
+
+  generateFeedback(journeyName) {
+    this._reservationService
+      .generateJourneyLink(
+        this.reservationDetailsFG.get('bookingId').value,
+        journeyName
+      )
+      .subscribe((res) => {
+        this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
+        this.snackbarService.openSnackBarAsText(
+          'Link copied successfully',
+          '',
+          {
+            panelClass: 'success',
+          }
+        );
+      });
   }
 
   sendInvoice() {}
@@ -613,13 +631,16 @@ export class DetailsComponent implements OnInit, OnDestroy {
       dialogConfig.disableClose = false;
       dialogConfig.width = '100%';
       const notificationCompRef = this._modal.openDialog(
-        channel === 'email'
+        channel === 'EMAIL'
           ? MarketingNotificationComponent
           : NotificationComponent,
         dialogConfig
       );
-
-      if (channel === 'email') {
+      if (channel === 'WHATSAPP_LITE') {
+        this._modal.close();
+        this.router.navigateByUrl('/pages/freddie/messages');
+      }
+      if (channel === 'EMAIL') {
         notificationCompRef.componentInstance.isEmail = true;
         notificationCompRef.componentInstance.email = this.primaryGuest.email;
       } else {
@@ -631,6 +652,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           }
         );
       }
+
       notificationCompRef.componentInstance.hotelId = this.hotelId;
       notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
       notificationCompRef.componentInstance.isModal = true;
@@ -692,6 +714,21 @@ export class DetailsComponent implements OnInit, OnDestroy {
     return label;
   }
 
+  getIconUrl(channel) {
+    const channelLabel = channel.name.split('_')[0];
+    const sharedIcon = this.shareIconList.find(
+      (icon) => icon.label === channelLabel
+    );
+
+    if(sharedIcon){
+      return channel.isSubscribed
+      ? sharedIcon.iconUrl
+      : sharedIcon.disableIcon;
+    }
+
+    return ''
+  }
+
   checkForTransactionFeedbackSubscribed() {
     return this.subscriptionService.checkModuleSubscription(
       ModuleNames.FEEDBACK_TRANSACTIONAL
@@ -704,11 +741,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
     );
   }
 
+  checkForGenerateFeedbackSubscribed() {
+    return this.subscriptionService.checkModuleSubscription(ModuleNames.HEDA);
+  }
+
   setTab(event) {
     this.tabKey = this.detailsConfig.find(
       (tabConfig) => tabConfig.index === event.index
     )?.key;
-    console.log(event, 'event');
   }
 
   get bookingCount() {

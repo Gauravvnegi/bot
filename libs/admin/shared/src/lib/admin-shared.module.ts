@@ -86,7 +86,8 @@ import { EmptyTableComponent } from './components/datatable/empty-table/empty-ta
 import { EmptyViewDirective } from './directives/empty-view.directive';
 import { CreateWithViewComponent } from './view/create-with-view/create-with-view.component';
 import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/toggle-switch-label.component';
-
+import { RoomTypeDirective } from './directives/room-type.directive';
+import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -180,6 +181,8 @@ import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/tog
     EmptyViewDirective,
     CreateWithViewComponent,
     ToggleSwitchComponentLabel,
+    RoomTypeDirective,
+    CopyLinkComponentComponent,
   ],
 
   exports: [
@@ -264,6 +267,8 @@ import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/tog
     EmptyViewDirective,
     CreateWithViewComponent,
     ToggleSwitchComponentLabel,
+    RoomTypeDirective,
+    CopyLinkComponentComponent,
   ],
 })
 export class AdminSharedModule {}

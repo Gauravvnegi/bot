@@ -7,7 +7,7 @@
     {{ tableName }}
   </div>
   <div class="action-wrapper">
-    <div class="btn read" *ngIf="selectedRows.length > 0">
+    <!-- <div class="btn read" *ngIf="selectedRows.length > 0">
       <img
         [src]="globalFeedbackConfig.images.datatable.mark_as_read.url"
         [alt]="globalFeedbackConfig.images.datatable.mark_as_read.alt"
@@ -16,8 +16,8 @@
       <span class="btn_text">
         {{ 'datatable.mark_as_read' | translate }}
       </span>
-    </div>
-    <div class="btn" *ngIf="selectedRows.length > 0">
+    </div> -->
+    <!-- <div class="btn" *ngIf="selectedRows.length > 0">
       <img
         [src]="globalFeedbackConfig.images.datatable.mark_as_unread.url"
         [alt]="globalFeedbackConfig.images.datatable.mark_as_unread.alt"
@@ -26,7 +26,7 @@
       <span class="btn_text">
         {{ 'datatable.mark_as_unread' | translate }}
       </span>
-    </div>
+    </div> -->
     <div class="pull-right">
       <label class="labl" *ngFor="let option of tableTypes">
         <input
@@ -80,11 +80,12 @@
     (sortFunction)="customSort($event)"
     [customSort]="isCustomSort"
     (onFilter)="onDataFilter($event)"
+    *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
   >
     <!-- <ng-template pTemplate="caption"> </ng-template> -->
     <ng-template pTemplate="caption">
       <div class="caption__wrapper" [formGroup]="tableFG">
-        <hospitality-bot-tab-group
+        <!-- <hospitality-bot-tab-group
           *ngIf="
             isTabFilters &&
             tabFilterItems &&
@@ -93,7 +94,16 @@
           [listItems]="tabFilterItems"
           [selectedIndex]="tabFilterIdx"
           (selectedTabChange)="onSelectedTabFilterChange($event)"
-        ></hospitality-bot-tab-group>
+        ></hospitality-bot-tab-group> -->
+        <ng-container
+          *ngIf="
+            isTabFilters &&
+            tabFilterItems &&
+            tableFG?.get('tableType').value !== 'card'
+          "
+          [ngTemplateOutlet]="tabFilter"
+        >
+        </ng-container>
 
         <hospitality-bot-filter-chips
           *ngIf="isQuickFilters && tableFG?.get('tableType').value !== 'card'"
@@ -149,11 +159,11 @@
           </td>
           <td class="guest">
             <div class="guest-name">{{ rowData?.guest.getFullName() }}</div>
-            <a href="tel:{{ rowData?.guest.getPhoneNumber() }}"
-              ><div class="guest-phone">
+            <a href="tel:{{ rowData?.guest.getPhoneNumber() }}">
+              <div class="guest-phone">
                 {{ rowData?.guest.getPhoneNumber() }}
-              </div></a
-            >
+              </div>
+            </a>
           </td>
           <td class="service-feedback">
             <div class="feedback">
@@ -363,12 +373,13 @@
             >
             </p-tableCheckbox>
           </td>
-          <td class="guest">
-            <div class="guest-status" *ngIf="rowData?.timeOut">
-              <img src="assets/svg/timeout.svg" alt="timeout" />
-            </div>
-            <div>
-              {{ rowData?.tableOrRoomNumber }}
+          <td>
+            <div [roomStatus]="rowData.roomStatus">
+              <div>
+                {{ rowData?.tableOrRoomNumber || '--' }}&nbsp;-&nbsp;{{
+                  rowData?.roomType || '--'
+                }}
+              </div>
             </div>
           </td>
           <td class="service-feedback">
@@ -487,11 +498,11 @@
           </td>
           <td class="guest">
             <div class="guest-name">{{ rowData?.guest.getFullName() }}</div>
-            <a href="tel:{{ rowData?.guest.getPhoneNumber() }}"
-              ><div class="guest-phone">
-                {{ rowData?.guest.phoneNumber }}
-              </div></a
-            >
+            <a href="tel:{{ rowData?.guest.getPhoneNumber() }}">
+              <div class="guest-phone">
+                {{ rowData?.guest.getPhoneNumber() }}
+              </div>
+            </a>
             <div class="guest-phone">{{ rowData?.guest.emailId }}</div>
           </td>
           <td class="package">
@@ -545,4 +556,23 @@
   <ng-template #emptyCell>
     <div class="emptyCell">&mdash;</div>
   </ng-template>
+</ng-template>
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [content]="{
+      description: 'No data available to view',
+      imageSrc: 'assets/images/empty-table-feedback.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
 </ng-template>

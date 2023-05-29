@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { initPaymentModule } from '@botshot-ecosystem/botpay-helpers';
+import { environment } from '@hospitality-bot/web-user/environment';
 import { TranslateService } from '@ngx-translate/core';
 import { SnackBarService } from 'libs/shared/material/src';
 import * as journeyEnums from 'libs/web-user/shared/src/lib/constants/journey';
@@ -32,6 +33,8 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   hotelPaymentConfig: IPaymentConfiguration;
   isConfigLoaded = false;
   selectedPaymentOption: SelectedPaymentOption = new SelectedPaymentOption();
+  paymentUrl: string;
+  selectedIndex: number = 0;
 
   constructor(
     private _paymentDetailsService: PaymentDetailsService,
@@ -51,6 +54,27 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
 
   ngOnInit(): void {
     this.getPaymentConfiguration();
+    this.initPaymentDetailsDSV2();
+
+    this._paymentDetailsService
+      .getPaymentStatus(this._reservationService.reservationId)
+      .subscribe((data) => {
+        console.log(data);
+      });
+  }
+
+  /**
+   * Handle getting the button Config with disabled state
+   * @param isNextDisabled to disable the next button
+   * @returns 
+   */
+  getUpdatedBtnConfig(isNextDisabled = false) {
+    this.buttonConfig[1].settings.disable = isNextDisabled && this.reservationData.paymentSummary.payableAmount !== 0;
+    return this.buttonConfig;
+  }
+
+  onTabChanged({ index }) {
+    this.selectedIndex = index;
   }
 
   initPaymentDetailsDS(hotelPaymentConfig) {
@@ -58,6 +82,38 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
       this.reservationData,
       hotelPaymentConfig
     );
+  }
+
+  // need to merge v1 into v2
+  initPaymentDetailsDSV2() {
+    this._paymentDetailsService
+      .getPaymentConfigurationV2(this._hotelService.hotelId)
+      .subscribe((data) => {
+        const gatewayDetails = data?.paymentConfiguration?.map((gateway) => ({
+          gatewayType: gateway?.gatewayType,
+          imgSrc:
+            gateway?.imgSrc || gateway?.gatewayType === 'CCAVENUE'
+              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/hotel/roseate/banner/ccavenue.webp'
+              : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/PayU.svg/1200px-PayU.svg.png',
+          payload: {
+            redirectUrl: `${environment.host_url}${this.router.url}&entity=payment`,
+          },
+        }));
+
+        this.paymentUrl = initPaymentModule({
+          userInfo: {
+            appName: 'web',
+            entityId: this._hotelService.hotelId,
+            reservationId: this._reservationService.reservationId,
+          },
+          uiConfig: {
+            heading: 'Select a payment method',
+            variant: 'standard',
+          },
+          gatewayDetails,
+          paymentApiKey: `${environment.paymentApiKey}`,
+        });
+      });
   }
 
   getPaymentConfiguration() {

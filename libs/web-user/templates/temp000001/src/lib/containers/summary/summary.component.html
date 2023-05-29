@@ -11,6 +11,7 @@
     <hospitality-bot-application-status
       (termsStatus)="emitTermsStatus($event)"
       [context]="context"
+      (requiredDetails)="handleRequireDetails($event)"
     >
     </hospitality-bot-application-status>
     <ng-content></ng-content>

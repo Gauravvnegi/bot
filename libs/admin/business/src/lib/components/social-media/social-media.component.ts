@@ -5,10 +5,9 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { BrandService } from '../../services/brand.service';
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
-import { set } from 'lodash';
-import { SocialMediaService } from '../../services/social-media.service';
+import { Subscription } from 'rxjs';
+import { BusinessService } from '../../services/business.service';
 
 @Component({
   selector: 'hospitality-bot-social-media',
@@ -18,21 +17,21 @@ import { SocialMediaService } from '../../services/social-media.service';
 export class SocialMediaComponent extends FormComponent implements OnInit {
   useForm: FormGroup;
   socialMediaControl: FormArray;
+  $subscription = new Subscription();
+  @Input() isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
-    private brandService: BrandService,
     public controlContainer: ControlContainer,
-    private socialMediaService: SocialMediaService
+    private businessService: BusinessService
   ) {
     super(controlContainer);
   }
 
   ngOnInit(): void {
-    this.initInputControl();
     this.initForm();
-    this.patchValueToSocialMediaControl();
-    this.patchValue();
+    this.initInputControl();
+    this.patchValueToParentComponent();
   }
 
   initForm(): void {
@@ -40,37 +39,47 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
       socialPlatforms: this.fb.array([]),
     });
     this.socialMediaControl = this.useForm.get('socialPlatforms') as FormArray;
-    this.getSocailMediaConfig();
-  }
-
-  patchValue(): void {
-    this.socialMediaService.onSubmit.subscribe((res) => {
-      console.log(res);
-      if (res) {
-        this.inputControl?.patchValue(this.socialMediaControl.value);
-      }
-    });
+    this.getsocialMediaConfig();
   }
 
   patchValueToSocialMediaControl(): void {
-    console.log(this.inputControl?.value);
-    setTimeout(() => {
-      if (this.inputControl?.value)
-        this.socialMediaControl.patchValue(this.inputControl?.value);
-    }, 1000);
+    if (!!this.inputControl.value.length) {
+      this.socialMediaControl.patchValue(this.inputControl.value);
+    }
+    this.$subscription.add(
+      this.inputControl.valueChanges.subscribe((res) => {
+        this.socialMediaControl.patchValue(this.inputControl.value);
+      })
+    );
   }
 
-  getSocailMediaConfig() {
-    this.socialMediaService.getSocialMediaConfig().subscribe((res) => {
-      res?.forEach((element) => {
-        this.socialMediaControl.push(
-          this.fb.group({
-            name: [element.name],
-            imageUrl: [element.imageUrl],
-            redirectUrl: [''],
-          })
-        );
-      });
+  patchValueToParentComponent(): void {
+    this.businessService.onSubmit.subscribe((res) => {
+      if (res)
+        this.inputControl.patchValue(this.socialMediaControl.value, {
+          emitEvent: false,
+        });
     });
+  }
+
+  getsocialMediaConfig() {
+    this.$subscription.add(
+      this.businessService.getSocialMediaConfig().subscribe((res) => {
+        res?.forEach((element) => {
+          this.socialMediaControl.push(
+            this.fb.group({
+              name: [element.name],
+              imageUrl: [element.imageUrl],
+              redirectUrl: [''],
+            })
+          );
+        });
+        this.patchValueToSocialMediaControl();
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
   }
 }

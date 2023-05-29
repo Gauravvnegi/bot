@@ -1,0 +1,52 @@
+@import 'main';
+
+.analytics-wrapper {
+  background: white;
+  box-shadow: $form-shadow;
+  padding: 16px;
+  border-radius: 5px;
+  &:not(:last-child) {
+    margin-bottom: 20px;
+  }
+}
+
+.header {
+  @include flex-item-center;
+  gap: 1%;
+  color: $secondary;
+  font-size: 16px;
+  margin-bottom: 20px;
+
+  .icon {
+    margin-right: 10px;
+    img {
+      @media screen and (max-width: 800px) {
+        height: 20px;
+      }
+    }
+  }
+}
+
+.graphs-wrapper {
+  display: flex;
+  gap: 1%;
+
+  .one-fourth {
+    flex-basis: 25%;
+    width: 25%;
+  }
+
+  .three-fourth {
+    flex-basis: 74%;
+    width: 74%;
+  }
+}
+
+.graph-container {
+  width: 100%;
+  border-radius: 5px;
+  border: solid 1px $borderCol;
+  &:hover {
+    border-color: $primary;
+  }
+}

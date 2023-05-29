@@ -475,11 +475,15 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     } else {
       this.updateUploadStatus(guestId, false);
       this.updateDocumentFG(guestId, doc_type, doc_page, '');
-      this._translateService
-        .get('VALIDATION.INVALID_IMAGE')
-        .subscribe((translatedMsg) => {
-          this._snackBarService.openSnackBarAsText(translatedMsg);
-        });
+      if (event.isDelete) {
+        this._snackBarService.openSnackBarAsText('Documents are required');
+      } else {
+        this._translateService
+          .get('VALIDATION.INVALID_IMAGE')
+          .subscribe((translatedMsg) => {
+            this._snackBarService.openSnackBarAsText(translatedMsg);
+          });
+      }
     }
   }
 

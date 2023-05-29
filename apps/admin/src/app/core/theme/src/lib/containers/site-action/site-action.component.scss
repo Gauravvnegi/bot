@@ -12,6 +12,18 @@
         font-size: 14px;
         white-space: nowrap;
       }
+      &.selected {
+        background: $option-hover;
+        .p-menuitem-text {
+          color: $primary;
+        }
+        .p-menuitem-link {
+          &:hover {
+            cursor: default;
+            background: transparent;
+          }
+        }
+      }
     }
 
     .p-menu-overlay {

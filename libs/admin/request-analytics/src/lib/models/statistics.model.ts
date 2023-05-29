@@ -15,6 +15,7 @@ export class InhouseSource {
     );
 
     const keys = Object.keys(input.requestSourceStats);
+
     keys.forEach((key, index) => {
       this.inhouseRequestSourceStats[key] = {
         value: input.requestSourceStats[key],
@@ -36,9 +37,18 @@ export class InhouseSentiments {
       set({}, 'label', get(input, ['label'])),
       set({}, 'totalCount', get(input, ['totalCount']))
     );
+
     const keys = Object.keys(input);
+    const keysNotToBeIncluded = [
+      'label',
+      'totalCount',
+      'comparisonPercent',
+      'score',
+    ];
+
     keys.forEach((key) => {
-      if (!['label', 'totalCount', 'packageTotalCounts'].includes(key)) {
+      // if (!['label', 'totalCount', 'packageTotalCounts'].includes(key)) {
+      if (!keysNotToBeIncluded.includes(key)) {
         this[key] = new Sentiment().deserialize(input[key]);
       }
     });

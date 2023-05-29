@@ -12,6 +12,7 @@
           <hospitality-bot-input
             controlName="name"
             label="Room Type Name"
+            maxLength="60"
           ></hospitality-bot-input>
         </div>
         <div class="file-upload-wrapper">
@@ -19,7 +20,10 @@
             formControlName="imageUrls"
             label="Image"
             description="Mandatory to add at least 1 image"
-            [limit]="4"
+            [settings]="{
+              limit: 1,
+              unit: 4
+            }"
             [hotelId]="hotelId"
             path="static-content/room-types"
           ></hospitality-bot-custom-file-upload>
@@ -46,6 +50,7 @@
           [itemList]="compServices"
           (viewAll)="saveRoomTypeData('COMPLIMENTARY')"
           [noRecordsAction]="noRecordAction"
+          [loading]="loading"
         ></hospitality-bot-custom-select>
         <div class="paid-services">
           <hospitality-bot-custom-select
@@ -55,6 +60,7 @@
             [itemList]="paidServices"
             (viewAll)="saveRoomTypeData('PAID')"
             [noRecordsAction]="noRecordAction"
+            [loading]="loading"
           ></hospitality-bot-custom-select>
         </div>
       </div>

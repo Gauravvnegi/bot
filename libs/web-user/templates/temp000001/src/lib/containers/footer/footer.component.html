@@ -4,11 +4,13 @@
   </div>
   <div class="footer__wrapper--text">
     <div class="social_icons" *ngIf="showSocialIcons">
-      <div *ngFor="let option of footerConfig.social" class="icon">
-        <a [href]="option.redirectUrl" target="_blank" rel="noreferrer">
-          <img [src]="option.imageUrl" alt="" />
-        </a>
-      </div>
+      <ng-container  *ngFor="let option of footerConfig.social" >
+        <div *ngIf="option.imageUrl && option.redirectUrl" class="icon">
+          <a [href]="option.redirectUrl" target="_blank" rel="noreferrer">
+            <img [src]="option.imageUrl" alt="" />
+          </a>
+        </div>
+      </ng-container>
     </div>
     <div class="footer-privacy-text">
       <a

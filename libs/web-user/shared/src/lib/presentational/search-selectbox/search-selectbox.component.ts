@@ -38,20 +38,25 @@ export class SearchSelectboxComponent extends BaseComponent {
 
   /**
    * To Reset the value in auto complete if the types value does not match either value or key
+   * TO DO - Figure out better way then set time out
    */
   blur() {
-    const control = this.parentForm.get(this.name);
-    const filterValue = control.value?.toLowerCase();
-    const data =
-      this.settings.options?.find(
-        (option) => option.value.toLowerCase() == filterValue
-      ) ??
-      this.settings.options?.find(
-        (option) => option.key.toLowerCase() == filterValue
-      );
+    setTimeout(() => {
+      const control = this.parentForm.get(this.name);
+      const filterValue = control.value?.toLowerCase();
 
-    if (data) control.setValue(data.value);
-    else control.reset();
+      // checking both value and key as api response can return either of those
+      const data =
+        this.settings.options?.find(
+          (option) => option.value.toLowerCase() == filterValue
+        ) ??
+        this.settings.options?.find(
+          (option) => option.key.toLowerCase() == filterValue
+        );
+
+      if (data) control.setValue(data.value);
+      else control.reset();
+    }, 350);
   }
 
   ngOnChanges(): void {
@@ -85,7 +90,7 @@ export class SearchSelectboxComponent extends BaseComponent {
   }
 
   private _filter(value: string) {
-    const filterValue = value.toLowerCase();
+    const filterValue = value?.toLowerCase();
     return this.settings.options?.filter((option) =>
       option.value.toLowerCase().includes(filterValue)
     );

@@ -57,14 +57,16 @@
                 </div>
                 <div class="field width-added">
                   <mat-label class="label">Phone No.</mat-label>
-                  <a href="tel:{{guestFormGroup.countryCode}}{{guestFormGroup.phoneNumber}}">
-                  <div
-                    *ngIf="guestFormGroup.phoneNumber; else emptyCell"
-                    class="value"
+                  <a
+                    *ngIf="guestData.phoneNumber; else emptyCell"
+                    href="tel:{{ guestFormGroup.countryCode }}{{
+                      guestFormGroup.phoneNumber
+                    }}"
                   >
-                    {{ guestFormGroup.countryCode }}
-                    {{ guestFormGroup.phoneNumber }}
-                  </div>
+                    <div class="value"> 
+                      {{ guestFormGroup.countryCode }}
+                      {{ guestFormGroup.phoneNumber }}
+                    </div>
                   </a>
                 </div>
                 <div class="field width-added">
@@ -298,7 +300,7 @@
         >
           <form [formGroup]="healthCardDetailsForm">
             <div>
-              <span class="text">Remark :</span>
+              <span class="text">Remarks :</span>
               <mat-form-field
                 class="remark"
                 [style.opacity]="

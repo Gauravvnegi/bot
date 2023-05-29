@@ -92,7 +92,7 @@
         </td>
         <td>
           <p>{{ rowData.confirmationNumber }}</p>
-          <p class="light">
+          <p [roomStatus]="rowData.rooms[0]?.status">
             {{ rowData.rooms[0].roomNumber }} - {{ rowData.rooms[0].type }}
           </p>
           <p>{{ rowData.quantity }}</p>
@@ -101,8 +101,12 @@
           <p>{{ rowData.guestDetails.primaryGuest.getFullName() }}</p>
         </td>
         <td>
-          <a href="tel:{{rowData.guestDetails.primaryGuest.phoneNumber}}">
-          <p>{{ rowData.guestDetails.primaryGuest.phoneNumber }}</p>
+          <a href="tel:{{ rowData.guestDetails.primaryGuest.phoneNumber }}">
+            <p class="email">
+              {{ rowData.guestDetails.primaryGuest.countryCode }}-{{
+                rowData.guestDetails.primaryGuest.phoneNumber
+              }}
+            </p>
           </a>
           <p class="email">{{ rowData.guestDetails.primaryGuest.email }}</p>
         </td>

@@ -149,8 +149,12 @@ export class StepperComponent extends BaseComponent {
       this.nextStepIdx = index;
     });
 
-    this.stepperService.stepperSelectedIndex$.subscribe((index) => {
-      //------ footer btn shift issue fix-------
+    /**
+     * To handle footer btn shift issue.
+     * Every time new button generated with the stepper form.
+     * Solution - Attached the class that fit the height to view port and then release the height
+     */
+    const layoutShiftFix = () => {
       clearTimeout(timeoutId);
       const doc = document.getElementsByClassName('main-block');
       for (let i = 0; i < doc.length; i++) {
@@ -161,7 +165,10 @@ export class StepperComponent extends BaseComponent {
           doc[i].classList.remove('main-container');
         }
       }, 1000);
-      //----------------
+    };
+
+    this.stepperService.stepperSelectedIndex$.subscribe((index) => {
+      layoutShiftFix();
 
       this.selectedIndex = index;
       this.toggleStepperClass(index);

@@ -1,5 +1,5 @@
 <div class="methods-container">
-  <label
+  <!-- <label
     class="labl"
     *ngFor="let method of settings.paymentConfigurations.paymentMethods"
   >
@@ -16,7 +16,6 @@
         <h3>
           {{ method.type }}
         </h3>
-        <!-- <h6 *ngFor="let method of option.paymentMethods">{{ method.type }}</h6> -->
         <div class="method-image-container">
           <div class="image">
             <img [src]="method.imageUrl" />
@@ -25,5 +24,16 @@
       </div>
       <span class="circle"><div class="tick"></div></span>
     </div>
-  </label>
+  </label> -->
+
+  <div class="iframe-wrapper">
+    <iframe
+      [src]="paymentUrl | safeUrl"
+      id="payGate"
+      height="300px"
+      title="Payment Gateway"
+      loading="eager"
+      width="100%"
+    ></iframe>
+  </div>
 </div>

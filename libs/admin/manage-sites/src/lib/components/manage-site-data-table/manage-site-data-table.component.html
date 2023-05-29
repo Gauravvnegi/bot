@@ -7,9 +7,7 @@
   <div class="action-wrapper">
     <hospitality-bot-button
       label="Create Site"
-      href="https://dev.createwith.botshot.ai/theme/select?userId={{
-        userId
-      }}"
+      [href]="createSiteUrl"
       target="_self"
     ></hospitality-bot-button>
   </div>
@@ -109,12 +107,9 @@
           </div>
         </td>
         <td>
-          <div
-            class="primary-text hide-text-overflow"
-            *ngIf="rowData.url; else emptyCell"
-          >
-            {{ rowData.url }}
-          </div>
+          <hospitality-bot-copy-link
+            [url]="rowData.url"
+          ></hospitality-bot-copy-link>
         </td>
         <!-- <td>
           <div class="primary-text" *ngIf="rowData.expiryDate; else emptyCell">

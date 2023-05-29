@@ -2,7 +2,7 @@ import { ManageSiteStatus } from '../constant/manage-site';
 
 export type ManageSiteResponse = {
   id: string;
-  logo: string;
+  favIcon: string;
   name: string;
   domain: string;
   themeId: string;

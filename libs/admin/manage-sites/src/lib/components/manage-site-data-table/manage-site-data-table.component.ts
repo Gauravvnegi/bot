@@ -23,6 +23,7 @@ import { ManageSiteStatus } from '../../constant/manage-site';
 import { ManageSite, ManageSiteList } from '../../models/data-table.model';
 import { ManageSitesService } from '../../services/manage-sites.service';
 import { NextState, QueryConfig } from '../../types/manage-site.type';
+import { environment } from '@hospitality-bot/admin/environment';
 
 @Component({
   selector: 'hospitality-bot-manage-site-data-table',
@@ -33,6 +34,8 @@ import { NextState, QueryConfig } from '../../types/manage-site.type';
   ],
 })
 export class ManageSiteDataTableComponent extends BaseDatatableComponent {
+  createSiteUrl: string;
+
   hotelId: string;
   filterChips = chips;
   cols = cols;
@@ -60,6 +63,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   ngOnInit(): void {
     this.userId = this.userService.getLoggedInUserId();
     this.initTableValue();
+    this.createSiteUrl = `${environment.createWithUrl}/theme/select?userId=${this.userId}&creatingNewSite=true`;
   }
 
   /**
@@ -84,7 +88,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         (res) => {
           const manageSiteData = new ManageSiteList().deserialize(res);
           this.values = manageSiteData.records;
-
+          console.log(this.values);
           this.nextState = this.values.map((item) => ({
             id: item.id,
             status: item.status,
@@ -107,7 +111,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
 
   selectSite(rowData) {
     if (rowData.id && rowData.status !== ManageSiteStatus.DELETE) {
-      this.cookiesSettingService.initPlatformChangeV2(rowData.id, '/pages');
+      this.cookiesSettingService.initPlatformChange(rowData.id, '/pages');
     }
   }
 
@@ -119,23 +123,46 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
       dialogConfig
     );
 
+    const currStatus =
+      status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+
+    // let heading: string;
+    let description: string[] = [
+      `You are about to mark this site ${currStatus}`,
+    ];
+    let label: string = 'Confirm';
+
+    if (status === ManageSiteStatus.DRAFT) {
+      description = [
+        'Are you sure you want to unpublish your website?',
+        'Once unpublished, it wont be visible to visitors.',
+        'You can always Publish it again.',
+      ];
+      label = 'Unpublish';
+    }
+
+    if (status === ManageSiteStatus.TRASH) {
+      description = [
+        'Are you sure you want to move your website to the trash?',
+        'Once moved, it will become invisible and inactive.',
+        'You can always restore it again.',
+      ];
+      label = 'Trash';
+    }
+
     togglePopupCompRef.componentInstance.content = {
-      heading: `Mark As ${
-        status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
-      }`,
-      description: [
-        `You are about to mark this site ${status}`,
-        'Are you Sure?',
-      ],
+      heading: `Mark As ${currStatus}`,
+      description: description,
     };
+
     togglePopupCompRef.componentInstance.actions = [
       {
-        label: 'No',
+        label: 'Cancel',
         onClick: () => this.modalService.close(),
         variant: 'outlined',
       },
       {
-        label: 'Yes',
+        label: label,
         onClick: () => {
           this.changeStatus(status, rowData);
           this.modalService.close();
@@ -195,7 +222,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         label: 'Go to Website Settings',
         onClick: () => {
           this.modalService.close();
-          this.cookiesSettingService.initPlatformChangeV2(
+          this.cookiesSettingService.initPlatformChange(
             hotelId, // siteId
             `/pages/settings/${SettingOptions.WEBSITE_SETTINGS}`
           );

@@ -1,16 +1,24 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import { cols } from '../../constant/hotel-data-table';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { FormBuilder } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { HotelService } from '../../services/hotel.service';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { ActivatedRoute, Router } from '@angular/router';
+import { cols } from '../../constant/hotel-data-table';
+import { BusinessService } from '../../services/business.service';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { QueryConfig } from '@hospitality-bot/admin/library';
+import * as FileSaver from 'file-saver';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'hospitality-bot-hotel-data-table',
@@ -35,32 +43,46 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     protected tabFilterService: TableService,
-    private hotelService: HotelService,
     private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private businessService: BusinessService,
+    private modalService: ModalService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.businessService.resetHotelFormState();
+
+    this.initTableValue();
+  }
+
+  /**
+   * @function loadData Fetch data as paginates
+   * @param event
+   */
+  loadData(event: LazyLoadEvent): void {
     this.initTableValue();
   }
 
   initTableValue() {
     this.loading = true;
     this.$subscription.add(
-      this.hotelService.getHotelList(this.hotelId).subscribe(
-        (res) => {
-          this.values = res.records;
-        },
-        (err) => {
-          this.loading = false;
-        },
-        this.handelFinal
-      )
+      this.businessService
+        .getHotelList(this.brandId, this.getQueryConfig())
+        .subscribe(
+          (res) => {
+            this.values = res.records;
+            this.totalRecords = res.total;
+          },
+          ({ error }) => {
+            this.values = [];
+            this.loading = false;
+          },
+          this.handelFinal
+        )
     );
   }
 
@@ -103,23 +125,100 @@ export class HotelDataTableComponent extends BaseDatatableComponent
    */
 
   handleStatus(status: boolean, rowData): void {
-    this.loading = true;
-    this.hotelService.updateHotel(this.hotelId, { status: status }).subscribe(
-      (res) => {
-        const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-        this.updateStatusAndCount(
-          statusValue(rowData.status),
-          statusValue(status)
-        );
-        this.values.find((item) => item.id === rowData.id).status = status;
-        this.snackbarService.openSnackBarAsText(
-          'Status changes successfully',
-          '',
-          { panelClass: 'success' }
-        );
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    const togglePopupCompRef = this.modalService.openDialog(
+      ModalComponent,
+      dialogConfig
+    );
+
+    // let heading: string;
+    let description: string[] = [
+      `Are you sure you want to Deactive ${rowData?.name}`,
+      ' Once Deactivated, you wont be to manage reservations and the hotel website will not be visible to visitors.',
+    ];
+    let label: string = 'Deactivate';
+    if (status) {
+      description = [
+        `Are you sure you want to Activate ${rowData?.name}`,
+        ' Once Activated, you will be able to manage reservations and the hotel website will be visible to visitors.',
+      ];
+      label = 'Activate';
+    }
+
+    togglePopupCompRef.componentInstance.content = {
+      heading: `Mark As ${status ? 'Active' : 'Inactive'}`,
+      description: description,
+    };
+
+    togglePopupCompRef.componentInstance.actions = [
+      {
+        label: 'Cancel',
+        onClick: () => this.modalService.close(),
+        variant: 'outlined',
       },
-      ({ error }) => {},
-      this.handelFinal
+      {
+        label: label,
+        onClick: () => {
+          this.changeStatus(status, rowData);
+          this.modalService.close();
+        },
+        variant: 'contained',
+      },
+    ];
+
+    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+      this.modalService.close();
+    });
+  }
+
+  changeStatus(status: boolean, rowData): void {
+    this.loading = true;
+    this.$subscription.add(
+      this.businessService
+        .updateHotel(rowData.id, { status: status })
+        .subscribe(
+          (res) => {
+            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
+            this.updateStatusAndCount(
+              statusValue(rowData.status),
+              statusValue(status)
+            );
+            this.values.find((item) => item.id === rowData.id).status = status;
+            this.snackbarService.openSnackBarAsText(
+              'Status changes successfully',
+              '',
+              { panelClass: 'success' }
+            );
+          },
+          ({ error }) => {},
+          this.handelFinal
+        )
+    );
+  }
+
+  /**
+   * @function exportCSV
+   * @description To export the data
+   */
+  exportCSV(): void {
+    this.loading = true;
+
+    const config: QueryConfig = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
+        { order: 'DESC' },
+        ...this.selectedRows.map((item) => ({ ids: item.id })),
+      ]),
+    };
+
+    this.$subscription.add(
+      this.businessService.exportCSV(this.hotelId, config).subscribe((res) => {
+        FileSaver.saveAs(
+          res,
+          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+        );
+      }, this.handelFinal)
     );
   }
 
@@ -133,4 +232,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   handelFinal = () => {
     this.loading = false;
   };
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

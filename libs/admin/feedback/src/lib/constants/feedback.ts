@@ -333,8 +333,9 @@ export const feedback = {
       stay: [
         {
           field: 'tableOrRoomNumber',
-          header: 'Room No',
+          header: 'Room No / Type',
           sortType: 'string',
+          width: '18%',
         },
         {
           field: '',
@@ -435,8 +436,9 @@ export const feedback = {
       stay: [
         {
           field: 'tableOrRoomNumber',
-          header: 'Room No',
+          header: 'Room No / Type',
           sortType: 'string',
+          width: '18%',
         },
         {
           field: '',

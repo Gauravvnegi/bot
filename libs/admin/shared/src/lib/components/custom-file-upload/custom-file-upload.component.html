@@ -49,7 +49,7 @@
           <input
             type="checkbox"
             [checked]="featureValueIndex?.includes(i)"
-            (change)="onCheckbox($event, i)"
+            (change)="processCheckboxChange($event, i)"
           />
           <label for="checkbox"> Make Featured Image</label><br />
         </div>
@@ -105,7 +105,13 @@
     </div>
   </div>
 </div>
-
+<hospitality-bot-button
+  class="create-btn"
+  label="+Add More Images"
+  (click)="addMoreImages()"
+  *ngIf="isAddMore"
+  variant="outlined"
+></hospitality-bot-button>
 <p
   class="validation-error"
   *ngIf="control?.errors?.required && control?.touched"

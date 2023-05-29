@@ -208,7 +208,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
         .getRoomById(this.hotelId, this.roomId)
         .subscribe((res) => {
           const roomDetails = res.rooms[0];
-          console.log(roomDetails, 'roomDetails');
           this.draftDate = roomDetails.updated ?? roomDetails.created;
           this.dateTitle = roomDetails.updated ? 'Updated on' : 'Activated on';
           const data: SingleRoomForm = {

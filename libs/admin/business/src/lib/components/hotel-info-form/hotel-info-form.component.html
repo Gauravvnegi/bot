@@ -65,17 +65,11 @@
           isFeatureView="true"
           description="Mandatory to add at least 1 image"
           [limit]="imageLimit"
+          [isAddMore]="true"
           [hotelId]="hotelId"
           path="static-content/room-types"
         ></hospitality-bot-custom-file-upload>
       </div>
-      <hospitality-bot-button
-        class="create-btn"
-        label="+Add More Images"
-        (onClick)="addMoreImage()"
-        variant="outlined"
-      ></hospitality-bot-button>
-
       <div class="des-template">
         <div class="des-template__label">Description</div>
         <div class="des-template__input">

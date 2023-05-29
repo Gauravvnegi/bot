@@ -88,7 +88,6 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         (res) => {
           const manageSiteData = new ManageSiteList().deserialize(res);
           this.values = manageSiteData.records;
-          console.log(this.values);
           this.nextState = this.values.map((item) => ({
             id: item.id,
             status: item.status,
@@ -116,6 +115,10 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   }
 
   handleStatus(status: ManageSiteStatus, rowData: ManageSite) {
+    if(status === ManageSiteStatus.PUBLISHED){
+      this.changeStatus(status, rowData);
+      return;
+    }
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     const togglePopupCompRef = this.modalService.openDialog(
@@ -125,6 +128,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
 
     const currStatus =
       status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+
 
     // let heading: string;
     let description: string[] = [

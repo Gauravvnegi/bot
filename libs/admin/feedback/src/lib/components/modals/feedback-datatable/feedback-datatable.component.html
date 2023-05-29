@@ -124,7 +124,7 @@
                 <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
                 <a href="tel:{{ rowData.guest.getPhoneNumber() }}">
                   <div class="guest-phone">
-                    {{ rowData.guest.getPhoneNumber() }}
+                    {{ rowData.guest.phoneNumber }}
                   </div>
                 </a>
               </td>
@@ -325,7 +325,7 @@
                 <!-- <div class="package-city">{{ rowData.guest.place }}</div> -->
               </td>
               <td class="comments">{{ rowData.guestData.overAllNps }}</td>
-              <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
+              <!-- <td class="comments">{{ rowData.guestData.churnProbalilty }}</td> -->
               <td class="comments" *ngIf="tableName === 'Response Rate'">
                 <div class="rate">
                   <div class="rate-images" *ngFor="let icon of responseRate">
@@ -530,10 +530,10 @@
                 </div>
               </td>
               <td class="guest">
-                <div class="guest-name">{{ rowData.guest.getFullName() }}</div>
+                <div class="guest-name">{{ rowData.guest.fullName }}</div>
                 <a href="tel:{{ rowData.guest.getPhoneNumber() }}">
                   <div class="guest-phone">
-                    {{ rowData.guest.getPhoneNumber() }}
+                    {{ rowData.guest.phoneNumber }}
                   </div>
                 </a>
                 <div class="guest-phone">{{ rowData.guest.emailId }}</div>
@@ -548,7 +548,7 @@
                 <p class="arrival-time">{{ rowData.guestData.guestCount }}G</p>
               </td>
               <td class="comments">{{ rowData.guestData.overAllNps }}</td>
-              <td class="comments">{{ rowData.guestData.churnProbalilty }}</td>
+              <!-- <td class="comments">{{ rowData.guestData.churnProbalilty }}</td> -->
               <td class="comments" *ngIf="tableName === 'Response Rate'">
                 <div class="rate">
                   <div class="rate-images" *ngFor="let icon of responseRate">

@@ -338,7 +338,7 @@
             </div>
           </td>
           <td class="comments">{{ rowData?.guestData.overAllNps }}</td>
-          <td class="comments">{{ rowData?.guestData.churnProbalilty }}</td>
+          <!-- <td class="comments">{{ rowData?.guestData.churnProbalilty }}</td> -->
           <td class="status-image" (click)="$event.stopPropagation()">
             <ng-container *ngIf="rowData.status === 'NOACTION'; else dropDown">
               <div class="detailPage" (click)="openDetailPage($event, rowData)">
@@ -515,7 +515,7 @@
             <p class="arrival-time">{{ rowData?.guestData.guestCount }}G</p>
           </td>
           <td class="comments">{{ rowData?.guestData.overAllNps }}</td>
-          <td class="comments">{{ rowData?.guestData.churnProbalilty }}</td>
+          <!-- <td class="comments">{{ rowData?.guestData.churnProbalilty }}</td> -->
 
           <!-- status-image-initiated -->
           <td class="status-image" (click)="$event.stopPropagation()">

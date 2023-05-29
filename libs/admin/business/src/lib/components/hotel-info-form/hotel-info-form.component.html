@@ -64,8 +64,11 @@
           label="Image"
           isFeatureView="true"
           description="Mandatory to add at least 1 image"
-          [limit]="imageLimit"
-          [isAddMore]="true"
+          [settings]="{
+            limit: 1,
+            unit: 4,
+            isMultiple: true
+          }"
           [hotelId]="hotelId"
           path="static-content/room-types"
         ></hospitality-bot-custom-file-upload>

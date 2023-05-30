@@ -109,7 +109,7 @@
         <div class="cell-content" *ngIf="rowData.amount; else emptyCell">
           <div class="primary-text">
             <div *ngIf="rowData.discountedPrice" class="primary-text">
-              {{ rowData.currency }} {{ rowData.discountedPrice }}
+              {{ rowData.discountedPrice | currency: rowData.currency }}
             </div>
             <div
               [ngClass]="{
@@ -118,7 +118,7 @@
                 'primary-text': !rowData.discountedPrice
               }"
             >
-              {{ rowData.currency }} {{ rowData.amount }}
+              {{ rowData.amount | currency: rowData.currency }}
             </div>
           </div>
         </div>

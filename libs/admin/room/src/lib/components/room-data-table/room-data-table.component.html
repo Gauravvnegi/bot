@@ -157,7 +157,7 @@
   </td>
   <td>
     <div *ngIf="rowData.price; else emptyCell">
-      <div class="primary-text">{{ rowData.currency }} {{ rowData.price }}</div>
+      <div class="primary-text">{{ rowData.price | currency: rowData.currency }}</div>
     </div>
   </td>
 </ng-template>

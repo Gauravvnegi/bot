@@ -19,7 +19,7 @@ export class StatsCardComponent {
 
   @Input() set stats(value) {
     this.title = value?.label?.replace(/\s+|-/g, '');
-    this.label = value?.label?.replace(/([A-Z])/g, ' $1').trim();
+    this.label = value?.label;
     this.score = value?.score;
     this.comparisonPercent = value?.comparisonPercent || '';
     this.additionalData = value?.additionalData || '';

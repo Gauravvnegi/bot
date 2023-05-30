@@ -154,7 +154,7 @@ export class BifurcationStatsComponent implements OnInit {
           this.stats = new Bifurcation().deserialize(response);
           this.stats.feedbacks.forEach((feedback) => {
             const newStatCard: StatCard = {
-              label: feedback.label.replace(/\s+|-/g, ''),
+              label: feedback.label,
               score: feedback.score.toString(),
               additionalData: feedback.score.toString(),
               comparisonPercent: 100,

@@ -64,6 +64,11 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   font-size: 1em;
 }
 
+// updated z index for the dropdown menu
+:host ::ng-deep .p-dropdown-panel { 
+  z-index: $main-overlay-z !important;
+}
+
 .icon {
   position: absolute;
   right: 1em;

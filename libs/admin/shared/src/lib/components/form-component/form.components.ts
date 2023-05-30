@@ -270,7 +270,7 @@ export class FormComponent implements OnInit {
       menu?.addEventListener('scroll', () => {
         if (this.stopEmission) return;
         if (
-          !this.loading &&
+          !this.isLoading &&
           !this.searchText &&
           menu.scrollHeight - 251 < menu.scrollTop
         ) {

@@ -150,21 +150,28 @@ export class BifurcationStatsComponent implements OnInit {
           this.statCard = [];
           this.feedback = [];
           this.gtmCount = 0;
+          console.log(this.gtmCount);
           this.stats = new Bifurcation().deserialize(response);
           this.stats.feedbacks.forEach((feedback) => {
             const newStatCard: StatCard = {
-              label: feedback.label.replace(/\s+|-/g, ''),
+              label: feedback.label,
               score: feedback.score.toString(),
               additionalData: feedback.score.toString(),
               comparisonPercent: 100,
               color: feedback.color,
             };
+            if(feedback.label!== 'No-Action' && feedback.label!=='Timeout'){
+              this.gtmCount += +newStatCard.score;
+            }
             if (feedback.label !== 'No-Action') {
-              this.gtmCount += feedback.score;
+              if(feedback.label==='Timeout'){
+                newStatCard.label = 'Timed-out'
+              }
               this.statCard.push(newStatCard);
             } else {
               this.noActionCount = +newStatCard.score;
               newStatCard.color = '#beaeff';
+              newStatCard.label = 'No-Action'
               this.feedback.push(newStatCard);
             }
           });
@@ -175,7 +182,6 @@ export class BifurcationStatsComponent implements OnInit {
             comparisonPercent: 100,
             color: '#5f38f9',
           });
-          console.log(this.feedback);
           this.initGraph(
             this.feedback.reduce(
               (accumulator, current) => accumulator + +current.score,

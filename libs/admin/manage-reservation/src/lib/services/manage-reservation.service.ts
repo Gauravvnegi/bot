@@ -22,6 +22,7 @@ export class ManageReservationService extends ApiService {
   ): Observable<T> {
     return this.get(`/api/v1/entity/${hotelId}/inventory${config?.params}`);
   }
+  
   getPaymentMethod(hotelId: string): Observable<any> {
     return this.get(`/api/v1/entity/${hotelId}/configuration?configType=PAYMENT&status=ACTIVE`);
   }

@@ -10,7 +10,7 @@
   height: 100%;
   position: relative;
   &-stats-header {
-    @include normal-text;
+    @include normal-sm-text;
     text-align: center;
     color: $tooltip;
   }
@@ -86,7 +86,7 @@
   &-footer {
     position: absolute;
     bottom: 20px;
-    @include normal-text;
+    @include normal-sm-text;
     color: $grayLight;
     font-size: 10px;
     @media screen and(max-width:$L) {

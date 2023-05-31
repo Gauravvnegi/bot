@@ -92,7 +92,7 @@
   }
 
   &_heading {
-    @include normal-text;
+    @include normal-sm-text;
     font-weight: 600;
     color: $secondary2;
     @include flex-item-center;
@@ -104,7 +104,7 @@
   }
 
   &_subheading {
-    @include normal-text;
+    @include normal-sm-text;
     font-weight: bold;
 
     &_label {
@@ -160,7 +160,7 @@
         font-weight: 500;
       }
       &_amount {
-        @include normal-text;
+        @include normal-sm-text;
         font-weight: bold;
         text-align: right;
         color: $amount;
@@ -188,7 +188,7 @@
       font-weight: 500;
     }
     &_amount {
-      @include normal-text;
+      @include normal-sm-text;
       font-weight: bold;
       text-align: right;
       color: #53d397;

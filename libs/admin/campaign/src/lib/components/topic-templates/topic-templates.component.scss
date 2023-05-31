@@ -63,7 +63,7 @@
     border-radius: 23px;
     box-shadow: $button-shadow;
     border: solid 1px $button-blue;
-    @include normal-text;
+    @include normal-sm-text;
     color: $button-blue;
     background-color: $white;
     cursor: pointer;

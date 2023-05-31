@@ -160,7 +160,7 @@
       }
     }
     &-job-duration {
-      @include normal-text;
+      @include normal-sm-text;
       font-size: 12px;
       color: $secondary;
     }

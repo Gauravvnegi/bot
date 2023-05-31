@@ -280,7 +280,7 @@
   }
   &__title {
     margin: 12px 0;
-    @include normal-text;
+    @include normal-sm-text;
     font-weight: bold;
     color: $secondary;
   }
@@ -570,7 +570,7 @@
   padding: 20px 15px;
 }
 .txt {
-  @include normal-text;
+  @include normal-sm-text;
   color: $secondary;
   font-weight: bold;
 }

@@ -9,7 +9,7 @@
     background-color: $whiteDeep;
     @include flex-space-between-cen-Algn;
     .title {
-      @include normal-text;
+      @include normal-sm-text;
       color: $tooltip;
     }
     .close {

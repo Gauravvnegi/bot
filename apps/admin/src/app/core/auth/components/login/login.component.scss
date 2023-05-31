@@ -118,7 +118,7 @@
     box-shadow: 0px 4px 4px $btn-shadow;
   }
   @media screen and (max-width: $tablet) {
-    @include normal-text;
+    @include normal-sm-text;
     height: 4.5vw;
     @include flex-all-center;
     width: 14vw;

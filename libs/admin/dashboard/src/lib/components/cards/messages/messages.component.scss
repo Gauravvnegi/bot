@@ -27,7 +27,7 @@
       margin-right: 10px;
     }
     &-text {
-      @include normal-text;
+      @include normal-sm-text;
       font-weight: bold;
       color: $secondary;
     }

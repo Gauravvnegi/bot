@@ -147,7 +147,7 @@
   &__title {
     margin: 12px 0;
     font-weight: bold;
-    @include normal-text;
+    @include normal-sm-text;
     color: $secondary;
   }
   &__description {

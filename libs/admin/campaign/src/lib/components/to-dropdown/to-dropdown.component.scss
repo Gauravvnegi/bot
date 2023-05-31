@@ -5,12 +5,12 @@
     border-bottom: 1px solid $grayMedium !important;
   }
   .mat-tab-label-content {
-    @include normal-text;
+    @include normal-sm-text;
     font-weight: normal;
     color: $inActiveTab;
   }
   .mat-tab-label-active > .mat-tab-label-content {
-    @include normal-text;
+    @include normal-sm-text;
     color: $button-blue !important;
   }
   .mat-form-field-underline {
@@ -44,7 +44,7 @@
 }
 
 .container {
-  @include normal-text;
+  @include normal-sm-text;
   font-weight: normal;
   .header {
     @include flex-item-center;

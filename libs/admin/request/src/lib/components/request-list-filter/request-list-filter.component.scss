@@ -12,7 +12,7 @@
   justify-content: space-between;
   align-items: center;
   &-text {
-    @include normal-text;
+    @include normal-sm-text;
     color: $secondary;
     opacity: 1;
   }

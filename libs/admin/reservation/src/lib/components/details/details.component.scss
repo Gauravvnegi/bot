@@ -212,7 +212,7 @@
         @include flex-item-center;
         border-radius: 5px;
         padding: 6px 20px;
-        @include normal-text;
+        @include normal-sm-text;
         text-align: center;
         color: $white;
         .material-icons {
@@ -628,7 +628,7 @@ mat-option {
 
 :host ::ng-deep {
   .mat-select-value-text {
-    @include normal-text;
+    @include normal-sm-text;
     color: $white;
   }
   .mat-select-arrow {

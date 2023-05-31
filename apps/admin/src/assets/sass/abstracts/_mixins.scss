@@ -185,10 +185,59 @@
     opacity: 1;
   }
 }
-@mixin normal-text {
+
+@mixin bold-sm-text {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.96;
+}
+
+@mixin bold-md-text {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.96;
+}
+
+@mixin bold-lg-text {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.96;
+}
+
+@mixin normal-sm-text {
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.96px;
+}
+
+@mixin normal-md-text {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.96px;
+}
+
+@mixin normal-lg-text {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.96px;
+}
+
+@mixin light-sm-text{
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.96;
+}
+
+@mixin light-md-text{
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.96;
+}
+
+@mixin light-lg-text{
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.96;
 }
 
 @mixin txt-Ellipsis {
@@ -288,9 +337,7 @@
 @mixin form-header {
   padding: 25px $form-padding-x 25px;
   font-family: Poppins;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.96px;
+  @include bold-sm-text;
   color: $secondary2 !important;
 }
 
@@ -321,7 +368,7 @@
     color: $secondary2;
 
     &__label {
-      @include normal-text;
+      @include normal-sm-text;
     }
 
     &__hash {
@@ -340,7 +387,7 @@
 
     &__label {
       color: $secondary2;
-      @include normal-text();
+      @include normal-sm-text();
     }
 
     &__input {

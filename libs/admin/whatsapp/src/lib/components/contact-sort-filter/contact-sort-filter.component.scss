@@ -7,7 +7,7 @@
   @include flex-space-between-cen-Algn;
 
   &-heading {
-    @include normal-text;
+    @include normal-sm-text;
     color: $secondary;
   }
   &-clear {

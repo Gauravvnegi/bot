@@ -16,7 +16,7 @@
     @include flex-item-center;
     .title {
       margin-left: 10px;
-      @include normal-text;
+      @include normal-sm-text;
 
       color: $primary-black;
     }
@@ -32,7 +32,7 @@
   height: calc(100% - 51.7px);
   padding: 18px;
   &__text {
-    @include normal-text;
+    @include normal-sm-text;
     text-align: center;
     color: $primary-black;
     margin: 19px 0;
@@ -86,7 +86,7 @@
 .allow-body {
   padding: 26px 36px 51px 58px;
   &__text {
-    @include normal-text;
+    @include normal-sm-text;
     color: $primary-black;
     margin: 0 0 30px 20px;
   }

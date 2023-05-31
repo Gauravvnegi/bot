@@ -37,7 +37,7 @@
 }
 
 .days-label {
-  @include normal-text;
+  @include normal-sm-text;
   font-size: 10px;
   color: $grayLight;
   align-self: flex-start;
@@ -78,7 +78,7 @@
     justify-content: space-between;
     align-items: center;
     &-title {
-      @include normal-text;
+      @include normal-sm-text;
       font-weight: bold;
 
       color: $secondary;

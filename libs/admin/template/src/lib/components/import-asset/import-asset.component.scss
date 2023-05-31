@@ -17,7 +17,7 @@
       cursor: pointer;
     }
     .title {
-      @include normal-text;
+      @include normal-sm-text;
       font-size: 14px;
       color: $secondary;
     }

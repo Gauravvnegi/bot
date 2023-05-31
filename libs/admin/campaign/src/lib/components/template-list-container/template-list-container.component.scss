@@ -12,7 +12,7 @@
     &__back {
       @include flex-item-center;
       .label {
-        @include normal-text;
+        @include normal-sm-text;
         font-weight: $bold;
       }
       .material-icons {
@@ -36,7 +36,7 @@
       }
       .topic {
         padding-right: 12px;
-        @include normal-text;
+        @include normal-sm-text;
         font-weight: bold;
         color: $secondary;
       }
@@ -68,7 +68,7 @@
       border-radius: 23px;
       box-shadow: $button-shadow;
       border: solid 1px $button-blue;
-      @include normal-text;
+      @include normal-sm-text;
       color: $button-blue;
       background-color: $white;
     }
@@ -151,7 +151,7 @@
     border-radius: 23px;
     box-shadow: $button-shadow;
     border: solid 1px $button-blue;
-    @include normal-text;
+    @include normal-sm-text;
     color: $button-blue;
     background-color: $white;
   }
@@ -168,7 +168,7 @@
 }
 
 :host ::ng-deep .template-name {
-  @include normal-text;
+  @include normal-sm-text;
   font-weight: bold;
   color: $secondary !important;
   .template-option {
@@ -178,7 +178,7 @@
 .template-name {
   width: 210px;
   height: 22px;
-  @include normal-text;
+  @include normal-sm-text;
   font-weight: bold;
   color: $secondary !important;
 }

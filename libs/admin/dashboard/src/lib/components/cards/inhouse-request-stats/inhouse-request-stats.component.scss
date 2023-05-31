@@ -143,14 +143,14 @@ svg text.label {
       background: $mediumRed 0% 0% no-repeat padding-box;
     }
 
-    &--normal-text {
+    &--normal-sm-text {
       font: normal normal bold 16px/21px Roboto;
       letter-spacing: 0px;
       color: $secondary;
       opacity: 1;
       margin: 0 10px;
     }
-    &--normal-text-2 {
+    &--normal-sm-text-2 {
       font: normal normal normal 10px/13px Roboto;
       letter-spacing: 0px;
       color: $draft-state;

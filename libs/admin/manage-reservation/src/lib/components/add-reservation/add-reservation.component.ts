@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { Location } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
 import {
   AdminUtilityService,
   ConfigService,
@@ -15,50 +17,39 @@ import {
   Option,
   Regex,
 } from 'libs/admin/shared/src';
-import { Subscription, forkJoin } from 'rxjs';
-import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
-import { ManageReservationService } from '../../services/manage-reservation.service';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import * as moment from 'moment';
+import { Subscription } from 'rxjs';
+import { manageReservationRoutes } from '../../constants/routes';
 import {
   BookingConfig,
   BookingInfo,
   OfferData,
   OfferList,
   PaymentMethodList,
-  RoomTypeOption,
-  RoomTypeOptionList,
+  ReservationFormData,
   SummaryData,
 } from '../../models/reservations.model';
-import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ReservationFormData } from '../../models/reservations.model';
-import * as moment from 'moment';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationResponse } from '../../types/response.type';
-import { manageReservationRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
   templateUrl: './add-reservation.component.html',
   styleUrls: ['./add-reservation.component.scss'],
 })
-export class AddReservationComponent implements OnInit {
+export class AddReservationComponent implements OnInit, OnDestroy {
   userForm: FormGroup;
   hotelId: string;
   reservationId: string;
-  roomTypes: RoomFieldTypeOption[] = [];
   paymentOptions: Option[] = [];
   currencies: Option[] = [];
   reservationTypes: Option[] = [];
   offersList: OfferList;
   selectedOffer: OfferData;
-  globalQueries = [];
-  roomTypeOffSet = 0;
-  roomTypeLimit = 10;
   countries: Option[] = [];
   summaryData: SummaryData;
   configData: BookingConfig;
-  roomFields = roomFields;
   loading = false;
   displayBookingOffer: boolean = false;
   formValueChanges = false;
@@ -96,7 +87,8 @@ export class AddReservationComponent implements OnInit {
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
     this.getCountryCode();
-    this.listenForGlobalFilters();
+    this.getInitialData();
+    this.getReservationId();
   }
 
   /**
@@ -174,22 +166,6 @@ export class AddReservationComponent implements OnInit {
           currency: this.currencies[0].value,
         });
       }
-    });
-  }
-
-  /**
-   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
-   */
-  listenForGlobalFilters(): void {
-    this.globalFilterService.globalFilter$.subscribe((data) => {
-      // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.getInitialData();
-      this.getRoomType(this.globalQueries);
-      this.getReservationId();
     });
   }
 
@@ -496,84 +472,6 @@ export class AddReservationComponent implements OnInit {
    */
   handleOfferView(): void {
     this.displayBookingOffer = !this.displayBookingOffer;
-  }
-
-  /**
-   * @function searchRoomTypes To search categories
-   * @param text search text
-   */
-  searchRoomTypes(text: string): void {
-    if (text) {
-      this.manageReservationService
-        .searchLibraryItem(this.hotelId, {
-          params: `?key=${text}&type=ROOM_TYPE`,
-        })
-        .subscribe(
-          (res: any) => {
-            const data = res;
-            this.roomTypes =
-              data.ROOM_TYPE?.filter((item) => item.status).map((item) => {
-                new RoomTypeOption().deserialize(item);
-                return {
-                  label: item.name,
-                  value: item.id,
-                  roomCount: item.roomCount,
-                  maxChildren: item.maxChildren,
-                  maxAdult: item.maxAdult,
-                };
-              }) ?? [];
-            roomFields[0].options = this.roomTypes;
-          },
-          (error) => {}
-        );
-    } else {
-      this.roomTypeOffSet = 0;
-      this.roomTypes = [];
-      this.getRoomType(this.globalQueries);
-    }
-  }
-
-  /**
-   * @function loadMoreRoomTypes load more categories options
-   */
-  loadMoreRoomTypes(): void {
-    this.roomTypeOffSet = this.roomTypeOffSet + 10;
-    this.getRoomType(this.globalQueries);
-  }
-
-  /**
-   * @function getRoomType to get room types.
-   * @param queries global Queries.
-   */
-  getRoomType(queries): void {
-    queries = [
-      ...queries,
-      {
-        type: 'ROOM_TYPE',
-        offset: this.roomTypeOffSet,
-        limit: this.roomTypeLimit,
-      },
-    ];
-    const config = {
-      params: this.adminUtilityService.makeQueryParams(queries),
-    };
-    this.$subscription.add(
-      this.manageReservationService
-        .getRoomTypeList<RoomTypeListResponse>(this.hotelId, config)
-        .subscribe((response) => {
-          const data = new RoomTypeOptionList()
-            .deserialize(response)
-            .records.map((item) => ({
-              label: item.name,
-              value: item.id,
-              roomCount: item.roomCount,
-              maxChildren: item.maxChildren,
-              maxAdult: item.maxAdult,
-            }));
-          this.roomTypes = [...this.roomTypes, ...data];
-          roomFields[0].options = this.roomTypes;
-        })
-    );
   }
 
   /**

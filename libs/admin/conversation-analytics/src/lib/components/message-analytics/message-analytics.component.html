@@ -1,3 +1,9 @@
+<hospitality-bot-tab-group
+  [selectedIndex]="tabFilterIdx"
+  [listItems]="tabFilterItems"
+  (selectedTabChange)="onSelectedTabFilterChange($event)"
+  isSticky="true"
+></hospitality-bot-tab-group>
 <div class="analyticsWrapper">
   <div class="header" [formGroup]="analyticsFG">
     <div class="title-container">
@@ -33,11 +39,7 @@
       </button>
     </div>
   </div>
-  <mat-tab-group (selectedTabChange)="onSelectedTabFilterChange($event)">
-    <mat-tab *ngFor="let tab of tabFilterItems; let tabIndex = index">
-      <ng-template mat-tab-label>{{ tab.title }} </ng-template>
-    </mat-tab>
-  </mat-tab-group>
+
   <div class="graphWrapper">
     <ng-container [ngSwitch]="tabFilterItems[tabFilterIdx].title">
       <ng-container *ngSwitchCase="'WhatsApp'">

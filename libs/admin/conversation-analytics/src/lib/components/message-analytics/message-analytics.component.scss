@@ -1,16 +1,4 @@
 @import 'main';
-:host ::ng-deep {
-  .mat-tab-label {
-    font: normal normal bold 14px/19px Roboto;
-    height: 40px;
-    letter-spacing: 0.84px;
-    color: $inActiveTab;
-    opacity: 1;
-  }
-  .mat-tab-label-active {
-    color: $button-blue;
-  }
-}
 
 .analyticsWrapper {
   background: 0% 0% no-repeat padding-box $white;

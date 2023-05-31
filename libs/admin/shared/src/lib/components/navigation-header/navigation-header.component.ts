@@ -19,11 +19,15 @@ import { NavRouteOptions } from '../../types/common.type';
 export class NavigationHeaderComponent implements OnInit, OnDestroy {
   draftDate: string;
   isScrolledUp: boolean;
+  isSpaceNeeded: boolean = false;
 
   @Input() heading: string;
   @Input() routes: NavRouteOptions = [];
   @Input() isBack: boolean = true;
   @Input() dateTitle: string;
+  @Input() isStickyTitle: boolean = false;
+  @Input() extraGap = 0; // required when some other sticky header
+  @Input() extraSpace = 0; // when height is less and need to stick the header (this will increase the hight at extra gap position)
   @Input() set dateTime(
     value: number | { dateTitle: string; dateTime: number }
   ) {
@@ -77,5 +81,6 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
   onScroll = () => {
     const { top } = this.header?.nativeElement.getBoundingClientRect();
     this.isScrolledUp = top < 60;
+    this.isSpaceNeeded = top < 60 + this.extraGap + 5;
   };
 }

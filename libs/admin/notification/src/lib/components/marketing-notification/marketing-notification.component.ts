@@ -63,7 +63,7 @@ export class MarketingNotificationComponent extends NotificationComponent
   ngOnInit(): void {
     this.getConfigData(this.hotelId);
   }
-  
+
   getConfigData(hotelId): void {
     this.requestService.getNotificationConfig(hotelId).subscribe((response) => {
       this.config = new RequestConfig().deserialize(response);
@@ -71,7 +71,7 @@ export class MarketingNotificationComponent extends NotificationComponent
       this.initOptions();
     });
   }
-  
+
   initOptions() {
     this.topicList = this.config.messageTypes;
     this.getFromEmails();
@@ -101,6 +101,32 @@ export class MarketingNotificationComponent extends NotificationComponent
       value: this.email,
     });
     this.emailFG.get('emailIds').patchValue(this.to.map((item) => item.value));
+  }
+
+  fetchTemplate(event) {
+    const topic = this.templateList.filter(
+      (item) => item.value === event.value
+    );
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        { templateType: topic[0].label },
+      ]),
+    };
+    this.$subscription.add(
+      this.requestService
+        .getTemplate(this.hotelId, event.value, config)
+        .subscribe(
+          (response) => {
+            console.log(response);
+            this.emailFG
+              .get('message')
+              .patchValue(this.modifyTemplate(response.template));
+          },
+          (error) => {
+            this.emailFG.get('message').patchValue('');
+          }
+        )
+    );
   }
 
   onTopicChange(selectedMessageType: string) {
@@ -163,23 +189,25 @@ export class MarketingNotificationComponent extends NotificationComponent
   //   }
   // }
 
-  // getTemplateList() {
-  //   // this.$subscription.add(
-  //   //   this._emailService
-  //   //     .getTemplateByTopic(this.hotelId)
-  //   //     .subscribe((response) => {
-  //   //       this.templateList = response.records;
-  //   //       this.emailFG.get('templateId').setValue('');
-  //   //     })
-  //   // );
-  //   if (this.templateList.length === 0) {
-  //     this.templateList.push({
-  //       label: 'No Data',
-  //       value: 'noData',
-  //     });
-  //     this.emailFG.get('templateId').setValue(this.templateList[0].value);
-  //   }
-  // }
+  getTemplateList(event) {
+    console.log(event);
+    this.$subscription.add(
+      this._emailService
+        .getTemplateByTopic(this.hotelId, event.value)
+        .subscribe((response) => {
+          console.log(response);
+          this.templateList = response.records;
+          this.emailFG.get('templateId').setValue('');
+        })
+    );
+    if (this.templateList.length === 0) {
+      this.templateList.push({
+        label: 'No Data',
+        value: 'noData',
+      });
+      this.emailFG.get('templateId').setValue(this.templateList[0].value);
+    }
+  }
 
   // handleTemplateChange(event) {
   //   this.emailFG.get('message').patchValue(event.value.htmlTemplate);

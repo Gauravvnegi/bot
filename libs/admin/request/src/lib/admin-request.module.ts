@@ -12,6 +12,7 @@ import { AdminRequestRoutingModule } from './admin-request.routing.module';
 import { RequestService } from './services/request.service';
 import { HttpClient } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
+import { RequestWrapperComponent } from './components/request-wrapper/request-wrapper.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { TranslateModule } from '@ngx-translate/core';
     AdminNotificationModule,
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['request'])),
   ],
+  exports: [RequestWrapperComponent],
   declarations: [...AdminRequestRoutingModule.components],
   providers: [RequestService],
 })

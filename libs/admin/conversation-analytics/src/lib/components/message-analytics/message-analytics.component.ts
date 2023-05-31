@@ -2,13 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
+import { MessageTabService } from 'apps/admin/src/app/core/theme/src/lib/services/messages-tab.service';
 import * as FileSaver from 'file-saver';
 import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/analytics.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
-import { Tab } from 'libs/admin/request-analytics/src/lib/models/tab.model';
-import { WhatsappMessageAnalyticsComponent } from '../whatsapp-message-analytics/whatsapp-message-analytics.component';
 
 @Component({
   selector: 'hospitality-bot-message-analytics',
@@ -40,11 +39,16 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
   tabFilterIdx = 0;
 
   tabFilterItems = [
-    new Tab({
-      component: WhatsappMessageAnalyticsComponent,
+    {
+      label: 'WhatsApp',
+      value: 'whatsapp',
       title: 'WhatsApp',
-      tabData: { parent: 'MessageAnalyticsComponent' },
-    }),
+    },
+    // new Tab({
+    //   component: WhatsappMessageAnalyticsComponent,
+    //   title: 'WhatsApp',
+    //   tabData: { parent: 'MessageAnalyticsComponent' },
+    // }),
   ];
   constructor(
     private fb: FormBuilder,
@@ -52,7 +56,8 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private dateService: DateService,
-    private analyticService: AnalyticsService
+    private analyticService: AnalyticsService,
+    private messageTabService: MessageTabService
   ) {}
 
   ngOnInit(): void {
@@ -97,6 +102,7 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
+    this.messageTabService.selectedTabMenu$.next(event.index);
   }
 
   exportCSV() {
@@ -104,13 +110,14 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this.analyticService.exportCSV(this.hotelId, config).subscribe(
-        (res) =>
+      this.analyticService
+        .exportCSV(this.hotelId, config)
+        .subscribe((res) =>
           FileSaver.saveAs(
             res,
             'Message_Analytics_export_' + new Date().getTime() + '.csv'
           )
-      )
+        )
     );
   }
 

@@ -85,7 +85,7 @@ export class HotelInfoFormComponent implements OnInit {
           number: [''],
         }),
         gstNumber: [''],
-        address: [[]],
+        address: [[], [Validators.required]],
         imageUrl: [[]],
         description: [''],
         serviceIds: [[]],

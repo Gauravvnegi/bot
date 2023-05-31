@@ -30,6 +30,7 @@
       [options]="templateList"
       class="half-width"
       [props]="{ placeholder: 'Select Template' }"
+      (itemSelection)="fetchTemplate($event)"
     ></hospitality-bot-select>
     <hospitality-bot-multi-select
       class="full-width"
@@ -73,14 +74,14 @@
       (onClick)="uploadAttachments($event)"
       #attachmentComponent
     ></hospitality-bot-add-attachment>
-    <div class="btn-wrapper">
-      <hospitality-bot-button
-        (onClick)="sendMail()"
-        [label]="isSending ? 'Sending' : 'Send'"
-        [disabled]="isSending"
-      >
-      </hospitality-bot-button>
-    </div>
+  </div>
+  <div class="btn-wrapper">
+    <hospitality-bot-button
+      (onClick)="sendMail()"
+      [label]="isSending ? 'Sending' : 'Send'"
+      [disabled]="isSending"
+    >
+    </hospitality-bot-button>
   </div>
 </div>
 

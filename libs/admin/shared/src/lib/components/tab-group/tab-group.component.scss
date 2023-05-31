@@ -55,3 +55,28 @@
   .mat-tab-header-pagination {
   display: none;
 }
+
+.tab-wrapper {
+  background-color: $white;
+  padding-right: 10px;
+  @include flex-all-center();
+
+  .tab-actions {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2%;
+  }
+}
+
+.sticky__tabs {
+  inset: 115px 0 auto 80px;
+  position: fixed;
+  height: 61px;
+  transition: box-shadow 1s ease-in;
+  padding: 0px 40px 0 22px;
+  z-index: $nav-action-sub-header;
+  box-shadow: 1px 7px 8px -7px #b5b5b5;
+  border-bottom: 1px solid #cdcdcd;
+}

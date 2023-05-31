@@ -25,6 +25,7 @@ import { trigger, transition, animate, style } from '@angular/animations';
   ],
 })
 export class RequestWrapperComponent implements OnInit, OnDestroy {
+  pageTitle = 'Requests';
   guestInfoEnable = false;
   private $subscription = new Subscription();
   requestConfig = request;

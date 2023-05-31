@@ -53,12 +53,23 @@
   }
 }
 td {
+  ::ng-deep span {
+    font-size: 12px;
+    color: #8995a3;
+    line-height: 16px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0px;
+  }
   ::ng-deep p {
     font-size: 12px;
     color: $grayMedium;
     line-height: 16px;
     text-overflow: ellipsis;
     overflow: hidden;
+
     @media (max-width: 992px) {
       font-size: 10px;
     }
@@ -74,8 +85,12 @@ td {
       background-color: $success-state;
       @include inhouse-popup-status;
     }
+    &.medium {
+      background-color: $warning;
+      padding: 7px 28px;
+      @include inhouse-popup-status;
+    }
     &.light {
-      color: $grayLight;
       text-overflow: ellipsis;
       overflow: hidden;
     }

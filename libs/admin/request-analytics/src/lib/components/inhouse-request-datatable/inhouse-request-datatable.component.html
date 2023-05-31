@@ -75,7 +75,7 @@
       let-columns="columns"
       let-rowIndex="rowIndex"
     >
-      <tr class="data-table-row">
+      <tr class="data-table-row table-row">
         <td class="table--checkbox">
           <p-tableCheckbox
             [value]="rowData"
@@ -84,34 +84,44 @@
           ></p-tableCheckbox>
         </td>
         <td>
-          <p>{{ rowData.itemCode }}</p>
-          <p class="{{ rowData.priority | lowercase }}">
-            {{ rowData.priority }}
-          </p>
-          <p>{{ rowData.quantity }}</p>
+          <div class="primary-text">
+            {{ rowData.quantity }} - {{ rowData?.itemName }}
+          </div>
+          <span class="secondary-text"
+            >{{ rowData?.itemCode || '-' }}
+
+            <p class="{{ rowData.priority | lowercase }}">
+              {{ rowData.priority || '-' }}
+            </p>
+          </span>
         </td>
         <td>
-          <p>{{ rowData.confirmationNumber }}</p>
-          <p [roomStatus]="rowData.rooms[0]?.status">
-            {{ rowData.rooms[0].roomNumber }} - {{ rowData.rooms[0].type }}
-          </p>
-          <p>{{ rowData.quantity }}</p>
+          <div class="center-align">
+            <p>{{ rowData.confirmationNumber }}</p>
+            <p [roomStatus]="rowData.rooms[0]?.status">
+              {{ rowData.rooms[0].roomNumber }} - {{ rowData.rooms[0].type }}
+            </p>
+          </div>
         </td>
         <td>
-          <p>{{ rowData.guestDetails.primaryGuest.getFullName() }}</p>
+          <div class="primary-text">
+            {{ rowData.guestDetails.primaryGuest.getFullName() }}
+          </div>
         </td>
         <td>
           <a href="tel:{{ rowData.guestDetails.primaryGuest.phoneNumber }}">
-            <p class="email">
+            <div class="email primary-text">
               {{ rowData.guestDetails.primaryGuest.countryCode }}-{{
                 rowData.guestDetails.primaryGuest.phoneNumber
               }}
-            </p>
+            </div>
           </a>
-          <p class="email">{{ rowData.guestDetails.primaryGuest.email }}</p>
+          <p class="email primary-text">
+            {{ rowData.guestDetails.primaryGuest.email }}
+          </p>
         </td>
         <td>
-          <p class="item-name">{{ rowData.itemName }}</p>
+          <!-- <p class="item-name">{{ rowData.itemName }}</p> -->
           <p class="light">{{ rowData.remarks }}</p>
           <div class="job-duration">
             <div>{{ rowData.action }}</div>
@@ -119,17 +129,19 @@
           </div>
         </td>
         <td>
-          <p class="date-time">
-            {{
-              rowData.getRequestDateTime(globalFilterService.timezone) ||
-                '- - - - -'
-            }}
-          </p>
-          <p class="date-time">
-            {{
-              rowData.getClosedTime(globalFilterService.timezone) || '- - - - -'
-            }}
-          </p>
+          <div class="center-align">
+            <p class="date-time">
+              {{
+                rowData.getRequestDateTime(globalFilterService.timezone) ||
+                  '   -  '
+              }}
+            </p>
+            <p class="date-time">
+              {{
+                rowData.getClosedTime(globalFilterService.timezone) || '  -  '
+              }}
+            </p>
+          </div>
         </td>
         <td>
           <mat-select

@@ -73,7 +73,7 @@ export class AddressService {
             city: city || '',
             state: state || '',
             country: country || '',
-            pincode: pincode || '',
+            postalCode: pincode || '',
             latitude: location.lat(),
             longitude: location.lng(),
           };

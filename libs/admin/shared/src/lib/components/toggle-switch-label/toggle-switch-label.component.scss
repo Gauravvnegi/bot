@@ -1,3 +1,5 @@
+@import 'main';
+
 .toggle {
   --height: 29px;
   --width: 90px;
@@ -78,6 +80,6 @@
 }
 
 .labels {
-  font-weight: bold;
+  font-weight: $bold;
   color: #fff;
 }

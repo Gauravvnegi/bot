@@ -36,7 +36,7 @@
 
 :host ::ng-deep .dropdown-label {
   margin-left: 0.5em;
-  font-weight: 500;
+  font-weight: $bolder;
 }
 
 :host ::ng-deep .mat-chip-list {
@@ -56,7 +56,7 @@
 
 :host ::ng-deep .dropdown-label {
   margin-left: 0.5em;
-  font-weight: 500;
+  font-weight: $bolder;
 }
 
 :host ::ng-deep .container {
@@ -87,7 +87,7 @@
 :host ::ng-deep .stat-title {
   letter-spacing: 0.96px;
   color: $secondary;
-  font-weight: 700;
+  font-weight: $bolder;
   @media screen and (max-width: 800px) {
     font-size: 12px;
   }
@@ -159,7 +159,7 @@
     transform: scale(0.95);
   }
   &__wrap {
-    font-family: Roboto;
+    font-family: Poppins;
     font-size: 11px;
 
     letter-spacing: 0.66px;

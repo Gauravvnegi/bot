@@ -39,7 +39,7 @@ button {
     cursor: pointer;
     &_text {
       font-size: 12px;
-      font-weight: normal;
+      font-weight: $medium;
       letter-spacing: 0.72px;
       text-align: left;
       color: $primary-cta;
@@ -59,7 +59,7 @@ button {
 
   &-viewDetails {
     font-size: 12px;
-    font-weight: normal;
+    font-weight: $medium;
     letter-spacing: 0.72px;
     color: $primary-cta;
     cursor: pointer;
@@ -97,9 +97,8 @@ button {
 
 .textarea {
   width: 100%;
-  font-family: 'Roboto';
   font-size: 12px;
-  font-weight: normal;
+  font-weight: $medium;
   letter-spacing: 0.6px;
   text-align: left;
   color: #93989c;

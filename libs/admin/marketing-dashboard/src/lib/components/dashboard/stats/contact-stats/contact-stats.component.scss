@@ -18,7 +18,7 @@
   &-graph-wrapper {
     margin-top: 20px;
     position: relative;
-    font-family: 'Roboto';
+    font-family: 'Poppins';
 
     height: 204px;
     width: 204px;
@@ -62,7 +62,7 @@
         .value {
           @include flex-row-justify-end;
           font-size: 12px;
-          font-weight: bold;
+          font-weight: $bold;
           letter-spacing: 0.72px;
           text-align: right;
           color: $secondary;

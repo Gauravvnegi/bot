@@ -51,9 +51,9 @@
         width: 100%;
         height: 29px;
         background-color: $whiteDeep;
-        font-family: Roboto;
+        font-family: Poppins;
         font-size: 12px;
-        font-weight: 500;
+        font-weight: $bold;
 
         color: $button-blue;
         display: flex;
@@ -140,7 +140,7 @@
   color: $load-more;
   cursor: pointer;
   text-align: center;
-  font-weight: bold;
+  font-weight: $bold;
   &:hover {
     background-color: #eaf3fa;
   }

@@ -7,6 +7,7 @@
  *   bootstrap present;     disableStyle true;  (original behavior - use bs styles)
  *   bootstrap present;     disableStyle false; (mixes internal style with bs)
  **/
+ @import 'main';
 
 .mention-menu {
   position: absolute;
@@ -25,7 +26,7 @@
   text-align: left;
   list-style: none;
   background-clip: padding-box;
-  font-family: Roboto;
+  font-family: Poppins;
   font-size: 14px;
 }
 .mention-item {
@@ -33,7 +34,7 @@
   padding: 0.2em 1.5em;
   line-height: 1.5em;
   clear: both;
-  font-weight: normal;
+  font-weight: $medium;
   color: #212529;
   text-align: inherit;
   white-space: nowrap;

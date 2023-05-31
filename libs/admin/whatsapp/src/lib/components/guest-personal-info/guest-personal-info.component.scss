@@ -4,14 +4,14 @@
   padding: 15px;
   height: calc(100vh - 307px);
   overflow: auto;
-  font-family: 'Roboto';
+  font-family: 'Poppins';
 
   &::-webkit-scrollbar {
     width: 2px;
   }
   .person-title {
     font-size: 14px;
-    font-weight: bold;
+    font-weight: $bold;
     letter-spacing: 0.84px;
     color: $secondary;
   }
@@ -56,13 +56,13 @@
     color: $grayMedium;
     margin-top: 15px;
     font-size: 10px;
-    font-weight: bold;
+    font-weight: $bold;
     letter-spacing: 0.6px;
   }
   .label-text {
     margin-top: 5px;
     font-size: 12px;
-    font-weight: bold;
+    font-weight: $bold;
     letter-spacing: 0.72px;
     color: $secondary;
     text-decoration: none;

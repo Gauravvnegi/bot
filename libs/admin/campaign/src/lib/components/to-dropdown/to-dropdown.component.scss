@@ -6,7 +6,6 @@
   }
   .mat-tab-label-content {
     @include normal-sm-text;
-    font-weight: normal;
     color: $inActiveTab;
   }
   .mat-tab-label-active > .mat-tab-label-content {
@@ -45,7 +44,7 @@
 
 .container {
   @include normal-sm-text;
-  font-weight: normal;
+  font-weight: $medium;
   .header {
     @include flex-item-center;
     width: 100%;
@@ -83,7 +82,7 @@
   }
   .info-message {
     font-size: 15px;
-    font-weight: 500;
+    font-weight: $bold;
     line-height: 1.67;
     letter-spacing: 0.9px;
     text-align: center;
@@ -100,7 +99,7 @@
     color: $load-more;
     cursor: pointer;
     text-align: center;
-    font-weight: bold;
+    font-weight: $bold;
     &:hover {
       background-color: #eaf3fa;
     }

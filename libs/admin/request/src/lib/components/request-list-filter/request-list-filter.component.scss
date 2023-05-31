@@ -25,7 +25,7 @@
       cursor: pointer;
       .filter {
         font-size: 14px;
-        font-weight: 500;
+        font-weight: $bold;
 
         letter-spacing: 0.56px;
         color: $grayMedium;
@@ -54,7 +54,7 @@
     border-bottom: 1px solid $grayMedium;
     padding: 15px;
     .sortBy {
-      font: normal normal bold 10px/13px Roboto;
+      font: normal normal $bold 10px/13px Poppins;
       letter-spacing: 0.6px;
       color: $grayLight;
       margin-bottom: 10px;
@@ -83,7 +83,7 @@
       margin: 20px 0;
     }
     .filterBy {
-      font: normal normal bold 10px/13px Roboto;
+      font: normal normal $bold 10px/13px Poppins;
       letter-spacing: 0.6px;
       color: $grayLight;
       margin-bottom: 10px;
@@ -99,7 +99,7 @@
       width: 20px;
     }
     .filterItem {
-      font: normal normal normal 14px/19px Roboto;
+      font: normal normal $medium 14px/19px Poppins;
       letter-spacing: 0.84px;
       color: $secondary;
       opacity: 1;

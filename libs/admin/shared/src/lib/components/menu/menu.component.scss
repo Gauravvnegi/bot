@@ -3,9 +3,9 @@
 .mat-menu-item {
   @include flex-space-between-cen-Algn;
   gap: 20px;
-  font-family: Roboto;
+  font-family: Poppins;
   font-size: 14px;
-  font-weight: normal;
+  font-weight: $medium;
   .mat-icon {
     margin-right: unset;
   }
@@ -20,7 +20,7 @@
 }
 .mat-menu-item.selected {
   color: $primary-cta;
-  font-weight: 500;
+  font-weight: $bold;
   .mat-icon.empty {
     display: none;
   }

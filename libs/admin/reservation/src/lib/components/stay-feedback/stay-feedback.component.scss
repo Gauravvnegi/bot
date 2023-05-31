@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  font: normal normal medium 14px/19px Roboto;
+  font: normal normal $medium 14px/19px Poppins;
   letter-spacing: 0.56px;
   color: $grayMedium;
 }
@@ -40,9 +40,9 @@
       font-weight: $medium;
     }
     .question {
-      font-family: Roboto;
+      font-family: Poppins;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: $bold;
 
       letter-spacing: 0.24px;
 
@@ -50,7 +50,7 @@
       margin: 5px 0;
     }
     .answer {
-      font-family: Roboto;
+      font-family: Poppins;
       font-size: 12px;
 
       line-height: 1.67;
@@ -79,7 +79,7 @@
   display: flex;
   align-items: center;
   color: $primary-black;
-  font-weight: 500;
+  font-weight: $bold;
   letter-spacing: 0.84px;
   margin-right: 0 !important;
   position: relative;
@@ -214,9 +214,9 @@
   justify-content: center;
   align-items: center;
   .view-feedback {
-    font-family: 'Roboto';
+    font-family: 'Poppins';
     font-size: 11px;
-    font-weight: bold;
+    font-weight: $bold;
 
     letter-spacing: 0.66px;
     text-align: right;

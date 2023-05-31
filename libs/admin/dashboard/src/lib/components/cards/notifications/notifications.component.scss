@@ -15,7 +15,7 @@
     }
     &-text {
       @include normal-sm-text;
-      font-weight: bold;
+      font-weight: $bold;
       color: $secondary;
     }
     &-channel {
@@ -48,7 +48,7 @@
     }
     &-number-color {
       color: $secondary;
-      font-weight: bold;
+      font-weight: $bold;
       font-size: 25px;
     }
     &-text-color {
@@ -60,12 +60,11 @@
   &-items {
     @include flex-space-between-cen-Algn;
     margin: 7.5px 0;
-    font-family: 'Roboto';
     font-size: 12px;
     color: $button-blue;
     &-item {
       display: flex;
-      font-weight: 500;
+      font-weight: $bold;
       &-dot {
         width: 10px;
         height: 10px;
@@ -78,7 +77,7 @@
     }
     &-count {
       color: $primary-cta;
-      font-weight: bold;
+      font-weight: $bold;
     }
   }
   .info-icon {
@@ -92,7 +91,7 @@
     }
     .tooltip {
       position: absolute;
-      font: normal normal normal 12px/16px Roboto;
+      font: normal normal $medium 12px/16px Poppins;
       background-color: $white;
       min-width: 160px;
       border: 1px solid $borderCol;
@@ -141,10 +140,10 @@
 }
 .notifications-graph-wrapper-number-color {
   color: $secondary;
-  font-weight: 700;
+  font-weight: $bolder;
   font-size: 25px;
 }
 .notifications-graph-wrapper-text-color {
   color: $grayLight;
-  font: normal normal 700 12px/14px Roboto;
+  font: normal normal $bolder 12px/14px Poppins;
 }

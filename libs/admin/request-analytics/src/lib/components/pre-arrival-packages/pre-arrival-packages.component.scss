@@ -57,7 +57,7 @@
 }
 :host ::ng-deep .mat-tab-label .mat-tab-label-content {
   font-size: 14px !important;
-  font-weight: 500;
+  font-weight: $bold;
   letter-spacing: 0.84px;
   display: inline-block;
   overflow: hidden;
@@ -66,7 +66,7 @@
 }
 :host ::ng-deep .mat-tab-label-active > .mat-tab-label-content {
   font-size: 14px !important;
-  font-weight: 500;
+  font-weight: $bold;
   letter-spacing: 0.84px;
 }
 .pap-wrapper {
@@ -79,7 +79,7 @@
     align-items: center;
     &-title {
       @include normal-sm-text;
-      font-weight: bold;
+      font-weight: $bold;
 
       color: $secondary;
       display: flex;
@@ -113,13 +113,13 @@
     margin: 10px 0;
     position: relative;
     @include flex-between-center;
-    font-family: Roboto;
+    font-family: Poppins;
     font-size: 12px;
 
     line-height: 1.17;
     letter-spacing: 0.72px;
     .label {
-      font-weight: 500;
+      font-weight: $bold;
       color: $subtitle;
       display: flex;
       align-items: center;
@@ -142,7 +142,7 @@
       }
     }
     .value {
-      font-weight: bold;
+      font-weight: $bold;
       color: $secondary;
     }
   }

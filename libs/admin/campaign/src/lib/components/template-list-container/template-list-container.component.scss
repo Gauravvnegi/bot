@@ -13,7 +13,6 @@
       @include flex-item-center;
       .label {
         @include normal-sm-text;
-        font-weight: $bold;
       }
       .material-icons {
         &:hover {
@@ -37,7 +36,6 @@
       .topic {
         padding-right: 12px;
         @include normal-sm-text;
-        font-weight: bold;
         color: $secondary;
       }
     }
@@ -118,9 +116,7 @@
   p {
     height: 33px;
     margin: 44px 58px 31px 0;
-    font-family: 'Roboto';
     font-size: 25px;
-    font-weight: bold;
     letter-spacing: 1.5px;
     color: $secondary;
   }
@@ -169,7 +165,6 @@
 
 :host ::ng-deep .template-name {
   @include normal-sm-text;
-  font-weight: bold;
   color: $secondary !important;
   .template-option {
     border: none !important;
@@ -179,7 +174,6 @@
   width: 210px;
   height: 22px;
   @include normal-sm-text;
-  font-weight: bold;
   color: $secondary !important;
 }
 .line {

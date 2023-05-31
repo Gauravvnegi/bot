@@ -92,12 +92,12 @@
 
   &--title {
     font-size: 16px;
-    font-weight: bold;
+    font-weight: $bolder;
     margin-top: 38px;
   }
   &--sub-title {
     font-size: 12px;
-    font-weight: bold;
+    font-weight: $bold;
     color: $grayLight;
     margin-top: 12px;
   }
@@ -154,7 +154,7 @@
           width: 100%;
           .title {
             font-size: 12px;
-            font-weight: $bold;
+            font-weight: $bolder;
           }
           .time {
             font-size: 10px;

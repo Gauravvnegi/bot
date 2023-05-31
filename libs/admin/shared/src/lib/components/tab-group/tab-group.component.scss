@@ -19,9 +19,7 @@
   align-items: flex-end;
 
   .mat-tab-label-content {
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 0.96px;
+    @include bold-sm-text;
     color: $inActiveTab;
     line-height: 55px;
     @media (max-width: 1024px) {

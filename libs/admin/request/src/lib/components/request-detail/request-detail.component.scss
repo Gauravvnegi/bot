@@ -32,9 +32,9 @@ th:last-child {
   border-radius: 5px;
 }
 th {
-  font-family: 'Roboto';
+  font-family: 'Poppins';
   font-size: 14px;
-  font-weight: bold;
+  font-weight: $bold;
   line-height: 1.14;
 
   color: #002046;
@@ -44,7 +44,7 @@ th {
 }
 
 td {
-  font-family: 'Roboto';
+  font-family: 'Poppins';
   font-size: 12px;
   letter-spacing: 0.72px;
   color: $secondary;
@@ -108,18 +108,18 @@ td {
     height: calc(100% - 65px);
     overflow: auto;
     padding: 20px 25px;
-    font-family: 'Roboto';
+    font-family: 'Poppins';
 
     &-title {
       font-size: 24px;
-      font-weight: bold;
+      font-weight: $bold;
       letter-spacing: 1.44px;
       color: $secondary;
       margin-bottom: 10px;
     }
     &-subtitle {
       font-size: 16px;
-      font-weight: normal;
+      font-weight: $medium;
       letter-spacing: 0.96px;
       color: $grayMedium;
       margin-bottom: 30px;
@@ -137,7 +137,7 @@ td {
         border-radius: 5px;
         width: fit-content;
         color: $white;
-        font-weight: bold;
+        font-weight: $bold;
         margin-top: 15px;
       }
       &-booking {
@@ -188,11 +188,11 @@ td {
     margin: 12px 0;
     @include normal-sm-text;
     color: $secondary;
-    font-weight: bold;
+    font-weight: $bold;
   }
   &__description {
     font-size: 12px;
-    font-weight: bold;
+    font-weight: $bold;
 
     letter-spacing: 0.72px;
     text-align: left;

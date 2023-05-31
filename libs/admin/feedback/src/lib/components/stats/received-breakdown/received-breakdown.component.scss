@@ -14,7 +14,7 @@
     justify-content: space-between;
     align-items: center;
     &__title {
-      font: normal normal bold 16px/21px Roboto;
+      font: normal normal $bolder 16px/21px Poppins;
       letter-spacing: 0.96px;
       color: $secondary;
     }
@@ -57,21 +57,21 @@
         width: 56px;
         text-align: center;
         .val {
-          font: normal normal bold 25px/30px Roboto;
+          font: normal normal $bolder 25px/30px Poppins;
           letter-spacing: 1.5px;
           color: $grayLight;
           opacity: 1;
           color: $secondary;
         }
         .label {
-          font: normal normal bold 10px/14px Roboto;
+          font: normal normal $bolder 10px/14px Poppins;
           letter-spacing: 0.72px;
           opacity: 1;
           color: $grayLight;
           max-width: 80px;
           text-align: center;
           font-size: 12px;
-          font-weight: bold;
+          font-weight: $bolder;
         }
       }
     }
@@ -83,7 +83,7 @@
       &__action {
         display: flex;
         margin: 10px 0;
-        font-weight: normal;
+        font-weight: $medium;
         font-stretch: normal;
         font-style: normal;
         line-height: normal;
@@ -101,13 +101,13 @@
           }
           &__stat {
             font-size: 16px;
-            font-weight: bold;
+            font-weight: $bolder;
             color: $secondary;
             margin-right: 10px;
           }
           &__days {
             font-size: 10px;
-            font-weight: 500;
+            font-weight: $bolder;
             color: $grayLight;
             margin-right: 10px;
           }
@@ -137,14 +137,14 @@
   justify-content: center;
   align-items: center;
   &__total {
-    font: normal normal bold 25px/30px Roboto;
+    font: normal normal $bolder 25px/30px Poppins;
     letter-spacing: 1.5px;
     color: $secondary;
     margin-bottom: 10px;
     opacity: 1;
   }
   &__text {
-    font: normal normal bold 12px/14px Roboto;
+    font: normal normal $bolder 12px/14px Poppins;
     letter-spacing: 0.72px;
     opacity: 1;
     width: 70px;
@@ -171,9 +171,9 @@
   width: 46px;
   height: 19px;
   margin: 0 28px 0 0;
-  font-family: Roboto;
+  font-family: Poppins;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: $bolder;
   font-stretch: normal;
   font-style: normal;
   line-height: 1.07;

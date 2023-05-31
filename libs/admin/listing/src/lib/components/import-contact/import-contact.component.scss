@@ -34,9 +34,9 @@
     right: 3%;
   }
   .import-contact {
-    font-family: 'Roboto';
+    font-family: 'Poppins';
     font-size: 20px;
-    font-weight: bold;
+    font-weight: $bold;
     letter-spacing: 1.2px;
     color: $primary-black;
     background: $whiteDeep;
@@ -170,9 +170,9 @@
     background-color: transparent;
   }
   .add-contact {
-    font-family: 'Roboto';
+    font-family: 'Poppins';
     font-size: 20px;
-    font-weight: bold;
+    font-weight: $bold;
     color: $secondary;
     padding-top: 20px;
   }

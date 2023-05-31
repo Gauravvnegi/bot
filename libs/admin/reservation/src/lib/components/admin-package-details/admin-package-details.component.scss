@@ -50,7 +50,7 @@
 .package-label {
   color: $secondary;
   @include normal-sm-text;
-  font-weight: 600;
+  font-weight: $bolder;
 }
 
 .special-request-wrapper {

@@ -22,9 +22,9 @@
   margin: 30px auto;
   border-radius: 18px;
   border: solid 1px $primary-cta;
-  font-family: Roboto;
+  font-family: Poppins;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: $bolder;
   font-stretch: normal;
   font-style: normal;
   line-height: normal;
@@ -45,9 +45,9 @@
   margin: 30px auto;
   border-radius: 18px;
   background-color: $primary-cta;
-  font-family: Roboto;
+  font-family: Poppins;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: $bolder;
   font-stretch: normal;
   font-style: normal;
   line-height: normal;
@@ -70,7 +70,7 @@
   &-title {
     margin-bottom: 10px;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: $bolder;
     font-stretch: normal;
     font-style: normal;
     line-height: 1.63;
@@ -102,7 +102,7 @@
       &-item {
         &-title {
           font-size: 12px;
-          font-weight: bold;
+          font-weight: $bolder;
           font-stretch: normal;
           font-style: normal;
           line-height: normal;
@@ -112,7 +112,7 @@
         }
         &-name {
           font-size: 12px;
-          font-weight: normal;
+          font-weight: $medium;
           font-stretch: normal;
           font-style: normal;
           line-height: normal;
@@ -131,7 +131,7 @@
     margin-bottom: 10px;
     &-title {
       font-size: 16px;
-      font-weight: bold;
+      font-weight: $bolder;
       font-stretch: normal;
       font-style: normal;
       line-height: 1.63;
@@ -139,9 +139,9 @@
       color: $tooltip;
     }
     &-btn {
-      font-family: Roboto;
+      font-family: Poppins;
       font-size: 13px;
-      font-weight: 500;
+      font-weight: $bolder;
       font-stretch: normal;
       font-style: normal;
       line-height: normal;

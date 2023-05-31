@@ -1,6 +1,6 @@
 @import 'main';
 .stat-title {
-  font: normal normal bold 16px/19px Roboto;
+  font: normal normal $bolder 16px/19px Poppins;
   letter-spacing: 0.96px;
   color: $secondary;
   opacity: 1;
@@ -24,13 +24,13 @@
   }
   .detail-container {
     .val {
-      font: normal normal bold 25px/30px Roboto;
+      font: normal normal $bolder 25px/30px Poppins;
       letter-spacing: 1.5px;
       color: $secondary;
       opacity: 1;
     }
     .label {
-      font: normal normal bold 12px/14px Roboto;
+      font: normal normal $bolder 12px/14px Poppins;
       letter-spacing: 0.72px;
       opacity: 1;
       color: $grayMedium;
@@ -48,7 +48,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
-    font: normal normal normal 12px/14px Roboto;
+    font: normal normal $medium 12px/14px Poppins;
     padding: 5px 0;
     .icon {
       width: 14px;
@@ -57,7 +57,7 @@
     }
     .stat-lable {
       text-align: center;
-      font: normal normal medium 12px/14px Roboto;
+      font: normal normal $medium 12px/14px Poppins;
       letter-spacing: 0.72px;
       color: $subtitle;
       opacity: 1;
@@ -66,7 +66,7 @@
       text-align: right;
       text-align: right;
       padding: 5px;
-      font: normal normal bold 25px/30px Roboto;
+      font: normal normal $bolder 25px/30px Poppins;
       letter-spacing: 1.5px;
       color: $primary-cta;
     }

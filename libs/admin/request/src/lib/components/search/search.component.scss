@@ -12,7 +12,7 @@
     width: 100%;
     outline: none;
     &::placeholder {
-      font: normal normal normal 12px/16px Roboto;
+      font: normal normal $medium 12px/16px Poppins;
       letter-spacing: 0.48px;
       color: $grayMedium;
       opacity: 1;

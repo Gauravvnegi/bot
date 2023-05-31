@@ -1,11 +1,18 @@
-<div class="request-wrapper-header">
-  <div>
-    <hospitality-bot-tab-group
-      [listItems]="tabFilterItems"
-      [selectedIndex]="tabFilterIdx"
-      (selectedTabChange)="onSelectedTabFilterChange($event)"
-    ></hospitality-bot-tab-group>
-  </div>
+<hospitality-bot-navigation-header
+  [heading]="pageTitle"
+  [isBack]="false"
+  [isStickyTitle]="true"
+  extraGap="40"
+>
+</hospitality-bot-navigation-header>
+
+<hospitality-bot-tab-group
+  [listItems]="tabFilterItems"
+  [selectedIndex]="tabFilterIdx"
+  (selectedTabChange)="onSelectedTabFilterChange($event)"
+  extraGap="60"
+  isSticky="true"
+>
   <div class="request-wrapper-header-btnwrap">
     <div
       class="guestInfoEditContainer"
@@ -18,7 +25,7 @@
       </div>
     </div>
   </div>
-</div>
+</hospitality-bot-tab-group>
 
 <ng-container [ngSwitch]="tabFilterItems[tabFilterIdx]?.value">
   <ng-container *ngSwitchCase="'INHOUSE'">

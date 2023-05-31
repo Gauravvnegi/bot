@@ -19,21 +19,21 @@ const appRoutes: CRoutes = [
             (m) => m.AdminDashboardModule
           ),
       },
-      {
-        path: 'request-analytics',
-        name: ModuleNames.REQUEST_DASHBOARD,
-        loadChildren: () =>
-          import('@hospitality-bot/admin/request-analytics').then(
-            (m) => m.AdminRequestAnalyticsModule
-          ),
-      },
+      // {
+      //   path: 'request-analytics',
+      //   name: ModuleNames.REQUEST_DASHBOARD,
+      //   loadChildren: () =>
+      //     import('@hospitality-bot/admin/request-analytics').then(
+      //       (m) => m.AdminRequestAnalyticsModule
+      //     ),
+      // },
 
       {
         path: 'request',
         name: ModuleNames.REQUEST,
         loadChildren: () =>
-          import('@hospitality-bot/admin/request').then(
-            (m) => m.AdminRequestModule
+          import('@hospitality-bot/admin/request-analytics').then(
+            (m) => m.AdminRequestAnalyticsModule
           ),
       },
       {

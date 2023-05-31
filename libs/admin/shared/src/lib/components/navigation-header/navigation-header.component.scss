@@ -1,15 +1,38 @@
 @import 'main';
 
+@mixin header-bg {
+  background-color: $layout-background;
+  z-index: $nav-action-header-z;
+}
+
+@mixin sticky-header {
+  @include header-fixed-position;
+  height: $sticky-header-height;
+  transition: box-shadow 1s ease-in;
+  padding: 20px 22px;
+  box-shadow: 1px 7px 8px -7px rgba(181, 181, 181, 1);
+}
+
 .header {
   display: flex;
   gap: 10px;
   align-items: center;
-  padding-bottom: 20px;
+  padding-bottom: 15px;
   margin-top: -15px;
 
   &__wrapper {
-    &__sticky {
+    position: relative;
+    @include header-bg;
+
+    &__sticky-subTitle {
       padding-top: 40px;
+    }
+
+    &__sticky-title {
+      @include sticky-header;
+      .header {
+        padding:5px 0 10px 0;
+      }
     }
   }
 
@@ -82,13 +105,8 @@
   }
 
   &__sticky {
-    @include header-fixed-position;
-    height: $sticky-header-height;
-    transition: box-shadow 1s ease-in;
-    background-color: $layout-background;
-    padding: 20px 22px;
-    z-index: $nav-action-header-z;
-    box-shadow: 1px 7px 8px -7px rgba(181, 181, 181, 1);
+    @include header-bg;
+    @include sticky-header;
   }
 }
 

@@ -1,16 +1,31 @@
-<mat-tab-group
-  [selectedIndex]="selectedIndex"
-  (selectedTabChange)="onSelectedTabChange($event)"
-  mat-stretch-tabs
-  class="example-stretched-tabs mat-elevation-z4"
-  click-stop-propagation
->
-  <mat-tab
-    *ngFor="let tab of listItems; let index = index"
-    [label]="
-      tab.total >= 0 ? tab.label.concat(' (', tab.total, ')') : tab.label
-    "
-    [disabled]="tab.disabled"
+<div #tabFilter>
+  <div
+    *ngIf="isSticky && isScrolledUp"
+    [ngStyle]="{ 'height.px': extraGap }"
+  ></div>
+
+  <div
+    class="tab-wrapper"
+    [ngClass]="{ sticky__tabs: isScrolledUp && isSticky }"
   >
-  </mat-tab>
-</mat-tab-group>
+    <mat-tab-group
+      [selectedIndex]="selectedIndex"
+      (selectedTabChange)="onSelectedTabChange($event)"
+      mat-stretch-tabs
+      class="example-stretched-tabs mat-elevation-z4"
+      click-stop-propagation
+    >
+      <mat-tab
+        *ngFor="let tab of listItems; let index = index"
+        [label]="
+          tab.total >= 0 ? tab.label.concat(' (', tab.total, ')') : tab.label
+        "
+        [disabled]="tab.disabled"
+      >
+      </mat-tab>
+    </mat-tab-group>
+    <div class="tab-actions">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

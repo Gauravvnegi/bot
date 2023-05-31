@@ -4,7 +4,6 @@ import { AddReservationComponent } from './components/add-reservation/add-reserv
 import { MainComponent } from './components/main/main.component';
 import { ManageReservationDataTableComponent } from './components/manage-reservation-data-table/manage-reservation-data-table.component';
 import { manageReservationRoutes } from './constants/routes';
-import { InvoiceComponent } from './components/invoice/invoice.component';
 import { RoomIteratorComponent } from './components/room-iterator/room-iterator.component';
 
 export const adminManageReservationRoutes: Route[] = [
@@ -24,10 +23,6 @@ export const adminManageReservationRoutes: Route[] = [
         path: `${manageReservationRoutes.editReservation.route}/:id`,
         component: AddReservationComponent,
       },
-      {
-        path: manageReservationRoutes.invoice.route,
-        component: InvoiceComponent,
-      },
     ],
   },
 ];
@@ -41,7 +36,6 @@ export class AdminManageReservationRoutingModule {
     AddReservationComponent,
     MainComponent,
     ManageReservationDataTableComponent,
-    InvoiceComponent,
     RoomIteratorComponent,
   ];
 }

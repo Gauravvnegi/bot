@@ -87,8 +87,8 @@
           <div class="primary-text">
             {{ rowData.quantity }} - {{ rowData?.itemName }}
           </div>
-          <span class="secondary-text"
-            >{{ rowData?.itemCode || '-' }}
+          <span class="secondary-text item-priority">
+            <p>{{ rowData?.itemCode || '-' }}</p>
 
             <p class="{{ rowData.priority | lowercase }}">
               {{ rowData.priority || '-' }}
@@ -97,7 +97,7 @@
         </td>
         <td>
           <div class="center-align">
-            <p>{{ rowData.confirmationNumber }}</p>
+            <div class="secondary-text">{{ rowData.confirmationNumber }}</div>
             <p [roomStatus]="rowData.rooms[0]?.status">
               {{ rowData.rooms[0].roomNumber }} - {{ rowData.rooms[0].type }}
             </p>

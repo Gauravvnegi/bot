@@ -53,6 +53,10 @@
   }
 }
 td {
+  .item-priority {
+    @include flex-space-between();
+  }
+
   ::ng-deep p {
     font-size: 12px;
     color: $grayMedium;
@@ -87,8 +91,7 @@ td {
     }
   }
   .job-duration {
-    display: flex;
-    justify-content: space-between;
+    @include flex-space-between();
     font-size: 11px;
     @media (max-width: 1024px) {
       font-size: 10px;

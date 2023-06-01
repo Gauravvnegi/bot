@@ -4,11 +4,13 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output,
+  Output
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
+import {
+  SnackBarService
+} from '@hospitality-bot/shared/material';
 import { AdminUtilityService } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
@@ -17,7 +19,7 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 
 import {
   RoomTypeOption,
-  RoomTypeOptionList,
+  RoomTypeOptionList
 } from '../../models/reservations.model';
 @Component({
   selector: 'hospitality-bot-room-iterator',
@@ -36,12 +38,14 @@ export class RoomIteratorComponent extends IteratorComponent
   roomTypes: RoomFieldTypeOption[] = [];
   hotelId: string;
   $subscription = new Subscription();
+  loadingRoomTypes = false;
 
   constructor(
     protected fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
-    private manageReservationService: ManageReservationService
+    private manageReservationService: ManageReservationService,
+    private snackbarService: SnackBarService
   ) {
     super(fb);
   }
@@ -88,6 +92,7 @@ export class RoomIteratorComponent extends IteratorComponent
    * @param text search text
    */
   searchRoomTypes(text: string): void {
+    this.loadingRoomTypes = true;
     if (text) {
       this.manageReservationService
         .searchLibraryItem(this.hotelId, {
@@ -109,7 +114,12 @@ export class RoomIteratorComponent extends IteratorComponent
               }) ?? [];
             this.fields[0].options = this.roomTypes;
           },
-          (error) => {}
+          ({ error }) => {
+            this.snackbarService.openSnackBarAsText(error.message);
+          },
+          () => {
+            this.loadingRoomTypes = false;
+          }
         );
     } else {
       this.roomTypeOffSet = 0;
@@ -133,27 +143,39 @@ export class RoomIteratorComponent extends IteratorComponent
         type: 'ROOM_TYPE',
         offset: this.roomTypeOffSet,
         limit: this.roomTypeLimit,
+        createBooking: true,
       },
     ];
+
     const config = {
       params: this.adminUtilityService.makeQueryParams(queries),
     };
+
+    this.loadingRoomTypes = true;
     this.$subscription.add(
       this.manageReservationService
-        .getRoomTypeList<RoomTypeListResponse>(this.hotelId, config)
-        .subscribe((response) => {
-          const data = new RoomTypeOptionList()
-            .deserialize(response)
-            .records.map((item) => ({
-              label: item.name,
-              value: item.id,
-              roomCount: item.roomCount,
-              maxChildren: item.maxChildren,
-              maxAdult: item.maxAdult,
-            }));
-          this.roomTypes = [...this.roomTypes, ...data];
-          this.fields[0].options = this.roomTypes;
-        })
+        .getRoomTypeList(this.hotelId, config)
+        .subscribe(
+          (response) => {
+            const data = new RoomTypeOptionList()
+              .deserialize(response)
+              .records.map((item) => ({
+                label: item.name,
+                value: item.id,
+                roomCount: item.roomCount,
+                maxChildren: item.maxChildren,
+                maxAdult: item.maxAdult,
+              }));
+            this.roomTypes = [...this.roomTypes, ...data];
+            this.fields[0].options = this.roomTypes;
+          },
+          ({ error }) => {
+            this.snackbarService.openSnackBarAsText(error.message);
+          },
+          () => {
+            this.loadingRoomTypes = false;
+          }
+        )
     );
   }
 

@@ -16,10 +16,10 @@ export class ManageReservationService extends ApiService {
     ReservationTableValue.ALL
   );
 
-  getRoomTypeList<T extends RoomTypeListResponse | RoomListResponse>(
+  getRoomTypeList(
     hotelId: string,
     config?: QueryConfig
-  ): Observable<T> {
+  ): Observable<RoomTypeListResponse> {
     return this.get(`/api/v1/entity/${hotelId}/inventory${config?.params}`);
   }
   

@@ -65,10 +65,7 @@
       </p-accordionTab>
       <p-accordionTab class="room-info" header="Room Information">
         <hospitality-bot-room-iterator
-          [fields]="roomFields"
           [userFormGroup]="userForm"
-          (paginate)="loadMoreRoomTypes()"
-          (onSearch)="searchRoomTypes($event)"
           (refreshData)="getSummaryData()"
         >
         </hospitality-bot-room-iterator>

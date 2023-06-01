@@ -1,8 +1,9 @@
 <div class="nav-header-wrapper" #header>
+  <div *ngIf="isStickyTitle && isScrolledUp" [ngStyle]="{ 'height.px': extraGap }"></div>
   <div
     class="nav-wrapper"
     *ngIf="routes.length"
-    [ngClass]="{ 'nav-wrapper__sticky': isScrolledUp }"
+    [ngClass]="{ 'nav-wrapper__sticky': isScrolledUp && !isStickyTitle }"
   >
     <div class="link" *ngFor="let route of routes; let idx = index">
       <span
@@ -23,7 +24,10 @@
   </div>
   <div
     class="header__wrapper"
-    [ngClass]="{ header__wrapper__sticky: isScrolledUp }"
+    [ngClass]="{
+      'header__wrapper__sticky-subTitle': isScrolledUp && !isStickyTitle,
+      'header__wrapper__sticky-title': isScrolledUp && isStickyTitle
+    }"
   >
     <header class="header">
       <i *ngIf="isBack" (click)="back()" class="pi pi-arrow-left"></i>
@@ -33,4 +37,5 @@
       {{ dateTitle || 'Drafted on' }} {{ draftDate }}
     </div>
   </div>
+  <div *ngIf="isSpaceNeeded" [ngStyle]="{ 'height.px': extraSpace }"></div>
 </div>

@@ -58,7 +58,7 @@ export const analytics = {
     },
     {
       field: 'itemName',
-      header: 'Item Name / Desc. / Status / Job Duration',
+      header: 'Desc. / Status / Job Duration',
       isSortDisabled: true,
       sortType: 'string',
       searchField: ['itemName', 'remarks', 'action', 'jobDuration'],

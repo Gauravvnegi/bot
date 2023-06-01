@@ -734,6 +734,7 @@ $table-hover-color: #f3f3f3;
           // width: fit-content;
           background: $table-hover-color;
           position: relative;
+          word-break: break-word;
         }
       }
 

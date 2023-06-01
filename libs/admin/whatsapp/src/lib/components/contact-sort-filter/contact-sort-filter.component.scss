@@ -69,7 +69,6 @@
         padding: 8px 15px;
         cursor: pointer;
         .sortItem {
-          font-family: 'Poppins';
           font-size: 14;
           letter-spacing: 0.84px;
           text-align: left;
@@ -113,7 +112,6 @@
     @include flex-all-center;
 
     &-text {
-      font-family: 'Poppins';
       font-size: 14px;
       letter-spacing: 0.66px;
       text-align: left;

@@ -36,7 +36,7 @@
 
 :host ::ng-deep .dropdown-label {
   margin-left: 0.5em;
-  font-weight: $bolder;
+  font-weight: $medium;
 }
 
 :host ::ng-deep .mat-chip-list {
@@ -54,10 +54,6 @@
   }
 }
 
-:host ::ng-deep .dropdown-label {
-  margin-left: 0.5em;
-  font-weight: $bolder;
-}
 
 :host ::ng-deep .container {
   width: 100%;

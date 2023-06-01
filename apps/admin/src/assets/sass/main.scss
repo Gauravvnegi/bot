@@ -27,6 +27,10 @@
   border-radius: 10px;
 }
 
+*:not(mat-icon, i) {
+  font-family: Poppins;
+}
+
 // @font-face {
 //   font-family: 'Poppins-regular';
 //   src: url('../../assets/fonts/Poppins-Regular.ttf');
@@ -42,9 +46,5 @@
 //   src: url('../../assets/fonts/Poppins-SemiBold.ttf');
 // }
 
-
-*:not(mat-icon, i) {
-  font-family: Poppins;
-}
 
 

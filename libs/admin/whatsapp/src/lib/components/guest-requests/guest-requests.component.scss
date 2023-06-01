@@ -4,7 +4,6 @@
   padding: 15px 0;
   max-height: calc(100vh - 310px);
   overflow-y: auto;
-  font-family: 'Poppins';
 
   &::-webkit-scrollbar {
     width: 2px;
@@ -66,7 +65,6 @@
 .no-request {
   @include flex-col-center-algn;
   &-msg {
-    font-family: 'Poppins';
     font-size: 12px;
     letter-spacing: 0.72px;
     color: $subtitle;

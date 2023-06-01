@@ -15,7 +15,7 @@
   font-size: 12px;
   font-weight: $bold;
   letter-spacing: 0.72px;
-  font-family: 'Poppins';
+  font-family: 'Poppins-regular';
 }
 
 :host ::ng-deep .p-datatable.p-datatable-lg .p-datatable-header {
@@ -91,7 +91,7 @@
 .databaseActionLabel {
   vertical-align: middle;
   margin-left: 0.5em;
-  font-weight: $medium;
+  font-weight: $bold;
   width: 5%;
   background-color: $whiteDeep;
   border-top: 0 !important;

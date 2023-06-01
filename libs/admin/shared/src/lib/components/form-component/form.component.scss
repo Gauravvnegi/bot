@@ -54,7 +54,7 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   color: $primary-text-color;
   font-size: 16px;
   letter-spacing: 0.96px;
-  font-weight: $bold;
+  font-weight: $medium;
 
   &__static {
   }
@@ -92,7 +92,6 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
 :host ::ng-deep .dropdown-action-cta {
   border-top: 1px solid $border-color;
   padding: 1em;
-  font-family: 'Poppins';
   font-size: 14px;
   letter-spacing: 0.84px;
   text-align: center;
@@ -103,7 +102,6 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
 :host ::ng-deep .dropdown-input-action-cta {
   border-top: 1px solid $border-color;
   padding: 1em;
-  font-family: 'Poppins';
   font-size: 14px;
   display: flex;
   gap: 1em;

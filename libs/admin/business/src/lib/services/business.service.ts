@@ -129,25 +129,30 @@ export class BusinessService extends ApiService {
     return this.get(`/api/v1/config?key=SERVICE_CONFIGURATION`);
   }
 
-  getServiceList(
-    hotelId,
-    config = { params: '?type=SERVICE&serviceType=ALL&limit=5' }
-  ): Observable<any> {
+  getServiceList(hotelId, config?: QueryConfig): Observable<any> {
     return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
   }
-  hotelInfoFormData = {
+  //save hotelinfo  data locally
+  hotelInfoFormData: importForm = {
     address: {
       value: '',
     },
     imageUrl: [],
-    serviceIds: [],
+    serviceIds: [] = [],
+    services: [] = [],
   };
   hotelFormState: boolean = false;
 
-  initHotelInfoFormData(input: any, roomTypeFormState: boolean) {
-    console.log(input, 'input');
+  initHotelInfoFormData(input: any, hotelFormState: boolean) {
+    debugger;
     this.hotelInfoFormData = { ...this.hotelInfoFormData, ...input };
-    this.hotelFormState = roomTypeFormState;
+    this.hotelFormState = hotelFormState;
+  }
+
+  tempServiceIds: any[] = [];
+
+  setServiceIds(serviceIds: any) {
+    this.tempServiceIds.push(...serviceIds);
   }
 
   /**
@@ -167,3 +172,10 @@ export class BusinessService extends ApiService {
     });
   }
 }
+
+export type importForm = {
+  imageUrl;
+  address;
+  services: any[];
+  serviceIds: any[];
+} & Record<string, any>;

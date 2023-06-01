@@ -30,11 +30,29 @@ export const navRoute = {
     link: '/pages/settings/business-info/brand/:brandId/hotel/:hotelId',
     isDisabled: true,
   },
+  importService: {
+    label: 'Import Service',
+    link: '/pages/settings/business-info/brand/:brandId/hotel/import-services',
+    isDisabled: true,
+  },
+  editImportService: {
+    label: 'Import Service',
+    link:
+      '/pages/settings/business-info/brand/:brandId/hotel/:hotelId/import-services',
+    isDisabled: true,
+  },
   services: { label: 'Services', link: './' },
 };
 
 export const businessRoute: Record<
-  'brand' | 'editBrand' | 'hotel' | 'editHotel' | 'services' | 'editServices',
+  | 'brand'
+  | 'editBrand'
+  | 'hotel'
+  | 'editHotel'
+  | 'services'
+  | 'editServices'
+  | 'importServices'
+  | 'editImportServices',
   PageRoutes
 > = {
   brand: {
@@ -88,5 +106,27 @@ export const businessRoute: Record<
       navRoute.services,
     ],
     title: 'Services',
+  },
+  importServices: {
+    route: 'import-services',
+    navRoutes: [
+      navRoute.settings,
+      navRoute.bussinessInfo,
+      navRoute.editBrand,
+      navRoute.hotel,
+      navRoute.importService,
+    ],
+    title: 'Import Services',
+  },
+  editImportServices: {
+    route: 'import-services',
+    navRoutes: [
+      navRoute.settings,
+      navRoute.bussinessInfo,
+      navRoute.editBrand,
+      navRoute.editHotel,
+      navRoute.editImportService,
+    ],
+    title: 'Import Services',
   },
 };

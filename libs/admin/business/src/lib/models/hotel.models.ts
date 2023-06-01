@@ -72,6 +72,7 @@ export class Service {
 export const noRecordAction = {
   imageSrc: 'assets/images/empty-table-service.png',
   description: 'No services found',
+  actionName: 'Import Services',
 };
 
 export class SegmentList {
@@ -118,7 +119,7 @@ export class ServiceIdList {
 
   deserialize(input) {
     input.services.forEach((x) => {
-      this.serviceIdList.push(x.id);
+      if (x.active) this.serviceIdList.push(x.id);
     });
 
     return this;

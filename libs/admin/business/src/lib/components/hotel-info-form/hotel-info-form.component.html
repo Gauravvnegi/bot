@@ -94,7 +94,9 @@
           formControlName="serviceIds"
           [itemList]="compServices"
           (viewAll)="saveHotelData()"
+          (addAction)="openImportService()"
           [noRecordsAction]="noRecordAction"
+          [addActLabel]="'+ Import Service'"
         ></hospitality-bot-custom-select>
       </div>
     </div>

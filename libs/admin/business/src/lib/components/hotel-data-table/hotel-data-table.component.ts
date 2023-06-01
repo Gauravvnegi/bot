@@ -225,7 +225,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   }
 
   editHotel(Id) {
-    console.log(Id);
     this.router.navigate([
       `pages/settings/business-info/brand/${this.brandId}/hotel/${Id}`,
     ]);

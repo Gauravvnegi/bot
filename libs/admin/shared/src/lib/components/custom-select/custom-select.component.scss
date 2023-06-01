@@ -1,3 +1,4 @@
+@import 'main';
 .header {
   display: flex;
   justify-content: space-between;
@@ -91,4 +92,8 @@
 
 :host ::ng-deep .wrapper{
   border: none !important;
+}
+
+.actions{
+  @include flex-item-center;
 }

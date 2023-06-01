@@ -13,7 +13,7 @@
     </hospitality-bot-modal-header>
   </div>
   
-  <div class="table-container">
+  <div class="table-container" [ngStyle]="tabFilterItems[tabFilterIdx]?.total ? {} : { 'padding': '10px' }">
     <ng-container>
       <p-table
         #dt

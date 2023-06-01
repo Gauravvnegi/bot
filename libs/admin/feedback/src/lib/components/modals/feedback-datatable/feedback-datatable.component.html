@@ -1,38 +1,20 @@
-<div class="details_wrapper">
-  <div class="header">
-    <div (click)="closeModal()" class="close">
-      <i class="fa fa-times" aria-hidden="true"></i>
-    </div>
+<div class="details_wrapper" *ngIf="!initialLoading; else loader">
+  <div [formGroup]="tableFG">
+    <hospitality-bot-modal-header
+      [tableName]="tableName"
+      (onModalClose)="closeModal()"
+    >
+      <hospitality-bot-export-list
+        (onDocumentActions)="onDocumentActions()"
+        [documentTypes]="documentTypes"
+        [documentActionTypes]="documentActionTypes"
+        [isDisable]="values.length === 0"
+      ></hospitality-bot-export-list>
+    </hospitality-bot-modal-header>
   </div>
-  <div class="caption__wrapper">
-    <form [formGroup]="tableFG">
-      <div class="caption__wrapper--tabmenu">
-        <div class="header">
-          <div class="flx">
-            <img src="assets/svg/surveyor.svg" alt="" /> &nbsp;
-            <p class="heading">
-              {{ tableName }}
-            </p>
-          </div>
-
-          <div class="action-wrapper">
-            <hospitality-bot-export-list
-              (onDocumentActions)="onDocumentActions()"
-              [documentTypes]="documentTypes"
-              [documentActionTypes]="documentActionTypes"
-              [isDisable]="values.length === 0"
-            ></hospitality-bot-export-list>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
+  
   <div class="table-container">
-    <ng-template #loader>
-      <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
-    </ng-template>
-
-    <ng-container *ngIf="!initialLoading; else loader">
+    <ng-container>
       <p-table
         #dt
         [styleClass]="tableConfig.styleClass"
@@ -61,7 +43,6 @@
         <ng-template pTemplate="caption">
           <div class="caption__wrapper" [formGroup]="tableFG">
             <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-
             <hospitality-bot-filter-chips
               *ngIf="isQuickFilters"
               [chips]="tabFilterItems[tabFilterIdx].chips"
@@ -639,4 +620,8 @@
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
+</ng-template>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
 </ng-template>

@@ -89,6 +89,7 @@ import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/tog
 import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
+import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -185,6 +186,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     RoomTypeDirective,
     CopyLinkComponentComponent,
     AddAttachmentComponent,
+    ModalHeaderComponent,
   ],
 
   exports: [
@@ -272,6 +274,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     RoomTypeDirective,
     CopyLinkComponentComponent,
     AddAttachmentComponent,
+    ModalHeaderComponent,
   ],
 })
 export class AdminSharedModule {}

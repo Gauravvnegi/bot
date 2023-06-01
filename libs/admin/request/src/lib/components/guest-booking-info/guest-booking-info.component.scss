@@ -3,7 +3,6 @@
   height: calc(100vh - 307px);
   overflow-y: auto;
   .booking-title {
-    font-family: Poppins;
     font-size: 14px;
     font-weight: $bold;
     font-stretch: normal;
@@ -15,7 +14,6 @@
   }
   .user-journey-title {
     margin-top: 20px;
-    font-family: Poppins;
     font-size: 14px;
     font-weight: $medium;
     font-stretch: normal;
@@ -37,7 +35,6 @@
       padding: 12px 6px 13px 15px;
       border: solid 1px $borderCol;
       .subHeading {
-        font-family: Poppins;
         font-size: 10px;
         font-weight: $bold;
         font-stretch: normal;
@@ -47,7 +44,6 @@
         text-align: left;
         color: $grayMedium;
         &--results {
-          font-family: Poppins;
           font-size: 12px;
           font-weight: $bold;
           font-stretch: normal;

@@ -9,7 +9,6 @@
 
 .heading {
   opacity: 0.75;
-  font-family: Poppins;
   font-size: 16px;
   font-weight: $bold;
   text-align: left;
@@ -19,7 +18,6 @@
 .sub-heading {
   margin-top: 2px;
   opacity: 0.45;
-  font-family: Poppins;
   font-size: 12px;
   text-align: left;
   color: #00162b;
@@ -74,7 +72,6 @@
 
 .text {
   margin-top: 10px;
-  font-family: Poppins;
   font-size: 14px;
   text-align: center;
   color: #002046;
@@ -91,6 +88,6 @@
   position: absolute;
 }
 
-:host ::ng-deep .wrapper{
+:host ::ng-deep .wrapper {
   border: none !important;
 }

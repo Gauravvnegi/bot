@@ -31,14 +31,13 @@
     &__sticky-title {
       @include sticky-header;
       .header {
-        padding:5px 0 10px 0;
+        padding: 5px 0 10px 0;
       }
     }
   }
 
   &__date {
     opacity: 0.5;
-    font-family: Poppins;
     font-size: 16px;
     padding-left: 32px;
     letter-spacing: 0.96px;
@@ -51,8 +50,6 @@
 .label {
   font-size: 26px;
   font-weight: $bolder;
-  font-family: Poppins;
-
   letter-spacing: 1.56px;
   color: $secondary2;
 }
@@ -74,7 +71,6 @@
     padding-bottom: 20px;
     display: flex;
     opacity: 0.6;
-    font-family: Poppins;
     font-size: 14px;
     font-weight: $bold;
     color: $secondary2;

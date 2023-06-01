@@ -19,7 +19,6 @@
 }
 
 .header {
-  font-family: Poppins;
   font-size: 16px;
   font-weight: $bolder;
   text-align: left;
@@ -46,7 +45,6 @@
 
 .room-des p {
   opacity: 0.75;
-  font-family: Poppins;
   font-size: 16px;
   font-weight: $bold;
   text-align: left;
@@ -89,9 +87,9 @@
 }
 
 :host ::ng-deep .wrapper {
-height: fit-content !important;
+  height: fit-content !important;
 }
 
-:host ::ng-deep .loader{
+:host ::ng-deep .loader {
   height: 40vh !important;
 }

@@ -15,7 +15,7 @@
 }
 
 :host ::ng-deep .p-multiselect-trigger-icon {
-    color: $border-color;
+  color: $border-color;
 }
 
 :host ::ng-deep .input {
@@ -102,7 +102,6 @@
   display: flex;
   gap: 1em;
   background-color: #e8e2ff;
-  font-family: Poppins;
   font-size: 0.7em;
   padding: 0.4em 0.6em;
   letter-spacing: 0.08em;

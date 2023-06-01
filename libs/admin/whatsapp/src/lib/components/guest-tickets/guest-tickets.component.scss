@@ -1,16 +1,14 @@
 @import 'main';
 
-.guest-ticket{
-    padding: 15px;
-    
-    &-title{
-        font-family: Poppins;
-        font-size: 14px;
-        font-weight: $bold;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: 0.84px; 
-    }
+.guest-ticket {
+  padding: 15px;
 
+  &-title {
+    font-size: 14px;
+    font-weight: $bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 0.84px;
+  }
 }

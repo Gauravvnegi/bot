@@ -1,7 +1,6 @@
 @import 'main';
 
 .wrapper {
-  font-family: Poppins;
   .stats-container {
     @include flex-space-between;
     .stats {

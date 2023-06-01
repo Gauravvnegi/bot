@@ -207,13 +207,15 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { order: 'DESC' },
+        { type: 'HOTEL' },
+        { parentId: this.brandId },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
 
     this.$subscription.add(
-      this.businessService.exportCSV(this.hotelId, config).subscribe((res) => {
+      this.businessService.exportCSV(this.brandId, config).subscribe((res) => {
+        this.loading = false;
         FileSaver.saveAs(
           res,
           `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`

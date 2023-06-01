@@ -161,12 +161,9 @@ export class BusinessService extends ApiService {
     );
   }
 
-  exportCSV(hotelId: string, config: QueryConfig) {
-    return this.get(
-      `/api/v1/entity/${hotelId}/hotel/export${config.params ?? ''}`,
-      {
-        responseType: 'blob',
-      }
-    );
+  exportCSV(brandId: string, config: QueryConfig): Observable<any> {
+    return this.get(`/api/v2/entity/export${config.params ?? ''}`, {
+      responseType: 'blob',
+    });
   }
 }

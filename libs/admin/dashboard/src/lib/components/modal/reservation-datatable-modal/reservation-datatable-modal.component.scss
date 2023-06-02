@@ -13,6 +13,10 @@
   color: $primary-cta !important;
 }
 
+.table-container {
+  overflow-y: auto;
+}
+
 .close {
   @include flex-row-justify-end;
   width: 100%;
@@ -27,15 +31,9 @@
 
 :host ::ng-deep .p-datatable {
   margin: 10px 1.5% !important;
-  box-shadow: none !important;
   .p-datatable-thead {
-    position: static !important;
+    top: 0 !important;
   }
-}
-
-.table-container {
-  max-height: 79vh;
-  overflow: auto;
 }
 
 :host ::ng-deep .data-table-row.hover-background {

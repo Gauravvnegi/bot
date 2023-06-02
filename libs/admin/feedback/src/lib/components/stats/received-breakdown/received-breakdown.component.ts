@@ -234,7 +234,6 @@ export class ReceivedBreakdownComponent implements OnInit, OnDestroy {
    * @param defaultGraph The data status.
    */
   initFeedbackChart(defaultGraph: boolean): void {
-    console.log(defaultGraph);
     this.feedbackChart.Data[0].length = this.feedbackChart.Labels.length = this.feedbackChart.Colors[0].backgroundColor.length = this.feedbackChart.Colors[0].borderColor.length = 0;
     if (defaultGraph) {
       this._translateService

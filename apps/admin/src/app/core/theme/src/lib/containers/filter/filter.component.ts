@@ -108,11 +108,11 @@ export class FilterComponent implements OnChanges, OnInit {
       .get('property')
       .get('hotelName')
       .valueChanges.subscribe((brandId) => {
-        const { hotels } = this._hotelDetailService.brands.find(
+        const { entities } = this._hotelDetailService.brands.find(
           (brand) => brand['id'] === brandId
         );
 
-        this.branchList = hotels.map((item) => ({
+        this.branchList = entities.map((item) => ({
           label: item.name,
           value: item.id,
         }));
@@ -140,7 +140,7 @@ export class FilterComponent implements OnChanges, OnInit {
         const outlets =
           this._hotelDetailService.brands
             .find((item) => item.id === brandName)
-            ?.hotels.find((item) => item.id).outlets ?? [];
+            ?.entities.find((item) => item.id).outlets ?? [];
 
         this.outlets = outlets;
         this.updateOutletsFormControls(outlets);

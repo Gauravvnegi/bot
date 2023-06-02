@@ -44,7 +44,7 @@ export class UserConfig implements IDeserializable {
 
     this.timezone = brands
       ?.find((item) => item.id === this.brandName)
-      ?.hotels?.find((item) => item.id === this.branchName)?.timezone;
+      ?.entities?.find((item) => item.id === this.branchName)?.timezone;
 
     this.products = this.departments.map(({ productLabel, productType }) => ({
       label: productLabel,

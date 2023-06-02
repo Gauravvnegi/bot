@@ -19,7 +19,7 @@ type Brand = {
   id: string;
   name: string;
   logo: string;
-  hotels: {
+  entities: {
     id: string;
     name: string;
     logo: string;

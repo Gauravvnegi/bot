@@ -59,12 +59,12 @@ export class UserService extends ApiService {
 
   getUsersList(config: { hotelId: string; queryObj?: string }) {
     return this.get(
-      `/api/v1/hotel/${config.hotelId}/users${config.queryObj ?? ''}`
+      `/api/v1/entity/${config.hotelId}/users${config.queryObj ?? ''}`
     );
   }
 
   getMentionList(hotelId: string) {
-    return this.get(`/api/v1/hotel/${hotelId}/users?mention=true`);
+    return this.get(`/api/v1/entity/${hotelId}/users?mention=true`);
   }
 
   uploadImage(hotelId: string, data: any, path: string) {

@@ -34,7 +34,7 @@ export class CardService extends ApiService {
   }
 
   getUsersList(hotelId: string) {
-    return this.get(`/api/v1/hotel/${hotelId}/users`);
+    return this.get(`/api/v1/entity/${hotelId}/users`);
   }
 
   searchFeedbacks(config) {

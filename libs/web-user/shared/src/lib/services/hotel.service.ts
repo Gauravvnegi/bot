@@ -19,7 +19,7 @@ export class HotelService extends ApiService {
   }
 
   getHotelConfigById(hotelId): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}`);
+    return this.get(`/api/v1/entity/${hotelId}`);
   }
 
   get currentJourney(): string {

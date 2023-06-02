@@ -132,7 +132,7 @@ export class ManagePermissionService extends ApiService {
   }
 
   getAllUsers(config: QueryConfig): Observable<UserListResponse> {
-    return this.get(`/api/v1/hotel/${config.hotelId}/users${config.queryObj ?? ''}`);
+    return this.get(`/api/v1/entity/${config.hotelId}/users${config.queryObj ?? ''}`);
   }
 
   addNewUser(parentUserId: string, data: any) {

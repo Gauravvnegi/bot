@@ -11,10 +11,7 @@
 }
 
 .table-container {
-  max-height: 75vh;
-  margin: 20;
   overflow: auto;
-  margin-bottom: 0;
 }
 
 .modal-header {
@@ -109,8 +106,8 @@
   }
 }
 
-// added for now
 :host ::ng-deep .p-datatable {
+  margin: 10px 1.5% !important;
   .p-datatable-thead {
     top: 0;
   }

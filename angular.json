@@ -2095,6 +2095,73 @@
           "style": "scss"
         }
       }
+    },
+    "admin-all-outlets": {
+      "projectType": "library",
+      "root": "libs/admin/all-outlets",
+      "sourceRoot": "libs/admin/all-outlets/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/all-outlets/tsconfig.lib.json",
+              "libs/admin/all-outlets/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/admin/all-outlets/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/all-outlets/jest.config.js",
+            "tsConfig": "libs/admin/all-outlets/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/all-outlets/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
+    "admin-outlets-dashboard": {
+      "projectType": "library",
+      "root": "libs/admin/outlets-dashboard",
+      "sourceRoot": "libs/admin/outlets-dashboard/src",
+      "prefix": "hospitality-bot",
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/admin/outlets-dashboard/tsconfig.lib.json",
+              "libs/admin/outlets-dashboard/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/admin/outlets-dashboard/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/admin/outlets-dashboard/jest.config.js",
+            "tsConfig": "libs/admin/outlets-dashboard/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "libs/admin/outlets-dashboard/src/test-setup.ts"
+          }
+        }
+      },
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      }
     }
   },
   "cli": {

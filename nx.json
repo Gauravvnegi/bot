@@ -188,6 +188,12 @@
     },
     "admin-business": {
       "tags": []
+    },
+    "admin-all-outlets": {
+      "tags": []
+    },
+    "admin-outlets-dashboard": {
+      "tags": []
     }
   }
 }

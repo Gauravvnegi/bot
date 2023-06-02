@@ -110,12 +110,15 @@ td {
   color: rgb(75, 86, 192) !important;
 }
 
-// added for now
 :host ::ng-deep .p-datatable {
+  margin: 10px 1.5% !important;
   .p-datatable-thead {
-    position: static !important;
+    top: 0;
   }
-  @include tableCellPadding(0.3em);
+}
+
+.table-container{
+  overflow-y: auto;
 }
 
 .email {

@@ -48,7 +48,10 @@
 }
 
 :host ::ng-deep .p-datatable {
-  box-shadow: none !important;
+  margin: 10px 1.5% !important;
+  .p-datatable-thead {
+    top: 0;
+  }
 }
 
 :host ::ng-deep .brand-name {
@@ -164,8 +167,6 @@ tr > td {
 
 // *** required new ** //
 .table-container {
-  max-height: 79vh;
-  padding: 0 10px 10px;
   overflow: auto;
 }
 
@@ -173,6 +174,3 @@ tr > td {
   background-color: white;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-thead {
-  top: 59px;
-}

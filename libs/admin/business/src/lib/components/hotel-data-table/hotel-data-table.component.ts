@@ -54,8 +54,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.businessService.resetHotelFormState();
-
     this.initTableValue();
   }
 

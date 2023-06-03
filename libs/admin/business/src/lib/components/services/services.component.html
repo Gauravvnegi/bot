@@ -34,6 +34,7 @@
           formControlName="serviceIds"
           [itemList]="filteredServices"
           [fullView]="true"
+          [noMoreData]="noMoreServices"
           [noRecordsAction]="noRecordAction"
           (loadMoreData)="loadMore()"
           [loading]="loading"

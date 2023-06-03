@@ -8,6 +8,7 @@ import { BusinessService } from '../../services/business.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { businessRoute } from '../../constant/routes';
+import { HotelFormDataServcie } from '../../services/hotel-form.service';
 
 @Component({
   selector: 'hospitality-bot-import-service',
@@ -35,7 +36,8 @@ export class ImportServiceComponent implements OnInit {
     private snackbarService: SnackBarService,
     private businessService: BusinessService,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private hotelFormDataServcie: HotelFormDataServcie
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -74,17 +76,17 @@ export class ImportServiceComponent implements OnInit {
     this.$subscription.add(
       this.businessService.getServices().subscribe(
         (res) => {
-          debugger;
           this.compServices = new Services().deserialize(res.service).services;
+          this.filteredServices = this.compServices;
 
-          if (this.businessService.tempServiceIds.length) {
-            this.filteredServices = this.compServices.filter(
-              (service) =>
-                !this.businessService.tempServiceIds.includes(service.id)
-            );
-          } else {
-            this.filteredServices = this.compServices;
-          }
+          // if (this.businessService.tempServiceIds.length) {
+          //   this.filteredServices = this.compServices.filter(
+          //     (service) =>
+          //       !this.businessService.tempServiceIds.includes(service.id)
+          //   );
+          // } else {
+          //   this.filteredServices = this.compServices;
+          // }
         },
         (error) => {
           this.snackbarService.openSnackBarAsText(error.error.message);
@@ -129,15 +131,22 @@ export class ImportServiceComponent implements OnInit {
     });
   }
   saveForm() {
-    const data = this.useForm.getRawValue();
     // if (!this.hotelId) {
-    this.businessService.initHotelInfoFormData(this.useForm.value, true);
-    const { serviceIds, services } = this.businessService.hotelInfoFormData;
-    const servicesToAdd = this.filteredServices.filter((service) =>
+    const { serviceIds } = this.useForm.getRawValue();
+
+    this.hotelFormDataServcie.hotelInfoFormData.serviceIds.push(...serviceIds);
+
+    const servicesToAdd = this.compServices.filter((service) =>
       serviceIds.includes(service.id)
     );
+    this.hotelFormDataServcie.hotelInfoFormData.services.push(...servicesToAdd);
 
-    this.businessService.hotelInfoFormData.services.push(...servicesToAdd);
+    this.hotelFormDataServcie.setActiveServiceIds(serviceIds);
+
+    if (this.hotelId)
+      this.businessService
+        .updateHotel(this.hotelId, { serviceIds: serviceIds })
+        .subscribe((_res) => {});
 
     this.handleSuccess();
     this.location.back();

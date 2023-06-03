@@ -26,9 +26,9 @@ export class BusinessService extends ApiService {
     );
   }
 
-  resetHotelFormState() {
-    this.hotelFormState = false;
-  }
+  // resetHotelFormState() {
+  //   this.hotelFormState = false;
+  // }
 
   /**
    * @function getBrandList
@@ -132,22 +132,25 @@ export class BusinessService extends ApiService {
   getServiceList(hotelId, config?: QueryConfig): Observable<any> {
     return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
   }
-  //save hotelinfo  data locally
-  hotelInfoFormData: importForm = {
-    address: {
-      value: '',
-    },
-    imageUrl: [],
-    serviceIds: [] = [],
-    services: [] = [],
-  };
-  hotelFormState: boolean = false;
+  // //save hotelinfo  data locally
+  // hotelInfoFormData: importForm = {
+  //   address: {
+  //     value: '',
+  //   },
+  //   imageUrl: [],
+  //   serviceIds: [] = [],
+  //   services: [] = [],
+  // };
+  // hotelFormState: boolean = false;
 
-  initHotelInfoFormData(input: any, hotelFormState: boolean) {
-    debugger;
-    this.hotelInfoFormData = { ...this.hotelInfoFormData, ...input };
-    this.hotelFormState = hotelFormState;
-  }
+  // services = {
+  //   '123123123': true,
+  // };
+
+  // initHotelInfoFormData(input: any, hotelFormState: boolean) {
+  //   this.hotelInfoFormData = { ...this.hotelInfoFormData, ...input };
+  //   this.hotelFormState = hotelFormState;
+  // }
 
   tempServiceIds: any[] = [];
 
@@ -170,6 +173,11 @@ export class BusinessService extends ApiService {
     return this.get(`/api/v2/entity/export${config.params ?? ''}`, {
       responseType: 'blob',
     });
+  }
+
+  arrayDifference(array1, array2) {
+    console.log(array1, array2, 'array1, array2');
+    return array1.filter((element) => !array2.includes(element));
   }
 }
 

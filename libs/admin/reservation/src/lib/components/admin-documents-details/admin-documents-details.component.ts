@@ -1,5 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+} from '@angular/forms';
 import { saveAs } from 'file-saver';
 import * as JSZip from 'jszip';
 import * as JSZipUtils from 'jszip-utils';
@@ -12,7 +17,7 @@ import { ReservationService } from '../../services/reservation.service';
   styleUrls: ['./admin-documents-details.component.scss'],
 })
 export class AdminDocumentsDetailsComponent implements OnInit {
-  selectedGuestGroup;
+  selectedGuestGroup: AbstractControl;
   selectedGuestId;
   documentsList;
   countriesLOV;
@@ -20,6 +25,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     fileSize: 3145728,
     fileType: ['png', 'jpg'],
   };
+  uploadingDoc: string; //'front-1'|'front-2'|'back-1'|'back-2'
 
   @Input() parentForm;
   @Input('data') detailsData;
@@ -34,12 +40,9 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   ngOnInit(): void {}
 
   ngOnChanges() {
-    this.getLOV();
-    this.addDocumentStatusForm();
-  }
-
-  getLOV() {
     this.getCountriesList();
+    this.addDocumentStatusForm();
+    this.setDefaultGuestForDocument();
   }
 
   addDocumentStatusForm() {
@@ -68,13 +71,71 @@ export class AdminDocumentsDetailsComponent implements OnInit {
           nationality: country.nationality,
         };
       });
-      this.addDocuments();
-      this.setDefaultGuestForDocument();
     });
   }
 
-  patchGuestData() {
+  getDocumentsConfigurationSettings(
+    isInternational: boolean,
+    docType: ForeignNationalDocType | string
+  ): DocumentForm['settings'] {
+    const isVISA = docType === ForeignNationalDocType.VISA;
+    const isPASSPORT = docType === ForeignNationalDocType.PASSPORT;
+
+    const settings: DocumentForm['settings'] = {
+      frontImage: 'required',
+      backImage: isInternational
+        ? isPASSPORT
+          ? 'not-required'
+          : isVISA
+          ? 'optional'
+          : 'required'
+        : 'required',
+      frontImageName: `${docType} FRONT PAGE`,
+      backImageName: isVISA
+        ? 'VISA ARRIVAL STAMP PAGE'
+        : `${docType} BACK PAGE`,
+    };
+
+    return settings;
+  }
+
+  /**
+   * Patching Guest details
+   */
+  setDefaultGuestForDocument() {
+    this.guestsFA.controls.forEach((guestFG: FormGroup, index) => {
+      const guestData = this.detailsData.guestDetails.guests[index];
+      guestFG.addControl('documents', new FormArray([])); // Adding document control for each guest
+
+      /**
+       * Adding document FG to the documents CONTROL - If guest already has documents
+       */
+      if (!!guestData.documents?.length) {
+        guestData.documents.forEach((item) => {
+          /**
+           * Settings for which documents are required based of document type and nationality
+           */
+          const settings = this.getDocumentsConfigurationSettings(
+            guestData.isInternational,
+            item.documentType
+          );
+
+          (guestFG.get('documents') as FormArray).controls.push(
+            this.getDocumentFG(item, settings)
+          );
+        });
+      }
+    });
+
+    /** Patching the details data to form */
     this.guestsFA.patchValue(this.detailsData.guestDetails.guests);
+
+    this.detailsData.guestDetails.guests.forEach((guest) => {
+      if (guest.isPrimary === true) {
+        this.selectedGuestId = guest.id;
+        this.onGuestChange(guest.id);
+      }
+    });
   }
 
   getDocumentsByCountry(nationality) {
@@ -89,35 +150,99 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       });
   }
 
-  setDefaultGuestForDocument() {
-    this.detailsData.guestDetails.guests.forEach((guest) => {
-      if (guest.isPrimary === true) {
-        this.selectedGuestId = guest.id;
-        this.onGuestChange(guest.id);
-      }
-    });
-  }
+  /**
+   * To get the document form group
+   * @param docValues these value will be patched to the create FG
+   * @param settings additional setting to be added or overridden
+   * @returns Document Form Group
+   */
+  getDocumentFG(
+    docValues: Partial<Omit<DocumentForm, 'settings'>> = {},
+    settings: Partial<DocumentForm['settings']> = {}
+  ): FormGroup {
+    const defaultSettings: DocumentForm['settings'] = {
+      frontImage: 'required',
+      backImage: 'required',
+    };
 
-  addDocuments() {
-    if (this.guestsFA.controls.length > 0) {
-      this.guestsFA.controls.forEach((guestFG: FormGroup, index) => {
-        guestFG.addControl('documents', new FormArray([]));
-        const controlFA = guestFG.get('documents') as FormArray;
-        this.detailsData.guestDetails.guests[index].documents.forEach((doc) => {
-          controlFA.push(this.getDocumentFG());
-        });
-      });
-      this.patchGuestData();
-    }
-  }
-
-  getDocumentFG(): FormGroup {
-    return this._fb.group({
+    const formGroup = this._fb.group({
       id: [''],
       documentType: [''],
       frontUrl: [''],
       backUrl: [''],
+      settings: {
+        ...defaultSettings,
+        ...settings,
+      },
     });
+
+    formGroup.patchValue(docValues);
+    return formGroup;
+  }
+
+  saveDocument() {
+    const data = this.parentForm.value.guestInfoDetails.guests.reduce(
+      (prev, curr) => {
+        if (curr.isPrimary) {
+          prev.primaryGuest['id'] = curr.id;
+          prev.primaryGuest['documents'] = curr.documents;
+        } else {
+          prev.sharerGuests.push({
+            id: curr.id,
+            documents: curr.documents,
+          });
+        }
+        return prev;
+      },
+      {
+        primaryGuest: {},
+        sharerGuests: [],
+      }
+    );
+    this._reservationService
+      .saveDocument(this.detailsData.reservationDetails.bookingId, data)
+      .subscribe((_res) => {
+        this.snackbarService.openSnackBarAsText(
+          'Document updated successfully',
+          '',
+          { panelClass: 'success' }
+        );
+      });
+  }
+
+  uploadDocuments(event, docPage: 'front' | 'back', index: number) {
+    this.uploadingDoc = `${docPage}-${index}`;
+    let formData = new FormData();
+    formData.append('file', event.file);
+    formData.append(
+      'doc_type',
+      this.documentFormGroup.at(index).get('documentType').value
+    );
+
+    formData.append('doc_page', docPage);
+    formData.append(
+      'doc_issue_place',
+      this.selectedGuestGroup.get('nationality').value
+    );
+
+    this._reservationService
+      .uploadDocumentFile(
+        this.detailsData.reservationDetails.bookingId,
+        this.selectedGuestGroup.get('id').value,
+        formData
+      )
+      .subscribe(
+        (res) => {
+          this.documentFormGroup
+            .at(index)
+            .patchValue({ [`${docPage}Url`]: res.fileDownloadUrl });
+          this.uploadingDoc = '';
+        },
+        ({ error }) => {
+          this.snackbarService.openSnackBarAsText(error?.message);
+          this.uploadingDoc = '';
+        }
+      );
   }
 
   updateDocumentVerificationStatus(status, isConfirmALL = false) {
@@ -139,7 +264,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
             .get('status')
             .setValue(status === 'ACCEPT' ? 'COMPLETED' : 'FAILED');
           this.snackbarService.openSnackBarAsText(
-            'Status updated sucessfully.',
+            'Status updated successfully.',
             '',
             { panelClass: 'success' }
           );
@@ -190,17 +315,80 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     this.documentStatus.get('status').patchValue('COMPLETED');
   }
 
-  onGuestChange(value) {
-    this.guestsFA.controls.forEach((guest) => {
+  onGuestChange(value: string) {
+    this.guestsFA.controls.forEach((guest: FormGroup) => {
       if (guest.get('id').value === value) {
         this.selectedGuestId = value;
         this.selectedGuestGroup = guest;
         this.getDocumentsByCountry(
           this.selectedGuestGroup.get('nationality').value
         );
+        this.selectedGuestGroup
+          .get('nationality')
+          .valueChanges.subscribe(this.onNationalityChange);
+        this.selectedGuestGroup
+          .get('selectedDocumentType')
+          .valueChanges.subscribe(this.onDocumentTypeChange);
       }
     });
   }
+
+  onNationalityChange = (res: string) => {
+    this.getDocumentsByCountry(res);
+    this.selectedGuestGroup.get('selectedDocumentType').reset();
+    this.documentFormGroup.clear();
+  };
+
+  onDocumentTypeChange = (res: string) => {
+    if (!res) return;
+
+    this.documentFormGroup.clear();
+    const guestId = this.selectedGuestGroup.get('id').value;
+
+    const guestData = this.detailsData.guestDetails.guests.find(
+      (data) => data.id === guestId
+    );
+
+    const guestUploadedDocs = guestData.documents;
+    const isDocTypeAlreadyPresent = guestData.selectedDocumentType === res;
+
+    const getDocs = (idx: 0 | 1) => ({
+      frontUrl: isDocTypeAlreadyPresent ? guestUploadedDocs[idx].frontUrl : '',
+      backUrl: isDocTypeAlreadyPresent ? guestUploadedDocs[idx].backUrl : '',
+    });
+
+    const isNational =
+      this.detailsData.reservationDetails.hotelNationality ===
+      this.selectedGuestGroup.get('nationality').value;
+
+    if (isNational) {
+      this.documentFormGroup.controls.push(
+        this.getDocumentFG(
+          {
+            documentType: res,
+            ...getDocs(0),
+          },
+          this.getDocumentsConfigurationSettings(!isNational, res)
+        )
+      );
+    } else {
+      const docTypes = res.split('/') as ForeignNationalDocType[]; // ["PASSPORT","VISA"] or ["PASSPORT","OCI"]
+
+      this.documentFormGroup.controls.push(
+        this.getDocumentFG(
+          { documentType: docTypes[0], ...getDocs(0) },
+          this.getDocumentsConfigurationSettings(!isNational, docTypes[0])
+        )
+      );
+
+      this.documentFormGroup.controls.push(
+        this.getDocumentFG(
+          { documentType: docTypes[1], ...getDocs(1) },
+          this.getDocumentsConfigurationSettings(!isNational, docTypes[1])
+        )
+      );
+    }
+  };
 
   downloadDocs(documents) {
     const urls = [];
@@ -241,6 +429,10 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     });
   }
 
+  get documentFormGroup(): FormArray {
+    return this.selectedGuestGroup.get('documents') as FormArray;
+  }
+
   get guestsFA(): FormArray {
     return this.parentForm.get('guestInfoDetails').get('guests') as FormArray;
   }
@@ -252,4 +444,23 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   get documentStatus() {
     return this.parentForm.get('documentStatus') as FormGroup;
   }
+}
+
+type DocumentForm = {
+  frontUrl: string;
+  backUrl: string;
+  documentType: string;
+  id: string;
+  settings: {
+    backImage: 'required' | 'optional' | 'not-required';
+    frontImage: 'required' | 'optional' | 'not-required';
+    backImageName?: string;
+    frontImageName?: string;
+  };
+};
+
+enum ForeignNationalDocType {
+  VISA = 'VISA',
+  OCI = 'OCI',
+  PASSPORT = 'PASSPORT',
 }

@@ -4,9 +4,6 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ReservationService extends ApiService {
-
-  
-
   getReservationDetails(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
   }
@@ -48,6 +45,10 @@ export class ReservationService extends ApiService {
       `/api/v1/reservation/${reservationId}/guest/${guestId}/documents/upload`,
       formData
     );
+  }
+
+  saveDocument(reservationId, data): Observable<any> {
+    return this.patch(`/api/v1/reservation/${reservationId}/documents`, data);
   }
 
   generateJourneyLink(reservationId, journeyName): Observable<any> {

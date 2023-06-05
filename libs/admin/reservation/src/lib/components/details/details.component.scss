@@ -464,7 +464,7 @@ mat-option {
 }
 
 :host ::ng-deep .empty-view {
-  padding: 12%;
+  // padding: 12%;
   .wrapper {
     @include flex-col-center-algn;
     img {

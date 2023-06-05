@@ -2,9 +2,7 @@ import { get, set } from 'lodash';
 import * as moment from 'moment';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { GuestRole } from '../constants/guest';
-import {
-  TransactionHistoryResponse,
-} from '../types/response';
+import { TransactionHistoryResponse } from '../types/response';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -220,6 +218,9 @@ export class GuestDetailsConfig implements IDeserializable {
     input.documents?.forEach((document) => {
       documents.push(new DocumentDetailsConfig().deserialize(document));
     });
+
+    this.nationality = get(input, ['nationality']) || hotelNationality;
+
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
@@ -231,7 +232,7 @@ export class GuestDetailsConfig implements IDeserializable {
       set({}, 'phoneNumber', get(contactDetails, ['contactNumber'])),
       set({}, 'email', get(contactDetails, ['email'])),
       set({}, 'isPrimary', get(input, ['isPrimary'])),
-      set({}, 'nationality', get(input, ['nationality']) || hotelNationality),
+      // set({}, 'nationality', get(input, ['nationality']) || hotelNationality),
       set({}, 'status', get(input.statusMessage, ['status'])),
       set({}, 'remarks', get(input.statusMessage, ['remarks'])),
       set({}, 'role', get(input, ['role'])),
@@ -240,17 +241,20 @@ export class GuestDetailsConfig implements IDeserializable {
       set(
         {},
         'isInternational',
-        get(input, ['nationality']) === hotelNationality ? false : true
+        this.nationality === hotelNationality ? false : true
       ),
       set(
         {},
         'selectedDocumentType',
-        input.nationality === hotelNationality
-          ? input.documents && input.documents[0]
-            ? input.documents[0].documentType
-            : null
+        input.documents && input.documents[0]
+          ? input.nationality !== hotelNationality && input.documents[1]
+            ? input.documents[0].documentType +
+              '/' +
+              input.documents[1].documentType
+            : input.documents[0].documentType
           : null
       ),
+
       set({}, 'documents', documents),
       set(
         {},
@@ -259,6 +263,7 @@ export class GuestDetailsConfig implements IDeserializable {
       ),
       set({}, 'regcardUrl', get(input, ['regcardUrl']))
     );
+
     return this;
   }
 
@@ -435,13 +440,14 @@ export class ReservationDetailsConfig implements IDeserializable {
   bookingNumber: string;
   bookingId: string;
   hotelId: string;
-
+  hotelNationality: string;
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'bookingNumber', get(input, ['number'])),
       set({}, 'bookingId', get(input, ['id'])),
-      set({}, 'hotelId', get(input.hotel, ['id']))
+      set({}, 'hotelId', get(input.hotel, ['id'])),
+      set({}, 'hotelNationality', get(input.hotel.address, ['countryCode']))
     );
     return this;
   }
@@ -508,8 +514,9 @@ export class PaymentDetailsConfig implements IDeserializable {
     //to-do
     this.roomRates = new RoomRateConfig().deserialize(input.roomRates);
     if (Array.isArray(input.transactionsHistory)) {
-      this.transactionHistory = input.transactionsHistory.map((item: TransactionHistoryResponse) =>
-        new TransactionHistory().deserialize(item)
+      this.transactionHistory = input.transactionsHistory.map(
+        (item: TransactionHistoryResponse) =>
+          new TransactionHistory().deserialize(item)
       );
     } else {
       this.transactionHistory = [];

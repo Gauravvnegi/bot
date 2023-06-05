@@ -90,6 +90,9 @@ import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
+import { ImageHandlingComponent } from './components/image-handling/image-handling.component';
+import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shared-image-cropper.module';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -115,6 +118,7 @@ import { ModalHeaderComponent } from './components/datatable/modal-header/modal-
     MatTooltipModule,
     DialogModule,
     MatMenuModule,
+    SharedImageCropperModule,
   ],
   declarations: [
     DatatableComponent,
@@ -187,6 +191,7 @@ import { ModalHeaderComponent } from './components/datatable/modal-header/modal-
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    ImageHandlingComponent,
   ],
 
   exports: [
@@ -275,6 +280,7 @@ import { ModalHeaderComponent } from './components/datatable/modal-header/modal-
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    ImageHandlingComponent,
   ],
 })
 export class AdminSharedModule {}

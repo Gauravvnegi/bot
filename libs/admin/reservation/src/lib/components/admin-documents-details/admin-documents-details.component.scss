@@ -81,11 +81,16 @@
   font-size: 14px;
 }
 
-.nationality-wrapper {
+.select-field {
   @include flex-base-algn;
-  .text {
+  .label {
     color: $grayMedium;
     margin-right: 7px;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
   }
 }
 

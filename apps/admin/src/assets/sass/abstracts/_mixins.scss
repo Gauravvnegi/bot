@@ -189,19 +189,19 @@
 @mixin bold-sm-text {
   font-size: 16px;
   font-weight: $bolder;
-  letter-spacing: 0.96;
+  letter-spacing: 0.96px;
 }
 
 @mixin bold-md-text {
   font-size: 18px;
   font-weight: $bolder;
-  letter-spacing: 0.96;
+  letter-spacing: 0.96px;
 }
 
 @mixin bold-lg-text {
   font-size: 20px;
   font-weight: $bolder;
-  letter-spacing: 0.96;
+  letter-spacing: 0.96px;
 }
 
 @mixin normal-sm-text {
@@ -225,19 +225,19 @@
 @mixin light-sm-text{
   font-size: 16px;
   font-weight: $medium;
-  letter-spacing: 0.96;
+  letter-spacing: 0.96px;
 }
 
 @mixin light-md-text{
   font-size: 18px;
   font-weight: $medium;
-  letter-spacing: 0.96;
+  letter-spacing: 0.96px;
 }
 
 @mixin light-lg-text{
   font-size: 20px;
   font-weight: $medium;
-  letter-spacing: 0.96;
+  letter-spacing: 0.96px;
 }
 
 @mixin txt-Ellipsis {

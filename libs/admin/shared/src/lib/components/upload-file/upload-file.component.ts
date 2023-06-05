@@ -17,7 +17,7 @@ export class UploadFileComponent implements OnInit {
   @Input() pageType: string;
   @Input() documentType: string;
   @Input() isDisable = false;
-  @Input() doNotSave = false;
+  @Input() doNotSave = true;
   @Input('fileUploadData') set fileUploadData(value: {}) {
     this._fileUploadData = { ...this.defaultValue, ...value };
   }
@@ -35,7 +35,7 @@ export class UploadFileComponent implements OnInit {
   ngOnInit(): void {}
 
   onSelectFile(event) {
-    this.url = '';
+    if(!this.doNotSave) this.url = '';
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
       reader.readAsDataURL(event.target.files[0]); // read file as data url

@@ -193,3 +193,7 @@
     padding-top: 4px;
   }
 }
+
+::ng-deep .mat-dialog-container{
+  position: relative;
+}

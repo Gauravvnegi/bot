@@ -5,10 +5,15 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
+import {
+  ModalService,
+  SnackBarService,
+} from '@hospitality-bot/shared/material';
 import { saveAs } from 'file-saver';
 import * as JSZip from 'jszip';
 import * as JSZipUtils from 'jszip-utils';
-import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { ImageHandlingComponent } from 'libs/admin/shared/src/lib/components/image-handling/image-handling.component';
 import { ReservationService } from '../../services/reservation.service';
 
 @Component({
@@ -17,13 +22,13 @@ import { ReservationService } from '../../services/reservation.service';
   styleUrls: ['./admin-documents-details.component.scss'],
 })
 export class AdminDocumentsDetailsComponent implements OnInit {
-  selectedGuestGroup: AbstractControl;
+  // selectedGuestGroup: AbstractControl;
   selectedGuestId;
   documentsList;
   countriesLOV;
   fileUploadData = {
     fileSize: 3145728,
-    fileType: ['png', 'jpg'],
+    fileType: ['png', 'jpg', 'jpeg', 'pdf'],
   };
   uploadingDoc: string; //'front-1'|'front-2'|'back-1'|'back-2'
 
@@ -34,7 +39,8 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _reservationService: ReservationService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private modalService: ModalService
   ) {}
 
   ngOnInit(): void {}
@@ -181,15 +187,26 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   saveDocument() {
-    const data = this.parentForm.value.guestInfoDetails.guests.reduce(
+    const data = this.guestsFA.controls.reduce(
       (prev, curr) => {
-        if (curr.isPrimary) {
-          prev.primaryGuest['id'] = curr.id;
-          prev.primaryGuest['documents'] = curr.documents;
+        const currValue = curr.value;
+
+        // -- TODO (Mapping value from control as value is not updating)
+        const currentDocuments = (curr.get(
+          'documents'
+        ) as FormArray).controls.map((element) => ({
+          frontUrl: element.get('frontUrl').value,
+          backUrl: element.get('backUrl').value,
+          documentType: element.get('documentType').value,
+        }));
+
+        if (currValue.isPrimary) {
+          prev.primaryGuest['id'] = currValue.id;
+          prev.primaryGuest['documents'] = currentDocuments;
         } else {
           prev.sharerGuests.push({
-            id: curr.id,
-            documents: curr.documents,
+            id: currValue.id,
+            documents: currentDocuments,
           });
         }
         return prev;
@@ -199,6 +216,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
         sharerGuests: [],
       }
     );
+
     this._reservationService
       .saveDocument(this.detailsData.reservationDetails.bookingId, data)
       .subscribe((_res) => {
@@ -210,39 +228,67 @@ export class AdminDocumentsDetailsComponent implements OnInit {
       });
   }
 
-  uploadDocuments(event, docPage: 'front' | 'back', index: number) {
-    this.uploadingDoc = `${docPage}-${index}`;
-    let formData = new FormData();
-    formData.append('file', event.file);
-    formData.append(
-      'doc_type',
-      this.documentFormGroup.at(index).get('documentType').value
+  uploadDocuments(data, docPage: 'front' | 'back', index: number) {
+    const docPageControl = this.documentFormGroup
+      .at(index)
+      .get(`${docPage}Url`);
+
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.id = 'image-cropper-modal';
+
+    const dialogRef = this.modalService.openDialog(
+      ImageHandlingComponent,
+      dialogConfig
     );
 
-    formData.append('doc_page', docPage);
-    formData.append(
-      'doc_issue_place',
-      this.selectedGuestGroup.get('nationality').value
-    );
+    dialogRef.componentInstance.imageChangedEvent = {
+      target: {
+        files: [data.file],
+      },
+    };
 
-    this._reservationService
-      .uploadDocumentFile(
-        this.detailsData.reservationDetails.bookingId,
-        this.selectedGuestGroup.get('id').value,
-        formData
-      )
-      .subscribe(
-        (res) => {
-          this.documentFormGroup
-            .at(index)
-            .patchValue({ [`${docPage}Url`]: res.fileDownloadUrl });
-          this.uploadingDoc = '';
-        },
-        ({ error }) => {
-          this.snackbarService.openSnackBarAsText(error?.message);
-          this.uploadingDoc = '';
+    dialogRef.componentInstance.onModalClose.subscribe((response) => {
+      if (response.status) {
+        if (response.data.file.size > this.fileUploadData.fileSize) {
+          this.snackbarService.openSnackBarAsText('File size limit exceeded');
+          return;
         }
-      );
+
+        const file = response.data.file;
+        this.uploadingDoc = `${docPage}-${index}`;
+        let formData = new FormData();
+        formData.append('file', file);
+        formData.append(
+          'doc_type',
+          this.documentFormGroup.at(index).get('documentType').value
+        );
+
+        formData.append('doc_page', docPage);
+        formData.append(
+          'doc_issue_place',
+          this.selectedGuestGroup.get('nationality').value
+        );
+
+        this._reservationService
+          .uploadDocumentFile(
+            this.detailsData.reservationDetails.bookingId,
+            this.selectedGuestGroup.get('id').value,
+            formData
+          )
+          .subscribe(
+            (res) => {
+              docPageControl.setValue(res.fileDownloadUrl);
+              this.uploadingDoc = '';
+            },
+            ({ error }) => {
+              this.snackbarService.openSnackBarAsText(error?.message);
+              this.uploadingDoc = '';
+            }
+          );
+      }
+      dialogRef.close();
+    });
   }
 
   updateDocumentVerificationStatus(status, isConfirmALL = false) {
@@ -319,7 +365,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     this.guestsFA.controls.forEach((guest: FormGroup) => {
       if (guest.get('id').value === value) {
         this.selectedGuestId = value;
-        this.selectedGuestGroup = guest;
+        // this.selectedGuestGroup = guest;
         this.getDocumentsByCountry(
           this.selectedGuestGroup.get('nationality').value
         );
@@ -430,7 +476,16 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   get documentFormGroup(): FormArray {
-    return this.selectedGuestGroup.get('documents') as FormArray;
+    // return this.selectedGuestGroup.get('documents') as FormArray;
+    return this.guestsFA.controls
+      .find((item) => item.get('id').value === this.selectedGuestId)
+      .get('documents') as FormArray;
+  }
+
+  get selectedGuestGroup(): AbstractControl {
+    return this.guestsFA.controls.find(
+      (item) => item.get('id').value === this.selectedGuestId
+    );
   }
 
   get guestsFA(): FormArray {

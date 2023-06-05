@@ -70,6 +70,11 @@
     color: $grayMedium;
     opacity: 1;
     cursor: pointer;
+
+    &__disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   }
 }
 
@@ -194,6 +199,6 @@
   }
 }
 
-::ng-deep .mat-dialog-container{
+::ng-deep .mat-dialog-container {
   position: relative;
 }

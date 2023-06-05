@@ -31,6 +31,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     fileType: ['png', 'jpg', 'jpeg', 'pdf'],
   };
   uploadingDoc: string; //'front-1'|'front-2'|'back-1'|'back-2'
+  updatedDocGuest = [];
 
   @Input() parentForm;
   @Input('data') detailsData;
@@ -65,6 +66,44 @@ export class AdminDocumentsDetailsComponent implements OnInit {
     return this._fb.group({
       status: [''],
     });
+  }
+
+  getDocumentsData(): DocumentDS {
+    const curr = this.guestsFA.controls.find(
+      (item) => item.value.id === this.selectedGuestId
+    );
+
+    const currValue = curr.value;
+    let isInvalid = false;
+    // -- TODO (Mapping value from control as value is not updating)
+    const currentDocuments = (curr.get('documents') as FormArray).controls.map(
+      (element) => {
+        const frontUrl = element.get('frontUrl').value;
+        const backUrl = element.get('backUrl').value;
+
+        const settings = element.get('settings')
+          .value as DocumentForm['settings'];
+
+        if (!isInvalid) {
+          isInvalid =
+            (settings.backImage === 'required' && !backUrl) ||
+            (settings.frontImage === 'required' && !frontUrl);
+        }
+
+        return {
+          frontUrl,
+          backUrl,
+          documentType: element.get('documentType').value,
+        };
+      }
+    );
+
+    return {
+      data: currentDocuments,
+      guestId: currValue.id,
+      isPrimary: currValue.isPrimary,
+      isInvalid,
+    } as DocumentDS;
   }
 
   getCountriesList() {
@@ -187,35 +226,43 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   }
 
   saveDocument() {
-    const data = this.guestsFA.controls.reduce(
-      (prev, curr) => {
-        const currValue = curr.value;
+    if (!this.updatedDocGuest.includes(this.selectedGuestId)) {
+      return;
+    }
 
-        // -- TODO (Mapping value from control as value is not updating)
-        const currentDocuments = (curr.get(
-          'documents'
-        ) as FormArray).controls.map((element) => ({
-          frontUrl: element.get('frontUrl').value,
-          backUrl: element.get('backUrl').value,
-          documentType: element.get('documentType').value,
-        }));
+    const docsData = this.getDocumentsData();
 
-        if (currValue.isPrimary) {
-          prev.primaryGuest['id'] = currValue.id;
-          prev.primaryGuest['documents'] = currentDocuments;
+    let data = this.detailsData.guestDetails.guests.reduce((prev, curr) => {
+      const guestDocData = { documents: curr.documents, id: curr.id };
+      if (curr.isPrimary) {
+        prev['primaryGuest'] = guestDocData;
+      } else {
+        if (prev['sharerGuests']) {
+          prev['sharerGuests'].push(guestDocData);
         } else {
-          prev.sharerGuests.push({
-            id: currValue.id,
-            documents: currentDocuments,
-          });
+          prev['sharerGuests'] = [guestDocData];
         }
-        return prev;
-      },
-      {
-        primaryGuest: {},
-        sharerGuests: [],
       }
-    );
+      return prev;
+    }, {});
+
+    if (docsData.isInvalid) {
+      this.snackbarService.openSnackBarAsText('Please attach all documents');
+      return;
+    }
+
+    if (docsData.isPrimary) {
+      data.primaryGuest = {
+        ...data.primaryGuest,
+        documents: docsData.data,
+      };
+    } else {
+      data.sharerGuests.forEach((item) => {
+        if (item.id === docsData.guestId) {
+          item.documents = docsData.data;
+        }
+      });
+    }
 
     this._reservationService
       .saveDocument(this.detailsData.reservationDetails.bookingId, data)
@@ -224,6 +271,9 @@ export class AdminDocumentsDetailsComponent implements OnInit {
           'Document updated successfully',
           '',
           { panelClass: 'success' }
+        );
+        this.updatedDocGuest = this.updatedDocGuest.filter(
+          (item) => item !== this.selectedGuestId
         );
       });
   }
@@ -270,16 +320,19 @@ export class AdminDocumentsDetailsComponent implements OnInit {
           this.selectedGuestGroup.get('nationality').value
         );
 
+        const guestID = this.selectedGuestGroup.get('id').value;
+
         this._reservationService
           .uploadDocumentFile(
             this.detailsData.reservationDetails.bookingId,
-            this.selectedGuestGroup.get('id').value,
+            guestID,
             formData
           )
           .subscribe(
             (res) => {
               docPageControl.setValue(res.fileDownloadUrl);
               this.uploadingDoc = '';
+              this.updatedDocGuest.push(guestID);
             },
             ({ error }) => {
               this.snackbarService.openSnackBarAsText(error?.message);
@@ -519,3 +572,10 @@ enum ForeignNationalDocType {
   OCI = 'OCI',
   PASSPORT = 'PASSPORT',
 }
+
+type DocumentDS = {
+  data: { frontUrl: string; backUrl: string; documentType: string }[];
+  guestId: string;
+  isInvalid?: boolean;
+  isPrimary?: boolean;
+};

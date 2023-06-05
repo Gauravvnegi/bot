@@ -221,6 +221,17 @@ export class GuestDetailsConfig implements IDeserializable {
 
     this.nationality = get(input, ['nationality']) || hotelNationality;
 
+    // Generating Document type value
+    const docType1 = input?.documents[0]?.documentType;
+    const docType2 = input?.documents[1]?.documentType;
+    const selectedDocumentType = docType1
+      ? input.nationality !== hotelNationality && docType2
+        ? docType1 === 'PASSPORT'
+          ? docType1 + '/' + docType2
+          : docType2 + '/' + docType1
+        : docType1
+      : null;
+
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
@@ -243,17 +254,7 @@ export class GuestDetailsConfig implements IDeserializable {
         'isInternational',
         this.nationality === hotelNationality ? false : true
       ),
-      set(
-        {},
-        'selectedDocumentType',
-        input.documents && input.documents[0]
-          ? input.nationality !== hotelNationality && input.documents[1]
-            ? input.documents[0].documentType +
-              '/' +
-              input.documents[1].documentType
-            : input.documents[0].documentType
-          : null
-      ),
+      set({}, 'selectedDocumentType', selectedDocumentType),
 
       set({}, 'documents', documents),
       set(

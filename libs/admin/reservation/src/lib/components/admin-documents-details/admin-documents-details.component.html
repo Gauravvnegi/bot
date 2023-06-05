@@ -30,7 +30,14 @@
         </ng-container>
       </div>
 
-      <div class="download" *ngIf="selectedGuestGroup" (click)="saveDocument()">
+      <div
+        class="download"
+        *ngIf="selectedGuestGroup"
+        (click)="saveDocument()"
+        [ngClass]="{
+          download__disabled: !updatedDocGuest.includes(this.selectedGuestId)
+        }"
+      >
         <img src="assets/svg/uparrow.svg" alt="document" /> &nbsp;
         <p>Update Docs</p>
       </div>
@@ -219,7 +226,7 @@
 <ng-template #emptyDoc>
   <div class="empty-view">
     <div class="wrapper">
-      <img src="assets/images/Documents.png" alt='documents'/>
+      <img src="assets/images/Documents.png" alt="documents" />
       <p class="label">Documents Pending!</p>
       <p
         class="note"

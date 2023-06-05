@@ -158,7 +158,7 @@
 }
 
 @mixin auth-quote {
-  font-weight: 400;
+  font-weight: $medium;
   font-size: 16px;
   color: $subtitle;
   letter-spacing: 0.54px;
@@ -185,10 +185,59 @@
     opacity: 1;
   }
 }
-@mixin normal-text {
+
+@mixin bold-sm-text {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: $bolder;
+  letter-spacing: 0.96;
+}
+
+@mixin bold-md-text {
+  font-size: 18px;
+  font-weight: $bolder;
+  letter-spacing: 0.96;
+}
+
+@mixin bold-lg-text {
+  font-size: 20px;
+  font-weight: $bolder;
+  letter-spacing: 0.96;
+}
+
+@mixin normal-sm-text {
+  font-size: 16px;
+  font-weight: $bold;
   letter-spacing: 0.96px;
+}
+
+@mixin normal-md-text {
+  font-size: 18px;
+  font-weight: $bold;
+  letter-spacing: 0.96px;
+}
+
+@mixin normal-lg-text {
+  font-size: 20px;
+  font-weight: $bold;
+  letter-spacing: 0.96px;
+}
+
+@mixin light-sm-text{
+  font-size: 16px;
+  font-weight: $medium;
+  letter-spacing: 0.96;
+}
+
+@mixin light-md-text{
+  font-size: 18px;
+  font-weight: $medium;
+  letter-spacing: 0.96;
+}
+
+@mixin light-lg-text{
+  font-size: 20px;
+  font-weight: $medium;
+  letter-spacing: 0.96;
 }
 
 @mixin txt-Ellipsis {
@@ -284,9 +333,7 @@
 @mixin form-header {
   padding: 25px $form-padding-x 25px;
   font-family: Poppins;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.96px;
+  @include bold-sm-text;
   color: $secondary2 !important;
 }
 
@@ -307,7 +354,7 @@
     align-items: center;
     height: 16px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: $bolder;
     letter-spacing: 0.96px;
     color: $secondary2;
   }
@@ -317,7 +364,7 @@
     color: $secondary2;
 
     &__label {
-      @include normal-text;
+      @include normal-sm-text;
     }
 
     &__hash {
@@ -336,7 +383,7 @@
 
     &__label {
       color: $secondary2;
-      @include normal-text();
+      @include normal-sm-text();
     }
 
     &__input {
@@ -417,7 +464,7 @@
 
 @mixin import {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: $bold;
   line-height: 1.07;
   letter-spacing: 0.84px;
   text-align: left;

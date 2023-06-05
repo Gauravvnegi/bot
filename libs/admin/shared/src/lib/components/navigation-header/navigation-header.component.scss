@@ -40,7 +40,6 @@
 
   &__date {
     opacity: 0.5;
-    font-family: Poppins;
     font-size: 16px;
     padding-left: 32px;
     letter-spacing: 0.96px;
@@ -52,9 +51,7 @@
 
 .label {
   font-size: 26px;
-  font-weight: 600;
-  font-family: Poppins;
-
+  font-weight: $bolder;
   letter-spacing: 1.56px;
   color: $secondary2;
 }
@@ -65,7 +62,7 @@
   border-radius: 50%;
   padding: 5px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: $bolder;
   cursor: pointer;
 }
 
@@ -76,9 +73,8 @@
     padding-bottom: 20px;
     display: flex;
     opacity: 0.6;
-    font-family: Poppins;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: $bold;
     color: $secondary2;
     letter-spacing: 0.84px;
 

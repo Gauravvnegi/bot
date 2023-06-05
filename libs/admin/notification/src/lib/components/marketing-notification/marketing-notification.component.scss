@@ -23,7 +23,7 @@
   padding: 10px 0;
   &__heading {
     padding: 20px 0;
-    font-weight: bold;
+    font-weight: $bold;
     letter-spacing: 1.2px;
     position: sticky;
     color: $secondary;
@@ -74,7 +74,7 @@
 //   align-items: center;
 //   &__heading {
 //     padding: 20px 0;
-//     font-weight: bold;
+//     font-weight: $bold;
 //     letter-spacing: 1.2px;
 //     position: sticky;
 //     background-color: $white !important;
@@ -153,7 +153,7 @@
 //       transform: scale(0.97);
 //     }
 //     &__text {
-//       @include normal-text;
+//       @include normal-sm-text;
 //       color: $primary-cta;
 //     }
 //   }
@@ -167,7 +167,7 @@
 //       transform: scale(0.97);
 //     }
 //     &__text {
-//       @include normal-text;
+//       @include normal-sm-text;
 //       color: $white;
 //     }
 //   }

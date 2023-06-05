@@ -5,9 +5,8 @@
   overflow-y: auto;
   &-title {
     padding: 0 15px;
-    font-family: Roboto;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: $bold;
     font-stretch: normal;
     font-style: normal;
     line-height: normal;
@@ -17,28 +16,27 @@
     overflow-y: auto;
     &-item {
       padding: 0 15px;
-      font-family: Roboto;
       font-size: 12px;
-      font-weight: normal;
+      font-weight: $medium;
       font-stretch: normal;
       font-style: normal;
       &-row {
         margin: 15px 0;
         .item-code {
           font-size: 14px;
-          font-weight: bold;
+          font-weight: $bold;
           letter-spacing: 0.84px;
           text-align: left;
           color: $inActiveTab;
         }
       }
       .intiated-row {
-        font-weight: 500;
+        font-weight: $bold;
         letter-spacing: 0.72px;
       }
       .nail-utter-row {
         margin-top: 10px;
-        font-weight: 500;
+        font-weight: $bold;
         letter-spacing: 0.72px;
         color: $secondary;
       }
@@ -71,9 +69,8 @@
   flex-direction: column;
   align-items: center;
   &-msg {
-    font-family: Roboto;
     font-size: 12px;
-    font-weight: normal;
+    font-weight: $medium;
     font-stretch: normal;
     font-style: normal;
     line-height: normal;
@@ -106,7 +103,7 @@
 
 .priority {
   font-size: 10px;
-  font-weight: bold;
+  font-weight: $bold;
   font-stretch: normal;
   font-style: normal;
   line-height: normal;

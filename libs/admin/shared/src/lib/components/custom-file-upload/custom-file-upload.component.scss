@@ -32,14 +32,14 @@
   color: $secondary2;
   font-size: 16px;
   letter-spacing: 0.96px;
-  font-weight: 500;
+  font-weight: $bold;
 }
 
 .description {
   margin-top: 12px;
   margin-bottom: 20px;
   font-size: 14px;
-  font-weight: normal;
+  font-weight: $medium;
   color: $secondary;
 }
 
@@ -69,7 +69,6 @@
 
 .hint {
   margin-top: 10px;
-  font-family: Roboto;
   font-size: 14px;
   color: #9eaeb8;
   word-wrap: break-word;
@@ -105,7 +104,6 @@
   padding: 3px 2px;
   font-size: 8px;
   letter-spacing: 0.48px;
-  font-family: Roboto;
   position: absolute;
   top: 7px;
   left: 10px;

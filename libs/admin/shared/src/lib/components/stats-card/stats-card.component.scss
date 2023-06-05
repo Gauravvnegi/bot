@@ -16,7 +16,7 @@
 
 .stats-text {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: $bolder;
   color: #001037;
 }
 
@@ -37,7 +37,7 @@
 
 .compared-dates {
   font-size: 8px;
-  font-weight: 500;
+  font-weight: $bold;
   text-align: center;
   color: #b4b4b4;
 }
@@ -49,7 +49,7 @@
 
 .amount {
   font-size: 32px;
-  font-weight: bold;
+  font-weight: $bolder;
   color: #002046;
 }
 

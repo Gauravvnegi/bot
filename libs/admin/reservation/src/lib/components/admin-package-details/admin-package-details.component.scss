@@ -49,8 +49,8 @@
 
 .package-label {
   color: $secondary;
-  @include normal-text;
-  font-weight: 600;
+  @include normal-sm-text;
+  font-weight: $bolder;
 }
 
 .special-request-wrapper {

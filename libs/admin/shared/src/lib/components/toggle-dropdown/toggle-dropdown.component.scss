@@ -54,6 +54,10 @@
   }
 }
 
+:host ::ng-deep .p-button-label {
+  font-weight: $medium;
+}
+
 :host ::ng-deep .activeClass{
   background: rgba(103, 58, 183, 0.12);
   span{

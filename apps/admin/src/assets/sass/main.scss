@@ -46,5 +46,40 @@
 //   src: url('../../assets/fonts/Poppins-SemiBold.ttf');
 // }
 
+.state {
+  &-active {
+    background-color: $active-state;
+    color: white;
+  }
+  &-inactive {
+    background-color: $inactive-state;
+    color: white;
+  }
+  &-temp-inactive {
+    background-color: $active-state;
+    color: white;
+  }
+  &-draft {
+    background-color: $draft-state;
+    color: white;
+  }
+  &-success {
+    background-color: $success-state;
+    color: white;
+  }
+  &-fulfilled {
+    background-color: $fulfilled-state;
+    color: white;
+  }
+  &-unavailable {
+    background-color: $unavailable-state;
+    color: white;
+  }
+  &-temp-unavailable {
+    background-color: $temp-unavailable-state;
+    color: white;
+  }
+}
+
 
 

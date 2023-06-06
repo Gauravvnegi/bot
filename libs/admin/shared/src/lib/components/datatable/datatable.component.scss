@@ -816,6 +816,14 @@ $table-hover-color: #f3f3f3;
 
       .toggle-btn {
       }
+
+      .status-text {
+        display: flex;
+        justify-content: center;
+        padding: 9px 20px;
+        border-radius: 20px;
+        max-width: fit-content;
+      }
     }
   }
 

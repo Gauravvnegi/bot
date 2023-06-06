@@ -488,3 +488,11 @@
   inset: 60px 0 auto 80px;
   position: fixed;
 }
+
+@mixin status-chip {
+  display: flex;
+  justify-content: center;
+  padding: 9px 20px;
+  border-radius: 20px;
+  max-width: fit-content;
+}

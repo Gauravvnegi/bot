@@ -53,6 +53,7 @@ import { ImageDirective } from './directives/image.directive';
 import { FeatureDirective } from './directives/feature.directive';
 import { InternalSubscriptionDirective } from './directives/internal-subscription.directive';
 import { NumberDirective } from './directives/number.directive';
+import { StatusCellDirective } from './directives/status-cell.directive';
 import { ClickStopPropagation } from './directives/stoppropagation.directive';
 import { SubscriptionDirective } from './directives/subscription.directive';
 import { LinkDetector } from './pipes/linkDetector.pipe';
@@ -122,6 +123,7 @@ import { ModalHeaderComponent } from './components/datatable/modal-header/modal-
     UploadFileComponent,
     ComingSoonComponent,
     NumberDirective,
+    StatusCellDirective,
     MultipleDropdownComponent,
     SubscriptionDirective,
     InternalSubscriptionDirective,
@@ -209,6 +211,7 @@ import { ModalHeaderComponent } from './components/datatable/modal-header/modal-
     AutoCompleteModule,
     CKEditorModule,
     NumberDirective,
+    StatusCellDirective,
     MultipleDropdownComponent,
     UploadCsvComponent,
     SubscriptionDirective,

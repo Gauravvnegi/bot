@@ -14,7 +14,7 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { TranslateService } from '@ngx-translate/core';
 import { feedback } from '../../../constants/feedback';
 import { StatisticsService } from '../../../services/feedback-statistics.service';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { StatCard } from '../../../types/feedback.type';
 import { chartConfig } from '../../../constants/chart';
 
@@ -29,8 +29,12 @@ export class BifurcationStatsComponent implements OnInit {
   feedback = [];
   stats: Bifurcation;
   bifurcationFG: FormGroup;
+
   noActionCount = 0;
   gtmCount = 0;
+  othersCount = 0;
+
+  loading = false;
   entityType = 'GTM';
   tabFeedbackType: string;
   $subscription = new Subscription();
@@ -76,6 +80,11 @@ export class BifurcationStatsComponent implements OnInit {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    if (
+      this.globalFeedbackFilterType === feedback.types.transactional ||
+      this.globalFeedbackFilterType === feedback.types.both
+    )
+      this.listenForOutletChanged();
   }
 
   listenForGlobalFilters(): void {
@@ -130,61 +139,119 @@ export class BifurcationStatsComponent implements OnInit {
     }
   }
 
-  /**
-   * @function getStats To get received feedback bifurcation data.
-   */
-  getStats(): void {
+  listenForOutletChanged() {
+    this._statisticService.$outletChange.subscribe((response) => {
+      if (response.status) {
+        this.tabFeedbackType = response.type;
+        this.globalQueries.forEach((element) => {
+          if (element.hasOwnProperty('entityIds')) {
+            element.entityIds = this._statisticService.outletIds;
+          }
+        });
+        this.getStats();
+      }
+    });
+  }
+
+  getConfig(type) {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
           feedbackType: this.getFeedbackType(),
-          entityType: 'ALL',
+          entityType: type,
         },
       ]),
     };
+    return config;
+  }
+
+  getStats(): void {
+    this.loading = true;
+    const gtmStats$ = this._statisticService.getBifurcationStats(
+      this.getConfig('GTM')
+    );
+    const allStats$ = this._statisticService.getBifurcationStats(
+      this.getConfig('ALL')
+    );
+    const othersResponse$ = this._statisticService.getBifurcationStats(
+      this.getConfig('OTHERS')
+    );
     this.$subscription.add(
-      this._statisticService
-        .getBifurcationStats(config)
-        .subscribe((response) => {
-          this.statCard = [];
-          this.feedback = [];
-          this.gtmCount = 0;
-          this.stats = new Bifurcation().deserialize(response);
-          this.stats.feedbacks.forEach((feedback) => {
-            const newStatCard: StatCard = {
-              label: feedback.label.replace(/\s+|-/g, ''),
-              score: feedback.score.toString(),
-              additionalData: feedback.score.toString(),
-              comparisonPercent: 100,
-              color: feedback.color,
-            };
-            if (feedback.label !== 'No-Action') {
-              this.gtmCount += feedback.score;
-              this.statCard.push(newStatCard);
-            } else {
-              this.noActionCount = +newStatCard.score;
-              newStatCard.color = '#beaeff';
-              this.feedback.push(newStatCard);
-            }
-          });
-          this.feedback.push({
-            label: 'GTM',
-            score: this.gtmCount,
-            additionalData: this.gtmCount,
-            comparisonPercent: 100,
-            color: '#5f38f9',
-          });
-          console.log(this.feedback);
+      forkJoin([gtmStats$, allStats$, othersResponse$]).subscribe(
+        ([gtmResponse, allResponse, othersResponse]) => {
+          // Process GTM stats
+          this.getGTMStats(gtmResponse);
+          // Process all stats
+          this.getAllStats(allResponse);
+          this.getOtherStats(othersResponse)
           this.initGraph(
             this.feedback.reduce(
               (accumulator, current) => accumulator + +current.score,
               0
             ) === 0
           );
-          // this.statCard = this.stats.feedbacks.map
-        })
+          this.loading = false;
+        }
+      )
     );
+  }
+
+  /**
+   * @function getStats To get received feedback bifurcation data.
+   */
+  getGTMStats(response): void {
+    this.statCard = [];
+    this.gtmCount = 0;
+    this.stats = new Bifurcation().deserialize(response);
+    this.gtmCount = this.stats.totalCount;
+    this.stats.feedbacks.forEach((feedback) => {
+      const gtmStatCard: StatCard = {
+        label: feedback.label,
+        score: feedback.score.toString(),
+        additionalData: feedback.score.toString(),
+        comparisonPercent: 100,
+        color: feedback.color,
+      };
+      if (feedback.label === 'Timeout') gtmStatCard.label = 'Timed-out';
+      this.statCard.push(gtmStatCard);
+    });
+  }
+
+  getAllStats(response) {
+    this.feedback = [];
+    this.noActionCount = 0;
+    const allStats = new Bifurcation().deserialize(response);
+    allStats.feedbacks.forEach((feedback) => {
+      if (feedback.label === 'No-Action') {
+        this.feedback.push({
+          label: feedback.label,
+          score: feedback.score.toString(),
+          additionalData: feedback.score.toString(),
+          color: '#beaeff',
+          comparisonPercent: 100,
+        });
+        this.noActionCount += feedback.score;
+      }
+    });
+    this.feedback.push({
+      label: 'GTM',
+      score: this?.gtmCount,
+      additionalData: this?.gtmCount,
+      color: '#5f38f9',
+      comparisonPercent: 100,
+    });
+  }
+  
+  getOtherStats(response){
+    this.feedback.push({
+      label: 'Others',
+      score: response.totalCount,
+      additionalData: response.totalCount,
+      color: 'rgb(197, 197, 197)',
+      comparisonPercent: 100,
+    })
+    this.othersCount = response.totalCount;
   }
 
   initGraph(defaultGraph = true): void {
@@ -196,7 +263,6 @@ export class BifurcationStatsComponent implements OnInit {
         borderColor: [],
       },
     ];
-    console.log(defaultGraph);
     if (defaultGraph) {
       this._translateService
         .get('no_data_chart')

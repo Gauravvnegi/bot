@@ -157,11 +157,14 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
   }
 
   onSelectedTabFilterChange(event) {
-    this.tabFilterIdx = event.index;
-    this.getNPSChartData();
+    if (event.index > -1) {
+      this.tabFilterIdx = event.index;
+      this.getNPSChartData();
+    }
   }
 
   getNPSDepartments() {
+    if (!this.tabFilterItems.length) return;
     this.loading = true;
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
@@ -344,7 +347,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
             });
         },
         ({ error }) => {},
-        () => {this.loading = false}
+        () => {
+          this.loading = false;
+        }
       )
     );
   }
@@ -364,8 +369,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
       ]),
     };
     this.$subscription.add(
-      this._statisticService.exportOverallDepartmentsCSV(config).subscribe(
-        (response) => {
+      this._statisticService
+        .exportOverallDepartmentsCSV(config)
+        .subscribe((response) => {
           FileSaver.saveAs(
             response,
             'NPS_Across_Departments_export_' + new Date().getTime() + '.csv'

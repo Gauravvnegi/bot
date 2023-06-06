@@ -384,6 +384,34 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.loading = false;
   }
 
+  updateQuickReplyFilterCount(countObj: any): void {
+    if (countObj) {
+      if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
+        this.setFilterChips(
+          this.tabFilterItems[this.tabFilterIdx]?.chips,
+          countObj
+        );
+      } else if (this.filterChips?.length) {
+        this.setFilterChips(this.filterChips, countObj);
+      }
+    }
+  }
+
+  /**
+   * @function setFilterChips To set the total count for the chips.
+   * @param chips The chips array.
+   * @param countObj The object with count for all the chip.
+   */
+  setFilterChips(chips, countObj) {
+    countObj = Object.entries(countObj).reduce((acc, [key, value]) => {
+      acc[key.toUpperCase()] = value;
+      return acc;
+    }, {});
+    chips.forEach((chip) => {
+      chip.total = countObj[chip.value] ?? 0;
+    });
+  }
+
   updateFeedbackState(event) {
     const data = {
       status: event.statusType,

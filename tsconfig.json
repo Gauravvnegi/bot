@@ -126,10 +126,9 @@
         "libs/admin/manage-reservation/src/index.ts"
       ],
       "@hospitality-bot/admin/invoice": ["libs/admin/invoice/src/index.ts"],
-      "@hospitality-bot/admin/booking-source": [
-        "libs/admin/booking-source/src/index.ts"
-      ],
+      "@hospitality-bot/admin/booking-source": ["libs/admin/booking-source/src/index.ts"],
       "@hospitality-bot/admin/business": ["libs/admin/business/src/index.ts"],
+      "@hospitality-bot/admin/outlet": ["libs/admin/outlet/src/index.ts"],
       "@hospitality-bot/admin/all-outlets": [
         "libs/admin/all-outlets/src/index.ts"
       ],

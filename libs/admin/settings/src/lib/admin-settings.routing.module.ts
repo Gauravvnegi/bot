@@ -54,8 +54,5 @@ const appRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminSettingsRoutingModule {
-  static components = [
-    MainComponent,
-    SettingsMenuComponent,
-  ];
+  static components = [MainComponent, SettingsMenuComponent];
 }

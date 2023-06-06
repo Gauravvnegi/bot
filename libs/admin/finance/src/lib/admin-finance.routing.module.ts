@@ -6,13 +6,27 @@ import {
   ModuleNames,
   routesFactory,
 } from '@hospitality-bot/admin/shared';
-import { FinanceComponent } from './components/finance/finance.component';
+import { MainComponent } from './components/main/main.component';
+import { InvoiceHistoryDataTableComponent } from './components/invoice-history-data-table/invoice-history-data-table.component';
+import { TransactionHistoryDataTableComponent } from './components/transaction-history-data-table/transaction-history-data-table.component';
 
 const appRoutes: CRoutes = [
   {
     path: '',
     name: ModuleNames.FINANCE,
-    component: FinanceComponent,
+    component: MainComponent,
+    children: [
+      {
+        path: 'invoice',
+        name: ModuleNames.INVOICE,
+        component: InvoiceHistoryDataTableComponent
+      },
+      {
+        path: 'transaction',
+        name: ModuleNames.TRANSACTION,
+        component: TransactionHistoryDataTableComponent
+      }
+    ]
   },
 ];
 
@@ -30,5 +44,5 @@ const appRoutes: CRoutes = [
   exports: [RouterModule],
 })
 export class AdminFinanceRoutingModule {
-  static components = [FinanceComponent];
+  static components = [MainComponent, InvoiceHistoryDataTableComponent, TransactionHistoryDataTableComponent ];
 }

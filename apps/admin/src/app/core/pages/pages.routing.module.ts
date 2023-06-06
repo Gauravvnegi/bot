@@ -108,6 +108,14 @@ const appRoutes: Route[] = [
         canActivate: [CanActivateGuard],
       },
       {
+        path: 'outlet',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/outlet').then(
+            (m) => m.AdminOutletModule
+          ),
+        canLoad: [CanLoadGuard],
+      },
+      {
         path: 'marketing',
         loadChildren: () =>
           import('@hospitality-bot/admin/marketing').then(

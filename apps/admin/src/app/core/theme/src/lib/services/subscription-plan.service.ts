@@ -20,6 +20,11 @@ export class SubscriptionPlanService extends ApiService {
   getSubscriptionPlan(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/subscriptions/`).pipe(
       map((res) => {
+        res.products = [
+          ...res.products,
+          customModule.finance,
+          customModule.outlets,
+        ];
         return res;
       })
     );

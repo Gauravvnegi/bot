@@ -28,10 +28,7 @@ import {
   title,
 } from '../../constant/data-table';
 import routes from '../../constant/routes';
-import {
-  RoomList,
-  RoomTypeList,
-} from '../../models/rooms-data-table.model';
+import { RoomList, RoomTypeList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { QueryConfig } from '../../types/room';
 import {

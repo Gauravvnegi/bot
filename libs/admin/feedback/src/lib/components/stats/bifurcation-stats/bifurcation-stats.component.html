@@ -4,9 +4,8 @@
       <div
         *skeleton="
           stats == undefined;
-          height: '40px';
-          width: '90px';
-          margin: '10px'
+          height: '30px';
+          width: '120px';
         "
         class="stats__head__title"
       >
@@ -18,13 +17,12 @@
         <ng-container
           *skeleton="
             stats == undefined;
-            height: '60px';
+            height: '50px';
             width: '120px';
-            margin: '0 0 40px 0'
           "
         >
           <div class="stats__body__detail__shared">
-            {{ noActionCount + gtmCount }}
+            {{ noActionCount + gtmCount + othersCount }}
           </div>
           <div class="stats__body__detail__sharedtitle">
             Overall Shared
@@ -34,8 +32,8 @@
           *skeleton="
             stats === undefined;
             height: '41px';
-            width: '150px';
-            repeat: 2;
+            width: '160px';
+            repeat: 3;
             margin: '10px 0'
           "
         >
@@ -83,7 +81,7 @@
           <canvas
             baseChart
             *skeleton="
-              stats == undefined;
+              stats === undefined;
               height: '200px';
               width: '200px';
               borderRadius: '50%';

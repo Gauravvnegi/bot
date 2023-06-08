@@ -188,7 +188,7 @@ export const transactionChips: Chip<'ALL' | 'PAID' | 'UNPAID'>[] = [
     value: 'PAID',
     total: 0,
     isSelected: false,
-    type: 'initiated',
+    type: 'active',
   },
   {
     label: 'Unpaid',
@@ -212,7 +212,7 @@ export const invoiceChips: Chip<'ALL' | 'PAID' | 'UNPAID'>[] = [
     value: 'PAID',
     total: 0,
     isSelected: false,
-    type: 'initiated',
+    type: 'active',
   },
   {
     label: 'Unpaid',

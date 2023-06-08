@@ -18,14 +18,7 @@ import {
   TypeGuestStatisticsComponent,
 } from './components';
 
-const appRoutes: CRoutes = [
-  { path: '', redirectTo: 'dashboard' },
-  {
-    path: 'dashboard',
-    name: ModuleNames.GUESTS_DASHBOARD,
-    component: GuestComponent,
-  },
-];
+const appRoutes: CRoutes = [{ path: '', component: GuestComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild([]), ChartsModule],

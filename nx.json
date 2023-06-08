@@ -206,6 +206,9 @@
     },
     "admin-channel-manager": {
       "tags": []
+    },
+    "admin-members": {
+      "tags": []
     }
   }
 }

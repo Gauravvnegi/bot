@@ -141,7 +141,8 @@
       "@hospitality-bot/admin/company": ["libs/admin/company/src/index.ts"],
       "@hospitality-bot/admin/channel-manager": [
         "libs/admin/channel-manager/src/index.ts"
-      ]
+      ],
+      "@hospitality-bot/admin/members": ["libs/admin/members/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

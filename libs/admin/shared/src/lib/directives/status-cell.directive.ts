@@ -1,11 +1,18 @@
-import { Directive, Input, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Directive,
+  Input,
+  ElementRef,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
+import { FlagType } from '../types/table.type';
 
 @Directive({
-  selector: '[statusCell]'
+  selector: '[statusCell]',
 })
 export class StatusCellDirective implements OnChanges {
   @Input() status: string;
-  @Input() type: string;
+  @Input() type: FlagType;
 
   constructor(private el: ElementRef) {}
 
@@ -17,32 +24,42 @@ export class StatusCellDirective implements OnChanges {
 
   private updateClasses() {
     this.el.nativeElement.className = 'status-cell';
-
     switch (this.type) {
+      case 'default':
+        this.el.nativeElement.classList.add('chip-contained-default');
+        break;
       case 'active':
-        this.el.nativeElement.classList.add('state-active');
+        this.el.nativeElement.classList.add('chip-contained-active');
+        break;
+      case 'failed':
+        this.el.nativeElement.classList.add('chip-contained-failed');
         break;
       case 'inactive':
-        this.el.nativeElement.classList.add('state-inactive');
+        this.el.nativeElement.classList.add('chip-contained-inactive');
         break;
-      case 'temp-inactive':
-        this.el.nativeElement.classList.add('state-temp-inactive');
-        break;
+
       case 'draft':
-        this.el.nativeElement.classList.add('state-draft');
+        this.el.nativeElement.classList.add('chip-contained-draft');
         break;
+      case 'completed':
+        this.el.nativeElement.classList.add('chip-contained-completed');
+        break;
+
       case 'success':
-        this.el.nativeElement.classList.add('state-success');
+        this.el.nativeElement.classList.add('chip-contained-success');
         break;
-      case 'fulfilled':
-        this.el.nativeElement.classList.add('state-fulfilled');
+      case 'warning':
+        this.el.nativeElement.classList.add('chip-contained-warning');
         break;
       case 'unavailable':
-        this.el.nativeElement.classList.add('state-unavailable');
+        this.el.nativeElement.classList.add('chip-contained-unavailable');
         break;
-      case 'temp-unavailable':
-        this.el.nativeElement.classList.add('state-temp-unavailable');
-        break;
+      // case 'paid':
+      //   this.el.nativeElement.classList.add('state-paid');
+      //   break;
+      // case 'unpaid':
+      //   this.el.nativeElement.classList.add('state-unpaid');
+      //   break;
     }
 
     this.el.nativeElement.innerText = this.status;

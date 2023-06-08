@@ -111,81 +111,87 @@
   background: none;
 }
 
-//default styling for selected chip
-.chipSelected {
-  color: $white;
+.chip {
+  &-outlined {
+    &-default {
+      border: 1px solid $default-state;
+      color: $default-state;
+    }
+    &-active {
+      border: 1px solid $active-state;
+      color: $active-state;
+    }
+    &-failed {
+      border: 1px solid $failed-state;
+      color: $failed-state;
+    }
+    &-inactive {
+      border: 1px solid $inactive-state;
+      color: $inactive-state;
+    }
+    &-draft {
+      border: 1px solid $draft-state;
+      color: $draft-state;
+    }
+    &-completed {
+      border: 1px solid $completed-state;
+      color: $completed-state;
+    }
+    &-success {
+      border: 1px solid $success-state;
+      color: $success-state;
+    }
+    &-warning {
+      border: 1px solid $warning-state;
+      color: $warning-state;
+    }
+    &-unavailable {
+      border: 1px solid $unavailable-state;
+      color: $unavailable-state;
+    }
+  }
+  
+  &-contained {
+    &-default {
+      background-color: $default-state;
+      color: white;
+    }
+    &-active {
+      background-color: $active-state;
+      color: white;
+    }
+    &-failed {
+      background-color: $failed-state;
+      color: white;
+    }
+    &-inactive {
+      background-color: $inactive-state;
+      color: white;
+    }
+    &-draft {
+      background-color: $draft-state;
+      color: white;
+    }
+    &-completed {
+      background-color: $completed-state;
+      color: white;
+    }
+    &-success {
+      background-color: $success-state;
+      color: white;
+    }
+    &-warning {
+      background-color: $warning-state;
+      color: white;
+    }
+    &-unavailable {
+      background-color: $unavailable-state;
+      color: white;
+    }
+  }
 }
 
-// chip styling for inactive
-.chip-pending {
-  border-color: $draft-state;
-  color: $draft-state;
-}
 
-.chip-initiated {
-  border-color: $active-state;
-  color: $active-state;
-}
 
-.chip-completed {
-  border-color: $success-state;
-  color: $success-state;
-}
 
-.chip-reject {
-  border-color: $inactive-state;
-  color: $inactive-state;
-}
 
-.chip-warning {
-  border-color: $unavailable-state;
-  color: $unavailable-state;
-}
-
-.chip-standard {
-  border-color: $primary-cta;
-  color: $primary-cta;
-}
-
-.chip-default {
-  border-color: $grayAuth;
-  color: $black;
-}
-
-.chip-new {
-  border-color: $active-state;
-  color: $active-state;
-}
-
-//chip styling for inactive
-
-.chip-selected-pending {
-  background: $draft-state;
-}
-
-.chip-selected-initiated {
-  background-color: $active-state;
-}
-.chip-selected-completed {
-  background: $success-state;
-}
-
-.chip-selected-reject {
-  background: $inactive-state;
-}
-
-.chip-selected-warning {
-  background-color: $unavailable-state;
-}
-
-.chip-selected-standard {
-  background: $primary-cta;
-}
-
-.chip-selected-default {
-  background: $grayAuth;
-}
-
-.chip-selected-new {
-  background: $active-state;
-}

@@ -200,7 +200,7 @@
   }
 }
 .priority-low {
-  background-color: $success-state;
+  background-color: $completed-state;
 }
 .priority-medium {
   background-color: $priority-medium;
@@ -212,7 +212,7 @@
   background-color: $darkRed;
 }
 .sla-new {
-  color: $success-state;
+  color: $completed-state;
 }
 .sla-pending {
   color: $priority-high;

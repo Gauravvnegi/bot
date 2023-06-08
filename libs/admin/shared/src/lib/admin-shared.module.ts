@@ -93,6 +93,8 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
 import { ImageHandlingComponent } from './components/image-handling/image-handling.component';
 import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shared-image-cropper.module';
+import { DiscountFormComponent } from './components/discount-form/discount-form.component';
+
 import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
 
 @NgModule({
@@ -196,6 +198,8 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     ModalHeaderComponent,
     ImageHandlingComponent,
     TimePickerComponent,
+    DiscountFormComponent,
+    TimePickerComponent
   ],
 
   exports: [
@@ -287,6 +291,8 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     ModalHeaderComponent,
     ImageHandlingComponent,
     TimePickerComponent,
+    DiscountFormComponent,
+    TimePickerComponent
   ],
 })
 export class AdminSharedModule {}

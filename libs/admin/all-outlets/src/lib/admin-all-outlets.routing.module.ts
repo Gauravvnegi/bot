@@ -7,6 +7,8 @@ import { MenuDataTableComponent } from './components/menu-data-table/menu-data-t
 import { AddMenuItemComponent } from './components/add-menu-item/add-menu-item.component';
 import { outletRoutes } from './constants/route';
 import { MenuListDataTableComponent } from './components/menu-list-data-table/menu-list-data-table.component';
+import { CreateFoodPackageComponent } from './components/create-food-package/create-food-package.component';
+import { FoodItemsComponent } from './components/food-items/food-items.component';
 
 const appRoutes: Route[] = [
   {
@@ -28,6 +30,10 @@ const appRoutes: Route[] = [
       {
         path: `${outletRoutes.menuList.route}`,
         component: MenuListDataTableComponent
+      },
+      {
+        path: `${outletRoutes.createFoodPackage.route}`,
+        component: CreateFoodPackageComponent,
       }
     ],
   },
@@ -45,5 +51,7 @@ export class AdminAllOutletsRoutingModule {
     MenuDataTableComponent,
     AddMenuItemComponent,
     MenuListDataTableComponent,
+    CreateFoodPackageComponent,
+    FoodItemsComponent,
   ];
 }

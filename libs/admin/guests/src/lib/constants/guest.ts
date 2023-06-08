@@ -69,7 +69,7 @@ export const chips = {
       value: 'NEW',
       total: 0,
       isSelected: false,
-      type: 'pending',
+      type: 'draft',
     },
     {
       label: 'Precheckin ',
@@ -103,7 +103,7 @@ export const chips = {
       value: 'VIP',
       total: 0,
       isSelected: true,
-      type: 'pending',
+      type: 'draft',
     },
   ],
   datatable: [
@@ -114,7 +114,7 @@ export const chips = {
       value: 'VIP',
       total: 0,
       isSelected: false,
-      type: 'pending',
+      type: 'draft',
     },
     {
       label: 'High Potential ',
@@ -138,8 +138,8 @@ export const chips = {
 export enum SourceChipsType {
   Bot = 'warning',
   Email = 'warning',
-  Microsite = 'new',
-  Others = 'pending',
+  Microsite = 'active',
+  Others = 'draft',
   Whatsapp = 'completed',
 }
 

@@ -157,7 +157,11 @@
   </td>
   <td>
     <div *ngIf="rowData.foStatus; else emptyCell">
-      <div statusCell [status]="rowData.foStatus" [type]="'fulfilled'"></div>
+      <div
+        statusCell
+        [status]="rowData.foStatus"
+        [type]="rowData.foStatus === 'VACANT' ? 'success' : 'failed'"
+      ></div>
     </div>
   </td>
   <td>

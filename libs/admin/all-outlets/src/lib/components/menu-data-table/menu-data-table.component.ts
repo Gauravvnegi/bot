@@ -9,7 +9,7 @@ import {
 import { Subscription } from 'rxjs';
 import { OutletService } from '../../services/outlet.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { menuCols } from '../../constants/data-table';
+import { cols } from '../../constants/data-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { outletRoutes } from '../../constants/route';
 
@@ -24,7 +24,7 @@ import { outletRoutes } from '../../constants/route';
 export class MenuDataTableComponent extends BaseDatatableComponent
   implements OnInit {
   tableName = 'Menu Items';
-  cols = menuCols;
+  cols = cols['MENU'];
   $subscription = new Subscription();
 
   constructor(

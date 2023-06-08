@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { outletRoutes } from '../../constants/route';
 import {
-  MenuTableValue,
+  MenuTabValue,
   chips,
+  cols,
   filters,
   menuList,
-  menuListCols,
 } from '../../constants/data-table';
 import { Subscription } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
@@ -37,9 +37,9 @@ export class MenuListDataTableComponent extends BaseDatatableComponent
   tabFilterItems = filters;
   tableName = 'Menu List';
   filterChips = chips;
-  cols = menuListCols;
+  cols = cols['MENU_LIST'];
   isQuickFilters = true;
-  selectedTable: MenuTableValue;
+  selectedTable: MenuTabValue;
 
   $subscription = new Subscription();
 

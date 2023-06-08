@@ -220,37 +220,92 @@ body {
   @include status-chip;
 }
 
-.state {
-  &-active {
-    background-color: $active-state;
+// Global styling for chips (status indicator)
+.chip {
+  &-outlined {
+    &-default {
+      border: 1px solid $default-state;
+      color: $default-state;
+    }
+    &-active {
+      border: 1px solid $active-state;
+      color: $active-state;
+    }
+    &-failed {
+      border: 1px solid $failed-state;
+      color: $failed-state;
+    }
+    &-inactive {
+      border: 1px solid $inactive-state;
+      color: $inactive-state;
+    }
+    &-draft {
+      border: 1px solid $draft-state;
+      color: $draft-state;
+    }
+    &-completed {
+      border: 1px solid $completed-state;
+      color: $completed-state;
+    }
+    &-success {
+      border: 1px solid $success-state;
+      color: $success-state;
+    }
+    &-warning {
+      border: 1px solid $warning-state;
+      color: $warning-state;
+    }
+    &-unavailable {
+      border: 1px solid $unavailable-state;
+      color: $unavailable-state;
+    }
+  }
+  
+  &-contained {
+    &-default {
+      background-color: $default-state;
+      color: white;
+    }
+    &-active {
+      background-color: $active-state;
+      color: white;
+    }
+    &-failed {
+      background-color: $failed-state;
+      color: white;
+    }
+    &-inactive {
+      background-color: $inactive-state;
+      color: white;
+    }
+    &-draft {
+      background-color: $draft-state;
+      color: white;
+    }
+    &-completed {
+      background-color: $completed-state;
+      color: white;
+    }
+    &-success {
+      background-color: $success-state;
+      color: white;
+    }
+    &-warning {
+      background-color: $warning-state;
+      color: white;
+    }
+    &-unavailable {
+      background-color: $unavailable-state;
+      color: white;
+    }
+  }
+  &-paid {
+    background-color: $paid-state;
     color: white;
   }
-  &-inactive {
-    background-color: $inactive-state;
-    color: white;
-  }
-  &-temp-inactive {
-    background-color: $active-state;
-    color: white;
-  }
-  &-draft {
-    background-color: $draft-state;
-    color: white;
-  }
-  &-success {
-    background-color: $success-state;
-    color: white;
-  }
-  &-fulfilled {
-    background-color: $fulfilled-state;
-    color: white;
-  }
-  &-unavailable {
-    background-color: $unavailable-state;
-    color: white;
-  }
-  &-temp-unavailable {
-    background-color: $temp-unavailable-state;
+  &-unpaid {
+    background-color: $unpaid-state;
     color: white;
   }
 }
+

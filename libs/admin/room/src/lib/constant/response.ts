@@ -1,4 +1,4 @@
-import { StatusTypes } from '@hospitality-bot/admin/shared';
+import { FlagType } from '@hospitality-bot/admin/shared';
 import { RoomFoStatus, RoomStatus } from '../types/service-response';
 
 export const roomStatuses: RoomStatus[] = [
@@ -11,7 +11,7 @@ export const roomStatuses: RoomStatus[] = [
 
 export const roomStatusDetails: Record<
   RoomStatus | RoomFoStatus,
-  { label: string; type: StatusTypes }
+  { label: string; type: FlagType }
 > = {
   CLEAN: {
     label: 'Clean',
@@ -19,15 +19,15 @@ export const roomStatusDetails: Record<
   },
   INSPECTED: {
     label: 'Inspected',
-    type: 'success',
+    type: 'completed',
   },
   OUT_OF_SERVICE: {
     label: 'Out of Service',
-    type: 'temp-inactive',
+    type: 'inactive',
   },
   OUT_OF_ORDER: {
     label: 'Out of Order',
-    type: 'inactive',
+    type: 'failed',
   },
   UNAVAILABLE: {
     label: 'Unavailable',
@@ -35,7 +35,7 @@ export const roomStatusDetails: Record<
   },
   VACANT: {
     label: 'Vacant',
-    type: 'fulfilled',
+    type: 'success',
   },
   OCCUPIED: {
     label: 'Occupied',

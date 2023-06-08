@@ -1,7 +1,7 @@
 @import 'main';
 
 .priority-low {
-  background-color: $success-state;
+  background-color: $completed-state;
 }
 
 .priority-medium {
@@ -17,7 +17,7 @@
 }
 
 .sla-new {
-  color: $success-state;
+  color: $completed-state;
 }
 
 .sla-pending {

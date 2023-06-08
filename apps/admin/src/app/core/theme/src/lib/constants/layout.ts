@@ -70,4 +70,20 @@ export const customModule = {
     isSubscribed: true,
     isView: true,
   },
+  guests: {
+    config: [
+      {
+        isSubscribed: true,
+        isView: true,
+        label: 'Agent',
+        name: 'AGENT',
+      },
+      {
+        isSubscribed: true,
+        isView: true,
+        label: 'Company',
+        name: 'COMPANY',
+      },
+    ],
+  },
 };

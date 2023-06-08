@@ -126,7 +126,9 @@
         "libs/admin/manage-reservation/src/index.ts"
       ],
       "@hospitality-bot/admin/invoice": ["libs/admin/invoice/src/index.ts"],
-      "@hospitality-bot/admin/booking-source": ["libs/admin/booking-source/src/index.ts"],
+      "@hospitality-bot/admin/booking-source": [
+        "libs/admin/booking-source/src/index.ts"
+      ],
       "@hospitality-bot/admin/business": ["libs/admin/business/src/index.ts"],
       "@hospitality-bot/admin/outlet": ["libs/admin/outlet/src/index.ts"],
       "@hospitality-bot/admin/all-outlets": [
@@ -134,7 +136,8 @@
       ],
       "@hospitality-bot/admin/outlets-dashboard": [
         "libs/admin/outlets-dashboard/src/index.ts"
-      ]
+      ],
+      "@hospitality-bot/admin/members": ["libs/admin/members/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

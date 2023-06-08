@@ -24,6 +24,25 @@ export const layoutConfig = {
  * Add to get subscription api
  */
 export const customModule = {
+
+  members: {
+    name: 'MEMBERS',
+    label: 'Members',
+    description: 'Outlet Module',
+    icon:
+      'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
+    config: [
+      {
+        isSubscribed: true,
+        isView: true,
+        label: 'Booking Source',
+        name: 'BOOKING_SOURCE',
+      },
+    ],
+    isSubscribed: true,
+    isView: true,
+  },
+
   finance: {
     name: 'FINANCE',
     label: 'Finance',

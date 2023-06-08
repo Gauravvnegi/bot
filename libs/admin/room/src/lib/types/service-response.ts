@@ -1,22 +1,39 @@
-export type RoomStatus = 'ACTIVE' | 'UNAVAILABLE' | 'SOLD_OUT' | 'INACTIVE';
+import {
+  RoomRecordsCount,
+  RoomTypeRecordCounts,
+} from '../models/rooms-data-table.model';
+
+export type RoomStatus = keyof Omit<RoomRecordsCount, 'ALL' | 'deserialize'>;
+export type RoomTypeStatus = keyof Omit<
+  RoomTypeRecordCounts,
+  'ALL' | 'deserialize'
+>;
+export type RoomFoStatus = 'VACANT' | 'OCCUPIED';
 
 export type RoomResponse = {
   id: string;
   roomNumber: string;
   floorNumber: string;
+  nextStates: RoomStatus[];
   roomTypeDetails: {
     id: string;
     name: string;
     roomCount: number;
     maxChildren: number;
     maxAdult: number;
-    totalOccupancy?: number; // Is it not required
+    totalOccupancy?: number;
     activeRoomCount: number;
     soldOutCount: number;
     soldOut: boolean;
     unavailableRoomCount: number;
   };
   roomStatus: RoomStatus;
+  //--- can be modified
+  foStatus: RoomFoStatus;
+  toDate: number;
+  fromDate: number;
+  remarks: string;
+
   source?: string;
   price: number;
   currency: string;
@@ -39,12 +56,7 @@ export type RoomListResponse = {
     ROOM_TYPE: number;
     ROOM: number;
   };
-  entityStateCounts: {
-    ALL: number;
-    ACTIVE: number;
-    SOLD_OUT: number;
-    UNAVAILABLE: number;
-  };
+  entityStateCounts: Record<RoomStatus | RoomFoStatus, number>;
   total: number;
 };
 
@@ -79,7 +91,6 @@ export type RoomTypeListResponse = {
     ROOM: number;
   };
   entityStateCounts: {
-    ALL: number;
     ACTIVE: number;
     INACTIVE: number;
   };
@@ -134,7 +145,7 @@ export interface AverageRoomRateResponse {
   averageRoomRateGraph: any;
 }
 
-export interface OccupancyResponse{
+export interface OccupancyResponse {
   label: string;
   score: number;
   comparisonPercent: number;
@@ -147,7 +158,7 @@ export interface InventoryRemainingResponse {
   remaining: number;
 }
 
-export interface InventoryCostRemainingResponse{
+export interface InventoryCostRemainingResponse {
   label: string;
   spent: number;
   remaining: number;
@@ -156,4 +167,4 @@ export interface InventoryCostRemainingResponse{
 export type GraphData = {
   label: string;
   value: number;
-}
+};

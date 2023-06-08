@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService, DateService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
+import { map } from 'rxjs/operators';
 import { TableValue } from '../constant/data-table';
 import {
   RoomTypeData,
@@ -55,7 +56,9 @@ export class RoomService extends ApiService {
   }
 
   getStats(hotelId: string, config): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/stats/inventory/room${config.queryObj}`);
+    return this.get(
+      `/api/v1/entity/${hotelId}/stats/inventory/room${config.queryObj}`
+    );
   }
 
   getServices(
@@ -75,6 +78,32 @@ export class RoomService extends ApiService {
   ): Observable<T> {
     return this.get(
       `/api/v1/entity/${hotelId}/inventory${config?.params ?? ''}`
+    ).pipe(
+      map((res) => {
+
+        // --refactor ---will be removed
+        if (this.selectedTable.value === TableValue.room) {
+          const rooms = res['rooms'];
+          {
+            rooms.forEach((item) => {
+              const foStatus = Math.random() < 0.5 ? 'OCCUPIED' : 'VACANT';
+              item['foStatus'] = foStatus;
+              const isOccupied = foStatus === 'OCCUPIED';
+              if (isOccupied) {
+                item['toDate'] = new Date().getTime();
+                item['fromDate'] =
+                  new Date().getTime() + 2 * 24 * 60 * 60 * 1000;
+              }
+              item['roomStatus'] = isOccupied ? 'DIRTY' : 'CLEAN';
+              item['nextStates'] = isOccupied
+                ? ['CLEAN', 'OUT_OF_SERVICE']
+                : ['DIRTY', 'INSPECTED'];
+            });
+          }
+        }
+
+        return res;
+      })
     );
   }
 
@@ -110,7 +139,18 @@ export class RoomService extends ApiService {
   }
 
   getRoomById(hotelId: string, roomId: string): Observable<RoomByIdResponse> {
-    return this.get(`/api/v1/entity/${hotelId}/inventory/${roomId}?type=ROOM`);
+    return this.get(
+      `/api/v1/entity/${hotelId}/inventory/${roomId}?type=ROOM`
+    ).pipe(
+      map((res) => {
+        // -- refactor-- will be removed
+        const item = res['rooms'][0];
+        item['foStatus'] = 'VACANT';
+        item['roomStatus'] = 'CLEAN';
+        item['remarks'] = 'Room is cleaned';
+        return res;
+      })
+    );
   }
 
   exportCSV(hotelId: string, table: TableValue, config?: QueryConfig) {

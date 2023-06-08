@@ -24,7 +24,6 @@ export class SubscriptionPlanService extends ApiService {
           ...res.products,
           customModule.finance,
           customModule.outlets,
-          customModule.members
         ];
         return res;
       })

@@ -45,12 +45,11 @@ export const routes = {
   [ModuleNames.PACKAGE]: 'library/package',
   [ModuleNames.SERVICES]: 'library/services',
   [ModuleNames.OFFERS]: 'library/offers',
-  [ModuleNames.BOOKING_SOURCE]: 'library/booking-source',
-
+  
   // Inventory
   [ModuleNames.INVENTORY]: 'inventory',
   [ModuleNames.ROOM]: 'inventory/room',
-
+  
   // FINANCE
   [ModuleNames.FINANCE]: 'finance',
   [ModuleNames.INVOICE]: 'finance/invoice',
@@ -67,6 +66,9 @@ export const routes = {
   [ModuleNames.OUTLET]: 'outlet',
   [ModuleNames.OUTLETS_DASHBOARD]: 'outlet/dashboard',
   [ModuleNames.ALL_OUTLETS]: 'outlet/all-outlets',
-
+  
+  //Members
+  [ModuleNames.MEMBERS]: 'members',
+  [ModuleNames.BOOKING_SOURCE]: 'members/booking-source',
   RoleAndPermission: 'roles-permissions',
 };

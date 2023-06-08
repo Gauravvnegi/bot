@@ -197,6 +197,9 @@
     },
     "admin-outlets-dashboard": {
       "tags": []
+    },
+    "admin-members": {
+      "tags": []
     }
   }
 }

@@ -20,7 +20,6 @@ export class SubscriptionPlanService extends ApiService {
   getSubscriptionPlan(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/subscriptions/`).pipe(
       map((res) => {
-        debugger;
         const guest = res.products.find(
           (item) => item.name === ModuleNames.GUESTS
         );

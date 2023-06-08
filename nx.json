@@ -197,6 +197,15 @@
     },
     "admin-outlets-dashboard": {
       "tags": []
+    },
+    "admin-agent": {
+      "tags": []
+    },
+    "admin-company": {
+      "tags": []
+    },
+    "admin-channel-manager": {
+      "tags": []
     }
   }
 }

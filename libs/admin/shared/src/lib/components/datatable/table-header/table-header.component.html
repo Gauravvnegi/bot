@@ -5,9 +5,9 @@
   [id]="col.fields"
   [pSortableColumn]="col.isSortDisabled ? '' : col.sortField || col.field"
   *ngFor="let col of columns"
-  [ngStyle]="col.width ? { width: col.width } : {}"
+  [ngStyle]="{ 'width': col.width ? col.width : null, 'pointer-events': col.isHidden ? 'none' : 'auto' }"
 >
-  <div class="table-head">
+  <div class="table-head" *ngIf="!col.isHidden">
     <div class="table-head__field">
       <div class="col-heading">{{ col.header }}</div>
       <div class="col-sort" *ngIf="!col.isSortDisabled">

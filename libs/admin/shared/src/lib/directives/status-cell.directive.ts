@@ -54,6 +54,12 @@ export class StatusCellDirective implements OnChanges {
       case 'unavailable':
         this.el.nativeElement.classList.add('chip-contained-unavailable');
         break;
+      // case 'paid':
+      //   this.el.nativeElement.classList.add('state-paid');
+      //   break;
+      // case 'unpaid':
+      //   this.el.nativeElement.classList.add('state-unpaid');
+      //   break;
     }
 
     this.el.nativeElement.innerText = this.status;

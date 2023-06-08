@@ -6,11 +6,12 @@ export const navRoute = {
   addOutlet: { label: 'Add Outlet', link: './' },
   addMenu: { label: 'Add Menu', link: './'},
   addMenuItem: { label: 'Add Menu Item', link: './'},
-  menuList: { label: 'Menu List', link: './'}
+  menuList: { label: 'Menu List', link: './'},
+  createFoodPackage: { label: 'Create Food Package', link: './'},
 };
 
 export const outletRoutes: Record<
-  'outlet' | 'allOutlets' | 'addOutlet' | 'addMenu' | 'addMenuItem' | 'menuList',
+  'outlet' | 'allOutlets' | 'addOutlet' | 'addMenu' | 'addMenuItem' | 'menuList' | 'createFoodPackage',
   PageRoutes
 > = {
   outlet: {
@@ -42,7 +43,13 @@ export const outletRoutes: Record<
     route: 'menu-list',
     navRoutes: [navRoute.outlet, navRoute.allOutlets, navRoute.menuList],
     title: 'Menu List'
+  },
+  createFoodPackage: {
+    route: 'create-food-package',
+    navRoutes: [navRoute.outlet, navRoute.allOutlets, navRoute.createFoodPackage],
+    title: 'Create Food Package'
   }
+
 };
 
 

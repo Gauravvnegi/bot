@@ -19,14 +19,14 @@ const appRoutes: CRoutes = [
       {
         path: 'invoice',
         name: ModuleNames.INVOICE,
-        component: InvoiceHistoryDataTableComponent
+        component: InvoiceHistoryDataTableComponent,
       },
       {
         path: 'transaction',
         name: ModuleNames.TRANSACTION,
-        component: TransactionHistoryDataTableComponent
-      }
-    ]
+        component: TransactionHistoryDataTableComponent,
+      },
+    ],
   },
 ];
 
@@ -44,5 +44,9 @@ const appRoutes: CRoutes = [
   exports: [RouterModule],
 })
 export class AdminFinanceRoutingModule {
-  static components = [MainComponent, InvoiceHistoryDataTableComponent, TransactionHistoryDataTableComponent ];
+  static components = [
+    MainComponent,
+    InvoiceHistoryDataTableComponent,
+    TransactionHistoryDataTableComponent,
+  ];
 }

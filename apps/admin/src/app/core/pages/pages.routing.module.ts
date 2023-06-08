@@ -156,15 +156,6 @@ const appRoutes: Route[] = [
         canActivate: [CanActivateGuard],
       },
       {
-        path: 'members',
-        loadChildren: () =>
-          import('@hospitality-bot/admin/members').then(
-            (m) => m.AdminMembersModule
-          ),
-        canLoad: [CanLoadGuard],
-        canActivate: [CanActivateGuard],
-      },
-      {
         path: 'redirect',
         loadChildren: () =>
           import('@hospitality-bot/admin/unsubscribed').then(

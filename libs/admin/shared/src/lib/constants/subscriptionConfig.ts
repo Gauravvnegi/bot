@@ -47,6 +47,7 @@ export enum ModuleNames {
   SERVICES = 'SERVICES',
   OFFERS = 'OFFERS',
   PACKAGE = 'PACKAGE',
+  BOOKING_SOURCE = 'BOOKING_SOURCE',
 
   // Inventory
   INVENTORY = 'INVENTORY',
@@ -71,10 +72,6 @@ export enum ModuleNames {
   //Settings
   SETTINGS = 'SETTINGS',
   SUBSCRIPTION = 'SUBSCRIPTION',
-
-  //Members 
-  MEMBERS = 'MEMBERS',
-  BOOKING_SOURCE = 'BOOKING_SOURCE',
 }
 
 export enum Integrations {

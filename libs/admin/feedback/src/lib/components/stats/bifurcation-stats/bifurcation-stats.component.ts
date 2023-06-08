@@ -34,6 +34,7 @@ export class BifurcationStatsComponent implements OnInit {
   gtmCount = 0;
   othersCount = 0;
 
+  loading = false;
   entityType = 'GTM';
   tabFeedbackType: string;
   $subscription = new Subscription();
@@ -79,6 +80,11 @@ export class BifurcationStatsComponent implements OnInit {
 
   registerListeners(): void {
     this.listenForGlobalFilters();
+    if (
+      this.globalFeedbackFilterType === feedback.types.transactional ||
+      this.globalFeedbackFilterType === feedback.types.both
+    )
+      this.listenForOutletChanged();
   }
 
   listenForGlobalFilters(): void {
@@ -133,6 +139,20 @@ export class BifurcationStatsComponent implements OnInit {
     }
   }
 
+  listenForOutletChanged() {
+    this._statisticService.$outletChange.subscribe((response) => {
+      if (response.status) {
+        this.tabFeedbackType = response.type;
+        this.globalQueries.forEach((element) => {
+          if (element.hasOwnProperty('entityIds')) {
+            element.entityIds = this._statisticService.outletIds;
+          }
+        });
+        this.getStats();
+      }
+    });
+  }
+
   getConfig(type) {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
@@ -147,6 +167,7 @@ export class BifurcationStatsComponent implements OnInit {
   }
 
   getStats(): void {
+    this.loading = true;
     const gtmStats$ = this._statisticService.getBifurcationStats(
       this.getConfig('GTM')
     );
@@ -170,6 +191,7 @@ export class BifurcationStatsComponent implements OnInit {
               0
             ) === 0
           );
+          this.loading = false;
         }
       )
     );

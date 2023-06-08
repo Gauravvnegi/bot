@@ -38,6 +38,7 @@ export class FormComponent implements OnInit {
   @Output() onCreate = new EventEmitter(); // createPrompt on click emitter
   @Output() onFocus = new EventEmitter(); //handle focus
   @Output() onBlur = new EventEmitter(); //handle focus
+  @Output() onKeyDown = new EventEmitter<Event>();
 
   /* Main Props */
   menuOptions: Option[] = [];
@@ -120,6 +121,10 @@ export class FormComponent implements OnInit {
 
   handleFocus() {
     this.onFocus.emit();
+  }
+
+  handleKeyDown(event: Event) {
+    this.onKeyDown.emit(event);
   }
 
   /**
@@ -303,7 +308,8 @@ export class FormComponent implements OnInit {
    * @function onMenuClose To trigger on close
    */
   onMenuClose() {
-    if (this.searchText) { // empty search value trigger on menu close
+    if (this.searchText) {
+      // empty search value trigger on menu close
       this.onSearch.emit('');
       this.searchText = '';
     }

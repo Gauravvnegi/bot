@@ -21,7 +21,7 @@ export type Chip<T extends string> = {
   label: string;
   value: T;
   total?: number;
-  isSelected: boolean;
+  isSelected?: boolean;
   type: FlagType;
 };
 
@@ -57,11 +57,12 @@ export type Cols = {
   placeholder?: string;
 };
 
+// ---- chips need to be separated form filters
 export type Filter<T extends string, K extends string> = {
   label: string;
   value: T;
-  disabled: boolean;
-  content: string;
+  disabled?: boolean;
+  content?: string;
   total: number;
   chips?: Chip<K>[];
 };
@@ -72,6 +73,8 @@ export type Status = {
   type: FlagType;
   disabled?: boolean;
 };
+
+export type NextStates = Status[]
 
 export type EmptyViewType ={
   description: string;

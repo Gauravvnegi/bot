@@ -1,26 +1,11 @@
 import {
   Cols,
-  Filter,
-  Status as StatusType,
+  Filter
 } from '@hospitality-bot/admin/shared';
 import {
   RoomRecordsCount,
-  RoomStateCounts,
+  RoomTypeRecordCounts
 } from '../models/rooms-data-table.model';
-
-export enum Status {
-  ACTIVE = 'Active',
-  INACTIVE = 'Inactive',
-  SOLD_OUT = 'Sold Out',
-  UNAVAILABLE = 'Unavailable',
-}
-
-export enum StatusEntity {
-  active = 'ACTIVE',
-  inactive = 'INACTIVE',
-  soldOut = 'SOLD_OUT',
-  unavailable = 'UNAVAILABLE',
-}
 
 export enum TableValue {
   room = 'ROOM',
@@ -42,8 +27,8 @@ export const roomFilter: Filter<TableValue, keyof RoomRecordsCount> = {
       type: 'default',
     },
     {
-      label: 'Active',
-      value: 'ACTIVE',
+      label: 'Clean',
+      value: 'CLEAN',
       total: 0,
       isSelected: false,
       type: 'new',
@@ -56,8 +41,15 @@ export const roomFilter: Filter<TableValue, keyof RoomRecordsCount> = {
       type: 'warning',
     },
     {
-      label: 'Sold Out',
-      value: 'SOLD_OUT',
+      label: 'Out of order',
+      value: 'OUT_OF_ORDER',
+      total: 0,
+      isSelected: false,
+      type: 'failed',
+    },
+    {
+      label: 'Out of service',
+      value: 'OUT_OF_SERVICE',
       total: 0,
       isSelected: false,
       type: 'failed',
@@ -65,7 +57,7 @@ export const roomFilter: Filter<TableValue, keyof RoomRecordsCount> = {
   ],
 };
 
-export const roomTypeFilter: Filter<TableValue, keyof RoomStateCounts> = {
+export const roomTypeFilter: Filter<TableValue, keyof RoomTypeRecordCounts> = {
   label: 'Room Type',
   value: TableValue.roomType,
   content: '',
@@ -88,7 +80,7 @@ export const roomTypeFilter: Filter<TableValue, keyof RoomStateCounts> = {
     },
     {
       label: 'Inactive ',
-      value: 'INACTIVE',
+      value: 'UNAVAILABLE',
       total: 0,
       isSelected: false,
       type: 'failed',
@@ -114,6 +106,11 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'date',
       header: 'Date',
       sortType: 'date',
+    },
+    {
+      field: 'foStatus',
+      header: 'Reservation Status',
+      sortType: 'string',
     },
     {
       field: 'price',
@@ -169,40 +166,35 @@ export const cols: Record<TableValue, Cols[]> = {
   ],
 };
 
+export const roomDetailsCols: Cols[] = [
+  {
+    field: 'roomNumber',
+    header: 'Room Number',
+    sortType: 'number',
+  },
+  {
+    field: 'floor',
+    header: 'Floor',
+    sortType: 'number',
+  },
+  {
+    field: 'roomStatus',
+    header: 'Room Status',
+    sortType: 'string',
+  },
+  {
+    field: 'foStatus',
+    header: 'FO Status',
+    sortType: 'string',
+  },
+  {
+    field: 'action',
+    header: 'Action',
+    isSearchDisabled: true,
+  },
+];
+
 export const title: Record<TableValue, string> = {
   [TableValue.room]: 'Room',
   [TableValue.roomType]: 'Room Type',
-};
-
-export const status: Record<TableValue, StatusType[]> = {
-  [TableValue.room]: [
-    {
-      label: Status.ACTIVE,
-      value: 'ACTIVE',
-      type: 'new',
-    },
-    {
-      label: Status.UNAVAILABLE,
-      value: 'UNAVAILABLE',
-      type: 'warning',
-    },
-    {
-      label: Status.SOLD_OUT,
-      value: 'SOLD_OUT',
-      type: 'failed',
-      disabled: true,
-    },
-  ],
-  [TableValue.roomType]: [
-    {
-      label: Status.ACTIVE,
-      value: 'ACTIVE',
-      type: 'new',
-    },
-    {
-      label: Status.INACTIVE,
-      value: 'INACTIVE',
-      type: 'failed',
-    },
-  ],
 };

@@ -1,0 +1,62 @@
+<hospitality-bot-navigation-header
+  [heading]="welcomeMessage"
+  [routes]="navRoutes"
+  [isBack]="false"
+></hospitality-bot-navigation-header>
+
+<div class="wrapper">
+  <div class="stats-wrapper">
+    <hospitality-bot-stats-card [stats]="sellsStat" class="stats-box">
+      <div>
+        <canvas
+          *skeleton="sellsGraph == undefined; height: '65vh'; width: '100%'"
+          baseChart
+          [datasets]="sellsGraph.data"
+          [options]="sellsGraph.options"
+          [labels]="sellsGraph.labels"
+          [chartType]="sellsGraph.type"
+        ></canvas>
+      </div>
+    </hospitality-bot-stats-card>
+    <hospitality-bot-stats-card [stats]="visitorsStat" class="stats-box">
+      <div>
+        <canvas
+          *skeleton="visitorsGraph == undefined; height: '65vh'; width: '100%'"
+          baseChart
+          [datasets]="visitorsGraph.data"
+          [options]="visitorsGraph.options"
+          [colors]="visitorsGraph.colors"
+          [labels]="visitorsGraph.labels"
+          [chartType]="visitorsGraph.type"
+        ></canvas>
+      </div>
+    </hospitality-bot-stats-card>
+    <hospitality-bot-stats-card [stats]="usersStat" class="stats-box">
+      <div>
+        <canvas
+          *skeleton="usersGraph == undefined; height: '65vh'; width: '100%'"
+          baseChart
+          [datasets]="usersGraph.data"
+          [options]="usersGraph.options"
+          [colors]="usersGraph.colors"
+          [labels]="usersGraph.labels"
+          [chartType]="usersGraph.type"
+        ></canvas>
+      </div>
+    </hospitality-bot-stats-card>
+    <hospitality-bot-stats-card [stats]="ordersStat" class="stats-box">
+      <div>
+        <canvas
+          *skeleton="ordersGraph == undefined; height: '65vh'; width: '100%'"
+          baseChart
+          [datasets]="ordersGraph.data"
+          [options]="ordersGraph.options"
+          [labels]="ordersGraph.labels"
+          [chartType]="ordersGraph.type"
+        ></canvas>
+      </div>
+    </hospitality-bot-stats-card>
+  </div>
+
+  <hospitality-bot-outlets-data-table></hospitality-bot-outlets-data-table>
+</div>

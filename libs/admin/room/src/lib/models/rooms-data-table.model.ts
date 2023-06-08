@@ -1,8 +1,8 @@
+import { NextStates } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { Status } from '../constant/data-table';
+// import { Status } from '../constant/data-table';
 import {
   AverageRoomRateResponse,
-  GraphData,
   InventoryCostRemainingResponse,
   InventoryRemainingResponse,
   OccupancyResponse,
@@ -17,12 +17,15 @@ import {
 export class RoomList {
   records: Room[];
   count: RoomRecordsCount;
-  typeCount: RoomTypeCounts;
+  typeCount: EntityTypeCount;
   deserialize(input: RoomListResponse) {
     this.records =
       input.rooms?.map((item) => new Room().deserialize(item)) ?? [];
-    this.count = new RoomRecordsCount().deserialize(input.entityStateCounts);
-    this.typeCount = new RoomTypeCounts().deserialize(input.entityTypeCounts);
+    this.count = new RoomRecordsCount().deserialize(
+      input.entityStateCounts,
+      input.total
+    );
+    this.typeCount = new EntityTypeCount().deserialize(input.entityTypeCounts);
 
     return this;
   }
@@ -32,19 +35,29 @@ export class Room {
   id: string;
   type: string;
   roomNo: string;
+  floorNo: string;
   date: number;
   price: number;
   currency: string;
-  status: { label: string; value: string };
+  status: string;
+  foStatus: string;
+  nextStates: NextStates;
+
   deserialize(input: RoomResponse) {
     this.id = input.id ?? '';
     this.type = input.roomTypeDetails.name ?? '';
     this.roomNo = input.roomNumber ?? '';
+    this.floorNo = input.floorNumber ?? '';
     this.date = input.updated ?? input.created ?? null;
     this.price = input.price ?? null;
     this.currency = input.currency ?? '';
-    this.status = { label: Status[input.roomStatus], value: input.roomStatus };
-
+    this.status = input.roomStatus ?? '';
+    this.foStatus = input.foStatus ?? '';
+    this.nextStates = [...input.nextStates, input.roomStatus].map((item) => ({
+      label: item,
+      value: item,
+      type: 'default',
+    }));
     return this;
   }
 
@@ -62,15 +75,20 @@ export class Room {
 
 export class RoomRecordsCount {
   ALL: number;
-  ACTIVE: number;
+  CLEAN: number;
+  INSPECTED: number;
+  OUT_OF_SERVICE: number;
+  OUT_OF_ORDER: number;
   UNAVAILABLE: number;
-  SOLD_OUT: number;
 
-  deserialize(input: RoomListResponse['entityStateCounts']) {
-    this.ALL = Number(Object.values(input).reduce((a, b) => a + b, 0));
-    this.UNAVAILABLE = input.UNAVAILABLE;
-    this.ACTIVE = input.ACTIVE;
-    this.SOLD_OUT = input.SOLD_OUT;
+  deserialize(input: RoomListResponse['entityStateCounts'], total: number) {
+    this.ALL = total;
+    this.UNAVAILABLE = input.UNAVAILABLE ?? 0;
+    this.CLEAN = input.UNAVAILABLE ?? 0;
+    this.INSPECTED = input.INSPECTED ?? 0;
+    this.OUT_OF_SERVICE = input.OUT_OF_SERVICE ?? 0;
+    this.OUT_OF_ORDER = input.OUT_OF_ORDER ?? 0;
+    this.UNAVAILABLE = input.UNAVAILABLE ?? 0;
 
     return this;
   }
@@ -80,14 +98,16 @@ export class RoomRecordsCount {
 
 export class RoomTypeList {
   records: RoomType[];
-  count: RoomStateCounts;
-  typeCount: RoomTypeCounts;
+  count: RoomTypeRecordCounts;
+  typeCount: EntityTypeCount;
 
   deserialize(input: RoomTypeListResponse) {
     this.records =
       input?.roomTypes.map((item) => new RoomType().deserialize(item)) ?? [];
-    this.count = new RoomStateCounts().deserialize(input.entityStateCounts);
-    this.typeCount = new RoomTypeCounts().deserialize(input.entityTypeCounts);
+    this.count = new RoomTypeRecordCounts().deserialize(
+      input.entityStateCounts
+    );
+    this.typeCount = new EntityTypeCount().deserialize(input.entityTypeCounts);
 
     return this;
   }
@@ -97,53 +117,57 @@ export class RoomType {
   id: string;
   name: string;
   area: number;
-  roomCount: RoomRecordsCount;
+  roomCount: number;
   amenities: string[];
   occupancy: number;
-  status: { label: string; value: string };
+  status: 'ACTIVE' | 'UNAVAILABLE';
   price: number;
   currency: string;
+  nextStates: NextStates;
 
   deserialize(input: RoomTypeResponse) {
     this.id = input.id ?? '';
     this.name = input.name ?? '';
     this.area = input.area;
-    this.roomCount = new RoomRecordsCount().deserialize({
-      ALL: null,
-      ACTIVE: input.activeRoomCount,
-      UNAVAILABLE: input.unavailableRoomCount,
-      SOLD_OUT: input.soldOutCount,
-    });
+    this.roomCount = input.roomCount;
     this.amenities =
       input.paidAmenities
         ?.map((item) => item.name)
         .concat(input.complimentaryAmenities.map((item) => item.name)) ?? [];
     this.occupancy = input.maxOccupancy ?? null;
-    this.status = {
-      label: input.status ? Status.ACTIVE : Status.INACTIVE,
-      value: input.status ? 'ACTIVE' : 'INACTIVE',
-    };
-
+    this.status = input.status ? 'ACTIVE' : 'UNAVAILABLE';
     // mapping discounted price
     this.price = input.discountedPrice ?? input.originalPrice;
     this.currency = input.currency ?? '';
+    this.nextStates = [
+      {
+        label: 'Active',
+        value: 'ACTIVE',
+        type: 'default',
+      },
+      {
+        label: 'Unavailable',
+        value: 'UNAVAILABLE',
+        type: 'default',
+      },
+    ];
 
     return this;
   }
 }
 
-export class RoomStateCounts {
+export class RoomTypeRecordCounts {
   ALL: number;
   ACTIVE: number;
-  INACTIVE: number;
+  UNAVAILABLE: number;
   deserialize(input: RoomTypeListResponse['entityStateCounts']) {
     this.ALL = Number(Object.values(input).reduce((a, b) => a + b, 0));
-    this.INACTIVE = input.INACTIVE;
+    this.UNAVAILABLE = input.INACTIVE;
     this.ACTIVE = input.ACTIVE;
     return this;
   }
 }
-export class RoomTypeCounts {
+export class EntityTypeCount {
   ROOM_TYPE: number;
   ROOM: number;
   deserialize(input: RoomTypeListResponse['entityTypeCounts']) {
@@ -159,7 +183,7 @@ export class RoomStatGraph {
   additionalData: string;
   graph: any;
 
-  deserialize(input: AverageRoomRateResponse){
+  deserialize(input: AverageRoomRateResponse) {
     this.label = input.label.replace(/\s+/g, '');
     this.additionalData = shortenNumber(input.score);
     this.comparisonPercent = input.comparisonPercent;
@@ -173,7 +197,7 @@ export class OccupancyGraph {
   additionalData: string;
   graph: any;
 
-  deserialize(input: OccupancyResponse){
+  deserialize(input: OccupancyResponse) {
     this.label = input.label.replace(/\s+/g, '');
     this.additionalData = `${input.score}%`;
     this.comparisonPercent = input.comparisonPercent;
@@ -188,7 +212,7 @@ export class RemainingInventory {
   remaining?: number;
   additionalData: string;
 
-  deserialize(input: InventoryRemainingResponse){
+  deserialize(input: InventoryRemainingResponse) {
     this.label = input.label.replace(/\s+/g, '');
     this.occupied = input.occupied;
     this.remaining = input.remaining;
@@ -197,13 +221,13 @@ export class RemainingInventory {
   }
 }
 
-export class RemainingInventoryCost{
+export class RemainingInventoryCost {
   label: string;
   spent?: number;
   remaining?: number;
   additionalData: string;
 
-  deserialize(input: InventoryCostRemainingResponse){
+  deserialize(input: InventoryCostRemainingResponse) {
     this.label = input.label.replace(/\s+/g, '');
     this.spent = input.spent;
     this.remaining = input.remaining;
@@ -212,10 +236,13 @@ export class RemainingInventoryCost{
   }
 }
 
+//--- move to utils -----
 function shortenNumber(value: number): string {
   const suffixes = ['', 'K', 'M', 'B', 'T', 'P', 'E'];
   const suffixNum = Math.floor(('' + value).length / 3);
-  let shortValue = parseFloat((suffixNum !== 0 ? (value / Math.pow(1000, suffixNum)) : value).toFixed(2));
+  let shortValue = parseFloat(
+    (suffixNum !== 0 ? value / Math.pow(1000, suffixNum) : value).toFixed(2)
+  );
   if (shortValue % 1 !== 0) {
     shortValue = parseFloat(shortValue.toFixed(2));
   }

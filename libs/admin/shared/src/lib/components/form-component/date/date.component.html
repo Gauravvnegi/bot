@@ -20,6 +20,7 @@
     }"
     [inputId]="controlName"
     [(ngModel)]="dateValue"
+    [selectOtherMonths]="true"
     (ngModelChange)="onDateChange($event)"
     [showTime]="enableTime"
     [showSeconds]="enableSeconds"

@@ -1,0 +1,169 @@
+<div class="wrapper">
+  <div
+    class="action-header"
+    [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+    [formGroup]="tableFG"
+  >
+    <div class="heading">{{ tableName }}</div>
+    <div class="action-wrapper">
+      <hospitality-bot-button
+        label="Import Menu Items"
+        variant="text"
+        (onClick)="handleImport()"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        label="Add Menu Items"
+        (onClick)="addMenuItems()"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+  <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
+
+  <p-table
+    #dt
+    [styleClass]="tableConfig.styleClass"
+    [resizableColumns]="isResizableColumns"
+    [autoLayout]="isAutoLayout"
+    [loading]="loading"
+    [columns]="cols"
+    [value]="values"
+    [paginator]="isPaginator"
+    [rows]="rowsPerPage"
+    [showCurrentPageReport]="showCurrentPageReport"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [(first)]="first"
+    [totalRecords]="totalRecords"
+    [filterDelay]="0"
+    [(selection)]="selectedRows"
+    (onRowSelect)="onRowSelect($event)"
+    (onRowUnselect)="onRowUnselect($event)"
+    (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+    (sortFunction)="customSort($event)"
+    [customSort]="isCustomSort"
+    (onFilter)="onDataFilter()"
+  >
+    <!-- *******************************EMPTY TABLE VIEW******************************* -->
+    <ng-template pTemplate="emptymessage">
+      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+    </ng-template>
+
+    <!-- *******************************HEADER WITH SEARCH******************************* -->
+    <ng-template pTemplate="header" let-columns #header>
+      <tr
+        hospitality-bot-table-header
+        [columns]="columns"
+        [showCheckbox]="isSelectable"
+        (search)="handleFieldSearch($event)"
+      ></tr>
+    </ng-template>
+    <!-- **************************************BODY********************************* -->
+    <ng-template
+      pTemplate="body"
+      let-rowData
+      let-columns="columns"
+      let-rowIndex="rowIndex"
+    >
+      <tr class="table-row">
+        <td class="table-row__checkbox">
+          <p-tableCheckbox
+            [value]="rowData"
+            [index]="rowIndex"
+            (click)="onCheckboxClicked($event)"
+          ></p-tableCheckbox>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.code; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.code }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.itemName; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.itemName }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.type; else emptyCell">
+            <div class="contained__primary">
+              {{ rowData.type }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="center-align" *ngIf="rowData.category; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.category }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="center-align" *ngIf="rowData.kitchenDept; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.kitchenDept }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="center-align" *ngIf="rowData.hsnCode; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.hsnCode }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="center-align" *ngIf="rowData.delivery; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.delivery }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div
+            class="center-align"
+            *ngIf="rowData.preparationTime; else emptyCell"
+          >
+            <div class="primary-text">
+              {{ rowData.preparationTime }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="center-align" *ngIf="rowData.unit; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.unit }}
+            </div>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <!-- *********************************FOOTER******************************* -->
+    <ng-template pTemplate="summary">
+      <p-paginator
+        #paginator
+        [rows]="rowsPerPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (onPageChange)="paginate($event)"
+        [currentPageReportTemplate]="reportTemplate"
+        showCurrentPageReport="true"
+      ></p-paginator>
+    </ng-template>
+  </p-table>
+</div>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>
+
+<ng-template #emptyView>
+  <div class="empty-view">
+    <div class="wrapper">
+      <img src="assets/images/notes.png" />
+      <p class="label">No Menu Item Yet</p>
+    </div>
+  </div>
+</ng-template>

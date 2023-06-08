@@ -53,6 +53,7 @@ import { ImageDirective } from './directives/image.directive';
 import { FeatureDirective } from './directives/feature.directive';
 import { InternalSubscriptionDirective } from './directives/internal-subscription.directive';
 import { NumberDirective } from './directives/number.directive';
+import { StatusCellDirective } from './directives/status-cell.directive';
 import { ClickStopPropagation } from './directives/stoppropagation.directive';
 import { SubscriptionDirective } from './directives/subscription.directive';
 import { LinkDetector } from './pipes/linkDetector.pipe';
@@ -92,6 +93,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
 import { ImageHandlingComponent } from './components/image-handling/image-handling.component';
 import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shared-image-cropper.module';
+import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
 
 @NgModule({
   imports: [
@@ -126,6 +128,7 @@ import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shar
     UploadFileComponent,
     ComingSoonComponent,
     NumberDirective,
+    StatusCellDirective,
     MultipleDropdownComponent,
     SubscriptionDirective,
     InternalSubscriptionDirective,
@@ -192,6 +195,7 @@ import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shar
     AddAttachmentComponent,
     ModalHeaderComponent,
     ImageHandlingComponent,
+    TimePickerComponent,
   ],
 
   exports: [
@@ -214,6 +218,7 @@ import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shar
     AutoCompleteModule,
     CKEditorModule,
     NumberDirective,
+    StatusCellDirective,
     MultipleDropdownComponent,
     UploadCsvComponent,
     SubscriptionDirective,
@@ -281,6 +286,7 @@ import { SharedImageCropperModule } from 'libs/shared/image-cropper/src/lib/shar
     AddAttachmentComponent,
     ModalHeaderComponent,
     ImageHandlingComponent,
+    TimePickerComponent,
   ],
 })
 export class AdminSharedModule {}

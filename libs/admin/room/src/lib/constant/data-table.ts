@@ -31,7 +31,7 @@ export const roomFilter: Filter<TableValue, keyof RoomRecordsCount> = {
       value: 'CLEAN',
       total: 0,
       isSelected: false,
-      type: 'new',
+      type: 'active',
     },
     {
       label: 'Unavailable ',
@@ -76,7 +76,7 @@ export const roomTypeFilter: Filter<TableValue, keyof RoomTypeRecordCounts> = {
       value: 'ACTIVE',
       total: 0,
       isSelected: false,
-      type: 'new',
+      type: 'active',
     },
     {
       label: 'Inactive ',

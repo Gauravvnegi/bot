@@ -1,12 +1,13 @@
 export type FlagType =
   | 'default'
-  | 'new'
-  | 'initiated'
-  | 'pending'
-  | 'completed'
+  | 'active'
   | 'failed'
+  | 'draft'
+  | 'completed'
   | 'warning'
-  | 'standard';
+  | 'inactive'
+  | 'success'
+  | 'unavailable';
 
 // more modes can be added (take reference form primeNg filter)
 export type MatchModes = 'startsWith' | 'contains' | 'endsWith' | 'equals';

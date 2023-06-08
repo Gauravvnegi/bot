@@ -26,7 +26,7 @@
 
 :host ::ng-deep .completedButton {
   .p-button {
-    background-color: $success-state;
+    background-color: $completed-state;
   }
 }
 
@@ -44,13 +44,13 @@
 
 :host ::ng-deep .failedButton {
   .p-button {
-    background-color: $inactive-state;
+    background-color: $failed-state;
   }
 }
 
 :host ::ng-deep .warningButton {
   .p-button {
-    background-color: $unavailable-state;
+    background-color: $warning-state;
   }
 }
 

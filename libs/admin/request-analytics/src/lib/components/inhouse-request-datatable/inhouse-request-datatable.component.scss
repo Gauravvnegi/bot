@@ -74,7 +74,7 @@ td {
       @include inhouse-popup-status;
     }
     &.low {
-      background-color: $success-state;
+      background-color: $completed-state;
       @include inhouse-popup-status;
     }
     &.medium {

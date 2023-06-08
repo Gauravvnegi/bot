@@ -17,13 +17,5 @@ export type PageRoutes = {
 export type TokenRecord = typeof tokensConfig;
 export type TokensType = keyof typeof tokensConfig;
 export type Tokens = typeof tokensConfig[TokensType];
+  
 
-export type StatusTypes =
-  | 'active'
-  | 'inactive'
-  | 'temp-inactive'
-  | 'draft'
-  | 'success'
-  | 'fulfilled'
-  | 'unavailable'
-  | 'temp-unavailable';

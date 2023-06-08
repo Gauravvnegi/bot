@@ -18,7 +18,7 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { NavRouteOptions, Option, StatusTypes } from 'libs/admin/shared/src';
+import { FlagType, NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
@@ -78,7 +78,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
   $subscription = new Subscription();
 
-  currentRoomState: { value: string; type: StatusTypes }[] = [];
+  currentRoomState: { value: string; type: FlagType }[] = [];
   isDateRequired = false;
 
   constructor(

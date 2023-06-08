@@ -18,27 +18,15 @@
   color: white;
 }
 
-:host ::ng-deep .newButton {
+:host ::ng-deep .defaultButton {
+  .p-button {
+    background-color: $default-state;
+  }
+}
+
+:host ::ng-deep .activeButton {
   .p-button {
     background-color: $active-state;
-  }
-}
-
-:host ::ng-deep .completedButton {
-  .p-button {
-    background-color: $completed-state;
-  }
-}
-
-// pending and initiated is same will be removed and flag type will also be updated
-:host ::ng-deep .pendingButton {
-  .p-button {
-    background-color: $draft-state;
-  }
-}
-:host ::ng-deep .initiatedButton {
-  .p-button {
-    background-color: $draft-state;
   }
 }
 
@@ -48,9 +36,39 @@
   }
 }
 
+:host ::ng-deep .inactiveButton {
+  .p-button {
+    background-color: $inactive-state;
+  }
+}
+
+:host ::ng-deep .draftButton {
+  .p-button {
+    background-color: $draft-state;
+  }
+}
+
+:host ::ng-deep .completedButton {
+  .p-button {
+    background-color: $completed-state;
+  }
+}
+
+:host ::ng-deep .successButton {
+  .p-button {
+    background-color: $success-state;
+  }
+}
+
 :host ::ng-deep .warningButton {
   .p-button {
     background-color: $warning-state;
+  }
+}
+
+:host ::ng-deep .unavailableButton {
+  .p-button {
+    background-color: $unavailable-state;
   }
 }
 
@@ -58,9 +76,9 @@
   font-weight: $medium;
 }
 
-:host ::ng-deep .activeClass{
+:host ::ng-deep .activeClass {
   background: rgba(103, 58, 183, 0.12);
-  span{
+  span {
     color: $primary !important;
   }
 }

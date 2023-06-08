@@ -1,5 +1,6 @@
 import { NextStates } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { roomStatusDetails } from '../constant/response';
 // import { Status } from '../constant/data-table';
 import {
   AverageRoomRateResponse,
@@ -53,10 +54,11 @@ export class Room {
     this.currency = input.currency ?? '';
     this.status = input.roomStatus ?? '';
     this.foStatus = input.foStatus ?? '';
+    //  --refactor-- this logic need to be moved to toggle button - refer table logic (same)
     this.nextStates = [...input.nextStates, input.roomStatus].map((item) => ({
-      label: item,
+      label: roomStatusDetails[item]?.label ?? item,
       value: item,
-      type: 'default',
+      type: roomStatusDetails[item]?.type ?? 'active',
     }));
     return this;
   }
@@ -143,12 +145,12 @@ export class RoomType {
       {
         label: 'Active',
         value: 'ACTIVE',
-        type: 'default',
+        type: 'active',
       },
       {
         label: 'Unavailable',
         value: 'UNAVAILABLE',
-        type: 'default',
+        type: 'failed',
       },
     ];
 

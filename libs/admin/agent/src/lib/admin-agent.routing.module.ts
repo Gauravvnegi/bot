@@ -8,7 +8,7 @@ const appRoutes: Route[] = [
     component: MainComponent,
     children: [
       {
-        path: 'agent',
+        path: '',
         component: AgentDataTableComponent,
       },
     ],

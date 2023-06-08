@@ -56,11 +56,11 @@ export const routes = {
   [ModuleNames.INVOICE]: 'finance/invoice',
   [ModuleNames.TRANSACTION]: 'finance/transaction',
 
-  // GUESTS
-  [ModuleNames.GUESTS]: 'guest',
-  [ModuleNames.GUESTS_DASHBOARD]: 'guest/dashboard',
-  [ModuleNames.AGENT]: 'guests/agent',
-  [ModuleNames.COMPANY]: 'guests/company',
+  // MEMBERS
+  [ModuleNames.MEMBERS]: 'members',
+  [ModuleNames.GUESTS]: 'members/guest',
+  [ModuleNames.AGENT]: 'members/agent',
+  [ModuleNames.COMPANY]: 'members/company',
 
 
   // SETTINGS

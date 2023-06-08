@@ -12,11 +12,11 @@ const appRoutes: CRoutes = [
   {
     path: '',
     component: MainComponent,
-    name: ModuleNames.GUESTS, // replace by MEMBERS
+    name: ModuleNames.MEMBERS, // replace by MEMBERS
     children: [
       {
         path: 'guest',
-        name: ModuleNames.GUESTS_DASHBOARD,  // replace by GUESTS
+        name: ModuleNames.GUESTS,  // replace by GUESTS
         loadChildren: () =>
           import('@hospitality-bot/admin/guests').then(
             (m) => m.AdminGuestsModule

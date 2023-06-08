@@ -66,7 +66,6 @@ export enum ModuleNames {
   // GUESTS
   MEMBERS = 'MEMBERS',
   GUESTS = 'GUESTS',
-  GUESTS_DASHBOARD = 'GUESTS_DASHBOARD',
   AGENT = 'AGENT',
   COMPANY = 'COMPANY',
 
@@ -198,7 +197,7 @@ export const ModuleConfig = {
       },
     },
   },
-  [ModuleNames.GUESTS_DASHBOARD]: {
+  [ModuleNames.GUESTS]: {
     cards: [
       CardNames.VIP,
       CardNames.STATUS,

@@ -28,7 +28,6 @@ export class InputComponent extends FormComponent {
         this.subtitle = `${this.inputLength}/${this.maxLength}`;
       });
     }
-
     this.initInputControl();
   }
 }

@@ -9,12 +9,14 @@ import {
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { TableValue, chips, cols, filters, records, title } from '../../constants/data-table';
+import { TabValue, chips, cols, filters, title } from '../../constants/data-table';
 import { Subscription } from 'rxjs';
 import { OutletService } from '../../services/outlet.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { outletRoutes } from '../../constants/route';
+import { QueryConfig } from '@hospitality-bot/admin/library';
+import { OutletList } from '../../models/outlet.model';
 
 @Component({
   selector: 'hospitality-bot-all-outlets-data-table',
@@ -33,9 +35,9 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
   tabFilterItems = filters;
   tableName = title;
   filterChips = chips;
-  cols = cols;
+  cols = cols['ALL_OUTLETS'];
   isQuickFilters = true;
-  selectedTable: TableValue;
+  selectedTable: TabValue;
 
   $subscription = new Subscription();
 
@@ -52,6 +54,7 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
+    this.outletId = this.globalFilterService.hotelId;
     this.listenToTableChange();
   }
 
@@ -73,43 +76,58 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
     this.initTableValue();
   }
 
+  getQueryConfig(): QueryConfig {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.getSelectedQuickReplyFilters(),
+        {
+          type: this.selectedTable,
+          offset: this.first,
+          limit: this.rowsPerPage,
+        },
+      ]),
+    };
+    return config;
+  }
+
   // Mock Data for now
   initTableValue() {
-    // this.loading = true;
-    this.values = records;
+    this.loading = true;
+    // this.values = allOutletsResponse;
 
-    // this.outletService
-    //   .getAllOutlets<OutletListResponse>(this.hotelId)
-    //   .subscribe(
-    //     (res) => {
-    //       const outletList = new OutletList().deserialize(res);
-    //       switch (this.selectedTable) {
-    //         case TableValue.ALL:
-    //           this.values = outletList.allOutlets;
-    //           break;
-    //         case TableValue.BANQUET:
-    //           this.values = outletList.banquets;
-    //           break;
-    //         case TableValue.BAR:
-    //           this.values = outletList.bar;
-    //           break;
-    //         case TableValue.CONFERENCE_ROOM:
-    //           this.values = outletList.conferenceRoom;
-    //           break;
-    //         case TableValue.RESTAURANT:
-    //           this.values = outletList.restaurant;
-    //           break;
-    //       }
-    //       this.updateTabFilterCount(res.entityTypeCounts, res.total);
-    //       this.updateQuickReplyFilterCount(res.entityStateCounts);
-    //       this.updateTotalRecords();
-    //     },
-    //     () => {
-    //       this.values = [];
-    //       this.loading = false;
-    //     },
-    //     this.handleFinal
-    //   );
+    this.outletService
+      .getAllOutlets(this.outletId)
+      .subscribe(
+        (res) => {
+          const outletList = new OutletList().deserialize(res);
+          this.values = res;
+          // switch (this.selectedTable) {
+          //   case TabValue.ALL:
+          //     this.values = outletList.allOutlets;
+          //     break;
+          //   case TabValue.BANQUET:
+          //     this.values = outletList.banquets;
+          //     break;
+          //   case TabValue.BAR:
+          //     this.values = outletList.bar;
+          //     break;
+          //   case TabValue.CONFERENCE_ROOM:
+          //     this.values = outletList.conferenceRoom;
+          //     break;
+          //   case TabValue.RESTAURANT:
+          //     this.values = outletList.restaurant;
+          //     break;
+          // }
+          this.updateTabFilterCount(res.entityTypeCounts, res.total);
+          this.updateQuickReplyFilterCount(res.entityStateCounts);
+          this.updateTotalRecords();
+        },
+        () => {
+          this.values = [];
+          this.loading = false;
+        },
+        this.handleFinal
+      );
   }
 
   getSelectedQuickReplyFilters() {
@@ -143,7 +161,9 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
               { panelClass: 'success' }
             );
           },
-          ({ error }) => {},
+          ({ error }) => {
+            this.handleError(error);
+          },
           this.handleFinal
         )
     );

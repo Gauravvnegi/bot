@@ -1,0 +1,95 @@
+<div class="table-form form-block" [formGroup]="useForm">
+  <div class="header full-width">
+    <div class="heading">{{ tableName }}</div>
+    <div class="btn-wrapper">
+      <hospitality-bot-button
+        variant="text"
+        label="Import Items"
+        (onClick)="onImportItems()"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+  <div formArrayName="foodItems">
+    <p-table
+      #dt
+      [styleClass]="tableConfig.styleClass"
+      [resizableColumns]="isResizableColumns"
+      [autoLayout]="isAutoLayout"
+      [loading]="loading"
+      [columns]="cols"
+      [value]="foodItemsArray.controls"
+      [paginator]="isPaginator"
+      [rows]="rowsPerPage"
+      [showCurrentPageReport]="showCurrentPageReport"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [(first)]="first"
+      [totalRecords]="totalRecords"
+      [filterDelay]="0"
+      [(selection)]="selectedRows"
+      (onRowSelect)="onRowSelect($event)"
+      (onRowUnselect)="onRowUnselect($event)"
+      (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+      (sortFunction)="customSort($event)"
+      [customSort]="isCustomSort"
+      (onFilter)="onDataFilter()"
+    >
+      <ng-template pTemplate="header" let-columns class="table_head">
+        <tr
+          hospitality-bot-table-header
+          [columns]="columns"
+          [showCheckbox]="isSelectable"
+          (search)="handleFieldSearch($event)"
+        ></tr>
+      </ng-template>
+
+      <ng-template
+        pTemplate="body"
+        let-rowData
+        let-columns="columns"
+        let-rowIndex="rowIndex"
+      >
+        <tr [formGroupName]="rowIndex">
+          <td>
+            <p-tableCheckbox
+              [value]="rowData"
+              [index]="rowIndex"
+            ></p-tableCheckbox>
+          </td>
+          <td>
+            <hospitality-bot-input
+              controlName="foodCategory"
+              [props]="{
+                placeholder: 'Search by name'
+              }"
+            ></hospitality-bot-input>
+          </td>
+          <td>
+            <hospitality-bot-input
+              controlName="type"
+              [props]="{
+                type: 'number',
+                placeholder: 'Search by name'
+              }"
+            ></hospitality-bot-input>
+          </td>
+          <td>
+            <hospitality-bot-menu
+              type="button"
+              alignment="horizontal"
+              (onClickItem)="handleMenuClick($event, rowIndex)"
+              [menuItems]="menuItems"
+            ></hospitality-bot-menu>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <hospitality-bot-button
+          label="+ Add More"
+          variant="text"
+          (onClick)="addNewItems()"
+        ></hospitality-bot-button>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

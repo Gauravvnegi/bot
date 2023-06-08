@@ -91,6 +91,8 @@ import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
+import { DiscountFormComponent } from './components/discount-form/discount-form.component';
+
 import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
 
 @NgModule({
@@ -191,6 +193,7 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    DiscountFormComponent,
     TimePickerComponent
   ],
 
@@ -281,6 +284,7 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    DiscountFormComponent,
     TimePickerComponent
   ],
 })

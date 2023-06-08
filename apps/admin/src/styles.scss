@@ -299,5 +299,13 @@ body {
       color: white;
     }
   }
+  &-paid {
+    background-color: $paid-state;
+    color: white;
+  }
+  &-unpaid {
+    background-color: $unpaid-state;
+    color: white;
+  }
 }
 

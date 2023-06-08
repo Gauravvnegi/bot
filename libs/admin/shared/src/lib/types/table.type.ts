@@ -55,6 +55,7 @@ export type Cols = {
   searchField?: string[];
   isSearchDisabled?: boolean;
   matchMode?: MatchModes;
+  isHidden?: boolean;
   placeholder?: string;
 };
 

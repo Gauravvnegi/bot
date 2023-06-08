@@ -1,0 +1,42 @@
+export const allOutletsResponse = [
+    {
+        id: '3a2beede-c18f-4912-b9b1-54d1a53ebf9e',
+        outletName: 'Outlet 1',
+        type: 'Restaurant',
+        totalSales: '20000',
+        area: '200 Sq.Ft',
+        status: 'ACTIVE',
+      },
+      {
+        id: '3a2beede-c18f-4912-b9b1-54d1a53ebf9e',
+        outletName: 'Outlet 2',
+        type: 'Restaurant',
+        totalSales: '30000',
+        area: '300 Sq.Ft',
+        status: 'ACTIVE',
+      },
+      {
+        id: '3a2beede-c18f-4912-b9b1-54d1a53ebf9e',
+        outletName: 'Outlet 3',
+        type: 'Restaurant',
+        totalSales: '40000',
+        area: '400 Sq.Ft',
+        status: 'ACTIVE',
+      },
+      {
+        id: '3a2beede-c18f-4912-b9b1-54d1a53ebf9e',
+        outletName: 'Outlet 4',
+        type: 'Restaurant',
+        totalSales: '50000',
+        area: '500 Sq.Ft',
+        status: 'ACTIVE',
+      },
+      {
+        id: '3a2beede-c18f-4912-b9b1-54d1a53ebf9e',
+        outletName: 'Outlet 5',
+        type: 'Restaurant',
+        totalSales: '60000',
+        area: '600 Sq.Ft',
+        status: 'ACTIVE',
+      },
+]

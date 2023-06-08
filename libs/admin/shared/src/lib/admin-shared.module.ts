@@ -91,6 +91,8 @@ import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
+import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -189,6 +191,7 @@ import { ModalHeaderComponent } from './components/datatable/modal-header/modal-
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    TimePickerComponent
   ],
 
   exports: [
@@ -278,6 +281,7 @@ import { ModalHeaderComponent } from './components/datatable/modal-header/modal-
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    TimePickerComponent
   ],
 })
 export class AdminSharedModule {}

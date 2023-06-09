@@ -121,7 +121,6 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'category',
       header: 'Category',
       sortType: 'string',
-      isSearchDisabled: true,
     },
     {
       field: 'kitchenDept',

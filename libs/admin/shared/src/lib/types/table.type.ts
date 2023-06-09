@@ -76,11 +76,15 @@ export type Status = {
   disabled?: boolean;
 };
 
-export type NextStates = Status[]
+export type NextStates = Status[];
 
-export type EmptyViewType ={
+export type EmptyViewType = {
   description: string;
   actionName?: string;
   imageSrc: string;
   link?: string;
+};
+
+export type QueryConfig = {
+  params: string;
 }

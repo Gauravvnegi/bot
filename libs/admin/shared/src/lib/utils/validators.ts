@@ -1,4 +1,4 @@
-import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 function minArrayValueLength(number: number): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } => {
@@ -14,9 +14,28 @@ function notAllowedChr(chr: string): ValidatorFn {
   };
 }
 
+function requiredLength(length: number): ValidationErrors | null {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (
+      value &&
+      (value.toString().length < length || value.toString().length > length)
+    ) {
+      return {
+        maxLength: {
+          valid: false,
+          message: `Length should be ${length} digits.`,
+        },
+      };
+    }
+    return null;
+  };
+}
+
 const CustomValidators = {
   minArrayValueLength,
   notAllowedChr,
+  requiredLength,
 };
 
 export default CustomValidators;

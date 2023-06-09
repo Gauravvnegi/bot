@@ -2,7 +2,13 @@
   <hospitality-bot-navigation-header
     [heading]="pageTitle"
     [routes]="navRoutes"
-  ></hospitality-bot-navigation-header>
+  >
+    <p-splitButton
+      label="Download Menu"
+      (onClick)="handleDownload()"
+      [model]="buttons"
+    ></p-splitButton>
+</hospitality-bot-navigation-header>
 
   <div class="form-block" [formGroup]="useForm">
     <div class="code">

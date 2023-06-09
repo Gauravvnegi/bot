@@ -17,7 +17,11 @@ const adminCompanyRoutes: Route[] = [
       {
         path: companyRoutes.addCompany.route,
         component: AddCompanyComponent,
-      }
+      },
+      {
+        path: `${companyRoutes.editCompany.route}/:id`,
+        component: AddCompanyComponent,
+      },
     ],
   },
 ];
@@ -27,5 +31,9 @@ const adminCompanyRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminCompanyRoutingModule {
-  static components = [MainComponent, CompanyDataTableComponent, AddCompanyComponent];
+  static components = [
+    MainComponent,
+    CompanyDataTableComponent,
+    AddCompanyComponent,
+  ];
 }

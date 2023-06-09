@@ -136,6 +136,16 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     );
   }
 
+  /**
+   * @function editCompany To edit the company.
+   * @params rowData
+   */
+  editCompany(rowData) {
+    this.router.navigate([
+      `/pages/members/company/${this.companyRoutes.editCompany.route}/${rowData.id}`,
+    ]);
+  }
+
   getSelectedQuickReplyFilters() {
     const chips = this.filterChips.filter(
       (item) => item.isSelected && item.value !== 'ALL'
@@ -147,31 +157,31 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     ];
   }
 
-    /**
+  /**
    * @function exportCSV To export CSV report of the table.
    */
-    exportCSV(): void {
-      this.loading = true;
-  
-      // const config: QueryConfig = {
-      //   params: this.adminUtilityService.makeQueryParams([
-      //     ...this.selectedRows.map((item) => ({ ids: item.id })),
-      //
-      //   ]),
-      // };
-      this.$subscription.add(
-        this.companyService.exportCSV(this.hotelId).subscribe(
-          (res) => {
-            FileSaver.saveAs(
-              res,
-              `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-            );
-          },
-          () => {},
-          this.handleFinal
-        )
-      );
-    }
+  exportCSV(): void {
+    this.loading = true;
+
+    // const config: QueryConfig = {
+    //   params: this.adminUtilityService.makeQueryParams([
+    //     ...this.selectedRows.map((item) => ({ ids: item.id })),
+    //
+    //   ]),
+    // };
+    this.$subscription.add(
+      this.companyService.exportCSV(this.hotelId).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+        },
+        () => {},
+        this.handleFinal
+      )
+    );
+  }
 
   /**
    * @function handleError to show the error

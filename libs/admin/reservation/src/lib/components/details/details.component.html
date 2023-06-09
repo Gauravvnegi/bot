@@ -344,6 +344,11 @@
                   ></hospitality-bot-button>
                 </ng-container>
               </ng-container>
+              <hospitality-bot-button
+                label="Edit Booking"
+                variant="outlined"
+                (click)="editBooking()"
+              ></hospitality-bot-button>
             </ng-template>
             <ng-template #CHECKIN>
               <ng-container [ngSwitch]="details.currentJourneyDetails.status">

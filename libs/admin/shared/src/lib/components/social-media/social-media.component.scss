@@ -1,0 +1,30 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+}
+
+.social-media {
+  display: flex;
+  align-items: center;
+  gap: 2%;
+}
+
+.img {
+  flex-basis: 18%;
+}
+
+.input {
+  flex-basis: 112%;
+}
+
+
+img {
+  width: 37px;
+  height: 37px;
+}
+.cross{
+     cursor: pointer;
+      width: 23px;
+
+}

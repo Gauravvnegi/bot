@@ -91,6 +91,8 @@ import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
+import { AddressComponent } from './components/address/address-component.component';
+import { SocialMediaComponent } from './components/social-media/social-media.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -189,6 +191,8 @@ import { ModalHeaderComponent } from './components/datatable/modal-header/modal-
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    AddressComponent,
+    SocialMediaComponent,
   ],
 
   exports: [
@@ -278,6 +282,8 @@ import { ModalHeaderComponent } from './components/datatable/modal-header/modal-
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    AddressComponent,
+    SocialMediaComponent,
   ],
 })
 export class AdminSharedModule {}

@@ -85,7 +85,7 @@ export class HotelInfoFormComponent implements OnInit {
           number: [''],
         }),
         gstNumber: [''],
-        address: [[], [Validators.required]],
+        address: [[]],
         imageUrl: [[]],
         description: [''],
         serviceIds: [[]],
@@ -93,6 +93,24 @@ export class HotelInfoFormComponent implements OnInit {
       }),
       brandId: [this.brandId],
     });
+
+    // this.useForm.get('hotel.address').patchValue([
+    //   {
+    //     buildingName: '',
+    //     city: 'Noida',
+    //     country: 'India',
+    //     floor: '',
+    //     formattedAddress:
+    //       'H9G4+8WH, Morna, Sector 35, Noida, Uttar Pradesh 201307, India',
+    //     latitude: 28.5759152,
+    //     longitude: 77.35734479999999,
+    //     id: 'ChIJNQGuDmHlDDkR7gG7SGkbpSM',
+    //     postalCode: '201307',
+    //     sector: 'Sector 35',
+    //     state: 'Uttar Pradesh',
+    //     street: '',
+    //   },
+    // ]);
 
     const { navRoutes, title } = businessRoute[
       this.hotelId ? 'editHotel' : 'hotel'
@@ -113,24 +131,17 @@ export class HotelInfoFormComponent implements OnInit {
 
     if (this.hotelId && !this.businessService.hotelFormState) {
       this.businessService.getHotelById(this.hotelId).subscribe((res) => {
-        const { address, ...rest } = res;
-        this.prevAddressId = address?.id;
+        // const data = new HotelResponse().deserialize(res);
 
-        this.addressList = [
-          {
-            label: address?.formattedAddress,
-            value: address?.id,
-          },
-        ];
-        const data = new HotelResponse().deserialize(rest);
-        this.useForm.patchValue(data);
-        this.useForm
-          .get('hotel.address')
-          .setValue({ label: address?.formattedAddress, value: address?.id });
-      });
-      this.businessService.getServiceList(this.hotelId).subscribe((res) => {
-        const serviceIds = new ServiceIdList().deserialize(res).serviceIdList;
-        this.useForm.get('hotel.serviceIds').patchValue(serviceIds);
+        const { address, ...rest } = res;
+        this.useForm.get('hotel').patchValue(rest);
+        console.log('res', address);
+        this.useForm.get('hotel.address').patchValue(address);
+
+        this.businessService.getServiceList(this.hotelId).subscribe((res) => {
+          const serviceIds = new ServiceIdList().deserialize(res).serviceIdList;
+          this.useForm.get('hotel.serviceIds').patchValue(serviceIds);
+        });
       });
     }
   }
@@ -190,7 +201,7 @@ export class HotelInfoFormComponent implements OnInit {
    * @returns void
    * @description to submit form
    */
-  async submitForm() {
+  submitForm() {
     if (this.useForm.invalid) {
       this.snackbarService.openSnackBarAsText(
         'Invalid Form: Please fix the errors'
@@ -200,81 +211,41 @@ export class HotelInfoFormComponent implements OnInit {
     }
     this.businessService.onSubmit.emit(true);
     const data = this.useForm.getRawValue();
-
     // get modified segment
     data.hotel.propertyCategory = this.segmentList.find(
       (item) => item?.value === data.hotel.propertyCategory
     );
 
-    try {
-      // get modified address
-      const address = await this.addressService.getAddressById(
-        data.hotel.address?.value,
-        this.prevAddressId === data.hotel.address?.value
+    //if hotelId is present then update hotel else create hotel
+    if (this.hotelId) {
+      this.$subscription.add(
+        this.businessService.updateHotel(this.hotelId, data.hotel).subscribe(
+          (res) => {
+            this.router.navigate([
+              `/pages/settings/business-info/brand/${this.brandId}`,
+            ]);
+          },
+          this.handelError,
+          this.handleSuccess
+        )
       );
-      data.hotel.address = address;
-
-      data.hotel.imageUrl = data.hotel.imageUrl.filter(
-        (x) => x.url !== this.defaultImage
+    } else {
+      this.$subscription.add(
+        this.businessService.createHotel(this.brandId, data).subscribe(
+          (res) => {
+            this.router.navigate([
+              `/pages/settings/business-info/brand/${this.brandId}`,
+            ]);
+          },
+          this.handelError,
+          this.handleSuccess
+        )
       );
-
-      //if hotelId is present then update hotel else create hotel
-      if (this.hotelId) {
-        this.$subscription.add(
-          this.businessService.updateHotel(this.hotelId, data.hotel).subscribe(
-            (res) => {
-              this.router.navigate([
-                `/pages/settings/business-info/brand/${this.brandId}`,
-              ]);
-            },
-            this.handelError,
-            this.handleSuccess
-          )
-        );
-      } else {
-        this.$subscription.add(
-          this.businessService.createHotel(this.brandId, data).subscribe(
-            (res) => {
-              this.router.navigate([
-                `/pages/settings/business-info/brand/${this.brandId}`,
-              ]);
-            },
-            this.handelError,
-            this.handleSuccess
-          )
-        );
-      }
-    } catch (error) {
-      // Handle the error from getAddressById function
-      this.handelError(error);
     }
   }
 
   resetForm() {
     this.useForm.reset({}, { emitEvent: true });
-  }
-
-  searchOptions(text: string) {
-    if (text) {
-      var placeServiceRequest = {
-        input: text,
-        types: ['establishment'],
-      };
-      var service = new google.maps.places.AutocompleteService();
-      service.getPlacePredictions(
-        placeServiceRequest,
-        (predictions, status) => {
-          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            this.addressList = predictions.map((item) => {
-              return {
-                label: item.description,
-                value: item.place_id,
-              };
-            });
-          }
-        }
-      );
-    }
   }
 
   /**

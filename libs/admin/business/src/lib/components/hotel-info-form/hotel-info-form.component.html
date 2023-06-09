@@ -46,17 +46,11 @@
         label="GST"
         maxLength="15"
       ></hospitality-bot-input>
-      <hospitality-bot-auto-complete
+      <hospitality-bot-address-component
         class="half-width"
         controlName="address"
-        label="Address"
-        [options]="addressList"
-        [loading]="loading"
-        (onSearch)="searchOptions($event)"
-        [settings]="{
-          multiple: false
-        }"
-      ></hospitality-bot-auto-complete>
+      >
+      </hospitality-bot-address-component>
 
       <div class="file-upload-wrapper">
         <hospitality-bot-custom-file-upload
@@ -70,7 +64,7 @@
             isMultiple: true
           }"
           [hotelId]="hotelId"
-          path="static-content/room-types"
+          path="static-content/hotel-images"
         ></hospitality-bot-custom-file-upload>
       </div>
       <div class="des-template">

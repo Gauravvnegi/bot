@@ -7,7 +7,7 @@
   <div class="action-wrapper">
     <hospitality-bot-button
       label="+ Add Company"
-      link="pages/members/company/{{ companyRoutes.addCompany.route }}"
+      link="/pages/members/company/{{ companyRoutes.addCompany.route }}"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
@@ -46,7 +46,6 @@
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
-
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
         [chips]="filterChips"
@@ -76,7 +75,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="table-row">
+    <tr class="table-row" (click)="editCompany(rowData)">
       <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -113,14 +112,20 @@
         </div>
       </td>
       <td>
-        <div class="center-align" *ngIf="rowData.salesPersonName; else emptyCell">
+        <div
+          class="center-align"
+          *ngIf="rowData.salesPersonName; else emptyCell"
+        >
           <div class="primary-text">
             {{ rowData.salesPersonName }}
           </div>
         </div>
       </td>
       <td>
-        <div class="center-align" *ngIf="rowData.salesPersonNumber; else emptyCell">
+        <div
+          class="center-align"
+          *ngIf="rowData.salesPersonNumber; else emptyCell"
+        >
           <div class="primary-text">
             {{ rowData.salesPersonNumber }}
           </div>
@@ -128,9 +133,7 @@
       </td>
       <td>
         <div class="center-align" *ngIf="rowData.discount; else emptyCell">
-          <div class="primary-text">
-            {{ rowData.discount }}
-          </div>
+          <div class="primary-text">{{ rowData.discount }}%</div>
         </div>
       </td>
       <td>

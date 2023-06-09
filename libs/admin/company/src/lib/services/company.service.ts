@@ -17,6 +17,42 @@ export class CompanyService extends ApiService {
     );
   }
 
+  addCompany(hotelId: string, data, config?: QueryConfig): Observable<any> {
+    return this.post(
+      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`,
+      data
+    ).pipe(
+      map((res) => {
+        return companyResponse;
+      })
+    );
+  }
+
+  getCompanyById(
+    hotelId: string,
+    data: { companyId: number },
+    config?: QueryConfig
+  ): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`
+    ).pipe(
+      map((res) => {
+        return companyResponse.find((item) => item.id === data.companyId) ?? {};
+      })
+    );
+  }
+
+  updateCompany(hotelId: string, data, config?: QueryConfig): Observable<any> {
+    return this.patch(
+      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`,
+      data
+    ).pipe(
+      map((res) => {
+        return companyResponse;
+      })
+    );
+  }
+
   exportCSV(hotelId: string): Observable<any> {
     return this.get(`/api/v1/entity/${hotelId}/outlet/export`, {
       responseType: 'blob',

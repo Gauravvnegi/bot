@@ -21,9 +21,6 @@
       class="half-width"
       controlName="firstName"
       label="Agent Name"
-      [props]="{
-        placeholder: 'Enter Agent Name'
-      }"
     ></hospitality-bot-input>
 
     <hospitality-bot-input
@@ -31,7 +28,6 @@
       controlName="email"
       label="Email"
       [props]="{
-        placeholder: 'Enter email',
         type: 'email',
         errorMessages: {
           required: 'This is a required field.',
@@ -56,7 +52,7 @@
         type: 'number',
         errorMessages: {
           required: 'This is a required field.',
-          maxLength: 'Length should be 14 digit.'
+          requiredLength: 'Length should be 14 digit.'
         }
       }"
     ></hospitality-bot-input>
@@ -81,7 +77,6 @@
       postControlName="commission"
       [defaultProps]="{ post: { type: 'number' } }"
       [props]="{
-        placeholder: 'Enter Commission',
         type: 'number',
         errorMessages: {
           required: 'This is a required field.',

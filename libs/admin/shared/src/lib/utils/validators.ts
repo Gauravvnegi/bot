@@ -14,21 +14,13 @@ function notAllowedChr(chr: string): ValidatorFn {
   };
 }
 
-function requiredLength(length: number): ValidationErrors | null {
-  return (control: AbstractControl): ValidationErrors | null => {
+function requiredLength(length: number): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } => {
     const value = control.value;
-    if (
+    const isError =
       value &&
-      (value.toString().length < length || value.toString().length > length)
-    ) {
-      return {
-        maxLength: {
-          valid: false,
-          message: `Length should be ${length} digits.`,
-        },
-      };
-    }
-    return null;
+      (value.toString().length < length || value.toString().length > length);
+    return isError ? { requiredLength: value } : null;
   };
 }
 

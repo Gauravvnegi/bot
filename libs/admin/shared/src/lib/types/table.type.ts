@@ -7,7 +7,9 @@ export type FlagType =
   | 'warning'
   | 'inactive'
   | 'success'
-  | 'unavailable';
+  | 'unavailable'
+  | 'paid'
+  | 'unpaid'
 
 // more modes can be added (take reference form primeNg filter)
 export type MatchModes = 'startsWith' | 'contains' | 'endsWith' | 'equals';
@@ -84,6 +86,14 @@ export type EmptyViewType = {
   imageSrc: string;
   link?: string;
 };
+
+export type EntityStateRecord<T extends string> = Record<
+  T,
+  {
+    label: string;
+    type: FlagType;
+  }
+>;
 
 export type QueryConfig = {
   params: string;

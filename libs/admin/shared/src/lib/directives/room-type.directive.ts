@@ -31,7 +31,7 @@ export class RoomTypeDirective {
 
   applyDefaultStyle(elementRef: ElementRef) {
     elementRef.nativeElement.style.backgroundColor = this.getBackgroundColorByStatus(
-      this.roomStatus.toLocaleLowerCase()
+      this.roomStatus?.toLocaleLowerCase()
     );
     elementRef.nativeElement.style.padding = '7px 11.7px 7.5px 12px';
     elementRef.nativeElement.style.textOverflow = 'ellipsis';
@@ -41,7 +41,7 @@ export class RoomTypeDirective {
     elementRef.nativeElement.style.borderRadius = '8px';
     elementRef.nativeElement.style.textAlign = 'center';
     elementRef.nativeElement.style.color = this.getColorByStatus(
-      this.roomStatus.toLocaleLowerCase()
+      this.roomStatus?.toLocaleLowerCase()
     );
   }
 

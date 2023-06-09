@@ -259,6 +259,14 @@ body {
       border: 1px solid $unavailable-state;
       color: $unavailable-state;
     }
+    &-paid {
+      border: 1px solid $paid-state;
+      color: $paid-state;
+    }
+    &-unpaid {
+      border: 1px solid $unpaid-state;
+      color:$unpaid-state;
+    }
   }
   
   &-contained {
@@ -298,14 +306,14 @@ body {
       background-color: $unavailable-state;
       color: white;
     }
-  }
-  &-paid {
-    background-color: $paid-state;
-    color: white;
-  }
-  &-unpaid {
-    background-color: $unpaid-state;
-    color: white;
+    &-paid {
+      background-color: $paid-state;
+      color: white;
+    }
+    &-unpaid {
+      background-color: $unpaid-state;
+      color: white;
+    }
   }
 }
 

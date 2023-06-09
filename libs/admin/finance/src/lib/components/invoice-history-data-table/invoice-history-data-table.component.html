@@ -122,7 +122,12 @@
       </td>
       <td>
         <div class="center-align" *ngIf="rowData.status; else emptyCell">
-          <div class="status-text" [ngClass]="rowData.status === 'Paid' ? 'state-paid' : 'state-unpaid'">
+          <div
+            class="status-text"
+            [ngClass]="
+              rowData.status === 'Paid' ? 'chip-contained-paid' : 'chip-contained-unpaid'
+            "
+          >
             {{ rowData.status }}
           </div>
         </div>

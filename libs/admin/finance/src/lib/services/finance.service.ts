@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { QueryConfig } from '@hospitality-bot/admin/library';
-import { TaxListResponse } from 'libs/admin/services/src/lib/types/response';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { TableValue } from '../constants/data-table';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { map } from 'rxjs/operators';
 import { invoiceHistoryRes, transactionHistoryRes } from '../constants/response';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable({
   providedIn: 'root',

@@ -18,6 +18,15 @@ export class CreateMenuComponent implements OnInit {
   navRoutes: NavRouteOptions;
   packageCode: string = '# will be auto generated';
 
+  buttons = [
+    {
+      label: 'Print Menu',
+      command: () => {
+        this.handlePrintMenu();
+      }
+    }
+  ]
+
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -47,7 +56,9 @@ export class CreateMenuComponent implements OnInit {
 
   handleSubmit() {}
 
-  handleReset() {
-    
-  }
+  handleReset() {}
+
+  handleDownload() {}
+
+  handlePrintMenu() {}
 }

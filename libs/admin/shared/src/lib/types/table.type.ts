@@ -94,3 +94,7 @@ export type EntityStateRecord<T extends string> = Record<
     type: FlagType;
   }
 >;
+
+export type QueryConfig = {
+  params: string;
+}

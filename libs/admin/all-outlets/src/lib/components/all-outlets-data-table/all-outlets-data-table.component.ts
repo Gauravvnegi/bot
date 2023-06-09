@@ -9,7 +9,13 @@ import {
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { TabValue, chips, cols, filters, title } from '../../constants/data-table';
+import {
+  TabValue,
+  chips,
+  cols,
+  filters,
+  title,
+} from '../../constants/data-table';
 import { Subscription } from 'rxjs';
 import { OutletService } from '../../services/outlet.service';
 import { LazyLoadEvent } from 'primeng/api';
@@ -26,7 +32,6 @@ import { OutletList } from '../../models/outlet.model';
     './all-outlets-data-table.component.scss',
   ],
 })
-
 export class AllOutletsDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   readonly outletRoutes = outletRoutes;
@@ -95,39 +100,37 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     // this.values = allOutletsResponse;
 
-    this.outletService
-      .getAllOutlets(this.outletId)
-      .subscribe(
-        (res) => {
-          const outletList = new OutletList().deserialize(res);
-          this.values = res;
-          // switch (this.selectedTable) {
-          //   case TabValue.ALL:
-          //     this.values = outletList.allOutlets;
-          //     break;
-          //   case TabValue.BANQUET:
-          //     this.values = outletList.banquets;
-          //     break;
-          //   case TabValue.BAR:
-          //     this.values = outletList.bar;
-          //     break;
-          //   case TabValue.CONFERENCE_ROOM:
-          //     this.values = outletList.conferenceRoom;
-          //     break;
-          //   case TabValue.RESTAURANT:
-          //     this.values = outletList.restaurant;
-          //     break;
-          // }
-          this.updateTabFilterCount(res.entityTypeCounts, res.total);
-          this.updateQuickReplyFilterCount(res.entityStateCounts);
-          this.updateTotalRecords();
-        },
-        () => {
-          this.values = [];
-          this.loading = false;
-        },
-        this.handleFinal
-      );
+    this.outletService.getAllOutlets(this.outletId).subscribe(
+      (res) => {
+        const outletList = new OutletList().deserialize(res);
+        this.values = res;
+        // switch (this.selectedTable) {
+        //   case TabValue.ALL:
+        //     this.values = outletList.allOutlets;
+        //     break;
+        //   case TabValue.BANQUET:
+        //     this.values = outletList.banquets;
+        //     break;
+        //   case TabValue.BAR:
+        //     this.values = outletList.bar;
+        //     break;
+        //   case TabValue.CONFERENCE_ROOM:
+        //     this.values = outletList.conferenceRoom;
+        //     break;
+        //   case TabValue.RESTAURANT:
+        //     this.values = outletList.restaurant;
+        //     break;
+        // }
+        this.updateTabFilterCount(res.entityTypeCounts, res.total);
+        this.updateQuickReplyFilterCount(res.entityStateCounts);
+        this.updateTotalRecords();
+      },
+      () => {
+        this.values = [];
+        this.loading = false;
+      },
+      this.handleFinal
+    );
   }
 
   getSelectedQuickReplyFilters() {
@@ -149,23 +152,21 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
     // Not working
     this.loading = true;
     this.$subscription.add(
-      this.outletService
-        .updateOutletItem(rowData.id, status)
-        .subscribe(
-          () => {
-            this.updateStatusAndCount(rowData.status, status);
+      this.outletService.updateOutletItem(rowData.id, status).subscribe(
+        () => {
+          this.updateStatusAndCount(rowData.status, status);
 
-            this.snackbarService.openSnackBarAsText(
-              'Status changes successfully',
-              '',
-              { panelClass: 'success' }
-            );
-          },
-          ({ error }) => {
-            this.handleError(error);
-          },
-          this.handleFinal
-        )
+          this.snackbarService.openSnackBarAsText(
+            'Status changes successfully',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        ({ error }) => {
+          this.handleError(error);
+        },
+        this.handleFinal
+      )
     );
   }
 

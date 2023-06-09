@@ -15,7 +15,7 @@
   font-size: 12px;
   font-weight: $bold;
   letter-spacing: 0.72px;
-  font-family: 'Poppins-regular';
+  font-family: 'Poppins';
 }
 
 :host ::ng-deep .p-datatable.p-datatable-lg .p-datatable-header {
@@ -938,7 +938,7 @@ $table-hover-color: #f3f3f3;
   color: $inActiveTab;
   font-size: 12px;
   font-weight: $bold;
-  font-family: 'Poppins-regular';
+  font-family: 'Poppins';
   order: 3;
 }
 

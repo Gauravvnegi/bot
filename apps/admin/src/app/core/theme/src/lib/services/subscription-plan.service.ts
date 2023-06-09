@@ -20,6 +20,16 @@ export class SubscriptionPlanService extends ApiService {
   getSubscriptionPlan(hotelId: string): Observable<any> {
     return this.get(`/api/v1/hotel/${hotelId}/subscriptions/`).pipe(
       map((res) => {
+        const guest = res.products.find(
+          (item) => item.name === ModuleNames.GUESTS
+        );
+        if (guest) {
+          guest['name'] = ModuleNames.MEMBERS;
+          guest['label'] = 'Members';
+          guest['config'][0]['name'] = ModuleNames.GUESTS;
+          guest['config'][0]['label'] = 'Guest';
+          guest['config'] = [...guest['config'], ...customModule.guests.config];
+        }
         res.products = [
           ...res.products,
           customModule.finance,

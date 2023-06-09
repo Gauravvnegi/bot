@@ -19,14 +19,7 @@ import * as FileSaver from 'file-saver';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import {
-  Status,
-  TableValue,
-  cols,
-  filter,
-  status,
-  title,
-} from '../../constant/data-table';
+import { cols, filter, TableValue, title } from '../../constant/data-table';
 import routes from '../../constant/routes';
 import { RoomList, RoomTypeList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
@@ -35,6 +28,7 @@ import {
   RoomListResponse,
   RoomStatus,
   RoomTypeListResponse,
+  RoomTypeStatus,
 } from '../../types/service-response';
 
 @Component({
@@ -48,7 +42,6 @@ import {
 export class RoomDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   readonly routes = routes;
-  readonly status = status;
 
   hotelId: string;
   $subscription = new Subscription();
@@ -84,13 +77,13 @@ export class RoomDataTableComponent extends BaseDatatableComponent
         );
         this.selectedTable = value;
         this.tableName = title[this.selectedTable];
-        this.getDataTableValue(this.selectedTable);
+        this.getDataTableValue();
       })
     );
   }
 
   loadData(event: LazyLoadEvent): void {
-    this.getDataTableValue(this.selectedTable);
+    this.getDataTableValue();
   }
 
   // /**
@@ -156,10 +149,10 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * Get table related data from service
    * @param table selected table value
    */
-  getDataTableValue(table: TableValue): void {
+  getDataTableValue(): void {
     this.loading = true;
 
-    if (table === TableValue.room)
+    if (this.selectedTable === TableValue.room)
       this.$subscription.add(
         this.roomService
           .getList<RoomListResponse>(this.hotelId, this.getQueryConfig())
@@ -180,7 +173,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           )
       );
 
-    if (table === TableValue.roomType)
+    if (this.selectedTable === TableValue.roomType)
       this.$subscription.add(
         this.roomService
           .getList<RoomTypeListResponse>(this.hotelId, this.getQueryConfig())
@@ -215,7 +208,14 @@ export class RoomDataTableComponent extends BaseDatatableComponent
         .updateRoomStatus(this.hotelId, {
           rooms: [{ id, roomStatus: status }],
         })
-        .subscribe(() => this.handleStatusSuccess(status, id))
+        .subscribe(
+          () => {
+            this.getDataTableValue();
+          },
+          () => {
+            this.loading = false;
+          }
+        )
     );
   }
 
@@ -233,8 +233,11 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           id,
           status,
         })
-        .subscribe(() =>
-          this.handleStatusSuccess(status ? 'ACTIVE' : 'INACTIVE', id)
+        .subscribe(
+          () => this.getDataTableValue(),
+          () => {
+            this.loading = false;
+          }
         )
     );
   }
@@ -243,9 +246,9 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function handleStatus To handle the status change
    * @param status status value
    */
-  handleStatus(status: RoomStatus, rowData): void {
+  handleStatus(status: RoomStatus | RoomTypeStatus, rowData): void {
     if (this.selectedTable === TableValue.room) {
-      this.handleRoomStatus(status, rowData.id);
+      this.handleRoomStatus(status as RoomStatus, rowData.id);
     }
 
     if (this.selectedTable === TableValue.roomType) {
@@ -305,19 +308,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function handleStatusSuccess To update the status after successful update
-   * @param status
-   * @param rowData
-   */
-  handleStatusSuccess = (status: RoomStatus, id: string): void => {
-    this.loading = false;
-    this.values.find((item) => item.id === id).status = {
-      label: Status[status],
-      value: status,
-    };
-  };
-
-  /**
    * @function onSelectedTabFilterChange To handle the tab filter change.
    * @param event The material tab change event.
    */
@@ -357,13 +347,18 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.roomService
         .exportCSV(this.hotelId, this.selectedTable, config)
-        .subscribe((res) => {
-          FileSaver.saveAs(
-            res,
-            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-          );
-          this.loading = false;
-        })
+        .subscribe(
+          (res) => {
+            FileSaver.saveAs(
+              res,
+              `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+            );
+          },
+          () => {},
+          () => {
+            this.loading = false;
+          }
+        )
     );
   }
 

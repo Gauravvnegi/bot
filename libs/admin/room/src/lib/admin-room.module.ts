@@ -13,6 +13,7 @@ import { RoomService } from './services/room.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ChartsModule } from 'ng2-charts';
 import { LibraryService } from '@hospitality-bot/admin/library';
+import { RoomDetailsDataTableComponent } from './components/room-details-data-table/room-details-data-table.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,7 @@ import { LibraryService } from '@hospitality-bot/admin/library';
     MatTooltipModule,
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['room'])),
   ],
-  declarations: [...AdminRoomRoutingModule.components],
+  declarations: [...AdminRoomRoutingModule.components, RoomDetailsDataTableComponent],
   providers: [RoomService, LibraryService],
 })
 export class AdminRoomModule {}

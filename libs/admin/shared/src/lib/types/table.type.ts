@@ -1,12 +1,15 @@
 export type FlagType =
   | 'default'
-  | 'new'
-  | 'initiated'
-  | 'pending'
-  | 'completed'
+  | 'active'
   | 'failed'
+  | 'draft'
+  | 'completed'
   | 'warning'
-  | 'standard';
+  | 'inactive'
+  | 'success'
+  | 'unavailable'
+  | 'paid'
+  | 'unpaid'
 
 // more modes can be added (take reference form primeNg filter)
 export type MatchModes = 'startsWith' | 'contains' | 'endsWith' | 'equals';
@@ -21,7 +24,7 @@ export type Chip<T extends string> = {
   label: string;
   value: T;
   total?: number;
-  isSelected: boolean;
+  isSelected?: boolean;
   type: FlagType;
 };
 
@@ -54,14 +57,16 @@ export type Cols = {
   searchField?: string[];
   isSearchDisabled?: boolean;
   matchMode?: MatchModes;
+  isHidden?: boolean;
   placeholder?: string;
 };
 
+// ---- chips need to be separated form filters
 export type Filter<T extends string, K extends string> = {
   label: string;
   value: T;
-  disabled: boolean;
-  content: string;
+  disabled?: boolean;
+  content?: string;
   total: number;
   chips?: Chip<K>[];
 };
@@ -73,9 +78,23 @@ export type Status = {
   disabled?: boolean;
 };
 
-export type EmptyViewType ={
+export type NextStates = Status[];
+
+export type EmptyViewType = {
   description: string;
   actionName?: string;
   imageSrc: string;
   link?: string;
+};
+
+export type EntityStateRecord<T extends string> = Record<
+  T,
+  {
+    label: string;
+    type: FlagType;
+  }
+>;
+
+export type QueryConfig = {
+  params: string;
 }

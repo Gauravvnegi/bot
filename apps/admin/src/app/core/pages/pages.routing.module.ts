@@ -71,11 +71,11 @@ const appRoutes: Route[] = [
         canLoad: [CanLoadGuard],
         canActivate: [CanActivateGuard],
       },
-      {
-        path: 'guest',
+       {
+        path: 'members',
         loadChildren: () =>
-          import('@hospitality-bot/admin/guests').then(
-            (m) => m.AdminGuestsModule
+          import('@hospitality-bot/admin/members').then(
+            (m) => m.AdminMembersModule
           ),
         canLoad: [CanLoadGuard],
         canActivate: [CanActivateGuard],

@@ -12,6 +12,8 @@ import { RulesComponent } from './components/outlet-forms/rules/rules.component'
 import { outletRoutes } from './constants/route';
 import { SpaFormComponent } from './components/outlet-forms/spa-form/spa-form.component';
 import { BanquetFormComponent } from './components/outlet-forms/banquet-form/banquet-form.component';
+import { CreateFoodPackageComponent } from './components/create-food-package/create-food-package.component';
+import { FoodItemsComponent } from './components/food-items/food-items.component';
 
 const appRoutes: Route[] = [
   {
@@ -38,6 +40,10 @@ const appRoutes: Route[] = [
         path: `${outletRoutes.menuList.route}`,
         component: MenuListDataTableComponent,
       },
+      {
+        path: `${outletRoutes.createFoodPackage.route}`,
+        component: CreateFoodPackageComponent,
+      },
     ],
   },
 ];
@@ -59,5 +65,7 @@ export class AdminAllOutletsRoutingModule {
     RestaurantFormComponent,
     SpaFormComponent,
     BanquetFormComponent,
+    CreateFoodPackageComponent,
+    FoodItemsComponent,
   ];
 }

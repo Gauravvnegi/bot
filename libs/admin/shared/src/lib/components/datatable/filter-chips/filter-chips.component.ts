@@ -21,7 +21,7 @@ export class FilterChipsComponent implements OnInit {
       value: 'active',
       total: 0,
       isSelected: false,
-      type: 'new',
+      type: 'active',
     },
     {
       label: 'In-Active ',

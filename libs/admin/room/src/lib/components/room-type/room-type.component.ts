@@ -103,10 +103,21 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       currency: ['', [Validators.required, Validators.min(0)]],
       // variableAmount: ['', [Validators.min(0)]],
       discountedPriceCurrency: [{ value: '', disabled: true }],
-      maxOccupancy: [null, occupancyValidation],
+      maxOccupancy: [
+        null,
+        [
+          Validators.required,
+          Validators.min(1),
+          CustomValidators.notAllowedChr('.'),
+        ],
+      ],
       maxChildren: [{ value: null, disabled: true }, occupancyValidation],
       maxAdult: [{ value: null, disabled: true }, occupancyValidation],
       area: ['', [Validators.required, Validators.min(0)]],
+
+      minPrice: ['', [Validators.required, Validators.min(0)]],
+      maxPrice: ['', [Validators.required, Validators.min(0)]],
+      paxAdditionalCost: ['', [Validators.required, Validators.min(0)]],
     });
 
     // If Data is already present

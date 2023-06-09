@@ -1,6 +1,12 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -12,18 +18,27 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import { NavRouteOptions } from 'libs/admin/shared/src';
+import { FlagType, NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
 import { iteratorFields } from '../../constant/form';
+import { roomStatusDetails, roomStatuses } from '../../constant/response';
 import routes from '../../constant/routes';
 import { MultipleRoomList, SingleRoomList } from '../../models/room.model';
 import { RoomType, RoomTypeList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { AddRoomTypes, RoomTypeOption } from '../../types/room';
-import { RoomTypeListResponse } from '../../types/service-response';
-import { SingleRoomForm } from '../../types/use-form';
+import {
+  RoomFoStatus,
+  RoomStatus,
+  RoomTypeListResponse,
+} from '../../types/service-response';
+import {
+  MultipleRoomForm,
+  SingleRoomForm,
+  StatusQuoForm,
+} from '../../types/use-form';
 
 @Component({
   selector: 'hospitality-bot-add-room',
@@ -38,9 +53,11 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   hotelId: string;
 
   useForm: FormGroup;
+  statusQuoForm: FormGroup;
   useFormArray: FormArray;
   fields: IteratorField[];
 
+  roomStatuses: Option[] = [];
   roomTypes: RoomTypeOption[] = [];
   submissionType: AddRoomTypes;
 
@@ -60,6 +77,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   roomTypeLimit = 10;
 
   $subscription = new Subscription();
+
+  currentRoomState: { value: string; type: FlagType }[] = [];
+  isDateRequired = false;
 
   constructor(
     private fb: FormBuilder,
@@ -109,7 +129,79 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       rooms: this.useFormArray,
     });
 
+    this.statusQuoForm = this.fb.group({
+      roomStatus: ['', Validators.required],
+      remarks: ['', Validators.required],
+      foStatus: [],
+      toDate: [''],
+      fromDate: [''],
+    });
+
+    this.registerFormListener();
+  }
+
+  /**
+   * room form controls
+   */
+  get roomFormControls() {
+    return this.useForm.controls as Record<
+      keyof (SingleRoomForm | MultipleRoomForm),
+      AbstractControl
+    >;
+  }
+
+  /**
+   * Return status quo form controls
+   */
+  get statusQuoFormControls() {
+    return this.statusQuoForm.controls as Record<
+      keyof StatusQuoForm,
+      AbstractControl
+    >;
+  }
+
+  /**
+   *Handles Form subscription
+   */
+  registerFormListener() {
     this.registerRoomTypeChangesListener();
+    this.registerRoomStateChangeListener();
+  }
+
+  registerRoomStateChangeListener() {
+    const {
+      fromDate,
+      toDate,
+      roomStatus,
+      foStatus,
+    } = this.statusQuoFormControls;
+
+    foStatus.valueChanges.subscribe((res: RoomFoStatus) => {
+      this.currentRoomState[1] = {
+        value: roomStatusDetails[res].label,
+        type: roomStatusDetails[res].type,
+      };
+    });
+
+    roomStatus.valueChanges.subscribe((res: RoomStatus) => {
+      this.currentRoomState[0] = {
+        value: roomStatusDetails[res].label,
+        type: roomStatusDetails[res].type,
+      };
+
+      this.isDateRequired = res === 'OUT_OF_ORDER' || res === 'OUT_OF_SERVICE';
+
+      if (this.isDateRequired) {
+        fromDate.setValidators([Validators.required]);
+        toDate.setValidators([Validators.required]);
+      } else {
+        fromDate.clearValidators();
+        toDate.clearValidators();
+      }
+
+      fromDate.updateValueAndValidity();
+      toDate.updateValueAndValidity();
+    });
   }
 
   /**
@@ -117,6 +209,11 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    */
   initOptionsConfig(): void {
     this.getRoomTypes();
+    this.roomStatuses = roomStatuses.map((item) => ({
+      label: roomStatusDetails[item].label,
+      value: item,
+      type: roomStatusDetails[item].type,
+    }));
   }
 
   /**
@@ -237,6 +334,12 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           }
 
           this.useForm.patchValue(data);
+
+          this.statusQuoForm.patchValue({
+            roomStatus:roomDetails.roomStatus,
+            remarks: roomDetails.remarks,
+            foStatus: roomDetails.foStatus,
+          });
 
           this.isRoomInfoLoading = false;
         })

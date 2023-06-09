@@ -37,7 +37,7 @@ export const chips: Chip<ManageSiteStatus | 'ALL'>[] = [
     value: ManageSiteStatus.PUBLISHED,
     total: 0,
     isSelected: false,
-    type: 'new',
+    type: 'active',
   },
   {
     label: 'Draft',

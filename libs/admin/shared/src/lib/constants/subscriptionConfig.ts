@@ -64,10 +64,10 @@ export enum ModuleNames {
   TRANSACTION = 'TRANSACTION',
 
   // GUESTS
+  MEMBERS = 'MEMBERS',
   GUESTS = 'GUESTS',
-  GUESTS_DASHBOARD = 'GUESTS_DASHBOARD',
-  RESIDENT = 'RESIDENT',
-  NON_RESIDENT = 'NON_RESIDENT',
+  AGENT = 'AGENT',
+  COMPANY = 'COMPANY',
 
   //Settings
   SETTINGS = 'SETTINGS',
@@ -197,7 +197,7 @@ export const ModuleConfig = {
       },
     },
   },
-  [ModuleNames.GUESTS_DASHBOARD]: {
+  [ModuleNames.GUESTS]: {
     cards: [
       CardNames.VIP,
       CardNames.STATUS,

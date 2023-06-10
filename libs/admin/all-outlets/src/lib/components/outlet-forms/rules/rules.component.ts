@@ -34,17 +34,17 @@ export class RulesComponent extends FormComponent implements OnInit {
     this.useForm = this.fb.group({
       rules: this.fb.array([
         this.fb.group({
-          title: ['Alcohol Rules'],
-          description: ['alchol'],
-        }),
-        this.fb.group({
-          title: ['Decoration Rules'],
-          description: ['decoration'],
+          title: [''],
+          description: [''],
         }),
       ]),
     });
 
     this.rulesControl = this.useForm.get('rules') as FormArray;
+
+    if (this.inputControl.value.length) {
+      this.rulesControl.patchValue(this.inputControl.value);
+    }
   }
 
   addRule(): void {
@@ -58,7 +58,6 @@ export class RulesComponent extends FormComponent implements OnInit {
 
   onValueChange(): void {
     this.rulesControl.valueChanges.subscribe((res) => {
-      console.log(res, 'response');
       this.inputControl.setValue(res);
     });
   }

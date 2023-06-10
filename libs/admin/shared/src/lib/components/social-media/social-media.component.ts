@@ -31,7 +31,6 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.initInputControl();
-    this.patchValueToParentComponent();
   }
 
   initForm(): void {
@@ -53,6 +52,7 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
         });
       })
     );
+    this.patchValueToParentComponent();
   }
 
   patchValueToParentComponent(): void {

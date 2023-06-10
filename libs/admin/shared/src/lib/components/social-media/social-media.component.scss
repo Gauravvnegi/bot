@@ -18,13 +18,15 @@
   flex-basis: 112%;
 }
 
-
 img {
   width: 37px;
   height: 37px;
 }
-.cross{
-     cursor: pointer;
-      width: 23px;
-
+.cross {
+  cursor: pointer;
+  width: 23px;
+}
+:host ::ng-deep .p-accordion .p-accordion-tab {
+  box-shadow: none !important;
+  border: solid 1px rgba(112, 112, 112, 0.35) !important;
 }

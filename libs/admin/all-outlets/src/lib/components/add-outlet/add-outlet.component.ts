@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup } from '@angular/forms';
 import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import { outletRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
@@ -8,7 +9,7 @@ import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
   styleUrls: ['./add-outlet.component.scss'],
 })
 export class AddOutletComponent implements OnInit {
-  pageTitle: string = 'Add Outlet';
+  pageTitle: string = '';
   navRoutes: NavRouteOptions = [];
   useForm: FormGroup;
   type: Option[] = [
@@ -23,7 +24,11 @@ export class AddOutletComponent implements OnInit {
     { label: 'Cafe', value: 'cafe' },
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+    const { navRoutes, title } = outletRoutes['addOutlet'];
+    this.navRoutes = navRoutes;
+    this.pageTitle = title;
+  }
 
   ngOnInit(): void {
     this.initForm();
@@ -54,7 +59,5 @@ export class AddOutletComponent implements OnInit {
     this.useForm.reset();
   }
 
-  submitForm(): void {
-    console.log(this.useForm.getRawValue());
-  }
+  submitForm(): void {}
 }

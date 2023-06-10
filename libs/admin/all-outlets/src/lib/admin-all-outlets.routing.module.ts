@@ -9,7 +9,7 @@ import { MenuDataTableComponent } from './components/menu-data-table/menu-data-t
 import { MenuListDataTableComponent } from './components/menu-list-data-table/menu-list-data-table.component';
 import { RestaurantFormComponent } from './components/outlet-forms/restaurant-form/restaurant-form.component';
 import { RulesComponent } from './components/outlet-forms/rules/rules.component';
-import { outletRoutes } from './constants/route';
+import { outletRoutes } from './constants/routes';
 import { SpaFormComponent } from './components/outlet-forms/spa-form/spa-form.component';
 import { BanquetFormComponent } from './components/outlet-forms/banquet-form/banquet-form.component';
 import { CreateFoodPackageComponent } from './components/create-food-package/create-food-package.component';
@@ -25,12 +25,18 @@ const appRoutes: Route[] = [
         component: AllOutletsDataTableComponent,
       },
       {
-        path: `add-outlet`,
-        component: AddOutletComponent,
-      },
-      {
-        path: outletRoutes.addMenu.route,
-        component: CreateMenuComponent,
+        path: outletRoutes.addOutlet.route,
+        component: MainComponent,
+        children: [
+          {
+            path: ``,
+            component: AddOutletComponent,
+          },
+          {
+            path: outletRoutes.addMenu.route,
+            component: CreateMenuComponent,
+          },
+        ],
       },
       {
         path: `${outletRoutes.addMenu.route}/${outletRoutes.addMenuItem.route}`,

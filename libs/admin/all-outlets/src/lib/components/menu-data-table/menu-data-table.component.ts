@@ -11,7 +11,7 @@ import { OutletService } from '../../services/outlet.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { cols } from '../../constants/data-table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { outletRoutes } from '../../constants/route';
+import { outletRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-menu-data-table',

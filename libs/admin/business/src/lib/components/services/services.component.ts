@@ -48,7 +48,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     private businessService: BusinessService,
     private route: ActivatedRoute,
     private adminUtilityService: AdminUtilityService,
-    private hotelFormDataServcie: HotelFormDataServcie
+    private hotelDataService: HotelFormDataServcie
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -61,7 +61,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (!this.hotelFormDataServcie.hotelFormState) {
+    if (!this.hotelDataService.hotelFormState) {
       this.location.back();
       return;
     }
@@ -82,13 +82,16 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
     if (this.hotelId) {
       this.initOptionConfig();
+      const data = this.hotelDataService.hotelInfoFormData.serviceIds;
+      this.useForm.get('serviceIds').patchValue(data);
     }
 
-    if (this.hotelFormDataServcie.hotelFormState && !this.hotelId) {
-      this.filteredServices = this.hotelFormDataServcie.hotelInfoFormData?.services;
+    if (this.hotelDataService.hotelFormState && !this.hotelId) {
+      this.filteredServices = this.hotelDataService.hotelInfoFormData?.services;
+
       this.useForm
         .get('serviceIds')
-        .patchValue(this.hotelFormDataServcie.getActiveServiceIds());
+        .patchValue(this.hotelDataService.hotelInfoFormData?.serviceIds);
     }
 
     this.manageRoutes();
@@ -150,25 +153,6 @@ export class ServicesComponent implements OnInit, OnDestroy {
           ];
           this.filteredServices = this.compServices;
 
-          const inActiveServiceIds = this.hotelFormDataServcie
-            .getInActiveServiceList()
-            .map((service) => service.id);
-
-          const activeIds = this.compServices
-            .filter(
-              (service) =>
-                service.active && !inActiveServiceIds.includes(service.id)
-            )
-            .map((service) => service.id);
-
-          this.hotelFormDataServcie.setActiveServiceIds(activeIds);
-
-          this.useForm
-            .get('serviceIds')
-            .patchValue(this.hotelFormDataServcie.getActiveServiceIds());
-
-          this.hotelFormDataServcie.hotelInfoFormData.services = this.compServices;
-
           if (this.compServices.length === res.total) {
             this.noMoreServices = true;
           }
@@ -207,34 +191,11 @@ export class ServicesComponent implements OnInit, OnDestroy {
   }
 
   saveForm() {
-    this.hotelFormDataServcie.setActiveServiceIds(
-      this.useForm.getRawValue().serviceIds
-    );
-
-    this.hotelFormDataServcie.isReturnFromService = true;
-
-    //to get active and inactive services
-    const data = new ServcieStatusList().deserialize(
-      this.compServices,
-      this.useForm.getRawValue().serviceIds
-    );
-    // extract active and inactive services from the list
-    const { activeServiceList, inActiveServiceList } = data;
-    this.hotelFormDataServcie.setInActiveServiceList(inActiveServiceList);
-    console.log(this.hotelFormDataServcie.getInActiveServiceList());
-
-    this.hotelFormDataServcie.initHotelInfoFormData(
+    this.hotelDataService.initHotelInfoFormData(
       this.useForm.getRawValue(),
       true
     );
-    // this.businessService.setServiceIds(this.useForm.getRawValue().serviceIds);
-    if (this.hotelId) {
-      this.businessService
-        .updateHotel(this.hotelId, {
-          serviceIds: this.useForm.getRawValue().serviceIds,
-        })
-        .subscribe((_res) => {});
-    }
+
     this.location.back();
   }
 

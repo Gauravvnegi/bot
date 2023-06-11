@@ -13,6 +13,7 @@ import { businessRoute } from '../../constant/routes';
 import {
   HotelResponse,
   SegmentList,
+  Service,
   ServiceIdList,
   Services,
   noRecordAction,
@@ -41,6 +42,7 @@ export class HotelInfoFormComponent implements OnInit {
   pageTitle: string = 'Hotel';
   brandId: string;
   addressList: any[] = [];
+  allServices: Service[] = [];
   defaultImage: string = 'assets/images/image-upload.png';
   actlink: string;
   noRecordAction;
@@ -97,20 +99,20 @@ export class HotelInfoFormComponent implements OnInit {
       }),
       brandId: [this.brandId],
     });
-    // if (this.hotelFormDataServcie.hotelFormState) {
-    //   this.compServices = this.hotelFormDataServcie.hotelInfoFormData.services.slice(
-    //     0,
-    //     5
-    //   );
-    //   this.useForm
-    //     .get('hotel')
-    //     .patchValue(this.hotelFormDataServcie.hotelInfoFormData);
 
-    //   const data = this.hotelFormDataServcie.getActiveServiceIds();
-    //   if (data.length) {
-    //     this.useForm.get('hotel.serviceIds').patchValue(data);
-    //   }
-    // }
+    if (this.hotelFormDataServcie.hotelFormState) {
+      this.allServices = this.hotelFormDataServcie.hotelInfoFormData.services.map(
+        (service) => service.id
+      );
+
+      this.compServices = this.hotelFormDataServcie.hotelInfoFormData.services.slice(
+        0,
+        5
+      );
+      this.useForm
+        .get('hotel')
+        .patchValue(this.hotelFormDataServcie.hotelInfoFormData);
+    }
 
     this.patchValue();
     this.manageRoutes();
@@ -136,23 +138,23 @@ export class HotelInfoFormComponent implements OnInit {
       //get the servcie list after getting hotel by id
       this.businessService
         .getServiceList(this.hotelId, {
-          params: '?type=SERVICE&serviceType=ALL&limit=5',
+          params: '?type=SERVICE&serviceType=COMPLIMENTARY&pagination=false',
         })
         .subscribe((res) => {
-          this.compServices = res.services;
+          this.allServices = res.complimentaryPackages.map((item) => item.id);
+
+          this.compServices = res.complimentaryPackages.slice(0, 5);
+
           this.hotelFormDataServcie.initHotelInfoFormData(
             { services: this.compServices },
             true
           );
 
-          this.useForm
-            .get('hotel.serviceIds')
-            .patchValue(
-              new ServiceIdList().deserialize(res.services).serviceIdList
-            );
-          this.hotelFormDataServcie.setActiveServiceIds(
-            this.useForm.getRawValue().hotel.serviceIds
-          );
+          const data = res.complimentaryPackages
+            .filter((item) => item.active)
+            .map((item) => item.id);
+
+          this.useForm.get('hotel.serviceIds').patchValue(data);
         });
     }
   }
@@ -276,24 +278,6 @@ export class HotelInfoFormComponent implements OnInit {
   saveHotelData() {
     this.businessService.onSubmit.emit(true);
 
-    //to get active and inactive services
-    let data;
-    if (this.hotelFormDataServcie.isReturnFromService) {
-      data = new ServcieStatusList().deserialize(
-        this.compServices,
-        this.hotelFormDataServcie.getActiveServiceIds()
-      );
-    } else {
-      data = new ServcieStatusList().deserialize(
-        this.compServices,
-        this.useForm.getRawValue().hotel.serviceIds
-      );
-    }
-    // extract active and inactive services from the list
-    const { activeServiceList, inActiveServiceList } = data;
-    this.hotelFormDataServcie.setActiveServiceList(activeServiceList);
-    this.hotelFormDataServcie.setInActiveServiceList(inActiveServiceList);
-
     //saving the hotel data locally
     this.hotelFormDataServcie.initHotelInfoFormData(
       this.useForm.getRawValue().hotel,
@@ -317,7 +301,10 @@ export class HotelInfoFormComponent implements OnInit {
     const data = this.useForm.getRawValue();
 
     //save hotel form data and now got to import service page
-    this.hotelFormDataServcie.initHotelInfoFormData(data.hotel, true);
+    this.hotelFormDataServcie.initHotelInfoFormData(
+      { ...data.hotel, allServices: this.allServices },
+      true
+    );
 
     if (this.hotelId) {
       this.router.navigate([
@@ -344,7 +331,7 @@ export class HotelInfoFormComponent implements OnInit {
    * @returns void
    */
   handleSuccess = () => {
-    this.hotelFormDataServcie.resetData();
+    this.hotelFormDataServcie.resetHotelInfoFormData();
     this.snackbarService.openSnackBarAsText(
       `Hotel ${this.hotelId ? 'edited' : 'created'} successfully`,
       '',

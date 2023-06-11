@@ -1,51 +1,4 @@
 export class HotelFormDataServcie {
-  hotelFormData = {};
-  private inActiveServiceList = [];
-  private activeServiceList = [];
-  private activeServiceIds = [];
-  isReturnFromService = false;
-
-  setInActiveServiceList(serviceList) {
-    this.inActiveServiceList = serviceList;
-  }
-
-  setActiveServiceIds(serviceIds) {
-    serviceIds.forEach((serviceId) => {
-      if (!this.activeServiceIds.includes(serviceId))
-        this.activeServiceIds.push(serviceId);
-    });
-  }
-
-  getActiveServiceIds() {
-    return this.activeServiceIds;
-  }
-
-  updateActiveServiceIds(serviceIds) {
-    this.activeServiceIds.push(...serviceIds);
-  }
-
-  setActiveServiceList(serviceList) {
-    this.activeServiceList = serviceList;
-  }
-
-  getInActiveServiceList() {
-    return this.inActiveServiceList;
-  }
-  getactiveServiceList() {
-    return this.activeServiceList;
-  }
-
-  updateInactiveserviceList(serviceList) {
-    this.inActiveServiceList.push(...serviceList);
-  }
-
-  resetData() {
-    this.activeServiceIds = [];
-    this.inActiveServiceList = [];
-    this.activeServiceList = [];
-    this.isReturnFromService = false;
-  }
-
   //save hotelinfo  data locally
   hotelInfoFormData: importForm = {
     address: {
@@ -54,6 +7,7 @@ export class HotelFormDataServcie {
     imageUrl: [],
     serviceIds: [] = [],
     services: [] = [],
+    allServices: [],
   };
   hotelFormState: boolean = false;
 
@@ -61,10 +15,24 @@ export class HotelFormDataServcie {
     this.hotelInfoFormData = { ...this.hotelInfoFormData, ...input };
     this.hotelFormState = hotelFormState;
   }
+
+  resetHotelInfoFormData() {
+    this.hotelInfoFormData = {
+      address: {
+        value: '',
+      },
+      imageUrl: [],
+      serviceIds: [] = [],
+      services: [] = [],
+      allServices: [],
+    };
+    this.hotelFormState = false;
+  }
 }
 export type importForm = {
   imageUrl;
   address;
   services: any[];
   serviceIds: any[];
+  allServices: any[];
 } & Record<string, any>;

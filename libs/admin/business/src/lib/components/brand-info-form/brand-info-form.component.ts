@@ -48,6 +48,7 @@ export class BrandInfoFormComponent implements OnInit {
     ];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
+    this.hotelFormDataServcie.resetHotelInfoFormData();
   }
 
   ngOnInit(): void {

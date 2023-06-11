@@ -76,7 +76,14 @@ export class ImportServiceComponent implements OnInit {
     this.$subscription.add(
       this.businessService.getServices().subscribe(
         (res) => {
-          this.compServices = new Services().deserialize(res.service).services;
+          const allServices = this.hotelFormDataServcie.hotelInfoFormData
+            .allServices;
+          console.log(allServices, 'allServices');
+
+          this.compServices = new Services()
+            .deserialize(res.service)
+            .services.filter((service) => !allServices.includes(service.id));
+
           this.filteredServices = this.compServices;
         },
         (error) => {
@@ -121,7 +128,34 @@ export class ImportServiceComponent implements OnInit {
       }
     });
   }
-  saveForm() {}
+  saveForm() {
+    let { serviceIds } = this.useForm.getRawValue();
+
+    let servicesToAdd = this.compServices.filter((service) => {
+      return serviceIds.includes(service.id);
+    });
+
+    servicesToAdd = [
+      ...this.hotelFormDataServcie.hotelInfoFormData.services,
+      ...servicesToAdd,
+    ];
+
+    serviceIds = [
+      ...this.hotelFormDataServcie.hotelInfoFormData.serviceIds,
+      ...serviceIds,
+    ];
+
+    this.hotelFormDataServcie.initHotelInfoFormData(
+      { serviceIds: serviceIds, services: servicesToAdd },
+      true
+    );
+
+    this.businessService
+      .updateHotel(this.hotelId, { serviceIds: serviceIds })
+      .subscribe((_res) => {});
+
+    this.location.back();
+  }
 
   resetForm() {}
 

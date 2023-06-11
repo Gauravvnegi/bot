@@ -17,7 +17,7 @@ import {
   noRecordAction,
 } from '../../models/hotel.models';
 import { BusinessService } from '../../services/business.service';
-import { HotelFormDataServcie } from '../../services/hotel-form.service';
+import { HotelFormDataService } from '../../services/hotel-form.service';
 import { ServcieStatusList } from '../../models/hotel-form.model';
 @Component({
   selector: 'hospitality-bot-services',
@@ -48,7 +48,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     private businessService: BusinessService,
     private route: ActivatedRoute,
     private adminUtilityService: AdminUtilityService,
-    private hotelDataService: HotelFormDataServcie
+    private hotelDataService: HotelFormDataService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {

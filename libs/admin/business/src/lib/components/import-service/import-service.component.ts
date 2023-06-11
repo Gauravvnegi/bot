@@ -8,7 +8,7 @@ import { BusinessService } from '../../services/business.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { businessRoute } from '../../constant/routes';
-import { HotelFormDataServcie } from '../../services/hotel-form.service';
+import { HotelFormDataService } from '../../services/hotel-form.service';
 
 @Component({
   selector: 'hospitality-bot-import-service',
@@ -37,7 +37,7 @@ export class ImportServiceComponent implements OnInit {
     private businessService: BusinessService,
     private router: Router,
     private location: Location,
-    private hotelFormDataServcie: HotelFormDataServcie
+    private hotelFormDataService: HotelFormDataService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -76,7 +76,7 @@ export class ImportServiceComponent implements OnInit {
     this.$subscription.add(
       this.businessService.getServices().subscribe(
         (res) => {
-          const allServices = this.hotelFormDataServcie.hotelInfoFormData
+          const allServices = this.hotelFormDataService.hotelInfoFormData
             .allServices;
           console.log(allServices, 'allServices');
 
@@ -136,16 +136,16 @@ export class ImportServiceComponent implements OnInit {
     });
 
     servicesToAdd = [
-      ...this.hotelFormDataServcie.hotelInfoFormData.services,
+      ...this.hotelFormDataService.hotelInfoFormData.services,
       ...servicesToAdd,
     ];
 
     serviceIds = [
-      ...this.hotelFormDataServcie.hotelInfoFormData.serviceIds,
+      ...this.hotelFormDataService.hotelInfoFormData.serviceIds,
       ...serviceIds,
     ];
 
-    this.hotelFormDataServcie.initHotelInfoFormData(
+    this.hotelFormDataService.initHotelInfoFormData(
       { serviceIds: serviceIds, services: servicesToAdd },
       true
     );

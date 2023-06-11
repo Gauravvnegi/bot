@@ -21,7 +21,7 @@ import {
 import { BusinessService } from '../../services/business.service';
 import { AddressService } from '../../services/place.service';
 import { ServcieStatusList } from '../../models/hotel-form.model';
-import { HotelFormDataServcie } from '../../services/hotel-form.service';
+import { HotelFormDataService } from '../../services/hotel-form.service';
 
 declare let google: any;
 
@@ -61,7 +61,7 @@ export class HotelInfoFormComponent implements OnInit {
     private businessService: BusinessService,
     private addressService: AddressService,
     private route: ActivatedRoute,
-    private hotelFormDataServcie: HotelFormDataServcie
+    private hotelFormDataService: HotelFormDataService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -100,25 +100,25 @@ export class HotelInfoFormComponent implements OnInit {
       brandId: [this.brandId],
     });
 
-    if (this.hotelFormDataServcie.hotelFormState) {
-      this.allServices = this.hotelFormDataServcie.hotelInfoFormData.services.map(
+    if (this.hotelFormDataService.hotelFormState) {
+      this.allServices = this.hotelFormDataService.hotelInfoFormData.services.map(
         (service) => service.id
       );
 
-      this.compServices = this.hotelFormDataServcie.hotelInfoFormData.services.slice(
+      this.compServices = this.hotelFormDataService.hotelInfoFormData.services.slice(
         0,
         5
       );
       this.useForm
         .get('hotel')
-        .patchValue(this.hotelFormDataServcie.hotelInfoFormData);
+        .patchValue(this.hotelFormDataService.hotelInfoFormData);
     }
 
     this.patchValue();
     this.manageRoutes();
 
     //if hotel id is present then get the hotel by id and paatch the hotel detais
-    if (this.hotelId && !this.hotelFormDataServcie.hotelFormState) {
+    if (this.hotelId && !this.hotelFormDataService.hotelFormState) {
       this.businessService.getHotelById(this.hotelId).subscribe((res) => {
         const { address, ...rest } = res;
         this.addressList = [
@@ -145,7 +145,7 @@ export class HotelInfoFormComponent implements OnInit {
 
           this.compServices = res.complimentaryPackages.slice(0, 5);
 
-          this.hotelFormDataServcie.initHotelInfoFormData(
+          this.hotelFormDataService.initHotelInfoFormData(
             { services: this.compServices },
             true
           );
@@ -279,7 +279,7 @@ export class HotelInfoFormComponent implements OnInit {
     this.businessService.onSubmit.emit(true);
 
     //saving the hotel data locally
-    this.hotelFormDataServcie.initHotelInfoFormData(
+    this.hotelFormDataService.initHotelInfoFormData(
       this.useForm.getRawValue().hotel,
       true
     );
@@ -301,7 +301,7 @@ export class HotelInfoFormComponent implements OnInit {
     const data = this.useForm.getRawValue();
 
     //save hotel form data and now got to import service page
-    this.hotelFormDataServcie.initHotelInfoFormData(
+    this.hotelFormDataService.initHotelInfoFormData(
       { ...data.hotel, allServices: this.allServices },
       true
     );
@@ -331,7 +331,7 @@ export class HotelInfoFormComponent implements OnInit {
    * @returns void
    */
   handleSuccess = () => {
-    this.hotelFormDataServcie.resetHotelInfoFormData();
+    this.hotelFormDataService.resetHotelInfoFormData();
     this.snackbarService.openSnackBarAsText(
       `Hotel ${this.hotelId ? 'edited' : 'created'} successfully`,
       '',

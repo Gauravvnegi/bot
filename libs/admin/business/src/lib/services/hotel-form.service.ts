@@ -1,4 +1,4 @@
-export class HotelFormDataServcie {
+export class HotelFormDataService {
   //save hotelinfo  data locally
   hotelInfoFormData: importForm = {
     address: {

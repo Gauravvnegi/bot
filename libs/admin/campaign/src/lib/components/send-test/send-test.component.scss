@@ -9,7 +9,7 @@
     background-color: $whiteDeep;
     @include flex-space-between-cen-Algn;
     .title {
-      @include normal-text;
+      @include normal-sm-text;
       color: $tooltip;
     }
     .close {
@@ -86,7 +86,7 @@
     }
     &__text {
       font-size: 13px;
-      font-weight: 500;
+      font-weight: $medium;
       letter-spacing: 0.78px;
       text-align: center;
       color: $primary-cta;
@@ -103,7 +103,7 @@
     }
     &__text {
       font-size: 13px;
-      font-weight: 500;
+      font-weight: $medium;
       letter-spacing: 0.78px;
       text-align: center;
       color: $white;

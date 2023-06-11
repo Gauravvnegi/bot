@@ -1,0 +1,106 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  ></hospitality-bot-navigation-header>
+
+  <div class="form-block" [formGroup]="useForm">
+    <div class="code">
+      <span class="code__label">Code: </span>
+      <span class="code__hash">{{ packageCode }}</span>
+    </div>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="active"
+      label="Status"
+    ></hospitality-bot-toggle-switch>
+    <hospitality-bot-input
+      class="one-third-width"
+      controlName="name"
+      label="Name"
+      [props]="{
+        placeholder: 'Enter name'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="mealPreference"
+      [options]="mealPreferences"
+      label="Meal Preference"
+      [props]="{
+        placeholder: 'Search Type'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="category"
+      [options]="categories"
+      label="Category"
+      [props]="{
+        placeholder: 'Search Category'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      class="one-third-width"
+      controlName="type"
+      [options]="types"
+      label="Type"
+      [props]="{
+        placeholder: 'Search Type'
+      }"
+    ></hospitality-bot-select>
+    <hospitality-bot-time-picker
+      class="one-third-width"
+      controlName="preparationTime"
+      label="Preparation Time"
+    ></hospitality-bot-time-picker>
+    <hospitality-bot-input
+      class="one-third-width"
+      controlName="unit"
+      label="Qty/Unit"
+      [props]="{
+        placeholder: 'Enter unit',
+        subtitle: 'grams'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="one-third-width"
+      controlName="dineInPrice"
+      label="Dine In Price"
+      [props]="{
+        placeholder: 'Enter Dine in price'
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="one-third-width"
+      controlName="hsnCode"
+      label="HSN Code"
+      [props]="{
+        placeholder: 'Enter HSN Code'
+      }"
+    ></hospitality-bot-input>
+    <div class="one-third-width"></div>
+    <div class="des-template">
+      <div class="des-template__label">Notes</div>
+      <div class="des-template__input">
+        <hospitality-bot-template-editor
+          [parentFG]="useForm"
+          [name]="'notes'"
+          [height]="250"
+        ></hospitality-bot-template-editor>
+      </div>
+    </div>
+    <div class="full-width btn">
+      <hospitality-bot-button
+        label="Create"
+        (onClick)="handleSubmit()"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        variant="outlined"
+        severity="reset"
+        label="Reset All"
+        (onClick)="handleReset()"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+</div>

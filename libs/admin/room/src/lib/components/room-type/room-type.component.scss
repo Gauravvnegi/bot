@@ -18,10 +18,16 @@
   background-color: #fff;
 }
 
+.room-details-wrapper{
+  margin: 40px 0;
+  border: 1px solid rgba(112, 112, 112, 0.35);
+  border-radius: 5px;
+  background-color: #fff;
+}
+
 .header {
-  font-family: Roboto;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: $bolder;
   text-align: left;
   color: #00162b;
   padding: 25px 30px;
@@ -46,9 +52,8 @@
 
 .room-des p {
   opacity: 0.75;
-  font-family: Roboto;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: $bold;
   text-align: left;
   color: #00162b;
   margin: 40px 0 17px;
@@ -89,9 +94,9 @@
 }
 
 :host ::ng-deep .wrapper {
-height: fit-content !important;
+  height: fit-content !important;
 }
 
-:host ::ng-deep .loader{
+:host ::ng-deep .loader {
   height: 40vh !important;
 }

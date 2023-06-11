@@ -8,8 +8,7 @@
     @include flex-space-between-cen-Algn;
     color: $tooltip;
     margin-bottom: 3px;
-    @include normal-text;
-    font-weight: normal;
+    @include light-sm-text;
   }
   &__container {
     width: 100%;

@@ -1,4 +1,4 @@
-import { tokensConfig } from "../constants/common";
+import { tokensConfig } from '../constants/common';
 
 export type NavRouteOption = {
   label: string;
@@ -14,9 +14,8 @@ export type PageRoutes = {
   title: string;
 };
 
-export type TokenRecord = typeof tokensConfig
+export type TokenRecord = typeof tokensConfig;
 export type TokensType = keyof typeof tokensConfig;
 export type Tokens = typeof tokensConfig[TokensType];
-
-
+  
 

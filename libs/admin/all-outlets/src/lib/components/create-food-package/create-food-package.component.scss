@@ -1,0 +1,13 @@
+@import 'main';
+
+
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+:host ::ng-deep .form-block {
+  @include form-block;
+}
+

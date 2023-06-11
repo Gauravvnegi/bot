@@ -1,0 +1,97 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  ></hospitality-bot-navigation-header>
+
+  <div class="form-block" [formGroup]="companyForm">
+    <div class="code">
+      <span class="code__label"> Code: </span>
+      <span class="code__hash"> {{ packageCode }} </span>
+    </div>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="active"
+      label="Black listed:"
+      onLabel="Yes"
+      offLabel="No"
+    ></hospitality-bot-toggle-switch>
+
+    <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      label="Name"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-input
+      class="half-width"
+      controlName="email"
+      label="Email"
+      [props]="{
+        type: 'email',
+        errorMessages: {
+          required: 'This is a required field.',
+          email: 'Enter valid email.'
+        }
+      }"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-phone-number
+      class="half-width"
+      preControlName="cc"
+      postControlName="phoneNo"
+    ></hospitality-bot-phone-number>
+
+    <hospitality-bot-input
+      class="half-width"
+      controlName="address"
+      label="Address"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-input
+      class="half-width"
+      controlName="salePersonName"
+      label="Sales Person Name"
+    ></hospitality-bot-input>
+
+    <hospitality-bot-phone-number
+      class="half-width"
+      label="Sales Person No."
+      preControlName="salePersonCC"
+      postControlName="salePersonNo"
+    ></hospitality-bot-phone-number>
+
+    <hospitality-bot-prefix-field
+      class="half-width"
+      [options]="discountType"
+      label="Discount"
+      preControlName="discountType"
+      postControlName="discount"
+      [defaultProps]="{ post: { type: 'number' } }"
+      [props]="{
+        type: 'number',
+        errorMessages: {
+          required: 'This is a required field.',
+          min: 'Minimum value should be 0.',
+          max: 'Maximum value should be 100.'
+        }
+      }"
+    ></hospitality-bot-prefix-field>
+  </div>
+
+  <div class="action-buttons">
+    <hospitality-bot-button
+      variant="outlined"
+      severity="reset"
+      class="reset-btn"
+      [label]="'Reset All'"
+      (onClick)="reset()"
+    ></hospitality-bot-button>
+
+    <hospitality-bot-button
+      class="create-btn"
+      [label]="companyId ? 'Update' : 'Save'"
+      (onClick)="handleSubmit()"
+    ></hospitality-bot-button>
+  </div>
+</div>

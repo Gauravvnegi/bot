@@ -1,6 +1,6 @@
 @import 'main';
 .stat-title {
-  font: normal normal bold 16px/19px Roboto;
+  font: normal normal $bolder 16px/19px Poppins;
   letter-spacing: 0.96px;
   color: $secondary;
   opacity: 1;
@@ -28,13 +28,13 @@
     flex-direction: column;
     align-items: center;
     .val {
-      font: normal normal bold 25px/29px Roboto;
+      font: normal normal $bolder 25px/29px Poppins;
       letter-spacing: 1.5px;
       color: $secondary;
       opacity: 1;
     }
     .label {
-      font: normal normal bold 12px/14px Roboto;
+      font: normal normal $bolder 12px/14px Poppins;
       letter-spacing: 0.72px;
       color: $subtitle;
       text-align: center;
@@ -67,7 +67,7 @@
       background: #38649f 0% 0% no-repeat padding-box;
     }
     .accepted {
-      background: $success-stated 0% 0% no-repeat padding-box;
+      background: $success-color 0% 0% no-repeat padding-box;
     }
     .rejected {
       background: $mediumRed 0% 0% no-repeat padding-box;
@@ -75,7 +75,7 @@
     .stat-lable {
       padding-left: 10px;
       text-align: left;
-      font: normal normal normal 12px/14px Roboto;
+      font: normal normal $medium 12px/14px Poppins;
       letter-spacing: 0.72px;
       color: $subtitle;
       opacity: 1;
@@ -86,13 +86,13 @@
   }
   .stat-val {
     text-align: right;
-    font: normal normal bold 12px/14px Roboto;
+    font: normal normal $bolder 12px/14px Poppins;
     letter-spacing: 0.72px;
     color: $primary-cta;
     opacity: 1;
 
     span {
-      font-weight: normal;
+      font-weight: $medium;
       color: $posCompare;
     }
   }

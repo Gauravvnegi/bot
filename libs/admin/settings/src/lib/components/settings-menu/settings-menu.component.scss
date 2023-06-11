@@ -15,8 +15,7 @@
 .heading {
   padding-top: 20px;
   font-size: 26px;
-  font-weight: 600;
-  font-family: Poppins;
+  font-weight: $bolder;
   letter-spacing: 1.56px;
   color: $secondary2;
 }
@@ -24,7 +23,6 @@
 .setting {
   padding: 25px;
   width: 264px;
-  font-family: Poppins;
   color: $secondary2;
   border-radius: 8px;
   cursor: pointer;
@@ -45,7 +43,7 @@
     display: flex;
     gap: 15px;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: $bold;
     letter-spacing: 0.96px;
   }
 
@@ -53,7 +51,7 @@
     display: flex;
     margin-top: 16px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: $bold;
     letter-spacing: 0.84px;
     opacity: 0.5;
   }

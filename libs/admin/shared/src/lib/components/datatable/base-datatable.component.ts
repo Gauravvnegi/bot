@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { get } from 'lodash';
 import * as moment from 'moment';
@@ -9,7 +9,7 @@ import { Table } from 'primeng/table';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { TableService } from '../../services/table.service';
-import { Chip, Cols, TableFieldSearch } from '../../types/table.type';
+import { Chip, Cols, FlagType, TableFieldSearch } from '../../types/table.type';
 
 interface Import {
   name: string;
@@ -65,7 +65,9 @@ export class BaseDatatableComponent implements OnInit {
 
   tabFilterItems = [];
   tabFilterIdx = 0;
+
   filterChips = []; //Chips setting, When there is no tabItem
+  filterChipsIndex = 0;
 
   values = [];
 
@@ -364,6 +366,35 @@ export class BaseDatatableComponent implements OnInit {
       ?.filter((chip) => chip?.isSelected)
       ?.reduce((total, chip) => total + (chip?.total ?? 0), 0);
   }
+
+  // --------------- Dynamic filter and chips ----------------------
+  initTabFilters<T extends string>(
+    entityStateCounts: Record<T, number>,
+    record: Record<T, string>
+  ) {
+    this.tabFilterItems = Object.entries(entityStateCounts).map(
+      ([key, value]) => ({
+        label: key,
+        value: key,
+        total: value,
+      })
+    );
+  }
+
+  initFilterChips<T extends string>(
+    entityTypeCounts: Record<T, number>,
+    record: Record<T, { label: string; type: FlagType }>
+  ) {
+    this.filterChips = Object.entries(entityTypeCounts).map(([key, value]) => ({
+      label: record[key].label,
+      value: key,
+      total: value,
+      type: record[key].type,
+    }));
+
+    this.filterChips = [];
+  }
+  // -------------------------------------------
 
   /**
    * @function updateTotalRecords To update the total records count.

@@ -31,7 +31,7 @@ export class RoomTypeDirective {
 
   applyDefaultStyle(elementRef: ElementRef) {
     elementRef.nativeElement.style.backgroundColor = this.getBackgroundColorByStatus(
-      this.roomStatus
+      this.roomStatus?.toLocaleLowerCase()
     );
     elementRef.nativeElement.style.padding = '7px 11.7px 7.5px 12px';
     elementRef.nativeElement.style.textOverflow = 'ellipsis';
@@ -41,7 +41,7 @@ export class RoomTypeDirective {
     elementRef.nativeElement.style.borderRadius = '8px';
     elementRef.nativeElement.style.textAlign = 'center';
     elementRef.nativeElement.style.color = this.getColorByStatus(
-      this.roomStatus
+      this.roomStatus?.toLocaleLowerCase()
     );
   }
 
@@ -69,7 +69,7 @@ export class RoomTypeDirective {
       case 'dirty':
         return '#fdebd1';
       case 'inspected':
-        return '#52b33f';
+        return '#52b33f2e';
       case 'out_of_order':
         return '#f6d6dc';
       case 'out_of_service':

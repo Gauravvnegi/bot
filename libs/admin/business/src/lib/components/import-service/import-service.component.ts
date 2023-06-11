@@ -78,15 +78,6 @@ export class ImportServiceComponent implements OnInit {
         (res) => {
           this.compServices = new Services().deserialize(res.service).services;
           this.filteredServices = this.compServices;
-
-          // if (this.businessService.tempServiceIds.length) {
-          //   this.filteredServices = this.compServices.filter(
-          //     (service) =>
-          //       !this.businessService.tempServiceIds.includes(service.id)
-          //   );
-          // } else {
-          //   this.filteredServices = this.compServices;
-          // }
         },
         (error) => {
           this.snackbarService.openSnackBarAsText(error.error.message);
@@ -130,39 +121,8 @@ export class ImportServiceComponent implements OnInit {
       }
     });
   }
-  saveForm() {
-    // if (!this.hotelId) {
-    const { serviceIds } = this.useForm.getRawValue();
+  saveForm() {}
 
-    this.hotelFormDataServcie.hotelInfoFormData.serviceIds.push(...serviceIds);
-
-    const servicesToAdd = this.compServices.filter((service) =>
-      serviceIds.includes(service.id)
-    );
-    this.hotelFormDataServcie.hotelInfoFormData.services.push(...servicesToAdd);
-
-    this.hotelFormDataServcie.setActiveServiceIds(serviceIds);
-
-    if (this.hotelId)
-      this.businessService
-        .updateHotel(this.hotelId, { serviceIds: serviceIds })
-        .subscribe((_res) => {});
-
-    this.handleSuccess();
-    this.location.back();
-    // } else {
-    //   this.$subscription.add(
-    //     this.businessService.updateHotel(this.hotelId, data).subscribe(
-    //       (res) => {
-    //         this.businessService.hotelFormState = false;
-    //         this.location.back();
-    //       },
-    //       this.handelError,
-    //       this.handleSuccess
-    //     )
-    //   );
-    // }
-  }
   resetForm() {}
 
   /**

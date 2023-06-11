@@ -1,5 +1,8 @@
 <div class="nav-header-wrapper" #header>
-  <div *ngIf="isStickyTitle && isScrolledUp" [ngStyle]="{ 'height.px': extraGap }"></div>
+  <div
+    *ngIf="isStickyTitle && isScrolledUp"
+    [ngStyle]="{ 'height.px': extraGap }"
+  ></div>
   <div
     class="nav-wrapper"
     *ngIf="routes.length"
@@ -25,8 +28,9 @@
   <div
     class="header__wrapper"
     [ngClass]="{
-      'header__wrapper__sticky-subTitle': isScrolledUp && !isStickyTitle,
-      'header__wrapper__sticky-title': isScrolledUp && isStickyTitle
+      'header__wrapper__sticky-sub-title': isScrolledUp && !isStickyTitle,
+      'header__wrapper__sticky-title': isScrolledUp && isStickyTitle,
+      header__wrapper__sticky: isStickyTitle
     }"
   >
     <header class="header">

@@ -89,7 +89,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     this._paymentDetailsService
       .getPaymentConfigurationV2(this._hotelService.hotelId)
       .subscribe((data) => {
-        const gatewayDetails = data?.paymentConfiguration?.map((gateway) => ({
+        const gatewayDetails = data?.paymentConfigurations?.map((gateway) => ({
           gatewayType: gateway?.gatewayType,
           imgSrc:
             gateway?.imgSrc || gateway?.gatewayType === 'CCAVENUE'

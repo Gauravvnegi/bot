@@ -4,6 +4,10 @@
   min-width: 5rem !important;
 }
 
+:host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
+  font-size: 14px;
+  font-weight: $bold;
+}
 .request-wrapper-header {
   padding: 10px 42px 10px 15px;
   background-color: $white;
@@ -39,7 +43,7 @@
       }
 
       .guestInfoEditText {
-        font: normal normal normal 11px/15px Roboto;
+        font: normal normal $medium 11px/15px Poppins;
         letter-spacing: 0.66px;
         color: $white;
         opacity: 1;

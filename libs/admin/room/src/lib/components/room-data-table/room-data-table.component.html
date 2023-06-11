@@ -113,9 +113,9 @@
       <td>
         <div class="" *ngIf="rowData.status; else emptyCell">
           <hospitality-bot-toggle-dropdown
-            [listItem]="status[selectedTable]"
+            [listItem]="rowData.nextStates"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.status.value"
+            [status]="rowData.status"
           >
           </hospitality-bot-toggle-dropdown>
         </div>
@@ -142,7 +142,7 @@
 
 <ng-template #roomCell let-rowData>
   <td>
-    <div [roomStatus]="rowData.roomStatus" *ngIf="rowData.type; else emptyCell">
+    <div [roomStatus]="rowData.status" *ngIf="rowData.type; else emptyCell">
       <div>
         {{ rowData.roomNo || '--' }}&nbsp;-&nbsp;{{ rowData.type || '--' }}
       </div>
@@ -156,8 +156,19 @@
     </div>
   </td>
   <td>
+    <div *ngIf="rowData.foStatus; else emptyCell">
+      <div
+        statusCell
+        [status]="rowData.foStatus"
+        [type]="rowData.foStatus === 'VACANT' ? 'success' : 'failed'"
+      ></div>
+    </div>
+  </td>
+  <td>
     <div *ngIf="rowData.price; else emptyCell">
-      <div class="primary-text">{{ rowData.price | currency: rowData.currency }}</div>
+      <div class="primary-text">
+        {{ rowData.price | currency: rowData.currency }}
+      </div>
     </div>
   </td>
 </ng-template>
@@ -175,6 +186,12 @@
   </td>
   <td>
     <div
+      class="primary-text"
+      *ngIf="rowData.roomCount !== undefined; else emptyCell"
+    >
+      {{ rowData.roomCount }}
+    </div>
+    <!-- <div
       class="cell-content room-count"
       *ngIf="rowData.roomCount; else emptyCell"
     >
@@ -191,7 +208,7 @@
           <div>{{ item.value }} - {{ item.key }}</div>
         </div>
       </ng-container>
-    </div>
+    </div> -->
   </td>
   <td>
     <div

@@ -39,6 +39,10 @@
       </div>
     </div>
 
+    <div class="room-details-wrapper">
+      <hospitality-bot-room-details-data-table></hospitality-bot-room-details-data-table>
+    </div>
+
     <div class="room-pricing-wrapper">
       <div class="header">Services</div>
       <hr />
@@ -72,13 +76,34 @@
         <div class="input-fields">
           <hospitality-bot-prefix-field
             preControlName="currency"
-            postControlName="originalPrice"
-            label="Base Price"
+            postControlName="minPrice"
+            label="Min Price"
             [options]="currencies"
             [props]="inputValidationProps"
             [defaultProps]="{ post: { type: 'number' } }"
           ></hospitality-bot-prefix-field>
         </div>
+        <div class="input-fields">
+          <hospitality-bot-prefix-field
+            preControlName="currency"
+            postControlName="maxPrice"
+            label="Max Price"
+            [options]="currencies"
+            [props]="inputValidationProps"
+            [defaultProps]="{ post: { type: 'number' } }"
+          ></hospitality-bot-prefix-field>
+        </div>
+        <div class="input-fields">
+          <hospitality-bot-prefix-field
+            preControlName="currency"
+            postControlName="paxAdditionalCost"
+            label="Pax Additional Cost"
+            [options]="currencies"
+            [props]="inputValidationProps"
+            [defaultProps]="{ post: { type: 'number' } }"
+          ></hospitality-bot-prefix-field>
+        </div>
+
         <!-- <div class="input-fields">
           <hospitality-bot-prefix-field
             preControlName="variablePriceCurrency"
@@ -94,7 +119,7 @@
             }"
           ></hospitality-bot-prefix-field>
         </div> -->
-        <div class="input-fields">
+        <!-- <div class="input-fields">
           <hospitality-bot-prefix-field
             preControlName="discountType"
             postControlName="discountValue"
@@ -112,7 +137,7 @@
             [options]="currencies"
             [defaultProps]="{ post: { type: 'number' } }"
           ></hospitality-bot-prefix-field>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="room-pricing-wrapper">
@@ -123,7 +148,14 @@
           <hospitality-bot-input
             controlName="maxOccupancy"
             label="Max Occupancy"
-            [props]="inputValidationProps"
+            [props]="{
+              errorMessages: {
+                required: 'This is a required field.',
+                min: 'Value must be greater than 0.',
+                notAllowedChr: 'Decimal are not allowed.'
+              },
+              type: 'number'
+            }"
           ></hospitality-bot-input>
         </div>
         <div class="input-fields">

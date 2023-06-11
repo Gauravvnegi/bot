@@ -104,6 +104,10 @@ mat-icon {
   }
 }
 
+::ng-deep .mat-dialog-container {
+  padding: 0px !important;
+}
+
 :host ::ng-deep .conditional-icon {
   height: 30px;
   @media screen and (max-width: $M) {

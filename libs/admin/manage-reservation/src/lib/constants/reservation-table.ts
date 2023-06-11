@@ -115,7 +115,7 @@ export const reservationStatus: Status[] = [
   {
     label: 'Confirm',
     value: ReservationStatusType.CONFIRMED,
-    type: 'new',
+    type: 'active',
     disabled: false,
   },
 ];
@@ -146,7 +146,7 @@ export const chips: Chip<
     value: ReservationStatusType.CONFIRMED,
     total: 0,
     isSelected: false,
-    type: 'new',
+    type: 'active',
   },
   {
     label: 'Cancelled ',

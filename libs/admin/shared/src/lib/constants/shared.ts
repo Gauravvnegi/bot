@@ -32,6 +32,8 @@ export enum StatCardImageUrls {
   ToDo = 'assets/svg/todo.svg',
   Resolved = 'assets/svg/resolved.svg',
   Timedout = 'assets/svg/timedout.svg',
+  SellsGraph = 'assets/svg/avg-room-rate.svg',
+  TotalOrders = 'assets/svg/remaining-inventory-cost.svg',  
   InProgress = 'assets/svg/in-progress.svg'
 }
 

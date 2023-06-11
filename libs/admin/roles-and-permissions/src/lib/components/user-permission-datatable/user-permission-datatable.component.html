@@ -1,24 +1,19 @@
 <div class="details_wrapper">
-  <div class="header">
-    <div (click)="closeModal()" class="close">
-      <i class="fa fa-times" aria-hidden="true"></i>
-    </div>
-  </div>
-  <div class="table-container">
-    <div
-      class="action-header"
-      [ngClass]="{ 'action-header__sticky': isScrolledUp }"
-      [formGroup]="tableFG"
+  <div [formGroup]="tableFG">
+    <hospitality-bot-modal-header
+      [tableName]="tableName"
+      (onModalClose)="closeModal()"
     >
-      <div class="heading">{{ tableName }}</div>
-      <div class="action-wrapper">
-        <hospitality-bot-export-list
-          (onDocumentActions)="onDocumentActions()"
-          [documentTypes]="documentTypes"
-          [documentActionTypes]="documentActionTypes"
-        ></hospitality-bot-export-list>
-      </div>
-    </div>
+      <hospitality-bot-export-list
+        (onDocumentActions)="onDocumentActions()"
+        [documentTypes]="documentTypes"
+        [documentActionTypes]="documentActionTypes"
+        [isDisable]="values.length === 0"
+      ></hospitality-bot-export-list>
+    </hospitality-bot-modal-header>
+  </div>
+
+  <div class="table-container" [ngStyle]="tabFilterItems[tabFilterIdx]?.total ? {} : { 'padding': '10px' }">
     <p-table
       #dt
       [styleClass]="tableConfig.styleClass"

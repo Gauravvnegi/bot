@@ -41,7 +41,6 @@
 .guestInfoEditText {
   letter-spacing: 0.66px;
   opacity: 1;
-  font-family: Roboto;
   font-size: 11px;
   letter-spacing: 0.66px;
   text-align: left;
@@ -66,9 +65,8 @@
   }
 
   &-heading {
-    font-family: Roboto;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: $bold;
     letter-spacing: 0.84px;
     text-align: left;
     color: $secondary;

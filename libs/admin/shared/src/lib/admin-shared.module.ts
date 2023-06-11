@@ -53,6 +53,7 @@ import { ImageDirective } from './directives/image.directive';
 import { FeatureDirective } from './directives/feature.directive';
 import { InternalSubscriptionDirective } from './directives/internal-subscription.directive';
 import { NumberDirective } from './directives/number.directive';
+import { StatusCellDirective } from './directives/status-cell.directive';
 import { ClickStopPropagation } from './directives/stoppropagation.directive';
 import { SubscriptionDirective } from './directives/subscription.directive';
 import { LinkDetector } from './pipes/linkDetector.pipe';
@@ -89,6 +90,11 @@ import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/tog
 import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
+import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
+import { DiscountFormComponent } from './components/discount-form/discount-form.component';
+
+import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -121,6 +127,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     UploadFileComponent,
     ComingSoonComponent,
     NumberDirective,
+    StatusCellDirective,
     MultipleDropdownComponent,
     SubscriptionDirective,
     InternalSubscriptionDirective,
@@ -185,6 +192,9 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     RoomTypeDirective,
     CopyLinkComponentComponent,
     AddAttachmentComponent,
+    ModalHeaderComponent,
+    DiscountFormComponent,
+    TimePickerComponent
   ],
 
   exports: [
@@ -207,6 +217,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     AutoCompleteModule,
     CKEditorModule,
     NumberDirective,
+    StatusCellDirective,
     MultipleDropdownComponent,
     UploadCsvComponent,
     SubscriptionDirective,
@@ -272,6 +283,9 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     RoomTypeDirective,
     CopyLinkComponentComponent,
     AddAttachmentComponent,
+    ModalHeaderComponent,
+    DiscountFormComponent,
+    TimePickerComponent
   ],
 })
 export class AdminSharedModule {}

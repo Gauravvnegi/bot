@@ -1,3 +1,5 @@
+@import 'main';
+
 .wrapper {
   margin-bottom: 10px;
 
@@ -6,7 +8,7 @@
     align-items: center;
     .label {
       letter-spacing: 0.96px;
-      font-weight: bold;
+      font-weight: $bold;
       font-size: 16px;
     }
   }
@@ -14,7 +16,6 @@
   .drafted-text {
     margin: 5px 0 0 40px;
     opacity: 0.5;
-    font-family: Roboto;
     font-size: 16px;
     letter-spacing: 0.96px;
     text-align: left;

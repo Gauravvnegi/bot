@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import {
   MarketingNotificationComponent,
-  NotificationComponent,
 } from '@hospitality-bot/admin/notification';
 import { ConfigService, ModuleNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -362,6 +361,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
   manageInvoice() {
     this.onDetailsClose.next(false);
     this.router.navigateByUrl(`pages/efrontdesk/invoice/${this.bookingId}`);
+  }
+
+  editBooking() {
+    this.onDetailsClose.next(false);
+    this.router.navigateByUrl(`pages/efrontdesk/manage-reservation/edit-reservation/${this.bookingId}`)
   }
 
   prepareInvoice() {

@@ -75,7 +75,6 @@ export class HotelInfoFormComponent implements OnInit {
     this.initForm();
     this.getSegmentList();
     this.onAddressChange();
-    // this.onServiceIdChange();
   }
 
   initForm() {
@@ -98,25 +97,23 @@ export class HotelInfoFormComponent implements OnInit {
       }),
       brandId: [this.brandId],
     });
-    if (this.hotelFormDataServcie.hotelFormState) {
-      this.compServices = this.hotelFormDataServcie.hotelInfoFormData.services.slice(
-        0,
-        5
-      );
-      this.useForm
-        .get('hotel')
-        .patchValue(this.hotelFormDataServcie.hotelInfoFormData);
+    // if (this.hotelFormDataServcie.hotelFormState) {
+    //   this.compServices = this.hotelFormDataServcie.hotelInfoFormData.services.slice(
+    //     0,
+    //     5
+    //   );
+    //   this.useForm
+    //     .get('hotel')
+    //     .patchValue(this.hotelFormDataServcie.hotelInfoFormData);
 
-      const data = this.hotelFormDataServcie.getActiveServiceIds();
-      if (data.length) {
-        this.useForm.get('hotel.serviceIds').patchValue(data);
-      }
-    }
+    //   const data = this.hotelFormDataServcie.getActiveServiceIds();
+    //   if (data.length) {
+    //     this.useForm.get('hotel.serviceIds').patchValue(data);
+    //   }
+    // }
 
     this.patchValue();
     this.manageRoutes();
-
-    // Track changes in the serviceIds form control
 
     //if hotel id is present then get the hotel by id and paatch the hotel detais
     if (this.hotelId && !this.hotelFormDataServcie.hotelFormState) {
@@ -193,18 +190,6 @@ export class HotelInfoFormComponent implements OnInit {
       this.segmentList = new SegmentList().deserialize(res).segmentList;
     });
   }
-
-  // onServiceIdChange() {
-  //   this.useForm
-  //     .get('hotel.serviceIds')
-  //     .valueChanges.subscribe((selectedServiceIds) => {
-  //       const uncheckedServiceIds = this.compServices.filter(
-  //         (service) => !selectedServiceIds.includes(service.id)
-  //       );
-  //       const data = new ServiceIdList().deserialize(uncheckedServiceIds);
-  //       this.businessService.setInActiveServiceIds(data.serviceIdList);
-  //     });
-  // }
 
   /**
    * @function submitForm to submit form
@@ -329,9 +314,11 @@ export class HotelInfoFormComponent implements OnInit {
   //to import the services
   openImportService() {
     this.businessService.onSubmit.emit(true);
-    const data = this.useForm.getRawValue().hotel;
-    // this.businessService.setServiceIds(data.serviceIds);
-    this.hotelFormDataServcie.initHotelInfoFormData(data, true);
+    const data = this.useForm.getRawValue();
+
+    //save hotel form data and now got to import service page
+    this.hotelFormDataServcie.initHotelInfoFormData(data.hotel, true);
+
     if (this.hotelId) {
       this.router.navigate([
         `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}/import-services`,

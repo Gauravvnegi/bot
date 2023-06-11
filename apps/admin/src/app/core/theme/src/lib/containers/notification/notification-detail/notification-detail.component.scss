@@ -6,7 +6,7 @@
     background-color: $header-background;
     &__title {
       @include flex-item-center;
-      @include normal-text;
+      @include normal-sm-text;
       color: $tooltip;
       img {
         margin-right: 10px;
@@ -21,7 +21,7 @@
     min-width: 550px;
     .message {
       padding: 7px 0 27px 0;
-      @include normal-text;
+      @include normal-sm-text;
       color: $tooltip;
     }
     .footer {

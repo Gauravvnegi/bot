@@ -23,7 +23,7 @@ export const routes = {
   [ModuleNames.FREDDIE]: 'freddie',
   [ModuleNames.CONVERSATION_DASHBOARD]: 'freddie/conversation-analytics',
   [ModuleNames.LIVE_MESSAGING]: 'freddie/messages',
-  [ModuleNames.SENTIMENTAL_ANALYSIS_FREDDIE]: 'freddie/sentimental-analysis',
+  // [ModuleNames.SENTIMENTAL_ANALYSIS_FREDDIE]: 'freddie/sentimental-analysis',
 
   // Hedda
   [ModuleNames.HEDA]: 'heda',
@@ -53,13 +53,23 @@ export const routes = {
 
   // FINANCE
   [ModuleNames.FINANCE]: 'finance',
+  [ModuleNames.INVOICE]: 'finance/invoice',
+  [ModuleNames.TRANSACTION]: 'finance/transaction',
 
-  // GUESTS
-  [ModuleNames.GUESTS]: 'guest',
-  [ModuleNames.GUESTS_DASHBOARD]: 'guest/dashboard',
+  // MEMBERS
+  [ModuleNames.MEMBERS]: 'members',
+  [ModuleNames.GUESTS]: 'members/guest',
+  [ModuleNames.AGENT]: 'members/agent',
+  [ModuleNames.COMPANY]: 'members/company',
+
 
   // SETTINGS
   [ModuleNames.SETTINGS]: 'settings',
+
+  //OUTLET
+  [ModuleNames.OUTLET]: 'outlet',
+  [ModuleNames.OUTLETS_DASHBOARD]: 'outlet/dashboard',
+  [ModuleNames.ALL_OUTLETS]: 'outlet/all-outlets',
 
   RoleAndPermission: 'roles-permissions',
 };

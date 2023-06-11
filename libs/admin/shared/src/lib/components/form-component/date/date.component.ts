@@ -10,7 +10,7 @@ import { FormComponent } from '../form.components';
 })
 export class DateComponent extends FormComponent implements OnInit {
   dateValue: Date;
-  isDisabled = false;
+
   /* Default Date Settings */
   enableTime = true;
   enableSeconds = false;

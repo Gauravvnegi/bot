@@ -7,6 +7,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { companyRoutes, navRoute } from '../../constants/route';
+import { FormService } from '../../../../../members/src/lib/services/form.service';
 @Component({
   selector: 'hospitality-bot-add-company',
   templateUrl: './add-company.component.html',
@@ -33,7 +34,8 @@ export class AddCompanyComponent implements OnInit {
     private globalService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private formService: FormService
   ) {
     this.companyId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = companyRoutes[
@@ -151,7 +153,10 @@ export class AddCompanyComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate([`pages/members/company/${this.routes.company}`]);
+    const targetedRoute = !this.formService.companyRedirectRoute.length
+      ? `pages/members/company/${this.routes.company.route}`
+      : this.formService.companyRedirectRoute;
+    this.router.navigate([targetedRoute]);
   };
 
   /**
@@ -159,6 +164,8 @@ export class AddCompanyComponent implements OnInit {
    */
   handleFinal = () => {
     this.loading = false;
+    // To-do, handle success method will be remove after integration with api
+    this.handleSuccess();
   };
 
   /**

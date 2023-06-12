@@ -1,3 +1,5 @@
+import { CompanyResponse } from 'libs/admin/company/src/lib/types/response';
+
 export type AgentListResponse = {
   records: AgentResponse[];
   total: number;
@@ -22,3 +24,5 @@ export type EntityStateCountsResponse = {
   Active: number;
   Inactive: number;
 };
+
+export type CompanyListResponse = CompanyResponse & {};

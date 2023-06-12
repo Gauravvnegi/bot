@@ -1,4 +1,17 @@
-import { Chip, Cols, Filter } from '../types/table.type';
+import {
+  Cols,
+  Filter,
+  QuickReplyFilterConfig
+} from '../types/table.type';
+
+export const quickReplyFilterDefaultConfig: QuickReplyFilterConfig = {
+  key: 'status',
+  isAllAType: false,
+  isStatusBoolean: false,
+  activeStateKey: 'ACTIVE',
+};
+
+export const defaultFilterChipValue = { label: 'All', value: 'ALL' };
 
 export type TableValue = 'users' | 'hotels';
 export const columns: Record<TableValue, Cols[]> = {

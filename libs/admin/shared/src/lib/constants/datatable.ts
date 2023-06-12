@@ -1,7 +1,8 @@
 import {
   Cols,
+  EntityStateRecord,
   Filter,
-  QuickReplyFilterConfig
+  QuickReplyFilterConfig,
 } from '../types/table.type';
 
 export const quickReplyFilterDefaultConfig: QuickReplyFilterConfig = {
@@ -11,7 +12,23 @@ export const quickReplyFilterDefaultConfig: QuickReplyFilterConfig = {
   activeStateKey: 'ACTIVE',
 };
 
-export const defaultFilterChipValue = { label: 'All', value: 'ALL' };
+export const defaultFilterChipValue = { label: 'All', value: 'ALL' } as const;
+export const defaultRecordJson: EntityStateRecord<
+  'ACTIVE' | 'INACTIVE' | typeof defaultFilterChipValue['value']
+> = {
+  ACTIVE: {
+    label: 'Active',
+    type: 'active',
+  },
+  INACTIVE: {
+    label: 'Inactive',
+    type: 'inactive',
+  },
+  ALL: {
+    label: defaultFilterChipValue.label,
+    type: 'default',
+  },
+};
 
 export type TableValue = 'users' | 'hotels';
 export const columns: Record<TableValue, Cols[]> = {

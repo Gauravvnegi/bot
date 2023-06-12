@@ -11,6 +11,7 @@ import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   defaultFilterChipValue,
+  defaultRecordJson,
   quickReplyFilterDefaultConfig,
 } from '../../constants/datatable';
 import { TableService } from '../../services/table.service';
@@ -414,15 +415,16 @@ export class BaseDatatableComponent implements OnInit {
    * Handle the value of tab filters and filter chips
    * @param entityTypeCounts Tab filters value
    * @param entityStateCounts Filter chips value
-   * @param record Json data for label and type value against the key
+   * @param recordJson Json data for label and type value against the key
    * @param totalMainCount total count of all data
    */
   initFilters<T extends string>(
     entityTypeCounts: EntityState<T>,
     entityStateCounts: EntityState<T>,
     totalMainCount: number,
-    record: EntityStateRecord<T>
+    recordJson?: EntityStateRecord<T>
   ) {
+    const record = { ...defaultRecordJson, ...recordJson };
     let totalCount = totalMainCount;
 
     if (entityTypeCounts) {
@@ -442,22 +444,24 @@ export class BaseDatatableComponent implements OnInit {
         [defaultFilterChipValue.value]: totalCount,
         ...entityStateCounts,
       }).map(([key, value]) => {
-        const isDefault = key === defaultFilterChipValue.value;
         const stateCount = {
-          label:
-            record[key]?.label ??
-            (isDefault
-              ? defaultFilterChipValue.label
-              : this.convertToTitleCase(key)),
+          label: record[key]?.label ?? this.convertToTitleCase(key),
           value: key,
           total: value,
-          type: record[key]?.type ?? (isDefault ? 'default' : 'active'),
+          type: record[key]?.type,
         } as Chip<T>;
 
         return stateCount;
       });
 
-      // totalCount = this.filterChips[this.filterChipsIndex].total;
+      if (!this.selectedFilterChips.has(defaultFilterChipValue.value)) {
+        totalCount = this.filterChips.reduce((prev, curr) => {
+          const isSelected = this.selectedFilterChips.has(curr.value);
+          const res = prev + (isSelected ? curr.total : 0);
+
+          return res;
+        }, 0);
+      }
     } else this.isQuickFilters = false;
 
     this.totalRecords = totalCount;

@@ -59,12 +59,14 @@ export class Service {
   imageUrl: string;
   type: string;
   rate?: string;
+  active?: boolean;
   deserialize(input) {
     this.id = input.id;
     this.name = input.name;
     this.imageUrl = input.imageUrl;
     this.type = input.serviceType;
     this.rate = `${input.currency}${input.rate}`;
+    this.active = input.active;
     return this;
   }
 }
@@ -72,6 +74,9 @@ export class Service {
 export const noRecordAction = {
   imageSrc: 'assets/images/empty-table-service.png',
   description: 'No services found',
+  actionName: 'Import Services',
+  actionLink:
+    '/pages/settings/business-info/brand/brandId/hotel/hotelId/import-service',
 };
 
 export class SegmentList {
@@ -117,8 +122,9 @@ export class ServiceIdList {
   serviceIdList = new Array<any>();
 
   deserialize(input) {
-    input.services.forEach((x) => {
-      this.serviceIdList.push(x.id);
+    console.log(input, 'input');
+    input.forEach((x) => {
+      if (x.active) this.serviceIdList.push(x.id);
     });
 
     return this;

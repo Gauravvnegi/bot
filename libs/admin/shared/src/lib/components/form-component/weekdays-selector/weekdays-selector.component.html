@@ -1,0 +1,47 @@
+<div
+  [formGroup]="weekDayForm"
+  class="wrapper p-field"
+  [style.fontSize]="fontSize"
+  [ngClass]="wrapperNgClasses"
+>
+  <label
+    *ngIf="label && !float"
+    class="label label__static"
+    [for]="controlName"
+    >{{ label }}</label
+  >
+
+  <div class="days-selector">
+    <label>
+      <input
+        type="checkbox"
+        formControlName="allDays"
+        (change)="toggleSelectAll()"
+        class="checkbox-input"
+      />
+      <span class="checkbox-label">
+        <span class="custom-check-icon" *ngIf="weekDayForm.get('allDays').value"
+          >&#10003;</span
+        >
+        All</span
+      >
+    </label>
+
+    <div *ngFor="let day of days">
+      <label>
+        <input
+          type="checkbox"
+          [formControlName]="day"
+          (change)="toggleDaySelection()"
+          class="checkbox-input"
+        />
+        <span class="checkbox-label">
+          <span class="custom-check-icon" *ngIf="weekDayForm.get(day).value"
+            >&#10003;</span
+          >
+          {{ day }}</span
+        >
+      </label>
+    </div>
+  </div>
+</div>

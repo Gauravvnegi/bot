@@ -92,9 +92,8 @@ import { CopyLinkComponentComponent } from './components/copy-link-component/cop
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
 import { DiscountFormComponent } from './components/discount-form/discount-form.component';
-
 import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
-
+import { WeekdaysSelectorComponent } from './components/form-component/weekdays-selector/weekdays-selector.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -194,7 +193,8 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     AddAttachmentComponent,
     ModalHeaderComponent,
     DiscountFormComponent,
-    TimePickerComponent
+    TimePickerComponent,
+    WeekdaysSelectorComponent,
   ],
 
   exports: [
@@ -285,7 +285,8 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     AddAttachmentComponent,
     ModalHeaderComponent,
     DiscountFormComponent,
-    TimePickerComponent
+    TimePickerComponent,
+    WeekdaysSelectorComponent,
   ],
 })
 export class AdminSharedModule {}

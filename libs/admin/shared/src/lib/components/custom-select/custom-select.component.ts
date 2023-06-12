@@ -37,6 +37,9 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
 
   @Output() loadMoreData = new EventEmitter();
   @Output() viewAll = new EventEmitter();
+  @Output() addAction = new EventEmitter();
+
+  @Input() addActLabel: string;
 
   @Input() set itemList(options: Record<string, any>[]) {
     this.options =

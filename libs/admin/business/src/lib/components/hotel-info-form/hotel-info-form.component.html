@@ -84,7 +84,7 @@
         </div>
       </div>
     </div>
-    <div class="hotel-wrapper">
+    <div class="service-wrapper">
       <div class="header">Services</div>
       <hr />
       <div class="hotel-services-wrapper">
@@ -94,7 +94,9 @@
           formControlName="serviceIds"
           [itemList]="compServices"
           (viewAll)="saveHotelData()"
+          (addAction)="openImportService()"
           [noRecordsAction]="noRecordAction"
+          [addActLabel]="'+ Import Service'"
         ></hospitality-bot-custom-select>
       </div>
     </div>

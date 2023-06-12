@@ -8,11 +8,18 @@
         {{ description }}
       </div>
     </div>
-    <div *ngIf="!fullView && options.length">
+    <div *ngIf="!fullView" class="actions">
+      <hospitality-bot-button
+        *ngIf="addActLabel?.length"
+        [label]="addActLabel"
+        variant="text"
+        (onClick)="addAction.emit()"
+      ></hospitality-bot-button>
       <hospitality-bot-button
         label="View All"
         (onClick)="viewAll.emit()"
         variant="contained"
+        *ngIf="options.length"
       ></hospitality-bot-button>
     </div>
   </div>

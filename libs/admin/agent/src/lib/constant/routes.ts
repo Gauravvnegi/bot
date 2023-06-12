@@ -1,7 +1,7 @@
 import { PageRoutes } from '@hospitality-bot/admin/shared';
 
 export const navRoute = {
-  agent: { label: 'Agent', link: '/pages/members/' },
+  agent: { label: 'Agent', link: '/pages/members/agent' },
   addAgent: { label: 'Add Agent', link: './' },
   editAgent: { label: 'Edit Agent', link: './' },
 };
@@ -21,7 +21,7 @@ export const agentRoutes: Record<
     title: 'Add Agent',
   },
   editAgent: {
-    route: 'add-agent',
+    route: 'edit-agent',
     navRoutes: [navRoute.agent, navRoute.editAgent],
     title: 'Edit Agent',
   },

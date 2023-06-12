@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { agentRoutes, navRoute } from '../../constant/routes';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
-import { Agent } from '../../models/agent.model';
 @Component({
   selector: 'hospitality-bot-add-agent',
   templateUrl: './add-agent.component.html',
@@ -165,7 +164,7 @@ export class AddAgentComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate([`pages/members/${this.routes.agent}`]);
+    this.router.navigate([`pages/members/agent/${this.routes.agent}`]);
   };
 
   /**

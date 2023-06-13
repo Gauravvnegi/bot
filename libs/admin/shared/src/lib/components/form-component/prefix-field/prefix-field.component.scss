@@ -9,6 +9,7 @@
 
 .main {
   display: flex;
+  align-items: center;
   gap: 1em;
   margin-top: $label-gap
 
@@ -24,8 +25,35 @@
   flex-basis: 85%;
 }
 
+.auto-compelet {
+    flex-basis: 50%;
+}
+
 :host ::ng-deep .label {
   display: block;
   width: 0;
   white-space: nowrap;
+}
+
+.hypen {
+  display: block !important;
+  width: 25px;
+  background: #002046;
+  height: 4px;
+}
+
+.disabled {
+  display: none;
+}
+
+.main{
+  flex-basis: 85%; ;
+}
+
+.dashed {
+ flex-basis: 50%;
+}
+
+.secondary{
+  flex-basis: 15%;
 }

@@ -12,6 +12,7 @@ export class HotelResponse {
     emailId: string;
     imageUrl: string[];
     propertyCategory: string;
+    address;
     socialPlatforms: SocialPlatForms[];
     serviceIds: string[];
   } = {
@@ -25,6 +26,7 @@ export class HotelResponse {
     propertyCategory: '',
     socialPlatforms: [],
     serviceIds: [],
+    address: {},
   };
   brandId: string;
   deserialize(input) {
@@ -37,6 +39,7 @@ export class HotelResponse {
     this.hotel.propertyCategory = input?.propertyCategory?.value;
     this.hotel.socialPlatforms = input?.socialPlatforms ?? [];
     this.hotel.serviceIds = input?.serviceIds ?? [];
+    this.hotel.address = input?.address ?? {};
     this.brandId = input?.id;
     return this;
   }

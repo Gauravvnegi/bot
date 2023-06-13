@@ -1,13 +1,13 @@
-import {
-  RoomRecordsCount,
-  RoomTypeRecordCounts,
-} from '../models/rooms-data-table.model';
 
-export type RoomStatus = keyof Omit<RoomRecordsCount, 'ALL' | 'deserialize'>;
-export type RoomTypeStatus = keyof Omit<
-  RoomTypeRecordCounts,
-  'ALL' | 'deserialize'
->;
+export type RoomStatus =
+  | 'CLEAN'
+  | 'INSPECTED'
+  | 'OUT_OF_SERVICE'
+  | 'OUT_OF_ORDER'
+  | 'UNAVAILABLE';
+
+export type RoomTypeStatus = 'ACTIVE' | 'INACTIVE';
+
 export type RoomFoStatus = 'VACANT' | 'OCCUPIED';
 
 export type RoomResponse = {

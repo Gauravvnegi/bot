@@ -25,7 +25,7 @@ import {
 @Injectable()
 export class RoomService extends ApiService {
   /** [ROOM | ROOM_TYPE] Selected Table */
-  selectedTable = new BehaviorSubject<TableValue>(TableValue.roomType);
+  selectedTable = TableValue.roomType;
 
   /** [PAID | COMPLIMENTARY] Selected service to be shown in service page  */
   selectedService: ServicesTypeValue;
@@ -80,9 +80,17 @@ export class RoomService extends ApiService {
       `/api/v1/entity/${hotelId}/inventory${config?.params ?? ''}`
     ).pipe(
       map((res) => {
-
         // --refactor ---will be removed
-        if (this.selectedTable.value === TableValue.room) {
+        if (this.selectedTable === TableValue.room) {
+          res.entityStateCounts = {
+            CLEAN: 10,
+            INSPECTED: 15,
+            OUT_OF_SERVICE: 18,
+            OUT_OF_ORDER: 25,
+            UNAVAILABLE: 12,
+          };
+
+          res.total = 80;
           const rooms = res['rooms'];
           {
             rooms.forEach((item) => {

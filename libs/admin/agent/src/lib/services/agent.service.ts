@@ -3,9 +3,9 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { generateDummyData } from '../constant/response';
-import { AgentListResponse } from '../types/response';
+import { AgentListResponse, CompanyListResponse } from '../types/response';
 import { QueryConfig } from '../types/agent';
-
+import { companyResponse } from '../../../../company/src/lib/constants/response';
 @Injectable({
   providedIn: 'root',
 })
@@ -29,6 +29,16 @@ export class AgentService extends ApiService {
           this.data = generateDummyData(5);
         }
         return this.data;
+      })
+    );
+  }
+
+  getCompanyList(hotelId: string, config?: QueryConfig) {
+    return this.get(
+      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`
+    ).pipe(
+      map((res) => {
+        return companyResponse;
       })
     );
   }

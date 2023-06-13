@@ -17,5 +17,12 @@ export type PageRoutes = {
 export type TokenRecord = typeof tokensConfig;
 export type TokensType = keyof typeof tokensConfig;
 export type Tokens = typeof tokensConfig[TokensType];
+
+/**
+ * Deep partial (multilevel object)
+ */
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
   
 

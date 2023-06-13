@@ -9,7 +9,7 @@ export type FlagType =
   | 'success'
   | 'unavailable'
   | 'paid'
-  | 'unpaid'
+  | 'unpaid';
 
 // more modes can be added (take reference form primeNg filter)
 export type MatchModes = 'startsWith' | 'contains' | 'endsWith' | 'equals';
@@ -95,6 +95,15 @@ export type EntityStateRecord<T extends string> = Record<
   }
 >;
 
+export type EntityState<T extends string> = Record<T, number>;
+
 export type QueryConfig = {
   params: string;
-}
+};
+
+export type QuickReplyFilterConfig = {
+  key: string;
+  isAllAType: boolean;
+  isStatusBoolean: boolean;
+  activeStateKey: string;
+};

@@ -1,3 +1,4 @@
+<ng-container [formGroup]="controlContainer.control">
 <div class="container-wrapper">
   <div class="header">Services</div>
   <hr />
@@ -55,7 +56,8 @@
       <hospitality-bot-button
         label="+ Add Menu"
         variant="contained"
-        link="pages/outlet/all-outlets/add-outlet/add-menu"
+        [routerLink]="['add-menu']"
+        queryParamsHandling="preserve"
       ></hospitality-bot-button>
     </hospitality-bot-custom-select>
   </div>
@@ -68,6 +70,8 @@
     <hospitality-bot-prefix-field
       label="Days Of operation"
       class="half-width"
+      preControlName="openingDay"
+      postControlName="closingDay"
       preFieldType="autocomplete"
       postFieldType="autocomplete"
       preOptions="preOptions"
@@ -81,6 +85,8 @@
     <hospitality-bot-prefix-field
       label="Timings"
       class="half-width"
+      preControlName="openingHour"
+      postControlName="closingHour"
       preFieldType="autocomplete"
       postFieldType="autocomplete"
       [preOptions]="preOptions"
@@ -97,3 +103,4 @@
   controlName="rules"
   class="full-width"
 ></hospitality-bot-rules>
+</ng-container>

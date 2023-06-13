@@ -95,14 +95,14 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       description: ['', [Validators.required]],
       complimentaryAmenities: [[], [Validators.required]],
       paidAmenities: [[]],
-      originalPrice: ['', [Validators.required, Validators.min(0)]],
-      discountType: ['PERCENTAGE'],
-      discountValue: ['0', [Validators.min(0)]],
-      discountedPrice: [{ value: '', disabled: true }],
+      // originalPrice: ['', [Validators.required, Validators.min(0)]],
+      // discountType: ['PERCENTAGE'],
+      // discountValue: ['0', [Validators.min(0)]],
+      // discountedPrice: [{ value: '', disabled: true }],
       // variablePriceCurrency: [{ value: '', disabled: true }],
       currency: ['', [Validators.required, Validators.min(0)]],
       // variableAmount: ['', [Validators.min(0)]],
-      discountedPriceCurrency: [{ value: '', disabled: true }],
+      // discountedPriceCurrency: [{ value: '', disabled: true }],
       maxOccupancy: [
         null,
         [
@@ -167,9 +167,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           }));
           // this.useForm.get('variablePriceCurrency').setValue(this.currencies[0].value);
           this.useForm.get('currency').setValue(this.currencies[0].value);
-          this.useForm
-            .get('discountedPriceCurrency')
-            .setValue(this.currencies[0].value);
+          // this.useForm
+          //   .get('discountedPriceCurrency')
+          //   .setValue(this.currencies[0].value);
         }
       })
     );
@@ -182,103 +182,103 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    * @function initFormSubscription Initialize the subscription of form value change
    */
   initFormSubscription() {
-    this.registerRateAndDiscountChange();
+    // this.registerRateAndDiscountChange();
     this.registerOccupancyChanges();
   }
 
-  /**
-   * @function registerRateAndDiscountChange Subscribe to rate and discount value subscription to get discounted price
-   */
-  registerRateAndDiscountChange() {
-    const {
-      originalPrice,
-      discountType,
-      discountedPriceCurrency,
-      discountValue,
-      currency,
-      // variablePriceCurrency,
-    } = this.inputControl;
+  // /**
+  //  * @function registerRateAndDiscountChange Subscribe to rate and discount value subscription to get discounted price
+  //  */
+  // registerRateAndDiscountChange() {
+  //   const {
+  //     originalPrice,
+  //     discountType,
+  //     discountedPriceCurrency,
+  //     discountValue,
+  //     currency,
+  //     // variablePriceCurrency,
+  //   } = this.inputControl;
 
-    /**
-     * @function setDiscountValueAndErrors To update the discount value
-     * @returns error type
-     */
-    const setDiscountValueAndErrors = () => {
-      const price = +originalPrice.value;
-      const discount = +(discountValue.value ?? 0);
-      const type = discountType.value;
+  //   /**
+  //    * @function setDiscountValueAndErrors To update the discount value
+  //    * @returns error type
+  //    */
+  //   const setDiscountValueAndErrors = () => {
+  //     const price = +originalPrice.value;
+  //     const discount = +(discountValue.value ?? 0);
+  //     const type = discountType.value;
 
-      if (price)
-        this.useForm.patchValue({
-          discountedPrice:
-            type === 'NUMBER'
-              ? price - discount
-              : Math.round(
-                  (price - (price * discount) / 100 + Number.EPSILON) * 100
-                ) / 100,
-        });
+  //     if (price)
+  //       this.useForm.patchValue({
+  //         discountedPrice:
+  //           type === 'NUMBER'
+  //             ? price - discount
+  //             : Math.round(
+  //                 (price - (price * discount) / 100 + Number.EPSILON) * 100
+  //               ) / 100,
+  //       });
 
-      if (type === 'NUMBER' && discount > price) {
-        return 'isNumError';
-      }
+  //     if (type === 'NUMBER' && discount > price) {
+  //       return 'isNumError';
+  //     }
 
-      if (type === 'PERCENTAGE' && discount > 100) {
-        return 'isPercentError';
-      }
+  //     if (type === 'PERCENTAGE' && discount > 100) {
+  //       return 'isPercentError';
+  //     }
 
-      if (discount < 0) {
-        return 'isMinError';
-      }
-    };
+  //     if (discount < 0) {
+  //       return 'isMinError';
+  //     }
+  //   };
 
-    const clearError = () => {
-      originalPrice.setErrors(null);
-      discountValue.setErrors(null);
-    };
+  //   const clearError = () => {
+  //     originalPrice.setErrors(null);
+  //     discountValue.setErrors(null);
+  //   };
 
-    /* Original price Subscription */
-    originalPrice.valueChanges.subscribe(() => {
-      clearError();
-      const error = setDiscountValueAndErrors();
-      if (error === 'isNumError') {
-        originalPrice.setErrors({ isPriceLess: true });
-      }
-      if (error === 'isPercentError') {
-        discountValue.setErrors({ moreThan100: true });
-      }
-      if (originalPrice.value < 0) {
-        originalPrice.setErrors({ min: true });
-      }
-    });
+  //   /* Original price Subscription */
+  //   originalPrice.valueChanges.subscribe(() => {
+  //     clearError();
+  //     const error = setDiscountValueAndErrors();
+  //     if (error === 'isNumError') {
+  //       originalPrice.setErrors({ isPriceLess: true });
+  //     }
+  //     if (error === 'isPercentError') {
+  //       discountValue.setErrors({ moreThan100: true });
+  //     }
+  //     if (originalPrice.value < 0) {
+  //       originalPrice.setErrors({ min: true });
+  //     }
+  //   });
 
-    /**
-     * @function discountSubscription To handle changes in discount value
-     */
-    const discountSubscription = () => {
-      discountValue.enable({ emitEvent: false });
-      clearError();
-      const error = setDiscountValueAndErrors();
-      if (error === 'isNumError') {
-        discountValue.setErrors({ isDiscountMore: true });
-      }
-      if (error === 'isPercentError') {
-        discountValue.setErrors({ moreThan100: true });
-      }
-      if (error === 'isMinError') {
-        discountValue.setErrors({ min: true });
-      }
-    };
+  //   /**
+  //    * @function discountSubscription To handle changes in discount value
+  //    */
+  //   const discountSubscription = () => {
+  //     discountValue.enable({ emitEvent: false });
+  //     clearError();
+  //     const error = setDiscountValueAndErrors();
+  //     if (error === 'isNumError') {
+  //       discountValue.setErrors({ isDiscountMore: true });
+  //     }
+  //     if (error === 'isPercentError') {
+  //       discountValue.setErrors({ moreThan100: true });
+  //     }
+  //     if (error === 'isMinError') {
+  //       discountValue.setErrors({ min: true });
+  //     }
+  //   };
 
-    /* Discount Subscription */
-    discountValue.valueChanges.subscribe(discountSubscription);
-    discountType.valueChanges.subscribe(discountSubscription);
+  //   /* Discount Subscription */
+  //   discountValue.valueChanges.subscribe(discountSubscription);
+  //   discountType.valueChanges.subscribe(discountSubscription);
 
-    /* Currency Subscription */
-    currency.valueChanges.subscribe((res) => {
-      discountedPriceCurrency.setValue(res);
-      // variablePriceCurrency.setValue(res);
-    });
-  }
+  //   /* Currency Subscription */
+  //   currency.valueChanges.subscribe((res) => {
+  //     discountedPriceCurrency.setValue(res);
+  //     // variablePriceCurrency.setValue(res);
+  //   });
+  // }
 
   /**
    * @function registerOccupancyChanges Subscribe to rate and discount value subscription to get discounted price
@@ -441,7 +441,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     const {
       complimentaryAmenities,
       paidAmenities,
-      discountedPriceCurrency,
+      // discountedPriceCurrency,
       // variablePriceCurrency,
       ...rest
     } = this.useForm.getRawValue() as RoomTypeFormData;

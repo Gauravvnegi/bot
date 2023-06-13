@@ -1,6 +1,5 @@
-import { EntityState, NextStates } from '@hospitality-bot/admin/shared';
+import { EntityState } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { roomStatusDetails } from '../constant/response';
 // import { Status } from '../constant/data-table';
 import {
   AverageRoomRateResponse,
@@ -42,7 +41,7 @@ export class Room {
   currency: string;
   status: string;
   foStatus: string;
-  nextStates: NextStates;
+  nextStates: string[];
 
   deserialize(input: RoomResponse) {
     this.id = input.id ?? '';
@@ -54,12 +53,7 @@ export class Room {
     this.currency = input.currency ?? '';
     this.status = input.roomStatus ?? '';
     this.foStatus = input.foStatus ?? '';
-    //  --refactor-- this logic need to be moved to toggle button - refer table logic (same)
-    this.nextStates = [...input.nextStates, input.roomStatus].map((item) => ({
-      label: roomStatusDetails[item]?.label ?? item,
-      value: item,
-      type: roomStatusDetails[item]?.type ?? 'active',
-    }));
+    this.nextStates = [...input.nextStates, input.roomStatus];
     return this;
   }
 
@@ -101,10 +95,10 @@ export class RoomType {
   roomCount: number;
   amenities: string[];
   occupancy: number;
-  status: 'ACTIVE' | 'UNAVAILABLE';
+  status: boolean;
   price: number;
   currency: string;
-  nextStates: NextStates;
+  nextStates: string[];
 
   deserialize(input: RoomTypeResponse) {
     this.id = input.id ?? '';
@@ -116,22 +110,10 @@ export class RoomType {
         ?.map((item) => item.name)
         .concat(input.complimentaryAmenities.map((item) => item.name)) ?? [];
     this.occupancy = input.maxOccupancy ?? null;
-    this.status = input.status ? 'ACTIVE' : 'UNAVAILABLE';
+    this.status = input.status;
     // mapping discounted price
     this.price = input.discountedPrice ?? input.originalPrice;
     this.currency = input.currency ?? '';
-    this.nextStates = [
-      {
-        label: 'Active',
-        value: 'ACTIVE',
-        type: 'active',
-      },
-      {
-        label: 'Unavailable',
-        value: 'UNAVAILABLE',
-        type: 'failed',
-      },
-    ];
 
     return this;
   }

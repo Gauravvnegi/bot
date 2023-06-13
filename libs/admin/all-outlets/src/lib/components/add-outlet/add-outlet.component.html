@@ -21,13 +21,15 @@
         class="half-width"
         controlName="type"
         label="Type"
-        [options]="type"
+        [options]="types"
+        (itemSelection)="onTypeChange($event.value)"
       ></hospitality-bot-select>
       <hospitality-bot-select
         class="half-width"
         controlName="subType"
         label="Sub Type"
         [options]="subType"
+        [disabled]="!isTypeSelected"
       ></hospitality-bot-select>
     </div>
     <div class="half-width" [formGroup]="useForm.get('contact')">
@@ -69,12 +71,12 @@
 
   <ng-container [ngSwitch]="useForm.get('type').value">
     <hospitality-bot-restaurant-form
-      *ngSwitchCase="'restaurant'"
+      *ngSwitchCase="'RESTAURANT'"
       class="full-width"
     ></hospitality-bot-restaurant-form>
-    <hospitality-bot-spa-form *ngSwitchCase="'spa'" class="full-width">
+    <hospitality-bot-spa-form *ngSwitchCase="'SPA'" class="full-width">
     </hospitality-bot-spa-form>
-    <hospitality-bot-banquet-form *ngSwitchCase="'banquet'" class="full-width">
+    <hospitality-bot-banquet-form *ngSwitchCase="'BANQUET'" class="full-width">
     </hospitality-bot-banquet-form>
   </ng-container>
 

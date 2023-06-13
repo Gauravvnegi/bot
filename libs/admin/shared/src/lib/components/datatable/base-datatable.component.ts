@@ -7,7 +7,7 @@ import { MenuItem } from 'primeng/api';
 import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Paginator } from 'primeng/paginator';
 import { Table } from 'primeng/table';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   defaultFilterChipValue,
@@ -24,6 +24,7 @@ import {
   QuickReplyFilterConfig,
   TableFieldSearch,
 } from '../../types/table.type';
+import { convertToTitleCase } from '../../utils/valueFormatter';
 
 interface Import {
   name: string;
@@ -145,6 +146,12 @@ export class BaseDatatableComponent implements OnInit {
   tempRowsPerPage;
   isSearchSet = false;
   @ViewChild('paginator', { static: false }) paginator: Paginator;
+
+
+  /** !!!!!! IMPORTANT
+   * Use this to cancel api call when filter changes and the previous request is still in progress
+   */
+  subscriptionList$ = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
@@ -389,53 +396,47 @@ export class BaseDatatableComponent implements OnInit {
       ?.reduce((total, chip) => total + (chip?.total ?? 0), 0);
   }
 
-  /**
-   * Handle conversion of the key to label format
-   * @param str key value
-   * @returns label value
-   */
-  convertToTitleCase(str: string) {
-    return str
-      .toLowerCase()
-      .split('_')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  }
-
   onSelectedTabFilterChange(event: MatTabChangeEvent) {
-    // this.resetTable()
-    this.table?.reset();
+    this.resetTable();
     this.tabFilterIdx = event.index;
     this.selectedTab = this.tabFilterItems[event.index].value;
-    this.loadData({});
     this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
+    this.loadData({});
   }
 
   /**
    * Handle the value of tab filters and filter chips
    * @param entityTypeCounts Tab filters value
    * @param entityStateCounts Filter chips value
-   * @param recordJson Json data for label and type value against the key
+   * @param recordsJson Json data for label and type value against the key
    * @param totalMainCount total count of all data
    */
   initFilters<T extends string>(
     entityTypeCounts: EntityState<T>,
     entityStateCounts: EntityState<T>,
     totalMainCount: number,
-    recordJson?: EntityStateRecord<T>
+    recordsJson?: EntityStateRecord<T>
   ) {
-    const record = { ...defaultRecordJson, ...recordJson };
+    const record = { ...defaultRecordJson, ...recordsJson };
     let totalCount = totalMainCount;
 
     if (entityTypeCounts) {
       this.tabFilterItems = Object.entries(entityTypeCounts).map(
         ([key, value]) => ({
-          label: record[key]?.label ?? this.convertToTitleCase(key),
+          label: record[key]?.label ?? convertToTitleCase(key),
           value: key,
           total: value,
         })
       );
 
+      const selectedTabIndex = this.tabFilterItems.findIndex(
+        (item) => item.value === this.selectedTab
+      );
+      if (selectedTabIndex !== -1 && selectedTabIndex !== this.tabFilterIdx) {
+        // changing the selected tab filter index as api response can give different order
+        this.tabFilterIdx === selectedTabIndex;
+      }
+      
       totalCount = this.tabFilterItems[this.tabFilterIdx].total;
     } else this.isTabFilters = false;
 
@@ -445,10 +446,10 @@ export class BaseDatatableComponent implements OnInit {
         ...entityStateCounts,
       }).map(([key, value]) => {
         const stateCount = {
-          label: record[key]?.label ?? this.convertToTitleCase(key),
+          label: record[key]?.label ?? convertToTitleCase(key),
           value: key,
           total: value,
-          type: record[key]?.type,
+          type: record[key]?.type ?? 'active',
         } as Chip<T>;
 
         return stateCount;

@@ -5,7 +5,7 @@ declare let google: any;
   providedIn: 'root',
 })
 export class AddressService {
-  storeData;
+  storeData = {};
   getAddressById(placeId, isSameAddress) {
     console.log(isSameAddress, 'isSameAddress');
     if (isSameAddress) {

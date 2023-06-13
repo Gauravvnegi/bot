@@ -13,12 +13,15 @@ import { businessRoute } from '../../constant/routes';
 import {
   HotelResponse,
   SegmentList,
+  Service,
   ServiceIdList,
   Services,
   noRecordAction,
 } from '../../models/hotel.models';
 import { BusinessService } from '../../services/business.service';
 import { AddressService } from '../../services/place.service';
+import { ServcieStatusList } from '../../models/hotel-form.model';
+import { HotelFormDataService } from '../../services/hotel-form.service';
 
 declare let google: any;
 
@@ -38,9 +41,11 @@ export class HotelInfoFormComponent implements OnInit {
   navRoutes: NavRouteOption[];
   pageTitle: string = 'Hotel';
   brandId: string;
-  noRecordAction = noRecordAction;
   addressList: any[] = [];
+  allServices: Service[] = [];
   defaultImage: string = 'assets/images/image-upload.png';
+  actlink: string;
+  noRecordAction;
 
   google: any;
   options = {
@@ -55,7 +60,8 @@ export class HotelInfoFormComponent implements OnInit {
     private router: Router,
     private businessService: BusinessService,
     private addressService: AddressService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private hotelFormDataService: HotelFormDataService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -69,7 +75,6 @@ export class HotelInfoFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.getServices();
     this.getSegmentList();
   }
 
@@ -94,24 +99,58 @@ export class HotelInfoFormComponent implements OnInit {
       brandId: [this.brandId],
     });
 
-    // this.useForm.get('hotel.address').patchValue([
-    //   {
-    //     buildingName: '',
-    //     city: 'Noida',
-    //     country: 'India',
-    //     floor: '',
-    //     formattedAddress:
-    //       'H9G4+8WH, Morna, Sector 35, Noida, Uttar Pradesh 201307, India',
-    //     latitude: 28.5759152,
-    //     longitude: 77.35734479999999,
-    //     id: 'ChIJNQGuDmHlDDkR7gG7SGkbpSM',
-    //     postalCode: '201307',
-    //     sector: 'Sector 35',
-    //     state: 'Uttar Pradesh',
-    //     street: '',
-    //   },
-    // ]);
+    if (this.hotelFormDataService.hotelFormState) {
+      this.allServices = this.hotelFormDataService.hotelInfoFormData.services.map(
+        (service) => service.id
+      );
 
+      this.compServices = this.hotelFormDataService.hotelInfoFormData.services.slice(
+        0,
+        5
+      );
+      this.useForm
+        .get('hotel')
+        .patchValue(this.hotelFormDataService.hotelInfoFormData);
+    }
+
+    this.patchValue();
+    this.manageRoutes();
+
+    //if hotel id is present then get the hotel by id and paatch the hotel detais
+    if (this.hotelId && !this.hotelFormDataService.hotelFormState) {
+      this.businessService.getHotelById(this.hotelId).subscribe((res) => {
+        // const data = new HotelResponse().deserialize(res);
+
+        const { address, ...rest } = res;
+        this.useForm.get('hotel').patchValue(rest);
+        this.useForm.get('hotel.address').patchValue(address);
+      });
+
+      //get the servcie list after getting hotel by id
+      this.businessService
+        .getServiceList(this.hotelId, {
+          params: '?type=SERVICE&serviceType=COMPLIMENTARY&pagination=false',
+        })
+        .subscribe((res) => {
+          this.allServices = res.complimentaryPackages.map((item) => item.id);
+
+          this.compServices = res.complimentaryPackages.slice(0, 5);
+
+          this.hotelFormDataService.initHotelInfoFormData(
+            { services: this.compServices },
+            true
+          );
+
+          const data = res.complimentaryPackages
+            .filter((item) => item.active)
+            .map((item) => item.id);
+
+          this.useForm.get('hotel.serviceIds').patchValue(data);
+        });
+    }
+  }
+
+  manageRoutes() {
     const { navRoutes, title } = businessRoute[
       this.hotelId ? 'editHotel' : 'hotel'
     ];
@@ -120,39 +159,18 @@ export class HotelInfoFormComponent implements OnInit {
     this.navRoutes[2].link = `/pages/settings/business-info/brand/${this.brandId}`;
     this.navRoutes[2].isDisabled = !this.brandId;
     this.navRoutes[3].isDisabled = true;
-
-    // if hotel form state is true then set form data
-    if (this.businessService.hotelFormState) {
-      this.prevAddressId = this.businessService.hotelInfoFormData!.address.value;
-      this.useForm
-        .get('hotel')
-        .patchValue(this.businessService.hotelInfoFormData);
-    }
-
-    if (this.hotelId && !this.businessService.hotelFormState) {
-      this.businessService.getHotelById(this.hotelId).subscribe((res) => {
-        // const data = new HotelResponse().deserialize(res);
-
-        const { address, ...rest } = res;
-        this.useForm.get('hotel').patchValue(rest);
-        console.log('res', address);
-        this.useForm.get('hotel.address').patchValue(address);
-
-        this.businessService.getServiceList(this.hotelId).subscribe((res) => {
-          const serviceIds = new ServiceIdList().deserialize(res).serviceIdList;
-          this.useForm.get('hotel.serviceIds').patchValue(serviceIds);
-        });
-      });
-    }
+    this.noRecordAction = {
+      imageSrc: 'assets/images/empty-table-service.png',
+      description: 'No services found',
+      actionName: '+ Import Services',
+      link: this.hotelId
+        ? `pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}/import-services`
+        : `pages/settings/business-info/brand/${this.brandId}/hotel/import-services`,
+    };
   }
 
-  /**
-   * @function addMoreImage to add more image
-   * @returns void
-   */
-  addMoreImage() {
-    this.imageLimit = this.imageLimit + 4;
-  }
+  // if hotel form state is true then set the form value
+  patchValue() {}
 
   /**
    * @function getSegmentList to get segment list
@@ -164,36 +182,6 @@ export class HotelInfoFormComponent implements OnInit {
     this.businessService.getSegments().subscribe((res) => {
       this.segmentList = new SegmentList().deserialize(res).segmentList;
     });
-  }
-
-  /**
-   * @function getServices to get amenities (paid and services)
-   * @param serviceType
-   */
-  getServices() {
-    this.$subscription.add(
-      this.businessService.getServices().subscribe((res) => {
-        this.compServices = new Services()
-          .deserialize(res.service)
-          .services.slice(0, 5);
-      }, this.handelError)
-    );
-  }
-
-  saveHotelData() {
-    this.businessService.initHotelInfoFormData(
-      this.useForm.getRawValue().hotel,
-      true
-    );
-    if (this.hotelId) {
-      this.router.navigate([
-        `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}/services`,
-      ]);
-    } else {
-      this.router.navigate([
-        `pages/settings/business-info/brand/${this.brandId}/hotel/services`,
-      ]);
-    }
   }
 
   /**
@@ -244,8 +232,59 @@ export class HotelInfoFormComponent implements OnInit {
     }
   }
 
-  resetForm() {
-    this.useForm.reset({}, { emitEvent: true });
+  getModifiedData(data) {
+    // get modified segment
+    data.hotel.propertyCategory = this.segmentList.find(
+      (item) => item?.value === data.hotel.propertyCategory
+    );
+
+    // get modified address
+    data.hotel.address = this.addressService.storeData;
+
+    return data;
+  }
+
+  //to view all the services
+  saveHotelData() {
+    this.businessService.onSubmit.emit(true);
+
+    //saving the hotel data locally
+    this.hotelFormDataService.initHotelInfoFormData(
+      this.useForm.getRawValue().hotel,
+      true
+    );
+
+    if (this.hotelId) {
+      this.router.navigate([
+        `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}/services`,
+      ]);
+    } else {
+      this.router.navigate([
+        `pages/settings/business-info/brand/${this.brandId}/hotel/services`,
+      ]);
+    }
+  }
+
+  //to import the services
+  openImportService() {
+    this.businessService.onSubmit.emit(true);
+    const data = this.useForm.getRawValue();
+
+    //save hotel form data and now got to import service page
+    this.hotelFormDataService.initHotelInfoFormData(
+      { ...data.hotel, allServices: this.allServices },
+      true
+    );
+
+    if (this.hotelId) {
+      this.router.navigate([
+        `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}/import-services`,
+      ]);
+    } else {
+      this.router.navigate([
+        `/pages/settings/business-info/brand/${this.brandId}/hotel/import-services`,
+      ]);
+    }
   }
 
   /**
@@ -253,6 +292,7 @@ export class HotelInfoFormComponent implements OnInit {
    * @returns void
    */
   handleSuccess = () => {
+    this.hotelFormDataService.resetHotelInfoFormData();
     this.snackbarService.openSnackBarAsText(
       `Hotel ${this.hotelId ? 'edited' : 'created'} successfully`,
       '',
@@ -267,6 +307,11 @@ export class HotelInfoFormComponent implements OnInit {
   handelError = ({ error }): void => {
     this.loading = false;
   };
+
+  //to reset the form
+  resetForm() {
+    this.useForm.reset({}, { emitEvent: true });
+  }
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();

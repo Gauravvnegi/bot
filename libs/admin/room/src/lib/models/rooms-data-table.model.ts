@@ -1,4 +1,4 @@
-import { NextStates } from '@hospitality-bot/admin/shared';
+import { EntityState, NextStates } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { roomStatusDetails } from '../constant/response';
 // import { Status } from '../constant/data-table';
@@ -17,16 +17,16 @@ import {
 
 export class RoomList {
   records: Room[];
-  count: RoomRecordsCount;
-  typeCount: EntityTypeCount;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
+  totalRecord: number;
+
   deserialize(input: RoomListResponse) {
     this.records =
       input.rooms?.map((item) => new Room().deserialize(item)) ?? [];
-    this.count = new RoomRecordsCount().deserialize(
-      input.entityStateCounts,
-      input.total
-    );
-    this.typeCount = new EntityTypeCount().deserialize(input.entityTypeCounts);
+    this.entityStateCounts = input.entityStateCounts;
+    this.entityTypeCounts = input.entityTypeCounts;
+    this.totalRecord = input.total;
 
     return this;
   }
@@ -75,41 +75,20 @@ export class Room {
   }
 }
 
-export class RoomRecordsCount {
-  ALL: number;
-  CLEAN: number;
-  INSPECTED: number;
-  OUT_OF_SERVICE: number;
-  OUT_OF_ORDER: number;
-  UNAVAILABLE: number;
-
-  deserialize(input: RoomListResponse['entityStateCounts'], total: number) {
-    this.ALL = total;
-    this.UNAVAILABLE = input.UNAVAILABLE ?? 0;
-    this.CLEAN = input.UNAVAILABLE ?? 0;
-    this.INSPECTED = input.INSPECTED ?? 0;
-    this.OUT_OF_SERVICE = input.OUT_OF_SERVICE ?? 0;
-    this.OUT_OF_ORDER = input.OUT_OF_ORDER ?? 0;
-    this.UNAVAILABLE = input.UNAVAILABLE ?? 0;
-
-    return this;
-  }
-}
-
 // ************ Room Type Models ******************
 
 export class RoomTypeList {
   records: RoomType[];
-  count: RoomTypeRecordCounts;
-  typeCount: EntityTypeCount;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
+  totalRecord: number;
 
   deserialize(input: RoomTypeListResponse) {
     this.records =
       input?.roomTypes.map((item) => new RoomType().deserialize(item)) ?? [];
-    this.count = new RoomTypeRecordCounts().deserialize(
-      input.entityStateCounts
-    );
-    this.typeCount = new EntityTypeCount().deserialize(input.entityTypeCounts);
+    this.entityStateCounts = input.entityStateCounts;
+    this.entityTypeCounts = input.entityTypeCounts;
+    this.totalRecord = input.total;
 
     return this;
   }
@@ -154,27 +133,6 @@ export class RoomType {
       },
     ];
 
-    return this;
-  }
-}
-
-export class RoomTypeRecordCounts {
-  ALL: number;
-  ACTIVE: number;
-  UNAVAILABLE: number;
-  deserialize(input: RoomTypeListResponse['entityStateCounts']) {
-    this.ALL = Number(Object.values(input).reduce((a, b) => a + b, 0));
-    this.UNAVAILABLE = input.INACTIVE;
-    this.ACTIVE = input.ACTIVE;
-    return this;
-  }
-}
-export class EntityTypeCount {
-  ROOM_TYPE: number;
-  ROOM: number;
-  deserialize(input: RoomTypeListResponse['entityTypeCounts']) {
-    this.ROOM_TYPE = input.ROOM_TYPE;
-    this.ROOM = input.ROOM;
     return this;
   }
 }

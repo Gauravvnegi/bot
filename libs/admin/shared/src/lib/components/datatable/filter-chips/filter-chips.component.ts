@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
+import { defaultFilterChipValue } from '../../../constants/datatable';
 import { Chip } from '../../../types/table.type';
 
 @Component({
@@ -8,35 +9,19 @@ import { Chip } from '../../../types/table.type';
   styleUrls: ['./filter-chips.component.scss'],
 })
 export class FilterChipsComponent implements OnInit {
-  @Input() chips: Chip<string>[] = [
-    {
-      label: 'All',
-      value: 'total',
-      total: 0,
-      isSelected: true,
-      type: 'default',
-    },
-    {
-      label: 'Active',
-      value: 'active',
-      total: 0,
-      isSelected: false,
-      type: 'active',
-    },
-    {
-      label: 'In-Active ',
-      value: 'inactive',
-      total: 0,
-      isSelected: false,
-      type: 'failed',
-    },
-  ];
+  @Input() chips: Chip<string>[] = [];
 
   /**
    * quickReplyActionFilters is used for Data table control
    */
   @Input() controlName = 'quickReplyActionFilters';
-  @Output() onChange = new EventEmitter<{ chips: Chip<string>[] }>();
+  @Input() selectedChips = new Set<string>();
+
+  // --chips will be removed from type (only index)
+  @Output() onChange = new EventEmitter<{
+    chips: Chip<string>[];
+    selectedChips: Set<string>;
+  }>();
 
   constructor(public controlContainer: ControlContainer) {}
 
@@ -47,15 +32,31 @@ export class FilterChipsComponent implements OnInit {
    * @param quickReplyTypeIdx The chip index.
    */
   toggleQuickReplyFilter(quickReplyTypeIdx: number): void {
+    // Refactor
+    // old implementation (will be removed)
+    // also removed the isSelected in template
     this.chips[0].isSelected = this.chips.reduce((value, chip, idx) => {
       if (!quickReplyTypeIdx) {
-        chip.isSelected = chip.value === 'All';
+        chip.isSelected = chip.value === defaultFilterChipValue.value;
       } else if (quickReplyTypeIdx === idx) {
         chip.isSelected = !chip.isSelected;
       }
       return value && !chip.isSelected;
-    }, true);
+    }, true); // remove
 
-    this.onChange.emit({ chips: this.chips });
+    const clickedChip = this.chips[quickReplyTypeIdx].value;
+    if (clickedChip !== defaultFilterChipValue.value) {
+      this.selectedChips.delete(defaultFilterChipValue.value);
+      this.selectedChips.has(clickedChip)
+        ? this.selectedChips.delete(clickedChip)
+        : this.selectedChips.add(clickedChip);
+    } else {
+      this.selectedChips = new Set([defaultFilterChipValue.value]);
+    }
+
+    this.onChange.emit({
+      chips: this.chips, // remove
+      selectedChips: this.selectedChips,
+    });
   }
 }

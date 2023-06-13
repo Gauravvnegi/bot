@@ -54,8 +54,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.businessService.resetHotelFormState();
-
     this.initTableValue();
   }
 
@@ -225,7 +223,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   }
 
   editHotel(Id) {
-    console.log(Id);
     this.router.navigate([
       `pages/settings/business-info/brand/${this.brandId}/hotel/${Id}`,
     ]);

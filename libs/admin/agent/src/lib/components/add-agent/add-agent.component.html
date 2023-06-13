@@ -51,11 +51,23 @@
         placeholder: 'Enter 14 digit IATA No.',
         type: 'number',
         errorMessages: {
-          required: 'This is a required field.',
           requiredLength: 'Length should be 14 digit.'
         }
       }"
     ></hospitality-bot-input>
+
+    <hospitality-bot-select
+      class="half-width"
+      controlName="companyName"
+      label="Company Name"
+      [options]="roomTypes"
+      [props]="{ isAsync: true, createPrompt: '+ Add New Company' }"
+      [loading]="loadingCompany"
+      (paginate)="loadMoreCompany()"
+      (onSearch)="searchCompany($event)"
+      [stopEmission]="noMoreCompany"
+      (onCreate)="createCompany()"
+    ></hospitality-bot-select>
 
     <hospitality-bot-input
       class="half-width"

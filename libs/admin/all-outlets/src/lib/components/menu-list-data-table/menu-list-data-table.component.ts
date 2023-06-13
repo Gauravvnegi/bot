@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { outletRoutes } from '../../constants/route';
+import { outletRoutes } from '../../constants/routes';
 import {
   MenuTabValue,
   chips,
@@ -15,7 +15,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  TableService
+  TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { OutletService } from '../../services/outlet.service';
@@ -26,7 +26,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
   templateUrl: './menu-list-data-table.component.html',
   styleUrls: [
     '../../../../../shared/src/lib/components/datatable/datatable.component.scss',
-    './menu-list-data-table.component.scss'
+    './menu-list-data-table.component.scss',
   ],
 })
 export class MenuListDataTableComponent extends BaseDatatableComponent
@@ -59,17 +59,17 @@ export class MenuListDataTableComponent extends BaseDatatableComponent
     this.listenToTableChange();
   }
 
-    /**
+  /**
    * @function listenToTableChange  To listen to table changes
    */
-    listenToTableChange() {
-      this.outletService.selectedMenuTable.subscribe((value) => {
-        this.selectedTable = value;
-        this.initTableValue();
-      });
-    }
+  listenToTableChange() {
+    this.outletService.selectedMenuTable.subscribe((value) => {
+      this.selectedTable = value;
+      this.initTableValue();
+    });
+  }
 
-      // Mock Data for now
+  // Mock Data for now
   initTableValue() {
     // this.loading = true;
     this.values = menuList;
@@ -86,7 +86,6 @@ export class MenuListDataTableComponent extends BaseDatatableComponent
     ];
   }
 
-
   /**
    * @function handleStatus To handle the status change
    * @param status status value
@@ -95,21 +94,19 @@ export class MenuListDataTableComponent extends BaseDatatableComponent
     // Not working
     this.loading = true;
     this.$subscription.add(
-      this.outletService
-        .updateOutletItem(rowData.id, status)
-        .subscribe(
-          () => {
-            this.updateStatusAndCount(rowData.status, status);
+      this.outletService.updateOutletItem(rowData.id, status).subscribe(
+        () => {
+          this.updateStatusAndCount(rowData.status, status);
 
-            this.snackbarService.openSnackBarAsText(
-              'Status changes successfully',
-              '',
-              { panelClass: 'success' }
-            );
-          },
-          ({ error }) => {},
-          this.handleFinal
-        )
+          this.snackbarService.openSnackBarAsText(
+            'Status changes successfully',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        ({ error }) => {},
+        this.handleFinal
+      )
     );
   }
 
@@ -162,5 +159,4 @@ export class MenuListDataTableComponent extends BaseDatatableComponent
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
   }
-
 }

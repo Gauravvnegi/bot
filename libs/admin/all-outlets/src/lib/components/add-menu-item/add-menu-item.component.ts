@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
-import { outletRoutes } from '../../constants/route';
+import { outletRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-add-menu-item',
@@ -15,22 +15,22 @@ export class AddMenuItemComponent implements OnInit {
   packageCode: string = '# will be auto generated';
 
   mealPreferences: Option[] = [
-    {label: 'Veg', value: 'VEG'},
-    {label: 'Non-Veg', value: 'NONVEG'}
-  ]
+    { label: 'Veg', value: 'VEG' },
+    { label: 'Non-Veg', value: 'NONVEG' },
+  ];
 
   types: Option[] = [
-    {label: 'Rice', value: 'RICE'},
-    {label: 'Bread', value: 'BREAD'},
-    {label: 'Pizza', value: 'PIZZA'},
-  ]
+    { label: 'Rice', value: 'RICE' },
+    { label: 'Bread', value: 'BREAD' },
+    { label: 'Pizza', value: 'PIZZA' },
+  ];
 
   categories: Option[] = [
-    {label: 'Appetizers', value: 'Appetizers'},
-    {label: 'Deserts', value: 'DESERTS'},
-    {label: 'Specials', value: 'SPECIALS'},
-    {label: 'Beverages', value: 'BEVERAGES'}
-  ]
+    { label: 'Appetizers', value: 'Appetizers' },
+    { label: 'Deserts', value: 'DESERTS' },
+    { label: 'Specials', value: 'SPECIALS' },
+    { label: 'Beverages', value: 'BEVERAGES' },
+  ];
 
   constructor(private fb: FormBuilder) {
     const { navRoutes, title } = outletRoutes['addMenuItem'];
@@ -53,15 +53,11 @@ export class AddMenuItemComponent implements OnInit {
       unit: ['', Validators.required],
       dineInPrice: ['', Validators.required],
       hsnCode: ['', Validators.required],
-      notes: ['', Validators.required]
-    })
+      notes: ['', Validators.required],
+    });
   }
 
-  handleReset(){
+  handleReset() {}
 
-  }
-
-  handleSubmit(){
-    
-  }
+  handleSubmit() {}
 }

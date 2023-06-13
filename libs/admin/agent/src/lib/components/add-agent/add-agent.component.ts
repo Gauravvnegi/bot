@@ -8,6 +8,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { agentRoutes, navRoute } from '../../constant/routes';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
+import { FormService } from '../../../../../members/src/lib/services/form.service';
+import { companyRoutes } from '../../../../../company/src/lib/constants/route';
+import { AgentFormType } from '../../types/form.types';
+import { CompanyList } from '../../models/agent.model';
 @Component({
   selector: 'hospitality-bot-add-agent',
   templateUrl: './add-agent.component.html',
@@ -26,6 +30,14 @@ export class AddAgentComponent implements OnInit {
   loading = false;
   subscription$ = new Subscription();
 
+  /* roomTypes options variable */
+  companyOffset = 0;
+  loadingCompany = false;
+  noMoreCompany = false;
+  companyLimit = 10;
+
+  roomTypes = [];
+
   commissionTypes: Option[] = [{ label: '%OFF', value: 'PERCENTAGE' }];
 
   constructor(
@@ -34,7 +46,8 @@ export class AddAgentComponent implements OnInit {
     private globalService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private formService: FormService
   ) {
     this.agentId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = agentRoutes[
@@ -47,6 +60,7 @@ export class AddAgentComponent implements OnInit {
   ngOnInit(): void {
     this.hotelId = this.globalService.hotelId;
     this.initAgentForm();
+    this.initDefaultForm();
   }
 
   initAgentForm() {
@@ -56,14 +70,7 @@ export class AddAgentComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       cc: ['+91'],
       phoneNo: [null, [Validators.required]],
-      iataNo: [
-        null,
-        [
-          Validators.required,
-          Validators.maxLength(14),
-          CustomValidators.requiredLength(14),
-        ],
-      ],
+      iataNo: ['', [CustomValidators.requiredLength(14)]],
       companyName: ['', [Validators.required]],
       address: ['', [Validators.required]],
       commissionType: ['PERCENTAGE'],
@@ -74,6 +81,12 @@ export class AddAgentComponent implements OnInit {
     });
 
     if (this.agentId) this.getAgentById();
+  }
+
+  initDefaultForm() {
+    this.formService.agentForm &&
+      this.formService.restoreForm(this.agentForm, 'agent');
+    this.formService.reset();
   }
 
   /**
@@ -152,6 +165,104 @@ export class AddAgentComponent implements OnInit {
       address: '',
       commission: '',
     });
+  }
+
+  /**
+   * @function addRoomType Add room type
+   */
+  createCompany() {
+    this.saveForm();
+    this.router.navigate([
+      `/pages/members/company/${companyRoutes.addCompany.route}`,
+    ]);
+  }
+
+  saveForm() {
+    this.formService.companyRedirectRoute = '/pages/members/agent';
+    this.route.snapshot.url.forEach((segment) => {
+      this.formService.companyRedirectRoute += `/${segment.path}`;
+    });
+    this.formService.setForm(
+      this.agentForm.getRawValue() as AgentFormType,
+      'agent'
+    );
+  }
+
+  /**
+   * @function loadMoreCompany load more categories options
+   */
+  loadMoreCompany() {
+    this.companyOffset = this.companyOffset + 10;
+    this.getCompany();
+  }
+
+  /**
+   * @function getCategories to get room type options
+   */
+  getCompany(): void {
+    this.loadingCompany = true;
+    this.subscription$.add(
+      this.agentService
+        .getAgentList(this.hotelId, {
+          params: `?type=ROOM_TYPE&offset=${this.companyOffset}&limit=${this.companyLimit}`,
+        })
+        .subscribe(
+          (res) => {
+            const data = new CompanyList().deserialize(res);
+            // .records.map((item) => ({
+            //   label: item.name,
+            //   value: item.id,
+            //   price: item.price,
+            //   currency: item.currency,
+            // }));
+            // this.roomTypes = [...this.roomTypes, ...data];
+            // this.noMoreCompany = data.length < this.companyLimit;
+          },
+          (error) => {},
+          () => {
+            this.loadingCompany = false;
+          }
+        )
+    );
+  }
+
+  /**
+   * @function searchCompany To search categories
+   * @param text search text
+   */
+  searchCompany(text: string) {
+    // if (text) {
+    //   this.loadingCompany = true;
+    //   this.libraryService
+    //     .searchLibraryItem(this.hotelId, {
+    //       params: `?key=${text}&type=${LibrarySearchItem.ROOM_TYPE}`,
+    //     })
+    //     .subscribe(
+    //       (res) => {
+    //         const data = res && res[LibrarySearchItem.ROOM_TYPE];
+    //         this.roomTypes =
+    //           data
+    //             ?.filter((item) => item.status)
+    //             .map((item) => {
+    //               const roomType = new RoomType().deserialize(item);
+    //               return {
+    //                 label: roomType.name,
+    //                 value: roomType.id,
+    //                 price: roomType.price,
+    //                 currency: roomType.currency,
+    //               };
+    //             }) ?? [];
+    //       },
+    //       (error) => {},
+    //       () => {
+    //         this.loadingCompany = false;
+    //       }
+    //     );
+    // } else {
+    //   this.companyOffset = 0;
+    //   this.roomTypes = [];
+    //   this.getRoomTypes();
+    // }
   }
 
   /**

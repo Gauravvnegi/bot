@@ -76,7 +76,6 @@ export class HotelInfoFormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.getSegmentList();
-    this.onAddressChange();
   }
 
   initForm() {
@@ -91,7 +90,7 @@ export class HotelInfoFormComponent implements OnInit {
           number: [''],
         }),
         gstNumber: [''],
-        address: [[], [Validators.required]],
+        address: [[]],
         imageUrl: [[]],
         description: [''],
         serviceIds: [[]],
@@ -120,19 +119,11 @@ export class HotelInfoFormComponent implements OnInit {
     //if hotel id is present then get the hotel by id and paatch the hotel detais
     if (this.hotelId && !this.hotelFormDataService.hotelFormState) {
       this.businessService.getHotelById(this.hotelId).subscribe((res) => {
+        // const data = new HotelResponse().deserialize(res);
+
         const { address, ...rest } = res;
-        this.addressList = [
-          {
-            label: address?.formattedAddress,
-            value: address?.id,
-          },
-        ];
-        const data = new HotelResponse().deserialize(rest);
-        this.useForm.patchValue(data);
-        this.useForm.get('hotel.address').setValue({
-          label: address?.formattedAddress,
-          value: address?.id,
-        });
+        this.useForm.get('hotel').patchValue(rest);
+        this.useForm.get('hotel.address').patchValue(address);
       });
 
       //get the servcie list after getting hotel by id
@@ -199,7 +190,6 @@ export class HotelInfoFormComponent implements OnInit {
    * @description to submit form
    */
   submitForm() {
-    this.businessService.onSubmit.emit(true);
     if (this.useForm.invalid) {
       this.snackbarService.openSnackBarAsText(
         'Invalid Form: Please fix the errors'
@@ -207,8 +197,12 @@ export class HotelInfoFormComponent implements OnInit {
       this.useForm.markAllAsTouched();
       return;
     }
-
-    const data = this.getModifiedData(this.useForm.getRawValue());
+    this.businessService.onSubmit.emit(true);
+    const data = this.useForm.getRawValue();
+    // get modified segment
+    data.hotel.propertyCategory = this.segmentList.find(
+      (item) => item?.value === data.hotel.propertyCategory
+    );
 
     //if hotelId is present then update hotel else create hotel
     if (this.hotelId) {
@@ -248,30 +242,6 @@ export class HotelInfoFormComponent implements OnInit {
     data.hotel.address = this.addressService.storeData;
 
     return data;
-  }
-
-  //to get the address list on search
-  searchOptions(text: string) {
-    if (text) {
-      var placeServiceRequest = {
-        input: text,
-        types: ['establishment'],
-      };
-      var service = new google.maps.places.AutocompleteService();
-      service.getPlacePredictions(
-        placeServiceRequest,
-        (predictions, status) => {
-          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            this.addressList = predictions.map((item) => {
-              return {
-                label: item.description,
-                value: item.place_id,
-              };
-            });
-          }
-        }
-      );
-    }
   }
 
   //to view all the services
@@ -315,15 +285,6 @@ export class HotelInfoFormComponent implements OnInit {
         `/pages/settings/business-info/brand/${this.brandId}/hotel/import-services`,
       ]);
     }
-  }
-
-  //on adress changes get the full address details
-  onAddressChange() {
-    this.useForm.get('hotel.address').valueChanges.subscribe((res) => {
-      if (res) {
-        this.addressService.getAddressById(res.value, false);
-      }
-    });
   }
 
   /**

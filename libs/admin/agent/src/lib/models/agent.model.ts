@@ -1,4 +1,8 @@
-import { AgentListResponse, AgentResponse } from '../types/response';
+import {
+  AgentListResponse,
+  AgentResponse,
+  CompanyListResponse,
+} from '../types/response';
 import { EntityStateCountsResponse } from '../types/response';
 export class Agent {
   id: string;
@@ -41,6 +45,10 @@ export class AgentList {
     );
     return this;
   }
+}
+
+export class CompanyList {
+  deserialize(input: CompanyListResponse) {}
 }
 
 export class EntityStateCounts {

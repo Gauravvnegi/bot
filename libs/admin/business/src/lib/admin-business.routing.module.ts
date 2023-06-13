@@ -6,7 +6,6 @@ import { HotelInfoFormComponent } from './components/hotel-info-form/hotel-info-
 import { MainComponent } from './components/main/main.component';
 import { HotelDataTableComponent } from './components/hotel-data-table/hotel-data-table.component';
 import { businessRoute } from './constant/routes';
-import { SocialMediaComponent } from './components/social-media/social-media.component';
 import { ServicesComponent } from './components/services/services.component';
 import { ImportServiceComponent } from './components/import-service/import-service.component';
 
@@ -85,7 +84,6 @@ export class AdminBusinessRoutingModule {
     BrandInfoFormComponent,
     HotelInfoFormComponent,
     HotelDataTableComponent,
-    SocialMediaComponent,
     ServicesComponent,
     ImportServiceComponent,
   ];

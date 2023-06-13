@@ -92,6 +92,8 @@ import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
+import { AddressComponent } from './components/address/address-component.component';
+import { SocialMediaComponent } from './components/social-media/social-media.component';
 import { DiscountFormComponent } from './components/discount-form/discount-form.component';
 
 import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
@@ -195,6 +197,8 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    AddressComponent,
+    SocialMediaComponent,
     DiscountFormComponent,
     TimePickerComponent,
   ],
@@ -287,6 +291,8 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    AddressComponent,
+    SocialMediaComponent,
     DiscountFormComponent,
     TimePickerComponent,
   ],

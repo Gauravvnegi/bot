@@ -104,7 +104,7 @@ export class RoomService extends ApiService {
               }
               item['roomStatus'] = isOccupied ? 'DIRTY' : 'CLEAN';
               item['nextStates'] = isOccupied
-                ? ['CLEAN', 'OUT_OF_SERVICE']
+                ? ['CLEAN', 'OUT_OF_ORDER', 'OUT_OF_SERVICE', 'INSPECT']
                 : ['DIRTY', 'INSPECTED'];
             });
           }

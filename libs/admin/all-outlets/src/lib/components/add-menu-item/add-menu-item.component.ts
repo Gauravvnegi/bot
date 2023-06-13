@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
-import { outletRoutes } from '../../constants/route';
+import { outletRoutes } from '../../constants/routes';
+import { OutletService } from '../../services/outlet.service';
 
 @Component({
   selector: 'hospitality-bot-add-menu-item',
@@ -14,32 +15,45 @@ export class AddMenuItemComponent implements OnInit {
   navRoutes: NavRouteOptions;
   packageCode: string = '# will be auto generated';
 
-  mealPreferences: Option[] = [
-    {label: 'Veg', value: 'VEG'},
-    {label: 'Non-Veg', value: 'NONVEG'}
-  ]
+  mealPreferences: Option[] = [];
 
-  types: Option[] = [
-    {label: 'Rice', value: 'RICE'},
-    {label: 'Bread', value: 'BREAD'},
-    {label: 'Pizza', value: 'PIZZA'},
-  ]
+  types: Option[] = [];
 
-  categories: Option[] = [
-    {label: 'Appetizers', value: 'Appetizers'},
-    {label: 'Deserts', value: 'DESERTS'},
-    {label: 'Specials', value: 'SPECIALS'},
-    {label: 'Beverages', value: 'BEVERAGES'}
-  ]
+  categories: Option[] = [];
 
-  constructor(private fb: FormBuilder) {
+  @HostListener('window:beforeunload', ['$event'])
+  handleBeforeUnload(event: BeforeUnloadEvent) {
+    event.preventDefault();
+    event.returnValue = false;
+    return 'Are you sure you want to leave? Your unsaved changes will be lost.';
+  }
+
+  constructor(private fb: FormBuilder, private outletService: OutletService) {
     const { navRoutes, title } = outletRoutes['addMenuItem'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
   }
 
   ngOnInit(): void {
+    this.initOptions();
     this.initForm();
+  }
+
+  initOptions() {
+    const menu = this.outletService.menu.value;
+    console.log(menu);
+    this.mealPreferences = menu.mealPreference.map((item) => ({
+      label: item,
+      value: item,
+    }));
+    this.types = menu.type.map((item) => ({
+      label: item,
+      value: item,
+    }));
+    this.categories = menu.category.map((item) => ({
+      label: item,
+      value: item,
+    }));
   }
 
   initForm(): void {
@@ -53,15 +67,11 @@ export class AddMenuItemComponent implements OnInit {
       unit: ['', Validators.required],
       dineInPrice: ['', Validators.required],
       hsnCode: ['', Validators.required],
-      notes: ['', Validators.required]
-    })
+      notes: ['', Validators.required],
+    });
   }
 
-  handleReset(){
+  handleReset() {}
 
-  }
-
-  handleSubmit(){
-    
-  }
+  handleSubmit() {}
 }

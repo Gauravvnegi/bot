@@ -1,0 +1,61 @@
+<ng-container [formGroup]="controlContainer.control">
+  <div class="container-wrapper">
+    <div class="header">Services</div>
+    <hr />
+    <div class="sub-container-wrapper">
+      <hospitality-bot-custom-select
+        label="Complimentary Services"
+        description="This is a free of cost services"
+        formControlName="serviceIds"
+        [itemList]=""
+        [noRecordsAction]="{
+          description: 'No services found',
+          imageSrc: 'assets/images/empty-table-service.png'
+        }"
+      >
+        <hospitality-bot-button
+          label="+ Import Services"
+          variant="text"
+          link=""
+        ></hospitality-bot-button>
+      </hospitality-bot-custom-select>
+      <hospitality-bot-custom-select
+        label="Paid Services"
+        description="Do not forget to add this cost in addition to the room cost"
+        formControlName="serviceIds"
+        [itemList]=""
+        [noRecordsAction]="{
+          description: 'No services found',
+          imageSrc: 'assets/images/empty-table-service.png'
+        }"
+      ></hospitality-bot-custom-select>
+    </div>
+  </div>
+
+  <div class="container-wrapper">
+    <div class="header">Food Packages</div>
+    <hr />
+    <div class="sub-container-wrapper">
+      <hospitality-bot-custom-select
+        label="Food Packages"
+        description="Do not forget to add this cost in addition to the room cost"
+        formControlName="serviceIds"
+        [itemList]=""
+        [noRecordsAction]="{
+          description: 'No food packages found',
+          imageSrc: 'assets/images/empty-table-service.png'
+        }"
+      >
+        <hospitality-bot-button
+          label="+ Add Packages"
+          variant="outlined"
+          link=""
+        ></hospitality-bot-button>
+      </hospitality-bot-custom-select>
+    </div>
+  </div>
+  <hospitality-bot-rules
+    controlName="rules"
+    class="full-width"
+  ></hospitality-bot-rules>
+</ng-container>

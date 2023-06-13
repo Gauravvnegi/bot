@@ -42,6 +42,7 @@ import { StatsCardComponent } from './components/stats-card/stats-card.component
 import { TabGroupComponent } from './components/tab-group/tab-group.component';
 import { TemplateEditorComponent } from './components/template-editor/template-editor.component';
 import { ToggleDropdownComponent } from './components/toggle-dropdown/toggle-dropdown.component';
+import { StatusDropdownToggleComponent } from './components/status-dropdown-toggle/status-dropdown-toggle.component';
 import { TopicDropdownComponent } from './components/topic-dropdown/topic-dropdown.component';
 import { UnsubscribeFeatureComponent } from './components/unsubscribe-feature/unsubscribe-feature.component';
 import { UnsubscribeViewComponent } from './components/unsubscribe-view/unsubscribe-view.component';
@@ -91,6 +92,8 @@ import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
+import { AddressComponent } from './components/address/address-component.component';
+import { SocialMediaComponent } from './components/social-media/social-media.component';
 import { DiscountFormComponent } from './components/discount-form/discount-form.component';
 import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
 import { CheckboxSelectorComponent } from './components/form-component/checkbox-selector/checkbox-selector.component';
@@ -159,6 +162,7 @@ import { CheckboxSelectorComponent } from './components/form-component/checkbox-
     ExportListComponent,
     ButtonComponent,
     ToggleDropdownComponent,
+    StatusDropdownToggleComponent,
     IteratorComponent,
     InputComponent,
     TextAreaComponent,
@@ -192,6 +196,8 @@ import { CheckboxSelectorComponent } from './components/form-component/checkbox-
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    AddressComponent,
+    SocialMediaComponent,
     DiscountFormComponent,
     TimePickerComponent,
     CheckboxSelectorComponent,
@@ -249,6 +255,7 @@ import { CheckboxSelectorComponent } from './components/form-component/checkbox-
     ExportListComponent,
     ButtonComponent,
     ToggleDropdownComponent,
+    StatusDropdownToggleComponent,
     IteratorComponent,
     InputComponent,
     TextAreaComponent,
@@ -284,6 +291,8 @@ import { CheckboxSelectorComponent } from './components/form-component/checkbox-
     CopyLinkComponentComponent,
     AddAttachmentComponent,
     ModalHeaderComponent,
+    AddressComponent,
+    SocialMediaComponent,
     DiscountFormComponent,
     TimePickerComponent,
     CheckboxSelectorComponent,

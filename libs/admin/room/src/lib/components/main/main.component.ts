@@ -11,6 +11,6 @@ export class MainComponent implements OnDestroy {
   constructor(private roomService: RoomService) {}
 
   ngOnDestroy(): void {
-    this.roomService.selectedTable.next(TableValue.roomType);
+    this.roomService.selectedTable = TableValue.roomType;
   }
 }

@@ -12,34 +12,49 @@
         (click)="toggleQuickReplyFilter(chipIdx)"
         [ngClass]="{
           'chip-outlined-default': chip.type === 'default',
-          'chip-contained-default': chip.type === 'default' && chip.isSelected,
+          'chip-contained-default':
+            chip.type === 'default' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
           'chip-outlined-active': chip.type === 'active',
-          'chip-contained-active': chip.type === 'active' && chip.isSelected,
+          'chip-contained-active':
+            chip.type === 'active' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
           'chip-outlined-failed': chip.type === 'failed',
-          'chip-contained-failed': chip.type === 'failed' && chip.isSelected,
+          'chip-contained-failed':
+            chip.type === 'failed' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
           'chip-outlined-inactive': chip.type === 'inactive',
           'chip-contained-inactive':
-            chip.type === 'inactive' && chip.isSelected,
+            chip.type === 'inactive' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
           'chip-outlined-draft': chip.type === 'draft',
-          'chip-contained-draft': chip.type === 'draft' && chip.isSelected,
+          'chip-contained-draft':
+            chip.type === 'draft' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
           'chip-outlined-completed': chip.type === 'completed',
           'chip-contained-completed':
-            chip.type === 'completed' && chip.isSelected,
+            chip.type === 'completed' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
           'chip-outlined-success': chip.type === 'success',
-          'chip-contained-success': chip.type === 'success' && chip.isSelected,
+          'chip-contained-success':
+            chip.type === 'success' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
           'chip-outlined-warning': chip.type === 'warning',
-          'chip-contained-warning': chip.type === 'warning' && chip.isSelected,
+          'chip-contained-warning':
+            chip.type === 'warning' &&
+            (chip.isSelected || selectedChips.has(chip.value)),
 
           'chip-outlined-unavailable': chip.type === 'unavailable',
           'chip-contained-unavailable':
-            chip.type === 'unavailable' && chip.isSelected
+            chip.type === 'unavailable' &&
+            (chip.isSelected || selectedChips.has(chip.value))
         }"
       >
         <span> {{ chip.label }}</span>

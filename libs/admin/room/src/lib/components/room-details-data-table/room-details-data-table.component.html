@@ -16,10 +16,6 @@
   [(first)]="first"
   [totalRecords]="totalRecords"
   [filterDelay]="0"
-  [(selection)]="selectedRows"
-  (onRowSelect)="onRowSelect($event)"
-  (onRowUnselect)="onRowUnselect($event)"
-  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
 >
   <ng-template pTemplate="emptymessage">
     <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
@@ -57,10 +53,10 @@
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.roomStatus; else emptyCell">
-          <div class="status-text"
-          [ngClass]="{
-            
-          }"
+          <div
+            statusCell
+            [status]="rowData.roomStatus"
+            [type]="rowData.roomStatus === 'PAID' ? 'paid' : 'unpaid'"
           >
             {{ rowData.roomStatus }}
           </div>

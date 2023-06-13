@@ -1,97 +1,9 @@
-import {
-  Cols,
-  Filter
-} from '@hospitality-bot/admin/shared';
-import {
-  RoomRecordsCount,
-  RoomTypeRecordCounts
-} from '../models/rooms-data-table.model';
+import { Cols } from '@hospitality-bot/admin/shared';
 
 export enum TableValue {
   room = 'ROOM',
   roomType = 'ROOM_TYPE',
 }
-
-export const roomFilter: Filter<TableValue, keyof RoomRecordsCount> = {
-  label: 'Room',
-  value: TableValue.room,
-  content: '',
-  disabled: false,
-  total: 0,
-  chips: [
-    {
-      label: 'All',
-      value: 'ALL',
-      total: 0,
-      isSelected: true,
-      type: 'default',
-    },
-    {
-      label: 'Clean',
-      value: 'CLEAN',
-      total: 0,
-      isSelected: false,
-      type: 'active',
-    },
-    {
-      label: 'Unavailable ',
-      value: 'UNAVAILABLE',
-      total: 0,
-      isSelected: false,
-      type: 'warning',
-    },
-    {
-      label: 'Out of order',
-      value: 'OUT_OF_ORDER',
-      total: 0,
-      isSelected: false,
-      type: 'failed',
-    },
-    {
-      label: 'Out of service',
-      value: 'OUT_OF_SERVICE',
-      total: 0,
-      isSelected: false,
-      type: 'failed',
-    },
-  ],
-};
-
-export const roomTypeFilter: Filter<TableValue, keyof RoomTypeRecordCounts> = {
-  label: 'Room Type',
-  value: TableValue.roomType,
-  content: '',
-  disabled: false,
-  total: 0,
-  chips: [
-    {
-      label: 'All',
-      value: 'ALL',
-      total: 0,
-      isSelected: true,
-      type: 'default',
-    },
-    {
-      label: 'Active',
-      value: 'ACTIVE',
-      total: 0,
-      isSelected: false,
-      type: 'active',
-    },
-    {
-      label: 'Inactive ',
-      value: 'UNAVAILABLE',
-      total: 0,
-      isSelected: false,
-      type: 'failed',
-    },
-  ],
-};
-
-export const filter: Filter<TableValue, string>[] = [
-  roomFilter,
-  roomTypeFilter,
-];
 
 export const cols: Record<TableValue, Cols[]> = {
   [TableValue.room]: [
@@ -171,26 +83,31 @@ export const roomDetailsCols: Cols[] = [
     field: 'roomNumber',
     header: 'Room Number',
     sortType: 'number',
+    width: '20%',
   },
   {
     field: 'floor',
     header: 'Floor',
     sortType: 'number',
+    width: '20%',
   },
   {
     field: 'roomStatus',
     header: 'Room Status',
     sortType: 'string',
+    width: '20%',
   },
   {
     field: 'foStatus',
     header: 'FO Status',
     sortType: 'string',
+    width: '20%',
   },
   {
     field: 'action',
     header: 'Action',
     isSearchDisabled: true,
+    width: '20%',
   },
 ];
 

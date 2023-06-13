@@ -13,7 +13,8 @@
       ></hospitality-bot-button>
       <hospitality-bot-button
         label="Add Menu Items"
-        (onClick)="addMenuItems()"
+        [routerLink]="['add-menu-item']"
+        queryParamsHandling="preserve"
       ></hospitality-bot-button>
     </div>
   </div>

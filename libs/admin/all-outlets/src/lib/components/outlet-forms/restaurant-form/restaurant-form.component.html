@@ -55,7 +55,8 @@
       <hospitality-bot-button
         label="+ Add Menu"
         variant="contained"
-        link="pages/outlet/all-outlets/add-outlet/add-menu"
+        [routerLink]="['add-menu']"
+        queryParamsHandling="preserve"
       ></hospitality-bot-button>
     </hospitality-bot-custom-select>
   </div>

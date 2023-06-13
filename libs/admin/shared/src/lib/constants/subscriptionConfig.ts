@@ -57,7 +57,7 @@ export enum ModuleNames {
   OUTLET = 'OUTLET',
   OUTLETS_DASHBOARD = 'OUTLETS_DASHBOARD',
   ALL_OUTLETS = 'ALL_OUTLETS',
-  
+
   // FINANCE
   FINANCE = 'FINANCE',
   INVOICE = 'INVOICE',
@@ -68,6 +68,9 @@ export enum ModuleNames {
   GUESTS = 'GUESTS',
   AGENT = 'AGENT',
   COMPANY = 'COMPANY',
+
+  // CHANNEL MANAGER
+  CHANNEL_MANAGER = 'CHANNEL_MANAGER',
 
   //Settings
   SETTINGS = 'SETTINGS',

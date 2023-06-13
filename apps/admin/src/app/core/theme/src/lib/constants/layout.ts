@@ -70,6 +70,16 @@ export const customModule = {
     isSubscribed: true,
     isView: true,
   },
+  channelManager: {
+    name: 'CHANNEL_MANAGER',
+    label: 'Channel Manager',
+    description: 'Channel Manager Module',
+    icon:
+      'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
+    config: [],
+    isSubscribed: true,
+    isView: true,
+  },
   guests: {
     config: [
       {

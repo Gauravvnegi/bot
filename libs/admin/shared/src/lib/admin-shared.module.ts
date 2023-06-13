@@ -93,7 +93,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
 import { DiscountFormComponent } from './components/discount-form/discount-form.component';
 import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
-import { WeekdaysSelectorComponent } from './components/form-component/weekdays-selector/weekdays-selector.component';
+import { CheckboxSelectorComponent } from './components/form-component/checkbox-selector/checkbox-selector.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -194,7 +194,7 @@ import { WeekdaysSelectorComponent } from './components/form-component/weekdays-
     ModalHeaderComponent,
     DiscountFormComponent,
     TimePickerComponent,
-    WeekdaysSelectorComponent,
+    CheckboxSelectorComponent,
   ],
 
   exports: [
@@ -286,7 +286,7 @@ import { WeekdaysSelectorComponent } from './components/form-component/weekdays-
     ModalHeaderComponent,
     DiscountFormComponent,
     TimePickerComponent,
-    WeekdaysSelectorComponent,
+    CheckboxSelectorComponent,
   ],
 })
 export class AdminSharedModule {}

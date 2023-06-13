@@ -1,5 +1,5 @@
 <div
-  [formGroup]="weekDayForm"
+  [formGroup]="checkBoxForm"
   class="wrapper p-field"
   [style.fontSize]="fontSize"
   [ngClass]="wrapperNgClasses"
@@ -15,33 +15,36 @@
     <label>
       <input
         type="checkbox"
-        formControlName="allDays"
+        formControlName="all"
         (change)="toggleSelectAll()"
         class="checkbox-input"
       />
       <span class="checkbox-label">
-        <span class="custom-check-icon" *ngIf="weekDayForm.get('allDays').value"
+        <span class="custom-check-icon" *ngIf="checkBoxForm.get('all').value"
           >&#10003;</span
         >
         All</span
       >
     </label>
 
-    <div *ngFor="let day of days">
+    <div *ngFor="let item of menuOptions">
       <label>
         <input
           type="checkbox"
-          [formControlName]="day"
-          (change)="toggleDaySelection()"
+          [formControlName]="item.value"
+          (change)="toggleCheckboxSelection()"
           class="checkbox-input"
         />
         <span class="checkbox-label">
-          <span class="custom-check-icon" *ngIf="weekDayForm.get(day).value"
+          <span
+            class="custom-check-icon"
+            *ngIf="checkBoxForm.get(item.value).value"
             >&#10003;</span
           >
-          {{ day }}</span
+          {{ item.label }}</span
         >
       </label>
     </div>
+    <small *ngIf="error" class="p-error"> {{ error }}</small>
   </div>
 </div>

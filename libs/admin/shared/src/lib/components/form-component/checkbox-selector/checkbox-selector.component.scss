@@ -1,8 +1,8 @@
-@import 'main';
+@import '../form.component.scss';
 .days-selector {
   @include flex-item-center();
+  justify-content: space-between;
   margin-top: 12px;
-  gap: 10px;
 
   label {
     @include flex-item-center();
@@ -41,8 +41,8 @@
 }
 
 .checkbox-input:checked + .checkbox-label::before {
-  background-color: #5f38f9;
-  border-color: #5f38f9;
+  background-color: $primary-form-color;
+  border-color: $primary-form-color;
 }
 
 .checkbox-input:checked + .checkbox-label::after {

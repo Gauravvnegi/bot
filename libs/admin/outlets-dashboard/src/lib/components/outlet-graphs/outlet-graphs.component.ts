@@ -127,8 +127,6 @@ export class OutletGraphsComponent implements OnInit {
         value,
       })
     );
-    console.log(graphArray);
-    console.log(this.selectedInterval);
 
     const labels = graphArray.map((data)=>
       this._dateService.convertTimestampToLabels(
@@ -143,7 +141,6 @@ export class OutletGraphsComponent implements OnInit {
           : null
       )    
     );
-    console.log(labels);
     const data = graphArray.map((data)=> data.value);
     this.sellsGraph.data[0].data = data;
     this.sellsGraph.labels = labels;
@@ -158,7 +155,6 @@ export class OutletGraphsComponent implements OnInit {
     this.usersGraph.labels = [];
     this.visitorsGraph.data[0].data=[];
     this.visitorsGraph.labels=[];
-    console.log(timestamps);
     timestamps.forEach((timestamp, i) => {
       const data = this._dateService.convertTimestampToLabels(
         this.selectedInterval,

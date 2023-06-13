@@ -1,27 +1,27 @@
 <div class="caption__wrapper">
-    <form [formGroup]="tableFG">
-      <div class="caption__wrapper--tabmenu">
-        <div class="action-header">
-          <p class="heading">All Bookings</p>
-          <div class="action-wrapper">
-            <hospitality-bot-button
+  <form [formGroup]="tableFG">
+    <div class="caption__wrapper--tabmenu">
+      <div class="action-header">
+        <p class="heading">All Bookings</p>
+        <div class="action-wrapper">
+          <hospitality-bot-button
             label="+Create Booking"
             link=""
           ></hospitality-bot-button>
-            <hospitality-bot-export-list
-              (onDocumentActions)="onDocumentActions()"
-              [documentTypes]="documentTypes"
-              [documentActionTypes]="documentActionTypes"
-              [isDisable]="values.length === 0"
-            ></hospitality-bot-export-list>
-          </div>
+          <hospitality-bot-export-list
+            (onDocumentActions)="onDocumentActions()"
+            [documentTypes]="documentTypes"
+            [documentActionTypes]="documentActionTypes"
+            [isDisable]="values.length === 0"
+          ></hospitality-bot-export-list>
         </div>
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
+</div>
 
-  <div class="table-container">
-    <p-table
+<div class="table-container">
+  <p-table
     #dt
     [styleClass]="tableConfig.styleClass"
     [resizableColumns]="isResizableColumns"
@@ -71,84 +71,84 @@
     </ng-template>
     <!-- **************************************BODY********************************* -->
     <ng-template
-    pTemplate="body"
-    let-rowData
-    let-columns="columns"
-    let-rowIndex="rowIndex"
-  >
-  <tr class="table-row" (click)="editTax(rowData.id)">
-    <td class="table-row__checkbox">
-      <p-tableCheckbox
-        [value]="rowData"
-        [index]="rowIndex"
-        (click)="onCheckboxClicked($event)"
-      ></p-tableCheckbox>
-    </td>
-    <td>
-      <div class="cell-content" *ngIf="rowData.id; else emptyCell">
-        <div class="primary-text">
-          {{ rowData.id }}
-        </div>
-      </div>
-    </td>
-    <td>
-      <div class="cell-content" *ngIf="rowData.name; else emptyCell">
-        <div class="primary-text">
-          {{ rowData.name }}
-        </div>
-      </div>
-    </td>
-    <td>
-      <div class="cell-content" *ngIf="rowData.booking_no; else emptyCell">
-        <div class="primary-text">
-          {{ rowData.booking_no }}
-        </div>
-      </div>
-    </td>
-    <td>
-      <div class="cell-content" *ngIf="rowData.guest_name; else emptyCell">
-        <div class="primary-text">{{ rowData.guest_name }}</div>
-      </div>
-    </td>
-    <td>
-        <div class="cell-content" *ngIf="rowData.booking_date; else emptyCell">
-          <div class="primary-text">{{ rowData.booking_date }}</div>
-        </div>
-      </td>
-      <td>
-        <div class="cell-content" *ngIf="rowData.amount; else emptyCell">
-          <div class="primary-text">{{ rowData.amount }}</div>
-        </div>
-      </td>
+      pTemplate="body"
+      let-rowData
+      let-columns="columns"
+      let-rowIndex="rowIndex"
+    >
+      <tr class="table-row" (click)="editTax(rowData.id)">
+        <td class="table-row__checkbox">
+          <p-tableCheckbox
+            [value]="rowData"
+            [index]="rowIndex"
+            (click)="onCheckboxClicked($event)"
+          ></p-tableCheckbox>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.id; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.id }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.name; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.name }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.booking_no; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.booking_no }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.guest_name; else emptyCell">
+            <div class="primary-text">{{ rowData.guest_name }}</div>
+          </div>
+        </td>
+        <td>
+          <div
+            class="cell-content"
+            *ngIf="rowData.booking_date; else emptyCell"
+          >
+            <div class="primary-text">{{ rowData.booking_date }}</div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.amount; else emptyCell">
+            <div class="primary-text">{{ rowData.amount }}</div>
+          </div>
+        </td>
 
-      <td>
-        <div class="cell-content" *ngIf="rowData.scource; else emptyCell">
-          <div class="primary-text">{{ rowData.scource }}</div>
-        </div>
-      </td>
-      <td>
-        <div class="cell-content" *ngIf="rowData.payment; else emptyCell">
-          <div class="primary-text">{{ rowData.payment }}</div>
-        </div>
-      </td>
-    <td>
-        
-      <div class="cell-content">
-        <hospitality-bot-toggle-dropdown
-          [listItem]="status"
-          class="toggle-btn"
-          (onClick)="handleStatus($event, rowData)"
-          [status]="'CONFIRMED'"
-          [disabled]="rowData.status === 'DELETE'"
-        >
-        </hospitality-bot-toggle-dropdown>
-      </div>
-    </td>
-  </tr>
+        <td>
+          <div class="cell-content" *ngIf="rowData.scource; else emptyCell">
+            <div class="primary-text">{{ rowData.scource }}</div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.payment; else emptyCell">
+            <div class="primary-text">{{ rowData.payment }}</div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content">
+            <hospitality-bot-toggle-dropdown
+              [listItem]="status"
+              class="toggle-btn"
+              (onClick)="handleStatus($event, rowData)"
+              [status]="'CONFIRMED'"
+              [disabled]="rowData.status === 'DELETE'"
+            >
+            </hospitality-bot-toggle-dropdown>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
 
-  </ng-template>
-      
-    
     <!-- *********************************FOOTER******************************* -->
     <ng-template pTemplate="summary">
       <p-paginator
@@ -162,27 +162,26 @@
       ></p-paginator>
     </ng-template>
   </p-table>
+</div>
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [content]="{
+      description: 'No data available to view',
+      imageSrc: imageSrc
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
 
-  </div>
-  <ng-template #emptyTable>
-    <hospitality-bot-empty-table
-      [content]="{
-        description: 'No data available to view',
-        imageSrc: imageSrc
-      }"
-    >
-      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-    </hospitality-bot-empty-table>
-  </ng-template>
-  
-  <ng-template #tabFilter>
-    <hospitality-bot-tab-group
-      [selectedIndex]="tabFilterIdx"
-      *ngIf="isTabFilters"
-      [listItems]="tabFilterItems"
-      (selectedTabChange)="onSelectedTabFilterChange($event)"
-    ></hospitality-bot-tab-group>
-  </ng-template>
-  <ng-template #emptyCell>
-    <div class="emptyCell">&mdash;</div>
-  </ng-template>
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+</ng-template>
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>

@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MainComponent } from './components/main/main.component';
-import { AdminChannelMangerRoutingModule } from './admin-channel-manager.routing.module';
-import { PanelModule } from 'primeng/panel';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminSharedModule } from '@hospitality-bot/admin/shared';
+import { PanelModule } from 'primeng/panel';
+import { AdminChannelMangerRoutingModule } from './admin-channel-manager.routing.module';
 
 @NgModule({
   imports: [
@@ -15,6 +14,6 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
     FormsModule,
     ReactiveFormsModule,
   ],
-  declarations: [MainComponent],
+  declarations: [...AdminChannelMangerRoutingModule.components],
 })
 export class AdminChannelManagerModule {}

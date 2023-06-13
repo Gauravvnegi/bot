@@ -76,7 +76,20 @@ export const customModule = {
     description: 'Channel Manager Module',
     icon:
       'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
-    config: [],
+      config: [
+        {
+          isSubscribed: true,
+          isView: true,
+          label: 'Update Inventory',
+          name: 'UPDATE_INVENTORY',
+        },
+        {
+          isSubscribed: true,
+          isView: true,
+          label: 'Update Rates',
+          name: 'UPDATE_RATES',
+        },
+      ],
     isSubscribed: true,
     isView: true,
   },

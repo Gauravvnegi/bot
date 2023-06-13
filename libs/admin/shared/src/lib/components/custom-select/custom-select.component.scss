@@ -91,3 +91,7 @@
 :host ::ng-deep .wrapper {
   border: none !important;
 }
+
+.btn-wrapper {
+  @include flex-item-center;
+}

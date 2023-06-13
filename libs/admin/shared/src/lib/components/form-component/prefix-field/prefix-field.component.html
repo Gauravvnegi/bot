@@ -7,25 +7,64 @@
       <hospitality-bot-input
         *ngSwitchCase="'input'"
         class="input pre-input"
+        [ngClass]="{
+          dashed: layout === 'dashed',
+          main: layout === 'pre-main',
+          secondary: layout === 'post-main'
+        }"
         [controlName]="preControlName"
         [props]="getProps('pre')"
         [disabled]="inputDisabled.pre || isDisabled"
       ></hospitality-bot-input>
       <hospitality-bot-select
         *ngSwitchCase="'select'"
-        class="input pre-input"
+        class="input slect pre-input"
+        [ngClass]="{
+          dashed: layout === 'dashed',
+          main: layout === 'pre-main',
+          secondary: layout === 'post-main'
+        }"
         [controlName]="preControlName"
         [props]="getProps('pre')"
         [disabled]="inputDisabled.pre || isDisabled"
         [options]="preOptions"
         [stopEmission]="stopEmission"
       ></hospitality-bot-select>
+      <hospitality-bot-auto-complete
+        *ngSwitchCase="'autocomplete'"
+        [controlName]="preControlName"
+        class="input pre-input"
+        [ngClass]="{
+          dashed: layout === 'dashed',
+          main: layout === 'pre-main',
+          secondary: layout === 'post-main'
+        }"
+        [options]="preOptions"
+        [loading]="loading"
+        [disabled]="inputDisabled.pre || isDisabled"
+        [settings]="{
+          multiple: false
+        }"
+      >
+      </hospitality-bot-auto-complete>
     </ng-container>
+
+    <div
+      class="disabled"
+      [ngClass]="{
+        hypen: layout === 'dashed'
+      }"
+    ></div>
 
     <ng-container [ngSwitch]="postFieldType">
       <hospitality-bot-input
         *ngSwitchCase="'input'"
         class="input post-input"
+        [ngClass]="{
+          dashed: layout === 'dashed',
+          secondary: layout === 'pre-main',
+          main: layout === 'post-main'
+        }"
         [controlName]="postControlName"
         [props]="getProps('post')"
         [disabled]="inputDisabled.post || isDisabled"
@@ -33,11 +72,33 @@
       <hospitality-bot-select
         *ngSwitchCase="'select'"
         class="input post-input"
+        [ngClass]="{
+          dashed: layout === 'dashed',
+          secondary: layout === 'pre-main',
+          main: layout === 'post-main'
+        }"
         [controlName]="postControlName"
         [props]="getProps('post')"
         [options]="postOptions"
         [disabled]="inputDisabled.post || isDisabled"
       ></hospitality-bot-select>
+      <hospitality-bot-auto-complete
+        *ngSwitchCase="'autocomplete'"
+        [controlName]="postControlName"
+        class="input auto-compelet"
+        [ngClass]="{
+          dashed: layout === 'dashed',
+          secondary: layout === 'pre-main',
+          main: layout === 'post-main'
+        }"
+        [options]="postOptions"
+        [loading]="loading"
+        [disabled]="inputDisabled.post || isDisabled"
+        [settings]="{
+          multiple: false
+        }"
+      >
+      </hospitality-bot-auto-complete>
     </ng-container>
   </div>
 </div>

@@ -9,15 +9,13 @@ import {
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { outletRoutes } from '../../constants/route';
+import { outletRoutes } from '../../constants/routes';
 import { errorMessages } from '../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-create-food-package',
   templateUrl: './create-food-package.component.html',
-  styleUrls: [
-    './create-food-package.component.scss',
-  ],
+  styleUrls: ['./create-food-package.component.scss'],
 })
 export class CreateFoodPackageComponent implements OnInit {
   readonly inputValidationProps = { errorMessages, type: 'number' };

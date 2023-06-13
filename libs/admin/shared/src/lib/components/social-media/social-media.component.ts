@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
 import { Subscription } from 'rxjs';
-import { BusinessService } from '../../services/business.service';
+import { SocialMediaServices } from '../../services/social.media.service';
 
 @Component({
   selector: 'hospitality-bot-social-media',
@@ -23,7 +23,7 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public controlContainer: ControlContainer,
-    private businessService: BusinessService
+    private socilaMediaService: SocialMediaServices
   ) {
     super(controlContainer);
   }
@@ -31,7 +31,6 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.initInputControl();
-    this.patchValueToParentComponent();
   }
 
   initForm(): void {
@@ -48,23 +47,23 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
     }
     this.$subscription.add(
       this.inputControl.valueChanges.subscribe((res) => {
-        this.socialMediaControl.patchValue(this.inputControl.value);
+        this.socialMediaControl.patchValue(this.inputControl.value, {
+          emitEvent: false,
+        });
       })
     );
+    this.patchValueToParentComponent();
   }
 
   patchValueToParentComponent(): void {
-    this.businessService.onSubmit.subscribe((res) => {
-      if (res)
-        this.inputControl.patchValue(this.socialMediaControl.value, {
-          emitEvent: false,
-        });
+    this.useForm.valueChanges.subscribe((res) => {
+      this.inputControl.patchValue(res.socialPlatforms);
     });
   }
 
   getsocialMediaConfig() {
     this.$subscription.add(
-      this.businessService.getSocialMediaConfig().subscribe((res) => {
+      this.socilaMediaService.getDefultSocialConfig().subscribe((res) => {
         res?.forEach((element) => {
           this.socialMediaControl.push(
             this.fb.group({

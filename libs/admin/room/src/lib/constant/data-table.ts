@@ -83,26 +83,31 @@ export const roomDetailsCols: Cols[] = [
     field: 'roomNumber',
     header: 'Room Number',
     sortType: 'number',
+    width: '20%',
   },
   {
     field: 'floor',
     header: 'Floor',
     sortType: 'number',
+    width: '20%',
   },
   {
     field: 'roomStatus',
     header: 'Room Status',
     sortType: 'string',
+    width: '20%',
   },
   {
     field: 'foStatus',
     header: 'FO Status',
     sortType: 'string',
+    width: '20%',
   },
   {
     field: 'action',
     header: 'Action',
     isSearchDisabled: true,
+    width: '20%',
   },
 ];
 

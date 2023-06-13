@@ -16,3 +16,16 @@ export const ValueFormatter = (num, digits) => {
     units[i].symbol
   }`;
 };
+
+/**
+* Handle conversion of the key to label format
+* @param str key value
+* @returns label value
+*/
+export function convertToTitleCase(str: string) {
+ return str
+   .toLowerCase()
+   .split('_')
+   .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+   .join(' ');
+}

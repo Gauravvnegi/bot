@@ -62,7 +62,6 @@ export const routes = {
   [ModuleNames.AGENT]: 'members/agent',
   [ModuleNames.COMPANY]: 'members/company',
 
-
   // SETTINGS
   [ModuleNames.SETTINGS]: 'settings',
 
@@ -70,6 +69,9 @@ export const routes = {
   [ModuleNames.OUTLET]: 'outlet',
   [ModuleNames.OUTLETS_DASHBOARD]: 'outlet/dashboard',
   [ModuleNames.ALL_OUTLETS]: 'outlet/all-outlets',
+
+  //CHANNEL_MANAGER
+  [ModuleNames.CHANNEL_MANAGER]: 'channel-manager',
 
   RoleAndPermission: 'roles-permissions',
 };

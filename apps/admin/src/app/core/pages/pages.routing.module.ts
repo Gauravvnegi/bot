@@ -71,7 +71,7 @@ const appRoutes: Route[] = [
         canLoad: [CanLoadGuard],
         canActivate: [CanActivateGuard],
       },
-       {
+      {
         path: 'members',
         loadChildren: () =>
           import('@hospitality-bot/admin/members').then(
@@ -151,6 +151,15 @@ const appRoutes: Route[] = [
         loadChildren: () =>
           import('@hospitality-bot/admin/finance').then(
             (m) => m.AdminFinanceModule
+          ),
+        canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
+      },
+      {
+        path: 'channel-manager',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/channel-manager').then(
+            (m) => m.AdminChannelManagerModule
           ),
         canLoad: [CanLoadGuard],
         canActivate: [CanActivateGuard],

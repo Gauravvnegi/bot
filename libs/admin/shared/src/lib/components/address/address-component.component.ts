@@ -55,8 +55,6 @@ export class AddressComponent extends FormComponent implements OnInit {
 
   onValueChange() {
     this.addressForm.get('addressData').valueChanges.subscribe((res) => {
-      debugger;
-
       if (res !== null && res !== undefined && res !== '') {
         this.getAddressById(res.value).subscribe((res) => {
           this.inputControl.setValue(res);

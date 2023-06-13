@@ -95,9 +95,8 @@ import { ModalHeaderComponent } from './components/datatable/modal-header/modal-
 import { AddressComponent } from './components/address/address-component.component';
 import { SocialMediaComponent } from './components/social-media/social-media.component';
 import { DiscountFormComponent } from './components/discount-form/discount-form.component';
-
 import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
-
+import { CheckboxSelectorComponent } from './components/form-component/checkbox-selector/checkbox-selector.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -201,6 +200,7 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     SocialMediaComponent,
     DiscountFormComponent,
     TimePickerComponent,
+    CheckboxSelectorComponent,
   ],
 
   exports: [
@@ -295,6 +295,7 @@ import { TimePickerComponent } from './components/form-component/time-picker/tim
     SocialMediaComponent,
     DiscountFormComponent,
     TimePickerComponent,
+    CheckboxSelectorComponent,
   ],
 })
 export class AdminSharedModule {}

@@ -1,0 +1,14 @@
+:host ::ng-deep {
+  .p-panel {
+    box-shadow: unset;
+    border-top-right-radius: unset;
+    border-top-left-radius: unset;
+  }
+  .pi-angle-down:before,
+  .pi-angle-up:before {
+    color: #5f38f9;
+  }
+}
+.panel-tree {
+  border-bottom: 0.2px solid rgb(222, 222, 222);
+}

@@ -1,0 +1,17 @@
+<div class="panel-tree" [formGroup]="controlContainer.control">
+  <p-panel
+    [toggleable]="true"
+    [(collapsed)]="isPanelCollapsed"
+    expandIcon="pi pi-angle-down"
+    collapseIcon="pi pi-angle-up"
+    (click)="togglePanel()"
+  >
+    <p-header> {{ label }} </p-header>
+    <div
+      class="panel-content"
+      [style.display]="isPanelCollapsed ? 'none' : 'block'"
+    >
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    </div>
+  </p-panel>
+</div>

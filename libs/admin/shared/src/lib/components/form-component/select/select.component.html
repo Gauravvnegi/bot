@@ -42,6 +42,11 @@
           [alt]="option.label"
         />
         <span class="option-label">{{ option.label }}</span>
+
+        <span *ngIf="option.number && option.email" class="option-details">
+          <span [ngStyle]="{'padding-right': '10px'}">{{ option.number }}</span>
+          <span>{{ option.email }}</span>
+        </span>
       </div>
     </ng-template>
 

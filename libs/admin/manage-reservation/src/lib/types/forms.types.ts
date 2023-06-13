@@ -1,34 +1,4 @@
 import { C } from '@angular/cdk/keycodes';
-
-export type InvoiceForm = {
-  invoiceNumber: string;
-  confirmationNumber: string;
-  guestName: string;
-  companyName: string;
-  invoiceDate: string;
-  arrivalDate: string;
-  departureDate: string;
-  roomNumber: string;
-  roomType: string;
-  adults: string;
-  children: string;
-};
-
-export type PaymentField = {
-  description: string;
-  unit: number;
-  unitPrice: number;
-  amount: number;
-  tax: string;
-  totalAmount: number;
-};
-
-export type PaymentForm = {
-  table: {
-    de;
-  };
-};
-
 export class ReservationFormData {
   firstName: string;
   lastName: string;
@@ -62,4 +32,11 @@ export class Address {
   state: string;
   countryCode: string;
   postalCode: string;
+}
+
+export type GuestDetails = {
+  label: string;
+  value: string;
+  number: string;
+  email: string;
 }

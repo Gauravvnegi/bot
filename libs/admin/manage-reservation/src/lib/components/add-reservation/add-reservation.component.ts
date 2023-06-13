@@ -16,6 +16,7 @@ import {
   NavRouteOptions,
   Option,
   Regex,
+  UserService,
 } from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import * as moment from 'moment';
@@ -32,6 +33,8 @@ import {
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationResponse } from '../../types/response.type';
+import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
+import { GuestDetails } from '../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -40,23 +43,36 @@ import { ReservationResponse } from '../../types/response.type';
 })
 export class AddReservationComponent implements OnInit, OnDestroy {
   userForm: FormGroup;
+
   hotelId: string;
   reservationId: string;
+
   paymentOptions: Option[] = [];
   currencies: Option[] = [];
   reservationTypes: Option[] = [];
+  guests: Option[] = [];
+  countries: Option[] = [];
+  guestOptions: Option[] = [];
+
   offersList: OfferList;
   selectedOffer: OfferData;
-  countries: Option[] = [];
   summaryData: SummaryData;
   configData: BookingConfig;
+
+  globalQueries = [];
+
   loading = false;
   displayBookingOffer: boolean = false;
   formValueChanges = false;
   disabledForm = false;
+  isBooking = false;
+  noMoreGuests = false;
+  loadingGuests = false;
+  viewAmountToPay = false;
+  guestsOffSet = 0;
+
   startMinDate = new Date();
   endMinDate = new Date();
-  isBooking = false;
 
   pageTitle = 'Add Booking';
   routes: NavRouteOptions = [
@@ -77,7 +93,9 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     protected activatedRoute: ActivatedRoute,
     private configService: ConfigService,
     private modalService: ModalService,
-    private _clipboard: Clipboard
+    private _clipboard: Clipboard,
+    private userService: UserService,
+    private guestService: GuestTableService
   ) {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
@@ -86,9 +104,11 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
+    this.listenForGlobalFilters();
     this.getCountryCode();
     this.getInitialData();
     this.getReservationId();
+    this.registerPaymentRuleChange();
   }
 
   /**
@@ -97,6 +117,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   initForm(): void {
     const startTime = moment(this.startMinDate).unix() * 1000;
     const endTime = moment(this.endMinDate).unix() * 1000;
+    const { firstName, lastName } = this.userService.userDetails;
 
     this.userForm = this.fb.group({
       bookingInformation: this.fb.group({
@@ -108,17 +129,18 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         marketSegment: ['', Validators.required],
       }),
       guestInformation: this.fb.group({
-        firstName: ['', [Validators.required, Validators.maxLength(60)]],
-        lastName: ['', [Validators.required, Validators.maxLength(60)]],
-        email: [
-          '',
-          [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)],
-        ],
-        countryCode: ['', Validators.required],
-        phoneNumber: [
-          '',
-          [Validators.required, Validators.pattern(Regex.NUMBER_REGEX)],
-        ],
+        //   firstName: ['', [Validators.required, Validators.maxLength(60)]],
+        //   lastName: ['', [Validators.required, Validators.maxLength(60)]],
+        //   email: [
+        //     '',
+        //     [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)],
+        //   ],
+        //   countryCode: ['', Validators.required],
+        //   phoneNumber: [
+        //     '',
+        //     [Validators.required, Validators.pattern(Regex.NUMBER_REGEX)],
+        //   ],
+        guestDetails: ['', Validators.required],
       }),
       address: this.fb.group({
         addressLine1: ['', [Validators.required]],
@@ -127,7 +149,15 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         state: ['', [Validators.required]],
         postalCode: ['', [Validators.required]],
       }),
+      paymentRule: this.fb.group({
+        amountToPay: [0, [Validators.required]],
+        deductedAmount: [''],
+        makePaymentBefore: ['', [Validators.required]],
+        inclusionsAndTerms: ['', [Validators.required]],
+      }),
       paymentMethod: this.fb.group({
+        cashierFirstName: [{ value: firstName, disabled: true }],
+        cashierLastName: [{ value: lastName, disabled: true }],
         totalPaidAmount: [
           '',
           [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
@@ -135,9 +165,33 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         currency: [''],
         paymentMethod: [''],
         paymentRemark: ['', [Validators.maxLength(60)]],
+        transactionId: ['', [Validators.required]],
       }),
       offerId: [''],
     });
+  }
+
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
+    this.$subscription.add(
+      this.globalFilterService.globalFilter$.subscribe((data) => {
+        this.globalQueries = [
+          ...data['filter'].queryValue,
+          ...data['dateRange'].queryValue,
+        ];
+        this.hotelId = this.globalFilterService.hotelId;
+        this.globalQueries = [
+          ...this.globalQueries,
+          {
+            order: 'DESC',
+            entityType: 'DUEIN',
+          },
+        ];
+        this.getGuests();
+      })
+    );
   }
 
   getCountryCode(): void {
@@ -194,6 +248,20 @@ export class AddReservationComponent implements OnInit, OnDestroy {
               .get('roomInformation.adultCount')
               .patchValue(this.userForm.get('roomInformation.roomCount').value);
         }
+      });
+  }
+
+  registerPaymentRuleChange() {
+    let deductedAmount = this.userForm.get('paymentRule.deductedAmount');
+    let previousAmountToPay = this.userForm.get('paymentRule.amountToPay')
+      .value;
+
+    this.userForm
+      .get('paymentRule.amountToPay')
+      .valueChanges.subscribe((res) => {
+        let difference = res - previousAmountToPay;
+        deductedAmount.setValue(deductedAmount.value - difference);
+        previousAmountToPay = res;
       });
   }
 
@@ -340,24 +408,69 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     const config = {
       params: this.adminUtilityService.makeQueryParams(defaultProps),
     };
-    if (this.userForm.get('roomInformation.roomTypeId')?.value)
+    if (this.userForm.get('roomInformation.roomTypeId')?.value) {
       this.$subscription.add(
         this.manageReservationService.getSummaryData(config).subscribe(
           (res) => {
-            this.summaryData = new SummaryData().deserialize(res);
+            console.log(res);
+            this.summaryData = new SummaryData()?.deserialize(res);
             this.userForm
               .get('roomInformation')
               .patchValue(this.summaryData, { emitEvent: false });
             this.userForm
               .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData.totalAmount)]);
+              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
             this.userForm
               .get('paymentMethod.totalPaidAmount')
               .updateValueAndValidity();
+            this.userForm
+              .get('paymentRule.deductedAmount')
+              .patchValue(this.summaryData?.totalAmount);
           },
           (error) => {}
         )
       );
+    }
+  }
+
+  loadMoreGuests() {
+    this.guestsOffSet = this.guestsOffSet + 5;
+    this.getGuests();
+  }
+
+  searchGuests(event) {}
+
+  createGuest() {
+    this.router.navigateByUrl('pages/library/members/guests');
+  }
+
+  getGuests() {
+    this.loadingGuests = true;
+    this.guestService.getGuestList(this.getConfig()).subscribe(
+      (res) => {
+        const guests = res.records;
+        const guestDetails: GuestDetails[] = guests.map((guest) => ({
+          label: `${guest.firstName} ${guest.lastName}`,
+          value: guest.id,
+          number: guest.contactDetails.contactNumber,
+          email: guest.contactDetails.emailId,
+        }));
+        this.guestOptions = [...this.guestOptions, ...guestDetails];
+        this.noMoreGuests = guests.length < 5;
+        this.loadingGuests = false;
+      },
+      (err) => {
+        this.loadingGuests = false;
+      }
+    );
+  }
+
+  getConfig() {
+    const config = [
+      ...this.globalQueries,
+      { entityState: 'ALL', offset: this.guestsOffSet, limit: 5 },
+    ];
+    return { queryObj: this.adminUtilityService.makeQueryParams(config) };
   }
 
   handleBooking(): void {

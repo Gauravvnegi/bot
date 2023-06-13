@@ -20,6 +20,7 @@ import { guest } from '../../../constants/guest';
 import { GuestTable } from '../../../data-models/guest-table.model';
 import { GuestTableService } from '../../../services/guest-table.service';
 import { SelectedEntityState } from '../../../types/guest.type';
+import { debug } from 'console';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable',
@@ -111,6 +112,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe(
         (data) => {
+          console.log(data);
           this.initialLoading = false;
           this.setRecords(data);
         },
@@ -163,7 +165,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
-
     return this._guestTableService.getGuestList(config);
   }
 
@@ -187,6 +188,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
       ).subscribe(
         (data) => {
           this.setRecords(data);
+          console.log(data)
         },
         ({ error }) => {
           this.values = [];

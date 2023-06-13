@@ -201,6 +201,55 @@
   }
 }
 
+.type-wrapper {
+  display: flex;
+
+  .three-fourth-width {
+    flex-basis: 75%;
+  }
+  .one-fourth-width {
+    flex-basis: 25%;
+  }
+  .half-width{
+    flex-basis: 50%
+  }
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  position: absolute;
+  top: -70px;
+  right: 75px;
+  gap: 12px;
+  z-index: 10;
+}
+
+:host ::ng-deep .payment-rule-accordion {
+  .p-accordion-content {
+    position: relative;
+  }
+}
+
+:host ::ng-deep .deducted-amount {
+  .label {
+    visibility: hidden;
+  }
+}
+
+
+:host ::ng-deep .amount-to-pay {
+  .label {
+    white-space: nowrap;
+  }
+}
+
+:host ::ng-deep .last-name {
+  .label {
+    visibility: hidden;
+  }
+}
+
 .divider {
   border-bottom: 1px solid $grayMedium;
   opacity: 0.35;

@@ -112,14 +112,13 @@
       </ng-container>
 
       <td>
-        <div class="" *ngIf="rowData.status; else emptyCell">
-          <hospitality-bot-status-dropdown-toggle
-            [nextStates]="rowData.nextStates"
-            (onClick)="handleStatus($event, rowData)"
-            [state]="rowData.status"
-          >
-          </hospitality-bot-status-dropdown-toggle>
-        </div>
+        <hospitality-bot-status-dropdown-toggle
+          [nextStates]="rowData.nextStates"
+          (onClick)="handleStatus($event, rowData)"
+          [state]="rowData.status"
+          [recordSetting]="roomStatusDetails"
+        >
+        </hospitality-bot-status-dropdown-toggle>
       </td>
     </tr>
   </ng-template>

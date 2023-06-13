@@ -7,7 +7,7 @@ import { MenuItem } from 'primeng/api';
 import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Paginator } from 'primeng/paginator';
 import { Table } from 'primeng/table';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import {
   defaultFilterChipValue,
@@ -146,6 +146,12 @@ export class BaseDatatableComponent implements OnInit {
   tempRowsPerPage;
   isSearchSet = false;
   @ViewChild('paginator', { static: false }) paginator: Paginator;
+
+
+  /** !!!!!! IMPORTANT
+   * Use this to cancel api call when filter changes and the previous request is still in progress
+   */
+  subscriptionList$ = new Subscription();
 
   constructor(
     private _fb: FormBuilder,

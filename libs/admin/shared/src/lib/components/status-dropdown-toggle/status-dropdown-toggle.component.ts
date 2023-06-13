@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MenuItem } from 'primeng/api';
 import { defaultRecordJson } from '../../constants/datatable';
-import { Status } from '../../types/table.type';
+import { EntityStateRecord, Status } from '../../types/table.type';
 import { convertToTitleCase } from '../../utils/valueFormatter';
 
 @Component({
@@ -11,8 +10,8 @@ import { convertToTitleCase } from '../../utils/valueFormatter';
 })
 export class StatusDropdownToggleComponent {
   label = 'Active';
-  value: string | boolean = true;
-  styleClass = 'newButton';
+  value: string | boolean;
+  styleClass = 'activeButton';
   items: (Status & { command: () => void })[] = [];
 
   booleanKeys: BooleanKeys = {
@@ -36,15 +35,27 @@ export class StatusDropdownToggleComponent {
     this.setSettings();
   }
 
+  @Input() set recordSetting(input:EntityStateRecord<string>){
+    this.records={
+      ...this.records,
+      ...input
+    }
+  } 
+
   @Input() set nextStates(input: string[]) {
-    this.items = input?.map((key) => ({
-      label: this.records[key]?.label ?? convertToTitleCase(key),
-      command: () => {
-        if (this.value !== key) this.onClick.emit(key);
-      },
-      type: this.records[key]?.type ?? 'active',
-      value: key,
-    }));
+    if (!input) return;
+    this.items = input?.map((key) => {
+      const data = {
+        label: this.records[key]?.label ?? convertToTitleCase(key),
+        command: () => {
+          if (this.value !== key) this.onClick.emit(key);
+        },
+        type: this.records[key]?.type ?? 'active',
+        value: key,
+      };
+
+      return data;
+    });
 
     this.setSettings();
   }
@@ -59,9 +70,14 @@ export class StatusDropdownToggleComponent {
       this.nextStates = [this.booleanKeys.forTrue, this.booleanKeys.forFalse];
     }
 
-    if (this.value && this.items.length) {
+    if (this.value !== undefined && this.items.length) {
       this.items.forEach((item) => {
-        if (item.value == this.value) {
+        if (
+          item.value == this.value ||
+          (isBoolean &&
+            ((item.value === this.booleanKeys.forTrue && this.value) ||
+              (item.value === this.booleanKeys.forFalse && !this.value)))
+        ) {
           this.label = item.label;
           this.styleClass = `${item.type}Button`;
 
@@ -73,7 +89,6 @@ export class StatusDropdownToggleComponent {
               if (this.value !== item.value) this.onClick.emit(isActiveItem);
             };
           }
-
           item['styleClass'] = 'activeClass';
         } else {
           item['styleClass'] = '';

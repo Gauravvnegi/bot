@@ -41,6 +41,7 @@ import {
 export class RoomDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   readonly routes = routes;
+  readonly roomStatusDetails = roomStatusDetails;
 
   hotelId: string;
   $subscription = new Subscription();
@@ -157,7 +158,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
                 roomList.entityTypeCounts,
                 roomList.entityStateCounts,
                 roomList.totalRecord,
-                roomStatusDetails
+                this.roomStatusDetails
               );
               this.loading = false;
             },
@@ -184,7 +185,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
                 roomTypesList.entityTypeCounts,
                 roomTypesList.entityStateCounts,
                 roomTypesList.totalRecord,
-                roomStatusDetails
+                this.roomStatusDetails
               );
 
               this.loading = false;

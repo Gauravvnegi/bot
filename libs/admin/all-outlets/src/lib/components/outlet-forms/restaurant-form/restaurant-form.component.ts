@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ControlContainer } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-restaurant-form',
@@ -16,7 +17,7 @@ export class RestaurantFormComponent implements OnInit {
     { label: 'Saturday', value: 'saturday' },
   ];
 
-  constructor() {}
+  constructor(public controlContainer: ControlContainer) {}
 
   ngOnInit(): void {}
 }

@@ -1,0 +1,84 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  ></hospitality-bot-navigation-header>
+
+  <div class="form-block" [formGroup]="guestForm">
+    <div class="code">
+      <span class="code__label"> Code: </span>
+      <span class="code__hash"> {{ packageCode }} </span>
+    </div>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="active"
+      label="Black listed:"
+      onLabel="Yes"
+      offLabel="No"
+    ></hospitality-bot-toggle-switch>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="firstName"
+      label="First Name"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="lastName"
+      label="Last Name"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="email"
+      label="Email"
+      [props]="{
+        type: 'email',
+        errorMessages: {
+          required: 'This is a required field.',
+          email: 'Enter valid email.'
+        }
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-phone-number
+      class="half-width"
+      preControlName="cc"
+      postControlName="phoneNo"
+    ></hospitality-bot-phone-number>
+    <hospitality-bot-select
+      class="half-width"
+      controlName="companyName"
+      label="Company Name"
+      [options]="roomTypes"
+      [props]="{ isAsync: true, createPrompt: '+ Add New Company' }"
+      [loading]="loadingCompany"
+      (paginate)="loadMoreCompany()"
+      (onSearch)="searchCompany($event)"
+      [stopEmission]="noMoreCompany"
+      (onCreate)="createCompany()"
+    ></hospitality-bot-select>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="gender"
+      label="Gender"
+    ></hospitality-bot-input>
+    <hospitality-bot-date
+      class="half-width"
+      controlName="dateOfBirth"
+      label="Date"
+      [settings]="{
+        enableTime: false
+      }"
+    ></hospitality-bot-date>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="age"
+      label="Age"
+    ></hospitality-bot-input>
+    <div class="btn-wrapper full-width">
+      <hospitality-bot-button
+        class="create-btn"
+        label="Save"
+        (onClick)="handleSubmit()"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+</div>

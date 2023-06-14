@@ -441,7 +441,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   searchGuests(event) {}
 
   createGuest() {
-    this.router.navigateByUrl('pages/library/members/guests');
+    this.router.navigateByUrl('pages/efrontdesk/manage-reservation/add-reservation/add-guest');
   }
 
   getGuests() {

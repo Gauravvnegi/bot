@@ -1,14 +1,16 @@
 @import '../form.component.scss';
 
-:host ::ng-deep .option-item {
+.option-items {
   display: flex;
   gap: 3%;
   flex-direction: column;
 }
+
 :host ::ng-deep .option-image {
   width: 2em;
   height: 2em;
 }
+
 :host ::ng-deep .selected-image {
   width: 3em;
   height: 3em;

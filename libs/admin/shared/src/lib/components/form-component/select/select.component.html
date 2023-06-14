@@ -34,7 +34,7 @@
     [resetFilterOnHide]="true"
   >
     <ng-template let-option pTemplate="item">
-      <div class="option-item" *ngIf="!option.hidden">
+      <div class="option-items" *ngIf="!option.hidden">
         <img
           *ngIf="option.icon"
           [src]="option.icon"

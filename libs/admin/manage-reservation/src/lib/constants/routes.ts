@@ -5,10 +5,11 @@ export const navRoute = {
   reservation: { label: 'Reservation', link: '/pages/efrontdesk/reservation' },
   addReservation: { label: 'Create Reservation', link: './' },
   editReservation: { label: 'Edit Reservation', link: './' },
+  addGuest: { label: 'Add Guest', link: './' },
 };
 
 export const manageReservationRoutes: Record<
-  'manageReservation' | 'addReservation' | 'editReservation',
+  'manageReservation' | 'addReservation' | 'editReservation' | 'addGuest',
   PageRoutes
 > = {
   manageReservation: {
@@ -35,5 +36,16 @@ export const manageReservationRoutes: Record<
       navRoute.editReservation,
     ],
     title: 'Edit Reservation',
+  },
+
+  addGuest: {
+    route: 'add-guest',
+    navRoutes: [
+      navRoute.eFrontdesk,
+      navRoute.reservation,
+      navRoute.addReservation,
+      navRoute.addGuest
+    ],
+    title: 'Add Guest',
   },
 };

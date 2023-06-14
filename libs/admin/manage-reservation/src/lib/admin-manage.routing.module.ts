@@ -5,6 +5,7 @@ import { MainComponent } from './components/main/main.component';
 import { ManageReservationDataTableComponent } from './components/manage-reservation-data-table/manage-reservation-data-table.component';
 import { manageReservationRoutes } from './constants/routes';
 import { RoomIteratorComponent } from './components/room-iterator/room-iterator.component';
+import { AddGuestComponent } from './components/add-guest/add-guest.component';
 
 export const adminManageReservationRoutes: Route[] = [
   {
@@ -23,6 +24,10 @@ export const adminManageReservationRoutes: Route[] = [
         path: `${manageReservationRoutes.editReservation.route}/:id`,
         component: AddReservationComponent,
       },
+      {
+        path: `${manageReservationRoutes.addReservation.route}/${manageReservationRoutes.addGuest.route}`,
+        component: AddGuestComponent,
+      },
     ],
   },
 ];
@@ -37,5 +42,6 @@ export class AdminManageReservationRoutingModule {
     MainComponent,
     ManageReservationDataTableComponent,
     RoomIteratorComponent,
+    AddGuestComponent
   ];
 }

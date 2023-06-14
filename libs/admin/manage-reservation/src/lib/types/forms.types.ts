@@ -40,3 +40,15 @@ export type GuestDetails = {
   number: string;
   email: string;
 }
+
+export type GuestType = {
+  active: boolean;
+  firstName: string;
+  email: string;
+  cc: string;
+  phoneNo: string;
+  companyName: string;
+  gender: string;
+  dateOfBirth: string;
+  age: string;
+};

@@ -79,7 +79,8 @@
             [options]="guestOptions"
             [props]="{
               isAsync: true,
-              createPrompt: '+ Add New Guest'
+              createPrompt: '+ Add New Guest',
+              placeholder: 'Search'
             }"
             [loading]="loadingGuests"
             (paginate)="loadMoreGuests()"

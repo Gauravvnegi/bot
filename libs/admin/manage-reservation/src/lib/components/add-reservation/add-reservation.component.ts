@@ -75,11 +75,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   endMinDate = new Date();
 
   pageTitle = 'Add Booking';
-  routes: NavRouteOptions = [
-    { label: 'eFrontdesk', link: './' },
-    { label: 'Booking', link: '/pages/efrontdesk/manage-reservation' },
-    { label: 'Add Booking', link: './' },
-  ];
+  routes: NavRouteOptions = [];
 
   $subscription = new Subscription();
   constructor(
@@ -100,6 +96,9 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
     this.initForm();
+    const { navRoutes, title } = manageReservationRoutes['addBooking'];
+    this.routes = navRoutes;
+    this.pageTitle = title;
   }
 
   ngOnInit(): void {
@@ -441,7 +440,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   searchGuests(event) {}
 
   createGuest() {
-    this.router.navigateByUrl('pages/efrontdesk/manage-reservation/add-reservation/add-guest');
+    this.router.navigateByUrl('pages/efrontdesk/manage-reservation/add-booking/add-guest');
   }
 
   getGuests() {
@@ -547,7 +546,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         onClick: () => {
           this.router.navigate(
             [
-              `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.addReservation.route}`,
+              `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.addBooking.route}`,
             ],
             { replaceUrl: true }
           );

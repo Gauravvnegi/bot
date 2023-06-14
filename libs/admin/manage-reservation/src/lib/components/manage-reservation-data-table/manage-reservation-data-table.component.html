@@ -8,7 +8,7 @@
     <hospitality-bot-button
       label="+ Create Booking"
       link="/pages/efrontdesk/manage-reservation/{{
-        manageReservationRoutes.addReservation.route
+        manageReservationRoutes.addBooking.route
       }}"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
@@ -191,7 +191,7 @@
   <hospitality-bot-empty-table
     [isLoading]="loading"
     link="/pages/efrontdesk/manage-reservation/{{
-      manageReservationRoutes.addReservation.route
+      manageReservationRoutes.addBooking.route
     }}"
     [content]="{
       description:

@@ -3,7 +3,7 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 import {
   RoomListResponse,
-  RoomTypeListResponse
+  RoomTypeListResponse,
 } from 'libs/admin/room/src/lib/types/service-response';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ReservationTableValue } from '../constants/reservation-table';
@@ -22,9 +22,11 @@ export class ManageReservationService extends ApiService {
   ): Observable<RoomTypeListResponse> {
     return this.get(`/api/v1/entity/${hotelId}/inventory${config?.params}`);
   }
-  
+
   getPaymentMethod(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/configuration?configType=PAYMENT&status=ACTIVE`);
+    return this.get(
+      `/api/v1/entity/${hotelId}/configuration?configType=PAYMENT&status=ACTIVE`
+    );
   }
 
   createReservation(hotelId: string, data): Observable<any> {
@@ -76,6 +78,10 @@ export class ManageReservationService extends ApiService {
       `/api/v1/booking/${bookingId}?bookingType=ROOM_TYPE&entityId=${hotelId}`,
       data
     );
+  }
+
+  addGuest(data) {
+    return this.post('api/v1/guest', data);
   }
 
   getSummaryData(config: QueryConfig): Observable<any> {

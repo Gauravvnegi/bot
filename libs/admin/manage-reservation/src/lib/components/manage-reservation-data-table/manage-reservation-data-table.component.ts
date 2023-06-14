@@ -267,7 +267,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   editReservation(id: string) {
     this.router.navigate([
-      `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.editReservation.route}/${id}`,
+      `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.editBooking.route}/${id}`,
     ]);
   }
 

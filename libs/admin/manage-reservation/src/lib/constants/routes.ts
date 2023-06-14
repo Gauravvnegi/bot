@@ -2,14 +2,15 @@ import { PageRoutes } from '@hospitality-bot/admin/shared';
 
 export const navRoute = {
   eFrontdesk: { label: 'eFrontdesk', link: './' },
-  reservation: { label: 'Reservation', link: '/pages/efrontdesk/reservation' },
-  addReservation: { label: 'Create Reservation', link: './' },
-  editReservation: { label: 'Edit Reservation', link: './' },
+  manageReservation: { label: 'Booking', link: '/pages/efrontdesk/manage-reservation' },
+  addBooking: { label: 'Add Booking', link: '/pages/efrontdesk/manage-reservation/add-booking' },
+  editBooking: { label: 'Edit Booking', link: './' },
   addGuest: { label: 'Add Guest', link: './' },
+
 };
 
 export const manageReservationRoutes: Record<
-  'manageReservation' | 'addReservation' | 'editReservation' | 'addGuest',
+  'manageReservation' | 'addBooking' | 'editBooking' | 'addGuest',
   PageRoutes
 > = {
   manageReservation: {
@@ -18,32 +19,32 @@ export const manageReservationRoutes: Record<
     title: 'Reservation',
   },
 
-  addReservation: {
-    route: 'add-reservation',
+  addBooking: {
+    route: 'add-booking',
     navRoutes: [
       navRoute.eFrontdesk,
-      navRoute.reservation,
-      navRoute.addReservation,
+      navRoute.manageReservation,
+      navRoute.addBooking,
     ],
-    title: 'Add Reservation',
+    title: 'Add Booking',
   },
 
-  editReservation: {
-    route: 'edit-reservation',
+  editBooking: {
+    route: 'edit-booking',
     navRoutes: [
       navRoute.eFrontdesk,
-      navRoute.reservation,
-      navRoute.editReservation,
+      navRoute.manageReservation,
+      navRoute.editBooking,
     ],
-    title: 'Edit Reservation',
+    title: 'Edit Booking',
   },
 
   addGuest: {
     route: 'add-guest',
     navRoutes: [
       navRoute.eFrontdesk,
-      navRoute.reservation,
-      navRoute.addReservation,
+      navRoute.manageReservation,
+      navRoute.addBooking,
       navRoute.addGuest
     ],
     title: 'Add Guest',

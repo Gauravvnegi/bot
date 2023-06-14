@@ -5,26 +5,29 @@
   ></hospitality-bot-navigation-header>
 
   <div class="form-block" [formGroup]="guestForm">
-    <div class="code">
-      <span class="code__label"> Code: </span>
-      <span class="code__hash"> {{ packageCode }} </span>
-    </div>
-    <hospitality-bot-toggle-switch
-      class="status"
-      controlName="active"
-      label="Black listed:"
-      onLabel="Yes"
-      offLabel="No"
-    ></hospitality-bot-toggle-switch>
     <hospitality-bot-input
       class="half-width"
       controlName="firstName"
       label="First Name"
+      [props]="{
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.',
+          maxlength: 'Maximum character limit is upto 60.'
+        }
+      }"
     ></hospitality-bot-input>
     <hospitality-bot-input
       class="half-width"
       controlName="lastName"
       label="Last Name"
+      [props]="{
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.',
+          maxlength: 'Maximum character limit is upto 60.'
+        }
+      }"
     ></hospitality-bot-input>
     <hospitality-bot-input
       class="half-width"
@@ -34,44 +37,61 @@
         type: 'email',
         errorMessages: {
           required: 'This is a required field.',
-          email: 'Enter valid email.'
-        }
+          email: 'Enter valid email address'
+        },
+        placeholder: 'Enter'
       }"
     ></hospitality-bot-input>
     <hospitality-bot-phone-number
       class="half-width"
       preControlName="cc"
       postControlName="phoneNo"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-phone-number>
     <hospitality-bot-select
       class="half-width"
       controlName="companyName"
       label="Company Name"
-      [options]="roomTypes"
+      [options]="companies"
       [props]="{ isAsync: true, createPrompt: '+ Add New Company' }"
       [loading]="loadingCompany"
       (paginate)="loadMoreCompany()"
       (onSearch)="searchCompany($event)"
       [stopEmission]="noMoreCompany"
       (onCreate)="createCompany()"
+      [props]="{
+        placeholder: 'Search'
+      }"
     ></hospitality-bot-select>
-    <hospitality-bot-input
+    <hospitality-bot-select
       class="half-width"
       controlName="gender"
+      [options]="genders"
       label="Gender"
-    ></hospitality-bot-input>
+      [props]="{
+        placeholder: 'Select'
+      }"
+    ></hospitality-bot-select>
     <hospitality-bot-date
       class="half-width"
       controlName="dateOfBirth"
-      label="Date"
+      label="Date of Birth"
       [settings]="{
         enableTime: false
+      }"
+      [props]="{
+        placeholder: 'DD/MM/YYYY'
       }"
     ></hospitality-bot-date>
     <hospitality-bot-input
       class="half-width"
       controlName="age"
       label="Age"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-input>
     <div class="btn-wrapper full-width">
       <hospitality-bot-button

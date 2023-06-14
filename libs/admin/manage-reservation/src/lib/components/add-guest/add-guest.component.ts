@@ -4,7 +4,7 @@ import { manageReservationRoutes } from '../../constants/routes';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import { NavRouteOptions, Option, Regex } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { CompanyList } from 'libs/admin/agent/src/lib/models/agent.model';
 import { FormService } from 'libs/admin/members/src/lib/services/form.service';
@@ -22,6 +22,11 @@ export class AddGuestComponent implements OnInit {
   agentId: string;
   pageTitle: string;
   navRoutes: NavRouteOptions;
+  genders: Option[] = [
+    { label: 'Male', value: 'MALE' },
+    { label: 'Female', value: 'FEMALE' },
+    { label: 'Other', value: 'OTHER' },
+  ];
   packageCode: string = '# will be auto generated';
 
   guestForm: FormGroup;
@@ -30,15 +35,13 @@ export class AddGuestComponent implements OnInit {
   loading = false;
   subscription$ = new Subscription();
 
-  /* roomTypes options variable */
+  /* companies options variable */
   companyOffset = 0;
   loadingCompany = false;
   noMoreCompany = false;
   companyLimit = 10;
+  companies: Option[] = [];
 
-  roomTypes = [];
-
-  commissionTypes: Option[] = [{ label: '%OFF', value: 'PERCENTAGE' }];
   constructor(
     private fb: FormBuilder,
     private manageReservationService: ManageReservationService,
@@ -47,10 +50,10 @@ export class AddGuestComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.agentId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = manageReservationRoutes['addGuest'];
     this.navRoutes = navRoutes;
     this.pageTitle = title;
+    console.log("Nav Routes ->>>>>>> ", navRoutes)
   }
 
   ngOnInit(): void {
@@ -61,10 +64,9 @@ export class AddGuestComponent implements OnInit {
 
   initGuestForm() {
     this.guestForm = this.fb.group({
-      active: [true],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
+      firstName: ['', [Validators.required, Validators.maxLength(60)]],
+      lastName: ['', [Validators.required, Validators.maxLength(60)]],
+      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       cc: ['+91'],
       phoneNo: [null, [Validators.required]],
       companyName: ['', [Validators.required]],
@@ -80,7 +82,9 @@ export class AddGuestComponent implements OnInit {
   //   this.formService.reset();
   // }
 
-  createCompany() {}
+  createCompany() {
+    this.router.navigateByUrl('pages/members/company/add-company');
+  }
 
   handleSubmit() {
     // if (this.guestForm.invalid) {
@@ -123,19 +127,6 @@ export class AddGuestComponent implements OnInit {
     //       .subscribe(this.handleSuccess, this.handleFinal)
     //   );
     // }
-  }
-
-  reset() {
-    this.guestForm.patchValue({
-      firstName: '',
-      email: '',
-      phoneNo: '',
-      companyName: '',
-      address: '',
-      gender: '',
-      dateOfBirth: '',
-      age: '',
-    });
   }
 
   saveForm() {

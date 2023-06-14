@@ -9,23 +9,23 @@ import { AddGuestComponent } from './components/add-guest/add-guest.component';
 
 export const adminManageReservationRoutes: Route[] = [
   {
-    path: manageReservationRoutes.manageReservation.route,
+    path: '',
     component: MainComponent,
     children: [
       {
-        path: '',
+        path: manageReservationRoutes.manageReservation.route,
         component: ManageReservationDataTableComponent,
       },
       {
-        path: manageReservationRoutes.addReservation.route,
+        path: manageReservationRoutes.addBooking.route,
         component: AddReservationComponent,
       },
       {
-        path: `${manageReservationRoutes.editReservation.route}/:id`,
+        path: `${manageReservationRoutes.editBooking.route}/:id`,
         component: AddReservationComponent,
       },
       {
-        path: `${manageReservationRoutes.addReservation.route}/${manageReservationRoutes.addGuest.route}`,
+        path: `${manageReservationRoutes.addBooking.route}/${manageReservationRoutes.addGuest.route}`,
         component: AddGuestComponent,
       },
     ],
@@ -42,6 +42,6 @@ export class AdminManageReservationRoutingModule {
     MainComponent,
     ManageReservationDataTableComponent,
     RoomIteratorComponent,
-    AddGuestComponent
+    AddGuestComponent,
   ];
 }

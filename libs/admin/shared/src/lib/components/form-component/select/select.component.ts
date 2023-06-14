@@ -16,7 +16,6 @@ export class SelectComponent extends FormComponent {
 
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
-    console.log(this.options)
   }
 
   handleItemChange(event: any): void {

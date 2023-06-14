@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
+  FormArray,
   FormBuilder,
   FormGroup,
   Validators,
@@ -35,6 +36,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   subscription$ = new Subscription();
 
   useForm: FormGroup;
+  ratePlanArray: FormArray;
   loading: boolean = false;
   roomTypeId: string;
   hotelId: string;
@@ -115,10 +117,12 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       maxAdult: [{ value: null, disabled: true }, occupancyValidation],
       area: ['', [Validators.required, Validators.min(0)]],
 
-      minPrice: ['', [Validators.required, Validators.min(0)]],
-      maxPrice: ['', [Validators.required, Validators.min(0)]],
-      paxAdditionalCost: ['', [Validators.required, Validators.min(0)]],
+      ratePlan: new FormArray([]),
+      // minPrice: ['', [Validators.required, Validators.min(0)]],
+      // maxPrice: ['', [Validators.required, Validators.min(0)]],
     });
+
+    this.ratePlanArray = this.useForm.get('ratePlan') as FormArray;
 
     // If Data is already present
     if (this.roomService.roomTypeFormState) {
@@ -148,6 +152,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
     /* Value changes subscription */
     this.initFormSubscription();
+    this.addNewRatePlan();
   }
 
   /**
@@ -176,6 +181,22 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
     this.getServices(ServicesTypeValue.PAID);
     this.getServices(ServicesTypeValue.COMPLIMENTARY);
+  }
+
+  addNewRatePlan() {
+    const data = {
+      basePriceCurrency: ['INR'],
+      basePrice: ['', [Validators.required, Validators.min(0)]],
+      discountType: ['PERCENTAGE'],
+      discountValue: ['', [Validators.required, Validators.min(0)]],
+      bestRateCurrency: ['INR'],
+      bestAvailableRate: ['', [Validators.required, Validators.min(0)]],
+      paxAdditionalCostCurrency: ['INR'],
+      paxAdditionalCost: ['', [Validators.required, Validators.min(0)]],
+    };
+
+    const formGroup = this.fb.group(data);
+    this.ratePlanArray.push(formGroup);
   }
 
   /**

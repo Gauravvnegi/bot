@@ -89,7 +89,7 @@ export const cols: Cols[] = [
   },
 ];
 
-export const title = 'Booking';
+export const title = 'Reservation';
 
 /* Status of the reservation */
 export enum ReservationStatusType {

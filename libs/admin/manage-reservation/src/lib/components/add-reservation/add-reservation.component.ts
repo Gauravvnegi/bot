@@ -25,6 +25,7 @@ import { manageReservationRoutes } from '../../constants/routes';
 import {
   BookingConfig,
   BookingInfo,
+  Guest,
   OfferData,
   OfferList,
   PaymentMethodList,
@@ -74,7 +75,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   startMinDate = new Date();
   endMinDate = new Date();
 
-  pageTitle = 'Add Booking';
+  pageTitle = 'Add Reservation';
   routes: NavRouteOptions = [];
 
   $subscription = new Subscription();
@@ -96,7 +97,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
     this.initForm();
-    const { navRoutes, title } = manageReservationRoutes['addBooking'];
+    const { navRoutes, title } = manageReservationRoutes['addReservation'];
     this.routes = navRoutes;
     this.pageTitle = title;
   }
@@ -119,7 +120,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     const { firstName, lastName } = this.userService.userDetails;
 
     this.userForm = this.fb.group({
-      bookingInformation: this.fb.group({
+      reservationInformation: this.fb.group({
         from: [startTime, Validators.required],
         to: [endTime, Validators.required],
         reservationType: ['', Validators.required],
@@ -289,8 +290,8 @@ export class AddReservationComponent implements OnInit, OnDestroy {
       this.activatedRoute.params.subscribe((params) => {
         if (params['id']) {
           this.reservationId = params['id'];
-          this.pageTitle = 'Edit Booking';
-          this.routes[2].label = 'Edit Booking';
+          this.pageTitle = 'Edit Reservation';
+          this.routes[2].label = 'Edit Reservation';
           this.reservationTypes = [
             { label: 'Draft', value: 'DRAFT' },
             { label: 'Confirmed', value: 'CONFIRMED' },
@@ -322,7 +323,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
             const data = new ReservationFormData().deserialize(response);
             this.userForm.patchValue(data);
             this.summaryData = new SummaryData().deserialize(response);
-            this.setFormDisability(data.bookingInformation);
+            this.setFormDisability(data.reservationInformation);
             if (data.offerId)
               this.getOfferByRoomType(
                 this.userForm.get('roomInformation.roomTypeId').value
@@ -340,7 +341,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   }
 
   setFormDisability(data: BookingInfo): void {
-    this.userForm.get('bookingInformation.source').disable();
+    this.userForm.get('reservationInformation.source').disable();
     switch (true) {
       case data.reservationType === 'CONFIRMED':
         this.userForm.disable();
@@ -394,8 +395,8 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     const defaultProps = [
       {
         type: 'ROOM_TYPE',
-        fromDate: this.userForm.get('bookingInformation.from')?.value,
-        toDate: this.userForm.get('bookingInformation.to')?.value,
+        fromDate: this.userForm.get('reservationInformation.from')?.value,
+        toDate: this.userForm.get('reservationInformation.to')?.value,
         adultCount: this.userForm.get('roomInformation.adultCount')?.value || 1,
         roomCount: this.userForm.get('roomInformation.roomCount')?.value || 1,
         childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
@@ -437,10 +438,25 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     this.getGuests();
   }
 
-  searchGuests(event) {}
+  searchGuests(text: string) {
+    if (text) {
+      this.loadingGuests = true;
+      this.guestService.searchGuest(text).subscribe((res) => {
+        this.loadingGuests = false;
+        const data = new Guest().deserialize(res);
+        this.guestOptions.push(data);
+      });
+    } else {
+      this.guestsOffSet = 0;
+      this.guestOptions = [];
+      this.getGuests();
+    }
+  }
 
   createGuest() {
-    this.router.navigateByUrl('pages/efrontdesk/manage-reservation/add-booking/add-guest');
+    this.router.navigateByUrl(
+      'pages/efrontdesk/manage-reservation/add-reservation/add-guest'
+    );
   }
 
   getGuests() {
@@ -528,12 +544,12 @@ export class AddReservationComponent implements OnInit, OnDestroy {
       dialogConfig
     );
     togglePopupCompRef.componentInstance.content = {
-      heading: `Booking ${
+      heading: `Reservation ${
         this.reservationId ? 'Updated' : 'Created'
       } Successfully`,
 
       description: [
-        `Congratulations! Your booking has been ${
+        `Congratulations! Your reservation has been ${
           this.reservationId ? 'updated' : 'created'
         } successfully.`,
         ` Your confirmation number is ${number}.`,
@@ -542,11 +558,11 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     };
     togglePopupCompRef.componentInstance.actions = [
       {
-        label: 'Continue Booking',
+        label: 'Continue Reservation',
         onClick: () => {
           this.router.navigate(
             [
-              `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.addBooking.route}`,
+              `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.addReservation.route}`,
             ],
             { replaceUrl: true }
           );

@@ -5,6 +5,7 @@ import {
   ReservationResponse,
 } from '../types/response.type';
 import { FlagType, Option } from '@hospitality-bot/admin/shared';
+import { SearchGuestResponse } from 'libs/admin/guests/src/lib/types/guest.type';
 /* Reservation */
 export class Reservation {
   id: string;
@@ -197,7 +198,7 @@ export class OfferData {
 }
 
 export class ReservationFormData {
-  bookingInformation: BookingInfo;
+  reservationInformation: BookingInfo;
   guestInformation: GuestInfo;
   address: AddressInfo;
   paymentMethod: PaymentInfo;
@@ -205,7 +206,7 @@ export class ReservationFormData {
   roomInformation: RoomTypeInfo;
 
   deserialize(input): this {
-    this.bookingInformation = new BookingInfo().deserialize(input);
+    this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input);
     this.address = new AddressInfo().deserialize(input.address);
     this.paymentMethod = new PaymentInfo().deserialize(input);
@@ -380,5 +381,20 @@ export class BookingConfig {
       default:
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     }
+  }
+}
+
+export class Guest {
+  label: string;
+  value: string;
+  number: string;
+  email: string;
+
+  deserialize(input: SearchGuestResponse) {
+    this.label = `${input.firstName} ${input.lastName}`;
+    this.value = input.id;
+    this.number = input.contactDetails?.contactNumber;
+    this.email = input.contactDetails?.emailId;
+    return this;
   }
 }

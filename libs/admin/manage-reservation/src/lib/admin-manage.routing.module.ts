@@ -17,15 +17,15 @@ export const adminManageReservationRoutes: Route[] = [
         component: ManageReservationDataTableComponent,
       },
       {
-        path: manageReservationRoutes.addBooking.route,
+        path: manageReservationRoutes.addReservation.route,
         component: AddReservationComponent,
       },
       {
-        path: `${manageReservationRoutes.editBooking.route}/:id`,
+        path: `${manageReservationRoutes.editReservation.route}/:id`,
         component: AddReservationComponent,
       },
       {
-        path: `${manageReservationRoutes.addBooking.route}/${manageReservationRoutes.addGuest.route}`,
+        path: `${manageReservationRoutes.addReservation.route}/${manageReservationRoutes.addGuest.route}`,
         component: AddGuestComponent,
       },
     ],

@@ -2,12 +2,12 @@ import { PageRoutes } from '@hospitality-bot/admin/shared';
 
 export const navRoute = {
   outlet: { label: 'Outlet', link: './' },
-  allOutlets: { label: 'All Outlets', link: '/pages/outlets' },
+  allOutlets: { label: 'All Outlets', link: '/pages/outlet/all-outlets' },
   addOutlet: {
     label: 'Add Outlet',
-    link: '/pages/outlets/all-outlets/add-outlet',
+    link: '/pages/outlet/all-outlets/add-outlet',
   },
-  editOutlet: { label: 'Edit Outlet', link: './' },
+  editOutlet: { label: 'Edit Outlet', link: '/pages/outlet/all-outlets/edit-outlet' },
   addMenu: { label: 'Add Menu', link: './' },
   addMenuItem: { label: 'Add Menu Item', link: './' },
   menuList: { label: 'Menu List', link: './' },

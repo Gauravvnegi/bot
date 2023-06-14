@@ -190,11 +190,11 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     );
 
     togglePopupCompRef.componentInstance.content = {
-      heading: `Mark Booking As ${
+      heading: `Mark Reservation As ${
         status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
       }`,
       description: [
-        `You are about to mark this booking as ${status}`,
+        `You are about to mark this reservation as ${status}`,
         'Are you Sure?',
       ],
     };
@@ -239,7 +239,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
               };
             });
             this.snackbarService.openSnackBarAsText(
-              'Booking ' + status + ' changes successfully',
+              'Reservation ' + status + ' changes successfully',
               '',
               { panelClass: 'success' }
             );
@@ -267,7 +267,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   editReservation(id: string) {
     this.router.navigate([
-      `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.editBooking.route}/${id}`,
+      `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.editReservation.route}/${id}`,
     ]);
   }
 

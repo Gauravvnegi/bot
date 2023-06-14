@@ -115,14 +115,15 @@ export class ManageReservationService extends ApiService {
     reservationData.adultCount = formValue.roomInformation?.adultCount ?? 0;
     reservationData.childCount = formValue.roomInformation?.childCount ?? 0;
     reservationData.roomCount = formValue.roomInformation?.roomCount ?? 0;
-    reservationData.from = formValue.bookingInformation.from ?? 0;
-    reservationData.to = formValue.bookingInformation.to ?? 0;
+    reservationData.from = formValue.reservationInformation.from ?? 0;
+    reservationData.to = formValue.reservationInformation.to ?? 0;
     reservationData.reservationType =
-      formValue.bookingInformation.reservationType ?? '';
-    reservationData.source = formValue.bookingInformation.source ?? '';
-    reservationData.sourceName = formValue.bookingInformation.sourceName ?? '';
+      formValue.reservationInformation.reservationType ?? '';
+    reservationData.source = formValue.reservationInformation.source ?? '';
+    reservationData.sourceName =
+      formValue.reservationInformation.sourceName ?? '';
     reservationData.marketSegment =
-      formValue.bookingInformation.marketSegment ?? '';
+      formValue.reservationInformation.marketSegment ?? '';
     reservationData.address = {
       addressLine1: formValue.address.addressLine1 ?? '',
       city: formValue.address.city ?? '',

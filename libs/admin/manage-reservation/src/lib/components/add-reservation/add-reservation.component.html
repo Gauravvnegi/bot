@@ -3,8 +3,8 @@
   </hospitality-bot-navigation-header>
   <div class="main">
     <p-accordion [multiple]="true">
-      <p-accordionTab header="Booking Information" [selected]="true">
-        <div class="form-block" formGroupName="bookingInformation">
+      <p-accordionTab header="Reservation Information" [selected]="true">
+        <div class="form-block" formGroupName="reservationInformation">
           <hospitality-bot-date
             class="half-width"
             controlName="from"
@@ -295,12 +295,12 @@
             </p>
             <p class="bk-summary_roomInfo_checkoutInfo_subText">
               {{
-                userForm.get('bookingInformation.from').value
+                userForm.get('reservationInformation.from').value
                   | date: 'dd/MM/yyyy'
               }}
               -
               {{
-                userForm.get('bookingInformation.to').value | date: 'dd/MM/yyyy'
+                userForm.get('reservationInformation.to').value | date: 'dd/MM/yyyy'
               }}
             </p>
           </div>
@@ -411,7 +411,7 @@
         <div class="bk-summary_btnwrapper">
           <hospitality-bot-button
             (click)="handleBooking()"
-            label="{{ this.reservationId ? 'Update' : 'Confirm' }} Booking"
+            label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"
             [disabled]="userForm.invalid || disabledForm"
             [isLoading]="isBooking"
           ></hospitality-bot-button>

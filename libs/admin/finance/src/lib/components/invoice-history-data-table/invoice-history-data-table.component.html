@@ -44,12 +44,6 @@
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
       <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-
-      <hospitality-bot-filter-chips
-        *ngIf="isQuickFilters"
-        [chips]="filterChips"
-        (onChange)="toggleQuickReplyFilter($event)"
-      ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
 
@@ -110,7 +104,7 @@
           </div>
         </div>
       </td>
-      <td>
+      <!-- <td>
         <div
           class="center-align"
           *ngIf="rowData.paymentMethods; else emptyCell"
@@ -131,7 +125,7 @@
             {{ rowData.status }}
           </div>
         </div>
-      </td>
+      </td> -->
       <td>
         <div class="center-align" *ngIf="rowData.totalBill; else emptyCell">
           <div class="primary-text">

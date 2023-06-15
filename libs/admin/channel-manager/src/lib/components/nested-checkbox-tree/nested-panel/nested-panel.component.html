@@ -50,12 +50,7 @@
           <div
             class="channel-content"
             style="margin-left: 30px;"
-            [style.display]="
-              collapsedChannel.id === roomsData['id'] + '-' + variant['id'] &&
-              collapsedChannel.isSelected
-                ? 'none'
-                : 'block'
-            "
+            [style.display]="'block'"
           >
             <ng-container
               class="channel"

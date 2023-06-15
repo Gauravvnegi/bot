@@ -1,58 +1,64 @@
-<div class="container-wrapper">
-  <div class="header">Services</div>
-  <hr />
-  <div class="sub-container-wrapper">
-    <hospitality-bot-custom-select
-      label="Complimentary Services"
-      description="This is a free of cost services"
-      formControlName="serviceIds"
-      [itemList]=""
-      [noRecordsAction]="{
-        description: 'No services found',
-        imageSrc: 'assets/images/empty-table-service.png'
-      }"
-    >
-      <hospitality-bot-button
-        label="+ Import Services"
-        variant="text"
-        link=""
-      ></hospitality-bot-button>
-    </hospitality-bot-custom-select>
+<ng-container [formGroup]="controlContainer.control">
+  <div class="container-wrapper">
+    <div class="header">Services</div>
+    <hr />
+    <div class="sub-container-wrapper">
+      <hospitality-bot-custom-select
+        label="Complimentary Services"
+        description="This is a free of cost services"
+        formControlName="serviceIds"
+        [itemList]=""
+        [noRecordsAction]="{
+          description: 'No services found',
+          imageSrc: 'assets/images/empty-table-service.png'
+        }"
+      >
+        <hospitality-bot-button
+          label="+ Import Services"
+          variant="text"
+          link=""
+        ></hospitality-bot-button>
+      </hospitality-bot-custom-select>
+    </div>
   </div>
-</div>
-<div class="container-wrapper">
-  <div class="header">Other Details</div>
-  <hr />
-  <div class="details-wrapper">
-    <hospitality-bot-prefix-field
-      label="Days Of operation"
-      class="half-width"
-      preFieldType="autocomplete"
-      postFieldType="autocomplete"
-      [preOptions]="preOptions"
-      postOptions="preOptions"
-      [settings]="{
-        layout: 'dashed'
-      }"
-    >
-    </hospitality-bot-prefix-field>
+  <div class="container-wrapper">
+    <div class="header">Other Details</div>
+    <hr />
+    <div class="details-wrapper">
+      <hospitality-bot-prefix-field
+        label="Days Of operation"
+        class="half-width"
+        preControlName="openingDay"
+        postControlName="closingDay"
+        preFieldType="autocomplete"
+        postFieldType="autocomplete"
+        [preOptions]="preOptions"
+        postOptions="preOptions"
+        [settings]="{
+          layout: 'dashed'
+        }"
+      >
+      </hospitality-bot-prefix-field>
 
-    <hospitality-bot-prefix-field
-      label="Timings"
-      class="half-width"
-      preFieldType="autocomplete"
-      postFieldType="autocomplete"
-      [preOptions]="preOptions"
-      postOptions="preOptions"
-      [settings]="{
-        layout: 'dashed'
-      }"
-    >
-    </hospitality-bot-prefix-field>
+      <hospitality-bot-prefix-field
+        label="Timings"
+        class="half-width"
+        preControlName="openingHour"
+        postControlName="closingHour"
+        preFieldType="autocomplete"
+        postFieldType="autocomplete"
+        [preOptions]="preOptions"
+        postOptions="preOptions"
+        [settings]="{
+          layout: 'dashed'
+        }"
+      >
+      </hospitality-bot-prefix-field>
+    </div>
   </div>
-</div>
 
-<hospitality-bot-rules
-  controlName="rules"
-  class="full-width"
-></hospitality-bot-rules>
+  <hospitality-bot-rules
+    controlName="rules"
+    class="full-width"
+  ></hospitality-bot-rules>
+</ng-container>

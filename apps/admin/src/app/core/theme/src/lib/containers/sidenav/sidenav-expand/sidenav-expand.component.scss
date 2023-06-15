@@ -34,7 +34,7 @@
 }
 
 .overlay-container {
-  width: 100vw;
+  width: calc(100vw - 88px);
   height: 100vh;
   position: absolute;
   inset: 0 0 0 0;

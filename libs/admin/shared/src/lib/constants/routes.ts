@@ -72,6 +72,8 @@ export const routes = {
 
   //CHANNEL_MANAGER
   [ModuleNames.CHANNEL_MANAGER]: 'channel-manager',
+  [ModuleNames.UPDATE_RATES]: 'channel-manager/update-rates',
+  [ModuleNames.UPDATE_INVENTORY]: 'channel-manager/update-inventory',
 
   RoleAndPermission: 'roles-permissions',
 };

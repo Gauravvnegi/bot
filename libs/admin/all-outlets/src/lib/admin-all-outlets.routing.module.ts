@@ -29,18 +29,18 @@ const appRoutes: Route[] = [
         component: MainComponent,
         children: [
           {
-            path: ``,
+            path: '',
             component: AddOutletComponent,
           },
           {
             path: outletRoutes.addMenu.route,
             component: CreateMenuComponent,
           },
+          {
+            path: `${outletRoutes.addMenu.route}/${outletRoutes.addMenuItem.route}`,
+            component: AddMenuItemComponent,
+          },
         ],
-      },
-      {
-        path: `${outletRoutes.addMenu.route}/${outletRoutes.addMenuItem.route}`,
-        component: AddMenuItemComponent,
       },
       {
         path: `${outletRoutes.menuList.route}`,

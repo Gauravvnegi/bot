@@ -36,4 +36,16 @@ export class NestedPanelComponent implements OnInit {
       channelIndex: channelIndex,
     } as UpdatedEmitType);
   }
+
+  collapsedChannel = {
+    id: '',
+    isSelected: false,
+  };
+  channelCollapsed(rooms: string, variant: string) {
+    this.collapsedChannel = {
+      id: `${rooms['id']}-${variant['id']}`,
+      isSelected: !this.collapsedChannel.isSelected,
+    };
+    console.log(this.collapsedChannel);
+  }
 }

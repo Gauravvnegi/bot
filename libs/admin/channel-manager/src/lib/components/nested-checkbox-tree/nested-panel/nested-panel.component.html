@@ -24,7 +24,7 @@
           class="variants"
           *ngFor="let variant of roomsData.variants; let variantIndex = index"
         >
-          <h5>
+          <div class="variants__heading">
             <input
               type="checkbox"
               [name]="'variant-' + variant.name"
@@ -40,9 +40,23 @@
               [checked]="variant.isSelected"
             />
             {{ variant.name }}
-            <span>channel {{ roomsData.variants.length }}</span>
-          </h5>
-          <div class="channel" style="margin-left: 30px;">
+            <span
+              class="channel-heading"
+              (click)="channelCollapsed(roomsData, variant)"
+            >
+              {{ roomsData.variants.length }} channel</span
+            >
+          </div>
+          <div
+            class="channel-content"
+            style="margin-left: 30px;"
+            [style.display]="
+              collapsedChannel.id === roomsData['id'] + '-' + variant['id'] &&
+              collapsedChannel.isSelected
+                ? 'none'
+                : 'block'
+            "
+          >
             <ng-container
               class="channel"
               *ngFor="let channel of variant.channels; let channelIndex = index"

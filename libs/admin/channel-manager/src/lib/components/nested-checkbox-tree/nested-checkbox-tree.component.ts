@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
 import {
@@ -14,6 +14,7 @@ import {
 export class NestedCheckboxTreeComponent extends FormComponent {
   isPanelCollapsed: boolean = true;
   @Input() roomsData: RoomTypes[];
+  @Output() objectChanged: EventEmitter<RoomTypes[]> = new EventEmitter();
 
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
@@ -57,9 +58,9 @@ export class NestedCheckboxTreeComponent extends FormComponent {
             event.channelIndex
           ]
         );
-
         break;
     }
+    this.objectChanged.emit(this.roomsData);
   }
   private changeChildrenStatus(parent) {
     const stack = [parent];

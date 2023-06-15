@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { RoomsData } from '../constants/bulkupdate-response';
+import { RoomTypes } from '../../types/bulk-update.types';
 @Component({
   selector: 'hospitality-bot-main',
   templateUrl: './main.component.html',
@@ -28,7 +29,7 @@ export class MainComponent implements OnInit {
     });
   }
 
-  getFromGroup() {
-    return this.fb.group({});
+  onChangeNesting(updatedObject: RoomTypes[]) {
+    console.log('***Updated Object List***', updatedObject);
   }
 }

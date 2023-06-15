@@ -1,0 +1,7 @@
+<ng-container class="panel" *ngFor="let room of roomsData; let i = index">
+  <hospitality-bot-nested-panel
+    class="nested-panel"
+    [roomsData]="roomsData[i]"
+    (objectUpdated)="onRoomChange($event, i)"
+  ></hospitality-bot-nested-panel>
+</ng-container>

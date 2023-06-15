@@ -1,30 +1,17 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
-import {
-  RoomTypes,
-  UpdatedEmitType,
-  SourceEmitType,
-} from '../../types/bulk-update.types';
+import { RoomTypes, UpdatedEmitType } from '../../types/bulk-update.types';
 @Component({
   selector: 'hospitality-bot-nested-checkbox-tree',
   templateUrl: './nested-checkbox-tree.component.html',
   styleUrls: ['./nested-checkbox-tree.component.scss'],
 })
-export class NestedCheckboxTreeComponent extends FormComponent {
-  isPanelCollapsed: boolean = true;
+export class NestedCheckboxTreeComponent {
   @Input() roomsData: RoomTypes[];
   @Output() objectChanged: EventEmitter<RoomTypes[]> = new EventEmitter();
 
-  constructor(public controlContainer: ControlContainer) {
-    super(controlContainer);
-  }
-
-  ngOnInit(): void {}
-
-  togglePanel(): void {
-    this.isPanelCollapsed = !this.isPanelCollapsed;
-  }
+  constructor() {}
 
   onRoomChange(event: UpdatedEmitType, objectIndex: number) {
     const currentObject = this.roomsData[objectIndex];

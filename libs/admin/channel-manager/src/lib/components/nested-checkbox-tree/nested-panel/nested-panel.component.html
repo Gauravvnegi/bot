@@ -1,17 +1,74 @@
-<div class="panel-tree" [formGroup]="controlContainer.control">
+<div class="panel-tree">
   <p-panel
     [toggleable]="true"
     [(collapsed)]="isPanelCollapsed"
     expandIcon="pi pi-angle-down"
     collapseIcon="pi pi-angle-up"
-    (click)="togglePanel()"
   >
-    <p-header> {{ label }} </p-header>
+    <p-header>
+      <input
+        type="checkbox"
+        [name]="'room-' + roomsData.name"
+        [id]="roomsData.id"
+        (change)="onRoomChange($event.target.checked, roomsData.id, 'parent')"
+        [checked]="roomsData.isSelected"
+      />
+      {{ roomsData.name }}
+    </p-header>
     <div
       class="panel-content"
       [style.display]="isPanelCollapsed ? 'none' : 'block'"
     >
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <div style="margin-left: 20px;">
+        <ng-container
+          class="variants"
+          *ngFor="let variant of roomsData.variants; let variantIndex = index"
+        >
+          <h5>
+            <input
+              type="checkbox"
+              [name]="'variant-' + variant.name"
+              [id]="variant"
+              (change)="
+                onRoomChange(
+                  $event.target.checked,
+                  variant.id,
+                  'variant',
+                  variantIndex
+                )
+              "
+              [checked]="variant.isSelected"
+            />
+            {{ variant.name }}
+            <span>channel {{ roomsData.variants.length }}</span>
+          </h5>
+          <div class="channel" style="margin-left: 30px;">
+            <ng-container
+              class="channel"
+              *ngFor="let channel of variant.channels; let channelIndex = index"
+            >
+              <div>
+                <input
+                  type="checkbox"
+                  [name]="'channel-' + channel.name"
+                  [id]="channel"
+                  (change)="
+                    onRoomChange(
+                      $event.target.checked,
+                      channel.id,
+                      'channel',
+                      variantIndex,
+                      channelIndex
+                    )
+                  "
+                  [checked]="channel.isSelected"
+                />
+                {{ channel.name }}
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
     </div>
   </p-panel>
 </div>

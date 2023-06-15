@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { RoomsData } from '../constants/bulkupdate-response';
 @Component({
   selector: 'hospitality-bot-main',
   templateUrl: './main.component.html',
@@ -8,63 +8,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 })
 export class MainComponent implements OnInit {
   checkbox: FormGroup;
-
-  inventoryList = [
-    {
-      label: 'luxury',
-      controlName: 'luxury',
-      value: 'luxury',
-      list: [
-        {
-          label: 'category1',
-          controlName: 'category1',
-          value: 'category1',
-          list: [
-            {
-              label: 'subcategory1',
-              controlName: 'subcategory1',
-              value: 'subcategory1',
-              list: [
-                {
-                  label: 'channel1',
-                  controlName: 'channel1',
-                  value: 'channel1',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-
-    {
-      label: 'luxury2',
-      controlName: 'luxury2',
-      value: 'luxury2',
-      list: [
-        {
-          label: 'category1',
-          controlName: 'category1',
-          value: 'category1',
-          list: [
-            {
-              label: 'subcategory1',
-              controlName: 'subcategory1',
-              value: 'subcategory1',
-              list: [
-                {
-                  label: 'channel1',
-                  controlName: 'channel1',
-                  value: 'channel1',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-  ];
-
+  roomsData = RoomsData;
   useForm: FormGroup;
 
   constructor(private fb: FormBuilder) {}
@@ -81,7 +25,6 @@ export class MainComponent implements OnInit {
       toDate: [''],
       roomType: [''],
       selectedDays: [[]],
-      details: this.fb.array([]),
     });
   }
 
@@ -89,19 +32,3 @@ export class MainComponent implements OnInit {
     return this.fb.group({});
   }
 }
-
-type roomTypes = {
-  name: string;
-  id: string;
-  isSelected: boolean;
-  variants: {
-    id: string;
-    name: string;
-    isSelected: boolean;
-    channels: {
-      id: string;
-      name: string;
-      isSelected: boolean;
-    }[];
-  }[];
-}[];

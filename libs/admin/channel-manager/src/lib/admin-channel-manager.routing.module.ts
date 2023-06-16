@@ -22,10 +22,15 @@ const appRoutes: CRoutes = [
         name: ModuleNames.UPDATE_RATES,
         component: MainComponent,
         children: [
-          { path: '', component: UpdateRatesComponent },
+          {
+            path: '',
+            component: UpdateRatesComponent,
+            name: ModuleNames.UPDATE_RATES,
+          },
           {
             path: 'bulk-update',
             component: BulkUpdateComponent,
+            name: ModuleNames.UPDATE_RATES,
           },
         ],
       },
@@ -34,10 +39,15 @@ const appRoutes: CRoutes = [
         name: ModuleNames.UPDATE_INVENTORY,
         component: MainComponent,
         children: [
-          { path: '', component: UpdateInventoryComponent },
+          {
+            path: '',
+            component: UpdateInventoryComponent,
+            name: ModuleNames.UPDATE_RATES,
+          },
           {
             path: 'bulk-update',
             component: BulkUpdateComponent,
+            name: ModuleNames.UPDATE_RATES,
           },
         ],
       },
@@ -45,18 +55,17 @@ const appRoutes: CRoutes = [
   },
 ];
 
-// need to fix the routesFactory
 @NgModule({
-  imports: [RouterModule.forChild(appRoutes)],
-  // providers: [
-  //   {
-  //     provide: ROUTES,
-  //     useFactory: (subscriptionService: SubscriptionPlanService) =>
-  //       routesFactory(appRoutes, [subscriptionService]),
-  //     multi: true,
-  //     deps: [SubscriptionPlanService],
-  //   },
-  // ],
+  imports: [RouterModule.forChild([])],
+  providers: [
+    {
+      provide: ROUTES,
+      useFactory: (subscriptionService: SubscriptionPlanService) =>
+        routesFactory(appRoutes, [subscriptionService]),
+      multi: true,
+      deps: [SubscriptionPlanService],
+    },
+  ],
   exports: [RouterModule],
 })
 export class AdminChannelMangerRoutingModule {

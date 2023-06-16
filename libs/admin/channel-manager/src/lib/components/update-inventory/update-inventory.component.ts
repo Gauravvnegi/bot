@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { daysOfWeek, Option } from '@hospitality-bot/admin/shared';
-import { dates } from '../../constants/data';
+import { channels, roomTypeData } from '../../constants/data';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
@@ -10,10 +10,8 @@ import { dates } from '../../constants/data';
 })
 export class UpdateInventoryComponent implements OnInit {
   useForm: FormGroup;
-  roomTypes: Option[] = [
-    { label: 'Luxury', value: 'Luxury' },
-    { label: 'Deluxe', value: 'Deluxe' },
-  ];
+  roomTypes: Option[] = [];
+  channels: Option[] = [];
 
   dates: DateOption[];
 
@@ -31,7 +29,9 @@ export class UpdateInventoryComponent implements OnInit {
       willBeChanged: [''],
     });
 
-    this.useFormControl.date.valueChanges.subscribe((res) => {});
+    this.useFormControl.date.valueChanges.subscribe((res) => {
+      this.initDate(res);
+    });
   }
 
   get useFormControl() {
@@ -40,6 +40,9 @@ export class UpdateInventoryComponent implements OnInit {
 
   initOptions() {
     this.initDate(Date.now());
+
+    this.roomTypes = roomTypeData;
+    this.channels = channels;
   }
 
   initFormSubscription() {}
@@ -60,6 +63,12 @@ export class UpdateInventoryComponent implements OnInit {
     }
 
     this.dates = dates;
+  }
+
+  handleChannelVisibility(roomTypeIdx: number, ratePlanIdx: number) {
+    const { ratePlans } = this.roomTypes[roomTypeIdx];
+    ratePlans[ratePlanIdx].isChannelVisible = !ratePlans[ratePlanIdx]
+      .isChannelVisible;
   }
 }
 

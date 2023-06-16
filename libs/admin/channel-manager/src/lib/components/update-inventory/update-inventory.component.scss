@@ -220,6 +220,11 @@ $border-color: rgba(112, 112, 112, 0.35);
 //------ Channels -----
 .channel {
   display: flex;
+  gap: 5px;
   color: #5f38f9;
   width: 100%;
+
+  &-btn {
+    min-width: 140px;
+  }
 }

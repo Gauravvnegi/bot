@@ -158,7 +158,11 @@
               <div class="header-wrapper">
                 <div
                   class="header-button"
-                  (click)="menu.toggle($event); selectedIndex=i; $event.stopPropagation()"
+                  (click)="
+                    menu.toggle($event);
+                    selectedIndex = i;
+                    $event.stopPropagation()
+                  "
                 >
                   <span> {{ ratePlanGroup.get('type').value }}</span>
                   <i class="pi pi-angle-down"></i>
@@ -177,7 +181,14 @@
                   </ng-template>
                 </p-menu>
               </div>
+              <hospitality-bot-button
+                label="Remove"
+                variant="text"
+                severity="reset"
+                (onClick)="onRemove(ratePlanGroup.get('type').value, i)"
+              ></hospitality-bot-button>
             </p-header>
+
             <div class="form-block" [formGroupName]="i">
               <hospitality-bot-prefix-field
                 class="half-width"
@@ -231,7 +242,7 @@
             label="+ Add Rate Plan"
             (onClick)="addNewRatePlan()"
             variant="text"
-            [disabled]="planCount>=plans.length"
+            [disabled]="planCount >= plans.length"
           ></hospitality-bot-button>
         </div>
       </div>

@@ -241,6 +241,14 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       .map((plan) => (plan.disabled = false));
   }
 
+  onRemove(value: string, index: number): void {
+    const removedPlan = this.ratePlanArray.at(index).get('type').value;
+    this.ratePlanArray.removeAt(index);
+    this.setDisabled(value);
+    this.planCount--;
+  }
+  
+
 
   addNewRatePlan() {
     const data = {
@@ -256,7 +264,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     };
     const formGroup = this.fb.group(data);
     this.ratePlanArray.push(formGroup);
-    
+
     const ratePlanArrayIndex = this.ratePlanArray.length - 1;
     this.handlePlan(this.plans[ratePlanArrayIndex].value, ratePlanArrayIndex);
     this.planCount++;

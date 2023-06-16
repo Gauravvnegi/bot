@@ -130,7 +130,18 @@
   height: 40vh !important;
 }
 
-:host ::ng-deep .header-wrapper{
+:host ::ng-deep p-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+:host ::ng-deep .p-accordion-header-link{
+  padding: 1.2rem !important;
+}
+
+:host ::ng-deep .header-wrapper {
   .p-menu {
     left: auto !important;
     top: auto !important;
@@ -161,19 +172,12 @@
 .header-button {
   @include flex-space-between-cen-Algn;
   @include contained-primary-button;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   gap: 5px;
-  padding: 1em;
   font-size: 16px;
   font-weight: $bold;
-  min-width: 150px;
-  height: 32px;
   cursor: pointer;
 }
 
-.disabled-option{
+.disabled-option {
   opacity: 0.5;
 }
-

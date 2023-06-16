@@ -1,17 +1,4 @@
-<div class="button" (click)="toggleIcon=!toggleIcon">
+<div class="button" (click)="toggleIcon = !toggleIcon">
   <span> {{ label }}</span>
   <i [ngClass]="toggleIcon ? 'pi pi-angle-down' : 'pi pi-angle-up'"></i>
 </div>
-<!-- <p-menu
-        #menu
-        [popup]="true"
-        [model]="plans"
-        styleClass="custom-menu"
-        click-stop-propagation
-      >
-        <ng-template let-option pTemplate="item">
-          <span [ngClass]="{ 'disabled-option': option.disabled }">{{
-            option.label
-          }}</span>
-        </ng-template>
-      </p-menu> -->

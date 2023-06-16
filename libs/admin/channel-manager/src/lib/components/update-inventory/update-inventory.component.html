@@ -21,11 +21,12 @@
             [options]="roomTypes"
             [settings]="{ showHeader: false }"
           ></hospitality-bot-multi-select>
-          <div class="dates__wrapper">
-            <div class="dates__selector">
-              Jan 18, 2023
-              <i class="pi pi-calendar"></i>
-            </div>
+          <div class="date-wrapper">
+            <hospitality-bot-date
+              controlName="date"
+              [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
+            >
+            </hospitality-bot-date>
           </div>
         </div>
         <div class="main-section">
@@ -51,8 +52,29 @@
                 <div>EP</div>
                 <div>(Room Only)</div>
               </div>
+              <hospitality-bot-menu-button
+                label="channels"
+              ></hospitality-bot-menu-button>
             </div>
             <div class="left-main-cell__right ltr">
+              Rates
+              <i class="pi pi-angle-down"></i>
+              <i class="pi pi-link"></i>
+            </div>
+          </div>
+          <div class="input-content-section left-main-cell p-bg">
+            <div class="left-main-cell__left">
+              <div class="channel">
+                <div class="channel-name">Agoda</div>
+
+                <img
+                  class="channel-icon"
+                  src="assets/svg/tick.svg"
+                  alt="check"
+                />
+              </div>
+            </div>
+            <div class="left-main-cell__right ltr w-bg">
               Rates
               <i class="pi pi-angle-down"></i>
               <i class="pi pi-link"></i>
@@ -64,7 +86,7 @@
     <div class="right">
       <div class="right__main">
         <div class="main-header main-header__right">
-          <div class="dates__wrapper dates-header">
+          <div class="date-wrapper dates-header">
             <div *ngFor="let date of dates" class="dates-cell cell">
               <div>{{ date.day }}</div>
               <div>{{ date.date }}</div>
@@ -90,7 +112,18 @@
           <div class="data-cell-wrapper">
             <div class="data-cell input-content-section">
               <div class="cell" *ngFor="let date of dates">
-                <hospitality-bot-input></hospitality-bot-input>
+                <hospitality-bot-input
+                  controlName="willBeChanged"
+                ></hospitality-bot-input>
+              </div>
+            </div>
+          </div>
+          <div class="data-cell-wrapper">
+            <div class="data-cell input-content-section">
+              <div class="cell" *ngFor="let date of dates">
+                <hospitality-bot-input
+                  controlName="willBeChanged"
+                ></hospitality-bot-input>
               </div>
             </div>
           </div>

@@ -33,23 +33,126 @@ const appRoutes: Route[] = [
             component: AddOutletComponent,
           },
           {
-            path: outletRoutes.addMenu.route,
-            component: CreateMenuComponent,
+            path: outletRoutes.addMenu1.route,
+            component: MainComponent,
+            children: [
+              { 
+                path: '', 
+                component: CreateMenuComponent 
+              },
+              {
+                path: outletRoutes.addMenuItem1.route,
+                component: AddMenuItemComponent,
+              }
+            ],
           },
           {
-            path: `${outletRoutes.addMenu.route}/${outletRoutes.addMenuItem.route}`,
-            component: AddMenuItemComponent,
+            path: outletRoutes.editMenu1.route,
+            component: MainComponent,
+            children: [
+              { 
+                path: '', 
+                component: CreateMenuComponent 
+              },
+              {
+                path: outletRoutes.addMenuItem1.route,
+                component: AddMenuItemComponent,
+              },
+              {
+                path: outletRoutes.editMenuItem1.route,
+                component: AddMenuItemComponent,
+              },
+            ],
+          },
+          {
+            path: outletRoutes.createFoodPackage1.route,
+            component: CreateFoodPackageComponent,
+          },
+          {
+            path: outletRoutes.editFoodPackage1.route,
+            component: CreateFoodPackageComponent,
           },
         ],
       },
       {
-        path: `${outletRoutes.menuList.route}`,
-        component: MenuListDataTableComponent,
-      },
-      {
-        path: `${outletRoutes.createFoodPackage.route}`,
-        component: CreateFoodPackageComponent,
-      },
+        path: outletRoutes.editOutlet.route,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            component: AddOutletComponent,
+          },
+          {
+            path: outletRoutes.addMenu1.route,
+            component: MainComponent,
+            children: [
+              { 
+                path: '', 
+                component: CreateMenuComponent 
+              },
+              {
+                path: outletRoutes.addMenuItem1.route,
+                component: AddMenuItemComponent,
+              }
+            ],
+          },
+          {
+            path: outletRoutes.editMenu1.route,
+            component: MainComponent,
+            children: [
+              { 
+                path: '', 
+                component: CreateMenuComponent 
+              },
+              {
+                path: outletRoutes.addMenuItem1.route,
+                component: AddMenuItemComponent,
+              },
+              {
+                path: outletRoutes.editMenuItem1.route,
+                component: AddMenuItemComponent,
+              },
+            ],
+          },
+          {
+            path: outletRoutes.createFoodPackage1.route,
+            component: CreateFoodPackageComponent,
+          },
+          {
+            path: outletRoutes.editFoodPackage1.route,
+            component: CreateFoodPackageComponent,
+          },
+        ],
+      },      
+      //         path: '',
+      //         component: AllOutletsDataTableComponent,
+      //       },
+      //       {
+      //         path: outletRoutes.addOutlet.route,
+      //         component: MainComponent,
+      //         children: [
+      //           {
+      //             path: '',
+      //             component: AddOutletComponent,
+      //           },
+      //           {
+      //             path: outletRoutes.addMenu.route,
+      //             component: CreateMenuComponent,
+      //           },
+      //           {
+      //             path: `${outletRoutes.addMenu.route}/${outletRoutes.addMenuItem.route}`,
+      //             component: AddMenuItemComponent,
+      //           },
+      //         ],
+      //       },
+      //       {
+      //         path: `${outletRoutes.menuList.route}`,
+      //         component: MenuListDataTableComponent,
+      //       },
+      //       {
+      //         path: `${outletRoutes.createFoodPackage.route}`,
+      //         component: CreateFoodPackageComponent,
+      //       },
     ],
   },
 ];

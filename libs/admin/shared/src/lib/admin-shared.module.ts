@@ -98,6 +98,7 @@ import { SocialMediaComponent } from './components/social-media/social-media.com
 import { DiscountFormComponent } from './components/discount-form/discount-form.component';
 import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
 import { CheckboxSelectorComponent } from './components/form-component/checkbox-selector/checkbox-selector.component';
+import { MenuButtonComponent } from './components/menu-button/menu-button.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -203,6 +204,7 @@ import { CheckboxSelectorComponent } from './components/form-component/checkbox-
     DiscountFormComponent,
     TimePickerComponent,
     CheckboxSelectorComponent,
+    MenuButtonComponent,
   ],
 
   exports: [
@@ -299,6 +301,7 @@ import { CheckboxSelectorComponent } from './components/form-component/checkbox-
     DiscountFormComponent,
     TimePickerComponent,
     CheckboxSelectorComponent,
+    MenuButtonComponent,
   ],
 })
 export class AdminSharedModule {}

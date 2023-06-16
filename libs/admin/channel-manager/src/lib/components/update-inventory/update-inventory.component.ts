@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { dates } from '../../constants/data';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
@@ -6,7 +8,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./update-inventory.component.scss'],
 })
 export class UpdateInventoryComponent implements OnInit {
-  constructor() {}
+  useForm: FormGroup;
+  roomTypes: [
+    { label: 'Luxury'; value: 'Luxury' },
+    { label: 'Deluxe'; value: 'Deluxe' }
+  ];
 
-  ngOnInit(): void {}
+  dates = dates;
+
+  constructor(private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.initForm();
+  }
+
+  initForm() {
+    this.useForm = this.fb.group({
+      roomType: [''],
+    });
+  }
 }

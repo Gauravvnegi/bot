@@ -1,0 +1,22 @@
+export const dates = [
+  { day: 'Mon', date: 18 },
+  { day: 'Tue', date: 19 },
+  { day: 'Wed', date: 20 },
+  { day: 'Thu', date: 21 },
+  { day: 'Fri', date: 22 },
+  { day: 'Sat', date: 23 },
+  { day: 'Sun', date: 24 },
+  { day: 'Mon', date: 25 },
+  { day: 'Tue', date: 26 },
+  { day: 'Wed', date: 27 },
+  { day: 'Thu', date: 28 },
+  { day: 'Fri', date: 29 },
+  { day: 'Sat', date: 30 },
+  { day: 'Sun', date: 31 },
+  { day: 'Mon', date: 1 },
+  { day: 'Tue', date: 2 },
+  { day: 'Wed', date: 3 },
+  { day: 'Thu', date: 4 },
+  { day: 'Fri', date: 5 },
+  // Continue adding more dates as needed
+];

@@ -29,7 +29,8 @@ export class AddMenuItemComponent implements OnInit {
   }
 
   constructor(private fb: FormBuilder, private outletService: OutletService) {
-    const { navRoutes, title } = outletRoutes['addMenuItem'];
+    
+    const { navRoutes, title } = outletRoutes['addMenuItem1'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
   }

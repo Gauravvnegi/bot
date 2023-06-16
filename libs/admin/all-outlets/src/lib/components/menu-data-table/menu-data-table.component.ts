@@ -62,7 +62,7 @@ export class MenuDataTableComponent extends BaseDatatableComponent
   }
 
   addMenuItems() {
-    this.router.navigate([outletRoutes.addMenuItem.route], {
+    this.router.navigate([outletRoutes.addMenuItem1.route], {
       relativeTo: this.route,
     });
   }

@@ -307,6 +307,16 @@
   }
 }
 
+@mixin contained-primary-button {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.72px;
+  color: $primary-cta;
+  padding: 7px 11.7px 7.5px 12px;
+  background-color: $primary-text-bg;
+  border-radius: 8px;
+}
+
 @mixin chat-list {
   height: auto;
   padding: 10.5px 15px;

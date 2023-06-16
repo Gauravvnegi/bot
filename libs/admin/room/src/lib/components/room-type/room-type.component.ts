@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -23,6 +23,8 @@ import routes from '../../constant/routes';
 import { Service, Services } from '../../models/amenities.model';
 import { RoomTypeForm } from '../../models/room.model';
 import { RoomService } from '../../services/room.service';
+import { Menu } from 'primeng/menu';
+import { type } from 'os';
 
 @Component({
   selector: 'hospitality-bot-room-type',
@@ -37,11 +39,22 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   useForm: FormGroup;
   ratePlanArray: FormArray;
+
   loading: boolean = false;
+
+  plans: {
+    label: string;
+    value: string;
+    disabled: boolean;
+    command: () => void;
+  }[] = [];
+  planCount = 0;
+
+  selectedIndex = 0;
   roomTypeId: string;
   hotelId: string;
-  defaultImage: string = 'assets/images/image-upload.png';
 
+  defaultImage: string = 'assets/images/image-upload.png';
   pageTitle = 'Add Room Type';
   navRoutes: NavRouteOptions = [
     { label: 'Inventory', link: './' },
@@ -152,7 +165,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
     /* Value changes subscription */
     this.initFormSubscription();
-    this.addNewRatePlan();
+    this.getRatePlans();
   }
 
   /**
@@ -183,6 +196,52 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.getServices(ServicesTypeValue.COMPLIMENTARY);
   }
 
+  getRatePlans() {
+    this.roomService.getRatePlan(this.hotelId).subscribe((res) => {
+      const plansData = res.map((option, index) => ({
+        label: option.label,
+        value: option.value,
+        disabled: false,
+        command: () => this.handlePlan(option.value),
+      }));
+      this.plans = plansData;
+      this.addNewRatePlan();
+    });
+  }
+
+  handlePlan(value, index?) {
+    const targetIndex = index ? index : this.selectedIndex;
+    const currentPlan = this.plans.find((plan) => plan.value === value);
+    if (!currentPlan.disabled) {
+      this.ratePlanArray.at(targetIndex).get('type').patchValue(value);
+    } else {
+      const nextEnabledPlan = this.plans.find(plan => !plan.disabled);
+      if (nextEnabledPlan) {
+        this.ratePlanArray
+          .at(targetIndex)
+          .get('type')
+          .patchValue(nextEnabledPlan.value);
+        nextEnabledPlan.disabled = true;
+      }
+    }
+    this.setDisabled(value);
+  }
+
+  setDisabled(value) {
+    const ratePlans = this.plans.filter((item) => item.value === value);
+    const types = this.ratePlanArray.controls.map(
+      (control) => control.get('type').value
+    );
+
+    if (types.includes(value)) {
+      ratePlans.map((type) => (type.disabled = true));
+    }
+    this.plans
+      .filter((item) => !types.includes(item.value))
+      .map((plan) => (plan.disabled = false));
+  }
+
+
   addNewRatePlan() {
     const data = {
       basePriceCurrency: ['INR'],
@@ -193,10 +252,14 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       bestAvailableRate: ['', [Validators.required, Validators.min(0)]],
       paxAdditionalCostCurrency: ['INR'],
       paxAdditionalCost: ['', [Validators.required, Validators.min(0)]],
+      type: [''],
     };
-
     const formGroup = this.fb.group(data);
     this.ratePlanArray.push(formGroup);
+    
+    const ratePlanArrayIndex = this.ratePlanArray.length - 1;
+    this.handlePlan(this.plans[ratePlanArrayIndex].value, ratePlanArrayIndex);
+    this.planCount++;
   }
 
   /**

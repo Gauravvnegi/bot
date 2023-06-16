@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MenuModule } from 'primeng/menu';
 import { CKEditorModule } from 'ckeditor4-angular';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { ButtonModule } from 'primeng/button/';
@@ -122,6 +123,7 @@ import { CheckboxSelectorComponent } from './components/form-component/checkbox-
     MatTooltipModule,
     DialogModule,
     MatMenuModule,
+    MenuModule,
   ],
   declarations: [
     DatatableComponent,
@@ -278,6 +280,7 @@ import { CheckboxSelectorComponent } from './components/form-component/checkbox-
     AutoCompleteComponent,
     ViewInputComponent,
     MatMenuModule,
+    MenuModule,
     MenuComponent,
     SkeletonDirective,
     SkeletonShapeComponent,

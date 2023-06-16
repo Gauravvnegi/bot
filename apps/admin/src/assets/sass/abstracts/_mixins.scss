@@ -330,6 +330,16 @@
   }
 }
 
+@mixin contained-primary-button {
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.72px;
+  color: $primary-cta;
+  padding: 7px 11.7px 7.5px 12px;
+  background-color: $primary-text-bg;
+  border-radius: 8px;
+}
+
 @mixin form-header {
   padding: 25px $form-padding-x 25px;
   font-family: Poppins;
@@ -340,7 +350,7 @@
 @mixin form-block {
   --row-gap: 40px;
   --column-gap: 6%;
-  
+
   display: flex;
   flex-wrap: wrap;
   align-items: center;

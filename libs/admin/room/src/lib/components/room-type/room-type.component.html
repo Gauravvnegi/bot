@@ -147,9 +147,37 @@
         <p-accordion [multiple]="true">
           <p-accordionTab
             *ngFor="let ratePlanGroup of ratePlanArray.controls; let i = index"
-            [header]="'Rate Plan ' + (i + 1)"
-            [ngStyle]="{ 'border-bottom': ratePlanGroup.expanded ? '1px solid rgba(112, 112, 112, 0.35)' : 'none' }"
+            click
+            [ngStyle]="{
+              'border-bottom': ratePlanGroup.expanded
+                ? '1px solid rgba(112, 112, 112, 0.35)'
+                : 'none'
+            }"
           >
+            <p-header>
+              <div class="header-wrapper">
+                <div
+                  class="header-button"
+                  (click)="menu.toggle($event); selectedIndex=i; $event.stopPropagation()"
+                >
+                  <span> {{ ratePlanGroup.get('type').value }}</span>
+                  <i class="pi pi-angle-down"></i>
+                </div>
+                <p-menu
+                  #menu
+                  [popup]="true"
+                  [model]="plans"
+                  styleClass="custom-menu"
+                  click-stop-propagation
+                >
+                  <ng-template let-option pTemplate="item">
+                    <span [ngClass]="{ 'disabled-option': option.disabled }">{{
+                      option.label
+                    }}</span>
+                  </ng-template>
+                </p-menu>
+              </div>
+            </p-header>
             <div class="form-block" [formGroupName]="i">
               <hospitality-bot-prefix-field
                 class="half-width"
@@ -203,6 +231,7 @@
             label="+ Add Rate Plan"
             (onClick)="addNewRatePlan()"
             variant="text"
+            [disabled]="planCount>=plans.length"
           ></hospitality-bot-button>
         </div>
       </div>

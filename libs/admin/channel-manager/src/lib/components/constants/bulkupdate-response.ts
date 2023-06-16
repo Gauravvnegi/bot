@@ -1,3 +1,4 @@
+import { Option } from '@hospitality-bot/admin/shared';
 import { RoomTypes } from '../../types/bulk-update.types';
 
 export const RoomsData: RoomTypes[] = [
@@ -83,4 +84,23 @@ export const RoomsData: RoomTypes[] = [
       },
     ],
   },
+];
+
+export const updateItems: Option[] = [
+  { label: 'Availability', value: 'AVAILABILITY' },
+  { label: 'Rates', value: 'RATE' },
+];
+export const roomTypes: Option[] = [
+  { label: 'Room Type1', value: 'room1' },
+  { label: 'Room Type2', value: 'room2' },
+];
+
+export const weeks: Option[] = [
+  { label: 'Mon', value: 'Monday' },
+  { label: 'Tue', value: 'Tuesday' },
+  { label: 'Wed', value: 'Wednesday' },
+  { label: 'Thu', value: 'Thursday' },
+  { label: 'Fri', value: 'Friday' },
+  { label: 'Sat', value: 'Saturday' },
+  { label: 'Sun', value: 'Sunday' },
 ];

@@ -1,6 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
-import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
+import { Component, Input } from '@angular/core';
 import { RoomTypes, UpdatedEmitType } from '../../types/bulk-update.types';
 @Component({
   selector: 'hospitality-bot-nested-checkbox-tree',
@@ -9,7 +7,6 @@ import { RoomTypes, UpdatedEmitType } from '../../types/bulk-update.types';
 })
 export class NestedCheckboxTreeComponent {
   @Input() roomsData: RoomTypes[];
-  @Output() objectChanged: EventEmitter<RoomTypes[]> = new EventEmitter();
 
   constructor() {}
 
@@ -47,7 +44,6 @@ export class NestedCheckboxTreeComponent {
         );
         break;
     }
-    this.objectChanged.emit(this.roomsData);
   }
   private changeChildrenStatus(parent) {
     const stack = [parent];

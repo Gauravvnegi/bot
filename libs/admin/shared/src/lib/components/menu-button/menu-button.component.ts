@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MenuButtonComponent implements OnInit {
   @Input() label: string;
-  toggleIcon: boolean = false;
+  @Input() toggleIcon: boolean = false;
 
   constructor() {}
 

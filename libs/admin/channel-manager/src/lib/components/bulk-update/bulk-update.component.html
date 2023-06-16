@@ -1,0 +1,6 @@
+<div [formGroup]="checkbox" style="margin-top: 10px;">
+  <hospitality-bot-nested-checkbox-tree
+    [roomsData]="roomsData"
+    (objectChanged)="onChangeNesting($event)"
+  ></hospitality-bot-nested-checkbox-tree>
+</div>

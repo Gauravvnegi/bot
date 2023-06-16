@@ -36,7 +36,6 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   tabFilterItems = filters;
   selectedTable: TableValue;
   tableName = title;
-  filterChips = invoiceChips;
   cols = cols.invoice;
   isQuickFilters = true;
 
@@ -97,7 +96,6 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
         {
           tableType: this.selectedTable,
           offset: this.first,
@@ -108,20 +106,20 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     return config;
   }
 
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'PAID' },
-    ];
-  }
+  // /**
+  //  * @function getSelectedQuickReplyFilters To return the selected chip list.
+  //  * @returns The selected chips.
+  //  */
+  // getSelectedQuickReplyFilters() {
+  //   const chips = this.filterChips.filter(
+  //     (item) => item.isSelected && item.value !== 'ALL'
+  //   );
+  //   return [
+  //     chips.length !== 1
+  //       ? { status: null }
+  //       : { status: chips[0].value === 'PAID' },
+  //   ];
+  // }
 
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.financeService.selectedTable.next(

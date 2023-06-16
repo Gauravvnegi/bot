@@ -1,1 +1,60 @@
-<h3>Update Inventory</h3>
+<div class="main-wrapper">
+  <hospitality-bot-navigation-header
+    heading="Update Inventory"
+    [routes]="[{ label: 'Update Inventory', link: './' }]"
+    [isStickyTitle]="false"
+    [isBack]="false"
+  >
+    <hospitality-bot-button
+      label="Bulk update"
+      [link]="'/pages/channel-manager/update-inventory/bulk-update'"
+    ></hospitality-bot-button>
+  </hospitality-bot-navigation-header>
+
+  <div class="wrapper" [formGroup]="useForm">
+    <div class="left">
+      <div class="left__main">
+        <div class="main-header main-header__left">
+          <hospitality-bot-multi-select
+            label="Room Type"
+            controlName="roomType"
+            [options]="roomTypes"
+            [settings]="{ showHeader: false }"
+          ></hospitality-bot-multi-select>
+          <div class="dates__wrapper">
+            <div class="dates__selector">
+              Jan 18, 2023
+              <i class="pi pi-calendar"></i>
+            </div>
+          </div>
+        </div>
+        <div class="main-section">
+          <div class="dynamic-section left-main-cell">
+            <span class="text">
+              Dynamic Pricing
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="right__main">
+        <div class="main-header main-header__right">
+          <div class="dates__wrapper dates-header">
+            <div *ngFor="let date of dates" class="dates-cell cell">
+              <div>{{ date.day }}</div>
+              <div>{{ date.date }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="main-section">
+          <div class="dynamic-section cell-wrapper">
+            <div class="cell" *ngFor="let date of dates">
+              <p-inputSwitch></p-inputSwitch>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

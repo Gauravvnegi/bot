@@ -70,16 +70,6 @@ export const cols = {
       sortType: 'string',
     },
     {
-      field: 'paymentMethod',
-      header: 'Payment Methods',
-      sortType: 'string',
-    },
-    {
-      field: 'status',
-      header: 'Status',
-      sortType: 'string',
-    },
-    {
       field: 'bill',
       header: 'Total Bill',
       sortType: 'number',

@@ -1,0 +1,35 @@
+@import 'main';
+.bulkupdate-wrapper {
+  .content-wrapper {
+  }
+}
+
+.row {
+  @include flex-space-between();
+  flex-wrap: wrap;
+  margin: 20px 0;
+  width: 100%;
+}
+.col {
+  width: 45%;
+  @include flex-space-between();
+  flex-wrap: wrap;
+}
+
+.bulk-update {
+  &__left {
+    width: 49%;
+  }
+  &__right {
+    width: 49%;
+  }
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.action-button {
+  @include flex-all-center();
+  margin-top: 20px;
+}

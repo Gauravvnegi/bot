@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Option } from '@hospitality-bot/admin/shared';
 import { dates } from '../../constants/data';
 
 @Component({
@@ -9,9 +10,9 @@ import { dates } from '../../constants/data';
 })
 export class UpdateInventoryComponent implements OnInit {
   useForm: FormGroup;
-  roomTypes: [
-    { label: 'Luxury'; value: 'Luxury' },
-    { label: 'Deluxe'; value: 'Deluxe' }
+  roomTypes: Option[] = [
+    { label: 'Luxury', value: 'Luxury' },
+    { label: 'Deluxe', value: 'Deluxe' },
   ];
 
   dates = dates;

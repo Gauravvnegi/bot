@@ -34,6 +34,30 @@
               Dynamic Pricing
             </span>
           </div>
+          <div class="heading-section left-main-cell">
+            <div class="left-main-cell__left main-text">Luxury</div>
+            <div class="left-main-cell__right ttp">
+              <div class="main-text">
+                Available
+              </div>
+              <div class="main-text">
+                (Occupancy%)
+              </div>
+            </div>
+          </div>
+          <div class="input-content-section left-main-cell">
+            <div class="left-main-cell__left">
+              <div class="room-type">
+                <div>EP</div>
+                <div>(Room Only)</div>
+              </div>
+            </div>
+            <div class="left-main-cell__right ltr">
+              Rates
+              <i class="pi pi-angle-down"></i>
+              <i class="pi pi-link"></i>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -48,9 +72,26 @@
           </div>
         </div>
         <div class="main-section">
-          <div class="dynamic-section cell-wrapper">
-            <div class="cell" *ngFor="let date of dates">
-              <p-inputSwitch></p-inputSwitch>
+          <div class="data-cell-wrapper">
+            <div class="data-cell dynamic-section">
+              <div class="cell" *ngFor="let date of dates">
+                <p-inputSwitch></p-inputSwitch>
+              </div>
+            </div>
+          </div>
+          <div class="data-cell-wrapper">
+            <div class="data-cell heading-section">
+              <div class="cell" *ngFor="let date of dates">
+                <div class="main-text">9</div>
+                <div class="seconday-text">32%</div>
+              </div>
+            </div>
+          </div>
+          <div class="data-cell-wrapper">
+            <div class="data-cell input-content-section">
+              <div class="cell" *ngFor="let date of dates">
+                <hospitality-bot-input></hospitality-bot-input>
+              </div>
             </div>
           </div>
         </div>

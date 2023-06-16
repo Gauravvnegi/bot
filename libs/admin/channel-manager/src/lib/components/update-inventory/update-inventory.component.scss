@@ -8,6 +8,12 @@ $border-color: rgba(112, 112, 112, 0.35);
   align-items: center;
 }
 
+@mixin item-center-with-space {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .main-wrapper {
 }
 
@@ -59,6 +65,14 @@ $border-color: rgba(112, 112, 112, 0.35);
   margin-top: 10px;
   display: flex;
   flex-direction: column;
+
+  .p-bg {
+    background-color: #e8e2ff;
+  }
+
+  .w-bg {
+    background-color: white;
+  }
 }
 
 .dynamic-section {
@@ -77,12 +91,6 @@ $border-color: rgba(112, 112, 112, 0.35);
   height: 81px;
   color: $title;
 
-  &.left-main-cell {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
   .main-text {
     @include normal-sm-text;
   }
@@ -95,10 +103,8 @@ $border-color: rgba(112, 112, 112, 0.35);
   height: 90px;
   background-color: white;
 
-  &.left-main-cell {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  & .left-main-cell__left {
+    @include item-center-with-space;
   }
 
   .cell {
@@ -108,21 +114,18 @@ $border-color: rgba(112, 112, 112, 0.35);
 
 // ------------ Dates Section -------
 
-.dates {
-  &__wrapper {
+:host ::ng-deep .date-wrapper {
+  height: 66px;
+  .p-calendar {
     height: 66px;
-  }
-
-  &__selector {
-    height: 100%;
-    width: 150px;
-    background-color: white;
-    border: 1px solid $border-color;
-    padding: 20px 15px;
-
-    .pi-calendar {
-      color: $border-color;
+    .p-inputtext {
+      text-align: center;
+      text-indent: -15px;
     }
+  }
+  .icon {
+    top: 1.5em;
+    right: 2em;
   }
 }
 
@@ -139,13 +142,16 @@ $border-color: rgba(112, 112, 112, 0.35);
 .left-main-cell {
   width: 100%;
   padding-left: 4%;
+  @include item-center-with-space;
 
   &__left {
+    flex-grow: 1;
   }
 
   &__right {
     width: 150px;
     @include item-center;
+    height: 100%;
   }
 
   .ttp {
@@ -208,5 +214,17 @@ $border-color: rgba(112, 112, 112, 0.35);
     width: 15px;
     margin-top: -7.5px;
     left: 2.5px;
+  }
+}
+
+//------ Channels -----
+.channel {
+  display: flex;
+  gap: 5px;
+  color: #5f38f9;
+  width: 100%;
+
+  &-btn {
+    min-width: 140px;
   }
 }

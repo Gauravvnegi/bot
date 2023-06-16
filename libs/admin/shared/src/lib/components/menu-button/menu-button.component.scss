@@ -1,0 +1,9 @@
+@import 'main';
+
+.button{
+    @include contained-primary-button;
+    display: flex;
+    align-items: center;
+    padding: 14px;
+    font-size: 14px;
+}

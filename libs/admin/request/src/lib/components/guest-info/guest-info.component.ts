@@ -105,13 +105,19 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   loadGuestInfo(): void {
+    if (!this.guestId) {
+      this.guestData = undefined;
+      this.guestReservations = undefined;
+      return;
+    }
+
     this.$subscription.add(
       this.requestService.getGuestById(this.guestId).subscribe(
         (response) => {
           this.guestData = new Guest().deserialize(response);
           this.loadGuestReservations();
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.closeDetails();
         }
       )
@@ -129,7 +135,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
 
           this.isGuestReservationFetched = true;
         },
-        ({ error }) => {  }
+        ({ error }) => {}
       )
     );
   }
@@ -141,10 +147,17 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   loadGuestRequests() {
+    if (!this.guestId) {
+      this.requestList = [];
+      return;
+    }
     this.$subscription.add(
-      this.requestService.getGuestRequestData(this.guestId).subscribe(
-        (response) => (this.requestList = new Requests().deserialize(response))
-      )
+      this.requestService
+        .getGuestRequestData(this.guestId)
+        .subscribe(
+          (response) =>
+            (this.requestList = new Requests().deserialize(response))
+        )
     );
   }
 

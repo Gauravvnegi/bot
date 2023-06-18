@@ -14,7 +14,7 @@
           class="form-elements"
           placeholder="Status"
           formControlName="status"
-          [disabled]="
+          [disabledN]="
             requestFG?.get('status').value === 'Closed' ||
             requestFG?.get('status').value === 'Timeout'
           "
@@ -78,10 +78,10 @@
           </td>
           <td>-</td>
           <td>
-            <a href="tel:{{data.guestDetails.getPhoneNumbers()}}">
-            <div>
-              {{ data.guestDetails.getPhoneNumbers() }}
-            </div>
+            <a href="tel:{{ data.guestDetails.getPhoneNumbers() }}">
+              <div>
+                {{ data.guestDetails.getPhoneNumbers() }}
+              </div>
             </a>
           </td>
         </tr>

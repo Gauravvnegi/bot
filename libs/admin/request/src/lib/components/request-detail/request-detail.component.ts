@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { InhouseData } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
+import { CMSUpdateJobData } from '../../types/request.type';
 
 @Component({
   selector: 'hospitality-bot-request-detail',
@@ -106,10 +107,11 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
    */
 
   handleStatusChange(event) {
-    const requestData = {
+    const requestData: CMSUpdateJobData = {
       jobID: this.data.jobID,
       roomNo: this.data.rooms[0].roomNumber,
       lastName: this.data.guestDetails.primaryGuest.lastName,
+      ...(event.value === 'Immediate' ? { action: 'TODO' } : {}),
     };
 
     const config = {

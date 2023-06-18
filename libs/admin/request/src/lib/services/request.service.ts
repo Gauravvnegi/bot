@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { RequestData } from '../../../../notification/src/lib/data-models/request.model';
+import { CMSUpdateJobData } from '../types/request.type';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
@@ -101,11 +102,12 @@ export class RequestService extends ApiService {
     );
   }
 
-  closeRequest(config, data) {
-    return this.post(
-      `/api/v1/reservation/cms-close-job${config.queryObj}`,
-      data
-    );
+  /**
+   * Updates status of job to to-do or close
+   */
+  closeRequest(config, data: CMSUpdateJobData) {
+    const url = data.action === 'TODO' ? 'cms-update-job' : 'cms-close-job';
+    return this.put(`/api/v1/reservation/${url}${config.queryObj}`, data);
   }
 
   searchBooking(config) {

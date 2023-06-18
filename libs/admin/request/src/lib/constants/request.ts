@@ -5,7 +5,8 @@ export const request = {
     { label: 'ASAP', value: 'ASAP' },
   ],
   status: [
-    { label: 'To-Do', value: 'Immediate' },
+    { label: 'To-Do', value: 'TODO' },
+    // { label: 'To-Do', value: 'Immediate' },
     { label: 'Timeout', value: 'Timeout' },
     { label: 'Closed', value: 'Closed' },
   ],

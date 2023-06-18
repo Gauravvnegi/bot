@@ -107,12 +107,12 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
    */
 
   handleStatusChange(event) {
-    const isTodo = event.value === 'Immediate';
+    const isTodo = event.value === 'TODO';
     const requestData: CMSUpdateJobData = {
       jobID: this.data.jobID,
       roomNo: this.data.rooms[0].roomNumber,
       lastName: this.data.guestDetails.primaryGuest.lastName,
-      ...(isTodo ? { action: 'TODO' } : {}),
+      ...(isTodo ? { action: event.value } : {}),
     };
 
     const config = {
@@ -125,7 +125,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this._requestService.closeRequest(config, requestData).subscribe(
-        (response) =>
+        (response) => {
           this.snackbarService
             .openSnackBarWithTranslate(
               {
@@ -137,8 +137,9 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
               '',
               { panelClass: 'success' }
             )
-            .subscribe(),
-
+            .subscribe();
+          this._requestService.refreshData.next(true);
+        },
         ({ error }) => {
           this.requestFG.patchValue({ status: this.data.action });
         }

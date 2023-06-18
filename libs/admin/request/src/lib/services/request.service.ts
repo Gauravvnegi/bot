@@ -106,8 +106,18 @@ export class RequestService extends ApiService {
    * Updates status of job to to-do or close
    */
   closeRequest(config, data: CMSUpdateJobData) {
-    const url = data.action === 'TODO' ? 'cms-update-job' : 'cms-close-job';
-    return this.put(`/api/v1/reservation/${url}${config.queryObj}`, data);
+    const isToDo = data.action === 'TODO';
+    if (isToDo) {
+      return this.put(
+        `/api/v1/reservation/cms-update-job${config.queryObj}`,
+        data
+      );
+    }
+
+    return this.post(
+      `/api/v1/reservation/cms-close-job${config.queryObj}`,
+      data
+    );
   }
 
   searchBooking(config) {

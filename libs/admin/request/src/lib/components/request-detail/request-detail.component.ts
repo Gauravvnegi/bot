@@ -107,11 +107,12 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
    */
 
   handleStatusChange(event) {
+    const isTodo = event.value === 'Immediate';
     const requestData: CMSUpdateJobData = {
       jobID: this.data.jobID,
       roomNo: this.data.rooms[0].roomNumber,
       lastName: this.data.guestDetails.primaryGuest.lastName,
-      ...(event.value === 'Immediate' ? { action: 'TODO' } : {}),
+      ...(isTodo ? { action: 'TODO' } : {}),
     };
 
     const config = {
@@ -129,7 +130,9 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.SUCCESS.JOB_CLOSED',
-                priorityMessage: `Job: ${this.data.jobID} closed.`,
+                priorityMessage: `Job: ${this.data.jobID} ${
+                  isTodo ? 'in to-do' : 'closed'
+                }.`,
               },
               '',
               { panelClass: 'success' }

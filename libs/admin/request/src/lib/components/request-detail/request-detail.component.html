@@ -14,7 +14,7 @@
           class="form-elements"
           placeholder="Status"
           formControlName="status"
-          [disabledN]="
+          [disabled]="
             requestFG?.get('status').value === 'Closed' ||
             requestFG?.get('status').value === 'Timeout'
           "

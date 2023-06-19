@@ -1,0 +1,6 @@
+@import 'main';
+:host ::ng-deep {
+  .panel-tree__wrapper {
+    background-color: white;
+  }
+}

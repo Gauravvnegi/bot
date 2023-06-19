@@ -59,24 +59,14 @@ export const cols = {
       header: 'Booking No./ Order No.',
       sortType: 'number',
     },
-    {
-      field: 'rooms',
-      header: 'Rooms',
-      sortType: 'number',
-    },
+    // {
+    //   field: 'rooms',
+    //   header: 'Rooms',
+    //   sortType: 'number',
+    // },
     {
       field: 'date',
       header: 'Invoice Date',
-      sortType: 'string',
-    },
-    {
-      field: 'paymentMethod',
-      header: 'Payment Methods',
-      sortType: 'string',
-    },
-    {
-      field: 'status',
-      header: 'Status',
       sortType: 'string',
     },
     {
@@ -110,18 +100,18 @@ export const cols = {
     {
       field: 'remarks',
       header: 'Remarks',
-      sortType: 'number',
+      sortType: 'string',
     },
     {
       field: 'credit',
       header: 'Credit/Debit',
-      sortType: 'string',
-    },
-    {
-      field: 'balanceDue',
-      header: 'Balance Due',
       sortType: 'number',
     },
+    // {
+    //   field: 'balanceDue',
+    //   header: 'Balance Due',
+    //   sortType: 'number',
+    // },
   ],
 };
 
@@ -175,7 +165,7 @@ export const records = [
 
 export const title = 'Invoice History';
 
-export const transactionChips: Chip<'ALL' | 'PAID' | 'UNPAID'>[] = [
+export const transactionChips: Chip<'ALL' | 'SUCCESS' | 'FAILURE'>[] = [
   {
     label: 'All',
     value: 'ALL',
@@ -185,21 +175,21 @@ export const transactionChips: Chip<'ALL' | 'PAID' | 'UNPAID'>[] = [
   },
   {
     label: 'Paid',
-    value: 'PAID',
+    value: 'SUCCESS',
     total: 0,
     isSelected: false,
     type: 'active',
   },
   {
     label: 'Unpaid',
-    value: 'UNPAID',
+    value: 'FAILURE',
     total: 0,
     isSelected: false,
     type: 'failed',
   },
 ];
 
-export const invoiceChips: Chip<'ALL' | 'PAID' | 'UNPAID'>[] = [
+export const invoiceChips: Chip<'ALL' | 'SUCCESS' | 'FAILURE'>[] = [
   {
     label: 'All',
     value: 'ALL',
@@ -209,14 +199,14 @@ export const invoiceChips: Chip<'ALL' | 'PAID' | 'UNPAID'>[] = [
   },
   {
     label: 'Paid',
-    value: 'PAID',
+    value: 'SUCCESS',
     total: 0,
     isSelected: false,
     type: 'active',
   },
   {
     label: 'Unpaid',
-    value: 'UNPAID',
+    value: 'FAILURE',
     total: 0,
     isSelected: false,
     type: 'failed',

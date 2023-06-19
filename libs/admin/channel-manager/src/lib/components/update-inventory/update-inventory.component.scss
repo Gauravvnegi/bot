@@ -1,0 +1,230 @@
+@import 'main';
+
+$border-color: rgba(112, 112, 112, 0.35);
+
+@mixin item-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin item-center-with-space {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-wrapper {
+}
+
+.wrapper {
+  display: flex;
+  min-height: 80vh;
+  width: 100%;
+}
+
+.left {
+  min-width: 200px;
+  flex-basis: 30%;
+
+  &__main {
+    width: 100%;
+  }
+}
+
+.right {
+  flex-basis: 70%;
+  // overflow: auto;
+  overflow: hidden; /* Hides the scrollbar */
+
+  &__main {
+    overflow-x: auto; /* Enables horizontal scrolling within the container */
+    width: 100%;
+    scrollbar-width: none; /* Hide the default scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide the default scrollbar for IE and Edge */
+    &::-webkit-scrollbar {
+      display: none; /* Hide the default scrollbar for Chrome, Safari, and Opera */
+    }
+  }
+}
+
+.main-header {
+  height: 90px;
+  display: flex;
+  align-items: flex-end;
+  color: $title;
+
+  &__left {
+    justify-content: space-between;
+  }
+}
+
+// ------- Section Styling -------
+
+.main-section {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+
+  .p-bg {
+    background-color: #e8e2ff;
+  }
+
+  .w-bg {
+    background-color: white;
+  }
+}
+
+.dynamic-section {
+  background-color: #4b4d54;
+  height: 50px;
+
+  .text {
+    line-height: 50px;
+    color: white;
+    @include normal-sm-text;
+  }
+}
+
+.heading-section {
+  background-color: #f1f2f7;
+  height: 81px;
+  color: $title;
+
+  .main-text {
+    @include normal-sm-text;
+  }
+  .secondary-text {
+    @include light-sm-text;
+  }
+}
+
+.input-content-section {
+  height: 90px;
+  background-color: white;
+
+  & .left-main-cell__left {
+    @include item-center-with-space;
+  }
+
+  .cell {
+    padding: 0 2px;
+  }
+}
+
+// ------------ Dates Section -------
+
+:host ::ng-deep .date-wrapper {
+  height: 66px;
+  .p-calendar {
+    height: 66px;
+    .p-inputtext {
+      text-align: center;
+      text-indent: -15px;
+    }
+  }
+  .icon {
+    top: 1.5em;
+    right: 2em;
+  }
+}
+
+.dates-header {
+  display: flex;
+}
+
+.dates-cell {
+  background-color: white;
+  border: 1px solid $border-color;
+  flex-direction: column;
+}
+
+.left-main-cell {
+  width: 100%;
+  padding-left: 4%;
+  @include item-center-with-space;
+
+  &__left {
+    flex-grow: 1;
+  }
+
+  &__right {
+    width: 150px;
+    @include item-center;
+    height: 100%;
+  }
+
+  .ttp {
+    flex-direction: column;
+  }
+
+  .ltr {
+    flex-direction: row;
+  }
+}
+
+//------------- Data Cell Styling -------
+
+.data-cell-wrapper {
+  display: flex;
+}
+
+.data-cell {
+  display: flex;
+  align-items: center;
+}
+
+.cell {
+  width: 65px;
+  min-width: 65px;
+  max-width: 65px;
+
+  // cell to be centered align
+  @include item-center;
+  flex-direction: column;
+}
+
+//-------------------------------
+
+// switch styling
+:host ::ng-deep .p-inputswitch {
+  &:not(.p-disabled):hover {
+    .p-inputswitch-slider {
+      background-color: #b8b8b8;
+    }
+  }
+  &.p-inputswitch-checked {
+    .p-inputswitch-slider {
+      background-color: $success-state;
+    }
+    &:not(.p-disabled):hover {
+      .p-inputswitch-slider {
+        background-color: $success-state;
+      }
+    }
+  }
+  .p-inputswitch-slider {
+    height: 18px;
+    background-color: #b8b8b8;
+  }
+
+  .p-inputswitch-slider:before {
+    background: white !important;
+    height: 15px;
+    width: 15px;
+    margin-top: -7.5px;
+    left: 2.5px;
+  }
+}
+
+//------ Channels -----
+.channel {
+  display: flex;
+  gap: 5px;
+  color: #5f38f9;
+  width: 100%;
+
+  &-btn {
+    min-width: 140px;
+  }
+}

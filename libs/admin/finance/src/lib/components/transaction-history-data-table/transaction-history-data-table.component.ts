@@ -32,7 +32,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 })
 export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   implements OnInit {
-  tabFilterItems = filters;
+  // tabFilterItems = filters;
   selectedTable: TableValue;
   tableName = 'Transaction History';
   filterChips = transactionChips;
@@ -57,18 +57,18 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.listenToTableChange();
+    // this.listenToTableChange();
   }
 
-  /**
-   * @function listenToTableChange  To listen to table changes
-   */
-  listenToTableChange() {
-    this.financeService.selectedTable.subscribe((value) => {
-      this.selectedTable = value;
-      this.initTableValue();
-    });
-  }
+  // /**
+  //  * @function listenToTableChange  To listen to table changes
+  //  */
+  // listenToTableChange() {
+  //   this.financeService.selectedTable.subscribe((value) => {
+  //     this.selectedTable = value;
+  //     this.initTableValue();
+  //   });
+  // }
 
   loadData(event: LazyLoadEvent): void {
     this.initTableValue();

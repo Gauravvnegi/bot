@@ -1,23 +1,22 @@
+import { NumberValueAccessor } from "@angular/forms";
+import { InvoiceHistoryResponse } from "../types/history";
+import { DateService } from "@hospitality-bot/shared/utils";
+
 export class InvoiceHistory {
   invoiceId: string;
   bookingNumber: string;
-  rooms: number;
-  invoiceDate: string;
-  paymentMethods: string;
-  status: string;
+  invoiceDate: number;
   totalBill: number;
 
-  deserailize(input) {
-    this.invoiceId = input.invoiceId;
+  deserailize(input: InvoiceHistoryResponse) {
+    this.invoiceId = input.invoiceCode;
     this.bookingNumber = input.bookingNumber;
-    this.rooms = input.rooms;
     this.invoiceDate = input.invoiceDate;
-    this.paymentMethods = input.paymentMethods;
-    this.status = input.status;
-    this.totalBill = input.totalBill;
+    this.totalBill = input.totalAmount; 
     return this;
   }
 }
+
 
 export class TransactionHistory {
   transactionId: string;

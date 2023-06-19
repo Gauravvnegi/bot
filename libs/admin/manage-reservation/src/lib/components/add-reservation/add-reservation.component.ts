@@ -71,7 +71,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   loadingGuests = false;
   viewAmountToPay = false;
   guestsOffSet = 0;
-
+  deductedAmount = 0;
   startMinDate = new Date();
   endMinDate = new Date();
 
@@ -252,17 +252,15 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   }
 
   registerPaymentRuleChange() {
-    let deductedAmount = this.userForm.get('paymentRule.deductedAmount');
-    let previousAmountToPay = this.userForm.get('paymentRule.amountToPay')
-      .value;
+    const deductedAmountControl = this.userForm.get(
+      'paymentRule.deductedAmount'
+    );
+    const amountToPayControl = this.userForm.get('paymentRule.amountToPay');
 
-    this.userForm
-      .get('paymentRule.amountToPay')
-      .valueChanges.subscribe((res) => {
-        let difference = res - previousAmountToPay;
-        deductedAmount.setValue(deductedAmount.value - difference);
-        previousAmountToPay = res;
-      });
+    amountToPayControl.valueChanges.subscribe((res) => {
+      const newDeductedAmount = this.deductedAmount - +res;
+      deductedAmountControl.setValue(newDeductedAmount);
+    });
   }
 
   getInitialData(): void {
@@ -426,6 +424,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
             this.userForm
               .get('paymentRule.deductedAmount')
               .patchValue(this.summaryData?.totalAmount);
+            this.deductedAmount = this.summaryData?.totalAmount;
           },
           (error) => {}
         )

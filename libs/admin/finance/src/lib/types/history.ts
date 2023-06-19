@@ -20,6 +20,19 @@ export type TransactionHistoryResponse = {
     remarks: string;    
 }
 
+export type TransactionHistoryListResponse = {
+    records: TransactionHistoryResponse[];
+    total: number;
+    entityStateCounts: EntityStateCountsResponse;
+    entityTypeCounts: any;
+}
+
+export type EntityStateCountsResponse = {
+    All: number;
+    Paid: number;
+    Unpaid: number;
+};
+
 // {
 //     "total": 299,
 //     "entityTypeCounts": {},

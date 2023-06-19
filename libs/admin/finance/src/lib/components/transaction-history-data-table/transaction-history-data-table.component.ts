@@ -19,8 +19,12 @@ import {
 import { LazyLoadEvent } from 'primeng/api';
 import * as FileSaver from 'file-saver';
 import { FinanceService } from '../../services/finance.service';
-import { TransactionHistory } from '../../models/history.model';
+import {
+  TransactionHistory,
+  TransactionHistoryList,
+} from '../../models/history.model';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { TransactionHistoryListResponse } from '../../types/history';
 
 @Component({
   selector: 'hospitality-bot-transaction-history-data-table',
@@ -57,6 +61,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
+    this.initTableValue();
     // this.listenToTableChange();
   }
 
@@ -79,11 +84,10 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
 
     this.financeService.getTransactionHistory(this.hotelId).subscribe(
       (res) => {
-        const transactionHistory = new TransactionHistory().deserialize(res);
-        this.values = res;
-        this.updateTabFilterCount(res.entityTypeCounts, res.total);
+        this.values = new TransactionHistoryList().deserialize(res).records;
         this.updateQuickReplyFilterCount(res.entityStateCounts);
         this.updateTotalRecords();
+        debugger;
       },
       () => {
         this.values = [];
@@ -126,7 +130,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
     return [
       chips.length !== 1
         ? { status: null }
-        : { status: chips[0].value === 'PAID' },
+        : { status: chips[0].value === 'SUCCESS' },
     ];
   }
 

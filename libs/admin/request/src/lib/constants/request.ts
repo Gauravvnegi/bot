@@ -20,9 +20,17 @@ export const request = {
       chips: [],
     },
     {
-      label: 'To-Do',
+      label: 'Pending',
       content: '',
       value: 'Pending',
+      disabled: false,
+      total: 0,
+      chips: [],
+    },
+    {
+      label: 'To-Do',
+      content: '',
+      value: 'TODO',
       disabled: false,
       total: 0,
       chips: [],

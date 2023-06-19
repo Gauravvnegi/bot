@@ -107,7 +107,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
    */
 
   handleStatusChange(event) {
-    const isTodo = event.value === 'TODO';
+    const isTodo = event.value === 'Todo';
     const requestData: CMSUpdateJobData = {
       jobID: this.data.jobID,
       roomNo: this.data.rooms[0].roomNumber,
@@ -131,7 +131,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
               {
                 translateKey: 'messages.SUCCESS.JOB_CLOSED',
                 priorityMessage: `Job: ${this.data.jobID} ${
-                  isTodo ? 'in to-do' : 'closed'
+                  isTodo ? 'in Todo' : 'closed'
                 }.`,
               },
               '',

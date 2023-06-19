@@ -6,5 +6,5 @@ export type CMSUpdateJobData = {
   jobID: string;
   roomNo: string | number;
   lastName: string;
-  action?: 'TODO';
+  action?: 'Todo';
 };

@@ -59,11 +59,11 @@ export const cols = {
       header: 'Booking No./ Order No.',
       sortType: 'number',
     },
-    {
-      field: 'rooms',
-      header: 'Rooms',
-      sortType: 'number',
-    },
+    // {
+    //   field: 'rooms',
+    //   header: 'Rooms',
+    //   sortType: 'number',
+    // },
     {
       field: 'date',
       header: 'Invoice Date',

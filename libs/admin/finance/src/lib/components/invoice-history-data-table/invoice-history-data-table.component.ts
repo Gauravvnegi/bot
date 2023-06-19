@@ -20,8 +20,8 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FinanceService } from '../../services/finance.service';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { InvoiceHistory } from '../../models/history.model';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { LazyLoadEvent } from 'primeng/api';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 @Component({
   selector: 'hospitality-bot-invoice-history-data-table',
@@ -50,25 +50,27 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
     private router: Router,
-    private financeService: FinanceService
+    private financeService: FinanceService,
+    private dateService: DateService,
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.listenToTableChange();
+    this.initTableValue();
+    // this.listenToTableChange();
   }
 
-  /**
-   * @function listenToTableChange  To listen to table changes
-   */
-  listenToTableChange() {
-    this.financeService.selectedTable.subscribe((value) => {
-      this.selectedTable = value;
-      this.initTableValue();
-    });
-  }
+  // /**
+  //  * @function listenToTableChange  To listen to table changes
+  //  */
+  // listenToTableChange() {
+  //   this.financeService.selectedTable.subscribe((value) => {
+  //     this.selectedTable = value;
+  //     this.initTableValue();
+  //   });
+  // }
 
   loadData(event: LazyLoadEvent): void {
     this.initTableValue();
@@ -81,9 +83,9 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
       (res) => {
         const invoiceHistory = new InvoiceHistory().deserailize(res);
         this.values = res;
-        this.updateTabFilterCount(res.entityTypeCounts, res.total);
-        this.updateQuickReplyFilterCount(res.entityStateCounts);
-        this.updateTotalRecords();
+        // this.updateTabFilterCount(res.entityTypeCounts, res.total);
+        // this.updateQuickReplyFilterCount(res.entityStateCounts);
+        // this.updateTotalRecords();
       },
       () => {
         this.values = [];
@@ -121,13 +123,13 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   //   ];
   // }
 
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.financeService.selectedTable.next(
-      this.tabFilterItems[event.index].value
-    );
-    this.tabFilterIdx = event.index;
-    this.initTableValue();
-  }
+  // onSelectedTabFilterChange(event: MatTabChangeEvent): void {
+  //   this.financeService.selectedTable.next(
+  //     this.tabFilterItems[event.index].value
+  //   );
+  //   this.tabFilterIdx = event.index;
+  //   this.initTableValue();
+  // }
 
   /**
    * @function handleError to show the error

@@ -41,11 +41,11 @@
   (onFilter)="onDataFilter()"
 >
   <!-- *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable" -->
-  <ng-template pTemplate="caption">
+  <!-- <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
       <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
     </div>
-  </ng-template>
+  </ng-template> -->
 
   <!-- *******************************EMPTY TABLE VIEW******************************* -->
   <ng-template pTemplate="emptymessage">
@@ -84,23 +84,23 @@
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.rooms; else emptyCell">
+        <div class="cell-content" *ngIf="rowData.bookingNumber; else emptyCell">
           <div class="primary-text">
             {{ rowData.bookingNumber }}
           </div>
         </div>
       </td>
-      <td>
+      <!-- <td>
         <div class="cell-content" *ngIf="rowData.rooms; else emptyCell">
           <div class="primary-text">
             {{ rowData.rooms }}
           </div>
         </div>
-      </td>
+      </td> -->
       <td>
         <div class="cell-content" *ngIf="rowData.invoiceDate; else emptyCell">
           <div class="primary-text">
-            {{ rowData.invoiceDate }}
+            {{ rowData.invoiceDate | date:'dd/MM/yyyy' }}
           </div>
         </div>
       </td>
@@ -127,9 +127,9 @@
         </div>
       </td> -->
       <td>
-        <div class="center-align" *ngIf="rowData.totalBill; else emptyCell">
+        <div class="cell-content" *ngIf="rowData.totalAmount; else emptyCell">
           <div class="primary-text">
-            {{ rowData.totalBill }}
+            {{ rowData.totalAmount }}
           </div>
         </div>
       </td>
@@ -165,11 +165,11 @@
   </hospitality-bot-empty-table>
 </ng-template>
 
-<ng-template #tabFilter>
+<!-- <ng-template #tabFilter>
   <hospitality-bot-tab-group
     [selectedIndex]="tabFilterIdx"
     *ngIf="isTabFilters"
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
-</ng-template>
+</ng-template> -->

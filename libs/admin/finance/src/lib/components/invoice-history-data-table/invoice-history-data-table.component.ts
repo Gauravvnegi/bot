@@ -74,7 +74,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
 
   initTableValue() {
     this.loading = true;
-    this.financeService.getInvoiceHistory(this.getQueryConfig()).subscribe(
+    this.financeService.getInvoiceHistory().subscribe(
       (res) => {
         const invoiceHistory = new InvoiceHistory().deserailize(res);
         this.values = res;

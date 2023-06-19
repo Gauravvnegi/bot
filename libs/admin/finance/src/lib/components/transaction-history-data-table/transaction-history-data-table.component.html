@@ -127,7 +127,7 @@
       <td>
         <div class="cell-content" *ngIf="rowData.credit; else emptyCell">
           <div class="primary-text">
-            {{ rowData.credit }}
+            {{ rowData.credit | currency: 'INR' }}
           </div>
         </div>
       </td>

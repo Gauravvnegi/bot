@@ -18,15 +18,31 @@ export const adminManageReservationRoutes: Route[] = [
       },
       {
         path: manageReservationRoutes.addReservation.route,
-        component: AddReservationComponent,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            component: AddReservationComponent,
+          },
+          {
+            path: manageReservationRoutes.addGuest1.route,
+            component: AddGuestComponent,
+          }
+        ],
       },
       {
         path: `${manageReservationRoutes.editReservation.route}/:id`,
-        component: AddReservationComponent,
-      },
-      {
-        path: `${manageReservationRoutes.addReservation.route}/${manageReservationRoutes.addGuest.route}`,
-        component: AddGuestComponent,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            component: AddReservationComponent,
+          },
+          {
+            path: manageReservationRoutes.addGuest1.route,
+            component: AddGuestComponent,
+          },
+        ],
       },
     ],
   },

@@ -97,7 +97,11 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
     this.initForm();
-    const { navRoutes, title } = manageReservationRoutes['addReservation'];
+    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
+
+    const { navRoutes, title } = manageReservationRoutes[
+      this.reservationId ? 'editReservation' : 'addReservation'
+    ];
     this.routes = navRoutes;
     this.pageTitle = title;
   }
@@ -284,32 +288,32 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   }
 
   getReservationId(): void {
-    this.$subscription.add(
-      this.activatedRoute.params.subscribe((params) => {
-        if (params['id']) {
-          this.reservationId = params['id'];
-          this.pageTitle = 'Edit Reservation';
-          this.routes[2].label = 'Edit Reservation';
-          this.reservationTypes = [
-            { label: 'Draft', value: 'DRAFT' },
-            { label: 'Confirmed', value: 'CONFIRMED' },
-            { label: 'Cancelled', value: 'CANCELED' },
-          ];
-          this.getReservationDetails();
-        } else {
-          this.reservationTypes = [
-            { label: 'Draft', value: 'DRAFT' },
-            { label: 'Confirmed', value: 'CONFIRMED' },
-          ];
-          this.userForm.valueChanges.subscribe((_) => {
-            if (!this.formValueChanges) {
-              this.formValueChanges = true;
-              this.listenForFormChanges();
-            }
-          });
+    // this.$subscription.add(
+    // this.activatedRoute.params.subscribe((params) => {
+    if (this.reservationId) {
+      // this.reservationId = params['id'];
+      // this.pageTitle = 'Edit Reservation';
+      // this.routes[2].label = 'Edit Reservation';
+      this.reservationTypes = [
+        { label: 'Draft', value: 'DRAFT' },
+        { label: 'Confirmed', value: 'CONFIRMED' },
+        { label: 'Cancelled', value: 'CANCELED' },
+      ];
+      this.getReservationDetails();
+    } else {
+      this.reservationTypes = [
+        { label: 'Draft', value: 'DRAFT' },
+        { label: 'Confirmed', value: 'CONFIRMED' },
+      ];
+      this.userForm.valueChanges.subscribe((_) => {
+        if (!this.formValueChanges) {
+          this.formValueChanges = true;
+          this.listenForFormChanges();
         }
-      })
-    );
+      });
+    }
+    // })
+    // );
   }
 
   getReservationDetails(): void {
@@ -321,7 +325,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
             const data = new ReservationFormData().deserialize(response);
             this.userForm.patchValue(data);
             this.summaryData = new SummaryData().deserialize(response);
-            this.setFormDisability(data.reservationInformation);
+            // this.setFormDisability(data.reservationInformation);
             if (data.offerId)
               this.getOfferByRoomType(
                 this.userForm.get('roomInformation.roomTypeId').value
@@ -453,9 +457,15 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   }
 
   createGuest() {
-    this.router.navigateByUrl(
-      'pages/efrontdesk/manage-reservation/add-reservation/add-guest'
-    );
+    if (this.reservationId) {
+      this.router.navigateByUrl(
+        `pages/efrontdesk/manage-reservation/edit-reservation/${this.reservationId}/add-guest`
+      );
+    } else {
+      this.router.navigateByUrl(
+        'pages/efrontdesk/manage-reservation/add-reservation/add-guest'
+      );
+    }
   }
 
   getGuests() {

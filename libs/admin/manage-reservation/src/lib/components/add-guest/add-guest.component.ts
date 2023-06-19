@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { manageReservationRoutes } from '../../constants/routes';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { NavRouteOptions, Option, Regex } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { CompanyList } from 'libs/admin/agent/src/lib/models/agent.model';
-import { FormService } from 'libs/admin/members/src/lib/services/form.service';
-import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { Subscription } from 'rxjs';
-import { GuestType } from '../../types/forms.types';
 
 @Component({
   selector: 'hospitality-bot-add-guest',
@@ -20,6 +20,8 @@ import { GuestType } from '../../types/forms.types';
 export class AddGuestComponent implements OnInit {
   hotelId: string;
   agentId: string;
+  reservationId: string;
+
   pageTitle: string;
   navRoutes: NavRouteOptions;
   genders: Option[] = [
@@ -34,7 +36,7 @@ export class AddGuestComponent implements OnInit {
   routes = manageReservationRoutes;
   loading = false;
   subscription$ = new Subscription();
-
+  routeSubscription$ = new Subscription();
   /* companies options variable */
   companyOffset = 0;
   loadingCompany = false;
@@ -44,16 +46,41 @@ export class AddGuestComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private manageReservationService: ManageReservationService,
     private globalService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private route: ActivatedRoute,
     private router: Router
   ) {
-    const { navRoutes, title } = manageReservationRoutes['addGuest'];
-    this.navRoutes = navRoutes;
-    this.pageTitle = title;
-    console.log("Nav Routes ->>>>>>> ", navRoutes)
+    this.routeSubscription$ = this.router.events.subscribe(
+      ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
+        this.reservationId = snapshot?.params['id'];
+        const { navRoutes, title } = manageReservationRoutes[
+          this.reservationId ? 'addGuest2' : 'addGuest1'
+        ];
+        this.navRoutes = this.reservationId
+          ? this.updateNavRoutesWithId(this.reservationId)
+          : navRoutes;
+        this.pageTitle = title;
+        if(this.reservationId){
+          this.routeSubscription$.unsubscribe();
+        }
+      }
+    );
+  }
+
+
+  updateNavRoutesWithId(id: string) {
+    const navRoutes = manageReservationRoutes['addGuest2'].navRoutes.map(
+      (route) => {
+        if (route.label === 'Edit Reservation') {
+          return {
+            ...route,
+            link: `/pages/efrontdesk/manage-reservation/edit-reservation/${id}`,
+          };
+        }
+        return route;
+      }
+    );
+    return navRoutes;
   }
 
   ngOnInit(): void {

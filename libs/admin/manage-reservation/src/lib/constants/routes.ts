@@ -10,12 +10,12 @@ export const navRoute = {
     label: 'Add Reservation',
     link: '/pages/efrontdesk/manage-reservation/add-reservation',
   },
-  editReservation: { label: 'Edit Reservation', link: './' },
+  editReservation: { label: 'Edit Reservation', link: '/pages/efrontdesk/manage-reservation/edit-reservation/:id' },
   addGuest: { label: 'Add Guest', link: './' },
 };
 
 export const manageReservationRoutes: Record<
-  'manageReservation' | 'addReservation' | 'editReservation' | 'addGuest',
+  'manageReservation' | 'addReservation' | 'editReservation' | 'addGuest1' | 'addGuest2',
   PageRoutes
 > = {
   manageReservation: {
@@ -44,12 +44,23 @@ export const manageReservationRoutes: Record<
     title: 'Edit Reservation',
   },
 
-  addGuest: {
+  addGuest1: {
     route: 'add-guest',
     navRoutes: [
       navRoute.eFrontdesk,
       navRoute.manageReservation,
       navRoute.addReservation,
+      navRoute.addGuest,
+    ],
+    title: 'Add Guest',
+  },
+
+  addGuest2: {
+    route: 'add-guest',
+    navRoutes: [
+      navRoute.eFrontdesk,
+      navRoute.manageReservation,
+      navRoute.editReservation,
       navRoute.addGuest,
     ],
     title: 'Add Guest',

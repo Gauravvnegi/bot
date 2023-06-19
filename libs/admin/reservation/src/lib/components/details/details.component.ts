@@ -418,14 +418,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  generateFeedback(journeyName) {
+  generateFeedback() {
     this._reservationService
-      .generateJourneyLink(
+      .generateFeedback(
         this.reservationDetailsFG.get('bookingId').value,
-        journeyName
       )
       .subscribe((res) => {
-        this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
+        this._clipboard.copy(`${res.domain}${res.feedback.token}`);
         this.snackbarService.openSnackBarAsText(
           'Link copied successfully',
           '',

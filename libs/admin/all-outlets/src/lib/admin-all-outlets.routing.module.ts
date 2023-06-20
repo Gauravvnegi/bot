@@ -33,26 +33,76 @@ const appRoutes: Route[] = [
             component: AddOutletComponent,
           },
           {
+            path: outletRoutes.createFoodPackage1.route,
+            component: CreateFoodPackageComponent,
+          },
+          {
+            path: outletRoutes.editFoodPackage1.route,
+            component: CreateFoodPackageComponent,
+          },
+          {
             path: outletRoutes.addMenu1.route,
             component: MainComponent,
             children: [
-              { 
-                path: '', 
-                component: CreateMenuComponent 
+              {
+                path: '',
+                component: CreateMenuComponent,
               },
               {
                 path: outletRoutes.addMenuItem1.route,
                 component: AddMenuItemComponent,
-              }
+              },
             ],
           },
           {
             path: outletRoutes.editMenu1.route,
             component: MainComponent,
             children: [
-              { 
-                path: '', 
-                component: CreateMenuComponent 
+              {
+                path: '',
+                component: CreateMenuComponent,
+              },
+              {
+                path: outletRoutes.addMenuItem1.route,
+                component: AddMenuItemComponent,
+              },
+              {
+                path: outletRoutes.editMenuItem1.route,
+                component: AddMenuItemComponent,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: outletRoutes.editOutlet.route,
+        component: MainComponent,
+        children: [
+          {
+            path: '',
+            component: AddOutletComponent,
+          },
+          {
+            path: outletRoutes.addMenu1.route,
+            component: MainComponent,
+            children: [
+              {
+                path: '',
+                component: CreateMenuComponent,
+              },
+              {
+                path: outletRoutes.addMenuItem1.route,
+                component: AddMenuItemComponent,
+              },
+            ],
+          },
+          {
+            path: outletRoutes.editMenu1.route,
+            component: MainComponent,
+            children: [
+              {
+                path: '',
+                component: CreateMenuComponent,
               },
               {
                 path: outletRoutes.addMenuItem1.route,
@@ -74,56 +124,6 @@ const appRoutes: Route[] = [
           },
         ],
       },
-      {
-        path: outletRoutes.editOutlet.route,
-        component: MainComponent,
-        children: [
-          {
-            path: '',
-            component: AddOutletComponent,
-          },
-          {
-            path: outletRoutes.addMenu1.route,
-            component: MainComponent,
-            children: [
-              { 
-                path: '', 
-                component: CreateMenuComponent 
-              },
-              {
-                path: outletRoutes.addMenuItem1.route,
-                component: AddMenuItemComponent,
-              }
-            ],
-          },
-          {
-            path: outletRoutes.editMenu1.route,
-            component: MainComponent,
-            children: [
-              { 
-                path: '', 
-                component: CreateMenuComponent 
-              },
-              {
-                path: outletRoutes.addMenuItem1.route,
-                component: AddMenuItemComponent,
-              },
-              {
-                path: outletRoutes.editMenuItem1.route,
-                component: AddMenuItemComponent,
-              },
-            ],
-          },
-          {
-            path: outletRoutes.createFoodPackage1.route,
-            component: CreateFoodPackageComponent,
-          },
-          {
-            path: outletRoutes.editFoodPackage1.route,
-            component: CreateFoodPackageComponent,
-          },
-        ],
-      },      
       //         path: '',
       //         component: AllOutletsDataTableComponent,
       //       },

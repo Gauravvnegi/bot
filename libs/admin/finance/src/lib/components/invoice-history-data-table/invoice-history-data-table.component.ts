@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { cols, filters, TableValue, title } from '../../constants/data-table';
+import { cols, title } from '../../constants/data-table';
 import { Subscription } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';

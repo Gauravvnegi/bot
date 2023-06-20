@@ -163,32 +163,6 @@ export const records = [
 
 export const title = 'Invoice History';
 
-export const transactionChips: Chip<'ALL' | 'SUCCESS' | 'FAILURE'>[] = [
-  {
-    label: 'All',
-    value: 'ALL',
-    total: 0,
-    isSelected: true,
-    type: 'default',
-  },
-  {
-    label: 'Paid',
-    value: 'SUCCESS',
-    total: 0,
-    isSelected: false,
-    type: 'active',
-  },
-  {
-    label: 'Fail',
-    value: 'FAILURE',
-    total: 0,
-    isSelected: false,
-    type: 'failed',
-  },
-];
-
-
-
 export const transactionStatus: Record<TransactionStatus, {label: string; type: FlagType}> = {
   SUCCESS: {
     label: 'Paid',

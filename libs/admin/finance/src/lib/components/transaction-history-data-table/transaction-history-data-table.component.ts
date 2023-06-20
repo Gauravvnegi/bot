@@ -11,21 +11,15 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import {
-  filters,
-  TableValue,
   cols,
-  transactionChips,
   transactionStatus,
 } from '../../constants/data-table';
 import { LazyLoadEvent } from 'primeng/api';
 import * as FileSaver from 'file-saver';
 import { FinanceService } from '../../services/finance.service';
 import {
-  TransactionHistory,
   TransactionHistoryList,
 } from '../../models/history.model';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { TransactionHistoryListResponse } from '../../types/history';
 
 @Component({
   selector: 'hospitality-bot-transaction-history-data-table',
@@ -38,7 +32,6 @@ import { TransactionHistoryListResponse } from '../../types/history';
 export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   implements OnInit {
   tableName = 'Transaction History';
-  filterChips = transactionChips;
   transactionStatus = transactionStatus
   cols = cols.transaction;
   isQuickFilters = true;

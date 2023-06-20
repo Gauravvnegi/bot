@@ -52,7 +52,11 @@ export class AddGuestComponent implements OnInit {
   ) {
     this.routeSubscription$ = this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
-        this.reservationId = snapshot?.params['id'];
+        const id = snapshot?.params['id'];
+        if (id) {
+          this.reservationId = id;
+          this.routeSubscription$.unsubscribe();
+        }
         const { navRoutes, title } = manageReservationRoutes[
           this.reservationId ? 'addGuest2' : 'addGuest1'
         ];
@@ -60,24 +64,17 @@ export class AddGuestComponent implements OnInit {
           ? this.updateNavRoutesWithId(this.reservationId)
           : navRoutes;
         this.pageTitle = title;
-        if(this.reservationId){
-          this.routeSubscription$.unsubscribe();
-        }
       }
     );
   }
 
-
   updateNavRoutesWithId(id: string) {
     const navRoutes = manageReservationRoutes['addGuest2'].navRoutes.map(
       (route) => {
-        if (route.label === 'Edit Reservation') {
-          return {
-            ...route,
-            link: `/pages/efrontdesk/manage-reservation/edit-reservation/${id}`,
-          };
-        }
-        return route;
+        return {
+          ...route,
+          link:  route.link.replace(':id', id),
+        };
       }
     );
     return navRoutes;

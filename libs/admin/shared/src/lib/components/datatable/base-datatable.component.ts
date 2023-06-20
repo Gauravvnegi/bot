@@ -147,7 +147,6 @@ export class BaseDatatableComponent implements OnInit {
   isSearchSet = false;
   @ViewChild('paginator', { static: false }) paginator: Paginator;
 
-
   /** !!!!!! IMPORTANT
    * Use this to cancel api call when filter changes and the previous request is still in progress
    */
@@ -420,7 +419,7 @@ export class BaseDatatableComponent implements OnInit {
     const record = { ...defaultRecordJson, ...recordsJson };
     let totalCount = totalMainCount;
 
-    if (entityTypeCounts) {
+    if (entityTypeCounts && Object.keys(entityTypeCounts).length > 0) {
       this.tabFilterItems = Object.entries(entityTypeCounts).map(
         ([key, value]) => ({
           label: record[key]?.label ?? convertToTitleCase(key),
@@ -436,11 +435,11 @@ export class BaseDatatableComponent implements OnInit {
         // changing the selected tab filter index as api response can give different order
         this.tabFilterIdx === selectedTabIndex;
       }
-      
+
       totalCount = this.tabFilterItems[this.tabFilterIdx].total;
     } else this.isTabFilters = false;
 
-    if (entityStateCounts) {
+    if (entityStateCounts && Object.keys(entityStateCounts).length > 0) {
       this.filterChips = Object.entries({
         [defaultFilterChipValue.value]: totalCount,
         ...entityStateCounts,
@@ -480,6 +479,10 @@ export class BaseDatatableComponent implements OnInit {
     const chips = [...this.selectedFilterChips]?.filter(
       (item) => item !== defaultFilterChipValue.value && !isAllAType
     );
+
+    if (chips.length + 1 === this.filterChips.length && !isAllAType) {
+      return [];
+    }
 
     return !isStatusBoolean
       ? chips.map((item) => ({ [key]: item }))

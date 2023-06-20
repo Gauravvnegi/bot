@@ -44,19 +44,23 @@ export class FilterChipsComponent implements OnInit {
       return value && !chip.isSelected;
     }, true); // remove
 
+    const defaultSelectedChip = new Set([defaultFilterChipValue.value]);
     const clickedChip = this.chips[quickReplyTypeIdx].value;
+    
     if (clickedChip !== defaultFilterChipValue.value) {
       this.selectedChips.delete(defaultFilterChipValue.value);
       this.selectedChips.has(clickedChip)
         ? this.selectedChips.delete(clickedChip)
         : this.selectedChips.add(clickedChip);
     } else {
-      this.selectedChips = new Set([defaultFilterChipValue.value]);
+      this.selectedChips = defaultSelectedChip;
     }
 
     this.onChange.emit({
       chips: this.chips, // remove
-      selectedChips: this.selectedChips,
+      selectedChips: this.selectedChips.size
+        ? this.selectedChips
+        : defaultSelectedChip,
     });
   }
 }

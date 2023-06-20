@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { outletRoutes } from '../../../constants/routes';
+import { areaUnits, days, hours } from '../../../constants/data';
 @Component({
   selector: 'hospitality-bot-restaurant-form',
   templateUrl: './restaurant-form.component.html',
@@ -8,16 +9,10 @@ import { outletRoutes } from '../../../constants/routes';
 })
 export class RestaurantFormComponent implements OnInit {
   routes = outletRoutes;
-  
-  preOptions = [
-    { label: 'Saunday', value: 'sunday' },
-    { label: 'Monday', value: 'monday' },
-    { label: 'Tuesday', value: 'tuesday' },
-    { label: 'Wednesday', value: 'wednesday' },
-    { label: 'Thursday', value: 'thursday' },
-    { label: 'Friday', value: 'friday' },
-    { label: 'Saturday', value: 'saturday' },
-  ];
+
+  days = days;
+  hours = hours;
+  areaUnits = areaUnits;
 
   constructor(public controlContainer: ControlContainer) {}
 

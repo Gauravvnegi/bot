@@ -1,8 +1,12 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
 import { outletRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
+import { cousins } from '../../constants/data';
+import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
+import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
@@ -16,6 +20,10 @@ export class AddOutletComponent implements OnInit {
   types: Option[] = [];
   subType: Option[] = [];
   isTypeSelected = false;
+  outletId: string = '';
+  cousins = cousins;
+  $subscription = new Subscription();
+  loading = false;
 
   @HostListener('window:beforeunload', ['$event'])
   handleBeforeUnload(event: BeforeUnloadEvent) {
@@ -24,7 +32,12 @@ export class AddOutletComponent implements OnInit {
     return 'Are you sure you want to leave? Your unsaved changes will be lost.';
   }
 
-  constructor(private fb: FormBuilder, private outletService: OutletService) {
+  constructor(
+    private fb: FormBuilder,
+    private outletService: OutletService,
+    private snackbarSerivce: SnackBarService,
+    private router: Router
+  ) {
     const { navRoutes, title } = outletRoutes['addOutlet'];
     this.navRoutes = navRoutes;
     this.pageTitle = title;
@@ -49,9 +62,9 @@ export class AddOutletComponent implements OnInit {
 
   initForm(): void {
     this.useForm = this.fb.group({
-      name: [''],
-      type: [[]],
-      subType: [[]],
+      name: ['', [Validators.required]],
+      type: [[], [Validators.required]],
+      subType: [[], [Validators.required]],
       contact: this.fb.group({
         countryCode: [''],
         number: [''],
@@ -60,16 +73,27 @@ export class AddOutletComponent implements OnInit {
       closingDay: [''],
       openingHour: [''],
       closingHour: [''],
-      address: [[]],
-      imageUrl: [[]],
+      address: [[], [Validators.required]],
+      imageUrl: [[], [Validators.required]],
       description: [''],
       rules: [[]],
       serviceIds: [[]],
       menu: [[]],
       socialMedia: [[]],
-      maxOccupancy: [''],
+      maxOccupancy: ['', [Validators.required]],
+      minOccupancy: ['', [Validators.required]],
       area: [''],
+      areaUnit: ['sqft'],
+      foodPackages: [[]],
+      cousins: [[]],
     });
+
+    //patch value if there is outlet id
+    if (this.outletId) {
+      this.outletService.getOutletById(this.outletId).subscribe((res) => {
+        this.useForm.patchValue(res);
+      });
+    }
   }
 
   onTypeChange(type: string) {
@@ -82,12 +106,67 @@ export class AddOutletComponent implements OnInit {
     if (selectedType[0].value === 'RESTAURANT') {
       this.outletService.menu.next(selectedType[0].menu);
     }
-    console.log(this.outletService.menu);
   }
 
+  /**
+   * @function submitForm
+   * @description submits the form
+   */
+  submitForm(): void {
+    if (this.useForm.invalid) {
+      this.useForm.markAllAsTouched();
+      this.snackbarSerivce.openSnackBarAsText(
+        'Please fill all the required fields',
+        'error'
+      );
+
+      return;
+    }
+
+    const data = this.useForm.getRawValue();
+
+    if (this.outletId) {
+      this.$subscription.add(
+        this.outletService
+          .updateOutlet(this.outletId, data)
+          .subscribe(this.handleSuccess, this.handleError)
+      );
+    } else {
+      this.$subscription.add(
+        this.outletService
+          .addOutlet(data)
+          .subscribe(this.handleSuccess, this.handleError)
+      );
+    }
+  }
+
+  /**
+   * @function resetForm
+   * @description resets the form
+   *
+   */
   resetForm(): void {
     this.useForm.reset();
   }
 
-  submitForm(): void {}
+  /**
+   * @function handleSuccess
+   * @description handles success
+   */
+  handleSuccess = () => {
+    this.snackbarSerivce.openSnackBarAsText(
+      this.outletId
+        ? 'Outlet updated successfully'
+        : 'Outlet added successfully'
+    );
+    this.router.navigate(['']);
+  };
+
+  /**
+   * @function handleError
+   * @description handles error
+   */
+  handleError = (err) => {
+    this.loading = false;
+  };
 }

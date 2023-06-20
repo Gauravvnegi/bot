@@ -31,7 +31,6 @@
 
 :host ::ng-deep .label {
   display: block;
-  width: 0;
   white-space: nowrap;
 }
 
@@ -46,7 +45,7 @@
   display: none;
 }
 
-.main{
+.primary{
   flex-basis: 85%; ;
 }
 

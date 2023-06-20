@@ -333,7 +333,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
             const data = new ReservationFormData().deserialize(response);
             this.userForm.patchValue(data);
             this.summaryData = new SummaryData().deserialize(response);
-            // this.setFormDisability(data.reservationInformation);
+            this.setFormDisability(data.reservationInformation);
             if (data.offerId)
               this.getOfferByRoomType(
                 this.userForm.get('roomInformation.roomTypeId').value

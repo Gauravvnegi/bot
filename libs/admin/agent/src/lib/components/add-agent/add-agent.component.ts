@@ -6,14 +6,14 @@ import { AgentService } from '../../services/agent.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { agentRoutes, navRoute } from '../../constant/routes';
+import { agentRoutes } from '../../constant/routes';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
-import { FormService } from '../../../../../members/src/lib/services/form.service';
-import { companyRoutes } from '../../../../../company/src/lib/constants/route';
+import { FormService } from 'libs/admin/members/src/lib/services/form.service';
+import { companyRoutes } from 'libs/admin/company/src/lib/constants/route';
 import { AgentFormType } from '../../types/form.types';
 import { AgentModel } from '../../models/agent.model';
 import { AgentResponseType } from '../../types/response';
-import { CompanyResponseType } from '../../../../../company/src/lib/types/response';
+import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 @Component({
   selector: 'hospitality-bot-add-agent',
   templateUrl: './add-agent.component.html',

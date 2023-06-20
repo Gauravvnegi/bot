@@ -6,8 +6,8 @@ import { CompanyService } from '../../services/company.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { companyRoutes, navRoute } from '../../constants/route';
-import { FormService } from '../../../../../members/src/lib/services/form.service';
+import { companyRoutes } from '../../constants/route';
+import { FormService } from 'libs/admin/members/src/lib/services/form.service';
 import { CompanyModel } from '../../models/company.model';
 import { CompanyResponseType } from '../../types/response';
 @Component({

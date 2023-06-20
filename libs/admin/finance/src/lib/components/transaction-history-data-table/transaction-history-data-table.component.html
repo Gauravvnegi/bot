@@ -43,7 +43,7 @@
   <!-- *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable" -->
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
-      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+      <!-- <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container> -->
 
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
@@ -88,18 +88,25 @@
             {{ rowData.transactionId }}
           </div>
         </div>
-      </td> 
+      </td>
       <td>
         <div class="cell-content" *ngIf="rowData.dateAndTime; else emptyCell">
           <div class="primary-text">
-            {{ rowData.dateAndTime }}
+            {{ rowData.dateAndTime | date: 'MMM d, h:mm a z' }}
           </div>
         </div>
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.status; else emptyCell">
-          <div class="status-text" [ngClass]="rowData.status === 'Paid' ? 'chip-contained-paid' : 'chip-contained-unpaid'">
-            {{ rowData.status }}
+          <div
+            class="status-text"
+            [ngClass]="
+              rowData.status === 'SUCCESS'
+                ? 'chip-contained-paid'
+                : 'chip-contained-unpaid'
+            "
+          >
+            {{ rowData.status === 'SUCCESS' ? 'Paid' : 'Unpaid' }}
           </div>
         </div>
       </td>
@@ -111,26 +118,26 @@
         </div>
       </td>
       <td>
-        <div class="center-align" *ngIf="rowData.remarks; else emptyCell">
+        <div class="cell-content" *ngIf="rowData.remarks; else emptyCell">
           <div class="primary-text">
             {{ rowData.remarks }}
           </div>
         </div>
       </td>
       <td>
-        <div class="center-align" *ngIf="rowData.credit; else emptyCell">
+        <div class="cell-content" *ngIf="rowData.credit; else emptyCell">
           <div class="primary-text">
-            {{ rowData.credit }}
+            {{ rowData.credit | currency: 'INR' }}
           </div>
         </div>
       </td>
-      <td>
+      <!-- <td>
         <div class="center-align" *ngIf="rowData.balanceDue; else emptyCell">
           <div class="primary-text">
             {{ rowData.balanceDue }}
           </div>
         </div>
-      </td>
+      </td> -->
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->
@@ -163,11 +170,11 @@
   </hospitality-bot-empty-table>
 </ng-template>
 
-<ng-template #tabFilter>
+<!-- <ng-template #tabFilter>
   <hospitality-bot-tab-group
     [selectedIndex]="tabFilterIdx"
     *ngIf="isTabFilters"
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
-</ng-template>
+</ng-template> -->

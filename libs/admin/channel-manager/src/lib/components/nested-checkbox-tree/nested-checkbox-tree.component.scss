@@ -1,8 +1,6 @@
 @import 'main';
-
 :host ::ng-deep {
-  .nested-tree {
-    border-radius: 4px;
-    box-shadow: 0 0px 0px 1px rgba(0, 0, 0, 0.14);
+  .panel-tree__wrapper {
+    background-color: white;
   }
 }

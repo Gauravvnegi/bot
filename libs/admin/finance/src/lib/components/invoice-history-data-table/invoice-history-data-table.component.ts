@@ -2,14 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {
   cols,
   filters,
-  invoiceChips,
-  records,
   TableValue,
   title,
 } from '../../constants/data-table';
 import { Subscription } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -20,7 +17,6 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FinanceService } from '../../services/finance.service';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { InvoiceHistory } from '../../models/history.model';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
@@ -40,6 +36,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   isQuickFilters = true;
 
   hotelId: string;
+  globalQueries = [];
 
   $subscription = new Subscription();
 
@@ -49,26 +46,27 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
-    private router: Router,
-    private financeService: FinanceService
+    private financeService: FinanceService,
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.listenToTableChange();
+    this.listenForGlobalFilters();
+    this.initTableValue();
+    // this.listenToTableChange();
   }
 
-  /**
-   * @function listenToTableChange  To listen to table changes
-   */
-  listenToTableChange() {
-    this.financeService.selectedTable.subscribe((value) => {
-      this.selectedTable = value;
-      this.initTableValue();
-    });
-  }
+  // /**
+  //  * @function listenToTableChange  To listen to table changes
+  //  */
+  // listenToTableChange() {
+  //   this.financeService.selectedTable.subscribe((value) => {
+  //     this.selectedTable = value;
+  //     this.initTableValue();
+  //   });
+  // }
 
   loadData(event: LazyLoadEvent): void {
     this.initTableValue();
@@ -76,14 +74,13 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
 
   initTableValue() {
     this.loading = true;
-
-    this.financeService.getInvoiceHistory(this.hotelId).subscribe(
+    this.financeService.getInvoiceHistory().subscribe(
       (res) => {
         const invoiceHistory = new InvoiceHistory().deserailize(res);
         this.values = res;
-        this.updateTabFilterCount(res.entityTypeCounts, res.total);
-        this.updateQuickReplyFilterCount(res.entityStateCounts);
-        this.updateTotalRecords();
+        // this.updateTabFilterCount(res.entityTypeCounts, res.total);
+        // this.updateQuickReplyFilterCount(res.entityStateCounts);
+        // this.updateTotalRecords();
       },
       () => {
         this.values = [];
@@ -93,11 +90,24 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     );
   }
 
+
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      // set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['dateRange'].queryValue,
+      ];
+    });
+  }
+
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
         {
-          tableType: this.selectedTable,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -121,13 +131,13 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   //   ];
   // }
 
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.financeService.selectedTable.next(
-      this.tabFilterItems[event.index].value
-    );
-    this.tabFilterIdx = event.index;
-    this.initTableValue();
-  }
+  // onSelectedTabFilterChange(event: MatTabChangeEvent): void {
+  //   this.financeService.selectedTable.next(
+  //     this.tabFilterItems[event.index].value
+  //   );
+  //   this.tabFilterIdx = event.index;
+  //   this.initTableValue();
+  // }
 
   /**
    * @function handleError to show the error

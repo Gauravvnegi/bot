@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { ControlContainer, FormBuilder, FormGroup } from '@angular/forms';
 import { FormComponent } from '../form.components';
 

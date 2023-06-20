@@ -14,7 +14,7 @@ export class FinanceService extends ApiService {
   selectedTransactionTable = new BehaviorSubject<TableValue>(TableValue.ROOM);
 
 
-  getInvoiceHistory(hotelId: string, config?: QueryConfig): Observable<any> {
+  getInvoiceHistory(hotelId?: string, config?: QueryConfig): Observable<any> {
     return this.get(
       `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`
     ).pipe(

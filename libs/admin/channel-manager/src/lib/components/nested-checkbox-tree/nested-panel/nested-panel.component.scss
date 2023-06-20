@@ -1,26 +1,93 @@
-:host ::ng-deep {
-  .p-panel {
-    box-shadow: unset;
-    border-top-right-radius: unset;
-    border-top-left-radius: unset;
-  }
-  .pi-angle-down:before,
-  .pi-angle-up:before {
-    color: #5f38f9;
-  }
-}
-.panel-tree {
-  border-bottom: 0.2px solid rgb(222, 222, 222);
+@import 'main';
+// was have to target direct element, that's why two host used
+:host
+  ::ng-deep
+  .p-accordion
+  .p-accordion-tab:first-child
+  .p-accordion-header
+  .p-accordion-header-link {
+  border-radius: 0;
+  border-radius: 0;
 }
 
+:host ::ng-deep {
+  .panel-tree {
+    background: white;
+    .p-accordion .p-accordion-tab,
+    .p-accordion-header-link {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &__content {
+      .p-accordion-content {
+        padding: 0;
+      }
+      .channel {
+        padding: 0.6rem 1.5rem;
+        margin: 3px 0;
+      }
+      .channel:hover {
+        background-color: #e8e2ff;
+        color: #5f38f9;
+        cursor: pointer;
+      }
+    }
+
+    .p-panel-content {
+      padding: 0;
+    }
+
+    .channel-heading {
+      .button {
+        padding: 0 10px;
+        color: #5f38f9;
+        background: #5f38f917;
+        border-radius: 5px;
+        font-size: 12px;
+      }
+    }
+    .panel-tree__content {
+      .pi-chevron-right:before,
+      .pi-chevron-down:before {
+        content: '';
+      }
+    }
+  }
+  .pi-chevron-right:before,
+  .pi-chevron-down:before {
+    color: #5f38f9;
+  }
+  .p-accordion .p-accordion-content {
+    padding: 0px;
+  }
+  .p-accordion-tab {
+    box-shadow: 0px 0px 1px #707070;
+  }
+
+  .panel-tree__header {
+    &-checkbox {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .label-checkbox-wrapper {
+    display: flex;
+    column-gap: 10px;
+  }
+  .variant-wrapper {
+    column-gap: 10px;
+  }
+}
 .variants__heading {
   padding: 10px 0px;
 }
-
-.channel-heading {
-  padding: 0 10px;
+.active-channel {
   color: #5f38f9;
-  background: #5f38f917;
-  border-radius: 5px;
-  font-size: 12px;
+  background-color: #e8e2ff;
+}
+
+label {
+  cursor: pointer;
 }

@@ -42,7 +42,7 @@ export class CreateMenuComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    const { navRoutes, title } = outletRoutes['addMenu'];
+    const { navRoutes, title } = outletRoutes['addMenu1'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
   }
@@ -57,7 +57,7 @@ export class CreateMenuComponent implements OnInit {
       active: [true],
       name: ['', Validators.required],
       imageUrl: ['', Validators.required],
-      description: ['', Validators.required],
+      description: [''],
     });
   }
 

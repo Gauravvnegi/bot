@@ -97,8 +97,6 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
           transactionHistory.totalRecords,
           this.transactionStatus
         );
-        console.log(this.values);
-        console.log(this.totalRecords);
         this.loading = false;
       },
       () => {

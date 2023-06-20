@@ -1,11 +1,11 @@
 export type AgentFormType = {
   active: boolean;
-  firstName: string;
+  name: string;
   email: string;
   cc: string;
   phoneNo: string;
   iataNo?: string;
-  companyName: string;
+  companyId: string;
   address: string;
   commissionType: string;
   commission: number;

@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div class="room-details-wrapper">
+    <div class="room-details-wrapper" *ngIf="roomTypeId">
       <hospitality-bot-room-details-data-table></hospitality-bot-room-details-data-table>
     </div>
 
@@ -186,6 +186,7 @@
                 variant="text"
                 severity="reset"
                 (onClick)="onRemove(ratePlanGroup.get('type').value, i)"
+                [disabled]="ratePlanArray.length === 1"
               ></hospitality-bot-button>
             </p-header>
 

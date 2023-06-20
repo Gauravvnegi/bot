@@ -72,6 +72,8 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
         (res) => {
           const roomList = new RoomList().deserialize(res);
           this.values = roomList.records;
+          this.updateTotalRecords();
+          console.log(this.totalRecords);
           this.loading = false;
         },
         () => {

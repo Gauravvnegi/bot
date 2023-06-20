@@ -19,7 +19,7 @@
 
     <hospitality-bot-input
       class="half-width"
-      controlName="firstName"
+      controlName="name"
       label="Agent Name"
     ></hospitality-bot-input>
 
@@ -58,9 +58,9 @@
 
     <hospitality-bot-select
       class="half-width"
-      controlName="companyName"
+      controlName="companyId"
       label="Company Name"
-      [options]="roomTypes"
+      [options]="companyList"
       [props]="{ isAsync: true, createPrompt: '+ Add New Company' }"
       [loading]="loadingCompany"
       (paginate)="loadMoreCompany()"
@@ -75,11 +75,8 @@
       label="Company Name"
     ></hospitality-bot-input>
 
-    <hospitality-bot-input
-      class="half-width"
-      controlName="address"
-      label="Address"
-    ></hospitality-bot-input>
+    <hospitality-bot-address-component class="half-width" controlName="address">
+    </hospitality-bot-address-component>
 
     <hospitality-bot-prefix-field
       class="half-width"

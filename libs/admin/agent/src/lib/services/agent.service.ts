@@ -2,74 +2,54 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { generateDummyData } from '../constant/response';
-import { AgentListResponse, CompanyListResponse } from '../types/response';
+import { AgentListResponse, AgentResponseType } from '../types/response';
 import { QueryConfig } from '../types/agent';
 import { companyResponse } from '../../../../company/src/lib/constants/response';
+import { dataList } from '../constant/response';
+import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AgentService extends ApiService {
   data: AgentListResponse;
 
-  addAgent(hotelId, data, config?: QueryConfig): Observable<any> {
-    return this.post(`/api/v1/entity/${hotelId}/tax}`, data);
-  }
-
-  updateAgent(hotelId, data, config?: QueryConfig): Observable<any> {
-    return this.patch(`/api/v1/entity/${hotelId}/tax}`, data);
-  }
-
-  getAgentList(hotelId, config?: QueryConfig): Observable<any> {
-    return this.get(
-      `/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`
-    ).pipe(
-      map((res) => {
-        if (!this.data) {
-          this.data = generateDummyData(5);
-        }
-        return this.data;
-      })
-    );
-  }
-
-  getCompanyList(hotelId: string, config?: QueryConfig) {
-    return this.get(
-      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`
-    ).pipe(
-      map((res) => {
-        return companyResponse;
-      })
-    );
-  }
-
-  getAgentById(hotelId, data, config?: QueryConfig): Observable<any> {
-    return this.get(
-      `/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`
-    ).pipe(
-      map((res) => {
-        return this.data.records.find((item) => item.id === data.AgentId) ?? {};
-      })
-    );
-  }
-
-  updateAgentStatus(
-    hotelId,
-    data: { id: string; status: boolean },
+  addAgent(
+    data: AgentResponseType,
     config?: QueryConfig
-  ): Observable<any> {
-    return this.get(
-      `/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`
-    ).pipe(
-      map((res) => {
-        this.data.records.forEach((element) => {
-          if (element.id === data.id) element['status'] = data.status;
-        });
-      })
-    );
+  ): Observable<AgentResponseType> {
+    return this.post(`api/v1/members${config.params}`, data);
   }
 
-  exportCSV(hotelId, config): Observable<any> {
-    return this.get(`/api/v1/outlets/export/${config.queryObj}`);
+  updateAgent(
+    data: AgentResponseType,
+    companyId: string,
+    config?: QueryConfig
+  ): Observable<AgentResponseType> {
+    return this.patch(`/api/v1/members/${companyId}${config.params}`, data);
+  }
+
+  getAgentList(config?: QueryConfig): Observable<AgentListResponse> {
+    return this.get(`/api/v1/members/${config.params}`);
+  }
+
+  getCompanyList(config?: QueryConfig): Observable<CompanyResponseType[]> {
+    return this.get(`/api/v1/members/${config.params}`);
+  }
+
+  getAgentById(
+    agentId: string,
+    config?: QueryConfig
+  ): Observable<AgentResponseType> {
+    return this.get(`/api/v1/members/${agentId}${config.params}`);
+  }
+  updateAgentStatus(agentid, config: QueryConfig): Observable<any> {
+    return this.patch(`/api/v1/members/${agentid}${config.params}`, {});
+  }
+
+  exportCSV(config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/members/export${config.params}`, {
+      responseType: 'blob',
+    });
   }
 }

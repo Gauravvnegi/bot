@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { companyRoutes, navRoute } from '../../constants/route';
 import { FormService } from '../../../../../members/src/lib/services/form.service';
+import { CompanyModel } from '../../models/company.model';
+import { CompanyResponseType } from '../../types/response';
 @Component({
   selector: 'hospitality-bot-add-company',
   templateUrl: './add-company.component.html',
@@ -55,7 +57,7 @@ export class AddCompanyComponent implements OnInit {
       active: [true],
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      cc: ['+91'],
+      cc: ['+91', [Validators.required]],
       phoneNo: [null, [Validators.required]],
       address: ['', [Validators.required]],
       salePersonName: [''],
@@ -78,16 +80,18 @@ export class AddCompanyComponent implements OnInit {
     this.loading = true;
     this.subscription$.add(
       this.companyService
-        .getCompanyById(this.hotelId, { companyId: +this.companyId })
-        .subscribe((response) => {
+        .getCompanyById(this.companyId)
+        .subscribe((response: CompanyResponseType) => {
           this.companyForm.patchValue({
-            name: response.name,
-            email: response.email,
-            phoneNo: response.phoneNumber,
+            name: response.firstName,
+            email: response.contactDetails.emailId,
+            cc: response.contactDetails.cc,
+            phoneNo: response.contactDetails.contactNumber,
             address: response.address,
             salePersonName: response.salesPersonName,
-            salePersonNo: response.salesPersonNumber,
-            discount: response.discount,
+            salePersonNo: response.salesPersonPhone,
+            discountType: response.pricaModifierType,
+            discount: response.priceModifierValue,
           });
         }, this.handleFinal)
     );
@@ -102,33 +106,15 @@ export class AddCompanyComponent implements OnInit {
       return;
     }
 
-    if (!!this.companyId) {
-      this.subscription$.add(
-        this.companyService
-          .updateCompany(this.hotelId, {
-            ...this.companyForm.getRawValue(),
-            type: 'COMPANY',
-            source: 1,
-          })
-          .subscribe(this.handleSuccess, this.handleFinal)
-      );
-    } else {
-      this.subscription$.add(
-        this.companyService
-          .addCompany(
-            this.hotelId,
-            {
-              ...this.companyForm.getRawValue(),
-              type: 'COMPANY',
-              source: 1,
-            },
-            {
-              params: '?type=COMPANY',
-            }
-          )
-          .subscribe(this.handleSuccess, this.handleFinal)
-      );
-    }
+    const formData = CompanyModel.mapFormData(this.companyForm.getRawValue());
+    const queryParms = { params: '?type=COMPANY' };
+    const request = !!this.companyId
+      ? this.companyService.updateCompany(formData, this.companyId)
+      : this.companyService.addCompany(formData, queryParms);
+
+    this.subscription$.add(
+      request.subscribe(this.handleSuccess, this.handleFinal)
+    );
   }
 
   reset() {

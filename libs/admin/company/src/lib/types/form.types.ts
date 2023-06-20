@@ -9,5 +9,5 @@ export type CompanyFormType = {
   salePersonCC: string;
   salePersonNo?: string;
   discountType: string;
-  discount: number;
+  discount: string;
 };

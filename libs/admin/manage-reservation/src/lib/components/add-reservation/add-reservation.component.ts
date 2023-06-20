@@ -9,15 +9,14 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import {
-  AdminUtilityService,
-  ConfigService,
-  CountryCodeList,
-  NavRouteOptions,
-  Option,
-  Regex,
-  UserService,
-} from 'libs/admin/shared/src';
+// import {
+//   AdminUtilityService,
+//   ConfigService,
+//   CountryCodeList,
+//   NavRouteOptions,
+//   Option,
+//   Regex,
+// } from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
@@ -36,6 +35,15 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { ReservationResponse } from '../../types/response.type';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 import { GuestDetails } from '../../types/forms.types';
+import {
+  AdminUtilityService,
+  ConfigService,
+  CountryCodeList,
+  NavRouteOptions,
+  Regex,
+  UserService,
+  Option,
+} from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',

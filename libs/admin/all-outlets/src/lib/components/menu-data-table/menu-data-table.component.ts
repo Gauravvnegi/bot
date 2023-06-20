@@ -12,6 +12,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { cols } from '../../constants/data-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { outletRoutes } from '../../constants/routes';
+import { MenuItem } from '../../models/outlet.model';
 
 @Component({
   selector: 'hospitality-bot-menu-data-table',
@@ -45,20 +46,18 @@ export class MenuDataTableComponent extends BaseDatatableComponent
   }
 
   initTableValue(): void {
-    // this.loading = true;
-    this.values = [
-      {
-        code: '12',
-        itemName: 'Coffee',
-        type: 'Cold',
-        hsnCode: '#12ds',
-        category: 'Drinks',
-        kitchenDept: 'Dept 1',
-        delivery: '04:00 PM',
-        preparationTime: '10 mins',
-        unit: 2,
+    this.loading = true;
+    this.outletService.getMenuItems().subscribe(
+      (res) => {
+        const menuItem = new MenuItem().deserialize(res);
+        this.values = res;
       },
-    ];
+      () => {
+        this.values = [];
+        this.loading = false;
+      },
+      this.handleFinal
+    );
   }
 
   addMenuItems() {
@@ -68,4 +67,16 @@ export class MenuDataTableComponent extends BaseDatatableComponent
   }
 
   handleImport() {}
+
+  /**
+   * @function handleError to show the error
+   * @param param0 network error
+   */
+  handleError = ({ error }): void => {
+    this.loading = false;
+  };
+
+  handleFinal = () => {
+    this.loading = false;
+  };
 }

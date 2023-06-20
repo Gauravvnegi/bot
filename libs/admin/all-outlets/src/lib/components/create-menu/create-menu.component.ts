@@ -57,7 +57,7 @@ export class CreateMenuComponent implements OnInit {
       active: [true],
       name: ['', Validators.required],
       imageUrl: ['', Validators.required],
-      description: ['', Validators.required],
+      description: [''],
     });
   }
 

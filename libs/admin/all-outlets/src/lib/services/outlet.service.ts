@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MenuTabValue, TabValue } from '../constants/data-table';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { allOutletsResponse } from '../constants/response';
+import { allOutletsResponse, menuListResponse } from '../constants/response';
 import { map } from 'rxjs/operators';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { MenuConfig, OutletConfig } from '../types/config';
@@ -45,6 +45,14 @@ export class OutletService extends ApiService {
           value: item.name.split(' ')[0].toUpperCase(),
         }));
         return response;
+      })
+    );
+  }
+
+  getMenuItems(): Observable<any> {
+    return this.get(`/api/v1/config?key=OUTLET_CONFIGURATION`).pipe(
+      map((res)=>{
+        return menuListResponse;
       })
     );
   }

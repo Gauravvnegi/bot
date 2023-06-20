@@ -2,14 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {
   cols,
   filters,
-  invoiceChips,
-  records,
   TableValue,
   title,
 } from '../../constants/data-table';
 import { Subscription } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -21,7 +18,6 @@ import { FinanceService } from '../../services/finance.service';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { InvoiceHistory } from '../../models/history.model';
 import { LazyLoadEvent } from 'primeng/api';
-import { DateService } from '@hospitality-bot/shared/utils';
 
 @Component({
   selector: 'hospitality-bot-invoice-history-data-table',
@@ -40,6 +36,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   isQuickFilters = true;
 
   hotelId: string;
+  globalQueries = [];
 
   $subscription = new Subscription();
 
@@ -49,15 +46,14 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
-    private router: Router,
     private financeService: FinanceService,
-    private dateService: DateService,
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
+    this.listenForGlobalFilters();
     this.initTableValue();
     // this.listenToTableChange();
   }
@@ -78,8 +74,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
 
   initTableValue() {
     this.loading = true;
-
-    this.financeService.getInvoiceHistory(this.hotelId).subscribe(
+    this.financeService.getInvoiceHistory().subscribe(
       (res) => {
         const invoiceHistory = new InvoiceHistory().deserailize(res);
         this.values = res;
@@ -95,11 +90,24 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     );
   }
 
+
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      // set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['dateRange'].queryValue,
+      ];
+    });
+  }
+
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
+        ...this.globalQueries,
         {
-          tableType: this.selectedTable,
           offset: this.first,
           limit: this.rowsPerPage,
         },

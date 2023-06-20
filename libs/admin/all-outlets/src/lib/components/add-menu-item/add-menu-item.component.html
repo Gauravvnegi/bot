@@ -18,6 +18,7 @@
       class="one-third-width"
       controlName="name"
       label="Name"
+      maxLength="60"
       [props]="{
         placeholder: 'Enter name'
       }"
@@ -28,7 +29,7 @@
       [options]="mealPreferences"
       label="Meal Preference"
       [props]="{
-        placeholder: 'Search Type'
+        placeholder: 'Select Type'
       }"
     ></hospitality-bot-select>
     <hospitality-bot-select
@@ -37,7 +38,7 @@
       [options]="categories"
       label="Category"
       [props]="{
-        placeholder: 'Search Category'
+        placeholder: 'Select Category'
       }"
     ></hospitality-bot-select>
     <hospitality-bot-select
@@ -46,7 +47,7 @@
       [options]="types"
       label="Type"
       [props]="{
-        placeholder: 'Search Type'
+        placeholder: 'Select Type'
       }"
     ></hospitality-bot-select>
     <hospitality-bot-time-picker
@@ -60,7 +61,8 @@
       label="Qty/Unit"
       [props]="{
         placeholder: 'Enter unit',
-        subtitle: 'grams'
+        subtitle: 'grams',
+        type: 'number'
       }"
     ></hospitality-bot-input>
     <hospitality-bot-input
@@ -79,7 +81,13 @@
         placeholder: 'Enter HSN Code'
       }"
     ></hospitality-bot-input>
-    <div class="one-third-width"></div>
+    <hospitality-bot-multi-select
+      label="Tax"
+      class="one-third-width"
+      controlName="tax"
+      [options]="taxes"
+      [settings]="{ showHeader: false }"
+    ></hospitality-bot-multi-select>
     <div class="des-template">
       <div class="des-template__label">Notes</div>
       <div class="des-template__input">

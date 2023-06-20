@@ -16,10 +16,13 @@ export class AddMenuItemComponent implements OnInit {
   packageCode: string = '# will be auto generated';
 
   mealPreferences: Option[] = [];
-
   types: Option[] = [];
-
   categories: Option[] = [];
+  taxes: Option[] = [
+    {label: 'CGST 4%', value: 'CGST'},
+    {label: 'sGST 12%', value: 'SGST'},
+    {label: 'VAT 20%', value: 'VAT'},
+  ];
 
   @HostListener('window:beforeunload', ['$event'])
   handleBeforeUnload(event: BeforeUnloadEvent) {
@@ -29,7 +32,6 @@ export class AddMenuItemComponent implements OnInit {
   }
 
   constructor(private fb: FormBuilder, private outletService: OutletService) {
-    
     const { navRoutes, title } = outletRoutes['addMenuItem1'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
@@ -68,7 +70,8 @@ export class AddMenuItemComponent implements OnInit {
       unit: ['', Validators.required],
       dineInPrice: ['', Validators.required],
       hsnCode: ['', Validators.required],
-      notes: ['', Validators.required],
+      tax: ['', Validators.required],
+      notes: [''],
     });
   }
 

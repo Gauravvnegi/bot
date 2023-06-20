@@ -130,27 +130,9 @@ export class BusinessService extends ApiService {
   }
 
   getServiceList(hotelId, config?: QueryConfig): Observable<any> {
+    //on header add hotel id
     return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
   }
-  // //save hotelinfo  data locally
-  // hotelInfoFormData: importForm = {
-  //   address: {
-  //     value: '',
-  //   },
-  //   imageUrl: [],
-  //   serviceIds: [] = [],
-  //   services: [] = [],
-  // };
-  // hotelFormState: boolean = false;
-
-  // services = {
-  //   '123123123': true,
-  // };
-
-  // initHotelInfoFormData(input: any, hotelFormState: boolean) {
-  //   this.hotelInfoFormData = { ...this.hotelInfoFormData, ...input };
-  //   this.hotelFormState = hotelFormState;
-  // }
 
   tempServiceIds: any[] = [];
 

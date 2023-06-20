@@ -14,6 +14,7 @@ import { SpaFormComponent } from './components/outlet-forms/spa-form/spa-form.co
 import { BanquetFormComponent } from './components/outlet-forms/banquet-form/banquet-form.component';
 import { CreateFoodPackageComponent } from './components/create-food-package/create-food-package.component';
 import { FoodItemsComponent } from './components/food-items/food-items.component';
+import { FoodPackageComponent } from './components/outlet-forms/food-package/food-package.component';
 
 const appRoutes: Route[] = [
   {
@@ -176,5 +177,6 @@ export class AdminAllOutletsRoutingModule {
     BanquetFormComponent,
     CreateFoodPackageComponent,
     FoodItemsComponent,
+    FoodPackageComponent,
   ];
 }

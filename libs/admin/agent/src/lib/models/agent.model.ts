@@ -29,7 +29,7 @@ export class AgentModel {
         countryCode: form.address['country'] ?? '',
         postalCode: form.address['postalCode'] ?? '',
       },
-      pricaModifierType: form.commissionType,
+      priceModifierType: form.commissionType,
       priceModifierValue: form.commission?.toString(),
       iataNumber: form.iataNo,
       companyId: form.companyId,

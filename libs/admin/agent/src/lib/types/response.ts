@@ -1,3 +1,5 @@
+import { EntityState } from '@hospitality-bot/admin/shared';
+
 export type AgentResponseType = {
   id?: string;
   nameTitle?: string;
@@ -19,7 +21,7 @@ export type AgentResponseType = {
   };
   iataNumber?: string;
   priceModifier?: string; //'COMMISSION';
-  pricaModifierType: string; //'PERCENTAGE';
+  priceModifierType: string; //'PERCENTAGE';
   priceModifierValue: string;
   companyId: string;
   code?: string;
@@ -30,10 +32,5 @@ export type AgentResponseType = {
 export type AgentListResponse = {
   records: AgentResponseType[];
   total: number;
-  entityTypeCounts: EntityCountsResponse;
-};
-
-export type EntityCountsResponse = {
-  Active: number;
-  Inactive: number;
+  entityTypeCounts: EntityState<string>;
 };

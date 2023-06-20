@@ -1,3 +1,5 @@
+import { EntityState } from '@hospitality-bot/admin/shared';
+
 export type CompanyResponseType = {
   id?: string;
   nameTitle?: string;
@@ -21,7 +23,7 @@ export type CompanyResponseType = {
   salesPersonPhone: string;
   iataNumber?: string;
   priceModifier?: string;
-  pricaModifierType: string;
+  priceModifierType: string;
   priceModifierValue: string;
   companyName?: string;
   companyCode?: number;
@@ -31,10 +33,5 @@ export type CompanyResponseType = {
 export type CompanyListResponse = {
   records: CompanyResponseType[];
   total: number;
-  entityTypeCounts: EntityCountsResponse;
-};
-
-export type EntityCountsResponse = {
-  Active: number;
-  Inactive: number;
+  entityTypeCounts: EntityState<string>;
 };

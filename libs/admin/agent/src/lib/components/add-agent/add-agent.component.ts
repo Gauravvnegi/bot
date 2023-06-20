@@ -122,10 +122,10 @@ export class AddAgentComponent implements OnInit {
     }
 
     const formData = AgentModel.mapFormData(this.agentForm.getRawValue());
-    const queryParms = { params: '?type=AGENT' };
+    const queryParams = { params: '?type=AGENT' };
     const request = !!this.agentId
       ? this.agentService.updateAgent(formData, this.agentId)
-      : this.agentService.addAgent(formData, queryParms);
+      : this.agentService.addAgent(formData, queryParams);
     this.subscription$.add(
       request.subscribe(this.handleSuccess, this.handleFinal)
     );
@@ -135,7 +135,6 @@ export class AddAgentComponent implements OnInit {
     this.agentForm.patchValue({
       name: '',
       email: '',
-
       phoneNo: '',
       iataNo: '',
       companyId: '',

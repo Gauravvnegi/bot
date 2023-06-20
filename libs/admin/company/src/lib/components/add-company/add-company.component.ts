@@ -90,7 +90,7 @@ export class AddCompanyComponent implements OnInit {
             address: response.address,
             salePersonName: response.salesPersonName,
             salePersonNo: response.salesPersonPhone,
-            discountType: response.pricaModifierType,
+            discountType: response.priceModifierType,
             discount: response.priceModifierValue,
           });
         }, this.handleFinal)

@@ -14,24 +14,26 @@ export class FinanceService extends ApiService {
   selectedTransactionTable = new BehaviorSubject<TableValue>(TableValue.ROOM);
 
 
-  getInvoiceHistory(hotelId?: string, config?: QueryConfig): Observable<any> {
+  getInvoiceHistory(config?: QueryConfig): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`
-    ).pipe(
-      map((res) => {
-        return invoiceHistoryRes;
-      })
-    );;
+      `/api/v1/invoices${config.params}`
+    )
+    // .pipe(
+    //   map((res) => {
+    //     return invoiceHistoryRes;
+    //   })
+    // );;
   }
 
-  getTransactionHistory(hotelId: string, config?: QueryConfig): Observable<any>  {
+  getTransactionHistory(config?: QueryConfig): Observable<any>  {
     return this.get(
-      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`
-    ).pipe(
-      map((res) => {
-        return transactionHistoryRes;
-      })
-    );;
+      `/api/v1/payment${config.params}`
+    )
+    // .pipe(
+    //   map((res) => {
+    //     return transactionHistoryRes;
+    //   })
+    // );
   }
 
   exportCSV(hotelId: string): Observable<any> {

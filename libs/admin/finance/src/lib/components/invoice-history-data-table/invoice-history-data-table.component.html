@@ -28,7 +28,6 @@
   [rows]="rowsPerPage"
   [showCurrentPageReport]="showCurrentPageReport"
   [rowsPerPageOptions]="rowsPerPageOptions"
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
   [(first)]="first"
   [totalRecords]="totalRecords"
   [filterDelay]="0"
@@ -39,13 +38,8 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
->
-  <!-- *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable" -->
-  <!-- <ng-template pTemplate="caption">
-    <div class="caption__wrapper" [formGroup]="tableFG">
-      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-    </div>
-  </ng-template> -->
+  *ngIf="totalRecords; else emptyTable"
+  >
 
   <!-- *******************************EMPTY TABLE VIEW******************************* -->
   <ng-template pTemplate="emptymessage">
@@ -90,13 +84,6 @@
           </div>
         </div>
       </td>
-      <!-- <td>
-        <div class="cell-content" *ngIf="rowData.rooms; else emptyCell">
-          <div class="primary-text">
-            {{ rowData.rooms }}
-          </div>
-        </div>
-      </td> -->
       <td>
         <div class="cell-content" *ngIf="rowData.invoiceDate; else emptyCell">
           <div class="primary-text">
@@ -104,32 +91,10 @@
           </div>
         </div>
       </td>
-      <!-- <td>
-        <div
-          class="center-align"
-          *ngIf="rowData.paymentMethods; else emptyCell"
-        >
-          <div class="primary-text">
-            {{ rowData.paymentMethods }}
-          </div>
-        </div>
-      </td>
       <td>
-        <div class="center-align" *ngIf="rowData.status; else emptyCell">
-          <div
-            class="status-text"
-            [ngClass]="
-              rowData.status === 'Paid' ? 'chip-contained-paid' : 'chip-contained-unpaid'
-            "
-          >
-            {{ rowData.status }}
-          </div>
-        </div>
-      </td> -->
-      <td>
-        <div class="cell-content" *ngIf="rowData.totalAmount; else emptyCell">
+        <div class="cell-content" *ngIf="rowData.totalBill; else emptyCell">
           <div class="primary-text">
-            {{ rowData.totalAmount | currency: 'INR' }}
+            {{ rowData.totalBill | currency: 'INR' }}
           </div>
         </div>
       </td>
@@ -164,12 +129,3 @@
     <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
   </hospitality-bot-empty-table>
 </ng-template>
-
-<!-- <ng-template #tabFilter>
-  <hospitality-bot-tab-group
-    [selectedIndex]="tabFilterIdx"
-    *ngIf="isTabFilters"
-    [listItems]="tabFilterItems"
-    (selectedTabChange)="onSelectedTabFilterChange($event)"
-  ></hospitality-bot-tab-group>
-</ng-template> -->

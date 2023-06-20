@@ -39,8 +39,8 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
->
-  <!-- *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable" -->
+  *ngIf="totalRecords; else emptyTable"
+  >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
       <!-- <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container> -->
@@ -49,6 +49,7 @@
         *ngIf="isQuickFilters"
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
       ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -106,7 +107,7 @@
                 : 'chip-contained-unpaid'
             "
           >
-            {{ rowData.status === 'SUCCESS' ? 'Paid' : 'Unpaid' }}
+            {{ rowData.status === 'SUCCESS' ? 'Paid' : 'Failed' }}
           </div>
         </div>
       </td>

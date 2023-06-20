@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  cols,
-  filters,
-  TableValue,
-  title,
-} from '../../constants/data-table';
+import { cols, filters, TableValue, title } from '../../constants/data-table';
 import { Subscription } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -16,7 +11,7 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { FinanceService } from '../../services/finance.service';
 import { QueryConfig } from '@hospitality-bot/admin/library';
-import { InvoiceHistory } from '../../models/history.model';
+import { InvoiceHistoryList } from '../../models/history.model';
 import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
@@ -29,12 +24,9 @@ import { LazyLoadEvent } from 'primeng/api';
 })
 export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   implements OnInit {
-  tabFilterItems = filters;
-  selectedTable: TableValue;
   tableName = title;
   cols = cols.invoice;
   isQuickFilters = true;
-
   hotelId: string;
   globalQueries = [];
 
@@ -46,7 +38,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
-    private financeService: FinanceService,
+    private financeService: FinanceService
   ) {
     super(fb, tabFilterService);
   }
@@ -54,19 +46,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
     this.listenForGlobalFilters();
-    this.initTableValue();
-    // this.listenToTableChange();
   }
-
-  // /**
-  //  * @function listenToTableChange  To listen to table changes
-  //  */
-  // listenToTableChange() {
-  //   this.financeService.selectedTable.subscribe((value) => {
-  //     this.selectedTable = value;
-  //     this.initTableValue();
-  //   });
-  // }
 
   loadData(event: LazyLoadEvent): void {
     this.initTableValue();
@@ -74,13 +54,11 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
 
   initTableValue() {
     this.loading = true;
-    this.financeService.getInvoiceHistory().subscribe(
+    this.financeService.getInvoiceHistory(this.getQueryConfig()).subscribe(
       (res) => {
-        const invoiceHistory = new InvoiceHistory().deserailize(res);
-        this.values = res;
-        // this.updateTabFilterCount(res.entityTypeCounts, res.total);
-        // this.updateQuickReplyFilterCount(res.entityStateCounts);
-        // this.updateTotalRecords();
+        this.values = new InvoiceHistoryList().deserialize(res)
+          .records;
+        this.totalRecords = res.total
       },
       () => {
         this.values = [];
@@ -90,7 +68,6 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     );
   }
 
-
   /**
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
@@ -98,8 +75,10 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     this.globalFilterService.globalFilter$.subscribe((data) => {
       // set-global query everytime global filter changes
       this.globalQueries = [
+        ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
+      this.initTableValue();
     });
   }
 
@@ -115,29 +94,6 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
     };
     return config;
   }
-
-  // /**
-  //  * @function getSelectedQuickReplyFilters To return the selected chip list.
-  //  * @returns The selected chips.
-  //  */
-  // getSelectedQuickReplyFilters() {
-  //   const chips = this.filterChips.filter(
-  //     (item) => item.isSelected && item.value !== 'ALL'
-  //   );
-  //   return [
-  //     chips.length !== 1
-  //       ? { status: null }
-  //       : { status: chips[0].value === 'PAID' },
-  //   ];
-  // }
-
-  // onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-  //   this.financeService.selectedTable.next(
-  //     this.tabFilterItems[event.index].value
-  //   );
-  //   this.tabFilterIdx = event.index;
-  //   this.initTableValue();
-  // }
 
   /**
    * @function handleError to show the error

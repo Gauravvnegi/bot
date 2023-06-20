@@ -1,5 +1,6 @@
 import { filtersChips } from '@hospitality-bot/admin/library';
-import { Chip, Cols, Filter } from '@hospitality-bot/admin/shared';
+import { Chip, Cols, Filter, FlagType } from '@hospitality-bot/admin/shared';
+import { TransactionStatus } from '../types/history';
 
 export enum TableValue {
   ROOM = 'ROOM',
@@ -50,27 +51,23 @@ export const filters: Filter<TableValue, string>[] = [
 export const cols = {
   invoice: [
     {
-      field: 'id',
+      field: 'invoiceId',
       header: 'Invoice Id',
       sortType: 'number',
     },
     {
       field: 'bookingNumber',
-      header: 'Booking No./ Order No.',
+      header: 'Booking No.',
       sortType: 'number',
     },
-    // {
-    //   field: 'rooms',
-    //   header: 'Rooms',
-    //   sortType: 'number',
-    // },
     {
       field: 'date',
       header: 'Invoice Date',
-      sortType: 'string',
+      sortType: 'date',
+      isSearchDisabled: true,
     },
     {
-      field: 'bill',
+      field: 'totalBill',
       header: 'Total Bill',
       sortType: 'number',
     },
@@ -78,14 +75,15 @@ export const cols = {
 
   transaction: [
     {
-      field: 'id',
+      field: 'transactionId',
       header: 'Transaction Id',
-      sortType: 'number',
+      sortType: 'string',
     },
     {
       field: 'dateTime',
       header: 'Date & Time',
-      sortType: 'number',
+      sortType: 'date',
+      isSearchDisabled: true
     },
     {
       field: 'status',
@@ -181,7 +179,7 @@ export const transactionChips: Chip<'ALL' | 'SUCCESS' | 'FAILURE'>[] = [
     type: 'active',
   },
   {
-    label: 'Unpaid',
+    label: 'Fail',
     value: 'FAILURE',
     total: 0,
     isSelected: false,
@@ -189,26 +187,15 @@ export const transactionChips: Chip<'ALL' | 'SUCCESS' | 'FAILURE'>[] = [
   },
 ];
 
-export const invoiceChips: Chip<'ALL' | 'SUCCESS' | 'FAILURE'>[] = [
-  {
-    label: 'All',
-    value: 'ALL',
-    total: 0,
-    isSelected: true,
-    type: 'default',
-  },
-  {
+
+
+export const transactionStatus: Record<TransactionStatus, {label: string; type: FlagType}> = {
+  SUCCESS: {
     label: 'Paid',
-    value: 'SUCCESS',
-    total: 0,
-    isSelected: false,
-    type: 'active',
+    type: 'active'
   },
-  {
-    label: 'Unpaid',
-    value: 'FAILURE',
-    total: 0,
-    isSelected: false,
-    type: 'failed',
-  },
-];
+  FAILURE: {
+    label: 'Failed',
+    type: 'failed'
+  }
+}

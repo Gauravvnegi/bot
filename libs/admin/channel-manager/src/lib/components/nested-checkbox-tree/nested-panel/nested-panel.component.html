@@ -30,11 +30,7 @@
       </ng-template>
       <ng-template pTemplate="content">
         <div class="panel-tree__content">
-          <p-accordion
-            [multiple]="true"
-            [activeIndex]="activatedVariant"
-            class="w-full"
-          >
+          <p-accordion [multiple]="true" class="w-full">
             <p-accordionTab
               *ngFor="
                 let variant of roomsData.variants;

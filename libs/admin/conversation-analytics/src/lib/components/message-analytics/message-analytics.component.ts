@@ -44,11 +44,6 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
       value: 'whatsapp',
       title: 'WhatsApp',
     },
-    {
-      label: 'Facebook',
-      value: 'facebook',
-      title: 'Facebook',
-    },
     // new Tab({
     //   component: WhatsappMessageAnalyticsComponent,
     //   title: 'WhatsApp',

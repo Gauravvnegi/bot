@@ -112,8 +112,6 @@ export class HotelInfoFormComponent implements OnInit {
         .get('hotel')
         .patchValue(this.hotelFormDataService.hotelInfoFormData);
     }
-
-    this.patchValue();
     this.manageRoutes();
 
     //if hotel id is present then get the hotel by id and paatch the hotel detais
@@ -168,9 +166,6 @@ export class HotelInfoFormComponent implements OnInit {
         : `pages/settings/business-info/brand/${this.brandId}/hotel/import-services`,
     };
   }
-
-  // if hotel form state is true then set the form value
-  patchValue() {}
 
   /**
    * @function getSegmentList to get segment list

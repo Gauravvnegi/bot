@@ -130,8 +130,11 @@ export class BusinessService extends ApiService {
   }
 
   getServiceList(hotelId, config?: QueryConfig): Observable<any> {
-    //on header add hotel id
-    return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
+    return this.get(
+      `/api/v1/entity/${hotelId}/library${config?.params ?? ''}`,
+      { headers: { 'hotel-id': hotelId } }
+      //hotel id to be send as header for getting service
+    );
   }
 
   tempServiceIds: any[] = [];

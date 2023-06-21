@@ -3,7 +3,6 @@ import { FormBuilder } from '@angular/forms';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  Chip,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
@@ -36,7 +35,6 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   tableName = title;
   cols = cols;
   filterChips = chips;
-  iQuickFilters = true;
 
   subscription$ = new Subscription();
 

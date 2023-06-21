@@ -12,7 +12,6 @@ import {
 import * as FileSaver from 'file-saver';
 import { CompanyService } from '../../services/company.service';
 import { Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { LazyLoadEvent } from 'primeng/api';
 import { CompanyResponseModel } from '../../models/company.model';
@@ -30,6 +29,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   implements OnInit {
   readonly companyRoutes = companyRoutes;
   tableName = title;
+  filterChips = chips;
   cols = cols;
 
   $subscription = new Subscription();

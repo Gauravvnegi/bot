@@ -37,6 +37,19 @@ export class AddressComponent extends FormComponent implements OnInit {
   }
 
   getValueFromParent() {
+    if (this.inputControl.value) {
+      this.addressList = [
+        {
+          label: this.inputControl.value.formattedAddress,
+          value: this.inputControl.value.id,
+        },
+      ];
+      this.addressForm.get('addressData').patchValue({
+        label: this.inputControl.value.formattedAddress,
+        value: this.inputControl.value.id,
+      });
+    }
+
     this.inputControl.valueChanges.subscribe((res) => {
       if (res !== null && res !== undefined && res !== '') {
         this.addressList = [
@@ -45,10 +58,15 @@ export class AddressComponent extends FormComponent implements OnInit {
             value: this.inputControl.value.id,
           },
         ];
-        this.addressForm.get('addressData').patchValue({
-          label: this.inputControl.value.formattedAddress,
-          value: this.inputControl.value.id,
-        });
+        this.addressForm.get('addressData').patchValue(
+          {
+            label: this.inputControl.value.formattedAddress,
+            value: this.inputControl.value.id,
+          },
+          {
+            emitEvent: false,
+          }
+        );
       }
     });
   }

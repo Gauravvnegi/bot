@@ -4,8 +4,8 @@
     <hr />
     <div class="sub-container-wrapper">
       <hospitality-bot-custom-select
-        label="Complimentary Services"
-        description="This is a free of cost services"
+        label="Services"
+        description="Do not forget to add this cost in addition to the room cost"
         formControlName="serviceIds"
         [itemList]=""
         [noRecordsAction]="{
@@ -14,9 +14,9 @@
         }"
       >
         <hospitality-bot-button
-          label="+ Import Services"
-          variant="text"
-          link=""
+          label="+ Add Service"
+          variant="outlined"
+          link="pages"
         ></hospitality-bot-button>
       </hospitality-bot-custom-select>
     </div>

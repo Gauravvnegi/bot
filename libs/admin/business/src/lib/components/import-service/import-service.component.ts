@@ -154,9 +154,10 @@ export class ImportServiceComponent implements OnInit {
       true
     );
 
-    this.businessService
-      .updateHotel(this.hotelId, { serviceIds: serviceIds })
-      .subscribe((_res) => {});
+    if (this.hotelId)
+      this.businessService
+        .updateHotel(this.hotelId, { serviceIds: serviceIds })
+        .subscribe((_res) => {});
 
     this.location.back();
   }

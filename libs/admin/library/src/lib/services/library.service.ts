@@ -1,15 +1,23 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
+import { tokensConfig } from 'libs/admin/shared/src/lib/constants/common';
 import { Observable } from 'rxjs/internal/Observable';
 import { CategoryData, QueryConfig } from '../types/library';
 import {
   CategoriesResponse,
   CategoryResponse,
-  SearchResultResponse,
+  SearchResultResponse
 } from '../types/response';
 
 @Injectable()
 export class LibraryService extends ApiService {
+  httpOptions: { headers: HttpHeaders } = {
+    headers: new HttpHeaders({
+      'hotel-id': localStorage.getItem(tokensConfig.hotelId),
+    }),
+  };
+
   createLibraryItem<T, K>(hotelId: string, data: T): Observable<K> {
     return this.post(`/api/v1/entity/${hotelId}/library`, data);
   }

@@ -54,14 +54,19 @@ export class AddressComponent extends FormComponent implements OnInit {
       if (res !== null && res !== undefined && res !== '') {
         this.addressList = [
           {
-            label: res.formattedAddress,
-            value: res.id,
+            label: this.inputControl.value.formattedAddress,
+            value: this.inputControl.value.id,
           },
         ];
-        this.addressForm.get('addressData').patchValue({
-          label: res.formattedAddress,
-          value: res.id,
-        });
+        this.addressForm.get('addressData').patchValue(
+          {
+            label: this.inputControl.value.formattedAddress,
+            value: this.inputControl.value.id,
+          },
+          {
+            emitEvent: false,
+          }
+        );
       }
     });
   }

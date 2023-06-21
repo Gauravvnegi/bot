@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   ActivatedRoute,
@@ -10,17 +10,8 @@ import { NavRouteOption, Option, Regex } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { businessRoute } from '../../constant/routes';
-import {
-  HotelResponse,
-  SegmentList,
-  Service,
-  ServiceIdList,
-  Services,
-  noRecordAction,
-} from '../../models/hotel.models';
+import { SegmentList, Service } from '../../models/hotel.models';
 import { BusinessService } from '../../services/business.service';
-import { AddressService } from '../../services/place.service';
-import { ServcieStatusList } from '../../models/hotel-form.model';
 import { HotelFormDataService } from '../../services/hotel-form.service';
 
 declare let google: any;
@@ -59,7 +50,6 @@ export class HotelInfoFormComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private router: Router,
     private businessService: BusinessService,
-    private addressService: AddressService,
     private route: ActivatedRoute,
     private hotelFormDataService: HotelFormDataService
   ) {
@@ -161,10 +151,6 @@ export class HotelInfoFormComponent implements OnInit {
     this.noRecordAction = {
       imageSrc: 'assets/images/empty-table-service.png',
       description: 'No services found',
-      actionName: '+ Import Services',
-      link: this.hotelId
-        ? `pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}/import-services`
-        : `pages/settings/business-info/brand/${this.brandId}/hotel/import-services`,
     };
   }
 

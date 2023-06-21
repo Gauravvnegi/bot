@@ -64,8 +64,13 @@
           controlName="roomType"
           [options]="roomTypes"
           [props]="{
+            isAsync: true,
             placeholder: 'Select'
           }"
+          [loading]="loadingRoomTypes"
+          (paginate)="loadMoreRoomTypes()"
+          (onSearch)="searchRoomTypes($event)"
+          [stopEmission]="noMoreRoomTypes"
         >
         </hospitality-bot-select>
         <hospitality-bot-checkbox-selector
@@ -85,7 +90,10 @@
     ></hospitality-bot-nested-checkbox-tree>
 
     <div class="action-button w-100">
-      <hospitality-bot-button label="Save"></hospitality-bot-button>
+      <hospitality-bot-button
+        (click)="onSubmit()"
+        label="Save"
+      ></hospitality-bot-button>
     </div>
   </div>
 </div>

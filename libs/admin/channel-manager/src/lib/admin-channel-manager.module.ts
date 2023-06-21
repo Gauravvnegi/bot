@@ -7,6 +7,8 @@ import { AdminChannelMangerRoutingModule } from './admin-channel-manager.routing
 import { NestedCheckboxTreeComponent } from './components/nested-checkbox-tree/nested-checkbox-tree.component';
 import { NestedPanelComponent } from './components/nested-checkbox-tree/nested-panel/nested-panel.component';
 import { BulkUpdateComponent } from './components/bulk-update/bulk-update.component';
+import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
+import { LibraryService } from '@hospitality-bot/admin/library';
 
 @NgModule({
   imports: [
@@ -23,5 +25,6 @@ import { BulkUpdateComponent } from './components/bulk-update/bulk-update.compon
     NestedPanelComponent,
     BulkUpdateComponent,
   ],
+  providers: [RoomService, LibraryService],
 })
 export class AdminChannelManagerModule {}

@@ -44,6 +44,11 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
       value: 'whatsapp',
       title: 'WhatsApp',
     },
+    {
+      label: 'Facebook',
+      value: 'facebook',
+      title: 'Facebook',
+    },
     // new Tab({
     //   component: WhatsappMessageAnalyticsComponent,
     //   title: 'WhatsApp',
@@ -102,7 +107,7 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
-    this.messageTabService.selectedTabMenu$.next(event.index);
+    // this.messageTabService.selectedTabMenu$.next(event.index);
   }
 
   exportCSV() {

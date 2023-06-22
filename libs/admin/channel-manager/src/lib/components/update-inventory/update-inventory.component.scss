@@ -25,7 +25,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 
 .left {
   min-width: 200px;
-  flex-basis: 30%;
+  flex-basis: 35%;
 
   &__main {
     width: 100%;
@@ -33,7 +33,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 .right {
-  flex-basis: 70%;
+  flex-basis: 65%;
   // overflow: auto;
   overflow: hidden; /* Hides the scrollbar */
 
@@ -152,6 +152,11 @@ $border-color: rgba(112, 112, 112, 0.35);
     width: 150px;
     @include item-center;
     height: 100%;
+
+    &.row-cell {
+      justify-content: flex-end;
+      padding-right: 2%;
+    }
   }
 
   .ttp {
@@ -160,6 +165,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 
   .ltr {
     flex-direction: row;
+    position: relative;
   }
 }
 
@@ -226,5 +232,83 @@ $border-color: rgba(112, 112, 112, 0.35);
 
   &-btn {
     min-width: 140px;
+  }
+}
+
+.rates {
+  cursor: pointer;
+  position: relative;
+}
+
+.pi-link {
+  cursor: pointer;
+  padding: 1%;
+  border-radius: 50%;
+  &.active {
+    background-color: $primary;
+    color: white;
+  }
+}
+
+// Rates dropdown styling
+:host ::ng-deep .rates {
+  .p-dropdown {
+    margin-left: 0%;
+    border: 0px;
+    &:not(.p-disabled) {
+      &.p-focus {
+        box-shadow: none !important;
+      }
+    }
+  }
+  .p-inputtext {
+    padding: 0px;
+  }
+}
+
+//Link toggle styling
+:host ::ng-deep .link {
+  & .p-togglebutton {
+    &.p-button {
+      border: none;
+      background: transparent;
+
+      &.p-highlight {
+        background: $primary;
+
+        & .p-button-icon {
+          color: white;
+        }
+      }
+    }
+    &.p-button-icon-only {
+      width: auto;
+      padding: 5px;
+      border-radius: 50%;
+    }
+  }
+}
+
+
+// Channel toggle btn styling
+:host ::ng-deep .channel-btn {
+  & .p-togglebutton {
+    &.p-button {
+      border: none;
+      background: #e8e2ff !important;
+      color: $primary !important;
+      padding: 4px 6px;
+
+      & .p-button-label {
+        white-space: nowrap;
+        font-size: 14px;
+        letter-spacing: 0.84px;
+        font-weight: normal;
+      }
+      & .p-button-icon {
+        color: $primary !important;
+        zoom: 0.8;
+      }
+    }
   }
 }

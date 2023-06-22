@@ -6,6 +6,7 @@ import { allOutletsResponse, menuListResponse } from '../constants/response';
 import { map } from 'rxjs/operators';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { MenuConfig, OutletConfig } from '../types/config';
+import { OutletResponse } from '../types/response';
 
 @Injectable()
 export class OutletService extends ApiService {
@@ -59,7 +60,7 @@ export class OutletService extends ApiService {
 
   //dummy
 
-  getOutletById(outletId: string): Observable<any> {
+  getOutletById(outletId: string): Observable<OutletResponse> {
     return this.get(`/api/v1/entity/${outletId}`);
   }
 
@@ -68,6 +69,40 @@ export class OutletService extends ApiService {
   }
 
   addOutlet(data): Observable<any> {
-    return this.post(`/api/v1/entity/outlet`, data);
+    return this.post(
+      `/api/v1/entity/onboarding?source=CREATE_WITH&onboardingType=OUTLET`,
+      data
+    );
+  }
+
+  addMenuItems(data, config: QueryConfig): Observable<any> {
+    return this.post(`/api/v1/menu-item ${config.params ?? ''}`, data);
+  }
+
+  /**
+   * @function updateMenuItems
+   * @description update menu items
+   * @param data
+   * @param itemId
+   * @returns
+   */
+  updateMenuItems(itemId, data): Observable<any> {
+    return this.patch(`/api/v1/menu-item /${itemId}`, data);
+  }
+
+  getMenuItemsById(itemId: string): Observable<any> {
+    return this.get(`/api/v1/menu-item /${itemId}`);
+  }
+
+  addFoodPackage(data): Observable<any> {
+    return this.post(`/api/v1/food-package`, data);
+  }
+
+  updateFoodPackage(packageId, data): Observable<any> {
+    return this.patch(`/api/v1/food-package/${packageId}`, data);
+  }
+
+  getFoodPackageById(packageId: string): Observable<any> {
+    return this.get(`/api/v1/food-package/${packageId}`);
   }
 }

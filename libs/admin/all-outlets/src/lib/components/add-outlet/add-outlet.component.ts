@@ -1,12 +1,27 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
-import { outletRoutes } from '../../constants/routes';
-import { OutletService } from '../../services/outlet.service';
-import { cousins } from '../../constants/data';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { Router } from '@angular/router';
+import {
+  HotelDetailService,
+  NavRouteOptions,
+  Option,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { cousins } from '../../constants/data';
+import { outletRoutes } from '../../constants/routes';
+import { OutletService } from '../../services/outlet.service';
+import {
+  OutletForm,
+  RestaurantForm,
+  SpaForm,
+  VenueForm,
+} from '../../types/outlet';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
@@ -24,6 +39,7 @@ export class AddOutletComponent implements OnInit {
   cousins = cousins;
   $subscription = new Subscription();
   loading = false;
+  siteId: string;
 
   @HostListener('window:beforeunload', ['$event'])
   handleBeforeUnload(event: BeforeUnloadEvent) {
@@ -35,8 +51,9 @@ export class AddOutletComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private outletService: OutletService,
-    private snackbarSerivce: SnackBarService,
-    private router: Router
+    private snackbarService: SnackBarService,
+    private router: Router,
+    private hotelDetailService: HotelDetailService
   ) {
     const { navRoutes, title } = outletRoutes['addOutlet'];
     this.navRoutes = navRoutes;
@@ -44,6 +61,7 @@ export class AddOutletComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.siteId = this.hotelDetailService.siteId;
     this.initOptions();
     this.initForm();
   }
@@ -73,15 +91,15 @@ export class AddOutletComponent implements OnInit {
       closingDay: [''],
       openingHour: [''],
       closingHour: [''],
-      address: [[], [Validators.required]],
+      address: [{}, [Validators.required]],
       imageUrl: [[], [Validators.required]],
       description: [''],
       rules: [[]],
       serviceIds: [[]],
       menu: [[]],
       socialMedia: [[]],
-      maxOccupancy: ['', [Validators.required]],
-      minOccupancy: ['', [Validators.required]],
+      maximumOccupancy: [''],
+      minimumOccupancy: [''],
       area: [''],
       areaUnit: ['sqft'],
       foodPackages: [[]],
@@ -106,6 +124,25 @@ export class AddOutletComponent implements OnInit {
     if (selectedType[0].value === 'RESTAURANT') {
       this.outletService.menu.next(selectedType[0].menu);
     }
+
+    //set form validation on type change
+    debugger;
+    const { maximumOccupancy, minimumOccupancy } = this.formControls;
+    switch (type) {
+      case 'RESTAURANT':
+        maximumOccupancy.setValidators([Validators.required]);
+        minimumOccupancy.clearValidators();
+        break;
+
+      case 'VENUE':
+        minimumOccupancy.setValidators([Validators.required]);
+        maximumOccupancy.clearAsyncValidators();
+        break;
+
+      case 'SPA':
+        maximumOccupancy.clearValidators();
+        minimumOccupancy.clearValidators();
+    }
   }
 
   /**
@@ -115,15 +152,13 @@ export class AddOutletComponent implements OnInit {
   submitForm(): void {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
-      this.snackbarSerivce.openSnackBarAsText(
-        'Please fill all the required fields',
-        'error'
+      this.snackbarService.openSnackBarAsText(
+        'Please fill all the required fields'
       );
-
       return;
     }
 
-    const data = this.useForm.getRawValue();
+    let data = this.useForm.getRawValue() as OutletForm;
 
     if (this.outletId) {
       this.$subscription.add(
@@ -134,10 +169,33 @@ export class AddOutletComponent implements OnInit {
     } else {
       this.$subscription.add(
         this.outletService
-          .addOutlet(data)
+          .addOutlet({ entity: { ...data }, siteId: this.siteId })
           .subscribe(this.handleSuccess, this.handleError)
       );
     }
+  }
+
+  //get form controls
+  get formControls() {
+    return this.useForm.controls as Record<keyof OutletForm, AbstractControl>;
+  }
+
+  //get restaurant form controls
+  get restaurantFormControl() {
+    return this.useForm.controls as Record<
+      keyof RestaurantForm,
+      AbstractControl
+    >;
+  }
+
+  //get venue form controls
+  get venueFormControl() {
+    return this.useForm.controls as Record<keyof VenueForm, AbstractControl>;
+  }
+
+  //get spa form controls
+  get spaFormControl() {
+    return this.useForm.controls as Record<keyof SpaForm, AbstractControl>;
   }
 
   /**
@@ -154,12 +212,12 @@ export class AddOutletComponent implements OnInit {
    * @description handles success
    */
   handleSuccess = () => {
-    this.snackbarSerivce.openSnackBarAsText(
+    this.snackbarService.openSnackBarAsText(
       this.outletId
         ? 'Outlet updated successfully'
         : 'Outlet added successfully'
     );
-    this.router.navigate(['']);
+    this.router.navigate(['pages/settings/business-info/brand']);
   };
 
   /**

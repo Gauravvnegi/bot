@@ -1,9 +1,9 @@
 <div class="panel-tree">
   <p-accordion class="accordion">
     <p-accordionTab>
-      <ng-template pTemplate="header">
+      <p-header>
         <div
-          class="panel-tree__header label-checkbox-wrapper"
+          class="panel-tree__header label-checkbox-wrapper category-header"
           [ngStyle]="parentHeadingStyle"
         >
           <span class="panel-tree__header-checkbox">
@@ -27,92 +27,79 @@
             {{ roomsData.name }}
           </label>
         </div>
-      </ng-template>
-      <ng-template pTemplate="content">
-        <div class="panel-tree__content">
-          <p-accordion
-            [multiple]="true"
-            [activeIndex]="activatedVariant"
-            class="w-full"
+      </p-header>
+      <div class="panel-tree__content">
+        <p-accordion [multiple]="true" class="w-full">
+          <p-accordionTab
+            *ngFor="let variant of roomsData.variants; let variantIndex = index"
+            class="disable-parent"
           >
-            <p-accordionTab
-              *ngFor="
-                let variant of roomsData.variants;
-                let variantIndex = index
-              "
+            <p-header>
+              <div class="varient__heading label-checkbox-wrapper">
+                <span class="panel-tree__header-checkbox">
+                  <input
+                    type="checkbox"
+                    [name]="'variant-' + variant.name"
+                    [id]="variant.id"
+                    (change)="
+                      onRoomChange(
+                        $event.target.checked,
+                        variant.id,
+                        'variant',
+                        variantIndex
+                      )
+                    "
+                    [checked]="variant.isSelected"
+                    (click)="$event.stopPropagation()"
+                    class="custom-checkbox enable-child"
+                  />
+                </span>
+
+                <span class="panel-tree__header-checkbox variant-wrapper">
+                  <label
+                    [for]="variant.id"
+                    (click)="$event.stopPropagation()"
+                    >{{ variant.name }}</label
+                  >
+
+                  <hospitality-bot-menu-button
+                    class="channel-heading enable-child"
+                    [label]="roomsData.variants.length + ' Channels'"
+                  ></hospitality-bot-menu-button>
+                </span>
+              </div>
+            </p-header>
+            <label
+              class="channel label-checkbox-wrapper panel-tree__header enable-child"
+              *ngFor="let channel of variant.channels; let channelIndex = index"
+              [for]="roomsData.id + '-' + variant.id + '-' + channel.id"
+              [ngClass]="'active-channel'"
             >
-              <ng-template pTemplate="header">
-                <div class="varient__heading label-checkbox-wrapper">
-                  <span class="panel-tree__header-checkbox">
-                    <input
-                      type="checkbox"
-                      [name]="'variant-' + variant.name"
-                      [id]="variant.id"
-                      (change)="
-                        onRoomChange(
-                          $event.target.checked,
-                          variant.id,
-                          'variant',
-                          variantIndex
-                        )
-                      "
-                      [checked]="variant.isSelected"
-                      (click)="$event.stopPropagation()"
-                      class="custom-checkbox"
-                    />
-                  </span>
-
-                  <span class="panel-tree__header-checkbox variant-wrapper">
-                    <label
-                      [for]="variant.id"
-                      (click)="$event.stopPropagation()"
-                      >{{ variant.name }}</label
-                    >
-
-                    <hospitality-bot-menu-button
-                      class="channel-heading"
-                      [label]="roomsData.variants.length + ' channel'"
-                    ></hospitality-bot-menu-button>
-                  </span>
-                </div>
-              </ng-template>
-              <ng-template pTemplate="content">
-                <label
-                  class="channel label-checkbox-wrapper panel-tree__header"
-                  *ngFor="
-                    let channel of variant.channels;
-                    let channelIndex = index
+              <span class="panel-tree__header-checkbox">
+                <input
+                  type="checkbox"
+                  [name]="'channel-' + channel.name"
+                  class="custom-checkbox enable-child"
+                  [id]="roomsData.id + '-' + variant.id + '-' + channel.id"
+                  (change)="
+                    onRoomChange(
+                      $event.target.checked,
+                      channel.id,
+                      'channel',
+                      variantIndex,
+                      channelIndex
+                    )
                   "
-                  [for]="variant.id + '-' + channel.id"
-                  [ngClass]="channel.isSelected ? 'active-channel' : ''"
-                >
-                  <span class="panel-tree__header-checkbox">
-                    <input
-                      type="checkbox"
-                      [name]="'channel-' + channel.name"
-                      class="custom-checkbox"
-                      [id]="variant.id + '-' + channel.id"
-                      (change)="
-                        onRoomChange(
-                          $event.target.checked,
-                          channel.id,
-                          'channel',
-                          variantIndex,
-                          channelIndex
-                        )
-                      "
-                      [checked]="channel.isSelected"
-                    />
-                  </span>
-                  <span class="panel-tree__header-label">
-                    {{ channel.name }}
-                  </span>
-                </label>
-              </ng-template>
-            </p-accordionTab>
-          </p-accordion>
-        </div>
-      </ng-template>
+                  [checked]="channel.isSelected"
+                />
+              </span>
+              <span class="panel-tree__header-label">
+                {{ channel.name }}
+              </span>
+            </label>
+          </p-accordionTab>
+        </p-accordion>
+      </div>
     </p-accordionTab>
   </p-accordion>
 </div>

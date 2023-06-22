@@ -4,19 +4,19 @@
     <hr />
     <div class="sub-container-wrapper">
       <hospitality-bot-custom-select
-        label="Complimentary Services"
-        description="This is a free of cost services"
+        label="Services"
+        description="Do not forget to add this cost in addition to the room cost"
         formControlName="serviceIds"
         [itemList]=""
         [noRecordsAction]="{
           description: 'No services found',
-          imageSrc: 'assets/images/empty-table-service.png'
+          imageSrc: 'assets/images/empty-view-food-package.jpg'
         }"
       >
         <hospitality-bot-button
-          label="+ Import Services"
-          variant="text"
-          link=""
+          label="+ Add Service"
+          variant="outlined"
+          link="pages"
         ></hospitality-bot-button>
       </hospitality-bot-custom-select>
     </div>
@@ -30,10 +30,10 @@
         class="half-width"
         preControlName="openingDay"
         postControlName="closingDay"
-        preFieldType="autocomplete"
-        postFieldType="autocomplete"
-        [preOptions]="preOptions"
-        postOptions="preOptions"
+        preFieldType="select"
+        postFieldType="select"
+        [preOptions]="days"
+        [postOptions]="days"
         [settings]="{
           layout: 'dashed'
         }"
@@ -45,10 +45,10 @@
         class="half-width"
         preControlName="openingHour"
         postControlName="closingHour"
-        preFieldType="autocomplete"
-        postFieldType="autocomplete"
-        [preOptions]="preOptions"
-        postOptions="preOptions"
+        preFieldType="select"
+        postFieldType="select"
+        [preOptions]="hours"
+        [postOptions]="hours"
         [settings]="{
           layout: 'dashed'
         }"

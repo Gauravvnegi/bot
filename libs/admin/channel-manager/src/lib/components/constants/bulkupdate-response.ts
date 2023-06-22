@@ -3,40 +3,35 @@ import { RoomTypes } from '../../types/bulk-update.types';
 
 export const RoomsData: RoomTypes[] = [
   {
-    name: 'luxury1',
-    id: 'luxury1',
+    name: 'Luxury',
+    id: 'LUXURY-ID',
     isSelected: false,
     variants: [
       {
-        name: 'variant1',
+        name: 'EP (Room Only)',
         id: 'variant1',
         isSelected: false,
         channels: [
           {
+            name: 'Agoda',
             id: 'channel1',
-            name: 'channel1',
             isSelected: false,
           },
           {
             id: 'channel2',
-            name: 'channel2',
+            name: 'Booking.com',
             isSelected: false,
           },
         ],
       },
       {
-        name: 'variant2',
+        name: 'CP (With breakfast)',
         id: 'variant2',
         isSelected: false,
         channels: [
           {
-            id: 'channel1',
-            name: 'channel1',
-            isSelected: false,
-          },
-          {
             id: 'channel2',
-            name: 'channel2',
+            name: 'Booking.com',
             isSelected: false,
           },
         ],
@@ -44,40 +39,35 @@ export const RoomsData: RoomTypes[] = [
     ],
   },
   {
-    name: 'luxury2',
-    id: 'luxury2',
+    name: 'Delux',
+    id: 'DELUX-ID',
     isSelected: false,
     variants: [
       {
-        name: 'variant1',
+        name: 'EP (Room Only)',
         id: 'variant1',
         isSelected: false,
         channels: [
           {
+            name: 'Agoda',
             id: 'channel1',
-            name: 'channel1',
             isSelected: false,
           },
           {
             id: 'channel2',
-            name: 'channel2',
+            name: 'Booking.com',
             isSelected: false,
           },
         ],
       },
       {
-        name: 'variant2',
+        name: 'CP (With breakfast)',
         id: 'variant2',
         isSelected: false,
         channels: [
           {
-            id: 'channel1',
-            name: 'channel1',
-            isSelected: false,
-          },
-          {
             id: 'channel2',
-            name: 'channel2',
+            name: 'Booking.com',
             isSelected: false,
           },
         ],

@@ -44,7 +44,7 @@ export class CreateFoodPackageComponent implements OnInit {
     private configService: ConfigService,
     private tabFilterservice: TableService
   ) {
-    const { navRoutes, title } = outletRoutes['createFoodPackage'];
+    const { navRoutes, title } = outletRoutes['createFoodPackage1'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
   }

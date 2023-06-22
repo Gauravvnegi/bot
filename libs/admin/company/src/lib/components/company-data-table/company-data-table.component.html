@@ -84,9 +84,12 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.name; else emptyCell">
+        <div class="cell-content" *ngIf="rowData.companyName; else emptyCell">
           <div class="primary-text">
-            {{ rowData.name }}
+            {{ rowData.companyName }}
+          </div>
+          <div class="secondary-text">
+            {{ rowData.companyCode }}
           </div>
         </div>
       </td>

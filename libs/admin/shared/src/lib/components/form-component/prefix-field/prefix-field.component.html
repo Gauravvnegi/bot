@@ -9,7 +9,7 @@
         class="input pre-input"
         [ngClass]="{
           dashed: layout === 'dashed',
-          main: layout === 'pre-main',
+          primary: layout === 'pre-main',
           secondary: layout === 'post-main'
         }"
         [controlName]="preControlName"
@@ -21,7 +21,7 @@
         class="input slect pre-input"
         [ngClass]="{
           dashed: layout === 'dashed',
-          main: layout === 'pre-main',
+          primary: layout === 'pre-main',
           secondary: layout === 'post-main'
         }"
         [controlName]="preControlName"
@@ -39,11 +39,12 @@
           main: layout === 'pre-main',
           secondary: layout === 'post-main'
         }"
-        [options]="preOptions"
         [loading]="loading"
         [disabled]="inputDisabled.pre || isDisabled"
         [settings]="{
-          multiple: false
+          multiple: false,
+          options: preOptions,
+          isAsync: false
         }"
       >
       </hospitality-bot-auto-complete>
@@ -91,11 +92,12 @@
           secondary: layout === 'pre-main',
           main: layout === 'post-main'
         }"
-        [options]="postOptions"
         [loading]="loading"
         [disabled]="inputDisabled.post || isDisabled"
         [settings]="{
-          multiple: false
+          multiple: false,
+          options: postOptions,
+          isAsync: false
         }"
       >
       </hospitality-bot-auto-complete>

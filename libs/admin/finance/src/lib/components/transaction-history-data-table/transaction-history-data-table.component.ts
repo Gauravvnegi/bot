@@ -11,20 +11,15 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import {
-  filters,
-  TableValue,
   cols,
-  transactionChips,
+  transactionStatus,
 } from '../../constants/data-table';
 import { LazyLoadEvent } from 'primeng/api';
 import * as FileSaver from 'file-saver';
 import { FinanceService } from '../../services/finance.service';
 import {
-  TransactionHistory,
   TransactionHistoryList,
 } from '../../models/history.model';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { TransactionHistoryListResponse } from '../../types/history';
 
 @Component({
   selector: 'hospitality-bot-transaction-history-data-table',
@@ -36,13 +31,11 @@ import { TransactionHistoryListResponse } from '../../types/history';
 })
 export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   implements OnInit {
-  // tabFilterItems = filters;
-  selectedTable: TableValue;
   tableName = 'Transaction History';
-  filterChips = transactionChips;
+  transactionStatus = transactionStatus
   cols = cols.transaction;
   isQuickFilters = true;
-
+  globalQueries = [];
   hotelId: string;
 
   $subscription = new Subscription();
@@ -52,7 +45,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
     protected tabFilterService: TableService,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    protected snackbarService: SnackBarService, // private router: Router, // private modalService: ModalService
+    protected snackbarService: SnackBarService,
     private router: Router,
     private financeService: FinanceService
   ) {
@@ -61,19 +54,22 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.initTableValue();
-    // this.listenToTableChange();
+    this.listenForGlobalFilters();
   }
 
-  // /**
-  //  * @function listenToTableChange  To listen to table changes
-  //  */
-  // listenToTableChange() {
-  //   this.financeService.selectedTable.subscribe((value) => {
-  //     this.selectedTable = value;
-  //     this.initTableValue();
-  //   });
-  // }
+  /**
+   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+   */
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      // set-global query everytime global filter changes
+      this.globalQueries = [
+        ...data['filter'].queryValue,
+        ...data['dateRange'].queryValue,
+      ];
+      this.initTableValue();
+    });
+  }
 
   loadData(event: LazyLoadEvent): void {
     this.initTableValue();
@@ -82,27 +78,33 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   initTableValue() {
     this.loading = true;
 
-    this.financeService.getTransactionHistory(this.hotelId).subscribe(
+    this.financeService.getTransactionHistory(this.getQueryConfig()).subscribe(
       (res) => {
-        this.values = new TransactionHistoryList().deserialize(res).records;
-        this.updateQuickReplyFilterCount(res.entityStateCounts);
-        this.updateTotalRecords();
-        debugger;
+        const transactionHistory = new TransactionHistoryList().deserialize(
+          res
+        );
+        this.values = transactionHistory.records;
+        this.initFilters(
+          transactionHistory.entityTypeCounts,
+          transactionHistory.entityStateCounts,
+          transactionHistory.totalRecords,
+          this.transactionStatus
+        );
+        this.loading = false;
       },
       () => {
         this.values = [];
         this.loading = false;
       },
-      this.handleFinal
     );
   }
 
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.globalQueries,
         {
-          tableType: this.selectedTable,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -111,28 +113,20 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
     return config;
   }
 
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.financeService.selectedTransactionTable.next(
-      this.tabFilterItems[event.index].value
-    );
-    this.tabFilterIdx = event.index;
-    this.initTableValue();
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'SUCCESS' },
-    ];
-  }
+  // /**
+  //  * @function getSelectedQuickReplyFilters To return the selected chip list.
+  //  * @returns The selected chips.
+  //  */
+  // getSelectedQuickReplyFilters() {
+  //   const chips = this.filterChips.filter(
+  //     (item) => item.isSelected && item.value !== 'ALL'
+  //   );
+  //   return [
+  //     chips.length !== 1
+  //       ? { status: null }
+  //       : { status: chips[0].value === 'SUCCESS' ? 'SUCCESS' : 'FAILURE' },
+  //   ];
+  // }
 
   /**
    * @function exportCSV To export CSV report of the table.

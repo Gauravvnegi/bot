@@ -1,3 +1,5 @@
+export type TransactionStatus = 'SUCCESS' | 'FAILURE'
+
 export type InvoiceHistoryResponse = {
     totalAmount: number;
     totalPaidAmount: number;
@@ -7,6 +9,11 @@ export type InvoiceHistoryResponse = {
     invoiceDate: number;
     pdfUrl: string;
     bookingNumber: string;
+}
+
+export type InvoiceHistoryListResponse = {
+    records: InvoiceHistoryResponse[];
+    total: number;
 }
 
 export type TransactionHistoryResponse = {

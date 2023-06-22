@@ -74,11 +74,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   responseRate;
   cols: Cols[] = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
-  tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
+  tableTypes = [feedback.tableTypes.card, feedback.tableTypes.table];
   chips = feedback.chips.feedbackDatatable;
   globalQueries = [];
   $subscription = new Subscription();
   userPermissions: Departmentpermission[];
+  navRoutes = [{ label: 'Heda Feedback', link: './' }];
   constructor(
     public fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,
@@ -98,7 +99,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.tableFG?.addControl('tableType', new FormControl('table'));
+    this.tableFG?.addControl('tableType', new FormControl('card'));
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,

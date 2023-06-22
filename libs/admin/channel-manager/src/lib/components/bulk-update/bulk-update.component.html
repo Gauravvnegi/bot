@@ -5,78 +5,84 @@
   ></hospitality-bot-navigation-header>
 
   <div class="content-wrapper">
-    <div class="row" [ngStyle]="{ 'margin-top': '0px' }">
-      <div class="col" [ngStyle]="{ 'margin-top': 'auto' }">
-        <hospitality-bot-select
-          class="bulk-update__left"
-          label="Set"
-          controlName="update"
-          [options]="updateItems"
-          [props]="{
-            alignment: 'horizontal'
-          }"
-        >
-        </hospitality-bot-select>
-        <hospitality-bot-input
-          class="bulk-update__right"
-          controlName="updateValue"
-          label="To"
-          [props]="{
-            placeholder: 'Enter',
-            alignment: 'horizontal'
-          }"
-        >
-        </hospitality-bot-input>
-      </div>
-      <div class="col">
-        <hospitality-bot-date
-          controlName="fromDate"
-          label="From"
-          [props]="{ placeholder: 'Select From Date' }"
-          [settings]="{
-            enableTime: false,
-            dateValue: endMinDate,
-            isDisabled: false
-          }"
-          [minDate]="startMinDate"
-        ></hospitality-bot-date>
-        <hospitality-bot-date
-          controlName="toDate"
-          label="To"
-          [props]="{ placeholder: 'Select To Date' }"
-          [settings]="{
-            enableTime: false,
-            dateValue: endMinDate,
-            isDisabled: false
-          }"
-          [minDate]="endMinDate"
-        ></hospitality-bot-date>
-      </div>
-
-      <div class="row">
-        <div class="col">
+    <div class="bulk-update">
+      <div class="row bulk-update__row1">
+        <div class="col bulk-update__range-wrapper">
           <hospitality-bot-select
-            class="w-100"
-            label="Room Type"
-            controlName="roomType"
-            [options]="roomTypes"
+            class="bulk-update__left"
+            label="Set"
+            controlName="update"
+            [options]="updateItems"
             [props]="{
-              placeholder: 'Select'
+              alignment: 'horizontal'
             }"
           >
           </hospitality-bot-select>
-        </div>
-        <div class="col">
-          <hospitality-bot-checkbox-selector
-            class="w-100"
-            label="WeekDays"
-            controlName="selectedDays"
-            [options]="weeks"
+          <hospitality-bot-input
+            class="bulk-update__right"
+            controlName="updateValue"
+            label="To"
+            [props]="{
+              placeholder: 'Enter',
+              alignment: 'horizontal'
+            }"
           >
-          </hospitality-bot-checkbox-selector>
+          </hospitality-bot-input>
+        </div>
+        <div class="col bulk-update__date-wrapper">
+          <hospitality-bot-date
+            class="bulk-update__date"
+            controlName="fromDate"
+            label="From"
+            [props]="{ placeholder: 'Select From Date' }"
+            [settings]="{
+              enableTime: false,
+              dateValue: endMinDate,
+              isDisabled: false
+            }"
+            [minDate]="startMinDate"
+          ></hospitality-bot-date>
+          <hospitality-bot-date
+            class="bulk-update__date"
+            controlName="toDate"
+            label="To"
+            [props]="{ placeholder: 'Select To Date' }"
+            [settings]="{
+              enableTime: false,
+              dateValue: endMinDate,
+              isDisabled: false
+            }"
+            [minDate]="endMinDate"
+          ></hospitality-bot-date>
         </div>
       </div>
+
+      <div class="row bulk-update__row2">
+        <hospitality-bot-select
+          class="bulk-update__room-type"
+          label="Room Type"
+          controlName="roomType"
+          [options]="roomTypes"
+          [props]="{
+            isAsync: true,
+            placeholder: 'Select'
+          }"
+          [loading]="loadingRoomTypes"
+          (paginate)="loadMoreRoomTypes()"
+          (onSearch)="searchRoomTypes($event)"
+          [stopEmission]="noMoreRoomTypes"
+        >
+        </hospitality-bot-select>
+        <hospitality-bot-checkbox-selector
+          class="bulk-update__week-days"
+          label="WeekDays"
+          controlName="selectedDays"
+          [options]="weeks"
+        >
+        </hospitality-bot-checkbox-selector>
+      </div>
     </div>
+
     <hospitality-bot-nested-checkbox-tree
       class="full-width"
       [roomsData]="roomsData"
@@ -84,7 +90,10 @@
     ></hospitality-bot-nested-checkbox-tree>
 
     <div class="action-button w-100">
-      <hospitality-bot-button label="Save"></hospitality-bot-button>
+      <hospitality-bot-button
+        (click)="onSubmit()"
+        label="Save"
+      ></hospitality-bot-button>
     </div>
   </div>
 </div>

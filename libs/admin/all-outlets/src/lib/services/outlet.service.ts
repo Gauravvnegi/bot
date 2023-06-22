@@ -11,7 +11,7 @@ import { MenuConfig, OutletConfig } from '../types/config';
 export class OutletService extends ApiService {
   selectedTable = new BehaviorSubject<TabValue>(TabValue.ALL);
   selectedMenuTable = new BehaviorSubject<MenuTabValue>(MenuTabValue.BREAKFAST);
-  menu: BehaviorSubject<MenuConfig>  = new BehaviorSubject<MenuConfig>({
+  menu: BehaviorSubject<MenuConfig> = new BehaviorSubject<MenuConfig>({
     type: [],
     mealPreference: [],
     category: [],
@@ -51,9 +51,23 @@ export class OutletService extends ApiService {
 
   getMenuItems(): Observable<any> {
     return this.get(`/api/v1/config?key=OUTLET_CONFIGURATION`).pipe(
-      map((res)=>{
+      map((res) => {
         return menuListResponse;
       })
     );
+  }
+
+  //dummy
+
+  getOutletById(outletId: string): Observable<any> {
+    return this.get(`/api/v1/entity/${outletId}`);
+  }
+
+  updateOutlet(outletId: string, data): Observable<any> {
+    return this.patch(`/api/v1/entity/${outletId}`, data);
+  }
+
+  addOutlet(data): Observable<any> {
+    return this.post(`/api/v1/entity/outlet`, data);
   }
 }

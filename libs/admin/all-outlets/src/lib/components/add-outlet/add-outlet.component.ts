@@ -180,24 +180,6 @@ export class AddOutletComponent implements OnInit {
     return this.useForm.controls as Record<keyof OutletForm, AbstractControl>;
   }
 
-  //get restaurant form controls
-  get restaurantFormControl() {
-    return this.useForm.controls as Record<
-      keyof RestaurantForm,
-      AbstractControl
-    >;
-  }
-
-  //get venue form controls
-  get venueFormControl() {
-    return this.useForm.controls as Record<keyof VenueForm, AbstractControl>;
-  }
-
-  //get spa form controls
-  get spaFormControl() {
-    return this.useForm.controls as Record<keyof SpaForm, AbstractControl>;
-  }
-
   /**
    * @function resetForm
    * @description resets the form

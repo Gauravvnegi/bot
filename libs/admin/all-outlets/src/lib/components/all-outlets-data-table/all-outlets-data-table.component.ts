@@ -179,7 +179,55 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function exportCSV To export CSV report of the table.
+   * @function e  //get restaurant form controls
+  get restaurantFormControl() {
+    return this.useForm.controls as Record<
+      keyof Rest  //get restaurant form controls
+  get restaurantFormControl() {
+    return this.useForm.controls as Record<
+      keyof Rest  //get restaurant form controls
+  get restaurantFormControl() {
+    return this.useForm.controls as Record<
+      keyof RestaurantForm,
+      AbstractControl
+    >;
+  }
+
+  //get venue form controls
+  get venueFormControl() {
+    return this.useForm.controls as Record<keyof VenueForm, AbstractControl>;
+  }
+
+  //get spa form controls
+  get spaFormControl() {
+    return this.useForm.controls as Record<keyof SpaForm, AbstractControl>;
+  }aurantForm,
+      AbstractControl
+    >;
+  }
+
+  //get venue form controls
+  get venueFormControl() {
+    return this.useForm.controls as Record<keyof VenueForm, AbstractControl>;
+  }
+
+  //get spa form controls
+  get spaFormControl() {
+    return this.useForm.controls as Record<keyof SpaForm, AbstractControl>;
+  }aurantForm,
+      AbstractControl
+    >;
+  }
+
+  //get venue form controls
+  get venueFormControl() {
+    return this.useForm.controls as Record<keyof VenueForm, AbstractControl>;
+  }
+
+  //get spa form controls
+  get spaFormControl() {
+    return this.useForm.controls as Record<keyof SpaForm, AbstractControl>;
+  }xportCSV To export CSV report of the table.
    */
   exportCSV(): void {
     this.loading = true;

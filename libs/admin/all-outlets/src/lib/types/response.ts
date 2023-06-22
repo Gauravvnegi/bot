@@ -28,4 +28,9 @@ export type Contact = {
   phoneNumber: string;
 };
 
-export type Address = {} & Record<string, any>;
+export type Address = {
+  country: string;
+  pinCode: number;
+  city: string;
+  state: string;
+} & Record<string, any>;

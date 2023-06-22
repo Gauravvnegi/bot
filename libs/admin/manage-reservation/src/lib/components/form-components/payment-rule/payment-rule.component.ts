@@ -15,7 +15,6 @@ export class PaymentRuleComponent implements OnInit {
   constructor(public controlContainer: ControlContainer) {}
 
   ngOnInit(): void {
-    console.log(this.controlContainer.control);
     this.startTime = moment(this.startMinDate).unix() * 1000;
     this.registerPaymentRuleChange();
   }
@@ -30,9 +29,6 @@ export class PaymentRuleComponent implements OnInit {
     amountToPayControl.valueChanges.subscribe((res) => {
       const newDeductedAmount = this.deductedAmount - +res;
       deductedAmountControl.setValue(newDeductedAmount);
-      console.log(res);
     });
-    console.log(deductedAmountControl);
-    console.log(amountToPayControl);
   }
 }

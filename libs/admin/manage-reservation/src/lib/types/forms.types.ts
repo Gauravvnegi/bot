@@ -1,9 +1,10 @@
 import { C } from '@angular/cdk/keycodes';
 export class ReservationFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  contact: Contact;
+  // firstName: string;
+  // lastName: string;
+  // email: string;
+  // contact: Contact;
+  // guestDetails: GuestDetails;
   roomTypeId: string;
   adultCount: number;
   childCount: number;
@@ -37,7 +38,8 @@ export class Address {
 export type GuestDetails = {
   label: string;
   value: string;
-  number: string;
+  cc: string;
+  phoneNumber: string;
   email: string;
 }
 

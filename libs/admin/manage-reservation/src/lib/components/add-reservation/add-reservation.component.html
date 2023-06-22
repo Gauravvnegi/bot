@@ -6,6 +6,7 @@
       <hospitality-bot-booking-info
         bookingType="HOTEL"
         [configData]="configData"
+        [reservationTypes]="reservationTypes"
       ></hospitality-bot-booking-info>
       <p-accordionTab class="room-info" header="Room Information">
         <hospitality-bot-room-iterator
@@ -26,114 +27,6 @@
         [currencies]="currencies"
         [paymentOptions]="paymentOptions"
       ></hospitality-bot-payment-method>
-      <!-- <p-accordionTab
-        class="payment-rule-accordion"
-        header="Payment Rule"
-        #accordionTab
-      >
-        <div class="btn-wrapper" *ngIf="accordionTab?.selected">
-          <hospitality-bot-button
-            label="Full Payment"
-            [variant]="viewAmountToPay ? 'outlined' : 'contained'"
-            (onClick)="viewAmountToPay = false"
-          ></hospitality-bot-button>
-          <hospitality-bot-button
-            label="Partial"
-            [variant]="viewAmountToPay ? 'contained' : 'outlined'"
-            (onClick)="viewAmountToPay = true"
-          ></hospitality-bot-button>
-        </div>
-        <div class="form-block" formGroupName="paymentRule">
-          <div class="half-width type-wrapper" *ngIf="viewAmountToPay">
-            <hospitality-bot-input
-              label="Amount to pay"
-              class="three-fourth-width amount-to-pay"
-              controlName="amountToPay"
-              [props]="{
-                placeholder: 'Enter',
-                type: 'number'
-              }"
-            ></hospitality-bot-input>
-            <hospitality-bot-view-input
-              label="amount"
-              controlName="deductedAmount"
-              class="one-fourth-width deducted-amount"
-              [strikeValue]="summaryData?.totalAmount"
-            ></hospitality-bot-view-input>
-          </div>
-          <hospitality-bot-date
-            class="half-width"
-            controlName="makePaymentBefore"
-            label="Make Payment on/Before"
-            [settings]="{
-              isDisabled: disabledForm
-            }"
-            [maxDate]="startMinDate"
-            [props]="{
-              placeholder: 'DD-HH-MM'
-            }"
-          ></hospitality-bot-date>
-          <hospitality-bot-text-area
-            class="full-width"
-            controlName="inclusionsAndTerms"
-            label="Inclusions and Terms of booking"
-            [props]="{
-              placeholder: 'Enter'
-            }"
-          ></hospitality-bot-text-area>
-        </div>
-      </p-accordionTab> -->
-      <!-- <p-accordionTab header="Payment Method">
-        <div class="form-block" formGroupName="paymentMethod">
-          <div class="type-wrapper half-width">
-            <hospitality-bot-input
-              class="half-width"
-              label="Cashier Name"
-              controlName="cashierFirstName"
-            ></hospitality-bot-input>
-            <hospitality-bot-input
-              class="half-width last-name"
-              label="Last Name"
-              controlName="cashierLastName"
-            ></hospitality-bot-input>
-          </div>
-          <hospitality-bot-select-group
-            *ngIf="!!paymentOptions.length"
-            class="full-width"
-            controlName="paymentMethod"
-            label="Payment Method"
-            [options]="paymentOptions"
-          ></hospitality-bot-select-group>
-          <hospitality-bot-prefix-field
-            class="half-width"
-            [options]="currencies"
-            label="Payment Received"
-            preControlName="currency"
-            postControlName="totalPaidAmount"
-            [defaultProps]="{ post: { type: 'number' } }"
-            [props]="{
-              errorMessages: {
-                required: 'This is a required field.',
-                min: 'Value must be greater than 0.',
-                max: 'Value must be less than or equal Total amount to be paid.'
-              }
-            }"
-          >
-          </hospitality-bot-prefix-field>
-          <hospitality-bot-input
-            class="half-width"
-            controlName="paymentRemark"
-            label="Your Inclusions/remakrs :"
-            [props]="{ placeholder: 'Enter' }"
-          ></hospitality-bot-input>
-          <hospitality-bot-input
-            class="half-width"
-            controlName="transactionId"
-            label="Transaction ID"
-            [props]="{ placeholder: 'Enter' }"
-          ></hospitality-bot-input>
-        </div>
-      </p-accordionTab> -->
     </p-accordion>
     <div class="bk-summary">
       <ng-container *ngIf="!displayBookingOffer; else bookingOffer">

@@ -382,13 +382,15 @@ export class BookingConfig {
 export class Guest {
   label: string;
   value: string;
-  number: string;
+  phoneNumber: string;
+  cc: string;
   email: string;
-
+  
   deserialize(input: SearchGuestResponse) {
     this.label = `${input.firstName} ${input.lastName}`;
     this.value = input.id;
-    this.number = input.contactDetails?.contactNumber;
+    this.phoneNumber = input.contactDetails?.contactNumber;
+    this.cc = input.contactDetails?.cc;
     this.email = input.contactDetails?.emailId;
     return this;
   }

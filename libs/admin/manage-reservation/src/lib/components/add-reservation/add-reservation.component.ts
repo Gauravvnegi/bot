@@ -24,7 +24,6 @@ import { manageReservationRoutes } from '../../constants/routes';
 import {
   BookingConfig,
   BookingInfo,
-  Guest,
   OfferData,
   OfferList,
   PaymentMethodList,
@@ -33,8 +32,6 @@ import {
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationResponse } from '../../types/response.type';
-import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
-import { GuestDetails } from '../../types/forms.types';
 import {
   AdminUtilityService,
   ConfigService,
@@ -48,9 +45,7 @@ import {
 @Component({
   selector: 'hospitality-bot-add-reservation',
   templateUrl: './add-reservation.component.html',
-  styleUrls: ['./add-reservation.component.scss', 
-  '../reservation.styles.scss',
-],
+  styleUrls: ['./add-reservation.component.scss', '../reservation.styles.scss'],
 })
 export class AddReservationComponent implements OnInit, OnDestroy {
   userForm: FormGroup;
@@ -61,36 +56,29 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   paymentOptions: Option[] = [];
   currencies: Option[] = [];
   reservationTypes: Option[] = [];
-  guests: Option[] = [];
   countries: Option[] = [];
-  guestOptions: Option[] = [];
 
   offersList: OfferList;
   selectedOffer: OfferData;
   summaryData: SummaryData;
   configData: BookingConfig;
 
-  // globalQueries = [];
-
   loading = false;
   displayBookingOffer: boolean = false;
   formValueChanges = false;
   disabledForm = false;
   isBooking = false;
-  // noMoreGuests = false;
-  // loadingGuests = false;
-  // guestsOffSet = 0;
-  
+
   deductedAmount = 0;
   startMinDate = new Date();
   endMinDate = new Date();
-  reservationType = 'HOTEL'
+  reservationType = 'HOTEL';
 
   pageTitle = 'Add Reservation';
   routes: NavRouteOptions = [];
 
   $subscription = new Subscription();
-  
+
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -103,8 +91,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private modalService: ModalService,
     private _clipboard: Clipboard,
-    private userService: UserService,
-    private guestService: GuestTableService
+    private userService: UserService
   ) {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
@@ -144,18 +131,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         marketSegment: ['', Validators.required],
       }),
       guestInformation: this.fb.group({
-        //   firstName: ['', [Validators.required, Validators.maxLength(60)]],
-        //   lastName: ['', [Validators.required, Validators.maxLength(60)]],
-        //   email: [
-        //     '',
-        //     [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)],
-        //   ],
-        //   countryCode: ['', Validators.required],
-        //   phoneNumber: [
-        //     '',
-        //     [Validators.required, Validators.pattern(Regex.NUMBER_REGEX)],
-        //   ],
-        guestDetails: ['', Validators.required],
+        guestDetails: [''],
       }),
       instructions: this.fb.group({
         specialInstructions: [''],
@@ -168,10 +144,10 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         postalCode: ['', [Validators.required]],
       }),
       paymentRule: this.fb.group({
-        amountToPay: [0, [Validators.required]],
+        amountToPay: [0],
         deductedAmount: [''],
-        makePaymentBefore: ['', [Validators.required]],
-        inclusionsAndTerms: ['', [Validators.required]],
+        makePaymentBefore: [''],
+        inclusionsAndTerms: [''],
       }),
       paymentMethod: this.fb.group({
         cashierFirstName: [{ value: firstName, disabled: true }],
@@ -183,34 +159,11 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         currency: [''],
         paymentMethod: [''],
         paymentRemark: ['', [Validators.maxLength(60)]],
-        transactionId: ['', [Validators.required]],
+        transactionId: [''],
       }),
       offerId: [''],
     });
   }
-
-  // /**
-  //  * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
-  //  */
-  // listenForGlobalFilters(): void {
-  //   this.$subscription.add(
-  //     this.globalFilterService.globalFilter$.subscribe((data) => {
-  //       this.globalQueries = [
-  //         ...data['filter'].queryValue,
-  //         ...data['dateRange'].queryValue,
-  //       ];
-  //       this.hotelId = this.globalFilterService.hotelId;
-  //       this.globalQueries = [
-  //         ...this.globalQueries,
-  //         {
-  //           order: 'DESC',
-  //           entityType: 'DUEIN',
-  //         },
-  //       ];
-  //       this.getGuests();
-  //     })
-  //   );
-  // }
 
   getCountryCode(): void {
     this.configService
@@ -269,8 +222,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
       });
   }
 
-
-
   getInitialData(): void {
     this.$subscription.add(
       this.manageReservationService.getPaymentMethod(this.hotelId).subscribe(
@@ -292,12 +243,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   }
 
   getReservationId(): void {
-    // this.$subscription.add(
-    // this.activatedRoute.params.subscribe((params) => {
     if (this.reservationId) {
-      // this.reservationId = params['id'];
-      // this.pageTitle = 'Edit Reservation';
-      // this.routes[2].label = 'Edit Reservation';
       this.reservationTypes = [
         { label: 'Draft', value: 'DRAFT' },
         { label: 'Confirmed', value: 'CONFIRMED' },
@@ -316,8 +262,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         }
       });
     }
-    // })
-    // );
   }
 
   getReservationDetails(): void {
@@ -418,7 +362,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
       this.$subscription.add(
         this.manageReservationService.getSummaryData(config).subscribe(
           (res) => {
-            console.log(res);
             this.summaryData = new SummaryData()?.deserialize(res);
             this.userForm
               .get('roomInformation')
@@ -440,77 +383,17 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     }
   }
 
-  // loadMoreGuests() {
-  //   this.guestsOffSet = this.guestsOffSet + 5;
-  //   this.getGuests();
-  // }
-
-  // searchGuests(text: string) {
-  //   if (text) {
-  //     this.loadingGuests = true;
-  //     this.guestService.searchGuest(text).subscribe((res) => {
-  //       this.loadingGuests = false;
-  //       const data = new Guest().deserialize(res);
-  //       this.guestOptions.push(data);
-  //     });
-  //   } else {
-  //     this.guestsOffSet = 0;
-  //     this.guestOptions = [];
-  //     this.getGuests();
-  //   }
-  // }
-
-  // createGuest() {
-  //   if (this.reservationId) {
-  //     this.router.navigateByUrl(
-  //       `pages/efrontdesk/manage-reservation/edit-reservation/${this.reservationId}/add-guest`
-  //     );
-  //   } else {
-  //     this.router.navigateByUrl(
-  //       'pages/efrontdesk/manage-reservation/add-reservation/add-guest'
-  //     );
-  //   }
-  // }
-
-  // getGuests() {
-  //   this.loadingGuests = true;
-  //   this.guestService.getGuestList(this.getConfig()).subscribe(
-  //     (res) => {
-  //       const guests = res.records;
-  //       const guestDetails: GuestDetails[] = guests.map((guest) => ({
-  //         label: `${guest.firstName} ${guest.lastName}`,
-  //         value: guest.id,
-  //         number: guest.contactDetails.contactNumber,
-  //         email: guest.contactDetails.emailId,
-  //       }));
-  //       this.guestOptions = [...this.guestOptions, ...guestDetails];
-  //       this.noMoreGuests = guests.length < 5;
-  //       this.loadingGuests = false;
-  //     },
-  //     (err) => {
-  //       this.loadingGuests = false;
-  //     }
-  //   );
-  // }
-
-  // getConfig() {
-  //   const config = [
-  //     ...this.globalQueries,
-  //     { entityState: 'ALL', offset: this.guestsOffSet, limit: 5 },
-  //   ];
-  //   return { queryObj: this.adminUtilityService.makeQueryParams(config) };
-  // }
-
   handleBooking(): void {
     this.isBooking = true;
     const data = this.manageReservationService.mapReservationData(
-      this.userForm.getRawValue()
+      this.userForm.getRawValue(),
     );
     if (this.reservationId) this.updateReservation(data);
     else this.createReservation(data);
   }
 
   createReservation(data): void {
+    data = {...data, firstName: 'Reservation', lastName: 'Temporary', contact: {countryCode: '+91', phoneNumber: '99999999999'}, email: 'botshot@gmail.com'}, 
     this.$subscription.add(
       this.manageReservationService
         .createReservation(this.hotelId, data)

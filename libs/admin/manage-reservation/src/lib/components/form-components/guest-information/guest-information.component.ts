@@ -38,6 +38,7 @@ export class GuestInformationComponent implements OnInit {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
+    this.listenForGlobalFilters();
   }
 
   /**
@@ -103,7 +104,8 @@ export class GuestInformationComponent implements OnInit {
         const guestDetails: GuestDetails[] = guests.map((guest) => ({
           label: `${guest.firstName} ${guest.lastName}`,
           value: guest.id,
-          number: guest.contactDetails.contactNumber,
+          phoneNumber: guest.contactDetails.contactNumber,
+          cc: guest.contactDetails.cc,
           email: guest.contactDetails.emailId,
         }));
         this.guestOptions = [...this.guestOptions, ...guestDetails];

@@ -102,13 +102,14 @@ export class ManageReservationService extends ApiService {
 
   mapReservationData(formValue) {
     const reservationData = new ReservationFormData();
-    reservationData.firstName = formValue.guestInformation.firstName ?? '';
-    reservationData.lastName = formValue.guestInformation.lastName ?? '';
-    reservationData.email = formValue.guestInformation.email ?? '';
-    reservationData.contact = {
-      countryCode: formValue?.guestInformation?.countryCode ?? '',
-      phoneNumber: formValue?.guestInformation?.phoneNumber ?? '',
-    };
+    // reservationData.firstName = formValue.guestInformation.firstName ?? '';
+    // reservationData.lastName = formValue.guestInformation.lastName ?? '';
+    // reservationData.email = formValue.guestInformation.email ?? '';
+    // reservationData.contact = {
+    //   countryCode: formValue?.guestInformation?.countryCode ?? '',
+    //   phoneNumber: formValue?.guestInformation?.phoneNumber ?? '',
+    // };
+    // reservationData.guestDetails = formValue.guestInformation.guestDetails;
     reservationData.roomTypeId = formValue.roomInformation?.roomTypeId ?? '';
     reservationData.adultCount = formValue.roomInformation?.adultCount ?? 0;
     reservationData.childCount = formValue.roomInformation?.childCount ?? 0;

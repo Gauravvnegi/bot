@@ -23,14 +23,14 @@ export class BookingInfoComponent implements OnInit {
     { label: 'Completed', value: 'COMPLETED' },
   ];
 
-  reservationTypes: Option[] = [
-    { label: 'Dine-in', value: 'DINEIN' },
-    { label: 'delivery', value: 'DELIVERY' },
-  ];
+  // reservationTypes: Option[] = [
+  //   { label: 'Dine-in', value: 'DINEIN' },
+  //   { label: 'delivery', value: 'DELIVERY' },
+  // ];
 
   @Input() configData: BookingConfig;
   @Input() bookingType: string = 'Hotel';
-
+  @Input() reservationTypes: Option[] = [];
   reservationInfoFormGroup: FormGroup;
 
   constructor(public controlContainer: ControlContainer) {

@@ -198,10 +198,10 @@
                 label="Base Price-Single Occupancy"
                 [options]="currencies"
                 [defaultProps]="{
-                  errorMessages: inputValidationProps.errorMessages,
                   post: { type: 'number' }
                 }"
-              ></hospitality-bot-prefix-field>
+                ></hospitality-bot-prefix-field>
+                <!-- errorMessages: inputValidationProps.errorMessages, -->
               <hospitality-bot-prefix-field
                 class="half-width"
                 preControlName="discountType"
@@ -209,10 +209,10 @@
                 label="Discount Type"
                 [options]="discountTypes"
                 [defaultProps]="{
-                  errorMessages: inputValidationProps.errorMessages,
                   post: { type: 'number' }
                 }"
-              ></hospitality-bot-prefix-field>
+                ></hospitality-bot-prefix-field>
+                <!-- errorMessages: inputValidationProps.errorMessages, -->
               <hospitality-bot-prefix-field
                 class="half-width"
                 preControlName="bestRateCurrency"
@@ -220,10 +220,10 @@
                 label="Best Available Rate"
                 [options]="currencies"
                 [defaultProps]="{
-                  errorMessages: inputValidationProps.errorMessages,
                   post: { type: 'number' }
                 }"
-              ></hospitality-bot-prefix-field>
+                ></hospitality-bot-prefix-field>
+                <!-- errorMessages: inputValidationProps.errorMessages, -->
               <hospitality-bot-prefix-field
                 class="half-width"
                 preControlName="paxAdditionalCostCurrency"
@@ -231,10 +231,10 @@
                 label="Pax Additional Cost"
                 [options]="currencies"
                 [defaultProps]="{
-                  errorMessages: inputValidationProps.errorMessages,
                   post: { type: 'number' }
                 }"
-              ></hospitality-bot-prefix-field>
+                ></hospitality-bot-prefix-field>
+                <!-- errorMessages: inputValidationProps.errorMessages, -->
             </div>
           </p-accordionTab>
         </p-accordion>

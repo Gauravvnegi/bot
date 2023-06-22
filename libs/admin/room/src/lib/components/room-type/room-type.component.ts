@@ -253,14 +253,23 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   addNewRatePlan() {
     const data = {
       basePriceCurrency: ['INR'],
-      basePrice: ['', [Validators.required, Validators.min(0)]],
+      basePrice: [''],
       discountType: ['PERCENTAGE'],
-      discountValue: ['', [Validators.required, Validators.min(0)]],
+      discountValue: [''],
       bestRateCurrency: ['INR'],
-      bestAvailableRate: ['', [Validators.required, Validators.min(0)]],
+      bestAvailableRate: [''],
       paxAdditionalCostCurrency: ['INR'],
-      paxAdditionalCost: ['', [Validators.required, Validators.min(0)]],
+      paxAdditionalCost: [''],
       type: [''],
+      // basePriceCurrency: ['INR'],
+      // basePrice: ['', [Validators.required, Validators.min(0)]],
+      // discountType: ['PERCENTAGE'],
+      // discountValue: ['', [Validators.required, Validators.min(0)]],
+      // bestRateCurrency: ['INR'],
+      // bestAvailableRate: ['', [Validators.required, Validators.min(0)]],
+      // paxAdditionalCostCurrency: ['INR'],
+      // paxAdditionalCost: ['', [Validators.required, Validators.min(0)]],
+      // type: [''],
     };
     const formGroup = this.fb.group(data);
     this.ratePlanArray.push(formGroup);
@@ -538,9 +547,18 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       ...rest
     } = this.useForm.getRawValue() as RoomTypeFormData;
 
+    // Pricing Hard coded for now
     const data = {
       ...rest,
       roomAmenityIds: complimentaryAmenities.concat(paidAmenities),
+      originalPrice: 100,
+      discountType: 'PERCENTAGE',
+      discountValue: 10,
+      discountedPrice: 90,
+      variablePriceCurrency: '10',
+      currency: 'INR',
+      variableAmount: 200,
+      discountedPriceCurrency: 'INR'
     };
     return data;
   }

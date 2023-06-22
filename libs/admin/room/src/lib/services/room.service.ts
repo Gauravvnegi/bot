@@ -66,7 +66,10 @@ export class RoomService extends ApiService {
     hotelId: string,
     config?: QueryConfig
   ): Observable<ServiceResponse> {
-    return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
+    return this.get(
+      `/api/v1/entity/${hotelId}/library${config?.params ?? ''}`,
+      { headers: { 'hotel-id': hotelId } }
+    );
   }
 
   getRoomTypes(hotelId: string): Observable<any> {

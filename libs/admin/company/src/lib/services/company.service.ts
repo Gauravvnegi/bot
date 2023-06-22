@@ -1,65 +1,41 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { map } from 'rxjs/operators';
 import { QueryConfig } from '@hospitality-bot/admin/library';
-import { companyResponse } from '../constants/response';
+import { CompanyListResponse, CompanyResponseType } from '../types/response';
 
 @Injectable()
 export class CompanyService extends ApiService {
-  getCompanyDetails(hotelId: string, config?: QueryConfig): Observable<any> {
-    return this.get(
-      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`
-    ).pipe(
-      map((res) => {
-        return companyResponse;
-      })
-    );
+  getCompanyDetails(config?: QueryConfig): Observable<CompanyListResponse> {
+    return this.get(`/api/v1/members${config.params}`);
   }
 
-  addCompany(hotelId: string, data, config?: QueryConfig): Observable<any> {
-    return this.post(
-      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`,
-      data
-    ).pipe(
-      map((res) => {
-        return companyResponse;
-      })
-    );
-  }
-
-  getCompanyById(
-    hotelId: string,
-    data: { companyId: number },
+  addCompany(
+    data: CompanyResponseType,
     config?: QueryConfig
-  ): Observable<any> {
-    return this.get(
-      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`
-    ).pipe(
-      map((res) => {
-        return companyResponse.find((item) => item.id === data.companyId) ?? {};
-      })
-    );
+  ): Observable<CompanyResponseType> {
+    return this.post(`api/v1/members${config.params}`, data);
   }
 
-  updateCompany(hotelId: string, data, config?: QueryConfig): Observable<any> {
-    return this.patch(
-      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`,
-      data
-    ).pipe(
-      map((res) => {
-        return companyResponse;
-      })
-    );
+  updateCompany(
+    data: CompanyResponseType,
+    companyId: string,
+    config?: QueryConfig
+  ): Observable<CompanyResponseType> {
+    return this.patch(`/api/v1/members/${companyId}${config.params}`, data);
   }
 
-  exportCSV(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/outlet/export`, {
+  getCompanyById(companyId: string): Observable<CompanyResponseType> {
+    return this.get(`/api/v1/members/${companyId}`);
+  }
+
+  exportCSV(config: QueryConfig): Observable<any> {
+    return this.get(`/api/v1/members/export${config.params}`, {
       responseType: 'blob',
     });
   }
 
-  updateOutletItem(hotelId, status): Observable<any> {
-    return this.patch(`/api/v1/user/${hotelId}/sites?status=${status}`, {});
+  updateCompanyStatus(compoanyId, config: QueryConfig): Observable<any> {
+    return this.patch(`/api/v1/members/${compoanyId}${config.params}`, {});
   }
 }

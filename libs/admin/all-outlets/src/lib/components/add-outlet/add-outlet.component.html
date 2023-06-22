@@ -2,6 +2,7 @@
   <hospitality-bot-button
     label="Print QR Code"
     link=""
+    [disabled]="!outletId"
   ></hospitality-bot-button>
 </hospitality-bot-navigation-header>
 
@@ -38,8 +39,18 @@
         postControlName="number"
       ></hospitality-bot-phone-number>
     </div>
+
     <hospitality-bot-address-component class="half-width" controlName="address">
     </hospitality-bot-address-component>
+
+    <hospitality-bot-multi-select
+      class="half-width"
+      controlName="cousins"
+      label="Cousine Type"
+      [options]="cousins"
+      *ngIf="useForm.get('type').value === 'RESTAURANT'"
+    ></hospitality-bot-multi-select>
+
     <div class="file-upload-wrapper">
       <hospitality-bot-custom-file-upload
         formControlName="imageUrl"
@@ -76,7 +87,7 @@
     ></hospitality-bot-restaurant-form>
     <hospitality-bot-spa-form *ngSwitchCase="'SPA'" class="full-width">
     </hospitality-bot-spa-form>
-    <hospitality-bot-banquet-form *ngSwitchCase="'BANQUET'" class="full-width">
+    <hospitality-bot-banquet-form *ngSwitchCase="'VENUE'" class="full-width">
     </hospitality-bot-banquet-form>
   </ng-container>
 

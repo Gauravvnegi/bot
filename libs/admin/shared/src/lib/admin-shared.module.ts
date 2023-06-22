@@ -98,6 +98,8 @@ import { DiscountFormComponent } from './components/discount-form/discount-form.
 import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
 import { CheckboxSelectorComponent } from './components/form-component/checkbox-selector/checkbox-selector.component';
 import { MenuButtonComponent } from './components/menu-button/menu-button.component';
+import { MenuModule } from 'primeng/menu';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 @NgModule({
   imports: [
     CommonModule,
@@ -123,6 +125,8 @@ import { MenuButtonComponent } from './components/menu-button/menu-button.compon
     MatTooltipModule,
     DialogModule,
     MatMenuModule,
+    MenuModule,
+    ToggleButtonModule,
   ],
   declarations: [
     DatatableComponent,
@@ -214,6 +218,7 @@ import { MenuButtonComponent } from './components/menu-button/menu-button.compon
     ButtonModule,
     PaginatorModule,
     TabMenuModule,
+    MenuModule,
     AccordionModule,
     SplitButtonModule,
     InputSwitchModule,
@@ -299,6 +304,7 @@ import { MenuButtonComponent } from './components/menu-button/menu-button.compon
     TimePickerComponent,
     CheckboxSelectorComponent,
     MenuButtonComponent,
+    ToggleButtonModule,
   ],
 })
 export class AdminSharedModule {}

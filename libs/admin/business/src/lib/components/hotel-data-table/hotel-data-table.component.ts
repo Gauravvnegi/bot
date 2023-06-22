@@ -31,7 +31,7 @@ import { LazyLoadEvent } from 'primeng/api';
 export class HotelDataTableComponent extends BaseDatatableComponent
   implements OnInit {
   cols = cols;
-  tableName = 'Hotel';
+  tableName = 'Property/Outlet';
   $subscription = new Subscription();
   hotelId: string;
   loading: boolean = false;

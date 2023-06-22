@@ -25,7 +25,7 @@ export class ImportServiceComponent implements OnInit {
   $subscription = new Subscription();
   useForm: FormGroup;
   searchForm: FormGroup;
-  loading: boolean;
+  loading: boolean = false;
   pageTitle = 'Import Services';
   navRoutes: NavRouteOptions = [];
   compServices: Service[] = [];
@@ -50,6 +50,10 @@ export class ImportServiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.hotelFormDataService.hotelFormState) {
+      this.location.back();
+      return;
+    }
     this.initForm();
     this.getServices();
     this.registerSearch();
@@ -78,7 +82,6 @@ export class ImportServiceComponent implements OnInit {
         (res) => {
           const allServices = this.hotelFormDataService.hotelInfoFormData
             .allServices;
-          console.log(allServices, 'allServices');
 
           this.compServices = new Services()
             .deserialize(res.service)
@@ -128,6 +131,7 @@ export class ImportServiceComponent implements OnInit {
       }
     });
   }
+
   saveForm() {
     let { serviceIds } = this.useForm.getRawValue();
 
@@ -150,14 +154,17 @@ export class ImportServiceComponent implements OnInit {
       true
     );
 
-    this.businessService
-      .updateHotel(this.hotelId, { serviceIds: serviceIds })
-      .subscribe((_res) => {});
+    if (this.hotelId)
+      this.businessService
+        .updateHotel(this.hotelId, { serviceIds: serviceIds })
+        .subscribe((_res) => {});
 
     this.location.back();
   }
 
-  resetForm() {}
+  resetForm() {
+    this.useForm.reset();
+  }
 
   /**
    * @function handleSuccess To show success message

@@ -3,7 +3,6 @@ import { FormBuilder } from '@angular/forms';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  Chip,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
@@ -12,11 +11,12 @@ import { chips, cols, title } from '../../constant/data-table';
 import { AgentService } from '../../services/agent.service';
 import { Router } from '@angular/router';
 import { agentRoutes } from '../../constant/routes';
-import { AgentResponse } from '../../types/response';
 import * as FileSaver from 'file-saver';
-import { AgentList } from '../../models/agent.model';
 import { QueryConfig } from '../../types/agent';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { AgentResponseModel } from '../../models/agent.model';
+import { AgentListResponse } from '../../types/response';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'hospitality-bot-agent-data-table',
@@ -35,7 +35,6 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   tableName = title;
   cols = cols;
   filterChips = chips;
-  iQuickFilters = true;
 
   subscription$ = new Subscription();
 
@@ -51,68 +50,89 @@ export class AgentDataTableComponent extends BaseDatatableComponent
     super(fb, tabFilterService);
   }
 
+  /**
+   * @function loadData Fetch data as paginates
+   * @param event
+   */
+  loadData(event: LazyLoadEvent): void {
+    this.initTable();
+  }
+
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.initTableValue();
+    this.initTable();
   }
 
-  initTableValue() {
+  initTable() {
     this.loading = true;
     this.subscription$.add(
-      this.agentService.getAgentList(this.hotelId).subscribe(
-        (res) => {
-          this.values = new AgentList().deserialize(res).agents;
-          this.updateQuickReplyFilterCount(res.entityStateCounts);
-          this.updateTotalRecords();
-        },
-        ({ error }) => {
-          this.values = [];
-        },
-        this.handleFinal
-      )
-    );
-  }
-
-  handleStatus(status: boolean, rowData) {
-    rowData.status = status;
-    this.loading = true;
-    this.subscription$.add(
-      this.agentService.updateAgentStatus(this.hotelId, rowData).subscribe(
-        (res) => {
-          this.values.forEach((item) => {
-            if (item.id === rowData.id) item = rowData;
-          });
-          this.snackbarService.openSnackBarAsText(
-            'Status changes successfully',
-            '',
-            { panelClass: 'success' }
+      this.agentService.getAgentList({ params: '?type=AGENT' }).subscribe(
+        (res: AgentListResponse) => {
+          const agentList = new AgentResponseModel().deserialize(res);
+          this.values = agentList.records;
+          this.initFilters(
+            agentList.entityTypeCounts,
+            agentList.entityStateCounts,
+            agentList.totalRecord
           );
+          this.loading = false;
         },
-        ({ error }) => {
+        () => {
           this.values = [];
+          this.loading = false;
         },
         this.handleFinal
       )
     );
   }
 
-  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }) {
-    const clickedChips = {
-      ALL: false,
-      ACTIVE: false,
-      INACTIVE: false,
+  getQueryConfig(): QueryConfig {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        {
+          type: 'AGENT',
+          offset: this.first,
+          limit: this.rowsPerPage,
+        },
+      ]),
     };
-    chips.forEach((item: Chip<string>) => {
-      clickedChips[item.value] = item.isSelected;
-    });
-    this.initTableValue();
+    return config;
+  }
+
+  /**
+   * @function handleStatus To handle the status change
+   * @param status status value
+   */
+  handleStatus(status, rowData): void {
+    this.loading = true;
+    this.subscription$.add(
+      this.agentService
+        .updateAgentStatus(rowData.id, {
+          params: `?status=${status}&type=AGENT`,
+        })
+        .subscribe(
+          () => {
+            this.updateStatusAndCount(rowData.status, status);
+            this.snackbarService.openSnackBarAsText(
+              'Status changes successfully',
+              '',
+              { panelClass: 'success' }
+            );
+          },
+          () => {
+            this.loading = false;
+          },
+          this.handleFinal
+        )
+    );
   }
 
   /**
    * @function editAgent To edit the agent.
    * @params rowData
    */
-  editAgent(rowData: AgentResponse) {
+  editAgent(rowData) {
     this.router.navigate([
       `/pages/members/agent/${this.routes.editAgent.route}/${rowData.id}`,
     ]);
@@ -126,11 +146,11 @@ export class AgentDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { type: 'Agent' },
+        { type: 'AGENT' },
       ]),
     };
     this.subscription$.add(
-      this.agentService.exportCSV(this.hotelId, config).subscribe((res) => {
+      this.agentService.exportCSV(config).subscribe((res) => {
         FileSaver.saveAs(
           res,
           `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`

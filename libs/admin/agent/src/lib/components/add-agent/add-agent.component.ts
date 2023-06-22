@@ -6,12 +6,14 @@ import { AgentService } from '../../services/agent.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { agentRoutes, navRoute } from '../../constant/routes';
+import { agentRoutes } from '../../constant/routes';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
-import { FormService } from '../../../../../members/src/lib/services/form.service';
-import { companyRoutes } from '../../../../../company/src/lib/constants/route';
+import { FormService } from 'libs/admin/members/src/lib/services/form.service';
+import { companyRoutes } from 'libs/admin/company/src/lib/constants/route';
 import { AgentFormType } from '../../types/form.types';
-import { CompanyList } from '../../models/agent.model';
+import { AgentModel } from '../../models/agent.model';
+import { AgentResponseType } from '../../types/response';
+import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 @Component({
   selector: 'hospitality-bot-add-agent',
   templateUrl: './add-agent.component.html',
@@ -36,8 +38,7 @@ export class AddAgentComponent implements OnInit {
   noMoreCompany = false;
   companyLimit = 10;
 
-  roomTypes = [];
-
+  companyList: Option[] = [];
   commissionTypes: Option[] = [{ label: '%OFF', value: 'PERCENTAGE' }];
 
   constructor(
@@ -66,12 +67,12 @@ export class AddAgentComponent implements OnInit {
   initAgentForm() {
     this.agentForm = this.fb.group({
       active: [true],
-      firstName: ['', [Validators.required]],
+      name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       cc: ['+91'],
       phoneNo: [null, [Validators.required]],
       iataNo: ['', [CustomValidators.requiredLength(14)]],
-      companyName: ['', [Validators.required]],
+      companyId: ['', [Validators.required]],
       address: ['', [Validators.required]],
       commissionType: ['PERCENTAGE'],
       commission: [
@@ -96,14 +97,14 @@ export class AddAgentComponent implements OnInit {
     this.loading = true;
     this.subscription$.add(
       this.agentService
-        .getAgentById(this.hotelId, { AgentId: this.agentId })
-        .subscribe((response) => {
+        .getAgentById(this.agentId, { params: '?type=AGENT' })
+        .subscribe((response: AgentResponseType) => {
           this.agentForm.patchValue({
-            firstName: response.name,
-            email: response.email,
-            phoneNo: response.phoneNo,
-            iataNo: response.iataNo,
-            companyName: response.company,
+            name: response.firstName,
+            email: response.contactDetails.emailId,
+            phoneNo: response.contactDetails.contactNumber,
+            iataNo: response.iataNumber,
+            companyId: response.companyId,
             address: response.address,
             commission: response.commission,
           });
@@ -120,48 +121,23 @@ export class AddAgentComponent implements OnInit {
       return;
     }
 
-    if (!!this.agentId) {
-      this.subscription$.add(
-        this.agentService
-          .updateAgent(
-            this.hotelId,
-            {
-              ...this.agentForm.getRawValue(),
-              type: 'AGENT',
-              source: 1,
-            },
-            {
-              params: '?type=AGENT',
-            }
-          )
-          .subscribe(this.handleSuccess, this.handleFinal)
-      );
-    } else {
-      this.subscription$.add(
-        this.agentService
-          .addAgent(
-            this.hotelId,
-            {
-              ...this.agentForm.getRawValue(),
-              type: 'AGENT',
-              source: 1,
-            },
-            {
-              params: '?type=AGENT',
-            }
-          )
-          .subscribe(this.handleSuccess, this.handleFinal)
-      );
-    }
+    const formData = AgentModel.mapFormData(this.agentForm.getRawValue());
+    const queryParams = { params: '?type=AGENT' };
+    const request = !!this.agentId
+      ? this.agentService.updateAgent(formData, this.agentId)
+      : this.agentService.addAgent(formData, queryParams);
+    this.subscription$.add(
+      request.subscribe(this.handleSuccess, this.handleFinal)
+    );
   }
 
   reset() {
     this.agentForm.patchValue({
-      firstName: '',
+      name: '',
       email: '',
       phoneNo: '',
       iataNo: '',
-      companyName: '',
+      companyId: '',
       address: '',
       commission: '',
     });
@@ -197,26 +173,20 @@ export class AddAgentComponent implements OnInit {
   }
 
   /**
-   * @function getCategories to get room type options
+   * @function getCompany to get company list options
    */
   getCompany(): void {
     this.loadingCompany = true;
     this.subscription$.add(
       this.agentService
-        .getAgentList(this.hotelId, {
-          params: `?type=ROOM_TYPE&offset=${this.companyOffset}&limit=${this.companyLimit}`,
+        .getCompanyList({
+          params: `?type=AGENT&companyList=true&offset=${this.companyOffset}&limit=${this.companyLimit}`,
         })
         .subscribe(
-          (res) => {
-            const data = new CompanyList().deserialize(res);
-            // .records.map((item) => ({
-            //   label: item.name,
-            //   value: item.id,
-            //   price: item.price,
-            //   currency: item.currency,
-            // }));
-            // this.roomTypes = [...this.roomTypes, ...data];
-            // this.noMoreCompany = data.length < this.companyLimit;
+          (res: CompanyResponseType[]) => {
+            const data = AgentModel.getCompanyList(res);
+            this.companyList = [...data];
+            this.noMoreCompany = data.length < this.companyLimit;
           },
           (error) => {},
           () => {
@@ -231,38 +201,38 @@ export class AddAgentComponent implements OnInit {
    * @param text search text
    */
   searchCompany(text: string) {
-    // if (text) {
-    //   this.loadingCompany = true;
-    //   this.libraryService
-    //     .searchLibraryItem(this.hotelId, {
-    //       params: `?key=${text}&type=${LibrarySearchItem.ROOM_TYPE}`,
-    //     })
-    //     .subscribe(
-    //       (res) => {
-    //         const data = res && res[LibrarySearchItem.ROOM_TYPE];
-    //         this.roomTypes =
-    //           data
-    //             ?.filter((item) => item.status)
-    //             .map((item) => {
-    //               const roomType = new RoomType().deserialize(item);
-    //               return {
-    //                 label: roomType.name,
-    //                 value: roomType.id,
-    //                 price: roomType.price,
-    //                 currency: roomType.currency,
-    //               };
-    //             }) ?? [];
-    //       },
-    //       (error) => {},
-    //       () => {
-    //         this.loadingCompany = false;
-    //       }
-    //     );
-    // } else {
-    //   this.companyOffset = 0;
-    //   this.roomTypes = [];
-    //   this.getRoomTypes();
-    // }
+    if (text) {
+      this.loadingCompany = true;
+      //   this.libraryService
+      //     .searchLibraryItem(this.hotelId, {
+      //       params: `?key=${text}&type=${LibrarySearchItem.ROOM_TYPE}`,
+      //     })
+      //     .subscribe(
+      //       (res) => {
+      //         const data = res && res[LibrarySearchItem.ROOM_TYPE];
+      //         this.roomTypes =
+      //           data
+      //             ?.filter((item) => item.status)
+      //             .map((item) => {
+      //               const roomType = new RoomType().deserialize(item);
+      //               return {
+      //                 label: roomType.name,
+      //                 value: roomType.id,
+      //                 price: roomType.price,
+      //                 currency: roomType.currency,
+      //               };
+      //             }) ?? [];
+      //       },
+      //       (error) => {},
+      //       () => {
+      //         this.loadingCompany = false;
+      //       }
+      //     );
+    } else {
+      this.companyOffset = 0;
+      this.companyList = [];
+      this.getCompany();
+    }
   }
 
   /**

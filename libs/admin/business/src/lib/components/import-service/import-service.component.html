@@ -34,8 +34,11 @@
           formControlName="serviceIds"
           [itemList]="filteredServices"
           [fullView]="true"
-          [noRecordsAction]=""
-          [loading]=""
+          [noRecordsAction]="{
+            imageSrc: 'assets/images/empty-table-service.png',
+            description: 'No services found'
+          }"
+          [loading]="loading"
         ></hospitality-bot-custom-select>
       </form>
     </div>

@@ -43,7 +43,6 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
     this.getDataTableValue();
-    console.log(this.cols);
   }
 
   getQueryConfig(): QueryConfig {
@@ -73,6 +72,8 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
         (res) => {
           const roomList = new RoomList().deserialize(res);
           this.values = roomList.records;
+          this.updateTotalRecords();
+          console.log(this.totalRecords);
           this.loading = false;
         },
         () => {

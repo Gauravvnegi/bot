@@ -48,7 +48,7 @@ export const roomTypeData = [
   },
 ];
 
-const ratesRestriction = [
+export const ratesRestriction = [
   { label: 'Stop Cell', value: 'asd' },
   { label: 'CTA', value: 'CTA' },
   { label: 'CTD', value: 'CTD' },

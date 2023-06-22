@@ -66,7 +66,7 @@
                   <div class="left-main-cell__left">
                     <div class="room-type">
                       <div>{{ ratePlan.get('type').value }}</div>
-                      <div>({{ ratePlan.get('label').value }})</div>
+                      <div class="room-type__subtitle">({{ ratePlan.get('label').value }})</div>
                     </div>
 
                     <p-toggleButton
@@ -105,6 +105,7 @@
                       let channel of ratePlan.get('channels').controls;
                       let ratePlanIdx = index
                     "
+                    [formGroupName]="ratePlanIdx"
                   >
                     <div class="input-content-section left-main-cell p-bg">
                       <div class="left-main-cell__left">
@@ -123,7 +124,12 @@
                         <div class="rates">
                           <p-dropdown [options]="restriction"></p-dropdown>
                         </div>
-                        <i class="pi pi-link"></i>
+                        <p-toggleButton
+                          class="link"
+                          formControlName="linked"
+                          [offIcon]="'pi pi-link'"
+                          [onIcon]="'pi pi-link'"
+                        ></p-toggleButton>
                       </div>
                     </div>
                   </ng-container>

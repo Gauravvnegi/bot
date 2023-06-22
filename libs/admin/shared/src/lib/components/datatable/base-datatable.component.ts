@@ -81,6 +81,7 @@ export class BaseDatatableComponent implements OnInit {
   tabFilterItems: Filter<string, string>[] | any = []; //any will be removed when implemented everywhere
   tabFilterIdx = 0;
   selectedTab: string;
+  isAllTabFilterRequired = false;
 
   filterChips: Chip<string>[] | any = []; //Chips setting, When there is no tabItem
   selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
@@ -114,7 +115,7 @@ export class BaseDatatableComponent implements OnInit {
     { vin: 11, year: 2023, brand: 'mg', color: 'yellow' },
   ]; // testing data-source
 
-  totalRecords = 20;
+  totalRecords = 0;
 
   selectionMode = 'multiple';
   selectedRows = [];
@@ -420,13 +421,16 @@ export class BaseDatatableComponent implements OnInit {
     let totalCount = totalMainCount;
 
     if (entityTypeCounts && Object.keys(entityTypeCounts).length > 0) {
-      this.tabFilterItems = Object.entries(entityTypeCounts).map(
-        ([key, value]) => ({
-          label: record[key]?.label ?? convertToTitleCase(key),
-          value: key,
-          total: value,
-        })
-      );
+      this.tabFilterItems = Object.entries({
+        ...(this.isAllTabFilterRequired
+          ? { [defaultFilterChipValue.value]: totalCount }
+          : {}),
+        ...entityTypeCounts,
+      }).map(([key, value]) => ({
+        label: record[key]?.label ?? convertToTitleCase(key),
+        value: key,
+        total: value,
+      }));
 
       const selectedTabIndex = this.tabFilterItems.findIndex(
         (item) => item.value === this.selectedTab

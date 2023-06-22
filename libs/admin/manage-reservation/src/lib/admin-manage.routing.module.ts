@@ -6,6 +6,15 @@ import { ManageReservationDataTableComponent } from './components/manage-reserva
 import { manageReservationRoutes } from './constants/routes';
 import { RoomIteratorComponent } from './components/room-iterator/room-iterator.component';
 import { AddGuestComponent } from './components/add-guest/add-guest.component';
+import { BookingInfoComponent } from './components/form-components/booking-info/booking-info.component';
+import { SpaReservationComponent } from './components/spa-reservation/spa-reservation.component';
+import { RestaurantReservationComponent } from './components/restaurant-reservation/restaurant-reservation.component';
+import { VenueReservationComponent } from './components/venue-reservation/venue-reservation.component';
+import { PaymentRuleComponent } from './components/form-components/payment-rule/payment-rule.component';
+import { PaymentMethodComponent } from './components/form-components/payment-method/payment-method.component';
+import { InstructionsComponent } from './components/form-components/instructions/instructions.component';
+import { BillingAddressComponent } from './components/form-components/billing-address/billing-address.component';
+import { GuestInformationComponent } from './components/form-components/guest-information/guest-information.component';
 
 export const adminManageReservationRoutes: Route[] = [
   {
@@ -59,5 +68,14 @@ export class AdminManageReservationRoutingModule {
     ManageReservationDataTableComponent,
     RoomIteratorComponent,
     AddGuestComponent,
+    BookingInfoComponent,
+    PaymentRuleComponent,
+    PaymentMethodComponent,
+    SpaReservationComponent,
+    RestaurantReservationComponent,
+    VenueReservationComponent,
+    InstructionsComponent,
+    BillingAddressComponent,
+    GuestInformationComponent
   ];
 }

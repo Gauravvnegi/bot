@@ -3,66 +3,10 @@
   </hospitality-bot-navigation-header>
   <div class="main">
     <p-accordion [multiple]="true">
-      <p-accordionTab header="Reservation Information" [selected]="true">
-        <div class="form-block" formGroupName="reservationInformation">
-          <hospitality-bot-date
-            class="half-width"
-            controlName="from"
-            label="Check-In Date"
-            [settings]="{
-              enableTime: false,
-              dateValue: startMinDate,
-              isDisabled: disabledForm
-            }"
-            [minDate]="startMinDate"
-          ></hospitality-bot-date>
-          <hospitality-bot-date
-            class="half-width"
-            controlName="to"
-            label="Check-Out Date"
-            [settings]="{
-              enableTime: false,
-              dateValue: endMinDate,
-              isDisabled: disabledForm
-            }"
-            [minDate]="endMinDate"
-          ></hospitality-bot-date>
-          <hospitality-bot-select
-            class="half-width"
-            controlName="reservationType"
-            label="Reservation Type"
-            [options]="reservationTypes"
-            [props]="{ placeholder: 'Select' }"
-          ></hospitality-bot-select>
-          <hospitality-bot-select
-            class="half-width"
-            controlName="source"
-            label="Booking Source"
-            [options]="configData?.source"
-            [props]="{ placeholder: 'Select' }"
-          ></hospitality-bot-select>
-          <hospitality-bot-input
-            class="half-width maxlength"
-            controlName="sourceName"
-            label="Booking Source Name"
-            maxLength="60"
-            [props]="{
-              placeholder: 'Enter',
-              errorMessages: {
-                required: 'This is a required field.',
-                maxlength: 'Maximum character limit is upto 60.'
-              }
-            }"
-          ></hospitality-bot-input>
-          <hospitality-bot-select
-            class="half-width"
-            controlName="marketSegment"
-            label="Market Segment"
-            [options]="configData?.marketSegment"
-            [props]="{ placeholder: 'Select' }"
-          ></hospitality-bot-select>
-        </div>
-      </p-accordionTab>
+      <hospitality-bot-booking-info
+        bookingType="HOTEL"
+        [configData]="configData"
+      ></hospitality-bot-booking-info>
       <p-accordionTab class="room-info" header="Room Information">
         <hospitality-bot-room-iterator
           [userFormGroup]="userForm"
@@ -70,104 +14,19 @@
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>
-      <p-accordionTab header="Guest Information">
-        <div class="form-block" formGroupName="guestInformation">
-          <hospitality-bot-select
-            class="half-width"
-            controlName="guestDetails"
-            label="Guest Name"
-            [options]="guestOptions"
-            [props]="{
-              isAsync: true,
-              createPrompt: '+ Add New Guest',
-              placeholder: 'Search'
-            }"
-            [loading]="loadingGuests"
-            (paginate)="loadMoreGuests()"
-            (onSearch)="searchGuests($event)"
-            [stopEmission]="noMoreGuests"
-            (onCreate)="createGuest()"
-          ></hospitality-bot-select>
-          <!-- <hospitality-bot-input
-            class="half-width maxlength"
-            controlName="firstName"
-            label="First Name"
-            maxLength="60"
-            [props]="{
-              placeholder: 'Enter',
-              errorMessages: {
-                required: 'This is a required field.',
-                maxlength: 'Maximum character limit is upto 60.'
-              }
-            }"
-          ></hospitality-bot-input>
-          <hospitality-bot-input
-            class="half-width maxlength"
-            controlName="lastName"
-            label="Last Name"
-            maxLength="60"
-            [props]="{
-              placeholder: 'Enter ',
-              errorMessages: {
-                required: 'This is a required field.',
-                maxlength: 'Maximum character limit is upto 60.'
-              }
-            }"
-          ></hospitality-bot-input>
-          <hospitality-bot-input
-            class="half-width"
-            controlName="email"
-            label="Email Address"
-            [props]="{
-              placeholder: 'Enter ',
-              errorMessages: {
-                required: 'This is a required field.',
-                pattern: 'Enter valid email address'
-              }
-            }"
-          ></hospitality-bot-input>
-          <hospitality-bot-phone-number
-            preControlName="countryCode"
-            postControlName="phoneNumber"
-            class="half-width"
-          ></hospitality-bot-phone-number> -->
-        </div>
-      </p-accordionTab>
-      <p-accordionTab header="Billing Address">
-        <div class="form-block" formGroupName="address">
-          <hospitality-bot-input
-            class="half-width"
-            controlName="city"
-            label="City"
-            [props]="{ placeholder: 'Enter ' }"
-          ></hospitality-bot-input>
-          <hospitality-bot-input
-            class="half-width"
-            controlName="countryCode"
-            label="Country"
-            [props]="{ placeholder: 'Enter ' }"
-          ></hospitality-bot-input>
-          <hospitality-bot-input
-            class="full-width"
-            controlName="addressLine1"
-            label="Address"
-            [props]="{ placeholder: 'Enter ' }"
-          ></hospitality-bot-input>
-          <hospitality-bot-input
-            class="half-width"
-            controlName="state"
-            label="State"
-            [props]="{ placeholder: 'Enter ' }"
-          ></hospitality-bot-input>
-          <hospitality-bot-input
-            class="half-width"
-            controlName="postalCode"
-            label="Postal Code"
-            [props]="{ placeholder: 'Enter' }"
-          ></hospitality-bot-input>
-        </div>
-      </p-accordionTab>
-      <p-accordionTab
+      <hospitality-bot-guest-information></hospitality-bot-guest-information>
+      <hospitality-bot-billing-address></hospitality-bot-billing-address>
+      <hospitality-bot-instructions
+        [reservationType]="reservationType"
+      ></hospitality-bot-instructions>
+      <hospitality-bot-payment-rule
+        [deductedAmount]="deductedAmount"
+      ></hospitality-bot-payment-rule>
+      <hospitality-bot-payment-method
+        [currencies]="currencies"
+        [paymentOptions]="paymentOptions"
+      ></hospitality-bot-payment-method>
+      <!-- <p-accordionTab
         class="payment-rule-accordion"
         header="Payment Rule"
         #accordionTab
@@ -223,8 +82,8 @@
             }"
           ></hospitality-bot-text-area>
         </div>
-      </p-accordionTab>
-      <p-accordionTab header="Payment Method">
+      </p-accordionTab> -->
+      <!-- <p-accordionTab header="Payment Method">
         <div class="form-block" formGroupName="paymentMethod">
           <div class="type-wrapper half-width">
             <hospitality-bot-input
@@ -274,7 +133,7 @@
             [props]="{ placeholder: 'Enter' }"
           ></hospitality-bot-input>
         </div>
-      </p-accordionTab>
+      </p-accordionTab> -->
     </p-accordion>
     <div class="bk-summary">
       <ng-container *ngIf="!displayBookingOffer; else bookingOffer">
@@ -299,7 +158,8 @@
               }}
               -
               {{
-                userForm.get('reservationInformation.to').value | date: 'dd/MM/yyyy'
+                userForm.get('reservationInformation.to').value
+                  | date: 'dd/MM/yyyy'
               }}
             </p>
           </div>

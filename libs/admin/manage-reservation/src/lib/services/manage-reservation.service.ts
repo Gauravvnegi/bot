@@ -12,9 +12,7 @@ import { QueryConfig } from '../types/reservation.type';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
-  selectedTable = new BehaviorSubject<ReservationTableValue>(
-    ReservationTableValue.ALL
-  );
+  selectedTab = ReservationTableValue.ALL;
 
   getRoomTypeList(
     hotelId: string,

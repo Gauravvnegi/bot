@@ -1,8 +1,10 @@
-import { Cols, Status } from '@hospitality-bot/admin/shared';
+import { Cols, FlagType, Option, Status } from '@hospitality-bot/admin/shared';
 import { Chip } from '@hospitality-bot/admin/shared';
+import { ReservationStatus } from '../types/reservation.type';
 /**
  * Reservation item type value
  */
+
 export enum ReservationItem {
   reservation = 'SERVICE',
   package = 'PACKAGE',
@@ -27,6 +29,46 @@ export enum ReservationTableValue {
   WALK_IN = 'WALK_IN',
   OFFLINE_SALES = 'OFFLINE_SALES',
   BOOKING_ENGINE = 'CREATE_WITH',
+}
+
+export enum EntityTabGroup {
+  HOTEL = 'HOTEL',
+  RESTAURANT_AND_BAR = 'RESTAURANT_AND_BAR',
+  VENUE = 'VENUE',
+  SPA = 'SPA'
+}
+
+
+
+/**
+ * Reservation filter Status
+ */
+export const reservationStatus: ReservationStatus[] = [
+  'DRAFT',
+  'CONFIRMED',
+  'CANCELLED',
+];
+
+export const reservationStatusDetails: Record<ReservationStatus, {label: string; type: FlagType}> = {
+  DRAFT: {
+    label: 'DRAFT',
+    type: 'active',
+  },
+  CONFIRMED: {
+    label: 'Confirmed',
+    type: 'completed',
+  },
+  CANCELLED: {
+    label: 'Cancelled',
+    type: 'failed',
+  }
+}
+
+export const entityTabGroup: Record<EntityTabGroup, Option> = {
+  HOTEL: {label: 'Hotel', value: 'HOTEL'},
+  RESTAURANT_AND_BAR: {label: 'Res & Bar', value: 'RESTAURANT_AND_BAR'},
+  VENUE: {label: 'Venue', value: 'VENUE'},
+  SPA: {label: 'Spa', value: 'SPA'},
 }
 
 /* Reservation Filters */
@@ -99,26 +141,26 @@ export enum ReservationStatusType {
   CANCELLED = 'CANCELED',
 }
 
-export const reservationStatus: Status[] = [
-  {
-    label: 'Draft',
-    value: ReservationStatusType.DRAFT,
-    type: 'warning',
-    disabled: false,
-  },
-  {
-    label: 'Cancel',
-    value: ReservationStatusType.CANCELLED,
-    type: 'failed',
-    disabled: false,
-  },
-  {
-    label: 'Confirm',
-    value: ReservationStatusType.CONFIRMED,
-    type: 'active',
-    disabled: false,
-  },
-];
+// export const reservationStatus: Status[] = [
+//   {
+//     label: 'Draft',
+//     value: ReservationStatusType.DRAFT,
+//     type: 'warning',
+//     disabled: false,
+//   },
+//   {
+//     label: 'Cancel',
+//     value: ReservationStatusType.CANCELLED,
+//     type: 'failed',
+//     disabled: false,
+//   },
+//   {
+//     label: 'Confirm',
+//     value: ReservationStatusType.CONFIRMED,
+//     type: 'active',
+//     disabled: false,
+//   },
+// ];
 
 /* All Chips */
 export const chips: Chip<

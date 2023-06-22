@@ -4,7 +4,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  Cols,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
@@ -67,22 +66,10 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.loading = true;
 
     this.$subscription.add(
-      this.outletService.getOutletList(this.hotelId).subscribe(
-        (_res) => {
-          this.values = [
-            {
-              id: 1,
-              name: 'Outlet 1',
-              booking_no: '#8544556CY',
-              guest_name: 'John Doe',
-              booking_date: '2021-07-01T00:00:00.000Z',
-              amount: '4,880',
-              scource: 'Agent',
-              payment: 'Cash',
-              actions: 'confirmed',
-            },
-          ];
-          this.totalRecords = 1;
+      this.outletService.getOutletList().subscribe(
+        (res) => {
+          this.values = res;
+          // this.totalRecords = 1;
         },
         (err) => {},
         this.handleFinal

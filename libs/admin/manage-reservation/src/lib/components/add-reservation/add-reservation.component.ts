@@ -48,7 +48,9 @@ import {
 @Component({
   selector: 'hospitality-bot-add-reservation',
   templateUrl: './add-reservation.component.html',
-  styleUrls: ['./add-reservation.component.scss'],
+  styleUrls: ['./add-reservation.component.scss', 
+  '../reservation.styles.scss',
+],
 })
 export class AddReservationComponent implements OnInit, OnDestroy {
   userForm: FormGroup;
@@ -68,25 +70,27 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   summaryData: SummaryData;
   configData: BookingConfig;
 
-  globalQueries = [];
+  // globalQueries = [];
 
   loading = false;
   displayBookingOffer: boolean = false;
   formValueChanges = false;
   disabledForm = false;
   isBooking = false;
-  noMoreGuests = false;
-  loadingGuests = false;
-  viewAmountToPay = false;
-  guestsOffSet = 0;
+  // noMoreGuests = false;
+  // loadingGuests = false;
+  // guestsOffSet = 0;
+  
   deductedAmount = 0;
   startMinDate = new Date();
   endMinDate = new Date();
+  reservationType = 'HOTEL'
 
   pageTitle = 'Add Reservation';
   routes: NavRouteOptions = [];
 
   $subscription = new Subscription();
+  
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -116,11 +120,10 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.listenForGlobalFilters();
+    // this.listenForGlobalFilters();
     this.getCountryCode();
     this.getInitialData();
     this.getReservationId();
-    this.registerPaymentRuleChange();
   }
 
   /**
@@ -154,6 +157,9 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         //   ],
         guestDetails: ['', Validators.required],
       }),
+      instructions: this.fb.group({
+        specialInstructions: [''],
+      }),
       address: this.fb.group({
         addressLine1: ['', [Validators.required]],
         city: ['', [Validators.required]],
@@ -183,28 +189,28 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
-   */
-  listenForGlobalFilters(): void {
-    this.$subscription.add(
-      this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.globalQueries = [
-          ...data['filter'].queryValue,
-          ...data['dateRange'].queryValue,
-        ];
-        this.hotelId = this.globalFilterService.hotelId;
-        this.globalQueries = [
-          ...this.globalQueries,
-          {
-            order: 'DESC',
-            entityType: 'DUEIN',
-          },
-        ];
-        this.getGuests();
-      })
-    );
-  }
+  // /**
+  //  * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
+  //  */
+  // listenForGlobalFilters(): void {
+  //   this.$subscription.add(
+  //     this.globalFilterService.globalFilter$.subscribe((data) => {
+  //       this.globalQueries = [
+  //         ...data['filter'].queryValue,
+  //         ...data['dateRange'].queryValue,
+  //       ];
+  //       this.hotelId = this.globalFilterService.hotelId;
+  //       this.globalQueries = [
+  //         ...this.globalQueries,
+  //         {
+  //           order: 'DESC',
+  //           entityType: 'DUEIN',
+  //         },
+  //       ];
+  //       this.getGuests();
+  //     })
+  //   );
+  // }
 
   getCountryCode(): void {
     this.configService
@@ -263,17 +269,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
       });
   }
 
-  registerPaymentRuleChange() {
-    const deductedAmountControl = this.userForm.get(
-      'paymentRule.deductedAmount'
-    );
-    const amountToPayControl = this.userForm.get('paymentRule.amountToPay');
 
-    amountToPayControl.valueChanges.subscribe((res) => {
-      const newDeductedAmount = this.deductedAmount - +res;
-      deductedAmountControl.setValue(newDeductedAmount);
-    });
-  }
 
   getInitialData(): void {
     this.$subscription.add(
@@ -444,66 +440,66 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadMoreGuests() {
-    this.guestsOffSet = this.guestsOffSet + 5;
-    this.getGuests();
-  }
+  // loadMoreGuests() {
+  //   this.guestsOffSet = this.guestsOffSet + 5;
+  //   this.getGuests();
+  // }
 
-  searchGuests(text: string) {
-    if (text) {
-      this.loadingGuests = true;
-      this.guestService.searchGuest(text).subscribe((res) => {
-        this.loadingGuests = false;
-        const data = new Guest().deserialize(res);
-        this.guestOptions.push(data);
-      });
-    } else {
-      this.guestsOffSet = 0;
-      this.guestOptions = [];
-      this.getGuests();
-    }
-  }
+  // searchGuests(text: string) {
+  //   if (text) {
+  //     this.loadingGuests = true;
+  //     this.guestService.searchGuest(text).subscribe((res) => {
+  //       this.loadingGuests = false;
+  //       const data = new Guest().deserialize(res);
+  //       this.guestOptions.push(data);
+  //     });
+  //   } else {
+  //     this.guestsOffSet = 0;
+  //     this.guestOptions = [];
+  //     this.getGuests();
+  //   }
+  // }
 
-  createGuest() {
-    if (this.reservationId) {
-      this.router.navigateByUrl(
-        `pages/efrontdesk/manage-reservation/edit-reservation/${this.reservationId}/add-guest`
-      );
-    } else {
-      this.router.navigateByUrl(
-        'pages/efrontdesk/manage-reservation/add-reservation/add-guest'
-      );
-    }
-  }
+  // createGuest() {
+  //   if (this.reservationId) {
+  //     this.router.navigateByUrl(
+  //       `pages/efrontdesk/manage-reservation/edit-reservation/${this.reservationId}/add-guest`
+  //     );
+  //   } else {
+  //     this.router.navigateByUrl(
+  //       'pages/efrontdesk/manage-reservation/add-reservation/add-guest'
+  //     );
+  //   }
+  // }
 
-  getGuests() {
-    this.loadingGuests = true;
-    this.guestService.getGuestList(this.getConfig()).subscribe(
-      (res) => {
-        const guests = res.records;
-        const guestDetails: GuestDetails[] = guests.map((guest) => ({
-          label: `${guest.firstName} ${guest.lastName}`,
-          value: guest.id,
-          number: guest.contactDetails.contactNumber,
-          email: guest.contactDetails.emailId,
-        }));
-        this.guestOptions = [...this.guestOptions, ...guestDetails];
-        this.noMoreGuests = guests.length < 5;
-        this.loadingGuests = false;
-      },
-      (err) => {
-        this.loadingGuests = false;
-      }
-    );
-  }
+  // getGuests() {
+  //   this.loadingGuests = true;
+  //   this.guestService.getGuestList(this.getConfig()).subscribe(
+  //     (res) => {
+  //       const guests = res.records;
+  //       const guestDetails: GuestDetails[] = guests.map((guest) => ({
+  //         label: `${guest.firstName} ${guest.lastName}`,
+  //         value: guest.id,
+  //         number: guest.contactDetails.contactNumber,
+  //         email: guest.contactDetails.emailId,
+  //       }));
+  //       this.guestOptions = [...this.guestOptions, ...guestDetails];
+  //       this.noMoreGuests = guests.length < 5;
+  //       this.loadingGuests = false;
+  //     },
+  //     (err) => {
+  //       this.loadingGuests = false;
+  //     }
+  //   );
+  // }
 
-  getConfig() {
-    const config = [
-      ...this.globalQueries,
-      { entityState: 'ALL', offset: this.guestsOffSet, limit: 5 },
-    ];
-    return { queryObj: this.adminUtilityService.makeQueryParams(config) };
-  }
+  // getConfig() {
+  //   const config = [
+  //     ...this.globalQueries,
+  //     { entityState: 'ALL', offset: this.guestsOffSet, limit: 5 },
+  //   ];
+  //   return { queryObj: this.adminUtilityService.makeQueryParams(config) };
+  // }
 
   handleBooking(): void {
     this.isBooking = true;

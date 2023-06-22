@@ -8,18 +8,6 @@
   display: flex;
 }
 
-.form-block {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 6%;
-  row-gap: 30px;
-  .half-width {
-    flex-basis: 47%;
-  }
-  .full-width {
-    flex-basis: 100%;
-  }
-}
 
 :host ::ng-deep .p-accordion-header-text {
   @include form-header();
@@ -201,29 +189,6 @@
   }
 }
 
-.type-wrapper {
-  display: flex;
-
-  .three-fourth-width {
-    flex-basis: 75%;
-  }
-  .one-fourth-width {
-    flex-basis: 25%;
-  }
-  .half-width{
-    flex-basis: 50%
-  }
-}
-
-.btn-wrapper {
-  display: flex;
-  justify-content: flex-end;
-  position: absolute;
-  top: -70px;
-  right: 75px;
-  gap: 12px;
-  z-index: 10;
-}
 
 :host ::ng-deep .payment-rule-accordion {
   .p-accordion-content {
@@ -231,11 +196,7 @@
   }
 }
 
-:host ::ng-deep .deducted-amount {
-  .label {
-    visibility: hidden;
-  }
-}
+
 
 
 :host ::ng-deep .amount-to-pay {

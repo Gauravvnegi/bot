@@ -1,4 +1,5 @@
-import { MenuItemResponse } from "../types/menu";
+import { MenuItemResponse } from '../types/menu';
+import { OutletResponse } from '../types/response';
 
 export class OutletList {
   id: string;

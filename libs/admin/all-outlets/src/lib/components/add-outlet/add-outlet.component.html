@@ -16,6 +16,9 @@
       controlName="name"
       label="Name"
       maxLength="60"
+      [props]="{
+        placeholder: 'Enter'
+      }"
     ></hospitality-bot-input>
     <div class="half-width type-wrapper">
       <hospitality-bot-select
@@ -24,6 +27,9 @@
         label="Type"
         [options]="types"
         (itemSelection)="onTypeChange($event.value)"
+        [props]="{
+          placeholder: 'Select Type'
+        }"
       ></hospitality-bot-select>
       <hospitality-bot-select
         class="half-width"
@@ -31,6 +37,9 @@
         label="Sub Type"
         [options]="subType"
         [disabled]="!isTypeSelected"
+        [props]="{
+          placeholder: 'Select Type'
+        }"
       ></hospitality-bot-select>
     </div>
     <div class="half-width" [formGroup]="useForm.get('contact')">

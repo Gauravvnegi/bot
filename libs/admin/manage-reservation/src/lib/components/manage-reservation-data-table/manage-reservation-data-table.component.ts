@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
@@ -20,9 +20,13 @@ import { Subscription } from 'rxjs';
 import {
   chips,
   cols,
+  EntityTabGroup,
+  entityTabGroup,
   filters,
   ReservationSearchItem,
+  reservationStatusDetails,
   ReservationStatusType,
+  ReservationTableValue,
   title,
 } from '../../constants/reservation-table';
 import { manageReservationRoutes } from '../../constants/routes';
@@ -34,6 +38,7 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { ReservationListResponse } from '../../types/response.type';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -45,18 +50,16 @@ import { MatDialogConfig } from '@angular/material/dialog';
 })
 export class ManageReservationDataTableComponent extends BaseDatableComponent {
   readonly manageReservationRoutes = manageReservationRoutes;
+  readonly reservationStatusDetails = reservationStatusDetails;
+  @Input() selectedEntity = entityTabGroup.HOTEL;
+
   hotelId!: string;
-  tabFilterItems = filters;
-  selectedTable;
-  tableName = title;
-  filterChips = chips;
-  cols = cols;
-  isQuickFilters = true;
+  selectedTab: ReservationTableValue;
   reservationLists!: ReservationList;
   $subscription = new Subscription();
   globalQueries = [];
   configData: BookingConfig;
-  tabFilterIdx: number = 0;
+  isAllTabFilterRequired: boolean = true;
 
   constructor(
     public fb: FormBuilder,
@@ -74,8 +77,18 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.getConfigData();
+    // this.getConfigData();
+    this.selectedTab = this.manageReservationService.selectedTab;
+    this.tableName = title;
+    this.cols = cols;
     this.listenForGlobalFilters();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.selectedEntity)
+      this.selectedEntity.value !== EntityTabGroup.HOTEL
+        ? this.initOutletValue(this.selectedEntity.value)
+        : this.initHotelValue();
   }
 
   getConfigData(): void {
@@ -108,24 +121,19 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.listenToTableChange();
+      this.initHotelValue();
     });
   }
 
-  /**
-   * @function listenToTableChange  To listen to table changes
-   */
-  listenToTableChange() {
-    this.manageReservationService.selectedTable.subscribe((value) => {
-      this.selectedTable = value;
-      this.loadData();
-    });
+  loadData(event: LazyLoadEvent): void {
+    this.selectedTab = this.manageReservationService.selectedTab;
+    this.initHotelValue();
   }
 
   /**
-   * @function initTableValue initializing data into value of table
+   * @function initHotelValue initializing data into value of table
    */
-  loadData() {
+  initHotelValue() {
     this.loading = true;
     this.manageReservationService
       .getReservationItems<ReservationListResponse>(this.getQueryConfig())
@@ -138,9 +146,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
               statusValues: this.getStatusValues(item.reservationType),
             };
           });
-          this.updateTabFilterCount(res.entityTypeCounts, res.total);
-          this.updateQuickReplyFilterCount(res.entityStateCounts);
-          this.updateTotalRecords();
+          this.initFilters(
+            this.reservationLists.entityTypeCounts,
+            this.reservationLists.entityStateCounts,
+            this.reservationLists.total,
+            this.reservationStatusDetails
+          );
+          this.loading = false;
         },
         ({ error }) => {
           this.values = [];
@@ -148,6 +160,18 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         },
         this.handleFinal
       );
+  }
+
+  initOutletValue(selectedEntity: string) {
+    if(selectedEntity === EntityTabGroup.RESTAURANT_AND_BAR){
+
+    }
+    if(selectedEntity === EntityTabGroup.SPA){
+
+    }
+    if(selectedEntity === EntityTabGroup.VENUE){
+
+    }
   }
 
   /**
@@ -190,11 +214,11 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     );
 
     togglePopupCompRef.componentInstance.content = {
-      heading: `Mark Booking As ${
+      heading: `Mark Reservation As ${
         status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
       }`,
       description: [
-        `You are about to mark this booking as ${status}`,
+        `You are about to mark this reservation as ${status}`,
         'Are you Sure?',
       ],
     };
@@ -239,7 +263,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
               };
             });
             this.snackbarService.openSnackBarAsText(
-              'Booking ' + status + ' changes successfully',
+              'Reservation ' + status + ' changes successfully',
               '',
               { panelClass: 'success' }
             );
@@ -250,17 +274,17 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     );
   }
 
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item?.isSelected && item?.value !== 'ALL'
-    );
-    let chipsValue = chips.map((item) => item?.value);
-    return [{ entityState: chipsValue }];
-  }
+  // /**
+  //  * @function getSelectedQuickReplyFilters To return the selected chip list.
+  //  * @returns The selected chips.
+  //  */
+  // getSelectedQuickReplyFilters() {
+  //   const chips = this.filterChips.filter(
+  //     (item) => item?.isSelected && item?.value !== 'ALL'
+  //   );
+  //   let chipsValue = chips.map((item) => item?.value);
+  //   return [{ entityState: chipsValue }];
+  // }
 
   /**
    * @function editReservation To navigate at edit page
@@ -278,10 +302,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
         {
           type: ReservationSearchItem.ROOM_TYPE,
-          entityType: this.selectedTable,
+          entityType: this.selectedTab,
           entityId: this.hotelId,
           offset: this.first,
           limit: this.rowsPerPage,
@@ -291,15 +315,15 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     return config;
   }
 
-  /**
-   * @function onSelectedTabFilterChange To handle the tab filter change.
-   * @param event The material tab change event.
-   */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.selectedTable = this.tabFilterItems[event.index].value;
-    this.tabFilterIdx = event.index;
-    this.loadData();
-  }
+  // /**
+  //  * @function onSelectedTabFilterChange To handle the tab filter change.
+  //  * @param event The material tab change event.
+  //  */
+  // onSelectedTabFilterChange(event: MatTabChangeEvent): void {
+  //   this.selectedTable = this.tabFilterItems[event.index].value;
+  //   this.tabFilterIdx = event.index;
+  //   this.loadData();
+  // }
 
   /**
    * @function exportCSV To export CSV report of the table.

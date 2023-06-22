@@ -4,7 +4,8 @@ import {
   ReservationListResponse,
   ReservationResponse,
 } from '../types/response.type';
-import { FlagType, Option } from '@hospitality-bot/admin/shared';
+import { EntityState, FlagType, Option } from '@hospitality-bot/admin/shared';
+import { SearchGuestResponse } from 'libs/admin/guests/src/lib/types/guest.type';
 /* Reservation */
 export class Reservation {
   id: string;
@@ -79,19 +80,14 @@ export type Status = {
 export class ReservationList {
   reservationData: Reservation[];
   total: number;
-  entityStateCounts: EntityStateCounts;
-  entityTypeCounts: EntityTypeCounts;
-  deserialize(input: ReservationListResponse | any) {
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
+  deserialize(input: ReservationListResponse) {
     this.reservationData =
       input.records?.map((item) => new Reservation().deserialize(item)) ?? [];
     this.total = input.total;
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts
-    );
-    this.entityTypeCounts = new EntityTypeCounts().deserialize(
-      input.entityTypeCounts,
-      this.total
-    );
+    this.entityStateCounts = input.entityStateCounts;
+    this.entityTypeCounts = input.entityTypeCounts;
     return this;
   }
 }
@@ -197,7 +193,7 @@ export class OfferData {
 }
 
 export class ReservationFormData {
-  bookingInformation: BookingInfo;
+  reservationInformation: BookingInfo;
   guestInformation: GuestInfo;
   address: AddressInfo;
   paymentMethod: PaymentInfo;
@@ -205,7 +201,7 @@ export class ReservationFormData {
   roomInformation: RoomTypeInfo;
 
   deserialize(input): this {
-    this.bookingInformation = new BookingInfo().deserialize(input);
+    this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input);
     this.address = new AddressInfo().deserialize(input.address);
     this.paymentMethod = new PaymentInfo().deserialize(input);
@@ -380,5 +376,22 @@ export class BookingConfig {
       default:
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     }
+  }
+}
+
+export class Guest {
+  label: string;
+  value: string;
+  phoneNumber: string;
+  cc: string;
+  email: string;
+  
+  deserialize(input: SearchGuestResponse) {
+    this.label = `${input.firstName} ${input.lastName}`;
+    this.value = input.id;
+    this.phoneNumber = input.contactDetails?.contactNumber;
+    this.cc = input.contactDetails?.cc;
+    this.email = input.contactDetails?.emailId;
+    return this;
   }
 }

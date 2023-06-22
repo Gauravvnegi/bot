@@ -8,18 +8,6 @@
   display: flex;
 }
 
-.form-block {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 6%;
-  row-gap: 30px;
-  .half-width {
-    flex-basis: 47%;
-  }
-  .full-width {
-    flex-basis: 100%;
-  }
-}
 
 :host ::ng-deep .p-accordion-header-text {
   @include form-header();
@@ -198,6 +186,28 @@
     @include flex-justify-center;
 
     margin-bottom: 21px;
+  }
+}
+
+
+:host ::ng-deep .payment-rule-accordion {
+  .p-accordion-content {
+    position: relative;
+  }
+}
+
+
+
+
+:host ::ng-deep .amount-to-pay {
+  .label {
+    white-space: nowrap;
+  }
+}
+
+:host ::ng-deep .last-name {
+  .label {
+    visibility: hidden;
   }
 }
 

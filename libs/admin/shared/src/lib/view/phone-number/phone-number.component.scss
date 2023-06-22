@@ -32,6 +32,12 @@
   border-color: $primary-form-color;
 }
 
+:host ::ng-deep .option-item{
+  display: flex;
+  align-items: center;
+  gap: 3%;
+}
+
 :host ::ng-deep .p-dropdown {
   border-color: $grayLight;
 }

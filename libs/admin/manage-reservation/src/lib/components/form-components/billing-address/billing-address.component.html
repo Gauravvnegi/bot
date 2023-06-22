@@ -1,0 +1,34 @@
+<p-accordionTab header="Billing Address" [formGroup]="controlContainer.control">
+    <div class="form-block" formGroupName="address">
+      <hospitality-bot-input
+        class="half-width"
+        controlName="city"
+        label="City"
+        [props]="{ placeholder: 'Enter ' }"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="countryCode"
+        label="Country"
+        [props]="{ placeholder: 'Enter ' }"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="full-width"
+        controlName="addressLine1"
+        label="Address"
+        [props]="{ placeholder: 'Enter ' }"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="state"
+        label="State"
+        [props]="{ placeholder: 'Enter ' }"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="postalCode"
+        label="Postal Code"
+        [props]="{ placeholder: 'Enter' }"
+      ></hospitality-bot-input>
+    </div>
+  </p-accordionTab>

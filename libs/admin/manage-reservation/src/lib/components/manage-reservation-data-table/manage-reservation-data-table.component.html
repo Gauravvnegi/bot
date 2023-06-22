@@ -6,7 +6,7 @@
   <div class="heading">{{ tableName }}</div>
   <div class="action-wrapper">
     <hospitality-bot-button
-      label="+ Create Booking"
+      label="+ Create Reservation"
       link="/pages/efrontdesk/manage-reservation/{{
         manageReservationRoutes.addReservation.route
       }}"
@@ -45,7 +45,7 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
-  *ngIf="tabFilterItems[tabFilterIdx].total; else emptyTable"
+  *ngIf="totalRecords; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
@@ -56,6 +56,7 @@
         *ngIf="isQuickFilters"
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
       ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -195,8 +196,8 @@
     }}"
     [content]="{
       description:
-        'No Booking found. Tap the +Create Booking to create & manage the booking offered by your hotel',
-      actionName: '+ Create Booking',
+        'No Reservation found. Tap the +Create Reservation to create & manage the reservation offered by your hotel',
+      actionName: '+ Create Reservation',
       imageSrc: 'assets/images/empty-table-package.png'
     }"
   >

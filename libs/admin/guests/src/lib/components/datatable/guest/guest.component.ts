@@ -163,7 +163,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
-
     return this._guestTableService.getGuestList(config);
   }
 

@@ -1,14 +1,16 @@
 @import '../form.component.scss';
 
-:host ::ng-deep .option-item {
-  display: inline-flex;
-  align-items: center;
+.option-items {
+  display: flex;
   gap: 3%;
+  flex-direction: column;
 }
+
 :host ::ng-deep .option-image {
   width: 2em;
   height: 2em;
 }
+
 :host ::ng-deep .selected-image {
   width: 3em;
   height: 3em;
@@ -16,6 +18,14 @@
 
 :host ::ng-deep .p-dropdown {
   @include input-default();
+}
+
+.option-details{
+  color: #a3a3a3;
+  font-size: 14px;
+  font-weight: $medium;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 :host ::ng-deep .p-dropdown-label {

@@ -1,0 +1,51 @@
+<p-accordionTab header="Payment Method" [formGroup]="controlContainer.control">
+    <div class="form-block" formGroupName="paymentMethod">
+      <div class="type-wrapper half-width">
+        <hospitality-bot-input
+          class="half-width"
+          label="Cashier Name"
+          controlName="cashierFirstName"
+        ></hospitality-bot-input>
+        <hospitality-bot-input
+          class="half-width last-name"
+          label="Last Name"
+          controlName="cashierLastName"
+        ></hospitality-bot-input>
+      </div>
+      <hospitality-bot-select-group
+        *ngIf="!!paymentOptions.length"
+        class="full-width"
+        controlName="paymentMethod"
+        label="Payment Method"
+        [options]="paymentOptions"
+      ></hospitality-bot-select-group>
+      <hospitality-bot-prefix-field
+        class="half-width"
+        [options]="currencies"
+        label="Payment Received"
+        preControlName="currency"
+        postControlName="totalPaidAmount"
+        [defaultProps]="{ post: { type: 'number' } }"
+        [props]="{
+          errorMessages: {
+            required: 'This is a required field.',
+            min: 'Value must be greater than 0.',
+            max: 'Value must be less than or equal Total amount to be paid.'
+          }
+        }"
+      >
+      </hospitality-bot-prefix-field>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="paymentRemark"
+        label="Your Inclusions/remakrs :"
+        [props]="{ placeholder: 'Enter' }"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="transactionId"
+        label="Transaction ID"
+        [props]="{ placeholder: 'Enter' }"
+      ></hospitality-bot-input>
+    </div>
+  </p-accordionTab>

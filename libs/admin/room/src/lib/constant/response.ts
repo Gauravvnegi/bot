@@ -1,5 +1,6 @@
 import { FlagType } from '@hospitality-bot/admin/shared';
 import { RoomFoStatus, RoomStatus } from '../types/service-response';
+import { RatePlanOptions } from '../types/room';
 
 export const roomStatuses: RoomStatus[] = [
   'CLEAN',
@@ -42,3 +43,22 @@ export const roomStatusDetails: Record<
     type: 'inactive',
   },
 };
+
+export const ratePlanResponse: RatePlanOptions[] = [
+  {
+    label: 'EP (Room Only)',
+    value: 'EP (Room Only)',
+  },
+  {
+    label: 'CP (With BF)',
+    value: 'CP (With BF)',
+  },
+  {
+    label: 'MAP (With BF and 1 Major Meal)',
+    value: 'MAP (With BF and 1 Major Meal)',
+  },
+  {
+    label: 'AP (With all 3 Meals)',
+    value: 'AP (With all 3 Meals)',
+  },
+]  

@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MenuModule } from 'primeng/menu';
 import { CKEditorModule } from 'ckeditor4-angular';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { ButtonModule } from 'primeng/button/';
@@ -98,7 +99,7 @@ import { DiscountFormComponent } from './components/discount-form/discount-form.
 import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
 import { CheckboxSelectorComponent } from './components/form-component/checkbox-selector/checkbox-selector.component';
 import { MenuButtonComponent } from './components/menu-button/menu-button.component';
-import { MenuModule } from 'primeng/menu';
+// import { MenuModule } from 'primeng/menu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 @NgModule({
   imports: [
@@ -285,6 +286,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     AutoCompleteComponent,
     ViewInputComponent,
     MatMenuModule,
+    MenuModule,
     MenuComponent,
     SkeletonDirective,
     SkeletonShapeComponent,

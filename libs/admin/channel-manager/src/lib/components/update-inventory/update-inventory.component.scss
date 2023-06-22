@@ -25,7 +25,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 
 .left {
   min-width: 200px;
-  flex-basis: 35%;
+  flex-basis: 30%;
 
   &__main {
     width: 100%;
@@ -33,7 +33,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 .right {
-  flex-basis: 65%;
+  flex-basis: 70%;
   // overflow: auto;
   overflow: hidden; /* Hides the scrollbar */
 
@@ -103,8 +103,15 @@ $border-color: rgba(112, 112, 112, 0.35);
   height: 90px;
   background-color: white;
 
-  & .left-main-cell__left {
+  .left-main-cell__left {
     @include item-center-with-space;
+  }
+
+  .room-type{
+    font-size: 14px;
+    &__subtitle{
+      font-size: 12px;
+    }
   }
 
   .cell {

@@ -6,7 +6,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { daysOfWeek, Option } from '@hospitality-bot/admin/shared';
-import { roomTypeData } from '../../constants/data';
+import { ratesRestriction, roomTypeData } from '../../constants/data';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
@@ -15,31 +15,17 @@ import { roomTypeData } from '../../constants/data';
 })
 export class UpdateInventoryComponent implements OnInit {
   useForm: FormGroup;
-  roomTypes: {
-    label: string;
-    value: string;
-    ratePlans: {
-      type: string;
-      label: string;
-      value: string;
-      channels: {
-        label: string;
-        value: string;
-      }[];
-    }[];
-  }[] = [];
+  roomTypes: RoomTypes[] = [];
 
   dates: DateOption[];
+  dateLimit: number = 15;
 
   restriction = [
     {
-      label: 'rates',
+      label: 'Rates',
       value: 'rates',
     },
-    {
-      label: 'availability',
-      value: 'availability',
-    },
+    ...ratesRestriction
   ];
 
   constructor(private fb: FormBuilder) {}
@@ -58,8 +44,14 @@ export class UpdateInventoryComponent implements OnInit {
   }
 
   get roomTypesControl() {
-    console.log(this.useFormControl.roomTypes.controls);
     return this.useFormControl.roomTypes.controls;
+  }
+
+  getArray(value?: number) {
+    if (value) {
+      return Array.from({ length: this.dateLimit }).fill(value);
+    }
+    return Array.from({ length: this.dateLimit }, (_, index) => index);
   }
 
   initForm() {
@@ -74,52 +66,124 @@ export class UpdateInventoryComponent implements OnInit {
       this.initDate(res);
     });
 
-    this.useForm.valueChanges.subscribe((res) => {
-      console.log(res);
-    });
+    // this.useForm.valueChanges.subscribe((res) => {
+    //   console.log(res);
+    // });
   }
 
+  /**
+   * Add Room Types Control
+   */
   addRoomTypesControl() {
     this.useForm.addControl('roomTypes', this.fb.array([]));
-    this.roomTypes.forEach((roomType) => {
+    this.roomTypes.forEach((roomType, roomTypeIdx) => {
       this.useFormControl.roomTypes.push(
         this.fb.group({
           label: roomType.label,
-          ratePlans: this.fb.array(
-            roomType.ratePlans.map((ratePlan) =>
-              this.fb.group({
-                type: [ratePlan.type],
-                label: [ratePlan.label],
-                rates: this.fb.array(
-                  this.dates.map((item) =>
-                    this.fb.group({
-                      value: [''],
-                    })
-                  )
-                ),
-                linked: [false],
-                showChannels: [true],
-                channels: this.fb.array(
-                  ratePlan.channels.map((channel) =>
-                    this.fb.group({
-                      rates: this.fb.array(
-                        this.dates.map((item) =>
-                          this.fb.group({
-                            value: [''],
-                          })
-                        )
-                      ),
-                      linked: [true],
-                      label: channel.label,
-                    })
-                  )
-                ),
-              })
-            )
-          ),
+          value: roomType.value,
         })
       );
+      this.addRatesPlanControls(roomType.ratePlans, roomTypeIdx);
     });
+  }
+
+  /**
+   * Add Rates plan control to room type control
+   * @param ratePlans rate plans array
+   * @param roomTypeIdx selected room type index
+   */
+  addRatesPlanControls(ratePlans: RoomTypes['ratePlans'], roomTypeIdx: number) {
+    const roomTypeFG = this.useFormControl.roomTypes.at(
+      roomTypeIdx
+    ) as FormGroup;
+
+    roomTypeFG.addControl('ratePlans', this.fb.array([]));
+
+    const ratePlansControl = roomTypeFG.get('ratePlans') as FormArray;
+
+    ratePlans.forEach((ratePlan, ratePlanIdx) => {
+      ratePlansControl.push(
+        this.fb.group({
+          type: [ratePlan.type],
+          label: [ratePlan.label],
+          value: [ratePlan.value],
+          rates: this.getValuesArrayControl(),
+          linked: [false],
+          showChannels: [true],
+        })
+      );
+
+      const ratesFA = ratePlansControl
+        .at(ratePlanIdx)
+        .get('rates') as FormArray;
+
+      ratesFA.controls.forEach((rateControl) => {
+        rateControl.valueChanges.subscribe((res) => {
+          const linkedValue = ratePlansControl.at(ratePlanIdx).get('linked')
+            .value;
+
+          if (linkedValue) {
+            ratesFA.patchValue(this.getArray(res), { emitEvent: false });
+          }
+        });
+      });
+
+      this.addChannelsControl(ratePlan.channels, roomTypeIdx, ratePlanIdx);
+    });
+  }
+
+  /**
+   * Add channels to the rate plans and subscribe changes
+   * @param channels channels array
+   * @param roomTypeIdx selected room type index
+   * @param ratePlanIdx selected rate plan index
+   */
+  addChannelsControl(
+    channels: RoomTypes['ratePlans'][0]['channels'],
+    roomTypeIdx: number,
+    ratePlanIdx: number
+  ) {
+    const ratePlanFG = (this.useFormControl.roomTypes
+      .at(roomTypeIdx)
+      .get('ratePlans') as FormArray).at(ratePlanIdx) as FormGroup;
+
+    ratePlanFG.addControl('channels', this.fb.array([]));
+
+    const channelControl = ratePlanFG.get('channels') as FormArray;
+
+    channels.forEach((channel, channelIdx) => {
+      channelControl.push(
+        this.fb.group({
+          label: channel.label,
+          value: channel.value,
+          linked: [true],
+          rates: this.getValuesArrayControl(),
+        })
+      );
+
+      const ratesFA = channelControl.at(channelIdx).get('rates') as FormArray;
+
+      ratesFA.controls.forEach((rateControl) => {
+        rateControl.valueChanges.subscribe((res) => {
+          const linkedValue = channelControl.at(channelIdx).get('linked')
+            .value;
+
+          if (linkedValue) {
+            ratesFA.patchValue(this.getArray(res), { emitEvent: false });
+          }
+        });
+      });
+    });
+  }
+
+  /**
+   * Return value controls form array
+   * @returns FormArray
+   */
+  getValuesArrayControl() {
+    return this.fb.array(
+      this.dates.map((item) => this.fb.group({ value: [''] }))
+    );
   }
 
   get useFormControl() {
@@ -151,7 +215,7 @@ export class UpdateInventoryComponent implements OnInit {
 
   initFormSubscription() {}
 
-  initDate(startDate: number, limit = 25) {
+  initDate(startDate: number, limit = 14) {
     const dates = [];
     const currentDate = new Date(startDate);
 
@@ -177,7 +241,21 @@ export class UpdateInventoryComponent implements OnInit {
 export type UseForm = {
   roomType: string[];
   date: Date;
-  roomTypes: { rates: []; ratePlans: [][] }[];
+  roomTypes: any[];
+};
+
+export type RoomTypes = {
+  label: string;
+  value: string;
+  ratePlans: {
+    type: string;
+    label: string;
+    value: string;
+    channels: {
+      label: string;
+      value: string;
+    }[];
+  }[];
 };
 
 export type DateOption = { day: string; date: number };

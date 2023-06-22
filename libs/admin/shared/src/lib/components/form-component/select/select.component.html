@@ -43,8 +43,8 @@
         />
         <span class="option-label">{{ option.label }}</span>
 
-        <span *ngIf="option.number && option.email" class="option-details">
-          <span [ngStyle]="{'padding-right': '10px'}">{{ option.number }}</span>
+        <span *ngIf="option.phoneNumber && option.email" class="option-details">
+          <span [ngStyle]="{'padding-right': '10px'}">{{ option.phoneNumber }}</span>
           <span>{{ option.email }}</span>
         </span>
       </div>

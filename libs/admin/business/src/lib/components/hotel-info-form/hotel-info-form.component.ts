@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   ActivatedRoute,
@@ -6,21 +6,12 @@ import {
   Router,
 } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { NavRouteOption, Option } from '@hospitality-bot/admin/shared';
+import { NavRouteOption, Option, Regex } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { businessRoute } from '../../constant/routes';
-import {
-  HotelResponse,
-  SegmentList,
-  Service,
-  ServiceIdList,
-  Services,
-  noRecordAction,
-} from '../../models/hotel.models';
+import { SegmentList, Service } from '../../models/hotel.models';
 import { BusinessService } from '../../services/business.service';
-import { AddressService } from '../../services/place.service';
-import { ServcieStatusList } from '../../models/hotel-form.model';
 import { HotelFormDataService } from '../../services/hotel-form.service';
 
 declare let google: any;
@@ -59,7 +50,6 @@ export class HotelInfoFormComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private router: Router,
     private businessService: BusinessService,
-    private addressService: AddressService,
     private route: ActivatedRoute,
     private hotelFormDataService: HotelFormDataService
   ) {
@@ -71,11 +61,11 @@ export class HotelInfoFormComponent implements OnInit {
         if (brandId) this.brandId = brandId;
       }
     );
+    this.getSegmentList();
   }
 
   ngOnInit(): void {
     this.initForm();
-    this.getSegmentList();
   }
 
   initForm() {
@@ -84,7 +74,7 @@ export class HotelInfoFormComponent implements OnInit {
         status: [true],
         name: ['', [Validators.required]],
         propertyCategory: [''],
-        emailId: [''],
+        emailId: ['', [Validators.pattern(Regex.EMAIL_REGEX)]],
         contact: this.fb.group({
           countryCode: [''],
           number: [''],
@@ -112,18 +102,17 @@ export class HotelInfoFormComponent implements OnInit {
         .get('hotel')
         .patchValue(this.hotelFormDataService.hotelInfoFormData);
     }
-
-    this.patchValue();
     this.manageRoutes();
 
     //if hotel id is present then get the hotel by id and paatch the hotel detais
     if (this.hotelId && !this.hotelFormDataService.hotelFormState) {
       this.businessService.getHotelById(this.hotelId).subscribe((res) => {
         // const data = new HotelResponse().deserialize(res);
-
-        const { address, ...rest } = res;
+        const { propertyCategory, ...rest } = res;
+        this.useForm
+          .get('hotel.propertyCategory')
+          .patchValue(propertyCategory?.value);
         this.useForm.get('hotel').patchValue(rest);
-        this.useForm.get('hotel.address').patchValue(address);
       });
 
       //get the servcie list after getting hotel by id
@@ -162,15 +151,8 @@ export class HotelInfoFormComponent implements OnInit {
     this.noRecordAction = {
       imageSrc: 'assets/images/empty-table-service.png',
       description: 'No services found',
-      actionName: '+ Import Services',
-      link: this.hotelId
-        ? `pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}/import-services`
-        : `pages/settings/business-info/brand/${this.brandId}/hotel/import-services`,
     };
   }
-
-  // if hotel form state is true then set the form value
-  patchValue() {}
 
   /**
    * @function getSegmentList to get segment list
@@ -197,7 +179,6 @@ export class HotelInfoFormComponent implements OnInit {
       this.useForm.markAllAsTouched();
       return;
     }
-    this.businessService.onSubmit.emit(true);
     const data = this.useForm.getRawValue();
     // get modified segment
     data.hotel.propertyCategory = this.segmentList.find(
@@ -232,22 +213,8 @@ export class HotelInfoFormComponent implements OnInit {
     }
   }
 
-  getModifiedData(data) {
-    // get modified segment
-    data.hotel.propertyCategory = this.segmentList.find(
-      (item) => item?.value === data.hotel.propertyCategory
-    );
-
-    // get modified address
-    data.hotel.address = this.addressService.storeData;
-
-    return data;
-  }
-
   //to view all the services
   saveHotelData() {
-    this.businessService.onSubmit.emit(true);
-
     //saving the hotel data locally
     this.hotelFormDataService.initHotelInfoFormData(
       this.useForm.getRawValue().hotel,
@@ -267,7 +234,6 @@ export class HotelInfoFormComponent implements OnInit {
 
   //to import the services
   openImportService() {
-    this.businessService.onSubmit.emit(true);
     const data = this.useForm.getRawValue();
 
     //save hotel form data and now got to import service page

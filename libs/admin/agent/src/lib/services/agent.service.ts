@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { AgentListResponse, AgentResponseType } from '../types/response';
 import { QueryConfig } from '../types/agent';
-import { companyResponse } from '../../../../company/src/lib/constants/response';
-import { dataList } from '../constant/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 
 @Injectable({

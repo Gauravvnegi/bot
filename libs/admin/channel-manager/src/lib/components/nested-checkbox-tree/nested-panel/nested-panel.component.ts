@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { RoomTypes, UpdatedEmitType } from '../../../types/bulk-update.types';
 
 @Component({
@@ -17,7 +17,6 @@ export class NestedPanelComponent {
     'font-weight': 'bold',
   };
   constructor() {}
-
   onRoomChange(
     status: boolean,
     id: string,

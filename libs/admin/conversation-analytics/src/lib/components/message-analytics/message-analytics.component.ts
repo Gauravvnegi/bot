@@ -102,7 +102,7 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
 
   onSelectedTabFilterChange(event) {
     this.tabFilterIdx = event.index;
-    this.messageTabService.selectedTabMenu$.next(event.index);
+    // this.messageTabService.selectedTabMenu$.next(event.index);
   }
 
   exportCSV() {

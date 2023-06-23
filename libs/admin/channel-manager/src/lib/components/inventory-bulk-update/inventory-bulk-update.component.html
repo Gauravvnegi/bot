@@ -17,6 +17,7 @@
       <hospitality-bot-button
         (click)="onSubmit()"
         label="Save"
+        [disabled]="!isFormValid"
       ></hospitality-bot-button>
     </div>
   </div>

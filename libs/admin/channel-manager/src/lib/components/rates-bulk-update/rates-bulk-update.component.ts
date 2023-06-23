@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoomsData } from '../constants/bulkupdate-response';
 import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 @Component({
@@ -20,17 +20,28 @@ export class RatesBulkUpdateComponent implements OnInit {
   ];
   startMinDate = new Date();
   endMinDate = new Date();
+  isFormValid = false;
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.useForm = this.fb.group({
       update: ['RATE'], // RATE, AVAILABILITY,
-      updateValue: [''],
-      fromDate: [''],
-      toDate: [''],
+      updateValue: ['', [Validators.required]],
+      fromDate: [new Date(), [Validators.required]],
+      toDate: [
+        new Date().setDate(new Date().getDate() + 7),
+        [Validators.required],
+      ],
       roomType: [''],
       selectedDays: [[]],
+    });
+    this.listenChanges();
+  }
+
+  listenChanges() {
+    this.useForm.valueChanges.subscribe((value) => {
+      this.isFormValid = this.useForm.valid;
     });
   }
 

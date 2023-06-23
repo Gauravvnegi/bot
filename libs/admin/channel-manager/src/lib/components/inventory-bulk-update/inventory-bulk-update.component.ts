@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { inventoryTreeList } from '../../constants/data';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 
@@ -12,6 +12,7 @@ import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 export class InventoryBulkUpdateComponent implements OnInit {
   inventoryTreeList = inventoryTreeList;
   useForm: FormGroup;
+  isFormValid = false;
   pageTitle = 'Bulk Update';
   navRoutes: NavRouteOptions = [
     {
@@ -26,11 +27,21 @@ export class InventoryBulkUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.useForm = this.fb.group({
       update: ['AVAILABILITY'], // RATE, AVAILABILITY,
-      updateValue: [''],
-      fromDate: [''],
-      toDate: [''],
+      updateValue: ['', [Validators.required]],
+      fromDate: [new Date(), [Validators.required]],
+      toDate: [
+        new Date().setDate(new Date().getDate() + 7),
+        [Validators.required],
+      ],
       roomType: [''],
       selectedDays: [[]],
+    });
+    this.listenChanges();
+  }
+
+  listenChanges() {
+    this.useForm.valueChanges.subscribe((value) => {
+      this.isFormValid = this.useForm.valid;
     });
   }
 

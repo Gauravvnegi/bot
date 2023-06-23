@@ -19,7 +19,8 @@
           *ngSwitchCase="'input'"
           [controlName]="field.name"
           [props]="{
-            placeholder: field.placeholder
+            placeholder: field.placeholder,
+            type: 'number'
           }"
           [disabled]="field.disabled"
           (focusout)="getSummaryData()"

@@ -56,6 +56,12 @@ export class ReservationService extends ApiService {
     );
   }
 
+  generateFeedback(reservationId): Observable<any> {
+    return this.get(
+      `/api/v1/reservation/${reservationId}/generate-link?surveyType=FEEDBACK`
+    )
+  }
+
   checkCurrentWindow(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}/journey-window`);
   }

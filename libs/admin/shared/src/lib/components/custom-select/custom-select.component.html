@@ -8,11 +8,14 @@
         {{ description }}
       </div>
     </div>
-    <div *ngIf="!fullView && options.length">
+    <div class="btn-wrapper" *ngIf="!fullView">
+      <ng-content></ng-content>
+
       <hospitality-bot-button
+        *ngIf="options.length"
         label="View All"
         (onClick)="viewAll.emit()"
-        variant="contained"
+        variant="outlined"
       ></hospitality-bot-button>
     </div>
   </div>
@@ -36,6 +39,7 @@
           <img
             [src]="item.imageUrl"
             class="show-image"
+            *ngIf="options.length"
             [alt]="item.imageUrl"
             appImage
           />

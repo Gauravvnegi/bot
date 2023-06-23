@@ -9,9 +9,8 @@
   border-radius: 5px;
   background: $white;
   ::placeholder {
-    font-family: Roboto;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: $bold;
     font-stretch: normal;
     font-style: normal;
     line-height: 1.25;
@@ -75,7 +74,7 @@ td {
       @include inhouse-popup-status;
     }
     &.low {
-      background-color: $success-state;
+      background-color: $completed-state;
       @include inhouse-popup-status;
     }
     &.medium {

@@ -81,11 +81,11 @@
 
 // main container
 
-// default calndar come from left
+// default calendar come from left
 :host ::ng-deep .p-calendar .p-datepicker {
   display: flex;
   z-index: 1;
-  min-width: unset;
+  min-width: 300px;
 
   table {
     font-size: 14px;

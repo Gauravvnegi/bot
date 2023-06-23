@@ -26,9 +26,9 @@ export class BusinessService extends ApiService {
     );
   }
 
-  resetHotelFormState() {
-    this.hotelFormState = false;
-  }
+  // resetHotelFormState() {
+  //   this.hotelFormState = false;
+  // }
 
   /**
    * @function getBrandList
@@ -129,25 +129,18 @@ export class BusinessService extends ApiService {
     return this.get(`/api/v1/config?key=SERVICE_CONFIGURATION`);
   }
 
-  getServiceList(
-    hotelId,
-    config = { params: '?type=SERVICE&serviceType=ALL&limit=5' }
-  ): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
+  getServiceList(hotelId, config?: QueryConfig): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${hotelId}/library${config?.params ?? ''}`,
+      { headers: { 'hotel-id': hotelId } }
+      //hotel id to be send as header for getting service
+    );
   }
-  hotelInfoFormData = {
-    address: {
-      value: '',
-    },
-    imageUrl: [],
-    serviceIds: [],
-  };
-  hotelFormState: boolean = false;
 
-  initHotelInfoFormData(input: any, roomTypeFormState: boolean) {
-    console.log(input, 'input');
-    this.hotelInfoFormData = { ...this.hotelInfoFormData, ...input };
-    this.hotelFormState = roomTypeFormState;
+  tempServiceIds: any[] = [];
+
+  setServiceIds(serviceIds: any) {
+    this.tempServiceIds.push(...serviceIds);
   }
 
   /**
@@ -166,4 +159,16 @@ export class BusinessService extends ApiService {
       responseType: 'blob',
     });
   }
+
+  arrayDifference(array1, array2) {
+    console.log(array1, array2, 'array1, array2');
+    return array1.filter((element) => !array2.includes(element));
+  }
 }
+
+export type importForm = {
+  imageUrl;
+  address;
+  services: any[];
+  serviceIds: any[];
+} & Record<string, any>;

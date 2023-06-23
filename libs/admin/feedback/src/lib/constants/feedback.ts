@@ -269,7 +269,7 @@ export const feedback = {
         value: 'NOACTION',
         total: 0,
         isSelected: false,
-        type: 'pending',
+        type: 'draft',
       },
     ],
   },

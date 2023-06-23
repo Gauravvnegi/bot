@@ -8,3 +8,17 @@ export type ChartTypeOption = {
 export type SelectedEntityState = {
   entityState: string;
 };
+
+export type SearchGuestResponse = {
+  id: string;
+  nameTitle?: string;
+  firstName: string;
+  lastName: string;
+  contactDetails: {
+    cc?: string;
+    contactNumber?: string;
+    emailId?: string;
+  }
+  nationality?: string;
+  age: number;
+}

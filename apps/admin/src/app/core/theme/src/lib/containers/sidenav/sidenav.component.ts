@@ -111,9 +111,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   setSelectedModuleBasedOnRoute() {
-    this.selectedModule = this.menuItems.find((item) =>
-      this.router.url.includes(item?.path)
-    )?.name;
+    this.selectedModule = this.menuItems.find((item) => {
+      const paths = this.router.url.split('/');
+      return paths.includes(item?.path);
+    })?.name;
   }
 
   listenForTabPortrait() {
@@ -175,7 +176,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   isSameModule(path: string) {
-    return this.router.url.includes(path);
+    const paths = this.router.url.split('/');
+    return paths.includes(path);
   }
 
   handleRouteChange(menuItem) {

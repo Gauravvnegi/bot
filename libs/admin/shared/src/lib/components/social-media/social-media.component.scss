@@ -1,0 +1,43 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+}
+
+.social-media {
+  display: flex;
+  align-items: center;
+  gap: 2%;
+}
+
+.img {
+  flex-basis: 18%;
+}
+
+.input {
+  flex-basis: 112%;
+}
+
+img {
+  width: 37px;
+  height: 37px;
+}
+.cross {
+  cursor: pointer;
+  width: 23px;
+}
+
+.form-block{
+  box-shadow: none !important;
+}
+
+:host ::ng-deep .p-accordion .p-accordion-tab {
+  box-shadow: none !important;
+  border: solid 1px rgba(112, 112, 112, 0.35) !important;
+  .p-accordion-header {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    border-bottom: solid 1px rgba(112, 112, 112, 0.35);
+  }
+}

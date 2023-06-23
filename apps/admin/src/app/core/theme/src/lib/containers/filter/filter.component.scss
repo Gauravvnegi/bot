@@ -154,7 +154,7 @@
   background-color: $accordian-background;
   color: $title;
   padding: 15px;
-  @include normal-text;
+  @include normal-sm-text;
   border-bottom: 1px solid $primary-cta;
   &__padding {
     padding: 15px;

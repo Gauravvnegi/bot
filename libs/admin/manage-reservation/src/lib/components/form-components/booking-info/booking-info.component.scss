@@ -1,0 +1,14 @@
+@import 'main';
+
+.form-block {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 6%;
+  row-gap: 30px;
+  .half-width {
+    flex-basis: 47%;
+  }
+  .full-width {
+    flex-basis: 100%;
+  }
+}

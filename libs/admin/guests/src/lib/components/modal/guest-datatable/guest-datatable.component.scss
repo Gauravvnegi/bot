@@ -2,7 +2,7 @@
 
 .documentItemLabel {
   margin-left: 0.5em;
-  font-weight: 500;
+  font-weight: $bold;
 }
 .tableHead {
   width: 5%;
@@ -90,11 +90,11 @@
 }
 
 .status-text-whatsapp {
-  color: $success-stated !important;
+  color: $success-color !important;
 }
 
 .status-selected-whatsapp {
-  background-color: $success-stated !important;
+  background-color: $success-color !important;
   color: $white !important;
   opacity: 1;
 }

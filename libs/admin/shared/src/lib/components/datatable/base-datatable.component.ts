@@ -1,15 +1,30 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { get } from 'lodash';
 import * as moment from 'moment';
 import { MenuItem } from 'primeng/api';
 import { LazyLoadEvent, SortEvent } from 'primeng/api/public_api';
 import { Paginator } from 'primeng/paginator';
 import { Table } from 'primeng/table';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
+import {
+  defaultFilterChipValue,
+  defaultRecordJson,
+  quickReplyFilterDefaultConfig,
+} from '../../constants/datatable';
 import { TableService } from '../../services/table.service';
-import { Chip, Cols, TableFieldSearch } from '../../types/table.type';
+import {
+  Chip,
+  Cols,
+  EntityState,
+  EntityStateRecord,
+  Filter,
+  QuickReplyFilterConfig,
+  TableFieldSearch,
+} from '../../types/table.type';
+import { convertToTitleCase } from '../../utils/valueFormatter';
 
 interface Import {
   name: string;
@@ -63,9 +78,13 @@ export class BaseDatatableComponent implements OnInit {
   @Input() loading = false;
   initialLoading = true;
 
-  tabFilterItems = [];
+  tabFilterItems: Filter<string, string>[] | any = []; //any will be removed when implemented everywhere
   tabFilterIdx = 0;
-  filterChips = []; //Chips setting, When there is no tabItem
+  selectedTab: string;
+  isAllTabFilterRequired = false;
+
+  filterChips: Chip<string>[] | any = []; //Chips setting, When there is no tabItem
+  selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
 
   values = [];
 
@@ -96,7 +115,7 @@ export class BaseDatatableComponent implements OnInit {
     { vin: 11, year: 2023, brand: 'mg', color: 'yellow' },
   ]; // testing data-source
 
-  totalRecords = 20;
+  totalRecords = 0;
 
   selectionMode = 'multiple';
   selectedRows = [];
@@ -121,18 +140,18 @@ export class BaseDatatableComponent implements OnInit {
     // { label: 'PDF', value: 'pdf' },
   ];
 
-  quickReplyTypes = [
-    { label: 'All', icon: '', isSelected: true },
-    { label: 'Check-In Pending (3)', icon: '', isSelected: false },
-    { label: 'Check-In Completed (3)', icon: '', isSelected: false },
-    { label: 'Express Check-In (10)', icon: '', isSelected: false },
-  ];
+  quickReplyTypes = [];
 
   reportTemplate = 'Showing {first} to {last} of {totalRecords} entries';
   tempFirst;
   tempRowsPerPage;
   isSearchSet = false;
   @ViewChild('paginator', { static: false }) paginator: Paginator;
+
+  /** !!!!!! IMPORTANT
+   * Use this to cancel api call when filter changes and the previous request is still in progress
+   */
+  subscriptionList$ = new Subscription();
 
   constructor(
     private _fb: FormBuilder,
@@ -213,6 +232,7 @@ export class BaseDatatableComponent implements OnInit {
     this.rowsPerPage = event.rows;
   }
 
+  // will be overridden at parent file
   loadData(event: LazyLoadEvent) {
     this.loading = true;
     this.fetchDataFrom({ first: event.first, rows: event.rows }).subscribe(
@@ -344,16 +364,27 @@ export class BaseDatatableComponent implements OnInit {
   /**
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
    */
-  toggleQuickReplyFilter({ chips }: { chips: Chip<string>[] }): void {
-    // If multiple tab filter chips
+  toggleQuickReplyFilter({
+    chips,
+    selectedChips,
+  }: {
+    chips: Chip<string>[];
+    selectedChips: Set<string>;
+  }): void {
+    this.selectedFilterChips = selectedChips;
+
+    // REMOVE
+    // If multiple tab filter chips - remove
     if (this.tabFilterItems[this.tabFilterIdx])
       this.tabFilterItems[this.tabFilterIdx].chips = chips;
 
-    // If no tab to switch (singleFilter)
+    // If no tab to switch (singleFilter) - remove
     if (this.filterChips) this.filterChips = chips;
 
     this.changePage(0);
   }
+
+  // remove
   /**
    * @function calculateTotalChipsCount To calculate the total count of the chips.
    * @param chips The chips array.
@@ -365,6 +396,109 @@ export class BaseDatatableComponent implements OnInit {
       ?.reduce((total, chip) => total + (chip?.total ?? 0), 0);
   }
 
+  onSelectedTabFilterChange(event: MatTabChangeEvent) {
+    this.resetTable();
+    this.tabFilterIdx = event.index;
+    this.selectedTab = this.tabFilterItems[event.index].value;
+    this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
+    this.loadData({});
+  }
+
+  /**
+   * Handle the value of tab filters and filter chips
+   * @param entityTypeCounts Tab filters value
+   * @param entityStateCounts Filter chips value
+   * @param recordsJson Json data for label and type value against the key
+   * @param totalMainCount total count of all data
+   */
+  initFilters<T extends string>(
+    entityTypeCounts: EntityState<T>,
+    entityStateCounts: EntityState<T>,
+    totalMainCount: number,
+    recordsJson?: EntityStateRecord<T>
+  ) {
+    const record = { ...defaultRecordJson, ...recordsJson };
+    let totalCount = totalMainCount;
+
+    if (entityTypeCounts && Object.keys(entityTypeCounts).length > 0) {
+      this.tabFilterItems = Object.entries({
+        ...(this.isAllTabFilterRequired
+          ? { [defaultFilterChipValue.value]: totalCount }
+          : {}),
+        ...entityTypeCounts,
+      }).map(([key, value]) => ({
+        label: record[key]?.label ?? convertToTitleCase(key),
+        value: key,
+        total: value,
+      }));
+
+      const selectedTabIndex = this.tabFilterItems.findIndex(
+        (item) => item.value === this.selectedTab
+      );
+      if (selectedTabIndex !== -1 && selectedTabIndex !== this.tabFilterIdx) {
+        // changing the selected tab filter index as api response can give different order
+        this.tabFilterIdx === selectedTabIndex;
+      }
+
+      totalCount = this.tabFilterItems[this.tabFilterIdx].total;
+    } else this.isTabFilters = false;
+
+    if (entityStateCounts && Object.keys(entityStateCounts).length > 0) {
+      this.filterChips = Object.entries({
+        [defaultFilterChipValue.value]: totalCount,
+        ...entityStateCounts,
+      }).map(([key, value]) => {
+        const stateCount = {
+          label: record[key]?.label ?? convertToTitleCase(key),
+          value: key,
+          total: value,
+          type: record[key]?.type ?? 'active',
+        } as Chip<T>;
+
+        return stateCount;
+      });
+
+      if (!this.selectedFilterChips.has(defaultFilterChipValue.value)) {
+        totalCount = this.filterChips.reduce((prev, curr) => {
+          const isSelected = this.selectedFilterChips.has(curr.value);
+          const res = prev + (isSelected ? curr.total : 0);
+
+          return res;
+        }, 0);
+      }
+    } else this.isQuickFilters = false;
+
+    this.totalRecords = totalCount;
+  }
+
+  //- different version for
+  getSelectedQuickReplyFiltersV2(config?: Partial<QuickReplyFilterConfig>) {
+    const configSetting: QuickReplyFilterConfig = {
+      ...quickReplyFilterDefaultConfig,
+      ...(config ?? {}),
+    };
+
+    const { key, isAllAType, isStatusBoolean, activeStateKey } = configSetting;
+
+    const chips = [...this.selectedFilterChips]?.filter(
+      (item) => item !== defaultFilterChipValue.value && !isAllAType
+    );
+
+    if (chips.length + 1 === this.filterChips.length && !isAllAType) {
+      return [];
+    }
+
+    return !isStatusBoolean
+      ? chips.map((item) => ({ [key]: item }))
+      : [
+          chips.length !== 1
+            ? { [key]: null }
+            : { [key]: chips[0] === activeStateKey },
+        ];
+  }
+  // -------------------------------------------
+
+  // REMOVE
   /**
    * @function updateTotalRecords To update the total records count.
    * @param chips The chips array.
@@ -381,6 +515,7 @@ export class BaseDatatableComponent implements OnInit {
     }
   }
 
+  // REMOVE
   /**
    * @function updateTabFilterCount To update the count for the tabs.
    * @param countObj The object with count for all the tab.
@@ -389,12 +524,13 @@ export class BaseDatatableComponent implements OnInit {
   updateTabFilterCount(countObj, currentTabCount: number): void {
     countObj = countObj ?? {};
     this.tabFilterItems?.forEach((tab) => {
-      tab.value === 'ALL'
+      tab.value === defaultFilterChipValue.value
         ? (tab.total = currentTabCount ?? 0)
         : (tab.total = countObj[tab.value] ?? 0);
     });
   }
 
+  // REMOVE
   /**
    * @function setFilterChips To set the total count for the chips.
    * @param chips The chips array.
@@ -406,7 +542,7 @@ export class BaseDatatableComponent implements OnInit {
       return acc;
     }, {});
     chips.forEach((chip) => {
-      chip.value === 'ALL'
+      chip.value === defaultFilterChipValue.value
         ? (chip.total =
             Number(
               Object.values(countObj).reduce((a: number, b: number) => a + b, 0)
@@ -415,6 +551,7 @@ export class BaseDatatableComponent implements OnInit {
     });
   }
 
+  // REMOVE
   /**
    * @function updateQuickReplyFilterCount To update the count for chips.
    * @param countObj The object with count for all the chip.
@@ -432,6 +569,7 @@ export class BaseDatatableComponent implements OnInit {
     }
   }
 
+  // REMOVE
   /**
    * @function updateStatusAndCount To change the count without reloading the table
    */

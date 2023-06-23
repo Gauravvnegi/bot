@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { InhouseData } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
+import { CMSUpdateJobData } from '../../types/request.type';
 
 @Component({
   selector: 'hospitality-bot-request-detail',
@@ -106,10 +107,12 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
    */
 
   handleStatusChange(event) {
-    const requestData = {
+    const isTodo = event.value === 'Todo';
+    const requestData: CMSUpdateJobData = {
       jobID: this.data.jobID,
       roomNo: this.data.rooms[0].roomNumber,
       lastName: this.data.guestDetails.primaryGuest.lastName,
+      ...(isTodo ? { action: event.value } : {}),
     };
 
     const config = {
@@ -122,18 +125,21 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this._requestService.closeRequest(config, requestData).subscribe(
-        (response) =>
+        (response) => {
           this.snackbarService
             .openSnackBarWithTranslate(
               {
                 translateKey: 'messages.SUCCESS.JOB_CLOSED',
-                priorityMessage: `Job: ${this.data.jobID} closed.`,
+                priorityMessage: `Job: ${this.data.jobID} ${
+                  isTodo ? 'in Todo' : 'closed'
+                }.`,
               },
               '',
               { panelClass: 'success' }
             )
-            .subscribe(),
-
+            .subscribe();
+          this._requestService.refreshData.next(true);
+        },
         ({ error }) => {
           this.requestFG.patchValue({ status: this.data.action });
         }

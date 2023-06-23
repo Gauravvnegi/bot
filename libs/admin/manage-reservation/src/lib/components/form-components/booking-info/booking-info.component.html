@@ -1,0 +1,62 @@
+<p-accordionTab
+  header="Reservation Information"
+  [selected]="true"
+  [formGroup]="controlContainer.control"
+>
+  <div class="form-block" formGroupName="reservationInformation">
+    <hospitality-bot-date
+      class="half-width"
+      controlName="from"
+      label="Check-In Date"
+      [settings]="{
+        enableTime: false,
+        dateValue: startMinDate
+      }"
+      [minDate]="startMinDate"
+    ></hospitality-bot-date>
+    <hospitality-bot-date
+      class="half-width"
+      controlName="to"
+      label="Check-Out Date"
+      [settings]="{
+        enableTime: false,
+        dateValue: endMinDate
+      }"
+      [minDate]="endMinDate"
+    ></hospitality-bot-date>
+    <hospitality-bot-select
+      class="half-width"
+      controlName="reservationType"
+      label="Reservation Type"
+      [options]="reservationTypes"
+      [props]="{ placeholder: 'Select' }"
+    ></hospitality-bot-select>
+    <hospitality-bot-select
+      class="half-width"
+      controlName="source"
+      label="Booking Source"
+      [options]="configData?.source"
+      [props]="{ placeholder: 'Select' }"
+    ></hospitality-bot-select>
+    <hospitality-bot-input
+      class="half-width maxlength"
+      controlName="sourceName"
+      label="Booking Source Name"
+      maxLength="60"
+      [props]="{
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.',
+          maxlength: 'Maximum character limit is upto 60.'
+        }
+      }"
+    ></hospitality-bot-input>
+    <hospitality-bot-select
+      class="half-width"
+      controlName="marketSegment"
+      label="Market Segment"
+      [options]="configData?.marketSegment"
+      [props]="{ placeholder: 'Select' }"
+    ></hospitality-bot-select>
+  </div>
+</p-accordionTab>

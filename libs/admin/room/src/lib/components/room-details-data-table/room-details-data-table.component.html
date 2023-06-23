@@ -1,0 +1,101 @@
+<ng-container *ngIf="totalRecords"
+  ><div class="heading">{{ 'Room Details' }}</div>
+
+  <p-table
+    #dt
+    [styleClass]="tableConfig.styleClass"
+    [resizableColumns]="isResizableColumns"
+    [autoLayout]="isAutoLayout"
+    [loading]="loading"
+    [columns]="cols"
+    [value]="values"
+    [paginator]="isPaginator"
+    [rows]="rowsPerPage"
+    [showCurrentPageReport]="showCurrentPageReport"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [(first)]="first"
+    [totalRecords]="totalRecords"
+    [filterDelay]="0"
+  >
+    <ng-template pTemplate="emptymessage">
+      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+    </ng-template>
+    <!-- *******************************HEADER WITH SEARCH******************************* -->
+    <ng-template pTemplate="header" let-columns #header>
+      <tr
+        hospitality-bot-table-header
+        [columns]="columns"
+        (search)="handleFieldSearch($event)"
+        [isSearchActive]="false"
+      ></tr>
+    </ng-template>
+    <!-- **************************************BODY********************************* -->
+    <ng-template
+      pTemplate="body"
+      let-rowData
+      let-columns="columns"
+      let-rowIndex="rowIndex"
+    >
+      <tr class="table-row">
+        <td>
+          <div class="cell-content" *ngIf="rowData.roomNo; else emptyCell">
+            <div class="primary-text">
+              <div>{{ rowData.roomNo }}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.floorNo; else emptyCell">
+            <div class="primary-text">
+              <div>{{ rowData.floorNo }}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.roomStatus; else emptyCell">
+            <div
+              statusCell
+              [status]="rowData.roomStatus"
+              [type]="rowData.roomStatus === 'PAID' ? 'paid' : 'unpaid'"
+            >
+              {{ rowData.roomStatus }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.foStatus; else emptyCell">
+            <div class="status-text">
+              {{ rowData.foStatus }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content">
+            <hospitality-bot-button
+              label="Edit Room"
+              variant="outlined"
+              (onClick)="onEditRoom(rowData.id)"
+            ></hospitality-bot-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <!-- *********************************FOOTER******************************* -->
+    <ng-template pTemplate="summary">
+      <p-paginator
+        #paginator
+        [rows]="rowsPerPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (onPageChange)="paginate($event)"
+        [currentPageReportTemplate]="reportTemplate"
+        showCurrentPageReport="true"
+      ></p-paginator>
+    </ng-template>
+  </p-table>
+
+  <ng-template #emptyCell>
+    <div class="emptyCell">&mdash;</div>
+  </ng-template>
+</ng-container>

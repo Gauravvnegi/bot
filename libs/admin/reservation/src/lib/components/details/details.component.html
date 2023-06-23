@@ -344,6 +344,11 @@
                   ></hospitality-bot-button>
                 </ng-container>
               </ng-container>
+              <hospitality-bot-button
+                label="Edit Booking"
+                variant="outlined"
+                (click)="editBooking()"
+              ></hospitality-bot-button>
             </ng-template>
             <ng-template #CHECKIN>
               <ng-container [ngSwitch]="details.currentJourneyDetails.status">
@@ -394,7 +399,7 @@
                   <hospitality-bot-button
                     *ngIf="checkForGenerateFeedbackSubscribed()"
                     label="Generate Feedback"
-                    (click)="generateFeedback('CHECKIN')"
+                    (click)="generateFeedback()"
                     variant="outlined"
                   ></hospitality-bot-button>
                 </ng-container>
@@ -405,12 +410,17 @@
                     variant="outlined"
                   ></hospitality-bot-button>
                   <!-- <hospitality-bot-button
-                  label="Download Invoice/Folio"
-                  (click)="downloadInvoice()"
-                  variant="outlined"
-                ></hospitality-bot-button> -->
+                    label="Download Invoice/Folio"
+                    (click)="downloadInvoice()"
+                    variant="outlined"
+                    ></hospitality-bot-button> -->
                 </ng-container>
               </ng-container>
+              <hospitality-bot-button
+                label="Edit Booking"
+                variant="outlined"
+                (click)="editBooking()"
+              ></hospitality-bot-button>
             </ng-template>
             <ng-template #CHECKOUT
               ><ng-container [ngSwitch]="details.currentJourneyDetails.status">
@@ -501,7 +511,7 @@
               </ng-container>
             </ng-template>
           </div>
-          <div *ngIf="channels.length>0">
+          <div *ngIf="channels.length > 0">
             <p class="contact">Contact Guest</p>
             <div class="right-bottom-icons">
               <ng-container *ngFor="let channel of channels">

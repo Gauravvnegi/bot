@@ -1,0 +1,55 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  ></hospitality-bot-navigation-header>
+
+  <div class="form-wrapper" [formGroup]="useForm">
+    <div class="form-block">
+      <div class="code">
+        <span class="code__label">Code: </span>
+        <span class="code__hash">{{ packageCode }}</span>
+      </div>
+      <hospitality-bot-toggle-switch
+        class="status"
+        controlName="active"
+        label="Status"
+      ></hospitality-bot-toggle-switch>
+      <hospitality-bot-input
+        class="half-width"
+        label="Name"
+        controlName="name"
+      ></hospitality-bot-input>
+      <hospitality-bot-select
+        class="half-width"
+        label="Type"
+        controlName="type"
+        [options]="types"
+      ></hospitality-bot-select>
+      <hospitality-bot-discount-form
+        class="container"
+      ></hospitality-bot-discount-form>
+      <hospitality-bot-custom-file-upload
+        formControlName="imageUrl"
+        label="Image"
+        [description]="
+          'This image will also reflect on Webapp and on your services'
+        "
+      ></hospitality-bot-custom-file-upload>
+      <div class="full-width btn-wrapper">
+        <hospitality-bot-button
+          label="Create"
+          (onClick)="handleCreate()"
+        ></hospitality-bot-button>
+        <hospitality-bot-button
+          variant="outlined"
+          severity="reset"
+          label="Reset"
+          (onClick)="handleReset()"
+        ></hospitality-bot-button>
+      </div>
+    </div>
+
+      <hospitality-bot-food-items></hospitality-bot-food-items>
+  </div>
+</div>

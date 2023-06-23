@@ -1,0 +1,30 @@
+<hospitality-bot-prefix-field
+  class="one-third-width"
+  [options]="currencies"
+  label="Original Price"
+  preControlName="currency"
+  postControlName="originalPrice"
+  [defaultProps]="{ post: { type: 'number' } }"
+  [props]="{ errorMessages: errorMessages }"
+>
+</hospitality-bot-prefix-field>
+<hospitality-bot-prefix-field
+  class="one-third-width"
+  [options]="discountTypes"
+  label="Discount Type"
+  preControlName="discountType"
+  postControlName="discountValue"
+  [defaultProps]="{ post: { type: 'number' } }"
+  [props]="{ errorMessages: errorMessages }"
+>
+</hospitality-bot-prefix-field>
+<hospitality-bot-prefix-field
+  class="one-third-width"
+  [options]="currencies"
+  label="Discount Price"
+  preControlName="discountedPriceCurrency"
+  postControlName="discountedPrice"
+  [defaultProps]="{ post: { type: 'number' } }"
+  [disabled]="true"
+>
+</hospitality-bot-prefix-field>

@@ -1,0 +1,63 @@
+<p-accordionTab header="Guest Information" [formGroup]="controlContainer.control">
+    <div class="form-block" formGroupName="guestInformation">
+      <hospitality-bot-select
+        class="half-width"
+        controlName="guestDetails"
+        label="Guest Name"
+        [options]="guestOptions"
+        [props]="{
+          isAsync: true,
+          createPrompt: '+ Add New Guest',
+          placeholder: 'Search'
+        }"
+        [loading]="loadingGuests"
+        (paginate)="loadMoreGuests()"
+        (onSearch)="searchGuests($event)"
+        [stopEmission]="noMoreGuests"
+        (onCreate)="createGuest()"
+      ></hospitality-bot-select>
+      <!-- <hospitality-bot-input
+        class="half-width maxlength"
+        controlName="firstName"
+        label="First Name"
+        maxLength="60"
+        [props]="{
+          placeholder: 'Enter',
+          errorMessages: {
+            required: 'This is a required field.',
+            maxlength: 'Maximum character limit is upto 60.'
+          }
+        }"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="half-width maxlength"
+        controlName="lastName"
+        label="Last Name"
+        maxLength="60"
+        [props]="{
+          placeholder: 'Enter ',
+          errorMessages: {
+            required: 'This is a required field.',
+            maxlength: 'Maximum character limit is upto 60.'
+          }
+        }"
+      ></hospitality-bot-input>
+      <hospitality-bot-input
+        class="half-width"
+        controlName="email"
+        label="Email Address"
+        [props]="{
+          placeholder: 'Enter ',
+          errorMessages: {
+            required: 'This is a required field.',
+            pattern: 'Enter valid email address'
+          }
+        }"
+      ></hospitality-bot-input>
+      <hospitality-bot-phone-number
+        preControlName="countryCode"
+        postControlName="phoneNumber"
+        class="half-width"
+      ></hospitality-bot-phone-number> -->
+    </div>
+  </p-accordionTab>

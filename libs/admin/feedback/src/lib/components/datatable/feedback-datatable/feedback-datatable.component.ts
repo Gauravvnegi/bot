@@ -74,11 +74,12 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   responseRate;
   cols: Cols[] = feedback.cols.feedbackDatatable.transactional;
   stayCols = feedback.cols.feedbackDatatable.stay;
-  tableTypes = [feedback.tableTypes.table, feedback.tableTypes.card];
+  tableTypes = [feedback.tableTypes.card, feedback.tableTypes.table];
   chips = feedback.chips.feedbackDatatable;
   globalQueries = [];
   $subscription = new Subscription();
   userPermissions: Departmentpermission[];
+  navRoutes = [{ label: 'Heda Feedback', link: './' }];
   constructor(
     public fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,
@@ -98,7 +99,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.tableFG?.addControl('tableType', new FormControl('table'));
+    this.tableFG?.addControl('tableType', new FormControl('card'));
     this.registerListeners();
     this.documentActionTypes.push({
       label: `Export Summary`,
@@ -382,6 +383,34 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.updateQuickReplyFilterCount(data.entityTypeCounts);
     this.updateTotalRecords();
     this.loading = false;
+  }
+
+  updateQuickReplyFilterCount(countObj: any): void {
+    if (countObj) {
+      if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
+        this.setFilterChips(
+          this.tabFilterItems[this.tabFilterIdx]?.chips,
+          countObj
+        );
+      } else if (this.filterChips?.length) {
+        this.setFilterChips(this.filterChips, countObj);
+      }
+    }
+  }
+
+  /**
+   * @function setFilterChips To set the total count for the chips.
+   * @param chips The chips array.
+   * @param countObj The object with count for all the chip.
+   */
+  setFilterChips(chips, countObj) {
+    countObj = Object.entries(countObj).reduce((acc, [key, value]) => {
+      acc[key.toUpperCase()] = value;
+      return acc;
+    }, {});
+    chips.forEach((chip) => {
+      chip.total = countObj[chip.value] ?? 0;
+    });
   }
 
   updateFeedbackState(event) {

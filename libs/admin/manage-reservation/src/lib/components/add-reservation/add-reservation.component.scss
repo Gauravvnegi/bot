@@ -8,18 +8,6 @@
   display: flex;
 }
 
-.form-block {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 6%;
-  row-gap: 30px;
-  .half-width {
-    flex-basis: 47%;
-  }
-  .full-width {
-    flex-basis: 100%;
-  }
-}
 
 :host ::ng-deep .p-accordion-header-text {
   @include form-header();
@@ -86,14 +74,14 @@
     &_text {
       width: fit-content;
       margin: 0 auto 120px;
-      font-weight: bold;
+      font-weight: $bold;
       opacity: 0.6;
     }
   }
 
   &_heading {
-    @include normal-text;
-    font-weight: 600;
+    @include normal-sm-text;
+    font-weight: $bolder;
     color: $secondary2;
     @include flex-item-center;
     mat-icon {
@@ -104,8 +92,8 @@
   }
 
   &_subheading {
-    @include normal-text;
-    font-weight: bold;
+    @include normal-sm-text;
+    font-weight: $bold;
 
     &_label {
       margin-bottom: 9px;
@@ -127,13 +115,13 @@
 
       &_heading {
         font-size: 14px;
-        font-weight: 500;
+        font-weight: $bold;
       }
     }
   }
 
   &_offerInfo {
-    font-weight: 500;
+    font-weight: $bold;
     margin-bottom: 16px;
     span {
       cursor: pointer;
@@ -145,7 +133,7 @@
     &_perNight {
       @include flex-space-between;
       &_label {
-        font-weight: 500;
+        font-weight: $bold;
       }
       &_amount {
         text-align: right;
@@ -157,11 +145,11 @@
 
       margin-bottom: 10px;
       &_label {
-        font-weight: 500;
+        font-weight: $bold;
       }
       &_amount {
-        @include normal-text;
-        font-weight: bold;
+        @include normal-sm-text;
+        font-weight: $bold;
         text-align: right;
         color: $amount;
       }
@@ -171,7 +159,7 @@
       @include flex-space-between;
 
       &_label {
-        font-weight: 500;
+        font-weight: $bold;
       }
       &_amount {
         text-align: right;
@@ -185,11 +173,11 @@
 
     margin-bottom: 33px;
     &_label {
-      font-weight: 500;
+      font-weight: $bold;
     }
     &_amount {
-      @include normal-text;
-      font-weight: bold;
+      @include normal-sm-text;
+      font-weight: $bold;
       text-align: right;
       color: #53d397;
     }
@@ -198,6 +186,28 @@
     @include flex-justify-center;
 
     margin-bottom: 21px;
+  }
+}
+
+
+:host ::ng-deep .payment-rule-accordion {
+  .p-accordion-content {
+    position: relative;
+  }
+}
+
+
+
+
+:host ::ng-deep .amount-to-pay {
+  .label {
+    white-space: nowrap;
+  }
+}
+
+:host ::ng-deep .last-name {
+  .label {
+    visibility: hidden;
   }
 }
 
@@ -218,7 +228,7 @@
     padding: 15px 20px;
     font-size: 12px;
     width: 70%;
-    font-weight: bold;
+    font-weight: $bold;
     line-height: 1.33;
     letter-spacing: 0.36px;
     color: $white;

@@ -63,7 +63,7 @@ export const filtersChips: Chip<'ALL' | 'ACTIVE' | 'INACTIVE'>[] = [
     value: 'ACTIVE',
     total: 0,
     isSelected: false,
-    type: 'new',
+    type: 'active',
   },
   {
     label: 'Inactive ',

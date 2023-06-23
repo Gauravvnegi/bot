@@ -9,14 +9,14 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
-import {
-  AdminUtilityService,
-  ConfigService,
-  CountryCodeList,
-  NavRouteOptions,
-  Option,
-  Regex,
-} from 'libs/admin/shared/src';
+// import {
+//   AdminUtilityService,
+//   ConfigService,
+//   CountryCodeList,
+//   NavRouteOptions,
+//   Option,
+//   Regex,
+// } from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
@@ -26,46 +26,57 @@ import {
   BookingInfo,
   OfferData,
   OfferList,
-  PaymentMethodList,
   ReservationFormData,
   SummaryData,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationResponse } from '../../types/response.type';
+import {
+  AdminUtilityService,
+  ConfigService,
+  NavRouteOptions,
+  Regex,
+  UserService,
+  Option,
+} from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
   templateUrl: './add-reservation.component.html',
-  styleUrls: ['./add-reservation.component.scss'],
+  styleUrls: ['./add-reservation.component.scss', '../reservation.styles.scss'],
 })
 export class AddReservationComponent implements OnInit, OnDestroy {
   userForm: FormGroup;
+
   hotelId: string;
   reservationId: string;
-  paymentOptions: Option[] = [];
-  currencies: Option[] = [];
+
+  // paymentOptions: Option[] = [];
+  // currencies: Option[] = [];
   reservationTypes: Option[] = [];
+  // countries: Option[] = [];
+
   offersList: OfferList;
   selectedOffer: OfferData;
-  countries: Option[] = [];
   summaryData: SummaryData;
   configData: BookingConfig;
+
   loading = false;
   displayBookingOffer: boolean = false;
   formValueChanges = false;
   disabledForm = false;
-  startMinDate = new Date();
-  endMinDate = new Date();
   isBooking = false;
 
-  pageTitle = 'Add Booking';
-  routes: NavRouteOptions = [
-    { label: 'eFrontdesk', link: './' },
-    { label: 'Booking', link: '/pages/efrontdesk/manage-reservation' },
-    { label: 'Add Booking', link: './' },
-  ];
+  deductedAmount = 0;
+  startMinDate = new Date();
+  endMinDate = new Date();
+  reservationType = 'HOTEL';
+
+  pageTitle = 'Add Reservation';
+  routes: NavRouteOptions = [];
 
   $subscription = new Subscription();
+
   constructor(
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -75,19 +86,27 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     private location: Location,
     private router: Router,
     protected activatedRoute: ActivatedRoute,
-    private configService: ConfigService,
     private modalService: ModalService,
-    private _clipboard: Clipboard
+    private _clipboard: Clipboard,
+    private userService: UserService
   ) {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
     this.initForm();
+    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
+
+    const { navRoutes, title } = manageReservationRoutes[
+      this.reservationId ? 'editReservation' : 'addReservation'
+    ];
+    this.routes = navRoutes;
+    this.pageTitle = title;
   }
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.getCountryCode();
-    this.getInitialData();
+    // this.listenForGlobalFilters();
+    // this.getCountryCode();
+    // this.getInitialData();
     this.getReservationId();
   }
 
@@ -97,9 +116,10 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   initForm(): void {
     const startTime = moment(this.startMinDate).unix() * 1000;
     const endTime = moment(this.endMinDate).unix() * 1000;
+    const { firstName, lastName } = this.userService.userDetails;
 
     this.userForm = this.fb.group({
-      bookingInformation: this.fb.group({
+      reservationInformation: this.fb.group({
         from: [startTime, Validators.required],
         to: [endTime, Validators.required],
         reservationType: ['', Validators.required],
@@ -108,17 +128,10 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         marketSegment: ['', Validators.required],
       }),
       guestInformation: this.fb.group({
-        firstName: ['', [Validators.required, Validators.maxLength(60)]],
-        lastName: ['', [Validators.required, Validators.maxLength(60)]],
-        email: [
-          '',
-          [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)],
-        ],
-        countryCode: ['', Validators.required],
-        phoneNumber: [
-          '',
-          [Validators.required, Validators.pattern(Regex.NUMBER_REGEX)],
-        ],
+        guestDetails: [''],
+      }),
+      instructions: this.fb.group({
+        specialInstructions: [''],
       }),
       address: this.fb.group({
         addressLine1: ['', [Validators.required]],
@@ -127,7 +140,15 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         state: ['', [Validators.required]],
         postalCode: ['', [Validators.required]],
       }),
+      paymentRule: this.fb.group({
+        amountToPay: [0],
+        deductedAmount: [''],
+        makePaymentBefore: [''],
+        inclusionsAndTerms: [''],
+      }),
       paymentMethod: this.fb.group({
+        cashierFirstName: [{ value: firstName, disabled: true }],
+        cashierLastName: [{ value: lastName, disabled: true }],
         totalPaidAmount: [
           '',
           [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
@@ -135,39 +156,13 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         currency: [''],
         paymentMethod: [''],
         paymentRemark: ['', [Validators.maxLength(60)]],
+        transactionId: [''],
       }),
       offerId: [''],
     });
   }
 
-  getCountryCode(): void {
-    this.configService
-      .getColorAndIconConfig(this.hotelId)
-      .subscribe((response) => {
-        this.configData = new BookingConfig().deserialize(
-          response.bookingConfig
-        );
-        this.configData.source = this.configData.source.filter(
-          (item) => item.value !== 'CREATE_WITH' && item.value !== 'OTHERS'
-        );
-      });
-    this.configService.getCountryCode().subscribe((res) => {
-      const data = new CountryCodeList().deserialize(res);
-      this.countries = data.records;
-    });
-    this.configService.$config.subscribe((value) => {
-      if (value) {
-        const { currencyConfiguration } = value;
-        this.currencies = currencyConfiguration.map(({ key, value }) => ({
-          label: key,
-          value,
-        }));
-        this.userForm.get('paymentMethod').patchValue({
-          currency: this.currencies[0].value,
-        });
-      }
-    });
-  }
+
 
   /**
    * @function listenForFormChanges Listen for form values changes.
@@ -197,53 +192,26 @@ export class AddReservationComponent implements OnInit, OnDestroy {
       });
   }
 
-  getInitialData(): void {
-    this.$subscription.add(
-      this.manageReservationService.getPaymentMethod(this.hotelId).subscribe(
-        (response) => {
-          const types = new PaymentMethodList()
-            .deserialize(response)
-            .records.map((item) => item.type);
-          const labels = [].concat(
-            ...types.map((array) => array.map((item) => item.label))
-          );
-          this.paymentOptions = labels.map((label) => ({
-            label: label,
-            value: label,
-          }));
-        },
-        (error) => {}
-      )
-    );
-  }
-
   getReservationId(): void {
-    this.$subscription.add(
-      this.activatedRoute.params.subscribe((params) => {
-        if (params['id']) {
-          this.reservationId = params['id'];
-          this.pageTitle = 'Edit Booking';
-          this.routes[2].label = 'Edit Booking';
-          this.reservationTypes = [
-            { label: 'Draft', value: 'DRAFT' },
-            { label: 'Confirmed', value: 'CONFIRMED' },
-            { label: 'Cancelled', value: 'CANCELED' },
-          ];
-          this.getReservationDetails();
-        } else {
-          this.reservationTypes = [
-            { label: 'Draft', value: 'DRAFT' },
-            { label: 'Confirmed', value: 'CONFIRMED' },
-          ];
-          this.userForm.valueChanges.subscribe((_) => {
-            if (!this.formValueChanges) {
-              this.formValueChanges = true;
-              this.listenForFormChanges();
-            }
-          });
+    if (this.reservationId) {
+      this.reservationTypes = [
+        { label: 'Draft', value: 'DRAFT' },
+        { label: 'Confirmed', value: 'CONFIRMED' },
+        { label: 'Cancelled', value: 'CANCELED' },
+      ];
+      this.getReservationDetails();
+    } else {
+      this.reservationTypes = [
+        { label: 'Draft', value: 'DRAFT' },
+        { label: 'Confirmed', value: 'CONFIRMED' },
+      ];
+      this.userForm.valueChanges.subscribe((_) => {
+        if (!this.formValueChanges) {
+          this.formValueChanges = true;
+          this.listenForFormChanges();
         }
-      })
-    );
+      });
+    }
   }
 
   getReservationDetails(): void {
@@ -255,7 +223,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
             const data = new ReservationFormData().deserialize(response);
             this.userForm.patchValue(data);
             this.summaryData = new SummaryData().deserialize(response);
-            this.setFormDisability(data.bookingInformation);
+            this.setFormDisability(data.reservationInformation);
             if (data.offerId)
               this.getOfferByRoomType(
                 this.userForm.get('roomInformation.roomTypeId').value
@@ -273,7 +241,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   }
 
   setFormDisability(data: BookingInfo): void {
-    this.userForm.get('bookingInformation.source').disable();
+    this.userForm.get('reservationInformation.source').disable();
     switch (true) {
       case data.reservationType === 'CONFIRMED':
         this.userForm.disable();
@@ -327,8 +295,8 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     const defaultProps = [
       {
         type: 'ROOM_TYPE',
-        fromDate: this.userForm.get('bookingInformation.from')?.value,
-        toDate: this.userForm.get('bookingInformation.to')?.value,
+        fromDate: this.userForm.get('reservationInformation.from')?.value,
+        toDate: this.userForm.get('reservationInformation.to')?.value,
         adultCount: this.userForm.get('roomInformation.adultCount')?.value || 1,
         roomCount: this.userForm.get('roomInformation.roomCount')?.value || 1,
         childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
@@ -340,36 +308,42 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     const config = {
       params: this.adminUtilityService.makeQueryParams(defaultProps),
     };
-    if (this.userForm.get('roomInformation.roomTypeId')?.value)
+    if (this.userForm.get('roomInformation.roomTypeId')?.value) {
       this.$subscription.add(
         this.manageReservationService.getSummaryData(config).subscribe(
           (res) => {
-            this.summaryData = new SummaryData().deserialize(res);
+            this.summaryData = new SummaryData()?.deserialize(res);
             this.userForm
               .get('roomInformation')
               .patchValue(this.summaryData, { emitEvent: false });
             this.userForm
               .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData.totalAmount)]);
+              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
             this.userForm
               .get('paymentMethod.totalPaidAmount')
               .updateValueAndValidity();
+            this.userForm
+              .get('paymentRule.deductedAmount')
+              .patchValue(this.summaryData?.totalAmount);
+            this.deductedAmount = this.summaryData?.totalAmount;
           },
           (error) => {}
         )
       );
+    }
   }
 
   handleBooking(): void {
     this.isBooking = true;
     const data = this.manageReservationService.mapReservationData(
-      this.userForm.getRawValue()
+      this.userForm.getRawValue(),
     );
     if (this.reservationId) this.updateReservation(data);
     else this.createReservation(data);
   }
 
   createReservation(data): void {
+    data = {...data, firstName: 'Reservation', lastName: 'Temporary', contact: {countryCode: '+91', phoneNumber: '99999999999'}, email: 'botshot@gmail.com'}, 
     this.$subscription.add(
       this.manageReservationService
         .createReservation(this.hotelId, data)
@@ -416,12 +390,12 @@ export class AddReservationComponent implements OnInit, OnDestroy {
       dialogConfig
     );
     togglePopupCompRef.componentInstance.content = {
-      heading: `Booking ${
+      heading: `Reservation ${
         this.reservationId ? 'Updated' : 'Created'
       } Successfully`,
 
       description: [
-        `Congratulations! Your booking has been ${
+        `Congratulations! Your reservation has been ${
           this.reservationId ? 'updated' : 'created'
         } successfully.`,
         ` Your confirmation number is ${number}.`,
@@ -430,7 +404,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     };
     togglePopupCompRef.componentInstance.actions = [
       {
-        label: 'Continue Booking',
+        label: 'Continue Reservation',
         onClick: () => {
           this.router.navigate(
             [

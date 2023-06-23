@@ -1,0 +1,76 @@
+@import 'main';
+.content-wrapper {
+  font-size: 16px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 0.94;
+  letter-spacing: 0.96px;
+  text-align: left;
+  color: #00162b;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 40px 0;
+  width: 100%;
+}
+.col {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.bulk-update {
+  margin: 20px;
+  &__right,
+  &__left {
+    width: 195px;
+  }
+  &__row1 {
+    margin-top: 0;
+    gap: 3%;
+  }
+
+  &__range-wrapper {
+    flex-basis: 33%;
+    margin-top: auto;
+    gap: 17px;
+  }
+
+  &__date-wrapper {
+    flex-basis: 63%;
+    gap: 2%;
+    flex-wrap: wrap;
+  }
+  &__date {
+    flex-basis: 40%;
+  }
+
+  &__row2 {
+    gap: 8%;
+  }
+
+  &__room-type {
+    flex-basis: 28%;
+  }
+
+  &__week-days {
+    flex-basis: 62%;
+  }
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.action-button {
+  @include flex-all-center();
+  margin-top: 20px;
+}
+
+:host ::ng-deep {
+  .days-selector {
+    margin-top: 19px !important;
+  }
+}

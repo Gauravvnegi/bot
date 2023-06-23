@@ -1,0 +1,64 @@
+<div class="wrapper">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  >
+    <p-splitButton
+      label="Download Menu"
+      (onClick)="handleDownload()"
+      [model]="buttons"
+    ></p-splitButton>
+</hospitality-bot-navigation-header>
+
+  <div class="form-block" [formGroup]="useForm">
+    <div class="code">
+      <span class="code__label">Code: </span>
+      <span class="code__hash">{{ packageCode }}</span>
+    </div>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="active"
+      label="Status"
+      ></hospitality-bot-toggle-switch>
+      <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      label="Name"
+      maxLength="60"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+    <div class="half-width"></div>
+    <hospitality-bot-custom-file-upload
+      formControlName="imageUrl"
+      label="Image"
+      [description]="
+        'This image will also reflect on Webapp and on your services'
+      "
+    ></hospitality-bot-custom-file-upload>
+    <div class="des-template">
+      <div class="des-template__label">Offer Description</div>
+      <div class="des-template__input">
+        <hospitality-bot-template-editor
+          [parentFG]="useForm"
+          [name]="'description'"
+          [height]="250"
+        ></hospitality-bot-template-editor>
+      </div>
+    </div>
+    <div class="full-width btn-wrapper">
+      <hospitality-bot-button
+        label="Create"
+        (onClick)="handleSubmit()"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        variant="outlined"
+        severity="reset"
+        label="Reset All"
+        (onClick)="handleReset()"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+  <hospitality-bot-menu-data-table></hospitality-bot-menu-data-table>
+</div>

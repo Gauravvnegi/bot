@@ -1,0 +1,44 @@
+<div class="hotel-wrapper">
+  <div class="header">Rules</div>
+  <hr />
+  <div class="hotel-services-wrapper" [formGroup]="useForm">
+    <p-accordion formArrayName="rules">
+      <div
+        class="rules-list-wrapper"
+        *ngFor="let rule of rulesControl.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <p-accordionTab
+          [ariaExpanded]="true"
+          [header]="
+            rulesControl.controls[i].get('title').value || 'Rule ' + (i + 1)
+          "
+        >
+          <hospitality-bot-input
+            class="half-width"
+            controlName="title"
+            label="Name"
+            maxLength="60"
+          >
+          </hospitality-bot-input>
+          <div class="des-template">
+            <div class="des-template__label">Description</div>
+            <div class="des-template__input">
+              <hospitality-bot-template-editor
+                [parentFG]="this.useForm.get('rules').controls[i]"
+                [name]="'description'"
+                [height]="250"
+              ></hospitality-bot-template-editor>
+            </div>
+          </div>
+        </p-accordionTab>
+      </div>
+    </p-accordion>
+  </div>
+  <hospitality-bot-button
+    (onClick)="addRule()"
+    class="add-more"
+    label="+ Add More Rule"
+    variant="text"
+  ></hospitality-bot-button>
+</div>

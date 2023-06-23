@@ -48,9 +48,8 @@
 
   &__amount {
     padding-bottom: 72px;
-    font-family: Poppins;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: $bolder;
     letter-spacing: 0.84px;
     border-bottom: 1px solid #d9d9d9;
 
@@ -171,7 +170,7 @@
       &:hover {
         background: #e8e2ff !important;
       }
-      .p-accordion-header-text{
+      .p-accordion-header-text {
         color: $primary-cta;
       }
     }
@@ -179,12 +178,11 @@
       margin-bottom: 0rem;
       .p-accordion-header-text {
         color: red;
-      }      
+      }
     }
 
     .p-accordion-tab {
       box-shadow: $form-shadow;
-
     }
 
     .p-accordion-content {
@@ -216,12 +214,10 @@
   margin-top: 0px;
 }
 
-
-.details-block{
+.details-block {
   justify-content: space-between;
 }
 
 .hide-checkbox {
   display: none;
 }
-

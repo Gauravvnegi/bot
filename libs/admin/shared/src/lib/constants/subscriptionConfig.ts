@@ -53,14 +53,26 @@ export enum ModuleNames {
   INVENTORY = 'INVENTORY',
   ROOM = 'ROOM',
 
+  // Outlet
+  OUTLET = 'OUTLET',
+  OUTLETS_DASHBOARD = 'OUTLETS_DASHBOARD',
+  ALL_OUTLETS = 'ALL_OUTLETS',
+
   // FINANCE
   FINANCE = 'FINANCE',
+  INVOICE = 'INVOICE',
+  TRANSACTION = 'TRANSACTION',
 
   // GUESTS
+  MEMBERS = 'MEMBERS',
   GUESTS = 'GUESTS',
-  GUESTS_DASHBOARD = 'GUESTS_DASHBOARD',
-  RESIDENT = 'RESIDENT',
-  NON_RESIDENT = 'NON_RESIDENT',
+  AGENT = 'AGENT',
+  COMPANY = 'COMPANY',
+
+  // CHANNEL MANAGER
+  CHANNEL_MANAGER = 'CHANNEL_MANAGER',
+  UPDATE_INVENTORY = 'UPDATE_INVENTORY',
+  UPDATE_RATES = 'UPDATE_RATES',
 
   //Settings
   SETTINGS = 'SETTINGS',
@@ -190,7 +202,7 @@ export const ModuleConfig = {
       },
     },
   },
-  [ModuleNames.GUESTS_DASHBOARD]: {
+  [ModuleNames.GUESTS]: {
     cards: [
       CardNames.VIP,
       CardNames.STATUS,

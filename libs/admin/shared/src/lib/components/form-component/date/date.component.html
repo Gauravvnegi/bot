@@ -20,6 +20,7 @@
     }"
     [inputId]="controlName"
     [(ngModel)]="dateValue"
+    [selectOtherMonths]="true"
     (ngModelChange)="onDateChange($event)"
     [showTime]="enableTime"
     [showSeconds]="enableSeconds"
@@ -33,6 +34,7 @@
     yearRange="2000:2030"
     (onBlur)="markAsTouched()"
     [disabled]="isDisabled"
+    [placeholder]="placeholder"
   ></p-calendar>
   <small *ngIf="error" class="p-error">{{ error }} </small>
 

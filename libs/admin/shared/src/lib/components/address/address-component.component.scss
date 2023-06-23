@@ -1,0 +1,11 @@
+:host ::ng-deep .label__main {
+  overflow: visible;
+  text-overflow: unset;
+  white-space: normal;
+  background: #f3f3f3;
+  position: relative;
+}
+
+:host ::ng-deep .label{
+  display: block !important;
+}

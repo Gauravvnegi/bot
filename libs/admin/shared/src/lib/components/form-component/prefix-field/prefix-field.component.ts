@@ -25,6 +25,18 @@ export class PrefixFieldComponent extends FormComponent {
   @Input() defaultProps: PrePostType<FormProps>;
   @Input() inputDisabled: PrePostType<boolean> = { pre: false, post: false };
 
+  layout: 'default' | 'dashed' | 'pre-main' | 'post-main' = 'default';
+
+  // @Input() isHyphenInput = true;
+
+  @Input() set settings(value: Settings) {
+    for (const key in value) {
+      if (Object.prototype.hasOwnProperty.call(value, key)) {
+        this[key] = value[key];
+      }
+    }
+  }
+
   /**
    * Handle options setting if only of them is select type
    */
@@ -45,6 +57,10 @@ export class PrefixFieldComponent extends FormComponent {
   }
 }
 
-type InputFieldTypes = 'input' | 'select';
+type InputFieldTypes = 'input' | 'select' | 'autocomplete';
 
 type PrePostType<T> = { pre?: T; post?: T };
+
+type Settings = {
+  layout: 'default' | 'dashed' | 'pre-main' | 'post-main';
+};

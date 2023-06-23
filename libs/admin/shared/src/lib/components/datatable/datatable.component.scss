@@ -13,9 +13,9 @@
   border-radius: 5px;
   border: 1px solid #efefef;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: $bold;
   letter-spacing: 0.72px;
-  font-family: 'Poppins-regular';
+  font-family: 'Poppins';
 }
 
 :host ::ng-deep .p-datatable.p-datatable-lg .p-datatable-header {
@@ -91,7 +91,7 @@
 .databaseActionLabel {
   vertical-align: middle;
   margin-left: 0.5em;
-  font-weight: 500;
+  font-weight: $bold;
   width: 5%;
   background-color: $whiteDeep;
   border-top: 0 !important;
@@ -186,7 +186,7 @@
   .reset-link {
     color: $reset-link;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: $bolder;
   }
 }
 
@@ -234,7 +234,7 @@
 :host ::ng-deep .message {
   font-size: 12px;
   color: $subtitle;
-  font-weight: 500;
+  font-weight: $bold;
 }
 
 :host ::ng-deep .guest {
@@ -379,7 +379,7 @@ th {
 
 :host ::ng-deep .chipSelected {
   color: $white !important;
-  font-weight: 400;
+  font-weight: $medium;
 }
 
 :host ::ng-deep .emptyCell {
@@ -581,7 +581,7 @@ $table-hover-color: #f3f3f3;
   .reset-link {
     color: $reset-link;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: $bolder;
   }
 }
 
@@ -648,7 +648,7 @@ $table-hover-color: #f3f3f3;
           word-break: break-word;
           white-space: break-spaces;
           font-size: 14px;
-          font-weight: 600;
+          font-weight: $bolder;
           letter-spacing: 0.84px;
           color: #787c9e;
 
@@ -769,7 +769,6 @@ $table-hover-color: #f3f3f3;
       .contained {
         &__primary {
           text-align: center;
-          font-family: Roboto;
           font-size: 12px;
           letter-spacing: 0.72px;
           color: $primary-cta;
@@ -817,6 +816,10 @@ $table-hover-color: #f3f3f3;
 
       .toggle-btn {
       }
+
+      .status-text {
+        @include status-chip
+      }
     }
   }
 
@@ -848,7 +851,7 @@ $table-hover-color: #f3f3f3;
     display: inline-flex;
     align-items: center;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: $bold;
     line-height: 1.07;
     letter-spacing: 0.84px;
     text-align: left;
@@ -859,7 +862,7 @@ $table-hover-color: #f3f3f3;
 
   .p-paginator-current {
     font-size: 12px;
-    font-weight: 500;
+    font-weight: $bold;
     letter-spacing: 0.72px;
     text-align: right;
     color: $paginator;
@@ -934,8 +937,8 @@ $table-hover-color: #f3f3f3;
   border: 1px solid $whiteDeep;
   color: $inActiveTab;
   font-size: 12px;
-  font-weight: 500;
-  font-family: 'Poppins-regular';
+  font-weight: $bold;
+  font-family: 'Poppins';
   order: 3;
 }
 

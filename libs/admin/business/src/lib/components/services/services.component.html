@@ -34,12 +34,14 @@
           formControlName="serviceIds"
           [itemList]="filteredServices"
           [fullView]="true"
+          [noMoreData]="noMoreServices"
           [noRecordsAction]="noRecordAction"
+          (loadMoreData)="loadMore()"
           [loading]="loading"
         ></hospitality-bot-custom-select>
       </form>
     </div>
-    <div class="footer-buttons" *ngIf="!loading && compServices.length > 0">
+    <div class="footer-buttons" *ngIf="!loading && filteredServices.length > 0">
       <hospitality-bot-button
         (onClick)="resetForm()"
         label="Reset"

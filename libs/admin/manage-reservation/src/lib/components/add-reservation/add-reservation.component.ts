@@ -26,7 +26,6 @@ import {
   BookingInfo,
   OfferData,
   OfferList,
-  PaymentMethodList,
   ReservationFormData,
   SummaryData,
 } from '../../models/reservations.model';
@@ -35,7 +34,6 @@ import { ReservationResponse } from '../../types/response.type';
 import {
   AdminUtilityService,
   ConfigService,
-  CountryCodeList,
   NavRouteOptions,
   Regex,
   UserService,
@@ -53,10 +51,10 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   hotelId: string;
   reservationId: string;
 
-  paymentOptions: Option[] = [];
-  currencies: Option[] = [];
+  // paymentOptions: Option[] = [];
+  // currencies: Option[] = [];
   reservationTypes: Option[] = [];
-  countries: Option[] = [];
+  // countries: Option[] = [];
 
   offersList: OfferList;
   selectedOffer: OfferData;
@@ -88,7 +86,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     private location: Location,
     private router: Router,
     protected activatedRoute: ActivatedRoute,
-    private configService: ConfigService,
     private modalService: ModalService,
     private _clipboard: Clipboard,
     private userService: UserService
@@ -108,8 +105,8 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
     // this.listenForGlobalFilters();
-    this.getCountryCode();
-    this.getInitialData();
+    // this.getCountryCode();
+    // this.getInitialData();
     this.getReservationId();
   }
 
@@ -165,34 +162,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     });
   }
 
-  getCountryCode(): void {
-    this.configService
-      .getColorAndIconConfig(this.hotelId)
-      .subscribe((response) => {
-        this.configData = new BookingConfig().deserialize(
-          response.bookingConfig
-        );
-        this.configData.source = this.configData.source.filter(
-          (item) => item.value !== 'CREATE_WITH' && item.value !== 'OTHERS'
-        );
-      });
-    this.configService.getCountryCode().subscribe((res) => {
-      const data = new CountryCodeList().deserialize(res);
-      this.countries = data.records;
-    });
-    this.configService.$config.subscribe((value) => {
-      if (value) {
-        const { currencyConfiguration } = value;
-        this.currencies = currencyConfiguration.map(({ key, value }) => ({
-          label: key,
-          value,
-        }));
-        this.userForm.get('paymentMethod').patchValue({
-          currency: this.currencies[0].value,
-        });
-      }
-    });
-  }
+
 
   /**
    * @function listenForFormChanges Listen for form values changes.
@@ -220,26 +190,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
               .patchValue(this.userForm.get('roomInformation.roomCount').value);
         }
       });
-  }
-
-  getInitialData(): void {
-    this.$subscription.add(
-      this.manageReservationService.getPaymentMethod(this.hotelId).subscribe(
-        (response) => {
-          const types = new PaymentMethodList()
-            .deserialize(response)
-            .records.map((item) => item.type);
-          const labels = [].concat(
-            ...types.map((array) => array.map((item) => item.label))
-          );
-          this.paymentOptions = labels.map((label) => ({
-            label: label,
-            value: label,
-          }));
-        },
-        (error) => {}
-      )
-    );
   }
 
   getReservationId(): void {

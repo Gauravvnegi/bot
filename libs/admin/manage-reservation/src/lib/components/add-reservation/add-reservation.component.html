@@ -4,8 +4,6 @@
   <div class="main">
     <p-accordion [multiple]="true">
       <hospitality-bot-booking-info
-        bookingType="HOTEL"
-        [configData]="configData"
         [reservationTypes]="reservationTypes"
       ></hospitality-bot-booking-info>
       <p-accordionTab class="room-info" header="Room Information">
@@ -23,10 +21,7 @@
       <hospitality-bot-payment-rule
         [deductedAmount]="deductedAmount"
       ></hospitality-bot-payment-rule>
-      <hospitality-bot-payment-method
-        [currencies]="currencies"
-        [paymentOptions]="paymentOptions"
-      ></hospitality-bot-payment-method>
+      <hospitality-bot-payment-method></hospitality-bot-payment-method>
     </p-accordion>
     <div class="bk-summary">
       <ng-container *ngIf="!displayBookingOffer; else bookingOffer">

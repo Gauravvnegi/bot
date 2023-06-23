@@ -15,6 +15,7 @@ import { PaymentMethodComponent } from './components/form-components/payment-met
 import { InstructionsComponent } from './components/form-components/instructions/instructions.component';
 import { BillingAddressComponent } from './components/form-components/billing-address/billing-address.component';
 import { GuestInformationComponent } from './components/form-components/guest-information/guest-information.component';
+import { BookingSummaryComponent } from './components/form-components/booking-summary/booking-summary.component';
 
 export const adminManageReservationRoutes: Route[] = [
   {
@@ -76,6 +77,7 @@ export class AdminManageReservationRoutingModule {
     VenueReservationComponent,
     InstructionsComponent,
     BillingAddressComponent,
-    GuestInformationComponent
+    GuestInformationComponent,
+    BookingSummaryComponent
   ];
 }

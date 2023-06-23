@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoomsData } from '../constants/bulkupdate-response';
 import { NavRouteOptions } from '@hospitality-bot/admin/shared';
+import { BulkUpdateRequest } from '../../types/bulk-update.types';
+import { FormFactory } from '../../models/bulk-update.models';
 @Component({
   selector: 'hospitality-bot-rates-bulk-update',
   templateUrl: './rates-bulk-update.component.html',
@@ -34,8 +36,8 @@ export class RatesBulkUpdateComponent implements OnInit {
       updateValue: ['', [Validators.required]],
       fromDate: [today.getTime(), [Validators.required]],
       toDate: [seventhDate.getTime(), [Validators.required]],
-      roomType: [''],
-      selectedDays: [[]],
+      roomType: [[]],
+      selectedDays: [[], [Validators.required]],
     });
     this.listenChanges();
   }
@@ -51,6 +53,12 @@ export class RatesBulkUpdateComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.useForm.getRawValue());
+    console.log('*** Form data', this.useForm.getRawValue());
+
+    const data: BulkUpdateRequest[] = FormFactory.makeRatesRequestData(
+      this.useForm.getRawValue()
+    );
+
+    console.log('*** Ready For Request data', data);
   }
 }

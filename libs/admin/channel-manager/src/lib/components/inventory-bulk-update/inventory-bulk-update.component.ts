@@ -35,7 +35,7 @@ export class InventoryBulkUpdateComponent implements OnInit {
       fromDate: [today.getTime(), [Validators.required]],
       toDate: [seventhDate.getTime(), [Validators.required]],
       roomType: [''],
-      selectedDays: [[]],
+      selectedDays: [[], [Validators.required]],
     });
     this.listenChanges();
   }

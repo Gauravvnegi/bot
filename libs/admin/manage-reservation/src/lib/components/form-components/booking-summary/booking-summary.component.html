@@ -15,35 +15,35 @@
       </p>
       <p class="bk-summary_roomInfo_checkoutInfo_subText">
         {{
-          controlContainer.control.get('reservationInformation.from').value
+          controlContainer.control.get('reservationInformation?.from')?.value
             | date: 'dd/MM/yyyy'
         }}
         -
         {{
-          controlContainer.control.get('reservationInformation.to').value
+          controlContainer.control.get('reservationInformation?.to')?.value
             | date: 'dd/MM/yyyy'
         }}
       </p>
     </div>
-    <div class="bk-summary_roomInfo_guestInfo">
+    <!-- <div class="bk-summary_roomInfo_guestInfo">
       <p class="bk-summary_roomInfo_guestInfo_heading">
         Rooms & Guests
       </p>
       <p class="bk-summary_roomInfo_guestInfo_subText">
         {{
-          controlContainer.control.get('roomInformation.roomCount').value
+          controlContainer.control?.get('roomInformation?.roomCount').value
         }}
         Room,
         {{
-          controlContainer.control.get('roomInformation.adultCount').value
+          controlContainer.control?.get('roomInformation?.adultCount').value
         }}
         Adult,
         {{
-          controlContainer.control.get('roomInformation.childCount').value
+          controlContainer.control?.get('roomInformation?.childCount').value
         }}
         Kid
       </p>
-    </div>
+    </div> -->
   </div>
   <div class="bk-summary_offerInfo">
     <ng-container
@@ -69,7 +69,7 @@
     <ng-template #selectOffer>
       <p>
         Have an Offer?
-        <span (click)="handleOfferView()">Apply Offer</span>
+        <span (click)="displayBookingOffer = !displayBookingOffer;">Apply Offer</span>
       </p>
     </ng-template>
   </div>
@@ -82,22 +82,22 @@
         >{{ summaryData?.originalPrice | currency: 'INR' }}</s
       >
     </p>
-    <p class="bk-summary_priceInfo_person">
+    <!-- <p class="bk-summary_priceInfo_person">
       <span class="bk-summary_priceInfo_perNight_label"
         >For
         {{
-          controlContainer.control.get('roomInformation.adultCount').value
+          controlContainer.control?.get('roomInformation?.adultCount').value
         }}
         Adult, Adults &
         {{
-          controlContainer.control.get('roomInformation.childCount').value
+          controlContainer.control?.get('roomInformation?.childCount').value
         }}
         Kid Child</span
       >
       <span class="bk-summary_priceInfo_perNight_amount">{{
         summaryData?.basePrice | currency: 'INR'
       }}</span>
-    </p>
+    </p> -->
     <p class="bk-summary_priceInfo_taxFair" *ngIf="summaryData?.offerAmount">
       <span class="bk-summary_priceInfo_perNight_label"
         >Discount<i class="fa fa-info-circle" aria-hidden="true"></i

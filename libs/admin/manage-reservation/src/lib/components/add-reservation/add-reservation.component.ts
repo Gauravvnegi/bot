@@ -1,28 +1,10 @@
-import { Clipboard } from '@angular/cdk/clipboard';
-import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  ModalService,
-  SnackBarService,
-} from '@hospitality-bot/shared/material';
-// import {
-//   AdminUtilityService,
-//   ConfigService,
-//   CountryCodeList,
-//   NavRouteOptions,
-//   Option,
-//   Regex,
-// } from 'libs/admin/shared/src';
-import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { manageReservationRoutes } from '../../constants/routes';
 import {
-  BookingConfig,
   BookingInfo,
   OfferData,
   OfferList,
@@ -30,13 +12,10 @@ import {
   SummaryData,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
-import { ReservationResponse } from '../../types/response.type';
 import {
   AdminUtilityService,
-  ConfigService,
   NavRouteOptions,
   Regex,
-  UserService,
   Option,
 } from '@hospitality-bot/admin/shared';
 
@@ -58,15 +37,13 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   summaryData: SummaryData;
 
   // loading = false;
-  displayBookingOffer: boolean = false;
   formValueChanges = false;
   disabledForm = false;
-  isBooking = false;
 
   deductedAmount = 0;
   startMinDate = new Date();
   endMinDate = new Date();
-  reservationType = 'HOTEL';
+  bookingType = 'HOTEL';
 
   pageTitle = 'Add Reservation';
   routes: NavRouteOptions = [];
@@ -77,15 +54,12 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService,
     private manageReservationService: ManageReservationService,
-    private location: Location,
-    private router: Router,
-    protected activatedRoute: ActivatedRoute,
-    private modalService: ModalService,
-    private _clipboard: Clipboard,
-    private userService: UserService
-  ) {
+    protected activatedRoute: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.hotelId = this.globalFilterService.hotelId;
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
     this.initForm();
@@ -96,10 +70,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     ];
     this.routes = navRoutes;
     this.pageTitle = title;
-  }
-
-  ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
     this.getReservationId();
   }
 
@@ -107,14 +77,10 @@ export class AddReservationComponent implements OnInit, OnDestroy {
    * @function initForm Initialize form
    */
   initForm(): void {
-    const startTime = moment(this.startMinDate).unix() * 1000;
-    const endTime = moment(this.endMinDate).unix() * 1000;
-    const { firstName, lastName } = this.userService.userDetails;
-
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
-        from: [startTime, Validators.required],
-        to: [endTime, Validators.required],
+        from: ['', Validators.required],
+        to: ['', Validators.required],
         reservationType: ['', Validators.required],
         source: ['', Validators.required],
         sourceName: ['', [Validators.required, Validators.maxLength(60)]],
@@ -140,8 +106,8 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         inclusionsAndTerms: [''],
       }),
       paymentMethod: this.fb.group({
-        cashierFirstName: [{ value: firstName, disabled: true }],
-        cashierLastName: [{ value: lastName, disabled: true }],
+        cashierFirstName: [{ value: '', disabled: true }],
+        cashierLastName: [{ value: '', disabled: true }],
         totalPaidAmount: [
           '',
           [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
@@ -272,7 +238,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   offerSelect(offerData?: OfferData): void {
     if (offerData) {
-      this.displayBookingOffer = !this.displayBookingOffer;
       this.userForm.patchValue({ offerId: offerData.id });
       this.getSummaryData();
     } else {
@@ -322,134 +287,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         )
       );
     }
-  }
-
-  handleBooking(): void {
-    this.isBooking = true;
-    const data = this.manageReservationService.mapReservationData(
-      this.userForm.getRawValue()
-    );
-    if (this.reservationId) this.updateReservation(data);
-    else this.createReservation(data);
-  }
-
-  createReservation(data): void {
-    (data = {
-      ...data,
-      firstName: 'Reservation',
-      lastName: 'Temporary',
-      contact: { countryCode: '+91', phoneNumber: '99999999999' },
-      email: 'botshot@gmail.com',
-    }),
-      this.$subscription.add(
-        this.manageReservationService
-          .createReservation(this.hotelId, data)
-          .subscribe(
-            (res: ReservationResponse) => {
-              this.bookingConfirmationPopup(res?.reservationNumber);
-            },
-            (error) => {
-              this.isBooking = false;
-            },
-            () => {
-              this.isBooking = false;
-            }
-          )
-      );
-  }
-
-  updateReservation(data): void {
-    (data = {
-      ...data,
-      firstName: 'Reservation',
-      lastName: 'Temporary',
-      contact: { countryCode: '+91', phoneNumber: '99999999999' },
-      email: 'botshot@gmail.com',
-    }),
-      this.$subscription.add(
-        this.manageReservationService
-          .updateReservation(this.hotelId, this.reservationId, data)
-          .subscribe(
-            (res: ReservationResponse) => {
-              this.bookingConfirmationPopup(res?.reservationNumber);
-            },
-            (error) => {
-              this.isBooking = false;
-            },
-            () => {
-              this.isBooking = false;
-            }
-          )
-      );
-  }
-
-  /**
-   * @function bookingConfirmationPopup
-   */
-  bookingConfirmationPopup(number?): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    const togglePopupCompRef = this.modalService.openDialog(
-      ModalComponent,
-      dialogConfig
-    );
-    togglePopupCompRef.componentInstance.content = {
-      heading: `Reservation ${
-        this.reservationId ? 'Updated' : 'Created'
-      } Successfully`,
-
-      description: [
-        `Congratulations! Your reservation has been ${
-          this.reservationId ? 'updated' : 'created'
-        } successfully.`,
-        ` Your confirmation number is ${number}.`,
-        // "Keep this number safe as you'll need it for any future inquiries or changes to your reservation.",
-      ],
-    };
-    togglePopupCompRef.componentInstance.actions = [
-      {
-        label: 'Continue Reservation',
-        onClick: () => {
-          this.router.navigate(
-            [
-              `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.addReservation.route}`,
-            ],
-            { replaceUrl: true }
-          );
-          // this.userForm.reset();
-          this.initForm();
-          this.modalService.close();
-        },
-        variant: 'outlined',
-      },
-      {
-        label: 'Copy Confirmation number',
-        onClick: () => {
-          this.copiedConfirmationNumber(number);
-          this.modalService.close();
-          this.location.back();
-        },
-        variant: 'contained',
-      },
-    ];
-    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
-      this.modalService.close();
-      this.location.back();
-    });
-  }
-
-  copiedConfirmationNumber(number): void {
-    this._clipboard.copy(number);
-    this.snackbarService.openSnackBarAsText('Confirmation number copied', '', {
-      panelClass: 'success',
-    });
-  }
-
-  /**
-   * @function handleOfferView handle offer view.
-   */
-  handleOfferView(): void {
-    this.displayBookingOffer = !this.displayBookingOffer;
   }
 
   /**

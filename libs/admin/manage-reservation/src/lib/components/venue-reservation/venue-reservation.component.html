@@ -1,1 +1,42 @@
-<p>venue-reservation works!</p>
+<div [formGroup]="userForm" class="wrapper">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="routes">
+  </hospitality-bot-navigation-header>
+  <div class="main">
+    <p-accordion [multiple]="true">
+      <hospitality-bot-booking-info
+        [reservationTypes]="reservationTypes"
+        [statusOptions]="statusOptions"
+        [bookingType]="bookingType"
+      ></hospitality-bot-booking-info>
+      <p-accordionTab header="booking Information">
+        <div class="form-block" formGroupName="bookingInformation">
+          <hospitality-bot-iterator
+            class="iterator full-width"
+            [fields]="fields"
+            [useFormArray]="venueBookingInfo"
+          ></hospitality-bot-iterator>
+        </div>
+      </p-accordionTab>
+      <hospitality-bot-guest-information></hospitality-bot-guest-information>
+      <hospitality-bot-billing-address></hospitality-bot-billing-address>
+      <hospitality-bot-instructions
+        [bookingType]="bookingType"
+      ></hospitality-bot-instructions>
+      <hospitality-bot-payment-rule
+        [deductedAmount]="deductedAmount"
+      ></hospitality-bot-payment-rule>
+      <hospitality-bot-payment-method></hospitality-bot-payment-method>
+    </p-accordion>
+    <div class="bk-summary">
+      <hospitality-bot-booking-summary
+        [selectedOffer]="selectedOffer"
+        [summaryData]="summaryData"
+        [offersList]="offersList"
+        (onOfferItemSelect)="offerSelect($event)"
+        (onOfferSelect)="offerSelect()"
+        (handleInitForm)="initForm()"
+        [disabledForm]="disabledForm"
+      ></hospitality-bot-booking-summary>
+    </div>
+  </div>
+</div>

@@ -5,6 +5,7 @@
     <p-accordion [multiple]="true">
       <hospitality-bot-booking-info
         [reservationTypes]="reservationTypes"
+        [bookingType]="bookingType"
       ></hospitality-bot-booking-info>
       <p-accordionTab class="room-info" header="Room Information">
         <hospitality-bot-room-iterator
@@ -16,7 +17,7 @@
       <hospitality-bot-guest-information></hospitality-bot-guest-information>
       <hospitality-bot-billing-address></hospitality-bot-billing-address>
       <hospitality-bot-instructions
-        [reservationType]="reservationType"
+        [bookingType]="bookingType"
       ></hospitality-bot-instructions>
       <hospitality-bot-payment-rule
         [deductedAmount]="deductedAmount"
@@ -25,188 +26,14 @@
     </p-accordion>
     <div class="bk-summary">
       <hospitality-bot-booking-summary
-        [displayBookingOffer]="displayBookingOffer"
-        [isBooking]="isBooking"
         [selectedOffer]="selectedOffer"
         [summaryData]="summaryData"
         [offersList]="offersList"
         (onOfferItemSelect)="offerSelect($event)"
         (onOfferSelect)="offerSelect()"
-        (onOfferView)="handleOfferView()"
-        (onSubmitBooking)="handleBooking()"
+        (handleInitForm)="initForm()"
+        [disabledForm]="disabledForm"
       ></hospitality-bot-booking-summary>
     </div>
-    <!-- <div class="bk-summary">
-      <ng-container *ngIf="!displayBookingOffer; else bookingOffer">
-        <div class="bk-summary_heading">Booking Summary</div>
-        <p class="divider"></p>
-        <div class="bk-summary_subheading">
-          {{ summaryData?.roomTypeName }}
-        </div>
-        <div class="bk-summary_subheading_label">
-          {{ summaryData?.location }}
-        </div>
-
-        <div class="bk-summary_roomInfo">
-          <div class="bk-summary_roomInfo_checkoutInfo">
-            <p class="bk-summary_roomInfo_checkoutInfo_heading">
-              Checkin - Checkout
-            </p>
-            <p class="bk-summary_roomInfo_checkoutInfo_subText">
-              {{
-                userForm.get('reservationInformation.from').value
-                  | date: 'dd/MM/yyyy'
-              }}
-              -
-              {{
-                userForm.get('reservationInformation.to').value
-                  | date: 'dd/MM/yyyy'
-              }}
-            </p>
-          </div>
-          <div class="bk-summary_roomInfo_guestInfo">
-            <p class="bk-summary_roomInfo_guestInfo_heading">
-              Rooms & Guests
-            </p>
-            <p class="bk-summary_roomInfo_guestInfo_subText">
-              {{ userForm.get('roomInformation.roomCount').value }} Room,
-              {{ userForm.get('roomInformation.adultCount').value }} Adult,
-              {{ userForm.get('roomInformation.childCount').value }} Kid
-            </p>
-          </div>
-        </div>
-        <div class="bk-summary_offerInfo">
-          <ng-container
-            *ngIf="
-              userForm.get('offerId').value && selectedOffer?.description;
-              else selectOffer
-            "
-          >
-            <p>
-              Offer Applied
-            </p>
-            <div class="offer">
-              <div
-                [innerHtml]="selectedOffer.description"
-                class="offer_card"
-              ></div>
-              <div class="offer_gift">
-                <img src="assets/svg/offer_gift.svg" alt="offer gift" />
-              </div>
-              <div class="offer_cross" (click)="offerSelect()">
-                <img src="assets/images/cross.png" alt="cross" />
-              </div>
-            </div>
-          </ng-container>
-          <ng-template #selectOffer>
-            <p>
-              Have an Offer?
-              <span (click)="handleOfferView()">Apply Offer</span>
-            </p>
-          </ng-template>
-        </div>
-        <div class="bk-summary_priceInfo">
-          <p class="bk-summary_priceInfo_perNight">
-            <span class="bk-summary_priceInfo_perNight_label">Per Night</span>
-            <s
-              class="bk-summary_priceInfo_perNight_amount"
-              *ngIf="summaryData?.originalPrice"
-              >{{ summaryData?.originalPrice | currency: 'INR' }}</s
-            >
-          </p>
-          <p class="bk-summary_priceInfo_person">
-            <span class="bk-summary_priceInfo_perNight_label"
-              >For {{ userForm.get('roomInformation.adultCount').value }} Adult,
-              Adults &
-              {{ userForm.get('roomInformation.childCount').value }} Kid
-              Child</span
-            >
-            <span class="bk-summary_priceInfo_perNight_amount">{{
-              summaryData?.basePrice | currency: 'INR'
-            }}</span>
-          </p>
-          <p
-            class="bk-summary_priceInfo_taxFair"
-            *ngIf="summaryData?.offerAmount"
-          >
-            <span class="bk-summary_priceInfo_perNight_label"
-              >Discount<i class="fa fa-info-circle" aria-hidden="true"></i
-            ></span>
-            <span class="bk-summary_priceInfo_perNight_amount">{{
-              summaryData?.offerAmount | currency: 'INR'
-            }}</span>
-          </p>
-          <p class="bk-summary_priceInfo_taxFair">
-            <span class="bk-summary_priceInfo_perNight_label"
-              >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
-            ></span>
-            <span class="bk-summary_priceInfo_perNight_amount"
-              >+{{ summaryData?.taxAndFees | currency: 'INR' }}</span
-            >
-          </p>
-          <p
-            class="bk-summary_priceInfo_perNight"
-            *ngIf="userForm.get('paymentMethod.totalPaidAmount').value"
-          >
-            <span class="bk-summary_priceInfo_perNight_label">Paid Amount</span>
-            <span class="bk-summary_priceInfo_perNight_amount"
-              >-{{
-                userForm.get('paymentMethod.totalPaidAmount').value
-                  | currency: 'INR'
-              }}</span
-            >
-          </p>
-        </div>
-        <p class="divider"></p>
-        <div class="bk-summary_total">
-          <p class="bk-summary_total_label">Total Amount to be paid</p>
-          <p class="bk-summary_total_amount">
-            {{
-              summaryData?.totalAmount -
-                userForm.get('paymentMethod.totalPaidAmount').value
-                | currency: 'INR'
-            }}
-          </p>
-        </div>
-        <div class="bk-summary_btnwrapper">
-          <hospitality-bot-button
-            (click)="handleBooking()"
-            label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"
-            [disabled]="userForm.invalid || disabledForm"
-            [isLoading]="isBooking"
-          ></hospitality-bot-button>
-        </div>
-      </ng-container>
-      <ng-template #bookingOffer>
-        <div class="bk-summary_heading">
-          <mat-icon
-            (click)="displayBookingOffer = !displayBookingOffer"
-            >arrow_back</mat-icon
-          >
-          Offers
-        </div>
-        <p class="divider"></p>
-        <ng-container *ngIf="offersList?.records?.length; else emptyOffer">
-          <div *ngFor="let item of offersList?.records" class="offerList">
-            <div class="offer" (click)="offerSelect(item)">
-              <div [innerHtml]="item.description" class="offer_card"></div>
-              <div class="offer_gift">
-                <img src="assets/svg/offer_gift.svg" alt="offer gift" />
-              </div>
-            </div>
-          </div>
-        </ng-container>
-        <ng-template #emptyOffer>
-          <div class="offerList">
-            <div class="offerList_box">
-              <img src="assets/svg/empty_box.svg" alt="empty box" />
-            </div>
-            <div class="offerList_text">
-              Currently You do not have any Offer
-            </div>
-          </div>
-        </ng-template>
-      </ng-template>
-    </div> -->
   </div>
 </div>

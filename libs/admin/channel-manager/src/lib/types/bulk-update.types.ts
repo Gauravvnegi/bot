@@ -24,3 +24,29 @@ export type UpdatedEmitType = {
   channelIndex?: number;
   source: SourceEmitType;
 };
+
+export type BulkUpdateResponse = {
+  success: boolean;
+  message: string;
+};
+
+export type BulkUpdateRequest = {
+  startDate: string; //'2023-02-22';
+  endDate: string; //'2023-02-24';
+  rates: Rates[];
+};
+
+type Rates = {
+  roomCode: string;
+  rate: number;
+  rateplanCode: string;
+};
+
+export type BulkUpdateForm = {
+  update: string;
+  updateValue: string;
+  fromDate: number;
+  toDate: number;
+  roomType?: string[];
+  selectedDays: string[];
+};

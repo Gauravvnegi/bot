@@ -93,7 +93,10 @@ export class RoomService extends ApiService {
     ).pipe(
       map((res) => {
         // --refactor ---will be removed
-        if (this.selectedTable === TableValue.room) {
+        if (
+          this.selectedTable === TableValue.room &&
+          !config?.params.includes('type=ROOM_TYPE')
+        ) {
           res.entityStateCounts = {
             CLEAN: 10,
             INSPECTED: 15,

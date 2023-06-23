@@ -25,14 +25,15 @@ export class InventoryBulkUpdateComponent implements OnInit {
   constructor(private fb: FormBuilder, private route: Router) {}
 
   ngOnInit(): void {
+    const today = new Date();
+    const seventhDate = new Date();
+    seventhDate.setDate(today.getDate() + 7);
+
     this.useForm = this.fb.group({
       update: ['AVAILABILITY'], // RATE, AVAILABILITY,
       updateValue: ['', [Validators.required]],
-      fromDate: [new Date(), [Validators.required]],
-      toDate: [
-        new Date().setDate(new Date().getDate() + 7),
-        [Validators.required],
-      ],
+      fromDate: [today.getTime(), [Validators.required]],
+      toDate: [seventhDate.getTime(), [Validators.required]],
       roomType: [''],
       selectedDays: [[]],
     });

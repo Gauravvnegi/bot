@@ -9,6 +9,8 @@ import { NestedPanelComponent } from './components/nested-checkbox-tree/nested-p
 import { BulkUpdateComponent } from './components/bulk-update/bulk-update.component';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { LibraryService } from '@hospitality-bot/admin/library';
+import { InventoryBulkUpdateComponent } from './components/inventory-bulk-update/inventory-bulk-update.component';
+import { InventoryNestedCheckboxTreeComponent } from './components/inventory-nested-checkbox-tree/inventory-nested-checkbox-tree.component';
 
 @NgModule({
   imports: [
@@ -24,6 +26,8 @@ import { LibraryService } from '@hospitality-bot/admin/library';
     NestedCheckboxTreeComponent,
     NestedPanelComponent,
     BulkUpdateComponent,
+    InventoryBulkUpdateComponent,
+    InventoryNestedCheckboxTreeComponent,
   ],
   providers: [RoomService, LibraryService],
 })

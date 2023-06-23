@@ -101,13 +101,13 @@
   }
 
   &_roomInfo {
-    @include flex-space-between;
+    display: flex;
     margin-bottom: 19px;
     gap: 10px;
     flex-wrap: wrap;
     &_checkoutInfo,
     &_guestInfo {
-      min-width: 182px;
+      min-width: 150px;
       max-height: fit-content;
       padding: 12px;
       border-radius: 5px;

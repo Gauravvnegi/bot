@@ -47,7 +47,40 @@
         (onOfferSelect)="offerSelect()"
         (handleInitForm)="initForm()"
         [disabledForm]="disabledForm"
-      ></hospitality-bot-booking-summary>
+        [bookingInfo]="{
+          header: 'United Coffee House Rewind',
+          subHeader: 'The Leela, New Delhi, 210002',
+          price: '2000',
+          discountedPrice: '1200',
+          guestInfo: 'For 2 Adults',
+          stayInfo: 'some info'
+        }"
+      >
+        <div class="bk-summary_roomInfo_checkoutInfo">
+          <p class="bk-summary_roomInfo_checkoutInfo_heading">
+            Date
+          </p>
+          <p class="bk-summary_roomInfo_checkoutInfo_subText">
+            5 April, Monday
+          </p>
+        </div>
+        <div class="bk-summary_roomInfo_guestInfo">
+          <p class="bk-summary_roomInfo_guestInfo_heading">
+            Time
+          </p>
+          <p class="bk-summary_roomInfo_guestInfo_subText">
+            06:00 PM
+          </p>
+        </div>
+        <div class="bk-summary_roomInfo_guestInfo">
+          <p class="bk-summary_roomInfo_guestInfo_heading">
+            Guests
+          </p>
+          <p class="bk-summary_roomInfo_guestInfo_subText">
+            2
+          </p>
+        </div>
+      </hospitality-bot-booking-summary>
     </div>
   </div>
 </div>

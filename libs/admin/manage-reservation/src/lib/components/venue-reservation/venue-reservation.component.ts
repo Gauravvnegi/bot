@@ -24,7 +24,10 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 @Component({
   selector: 'hospitality-bot-venue-reservation',
   templateUrl: './venue-reservation.component.html',
-  styleUrls: ['./venue-reservation.component.scss'],
+  styleUrls: [
+    './venue-reservation.component.scss',
+    '../reservation.styles.scss',
+  ],
 })
 export class VenueReservationComponent implements OnInit {
   userForm: FormGroup;
@@ -104,7 +107,7 @@ export class VenueReservationComponent implements OnInit {
         sourceName: ['', [Validators.required, Validators.maxLength(60)]],
         marketSegment: ['', Validators.required],
       }),
-      orderInformation: this.fb.group({
+      bookingInformation: this.fb.group({
         menuItems: this.venueBookingInfo,
       }),
       guestInformation: this.fb.group({

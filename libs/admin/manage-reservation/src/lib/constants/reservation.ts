@@ -63,7 +63,7 @@ export const Reservation = {
 export const menuItemFields: IteratorField[] = [
   {
     label: 'Menu Item',
-    name: 'menuItem',
+    name: 'menuItems',
     type: 'input',
     required: true,
     placeholder: 'Search by name',

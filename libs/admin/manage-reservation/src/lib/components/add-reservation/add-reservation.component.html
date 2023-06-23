@@ -33,7 +33,43 @@
         (onOfferSelect)="offerSelect()"
         (handleInitForm)="initForm()"
         [disabledForm]="disabledForm"
-      ></hospitality-bot-booking-summary>
+      >
+        <div class="bk-summary_roomInfo_checkoutInfo">
+          <p class="bk-summary_roomInfo_checkoutInfo_heading">
+            Checkin - Checkout
+          </p>
+          <p class="bk-summary_roomInfo_checkoutInfo_subText">
+            {{
+              userForm.get('reservationInformation?.from')
+                ?.value | date: 'dd/MM/yyyy'
+            }}
+            -
+            {{
+              userForm.get('reservationInformation?.to')?.value
+                | date: 'dd/MM/yyyy'
+            }}
+          </p>
+        </div>
+        <div class="bk-summary_roomInfo_guestInfo">
+          <p class="bk-summary_roomInfo_guestInfo_heading">
+            Rooms & Guests
+          </p>
+          <p class="bk-summary_roomInfo_guestInfo_subText">
+            {{
+              userForm.get('roomInformation?.roomCount').value
+            }}
+            Room,
+            {{
+              userForm.get('roomInformation?.adultCount').value
+            }}
+            Adult,
+            {{
+              userForm.get('roomInformation?.childCount').value
+            }}
+            Kid
+          </p>
+        </div>
+      </hospitality-bot-booking-summary>
     </div>
   </div>
 </div>

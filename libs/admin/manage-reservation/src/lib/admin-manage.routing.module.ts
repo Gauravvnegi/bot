@@ -32,7 +32,7 @@ export const adminManageReservationRoutes: Route[] = [
         children: [
           {
             path: '',
-            component: SpaReservationComponent,
+            component: AddReservationComponent,
           },
           {
             path: manageReservationRoutes.addGuest1.route,
@@ -46,7 +46,7 @@ export const adminManageReservationRoutes: Route[] = [
         children: [
           {
             path: '',
-            component: SpaReservationComponent,
+            component: RestaurantReservationComponent,
           },
           {
             path: manageReservationRoutes.addGuest1.route,

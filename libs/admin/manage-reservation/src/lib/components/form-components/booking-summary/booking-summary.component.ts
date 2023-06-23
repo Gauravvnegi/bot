@@ -35,12 +35,25 @@ export class BookingSummaryComponent implements OnInit {
   parentFormGroup: FormGroup;
   isBooking = false;
 
+  header = '';
+  subHeader = '';
+  stayInfo = '';
+  price = '';
+  guestInfo = '';
+  discountedPrice = '';
+
   $subscription = new Subscription();
 
   @Input() summaryData: SummaryData;
   @Input() selectedOffer: OfferData;
   @Input() offersList: OfferList;
   @Input() disabledForm: boolean;
+
+  @Input() set bookingInfo(value: BookingSummaryInfo) {
+    Object.entries(value)?.forEach(([key, value]) => {
+      this[key] = value;
+    });
+  }
 
   // @Output() onSubmitBooking: EventEmitter<void> = new EventEmitter<void>();
   @Output() onOfferSelect: EventEmitter<void> = new EventEmitter<void>();
@@ -63,6 +76,7 @@ export class BookingSummaryComponent implements OnInit {
     this.hotelId = this.globalFilterService.hotelId;
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
+    console.log(this.bookingInfo);
   }
 
   offerSelect(item?: any): void {
@@ -195,3 +209,12 @@ export class BookingSummaryComponent implements OnInit {
     });
   }
 }
+
+type BookingSummaryInfo = {
+  header: string;
+  subHeader: string;
+  stayInfo: string;
+  price: string;
+  guestInfo: string;
+  discountedPrice: string;
+};

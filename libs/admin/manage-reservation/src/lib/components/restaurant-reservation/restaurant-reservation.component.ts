@@ -145,21 +145,6 @@ export class RestaurantReservationComponent implements OnInit {
       }),
       offerId: [''],
     });
-
-    this.menuItemsArray = this.userForm.get(
-      'orderInformation.menuItems'
-    ) as FormArray;
-    this.addNewItems();
-  }
-
-  addNewItems() {
-    const itemsFormGroup = this.fb.group({
-      itemName: ['', Validators.required],
-      quantity: ['', Validators.required],
-      price: ['', Validators.required],
-    });
-
-    this.menuItemsArray.push(itemsFormGroup);
   }
 
   /**

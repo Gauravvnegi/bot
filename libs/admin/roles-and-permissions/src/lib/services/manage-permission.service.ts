@@ -122,7 +122,7 @@ export class ManagePermissionService extends ApiService {
   // ): Observable<UserListResponse> {
   //   return this.get(
   //     `/api/v1/${
-  //       allUsers ? `hotel/${config.hotelId}` : `user/${config.loggedInUserId}`
+  //       allUsers ? `entity/${config.hotelId}` : `user/${config.loggedInUserId}`
   //     }/users${config.queryObj ?? ''}`
   //   );
   // }
@@ -145,7 +145,7 @@ export class ManagePermissionService extends ApiService {
   exportCSV(config: QueryConfig, allUsers: boolean = false): Observable<any> {
     return this.get(
       `/api/v1/${
-        allUsers ? `hotel/${config.hotelId}` : `user/${config.loggedInUserId}`
+        allUsers ? `entity/${config.hotelId}` : `user/${config.loggedInUserId}`
       }/users/export/${config.queryObj ? config.queryObj : ''}`,
       {
         responseType: 'blob',

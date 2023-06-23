@@ -7,7 +7,7 @@ import { Amenity, PackageSource } from '../data-models/packageConfig.model';
 export class PackageService extends ApiService {
   uploadImage(hotelId, data) {
     return this.post(
-      `/api/v1/uploads?folder_name=hotel/${hotelId}/static-content/packages`,
+      `/api/v1/uploads?folder_name=entity/${hotelId}/static-content/packages`,
       data
     );
   }
@@ -27,20 +27,20 @@ export class PackageService extends ApiService {
   }
 
   getPackageDetails(hotelId, packageId) {
-    return this.get(`/api/v1/hotel/${hotelId}/packages/${packageId}`);
+    return this.get(`/api/v1/entity/${hotelId}/packages/${packageId}`);
   }
 
   updatePackage(hotelId, packageId, data) {
-    return this.patch(`/api/v1/hotel/${hotelId}/packages/${packageId}`, data);
+    return this.patch(`/api/v1/entity/${hotelId}/packages/${packageId}`, data);
   }
 
   addPackage(hotelId, data) {
-    return this.post(`/api/v1/hotel/${hotelId}/packages`, data);
+    return this.post(`/api/v1/entity/${hotelId}/packages`, data);
   }
 
   updatePackageStatus(hotelId, status, data) {
     return this.put(
-      `/api/v1/hotel/${hotelId}/packages/status?active=${status}`,
+      `/api/v1/entity/${hotelId}/packages/status?active=${status}`,
       data
     );
   }

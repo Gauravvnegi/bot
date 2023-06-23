@@ -36,7 +36,7 @@ export class UserService extends ApiService {
 
   uploadProfileImage(hotelId: string, formData) {
     return this.uploadDocumentPost(
-      `/api/v1/uploads?folder_name=hotel/${hotelId}/profileImage`,
+      `/api/v1/uploads?folder_name=entity/${hotelId}/profileImage`,
       formData
     );
   }
@@ -69,7 +69,7 @@ export class UserService extends ApiService {
 
   uploadImage(hotelId: string, data: any, path: string) {
     return this.post(
-      `/api/v1/uploads?folder_name=hotel/${hotelId}/${path}`,
+      `/api/v1/uploads?folder_name=entity/${hotelId}/${path}`,
       data
     );
   }

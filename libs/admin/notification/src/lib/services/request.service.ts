@@ -24,7 +24,7 @@ export class RequestService extends ApiService {
   }
 
   createRequestData(hotelId: string, data): Observable<any> {
-    return this.post(`/api/v1/hotel/${hotelId}/notifications`, data);
+    return this.post(`/api/v1/entity/${hotelId}/notifications`, data);
   }
 
   uploadAttachments(hotelId, formData): Observable<any> {
@@ -36,12 +36,12 @@ export class RequestService extends ApiService {
 
   getTemplate(hotelId: string, templateId: string, config): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/templates/${templateId}${config.queryObj}`
+      `/api/v1/entity/${hotelId}/templates/${templateId}${config.queryObj}`
     );
   }
 
   getNotificationConfig(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/cms/hotel/${hotelId}/notification-config`);
+    return this.get(`/api/v1/cms/entity/${hotelId}/notification-config`);
   }
 
   validateRequestData(fg: FormGroup, channelSelection) {

@@ -25,7 +25,7 @@ export class CardService extends ApiService {
   }
   getDepartmentList(hotelId: string, feedbackType: string) {
     return this.get(
-      `/api/v1/cms/hotel/${hotelId}/feedback-form?key=${
+      `/api/v1/cms/entity/${hotelId}/feedback-form?key=${
         feedbackType === feedback.types.stay
           ? 'departments'
           : 'transactionaldepartments'

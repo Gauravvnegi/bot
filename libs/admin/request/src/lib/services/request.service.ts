@@ -36,7 +36,7 @@ export class RequestService extends ApiService {
   }
 
   createRequestData(hotelId: string, data: RequestData): Observable<any> {
-    return this.post(`/api/v1/hotel/${hotelId}/notifications`, data);
+    return this.post(`/api/v1/entity/${hotelId}/notifications`, data);
   }
 
   searchRequest(hotelId: string, config) {
@@ -56,7 +56,7 @@ export class RequestService extends ApiService {
     journey: string
   ): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/templates/${templateId}?journey=${journey}`
+      `/api/v1/entity/${hotelId}/templates/${templateId}?journey=${journey}`
     );
   }
 
@@ -65,11 +65,11 @@ export class RequestService extends ApiService {
   }
 
   getNotificationConfig(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/cms/hotel/${hotelId}/notification-config`);
+    return this.get(`/api/v1/cms/entity/${hotelId}/notification-config`);
   }
 
   getCMSServices(hotelId: string, config) {
-    return this.get(`/api/v1/hotel/${hotelId}/cms-services${config.queryObj}`);
+    return this.get(`/api/v1/entity/${hotelId}/cms-services${config.queryObj}`);
   }
 
   validateRequestData(fg: FormGroup, channelSelection) {

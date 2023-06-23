@@ -9,7 +9,7 @@ export class ConfigService extends ApiService {
   getColorAndIconConfig(
     hotelId: string
   ): Observable<Record<ConfigurationValue, any>> {
-    return this.get(`/api/v1/cms/hotel/${hotelId}/configuration`);
+    return this.get(`/api/v1/cms/entity/${hotelId}/configuration`);
   }
 
   getCountryCode(): Observable<any> {

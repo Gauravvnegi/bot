@@ -4,10 +4,7 @@ import { UpdatedEmitType, Variant } from '../../types/bulk-update.types';
 @Component({
   selector: 'hospitality-bot-inventory-nested-checkbox-tree',
   templateUrl: './inventory-nested-checkbox-tree.component.html',
-  styleUrls: [
-    './inventory-nested-checkbox-tree.component.scss',
-    '../nested-checkbox-tree/nested-checkbox-tree.component.scss',
-  ],
+  styleUrls: ['./inventory-nested-checkbox-tree.component.scss'],
 })
 export class InventoryNestedCheckboxTreeComponent implements OnInit {
   @Input() variants: Variant[];
@@ -37,7 +34,10 @@ export class InventoryNestedCheckboxTreeComponent implements OnInit {
 
   checkBoxVerify() {
     for (let item in this.variants) {
-      item['isSelected'] = item['channels'].every((item) => item['isSelected']);
+      item['channels'] &&
+        (item['isSelected'] = item['channels'].every(
+          (item) => item['isSelected']
+        ));
     }
   }
 }

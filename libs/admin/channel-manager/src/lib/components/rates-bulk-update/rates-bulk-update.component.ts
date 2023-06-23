@@ -1,21 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { RoomsData } from '../constants/bulkupdate-response';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import {
   RoomType,
   RoomTypeList,
 } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
-import {
-  AddRoomTypes,
-  RoomTypeOption,
-} from 'libs/admin/room/src/lib/types/room';
-import {
-  updateItems,
-  roomTypes,
-  weeks,
-} from '../constants/bulkupdate-response';
+import { RoomTypeOption } from 'libs/admin/room/src/lib/types/room';
+import { updateItems, weeks } from '../constants/bulkupdate-response';
 import {
   LibrarySearchItem,
   LibraryService,
@@ -23,13 +16,13 @@ import {
 import { Subscription } from 'rxjs';
 import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 @Component({
-  selector: 'hospitality-bot-bulk-update',
-  templateUrl: './bulk-update.component.html',
-  styleUrls: ['./bulk-update.component.scss'],
+  selector: 'hospitality-bot-rates-bulk-update',
+  templateUrl: './rates-bulk-update.component.html',
+  styleUrls: ['./rates-bulk-update.component.scss'],
 })
-export class BulkUpdateComponent implements OnInit {
+export class RatesBulkUpdateComponent implements OnInit {
   hotelId: string;
   roomsData = RoomsData;
   useForm: FormGroup;

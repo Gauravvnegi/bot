@@ -9,7 +9,7 @@ import {
 import { MainComponent } from './components/main/main.component';
 import { UpdateInventoryComponent } from './components/update-inventory/update-inventory.component';
 import { UpdateRatesComponent } from './components/update-rates/update-rates.component';
-import { BulkUpdateComponent } from './components/bulk-update/bulk-update.component';
+import { RatesBulkUpdateComponent } from './components/rates-bulk-update/rates-bulk-update.component';
 import { InventoryBulkUpdateComponent } from './components/inventory-bulk-update/inventory-bulk-update.component';
 
 const appRoutes: CRoutes = [
@@ -29,8 +29,8 @@ const appRoutes: CRoutes = [
             name: ModuleNames.UPDATE_RATES,
           },
           {
-            path: 'bulk-update',
-            component: BulkUpdateComponent,
+            path: 'rates-bulk-update',
+            component: RatesBulkUpdateComponent,
             name: ModuleNames.UPDATE_RATES,
           },
         ],
@@ -43,11 +43,6 @@ const appRoutes: CRoutes = [
           {
             path: '',
             component: UpdateInventoryComponent,
-            name: ModuleNames.UPDATE_RATES,
-          },
-          {
-            path: 'bulk-update',
-            component: BulkUpdateComponent,
             name: ModuleNames.UPDATE_RATES,
           },
           {

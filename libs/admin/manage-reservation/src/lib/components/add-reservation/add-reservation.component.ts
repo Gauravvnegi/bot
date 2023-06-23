@@ -51,17 +51,13 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   hotelId: string;
   reservationId: string;
 
-  // paymentOptions: Option[] = [];
-  // currencies: Option[] = [];
   reservationTypes: Option[] = [];
-  // countries: Option[] = [];
 
   offersList: OfferList;
   selectedOffer: OfferData;
   summaryData: SummaryData;
-  configData: BookingConfig;
 
-  loading = false;
+  // loading = false;
   displayBookingOffer: boolean = false;
   formValueChanges = false;
   disabledForm = false;
@@ -104,9 +100,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    // this.listenForGlobalFilters();
-    // this.getCountryCode();
-    // this.getInitialData();
     this.getReservationId();
   }
 
@@ -161,8 +154,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
       offerId: [''],
     });
   }
-
-
 
   /**
    * @function listenForFormChanges Listen for form values changes.
@@ -336,47 +327,60 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   handleBooking(): void {
     this.isBooking = true;
     const data = this.manageReservationService.mapReservationData(
-      this.userForm.getRawValue(),
+      this.userForm.getRawValue()
     );
     if (this.reservationId) this.updateReservation(data);
     else this.createReservation(data);
   }
 
   createReservation(data): void {
-    data = {...data, firstName: 'Reservation', lastName: 'Temporary', contact: {countryCode: '+91', phoneNumber: '99999999999'}, email: 'botshot@gmail.com'}, 
-    this.$subscription.add(
-      this.manageReservationService
-        .createReservation(this.hotelId, data)
-        .subscribe(
-          (res: ReservationResponse) => {
-            this.bookingConfirmationPopup(res?.reservationNumber);
-          },
-          (error) => {
-            this.isBooking = false;
-          },
-          () => {
-            this.isBooking = false;
-          }
-        )
-    );
+    (data = {
+      ...data,
+      firstName: 'Reservation',
+      lastName: 'Temporary',
+      contact: { countryCode: '+91', phoneNumber: '99999999999' },
+      email: 'botshot@gmail.com',
+    }),
+      this.$subscription.add(
+        this.manageReservationService
+          .createReservation(this.hotelId, data)
+          .subscribe(
+            (res: ReservationResponse) => {
+              this.bookingConfirmationPopup(res?.reservationNumber);
+            },
+            (error) => {
+              this.isBooking = false;
+            },
+            () => {
+              this.isBooking = false;
+            }
+          )
+      );
   }
 
   updateReservation(data): void {
-    this.$subscription.add(
-      this.manageReservationService
-        .updateReservation(this.hotelId, this.reservationId, data)
-        .subscribe(
-          (res: ReservationResponse) => {
-            this.bookingConfirmationPopup(res?.reservationNumber);
-          },
-          (error) => {
-            this.isBooking = false;
-          },
-          () => {
-            this.isBooking = false;
-          }
-        )
-    );
+    (data = {
+      ...data,
+      firstName: 'Reservation',
+      lastName: 'Temporary',
+      contact: { countryCode: '+91', phoneNumber: '99999999999' },
+      email: 'botshot@gmail.com',
+    }),
+      this.$subscription.add(
+        this.manageReservationService
+          .updateReservation(this.hotelId, this.reservationId, data)
+          .subscribe(
+            (res: ReservationResponse) => {
+              this.bookingConfirmationPopup(res?.reservationNumber);
+            },
+            (error) => {
+              this.isBooking = false;
+            },
+            () => {
+              this.isBooking = false;
+            }
+          )
+      );
   }
 
   /**

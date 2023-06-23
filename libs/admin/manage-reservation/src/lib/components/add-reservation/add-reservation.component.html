@@ -24,6 +24,19 @@
       <hospitality-bot-payment-method></hospitality-bot-payment-method>
     </p-accordion>
     <div class="bk-summary">
+      <hospitality-bot-booking-summary
+        [displayBookingOffer]="displayBookingOffer"
+        [isBooking]="isBooking"
+        [selectedOffer]="selectedOffer"
+        [summaryData]="summaryData"
+        [offersList]="offersList"
+        (onOfferItemSelect)="offerSelect($event)"
+        (onOfferSelect)="offerSelect()"
+        (onOfferView)="handleOfferView()"
+        (onSubmitBooking)="handleBooking()"
+      ></hospitality-bot-booking-summary>
+    </div>
+    <!-- <div class="bk-summary">
       <ng-container *ngIf="!displayBookingOffer; else bookingOffer">
         <div class="bk-summary_heading">Booking Summary</div>
         <p class="divider"></p>
@@ -166,7 +179,11 @@
       </ng-container>
       <ng-template #bookingOffer>
         <div class="bk-summary_heading">
-          <mat-icon (click)="handleOfferView()">arrow_back</mat-icon> Offers
+          <mat-icon
+            (click)="displayBookingOffer = !displayBookingOffer"
+            >arrow_back</mat-icon
+          >
+          Offers
         </div>
         <p class="divider"></p>
         <ng-container *ngIf="offersList?.records?.length; else emptyOffer">
@@ -190,6 +207,6 @@
           </div>
         </ng-template>
       </ng-template>
-    </div>
+    </div> -->
   </div>
 </div>

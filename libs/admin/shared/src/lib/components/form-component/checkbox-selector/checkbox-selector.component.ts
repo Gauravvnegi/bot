@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ControlContainer, FormBuilder, FormGroup } from '@angular/forms';
 import { FormComponent } from '../form.components';
 
@@ -9,6 +9,11 @@ import { FormComponent } from '../form.components';
 })
 export class CheckboxSelectorComponent extends FormComponent {
   checkboxControlsName: string[];
+  defaultAllChecked = false;
+  @Input() set allChecked(value: boolean) {
+    this.defaultAllChecked = value;
+    this.setControls(value);
+  }
 
   checkBoxForm: FormGroup;
 
@@ -20,17 +25,17 @@ export class CheckboxSelectorComponent extends FormComponent {
   }
 
   ngOnInit(): void {
-    this.setControls();
+    this.setControls(this.defaultAllChecked);
     this.listenChanges();
   }
 
-  setControls() {
+  setControls(isSelected) {
     this.checkboxControlsName = this.menuOptions.map((item) => item.value);
     this.checkBoxForm = this.fb.group({
-      all: false,
+      all: isSelected,
     });
     for (const item of this.checkboxControlsName) {
-      this.checkBoxForm.addControl(item, this.fb.control(false));
+      this.checkBoxForm.addControl(item, this.fb.control(isSelected));
     }
   }
 

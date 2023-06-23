@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { inventoryTreeList } from '../../constants/data';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 
 @Component({
   selector: 'hospitality-bot-inventory-bulk-update',
@@ -8,11 +11,34 @@ import { inventoryTreeList } from '../../constants/data';
 })
 export class InventoryBulkUpdateComponent implements OnInit {
   inventoryTreeList = inventoryTreeList;
-  constructor() {}
+  useForm: FormGroup;
+  pageTitle = 'Bulk Update';
+  navRoutes: NavRouteOptions = [
+    {
+      label: 'Update Inventory',
+      link: '/pages/channel-manager/update-inventory/',
+    },
+    { label: 'Bulk Update', link: './' },
+  ];
 
-  ngOnInit(): void {}
+  constructor(private fb: FormBuilder, private route: Router) {}
+
+  ngOnInit(): void {
+    this.useForm = this.fb.group({
+      update: ['AVAILABILITY'], // RATE, AVAILABILITY,
+      updateValue: [''],
+      fromDate: [''],
+      toDate: [''],
+      roomType: [''],
+      selectedDays: [[]],
+    });
+  }
 
   objectChange() {
     console.log('***Object Change', this.inventoryTreeList);
+  }
+
+  onSubmit() {
+    console.log(this.useForm.getRawValue());
   }
 }

@@ -11,6 +11,10 @@ import { UpdateInventoryComponent } from './components/update-inventory/update-i
 import { UpdateRatesComponent } from './components/update-rates/update-rates.component';
 import { RatesBulkUpdateComponent } from './components/rates-bulk-update/rates-bulk-update.component';
 import { InventoryBulkUpdateComponent } from './components/inventory-bulk-update/inventory-bulk-update.component';
+import { BulkUpdateFormComponent } from './components/bulk-update-form/bulk-update-form.component';
+import { RatesNestedCheckboxTreeComponent } from './components/rates-nested-checkbox-tree/rates-nested-checkbox-tree.component';
+import { NestedPanelComponent } from './components/rates-nested-checkbox-tree/nested-panel/nested-panel.component';
+import { InventoryNestedCheckboxTreeComponent } from './components/inventory-nested-checkbox-tree/inventory-nested-checkbox-tree.component';
 
 const appRoutes: CRoutes = [
   {
@@ -73,6 +77,12 @@ export class AdminChannelMangerRoutingModule {
   static components = [
     UpdateRatesComponent,
     UpdateInventoryComponent,
+    BulkUpdateFormComponent,
     MainComponent,
+    RatesNestedCheckboxTreeComponent,
+    NestedPanelComponent,
+    RatesBulkUpdateComponent,
+    InventoryBulkUpdateComponent,
+    InventoryNestedCheckboxTreeComponent,
   ];
 }

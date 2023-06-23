@@ -40,12 +40,12 @@
           </p>
           <p class="bk-summary_roomInfo_checkoutInfo_subText">
             {{
-              userForm.get('reservationInformation?.from')
+              userForm.get('reservationInformation.from')
                 ?.value | date: 'dd/MM/yyyy'
             }}
             -
             {{
-              userForm.get('reservationInformation?.to')?.value
+              userForm.get('reservationInformation.to')?.value
                 | date: 'dd/MM/yyyy'
             }}
           </p>
@@ -56,15 +56,15 @@
           </p>
           <p class="bk-summary_roomInfo_guestInfo_subText">
             {{
-              userForm.get('roomInformation?.roomCount').value
+              userForm.get('roomInformation.roomCount').value
             }}
             Room,
             {{
-              userForm.get('roomInformation?.adultCount').value
+              userForm.get('roomInformation.adultCount').value
             }}
             Adult,
             {{
-              userForm.get('roomInformation?.childCount').value
+              userForm.get('roomInformation.childCount').value
             }}
             Kid
           </p>

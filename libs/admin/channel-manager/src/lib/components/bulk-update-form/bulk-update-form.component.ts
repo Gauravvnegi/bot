@@ -57,7 +57,16 @@ export class BulkUpdateFormComponent extends FormComponent {
   ngOnInit(): void {
     this.parentForm = this.controlContainer.control as FormGroup;
     this.hotelId = this.globalFilterService.hotelId;
+    this.listenChanges();
     this.initOptionsConfig();
+  }
+
+  listenChanges() {
+    this.parentForm
+      .get(this.controls.fromDate)
+      .valueChanges.subscribe((value) => {
+        this.endMinDate = new Date(value);
+      });
   }
 
   /**

@@ -37,24 +37,26 @@ export class CheckboxSelectorComponent extends FormComponent {
     for (const item of this.checkboxControlsName) {
       this.checkBoxForm.addControl(item, this.fb.control(isSelected));
     }
+    isSelected && this.patchMyValues(this.checkBoxForm.getRawValue());
   }
 
   listenChanges() {
     this.checkBoxForm.valueChanges.subscribe((changedCheckbox) => {
-      let selectedCheckbox = [];
-      Object.keys(changedCheckbox).forEach((key) => {
-        const value = changedCheckbox[key];
-        value && selectedCheckbox.push(key);
-      });
+      this.patchMyValues(changedCheckbox);
+    });
+  }
 
-      changedCheckbox.all &&
-        (selectedCheckbox = [...this.checkboxControlsName]);
+  patchMyValues(changedCheckbox) {
+    let selectedCheckbox = [];
+    Object.keys(changedCheckbox).forEach((key) => {
+      const value = changedCheckbox[key];
+      value && selectedCheckbox.push(key);
+    });
 
-      this.controlContainer.control.get(this.controlName).patchValue({
-        [this.controlName]: selectedCheckbox,
-      });
+    changedCheckbox.all && (selectedCheckbox = [...this.checkboxControlsName]);
 
-      console.log(this.controlContainer.control.get(this.controlName).value);
+    this.controlContainer.control.get(this.controlName).patchValue({
+      [this.controlName]: selectedCheckbox,
     });
   }
 

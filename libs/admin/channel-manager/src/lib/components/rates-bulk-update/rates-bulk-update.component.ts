@@ -25,7 +25,7 @@ export class RatesBulkUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.useForm = this.fb.group({
-      update: ['AVAILABILITY'], // RATE, AVAILABILITY,
+      update: ['RATE'], // RATE, AVAILABILITY,
       updateValue: [''],
       fromDate: [''],
       toDate: [''],

@@ -138,6 +138,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 
 .dates-header {
   display: flex;
+  flex-grow: 1;
 }
 
 .dates-cell {
@@ -185,12 +186,14 @@ $border-color: rgba(112, 112, 112, 0.35);
 .data-cell {
   display: flex;
   align-items: center;
+  flex-grow:1;
 }
 
 .cell {
   width: 65px;
   min-width: 65px;
-  max-width: 65px;
+  // max-width: 65px;
+  flex-grow: 1;
 
   // cell to be centered align
   @include item-center;
@@ -199,36 +202,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 
 //-------------------------------
 
-// switch styling
-:host ::ng-deep .p-inputswitch {
-  &:not(.p-disabled):hover {
-    .p-inputswitch-slider {
-      background-color: #b8b8b8;
-    }
-  }
-  &.p-inputswitch-checked {
-    .p-inputswitch-slider {
-      background-color: $success-state;
-    }
-    &:not(.p-disabled):hover {
-      .p-inputswitch-slider {
-        background-color: $success-state;
-      }
-    }
-  }
-  .p-inputswitch-slider {
-    height: 18px;
-    background-color: #b8b8b8;
-  }
 
-  .p-inputswitch-slider:before {
-    background: white !important;
-    height: 15px;
-    width: 15px;
-    margin-top: -7.5px;
-    left: 2.5px;
-  }
-}
 
 //------ Channels -----
 .channel {

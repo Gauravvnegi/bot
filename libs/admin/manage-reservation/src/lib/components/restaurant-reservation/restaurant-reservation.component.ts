@@ -159,7 +159,6 @@ export class RestaurantReservationComponent implements OnInit {
           this.getOfferByRoomType(res);
           this.getSummaryData();
         }
-        debugger;
       });
     this.userForm
       .get('roomInformation.roomCount')
@@ -173,7 +172,6 @@ export class RestaurantReservationComponent implements OnInit {
               .get('roomInformation.adultCount')
               .patchValue(this.userForm.get('roomInformation.roomCount').value);
         }
-        debugger;
       });
   }
 

@@ -79,6 +79,7 @@ import { NavigationHeaderComponent } from './components/navigation-header/naviga
 import { CategoryFormComponent } from './view/category-form/category-form.component';
 import { AutoCompleteComponent } from './components/form-component/auto-complete/auto-complete.component';
 import { ViewInputComponent } from './components/form-component/view-input/view-input.component';
+import { InputSwitchComponent } from './components/form-component/input-switch/input-switch.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { SkeletonShapeComponent } from './components/skeleton/skeleton-shape/skeleton-shape.component';
@@ -189,6 +190,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    InputSwitchComponent,
     MenuComponent,
     SkeletonShapeComponent,
     SkeletonDirective,
@@ -285,6 +287,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    InputSwitchComponent,
     MatMenuModule,
     MenuModule,
     MenuComponent,

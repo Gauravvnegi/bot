@@ -1,46 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { RoomsData } from '../constants/bulkupdate-response';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
-import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
-import {
-  RoomType,
-  RoomTypeList,
-} from 'libs/admin/room/src/lib/models/rooms-data-table.model';
-import {
-  AddRoomTypes,
-  RoomTypeOption,
-} from 'libs/admin/room/src/lib/types/room';
-import {
-  updateItems,
-  roomTypes,
-  weeks,
-} from '../constants/bulkupdate-response';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
+import { ControlContainer, FormGroup } from '@angular/forms';
+import { updateItems, weeks } from '../constants/bulkupdate-response';
+import { RoomTypeOption } from 'libs/admin/room/src/lib/types/room';
+import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   LibrarySearchItem,
   LibraryService,
 } from '@hospitality-bot/admin/library';
+import {
+  RoomType,
+  RoomTypeList,
+} from 'libs/admin/room/src/lib/models/rooms-data-table.model';
+import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { Subscription } from 'rxjs';
-import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ActivatedRoute, Router } from '@angular/router';
 @Component({
-  selector: 'hospitality-bot-bulk-update',
-  templateUrl: './bulk-update.component.html',
-  styleUrls: ['./bulk-update.component.scss'],
+  selector: 'hospitality-bot-bulk-update-form',
+  templateUrl: './bulk-update-form.component.html',
+  styleUrls: ['./bulk-update-form.component.scss'],
 })
-export class BulkUpdateComponent implements OnInit {
-  hotelId: string;
-  roomsData = RoomsData;
-  useForm: FormGroup;
+export class BulkUpdateFormComponent extends FormComponent {
   updateItems = updateItems;
-  roomTypes: RoomTypeOption[] = [];
   weeks = weeks;
-  pageTitle = 'Bulk Update';
-  navRoutes: NavRouteOptions = [];
-  startMinDate = new Date();
-  endMinDate = new Date();
 
+  hotelId: string;
+  parentForm: FormGroup;
+  endMinDate = new Date();
+  startMinDate = new Date();
+  roomTypes: RoomTypeOption[] = [];
   /* roomTypes options variable */
   roomTypeOffSet = 0;
   loadingRoomTypes = false;
@@ -49,46 +37,36 @@ export class BulkUpdateComponent implements OnInit {
 
   $subscription = new Subscription();
 
+  @Input() controls = {
+    update: 'update',
+    updateValue: 'updateValue',
+    fromDate: 'fromDate',
+    toDate: 'toDate',
+    roomType: 'roomType',
+    selectedDays: 'selectedDays',
+  };
+
   constructor(
-    private fb: FormBuilder,
+    public controlContainer: ControlContainer,
     private roomService: RoomService,
     private globalFilterService: GlobalFilterService,
-    private libraryService: LibraryService,
-    private route: Router
-  ) {}
-
+    private libraryService: LibraryService
+  ) {
+    super(controlContainer);
+  }
   ngOnInit(): void {
-    this.useForm = this.fb.group({
-      update: ['AVAILABILITY'], // RATE, AVAILABILITY,
-      updateValue: [''],
-      fromDate: [''],
-      toDate: [''],
-      roomType: [''],
-      selectedDays: [[]],
-    });
-
+    this.parentForm = this.controlContainer.control as FormGroup;
     this.hotelId = this.globalFilterService.hotelId;
-    this.configRoute();
+    this.listenChanges();
     this.initOptionsConfig();
   }
 
-  configRoute() {
-    const previousRoute = this.route.url.split('/');
-    previousRoute.pop();
-    this.navRoutes = [
-      {
-        label:
-          previousRoute[previousRoute.length - 1] === 'update-rates'
-            ? 'Update Rates'
-            : 'Update Inventory',
-        link: previousRoute.join('/'),
-      },
-      { label: 'Bulk Update', link: './' },
-    ];
-  }
-
-  onChangeNesting() {
-    console.log('***Object List***', this.roomsData);
+  listenChanges() {
+    this.parentForm
+      .get(this.controls.fromDate)
+      .valueChanges.subscribe((value) => {
+        this.endMinDate = new Date(value);
+      });
   }
 
   /**
@@ -175,9 +153,5 @@ export class BulkUpdateComponent implements OnInit {
       this.roomTypes = [];
       this.getRoomTypes();
     }
-  }
-
-  onSubmit() {
-    console.log(this.useForm.getRawValue());
   }
 }

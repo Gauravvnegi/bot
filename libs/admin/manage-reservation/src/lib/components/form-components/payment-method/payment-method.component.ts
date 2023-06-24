@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
-import { ConfigService, Option } from '@hospitality-bot/admin/shared';
+import {
+  ConfigService,
+  Option,
+  UserService,
+} from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
 import { PaymentMethodList } from '../../../models/reservations.model';
@@ -29,12 +33,21 @@ export class PaymentMethodComponent implements OnInit {
     private configService: ConfigService,
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
     this.initConfig();
     this.getPaymentMethod();
+    const { firstName, lastName } = this.userService.userDetails;
+
+    this.controlContainer.control
+      .get('paymentMethod.cashierFirstName')
+      .setValue(firstName);
+    this.controlContainer.control
+      .get('paymentMethod.cashierLastName')
+      .setValue(lastName);
   }
 
   initConfig() {

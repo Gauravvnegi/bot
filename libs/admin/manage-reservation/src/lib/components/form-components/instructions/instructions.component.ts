@@ -7,7 +7,7 @@ import { ControlContainer } from '@angular/forms';
   styleUrls: ['./instructions.component.scss', '../../reservation.styles.scss'],
 })
 export class InstructionsComponent implements OnInit {
-  @Input() reservationType: string;
+  @Input() bookingType: string;
 
   constructor(public controlContainer: ControlContainer) {}
 

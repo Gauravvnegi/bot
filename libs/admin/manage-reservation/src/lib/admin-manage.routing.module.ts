@@ -46,7 +46,7 @@ export const adminManageReservationRoutes: Route[] = [
         children: [
           {
             path: '',
-            component: AddReservationComponent,
+            component: RestaurantReservationComponent,
           },
           {
             path: manageReservationRoutes.addGuest1.route,

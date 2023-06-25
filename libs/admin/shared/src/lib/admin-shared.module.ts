@@ -101,6 +101,7 @@ import { CheckboxSelectorComponent } from './components/form-component/checkbox-
 import { MenuButtonComponent } from './components/menu-button/menu-button.component';
 // import { MenuModule } from 'primeng/menu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TabHeaderComponent } from './components/tab-header/tab-header.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -208,6 +209,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     TimePickerComponent,
     CheckboxSelectorComponent,
     MenuButtonComponent,
+    TabHeaderComponent,
   ],
 
   exports: [
@@ -307,6 +309,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     CheckboxSelectorComponent,
     MenuButtonComponent,
     ToggleButtonModule,
+    TabHeaderComponent,
   ],
 })
 export class AdminSharedModule {}

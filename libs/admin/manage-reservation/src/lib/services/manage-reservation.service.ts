@@ -9,6 +9,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { ReservationFormData } from '../types/forms.types';
 import { QueryConfig } from '../types/reservation.type';
+import { map } from 'rxjs/operators';
+import { EntityTypeCounts } from '../models/reservations.model';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
@@ -136,5 +138,140 @@ export class ManageReservationService extends ApiService {
     reservationData.offerId = formValue.offerId ?? '';
     reservationData.paymentRemark = formValue.paymentMethod.paymentRemark ?? '';
     return reservationData;
+  }
+
+  getReservationList(
+    hotelId,
+    config: QueryConfig = { params: '?order=DESC&limit=5' }
+  ): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`
+    ).pipe(
+      map((res) => {
+        res.records = [
+          {
+            invoiceId: 1682254737883,
+            outletName: 'Outlet 1',
+            bookingNumber: '1682254737883',
+            guestName: 'Rajesh',
+            date: '2021-05-21',
+            time: '12:00 PM',
+            totalDueAmount: 100,
+            totalAmount: 1000,
+            source: 'Agent',
+            paymentMethod: 'Cash',
+            status: 'Paid',
+            statusValues: ['Paid', 'Unpaid'],
+          },
+          {
+            invoiceId: 1682254737883,
+            outletName: 'Outlet 1',
+            bookingNumber: '1682254737883',
+            guestName: 'Rajesh',
+            date: '2021-05-21',
+            time: '12:00 PM',
+            totalDueAmount: 100,
+            totalAmount: 1000,
+            source: 'Agent',
+            paymentMethod: 'Cash',
+            status: 'Paid',
+            statusValues: ['Paid', 'Unpaid'],
+          },
+          {
+            invoiceId: 1682254737883,
+            outletName: 'Outlet 1',
+            bookingNumber: '1682254737883',
+            guestName: 'Rajesh',
+            from: '2021-05-21 12:00 PM',
+            to: '2021-05-21 12:00 PM',
+            totalDueAmount: 100,
+            totalAmount: 1000,
+            source: 'Agent',
+            paymentMethod: 'Cash',
+            status: 'Paid',
+            statusValues: ['Paid', 'Unpaid'],
+          },
+          {
+            invoiceId: 1682254737883,
+            outletName: 'Outlet 1',
+            bookingNumber: '1682254737883',
+            guestName: 'Rajesh',
+            date: '2021-05-21',
+            time: '12:00 PM',
+            totalDueAmount: 100,
+            totalAmount: 1000,
+            source: 'Agent',
+            paymentMethod: 'Cash',
+            status: 'Paid',
+            statusValues: ['Paid', 'Unpaid'],
+          },
+          {
+            invoiceId: 1682254737883,
+            outletName: 'Outlet 1',
+            bookingNumber: '1682254737883',
+            guestName: 'Rajesh',
+            date: '2021-05-21',
+            time: '12:00 PM',
+            totalDueAmount: 100,
+            totalAmount: 1000,
+            source: 'Agent',
+            paymentMethod: 'Cash',
+            status: 'Paid',
+            statusValues: ['Paid', 'Unpaid'],
+          },
+        ];
+
+        res.entityTypeCounts = {
+          All: 1,
+        };
+        res.entityStateCounts = {
+          All: 1,
+          draft: 0,
+          confirmed: 0,
+          cancelled: 0,
+          waitListed: 0,
+          noShow: 0,
+          checkedIn: 0,
+          checkedOut: 0,
+          inSession: 0,
+          completed: 0,
+        };
+
+        res.total = 5;
+
+        return res;
+      })
+    );
+  }
+
+  getOutletList(
+    hotelId,
+    config: QueryConfig = { params: '?order=DESC&limit=5' }
+  ): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`
+    ).pipe(
+      map((res) => {
+        res.records = [
+          {
+            id: 1,
+            name: 'The Hilltop',
+            type: 'Hotel',
+          },
+          {
+            id: 2,
+            name: 'The Hilltop Restaurant',
+            type: 'Restaurant',
+          },
+
+          {
+            id: 3,
+            name: 'The Hilltop Venue',
+            type: 'Venue',
+          },
+        ];
+        return res;
+      })
+    );
   }
 }

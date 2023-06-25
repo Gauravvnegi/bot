@@ -52,21 +52,11 @@
   </div>
 
   <div class="row bulk-update__row2">
-    <hospitality-bot-select
+    <hospitality-bot-room-types
       class="bulk-update__room-type"
-      label="Room Type"
-      [controlName]="controls.roomType"
-      [options]="roomTypes"
-      [props]="{
-        isAsync: true,
-        placeholder: 'Select'
-      }"
-      [loading]="loadingRoomTypes"
-      (paginate)="loadMoreRoomTypes()"
-      (onSearch)="searchRoomTypes($event)"
-      [stopEmission]="noMoreRoomTypes"
+      [controlName]="roomTypes"
     >
-    </hospitality-bot-select>
+    </hospitality-bot-room-types>
     <hospitality-bot-checkbox-selector
       class="bulk-update__week-days"
       label="WeekDays"

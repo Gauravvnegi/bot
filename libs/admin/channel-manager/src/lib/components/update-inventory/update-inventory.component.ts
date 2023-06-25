@@ -1,12 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { daysOfWeek, Option } from '@hospitality-bot/admin/shared';
-import { ratesRestriction, roomTypeData } from '../../constants/data';
+import { daysOfWeek } from '@hospitality-bot/admin/shared';
+import {
+  ratesRestrictions,
+  RestrictionAndValuesOption,
+  restrictionsRecord,
+  roomTypeData,
+} from '../../constants/data';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
@@ -14,33 +19,34 @@ import { ratesRestriction, roomTypeData } from '../../constants/data';
   styleUrls: ['./update-inventory.component.scss'],
 })
 export class UpdateInventoryComponent implements OnInit {
+  readonly restrictionsRecord = restrictionsRecord;
+
   useForm: FormGroup;
   roomTypes: RoomTypes[] = [];
 
   dates: DateOption[];
   dateLimit: number = 15;
 
-  restriction = [
-    {
-      label: 'Rates',
-      value: 'rates',
-    },
-    ...ratesRestriction
-  ];
+  restrictions: RestrictionAndValuesOption[];
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initOptions();
-
-    //form will only be after dates and
-
     this.initForm();
   }
 
   initOptions() {
     this.initDate(Date.now());
     this.initRoomTypes();
+    this.getRestrictions();
+  }
+
+  getRestrictions() {
+    this.restrictions = ratesRestrictions.map((item) => {
+      const { label, type } = this.restrictionsRecord[item];
+      return { label, type, value: item };
+    });
   }
 
   get roomTypesControl() {
@@ -61,14 +67,40 @@ export class UpdateInventoryComponent implements OnInit {
     });
 
     this.addRoomTypesControl();
+    this.addDynamicControl();
 
     this.useFormControl.date.valueChanges.subscribe((res) => {
       this.initDate(res);
     });
 
-    // this.useForm.valueChanges.subscribe((res) => {
-    //   console.log(res);
-    // });
+    this.useForm.valueChanges.subscribe((res) => {
+      console.log(res);
+    });
+  }
+
+  addDynamicControl() {
+    this.useForm.addControl(
+      'dynamicPricing',
+      this.getValuesArrayControl('boolean')
+    );
+
+    this.useFormControl.dynamicPricing.controls.forEach((control, idx) => {
+      control.valueChanges.subscribe((res) => {
+        console.log(res);
+        this.useFormControl.roomTypes.controls.forEach((roomTypeControl) => {
+          (roomTypeControl.get('ratePlans') as FormArray).controls.forEach(
+            (ratePlanControl) => {
+              const rateControl = (ratePlanControl.get('rates') as FormArray)
+                .at(idx)
+                .get('value');
+                
+              if (res.val) rateControl.disable();
+              else rateControl.enable();
+            }
+          );
+        });
+      });
+    });
   }
 
   /**
@@ -83,7 +115,7 @@ export class UpdateInventoryComponent implements OnInit {
           value: roomType.value,
         })
       );
-      this.addRatesPlanControls(roomType.ratePlans, roomTypeIdx);
+      this.addRatePlansControls(roomType.ratePlans, roomTypeIdx);
     });
   }
 
@@ -92,7 +124,7 @@ export class UpdateInventoryComponent implements OnInit {
    * @param ratePlans rate plans array
    * @param roomTypeIdx selected room type index
    */
-  addRatesPlanControls(ratePlans: RoomTypes['ratePlans'], roomTypeIdx: number) {
+  addRatePlansControls(ratePlans: RoomTypes['ratePlans'], roomTypeIdx: number) {
     const roomTypeFG = this.useFormControl.roomTypes.at(
       roomTypeIdx
     ) as FormGroup;
@@ -107,28 +139,39 @@ export class UpdateInventoryComponent implements OnInit {
           type: [ratePlan.type],
           label: [ratePlan.label],
           value: [ratePlan.value],
-          rates: this.getValuesArrayControl(),
           linked: [false],
           showChannels: [true],
+          selectedRestriction: [this.restrictions[0].value],
         })
       );
 
-      const ratesFA = ratePlansControl
-        .at(ratePlanIdx)
-        .get('rates') as FormArray;
+      this.addRatesAndRestrictionControl(ratePlansControl, ratePlanIdx);
 
-      ratesFA.controls.forEach((rateControl) => {
+      this.addChannelsControl(ratePlan.channels, roomTypeIdx, ratePlanIdx);
+    });
+  }
+
+  /**
+   * Handle Rates and Restrictions Control
+   * @param control
+   * @param idx
+   */
+  addRatesAndRestrictionControl(control: FormArray, idx: number) {
+    const controlG = control.at(idx) as FormGroup;
+    this.restrictions.forEach((item) => {
+      controlG.addControl(item.value, this.getValuesArrayControl(item.type));
+
+      const restrictionFA = control.at(idx).get(item.value) as FormArray;
+
+      restrictionFA.controls.forEach((rateControl) => {
         rateControl.valueChanges.subscribe((res) => {
-          const linkedValue = ratePlansControl.at(ratePlanIdx).get('linked')
-            .value;
+          const linkedValue = control.at(idx).get('linked').value;
 
           if (linkedValue) {
-            ratesFA.patchValue(this.getArray(res), { emitEvent: false });
+            restrictionFA.patchValue(this.getArray(res), { emitEvent: false });
           }
         });
       });
-
-      this.addChannelsControl(ratePlan.channels, roomTypeIdx, ratePlanIdx);
     });
   }
 
@@ -157,22 +200,11 @@ export class UpdateInventoryComponent implements OnInit {
           label: channel.label,
           value: channel.value,
           linked: [true],
-          rates: this.getValuesArrayControl(),
+          selectedRestriction: [this.restrictions[0].value],
         })
       );
 
-      const ratesFA = channelControl.at(channelIdx).get('rates') as FormArray;
-
-      ratesFA.controls.forEach((rateControl) => {
-        rateControl.valueChanges.subscribe((res) => {
-          const linkedValue = channelControl.at(channelIdx).get('linked')
-            .value;
-
-          if (linkedValue) {
-            ratesFA.patchValue(this.getArray(res), { emitEvent: false });
-          }
-        });
-      });
+      this.addRatesAndRestrictionControl(channelControl, channelIdx);
     });
   }
 
@@ -180,9 +212,11 @@ export class UpdateInventoryComponent implements OnInit {
    * Return value controls form array
    * @returns FormArray
    */
-  getValuesArrayControl() {
+  getValuesArrayControl(type: RestrictionAndValuesOption['type'] = 'number') {
     return this.fb.array(
-      this.dates.map((item) => this.fb.group({ value: [''] }))
+      this.dates.map((item) =>
+        this.fb.group({ value: [type === 'number' ? null : false] })
+      )
     );
   }
 
@@ -192,20 +226,7 @@ export class UpdateInventoryComponent implements OnInit {
       AbstractControl
     > & {
       roomTypes: FormArray;
-    };
-  }
-
-  initRatesControl() {
-    const da = {
-      roomType: [
-        {
-          rates: [200, 100, 200],
-          ratePlan: [
-            [200, 100, 200],
-            [100, 123, 200],
-          ],
-        },
-      ],
+      dynamicPricing: FormArray;
     };
   }
 
@@ -233,9 +254,7 @@ export class UpdateInventoryComponent implements OnInit {
     this.dates = dates;
   }
 
-  handleLink(roomTypeIdx: number, ratePlanIdx: number) {
-    debugger;
-  }
+  handleLink(roomTypeIdx: number, ratePlanIdx: number) {}
 }
 
 export type UseForm = {

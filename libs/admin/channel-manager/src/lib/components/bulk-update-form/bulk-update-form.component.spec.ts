@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PaymentFormComponent } from './payment-form.component';
+import { BulkUpdateFormComponent } from './bulk-update-form.component';
 
-describe('PaymentFormComponent', () => {
-  let component: PaymentFormComponent;
-  let fixture: ComponentFixture<PaymentFormComponent>;
+describe('BulkUpdateFormComponent', () => {
+  let component: BulkUpdateFormComponent;
+  let fixture: ComponentFixture<BulkUpdateFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PaymentFormComponent ]
+      declarations: [ BulkUpdateFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PaymentFormComponent);
+    fixture = TestBed.createComponent(BulkUpdateFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

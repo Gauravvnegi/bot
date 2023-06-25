@@ -1,11 +1,11 @@
 <p-accordionTab
-  [header]="reservationType === 'RESTAURANT' ? 'KOT Instructions' : 'Special Instructions'"
+  [header]="bookingType === 'RESTAURANT' ? 'KOT Instructions' : 'Special Instructions'"
   [formGroup]="controlContainer.control"
 >
   <div class="form-block" formGroupName="instructions">
     <hospitality-bot-text-area
       class="full-width"
-      [controlName]="reservationType === 'RESTAURANT' ? 'kotInstructions' : 'specialInstructions'"
+      [controlName]="bookingType === 'RESTAURANT' ? 'kotInstructions' : 'specialInstructions'"
       [props]="{
         placeholder: 'Enter'
       }"

@@ -125,7 +125,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       roomTypeId: ['', Validators.required],
       price: [''],
       currency: [''],
-      status: ['ACTIVE'],
+      status: ['DIRTY'],
       rooms: this.useFormArray,
     });
 
@@ -224,7 +224,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.roomService
         .getList<RoomTypeListResponse>(this.hotelId, {
-          params: `?type=ROOM_TYPE&offset=${this.roomTypeOffSet}&limit=${this.roomTypeLimit}`,
+          params: `?type=ROOM_TYPE&offset=${this.roomTypeOffSet}&limit=${this.roomTypeLimit}&createBooking=true`,
         })
         .subscribe(
           (res) => {
@@ -336,7 +336,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           this.useForm.patchValue(data);
 
           this.statusQuoForm.patchValue({
-            roomStatus:roomDetails.roomStatus,
+            roomStatus: roomDetails.roomStatus,
             remarks: roomDetails.remarks,
             foStatus: roomDetails.foStatus,
           });

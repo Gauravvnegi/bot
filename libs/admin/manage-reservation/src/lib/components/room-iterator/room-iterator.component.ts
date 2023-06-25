@@ -4,13 +4,11 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  SnackBarService
-} from '@hospitality-bot/shared/material';
+import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AdminUtilityService } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
@@ -19,7 +17,7 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 
 import {
   RoomTypeOption,
-  RoomTypeOptionList
+  RoomTypeOptionList,
 } from '../../models/reservations.model';
 @Component({
   selector: 'hospitality-bot-room-iterator',

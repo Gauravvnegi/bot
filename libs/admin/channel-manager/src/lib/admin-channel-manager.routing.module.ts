@@ -15,6 +15,7 @@ import { BulkUpdateFormComponent } from './components/bulk-update-form/bulk-upda
 import { RatesNestedCheckboxTreeComponent } from './components/rates-nested-checkbox-tree/rates-nested-checkbox-tree.component';
 import { NestedPanelComponent } from './components/rates-nested-checkbox-tree/nested-panel/nested-panel.component';
 import { InventoryNestedCheckboxTreeComponent } from './components/inventory-nested-checkbox-tree/inventory-nested-checkbox-tree.component';
+import { RoomTypesComponent } from './components/room-types/room-types.component';
 
 const appRoutes: CRoutes = [
   {
@@ -84,5 +85,6 @@ export class AdminChannelMangerRoutingModule {
     RatesBulkUpdateComponent,
     InventoryBulkUpdateComponent,
     InventoryNestedCheckboxTreeComponent,
+    RoomTypesComponent,
   ];
 }

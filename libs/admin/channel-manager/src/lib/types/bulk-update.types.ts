@@ -1,20 +1,17 @@
-export type RoomTypes = {
+export type TreeType = {
   name: string;
   id: string;
   isSelected: boolean;
+};
+export type RoomTypes = TreeType & {
   variants: Variant[];
 };
 
-export type Variant = {
-  id: string;
-  name: string;
-  isSelected: boolean;
-  channels: {
-    id: string;
-    name: string;
-    isSelected: boolean;
-  }[];
+export type Variant = TreeType & {
+  channels: Channel[];
 };
+
+export type Channel = TreeType;
 
 export type SourceEmitType = 'parent' | 'variant' | 'channel';
 export type UpdatedEmitType = {

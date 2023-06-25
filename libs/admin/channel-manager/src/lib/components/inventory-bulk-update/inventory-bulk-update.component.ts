@@ -3,6 +3,8 @@ import { inventoryTreeList } from '../../constants/data';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NavRouteOptions } from '@hospitality-bot/admin/shared';
+import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
+import { CheckBoxTreeFactory } from '../../models/bulk-update.models';
 
 @Component({
   selector: 'hospitality-bot-inventory-bulk-update',
@@ -10,7 +12,7 @@ import { NavRouteOptions } from '@hospitality-bot/admin/shared';
   styleUrls: ['./inventory-bulk-update.component.scss'],
 })
 export class InventoryBulkUpdateComponent implements OnInit {
-  inventoryTreeList = inventoryTreeList;
+  inventoryTreeList = [];
   useForm: FormGroup;
   isFormValid = false;
   pageTitle = 'Bulk Update';
@@ -22,7 +24,10 @@ export class InventoryBulkUpdateComponent implements OnInit {
     { label: 'Bulk Update', link: './' },
   ];
 
-  constructor(private fb: FormBuilder, private route: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private formService: ChannelManagerFormService
+  ) {}
 
   ngOnInit(): void {
     const today = new Date();
@@ -43,6 +48,11 @@ export class InventoryBulkUpdateComponent implements OnInit {
   listenChanges() {
     this.useForm.valueChanges.subscribe((value) => {
       this.isFormValid = this.useForm.valid;
+      this.inventoryTreeList = CheckBoxTreeFactory.buildTree(
+        this.formService.getRoomsData,
+        value.roomType,
+        { isInventory: true }
+      );
     });
   }
 

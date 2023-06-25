@@ -3,3 +3,8 @@
   @include flex-all-center();
   margin-top: 20px;
 }
+:host ::ng-deep {
+  .p-accordion-toggle-icon {
+    display: none;
+  }
+}

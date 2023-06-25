@@ -6,6 +6,7 @@ import { PanelModule } from 'primeng/panel';
 import { AdminChannelMangerRoutingModule } from './admin-channel-manager.routing.module';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { LibraryService } from '@hospitality-bot/admin/library';
+import { ChannelManagerFormService } from './services/channel-manager-form.service';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { LibraryService } from '@hospitality-bot/admin/library';
     ReactiveFormsModule,
   ],
   declarations: [...AdminChannelMangerRoutingModule.components],
-  providers: [RoomService, LibraryService],
+  providers: [RoomService, LibraryService, ChannelManagerFormService],
 })
 export class AdminChannelManagerModule {}

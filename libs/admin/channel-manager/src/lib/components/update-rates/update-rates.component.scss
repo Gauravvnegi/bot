@@ -54,6 +54,10 @@ $border-color: rgba(112, 112, 112, 0.35);
   align-items: flex-end;
   color: $title;
 
+  .room-types-select {
+    max-width: 200px;
+  }
+
   &__left {
     justify-content: space-between;
   }
@@ -107,9 +111,9 @@ $border-color: rgba(112, 112, 112, 0.35);
     @include item-center-with-space;
   }
 
-  .room-type{
+  .room-type {
     font-size: 14px;
-    &__subtitle{
+    &__subtitle {
       font-size: 12px;
     }
   }
@@ -186,7 +190,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 .data-cell {
   display: flex;
   align-items: center;
-  flex-grow:1;
+  flex-grow: 1;
 }
 
 .cell {
@@ -201,8 +205,6 @@ $border-color: rgba(112, 112, 112, 0.35);
 }
 
 //-------------------------------
-
-
 
 //------ Channels -----
 .channel {
@@ -270,7 +272,6 @@ $border-color: rgba(112, 112, 112, 0.35);
   }
 }
 
-
 // Channel toggle btn styling
 :host ::ng-deep .channel-btn {
   & .p-togglebutton {
@@ -292,4 +293,10 @@ $border-color: rgba(112, 112, 112, 0.35);
       }
     }
   }
+}
+
+.save-btn {
+  padding: 35px;
+  display: flex;
+  justify-content: center;
 }

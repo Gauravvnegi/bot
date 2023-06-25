@@ -37,6 +37,7 @@ export class BulkUpdateFormComponent extends FormComponent {
 
   $subscription = new Subscription();
 
+  // reviewPoint: no need to have control as a input (it will all be predefined as will not be be any where else)
   @Input() controls = {
     update: 'update',
     updateValue: 'updateValue',
@@ -69,6 +70,9 @@ export class BulkUpdateFormComponent extends FormComponent {
       });
   }
 
+
+  // reviewPoint: all these function should be in the room type component itself
+  
   /**
    * @function loadMoreRoomTypes load more categories options
    */

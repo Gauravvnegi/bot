@@ -3,15 +3,16 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
-  FormGroup,
+  FormGroup
 } from '@angular/forms';
 import { daysOfWeek } from '@hospitality-bot/admin/shared';
 import {
   ratesRestrictions,
   RestrictionAndValuesOption,
-  restrictionsRecord,
-  roomTypeData,
+  restrictionsRecord
 } from '../../constants/data';
+import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
+import { DateOption, RoomTypes } from '../../types/channel-manager.types';
 
 @Component({
   selector: 'hospitality-bot-update-rates',
@@ -29,7 +30,10 @@ export class UpdateRatesComponent implements OnInit {
 
   restrictions: RestrictionAndValuesOption[];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private channelMangerForm: ChannelManagerFormService
+  ) {}
 
   ngOnInit(): void {
     this.initOptions();
@@ -38,7 +42,7 @@ export class UpdateRatesComponent implements OnInit {
 
   initOptions() {
     this.initDate(Date.now());
-    this.initRoomTypes();
+    this.roomTypes = this.channelMangerForm.getRoomsData;
     this.getRestrictions();
   }
 
@@ -50,7 +54,7 @@ export class UpdateRatesComponent implements OnInit {
   }
 
   get roomTypesControl() {
-    return this.useFormControl.roomTypes.controls;
+    return this.useFormControl.roomTypes?.controls;
   }
 
   getArray(value?: number) {
@@ -76,6 +80,17 @@ export class UpdateRatesComponent implements OnInit {
     this.useForm.valueChanges.subscribe((res) => {
       console.log(res);
     });
+
+    this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
+      if (res.length) {
+        this.roomTypes = this.channelMangerForm.getRoomsData.filter((item) =>
+          res.includes(item.value)
+        );
+      } else this.roomTypes = this.channelMangerForm.getRoomsData;
+
+      this.useForm.removeControl('roomTypes');
+      this.addRoomTypesControl();
+    });
   }
 
   addDynamicControl() {
@@ -84,18 +99,27 @@ export class UpdateRatesComponent implements OnInit {
       this.getValuesArrayControl('boolean')
     );
 
+    const disableRateControls = (
+      control: AbstractControl,
+      idx: number,
+      res: { value: boolean }
+    ) => {
+      const rateControl = (control.get('rates') as FormArray).at(idx);
+      if (res.value) rateControl.disable();
+      else rateControl.enable();
+    };
+
     this.useFormControl.dynamicPricing.controls.forEach((control, idx) => {
       control.valueChanges.subscribe((res) => {
-        console.log(res);
         this.useFormControl.roomTypes.controls.forEach((roomTypeControl) => {
           (roomTypeControl.get('ratePlans') as FormArray).controls.forEach(
             (ratePlanControl) => {
-              const rateControl = (ratePlanControl.get('rates') as FormArray)
-                .at(idx)
-                .get('value');
-
-              if (res.val) rateControl.disable();
-              else rateControl.enable();
+              disableRateControls(ratePlanControl, idx, res);
+              (ratePlanControl.get('channels') as FormArray).controls.forEach(
+                (channelControl) => {
+                  disableRateControls(channelControl, idx, res);
+                }
+              );
             }
           );
         });
@@ -140,7 +164,7 @@ export class UpdateRatesComponent implements OnInit {
           label: [ratePlan.label],
           value: [ratePlan.value],
           linked: [false],
-          showChannels: [true],
+          showChannels: [false],
           selectedRestriction: [this.restrictions[0].value],
         })
       );
@@ -230,12 +254,6 @@ export class UpdateRatesComponent implements OnInit {
     };
   }
 
-  initRoomTypes() {
-    this.roomTypes = roomTypeData;
-  }
-
-  initFormSubscription() {}
-
   initDate(startDate: number, limit = 14) {
     const dates = [];
     const currentDate = new Date(startDate);
@@ -254,27 +272,7 @@ export class UpdateRatesComponent implements OnInit {
     this.dates = dates;
   }
 
-  handleLink(roomTypeIdx: number, ratePlanIdx: number) {}
+  handleSave() {
+    // this.snacu
+  }
 }
-
-export type UseForm = {
-  roomType: string[];
-  date: Date;
-  roomTypes: any[];
-};
-
-export type RoomTypes = {
-  label: string;
-  value: string;
-  ratePlans: {
-    type: string;
-    label: string;
-    value: string;
-    channels: {
-      label: string;
-      value: string;
-    }[];
-  }[];
-};
-
-export type DateOption = { day: string; date: number };

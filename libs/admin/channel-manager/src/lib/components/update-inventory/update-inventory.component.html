@@ -30,64 +30,80 @@
           </div>
         </div>
         <div class="main-section">
-          <div class="dynamic-section left-main-cell">
-            <span class="text">
-              Dynamic Pricing
-            </span>
+          <div class="heading-section left-main-cell">
+            <div class="left-main-cell__left head-cell ttp">
+              <div class="main-text">
+                Total Available Rooms
+              </div>
+              <div class="main-text">
+                (Occupancy%)
+              </div>
+            </div>
           </div>
           <ng-container formArrayName="roomTypes">
             <ng-container
               *ngFor="let roomType of roomTypesControl; let roomTypeIdx = index"
               [formGroupName]="roomTypeIdx"
             >
-              <ng-container formArrayName="ratePlans">
-                <div class="heading-section left-main-cell">
-                  <div class="left-main-cell__left main-text">
-                    {{ roomType.get('label').value }}
-                  </div>
-                  <div class="left-main-cell__right head-cell ttp">
-                    <div class="main-text">
-                      Available
-                    </div>
-                    <div class="main-text">
-                      (Occupancy%)
-                    </div>
-                  </div>
+              <div class="input-content-section left-main-cell">
+                <div class="left-main-cell__left">
+                  <div class="room-type">{{ roomType.get('label').value }}</div>
+
+                  <p-toggleButton
+                    class="channel-btn"
+                    formControlName="showChannels"
+                    [offIcon]="'pi pi-angle-down'"
+                    [onIcon]="'pi pi-angle-up'"
+                    [offLabel]="
+                      roomType.get('channels').value.length + ' Channels'
+                    "
+                    [onLabel]="
+                      roomType.get('channels').value.length + ' Channels'
+                    "
+                    iconPos="right"
+                  >
+                  </p-toggleButton>
                 </div>
+                <div class="left-main-cell__right row-cell ltr">
+                  <div class="rates">
+                    <p-dropdown
+                      formControlName="selectedRestriction"
+                      [options]="restrictions"
+                    ></p-dropdown>
+                  </div>
+                  <p-toggleButton
+                    class="link"
+                    formControlName="linked"
+                    [offIcon]="'pi pi-link'"
+                    [onIcon]="'pi pi-link'"
+                  ></p-toggleButton>
+                </div>
+              </div>
+              <ng-container
+                *ngIf="roomType.get('showChannels').value"
+                formArrayName="channels"
+              >
                 <ng-container
                   *ngFor="
-                    let ratePlan of roomTypesControl[roomTypeIdx].get(
-                      'ratePlans'
-                    ).controls;
-                    let ratePlanIdx = index
+                    let channel of roomType.get('channels').controls;
+                    let channelIdx = index
                   "
-                  [formGroupName]="ratePlanIdx"
+                  [formGroupName]="channelIdx"
                 >
-                  <div class="input-content-section left-main-cell">
+                  <div class="input-content-section left-main-cell p-bg">
                     <div class="left-main-cell__left">
-                      <div class="room-type">
-                        <div>{{ ratePlan.get('type').value }}</div>
-                        <div class="room-type__subtitle">
-                          ({{ ratePlan.get('label').value }})
+                      <div class="channel">
+                        <div class="channel-name">
+                          {{ channel.get('label').value }}
                         </div>
+                        <img
+                          class="channel-icon"
+                          src="assets/svg/tick.svg"
+                          alt="check"
+                        />
                       </div>
-
-                      <p-toggleButton
-                        class="channel-btn"
-                        formControlName="showChannels"
-                        [offIcon]="'pi pi-angle-down'"
-                        [onIcon]="'pi pi-angle-up'"
-                        [offLabel]="
-                          ratePlan.get('channels').value.length + ' Channels'
-                        "
-                        [onLabel]="
-                          ratePlan.get('channels').value.length + ' Channels'
-                        "
-                        iconPos="right"
-                      >
-                      </p-toggleButton>
                     </div>
-                    <div class="left-main-cell__right row-cell ltr">
+                    <div class="left-main-cell__right row-cell ltr w-bg">
                       <div class="rates">
                         <p-dropdown
                           formControlName="selectedRestriction"
@@ -102,47 +118,6 @@
                       ></p-toggleButton>
                     </div>
                   </div>
-                  <ng-container
-                    *ngIf="ratePlan.get('showChannels').value"
-                    formArrayName="channels"
-                  >
-                    <ng-container
-                      *ngFor="
-                        let channel of ratePlan.get('channels').controls;
-                        let ratePlanIdx = index
-                      "
-                      [formGroupName]="ratePlanIdx"
-                    >
-                      <div class="input-content-section left-main-cell p-bg">
-                        <div class="left-main-cell__left">
-                          <div class="channel">
-                            <div class="channel-name">
-                              {{ channel.get('label').value }}
-                            </div>
-                            <img
-                              class="channel-icon"
-                              src="assets/svg/tick.svg"
-                              alt="check"
-                            />
-                          </div>
-                        </div>
-                        <div class="left-main-cell__right row-cell ltr w-bg">
-                          <div class="rates">
-                            <p-dropdown
-                              formControlName="selectedRestriction"
-                              [options]="restrictions"
-                            ></p-dropdown>
-                          </div>
-                          <p-toggleButton
-                            class="link"
-                            formControlName="linked"
-                            [offIcon]="'pi pi-link'"
-                            [onIcon]="'pi pi-link'"
-                          ></p-toggleButton>
-                        </div>
-                      </div>
-                    </ng-container>
-                  </ng-container>
                 </ng-container>
               </ng-container>
             </ng-container>
@@ -163,16 +138,11 @@
           </div>
         </div>
         <div class="main-section">
-          <div class="data-cell-wrapper" formArrayName="dynamicPricing">
-            <div class="data-cell dynamic-section">
-              <div
-                class="cell"
-                *ngFor="let date of dates; let controlIdx = index"
-                [formGroupName]="controlIdx"
-              >
-                <hospitality-bot-input-switch
-                  controlName="value"
-                ></hospitality-bot-input-switch>
+          <div class="data-cell-wrapper">
+            <div class="data-cell heading-section">
+              <div class="cell" *ngFor="let date of dates">
+                <div class="main-text">9</div>
+                <div class="seconday-text">32%</div>
               </div>
             </div>
           </div>
@@ -181,27 +151,50 @@
               *ngFor="let roomType of roomTypesControl; let roomTypeIdx = index"
               [formGroupName]="roomTypeIdx"
             >
-              <ng-container formArrayName="ratePlans">
-                <div class="data-cell-wrapper">
-                  <div class="data-cell heading-section">
-                    <div class="cell" *ngFor="let date of dates">
-                      <div class="main-text">9</div>
-                      <div class="seconday-text">32%</div>
-                    </div>
+              <div
+                class="data-cell-wrapper"
+                [formArrayName]="roomType.get('selectedRestriction').value"
+              >
+                <div class="data-cell input-content-section">
+                  <div
+                    class="cell"
+                    *ngFor="let date of dates; let controlIdx = index"
+                    [formGroupName]="controlIdx"
+                  >
+                    <ng-container
+                      [ngSwitch]="
+                        restrictionsRecord[
+                          roomType.get('selectedRestriction').value
+                        ].type
+                      "
+                    >
+                      <hospitality-bot-input
+                        *ngSwitchCase="'number'"
+                        controlName="value"
+                      ></hospitality-bot-input>
+                      <hospitality-bot-input-switch
+                        *ngSwitchCase="'boolean'"
+                        controlName="value"
+                      >
+                      </hospitality-bot-input-switch>
+                    </ng-container>
                   </div>
                 </div>
+              </div>
+              <ng-container
+                *ngIf="roomType.get('showChannels').value"
+                formArrayName="channels"
+              >
                 <ng-container
                   *ngFor="
-                    let ratePlan of roomTypesControl[roomTypeIdx].get(
-                      'ratePlans'
-                    ).controls;
-                    let ratePlanIdx = index
+                    let channel of roomType.get('channels').controls;
+                    let channelIdx = index
                   "
-                  [formGroupName]="ratePlanIdx"
+                  [formGroupName]="channelIdx"
                 >
                   <div
                     class="data-cell-wrapper"
-                    [formArrayName]="ratePlan.get('selectedRestriction').value"
+                    [formArrayName]="channel.get('selectedRestriction').value"
                   >
                     <div class="data-cell input-content-section">
                       <div
@@ -212,7 +205,7 @@
                         <ng-container
                           [ngSwitch]="
                             restrictionsRecord[
-                              ratePlan.get('selectedRestriction').value
+                              channel.get('selectedRestriction').value
                             ].type
                           "
                         >
@@ -229,51 +222,6 @@
                       </div>
                     </div>
                   </div>
-                  <ng-container
-                    *ngIf="ratePlan.get('showChannels').value"
-                    formArrayName="channels"
-                  >
-                    <ng-container
-                      *ngFor="
-                        let channel of ratePlan.get('channels').controls;
-                        let ratePlanIdx = index
-                      "
-                      [formGroupName]="ratePlanIdx"
-                    >
-                      <div
-                        class="data-cell-wrapper"
-                        [formArrayName]="
-                          channel.get('selectedRestriction').value
-                        "
-                      >
-                        <div class="data-cell input-content-section">
-                          <div
-                            class="cell"
-                            *ngFor="let date of dates; let controlIdx = index"
-                            [formGroupName]="controlIdx"
-                          >
-                            <ng-container
-                              [ngSwitch]="
-                                restrictionsRecord[
-                                  channel.get('selectedRestriction').value
-                                ].type
-                              "
-                            >
-                              <hospitality-bot-input
-                                *ngSwitchCase="'number'"
-                                controlName="value"
-                              ></hospitality-bot-input>
-                              <hospitality-bot-input-switch
-                                *ngSwitchCase="'boolean'"
-                                controlName="value"
-                              >
-                              </hospitality-bot-input-switch>
-                            </ng-container>
-                          </div>
-                        </div>
-                      </div>
-                    </ng-container>
-                  </ng-container>
                 </ng-container>
               </ng-container>
             </ng-container>

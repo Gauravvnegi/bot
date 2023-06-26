@@ -13,6 +13,7 @@ export const roomTypeData = [
   {
     label: 'Luxury',
     value: 'LUX123',
+    channels: channels,
     ratePlans: [
       {
         type: 'EP',
@@ -31,6 +32,7 @@ export const roomTypeData = [
   {
     label: 'Luxury @1',
     value: 'LUX12373',
+    channels: channels,
     ratePlans: [
       {
         type: 'EP',
@@ -49,6 +51,7 @@ export const roomTypeData = [
   {
     label: 'Luxury @2',
     value: 'LUX1243',
+    channels: channels,
     ratePlans: [
       {
         type: 'EP',
@@ -67,6 +70,7 @@ export const roomTypeData = [
   {
     label: 'Deluxe',
     value: 'DEL123',
+    channels: channels,
     ratePlans: [
       {
         type: 'EP',
@@ -82,14 +86,6 @@ export const roomTypeData = [
       },
     ],
   },
-];
-
-export const ratesRestriction = [
-  { label: 'Stop Cell', value: 'asd' },
-  { label: 'CTA', value: 'CTA' },
-  { label: 'CTD', value: 'CTD' },
-  { label: 'Min Stay', value: 'Min Stay' },
-  { label: 'Max Stay', value: 'Max Stay' },
 ];
 
 export const inventoryTreeList = [
@@ -213,96 +209,3 @@ export const inventoryRestrictions = [
   'minimumStayArrival',
 ] as const;
 
-const res = {
-  hotelCode: 'SANDBOX-OTA',
-  updates: [
-    {
-      startDate: '2022-11-15',
-      endDate: '2022-11-17',
-
-      rates: [
-        {
-          roomCode: 'EXECUTIVE',
-          rate: 1700.0,
-          rateplanCode: 'EXECUTIVE-S-101',
-          restrictions: {
-            closeOnArrival: false,
-            closeOnDeparture: false,
-            exactStayArrival: null,
-            maximumAdvanceReservation: null,
-            maximumStay: null,
-            maximumStayArrival: null,
-            minimumAdvanceReservation: null,
-            minimumStay: 1,
-            minimumStayArrival: null,
-            stopSell: false,
-          },
-        },
-        {
-          roomCode: 'EXECUTIVE',
-          rate: 1700.0,
-          rateplanCode: 'EXECUTIVE-D-101',
-          restrictions: {
-            closeOnArrival: false,
-            closeOnDeparture: false,
-            exactStayArrival: null,
-            maximumAdvanceReservation: null,
-            maximumStay: null,
-            maximumStayArrival: null,
-            minimumAdvanceReservation: null,
-            minimumStay: 1,
-            minimumStayArrival: null,
-            stopSell: false,
-          },
-        },
-
-        {
-          roomCode: 'SUITE',
-          rate: 2700.0,
-          rateplanCode: 'SUITE-S-101',
-        },
-        {
-          roomCode: 'SUITE',
-          rate: 2700.0,
-          rateplanCode: 'SUITE-D-101',
-        },
-      ],
-    },
-  ],
-};
-
-const response = {
-  hotelCode: 'SANDBOX-OTA',
-  updates: [
-    {
-      startDate: '2022-11-15',
-      endDate: '2022-11-17',
-      rooms: [
-        {
-          available: 2,
-          roomCode: 'SUITE',
-          restrictions: {
-            closeOnArrival: false,
-            closeOnDeparture: false,
-            exactStayArrival: null,
-            minimumStay: 1,
-            minimumStayArrival: null,
-            stopSell: false,
-          },
-        },
-        {
-          available: 10,
-          roomCode: 'EXECUTIVE',
-          restrictions: {
-            closeOnArrival: false,
-            closeOnDeparture: false,
-            exactStayArrival: null,
-            minimumStay: 1,
-            minimumStayArrival: null,
-            stopSell: false,
-          },
-        },
-      ],
-    },
-  ],
-};

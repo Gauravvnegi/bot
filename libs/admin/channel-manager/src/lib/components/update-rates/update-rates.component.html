@@ -109,9 +109,9 @@
                     <ng-container
                       *ngFor="
                         let channel of ratePlan.get('channels').controls;
-                        let ratePlanIdx = index
+                        let channelIdx = index
                       "
-                      [formGroupName]="ratePlanIdx"
+                      [formGroupName]="channelIdx"
                     >
                       <div class="input-content-section left-main-cell p-bg">
                         <div class="left-main-cell__left">
@@ -236,9 +236,9 @@
                     <ng-container
                       *ngFor="
                         let channel of ratePlan.get('channels').controls;
-                        let ratePlanIdx = index
+                        let channelIdx = index
                       "
-                      [formGroupName]="ratePlanIdx"
+                      [formGroupName]="channelIdx"
                     >
                       <div
                         class="data-cell-wrapper"

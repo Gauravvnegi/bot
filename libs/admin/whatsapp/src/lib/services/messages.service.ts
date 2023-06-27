@@ -81,7 +81,7 @@ export class MessageService extends ApiService {
   }
 
   getGuestReservations(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}/reservations`);
+    return this.get(`/api/v1/members/${guestId}/reservations`);
   }
 
   updatePreArrivalRequest(id, data) {

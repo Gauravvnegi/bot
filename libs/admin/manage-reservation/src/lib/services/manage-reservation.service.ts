@@ -79,7 +79,7 @@ export class ManageReservationService extends ApiService {
   }
 
   addGuest(data) {
-    return this.post('api/v1/guest', data);
+    return this.post('api/v1/members?type=GUEST', data);
   }
 
   getSummaryData(config: QueryConfig): Observable<any> {

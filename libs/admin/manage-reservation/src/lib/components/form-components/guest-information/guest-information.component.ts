@@ -25,7 +25,7 @@ export class GuestInformationComponent implements OnInit {
   $subscription = new Subscription();
   entityId: string;
   hotelId: string;
-  
+
   @Input() reservationId: string;
 
   constructor(
@@ -34,7 +34,7 @@ export class GuestInformationComponent implements OnInit {
     private router: Router,
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
@@ -63,7 +63,7 @@ export class GuestInformationComponent implements OnInit {
       })
     );
   }
-  
+
   loadMoreGuests() {
     this.guestsOffSet = this.guestsOffSet + 5;
     this.getGuests();
@@ -121,7 +121,7 @@ export class GuestInformationComponent implements OnInit {
   getConfig() {
     const config = [
       ...this.globalQueries,
-      { entityState: 'ALL', offset: this.guestsOffSet, limit: 5 },
+      { entityState: 'ALL', offset: this.guestsOffSet, limit: 5, type: 'GUEST' },
     ];
     return { queryObj: this.adminUtilityService.makeQueryParams(config) };
   }

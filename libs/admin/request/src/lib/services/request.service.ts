@@ -125,11 +125,11 @@ export class RequestService extends ApiService {
   }
 
   getGuestReservations(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}/reservations`);
+    return this.get(`/api/v1/members/${guestId}/reservations`);
   }
 
   getGuestById(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}`);
+    return this.get(`/api/v1/members/${guestId}`);
   }
 
   getGuestRequestData(guestId) {

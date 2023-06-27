@@ -18,17 +18,16 @@ export class CardService extends ApiService {
     return this.get(`/api/v1/request/${guestId}/guest`);
   }
   getGuestReservations(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}/reservations`);
+    return this.get(`/api/v1/members/${guestId}/reservations`);
   }
   getGuestById(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}`);
+    return this.get(`/api/v1/members/${guestId}`);
   }
   getDepartmentList(hotelId: string, feedbackType: string) {
     return this.get(
-      `/api/v1/cms/entity/${hotelId}/feedback-form?key=${
-        feedbackType === feedback.types.stay
-          ? 'departments'
-          : 'transactionaldepartments'
+      `/api/v1/cms/entity/${hotelId}/feedback-form?key=${feedbackType === feedback.types.stay
+        ? 'departments'
+        : 'transactionaldepartments'
       }`
     );
   }

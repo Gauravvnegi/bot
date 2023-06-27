@@ -7,15 +7,15 @@ import { SearchGuestResponse } from '../types/guest.type';
 @Injectable()
 export class GuestTableService extends ApiService {
   getGuestList(config): Observable<any> {
-    return this.get(`/api/v1/guests${config.queryObj}`);
+    return this.get(`/api/v1/members${config.queryObj}`);
   }
 
   getGuestById(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}`);
+    return this.get(`/api/v1/members/${guestId}`);
   }
 
-  searchGuest(text: string): Observable<SearchGuestResponse>{
-    return this.get(`api/v1/search/guest?key=${text}`);
+  searchGuest(text: string): Observable<SearchGuestResponse> {
+    return this.get(`api/v1/search/guest?key=${text}&type=GUEST`);
   }
 
   getReservationFeedback(reservationId: string): Observable<any> {
@@ -27,15 +27,15 @@ export class GuestTableService extends ApiService {
   }
 
   getGuestReservations(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}/reservations`);
+    return this.get(`/api/v1/members/${guestId}/reservations`);
   }
 
   getGuestReservationById(guestId: string, reservationId: string) {
-    return this.get(`/api/v1/guest/${guestId}/reservations/${reservationId}`);
+    return this.get(`/api/v1/members/${guestId}/reservations/${reservationId}`);
   }
 
   exportCSV(config): Observable<any> {
-    return this.get(`/api/v1/guest/export/${config.queryObj}`, {
+    return this.get(`/api/v1/members/export/${config.queryObj}`, {
       responseType: 'blob',
     });
   }
@@ -45,11 +45,11 @@ export class GuestTableService extends ApiService {
   }
 
   getAllGuestStats(config): Observable<any> {
-    return this.get(`/api/v1/guests/stats/${config.queryObj}`);
+    return this.get(`/api/v1/members/stats/${config.queryObj}`);
   }
 
   exportCSVStat(config): Observable<any> {
-    return this.get(`/api/v1/guests/stats/export/${config.queryObj}`, {
+    return this.get(`/api/v1/members/stats/export/${config.queryObj}`, {
       responseType: 'blob',
     });
   }

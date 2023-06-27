@@ -1,5 +1,11 @@
 @import 'main';
-
+:host ::ng-deep {
+  .option-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
 .wrapper {
   @include form-block();
   padding: 0;

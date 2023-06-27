@@ -16,6 +16,8 @@ import { InstructionsComponent } from './components/form-components/instructions
 import { BillingAddressComponent } from './components/form-components/billing-address/billing-address.component';
 import { GuestInformationComponent } from './components/form-components/guest-information/guest-information.component';
 import { BookingSummaryComponent } from './components/form-components/booking-summary/booking-summary.component';
+import { ReservationComponent } from './components/reservation/reservation.component';
+import { ReservationDataTableModelComponent } from './components/table-model/reservation-datatable-model/reservation-datatable-model.component';
 
 export const adminManageReservationRoutes: Route[] = [
   {
@@ -24,7 +26,7 @@ export const adminManageReservationRoutes: Route[] = [
     children: [
       {
         path: manageReservationRoutes.manageReservation.route,
-        component: ManageReservationDataTableComponent,
+        component: ReservationComponent,
       },
       {
         path: manageReservationRoutes.addReservation.route,
@@ -37,7 +39,7 @@ export const adminManageReservationRoutes: Route[] = [
           {
             path: manageReservationRoutes.addGuest1.route,
             component: AddGuestComponent,
-          }
+          },
         ],
       },
       {
@@ -46,7 +48,7 @@ export const adminManageReservationRoutes: Route[] = [
         children: [
           {
             path: '',
-            component: AddReservationComponent,
+            component: RestaurantReservationComponent,
           },
           {
             path: manageReservationRoutes.addGuest1.route,
@@ -78,6 +80,8 @@ export class AdminManageReservationRoutingModule {
     InstructionsComponent,
     BillingAddressComponent,
     GuestInformationComponent,
-    BookingSummaryComponent
+    BookingSummaryComponent,
+    ReservationComponent,
+    ReservationDataTableModelComponent,
   ];
 }

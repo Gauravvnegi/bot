@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { RoomTypes, UpdatedEmitType } from '../../../types/bulk-update.types';
 
 @Component({
@@ -9,7 +9,7 @@ import { RoomTypes, UpdatedEmitType } from '../../../types/bulk-update.types';
     '../../../../../../../admin/shared/src/lib/components/form-component/custom-checkbox.scss',
   ],
 })
-export class NestedPanelComponent {
+export class NestedPanelComponent implements OnInit {
   @Input() roomsData: RoomTypes;
   @Output() objectUpdated: EventEmitter<UpdatedEmitType> = new EventEmitter();
   parentHeadingStyle = {
@@ -17,6 +17,11 @@ export class NestedPanelComponent {
     'font-weight': 'bold',
   };
   constructor() {}
+
+  ngOnInit(): void {
+    console.log(this.roomsData);
+  }
+
   onRoomChange(
     status: boolean,
     id: string,

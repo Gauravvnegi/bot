@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ControlContainer, FormGroup } from '@angular/forms';
-import { ConfigService, CountryCodeList, Option } from '@hospitality-bot/admin/shared';
+import { ControlContainer } from '@angular/forms';
+import {
+  ConfigService,
+  CountryCodeList,
+  Option,
+} from '@hospitality-bot/admin/shared';
 import { BookingConfig } from '../../../models/reservations.model';
 import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -14,22 +18,24 @@ import { ActivatedRoute } from '@angular/router';
 export class BookingInfoComponent implements OnInit {
   startMinDate = new Date();
   endMinDate = new Date();
-  
+
   hotelId: string;
   reservationId: string;
 
-  statusOptions: Option[] = [
-    { label: 'Confirmed', value: 'CONFIRMED' },
-    { label: 'Draft', value: 'DRAFT' },
-    { label: 'Cancelled', value: 'CANCELLED' },
-    { label: 'Wait Listed', value: 'WAIT_LISTED' },
-    { label: 'No Show', value: 'NO_SHOW' },
-    { label: 'In Session', value: 'IN_SESSION' },
-    { label: 'Completed', value: 'COMPLETED' },
-  ];
+  // statusOptions: Option[] = [
+  //   { label: 'Confirmed', value: 'CONFIRMED' },
+  //   { label: 'Draft', value: 'DRAFT' },
+  //   { label: 'Cancelled', value: 'CANCELLED' },
+  //   { label: 'Wait Listed', value: 'WAIT_LISTED' },
+  //   { label: 'No Show', value: 'NO_SHOW' },
+  //   { label: 'In Session', value: 'IN_SESSION' },
+  //   { label: 'Completed', value: 'COMPLETED' },
+  // ];
 
   countries: Option[];
-  @Input() reservationTypes: Option[];
+  @Input() reservationTypes: Option[] = [];
+  @Input() statusOptions: Option[] = [];
+  @Input() bookingType: string;
   configData: BookingConfig;
 
   constructor(
@@ -44,8 +50,20 @@ export class BookingInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // const startTime = moment(this.startMinDate).unix() * 1000;
-    // const endTime = moment(this.endMinDate).unix() * 1000;
+    const startTime = moment(this.startMinDate).unix() * 1000;
+    const endTime = moment(this.endMinDate).unix() * 1000;
+    if (this.bookingType === 'HOTEL') {
+      this.controlContainer.control
+        .get('reservationInformation.from')
+        .setValue(startTime);
+      this.controlContainer.control
+        .get('reservationInformation.to')
+        .setValue(endTime);
+    } else {
+      this.controlContainer.control
+        .get('reservationInformation.reservationDateAndTime')
+        .setValue(endTime);
+    }
     this.hotelId = this.globalFilterService.hotelId;
     this.getCountryCode();
   }

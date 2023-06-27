@@ -79,6 +79,7 @@ import { NavigationHeaderComponent } from './components/navigation-header/naviga
 import { CategoryFormComponent } from './view/category-form/category-form.component';
 import { AutoCompleteComponent } from './components/form-component/auto-complete/auto-complete.component';
 import { ViewInputComponent } from './components/form-component/view-input/view-input.component';
+import { InputSwitchComponent } from './components/form-component/input-switch/input-switch.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { SkeletonShapeComponent } from './components/skeleton/skeleton-shape/skeleton-shape.component';
@@ -101,6 +102,7 @@ import { CheckboxSelectorComponent } from './components/form-component/checkbox-
 import { MenuButtonComponent } from './components/menu-button/menu-button.component';
 // import { MenuModule } from 'primeng/menu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TabHeaderComponent } from './components/tab-header/tab-header.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -189,6 +191,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    InputSwitchComponent,
     MenuComponent,
     SkeletonShapeComponent,
     SkeletonDirective,
@@ -208,6 +211,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     TimePickerComponent,
     CheckboxSelectorComponent,
     MenuButtonComponent,
+    TabHeaderComponent,
   ],
 
   exports: [
@@ -285,6 +289,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    InputSwitchComponent,
     MatMenuModule,
     MenuModule,
     MenuComponent,
@@ -307,6 +312,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     CheckboxSelectorComponent,
     MenuButtonComponent,
     ToggleButtonModule,
+    TabHeaderComponent,
   ],
 })
 export class AdminSharedModule {}

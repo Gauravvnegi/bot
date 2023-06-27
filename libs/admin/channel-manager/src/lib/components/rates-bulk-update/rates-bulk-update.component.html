@@ -1,0 +1,24 @@
+<div class="bulkupdate-wrapper" [formGroup]="useForm" style="margin-top: 10px;">
+  <hospitality-bot-navigation-header
+    [heading]="pageTitle"
+    [routes]="navRoutes"
+  ></hospitality-bot-navigation-header>
+
+  <div class="content-wrapper">
+    <hospitality-bot-bulk-update-form></hospitality-bot-bulk-update-form>
+
+    <hospitality-bot-rates-nested-checkbox-tree
+      class="full-width"
+      [roomsData]="roomsData"
+      (change)="onChangeNesting()"
+    ></hospitality-bot-rates-nested-checkbox-tree>
+
+    <div class="action-button w-100">
+      <hospitality-bot-button
+        (click)="onSubmit()"
+        label="Save"
+        [disabled]="!isFormValid"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+</div>

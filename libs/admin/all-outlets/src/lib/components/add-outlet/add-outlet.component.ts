@@ -126,7 +126,6 @@ export class AddOutletComponent implements OnInit {
     }
 
     //set form validation on type change
-    debugger;
     const { maximumOccupancy, minimumOccupancy } = this.formControls;
     switch (type) {
       case 'RESTAURANT':

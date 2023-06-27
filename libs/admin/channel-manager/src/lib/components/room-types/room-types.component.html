@@ -1,0 +1,13 @@
+<div [formGroup]="controlContainer.control">
+  <hospitality-bot-multi-select
+    label="Room Type"
+    controlName="roomType"
+    [options]="roomTypes"
+    [settings]="{
+      placeholder: 'Select',
+      showHeader: false,
+      showChips: false,
+      maxSelectedLabels: 1
+    }"
+  ></hospitality-bot-multi-select>
+</div>

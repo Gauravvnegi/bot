@@ -1,50 +1,60 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { daysOfWeek, Option } from '@hospitality-bot/admin/shared';
-import { ratesRestriction, roomTypeData } from '../../constants/data';
+import { daysOfWeek } from '@hospitality-bot/admin/shared';
+import {
+  inventoryRestrictions,
+  RestrictionAndValuesOption,
+  restrictionsRecord,
+} from '../../constants/data';
+import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
+import { DateOption, RoomTypes } from '../../types/channel-manager.types';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
   templateUrl: './update-inventory.component.html',
-  styleUrls: ['./update-inventory.component.scss'],
+  styleUrls: ['../update-rates/update-rates.component.scss'],
 })
 export class UpdateInventoryComponent implements OnInit {
+  readonly restrictionsRecord = restrictionsRecord;
+
   useForm: FormGroup;
   roomTypes: RoomTypes[] = [];
 
   dates: DateOption[];
   dateLimit: number = 15;
 
-  restriction = [
-    {
-      label: 'Rates',
-      value: 'rates',
-    },
-    ...ratesRestriction
-  ];
+  restrictions: RestrictionAndValuesOption[];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private channelMangerForm: ChannelManagerFormService
+  ) {}
 
   ngOnInit(): void {
     this.initOptions();
-
-    //form will only be after dates and
-
     this.initForm();
   }
 
   initOptions() {
     this.initDate(Date.now());
-    this.initRoomTypes();
+    this.roomTypes = this.channelMangerForm.getRoomsData;
+    this.getRestrictions();
+  }
+
+  getRestrictions() {
+    this.restrictions = inventoryRestrictions.map((item) => {
+      const { label, type } = this.restrictionsRecord[item];
+      return { label, type, value: item };
+    });
   }
 
   get roomTypesControl() {
-    return this.useFormControl.roomTypes.controls;
+    return this.useFormControl.roomTypes?.controls;
   }
 
   getArray(value?: number) {
@@ -66,9 +76,20 @@ export class UpdateInventoryComponent implements OnInit {
       this.initDate(res);
     });
 
-    // this.useForm.valueChanges.subscribe((res) => {
-    //   console.log(res);
-    // });
+    this.useForm.valueChanges.subscribe((res) => {
+      console.log(res);
+    });
+
+    this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
+      if (res.length) {
+        this.roomTypes = this.channelMangerForm.getRoomsData.filter((item) =>
+          res.includes(item.value)
+        );
+      } else this.roomTypes = this.channelMangerForm.getRoomsData;
+
+      this.useForm.removeControl('roomTypes');
+      this.addRoomTypesControl();
+    });
   }
 
   /**
@@ -76,59 +97,45 @@ export class UpdateInventoryComponent implements OnInit {
    */
   addRoomTypesControl() {
     this.useForm.addControl('roomTypes', this.fb.array([]));
+    const ratePlansControl = this.useForm.get('roomTypes') as FormArray
     this.roomTypes.forEach((roomType, roomTypeIdx) => {
       this.useFormControl.roomTypes.push(
         this.fb.group({
-          label: roomType.label,
-          value: roomType.value,
+          label: [roomType.label],
+          value: [roomType.value],
+          linked: [false],
+          showChannels: [false],
+          selectedRestriction: [this.restrictions[0].value],
         })
       );
-      this.addRatesPlanControls(roomType.ratePlans, roomTypeIdx);
+      
+      this.addRatesAndRestrictionControl(ratePlansControl, roomTypeIdx);
+
+      this.addChannelsControl(roomType.channels, roomTypeIdx);
     });
   }
 
   /**
-   * Add Rates plan control to room type control
-   * @param ratePlans rate plans array
-   * @param roomTypeIdx selected room type index
+   * Handle Rates and Restrictions Control
+   * @param control
+   * @param idx
    */
-  addRatesPlanControls(ratePlans: RoomTypes['ratePlans'], roomTypeIdx: number) {
-    const roomTypeFG = this.useFormControl.roomTypes.at(
-      roomTypeIdx
-    ) as FormGroup;
+  addRatesAndRestrictionControl(control: FormArray, idx: number) {
+    const controlG = control.at(idx) as FormGroup;
+    this.restrictions.forEach((item) => {
+      controlG.addControl(item.value, this.getValuesArrayControl(item.type));
 
-    roomTypeFG.addControl('ratePlans', this.fb.array([]));
+      const restrictionFA = control.at(idx).get(item.value) as FormArray;
 
-    const ratePlansControl = roomTypeFG.get('ratePlans') as FormArray;
-
-    ratePlans.forEach((ratePlan, ratePlanIdx) => {
-      ratePlansControl.push(
-        this.fb.group({
-          type: [ratePlan.type],
-          label: [ratePlan.label],
-          value: [ratePlan.value],
-          rates: this.getValuesArrayControl(),
-          linked: [false],
-          showChannels: [true],
-        })
-      );
-
-      const ratesFA = ratePlansControl
-        .at(ratePlanIdx)
-        .get('rates') as FormArray;
-
-      ratesFA.controls.forEach((rateControl) => {
+      restrictionFA.controls.forEach((rateControl) => {
         rateControl.valueChanges.subscribe((res) => {
-          const linkedValue = ratePlansControl.at(ratePlanIdx).get('linked')
-            .value;
+          const linkedValue = control.at(idx).get('linked').value;
 
           if (linkedValue) {
-            ratesFA.patchValue(this.getArray(res), { emitEvent: false });
+            restrictionFA.patchValue(this.getArray(res), { emitEvent: false });
           }
         });
       });
-
-      this.addChannelsControl(ratePlan.channels, roomTypeIdx, ratePlanIdx);
     });
   }
 
@@ -141,15 +148,13 @@ export class UpdateInventoryComponent implements OnInit {
   addChannelsControl(
     channels: RoomTypes['ratePlans'][0]['channels'],
     roomTypeIdx: number,
-    ratePlanIdx: number
+ 
   ) {
-    const ratePlanFG = (this.useFormControl.roomTypes
-      .at(roomTypeIdx)
-      .get('ratePlans') as FormArray).at(ratePlanIdx) as FormGroup;
+    const roomTypeFG = this.useFormControl.roomTypes.at(roomTypeIdx) as FormGroup;
 
-    ratePlanFG.addControl('channels', this.fb.array([]));
+      roomTypeFG.addControl('channels', this.fb.array([]));
 
-    const channelControl = ratePlanFG.get('channels') as FormArray;
+    const channelControl = roomTypeFG.get('channels') as FormArray;
 
     channels.forEach((channel, channelIdx) => {
       channelControl.push(
@@ -157,22 +162,11 @@ export class UpdateInventoryComponent implements OnInit {
           label: channel.label,
           value: channel.value,
           linked: [true],
-          rates: this.getValuesArrayControl(),
+          selectedRestriction: [this.restrictions[0].value],
         })
       );
 
-      const ratesFA = channelControl.at(channelIdx).get('rates') as FormArray;
-
-      ratesFA.controls.forEach((rateControl) => {
-        rateControl.valueChanges.subscribe((res) => {
-          const linkedValue = channelControl.at(channelIdx).get('linked')
-            .value;
-
-          if (linkedValue) {
-            ratesFA.patchValue(this.getArray(res), { emitEvent: false });
-          }
-        });
-      });
+      this.addRatesAndRestrictionControl(channelControl, channelIdx);
     });
   }
 
@@ -180,9 +174,11 @@ export class UpdateInventoryComponent implements OnInit {
    * Return value controls form array
    * @returns FormArray
    */
-  getValuesArrayControl() {
+  getValuesArrayControl(type: RestrictionAndValuesOption['type'] = 'number') {
     return this.fb.array(
-      this.dates.map((item) => this.fb.group({ value: [''] }))
+      this.dates.map((item) =>
+        this.fb.group({ value: [type === 'number' ? null : false] })
+      )
     );
   }
 
@@ -192,28 +188,9 @@ export class UpdateInventoryComponent implements OnInit {
       AbstractControl
     > & {
       roomTypes: FormArray;
+      dynamicPricing: FormArray;
     };
   }
-
-  initRatesControl() {
-    const da = {
-      roomType: [
-        {
-          rates: [200, 100, 200],
-          ratePlan: [
-            [200, 100, 200],
-            [100, 123, 200],
-          ],
-        },
-      ],
-    };
-  }
-
-  initRoomTypes() {
-    this.roomTypes = roomTypeData;
-  }
-
-  initFormSubscription() {}
 
   initDate(startDate: number, limit = 14) {
     const dates = [];
@@ -233,29 +210,7 @@ export class UpdateInventoryComponent implements OnInit {
     this.dates = dates;
   }
 
-  handleLink(roomTypeIdx: number, ratePlanIdx: number) {
-    debugger;
+  handleSave() {
+    // this.snacu
   }
 }
-
-export type UseForm = {
-  roomType: string[];
-  date: Date;
-  roomTypes: any[];
-};
-
-export type RoomTypes = {
-  label: string;
-  value: string;
-  ratePlans: {
-    type: string;
-    label: string;
-    value: string;
-    channels: {
-      label: string;
-      value: string;
-    }[];
-  }[];
-};
-
-export type DateOption = { day: string; date: number };

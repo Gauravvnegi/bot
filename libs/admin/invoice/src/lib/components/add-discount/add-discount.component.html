@@ -1,0 +1,46 @@
+<div class="wrapper">
+  <div class="header">
+    <div class="header__title">
+      <div>Add Discount on {{ serviceName }}</div>
+    </div>
+    <div (click)="close()" class="header__close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="container">
+    <div class="amount-wrapper">
+      <div>
+        <span class="amount-label">Total Amount</span> : {{ originalAmount }}
+      </div>
+      <span><span class="amount-label">Total Tax</span> : {{ tax }}</span>
+    </div>
+    <div class="discount-form" [formGroup]="discountForm">
+      <hospitality-bot-prefix-field
+        preControlName="discountType"
+        postControlName="discountValue"
+        [options]="discountOptions"
+        [props]="{
+          errorMessages: errorMessages,
+          type: 'number'
+        }"
+      ></hospitality-bot-prefix-field>
+    </div>
+    <div class="total-amount">
+      Total Discount :
+      <span [ngClass]="totalDiscount > 0 ? 'discount-amount' : ''">{{
+        totalDiscount
+      }}</span>
+    </div>
+    <div class="buttons">
+      <hospitality-bot-button
+        label="Cancel"
+        (onClick)="handleCancel()"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        label="Apply"
+        [disabled]="discountForm.invalid"
+        (onClick)="handleApply()"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+</div>

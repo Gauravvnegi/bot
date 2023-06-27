@@ -44,6 +44,7 @@ import {
 } from '../../models/invoice.model';
 import { InvoiceService } from '../../services/invoice.service';
 import { InvoiceForm, PaymentField } from '../../types/forms.types';
+import { AddDiscountComponent } from '../add-discount/add-discount.component';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -131,15 +132,15 @@ export class InvoiceComponent implements OnInit {
     this.getDescriptionOptions();
   }
 
-  initOptions(){
-    this.configService.$config.subscribe(config => {
+  initOptions() {
+    this.configService.$config.subscribe((config) => {
       if (config) {
-        this.refundOption = config.currencyConfiguration.map(item => ({
+        this.refundOption = config.currencyConfiguration.map((item) => ({
           label: item.key,
           value: item.value,
         }));
         this.inputControl.currency.setValue(this.refundOption[0].value);
-      } 
+      }
     });
   }
 
@@ -236,7 +237,9 @@ export class InvoiceComponent implements OnInit {
         });
 
         this.useForm.patchValue(data, { emitEvent: false });
-        this.inputControl.guestName.patchValue(data.guestName, { emitEvent: true });
+        this.inputControl.guestName.patchValue(data.guestName, {
+          emitEvent: true,
+        });
         // Generating tax options
         this.tax = res.itemList.reduce((prev, curr) => {
           const taxes = curr.itemTax.map((item) => ({
@@ -1089,4 +1092,22 @@ export class InvoiceComponent implements OnInit {
   //     })
   //   );
   // }
+
+  addDiscountModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.width = '40%';
+    const discountComponentRef = this.modalService.openDialog(
+      AddDiscountComponent,
+      dialogConfig
+    );
+    discountComponentRef.componentInstance.originalAmount = 1000;
+    discountComponentRef.componentInstance.serviceName = 'Service';
+    discountComponentRef.componentInstance.tax = 10;
+
+    discountComponentRef.componentInstance.onClose.subscribe((res) => {
+      console.log(res);
+      this.modalService.close();
+    });
+  }
 }

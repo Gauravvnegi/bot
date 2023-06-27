@@ -1,0 +1,46 @@
+@import 'main';
+
+.wrapper {
+  .header {
+    @include flex-between-center;
+    padding: 14px 17px 12.7px 24px;
+    background-color: #f4f5f7;
+    &__title {
+      @include flex-item-center;
+      font-size: 22px;
+      font-weight: $bolder;
+      color: $tooltip;
+      .alert {
+        margin-right: 10px;
+      }
+    }
+    &__close {
+      cursor: pointer;
+    }
+  }
+  .container{   
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px 20px;
+  }
+  .amount-wrapper {
+    @include flex-space-around;
+    font-size: 18px;
+    font-weight: $bolder;
+  }
+  .amount-label {
+    font-weight: $bolder;
+  }
+  .total-amount {
+    font-weight: $bolder;
+    font-size: 18px;    
+  }
+  .discount-amount {
+    color: $success-state;
+  }
+  .buttons {
+    @include flex-justify-center;
+    gap: 10px;
+  }
+}

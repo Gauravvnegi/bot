@@ -43,7 +43,7 @@
       <hospitality-bot-room-details-data-table></hospitality-bot-room-details-data-table>
     </div>
 
-    <div class="room-pricing-wrapper">
+    <div class="room-wrapper">
       <div class="header">Services</div>
       <hr />
       <div class="room-services-wrapper">
@@ -69,7 +69,7 @@
         </div>
       </div>
     </div>
-    <!-- <div class="room-pricing-wrapper">
+    <!-- <div class="room-wrapper">
       <div class="header">Room Pricing</div>
       <hr />
       <div class="room-pricing-form-wrapper">
@@ -140,7 +140,7 @@
         </div>
       </div>
     </div> -->
-    <div class="room-pricing-wrapper" formArrayName="ratePlan">
+    <div class="room-wrapper" formArrayName="ratePlan">
       <div class="header">Room Pricing</div>
       <hr />
       <div class="room-pricing-form-wrapper">
@@ -190,8 +190,33 @@
               ></hospitality-bot-button>
             </p-header>
 
-            <div class="form-block" [formGroupName]="i">
-              <hospitality-bot-prefix-field
+            <div [formGroupName]="i" hospitality-bot-discount-header>
+              <hospitality-bot-discount-form
+                class="form-block"
+                [controls]="{
+                  originalPrice: 'basePrice',
+                  currency: 'basePriceCurrency',
+                  discountedPrice: 'bestAvailableRate',
+                  discountedPriceCurrency: 'bestRateCurrency'
+                }"
+                [labels]="{
+                  originalPriceLabel: 'Base Price-Single Occupancy',
+                  discountedPriceLabel: 'Best Available Rate'
+                }"
+                flexBasis="half-width"
+              >
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  preControlName="paxAdditionalCostCurrency"
+                  postControlName="paxAdditionalCost"
+                  label="Pax Additional Cost"
+                  [options]="currencies"
+                  [defaultProps]="{
+                    post: { type: 'number' }
+                  }"
+                ></hospitality-bot-prefix-field>
+              </hospitality-bot-discount-form>
+              <!-- <hospitality-bot-prefix-field
                 class="half-width"
                 preControlName="basePriceCurrency"
                 postControlName="basePrice"
@@ -201,8 +226,7 @@
                   post: { type: 'number' }
                 }"
                 ></hospitality-bot-prefix-field>
-                <!-- errorMessages: inputValidationProps.errorMessages, -->
-              <hospitality-bot-prefix-field
+                <hospitality-bot-prefix-field
                 class="half-width"
                 preControlName="discountType"
                 postControlName="discountValue"
@@ -212,8 +236,7 @@
                   post: { type: 'number' }
                 }"
                 ></hospitality-bot-prefix-field>
-                <!-- errorMessages: inputValidationProps.errorMessages, -->
-              <hospitality-bot-prefix-field
+                <hospitality-bot-prefix-field
                 class="half-width"
                 preControlName="bestRateCurrency"
                 postControlName="bestAvailableRate"
@@ -222,19 +245,11 @@
                 [defaultProps]="{
                   post: { type: 'number' }
                 }"
-                ></hospitality-bot-prefix-field>
-                <!-- errorMessages: inputValidationProps.errorMessages, -->
-              <hospitality-bot-prefix-field
-                class="half-width"
-                preControlName="paxAdditionalCostCurrency"
-                postControlName="paxAdditionalCost"
-                label="Pax Additional Cost"
-                [options]="currencies"
-                [defaultProps]="{
-                  post: { type: 'number' }
-                }"
-                ></hospitality-bot-prefix-field>
-                <!-- errorMessages: inputValidationProps.errorMessages, -->
+                ></hospitality-bot-prefix-field> -->
+              <!-- errorMessages: inputValidationProps.errorMessages, -->
+              <!-- errorMessages: inputValidationProps.errorMessages, -->
+              <!-- errorMessages: inputValidationProps.errorMessages, -->
+              <!-- errorMessages: inputValidationProps.errorMessages, -->
             </div>
           </p-accordionTab>
         </p-accordion>
@@ -249,10 +264,10 @@
       </div>
     </div>
 
-    <div class="room-pricing-wrapper">
+    <div class="room-wrapper">
       <div class="header">Room Occupancy</div>
       <hr />
-      <div class="room-pricing-form-wrapper">
+      <div class="room-occupancy-form-wrapper">
         <div class="input-fields">
           <hospitality-bot-input
             controlName="maxOccupancy"

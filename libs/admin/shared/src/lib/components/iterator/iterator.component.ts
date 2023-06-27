@@ -18,9 +18,8 @@ import { FormProps } from '../../types/form.type';
 export class IteratorComponent implements OnChanges {
   constructor(protected fb: FormBuilder) {}
 
-  props: FormProps = {
-    fontSize: '14px',
-  };
+  // props: FormProps = {
+  // };
 
   @Input() fields: IteratorField[];
   @Input() useFormArray: FormArray;

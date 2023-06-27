@@ -224,7 +224,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.roomService
         .getList<RoomTypeListResponse>(this.hotelId, {
-          params: `?type=ROOM_TYPE&offset=${this.roomTypeOffSet}&limit=${this.roomTypeLimit}&createBooking=true`,
+          params: `?type=ROOM_TYPE&offset=${this.roomTypeOffSet}&limit=${this.roomTypeLimit}`,
         })
         .subscribe(
           (res) => {

@@ -23,20 +23,20 @@
           <hospitality-bot-input
             *ngSwitchCase="'input'"
             [controlName]="field.name"
-            [props]="props"
             [disabled]="field.disabled"
             [props]="{
-              placeholder: field.placeholder
+              placeholder: field.placeholder ? field.placeholder : '',
+              fontSize: '14px'
             }"
           ></hospitality-bot-input>
           <hospitality-bot-select
             *ngSwitchCase="'select'"
             [controlName]="field.name"
-            [props]="props"
             [options]="field.options"
             [disabled]="field.disabled"
             [props]="{
-              placeholder: field.placeholder
+              placeholder: field.placeholder ? field.placeholder : '',
+              fontSize: '14px'
             }"
           ></hospitality-bot-select>
         </div>

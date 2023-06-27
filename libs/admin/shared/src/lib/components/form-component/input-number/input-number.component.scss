@@ -1,0 +1,10 @@
+@import '../form.component.scss';
+
+:host ::ng-deep .p-inputnumber-input {
+  pointer-events: none;
+  max-width: 60px;
+}
+
+:host ::ng-deep .p-button.p-button-icon-only {
+  background-color: $primary-cta !important;
+}

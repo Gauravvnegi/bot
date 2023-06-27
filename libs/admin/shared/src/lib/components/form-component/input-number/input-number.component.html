@@ -1,0 +1,32 @@
+<div
+  class="wrapper p-field"
+  [style.fontSize]="fontSize"
+  [ngClass]="wrapperNgClasses"
+  [formGroup]="controlContainer.control"
+>
+  <label
+    *ngIf="label && !float"
+    class="label label__static"
+    [for]="controlName"
+    >{{ label }}</label
+  >
+  <p-inputNumber
+    [formControlName]="controlName"
+    [showButtons]="true"
+    [min]="min"
+    [max]="max"
+    buttonLayout="horizontal"
+    spinnerMode="horizontal"
+    inputId="horizontal"
+    decrementButtonClass="p-button-secondary"
+    incrementButtonClass="p-button-secondary"
+    incrementButtonIcon="pi pi-plus"
+    decrementButtonIcon="pi pi-minus"
+  ></p-inputNumber>
+
+  <small *ngIf="error" class="p-error"> {{ error }}</small>
+
+  <label *ngIf="label && float" [for]="controlName" class="label">{{
+    label
+  }}</label>
+</div>

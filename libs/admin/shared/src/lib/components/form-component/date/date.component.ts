@@ -10,7 +10,7 @@ import { FormComponent } from '../form.components';
 })
 export class DateComponent extends FormComponent implements OnInit {
   dateValue: Date;
-  isDisabled = false;
+
   /* Default Date Settings */
   enableTime = true;
   enableSeconds = false;
@@ -38,6 +38,10 @@ export class DateComponent extends FormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initInputControl();
+
+    const value = this.inputControl.value;
+    if (value) this.dateValue = new Date(value);
+
     this.inputControl.valueChanges.subscribe((res) => {
       /* Epoch Date conversion to Date */
       this.dateValue = new Date(res);

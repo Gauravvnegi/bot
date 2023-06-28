@@ -270,7 +270,7 @@ export class FormComponent implements OnInit {
       menu?.addEventListener('scroll', () => {
         if (this.stopEmission) return;
         if (
-          !this.loading &&
+          !this.isLoading &&
           !this.searchText &&
           menu.scrollHeight - 251 < menu.scrollTop
         ) {
@@ -303,7 +303,8 @@ export class FormComponent implements OnInit {
    * @function onMenuClose To trigger on close
    */
   onMenuClose() {
-    if (this.searchText) { // empty search value trigger on menu close
+    if (this.searchText) {
+      // empty search value trigger on menu close
       this.onSearch.emit('');
       this.searchText = '';
     }

@@ -5,6 +5,13 @@
   max-width: 60px;
 }
 
-:host ::ng-deep .p-button.p-button-icon-only {
-  background-color: $primary-cta !important;
+:host ::ng-deep .p-button {
+  &.p-button-icon-only {
+    // background: linear-gradient(180deg, rgba(95,56,249,1) 0%, rgba(68,35,198,1) 50%, rgba(95,56,249,1) 100%) !important;
+    background: linear-gradient(180deg, rgba(95,56,249,0.85) 0%, rgba(95,56,249,1) 25%, rgba(95,56,249,1) 75%, rgba(95,56,249,0.85) 100%) !important;
+
+    &:hover {
+      background-color: $primary-hover !important;
+    }
+  }
 }

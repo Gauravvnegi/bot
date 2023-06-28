@@ -45,6 +45,7 @@ import {
 import { InvoiceService } from '../../services/invoice.service';
 import { InvoiceForm, PaymentField } from '../../types/forms.types';
 import { AddDiscountComponent } from '../add-discount/add-discount.component';
+import { AddRefundComponent } from '../add-refund/add-refund.component';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -1104,6 +1105,23 @@ export class InvoiceComponent implements OnInit {
     discountComponentRef.componentInstance.originalAmount = 1000;
     discountComponentRef.componentInstance.serviceName = 'Service';
     discountComponentRef.componentInstance.tax = 10;
+
+    discountComponentRef.componentInstance.onClose.subscribe((res) => {
+      console.log(res);
+      this.modalService.close();
+    });
+  }
+
+  addRefundModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.width = '40%';
+    const discountComponentRef = this.modalService.openDialog(
+      AddRefundComponent,
+      dialogConfig
+    );
+
+    discountComponentRef.componentInstance.maxAmount = 1000;
 
     discountComponentRef.componentInstance.onClose.subscribe((res) => {
       console.log(res);

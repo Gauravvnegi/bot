@@ -6,6 +6,7 @@ import { MainComponent } from './components/main/main.component';
 import { invoiceRoutes } from './constants/routes';
 import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
 import { AddDiscountComponent } from './components/add-discount/add-discount.component';
+import { AddRefundComponent } from './components/add-refund/add-refund.component';
 
 export const adminInvoiceRoutes: Route[] = [
   {
@@ -38,6 +39,7 @@ export class AdminInvoiceRoutingModule {
     InvoiceComponent,
     PreviewComponent,
     PaymentHistoryComponent,
-    AddDiscountComponent
+    AddDiscountComponent,
+    AddRefundComponent
   ];
 }

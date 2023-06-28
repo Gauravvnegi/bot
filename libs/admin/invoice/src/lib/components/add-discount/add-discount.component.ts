@@ -51,9 +51,9 @@ export class AddDiscountComponent implements OnInit {
       if (this.originalAmount)
         if (type === 'NUMBER') {
           const totalPercent = (100 / this.originalAmount) * discount;
-          this.totalDiscount = (totalPercent / 100) * totalAmount;
+          this.totalDiscount = +((totalPercent / 100) * totalAmount).toFixed(2);
         } else {
-          this.totalDiscount = (discount / 100) * totalAmount;
+          this.totalDiscount = +((discount / 100) * totalAmount).toFixed(2);
         }
 
       if (type === 'NUMBER' && discount > this.originalAmount) {

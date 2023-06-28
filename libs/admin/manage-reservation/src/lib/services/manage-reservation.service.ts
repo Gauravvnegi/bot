@@ -8,12 +8,23 @@ import {
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { ReservationFormData } from '../types/forms.types';
-import { QueryConfig } from '../types/reservation.type';
-import { map } from 'rxjs/operators';
+import { QueryConfig, selectedOutlet } from '../types/reservation.type';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { EntityTypeCounts } from '../models/reservations.model';
+import { EntityTabGroup } from '../constants/reservation-table';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
+  public selectedOutlet = new BehaviorSubject<EntityTabGroup>(null);
+
+  setSelectedOutlet(value: EntityTabGroup) {
+    this.selectedOutlet.next(value);
+  }
+
+  getSelectedOutlet(): Observable<EntityTabGroup> {
+    return this.selectedOutlet.asObservable().pipe(distinctUntilChanged());
+  }
+
   selectedTab = ReservationTableValue.ALL;
 
   getRoomTypeList(
@@ -221,12 +232,9 @@ export class ManageReservationService extends ApiService {
           },
         ];
 
-        res.entityTypeCounts = {
-          All: 1,
-        };
+        res.entityTypeCounts = {};
         res.entityStateCounts = {
-          All: 1,
-          draft: 0,
+          draft: 5,
           confirmed: 0,
           cancelled: 0,
           waitListed: 0,
@@ -256,18 +264,22 @@ export class ManageReservationService extends ApiService {
           {
             id: 1,
             name: 'The Hilltop',
-            type: 'Hotel',
+            type: 'HOTEL',
           },
           {
             id: 2,
-            name: 'The Hilltop Restaurant',
-            type: 'Restaurant',
+            name: 'Restaurant',
+            type: 'RESTAURANT',
           },
-
           {
             id: 3,
-            name: 'The Hilltop Venue',
-            type: 'Venue',
+            name: 'Venue',
+            type: 'VENUE',
+          },
+          {
+            id: 3,
+            name: 'Spa',
+            type: 'SPA',
           },
         ];
         return res;

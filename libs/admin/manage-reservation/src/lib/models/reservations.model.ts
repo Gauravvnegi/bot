@@ -10,6 +10,7 @@ import { SearchGuestResponse } from 'libs/admin/guests/src/lib/types/guest.type'
 export class Reservation {
   id: string;
   hotelId: string;
+  invoiceId: string;
   rooms: number;
   roomType: string;
   confirmationNo: string;
@@ -40,6 +41,7 @@ export class Reservation {
   deserialize(input: ReservationResponse) {
     this.id = input.id;
     this.hotelId = input.hotelId;
+    this.invoiceId = input?.invoiceId ?? '';
     this.rooms = input.rooms;
     this.roomType = input.roomType;
     this.confirmationNo = input.reservationNumber;

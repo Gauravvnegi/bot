@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { selectedOutlet } from '../../types/reservation.type';
+import { EntityTabGroup } from '../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-reservation',
@@ -11,8 +13,8 @@ export class ReservationComponent implements OnInit {
   hotelId: string = '';
   tabFilterIdx = 0;
   tabFilterItems = [];
-
-  selectedOutlet = this.tabFilterItems[0];
+  selectedOutlet: EntityTabGroup;
+  loading = false;
   navRoutes = [
     {
       label: 'Manage Reservation',
@@ -27,14 +29,12 @@ export class ReservationComponent implements OnInit {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-
     this.getTabFilterItems();
   }
 
   getTabFilterItems(): void {
     //api call to get the outlet list
     this.reservationService.getOutletList(this.hotelId).subscribe((res) => {
-      console.log(res, 'response');
       res.records.forEach((element) => {
         this.tabFilterItems.push({
           label: element.name,
@@ -42,11 +42,13 @@ export class ReservationComponent implements OnInit {
           type: element.type,
         });
       });
+      this.selectedOutlet = this.tabFilterItems[0];
     });
   }
 
   onSelectedTabFilterChange(event): void {
     this.tabFilterIdx = event.index;
-    this.selectedOutlet = this.tabFilterItems[event.index];
+    this.selectedOutlet = this.tabFilterItems[event.index].type;
+    this.reservationService.setSelectedOutlet(this.selectedOutlet);
   }
 }

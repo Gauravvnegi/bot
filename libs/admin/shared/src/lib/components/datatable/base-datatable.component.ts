@@ -188,6 +188,18 @@ export class BaseDatatableComponent implements OnInit {
     });
   }
 
+  resetTableValues() {
+    this.isTabFilters = true;
+    this.rowsPerPage = 5;
+    this.first = 0;
+    this.values = [];
+    this.tabFilterItems = [];
+    this.tabFilterIdx = 0;
+    this.filterChips = []; 
+    this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
+    this.totalRecords = 0;
+  }
+
   getSubscribedFilters(module, table, tabFilters) {
     this.tabFilterItems = this.tabFilterService.getSubscribedFilters(
       module,
@@ -431,7 +443,6 @@ export class BaseDatatableComponent implements OnInit {
         value: key,
         total: value,
       }));
-
       const selectedTabIndex = this.tabFilterItems.findIndex(
         (item) => item.value === this.selectedTab
       );
@@ -454,7 +465,6 @@ export class BaseDatatableComponent implements OnInit {
           total: value,
           type: record[key]?.type ?? 'active',
         } as Chip<T>;
-
         return stateCount;
       });
 
@@ -462,12 +472,10 @@ export class BaseDatatableComponent implements OnInit {
         totalCount = this.filterChips.reduce((prev, curr) => {
           const isSelected = this.selectedFilterChips.has(curr.value);
           const res = prev + (isSelected ? curr.total : 0);
-
           return res;
         }, 0);
       }
     } else this.isQuickFilters = false;
-
     this.totalRecords = totalCount;
   }
 
@@ -487,7 +495,6 @@ export class BaseDatatableComponent implements OnInit {
     if (chips.length + 1 === this.filterChips.length && !isAllAType) {
       return [];
     }
-
     return !isStatusBoolean
       ? chips.map((item) => ({ [key]: item }))
       : [

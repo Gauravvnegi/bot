@@ -15,6 +15,7 @@ export type ReservationListResponse = {
 export type ReservationResponse = {
   id: string;
   hotelId: string;
+  invoiceId: string;
   rooms: number;
   roomType: string;
   confirmationNo: string;

@@ -7,11 +7,12 @@ import {
   QueryConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import { cols } from '../../../constants/reservation-table';
+import { outletCols } from '../../../constants/reservation-table';
 import { Subscription } from 'rxjs';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
 import { Router } from '@angular/router';
+import { selectedOutlet } from '../../../types/reservation.type';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable-model',
@@ -25,7 +26,7 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
   implements OnInit {
   navLink: string = ''; //link to navigate to booking page on the basis of outlet type
   hotelId: string;
-  cols = cols;
+  cols = outletCols;
   globalQueries = [];
   tableName: string = 'Reservation';
 
@@ -48,6 +49,9 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
 
     //set the nav link on the basis of outlet type
     switch (value.type) {
+      case 'HOTEL': 
+        this.navLink = '/pages/efrontdesk/manage-reservation/add-reservation';
+        break;
       case 'RESTAURANT':
         this.navLink = `/hotel/${this.hotelId}/reservation/restaurant`;
         break;
@@ -129,9 +133,3 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
   };
 }
 
-type selectedOutlet = {
-  id: string;
-  type: string;
-  label: string;
-  value: string;
-};

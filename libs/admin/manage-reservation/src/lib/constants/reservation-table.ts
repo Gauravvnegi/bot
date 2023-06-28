@@ -44,7 +44,7 @@ export enum EntityTabGroup {
 export const reservationStatus: ReservationStatus[] = [
   'DRAFT',
   'CONFIRMED',
-  'CANCELLED',
+  'CANCELED',
 ];
 
 export const reservationStatusDetails: Record<
@@ -52,15 +52,15 @@ export const reservationStatusDetails: Record<
   { label: string; type: FlagType }
 > = {
   DRAFT: {
-    label: 'DRAFT',
+    label: 'Draft',
     type: 'active',
   },
   CONFIRMED: {
     label: 'Confirmed',
     type: 'completed',
   },
-  CANCELLED: {
-    label: 'Cancelled',
+  CANCELED: {
+    label: 'Canceled',
     type: 'failed',
   },
 };
@@ -83,56 +83,61 @@ export const filters = [
   },
 ];
 
-// export const cols: Cols[] = [
-//   {
-//     field: 'roomNumber',
-//     header: 'Room No / Type',
-//     sortType: 'number',
-//     searchField: ['roomNumber', 'roomType'],
-//   },
-//   {
-//     field: 'confirmationNo',
-//     header: 'Confirmation No',
-//     sortType: 'number',
-//   },
-//   {
-//     field: 'fullName',
-//     header: 'Guest',
-//     sortType: 'string',
-//   },
-//   {
-//     field: 'from',
-//     header: 'Arrival / Departure',
-//     sortType: 'number',
-//     isSearchDisabled: true,
-//   },
-//   {
-//     field: 'totalDueAmount',
-//     header: 'Amount Due / Total (INR)',
-//     sortType: 'number',
-//     isSearchDisabled: true,
-//   },
-//   {
-//     field: 'sourceName',
-//     header: 'Source Name / Type',
-//     sortType: 'string',
-//     searchField: ['sourceName', 'source'],
-//   },
-//   {
-//     field: 'totalPaidAmount',
-//     header: 'Payment',
-//     sortType: 'number',
-//     isSearchDisabled: true,
-//   },
-//   {
-//     field: 'reservationType',
-//     header: 'Actions',
-//     sortType: 'string',
-//     isSearchDisabled: true,
-//   },
-// ];
+export const hotelCols: Cols[] = [
+  {
+    field: 'invoiceId',
+    header: 'Invoice Id',
+    sortType: 'string',
+  },
+  {
+    field: 'roomNumber',
+    header: 'Room No / Type',
+    sortType: 'number',
+    searchField: ['roomNumber', 'roomType'],
+  },
+  {
+    field: 'confirmationNo',
+    header: 'Confirmation No',
+    sortType: 'number',
+  },
+  {
+    field: 'fullName',
+    header: 'Guest',
+    sortType: 'string',
+  },
+  {
+    field: 'from',
+    header: 'Arrival / Departure',
+    sortType: 'number',
+    isSearchDisabled: true,
+  },
+  {
+    field: 'totalDueAmount',
+    header: 'Amount Due / Total (INR)',
+    sortType: 'number',
+    isSearchDisabled: true,
+  },
+  {
+    field: 'sourceName',
+    header: 'Source Name / Type',
+    sortType: 'string',
+    searchField: ['sourceName', 'source'],
+  },
+  {
+    field: 'totalPaidAmount',
+    header: 'Payment',
+    sortType: 'number',
+    isSearchDisabled: true,
+  },
+  {
+    field: 'reservationType',
+    header: 'Actions',
+    sortType: 'string',
+    isSearchDisabled: true,
+  },
+];
 
-export const cols: Cols[] = [
+export const outletCols: Cols[] = [
   {
     field: 'invoiceId',
     header: 'Invoice Id',
@@ -197,7 +202,7 @@ export enum ReservationStatusType {
   ALL = 'ALL',
   CONFIRMED = 'CONFIRMED',
   DRAFT = 'DRAFT',
-  CANCELLED = 'CANCELED',
+  CANCELED = 'CANCELED',
 }
 
 // export const reservationStatus: Status[] = [
@@ -226,7 +231,7 @@ export const chips: Chip<
   | ReservationStatusType.ALL
   | ReservationStatusType.DRAFT
   | ReservationStatusType.CONFIRMED
-  | ReservationStatusType.CANCELLED
+  | ReservationStatusType.CANCELED
 >[] = [
   {
     label: 'All',
@@ -251,7 +256,7 @@ export const chips: Chip<
   },
   {
     label: 'Cancelled ',
-    value: ReservationStatusType.CANCELLED,
+    value: ReservationStatusType.CANCELED,
     total: 0,
     isSelected: false,
     type: 'failed',

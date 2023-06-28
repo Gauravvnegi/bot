@@ -19,4 +19,11 @@ export type QueryConfig = {
   params: string;
 };
 
-export type ReservationStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELLED'
+export type ReservationStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELED';
+
+export type selectedOutlet = {
+  id: string;
+  type: string;
+  label: string;
+  value: string;
+};

@@ -33,8 +33,13 @@
     font-weight: $bolder;
   }
   .total-amount {
+    @include flex-col;
     font-weight: $bolder;
-    font-size: 18px;    
+    font-size: 18px;   
+    .note{
+      font-size: 14px;
+      font-weight: $medium;
+    }
   }
   .discount-amount {
     color: $success-state;

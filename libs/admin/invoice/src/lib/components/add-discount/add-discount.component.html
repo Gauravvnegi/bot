@@ -26,10 +26,13 @@
       ></hospitality-bot-prefix-field>
     </div>
     <div class="total-amount">
-      Total Discount :
-      <span [ngClass]="totalDiscount > 0 ? 'discount-amount' : ''">{{
-        totalDiscount
-      }}</span>
+      <div>
+        Total Discount :
+        <span [ngClass]="totalDiscount > 0 ? 'discount-amount' : ''">{{
+          totalDiscount
+        }}</span>
+      </div>
+      <span class="note">Total Amount is Inclusive of tax</span>
     </div>
     <div class="buttons">
       <hospitality-bot-button

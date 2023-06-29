@@ -37,8 +37,8 @@ export class VenueReservationComponent implements OnInit {
   hotelId: string;
   reservationId: string;
 
-  reservationTypes: Option[] = [];
   statusOptions: Option[] = [];
+  eventOptions: Option[] = [];
 
   offersList: OfferList;
   selectedOffer: OfferData;
@@ -81,15 +81,19 @@ export class VenueReservationComponent implements OnInit {
   }
 
   initOptions() {
-    this.reservationTypes = [
-      { label: 'Dine-in', value: 'DINE_IN' },
-      { label: 'Delivery', value: 'Delivery' },
-    ];
     this.statusOptions = [
       { label: 'Confirmed', value: 'CONFIRMED' },
       { label: 'Waitlist', value: 'WAITLIST' },
       { label: 'Draft', value: 'DRAFT' },
     ];
+    this.eventOptions = [
+      { label: 'Anniversary', value: 'ANNIVERSARY'},
+      { label: 'Birthday', value: 'BIRTHDAY'},
+      { label: 'Wedding', value: 'WEDDING'},
+      { label: 'Conference', value: 'CONFERENCE'},
+      { label: 'Exhibition', value: 'EXHIBITION'},
+      { label: 'Seminar', value: 'SEMINAR'},
+    ]
   }
 
   /**
@@ -100,12 +104,13 @@ export class VenueReservationComponent implements OnInit {
 
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
-        reservationDateAndTime: ['', Validators.required],
-        reservationType: ['', Validators.required],
+        from: ['', Validators.required],
+        to: ['', Validators.required],
         status: ['', Validators.required],
         source: ['', Validators.required],
         sourceName: ['', [Validators.required, Validators.maxLength(60)]],
         marketSegment: ['', Validators.required],
+        eventType: ['', [Validators.required]],
       }),
       bookingInformation: this.fb.group({
         menuItems: this.venueBookingInfo,
@@ -175,17 +180,8 @@ export class VenueReservationComponent implements OnInit {
 
   getReservationId(): void {
     if (this.reservationId) {
-      this.reservationTypes = [
-        { label: 'Draft', value: 'DRAFT' },
-        { label: 'Confirmed', value: 'CONFIRMED' },
-        { label: 'Cancelled', value: 'CANCELED' },
-      ];
       this.getReservationDetails();
     } else {
-      this.reservationTypes = [
-        { label: 'Draft', value: 'DRAFT' },
-        { label: 'Confirmed', value: 'CONFIRMED' },
-      ];
       this.userForm.valueChanges.subscribe((_) => {
         if (!this.formValueChanges) {
           this.formValueChanges = true;

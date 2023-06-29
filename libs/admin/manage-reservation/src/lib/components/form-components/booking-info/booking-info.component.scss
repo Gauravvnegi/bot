@@ -12,3 +12,12 @@
     flex-basis: 100%;
   }
 }
+
+:host ::ng-deep .to-date {
+  .label {
+    visibility: hidden;
+  }
+  .text__wrapper {
+    min-width: max-content;
+  }
+}

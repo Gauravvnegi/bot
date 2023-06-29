@@ -35,6 +35,7 @@ export class BookingInfoComponent implements OnInit {
   countries: Option[];
   @Input() reservationTypes: Option[] = [];
   @Input() statusOptions: Option[] = [];
+  @Input() eventTypes: Option[] = [];
   @Input() bookingType: string;
   configData: BookingConfig;
 
@@ -59,7 +60,7 @@ export class BookingInfoComponent implements OnInit {
       this.controlContainer.control
         .get('reservationInformation.to')
         .setValue(endTime);
-    } else {
+    } else if (this.bookingType !== 'VENUE') {
       this.controlContainer.control
         .get('reservationInformation.reservationDateAndTime')
         .setValue(endTime);

@@ -26,7 +26,33 @@
         [minDate]="endMinDate"
       ></hospitality-bot-date>
     </ng-container>
-    <ng-container *ngIf="bookingType !== 'HOTEL'">
+    <ng-container *ngIf="bookingType === 'VENUE'">
+      <div class="half-width type-wrapper">
+        <hospitality-bot-date
+          class="half-width"
+          controlName="from"
+          label="Reservation Date & Time"
+          [settings]="{
+            enableTime: true
+          }"
+          [props]="{
+            placeholder: 'From'
+          }"
+        ></hospitality-bot-date>
+        <hospitality-bot-date
+          label="date"
+          class="half-width to-date"
+          controlName="to"
+          [settings]="{
+            enableTime: true
+          }"
+          [props]="{
+            placeholder: 'To'
+          }"
+        ></hospitality-bot-date>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="bookingType !== 'HOTEL' && bookingType !== 'VENUE'">
       <hospitality-bot-date
         class="half-width"
         controlName="reservationDateAndTime"
@@ -81,5 +107,14 @@
       [options]="configData?.marketSegment"
       [props]="{ placeholder: 'Select' }"
     ></hospitality-bot-select>
+    <ng-container *ngIf="bookingType === 'VENUE'">
+      <hospitality-bot-select
+        class="half-width"
+        controlName="eventType"
+        label="Event Types"
+        [options]="eventTypes"
+        [props]="{ placeholder: 'Select' }"
+      ></hospitality-bot-select>
+    </ng-container>
   </div>
 </p-accordionTab>

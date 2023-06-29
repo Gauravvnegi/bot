@@ -2,20 +2,18 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 import {
-  RoomListResponse,
   RoomTypeListResponse,
 } from 'libs/admin/room/src/lib/types/service-response';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { ReservationFormData } from '../types/forms.types';
-import { QueryConfig, selectedOutlet } from '../types/reservation.type';
+import { QueryConfig } from '../types/reservation.type';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { EntityTypeCounts } from '../models/reservations.model';
 import { EntityTabGroup } from '../constants/reservation-table';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
-  public selectedOutlet = new BehaviorSubject<EntityTabGroup>(null);
+  public selectedOutlet = new BehaviorSubject<EntityTabGroup>(EntityTabGroup.HOTEL);
 
   setSelectedOutlet(value: EntityTabGroup) {
     this.selectedOutlet.next(value);

@@ -8,7 +8,6 @@
   display: flex;
 }
 
-
 :host ::ng-deep .p-accordion-header-text {
   @include form-header();
   padding: 15px 6px;
@@ -189,15 +188,11 @@
   }
 }
 
-
 :host ::ng-deep .payment-rule-accordion {
   .p-accordion-content {
     position: relative;
   }
 }
-
-
-
 
 :host ::ng-deep .amount-to-pay {
   .label {
@@ -297,10 +292,11 @@
 }
 
 :host ::ng-deep .deducted-amount {
-    .label {
-      visibility: hidden;
-    }
-    .text__wrapper{
-        min-width: max-content;
-    }
+  .label {
+    visibility: hidden;
   }
+  .text__wrapper {
+    min-width: max-content;
+  }
+}
+

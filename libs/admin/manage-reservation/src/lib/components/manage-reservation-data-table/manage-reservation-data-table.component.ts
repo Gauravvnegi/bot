@@ -15,7 +15,7 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import {
   EntityTabGroup,
   hotelCols,
@@ -36,6 +36,7 @@ import { ReservationListResponse } from '../../types/response.type';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { LazyLoadEvent } from 'primeng/api';
+import { switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -58,6 +59,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   globalQueries = [];
   configData: BookingConfig;
   isAllTabFilterRequired: boolean = true;
+  private destroy$ = new Subject<void>();
 
   constructor(
     public fb: FormBuilder,
@@ -80,11 +82,11 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.listenForOutletChange();
   }
 
-  initTableDetails = () => {
-    this.selectedOutlet === EntityTabGroup.HOTEL
-      ? (this.cols = hotelCols)
-      : (this.cols = outletCols);
-  };
+  // initTableDetails = () => {
+  //   this.selectedOutlet === EntityTabGroup.HOTEL
+  //     ? (this.cols = hotelCols)
+  //     : (this.cols = outletCols);
+  // };
 
   getConfigData(): void {
     this.configService
@@ -135,6 +137,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         this.initTableValue();
       }
       if (this.selectedOutlet) this.previousOutlet = this.selectedOutlet;
+      this.selectedOutlet === EntityTabGroup.HOTEL ? this.cols = hotelCols : this.cols = outletCols
     });
   }
 
@@ -144,59 +147,120 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   initTableValue() {
     this.loading = true;
 
-    if (this.selectedOutlet === EntityTabGroup.HOTEL) {
-      this.subscriptionList$.add(
-        this.manageReservationService
-          .getReservationItems<ReservationListResponse>(this.getQueryConfig())
-          .subscribe(
-            (res) => {
-              this.reservationLists = new ReservationList().deserialize(res);
-              this.values = this.reservationLists.reservationData.map(
-                (item) => {
-                  return {
-                    ...item,
-                    statusValues: this.getStatusValues(item.reservationType),
-                  };
-                }
-              );
-              this.initFilters(
-                this.reservationLists.entityTypeCounts,
-                this.reservationLists.entityStateCounts,
-                this.reservationLists.total,
-                this.reservationStatusDetails
-              );
-              this.loading = false;
-            },
-            () => {
-              this.values = [];
-              this.loading = false;
-            },
-            this.initTableDetails
-          )
+    this.manageReservationService
+      .getSelectedOutlet()
+      .pipe(
+        switchMap((selectedOutlet) => {
+          // Store the selected outlet
+          this.selectedOutlet = selectedOutlet;
+
+          if (this.selectedOutlet === EntityTabGroup.HOTEL) {
+            // API call for hotel data
+            return this.manageReservationService.getReservationItems<
+              ReservationListResponse
+            >(this.getQueryConfig());
+          } else {
+            // API call for outlet data
+            return this.manageReservationService.getReservationList(
+              this.hotelId,
+              this.getOutletConfig()
+            );
+          }
+        }),
+        takeUntil(this.destroy$) // Unsubscribe when the destroy$ subject emits
+      )
+      .subscribe(
+        (res) => {
+          // Process the response and update the data
+          if (this.selectedOutlet === EntityTabGroup.HOTEL) {
+            this.reservationLists = new ReservationList().deserialize(res);
+            this.values = this.reservationLists.reservationData.map((item) => {
+              return {
+                ...item,
+                statusValues: this.getStatusValues(item.reservationType),
+              };
+            });
+            this.initFilters(
+              this.reservationLists.entityTypeCounts,
+              this.reservationLists.entityStateCounts,
+              this.reservationLists.total,
+              this.reservationStatusDetails
+            );
+          } else {
+            this.values = res.records;
+            this.initFilters(
+              res.entityTypeCounts,
+              res.entityStateCounts,
+              res.total
+            );
+          }
+          this.loading = false;
+        },
+        (error) => {
+          // Handle error if needed
+          this.values = [];
+          this.loading = false;
+        },
       );
-    } else {
-      this.subscriptionList$.add(
-        this.manageReservationService
-          .getReservationList(this.hotelId, this.getOutletConfig())
-          .subscribe(
-            (res) => {
-              this.values = res.records;
-              this.initFilters(
-                res.entityTypeCounts,
-                res.entityStateCounts,
-                res.total
-              );
-              this.loading = false;
-            },
-            () => {
-              this.values = [];
-              this.loading = false;
-            },
-            this.initTableDetails
-          )
-      );
-    }
   }
+  // initTableValue() {
+
+  //   if(this.loading) return;
+
+  //   this.loading = true;
+  //   if (this.selectedOutlet === EntityTabGroup.HOTEL) {
+  //     this.subscriptionList$.add(
+  //       this.manageReservationService
+  //         .getReservationItems<ReservationListResponse>(this.getQueryConfig())
+  //         .subscribe(
+  //           (res) => {
+  //             this.reservationLists = new ReservationList().deserialize(res);
+  //             this.values = this.reservationLists.reservationData.map(
+  //               (item) => {
+  //                 return {
+  //                   ...item,
+  //                   statusValues: this.getStatusValues(item.reservationType),
+  //                 };
+  //               }
+  //             );
+  //             this.initFilters(
+  //               this.reservationLists.entityTypeCounts,
+  //               this.reservationLists.entityStateCounts,
+  //               this.reservationLists.total,
+  //               this.reservationStatusDetails
+  //             );
+  //             this.loading = false;
+  //           },
+  //           () => {
+  //             this.values = [];
+  //             this.loading = false;
+  //           },
+  //           this.initTableDetails
+  //         )
+  //     );
+  //   } else {
+  //     this.subscriptionList$.add(
+  //       this.manageReservationService
+  //         .getReservationList(this.hotelId, this.getOutletConfig())
+  //         .subscribe(
+  //           (res) => {
+  //             this.values = res.records;
+  //             this.initFilters(
+  //               res.entityTypeCounts,
+  //               res.entityStateCounts,
+  //               res.total
+  //             );
+  //             this.loading = false;
+  //           },
+  //           () => {
+  //             this.values = [];
+  //             this.loading = false;
+  //           },
+  //           this.initTableDetails
+  //         )
+  //     );
+  //   }
+  // }
 
   /**
    * To get query params
@@ -387,5 +451,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

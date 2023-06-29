@@ -1,28 +1,5 @@
 <ng-container [formGroup]="controlContainer.control">
   <div class="container-wrapper">
-    <div class="header">Services</div>
-    <hr />
-    <div class="sub-container-wrapper">
-      <hospitality-bot-custom-select
-        label="Complimentary Services"
-        description="This is a free of cost services"
-        formControlName="serviceIds"
-        [itemList]=""
-        [noRecordsAction]="{
-          description: 'No services found',
-          imageSrc: 'assets/images/empty-table-service.png'
-        }"
-      >
-        <hospitality-bot-button
-          label="+ Import Services"
-          variant="text"
-          link=""
-        ></hospitality-bot-button>
-      </hospitality-bot-custom-select>
-    </div>
-  </div>
-
-  <div class="container-wrapper">
     <div class="header">Occupancy</div>
     <hr />
     <div class="occupancy-wrapper">
@@ -44,6 +21,36 @@
           postOptions: areaUnits
         }"
       ></hospitality-bot-prefix-field>
+    </div>
+  </div>
+
+  <div class="container-wrapper">
+    <div class="header">Services</div>
+    <hr />
+    <div class="sub-container-wrapper">
+      <hospitality-bot-custom-select
+        label="Complimentary Services"
+        description="This is a free of cost services"
+        formControlName="serviceIds"
+        [itemList]=""
+        [noRecordsAction]="{
+          description: 'No services found',
+          imageSrc: 'assets/images/empty-table-service.png'
+        }"
+      >
+        <hospitality-bot-button
+          label="+ Import Services"
+          variant="text"
+          link="pages/outlet/all-outlets/add-outlet/import-service"
+        ></hospitality-bot-button>
+      </hospitality-bot-custom-select>
+      <div class="backdrop">
+        <hospitality-bot-button
+          label="Create and Continue"
+          variant="contained"
+          (onClick)="onCreateAndContinue('service')"
+        ></hospitality-bot-button>
+      </div>
     </div>
   </div>
 
@@ -72,42 +79,6 @@
   </div>
 
   <hospitality-bot-food-package></hospitality-bot-food-package>
-
-  <div class="container-wrapper">
-    <div class="header">Other Details</div>
-    <hr />
-    <div class="details-wrapper">
-      <hospitality-bot-prefix-field
-        label="Days Of operation"
-        class="half-width"
-        preControlName="openingDay"
-        postControlName="closingDay"
-        preFieldType="select"
-        postFieldType="select"
-        [preOptions]="days"
-        [postOptions]="days"
-        [settings]="{
-          layout: 'dashed'
-        }"
-      >
-      </hospitality-bot-prefix-field>
-
-      <hospitality-bot-prefix-field
-        label="Timings"
-        class="half-width"
-        preControlName="openingHour"
-        postControlName="closingHour"
-        preFieldType="select"
-        postFieldType="select"
-        [preOptions]="hours"
-        [postOptions]="hours"
-        [settings]="{
-          layout: 'dashed'
-        }"
-      >
-      </hospitality-bot-prefix-field>
-    </div>
-  </div>
 
   <hospitality-bot-rules
     controlName="rules"

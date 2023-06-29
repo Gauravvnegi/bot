@@ -103,6 +103,7 @@ import { MenuButtonComponent } from './components/menu-button/menu-button.compon
 // import { MenuModule } from 'primeng/menu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TabHeaderComponent } from './components/tab-header/tab-header.component';
+import { ImportServiceContainerComponent } from './components/import-service-container/import-service-container.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -212,6 +213,7 @@ import { TabHeaderComponent } from './components/tab-header/tab-header.component
     CheckboxSelectorComponent,
     MenuButtonComponent,
     TabHeaderComponent,
+    ImportServiceContainerComponent,
   ],
 
   exports: [
@@ -313,6 +315,7 @@ import { TabHeaderComponent } from './components/tab-header/tab-header.component
     MenuButtonComponent,
     ToggleButtonModule,
     TabHeaderComponent,
+    ImportServiceContainerComponent,
   ],
 })
 export class AdminSharedModule {}

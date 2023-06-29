@@ -76,7 +76,7 @@ export class HotelInfoFormComponent implements OnInit {
         propertyCategory: [''],
         emailId: ['', [Validators.pattern(Regex.EMAIL_REGEX)]],
         contact: this.fb.group({
-          countryCode: [''],
+          countryCode: ['+91'],
           number: [''],
         }),
         gstNumber: [''],

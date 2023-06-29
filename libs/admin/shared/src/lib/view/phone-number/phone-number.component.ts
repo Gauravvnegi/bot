@@ -4,7 +4,6 @@ import { ConfigService, CountryCodeList } from '@hospitality-bot/admin/shared';
 import { FormComponent } from '../../components/form-component/form.components';
 import { ControlContainer } from '@angular/forms';
 
-
 @Component({
   selector: 'hospitality-bot-phone-number',
   templateUrl: './phone-number.component.html',
@@ -29,6 +28,7 @@ export class PhoneNumberComponent extends FormComponent {
   ngOnInit(): void {
     this.initInputControl();
     this.getCountryCode();
+    this.initInputControl();
   }
 
   getCountryCode() {

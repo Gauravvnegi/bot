@@ -134,10 +134,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       this.selectedOutlet = value;
       if (this.selectedOutlet && this.selectedOutlet !== this.previousOutlet) {
         this.resetTableValues();
-        this.initTableValue();
+        this.loading=true;
+        // this.initTableValue();
       }
       if (this.selectedOutlet) this.previousOutlet = this.selectedOutlet;
-      this.selectedOutlet === EntityTabGroup.HOTEL ? this.cols = hotelCols : this.cols = outletCols
+      this.selectedOutlet === EntityTabGroup.HOTEL
+        ? (this.cols = hotelCols)
+        : (this.cols = outletCols);
     });
   }
 
@@ -146,7 +149,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   initTableValue() {
     this.loading = true;
-
     this.manageReservationService
       .getSelectedOutlet()
       .pipe(
@@ -186,6 +188,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
               this.reservationLists.total,
               this.reservationStatusDetails
             );
+            this.loading = false;
           } else {
             this.values = res.records;
             this.initFilters(
@@ -193,8 +196,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
               res.entityStateCounts,
               res.total
             );
+            this.loading = false;
           }
-          this.loading = false;
         },
         (error) => {
           // Handle error if needed

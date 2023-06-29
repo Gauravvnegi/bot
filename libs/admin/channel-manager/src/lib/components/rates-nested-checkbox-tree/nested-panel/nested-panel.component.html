@@ -94,16 +94,7 @@
               <span class="panel-tree__header-checkbox">
                 <div
                   [id]="roomsData.id + '-' + variant.id + '-' + channel.id"
-                  (click)="
-                    onRoomChange(
-                      !channel.isSelected,
-                      channel.id,
-                      'channel',
-                      variantIndex,
-                      channelIndex
-                    )
-                  "
-                  class="enable-child checkbox"
+                  class="checkbox"
                 >
                   <img
                     *ngIf="channel.isSelected"

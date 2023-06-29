@@ -7,7 +7,7 @@
   label {
     @include flex-item-center();
     font-size: 14px;
-    gap: 4px;
+    gap: 10px;
     input {
       height: 16px;
       width: 16px;
@@ -17,9 +17,9 @@
 }
 
 .checkbox {
-  height: 1.2em;
+  height: 1.4em;
   background: $border-color;
-  width: 1.2em;
+  width: 1.4em;
   border-radius: 2px;
   opacity: 0.8;
   &__img {

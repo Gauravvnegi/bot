@@ -19,16 +19,14 @@
         (change)="toggleSelectAll()"
         class="d-none"
       />
-      <span class="panel-tree__header-checkbox">
-        <div (click)="toggleSelectAll()" class="checkbox">
-          <img
-            *ngIf="checkBoxForm.get('all')?.value"
-            class="checkbox__img"
-            src="assets/svg/checkboxSelect.svg"
-            alt="select"
-          />
-        </div>
-      </span>
+      <div (click)="toggleSelectAll()" class="checkbox">
+        <img
+          *ngIf="checkBoxForm.get('all')?.value"
+          class="checkbox__img"
+          src="assets/svg/checkboxSelect.svg"
+          alt="select"
+        />
+      </div>
 
       <span class="checkbox-label"> All</span>
     </label>

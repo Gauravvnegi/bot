@@ -26,13 +26,21 @@
             [useFormArray]="menuItemsArray"
             ctaLabel="+ Add Item"
           ></hospitality-bot-iterator>
+          <hospitality-bot-text-area
+            class="full-width"
+            controlName="kotInstructions"
+            label="KOT Instructions"
+            [props]="{
+              placeholder: 'Enter'
+            }"
+          ></hospitality-bot-text-area>
         </div>
       </p-accordionTab>
       <hospitality-bot-guest-information></hospitality-bot-guest-information>
       <hospitality-bot-billing-address></hospitality-bot-billing-address>
-      <hospitality-bot-instructions
+      <!-- <hospitality-bot-instructions
         [bookingType]="bookingType"
-      ></hospitality-bot-instructions>
+      ></hospitality-bot-instructions> -->
       <hospitality-bot-payment-rule
         [deductedAmount]="deductedAmount"
       ></hospitality-bot-payment-rule>
@@ -52,8 +60,8 @@
           subHeader: 'The Leela, New Delhi, 210002',
           price: '2000',
           discountedPrice: '1200',
-          guestInfo: 'For 2 Adults',
-          stayInfo: 'some info'
+          guestInfo: numberOfAdults,
+          stayInfo: tableNumber
         }"
       >
         <div class="bk-summary_roomInfo_checkoutInfo">

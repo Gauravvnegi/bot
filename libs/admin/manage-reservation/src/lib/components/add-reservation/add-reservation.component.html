@@ -11,6 +11,7 @@
         <hospitality-bot-room-iterator
           [userFormGroup]="userForm"
           (refreshData)="getSummaryData()"
+          (listenChanges)="listenForFormChanges()"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>

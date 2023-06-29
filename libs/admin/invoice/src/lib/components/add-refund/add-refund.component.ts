@@ -21,15 +21,18 @@ export class AddRefundComponent implements OnInit {
 
   initForm(): void {
     this.userForm = this.fb.group({
-      refundAmount: [0, [Validators.required, Validators.max(this.maxAmount)]],
+      refundAmount: [
+        null,
+        [Validators.required, Validators.max(this.maxAmount + 1)],
+      ],
       remarks: [''],
     });
   }
 
   handleApply() {
     this.onClose.next({
-      refundAmount: this.userForm.get('refundAmount').value,
-      remarks: this.userForm.get('remarks').value
+      refundAmount: +this.userForm.get('refundAmount').value,
+      remarks: this.userForm.get('remarks').value,
     });
   }
 

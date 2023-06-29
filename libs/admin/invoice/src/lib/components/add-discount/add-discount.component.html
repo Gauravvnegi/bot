@@ -1,18 +1,19 @@
 <div class="wrapper">
   <div class="header">
     <div class="header__title">
-      <div>Add Discount on {{ serviceName }}</div>
+      <div *ngIf="!isRemove">Add Discount on {{ serviceName }}</div>
+      <div *ngIf="isRemove">Remove Discount for {{ serviceName }}</div>
     </div>
     <div (click)="close()" class="header__close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
   </div>
-  <div class="container">
+  <div *ngIf="!isRemove" class="container">
     <div class="amount-wrapper">
       <div>
         <span class="amount-label">Total Amount</span> : {{ originalAmount }}
       </div>
-      <span><span class="amount-label">Total Tax</span> : {{ tax }}</span>
+      <!-- <span><span class="amount-label">Total Tax</span> : {{ tax }}</span> -->
     </div>
     <div class="discount-form" [formGroup]="discountForm">
       <hospitality-bot-prefix-field
@@ -32,7 +33,7 @@
           totalDiscount
         }}</span>
       </div>
-      <span class="note">Total Amount is Inclusive of tax</span>
+      <span class="note">Total Tax will be updated for this billing item</span>
     </div>
     <div class="buttons">
       <hospitality-bot-button
@@ -44,6 +45,24 @@
         label="Apply"
         [disabled]="discountForm.invalid"
         (onClick)="handleApply()"
+      ></hospitality-bot-button>
+    </div>
+  </div>
+
+  <div *ngIf="isRemove" class="container">
+    <div class="remove-discount">
+      Are you sure you want to remove discount?
+    </div>
+    <div class="buttons">
+      <hospitality-bot-button
+        label="Cancel"
+        (onClick)="handleCancel()"
+        variant="outlined"
+      ></hospitality-bot-button>
+      <hospitality-bot-button
+        label="Remove"
+        [disabled]="discountForm.invalid"
+        (onClick)="handleRemove()"
       ></hospitality-bot-button>
     </div>
   </div>

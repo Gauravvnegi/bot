@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Option } from '@hospitality-bot/admin/shared';
+import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
 import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
 
 @Component({
@@ -11,9 +11,9 @@ import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
 export class AddDiscountComponent implements OnInit {
   readonly errorMessages = errorMessages;
 
-  @Input() tax: number;
   @Input() serviceName: string;
   @Input() originalAmount: number;
+  @Input() isRemove = false;
   totalDiscount: number = 0;
   discountForm: FormGroup;
   discountOptions: Option[] = [
@@ -23,7 +23,10 @@ export class AddDiscountComponent implements OnInit {
 
   @Output() onClose = new EventEmitter();
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private adminUtilityService: AdminUtilityService
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -46,14 +49,13 @@ export class AddDiscountComponent implements OnInit {
       const discount = +(discountValue.value ?? 0);
       const type = discountType.value;
 
-      const totalAmount =
-        this.originalAmount + (this.tax / 100) * this.originalAmount;
       if (this.originalAmount)
         if (type === 'NUMBER') {
-          const totalPercent = (100 / this.originalAmount) * discount;
-          this.totalDiscount = +((totalPercent / 100) * totalAmount).toFixed(2);
+          this.totalDiscount = discount;
         } else {
-          this.totalDiscount = +((discount / 100) * totalAmount).toFixed(2);
+          this.totalDiscount = this.adminUtilityService.getEpsilonValue(
+            +((discount / 100) * this.originalAmount)
+          );
         }
 
       if (type === 'NUMBER' && discount > this.originalAmount) {
@@ -98,12 +100,18 @@ export class AddDiscountComponent implements OnInit {
 
   handleApply() {
     this.onClose.next({
-      totalDisount: this.totalDiscount
-    })
+      totalDiscount: this.totalDiscount,
+    });
   }
 
   handleCancel() {
     this.onClose.emit();
+  }
+
+  handleRemove() {
+    this.onClose.emit({
+      totalDiscount: 0,
+    });
   }
 
   close() {

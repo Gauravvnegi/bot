@@ -1,7 +1,7 @@
 <div class="wrapper">
   <div class="header">
     <div class="header__title">
-      <div>Refund discount-amount</div>
+      <div>Refund Amount</div>
     </div>
     <div (click)="close()" class="header__close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -11,13 +11,14 @@
     <hospitality-bot-input
       class="half-width"
       controlName="refundAmount"
-      label="Add Refund"
+      label="Amount"
       [props]="{
         type: 'number',
         errorMessages: {
-          max: 'Cannot be more than paid amount'
+          max: 'Needs to be less than the excessive paid amount'
         }
       }"
+      [max]="maxAmount"
     ></hospitality-bot-input>
     <hospitality-bot-input
       class="full-width"

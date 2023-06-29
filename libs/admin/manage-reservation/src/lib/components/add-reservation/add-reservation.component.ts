@@ -137,7 +137,7 @@ export class AddReservationComponent implements OnInit {
       }),
       paymentMethod: this.fb.group({
         totalPaidAmount: [
-          '',
+          0,
           [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
         ],
         currency: [''],

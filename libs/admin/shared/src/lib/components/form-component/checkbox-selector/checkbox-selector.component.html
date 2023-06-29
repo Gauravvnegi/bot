@@ -17,14 +17,20 @@
         type="checkbox"
         formControlName="all"
         (change)="toggleSelectAll()"
-        class="checkbox-input"
+        class="d-none"
       />
-      <span class="checkbox-label">
-        <span class="custom-check-icon" *ngIf="checkBoxForm.get('all').value"
-          >&#10003;</span
-        >
-        All</span
-      >
+      <span class="panel-tree__header-checkbox">
+        <div (click)="toggleSelectAll()" class="checkbox">
+          <img
+            *ngIf="checkBoxForm.get('all')?.value"
+            class="checkbox__img"
+            src="assets/svg/checkboxSelect.svg"
+            alt="select"
+          />
+        </div>
+      </span>
+
+      <span class="checkbox-label"> All</span>
     </label>
 
     <div *ngFor="let item of menuOptions">
@@ -33,16 +39,20 @@
           type="checkbox"
           [formControlName]="item.value"
           (change)="toggleCheckboxSelection()"
-          class="checkbox-input"
+          class="d-none"
         />
-        <span class="checkbox-label">
-          <span
-            class="custom-check-icon"
-            *ngIf="checkBoxForm.get(item.value).value"
-            >&#10003;</span
-          >
-          {{ item.label }}</span
-        >
+        <span class="panel-tree__header-checkbox">
+          <div (click)="toggleCheckboxSelection()" class="checkbox">
+            <img
+              *ngIf="checkBoxForm.get(item.value).value"
+              class="checkbox__img"
+              src="assets/svg/checkboxSelect.svg"
+              alt="select"
+            />
+          </div>
+        </span>
+
+        <span class="checkbox-label"> {{ item.label }}</span>
       </label>
     </div>
     <small *ngIf="error" class="p-error"> {{ error }}</small>

@@ -195,7 +195,7 @@
               </td>
 
               <td>
-                <hospitality-bot-input
+                <!-- <hospitality-bot-input
                   controlName="unit"
                   [props]="{
                     errorMessages: errorMessages,
@@ -206,7 +206,18 @@
                     tableFormArray.at(rowIndex).get('isDiscount').value ||
                     tableFormArray.at(rowIndex).get('isRefund').value
                   "
-                ></hospitality-bot-input>
+                ></hospitality-bot-input> -->
+                <hospitality-bot-input-number
+                  controlName="unit"
+                  [settings]="{
+                    min:1
+                  }"
+                  [disabled]="
+                  tableFormArray.at(rowIndex).get('isDisabled').value ||
+                  tableFormArray.at(rowIndex).get('isDiscount').value ||
+                  tableFormArray.at(rowIndex).get('isRefund').value
+                "
+                ></hospitality-bot-input-number>
                 <!-- <hospitality-bot-input-number
                   controlName="unit"
                   [disabled]="

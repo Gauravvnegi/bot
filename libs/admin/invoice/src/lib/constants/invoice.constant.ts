@@ -30,6 +30,6 @@ export const addDiscountMenu: Option[] = [
   { label: 'Add Discount', value: DiscountActionItem.ADD_DISCOUNT },
 ];
 export const editDiscountMenu: Option[] = [
-  { label: 'Edit Discount', value: DiscountActionItem.EDIT_DISCOUNT },
+  { label: 'Update Discount', value: DiscountActionItem.EDIT_DISCOUNT },
   { label: 'Remove Discount', value: DiscountActionItem.REMOVE_DISCOUNT },
 ];

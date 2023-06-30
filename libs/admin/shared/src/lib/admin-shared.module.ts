@@ -19,6 +19,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonComponent } from './components/button/button.component';
@@ -92,6 +93,7 @@ import { CreateWithViewComponent } from './view/create-with-view/create-with-vie
 import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/toggle-switch-label.component';
 import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
+import { InputNumberComponent } from './components/form-component/input-number/input-number.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
 import { AddressComponent } from './components/address/address-component.component';
@@ -132,6 +134,7 @@ import { BackdropDirective } from './directives/backdrop.directive';
     MatMenuModule,
     MenuModule,
     ToggleButtonModule,
+    InputNumberModule,
   ],
   declarations: [
     DatatableComponent,
@@ -216,6 +219,7 @@ import { BackdropDirective } from './directives/backdrop.directive';
     TabHeaderComponent,
     BackdropDirective,
     ImportServiceContainerComponent,
+    InputNumberComponent,
   ],
 
   exports: [
@@ -318,6 +322,7 @@ import { BackdropDirective } from './directives/backdrop.directive';
     ToggleButtonModule,
     TabHeaderComponent,
     ImportServiceContainerComponent,
+    InputNumberComponent,
   ],
 })
 export class AdminSharedModule {}

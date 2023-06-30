@@ -515,8 +515,10 @@ export class InvoiceComponent implements OnInit {
         >[] = selectedService.taxes.map((item) => ({
           taxId: item.id,
           itemId: selectedService.value,
-          debitAmount: this.adminUtilityService.getEpsilonValue(selectedService.amount * (item.taxValue / 100)),
-          billItemId: selectedService.value,
+          debitAmount: this.adminUtilityService.getEpsilonValue(
+            selectedService.amount * (item.taxValue / 100)
+          ),
+          billItemId: item.id,
           description: `${item.taxType} ${selectedService.label}`,
         }));
 
@@ -542,7 +544,6 @@ export class InvoiceComponent implements OnInit {
     unit.valueChanges
       .pipe(startWith(unit.value), pairwise())
       .subscribe(([prevUnitQuantity, currentUnitQuantity]) => {
-  
         if (unit.invalid || debitAmount.invalid) return;
         const currentDebitAmount = debitAmount.value;
         const newDebitAmount =
@@ -1040,8 +1041,7 @@ export class InvoiceComponent implements OnInit {
     this.tableFormArray.controls.forEach((control: Controls) => {
       if (control.value.itemId === itemId && control.value.taxId) {
         const currentTax = control.value.debitAmount;
-        const taxFraction = currentTax / taxedAmount
-    
+        const taxFraction = currentTax / taxedAmount;
 
         const newTax = this.adminUtilityService.getEpsilonValue(
           newTaxedAmount * taxFraction

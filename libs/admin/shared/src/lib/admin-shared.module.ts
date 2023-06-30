@@ -103,6 +103,7 @@ import { MenuButtonComponent } from './components/menu-button/menu-button.compon
 // import { MenuModule } from 'primeng/menu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TabHeaderComponent } from './components/tab-header/tab-header.component';
+import { BackdropDirective } from './directives/backdrop.directive';
 @NgModule({
   imports: [
     CommonModule,
@@ -212,6 +213,7 @@ import { TabHeaderComponent } from './components/tab-header/tab-header.component
     CheckboxSelectorComponent,
     MenuButtonComponent,
     TabHeaderComponent,
+    BackdropDirective,
   ],
 
   exports: [

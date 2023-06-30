@@ -31,7 +31,6 @@ export class Invoice {
     input: BillSummaryData,
     data: {
       cashierName: string;
-      bookingNumber: string;
       guestName: string;
       currency: string;
     }
@@ -39,8 +38,8 @@ export class Invoice {
     const companyDetails = input?.companyDetails;
 
     this.invoiceNumber = input.invoiceCode;
-    this.confirmationNumber = data.bookingNumber;
-    this.guestName = data.bookingNumber;
+
+    this.guestName = data.guestName;
 
     this.companyName = companyDetails?.companyName ?? '';
 
@@ -101,7 +100,7 @@ export class TableData {
   date: number;
   isNew: boolean;
   isDiscount: boolean;
-  isRefund: boolean;
+  isRefundOrPayment: boolean;
   isDisabled: boolean;
 
   deserialize(input: BillItem) {
@@ -116,9 +115,9 @@ export class TableData {
     this.taxId = input.taxId;
     this.date = input.date;
     this.isNew = false;
-    this.isDisabled = !input.isAddOn || !!input.taxId || !input.itemId;
+    this.isDisabled = !input.isAddOn || !!input.taxId;
     this.isDiscount = !!input.isCoupon;
-    this.isRefund = !input.itemId;
+    this.isRefundOrPayment = !input.itemId;
 
     return this;
   }

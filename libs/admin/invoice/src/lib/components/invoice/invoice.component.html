@@ -216,7 +216,9 @@
                   [disabled]="
                     tableFormArray.at(rowIndex).get('isDisabled').value ||
                     tableFormArray.at(rowIndex).get('isDiscount').value ||
-                    tableFormArray.at(rowIndex).get('isRefundOrPayment').value
+                    tableFormArray.at(rowIndex).get('isRefundOrPayment')
+                      .value ||
+                    !tableFormArray.at(rowIndex).get('billItemId').value
                   "
                 ></hospitality-bot-input-number>
               </td>

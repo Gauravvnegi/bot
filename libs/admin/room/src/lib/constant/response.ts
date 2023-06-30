@@ -11,12 +11,16 @@ export const roomStatuses: RoomStatus[] = [
 ];
 
 export const roomStatusDetails: Record<
-  RoomStatus | RoomFoStatus,
+  RoomStatus | RoomFoStatus | 'DIRTY',
   { label: string; type: FlagType }
 > = {
   CLEAN: {
     label: 'Clean',
     type: 'active',
+  },
+  DIRTY: {
+    label: 'Dirty',
+    type: 'warning',
   },
   INSPECTED: {
     label: 'Inspected',
@@ -61,4 +65,4 @@ export const ratePlanResponse: RatePlanOptions[] = [
     label: 'AP (With all 3 Meals)',
     value: 'AP (With all 3 Meals)',
   },
-]  
+];

@@ -28,7 +28,6 @@ export class PhoneNumberComponent extends FormComponent {
   ngOnInit(): void {
     this.initInputControl();
     this.getCountryCode();
-    this.initInputControl();
   }
 
   getCountryCode() {

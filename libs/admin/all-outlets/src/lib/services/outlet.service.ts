@@ -58,10 +58,35 @@ export class OutletService extends ApiService {
     );
   }
 
-  //dummy
+  outletResponse: Partial<OutletResponse> = {
+    id: '85692aa9-cf86-4f5d-8fe6-9783c9884e9b',
+    name: 'test',
+    type: 'RESTAURANT',
+    contact: {
+      countryCode: '+91',
+      phoneNumber: '1234567890',
+    },
+    dayOfOperationStart: 'MONDAY',
+    dayOfOperationEnd: 'SUNDAY',
+    timeDayStart: '10:00',
+    timeDayEnd: '22:00',
+    address: {
+      city: 'test',
+      state: 'test',
+      country: 'test',
+      pinCode: 12333,
+    },
+  };
 
-  getOutletById(outletId: string): Observable<OutletResponse> {
-    return this.get(`/api/v1/entity/${outletId}`);
+  //dummy
+  getOutletById(outletId: string): Observable<any> {
+    return this.get(
+      `api/v1/entity/fb8c0b81-1062-43c1-a341-6677e8687c32/library/85692aa9-cf86-4f5d-8fe6-9783c9884e9b?type=SERVICE`
+    ).pipe(
+      map((res) => {
+        return (res = this.outletResponse);
+      })
+    );
   }
 
   updateOutlet(outletId: string, data): Observable<any> {
@@ -69,9 +94,34 @@ export class OutletService extends ApiService {
   }
 
   addOutlet(data): Observable<any> {
-    return this.post(
-      `/api/v1/entity/onboarding?source=CREATE_WITH&onboardingType=OUTLET`,
-      data
+    console.log(data, 'add-outlet');
+    return this.patch(
+      `/api/v1/entity/fb8c0b81-1062-43c1-a341-6677e8687c32/library/85692aa9-cf86-4f5d-8fe6-9783c9884e9b?type=SERVICE`,
+      {
+        id: '85692aa9-cf86-4f5d-8fe6-9783c9884e9b',
+        name: 'test',
+        rate: 0.0,
+        startDate: 0,
+        endDate: 0,
+        active: true,
+        packageCode: 'A0SC62RT',
+        imageUrl:
+          'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/hotel/fb8c0b81-1062-43c1-a341-6677e8687c32/static-content/files/download_(1).jpeg',
+        source: 'BOTSHOT',
+        hotelId: 'fb8c0b81-1062-43c1-a341-6677e8687c32',
+        type: 'Complimentary',
+        unit: 'Km',
+        autoAccept: true,
+        hasChild: false,
+        parentId: 'c1a739bc-224b-11eb-adc1-0242ac120002',
+        categoryName: 'Wifi',
+        discountValue: 0.0,
+        enableVisibility: ['CHECKIN'],
+        discountedPrice: 0.0,
+        created: 1688019650577,
+        updated: 1688019650699,
+        taxes: [],
+      }
     );
   }
 

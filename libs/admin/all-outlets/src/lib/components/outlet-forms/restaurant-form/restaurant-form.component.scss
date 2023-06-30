@@ -37,6 +37,8 @@
     height: fit-content !important;
   }
   .sub-container-wrapper {
+    position: relative;
+
     padding: 34.5px 50px 37px 50px;
   }
   ::ng-deep .wrapper {
@@ -53,4 +55,30 @@
 
 .half-width {
   flex-basis: 50%;
+}
+
+.backdrop {
+  @include flex-all-center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(255, 255, 255);
+
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(252, 252, 252, 1) 25%,
+    rgba(252, 252, 252, 1) 75%,
+    rgba(255, 255, 255, 0.6) 100%
+  );
+  // background: radial-gradient(
+  //   circle,
+  //   rgba(255, 255, 255, 1) 0%,
+  //   rgba(255, 255, 255, 0.7987570028011204) 51%,
+  //   rgba(255, 255, 255, 0.3085609243697479) 100%
+  // );
+
+  opacity: 0.7;
 }

@@ -5,7 +5,11 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import {
   HotelDetailService,
   NavRouteOptions,
@@ -17,6 +21,7 @@ import { cousins } from '../../constants/data';
 import { outletRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
 import {
+  Feature,
   OutletForm,
   RestaurantForm,
   SpaForm,
@@ -53,14 +58,23 @@ export class AddOutletComponent implements OnInit {
     private outletService: OutletService,
     private snackbarService: SnackBarService,
     private router: Router,
+    private route: ActivatedRoute,
     private hotelDetailService: HotelDetailService
   ) {
+    this.router.events.subscribe(
+      ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
+        const outletId = snapshot?.params['outletId'];
+        if (outletId) this.outletId = outletId;
+      }
+    );
+
     const { navRoutes, title } = outletRoutes['addOutlet'];
     this.navRoutes = navRoutes;
     this.pageTitle = title;
   }
 
   ngOnInit(): void {
+    console.log(this.outletId);
     this.siteId = this.hotelDetailService.siteId;
     this.initOptions();
     this.initForm();
@@ -68,7 +82,6 @@ export class AddOutletComponent implements OnInit {
 
   initOptions() {
     this.outletService.getOutletConfig().subscribe((res) => {
-      console.log(res);
       this.types = res.type.map((item) => ({
         label: item.name,
         value: item.value,
@@ -84,7 +97,7 @@ export class AddOutletComponent implements OnInit {
       type: [[], [Validators.required]],
       subType: [[], [Validators.required]],
       contact: this.fb.group({
-        countryCode: [''],
+        countryCode: ['+91'],
         number: [''],
       }),
       openingDay: [''],
@@ -109,6 +122,7 @@ export class AddOutletComponent implements OnInit {
     //patch value if there is outlet id
     if (this.outletId) {
       this.outletService.getOutletById(this.outletId).subscribe((res) => {
+        console.log(res, 'response');
         this.useForm.patchValue(res);
       });
     }
@@ -148,7 +162,7 @@ export class AddOutletComponent implements OnInit {
    * @function submitForm
    * @description submits the form
    */
-  submitForm(): void {
+  submitForm(features?: Feature): void {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
@@ -169,7 +183,10 @@ export class AddOutletComponent implements OnInit {
       this.$subscription.add(
         this.outletService
           .addOutlet({ entity: { ...data }, siteId: this.siteId })
-          .subscribe(this.handleSuccess, this.handleError)
+          .subscribe(
+            (res) => this.handleSuccess(features, res.id),
+            this.handleError
+          )
       );
     }
   }
@@ -192,13 +209,30 @@ export class AddOutletComponent implements OnInit {
    * @function handleSuccess
    * @description handles success
    */
-  handleSuccess = () => {
+  handleSuccess = (feature?: Feature, outletId?: string) => {
+    console.log(feature, outletId, 'feature');
     this.snackbarService.openSnackBarAsText(
       this.outletId
         ? 'Outlet updated successfully'
         : 'Outlet added successfully'
     );
-    this.router.navigate(['pages/settings/business-info/brand']);
+    switch (feature) {
+      case 'menu':
+        console.log('menu');
+        break;
+      case 'service':
+        this.router.navigate([
+          `pages/outlet/all-outlets/add-outlet/${outletId}/import-service`,
+        ]);
+        break;
+      case 'food':
+        console.log('food');
+        break;
+      default:
+        this.router.navigate([
+          `pages/outlet/all-outlets/add-outlet/${outletId}`,
+        ]);
+    }
   };
 
   /**
@@ -208,4 +242,8 @@ export class AddOutletComponent implements OnInit {
   handleError = (err) => {
     this.loading = false;
   };
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

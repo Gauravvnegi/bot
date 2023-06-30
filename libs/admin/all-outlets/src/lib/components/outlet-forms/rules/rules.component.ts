@@ -89,4 +89,8 @@ export class RulesComponent extends FormComponent implements OnInit {
       this.inputControl.setValue(res);
     });
   }
+
+  removeRule(index: number): void {
+    this.rulesControl.removeAt(index);
+  }
 }

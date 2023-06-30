@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -14,17 +14,15 @@ import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import {
-  errorMessages,
-  noRecordAction,
   RoomTypeFormData,
   ServicesTypeValue,
+  errorMessages,
+  noRecordAction,
 } from '../../constant/form';
 import routes from '../../constant/routes';
 import { Service, Services } from '../../models/amenities.model';
 import { RoomTypeForm } from '../../models/room.model';
 import { RoomService } from '../../services/room.service';
-import { Menu } from 'primeng/menu';
-import { type } from 'os';
 
 @Component({
   selector: 'hospitality-bot-room-type',
@@ -215,7 +213,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     if (!currentPlan.disabled) {
       this.ratePlanArray.at(targetIndex).get('type').patchValue(value);
     } else {
-      const nextEnabledPlan = this.plans.find(plan => !plan.disabled);
+      const nextEnabledPlan = this.plans.find((plan) => !plan.disabled);
       if (nextEnabledPlan) {
         this.ratePlanArray
           .at(targetIndex)
@@ -247,8 +245,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.setDisabled(value);
     this.planCount--;
   }
-  
-
 
   addNewRatePlan() {
     const data = {
@@ -558,7 +554,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       variablePriceCurrency: '10',
       currency: 'INR',
       variableAmount: 200,
-      discountedPriceCurrency: 'INR'
+      discountedPriceCurrency: 'INR',
     };
     return data;
   }

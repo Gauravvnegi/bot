@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { inventoryTreeList } from '../../constants/data';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { CheckBoxTreeFactory } from '../../models/bulk-update.models';

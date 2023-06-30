@@ -15,6 +15,7 @@ import { BanquetFormComponent } from './components/outlet-forms/banquet-form/ban
 import { CreateFoodPackageComponent } from './components/create-food-package/create-food-package.component';
 import { FoodItemsComponent } from './components/food-items/food-items.component';
 import { FoodPackageComponent } from './components/outlet-forms/food-package/food-package.component';
+import { ImportServiceComponent } from './components/import-service/import-service.component';
 
 const appRoutes: Route[] = [
   {
@@ -34,6 +35,21 @@ const appRoutes: Route[] = [
             component: AddOutletComponent,
           },
           {
+            path: ':outletId',
+            component: MainComponent,
+            children: [
+              {
+                path: '',
+                component: AddOutletComponent,
+              },
+              {
+                path: 'import-service',
+                component: ImportServiceComponent,
+                pathMatch: 'full',
+              },
+            ],
+          },
+          {
             path: outletRoutes.createFoodPackage1.route,
             component: CreateFoodPackageComponent,
           },
@@ -41,6 +57,7 @@ const appRoutes: Route[] = [
             path: outletRoutes.editFoodPackage1.route,
             component: CreateFoodPackageComponent,
           },
+
           {
             path: outletRoutes.addMenu1.route,
             component: MainComponent,
@@ -178,5 +195,6 @@ export class AdminAllOutletsRoutingModule {
     CreateFoodPackageComponent,
     FoodItemsComponent,
     FoodPackageComponent,
+    ImportServiceComponent,
   ];
 }

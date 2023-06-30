@@ -8,11 +8,10 @@ export const roomStatuses: RoomStatus[] = [
   'OUT_OF_ORDER',
   'OUT_OF_SERVICE',
   'UNAVAILABLE',
-  'DIRTY',
 ];
 
 export const roomStatusDetails: Record<
-  RoomStatus | RoomFoStatus | 'DIRTY',
+  RoomStatus | RoomFoStatus,
   { label: string; type: FlagType }
 > = {
   CLEAN: {

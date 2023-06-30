@@ -161,6 +161,7 @@
                   }"
                   controlName="date"
                   [minDate]="currentData"
+                  [disabled]="true"
                 ></hospitality-bot-date>
               </td>
               <td>
@@ -194,17 +195,19 @@
               </td>
 
               <td>
-                <!-- <hospitality-bot-input
+                <hospitality-bot-input
                   controlName="unit"
                   [props]="{
                     errorMessages: errorMessages,
                     type: 'number'
                   }"
                   [disabled]="
-                    tableFormArray.at(rowIndex).get('isDisabled').value
+                    tableFormArray.at(rowIndex).get('isDisabled').value ||
+                    tableFormArray.at(rowIndex).get('isDiscount').value ||
+                    tableFormArray.at(rowIndex).get('isRefund').value
                   "
-                ></hospitality-bot-input> -->
-                <hospitality-bot-input-number
+                ></hospitality-bot-input>
+                <!-- <hospitality-bot-input-number
                   controlName="unit"
                   [disabled]="
                     tableFormArray.at(rowIndex).get('isDisabled').value ||
@@ -215,7 +218,7 @@
                     min: 1
                   }"
                 >
-                </hospitality-bot-input-number>
+                </hospitality-bot-input-number> -->
               </td>
 
               <td>
@@ -244,7 +247,14 @@
                       ? editDiscountMenu
                       : addDiscountMenu
                   "
-                  [disabled]="isInvoiceGenerated"
+                  [disabled]="
+                    isInvoiceGenerated ||
+                    !(
+                      tableFormArray.at(rowIndex).get('itemId').value &&
+                      (!tableFormArray.at(rowIndex).get('taxId').value ||
+                        tableFormArray.at(rowIndex).get('isDiscount').value)
+                    )
+                  "
                 ></hospitality-bot-menu>
               </td>
             </tr>
@@ -253,7 +263,7 @@
           <ng-template pTemplate="summary">
             <div class="summary-btn">
               <hospitality-bot-button
-                label="+ Add New"
+                label="+ Add New Item"
                 variant="text"
                 (onClick)="addNewCharges()"
                 [disabled]="isInvoiceGenerated"
@@ -277,20 +287,13 @@
             INR {{ inputControl.totalAmount.value | number: '1.1-1' }}</span
           >
         </div>
-        <div class="py-row invert stretch">
+        <div class="py-row invert">
           <span>Paid Amount</span>
-          <span class="span-block">
+          <span>
             <span
               >INR
               {{ inputControl.paidAmount.value | number: '1.1-1' }}
             </span>
-            <hospitality-bot-menu
-              type="button"
-              alignment="horizontal"
-              [disabled]="isInvoiceGenerated"
-              (onClickItem)="handleRefund()"
-              [menuItems]="addRefundMenu"
-            ></hospitality-bot-menu>
           </span>
         </div>
 

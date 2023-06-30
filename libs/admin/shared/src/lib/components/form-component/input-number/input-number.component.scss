@@ -17,6 +17,7 @@
     );
     &:disabled {
       background: none;
+      cursor: not-allowed;
       &:hover {
         background: none;
       }

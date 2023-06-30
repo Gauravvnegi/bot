@@ -153,6 +153,7 @@ export class FormComponent implements OnInit {
       'p-float-label': this.float,
       wrapper__vertical: this.alignment === 'vertical',
       wrapper__horizontal: this.alignment === 'horizontal',
+      'custom-disabled': this.isDisabled,
     };
   }
 

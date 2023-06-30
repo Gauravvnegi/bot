@@ -14,7 +14,7 @@ export class AddDiscountComponent implements OnInit {
   @Input() serviceName: string;
   @Input() originalAmount: number;
   @Input() isRemove = false;
-  totalDiscount: number = 0;
+  totalDiscount: number;
   discountForm: FormGroup;
   discountOptions: Option[] = [
     { label: 'Flat', value: 'NUMBER' },
@@ -35,7 +35,7 @@ export class AddDiscountComponent implements OnInit {
   initForm(): void {
     this.discountForm = this.fb.group({
       discountType: ['PERCENTAGE'],
-      discountValue: [0, [Validators.min(0)]],
+      discountValue: [null, [Validators.min(0)]],
     });
 
     this.registerRateAndDiscountChange();

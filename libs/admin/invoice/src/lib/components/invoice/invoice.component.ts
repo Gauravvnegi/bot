@@ -115,6 +115,8 @@ export class InvoiceComponent implements OnInit {
   selectedRows = [];
   cols = cols;
 
+  doNotUpdate = false;
+
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -206,17 +208,16 @@ export class InvoiceComponent implements OnInit {
       // Payment Details
       remarks: [''],
       paymentMethod: [''],
-      receivedPayment: ['', Validators.required],
+      receivedPayment: [''],
       transactionId: [''],
     });
 
     this.tableFormArray = this.useForm.get('tableData') as FormArray;
-    // this.addNewCharges('price', 0);
-    this.gstValidation(false);
 
-    // this.paymentValidation(false);
     this.initFormDetails();
-    // this.initFormSubscription();
+
+    this.gstValidation(false);
+    this.paymentValidation(false);
   }
 
   /**
@@ -272,25 +273,10 @@ export class InvoiceComponent implements OnInit {
             emitEvent: false,
           });
 
-          // Generating tax options
-          // this.tax = res.itemList.reduce((prev, curr) => {
-          //   const taxes = curr.itemTax.map((item) => ({
-          //     label: `${item.taxType} [${item.taxValue}%]`,
-          //     value: item.id,
-          //   }));
-
-          //   return [...prev, ...taxes];
-          // }, []);
-
-          // Generating default description options
-
           res.billItems.forEach((item) => {
             this.defaultDescriptionOptions.push({
               label: item.description,
-
               value: item.id, // billItemId
-              // amount: item.amount,
-              // taxes: item.itemTax,
             });
           });
 
@@ -319,27 +305,6 @@ export class InvoiceComponent implements OnInit {
   handleBlur() {
     this.selectedSearchIndex = -1;
   }
-
-  // /**
-  //  * Initialize Form Subscription
-  //  */
-  // initFormSubscription() {
-  //   const totalCurrentAmount = this.useForm.get('currentAmount');
-  //   const totalDiscountControl = this.useForm.get('totalDiscount');
-  //   const totalDiscountedAmountControl = this.useForm.get('discountedAmount');
-  //   const paidAmountControl = this.useForm.get('paidAmount');
-  //   const dueAmountControl = this.useForm.get('dueAmount');
-
-  //   totalDiscountControl.valueChanges.subscribe((res) => {
-  //     const discountedAmount = totalCurrentAmount.value - res;
-  //     totalDiscountedAmountControl.patchValue(discountedAmount);
-  //   });
-
-  //   totalDiscountedAmountControl.valueChanges.subscribe((res) => {
-  //     const dueAmount = res - paidAmountControl.value;
-  //     dueAmountControl.patchValue(dueAmount);
-  //   });
-  // }
 
   paymentValidation(addValidation: boolean = true) {
     const paymentMethodControl = this.useForm.get('paymentMethod');
@@ -407,6 +372,18 @@ export class InvoiceComponent implements OnInit {
     }
   }
 
+  isTableInvalid(triggerMessage = true) {
+    if (this.tableFormArray.invalid) {
+      this.markAsTouched(this.tableFormArray);
+      if (triggerMessage)
+        this.snackbarService.openSnackBarAsText(
+          'Please select the previously added item.'
+        );
+      return true;
+    }
+    return false;
+  }
+
   /**
    * Handle addition of table entry (New Charges)
    */
@@ -427,22 +404,16 @@ export class InvoiceComponent implements OnInit {
     };
 
     if (this.tableFormArray.length > 0 && !rowIndex) {
-      if (this.tableFormArray.invalid) {
-        this.markAsTouched(this.tableFormArray);
-        this.snackbarService.openSnackBarAsText(
-          'Invalid form: Please fix the errors.'
-        );
-        // return;
-      }
+      if (this.isTableInvalid()) return;
     }
 
     const data: Record<keyof BillItemFields, any> = {
       key: [`${Date.now()}`],
-      description: ['', [Validators.required]],
-      billItemId: ['', []],
+      description: ['', []],
+      billItemId: ['', [Validators.required]],
       unit: [unit, [Validators.min(1)]],
-      creditAmount: [null],
-      debitAmount: [null],
+      creditAmount: [0],
+      debitAmount: [0],
       date: [moment(new Date()).unix() * 1000],
       transactionType: [isDebit ? 'DEBIT' : 'CREDIT'],
       isDisabled: [isDisabled],
@@ -541,24 +512,44 @@ export class InvoiceComponent implements OnInit {
         if (prevId) this.findAndRemoveItems(prevId);
       });
 
+    let doNotUpdateUnit = false;
+
     unit.valueChanges
       .pipe(startWith(unit.value), pairwise())
       .subscribe(([prevUnitQuantity, currentUnitQuantity]) => {
+        if (doNotUpdateUnit) {
+          doNotUpdateUnit = false;
+          return;
+        }
         if (unit.invalid || debitAmount.invalid) return;
+
+        const discountControl = this.hasDiscount(itemId.value);
+        const discountValue = discountControl?.value.creditAmount ?? 0;
+
         const currentDebitAmount = debitAmount.value;
         const newDebitAmount =
           (currentDebitAmount / prevUnitQuantity) * currentUnitQuantity;
+
+        if (discountControl && newDebitAmount < discountValue) {
+          this.snackbarService.openSnackBarAsText(
+            'Please update or remove discount for this item.'
+          );
+
+          doNotUpdateUnit = true;
+
+          currentFormGroup.patchValue({ unit: prevUnitQuantity });
+          // currentFormGroup.patchValue({ unit: prevUnitQuantity });
+
+          return;
+        }
+
         currentFormGroup.patchValue({ debitAmount: newDebitAmount });
 
-        // if (currentUnitQuantity > 1) { ?? need to retest this
-        const discountControl = this.hasDiscount(itemId.value);
-        const discountValue = discountControl?.value.creditAmount ?? 0;
         this.updateTax(
-          currentDebitAmount,
+          currentDebitAmount - discountValue,
           itemId.value,
           newDebitAmount - discountValue
         );
-        // }
       });
   }
 
@@ -651,29 +642,8 @@ export class InvoiceComponent implements OnInit {
   }
 
   removeSelectedCharges() {
-    // const idsToRemove = this.selectedRows;
-
     this.selectedRows.forEach((item) => this.findAndRemoveItems(item));
-
     this.selectedRows = [];
-
-    // let totalDiscount = 0;
-    // let currentAmount = 0;
-    // this.tableFormArray.getRawValue().map((item) => {
-    //   if (item.type === 'discount') {
-    //     totalDiscount += +item.totalAmount;
-    //   }
-    //   if (item.type === 'price') {
-    //     currentAmount += +item.totalAmount;
-    //   }
-    //   const discountedAmount = currentAmount - totalDiscount;
-    //   const paidAmount = this.useForm.get('paidAmount').value;
-
-    //   this.useForm.patchValue({ currentAmount });
-    //   this.useForm.patchValue({ totalDiscount });
-    //   this.useForm.patchValue({ discountedAmount });
-    //   this.useForm.patchValue({ dueAmount: discountedAmount - paidAmount });
-    // });
 
     return;
   }
@@ -743,7 +713,7 @@ export class InvoiceComponent implements OnInit {
       this.snackbarService.openSnackBarAsText(
         'Invalid form: Please fix the errors.'
       );
-      // return;
+      return;
     }
 
     const invoiceFormData = this.useForm.getRawValue() as UseForm;
@@ -947,25 +917,6 @@ export class InvoiceComponent implements OnInit {
     this.$subscription.unsubscribe();
   }
 
-  /**
-   * Getting tax list (will not be using it as values are not editable)
-   */
-  // getTax() {
-  //   this.$subscription.add(
-  //     this.servicesService.getTaxList(this.hotelId).subscribe(({ records }) => {
-  //       records = records.filter(
-  //         (item) => item.category === 'service' && item.status
-  //       );
-  //       this.tax = records.map((item) => ({
-  //         label: `${item.taxType} ${item.taxValue}%`,
-  //         value: item.id,
-  //         taxType: item.taxType,
-  //         taxValue: item.taxValue,
-  //       }));
-  //     })
-  //   );
-  // }
-
   addNewDefaultDescription(option: DescriptionOption) {
     this.defaultDescriptionOptions = [
       ...this.defaultDescriptionOptions,
@@ -1093,6 +1044,8 @@ export class InvoiceComponent implements OnInit {
   }
 
   handleRefund() {
+    if (this.isTableInvalid()) return;
+
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.width = '40%';

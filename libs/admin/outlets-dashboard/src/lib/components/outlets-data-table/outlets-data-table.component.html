@@ -136,14 +136,14 @@
         </td>
         <td>
           <div class="cell-content">
-            <hospitality-bot-toggle-dropdown
+            <hospitality-bot-status-dropdown-toggle
               [listItem]="status"
               class="toggle-btn"
               (onClick)="handleStatus($event, rowData)"
-              [status]="'CONFIRMED'"
+              [state]="'CONFIRMED'"
               [disabled]="rowData.status === 'DELETE'"
             >
-            </hospitality-bot-toggle-dropdown>
+            </hospitality-bot-status-dropdown-toggle>
           </div>
         </td>
       </tr>

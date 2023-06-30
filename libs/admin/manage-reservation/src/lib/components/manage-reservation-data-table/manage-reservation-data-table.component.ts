@@ -24,6 +24,7 @@ import {
   reservationStatusDetails,
   ReservationStatusType,
   ReservationTableValue,
+  ReservationType,
   title,
 } from '../../constants/reservation-table';
 import { manageReservationRoutes } from '../../constants/routes';
@@ -49,6 +50,7 @@ import { switchMap, takeUntil } from 'rxjs/operators';
 export class ManageReservationDataTableComponent extends BaseDatableComponent {
   readonly manageReservationRoutes = manageReservationRoutes;
   readonly reservationStatusDetails = reservationStatusDetails;
+  readonly reservationType = ReservationType;
 
   hotelId!: string;
   selectedTab: ReservationTableValue;
@@ -134,7 +136,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       this.selectedOutlet = value;
       if (this.selectedOutlet && this.selectedOutlet !== this.previousOutlet) {
         this.resetTableValues();
-        this.loading=true;
+        this.loading = true;
         // this.initTableValue();
       }
       if (this.selectedOutlet) this.previousOutlet = this.selectedOutlet;
@@ -203,7 +205,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           // Handle error if needed
           this.values = [];
           this.loading = false;
-        },
+        }
       );
   }
   // initTableValue() {

@@ -16,6 +16,7 @@
     [showButtons]="true"
     [min]="min"
     [max]="max"
+    (keydown)="onInputKeyDown($event)"
   ></p-inputNumber>
 
   <small *ngIf="error" class="p-error"> {{ error }}</small>

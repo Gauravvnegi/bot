@@ -22,6 +22,12 @@ export class InputNumberComponent extends FormComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onInputKeyDown(event: KeyboardEvent): void {
+    if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
+      event.preventDefault(); // Prevent input when other keys are pressed
+    }
+  }
 }
 
 type InputNumberSettings = {

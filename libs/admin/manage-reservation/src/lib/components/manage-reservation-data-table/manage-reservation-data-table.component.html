@@ -117,7 +117,6 @@
             (onClick)="handleStatus($event, rowData)"
             [state]="rowData.reservationType"
             [recordSetting]="reservationStatusDetails"
-            [disabled]="rowData.reservationType === reservationType.CANCELED"
           >
           </hospitality-bot-status-dropdown-toggle>
         </div>

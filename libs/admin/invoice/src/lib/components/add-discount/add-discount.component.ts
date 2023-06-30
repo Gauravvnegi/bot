@@ -58,11 +58,11 @@ export class AddDiscountComponent implements OnInit {
           );
         }
 
-      if (type === 'NUMBER' && discount > this.originalAmount) {
+      if (type === 'NUMBER' && discount >= this.originalAmount) {
         return 'isNumError';
       }
 
-      if (type === 'PERCENTAGE' && discount > 100) {
+      if (type === 'PERCENTAGE' && discount >= 100) {
         return 'isPercentError';
       }
 

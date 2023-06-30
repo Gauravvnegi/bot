@@ -205,7 +205,7 @@
                   [disabled]="
                     tableFormArray.at(rowIndex).get('isDisabled').value ||
                     tableFormArray.at(rowIndex).get('isDiscount').value ||
-                    tableFormArray.at(rowIndex).get('isRefund').value
+                    tableFormArray.at(rowIndex).get('isRefundOrPayment').value
                   "
                 ></hospitality-bot-input>
                 <!-- <hospitality-bot-input-number
@@ -213,7 +213,7 @@
                   [disabled]="
                     tableFormArray.at(rowIndex).get('isDisabled').value ||
                     tableFormArray.at(rowIndex).get('isDiscount').value ||
-                    tableFormArray.at(rowIndex).get('isRefund').value
+                    tableFormArray.at(rowIndex).get('isRefundOrPayment').value
                   "
                   [settings]="{
                     min: 1
@@ -250,11 +250,10 @@
                   "
                   [disabled]="
                     isInvoiceGenerated ||
-                    !(
-                      tableFormArray.at(rowIndex).get('itemId').value &&
-                      (!tableFormArray.at(rowIndex).get('taxId').value ||
-                        tableFormArray.at(rowIndex).get('isDiscount').value)
-                    )
+                    (!tableFormArray.at(rowIndex).get('itemId').value &&
+                      !tableFormArray.at(rowIndex).get('isNew').value) ||
+                    tableFormArray.at(rowIndex).get('taxId').value ||
+                    tableFormArray.at(rowIndex).get('isRefundOrPayment').value
                   "
                 ></hospitality-bot-menu>
               </td>

@@ -427,7 +427,7 @@ export class InvoiceComponent implements OnInit {
       isNew: [isNewEntry],
       taxId: [''],
       isDiscount: [false],
-      isRefund: [false],
+      isRefundOrPayment: [false],
     };
 
     const formGroup = this.fb.group(data);
@@ -1064,7 +1064,7 @@ export class InvoiceComponent implements OnInit {
       billItemId: value,
       description: value,
       isDiscount: type === 'discount',
-      isRefund: type === 'refund',
+      isRefundOrPayment: type === 'refund',
       itemId,
       transactionType: transactionType,
     });

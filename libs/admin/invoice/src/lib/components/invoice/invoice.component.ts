@@ -53,6 +53,8 @@ import { AddDiscountComponent } from '../add-discount/add-discount.component';
 import { AddRefundComponent } from '../add-refund/add-refund.component';
 import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response';
 import * as moment from 'moment';
+import { PaymentMethodList } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
+import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -75,7 +77,6 @@ export class InvoiceComponent implements OnInit {
 
   selectedServiceIds: Set<string>;
 
-  readonly paymentOptions = paymentOptions;
   readonly discountOption = discountOptions;
   readonly addRefundMenu = addRefundMenu;
   readonly editRefund = editRefundMenu;
@@ -98,6 +99,7 @@ export class InvoiceComponent implements OnInit {
   typeSubscription: Subscription;
 
   serviceOptions: Option[];
+  paymentOptions: Option[];
 
   descriptionOffSet = 0;
 
@@ -127,7 +129,8 @@ export class InvoiceComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private manageReservationService: ManageReservationService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -153,6 +156,27 @@ export class InvoiceComponent implements OnInit {
         this.inputControl.currency.setValue(this.refundOption[0].value);
       }
     });
+    this.initPaymentOptions();
+  }
+
+  initPaymentOptions() {
+    this.$subscription.add(
+      this.manageReservationService.getPaymentMethod(this.hotelId).subscribe(
+        (response) => {
+          const types = new PaymentMethodList()
+            .deserialize(response)
+            .records.map((item) => item.type);
+          const labels = [].concat(
+            ...types.map((array) => array.map((item) => item.label))
+          );
+          this.paymentOptions = labels.map((label) => ({
+            label: label,
+            value: label,
+          }));
+        },
+        (error) => {}
+      )
+    );
   }
 
   /**

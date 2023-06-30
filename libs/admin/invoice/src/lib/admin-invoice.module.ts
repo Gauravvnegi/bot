@@ -7,6 +7,7 @@ import { AdminInvoiceRoutingModule } from './admin-invoice.routing.module';
 import { InvoiceService } from './services/invoice.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ServicesService } from '../../../services/src/lib/services/services.service'
+import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 
 @NgModule({
   imports: [
@@ -19,6 +20,6 @@ import { ServicesService } from '../../../services/src/lib/services/services.ser
     AdminInvoiceRoutingModule,
   ],
   declarations: [...AdminInvoiceRoutingModule.components],
-  providers: [InvoiceService, ServicesService],
+  providers: [InvoiceService, ServicesService, ManageReservationService],
 })
 export class AdminInvoiceModule {}

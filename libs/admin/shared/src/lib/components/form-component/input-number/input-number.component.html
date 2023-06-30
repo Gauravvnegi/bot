@@ -1,32 +1,26 @@
-<div
-  class="wrapper p-field"
-  [style.fontSize]="fontSize"
-  [ngClass]="wrapperNgClasses"
-  [formGroup]="controlContainer.control"
->
-  <label
-    *ngIf="label && !float"
-    class="label label__static"
-    [for]="controlName"
-    >{{ label }}</label
-  >
-  <p-inputNumber
+<div class="wrapper">
+  <hospitality-bot-input
+    #inputField
+    [controlName]="controlName"
     [disabled]="isDisabled"
-    [formControlName]="controlName"
-    [showButtons]="true"
-    [min]="min"
-    [max]="max"
-    (keydown)="onInputKeyDown($event)"
-  ></p-inputNumber>
-
-  <small *ngIf="error" class="p-error"> {{ error }}</small>
-
-  <label *ngIf="label && float" [for]="controlName" class="label">{{
-    label
-  }}</label>
+    [props]="{
+      tabIndex: '-1'
+    }"
+    ></hospitality-bot-input>
+  <div class="buttons">
+    <button
+      class="btn btn-up"
+      [disabled]="isDisabled"
+      (click)="incrementValue()"
+    >
+      <i class="pi pi-chevron-up"></i>
+    </button>
+    <button
+      class="btn btn-down"
+      [disabled]="isDisabled"
+      (click)="decrementValue()"
+    >
+      <i class="pi pi-chevron-down"></i>
+    </button>
+  </div>
 </div>
-
-<!-- decrementButtonClass="p-button-secondary"
-incrementButtonClass="p-button-secondary"
-incrementButtonIcon="pi pi-plus"
-decrementButtonIcon="pi pi-minus" -->

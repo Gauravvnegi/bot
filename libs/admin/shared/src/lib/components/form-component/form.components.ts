@@ -26,6 +26,7 @@ export class FormComponent implements OnInit {
     // error messages with appropriate error-key
     required: 'This is a required field.',
   };
+  tabIndex = ""; // Removes tab focus in input 
   type: InputType = 'text';
   dropdownIcon = 'pi pi-chevron-down'; // Arrow icon for dropdown inputs
   isAsync = false; // To register load-more/search option query

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormComponent } from '../form.components';
 import { ControlContainer } from '@angular/forms';
 
@@ -8,6 +8,8 @@ import { ControlContainer } from '@angular/forms';
   styleUrls: ['./input-number.component.scss'],
 })
 export class InputNumberComponent extends FormComponent implements OnInit {
+  @ViewChild('inputField', { static: true }) inputField: ElementRef<HTMLInputElement>;
+
   min: number;
   max: number;
 
@@ -17,16 +19,42 @@ export class InputNumberComponent extends FormComponent implements OnInit {
     });
   }
 
-  constructor(public controlContainer: ControlContainer) {
+  constructor(
+    public controlContainer: ControlContainer,
+  ) {
     super(controlContainer);
   }
 
   ngOnInit(): void {}
 
-  onInputKeyDown(event: KeyboardEvent): void {
-    if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') {
-      event.preventDefault(); // Prevent input when other keys are pressed
+  get control() {
+    return this.controlContainer.control.get(this.controlName);
+  }
+
+  incrementValue() {
+    const currentValue = this.control.value;
+    const newValue = currentValue + 1;
+
+    if (currentValue !== this.max || !this.max) {
+      this.control.setValue(newValue);
+      this.focusInput();
     }
+  }
+
+  decrementValue() {
+    const currentValue = this.control.value;
+    const newValue = currentValue - 1;
+
+    if (currentValue !== this.min || !this.min) {
+      this.control.setValue(newValue);
+      this.focusInput();
+    }
+  }
+
+  focusInput() {
+    const inputElement = this.inputField.nativeElement;
+    debugger;
+    inputElement.focus();
   }
 }
 

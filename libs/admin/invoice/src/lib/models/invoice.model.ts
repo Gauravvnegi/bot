@@ -31,7 +31,6 @@ export class Invoice {
     input: BillSummaryData,
     data: {
       cashierName: string;
-      bookingNumber: string;
       guestName: string;
       currency: string;
     }
@@ -39,8 +38,8 @@ export class Invoice {
     const companyDetails = input?.companyDetails;
 
     this.invoiceNumber = input.invoiceCode;
-    this.confirmationNumber = data.bookingNumber;
-    this.guestName = data.bookingNumber;
+
+    this.guestName = data.guestName;
 
     this.companyName = companyDetails?.companyName ?? '';
 

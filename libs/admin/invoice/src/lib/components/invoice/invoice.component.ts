@@ -115,8 +115,6 @@ export class InvoiceComponent implements OnInit {
   selectedRows = [];
   cols = cols;
 
-  doNotUpdate = false;
-
   constructor(
     private fb: FormBuilder,
     private globalFilterService: GlobalFilterService,
@@ -174,7 +172,6 @@ export class InvoiceComponent implements OnInit {
 
     this.useForm = this.fb.group({
       invoiceNumber: [],
-      confirmationNumber: [],
 
       guestName: ['', Validators.required],
       companyName: [''],
@@ -224,9 +221,6 @@ export class InvoiceComponent implements OnInit {
    * Patch the initial form values
    */
   initFormDetails() {
-    this.loadingData = true;
-    const { firstName, lastName } = this.userService.userDetails;
-
     this.$subscription.add(
       this.invoiceService
         .getReservationDetail(this.reservationId)
@@ -241,23 +235,35 @@ export class InvoiceComponent implements OnInit {
         })
     );
 
+    this.getBillingSummary();
+  }
+
+  getBillingSummary() {
+    this.loadingData = true;
+
+    const { firstName, lastName } = this.userService.userDetails;
+
     this.$subscription.add(
       this.invoiceService.getInvoiceData(this.reservationId).subscribe(
         (res) => {
           // saving initial invoice data
           this.invoiceService.initInvoiceData(res);
 
-          const { serviceIds, ...data } = new Invoice().deserialize(res, {
-            cashierName: `${firstName} ${lastName}`,
-            bookingNumber: this.bookingNumber,
-            guestName: 'Jhon Doe',
-            currency: 'INR',
-          });
+          const { serviceIds, guestName, ...data } = new Invoice().deserialize(
+            res,
+            {
+              cashierName: `${firstName} ${lastName}`,
+              guestName: this.inputControl.guestName.value,
+              currency: 'INR',
+            }
+          );
 
           this.selectedServiceIds = serviceIds;
 
+          // if GST details is present
           if (data.gstNumber !== '') {
-            this.onAddGST();
+            this.addGST = true;
+            this.gstValidation(true);
           }
 
           // adding new table entry to patch data
@@ -468,6 +474,9 @@ export class InvoiceComponent implements OnInit {
 
         if (!selectedService) return;
 
+        // Adding to selected service ids
+        this.selectedServiceIds.add(currId);
+
         this.addNewDefaultDescription({
           label: selectedService.label,
           value: selectedService.value,
@@ -490,7 +499,7 @@ export class InvoiceComponent implements OnInit {
             selectedService.amount * (item.taxValue / 100)
           ),
           billItemId: item.id,
-          description: `${item.taxType} ${selectedService.label}`,
+          description: `${item.taxType} (${item.taxValue}%) ${selectedService.label}`,
         }));
 
         newServiceTax.forEach((item) => {
@@ -531,15 +540,12 @@ export class InvoiceComponent implements OnInit {
           (currentDebitAmount / prevUnitQuantity) * currentUnitQuantity;
 
         if (discountControl && newDebitAmount < discountValue) {
-          this.snackbarService.openSnackBarAsText(
-            'Please update or remove discount for this item.'
-          );
-
           doNotUpdateUnit = true;
 
+          this.snackbarService.openSnackBarAsText(
+            'To decrease the number of units, please either update or remove the discount for this item.'
+          );
           currentFormGroup.patchValue({ unit: prevUnitQuantity });
-          // currentFormGroup.patchValue({ unit: prevUnitQuantity });
-
           return;
         }
 
@@ -558,6 +564,9 @@ export class InvoiceComponent implements OnInit {
    * @param idToRemove ID of the items you want to remove
    */
   findAndRemoveItems(idToRemove: string) {
+    // removing the selected serviceID
+    this.selectedServiceIds.delete(idToRemove);
+
     // Step 1: Filter out items with the same ID
     const itemsToRemove = this.tableFormArray.controls.filter(
       (control: Controls) => control.value.itemId === idToRemove
@@ -737,8 +746,21 @@ export class InvoiceComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
+          this.refreshData();
         })
     );
+  }
+
+  /**
+   * Rest data after save
+   */
+  refreshData() {
+    this.addPayment = false;
+    this.paymentValidation(false);
+    this.tableFormArray.clear();
+    this.tableFormArray.updateValueAndValidity();
+    this.useForm.updateValueAndValidity();
+    this.getBillingSummary();
   }
 
   createInvoiceData(data): void {
@@ -831,6 +853,13 @@ export class InvoiceComponent implements OnInit {
       ]),
     };
     return config;
+  }
+
+  get filteredDescriptionOptions() {
+    if (!this.selectedServiceIds?.size) return this.descriptionOptions;
+    return this.descriptionOptions.filter(
+      (item) => !this.selectedServiceIds.has(item.value)
+    );
   }
 
   /**
@@ -1070,7 +1099,7 @@ export class InvoiceComponent implements OnInit {
             itemId: `refund-${moment(new Date()).unix() * 1000}`,
             transactionType: 'DEBIT',
             type: 'refund',
-            value: 'Payed Out' + `${res.remarks ? ` (${res.remarks})` : ''}`,
+            value: 'Paid Out' + `${res.remarks ? ` (${res.remarks})` : ''}`,
           });
         }
 

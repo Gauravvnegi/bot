@@ -24,7 +24,7 @@
     border: none;
     cursor: pointer;
     height: 22px;
-    i{
+    i {
       font-size: 0.8rem;
     }
     &:disabled {
@@ -51,19 +51,3 @@ button[disabled] {
   opacity: 1;
   cursor: not-allowed;
 }
-
-// .disabled {
-//   background: rgba(0, 0, 0, 0.12) !important;
-//   color: rgba(0, 0, 0, 0.38) !important;
-//   opacity: 1;
-//   pointer-events: none;
-//   &:hover {
-//     cursor: not-allowed;
-//   }
-// }
-
-// :host ::ng-deep .p-button {
-//   &.p-button-icon-only {
-//     // background: linear-gradient(180deg, rgba(95,56,249,1) 0%, rgba(68,35,198,1) 50%, rgba(95,56,249,1) 100%) !important;
-//   }
-// }

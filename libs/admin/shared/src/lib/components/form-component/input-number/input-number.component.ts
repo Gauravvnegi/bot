@@ -1,6 +1,6 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormComponent } from '../form.components';
+import { Component, Input, OnInit } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
+import { FormComponent } from '../form.components';
 
 @Component({
   selector: 'hospitality-bot-input-number',
@@ -8,8 +8,6 @@ import { ControlContainer } from '@angular/forms';
   styleUrls: ['./input-number.component.scss'],
 })
 export class InputNumberComponent extends FormComponent implements OnInit {
-  @ViewChild('inputField', { static: true }) inputField: ElementRef<HTMLInputElement>;
-
   min: number;
   max: number;
 
@@ -19,9 +17,7 @@ export class InputNumberComponent extends FormComponent implements OnInit {
     });
   }
 
-  constructor(
-    public controlContainer: ControlContainer,
-  ) {
+  constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
   }
 
@@ -37,7 +33,6 @@ export class InputNumberComponent extends FormComponent implements OnInit {
 
     if (currentValue !== this.max || !this.max) {
       this.control.setValue(newValue);
-      this.focusInput();
     }
   }
 
@@ -47,14 +42,7 @@ export class InputNumberComponent extends FormComponent implements OnInit {
 
     if (currentValue !== this.min || !this.min) {
       this.control.setValue(newValue);
-      this.focusInput();
     }
-  }
-
-  focusInput() {
-    const inputElement = this.inputField.nativeElement;
-    debugger;
-    inputElement.focus();
   }
 }
 

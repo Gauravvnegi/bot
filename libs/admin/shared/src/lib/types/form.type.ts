@@ -24,7 +24,7 @@ export type FormProps = {
   addNewPrompt?: string;
   subtitle?: string;
   isAutoFocusFilter?: boolean;
-  tabIndex: string;
+  tabIndex?: string;
 };
 
 export type ButtonVariant = 'text' | 'contained' | 'outlined';

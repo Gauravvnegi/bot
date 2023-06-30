@@ -2,7 +2,7 @@
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <hospitality-bot-button
       variant="outlined"
-      label="Preview and Generate"
+      [label]="isInvoiceGenerated ? 'Preview' : 'Preview and Generate'"
       (onClick)="previewAndGenerate()"
       queryParamsHandling="preserve"
     ></hospitality-bot-button>
@@ -211,26 +211,14 @@
                 <hospitality-bot-input-number
                   controlName="unit"
                   [settings]="{
-                    min:1
+                    min: 1
                   }"
-                  [disabled]="
-                  tableFormArray.at(rowIndex).get('isDisabled').value ||
-                  tableFormArray.at(rowIndex).get('isDiscount').value ||
-                  tableFormArray.at(rowIndex).get('isRefund').value
-                "
-                ></hospitality-bot-input-number>
-                <!-- <hospitality-bot-input-number
-                  controlName="unit"
                   [disabled]="
                     tableFormArray.at(rowIndex).get('isDisabled').value ||
                     tableFormArray.at(rowIndex).get('isDiscount').value ||
                     tableFormArray.at(rowIndex).get('isRefundOrPayment').value
                   "
-                  [settings]="{
-                    min: 1
-                  }"
-                >
-                </hospitality-bot-input-number> -->
+                ></hospitality-bot-input-number>
               </td>
 
               <td>

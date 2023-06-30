@@ -190,7 +190,7 @@
               ></hospitality-bot-button>
             </p-header>
 
-            <div [formGroupName]="i" hospitality-bot-discount-header>
+            <div [formGroupName]="i">
               <hospitality-bot-discount-form
                 class="form-block"
                 [controls]="{
@@ -203,7 +203,9 @@
                   originalPriceLabel: 'Base Price-Single Occupancy',
                   discountedPriceLabel: 'Best Available Rate'
                 }"
-                flexBasis="half-width"
+                [settings]="{
+                  className: 'half-width'
+                }"
               >
                 <hospitality-bot-prefix-field
                   class="half-width"

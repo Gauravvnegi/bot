@@ -17,7 +17,7 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
 
 
 
-  className = 'one-third-width'
+  className = 'half-width'
 
   errorMessages = {
     required: 'This is a required field.',

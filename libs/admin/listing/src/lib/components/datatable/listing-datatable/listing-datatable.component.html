@@ -103,12 +103,12 @@
       </td>
       <td>
         <div class="cell-content" (click)="onCheckboxClicked($event)">
-          <hospitality-bot-toggle-dropdown
+          <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="updateStatus($event, rowData)"
-            [status]="rowData.active"
+            [state]="rowData.active"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>

@@ -37,14 +37,18 @@ export enum EntityTabGroup {
   VENUE = 'VENUE',
   SPA = 'SPA',
 }
-
+export enum ReservationType {
+  DRAFT = 'DRAFT',
+  CONFIRMED = 'CONFIRMED',
+  CANCELED = 'CANCELED',
+}
 /**
  * Reservation filter Status
  */
 export const reservationStatus: ReservationStatus[] = [
-  'DRAFT',
-  'CONFIRMED',
-  'CANCELED',
+  ReservationType.DRAFT,
+  ReservationType.CONFIRMED,
+  ReservationType.CANCELED,
 ];
 
 export const reservationStatusDetails: Record<

@@ -119,13 +119,14 @@
 
         <td>
           <div class="" *ngIf="rowData.status; else emptyCell">
-            <hospitality-bot-toggle-dropdown
-              [listItem]="getStatusList(rowData)"
+            <hospitality-bot-status-dropdown-toggle
+              [nextStates]="rowData.nextState"
               (onClick)="handleStatus($event, rowData)"
-              [status]="rowData.status"
+              [state]="rowData.status"
+              [recordSetting]="siteStatusDetails"
               [disabled]="rowData.status === 'DELETE'"
             >
-            </hospitality-bot-toggle-dropdown>
+            </hospitality-bot-status-dropdown-toggle>
           </div>
         </td>
       </tr>

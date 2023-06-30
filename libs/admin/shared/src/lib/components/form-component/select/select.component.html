@@ -44,14 +44,16 @@
         <span class="option-label">{{ option.label }}</span>
 
         <span *ngIf="option.phoneNumber && option.email" class="option-details">
-          <span [ngStyle]="{'padding-right': '10px'}">{{ option.phoneNumber }}</span>
+          <span [ngStyle]="{ 'padding-right': '10px' }">{{
+            option.phoneNumber
+          }}</span>
           <span>{{ option.email }}</span>
         </span>
       </div>
     </ng-template>
 
     <ng-template let-option pTemplate="selectedItem">
-      <div class="option-item">
+      <div class="option-items">
         <div>
           <img
             *ngIf="option.icon"

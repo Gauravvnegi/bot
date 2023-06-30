@@ -147,7 +147,9 @@
                   [value]="tableFormArray.at(rowIndex)?.get('itemId').value"
                   [index]="rowIndex"
                   [disabled]="
-                    tableFormArray.at(rowIndex).get('isDisabled').value
+                    tableFormArray.at(rowIndex).get('isDisabled').value ||
+                    tableFormArray.at(rowIndex).get('isDiscount').value ||
+                    tableFormArray.at(rowIndex).get('taxId').value
                   "
                 ></p-tableCheckbox>
               </td>
@@ -183,7 +185,8 @@
                   [stopEmission]="noMoreDescription"
                   (onCreate)="createService($event)"
                   [disabled]="
-                    tableFormArray.at(rowIndex).get('isDisabled').value
+                    tableFormArray.at(rowIndex).get('isDisabled').value ||
+                    tableFormArray.at(rowIndex).get('isDiscount').value
                   "
                   (onFocus)="handleFocus(rowIndex)"
                   (onBlur)="handleBlur()"
@@ -204,7 +207,9 @@
                 <hospitality-bot-input-number
                   controlName="unit"
                   [disabled]="
-                    tableFormArray.at(rowIndex).get('isDisabled').value
+                    tableFormArray.at(rowIndex).get('isDisabled').value ||
+                    tableFormArray.at(rowIndex).get('isDiscount').value ||
+                    tableFormArray.at(rowIndex).get('isRefund').value
                   "
                   [settings]="{
                     min: 1
@@ -217,6 +222,7 @@
                 <hospitality-bot-input
                   controlName="debitAmount"
                   [props]="{ type: 'number' }"
+                  [disabled]="true"
                 ></hospitality-bot-input>
               </td>
 
@@ -224,6 +230,7 @@
                 <hospitality-bot-input
                   controlName="creditAmount"
                   [props]="{ type: 'number' }"
+                  [disabled]="true"
                 ></hospitality-bot-input>
               </td>
 

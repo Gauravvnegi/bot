@@ -495,6 +495,8 @@ export class InvoiceComponent implements OnInit {
           (item) => item.value === currId
         );
 
+        if (!selectedService) return;
+
         this.addNewDefaultDescription({
           label: selectedService.label,
           value: selectedService.value,
@@ -513,15 +515,21 @@ export class InvoiceComponent implements OnInit {
         >[] = selectedService.taxes.map((item) => ({
           taxId: item.id,
           itemId: selectedService.value,
-          debitAmount: selectedService.amount * (item.taxValue / 100),
-          billItemId: item.id + selectedService.value,
+          debitAmount: this.adminUtilityService.getEpsilonValue(selectedService.amount * (item.taxValue / 100)),
+          billItemId: selectedService.value,
           description: `${item.taxType} ${selectedService.label}`,
         }));
 
         newServiceTax.forEach((item) => {
+          const { debitAmount, ...data } = item;
           const length = this.tableFormArray.length;
           this.addNewCharges({ isDisabled: true });
-          this.tableFormArray.at(length).patchValue(item);
+          this.tableFormArray.at(length).patchValue(data, { emitEvent: false });
+          this.tableFormArray
+            .at(length)
+            .get('debitAmount')
+            .patchValue(debitAmount);
+
           this.addNewDefaultDescription({
             label: item.description,
             value: item.billItemId,
@@ -534,21 +542,22 @@ export class InvoiceComponent implements OnInit {
     unit.valueChanges
       .pipe(startWith(unit.value), pairwise())
       .subscribe(([prevUnitQuantity, currentUnitQuantity]) => {
+  
         if (unit.invalid || debitAmount.invalid) return;
         const currentDebitAmount = debitAmount.value;
         const newDebitAmount =
           (currentDebitAmount / prevUnitQuantity) * currentUnitQuantity;
         currentFormGroup.patchValue({ debitAmount: newDebitAmount });
 
-        if (currentUnitQuantity > 1) {
-          const discountControl = this.hasDiscount(itemId.value);
-          const discountValue = discountControl?.value.creditAmount ?? 0;
-          this.updateTax(
-            currentDebitAmount,
-            itemId.value,
-            newDebitAmount - discountValue
-          );
-        }
+        // if (currentUnitQuantity > 1) { ?? need to retest this
+        const discountControl = this.hasDiscount(itemId.value);
+        const discountValue = discountControl?.value.creditAmount ?? 0;
+        this.updateTax(
+          currentDebitAmount,
+          itemId.value,
+          newDebitAmount - discountValue
+        );
+        // }
       });
   }
 
@@ -996,24 +1005,22 @@ export class InvoiceComponent implements OnInit {
         this.modalService.close();
         if (!res) return;
 
+        const totalDiscount = res.totalDiscount;
         const alreadyHasDiscount = this.hasDiscount(itemId);
+        const taxedAmount =
+          amount - (alreadyHasDiscount?.value.creditAmount ?? 0); // Amount to be used for the reversed tax calculation
+        const newTaxedAmount = amount - totalDiscount;
 
-        if (!res.totalDiscount) {
-          alreadyHasDiscount &&
+        if (!totalDiscount) {
+          if (alreadyHasDiscount) {
             this.removeSingleItem(alreadyHasDiscount.value.billItemId);
-
+            this.updateTax(taxedAmount, itemId, newTaxedAmount);
+          }
           return;
         }
 
-        let taxedAmount = amount; // Amount to be used for the reversed tax calculation
-        const totalDiscount = res.totalDiscount;
-
-        if (alreadyHasDiscount) {
-          taxedAmount = taxedAmount - alreadyHasDiscount.value.creditAmount;
-          alreadyHasDiscount.patchValue({ creditAmount: totalDiscount });
-        } else {
+        if (!alreadyHasDiscount) {
           const value = `DISCOUNT (${serviceName})`;
-
           this.addNonBillItem({
             amount: totalDiscount,
             itemId: itemId,
@@ -1022,10 +1029,9 @@ export class InvoiceComponent implements OnInit {
             value: value,
             entryIdx: index + 1,
           });
-        }
+        } else alreadyHasDiscount.patchValue({ creditAmount: totalDiscount });
 
-        /** Tax Update Flow */
-        this.updateTax(taxedAmount, itemId, amount - totalDiscount);
+        this.updateTax(taxedAmount, itemId, newTaxedAmount);
       }
     );
   }
@@ -1034,9 +1040,8 @@ export class InvoiceComponent implements OnInit {
     this.tableFormArray.controls.forEach((control: Controls) => {
       if (control.value.itemId === itemId && control.value.taxId) {
         const currentTax = control.value.debitAmount;
-        const taxFraction = this.adminUtilityService.getEpsilonValue(
-          currentTax / taxedAmount
-        );
+        const taxFraction = currentTax / taxedAmount
+    
 
         const newTax = this.adminUtilityService.getEpsilonValue(
           newTaxedAmount * taxFraction
@@ -1106,13 +1111,15 @@ export class InvoiceComponent implements OnInit {
       (res: { refundAmount: number; remarks: string }) => {
         console.log(res);
 
-        this.addNonBillItem({
-          amount: res.refundAmount,
-          itemId: `refund-${moment(new Date()).unix() * 1000}`,
-          transactionType: 'DEBIT',
-          type: 'refund',
-          value: 'Payed Out' + `${res.remarks ? ` (${res.remarks})` : ''}`,
-        });
+        if (res) {
+          this.addNonBillItem({
+            amount: res.refundAmount,
+            itemId: `refund-${moment(new Date()).unix() * 1000}`,
+            transactionType: 'DEBIT',
+            type: 'refund',
+            value: 'Payed Out' + `${res.remarks ? ` (${res.remarks})` : ''}`,
+          });
+        }
 
         this.modalService.close();
       }

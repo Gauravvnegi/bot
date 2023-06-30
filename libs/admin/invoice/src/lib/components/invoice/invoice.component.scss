@@ -240,3 +240,11 @@
 .summary-btn {
   display: flex;
 }
+
+input[disabled] {
+  /* CSS rules for disabled input elements */
+  /* Example styles: */
+  // opacity: 0.5;
+  cursor: not-allowed;
+  /* Add more styles as needed */
+}

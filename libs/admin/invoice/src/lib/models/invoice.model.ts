@@ -116,7 +116,7 @@ export class TableData {
     this.taxId = input.taxId;
     this.date = input.date;
     this.isNew = false;
-    this.isDisabled = !input.isAddOn;
+    this.isDisabled = !input.isAddOn || !!input.taxId || !input.itemId;
     this.isDiscount = !!input.isCoupon;
     this.isRefund = !input.itemId;
 

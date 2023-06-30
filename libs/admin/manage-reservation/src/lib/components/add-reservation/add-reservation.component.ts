@@ -29,6 +29,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   hotelId: string;
   reservationId: string;
+  globalQueries = [];
 
   reservationTypes: Option[] = [];
 
@@ -125,6 +126,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
    * @function listenForFormChanges Listen for form values changes.
    */
   listenForFormChanges(): void {
+    this.formValueChanges = true;
     this.userForm
       .get('roomInformation.roomTypeId')
       ?.valueChanges.subscribe((res) => {
@@ -162,12 +164,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         { label: 'Draft', value: 'DRAFT' },
         { label: 'Confirmed', value: 'CONFIRMED' },
       ];
-      this.userForm.valueChanges.subscribe((_) => {
-        if (!this.formValueChanges) {
-          this.formValueChanges = true;
-          this.listenForFormChanges();
-        }
-      });
     }
   }
 

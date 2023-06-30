@@ -18,7 +18,7 @@ import { ActivatedRoute } from '@angular/router';
 export class BookingInfoComponent implements OnInit {
   startMinDate = new Date();
   endMinDate = new Date();
-
+  maxDate = new Date();
   hotelId: string;
   reservationId: string;
 
@@ -51,6 +51,12 @@ export class BookingInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.hotelId = this.globalFilterService.hotelId;
+    this.getCountryCode();
+    this.listenForDateChange();
+  }
+
+  listenForDateChange(){
     const startTime = moment(this.startMinDate).unix() * 1000;
     const endTime = moment(this.endMinDate).unix() * 1000;
     if (this.bookingType === 'HOTEL') {
@@ -65,8 +71,6 @@ export class BookingInfoComponent implements OnInit {
         .get('reservationInformation.reservationDateAndTime')
         .setValue(endTime);
     }
-    this.hotelId = this.globalFilterService.hotelId;
-    this.getCountryCode();
   }
 
   getCountryCode(): void {

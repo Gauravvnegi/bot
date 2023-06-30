@@ -1,5 +1,5 @@
 @import 'main';
 
-.form-block {
-  @include form-block;
+.half-width{
+  flex-basis: 47%;
 }

@@ -28,6 +28,7 @@ export class RoomIteratorComponent extends IteratorComponent
   implements OnInit, OnDestroy {
   @Input() userFormGroup: FormGroup;
   @Output() refreshData = new EventEmitter();
+  @Output() listenChanges = new EventEmitter();
   fields = roomFields;
   globalQueries = [];
 
@@ -74,6 +75,7 @@ export class RoomIteratorComponent extends IteratorComponent
       ];
 
       this.getRoomType(this.globalQueries);
+      this.listenForFormChanges();
     });
   }
 
@@ -130,6 +132,10 @@ export class RoomIteratorComponent extends IteratorComponent
     this.refreshData.emit();
   }
 
+  listenForFormChanges(): void{
+    this.listenChanges.emit();
+  }
+
   /**
    * @function getRoomType to get room types.
    * @param queries global Queries.
@@ -149,6 +155,7 @@ export class RoomIteratorComponent extends IteratorComponent
       params: this.adminUtilityService.makeQueryParams(queries),
     };
 
+
     this.loadingRoomTypes = true;
     this.$subscription.add(
       this.manageReservationService
@@ -165,7 +172,7 @@ export class RoomIteratorComponent extends IteratorComponent
                 maxAdult: item.maxAdult,
               }));
             this.roomTypes = [...this.roomTypes, ...data];
-            this.fields[0].options = this.roomTypes;
+            this.fields[0].options = this.roomTypes;     
           },
           ({ error }) => {
             this.snackbarService.openSnackBarAsText(error.message);

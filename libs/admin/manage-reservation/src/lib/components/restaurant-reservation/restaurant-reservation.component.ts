@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormArray,
+  AbstractControl,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -20,6 +26,7 @@ import {
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { menuItemFields } from '../../constants/reservation';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
+import { RestaurantFormData } from '../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -54,6 +61,10 @@ export class RestaurantReservationComponent implements OnInit {
   pageTitle = 'Add Reservation';
   routes: NavRouteOptions = [];
 
+  // summaryInfo: SummaryInfo;
+  tableNumber = '';
+  numberOfAdults = '';
+  price = 0;
   $subscription = new Subscription();
 
   constructor(
@@ -78,6 +89,13 @@ export class RestaurantReservationComponent implements OnInit {
     this.fields = menuItemFields;
     this.initOptions();
     this.getReservationId();
+  }
+
+  get inputControl() {
+    return this.userForm.controls as Record<
+      keyof RestaurantFormData,
+      AbstractControl
+    >;
   }
 
   initOptions() {
@@ -111,12 +129,10 @@ export class RestaurantReservationComponent implements OnInit {
         tableNumber: ['', Validators.required],
         numberOfAdults: ['', Validators.required],
         menuItems: this.menuItemsArray,
+        kotInstructions: [''],
       }),
       guestInformation: this.fb.group({
         guestDetails: [''],
-      }),
-      instructions: this.fb.group({
-        kotInstructions: [''],
       }),
       address: this.fb.group({
         addressLine1: ['', [Validators.required]],
@@ -151,28 +167,10 @@ export class RestaurantReservationComponent implements OnInit {
    * @function listenForFormChanges Listen for form values changes.
    */
   listenForFormChanges(): void {
-    this.userForm
-      .get('roomInformation.roomTypeId')
-      ?.valueChanges.subscribe((res) => {
-        if (res) {
-          this.userForm.get('offerId').reset();
-          this.getOfferByRoomType(res);
-          this.getSummaryData();
-        }
-      });
-    this.userForm
-      .get('roomInformation.roomCount')
-      ?.valueChanges.subscribe((res) => {
-        if (res) {
-          if (
-            this.userForm.get('roomInformation.roomCount').value >
-            this.userForm.get('roomInformation.adultCount').value
-          )
-            this.userForm
-              .get('roomInformation.adultCount')
-              .patchValue(this.userForm.get('roomInformation.roomCount').value);
-        }
-      });
+    this.inputControl.orderInformation.valueChanges.subscribe((res) => {
+      this.numberOfAdults = `For ${res?.numberOfAdults} Adults`;
+      this.tableNumber = `Table Number: ${res?.tableNumber}`;
+    });
   }
 
   getReservationId(): void {

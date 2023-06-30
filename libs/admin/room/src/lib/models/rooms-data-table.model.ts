@@ -52,7 +52,7 @@ export class Room {
     this.price = input.price ?? null;
     this.currency = input.currency ?? '';
     this.status = input.roomStatus ?? '';
-    this.foStatus = input.foStatus ?? '';
+    this.foStatus = input.frontOfficeState ?? '';
     this.nextStates = [...input.nextStates, input.roomStatus];
     return this;
   }

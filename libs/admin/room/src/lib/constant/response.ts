@@ -8,7 +8,7 @@ export const roomStatuses: RoomStatus[] = [
   'OUT_OF_ORDER',
   'OUT_OF_SERVICE',
   'UNAVAILABLE',
-  'DIRTY'
+  'DIRTY',
 ];
 
 export const roomStatusDetails: Record<
@@ -18,10 +18,6 @@ export const roomStatusDetails: Record<
   CLEAN: {
     label: 'Clean',
     type: 'active',
-  },
-  DIRTY: {
-    label: 'Dirty',
-    type: 'warning',
   },
   INSPECTED: {
     label: 'Inspected',
@@ -49,8 +45,8 @@ export const roomStatusDetails: Record<
   },
   DIRTY: {
     label: 'Dirty',
-    type: 'warning'
-  }
+    type: 'warning',
+  },
 };
 
 export const ratePlanResponse: RatePlanOptions[] = [

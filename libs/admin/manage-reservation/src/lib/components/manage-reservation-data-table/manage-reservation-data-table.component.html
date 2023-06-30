@@ -98,7 +98,7 @@
         </div>
       </td>
       <ng-container
-        *ngIf="values.length && values[0].roomNumber"
+        *ngIf="values.length && (values[0].roomNumber || values[0].roomType)"
         [ngTemplateOutlet]="hotelCell"
         [ngTemplateOutletContext]="{ $implicit: rowData }"
       >

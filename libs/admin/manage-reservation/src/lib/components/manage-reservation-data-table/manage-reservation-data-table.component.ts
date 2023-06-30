@@ -51,7 +51,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   readonly reservationStatusDetails = reservationStatusDetails;
 
   hotelId!: string;
-  selectedTab: ReservationTableValue;
+  selectedTab: ReservationTableValue = ReservationTableValue.ALL;
   selectedOutlet: EntityTabGroup = EntityTabGroup.HOTEL;
   previousOutlet: EntityTabGroup = EntityTabGroup.HOTEL;
   reservationLists!: ReservationList;
@@ -134,7 +134,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       this.selectedOutlet = value;
       if (this.selectedOutlet && this.selectedOutlet !== this.previousOutlet) {
         this.resetTableValues();
-        this.loading=true;
+        this.loading = true;
         // this.initTableValue();
       }
       if (this.selectedOutlet) this.previousOutlet = this.selectedOutlet;

@@ -23,7 +23,6 @@
 .panel-tree__header-checkbox {
   display: flex;
   align-items: center;
-  column-gap: 10px;
 }
 
 .panel-tree__header-checkbox .custom-checkbox {
@@ -47,6 +46,7 @@
   padding: 5px 10px;
   border-radius: 3px;
   margin-left: 10px;
+  zoom: 0.82;
 }
 
 label.channel {

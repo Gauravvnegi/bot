@@ -59,7 +59,8 @@
         -ms-transition: all 400ms;
         -o-transition: all 400ms;
         transition: all 400ms;
-        height: 56px;
+        min-height: 56px;
+        zoom: 0.98;
         text-decoration: none;
         border-radius: 3px;
         border-radius: 3px;

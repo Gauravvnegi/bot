@@ -135,3 +135,18 @@ label {
 .enable-child {
   pointer-events: auto;
 }
+
+.checkbox {
+  height: 1.4em;
+  background: #d4d4d4;
+  width: 1.4em;
+  border-radius: 2px;
+  opacity: 0.8;
+  &__img {
+    height: 100%;
+    width: 100%;
+  }
+}
+.d-none {
+  display: none;
+}

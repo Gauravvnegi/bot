@@ -1,11 +1,10 @@
 @import 'main';
 
-.iframe{
-    height: 72vh;
-    width: 94vw;
+.iframe {
+  height: calc(100vh - 250px);
 }
 
-:host ::ng-deep .p-button{
+:host ::ng-deep .p-button {
   background-color: $primary-cta !important;
 }
 
@@ -14,10 +13,11 @@
 }
 
 :host ::ng-deep .p-splitbutton-menubutton:hover {
-    background-color: $primary-hover !important;
+  background-color: $primary-hover !important;
 }
 
-:host ::ng-deep .p-component, .p-button{
+:host ::ng-deep .p-component,
+.p-button {
   font-size: 14px;
   font-weight: 500;
 }
@@ -28,6 +28,3 @@
   align-items: center;
   height: 70vh;
 }
-  
-
-  

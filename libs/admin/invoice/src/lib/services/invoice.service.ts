@@ -36,10 +36,9 @@ export class InvoiceService extends ApiService {
   }
 
   generateInvoice(reservationId: string): Observable<any> {
-    return this.patch(
-      `/api/v1/reservation/${reservationId}/invoice?source=BOTSHOT_ADMIN`,
-      { invoiceGenerated: true }
-    );
+    return this.patch(`/api/v1/reservation/${reservationId}/bill-summary`, {
+      invoiceGenerated: true,
+    });
   }
 
   getInvoiceData(reservationId: string): Observable<BillSummaryData> {

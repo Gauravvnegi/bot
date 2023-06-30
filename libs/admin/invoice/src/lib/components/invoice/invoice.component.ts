@@ -526,6 +526,8 @@ export class InvoiceComponent implements OnInit {
     unit.valueChanges
       .pipe(startWith(unit.value), pairwise())
       .subscribe(([prevUnitQuantity, currentUnitQuantity]) => {
+        if (prevUnitQuantity === currentUnitQuantity) return;
+
         if (doNotUpdateUnit) {
           doNotUpdateUnit = false;
           return;

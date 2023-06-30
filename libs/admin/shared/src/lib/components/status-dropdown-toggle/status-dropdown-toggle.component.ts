@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { defaultRecordJson } from '../../constants/datatable';
-import { EntityStateRecord, Status } from '../../types/table.type';
+import { EntityStateRecord, FlagType } from '../../types/table.type';
 import { convertToTitleCase } from '../../utils/valueFormatter';
 
 @Component({
@@ -35,12 +35,18 @@ export class StatusDropdownToggleComponent {
     this.setSettings();
   }
 
-  @Input() set recordSetting(input:EntityStateRecord<string>){
-    this.records={
+  @Input() set recordSetting(input: EntityStateRecord<string>) {
+    if (!input) return;
+
+    this.records = {
       ...this.records,
-      ...input
+      ...input,
+    };
+
+    if (this.items.length) {
+      this.nextStates = this.items.map((element) => element.value);
     }
-  } 
+  }
 
   @Input() set nextStates(input: string[]) {
     if (!input) return;
@@ -129,3 +135,10 @@ export class StatusDropdownToggleComponent {
 }
 
 type BooleanKeys = { forTrue?: string; forFalse?: string };
+
+type Status = {
+  label: string;
+  value: string;
+  type: FlagType;
+  disabled?: boolean;
+};

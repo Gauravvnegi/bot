@@ -104,6 +104,7 @@ import { MenuButtonComponent } from './components/menu-button/menu-button.compon
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TabHeaderComponent } from './components/tab-header/tab-header.component';
 import { ImportServiceContainerComponent } from './components/import-service-container/import-service-container.component';
+import { BackdropDirective } from './directives/backdrop.directive';
 @NgModule({
   imports: [
     CommonModule,
@@ -213,6 +214,7 @@ import { ImportServiceContainerComponent } from './components/import-service-con
     CheckboxSelectorComponent,
     MenuButtonComponent,
     TabHeaderComponent,
+    BackdropDirective,
     ImportServiceContainerComponent,
   ],
 

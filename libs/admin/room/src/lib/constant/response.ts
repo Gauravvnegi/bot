@@ -8,7 +8,6 @@ export const roomStatuses: RoomStatus[] = [
   'OUT_OF_ORDER',
   'OUT_OF_SERVICE',
   'UNAVAILABLE',
-  'DIRTY'
 ];
 
 export const roomStatusDetails: Record<
@@ -45,8 +44,8 @@ export const roomStatusDetails: Record<
   },
   DIRTY: {
     label: 'Dirty',
-    type: 'warning'
-  }
+    type: 'warning',
+  },
 };
 
 export const ratePlanResponse: RatePlanOptions[] = [
@@ -66,4 +65,4 @@ export const ratePlanResponse: RatePlanOptions[] = [
     label: 'AP (With all 3 Meals)',
     value: 'AP (With all 3 Meals)',
   },
-]  
+];

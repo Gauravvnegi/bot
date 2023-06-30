@@ -112,12 +112,13 @@
 
       <td>
         <div class="" *ngIf="rowData.reservationType; else emptyCell">
-          <hospitality-bot-toggle-dropdown
-            [listItem]="rowData.statusValues"
+          <hospitality-bot-status-dropdown-toggle
+            [nextStates]="rowData.nextStates"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.reservationType"
+            [state]="rowData.reservationType"
+            [recordSetting]="reservationStatusDetails"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>

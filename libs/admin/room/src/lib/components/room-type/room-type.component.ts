@@ -41,6 +41,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   ratePlanArray: FormArray;
 
   loading: boolean = false;
+  isCompLoading: boolean = false;
+  isPaidLoading: boolean = false;
 
   plans: {
     label: string;
@@ -429,6 +431,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    */
   getServices(serviceType: ServicesTypeValue) {
     this.loading = true;
+    this.isCompLoading = true;
+    this.isPaidLoading = true;
     this.subscription$.add(
       this.roomService
         .getServices(this.hotelId, {
@@ -455,6 +459,12 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           },
           () => {
             this.loading = false;
+            if (serviceType === ServicesTypeValue.COMPLIMENTARY) {
+              this.isCompLoading = false;
+            }
+            if (serviceType === ServicesTypeValue.PAID) {
+              this.isPaidLoading = false;
+            }
           }
         )
     );

@@ -54,7 +54,7 @@
           [itemList]="compServices"
           (viewAll)="saveRoomTypeData('COMPLIMENTARY')"
           [noRecordsAction]="noRecordActionForComp"
-          [loading]="loading"
+          [loading]="isCompLoading"
           (onEmptyViewCta)="openImportService('COMPLIMENTARY')"
         >
           <hospitality-bot-button
@@ -71,7 +71,7 @@
             [itemList]="paidServices"
             (viewAll)="saveRoomTypeData('PAID')"
             [noRecordsAction]="noRecordAction"
-            [loading]="loading"
+            [loading]="isPaidLoading"
           ></hospitality-bot-custom-select>
         </div>
       </div>

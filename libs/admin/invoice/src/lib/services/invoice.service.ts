@@ -73,6 +73,7 @@ export class InvoiceService extends ApiService {
       taxId: null,
       transactionType: 'DEBIT',
       unit: 1,
+      isAddOn: true,
       ...settings,
     };
   }

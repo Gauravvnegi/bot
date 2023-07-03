@@ -12,7 +12,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { LibraryItem, QueryConfig } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
-  ConfigService,
   NavRouteOptions,
   Option,
   UserService,
@@ -21,27 +20,25 @@ import {
   ModalService,
   SnackBarService,
 } from '@hospitality-bot/shared/material';
+import { PaymentMethodList } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
+import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
 import { ServicesService } from 'libs/admin/services/src/lib/services/services.service';
+import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { pairwise, startWith } from 'rxjs/operators';
 import {
   addDiscountMenu,
-  addRefundMenu,
-  DiscountActionItem,
-  discountOptions,
+  defaultMenu,
+  MenuActionItem,
   editDiscountMenu,
-  editRefundMenu,
 } from '../../constants/invoice.constant';
+
 import { cols } from '../../constants/payment';
 import { invoiceRoutes } from '../../constants/routes';
-import {
-  Invoice,
-  Service,
-  ServiceList,
-  TableData,
-} from '../../models/invoice.model';
+import { Invoice, Service, ServiceList } from '../../models/invoice.model';
 import { InvoiceService } from '../../services/invoice.service';
 import {
   BillItemFields,
@@ -50,10 +47,6 @@ import {
 } from '../../types/forms.types';
 import { AddDiscountComponent } from '../add-discount/add-discount.component';
 import { AddRefundComponent } from '../add-refund/add-refund.component';
-import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response';
-import * as moment from 'moment';
-import { PaymentMethodList } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
-import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
 
 @Component({
   selector: 'hospitality-bot-invoice',
@@ -72,20 +65,11 @@ export class InvoiceComponent implements OnInit {
 
   tableFormArray: FormArray;
   useForm: FormGroup;
-  currentData = new Date();
 
   selectedServiceIds: Set<string>;
 
-  readonly discountOption = discountOptions;
-  readonly addRefundMenu = addRefundMenu;
-  readonly editRefund = editRefundMenu;
-  readonly addDiscountMenu = addDiscountMenu;
-  readonly editDiscountMenu = editDiscountMenu;
-
   tableLength = 0;
   tax: Option[] = [];
-
-  refundOption: Option[] = [];
 
   isValidDiscount = true;
 
@@ -93,6 +77,8 @@ export class InvoiceComponent implements OnInit {
   addPayment = false;
 
   isInvoiceGenerated = false;
+  pmsBooking = false;
+  isInvoiceDisabled = false;
 
   $subscription = new Subscription();
   typeSubscription: Subscription;
@@ -101,16 +87,15 @@ export class InvoiceComponent implements OnInit {
   paymentOptions: Option[];
 
   descriptionOffSet = 0;
-
-  loadingData = false;
   loadingDescription = false;
-
   noMoreDescription = false;
 
   selectedSearchIndex = -1;
   descriptionOptions: DescriptionOption[] = [];
   defaultDescriptionOptions: DescriptionOption[] = [];
   focusedDescriptionId: string;
+
+  loadingData = false;
 
   /**Table Variable */
   selectedRows = [];
@@ -128,7 +113,6 @@ export class InvoiceComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
-    private configService: ConfigService,
     private manageReservationService: ManageReservationService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
@@ -146,15 +130,6 @@ export class InvoiceComponent implements OnInit {
   }
 
   initOptions() {
-    this.configService.$config.subscribe((config) => {
-      if (config) {
-        this.refundOption = config.currencyConfiguration.map((item) => ({
-          label: item.key,
-          value: item.value,
-        }));
-        this.inputControl.currency.setValue(this.refundOption[0].value);
-      }
-    });
     this.initPaymentOptions();
   }
 
@@ -222,9 +197,6 @@ export class InvoiceComponent implements OnInit {
         Validators.required,
       ],
 
-      /**
-       * PUT A CHECK OF DUE AMOUNT PAYMENT RECIEVED
-       */
       // Payment Details
       remarks: [''],
       paymentMethod: [''],
@@ -255,6 +227,8 @@ export class InvoiceComponent implements OnInit {
 
           this.guestId = guestData.id;
           this.bookingNumber = res.number;
+          this.pmsBooking = res.pmsBooking;
+          if (this.pmsBooking) this.disableInvoice();
         })
     );
 
@@ -311,9 +285,7 @@ export class InvoiceComponent implements OnInit {
 
           // disabling invoice if already generated
           this.isInvoiceGenerated = res.invoiceGenerated;
-          if (this.isInvoiceGenerated) {
-            this.useForm.disable();
-          }
+          if (this.isInvoiceGenerated) this.disableInvoice();
 
           this.getDescriptionOptions();
         },
@@ -327,6 +299,11 @@ export class InvoiceComponent implements OnInit {
     );
   }
 
+  disableInvoice() {
+    this.useForm.disable();
+    this.isInvoiceDisabled = true;
+  }
+
   handleFocus(index: number) {
     this.selectedSearchIndex = index;
     const currId = this.tableFormArray.at(index).get('billItemId').value;
@@ -338,6 +315,16 @@ export class InvoiceComponent implements OnInit {
   handleBlur() {
     this.selectedSearchIndex = -1;
     this.focusedDescriptionId = '';
+  }
+
+  getMenu(rowIndex: number) {
+    const rowFG: BillItemFields = this.tableFormArray.at(rowIndex).value;
+    const dMenu = rowFG.isDiscount || !rowFG.isAddOn ? [] : defaultMenu;
+
+    if (this.hasDiscount(rowFG.itemId)) {
+      return [...editDiscountMenu, ...dMenu];
+    }
+    return [...addDiscountMenu, ...dMenu];
   }
 
   paymentValidation(addValidation: boolean = true) {
@@ -456,6 +443,7 @@ export class InvoiceComponent implements OnInit {
       taxId: [''],
       isDiscount: [false],
       isRefundOrPayment: [false],
+      isAddOn: [true],
     };
 
     const formGroup = this.fb.group(data);
@@ -662,20 +650,29 @@ export class InvoiceComponent implements OnInit {
     return formControl;
   }
 
+  getTableRowValue(index: number) {
+    return this.tableFormArray.at(index).value as BillItemFields;
+  }
+
   /**
    * Handle discount flow
    */
-  handleDiscount(
-    { item: { value } }: { item: { value: DiscountActionItem } },
+  handleMenuAction(
+    { item: { value } }: { item: { value: MenuActionItem } },
     index: number
   ) {
-    const priceControls = this.getTableRowFormGroup(index);
+    const priceControls = this.getTableRowValue(index);
+
+    if (value === MenuActionItem.DELETE_ITEM) {
+      this.findAndRemoveItems(priceControls.itemId);
+      return;
+    }
 
     this.addDiscountModal({
-      amount: priceControls.debitAmount.value,
-      serviceName: priceControls.description.value,
-      itemId: priceControls.itemId.value,
-      isRemoveDiscount: value === DiscountActionItem.REMOVE_DISCOUNT,
+      amount: priceControls.debitAmount,
+      serviceName: priceControls.description,
+      itemId: priceControls.itemId,
+      isRemoveDiscount: value === MenuActionItem.REMOVE_DISCOUNT,
       index,
     });
   }

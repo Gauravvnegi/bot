@@ -102,6 +102,7 @@ export class TableData {
   isDiscount: boolean;
   isRefundOrPayment: boolean;
   isDisabled: boolean;
+  isAddOn: boolean;
 
   deserialize(input: BillItem) {
     this.key = input.id;
@@ -118,6 +119,7 @@ export class TableData {
     this.isDisabled = !input.isAddOn || !!input.taxId;
     this.isDiscount = !!input.isCoupon;
     this.isRefundOrPayment = !input.itemId;
+    this.isAddOn = input.isAddOn;
 
     return this;
   }

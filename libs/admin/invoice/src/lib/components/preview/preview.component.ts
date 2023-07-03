@@ -16,14 +16,14 @@ export class PreviewComponent implements OnInit {
   isLoading = true;
   navRoutes = [];
   isInvoiceGenerated = false;
-  items = [
-    {
-      label: 'Generate Proforma',
-      command: () => {
-        this.handleDownload();
-      },
-    },
-  ];
+  // items = [
+  //   {
+  //     label: 'Generate Proforma',
+  //     command: () => {
+  //       this.handleDownload();
+  //     },
+  //   },
+  // ];
   constructor(
     private invoiceService: InvoiceService,
     private activatedRoute: ActivatedRoute,

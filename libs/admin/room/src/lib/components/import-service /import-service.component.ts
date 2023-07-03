@@ -87,7 +87,6 @@ export class ImportServiceComponent implements OnInit {
   }
 
   saveForm(serviceData) {
-    debugger;
     serviceData.serviceIds = [
       ...this.roomService.roomTypeFormData.services.map(
         (service) => service.id

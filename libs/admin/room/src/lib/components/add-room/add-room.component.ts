@@ -414,7 +414,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    * @function updateRoom To update the room data
    */
   updateRoom(): void {
-    debugger;
     const data = this.useForm.getRawValue();
 
     this.$subscription.add(

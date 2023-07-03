@@ -34,4 +34,5 @@ export type CompanyListResponse = {
   records: CompanyResponseType[];
   total: number;
   entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
 };

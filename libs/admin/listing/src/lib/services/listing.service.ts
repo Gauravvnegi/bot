@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
+import { TableValue } from '../constants/listing';
 
 @Injectable()
 export class ListingService extends ApiService {
-
+  selectedTab = TableValue.all;
   /**
    * @function getTopicList get topic list.
    * @param id dynamically getting id into api.

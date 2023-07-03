@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { companyRoutes } from '../../constants/route';
-import { chips, cols, title } from '../../constants/datatable';
+import { cols, title } from '../../constants/datatable';
 import { Subscription } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
 import {
@@ -29,7 +29,6 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   implements OnInit {
   readonly companyRoutes = companyRoutes;
   tableName = title;
-  filterChips = chips;
   cols = cols;
 
   $subscription = new Subscription();
@@ -104,8 +103,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
         })
         .subscribe(
           () => {
-            this.updateStatusAndCount(rowData.status, status);
-
+            this.initTable();
             this.snackbarService.openSnackBarAsText(
               'Status changes successfully',
               '',

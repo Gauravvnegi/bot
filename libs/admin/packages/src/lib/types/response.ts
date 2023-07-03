@@ -1,4 +1,4 @@
-import { EntityStateCountsResponse } from 'libs/admin/library/src/lib/types/response';
+import { EntityState } from '@hospitality-bot/admin/shared';
 import { ServiceResponse } from 'libs/admin/services/src/lib/types/response';
 
 export type PackageResponse = {
@@ -32,6 +32,6 @@ export type PackageResponse = {
 export type PackageListResponse = {
   paidPackages: PackageResponse[];
   total: number;
-  entityStateCounts: EntityStateCountsResponse;
-  entityTypeCounts: any;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
 };

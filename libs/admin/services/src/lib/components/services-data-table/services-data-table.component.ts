@@ -44,6 +44,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   filterChips = chips;
   cols = cols;
   isQuickFilters = true;
+  isAllATabItem = true;
 
   $subscription = new Subscription();
 
@@ -101,9 +102,12 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
               this.values = serviceList.complimentaryService;
               break;
           }
-          this.updateTabFilterCount(res.entityTypeCounts, res.total);
-          this.updateQuickReplyFilterCount(res.entityStateCounts);
-          this.updateTotalRecords();
+
+          this.initFilters(
+            serviceList.entityTypeCounts,
+            serviceList.entityStateCounts,
+            serviceList.total
+          );
         },
         () => {
           this.values = [];
@@ -129,13 +133,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
         )
         .subscribe(
           (res) => {
-            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-            this.updateStatusAndCount(
-              statusValue(rowData.status),
-              statusValue(status)
-            );
-            this.values.find((item) => item.id === rowData.id).status = status;
-
+            this.initTableValue();
             this.snackbarService.openSnackBarAsText(
               'Status changes successfully',
               '',
@@ -148,21 +146,6 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
           this.handleFinal
         )
     );
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'ACTIVE' },
-    ];
   }
 
   /**
@@ -180,7 +163,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
         {
           type: LibraryItem.service,
           serviceType: this.selectedTable,
@@ -190,18 +173,6 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
       ]),
     };
     return config;
-  }
-
-  /**
-   * @function onSelectedTabFilterChange To handle the tab filter change.
-   * @param event The material tab change event.
-   */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.servicesService.selectedTable.next(
-      this.tabFilterItems[event.index].value
-    );
-    this.tabFilterIdx = event.index;
-    this.initTableValue();
   }
 
   /**

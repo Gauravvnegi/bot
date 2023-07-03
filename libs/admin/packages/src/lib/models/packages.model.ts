@@ -1,5 +1,5 @@
-import { EntityStateCounts } from '@hospitality-bot/admin/library';
 import { PackageListResponse, PackageResponse } from '../types/response';
+import { EntityState } from '@hospitality-bot/admin/shared';
 
 export class Package {
   id: string;
@@ -32,16 +32,15 @@ export class Package {
 export class PackageList {
   records: Package[];
   total: number;
-  entityStateCounts: EntityStateCounts;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
   deserialize(input: PackageListResponse) {
     this.records = input.paidPackages?.map((item) =>
       new Package().deserialize(item)
     );
     this.total = input.total;
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input?.entityStateCounts,
-      input?.total
-    );
+    this.entityStateCounts = input.entityStateCounts;
+    this.entityTypeCounts = input.entityTypeCounts;
     return this;
   }
 }

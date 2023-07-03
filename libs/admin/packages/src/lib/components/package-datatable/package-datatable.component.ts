@@ -10,7 +10,7 @@ import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { LazyLoadEvent } from 'primeng/api/public_api';
 import { Subscription } from 'rxjs';
-import { chips, cols, tabFilterItems, title } from '../../constant/data-table';
+import { chips, cols, title } from '../../constant/data-table';
 import { PackageList } from '../../models/packages.model';
 import { PackagesService } from '../../services/packages.service';
 import { PackageData } from '../../types/package';
@@ -34,11 +34,9 @@ export class PackageDataTableComponent extends BaseDatatableComponent
 
   isCustomSort = true;
   triggerInitialData = false;
-  tabFilterItems = tabFilterItems;
   isTabFilters = true;
-  filterChips = chips;
+  isAllTabFilterRequired = true;
   globalQueries = [];
-  tabFilterIdx = 0;
   $subscription = new Subscription();
 
   cols = cols;
@@ -96,9 +94,11 @@ export class PackageDataTableComponent extends BaseDatatableComponent
           (res) => {
             const packageList = new PackageList().deserialize(res);
             this.values = packageList.records;
-            this.updateTabFilterCount(res.entityTypeCounts, res.total);
-            this.updateQuickReplyFilterCount(res.entityStateCounts);
-            this.updateTotalRecords();
+            this.initFilters(
+              packageList.entityTypeCounts,
+              packageList.entityStateCounts,
+              packageList.total
+            );
           },
           ({ error }) => {
             this.values = [];
@@ -115,7 +115,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           type: LibraryItem.package,
@@ -125,21 +125,6 @@ export class PackageDataTableComponent extends BaseDatatableComponent
       ]),
     };
     return config;
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'ACTIVE' },
-    ];
   }
 
   exportCSV(): void {
@@ -181,19 +166,17 @@ export class PackageDataTableComponent extends BaseDatatableComponent
         )
         .subscribe(
           () => {
-            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-            this.updateStatusAndCount(
-              statusValue(rowData.status),
-              statusValue(status)
-            );
-            this.values.find((item) => item.id === rowData.id).status = status;
+            this.initTableValue();
             this.snackbarService.openSnackBarAsText(
               'Status changes successfully',
               '',
               { panelClass: 'success' }
             );
           },
-          ({ error }) => {},
+          ({ error }) => {
+            this.values = [];
+            this.loading = false;
+          },
           this.handleFinal
         )
     );

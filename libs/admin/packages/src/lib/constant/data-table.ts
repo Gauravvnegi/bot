@@ -1,16 +1,7 @@
 import { filtersChips } from '@hospitality-bot/admin/library';
-import { Cols, Filter } from '@hospitality-bot/admin/shared';
+import { Cols } from '@hospitality-bot/admin/shared';
 
 export const title = 'Packages';
-export const tabFilterItems = [
-  {
-    label: 'All',
-    content: '',
-    value: 'ALL',
-    disabled: false,
-    total: 0,
-  },
-];
 
 export const cols: Cols[] = [
   {

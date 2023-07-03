@@ -1,23 +1,18 @@
 import { get, set } from 'lodash';
 import { DateService } from '@hospitality-bot/shared/utils';
-import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { EntityState, IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class Templates implements IDeserializable {
   records: ITemplate[];
-  entitySateCounts: IEntityStateCounts;
-  entityTypeCounts: IEntityTypeCounts;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
   total: number;
   deserialize(input) {
     this.records =
       input?.records?.map((item) => new Template().deserialize(item)) ?? [];
-    // this.entityTypeCounts = new EntityTypeCounts().deserialize(
-    //   input?.entityTypeCounts ?? [],
-    //   input?.total
-    // );
-    // this.entitySateCounts = new EntityStateCounts().deserialize(
-    //   input?.entityStateCounts
-    // );
-    // this.total = input.total;
+    this.entityStateCounts = input?.entityStateCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
+    this.total = input?.total;
     return this;
   }
 }
@@ -38,7 +33,6 @@ class EntityStateCounts {
 }
 class EntityTypeCounts {
   ALL: number;
-
   deserialize(input, total) {
     this.ALL = total;
     console.log(EntityTypeCounts);

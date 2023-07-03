@@ -34,17 +34,13 @@ import { ListingService } from '../../../services/listing.service';
 export class ListingDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   @Input() tableName = listingConfig.datatable.title;
-  @Input() tabFilterItems = listingConfig.datatable.tabFilterItems;
-  @Input() tabFilterIdx = 0;
   actionButtons = true;
-  isQuickFilters = true;
-  isTabFilters = true;
+
   isResizableColumns = true;
   isAutoLayout = false;
   isCustomSort = true;
+  isAllTabFilterRequired = true;
   triggerInitialData = false;
-  rowsPerPageOptions = [5, 10, 25, 50, 200];
-  rowsPerPage = listingConfig.datatable.limit;
   cols = listingConfig.datatable.cols;
   hotelId: string;
   $subscription = new Subscription();
@@ -76,15 +72,16 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
+    this.selectedTab = this.listingService.selectedTab;
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         this.hotelId = this.globalFilterService.hotelId;
         this.loadInitialData([
           {
             order: sharedConfig.defaultOrder,
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFiltersV2(),
         ]);
       })
     );
@@ -105,29 +102,6 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
-          const chipsData = [
-            {
-              label: 'All',
-              icon: '',
-              value: 'ALL',
-              total: 0,
-              isSelected: true,
-              type: 'default',
-            },
-          ];
-          chipsData.push(
-            ...Object.keys(data.entityStateCounts)
-              .sort()
-              .map((key) => ({
-                label: key,
-                icon: '',
-                value: key,
-                total: data.entityStateCounts[key],
-                isSelected: false,
-                type: key === 'INACTIVE' ? 'failed' : 'new',
-              }))
-          );
-          this.tabFilterItems[this.tabFilterIdx].chips = chipsData;
           this.initialLoading = false;
           this.setRecords(data);
         },
@@ -144,23 +118,14 @@ export class ListingDatatableComponent extends BaseDatatableComponent
    * @param data The data is a response which comes from an api call.
    */
   setRecords(data): void {
-    this.values = new ListTable().deserialize(data).records;
-    this.updateTabFilterCount(data.entityTypeCounts, data.total);
-    this.updateQuickReplyFilterCount(data.entityStateCounts);
-    this.updateTotalRecords();
+    const ListingData = new ListTable().deserialize(data);
+    this.values = ListingData.records;
+    this.initFilters(
+      ListingData.entityTypeCounts,
+      ListingData.entityStateCounts,
+      ListingData.total
+    );
     this.loading = false;
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters(): SelectedEntityState[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected)
-      .map((item) => ({
-        entityState: item.value,
-      }));
   }
 
   /**
@@ -175,9 +140,9 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         [
           {
             order: sharedConfig.defaultOrder,
-            entityType: this.tabFilterItems[this.tabFilterIdx].value,
+            entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFiltersV2(),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -212,17 +177,6 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function updatePaginations To update the pagination variable values.
-   * @param event The lazy load event for the table.
-   */
-  updatePaginations(event): void {
-    this.first = event.first;
-    this.rowsPerPage = event.rows;
-    this.tempFirst = this.first;
-    this.tempRowsPerPage = this.rowsPerPage;
-  }
-
-  /**
    * @function customSort To sort the rows of the table.
    * @param eventThe The event for sort click action.
    */
@@ -238,40 +192,6 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function onSelectedTabFilterChange To handle the tab filter change.
-   * @param event The material tab change event.
-   */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.tabFilterIdx = event.index;
-    this.changePage(+this.tabFilterItems[event.index].lastPage);
-  }
-
-  /**
-   * @function onFilterTypeTextChange To handle the search for each column of the table.
-   * @param value The value of the search field.
-   * @param field The name of the field across which filter is done.
-   * @param matchMode The mode by which filter is to be done.
-   */
-  onFilterTypeTextChange(
-    value: string,
-    field: string,
-    matchMode = 'startsWith'
-  ): void {
-    if (!!value && !this.isSearchSet) {
-      this.tempFirst = this.first;
-      this.tempRowsPerPage = this.rowsPerPage;
-      this.isSearchSet = true;
-    } else if (!!!value) {
-      this.isSearchSet = false;
-      this.first = this.tempFirst;
-      this.rowsPerPage = this.tempRowsPerPage;
-    }
-
-    value = value && value.trim();
-    this.table.filter(value, field, matchMode);
-  }
-
-  /**
    * @function exportCSV To export CSV report of the table.
    */
   exportCSV(): void {
@@ -281,9 +201,9 @@ export class ListingDatatableComponent extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams([
         {
           order: sharedConfig.defaultOrder,
-          entityType: this.tabFilterItems[this.tabFilterIdx].value,
+          entityType: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -323,13 +243,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
         .updateListStatus(this.hotelId, rowData.id, { status: status })
         .subscribe(
           (_) => {
-            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-            this.updateStatusAndCount(
-              statusValue(rowData.active),
-              statusValue(status)
-            );
-            this.values.find((item) => item.id === rowData.id).active = status;
-
+            this.loadInitialData();
             this.snackbarService
               .openSnackBarWithTranslate(
                 {

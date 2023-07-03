@@ -56,6 +56,7 @@ export class BaseDatatableComponent implements OnInit {
   isCustomSort = true;
   isSelectable = true;
   isSearchable = true;
+  isEmpty = true;
 
   tableFG: FormGroup;
 
@@ -195,7 +196,7 @@ export class BaseDatatableComponent implements OnInit {
     this.values = [];
     this.tabFilterItems = [];
     this.tabFilterIdx = 0;
-    this.filterChips = []; 
+    this.filterChips = [];
     this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
     this.totalRecords = 0;
   }
@@ -432,17 +433,22 @@ export class BaseDatatableComponent implements OnInit {
     const record = { ...defaultRecordJson, ...recordsJson };
     let totalCount = totalMainCount;
 
-    if (entityTypeCounts && Object.keys(entityTypeCounts).length > 0) {
-      this.tabFilterItems = Object.entries({
-        ...(this.isAllTabFilterRequired
-          ? { [defaultFilterChipValue.value]: totalCount }
-          : {}),
-        ...entityTypeCounts,
-      }).map(([key, value]) => ({
-        label: record[key]?.label ?? convertToTitleCase(key),
-        value: key,
-        total: value,
-      }));
+    const resEntityTypeCounts = {
+      ...(this.isAllTabFilterRequired
+        ? { [defaultFilterChipValue.value]: totalCount }
+        : {}),
+      ...entityTypeCounts,
+    };
+
+    if (resEntityTypeCounts && Object.keys(resEntityTypeCounts).length > 0) {
+      this.tabFilterItems = Object.entries(resEntityTypeCounts).map(
+        ([key, value]) => ({
+          label: record[key]?.label ?? convertToTitleCase(key),
+          value: key,
+          total: value,
+        })
+      );
+
       const selectedTabIndex = this.tabFilterItems.findIndex(
         (item) => item.value === this.selectedTab
       );
@@ -453,6 +459,9 @@ export class BaseDatatableComponent implements OnInit {
 
       totalCount = this.tabFilterItems[this.tabFilterIdx].total;
     } else this.isTabFilters = false;
+
+    // Is empty is checked for tab filters only or main
+    this.isEmpty = totalCount === 0;
 
     if (entityStateCounts && Object.keys(entityStateCounts).length > 0) {
       this.filterChips = Object.entries({
@@ -475,6 +484,8 @@ export class BaseDatatableComponent implements OnInit {
           return res;
         }, 0);
       }
+
+      this.isQuickFilters = true;
     } else this.isQuickFilters = false;
     this.totalRecords = totalCount;
   }

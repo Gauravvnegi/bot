@@ -40,7 +40,7 @@
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
   (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
-  *ngIf="totalRecords; else emptyTable"
+  *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
@@ -49,6 +49,7 @@
         *ngIf="isQuickFilters"
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
       ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -152,13 +153,23 @@
   <div class="caption__wrapper">
     <hospitality-bot-empty-table
       [isLoading]="loading"
-      link="/pages/members/{{ routes.addAgent }}"
+      link="/pages/members/agent/{{ routes.addAgent.route }}"
       [content]="{
         description: 'No Agent found. Tap the +Add Agent to add more agent.',
         imageSrc: 'assets/images/empty-table-offer.png',
         actionName: '+Add Agent'
       }"
     >
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
     </hospitality-bot-empty-table>
   </div>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
 </ng-template>

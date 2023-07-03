@@ -1,3 +1,4 @@
+import { EntityState } from '@hospitality-bot/admin/shared';
 import { ManageSiteStatus } from '../constant/manage-site';
 
 export type ManageSiteResponse = {
@@ -13,10 +14,7 @@ export type ManageSiteResponse = {
 
 export type ManageSiteListResponse = {
   total: number;
-  entityTypeCounts: {
-    PUBLISHED: number;
-    DRAFT: number;
-    TRASH: number;
-  };
+  entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
   records: ManageSiteResponse[];
 };

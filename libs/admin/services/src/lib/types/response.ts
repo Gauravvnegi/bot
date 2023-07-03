@@ -1,13 +1,11 @@
-import { EntityTypeCountsResponse } from '@hospitality-bot/admin/library';
-import { EntityStateCountsResponse } from 'libs/admin/library/src/lib/types/response';
-
+import { EntityState } from '@hospitality-bot/admin/shared';
 export type ServiceListResponse = {
   services?: ServiceResponse[];
   paidPackages?: ServiceResponse[];
   complimentaryPackages?: ServiceResponse[];
   total: number;
-  entityStateCounts: EntityStateCountsResponse;
-  entityTypeCounts: EntityTypeCountsResponse;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
 };
 
 export type ServiceResponse = {
@@ -45,5 +43,6 @@ export type TaxResponse = {
 export type TaxListResponse = {
   records: TaxResponse[];
   total: number;
-  entityStateCounts: EntityStateCountsResponse;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
 };

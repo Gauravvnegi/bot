@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
-import { ControlContainer, FormGroup } from '@angular/forms';
+import { ControlContainer, FormGroup, Validators } from '@angular/forms';
 import { updateItems, weeks } from '../constants/bulkupdate-response';
 import { RoomTypeOption } from 'libs/admin/room/src/lib/types/room';
 import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
@@ -79,9 +79,18 @@ export class BulkUpdateFormComponent extends FormComponent {
         this.endMinDate = new Date(value);
       });
 
-    this.parentForm.get(this.controls.update).valueChanges.subscribe((_) => {
-      this.parentForm.controls[this.controls.updateValue].reset();
-    });
+    this.parentForm
+      .get(this.controls.update)
+      .valueChanges.subscribe((changedValue) => {
+        const target = this.parentForm.controls[this.controls.updateValue];
+        target.reset();
+
+        restrictionsRecord[changedValue].type === 'boolean'
+          ? target.clearValidators()
+          : target.setValidators([Validators.required]);
+
+        target.updateValueAndValidity();
+      });
   }
 
   // reviewPoint: all these function should be in the room type component itself

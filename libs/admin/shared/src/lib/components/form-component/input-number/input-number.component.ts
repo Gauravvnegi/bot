@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { FormComponent } from '../form.components';
 
@@ -7,7 +7,7 @@ import { FormComponent } from '../form.components';
   templateUrl: './input-number.component.html',
   styleUrls: ['./input-number.component.scss'],
 })
-export class InputNumberComponent extends FormComponent implements OnInit {
+export class InputNumberComponent extends FormComponent {
   min: number;
   max: number;
 
@@ -21,27 +21,27 @@ export class InputNumberComponent extends FormComponent implements OnInit {
     super(controlContainer);
   }
 
-  ngOnInit(): void {}
+  // ngOnInit(): void {}
 
-  get control() {
-    return this.controlContainer.control.get(this.controlName);
-  }
+  // get control() {
+  //   return this.controlContainer.control.get(this.controlName);
+  // }
 
   incrementValue() {
-    const currentValue = this.control.value;
+    const currentValue = this.inputControl.value;
     const newValue = currentValue + 1;
 
     if (currentValue !== this.max || !this.max) {
-      this.control.setValue(newValue);
+      this.inputControl.setValue(newValue);
     }
   }
 
   decrementValue() {
-    const currentValue = this.control.value;
+    const currentValue = this.inputControl.value;
     const newValue = currentValue - 1;
 
     if (currentValue !== this.min || !this.min) {
-      this.control.setValue(newValue);
+      this.inputControl.setValue(newValue);
     }
   }
 }

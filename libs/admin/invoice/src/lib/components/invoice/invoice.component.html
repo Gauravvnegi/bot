@@ -218,7 +218,8 @@
                     tableFormArray.at(rowIndex).get('isDiscount').value ||
                     tableFormArray.at(rowIndex).get('isRefundOrPayment')
                       .value ||
-                    !tableFormArray.at(rowIndex).get('billItemId').value
+                    !tableFormArray.at(rowIndex).get('billItemId').value ||
+                    isInvoiceGenerated
                   "
                 ></hospitality-bot-input-number>
               </td>

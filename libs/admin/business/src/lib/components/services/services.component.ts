@@ -19,6 +19,7 @@ import {
 import { BusinessService } from '../../services/business.service';
 import { HotelFormDataService } from '../../services/hotel-form.service';
 import { ServcieStatusList } from '../../models/hotel-form.model';
+import { Cancelable, debounce } from 'lodash';
 @Component({
   selector: 'hospitality-bot-services',
   templateUrl: './services.component.html',
@@ -102,13 +103,44 @@ export class ServicesComponent implements OnInit, OnDestroy {
    * @function searchServices
    */
   registerSearch() {
+    let debounceCall: (() => void) & Cancelable;
+
     this.searchForm.get('searchText').valueChanges.subscribe((res) => {
+      debounceCall?.cancel();
+
       if (res) {
-        this.filteredServices = this.compServices.filter((service) =>
-          service.name.toLowerCase().includes(res.toLowerCase())
-        );
+        debounceCall = debounce(() => {
+          this.loading = true;
+          this.businessService
+            .searchLibraryItem(this.hotelId, {
+              params: `?key=${res}&type=SERVICE`,
+            })
+            .subscribe(
+              (res) => {
+                const data = res && res['SERVICE'];
+                const compServices = [];
+
+                data?.forEach((item) => {
+                  if (item.type == 'Complimentary' && item.active) {
+                    compServices.push(item);
+                  }
+                });
+                this.compServices = compServices;
+                this.filteredServices = this.compServices;
+              },
+              (error) => {
+                this.snackbarService.openSnackBarAsText(error.error.message);
+              },
+              () => {
+                this.loading = false;
+              }
+            );
+        }, 500);
+        debounceCall();
       } else {
-        this.filteredServices = this.compServices;
+        this.offset = 0;
+        this.compServices = [];
+        this.getServices();
       }
     });
   }
@@ -151,7 +183,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
             ...this.compServices,
             ...res.complimentaryPackages,
           ];
-          this.filteredServices = this.compServices;
+          // this.filteredServices = this.compServices;
 
           if (this.compServices.length === res.total) {
             this.noMoreServices = true;
@@ -206,5 +238,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   /**
    * Remove selected service value when components is removed
    */
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

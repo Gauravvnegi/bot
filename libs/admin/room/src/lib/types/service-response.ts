@@ -1,4 +1,3 @@
-
 export type RoomStatus =
   | 'CLEAN'
   | 'INSPECTED'
@@ -29,6 +28,7 @@ export type RoomResponse = {
     soldOut: boolean;
     unavailableRoomCount: number;
   };
+  features: string[];
   roomStatus: RoomStatus;
   //--- can be modified
   toDate: number;

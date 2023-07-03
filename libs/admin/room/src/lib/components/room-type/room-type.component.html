@@ -53,9 +53,16 @@
           formControlName="complimentaryAmenities"
           [itemList]="compServices"
           (viewAll)="saveRoomTypeData('COMPLIMENTARY')"
-          [noRecordsAction]="noRecordAction"
+          [noRecordsAction]="noRecordActionForComp"
           [loading]="loading"
-        ></hospitality-bot-custom-select>
+          (onEmptyViewCta)="openImportService('COMPLIMENTARY')"
+        >
+          <hospitality-bot-button
+            label="+Import Services"
+            variant="text"
+            (onClick)="openImportService('COMPLIMENTARY')"
+          ></hospitality-bot-button>
+        </hospitality-bot-custom-select>
         <div class="paid-services">
           <hospitality-bot-custom-select
             label="Paid Services"

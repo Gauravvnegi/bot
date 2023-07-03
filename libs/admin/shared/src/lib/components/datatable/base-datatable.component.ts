@@ -189,13 +189,14 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   resetTableValues() {
+    this.table.reset();
     this.isTabFilters = true;
     this.rowsPerPage = 5;
     this.first = 0;
     this.values = [];
     this.tabFilterItems = [];
     this.tabFilterIdx = 0;
-    this.filterChips = []; 
+    this.filterChips = [];
     this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
     this.totalRecords = 0;
   }
@@ -518,7 +519,7 @@ export class BaseDatatableComponent implements OnInit {
     } else if (this.filterChips?.length) {
       this.totalRecords = this.calculateTotalChipsCount(this.filterChips);
     } else {
-      this.totalRecords = this.tabFilterItems[this.tabFilterIdx].total;
+      this.totalRecords = this.tabFilterItems[this.tabFilterIdx]?.total;
     }
   }
 

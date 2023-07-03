@@ -93,3 +93,10 @@ export const noRecordAction = {
   description:
     'No services found. Tap the +Create Services to create & manage the services offered by your hotel',
 };
+
+export const noRecordActionForComp = {
+  actionName: '+Import Services',
+  imageSrc: 'assets/images/empty-table-service.png',
+  description:
+    'No services found. Tap the +Import Services to Import & manage the services offered by your hotel',
+};

@@ -196,6 +196,7 @@ $border-color: rgba(112, 112, 112, 0.35);
 .cell {
   width: 65px;
   min-width: 65px;
+  height: 100%;
   // max-width: 65px;
   flex-grow: 1;
 
@@ -300,4 +301,16 @@ $border-color: rgba(112, 112, 112, 0.35);
   padding: 35px 0 15px;
   display: flex;
   justify-content: center;
+}
+
+:host ::ng-deep {
+  .weekend-occupancy-bg {
+    background-color: #e4e5eb;
+  }
+  .weekend-bg {
+    background-color: rgba(255, 0, 0, 0.05);
+    input {
+      background: transparent;
+    }
+  }
 }

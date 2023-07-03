@@ -97,7 +97,7 @@ export class UpdateInventoryComponent implements OnInit {
    */
   addRoomTypesControl() {
     this.useForm.addControl('roomTypes', this.fb.array([]));
-    const ratePlansControl = this.useForm.get('roomTypes') as FormArray
+    const ratePlansControl = this.useForm.get('roomTypes') as FormArray;
     this.roomTypes.forEach((roomType, roomTypeIdx) => {
       this.useFormControl.roomTypes.push(
         this.fb.group({
@@ -108,7 +108,7 @@ export class UpdateInventoryComponent implements OnInit {
           selectedRestriction: [this.restrictions[0].value],
         })
       );
-      
+
       this.addRatesAndRestrictionControl(ratePlansControl, roomTypeIdx);
 
       this.addChannelsControl(roomType.channels, roomTypeIdx);
@@ -147,12 +147,13 @@ export class UpdateInventoryComponent implements OnInit {
    */
   addChannelsControl(
     channels: RoomTypes['ratePlans'][0]['channels'],
-    roomTypeIdx: number,
- 
+    roomTypeIdx: number
   ) {
-    const roomTypeFG = this.useFormControl.roomTypes.at(roomTypeIdx) as FormGroup;
+    const roomTypeFG = this.useFormControl.roomTypes.at(
+      roomTypeIdx
+    ) as FormGroup;
 
-      roomTypeFG.addControl('channels', this.fb.array([]));
+    roomTypeFG.addControl('channels', this.fb.array([]));
 
     const channelControl = roomTypeFG.get('channels') as FormArray;
 
@@ -212,5 +213,12 @@ export class UpdateInventoryComponent implements OnInit {
 
   handleSave() {
     // this.snacu
+  }
+  getWeekendBG(day: string, isOccupancy = false) {
+    return day === 'Sat' || day === 'Sun'
+      ? isOccupancy
+        ? 'weekend-occupancy-bg'
+        : 'weekend-bg'
+      : '';
   }
 }

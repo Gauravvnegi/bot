@@ -70,3 +70,11 @@ export class CheckBoxTreeFactory {
     return tree;
   }
 }
+
+export function getWeekendBG(day: string, isOccupancy = false) {
+  return day === 'Sat' || day === 'Sun'
+    ? isOccupancy
+      ? 'weekend-occupancy-bg'
+      : 'weekend-bg'
+    : '';
+}

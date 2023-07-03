@@ -13,6 +13,7 @@ import {
 } from '../../constants/data';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { DateOption, RoomTypes } from '../../types/channel-manager.types';
+import { getWeekendBG } from '../../models/bulk-update.models';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
@@ -214,11 +215,8 @@ export class UpdateInventoryComponent implements OnInit {
   handleSave() {
     // this.snacu
   }
+
   getWeekendBG(day: string, isOccupancy = false) {
-    return day === 'Sat' || day === 'Sun'
-      ? isOccupancy
-        ? 'weekend-occupancy-bg'
-        : 'weekend-bg'
-      : '';
+    return getWeekendBG(day, isOccupancy);
   }
 }

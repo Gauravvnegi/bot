@@ -3,16 +3,17 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
-  FormGroup
+  FormGroup,
 } from '@angular/forms';
 import { daysOfWeek } from '@hospitality-bot/admin/shared';
 import {
   ratesRestrictions,
   RestrictionAndValuesOption,
-  restrictionsRecord
+  restrictionsRecord,
 } from '../../constants/data';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { DateOption, RoomTypes } from '../../types/channel-manager.types';
+import { getWeekendBG } from '../../models/bulk-update.models';
 
 @Component({
   selector: 'hospitality-bot-update-rates',
@@ -274,5 +275,9 @@ export class UpdateRatesComponent implements OnInit {
 
   handleSave() {
     // this.snacu
+  }
+
+  getWeekendBG(day: string, isOccupancy = false) {
+    return getWeekendBG(day, isOccupancy);
   }
 }

@@ -4,6 +4,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4%;
+  overflow: hidden;
 }
 :host ::ng-deep .option-image {
   width: 2em;
@@ -23,7 +24,10 @@
   align-items: center;
   padding: 0;
   overflow: visible;
-  line-height: 1em;
+  line-height: 1.2em;
+  &.p-disabled {
+    cursor: not-allowed !important;
+  }
 }
 
 :host ::ng-deep .p-dropdown-panel {

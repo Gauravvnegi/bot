@@ -110,7 +110,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         cashierFirstName: [{ value: '', disabled: true }],
         cashierLastName: [{ value: '', disabled: true }],
         totalPaidAmount: [
-          '',
+          0,
           [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
         ],
         currency: [''],

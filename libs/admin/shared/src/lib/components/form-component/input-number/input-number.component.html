@@ -1,0 +1,25 @@
+<div class="wrapper" [formGroup]="controlContainer.control">
+  <hospitality-bot-input
+    [controlName]="controlName"
+    [disabled]="isDisabled"
+    [props]="{
+      tabIndex: '-1'
+    }"
+  ></hospitality-bot-input>
+  <div class="buttons">
+    <button
+      class="btn btn-up"
+      [disabled]="isDisabled"
+      (click)="incrementValue()"
+    >
+      <i class="pi pi-chevron-up"></i>
+    </button>
+    <button
+      class="btn btn-down"
+      [disabled]="isDisabled"
+      (click)="decrementValue()"
+    >
+      <i class="pi pi-chevron-down"></i>
+    </button>
+  </div>
+</div>

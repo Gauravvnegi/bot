@@ -33,7 +33,7 @@ export class ApiService {
     if (config?.headers) {
       Object.entries(config.headers).forEach(
         ([key, value]: [string, string]) => {
-           headers = headers.set(key, value);
+          headers = headers.set(key, value);
         }
       );
     }

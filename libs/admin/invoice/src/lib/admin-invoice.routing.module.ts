@@ -4,7 +4,8 @@ import { InvoiceComponent } from './components/invoice/invoice.component';
 import { PreviewComponent } from './components/preview/preview.component';
 import { MainComponent } from './components/main/main.component';
 import { invoiceRoutes } from './constants/routes';
-import { PaymentHistoryComponent } from './components/payment-history/payment-history.component';
+import { AddDiscountComponent } from './components/add-discount/add-discount.component';
+import { AddRefundComponent } from './components/add-refund/add-refund.component';
 
 export const adminInvoiceRoutes: Route[] = [
   {
@@ -19,10 +20,6 @@ export const adminInvoiceRoutes: Route[] = [
         path: 'preview-invoice/:id',
         component: PreviewComponent,
       },
-      {
-        path: `${invoiceRoutes.paymentHistory.route}/:id`,
-        component: PaymentHistoryComponent,
-      },
     ],
   },
 ];
@@ -32,5 +29,11 @@ export const adminInvoiceRoutes: Route[] = [
   exports: [RouterModule],
 })
 export class AdminInvoiceRoutingModule {
-  static components = [MainComponent, InvoiceComponent, PreviewComponent, PaymentHistoryComponent];
+  static components = [
+    MainComponent,
+    InvoiceComponent,
+    PreviewComponent,
+    AddDiscountComponent,
+    AddRefundComponent,
+  ];
 }

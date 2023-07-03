@@ -19,7 +19,7 @@ export class ManageSite {
     this.url = input.domain;
     this.nextState = input.nextState;
     this.status = input.status;
-
+    this.nextState = [...input.nextState, input.status];
     return this;
   }
 }

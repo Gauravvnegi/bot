@@ -24,6 +24,7 @@ import { ManageSite, ManageSiteList } from '../../models/data-table.model';
 import { ManageSitesService } from '../../services/manage-sites.service';
 import { NextState, QueryConfig } from '../../types/manage-site.type';
 import { environment } from '@hospitality-bot/admin/environment';
+import { siteStatusDetails } from '../../constants/response';
 
 @Component({
   selector: 'hospitality-bot-manage-site-data-table',
@@ -34,6 +35,7 @@ import { environment } from '@hospitality-bot/admin/environment';
   ],
 })
 export class ManageSiteDataTableComponent extends BaseDatatableComponent {
+  readonly siteStatusDetails = siteStatusDetails;
   createSiteUrl: string;
 
   hotelId: string;
@@ -115,7 +117,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   }
 
   handleStatus(status: ManageSiteStatus, rowData: ManageSite) {
-    if(status === ManageSiteStatus.PUBLISHED){
+    if (status === ManageSiteStatus.PUBLISHED) {
       this.changeStatus(status, rowData);
       return;
     }
@@ -128,7 +130,6 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
 
     const currStatus =
       status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
-
 
     // let heading: string;
     let description: string[] = [

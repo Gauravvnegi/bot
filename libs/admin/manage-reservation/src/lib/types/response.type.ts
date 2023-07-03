@@ -40,7 +40,7 @@ export type ReservationResponse = {
   totalAmount: number;
   fullName: string;
   roomNumber: number;
-  statusValues: Status[];
+  nextStates: string[];
   sourceName: string;
 };
 

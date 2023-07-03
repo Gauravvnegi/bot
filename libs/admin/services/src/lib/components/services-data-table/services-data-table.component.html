@@ -122,18 +122,19 @@
       <td>
         <div class="center-align" *ngIf="rowData.amount; else emptyCell">
           <div class="primary-text">
-            {{ rowData.amount | currency: rowData.currency }} / {{ rowData.unit }}
+            {{ rowData.amount | currency: rowData.currency }} /
+            {{ rowData.unit }}
           </div>
         </div>
       </td>
       <td>
         <div class="cell-content">
-          <hospitality-bot-toggle-dropdown
+          <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.status"
+            [state]="rowData.status"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>

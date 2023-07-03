@@ -42,23 +42,20 @@ export class CheckBoxTreeFactory {
         [buildType.isInventory ? 'channels' : 'variants']: [],
       };
 
-      const getChannels = (ratePlan) => {
-        return ratePlan['channels']?.map((item) => {
+      const getChannels = (parent) => {
+        return parent['channels']?.map((item) => {
           return {
             id: item.value,
             name: item.label,
             isSelected: false,
-          } as Channel;
+          };
         });
       };
 
-      for (let ratePlan of item['ratePlans']) {
-        if (buildType.isInventory) {
-          buildData.channels = [
-            ...buildData.channels,
-            ...getChannels(ratePlan),
-          ];
-        } else {
+      if (buildType.isInventory) {
+        buildData['channels'] = [...getChannels(item)];
+      } else {
+        for (let ratePlan of item['ratePlans']) {
           buildData['variants'].push({
             id: ratePlan.value,
             name: ratePlan.type + ` ( ${ratePlan.label} )`,
@@ -67,7 +64,8 @@ export class CheckBoxTreeFactory {
           });
         }
       }
-      return buildData;
+
+      return buildData as ObjectType;
     }) as ObjectType[];
     return tree;
   }

@@ -15,13 +15,23 @@ import {
 } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { Subscription } from 'rxjs';
+import {
+  RestrictionAndValuesOption,
+  restrictionsRecord,
+  inventoryRestrictions,
+} from '../../constants/data';
 @Component({
   selector: 'hospitality-bot-bulk-update-form',
   templateUrl: './bulk-update-form.component.html',
   styleUrls: ['./bulk-update-form.component.scss'],
 })
 export class BulkUpdateFormComponent extends FormComponent {
+  readonly restrictionsRecord = restrictionsRecord;
+
   updateItems = updateItems;
+
+  restrictions: RestrictionAndValuesOption[];
+
   weeks = weeks;
 
   hotelId: string;
@@ -68,11 +78,14 @@ export class BulkUpdateFormComponent extends FormComponent {
       .valueChanges.subscribe((value) => {
         this.endMinDate = new Date(value);
       });
+
+    this.parentForm.get(this.controls.update).valueChanges.subscribe((_) => {
+      this.parentForm.controls[this.controls.updateValue].reset();
+    });
   }
 
-
   // reviewPoint: all these function should be in the room type component itself
-  
+
   /**
    * @function loadMoreRoomTypes load more categories options
    */
@@ -86,6 +99,14 @@ export class BulkUpdateFormComponent extends FormComponent {
    */
   initOptionsConfig(): void {
     this.getRoomTypes();
+    this.getRestrictions();
+  }
+
+  getRestrictions() {
+    this.restrictions = inventoryRestrictions.map((item) => {
+      const { label, type } = this.restrictionsRecord[item];
+      return { label, type, value: item };
+    });
   }
 
   /**

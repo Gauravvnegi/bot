@@ -134,6 +134,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       this.selectedOutlet = value;
       if (this.selectedOutlet && this.selectedOutlet !== this.previousOutlet) {
         this.resetTableValues();
+        this.selectedTab = ReservationTableValue.ALL;
         this.loading = true;
         // this.initTableValue();
       }

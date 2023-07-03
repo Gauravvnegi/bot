@@ -46,9 +46,7 @@ export class BulkUpdateFormComponent extends FormComponent {
   roomTypeLimit = 10;
 
   $subscription = new Subscription();
-
-  // reviewPoint: no need to have control as a input (it will all be predefined as will not be be any where else)
-  @Input() controls = {
+  private _controls = {
     update: 'update',
     updateValue: 'updateValue',
     fromDate: 'fromDate',
@@ -56,6 +54,14 @@ export class BulkUpdateFormComponent extends FormComponent {
     roomType: 'roomType',
     selectedDays: 'selectedDays',
   };
+
+  @Input() set controls(value: { [key: string]: string }) {
+    this._controls = { ...this._controls, ...value };
+  }
+
+  get controls() {
+    return this._controls;
+  }
 
   constructor(
     public controlContainer: ControlContainer,

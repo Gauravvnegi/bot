@@ -10,12 +10,7 @@ import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { taxRoutes } from '../../constants/routes';
-import {
-  cols,
-  title,
-  filtersChips,
-  tabFilterItems,
-} from '../../constants/data-table';
+import { cols, title } from '../../constants/data-table';
 import { Subscription } from 'rxjs';
 import { TaxService } from '../../services/tax.service';
 import { LazyLoadEvent } from 'primeng/api/public_api';
@@ -39,12 +34,10 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   cols = cols;
   isCustomSort = true;
   triggerInitialData = false;
-  filterChips = filtersChips;
-  tabFilterIdx = 0;
+  isAllTabFilterRequired = true;
   globalQueries = [];
   $subscription = new Subscription();
   navRoutes: NavRouteOptions;
-  tabFilterItems = tabFilterItems;
 
   constructor(
     public fb: FormBuilder,
@@ -87,9 +80,11 @@ export class TaxDataTableComponent extends BaseDatatableComponent
           const taxList = new TaxList().deserialize(res);
 
           this.values = taxList.records;
-          this.updateTabFilterCount(res.entityTypeCounts, res.total);
-          this.updateQuickReplyFilterCount(res.entityStateCounts);
-          this.updateTotalRecords();
+          this.initFilters(
+            taxList.entityTypeCounts,
+            taxList.entityStateCounts,
+            taxList.total
+          );
         },
         ({ error }) => {
           this.values = [];
@@ -106,7 +101,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           offset: this.first,
@@ -116,21 +111,6 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     };
 
     return config;
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { entityState: null }
-        : { entityState: chips[0].value === 'ACTIVE' },
-    ];
   }
 
   /**
@@ -144,19 +124,17 @@ export class TaxDataTableComponent extends BaseDatatableComponent
       .updateTax(this.hotelId, rowData.id, { status: status })
       .subscribe(
         (res) => {
-          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-          this.updateStatusAndCount(
-            statusValue(rowData.status),
-            statusValue(status)
-          );
-          this.values.find((item) => item.id === rowData.id).status = status;
+          this.initTableValue();
           this.snackbarService.openSnackBarAsText(
             'Status changes successfully',
             '',
             { panelClass: 'success' }
           );
         },
-        ({ error }) => {},
+        ({ error }) => {
+          this.loading = false;
+          this.values = [];
+        },
         this.handleFinal
       );
   }

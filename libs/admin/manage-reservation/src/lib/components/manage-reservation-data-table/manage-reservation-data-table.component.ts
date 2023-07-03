@@ -106,7 +106,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
             total: 0,
           };
         });
-        this.tabFilterItems = [...this.tabFilterItems, ...data];
       });
   }
 
@@ -367,12 +366,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
             this.values.find(
               (item) => item.id === reservationData.id
             ).reservationType = status;
-            this.values = this.values.map((item) => {
-              return {
-                ...item,
-                statusValues: this.getStatusValues(item.reservationType),
-              };
-            });
+            this.initTableValue();
             this.snackbarService.openSnackBarAsText(
               'Reservation ' + status + ' changes successfully',
               '',

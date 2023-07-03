@@ -39,17 +39,17 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter($event)"
-  *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+  *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
-     <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
 
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
-        [chips]="tabFilterItems[tabFilterIdx].chips"
+        [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
       ></hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -186,7 +186,7 @@
               class="email"
               (click)="openDetailPage($event)"
             >
-              <u> {{rowData.countryCode}}-{{ rowData.phoneNumber }}</u>
+              <u> {{ rowData.countryCode }}-{{ rowData.phoneNumber }}</u>
             </a>
           </ng-template>
         </span>
@@ -406,7 +406,7 @@
   <hospitality-bot-empty-table
     [isLoading]="loading"
     [content]="{
-      description:'No guest found.',
+      description: 'No guest found.',
       imageSrc: 'assets/images/empty-table-guest.png'
     }"
   >

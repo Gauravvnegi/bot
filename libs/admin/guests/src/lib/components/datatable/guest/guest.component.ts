@@ -16,7 +16,7 @@ import * as FileSaver from 'file-saver';
 import { SnackBarService } from 'libs/shared/material/src';
 import { SortEvent } from 'primeng/api/sortevent';
 import { Observable, Subscription } from 'rxjs';
-import { guest } from '../../../constants/guest';
+import { chips, guest, guestStatusDetails } from '../../../constants/guest';
 import { GuestTable } from '../../../data-models/guest-table.model';
 import { GuestTableService } from '../../../services/guest-table.service';
 import { SelectedEntityState } from '../../../types/guest.type';
@@ -33,6 +33,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   @Input() tableName = 'Guest List';
   @Input() tabFilterItems = guest.tabFilterItems.datatable;
+  readonly guestStatusDetails = guestStatusDetails;
+
   actionButtons = true;
   isQuickFilters = true;
   isTabFilters = true;
@@ -89,7 +91,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFiltersV2(),
         ]);
       })
     );
@@ -127,25 +129,15 @@ export class GuestDatatableComponent extends BaseDatatableComponent
    * @param data The api response data.
    */
   setRecords(data): void {
-    this.values = new GuestTable().deserialize(data).records;
+    const guestData = new GuestTable().deserialize(data);
+    this.values = guestData.records;
+    this.initFilters(
+      guestData.entityTypeCounts,
+      guestData.entityStateCounts,
+      guestData.totalRecord,
+      this.guestStatusDetails
+    );
     this.loading = false;
-    data.entityStateCounts &&
-      this.updateQuickReplyFilterCount(data.entityStateCounts);
-    data.entityTypeCounts &&
-      this.updateTabFilterCount(data.entityTypeCounts, data.total);
-    this.updateTotalRecords();
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters(): SelectedEntityState[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected)
-      .map((item) => ({
-        entityState: item.value,
-      }));
   }
 
   /**
@@ -180,7 +172,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFiltersV2(),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -225,11 +217,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     );
   }
 
-  onSelectedTabFilterChange(event): void {
-    this.tabFilterIdx = event.index;
-    this.loadData();
-  }
-
   onFilterTypeTextChange(value, field, matchMode = 'contains'): void {
     if (!!value && !this.isSearchSet) {
       this.tempFirst = this.first;
@@ -254,7 +241,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
       ]),
     };
@@ -268,6 +255,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         ({ error }) => {
+          this.values = [];
           this.loading = false;
         }
       )
@@ -299,7 +287,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
                 order: 'DESC',
                 entityType: this.tabFilterItems[this.tabFilterIdx].value,
               },
-              ...this.getSelectedQuickReplyFilters(),
+              ...this.getSelectedQuickReplyFiltersV2(),
             ],
             false
           );

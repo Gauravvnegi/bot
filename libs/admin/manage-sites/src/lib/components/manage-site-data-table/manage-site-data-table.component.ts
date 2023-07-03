@@ -18,7 +18,7 @@ import {
 } from '@hospitality-bot/shared/material';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { chips, cols, status } from '../../constant/data-table';
+import { cols, manageSiteStatus, status } from '../../constant/data-table';
 import { ManageSiteStatus } from '../../constant/manage-site';
 import { ManageSite, ManageSiteList } from '../../models/data-table.model';
 import { ManageSitesService } from '../../services/manage-sites.service';
@@ -39,9 +39,9 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   createSiteUrl: string;
 
   hotelId: string;
-  filterChips = chips;
   cols = cols;
   status = status;
+  manageSiteStatus = manageSiteStatus;
   isSelectable = false;
   tableName = 'Partner Dashboard';
   userId: string;
@@ -95,12 +95,12 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
             status: item.status,
             value: item.nextState,
           }));
-          // this.totalRecords = manageSiteData.total;
-          // this.filterChips.forEach((item) => {
-          //   item.total = manageSiteData.entityTypeCounts[item.value];
-          // });
-          this.updateQuickReplyFilterCount(res.entityTypeCounts);
-          this.updateTotalRecords();
+          this.initFilters(
+            manageSiteData.entityStateCounts,
+            manageSiteData.entityTypeCounts,
+            manageSiteData.total,
+            this.manageSiteStatus
+          );
         },
         () => {
           this.values = [];
@@ -192,7 +192,6 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
             '',
             { panelClass: 'success' }
           );
-          this.updateStatusAndCount(rowData.status, status);
           this.initTableValue();
         },
         ({ error }) => {
@@ -241,21 +240,10 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
     });
   }
 
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return chips.map((item) => ({ status: item.value }));
-  }
-
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
         {
           // not using pagination as of now
           // offset: this.first,

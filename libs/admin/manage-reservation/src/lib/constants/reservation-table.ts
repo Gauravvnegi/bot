@@ -201,6 +201,28 @@ export const outletCols: Cols[] = [
 ];
 export const title = 'Reservation';
 
+export const reservationChips: Record<
+  'DRAFT' | 'CANCELED' | 'CONFIRMED' | 'OTA',
+  { label: string; type: FlagType }
+> = {
+  DRAFT: {
+    label: 'Draft',
+    type: 'warning',
+  },
+  CANCELED: {
+    label: 'Cancel',
+    type: 'failed',
+  },
+  CONFIRMED: {
+    label: 'Confirm',
+    type: 'active',
+  },
+  [ReservationTableValue.OTA]: {
+    label: ReservationTableValue.OTA,
+    type: 'active',
+  },
+};
+
 /* Status of the reservation */
 export enum ReservationStatusType {
   ALL = 'ALL',

@@ -29,10 +29,5 @@ export class RoomTypesComponent extends FormComponent {
     this.roomTypes = this.channelMangerForm.getRoomsData;
   }
 
-  listenChanges() {
-    this.controlContainer.valueChanges.subscribe((value) => {
-      console.log('options--', value);
-      // reviewPoint: Do we need subscription here?
-    });
-  }
+  listenChanges() {}
 }

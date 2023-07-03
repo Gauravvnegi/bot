@@ -5,23 +5,39 @@
         class="bulk-update__left"
         label="Set"
         [controlName]="controls.update"
-        [options]="updateItems"
+        [options]="restrictions"
         [props]="{
-          alignment: 'horizontal',
-          disabled: true
-        }"
-      >
-      </hospitality-bot-select>
-      <hospitality-bot-input
-        class="bulk-update__right"
-        [controlName]="controls.updateValue"
-        label="To"
-        [props]="{
-          placeholder: 'Enter',
+          placeholder: 'Select',
           alignment: 'horizontal'
         }"
       >
-      </hospitality-bot-input>
+      </hospitality-bot-select>
+      <ng-container
+        [ngSwitch]="
+          restrictionsRecord[
+            controlContainer.control.get(controls.update).value
+          ]?.type
+        "
+      >
+        <hospitality-bot-input
+          *ngSwitchCase="'number'"
+          class="bulk-update__right"
+          [controlName]="controls.updateValue"
+          label="To"
+          [props]="{
+            placeholder: 'Enter',
+            alignment: 'horizontal'
+          }"
+        >
+        </hospitality-bot-input>
+        <hospitality-bot-toggle-switch
+          class="status"
+          *ngSwitchCase="'boolean'"
+          [controlName]="controls.updateValue"
+          onLabel="Yes"
+          offLabel="No"
+        ></hospitality-bot-toggle-switch>
+      </ng-container>
     </div>
     <div class="col bulk-update__date-wrapper">
       <hospitality-bot-date
@@ -54,9 +70,8 @@
   <div class="row bulk-update__row2">
     <hospitality-bot-room-types
       class="bulk-update__room-type"
-      [controlName]="roomTypes"
+      [controlName]="controls.roomType"
     >
-    <!-- reviewPoint: there is no vairable as roomTypes and it will be a string -->
     </hospitality-bot-room-types>
     <hospitality-bot-checkbox-selector
       class="bulk-update__week-days"

@@ -39,7 +39,7 @@ export class RatesBulkUpdateComponent implements OnInit {
     seventhDate.setDate(today.getDate() + 7);
 
     this.useForm = this.fb.group({
-      update: ['RATE'], // RATE, AVAILABILITY,
+      update: ['availability'], // RATE, AVAILABILITY,
       updateValue: ['', [Validators.required]],
       fromDate: [today.getTime(), [Validators.required]],
       toDate: [seventhDate.getTime(), [Validators.required]],

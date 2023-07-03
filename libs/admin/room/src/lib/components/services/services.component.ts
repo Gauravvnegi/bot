@@ -121,8 +121,8 @@ export class ServicesComponent implements OnInit, OnDestroy {
     let debounceCall: (() => void) & Cancelable;
 
     this.searchForm.get('searchText').valueChanges.subscribe((res) => {
+      debounceCall?.cancel();
       if (res) {
-        debounceCall?.cancel();
         debounceCall = debounce(() => {
           this.loading = true;
           this.disablePagination = true;

@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Form, FormBuilder, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { ImportService } from '../../services/import-service.service';
+import { QueryConfig } from '../../types/table.type';
 
 @Component({
   selector: 'hospitality-bot-import-service-container',
@@ -15,14 +16,18 @@ export class ImportServiceContainerComponent implements OnInit {
   loading: boolean = false;
   $subscription = new Subscription();
   filteredServices: any[] = [];
+  itemId: string;
+  endpoint = '';
+  params: string;
 
   @Input() compServices: any[] = [];
   @Output() OnSave = new EventEmitter<string[]>();
+  @Input() attachedServices: any[] = [];
 
-  @Input() set serviceIds(value: string[]) {
-    this.useForm.patchValue({
-      serviceIds: value,
-    });
+  @Input() set apiConfig(apiConfig: apiConfig) {
+    this.endpoint = apiConfig.endpoint;
+    this.params = apiConfig.params;
+    this.itemId = apiConfig.itemId;
   }
 
   constructor(private fb: FormBuilder, private importService: ImportService) {}
@@ -70,19 +75,28 @@ export class ImportServiceContainerComponent implements OnInit {
    */
   getDefaultServices() {
     this.loading = true;
-    this.$subscription.add(
-      this.importService.getServices().subscribe(
-        (res) => {
-          this.compServices = res.service;
-          this.filteredServices = this.compServices;
+    const api1$ = this.importService.getServices();
+    const api2$ = this.importService.getAttachedServices(
+      this.endpoint,
+      this.itemId,
+      {
+        params: this.params,
+      }
+    );
 
-          //still left to implement the logic for the filter already imported services
-        },
-        (err) => {},
-        () => {
-          this.loading = false;
-        }
-      )
+    forkJoin([api1$, api2$]).subscribe(
+      ([api1Data, api2Data]) => {
+        api2Data = api2Data.complimentaryPackages.map((res) => res.id);
+
+        this.compServices = api1Data.service.filter(
+          (res) => !api2Data.includes(res.id)
+        );
+        this.filteredServices = this.compServices;
+      },
+      (err) => {},
+      () => {
+        this.loading = false;
+      }
     );
   }
 
@@ -107,3 +121,9 @@ export class ImportServiceContainerComponent implements OnInit {
     this.$subscription.unsubscribe();
   }
 }
+
+type apiConfig = {
+  endpoint: string;
+  itemId: string;
+  params;
+};

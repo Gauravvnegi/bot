@@ -11,6 +11,7 @@
       *ngIf="actionName?.length"
       [label]="actionName"
       [link]="link"
+      (onClick)="action.emit()"
     ></hospitality-bot-button>
   </div>
 </div>

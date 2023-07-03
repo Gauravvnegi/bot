@@ -33,6 +33,7 @@ export class SingleRoom {
   currency: string;
   price: number;
   roomTypeId: string;
+  features: string[];
 
   deserialize(input: SingleRoomData) {
     this.id = input.id ?? '';
@@ -42,6 +43,7 @@ export class SingleRoom {
     this.currency = input.currency ?? '';
     this.price = input.price ?? null;
     this.roomTypeId = input.roomTypeId ?? '';
+    this.features = input.features ?? [];
     return this;
   }
 }

@@ -1,13 +1,5 @@
 <!-- To-Do: Please insert link -->
-<div
-  class="wrapper"
-  hospitalityBotBackdrop
-  [config]="{
-    isVisible: true,
-    label: 'Create and Continue',
-    link: '#'
-  }"
->
+<div class="wrapper">
   <div class="header">
     <div>
       <div class="heading" *ngIf="label">{{ label }}</div>
@@ -61,6 +53,7 @@
     <hospitality-bot-empty-table
       [isLoading]="loading"
       [content]="noRecordsAction"
+      (action)="onEmptyViewCta.emit()"
     >
     </hospitality-bot-empty-table>
   </ng-template>

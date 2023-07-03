@@ -109,8 +109,8 @@ export class InvoiceComponent implements OnInit {
 
   selectedSearchIndex = -1;
   descriptionOptions: DescriptionOption[] = [];
-
   defaultDescriptionOptions: DescriptionOption[] = [];
+  focusedDescriptionId: string;
 
   /**Table Variable */
   selectedRows = [];
@@ -329,10 +329,15 @@ export class InvoiceComponent implements OnInit {
 
   handleFocus(index: number) {
     this.selectedSearchIndex = index;
+    const currId = this.tableFormArray.at(index).get('billItemId').value;
+    if (currId) {
+      this.focusedDescriptionId = currId;
+    }
   }
 
   handleBlur() {
     this.selectedSearchIndex = -1;
+    this.focusedDescriptionId = '';
   }
 
   paymentValidation(addValidation: boolean = true) {
@@ -883,7 +888,9 @@ export class InvoiceComponent implements OnInit {
   get filteredDescriptionOptions() {
     if (!this.selectedServiceIds?.size) return this.descriptionOptions;
     return this.descriptionOptions.filter(
-      (item) => !this.selectedServiceIds.has(item.value)
+      (item) =>
+        !this.selectedServiceIds.has(item.value) ||
+        item.value === this.focusedDescriptionId
     );
   }
 

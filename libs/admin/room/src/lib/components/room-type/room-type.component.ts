@@ -18,6 +18,7 @@ import {
   ServicesTypeValue,
   errorMessages,
   noRecordAction,
+  noRecordActionForComp,
 } from '../../constant/form';
 import routes from '../../constant/routes';
 import { Service, Services } from '../../models/amenities.model';
@@ -32,6 +33,7 @@ import { RoomService } from '../../services/room.service';
 export class RoomTypeComponent implements OnInit, OnDestroy {
   readonly inputValidationProps = { errorMessages, type: 'number' };
   readonly noRecordAction = noRecordAction;
+  readonly noRecordActionForComp = noRecordActionForComp;
 
   subscription$ = new Subscription();
 
@@ -39,6 +41,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   ratePlanArray: FormArray;
 
   loading: boolean = false;
+  isCompLoading: boolean = false;
+  isPaidLoading: boolean = false;
 
   plans: {
     label: string;
@@ -427,6 +431,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    */
   getServices(serviceType: ServicesTypeValue) {
     this.loading = true;
+    this.isCompLoading = true;
+    this.isPaidLoading = true;
     this.subscription$.add(
       this.roomService
         .getServices(this.hotelId, {
@@ -453,6 +459,12 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           },
           () => {
             this.loading = false;
+            if (serviceType === ServicesTypeValue.COMPLIMENTARY) {
+              this.isCompLoading = false;
+            }
+            if (serviceType === ServicesTypeValue.PAID) {
+              this.isPaidLoading = false;
+            }
           }
         )
     );
@@ -465,6 +477,24 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     const data = this.useForm.getRawValue();
     this.roomService.initRoomTypeFormData(data, serviceType, true);
     this.router.navigate(['/pages/inventory/room/add-room-type/services']);
+  }
+
+  /**
+   * @function openImportService Open import service page
+   * @description Open import service page and save data locally
+   * @param serviceType
+   * @returns
+   */
+  openImportService(serviceType) {
+    const data = this.useForm.getRawValue();
+    this.roomService.initRoomTypeFormData(
+      { ...data, services: this.compServices },
+      serviceType,
+      true
+    );
+    this.router.navigate([
+      'pages/inventory/room/add-room-type/import-services',
+    ]);
   }
 
   /**

@@ -37,7 +37,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
 
   @Output() loadMoreData = new EventEmitter();
   @Output() viewAll = new EventEmitter();
-  @Output() addAction = new EventEmitter();
+  @Output() onEmptyViewCta = new EventEmitter();
 
   @Input() addActLabel: string;
 
@@ -87,7 +87,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
   selectItems(i: number) {
     const valueItem = this.options[i];
     if (!valueItem.checked) {
-      this.value.push(valueItem[this.optionValue]);
+      this.value?.push(valueItem[this.optionValue]);
     } else {
       let index = this.value.findIndex(
         (item) => item === valueItem[this.optionValue]

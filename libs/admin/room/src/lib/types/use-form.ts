@@ -9,6 +9,7 @@ export type BaseRoomForm = {
   price: number;
   currency: string;
   status: RoomStatus;
+  features: string[];
 };
 
 //  ******** Single Room Interface ********

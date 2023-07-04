@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
-import { ControlContainer, FormGroup } from '@angular/forms';
+import { ControlContainer, FormGroup, Validators } from '@angular/forms';
 import { updateItems, weeks } from '../constants/bulkupdate-response';
 import { RoomTypeOption } from 'libs/admin/room/src/lib/types/room';
 import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
@@ -15,13 +15,23 @@ import {
 } from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { Subscription } from 'rxjs';
+import {
+  RestrictionAndValuesOption,
+  restrictionsRecord,
+  inventoryRestrictions,
+} from '../../constants/data';
 @Component({
   selector: 'hospitality-bot-bulk-update-form',
   templateUrl: './bulk-update-form.component.html',
   styleUrls: ['./bulk-update-form.component.scss'],
 })
 export class BulkUpdateFormComponent extends FormComponent {
+  readonly restrictionsRecord = restrictionsRecord;
+
   updateItems = updateItems;
+
+  restrictions: RestrictionAndValuesOption[];
+
   weeks = weeks;
 
   hotelId: string;
@@ -36,9 +46,7 @@ export class BulkUpdateFormComponent extends FormComponent {
   roomTypeLimit = 10;
 
   $subscription = new Subscription();
-
-  // reviewPoint: no need to have control as a input (it will all be predefined as will not be be any where else)
-  @Input() controls = {
+  private _controls = {
     update: 'update',
     updateValue: 'updateValue',
     fromDate: 'fromDate',
@@ -46,6 +54,14 @@ export class BulkUpdateFormComponent extends FormComponent {
     roomType: 'roomType',
     selectedDays: 'selectedDays',
   };
+
+  @Input() set controls(value: { [key: string]: string }) {
+    this._controls = { ...this._controls, ...value };
+  }
+
+  get controls() {
+    return this._controls;
+  }
 
   constructor(
     public controlContainer: ControlContainer,
@@ -68,11 +84,23 @@ export class BulkUpdateFormComponent extends FormComponent {
       .valueChanges.subscribe((value) => {
         this.endMinDate = new Date(value);
       });
+
+    this.parentForm
+      .get(this.controls.update)
+      .valueChanges.subscribe((changedValue) => {
+        const target = this.parentForm.controls[this.controls.updateValue];
+        target.reset();
+
+        restrictionsRecord[changedValue].type === 'boolean'
+          ? target.clearValidators()
+          : target.setValidators([Validators.required]);
+
+        target.updateValueAndValidity();
+      });
   }
 
-
   // reviewPoint: all these function should be in the room type component itself
-  
+
   /**
    * @function loadMoreRoomTypes load more categories options
    */
@@ -86,6 +114,14 @@ export class BulkUpdateFormComponent extends FormComponent {
    */
   initOptionsConfig(): void {
     this.getRoomTypes();
+    this.getRestrictions();
+  }
+
+  getRestrictions() {
+    this.restrictions = inventoryRestrictions.map((item) => {
+      const { label, type } = this.restrictionsRecord[item];
+      return { label, type, value: item };
+    });
   }
 
   /**

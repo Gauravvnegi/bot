@@ -156,7 +156,11 @@
       <div class="right__main">
         <div class="main-header main-header__right">
           <div class="date-wrapper dates-header">
-            <div *ngFor="let date of dates" class="dates-cell cell">
+            <div
+              *ngFor="let date of dates"
+              class="dates-cell cell"
+              [ngClass]="getWeekendBG(date.day)"
+            >
               <div>{{ date.day }}</div>
               <div>{{ date.date }}</div>
             </div>
@@ -184,7 +188,11 @@
               <ng-container formArrayName="ratePlans">
                 <div class="data-cell-wrapper">
                   <div class="data-cell heading-section">
-                    <div class="cell" *ngFor="let date of dates">
+                    <div
+                      class="cell"
+                      *ngFor="let date of dates"
+                      [ngClass]="getWeekendBG(date.day, true)"
+                    >
                       <div class="main-text">9</div>
                       <div class="seconday-text">32%</div>
                     </div>
@@ -208,6 +216,7 @@
                         class="cell"
                         *ngFor="let date of dates; let controlIdx = index"
                         [formGroupName]="controlIdx"
+                        [ngClass]="getWeekendBG(date.day)"
                       >
                         <ng-container
                           [ngSwitch]="
@@ -251,6 +260,7 @@
                             class="cell"
                             *ngFor="let date of dates; let controlIdx = index"
                             [formGroupName]="controlIdx"
+                            [ngClass]="getWeekendBG(date.day)"
                           >
                             <ng-container
                               [ngSwitch]="

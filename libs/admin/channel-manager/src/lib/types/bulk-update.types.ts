@@ -4,6 +4,7 @@ export type TreeType = {
   isSelected: boolean;
 };
 export type RoomTypes = TreeType & {
+  channels: Channel[];
   variants: Variant[];
 };
 

@@ -52,6 +52,8 @@
           [props]="{
             placeholder: 'To'
           }"
+          [minDate]="endMinDate"
+          [maxDate]="maxToDate"
         ></hospitality-bot-date>
       </div>
     </ng-container>
@@ -62,9 +64,9 @@
         label="Reservation Date and Time"
         [settings]="{
           enableTime: false,
-          dateValue: endMinDate
+          dateValue: startMinDate
         }"
-        [minDate]="endMinDate"
+        [minDate]="startMinDate"
       ></hospitality-bot-date>
     </ng-container>
     <hospitality-bot-select

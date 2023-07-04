@@ -44,7 +44,7 @@
 }
 
 :host ::ng-deep .mat-tab-header {
-  // border-bottom: 1px solid #cdcdcd;
+  border: none !important;
   height: 100%;
 }
 
@@ -76,8 +76,9 @@
   padding: 0px 40px 0 22px;
   z-index: $nav-action-sub-header;
   box-shadow: 1px 7px 8px -7px #b5b5b5;
-  border-bottom: 1px solid #cdcdcd;
+  // border-bottom: 1px solid #cdcdcd;
 }
+//border for tab header
 .tab-wrapper {
-  border: 1px solid #cdcdcd;
+  border: 1px solid $borderCol;
 }

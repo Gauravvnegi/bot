@@ -212,7 +212,7 @@ export const feedback = {
   minPercent: -100,
   maxPercent: 100,
   table: {
-    name: 'Guest - Feedback',
+    name: 'Enhancing Guest Experience',
   },
   chips: {
     feedbackDatatable: [

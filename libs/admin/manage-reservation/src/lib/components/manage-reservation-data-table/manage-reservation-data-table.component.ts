@@ -51,6 +51,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   readonly manageReservationRoutes = manageReservationRoutes;
   readonly reservationStatusDetails = reservationStatusDetails;
   readonly reservationType = ReservationType;
+  scrollTargetPoint: number = 150;
 
   hotelId!: string;
   selectedTab: ReservationTableValue = ReservationTableValue.ALL;

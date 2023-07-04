@@ -52,7 +52,8 @@
   }
 }
 .request-body {
-  margin-top: 6px;
+  border: 1px solid $borderCol;
+  margin-top: 20px;
   background-color: $white;
   height: calc(100vh - 230px);
   display: flex;

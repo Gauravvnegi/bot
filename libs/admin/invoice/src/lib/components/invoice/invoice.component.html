@@ -1,10 +1,16 @@
 <div class="wrapper">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <hospitality-bot-button
+      *ngIf="(invoicePrepareRequest && pmsBooking) || !pmsBooking"
       variant="outlined"
-      [label]="isInvoiceGenerated ? 'Preview' : 'Preview and Generate'"
+      [label]="isInvoiceGenerated ? 'Preview and Send' : 'Preview and Generate'"
       (onClick)="previewAndGenerate()"
-      queryParamsHandling="preserve"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      *ngIf="!invoicePrepareRequest && pmsBooking"
+      variant="outlined"
+      [label]="'Prepare Invoice'"
+      (onClick)="prepareInvoice()"
     ></hospitality-bot-button>
   </hospitality-bot-navigation-header>
   <div class="form-wrapper" [formGroup]="useForm">
@@ -43,7 +49,7 @@
           [severity]="addGST ? 'reset' : 'primary'"
           [label]="addGST ? 'Remove GST' : '+Add GST'"
           (onClick)="onAddGST()"
-          [disabled]="isInvoiceGenerated"
+          [disabled]="isInvoiceDisabled"
         ></hospitality-bot-button>
       </div>
 
@@ -188,7 +194,8 @@
                   [disabled]="
                     tableFormArray.at(rowIndex).get('isDisabled').value ||
                     tableFormArray.at(rowIndex).get('isDiscount').value ||
-                    !tableFormArray.at(rowIndex).get('isNew').value
+                    !tableFormArray.at(rowIndex).get('isNew').value ||
+                    tableFormArray.at(rowIndex).get('isRefundOrPayment').value
                   "
                   (onFocus)="handleFocus(rowIndex)"
                   (onBlur)="handleBlur()"
@@ -219,7 +226,7 @@
                     tableFormArray.at(rowIndex).get('isRefundOrPayment')
                       .value ||
                     !tableFormArray.at(rowIndex).get('billItemId').value ||
-                    isInvoiceGenerated
+                    isInvoiceDisabled
                   "
                 ></hospitality-bot-input-number>
               </td>
@@ -244,14 +251,10 @@
                 <hospitality-bot-menu
                   type="button"
                   alignment="horizontal"
-                  (onClickItem)="handleDiscount($event, rowIndex)"
-                  [menuItems]="
-                    hasDiscount(tableFormArray.at(rowIndex).get('itemId').value)
-                      ? editDiscountMenu
-                      : addDiscountMenu
-                  "
+                  (onClickItem)="handleMenuAction($event, rowIndex)"
+                  [menuItems]="getMenu(rowIndex)"
                   [disabled]="
-                    isInvoiceGenerated ||
+                    isInvoiceDisabled ||
                     (!tableFormArray.at(rowIndex).get('itemId').value &&
                       !tableFormArray.at(rowIndex).get('isNew').value) ||
                     tableFormArray.at(rowIndex).get('taxId').value ||
@@ -268,7 +271,7 @@
                 label="+ Add New Item"
                 variant="text"
                 (onClick)="addNewCharges()"
-                [disabled]="isInvoiceGenerated"
+                [disabled]="isInvoiceDisabled"
               ></hospitality-bot-button>
               <hospitality-bot-button
                 *ngIf="inputControl.dueAmount.value < 0"
@@ -276,7 +279,7 @@
                 variant="text"
                 [severity]="'reset'"
                 (onClick)="handleRefund()"
-                [disabled]="isInvoiceGenerated"
+                [disabled]="isInvoiceDisabled"
               ></hospitality-bot-button>
             </div>
           </ng-template>
@@ -328,7 +331,7 @@
           variant="text"
           [severity]="addPayment ? 'reset' : 'primary'"
           [label]="addPayment ? 'Remove Payment' : '+Add Payment'"
-          [disabled]="isInvoiceGenerated"
+          [disabled]="isInvoiceDisabled"
           (onClick)="onAddPaymentDetails()"
         ></hospitality-bot-button>
       </div>
@@ -384,7 +387,7 @@
       <hospitality-bot-button
         label="Save Details"
         (onClick)="handleSave()"
-        [disabled]="isInvoiceGenerated"
+        [disabled]="isInvoiceDisabled"
       ></hospitality-bot-button>
     </div>
   </div>

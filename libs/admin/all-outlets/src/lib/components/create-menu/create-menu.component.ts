@@ -1,10 +1,14 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ConfigService, NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { outletRoutes } from '../../constants/routes';
+import { outletBusinessRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-create-menu',
@@ -12,7 +16,9 @@ import { outletRoutes } from '../../constants/routes';
   styleUrls: ['./create-menu.component.scss'],
 })
 export class CreateMenuComponent implements OnInit {
-  hotelId: string;
+  outletId: string;
+  brandId: string;
+  menuId: string;
   useForm: FormGroup;
   pageTitle: string;
   navRoutes: NavRouteOptions;
@@ -42,7 +48,17 @@ export class CreateMenuComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    const { navRoutes, title } = outletRoutes['addMenu1'];
+    this.router.events.subscribe(
+      ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
+        const outletId = snapshot?.params['outletId'];
+        const brandId = snapshot?.params['brandId'];
+        const menuId = snapshot?.params['menuId'];
+        if (outletId) this.outletId = outletId;
+        if (brandId) this.brandId = brandId;
+        if (menuId) this.menuId = menuId;
+      }
+    );
+    const { navRoutes, title } = outletBusinessRoutes['menu'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
   }

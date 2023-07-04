@@ -20,7 +20,7 @@ import { Subscription } from 'rxjs';
 import { OutletService } from '../../services/outlet.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { outletRoutes } from '../../constants/routes';
+import { outletBusinessRoutes } from '../../constants/routes';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { OutletList } from '../../models/outlet.model';
 
@@ -34,7 +34,7 @@ import { OutletList } from '../../models/outlet.model';
 })
 export class AllOutletsDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  readonly outletRoutes = outletRoutes;
+  readonly outletBusinessRoutes = outletBusinessRoutes;
 
   outletId: string;
   tabFilterItems = filters;

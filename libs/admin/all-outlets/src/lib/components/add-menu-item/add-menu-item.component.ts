@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { outletRoutes } from '../../constants/routes';
+import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
 import { MenuItemForm } from '../../types/outlet';
 
@@ -43,7 +43,7 @@ export class AddMenuItemComponent implements OnInit {
     private snackbarService: SnackBarService,
     private router: Router
   ) {
-    const { navRoutes, title } = outletRoutes['addMenuItem1'];
+    const { navRoutes, title } = outletBusinessRoutes['menuItem'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
   }

@@ -47,29 +47,29 @@ export const customModule = {
     isSubscribed: true,
     isView: true,
   },
-  outlets: {
-    name: 'OUTLET',
-    label: 'Outlet',
-    description: 'Outlet Module',
-    icon:
-      'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
-    config: [
-      {
-        isSubscribed: true,
-        isView: true,
-        label: 'Dashboard',
-        name: 'OUTLETS_DASHBOARD',
-      },
-      {
-        isSubscribed: true,
-        isView: true,
-        label: 'All Outlets',
-        name: 'ALL_OUTLETS',
-      },
-    ],
-    isSubscribed: true,
-    isView: true,
-  },
+  // outlets: {
+  //   name: 'OUTLET',
+  //   label: 'Outlet',
+  //   description: 'Outlet Module',
+  //   icon:
+  //     'https://nyc3.digitaloceanspaces.com/botfiles/bot/subscription_icons/FrontDesk.svg',
+  //   config: [
+  //     {
+  //       isSubscribed: true,
+  //       isView: true,
+  //       label: 'Dashboard',
+  //       name: 'OUTLETS_DASHBOARD',
+  //     },
+  //     {
+  //       isSubscribed: true,
+  //       isView: true,
+  //       label: 'All Outlets',
+  //       name: 'ALL_OUTLETS',
+  //     },
+  //   ],
+  //   isSubscribed: true,
+  //   isView: true,
+  // },
   channelManager: {
     name: 'CHANNEL_MANAGER',
     label: 'Channel Manager',

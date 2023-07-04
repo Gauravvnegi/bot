@@ -33,7 +33,10 @@ export class RoomService extends ApiService {
   /** Represent is room type form data is available */
   roomTypeFormState: boolean = false;
   /** State to handle syncing of services and room type form data */
-  roomTypeFormData: Partial<RoomTypeFormData> = {
+  roomTypeFormData: Partial<RoomTypeFormData> & {
+    services: any[];
+  } = {
+    services: [],
     complimentaryAmenities: [],
     paidAmenities: [],
   };
@@ -90,7 +93,7 @@ export class RoomService extends ApiService {
   ): Observable<T> {
     return this.get(
       `/api/v1/entity/${hotelId}/inventory${config?.params ?? ''}`
-    )
+    );
     // .pipe(
     //   map((res) => {
     //     // --refactor ---will be removed
@@ -163,9 +166,7 @@ export class RoomService extends ApiService {
   }
 
   getRoomById(hotelId: string, roomId: string): Observable<RoomByIdResponse> {
-    return this.get(
-      `/api/v1/entity/${hotelId}/inventory/${roomId}?type=ROOM`
-    )
+    return this.get(`/api/v1/entity/${hotelId}/inventory/${roomId}?type=ROOM`);
     // .pipe(
     //   map((res) => {
     //     // -- refactor-- will be removed
@@ -208,5 +209,13 @@ export class RoomService extends ApiService {
     data: RoomTypeData
   ): Observable<RoomTypeResponse> {
     return this.put(`/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`, data);
+  }
+
+  updateHotel(hotelId: string, data): Observable<any> {
+    return this.patch(`/api/v2/entity/${hotelId}?type=HOTEL`, data);
+  }
+
+  getFeatures(): Observable<any> {
+    return this.get(`/api/v1/config?key=SERVICE_CONFIGURATION`);
   }
 }

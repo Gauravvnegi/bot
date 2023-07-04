@@ -8,39 +8,56 @@
     }"
   >
   </hospitality-bot-navigation-header>
-  <div class="main">
-    <div class="sub-heading">
-      Room Information
-    </div>
-    <div class="form-block" [formGroup]="useForm">
-      <hospitality-bot-select
-        class="half-width"
-        controlName="roomTypeId"
-        label="Room Type"
-        [options]="roomTypes"
-        [props]="{ isAsync: true, createPrompt: '+ Add New Room Type' }"
-        [loading]="loadingRoomTypes"
-        (paginate)="loadMoreRoomTypes()"
-        (onSearch)="searchRoomTypes($event)"
-        [stopEmission]="noMoreRoomTypes"
-        (onCreate)="createRoomType()"
-      ></hospitality-bot-select>
-      <div class="price" *ngIf="useForm.get('price').value">
-        Price :
-        <span class="price__value">
-          {{ useForm.get('currency').value }}
-          {{ useForm.get('price').value }}
-        </span>
+  <div class="sub-wrapper" [formGroup]="useForm">
+    <div class="main">
+      <div class="sub-heading">
+        Room Information
       </div>
+      <div class="form-block">
+        <hospitality-bot-select
+          class="half-width"
+          controlName="roomTypeId"
+          label="Room Type"
+          [options]="roomTypes"
+          [props]="{ isAsync: true, createPrompt: '+ Add New Room Type' }"
+          [loading]="loadingRoomTypes"
+          (paginate)="loadMoreRoomTypes()"
+          (onSearch)="searchRoomTypes($event)"
+          [stopEmission]="noMoreRoomTypes"
+          (onCreate)="createRoomType()"
+        ></hospitality-bot-select>
+        <div class="price" *ngIf="useForm.get('price').value">
+          Price :
+          <span class="price__value">
+            {{ useForm.get('currency').value }}
+            {{ useForm.get('price').value }}
+          </span>
+        </div>
 
-      <hospitality-bot-iterator
-        class="iterator full-width"
-        [fields]="fields"
-        [useFormArray]="useFormArray"
-        [maxLimit]="roomId ? 1 : 0"
-        ctaLabel="+ Add Another Room"
-      >
-      </hospitality-bot-iterator>
+        <hospitality-bot-iterator
+          class="iterator full-width"
+          [fields]="fields"
+          [useFormArray]="useFormArray"
+          [maxLimit]="roomId ? 1 : 0"
+          ctaLabel="+ Add Another Room"
+        >
+        </hospitality-bot-iterator>
+      </div>
+    </div>
+    <div class="room-wrapper">
+      <div class="header">Features</div>
+      <hr />
+      <div class="room-services-wrapper">
+        <hospitality-bot-custom-select
+          label="Features"
+          description="Select the features available in the room"
+          formControlName="features"
+          [itemList]="features"
+          [noRecordsAction]=""
+          [loading]="loading"
+        >
+        </hospitality-bot-custom-select>
+      </div>
     </div>
   </div>
 
@@ -72,13 +89,15 @@
         <hospitality-bot-date controlName="fromDate" class="half-width">
         </hospitality-bot-date>
         <hospitality-bot-date
-        [settings]="{
-          enableTime: false,
-          dateValue: endMinDate,
-          isDisabled: disabledForm
-        }"
-        [minDate]="endMinDate"
-        controlName="toDate" class="half-width">
+          [settings]="{
+            enableTime: false,
+            dateValue: endMinDate,
+            isDisabled: disabledForm
+          }"
+          [minDate]="endMinDate"
+          controlName="toDate"
+          class="half-width"
+        >
         </hospitality-bot-date>
       </div>
       <hospitality-bot-text-area

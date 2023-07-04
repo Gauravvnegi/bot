@@ -35,6 +35,7 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
+  scrollTargetPoint = 110; //scroll target point to stick the table header on top
   isScrolledUp = false;
   currentPage = 0;
   @ViewChild('dt') table: Table; //reference to data-table
@@ -190,6 +191,7 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   resetTableValues() {
+    this.table.reset();
     this.isTabFilters = true;
     this.rowsPerPage = 5;
     this.first = 0;
@@ -529,7 +531,7 @@ export class BaseDatatableComponent implements OnInit {
     } else if (this.filterChips?.length) {
       this.totalRecords = this.calculateTotalChipsCount(this.filterChips);
     } else {
-      this.totalRecords = this.tabFilterItems[this.tabFilterIdx].total;
+      this.totalRecords = this.tabFilterItems[this.tabFilterIdx]?.total;
     }
   }
 
@@ -749,7 +751,7 @@ export class BaseDatatableComponent implements OnInit {
   onScroll = () => {
     if (this.table) {
       const { top } = this.table?.el?.nativeElement.getBoundingClientRect();
-      this.isScrolledUp = top < 110;
+      this.isScrolledUp = top < this.scrollTargetPoint;
     }
   };
 }

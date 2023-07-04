@@ -18,7 +18,7 @@ import {
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import { cousins } from '../../constants/data';
-import { outletRoutes } from '../../constants/routes';
+import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
 import {
   Feature,
@@ -41,6 +41,7 @@ export class AddOutletComponent implements OnInit {
   subType: Option[] = [];
   isTypeSelected = false;
   outletId: string = '';
+  brandId: string = '';
   cousins = cousins;
   $subscription = new Subscription();
   loading = false;
@@ -64,20 +65,21 @@ export class AddOutletComponent implements OnInit {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
         const outletId = snapshot?.params['outletId'];
+        const brandId = snapshot?.params['brandId'];
         if (outletId) this.outletId = outletId;
+        if (brandId) this.brandId = brandId;
       }
     );
-
-    const { navRoutes, title } = outletRoutes['addOutlet'];
-    this.navRoutes = navRoutes;
-    this.pageTitle = title;
   }
 
   ngOnInit(): void {
-    console.log(this.outletId);
     this.siteId = this.hotelDetailService.siteId;
     this.initOptions();
     this.initForm();
+    const { navRoutes, title } = outletBusinessRoutes['addOutlet'];
+    this.navRoutes = navRoutes;
+    navRoutes[2].link = navRoutes[2].link.replace(':brandId', this.brandId);
+    this.pageTitle = title;
   }
 
   initOptions() {
@@ -100,7 +102,7 @@ export class AddOutletComponent implements OnInit {
         countryCode: ['+91'],
         number: [''],
       }),
-      openingDay: [''],
+      cc: [''],
       closingDay: [''],
       openingHour: [''],
       closingHour: [''],
@@ -122,7 +124,6 @@ export class AddOutletComponent implements OnInit {
     //patch value if there is outlet id
     if (this.outletId) {
       this.outletService.getOutletById(this.outletId).subscribe((res) => {
-        console.log(res, 'response');
         this.useForm.patchValue(res);
       });
     }
@@ -170,7 +171,6 @@ export class AddOutletComponent implements OnInit {
       );
       return;
     }
-
     let data = this.useForm.getRawValue() as OutletForm;
 
     if (this.outletId) {
@@ -210,7 +210,6 @@ export class AddOutletComponent implements OnInit {
    * @description handles success
    */
   handleSuccess = (feature?: Feature, outletId?: string) => {
-    console.log(feature, outletId, 'feature');
     this.snackbarService.openSnackBarAsText(
       this.outletId
         ? 'Outlet updated successfully'
@@ -218,15 +217,19 @@ export class AddOutletComponent implements OnInit {
     );
     switch (feature) {
       case 'menu':
-        console.log('menu');
+        this.router.navigate([outletBusinessRoutes.menu.route], {
+          relativeTo: this.route,
+        });
         break;
       case 'service':
-        this.router.navigate([
-          `pages/outlet/all-outlets/add-outlet/${outletId}/import-service`,
-        ]);
+        this.router.navigate([outletBusinessRoutes.importService.route], {
+          relativeTo: this.route,
+        });
         break;
       case 'food':
-        console.log('food');
+        this.router.navigate([outletBusinessRoutes.foodPackage.route], {
+          relativeTo: this.route,
+        });
         break;
       default:
         this.router.navigate([

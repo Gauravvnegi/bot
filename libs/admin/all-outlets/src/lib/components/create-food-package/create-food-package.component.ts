@@ -5,7 +5,7 @@ import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { errorMessages } from '../../constants/form';
-import { outletRoutes } from '../../constants/routes';
+import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
 import { FoodPackageForm } from '../../types/outlet';
 
@@ -45,7 +45,7 @@ export class CreateFoodPackageComponent implements OnInit {
   ) {
     this.packageId = this.route.snapshot.paramMap.get('id');
 
-    const { navRoutes, title } = outletRoutes['createFoodPackage1'];
+    const { navRoutes, title } = outletBusinessRoutes['foodPackage'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
   }

@@ -33,24 +33,20 @@
         description="This is a free of cost services"
         formControlName="serviceIds"
         [itemList]=""
+        (onEmptyViewAction)="onCreateAndContinue('service')"
         [noRecordsAction]="{
-          description: 'No services found',
+          actionName: 'Create and Continue',
+          description:
+            'No services found. Tap the +Create and Continue to Import Services.',
           imageSrc: 'assets/images/empty-table-service.png'
         }"
       >
         <hospitality-bot-button
           label="+ Import Services"
           variant="text"
-          link="pages/outlet/all-outlets/add-outlet/import-service"
-        ></hospitality-bot-button>
-      </hospitality-bot-custom-select>
-      <div class="backdrop">
-        <hospitality-bot-button
-          label="Create and Continue"
-          variant="contained"
           (onClick)="onCreateAndContinue('service')"
         ></hospitality-bot-button>
-      </div>
+      </hospitality-bot-custom-select>
     </div>
   </div>
 
@@ -63,16 +59,18 @@
         formControlName="menu"
         description="Do not forget to add this cost in addition to the room cost"
         [itemList]=""
+        (onEmptyViewAction)="onCreateAndContinue('menu')"
         [noRecordsAction]="{
-          description: 'No menu found',
-          imageSrc: 'assets/images/empty-table-service.png'
+          description:
+            'No Menu found. Tap the +Create and Continue to create the Menu.',
+          imageSrc: 'assets/images/empty-table-service.png',
+          actionName: 'Create and Continue'
         }"
       >
         <hospitality-bot-button
           label="+ Add Menu"
           variant="outlined"
-          [routerLink]="[routes.addMenu1.route]"
-          queryParamsHandling="preserve"
+          (onClick)="onCreateAndContinue('menu')"
         ></hospitality-bot-button>
       </hospitality-bot-custom-select>
     </div>

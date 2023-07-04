@@ -1,3 +1,4 @@
+import { P } from '@angular/cdk/keycodes';
 import { PageRoutes } from '@hospitality-bot/admin/shared';
 
 export const navRoute = {
@@ -21,7 +22,7 @@ export const navRoute = {
     link: '/pages/settings/business-info/brand/:brandId',
     isDisabled: true,
   },
-  bussinessInfo: {
+  businessInfo: {
     label: 'Business Info',
     link: '/pages/settings/business-info',
   },
@@ -52,24 +53,25 @@ export const businessRoute: Record<
   | 'services'
   | 'editServices'
   | 'importServices'
-  | 'editImportServices',
+  | 'editImportServices'
+  | 'outlet',
   PageRoutes
 > = {
   brand: {
     route: '',
-    navRoutes: [navRoute.settings, navRoute.bussinessInfo, navRoute.brand],
+    navRoutes: [navRoute.settings, navRoute.businessInfo, navRoute.brand],
     title: 'Brand',
   },
   editBrand: {
     route: ':brandId',
-    navRoutes: [navRoute.settings, navRoute.bussinessInfo, navRoute.editBrand],
+    navRoutes: [navRoute.settings, navRoute.businessInfo, navRoute.editBrand],
     title: 'Edit Brand',
   },
   hotel: {
     route: 'hotel',
     navRoutes: [
       navRoute.settings,
-      navRoute.bussinessInfo,
+      navRoute.businessInfo,
       navRoute.editBrand,
       navRoute.hotel,
     ],
@@ -79,7 +81,7 @@ export const businessRoute: Record<
     route: ':hotelId',
     navRoutes: [
       navRoute.settings,
-      navRoute.bussinessInfo,
+      navRoute.businessInfo,
       navRoute.editBrand,
       navRoute.editHotel,
     ],
@@ -89,7 +91,7 @@ export const businessRoute: Record<
     route: 'services',
     navRoutes: [
       navRoute.settings,
-      navRoute.bussinessInfo,
+      navRoute.businessInfo,
       navRoute.editBrand,
       navRoute.hotel,
       navRoute.services,
@@ -100,7 +102,7 @@ export const businessRoute: Record<
     route: ':serviceId',
     navRoutes: [
       navRoute.settings,
-      navRoute.bussinessInfo,
+      navRoute.businessInfo,
       navRoute.editBrand,
       navRoute.editHotel,
       navRoute.services,
@@ -111,7 +113,7 @@ export const businessRoute: Record<
     route: 'import-services',
     navRoutes: [
       navRoute.settings,
-      navRoute.bussinessInfo,
+      navRoute.businessInfo,
       navRoute.editBrand,
       navRoute.hotel,
       navRoute.importService,
@@ -122,11 +124,16 @@ export const businessRoute: Record<
     route: 'import-services',
     navRoutes: [
       navRoute.settings,
-      navRoute.bussinessInfo,
+      navRoute.businessInfo,
       navRoute.editBrand,
       navRoute.editHotel,
       navRoute.editImportService,
     ],
     title: 'Import Services',
+  },
+  outlet: {
+    route: 'outlet',
+    navRoutes: [],
+    title: 'Outlet',
   },
 };

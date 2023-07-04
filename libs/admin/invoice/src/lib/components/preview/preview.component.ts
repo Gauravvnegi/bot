@@ -16,14 +16,14 @@ export class PreviewComponent implements OnInit {
   isLoading = true;
   navRoutes = [];
   isInvoiceGenerated = false;
-  items = [
-    {
-      label: 'Generate Proforma',
-      command: () => {
-        this.handleDownload();
-      },
-    },
-  ];
+  // items = [
+  //   {
+  //     label: 'Generate Proforma',
+  //     command: () => {
+  //       this.handleDownload();
+  //     },
+  //   },
+  // ];
   constructor(
     private invoiceService: InvoiceService,
     private activatedRoute: ActivatedRoute,
@@ -89,13 +89,14 @@ export class PreviewComponent implements OnInit {
       xhr.open('GET', fileUrl, true);
       xhr.setRequestHeader('Content-type', 'application/pdf');
       xhr.responseType = 'blob';
-      xhr.onload = function () {
+      xhr.onload = () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
           const blob = new Blob([xhr.response], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = url;
-          link.download = 'invoice.pdf';
+          link.download =
+            'invoice_' + this.reservationId + new Date().getTime() + '.pdf';
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);

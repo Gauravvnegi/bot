@@ -11,7 +11,7 @@ import { OutletService } from '../../services/outlet.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { cols } from '../../constants/data-table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { outletRoutes } from '../../constants/routes';
+import { outletBusinessRoutes } from '../../constants/routes';
 import { MenuItem } from '../../models/outlet.model';
 
 @Component({
@@ -27,6 +27,7 @@ export class MenuDataTableComponent extends BaseDatatableComponent
   tableName = 'Menu Items';
   cols = cols['MENU'];
   $subscription = new Subscription();
+  navigationRoute = outletBusinessRoutes;
 
   constructor(
     public fb: FormBuilder,
@@ -61,7 +62,7 @@ export class MenuDataTableComponent extends BaseDatatableComponent
   }
 
   addMenuItems() {
-    this.router.navigate([outletRoutes.addMenuItem1.route], {
+    this.router.navigate([], {
       relativeTo: this.route,
     });
   }

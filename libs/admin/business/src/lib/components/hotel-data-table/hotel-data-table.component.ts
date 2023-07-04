@@ -19,6 +19,7 @@ import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent } from 'primeng/api';
+import { businessRoute } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-hotel-data-table',
@@ -37,6 +38,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   loading: boolean = false;
   globalQueries = [];
   tableFG;
+  routerLink = businessRoute;
   @Input() brandId: string = '';
 
   constructor(
@@ -73,6 +75,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
         .subscribe(
           (res) => {
             this.values = res.records;
+            console.log('this.values', this.values);
             this.totalRecords = res.total;
           },
           ({ error }) => {
@@ -220,6 +223,24 @@ export class HotelDataTableComponent extends BaseDatatableComponent
         );
       }, this.handelFinal)
     );
+  }
+
+  getSrc(value) {
+    console.log(value);
+    switch (value) {
+      case '2':
+        return 'assets/images/2.svg';
+      case '3':
+        return 'assets/images/3 star.svg';
+      case '4':
+        return 'assets/images/4 star.svg';
+      case '5':
+        return 'assets/images/5star.svg';
+    }
+  }
+
+  onAddOutlet() {
+    //lazy loading to load module on demand
   }
 
   editHotel(Id) {

@@ -7,6 +7,18 @@
     {{ tableName }}
   </div>
   <div class="action-wrapper">
+    <hospitality-bot-button
+      label="+Add Outlet"
+      variant="text"
+      [routerLink]="[routerLink.outlet.route]"
+      preserveQueryParams="true"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      label="+Add Hotel"
+      [routerLink]="[routerLink.hotel.route]"
+      preserveQueryParams="true"
+    ></hospitality-bot-button>
+
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
@@ -14,10 +26,6 @@
       [documentActionTypes]="documentActionTypes"
       [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
-    <hospitality-bot-button
-      label="+Add Hotels"
-      link="pages/settings/business-info/brand/{{ brandId }}/hotel"
-    ></hospitality-bot-button>
   </div>
 </div>
 <p-table
@@ -71,9 +79,16 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData?.name; else emptyCell">
+        <div class="cell-content type" *ngIf="rowData?.name; else emptyCell">
           <div class="primary-text">
             {{ rowData?.name }}
+          </div>
+          <div *ngIf="rowData?.propertyCategory?.label">
+            <img
+              class="img"
+              [src]="getSrc(rowData?.propertyCategory?.iconCount)"
+              [alt]="img"
+            />
           </div>
         </div>
       </td>
@@ -83,38 +98,33 @@
           *ngIf="rowData?.propertyCategory?.label; else emptyCell"
         >
           <div class="primary-text">
-            {{ rowData?.propertyCategory?.label }}
+            {{ rowData?.openingDay || 'mon' }} -
+            {{ rowData?.closingDay || 'sat' }}
           </div>
-        </div>
-      </td>
-      <td>
-        <div class="" *ngIf="rowData?.address?.city; else emptyCell">
           <div class="primary-text">
-            {{ rowData?.address?.city }}
+            {{ rowData?.openingTime || '9:00 AM' }} -
+            {{ rowData?.closingTime || '9:00 PM' }}
           </div>
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData?.emailId; else emptyCell">
+        <div class="cell-content" *ngIf="rowData?.contact; else emptyCell">
           <div class="primary-text">
-            {{ rowData?.emailId }}
+            {{ rowData?.contact.countryCode || '+9333' }}
+            {{ rowData?.contact.phoneNumber || '111111111111' }}
+          </div>
+        </div>
+        <div class="cell-content">
+          <div class="primary-text">
+            {{ rowData?.emailId || 'Vsaurav026@gmail.com' }}
           </div>
         </div>
       </td>
       <td>
-        <div
-          class="cell-content"
-          *ngIf="rowData?.contact?.number; else emptyCell"
-        >
-          <a
-            href="tel:{{ rowData?.contact?.countryCode }}
-            {{ rowData?.contact?.number }}"
-          >
-            <div class="primary-text">
-              {{ rowData?.contact?.countryCode || '-' }}-
-              {{ rowData?.contact?.number || '-' }}
-            </div>
-          </a>
+        <div class="cell-content">
+          <hospitality-bot-copy-link
+            [url]="'www.google.com'"
+          ></hospitality-bot-copy-link>
         </div>
       </td>
       <td>

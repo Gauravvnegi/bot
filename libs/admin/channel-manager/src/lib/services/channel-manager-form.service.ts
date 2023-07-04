@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { roomTypeData } from '../constants/data';
+import { RoomTypes } from '../types/channel-manager.types';
 
 @Injectable()
 export class ChannelManagerFormService {
-  roomDetails = [];
-  //reviewPoint: add type (already written in type files)
+  roomDetails: RoomTypes[] = [];
 
   constructor() {
     this.setRoomTypes();

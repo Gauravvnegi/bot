@@ -11,7 +11,6 @@ import { ChannelManagerFormService } from '../../services/channel-manager-form.s
 })
 export class RoomTypesComponent extends FormComponent {
   roomTypes: Option[] = [];
-  // reviewPoint: there is no input to change the controlName
 
   constructor(
     public controlContainer: ControlContainer,

@@ -58,7 +58,7 @@ export class CreateMenuComponent implements OnInit {
         if (menuId) this.menuId = menuId;
       }
     );
-    const { navRoutes, title } = outletBusinessRoutes['addMenu'];
+    const { navRoutes, title } = outletBusinessRoutes['menu'];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
   }

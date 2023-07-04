@@ -59,7 +59,7 @@ export const outletBusinessRoutes: Record<
   | 'addOutlet'
   | 'editOutlet'
   | 'importService'
-  | 'addMenu'
+  | 'menu'
   | 'editMenu'
   | 'menuItem'
   | 'editMenuItem'
@@ -97,7 +97,7 @@ export const outletBusinessRoutes: Record<
     ],
     title: 'Import Services',
   },
-  addMenu: {
+  menu: {
     route: 'menu',
     navRoutes: [
       navRoutes.settings,

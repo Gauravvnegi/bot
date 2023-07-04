@@ -12,7 +12,7 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { cols } from '../../constant/hotel-data-table';
+import { cols, tableName } from '../../constant/hotel-data-table';
 import { BusinessService } from '../../services/business.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
@@ -32,7 +32,7 @@ import { businessRoute } from '../../constant/routes';
 export class HotelDataTableComponent extends BaseDatatableComponent
   implements OnInit {
   cols = cols;
-  tableName = 'Property/Outlet';
+  tableName = tableName;
   $subscription = new Subscription();
   hotelId: string;
   loading: boolean = false;
@@ -75,7 +75,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
         .subscribe(
           (res) => {
             this.values = res.records;
-            console.log('this.values', this.values);
             this.totalRecords = res.total;
           },
           ({ error }) => {
@@ -135,7 +134,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
 
     // let heading: string;
     let description: string[] = [
-      `Are you sure you want to Deactive ${rowData?.name}`,
+      `Are you sure you want to Deactivate ${rowData?.name}`,
       ' Once Deactivated, you wont be to manage reservations and the hotel website will not be visible to visitors.',
     ];
     let label: string = 'Deactivate';
@@ -239,14 +238,16 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     }
   }
 
-  onAddOutlet() {
-    //lazy loading to load module on demand
-  }
-
-  editHotel(Id) {
-    this.router.navigate([
-      `pages/settings/business-info/brand/${this.brandId}/hotel/${Id}`,
-    ]);
+  editHotel(data) {
+    if (data?.type === 'HOTEL') {
+      this.router.navigate([
+        `pages/settings/business-info/brand/${this.brandId}/hotel/${data.id}`,
+      ]);
+    } else {
+      this.router.navigate([
+        `pages/settings/business-info/brand/${this.brandId}/outlet/${data.id}`,
+      ]);
+    }
   }
 
   handelFinal = () => {

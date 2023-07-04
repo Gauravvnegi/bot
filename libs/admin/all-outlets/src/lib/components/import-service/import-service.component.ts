@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavRouteOptions } from '@hospitality-bot/admin/shared';
+import { outletBusinessRoutes } from '../../constants/routes';
 
 @Component({
   selector: 'hospitality-bot-import-service',
@@ -8,19 +9,14 @@ import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 })
 export class ImportServiceComponent implements OnInit {
   pageTitle: string = 'Import Services';
-  navRoutes: NavRouteOptions = [
-    {
-      label: 'Business',
-      link: '/admin/business',
-    },
-  ];
-  constructor() {}
+  navRoutes: NavRouteOptions = [];
+  constructor() {
+    const { navRoutes, title } = outletBusinessRoutes['importService'];
+    this.navRoutes = navRoutes;
+    this.pageTitle = title;
+  }
 
   ngOnInit(): void {}
 
-  saveForm(serviceIds: string[]) {
-    console.log(serviceIds, 'serviceIds');
-
-    //if id is there, update the service
-  }
+  saveForm(serviceIds: string[]) {}
 }

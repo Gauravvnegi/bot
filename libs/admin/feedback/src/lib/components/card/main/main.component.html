@@ -1,10 +1,12 @@
 <div class="container">
   <div *ngIf="tabFilterItems" class="header">
-    <hospitality-bot-tab-group
+    <hospitality-bot-tab-header
       [listItems]="tabFilterItems"
       [selectedIndex]="tabFilterIdx"
       (selectedTabChange)="onSelectedTabFilterChange($event)"
-    ></hospitality-bot-tab-group>
+      extraGap="60"
+      isSticky="true"
+    ></hospitality-bot-tab-header>
   </div>
   <div class="body">
     <div class="body__container">

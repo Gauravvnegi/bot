@@ -79,7 +79,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   userPermissions: Departmentpermission[];
-  navRoutes = [{ label: 'Heda Feedback', link: './' }];
+  navRoutes = [{ label: 'Feedback', link: './' }];
   constructor(
     public fb: FormBuilder,
     protected _adminUtilityService: AdminUtilityService,

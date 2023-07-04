@@ -2,16 +2,14 @@
   <div class="bk-summary_heading">Booking Summary</div>
   <p class="divider"></p>
   <div class="bk-summary_subheading">
-    {{
-      summaryData?.roomTypeName ? summaryData.roomTypeName : header
-    }}
+    {{ summaryData?.roomTypeName ? summaryData.roomTypeName : header }}
   </div>
   <div class="bk-summary_subheading_label">
     {{ summaryData?.location ? summaryData.location : subHeader }}
   </div>
 
   <div class="bk-summary_roomInfo">
-    <ng-content></ng-content>
+    <ng-content *ngIf="!displayBookingOffer"></ng-content>
   </div>
   <div class="bk-summary_offerInfo">
     <ng-container
@@ -45,12 +43,10 @@
   </div>
   <div class="bk-summary_priceInfo">
     <p class="bk-summary_priceInfo_perNight">
-      <span class="bk-summary_priceInfo_perNight_label">{{
+      <span class="bk-summary_priceInfo_perNight_label" *ngIf="stayInfo">{{
         stayInfo
       }}</span>
-      <span
-        *ngIf="!stayInfo"
-        class="bk-summary_priceInfo_perNight_label"
+      <span *ngIf="!stayInfo" class="bk-summary_priceInfo_perNight_label"
         >Per Night</span
       >
       <s
@@ -58,10 +54,7 @@
         *ngIf="summaryData?.originalPrice"
         >{{ summaryData?.originalPrice | currency: 'INR' }}</s
       >
-      <s
-        class="bk-summary_priceInfo_perNight_amount"
-        *ngIf="price"
-      >
+      <s class="bk-summary_priceInfo_perNight_amount" *ngIf="price">
         {{ price }}
       </s>
     </p>
@@ -78,9 +71,7 @@
       }}</span>
     </p>
     <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'HOTEL'">
-      <span class="bk-summary_priceInfo_perNight_label">{{
-        guestInfo
-      }}</span>
+      <span class="bk-summary_priceInfo_perNight_label">{{ guestInfo }}</span>
       <span class="bk-summary_priceInfo_perNight_amount">{{
         discountedPrice
       }}</span>
@@ -154,14 +145,14 @@
       </div>
     </div>
   </ng-container>
-  <ng-template #emptyOffer>
-    <div class="offerList">
-      <div class="offerList_box">
-        <img src="assets/svg/empty_box.svg" alt="empty box" />
+    <ng-template #emptyOffer>
+      <div class="empty-offer-view">
+        <div class="offerList_box">
+          <img src="assets/svg/empty_box.svg" alt="empty box" />
+        </div>
+        <div class="offerList_text">
+          Currently You do not have any Offer
+        </div>
       </div>
-      <div class="offerList_text">
-        Currently You do not have any Offer
-      </div>
-    </div>
-  </ng-template>
+    </ng-template>
 </ng-template>

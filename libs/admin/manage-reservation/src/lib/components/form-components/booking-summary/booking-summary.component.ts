@@ -76,7 +76,6 @@ export class BookingSummaryComponent implements OnInit {
     this.hotelId = this.globalFilterService.hotelId;
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
-    console.log(this.bookingInfo);
   }
 
   offerSelect(item?: any): void {

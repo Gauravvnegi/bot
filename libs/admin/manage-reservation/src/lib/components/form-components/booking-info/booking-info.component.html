@@ -14,6 +14,7 @@
           dateValue: startMinDate
         }"
         [minDate]="startMinDate"
+        [maxDate]="maxFromDate"
       ></hospitality-bot-date>
       <hospitality-bot-date
         class="half-width"
@@ -24,6 +25,7 @@
           dateValue: endMinDate
         }"
         [minDate]="endMinDate"
+        [maxDate]="maxToDate"
       ></hospitality-bot-date>
     </ng-container>
     <ng-container *ngIf="bookingType === 'VENUE'">

@@ -42,8 +42,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   disabledForm = false;
 
   deductedAmount = 0;
-  startMinDate = new Date();
-  endMinDate = new Date();
   bookingType = 'HOTEL';
 
   pageTitle = 'Add Reservation';
@@ -61,8 +59,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.endMinDate.setDate(this.startMinDate.getDate() + 1);
-    this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
     this.initForm();
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
 

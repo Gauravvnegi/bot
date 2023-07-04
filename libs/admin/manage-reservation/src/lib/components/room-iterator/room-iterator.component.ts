@@ -31,7 +31,7 @@ export class RoomIteratorComponent extends IteratorComponent
   @Output() listenChanges = new EventEmitter();
   fields = roomFields;
   globalQueries = [];
-
+  errorMessages = {};
   roomTypeOffSet = 0;
   roomTypeLimit = 10;
   roomTypes: RoomFieldTypeOption[] = [];
@@ -58,11 +58,18 @@ export class RoomIteratorComponent extends IteratorComponent
    * @function createNewFields To get the initial value config
    */
   createNewFields(): void {
-    const data = this.fields.reduce((prev, curr) => {
-      const value = curr.required ? ['', Validators.required] : [''];
-      prev[curr.name] = value;
-      return prev;
-    }, {});
+    // const data = this.fields.reduce((prev, curr) => {
+    //   const value = curr.required ? ['', Validators.required] : [''];
+    //   prev[curr.name] = value;
+    //   return prev;
+    // }, {});
+    const data = {
+      roomTypeId: [''],
+      roomCount: ['', [Validators.required, Validators.min(1)]],
+      adultCount: ['', [Validators.required, Validators.min(1)]],
+      childCount: ['', [Validators.min(0)]],
+    };
+
     this.userFormGroup.addControl('roomInformation', this.fb.group(data));
   }
 
@@ -132,7 +139,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.refreshData.emit();
   }
 
-  listenForFormChanges(): void{
+  listenForFormChanges(): void {
     this.listenChanges.emit();
   }
 
@@ -155,7 +162,6 @@ export class RoomIteratorComponent extends IteratorComponent
       params: this.adminUtilityService.makeQueryParams(queries),
     };
 
-
     this.loadingRoomTypes = true;
     this.$subscription.add(
       this.manageReservationService
@@ -172,7 +178,7 @@ export class RoomIteratorComponent extends IteratorComponent
                 maxAdult: item.maxAdult,
               }));
             this.roomTypes = [...this.roomTypes, ...data];
-            this.fields[0].options = this.roomTypes;     
+            this.fields[0].options = this.roomTypes;
           },
           ({ error }) => {
             this.snackbarService.openSnackBarAsText(error.message);

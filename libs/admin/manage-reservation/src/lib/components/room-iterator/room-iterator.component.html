@@ -18,10 +18,30 @@
         <hospitality-bot-input
           *ngSwitchCase="'input'"
           [controlName]="field.name"
-          [props]="{
-            placeholder: field.placeholder,
-            type: 'number'
-          }"
+          [props]="
+            field.name !== 'roomTypeId'
+              ? field.name !== 'childCount'
+                ? {
+                    placeholder: field.placeholder,
+                    type: 'number',
+                    errorMessages: {
+                      required: 'This is a required field.',
+                      min: 'Value must be greater than 0'
+                    }
+                  }
+                : {
+                    placeholder: field.placeholder,
+                    type: 'number',
+                    errorMessages: {
+                      required: 'This is a required field.',
+                      min: 'Value can not be less than 0.'
+                    }
+                  }
+              : {
+                  placeholder: field.placeholder,
+                  type: 'number'
+                }
+          "
           [disabled]="field.disabled"
           (focusout)="getSummaryData()"
           (keyup.enter)="getSummaryData()"

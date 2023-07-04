@@ -1,13 +1,15 @@
 <div [formGroup]="controlContainer.control">
   <hospitality-bot-multi-select
-    label="Room Type"
+    class="full-width"
     [controlName]="controlName"
+    label="Room Type"
     [options]="roomTypes"
+    [loading]="loadingRoomTypes"
     [settings]="{
-      placeholder: 'Select',
-      showHeader: false,
+      placeholder: 'Select Rooms',
       showChips: false,
       maxSelectedLabels: 1
     }"
+    [props]="{ isAsync: false }"
   ></hospitality-bot-multi-select>
 </div>

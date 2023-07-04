@@ -43,7 +43,7 @@ export class UpdateInventoryComponent implements OnInit {
 
   initOptions() {
     this.initDate(Date.now());
-    this.roomTypes = this.channelMangerForm.getRoomsData;
+    this.roomTypes = this.channelMangerForm.roomDetails;
     this.getRestrictions();
   }
 
@@ -83,10 +83,10 @@ export class UpdateInventoryComponent implements OnInit {
 
     this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
       if (res.length) {
-        this.roomTypes = this.channelMangerForm.getRoomsData.filter((item) =>
+        this.roomTypes = this.channelMangerForm.roomDetails.filter((item) =>
           res.includes(item.value)
         );
-      } else this.roomTypes = this.channelMangerForm.getRoomsData;
+      } else this.roomTypes = this.channelMangerForm.roomDetails;
 
       this.useForm.removeControl('roomTypes');
       this.addRoomTypesControl();

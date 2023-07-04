@@ -3,7 +3,7 @@ import { roomTypeData } from '../constants/data';
 
 @Injectable()
 export class ChannelManagerFormService {
-  private roomsData = [];
+  roomDetails = [];
   //reviewPoint: add type (already written in type files)
 
   constructor() {
@@ -11,15 +11,10 @@ export class ChannelManagerFormService {
   }
 
   reset() {
-    this.roomsData = [];
+    this.roomDetails = [];
   }
 
   setRoomTypes() {
-    this.roomsData = roomTypeData;
-  }
-
-  get getRoomsData() {
-    //reviewPoint: name should not be getRoomsData ??
-    return this.roomsData;
+    this.roomDetails = roomTypeData;
   }
 }

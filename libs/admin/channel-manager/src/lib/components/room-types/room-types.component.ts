@@ -26,7 +26,7 @@ export class RoomTypesComponent extends FormComponent {
   }
 
   initOptions() {
-    this.roomTypes = this.channelMangerForm.getRoomsData;
+    this.roomTypes = this.channelMangerForm.roomDetails;
   }
 
   listenChanges() {}

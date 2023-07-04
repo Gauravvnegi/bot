@@ -1,7 +1,7 @@
 <div [formGroup]="controlContainer.control">
   <hospitality-bot-multi-select
     label="Room Type"
-    controlName="roomType"
+    [controlName]="controlName"
     [options]="roomTypes"
     [settings]="{
       placeholder: 'Select',

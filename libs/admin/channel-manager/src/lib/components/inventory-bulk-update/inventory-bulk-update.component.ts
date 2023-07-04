@@ -47,7 +47,7 @@ export class InventoryBulkUpdateComponent implements OnInit {
     this.useForm.valueChanges.subscribe((value) => {
       this.isFormValid = this.useForm.valid;
       this.inventoryTreeList = CheckBoxTreeFactory.buildTree(
-        this.formService.getRoomsData,
+        this.formService.roomDetails,
         value.roomType,
         { isInventory: true }
       );

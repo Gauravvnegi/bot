@@ -15,6 +15,8 @@ import { EntityTabGroup } from '../constants/reservation-table';
 export class ManageReservationService extends ApiService {
   public selectedOutlet = new BehaviorSubject<EntityTabGroup>(EntityTabGroup.HOTEL);
 
+  reservationDate = new BehaviorSubject<Date>(null);
+
   setSelectedOutlet(value: EntityTabGroup) {
     this.selectedOutlet.next(value);
   }

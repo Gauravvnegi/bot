@@ -22,6 +22,7 @@ import {
 } from '@hospitality-bot/shared/material';
 import { PaymentMethodList } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
 import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
+import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
 import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
 import { ServicesService } from 'libs/admin/services/src/lib/services/services.service';
 import { ServiceListResponse } from 'libs/admin/services/src/lib/types/response';
@@ -79,6 +80,7 @@ export class InvoiceComponent implements OnInit {
   isInvoiceGenerated = false;
   pmsBooking = false;
   isInvoiceDisabled = false;
+  invoicePrepareRequest = false;
 
   $subscription = new Subscription();
   typeSubscription: Subscription;
@@ -113,7 +115,8 @@ export class InvoiceComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
-    private manageReservationService: ManageReservationService
+    private manageReservationService: ManageReservationService,
+    private reservationService: ReservationService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.initPageHeaders();
@@ -227,6 +230,7 @@ export class InvoiceComponent implements OnInit {
 
           this.guestId = guestData.id;
           this.bookingNumber = res.number;
+          this.invoicePrepareRequest = res.invoicePrepareRequest;
           this.pmsBooking = res.pmsBooking;
           if (this.pmsBooking) this.disableInvoice();
         })
@@ -727,16 +731,25 @@ export class InvoiceComponent implements OnInit {
   };
 
   previewAndGenerate(): void {
-    // if(!this.inputControl.paidAmount.value){
-    //   this.snackbarService.openSnackBarAsText(
-    //     'Paid amount is 0: Invoice cannot preview or generate'
-    //   )
-    //   return;
-    // }
-
     this.router.navigate(['../preview-invoice', this.reservationId], {
       relativeTo: this.route,
     });
+  }
+
+  prepareInvoice() {
+    this.$subscription.add(
+      this.reservationService.prepareInvoice(this.reservationId).subscribe(
+        (_) => {
+          this.invoicePrepareRequest = true;
+          this.snackbarService.openSnackBarAsText(
+            'Ticket raised for invoice.',
+            '',
+            { panelClass: 'success' }
+          );
+        },
+        ({ error }) => {}
+      )
+    );
   }
 
   handleSave(): void {

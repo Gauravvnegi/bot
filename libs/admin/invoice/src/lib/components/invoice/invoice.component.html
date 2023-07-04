@@ -1,10 +1,16 @@
 <div class="wrapper">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <hospitality-bot-button
+      *ngIf="(invoicePrepareRequest && pmsBooking) || !pmsBooking"
       variant="outlined"
-      [label]="isInvoiceGenerated ? 'Preview' : 'Preview and Generate'"
+      [label]="isInvoiceGenerated ? 'Preview and Send' : 'Preview and Generate'"
       (onClick)="previewAndGenerate()"
-      queryParamsHandling="preserve"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      *ngIf="!invoicePrepareRequest && pmsBooking"
+      variant="outlined"
+      [label]="'Prepare Invoice'"
+      (onClick)="prepareInvoice()"
     ></hospitality-bot-button>
   </hospitality-bot-navigation-header>
   <div class="form-wrapper" [formGroup]="useForm">

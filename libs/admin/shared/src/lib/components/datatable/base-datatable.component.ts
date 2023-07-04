@@ -35,7 +35,7 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
-  scrollTargetPoint = 90; //scroll target point to stick the table header on top
+  scrollTargetPoint = 110; //scroll target point to stick the table header on top
   isScrolledUp = false;
   currentPage = 0;
   @ViewChild('dt') table: Table; //reference to data-table

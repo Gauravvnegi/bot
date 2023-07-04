@@ -44,7 +44,7 @@ const appRoutes: Route[] = [
             component: CreateFoodPackageComponent,
           },
           {
-            path: outletBusinessRoutes.addMenu.route,
+            path: outletBusinessRoutes.menu.route,
             component: MainComponent,
             children: [
               {

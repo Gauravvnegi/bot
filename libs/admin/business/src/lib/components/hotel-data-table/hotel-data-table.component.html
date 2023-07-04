@@ -24,7 +24,7 @@
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
-      [isDisable]="values.length === 0"
+      [isDisable]="values?.length === 0"
     ></hospitality-bot-export-list>
   </div>
 </div>
@@ -52,7 +52,7 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter($event)"
-  *ngIf="values.length; else emptyTable"
+  *ngIf="values?.length; else emptyTable"
 >
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
@@ -70,7 +70,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="table-row" (click)="editHotel(rowData.id)">
+    <tr class="table-row" (click)="editHotel(rowData)">
       <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"

@@ -97,7 +97,6 @@ export class AddGuestComponent implements OnInit {
     this.subscription$.add(
       this.guestForm.controls['dateOfBirth'].valueChanges.subscribe(
         (changedDOB) => {
-          debugger;
           const birthDate = new Date(changedDOB);
           const today = new Date();
           const diff = today.getTime() - birthDate.getTime();

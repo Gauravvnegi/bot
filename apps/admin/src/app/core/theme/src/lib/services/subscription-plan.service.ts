@@ -33,7 +33,6 @@ export class SubscriptionPlanService extends ApiService {
         res.products = [
           ...res.products,
           customModule.finance,
-          customModule.outlets,
           customModule.channelManager,
         ];
         return res;

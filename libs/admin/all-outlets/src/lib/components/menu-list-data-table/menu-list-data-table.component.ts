@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { outletRoutes } from '../../constants/routes';
+import { outletBusinessRoutes } from '../../constants/routes';
 import {
   MenuTabValue,
   chips,
@@ -31,7 +31,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 })
 export class MenuListDataTableComponent extends BaseDatatableComponent
   implements OnInit {
-  readonly outletRoutes = outletRoutes;
+  readonly outletBusinessRoutes = outletBusinessRoutes;
 
   outletId: string;
   tabFilterItems = filters;

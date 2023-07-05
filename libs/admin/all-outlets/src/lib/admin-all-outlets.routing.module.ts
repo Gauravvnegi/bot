@@ -9,13 +9,13 @@ import { MenuDataTableComponent } from './components/menu-data-table/menu-data-t
 import { MenuListDataTableComponent } from './components/menu-list-data-table/menu-list-data-table.component';
 import { RestaurantFormComponent } from './components/outlet-forms/restaurant-form/restaurant-form.component';
 import { RulesComponent } from './components/outlet-forms/rules/rules.component';
-import { outletRoutes } from './constants/routes';
 import { SpaFormComponent } from './components/outlet-forms/spa-form/spa-form.component';
 import { BanquetFormComponent } from './components/outlet-forms/banquet-form/banquet-form.component';
 import { CreateFoodPackageComponent } from './components/create-food-package/create-food-package.component';
 import { FoodItemsComponent } from './components/food-items/food-items.component';
 import { FoodPackageComponent } from './components/outlet-forms/food-package/food-package.component';
 import { ImportServiceComponent } from './components/import-service/import-service.component';
+import { outletBusinessRoutes } from './constants/routes';
 
 const appRoutes: Route[] = [
   {
@@ -24,10 +24,10 @@ const appRoutes: Route[] = [
     children: [
       {
         path: '',
-        component: AllOutletsDataTableComponent,
+        component: AddOutletComponent,
       },
       {
-        path: outletRoutes.addOutlet.route,
+        path: outletBusinessRoutes.editOutlet.route,
         component: MainComponent,
         children: [
           {
@@ -35,31 +35,16 @@ const appRoutes: Route[] = [
             component: AddOutletComponent,
           },
           {
-            path: ':outletId',
-            component: MainComponent,
-            children: [
-              {
-                path: '',
-                component: AddOutletComponent,
-              },
-              {
-                path: 'import-service',
-                component: ImportServiceComponent,
-                pathMatch: 'full',
-              },
-            ],
+            path: 'import-services',
+            component: ImportServiceComponent,
+            pathMatch: 'full',
           },
           {
-            path: outletRoutes.createFoodPackage1.route,
+            path: outletBusinessRoutes.foodPackage.route,
             component: CreateFoodPackageComponent,
           },
           {
-            path: outletRoutes.editFoodPackage1.route,
-            component: CreateFoodPackageComponent,
-          },
-
-          {
-            path: outletRoutes.addMenu1.route,
+            path: outletBusinessRoutes.menu.route,
             component: MainComponent,
             children: [
               {
@@ -67,110 +52,23 @@ const appRoutes: Route[] = [
                 component: CreateMenuComponent,
               },
               {
-                path: outletRoutes.addMenuItem1.route,
-                component: AddMenuItemComponent,
-              },
-            ],
-          },
-          {
-            path: outletRoutes.editMenu1.route,
-            component: MainComponent,
-            children: [
-              {
-                path: '',
-                component: CreateMenuComponent,
-              },
-              {
-                path: outletRoutes.addMenuItem1.route,
-                component: AddMenuItemComponent,
-              },
-              {
-                path: outletRoutes.editMenuItem1.route,
-                component: AddMenuItemComponent,
+                path: outletBusinessRoutes.editMenu.route,
+                component: MainComponent,
+                children: [
+                  {
+                    path: '',
+                    component: CreateMenuComponent,
+                  },
+                  {
+                    path: outletBusinessRoutes.menuItem.route,
+                    component: AddMenuItemComponent,
+                  },
+                ],
               },
             ],
           },
         ],
       },
-      {
-        path: outletRoutes.editOutlet.route,
-        component: MainComponent,
-        children: [
-          {
-            path: '',
-            component: AddOutletComponent,
-          },
-          {
-            path: outletRoutes.addMenu1.route,
-            component: MainComponent,
-            children: [
-              {
-                path: '',
-                component: CreateMenuComponent,
-              },
-              {
-                path: outletRoutes.addMenuItem1.route,
-                component: AddMenuItemComponent,
-              },
-            ],
-          },
-          {
-            path: outletRoutes.editMenu1.route,
-            component: MainComponent,
-            children: [
-              {
-                path: '',
-                component: CreateMenuComponent,
-              },
-              {
-                path: outletRoutes.addMenuItem1.route,
-                component: AddMenuItemComponent,
-              },
-              {
-                path: outletRoutes.editMenuItem1.route,
-                component: AddMenuItemComponent,
-              },
-            ],
-          },
-          {
-            path: outletRoutes.createFoodPackage1.route,
-            component: CreateFoodPackageComponent,
-          },
-          {
-            path: outletRoutes.editFoodPackage1.route,
-            component: CreateFoodPackageComponent,
-          },
-        ],
-      },
-      //         path: '',
-      //         component: AllOutletsDataTableComponent,
-      //       },
-      //       {
-      //         path: outletRoutes.addOutlet.route,
-      //         component: MainComponent,
-      //         children: [
-      //           {
-      //             path: '',
-      //             component: AddOutletComponent,
-      //           },
-      //           {
-      //             path: outletRoutes.addMenu.route,
-      //             component: CreateMenuComponent,
-      //           },
-      //           {
-      //             path: `${outletRoutes.addMenu.route}/${outletRoutes.addMenuItem.route}`,
-      //             component: AddMenuItemComponent,
-      //           },
-      //         ],
-      //       },
-      //       {
-      //         path: `${outletRoutes.menuList.route}`,
-      //         component: MenuListDataTableComponent,
-      //       },
-      //       {
-      //         path: `${outletRoutes.createFoodPackage.route}`,
-      //         component: CreateFoodPackageComponent,
-      //       },
     ],
   },
 ];

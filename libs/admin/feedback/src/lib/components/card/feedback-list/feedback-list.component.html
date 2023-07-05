@@ -31,7 +31,7 @@
   ></hospitality-bot-tab-group>
   <div
     class="body"
-    [style.height]="search.length ? '480px' : '520px'"
+    [style.height]="search.length ? '480px' : 'calc(100% - 129px)'"
     infiniteScroll
     (scrolled)="loadMore()"
     [toggleScrollListener]="paginationDisabled"

@@ -37,7 +37,7 @@ export class CustomSelectComponent implements OnInit, ControlValueAccessor {
 
   @Output() loadMoreData = new EventEmitter();
   @Output() viewAll = new EventEmitter();
-  @Output() onEmptyViewCta = new EventEmitter();
+  @Output() onEmptyViewAction = new EventEmitter();
 
   @Input() addActLabel: string;
 

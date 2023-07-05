@@ -66,6 +66,27 @@ const appRoutes: Route[] = [
               },
             ],
           },
+          {
+            path: 'outlet',
+            component: MainComponent,
+            children: [
+              {
+                path: '',
+                loadChildren: () =>
+                  import('@hospitality-bot/admin/all-outlets').then(
+                    (m) => m.AdminAllOutletsModule
+                  ),
+              },
+
+              {
+                path: ':outletId',
+                loadChildren: () =>
+                  import('@hospitality-bot/admin/all-outlets').then(
+                    (m) => m.AdminAllOutletsModule
+                  ),
+              },
+            ],
+          },
         ],
       },
       { path: '**', redirectTo: '404' },

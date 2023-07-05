@@ -2,9 +2,7 @@ import { get, set } from 'lodash';
 import * as moment from 'moment';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { GuestRole } from '../constants/guest';
-import {
-  TransactionHistoryResponse,
-} from '../types/response';
+import { TransactionHistoryResponse } from '../types/response';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
@@ -24,10 +22,12 @@ export class Details implements IDeserializable {
   roomsDetails: RoomsDetails;
   feedbackDetails: FeedbackDetails;
   invoicePrepareRequest: boolean;
+  pmsBooking: boolean;
 
   deserialize(input: any, timezone) {
     const hotelNationality = input.hotel.address.countryCode;
     this.invoicePrepareRequest = input.invoicePrepareRequest || false;
+    this.pmsBooking = input.pmsBooking || false;
     this.guestDetails = new GuestDetailDS().deserialize(
       input.guestDetails,
       hotelNationality
@@ -508,8 +508,9 @@ export class PaymentDetailsConfig implements IDeserializable {
     //to-do
     this.roomRates = new RoomRateConfig().deserialize(input.roomRates);
     if (Array.isArray(input.transactionsHistory)) {
-      this.transactionHistory = input.transactionsHistory.map((item: TransactionHistoryResponse) =>
-        new TransactionHistory().deserialize(item)
+      this.transactionHistory = input.transactionsHistory.map(
+        (item: TransactionHistoryResponse) =>
+          new TransactionHistory().deserialize(item)
       );
     } else {
       this.transactionHistory = [];

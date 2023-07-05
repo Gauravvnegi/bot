@@ -209,6 +209,9 @@
     },
     "admin-members": {
       "tags": []
+    },
+    "admin-guest-dashboard": {
+      "tags": []
     }
   }
 }

@@ -26,6 +26,7 @@ export class TokenInterceptor implements HttpInterceptor {
         setHeaders: {
           'x-access-token': this._authService.getTokenByName('x-access-token'),
           'x-userId': this._authService.getTokenByName('x-userId'),
+          "entity-id": this._authService.getTokenByName('x-entityId')
         },
       });
       return next.handle(modifiedRequest);

@@ -135,13 +135,13 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     // let heading: string;
     let description: string[] = [
       `Are you sure you want to Deactivate ${rowData?.name}`,
-      ' Once Deactivated, you wont be to manage reservations and the hotel website will not be visible to visitors.',
+      ' Once deactivated, you will no longer be able to manage reservations, and the property or outlet website will become inaccessible to visitors.',
     ];
     let label: string = 'Deactivate';
     if (status) {
       description = [
         `Are you sure you want to Activate ${rowData?.name}`,
-        ' Once Activated, you will be able to manage reservations and the hotel website will be visible to visitors.',
+        ' Once Activated, you will be able to manage reservations, and the property or outlet website will be visible to visitors.',
       ];
       label = 'Activate';
     }
@@ -225,7 +225,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   }
 
   getSrc(value) {
-    console.log(value);
     switch (value) {
       case '2':
         return 'assets/images/2.svg';

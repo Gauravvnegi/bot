@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
 import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
+import { MenuActionItem } from '../../constants/invoice.constant';
 
 @Component({
   selector: 'hospitality-bot-add-discount',
@@ -11,9 +12,18 @@ import { errorMessages } from 'libs/admin/room/src/lib/constant/form';
 export class AddDiscountComponent implements OnInit {
   readonly errorMessages = errorMessages;
 
+  isRemove = false;
+  isUpdate = false;
+  isAdd = false;
+
   @Input() serviceName: string;
   @Input() originalAmount: number;
-  @Input() isRemove = false;
+  @Input() set discountAction(val: MenuActionItem) {
+    this.isAdd = val === MenuActionItem.ADD_DISCOUNT;
+    this.isRemove = val === MenuActionItem.REMOVE_DISCOUNT;
+    this.isUpdate = val === MenuActionItem.EDIT_DISCOUNT;
+  }
+
   totalDiscount: number;
   discountForm: FormGroup;
   discountOptions: Option[] = [

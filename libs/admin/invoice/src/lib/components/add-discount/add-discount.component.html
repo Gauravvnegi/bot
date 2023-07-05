@@ -1,8 +1,9 @@
 <div class="wrapper">
   <div class="header">
     <div class="header__title">
-      <div *ngIf="!isRemove">Add Discount on {{ serviceName }}</div>
+      <div *ngIf="isAdd">Add Discount on {{ serviceName }}</div>
       <div *ngIf="isRemove">Remove Discount for {{ serviceName }}</div>
+      <div *ngIf="isUpdate">Update Discount of {{ serviceName }}</div>
     </div>
     <div (click)="close()" class="header__close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -30,7 +31,7 @@
       <div>
         Total Discount :
         <span [ngClass]="totalDiscount > 0 ? 'discount-amount' : ''">{{
-          totalDiscount
+          totalDiscount > 0 ? totalDiscount : '0'
         }}</span>
       </div>
       <span class="note">Total Tax will be updated for this billing item</span>

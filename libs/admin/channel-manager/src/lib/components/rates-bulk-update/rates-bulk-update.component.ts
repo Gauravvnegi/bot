@@ -8,12 +8,14 @@ import {
   FormFactory,
 } from '../../models/bulk-update.models';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 @Component({
   selector: 'hospitality-bot-rates-bulk-update',
   templateUrl: './rates-bulk-update.component.html',
   styleUrls: ['./rates-bulk-update.component.scss'],
 })
 export class RatesBulkUpdateComponent implements OnInit {
+  hotelId: string;
   roomsData: any;
   useForm: FormGroup;
   pageTitle = 'Bulk Update';
@@ -28,12 +30,16 @@ export class RatesBulkUpdateComponent implements OnInit {
   endMinDate = new Date();
   isFormValid = false;
 
+  roomTypes = [];
+
   constructor(
     private fb: FormBuilder,
+    private globalFilter: GlobalFilterService,
     private formService: ChannelManagerFormService
   ) {}
 
   ngOnInit(): void {
+    this.hotelId = this.globalFilter.hotelId;
     const today = new Date();
     const seventhDate = new Date();
     seventhDate.setDate(today.getDate() + 7);
@@ -47,17 +53,31 @@ export class RatesBulkUpdateComponent implements OnInit {
       selectedDays: [[], [Validators.required]],
     });
     this.listenChanges();
+    this.loadRooms();
+  }
+
+  loadRooms() {
+    this.formService.roomDetails.subscribe((rooms) => {
+      this.roomTypes = rooms;
+      !this.roomTypes.length && this.formService.loadRoomTypes(this.hotelId);
+      this.loadTree({ roomType: '' });
+    });
   }
 
   listenChanges() {
     this.useForm.valueChanges.subscribe((value) => {
       this.isFormValid = this.useForm.valid;
-      this.roomsData = CheckBoxTreeFactory.buildTree(
-        this.formService.getRoomsData,
-        value.roomType,
-        { isInventory: false }
-      );
+      this.roomTypes;
+      this.loadTree(value);
     });
+  }
+
+  loadTree(controls) {
+    this.roomsData = CheckBoxTreeFactory.buildTree(
+      this.roomTypes,
+      controls.roomType,
+      { isInventory: false }
+    );
   }
 
   onChangeNesting() {

@@ -33,6 +33,7 @@
         description="This is a free of cost services"
         formControlName="serviceIds"
         [itemList]=""
+        (onEmptyViewAction)="onCreateAndContinue('service')"
         [noRecordsAction]="{
           actionName: 'Create and Continue',
           description:
@@ -58,6 +59,7 @@
         formControlName="menu"
         description="Do not forget to add this cost in addition to the room cost"
         [itemList]=""
+        (onEmptyViewAction)="onCreateAndContinue('menu')"
         [noRecordsAction]="{
           description:
             'No Menu found. Tap the +Create and Continue to create the Menu.',

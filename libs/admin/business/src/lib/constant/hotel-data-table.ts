@@ -1,3 +1,4 @@
+export const tableName = 'Property / Outlet';
 export const cols = [
   {
     field: 'name',

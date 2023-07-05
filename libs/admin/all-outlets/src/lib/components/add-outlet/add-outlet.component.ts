@@ -164,9 +164,6 @@ export class AddOutletComponent implements OnInit {
    * @description submits the form
    */
   submitForm(features?: Feature): void {
-    this.router.navigate([
-      `pages/settings/business-info/brand/${this.brandId}/outlet/${this.outletId}/menu`,
-    ]);
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
@@ -220,17 +217,19 @@ export class AddOutletComponent implements OnInit {
     );
     switch (feature) {
       case 'menu':
-        this.router.navigate([
-          `pages/settings/business-info/brand/${this.brandId}/outlet/${this.outletId}/menu`,
-        ]);
+        this.router.navigate([outletBusinessRoutes.menu.route], {
+          relativeTo: this.route,
+        });
         break;
       case 'service':
-        this.router.navigate([
-          `pages/settings/business-info/brand/${this.brandId}/outlet/${this.outletId}/import-services`,
-        ]);
+        this.router.navigate([outletBusinessRoutes.importService.route], {
+          relativeTo: this.route,
+        });
         break;
       case 'food':
-        console.log('food');
+        this.router.navigate([outletBusinessRoutes.foodPackage.route], {
+          relativeTo: this.route,
+        });
         break;
       default:
         this.router.navigate([

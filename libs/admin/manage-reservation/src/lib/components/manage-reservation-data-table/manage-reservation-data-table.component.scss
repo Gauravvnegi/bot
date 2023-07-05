@@ -15,6 +15,8 @@
   font-size: 12px !important;
 }
 
-:host ::ng-deep .p-datatable .p-datatable-thead {
-  top: 114px !important;
+:host ::ng-deep {
+  .p-datatable {
+    @include tableHeadingStickyPosition(114px);
+  }
 }

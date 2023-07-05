@@ -45,7 +45,7 @@
     display: flex;
     justify-content: flex-start;
     &__title {
-      font: normal normal bold 21px/21px Roboto;
+      font: normal normal $bolder 21px/21px Poppins;
       letter-spacing: 0.96px;
       color: $secondary;
       @media screen and (max-width: 1024px) {
@@ -54,7 +54,7 @@
     }
   }
   &__subheading {
-    font: normal normal medium 12px/16px Roboto;
+    font: normal normal $medium 12px/16px Poppins;
     letter-spacing: 0px;
     color: $subtitle;
     margin: 10px 0;
@@ -117,18 +117,18 @@
     }
     &__detail {
       width: 50%;
-      padding: 20px 40px;
+      padding: 10px 20px;
       @media screen and (max-width: 1024px) {
         width: auto;
         margin-left: 30px;
       }
       &__shared {
-        font: normal normal bold 35px/46px Roboto;
+        font: normal normal $bolder 35px/46px Poppins;
         letter-spacing: 2.1px;
         color: $secondary;
       }
       &__sharedtitle {
-        font: normal normal bold 12px/16px Roboto;
+        font: normal normal $bolder 12px/16px Poppins;
         letter-spacing: 0.72px;
         color: $subtitle;
       }
@@ -150,7 +150,7 @@
       border-radius: 2px;
     }
     &__count {
-      font: normal normal bold 16px/21px Roboto;
+      font: normal normal $bolder 16px/21px Poppins;
       letter-spacing: 0px;
       color: $secondary;
       margin: 0 5px;
@@ -159,14 +159,14 @@
       margin-left: 5px;
     }
     &__date {
-      font: normal normal normal 10px/14px Roboto;
+      font: normal normal $medium 10px/14px Poppins;
       letter-spacing: 0.72px;
       color: $subtitle;
       margin: 0 5px;
     }
   }
   &__recived-title {
-    font: normal normal normal 12px/16px Roboto;
+    font: normal normal $medium 12px/16px Poppins;
     letter-spacing: 0.72px;
     color: $subtitle;
   }
@@ -182,20 +182,20 @@
         border-radius: 2px;
       }
       &__count {
-        font: normal normal bold 16px/21px Roboto;
+        font: normal normal $bolder 16px/21px Poppins;
         letter-spacing: 0px;
         color: $secondary;
         margin: 0 5px;
       }
       &__date {
-        font: normal normal normal 10px/14px Roboto;
+        font: normal normal $medium 10px/14px Poppins;
         letter-spacing: 0.72px;
         color: $subtitle;
         margin: 0 5px;
       }
     }
     &__title {
-      font: normal normal normal 12px/16px Roboto;
+      font: normal normal $medium 12px/16px Poppins;
       letter-spacing: 0.72px;
       color: $subtitle;
     }
@@ -216,7 +216,7 @@
     .header-content{ 
       .stats-text{
         font-size: 20px;
-        font-weight: 700;
+        font-weight: $bolder;
       }
       .icons{
         height: 50px;
@@ -226,6 +226,7 @@
     .info{
       .amount{
         font-size: 41px;
+        font-weight: $bolder;
       }
       .percent{
         .comparison-percent{

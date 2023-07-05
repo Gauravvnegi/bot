@@ -30,12 +30,14 @@
     [min]="min"
     [max]="max"
     [placeholder]="placeholder"
+    (keydown)="handleKeyDown($event)"
+    [tabindex]="tabIndex"
   />
 
   <ng-container *ngIf="!isLoading">
     <small *ngIf="subtitle" class="subtitle">{{ subtitle }}</small>
   </ng-container>
-  
+
   <small *ngIf="error" class="p-error"> {{ error }}</small>
 
   <label *ngIf="label && float" [for]="controlName" class="label">{{

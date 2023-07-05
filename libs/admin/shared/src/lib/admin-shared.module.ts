@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MenuModule } from 'primeng/menu';
 import { CKEditorModule } from 'ckeditor4-angular';
 import { SharedMaterialModule } from 'libs/shared/material/src';
 import { ButtonModule } from 'primeng/button/';
@@ -18,6 +19,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonComponent } from './components/button/button.component';
@@ -42,6 +44,7 @@ import { StatsCardComponent } from './components/stats-card/stats-card.component
 import { TabGroupComponent } from './components/tab-group/tab-group.component';
 import { TemplateEditorComponent } from './components/template-editor/template-editor.component';
 import { ToggleDropdownComponent } from './components/toggle-dropdown/toggle-dropdown.component';
+import { StatusDropdownToggleComponent } from './components/status-dropdown-toggle/status-dropdown-toggle.component';
 import { TopicDropdownComponent } from './components/topic-dropdown/topic-dropdown.component';
 import { UnsubscribeFeatureComponent } from './components/unsubscribe-feature/unsubscribe-feature.component';
 import { UnsubscribeViewComponent } from './components/unsubscribe-view/unsubscribe-view.component';
@@ -53,6 +56,7 @@ import { ImageDirective } from './directives/image.directive';
 import { FeatureDirective } from './directives/feature.directive';
 import { InternalSubscriptionDirective } from './directives/internal-subscription.directive';
 import { NumberDirective } from './directives/number.directive';
+import { StatusCellDirective } from './directives/status-cell.directive';
 import { ClickStopPropagation } from './directives/stoppropagation.directive';
 import { SubscriptionDirective } from './directives/subscription.directive';
 import { LinkDetector } from './pipes/linkDetector.pipe';
@@ -76,6 +80,7 @@ import { NavigationHeaderComponent } from './components/navigation-header/naviga
 import { CategoryFormComponent } from './view/category-form/category-form.component';
 import { AutoCompleteComponent } from './components/form-component/auto-complete/auto-complete.component';
 import { ViewInputComponent } from './components/form-component/view-input/view-input.component';
+import { InputSwitchComponent } from './components/form-component/input-switch/input-switch.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { SkeletonShapeComponent } from './components/skeleton/skeleton-shape/skeleton-shape.component';
@@ -88,7 +93,20 @@ import { CreateWithViewComponent } from './view/create-with-view/create-with-vie
 import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/toggle-switch-label.component';
 import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
+import { InputNumberComponent } from './components/form-component/input-number/input-number.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
+import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
+import { AddressComponent } from './components/address/address-component.component';
+import { SocialMediaComponent } from './components/social-media/social-media.component';
+import { DiscountFormComponent } from './components/discount-form/discount-form.component';
+import { TimePickerComponent } from './components/form-component/time-picker/time-picker.component';
+import { CheckboxSelectorComponent } from './components/form-component/checkbox-selector/checkbox-selector.component';
+import { MenuButtonComponent } from './components/menu-button/menu-button.component';
+// import { MenuModule } from 'primeng/menu';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TabHeaderComponent } from './components/tab-header/tab-header.component';
+import { ImportServiceContainerComponent } from './components/import-service-container/import-service-container.component';
+import { BackdropDirective } from './directives/backdrop.directive';
 @NgModule({
   imports: [
     CommonModule,
@@ -114,6 +132,9 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     MatTooltipModule,
     DialogModule,
     MatMenuModule,
+    MenuModule,
+    ToggleButtonModule,
+    InputNumberModule,
   ],
   declarations: [
     DatatableComponent,
@@ -121,6 +142,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     UploadFileComponent,
     ComingSoonComponent,
     NumberDirective,
+    StatusCellDirective,
     MultipleDropdownComponent,
     SubscriptionDirective,
     InternalSubscriptionDirective,
@@ -153,6 +175,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     ExportListComponent,
     ButtonComponent,
     ToggleDropdownComponent,
+    StatusDropdownToggleComponent,
     IteratorComponent,
     InputComponent,
     TextAreaComponent,
@@ -173,6 +196,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    InputSwitchComponent,
     MenuComponent,
     SkeletonShapeComponent,
     SkeletonDirective,
@@ -185,6 +209,17 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     RoomTypeDirective,
     CopyLinkComponentComponent,
     AddAttachmentComponent,
+    ModalHeaderComponent,
+    AddressComponent,
+    SocialMediaComponent,
+    DiscountFormComponent,
+    TimePickerComponent,
+    CheckboxSelectorComponent,
+    MenuButtonComponent,
+    TabHeaderComponent,
+    BackdropDirective,
+    ImportServiceContainerComponent,
+    InputNumberComponent,
   ],
 
   exports: [
@@ -196,6 +231,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     ButtonModule,
     PaginatorModule,
     TabMenuModule,
+    MenuModule,
     AccordionModule,
     SplitButtonModule,
     InputSwitchModule,
@@ -207,6 +243,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     AutoCompleteModule,
     CKEditorModule,
     NumberDirective,
+    StatusCellDirective,
     MultipleDropdownComponent,
     UploadCsvComponent,
     SubscriptionDirective,
@@ -238,6 +275,7 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     ExportListComponent,
     ButtonComponent,
     ToggleDropdownComponent,
+    StatusDropdownToggleComponent,
     IteratorComponent,
     InputComponent,
     TextAreaComponent,
@@ -259,7 +297,9 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    InputSwitchComponent,
     MatMenuModule,
+    MenuModule,
     MenuComponent,
     SkeletonDirective,
     SkeletonShapeComponent,
@@ -272,6 +312,17 @@ import { AddAttachmentComponent } from './components/form-component/add-attachme
     RoomTypeDirective,
     CopyLinkComponentComponent,
     AddAttachmentComponent,
+    ModalHeaderComponent,
+    AddressComponent,
+    SocialMediaComponent,
+    DiscountFormComponent,
+    TimePickerComponent,
+    CheckboxSelectorComponent,
+    MenuButtonComponent,
+    ToggleButtonModule,
+    TabHeaderComponent,
+    ImportServiceContainerComponent,
+    InputNumberComponent,
   ],
 })
 export class AdminSharedModule {}

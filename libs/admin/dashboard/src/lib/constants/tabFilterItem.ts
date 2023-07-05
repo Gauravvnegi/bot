@@ -1,3 +1,8 @@
+export enum TableValue {
+  inHouse = 'INHOUSE',
+  arrival = 'ARRIVAL',
+  departure = 'DEPARTURE',
+}
 export const tabFilterItems = {
   arrivals: [
     {
@@ -29,7 +34,7 @@ export const tabFilterItems = {
           value: 'PRECHECKINPENDING',
           total: 0,
           isSelected: false,
-          type: 'pending',
+          type: 'draft',
         },
         {
           label: 'Precheckin_Initiated ',
@@ -61,7 +66,7 @@ export const tabFilterItems = {
           value: 'CHECKINPENDING',
           total: 0,
           isSelected: false,
-          type: 'pending',
+          type: 'draft',
         },
         {
           label: 'CheckIn_Initiated',
@@ -124,7 +129,7 @@ export const tabFilterItems = {
           value: 'CHECKOUTPENDING',
           total: 0,
           isSelected: false,
-          type: 'pending',
+          type: 'draft',
         },
         {
           label: 'Checkout_Initiated',
@@ -194,7 +199,7 @@ export const tabFilterItems = {
           value: 'CHECKINPENDING',
           total: 0,
           isSelected: false,
-          type: 'pending',
+          type: 'draft',
         },
         {
           label: 'CheckIn_Initiated',
@@ -227,7 +232,7 @@ export const tabFilterItems = {
           value: 'PRECHECKINPENDING',
           total: 0,
           isSelected: false,
-          type: 'pending',
+          type: 'draft',
         },
         {
           label: 'Precheckin_Initiated ',
@@ -277,7 +282,7 @@ export const tabFilterItems = {
           value: 'CHECKOUTPENDING',
           total: 0,
           isSelected: false,
-          type: 'pending',
+          type: 'draft',
         },
         {
           label: 'Checkout_Initiated',

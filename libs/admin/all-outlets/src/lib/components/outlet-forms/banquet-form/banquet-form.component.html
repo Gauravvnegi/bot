@@ -1,0 +1,107 @@
+<ng-container [formGroup]="controlContainer.control">
+  <div class="container-wrapper">
+    <div class="header">Services</div>
+    <hr />
+    <div class="sub-container-wrapper">
+      <hospitality-bot-custom-select
+        label="Complimentary Services"
+        description="This is a free of cost services"
+        formControlName="serviceIds"
+        [itemList]=""
+        [noRecordsAction]="{
+          actionName: 'Create and Continue',
+          description:
+            'No services found. Tap the +Create and Continue to Import Services.',
+          imageSrc: 'assets/images/empty-table-service.png'
+        }"
+      >
+        <hospitality-bot-button
+          label="+ Import Services"
+          variant="text"
+          link=""
+        ></hospitality-bot-button>
+      </hospitality-bot-custom-select>
+      <hospitality-bot-custom-select
+        label="Paid Services"
+        description="Do not forget to add this cost in addition to the room cost"
+        formControlName="serviceIds"
+        [itemList]=""
+        [noRecordsAction]="{
+          actionName: 'Create and Continue',
+          description:
+            'No services found. Tap the +Create and Continue to Create Services',
+          imageSrc: 'assets/images/empty-table-service.png'
+        }"
+      ></hospitality-bot-custom-select>
+    </div>
+  </div>
+
+  <hospitality-bot-food-package></hospitality-bot-food-package>
+
+  <div class="container-wrapper">
+    <div class="header">Other Details</div>
+    <hr />
+    <div class="details-wrapper">
+      <hospitality-bot-prefix-field
+        label="Occupancy"
+        class="half-width"
+        preControlName="maximumOccupancy"
+        postControlName="minimumOccupancy"
+        preFieldType="input"
+        postFieldType="input"
+        [settings]="{
+          layout: 'dashed',
+          preProps: { type: 'number' },
+          postProps: { type: 'number' }
+        }"
+      >
+      </hospitality-bot-prefix-field>
+      <hospitality-bot-prefix-field
+        preControlName="area"
+        postControlName="areaUnit"
+        class="half-width"
+        label="Area"
+        [settings]="{
+          preFieldType: 'input',
+          postFieldType: 'select',
+          layout: 'pre-main',
+          postOptions: areaUnits
+        }"
+      ></hospitality-bot-prefix-field>
+      <hospitality-bot-prefix-field
+        label="Days Of operation"
+        class="half-width"
+        preControlName="openingDay"
+        postControlName="closingDay"
+        preFieldType="select"
+        postFieldType="select"
+        [preOptions]="days"
+        [postOptions]="days"
+        [settings]="{
+          layout: 'dashed'
+        }"
+      >
+      </hospitality-bot-prefix-field>
+
+      <hospitality-bot-prefix-field
+        label="Timings"
+        class="half-width"
+        preControlName="openingHour"
+        postControlName="closingHour"
+        preFieldType="select"
+        postFieldType="select"
+        [preOptions]="hours"
+        [postOptions]="hours"
+        [settings]="{
+          layout: 'dashed'
+        }"
+      >
+      </hospitality-bot-prefix-field>
+    </div>
+  </div>
+
+  <hospitality-bot-rules
+    controlName="rules"
+    class="full-width"
+  ></hospitality-bot-rules>
+</ng-container>

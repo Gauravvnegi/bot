@@ -8,14 +8,14 @@
     }"
   >
   </hospitality-bot-navigation-header>
-  <div class="main">
-    <div class="sub-heading">
-      Room Information
-    </div>
-    <div class="form-block">
-      <div class="input-fields" [formGroup]="useForm">
+  <div class="sub-wrapper" [formGroup]="useForm">
+    <div class="main">
+      <div class="sub-heading">
+        Room Information
+      </div>
+      <div class="form-block">
         <hospitality-bot-select
-          class="input"
+          class="half-width"
           controlName="roomTypeId"
           label="Room Type"
           [options]="roomTypes"
@@ -33,23 +33,85 @@
             {{ useForm.get('price').value }}
           </span>
         </div>
-      </div>
 
-      <hospitality-bot-iterator
-        class="iterator"
-        [fields]="fields"
-        [useFormArray]="useFormArray"
-        [maxLimit]="roomId ? 1 : 0"
-        ctaLabel="+ Add Another Room"
-      >
-      </hospitality-bot-iterator>
-
-      <div class="save-footer">
-        <hospitality-bot-button
-          label="Save"
-          (onClick)="handleSubmit()"
-        ></hospitality-bot-button>
+        <hospitality-bot-iterator
+          class="iterator full-width"
+          [fields]="fields"
+          [useFormArray]="useFormArray"
+          [maxLimit]="roomId ? 1 : 0"
+          ctaLabel="+ Add Another Room"
+        >
+        </hospitality-bot-iterator>
       </div>
     </div>
+    <div class="room-wrapper">
+      <div class="header">Features</div>
+      <hr />
+      <div class="room-services-wrapper">
+        <hospitality-bot-custom-select
+          label="Features"
+          description="Select the features available in the room"
+          formControlName="features"
+          [itemList]="features"
+          [noRecordsAction]=""
+          [loading]="loading"
+        >
+        </hospitality-bot-custom-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="main" *ngIf="roomId">
+    <div class="sub-heading status__wrapper">
+      <span> Room Status </span>
+      <span class="status" *ngIf="!!currentRoomState.length">
+        <span
+          statusCell
+          [status]="currentRoomState[0]?.value"
+          [type]="currentRoomState[0]?.type"
+        ></span>
+        <span
+          statusCell
+          [status]="currentRoomState[1]?.value"
+          [type]="currentRoomState[1]?.type"
+        ></span>
+      </span>
+    </div>
+    <div class="form-block" [formGroup]="statusQuoForm">
+      <hospitality-bot-select
+        class="half-width"
+        controlName="roomStatus"
+        label="Room Status"
+        [options]="roomStatuses"
+        [loading]="isRoomInfoLoading"
+      ></hospitality-bot-select>
+      <div class="container" *ngIf="isDateRequired">
+        <hospitality-bot-date controlName="fromDate" class="half-width">
+        </hospitality-bot-date>
+        <hospitality-bot-date
+          [settings]="{
+            enableTime: false,
+            dateValue: endMinDate,
+            isDisabled: disabledForm
+          }"
+          [minDate]="endMinDate"
+          controlName="toDate"
+          class="half-width"
+        >
+        </hospitality-bot-date>
+      </div>
+      <hospitality-bot-text-area
+        class="full-width"
+        controlName="remarks"
+        label="Remarks"
+      ></hospitality-bot-text-area>
+    </div>
+  </div>
+
+  <div class="save-footer">
+    <hospitality-bot-button
+      label="Save"
+      (onClick)="handleSubmit()"
+    ></hospitality-bot-button>
   </div>
 </div>

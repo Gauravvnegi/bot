@@ -130,14 +130,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       loggedInUserId: this.userService.getLoggedInUserId(),
       hotelId: this.hotelId,
     };
-    console.log(this.tabFilterIdx);
     const allUsers$ = this._managePermissionService.getAllUsers(config);
     const managedUsers$ = this._managePermissionService.getManagedUsers(config);
 
     return forkJoin([allUsers$, managedUsers$]);
   }
-
-  /** not used */
 
   loadData(event) {
     this.loading = true;

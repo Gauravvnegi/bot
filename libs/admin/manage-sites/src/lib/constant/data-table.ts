@@ -1,4 +1,4 @@
-import { Chip, Cols, Status } from '@hospitality-bot/admin/shared';
+import { Chip, Cols, FlagType, Status } from '@hospitality-bot/admin/shared';
 import { ManageSiteStatus } from './manage-site';
 
 export const status = [
@@ -24,6 +24,28 @@ export const status = [
   },
 ];
 
+export const manageSiteStatus: Record<
+  ManageSiteStatus,
+  { label: string; type: FlagType }
+> = {
+  DRAFT: {
+    label: 'Draft',
+    type: 'warning',
+  },
+  PUBLISHED: {
+    label: 'Published',
+    type: 'active',
+  },
+  TRASH: {
+    label: 'Trash',
+    type: 'failed',
+  },
+  DELETE: {
+    label: 'Delete',
+    type: 'failed',
+  },
+};
+
 export const chips: Chip<ManageSiteStatus | 'ALL'>[] = [
   {
     label: 'All',
@@ -37,7 +59,7 @@ export const chips: Chip<ManageSiteStatus | 'ALL'>[] = [
     value: ManageSiteStatus.PUBLISHED,
     total: 0,
     isSelected: false,
-    type: 'new',
+    type: 'active',
   },
   {
     label: 'Draft',

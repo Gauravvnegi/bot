@@ -1,3 +1,4 @@
+import { EntityState } from '@hospitality-bot/admin/shared';
 import { ManageSiteStatus } from '../constant/manage-site';
 import {
   ManageSiteListResponse,
@@ -19,14 +20,15 @@ export class ManageSite {
     this.url = input.domain;
     this.nextState = input.nextState;
     this.status = input.status;
-
+    this.nextState = [...input.nextState, input.status];
     return this;
   }
 }
 
 export class ManageSiteList {
   total: number;
-  entityTypeCounts: ManageSiteListResponse['entityTypeCounts'];
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
   records: ManageSite[];
 
   deserialize(input: ManageSiteListResponse) {
@@ -35,12 +37,8 @@ export class ManageSiteList {
     this.records =
       input.records.map((item) => new ManageSite().deserialize(item)) ?? [];
 
-    this.entityTypeCounts = {
-      DRAFT: input.entityTypeCounts.DRAFT,
-      PUBLISHED: input.entityTypeCounts.PUBLISHED,
-      TRASH: input.entityTypeCounts.TRASH,
-    };
-
+    this.entityTypeCounts = input.entityTypeCounts;
+    this.entityStateCounts = input.entityStateCounts;
     return this;
   }
 }

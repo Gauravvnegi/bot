@@ -29,12 +29,15 @@ export class HotelDetailService {
       this.brands.find((item) => item.id === this.brandId)?.hotels ?? [];
   }
 
-/**
- * 
- * @param businessInfo all the required tokens update
- * @param redirectUrl default will be page -> will open the page on subscription priority
- */
-  updateBusinessSession(businessInfo: BusinessInfo, redirectUrl: string = '/pages') {
+  /**
+   *
+   * @param businessInfo all the required tokens update
+   * @param redirectUrl default will be page -> will open the page on subscription priority
+   */
+  updateBusinessSession(
+    businessInfo: BusinessInfo,
+    redirectUrl: string = '/pages'
+  ) {
     Object.entries(businessInfo).forEach(([token, value]) => {
       localStorage.setItem(token, value);
     });

@@ -1,4 +1,7 @@
+import { EntityState } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { ReservationTab } from 'libs/admin/dashboard/src/lib/types/response.type';
+import { TableValue } from 'libs/admin/dashboard/src/lib/constants/tabFilterItem';
 import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 export interface IDeserializable {
@@ -7,10 +10,22 @@ export interface IDeserializable {
 
 export class ReservationTable implements IDeserializable {
   records: Reservation[];
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<ReservationTab>;
+  totalRecord: number;
+
   deserialize(input: any, timezone) {
     this.records = input.records.map((record) =>
       new Reservation().deserialize(record, timezone)
     );
+    this.entityStateCounts = input?.entityStateCounts;
+    const entityType = input?.entityTypeCounts;
+    this.entityTypeCounts = {
+      [TableValue.inHouse]: entityType[TableValue.inHouse],
+      [TableValue.arrival]: entityType[TableValue.arrival],
+      [TableValue.departure]: entityType[TableValue.departure],
+    };
+    this.totalRecord = input?.total;
     return this;
   }
 }
@@ -379,9 +394,9 @@ export class Guest implements IDeserializable {
   }
 
   getPhoneNumber() {
-    return `${this.countryCode ? this.countryCode : ''} ${
-      this.phoneNumber ? this.phoneNumber : ''
-    }`;
+    return this.phoneNumber
+      ? `${this.countryCode ? this.countryCode : ''} ${this.phoneNumber}`
+      : '';
   }
 
   getNationality(cc) {

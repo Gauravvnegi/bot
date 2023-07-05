@@ -1,21 +1,45 @@
 @import 'main';
 
+@mixin header-bg {
+  background-color: $layout-background;
+  z-index: $nav-action-header-z;
+}
+
+@mixin sticky-header {
+  @include header-fixed-position;
+  height: $sticky-header-height;
+  transition: box-shadow 1s ease-in;
+  padding: 20px 22px;
+  box-shadow: 1px 7px 8px -7px rgba(181, 181, 181, 1);
+}
+
 .header {
   display: flex;
   gap: 10px;
   align-items: center;
-  padding-bottom: 20px;
+  padding-bottom: 15px;
   margin-top: -15px;
 
   &__wrapper {
+    position: relative;
+
     &__sticky {
-      padding-top: 40px;
+      @include header-bg;
+
+      &-sub-title {
+        padding-top: 40px;
+      }
+      &-title {
+        @include sticky-header;
+        .header {
+          padding: 5px 0 10px 0;
+        }
+      }
     }
   }
 
   &__date {
     opacity: 0.5;
-    font-family: Poppins;
     font-size: 16px;
     padding-left: 32px;
     letter-spacing: 0.96px;
@@ -27,9 +51,7 @@
 
 .label {
   font-size: 26px;
-  font-weight: 600;
-  font-family: Poppins;
-
+  font-weight: $bolder;
   letter-spacing: 1.56px;
   color: $secondary2;
 }
@@ -40,7 +62,7 @@
   border-radius: 50%;
   padding: 5px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: $bolder;
   cursor: pointer;
 }
 
@@ -51,9 +73,8 @@
     padding-bottom: 20px;
     display: flex;
     opacity: 0.6;
-    font-family: Poppins;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: $bold;
     color: $secondary2;
     letter-spacing: 0.84px;
 
@@ -82,13 +103,8 @@
   }
 
   &__sticky {
-    @include header-fixed-position;
-    height: $sticky-header-height;
-    transition: box-shadow 1s ease-in;
-    background-color: $layout-background;
-    padding: 20px 22px;
-    z-index: $nav-action-header-z;
-    box-shadow: 1px 7px 8px -7px rgba(181, 181, 181, 1);
+    @include header-bg;
+    @include sticky-header;
   }
 }
 

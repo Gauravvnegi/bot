@@ -1,14 +1,12 @@
-<div class="feedback-container mb-20">
-  <div class="feedback-container__header">
-    <div class="feedback-container__header__all">
-      <hospitality-bot-tab-group
-        [listItems]="tabFilterItems"
-        [selectedIndex]="tabFilterIdx"
-        (selectedTabChange)="onSelectedTabFilterChange($event)"
-      ></hospitality-bot-tab-group>
-    </div>
-  </div>
+<hospitality-bot-tab-group
+  [listItems]="tabFilterItems"
+  [selectedIndex]="tabFilterIdx"
+  (selectedTabChange)="onSelectedTabFilterChange($event)"
+  isSticky="true"
+  extraGap="60"
+></hospitality-bot-tab-group>
 
+<div class="feedback-container mb-20">
   <div class="stats--wrapper">
     <div class="bifurcation-container">
       <hospitality-bot-bifurcation-stats
@@ -73,7 +71,7 @@
   ></hospitality-bot-disengagement>
 </div>
 
-<hospitality-bot-feedback-datatable
+<!-- <hospitality-bot-feedback-datatable
   [globalFeedbackFilterType]="globalFeedbackFilterType"
 >
-</hospitality-bot-feedback-datatable>
+</hospitality-bot-feedback-datatable> -->

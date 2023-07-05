@@ -1,9 +1,11 @@
 import { get, set } from 'lodash';
-import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { EntityState, IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class ListTable {
   records: IList[];
   total: number;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
 
   deserialize(input) {
     this.records = new Array<IList>();
@@ -11,6 +13,8 @@ export class ListTable {
       this.records.push(new List().deserialize(list, i))
     );
     this.total = input.total;
+    this.entityStateCounts = input?.entityStateCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
     return this;
   }
 }

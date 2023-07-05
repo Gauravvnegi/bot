@@ -1,0 +1,23 @@
+<p-accordion [multiple]="false">
+  <p-accordionTab class="accordion-header" header="Food Packages">
+    <div class="package-wrapper">
+      <hospitality-bot-custom-select
+        label="Food Packages"
+        formControlName="foodPackages"
+        description="Do not forget to add this cost in addition to the room cost"
+        [itemList]=""
+        [noRecordsAction]="{
+          description: 'No Food Package yet',
+          imageSrc: 'assets/images/empty-view-food-package.jpg'
+        }"
+      >
+        <hospitality-bot-button
+          label="+ Add Packages"
+          variant="outlined"
+          [routerLink]="[routerLink.foodPackage.route]"
+          queryParamsHandling="preserve"
+        ></hospitality-bot-button>
+      </hospitality-bot-custom-select>
+    </div>
+  </p-accordionTab>
+</p-accordion>

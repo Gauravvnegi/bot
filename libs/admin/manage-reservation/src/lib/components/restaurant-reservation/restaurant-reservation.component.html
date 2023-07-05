@@ -1,0 +1,94 @@
+<div [formGroup]="userForm" class="wrapper">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="routes">
+  </hospitality-bot-navigation-header>
+  <div class="main">
+    <p-accordion [multiple]="true">
+      <hospitality-bot-booking-info
+        [reservationTypes]="reservationTypes"
+        [statusOptions]="statusOptions"
+        [bookingType]="bookingType"
+      ></hospitality-bot-booking-info>
+      <p-accordionTab header="Order Information">
+        <div class="form-block" formGroupName="orderInformation">
+          <hospitality-bot-input
+            class="half-width"
+            controlName="tableNumber"
+            label="Table Number"
+          ></hospitality-bot-input>
+          <hospitality-bot-input
+            class="half-width"
+            controlName="numberOfAdults"
+            label="No. of Adults"
+          ></hospitality-bot-input>
+          <hospitality-bot-iterator
+            class="iterator full-width"
+            [fields]="fields"
+            [useFormArray]="menuItemsArray"
+            ctaLabel="+ Add Item"
+          ></hospitality-bot-iterator>
+          <hospitality-bot-text-area
+            class="full-width"
+            controlName="kotInstructions"
+            label="KOT Instructions"
+            [props]="{
+              placeholder: 'Enter'
+            }"
+          ></hospitality-bot-text-area>
+        </div>
+      </p-accordionTab>
+      <hospitality-bot-guest-information></hospitality-bot-guest-information>
+      <hospitality-bot-billing-address></hospitality-bot-billing-address>
+      <!-- <hospitality-bot-instructions
+        [bookingType]="bookingType"
+      ></hospitality-bot-instructions> -->
+      <hospitality-bot-payment-rule
+        [deductedAmount]="deductedAmount"
+      ></hospitality-bot-payment-rule>
+      <hospitality-bot-payment-method></hospitality-bot-payment-method>
+    </p-accordion>
+    <div class="bk-summary">
+      <hospitality-bot-booking-summary
+        [selectedOffer]="selectedOffer"
+        [summaryData]="summaryData"
+        [offersList]="offersList"
+        (onOfferItemSelect)="offerSelect($event)"
+        (onOfferSelect)="offerSelect()"
+        (handleInitForm)="initForm()"
+        [disabledForm]="disabledForm"
+        [bookingInfo]="{
+          header: 'United Coffee House Rewind',
+          subHeader: 'The Leela, New Delhi, 210002',
+          price: '2000',
+          discountedPrice: '1200',
+          guestInfo: numberOfAdults,
+          stayInfo: tableNumber
+        }"
+      >
+        <div class="bk-summary_roomInfo_checkoutInfo">
+          <p class="bk-summary_roomInfo_checkoutInfo_heading">
+            Date
+          </p>
+          <p class="bk-summary_roomInfo_checkoutInfo_subText">
+            5 April, Monday
+          </p>
+        </div>
+        <div class="bk-summary_roomInfo_guestInfo">
+          <p class="bk-summary_roomInfo_guestInfo_heading">
+            Time
+          </p>
+          <p class="bk-summary_roomInfo_guestInfo_subText">
+            06:00 PM
+          </p>
+        </div>
+        <div class="bk-summary_roomInfo_guestInfo">
+          <p class="bk-summary_roomInfo_guestInfo_heading">
+            Guests
+          </p>
+          <p class="bk-summary_roomInfo_guestInfo_subText">
+            2
+          </p>
+        </div>
+      </hospitality-bot-booking-summary>
+    </div>
+  </div>
+</div>

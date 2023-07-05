@@ -23,12 +23,13 @@ export const routes = {
   [ModuleNames.FREDDIE]: 'freddie',
   [ModuleNames.CONVERSATION_DASHBOARD]: 'freddie/conversation-analytics',
   [ModuleNames.LIVE_MESSAGING]: 'freddie/messages',
-  [ModuleNames.SENTIMENTAL_ANALYSIS_FREDDIE]: 'freddie/sentimental-analysis',
+  // [ModuleNames.SENTIMENTAL_ANALYSIS_FREDDIE]: 'freddie/sentimental-analysis',
 
   // Hedda
   [ModuleNames.HEDA]: 'heda',
   [ModuleNames.HEDA_DASHBOARD]: 'heda/analytics',
   [ModuleNames.SENTIMENTAL_ANALYSIS_HEDA]: 'heda/sentimental-analysis',
+  [ModuleNames.FEEDBACK]: 'heda/feedback',
 
   // eMarkt_IT
   [ModuleNames.EMARK_IT]: 'marketing',
@@ -53,13 +54,27 @@ export const routes = {
 
   // FINANCE
   [ModuleNames.FINANCE]: 'finance',
+  [ModuleNames.INVOICE]: 'finance/invoice',
+  [ModuleNames.TRANSACTION]: 'finance/transaction',
 
-  // GUESTS
-  [ModuleNames.GUESTS]: 'guest',
-  [ModuleNames.GUESTS_DASHBOARD]: 'guest/dashboard',
+  // MEMBERS
+  [ModuleNames.MEMBERS]: 'members',
+  [ModuleNames.GUESTS]: 'members/guest',
+  [ModuleNames.AGENT]: 'members/agent',
+  [ModuleNames.COMPANY]: 'members/company',
 
   // SETTINGS
   [ModuleNames.SETTINGS]: 'settings',
+
+  //OUTLET
+  // [ModuleNames.OUTLET]: 'outlet',
+  // [ModuleNames.OUTLETS_DASHBOARD]: 'outlet/dashboard',
+  // [ModuleNames.ALL_OUTLETS]: 'outlet/all-outlets',
+
+  //CHANNEL_MANAGER
+  [ModuleNames.CHANNEL_MANAGER]: 'channel-manager',
+  [ModuleNames.UPDATE_RATES]: 'channel-manager/update-rates',
+  [ModuleNames.UPDATE_INVENTORY]: 'channel-manager/update-inventory',
 
   RoleAndPermission: 'roles-permissions',
 };

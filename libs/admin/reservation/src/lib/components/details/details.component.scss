@@ -26,10 +26,12 @@
 
 .details-wrapper {
   background-color: $white;
+  height: 85vh;
   // max-height: 100%;
   // @media screen and (max-width: 1100px) {
-    height: 85vh;
+    // height: 85vh;
   // }
+  padding-bottom: 10px;
 }
 
 :host ::ng-deep .p-dropdown .p-inputtext {
@@ -121,7 +123,7 @@
         .label {
           letter-spacing: 0.84px;
           font-size: 14px;
-          font-weight: bold;
+          font-weight: $bold;
           text-align: left;
         }
         .value {
@@ -129,7 +131,7 @@
           color: $grayLight;
           letter-spacing: 0.66px;
           margin-top: 5px;
-          font-weight: 500;
+          font-weight: $bold;
         }
       }
     }
@@ -211,7 +213,7 @@
         @include flex-item-center;
         border-radius: 5px;
         padding: 6px 20px;
-        @include normal-text;
+        @include normal-sm-text;
         text-align: center;
         color: $white;
         .material-icons {
@@ -296,7 +298,7 @@ mat-option {
       margin-left: 30px;
       color: $white;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: $bold;
       padding-top: 7px;
     }
     li.contant {
@@ -305,7 +307,7 @@ mat-option {
       margin-left: 25px;
       padding-top: 8px;
       margin-right: 10px;
-      font-weight: bold;
+      font-weight: $bold;
     }
     button {
       border: none;
@@ -470,14 +472,14 @@ mat-option {
     }
     .label {
       color: $primary-black;
-      font-weight: 500;
+      font-weight: $bold;
       letter-spacing: 0.84px;
       font-size: 10px;
       margin-top: 12px;
     }
     .note {
       color: $grayMedium;
-      font-weight: 500;
+      font-weight: $bold;
       letter-spacing: 0.84px;
       margin-top: 10px;
       font-size: 12px;
@@ -513,7 +515,7 @@ mat-option {
       border: 1px solid $primary-cta;
       padding: 9.5px 18.5px;
       font-size: 12px;
-      font-weight: 500;
+      font-weight: $bold;
       border-radius: 4px;
       @include flex-all-center;
       color: $primary-cta;
@@ -627,7 +629,7 @@ mat-option {
 
 :host ::ng-deep {
   .mat-select-value-text {
-    @include normal-text;
+    @include normal-sm-text;
     color: $white;
   }
   .mat-select-arrow {

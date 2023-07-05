@@ -18,11 +18,17 @@ $progress-bar-arrivals-base: #e7f4f6;
 $blackPrime-base: #f7f7f7;
 
 //state color
+$paid-state: #4bc0c0;
+$unpaid-state: #ff6384;
+$default-state: #555555;
 $active-state: #1468f9;
-$inactive-state: #e31717;
+$failed-state: #e31717;
+$inactive-state: #ef1d45;
 $draft-state: #bebebe;
-$success-state: #30ce0b;
-$unavailable-state: #e39117;
+$completed-state: #30ce0b;
+$success-state: #52b33f;
+$warning-state: #e39117;
+$unavailable-state: #ffbf04;
 
 // linear-gradients
 
@@ -70,14 +76,12 @@ $blackPrime-1: 0px 0px 6px #b8bbbe;
 $subItem_heading_hover: rgba(255, 255, 255, 0.24);
 
 // green palate
-// $success-state: #119e0c;
 $posCompare: #52b33f;
 $resolved: #31bb92;
-$success-state: #30ce0b;
 
 // blue palate
 
-$success-stated: #389f99;
+$success-color: #389f99;
 $progress-bar-arrivals: #1495a4;
 $priority-medium: #25a2e2;
 $load-more: rgba(37, 162, 226);
@@ -115,7 +119,7 @@ $option-hover: #673ab71f;
 // yellow palate
 
 $initiated-2: #ff8f00;
-$priority-high: #f8b633;
+$priority-high: #ff8f00;
 $text-email: #faa700;
 $warning: #f6b155;
 $dark-warning: #fc9d03;

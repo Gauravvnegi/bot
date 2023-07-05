@@ -1,0 +1,31 @@
+<hospitality-bot-prefix-field
+  [class]="className"
+  [options]="currencies"
+  [label]="originalPriceLabel"
+  [preControlName]="currency"
+  [postControlName]="originalPrice"
+  [defaultProps]="{ post: { type: 'number' } }"
+  [props]="{ errorMessages: errorMessages }"
+>
+</hospitality-bot-prefix-field>
+<hospitality-bot-prefix-field
+  [class]="className"
+  [options]="discountTypes"
+  [label]="discountLabel"
+  [preControlName]="discountType"
+  [postControlName]="discountValue"
+  [defaultProps]="{ post: { type: 'number' } }"
+  [props]="{ errorMessages: errorMessages }"
+>
+</hospitality-bot-prefix-field>
+<hospitality-bot-prefix-field
+  [class]="className"
+  [options]="currencies"
+  [label]="discountedPriceLabel"
+  [preControlName]="discountedPriceCurrency"
+  [postControlName]="discountedPrice"
+  [defaultProps]="{ post: { type: 'number' } }"
+  [disabled]="true"
+>
+</hospitality-bot-prefix-field>
+<ng-content></ng-content>

@@ -52,6 +52,7 @@
     (sortFunction)="customSort($event)"
     [customSort]="isCustomSort"
     (onFilter)="onDataFilter()"
+    *ngIf="!isEmpty; emptyTable"
   >
     <ng-template pTemplate="caption">
       <div class="caption__wrapper">
@@ -61,6 +62,7 @@
             *ngIf="isQuickFilters"
             [chips]="filterChips"
             (onChange)="toggleQuickReplyFilter($event)"
+            [selectedChips]="selectedFilterChips"
           ></hospitality-bot-filter-chips>
         </form>
       </div>
@@ -119,13 +121,14 @@
 
         <td>
           <div class="" *ngIf="rowData.status; else emptyCell">
-            <hospitality-bot-toggle-dropdown
-              [listItem]="getStatusList(rowData)"
+            <hospitality-bot-status-dropdown-toggle
+              [nextStates]="rowData.nextState"
               (onClick)="handleStatus($event, rowData)"
-              [status]="rowData.status"
+              [state]="rowData.status"
+              [recordSetting]="siteStatusDetails"
               [disabled]="rowData.status === 'DELETE'"
             >
-            </hospitality-bot-toggle-dropdown>
+            </hospitality-bot-status-dropdown-toggle>
           </div>
         </td>
       </tr>
@@ -147,6 +150,25 @@
 
 <ng-template #emptyCell>
   <div class="emptyCell">&mdash;</div>
+</ng-template>
+
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    [link]="
+      selectedTable === 'ROOM'
+        ? '/pages/inventory/room/add-room/multiple'
+        : '/pages/inventory/room/add-room-type'
+    "
+    [content]="{
+      description:
+        'No site found. Tap the +Add Site to Manage and track your site',
+      actionName: '+ Add Site',
+      imageSrc: 'assets/images/empty-table-room-types.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
 </ng-template>
 
 <ng-template #siteHeader>

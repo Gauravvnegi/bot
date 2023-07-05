@@ -1,6 +1,6 @@
-import { EntityStateCounts } from '@hospitality-bot/admin/library';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { OfferListResponse, OfferResponse } from '../types/response';
+import { EntityState } from '@hospitality-bot/admin/shared';
 
 export class Offer {
   id: string;
@@ -47,15 +47,15 @@ export class Offer {
 
 export class OfferList {
   records: Offer[];
-  total: number;
-  entityStateCounts: EntityStateCounts;
+  totalRecord: number;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
+
   deserialize(input: OfferListResponse) {
     this.records = input.offers?.map((item) => new Offer().deserialize(item));
-    this.total = input.total;
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input?.entityStateCounts,
-      input?.total
-    );
+    this.totalRecord = input.total;
+    this.entityStateCounts = input.entityStateCounts;
+    this.entityTypeCounts = input.entityTypeCounts;
     return this;
   }
 }

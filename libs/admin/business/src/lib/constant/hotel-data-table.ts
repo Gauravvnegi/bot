@@ -1,37 +1,31 @@
+export const tableName = 'Property / Outlet';
 export const cols = [
   {
     field: 'name',
-    header: 'Name',
+    header: 'Name / Type',
     sortType: 'string',
     searchField: ['name'],
-    width: '23.75%',
+    width: '27%',
   },
   {
-    field: 'segment',
-    header: 'Segment',
+    field: 'workingDays',
+    header: 'Working days / Hours of',
     sortType: 'string',
     searchField: ['propertyCategory.label'],
     width: '23.75%',
   },
   {
-    field: 'address',
-    header: 'Address',
+    field: 'contact',
+    header: 'Contact / Email',
     sortType: 'string',
-    searchField: ['address.city'],
+    searchField: ['contact', 'emailId'],
     width: '23.75%',
   },
   {
-    field: 'email',
-    header: 'Email',
+    field: 'url',
+    header: 'URL',
     sortType: 'string',
     searchField: ['emailId'],
-    width: '23.75%',
-  },
-  {
-    field: 'contact',
-    header: 'contact',
-    sortType: 'string',
-    searchField: ['contact?.number'],
     width: '23.75%',
   },
   {

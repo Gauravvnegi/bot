@@ -1,0 +1,84 @@
+@import 'main';
+
+.example-stretched-tabs {
+  max-width: 100%;
+  height: 64px;
+  flex-grow: 1;
+}
+
+:host ::ng-deep .mat-tab-labels {
+  height: 100%;
+  align-items: center;
+}
+
+:host ::ng-deep .mat-tab-label {
+  opacity: 1;
+  height: 100%;
+  flex-grow: inherit !important;
+  flex-basis: inherit !important;
+  min-width: auto;
+  align-items: flex-end;
+
+  .mat-tab-label-content {
+    @include bold-sm-text;
+    color: $inActiveTab;
+    line-height: 55px;
+    @media (max-width: 1024px) {
+      font-size: 12px;
+    }
+  }
+}
+
+:host ::ng-deep .mat-tab-label-active {
+  .mat-tab-label-content {
+    color: $primary-cta;
+  }
+}
+
+:host ::ng-deep .mat-tab-group {
+  box-shadow: none;
+  .mat-ink-bar {
+    background-color: $primary-cta;
+    height: 1px;
+  }
+}
+
+:host ::ng-deep .mat-tab-header {
+  border: none !important;
+  height: 100%;
+}
+
+:host
+  ::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: none;
+}
+
+.tab-wrapper {
+  background-color: $white;
+  @include flex-item-center;
+
+  .tab-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2%;
+    padding-right: 10px;
+  }
+}
+
+.sticky__tabs {
+  inset: 115px 0 auto 80px;
+  position: fixed;
+  height: 61px;
+  transition: box-shadow 1s ease-in;
+  padding: 0px 40px 0 22px;
+  z-index: $nav-action-sub-header;
+  box-shadow: 1px 7px 8px -7px #b5b5b5;
+  // border-bottom: 1px solid #cdcdcd;
+}
+//border for tab header
+.tab-wrapper {
+  border: 1px solid $borderCol;
+}

@@ -9,9 +9,8 @@
   border-radius: 5px;
   background: $white;
   ::placeholder {
-    font-family: Roboto;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: $bold;
     font-stretch: normal;
     font-style: normal;
     line-height: 1.25;
@@ -53,6 +52,10 @@
   }
 }
 td {
+  .item-priority {
+    @include flex-space-between();
+  }
+
   ::ng-deep p {
     font-size: 12px;
     color: $grayMedium;
@@ -71,7 +74,7 @@ td {
       @include inhouse-popup-status;
     }
     &.low {
-      background-color: $success-state;
+      background-color: $completed-state;
       @include inhouse-popup-status;
     }
     &.light {
@@ -87,8 +90,7 @@ td {
     }
   }
   .job-duration {
-    display: flex;
-    justify-content: space-between;
+    @include flex-space-between();
     font-size: 11px;
     @media (max-width: 1024px) {
       font-size: 10px;
@@ -102,17 +104,25 @@ td {
 
 :host ::ng-deep .requestDataActionLabel {
   margin-left: 0.5em;
-  font-weight: 500;
+  font-weight: $bold;
 }
 
-// added for now
 :host ::ng-deep .p-datatable {
+  margin: 10px 1.5% !important;
   .p-datatable-thead {
-    position: static !important;
+    top: 0;
   }
-  @include tableCellPadding(0.3em);
+}
+
+.table-container{
+  overflow-y: auto;
 }
 
 .email {
   color: #3e6ded;
+}
+
+// *** over ride the table style ***
+:host ::ng-deep .p-datatable {
+  @include tableCellPadding(0.3em);
 }

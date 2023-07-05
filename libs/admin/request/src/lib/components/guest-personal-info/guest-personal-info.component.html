@@ -1,4 +1,4 @@
-<div class="guest-person" *ngIf="data">
+<div class="guest-person" *ngIf="data; else emptyView">
   <div class="person-title">
     Personal Info
   </div>
@@ -27,10 +27,10 @@
   <div class="label">
     Phone No.
   </div>
-  <a href="tel:{{data.phoneNumber}}">
-  <div class="label-text">
-    {{ data.phoneNumber }}
-  </div>
+  <a href="tel:{{ data.phoneNumber }}">
+    <div class="label-text">
+      {{ data.phoneNumber }}
+    </div>
   </a>
   <div class="label">
     Email
@@ -60,3 +60,11 @@
     {{ data.churn }}
   </div>
 </div>
+
+<ng-template #emptyView>
+  <div class="guest-person">
+    <div class="person-title">
+      Personal Info Not Available
+    </div>
+  </div>
+</ng-template>

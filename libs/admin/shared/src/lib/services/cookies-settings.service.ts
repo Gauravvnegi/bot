@@ -110,7 +110,6 @@ export class CookiesSettingsService {
                 },
                 redirectUrl
               );
-
             } else
               this.snackbarService.openSnackBarAsText(
                 'Do not have access to the site.'

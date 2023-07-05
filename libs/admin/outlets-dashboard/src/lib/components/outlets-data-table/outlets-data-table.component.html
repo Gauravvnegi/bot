@@ -1,0 +1,187 @@
+<div class="caption__wrapper">
+  <form [formGroup]="tableFG">
+    <div class="caption__wrapper--tabmenu">
+      <div class="action-header">
+        <p class="heading">All Bookings</p>
+        <div class="action-wrapper">
+          <hospitality-bot-button
+            label="+Create Booking"
+            link=""
+          ></hospitality-bot-button>
+          <hospitality-bot-export-list
+            (onDocumentActions)="onDocumentActions()"
+            [documentTypes]="documentTypes"
+            [documentActionTypes]="documentActionTypes"
+            [isDisable]="values.length === 0"
+          ></hospitality-bot-export-list>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="table-container">
+  <p-table
+    #dt
+    [styleClass]="tableConfig.styleClass"
+    [resizableColumns]="isResizableColumns"
+    [autoLayout]="isAutoLayout"
+    [loading]="loading"
+    [columns]="cols"
+    [value]="values"
+    [paginator]="isPaginator"
+    [rows]="rowsPerPage"
+    [showCurrentPageReport]="showCurrentPageReport"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [(first)]="first"
+    [totalRecords]="totalRecords"
+    [filterDelay]="0"
+    [selectionMode]="selectionMode"
+    [(selection)]="selectedRows"
+    (onRowSelect)="onRowSelect($event)"
+    (onRowUnselect)="onRowUnselect($event)"
+    (sortFunction)="customSort($event)"
+    [customSort]="isCustomSort"
+    (onFilter)="onDataFilter($event)"
+  >
+    <ng-template pTemplate="caption">
+      <div class="caption__wrapper" [formGroup]="tableFG">
+        <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+
+        <!-- <hospitality-bot-filter-chips
+          *ngIf="isQuickFilters"
+          [chips]="tabFilterItems[tabFilterIdx].chips"
+          (onChange)="toggleQuickReplyFilter($event)"
+        ></hospitality-bot-filter-chips> -->
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+    </ng-template>
+    <!-- *******************************HEADER WITH SEARCH******************************* -->
+    <ng-template pTemplate="header" let-columns>
+      <tr
+        hospitality-bot-table-header
+        [columns]="columns"
+        [showCheckbox]="isSelectable"
+        (search)="handleFieldSearch($event)"
+      ></tr>
+    </ng-template>
+    <!-- **************************************BODY********************************* -->
+    <ng-template
+      pTemplate="body"
+      let-rowData
+      let-columns="columns"
+      let-rowIndex="rowIndex"
+    >
+      <tr class="table-row" (click)="editTax(rowData.id)">
+        <td class="table-row__checkbox">
+          <p-tableCheckbox
+            [value]="rowData"
+            [index]="rowIndex"
+            (click)="onCheckboxClicked($event)"
+          ></p-tableCheckbox>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.id; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.id }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.name; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.name }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.booking_no; else emptyCell">
+            <div class="primary-text">
+              {{ rowData.booking_no }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.guest_name; else emptyCell">
+            <div class="primary-text">{{ rowData.guest_name }}</div>
+          </div>
+        </td>
+        <td>
+          <div
+            class="cell-content"
+            *ngIf="rowData.booking_date; else emptyCell"
+          >
+            <div class="primary-text">{{ rowData.booking_date }}</div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.amount; else emptyCell">
+            <div class="primary-text">{{ rowData.amount }}</div>
+          </div>
+        </td>
+
+        <td>
+          <div class="cell-content" *ngIf="rowData.scource; else emptyCell">
+            <div class="primary-text">{{ rowData.scource }}</div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content" *ngIf="rowData.payment; else emptyCell">
+            <div class="primary-text">{{ rowData.payment }}</div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content">
+            <hospitality-bot-status-dropdown-toggle
+              [listItem]="status"
+              class="toggle-btn"
+              (onClick)="handleStatus($event, rowData)"
+              [state]="'CONFIRMED'"
+              [disabled]="rowData.status === 'DELETE'"
+            >
+            </hospitality-bot-status-dropdown-toggle>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <!-- *********************************FOOTER******************************* -->
+    <ng-template pTemplate="summary">
+      <p-paginator
+        #paginator
+        [rows]="rowsPerPage"
+        [totalRecords]="totalRecords"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        (onPageChange)="paginate($event)"
+        [currentPageReportTemplate]="reportTemplate"
+        showCurrentPageReport="true"
+      ></p-paginator>
+    </ng-template>
+  </p-table>
+</div>
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [content]="{
+      description: 'No data available to view',
+      imageSrc: imageSrc
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+</ng-template>
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>

@@ -2,7 +2,7 @@
 
 .documentActionItem {
   margin-left: 0.5em;
-  font-weight: 500;
+  font-weight: $bolder;
 }
 .tableHeading {
   width: 5%;
@@ -52,14 +52,8 @@
   }
 }
 
-:host ::ng-deep .p-datatable {
-  margin: 10px 1.5% !important;
-  box-shadow: none !important;
-}
-
 .table-container {
-  max-height: 79vh;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 .detailPage {
@@ -82,9 +76,10 @@
   display: flex;
 }
 
-// added for now
 :host ::ng-deep .p-datatable {
+  margin: 10px 1.5% !important;
   .p-datatable-thead {
     top: 0;
   }
 }
+

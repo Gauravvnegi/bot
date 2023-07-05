@@ -1,0 +1,86 @@
+@import 'main';
+
+@mixin form-wrapper {
+  padding: 34.5px 50px 37px 50px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin header {
+  font-size: 16px;
+  font-weight: $bold;
+  text-align: left;
+  color: $secondary2;
+  padding: 25px 30px;
+}
+
+.form-block {
+  @include form-block;
+  border: solid 1px rgba(112, 112, 112, 0.35);
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.header {
+  @include header();
+}
+
+.hotel-wrapper {
+  margin: 30px 0 24px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  border: solid 1px rgba(112, 112, 112, 0.35);
+  background-color: $white;
+}
+
+.hotel-services-wrapper {
+  padding: 34.5px 50px 37px 50px;
+}
+
+.hotel-header {
+  border: solid 1px rgba(112, 112, 112, 0.35);
+  border-bottom: none;
+  background: $white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include header();
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.add-more {
+  display: flex;
+  justify-content: flex-end;
+}
+
+:host ::ng-deep .p-component {
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+}
+
+:host ::ng-deep .p-accordion p-accordiontab .p-accordion-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+}
+
+:host ::ng-deep p-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+:host ::ng-deep .p-accordion .p-accordion-tab {
+  box-shadow: none !important;
+  border: solid 1px rgba(112, 112, 112, 0.35) !important;
+  .p-accordion-header {
+    width: 100%;
+    height: 100%;
+    // border-radius: 8px;
+    border-bottom: solid 1px rgba(112, 112, 112, 0.35);
+  }
+}

@@ -1,0 +1,85 @@
+<ng-container [formGroup]="controlContainer.control">
+  <div class="container-wrapper">
+    <div class="header">Occupancy</div>
+    <hr />
+    <div class="occupancy-wrapper">
+      <hospitality-bot-input
+        controlName="maximumOccupancy"
+        class="half-width"
+        label="Max Occupancy"
+        [props]="{ type: 'number', placeholder: 'Enter' }"
+      ></hospitality-bot-input>
+      <hospitality-bot-prefix-field
+        preControlName="area"
+        postControlName="areaUnit"
+        class="half-width"
+        label="Area"
+        [settings]="{
+          preFieldType: 'input',
+          postFieldType: 'select',
+          layout: 'pre-main',
+          postOptions: areaUnits
+        }"
+      ></hospitality-bot-prefix-field>
+    </div>
+  </div>
+
+  <div class="container-wrapper">
+    <div class="header">Services</div>
+    <hr />
+    <div class="sub-container-wrapper">
+      <hospitality-bot-custom-select
+        label="Complimentary Services"
+        description="This is a free of cost services"
+        formControlName="serviceIds"
+        [itemList]=""
+        (onEmptyViewAction)="onCreateAndContinue('service')"
+        [noRecordsAction]="{
+          actionName: 'Create and Continue',
+          description:
+            'No services found. Tap the +Create and Continue to Import Services.',
+          imageSrc: 'assets/images/empty-table-service.png'
+        }"
+      >
+        <hospitality-bot-button
+          label="+ Import Services"
+          variant="text"
+          (onClick)="onCreateAndContinue('service')"
+        ></hospitality-bot-button>
+      </hospitality-bot-custom-select>
+    </div>
+  </div>
+
+  <div class="container-wrapper">
+    <div class="header">Menu</div>
+    <hr />
+    <div class="sub-container-wrapper">
+      <hospitality-bot-custom-select
+        label="Menu"
+        formControlName="menu"
+        description="Do not forget to add this cost in addition to the room cost"
+        [itemList]=""
+        (onEmptyViewAction)="onCreateAndContinue('menu')"
+        [noRecordsAction]="{
+          description:
+            'No Menu found. Tap the +Create and Continue to create the Menu.',
+          imageSrc: 'assets/images/empty-table-service.png',
+          actionName: 'Create and Continue'
+        }"
+      >
+        <hospitality-bot-button
+          label="+ Add Menu"
+          variant="outlined"
+          (onClick)="onCreateAndContinue('menu')"
+        ></hospitality-bot-button>
+      </hospitality-bot-custom-select>
+    </div>
+  </div>
+
+  <hospitality-bot-food-package></hospitality-bot-food-package>
+
+  <hospitality-bot-rules
+    controlName="rules"
+    class="full-width"
+  ></hospitality-bot-rules>
+</ng-container>

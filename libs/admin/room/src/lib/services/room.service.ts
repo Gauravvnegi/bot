@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService, DateService } from '@hospitality-bot/shared/utils';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
+import { map } from 'rxjs/operators';
 import { TableValue } from '../constant/data-table';
 import {
   RoomTypeData,
@@ -9,7 +10,7 @@ import {
   ServicesTypeValue,
 } from '../constant/form';
 import { MultipleRoom, SingleRoom } from '../models/room.model';
-import { QueryConfig } from '../types/room';
+import { QueryConfig, RatePlanOptions } from '../types/room';
 import {
   AddRoomsResponse,
   RoomByIdResponse,
@@ -20,18 +21,22 @@ import {
   RoomTypeResponse,
   ServiceResponse,
 } from '../types/service-response';
+import { ratePlanResponse } from '../constant/response';
 
 @Injectable()
 export class RoomService extends ApiService {
   /** [ROOM | ROOM_TYPE] Selected Table */
-  selectedTable = new BehaviorSubject<TableValue>(TableValue.roomType);
+  selectedTable = TableValue.roomType;
 
   /** [PAID | COMPLIMENTARY] Selected service to be shown in service page  */
   selectedService: ServicesTypeValue;
   /** Represent is room type form data is available */
   roomTypeFormState: boolean = false;
   /** State to handle syncing of services and room type form data */
-  roomTypeFormData: Partial<RoomTypeFormData> = {
+  roomTypeFormData: Partial<RoomTypeFormData> & {
+    services: any[];
+  } = {
+    services: [],
     complimentaryAmenities: [],
     paidAmenities: [],
   };
@@ -55,18 +60,31 @@ export class RoomService extends ApiService {
   }
 
   getStats(hotelId: string, config): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/stats/inventory/room${config.queryObj}`);
+    return this.get(
+      `/api/v1/entity/${hotelId}/stats/inventory/room${config.queryObj}`
+    );
   }
 
   getServices(
     hotelId: string,
     config?: QueryConfig
   ): Observable<ServiceResponse> {
-    return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
+    return this.get(
+      `/api/v1/entity/${hotelId}/library${config?.params ?? ''}`,
+      { headers: { 'hotel-id': hotelId } }
+    );
   }
 
   getRoomTypes(hotelId: string): Observable<any> {
     return this.get(`/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`);
+  }
+
+  getRatePlan(hotelId: string): Observable<RatePlanOptions[]> {
+    return this.get(`/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`).pipe(
+      map((res) => {
+        return ratePlanResponse as RatePlanOptions[];
+      })
+    );
   }
 
   getList<T extends RoomTypeListResponse | RoomListResponse>(
@@ -76,6 +94,44 @@ export class RoomService extends ApiService {
     return this.get(
       `/api/v1/entity/${hotelId}/inventory${config?.params ?? ''}`
     );
+    // .pipe(
+    //   map((res) => {
+    //     // --refactor ---will be removed
+    //     if (
+    //       this.selectedTable === TableValue.room &&
+    //       !config?.params.includes('type=ROOM_TYPE')
+    //     ) {
+    //       res.entityStateCounts = {
+    //         CLEAN: 10,
+    //         INSPECTED: 15,
+    //         OUT_OF_SERVICE: 18,
+    //         OUT_OF_ORDER: 25,
+    //         UNAVAILABLE: 12,
+    //       };
+
+    //       res.total = 80;
+    //       const rooms = res['rooms'];
+    //       {
+    //         rooms.forEach((item) => {
+    //           const foStatus = Math.random() < 0.5 ? 'OCCUPIED' : 'VACANT';
+    //           item['foStatus'] = foStatus;
+    //           const isOccupied = foStatus === 'OCCUPIED';
+    //           if (isOccupied) {
+    //             item['toDate'] = new Date().getTime();
+    //             item['fromDate'] =
+    //               new Date().getTime() + 2 * 24 * 60 * 60 * 1000;
+    //           }
+    //           item['roomStatus'] = isOccupied ? 'DIRTY' : 'CLEAN';
+    //           item['nextStates'] = isOccupied
+    //             ? ['CLEAN', 'OUT_OF_ORDER', 'OUT_OF_SERVICE', 'INSPECT']
+    //             : ['DIRTY', 'INSPECTED'];
+    //         });
+    //       }
+    //     }
+
+    //     return res;
+    //   })
+    // );
   }
 
   updateRoomStatus(
@@ -111,6 +167,16 @@ export class RoomService extends ApiService {
 
   getRoomById(hotelId: string, roomId: string): Observable<RoomByIdResponse> {
     return this.get(`/api/v1/entity/${hotelId}/inventory/${roomId}?type=ROOM`);
+    // .pipe(
+    //   map((res) => {
+    //     // -- refactor-- will be removed
+    //     const item = res['rooms'][0];
+    //     item['foStatus'] = 'VACANT';
+    //     item['roomStatus'] = 'CLEAN';
+    //     item['remarks'] = 'Room is cleaned';
+    //     return res;
+    //   })
+    // );
   }
 
   exportCSV(hotelId: string, table: TableValue, config?: QueryConfig) {
@@ -143,5 +209,13 @@ export class RoomService extends ApiService {
     data: RoomTypeData
   ): Observable<RoomTypeResponse> {
     return this.put(`/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`, data);
+  }
+
+  updateHotel(hotelId: string, data): Observable<any> {
+    return this.patch(`/api/v2/entity/${hotelId}?type=HOTEL`, data);
+  }
+
+  getFeatures(): Observable<any> {
+    return this.get(`/api/v1/config?key=SERVICE_CONFIGURATION`);
   }
 }

@@ -1,0 +1,16 @@
+<div [formGroup]="addressForm">
+  <hospitality-bot-auto-complete
+    controlName="addressData"
+    label="Address"
+    [options]="addressList"
+    [loading]="loading"
+    (onSearch)="searchOptions($event)"
+    [settings]="{
+      multiple: false
+    }"
+    [props]="{
+      placeholder: 'Search Address'
+    }"
+  >
+  </hospitality-bot-auto-complete>
+</div>

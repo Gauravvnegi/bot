@@ -1,29 +1,37 @@
 <div class="nav-header-wrapper" #header>
   <div
+    *ngIf="isStickyTitle && isScrolledUp"
+    [ngStyle]="{ 'height.px': extraGap }"
+  ></div>
+  <div
     class="nav-wrapper"
     *ngIf="routes.length"
-    [ngClass]="{ 'nav-wrapper__sticky': isScrolledUp }"
+    [ngClass]="{ 'nav-wrapper__sticky': isScrolledUp && !isStickyTitle }"
   >
-    <div class="link" *ngFor="let route of routes; let idx = index">
-      <span
-        [disabled]="route.isDisabled"
-        [routerLink]="route.link"
-        [ngClass]="{
-          link__disabled: route.link === './' || route.isDisabled,
-          link__active: route.link !== './' && !route.isDisabled
-        }"
-        >{{ route.label }}</span
-      >
-
-      <i *ngIf="idx < routes.length - 1" class="pi pi-angle-right"></i>
-    </div>
+  <div class="link" *ngFor="let route of routes; let idx = index">
+    <span
+      [disabled]="route.isDisabled || idx === routes.length - 1"
+      [routerLink]="route.link"
+      [ngClass]="{
+        link__disabled: route.link === './' || route.isDisabled || idx === routes.length - 1,
+        link__active: route.link !== './' && !route.isDisabled && idx !== routes.length - 1
+      }"
+    >
+      {{ route.label }}
+    </span>
+    <i *ngIf="idx < routes.length - 1" class="pi pi-angle-right"></i>
+  </div>
     <div class="nav-actions">
       <ng-content></ng-content>
     </div>
   </div>
   <div
     class="header__wrapper"
-    [ngClass]="{ header__wrapper__sticky: isScrolledUp }"
+    [ngClass]="{
+      'header__wrapper__sticky-sub-title': isScrolledUp && !isStickyTitle,
+      'header__wrapper__sticky-title': isScrolledUp && isStickyTitle,
+      header__wrapper__sticky: isStickyTitle
+    }"
   >
     <header class="header">
       <i *ngIf="isBack" (click)="back()" class="pi pi-arrow-left"></i>
@@ -33,4 +41,5 @@
       {{ dateTitle || 'Drafted on' }} {{ draftDate }}
     </div>
   </div>
+  <div *ngIf="isSpaceNeeded" [ngStyle]="{ 'height.px': extraSpace }"></div>
 </div>

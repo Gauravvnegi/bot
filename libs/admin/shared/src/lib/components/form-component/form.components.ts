@@ -26,6 +26,7 @@ export class FormComponent implements OnInit {
     // error messages with appropriate error-key
     required: 'This is a required field.',
   };
+  tabIndex = ""; // Removes tab focus in input 
   type: InputType = 'text';
   dropdownIcon = 'pi pi-chevron-down'; // Arrow icon for dropdown inputs
   isAsync = false; // To register load-more/search option query
@@ -38,6 +39,7 @@ export class FormComponent implements OnInit {
   @Output() onCreate = new EventEmitter(); // createPrompt on click emitter
   @Output() onFocus = new EventEmitter(); //handle focus
   @Output() onBlur = new EventEmitter(); //handle focus
+  @Output() onKeyDown = new EventEmitter<Event>();
 
   /* Main Props */
   menuOptions: Option[] = [];
@@ -122,6 +124,10 @@ export class FormComponent implements OnInit {
     this.onFocus.emit();
   }
 
+  handleKeyDown(event: Event) {
+    this.onKeyDown.emit(event);
+  }
+
   /**
    * To get all the required props [add value in return if new prop is added]
    * @returns all the required prop
@@ -153,6 +159,7 @@ export class FormComponent implements OnInit {
       'p-float-label': this.float,
       wrapper__vertical: this.alignment === 'vertical',
       wrapper__horizontal: this.alignment === 'horizontal',
+      'custom-disabled': this.isDisabled,
     };
   }
 
@@ -270,7 +277,7 @@ export class FormComponent implements OnInit {
       menu?.addEventListener('scroll', () => {
         if (this.stopEmission) return;
         if (
-          !this.loading &&
+          !this.isLoading &&
           !this.searchText &&
           menu.scrollHeight - 251 < menu.scrollTop
         ) {
@@ -303,7 +310,8 @@ export class FormComponent implements OnInit {
    * @function onMenuClose To trigger on close
    */
   onMenuClose() {
-    if (this.searchText) { // empty search value trigger on menu close
+    if (this.searchText) {
+      // empty search value trigger on menu close
       this.onSearch.emit('');
       this.searchText = '';
     }

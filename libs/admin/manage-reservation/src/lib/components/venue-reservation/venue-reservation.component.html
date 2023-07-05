@@ -1,0 +1,75 @@
+<div [formGroup]="userForm" class="wrapper">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="routes">
+  </hospitality-bot-navigation-header>
+  <div class="main">
+    <p-accordion [multiple]="true">
+      <hospitality-bot-booking-info
+        [statusOptions]="statusOptions"
+        [bookingType]="bookingType"
+        [eventTypes]="eventOptions"
+      ></hospitality-bot-booking-info>
+      <p-accordionTab header="Event Information">
+        <div class="form-block" formGroupName="bookingInformation">
+          <hospitality-bot-iterator
+            class="iterator full-width"
+            [fields]="fields"
+            [useFormArray]="venueBookingInfo"
+          ></hospitality-bot-iterator>
+        </div>
+      </p-accordionTab>
+      <hospitality-bot-guest-information></hospitality-bot-guest-information>
+      <hospitality-bot-billing-address></hospitality-bot-billing-address>
+      <hospitality-bot-instructions
+        [bookingType]="bookingType"
+      ></hospitality-bot-instructions>
+      <hospitality-bot-payment-rule
+        [deductedAmount]="deductedAmount"
+      ></hospitality-bot-payment-rule>
+      <hospitality-bot-payment-method></hospitality-bot-payment-method>
+    </p-accordion>
+    <div class="bk-summary">
+      <hospitality-bot-booking-summary
+        [selectedOffer]="selectedOffer"
+        [summaryData]="summaryData"
+        [offersList]="offersList"
+        (onOfferItemSelect)="offerSelect($event)"
+        (onOfferSelect)="offerSelect()"
+        (handleInitForm)="initForm()"
+        [disabledForm]="disabledForm"
+        [bookingInfo]="{
+          header: 'Wedding And Hall',
+          subHeader: 'The Leela, New Delhi, 210002',
+          price: '2000',
+          discountedPrice: '1200',
+          guestInfo: 'For 2 Adults',
+          stayInfo: 'some info'
+        }"
+      >
+        <div class="bk-summary_roomInfo_checkoutInfo">
+          <p class="bk-summary_roomInfo_checkoutInfo_heading">
+            Date
+          </p>
+          <p class="bk-summary_roomInfo_checkoutInfo_subText">
+            05 Apr, Mon
+          </p>
+        </div>
+        <div class="bk-summary_roomInfo_guestInfo">
+          <p class="bk-summary_roomInfo_guestInfo_heading">
+            Duration
+          </p>
+          <p class="bk-summary_roomInfo_guestInfo_subText">
+            Full Day
+          </p>
+        </div>
+        <div class="bk-summary_roomInfo_guestInfo">
+          <p class="bk-summary_roomInfo_guestInfo_heading">
+            Event
+          </p>
+          <p class="bk-summary_roomInfo_guestInfo_subText">
+            Wedding
+          </p>
+        </div>
+      </hospitality-bot-booking-summary>
+    </div>
+  </div>
+</div>

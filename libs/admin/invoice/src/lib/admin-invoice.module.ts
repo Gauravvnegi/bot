@@ -6,7 +6,9 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminInvoiceRoutingModule } from './admin-invoice.routing.module';
 import { InvoiceService } from './services/invoice.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { ServicesService } from '../../../services/src/lib/services/services.service'
+import { ServicesService } from '../../../services/src/lib/services/services.service';
+import { ManageReservationService } from 'libs/admin/manage-reservation/src/lib/services/manage-reservation.service';
+import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
 
 @NgModule({
   imports: [
@@ -19,6 +21,11 @@ import { ServicesService } from '../../../services/src/lib/services/services.ser
     AdminInvoiceRoutingModule,
   ],
   declarations: [...AdminInvoiceRoutingModule.components],
-  providers: [InvoiceService, ServicesService],
+  providers: [
+    InvoiceService,
+    ServicesService,
+    ManageReservationService,
+    ReservationService,
+  ],
 })
 export class AdminInvoiceModule {}

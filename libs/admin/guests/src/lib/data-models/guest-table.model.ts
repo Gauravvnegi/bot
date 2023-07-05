@@ -7,29 +7,25 @@ import {
   Room,
   Status,
 } from '../../../../reservation/src/lib/models/reservation-table.model';
+import { EntityState } from '@hospitality-bot/admin/shared';
 
 export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
 export class GuestTable implements IDeserializable {
-  total: number;
-  entityTypeCounts: EntityTypeCounts;
-  entityStateCounts: EntityStateCounts;
+  totalRecord: number;
+  entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
   records: Guest[];
 
   deserialize(input: any) {
-    Object.assign(this, set({}, 'total', get(input, ['total'])));
-    this.entityTypeCounts = new EntityTypeCounts().deserialize(
-      input.entityTypeCounts,
-      input.total
-    );
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts
-    );
     this.records = input.records.map((record) =>
       new Guest().deserialize(record)
     );
+    this.entityTypeCounts = input?.entityTypeCounts;
+    this.entityStateCounts = input?.entityStateCounts;
+    this.totalRecord = input?.total;
     return this;
   }
 }

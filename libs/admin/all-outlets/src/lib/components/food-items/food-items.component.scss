@@ -1,0 +1,28 @@
+@import 'main';
+
+.form-block {
+  @include form-block;
+}
+
+.table-form {
+  padding: 0 !important;
+  row-gap: 0px !important;
+  border: 1px solid rgba(112, 112, 112, 0.35);
+  border-radius: 5px;
+}
+
+.header {
+  @include flex-space-between-cen-Algn;
+  padding: 50px 20px;
+  .heading {
+    @include bold-lg-text;
+  }
+}
+
+:host ::ng-deep .p-datatable {
+  border: none;
+}
+
+:host ::ng-deep .p-error {
+  bottom: -1.25em;
+}

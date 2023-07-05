@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
 import {
   MarketingNotificationComponent,
-  NotificationComponent,
 } from '@hospitality-bot/admin/notification';
 import { ConfigService, ModuleNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
@@ -364,6 +363,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(`pages/efrontdesk/invoice/${this.bookingId}`);
   }
 
+  editBooking() {
+    this.onDetailsClose.next(false);
+    this.router.navigateByUrl(`pages/efrontdesk/manage-reservation/edit-reservation/${this.bookingId}`)
+  }
+
   prepareInvoice() {
     if (!this.branchConfig.pmsEnable) {
       this.manageInvoice();
@@ -414,14 +418,13 @@ export class DetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  generateFeedback(journeyName) {
+  generateFeedback() {
     this._reservationService
-      .generateJourneyLink(
+      .generateFeedback(
         this.reservationDetailsFG.get('bookingId').value,
-        journeyName
       )
       .subscribe((res) => {
-        this._clipboard.copy(`${res.domain}?token=${res.journey.token}`);
+        this._clipboard.copy(`${res.domain}${res.feedback.token}`);
         this.snackbarService.openSnackBarAsText(
           'Link copied successfully',
           '',

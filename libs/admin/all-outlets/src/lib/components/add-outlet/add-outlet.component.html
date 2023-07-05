@@ -1,0 +1,121 @@
+<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+  <hospitality-bot-button
+    label="Print QR Code"
+    link=""
+    [disabled]="!outletId"
+  ></hospitality-bot-button>
+</hospitality-bot-navigation-header>
+
+<div [formGroup]="useForm">
+  <div class="hotel-header">
+    <div class="header__title">Outlet Information</div>
+  </div>
+  <div class="form-block">
+    <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      label="Name"
+      maxLength="60"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
+    <div class="half-width type-wrapper">
+      <hospitality-bot-select
+        class="half-width"
+        controlName="type"
+        label="Type"
+        [options]="types"
+        (itemSelection)="onTypeChange($event.value)"
+        [props]="{
+          placeholder: 'Select Type'
+        }"
+      ></hospitality-bot-select>
+      <hospitality-bot-select
+        class="half-width"
+        controlName="subType"
+        label="Sub Type"
+        [options]="subType"
+        [disabled]="!isTypeSelected"
+        [props]="{
+          placeholder: 'Select Sub Type'
+        }"
+      ></hospitality-bot-select>
+    </div>
+    <div class="half-width" [formGroup]="useForm.get('contact')">
+      <hospitality-bot-phone-number
+        preControlName="countryCode"
+        postControlName="number"
+      ></hospitality-bot-phone-number>
+    </div>
+
+    <hospitality-bot-address-component class="half-width" controlName="address">
+    </hospitality-bot-address-component>
+
+    <hospitality-bot-multi-select
+      class="half-width"
+      controlName="cousins"
+      label="Cousine Type"
+      [options]="cousins"
+      *ngIf="useForm.get('type').value === 'RESTAURANT'"
+    ></hospitality-bot-multi-select>
+
+    <div class="file-upload-wrapper">
+      <hospitality-bot-custom-file-upload
+        formControlName="imageUrl"
+        label="Image"
+        isFeatureView="true"
+        description="Mandatory to add at least 1 image"
+        [settings]="{
+          limit: 1,
+          unit: 4,
+          isMultiple: true
+        }"
+        [hotelId]=""
+        path="static-content/room-types"
+      ></hospitality-bot-custom-file-upload>
+    </div>
+    <div class="des-template">
+      <div class="des-template__label">Description</div>
+      <div class="des-template__input">
+        <hospitality-bot-template-editor
+          [parentFG]="useForm"
+          [name]="'description'"
+          [height]="250"
+        ></hospitality-bot-template-editor>
+      </div>
+    </div>
+  </div>
+
+  <!-- //ng ngSwitch it will operate on the basis of type -->
+
+  <ng-container [ngSwitch]="useForm.get('type').value">
+    <hospitality-bot-restaurant-form
+      *ngSwitchCase="'RESTAURANT'"
+      class="full-width"
+      (onCreateAndContinueFeature)="submitForm($event)"
+    ></hospitality-bot-restaurant-form>
+    <hospitality-bot-spa-form *ngSwitchCase="'SPA'" class="full-width">
+    </hospitality-bot-spa-form>
+    <hospitality-bot-banquet-form *ngSwitchCase="'VENUE'" class="full-width">
+    </hospitality-bot-banquet-form>
+  </ng-container>
+
+  <hospitality-bot-social-media
+    *ngIf="useForm.get('type').value.length"
+    controlName="socialMedia"
+  ></hospitality-bot-social-media>
+
+  <div class="footer-buttons full-width">
+    <hospitality-bot-button
+      label="Reset All"
+      (onClick)="resetForm()"
+      variant="outlined"
+      severity="reset"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      [label]="'Create'"
+      (onClick)="submitForm()"
+    ></hospitality-bot-button>
+  </div>
+</div>

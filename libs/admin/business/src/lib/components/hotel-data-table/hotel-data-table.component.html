@@ -7,17 +7,25 @@
     {{ tableName }}
   </div>
   <div class="action-wrapper">
+    <hospitality-bot-button
+      label="+Add Outlet"
+      variant="text"
+      [routerLink]="[routerLink.outlet.route]"
+      preserveQueryParams="true"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      label="+Add Hotel"
+      [routerLink]="[routerLink.hotel.route]"
+      preserveQueryParams="true"
+    ></hospitality-bot-button>
+
     <hospitality-bot-export-list
       [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
-      [isDisable]="values.length === 0"
+      [isDisable]="values?.length === 0"
     ></hospitality-bot-export-list>
-    <hospitality-bot-button
-      label="+Add Hotels"
-      link="pages/settings/business-info/brand/{{ brandId }}/hotel"
-    ></hospitality-bot-button>
   </div>
 </div>
 <p-table
@@ -44,7 +52,7 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter($event)"
-  *ngIf="values.length; else emptyTable"
+  *ngIf="values?.length; else emptyTable"
 >
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns>
@@ -62,7 +70,7 @@
     let-columns="columns"
     let-rowIndex="rowIndex"
   >
-    <tr class="table-row" (click)="editHotel(rowData.id)">
+    <tr class="table-row" (click)="editHotel(rowData)">
       <td class="table-row__checkbox">
         <p-tableCheckbox
           [value]="rowData"
@@ -71,50 +79,49 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData?.name; else emptyCell">
+        <div class="cell-content type" *ngIf="rowData?.name; else emptyCell">
           <div class="primary-text">
             {{ rowData?.name }}
           </div>
-        </div>
-      </td>
-      <td>
-        <div
-          class="cell-content"
-          *ngIf="rowData?.propertyCategory?.label; else emptyCell"
-        >
-          <div class="primary-text">
-            {{ rowData?.propertyCategory?.label }}
+          <div *ngIf="rowData?.propertyCategory?.label">
+            <img
+              class="img"
+              [src]="getSrc(rowData?.propertyCategory?.iconCount)"
+              [alt]="img"
+            />
           </div>
         </div>
       </td>
       <td>
-        <div class="" *ngIf="rowData?.address?.city; else emptyCell">
+        <div class="cell-content" *ngIf="rowData?.openingDay; else emptyCell">
           <div class="primary-text">
-            {{ rowData?.address?.city }}
+            {{ rowData?.openingDay }} -
+            {{ rowData?.closingDay }}
+          </div>
+          <div class="primary-text">
+            {{ rowData?.openingTime }} -
+            {{ rowData?.closingTime }}
           </div>
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData?.emailId; else emptyCell">
+        <div class="cell-content" *ngIf="rowData?.contact; else emptyCell">
+          <div class="primary-text">
+            {{ rowData?.contact.countryCode }}
+            {{ rowData?.contact.number }}
+          </div>
+        </div>
+        <div class="cell-content">
           <div class="primary-text">
             {{ rowData?.emailId }}
           </div>
         </div>
       </td>
       <td>
-        <div
-          class="cell-content"
-          *ngIf="rowData?.contact?.number; else emptyCell"
-        >
-          <a
-            href="tel:{{ rowData?.contact?.countryCode }}
-            {{ rowData?.contact?.number }}"
-          >
-            <div class="primary-text">
-              {{ rowData?.contact?.countryCode || '-' }}-
-              {{ rowData?.contact?.number || '-' }}
-            </div>
-          </a>
+        <div class="cell-content" *ngIf="rowData?.url; else emptyCell">
+          <hospitality-bot-copy-link
+            [url]="rowData?.url"
+          ></hospitality-bot-copy-link>
         </div>
       </td>
       <td>
@@ -142,6 +149,10 @@
     ></p-paginator>
   </ng-template>
 </p-table>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>
 
 <ng-template #emptyTable>
   <hospitality-bot-empty-table

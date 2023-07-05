@@ -72,10 +72,10 @@ const appRoutes: Route[] = [
         canActivate: [CanActivateGuard],
       },
       {
-        path: 'guest',
+        path: 'members',
         loadChildren: () =>
-          import('@hospitality-bot/admin/guests').then(
-            (m) => m.AdminGuestsModule
+          import('@hospitality-bot/admin/members').then(
+            (m) => m.AdminMembersModule
           ),
         canLoad: [CanLoadGuard],
         canActivate: [CanActivateGuard],
@@ -107,6 +107,14 @@ const appRoutes: Route[] = [
         canLoad: [CanLoadGuard],
         canActivate: [CanActivateGuard],
       },
+      // {
+      //   path: 'outlet',
+      //   loadChildren: () =>
+      //     import('@hospitality-bot/admin/outlet').then(
+      //       (m) => m.AdminOutletModule
+      //     ),
+      //   canLoad: [CanLoadGuard],
+      // },
       {
         path: 'marketing',
         loadChildren: () =>
@@ -143,6 +151,15 @@ const appRoutes: Route[] = [
         loadChildren: () =>
           import('@hospitality-bot/admin/finance').then(
             (m) => m.AdminFinanceModule
+          ),
+        canLoad: [CanLoadGuard],
+        canActivate: [CanActivateGuard],
+      },
+      {
+        path: 'channel-manager',
+        loadChildren: () =>
+          import('@hospitality-bot/admin/channel-manager').then(
+            (m) => m.AdminChannelManagerModule
           ),
         canLoad: [CanLoadGuard],
         canActivate: [CanActivateGuard],

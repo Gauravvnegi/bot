@@ -60,19 +60,23 @@ export class DocumentDetailsService extends ApiService {
 
   setDocumentFileConfig(required, documentTypeLabel?) {
     let fileSchema = {};
+
+    // For visa type document -> visa page is front and visa stamp is back
+    const notVisaType = documentTypeLabel != 'VISA';
+
     fileSchema['documentFileFront'] = new FieldSchema().deserialize({
-      label: `${documentTypeLabel} ${
-        documentTypeLabel != 'VISA' ? 'FIRST' : ''
-      } PAGE`,
+      label: `${documentTypeLabel} ${notVisaType ? 'FIRST' : ''} PAGE`,
       type: 'front',
       disable: false,
       required,
     });
     fileSchema['documentFileBack'] = new FieldSchema().deserialize({
-      label: `${documentTypeLabel} BACK PAGE`,
+      label: notVisaType
+        ? `${documentTypeLabel} BACK PAGE`
+        : 'VISA ARRIVAL STAMP PAGE',
       type: 'back',
       disable: false,
-      required,
+      required: notVisaType ? required : false,
     });
     return fileSchema as FileDetailConfigI;
   }

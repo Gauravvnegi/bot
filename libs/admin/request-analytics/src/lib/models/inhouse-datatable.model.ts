@@ -213,9 +213,9 @@ export class Guest {
   }
 
   getPhoneNumber() {
-    return `${this.countryCode ? this.countryCode : ''} ${
-      this.phoneNumber ? this.phoneNumber : ''
-    }`;
+    return this.phoneNumber
+      ? `${this.countryCode ? this.countryCode : ''} ${this.phoneNumber}`
+      : '';
   }
 
   getNationality(cc) {

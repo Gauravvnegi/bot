@@ -6,7 +6,7 @@
 
 :host ::ng-deep .mat-tab-label-active .mat-tab-label-content {
   font-size: 14px;
-  font-weight: bold;
+  font-weight: $bold;
 }
 .request-wrapper-header {
   padding: 10px 42px 10px 15px;
@@ -43,7 +43,7 @@
       }
 
       .guestInfoEditText {
-        font: normal normal normal 11px/15px Roboto;
+        font: normal normal $medium 11px/15px Poppins;
         letter-spacing: 0.66px;
         color: $white;
         opacity: 1;
@@ -52,9 +52,10 @@
   }
 }
 .request-body {
-  margin-top: 6px;
+  border: 1px solid $borderCol;
+  margin-top: 20px;
   background-color: $white;
-  height: calc(100vh - 182px);
+  height: calc(100vh - 230px);
   display: flex;
   @media (max-width: $tablet) {
     width: 100%;
@@ -103,16 +104,46 @@
   background-color: #ffffff;
 }
 
-::ng-deep .mat-tab-labels {
-  @media (max-width: $tablet) {
-    height: 63px;
-    align-items: center;
+.action-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0px 15px;
+  padding: 7px 0px;
+  position: sticky;
+  top: 0;
+  z-index: $nav-action-header-z;
+  background-color: $layout-background;
+  transition: box-shadow 0.5s;
+
+  .heading {
+    font-size: 26px;
+    font-weight: 600;
+
+    letter-spacing: 1.56px;
+
+    color: $title;
   }
 }
-:host ::ng-deep .mat-tab-header {
-  border: none !important;
-}
-:host ::ng-deep .mat-tab-nav-bar,
-.mat-tab-header {
-  border: none !important;
+
+.action-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 15px 0px 15px;
+  padding: 7px 0px;
+  position: sticky;
+  top: 0;
+  z-index: $nav-action-header-z;
+  background-color: $layout-background;
+  transition: box-shadow 0.5s;
+
+  .heading {
+    font-size: 26px;
+    font-weight: 600;
+
+    letter-spacing: 1.56px;
+
+    color: $title;
+  }
 }

@@ -1,173 +1,183 @@
-<div class="popup__wrap">
-  <div (click)="closeModal()" class="popup__wrap__close">&#10006;</div>
-  <div class="caption__wrapper">
-    <form [formGroup]="tableFG">
-      <div class="caption__wrapper--tabmenu">
-        <div class="header">
-          <div>
-            <p class="heading">{{ tableName }}</p>
-          </div>
-          <div class="action-wrapper">
-            <hospitality-bot-export-list
-              (onDocumentActions)="onDocumentActions()"
-              [documentTypes]="documentTypes"
-              [documentActionTypes]="documentActionTypes"
-              [isDisable]="values.length === 0"
-            ></hospitality-bot-export-list>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-  <p-table
-    #dt
-    [styleClass]="tableConfig.styleClass"
-    [resizableColumns]="isResizableColumns"
-    [autoLayout]="isAutoLayout"
-    [loading]="loading"
-    [columns]="cols"
-    [value]="values"
-    [paginator]="isPaginator"
-    [rows]="rowsPerPage"
-    [showCurrentPageReport]="showCurrentPageReport"
-    [rowsPerPageOptions]="rowsPerPageOptions"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [(first)]="first"
-    [totalRecords]="totalRecords"
-    [filterDelay]="0"
-    [selectionMode]="selectionMode"
-    [(selection)]="selectedRows"
-    (onRowSelect)="onRowSelect($event)"
-    (onRowUnselect)="onRowUnselect($event)"
-    (sortFunction)="customSort($event)"
-    [customSort]="isCustomSort"
-    *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
-  >
-    <ng-template pTemplate="caption">
-      <div class="caption__wrapper" [formGroup]="tableFG">
-        <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-        <hospitality-bot-filter-chips
-          *ngIf="isQuickFilters"
-          [chips]="tabFilterItems[tabFilterIdx].chips"
-          (onChange)="toggleQuickReplyFilter($event)"
-        ></hospitality-bot-filter-chips>
-      </div>
-    </ng-template>
-
-    <!-- *******************************EMPTY TABLE VIEW******************************* -->
-    <ng-template pTemplate="emptymessage">
-      <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
-    </ng-template>
-
-    <!-- *******************************HEADER WITH SEARCH******************************* -->
-    <ng-template pTemplate="header" let-columns>
-      <tr
-        hospitality-bot-table-header
-        [columns]="columns"
-        [showCheckbox]="isSelectable"
-        (search)="handleFieldSearch($event)"
-      ></tr>
-    </ng-template>
-
-    <!-- **************************************BODY********************************* -->
-    <ng-template
-      pTemplate="body"
-      let-rowData
-      let-columns="columns"
-      let-rowIndex="rowIndex"
+<div class="details_wrapper">
+  <div [formGroup]="tableFG">
+    <hospitality-bot-modal-header
+      [tableName]="tableName"
+      (onModalClose)="closeModal()"
     >
-      <tr class="data-table-row">
-        <td class="table--checkbox">
-          <p-tableCheckbox
-            [value]="rowData"
-            [index]="rowIndex"
-            (click)="onCheckboxClicked($event)"
-          ></p-tableCheckbox>
-        </td>
-        <td>
-          <p>{{ rowData.itemCode }}</p>
-          <p class="{{ rowData.priority | lowercase }}">
-            {{ rowData.priority }}
-          </p>
-          <p>{{ rowData.quantity }}</p>
-        </td>
-        <td>
-          <p>{{ rowData.confirmationNumber }}</p>
-          <p [roomStatus]="rowData.rooms[0].status">
-            {{ rowData.rooms[0].roomNumber }} - {{ rowData.rooms[0].type }}
-          </p>
-          <p>{{ rowData.quantity }}</p>
-        </td>
-        <td>
-          <p>{{ rowData.guestDetails.primaryGuest.getFullName() }}</p>
-        </td>
-        <td>
-          <a href="tel:{{ rowData.guestDetails.primaryGuest.phoneNumber }}">
-            <p class="email">
-              {{ rowData.guestDetails.primaryGuest.countryCode }}-{{
-                rowData.guestDetails.primaryGuest.phoneNumber
-              }}
-            </p>
-          </a>
-          <p class="email">{{ rowData.guestDetails.primaryGuest.email }}</p>
-        </td>
-        <td>
-          <p class="item-name">{{ rowData.itemName }}</p>
-          <p class="light">{{ rowData.remarks }}</p>
-          <div class="job-duration">
-            <div>{{ rowData.action }}</div>
-            <div>JD :- {{ rowData.jobDuration }}min</div>
-          </div>
-        </td>
-        <td>
-          <p class="date-time">
-            {{
-              rowData.getRequestDateTime(globalFilterService.timezone) ||
-                '- - - - -'
-            }}
-          </p>
-          <p class="date-time">
-            {{
-              rowData.getClosedTime(globalFilterService.timezone) || '- - - - -'
-            }}
-          </p>
-        </td>
-        <td>
-          <mat-select
-            class="form-elements"
-            placeholder=""
-            [value]="rowData.action"
-            [disabled]="
-              rowData.action === 'Closed' ||
-              rowData.action === 'Timeout' ||
-              rowData.action === 'Reject'
-            "
-            (selectionChange)="handleStatusChange(rowData, $event)"
-          >
-            <mat-option
-              [value]="item"
-              *ngFor="let item of optionLabels"
-              [disabled]="item === 'Timeout'"
-              >{{ item }}</mat-option
-            >
-          </mat-select>
-        </td>
-      </tr>
-    </ng-template>
+      <hospitality-bot-export-list
+        (onDocumentActions)="onDocumentActions()"
+        [documentTypes]="documentTypes"
+        [documentActionTypes]="documentActionTypes"
+        [isDisable]="values.length === 0"
+      ></hospitality-bot-export-list>
+    </hospitality-bot-modal-header>
+  </div>
+  <div
+    class="table-container"
+    [ngStyle]="tabFilterItems[tabFilterIdx]?.total ? {} : { padding: '10px' }"
+  >
+    <p-table
+      #dt
+      [styleClass]="tableConfig.styleClass"
+      [resizableColumns]="isResizableColumns"
+      [autoLayout]="isAutoLayout"
+      [loading]="loading"
+      [columns]="cols"
+      [value]="values"
+      [paginator]="isPaginator"
+      [rows]="rowsPerPage"
+      [showCurrentPageReport]="showCurrentPageReport"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [(first)]="first"
+      [totalRecords]="totalRecords"
+      [filterDelay]="0"
+      [selectionMode]="selectionMode"
+      [(selection)]="selectedRows"
+      (onRowSelect)="onRowSelect($event)"
+      (onRowUnselect)="onRowUnselect($event)"
+      (sortFunction)="customSort($event)"
+      [customSort]="isCustomSort"
+      *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+    >
+      <ng-template pTemplate="caption">
+        <div class="caption__wrapper" [formGroup]="tableFG">
+          <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+          <hospitality-bot-filter-chips
+            *ngIf="isQuickFilters"
+            [chips]="tabFilterItems[tabFilterIdx].chips"
+            (onChange)="toggleQuickReplyFilter($event)"
+          ></hospitality-bot-filter-chips>
+        </div>
+      </ng-template>
 
-    <!-- *********************************FOOTER******************************* -->
-    <ng-template pTemplate="summary">
-      <p-paginator
-        #paginator
-        [rows]="rowsPerPage"
-        [totalRecords]="totalRecords"
-        [rowsPerPageOptions]="rowsPerPageOptions"
-        (onPageChange)="paginate($event)"
-        [currentPageReportTemplate]="reportTemplate"
-        showCurrentPageReport="true"
-      ></p-paginator>
-    </ng-template>
-  </p-table>
+      <!-- *******************************EMPTY TABLE VIEW******************************* -->
+      <ng-template pTemplate="emptymessage">
+        <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+      </ng-template>
+
+      <!-- *******************************HEADER WITH SEARCH******************************* -->
+      <ng-template pTemplate="header" let-columns>
+        <tr
+          hospitality-bot-table-header
+          [columns]="columns"
+          [showCheckbox]="isSelectable"
+          (search)="handleFieldSearch($event)"
+        ></tr>
+      </ng-template>
+
+      <!-- **************************************BODY********************************* -->
+      <ng-template
+        pTemplate="body"
+        let-rowData
+        let-columns="columns"
+        let-rowIndex="rowIndex"
+      >
+        <tr class="data-table-row table-row">
+          <td class="table--checkbox">
+            <p-tableCheckbox
+              [value]="rowData"
+              [index]="rowIndex"
+              (click)="onCheckboxClicked($event)"
+            ></p-tableCheckbox>
+          </td>
+          <td>
+            <div class="primary-text">
+              {{ rowData.quantity }} - {{ rowData?.itemName }}
+            </div>
+            <span class="secondary-text item-priority">
+              <div>{{ rowData?.itemCode || '-' }}</div>
+
+              <p class="{{ rowData.priority | lowercase }}">
+                {{ rowData.priority || '-' }}
+              </p>
+            </span>
+          </td>
+          <td>
+            <div class="center-align">
+              <div class="secondary-text">{{ rowData.confirmationNumber }}</div>
+              <p [roomStatus]="rowData.rooms[0]?.status">
+                {{ rowData.rooms[0].roomNumber }} - {{ rowData.rooms[0].type }}
+              </p>
+            </div>
+          </td>
+          <td>
+            <div class="primary-text">
+              {{ rowData.guestDetails.primaryGuest.getFullName() }}
+            </div>
+          </td>
+          <td>
+            <a href="tel:{{ rowData.guestDetails.primaryGuest.phoneNumber }}">
+              <div class="primary-text">
+                {{ rowData.guestDetails.primaryGuest.countryCode }}-{{
+                  rowData.guestDetails.primaryGuest.phoneNumber
+                }}
+              </div>
+            </a>
+            <div class="primary-text">
+              {{ rowData.guestDetails.primaryGuest.email }}
+            </div>
+          </td>
+          <td>
+            <!-- <p class="item-name">{{ rowData.itemName }}</p> -->
+            <p class="light">{{ rowData.remarks }}</p>
+            <div class="job-duration">
+              <div>{{ rowData.action }}</div>
+              <div>JD :- {{ rowData.jobDuration }}min</div>
+            </div>
+          </td>
+          <td>
+            <div class="center-align">
+              <p class="date-time">
+                {{
+                  rowData.getRequestDateTime(globalFilterService.timezone) ||
+                    '   -  '
+                }}
+              </p>
+              <p class="date-time">
+                {{
+                  rowData.getClosedTime(globalFilterService.timezone) || '  -  '
+                }}
+              </p>
+            </div>
+          </td>
+          <td>
+            <mat-select
+              class="form-elements"
+              placeholder=""
+              [value]="rowData.action"
+              [disabled]="
+                rowData.action === 'Closed' ||
+                rowData.action === 'Timeout' ||
+                rowData.action === 'Reject'
+              "
+              (selectionChange)="handleStatusChange(rowData, $event)"
+            >
+              <mat-option
+                [value]="item"
+                *ngFor="let item of optionLabels"
+                [disabled]="item === 'Timeout'"
+                >{{ item }}</mat-option
+              >
+            </mat-select>
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- *********************************FOOTER******************************* -->
+      <ng-template pTemplate="summary">
+        <p-paginator
+          #paginator
+          [rows]="rowsPerPage"
+          [totalRecords]="totalRecords"
+          [rowsPerPageOptions]="rowsPerPageOptions"
+          (onPageChange)="paginate($event)"
+          [currentPageReportTemplate]="reportTemplate"
+          showCurrentPageReport="true"
+        ></p-paginator>
+      </ng-template>
+    </p-table>
+  </div>
 </div>
 
 <ng-template #emptyTable>

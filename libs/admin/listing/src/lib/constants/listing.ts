@@ -1,3 +1,6 @@
+export enum TableValue {
+  all = 'ALL',
+}
 export const listingConfig = {
   datatable: {
     title: 'Listings',

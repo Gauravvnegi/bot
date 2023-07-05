@@ -18,6 +18,6 @@ export class GuestComponent implements OnInit {
   ngOnInit(): void {}
 
   get featurePath() {
-    return [`${ModuleNames.GUESTS_DASHBOARD}.tables.${TableNames.GUEST}`];
+    return [`${ModuleNames.GUESTS}.tables.${TableNames.GUEST}`];
   }
 }

@@ -4,6 +4,10 @@
   overflow: hidden;
 }
 
+.full-view {
+  height: 82vh !important;
+}
+
 .wrapper {
   background-color: #ffff;
   border: 1px solid rgba(112, 112, 112, 0.35);
@@ -11,7 +15,7 @@
   height: 70vh;
   &__default {
     font-size: 14px;
-    font-weight: 500;
+    font-weight: $bold;
     letter-spacing: 0.84px;
     // color: $dark-blue;
     margin: auto;
@@ -42,7 +46,7 @@
 
     &-subText {
       font-size: 16px;
-      font-weight: bold;
+      font-weight: $bold;
       letter-spacing: 0.96px;
       color: $secondary2;
       line-height: 24px;

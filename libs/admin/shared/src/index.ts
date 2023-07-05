@@ -27,3 +27,4 @@ export * from './lib/types/form.type';
 export * from './lib/utils/shared';
 export * from './lib/utils/validators';
 export * from './lib/types/user.type';
+export * from './lib/components/button/button.component';

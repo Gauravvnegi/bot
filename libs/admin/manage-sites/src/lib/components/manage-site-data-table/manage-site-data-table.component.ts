@@ -18,12 +18,13 @@ import {
 } from '@hospitality-bot/shared/material';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import { chips, cols, status } from '../../constant/data-table';
+import { cols, manageSiteStatus, status } from '../../constant/data-table';
 import { ManageSiteStatus } from '../../constant/manage-site';
 import { ManageSite, ManageSiteList } from '../../models/data-table.model';
 import { ManageSitesService } from '../../services/manage-sites.service';
 import { NextState, QueryConfig } from '../../types/manage-site.type';
 import { environment } from '@hospitality-bot/admin/environment';
+import { siteStatusDetails } from '../../constants/response';
 
 @Component({
   selector: 'hospitality-bot-manage-site-data-table',
@@ -34,12 +35,13 @@ import { environment } from '@hospitality-bot/admin/environment';
   ],
 })
 export class ManageSiteDataTableComponent extends BaseDatatableComponent {
+  readonly siteStatusDetails = siteStatusDetails;
   createSiteUrl: string;
 
   hotelId: string;
-  filterChips = chips;
   cols = cols;
   status = status;
+  manageSiteStatus = manageSiteStatus;
   isSelectable = false;
   tableName = 'Partner Dashboard';
   userId: string;
@@ -93,12 +95,12 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
             status: item.status,
             value: item.nextState,
           }));
-          // this.totalRecords = manageSiteData.total;
-          // this.filterChips.forEach((item) => {
-          //   item.total = manageSiteData.entityTypeCounts[item.value];
-          // });
-          this.updateQuickReplyFilterCount(res.entityTypeCounts);
-          this.updateTotalRecords();
+          this.initFilters(
+            manageSiteData.entityStateCounts,
+            manageSiteData.entityTypeCounts,
+            manageSiteData.total,
+            this.manageSiteStatus
+          );
         },
         () => {
           this.values = [];
@@ -115,7 +117,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   }
 
   handleStatus(status: ManageSiteStatus, rowData: ManageSite) {
-    if(status === ManageSiteStatus.PUBLISHED){
+    if (status === ManageSiteStatus.PUBLISHED) {
       this.changeStatus(status, rowData);
       return;
     }
@@ -128,7 +130,6 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
 
     const currStatus =
       status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
-
 
     // let heading: string;
     let description: string[] = [
@@ -191,7 +192,6 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
             '',
             { panelClass: 'success' }
           );
-          this.updateStatusAndCount(rowData.status, status);
           this.initTableValue();
         },
         ({ error }) => {
@@ -240,21 +240,10 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
     });
   }
 
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return chips.map((item) => ({ status: item.value }));
-  }
-
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
         {
           // not using pagination as of now
           // offset: this.first,

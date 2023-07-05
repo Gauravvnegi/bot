@@ -16,14 +16,14 @@
   }
   .subhead {
     opacity: 0.35;
-    @include normal-text;
+    @include normal-sm-text;
     line-height: 1.56;
     color: $secondary;
   }
   .visit {
     padding-top: 7px;
     text-decoration: underline;
-    @include normal-text;
+    @include normal-sm-text;
     line-height: 1;
     color: $unsubscribe-Visit;
     cursor: pointer;

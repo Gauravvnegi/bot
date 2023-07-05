@@ -34,7 +34,7 @@
     [resetFilterOnHide]="true"
   >
     <ng-template let-option pTemplate="item">
-      <div class="option-item" *ngIf="!option.hidden">
+      <div class="option-items" *ngIf="!option.hidden">
         <img
           *ngIf="option.icon"
           [src]="option.icon"
@@ -42,14 +42,20 @@
           [alt]="option.label"
         />
         <span class="option-label">{{ option.label }}</span>
+
+        <span *ngIf="option.phoneNumber && option.email" class="option-details">
+          <span [ngStyle]="{ 'padding-right': '10px' }">{{
+            option.phoneNumber
+          }}</span>
+          <span>{{ option.email }}</span>
+        </span>
       </div>
     </ng-template>
 
     <ng-template let-option pTemplate="selectedItem">
-      <div class="option-item">
-        <div>
+      <div class="option-items">
+        <div *ngIf="option.icon">
           <img
-            *ngIf="option.icon"
             [src]="option.icon"
             class="selected-image"
             [alt]="option.label"

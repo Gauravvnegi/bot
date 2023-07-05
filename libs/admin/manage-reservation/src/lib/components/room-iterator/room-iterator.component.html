@@ -19,7 +19,8 @@
           *ngSwitchCase="'input'"
           [controlName]="field.name"
           [props]="{
-            placeholder: field.placeholder
+            placeholder: field.placeholder,
+            type: 'number'
           }"
           [disabled]="field.disabled"
           (focusout)="getSummaryData()"
@@ -36,6 +37,7 @@
           (onSearch)="searchRoomTypes($event)"
           [options]="field.options"
           [disabled]="field.disabled"
+          [loading]="loadingRoomTypes"
         ></hospitality-bot-select>
       </div>
     </div>

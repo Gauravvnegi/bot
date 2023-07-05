@@ -13,6 +13,8 @@ export class MultiSelectComponent extends FormComponent {
   searchInputClass = 'p-multiselect-filter';
 
   showHeader = true;
+  showChips = true;
+  maxSelectedLabels = 20;
 
   /**
    * @Input to change default date setting
@@ -30,7 +32,7 @@ export class MultiSelectComponent extends FormComponent {
   dictionary: Record<string, string> = {};
 
   handleClear(value: string) {
-    if (!this.isDisabled)
+    if (!this.isDisabled && this.inputControl.status !== 'DISABLED')
       this.inputControl.setValue(
         (this.inputControl.value as string[])?.filter((item) => item !== value)
       );
@@ -47,4 +49,6 @@ export class MultiSelectComponent extends FormComponent {
 
 type MultiSelectSettings = {
   showHeader: boolean;
+  maxSelectedLabels: number;
+  showChips: boolean;
 };

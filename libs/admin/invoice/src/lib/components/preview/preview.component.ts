@@ -12,17 +12,18 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 export class PreviewComponent implements OnInit {
   reservationId: string;
   previewUrl: string;
+  loadingPdf = true;
   isLoading = true;
   navRoutes = [];
   isInvoiceGenerated = false;
-  items = [
-    {
-      label: 'Generate Proforma',
-      command: () => {
-        this.handleDownload();
-      },
-    },
-  ];
+  // items = [
+  //   {
+  //     label: 'Generate Proforma',
+  //     command: () => {
+  //       this.handleDownload();
+  //     },
+  //   },
+  // ];
   constructor(
     private invoiceService: InvoiceService,
     private activatedRoute: ActivatedRoute,
@@ -30,40 +31,55 @@ export class PreviewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getReservationId();
-    this.invoiceService.downloadPDF(this.reservationId).subscribe((res) => {
-      this.previewUrl = res.file_download_url;
-      this.isLoading = false;
-    });
-    this.updateNavRoutes();
-  }
-
-  getReservationId(): void {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     this.reservationId = id;
+    this.updateNavRoutes();
+    this.getPreviewUrl();
+    this.getInvoiceData();
+  }
+
+  getInvoiceData() {
+    this.isLoading = true;
+    this.invoiceService.getInvoiceData(this.reservationId).subscribe(
+      (res) => (this.isInvoiceGenerated = res.invoiceGenerated),
+      () => {},
+      () => (this.isLoading = false)
+    );
+  }
+
+  getPreviewUrl() {
+    this.loadingPdf = true;
+    this.invoiceService.downloadPDF(this.reservationId).subscribe((res) => {
+      this.previewUrl = res.file_download_url;
+      this.loadingPdf = false;
+    });
   }
 
   updateNavRoutes(): void {
     const invoiceRoute = `/pages/efrontdesk/invoice/${this.reservationId}`;
-  
+
     this.navRoutes = [
       { label: 'eFrontdesk', link: '/pages/efrontdesk' },
       { label: 'Invoice', link: invoiceRoute },
-      { label: 'Preview Invoice', link: './'},
+      { label: 'Preview Invoice', link: './' },
     ];
   }
 
   handleGenerateInvoice() {
-    this.invoiceService.generateInvoice(this.reservationId).subscribe((res) => {
-      this.snackbarService.openSnackBarAsText(
-        'Invoice Generated Successfully',
-        '',
-        {
-          panelClass: 'success',
-        }
-      );
-      this.isInvoiceGenerated = true;
-    });
+    this.invoiceService.generateInvoice(this.reservationId).subscribe(
+      (res) => {
+        this.snackbarService.openSnackBarAsText(
+          'Invoice Generated Successfully',
+          '',
+          {
+            panelClass: 'success',
+          }
+        );
+        this.isInvoiceGenerated = true;
+        this.getPreviewUrl();
+      },
+      () => {}
+    );
   }
 
   handleDownload() {
@@ -73,13 +89,14 @@ export class PreviewComponent implements OnInit {
       xhr.open('GET', fileUrl, true);
       xhr.setRequestHeader('Content-type', 'application/pdf');
       xhr.responseType = 'blob';
-      xhr.onload = function () {
+      xhr.onload = () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
           const blob = new Blob([xhr.response], { type: 'application/pdf' });
           const url = window.URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = url;
-          link.download = 'invoice.pdf';
+          link.download =
+            'invoice_' + this.reservationId + new Date().getTime() + '.pdf';
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);

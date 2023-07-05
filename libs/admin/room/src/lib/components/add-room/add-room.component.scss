@@ -9,40 +9,31 @@
   background-color: $white;
   border-radius: 8px;
   border: solid 1px rgba(112, 112, 112, 0.35);
-  overflow: auto;
+  // overflow: auto;
+  margin-bottom: 50px;
 }
 
 .sub-heading {
   padding: 25px 30px;
-  font-family: Poppins;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: $bolder;
   letter-spacing: 0.96px;
   color: $secondary2;
   border-bottom: 1px solid #707070c1;
 }
 
 .form-block {
-  padding: 35px 50px 62px;
-}
-
-.input-fields {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 40px;
-  .input {
-    flex-basis: 50%;
-  }
+  @include form-block;
 
   .price {
     opacity: 0.75;
-    font-family: Poppins;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: $bold;
     line-height: 0.94;
     letter-spacing: 0.96px;
     color: $secondary2;
+    text-align: right;
+    flex-grow: 1;
     &__value {
       font-size: 14px;
       line-height: 1.07;
@@ -65,4 +56,35 @@
   justify-content: center;
   align-items: center;
   margin-top: 20px;
+}
+
+.status {
+  &__wrapper {
+    display: flex;
+  }
+
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+  margin: -10px 0;
+  padding-left: 10px;
+}
+
+.room-wrapper {
+  margin: 30px 0 24px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  border: solid 1px rgba(112, 112, 112, 0.35);
+  background-color: #fff;
+}
+.room-services-wrapper {
+  padding: 34.5px 50px 37px 50px;
+}
+.header {
+  font-size: 16px;
+  font-weight: $bolder;
+  text-align: left;
+  color: #00162b;
+  padding: 25px 30px;
 }

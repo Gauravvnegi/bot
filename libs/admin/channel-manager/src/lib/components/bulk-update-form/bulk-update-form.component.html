@@ -1,0 +1,85 @@
+<div class="bulk-update">
+  <div class="row bulk-update__row1">
+    <div class="col bulk-update__range-wrapper">
+      <hospitality-bot-select
+        class="bulk-update__left"
+        label="Set"
+        [controlName]="controls.update"
+        [options]="restrictions"
+        [props]="{
+          placeholder: 'Select',
+          alignment: 'horizontal'
+        }"
+      >
+      </hospitality-bot-select>
+      <ng-container
+        [ngSwitch]="
+          restrictionsRecord[
+            controlContainer.control.get(controls.update).value
+          ]?.type
+        "
+      >
+        <hospitality-bot-input
+          *ngSwitchCase="'number'"
+          class="bulk-update__right"
+          [controlName]="controls.updateValue"
+          label="To"
+          [props]="{
+            placeholder: 'Enter',
+            alignment: 'horizontal'
+          }"
+        >
+        </hospitality-bot-input>
+        <hospitality-bot-toggle-switch
+          class="status"
+          *ngSwitchCase="'boolean'"
+          [controlName]="controls.updateValue"
+          onLabel="Yes"
+          offLabel="No"
+        ></hospitality-bot-toggle-switch>
+      </ng-container>
+    </div>
+    <div class="col bulk-update__date-wrapper">
+      <hospitality-bot-date
+        class="bulk-update__date"
+        [controlName]="controls.fromDate"
+        label="From"
+        [props]="{ placeholder: 'Select From Date' }"
+        [settings]="{
+          enableTime: false,
+          dateValue: endMinDate,
+          isDisabled: false
+        }"
+        [minDate]="startMinDate"
+      ></hospitality-bot-date>
+      <hospitality-bot-date
+        class="bulk-update__date"
+        [controlName]="controls.toDate"
+        label="To"
+        [props]="{ placeholder: 'Select To Date' }"
+        [settings]="{
+          enableTime: false,
+          dateValue: endMinDate,
+          isDisabled: false
+        }"
+        [minDate]="endMinDate"
+      ></hospitality-bot-date>
+    </div>
+  </div>
+
+  <div class="row bulk-update__row2">
+    <hospitality-bot-room-types
+      class="bulk-update__room-type"
+      [controlName]="controls.roomType"
+    >
+    </hospitality-bot-room-types>
+    <hospitality-bot-checkbox-selector
+      class="bulk-update__week-days"
+      label="WeekDays"
+      [allChecked]="true"
+      [controlName]="controls.selectedDays"
+      [options]="weeks"
+    >
+    </hospitality-bot-checkbox-selector>
+  </div>
+</div>

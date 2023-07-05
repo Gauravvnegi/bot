@@ -6,8 +6,8 @@ import { HotelInfoFormComponent } from './components/hotel-info-form/hotel-info-
 import { MainComponent } from './components/main/main.component';
 import { HotelDataTableComponent } from './components/hotel-data-table/hotel-data-table.component';
 import { businessRoute } from './constant/routes';
-import { SocialMediaComponent } from './components/social-media/social-media.component';
 import { ServicesComponent } from './components/services/services.component';
+import { ImportServiceComponent } from './components/import-service/import-service.component';
 
 const appRoutes: Route[] = [
   {
@@ -40,6 +40,11 @@ const appRoutes: Route[] = [
                 pathMatch: 'full',
               },
               {
+                path: 'import-services',
+                component: ImportServiceComponent,
+                pathMatch: 'full',
+              },
+              {
                 path: businessRoute.editHotel.route,
                 component: MainComponent,
                 children: [
@@ -52,7 +57,33 @@ const appRoutes: Route[] = [
                     component: ServicesComponent,
                     pathMatch: 'full',
                   },
+                  {
+                    path: 'import-services',
+                    component: ImportServiceComponent,
+                    pathMatch: 'full',
+                  },
                 ],
+              },
+            ],
+          },
+          {
+            path: 'outlet',
+            component: MainComponent,
+            children: [
+              {
+                path: '',
+                loadChildren: () =>
+                  import('@hospitality-bot/admin/all-outlets').then(
+                    (m) => m.AdminAllOutletsModule
+                  ),
+              },
+
+              {
+                path: ':outletId',
+                loadChildren: () =>
+                  import('@hospitality-bot/admin/all-outlets').then(
+                    (m) => m.AdminAllOutletsModule
+                  ),
               },
             ],
           },
@@ -74,7 +105,7 @@ export class AdminBusinessRoutingModule {
     BrandInfoFormComponent,
     HotelInfoFormComponent,
     HotelDataTableComponent,
-    SocialMediaComponent,
     ServicesComponent,
+    ImportServiceComponent,
   ];
 }

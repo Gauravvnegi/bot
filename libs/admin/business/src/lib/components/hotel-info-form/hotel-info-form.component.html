@@ -22,17 +22,26 @@
         controlName="name"
         label="Name"
         maxLength="60"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <hospitality-bot-select
         class="half-width , segment"
         controlName="propertyCategory"
         label="Segment"
         [options]="segmentList"
+        [props]="{
+          placeholder: 'Select Segment'
+        }"
       ></hospitality-bot-select>
       <hospitality-bot-input
         class="half-width"
         controlName="emailId"
         label="Email"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <div class="half-width" [formGroup]="useForm.get('hotel').get('contact')">
         <hospitality-bot-phone-number
@@ -45,18 +54,15 @@
         controlName="gstNumber"
         label="GST"
         maxLength="15"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
-      <hospitality-bot-auto-complete
+      <hospitality-bot-address-component
         class="half-width"
         controlName="address"
-        label="Address"
-        [options]="addressList"
-        [loading]="loading"
-        (onSearch)="searchOptions($event)"
-        [settings]="{
-          multiple: false
-        }"
-      ></hospitality-bot-auto-complete>
+      >
+      </hospitality-bot-address-component>
 
       <div class="file-upload-wrapper">
         <hospitality-bot-custom-file-upload
@@ -70,7 +76,7 @@
             isMultiple: true
           }"
           [hotelId]="hotelId"
-          path="static-content/room-types"
+          path="static-content/hotel-images"
         ></hospitality-bot-custom-file-upload>
       </div>
       <div class="des-template">
@@ -84,7 +90,7 @@
         </div>
       </div>
     </div>
-    <div class="hotel-wrapper">
+    <div class="service-wrapper">
       <div class="header">Services</div>
       <hr />
       <div class="hotel-services-wrapper">
@@ -94,8 +100,15 @@
           formControlName="serviceIds"
           [itemList]="compServices"
           (viewAll)="saveHotelData()"
+          (addAction)="openImportService()"
           [noRecordsAction]="noRecordAction"
-        ></hospitality-bot-custom-select>
+        >
+          <hospitality-bot-button
+            label="+ Import Service"
+            (onClick)="openImportService()"
+            variant="text"
+          ></hospitality-bot-button>
+        </hospitality-bot-custom-select>
       </div>
     </div>
 

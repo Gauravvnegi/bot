@@ -3,7 +3,7 @@
     <div class="header">
       <div
         *ngFor="let field of fields"
-        [style.flexBasis]="width"
+        [style.flexBasis]="field.width ? field.width : width"
         class="header__cell"
       >
         {{ field.label }}
@@ -17,24 +17,35 @@
       <div [formGroup]="controls" class="values-row">
         <div
           *ngFor="let field of fields"
-          [style.flexBasis]="width"
+          [style.flexBasis]="field.width ? field.width : width"
           [ngSwitch]="field.type"
         >
           <hospitality-bot-input
             *ngSwitchCase="'input'"
             [controlName]="field.name"
-            [props]="props"
             [disabled]="field.disabled"
+            [props]="{
+              placeholder: field.placeholder ? field.placeholder : '',
+              fontSize: '14px'
+            }"
           ></hospitality-bot-input>
           <hospitality-bot-select
             *ngSwitchCase="'select'"
             [controlName]="field.name"
-            [props]="props"
             [options]="field.options"
             [disabled]="field.disabled"
+            [props]="{
+              placeholder: field.placeholder ? field.placeholder : '',
+              fontSize: '14px'
+            }"
           ></hospitality-bot-select>
         </div>
-        <mat-icon class="delete" (click)="removeField(i)">clear</mat-icon>
+        <mat-icon
+          *ngIf="ctaLabel && (!maxLimit || maxLimit > useFormArray.length)"
+          class="delete"
+          (click)="removeField(i)"
+          >clear</mat-icon
+        >
       </div>
     </div>
   </div>

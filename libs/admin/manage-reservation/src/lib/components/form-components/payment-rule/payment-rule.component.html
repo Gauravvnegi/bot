@@ -1,0 +1,55 @@
+<p-accordionTab
+  class="payment-rule-accordion"
+  header="Payment Rule"
+  #accordionTab
+  [formGroup]="controlContainer.control"
+>
+  <div class="btn-wrapper" *ngIf="accordionTab?.selected">
+    <hospitality-bot-button
+      label="Full Payment"
+      [variant]="viewAmountToPay ? 'outlined' : 'contained'"
+      (onClick)="viewAmountToPay = false"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      label="Partial"
+      [variant]="viewAmountToPay ? 'contained' : 'outlined'"
+      (onClick)="viewAmountToPay = true"
+    ></hospitality-bot-button>
+  </div>
+  <div class="form-block" formGroupName="paymentRule">
+    <div class="half-width type-wrapper" *ngIf="viewAmountToPay">
+      <hospitality-bot-input
+        label="Amount to pay"
+        class="three-fourth-width amount-to-pay"
+        controlName="amountToPay"
+        [props]="{
+          placeholder: 'Enter',
+          type: 'number'
+        }"
+      ></hospitality-bot-input>
+      <hospitality-bot-view-input
+        label="amount"
+        controlName="deductedAmount"
+        class="one-fourth-width deducted-amount"
+        [strikeValue]="summaryData?.totalAmount"
+      ></hospitality-bot-view-input>
+    </div>
+    <hospitality-bot-date
+      class="half-width"
+      controlName="makePaymentBefore"
+      label="Make Payment on/Before"
+      [maxDate]="startMinDate"
+      [props]="{
+        placeholder: 'DD-HH-MM'
+      }"
+    ></hospitality-bot-date>
+    <hospitality-bot-text-area
+      class="full-width"
+      controlName="inclusionsAndTerms"
+      label="Inclusions and Terms of booking"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-text-area>
+  </div>
+</p-accordionTab>

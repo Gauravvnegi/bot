@@ -1,0 +1,14 @@
+<p-accordionTab
+  header="Special Instructions"
+  [formGroup]="controlContainer.control"
+>
+  <div class="form-block" formGroupName="instructions">
+    <hospitality-bot-text-area
+      class="full-width"
+      controlName="specialInstructions"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-text-area>
+  </div>
+</p-accordionTab>

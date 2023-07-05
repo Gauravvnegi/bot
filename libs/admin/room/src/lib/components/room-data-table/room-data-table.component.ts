@@ -7,8 +7,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
-  Chip,
-  Cols,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import {
@@ -19,25 +17,17 @@ import * as FileSaver from 'file-saver';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subscription } from 'rxjs';
-import {
-  Status,
-  TableValue,
-  cols,
-  filter,
-  status,
-  title,
-} from '../../constant/data-table';
+import { cols, TableValue, title } from '../../constant/data-table';
+import { roomStatusDetails } from '../../constant/response';
 import routes from '../../constant/routes';
-import {
-  RoomList,
-  RoomTypeList,
-} from '../../models/rooms-data-table.model';
+import { RoomList, RoomTypeList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { QueryConfig } from '../../types/room';
 import {
   RoomListResponse,
   RoomStatus,
   RoomTypeListResponse,
+  RoomTypeStatus,
 } from '../../types/service-response';
 
 @Component({
@@ -51,18 +41,12 @@ import {
 export class RoomDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   readonly routes = routes;
-  readonly status = status;
+  readonly roomStatusDetails = roomStatusDetails;
 
   hotelId: string;
   $subscription = new Subscription();
-  cols: Cols[] = [];
-  tableName: string;
-  tabFilterItems = filter;
-  tabFilterIdx: number = 0;
-  selectedTable: TableValue;
-  filterChips: Chip<string>[] = [];
-  isQuickFilters = true;
-
+  selectedTab: TableValue;
+  tabFilterIdx: number = 0; 
   constructor(
     public fb: FormBuilder,
     protected tabFilterService: TableService,
@@ -80,20 +64,16 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.hotelId = this.globalFilterService.hotelId;
     this.roomService.resetRoomTypeFormState();
 
-    this.$subscription.add(
-      this.roomService.selectedTable.subscribe((value) => {
-        this.tabFilterIdx = this.tabFilterItems.findIndex(
-          (item) => item.value === value
-        );
-        this.selectedTable = value;
-        this.tableName = title[this.selectedTable];
-        this.getDataTableValue(this.selectedTable);
-      })
-    );
+    this.selectedTab = this.roomService.selectedTable;
+    this.selectedTab === TableValue.roomType ? this.tabFilterIdx = 0 : this.tabFilterIdx = 1;
+    this.getDataTableValue();
+    this.tableName = title[this.selectedTab];
   }
 
   loadData(event: LazyLoadEvent): void {
-    this.getDataTableValue(this.selectedTable);
+    this.tableName = title[this.selectedTab];
+    this.roomService.selectedTable = this.selectedTab;
+    this.getDataTableValue();
   }
 
   // /**
@@ -116,25 +96,27 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function getSelectedQuickReplyFilters To return the selected chip list.
    * @returns The selected chips.
    */
-  getSelectedQuickReplyFilters() {
-    const chips = this.tabFilterItems[this.tabFilterIdx].chips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return this.selectedTable === 'ROOM'
-      ? chips.map((item) => ({ roomStatus: item.value }))
-      : [
-          chips.length !== 1
-            ? { roomTypeStatus: null }
-            : { roomTypeStatus: chips[0].value === 'ACTIVE' },
-        ];
-  }
+  // getSelectedQuickReplyFilters() {
+  //   const chips = this.tabFilterItems[this.tabFilterIdx].chips.filter(
+  //     (item) => item.isSelected && item.value !== 'ALL'
+  //   );
+  //   return this.selectedTab === 'ROOM'
+  //     ? chips.map((item) => ({ roomStatus: item.value }))
+  //     : [
+  //         chips.length !== 1
+  //           ? { roomTypeStatus: null }
+  //           : { roomTypeStatus: chips[0].value === 'ACTIVE' },
+  //       ];
+  // }
 
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2({
+          isStatusBoolean: this.selectedTab === TableValue.roomType,
+        }),
         {
-          type: this.selectedTable,
+          type: this.selectedTab,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -147,22 +129,21 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * Initial selection of table
    */
   initTableDetails = () => {
-    this.cols = cols[this.selectedTable];
-    this.tableName = title[this.selectedTable];
-    this.filterChips = filter[this.tabFilterIdx].chips;
-    this.totalRecords = this.filterChips
-      .filter((item) => item.isSelected)
-      .reduce((p, c) => p + c.total, 0);
+    this.cols = cols[this.selectedTab];
+    this.tableName = title[this.selectedTab];
+    // this.filterChips = filter[this.tabFilterIdx].chips;
+    // this.totalRecords = this.filterChips
+    //   .filter((item) => item.isSelected)
+    //   .reduce((p, c) => p + c.total, 0);
   };
 
   /**
    * Get table related data from service
    * @param table selected table value
    */
-  getDataTableValue(table: TableValue): void {
+  getDataTableValue(): void {
     this.loading = true;
-
-    if (table === TableValue.room)
+    if (this.selectedTab === TableValue.room)
       this.$subscription.add(
         this.roomService
           .getList<RoomListResponse>(this.hotelId, this.getQueryConfig())
@@ -170,9 +151,15 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             (res) => {
               const roomList = new RoomList().deserialize(res);
               this.values = roomList.records;
-              this.updateQuickReplyFilterCount(res.entityStateCounts);
-              this.updateTabFilterCount(res.entityTypeCounts, res.total);
-              this.updateTotalRecords();
+              // this.updateQuickReplyFilterCount(res.entityStateCounts);
+              // this.updateTabFilterCount(res.entityTypeCounts, res.total);
+              // this.updateTotalRecords();
+              this.initFilters(
+                roomList.entityTypeCounts,
+                roomList.entityStateCounts,
+                roomList.totalRecord,
+                this.roomStatusDetails
+              );
               this.loading = false;
             },
             () => {
@@ -183,7 +170,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           )
       );
 
-    if (table === TableValue.roomType)
+    if (this.selectedTab === TableValue.roomType)
       this.$subscription.add(
         this.roomService
           .getList<RoomTypeListResponse>(this.hotelId, this.getQueryConfig())
@@ -191,9 +178,15 @@ export class RoomDataTableComponent extends BaseDatatableComponent
             (res) => {
               const roomTypesList = new RoomTypeList().deserialize(res);
               this.values = roomTypesList.records;
-              this.updateQuickReplyFilterCount(res.entityStateCounts);
-              this.updateTabFilterCount(res.entityTypeCounts, res.total);
-              this.updateTotalRecords();
+              // this.updateQuickReplyFilterCount(res.entityStateCounts);
+              // this.updateTabFilterCount(res.entityTypeCounts, res.total);
+              // this.updateTotalRecords();
+              this.initFilters(
+                roomTypesList.entityTypeCounts,
+                roomTypesList.entityStateCounts,
+                roomTypesList.totalRecord,
+                this.roomStatusDetails
+              );
 
               this.loading = false;
             },
@@ -218,7 +211,14 @@ export class RoomDataTableComponent extends BaseDatatableComponent
         .updateRoomStatus(this.hotelId, {
           rooms: [{ id, roomStatus: status }],
         })
-        .subscribe(() => this.handleStatusSuccess(status, id))
+        .subscribe(
+          () => {
+            this.getDataTableValue();
+          },
+          () => {
+            this.loading = false;
+          }
+        )
     );
   }
 
@@ -236,8 +236,11 @@ export class RoomDataTableComponent extends BaseDatatableComponent
           id,
           status,
         })
-        .subscribe(() =>
-          this.handleStatusSuccess(status ? 'ACTIVE' : 'INACTIVE', id)
+        .subscribe(
+          () => this.getDataTableValue(),
+          () => {
+            this.loading = false;
+          }
         )
     );
   }
@@ -246,12 +249,12 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    * @function handleStatus To handle the status change
    * @param status status value
    */
-  handleStatus(status: RoomStatus, rowData): void {
-    if (this.selectedTable === TableValue.room) {
-      this.handleRoomStatus(status, rowData.id);
+  handleStatus(status: RoomStatus | RoomTypeStatus, rowData): void {
+    if (this.selectedTab === TableValue.room) {
+      this.handleRoomStatus(status as RoomStatus, rowData.id);
     }
 
-    if (this.selectedTable === TableValue.roomType) {
+    if (this.selectedTab === TableValue.roomType) {
       const roomTypeStatus = status === 'ACTIVE';
       if (!roomTypeStatus) {
         const dialogConfig = new MatDialogConfig();
@@ -308,38 +311,16 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function handleStatusSuccess To update the status after successful update
-   * @param status
-   * @param rowData
-   */
-  handleStatusSuccess = (status: RoomStatus, id: string): void => {
-    this.loading = false;
-    this.values.find((item) => item.id === id).status = {
-      label: Status[status],
-      value: status,
-    };
-  };
-
-  /**
-   * @function onSelectedTabFilterChange To handle the tab filter change.
-   * @param event The material tab change event.
-   */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.resetTable();
-    this.roomService.selectedTable.next(this.tabFilterItems[event.index].value);
-  }
-
-  /**
    * @function openEditForm handle the room or room type form open
    * @param rowData clicked row data
    */
   openEditForm(rowData): void {
-    if (this.selectedTable === TableValue.room) {
+    if (this.selectedTab === TableValue.room) {
       this.router.navigate([`/pages/inventory/room/${routes.addRoom}/single`], {
         queryParams: { id: rowData.id },
       });
     }
-    if (this.selectedTable === TableValue.roomType) {
+    if (this.selectedTab === TableValue.roomType) {
       this.router.navigate([
         `/pages/inventory/room/${routes.addRoomType}/${rowData.id}`,
       ]);
@@ -359,14 +340,19 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     };
     this.$subscription.add(
       this.roomService
-        .exportCSV(this.hotelId, this.selectedTable, config)
-        .subscribe((res) => {
-          FileSaver.saveAs(
-            res,
-            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-          );
-          this.loading = false;
-        })
+        .exportCSV(this.hotelId, this.selectedTab, config)
+        .subscribe(
+          (res) => {
+            FileSaver.saveAs(
+              res,
+              `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+            );
+          },
+          () => {},
+          () => {
+            this.loading = false;
+          }
+        )
     );
   }
 

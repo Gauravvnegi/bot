@@ -6,14 +6,20 @@ import {
   ActivatedRouteSnapshot,
   Router,
 } from '@angular/router';
+import { QueryConfig } from '@hospitality-bot/admin/library';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { NavRouteOptions } from 'libs/admin/shared/src';
-import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
-import { Cancelable } from 'lodash';
+import { AdminUtilityService, NavRouteOptions } from 'libs/admin/shared/src';
 import { Subscription } from 'rxjs';
 import { businessRoute } from '../../constant/routes';
-import { Service, Services, noRecordAction } from '../../models/hotel.models';
+import {
+  Service,
+  ServiceIdList,
+  noRecordAction,
+} from '../../models/hotel.models';
 import { BusinessService } from '../../services/business.service';
+import { HotelFormDataService } from '../../services/hotel-form.service';
+import { ServcieStatusList } from '../../models/hotel-form.model';
+import { Cancelable, debounce } from 'lodash';
 @Component({
   selector: 'hospitality-bot-services',
   templateUrl: './services.component.html',
@@ -31,6 +37,9 @@ export class ServicesComponent implements OnInit, OnDestroy {
   navRoutes: NavRouteOptions;
   compServices: Service[] = [];
   filteredServices: any[] = [];
+  noMoreServices = false;
+  limit = 10;
+  offset = 0;
 
   constructor(
     private snackbarService: SnackBarService,
@@ -38,7 +47,9 @@ export class ServicesComponent implements OnInit, OnDestroy {
     private router: Router,
     private location: Location,
     private businessService: BusinessService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private adminUtilityService: AdminUtilityService,
+    private hotelDataService: HotelFormDataService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -51,12 +62,11 @@ export class ServicesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (!this.businessService.hotelFormState) {
+    if (!this.hotelDataService.hotelFormState) {
       this.location.back();
       return;
     }
     this.initForm();
-    this.initOptionConfig();
   }
 
   /**
@@ -71,6 +81,71 @@ export class ServicesComponent implements OnInit, OnDestroy {
       searchText: [''],
     });
 
+    if (this.hotelId) {
+      this.initOptionConfig();
+      const data = this.hotelDataService.hotelInfoFormData.serviceIds;
+      this.useForm.get('serviceIds').patchValue(data);
+    }
+
+    if (this.hotelDataService.hotelFormState && !this.hotelId) {
+      this.filteredServices = this.hotelDataService.hotelInfoFormData?.services;
+
+      this.useForm
+        .get('serviceIds')
+        .patchValue(this.hotelDataService.hotelInfoFormData?.serviceIds);
+    }
+
+    this.manageRoutes();
+    this.registerSearch();
+  }
+
+  /**
+   * @function searchServices
+   */
+  registerSearch() {
+    let debounceCall: (() => void) & Cancelable;
+
+    this.searchForm.get('searchText').valueChanges.subscribe((res) => {
+      debounceCall?.cancel();
+
+      if (res) {
+        debounceCall = debounce(() => {
+          this.loading = true;
+          this.businessService
+            .searchLibraryItem(this.hotelId, {
+              params: `?key=${res}&type=SERVICE`,
+            })
+            .subscribe(
+              (res) => {
+                const data = res && res['SERVICE'];
+                const compServices = [];
+
+                data?.forEach((item) => {
+                  if (item.type == 'Complimentary' && item.active) {
+                    compServices.push(item);
+                  }
+                });
+                this.compServices = compServices;
+                this.filteredServices = this.compServices;
+              },
+              (error) => {
+                this.snackbarService.openSnackBarAsText(error.error.message);
+              },
+              () => {
+                this.loading = false;
+              }
+            );
+        }, 500);
+        debounceCall();
+      } else {
+        this.offset = 0;
+        this.compServices = [];
+        this.getServices();
+      }
+    });
+  }
+
+  manageRoutes() {
     const { navRoutes, title } = businessRoute[
       this.hotelId ? 'editServices' : 'services'
     ];
@@ -84,25 +159,6 @@ export class ServicesComponent implements OnInit, OnDestroy {
       this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel`;
       this.navRoutes[3].isDisabled = false;
     }
-
-    this.registerSearch();
-  }
-
-  /**
-   * @function searchServices
-   */
-  registerSearch() {
-    let debounceCall: (() => void) & Cancelable;
-
-    this.searchForm.get('searchText').valueChanges.subscribe((res) => {
-      if (res) {
-        this.filteredServices = this.compServices.filter((service) =>
-          service.name.toLowerCase().includes(res.toLowerCase())
-        );
-      } else {
-        this.filteredServices = this.compServices;
-      }
-    });
   }
 
   /**
@@ -118,14 +174,20 @@ export class ServicesComponent implements OnInit, OnDestroy {
    */
   getServices() {
     this.loading = true;
-    this.$subscription.add(
-      this.businessService.getServices().subscribe(
-        (res) => {
-          this.compServices = new Services().deserialize(res.service).services;
-          this.filteredServices = this.compServices;
 
-          if (this.businessService.hotelInfoFormData)
-            this.useForm.patchValue(this.businessService.hotelInfoFormData);
+    const config = this.getQueryConfig(this.offset);
+    this.$subscription.add(
+      this.businessService.getServiceList(this.hotelId, config).subscribe(
+        (res) => {
+          this.compServices = [
+            ...this.compServices,
+            ...res.complimentaryPackages,
+          ];
+          // this.filteredServices = this.compServices;
+
+          if (this.compServices.length === res.total) {
+            this.noMoreServices = true;
+          }
         },
         (error) => {
           this.snackbarService.openSnackBarAsText(error.error.message);
@@ -138,11 +200,34 @@ export class ServicesComponent implements OnInit, OnDestroy {
     );
   }
 
+  getQueryConfig = (offset: number): QueryConfig => {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          offset: offset,
+          limit: this.limit,
+          type: 'SERVICE',
+          serviceType: 'COMPLIMENTARY',
+        },
+      ]),
+    };
+
+    return config;
+  };
+
+  loadMore() {
+    if (this.hotelId) {
+      this.offset += this.limit;
+      this.getServices();
+    }
+  }
+
   saveForm() {
-    this.businessService.initHotelInfoFormData(
+    this.hotelDataService.initHotelInfoFormData(
       this.useForm.getRawValue(),
       true
     );
+
     this.location.back();
   }
 
@@ -153,5 +238,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   /**
    * Remove selected service value when components is removed
    */
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+  }
 }

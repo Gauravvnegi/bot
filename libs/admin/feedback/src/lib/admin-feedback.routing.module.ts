@@ -47,6 +47,7 @@ import {
   BifurcationStatsComponent,
 } from './components/stats';
 import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
+import { FeedbackWrapperComponent } from './components/feedback-wrapper/feedback-wrapper.component';
 
 const appRoutes: CRoutes = [
   { path: '', redirectTo: 'analytics' },
@@ -62,6 +63,11 @@ const appRoutes: CRoutes = [
       import('@hospitality-bot/admin/sentimental-analysis').then(
         (m) => m.AdminSentimentalAnalysisModule
       ),
+  },
+  {
+    path: 'feedback',
+    name: ModuleNames.FEEDBACK,
+    component: FeedbackWrapperComponent,
   },
 ];
 
@@ -119,5 +125,6 @@ export class AdminFeedbackRoutingModule {
     DisengagementComponent,
     GtmClosureComponent,
     BifurcationStatsComponent,
+    FeedbackWrapperComponent,
   ];
 }

@@ -20,7 +20,7 @@ import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
   styleUrls: ['./add-agent.component.scss'],
 })
 export class AddAgentComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
   agentId: string;
   pageTitle: string;
   navRoutes: NavRouteOptions;
@@ -59,7 +59,7 @@ export class AddAgentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalService.hotelId;
+    this.entityId = this.globalService.entityId;
     this.initAgentForm();
     this.initDefaultForm();
   }
@@ -204,7 +204,7 @@ export class AddAgentComponent implements OnInit {
     if (text) {
       this.loadingCompany = true;
       //   this.libraryService
-      //     .searchLibraryItem(this.hotelId, {
+      //     .searchLibraryItem(this.entityId, {
       //       params: `?key=${text}&type=${LibrarySearchItem.ROOM_TYPE}`,
       //     })
       //     .subscribe(

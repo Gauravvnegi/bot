@@ -52,7 +52,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   cols = analytics.preArrivalCols;
 
   tabFilterItems = analytics.PreArrivaltabFilterItems;
-  hotelId: string;
+  entityId: string;
 
   ngOnInit(): void {
     this.registerListeners();
@@ -73,7 +73,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,

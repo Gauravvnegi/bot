@@ -122,7 +122,7 @@ export class ManagePermissionService extends ApiService {
   // ): Observable<UserListResponse> {
   //   return this.get(
   //     `/api/v1/${
-  //       allUsers ? `entity/${config.hotelId}` : `user/${config.loggedInUserId}`
+  //       allUsers ? `entity/${config.entityId}` : `user/${config.loggedInUserId}`
   //     }/users${config.queryObj ?? ''}`
   //   );
   // }
@@ -132,7 +132,7 @@ export class ManagePermissionService extends ApiService {
   }
 
   getAllUsers(config: QueryConfig): Observable<UserListResponse> {
-    return this.get(`/api/v1/entity/${config.hotelId}/users${config.queryObj ?? ''}`);
+    return this.get(`/api/v1/entity/${config.entityId}/users${config.queryObj ?? ''}`);
   }
 
   addNewUser(parentUserId: string, data: any) {
@@ -145,7 +145,7 @@ export class ManagePermissionService extends ApiService {
   exportCSV(config: QueryConfig, allUsers: boolean = false): Observable<any> {
     return this.get(
       `/api/v1/${
-        allUsers ? `entity/${config.hotelId}` : `user/${config.loggedInUserId}`
+        allUsers ? `entity/${config.entityId}` : `user/${config.loggedInUserId}`
       }/users/export/${config.queryObj ? config.queryObj : ''}`,
       {
         responseType: 'blob',

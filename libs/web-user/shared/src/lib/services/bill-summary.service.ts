@@ -42,12 +42,12 @@ export class BillSummaryService extends ApiService {
 
   uploadSignature(
     reservationId,
-    hotelId,
+    entityId,
     guestId,
     formData
   ): Observable<FileDetails> {
     return this.uploadDocumentPost(
-      `/api/v1/uploads?folder_name=entity/${hotelId}/reservation/${reservationId}/guest/${guestId}/payment`,
+      `/api/v1/uploads?folder_name=entity/${entityId}/reservation/${reservationId}/guest/${guestId}/payment`,
       formData
     );
   }

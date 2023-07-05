@@ -34,7 +34,7 @@ export class SendMessageComponent implements OnInit {
   attachmentsList: Option[] = [];
 
   @Input() isEmail: boolean;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() channel: string;
   @Input() roomNumber: string;
   @Input() isModal: boolean;
@@ -66,12 +66,12 @@ export class SendMessageComponent implements OnInit {
   }
 
   registerListeners(): void {
-    this.getConfigData(this.hotelId);
-    // this.templates.hotelId = this.hotelId;
+    this.getConfigData(this.entityId);
+    // this.templates.entityId = this.entityId;
   }
 
-  getConfigData(hotelId): void {
-    this.requestService.getNotificationConfig(hotelId).subscribe((response) => {
+  getConfigData(entityId): void {
+    this.requestService.getNotificationConfig(entityId).subscribe((response) => {
       this.config = new RequestConfig().deserialize(response);
       this.initOptions();
       this.initNotificationForm();
@@ -138,7 +138,7 @@ export class SendMessageComponent implements OnInit {
       values.templateId = '';
     }
     this.$subscription.add(
-      this.requestService.createRequestData(this.hotelId, values).subscribe(
+      this.requestService.createRequestData(this.entityId, values).subscribe(
         (res) => {
           this.isSending = false;
           this.snackbarService
@@ -163,7 +163,7 @@ export class SendMessageComponent implements OnInit {
   uploadAttachments(event): void {
     const formData = new FormData();
     formData.append('files', event.currentTarget.files[0]);
-    this.requestService.uploadAttachments(this.hotelId, formData).subscribe(
+    this.requestService.uploadAttachments(this.entityId, formData).subscribe(
       (response) => {
         this.attachment = response.fileName;
         this.attachmentsList.push({

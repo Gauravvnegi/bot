@@ -35,7 +35,7 @@ export class UserConfig implements IDeserializable {
     );
 
     this.brandName = localStorage.getItem(tokensConfig.brandId);
-    this.branchName = localStorage.getItem(tokensConfig.hotelId);
+    this.branchName = localStorage.getItem(tokensConfig.entityId);
     this.siteName = localStorage.getItem(tokensConfig.siteId);
 
     const brands =

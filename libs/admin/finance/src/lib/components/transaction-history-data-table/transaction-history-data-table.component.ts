@@ -31,7 +31,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   cols = cols.transaction;
   isQuickFilters = true;
   globalQueries = [];
-  hotelId: string;
+  entityId: string;
 
   $subscription = new Subscription();
 
@@ -48,7 +48,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.listenForGlobalFilters();
   }
 
@@ -136,7 +136,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
     //   ]),
     // };
     this.$subscription.add(
-      this.financeService.exportCSV(this.hotelId).subscribe(
+      this.financeService.exportCSV(this.entityId).subscribe(
         (res) => {
           FileSaver.saveAs(
             res,

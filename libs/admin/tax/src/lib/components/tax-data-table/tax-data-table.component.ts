@@ -29,7 +29,7 @@ import * as FileSaver from 'file-saver';
 export class TaxDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   readonly routes = taxRoutes;
-  hotelId: string;
+  entityId: string;
   tableName = title;
   cols = cols;
   isCustomSort = true;
@@ -55,7 +55,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.initTableValue();
   }
 
@@ -75,7 +75,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   initTableValue(): void {
     this.loading = true;
     this.$subscription.add(
-      this.taxService.getTaxList(this.hotelId, this.getQueryConfig()).subscribe(
+      this.taxService.getTaxList(this.entityId, this.getQueryConfig()).subscribe(
         (res) => {
           const taxList = new TaxList().deserialize(res);
 
@@ -121,7 +121,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   handleStatus(status: boolean, rowData): void {
     this.loading = true;
     this.taxService
-      .updateTax(this.hotelId, rowData.id, { status: status })
+      .updateTax(this.entityId, rowData.id, { status: status })
       .subscribe(
         (res) => {
           this.initTableValue();
@@ -155,7 +155,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     };
 
     this.$subscription.add(
-      this.taxService.exportCSV(this.hotelId, config).subscribe((res) => {
+      this.taxService.exportCSV(this.entityId, config).subscribe((res) => {
         FileSaver.saveAs(
           res,
           `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`

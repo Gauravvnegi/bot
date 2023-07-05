@@ -155,9 +155,9 @@ export class DocumentDetailsService extends ApiService {
     return this.get(`/api/v1/countries`);
   }
 
-  getDocumentsByNationality(hotelId, nationality) {
+  getDocumentsByNationality(entityId, nationality) {
     return this.get(
-      `/api/v1/entity/${hotelId}/support-documents?nationality=${nationality}`
+      `/api/v1/entity/${entityId}/support-documents?nationality=${nationality}`
     ).pipe(
       map((res) => {
         // modified the result for no content (for the wrong nationality)

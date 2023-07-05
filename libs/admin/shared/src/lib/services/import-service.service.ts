@@ -9,11 +9,11 @@ export class ImportService extends ApiService {
 
   getAttachedServices(
     endPoint: string,
-    hotelId: string,
+    entityId: string,
     config
   ): Observable<any> {
     return this.get(`/api/v1/${endPoint}${config?.params ?? ''}`, {
-      headers: { 'hotel-id': hotelId },
+      headers: { 'hotel-id': entityId },
     });
   }
 }

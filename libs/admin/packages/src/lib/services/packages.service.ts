@@ -8,7 +8,7 @@ import { PackageResponse } from '../types/response';
 export class PackagesService extends LibraryService {
   /*refactor*/
   updatePackage(
-    hotelId: string,
+    entityId: string,
     serviceId: string,
     data: Partial<PackageFormData>
   ): Observable<PackageResponse> {

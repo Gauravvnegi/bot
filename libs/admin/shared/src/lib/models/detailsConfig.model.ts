@@ -434,14 +434,14 @@ export class HealthDeclarationConfig implements IDeserializable {
 export class ReservationDetailsConfig implements IDeserializable {
   bookingNumber: string;
   bookingId: string;
-  hotelId: string;
+  entityId: string;
 
   deserialize(input: any) {
     Object.assign(
       this,
       set({}, 'bookingNumber', get(input, ['number'])),
       set({}, 'bookingId', get(input, ['id'])),
-      set({}, 'hotelId', get(input.hotel, ['id']))
+      set({}, 'entityId', get(input.hotel, ['id']))
     );
     return this;
   }

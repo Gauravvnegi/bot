@@ -23,7 +23,7 @@ import { EmailService } from '../../services/email.service';
 export class ToDropdownComponent implements OnInit, OnDestroy {
   @Input() value: string;
   @Input() search = false;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() searchList: ReceiversSearchItem[];
   @Output() selectedList = new EventEmitter();
   @Output() closeDropdown = new EventEmitter();
@@ -60,7 +60,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
   loadSubscribers() {
     this.$subscriptions.add(
       this._emailService
-        .getAllSubscriberGroup(this.hotelId)
+        .getAllSubscriberGroup(this.entityId)
         .subscribe((response) => {
           this.subscribers = response;
         })
@@ -82,7 +82,7 @@ export class ToDropdownComponent implements OnInit, OnDestroy {
     };
     this.$subscriptions.add(
       this._campaignService
-        .getListings(this.hotelId, config)
+        .getListings(this.entityId, config)
         .subscribe((response) => {
           this.listings.data = [...this.listings.data, ...response.records];
           this.offset = this.offset + campaignConfig.rowsPerPage.rows;

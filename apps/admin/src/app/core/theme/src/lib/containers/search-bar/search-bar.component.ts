@@ -34,7 +34,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   @ViewChild('searchResult') searchResult;
   @ViewChild('searchBar') searchBar: ElementRef;
 
-  hotelId: string;
+  entityId: string;
 
   searchOptions: SearchResultDetail[];
   results: any;
@@ -67,7 +67,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         const { branchName: branchId } = data['filter'].value.property;
-        this.hotelId = branchId;
+        this.entityId = branchId;
       })
     );
   }
@@ -75,7 +75,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   listenForSearchChanges(): void {
     const formChanges$ = this.parentForm.valueChanges;
     const findSearch$ = ({ search }: { search: string }) =>
-      this.searchService.search(search.trim(), this.hotelDetailService.hotelId);
+      this.searchService.search(search.trim(), this.hotelDetailService.entityId);
     formChanges$
       .pipe(
         debounceTime(1000),

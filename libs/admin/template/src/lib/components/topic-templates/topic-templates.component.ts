@@ -20,7 +20,7 @@ import { TemplateService } from '../../services/template.service';
 })
 export class TopicTemplatesComponent implements OnInit, OnDestroy {
   @Input() template;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() templateType: string;
   @Output() selectedTemplate = new EventEmitter();
   loading: boolean;
@@ -52,7 +52,7 @@ export class TopicTemplatesComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this.templateService
-        .getTemplateListByTopicId(this.hotelId, this.template.topicId, config)
+        .getTemplateListByTopicId(this.entityId, this.template.topicId, config)
         .subscribe(
           (response) => {
             this.template.templates = [

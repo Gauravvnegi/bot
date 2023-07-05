@@ -27,7 +27,7 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
   @ViewChild('receiverField') receiverField;
   @Input() chipList = [];
   @Input() name: string;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() disableInput = false;
   @Input() disabled = false;
   @Output() updateChipSet = new EventEmitter();
@@ -126,7 +126,7 @@ export class ReceiverFieldComponent implements OnInit, OnDestroy {
     if (!this.separatorKeysCodes.includes(event.which) && key.length > 0) {
       this.$subscription.add(
         this._campaignService
-          .searchReceivers(this.hotelId, key)
+          .searchReceivers(this.entityId, key)
           .subscribe((response) => {
             this.search = true;
             this.searchList = new ReceiversSearch().deserialize(

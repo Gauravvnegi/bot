@@ -35,10 +35,10 @@ export class TempCovid000001Component implements OnInit {
   }
 
   initTemplateConfig() {
-    const { journey, hotelId } = this._templateService.templateConfig;
+    const { journey, entityId } = this._templateService.templateConfig;
 
     this._hotelService.currentJourney = journey;
-    this._hotelService.hotelId = hotelId;
+    this._hotelService.entityId = entityId;
   }
 
   private initTranslationService() {
@@ -47,7 +47,7 @@ export class TempCovid000001Component implements OnInit {
 
   private getHotelConfig() {
     this._hotelService
-      .getHotelConfigById(this._hotelService.hotelId)
+      .getHotelConfigById(this._hotelService.entityId)
       .subscribe((hotel) => {
         this._hotelService.hotelConfig = hotel;
         this.titleService.setTitle(hotel.name);

@@ -403,7 +403,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
 
   getDropDownDocTypes(nationalityKey) {
     return this._documentDetailService.getDocumentsByNationality(
-      this._hotelService.hotelId,
+      this._hotelService.entityId,
       nationalityKey
     );
   }
@@ -572,7 +572,7 @@ export class DocumentsDetailsComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this._documentDetailService
         .getDocumentsByNationality(
-          this._hotelService.hotelId,
+          this._hotelService.entityId,
           this.countries.filter(
             (item) => item.value === event.selectEvent.value
           )[0].key

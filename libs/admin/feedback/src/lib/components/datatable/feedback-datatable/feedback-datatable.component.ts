@@ -68,7 +68,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
-  hotelId: string;
+  entityId: string;
   rowsPerPage = 25;
   colorMap;
   responseRate;
@@ -165,7 +165,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getOutlets(data['filter'].value.property.branchName);
         const feedbackType = data['filter'].value.feedback.feedbackType;
 
@@ -327,7 +327,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.globalFeedbackConfig.types.transactional
     )
       return this.statisticService.outletIds;
-    else return this.hotelId;
+    else return this.entityId;
   }
 
   /**
@@ -649,7 +649,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       FeedbackNotificationComponent,
       dialogConfig
     );
-    detailCompRef.componentInstance.hotelId = this.hotelId;
+    detailCompRef.componentInstance.entityId = this.entityId;
     detailCompRef.componentInstance.email = [
       ...new Set(this.selectedRows.map((item) => item.guest.emailId)),
     ];

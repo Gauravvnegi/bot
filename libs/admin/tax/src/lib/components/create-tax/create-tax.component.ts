@@ -17,7 +17,7 @@ import { TaxFormData } from '../../types/tax';
 export class CreateTaxComponent implements OnInit {
   globalCountryData: TaxCountryList;
   taxId: string;
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   useForm: FormGroup;
   pageTitle = 'Create Tax';
@@ -46,7 +46,7 @@ export class CreateTaxComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.getTaxCountry();
     this.initForm();
   }
@@ -74,7 +74,7 @@ export class CreateTaxComponent implements OnInit {
     this.loading = true;
     this.$subscription.add(
       this.taxService
-        .getTaxById(this.hotelId, this.taxId)
+        .getTaxById(this.entityId, this.taxId)
         .subscribe((res: TaxFormData) => {
           this.useForm.get('country').setValue(res.country);
           this.useForm.get('taxType').setValue(res.taxType);
@@ -127,13 +127,13 @@ export class CreateTaxComponent implements OnInit {
     if (this.taxId) {
       this.$subscription.add(
         this.taxService
-          .updateTax(this.hotelId, this.taxId, data)
+          .updateTax(this.entityId, this.taxId, data)
           .subscribe(this.handleSuccess, this.handelError)
       );
     } else {
       this.$subscription.add(
         this.taxService
-          .createTax(this.hotelId, data)
+          .createTax(this.entityId, data)
           .subscribe(this.handleSuccess, this.handelError)
       );
     }

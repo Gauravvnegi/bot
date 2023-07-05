@@ -13,7 +13,7 @@ export type PackageResponse = {
   packageCode: string;
   imageUrl: string;
   source: string;
-  hotelId: string;
+  entityId: string;
   type: string;
   unit: string;
   autoAccept: boolean;

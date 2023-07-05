@@ -26,40 +26,40 @@ export class ManageReservationService extends ApiService {
   selectedTab = ReservationTableValue.ALL;
 
   getRoomTypeList(
-    hotelId: string,
+    entityId: string,
     config?: QueryConfig
   ): Observable<RoomTypeListResponse> {
-    return this.get(`/api/v1/entity/${hotelId}/inventory${config?.params}`);
+    return this.get(`/api/v1/entity/${entityId}/inventory${config?.params}`);
   }
 
-  getPaymentMethod(hotelId: string): Observable<any> {
+  getPaymentMethod(entityId: string): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/configuration?configType=PAYMENT&status=ACTIVE`
+      `/api/v1/entity/${entityId}/configuration?configType=PAYMENT&status=ACTIVE`
     );
   }
 
-  createReservation(hotelId: string, data): Observable<any> {
+  createReservation(entityId: string, data): Observable<any> {
     return this.post(
-      `/api/v1/booking?bookingType=ROOM_TYPE&entityId=${hotelId}`,
+      `/api/v1/booking?bookingType=ROOM_TYPE&entityId=${entityId}`,
       data
     );
   }
 
-  getOfferByRoomType(hotelId: string, roomTypeId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/inventory/room/${roomTypeId}`);
+  getOfferByRoomType(entityId: string, roomTypeId: string): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/inventory/room/${roomTypeId}`);
   }
 
-  getReservationDataById(bookingId: string, hotelId: string): Observable<any> {
-    return this.get(`/api/v1/booking/${bookingId}?entityId=${hotelId}`);
+  getReservationDataById(bookingId: string, entityId: string): Observable<any> {
+    return this.get(`/api/v1/booking/${bookingId}?entityId=${entityId}`);
   }
 
   updateReservation<T, K>(
-    hotelId: string,
+    entityId: string,
     reservationId: string,
     data: any
   ): Observable<K> {
     return this.put(
-      `/api/v1/booking/${reservationId}?bookingType=ROOM_TYPE&entityId=${hotelId}`,
+      `/api/v1/booking/${reservationId}?bookingType=ROOM_TYPE&entityId=${entityId}`,
       data
     );
   }
@@ -70,21 +70,21 @@ export class ManageReservationService extends ApiService {
    *
    */
   searchLibraryItem(
-    hotelId: string,
+    entityId: string,
     config?: QueryConfig
   ): Observable<SearchResultResponse> {
     return this.get(
-      `/api/v1/entity/${hotelId}/library/search${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/library/search${config?.params ?? ''}`
     );
   }
 
   updateBookingStatus(
     bookingId: string,
-    hotelId: string,
+    entityId: string,
     data
   ): Observable<any> {
     return this.patch(
-      `/api/v1/booking/${bookingId}?bookingType=ROOM_TYPE&entityId=${hotelId}`,
+      `/api/v1/booking/${bookingId}?bookingType=ROOM_TYPE&entityId=${entityId}`,
       data
     );
   }
@@ -150,11 +150,11 @@ export class ManageReservationService extends ApiService {
   }
 
   getReservationList(
-    hotelId,
+    entityId,
     config: QueryConfig = { params: '?order=DESC&limit=5' }
   ): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/tax${config?.params ?? ''}`
     ).pipe(
       map((res) => {
         res.records = [
@@ -251,11 +251,11 @@ export class ManageReservationService extends ApiService {
   }
 
   getOutletList(
-    hotelId,
+    entityId,
     config: QueryConfig = { params: '?order=DESC&limit=5' }
   ): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/tax${config?.params ?? ''}`
     ).pipe(
       map((res) => {
         res.records = [

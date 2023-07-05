@@ -3,7 +3,7 @@ import { ApiService } from '../../../../../../../../../libs/shared/utils/src/lib
 
 @Injectable({ providedIn: 'root' })
 export class TokenUpdateService extends ApiService {
-  getUpdatedToken(hotelID: string) {
-    return this.get(`/api/v1/entity/${hotelID}/access-token`);
+  getUpdatedToken(entityId: string) {
+    return this.get(`/api/v1/entity/${entityId}/access-token`);
   }
 }

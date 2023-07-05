@@ -31,7 +31,7 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
   @Output() onModalClose = new EventEmitter();
   searchFG: FormGroup;
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   reservationIds = [];
   showSearchResult = false;
   channelList;
@@ -87,7 +87,7 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
       })
     );
   }
@@ -103,7 +103,7 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
     if (values.reservationId.length === 0) values.reservationId = null;
     this.$subscription.add(
       this.messageService
-        .updateGuestDetail(this.hotelId, this.data.receiverId, values)
+        .updateGuestDetail(this.entityId, this.data.receiverId, values)
         .subscribe(
           (response) => {
             this.messageService.refreshData$.next(true);
@@ -130,7 +130,7 @@ export class GuestDetailMapComponent implements OnInit, OnDestroy {
               this.adminUtilityService.makeQueryParams([
                 {
                   key: response?.search,
-                  hotel_id: this.hotelId,
+                  hotel_id: this.entityId,
                 },
               ])
             )

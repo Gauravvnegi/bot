@@ -10,7 +10,7 @@ export class GlobalFilterService {
   selectedModule = new BehaviorSubject<ModuleNames | ''>('');
   globalFilter$ = new BehaviorSubject({});
   timezone: string;
-  hotelId: string;
+  entityId: string;
   globalFilterObj = {
     filter: {
       value: {},
@@ -56,7 +56,7 @@ export class GlobalFilterService {
       if (Object.keys(data).length) {
         this.globalFilterObj.filter.value = data;
         this.globalFilterObj.filter.queryValue = [
-          { hotelId: get(data, ['property', 'branchName']) },
+          { entityId: get(data, ['property', 'branchName']) },
           {
             guestType: get(data, ['guest', 'guestType', 'isVip'])
               ? 'VIP'

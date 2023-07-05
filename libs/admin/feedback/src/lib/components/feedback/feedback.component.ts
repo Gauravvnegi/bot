@@ -30,7 +30,7 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   feedbackConfig = feedback;
   public cards = CardNames;
   tables = TableNames;
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   globalFeedbackFilterType = '';
   outlets;
@@ -75,7 +75,7 @@ export class FeedbackComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.globalFeedbackFilterType =
           data['filter'].value.feedback.feedbackType;
         if (
@@ -212,7 +212,7 @@ export class FeedbackComponent implements OnInit, OnDestroy {
       FeedbackNotificationComponent,
       dialogConfig
     );
-    detailCompRef.componentInstance.hotelId = this.hotelId;
+    detailCompRef.componentInstance.entityId = this.entityId;
 
     this.$subscription.add(
       detailCompRef.componentInstance.onModalClose.subscribe((res) =>

@@ -41,7 +41,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
   isAllTabFilterRequired = true;
   globalQueries = [];
   $subscription = new Subscription();
-  hotelId: any;
+  entityId: any;
   cols = templateConfig.datatable.cols;
   isAllATabItem = true;
 
@@ -75,7 +75,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
       this.loadTableValue();
     });
   }
@@ -95,7 +95,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     };
     this.$subscription.add(
       this._topicService
-        .getHotelTopic(topicConfig, this.hotelId)
+        .getHotelTopic(topicConfig, this.entityId)
         .subscribe((response) => {
           this.loading = false;
           this.loadInitialData([
@@ -159,7 +159,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.templateService.getHotelTemplate(config, this.hotelId);
+    return this.templateService.getHotelTemplate(config, this.entityId);
   }
 
   /**
@@ -173,7 +173,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
       active: status,
     };
     this.templateService
-      .updateTemplateStatus(this.hotelId, data, userData.id)
+      .updateTemplateStatus(this.entityId, data, userData.id)
       .subscribe(
         (_) => {
           this.loadInitialData();
@@ -270,7 +270,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
       ]),
     };
     this.$subscription.add(
-      this.templateService.exportCSV(this.hotelId, config).subscribe(
+      this.templateService.exportCSV(this.entityId, config).subscribe(
         (response) => {
           FileSaver.saveAs(
             response,

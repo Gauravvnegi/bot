@@ -31,7 +31,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
   @Input() selected;
   @Output() selectedChat = new EventEmitter();
   limit = 20;
-  hotelId: string;
+  entityId: string;
   chatList: IContactList;
   $subscription = new Subscription();
   contactFG: FormGroup;
@@ -90,7 +90,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.loadChatList();
       })
     );
@@ -130,10 +130,10 @@ export class ChatListComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.messageService
         .getChatList(
-          this.hotelId,
+          this.entityId,
           this.adminUtilityService.makeQueryParams([
             {
-              hotelId: this.hotelId,
+              entityId: this.entityId,
               limit: this.limit,
               ...this.filterData,
             },
@@ -173,7 +173,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
     );
     if (this.chatList.contacts[index].unreadCount) {
       this.messageService
-        .markAsRead(this.hotelId, value.receiverId, { unreadCount: 0 })
+        .markAsRead(this.entityId, value.receiverId, { unreadCount: 0 })
         .subscribe(
           (response) => {
             this.chatList.contacts[index].unreadCount = response.unreadCount;
@@ -198,7 +198,7 @@ export class ChatListComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.messageService
         .searchChatList(
-          this.hotelId,
+          this.entityId,
           this.adminUtilityService.makeQueryParams([
             {
               limit: this.limit,

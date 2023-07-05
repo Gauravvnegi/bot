@@ -75,7 +75,7 @@
             unit: 4,
             isMultiple: true
           }"
-          [hotelId]="hotelId"
+          [entityId]="entityId"
           path="static-content/hotel-images"
         ></hospitality-bot-custom-file-upload>
       </div>
@@ -126,7 +126,7 @@
         severity="reset"
       ></hospitality-bot-button>
       <hospitality-bot-button
-        [label]="hotelId ? 'Update' : 'Create'"
+        [label]="entityId ? 'Update' : 'Create'"
         (onClick)="submitForm()"
         [isLoading]="loading"
       ></hospitality-bot-button>

@@ -14,7 +14,7 @@ import { AnalyticsService } from 'libs/admin/request-analytics/src/lib/services/
 export class ConversationComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   globalFilters;
-  hotelId: string;
+  entityId: string;
   chart: any = analytics.chart;
   stats: Conversation;
   constructor(
@@ -42,7 +42,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getConversationData();
       })
     );

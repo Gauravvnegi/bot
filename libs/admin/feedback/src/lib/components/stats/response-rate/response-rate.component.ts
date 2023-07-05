@@ -129,10 +129,10 @@ export class ResponseRateComponent implements OnInit, OnDestroy {
       ];
     else {
       this.globalQueries.forEach((element) => {
-        if (element.hasOwnProperty('hotelId')) {
+        if (element.hasOwnProperty('entityId')) {
           this.globalQueries = [
             ...this.globalQueries,
-            { entityIds: element.hotelId },
+            { entityIds: element.entityId },
           ];
         }
       });

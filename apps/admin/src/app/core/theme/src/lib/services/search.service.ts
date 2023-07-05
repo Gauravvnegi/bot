@@ -8,9 +8,9 @@ export class SearchService extends ApiService {
   cartItems = new BehaviorSubject({});
   cartItems$ = this.cartItems.asObservable();
 
-  search(searchKey, hotelId): Observable<any> {
+  search(searchKey, entityId): Observable<any> {
     if (searchKey) {
-      return this.get(`/api/v1/search?key=${searchKey}&hotel_id=${hotelId}`);
+      return this.get(`/api/v1/search?key=${searchKey}&hotel_id=${entityId}`);
     } else {
       this.cartItems.next({
         reservations: [],

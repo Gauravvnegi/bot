@@ -51,7 +51,7 @@ export class FeedbackDetailFooterComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((_) => {
         this.userService
-          .getMentionList(this.globalFilterService.hotelId)
+          .getMentionList(this.globalFilterService.entityId)
           .subscribe((response) => {
             const userList = new UserList().deserialize(response?.users);
             const departmentList = new DepartmentList().deserialize(

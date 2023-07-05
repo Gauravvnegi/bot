@@ -19,7 +19,7 @@ import { SentimentDataTable } from '../../data-models/sentiment-datatable';
 })
 export class SentimentDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  hotelId: string;
+  entityId: string;
   tableName = title;
   cols = cols;
   iQuickFilters = true;

@@ -21,7 +21,7 @@ import { OfferResponse, SearchResult } from '../../types/response';
   styleUrls: ['./create-offer.component.scss'],
 })
 export class CreateOfferComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
   offerId: string;
   packageCode: string = '# will be auto generated';
 
@@ -66,7 +66,7 @@ export class CreateOfferComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalService.hotelId;
+    this.entityId = this.globalService.entityId;
     this.initUseForm();
     this.initOptionsConfig();
   }
@@ -204,7 +204,7 @@ export class CreateOfferComponent implements OnInit {
     if (text) {
       this.loading = true;
       this.offerService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=${this.searchItems.join(',')}`,
         })
         .subscribe((res) => {
@@ -297,7 +297,7 @@ export class CreateOfferComponent implements OnInit {
       this.subscription$.add(
         this.offerService
           .updateLibraryItem<OfferData, OfferResponse>(
-            this.hotelId,
+            this.entityId,
             this.offerId,
             {
               ...restFormData,
@@ -312,7 +312,7 @@ export class CreateOfferComponent implements OnInit {
     } else {
       this.subscription$.add(
         this.offerService
-          .createLibraryItem<OfferData, OfferResponse>(this.hotelId, {
+          .createLibraryItem<OfferData, OfferResponse>(this.entityId, {
             ...restFormData,
             ...libraryIds,
             type: 'OFFER',
@@ -326,7 +326,7 @@ export class CreateOfferComponent implements OnInit {
   getOfferById() {
     this.subscription$.add(
       this.offerService
-        .getLibraryItemById<OfferResponse>(this.hotelId, this.offerId, {
+        .getLibraryItemById<OfferResponse>(this.entityId, this.offerId, {
           params: '?type=OFFER',
         })
         .subscribe((res) => {

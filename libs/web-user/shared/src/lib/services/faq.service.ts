@@ -22,8 +22,8 @@ export class FaqService extends ApiService {
     return feedbackDetailsFieldSchema as FaqConfigI;
   }
 
-  getFaqs(hotelId: any): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/covid/faqs`);
+  getFaqs(entityId: any): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/covid/faqs`);
   }
 
   get faqDetails() {

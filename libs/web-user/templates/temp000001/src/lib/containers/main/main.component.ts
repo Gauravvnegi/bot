@@ -121,7 +121,7 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   getHotelDataById(errorType) {
-    this._hotelService.getHotelConfigById(this._hotelService.hotelId).subscribe(
+    this._hotelService.getHotelConfigById(this._hotelService.entityId).subscribe(
       (hotel) => {
         this._hotelService.hotelConfig = hotel;
         this._hotelService.titleConfig$.next(hotel);

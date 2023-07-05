@@ -14,7 +14,7 @@ export type ReservationListResponse = {
 /* Reservation Response Types Deceleration*/
 export type ReservationResponse = {
   id: string;
-  hotelId: string;
+  entityId: string;
   invoiceId: string;
   rooms: number;
   roomType: string;
@@ -53,7 +53,7 @@ export type PaymentConfigResponse = {
 
 export type PaymentMethodConfig = {
   id: string;
-  hotelId: string;
+  entityId: string;
   merchantId?: string;
   accessCode?: string;
   chainId?: string;

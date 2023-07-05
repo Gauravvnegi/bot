@@ -25,7 +25,7 @@ import { RoomListResponse } from '../../types/service-response';
 })
 export class RoomDetailsDataTableComponent extends BaseDatatableComponent
   implements OnInit {
-  hotelId: string;
+  entityId: string;
   cols = roomDetailsCols;
   @Input() roomTypeId: string;
 
@@ -41,7 +41,7 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.getDataTableValue();
   }
 
@@ -67,7 +67,7 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
   getDataTableValue() {
     this.loading = true;
     this.roomService
-      .getList<RoomListResponse>(this.hotelId, this.getQueryConfig())
+      .getList<RoomListResponse>(this.entityId, this.getQueryConfig())
       .subscribe(
         (res) => {
           const roomList = new RoomList().deserialize(res);

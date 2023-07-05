@@ -78,7 +78,7 @@ export class BusinessService extends ApiService {
   /**
    * @function getSegments
    * @description get segments
-   * @param hotelId
+   * @param entityId
    * @returns
    * @memberof HotelService
    */
@@ -102,26 +102,26 @@ export class BusinessService extends ApiService {
   /**
    * @function updateHotel
    * @description update hotel
-   * @param hotelId
+   * @param entityId
    * @param data
    * @returns
    * @memberof HotelService
    */
 
-  updateHotel(hotelId: string, data): Observable<any> {
-    return this.patch(`/api/v1/entity/${hotelId}?type=HOTEL`, data);
+  updateHotel(entityId: string, data): Observable<any> {
+    return this.patch(`/api/v1/entity/${entityId}?type=HOTEL`, data);
   }
 
   /**
    * @function getHotelById
    * @description get hotel by id
-   * @param hotelId
+   * @param entityId
    * @returns
    * @memberof HotelService
    */
 
-  getHotelById(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}?type=HOTEL`);
+  getHotelById(entityId: string): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}?type=HOTEL`);
   }
 
   onSubmit = new EventEmitter<boolean>(false);
@@ -138,10 +138,10 @@ export class BusinessService extends ApiService {
     return this.get(`/api/v1/config?key=SERVICE_CONFIGURATION`);
   }
 
-  getServiceList(hotelId, config?: QueryConfig): Observable<any> {
+  getServiceList(entityId, config?: QueryConfig): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/library${config?.params ?? ''}`,
-      { headers: { 'hotel-id': hotelId } }
+      `/api/v1/entity/${entityId}/library${config?.params ?? ''}`,
+      { headers: { 'hotel-id': entityId } }
       //hotel id to be send as header for getting service
     );
   }
@@ -157,9 +157,9 @@ export class BusinessService extends ApiService {
    * @param config  Will have type and search query
    *
    */
-  searchLibraryItem(hotelId: string, config?: QueryConfig): Observable<any> {
+  searchLibraryItem(entityId: string, config?: QueryConfig): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/library/search${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/library/search${config?.params ?? ''}`
     );
   }
 

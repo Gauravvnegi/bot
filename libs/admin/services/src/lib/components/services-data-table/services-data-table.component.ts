@@ -37,7 +37,7 @@ import { ServiceData } from '../../types/service';
 export class ServicesDataTableComponent extends BaseDatatableComponent {
   readonly servicesRoutes = servicesRoutes;
 
-  hotelId: string;
+  entityId: string;
   tabFilterItems = filters;
   selectedTable: TableValue;
   tableName = title;
@@ -61,7 +61,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.listenToTableChange();
   }
 
@@ -87,7 +87,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     this.loading = true;
 
     this.servicesService
-      .getLibraryItems<ServiceListResponse>(this.hotelId, this.getQueryConfig())
+      .getLibraryItems<ServiceListResponse>(this.entityId, this.getQueryConfig())
       .subscribe(
         (res) => {
           const serviceList = new ServiceList().deserialize(res);
@@ -126,7 +126,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     this.$subscription.add(
       this.servicesService
         .updateLibraryItem<Partial<ServiceData>, ServiceResponse>(
-          this.hotelId,
+          this.entityId,
           rowData.id,
           { active: status },
           { params: '?type=SERVICE' }
@@ -188,7 +188,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
       ]),
     };
     this.$subscription.add(
-      this.servicesService.exportCSV(this.hotelId, config).subscribe(
+      this.servicesService.exportCSV(this.entityId, config).subscribe(
         (res) => {
           FileSaver.saveAs(
             res,

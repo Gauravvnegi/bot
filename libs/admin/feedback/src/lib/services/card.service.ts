@@ -23,17 +23,17 @@ export class CardService extends ApiService {
   getGuestById(guestId: string): Observable<any> {
     return this.get(`/api/v1/members/${guestId}`);
   }
-  getDepartmentList(hotelId: string, feedbackType: string) {
+  getDepartmentList(entityId: string, feedbackType: string) {
     return this.get(
-      `/api/v1/cms/entity/${hotelId}/feedback-form?key=${feedbackType === feedback.types.stay
+      `/api/v1/cms/entity/${entityId}/feedback-form?key=${feedbackType === feedback.types.stay
         ? 'departments'
         : 'transactionaldepartments'
       }`
     );
   }
 
-  getUsersList(hotelId: string) {
-    return this.get(`/api/v1/entity/${hotelId}/users`);
+  getUsersList(entityId: string) {
+    return this.get(`/api/v1/entity/${entityId}/users`);
   }
 
   searchFeedbacks(config) {

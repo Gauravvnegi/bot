@@ -59,7 +59,7 @@ export class InvoiceComponent implements OnInit {
   pageTitle: string;
   navRoutes: NavRouteOptions;
 
-  hotelId: string;
+  entityId: string;
   reservationId: string;
   guestId: string;
   bookingNumber: string;
@@ -127,7 +127,7 @@ export class InvoiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.initForm();
     this.initOptions();
   }
@@ -138,7 +138,7 @@ export class InvoiceComponent implements OnInit {
 
   initPaymentOptions() {
     this.$subscription.add(
-      this.manageReservationService.getPaymentMethod(this.hotelId).subscribe(
+      this.manageReservationService.getPaymentMethod(this.entityId).subscribe(
         (response) => {
           const types = new PaymentMethodList()
             .deserialize(response)
@@ -770,7 +770,7 @@ export class InvoiceComponent implements OnInit {
       invoiceFormData,
       {
         reservationId: this.reservationId,
-        hotelId: this.hotelId,
+        entityId: this.entityId,
         guestId: this.guestId,
         currency: 'INR',
       },
@@ -911,7 +911,7 @@ export class InvoiceComponent implements OnInit {
     this.loadingDescription = true;
 
     this.servicesService
-      .getLibraryItems<ServiceListResponse>(this.hotelId, {
+      .getLibraryItems<ServiceListResponse>(this.entityId, {
         params: `?&type=${LibraryItem.service}&serviceType=PAID&limit=10&offset=${this.descriptionOffSet}&status=true`,
       })
       .subscribe(
@@ -945,7 +945,7 @@ export class InvoiceComponent implements OnInit {
       this.loadingDescription = true;
 
       this.servicesService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=${LibraryItem.service}&serviceType=PAID`,
         })
         .subscribe((res) => {

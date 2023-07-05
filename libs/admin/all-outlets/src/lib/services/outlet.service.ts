@@ -18,9 +18,9 @@ export class OutletService extends ApiService {
     category: [],
   });
 
-  getAllOutlets(hotelId: string, config?: QueryConfig): Observable<any> {
+  getAllOutlets(entityId: string, config?: QueryConfig): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/library?type=SERVICE&serviceType=ALL&limit=5`
+      `/api/v1/entity/${entityId}/library?type=SERVICE&serviceType=ALL&limit=5`
     ).pipe(
       map((res) => {
         return allOutletsResponse;
@@ -28,8 +28,8 @@ export class OutletService extends ApiService {
     );
   }
 
-  exportCSV(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/outlet/export`, {
+  exportCSV(entityId: string): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/outlet/export`, {
       responseType: 'blob',
     });
   }
@@ -108,7 +108,7 @@ export class OutletService extends ApiService {
         imageUrl:
           'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/hotel/fb8c0b81-1062-43c1-a341-6677e8687c32/static-content/files/download_(1).jpeg',
         source: 'BOTSHOT',
-        hotelId: 'fb8c0b81-1062-43c1-a341-6677e8687c32',
+        entityId: 'fb8c0b81-1062-43c1-a341-6677e8687c32',
         type: 'Complimentary',
         unit: 'Km',
         autoAccept: true,

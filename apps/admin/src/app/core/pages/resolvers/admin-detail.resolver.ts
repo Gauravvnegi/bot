@@ -21,7 +21,7 @@ export class AdminDetailResolver implements Resolve<any> {
     _route: ActivatedRouteSnapshot
   ): Observable<any> | Promise<any> | any {
     const userId = this._userService.getLoggedInUserId();
-    const hotelId = this.hotelDetailsService.getHotelId();
+    const entityId = this.hotelDetailsService.getentityId();
 
     if (!userId) {
       this._router.navigate(['/auth']);
@@ -32,12 +32,12 @@ export class AdminDetailResolver implements Resolve<any> {
       .getUserDetailsById(this._userService.getLoggedInUserId())
       .pipe(
         switchMap((res) => {
-          if (hotelId) {
+          if (entityId) {
             const manageSiteList = this.manageSite.getSitesList();
             let subscription: Observable<any> = of(undefined);
             if (!this.subscriptionPlanService.getSubscription()) {
               subscription = this.subscriptionPlanService.getSubscriptionPlan(
-                hotelId
+                entityId
               );
             }
 

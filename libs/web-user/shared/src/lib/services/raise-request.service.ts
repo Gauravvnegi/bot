@@ -42,8 +42,8 @@ export class RaiseRequestService extends ApiService {
     return raiseRequestFieldSchema as RaiseRequestConfigI;
   }
 
-  saveRaiseRequest(hotelId, data): Observable<RaiseRequestConfigI> {
-    return this.post(`/api/v1/entity/${hotelId}/raise-concern`, data);
+  saveRaiseRequest(entityId, data): Observable<RaiseRequestConfigI> {
+    return this.post(`/api/v1/entity/${entityId}/raise-concern`, data);
   }
 
   updateRaiseRequestDetailDS(value) {

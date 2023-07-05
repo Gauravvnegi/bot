@@ -63,7 +63,7 @@
     [add]="listId ? false : true"
     [dataSource]="listFG?.get('marketingContacts')?.value"
     [totalRecords]="listFG?.get('marketingContacts')?.value.length"
-    [hotelId]="hotelId"
+    [entityId]="entityId"
     [list]="listId ? listFG?.getRawValue() : ''"
     (updateContacts)="updateContactList($event)"
   ></hospitality-bot-contact-datatable>

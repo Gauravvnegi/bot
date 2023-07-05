@@ -22,7 +22,7 @@ export class Campaigns implements IDeserializable {
 export class Campaign implements IDeserializable {
   id: string;
   name: string;
-  hotelId: string;
+  entityId: string;
   active: boolean;
   statsCampaign;
   templateName: string;
@@ -31,7 +31,7 @@ export class Campaign implements IDeserializable {
   archieved: true;
   campaignType: string;
   createdAt: number;
-  entityId: string;
+
   from: string;
   message: string;
   previewText: string;

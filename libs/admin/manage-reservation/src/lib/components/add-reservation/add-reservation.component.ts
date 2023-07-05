@@ -27,7 +27,7 @@ import {
 export class AddReservationComponent implements OnInit, OnDestroy {
   userForm: FormGroup;
 
-  hotelId: string;
+  entityId: string;
   reservationId: string;
   globalQueries = [];
 
@@ -60,7 +60,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
     this.initForm();
@@ -170,7 +170,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   getReservationDetails(): void {
     this.$subscription.add(
       this.manageReservationService
-        .getReservationDataById(this.reservationId, this.hotelId)
+        .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
           (response) => {
             const data = new ReservationFormData().deserialize(response);
@@ -217,7 +217,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     if (id)
       this.$subscription.add(
         this.manageReservationService
-          .getOfferByRoomType(this.hotelId, id)
+          .getOfferByRoomType(this.entityId, id)
           .subscribe(
             (response) => {
               this.offersList = new OfferList().deserialize(response);
@@ -254,7 +254,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
         roomType: this.userForm.get('roomInformation.roomTypeId')?.value,
         offerId: this.userForm.get('offerId')?.value,
-        entityId: this.hotelId,
+        entityId: this.entityId,
       },
     ];
     const config = {

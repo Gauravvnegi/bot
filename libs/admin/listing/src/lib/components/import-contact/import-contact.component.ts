@@ -22,7 +22,7 @@ import { Regex } from '@hospitality-bot/admin/shared';
 })
 export class ImportContactComponent implements OnInit, OnDestroy {
   @Output() onImportClosed = new EventEmitter();
-  @Input() hotelId: string;
+  @Input() entityId: string;
   fileUploadData = contactConfig.datatable.fileUploadData;
   contacts: IContact[];
   fileName = '';
@@ -94,7 +94,7 @@ export class ImportContactComponent implements OnInit, OnDestroy {
     const formData = new FormData();
     formData.append('file', event.file);
     this.$subscription.add(
-      this._listingService.importContact(this.hotelId, formData).subscribe(
+      this._listingService.importContact(this.entityId, formData).subscribe(
         (response) => {
           this.fileName = event.file.name;
           this.contacts = new ContactList().deserialize(response).records;

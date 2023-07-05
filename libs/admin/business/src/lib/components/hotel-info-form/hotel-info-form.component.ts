@@ -22,7 +22,7 @@ declare let google: any;
   styleUrls: ['./hotel-info-form.component.scss'],
 })
 export class HotelInfoFormComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
   useForm: FormGroup;
   compServices = [];
   loading = false;
@@ -55,9 +55,9 @@ export class HotelInfoFormComponent implements OnInit {
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
-        const hotelId = snapshot?.params['hotelId'];
+        const entityId = snapshot?.params['entityId'];
         const brandId = snapshot?.params['brandId'];
-        if (hotelId) this.hotelId = hotelId;
+        if (entityId) this.entityId = entityId;
         if (brandId) this.brandId = brandId;
       }
     );
@@ -108,8 +108,8 @@ export class HotelInfoFormComponent implements OnInit {
     this.manageRoutes();
 
     //if hotel id is present then get the hotel by id and paatch the hotel detais
-    if (this.hotelId && !this.hotelFormDataService.hotelFormState) {
-      this.businessService.getHotelById(this.hotelId).subscribe((res) => {
+    if (this.entityId && !this.hotelFormDataService.hotelFormState) {
+      this.businessService.getHotelById(this.entityId).subscribe((res) => {
         // const data = new HotelResponse().deserialize(res);
         const { propertyCategory, ...rest } = res;
         this.useForm
@@ -120,7 +120,7 @@ export class HotelInfoFormComponent implements OnInit {
 
       //get the servcie list after getting hotel by id
       this.businessService
-        .getServiceList(this.hotelId, {
+        .getServiceList(this.entityId, {
           params: '?type=SERVICE&serviceType=COMPLIMENTARY&pagination=false',
         })
         .subscribe((res) => {
@@ -144,7 +144,7 @@ export class HotelInfoFormComponent implements OnInit {
 
   manageRoutes() {
     const { navRoutes, title } = businessRoute[
-      this.hotelId ? 'editHotel' : 'hotel'
+      this.entityId ? 'editHotel' : 'hotel'
     ];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
@@ -188,10 +188,10 @@ export class HotelInfoFormComponent implements OnInit {
       (item) => item?.value === data.hotel.propertyCategory
     );
 
-    //if hotelId is present then update hotel else create hotel
-    if (this.hotelId) {
+    //if entityId is present then update hotel else create hotel
+    if (this.entityId) {
       this.$subscription.add(
-        this.businessService.updateHotel(this.hotelId, data.hotel).subscribe(
+        this.businessService.updateHotel(this.entityId, data.hotel).subscribe(
           (res) => {
             this.router.navigate([
               `/pages/settings/business-info/brand/${this.brandId}`,
@@ -224,9 +224,9 @@ export class HotelInfoFormComponent implements OnInit {
       true
     );
 
-    if (this.hotelId) {
+    if (this.entityId) {
       this.router.navigate([
-        `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}/services`,
+        `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}/services`,
       ]);
     } else {
       this.router.navigate([
@@ -245,9 +245,9 @@ export class HotelInfoFormComponent implements OnInit {
       true
     );
 
-    if (this.hotelId) {
+    if (this.entityId) {
       this.router.navigate([
-        `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}/import-services`,
+        `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}/import-services`,
       ]);
     } else {
       this.router.navigate([
@@ -263,7 +263,7 @@ export class HotelInfoFormComponent implements OnInit {
   handleSuccess = () => {
     this.hotelFormDataService.resetHotelInfoFormData();
     this.snackbarService.openSnackBarAsText(
-      `Hotel ${this.hotelId ? 'edited' : 'created'} successfully`,
+      `Hotel ${this.entityId ? 'edited' : 'created'} successfully`,
       '',
       { panelClass: 'success' }
     );

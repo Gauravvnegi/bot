@@ -16,7 +16,7 @@ import { CompanyResponseType } from '../../types/response';
   styleUrls: ['./add-company.component.scss'],
 })
 export class AddCompanyComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
   companyId: string;
   pageTitle: string;
   navRoutes: NavRouteOptions;
@@ -48,7 +48,7 @@ export class AddCompanyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalService.hotelId;
+    this.entityId = this.globalService.entityId;
     this.initCompanyForm();
   }
 

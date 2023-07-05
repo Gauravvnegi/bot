@@ -5,7 +5,7 @@ import { Measures } from '../data-models/safeMeasureConfig.model';
 
 @Injectable()
 export class SafeMeasuresService extends ApiService {
-  getSafeMeasures(hotelId): Observable<Measures> {
-    return this.get(`/api/v1/entity/${hotelId}/covid/safe-measures`);
+  getSafeMeasures(entityId): Observable<Measures> {
+    return this.get(`/api/v1/entity/${entityId}/covid/safe-measures`);
   }
 }

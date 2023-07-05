@@ -9,7 +9,7 @@ import { SearchGuestResponse } from 'libs/admin/guests/src/lib/types/guest.type'
 /* Reservation */
 export class Reservation {
   id: string;
-  hotelId: string;
+  entityId: string;
   invoiceId: string;
   rooms: number;
   roomType: string;
@@ -40,7 +40,7 @@ export class Reservation {
 
   deserialize(input: ReservationResponse) {
     this.id = input.id;
-    this.hotelId = input.hotelId;
+    this.entityId = input.entityId;
     this.invoiceId = input?.invoiceId ?? '';
     this.rooms = input.rooms;
     this.roomType = input.roomType;

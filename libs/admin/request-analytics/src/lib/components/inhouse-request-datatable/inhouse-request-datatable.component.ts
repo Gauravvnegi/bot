@@ -49,7 +49,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   cols = analytics.cols;
   tabFilterItems = analytics.tabFilterItems;
 
-  hotelId: string;
+  entityId: string;
 
   ngOnInit(): void {
     this.registerListeners();
@@ -70,7 +70,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,
@@ -240,7 +240,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams([
         {
           cmsUserType: 'Bot',
-          hotelId: this.hotelId,
+          entityId: this.entityId,
         },
       ]),
     };

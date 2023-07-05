@@ -19,20 +19,20 @@ export class CryptoService extends ApiService {
       expiry: string,
       journey: string,
       reservationId: string,
-      hotelId: string;
+      entityId: string;
 
     [templateId, data] = data.split('*');
     [expiry, data] = data.split('&');
     [journey, data] = data.split('$');
     [reservationId, data] = data.split('#');
-    [hotelId, data] = data && data.split(' ');
+    [entityId, data] = data && data.split(' ');
 
     return {
       templateId,
       expiry: parseInt(expiry),
       journey,
       reservationId,
-      hotelId,
+      entityId,
     };
   }
 }

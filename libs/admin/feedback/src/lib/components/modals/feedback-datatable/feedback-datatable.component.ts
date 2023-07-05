@@ -159,7 +159,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
           ...data['dateRange'].queryValue,
           ...this.config,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getOutlets(data['filter'].value.property.branchName);
         //fetch-api for records
         this.loadInitialData([
@@ -266,7 +266,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       this.feedbackType === ''
     )
       return this.statisticService.outletIds;
-    else return this.hotelId;
+    else return this.entityId;
   }
 
   /**

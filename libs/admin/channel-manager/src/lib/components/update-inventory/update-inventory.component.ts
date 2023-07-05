@@ -32,7 +32,7 @@ export class UpdateInventoryComponent implements OnInit {
   dateLimit: number = 15;
 
   restrictions: RestrictionAndValuesOption[];
-  hotelId: string;
+  entityId: string;
 
   constructor(
     private fb: FormBuilder,
@@ -41,7 +41,7 @@ export class UpdateInventoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilter.hotelId;
+    this.entityId = this.globalFilter.entityId;
     this.initOptions();
     this.initForm();
   }
@@ -53,7 +53,7 @@ export class UpdateInventoryComponent implements OnInit {
   }
 
   initRoomTypes() {
-    this.channelMangerForm.loadRoomTypes(this.hotelId);
+    this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       if (rooms.length !== 0) {
         this.roomTypes = rooms;

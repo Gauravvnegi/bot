@@ -40,7 +40,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
   rowsPerPage = 5;
   globalQueries = [];
   $subscription = new Subscription();
-  hotelId: any;
+  entityId: any;
 
   cols = assetConfig.datatable.cols;
 
@@ -73,7 +73,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
       //fetch-api for records
       this.loadInitialData([
         ...this.globalQueries,
@@ -136,7 +136,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.assetService.getHotelAsset(config, this.hotelId);
+    return this.assetService.getHotelAsset(config, this.entityId);
   }
 
   /**
@@ -202,7 +202,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
       ]),
     };
     this.$subscription.add(
-      this.assetService.exportCSV(config, this.hotelId).subscribe(
+      this.assetService.exportCSV(config, this.entityId).subscribe(
         (res) => {
           FileSaver.saveAs(
             res,
@@ -227,7 +227,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
     const data = {
       active: event.checked,
     };
-    this.assetService.updateAssetStatus(this.hotelId, data, assetId).subscribe(
+    this.assetService.updateAssetStatus(this.entityId, data, assetId).subscribe(
       (response) => {
         this.loading = false;
         this.loadData();

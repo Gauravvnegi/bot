@@ -22,7 +22,7 @@ export class StatsViewComponent implements OnInit, OnDestroy {
   adminSharedConfig = sharedConfig;
   globalQueries = [];
   selectedInterval: string;
-  hotelId: string;
+  entityId: string;
   stats: MarketingStats;
   $subscription = new Subscription();
   loading = false;
@@ -57,7 +57,7 @@ export class StatsViewComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getMarketingCards();
       })
     );
@@ -72,7 +72,7 @@ export class StatsViewComponent implements OnInit, OnDestroy {
       queryObj: this.adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this.marketingService.getMarketingCards(this.hotelId, config).subscribe(
+      this.marketingService.getMarketingCards(this.entityId, config).subscribe(
         (response) => {
           this.stats = new MarketingStats().deserialize(response);
           this.loading = false;

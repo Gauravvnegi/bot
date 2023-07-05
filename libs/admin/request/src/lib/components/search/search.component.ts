@@ -13,7 +13,7 @@ import { RequestService } from '../../services/request.service';
 })
 export class SearchComponent implements OnInit {
   @Input() parentFG: FormGroup;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() globalQueries;
   @Input() filterData;
   @Input() entityType: string;
@@ -36,7 +36,7 @@ export class SearchComponent implements OnInit {
   listenForSearchChanges(): void {
     const formChanges$ = this.parentFG.valueChanges;
     const findSearch$ = ({ search }: { search: string }) =>
-      this._requestService.searchRequest(this.hotelId, {
+      this._requestService.searchRequest(this.entityId, {
         queryObj: this._adminUtilityService.makeQueryParams([
           ...this.globalQueries,
           {

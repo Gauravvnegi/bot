@@ -28,7 +28,7 @@ import { Cancelable, debounce } from 'lodash';
 export class ServicesComponent implements OnInit, OnDestroy {
   noRecordAction = noRecordAction;
   brandId: string;
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   useForm: FormGroup;
   searchForm: FormGroup;
@@ -53,9 +53,9 @@ export class ServicesComponent implements OnInit, OnDestroy {
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
-        const hotelId = snapshot?.params['hotelId'];
+        const entityId = snapshot?.params['entityId'];
         const brandId = snapshot?.params['brandId'];
-        if (hotelId) this.hotelId = hotelId;
+        if (entityId) this.entityId = entityId;
         if (brandId) this.brandId = brandId;
       }
     );
@@ -81,13 +81,13 @@ export class ServicesComponent implements OnInit, OnDestroy {
       searchText: [''],
     });
 
-    if (this.hotelId) {
+    if (this.entityId) {
       this.initOptionConfig();
       const data = this.hotelDataService.hotelInfoFormData.serviceIds;
       this.useForm.get('serviceIds').patchValue(data);
     }
 
-    if (this.hotelDataService.hotelFormState && !this.hotelId) {
+    if (this.hotelDataService.hotelFormState && !this.entityId) {
       this.filteredServices = this.hotelDataService.hotelInfoFormData?.services;
 
       this.useForm
@@ -112,7 +112,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
         debounceCall = debounce(() => {
           this.loading = true;
           this.businessService
-            .searchLibraryItem(this.hotelId, {
+            .searchLibraryItem(this.entityId, {
               params: `?key=${res}&type=SERVICE`,
             })
             .subscribe(
@@ -147,13 +147,13 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
   manageRoutes() {
     const { navRoutes, title } = businessRoute[
-      this.hotelId ? 'editServices' : 'services'
+      this.entityId ? 'editServices' : 'services'
     ];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
     this.navRoutes[2].link.replace('brandId', this.brandId);
-    if (this.hotelId) {
-      this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}`;
+    if (this.entityId) {
+      this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}`;
       this.navRoutes[3].isDisabled = false;
     } else {
       this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel`;
@@ -177,7 +177,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
 
     const config = this.getQueryConfig(this.offset);
     this.$subscription.add(
-      this.businessService.getServiceList(this.hotelId, config).subscribe(
+      this.businessService.getServiceList(this.entityId, config).subscribe(
         (res) => {
           this.compServices = [
             ...this.compServices,
@@ -216,7 +216,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   };
 
   loadMore() {
-    if (this.hotelId) {
+    if (this.entityId) {
       this.offset += this.limit;
       this.getServices();
     }

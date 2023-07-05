@@ -23,7 +23,7 @@ export class Category implements IDeserializable {
   id: string;
   description: string;
   name: string;
-  hotelId: string;
+  entityId: string;
   imageUrl: string;
   active: boolean;
   subPackageNameList = '';
@@ -47,7 +47,7 @@ export class Category implements IDeserializable {
       set({}, 'id', get(input, ['id'])),
       set({}, 'name', get(input, ['name'])),
       set({}, 'description', get(input, ['description'])),
-      set({}, 'hotelId', get(input, ['hotelId'])),
+      set({}, 'entityId', get(input, ['entityId'])),
       set({}, 'imageUrl', get(input, ['imageUrl'])),
       set({}, 'active', get(input, ['active']) || true),
       set({}, 'subpackages', get(input, ['subPackages'])),

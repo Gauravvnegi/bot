@@ -78,7 +78,7 @@ export class DisengagementComponent implements OnInit {
     label: '',
   };
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   constructor(
     private dateService: DateService,
     private _globalFilterService: GlobalFilterService,
@@ -119,7 +119,7 @@ export class DisengagementComponent implements OnInit {
         this.globalFeedbackFilterType =
           data['filter'].value.feedback.feedbackType;
         this.setEntityId(data['filter'].value.feedback.feedbackType);
-        this.getHotelId(this.globalQueries);
+        this.getentityId(this.globalQueries);
         this.getGraphData();
       })
     );
@@ -177,10 +177,10 @@ export class DisengagementComponent implements OnInit {
       ];
     else {
       this.globalQueries.forEach((element) => {
-        if (element.hasOwnProperty('hotelId')) {
+        if (element.hasOwnProperty('entityId')) {
           this.globalQueries = [
             ...this.globalQueries,
-            { entityIds: element.hotelId },
+            { entityIds: element.entityId },
           ];
         }
       });
@@ -202,13 +202,13 @@ export class DisengagementComponent implements OnInit {
   }
 
   /**
-   * @function getHotelId To get hotel id from the filter data.
+   * @function getentityId To get hotel id from the filter data.
    * @param globalQueries The filter list data.
    */
-  getHotelId(globalQueries): void {
+  getentityId(globalQueries): void {
     globalQueries.forEach((element) => {
-      if (element.hasOwnProperty('hotelId')) {
-        this.hotelId = element.hotelId;
+      if (element.hasOwnProperty('entityId')) {
+        this.entityId = element.entityId;
       }
     });
   }

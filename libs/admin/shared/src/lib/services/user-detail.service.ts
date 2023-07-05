@@ -30,13 +30,13 @@ export class UserService extends ApiService {
     return localStorage.getItem(tokensConfig.userId);
   }
 
-  getHotelId() {
-    return localStorage.getItem(tokensConfig.hotelId);
+  getentityId() {
+    return localStorage.getItem(tokensConfig.entityId);
   }
 
-  uploadProfileImage(hotelId: string, formData) {
+  uploadProfileImage(entityId: string, formData) {
     return this.uploadDocumentPost(
-      `/api/v1/uploads?folder_name=entity/${hotelId}/profileImage`,
+      `/api/v1/uploads?folder_name=entity/${entityId}/profileImage`,
       formData
     );
   }
@@ -57,19 +57,19 @@ export class UserService extends ApiService {
     );
   }
 
-  getUsersList(config: { hotelId: string; queryObj?: string }) {
+  getUsersList(config: { entityId: string; queryObj?: string }) {
     return this.get(
-      `/api/v1/entity/${config.hotelId}/users${config.queryObj ?? ''}`
+      `/api/v1/entity/${config.entityId}/users${config.queryObj ?? ''}`
     );
   }
 
-  getMentionList(hotelId: string) {
-    return this.get(`/api/v1/entity/${hotelId}/users?mention=true`);
+  getMentionList(entityId: string) {
+    return this.get(`/api/v1/entity/${entityId}/users?mention=true`);
   }
 
-  uploadImage(hotelId: string, data: any, path: string) {
+  uploadImage(entityId: string, data: any, path: string) {
     return this.post(
-      `/api/v1/uploads?folder_name=entity/${hotelId}/${path}`,
+      `/api/v1/uploads?folder_name=entity/${entityId}/${path}`,
       data
     );
   }

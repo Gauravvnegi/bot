@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class FooterService extends ApiService {
-  getCovidGallery(hotelId: any): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/covid/galleries`);
+  getCovidGallery(entityId: any): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/covid/galleries`);
   }
 }

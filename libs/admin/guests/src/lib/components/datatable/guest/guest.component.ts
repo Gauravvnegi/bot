@@ -42,7 +42,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
-  hotelId: string;
+  entityId: string;
   cols = guest.cols.datatable;
   tabFilterIdx = 0;
   globalQueries = [];
@@ -84,7 +84,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.loadInitialData([
           ...this.globalQueries,
           {

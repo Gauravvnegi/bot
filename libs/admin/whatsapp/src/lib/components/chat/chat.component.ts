@@ -37,7 +37,7 @@ export class ChatComponent
   @Input() data;
   @Output() guestInfo = new EventEmitter();
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
-  hotelId: string;
+  entityId: string;
   chat: IChats;
   chatFG: FormGroup;
   liveChatFG: FormGroup;
@@ -81,7 +81,7 @@ export class ChatComponent
   }
 
   ngOnChanges(): void {
-    if (this.hotelId) {
+    if (this.entityId) {
       this.loadChat();
       this.getLiveChat();
     }
@@ -124,7 +124,7 @@ export class ChatComponent
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getLiveChat();
         this.loadChat();
       })
@@ -181,7 +181,7 @@ export class ChatComponent
       this.$subscription.add(
         this.messageService
           .getChat(
-            this.hotelId,
+            this.entityId,
             this.selectedChat.receiverId,
             this.adminUtilityService.makeQueryParams([
               {
@@ -317,7 +317,7 @@ export class ChatComponent
     this.$subscription.add(
       this.messageService
         .getLiveChat(
-          this.hotelId,
+          this.entityId,
           this.selectedChat.receiverId,
           this.selectedChat.phone
         )
@@ -331,7 +331,7 @@ export class ChatComponent
     this.$subscription.add(
       this.messageService
         .updateLiveChat(
-          this.hotelId,
+          this.entityId,
           this.selectedChat.receiverId,
           this.liveChatFG.getRawValue()
         )
@@ -349,7 +349,7 @@ export class ChatComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          hotelId: this.hotelId,
+          entityId: this.entityId,
           confirmationNumber: this.data.reservationId,
         },
       ]),
@@ -381,7 +381,7 @@ export class ChatComponent
             };
             this.$subscription.add(
               this.messageService
-                .updateGuestDetail(this.hotelId, this.data.receiverId, values)
+                .updateGuestDetail(this.entityId, this.data.receiverId, values)
                 .subscribe(
                   (response) => {
                     this.messageService.refreshData$.next(true);
@@ -398,7 +398,7 @@ export class ChatComponent
   exportChat() {
     this.$subscription.add(
       this.messageService
-        .exportChat(this.hotelId, this.selectedChat.receiverId)
+        .exportChat(this.entityId, this.selectedChat.receiverId)
         .subscribe(
           (response) => {
             FileSaver.saveAs(

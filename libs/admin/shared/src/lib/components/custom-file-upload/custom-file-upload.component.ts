@@ -39,7 +39,7 @@ export class CustomFileUploadComponent
 
   @ViewChild('fileInput') input: ElementRef;
   @Input() path = 'static-content/files';
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() limit: number = 1;
   unit: number = 1;
   isMultiple: boolean = false;
@@ -171,7 +171,7 @@ export class CustomFileUploadComponent
     formData.append('files', event.file);
     this.subscription$.add(
       this.userDetailsService
-        .uploadImage(this.hotelId, formData, this.path)
+        .uploadImage(this.entityId, formData, this.path)
         .subscribe(
           (response) => {
             if (this.unit == 1) {
@@ -285,12 +285,12 @@ export class CustomFileUploadComponent
     this.subscription$.add(
       forkJoin({
         videoFile: this.userDetailsService.uploadImage(
-          this.hotelId,
+          this.entityId,
           formData,
           this.path
         ),
         thumbnail: this.userDetailsService.uploadImage(
-          this.hotelId,
+          this.entityId,
           thumbnailData,
           this.path
         ),

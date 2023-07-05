@@ -14,22 +14,22 @@ import {
 export class LibraryService extends ApiService {
   httpOptions: { headers: HttpHeaders } = {
     headers: new HttpHeaders({
-      'hotel-id': localStorage.getItem(tokensConfig.hotelId),
+      'hotel-id': localStorage.getItem(tokensConfig.entityId),
     }),
   };
 
-  createLibraryItem<T, K>(hotelId: string, data: T): Observable<K> {
-    return this.post(`/api/v1/entity/${hotelId}/library`, data);
+  createLibraryItem<T, K>(entityId: string, data: T): Observable<K> {
+    return this.post(`/api/v1/entity/${entityId}/library`, data);
   }
 
   updateLibraryItem<T, K>(
-    hotelId: string,
+    entityId: string,
     libraryItemId: string,
     data: T,
     config?: QueryConfig
   ): Observable<K> {
     return this.patch(
-      `/api/v1/entity/${hotelId}/library/${libraryItemId}${
+      `/api/v1/entity/${entityId}/library/${libraryItemId}${
         config?.params ?? ''
       }`,
       data
@@ -37,23 +37,23 @@ export class LibraryService extends ApiService {
   }
 
   createCategory(
-    hotelId: string,
+    entityId: string,
     data: CategoryData
   ): Observable<CategoryResponse> {
-    return this.post(`/api/v1/entity/${hotelId}/categories`, data);
+    return this.post(`/api/v1/entity/${entityId}/categories`, data);
   }
 
-  getLibraryItems<T>(hotelId: string, config?: QueryConfig): Observable<T> {
-    return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
+  getLibraryItems<T>(entityId: string, config?: QueryConfig): Observable<T> {
+    return this.get(`/api/v1/entity/${entityId}/library${config?.params ?? ''}`);
   }
 
   getLibraryItemById<T>(
-    hotelId: string,
+    entityId: string,
     libraryItemId: string,
     config?: QueryConfig
   ): Observable<T> {
     return this.get(
-      `/api/v1/entity/${hotelId}/library/${libraryItemId}${
+      `/api/v1/entity/${entityId}/library/${libraryItemId}${
         config?.params ?? ''
       }`
     );
@@ -64,11 +64,11 @@ export class LibraryService extends ApiService {
    * @param config Has params with type value equal to either 'PACKAGE_CATEGORY' | 'SERVICE_CATEGORY'
    */
   getCategories(
-    hotelId: string,
+    entityId: string,
     config?: QueryConfig
   ): Observable<CategoriesResponse> {
     return this.get(
-      `/api/v1/entity/${hotelId}/categories/${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/categories/${config?.params ?? ''}`
     );
   }
 
@@ -78,17 +78,17 @@ export class LibraryService extends ApiService {
    *
    */
   searchLibraryItem(
-    hotelId: string,
+    entityId: string,
     config?: QueryConfig
   ): Observable<SearchResultResponse> {
     return this.get(
-      `/api/v1/entity/${hotelId}/library/search${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/library/search${config?.params ?? ''}`
     );
   }
 
-  exportCSV(hotelId: string, config?: QueryConfig) {
+  exportCSV(entityId: string, config?: QueryConfig) {
     return this.get(
-      `/api/v1/entity/${hotelId}/library/export${config?.params ?? ''}`,
+      `/api/v1/entity/${entityId}/library/export${config?.params ?? ''}`,
       {
         responseType: 'blob',
       }

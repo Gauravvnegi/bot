@@ -15,9 +15,9 @@ export class ReservationService extends ApiService {
     return this.get(`/api/v1/countries`);
   }
 
-  getDocumentsByNationality(hotelId, nationality): Observable<any> {
+  getDocumentsByNationality(entityId, nationality): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/support-documents?nationality=${nationality}`
+      `/api/v1/entity/${entityId}/support-documents?nationality=${nationality}`
     );
   }
 

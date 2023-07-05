@@ -78,7 +78,7 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
   getHotelAmenities(): void {
     this.$subscription.add(
       this._amenitiesService
-        .getHotelAmenities(this._hotelService.hotelId)
+        .getHotelAmenities(this._hotelService.entityId)
         .subscribe((response) => {
           this._amenitiesService.initAmenitiesDetailDS(
             response,

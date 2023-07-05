@@ -3,7 +3,7 @@ export type CookiesData = {
   accessRefreshToken: string;
   user: string;
   'x-userId': string;
-  hotelId: string;
+  entityId: string;
   siteId: string;
   brandId: string;
 };

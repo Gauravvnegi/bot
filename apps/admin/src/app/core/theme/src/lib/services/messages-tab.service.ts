@@ -9,7 +9,7 @@ export class MessageTabService extends ApiService {
 
   registerFirebaseMessage(config, data) {
     return this.post(
-      // `/api/v1/hotel/${config.hotelId}/user/${config.userId}/device`,
+      // `/api/v1/hotel/${config.entityId}/user/${config.userId}/device`,
       `/api/v1/user/${config.userId}/device`,
       data
     );

@@ -28,7 +28,7 @@ export const navRoute = {
   },
   editHotel: {
     label: 'Edit Hotel',
-    link: '/pages/settings/business-info/brand/:brandId/hotel/:hotelId',
+    link: '/pages/settings/business-info/brand/:brandId/hotel/:entityId',
     isDisabled: true,
   },
   importService: {
@@ -39,7 +39,7 @@ export const navRoute = {
   editImportService: {
     label: 'Import Service',
     link:
-      '/pages/settings/business-info/brand/:brandId/hotel/:hotelId/import-services',
+      '/pages/settings/business-info/brand/:brandId/hotel/:entityId/import-services',
     isDisabled: true,
   },
   services: { label: 'Services', link: './' },
@@ -78,7 +78,7 @@ export const businessRoute: Record<
     title: 'Hotel',
   },
   editHotel: {
-    route: ':hotelId',
+    route: ':entityId',
     navRoutes: [
       navRoute.settings,
       navRoute.businessInfo,

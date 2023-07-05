@@ -53,7 +53,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   readonly reservationType = ReservationType;
   scrollTargetPoint: number = 150;
 
-  hotelId!: string;
+  entityId!: string;
   selectedTab: ReservationTableValue = ReservationTableValue.ALL;
   selectedOutlet: EntityTabGroup = EntityTabGroup.HOTEL;
   previousOutlet: EntityTabGroup = EntityTabGroup.HOTEL;
@@ -93,7 +93,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   getConfigData(): void {
     this.configService
-      .getColorAndIconConfig(this.hotelId)
+      .getColorAndIconConfig(this.entityId)
       .subscribe((response) => {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
@@ -114,7 +114,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    * @function listenForGlobalFilters To listen for global filters and load data when filter value is changed.
    */
   listenForGlobalFilters(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.globalQueries = [];
     this.globalFilterService.globalFilter$.subscribe((data) => {
       // set-global query everytime global filter changes
@@ -167,7 +167,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           } else {
             // API call for outlet data
             return this.manageReservationService.getReservationList(
-              this.hotelId,
+              this.entityId,
               this.getOutletConfig()
             );
           }
@@ -247,7 +247,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   //   } else {
   //     this.subscriptionList$.add(
   //       this.manageReservationService
-  //         .getReservationList(this.hotelId, this.getOutletConfig())
+  //         .getReservationList(this.entityId, this.getOutletConfig())
   //         .subscribe(
   //           (res) => {
   //             this.values = res.records;
@@ -359,7 +359,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.loading = true;
     this.$subscription.add(
       this.manageReservationService
-        .updateBookingStatus(reservationData.id, this.hotelId, {
+        .updateBookingStatus(reservationData.id, this.entityId, {
           reservationType: status,
         })
         .subscribe(
@@ -400,7 +400,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         {
           type: ReservationSearchItem.ROOM_TYPE,
           entityType: this.selectedTab,
-          entityId: this.hotelId,
+          entityId: this.entityId,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -421,7 +421,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           order: sharedConfig.defaultOrder,
         },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { type: 'ROOM_TYPE', entityId: this.hotelId },
+        { type: 'ROOM_TYPE', entityId: this.entityId },
       ]),
     };
     this.$subscription.add(

@@ -51,7 +51,7 @@ export class FrontdeskStatComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   globalQueries = [];
   selectedInterval: string;
-  hotelId: string;
+  entityId: string;
   graphData: FrontDeskGraph;
   constructor(
     private globalFilterService: GlobalFilterService,
@@ -88,7 +88,7 @@ export class FrontdeskStatComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getChartData();
       })
     );
@@ -98,7 +98,7 @@ export class FrontdeskStatComponent implements OnInit, OnDestroy {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        { entityIds: this.hotelId },
+        { entityIds: this.entityId },
       ]),
     };
     this.$subscription.add(

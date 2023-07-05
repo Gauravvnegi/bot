@@ -14,30 +14,30 @@ export class MessageService extends ApiService {
     messages: {},
     receiver: {},
   };
-  getChatList(hotelId: string, queryObj) {
-    return this.get(`/api/v1/entity/${hotelId}/conversations/${queryObj}`);
+  getChatList(entityId: string, queryObj) {
+    return this.get(`/api/v1/entity/${entityId}/conversations/${queryObj}`);
   }
 
-  searchChatList(hotelId: string, queryObj) {
-    return this.get(`/api/v1/entity/${hotelId}/conversations/search${queryObj}`);
+  searchChatList(entityId: string, queryObj) {
+    return this.get(`/api/v1/entity/${entityId}/conversations/search${queryObj}`);
   }
 
-  getChat(hotelId, receiverId, queryObj) {
+  getChat(entityId, receiverId, queryObj) {
     return this.get(
-      `/api/v1/entity/${hotelId}/conversations/${receiverId}${queryObj}`
+      `/api/v1/entity/${entityId}/conversations/${receiverId}${queryObj}`
     );
   }
 
-  sendMessage(hotelId: string, data, queryObj) {
+  sendMessage(entityId: string, data, queryObj) {
     return this.post(
-      `/api/v1/entity/${hotelId}/conversations/send${queryObj ?? ''}`,
+      `/api/v1/entity/${entityId}/conversations/send${queryObj ?? ''}`,
       data
     );
   }
 
-  updateGuestDetail(hotelId: string, conversationId: string, data) {
+  updateGuestDetail(entityId: string, conversationId: string, data) {
     return this.patch(
-      `/api/v1/entity/${hotelId}/conversations/${conversationId}/guest-associate`,
+      `/api/v1/entity/${entityId}/conversations/${conversationId}/guest-associate`,
       data
     );
   }
@@ -50,9 +50,9 @@ export class MessageService extends ApiService {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
   }
 
-  markAsRead(hotelId: string, contactId: string, data) {
+  markAsRead(entityId: string, contactId: string, data) {
     return this.patch(
-      `/api/v1/entity/${hotelId}/conversations/${contactId}/guest-associate`,
+      `/api/v1/entity/${entityId}/conversations/${contactId}/guest-associate`,
       data
     );
   }
@@ -63,15 +63,15 @@ export class MessageService extends ApiService {
     });
   }
 
-  getLiveChat(hotelId, conversationId, phone) {
+  getLiveChat(entityId, conversationId, phone) {
     return this.get(
-      `/api/v1/entity/${hotelId}/conversations/${conversationId}/live-chat?phoneNumber=${phone}`
+      `/api/v1/entity/${entityId}/conversations/${conversationId}/live-chat?phoneNumber=${phone}`
     );
   }
 
-  updateLiveChat(hotelId, conversationId, data) {
+  updateLiveChat(entityId, conversationId, data) {
     return this.put(
-      `/api/v1/entity/${hotelId}/conversations/${conversationId}/live-chat`,
+      `/api/v1/entity/${entityId}/conversations/${conversationId}/live-chat`,
       data
     );
   }
@@ -95,8 +95,8 @@ export class MessageService extends ApiService {
     );
   }
 
-  exportChat(hotelId: string, id: string) {
-    return this.get(`/api/v1/entity/${hotelId}/conversations/${id}/export`, {
+  exportChat(entityId: string, id: string) {
+    return this.get(`/api/v1/entity/${entityId}/conversations/${id}/export`, {
       responseType: 'blob',
     });
   }

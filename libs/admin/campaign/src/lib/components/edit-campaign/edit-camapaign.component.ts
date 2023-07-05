@@ -34,7 +34,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   campaignFG: FormGroup;
   scheduleFG: FormGroup;
   templateData = '';
-  hotelId: string;
+  entityId: string;
   templateList = [];
   globalQueries = [];
   fromEmailList = [];
@@ -113,7 +113,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getTemplateId();
       })
     );
@@ -177,7 +177,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   getCampaignDetails(id: string) {
     this.$subscription.add(
       this._campaignService
-        .getCampaignById(this.hotelId, id)
+        .getCampaignById(this.entityId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
           if (this.campaign.cc && this.campaign.cc.length)
@@ -291,7 +291,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
    */
   autoSave(data: any) {
     return this._campaignService.save(
-      this.hotelId,
+      this.entityId,
       this._emailService.createRequestData(data),
       this.campaignId
     );
@@ -396,7 +396,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
         this.$subscription.add(
           this._emailService
             .scheduleCampaign(
-              this.hotelId,
+              this.entityId,
               this._emailService.createScheduleRequestData(
                 this.campaignFG.getRawValue(),
                 this.scheduleFG.get('time').value
@@ -442,7 +442,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
     reqData.isDraft = false;
     this.isSending = true;
     this.$subscription.add(
-      this._emailService.sendEmail(this.hotelId, reqData).subscribe(
+      this._emailService.sendEmail(this.entityId, reqData).subscribe(
         (response) => {
           this.snackbarService
             .openSnackBarWithTranslate(

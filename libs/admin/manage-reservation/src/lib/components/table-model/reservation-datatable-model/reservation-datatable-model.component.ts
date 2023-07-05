@@ -25,7 +25,7 @@ import { selectedOutlet } from '../../../types/reservation.type';
 export class ReservationDataTableModelComponent extends BaseDatatableComponent
   implements OnInit {
   navLink: string = ''; //link to navigate to booking page on the basis of outlet type
-  hotelId: string;
+  entityId: string;
   cols = outletCols;
   globalQueries = [];
   tableName: string = 'Reservation';
@@ -53,18 +53,18 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
         this.navLink = '/pages/efrontdesk/manage-reservation/add-reservation';
         break;
       case 'RESTAURANT':
-        this.navLink = `/hotel/${this.hotelId}/reservation/restaurant`;
+        this.navLink = `/hotel/${this.entityId}/reservation/restaurant`;
         break;
       case 'SPA':
-        this.navLink = `/hotel/${this.hotelId}/reservation/spa`;
+        this.navLink = `/hotel/${this.entityId}/reservation/spa`;
         break;
       case 'VENUE':
-        this.navLink = `/hotel/${this.hotelId}/reservation/activity`;
+        this.navLink = `/hotel/${this.entityId}/reservation/activity`;
     }
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
   }
 
   initTableValues(outletId, outletType): void {
@@ -72,7 +72,7 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
     this.loading = true;
     this.subscriptionList$.add(
       this.reservationService
-        .getReservationList(this.hotelId, this.getQueryConfig())
+        .getReservationList(this.entityId, this.getQueryConfig())
         .subscribe(
           (res) => {
             this.values = res.records;
@@ -109,7 +109,7 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
 
   editReservation(reservationId: string) {
     this.router.navigate([
-      `/hotel/${this.hotelId}/reservation/edit/${reservationId}`,
+      `/hotel/${this.entityId}/reservation/edit/${reservationId}`,
     ]);
   }
 

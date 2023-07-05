@@ -16,7 +16,7 @@ import { MessageService } from '../../services/messages.service';
 export class GuestBookingInfoComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data;
   @Input() guestId;
-  @Input() hotelId;
+  @Input() entityId;
   @Input() reservation;
   $subscription = new Subscription();
   reservationData;

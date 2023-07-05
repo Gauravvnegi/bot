@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class HotelService extends ApiService {
   private _hotelConfig;
   private _currentJourney: string;
-  private _hotelId: string;
+  private _entityId: string;
   titleConfig$ = new BehaviorSubject(null);
 
   getCurrentJourneyConfig() {
@@ -18,8 +18,8 @@ export class HotelService extends ApiService {
     );
   }
 
-  getHotelConfigById(hotelId): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}`);
+  getHotelConfigById(entityId): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}`);
   }
 
   get currentJourney(): string {
@@ -38,12 +38,12 @@ export class HotelService extends ApiService {
     this._hotelConfig = hotelConfig;
   }
 
-  get hotelId(): string {
-    return this._hotelId || (this.hotelConfig && this._hotelConfig.id);
+  get entityId(): string {
+    return this._entityId || (this.hotelConfig && this._hotelConfig.id);
   }
 
-  set hotelId(hotelId: string) {
-    this._hotelId = hotelId;
+  set entityId(entityId: string) {
+    this._entityId = entityId;
   }
 
   get healthFormId(): string {

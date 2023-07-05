@@ -16,7 +16,7 @@ import { AnalyticsService } from '../../../../../request-analytics/src/lib/servi
 export class NotificationComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
   globalFilters;
-  hotelId: string;
+  entityId: string;
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
 
   chart = analytics.notificationChart;
@@ -46,7 +46,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getConversationData();
       })
     );

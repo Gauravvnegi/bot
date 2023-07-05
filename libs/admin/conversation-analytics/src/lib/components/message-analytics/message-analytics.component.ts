@@ -33,7 +33,7 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
   ];
   selectedInterval;
   globalQueries;
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   analyticsFG: FormGroup;
   tabFilterIdx = 0;
@@ -88,7 +88,7 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
       })
     );
   }
@@ -111,7 +111,7 @@ export class MessageAnalyticsComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this.analyticService
-        .exportCSV(this.hotelId, config)
+        .exportCSV(this.entityId, config)
         .subscribe((res) =>
           FileSaver.saveAs(
             res,

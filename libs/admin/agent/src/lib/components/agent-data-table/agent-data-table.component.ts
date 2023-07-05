@@ -30,7 +30,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   readonly routes = agentRoutes;
 
-  hotelId: string;
+  entityId: string;
 
   tableName = title;
   cols = cols;
@@ -58,7 +58,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.initTable();
   }
 

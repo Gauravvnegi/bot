@@ -87,7 +87,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   // need to merge v1 into v2
   initPaymentDetailsDSV2() {
     this._paymentDetailsService
-      .getPaymentConfigurationV2(this._hotelService.hotelId)
+      .getPaymentConfigurationV2(this._hotelService.entityId)
       .subscribe((data) => {
         const gatewayDetails = data?.paymentConfigurations?.map((gateway) => ({
           gatewayType: gateway?.gatewayType,
@@ -103,7 +103,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         this.paymentUrl = initPaymentModule({
           userInfo: {
             appName: 'web',
-            entityId: this._hotelService.hotelId,
+            entityId: this._hotelService.entityId,
             reservationId: this._reservationService.reservationId,
           },
           uiConfig: {

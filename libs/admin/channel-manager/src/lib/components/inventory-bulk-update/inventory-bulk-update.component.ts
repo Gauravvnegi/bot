@@ -12,7 +12,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
   styleUrls: ['./inventory-bulk-update.component.scss'],
 })
 export class InventoryBulkUpdateComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
   inventoryTreeList = [];
   useForm: FormGroup;
   isFormValid = false;
@@ -33,7 +33,7 @@ export class InventoryBulkUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilter.hotelId;
+    this.entityId = this.globalFilter.entityId;
     const today = new Date();
     const seventhDate = new Date();
     seventhDate.setDate(today.getDate() + 7);
@@ -53,7 +53,7 @@ export class InventoryBulkUpdateComponent implements OnInit {
   loadRooms() {
     this.formService.roomDetails.subscribe((rooms) => {
       this.roomTypes = rooms;
-      !this.roomTypes.length && this.formService.loadRoomTypes(this.hotelId);
+      !this.roomTypes.length && this.formService.loadRoomTypes(this.entityId);
       this.loadTree({ roomType: '' });
     });
   }

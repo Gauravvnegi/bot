@@ -14,9 +14,9 @@ export class ServicesService extends LibraryService {
   selectedTable = new BehaviorSubject<TableValue>(TableValue.ALL);
 
   getTaxList(
-    hotelId: string,
+    entityId: string,
     config: QueryConfig = { params: '?order=DESC&limit=100' }
   ): Observable<TaxListResponse> {
-    return this.get(`/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`);
+    return this.get(`/api/v1/entity/${entityId}/tax${config?.params ?? ''}`);
   }
 }

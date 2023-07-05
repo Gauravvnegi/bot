@@ -118,7 +118,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   initFirebaseMessaging(entityId?) {
     const requestPermissionData = {
-      hotelId: entityId,
+      entityId: entityId,
       userId: this._userService.getLoggedInUserId(),
     };
     this.firebaseMessagingService.requestPermission(requestPermissionData);
@@ -173,9 +173,9 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   setInitialFilterValue() {
     const selectedSiteId = this._hotelDetailService.siteId;
-    const selectedHotelId = this._hotelDetailService.hotelId;
+    const selectedentityId = this._hotelDetailService.entityId;
     const selectedHotelData = this._hotelDetailService.hotels.find(
-      (item) => item.id === selectedHotelId
+      (item) => item.id === selectedentityId
     );
     const selectedBrandId = this._hotelDetailService.brandId;
     const selectedBrandData = this._hotelDetailService.brands.find(
@@ -205,7 +205,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.initFirebaseMessaging(selectedHotelData?.['id']);
     this.timezone = selectedHotelData?.['timezone'];
     this.globalFilterService.timezone = this.timezone;
-    this.globalFilterService.hotelId = selectedHotelId;
+    this.globalFilterService.entityId = selectedentityId;
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
   }
@@ -252,15 +252,15 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   applyFilter(event) {
     const values = event.values;
-    const hotelId = values.property.branchName;
+    const entityId = values.property.branchName;
     const brandId = values.property.hotelName;
-    if (event.token.key && event.token.value && hotelId && brandId) {
+    if (event.token.key && event.token.value && entityId && brandId) {
       /**
        * Update business session will update the local storage and reload to reset the data
        */
       this._hotelDetailService.updateBusinessSession({
         [tokensConfig.accessToken]: event.token.value,
-        [tokensConfig.hotelId]: hotelId,
+        [tokensConfig.entityId]: entityId,
         [tokensConfig.brandId]: brandId,
       });
     }

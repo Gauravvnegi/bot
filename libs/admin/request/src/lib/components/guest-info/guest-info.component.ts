@@ -32,7 +32,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('matTab') matTab: MatTabGroup;
   $subscription = new Subscription();
   guestData;
-  hotelId: string;
+  entityId: string;
   isLoading = false;
   selectedIndex = 0;
   requestList;
@@ -74,7 +74,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
       })
     );
   }

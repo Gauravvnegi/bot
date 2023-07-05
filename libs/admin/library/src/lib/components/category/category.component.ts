@@ -24,7 +24,7 @@ export class CategoryComponent implements OnInit {
   noMoreCategories = false;
   categories: Option[] = [];
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   servicesService: any;
 
   constructor(
@@ -36,7 +36,7 @@ export class CategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.getCategories();
   }
   /**
@@ -47,7 +47,7 @@ export class CategoryComponent implements OnInit {
     this.loadingCategory = true;
     this.$subscription.add(
       this.libraryService
-        .getCategories(this.hotelId, {
+        .getCategories(this.entityId, {
           params: `?type=${this.type}&offset=${this.categoryOffSet}&limit=10&status=true`,
         })
         .subscribe(
@@ -84,7 +84,7 @@ export class CategoryComponent implements OnInit {
     if (text) {
       this.loadingCategory = true;
       this.libraryService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=${LibrarySearchItem[this.type]}`,
         })
         .subscribe((res) => {
@@ -113,7 +113,7 @@ export class CategoryComponent implements OnInit {
   create(event) {
     this.$subscription.add(
       this.libraryService
-        .createCategory(this.hotelId, {
+        .createCategory(this.entityId, {
           name: event,
           source: 1,
           imageUrl: '',

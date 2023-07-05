@@ -44,11 +44,11 @@ export class HotelService extends ApiService {
     },
   ];
   getHotelList(
-    hotelId,
+    entityId,
     config = { params: '?order=DESC&limit=5' }
   ): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`
+      `/api/v1/entity/${entityId}/tax${config?.params ?? ''}`
     ).pipe(
       map((res) => {
         res.records = this.data;
@@ -58,24 +58,24 @@ export class HotelService extends ApiService {
     );
   }
   updateHotel(
-    hotelId,
+    entityId,
     itemId = 'e44793eb-38b9-4944-a50d-b9fce62a4033',
     data
   ): Observable<any> {
-    return this.patch(`/api/v1/entity/${hotelId}/tax/${itemId}`, {
+    return this.patch(`/api/v1/entity/${entityId}/tax/${itemId}`, {
       status: false,
     });
   }
 
-  getSegments(hotelId): Observable<any> {
+  getSegments(entityId): Observable<any> {
     return this.get(`/api/v1/config`, { params: { key: 'THEME_TYPE' } });
   }
 
-  getServices(hotelId: string, config?): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/library${config?.params ?? ''}`);
+  getServices(entityId: string, config?): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/library${config?.params ?? ''}`);
   }
 
-  createHotel(hotelId: string, data: any): Observable<any> {
+  createHotel(entityId: string, data: any): Observable<any> {
     return this.post(
       `/api/v1/entity/onboarding?source=CREATE_WITH&onboardingType=HOTEL`,
       data

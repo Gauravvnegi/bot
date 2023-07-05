@@ -18,7 +18,7 @@ export class ContactStatsComponent implements OnInit, OnDestroy {
   contactValue = [];
   selectedInterval: string;
   globalQueries = [];
-  hotelId: any;
+  entityId: any;
   contactStats: ContactStat;
   $subscription = new Subscription();
 
@@ -53,7 +53,7 @@ export class ContactStatsComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getContactStats();
       })
     );
@@ -67,7 +67,7 @@ export class ContactStatsComponent implements OnInit, OnDestroy {
       queryObj: this.adminUtilityService.makeQueryParams(this.globalQueries),
     };
     this.$subscription.add(
-      this.marketingService.getContactStats(this.hotelId, config).subscribe(
+      this.marketingService.getContactStats(this.entityId, config).subscribe(
         (response) => {
           this.contactStats = new ContactStat().deserialize(response);
         },

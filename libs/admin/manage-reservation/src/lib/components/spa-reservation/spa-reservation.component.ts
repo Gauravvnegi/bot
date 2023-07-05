@@ -31,7 +31,7 @@ export class SpaReservationComponent implements OnInit {
   spaBookingInfo: FormArray;
   fields: IteratorField[];
 
-  hotelId: string;
+  entityId: string;
   reservationId: string;
 
   statusOptions: Option[] = [];
@@ -70,7 +70,7 @@ export class SpaReservationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.fields = menuItemFields;
     this.initOptions();
     this.getReservationId();
@@ -190,7 +190,7 @@ export class SpaReservationComponent implements OnInit {
   getReservationDetails(): void {
     this.$subscription.add(
       this.manageReservationService
-        .getReservationDataById(this.reservationId, this.hotelId)
+        .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
           (response) => {
             const data = new ReservationFormData().deserialize(response);
@@ -237,7 +237,7 @@ export class SpaReservationComponent implements OnInit {
     if (id)
       this.$subscription.add(
         this.manageReservationService
-          .getOfferByRoomType(this.hotelId, id)
+          .getOfferByRoomType(this.entityId, id)
           .subscribe(
             (response) => {
               this.offersList = new OfferList().deserialize(response);
@@ -274,7 +274,7 @@ export class SpaReservationComponent implements OnInit {
         childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
         roomType: this.userForm.get('roomInformation.roomTypeId')?.value,
         offerId: this.userForm.get('offerId')?.value,
-        entityId: this.hotelId,
+        entityId: this.entityId,
       },
     ];
     const config = {

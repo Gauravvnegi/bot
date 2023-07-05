@@ -24,7 +24,7 @@ export class BrandInfoFormComponent implements OnInit {
   code: string = '# will be auto generated';
   useForm: FormGroup;
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   loading: boolean = false;
   brandId: string = '';
   isBrandCreated: boolean = false;
@@ -52,7 +52,7 @@ export class BrandInfoFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.siteId = this.hotelDetailService.siteId;
     this.initForm();
     this.hotelFormDataService.hotelFormState = false;

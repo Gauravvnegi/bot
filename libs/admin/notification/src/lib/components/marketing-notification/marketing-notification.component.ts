@@ -21,7 +21,7 @@ import { RequestConfig } from '../../data-models/request.model';
 export class MarketingNotificationComponent extends NotificationComponent
   implements OnInit, OnDestroy {
   emailFG: FormGroup;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() email: string;
   fromEmailList: Option[] = [];
   topicList: Option[] = [];
@@ -61,11 +61,11 @@ export class MarketingNotificationComponent extends NotificationComponent
   }
 
   ngOnInit(): void {
-    this.getConfigData(this.hotelId);
+    this.getConfigData(this.entityId);
   }
 
-  getConfigData(hotelId): void {
-    this.requestService.getNotificationConfig(hotelId).subscribe((response) => {
+  getConfigData(entityId): void {
+    this.requestService.getNotificationConfig(entityId).subscribe((response) => {
       this.config = new RequestConfig().deserialize(response);
       this.initFG();
       this.initOptions();
@@ -92,7 +92,7 @@ export class MarketingNotificationComponent extends NotificationComponent
   }
 
   getFromEmails() {
-    this._emailService.getFromEmail(this.hotelId).subscribe((response) => {
+    this._emailService.getFromEmail(this.entityId).subscribe((response) => {
       this.fromEmailList = new EmailList().deserialize(response);
       this.emailFG.get('fromId').setValue(this.fromEmailList[0].value);
     });
@@ -114,7 +114,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     };
     this.$subscription.add(
       this.requestService
-        .getTemplate(this.hotelId, event.value, config)
+        .getTemplate(this.entityId, event.value, config)
         .subscribe(
           (response) => {
             console.log(response);
@@ -148,7 +148,7 @@ export class MarketingNotificationComponent extends NotificationComponent
   // getTopicList() {
   //   this.$subscription.add(
   //     this._emailService
-  //       .getTopicList(this.hotelId)
+  //       .getTopicList(this.entityId)
   //       .subscribe(
   //         (response) =>
   //           (this.topicList = new Topics().deserialize(response).records)
@@ -193,7 +193,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     console.log(event);
     this.$subscription.add(
       this._emailService
-        .getTemplateByTopic(this.hotelId, event.value)
+        .getTemplateByTopic(this.entityId, event.value)
         .subscribe((response) => {
           console.log(response);
           this.templateList = response.records;
@@ -216,7 +216,7 @@ export class MarketingNotificationComponent extends NotificationComponent
   uploadAttachments(event): void {
     const formData = new FormData();
     formData.append('files', event.currentTarget.files[0]);
-    this.requestService.uploadAttachments(this.hotelId, formData).subscribe(
+    this.requestService.uploadAttachments(this.entityId, formData).subscribe(
       (response) => {
         this.attachment = response.fileName;
         this.attachmentsList.push({
@@ -283,7 +283,7 @@ export class MarketingNotificationComponent extends NotificationComponent
     delete reqData['tempalteId'];
     this.isSending = true;
     this.$subscription.add(
-      this._emailService.sendEmail(this.hotelId, reqData).subscribe(
+      this._emailService.sendEmail(this.entityId, reqData).subscribe(
         (response) => {
           this.snackbarService
             .openSnackBarWithTranslate(

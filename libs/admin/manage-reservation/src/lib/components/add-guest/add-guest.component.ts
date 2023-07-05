@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./add-guest.component.scss'],
 })
 export class AddGuestComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
   agentId: string;
   reservationId: string;
 
@@ -81,7 +81,7 @@ export class AddGuestComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalService.hotelId;
+    this.entityId = this.globalService.entityId;
     this.initGuestForm();
     // this.initDefaultForm();
   }
@@ -122,7 +122,7 @@ export class AddGuestComponent implements OnInit {
     //   this.subscription$.add(
     //     this.manageReservationService
     //       .updateAgent(
-    //         this.hotelId,
+    //         this.entityId,
     //         {
     //           ...this.guestForm.getRawValue(),
     //           type: 'AGENT',
@@ -138,7 +138,7 @@ export class AddGuestComponent implements OnInit {
     //   this.subscription$.add(
     //     this.agentService
     //       .addAgent(
-    //         this.hotelId,
+    //         this.entityId,
     //         {
     //           ...this.guestForm.getRawValue(),
     //           type: 'AGENT',
@@ -179,7 +179,7 @@ export class AddGuestComponent implements OnInit {
   //   this.loadingCompany = true;
   //   this.subscription$.add(
   //     this.agentService
-  //       .getAgentList(this.hotelId, {
+  //       .getAgentList(this.entityId, {
   //         params: `?type=ROOM_TYPE&offset=${this.companyOffset}&limit=${this.companyLimit}`,
   //       })
   //       .subscribe(
@@ -210,7 +210,7 @@ export class AddGuestComponent implements OnInit {
     // if (text) {
     //   this.loadingCompany = true;
     //   this.libraryService
-    //     .searchLibraryItem(this.hotelId, {
+    //     .searchLibraryItem(this.entityId, {
     //       params: `?key=${text}&type=${LibrarySearchItem.ROOM_TYPE}`,
     //     })
     //     .subscribe(

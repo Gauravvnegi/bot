@@ -5,9 +5,9 @@ import { Amenity, PackageSource } from '../data-models/packageConfig.model';
 
 @Injectable()
 export class PackageService extends ApiService {
-  uploadImage(hotelId, data) {
+  uploadImage(entityId, data) {
     return this.post(
-      `/api/v1/uploads?folder_name=entity/${hotelId}/static-content/packages`,
+      `/api/v1/uploads?folder_name=entity/${entityId}/static-content/packages`,
       data
     );
   }
@@ -22,33 +22,33 @@ export class PackageService extends ApiService {
     return this.get(`/api/v1/packages${config.queryObj}`);
   }
 
-  getHotelPackageCategories(hotelId) {
-    return this.get(`/api/v1/packages/categories?hotelId=${hotelId}`);
+  getHotelPackageCategories(entityId) {
+    return this.get(`/api/v1/packages/categories?entityId=${entityId}`);
   }
 
-  getPackageDetails(hotelId, packageId) {
-    return this.get(`/api/v1/entity/${hotelId}/packages/${packageId}`);
+  getPackageDetails(entityId, packageId) {
+    return this.get(`/api/v1/entity/${entityId}/packages/${packageId}`);
   }
 
-  updatePackage(hotelId, packageId, data) {
-    return this.patch(`/api/v1/entity/${hotelId}/packages/${packageId}`, data);
+  updatePackage(entityId, packageId, data) {
+    return this.patch(`/api/v1/entity/${entityId}/packages/${packageId}`, data);
   }
 
-  addPackage(hotelId, data) {
-    return this.post(`/api/v1/entity/${hotelId}/packages`, data);
+  addPackage(entityId, data) {
+    return this.post(`/api/v1/entity/${entityId}/packages`, data);
   }
 
-  updatePackageStatus(hotelId, status, data) {
+  updatePackageStatus(entityId, status, data) {
     return this.put(
-      `/api/v1/entity/${hotelId}/packages/status?active=${status}`,
+      `/api/v1/entity/${entityId}/packages/status?active=${status}`,
       data
     );
   }
 
-  mapPackageData(formValue, hotelId, id?) {
+  mapPackageData(formValue, entityId, id?) {
     const packageData = new Amenity();
     packageData.active = formValue.status;
-    packageData.hotelId = hotelId;
+    packageData.entityId = entityId;
     packageData.imageUrl = formValue.imageUrl;
     packageData.packageCode = formValue.packageCode;
     packageData.id = id || '';

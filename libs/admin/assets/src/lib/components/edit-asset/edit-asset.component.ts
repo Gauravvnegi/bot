@@ -20,7 +20,7 @@ import { FileUploadType } from 'libs/admin/shared/src/lib/models/file-upload-typ
 export class EditAssetComponent implements OnInit, OnDestroy {
   @Input() id: string;
   fileUploadData = assetConfig.fileUploadData;
-  hotelId: string;
+  entityId: string;
   assetForm: FormGroup;
   isSavingasset = false;
   private $subscription: Subscription = new Subscription();
@@ -102,7 +102,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
 
         this.getAssetId();
       })
@@ -136,7 +136,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
   getAssetDetails(assetId: string): void {
     this.$subscription.add(
       this.assetService
-        .getAssetDetails(this.hotelId, assetId)
+        .getAssetDetails(this.entityId, assetId)
         .subscribe((response) => {
           this.hotelasset = new Asset().deserialize(response);
           this.assetForm.patchValue(this.hotelasset);
@@ -152,10 +152,10 @@ export class EditAssetComponent implements OnInit, OnDestroy {
     this.isSavingasset = true;
     const data = this.assetService.mapAssetData(
       this.assetForm.getRawValue(),
-      this.hotelId
+      this.entityId
     );
     this.$subscription.add(
-      this.assetService.addasset(this.hotelId, data).subscribe(
+      this.assetService.addasset(this.entityId, data).subscribe(
         (response) => {
           this.hotelasset = new Asset().deserialize(response);
           this.assetForm.patchValue(this.hotelasset);
@@ -196,12 +196,12 @@ export class EditAssetComponent implements OnInit, OnDestroy {
     this.isSavingasset = true;
     const data = this.assetService.mapAssetData(
       this.assetForm.getRawValue(),
-      this.hotelId,
+      this.entityId,
       this.hotelasset.id
     );
     this.$subscription.add(
       this.assetService
-        .updateAsset(this.hotelId, data, this.hotelasset.id)
+        .updateAsset(this.entityId, data, this.hotelasset.id)
         .subscribe(
           (response) => {
             this.snackbarService

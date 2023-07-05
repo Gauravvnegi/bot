@@ -18,19 +18,19 @@ export class EmailService extends ApiService {
 
   /**
    * @function getFromEmail get email on basis of hotel id.
-   * @param hotelId dynamically getting hotelId.
+   * @param entityId dynamically getting entityId.
    * @returns get api for email.
    */
-  getFromEmail(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/configurations/smtp`, { 'entity-id': hotelId });
+  getFromEmail(entityId: string): Observable<any> {
+    return this.get(`/api/v1/configurations/smtp`, { 'entity-id': entityId });
   }
-  // getFromEmail(hotelId: string): Observable<any> {
-  //   return this.get(`/api/v1/hotel/${hotelId}/email`);
+  // getFromEmail(entityId: string): Observable<any> {
+  //   return this.get(`/api/v1/hotel/${entityId}/email`);
   // }
 
   /**
    * @function getTopicList function to get topic list
-   * @param id dynamically getting hotelId.
+   * @param id dynamically getting entityId.
    * @returns get api for getting topic list.
    */
   getTopicList(id: string): Observable<any> {
@@ -39,31 +39,31 @@ export class EmailService extends ApiService {
 
   /**
    * @function getTemplateByTopic function to get template by topic.
-   * @param hotelId dynamically getting hotel id.
+   * @param entityId dynamically getting hotel id.
    * @param topicId dynamically getting topic id.
    * @returns
    */
-  getTemplateByTopic(hotelId: string, topicId: string) {
-    return this.get(`/api/v1/entity/${hotelId}/templates/topic/${topicId}`);
+  getTemplateByTopic(entityId: string, topicId: string) {
+    return this.get(`/api/v1/entity/${entityId}/templates/topic/${topicId}`);
   }
 
   /**
    * @function getAllSubscriberGroup function to get subscribers group.
-   * @param hotelId dynamically getting hotel id.
+   * @param entityId dynamically getting hotel id.
    * @returns get api of getting subscribers group.
    */
-  getAllSubscriberGroup(hotelId: string) {
-    return this.get(`/api/v1/marketing/entity/${hotelId}/subscription-group`);
+  getAllSubscriberGroup(entityId: string) {
+    return this.get(`/api/v1/marketing/entity/${entityId}/subscription-group`);
   }
 
   /**
    * @function sendEmail function to send email.
-   * @param hotelId dynamically getting hotel id.
+   * @param entityId dynamically getting hotel id.
    * @param data getting form input data.
    * @returns post api to send email.
    */
-  sendEmail(hotelId: string, data) {
-    return this.post(`/api/v1/cms/${hotelId}/campaign`, {
+  sendEmail(entityId: string, data) {
+    return this.post(`/api/v1/cms/${entityId}/campaign`, {
       ...data,
       isDraft: false,
     });
@@ -71,16 +71,16 @@ export class EmailService extends ApiService {
 
   /**
    * @function sendTest function to send test email.
-   * @param hotelId dynamically getting hotel id.
+   * @param entityId dynamically getting hotel id.
    * @param data getting form input data.
    * @returns post api of sending test email.
    */
-  sendTest(hotelId: string, data) {
-    return this.post(`/api/v1/cms/${hotelId}/campaign/test`, data);
+  sendTest(entityId: string, data) {
+    return this.post(`/api/v1/cms/${entityId}/campaign/test`, data);
   }
 
-  scheduleCampaign(hotelId: string, data) {
-    return this.post(`/api/v1/cms/${hotelId}/campaign`, data);
+  scheduleCampaign(entityId: string, data) {
+    return this.post(`/api/v1/cms/${entityId}/campaign`, data);
   }
 
   /**

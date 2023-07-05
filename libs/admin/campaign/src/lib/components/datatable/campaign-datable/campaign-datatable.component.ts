@@ -41,7 +41,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
   cols = campaignConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   constructor(
     public fb: FormBuilder,
     private adminUtilityService: AdminUtilityService,
@@ -69,7 +69,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
       this.loadInitialData([
         ...this.globalQueries,
         {
@@ -131,7 +131,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.campaignService.getHotelCampaign(config, this.hotelId);
+    return this.campaignService.getHotelCampaign(config, this.entityId);
   }
 
   /**
@@ -146,7 +146,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.campaignService
-        .updateCampaignStatus(this.hotelId, data, userData.id)
+        .updateCampaignStatus(this.entityId, data, userData.id)
         .subscribe(
           (_response) => {
             this.loadData();
@@ -173,7 +173,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.campaignService
-        .cloneCampaign(this.hotelId, data, campaignId)
+        .cloneCampaign(this.entityId, data, campaignId)
         .subscribe(
           (_response) => {
             this.showMessage(
@@ -200,7 +200,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.campaignService
-        .archiveCampaign(this.hotelId, data, campaignId)
+        .archiveCampaign(this.entityId, data, campaignId)
         .subscribe(
           (_response) => {
             this.showMessage(
@@ -323,7 +323,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
       ]),
     };
     this.$subscription.add(
-      this.campaignService.exportCSV(this.hotelId, config).subscribe(
+      this.campaignService.exportCSV(this.entityId, config).subscribe(
         (response) =>
           FileSaver.saveAs(
             response,

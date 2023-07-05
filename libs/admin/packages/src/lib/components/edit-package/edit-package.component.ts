@@ -44,7 +44,7 @@ export class EditPackageComponent implements OnInit, OnDestroy {
   hotelPackage: PackageDetail;
   categories: Category[];
   packageId: string;
-  hotelId: string;
+  entityId: string;
   isSavingPackage = false;
   globalQueries = [];
 
@@ -137,9 +137,9 @@ export class EditPackageComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
         ];
 
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getConfig();
-        this.getCategoriesList(this.hotelId);
+        this.getCategoriesList(this.entityId);
         this.getPackageId();
       })
     );
@@ -162,7 +162,7 @@ export class EditPackageComponent implements OnInit, OnDestroy {
   getPackageDetails(packageId: string): void {
     this.$subscription.add(
       this.packageService
-        .getPackageDetails(this.hotelId, packageId)
+        .getPackageDetails(this.entityId, packageId)
         .subscribe((response) => {
           this.hotelPackage = new PackageDetail().deserialize(response);
           this.packageForm.patchValue(this.hotelPackage.amenityPackage);
@@ -171,10 +171,10 @@ export class EditPackageComponent implements OnInit, OnDestroy {
     );
   }
 
-  getCategoriesList(hotelId: string): void {
+  getCategoriesList(entityId: string): void {
     this.$subscription.add(
       this.packageService
-        .getHotelPackageCategories(hotelId)
+        .getHotelPackageCategories(entityId)
         .subscribe((response) => {
           this.categories = response.records;
           this.packageForm
@@ -191,13 +191,13 @@ export class EditPackageComponent implements OnInit, OnDestroy {
   getConfig() {
     this.configService.$config.subscribe((response) => {
       if (response) this.setCurrencyOptions(response.currencyConfiguration);
-      else this.getConfigByHotelID();
+      else this.getConfigByentityId();
     });
   }
 
-  getConfigByHotelID() {
+  getConfigByentityId() {
     this.configService
-      .getColorAndIconConfig(this.hotelId)
+      .getColorAndIconConfig(this.entityId)
       .subscribe((response) => {
         this.setCurrencyOptions(response.currencyConfiguration);
       });
@@ -229,10 +229,10 @@ export class EditPackageComponent implements OnInit, OnDestroy {
     this.isSavingPackage = true;
     const data = this.packageService.mapPackageData(
       this.packageForm.getRawValue(),
-      this.hotelId
+      this.entityId
     );
     this.$subscription.add(
-      this.packageService.addPackage(this.hotelId, data).subscribe(
+      this.packageService.addPackage(this.entityId, data).subscribe(
         (response) => {
           this.hotelPackage = new PackageDetail().deserialize(response);
           this.packageForm.patchValue(this.hotelPackage.amenityPackage);
@@ -275,12 +275,12 @@ export class EditPackageComponent implements OnInit, OnDestroy {
     this.isSavingPackage = true;
     const data = this.packageService.mapPackageData(
       this.packageForm.getRawValue(),
-      this.hotelId,
+      this.entityId,
       this.hotelPackage.amenityPackage.id
     );
     this.$subscription.add(
       this.packageService
-        .updatePackage(this.hotelId, this.hotelPackage.amenityPackage.id, data)
+        .updatePackage(this.entityId, this.hotelPackage.amenityPackage.id, data)
         .subscribe(
           (response) => {
             this.snackbarService

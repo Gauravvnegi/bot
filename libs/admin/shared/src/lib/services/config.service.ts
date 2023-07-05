@@ -7,9 +7,9 @@ export class ConfigService extends ApiService {
   $config = new BehaviorSubject<Record<string, any>>(null);
 
   getColorAndIconConfig(
-    hotelId: string
+    entityId: string
   ): Observable<Record<ConfigurationValue, any>> {
-    return this.get(`/api/v1/cms/entity/${hotelId}/configuration`);
+    return this.get(`/api/v1/cms/entity/${entityId}/configuration`);
   }
 
   getCountryCode(): Observable<any> {

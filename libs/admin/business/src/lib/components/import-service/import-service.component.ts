@@ -21,7 +21,7 @@ import { HotelFormDataService } from '../../services/hotel-form.service';
 export class ImportServiceComponent implements OnInit {
   noRecordAction = [];
   brandId: string;
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   useForm: FormGroup;
   searchForm: FormGroup;
@@ -41,9 +41,9 @@ export class ImportServiceComponent implements OnInit {
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
-        const hotelId = snapshot?.params['hotelId'];
+        const entityId = snapshot?.params['entityId'];
         const brandId = snapshot?.params['brandId'];
-        if (hotelId) this.hotelId = hotelId;
+        if (entityId) this.entityId = entityId;
         if (brandId) this.brandId = brandId;
       }
     );
@@ -102,14 +102,14 @@ export class ImportServiceComponent implements OnInit {
 
   manageRoutes() {
     const { navRoutes, title } = businessRoute[
-      this.hotelId ? 'editImportServices' : 'importServices'
+      this.entityId ? 'editImportServices' : 'importServices'
     ];
     this.pageTitle = title;
     this.navRoutes = navRoutes;
     this.navRoutes[2].link.replace('brandId', this.brandId);
     this.navRoutes[2].isDisabled = false;
-    if (this.hotelId) {
-      this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.hotelId}`;
+    if (this.entityId) {
+      this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}`;
       this.navRoutes[3].isDisabled = false;
     } else {
       this.navRoutes[3].link = `/pages/settings/business-info/brand/${this.brandId}/hotel`;
@@ -154,9 +154,9 @@ export class ImportServiceComponent implements OnInit {
       true
     );
 
-    if (this.hotelId)
+    if (this.entityId)
       this.businessService
-        .updateHotel(this.hotelId, { serviceIds: serviceIds })
+        .updateHotel(this.entityId, { serviceIds: serviceIds })
         .subscribe((_res) => {});
 
     this.location.back();

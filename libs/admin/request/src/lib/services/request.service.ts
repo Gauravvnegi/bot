@@ -35,28 +35,28 @@ export class RequestService extends ApiService {
     );
   }
 
-  createRequestData(hotelId: string, data: RequestData): Observable<any> {
-    return this.post(`/api/v1/entity/${hotelId}/notifications`, data);
+  createRequestData(entityId: string, data: RequestData): Observable<any> {
+    return this.post(`/api/v1/entity/${entityId}/notifications`, data);
   }
 
-  searchRequest(hotelId: string, config) {
-    return this.get(`/api/v1/request/${hotelId}/search${config.queryObj}`);
+  searchRequest(entityId: string, config) {
+    return this.get(`/api/v1/request/${entityId}/search${config.queryObj}`);
   }
 
-  uploadAttachments(hotelId, formData): Observable<any> {
+  uploadAttachments(entityId, formData): Observable<any> {
     return this.uploadDocumentPost(
-      `/api/v1/uploads?folder_name=hotel/${hotelId}/notification`,
+      `/api/v1/uploads?folder_name=hotel/${entityId}/notification`,
       formData
     );
   }
 
   getTemplate(
-    hotelId: string,
+    entityId: string,
     templateId: string,
     journey: string
   ): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/templates/${templateId}?journey=${journey}`
+      `/api/v1/entity/${entityId}/templates/${templateId}?journey=${journey}`
     );
   }
 
@@ -64,12 +64,12 @@ export class RequestService extends ApiService {
     return this.patch(`/api/v1/request/pre-arrival/${id}`, data);
   }
 
-  getNotificationConfig(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/cms/entity/${hotelId}/notification-config`);
+  getNotificationConfig(entityId: string): Observable<any> {
+    return this.get(`/api/v1/cms/entity/${entityId}/notification-config`);
   }
 
-  getCMSServices(hotelId: string, config) {
-    return this.get(`/api/v1/entity/${hotelId}/cms-services${config.queryObj}`);
+  getCMSServices(entityId: string, config) {
+    return this.get(`/api/v1/entity/${entityId}/cms-services${config.queryObj}`);
   }
 
   validateRequestData(fg: FormGroup, channelSelection) {
@@ -95,9 +95,9 @@ export class RequestService extends ApiService {
     return status;
   }
 
-  createRequest(hotelId, data) {
+  createRequest(entityId, data) {
     return this.post(
-      `/api/v1/request?cmsUserType=Bot&hotelId=${hotelId}`,
+      `/api/v1/request?cmsUserType=Bot&entityId=${entityId}`,
       data
     );
   }

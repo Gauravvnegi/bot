@@ -24,7 +24,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   template: Template;
   id: string;
   templateId: string;
-  hotelId: string;
+  entityId: string;
   isDisabled = false;
   globalQueries = [];
   topicList: Option[] = [];
@@ -81,18 +81,18 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getTemplateId();
-        this.getTopicList(this.hotelId);
+        this.getTopicList(this.entityId);
       })
     );
   }
 
   /**
    * @function getTopicList To get topic record list.
-   * @param hotelId The hotel id for which getTopicList will be done.
+   * @param entityId The hotel id for which getTopicList will be done.
    */
-  getTopicList(hotelId) {
+  getTopicList(entityId) {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
@@ -102,7 +102,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
       ]),
     };
     this.$subscription.add(
-      this.templateService.getTopicList(hotelId, config).subscribe(
+      this.templateService.getTopicList(entityId, config).subscribe(
         (response) => {
           const data = new Topics()
             .deserialize(response)
@@ -150,7 +150,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   getTemplateDetails(topicId: string): void {
     this.$subscription.add(
       this.templateService
-        .getTemplateDetails(this.hotelId, topicId)
+        .getTemplateDetails(this.entityId, topicId)
         .subscribe((response) => {
           this.template = new Template().deserialize(response);
           this.draftDate = this.template.updatedAt ?? this.template.createdAt;
@@ -237,11 +237,11 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   updateTemplate(templateFormData) {
     const data = this.templateService.mapTemplateData(
       templateFormData,
-      this.hotelId,
+      this.entityId,
       this.template.id
     );
     return this.templateService.updateTemplate(
-      this.hotelId,
+      this.entityId,
       this.template.id,
       data
     );
@@ -255,9 +255,9 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   createTemplate(templateFormData) {
     const data = this.templateService.mapTemplateData(
       templateFormData,
-      this.hotelId
+      this.entityId
     );
-    return this.templateService.createTemplate(this.hotelId, data);
+    return this.templateService.createTemplate(this.entityId, data);
   }
 
   /**
@@ -286,7 +286,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
     if (this.templateId)
       this.$subscription.add(
         this.templateService
-          .deleteTemplateContent(this.hotelId, this.templateId)
+          .deleteTemplateContent(this.entityId, this.templateId)
           .subscribe(
             (_) => {
               this.templateForm.patchValue({ htmlTemplate: '' });

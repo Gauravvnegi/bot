@@ -39,7 +39,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   colorMap: any;
   guestId: string;
   guestData: IContact;
-  hotelId: string;
+  entityId: string;
   isLoading = false;
   selectedTab = 0;
   requestList;
@@ -58,7 +58,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    if (this.hotelId) {
+    if (this.entityId) {
       this.getGuestInfo();
     }
   }
@@ -67,7 +67,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     this.isLoading = true;
     this.$subscription.add(
       this.messageService
-        .getChat(this.hotelId, this.data.receiverId, '')
+        .getChat(this.entityId, this.data.receiverId, '')
         .subscribe((response) => {
           this.guestData = new Contact().deserialize(
             response.receiver,
@@ -88,7 +88,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getGuestInfo();
       })
     );
@@ -107,7 +107,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          hotelId: this.hotelId,
+          entityId: this.entityId,
           confirmationNumber: this.data.reservationId,
         },
       ]),
@@ -135,7 +135,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          hotelId: this.hotelId,
+          entityId: this.entityId,
           confirmationNumber: this.data.reservationId,
         },
       ]),
@@ -195,7 +195,7 @@ export class GuestInfoComponent implements OnInit, OnChanges, OnDestroy {
             };
             this.$subscription.add(
               this.messageService
-                .updateGuestDetail(this.hotelId, this.data.receiverId, values)
+                .updateGuestDetail(this.entityId, this.data.receiverId, values)
                 .subscribe(
                   (response) => {
                     this.messageService.refreshData$.next(true);

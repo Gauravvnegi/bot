@@ -34,7 +34,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   cols = cols;
   tableName = tableName;
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   loading: boolean = false;
   globalQueries = [];
   tableFG;

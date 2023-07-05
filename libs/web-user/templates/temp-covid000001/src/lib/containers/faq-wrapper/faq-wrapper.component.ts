@@ -33,7 +33,7 @@ export class FaqWrapperComponent implements OnInit, OnDestroy {
   getFaqs() {
     this.$subscription.add(
     this._faqService
-      .getFaqs(this._hotelService.hotelId)
+      .getFaqs(this._hotelService.entityId)
       .subscribe((faqResponse) => {
         this.faq = true;
         this.initFaqDetailsDs(faqResponse);

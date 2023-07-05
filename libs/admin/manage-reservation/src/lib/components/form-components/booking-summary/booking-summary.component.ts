@@ -30,7 +30,7 @@ import { Subscription } from 'rxjs';
 })
 export class BookingSummaryComponent implements OnInit {
   reservationId: string;
-  hotelId: string;
+  entityId: string;
   displayBookingOffer = false;
   parentFormGroup: FormGroup;
   isBooking = false;
@@ -73,7 +73,7 @@ export class BookingSummaryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
     console.log(this.bookingInfo);
@@ -107,7 +107,7 @@ export class BookingSummaryComponent implements OnInit {
     }),
       this.$subscription.add(
         this.manageReservationService
-          .createReservation(this.hotelId, data)
+          .createReservation(this.entityId, data)
           .subscribe(
             (res: ReservationResponse) => {
               this.bookingConfirmationPopup(res?.reservationNumber);
@@ -132,7 +132,7 @@ export class BookingSummaryComponent implements OnInit {
     }),
       this.$subscription.add(
         this.manageReservationService
-          .updateReservation(this.hotelId, this.reservationId, data)
+          .updateReservation(this.entityId, this.reservationId, data)
           .subscribe(
             (res: ReservationResponse) => {
               this.bookingConfirmationPopup(res?.reservationNumber);

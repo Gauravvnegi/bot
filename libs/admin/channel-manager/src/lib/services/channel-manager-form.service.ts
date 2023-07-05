@@ -14,10 +14,10 @@ export class ChannelManagerFormService extends ApiService {
     this.roomDetails.next([]);
   }
 
-  loadRoomTypes(hotelId) {
+  loadRoomTypes(entityId) {
     // this.roomDetails = roomTypeData;
     this.get(
-      `/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE&offset=0&limit=${100}`
+      `/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE&offset=0&limit=${100}`
     ).subscribe((res) => {
       const rooms = new RoomTypeList().deserialize(res).records;
       this.roomDetails.next(

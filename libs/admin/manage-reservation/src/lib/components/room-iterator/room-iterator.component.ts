@@ -35,7 +35,7 @@ export class RoomIteratorComponent extends IteratorComponent
   roomTypeOffSet = 0;
   roomTypeLimit = 10;
   roomTypes: RoomFieldTypeOption[] = [];
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   loadingRoomTypes = false;
 
@@ -50,7 +50,7 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.listenForGlobalFilters();
   }
 
@@ -95,7 +95,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.loadingRoomTypes = true;
     if (text) {
       this.manageReservationService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=ROOM_TYPE`,
         })
         .subscribe(
@@ -159,7 +159,7 @@ export class RoomIteratorComponent extends IteratorComponent
     this.loadingRoomTypes = true;
     this.$subscription.add(
       this.manageReservationService
-        .getRoomTypeList(this.hotelId, config)
+        .getRoomTypeList(this.entityId, config)
         .subscribe(
           (response) => {
             const data = new RoomTypeOptionList()

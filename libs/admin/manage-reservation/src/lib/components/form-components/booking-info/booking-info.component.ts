@@ -19,7 +19,7 @@ export class BookingInfoComponent implements OnInit {
   startMinDate = new Date();
   endMinDate = new Date();
   maxDate = new Date();
-  hotelId: string;
+  entityId: string;
   reservationId: string;
 
   // statusOptions: Option[] = [
@@ -51,7 +51,7 @@ export class BookingInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.getCountryCode();
     this.listenForDateChange();
   }
@@ -75,7 +75,7 @@ export class BookingInfoComponent implements OnInit {
 
   getCountryCode(): void {
     this.configService
-      .getColorAndIconConfig(this.hotelId)
+      .getColorAndIconConfig(this.entityId)
       .subscribe((response) => {
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig

@@ -41,7 +41,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     super(fb, tabFilterService);
   }
 
-  hotelId: string;
+  entityId: string;
   tableName = title;
   cols = cols;
   filterChips = chips;
@@ -51,7 +51,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
   subscription$ = new Subscription();
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.initTableValue();
   }
 
@@ -67,7 +67,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.subscription$.add(
       this.offerService
-        .getLibraryItems<OfferListResponse>(this.hotelId, this.getQueryConfig())
+        .getLibraryItems<OfferListResponse>(this.entityId, this.getQueryConfig())
         .subscribe(
           (res) => {
             const data = new OfferList().deserialize(res);
@@ -95,7 +95,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     this.subscription$.add(
       this.offerService
         .updateLibraryItem<Partial<OfferData>, OfferResponse>(
-          this.hotelId,
+          this.entityId,
           rowData.id,
           { active: status },
           { params: '?type=OFFER' }
@@ -152,7 +152,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
       ]),
     };
     this.subscription$.add(
-      this.offerService.exportCSV(this.hotelId, config).subscribe((res) => {
+      this.offerService.exportCSV(this.entityId, config).subscribe((res) => {
         FileSaver.saveAs(
           res,
           `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`

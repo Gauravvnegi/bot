@@ -52,14 +52,14 @@ export class PaymentDetailsService extends ApiService {
   //   return paymentDetailsFieldSchema as PaymentDetailsConfigI;
   // }
 
-  getPaymentConfiguration(hotelId, journeyName): Observable<any> {
+  getPaymentConfiguration(entityId, journeyName): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/payment-configurations?journeyName=${journeyName}`
+      `/api/v1/entity/${entityId}/payment-configurations?journeyName=${journeyName}`
     );
   }
 
-  getPaymentConfigurationV2(hotelId: string) {
-    return this.get(`/api/v1/entity/${hotelId}/payment-configurations`);
+  getPaymentConfigurationV2(entityId: string) {
+    return this.get(`/api/v1/entity/${entityId}/payment-configurations`);
   }
 
   initiatePayment(reservationId) {

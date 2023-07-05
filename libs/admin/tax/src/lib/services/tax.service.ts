@@ -8,12 +8,12 @@ import { QueryConfig } from '../types/tax';
 export class TaxService extends ApiService {
   /**
    * @createTax --api call to create tax
-   * @param hotelId --string type
+   * @param entityId --string type
    * @param data
    * @returns
    */
-  createTax(hotelId: string, data: any): Observable<any> {
-    return this.post(`/api/v1/entity/${hotelId}/tax`, data);
+  createTax(entityId: string, data: any): Observable<any> {
+    return this.post(`/api/v1/entity/${entityId}/tax`, data);
   }
   /**
    * @getTaxCountry --to get all tax countries
@@ -24,27 +24,27 @@ export class TaxService extends ApiService {
   }
 
   getTaxList(
-    hotelId: string,
+    entityId: string,
     config?: QueryConfig
   ): Observable<TaxListResponse> {
-    return this.get(`/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`);
+    return this.get(`/api/v1/entity/${entityId}/tax${config?.params ?? ''}`);
   }
 
   updateTax(
-    hotelId: string,
+    entityId: string,
     taxId: string,
     data: any
   ): Observable<TaxListResponse> {
-    return this.patch(`/api/v1/entity/${hotelId}/tax/${taxId}`, data);
+    return this.patch(`/api/v1/entity/${entityId}/tax/${taxId}`, data);
   }
 
-  getTaxById(hotelId: string, taxId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/tax/${taxId}`);
+  getTaxById(entityId: string, taxId: string): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/tax/${taxId}`);
   }
 
-  exportCSV(hotelId: string, config: QueryConfig) {
+  exportCSV(entityId: string, config: QueryConfig) {
     return this.get(
-      `/api/v1/entity/${hotelId}/tax/export${config.params ?? ''}`,
+      `/api/v1/entity/${entityId}/tax/export${config.params ?? ''}`,
       {
         responseType: 'blob',
       }

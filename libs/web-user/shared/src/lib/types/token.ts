@@ -7,5 +7,5 @@ export interface ITokenInfo {
   expiry: number;
   journey: string;
   reservationId: string;
-  hotelId: string;
+  entityId: string;
 }

@@ -39,7 +39,7 @@ export class Topic {
   status: boolean;
   description: string;
   name: string;
-  hotelId: string;
+  entityId: string;
   active: boolean;
 
   deserialize(input: any) {
@@ -49,7 +49,7 @@ export class Topic {
       set({}, 'name', get(input, ['name'])),
       set({}, 'status', get(input, ['active'])),
       set({}, 'description', get(input, ['description'])),
-      set({}, 'hotelId', get(input, ['hotelId'])),
+      set({}, 'entityId', get(input, ['entityId'])),
       set({}, 'active', get(input, ['active']))
     );
     return this;

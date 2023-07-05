@@ -13,7 +13,7 @@ export class EditContactComponent implements OnInit {
   @Input() contacts = [];
   @Output() onContactClosed = new EventEmitter();
   @Input() add: boolean;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   contactFA: FormArray;
   salutationList = contactConfig.datatable.salutationList;
   constructor(private _fb: FormBuilder) {

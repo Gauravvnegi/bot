@@ -11,7 +11,7 @@ import { CategoryFormValue } from '../../types/form.type';
 export class CategoryFormComponent implements OnInit {
   useForm: FormGroup;
 
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Output() onSave = new EventEmitter<CategoryFormValue>();
 
   constructor(

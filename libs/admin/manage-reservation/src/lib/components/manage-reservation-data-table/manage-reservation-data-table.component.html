@@ -23,6 +23,7 @@
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <p-table
+  [ngClass]="{ 'dynamic-height': isReachedEnd }"
   #dt
   [styleClass]="tableConfig.styleClass"
   [resizableColumns]="isResizableColumns"
@@ -68,6 +69,7 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns #header>
     <tr
+      #tableHeader
       hospitality-bot-table-header
       [columns]="columns"
       [showCheckbox]="isSelectable"
@@ -136,7 +138,7 @@
     ></p-paginator>
   </ng-template>
 </p-table>
-<ng-template #emptyTable>
+<ng-template [ngClass]="{ 'dynamic-height': isReachedEnd }" #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
     link="/pages/efrontdesk/manage-reservation/{{

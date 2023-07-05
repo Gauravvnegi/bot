@@ -93,10 +93,7 @@
         </div>
       </td>
       <td>
-        <div
-          class="cell-content"
-          *ngIf="rowData?.propertyCategory?.label; else emptyCell"
-        >
+        <div class="cell-content" *ngIf="rowData?.openingDay; else emptyCell">
           <div class="primary-text">
             {{ rowData?.openingDay }} -
             {{ rowData?.closingDay }}
@@ -121,9 +118,9 @@
         </div>
       </td>
       <td>
-        <div class="cell-content">
+        <div class="cell-content" *ngIf="rowData?.url; else emptyCell">
           <hospitality-bot-copy-link
-            [url]="'www.google.com'"
+            [url]="rowData?.url"
           ></hospitality-bot-copy-link>
         </div>
       </td>
@@ -152,6 +149,10 @@
     ></p-paginator>
   </ng-template>
 </p-table>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>
 
 <ng-template #emptyTable>
   <hospitality-bot-empty-table

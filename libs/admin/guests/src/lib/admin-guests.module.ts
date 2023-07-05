@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Route, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import {
   AdminSharedModule,
   getTranslationConfigs,
@@ -13,7 +13,6 @@ import { ChartsModule } from 'ng2-charts';
 import { AdminReservationModule } from '@hospitality-bot/admin/reservation';
 import { AdminGuestsRoutingModule } from './admin-guests.routing.module';
 import { GuestTableService } from './services/guest-table.service';
-import { StatisticsService } from './services/statistics.service';
 
 @NgModule({
   imports: [
@@ -30,6 +29,6 @@ import { StatisticsService } from './services/statistics.service';
   ],
   declarations: [...AdminGuestsRoutingModule.components],
   exports: [...AdminGuestsRoutingModule.components],
-  providers: [StatisticsService, GuestTableService],
+  providers: [GuestTableService],
 })
 export class AdminGuestsModule {}

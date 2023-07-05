@@ -23,8 +23,10 @@ export class GuestTable implements IDeserializable {
     this.records = input.records.map((record) =>
       new Guest().deserialize(record)
     );
-    this.entityTypeCounts = input?.entityTypeCounts;
-    this.entityStateCounts = input?.entityStateCounts;
+    // TODO: it will be replace(input.entityTypeCounts/input.entityStateCounts) after getting guest table api
+    this.entityTypeCounts = null;
+    this.entityStateCounts = null;
+
     this.totalRecord = input?.total;
     return this;
   }
@@ -87,6 +89,7 @@ export class Guest implements IDeserializable {
   documents: any[];
   vip: boolean;
   fullName: string;
+  companyName: string;
   deserialize(input: any) {
     Object.assign(
       this,
@@ -113,6 +116,9 @@ export class Guest implements IDeserializable {
       set({}, 'phoneNumber', get(input, ['contactDetails', 'contactNumber'])),
       set({}, 'email', get(input, ['contactDetails', 'emailId']))
     );
+
+    this.companyName = 'Company Name';
+
     this.guestAttributes = new GuestAttributes().deserialize(input.attributes);
     if (input.reservation[0]) {
       const reservation = input.reservation[0];

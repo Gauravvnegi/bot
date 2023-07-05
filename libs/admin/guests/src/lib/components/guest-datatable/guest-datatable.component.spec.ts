@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GuestDatatableComponent } from './guest.component';
+import { GuestDatatableComponent } from './guest-datatable.component';
 
 describe('GuestDatatableComponent', () => {
   let component: GuestDatatableComponent;

@@ -6,6 +6,7 @@ import { Guest } from '../../../models/reservations.model';
 import { GuestDetails } from '../../../types/forms.types';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { manageGuestRoutes } from 'libs/admin/guests/src/lib/constant/route';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
@@ -25,7 +26,7 @@ export class GuestInformationComponent implements OnInit {
   $subscription = new Subscription();
   entityId: string;
   hotelId: string;
-  
+
   @Input() reservationId: string;
 
   constructor(
@@ -33,7 +34,7 @@ export class GuestInformationComponent implements OnInit {
     private guestService: GuestTableService,
     private router: Router,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +64,7 @@ export class GuestInformationComponent implements OnInit {
       })
     );
   }
-  
+
   loadMoreGuests() {
     this.guestsOffSet = this.guestsOffSet + 5;
     this.getGuests();
@@ -87,11 +88,11 @@ export class GuestInformationComponent implements OnInit {
   createGuest() {
     if (this.reservationId) {
       this.router.navigateByUrl(
-        `pages/efrontdesk/manage-reservation/edit-reservation/${this.reservationId}/add-guest`
+        `/pages/members/guests/${manageGuestRoutes.editGuest.route}/${this.reservationId}`
       );
     } else {
       this.router.navigateByUrl(
-        'pages/efrontdesk/manage-reservation/add-reservation/add-guest'
+        `/pages/members/guests/${manageGuestRoutes.addGuest.route}`
       );
     }
   }

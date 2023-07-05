@@ -18,7 +18,7 @@ export type SearchGuestResponse = {
     cc?: string;
     contactNumber?: string;
     emailId?: string;
-  }
+  };
   nationality?: string;
   age: number;
-}
+};

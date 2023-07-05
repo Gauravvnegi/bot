@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
-import { FeedbackConfigI } from '../data-models/feedbackDetailsConfig.model';
 import { SearchGuestResponse } from '../types/guest.type';
 
 @Injectable()
 export class GuestTableService extends ApiService {
   getGuestList(config): Observable<any> {
-    return this.get(`/api/v1/guests${config.queryObj}`);
+    return this.get(`/api/v1/guests${config.params}`);
   }
 
   getGuestById(guestId: string): Observable<any> {
     return this.get(`/api/v1/guest/${guestId}`);
   }
 
-  searchGuest(text: string): Observable<SearchGuestResponse>{
+  searchGuest(text: string): Observable<SearchGuestResponse> {
     return this.get(`api/v1/search/guest?key=${text}`);
   }
 
@@ -35,21 +34,17 @@ export class GuestTableService extends ApiService {
   }
 
   exportCSV(config): Observable<any> {
-    return this.get(`/api/v1/guest/export/${config.queryObj}`, {
+    return this.get(`/api/v1/guest/export/${config.params}`, {
       responseType: 'blob',
     });
   }
 
-  getFeedback(hotelId): Observable<FeedbackConfigI> {
-    return this.get(`/api/v1/cms/feedback-form`);
-  }
-
   getAllGuestStats(config): Observable<any> {
-    return this.get(`/api/v1/guests/stats/${config.queryObj}`);
+    return this.get(`/api/v1/guests/stats/${config.params}`);
   }
 
   exportCSVStat(config): Observable<any> {
-    return this.get(`/api/v1/guests/stats/export/${config.queryObj}`, {
+    return this.get(`/api/v1/guests/stats/export/${config.params}`, {
       responseType: 'blob',
     });
   }

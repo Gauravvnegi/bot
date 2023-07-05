@@ -47,7 +47,7 @@ export class BillSummaryService extends ApiService {
     formData
   ): Observable<FileDetails> {
     return this.uploadDocumentPost(
-      `/api/v1/uploads?folder_name=hotel/${hotelId}/reservation/${reservationId}/guest/${guestId}/payment`,
+      `/api/v1/uploads?folder_name=entity/${hotelId}/reservation/${reservationId}/guest/${guestId}/payment`,
       formData
     );
   }

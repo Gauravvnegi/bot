@@ -22,8 +22,11 @@ export class EmailService extends ApiService {
    * @returns get api for email.
    */
   getFromEmail(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/email`);
+    return this.get(`/api/v1/configurations/smtp`, { 'entity-id': hotelId });
   }
+  // getFromEmail(hotelId: string): Observable<any> {
+  //   return this.get(`/api/v1/hotel/${hotelId}/email`);
+  // }
 
   /**
    * @function getTopicList function to get topic list

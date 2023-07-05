@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class EmailService extends ApiService {
   getFromEmail(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/email`);
+    return this.get(`/api/v1/configurations/smtp`, { 'entity-id': hotelId });
   }
 
   getTopicList(id: string): Observable<any> {

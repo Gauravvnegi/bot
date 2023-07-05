@@ -5,24 +5,24 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class SubscriptionService extends ApiService {
   getSubscriptionPlan(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/subscriptions/current-plan`);
+    return this.get(`/api/v1/entity/${hotelId}/subscriptions/current-plan`);
   }
 
   getSubscriptionUsage(hotelId: string, config): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/subscriptions/usage/${config.queryObj}`
+      `/api/v1/entity/${hotelId}/subscriptions/usage/${config.queryObj}`
     );
   }
 
   getSubscriptionUsagePercentage(hotelId: string, config): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/subscriptions/usage/percentage/${config.queryObj}`
+      `/api/v1/entity/${hotelId}/subscriptions/usage/percentage/${config.queryObj}`
     );
   }
 
   exportCSV(hotelId, config): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/subscriptions/exportcsv/${config.queryObj}`,
+      `/api/v1/entity/${hotelId}/subscriptions/exportcsv/${config.queryObj}`,
       {
         responseType: 'blob',
       }

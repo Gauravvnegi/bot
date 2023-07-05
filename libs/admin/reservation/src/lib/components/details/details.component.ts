@@ -142,7 +142,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         const brandConfig = this._hotelDetailService.brands.find(
           (brand) => brand.id === brandId
         );
-        this.branchConfig = brandConfig.hotels.find(
+        this.branchConfig = brandConfig.entities.find(
           (branch) => branch.id === branchId
         );
         this.loadGuestInfo();

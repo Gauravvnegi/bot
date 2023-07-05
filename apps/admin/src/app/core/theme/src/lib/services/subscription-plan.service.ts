@@ -18,7 +18,7 @@ export class SubscriptionPlanService extends ApiService {
   settings: SettingsMenuItem[];
 
   getSubscriptionPlan(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/subscriptions/`).pipe(
+    return this.get(`/api/v1/entity/${hotelId}/subscriptions/`).pipe(
       map((res) => {
         const guest = res.products.find(
           (item) => item.name === ModuleNames.GUESTS
@@ -65,13 +65,13 @@ export class SubscriptionPlanService extends ApiService {
 
   getSubscriptionUsage(hotelId: string, config: any): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/subscriptions/usage/${config.queryObj}`
+      `/api/v1/entity/${hotelId}/subscriptions/usage/${config.queryObj}`
     );
   }
 
   getSubscriptionUsagePercentage(hotelId: string, config): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/subscriptions/usage/percentage${config.queryObj}`
+      `/api/v1/entity/${hotelId}/subscriptions/usage/percentage${config.queryObj}`
     );
   }
 

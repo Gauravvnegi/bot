@@ -19,19 +19,19 @@ export class CategoriesService extends ApiService {
 
   getCategoryDetails(hotelId, categoryId) {
     return this.get(
-      `/api/v1/hotel/${hotelId}/packages/categories/${categoryId}`
+      `/api/v1/entity/${hotelId}/packages/categories/${categoryId}`
     );
   }
 
   updateCategory(hotelId, categoryId, data) {
     return this.patch(
-      `/api/v1/hotel/${hotelId}/packages/categories/${categoryId}`,
+      `/api/v1/entity/${hotelId}/packages/categories/${categoryId}`,
       data
     );
   }
 
   addCategory(hotelId, data) {
-    return this.post(`/api/v1/hotel/${hotelId}/packages/categories`, data);
+    return this.post(`/api/v1/entity/${hotelId}/packages/categories`, data);
   }
 
   mapCategoryData(formValue, id?) {

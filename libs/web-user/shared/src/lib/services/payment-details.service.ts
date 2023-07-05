@@ -54,12 +54,12 @@ export class PaymentDetailsService extends ApiService {
 
   getPaymentConfiguration(hotelId, journeyName): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/payment-configuration?journeyName=${journeyName}`
+      `/api/v1/entity/${hotelId}/payment-configurations?journeyName=${journeyName}`
     );
   }
 
   getPaymentConfigurationV2(hotelId: string) {
-    return this.get(`/api/v2/hotel/${hotelId}/payment-configuration`);
+    return this.get(`/api/v1/entity/${hotelId}/payment-configurations`);
   }
 
   initiatePayment(reservationId) {

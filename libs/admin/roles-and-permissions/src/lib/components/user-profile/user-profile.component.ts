@@ -264,7 +264,7 @@ export class UserProfileComponent implements OnInit {
       const currentBrand = this._hotelDetailService.brands.find(
         (brand) => brand['id'] === brandId
       );
-      const branches = currentBrand?.hotels;
+      const branches = currentBrand?.entities;
       if (branches) {
         this.branchNames = branches.map((item) => ({
           label: item.name,

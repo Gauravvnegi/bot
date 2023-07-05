@@ -90,8 +90,8 @@ export class CookiesSettingsService {
     const brands = currentSite?.brands;
     if (brands?.length) {
       // finding the brand which has hotel
-      const currentBrand = brands.find((item) => !!item.hotels?.length);
-      const hotels = currentBrand?.hotels;
+      const currentBrand = brands.find((item) => !!item.entities?.length);
+      const hotels = currentBrand?.entities;
 
       if (hotels.length) {
         const hotelId = hotels[0].id;

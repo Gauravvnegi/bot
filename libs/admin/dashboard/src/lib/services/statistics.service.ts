@@ -62,6 +62,6 @@ export class StatisticsService extends ApiService {
    * @returns An Observable with active channel list for the hotel.
    */
   getHotelChannels(hotelId): Observable<any> {
-    return this.get(`/api/v1/hotel/${hotelId}/channels`);
+    return this.get(`/api/v1/entity/${hotelId}/channels`);
   }
 }

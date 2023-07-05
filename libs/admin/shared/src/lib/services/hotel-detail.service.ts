@@ -26,7 +26,7 @@ export class HotelDetailService {
         : input.hotelAccess?.brands) ?? [];
 
     this.hotels =
-      this.brands.find((item) => item.id === this.brandId)?.hotels ?? [];
+      this.brands.find((item) => item.id === this.brandId)?.entities ?? [];
   }
 
   /**
@@ -58,7 +58,7 @@ export class HotelDetailService {
 
 type Sites = UserResponse['sites'][0];
 type Brands = Sites['brands'][0];
-type Hotels = Brands['hotels'][0];
+type Hotels = Brands['entities'][0];
 
 type BusinessInfo = {
   [tokensConfig.accessToken]: string;

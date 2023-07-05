@@ -36,7 +36,7 @@ export class UserService extends ApiService {
 
   uploadProfileImage(hotelId: string, formData) {
     return this.uploadDocumentPost(
-      `/api/v1/uploads?folder_name=hotel/${hotelId}/profileImage`,
+      `/api/v1/uploads?folder_name=entity/${hotelId}/profileImage`,
       formData
     );
   }
@@ -59,17 +59,17 @@ export class UserService extends ApiService {
 
   getUsersList(config: { hotelId: string; queryObj?: string }) {
     return this.get(
-      `/api/v1/hotel/${config.hotelId}/users${config.queryObj ?? ''}`
+      `/api/v1/entity/${config.hotelId}/users${config.queryObj ?? ''}`
     );
   }
 
   getMentionList(hotelId: string) {
-    return this.get(`/api/v1/hotel/${hotelId}/users?mention=true`);
+    return this.get(`/api/v1/entity/${hotelId}/users?mention=true`);
   }
 
   uploadImage(hotelId: string, data: any, path: string) {
     return this.post(
-      `/api/v1/uploads?folder_name=hotel/${hotelId}/${path}`,
+      `/api/v1/uploads?folder_name=entity/${hotelId}/${path}`,
       data
     );
   }

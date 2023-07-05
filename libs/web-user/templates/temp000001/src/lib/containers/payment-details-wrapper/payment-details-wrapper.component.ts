@@ -93,7 +93,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
           gatewayType: gateway?.gatewayType,
           imgSrc:
             gateway?.imgSrc || gateway?.gatewayType === 'CCAVENUE'
-              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/hotel/roseate/banner/ccavenue.webp'
+              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/entity/roseate/banner/ccavenue.webp'
               : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/PayU.svg/1200px-PayU.svg.png',
           payload: {
             redirectUrl: `${environment.host_url}${this.router.url}&entity=payment`,

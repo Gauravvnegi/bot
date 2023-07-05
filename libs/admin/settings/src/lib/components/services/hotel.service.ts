@@ -77,7 +77,7 @@ export class HotelService extends ApiService {
 
   createHotel(hotelId: string, data: any): Observable<any> {
     return this.post(
-      `/api/v2/entity/onboarding?source=CREATE_WITH&onboardingType=HOTEL`,
+      `/api/v1/entity/onboarding?source=CREATE_WITH&onboardingType=HOTEL`,
       data
     );
   }

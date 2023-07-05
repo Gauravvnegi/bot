@@ -20,7 +20,7 @@ export class BusinessService extends ApiService {
 
   getHotelList(brandId: string, config: QueryConfig): Observable<any> {
     return this.get(
-      `/api/v2/entity?type=HOTEL&parentId=${brandId}&${
+      `/api/v1/entity?type=HOTEL&parentId=${brandId}&${
         config.params.slice(1) ?? ''
       }`
     ).pipe(
@@ -47,7 +47,7 @@ export class BusinessService extends ApiService {
 
   createBrand(data: BrandFormData): Observable<BrandResponse> {
     return this.post(
-      `/api/v2/entity/onboarding?source=CREATE_WITH&onboardingType=BRAND`,
+      `/api/v1/entity/onboarding?source=CREATE_WITH&onboardingType=BRAND`,
       data
     );
   }
@@ -94,7 +94,7 @@ export class BusinessService extends ApiService {
     data: HotelFormData | any
   ): Observable<HotelConfiguration> {
     return this.post(
-      `/api/v2/entity/onboarding?source=CREATE_WITH&onboardingType=HOTEL`,
+      `/api/v1/entity/onboarding?source=CREATE_WITH&onboardingType=HOTEL`,
       data
     );
   }
@@ -109,7 +109,7 @@ export class BusinessService extends ApiService {
    */
 
   updateHotel(hotelId: string, data): Observable<any> {
-    return this.patch(`/api/v2/entity/${hotelId}?type=HOTEL`, data);
+    return this.patch(`/api/v1/entity/${hotelId}?type=HOTEL`, data);
   }
 
   /**
@@ -121,7 +121,7 @@ export class BusinessService extends ApiService {
    */
 
   getHotelById(hotelId: string): Observable<any> {
-    return this.get(`/api/v2/entity/${hotelId}?type=HOTEL`);
+    return this.get(`/api/v1/entity/${hotelId}?type=HOTEL`);
   }
 
   onSubmit = new EventEmitter<boolean>(false);
@@ -164,7 +164,7 @@ export class BusinessService extends ApiService {
   }
 
   exportCSV(brandId: string, config: QueryConfig): Observable<any> {
-    return this.get(`/api/v2/entity/export${config.params ?? ''}`, {
+    return this.get(`/api/v1/entity/export${config.params ?? ''}`, {
       responseType: 'blob',
     });
   }

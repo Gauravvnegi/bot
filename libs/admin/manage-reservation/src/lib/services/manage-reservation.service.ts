@@ -2,16 +2,27 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 import {
-  RoomListResponse,
   RoomTypeListResponse,
 } from 'libs/admin/room/src/lib/types/service-response';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { ReservationFormData } from '../types/forms.types';
 import { QueryConfig } from '../types/reservation.type';
+import { distinctUntilChanged, map } from 'rxjs/operators';
+import { EntityTabGroup } from '../constants/reservation-table';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
+  public selectedOutlet = new BehaviorSubject<EntityTabGroup>(EntityTabGroup.HOTEL);
+
+  setSelectedOutlet(value: EntityTabGroup) {
+    this.selectedOutlet.next(value);
+  }
+
+  getSelectedOutlet(): Observable<EntityTabGroup> {
+    return this.selectedOutlet.asObservable().pipe(distinctUntilChanged());
+  }
+
   selectedTab = ReservationTableValue.ALL;
 
   getRoomTypeList(
@@ -136,5 +147,141 @@ export class ManageReservationService extends ApiService {
     reservationData.offerId = formValue.offerId ?? '';
     reservationData.paymentRemark = formValue.paymentMethod.paymentRemark ?? '';
     return reservationData;
+  }
+
+  getReservationList(
+    hotelId,
+    config: QueryConfig = { params: '?order=DESC&limit=5' }
+  ): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`
+    ).pipe(
+      map((res) => {
+        res.records = [
+          {
+            invoiceId: 1682254737883,
+            outletName: 'Outlet 1',
+            bookingNumber: '1682254737883',
+            guestName: 'Rajesh',
+            date: '2021-05-21',
+            time: '12:00 PM',
+            totalDueAmount: 100,
+            totalAmount: 1000,
+            source: 'Agent',
+            paymentMethod: 'Cash',
+            status: 'Paid',
+            statusValues: ['Paid', 'Unpaid'],
+          },
+          {
+            invoiceId: 1682254737883,
+            outletName: 'Outlet 1',
+            bookingNumber: '1682254737883',
+            guestName: 'Rajesh',
+            date: '2021-05-21',
+            time: '12:00 PM',
+            totalDueAmount: 100,
+            totalAmount: 1000,
+            source: 'Agent',
+            paymentMethod: 'Cash',
+            status: 'Paid',
+            statusValues: ['Paid', 'Unpaid'],
+          },
+          {
+            invoiceId: 1682254737883,
+            outletName: 'Outlet 1',
+            bookingNumber: '1682254737883',
+            guestName: 'Rajesh',
+            from: '2021-05-21 12:00 PM',
+            to: '2021-05-21 12:00 PM',
+            totalDueAmount: 100,
+            totalAmount: 1000,
+            source: 'Agent',
+            paymentMethod: 'Cash',
+            status: 'Paid',
+            statusValues: ['Paid', 'Unpaid'],
+          },
+          {
+            invoiceId: 1682254737883,
+            outletName: 'Outlet 1',
+            bookingNumber: '1682254737883',
+            guestName: 'Rajesh',
+            date: '2021-05-21',
+            time: '12:00 PM',
+            totalDueAmount: 100,
+            totalAmount: 1000,
+            source: 'Agent',
+            paymentMethod: 'Cash',
+            status: 'Paid',
+            statusValues: ['Paid', 'Unpaid'],
+          },
+          {
+            invoiceId: 1682254737883,
+            outletName: 'Outlet 1',
+            bookingNumber: '1682254737883',
+            guestName: 'Rajesh',
+            date: '2021-05-21',
+            time: '12:00 PM',
+            totalDueAmount: 100,
+            totalAmount: 1000,
+            source: 'Agent',
+            paymentMethod: 'Cash',
+            status: 'Paid',
+            statusValues: ['Paid', 'Unpaid'],
+          },
+        ];
+
+        res.entityTypeCounts = {};
+        res.entityStateCounts = {
+          draft: 5,
+          confirmed: 0,
+          cancelled: 0,
+          waitListed: 0,
+          noShow: 0,
+          checkedIn: 0,
+          checkedOut: 0,
+          inSession: 0,
+          completed: 0,
+        };
+
+        res.total = 5;
+
+        return res;
+      })
+    );
+  }
+
+  getOutletList(
+    hotelId,
+    config: QueryConfig = { params: '?order=DESC&limit=5' }
+  ): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${hotelId}/tax${config?.params ?? ''}`
+    ).pipe(
+      map((res) => {
+        res.records = [
+          {
+            id: 1,
+            name: 'The Hilltop',
+            type: 'HOTEL',
+          },
+          {
+            id: 2,
+            name: 'Restaurant',
+            type: 'RESTAURANT',
+          },
+          {
+            id: 3,
+            name: 'Venue',
+            type: 'VENUE',
+          },
+          {
+            id: 3,
+            name: 'Spa',
+            type: 'SPA',
+          },
+        ];
+        return res;
+      })
+    );
   }
 }

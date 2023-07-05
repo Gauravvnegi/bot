@@ -9,6 +9,7 @@ import {
   TaxListResponse,
   EntityStateCountsResponse,
 } from '../types/response.type';
+import { EntityState } from '@hospitality-bot/admin/shared';
 
 export class Tax {
   id: string;
@@ -31,14 +32,15 @@ export class Tax {
 export class TaxList {
   records: Tax[];
   total: number;
-  entityStateCounts: EntityStateCounts;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
   deserialize(input: TaxListResponse) {
     this.records =
       input?.records?.map((item) => new Tax().deserialize(item)) ?? [];
     this.total = input?.total ?? 0;
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input?.entityStateCounts
-    );
+    this.entityStateCounts = input?.entityStateCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
+    this.total = input?.total;
     return this;
   }
 }

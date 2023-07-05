@@ -5,7 +5,11 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import {
   HotelDetailService,
   NavRouteOptions,
@@ -14,9 +18,10 @@ import {
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import { cousins } from '../../constants/data';
-import { outletRoutes } from '../../constants/routes';
+import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
 import {
+  Feature,
   OutletForm,
   RestaurantForm,
   SpaForm,
@@ -36,6 +41,7 @@ export class AddOutletComponent implements OnInit {
   subType: Option[] = [];
   isTypeSelected = false;
   outletId: string = '';
+  brandId: string = '';
   cousins = cousins;
   $subscription = new Subscription();
   loading = false;
@@ -53,22 +59,31 @@ export class AddOutletComponent implements OnInit {
     private outletService: OutletService,
     private snackbarService: SnackBarService,
     private router: Router,
+    private route: ActivatedRoute,
     private hotelDetailService: HotelDetailService
   ) {
-    const { navRoutes, title } = outletRoutes['addOutlet'];
-    this.navRoutes = navRoutes;
-    this.pageTitle = title;
+    this.router.events.subscribe(
+      ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
+        const outletId = snapshot?.params['outletId'];
+        const brandId = snapshot?.params['brandId'];
+        if (outletId) this.outletId = outletId;
+        if (brandId) this.brandId = brandId;
+      }
+    );
   }
 
   ngOnInit(): void {
     this.siteId = this.hotelDetailService.siteId;
     this.initOptions();
     this.initForm();
+    const { navRoutes, title } = outletBusinessRoutes['addOutlet'];
+    this.navRoutes = navRoutes;
+    navRoutes[2].link = navRoutes[2].link.replace(':brandId', this.brandId);
+    this.pageTitle = title;
   }
 
   initOptions() {
     this.outletService.getOutletConfig().subscribe((res) => {
-      console.log(res);
       this.types = res.type.map((item) => ({
         label: item.name,
         value: item.value,
@@ -84,10 +99,10 @@ export class AddOutletComponent implements OnInit {
       type: [[], [Validators.required]],
       subType: [[], [Validators.required]],
       contact: this.fb.group({
-        countryCode: [''],
+        countryCode: ['+91'],
         number: [''],
       }),
-      openingDay: [''],
+      cc: [''],
       closingDay: [''],
       openingHour: [''],
       closingHour: [''],
@@ -126,7 +141,6 @@ export class AddOutletComponent implements OnInit {
     }
 
     //set form validation on type change
-    debugger;
     const { maximumOccupancy, minimumOccupancy } = this.formControls;
     switch (type) {
       case 'RESTAURANT':
@@ -149,7 +163,7 @@ export class AddOutletComponent implements OnInit {
    * @function submitForm
    * @description submits the form
    */
-  submitForm(): void {
+  submitForm(features?: Feature): void {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
@@ -157,7 +171,6 @@ export class AddOutletComponent implements OnInit {
       );
       return;
     }
-
     let data = this.useForm.getRawValue() as OutletForm;
 
     if (this.outletId) {
@@ -170,7 +183,10 @@ export class AddOutletComponent implements OnInit {
       this.$subscription.add(
         this.outletService
           .addOutlet({ entity: { ...data }, siteId: this.siteId })
-          .subscribe(this.handleSuccess, this.handleError)
+          .subscribe(
+            (res) => this.handleSuccess(features, res.id),
+            this.handleError
+          )
       );
     }
   }
@@ -193,13 +209,33 @@ export class AddOutletComponent implements OnInit {
    * @function handleSuccess
    * @description handles success
    */
-  handleSuccess = () => {
+  handleSuccess = (feature?: Feature, outletId?: string) => {
     this.snackbarService.openSnackBarAsText(
       this.outletId
         ? 'Outlet updated successfully'
         : 'Outlet added successfully'
     );
-    this.router.navigate(['pages/settings/business-info/brand']);
+    switch (feature) {
+      case 'menu':
+        this.router.navigate([outletBusinessRoutes.menu.route], {
+          relativeTo: this.route,
+        });
+        break;
+      case 'service':
+        this.router.navigate([outletBusinessRoutes.importService.route], {
+          relativeTo: this.route,
+        });
+        break;
+      case 'food':
+        this.router.navigate([outletBusinessRoutes.foodPackage.route], {
+          relativeTo: this.route,
+        });
+        break;
+      default:
+        this.router.navigate([
+          `pages/outlet/all-outlets/add-outlet/${outletId}`,
+        ]);
+    }
   };
 
   /**
@@ -209,4 +245,8 @@ export class AddOutletComponent implements OnInit {
   handleError = (err) => {
     this.loading = false;
   };
+
+  ngOnDestroy() {
+    this.$subscription.unsubscribe();
+  }
 }

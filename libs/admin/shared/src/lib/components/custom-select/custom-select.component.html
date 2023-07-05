@@ -1,9 +1,7 @@
 <div class="wrapper">
   <div class="header">
     <div>
-      <div class="heading" *ngIf="label">
-        {{ label }}
-      </div>
+      <div class="heading" *ngIf="label">{{ label }}</div>
       <div class="sub-heading" *ngIf="description">
         {{ description }}
       </div>
@@ -50,11 +48,11 @@
       </div>
     </ng-container>
   </div>
-
   <ng-template #emptyTable>
     <hospitality-bot-empty-table
       [isLoading]="loading"
       [content]="noRecordsAction"
+      (action)="onEmptyViewAction.emit()"
     >
     </hospitality-bot-empty-table>
   </ng-template>

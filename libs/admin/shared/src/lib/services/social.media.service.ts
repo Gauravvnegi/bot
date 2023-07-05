@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SocialMediaServices extends ApiService {
-  getDefultSocialConfig(): Observable<any> {
+  getDefaultSocialConfig(): Observable<any> {
     return this.get(`/api/v1/config?key=SOCIAL_MEDIA_CONFIGURATION`);
   }
 }

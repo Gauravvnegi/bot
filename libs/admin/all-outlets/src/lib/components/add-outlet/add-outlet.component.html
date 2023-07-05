@@ -38,7 +38,7 @@
         [options]="subType"
         [disabled]="!isTypeSelected"
         [props]="{
-          placeholder: 'Select Type'
+          placeholder: 'Select Sub Type'
         }"
       ></hospitality-bot-select>
     </div>
@@ -93,6 +93,7 @@
     <hospitality-bot-restaurant-form
       *ngSwitchCase="'RESTAURANT'"
       class="full-width"
+      (onCreateAndContinueFeature)="submitForm($event)"
     ></hospitality-bot-restaurant-form>
     <hospitality-bot-spa-form *ngSwitchCase="'SPA'" class="full-width">
     </hospitality-bot-spa-form>

@@ -46,7 +46,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   hotelId: string;
   $subscription = new Subscription();
   selectedTab: TableValue;
-
+  tabFilterIdx: number = 0; 
   constructor(
     public fb: FormBuilder,
     protected tabFilterService: TableService,
@@ -65,6 +65,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.roomService.resetRoomTypeFormState();
 
     this.selectedTab = this.roomService.selectedTable;
+    this.selectedTab === TableValue.roomType ? this.tabFilterIdx = 0 : this.tabFilterIdx = 1;
     this.getDataTableValue();
     this.tableName = title[this.selectedTab];
   }
@@ -142,7 +143,6 @@ export class RoomDataTableComponent extends BaseDatatableComponent
    */
   getDataTableValue(): void {
     this.loading = true;
-
     if (this.selectedTab === TableValue.room)
       this.$subscription.add(
         this.roomService

@@ -108,16 +108,12 @@ export class BrandInfoFormComponent implements OnInit {
       );
     } else {
       this.$subscription.add(
-        this.businessService.createBrand(data).subscribe(
-          (res) => {
-            this.handleSuccess();
-            this.router.navigate([
-              `pages/settings/business-info/brand/${res.id}`,
-            ]);
-          },
-          this.handelError,
-          this.handleSuccess
-        )
+        this.businessService.createBrand(data).subscribe((res) => {
+          this.handleSuccess();
+          this.router.navigate([
+            `pages/settings/business-info/brand/${res.id}`,
+          ]);
+        }, this.handelError)
       );
     }
   }

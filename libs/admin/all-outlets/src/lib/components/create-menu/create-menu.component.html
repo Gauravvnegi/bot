@@ -1,14 +1,11 @@
 <div class="wrapper">
-  <hospitality-bot-navigation-header
-    [heading]="pageTitle"
-    [routes]="navRoutes"
-  >
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <p-splitButton
       label="Download Menu"
       (onClick)="handleDownload()"
       [model]="buttons"
     ></p-splitButton>
-</hospitality-bot-navigation-header>
+  </hospitality-bot-navigation-header>
 
   <div class="form-block" [formGroup]="useForm">
     <div class="code">
@@ -19,8 +16,8 @@
       class="status"
       controlName="active"
       label="Status"
-      ></hospitality-bot-toggle-switch>
-      <hospitality-bot-input
+    ></hospitality-bot-toggle-switch>
+    <hospitality-bot-input
       class="half-width"
       controlName="name"
       label="Name"
@@ -60,5 +57,7 @@
       ></hospitality-bot-button>
     </div>
   </div>
-  <hospitality-bot-menu-data-table></hospitality-bot-menu-data-table>
+  <hospitality-bot-menu-data-table
+    *ngIf="menuId"
+  ></hospitality-bot-menu-data-table>
 </div>

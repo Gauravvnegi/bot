@@ -1,3 +1,259 @@
+@import 'main';
+
+:host ::ng-deep .p-accordion .p-accordion-tab.p-accordion-tab-active {
+  margin-bottom: 0;
+}
+
+.main {
+  display: flex;
+}
+
+:host ::ng-deep .p-accordion-header-text {
+  @include form-header();
+  padding: 15px 6px;
+}
+
+:host ::ng-deep .p-accordion-content {
+  padding: 5px 80px 45px 30px;
+}
+
+:host ::ng-deep {
+  .room-info {
+    .p-accordion-content {
+      padding: 0px;
+    }
+    .wrapper {
+      border-radius: 0px;
+      height: auto;
+    }
+    .action-btn {
+      margin: 0px 0px 10px 0px;
+    }
+  }
+  .input {
+    &::placeholder {
+      opacity: 0.7;
+    }
+  }
+  .countryflag .selected-image {
+    width: 2em;
+  }
+
+  .maxlength .input {
+    padding-right: 4em !important;
+  }
+}
+// booking summary div styling
+
+.bk-summary {
+  position: sticky;
+  top: 65px;
+  min-width: 32%;
+  min-height: 480px;
+  height: fit-content;
+  padding: 17px 16px 0px 16px;
+  border-radius: 5px;
+  border: solid 1px rgba(112, 112, 112, 0.4);
+  background-color: $white;
+  margin-left: 19px;
+  font-size: 12px;
+  letter-spacing: 0.72px;
+  color: $grayMedium;
+
+  .offerList {
+    &_box {
+      width: 183.1px;
+      height: 164.9px;
+      margin: 60px auto;
+      margin-bottom: 22px;
+      img {
+        @include full-img;
+      }
+    }
+    &_text {
+      width: fit-content;
+      margin: 0 auto 120px;
+      font-weight: $bold;
+      opacity: 0.6;
+    }
+  }
+
+  &_heading {
+    @include normal-sm-text;
+    font-weight: $bolder;
+    color: $secondary2;
+    @include flex-item-center;
+    mat-icon {
+      cursor: pointer;
+      width: 29px;
+      color: $button-blue !important;
+    }
+  }
+
+  &_subheading {
+    @include normal-sm-text;
+    font-weight: $bold;
+
+    &_label {
+      margin-bottom: 9px;
+    }
+  }
+
+  &_roomInfo {
+    display: flex;
+    margin-bottom: 19px;
+    gap: 10px;
+    flex-wrap: wrap;
+    &_checkoutInfo,
+    &_guestInfo {
+      min-width: 150px;
+      max-height: fit-content;
+      padding: 12px;
+      border-radius: 5px;
+      background-color: $background-grey;
+
+      &_heading {
+        font-size: 14px;
+        font-weight: $bold;
+      }
+    }
+  }
+
+  &_offerInfo {
+    font-weight: $bold;
+    margin-bottom: 16px;
+    span {
+      cursor: pointer;
+      color: $authColor;
+    }
+  }
+
+  &_priceInfo {
+    &_perNight {
+      @include flex-space-between;
+      &_label {
+        font-weight: $bold;
+      }
+      &_amount {
+        text-align: right;
+        color: $grayMedium;
+      }
+    }
+    &_person {
+      @include flex-space-between;
+
+      margin-bottom: 10px;
+      &_label {
+        font-weight: $bold;
+      }
+      &_amount {
+        @include normal-sm-text;
+        font-weight: $bold;
+        text-align: right;
+        color: $amount;
+      }
+    }
+
+    &_taxFair {
+      @include flex-space-between;
+
+      &_label {
+        font-weight: $bold;
+      }
+      &_amount {
+        text-align: right;
+        color: $grayMedium;
+      }
+    }
+  }
+
+  &_total {
+    @include flex-space-between;
+
+    margin-bottom: 33px;
+    &_label {
+      font-weight: $bold;
+    }
+    &_amount {
+      @include normal-sm-text;
+      font-weight: $bold;
+      text-align: right;
+      color: #53d397;
+    }
+  }
+  &_btnwrapper {
+    @include flex-justify-center;
+
+    margin-bottom: 21px;
+  }
+}
+
+:host ::ng-deep .payment-rule-accordion {
+  .p-accordion-content {
+    position: relative;
+  }
+}
+
+:host ::ng-deep .amount-to-pay {
+  .label {
+    white-space: nowrap;
+  }
+}
+
+:host ::ng-deep .last-name {
+  .label {
+    visibility: hidden;
+  }
+}
+
+.divider {
+  border-bottom: 1px solid $grayMedium;
+  opacity: 0.35;
+  margin: 17.5px 0px;
+  padding: unset;
+}
+.offer {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  position: relative;
+  border-radius: 10px;
+  cursor: pointer;
+  background-image: $secondaryGradient-bg;
+  &_card {
+    padding: 15px 20px;
+    font-size: 12px;
+    width: 70%;
+    font-weight: $bold;
+    line-height: 1.33;
+    letter-spacing: 0.36px;
+    color: $white;
+  }
+  &_gift {
+    width: 64.6px;
+    height: 46.5px;
+    position: absolute;
+    right: 7px;
+    bottom: 0;
+    img {
+      @include full-img;
+    }
+  }
+  &_cross {
+    cursor: pointer;
+    position: absolute;
+    top: -18px;
+    right: -18px;
+    width: 30px;
+    height: 30px;
+    img {
+      @include full-img;
+    }
+  }
+}
+:host ::ng-deep .p-dropdown-panel {
+  width: 300px !important;
+}
+
 .form-block {
   display: flex;
   flex-wrap: wrap;
@@ -36,10 +292,11 @@
 }
 
 :host ::ng-deep .deducted-amount {
-    .label {
-      visibility: hidden;
-    }
-    .text__wrapper{
-        min-width: max-content;
-    }
+  .label {
+    visibility: hidden;
   }
+  .text__wrapper {
+    min-width: max-content;
+  }
+}
+

@@ -76,12 +76,12 @@ export class HotelInfoFormComponent implements OnInit {
         propertyCategory: [''],
         emailId: ['', [Validators.pattern(Regex.EMAIL_REGEX)]],
         contact: this.fb.group({
-          countryCode: [''],
+          countryCode: ['+91'],
           number: [''],
         }),
         gstNumber: [''],
         address: [[]],
-        imageUrl: [[]],
+        imageUrl: [[], [Validators.required]],
         description: [''],
         serviceIds: [[]],
         socialPlatforms: [[]],
@@ -90,9 +90,12 @@ export class HotelInfoFormComponent implements OnInit {
     });
 
     if (this.hotelFormDataService.hotelFormState) {
-      this.allServices = this.hotelFormDataService.hotelInfoFormData.services.map(
-        (service) => service.id
-      );
+      this.allServices = [
+        ...this.hotelFormDataService.hotelInfoFormData.services.map(
+          (service) => service.id
+        ),
+        ...this.hotelFormDataService.hotelInfoFormData.allServices,
+      ];
 
       this.compServices = this.hotelFormDataService.hotelInfoFormData.services.slice(
         0,

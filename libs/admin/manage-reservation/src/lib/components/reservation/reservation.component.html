@@ -1,0 +1,15 @@
+<hospitality-bot-navigation-header
+  [heading]="'Welcome To Reservation'"
+  [routes]="navRoutes"
+  [isBack]="false"
+>
+</hospitality-bot-navigation-header>
+<hospitality-bot-tab-header
+  [selectedIndex]="tabFilterIdx"
+  [listItems]="tabFilterItems"
+  (selectedTabChange)="onSelectedTabFilterChange($event)"
+  [isSticky]="true"
+  extraGap="70"
+></hospitality-bot-tab-header>
+
+<hospitality-bot-manage-reservation-data-table></hospitality-bot-manage-reservation-data-table>

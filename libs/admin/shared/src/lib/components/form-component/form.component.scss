@@ -17,6 +17,9 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   margin-left: 0%;
   padding: $input-padding;
   font-size: inherit;
+  &.p-disabled {
+    cursor: not-allowed !important;
+  }
 }
 
 @mixin search-input() {
@@ -26,8 +29,16 @@ $input-padding: $input-padding-vertical $input-padding-horizontal;
   color: $secondary-text-color;
 }
 
+input:disabled {
+  cursor: not-allowed;
+}
+
 .wrapper {
   position: relative;
+
+  &.custom-disabled{
+    cursor: not-allowed;
+  }
 
   &__vertical {
     // margin-top: 2em;

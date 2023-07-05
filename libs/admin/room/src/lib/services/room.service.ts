@@ -33,7 +33,10 @@ export class RoomService extends ApiService {
   /** Represent is room type form data is available */
   roomTypeFormState: boolean = false;
   /** State to handle syncing of services and room type form data */
-  roomTypeFormData: Partial<RoomTypeFormData> = {
+  roomTypeFormData: Partial<RoomTypeFormData> & {
+    services: any[];
+  } = {
+    services: [],
     complimentaryAmenities: [],
     paidAmenities: [],
   };
@@ -90,41 +93,45 @@ export class RoomService extends ApiService {
   ): Observable<T> {
     return this.get(
       `/api/v1/entity/${hotelId}/inventory${config?.params ?? ''}`
-    ).pipe(
-      map((res) => {
-        // --refactor ---will be removed
-        if (this.selectedTable === TableValue.room) {
-          res.entityStateCounts = {
-            CLEAN: 10,
-            INSPECTED: 15,
-            OUT_OF_SERVICE: 18,
-            OUT_OF_ORDER: 25,
-            UNAVAILABLE: 12,
-          };
-
-          res.total = 80;
-          const rooms = res['rooms'];
-          {
-            rooms.forEach((item) => {
-              const foStatus = Math.random() < 0.5 ? 'OCCUPIED' : 'VACANT';
-              item['foStatus'] = foStatus;
-              const isOccupied = foStatus === 'OCCUPIED';
-              if (isOccupied) {
-                item['toDate'] = new Date().getTime();
-                item['fromDate'] =
-                  new Date().getTime() + 2 * 24 * 60 * 60 * 1000;
-              }
-              item['roomStatus'] = isOccupied ? 'DIRTY' : 'CLEAN';
-              item['nextStates'] = isOccupied
-                ? ['CLEAN', 'OUT_OF_ORDER', 'OUT_OF_SERVICE', 'INSPECT']
-                : ['DIRTY', 'INSPECTED'];
-            });
-          }
-        }
-
-        return res;
-      })
     );
+    // .pipe(
+    //   map((res) => {
+    //     // --refactor ---will be removed
+    //     if (
+    //       this.selectedTable === TableValue.room &&
+    //       !config?.params.includes('type=ROOM_TYPE')
+    //     ) {
+    //       res.entityStateCounts = {
+    //         CLEAN: 10,
+    //         INSPECTED: 15,
+    //         OUT_OF_SERVICE: 18,
+    //         OUT_OF_ORDER: 25,
+    //         UNAVAILABLE: 12,
+    //       };
+
+    //       res.total = 80;
+    //       const rooms = res['rooms'];
+    //       {
+    //         rooms.forEach((item) => {
+    //           const foStatus = Math.random() < 0.5 ? 'OCCUPIED' : 'VACANT';
+    //           item['foStatus'] = foStatus;
+    //           const isOccupied = foStatus === 'OCCUPIED';
+    //           if (isOccupied) {
+    //             item['toDate'] = new Date().getTime();
+    //             item['fromDate'] =
+    //               new Date().getTime() + 2 * 24 * 60 * 60 * 1000;
+    //           }
+    //           item['roomStatus'] = isOccupied ? 'DIRTY' : 'CLEAN';
+    //           item['nextStates'] = isOccupied
+    //             ? ['CLEAN', 'OUT_OF_ORDER', 'OUT_OF_SERVICE', 'INSPECT']
+    //             : ['DIRTY', 'INSPECTED'];
+    //         });
+    //       }
+    //     }
+
+    //     return res;
+    //   })
+    // );
   }
 
   updateRoomStatus(
@@ -159,18 +166,17 @@ export class RoomService extends ApiService {
   }
 
   getRoomById(hotelId: string, roomId: string): Observable<RoomByIdResponse> {
-    return this.get(
-      `/api/v1/entity/${hotelId}/inventory/${roomId}?type=ROOM`
-    ).pipe(
-      map((res) => {
-        // -- refactor-- will be removed
-        const item = res['rooms'][0];
-        item['foStatus'] = 'VACANT';
-        item['roomStatus'] = 'CLEAN';
-        item['remarks'] = 'Room is cleaned';
-        return res;
-      })
-    );
+    return this.get(`/api/v1/entity/${hotelId}/inventory/${roomId}?type=ROOM`);
+    // .pipe(
+    //   map((res) => {
+    //     // -- refactor-- will be removed
+    //     const item = res['rooms'][0];
+    //     item['foStatus'] = 'VACANT';
+    //     item['roomStatus'] = 'CLEAN';
+    //     item['remarks'] = 'Room is cleaned';
+    //     return res;
+    //   })
+    // );
   }
 
   exportCSV(hotelId: string, table: TableValue, config?: QueryConfig) {
@@ -203,5 +209,13 @@ export class RoomService extends ApiService {
     data: RoomTypeData
   ): Observable<RoomTypeResponse> {
     return this.put(`/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`, data);
+  }
+
+  updateHotel(hotelId: string, data): Observable<any> {
+    return this.patch(`/api/v2/entity/${hotelId}?type=HOTEL`, data);
+  }
+
+  getFeatures(): Observable<any> {
+    return this.get(`/api/v1/config?key=SERVICE_CONFIGURATION`);
   }
 }

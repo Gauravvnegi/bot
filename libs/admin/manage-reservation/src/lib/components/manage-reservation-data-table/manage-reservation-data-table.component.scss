@@ -14,3 +14,9 @@
 .txtSize {
   font-size: 12px !important;
 }
+
+:host ::ng-deep {
+  .p-datatable {
+    @include tableHeadingStickyPosition(114px);
+  }
+}

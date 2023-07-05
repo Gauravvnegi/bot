@@ -10,16 +10,11 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import {
-  cols,
-  transactionStatus,
-} from '../../constants/data-table';
+import { cols, transactionStatus } from '../../constants/data-table';
 import { LazyLoadEvent } from 'primeng/api';
 import * as FileSaver from 'file-saver';
 import { FinanceService } from '../../services/finance.service';
-import {
-  TransactionHistoryList,
-} from '../../models/history.model';
+import { TransactionHistoryList } from '../../models/history.model';
 
 @Component({
   selector: 'hospitality-bot-transaction-history-data-table',
@@ -32,7 +27,7 @@ import {
 export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
   implements OnInit {
   tableName = 'Transaction History';
-  transactionStatus = transactionStatus
+  transactionStatus = transactionStatus;
   cols = cols.transaction;
   isQuickFilters = true;
   globalQueries = [];
@@ -95,7 +90,7 @@ export class TransactionHistoryDataTableComponent extends BaseDatatableComponent
       () => {
         this.values = [];
         this.loading = false;
-      },
+      }
     );
   }
 

@@ -12,13 +12,14 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { cols } from '../../constant/hotel-data-table';
+import { cols, tableName } from '../../constant/hotel-data-table';
 import { BusinessService } from '../../services/business.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent } from 'primeng/api';
+import { businessRoute } from '../../constant/routes';
 
 @Component({
   selector: 'hospitality-bot-hotel-data-table',
@@ -31,12 +32,13 @@ import { LazyLoadEvent } from 'primeng/api';
 export class HotelDataTableComponent extends BaseDatatableComponent
   implements OnInit {
   cols = cols;
-  tableName = 'Property/Outlet';
+  tableName = tableName;
   $subscription = new Subscription();
   hotelId: string;
   loading: boolean = false;
   globalQueries = [];
   tableFG;
+  routerLink = businessRoute;
   @Input() brandId: string = '';
 
   constructor(
@@ -132,14 +134,14 @@ export class HotelDataTableComponent extends BaseDatatableComponent
 
     // let heading: string;
     let description: string[] = [
-      `Are you sure you want to Deactive ${rowData?.name}`,
-      ' Once Deactivated, you wont be to manage reservations and the hotel website will not be visible to visitors.',
+      `Are you sure you want to Deactivate ${rowData?.name}`,
+      ' Once deactivated, you will no longer be able to manage reservations, and the property or outlet website will become inaccessible to visitors.',
     ];
     let label: string = 'Deactivate';
     if (status) {
       description = [
         `Are you sure you want to Activate ${rowData?.name}`,
-        ' Once Activated, you will be able to manage reservations and the hotel website will be visible to visitors.',
+        ' Once Activated, you will be able to manage reservations, and the property or outlet website will be visible to visitors.',
       ];
       label = 'Activate';
     }
@@ -222,10 +224,29 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     );
   }
 
-  editHotel(Id) {
-    this.router.navigate([
-      `pages/settings/business-info/brand/${this.brandId}/hotel/${Id}`,
-    ]);
+  getSrc(value) {
+    switch (value) {
+      case '2':
+        return 'assets/images/2.svg';
+      case '3':
+        return 'assets/images/3 star.svg';
+      case '4':
+        return 'assets/images/4 star.svg';
+      case '5':
+        return 'assets/images/5star.svg';
+    }
+  }
+
+  editHotel(data) {
+    if (data?.type === 'HOTEL') {
+      this.router.navigate([
+        `pages/settings/business-info/brand/${this.brandId}/hotel/${data.id}`,
+      ]);
+    } else {
+      this.router.navigate([
+        `pages/settings/business-info/brand/${this.brandId}/outlet/${data.id}`,
+      ]);
+    }
   }
 
   handelFinal = () => {

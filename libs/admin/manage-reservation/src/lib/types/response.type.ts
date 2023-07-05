@@ -15,6 +15,7 @@ export type ReservationListResponse = {
 export type ReservationResponse = {
   id: string;
   hotelId: string;
+  invoiceId: string;
   rooms: number;
   roomType: string;
   confirmationNo: string;
@@ -39,7 +40,7 @@ export type ReservationResponse = {
   totalAmount: number;
   fullName: string;
   roomNumber: number;
-  statusValues: Status[];
+  nextStates: string[];
   sourceName: string;
 };
 

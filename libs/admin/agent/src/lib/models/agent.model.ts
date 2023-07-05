@@ -75,8 +75,8 @@ export class AgentResponseModel {
   deserialize(input: AgentListResponse) {
     this.records =
       input.records?.map((item) => new AgentModel().deserialize(item)) ?? [];
-    this.entityStateCounts = input['entityStateCounts'];
-    this.entityTypeCounts = input.entityTypeCounts;
+    this.entityStateCounts = input?.entityStateCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
     this.totalRecord = input.total;
     return this;
   }

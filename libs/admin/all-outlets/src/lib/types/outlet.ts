@@ -71,3 +71,5 @@ export type FoodPackageForm = {
   type: string;
   source: number;
 };
+
+export type Feature = 'menu' | 'service' | 'food';

@@ -1,30 +1,31 @@
 <hospitality-bot-prefix-field
-  class="one-third-width"
+  [class]="className"
   [options]="currencies"
-  label="Original Price"
-  preControlName="currency"
-  postControlName="originalPrice"
+  [label]="originalPriceLabel"
+  [preControlName]="currency"
+  [postControlName]="originalPrice"
   [defaultProps]="{ post: { type: 'number' } }"
   [props]="{ errorMessages: errorMessages }"
 >
 </hospitality-bot-prefix-field>
 <hospitality-bot-prefix-field
-  class="one-third-width"
+  [class]="className"
   [options]="discountTypes"
-  label="Discount Type"
-  preControlName="discountType"
-  postControlName="discountValue"
+  [label]="discountLabel"
+  [preControlName]="discountType"
+  [postControlName]="discountValue"
   [defaultProps]="{ post: { type: 'number' } }"
   [props]="{ errorMessages: errorMessages }"
 >
 </hospitality-bot-prefix-field>
 <hospitality-bot-prefix-field
-  class="one-third-width"
+  [class]="className"
   [options]="currencies"
-  label="Discount Price"
-  preControlName="discountedPriceCurrency"
-  postControlName="discountedPrice"
+  [label]="discountedPriceLabel"
+  [preControlName]="discountedPriceCurrency"
+  [postControlName]="discountedPrice"
   [defaultProps]="{ post: { type: 'number' } }"
   [disabled]="true"
 >
 </hospitality-bot-prefix-field>
+<ng-content></ng-content>

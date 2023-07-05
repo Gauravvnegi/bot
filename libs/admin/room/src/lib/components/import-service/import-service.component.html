@@ -1,0 +1,13 @@
+<hospitality-bot-navigation-header
+  [heading]="pageTitle"
+  [routes]="navRoutes"
+></hospitality-bot-navigation-header>
+
+<hospitality-bot-import-service-container
+  [apiConfig]="{
+    itemId: hotelId,
+    endpoint: 'entity/' + hotelId + '/library',
+    params: '?type=SERVICE&serviceType=COMPLIMENTARY&pagination=false'
+  }"
+  (OnSave)="saveForm($event)"
+></hospitality-bot-import-service-container>

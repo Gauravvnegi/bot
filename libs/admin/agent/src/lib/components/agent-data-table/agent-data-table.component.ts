@@ -34,7 +34,6 @@ export class AgentDataTableComponent extends BaseDatatableComponent
 
   tableName = title;
   cols = cols;
-  filterChips = chips;
 
   subscription$ = new Subscription();
 
@@ -77,7 +76,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
           );
           this.loading = false;
         },
-        () => {
+        (error) => {
           this.values = [];
           this.loading = false;
         },
@@ -113,7 +112,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
         })
         .subscribe(
           () => {
-            this.updateStatusAndCount(rowData.status, status);
+            this.initTable();
             this.snackbarService.openSnackBarAsText(
               'Status changes successfully',
               '',
@@ -150,13 +149,20 @@ export class AgentDataTableComponent extends BaseDatatableComponent
       ]),
     };
     this.subscription$.add(
-      this.agentService.exportCSV(config).subscribe((res) => {
-        FileSaver.saveAs(
-          res,
-          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-        );
-        this.loading = false;
-      }, this.handleFinal)
+      this.agentService.exportCSV(config).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+          this.loading = false;
+        },
+        (error) => {
+          this.values = [];
+          this.loading = false;
+        },
+        this.handleFinal
+      )
     );
   }
 

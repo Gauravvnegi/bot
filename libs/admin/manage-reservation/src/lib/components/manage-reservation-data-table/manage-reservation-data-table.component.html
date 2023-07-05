@@ -45,14 +45,13 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter()"
-  *ngIf="totalRecords; else emptyTable"
+  *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div class="caption__wrapper" [formGroup]="tableFG">
       <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
 
       <hospitality-bot-filter-chips
-        class="filterIcon"
         *ngIf="isQuickFilters"
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
@@ -91,85 +90,34 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="table-room-no" [roomStatus]="rowData.roomStatus">
-          <div>
-            {{ rowData.roomNumber || '--' }}&nbsp;-&nbsp;{{
-              rowData.roomType || '--'
-            }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <div class="center-align">
-          <div class="primary-text">#{{ rowData.confirmationNo }}</div>
-        </div>
-      </td>
-
-      <td>
         <div class="cell-content">
           <div class="primary-text">
-            {{ rowData.fullName }}
+            {{ rowData.invoiceId || '--' }}
           </div>
         </div>
       </td>
-
-      <td>
-        <div class="center-align">
-          <div class="primary-text txtSize">
-            {{ rowData.from | date: 'dd/MM/yy' }}-{{
-              rowData.to | date: 'dd/MM/yy'
-            }}
-          </div>
-          <div class="secondary-text">
-            {{ rowData.from | date: 'HH:mm' }}-{{ rowData.to | date: 'HH:mm' }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <div class="center-align">
-          <div class="primary-text txtSize">
-            <span
-              [ngClass]="{
-                'status-text-reject':
-                  rowData.totalDueAmount > 0 &&
-                  rowData.totalDueAmount <= rowData.totalAmount
-              }"
-              >{{ rowData.totalDueAmount | currency: 'INR' }}</span
-            >
-            /{{ rowData.totalAmount | currency: 'INR' }}
-          </div>
-        </div>
-      </td>
-      <td>
-        <div class="center-align">
-          <div class="primary-text">
-            {{ rowData.sourceName }}
-          </div>
-          <div class="secondary-text">
-            {{ rowData.source }}
-          </div>
-        </div>
-      </td>
-
-      <td>
-        <div class="center-align">
-          <div class="primary-text">
-            {{ rowData.paymentMethod }}
-          </div>
-          <div class="secondary-text">
-            {{ rowData.totalPaidAmount | currency: 'INR' }}
-          </div>
-        </div>
-      </td>
+      <ng-container
+        *ngIf="values.length && (values[0].roomNumber || values[0].roomType)"
+        [ngTemplateOutlet]="hotelCell"
+        [ngTemplateOutletContext]="{ $implicit: rowData }"
+      >
+      </ng-container>
+      <ng-container
+        *ngIf="values.length && values[0].outletName"
+        [ngTemplateOutlet]="outletCell"
+        [ngTemplateOutletContext]="{ $implicit: rowData }"
+      >
+      </ng-container>
 
       <td>
         <div class="" *ngIf="rowData.reservationType; else emptyCell">
-          <hospitality-bot-toggle-dropdown
-            [listItem]="rowData.statusValues"
+          <hospitality-bot-status-dropdown-toggle
+            [nextStates]="rowData.nextStates"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.reservationType"
+            [state]="rowData.reservationType"
+            [recordSetting]="reservationStatusDetails"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>
@@ -211,4 +159,157 @@
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
+</ng-template>
+
+<ng-template #hotelCell let-rowData>
+  <td>
+    <div class="table-room-no" [roomStatus]="rowData.roomStatus">
+      <div>
+        {{ rowData.roomNumber || '--' }}&nbsp;-&nbsp;{{
+          rowData.roomType || '--'
+        }}
+      </div>
+    </div>
+  </td>
+  <td>
+    <div class="center-align">
+      <div class="primary-text">#{{ rowData.confirmationNo }}</div>
+    </div>
+  </td>
+
+  <td>
+    <div class="cell-content">
+      <div class="primary-text">
+        {{ rowData.fullName }}
+      </div>
+    </div>
+  </td>
+
+  <td>
+    <div class="center-align">
+      <div class="primary-text txtSize">
+        {{ rowData.from | date: 'dd/MM/yy' }}-{{
+          rowData.to | date: 'dd/MM/yy'
+        }}
+      </div>
+      <div class="secondary-text">
+        {{ rowData.from | date: 'HH:mm' }}-{{ rowData.to | date: 'HH:mm' }}
+      </div>
+    </div>
+  </td>
+  <td>
+    <div class="center-align">
+      <div class="primary-text txtSize">
+        <span
+          [ngClass]="{
+            'status-text-reject':
+              rowData.totalDueAmount > 0 &&
+              rowData.totalDueAmount <= rowData.totalAmount
+          }"
+          >{{ rowData.totalDueAmount | currency: 'INR' }}</span
+        >
+        /{{ rowData.totalAmount | currency: 'INR' }}
+      </div>
+    </div>
+  </td>
+  <td>
+    <div class="center-align">
+      <div class="primary-text">
+        {{ rowData.sourceName }}
+      </div>
+      <div class="secondary-text">
+        {{ rowData.source }}
+      </div>
+    </div>
+  </td>
+
+  <td>
+    <div class="center-align">
+      <div class="primary-text">
+        {{ rowData.paymentMethod }}
+      </div>
+      <div class="secondary-text">
+        {{ rowData.totalPaidAmount | currency: 'INR' }}
+      </div>
+    </div>
+  </td>
+</ng-template>
+
+<ng-template #outletCell let-rowData>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.outletName }}</div>
+    </div>
+    <div class="secondary-text">
+      {{ rowData.type }}
+    </div>
+  </td>
+  <td>
+    <div class="primary-text">
+      <div>{{ rowData.bookingNumber }}</div>
+    </div>
+  </td>
+
+  <td>
+    <div class="primary-text">
+      {{ rowData.guestName }}
+    </div>
+    <div class="secondary-text">
+      {{ rowData.guestMobile }}
+    </div>
+  </td>
+
+  <td>
+    <div class="center-align">
+      <div class="primary-text txtSize">
+        {{ rowData.from | date: 'dd/MM/yy' }}-{{
+          rowData.to | date: 'dd/MM/yy'
+        }}
+      </div>
+      <div class="secondary-text">
+        {{ rowData.from | date: 'HH:mm' }}-{{ rowData.to | date: 'HH:mm' }}
+      </div>
+    </div>
+  </td>
+
+  <td>
+    <div class="center-align">
+      <div class="primary-text txtSize">
+        <span
+          [ngClass]="{
+            'status-text-reject':
+              rowData.totalDueAmount > 0 &&
+              rowData.totalDueAmount <= rowData.totalAmount
+          }"
+          >{{ rowData.totalDueAmount | currency: 'INR' }}</span
+        >
+        /{{ rowData.totalAmount | currency: 'INR' }}
+      </div>
+    </div>
+  </td>
+
+  <td>
+    <div class="center-align">
+      <div class="primary-text">
+        {{ rowData.source }}
+      </div>
+    </div>
+  </td>
+
+  <td>
+    <div class="primary-text">
+      {{ rowData.paymentMethod }}
+    </div>
+  </td>
+
+  <!-- <td>
+    <div class="" *ngIf="rowData.status; else emptyCell">
+      <hospitality-bot-toggle-dropdown
+        [listItem]="rowData.statusValues"
+        (onClick)="handleStatus($event, rowData)"
+        [status]="rowData.status"
+      >
+      </hospitality-bot-toggle-dropdown>
+    </div>
+  </td> -->
 </ng-template>

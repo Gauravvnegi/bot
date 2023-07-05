@@ -1,40 +1,36 @@
 import { Option } from '@hospitality-bot/admin/shared';
 import { RoomTypes } from '../../types/bulk-update.types';
+const channels = [
+  {
+    name: 'Agoda',
+    id: 'channel1',
+    isSelected: false,
+  },
+  {
+    id: 'channel2',
+    name: 'Booking.com',
+    isSelected: false,
+  },
+];
 
 export const RoomsData: RoomTypes[] = [
   {
     name: 'Luxury',
     id: 'LUXURY-ID',
     isSelected: false,
+    channels: channels,
     variants: [
       {
         name: 'EP (Room Only)',
         id: 'variant1',
         isSelected: false,
-        channels: [
-          {
-            name: 'Agoda',
-            id: 'channel1',
-            isSelected: false,
-          },
-          {
-            id: 'channel2',
-            name: 'Booking.com',
-            isSelected: false,
-          },
-        ],
+        channels: channels,
       },
       {
         name: 'CP (With breakfast)',
         id: 'variant2',
         isSelected: false,
-        channels: [
-          {
-            id: 'channel2',
-            name: 'Booking.com',
-            isSelected: false,
-          },
-        ],
+        channels: channels,
       },
     ],
   },
@@ -42,23 +38,14 @@ export const RoomsData: RoomTypes[] = [
     name: 'Delux',
     id: 'DELUX-ID',
     isSelected: false,
+
+    channels: channels,
     variants: [
       {
         name: 'EP (Room Only)',
         id: 'variant1',
         isSelected: false,
-        channels: [
-          {
-            name: 'Agoda',
-            id: 'channel1',
-            isSelected: false,
-          },
-          {
-            id: 'channel2',
-            name: 'Booking.com',
-            isSelected: false,
-          },
-        ],
+        channels: channels,
       },
       {
         name: 'CP (With breakfast)',

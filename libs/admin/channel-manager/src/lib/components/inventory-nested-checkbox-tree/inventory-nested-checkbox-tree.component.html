@@ -1,0 +1,80 @@
+<div class="panel-tree">
+  <p-accordion [multiple]="true" class="w-full">
+    <p-accordionTab
+      *ngFor="let variant of variants; let variantIndex = index"
+      class="disable-parent"
+    >
+      <p-header>
+        <div class="varient__heading label-checkbox-wrapper">
+          <span class="panel-tree__header-checkbox">
+            <div
+              class="checkbox"
+              [name]="'variant-' + variant.name"
+              [id]="variant.id"
+              [checked]="variant.isSelected"
+              (click)="
+                onVariantChange(!variant.isSelected, variantIndex);
+                $event.stopPropagation()
+              "
+              class="custom-checkbox enable-child checkbox"
+            >
+              <img
+                *ngIf="variant.isSelected"
+                class="checkbox__img"
+                src="assets/svg/checkboxSelect.svg"
+                alt="select"
+              />
+            </div>
+          </span>
+
+          <span class="panel-tree__header-checkbox variant-wrapper">
+            <label
+              [for]="variant.id"
+              (click)="
+                onVariantChange(!variant.isSelected, variantIndex);
+                $event.stopPropagation()
+              "
+              >{{ variant.name }}</label
+            >
+
+            <hospitality-bot-menu-button
+              class="channel-heading enable-child"
+              [label]="variant.channels.length + ' Channels'"
+            ></hospitality-bot-menu-button>
+          </span>
+        </div>
+      </p-header>
+      <label
+        class="channel label-checkbox-wrapper panel-tree__header enable-child"
+        *ngFor="let channel of variant.channels; let channelIndex = index"
+        [for]="variant.id + '-' + channel.id"
+        [ngClass]="{ 'active-channel': channel.isSelected }"
+        (click)="
+          onChannelChange(!channel.isSelected, variantIndex, channelIndex)
+        "
+      >
+        <span class="panel-tree__header-checkbox">
+          <div
+            class="custom-checkbox enable-child checkbox"
+            [id]="variant.id"
+            [checked]="channel.isSelected"
+            (click)="
+              onChannelChange(!channel.isSelected, variantIndex, channelIndex);
+              $event.stopPropagation()
+            "
+          >
+            <img
+              *ngIf="channel.isSelected"
+              class="checkbox__img"
+              src="assets/svg/checkboxSelect.svg"
+              alt="select"
+            />
+          </div>
+          <span class="channel panel-tree__header-label">
+            {{ channel.name }}
+          </span>
+        </span>
+      </label>
+    </p-accordionTab>
+  </p-accordion>
+</div>

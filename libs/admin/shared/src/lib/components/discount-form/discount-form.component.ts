@@ -15,6 +15,10 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
     { label: 'Flat', value: 'NUMBER' },
   ];
 
+
+
+  className = 'half-width'
+
   errorMessages = {
     required: 'This is a required field.',
     isPriceLess: 'Price cannot be less than the discount value.',
@@ -28,15 +32,31 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
 
   originalPrice = 'originalPrice';
   currency = 'currency';
-  discountedPrice = 'discountedPrice';
   discountValue = 'discountValue';
   discountType = 'discountType';
+  discountedPrice = 'discountedPrice';
   discountedPriceCurrency = 'discountedPriceCurrency';
+
+  originalPriceLabel = 'Original Price'
+  discountLabel = 'Discount Type'
+  discountedPriceLabel = 'Discounted Price'
 
   @Input() set controls(value: controlSettings) {
     Object.entries(value)?.forEach(([key, value]) => {
       this[key] = value;
     });
+  }
+
+  @Input() set labels(value: labelSettings){
+    Object.entries(value)?.forEach(([key,value])=>{
+      this[key]=value;
+    })
+  }
+
+  @Input() set settings(value: formSettings){
+    Object.entries(value)?.forEach(([key,value]) =>{
+      this[key]=value;
+    })
   }
 
   constructor(public controlContainer: ControlContainer) {
@@ -147,8 +167,18 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
 type controlSettings = {
   originalPrice: string;
   currency: string;
-  discountedPrice: string;
   discountValue: string;
   discountType: string;
+  discountedPrice: string;
   discountedPriceCurrency: string;
 };
+
+type labelSettings = {
+  originalyPriceLabel: string;
+  discountLable: string;
+  discountedPriceLabel: string;
+}
+
+type formSettings = {
+  className: string;
+}

@@ -20,6 +20,9 @@
         controlName="name"
         label="Name"
         maxLength="60"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <div class="half-width"></div>
       <hospitality-bot-input
@@ -27,12 +30,18 @@
         controlName="gstNumber"
         label="GST"
         maxLength="15"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <hospitality-bot-input
         class="half-width"
         controlName="fssaiNumber"
         label="FSSAI NO."
         maxLength="14"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <div class="des-template">
         <div class="des-template__label">Description</div>
@@ -45,7 +54,6 @@
         </div>
       </div>
     </div>
-    <div></div>
     <hospitality-bot-social-media
       controlName="socialPlatforms"
       class="full-width"

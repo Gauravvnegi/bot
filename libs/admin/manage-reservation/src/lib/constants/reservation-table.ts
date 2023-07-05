@@ -35,41 +35,46 @@ export enum EntityTabGroup {
   HOTEL = 'HOTEL',
   RESTAURANT_AND_BAR = 'RESTAURANT_AND_BAR',
   VENUE = 'VENUE',
-  SPA = 'SPA'
+  SPA = 'SPA',
 }
-
-
-
+export enum ReservationType {
+  DRAFT = 'DRAFT',
+  CONFIRMED = 'CONFIRMED',
+  CANCELED = 'CANCELED',
+}
 /**
  * Reservation filter Status
  */
 export const reservationStatus: ReservationStatus[] = [
-  'DRAFT',
-  'CONFIRMED',
-  'CANCELLED',
+  ReservationType.DRAFT,
+  ReservationType.CONFIRMED,
+  ReservationType.CANCELED,
 ];
 
-export const reservationStatusDetails: Record<ReservationStatus, {label: string; type: FlagType}> = {
+export const reservationStatusDetails: Record<
+  ReservationStatus,
+  { label: string; type: FlagType }
+> = {
   DRAFT: {
-    label: 'DRAFT',
+    label: 'Draft',
     type: 'active',
   },
   CONFIRMED: {
     label: 'Confirmed',
     type: 'completed',
   },
-  CANCELLED: {
-    label: 'Cancelled',
+  CANCELED: {
+    label: 'Canceled',
     type: 'failed',
-  }
-}
+  },
+};
 
 export const entityTabGroup: Record<EntityTabGroup, Option> = {
-  HOTEL: {label: 'Hotel', value: 'HOTEL'},
-  RESTAURANT_AND_BAR: {label: 'Res & Bar', value: 'RESTAURANT_AND_BAR'},
-  VENUE: {label: 'Venue', value: 'VENUE'},
-  SPA: {label: 'Spa', value: 'SPA'},
-}
+  HOTEL: { label: 'Hotel', value: 'HOTEL' },
+  RESTAURANT_AND_BAR: { label: 'Res & Bar', value: 'RESTAURANT_AND_BAR' },
+  VENUE: { label: 'Venue', value: 'VENUE' },
+  SPA: { label: 'Spa', value: 'SPA' },
+};
 
 /* Reservation Filters */
 export const filters = [
@@ -82,7 +87,12 @@ export const filters = [
   },
 ];
 
-export const cols: Cols[] = [
+export const hotelCols: Cols[] = [
+  {
+    field: 'invoiceId',
+    header: 'Invoice Id',
+    sortType: 'string',
+  },
   {
     field: 'roomNumber',
     header: 'Room No / Type',
@@ -131,14 +141,94 @@ export const cols: Cols[] = [
   },
 ];
 
+export const outletCols: Cols[] = [
+  {
+    field: 'invoiceId',
+    header: 'Invoice Id',
+    sortType: 'number',
+    searchField: ['invoiceId'],
+  },
+  {
+    field: 'outletName',
+    header: 'Outlet Name / Type',
+    sortType: 'string',
+    searchField: ['outletName', 'outletType'],
+  },
+  {
+    field: 'bookingNo',
+    header: 'Booking No',
+    sortType: 'string',
+    searchField: ['bookingNo'],
+  },
+  {
+    field: 'guest',
+    header: 'Guest / Company',
+    sortType: 'string',
+    searchField: ['guest', 'company'],
+  },
+
+  {
+    field: 'date',
+    header: 'Date / Time',
+    sortType: 'string',
+    searchField: ['date', 'time'],
+  },
+  {
+    field: 'totalDueAmount',
+    header: 'Amount Due / Total (INR)',
+    sortType: 'string',
+    searchField: ['totalDueAmount', 'total'],
+  },
+  {
+    field: 'payment',
+    header: 'Payment',
+    sortType: 'string',
+    isSearchDisabled: true,
+  },
+  {
+    field: 'source',
+    header: 'Source',
+    sortType: 'string',
+    isSearchDisabled: true,
+  },
+
+  {
+    field: 'reservationType',
+    header: 'Actions',
+    sortType: 'string',
+    isSearchDisabled: true,
+  },
+];
 export const title = 'Reservation';
+
+export const reservationChips: Record<
+  'DRAFT' | 'CANCELED' | 'CONFIRMED' | 'OTA',
+  { label: string; type: FlagType }
+> = {
+  DRAFT: {
+    label: 'Draft',
+    type: 'warning',
+  },
+  CANCELED: {
+    label: 'Cancel',
+    type: 'failed',
+  },
+  CONFIRMED: {
+    label: 'Confirm',
+    type: 'active',
+  },
+  [ReservationTableValue.OTA]: {
+    label: ReservationTableValue.OTA,
+    type: 'active',
+  },
+};
 
 /* Status of the reservation */
 export enum ReservationStatusType {
   ALL = 'ALL',
   CONFIRMED = 'CONFIRMED',
   DRAFT = 'DRAFT',
-  CANCELLED = 'CANCELED',
+  CANCELED = 'CANCELED',
 }
 
 // export const reservationStatus: Status[] = [
@@ -167,7 +257,7 @@ export const chips: Chip<
   | ReservationStatusType.ALL
   | ReservationStatusType.DRAFT
   | ReservationStatusType.CONFIRMED
-  | ReservationStatusType.CANCELLED
+  | ReservationStatusType.CANCELED
 >[] = [
   {
     label: 'All',
@@ -192,7 +282,7 @@ export const chips: Chip<
   },
   {
     label: 'Cancelled ',
-    value: ReservationStatusType.CANCELLED,
+    value: ReservationStatusType.CANCELED,
     total: 0,
     isSelected: false,
     type: 'failed',

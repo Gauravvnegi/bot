@@ -10,6 +10,7 @@ import { SearchGuestResponse } from 'libs/admin/guests/src/lib/types/guest.type'
 export class Reservation {
   id: string;
   hotelId: string;
+  invoiceId: string;
   rooms: number;
   roomType: string;
   confirmationNo: string;
@@ -34,12 +35,13 @@ export class Reservation {
   totalAmount: number;
   fullName: string;
   roomNumber: number;
-  statusValues: Status[];
+  nextStates: string[];
   sourceName: string;
 
   deserialize(input: ReservationResponse) {
     this.id = input.id;
     this.hotelId = input.hotelId;
+    this.invoiceId = input?.invoiceId ?? '';
     this.rooms = input.rooms;
     this.roomType = input.roomType;
     this.confirmationNo = input.reservationNumber;
@@ -65,6 +67,7 @@ export class Reservation {
     this.fullName = this.firstName + ' ' + this.lastName;
     this.roomNumber = input?.roomNumber;
     this.sourceName = input?.sourceName;
+    this.nextStates = [...input.nextStates, input.reservationType];
     return this;
   }
 }
@@ -385,7 +388,7 @@ export class Guest {
   phoneNumber: string;
   cc: string;
   email: string;
-  
+
   deserialize(input: SearchGuestResponse) {
     this.label = `${input.firstName} ${input.lastName}`;
     this.value = input.id;

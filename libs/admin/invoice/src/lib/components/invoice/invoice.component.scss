@@ -17,6 +17,20 @@
   margin: 20px;
 }
 
+:host ::ng-deep .pi-calendar {
+  &.icon {
+    right: 0.9em;
+    top: 0.9em;
+  }
+}
+
+:host ::ng-deep .bill-description {
+  .option-item {
+    gap: 0px;
+    overflow: hidden;
+  }
+}
+
 :host ::ng-deep hospitality-bot-navigation-header .nav-wrapper__sticky {
   padding: 20px 32px 20px 22px;
 }
@@ -220,4 +234,16 @@
 
 .hide-checkbox {
   display: none;
+}
+
+.summary-btn {
+  display: flex;
+}
+
+input[disabled] {
+  /* CSS rules for disabled input elements */
+  /* Example styles: */
+  // opacity: 0.5;
+  cursor: not-allowed;
+  /* Add more styles as needed */
 }

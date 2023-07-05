@@ -66,8 +66,8 @@ export class CompanyResponseModel {
   desearalize(input: CompanyListResponse) {
     this.records =
       input.records?.map((item) => new CompanyModel().desearalize(item)) ?? [];
-    this.entityStateCounts = input['entityStateCounts'];
-    this.entityTypeCounts = input.entityTypeCounts;
+    this.entityStateCounts = input?.entityStateCounts;
+    this.entityTypeCounts = input?.entityTypeCounts;
     this.totalRecord = input.total;
     return this;
   }

@@ -23,7 +23,7 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public controlContainer: ControlContainer,
-    private socilaMediaService: SocialMediaServices
+    private socialsMediaService: SocialMediaServices
   ) {
     super(controlContainer);
   }
@@ -38,7 +38,7 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
       socialPlatforms: this.fb.array([]),
     });
     this.socialMediaControl = this.useForm.get('socialPlatforms') as FormArray;
-    this.getsocialMediaConfig();
+    this.getSocialMediaConfig();
   }
 
   patchValueToSocialMediaControl(): void {
@@ -61,9 +61,9 @@ export class SocialMediaComponent extends FormComponent implements OnInit {
     });
   }
 
-  getsocialMediaConfig() {
+  getSocialMediaConfig() {
     this.$subscription.add(
-      this.socilaMediaService.getDefultSocialConfig().subscribe((res) => {
+      this.socialsMediaService.getDefaultSocialConfig().subscribe((res) => {
         res?.forEach((element) => {
           this.socialMediaControl.push(
             this.fb.group({

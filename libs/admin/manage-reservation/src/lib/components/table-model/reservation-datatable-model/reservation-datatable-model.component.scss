@@ -1,0 +1,16 @@
+@import 'main';
+// *** over ride the table style ***
+:host ::ng-deep {
+  .p-datatable {
+    @include tableCellPadding(0.3em);
+  }
+  .filterIcon .button__wrapper {
+    img {
+      display: none;
+    }
+  }
+}
+
+.txtSize {
+  font-size: 12px !important;
+}

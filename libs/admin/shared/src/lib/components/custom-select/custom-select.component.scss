@@ -55,19 +55,22 @@
 
 .selected {
   filter: brightness(40%);
-  background-color: blueviolet;
+  background-color: #f5f5dc !important;
   border-radius: 4px;
 }
 
 .image-wrapper {
+  @include flex-all-center();
+
   width: 210px;
   height: 157px;
 }
 
 .show-image {
-  width: 208px;
-  height: 155px;
+  height: 100%;
+  width: 100%;
   border-radius: 4px;
+  object-fit: contain;
 }
 
 .text {

@@ -22,17 +22,26 @@
         controlName="name"
         label="Name"
         maxLength="60"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <hospitality-bot-select
         class="half-width , segment"
         controlName="propertyCategory"
         label="Segment"
         [options]="segmentList"
+        [props]="{
+          placeholder: 'Select Segment'
+        }"
       ></hospitality-bot-select>
       <hospitality-bot-input
         class="half-width"
         controlName="emailId"
         label="Email"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <div class="half-width" [formGroup]="useForm.get('hotel').get('contact')">
         <hospitality-bot-phone-number
@@ -45,6 +54,9 @@
         controlName="gstNumber"
         label="GST"
         maxLength="15"
+        [props]="{
+          placeholder: 'Enter'
+        }"
       ></hospitality-bot-input>
       <hospitality-bot-address-component
         class="half-width"
@@ -90,7 +102,6 @@
           (viewAll)="saveHotelData()"
           (addAction)="openImportService()"
           [noRecordsAction]="noRecordAction"
-          [addActLabel]="'+ Import Service'"
         >
           <hospitality-bot-button
             label="+ Import Service"

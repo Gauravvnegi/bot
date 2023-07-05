@@ -1,10 +1,10 @@
-
 export type RoomStatus =
   | 'CLEAN'
   | 'INSPECTED'
   | 'OUT_OF_SERVICE'
   | 'OUT_OF_ORDER'
-  | 'UNAVAILABLE';
+  | 'UNAVAILABLE'
+  | 'DIRTY';
 
 export type RoomTypeStatus = 'ACTIVE' | 'INACTIVE';
 
@@ -15,6 +15,7 @@ export type RoomResponse = {
   roomNumber: string;
   floorNumber: string;
   nextStates: RoomStatus[];
+  frontOfficeState: RoomFoStatus;
   roomTypeDetails: {
     id: string;
     name: string;
@@ -27,9 +28,9 @@ export type RoomResponse = {
     soldOut: boolean;
     unavailableRoomCount: number;
   };
+  features: string[];
   roomStatus: RoomStatus;
   //--- can be modified
-  foStatus: RoomFoStatus;
   toDate: number;
   fromDate: number;
   remarks: string;

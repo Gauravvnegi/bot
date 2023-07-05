@@ -6,7 +6,7 @@
 >
 </hospitality-bot-navigation-header>
 
-<hospitality-bot-tab-group
+<hospitality-bot-tab-header
   [listItems]="tabFilterItems"
   [selectedIndex]="tabFilterIdx"
   (selectedTabChange)="onSelectedTabFilterChange($event)"
@@ -25,7 +25,7 @@
       </div>
     </div>
   </div>
-</hospitality-bot-tab-group>
+</hospitality-bot-tab-header>
 
 <ng-container [ngSwitch]="tabFilterItems[tabFilterIdx]?.value">
   <ng-container *ngSwitchCase="'INHOUSE'">

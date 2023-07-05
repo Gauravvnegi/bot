@@ -42,6 +42,10 @@ export const roomStatusDetails: Record<
     label: 'Occupied',
     type: 'inactive',
   },
+  DIRTY: {
+    label: 'Dirty',
+    type: 'warning',
+  },
 };
 
 export const ratePlanResponse: RatePlanOptions[] = [
@@ -61,4 +65,4 @@ export const ratePlanResponse: RatePlanOptions[] = [
     label: 'AP (With all 3 Meals)',
     value: 'AP (With all 3 Meals)',
   },
-]  
+];

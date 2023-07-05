@@ -33,4 +33,5 @@ export type AgentListResponse = {
   records: AgentResponseType[];
   total: number;
   entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
 };

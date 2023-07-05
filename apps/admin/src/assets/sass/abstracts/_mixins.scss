@@ -485,6 +485,11 @@
   }
 }
 
+@mixin tableHeadingStickyPosition($topPosition) {
+  .p-datatable-thead {
+    top: $topPosition !important;
+  }
+}
 @mixin create-with-container {
   height: calc(100vh - 65px);
   overflow: hidden;

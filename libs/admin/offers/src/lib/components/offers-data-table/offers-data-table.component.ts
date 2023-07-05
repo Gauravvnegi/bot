@@ -12,7 +12,7 @@ import * as FileSaver from 'file-saver';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { LazyLoadEvent } from 'primeng/api/lazyloadevent';
 import { Subscription } from 'rxjs';
-import { chips, cols, tabFilterItems, title } from '../../constant/data-table';
+import { chips, cols, title } from '../../constant/data-table';
 import routes from '../../constant/routes';
 import { Offer, OfferList } from '../../models/offers.model';
 import { OffersServices } from '../../services/offers.service';
@@ -47,8 +47,8 @@ export class OffersDataTableComponent extends BaseDatatableComponent
   filterChips = chips;
   readonly routes = routes;
   iQuickFilters = true;
+  isAllTabFilterRequired = true;
   subscription$ = new Subscription();
-  tabFilterItems = tabFilterItems;
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
@@ -70,10 +70,13 @@ export class OffersDataTableComponent extends BaseDatatableComponent
         .getLibraryItems<OfferListResponse>(this.hotelId, this.getQueryConfig())
         .subscribe(
           (res) => {
-            this.values = new OfferList().deserialize(res).records;
-            this.updateTabFilterCount(res.entityTypeCounts, res.total);
-            this.updateQuickReplyFilterCount(res.entityStateCounts);
-            this.updateTotalRecords();
+            const data = new OfferList().deserialize(res);
+            this.values = data.records;
+            this.initFilters(
+              data.entityTypeCounts,
+              data.entityStateCounts,
+              data.totalRecord
+            );
           },
           ({ error }) => {
             this.values = [];
@@ -98,13 +101,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
           { params: '?type=OFFER' }
         )
         .subscribe(() => {
-          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-          this.updateStatusAndCount(
-            statusValue(rowData.status),
-            statusValue(status)
-          );
-          this.values.find((item) => item.id === rowData.id).status = status;
-
+          this.initTableValue();
           this.snackbarService.openSnackBarAsText(
             'Status changes successfully',
             '',
@@ -121,7 +118,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
         {
           type: LibraryItem.offer,
           offset: this.first,
@@ -141,21 +138,6 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     this.router.navigate([
       `/pages/library/offers/${routes.createOffer}/${rowData.id}`,
     ]);
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { status: null }
-        : { status: chips[0].value === 'ACTIVE' },
-    ];
   }
 
   /**

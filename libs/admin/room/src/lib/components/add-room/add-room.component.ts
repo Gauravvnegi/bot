@@ -39,6 +39,7 @@ import {
   SingleRoomForm,
   StatusQuoForm,
 } from '../../types/use-form';
+import { Services } from '../../models/amenities.model';
 
 @Component({
   selector: 'hospitality-bot-add-room',
@@ -75,6 +76,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   loadingRoomTypes = false;
   noMoreRoomTypes = false;
   roomTypeLimit = 10;
+  features;
 
   $subscription = new Subscription();
 
@@ -92,7 +94,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private libraryService: LibraryService
   ) {
-    this.initForm();
     this.submissionType = this.route.snapshot.paramMap.get(
       'type'
     ) as AddRoomTypes;
@@ -111,6 +112,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
+    this.initForm();
     this.initOptionsConfig();
     if (this.roomId) this.initRoomDetails();
   }
@@ -125,8 +127,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       roomTypeId: ['', Validators.required],
       price: [''],
       currency: [''],
-      status: ['ACTIVE'],
+      status: ['DIRTY'],
       rooms: this.useFormArray,
+      features: [[], Validators.required],
     });
 
     this.statusQuoForm = this.fb.group({
@@ -214,6 +217,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       value: item,
       type: roomStatusDetails[item].type,
     }));
+    this.getDefaultFeatures();
   }
 
   /**
@@ -244,6 +248,18 @@ export class AddRoomComponent implements OnInit, OnDestroy {
             this.loadingRoomTypes = false;
           }
         )
+    );
+  }
+
+  getDefaultFeatures() {
+    this.$subscription.add(
+      this.roomService.getFeatures().subscribe(
+        (res) => {
+          this.features = new Services().deserialize(res.features).services;
+        },
+        (err) => {},
+        () => {}
+      )
     );
   }
 
@@ -318,6 +334,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
                 floorNo: roomDetails.floorNumber,
               },
             ],
+            features: roomDetails.features,
           };
 
           if (
@@ -336,9 +353,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           this.useForm.patchValue(data);
 
           this.statusQuoForm.patchValue({
-            roomStatus:roomDetails.roomStatus,
+            roomStatus: roomDetails.roomStatus,
             remarks: roomDetails.remarks,
-            foStatus: roomDetails.foStatus,
+            foStatus: roomDetails.frontOfficeState,
           });
 
           this.isRoomInfoLoading = false;
@@ -382,7 +399,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   handleSubmit(): void {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
-      this.snackbarService.openSnackBarAsText('Invalid Login form');
+      this.snackbarService.openSnackBarAsText('Please fill all the fields');
       return;
     }
 

@@ -35,6 +35,7 @@ interface Import {
   template: '',
 })
 export class BaseDatatableComponent implements OnInit {
+  scrollTargetPoint = 110; //scroll target point to stick the table header on top
   isScrolledUp = false;
   currentPage = 0;
   @ViewChild('dt') table: Table; //reference to data-table
@@ -56,6 +57,7 @@ export class BaseDatatableComponent implements OnInit {
   isCustomSort = true;
   isSelectable = true;
   isSearchable = true;
+  isEmpty = true;
 
   tableFG: FormGroup;
 
@@ -186,6 +188,19 @@ export class BaseDatatableComponent implements OnInit {
       //setting pagination
       this.totalRecords = this.dataSource.length;
     });
+  }
+
+  resetTableValues() {
+    this.table.reset();
+    this.isTabFilters = true;
+    this.rowsPerPage = 5;
+    this.first = 0;
+    this.values = [];
+    this.tabFilterItems = [];
+    this.tabFilterIdx = 0;
+    this.filterChips = [];
+    this.selectedFilterChips = new Set<string>([defaultFilterChipValue.value]);
+    this.totalRecords = 0;
   }
 
   getSubscribedFilters(module, table, tabFilters) {
@@ -420,17 +435,21 @@ export class BaseDatatableComponent implements OnInit {
     const record = { ...defaultRecordJson, ...recordsJson };
     let totalCount = totalMainCount;
 
-    if (entityTypeCounts && Object.keys(entityTypeCounts).length > 0) {
-      this.tabFilterItems = Object.entries({
-        ...(this.isAllTabFilterRequired
-          ? { [defaultFilterChipValue.value]: totalCount }
-          : {}),
-        ...entityTypeCounts,
-      }).map(([key, value]) => ({
-        label: record[key]?.label ?? convertToTitleCase(key),
-        value: key,
-        total: value,
-      }));
+    const resEntityTypeCounts = {
+      ...(this.isAllTabFilterRequired
+        ? { [defaultFilterChipValue.value]: totalCount }
+        : {}),
+      ...entityTypeCounts,
+    };
+
+    if (resEntityTypeCounts && Object.keys(resEntityTypeCounts).length > 0) {
+      this.tabFilterItems = Object.entries(resEntityTypeCounts).map(
+        ([key, value]) => ({
+          label: record[key]?.label ?? convertToTitleCase(key),
+          value: key,
+          total: value,
+        })
+      );
 
       const selectedTabIndex = this.tabFilterItems.findIndex(
         (item) => item.value === this.selectedTab
@@ -443,6 +462,9 @@ export class BaseDatatableComponent implements OnInit {
       totalCount = this.tabFilterItems[this.tabFilterIdx].total;
     } else this.isTabFilters = false;
 
+    // Is empty is checked for tab filters only or main
+    this.isEmpty = totalCount === 0;
+
     if (entityStateCounts && Object.keys(entityStateCounts).length > 0) {
       this.filterChips = Object.entries({
         [defaultFilterChipValue.value]: totalCount,
@@ -454,7 +476,6 @@ export class BaseDatatableComponent implements OnInit {
           total: value,
           type: record[key]?.type ?? 'active',
         } as Chip<T>;
-
         return stateCount;
       });
 
@@ -462,12 +483,12 @@ export class BaseDatatableComponent implements OnInit {
         totalCount = this.filterChips.reduce((prev, curr) => {
           const isSelected = this.selectedFilterChips.has(curr.value);
           const res = prev + (isSelected ? curr.total : 0);
-
           return res;
         }, 0);
       }
-    } else this.isQuickFilters = false;
 
+      this.isQuickFilters = true;
+    } else this.isQuickFilters = false;
     this.totalRecords = totalCount;
   }
 
@@ -487,7 +508,6 @@ export class BaseDatatableComponent implements OnInit {
     if (chips.length + 1 === this.filterChips.length && !isAllAType) {
       return [];
     }
-
     return !isStatusBoolean
       ? chips.map((item) => ({ [key]: item }))
       : [
@@ -511,7 +531,7 @@ export class BaseDatatableComponent implements OnInit {
     } else if (this.filterChips?.length) {
       this.totalRecords = this.calculateTotalChipsCount(this.filterChips);
     } else {
-      this.totalRecords = this.tabFilterItems[this.tabFilterIdx].total;
+      this.totalRecords = this.tabFilterItems[this.tabFilterIdx]?.total;
     }
   }
 
@@ -731,7 +751,7 @@ export class BaseDatatableComponent implements OnInit {
   onScroll = () => {
     if (this.table) {
       const { top } = this.table?.el?.nativeElement.getBoundingClientRect();
-      this.isScrolledUp = top < 110;
+      this.isScrolledUp = top < this.scrollTargetPoint;
     }
   };
 }

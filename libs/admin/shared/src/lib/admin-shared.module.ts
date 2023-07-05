@@ -19,6 +19,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonComponent } from './components/button/button.component';
@@ -79,6 +80,7 @@ import { NavigationHeaderComponent } from './components/navigation-header/naviga
 import { CategoryFormComponent } from './view/category-form/category-form.component';
 import { AutoCompleteComponent } from './components/form-component/auto-complete/auto-complete.component';
 import { ViewInputComponent } from './components/form-component/view-input/view-input.component';
+import { InputSwitchComponent } from './components/form-component/input-switch/input-switch.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { SkeletonShapeComponent } from './components/skeleton/skeleton-shape/skeleton-shape.component';
@@ -91,6 +93,7 @@ import { CreateWithViewComponent } from './view/create-with-view/create-with-vie
 import { ToggleSwitchComponentLabel } from './components/toggle-switch-label/toggle-switch-label.component';
 import { RoomTypeDirective } from './directives/room-type.directive';
 import { CopyLinkComponentComponent } from './components/copy-link-component/copy-link-component.component';
+import { InputNumberComponent } from './components/form-component/input-number/input-number.component';
 import { AddAttachmentComponent } from './components/form-component/add-attachment/add-attachment.component';
 import { ModalHeaderComponent } from './components/datatable/modal-header/modal-header.component';
 import { AddressComponent } from './components/address/address-component.component';
@@ -101,6 +104,9 @@ import { CheckboxSelectorComponent } from './components/form-component/checkbox-
 import { MenuButtonComponent } from './components/menu-button/menu-button.component';
 // import { MenuModule } from 'primeng/menu';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TabHeaderComponent } from './components/tab-header/tab-header.component';
+import { ImportServiceContainerComponent } from './components/import-service-container/import-service-container.component';
+import { BackdropDirective } from './directives/backdrop.directive';
 @NgModule({
   imports: [
     CommonModule,
@@ -128,6 +134,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     MatMenuModule,
     MenuModule,
     ToggleButtonModule,
+    InputNumberModule,
   ],
   declarations: [
     DatatableComponent,
@@ -189,6 +196,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    InputSwitchComponent,
     MenuComponent,
     SkeletonShapeComponent,
     SkeletonDirective,
@@ -208,6 +216,10 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     TimePickerComponent,
     CheckboxSelectorComponent,
     MenuButtonComponent,
+    TabHeaderComponent,
+    BackdropDirective,
+    ImportServiceContainerComponent,
+    InputNumberComponent,
   ],
 
   exports: [
@@ -285,6 +297,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     CategoryFormComponent,
     AutoCompleteComponent,
     ViewInputComponent,
+    InputSwitchComponent,
     MatMenuModule,
     MenuModule,
     MenuComponent,
@@ -307,6 +320,9 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     CheckboxSelectorComponent,
     MenuButtonComponent,
     ToggleButtonModule,
+    TabHeaderComponent,
+    ImportServiceContainerComponent,
+    InputNumberComponent,
   ],
 })
 export class AdminSharedModule {}

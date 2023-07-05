@@ -79,7 +79,7 @@ export class AddGuestComponent implements OnInit {
       companyName: ['', [Validators.required]],
       gender: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
-      age: ['', Validators.required],
+      age: [{ value: '', disabled: true }, Validators.required],
     });
   }
   initEditView() {
@@ -97,11 +97,9 @@ export class AddGuestComponent implements OnInit {
     this.subscription$.add(
       this.guestForm.controls['dateOfBirth'].valueChanges.subscribe(
         (changedDOB) => {
-          const birthDate = new Date(changedDOB);
-          const today = new Date();
-          const diff = today.getTime() - birthDate.getTime();
+          let timeDiff = Math.abs(Date.now() - changedDOB);
           this.guestForm.patchValue({
-            age: Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25)),
+            age: Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25),
           });
         }
       )

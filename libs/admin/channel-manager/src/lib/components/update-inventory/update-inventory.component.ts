@@ -14,6 +14,7 @@ import {
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { DateOption, RoomTypes } from '../../types/channel-manager.types';
 import { getWeekendBG } from '../../models/bulk-update.models';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
@@ -25,26 +26,41 @@ export class UpdateInventoryComponent implements OnInit {
 
   useForm: FormGroup;
   roomTypes: RoomTypes[] = [];
+  allRoomTypes: RoomTypes[] = [];
 
   dates: DateOption[];
   dateLimit: number = 15;
 
   restrictions: RestrictionAndValuesOption[];
+  hotelId: string;
 
   constructor(
     private fb: FormBuilder,
-    private channelMangerForm: ChannelManagerFormService
+    private channelMangerForm: ChannelManagerFormService,
+    private globalFilter: GlobalFilterService
   ) {}
 
   ngOnInit(): void {
+    this.hotelId = this.globalFilter.hotelId;
     this.initOptions();
     this.initForm();
   }
 
   initOptions() {
     this.initDate(Date.now());
-    this.roomTypes = this.channelMangerForm.getRoomsData;
+    this.initRoomTypes();
     this.getRestrictions();
+  }
+
+  initRoomTypes() {
+    this.channelMangerForm.loadRoomTypes(this.hotelId);
+    this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
+      if (rooms.length !== 0) {
+        this.roomTypes = rooms;
+        this.allRoomTypes = rooms;
+        this.initForm();
+      }
+    });
   }
 
   getRestrictions() {
@@ -83,10 +99,12 @@ export class UpdateInventoryComponent implements OnInit {
 
     this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
       if (res.length) {
-        this.roomTypes = this.channelMangerForm.getRoomsData.filter((item) =>
+        this.roomTypes = this.allRoomTypes.filter((item) =>
           res.includes(item.value)
         );
-      } else this.roomTypes = this.channelMangerForm.getRoomsData;
+      } else {
+        this.initRoomTypes();
+      }
 
       this.useForm.removeControl('roomTypes');
       this.addRoomTypesControl();
@@ -106,7 +124,9 @@ export class UpdateInventoryComponent implements OnInit {
           value: [roomType.value],
           linked: [false],
           showChannels: [false],
-          selectedRestriction: [this.restrictions[0].value],
+          selectedRestriction: [
+            this.restrictions && this.restrictions[0].value,
+          ],
         })
       );
 
@@ -123,21 +143,24 @@ export class UpdateInventoryComponent implements OnInit {
    */
   addRatesAndRestrictionControl(control: FormArray, idx: number) {
     const controlG = control.at(idx) as FormGroup;
-    this.restrictions.forEach((item) => {
-      controlG.addControl(item.value, this.getValuesArrayControl(item.type));
+    this.restrictions &&
+      this.restrictions.forEach((item) => {
+        controlG.addControl(item.value, this.getValuesArrayControl(item.type));
 
-      const restrictionFA = control.at(idx).get(item.value) as FormArray;
+        const restrictionFA = control.at(idx).get(item.value) as FormArray;
 
-      restrictionFA.controls.forEach((rateControl) => {
-        rateControl.valueChanges.subscribe((res) => {
-          const linkedValue = control.at(idx).get('linked').value;
+        restrictionFA.controls.forEach((rateControl) => {
+          rateControl.valueChanges.subscribe((res) => {
+            const linkedValue = control.at(idx).get('linked').value;
 
-          if (linkedValue) {
-            restrictionFA.patchValue(this.getArray(res), { emitEvent: false });
-          }
+            if (linkedValue) {
+              restrictionFA.patchValue(this.getArray(res), {
+                emitEvent: false,
+              });
+            }
+          });
         });
       });
-    });
   }
 
   /**
@@ -164,7 +187,9 @@ export class UpdateInventoryComponent implements OnInit {
           label: channel.label,
           value: channel.value,
           linked: [true],
-          selectedRestriction: [this.restrictions[0].value],
+          selectedRestriction: [
+            this.restrictions && this.restrictions[0].value,
+          ],
         })
       );
 

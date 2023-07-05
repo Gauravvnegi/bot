@@ -7,7 +7,7 @@ import { RoomTypeComponent } from './components/room-type/room-type.component';
 import { RoomComponent } from './components/room/room.component';
 import { ServicesComponent } from './components/services/services.component';
 import routes from './constant/routes';
-import { ImportServiceComponent } from './components/import-service /import-service.component';
+import { ImportServiceComponent } from './components/import-service/import-service.component';
 
 export const adminRoomRoutes: Route[] = [
   {

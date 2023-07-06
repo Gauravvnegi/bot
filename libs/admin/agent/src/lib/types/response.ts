@@ -1,8 +1,8 @@
 import { EntityState } from '@hospitality-bot/admin/shared';
 
 export type AgentTableResponse = {
-  id: string;
-  salutation: string;
+  id?: string;
+  salutation?: string;
   firstName: string;
   lastName: string;
   contactDetails: {
@@ -11,14 +11,22 @@ export type AgentTableResponse = {
     emailId: string;
   };
   nationality: string;
-  age: number;
+  age?: number;
   type: string;
   priceModifier: string;
   priceModifierValue: string;
   iataNumber: string;
   isVerified: boolean;
-  status: boolean;
-  code: string;
+  status?: boolean;
+  code?: string;
+  address: {
+    addressLine1: string;
+    city: string;
+    state: string;
+    countryCode: string;
+    postalCode: string;
+  };
+  companyId: string;
 };
 
 export type AgentListResponse = {

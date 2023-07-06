@@ -12,8 +12,9 @@ import { FormService } from 'libs/admin/members/src/lib/services/form.service';
 import { companyRoutes } from 'libs/admin/company/src/lib/constants/route';
 import { AgentFormType } from '../../types/form.types';
 import { AgentModel } from '../../models/agent.model';
-import { AgentResponseType } from '../../types/response';
+import { AgentTableResponse } from '../../types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
+import { commissionType } from '../../types/agent';
 @Component({
   selector: 'hospitality-bot-add-agent',
   templateUrl: './add-agent.component.html',
@@ -39,7 +40,10 @@ export class AddAgentComponent implements OnInit {
   companyLimit = 10;
 
   companyList: Option[] = [];
-  commissionTypes: Option[] = [{ label: '%OFF', value: 'PERCENTAGE' }];
+  commissionTypes: Option[] = [
+    { label: '%OFF', value: commissionType.PERCENTAGE },
+    { label: 'Flat', value: commissionType.COMMISSION },
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -70,17 +74,14 @@ export class AddAgentComponent implements OnInit {
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       cc: ['+91'],
-      phoneNo: [null, [Validators.required]],
+      phoneNo: ['', [Validators.required]],
       iataNo: ['', [CustomValidators.requiredLength(14)]],
-      companyId: ['', [Validators.required]],
+      company: ['', [Validators.required]],
       address: ['', [Validators.required]],
-      commissionType: ['PERCENTAGE'],
-      commission: [
-        null,
-        [Validators.required, Validators.min(0), Validators.max(100)],
-      ],
+      commissionType: [commissionType.PERCENTAGE, [Validators.required]],
+      commission: ['', [Validators.required, Validators.min(0)]],
     });
-
+    this.listenChanges();
     if (this.agentId) this.getAgentById();
   }
 
@@ -90,6 +91,36 @@ export class AddAgentComponent implements OnInit {
     this.formService.reset();
   }
 
+  listenChanges() {
+    const commissionControl = this.agentForm.get('commissionType');
+    const commissionValueControl = this.agentForm.get('commission');
+    const setCommissionValueAndErrors = () => {
+      const commission = +(commissionValueControl.value ?? 0);
+      const type = commissionControl.value;
+
+      const validationRules = {
+        [commissionType.PERCENTAGE]:
+          commission >= 100 ? { moreThan100: true } : null,
+      };
+
+      if (commission < 0) {
+        return { min: true };
+      }
+
+      return validationRules[type];
+    };
+
+    const commissionSubscription = () => {
+      commissionValueControl.enable({ emitEvent: false });
+      commissionValueControl.setErrors(null);
+      const errors = setCommissionValueAndErrors();
+      errors && commissionValueControl.setErrors(errors);
+    };
+
+    commissionValueControl.valueChanges.subscribe(commissionSubscription);
+    commissionControl.valueChanges.subscribe(commissionSubscription);
+  }
+
   /**
    * @function getAgentById load edit view
    */
@@ -97,16 +128,21 @@ export class AddAgentComponent implements OnInit {
     this.loading = true;
     this.subscription$.add(
       this.agentService
-        .getAgentById(this.agentId, { params: '?type=AGENT' })
-        .subscribe((response: AgentResponseType) => {
+        .getAgentById(this.agentId, {
+          params: `?type=AGENT&entityId=${this.entityId}`,
+        })
+        .subscribe((response: AgentTableResponse) => {
+          const address = response.address;
           this.agentForm.patchValue({
             name: response.firstName,
             email: response.contactDetails.emailId,
+            cc: response.contactDetails.cc,
             phoneNo: response.contactDetails.contactNumber,
             iataNo: response.iataNumber,
-            companyId: response.companyId,
-            address: response.address,
-            commission: response.commission,
+            company: response.companyId,
+            address: `${address.addressLine1}, ${address.city}, ${address.countryCode}, ${address.postalCode}, ${address.state}`,
+            commissionType: response.priceModifier,
+            commission: response.priceModifierValue,
           });
         }, this.handleFinal)
     );

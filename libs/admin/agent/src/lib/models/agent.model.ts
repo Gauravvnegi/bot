@@ -1,10 +1,6 @@
 import { EntityState, Option } from '@hospitality-bot/admin/shared';
 import { AgentFormType } from '../types/form.types';
-import {
-  AgentListResponse,
-  AgentResponseType,
-  AgentTableResponse,
-} from '../types/response';
+import { AgentListResponse, AgentTableResponse } from '../types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 export class AgentModel {
   id: string;
@@ -20,13 +16,21 @@ export class AgentModel {
   status: boolean;
 
   static mapFormData(form: AgentFormType) {
-    let data: AgentResponseType = {
-      firstName: form.name,
+    const name = form.name.split(' ');
+    let data: AgentTableResponse = {
+      firstName: name[0] ?? '',
+      lastName: name[1] ?? '',
       contactDetails: {
         cc: form.cc,
         contactNumber: form.phoneNo,
         emailId: form.email,
       },
+      nationality: form.address['country'],
+      type: 'GUEST',
+      priceModifier: form.commissionType,
+      priceModifierValue: form.commission?.toString(),
+      iataNumber: form.iataNo,
+      isVerified: form.iataNo.length > 0 ? true : false,
       address: {
         addressLine1: form.address['formattedAddress'] ?? '',
         city: form.address['city'] ?? '',
@@ -34,9 +38,6 @@ export class AgentModel {
         countryCode: form.address['country'] ?? '',
         postalCode: form.address['postalCode'] ?? '',
       },
-      priceModifierType: form.commissionType,
-      priceModifierValue: form.commission?.toString(),
-      iataNumber: form.iataNo,
       companyId: form.companyId,
     };
 

@@ -1,6 +1,4 @@
-import { Cols } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import { windowTime } from 'rxjs/operators';
 
 export const roomFields: IteratorField[] = [
   {
@@ -10,13 +8,23 @@ export const roomFields: IteratorField[] = [
     options: [],
     required: false,
     placeholder: 'Select',
+    width: '25%',
   },
   {
-    label: 'Number of rooms',
+    label: 'No. of rooms',
     name: 'roomCount',
     type: 'input',
     required: true,
     placeholder: 'Enter',
+    width: '14%',
+  },
+  {
+    label: 'Room Number',
+    name: 'roomNumber',
+    type: 'multi-select',
+    required: true,
+    placeholder: 'Enter',
+    width: '25%',
   },
   {
     label: 'Adult',
@@ -24,6 +32,7 @@ export const roomFields: IteratorField[] = [
     type: 'input',
     required: true,
     placeholder: 'Enter',
+    width: '14%',
   },
   {
     label: 'Kids',
@@ -31,6 +40,7 @@ export const roomFields: IteratorField[] = [
     type: 'input',
     required: false,
     placeholder: 'Enter',
+    width: '14%',
   },
 ];
 
@@ -113,7 +123,7 @@ export const venueFields: IteratorField[] = [
     type: 'input',
     required: true,
     placeholder: 'Search by name',
-    width: '40%',
+    width: '30%',
   },
   {
     label: 'Duration',
@@ -121,14 +131,22 @@ export const venueFields: IteratorField[] = [
     type: 'input',
     required: true,
     placeholder: 'Enter',
-    width: '25%',
+    width: '20%',
   },
   {
     label: 'Price',
     name: 'price',
     type: 'input',
-    required: true,
+    required: false,
     placeholder: 'Enter',
-    width: '25%',
+    width: '20%',
+  },
+  {
+    label: 'Total Price',
+    name: 'totalPrice',
+    type: 'input',
+    required: false,
+    placeholder: 'Enter',
+    width: '20%',
   },
 ];

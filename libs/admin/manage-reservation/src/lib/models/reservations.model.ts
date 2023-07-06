@@ -329,6 +329,7 @@ export class SummaryData {
   adultCount: number;
   childCount: number;
   roomCount: number;
+  roomNumbers: Option[];
 
   deserialize(input): this {
     this.id = input?.id;
@@ -342,6 +343,7 @@ export class SummaryData {
     this.adultCount = input?.adultCount;
     this.childCount = input?.childCount;
     this.roomCount = input?.roomCount;
+    this.roomNumbers = input?.roomNumbers;
     return this;
   }
 }

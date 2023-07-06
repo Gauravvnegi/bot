@@ -9,13 +9,14 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ConfigService, NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { outletBusinessRoutes } from '../../constants/routes';
+import { OutletBaseComponent } from '../outlet-base.components';
 
 @Component({
   selector: 'hospitality-bot-create-menu',
   templateUrl: './create-menu.component.html',
   styleUrls: ['./create-menu.component.scss'],
 })
-export class CreateMenuComponent implements OnInit {
+export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
   outletId: string;
   brandId: string;
   menuId: string;
@@ -45,27 +46,16 @@ export class CreateMenuComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private configService: ConfigService,
-    private router: Router,
-    private route: ActivatedRoute
+    router: Router,
+    route: ActivatedRoute
   ) {
-    this.router.events.subscribe(
-      ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
-        const outletId = snapshot?.params['outletId'];
-        const brandId = snapshot?.params['brandId'];
-        const menuId = snapshot?.params['menuId'];
-        if (outletId) this.outletId = outletId;
-        if (brandId) this.brandId = brandId;
-        if (menuId) this.menuId = menuId;
-      }
-    );
-    const { navRoutes, title } = outletBusinessRoutes['menu'];
-    this.pageTitle = title;
-    this.navRoutes = navRoutes;
+    super(router, route);
   }
 
   ngOnInit(): void {
     this.initForm();
     // this.initOptionsConfig();
+    this.initComponent('menu');
   }
 
   initForm(): void {

@@ -1,22 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { NavRouteOptions } from '@hospitality-bot/admin/shared';
-import { outletBusinessRoutes } from '../../constants/routes';
+import { ActivatedRoute, Router } from '@angular/router';
+import { OutletBaseComponent } from '../outlet-base.components';
 
 @Component({
   selector: 'hospitality-bot-import-service',
   templateUrl: './import-service.component.html',
   styleUrls: ['./import-service.component.scss'],
 })
-export class ImportServiceComponent implements OnInit {
-  pageTitle: string = 'Import Services';
-  navRoutes: NavRouteOptions = [];
-  constructor() {
-    const { navRoutes, title } = outletBusinessRoutes['importService'];
-    this.navRoutes = navRoutes;
-    this.pageTitle = title;
+export class ImportServiceComponent extends OutletBaseComponent
+  implements OnInit {
+  constructor(router: Router, route: ActivatedRoute) {
+    super(router, route);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initComponent('importService');
+  }
 
   saveForm(serviceIds: string[]) {}
 }

@@ -40,8 +40,8 @@ export class AgentService extends ApiService {
   ): Observable<AgentResponseType> {
     return this.get(`/api/v1/members/${agentId}${config.params}`);
   }
-  updateAgentStatus(agentid, config: QueryConfig): Observable<any> {
-    return this.patch(`/api/v1/members/${agentid}${config.params}`, {});
+  updateAgentStatus(agentId, config: QueryConfig): Observable<any> {
+    return this.patch(`/api/v1/members/${agentId}${config.params}`, {});
   }
 
   exportCSV(config: QueryConfig): Observable<any> {

@@ -65,13 +65,13 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   initTable() {
     this.loading = true;
     this.subscription$.add(
-      this.agentService.getAgentList({ params: '?type=AGENT' }).subscribe(
-        (res: AgentListResponse) => {
+      this.agentService.getAgentList(this.getQueryConfig()).subscribe(
+        (res) => {
           const agentList = new AgentResponseModel().deserialize(res);
           this.values = agentList.records;
           this.initFilters(
-            agentList.entityTypeCounts,
             agentList.entityStateCounts,
+            agentList.entityTypeCounts,
             agentList.totalRecord
           );
           this.loading = false;
@@ -91,6 +91,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
         ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
         {
           type: 'AGENT',
+          entityId: this.entityId,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -145,7 +146,11 @@ export class AgentDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { type: 'AGENT' },
+        {
+          entityType: 'AGENT',
+          entityId: this.entityId,
+          entityState: this.selectedTab,
+        },
       ]),
     };
     this.subscription$.add(

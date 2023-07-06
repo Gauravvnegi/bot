@@ -1,6 +1,10 @@
 import { EntityState, Option } from '@hospitality-bot/admin/shared';
 import { AgentFormType } from '../types/form.types';
-import { AgentListResponse, AgentResponseType } from '../types/response';
+import {
+  AgentListResponse,
+  AgentResponseType,
+  AgentTableResponse,
+} from '../types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 export class AgentModel {
   id: string;
@@ -11,6 +15,7 @@ export class AgentModel {
   iataNo: number;
   email: string;
   phoneNo: string;
+  commissionType: string;
   commission: string;
   status: boolean;
 
@@ -38,18 +43,19 @@ export class AgentModel {
     return data;
   }
 
-  deserialize(input: AgentResponseType) {
-    const contact = input['contactDetails'];
+  deserialize(input: AgentTableResponse) {
+    const contact = input.contactDetails;
     Object.assign(this, {
       id: input.id,
       name: input.firstName,
       code: input.code,
-      verified: input.iataNumber ? true : false,
-      iataNo: input.iataNumber ?? '--',
+      verified: input.isVerified,
+      iataNo: input.iataNumber,
       email: contact.emailId,
-      phoneNumber: `${contact.cc}-${contact.contactNumber}`,
-      commission: input.commission,
-      status: input.action,
+      phoneNo: `${contact.cc}-${contact.contactNumber}`,
+      commissionType: input.priceModifier,
+      commission: input.priceModifierValue,
+      status: input.status,
     });
     return this;
   }

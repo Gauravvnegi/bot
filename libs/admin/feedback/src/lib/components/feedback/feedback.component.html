@@ -13,22 +13,24 @@
         [globalFeedbackFilterType]="globalFeedbackFilterType"
       ></hospitality-bot-bifurcation-stats>
     </div>
-    <div class="stats">
-      <hospitality-bot-global-nps
-        [globalFeedbackFilterType]="globalFeedbackFilterType"
-      >
-      </hospitality-bot-global-nps>
-    </div>
-    <div class="stats">
-      <hospitality-bot-top-low-nps
-        [globalFeedbackFilterType]="globalFeedbackFilterType"
-      >
-      </hospitality-bot-top-low-nps>
-    </div>
-    <div class="stats">
-      <hospitality-bot-feedback-distribution
-        [globalFeedbackFilterType]="globalFeedbackFilterType"
-      ></hospitality-bot-feedback-distribution>
+    <div class="stats-container">
+      <div class="stats">
+        <hospitality-bot-global-nps
+          [globalFeedbackFilterType]="globalFeedbackFilterType"
+        >
+        </hospitality-bot-global-nps>
+      </div>
+      <div class="stats">
+        <hospitality-bot-top-low-nps
+          [globalFeedbackFilterType]="globalFeedbackFilterType"
+        >
+        </hospitality-bot-top-low-nps>
+      </div>
+      <div class="stats">
+        <hospitality-bot-feedback-distribution
+          [globalFeedbackFilterType]="globalFeedbackFilterType"
+        ></hospitality-bot-feedback-distribution>
+      </div>
     </div>
     <div class="shared-container">
       <div class="shared-stats">

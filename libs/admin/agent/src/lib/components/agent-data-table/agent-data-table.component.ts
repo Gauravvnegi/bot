@@ -7,7 +7,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
-import { chips, cols, title } from '../../constant/data-table';
+import { cols, title } from '../../constant/data-table';
 import { AgentService } from '../../services/agent.service';
 import { Router } from '@angular/router';
 import { agentRoutes } from '../../constant/routes';

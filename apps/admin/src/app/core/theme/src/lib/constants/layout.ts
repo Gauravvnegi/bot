@@ -98,6 +98,18 @@ export const customModule = {
       {
         isSubscribed: true,
         isView: true,
+        label: 'Guest Dashboard',
+        name: 'GUEST_DASHBOARD',
+      },
+      {
+        isSubscribed: true,
+        isView: true,
+        label: 'Guests',
+        name: 'GUESTS',
+      },
+      {
+        isSubscribed: true,
+        isView: true,
         label: 'Agent',
         name: 'AGENT',
       },

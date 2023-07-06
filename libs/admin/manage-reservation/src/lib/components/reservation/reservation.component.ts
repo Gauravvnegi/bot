@@ -57,6 +57,6 @@ export class ReservationComponent extends BaseDatatableComponent
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
     this.selectedOutlet = this.tabFilterItems[event.index].type;
-    this.reservationService.setSelectedOutlet(this.selectedOutlet);
+    this.reservationService.selectedOutlet.next(this.selectedOutlet);
   }
 }

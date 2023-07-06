@@ -14,16 +14,11 @@ export class ManageReservationService extends ApiService {
   public selectedOutlet = new BehaviorSubject<EntityTabGroup>(
     EntityTabGroup.HOTEL
   );
-
-  reservationDate = new BehaviorSubject<Date>(null);
-
-  setSelectedOutlet(value: EntityTabGroup) {
-    this.selectedOutlet.next(value);
-  }
-
   getSelectedOutlet(): Observable<EntityTabGroup> {
     return this.selectedOutlet.asObservable().pipe(distinctUntilChanged());
   }
+
+  reservationDate = new BehaviorSubject<Date>(null);
 
   selectedTab = ReservationTableValue.ALL;
 
@@ -284,8 +279,8 @@ export class ManageReservationService extends ApiService {
           },
           {
             id: 2,
-            name: 'Restaurant',
-            type: 'RESTAURANT',
+            name: 'Restaurant and Bar',
+            type: 'RESTAURANT_AND_BAR',
           },
           {
             id: 3,

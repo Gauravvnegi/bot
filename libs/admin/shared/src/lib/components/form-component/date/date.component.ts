@@ -16,7 +16,7 @@ export class DateComponent extends FormComponent implements OnInit {
   enableSeconds = false;
   hourFormat: 12 | 24 = 12;
   dateFormat = 'd/m/yy';
-  readonlyInput = false;
+  readonlyInput = true;
   enableButtonBar = false;
 
   /**
@@ -76,7 +76,7 @@ export class DateComponent extends FormComponent implements OnInit {
 /**
  * @type DateSetting
  * @property translateKey Translation key whose value will be fetched from translation files.
- * @property readonlyInput To set date as non editable
+ * @property readonlyInput To disable setting date using user input.
  * @property enableButtonBar To add cta to calendar
  *
  */

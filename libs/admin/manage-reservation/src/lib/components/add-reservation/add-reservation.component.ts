@@ -46,6 +46,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   // loading = false;
   formValueChanges = false;
   disabledForm = false;
+  expandAccordion = false;
 
   deductedAmount = 0;
   bookingType = 'HOTEL';
@@ -66,14 +67,21 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
     this.initForm();
-    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.initDetails();
+    this.getReservationId();
+  }
 
+  initDetails() {
+    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.activatedRoute.queryParams.subscribe((params) => {
+      this.expandAccordion = params.expandAccordion === 'true';
+    });
+    console.log(this.expandAccordion);
     const { navRoutes, title } = manageReservationRoutes[
       this.reservationId ? 'editReservation' : 'addReservation'
     ];
     this.routes = navRoutes;
     this.pageTitle = title;
-    this.getReservationId();
   }
 
   /**

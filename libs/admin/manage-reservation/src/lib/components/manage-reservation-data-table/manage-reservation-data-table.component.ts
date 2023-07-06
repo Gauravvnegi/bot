@@ -20,12 +20,15 @@ import { Subject, Subscription } from 'rxjs';
 import {
   EntityTabGroup,
   hotelCols,
+  HotelMenuOptions,
+  MenuOptions,
   outletCols,
   ReservationSearchItem,
   reservationStatusDetails,
   ReservationStatusType,
   ReservationTableValue,
   ReservationType,
+  RestaurantMenuOptions,
   title,
 } from '../../constants/reservation-table';
 import { manageReservationRoutes } from '../../constants/routes';
@@ -66,10 +69,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   isOutletChanged: boolean = false;
   private destroy$ = new Subject<void>();
 
-  menuOptions: Option[] = [
-    { label: 'Manage Invoice', value: 'MANAGE_INVOICE' },
-    { label: 'Edit Reservation', value: 'EDIT_RESERVATION' },
-  ];
+  menuOptions: Option[] = MenuOptions;
 
   constructor(
     public fb: FormBuilder,
@@ -134,20 +134,22 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   loadData(event: LazyLoadEvent): void {
     this.manageReservationService.selectedTab = this.selectedTab;
-    if(!this.isOutletChanged) this.initTableValue();
+    if (!this.isOutletChanged) this.initTableValue();
   }
 
   listenForOutletChange(value) {
     // this.manageReservationService.getSelectedOutlet().subscribe((value) => {
-      this.selectedOutlet = value;
-      if (this.selectedOutlet !== this.previousOutlet) {
-        this.resetTableValues();
-        this.loading = true;
-        this.isOutletChanged = true;
-      } else { this.isOutletChanged = false}
+    this.selectedOutlet = value;
+    if (this.selectedOutlet !== this.previousOutlet) {
+      this.resetTableValues();
+      this.loading = true;
+      this.isOutletChanged = true;
+    } else {
+      this.isOutletChanged = false;
+    }
 
-      this.previousOutlet = this.selectedOutlet;
-      this.initDetails(this.selectedOutlet);
+    this.previousOutlet = this.selectedOutlet;
+    this.initDetails(this.selectedOutlet);
     // });
   }
 
@@ -155,13 +157,17 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     if (selectedOutlet === EntityTabGroup.HOTEL) {
       this.selectedTab = ReservationTableValue.ALL;
       this.cols = hotelCols;
-      this.menuOptions.push({label: 'Assign Room', value: 'ASSIGN_ROOM'});
+      this.menuOptions = HotelMenuOptions;
       this.isAllTabFilterRequired = true;
       this.isTabFilters = true;
     } else {
       this.cols = outletCols;
       this.isTabFilters = false;
       this.isAllTabFilterRequired = false;
+      this.menuOptions = MenuOptions;
+      if (selectedOutlet === EntityTabGroup.RESTAURANT_AND_BAR) {
+        this.menuOptions = RestaurantMenuOptions;
+      }
     }
   }
 
@@ -341,12 +347,16 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   /**
-   * @function editReservation To navigate at edit page
+   * @function editReservation To navigate to the edit page
    */
-  editReservation(id: string) {
-    this.router.navigate([
-      `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.editReservation.route}/${id}`,
-    ]);
+  editReservation(id: string, expandAccordion = false) {
+    const queryParams = expandAccordion ? { expandAccordion: true } : undefined;
+    this.router.navigate(
+      [
+        `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.editReservation.route}/${id}`,
+      ],
+      { queryParams }
+    );
   }
 
   /**
@@ -370,11 +380,23 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   handleMenuClick(value: string, id: string) {
-    if (value === 'MANAGE_INVOICE') {
-      this.router.navigateByUrl(`pages/efrontdesk/invoice/${id}`);
-    }
-    if (value === 'EDIT_RESERVATION') {
-      this.editReservation(id);
+    switch (value) {
+      case 'MANAGE_INVOICE':
+        this.router.navigateByUrl(`pages/efrontdesk/invoice/${id}`);
+        break;
+      case 'EDIT_RESERVATION':
+        this.editReservation(id);
+        break;
+      case 'PRINT_INVOICE':
+        // Handle PRINT_INVOICE case
+        break;
+      case 'ASSIGN_ROOM':
+        this.editReservation(id, true);
+        // Handle ASSIGN_ROOM case
+        break;
+      case 'ASSIGN_TABLE':
+        // Handle ASSIGN_TABLE case
+        break;
     }
   }
 

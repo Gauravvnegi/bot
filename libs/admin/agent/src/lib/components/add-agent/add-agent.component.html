@@ -56,18 +56,12 @@
       }"
     ></hospitality-bot-input>
 
-    <hospitality-bot-select
+    <hospitality-bot-company-list
       class="half-width"
       controlName="company"
-      label="Company Name"
-      [options]="companyList"
-      [props]="{ isAsync: true, createPrompt: '+ Add New Company' }"
-      [loading]="loadingCompany"
-      (paginate)="loadMoreCompany()"
-      (onSearch)="searchCompany($event)"
-      [stopEmission]="noMoreCompany"
-      (onCreate)="createCompany()"
-    ></hospitality-bot-select>
+      type="COMPANY"
+      (createCompany)="createNewCompany()"
+    ></hospitality-bot-company-list>
 
     <hospitality-bot-address-component class="half-width" controlName="address">
     </hospitality-bot-address-component>
@@ -104,6 +98,7 @@
       class="create-btn"
       [label]="agentId ? 'Update' : 'Save'"
       (onClick)="handleSubmit()"
+      [disabled]="loading"
     ></hospitality-bot-button>
   </div>
 </div>

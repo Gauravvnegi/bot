@@ -15,7 +15,6 @@ import * as FileSaver from 'file-saver';
 import { QueryConfig } from '../../types/agent';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AgentResponseModel } from '../../models/agent.model';
-import { AgentListResponse } from '../../types/response';
 import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
@@ -147,7 +146,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
         {
-          entityType: 'AGENT',
+          type: 'AGENT',
           entityId: this.entityId,
           entityState: this.selectedTab,
         },

@@ -20,32 +20,31 @@ export class AgentService extends ApiService {
 
   updateAgent(
     data: AgentTableResponse,
-    companyId: string,
-    config?: QueryConfig
+    agentId: string
   ): Observable<AgentTableResponse> {
-    return this.patch(`/api/v1/members/${companyId}${config.params}`, data);
+    return this.patch(`/api/v1/members/${agentId}`, data);
   }
 
   getAgentList(config?: QueryConfig): Observable<AgentListResponse> {
-    return this.get(`/api/v1/members/${config.params}`);
+    return this.get(`/api/v1/members/${config?.params}`);
   }
 
   getCompanyList(config?: QueryConfig): Observable<CompanyResponseType[]> {
-    return this.get(`/api/v1/members/${config.params}`);
+    return this.get(`/api/v1/members/${config?.params}`);
   }
 
   getAgentById(
     agentId: string,
     config?: QueryConfig
   ): Observable<AgentTableResponse> {
-    return this.get(`/api/v1/members/${agentId}${config.params}`);
+    return this.get(`/api/v1/members/${agentId}${config?.params}`);
   }
   updateAgentStatus(agentId, config: QueryConfig): Observable<any> {
-    return this.patch(`/api/v1/members/${agentId}${config.params}`, {});
+    return this.patch(`/api/v1/members/${agentId}${config?.params}`, {});
   }
 
   exportCSV(config: QueryConfig): Observable<any> {
-    return this.get(`/api/v1/members/export${config.params}`, {
+    return this.get(`/api/v1/members/export${config?.params}`, {
       responseType: 'blob',
     });
   }

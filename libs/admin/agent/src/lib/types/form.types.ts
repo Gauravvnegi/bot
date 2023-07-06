@@ -5,7 +5,7 @@ export type AgentFormType = {
   cc: string;
   phoneNo: string;
   iataNo?: string;
-  companyId: string;
+  company: string;
   address: string;
   commissionType: string;
   commission: number;

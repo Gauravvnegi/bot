@@ -1,0 +1,16 @@
+<hospitality-bot-select
+  class="half-width"
+  controlName="company"
+  label="Company Name"
+  [options]="companyList"
+  [props]="{
+    placeholder: 'Select Company',
+    isAsync: true,
+    createPrompt: '+ Add New Company'
+  }"
+  [loading]="loadingCompany"
+  (paginate)="loadMoreCompany()"
+  (onSearch)="searchCompany($event)"
+  [stopEmission]="noMoreCompany"
+  (onCreate)="createNewCompany($event)"
+></hospitality-bot-select>

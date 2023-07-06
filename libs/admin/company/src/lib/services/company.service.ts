@@ -29,6 +29,10 @@ export class CompanyService extends ApiService {
     return this.get(`/api/v1/members/${companyId}`);
   }
 
+  searchCompany(queryParams?: QueryConfig) {
+    return this.get(`/api/v1/members/${queryParams.params}`);
+  }
+
   exportCSV(config: QueryConfig): Observable<any> {
     return this.get(`/api/v1/members/export${config.params}`, {
       responseType: 'blob',

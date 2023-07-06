@@ -26,7 +26,7 @@ export class AgentModel {
         emailId: form.email,
       },
       nationality: form.address['country'],
-      type: 'GUEST',
+      type: 'AGENT',
       priceModifier: form.commissionType,
       priceModifierValue: form.commission?.toString(),
       iataNumber: form.iataNo,
@@ -38,7 +38,7 @@ export class AgentModel {
         countryCode: form.address['country'] ?? '',
         postalCode: form.address['postalCode'] ?? '',
       },
-      companyId: form.companyId,
+      companyId: form.company,
     };
 
     return data;
@@ -64,11 +64,10 @@ export class AgentModel {
   static getCompanyList(input: CompanyResponseType[]) {
     let options: Option[] = input.map((item) => {
       return {
-        label: item.companyName,
-        value: item.companyCode?.toString(),
-      } as Option;
+        label: item.firstName,
+        value: item.id,
+      };
     });
-
     return options;
   }
 }

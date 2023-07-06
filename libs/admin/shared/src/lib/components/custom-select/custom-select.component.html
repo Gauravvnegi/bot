@@ -31,8 +31,11 @@
           <img src="assets/svg/tick.svg" *ngIf="item.checked" alt="checked" />
         </div>
         <div
-          class="image-wrapper"
-          [ngClass]="{ selected: item.checked == true }"
+          [ngClass]="{
+            'icon-type': type === 'icon',
+            'image-type': type === 'image',
+            selected: item.checked
+          }"
         >
           <img
             [src]="item.imageUrl"
@@ -50,7 +53,7 @@
   </div>
   <ng-template #emptyTable>
     <hospitality-bot-empty-table
-      height="fit-content"
+      [height]="fullView ? '51vh' : 'fit-content'"
       [isLoading]="loading"
       [content]="noRecordsAction"
       (action)="onEmptyViewAction.emit()"

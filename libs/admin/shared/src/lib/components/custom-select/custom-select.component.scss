@@ -59,18 +59,17 @@
   border-radius: 4px;
 }
 
-.image-wrapper {
+.image-type {
   @include flex-all-center();
-
   width: 210px;
   height: 157px;
-}
 
-.show-image {
-  height: 100%;
-  width: 100%;
-  border-radius: 4px;
-  object-fit: contain;
+  .show-image {
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    object-fit: contain;
+  }
 }
 
 .text {
@@ -97,4 +96,16 @@
 
 .btn-wrapper {
   @include flex-item-center;
+}
+
+.icon-type {
+  @include flex-all-center;
+  width: 210px;
+  height: 112px;
+  .show-image {
+    height: 50%;
+    width: 100%;
+    border-radius: 4px;
+    object-fit: contain;
+  }
 }

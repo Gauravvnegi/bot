@@ -2,16 +2,14 @@
   <div class="bk-summary_heading">Booking Summary</div>
   <p class="divider"></p>
   <div class="bk-summary_subheading">
-    {{
-      summaryData?.roomTypeName ? summaryData.roomTypeName : header
-    }}
+    {{ summaryData?.roomTypeName ? summaryData.roomTypeName : header }}
   </div>
   <div class="bk-summary_subheading_label">
     {{ summaryData?.location ? summaryData.location : subHeader }}
   </div>
 
   <div class="bk-summary_roomInfo">
-    <ng-content></ng-content>
+    <ng-content *ngIf="!displayBookingOffer"></ng-content>
   </div>
   <div class="bk-summary_offerInfo">
     <ng-container
@@ -45,12 +43,10 @@
   </div>
   <div class="bk-summary_priceInfo">
     <p class="bk-summary_priceInfo_perNight">
-      <span class="bk-summary_priceInfo_perNight_label">{{
+      <span class="bk-summary_priceInfo_perNight_label" *ngIf="stayInfo">{{
         stayInfo
       }}</span>
-      <span
-        *ngIf="!stayInfo"
-        class="bk-summary_priceInfo_perNight_label"
+      <span *ngIf="!stayInfo" class="bk-summary_priceInfo_perNight_label"
         >Per Night</span
       >
       <s
@@ -58,29 +54,32 @@
         *ngIf="summaryData?.originalPrice"
         >{{ summaryData?.originalPrice | currency: 'INR' }}</s
       >
-      <s
-        class="bk-summary_priceInfo_perNight_amount"
-        *ngIf="price"
-      >
+      <s class="bk-summary_priceInfo_perNight_amount" *ngIf="price">
         {{ price }}
       </s>
     </p>
     <p class="bk-summary_priceInfo_person" *ngIf="bookingType === 'HOTEL'">
-      <span class="bk-summary_priceInfo_perNight_label"
-        >For
-        {{ controlContainer.control?.get('roomInformation?.adultCount').value }}
+      <span class="bk-summary_priceInfo_perNight_label">
+        For
+        {{
+          controlContainer.control?.get('roomInformation.adultCount')?.value
+            ? controlContainer.control?.get('roomInformation.adultCount')?.value
+            : 0
+        }}
         Adult, Adults &
-        {{ controlContainer.control?.get('roomInformation?.childCount').value }}
-        Kid Child</span
-      >
-      <span class="bk-summary_priceInfo_perNight_amount">{{
-        summaryData?.basePrice | currency: 'INR'
-      }}</span>
+        {{
+          controlContainer.control?.get('roomInformation.childCount')?.value
+            ? controlContainer.control?.get('roomInformation.childCount')?.value
+            : 0
+        }}
+        Kid Child
+      </span>
+      <span class="bk-summary_priceInfo_perNight_amount">
+        {{ summaryData?.basePrice | currency: 'INR' }}
+      </span>
     </p>
     <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'HOTEL'">
-      <span class="bk-summary_priceInfo_perNight_label">{{
-        guestInfo
-      }}</span>
+      <span class="bk-summary_priceInfo_perNight_label">{{ guestInfo }}</span>
       <span class="bk-summary_priceInfo_perNight_amount">{{
         discountedPrice
       }}</span>
@@ -155,7 +154,7 @@
     </div>
   </ng-container>
   <ng-template #emptyOffer>
-    <div class="offerList">
+    <div class="empty-offer-view">
       <div class="offerList_box">
         <img src="assets/svg/empty_box.svg" alt="empty box" />
       </div>

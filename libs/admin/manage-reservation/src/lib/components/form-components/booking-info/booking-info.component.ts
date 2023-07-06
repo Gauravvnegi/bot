@@ -9,6 +9,7 @@ import { BookingConfig } from '../../../models/reservations.model';
 import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ActivatedRoute } from '@angular/router';
+import { ManageReservationService } from '../../../services/manage-reservation.service';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -18,19 +19,10 @@ import { ActivatedRoute } from '@angular/router';
 export class BookingInfoComponent implements OnInit {
   startMinDate = new Date();
   endMinDate = new Date();
-  maxDate = new Date();
+  maxFromDate = new Date();
+  maxToDate = new Date();
   entityId: string;
   reservationId: string;
-
-  // statusOptions: Option[] = [
-  //   { label: 'Confirmed', value: 'CONFIRMED' },
-  //   { label: 'Draft', value: 'DRAFT' },
-  //   { label: 'Cancelled', value: 'CANCELLED' },
-  //   { label: 'Wait Listed', value: 'WAIT_LISTED' },
-  //   { label: 'No Show', value: 'NO_SHOW' },
-  //   { label: 'In Session', value: 'IN_SESSION' },
-  //   { label: 'Completed', value: 'COMPLETED' },
-  // ];
 
   countries: Option[];
   @Input() reservationTypes: Option[] = [];
@@ -43,33 +35,86 @@ export class BookingInfoComponent implements OnInit {
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private manageReservationService: ManageReservationService
   ) {
-    this.endMinDate.setDate(this.startMinDate.getDate() + 1);
-    this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
   }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.getCountryCode();
+    this.initDefaultDates();
     this.listenForDateChange();
   }
 
-  listenForDateChange(){
+  /**
+   * Set default to and from dates.
+   */
+  initDefaultDates() {
+    this.endMinDate.setDate(this.startMinDate.getDate() + 1);
+    this.maxFromDate.setDate(this.endMinDate.getDate() - 1);
+
+    if (this.bookingType === 'HOTEL')
+      this.maxToDate.setDate(this.startMinDate.getDate() + 365);
+    if (this.bookingType === 'VENUE')
+      this.maxToDate = moment().add(24, 'hours').toDate();
+
+    this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
+  }
+
+
+  /**
+   * Listen for date changes in hotel and outlets.
+   */
+  listenForDateChange() {
     const startTime = moment(this.startMinDate).unix() * 1000;
     const endTime = moment(this.endMinDate).unix() * 1000;
+    const toDateControl = this.controlContainer.control.get(
+      'reservationInformation.to'
+    );
+    const fromDateControl = this.controlContainer.control.get(
+      'reservationInformation.from'
+    );
+    const dateAndTimeControl = this.controlContainer.control.get(
+      'reservationInformation.reservationDateAndTime'
+    );
+
+    // Listen to from and to date changes in hotel and setting
+    // min and max dates accordingly
     if (this.bookingType === 'HOTEL') {
-      this.controlContainer.control
-        .get('reservationInformation.from')
-        .setValue(startTime);
-      this.controlContainer.control
-        .get('reservationInformation.to')
-        .setValue(endTime);
-    } else if (this.bookingType !== 'VENUE') {
-      this.controlContainer.control
-        .get('reservationInformation.reservationDateAndTime')
-        .setValue(endTime);
+      fromDateControl.setValue(startTime);
+      toDateControl.setValue(endTime);
+      fromDateControl.valueChanges.subscribe((res) => {
+        const maxToLimit = new Date(res);
+        this.maxToDate.setDate(maxToLimit.getDate() + 365);
+        this.manageReservationService.reservationDate.next(res);
+      });
+      toDateControl.valueChanges.subscribe((res) => {
+        const maxLimit = new Date(res);
+        this.maxFromDate.setDate(maxLimit.getDate() - 1);
+      });
+    } 
+
+    // Listen to from and to date changes in Venue
+    else if (this.bookingType === 'VENUE') {
+      fromDateControl.setValue(startTime);
+      toDateControl.setValue(endTime);
+      this.endMinDate.setDate(this.startMinDate.getDate());
+      fromDateControl.valueChanges.subscribe((res) => {
+        const maxLimit = new Date(res);
+        toDateControl.setValue(moment(maxLimit).unix() * 1000);
+        this.maxToDate = moment(maxLimit).add(24, 'hours').toDate();
+        this.manageReservationService.reservationDate.next(res);
+      });
+    } 
+    
+    // Listen for date and time change in restaurant and spa
+    else {
+      dateAndTimeControl.setValue(startTime);
+      dateAndTimeControl.valueChanges.subscribe((res) => {
+        this.manageReservationService.reservationDate.next(res);
+      });
     }
   }
 
@@ -89,25 +134,4 @@ export class BookingInfoComponent implements OnInit {
       this.countries = data.records;
     });
   }
-
-  // getReservationId(): void {
-  //   if (this.reservationId) {
-  //     this.reservationTypes = [
-  //       { label: 'Draft', value: 'DRAFT' },
-  //       { label: 'Confirmed', value: 'CONFIRMED' },
-  //       { label: 'Cancelled', value: 'CANCELED' },
-  //     ];
-  //   } else {
-  //     this.reservationTypes = [
-  //       { label: 'Draft', value: 'DRAFT' },
-  //       { label: 'Confirmed', value: 'CONFIRMED' },
-  //     ];
-  //     this.userForm.valueChanges.subscribe((_) => {
-  //       if (!this.formValueChanges) {
-  //         this.formValueChanges = true;
-  //         this.listenForFormChanges();
-  //       }
-  //     });
-  //   }
-  // }
 }

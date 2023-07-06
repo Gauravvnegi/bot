@@ -9,7 +9,6 @@
       ></hospitality-bot-booking-info>
       <p-accordionTab class="room-info" header="Room Information">
         <hospitality-bot-room-iterator
-          [userFormGroup]="userForm"
           (refreshData)="getSummaryData()"
           (listenChanges)="listenForFormChanges()"
         >
@@ -17,9 +16,7 @@
       </p-accordionTab>
       <hospitality-bot-guest-information></hospitality-bot-guest-information>
       <hospitality-bot-billing-address></hospitality-bot-billing-address>
-      <hospitality-bot-instructions
-        [bookingType]="bookingType"
-      ></hospitality-bot-instructions>
+      <hospitality-bot-instructions></hospitality-bot-instructions>
       <hospitality-bot-payment-rule
         [deductedAmount]="deductedAmount"
       ></hospitality-bot-payment-rule>
@@ -34,6 +31,9 @@
         (onOfferSelect)="offerSelect()"
         (handleInitForm)="initForm()"
         [disabledForm]="disabledForm"
+        [bookingInfo]="{
+          bookingType: bookingType
+        }"
       >
         <div class="bk-summary_roomInfo_checkoutInfo">
           <p class="bk-summary_roomInfo_checkoutInfo_heading">
@@ -41,8 +41,8 @@
           </p>
           <p class="bk-summary_roomInfo_checkoutInfo_subText">
             {{
-              userForm.get('reservationInformation.from')
-                ?.value | date: 'dd/MM/yyyy'
+              userForm.get('reservationInformation.from')?.value
+                | date: 'dd/MM/yyyy'
             }}
             -
             {{
@@ -56,17 +56,11 @@
             Rooms & Guests
           </p>
           <p class="bk-summary_roomInfo_guestInfo_subText">
-            {{
-              userForm.get('roomInformation.roomCount').value
-            }}
+            {{ userForm.get('roomInformation.roomCount').value }}
             Room,
-            {{
-              userForm.get('roomInformation.adultCount').value
-            }}
+            {{ userForm.get('roomInformation.adultCount').value }}
             Adult,
-            {{
-              userForm.get('roomInformation.childCount').value
-            }}
+            {{ userForm.get('roomInformation.childCount').value }}
             Kid
           </p>
         </div>

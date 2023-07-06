@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
+import { ControlContainer, FormBuilder, FormGroup } from '@angular/forms';
 import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 import { Guest } from '../../../models/reservations.model';
@@ -24,20 +24,31 @@ export class GuestInformationComponent implements OnInit {
   globalQueries = [];
   $subscription = new Subscription();
   entityId: string;
+  parentFormGroup: FormGroup;
 
   @Input() reservationId: string;
 
   constructor(
+    private fb: FormBuilder,
     public controlContainer: ControlContainer,
     private guestService: GuestTableService,
     private router: Router,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService,
-  ) { }
+    private globalFilterService: GlobalFilterService
+  ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    this.addFormGroup();
     this.listenForGlobalFilters();
+  }
+
+  addFormGroup() {
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
+    const data = {
+      guestDetails: [''],
+    };
+    this.parentFormGroup.addControl('guestInformation', this.fb.group(data));
   }
 
   /**

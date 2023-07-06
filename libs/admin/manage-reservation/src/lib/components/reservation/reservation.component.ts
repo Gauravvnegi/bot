@@ -3,13 +3,17 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { selectedOutlet } from '../../types/reservation.type';
 import { EntityTabGroup } from '../../constants/reservation-table';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { BaseDatatableComponent, TableService } from '@hospitality-bot/admin/shared';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-reservation',
   templateUrl: './reservation.component.html',
   styleUrls: ['./reservation.component.scss'],
 })
-export class ReservationComponent implements OnInit {
+export class ReservationComponent extends BaseDatatableComponent
+  implements OnInit {
   entityId: string = '';
   tabFilterIdx = 0;
   tabFilterItems = [];
@@ -23,9 +27,13 @@ export class ReservationComponent implements OnInit {
   ];
 
   constructor(
+    public fb: FormBuilder,
     private reservationService: ManageReservationService,
-    private globalFilterService: GlobalFilterService
-  ) {}
+    private globalFilterService: GlobalFilterService,
+    public tabFilterService: TableService
+  ) {
+    super(fb, tabFilterService);
+  }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
@@ -46,7 +54,7 @@ export class ReservationComponent implements OnInit {
     });
   }
 
-  onSelectedTabFilterChange(event): void {
+  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
     this.selectedOutlet = this.tabFilterItems[event.index].type;
     this.reservationService.setSelectedOutlet(this.selectedOutlet);

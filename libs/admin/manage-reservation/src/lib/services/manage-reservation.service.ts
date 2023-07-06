@@ -15,6 +15,8 @@ import { EntityTabGroup } from '../constants/reservation-table';
 export class ManageReservationService extends ApiService {
   public selectedOutlet = new BehaviorSubject<EntityTabGroup>(EntityTabGroup.HOTEL);
 
+  reservationDate = new BehaviorSubject<Date>(null);
+
   setSelectedOutlet(value: EntityTabGroup) {
     this.selectedOutlet.next(value);
   }
@@ -169,6 +171,7 @@ export class ManageReservationService extends ApiService {
             totalAmount: 1000,
             source: 'Agent',
             paymentMethod: 'Cash',
+            reservationType: 'DRAFT',
             status: 'Paid',
             statusValues: ['Paid', 'Unpaid'],
           },
@@ -183,6 +186,7 @@ export class ManageReservationService extends ApiService {
             totalAmount: 1000,
             source: 'Agent',
             paymentMethod: 'Cash',
+            reservationType: 'CONFIRMED',
             status: 'Paid',
             statusValues: ['Paid', 'Unpaid'],
           },
@@ -197,6 +201,7 @@ export class ManageReservationService extends ApiService {
             totalAmount: 1000,
             source: 'Agent',
             paymentMethod: 'Cash',
+            reservationType: 'DRAFT',
             status: 'Paid',
             statusValues: ['Paid', 'Unpaid'],
           },
@@ -211,6 +216,7 @@ export class ManageReservationService extends ApiService {
             totalAmount: 1000,
             source: 'Agent',
             paymentMethod: 'Cash',
+            reservationType: 'CONFIRMED',
             status: 'Paid',
             statusValues: ['Paid', 'Unpaid'],
           },
@@ -225,6 +231,7 @@ export class ManageReservationService extends ApiService {
             totalAmount: 1000,
             source: 'Agent',
             paymentMethod: 'Cash',
+            reservationType: 'DRAFT',
             status: 'Paid',
             statusValues: ['Paid', 'Unpaid'],
           },
@@ -232,8 +239,8 @@ export class ManageReservationService extends ApiService {
 
         res.entityTypeCounts = {};
         res.entityStateCounts = {
-          draft: 5,
-          confirmed: 0,
+          draft: 3,
+          confirmed: 2,
           cancelled: 0,
           waitListed: 0,
           noShow: 0,

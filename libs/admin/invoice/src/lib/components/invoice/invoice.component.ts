@@ -667,16 +667,27 @@ export class InvoiceComponent implements OnInit {
   ) {
     const priceControls = this.getTableRowValue(index);
 
+    /**
+     * If delete item action is performed
+     */
     if (value === MenuActionItem.DELETE_ITEM) {
       this.findAndRemoveItems(priceControls.itemId);
       return;
     }
 
+    /**
+     * To update or add discount
+     */
+    const itemId = priceControls.itemId;
+    const priceItem = this.getAllItemWithSameItemId(itemId).find(
+      (control) => !control.value.taxId && !control.value.isDiscount
+    );
+
     this.addDiscountModal({
-      amount: priceControls.debitAmount,
-      serviceName: priceControls.description,
-      itemId: priceControls.itemId,
-      isRemoveDiscount: value === MenuActionItem.REMOVE_DISCOUNT,
+      amount: priceItem.value.debitAmount,
+      serviceName: priceItem.value.description,
+      itemId,
+      discountAction: value,
       index,
     });
   }
@@ -686,6 +697,14 @@ export class InvoiceComponent implements OnInit {
     this.selectedRows = [];
 
     return;
+  }
+
+  getAllItemWithSameItemId(itemId: string) {
+    const res = this.tableFormArray.controls.filter(
+      (control: Controls) => control.value.itemId === itemId
+    );
+
+    return res as Controls[];
   }
 
   registerOnDeleteChanges(index) {
@@ -1008,9 +1027,9 @@ export class InvoiceComponent implements OnInit {
     serviceName: string;
     index: number;
     itemId: string;
-    isRemoveDiscount: boolean;
+    discountAction: MenuActionItem;
   }) {
-    const { amount, serviceName, index, itemId, isRemoveDiscount } = data;
+    const { amount, serviceName, index, itemId, discountAction } = data;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.width = '40%';
@@ -1020,7 +1039,7 @@ export class InvoiceComponent implements OnInit {
     );
     discountComponentRef.componentInstance.originalAmount = amount;
     discountComponentRef.componentInstance.serviceName = serviceName;
-    discountComponentRef.componentInstance.isRemove = isRemoveDiscount;
+    discountComponentRef.componentInstance.discountAction = discountAction;
     // discountComponentRef.componentInstance.tax = taxPercentage;
 
     discountComponentRef.componentInstance.onClose.subscribe(

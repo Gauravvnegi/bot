@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
+import { ControlContainer, FormBuilder, FormGroup } from '@angular/forms';
 import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
 import { Guest } from '../../../models/reservations.model';
@@ -25,20 +25,31 @@ export class GuestInformationComponent implements OnInit {
   $subscription = new Subscription();
   entityId: string;
   hotelId: string;
-  
+  parentFormGroup: FormGroup;
+
   @Input() reservationId: string;
 
   constructor(
+    private fb: FormBuilder,
     public controlContainer: ControlContainer,
     private guestService: GuestTableService,
     private router: Router,
     private adminUtilityService: AdminUtilityService,
-    private globalFilterService: GlobalFilterService,
+    private globalFilterService: GlobalFilterService
   ) {}
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
+    this.addFormGroup();
     this.listenForGlobalFilters();
+  }
+
+  addFormGroup() {
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
+    const data = {
+      guestDetails: [''],
+    };
+    this.parentFormGroup.addControl('guestInformation', this.fb.group(data));
   }
 
   /**
@@ -63,7 +74,7 @@ export class GuestInformationComponent implements OnInit {
       })
     );
   }
-  
+
   loadMoreGuests() {
     this.guestsOffSet = this.guestsOffSet + 5;
     this.getGuests();

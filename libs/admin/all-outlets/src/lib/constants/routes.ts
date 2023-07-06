@@ -16,7 +16,7 @@ export const navRoutes = {
   },
   editHotel: {
     label: 'Edit Hotel',
-    link: '/pages/settings/business-info/brand/:brandId/hotel/:hotelId',
+    link: '/pages/settings/business-info/brand/:brandId/hotel/:entityId',
   },
 
   editBrand: {

@@ -17,7 +17,7 @@ import {
 export class OutletBaseComponent {
   outletId: string;
   brandId: string;
-  hotelId: string;
+  entityId: string;
   menuId: string;
   navRoutes: any[];
   pageTitle: string;
@@ -27,22 +27,22 @@ export class OutletBaseComponent {
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
         const outletId = snapshot?.params['outletId'];
         const brandId = snapshot?.params['brandId'];
-        const hotelId = snapshot?.params['hotelId'];
+        const entityId = snapshot?.params['entityId'];
         const menuId = snapshot?.params['menuId'];
         if (outletId) this.outletId = outletId;
         if (brandId) this.brandId = brandId;
-        if (hotelId) this.hotelId = hotelId;
+        if (entityId) this.entityId = entityId;
         if (menuId) this.menuId = menuId;
       }
     );
   }
 
   initComponent(routeName: OutletBusinessRoutes) {
-    const { navRoutes, title } = this.hotelId
+    const { navRoutes, title } = this.entityId
       ? getRoutes(routeName, true)
       : outletBusinessRoutes[routeName];
     navRoutes[2].link = navRoutes[2].link.replace(':brandId', this.brandId);
-    navRoutes[3].link = navRoutes[3].link.replace(':hotelId', this.hotelId);
+    navRoutes[3].link = navRoutes[3].link.replace(':entityId', this.entityId);
 
     this.navRoutes = navRoutes;
 

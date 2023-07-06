@@ -134,20 +134,22 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   loadData(event: LazyLoadEvent): void {
     this.manageReservationService.selectedTab = this.selectedTab;
-    if(!this.isOutletChanged) this.initTableValue();
+    if (!this.isOutletChanged) this.initTableValue();
   }
 
   listenForOutletChange(value) {
     // this.manageReservationService.getSelectedOutlet().subscribe((value) => {
-      this.selectedOutlet = value;
-      if (this.selectedOutlet !== this.previousOutlet) {
-        this.resetTableValues();
-        this.loading = true;
-        this.isOutletChanged = true;
-      } else { this.isOutletChanged = false}
+    this.selectedOutlet = value;
+    if (this.selectedOutlet !== this.previousOutlet) {
+      this.resetTableValues();
+      this.loading = true;
+      this.isOutletChanged = true;
+    } else {
+      this.isOutletChanged = false;
+    }
 
-      this.previousOutlet = this.selectedOutlet;
-      this.initDetails(this.selectedOutlet);
+    this.previousOutlet = this.selectedOutlet;
+    this.initDetails(this.selectedOutlet);
     // });
   }
 
@@ -155,7 +157,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     if (selectedOutlet === EntityTabGroup.HOTEL) {
       this.selectedTab = ReservationTableValue.ALL;
       this.cols = hotelCols;
-      this.menuOptions.push({label: 'Assign Room', value: 'ASSIGN_ROOM'});
+      this.menuOptions.push({ label: 'Assign Room', value: 'ASSIGN_ROOM' });
       this.isAllTabFilterRequired = true;
       this.isTabFilters = true;
     } else {

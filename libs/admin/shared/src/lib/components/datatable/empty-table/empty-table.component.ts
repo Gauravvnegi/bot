@@ -14,6 +14,7 @@ export class EmptyTableComponent implements OnInit {
   @Input() isLoading: boolean;
   @Input() isFormView: boolean = false;
   @Output() action = new EventEmitter();
+  @Input() height: string;
 
   /**
    * Set Content of the empty view.

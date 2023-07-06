@@ -13,6 +13,9 @@
   border: 1px solid rgba(112, 112, 112, 0.35);
   border-radius: 5px;
   min-height: calc(100vh - 330px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   &__default {
     font-size: 14px;
     font-weight: $bold;
@@ -62,5 +65,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 70vh;
+  height: 50vh;
 }

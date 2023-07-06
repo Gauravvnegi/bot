@@ -120,7 +120,7 @@
             [recordSetting]="reservationStatusDetails"
             [menuOptions]="menuOptions"
             (onMenuItemClick)="handleMenuClick($event, rowData.id)"
-            >
+          >
           </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
@@ -142,6 +142,7 @@
 </p-table>
 <ng-template [ngClass]="{ 'dynamic-height': isReachedEnd }" #emptyTable>
   <hospitality-bot-empty-table
+    [height]="'62vh'"
     [isLoading]="loading"
     link="/pages/efrontdesk/manage-reservation/{{
       manageReservationRoutes.addReservation.route

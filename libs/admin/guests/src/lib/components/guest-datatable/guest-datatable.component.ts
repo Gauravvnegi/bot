@@ -31,7 +31,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   isQuickFilters = false;
   isTabFilters = false;
 
-  hotelId: string;
+  entityId: string;
   cols = guestCols;
   globalQueries = [];
   $subscription = new Subscription();
@@ -48,7 +48,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.getDataTableValue();
   }
 
@@ -82,7 +82,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     // TODO: We have to remove toDate & fromDate after getting api of guest list
     this.globalQueries = [
-      { hotelId: this.hotelId, toDate: 1688581799000, fromDate: 1688495400000 },
+      { entityId: this.entityId, toDate: 1688581799000, fromDate: 1688495400000 },
     ];
 
     const config = {

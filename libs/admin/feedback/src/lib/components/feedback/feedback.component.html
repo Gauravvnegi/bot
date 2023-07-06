@@ -8,7 +8,7 @@
 
 <div class="feedback-container mb-20">
   <div class="stats--wrapper">
-    <div class="bifurcation-container">
+    <div class="bifurcation-stats">
       <hospitality-bot-bifurcation-stats
         [globalFeedbackFilterType]="globalFeedbackFilterType"
       ></hospitality-bot-bifurcation-stats>
@@ -30,18 +30,18 @@
         [globalFeedbackFilterType]="globalFeedbackFilterType"
       ></hospitality-bot-feedback-distribution>
     </div>
-  </div>
-  <div class="feedback">
-    <div class="feedback__shared">
-      <hospitality-bot-response-rate
-        [globalFeedbackFilterType]="globalFeedbackFilterType"
-      >
-      </hospitality-bot-response-rate>
-    </div>
-    <div class="feedback__received-bifurcation">
-      <hospitality-bot-received-breakdown
-        [globalFeedbackFilterType]="globalFeedbackFilterType"
-      ></hospitality-bot-received-breakdown>
+    <div class="shared-container">
+      <div class="shared-stats">
+        <hospitality-bot-response-rate
+          [globalFeedbackFilterType]="globalFeedbackFilterType"
+        >
+        </hospitality-bot-response-rate>
+      </div>
+      <div class="shared-stats">
+        <hospitality-bot-received-breakdown
+          [globalFeedbackFilterType]="globalFeedbackFilterType"
+        ></hospitality-bot-received-breakdown>
+      </div>
     </div>
   </div>
   <hospitality-bot-net-promoter-score

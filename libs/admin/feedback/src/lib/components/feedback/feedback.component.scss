@@ -119,13 +119,29 @@
   .stats {
     // height: 360px;
     width: 32.33%;
-    margin: 0.5%;
+    margin: 0 0.5% 0.5%;
     background: $white;
     border: solid 1px $borderCol;
     box-shadow: 0px 3px 6px $boxShadow;
     border-radius: 5px;
     @media screen and (max-width: 800px) {
       // height: 185px;
+    }
+  }
+  .bifurcation-stats{
+    width: 100%;
+    margin-bottom: 0.5%;    
+  }
+  .shared-container{
+    width: 100%;
+    display: flex;
+    .shared-stats{
+      width: 49.5%;
+      margin: 0 0.5%;
+      background: $white;
+      border: solid 1px $borderCol;
+      box-shadow: 0px 3px 6px $boxShadow;
+      border-radius: 5px;
     }
   }
   .change-height {
@@ -137,11 +153,6 @@
   .inc-width-l {
     width: 37.85%;
   }
-}
-
-.bifurcation-container{
-  width: 100%;
-  margin: 20px 0;
 }
 
 .request-btn {

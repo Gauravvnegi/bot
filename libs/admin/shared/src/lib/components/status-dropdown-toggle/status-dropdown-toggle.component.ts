@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { defaultRecordJson } from '../../constants/datatable';
 import { EntityStateRecord, FlagType } from '../../types/table.type';
 import { convertToTitleCase } from '../../utils/valueFormatter';
+import { Option } from '../../types/form.type';
 
 @Component({
   selector: 'hospitality-bot-status-dropdown-toggle',
@@ -29,6 +30,8 @@ export class StatusDropdownToggleComponent {
   records = defaultRecordJson;
 
   @Input() disabled: boolean = false;
+
+  @Input() menuOptions: Option[] = [];
 
   @Input() set state(value: string) {
     this.value = value;
@@ -67,6 +70,7 @@ export class StatusDropdownToggleComponent {
   }
 
   @Output() onClick = new EventEmitter<string | boolean>();
+  @Output() onMenuItemClick = new EventEmitter<string>();
 
   constructor() {}
 
@@ -131,6 +135,12 @@ export class StatusDropdownToggleComponent {
     if (currentIdx !== nextIndex) {
       this.onClick.emit(this.items[nextIndex].value);
     }
+  }
+
+  handleMenuClick(
+    { item: { value } }: { item: { value: string } },
+  ) {
+    this.onMenuItemClick.emit(value);
   }
 }
 

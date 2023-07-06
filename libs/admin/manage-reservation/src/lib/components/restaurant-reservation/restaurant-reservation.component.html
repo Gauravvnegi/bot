@@ -38,9 +38,6 @@
       </p-accordionTab>
       <hospitality-bot-guest-information></hospitality-bot-guest-information>
       <hospitality-bot-billing-address></hospitality-bot-billing-address>
-      <!-- <hospitality-bot-instructions
-        [bookingType]="bookingType"
-      ></hospitality-bot-instructions> -->
       <hospitality-bot-payment-rule
         [deductedAmount]="deductedAmount"
       ></hospitality-bot-payment-rule>
@@ -61,7 +58,8 @@
           price: '2000',
           discountedPrice: '1200',
           guestInfo: numberOfAdults,
-          stayInfo: tableNumber
+          stayInfo: tableNumber,
+          bookingType: bookingType
         }"
       >
         <div class="bk-summary_roomInfo_checkoutInfo">

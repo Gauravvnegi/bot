@@ -10,7 +10,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
-import { menuItemFields } from '../../constants/reservation';
+import { menuItemFields, venueFields } from '../../constants/reservation';
 import { manageReservationRoutes } from '../../constants/routes';
 import {
   OfferList,
@@ -75,7 +75,7 @@ export class VenueReservationComponent implements OnInit {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.fields = menuItemFields;
+    this.fields = venueFields;
     this.initOptions();
     this.getReservationId();
   }
@@ -87,13 +87,13 @@ export class VenueReservationComponent implements OnInit {
       { label: 'Draft', value: 'DRAFT' },
     ];
     this.eventOptions = [
-      { label: 'Anniversary', value: 'ANNIVERSARY'},
-      { label: 'Birthday', value: 'BIRTHDAY'},
-      { label: 'Wedding', value: 'WEDDING'},
-      { label: 'Conference', value: 'CONFERENCE'},
-      { label: 'Exhibition', value: 'EXHIBITION'},
-      { label: 'Seminar', value: 'SEMINAR'},
-    ]
+      { label: 'Anniversary', value: 'ANNIVERSARY' },
+      { label: 'Birthday', value: 'BIRTHDAY' },
+      { label: 'Wedding', value: 'WEDDING' },
+      { label: 'Conference', value: 'CONFERENCE' },
+      { label: 'Exhibition', value: 'EXHIBITION' },
+      { label: 'Seminar', value: 'SEMINAR' },
+    ];
   }
 
   /**
@@ -112,39 +112,9 @@ export class VenueReservationComponent implements OnInit {
         marketSegment: ['', Validators.required],
         eventType: ['', [Validators.required]],
       }),
-      bookingInformation: this.fb.group({
-        menuItems: this.venueBookingInfo,
-      }),
-      guestInformation: this.fb.group({
-        guestDetails: [''],
-      }),
-      instructions: this.fb.group({
-        specialInstructions: [''],
-      }),
-      address: this.fb.group({
-        addressLine1: ['', [Validators.required]],
-        city: ['', [Validators.required]],
-        countryCode: ['', [Validators.required]],
-        state: ['', [Validators.required]],
-        postalCode: ['', [Validators.required]],
-      }),
-      paymentRule: this.fb.group({
-        amountToPay: [0],
-        deductedAmount: [''],
-        makePaymentBefore: [''],
-        inclusionsAndTerms: [''],
-      }),
-      paymentMethod: this.fb.group({
-        cashierFirstName: [{ value: '', disabled: true }],
-        cashierLastName: [{ value: '', disabled: true }],
-        totalPaidAmount: [
-          '',
-          [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
-        ],
-        currency: [''],
-        paymentMethod: [''],
-        paymentRemark: ['', [Validators.maxLength(60)]],
-        transactionId: [''],
+      eventInformation: this.fb.group({
+        numberOfAdults: ['', Validators.required],
+        venueInfo: this.venueBookingInfo,
       }),
       offerId: [''],
     });

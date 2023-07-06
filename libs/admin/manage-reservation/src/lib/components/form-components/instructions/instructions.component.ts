@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
+import { ControlContainer, FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-instructions',
@@ -7,9 +7,22 @@ import { ControlContainer } from '@angular/forms';
   styleUrls: ['./instructions.component.scss', '../../reservation.styles.scss'],
 })
 export class InstructionsComponent implements OnInit {
-  @Input() bookingType: string;
+  parentFormGroup: FormGroup;
 
-  constructor(public controlContainer: ControlContainer) {}
+  constructor(
+    private fb: FormBuilder,
+    public controlContainer: ControlContainer
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.addFormGroup();
+  }
+
+  addFormGroup() {
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
+    const data = {
+      specialInstructions: [''],
+    };
+    this.parentFormGroup.addControl('instructions', this.fb.group(data));
+  }
 }

@@ -231,7 +231,6 @@ export class AddReservationComponent implements OnInit, OnDestroy {
           (res) => {
             this.summaryData = new SummaryData()?.deserialize(res);
             this.fields[2].options = this.summaryData?.roomNumbers;
-            debugger;
             this.userForm
               .get('roomInformation')
               .patchValue(this.summaryData, { emitEvent: false });

@@ -50,7 +50,7 @@
   </div>
   <ng-template #emptyTable>
     <hospitality-bot-empty-table
-      [isFormView]="true"
+      height="fit-content"
       [isLoading]="loading"
       [content]="noRecordsAction"
       (action)="onEmptyViewAction.emit()"

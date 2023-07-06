@@ -12,7 +12,6 @@ export class EmptyTableComponent implements OnInit {
   actionName: string;
   @Input() link: string;
   @Input() isLoading: boolean;
-  @Input() isFormView: boolean = false;
   @Output() action = new EventEmitter();
   @Input() height: string;
 

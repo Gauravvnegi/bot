@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
+import {
+  ControlContainer,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-billing-address',
@@ -10,7 +15,28 @@ import { ControlContainer } from '@angular/forms';
   ],
 })
 export class BillingAddressComponent implements OnInit {
-  constructor(public controlContainer: ControlContainer) {}
+  parentFormGroup: FormGroup;
 
-  ngOnInit(): void {}
+  constructor(
+    private fb: FormBuilder,
+    public controlContainer: ControlContainer
+  ) {}
+
+  ngOnInit(): void {
+    this.addFormGroup();
+  }
+
+  addFormGroup() {
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
+
+    const data = {
+      addressLine1: ['', [Validators.required]],
+      city: ['', [Validators.required]],
+      countryCode: ['', [Validators.required]],
+      state: ['', [Validators.required]],
+      postalCode: ['', [Validators.required]],
+    };
+    
+    this.parentFormGroup.addControl('address', this.fb.group(data));
+  }
 }

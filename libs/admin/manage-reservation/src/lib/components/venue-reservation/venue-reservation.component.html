@@ -9,19 +9,23 @@
         [eventTypes]="eventOptions"
       ></hospitality-bot-booking-info>
       <p-accordionTab header="Event Information">
-        <div class="form-block" formGroupName="bookingInformation">
+        <div class="form-block" formGroupName="eventInformation">
+          <hospitality-bot-input
+            class="half-width"
+            label="No. of Adults"
+            controlName="numberOfAdults"
+          ></hospitality-bot-input>
           <hospitality-bot-iterator
             class="iterator full-width"
             [fields]="fields"
             [useFormArray]="venueBookingInfo"
+            ctaLabel="+ Add Item"
           ></hospitality-bot-iterator>
         </div>
       </p-accordionTab>
       <hospitality-bot-guest-information></hospitality-bot-guest-information>
       <hospitality-bot-billing-address></hospitality-bot-billing-address>
-      <hospitality-bot-instructions
-        [bookingType]="bookingType"
-      ></hospitality-bot-instructions>
+      <hospitality-bot-instructions></hospitality-bot-instructions>
       <hospitality-bot-payment-rule
         [deductedAmount]="deductedAmount"
       ></hospitality-bot-payment-rule>
@@ -42,7 +46,8 @@
           price: '2000',
           discountedPrice: '1200',
           guestInfo: 'For 2 Adults',
-          stayInfo: 'some info'
+          stayInfo: 'some info',
+          bookingType: bookingType
         }"
       >
         <div class="bk-summary_roomInfo_checkoutInfo">

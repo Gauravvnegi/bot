@@ -2,17 +2,17 @@
   <div class="header">
     <div
       *ngFor="let field of fields"
-      [style.flexBasis]="width"
+      [style.flexBasis]="field.width ? field.width : width"
       class="header__cell"
     >
       {{ field.label }}
     </div>
   </div>
-  <div [formGroup]="userFormGroup">
+  <div [formGroup]="parentFormGroup">
     <div formGroupName="roomInformation" class="wrapper">
       <div
         *ngFor="let field of fields"
-        [style.flexBasis]="width"
+        [style.flexBasis]="field.width ? field.width : width"
         [ngSwitch]="field.type"
       >
         <hospitality-bot-input
@@ -46,6 +46,17 @@
           (focusout)="getSummaryData()"
           (keyup.enter)="getSummaryData()"
         ></hospitality-bot-input>
+        <hospitality-bot-multi-select
+          *ngSwitchCase="'multi-select'"
+          [controlName]="field.name"
+          [props]="{
+            placeholder: field.placeholder,
+            isAsync: false
+          }"
+          [options]="field.options"
+          [disabled]="field.disabled"
+          [settings]="{ showHeader: false }"
+        ></hospitality-bot-multi-select>
         <hospitality-bot-select
           *ngSwitchCase="'select'"
           [controlName]="field.name"

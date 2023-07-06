@@ -10,7 +10,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
-import { menuItemFields } from '../../constants/reservation';
+import { menuItemFields, spaFields } from '../../constants/reservation';
 import { manageReservationRoutes } from '../../constants/routes';
 import {
   OfferList,
@@ -71,7 +71,7 @@ export class SpaReservationComponent implements OnInit {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.fields = menuItemFields;
+    this.fields = spaFields;
     this.initOptions();
     this.getReservationId();
   }
@@ -101,37 +101,6 @@ export class SpaReservationComponent implements OnInit {
       bookingInformation: this.fb.group({
         numberOfAdults: ['', Validators.required],
         menuItems: this.spaBookingInfo,
-      }),
-      guestInformation: this.fb.group({
-        guestDetails: [''],
-      }),
-      instructions: this.fb.group({
-        specialInstructions: [''],
-      }),
-      address: this.fb.group({
-        addressLine1: ['', [Validators.required]],
-        city: ['', [Validators.required]],
-        countryCode: ['', [Validators.required]],
-        state: ['', [Validators.required]],
-        postalCode: ['', [Validators.required]],
-      }),
-      paymentRule: this.fb.group({
-        amountToPay: [0],
-        deductedAmount: [''],
-        makePaymentBefore: [''],
-        inclusionsAndTerms: [''],
-      }),
-      paymentMethod: this.fb.group({
-        cashierFirstName: [{ value: '', disabled: true }],
-        cashierLastName: [{ value: '', disabled: true }],
-        totalPaidAmount: [
-          '',
-          [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
-        ],
-        currency: [''],
-        paymentMethod: [''],
-        paymentRemark: ['', [Validators.maxLength(60)]],
-        transactionId: [''],
       }),
       offerId: [''],
     });

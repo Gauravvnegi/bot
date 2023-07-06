@@ -4,7 +4,7 @@ import {
   OfferList,
   SummaryData,
 } from '../../../models/reservations.model';
-import { ControlContainer, FormGroup } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ModalService,
@@ -19,6 +19,7 @@ import { ReservationResponse } from '../../../types/response.type';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { ReservationForm } from '../../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -41,6 +42,7 @@ export class BookingSummaryComponent implements OnInit {
   price = '';
   guestInfo = '';
   discountedPrice = '';
+  bookingType = ''
 
   $subscription = new Subscription();
 
@@ -48,7 +50,6 @@ export class BookingSummaryComponent implements OnInit {
   @Input() selectedOffer: OfferData;
   @Input() offersList: OfferList;
   @Input() disabledForm: boolean;
-
   @Input() set bookingInfo(value: BookingSummaryInfo) {
     Object.entries(value)?.forEach(([key, value]) => {
       this[key] = value;
@@ -99,8 +100,8 @@ export class BookingSummaryComponent implements OnInit {
   createReservation(data): void {
     (data = {
       ...data,
-      firstName: 'Reservation',
-      lastName: 'Temporary',
+      firstName: 'Dummy',
+      lastName: 'Reservation',
       contact: { countryCode: '+91', phoneNumber: '99999999999' },
       email: 'botshot@gmail.com',
     }),
@@ -124,8 +125,8 @@ export class BookingSummaryComponent implements OnInit {
   updateReservation(data): void {
     (data = {
       ...data,
-      firstName: 'Reservation',
-      lastName: 'Temporary',
+      firstName: 'Dummy',
+      lastName: 'Reservation',
       contact: { countryCode: '+91', phoneNumber: '99999999999' },
       email: 'botshot@gmail.com',
     }),
@@ -207,6 +208,10 @@ export class BookingSummaryComponent implements OnInit {
       panelClass: 'success',
     });
   }
+
+  get inputControl() {
+    return this.parentFormGroup.controls as Record<keyof ReservationForm, AbstractControl>;
+  }
 }
 
 type BookingSummaryInfo = {
@@ -216,4 +221,6 @@ type BookingSummaryInfo = {
   price: string;
   guestInfo: string;
   discountedPrice: string;
+  bookingType: string;
 };
+

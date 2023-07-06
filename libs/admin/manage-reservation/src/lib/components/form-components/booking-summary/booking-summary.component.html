@@ -59,16 +59,24 @@
       </s>
     </p>
     <p class="bk-summary_priceInfo_person" *ngIf="bookingType === 'HOTEL'">
-      <span class="bk-summary_priceInfo_perNight_label"
-        >For
-        {{ controlContainer.control?.get('roomInformation?.adultCount').value }}
+      <span class="bk-summary_priceInfo_perNight_label">
+        For
+        {{
+          controlContainer.control?.get('roomInformation.adultCount')?.value
+            ? controlContainer.control?.get('roomInformation.adultCount')?.value
+            : 0
+        }}
         Adult, Adults &
-        {{ controlContainer.control?.get('roomInformation?.childCount').value }}
-        Kid Child</span
-      >
-      <span class="bk-summary_priceInfo_perNight_amount">{{
-        summaryData?.basePrice | currency: 'INR'
-      }}</span>
+        {{
+          controlContainer.control?.get('roomInformation.childCount')?.value
+            ? controlContainer.control?.get('roomInformation.childCount')?.value
+            : 0
+        }}
+        Kid Child
+      </span>
+      <span class="bk-summary_priceInfo_perNight_amount">
+        {{ summaryData?.basePrice | currency: 'INR' }}
+      </span>
     </p>
     <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'HOTEL'">
       <span class="bk-summary_priceInfo_perNight_label">{{ guestInfo }}</span>
@@ -145,14 +153,14 @@
       </div>
     </div>
   </ng-container>
-    <ng-template #emptyOffer>
-      <div class="empty-offer-view">
-        <div class="offerList_box">
-          <img src="assets/svg/empty_box.svg" alt="empty box" />
-        </div>
-        <div class="offerList_text">
-          Currently You do not have any Offer
-        </div>
+  <ng-template #emptyOffer>
+    <div class="empty-offer-view">
+      <div class="offerList_box">
+        <img src="assets/svg/empty_box.svg" alt="empty box" />
       </div>
-    </ng-template>
+      <div class="offerList_text">
+        Currently You do not have any Offer
+      </div>
+    </div>
+  </ng-template>
 </ng-template>

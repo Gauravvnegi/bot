@@ -2,7 +2,7 @@
   class="payment-rule-accordion"
   header="Payment Rule"
   #accordionTab
-  [formGroup]="controlContainer.control"
+  [formGroup]="parentFormGroup"
 >
   <div class="btn-wrapper" *ngIf="accordionTab?.selected">
     <hospitality-bot-button

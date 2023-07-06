@@ -6,10 +6,15 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ControlContainer,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { AdminUtilityService } from 'libs/admin/shared/src';
+import { AdminUtilityService, Option } from 'libs/admin/shared/src';
 import { IteratorComponent } from 'libs/admin/shared/src/lib/components/iterator/iterator.component';
 import { Subscription } from 'rxjs';
 import { roomFields, RoomFieldTypeOption } from '../../constants/reservation';
@@ -26,7 +31,7 @@ import {
 })
 export class RoomIteratorComponent extends IteratorComponent
   implements OnInit, OnDestroy {
-  @Input() userFormGroup: FormGroup;
+  parentFormGroup: FormGroup;
   @Output() refreshData = new EventEmitter();
   @Output() listenChanges = new EventEmitter();
   fields = roomFields;
@@ -44,13 +49,15 @@ export class RoomIteratorComponent extends IteratorComponent
     private globalFilterService: GlobalFilterService,
     private adminUtilityService: AdminUtilityService,
     private manageReservationService: ManageReservationService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private controlContainer: ControlContainer
   ) {
     super(fb);
   }
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
+    this.createNewFields();
     this.listenForGlobalFilters();
   }
 
@@ -58,19 +65,15 @@ export class RoomIteratorComponent extends IteratorComponent
    * @function createNewFields To get the initial value config
    */
   createNewFields(): void {
-    // const data = this.fields.reduce((prev, curr) => {
-    //   const value = curr.required ? ['', Validators.required] : [''];
-    //   prev[curr.name] = value;
-    //   return prev;
-    // }, {});
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
     const data = {
       roomTypeId: [''],
       roomCount: ['', [Validators.required, Validators.min(1)]],
+      roomNumber: [''],
       adultCount: ['', [Validators.required, Validators.min(1)]],
       childCount: ['', [Validators.min(0)]],
     };
-
-    this.userFormGroup.addControl('roomInformation', this.fb.group(data));
+    this.parentFormGroup.addControl('roomInformation', this.fb.group(data));
   }
 
   listenForGlobalFilters(): void {

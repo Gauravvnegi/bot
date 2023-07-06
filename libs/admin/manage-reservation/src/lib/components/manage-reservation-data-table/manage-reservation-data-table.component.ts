@@ -155,6 +155,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     if (selectedOutlet === EntityTabGroup.HOTEL) {
       this.selectedTab = ReservationTableValue.ALL;
       this.cols = hotelCols;
+      this.menuOptions.push({label: 'Assign Room', value: 'ASSIGN_ROOM'});
       this.isAllTabFilterRequired = true;
       this.isTabFilters = true;
     } else {

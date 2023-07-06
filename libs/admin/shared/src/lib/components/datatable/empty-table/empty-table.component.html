@@ -1,4 +1,7 @@
-<div class="wrapper" [ngClass]="{ 'full-view': isFullView }">
+<div
+  class="wrapper"
+  [ngStyle]="{ minHeight: height ? height : 'calc(100vh - 330px)' }"
+>
   <div class="nav-actions">
     <ng-content></ng-content>
   </div>

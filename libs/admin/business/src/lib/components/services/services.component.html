@@ -41,7 +41,7 @@
         ></hospitality-bot-custom-select>
       </form>
     </div>
-    <div class="footer-buttons" *ngIf="!loading && filteredServices.length > 0">
+    <div class="footer-buttons" *ngIf="!loading && compServices.length > 0">
       <hospitality-bot-button
         (onClick)="resetForm()"
         label="Reset"

@@ -53,6 +53,13 @@ const appRoutes: Route[] = [
                     component: HotelInfoFormComponent,
                   },
                   {
+                    path: 'outlet',
+                    loadChildren: () =>
+                      import('@hospitality-bot/admin/all-outlets').then(
+                        (m) => m.AdminAllOutletsModule
+                      ),
+                  },
+                  {
                     path: businessRoute.services.route,
                     component: ServicesComponent,
                     pathMatch: 'full',

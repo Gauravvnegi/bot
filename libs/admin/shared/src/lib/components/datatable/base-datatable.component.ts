@@ -37,6 +37,7 @@ interface Import {
 export class BaseDatatableComponent implements OnInit {
   scrollTargetPoint = 110; //scroll target point to stick the table header on top
   isScrolledUp = false;
+  isReachedEnd = false;
   currentPage = 0;
   @ViewChild('dt') table: Table; //reference to data-table
   tableName = 'Datatable'; //table name
@@ -149,6 +150,7 @@ export class BaseDatatableComponent implements OnInit {
   tempRowsPerPage;
   isSearchSet = false;
   @ViewChild('paginator', { static: false }) paginator: Paginator;
+  mainLayout;
 
   /** !!!!!! IMPORTANT
    * Use this to cancel api call when filter changes and the previous request is still in progress
@@ -160,9 +162,8 @@ export class BaseDatatableComponent implements OnInit {
     protected tabFilterService: TableService
   ) {
     this.initTableFG();
-    document
-      .getElementById('main-layout')
-      ?.addEventListener('scroll', this.onScroll);
+    this.mainLayout = document.getElementById('main-layout');
+    this.mainLayout?.addEventListener('scroll', this.onScroll);
   }
 
   initTableFG() {
@@ -746,10 +747,31 @@ export class BaseDatatableComponent implements OnInit {
   /**
    * @function onScroll Handle the scrolled to show changes is UI
    */
+  previousScrollPosition = 0;
+
   onScroll = () => {
+    const currentScrollPosition = this.mainLayout.scrollTop;
+
     if (this.table) {
       const { top } = this.table?.el?.nativeElement.getBoundingClientRect();
+      console.log(top);
       this.isScrolledUp = top < this.scrollTargetPoint;
+      this.isReachedEnd = top < 300;
     }
+
+    // if (
+    //   this.mainLayout.scrollTop + this.mainLayout.clientHeight >=
+    //   this.mainLayout.scrollHeight
+    // ) {
+    //   // Reached the end of scrollable area
+    //   console.log('Reached the end');
+    //   this.isReachedEnd = true;
+    // } else if (currentScrollPosition < this.previousScrollPosition) {
+    //   // Scrolling upward
+    //   console.log('Scrolling upward');
+    //   this.isReachedEnd = false;
+    // }
+
+    // this.previousScrollPosition = currentScrollPosition;
   };
 }

@@ -23,6 +23,7 @@
 <div [ngClass]="{ 'sticky-header-gap': isScrolledUp }"></div>
 
 <p-table
+  [ngClass]="{ 'dynamic-height': isReachedEnd }"
   #dt
   [styleClass]="tableConfig.styleClass"
   [resizableColumns]="isResizableColumns"
@@ -68,6 +69,7 @@
   <!-- *******************************HEADER WITH SEARCH******************************* -->
   <ng-template pTemplate="header" let-columns #header>
     <tr
+      #tableHeader
       hospitality-bot-table-header
       [columns]="columns"
       [showCheckbox]="isSelectable"
@@ -118,7 +120,7 @@
             [recordSetting]="reservationStatusDetails"
             [menuOptions]="menuOptions"
             (onMenuItemClick)="handleMenuClick($event, rowData.id)"
-            >
+          >
           </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
@@ -138,8 +140,9 @@
     ></p-paginator>
   </ng-template>
 </p-table>
-<ng-template #emptyTable>
+<ng-template [ngClass]="{ 'dynamic-height': isReachedEnd }" #emptyTable>
   <hospitality-bot-empty-table
+    [height]="'62vh'"
     [isLoading]="loading"
     link="/pages/efrontdesk/manage-reservation/{{
       manageReservationRoutes.addReservation.route

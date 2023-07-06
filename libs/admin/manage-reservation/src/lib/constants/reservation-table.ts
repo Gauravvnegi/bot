@@ -137,6 +137,7 @@ export const hotelCols: Cols[] = [
     field: 'reservationType',
     header: 'Actions',
     sortType: 'string',
+    width: '13%',
     isSearchDisabled: true,
   },
 ];
@@ -196,6 +197,7 @@ export const outletCols: Cols[] = [
     field: 'reservationType',
     header: 'Actions',
     sortType: 'string',
+    width: '13%',
     isSearchDisabled: true,
   },
 ];

@@ -26,7 +26,7 @@ import {
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { menuItemFields } from '../../constants/reservation';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
-import { RestaurantFormData } from '../../constants/form';
+import { ReservationForm } from '../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -93,7 +93,7 @@ export class RestaurantReservationComponent implements OnInit {
 
   get inputControl() {
     return this.userForm.controls as Record<
-      keyof RestaurantFormData,
+      keyof ReservationForm,
       AbstractControl
     >;
   }
@@ -130,34 +130,6 @@ export class RestaurantReservationComponent implements OnInit {
         numberOfAdults: ['', Validators.required],
         menuItems: this.menuItemsArray,
         kotInstructions: [''],
-      }),
-      guestInformation: this.fb.group({
-        guestDetails: [''],
-      }),
-      address: this.fb.group({
-        addressLine1: ['', [Validators.required]],
-        city: ['', [Validators.required]],
-        countryCode: ['', [Validators.required]],
-        state: ['', [Validators.required]],
-        postalCode: ['', [Validators.required]],
-      }),
-      paymentRule: this.fb.group({
-        amountToPay: [0],
-        deductedAmount: [''],
-        makePaymentBefore: [''],
-        inclusionsAndTerms: [''],
-      }),
-      paymentMethod: this.fb.group({
-        cashierFirstName: [{ value: '', disabled: true }],
-        cashierLastName: [{ value: '', disabled: true }],
-        totalPaidAmount: [
-          '',
-          [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
-        ],
-        currency: [''],
-        paymentMethod: [''],
-        paymentRemark: ['', [Validators.maxLength(60)]],
-        transactionId: [''],
       }),
       offerId: [''],
     });

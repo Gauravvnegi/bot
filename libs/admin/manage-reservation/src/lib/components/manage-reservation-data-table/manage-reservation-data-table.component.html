@@ -116,7 +116,9 @@
             (onClick)="handleStatus($event, rowData)"
             [state]="rowData.reservationType"
             [recordSetting]="reservationStatusDetails"
-          >
+            [menuOptions]="menuOptions"
+            (onMenuItemClick)="handleMenuClick($event, rowData.id)"
+            >
           </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>

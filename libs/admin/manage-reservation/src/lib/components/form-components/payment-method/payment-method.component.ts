@@ -1,14 +1,22 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
+import {
+  AbstractControl,
+  ControlContainer,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import {
   ConfigService,
   Option,
+  Regex,
   UserService,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
 import { PaymentMethodList } from '../../../models/reservations.model';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { ReservationForm } from '../../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-payment-method',
@@ -27,8 +35,9 @@ export class PaymentMethodComponent implements OnInit {
   hotelId: string;
 
   $subscription = new Subscription();
-
+  parentFormGroup: FormGroup;
   constructor(
+    public fb: FormBuilder,
     public controlContainer: ControlContainer,
     private configService: ConfigService,
     private manageReservationService: ManageReservationService,
@@ -38,16 +47,32 @@ export class PaymentMethodComponent implements OnInit {
 
   ngOnInit(): void {
     this.hotelId = this.globalFilterService.hotelId;
-    this.initConfig();
+    this.addFormGroup();
     this.getPaymentMethod();
-    const { firstName, lastName } = this.userService.userDetails;
+    this.initConfig();
 
-    this.controlContainer.control
-      .get('paymentMethod.cashierFirstName')
-      .setValue(firstName);
-    this.controlContainer.control
-      .get('paymentMethod.cashierLastName')
-      .setValue(lastName);
+    const { firstName, lastName } = this.userService.userDetails;
+    this.inputControl.cashierFirstName.setValue(firstName);
+    this.inputControl.cashierLastName.setValue(lastName);
+  }
+
+  addFormGroup() {
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
+
+    const data = {
+      cashierFirstName: [{ value: '', disabled: true }],
+      cashierLastName: [{ value: '', disabled: true }],
+      totalPaidAmount: [
+        0,
+        [Validators.pattern(Regex.DECIMAL_REGEX), Validators.min(1)],
+      ],
+      currency: [''],
+      paymentMethod: [''],
+      paymentRemark: ['', [Validators.maxLength(60)]],
+      transactionId: [''],
+    };
+
+    this.parentFormGroup.addControl('paymentMethod', this.fb.group(data));
   }
 
   initConfig() {
@@ -84,4 +109,14 @@ export class PaymentMethodComponent implements OnInit {
       )
     );
   }
+
+  get inputControl() {
+    return (this.parentFormGroup.get('paymentMethod') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['paymentMethod'],
+      AbstractControl
+    >;
+  }
+
+  // get input
 }

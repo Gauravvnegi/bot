@@ -18,14 +18,13 @@
             class="iterator full-width"
             [fields]="fields"
             [useFormArray]="spaBookingInfo"
+            ctaLabel="+ Add Item"
           ></hospitality-bot-iterator>
         </div>
       </p-accordionTab>
       <hospitality-bot-guest-information></hospitality-bot-guest-information>
       <hospitality-bot-billing-address></hospitality-bot-billing-address>
-      <hospitality-bot-instructions
-        [bookingType]="bookingType"
-      ></hospitality-bot-instructions>
+      <hospitality-bot-instructions></hospitality-bot-instructions>
       <hospitality-bot-payment-rule
         [deductedAmount]="deductedAmount"
       ></hospitality-bot-payment-rule>
@@ -46,7 +45,8 @@
           price: '2000',
           discountedPrice: '1800',
           guestInfo: 'For 1 Adult',
-          stayInfo: 'some info'
+          stayInfo: 'some info',
+          bookingType: bookingType
         }"
       >
         <div class="bk-summary_roomInfo_checkoutInfo">

@@ -1,17 +1,5 @@
-<p-accordionTab header="Billing Address" [formGroup]="controlContainer.control">
+<p-accordionTab header="Billing Address" [formGroup]="parentFormGroup">
   <div class="form-block" formGroupName="address">
-    <hospitality-bot-input
-      class="half-width"
-      controlName="city"
-      label="City"
-      [props]="{ placeholder: 'Enter ' }"
-    ></hospitality-bot-input>
-    <hospitality-bot-input
-      class="half-width"
-      controlName="countryCode"
-      label="Country"
-      [props]="{ placeholder: 'Enter ' }"
-    ></hospitality-bot-input>
     <hospitality-bot-input
       class="full-width"
       controlName="addressLine1"
@@ -20,8 +8,20 @@
     ></hospitality-bot-input>
     <hospitality-bot-input
       class="half-width"
+      controlName="city"
+      label="City"
+      [props]="{ placeholder: 'Enter ' }"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
       controlName="state"
       label="State"
+      [props]="{ placeholder: 'Enter ' }"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="countryCode"
+      label="Country"
       [props]="{ placeholder: 'Enter ' }"
     ></hospitality-bot-input>
     <hospitality-bot-input

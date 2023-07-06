@@ -59,7 +59,8 @@ export const routes = {
 
   // MEMBERS
   [ModuleNames.MEMBERS]: 'members',
-  [ModuleNames.GUESTS]: 'members/guest',
+  [ModuleNames.GUESTS]: 'members/guests',
+  [ModuleNames.GUEST_DASHBOARD]: 'members/guest-dashboard',
   [ModuleNames.AGENT]: 'members/agent',
   [ModuleNames.COMPANY]: 'members/company',
 

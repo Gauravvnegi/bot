@@ -1,0 +1,176 @@
+<div
+  class="action-header"
+  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
+  [formGroup]="tableFG"
+>
+  <div class="heading">
+    {{ tableName }}
+  </div>
+  <div class="action-wrapper">
+    <hospitality-bot-button
+      label="+ Add Guest"
+      [link]="'/pages/members/guests/' + guestRoutes.addGuest.route"
+    ></hospitality-bot-button>
+
+    <hospitality-bot-export-list
+      (onDocumentActions)="onDocumentActions()"
+      [documentTypes]="documentTypes"
+      [documentActionTypes]="documentActionTypes"
+    ></hospitality-bot-export-list>
+  </div>
+</div>
+
+<p-table
+  #dt
+  [styleClass]="tableConfig.styleClass"
+  [resizableColumns]="isResizableColumns"
+  [autoLayout]="isAutoLayout"
+  [loading]="loading"
+  [columns]="cols"
+  [value]="values"
+  [paginator]="isPaginator"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="showCurrentPageReport"
+  [rowsPerPageOptions]="rowsPerPageOptions"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [(first)]="first"
+  [totalRecords]="totalRecords"
+  [filterDelay]="0"
+  [selectionMode]="selectionMode"
+  [(selection)]="selectedRows"
+  (onRowSelect)="onRowSelect($event)"
+  (onRowUnselect)="onRowUnselect($event)"
+  (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
+  (sortFunction)="customSort($event)"
+  [customSort]="isCustomSort"
+  (onFilter)="onDataFilter($event)"
+  *ngIf="!isEmpty; else emptyTable"
+>
+  <ng-template pTemplate="caption">
+    <div
+      [formGroup]="tableFG"
+      [ngClass]="(isQuickFilters || isTabFilters) && 'caption__wrapper'"
+    >
+      <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+
+      <hospitality-bot-filter-chips
+        *ngIf="isQuickFilters"
+        [chips]="filterChips"
+        (onChange)="toggleQuickReplyFilter($event)"
+        [selectedChips]="selectedFilterChips"
+      ></hospitality-bot-filter-chips>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
+  </ng-template>
+  <!-- *******************************HEADER WITH SEARCH******************************* -->
+  <ng-template pTemplate="header" let-columns>
+    <tr
+      hospitality-bot-table-header
+      [columns]="columns"
+      [showCheckbox]="isSelectable"
+      (search)="handleFieldSearch($event)"
+    ></tr>
+  </ng-template>
+  <!-- **************************************BODY********************************* -->
+  <ng-template
+    pTemplate="body"
+    let-rowData
+    let-columns="columns"
+    let-rowIndex="rowIndex"
+  >
+    <tr class="table-row" (click)="editGuest($event, rowData)">
+      <td class="table-row__checkbox">
+        <p-tableCheckbox
+          [value]="rowData"
+          [index]="rowIndex"
+          (click)="onCheckboxClicked($event)"
+        ></p-tableCheckbox>
+      </td>
+      <td class="cell-content">
+        <span class="primary-text">{{ rowData.getFullName() }}</span>
+        <span class="secondary-text">{{ rowData.email }}</span>
+      </td>
+      <td>
+        <span *ngIf="rowData.email; else emptyCell">
+          {{ rowData.email }}
+        </span>
+      </td>
+      <td class="package">
+        <span
+          *ngIf="
+            rowData.getPhoneNumber().length && rowData.getPhoneNumber() !== ' ';
+            else emptyCell
+          "
+        >
+          <ng-container
+            *ngIf="rowData.getPhoneNumber().includes(','); else singlePhone"
+          >
+            <ng-container
+              *ngFor="let link of rowData.getPhoneNumber().split(',\n')"
+            >
+              <a
+                href="tel:{{ link }}"
+                *ngIf="link"
+                class="email"
+                (click)="openDetailPage($event)"
+              >
+                <u> {{ link }}</u> </a
+              ><br />
+            </ng-container>
+          </ng-container>
+          <ng-template #singlePhone>
+            <a
+              href="tel:{{ rowData.countryCode }}{{ rowData.phoneNumber }}"
+              class="email"
+              (click)="openDetailPage($event)"
+            >
+              <u> {{ rowData.countryCode }}-{{ rowData.phoneNumber }}</u>
+            </a>
+          </ng-template>
+        </span>
+      </td>
+      <td class="amount">
+        {{ rowData.payment.totalAmount | currency: 'INR' }}
+      </td>
+    </tr>
+  </ng-template>
+  <!-- *********************************FOOTER******************************* -->
+  <ng-template pTemplate="summary">
+    <p-paginator
+      #paginator
+      [rows]="rowsPerPage"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      (onPageChange)="paginate($event)"
+      [currentPageReportTemplate]="reportTemplate"
+      showCurrentPageReport="true"
+    ></p-paginator>
+  </ng-template>
+</p-table>
+
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    [content]="{
+      description: 'No guest found.',
+      imageSrc: 'assets/images/empty-table-guest.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
+</ng-template>
+
+<ng-template #tabFilter>
+  <hospitality-bot-tab-group
+    [selectedIndex]="tabFilterIdx"
+    *ngIf="isTabFilters"
+    [listItems]="tabFilterItems"
+    (selectedTabChange)="onSelectedTabFilterChange($event)"
+  ></hospitality-bot-tab-group>
+</ng-template>

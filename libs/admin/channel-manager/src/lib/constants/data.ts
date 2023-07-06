@@ -9,82 +9,45 @@ export const channels = [
   },
 ];
 
+export const ratePlans = [
+  {
+    type: 'EP',
+    label: 'Room Only',
+    value: 'LUX0EP123RO',
+    channels: channels,
+  },
+  {
+    type: 'CP',
+    label: 'With breakfast',
+    value: 'LUX0CP123WB',
+    channels: channels,
+  },
+];
+
 export const roomTypeData = [
   {
     label: 'Luxury',
     value: 'LUX123',
     channels: channels,
-    ratePlans: [
-      {
-        type: 'EP',
-        label: 'Room Only',
-        value: 'LUX0EP123RO',
-        channels: channels,
-      },
-      {
-        type: 'CP',
-        label: 'With breakfast',
-        value: 'LUX0CP123WB',
-        channels: channels,
-      },
-    ],
+    ratePlans: ratePlans,
   },
   {
     label: 'Luxury @1',
     value: 'LUX12373',
     channels: channels,
-    ratePlans: [
-      {
-        type: 'EP',
-        label: 'Room Only',
-        value: 'LUX0EP123RO',
-        channels: channels,
-      },
-      {
-        type: 'CP',
-        label: 'With breakfast',
-        value: 'LUX0CP123WB',
-        channels: channels,
-      },
-    ],
+    ratePlans: ratePlans,
   },
   {
     label: 'Luxury @2',
     value: 'LUX1243',
     channels: channels,
-    ratePlans: [
-      {
-        type: 'EP',
-        label: 'Room Only',
-        value: 'LUX0EP123RO',
-        channels: channels,
-      },
-      {
-        type: 'CP',
-        label: 'With breakfast',
-        value: 'LUX0CP123WB',
-        channels: channels,
-      },
-    ],
+    ratePlans: ratePlans,
   },
   {
     label: 'Deluxe',
     value: 'DEL123',
     channels: channels,
-    ratePlans: [
-      {
-        type: 'EP',
-        label: 'Room Only',
-        value: 'DEL0EP123RO',
-        channels: channels,
-      },
-      {
-        type: 'CP',
-        label: 'With breakfast',
-        value: 'DEL0CP123WB',
-        channels: channels,
-      },
-    ],
+    ratePlans: ratePlans,
   },
 ];
 
@@ -208,4 +171,3 @@ export const inventoryRestrictions = [
   'minimumStay',
   'minimumStayArrival',
 ] as const;
-

@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ManageReservationService } from '../../services/manage-reservation.service';
-import { manageReservationRoutes } from '../../constants/routes';
+import { manageGuestRoutes } from '../../constant/route';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { NavRouteOptions, Option, Regex } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
+import { Location } from '@angular/common';
+import { GuestTableService } from '../../services/guest-table.service';
+import { GuestFactory } from '../../data-models/guest.model';
+import { max } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-add-guest',
@@ -20,7 +19,7 @@ import { Subscription } from 'rxjs';
 export class AddGuestComponent implements OnInit {
   entityId: string;
   agentId: string;
-  reservationId: string;
+  guestId: string;
 
   pageTitle: string;
   navRoutes: NavRouteOptions;
@@ -33,7 +32,7 @@ export class AddGuestComponent implements OnInit {
 
   guestForm: FormGroup;
 
-  routes = manageReservationRoutes;
+  routes = manageGuestRoutes;
   loading = false;
   subscription$ = new Subscription();
   routeSubscription$ = new Subscription();
@@ -43,47 +42,31 @@ export class AddGuestComponent implements OnInit {
   noMoreCompany = false;
   companyLimit = 10;
   companies: Option[] = [];
+  ageRestriction = new Date();
 
   constructor(
     private fb: FormBuilder,
     private globalService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private router: Router
-  ) {
-    this.routeSubscription$ = this.router.events.subscribe(
-      ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
-        const id = snapshot?.params['id'];
-        if (id) {
-          this.reservationId = id;
-          this.routeSubscription$.unsubscribe();
-        }
-        const { navRoutes, title } = manageReservationRoutes[
-          this.reservationId ? 'addGuest2' : 'addGuest1'
-        ];
-        this.navRoutes = this.reservationId
-          ? this.updateNavRoutesWithId(this.reservationId)
-          : navRoutes;
-        this.pageTitle = title;
-      }
-    );
-  }
-
-  updateNavRoutesWithId(id: string) {
-    const navRoutes = manageReservationRoutes['addGuest2'].navRoutes.map(
-      (route) => {
-        return {
-          ...route,
-          link:  route.link.replace(':id', id),
-        };
-      }
-    );
-    return navRoutes;
-  }
+    private guestService: GuestTableService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private location: Location
+  ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalService.entityId;
     this.initGuestForm();
-    // this.initDefaultForm();
+    this.activatedRoute.params.subscribe((params) => {
+      this.guestId = params['id'];
+      const { navRoutes, title } = manageGuestRoutes[
+        this.guestId ? 'editGuest' : 'addGuest'
+      ];
+      this.navRoutes = navRoutes;
+      this.pageTitle = title;
+      this.initEditView();
+    });
+    this.listenChanges();
   }
 
   initGuestForm() {
@@ -96,8 +79,31 @@ export class AddGuestComponent implements OnInit {
       companyName: ['', [Validators.required]],
       gender: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
-      age: ['', Validators.required],
+      age: [{ value: '', disabled: true }, Validators.required],
     });
+  }
+  initEditView() {
+    this.guestId &&
+      ((this.loading = true),
+      this.subscription$.add(
+        this.guestService.getGuestById(this.guestId).subscribe((res) => {
+          GuestFactory.patchEditView(this.guestForm, res);
+          this.loading = false;
+        }, this.handleFinal)
+      ));
+  }
+
+  listenChanges() {
+    this.subscription$.add(
+      this.guestForm.controls['dateOfBirth'].valueChanges.subscribe(
+        (changedDOB) => {
+          let timeDiff = Math.abs(Date.now() - changedDOB);
+          this.guestForm.patchValue({
+            age: Math.floor(timeDiff / (1000 * 3600 * 24) / 365.25),
+          });
+        }
+      )
+    );
   }
 
   // initDefaultForm() {
@@ -151,6 +157,7 @@ export class AddGuestComponent implements OnInit {
     //       .subscribe(this.handleSuccess, this.handleFinal)
     //   );
     // }
+    this.location.back();
   }
 
   saveForm() {

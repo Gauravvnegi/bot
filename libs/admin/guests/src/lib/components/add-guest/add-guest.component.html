@@ -86,6 +86,7 @@
       [props]="{
         placeholder: 'DD/MM/YYYY'
       }"
+      [maxDate]="ageRestriction"
     ></hospitality-bot-date>
     <hospitality-bot-input
       class="half-width"
@@ -100,6 +101,7 @@
         class="create-btn"
         label="Save"
         (onClick)="handleSubmit()"
+        [disabled]="loading"
       ></hospitality-bot-button>
     </div>
   </div>

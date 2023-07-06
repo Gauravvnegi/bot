@@ -5,7 +5,6 @@ import { MainComponent } from './components/main/main.component';
 import { ManageReservationDataTableComponent } from './components/manage-reservation-data-table/manage-reservation-data-table.component';
 import { manageReservationRoutes } from './constants/routes';
 import { RoomIteratorComponent } from './components/room-iterator/room-iterator.component';
-import { AddGuestComponent } from './components/add-guest/add-guest.component';
 import { BookingInfoComponent } from './components/form-components/booking-info/booking-info.component';
 import { SpaReservationComponent } from './components/spa-reservation/spa-reservation.component';
 import { RestaurantReservationComponent } from './components/restaurant-reservation/restaurant-reservation.component';
@@ -37,10 +36,6 @@ export const adminManageReservationRoutes: Route[] = [
             path: '',
             component: ReservationFormWrapperComponent,
           },
-          {
-            path: manageReservationRoutes.addGuest1.route,
-            component: AddGuestComponent,
-          },
         ],
       },
       {
@@ -50,10 +45,6 @@ export const adminManageReservationRoutes: Route[] = [
           {
             path: '',
             component: ReservationFormWrapperComponent,
-          },
-          {
-            path: manageReservationRoutes.addGuest1.route,
-            component: AddGuestComponent,
           },
         ],
       },
@@ -71,7 +62,6 @@ export class AdminManageReservationRoutingModule {
     MainComponent,
     ManageReservationDataTableComponent,
     RoomIteratorComponent,
-    AddGuestComponent,
     BookingInfoComponent,
     PaymentRuleComponent,
     PaymentMethodComponent,
@@ -84,6 +74,6 @@ export class AdminManageReservationRoutingModule {
     BookingSummaryComponent,
     ReservationComponent,
     ReservationDataTableModelComponent,
-    ReservationFormWrapperComponent
+    ReservationFormWrapperComponent,
   ];
 }

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -46,7 +45,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   entityId: string;
   $subscription = new Subscription();
   selectedTab: TableValue;
-  tabFilterIdx: number = 0; 
+  tabFilterIdx: number = 0;
   constructor(
     public fb: FormBuilder,
     protected tabFilterService: TableService,
@@ -65,7 +64,9 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.roomService.resetRoomTypeFormState();
 
     this.selectedTab = this.roomService.selectedTable;
-    this.selectedTab === TableValue.roomType ? this.tabFilterIdx = 0 : this.tabFilterIdx = 1;
+    this.selectedTab === TableValue.roomType
+      ? (this.tabFilterIdx = 0)
+      : (this.tabFilterIdx = 1);
     this.getDataTableValue();
     this.tableName = title[this.selectedTab];
   }

@@ -26,9 +26,7 @@ export class SubscriptionPlanService extends ApiService {
         if (guest) {
           guest['name'] = ModuleNames.MEMBERS;
           guest['label'] = 'Members';
-          guest['config'][0]['name'] = ModuleNames.GUESTS;
-          guest['config'][0]['label'] = 'Guest';
-          guest['config'] = [...guest['config'], ...customModule.guests.config];
+          guest['config'] = customModule.guests.config;
         }
         res.products = [
           ...res.products,

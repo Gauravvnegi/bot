@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
-import {
-  RoomTypeListResponse,
-} from 'libs/admin/room/src/lib/types/service-response';
+import { RoomTypeListResponse } from 'libs/admin/room/src/lib/types/service-response';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { ReservationFormData } from '../types/forms.types';
@@ -13,7 +11,9 @@ import { EntityTabGroup } from '../constants/reservation-table';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
-  public selectedOutlet = new BehaviorSubject<EntityTabGroup>(EntityTabGroup.HOTEL);
+  public selectedOutlet = new BehaviorSubject<EntityTabGroup>(
+    EntityTabGroup.HOTEL
+  );
 
   reservationDate = new BehaviorSubject<Date>(null);
 
@@ -96,7 +96,18 @@ export class ManageReservationService extends ApiService {
   }
 
   getSummaryData(config: QueryConfig): Observable<any> {
-    return this.get(`/api/v1/booking/summary${config?.params}`);
+    return this.get(`/api/v1/booking/summary${config?.params}`).pipe(
+      map((res) => ({
+        ...res,
+        roomNumbers: [
+          { label: '200', value: '200' },
+          { label: '201', value: '201' },
+          { label: '202', value: '202' },
+          { label: '203', value: '203' },
+          { label: '204', value: '204' },
+        ],
+      }))
+    );
   }
 
   getReservationItems<T>(config?: QueryConfig): Observable<T> {

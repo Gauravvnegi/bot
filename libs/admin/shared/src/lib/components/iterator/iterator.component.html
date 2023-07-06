@@ -39,6 +39,17 @@
               fontSize: '14px'
             }"
           ></hospitality-bot-select>
+          <hospitality-bot-multi-select
+            *ngSwitchCase="'multi-select'"
+            [controlName]="field.name"
+            [props]="{
+              placeholder: field.placeholder,
+              isAsync: false
+            }"
+            [options]="field.options"
+            [disabled]="field.disabled"
+            [settings]="{ showHeader: false }"
+          ></hospitality-bot-multi-select>
         </div>
         <mat-icon
           *ngIf="ctaLabel && (!maxLimit || maxLimit > useFormArray.length)"

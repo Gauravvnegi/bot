@@ -1,9 +1,9 @@
 import { ButtonVariant, Option } from './form.type';
 
 export type IteratorField = {
-  label: string;
+  label?: string;
   name: string;
-  type: 'input' | 'select';
+  type: 'input' | 'select' | 'multi-select';
   options?: Option[];
   required?: boolean;
   disabled?: boolean;

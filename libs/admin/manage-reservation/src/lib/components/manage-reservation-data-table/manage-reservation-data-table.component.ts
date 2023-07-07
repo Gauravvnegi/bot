@@ -1,5 +1,6 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { QueryConfig } from '@hospitality-bot/admin/library';
@@ -16,16 +17,19 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { LazyLoadEvent } from 'primeng/api';
 import { Subject, Subscription } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import {
   EntityTabGroup,
-  hotelCols,
-  outletCols,
   ReservationSearchItem,
-  reservationStatusDetails,
   ReservationStatusType,
   ReservationTableValue,
   ReservationType,
+  hotelCols,
+  outletCols,
+  reservationStatusDetails,
   title,
 } from '../../constants/reservation-table';
 import { manageReservationRoutes } from '../../constants/routes';
@@ -35,10 +39,6 @@ import {
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationListResponse } from '../../types/response.type';
-import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { LazyLoadEvent } from 'primeng/api';
-import { switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -134,20 +134,22 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   loadData(event: LazyLoadEvent): void {
     this.manageReservationService.selectedTab = this.selectedTab;
-    if(!this.isOutletChanged) this.initTableValue();
+    if (!this.isOutletChanged) this.initTableValue();
   }
 
   listenForOutletChange(value) {
     // this.manageReservationService.getSelectedOutlet().subscribe((value) => {
-      this.selectedOutlet = value;
-      if (this.selectedOutlet !== this.previousOutlet) {
-        this.resetTableValues();
-        this.loading = true;
-        this.isOutletChanged = true;
-      } else { this.isOutletChanged = false}
+    this.selectedOutlet = value;
+    if (this.selectedOutlet !== this.previousOutlet) {
+      this.resetTableValues();
+      this.loading = true;
+      this.isOutletChanged = true;
+    } else {
+      this.isOutletChanged = false;
+    }
 
-      this.previousOutlet = this.selectedOutlet;
-      this.initDetails(this.selectedOutlet);
+    this.previousOutlet = this.selectedOutlet;
+    this.initDetails(this.selectedOutlet);
     // });
   }
 
@@ -155,7 +157,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     if (selectedOutlet === EntityTabGroup.HOTEL) {
       this.selectedTab = ReservationTableValue.ALL;
       this.cols = hotelCols;
-      this.menuOptions.push({label: 'Assign Room', value: 'ASSIGN_ROOM'});
+      this.menuOptions.push({ label: 'Assign Room', value: 'ASSIGN_ROOM' });
       this.isAllTabFilterRequired = true;
       this.isTabFilters = true;
     } else {

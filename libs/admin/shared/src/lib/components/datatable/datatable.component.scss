@@ -818,7 +818,7 @@ $table-hover-color: #f3f3f3;
       }
 
       .status-text {
-        @include status-chip
+        @include status-chip;
       }
     }
   }
@@ -976,4 +976,9 @@ $table-hover-color: #f3f3f3;
 
 .sticky-header-gap {
   height: $sticky-header-height;
+}
+
+.dynamic-height {
+  display: block;
+  min-height: 77vh;
 }

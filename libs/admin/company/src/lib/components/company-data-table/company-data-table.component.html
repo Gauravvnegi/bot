@@ -139,7 +139,10 @@
       </td>
       <td>
         <div class="center-align" *ngIf="rowData.discount; else emptyCell">
-          <div class="primary-text">{{ rowData.discount }}%</div>
+          <div class="primary-text">
+            {{ rowData.discount
+            }}{{ rowData.discountType === 'COMMISSION' ? '/-' : '%' }}
+          </div>
         </div>
       </td>
       <td>

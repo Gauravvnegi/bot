@@ -162,7 +162,6 @@ export class AgentDataTableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         (error) => {
-          this.values = [];
           this.loading = false;
         },
         this.handleFinal

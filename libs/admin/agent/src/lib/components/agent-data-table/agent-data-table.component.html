@@ -112,7 +112,9 @@
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.phoneNo; else emptyCell">
-          <div class="primary-text">{{ rowData.phoneNo }}</div>
+          <a href="tel:{{ rowData.phoneNo }}">
+            <u> {{ rowData.phoneNo }}</u>
+          </a>
         </div>
       </td>
       <td>

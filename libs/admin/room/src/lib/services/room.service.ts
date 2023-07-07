@@ -10,7 +10,7 @@ import {
   ServicesTypeValue,
 } from '../constant/form';
 import { MultipleRoom, SingleRoom } from '../models/room.model';
-import { QueryConfig, RatePlanOptions } from '../types/room';
+import { QueryConfig } from '../types/room';
 import {
   AddRoomsResponse,
   RoomByIdResponse,
@@ -21,7 +21,6 @@ import {
   RoomTypeResponse,
   ServiceResponse,
 } from '../types/service-response';
-import { ratePlanResponse } from '../constant/response';
 
 @Injectable()
 export class RoomService extends ApiService {
@@ -79,13 +78,13 @@ export class RoomService extends ApiService {
     return this.get(`/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`);
   }
 
-  getRatePlan(hotelId: string): Observable<RatePlanOptions[]> {
-    return this.get(`/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`).pipe(
-      map((res) => {
-        return ratePlanResponse as RatePlanOptions[];
-      })
-    );
-  }
+  // getRatePlan(hotelId: string): Observable<RatePlanOptions[]> {
+  //   return this.get(`/api/v1/entity/${hotelId}/inventory?type=ROOM_TYPE`).pipe(
+  //     map((res) => {
+  //       return ratePlanResponse as RatePlanOptions[];
+  //     })
+  //   );
+  // }
 
   getList<T extends RoomTypeListResponse | RoomListResponse>(
     hotelId: string,

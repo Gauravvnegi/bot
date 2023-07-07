@@ -169,3 +169,10 @@ export type GraphData = {
   label: string;
   value: number;
 };
+
+export type RatePlanResponse = {
+  id: string;
+  label: string;
+  key: string;
+  isDefault: boolean;
+};

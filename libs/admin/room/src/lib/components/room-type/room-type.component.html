@@ -171,7 +171,19 @@
                     $event.stopPropagation()
                   "
                 >
-                  <span> {{ ratePlanGroup.get('type').value }}</span>
+                  <span>
+                    <ng-container *ngIf="ratePlanGroup.get('label').value">
+                      {{ ratePlanGroup.get('label').value.split('(')[0] }}
+                      <span class="rate-plan-text">
+                        ({{
+                          ratePlanGroup
+                            .get('label')
+                            .value.split('(')[1]
+                            .replace(')', '')
+                        }})
+                      </span>
+                    </ng-container>
+                  </span>
                   <i class="pi pi-angle-down"></i>
                 </div>
                 <p-menu
@@ -192,13 +204,16 @@
                 label="Remove"
                 variant="text"
                 severity="reset"
-                (onClick)="onRemove(ratePlanGroup.get('type').value, i)"
+                (onClick)="
+                  onRemove(ratePlanGroup.get('ratePlanTypeId').value, i)
+                "
                 [disabled]="ratePlanArray.length === 1"
               ></hospitality-bot-button>
             </p-header>
 
             <div [formGroupName]="i">
               <hospitality-bot-discount-form
+                *ngIf="!isPricingDynamic"
                 class="form-block"
                 [controls]="{
                   originalPrice: 'basePrice',
@@ -225,40 +240,39 @@
                   }"
                 ></hospitality-bot-prefix-field>
               </hospitality-bot-discount-form>
-              <!-- <hospitality-bot-prefix-field
-                class="half-width"
-                preControlName="basePriceCurrency"
-                postControlName="basePrice"
-                label="Base Price-Single Occupancy"
-                [options]="currencies"
-                [defaultProps]="{
-                  post: { type: 'number' }
-                }"
+
+              <div class="form-block" *ngIf="isPricingDynamic">
+                <hospitality-bot-prefix-field
+                  class="half-width"
+                  preControlName="minPriceCurrency"
+                  postControlName="minPrice"
+                  label="Min Price"
+                  [options]="currencies"
+                  [defaultProps]="{
+                    post: { type: 'number' }
+                  }"
                 ></hospitality-bot-prefix-field>
                 <hospitality-bot-prefix-field
-                class="half-width"
-                preControlName="discountType"
-                postControlName="discountValue"
-                label="Discount Type"
-                [options]="discountTypes"
-                [defaultProps]="{
-                  post: { type: 'number' }
-                }"
+                  class="half-width"
+                  preControlName="maxPriceCurrency"
+                  postControlName="maxPrice"
+                  label="Max Price"
+                  [options]="currenices"
+                  [defaultProps]="{
+                    post: { type: 'number' }
+                  }"
                 ></hospitality-bot-prefix-field>
                 <hospitality-bot-prefix-field
-                class="half-width"
-                preControlName="bestRateCurrency"
-                postControlName="bestAvailableRate"
-                label="Best Available Rate"
-                [options]="currencies"
-                [defaultProps]="{
-                  post: { type: 'number' }
-                }"
-                ></hospitality-bot-prefix-field> -->
-              <!-- errorMessages: inputValidationProps.errorMessages, -->
-              <!-- errorMessages: inputValidationProps.errorMessages, -->
-              <!-- errorMessages: inputValidationProps.errorMessages, -->
-              <!-- errorMessages: inputValidationProps.errorMessages, -->
+                  class="half-width"
+                  preControlName="paxAdditionalCostCurrency"
+                  postControlName="paxAdditionalCost"
+                  label="Pax Additional Cost"
+                  [options]="currencies"
+                  [defaultProps]="{
+                    post: { type: 'number' }
+                  }"
+                ></hospitality-bot-prefix-field>
+              </div>
             </div>
           </p-accordionTab>
         </p-accordion>

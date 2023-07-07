@@ -50,18 +50,26 @@ export type RoomTypeFormData = {
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  originalPrice: number;
-  discountType: string;
-  discountValue: number;
-  discountedPrice: number;
-  variablePriceCurrency: string;
+  ratePlans: Omit<RatePlanData, 'label'>[];
   currency: string;
   variableAmount: number;
-  discountedPriceCurrency: string;
   maxOccupancy: number;
   maxChildren: number;
   maxAdult: number;
   area: number;
+};
+
+export type RatePlanData = {
+  basePriceCurrency: string;
+  basePrice: string;
+  discountType: string;
+  discountValue: string;
+  bestRateCurrency: string;
+  bestAvailableRate: number;
+  paxAdditionalCostCurrency: string;
+  paxAdditionalCost: string;
+  ratePlanTypeId: string;
+  label: string;
 };
 
 export type RoomTypeData = Omit<
@@ -72,7 +80,6 @@ export type RoomTypeData = Omit<
   | 'discountedPriceCurrency'
 > & {
   roomAmenityIds: string[];
-  status: boolean;
 };
 
 export const errorMessages = {

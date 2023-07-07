@@ -1,13 +1,10 @@
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { LibraryService } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   Option,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
-import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { AgentService } from '../../services/agent.service';
 import { AgentModel } from '../../models/agent.model';

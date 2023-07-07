@@ -15,7 +15,7 @@ import {
   Option,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
-import { manageReservationRoutes } from '../../constants/routes';
+import { manageBookingRoutes } from '../../constants/routes';
 import {
   OfferList,
   OfferData,
@@ -27,6 +27,7 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { menuItemFields } from '../../constants/reservation';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { ReservationForm } from '../../constants/form';
+import { title } from '../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -54,11 +55,12 @@ export class RestaurantReservationComponent implements OnInit {
   // loading = false;
   formValueChanges = false;
   disabledForm = false;
+  expandAccordion = false;
 
   deductedAmount = 0;
   bookingType = 'RESTAURANT';
 
-  pageTitle = 'Add Reservation';
+  pageTitle: string;
   routes: NavRouteOptions = [];
 
   // summaryInfo: SummaryInfo;
@@ -77,18 +79,26 @@ export class RestaurantReservationComponent implements OnInit {
     this.initForm();
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
 
-    const { navRoutes, title } = manageReservationRoutes[
-      this.reservationId ? 'editReservation' : 'addReservation'
+    const { navRoutes, title } = manageBookingRoutes[
+      this.reservationId ? 'editBooking' : 'addBooking'
     ];
     this.routes = navRoutes;
     this.pageTitle = title;
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
-    this.fields = menuItemFields;
+    this.initDetails();
     this.initOptions();
     this.getReservationId();
+  }
+
+  initDetails() {
+    this.hotelId = this.globalFilterService.hotelId;
+    this.fields = menuItemFields;
+    this.expandAccordion = this.manageReservationService.enableAccordion;
+    if (this.expandAccordion) {
+      this.manageReservationService.enableAccordion = false;
+    }
   }
 
   get inputControl() {

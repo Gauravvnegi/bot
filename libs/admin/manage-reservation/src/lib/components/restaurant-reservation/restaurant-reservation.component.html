@@ -8,7 +8,7 @@
         [statusOptions]="statusOptions"
         [bookingType]="bookingType"
       ></hospitality-bot-booking-info>
-      <p-accordionTab header="Order Information">
+      <p-accordionTab header="Order Information" [selected]="expandAccordion">
         <div class="form-block" formGroupName="orderInformation">
           <hospitality-bot-input
             class="half-width"

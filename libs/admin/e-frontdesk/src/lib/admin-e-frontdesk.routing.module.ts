@@ -37,7 +37,7 @@ const appRoutes: CRoutes = [
           ),
       },
       {
-        path: 'manage-reservation',
+        path: 'manage-booking',
         name: ModuleNames.ADD_RESERVATION,
         loadChildren: () =>
           import('@hospitality-bot/admin/manage-reservation').then(

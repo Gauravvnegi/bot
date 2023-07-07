@@ -23,8 +23,9 @@ export class BookingInfoComponent implements OnInit {
   maxToDate = new Date();
   hotelId: string;
   reservationId: string;
-
+  
   countries: Option[];
+  @Input() expandAccordion: boolean = false;
   @Input() reservationTypes: Option[] = [];
   @Input() statusOptions: Option[] = [];
   @Input() eventTypes: Option[] = [];

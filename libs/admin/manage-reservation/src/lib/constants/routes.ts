@@ -2,54 +2,54 @@ import { PageRoutes } from '@hospitality-bot/admin/shared';
 
 export const navRoute = {
   eFrontdesk: { label: 'eFrontdesk', link: './' },
-  manageReservation: {
-    label: 'Reservation',
-    link: '/pages/efrontdesk/manage-reservation',
+  manageBooking: {
+    label: 'Booking',
+    link: '/pages/efrontdesk/manage-booking',
   },
-  addReservation: {
-    label: 'Add Reservation',
-    link: '/pages/efrontdesk/manage-reservation/add-reservation',
+  addBooking: {
+    label: 'Add Booking',
+    link: '/pages/efrontdesk/manage-booking/add-booking',
   },
-  editReservation: { label: 'Edit Reservation', link: '/pages/efrontdesk/manage-reservation/edit-reservation/:id' },
+  editBooking: { label: 'Edit Booking', link: '/pages/efrontdesk/manage-booking/edit-booking/:id' },
   addGuest: { label: 'Add Guest', link: './' },
 };
 
-export const manageReservationRoutes: Record<
-  'manageReservation' | 'addReservation' | 'editReservation' | 'addGuest1' | 'addGuest2',
+export const manageBookingRoutes: Record<
+  'manageBooking' | 'addBooking' | 'editBooking' | 'addGuest1' | 'addGuest2',
   PageRoutes
 > = {
-  manageReservation: {
+  manageBooking: {
     route: '',
     navRoutes: [],
-    title: 'Reservation',
+    title: 'Booking',
   },
 
-  addReservation: {
-    route: 'add-reservation',
+  addBooking: {
+    route: 'add-booking',
     navRoutes: [
       navRoute.eFrontdesk,
-      navRoute.manageReservation,
-      navRoute.addReservation,
+      navRoute.manageBooking,
+      navRoute.addBooking,
     ],
-    title: 'Add Reservation',
+    title: 'Add Booking',
   },
 
-  editReservation: {
-    route: 'edit-reservation',
+  editBooking: {
+    route: 'edit-booking',
     navRoutes: [
       navRoute.eFrontdesk,
-      navRoute.manageReservation,
-      navRoute.editReservation,
+      navRoute.manageBooking,
+      navRoute.editBooking,
     ],
-    title: 'Edit Reservation',
+    title: 'Edit Booking',
   },
 
   addGuest1: {
     route: 'add-guest',
     navRoutes: [
       navRoute.eFrontdesk,
-      navRoute.manageReservation,
-      navRoute.addReservation,
+      navRoute.manageBooking,
+      navRoute.addBooking,
       navRoute.addGuest,
     ],
     title: 'Add Guest',
@@ -59,8 +59,8 @@ export const manageReservationRoutes: Record<
     route: 'add-guest',
     navRoutes: [
       navRoute.eFrontdesk,
-      navRoute.manageReservation,
-      navRoute.editReservation,
+      navRoute.manageBooking,
+      navRoute.editBooking,
       navRoute.addGuest,
     ],
     title: 'Add Guest',

@@ -13,7 +13,7 @@ import {
 import { MatDialogConfig } from '@angular/material/dialog';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { manageReservationRoutes } from '../../../constants/routes';
+import { manageBookingRoutes } from '../../../constants/routes';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
 import { ReservationResponse } from '../../../types/response.type';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -176,7 +176,7 @@ export class BookingSummaryComponent implements OnInit {
         onClick: () => {
           this.router.navigate(
             [
-              `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.addReservation.route}`,
+              `/pages/efrontdesk/manage-reservation/${manageBookingRoutes.addBooking.route}`,
             ],
             { replaceUrl: true }
           );

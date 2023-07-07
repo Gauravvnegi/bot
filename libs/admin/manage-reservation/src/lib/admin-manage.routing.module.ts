@@ -3,7 +3,7 @@ import { Route, RouterModule } from '@angular/router';
 import { AddReservationComponent } from './components/add-reservation/add-reservation.component';
 import { MainComponent } from './components/main/main.component';
 import { ManageReservationDataTableComponent } from './components/manage-reservation-data-table/manage-reservation-data-table.component';
-import { manageReservationRoutes } from './constants/routes';
+import { manageBookingRoutes } from './constants/routes';
 import { RoomIteratorComponent } from './components/room-iterator/room-iterator.component';
 import { BookingInfoComponent } from './components/form-components/booking-info/booking-info.component';
 import { SpaReservationComponent } from './components/spa-reservation/spa-reservation.component';
@@ -25,11 +25,11 @@ export const adminManageReservationRoutes: Route[] = [
     component: MainComponent,
     children: [
       {
-        path: manageReservationRoutes.manageReservation.route,
+        path: manageBookingRoutes.manageBooking.route,
         component: ReservationComponent,
       },
       {
-        path: manageReservationRoutes.addReservation.route,
+        path: manageBookingRoutes.addBooking.route,
         component: MainComponent,
         children: [
           {
@@ -39,7 +39,7 @@ export const adminManageReservationRoutes: Route[] = [
         ],
       },
       {
-        path: `${manageReservationRoutes.editReservation.route}/:id`,
+        path: `${manageBookingRoutes.editBooking.route}/:id`,
         component: MainComponent,
         children: [
           {

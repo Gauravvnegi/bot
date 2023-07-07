@@ -31,7 +31,7 @@ import {
   RestaurantMenuOptions,
   title,
 } from '../../constants/reservation-table';
-import { manageReservationRoutes } from '../../constants/routes';
+import { manageBookingRoutes } from '../../constants/routes';
 import {
   BookingConfig,
   ReservationList,
@@ -52,7 +52,7 @@ import { switchMap, takeUntil } from 'rxjs/operators';
   ],
 })
 export class ManageReservationDataTableComponent extends BaseDatableComponent {
-  readonly manageReservationRoutes = manageReservationRoutes;
+  readonly manageBookingRoutes = manageBookingRoutes;
   readonly reservationStatusDetails = reservationStatusDetails;
   readonly reservationType = ReservationType;
   scrollTargetPoint: number = 150;
@@ -353,7 +353,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     const queryParams = expandAccordion ? { expandAccordion: true } : undefined;
     this.router.navigate(
       [
-        `/pages/efrontdesk/manage-reservation/${manageReservationRoutes.editReservation.route}/${id}`,
+        `/pages/efrontdesk/manage-booking/${manageBookingRoutes.editBooking.route}/${id}`,
       ],
       { queryParams }
     );
@@ -388,14 +388,11 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         this.editReservation(id);
         break;
       case 'PRINT_INVOICE':
-        // Handle PRINT_INVOICE case
         break;
       case 'ASSIGN_ROOM':
-        this.editReservation(id, true);
-        // Handle ASSIGN_ROOM case
-        break;
       case 'ASSIGN_TABLE':
-        // Handle ASSIGN_TABLE case
+        this.manageReservationService.enableAccordion = true;
+        this.editReservation(id);
         break;
     }
   }

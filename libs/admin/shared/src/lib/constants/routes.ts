@@ -17,7 +17,7 @@ export const routes = {
   [ModuleNames.FRONT_DESK_DASHBOARD]: 'efrontdesk/dashboard',
   [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/request-analytics',
   [ModuleNames.REQUEST]: 'efrontdesk/request',
-  [ModuleNames.ADD_RESERVATION]: 'efrontdesk/manage-reservation',
+  [ModuleNames.ADD_RESERVATION]: 'efrontdesk/manage-booking',
 
   // Freddie
   [ModuleNames.FREDDIE]: 'freddie',

@@ -19,8 +19,8 @@ export class ManageReservationService extends ApiService {
   }
 
   reservationDate = new BehaviorSubject<Date>(null);
-
   selectedTab = ReservationTableValue.ALL;
+  enableAccordion: boolean = false;
 
   getRoomTypeList(
     hotelId: string,
@@ -250,8 +250,6 @@ export class ManageReservationService extends ApiService {
           cancelled: 0,
           waitListed: 0,
           noShow: 0,
-          checkedIn: 0,
-          checkedOut: 0,
           inSession: 0,
           completed: 0,
         };

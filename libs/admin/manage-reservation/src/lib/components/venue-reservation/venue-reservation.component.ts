@@ -11,7 +11,7 @@ import {
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
 import { menuItemFields, venueFields } from '../../constants/reservation';
-import { manageReservationRoutes } from '../../constants/routes';
+import { manageBookingRoutes } from '../../constants/routes';
 import {
   OfferList,
   OfferData,
@@ -66,8 +66,8 @@ export class VenueReservationComponent implements OnInit {
     this.initForm();
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
 
-    const { navRoutes, title } = manageReservationRoutes[
-      this.reservationId ? 'editReservation' : 'addReservation'
+    const { navRoutes, title } = manageBookingRoutes[
+      this.reservationId ? 'editBooking' : 'addBooking'
     ];
     this.routes = navRoutes;
     this.pageTitle = title;

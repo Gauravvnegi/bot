@@ -6,9 +6,9 @@
   <div class="heading">{{ tableName }}</div>
   <div class="action-wrapper">
     <hospitality-bot-button
-      label="+ Create Reservation"
-      link="/pages/efrontdesk/manage-reservation/{{
-        manageReservationRoutes.addReservation.route
+      label="+ Create Booking"
+      link="/pages/efrontdesk/manage-booking/{{
+        manageBookingRoutes.addBooking.route
       }}"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
@@ -141,13 +141,13 @@
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
     [isLoading]="loading"
-    link="/pages/efrontdesk/manage-reservation/{{
-      manageReservationRoutes.addReservation.route
+    link="/pages/efrontdesk/manage-booking/{{
+      manageBookingRoutes.addBooking.route
     }}"
     [content]="{
       description:
-        'No Reservation found. Tap the +Create Reservation to create & manage the reservation offered by your hotel',
-      actionName: '+ Create Reservation',
+        'No Booking found. Tap the +Create Booking to create & manage the booking offered by your hotel',
+      actionName: '+ Create Booking',
       imageSrc: 'assets/images/empty-table-package.png'
     }"
   >

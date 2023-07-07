@@ -14,10 +14,11 @@ import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import {
-  RatePlanData,
+  DynamicPricingRatePlan,
   RoomTypeData,
   RoomTypeFormData,
   ServicesTypeValue,
+  StaticPricingRatePlan,
   errorMessages,
   noRecordAction,
   noRecordActionForComp,
@@ -112,14 +113,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       description: ['', [Validators.required]],
       complimentaryAmenities: [[], [Validators.required]],
       paidAmenities: [[]],
-      // originalPrice: ['', [Validators.required, Validators.min(0)]],
-      // discountType: ['PERCENTAGE'],
-      // discountValue: ['0', [Validators.min(0)]],
-      // discountedPrice: [{ value: '', disabled: true }],
-      // variablePriceCurrency: [{ value: '', disabled: true }],
       currency: ['', [Validators.required, Validators.min(0)]],
-      // variableAmount: ['', [Validators.min(0)]],
-      // discountedPriceCurrency: [{ value: '', disabled: true }],
       maxOccupancy: [
         null,
         [
@@ -133,8 +127,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       area: ['', [Validators.required, Validators.min(0)]],
 
       ratePlan: new FormArray([]),
-      // minPrice: ['', [Validators.required, Validators.min(0)]],
-      // maxPrice: ['', [Validators.required, Validators.min(0)]],
     });
 
     this.ratePlanArray = this.useForm.get('ratePlan') as FormArray;
@@ -188,12 +180,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             label: DiscountType[value],
             value,
           }));
-          // this.useForm.get('variablePriceCurrency').setValue(this.currencies[0].value);
           this.useForm.get('currency').setValue(this.currencies[0].value);
           this.getRatePlans(roomRatePlans);
-          // this.useForm
-          //   .get('discountedPriceCurrency')
-          //   .setValue(this.currencies[0].value);
         }
       })
     );
@@ -208,17 +196,21 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       value: option.id,
       disabled: false,
       isDefault: option.isDefault,
-      command: () => this.handlePlan(option.id, option.label),
+      command: () => this.handleRatePlan(option.id, option.label),
     }));
     this.plans = plansData;
     this.addNewRatePlan();
   }
 
-  handlePlan(value: string, label: string, index?: number) {
+  /**
+   * @function handleRatePlan To handle rate plan dropdown clicks
+   */
+  handleRatePlan(value: string, label: string, index?: number) {
     const targetIndex = index ?? this.selectedIndex;
     const currentPlan = this.plans.find((plan) => plan.value === value);
     const ratePlanControl = this.ratePlanArray.at(targetIndex);
 
+    // If current plan is disabled then add next enabled plan
     if (!currentPlan.disabled) {
       ratePlanControl.get('ratePlanTypeId').patchValue(value);
       ratePlanControl.get('label').patchValue(label);
@@ -231,19 +223,31 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.setDisabled(value);
   }
 
+  /**
+   * Disables the rate plan if already added
+   */
   setDisabled(value: string) {
-    const ratePlans = this.plans.filter((item) => item.value === value);
-    const types = this.ratePlanArray.controls.map(
+    // Currently selected rate plans
+    const selectedRatePlans = this.plans.filter((item) => item.value === value);
+
+    const ratePlanIds = this.ratePlanArray.controls.map(
       (control) => control.get('ratePlanTypeId').value
     );
-    if (types.includes(value)) {
-      ratePlans.map((type) => (type.disabled = true));
+
+    // Disables currently selected rate plans in the array
+    if (ratePlanIds.includes(value)) {
+      selectedRatePlans.map((type) => (type.disabled = true));
     }
+
+    // Enables remaining rate plans
     this.plans
-      .filter((item) => !types.includes(item.value))
+      .filter((item) => !ratePlanIds.includes(item.value))
       .map((plan) => (plan.disabled = false));
   }
 
+  /**
+   * Handle remove rate plan based on index
+   */
   onRemove(value: string, index: number): void {
     const removedPlan = this.ratePlanArray.at(index).get('ratePlanTypeId')
       .value;
@@ -252,30 +256,34 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.planCount--;
   }
 
+  /**
+   * @function addNewRatePlan Adds new rate plan array based on pricing type
+   */
   addNewRatePlan() {
-    const staticPricing: Record<keyof RatePlanData, any> = {
+    const staticPricing: Record<keyof StaticPricingRatePlan, any> = {
       basePriceCurrency: ['INR'],
       basePrice: ['', [Validators.required, Validators.min(0)]],
-      discountType: ['PERCENT'],
+      discountType: ['PERCENTAGE'],
       discountValue: ['', [Validators.required, Validators.min(0)]],
       bestRateCurrency: ['INR'],
       bestAvailableRate: ['', [Validators.required, Validators.min(0)]],
-      paxAdditionalCostCurrency: ['INR'],
-      paxAdditionalCost: ['', [Validators.required, Validators.min(0)]],
+      paxPriceCurrency: ['INR'],
+      paxPrice: ['', [Validators.required, Validators.min(0)]],
       ratePlanTypeId: [''],
       label: [''],
     };
 
-    const dynamicPricing = {
+    const dynamicPricing: Record<keyof DynamicPricingRatePlan, any> = {
       minPriceCurrency: ['INR'],
       minPrice: ['', [Validators.required, Validators.min(0)]],
       maxPriceCurrency: ['INR'],
       maxPrice: ['', [Validators.required, Validators.min(0)]],
-      paxAdditionalCostCurrency: ['INR'],
-      paxAdditionalCost: ['', [Validators.required, Validators.min(0)]],
+      paxPriceCurrency: ['INR'],
+      paxPrice: ['', [Validators.required, Validators.min(0)]],
       ratePlanTypeId: [''],
       label: [''],
     };
+
     let formGroup: FormGroup;
     this.isPricingDynamic
       ? (formGroup = this.fb.group(dynamicPricing))
@@ -283,7 +291,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.ratePlanArray.push(formGroup);
 
     const ratePlanArrayIndex = this.ratePlanArray.length - 1;
-    this.handlePlan(
+    this.handleRatePlan(
       this.plans[ratePlanArrayIndex].value,
       this.plans[ratePlanArrayIndex].label,
       ratePlanArrayIndex
@@ -485,13 +493,30 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     const {
       complimentaryAmenities,
       paidAmenities,
+      staticRatePlans,
+      dynamicRatePlans,
       ...rest
     } = this.useForm.getRawValue() as RoomTypeFormData;
 
+    const staticRatePlanModData = staticRatePlans.map((ratePlan) => {
+      const { discountType, discountValue, ...restRatePlan } = ratePlan;
+      return {
+        ...restRatePlan,
+        discount: {
+          type: discountType,
+          value: discountValue,
+        },
+      };
+    });
+
     const data: RoomTypeData = {
       ...rest,
+      ...(this.isPricingDynamic
+        ? { dynamicRatePlans }
+        : { staticRatePlanModData }),
       roomAmenityIds: complimentaryAmenities.concat(paidAmenities),
     };
+
     return data;
   }
 

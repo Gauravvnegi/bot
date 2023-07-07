@@ -97,6 +97,8 @@
 
 .room-occupancy-form-wrapper {
   @include form-wrapper();
+  gap: 10%;
+  row-gap: 30px;
 }
 
 .room-pricing-form-wrapper {

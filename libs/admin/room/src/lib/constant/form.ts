@@ -50,24 +50,33 @@ export type RoomTypeFormData = {
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  ratePlans: Omit<RatePlanData, 'label'>[];
-  currency: string;
-  variableAmount: number;
+  staticRatePlans?: Omit<StaticPricingRatePlan, 'label'>[];
+  dynamicRatePlans?: Omit<StaticPricingRatePlan, 'label'>[];
   maxOccupancy: number;
   maxChildren: number;
   maxAdult: number;
   area: number;
 };
 
-export type RatePlanData = {
+export type StaticPricingRatePlan = RatePlan & {
   basePriceCurrency: string;
   basePrice: string;
   discountType: string;
-  discountValue: string;
+  discountValue: number;
   bestRateCurrency: string;
   bestAvailableRate: number;
-  paxAdditionalCostCurrency: string;
-  paxAdditionalCost: string;
+};
+
+export type DynamicPricingRatePlan = RatePlan & {
+  maxPriceCurrency: string;
+  maxPrice: number;
+  minPriceCurrency: string;
+  minPrice: number;
+};
+
+export type RatePlan = {
+  paxPriceCurrency: string;
+  paxPrice: string;
   ratePlanTypeId: string;
   label: string;
 };
@@ -76,8 +85,6 @@ export type RoomTypeData = Omit<
   RoomTypeFormData,
   | 'complimentaryAmenities'
   | 'paidAmenities'
-  | 'variablePriceCurrency'
-  | 'discountedPriceCurrency'
 > & {
   roomAmenityIds: string[];
 };

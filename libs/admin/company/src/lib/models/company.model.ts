@@ -32,7 +32,7 @@ export class CompanyModel {
       },
       salesPersonName: form.salePersonName ?? '',
       salesPersonPhone: form.salePersonNo ?? '',
-      priceModifierType: form.discountType ?? '',
+      priceModifier: form.discountType ?? '',
       priceModifierValue: form.discount ?? '',
     };
     return data;
@@ -50,8 +50,8 @@ export class CompanyModel {
       salesPersonName: input.salesPersonName,
       salesPersonNumber: input.salesPersonPhone,
       discount: input.priceModifierValue,
-      discountType: input.priceModifierType,
-      status: input.action,
+      discountType: input.priceModifier,
+      status: input.status,
     });
     return this;
   }

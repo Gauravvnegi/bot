@@ -69,8 +69,9 @@
         type: 'number',
         errorMessages: {
           required: 'This is a required field.',
-          min: 'Minimum value should be 0.',
-          max: 'Maximum value should be 100.'
+          moreThan100: 'Cannot be more than 100%.',
+          notAllowedChr: 'Decimal are not allowed.',
+          min: 'Value can not be less than 0.'
         }
       }"
     ></hospitality-bot-prefix-field>
@@ -89,6 +90,7 @@
       class="create-btn"
       [label]="companyId ? 'Update' : 'Save'"
       (onClick)="handleSubmit()"
+      [disabled]="loading"
     ></hospitality-bot-button>
   </div>
 </div>

@@ -2,6 +2,7 @@ import { EntityState } from '@hospitality-bot/admin/shared';
 
 export type CompanyResponseType = {
   id?: string;
+  code?: string;
   nameTitle?: string;
   firstName: string;
   lastName?: string;
@@ -22,12 +23,11 @@ export type CompanyResponseType = {
   salesPersonName: string;
   salesPersonPhone: string;
   iataNumber?: string;
-  priceModifier?: string;
-  priceModifierType: string;
+  priceModifier: string;
   priceModifierValue: string;
   companyName?: string;
   companyCode?: number;
-  action?: boolean;
+  status?: boolean;
 };
 
 export type CompanyListResponse = {

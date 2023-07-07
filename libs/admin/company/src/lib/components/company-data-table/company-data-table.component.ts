@@ -83,9 +83,10 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
         {
           type: 'COMPANY',
+          entityId: this.entityId,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -102,9 +103,12 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.companyService
-        .updateCompanyStatus(rowData.id, {
-          params: `?status=${status}&type=COMPANY`,
-        })
+        .updateCompanyStatus(
+          { companyId: rowData.id, status: status },
+          {
+            params: `?type=COMPANY`,
+          }
+        )
         .subscribe(
           () => {
             this.initTable();
@@ -142,7 +146,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
         {
-          type: 'AGENT',
+          type: 'COMPANY',
           entityId: this.entityId,
           entityState: this.selectedTab,
         },

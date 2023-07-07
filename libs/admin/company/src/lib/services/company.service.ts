@@ -14,7 +14,7 @@ export class CompanyService extends ApiService {
     data: CompanyResponseType,
     config?: QueryConfig
   ): Observable<CompanyResponseType> {
-    return this.post(`api/v1/members${config.params}`, data);
+    return this.post(`/api/v1/members${config.params}`, data);
   }
 
   updateCompany(
@@ -22,7 +22,7 @@ export class CompanyService extends ApiService {
     companyId: string,
     config?: QueryConfig
   ): Observable<CompanyResponseType> {
-    return this.patch(`/api/v1/members/${companyId}${config.params}`, data);
+    return this.patch(`/api/v1/members/${companyId}`, data);
   }
 
   getCompanyById(companyId: string): Observable<CompanyResponseType> {
@@ -39,7 +39,12 @@ export class CompanyService extends ApiService {
     });
   }
 
-  updateCompanyStatus(compoanyId, config: QueryConfig): Observable<any> {
-    return this.patch(`/api/v1/members/${compoanyId}${config.params}`, {});
+  updateCompanyStatus(
+    data: { companyId: string; status: boolean },
+    config: QueryConfig
+  ): Observable<any> {
+    return this.patch(`/api/v1/members/${data.companyId}${config.params}`, {
+      status: data.status,
+    });
   }
 }

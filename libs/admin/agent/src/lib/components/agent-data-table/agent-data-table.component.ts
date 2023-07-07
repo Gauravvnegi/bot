@@ -87,7 +87,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
         {
           type: 'AGENT',
           entityId: this.entityId,
@@ -107,9 +107,12 @@ export class AgentDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.subscription$.add(
       this.agentService
-        .updateAgentStatus(rowData.id, {
-          params: `?status=${status}&type=AGENT`,
-        })
+        .updateAgentStatus(
+          { agentId: rowData.id, status: status },
+          {
+            params: `?type=AGENT`,
+          }
+        )
         .subscribe(
           () => {
             this.initTable();

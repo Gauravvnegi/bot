@@ -13,19 +13,19 @@ export const cols: Cols[] = [
     field: 'company',
     header: 'Company',
     sortType: 'string',
-    width: '10%',
+    width: '7%',
   },
   {
     field: 'iataNo',
     header: 'IATA No',
     sortType: 'string',
-    width: '8%',
+    width: '6%',
   },
   {
     field: 'email',
     header: 'Email',
     sortType: 'string',
-    width: '10%',
+    width: '7%',
   },
   {
     field: 'phoneNo',
@@ -43,7 +43,7 @@ export const cols: Cols[] = [
     field: 'status',
     header: 'Action',
     sortType: 'string',
-    width: '5%',
+    width: '10%',
     isSearchDisabled: true,
   },
 ];

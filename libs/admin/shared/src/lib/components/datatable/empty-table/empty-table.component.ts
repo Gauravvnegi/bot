@@ -12,8 +12,8 @@ export class EmptyTableComponent implements OnInit {
   actionName: string;
   @Input() link: string;
   @Input() isLoading: boolean;
-  @Input() isFullView: boolean = false;
   @Output() action = new EventEmitter();
+  @Input() height: string;
 
   /**
    * Set Content of the empty view.

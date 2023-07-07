@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { MenuTabValue, TabValue } from '../constants/data-table';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { allOutletsResponse, menuListResponse } from '../constants/response';
@@ -94,35 +94,12 @@ export class OutletService extends ApiService {
   }
 
   addOutlet(data): Observable<any> {
-    console.log(data, 'add-outlet');
-    return this.patch(
-      `/api/v1/entity/fb8c0b81-1062-43c1-a341-6677e8687c32/library/85692aa9-cf86-4f5d-8fe6-9783c9884e9b?type=SERVICE`,
-      {
-        id: '85692aa9-cf86-4f5d-8fe6-9783c9884e9b',
-        name: 'test',
-        rate: 0.0,
-        startDate: 0,
-        endDate: 0,
-        active: true,
-        packageCode: 'A0SC62RT',
-        imageUrl:
-          'https://botfiles.nyc3.cdn.digitaloceanspaces.com/bot/hotel/fb8c0b81-1062-43c1-a341-6677e8687c32/static-content/files/download_(1).jpeg',
-        source: 'BOTSHOT',
-        hotelId: 'fb8c0b81-1062-43c1-a341-6677e8687c32',
-        type: 'Complimentary',
-        unit: 'Km',
-        autoAccept: true,
-        hasChild: false,
-        parentId: 'c1a739bc-224b-11eb-adc1-0242ac120002',
-        categoryName: 'Wifi',
-        discountValue: 0.0,
-        enableVisibility: ['CHECKIN'],
-        discountedPrice: 0.0,
-        created: 1688019650577,
-        updated: 1688019650699,
-        taxes: [],
-      }
-    );
+    const mockData = {
+      id: '85692aa9-cf86-4f5d-8fe6-9783c9884e9b',
+    };
+
+    // Return an Observable of the mock data
+    return of(mockData);
   }
 
   addMenuItems(data, config: QueryConfig): Observable<any> {

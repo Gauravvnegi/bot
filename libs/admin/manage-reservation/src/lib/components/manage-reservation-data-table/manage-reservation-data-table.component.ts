@@ -1,5 +1,6 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { QueryConfig } from '@hospitality-bot/admin/library';
@@ -16,19 +17,22 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import * as FileSaver from 'file-saver';
+import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
+import { LazyLoadEvent } from 'primeng/api';
 import { Subject, Subscription } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import {
   EntityTabGroup,
-  hotelCols,
   HotelMenuOptions,
   MenuOptions,
-  outletCols,
   ReservationSearchItem,
-  reservationStatusDetails,
   ReservationStatusType,
   ReservationTableValue,
   ReservationType,
   RestaurantMenuOptions,
+  hotelCols,
+  outletCols,
+  reservationStatusDetails,
   title,
 } from '../../constants/reservation-table';
 import { manageBookingRoutes } from '../../constants/routes';
@@ -38,10 +42,6 @@ import {
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationListResponse } from '../../types/response.type';
-import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
-import { MatDialogConfig } from '@angular/material/dialog';
-import { LazyLoadEvent } from 'primeng/api';
-import { switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',

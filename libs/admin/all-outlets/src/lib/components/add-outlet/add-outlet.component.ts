@@ -5,11 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   HotelDetailService,
   NavRouteOptions,
@@ -20,28 +16,21 @@ import { Subscription } from 'rxjs';
 import { cousins } from '../../constants/data';
 import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
-import {
-  Feature,
-  OutletForm,
-  RestaurantForm,
-  SpaForm,
-  VenueForm,
-} from '../../types/outlet';
+import { Feature, OutletForm } from '../../types/outlet';
+import { OutletBaseComponent } from '../outlet-base.components';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
   templateUrl: './add-outlet.component.html',
   styleUrls: ['./add-outlet.component.scss'],
 })
-export class AddOutletComponent implements OnInit {
+export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   pageTitle: string = '';
   navRoutes: NavRouteOptions = [];
   useForm: FormGroup;
   types: Option[] = [];
   subType: Option[] = [];
   isTypeSelected = false;
-  outletId: string = '';
-  brandId: string = '';
   cousins = cousins;
   $subscription = new Subscription();
   loading = false;
@@ -58,28 +47,18 @@ export class AddOutletComponent implements OnInit {
     private fb: FormBuilder,
     private outletService: OutletService,
     private snackbarService: SnackBarService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private hotelDetailService: HotelDetailService
+    private hotelDetailService: HotelDetailService,
+    router: Router,
+    route: ActivatedRoute
   ) {
-    this.router.events.subscribe(
-      ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
-        const outletId = snapshot?.params['outletId'];
-        const brandId = snapshot?.params['brandId'];
-        if (outletId) this.outletId = outletId;
-        if (brandId) this.brandId = brandId;
-      }
-    );
+    super(router, route);
   }
 
   ngOnInit(): void {
     this.siteId = this.hotelDetailService.siteId;
     this.initOptions();
     this.initForm();
-    const { navRoutes, title } = outletBusinessRoutes['addOutlet'];
-    this.navRoutes = navRoutes;
-    navRoutes[2].link = navRoutes[2].link.replace(':brandId', this.brandId);
-    this.pageTitle = title;
+    this.initComponent('addOutlet');
   }
 
   initOptions() {
@@ -183,10 +162,9 @@ export class AddOutletComponent implements OnInit {
       this.$subscription.add(
         this.outletService
           .addOutlet({ entity: { ...data }, siteId: this.siteId })
-          .subscribe(
-            (res) => this.handleSuccess(features, res.id),
-            this.handleError
-          )
+          .subscribe((res) => {
+            if (res) this.handleSuccess(features, res.id);
+          }, this.handleError)
       );
     }
   }
@@ -210,6 +188,7 @@ export class AddOutletComponent implements OnInit {
    * @description handles success
    */
   handleSuccess = (feature?: Feature, outletId?: string) => {
+    debugger;
     this.snackbarService.openSnackBarAsText(
       this.outletId
         ? 'Outlet updated successfully'
@@ -217,14 +196,20 @@ export class AddOutletComponent implements OnInit {
     );
     switch (feature) {
       case 'menu':
-        this.router.navigate([outletBusinessRoutes.menu.route], {
-          relativeTo: this.route,
-        });
+        this.router.navigate(
+          [`${outletId} /${outletBusinessRoutes.menu.route}`],
+          {
+            relativeTo: this.route,
+          }
+        );
         break;
       case 'service':
-        this.router.navigate([outletBusinessRoutes.importService.route], {
-          relativeTo: this.route,
-        });
+        this.router.navigate(
+          [`${outletId} /${outletBusinessRoutes.importService.route}`],
+          {
+            relativeTo: this.route,
+          }
+        );
         break;
       case 'food':
         this.router.navigate([outletBusinessRoutes.foodPackage.route], {

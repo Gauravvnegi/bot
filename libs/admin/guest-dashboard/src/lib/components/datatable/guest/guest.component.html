@@ -16,6 +16,7 @@
 </div>
 
 <p-table
+  [ngClass]="{ 'dynamic-height': isReachedEnd }"
   #dt
   [styleClass]="tableConfig.styleClass"
   [resizableColumns]="isResizableColumns"

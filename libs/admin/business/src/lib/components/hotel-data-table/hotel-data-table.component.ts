@@ -39,7 +39,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   globalQueries = [];
   tableFG;
   routerLink = businessRoute;
-  @Input() brandId: string = '';
+  @Input() parentId: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -71,7 +71,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.businessService
-        .getHotelList(this.brandId, this.getQueryConfig())
+        .getHotelList(this.parentId, this.getQueryConfig())
         .subscribe(
           (res) => {
             this.values = res.records;
@@ -208,13 +208,13 @@ export class HotelDataTableComponent extends BaseDatatableComponent
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         { type: 'HOTEL' },
-        { parentId: this.brandId },
+        { parentId: this.parentId },
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
 
     this.$subscription.add(
-      this.businessService.exportCSV(this.brandId, config).subscribe((res) => {
+      this.businessService.exportCSV(this.parentId, config).subscribe((res) => {
         this.loading = false;
         FileSaver.saveAs(
           res,
@@ -240,11 +240,11 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   editHotel(data) {
     if (data?.type === 'HOTEL') {
       this.router.navigate([
-        `pages/settings/business-info/brand/${this.brandId}/hotel/${data.id}`,
+        `pages/settings/business-info/brand/${this.parentId}/hotel/${data.id}`,
       ]);
     } else {
       this.router.navigate([
-        `pages/settings/business-info/brand/${this.brandId}/outlet/${data.id}`,
+        `pages/settings/business-info/brand/${this.parentId}/outlet/${data.id}`,
       ]);
     }
   }

@@ -14,6 +14,10 @@ export const navRoutes = {
     label: 'Hotel',
     link: '/pages/settings/business-info/brand/:brandId/hotel',
   },
+  editHotel: {
+    label: 'Edit Hotel',
+    link: '/pages/settings/business-info/brand/:brandId/hotel/:entityId',
+  },
 
   editBrand: {
     label: 'Edit Brand',
@@ -55,17 +59,7 @@ export const navRoutes = {
   },
 };
 
-export const outletBusinessRoutes: Record<
-  | 'addOutlet'
-  | 'editOutlet'
-  | 'importService'
-  | 'menu'
-  | 'editMenu'
-  | 'menuItem'
-  | 'editMenuItem'
-  | 'foodPackage',
-  PageRoutes
-> = {
+export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
   addOutlet: {
     route: 'outlet',
     navRoutes: [
@@ -155,3 +149,23 @@ export const outletBusinessRoutes: Record<
     title: 'Add Food Package',
   },
 };
+
+//it will dynamically add editHotel on the basis of isHotel
+export function getRoutes(routeName: string, isHotel) {
+  debugger;
+  if (isHotel) {
+    outletBusinessRoutes[routeName].navRoutes.splice(3, 0, navRoutes.editHotel);
+
+    return outletBusinessRoutes[routeName];
+  }
+}
+
+export type OutletBusinessRoutes =
+  | 'addOutlet'
+  | 'editOutlet'
+  | 'importService'
+  | 'menu'
+  | 'editMenu'
+  | 'menuItem'
+  | 'editMenuItem'
+  | 'foodPackage';

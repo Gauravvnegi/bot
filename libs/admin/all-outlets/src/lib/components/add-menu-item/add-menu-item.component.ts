@@ -1,19 +1,21 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
 import { MenuItemForm } from '../../types/outlet';
+import { OutletBaseComponent } from '../outlet-base.components';
 
 @Component({
   selector: 'hospitality-bot-add-menu-item',
   templateUrl: './add-menu-item.component.html',
   styleUrls: ['./add-menu-item.component.scss'],
 })
-export class AddMenuItemComponent implements OnInit {
+export class AddMenuItemComponent extends OutletBaseComponent
+  implements OnInit {
   useForm: FormGroup;
   pageTitle: string;
   navRoutes: NavRouteOptions;
@@ -41,16 +43,16 @@ export class AddMenuItemComponent implements OnInit {
     private fb: FormBuilder,
     private outletService: OutletService,
     private snackbarService: SnackBarService,
-    private router: Router
+    route: ActivatedRoute,
+    router: Router
   ) {
-    const { navRoutes, title } = outletBusinessRoutes['menuItem'];
-    this.pageTitle = title;
-    this.navRoutes = navRoutes;
+    super(router, route);
   }
 
   ngOnInit(): void {
     this.initOptions();
     this.initForm();
+    this.initComponent('menuItem');
   }
 
   initOptions() {

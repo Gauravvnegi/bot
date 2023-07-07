@@ -102,6 +102,7 @@
           (viewAll)="saveHotelData()"
           (addAction)="openImportService()"
           [noRecordsAction]="noRecordAction"
+          type="icon"
         >
           <hospitality-bot-button
             label="+ Import Service"
@@ -133,3 +134,8 @@
     </div>
   </div>
 </div>
+
+<hospitality-bot-hotel-data-table
+  [parentId]="entityId"
+  *ngIf="entityId?.length"
+></hospitality-bot-hotel-data-table>

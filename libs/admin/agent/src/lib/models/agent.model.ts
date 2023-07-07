@@ -55,6 +55,7 @@ export class AgentModel {
       email: contact.emailId,
       phoneNo: `${contact.cc}-${contact.contactNumber}`,
       commissionType: input.priceModifier,
+      company: input?.company?.firstName,
       commission: input.priceModifierValue,
       status: input.status,
     });

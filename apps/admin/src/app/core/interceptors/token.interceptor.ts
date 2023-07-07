@@ -31,9 +31,9 @@ export class TokenInterceptor implements HttpInterceptor {
           [tokensConfig.userId]: this._authService.getTokenByName(
             tokensConfig.userId
           ),
-          [tokensConfig.entityId]:
-            req.headers.get(tokensConfig.entityId) ??
-            this._authService.getTokenByName(tokensConfig.entityId),
+          ['entity-id']:
+            req.headers.get('entity-id') ??
+            this._authService.getTokenByName('entity-id'),
         },
       });
       return next.handle(modifiedRequest);

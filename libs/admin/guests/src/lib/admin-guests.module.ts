@@ -13,7 +13,7 @@ import { ChartsModule } from 'ng2-charts';
 import { AdminReservationModule } from '@hospitality-bot/admin/reservation';
 import { AdminGuestsRoutingModule } from './admin-guests.routing.module';
 import { GuestTableService } from './services/guest-table.service';
-
+import { AdminAgentModule } from 'libs/admin/agent/src/lib/admin-agent.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -25,6 +25,7 @@ import { GuestTableService } from './services/guest-table.service';
     SharedMaterialModule,
     AdminSharedModule,
     AdminReservationModule,
+    AdminAgentModule,
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['guests'])),
   ],
   declarations: [...AdminGuestsRoutingModule.components],

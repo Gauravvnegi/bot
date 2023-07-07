@@ -28,6 +28,8 @@ export type AgentTableResponse = {
   };
   companyId: string;
   company?: AgentTableResponse;
+  gender?: string;
+  dateOfBirth?: string;
 };
 
 export type AgentListResponse = {

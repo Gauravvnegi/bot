@@ -4,13 +4,13 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
 import { CompanyService } from '../../services/company.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { companyRoutes } from '../../constants/route';
-import { FormService } from 'libs/admin/members/src/lib/services/form.service';
 import { CompanyModel } from '../../models/company.model';
 import { CompanyResponseType } from '../../types/response';
 import { companyDiscount } from '../../constants/company';
+import { Location } from '@angular/common';
 @Component({
   selector: 'hospitality-bot-add-company',
   templateUrl: './add-company.component.html',
@@ -40,8 +40,7 @@ export class AddCompanyComponent implements OnInit {
     private globalService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
-    private router: Router,
-    private formService: FormService
+    private location: Location
   ) {
     this.companyId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = companyRoutes[
@@ -76,33 +75,33 @@ export class AddCompanyComponent implements OnInit {
   }
 
   listenChanges() {
-    const commissionControl = this.companyForm.get('discountType');
-    const commissionValueControl = this.companyForm.get('discount');
-    const setCommissionValueAndErrors = () => {
-      const commission = +(commissionValueControl.value ?? 0);
-      const type = commissionControl.value;
+    const discountControl = this.companyForm.get('discountType');
+    const discountValueControl = this.companyForm.get('discount');
+    const setDiscountValueAndErrors = () => {
+      const discount = +(discountValueControl.value ?? 0);
+      const type = discountControl.value;
 
       const validationRules = {
         [companyDiscount.PERCENTAGE]:
-          commission >= 100 ? { moreThan100: true } : null,
+          discount >= 100 ? { moreThan100: true } : null,
       };
 
-      if (commission < 0) {
+      if (discount < 0) {
         return { min: true };
       }
 
       return validationRules[type];
     };
 
-    const commissionSubscription = () => {
-      commissionValueControl.enable({ emitEvent: false });
-      commissionValueControl.setErrors(null);
-      const errors = setCommissionValueAndErrors();
-      errors && commissionValueControl.setErrors(errors);
+    const discountSubscription = () => {
+      discountValueControl.enable({ emitEvent: false });
+      discountValueControl.setErrors(null);
+      const errors = setDiscountValueAndErrors();
+      errors && discountValueControl.setErrors(errors);
     };
 
-    commissionValueControl.valueChanges.subscribe(commissionSubscription);
-    commissionControl.valueChanges.subscribe(commissionSubscription);
+    discountValueControl.valueChanges.subscribe(discountSubscription);
+    discountControl.valueChanges.subscribe(discountSubscription);
   }
 
   /**
@@ -165,10 +164,7 @@ export class AddCompanyComponent implements OnInit {
             '',
             { panelClass: 'success' }
           );
-          const targetedRoute = !this.formService.companyRedirectRoute.length
-            ? `pages/members/company/${this.routes.company.route}`
-            : this.formService.companyRedirectRoute;
-          this.router.navigate([targetedRoute]);
+          this.location.back();
         },
         (error) => {
           this.loading = false;

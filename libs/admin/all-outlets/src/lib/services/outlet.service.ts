@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { MenuConfig, OutletConfig } from '../types/config';
 import { OutletResponse } from '../types/response';
+import { ServiceResponse } from 'libs/admin/services/src/lib/types/response';
 
 @Injectable()
 export class OutletService extends ApiService {
@@ -80,13 +81,7 @@ export class OutletService extends ApiService {
 
   //dummy
   getOutletById(outletId: string): Observable<any> {
-    return this.get(
-      `api/v1/entity/fb8c0b81-1062-43c1-a341-6677e8687c32/library/85692aa9-cf86-4f5d-8fe6-9783c9884e9b?type=SERVICE`
-    ).pipe(
-      map((res) => {
-        return (res = this.outletResponse);
-      })
-    );
+    return this.get(`/api/v1/entity/${outletId}?type=OUTLET`);
   }
 
   updateOutlet(outletId: string, data): Observable<any> {
@@ -94,12 +89,10 @@ export class OutletService extends ApiService {
   }
 
   addOutlet(data): Observable<any> {
-    const mockData = {
-      id: '85692aa9-cf86-4f5d-8fe6-9783c9884e9b',
-    };
-
-    // Return an Observable of the mock data
-    return of(mockData);
+    return this.post(
+      `/api/v1/entity/onboarding?source=CREATE_WITH&onboardingType=OUTLET`,
+      data
+    );
   }
 
   addMenuItems(data, config: QueryConfig): Observable<any> {
@@ -131,5 +124,15 @@ export class OutletService extends ApiService {
 
   getFoodPackageById(packageId: string): Observable<any> {
     return this.get(`/api/v1/food-package/${packageId}`);
+  }
+
+  getServices(
+    entityId: string,
+    config?: QueryConfig
+  ): Observable<ServiceResponse> {
+    return this.get(
+      `/api/v1/entity/${entityId}/library${config?.params ?? ''}`,
+      { headers: { 'entity-id': entityId } }
+    );
   }
 }

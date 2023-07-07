@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ControlContainer, FormBuilder } from '@angular/forms';
-import { navRoutes, outletBusinessRoutes } from '../../../constants/routes';
+import { ControlContainer } from '@angular/forms';
 import { areaUnits, days, hours } from '../../../constants/data';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  noRecordActionForComp,
+  noRecordActionForCompWithId,
+  noRecordActionForMenu,
+  noRecordActionForMenuWithId,
+} from '../../../constants/form';
+import { navRoutes } from '../../../constants/routes';
 import { Feature } from '../../../types/outlet';
-import { AddOutletComponent } from '../../add-outlet/add-outlet.component';
-import { OutletService } from '../../../services/outlet.service';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { HotelDetailService } from '@hospitality-bot/admin/shared';
 @Component({
   selector: 'hospitality-bot-restaurant-form',
   templateUrl: './restaurant-form.component.html',
@@ -15,7 +16,14 @@ import { HotelDetailService } from '@hospitality-bot/admin/shared';
 })
 export class RestaurantFormComponent implements OnInit {
   routes = navRoutes;
+  @Input() set outletId(id: string) {
+    if (id) {
+      this.modifyNoRecordActions();
+    }
+  }
   @Output() onCreateAndContinueFeature = new EventEmitter<Feature>();
+  noRecordActionForComp = noRecordActionForComp;
+  noRecordActionForMenu = noRecordActionForMenu;
 
   days = days;
   hours = hours;
@@ -24,6 +32,11 @@ export class RestaurantFormComponent implements OnInit {
   constructor(public controlContainer: ControlContainer) {}
 
   ngOnInit(): void {}
+
+  modifyNoRecordActions() {
+    this.noRecordActionForComp = noRecordActionForCompWithId;
+    this.noRecordActionForMenu = noRecordActionForMenuWithId;
+  }
 
   onCreateAndContinue(features: Feature) {
     this.onCreateAndContinueFeature.emit(features);

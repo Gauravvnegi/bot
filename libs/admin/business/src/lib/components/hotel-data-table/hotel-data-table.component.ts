@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Router,
+} from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
@@ -20,6 +24,7 @@ import { QueryConfig } from '@hospitality-bot/admin/library';
 import * as FileSaver from 'file-saver';
 import { LazyLoadEvent } from 'primeng/api';
 import { businessRoute } from '../../constant/routes';
+import { HotelFormDataService } from '../../services/hotel-form.service';
 
 @Component({
   selector: 'hospitality-bot-hotel-data-table',
@@ -35,6 +40,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   tableName = tableName;
   $subscription = new Subscription();
   entityId: string;
+  hotelId: string;
   loading: boolean = false;
   globalQueries = [];
   tableFG;
@@ -50,13 +56,15 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     private router: Router,
     private route: ActivatedRoute,
     private businessService: BusinessService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private hotelFormDataService: HotelFormDataService
   ) {
     super(fb, tabFilterService);
   }
 
   ngOnInit(): void {
     this.initTableValue();
+    this.hotelId = this.route.snapshot.params['entityId'];
   }
 
   /**
@@ -238,14 +246,16 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   }
 
   editHotel(data) {
-    if (data?.type === 'HOTEL') {
-      this.router.navigate([
-        `pages/settings/business-info/brand/${this.parentId}/hotel/${data.id}`,
-      ]);
+    if (data?.category === 'HOTEL') {
+      this.router.navigate([`hotel/${data.id}`], {
+        relativeTo: this.route,
+      });
+      this.hotelFormDataService.resetHotelInfoFormData();
     } else {
-      this.router.navigate([
-        `pages/settings/business-info/brand/${this.parentId}/outlet/${data.id}`,
-      ]);
+      this.router.navigate([`outlet/${data.id}`], {
+        relativeTo: this.route,
+      });
+      this.hotelFormDataService.resetHotelInfoFormData();
     }
   }
 

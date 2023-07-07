@@ -19,8 +19,9 @@ export class BusinessService extends ApiService {
    */
 
   getHotelList(brandId: string, config: QueryConfig): Observable<any> {
+    //the type will be changed to ALL to get both hotel and outlet
     return this.get(
-      `/api/v1/entity?type=HOTEL&parentId=${brandId}&${
+      `/api/v1/entity?type=ALL&parentId=${brandId}&${
         config.params.slice(1) ?? ''
       }`
     ).pipe(
@@ -60,7 +61,7 @@ export class BusinessService extends ApiService {
    */
 
   getBrandById(id: string): Observable<BrandResponse> {
-    return this.get(`/api/v1/brand/${id}`);
+    return this.get(`/api/v1/entity/${id}`);
   }
 
   /**
@@ -141,7 +142,7 @@ export class BusinessService extends ApiService {
   getServiceList(entityId, config?: QueryConfig): Observable<any> {
     return this.get(
       `/api/v1/entity/${entityId}/library${config?.params ?? ''}`,
-      { headers: { 'hotel-id': entityId } }
+      { headers: { 'entity-id': entityId } }
       //hotel id to be send as header for getting service
     );
   }

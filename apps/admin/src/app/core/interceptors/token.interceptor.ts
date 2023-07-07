@@ -33,7 +33,7 @@ export class TokenInterceptor implements HttpInterceptor {
           ),
           ['entity-id']:
             req.headers.get('entity-id') ??
-            this._authService.getTokenByName('entity-id'),
+            this._authService.getTokenByName(tokensConfig.entityId),
         },
       });
       return next.handle(modifiedRequest);

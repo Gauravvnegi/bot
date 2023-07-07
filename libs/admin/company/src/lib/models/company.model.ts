@@ -48,7 +48,9 @@ export class CompanyModel {
       email: contact.emailId,
       phoneNumber: `${contact.cc}-${contact.contactNumber}`,
       salesPersonName: input.salesPersonName,
-      salesPersonNumber: input.salesPersonPhone,
+      salesPersonNumber: `${input['salesPersonCC'] ?? ''}${
+        input.salesPersonPhone
+      }`,
       discount: input.priceModifierValue,
       discountType: input.priceModifier,
       status: input.status,

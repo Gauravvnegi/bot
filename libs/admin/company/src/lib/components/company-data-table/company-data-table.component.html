@@ -133,7 +133,9 @@
           *ngIf="rowData.salesPersonNumber; else emptyCell"
         >
           <div class="primary-text">
-            {{ rowData.salesPersonNumber }}
+            <a href="tel:{{ rowData.salesPersonNumber }}">
+              <u> {{ rowData.salesPersonNumber }}</u>
+            </a>
           </div>
         </div>
       </td>

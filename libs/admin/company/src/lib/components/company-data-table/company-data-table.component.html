@@ -111,7 +111,7 @@
         </div>
       </td>
       <td>
-        <div class="center-align" *ngIf="rowData.phoneNumber; else emptyCell">
+        <div class="cell-content" *ngIf="rowData.phoneNumber; else emptyCell">
           <div class="primary-text">
             {{ rowData.phoneNumber }}
           </div>
@@ -119,7 +119,7 @@
       </td>
       <td>
         <div
-          class="center-align"
+          class="cell-content"
           *ngIf="rowData.salesPersonName; else emptyCell"
         >
           <div class="primary-text">
@@ -129,7 +129,7 @@
       </td>
       <td>
         <div
-          class="center-align"
+          class="cell-content"
           *ngIf="rowData.salesPersonNumber; else emptyCell"
         >
           <div class="primary-text">
@@ -138,7 +138,7 @@
         </div>
       </td>
       <td>
-        <div class="center-align" *ngIf="rowData.discount; else emptyCell">
+        <div class="cell-content" *ngIf="rowData.discount; else emptyCell">
           <div class="primary-text">
             {{ rowData.discount
             }}{{ rowData.discountType === 'COMMISSION' ? '/-' : '%' }}

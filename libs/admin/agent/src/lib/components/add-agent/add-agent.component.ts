@@ -176,14 +176,20 @@ export class AddAgentComponent implements OnInit {
 
     const formData = AgentModel.mapFormData(this.agentForm.getRawValue());
     const queryParams = { params: `?type=AGENT&entityId=${this.entityId}` };
-    const request = !!this.agentId?.length
+    const request = this.agentId
       ? this.agentService.updateAgent(formData, this.agentId)
       : this.agentService.addAgent(formData, queryParams);
     this.subscription$.add(
-      request.subscribe((res) => {
-        this.loading = false;
-        this.handleSuccess();
-      }, this.handleFinal)
+      request.subscribe(
+        (res) => {
+          this.loading = false;
+          this.handleSuccess();
+        },
+        (error) => {
+          this.loading = false;
+        },
+        this.handleFinal
+      )
     );
   }
 

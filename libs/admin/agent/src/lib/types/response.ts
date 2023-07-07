@@ -27,6 +27,7 @@ export type AgentTableResponse = {
     postalCode: string;
   };
   companyId: string;
+  company?: AgentTableResponse;
 };
 
 export type AgentListResponse = {

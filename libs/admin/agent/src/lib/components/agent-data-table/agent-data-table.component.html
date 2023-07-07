@@ -76,6 +76,7 @@
     <tr class="table-row" (click)="editAgent(rowData)">
       <td class="table-row__checkbox">
         <p-tableCheckbox
+          class="cell-content"
           [value]="rowData"
           [index]="rowIndex"
           (click)="onCheckboxClicked($event)"
@@ -117,8 +118,8 @@
       <td>
         <div class="cell-content" *ngIf="rowData.commission; else emptyCell">
           <div class="primary-text">
-            {{ rowData.commission }}
-            {{ rowData.commissionType === 'COMMISSION' ? '' : '%' }}
+            {{ rowData.commission
+            }}{{ rowData.commissionType === 'COMMISSION' ? '/-' : '%' }}
           </div>
         </div>
       </td>

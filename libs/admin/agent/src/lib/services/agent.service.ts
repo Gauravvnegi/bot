@@ -15,7 +15,7 @@ export class AgentService extends ApiService {
     data: AgentTableResponse,
     config?: QueryConfig
   ): Observable<AgentTableResponse> {
-    return this.post(`api/v1/members${config.params}`, data);
+    return this.post(`/api/v1/members${config.params}`, data);
   }
 
   updateAgent(

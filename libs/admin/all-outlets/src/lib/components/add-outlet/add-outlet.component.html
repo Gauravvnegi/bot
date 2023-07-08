@@ -91,6 +91,7 @@
 
   <ng-container [ngSwitch]="useForm.get('type').value">
     <hospitality-bot-restaurant-form
+      [outletId]="outletId"
       *ngSwitchCase="'RESTAURANT'"
       class="full-width"
       (onCreateAndContinueFeature)="submitForm($event)"

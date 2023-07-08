@@ -82,16 +82,20 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     // TODO: We have to remove toDate & fromDate after getting api of guest list
     this.globalQueries = [
-      { entityId: this.entityId, toDate: 1688581799000, fromDate: 1688495400000 },
+      {
+        entityId: this.entityId,
+      },
     ];
 
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
         {
-          order: 'DESC',
-          entityType: 'DUEIN',
+          type: 'GUEST',
+          entityId: this.entityId,
+          offset: this.first,
+          limit: this.rowsPerPage,
         },
       ]),
     };

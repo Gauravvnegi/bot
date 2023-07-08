@@ -152,7 +152,6 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
 
 //it will dynamically add editHotel on the basis of isHotel
 export function getRoutes(routeName: string, isHotel) {
-  debugger;
   if (isHotel) {
     outletBusinessRoutes[routeName].navRoutes.splice(3, 0, navRoutes.editHotel);
 

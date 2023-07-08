@@ -87,7 +87,10 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
     this.loading = true;
 
     this.servicesService
-      .getLibraryItems<ServiceListResponse>(this.entityId, this.getQueryConfig())
+      .getLibraryItems<ServiceListResponse>(
+        this.entityId,
+        this.getQueryConfig()
+      )
       .subscribe(
         (res) => {
           const serviceList = new ServiceList().deserialize(res);
@@ -163,7 +166,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
         {
           type: LibraryItem.service,
           serviceType: this.selectedTable,

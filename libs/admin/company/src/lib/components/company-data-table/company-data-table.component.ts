@@ -16,6 +16,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { LazyLoadEvent } from 'primeng/api';
 import { CompanyResponseModel } from '../../models/company.model';
 import { CompanyListResponse } from '../../types/response';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-agent-data-table',
@@ -30,6 +31,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   readonly companyRoutes = companyRoutes;
   tableName = title;
   cols = cols;
+  entityId: string;
 
   $subscription = new Subscription();
 
@@ -39,7 +41,8 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     private adminUtilityService: AdminUtilityService,
     protected snackbarService: SnackBarService,
     private router: Router,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private globalFilterService: GlobalFilterService
   ) {
     super(fb, tabFilterService);
   }
@@ -52,6 +55,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.initTable();
   }
 
@@ -59,11 +63,11 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.companyService.getCompanyDetails(this.getQueryConfig()).subscribe(
       (res: CompanyListResponse) => {
-        const companyList = new CompanyResponseModel().desearalize(res);
+        const companyList = new CompanyResponseModel().deserialize(res);
         this.values = companyList.records;
         this.initFilters(
-          companyList.entityTypeCounts,
           companyList.entityStateCounts,
+          companyList.entityTypeCounts,
           companyList.totalRecord
         );
         this.loading = false;
@@ -79,9 +83,10 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
         {
           type: 'COMPANY',
+          entityId: this.entityId,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -98,9 +103,12 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.companyService
-        .updateCompanyStatus(rowData.id, {
-          params: `?status=${status}&type=COMPANY`,
-        })
+        .updateCompanyStatus(
+          { companyId: rowData.id, status: status },
+          {
+            params: `?type=COMPANY`,
+          }
+        )
         .subscribe(
           () => {
             this.initTable();
@@ -137,6 +145,11 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
+        {
+          type: 'COMPANY',
+          entityId: this.entityId,
+          entityState: this.selectedTab,
+        },
       ]),
     };
     this.$subscription.add(
@@ -146,8 +159,11 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
             res,
             `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
           );
+          this.loading = false;
         },
-        () => {},
+        (error) => {
+          this.loading = false;
+        },
         this.handleFinal
       )
     );

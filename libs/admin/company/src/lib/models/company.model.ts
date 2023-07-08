@@ -32,26 +32,28 @@ export class CompanyModel {
       },
       salesPersonName: form.salePersonName ?? '',
       salesPersonPhone: form.salePersonNo ?? '',
-      priceModifierType: form.discountType ?? '',
+      priceModifier: form.discountType ?? '',
       priceModifierValue: form.discount ?? '',
     };
     return data;
   }
 
-  desearalize(input: CompanyResponseType) {
+  deserialize(input: CompanyResponseType) {
     const contact = input['contactDetails'];
     Object.assign(this, {
       id: input.id,
-      companyName: input.companyName,
-      companyCode: input.companyName,
+      companyName: input.firstName,
+      companyCode: input?.id,
       contactName: input.firstName,
       email: contact.emailId,
       phoneNumber: `${contact.cc}-${contact.contactNumber}`,
       salesPersonName: input.salesPersonName,
-      salesPersonNumber: input.salesPersonPhone,
+      salesPersonNumber: `${input['salesPersonCC'] ?? ''}${
+        input.salesPersonPhone
+      }`,
       discount: input.priceModifierValue,
-      discountType: input.priceModifierType,
-      status: input.action,
+      discountType: input.priceModifier,
+      status: input.status,
     });
     return this;
   }
@@ -63,9 +65,9 @@ export class CompanyResponseModel {
   entityStateCounts: EntityState<string>;
   totalRecord: number;
 
-  desearalize(input: CompanyListResponse) {
+  deserialize(input: CompanyListResponse) {
     this.records =
-      input.records?.map((item) => new CompanyModel().desearalize(item)) ?? [];
+      input.records?.map((item) => new CompanyModel().deserialize(item)) ?? [];
     this.entityStateCounts = input?.entityStateCounts;
     this.entityTypeCounts = input?.entityTypeCounts;
     this.totalRecord = input.total;

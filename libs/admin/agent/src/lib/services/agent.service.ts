@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
-import { AgentListResponse, AgentResponseType } from '../types/response';
+import { AgentListResponse, AgentTableResponse } from '../types/response';
 import { QueryConfig } from '../types/agent';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 
@@ -12,40 +12,44 @@ export class AgentService extends ApiService {
   data: AgentListResponse;
 
   addAgent(
-    data: AgentResponseType,
+    data: AgentTableResponse,
     config?: QueryConfig
-  ): Observable<AgentResponseType> {
-    return this.post(`api/v1/members${config.params}`, data);
+  ): Observable<AgentTableResponse> {
+    return this.post(`/api/v1/members${config.params}`, data);
   }
 
   updateAgent(
-    data: AgentResponseType,
-    companyId: string,
-    config?: QueryConfig
-  ): Observable<AgentResponseType> {
-    return this.patch(`/api/v1/members/${companyId}${config.params}`, data);
+    data: AgentTableResponse,
+    agentId: string
+  ): Observable<AgentTableResponse> {
+    return this.patch(`/api/v1/members/${agentId}`, data);
   }
 
   getAgentList(config?: QueryConfig): Observable<AgentListResponse> {
-    return this.get(`/api/v1/members/${config.params}`);
+    return this.get(`/api/v1/members/${config?.params}`);
   }
 
   getCompanyList(config?: QueryConfig): Observable<CompanyResponseType[]> {
-    return this.get(`/api/v1/members/${config.params}`);
+    return this.get(`/api/v1/members/${config?.params}`);
   }
 
   getAgentById(
     agentId: string,
     config?: QueryConfig
-  ): Observable<AgentResponseType> {
-    return this.get(`/api/v1/members/${agentId}${config.params}`);
+  ): Observable<AgentTableResponse> {
+    return this.get(`/api/v1/members/${agentId}${config?.params}`);
   }
-  updateAgentStatus(agentid, config: QueryConfig): Observable<any> {
-    return this.patch(`/api/v1/members/${agentid}${config.params}`, {});
+  updateAgentStatus(
+    data: { agentId: string; status: boolean },
+    config: QueryConfig
+  ): Observable<any> {
+    return this.patch(`/api/v1/members/${data.agentId}${config?.params}`, {
+      status: data.status,
+    });
   }
 
   exportCSV(config: QueryConfig): Observable<any> {
-    return this.get(`/api/v1/members/export${config.params}`, {
+    return this.get(`/api/v1/members/export${config?.params}`, {
       responseType: 'blob',
     });
   }

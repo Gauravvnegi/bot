@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
 import { SearchGuestResponse } from '../types/guest.type';
+import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class GuestTableService extends ApiService {
@@ -31,6 +32,14 @@ export class GuestTableService extends ApiService {
 
   getGuestReservationById(guestId: string, reservationId: string) {
     return this.get(`/api/v1/members/${guestId}/reservations/${reservationId}`);
+  }
+
+  addGuest(data, config?: QueryConfig): Observable<any> {
+    return this.post(`/api/v1/members${config.params}`, data);
+  }
+
+  updateGuest(data, guestId: string, config?: QueryConfig): Observable<any> {
+    return this.patch(`/api/v1/members/${guestId}`, data);
   }
 
   exportCSV(config): Observable<any> {

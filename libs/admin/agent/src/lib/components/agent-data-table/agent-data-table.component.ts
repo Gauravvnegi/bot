@@ -15,7 +15,6 @@ import * as FileSaver from 'file-saver';
 import { QueryConfig } from '../../types/agent';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AgentResponseModel } from '../../models/agent.model';
-import { AgentListResponse } from '../../types/response';
 import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
@@ -65,13 +64,13 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   initTable() {
     this.loading = true;
     this.subscription$.add(
-      this.agentService.getAgentList({ params: '?type=AGENT' }).subscribe(
-        (res: AgentListResponse) => {
+      this.agentService.getAgentList(this.getQueryConfig()).subscribe(
+        (res) => {
           const agentList = new AgentResponseModel().deserialize(res);
           this.values = agentList.records;
           this.initFilters(
-            agentList.entityTypeCounts,
             agentList.entityStateCounts,
+            agentList.entityTypeCounts,
             agentList.totalRecord
           );
           this.loading = false;
@@ -88,9 +87,10 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
         {
           type: 'AGENT',
+          entityId: this.entityId,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -107,9 +107,12 @@ export class AgentDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.subscription$.add(
       this.agentService
-        .updateAgentStatus(rowData.id, {
-          params: `?status=${status}&type=AGENT`,
-        })
+        .updateAgentStatus(
+          { agentId: rowData.id, status: status },
+          {
+            params: `?type=AGENT`,
+          }
+        )
         .subscribe(
           () => {
             this.initTable();
@@ -145,7 +148,11 @@ export class AgentDataTableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.selectedRows.map((item) => ({ ids: item.id })),
-        { type: 'AGENT' },
+        {
+          type: 'AGENT',
+          entityId: this.entityId,
+          entityState: this.selectedTab,
+        },
       ]),
     };
     this.subscription$.add(
@@ -158,7 +165,6 @@ export class AgentDataTableComponent extends BaseDatatableComponent
           this.loading = false;
         },
         (error) => {
-          this.values = [];
           this.loading = false;
         },
         this.handleFinal

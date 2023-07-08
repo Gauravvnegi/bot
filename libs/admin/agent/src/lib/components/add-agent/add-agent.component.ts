@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  NavRouteOptions,
+  Option,
+  QueryConfig,
+  TableService,
+} from '@hospitality-bot/admin/shared';
 import { AgentService } from '../../services/agent.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,8 +18,8 @@ import { FormService } from 'libs/admin/members/src/lib/services/form.service';
 import { companyRoutes } from 'libs/admin/company/src/lib/constants/route';
 import { AgentFormType } from '../../types/form.types';
 import { AgentModel } from '../../models/agent.model';
-import { AgentResponseType } from '../../types/response';
-import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
+import { AgentTableResponse } from '../../types/response';
+import { commissionType } from '../../types/agent';
 @Component({
   selector: 'hospitality-bot-add-agent',
   templateUrl: './add-agent.component.html',
@@ -39,17 +45,23 @@ export class AddAgentComponent implements OnInit {
   companyLimit = 10;
 
   companyList: Option[] = [];
-  commissionTypes: Option[] = [{ label: '%OFF', value: 'PERCENTAGE' }];
+  commissionTypes: Option[] = [
+    { label: '%OFF', value: commissionType.PERCENTAGE },
+    { label: 'Flat', value: commissionType.COMMISSION },
+  ];
 
   constructor(
-    private fb: FormBuilder,
+    public fb: FormBuilder,
+    public tabFilter: TableService,
     private agentService: AgentService,
     private globalService: GlobalFilterService,
+    private adminUtilityService: AdminUtilityService,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
     private router: Router,
     private formService: FormService
   ) {
+    // super(fb, tabFilter);
     this.agentId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = agentRoutes[
       this.agentId ? 'editAgent' : 'addAgent'
@@ -69,18 +81,15 @@ export class AddAgentComponent implements OnInit {
       active: [true],
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      cc: ['+91'],
-      phoneNo: [null, [Validators.required]],
+      cc: ['+91', [Validators.required]],
+      phoneNo: ['', [Validators.required]],
       iataNo: ['', [CustomValidators.requiredLength(14)]],
-      companyId: ['', [Validators.required]],
+      company: [''],
       address: ['', [Validators.required]],
-      commissionType: ['PERCENTAGE'],
-      commission: [
-        null,
-        [Validators.required, Validators.min(0), Validators.max(100)],
-      ],
+      commissionType: [commissionType.PERCENTAGE, [Validators.required]],
+      commission: ['', [Validators.required, Validators.min(0)]],
     });
-
+    this.listenChanges();
     if (this.agentId) this.getAgentById();
   }
 
@@ -90,6 +99,36 @@ export class AddAgentComponent implements OnInit {
     this.formService.reset();
   }
 
+  listenChanges() {
+    const commissionControl = this.agentForm.get('commissionType');
+    const commissionValueControl = this.agentForm.get('commission');
+    const setCommissionValueAndErrors = () => {
+      const commission = +(commissionValueControl.value ?? 0);
+      const type = commissionControl.value;
+
+      const validationRules = {
+        [commissionType.PERCENTAGE]:
+          commission >= 100 ? { moreThan100: true } : null,
+      };
+
+      if (commission < 0) {
+        return { min: true };
+      }
+
+      return validationRules[type];
+    };
+
+    const commissionSubscription = () => {
+      commissionValueControl.enable({ emitEvent: false });
+      commissionValueControl.setErrors(null);
+      const errors = setCommissionValueAndErrors();
+      errors && commissionValueControl.setErrors(errors);
+    };
+
+    commissionValueControl.valueChanges.subscribe(commissionSubscription);
+    commissionControl.valueChanges.subscribe(commissionSubscription);
+  }
+
   /**
    * @function getAgentById load edit view
    */
@@ -97,17 +136,30 @@ export class AddAgentComponent implements OnInit {
     this.loading = true;
     this.subscription$.add(
       this.agentService
-        .getAgentById(this.agentId, { params: '?type=AGENT' })
-        .subscribe((response: AgentResponseType) => {
+        .getAgentById(this.agentId, {
+          params: `?type=AGENT&entityId=${this.entityId}`,
+        })
+        .subscribe((response: AgentTableResponse) => {
+          this.packageCode = '#' + response.code;
+          const address = response.address;
           this.agentForm.patchValue({
             name: response.firstName,
             email: response.contactDetails.emailId,
+            cc: response.contactDetails.cc,
             phoneNo: response.contactDetails.contactNumber,
             iataNo: response.iataNumber,
-            companyId: response.companyId,
-            address: response.address,
-            commission: response.commission,
+            company: response.companyId,
+            address: {
+              formattedAddress: `${address.addressLine1}, ${address.city}, ${address.countryCode}, ${address.postalCode}, ${address.state}`,
+              city: address.city,
+              state: address.state,
+              countryCode: address.countryCode,
+              postalCode: address.postalCode,
+            },
+            commissionType: response.priceModifier,
+            commission: response.priceModifierValue,
           });
+          this.loading = false;
         }, this.handleFinal)
     );
   }
@@ -120,14 +172,24 @@ export class AddAgentComponent implements OnInit {
       );
       return;
     }
+    this.loading = true;
 
     const formData = AgentModel.mapFormData(this.agentForm.getRawValue());
-    const queryParams = { params: '?type=AGENT' };
-    const request = !!this.agentId
+    const queryParams = { params: `?type=AGENT&entityId=${this.entityId}` };
+    const request = this.agentId
       ? this.agentService.updateAgent(formData, this.agentId)
       : this.agentService.addAgent(formData, queryParams);
     this.subscription$.add(
-      request.subscribe(this.handleSuccess, this.handleFinal)
+      request.subscribe(
+        (res) => {
+          this.loading = false;
+          this.handleSuccess();
+        },
+        (error) => {
+          this.loading = false;
+        },
+        this.handleFinal
+      )
     );
   }
 
@@ -137,16 +199,16 @@ export class AddAgentComponent implements OnInit {
       email: '',
       phoneNo: '',
       iataNo: '',
-      companyId: '',
-      address: '',
+      company: '',
+      address: {},
       commission: '',
     });
   }
 
   /**
-   * @function addRoomType Add room type
+   * @function createNewCompany Add new company
    */
-  createCompany() {
+  createNewCompany() {
     this.saveForm();
     this.router.navigate([
       `/pages/members/company/${companyRoutes.addCompany.route}`,
@@ -164,75 +226,18 @@ export class AddAgentComponent implements OnInit {
     );
   }
 
-  /**
-   * @function loadMoreCompany load more categories options
-   */
-  loadMoreCompany() {
-    this.companyOffset = this.companyOffset + 10;
-    this.getCompany();
-  }
-
-  /**
-   * @function getCompany to get company list options
-   */
-  getCompany(): void {
-    this.loadingCompany = true;
-    this.subscription$.add(
-      this.agentService
-        .getCompanyList({
-          params: `?type=AGENT&companyList=true&offset=${this.companyOffset}&limit=${this.companyLimit}`,
-        })
-        .subscribe(
-          (res: CompanyResponseType[]) => {
-            const data = AgentModel.getCompanyList(res);
-            this.companyList = [...data];
-            this.noMoreCompany = data.length < this.companyLimit;
-          },
-          (error) => {},
-          () => {
-            this.loadingCompany = false;
-          }
-        )
-    );
-  }
-
-  /**
-   * @function searchCompany To search categories
-   * @param text search text
-   */
-  searchCompany(text: string) {
-    if (text) {
-      this.loadingCompany = true;
-      //   this.libraryService
-      //     .searchLibraryItem(this.entityId, {
-      //       params: `?key=${text}&type=${LibrarySearchItem.ROOM_TYPE}`,
-      //     })
-      //     .subscribe(
-      //       (res) => {
-      //         const data = res && res[LibrarySearchItem.ROOM_TYPE];
-      //         this.roomTypes =
-      //           data
-      //             ?.filter((item) => item.status)
-      //             .map((item) => {
-      //               const roomType = new RoomType().deserialize(item);
-      //               return {
-      //                 label: roomType.name,
-      //                 value: roomType.id,
-      //                 price: roomType.price,
-      //                 currency: roomType.currency,
-      //               };
-      //             }) ?? [];
-      //       },
-      //       (error) => {},
-      //       () => {
-      //         this.loadingCompany = false;
-      //       }
-      //     );
-    } else {
-      this.companyOffset = 0;
-      this.companyList = [];
-      this.getCompany();
-    }
+  getQueryConfig(type = 'AGENT'): QueryConfig {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        // ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        {
+          type: type,
+          // offset: this.first,
+          // limit: this.rowsPerPage,
+        },
+      ]),
+    };
+    return config;
   }
 
   /**
@@ -245,7 +250,7 @@ export class AddAgentComponent implements OnInit {
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate([`pages/members/agent/${this.routes.agent}`]);
+    this.router.navigate([`pages/members/agent/${this.routes.agent.route}`]);
   };
 
   /**

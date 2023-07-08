@@ -1,3 +1,5 @@
+import { AgentTableResponse } from 'libs/admin/agent/src/lib/types/response';
+
 export type ChartTypeOption = {
   name: string;
   value: string;
@@ -22,3 +24,16 @@ export type SearchGuestResponse = {
   nationality?: string;
   age: number;
 };
+
+type discard =
+  | 'id'
+  | 'nationality'
+  | 'priceModifier'
+  | 'priceModifierValue'
+  | 'iataNumber'
+  | 'isVerified'
+  | 'status'
+  | 'address'
+  | 'code'
+  | 'company';
+export type GuestType = Omit<AgentTableResponse, discard>;

@@ -1,6 +1,6 @@
 import { EntityState, Option } from '@hospitality-bot/admin/shared';
 import { AgentFormType } from '../types/form.types';
-import { AgentListResponse, AgentResponseType } from '../types/response';
+import { AgentListResponse, AgentTableResponse } from '../types/response';
 import { CompanyResponseType } from 'libs/admin/company/src/lib/types/response';
 export class AgentModel {
   id: string;
@@ -11,17 +11,26 @@ export class AgentModel {
   iataNo: number;
   email: string;
   phoneNo: string;
+  commissionType: string;
   commission: string;
   status: boolean;
 
   static mapFormData(form: AgentFormType) {
-    let data: AgentResponseType = {
-      firstName: form.name,
+    const name = form.name.split(' ');
+    let data: AgentTableResponse = {
+      firstName: name[0] ?? '',
+      lastName: name[1] ?? '',
       contactDetails: {
         cc: form.cc,
         contactNumber: form.phoneNo,
         emailId: form.email,
       },
+      nationality: form.address['country'],
+      type: 'AGENT',
+      priceModifier: form.commissionType,
+      priceModifierValue: form.commission?.toString(),
+      iataNumber: form.iataNo,
+      isVerified: form.iataNo.length > 0 ? true : false,
       address: {
         addressLine1: form.address['formattedAddress'] ?? '',
         city: form.address['city'] ?? '',
@@ -29,27 +38,26 @@ export class AgentModel {
         countryCode: form.address['country'] ?? '',
         postalCode: form.address['postalCode'] ?? '',
       },
-      priceModifierType: form.commissionType,
-      priceModifierValue: form.commission?.toString(),
-      iataNumber: form.iataNo,
-      companyId: form.companyId,
+      companyId: form.company,
     };
 
     return data;
   }
 
-  deserialize(input: AgentResponseType) {
-    const contact = input['contactDetails'];
+  deserialize(input: AgentTableResponse) {
+    const contact = input.contactDetails;
     Object.assign(this, {
       id: input.id,
       name: input.firstName,
       code: input.code,
-      verified: input.iataNumber ? true : false,
-      iataNo: input.iataNumber ?? '--',
+      verified: input.isVerified,
+      iataNo: input.iataNumber,
       email: contact.emailId,
-      phoneNumber: `${contact.cc}-${contact.contactNumber}`,
-      commission: input.commission,
-      status: input.action,
+      phoneNo: `${contact.cc}-${contact.contactNumber}`,
+      commissionType: input.priceModifier,
+      company: input?.company?.firstName,
+      commission: input.priceModifierValue,
+      status: input.status,
     });
     return this;
   }
@@ -57,11 +65,10 @@ export class AgentModel {
   static getCompanyList(input: CompanyResponseType[]) {
     let options: Option[] = input.map((item) => {
       return {
-        label: item.companyName,
-        value: item.companyCode?.toString(),
-      } as Option;
+        label: item.firstName,
+        value: item.id,
+      };
     });
-
     return options;
   }
 }

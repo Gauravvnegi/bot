@@ -8,7 +8,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
-import { manageReservationRoutes } from '../../constants/routes';
+import { manageBookingRoutes } from '../../constants/routes';
 import {
   BookingInfo,
   OfferData,
@@ -46,11 +46,12 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   // loading = false;
   formValueChanges = false;
   disabledForm = false;
+  expandAccordion = false;
 
   deductedAmount = 0;
   bookingType = 'HOTEL';
 
-  pageTitle = 'Add Reservation';
+  pageTitle = 'Add Booking';
   routes: NavRouteOptions = [];
 
   $subscription = new Subscription();
@@ -66,14 +67,21 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.initForm();
-    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.initDetails();
+    this.getReservationId();
+  }
 
-    const { navRoutes, title } = manageReservationRoutes[
-      this.reservationId ? 'editReservation' : 'addReservation'
+  initDetails() {
+    this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.expandAccordion = this.manageReservationService.enableAccordion;
+    if (this.expandAccordion) {
+      this.manageReservationService.enableAccordion = false;
+    }
+    const { navRoutes, title } = manageBookingRoutes[
+      this.reservationId ? 'editBooking' : 'addBooking'
     ];
     this.routes = navRoutes;
     this.pageTitle = title;
-    this.getReservationId();
   }
 
   /**

@@ -201,7 +201,7 @@ export const outletCols: Cols[] = [
     isSearchDisabled: true,
   },
 ];
-export const title = 'Reservation';
+export const title = 'Booking';
 
 export const reservationChips: Record<
   'DRAFT' | 'CANCELED' | 'CONFIRMED' | 'OTA',
@@ -289,4 +289,20 @@ export const chips: Chip<
     isSelected: false,
     type: 'failed',
   },
+];
+
+export const MenuOptions: Option[] = [
+  { label: 'Manage Invoice', value: 'MANAGE_INVOICE' },
+  { label: 'Edit Reservation', value: 'EDIT_RESERVATION' },
+  { label: 'Print Invoice', value: 'PRINT_INVOICE' },
+];
+
+export const HotelMenuOptions: Option[] = [
+  ...MenuOptions,
+  { label: 'Assign Room', value: 'ASSIGN_ROOM' },
+];
+
+export const RestaurantMenuOptions: Option[] = [
+  ...MenuOptions,
+  { label: 'Assign Table', value: 'ASSIGN_TABLE' },
 ];

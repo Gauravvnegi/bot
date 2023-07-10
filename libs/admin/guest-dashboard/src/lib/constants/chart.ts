@@ -1,3 +1,5 @@
+import { getNoDataLabel } from '@hospitality-bot/admin/shared';
+
 export const chartConfig = {
   type: { bar: 'bar', line: 'line', doughnut: 'doughnut' },
   options: {
@@ -11,6 +13,9 @@ export const chartConfig = {
         titleMarginBottom: 5,
         xPadding: 10,
         yPadding: 10,
+        callbacks: {
+          label: getNoDataLabel,
+        },
       },
       responsive: true,
       cutoutPercentage: 75,
@@ -25,6 +30,9 @@ export const chartConfig = {
         titleMarginBottom: 5,
         xPadding: 10,
         yPadding: 10,
+        callbacks: {
+          label: getNoDataLabel,
+        },
       },
       responsive: true,
       elements: {
@@ -60,6 +68,9 @@ export const chartConfig = {
         titleMarginBottom: 5,
         xPadding: 10,
         yPadding: 10,
+        callbacks: {
+          label: getNoDataLabel,
+        },
       },
       cutoutPercentage: 75,
     },

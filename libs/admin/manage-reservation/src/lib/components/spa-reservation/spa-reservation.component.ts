@@ -11,7 +11,7 @@ import {
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
 import { menuItemFields, spaFields } from '../../constants/reservation';
-import { manageReservationRoutes } from '../../constants/routes';
+import { manageBookingRoutes } from '../../constants/routes';
 import {
   OfferList,
   OfferData,
@@ -47,7 +47,7 @@ export class SpaReservationComponent implements OnInit {
   deductedAmount = 0;
   bookingType = 'SPA';
 
-  pageTitle = 'Add Reservation';
+  pageTitle: string;
   routes: NavRouteOptions = [];
 
   $subscription = new Subscription();
@@ -62,8 +62,8 @@ export class SpaReservationComponent implements OnInit {
     this.initForm();
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
 
-    const { navRoutes, title } = manageReservationRoutes[
-      this.reservationId ? 'editReservation' : 'addReservation'
+    const { navRoutes, title } = manageBookingRoutes[
+      this.reservationId ? 'editBooking' : 'addBooking'
     ];
     this.routes = navRoutes;
     this.pageTitle = title;

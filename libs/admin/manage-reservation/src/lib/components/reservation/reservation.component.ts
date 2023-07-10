@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { selectedOutlet } from '../../types/reservation.type';
 import { EntityTabGroup } from '../../constants/reservation-table';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { BaseDatatableComponent, TableService } from '@hospitality-bot/admin/shared';
@@ -21,7 +20,7 @@ export class ReservationComponent extends BaseDatatableComponent
   loading = false;
   navRoutes = [
     {
-      label: 'Manage Reservation',
+      label: 'Manage Booking',
       link: '/admin',
     },
   ];
@@ -57,6 +56,6 @@ export class ReservationComponent extends BaseDatatableComponent
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
     this.selectedOutlet = this.tabFilterItems[event.index].type;
-    this.reservationService.setSelectedOutlet(this.selectedOutlet);
+    this.reservationService.selectedOutlet.next(this.selectedOutlet);
   }
 }

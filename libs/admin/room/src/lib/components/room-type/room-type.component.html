@@ -148,7 +148,7 @@
         </div>
       </div>
     </div> -->
-    <div class="room-wrapper" formArrayName="ratePlan">
+    <div class="room-wrapper" formArrayName="ratePlans">
       <div class="header">Room Pricing</div>
       <hr />
       <div class="room-pricing-form-wrapper">
@@ -156,6 +156,7 @@
           <p-accordionTab
             *ngFor="let ratePlanGroup of ratePlanArray.controls; let i = index"
             click
+            [selected]="roomTypeId"
             [ngStyle]="{
               'border-bottom': ratePlanGroup.expanded
                 ? '1px solid rgba(112, 112, 112, 0.35)'
@@ -173,17 +174,7 @@
                   "
                 >
                   <span>
-                    <ng-container *ngIf="ratePlanGroup.get('label').value">
-                      {{ ratePlanGroup.get('label').value.split('(')[0] }}
-                      <span class="rate-plan-text">
-                        ({{
-                          ratePlanGroup
-                            .get('label')
-                            .value.split('(')[1]
-                            .replace(')', '')
-                        }})
-                      </span>
-                    </ng-container>
+                    {{ ratePlanGroup.get('label').value }}
                   </span>
                   <i class="pi pi-angle-down"></i>
                 </div>
@@ -219,8 +210,8 @@
                 [controls]="{
                   originalPrice: 'basePrice',
                   currency: 'basePriceCurrency',
-                  discountedPrice: 'bestAvailableRate',
-                  discountedPriceCurrency: 'bestRateCurrency'
+                  discountedPrice: 'bestAvailablePrice',
+                  discountedPriceCurrency: 'basePriceCurrency'
                 }"
                 [labels]="{
                   originalPriceLabel: 'Base Price-Single Occupancy',
@@ -344,7 +335,6 @@
     <hospitality-bot-button
       [label]="roomTypeId ? 'Update' : 'Create'"
       (onClick)="submitForm()"
-      [isLoading]="loading"
     ></hospitality-bot-button>
   </div>
 </div>

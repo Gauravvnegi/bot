@@ -50,12 +50,27 @@ export type RoomTypeFormData = {
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  staticRatePlans?: Omit<StaticPricingRatePlan, 'label'>[];
-  dynamicRatePlans?: Omit<StaticPricingRatePlan, 'label'>[];
+  // staticRatePlans?: Omit<StaticPricingRatePlan, 'label'>[];
+  // dynamicRatePlans?: Omit<DynamicPricingRatePlan, 'label'>[];
+  ratePlans: StaticPricingRatePlan[] | DynamicPricingRatePlan[];
   maxOccupancy: number;
   maxChildren: number;
   maxAdult: number;
   area: number;
+};
+
+export type RoomTypeModData = Omit<RoomTypeData, 'ratePlans'> & {
+  ratePlans: StaticPricingMod[] | DynamicPricingRatePlan[];
+};
+
+export type StaticPricingMod = Omit<
+  StaticPricingRatePlan,
+  'discountType' | 'discountValue' | 'label'
+> & {
+  discount: {
+    type: string;
+    value: number;
+  };
 };
 
 export type StaticPricingRatePlan = RatePlan & {
@@ -63,8 +78,8 @@ export type StaticPricingRatePlan = RatePlan & {
   basePrice: string;
   discountType: string;
   discountValue: number;
-  bestRateCurrency: string;
-  bestAvailableRate: number;
+  bestPriceCurrency: string;
+  bestAvailablePrice: number;
 };
 
 export type DynamicPricingRatePlan = RatePlan & {
@@ -83,8 +98,7 @@ export type RatePlan = {
 
 export type RoomTypeData = Omit<
   RoomTypeFormData,
-  | 'complimentaryAmenities'
-  | 'paidAmenities'
+  'complimentaryAmenities' | 'paidAmenities'
 > & {
   roomAmenityIds: string[];
 };

@@ -1,3 +1,51 @@
+import { FlagType } from '@hospitality-bot/admin/shared';
+import { FeedbackStatusType } from '../types/feedback.type';
+
+export const feedbackStatus: Record<
+  | FeedbackStatusType
+  | 'ENCOURAGEIMPROVEMENT'
+  | 'EXCEEDEXPECTATIONS'
+  | 'MEETEXPECTATIONS',
+  { label: string; type: FlagType }
+> = {
+  HIGHPOTENTIAL: {
+    label: 'High Potential ',
+    type: 'failed',
+  },
+  HIGHRISK: {
+    label: 'High Risk ',
+    type: 'completed',
+  },
+  TODO: {
+    label: 'To Do ',
+    type: 'default',
+  },
+  INPROGRESS: {
+    label: 'In-Progress ',
+    type: 'completed',
+  },
+  RESOLVED: {
+    label: 'Resolved ',
+    type: 'failed',
+  },
+  NOACTION: {
+    label: 'No Action ',
+    type: 'draft',
+  },
+  ENCOURAGEIMPROVEMENT: {
+    label: 'Encourage Improvement ',
+    type: 'default',
+  },
+  EXCEEDEXPECTATIONS: {
+    label: 'Exceed Expectations',
+    type: 'default',
+  },
+  MEETEXPECTATIONS: {
+    label: 'Meet Expectations',
+    type: 'default',
+  },
+};
+
 export const feedback = {
   types: {
     stay: 'STAYFEEDBACK',

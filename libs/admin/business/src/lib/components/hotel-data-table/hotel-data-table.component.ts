@@ -100,7 +100,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   getQueryConfig() {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           offset: this.first,
@@ -110,21 +110,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     };
 
     return config;
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { entityState: null }
-        : { entityState: chips[0].value === 'ACTIVE' },
-    ];
   }
 
   /**

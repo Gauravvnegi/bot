@@ -1,7 +1,7 @@
 import { FlagType } from '@hospitality-bot/admin/shared';
-
+import { GuestModalStatus } from '../types/guest.type';
 export const guestStatusDetails: Record<
-  'HIGHRISK' | 'HIGHPOTENTIAL' | 'VIP',
+  'HIGHRISK' | 'HIGHPOTENTIAL' | 'VIP' | GuestModalStatus,
   { label: string; type: FlagType }
 > = {
   HIGHRISK: {
@@ -15,6 +15,26 @@ export const guestStatusDetails: Record<
   VIP: {
     label: 'VIP',
     type: 'active',
+  },
+  BOT: {
+    label: 'BOT',
+    type: 'warning',
+  },
+  EMAIL: {
+    label: 'EMAIL',
+    type: 'warning',
+  },
+  MICROSITE: {
+    label: 'MICROSITE',
+    type: 'active',
+  },
+  OTHERS: {
+    label: 'OTHERS',
+    type: 'default',
+  },
+  WHATSAPP: {
+    label: 'WHATSAPP',
+    type: 'completed',
   },
 };
 

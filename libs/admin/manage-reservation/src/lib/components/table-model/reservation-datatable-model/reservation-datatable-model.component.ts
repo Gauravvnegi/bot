@@ -49,7 +49,7 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
 
     //set the nav link on the basis of outlet type
     switch (value.type) {
-      case 'HOTEL': 
+      case 'HOTEL':
         this.navLink = '/pages/efrontdesk/manage-reservation/add-reservation';
         break;
       case 'RESTAURANT':
@@ -95,7 +95,7 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           offset: this.first,
@@ -113,23 +113,7 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
     ]);
   }
 
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { entityState: null }
-        : { entityState: chips[0].value === 'ACTIVE' },
-    ];
-  }
-
   handelFinal = () => {
     this.loading = false;
   };
 }
-

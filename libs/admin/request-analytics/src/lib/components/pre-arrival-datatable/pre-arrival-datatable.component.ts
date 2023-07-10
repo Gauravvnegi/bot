@@ -19,7 +19,7 @@ import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
 import * as FileSaver from 'file-saver';
 import { analytics } from '@hospitality-bot/admin/shared';
-import { ChipType } from '../../constant/datatable';
+import { ChipType, inhouseStatus } from '../../constant/datatable';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-datatable',
@@ -31,6 +31,7 @@ import { ChipType } from '../../constant/datatable';
 })
 export class PreArrivalDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
+  isAllTabFilterRequired = true;
   @Input() entityType = 'Inhouse';
   @Input() optionLabels = [];
   @Input() packageId: string;
@@ -51,7 +52,6 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
 
   cols = analytics.preArrivalCols;
 
-  tabFilterItems = analytics.PreArrivaltabFilterItems;
   entityId: string;
 
   ngOnInit(): void {
@@ -82,7 +82,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
             entityType: this.entityType,
             packageId: this.packageId,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFiltersV2(),
         ]);
       })
     );
@@ -98,9 +98,6 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
           this.setRecords(data);
-          if (this.tabFilterItems[this.tabFilterIdx].chips.length === 1)
-            this.addQuickReplyFilter(data.entityStateCounts, this.totalRecords);
-          else this.updateQuickReplyFilterCount(data.entityStateCounts);
         },
         ({ error }) => {
           this.values = [];
@@ -111,37 +108,15 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   }
 
   setRecords(data): void {
-    this.values = new InhouseTable().deserialize(data).records;
-    this.updateTabFilterCount(data?.entityTypeCounts, data.total);
-    this.updateTotalRecords();
-    this.loading = false;
-  }
-
-  addQuickReplyFilter(entityStateCounts, total) {
-    this.tabFilterItems[this.tabFilterIdx].chips[0].total = Number(
-      Object?.values(entityStateCounts)?.reduce(
-        (a: number, b: number) => a + b,
-        0
-      )
+    const preArrivalData = new InhouseTable().deserialize(data);
+    this.values = preArrivalData.records;
+    this.initFilters(
+      preArrivalData.entityTypeCounts,
+      preArrivalData.entityStateCounts,
+      preArrivalData.total,
+      inhouseStatus
     );
-    Object.keys(entityStateCounts).forEach((key) => {
-      this.tabFilterItems[this.tabFilterIdx].chips.push({
-        label: key,
-        icon: '',
-        value: key,
-        total: entityStateCounts[key],
-        isSelected: false,
-        type: ChipType[key],
-      });
-    });
-  }
-
-  getSelectedQuickReplyFilters() {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected === true)
-      .map((item) => ({
-        actionType: item.value,
-      }));
+    this.loading = false;
   }
 
   fetchDataFrom(
@@ -169,7 +144,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
             entityType: this.entityType,
             packageId: this.packageId,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFiltersV2(),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -214,7 +189,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
           entityType: this.entityType,
           packageId: this.packageId,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -250,7 +225,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
               entityType: this.entityType,
               packageId: this.packageId,
             },
-            ...this.getSelectedQuickReplyFilters(),
+            ...this.getSelectedQuickReplyFiltersV2(),
           ],
           false,
           {

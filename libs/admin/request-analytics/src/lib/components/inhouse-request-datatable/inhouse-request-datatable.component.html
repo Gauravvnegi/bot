@@ -38,7 +38,7 @@
       (onRowUnselect)="onRowUnselect($event)"
       (sortFunction)="customSort($event)"
       [customSort]="isCustomSort"
-      *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+      *ngIf="!isEmpty; else emptyTable"
     >
       <ng-template pTemplate="caption" [formGroup]="tableFG">
         <div class="caption__wrapper">
@@ -46,8 +46,9 @@
 
           <hospitality-bot-filter-chips
             *ngIf="isQuickFilters"
-            [chips]="tabFilterItems[tabFilterIdx].chips"
+            [chips]="filterChips"
             (onChange)="toggleQuickReplyFilter($event)"
+            [selectedChips]="selectedFilterChips"
           ></hospitality-bot-filter-chips>
         </div>
       </ng-template>

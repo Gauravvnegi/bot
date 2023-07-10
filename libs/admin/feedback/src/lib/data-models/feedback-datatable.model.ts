@@ -2,19 +2,18 @@ import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
 import * as moment from 'moment';
 import { feedback } from '../constants/feedback';
-import { IDeserializable } from '@hospitality-bot/admin/shared';
+import { EntityState, IDeserializable } from '@hospitality-bot/admin/shared';
 
 export class FeedbackTable {
   total: number;
-  entityTypeCounts;
-  entityStateCounts: EntityStateCounts;
+  entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
   records: Feedback[];
 
   deserialize(input, outlets) {
     Object.assign(this, set({}, 'total', get(input, ['total'])));
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts
-    );
+    this.entityStateCounts = input['entityStateCounts'];
+    this.entityTypeCounts = input['entityTypeCounts'];
 
     this.records = new Array<Feedback>();
     input.records.forEach((item) => {
@@ -354,15 +353,14 @@ export class Notes {
 
 export class StayFeedbackTable {
   total: number;
-  entityTypeCounts;
-  entityStateCounts: EntityStateCounts;
+  entityTypeCounts: EntityState<string>;
+  entityStateCounts: EntityState<string>;
   records: StayFeedback[];
 
   deserialize(input, outlets, colorMap) {
     Object.assign(this, set({}, 'total', get(input, ['total'])));
-    this.entityStateCounts = new EntityStateCounts().deserialize(
-      input.entityStateCounts
-    );
+    this.entityStateCounts = input['entityStateCounts'];
+    this.entityTypeCounts = input['entityTypeCounts'];
     this.records = new Array<StayFeedback>();
     input.records.forEach((item) => {
       this.records.push(

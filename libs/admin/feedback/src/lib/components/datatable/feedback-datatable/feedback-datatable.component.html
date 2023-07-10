@@ -58,7 +58,7 @@
     (sortFunction)="customSort($event)"
     [customSort]="isCustomSort"
     (onFilter)="onDataFilter($event)"
-    *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+    *ngIf="!isEmpty; else emptyTable"
   >
     <!-- <ng-template pTemplate="caption"> </ng-template> -->
     <ng-template pTemplate="caption">
@@ -85,8 +85,9 @@
 
         <hospitality-bot-filter-chips
           *ngIf="isQuickFilters && tableFG?.get('tableType').value !== 'card'"
-          [chips]="tabFilterItems[tabFilterIdx].chips"
+          [chips]="filterChips"
           (onChange)="toggleQuickReplyFilter($event)"
+          [selectedChips]="selectedFilterChips"
         ></hospitality-bot-filter-chips>
       </div>
     </ng-template>

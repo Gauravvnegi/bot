@@ -44,7 +44,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   @ViewChild('adminDocumentsDetailsComponent')
   documentDetailComponent: AdminDocumentsDetailsComponent;
   self;
-  hotelId: string;
+  entityId: string;
   detailsForm: FormGroup;
   details;
   isGuestInfoPatched = false;
@@ -135,14 +135,14 @@ export class DetailsComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         const { hotelName: brandId, branchName: branchId } = data[
           'filter'
         ].value.property;
         const brandConfig = this._hotelDetailService.brands.find(
           (brand) => brand.id === brandId
         );
-        this.branchConfig = brandConfig.hotels.find(
+        this.branchConfig = brandConfig.entities.find(
           (branch) => branch.id === branchId
         );
         this.loadGuestInfo();
@@ -657,7 +657,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         );
       }
 
-      notificationCompRef.componentInstance.hotelId = this.hotelId;
+      notificationCompRef.componentInstance.entityId = this.entityId;
       notificationCompRef.componentInstance.roomNumber = this.details.stayDetails.roomNumber;
       notificationCompRef.componentInstance.isModal = true;
       notificationCompRef.componentInstance.onModalClose.subscribe((res) => {

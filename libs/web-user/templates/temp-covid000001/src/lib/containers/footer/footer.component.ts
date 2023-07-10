@@ -75,7 +75,7 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   getCovidGalleries(){
     this.$subscription.add(
-      this._footerService.getCovidGallery(this._hotelService.hotelId)
+      this._footerService.getCovidGallery(this._hotelService.entityId)
       .subscribe(response =>{
         this.slides = response;
       }, ({error})=>{

@@ -25,7 +25,7 @@ import {
 export class ServicesComponent implements OnInit, OnDestroy {
   noRecordAction = noRecordAction;
 
-  hotelId: string;
+  entityId: string;
   subscription$ = new Subscription();
   useForm: FormGroup;
   searchForm: FormGroup;
@@ -78,7 +78,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
       this.location.back();
       return;
     }
-    this.hotelId = this.globalService.hotelId;
+    this.entityId = this.globalService.entityId;
 
     this.initForm();
     this.initOptionConfig();
@@ -127,7 +127,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
           this.loading = true;
           this.disablePagination = true;
           this.libraryService
-            .searchLibraryItem(this.hotelId, {
+            .searchLibraryItem(this.entityId, {
               params: `?key=${res}&type=${LibrarySearchItem.SERVICE}`,
             })
             .subscribe(
@@ -215,7 +215,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     );
 
     this.subscription$.add(
-      this.roomService.getServices(this.hotelId, config).subscribe(
+      this.roomService.getServices(this.entityId, config).subscribe(
         (res) => {
           /* Setting Paid Services */
           if (serviceType == ServicesTypeValue.PAID && res.paidPackages) {

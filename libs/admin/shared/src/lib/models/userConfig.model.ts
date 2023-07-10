@@ -35,7 +35,7 @@ export class UserConfig implements IDeserializable {
     );
 
     this.brandName = localStorage.getItem(tokensConfig.brandId);
-    this.branchName = localStorage.getItem(tokensConfig.hotelId);
+    this.branchName = localStorage.getItem(tokensConfig.entityId);
     this.siteName = localStorage.getItem(tokensConfig.siteId);
 
     const brands =
@@ -44,7 +44,7 @@ export class UserConfig implements IDeserializable {
 
     this.timezone = brands
       ?.find((item) => item.id === this.brandName)
-      ?.hotels?.find((item) => item.id === this.branchName)?.timezone;
+      ?.entities?.find((item) => item.id === this.branchName)?.timezone;
 
     this.products = this.departments.map(({ productLabel, productType }) => ({
       label: productLabel,

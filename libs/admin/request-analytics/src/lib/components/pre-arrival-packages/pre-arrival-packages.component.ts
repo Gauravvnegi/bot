@@ -43,7 +43,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
   chart = analytics.preArrivalChart;
   tabFilterItems = [];
   tabFilterIdx = 0;
-  hotelId: string;
+  entityId: string;
 
   constructor(
     private _adminUtilityService: AdminUtilityService,
@@ -90,7 +90,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
           calenderType,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         if (!this.tabFilterItems.length) this.getPackageList();
         this.getInhouseSentimentsData();
       })
@@ -100,7 +100,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
   getPackageList() {
     this.$subscription.add(
       this.analyticsService
-        .getPackageList(this.hotelId)
+        .getPackageList(this.entityId)
         .subscribe((response) => {
           const packages = response.paidPackages || [];
 

@@ -22,7 +22,7 @@ import { RoomTypes } from '../../types/channel-manager.types';
   styleUrls: ['./room-types.component.scss'],
 })
 export class RoomTypesComponent extends FormComponent {
-  hotelId = '';
+  entityId = '';
   roomTypes: Option[] = [];
 
   $subscription = new Subscription();
@@ -41,7 +41,7 @@ export class RoomTypesComponent extends FormComponent {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.initOptions();
   }
 
@@ -50,7 +50,7 @@ export class RoomTypesComponent extends FormComponent {
   }
 
   initRoomTypes() {
-    this.channelMangerForm.loadRoomTypes(this.hotelId);
+    this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       this.roomTypes = rooms;
     });

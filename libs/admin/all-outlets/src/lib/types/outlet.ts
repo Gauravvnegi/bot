@@ -72,4 +72,4 @@ export type FoodPackageForm = {
   source: number;
 };
 
-export type Feature = 'menu' | 'service' | 'food';
+export type Feature = 'menu' | 'import-services' | 'food-package';

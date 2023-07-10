@@ -21,93 +21,93 @@ export class TemplateService extends ApiService {
 
   /**
    * @function getTemplateListByTopic function to get template list by topic.
-   * @param hotelId dynamically getting hotel id into api.
+   * @param entityId dynamically getting hotel id into api.
    * @param config dynamically getting global query filter into api.
    * @returns get api for getting template list by topic.
    */
-  getTemplateListByTopic(hotelId, config): Observable<any> {
+  getTemplateListByTopic(entityId, config): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/templates/topic${config.queryObj}`
+      `/api/v1/entity/${entityId}/templates/topic${config.queryObj}`
     );
   }
 
   /**
    * @function getTemplateByTopicId function to get template by particular topic id.
-   * @param hotelId dynamically getting hotel id into api.
+   * @param entityId dynamically getting hotel id into api.
    * @param topicId dynamically getting topic id into api.
    * @param config dynamically getting global query filter into api.
    * @returns get api for getting template list by particular topic id.
    */
-  getTemplateListByTopicId(hotelId, topicId, config) {
+  getTemplateListByTopicId(entityId, topicId, config) {
     return this.get(
-      `/api/v1/entity/${hotelId}/templates/topic/${topicId}${config.queryObj}`
+      `/api/v1/entity/${entityId}/templates/topic/${topicId}${config.queryObj}`
     );
   }
 
   /**
    * @function getHotelTemplate get template list from api.
    * @param config dynamically getting global query filter into api.
-   * @param hotelId dynamically getting hotelId into api.
+   * @param entityId dynamically getting entityId into api.
    * @returns get api of template lists.
    */
-  getHotelTemplate(config, hotelId) {
-    return this.get(`/api/v1/entity/${hotelId}/templates${config.queryObj}`);
+  getHotelTemplate(config, entityId) {
+    return this.get(`/api/v1/entity/${entityId}/templates${config.queryObj}`);
   }
 
   /**
    * @function createTemplate create new template record.
-   * @param hotelId dynamically getting hotelId into api.
+   * @param entityId dynamically getting entityId into api.
    * @param data getting form input data.
    * @returns post api of creating new record.
    */
-  createTemplate(hotelId, data) {
-    return this.post(`/api/v1/entity/${hotelId}/templates`, data);
+  createTemplate(entityId, data) {
+    return this.post(`/api/v1/entity/${entityId}/templates`, data);
   }
 
   /**
    * @function getTemplateDetails get template record details.
-   * @param hotelId dynamically getting hotelId into api.
+   * @param entityId dynamically getting entityId into api.
    * @param templateId dynamically getting templateId into api.
    * @returns get api of template details.
    */
-  getTemplateDetails(hotelId, templateId) {
-    return this.get(`/api/v1/entity/${hotelId}/templates/${templateId}`);
+  getTemplateDetails(entityId, templateId) {
+    return this.get(`/api/v1/entity/${entityId}/templates/${templateId}`);
   }
 
   /**
    * @function updateTemplate update Templaterecord.
-   * @param hotelId dynamically getting hotelId into api.
+   * @param entityId dynamically getting entityId into api.
    * @param templateId dynamically getting templateId into api.
    * @param data getting form input data.
    * @returns put api of update Template record.
    */
-  updateTemplate(hotelId, templateId, data) {
-    return this.put(`/api/v1/entity/${hotelId}/templates/${templateId}`, data);
+  updateTemplate(entityId, templateId, data) {
+    return this.put(`/api/v1/entity/${entityId}/templates/${templateId}`, data);
   }
 
   /**
    * @function updateTemplateStatus update status of a template record.
-   * @param hotelId dynamically getting hotelId into api.
+   * @param entityId dynamically getting entityId into api.
    * @param data getting form input data.
    * @param templateId dynamically getting templateId into api.
    * @returns patch api of update status.
    */
-  updateTemplateStatus(hotelId, data, templateId) {
+  updateTemplateStatus(entityId, data, templateId) {
     return this.patch(
-      `/api/v1/entity/${hotelId}/templates/${templateId}/status`,
+      `/api/v1/entity/${entityId}/templates/${templateId}/status`,
       data
     );
   }
 
   /**
    * @function exportCSV To export CSV report of the table.
-   * @param hotelId dynamically getting hotelId into api.
+   * @param entityId dynamically getting entityId into api.
    * @param config dynamically getting global query filter into api.
    * @returns get api of export csv report of table.
    */
-  exportCSV(hotelId, config) {
+  exportCSV(entityId, config) {
     return this.get(
-      `/api/v1/entity/${hotelId}/templates/export${config.queryObj}`,
+      `/api/v1/entity/${entityId}/templates/export${config.queryObj}`,
       {
         responseType: 'blob',
       }
@@ -116,12 +116,12 @@ export class TemplateService extends ApiService {
 
   /**
    * @function getAssets function to get Assets.
-   * @param hotelId dynamically getting hotelId into api.
+   * @param entityId dynamically getting entityId into api.
    * @param config dynamically getting global query filter into api.
    * @returns get api for getting assets.
    */
-  getAssets(hotelId: string, config) {
-    return this.get(`/api/v1/entity/${hotelId}/assets${config.queryObj}`);
+  getAssets(entityId: string, config) {
+    return this.get(`/api/v1/entity/${entityId}/assets${config.queryObj}`);
   }
 
   /**
@@ -137,14 +137,14 @@ export class TemplateService extends ApiService {
   /**
    * @function mapTemplateData map api data into template form data.
    * @param formValue form key values.
-   * @param hotelId hotelId for template table.
+   * @param entityId entityId for template table.
    * @param id template id.
    * @returns template data.
    */
-  mapTemplateData(formValue, hotelId, id?) {
+  mapTemplateData(formValue, entityId, id?) {
     const templateData = new Template();
     templateData.active = formValue.status;
-    templateData.entityId = hotelId;
+    templateData.entityId = entityId;
     templateData.id = formValue.id;
     templateData.name = formValue.name;
     templateData.description = formValue.description;

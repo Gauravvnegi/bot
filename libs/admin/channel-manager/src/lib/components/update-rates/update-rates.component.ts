@@ -28,7 +28,7 @@ export class UpdateRatesComponent implements OnInit {
   roomTypes: RoomTypes[] = [];
   allRoomTypes: RoomTypes[] = [];
 
-  hotelId: string;
+  entityId: string;
 
   dates: DateOption[];
   dateLimit: number = 15;
@@ -42,7 +42,7 @@ export class UpdateRatesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilter.hotelId;
+    this.entityId = this.globalFilter.entityId;
     this.initOptions();
     this.initForm();
   }
@@ -54,7 +54,7 @@ export class UpdateRatesComponent implements OnInit {
   }
 
   initRoomTypes() {
-    this.channelMangerForm.loadRoomTypes(this.hotelId);
+    this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       if (rooms.length !== 0) {
         this.roomTypes = rooms;

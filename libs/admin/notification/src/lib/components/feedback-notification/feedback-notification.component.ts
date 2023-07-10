@@ -53,16 +53,16 @@ export class FeedbackNotificationComponent extends NotificationComponent
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query everytime global filter changes
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         //fetch-api for records
       })
     );
   }
 
-  getConfigData(hotelId): void {
-    this.requestService.getNotificationConfig(hotelId).subscribe((response) => {
+  getConfigData(entityId): void {
+    this.requestService.getNotificationConfig(entityId).subscribe((response) => {
       this.config = new FeedbackNotificationConfig().deserialize(response);
-      this.templates.hotelId = hotelId;
+      this.templates.entityId = entityId;
       this.initNotificationForm();
     });
   }
@@ -98,7 +98,7 @@ export class FeedbackNotificationComponent extends NotificationComponent
     };
     this.$subscription.add(
       this.requestService
-        .getTemplate(this.hotelId, event.value.id, config)
+        .getTemplate(this.entityId, event.value.id, config)
         .subscribe(
           (response) =>
             this.notificationForm
@@ -142,7 +142,7 @@ export class FeedbackNotificationComponent extends NotificationComponent
     this.isSending = true;
     this.$subscription.add(
       this.requestService
-        .createRequestData(this.templates.hotelId, requestData)
+        .createRequestData(this.templates.entityId, requestData)
         .subscribe(
           (res) => {
             this.isSending = false;

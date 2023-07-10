@@ -12,7 +12,7 @@ import { PackagesService } from '../../services/packages.service';
   styleUrls: ['./create-category.component.scss'],
 })
 export class CreateCategoryComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
 
   $subscription = new Subscription();
 
@@ -30,13 +30,13 @@ export class CreateCategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
   }
 
   handleSubmit(value: CategoryFormValue) {
     this.$subscription.add(
       this.packagesService
-        .createCategory(this.hotelId, {
+        .createCategory(this.entityId, {
           ...value,
           source: 1,
           type: 'PACKAGE_CATEGORY',

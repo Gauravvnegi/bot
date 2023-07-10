@@ -71,7 +71,7 @@
           unit: 4,
           isMultiple: true
         }"
-        [hotelId]=""
+        [entityId]=""
         path="static-content/room-types"
       ></hospitality-bot-custom-file-upload>
     </div>
@@ -91,6 +91,7 @@
 
   <ng-container [ngSwitch]="useForm.get('type').value">
     <hospitality-bot-restaurant-form
+      [outletId]="outletId"
       *ngSwitchCase="'RESTAURANT'"
       class="full-width"
       (onCreateAndContinueFeature)="submitForm($event)"

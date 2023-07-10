@@ -20,6 +20,8 @@ export class StatusDropdownToggleComponent {
     forFalse: 'INACTIVE',
   };
 
+  isBoolean = false;
+
   @Input() set booleanStatusKeys(input: BooleanKeys) {
     this.booleanKeys = {
       ...this.booleanKeys,
@@ -47,20 +49,28 @@ export class StatusDropdownToggleComponent {
     };
 
     if (this.items.length) {
-      this.nextStates = this.items.map((element) => element.value);
+      this.nextStates = this.items.map((element) => {
+        if (typeof element.value === 'boolean') {
+          return this.booleanKeys[element.value ? 'forTrue' : 'forFalse'];
+        }
+        return element.value;
+      });
     }
   }
 
   @Input() set nextStates(input: string[]) {
     if (!input) return;
+
     this.items = input?.map((key) => {
+      const value = this.isBoolean ? this.booleanKeys.forTrue === key : key;
+
       const data = {
         label: this.records[key]?.label ?? convertToTitleCase(key),
         command: () => {
-          if (this.value !== key) this.onClick.emit(key);
+          if (this.value !== value) this.onClick.emit(value);
         },
         type: this.records[key]?.type ?? 'active',
-        value: key,
+        value: value,
       };
 
       return data;
@@ -75,8 +85,8 @@ export class StatusDropdownToggleComponent {
   constructor() {}
 
   setSettings() {
-    const isBoolean = typeof this.value === 'boolean';
-    if (!this.items.length && isBoolean) {
+    this.isBoolean = typeof this.value === 'boolean';
+    if (!this.items.length && this.isBoolean) {
       this.nextStates = [this.booleanKeys.forTrue, this.booleanKeys.forFalse];
     }
 
@@ -84,7 +94,7 @@ export class StatusDropdownToggleComponent {
       this.items.forEach((item) => {
         if (
           item.value == this.value ||
-          (isBoolean &&
+          (this.isBoolean &&
             ((item.value === this.booleanKeys.forTrue && this.value) ||
               (item.value === this.booleanKeys.forFalse && !this.value)))
         ) {
@@ -94,7 +104,7 @@ export class StatusDropdownToggleComponent {
           // handling boolean driven status
           const isActiveItem = item.value === this.booleanKeys.forTrue;
           const isInactiveItem = item.value === this.booleanKeys.forFalse;
-          if (isBoolean && (isActiveItem || isInactiveItem)) {
+          if (this.isBoolean && (isActiveItem || isInactiveItem)) {
             item.command = () => {
               if (this.value !== item.value) this.onClick.emit(isActiveItem);
             };
@@ -137,9 +147,7 @@ export class StatusDropdownToggleComponent {
     }
   }
 
-  handleMenuClick(
-    { item: { value } }: { item: { value: string } },
-  ) {
+  handleMenuClick({ item: { value } }: { item: { value: string } }) {
     this.onMenuItemClick.emit(value);
   }
 }
@@ -148,7 +156,7 @@ type BooleanKeys = { forTrue?: string; forFalse?: string };
 
 type Status = {
   label: string;
-  value: string;
+  value: string | boolean;
   type: FlagType;
   disabled?: boolean;
 };

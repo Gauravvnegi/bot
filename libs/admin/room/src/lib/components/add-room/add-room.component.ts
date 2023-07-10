@@ -51,7 +51,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   dateTitle: string;
 
   roomId: string;
-  hotelId: string;
+  entityId: string;
 
   useForm: FormGroup;
   statusQuoForm: FormGroup;
@@ -111,7 +111,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.initForm();
     this.initOptionsConfig();
     if (this.roomId) this.initRoomDetails();
@@ -227,7 +227,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.loadingRoomTypes = true;
     this.$subscription.add(
       this.roomService
-        .getList<RoomTypeListResponse>(this.hotelId, {
+        .getList<RoomTypeListResponse>(this.entityId, {
           params: `?type=ROOM_TYPE&offset=${this.roomTypeOffSet}&limit=${this.roomTypeLimit}`,
         })
         .subscribe(
@@ -271,7 +271,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     if (text) {
       this.loadingRoomTypes = true;
       this.libraryService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=${LibrarySearchItem.ROOM_TYPE}`,
         })
         .subscribe(
@@ -318,7 +318,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     this.isRoomInfoLoading = true;
     this.$subscription.add(
       this.roomService
-        .getRoomById(this.hotelId, this.roomId)
+        .getRoomById(this.entityId, this.roomId)
         .subscribe((res) => {
           const roomDetails = res.rooms[0];
           this.draftDate = roomDetails.updated ?? roomDetails.created;
@@ -418,7 +418,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
     this.$subscription.add(
       this.roomService
-        .updateRoom(this.hotelId, {
+        .updateRoom(this.entityId, {
           rooms: [
             new SingleRoomList().deserialize({ id: this.roomId, ...data })
               .list[0],
@@ -451,7 +451,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
 
     this.$subscription.add(
       this.roomService
-        .addRooms(this.hotelId, {
+        .addRooms(this.entityId, {
           rooms:
             this.submissionType === 'single'
               ? new SingleRoomList().deserialize(data).list

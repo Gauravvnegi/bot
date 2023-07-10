@@ -1,5 +1,6 @@
 import { PageRoutes } from '@hospitality-bot/admin/shared';
 import { title } from 'process';
+import { OutletBaseComponent } from '../components/outlet-base.components';
 
 export const navRoutes = {
   settings: {
@@ -16,7 +17,7 @@ export const navRoutes = {
   },
   editHotel: {
     label: 'Edit Hotel',
-    link: '/pages/settings/business-info/brand/:brandId/hotel/:hotelId',
+    link: '/pages/settings/business-info/brand/:brandId/hotel/:entityId',
   },
 
   editBrand: {
@@ -60,7 +61,7 @@ export const navRoutes = {
 };
 
 export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
-  addOutlet: {
+  outlet: {
     route: 'outlet',
     navRoutes: [
       navRoutes.settings,
@@ -68,7 +69,7 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
       navRoutes.editBrand,
       navRoutes.addOutlet,
     ],
-    title: 'Outlet',
+    title: 'Add Outlet',
   },
   editOutlet: {
     route: ':outletId',
@@ -148,24 +149,62 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
     ],
     title: 'Add Food Package',
   },
+  editFoodPackage: {
+    route: 'food-package',
+    navRoutes: [
+      navRoutes.settings,
+      navRoutes.businessInfo,
+      navRoutes.editBrand,
+      navRoutes.editOutlet,
+      navRoutes.foodPackage,
+    ],
+    title: 'Edit Food Package',
+  },
 };
 
-//it will dynamically add editHotel on the basis of isHotel
-export function getRoutes(routeName: string, isHotel) {
-  debugger;
-  if (isHotel) {
-    outletBusinessRoutes[routeName].navRoutes.splice(3, 0, navRoutes.editHotel);
+export function getRoutes(
+  routeName: string,
+  isHotel: boolean,
+  isEdit?: boolean
+) {
+  routeName = isEdit ? correspondingEditRouteName[routeName] : routeName;
 
-    return outletBusinessRoutes[routeName];
+  if (isHotel) {
+    const updatedRoutes = Object.assign({}, outletBusinessRoutes[routeName]);
+    updatedRoutes.navRoutes = [...outletBusinessRoutes[routeName].navRoutes];
+
+    updatedRoutes.navRoutes.splice(3, 0, navRoutes.editHotel);
+
+    return updatedRoutes;
   }
 }
 
-export type OutletBusinessRoutes =
-  | 'addOutlet'
+export type OutletEditRoutes =
   | 'editOutlet'
-  | 'importService'
-  | 'menu'
   | 'editMenu'
-  | 'menuItem'
   | 'editMenuItem'
-  | 'foodPackage';
+  | 'editFoodPackage';
+
+export type OutletAddRoutes = 'outlet' | 'menu' | 'menuItem' | 'foodPackage';
+
+export type OutletBusinessRoutes =
+  | OutletAddRoutes
+  | OutletEditRoutes
+  | 'importService';
+
+export const hasId: Record<OutletAddRoutes, keyof OutletBaseComponent> = {
+  outlet: 'outletId',
+  menu: 'menuId',
+  foodPackage: 'foodPackageId',
+  menuItem: 'menuItemId',
+};
+
+export const correspondingEditRouteName: Record<
+  OutletAddRoutes,
+  OutletEditRoutes
+> = {
+  outlet: 'editOutlet',
+  menu: 'editMenu',
+  foodPackage: 'editFoodPackage',
+  menuItem: 'editMenuItem',
+};

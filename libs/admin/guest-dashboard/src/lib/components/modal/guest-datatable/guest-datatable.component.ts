@@ -115,6 +115,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       offset: this.first,
       limit: this.rowsPerPage,
       guestFilter: this.guestFilter,
+      type: 'GUEST'
     }
   ): Observable<any> {
     this.resetRowSelection();
@@ -143,6 +144,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
           offset: this.first,
           limit: this.rowsPerPage,
           guestFilter: this.guestFilter,
+          type: 'GUEST'
         }
       ).subscribe(
         (data) => {

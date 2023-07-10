@@ -7,7 +7,7 @@
   <ng-container [ngSwitch]="stepper.selectedIndex">
     <ng-container *ngSwitchCase="0">
       <hospitality-bot-campaign-form
-        [hotelId]="hotelId"
+        [entityId]="entityId"
         [campaign]="campaign"
         [campaignId]="campaignId"
         [campaignFG]="campaignFG"
@@ -24,7 +24,7 @@
     </ng-container>
     <ng-container *ngSwitchCase="2">
       <hospitality-bot-template-list-container
-        [hotelId]="hotelId"
+        [entityId]="entityId"
         [templateType]="createContentType"
         (change)="changeStep($event)"
       ></hospitality-bot-template-list-container>

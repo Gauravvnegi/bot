@@ -20,7 +20,7 @@ export class OutletGraphsComponent implements OnInit {
   @ViewChild(BaseChartDirective) baseChart: BaseChartDirective;
 
   selectedInterval: string;
-  hotelId: string;
+  entityId: string;
   globalQueries = [];
   $subscription = new Subscription();
 
@@ -74,7 +74,7 @@ export class OutletGraphsComponent implements OnInit {
   }
 
   listenForGlobalFilter(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.globalFilterService.globalFilter$.subscribe((data) => {
       const calenderType = {
         calenderType: this._dateService.getCalendarType(
@@ -105,7 +105,7 @@ export class OutletGraphsComponent implements OnInit {
     this.ordersStat = stats.totalOrders;
 
     // this.$subscription.add(
-    //   this.roomService.getStats(this.hotelId, config).subscribe((res)=>{
+    //   this.roomService.getStats(this.entityId, config).subscribe((res)=>{
     //     console.log(res);
     //     this.sellsStat = new SellsGraph().deserialize(res.averageRoomRateGraph);
     //     this.visitorsStat = new VisitorsGraph().deserialize(res.occupancyStat);

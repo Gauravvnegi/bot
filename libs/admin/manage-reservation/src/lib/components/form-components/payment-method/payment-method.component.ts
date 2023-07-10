@@ -32,7 +32,7 @@ export class PaymentMethodComponent implements OnInit {
 
   currencies: Option[] = [];
   paymentOptions: Option[] = [];
-  hotelId: string;
+  entityId: string;
 
   $subscription = new Subscription();
   parentFormGroup: FormGroup;
@@ -46,7 +46,7 @@ export class PaymentMethodComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.addFormGroup();
     this.getPaymentMethod();
     this.initConfig();
@@ -92,7 +92,7 @@ export class PaymentMethodComponent implements OnInit {
 
   getPaymentMethod(): void {
     this.$subscription.add(
-      this.manageReservationService.getPaymentMethod(this.hotelId).subscribe(
+      this.manageReservationService.getPaymentMethod(this.entityId).subscribe(
         (response) => {
           const types = new PaymentMethodList()
             .deserialize(response)

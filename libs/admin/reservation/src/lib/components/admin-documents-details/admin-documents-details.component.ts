@@ -80,7 +80,7 @@ export class AdminDocumentsDetailsComponent implements OnInit {
   getDocumentsByCountry(nationality) {
     this._reservationService
       .getDocumentsByNationality(
-        this.detailsData.reservationDetails.hotelId,
+        this.detailsData.reservationDetails.entityId,
         nationality
       )
       .subscribe((response) => {

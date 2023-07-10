@@ -40,7 +40,7 @@
 
   <ng-container *ngFor="let template of templateTopicList; last as isLast">
     <hospitality-bot-topic-templates
-      [hotelId]="hotelId"
+      [entityId]="entityId"
       [templateType]="templateType"
       [template]="template"
       (selectedTemplate)="setTemplate($event)"

@@ -19,7 +19,7 @@ export type ServiceResponse = {
   currency: string;
   packageCode: string;
   imageUrl: string;
-  hotelId: string;
+  entityId: string;
   source: string;
   type: string;
   unit: string;

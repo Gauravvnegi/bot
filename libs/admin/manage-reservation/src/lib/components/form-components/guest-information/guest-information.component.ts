@@ -25,7 +25,6 @@ export class GuestInformationComponent implements OnInit {
   globalQueries = [];
   $subscription = new Subscription();
   entityId: string;
-  hotelId: string;
   parentFormGroup: FormGroup;
 
   @Input() reservationId: string;
@@ -40,7 +39,7 @@ export class GuestInformationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.addFormGroup();
     this.listenForGlobalFilters();
   }
@@ -63,7 +62,7 @@ export class GuestInformationComponent implements OnInit {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.globalQueries = [
           ...this.globalQueries,
           {
@@ -133,7 +132,7 @@ export class GuestInformationComponent implements OnInit {
   getConfig() {
     const config = [
       ...this.globalQueries,
-      { entityState: 'ALL', offset: this.guestsOffSet, limit: 5 },
+      { entityState: 'ALL', offset: this.guestsOffSet, limit: 5, type: 'GUEST' },
     ];
     return { queryObj: this.adminUtilityService.makeQueryParams(config) };
   }

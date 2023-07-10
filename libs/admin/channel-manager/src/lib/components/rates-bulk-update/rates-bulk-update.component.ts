@@ -15,7 +15,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
   styleUrls: ['./rates-bulk-update.component.scss'],
 })
 export class RatesBulkUpdateComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
   roomsData: any;
   useForm: FormGroup;
   pageTitle = 'Bulk Update';
@@ -39,7 +39,7 @@ export class RatesBulkUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilter.hotelId;
+    this.entityId = this.globalFilter.entityId;
     const today = new Date();
     const seventhDate = new Date();
     seventhDate.setDate(today.getDate() + 7);
@@ -59,7 +59,7 @@ export class RatesBulkUpdateComponent implements OnInit {
   loadRooms() {
     this.formService.roomDetails.subscribe((rooms) => {
       this.roomTypes = rooms;
-      !this.roomTypes.length && this.formService.loadRoomTypes(this.hotelId);
+      !this.roomTypes.length && this.formService.loadRoomTypes(this.entityId);
       this.loadTree({ roomType: '' });
     });
   }

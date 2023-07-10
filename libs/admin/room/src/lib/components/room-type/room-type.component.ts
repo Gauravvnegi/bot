@@ -54,7 +54,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
   selectedIndex = 0;
   roomTypeId: string;
-  hotelId: string;
+  entityId: string;
 
   defaultImage: string = 'assets/images/image-upload.png';
   pageTitle = 'Add Room Type';
@@ -83,7 +83,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalService.hotelId;
+    this.entityId = this.globalService.entityId;
     this.initForm();
     this.initOptionConfig();
   }
@@ -152,7 +152,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       if (!this.roomService.roomTypeFormState) {
         this.subscription$.add(
           this.roomService
-            .getRoomTypeById(this.hotelId, this.roomTypeId)
+            .getRoomTypeById(this.entityId, this.roomTypeId)
             .subscribe(
               (res) => {
                 this.useForm.patchValue(new RoomTypeForm().deserialize(res));
@@ -199,7 +199,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   getRatePlans() {
-    this.roomService.getRatePlan(this.hotelId).subscribe((res) => {
+    this.roomService.getRatePlan(this.entityId).subscribe((res) => {
       const plansData = res.map((option, index) => ({
         label: option.label,
         value: option.value,
@@ -435,7 +435,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.isPaidLoading = true;
     this.subscription$.add(
       this.roomService
-        .getServices(this.hotelId, {
+        .getServices(this.entityId, {
           params: `?limit=5&type=SERVICE&serviceType=${serviceType}&status=true`,
         })
         .subscribe(
@@ -521,7 +521,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   saveDetails() {
     const data = this.getRoomTypeModData();
     this.subscription$.add(
-      this.roomService.createRoomType(this.hotelId, data).subscribe(
+      this.roomService.createRoomType(this.entityId, data).subscribe(
         (res) => {
           this.loading = false;
           this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);
@@ -546,7 +546,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     };
 
     this.subscription$.add(
-      this.roomService.updateRoomType(this.hotelId, data).subscribe(
+      this.roomService.updateRoomType(this.entityId, data).subscribe(
         (res) => {
           this.loading = false;
           this.router.navigate([`/pages/inventory/room/${routes.dashboard}`]);

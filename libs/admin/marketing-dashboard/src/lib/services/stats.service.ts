@@ -6,24 +6,24 @@ import { GraphStatsData, QueryConfig } from '../components/types/stats';
 
 @Injectable()
 export class MarketingService extends ApiService {
-  getMarketingCards(hotelId: string, config: QueryConfig): Observable<any> {
+  getMarketingCards(entityId: string, config: QueryConfig): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/marketing-dashboard/marketing-stats${config.queryObj}`
+      `/api/v1/entity/${entityId}/marketing-dashboard/marketing-stats${config.queryObj}`
     );
   }
 
-  getContactStats(hotelId: string, config: QueryConfig): Observable<any> {
+  getContactStats(entityId: string, config: QueryConfig): Observable<any> {
     return this.get(
-      `/api/v1/entity/${hotelId}/marketing-dashboard/contact-stats${config.queryObj}`
+      `/api/v1/entity/${entityId}/marketing-dashboard/contact-stats${config.queryObj}`
     );
   }
 
   rateGraphStats(
-    hotelId: string,
+    entityId: string,
     config: QueryConfig
   ): Observable<GraphStatsData[]> {
     return this.get(
-      `/api/v1/entity/${hotelId}/marketing-dashboard/open-vs-click${config.queryObj}`
+      `/api/v1/entity/${entityId}/marketing-dashboard/open-vs-click${config.queryObj}`
     ).pipe(
       map((res) => {
         return res.map((item) => ({
@@ -36,11 +36,11 @@ export class MarketingService extends ApiService {
   }
 
   subscriberGraphStats(
-    hotelId: string,
+    entityId: string,
     config: any
   ): Observable<GraphStatsData[]> {
     return this.get(
-      `/api/v1/entity/${hotelId}/marketing-dashboard/subscribers-vs-unsubscribers${config.queryObj}`
+      `/api/v1/entity/${entityId}/marketing-dashboard/subscribers-vs-unsubscribers${config.queryObj}`
     ).pipe(
       map((res) => {
         return res.map((item) => {

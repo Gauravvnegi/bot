@@ -36,8 +36,8 @@ export class FinanceService extends ApiService {
     // );
   }
 
-  exportCSV(hotelId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${hotelId}/outlet/export`, {
+  exportCSV(entityId: string): Observable<any> {
+    return this.get(`/api/v1/entity/${entityId}/outlet/export`, {
       responseType: 'blob',
     });
   }

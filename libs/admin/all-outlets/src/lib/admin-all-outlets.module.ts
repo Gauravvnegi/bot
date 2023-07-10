@@ -4,6 +4,7 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminAllOutletsRoutingModule } from './admin-all-outlets.routing.module';
 import { OutletService } from './services/outlet.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OutletFormService } from './services/outlet-form.service';
 
 @NgModule({
   imports: [
@@ -11,9 +12,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AdminSharedModule,
     AdminAllOutletsRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   declarations: [...AdminAllOutletsRoutingModule.components],
-  providers: [OutletService]
+  providers: [OutletService, OutletFormService],
 })
 export class AdminAllOutletsModule {}

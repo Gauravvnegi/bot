@@ -130,7 +130,7 @@ export type Amenity = {
   packageCode: string;
   imageUrl: string;
   source: string;
-  hotelId: string;
+  entityId: string;
   type: string;
   unit: string;
   category: string;

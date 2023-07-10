@@ -18,6 +18,7 @@ import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
 import { Feature, OutletForm } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
+import { OutletFormService } from '../../services/outlet-form.service';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
@@ -25,8 +26,6 @@ import { OutletBaseComponent } from '../outlet-base.components';
   styleUrls: ['./add-outlet.component.scss'],
 })
 export class AddOutletComponent extends OutletBaseComponent implements OnInit {
-  pageTitle: string = '';
-  navRoutes: NavRouteOptions = [];
   useForm: FormGroup;
   types: Option[] = [];
   subType: Option[] = [];
@@ -48,6 +47,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     private outletService: OutletService,
     private snackbarService: SnackBarService,
     private hotelDetailService: HotelDetailService,
+    private OutletFormService: OutletFormService,
     router: Router,
     route: ActivatedRoute
   ) {
@@ -58,7 +58,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     this.siteId = this.hotelDetailService.siteId;
     this.initOptions();
     this.initForm();
-    this.initComponent('addOutlet');
+    this.initComponent('outlet');
+    this.initOptionConfig();
   }
 
   initOptions() {
@@ -143,6 +144,17 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    * @description submits the form
    */
   submitForm(features?: Feature): void {
+    if (this.outletId && !(features === undefined)) {
+      //save data into service
+      this.OutletFormService.initOutletFormData(
+        this.useForm.getRawValue(),
+        true
+      );
+      this.router.navigate([features], {
+        relativeTo: this.route,
+      });
+      return;
+    }
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
@@ -161,7 +173,11 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     } else {
       this.$subscription.add(
         this.outletService
-          .addOutlet({ entity: { ...data }, siteId: this.siteId })
+          .addOutlet({
+            entity: { ...data },
+            siteId: this.siteId,
+            parentId: this.entityId ? this.entityId : this.brandId,
+          })
           .subscribe((res) => {
             if (res) this.handleSuccess(features, res.id);
           }, this.handleError)
@@ -172,6 +188,25 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   //get form controls
   get formControls() {
     return this.useForm.controls as Record<keyof OutletForm, AbstractControl>;
+  }
+
+  initOptionConfig() {
+    this.getServices('PAID');
+    this.getServices('COMPLIMENTARY');
+  }
+
+  getServices(serviceType: string) {
+    this.outletService
+      .getServices(
+        this.outletId,
+
+        {
+          params: `?limit=5&type=SERVICE&serviceType=${serviceType}&status=true`,
+        }
+      )
+      .subscribe((res) => {
+        console.log(res, 'services');
+      });
   }
 
   /**
@@ -188,7 +223,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    * @description handles success
    */
   handleSuccess = (feature?: Feature, outletId?: string) => {
-    debugger;
     this.snackbarService.openSnackBarAsText(
       this.outletId
         ? 'Outlet updated successfully'
@@ -203,7 +237,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
           }
         );
         break;
-      case 'service':
+      case 'import-services':
         this.router.navigate(
           [`${outletId} /${outletBusinessRoutes.importService.route}`],
           {
@@ -211,15 +245,15 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
           }
         );
         break;
-      case 'food':
+      case 'food-package':
         this.router.navigate([outletBusinessRoutes.foodPackage.route], {
           relativeTo: this.route,
         });
         break;
       default:
-        this.router.navigate([
-          `pages/outlet/all-outlets/add-outlet/${outletId}`,
-        ]);
+        this.router.navigate([`${outletId}`], {
+          relativeTo: this.route,
+        });
     }
   };
 

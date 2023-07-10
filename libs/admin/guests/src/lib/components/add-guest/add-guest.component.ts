@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { GuestTableService } from '../../services/guest-table.service';
 import { GuestFactory } from '../../data-models/guest.model';
-import { max } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-add-guest',
@@ -17,7 +16,7 @@ import { max } from 'lodash';
   styleUrls: ['./add-guest.component.scss'],
 })
 export class AddGuestComponent implements OnInit {
-  hotelId: string;
+  entityId: string;
   agentId: string;
   guestId: string;
 
@@ -55,7 +54,7 @@ export class AddGuestComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalService.hotelId;
+    this.entityId = this.globalService.entityId;
     this.initGuestForm();
     this.activatedRoute.params.subscribe((params) => {
       this.guestId = params['id'];
@@ -76,7 +75,7 @@ export class AddGuestComponent implements OnInit {
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       cc: ['+91'],
       phoneNo: [null, [Validators.required]],
-      companyName: ['', [Validators.required]],
+      company: ['', [Validators.required]],
       gender: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       age: [{ value: '', disabled: true }, Validators.required],
@@ -106,157 +105,43 @@ export class AddGuestComponent implements OnInit {
     );
   }
 
-  // initDefaultForm() {
-  //   this.formService.agentForm &&
-  //     this.formService.restoreForm(this.guestForm, 'guest');
-  //   this.formService.reset();
-  // }
-
-  createCompany() {
+  createNewCompany() {
     this.router.navigateByUrl('pages/members/company/add-company');
   }
 
   handleSubmit() {
-    // if (this.guestForm.invalid) {
-    //   this.guestForm.markAllAsTouched();
-    //   this.snackbarService.openSnackBarAsText(
-    //     'Invalid form: Please fix errors'
-    //   );
-    //   return;
-    // }
-    // if (!!this.agentId) {
-    //   this.subscription$.add(
-    //     this.manageReservationService
-    //       .updateAgent(
-    //         this.hotelId,
-    //         {
-    //           ...this.guestForm.getRawValue(),
-    //           type: 'AGENT',
-    //           source: 1,
-    //         },
-    //         {
-    //           params: '?type=AGENT',
-    //         }
-    //       )
-    //       .subscribe(this.handleSuccess, this.handleFinal)
-    //   );
-    // } else {
-    //   this.subscription$.add(
-    //     this.agentService
-    //       .addAgent(
-    //         this.hotelId,
-    //         {
-    //           ...this.guestForm.getRawValue(),
-    //           type: 'AGENT',
-    //           source: 1,
-    //         },
-    //         {
-    //           params: '?type=AGENT',
-    //         }
-    //       )
-    //       .subscribe(this.handleSuccess, this.handleFinal)
-    //   );
-    // }
-    this.location.back();
+    if (this.guestForm.invalid) {
+      this.guestForm.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix errors'
+      );
+      return;
+    }
+    this.loading = true;
+    const formData = GuestFactory.mapFormData(this.guestForm.getRawValue());
+    const queryParams = { params: `?type=GUEST&entityId=${this.entityId}` };
+    const request = this.guestId
+      ? this.guestService.updateGuest(formData, this.guestId)
+      : this.guestService.addGuest(formData, queryParams);
+
+    this.subscription$.add(
+      request.subscribe(
+        (res) => {
+          this.snackbarService.openSnackBarAsText(
+            `Guest is ${!this.guestId ? 'created' : 'edited'} successfully`,
+            '',
+            { panelClass: 'success' }
+          );
+          this.loading = false;
+          this.location.back();
+        },
+        (error) => {
+          this.loading = false;
+        },
+        this.handleFinal
+      )
+    );
   }
-
-  saveForm() {
-    // this.formService.companyRedirectRoute = '/pages/efrontdesk/manage-reservation/add-reservation';
-    // this.route.snapshot.url.forEach((segment) => {
-    //   this.formService.companyRedirectRoute += `/${segment.path}`;
-    // });
-    // this.formService.setForm(
-    //   this.guestForm.getRawValue() as GuestType,
-    //   'agent'
-    // );
-  }
-
-  /**
-   * @function loadMoreCompany load more company options
-   */
-  loadMoreCompany() {
-    this.companyOffset = this.companyOffset + 10;
-    // this.getCompany();
-  }
-
-  // /**
-  //  * @function getCategories to get company options
-  //  */
-  // getCompany(): void {
-  //   this.loadingCompany = true;
-  //   this.subscription$.add(
-  //     this.agentService
-  //       .getAgentList(this.hotelId, {
-  //         params: `?type=ROOM_TYPE&offset=${this.companyOffset}&limit=${this.companyLimit}`,
-  //       })
-  //       .subscribe(
-  //         (res) => {
-  //           const data = new CompanyList().deserialize(res);
-  //           // .records.map((item) => ({
-  //           //   label: item.name,
-  //           //   value: item.id,
-  //           //   price: item.price,
-  //           //   currency: item.currency,
-  //           // }));
-  //           // this.roomTypes = [...this.roomTypes, ...data];
-  //           // this.noMoreCompany = data.length < this.companyLimit;
-  //         },
-  //         (error) => {},
-  //         () => {
-  //           this.loadingCompany = false;
-  //         }
-  //       )
-  //   );
-  // }
-
-  /**
-   * @function searchCompany To search categories
-   * @param text search text
-   */
-  searchCompany(text: string) {
-    // if (text) {
-    //   this.loadingCompany = true;
-    //   this.libraryService
-    //     .searchLibraryItem(this.hotelId, {
-    //       params: `?key=${text}&type=${LibrarySearchItem.ROOM_TYPE}`,
-    //     })
-    //     .subscribe(
-    //       (res) => {
-    //         const data = res && res[LibrarySearchItem.ROOM_TYPE];
-    //         this.roomTypes =
-    //           data
-    //             ?.filter((item) => item.status)
-    //             .map((item) => {
-    //               const roomType = new RoomType().deserialize(item);
-    //               return {
-    //                 label: roomType.name,
-    //                 value: roomType.id,
-    //                 price: roomType.price,
-    //                 currency: roomType.currency,
-    //               };
-    //             }) ?? [];
-    //       },
-    //       (error) => {},
-    //       () => {
-    //         this.loadingCompany = false;
-    //       }
-    //     );
-    // } else {
-    //   this.companyOffset = 0;
-    //   this.roomTypes = [];
-    //   this.getRoomTypes();
-    // }
-  }
-
-  /**
-   * @function handleSuccess to handle network success
-   */
-  handleSuccess = () => {
-    this.loading = false;
-    this.snackbarService.openSnackBarAsText('Guest added successfully', '', {
-      panelClass: 'success',
-    });
-  };
 
   /**
    * @function handleFinal

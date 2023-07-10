@@ -22,7 +22,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
   topicForm: FormGroup;
   topic: Topic;
   topicId: string;
-  hotelId: string;
+  entityId: string;
   isSavingTopic = false;
   globalQueries = [];
 
@@ -71,7 +71,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
           ...data['dateRange'].queryValue,
         ];
 
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getTopicId();
       })
     );
@@ -109,10 +109,10 @@ export class EditTopicComponent implements OnInit, OnDestroy {
     this.isSavingTopic = true;
     const data = this.topicService.mapTopicData(
       this.topicForm.getRawValue(),
-      this.hotelId
+      this.entityId
     );
     this.$subscription.add(
-      this.topicService.addTopic(this.hotelId, data).subscribe(
+      this.topicService.addTopic(this.entityId, data).subscribe(
         (response) => {
           this.topic = new Topic().deserialize(response);
           this.topicForm.patchValue(this.topic);
@@ -164,7 +164,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
   getTopicDetails(topicId: string): void {
     this.$subscription.add(
       this.topicService
-        .getTopicDetails(this.hotelId, topicId)
+        .getTopicDetails(this.entityId, topicId)
         .subscribe((response) => {
           this.topic = new Topic().deserialize(response);
           this.topicForm.patchValue(this.topic);
@@ -179,12 +179,12 @@ export class EditTopicComponent implements OnInit, OnDestroy {
     this.isSavingTopic = true;
     const data = this.topicService.mapTopicData(
       this.topicForm.getRawValue(),
-      this.hotelId,
+      this.entityId,
       this.topic.id
     );
     this.$subscription.add(
       this.topicService
-        .updateTopic(this.hotelId, this.topic.id, data)
+        .updateTopic(this.entityId, this.topic.id, data)
         .subscribe(
           (response) => {
             this.snackbarService

@@ -24,7 +24,7 @@ export type PageState = keyof typeof managePermissionRoutes;
 export type QueryConfig = {
   queryObj?: string;
   loggedInUserId?: string;
-  hotelId?: string;
+  entityId?: string;
 };
 
 export type Department = {

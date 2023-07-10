@@ -75,7 +75,7 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getTemplateId();
         this.getTopicList();
         this.getTemplateForAllTopics();
@@ -135,7 +135,7 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
       ]),
     };
     this.$subscription.add(
-      this.templateService.getTopicList(this.hotelId, config).subscribe(
+      this.templateService.getTopicList(this.entityId, config).subscribe(
         (response) => {
           this.topicList = new Topics()
             .deserialize(response)
@@ -161,7 +161,7 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
     };
     this.$subscription.add(
       this.templateService
-        .getTemplateListByTopic(this.hotelId, config)
+        .getTemplateListByTopic(this.entityId, config)
         .subscribe((response) => {
           this.templateTopicList = response;
         })
@@ -195,7 +195,7 @@ export class TemplateListContainerComponent extends EditTemplateComponent {
     this.$subscription.add(
       this.templateService
         .getTemplateListByTopicId(
-          this.hotelId,
+          this.entityId,
           this.topicFG.get('topicId').value,
           config
         )

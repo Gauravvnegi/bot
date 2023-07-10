@@ -13,7 +13,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
   welcomeMessage = 'Welcome To Request Analytics';
   navRoutes = [{ label: 'Request Analytics', link: './' }];
 
-  hotelId: string;
+  entityId: string;
   requestConfiguration: RequestConfiguration = {
     preArrival: [],
     inhouse: [],
@@ -38,7 +38,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         //set-global query every time global filter changes
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
       })
     );
   }
@@ -70,7 +70,7 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
       }
       // getting configuration is already not present
       this.configService
-        .getColorAndIconConfig(this.hotelId)
+        .getColorAndIconConfig(this.entityId)
         .subscribe((response: ConfigurationResponse) => {
           this.requestConfiguration = configuration(response);
         });

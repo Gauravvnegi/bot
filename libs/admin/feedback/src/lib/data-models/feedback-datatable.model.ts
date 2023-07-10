@@ -49,7 +49,7 @@ export class Feedback {
   feedback;
   guestData: StayGuestData;
   guest: Guest;
-  hotelId: string;
+  entityId: string;
   id: string;
   outlet: string;
   ratings: number;
@@ -89,7 +89,7 @@ export class Feedback {
         'feedback',
         input.feedback ? JSON.parse(get(input, ['feedback'])) : {}
       ),
-      set({}, 'hotelId', get(input, ['hotelId'])),
+      set({}, 'entityId', get(input, ['entityId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'ratings', get(input, ['ratings'])),
       set({}, 'read', get(input, ['read'])),

@@ -23,7 +23,7 @@ import { cols, status, tabFilterItems } from '../../constants/data-table';
 })
 export class OutletsDataTableComponent extends BaseDatatableComponent
   implements OnInit {
-  hotelId: string;
+  entityId: string;
   globalQueries = [];
   $subscription = new Subscription();
   limit = 10;
@@ -48,7 +48,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
 
   listenForGlobalFilter() {
     this.globalFilterService.globalFilter$.subscribe((value) => {
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
 
       this.globalQueries = [
         ...value['filter'].queryValue,
@@ -121,7 +121,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     };
 
     this.$subscription.add(
-      this.outletService.exportCSV(this.hotelId, config).subscribe((res) => {
+      this.outletService.exportCSV(this.entityId, config).subscribe((res) => {
         FileSaver.saveAs(
           res,
           `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
@@ -139,7 +139,7 @@ export class OutletsDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.outletService
-        .updateOutletItem(this.hotelId, rowData.id, status)
+        .updateOutletItem(this.entityId, rowData.id, status)
         .subscribe(
           () => {
             this.updateStatusAndCount(rowData.status, status);

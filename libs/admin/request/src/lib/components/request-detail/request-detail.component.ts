@@ -26,7 +26,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   status = false;
   statusList = request.status;
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   @Output() guestInfo = new EventEmitter();
   @Input() guestInfoEnable;
 
@@ -40,7 +40,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
 
     this.registerListeners();
     this.initFG();
@@ -75,7 +75,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe(
-        (data) => this.globalFilterService.hotelId
+        (data) => this.globalFilterService.entityId
       )
     );
   }
@@ -119,7 +119,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
           cmsUserType: 'Bot',
-          hotelId: this.hotelId,
+          entityId: this.entityId,
         },
       ]),
     };

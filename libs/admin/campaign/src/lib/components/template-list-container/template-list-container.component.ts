@@ -21,7 +21,7 @@ import { CampaignService } from '../../services/campaign.service';
 })
 export class TemplateListContainerComponent implements OnInit, OnDestroy {
   private $subscription = new Subscription();
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() templateType: string;
   @Output() change = new EventEmitter();
   templateTypes = campaignConfig.datatable.templateTypes;
@@ -53,7 +53,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
       ]),
     };
     this.$subscription.add(
-      this.campaignService.getTopicList(this.hotelId, config).subscribe(
+      this.campaignService.getTopicList(this.entityId, config).subscribe(
         (response) => {
           this.topicList = new Topics().deserialize(response).records;
         } 
@@ -76,7 +76,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this.campaignService
-        .getTemplateByContentType(this.hotelId, config)
+        .getTemplateByContentType(this.entityId, config)
         .subscribe((response) => {
           this.templateTopicList = response;
         })
@@ -99,7 +99,7 @@ export class TemplateListContainerComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this.campaignService
-        .getTemplateListByTopicId(this.hotelId, topic.id, config)
+        .getTemplateListByTopicId(this.entityId, topic.id, config)
         .subscribe((response) => {
           this.templateTopicList = [
             {

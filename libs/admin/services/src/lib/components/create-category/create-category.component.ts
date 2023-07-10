@@ -16,7 +16,7 @@ export class CreateCategoryComponent implements OnInit {
   readonly navRoute = servicesRoutes.createCategory.navRoutes;
   readonly pageTitle = servicesRoutes.createCategory.title;
 
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
 
   constructor(
@@ -27,13 +27,13 @@ export class CreateCategoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
   }
 
   handleSubmit(value: CategoryFormValue) {
     this.$subscription.add(
       this.servicesService
-        .createCategory(this.hotelId, {
+        .createCategory(this.entityId, {
           ...value,
           type: 'SERVICE_CATEGORY',
           source: 1,

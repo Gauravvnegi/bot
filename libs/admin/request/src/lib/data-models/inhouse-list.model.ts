@@ -34,7 +34,7 @@ export class InhouseData {
   confirmationNumber: string;
   elapsedTime: number;
   guestDetails: GuestType;
-  hotelId: string;
+  entityId: string;
   id: string;
   itemCode: string;
   itemName: string;
@@ -65,7 +65,7 @@ export class InhouseData {
       set({}, 'closedTime', get(input, ['closedTime'])),
       set({}, 'confirmationNumber', get(input, ['confirmationNumber'])),
       set({}, 'elapsedTime', get(input, ['elapsedTime'])),
-      set({}, 'hotelId', get(input, ['hotelId'])),
+      set({}, 'entityId', get(input, ['entityId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'itemCode', get(input, ['itemCode'])),
       set({}, 'itemName', get(input, ['itemName'])),

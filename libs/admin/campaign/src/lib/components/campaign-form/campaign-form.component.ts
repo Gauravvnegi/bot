@@ -30,7 +30,7 @@ import { Option, NavRouteOptions } from '@hospitality-bot/admin/shared';
   styleUrls: ['./campaign-form.component.scss'],
 })
 export class CampaignFormComponent implements OnInit, OnDestroy {
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Input() campaignId: string;
   @Input() campaignFG: FormGroup;
   @Input() campaign: Campaign;
@@ -80,7 +80,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
    */
   getFromEmails() {
     this.$subscription.add(
-      this._emailService.getFromEmail(this.hotelId).subscribe(
+      this._emailService.getFromEmail(this.entityId).subscribe(
         (response) => {
           this.fromEmailList = new EmailList()
             .deserialize(response)
@@ -118,7 +118,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
             );
             reqData.message = this.getTemplateMessage(reqData);
             this.$subscription.add(
-              this._emailService.sendTest(this.hotelId, reqData).subscribe(
+              this._emailService.sendTest(this.entityId, reqData).subscribe(
                 (response) => {
                   this.snackbarService
                     .openSnackBarWithTranslate(
@@ -148,7 +148,7 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   archiveCampaign() {
     this.$subscription.add(
       this.campaignService
-        .archiveCampaign(this.hotelId, {}, this.campaignId)
+        .archiveCampaign(this.entityId, {}, this.campaignId)
         .subscribe(
           (response) => {
             this.snackbarService

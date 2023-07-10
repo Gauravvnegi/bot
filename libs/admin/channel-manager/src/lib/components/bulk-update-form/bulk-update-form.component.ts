@@ -24,7 +24,7 @@ export class BulkUpdateFormComponent extends FormComponent {
 
   weeks = weeks;
 
-  hotelId: string;
+  entityId: string;
   parentForm: FormGroup;
   endMinDate = new Date();
   startMinDate = new Date();
@@ -56,7 +56,7 @@ export class BulkUpdateFormComponent extends FormComponent {
   }
   ngOnInit(): void {
     this.parentForm = this.controlContainer.control as FormGroup;
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.listenChanges();
     this.initOptionsConfig();
   }

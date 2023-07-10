@@ -21,7 +21,7 @@ export class Asset implements IDeserializable {
   id: string;
   description: string;
   name: string;
-  hotelId: string;
+  entityId: string;
   url: string;
   type: string;
   active: boolean;

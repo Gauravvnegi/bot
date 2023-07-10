@@ -34,9 +34,9 @@ export class NotificationComponent implements OnInit, OnDestroy {
   attachment: string;
   templates = {
     ids: [],
-    hotelId: '',
+    entityId: '',
   };
-  @Input() hotelId;
+  @Input() entityId;
   @Input() channel;
   @Input() isEmail;
   @Input() email;
@@ -82,13 +82,13 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   private listenForRouteParams(): void {
     if (this.isModal) {
-      this.getConfigData(this.hotelId);
-      this.templates.hotelId = this.hotelId;
+      this.getConfigData(this.entityId);
+      this.templates.entityId = this.entityId;
     } else {
       this.$subscription.add(
         this.route.queryParams.subscribe((params) => {
           if (params) {
-            this.templates.hotelId = params['hotelId'];
+            this.templates.entityId = params['entityId'];
             if (params['channel']) {
               this.social_channels.patchValue([params['channel']]);
               this.notificationForm.get('is_social_channel').patchValue(true);
@@ -96,7 +96,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
             if (params['roomNumber']) {
               this.roomNumbers.patchValue([params['roomNumber']]);
             }
-            this.getConfigData(params['hotelId']);
+            this.getConfigData(params['entityId']);
           }
         })
       );
@@ -133,8 +133,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
     }
   }
 
-  getConfigData(hotelId): void {
-    this.requestService.getNotificationConfig(hotelId).subscribe((response) => {
+  getConfigData(entityId): void {
+    this.requestService.getNotificationConfig(entityId).subscribe((response) => {
       this.config = new RequestConfig().deserialize(response);
       this.initNotificationForm();
     });
@@ -215,7 +215,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     const formData = new FormData();
     formData.append('files', event.currentTarget.files[0]);
     this.requestService
-      .uploadAttachments(this.templates.hotelId, formData)
+      .uploadAttachments(this.templates.entityId, formData)
       .subscribe(
         (response) => {
           this.attachment = response.fileName;
@@ -272,7 +272,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
     this.$subscription.add(
       this.requestService
-        .createRequestData(this.templates.hotelId, values)
+        .createRequestData(this.templates.entityId, values)
         .subscribe(
           (res) => {
             this.isSending = false;
@@ -308,7 +308,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
       };
       this.$subscription.add(
         this.requestService
-          .getTemplate(this.templates.hotelId, templateId, config)
+          .getTemplate(this.templates.entityId, templateId, config)
           .subscribe(
             (response) => {
               this.notificationForm

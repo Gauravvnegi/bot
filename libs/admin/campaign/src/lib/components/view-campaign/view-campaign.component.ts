@@ -33,7 +33,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
   globalQueries = [];
   campaignId: string;
   campaignFG: FormGroup;
-  hotelId: string;
+  entityId: string;
   ckeConfig = {
     allowedContent: true,
     extraAllowedContent: '*(*);*{*}',
@@ -94,7 +94,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.getFromEmails();
         this.getTemplateId();
       })
@@ -106,7 +106,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
    */
   getFromEmails() {
     this.$subscription.add(
-      this._emailService.getFromEmail(this.hotelId).subscribe(
+      this._emailService.getFromEmail(this.entityId).subscribe(
         (response) =>
           (this.fromEmailList = new EmailList()
             .deserialize(response)
@@ -136,7 +136,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
   getCampaignDetails(id: string) {
     this.$subscription.add(
       this._campaignService
-        .getCampaignById(this.hotelId, id)
+        .getCampaignById(this.entityId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
           this.draftDate = this.campaign?.updatedAt ?? this.campaign?.createdAt;
@@ -214,7 +214,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
   archiveCampaign() {
     this.$subscription.add(
       this._campaignService
-        .archiveCampaign(this.hotelId, {}, this.campaignId)
+        .archiveCampaign(this.entityId, {}, this.campaignId)
         .subscribe(
           (response) => {
             this.setDataAfterUpdate(response);
@@ -251,7 +251,7 @@ export class ViewCampaignComponent implements OnInit, OnDestroy {
               this.campaignFG.getRawValue()
             );
             this.$subscription.add(
-              this._emailService.sendTest(this.hotelId, reqData).subscribe(
+              this._emailService.sendTest(this.entityId, reqData).subscribe(
                 (response) => {
                   this.setDataAfterUpdate(response);
                   this.snackbarService

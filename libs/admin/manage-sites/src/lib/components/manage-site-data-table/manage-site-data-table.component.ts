@@ -38,7 +38,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   readonly siteStatusDetails = siteStatusDetails;
   createSiteUrl: string;
 
-  hotelId: string;
+  entityId: string;
   cols = cols;
   status = status;
   manageSiteStatus = manageSiteStatus;
@@ -209,7 +209,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   /**
    * @function handlePublish Handle Publishing of site
    */
-  handlePublish(hotelId) {
+  handlePublish(entityId) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     const togglePopupCompRef = this.modalService.openDialog(
@@ -227,7 +227,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
         onClick: () => {
           this.modalService.close();
           this.cookiesSettingService.initPlatformChange(
-            hotelId, // siteId
+            entityId, // siteId
             `/pages/settings/${SettingOptions.WEBSITE_SETTINGS}`
           );
         },

@@ -30,7 +30,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   @Output() onRaiseRequestClose = new EventEmitter();
   requestFG: FormGroup;
   searchFG: FormGroup;
-  hotelId: string;
+  entityId: string;
   reservation = {};
   $subscription = new Subscription();
   cmsServices = [];
@@ -63,7 +63,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.initItemList();
       })
     );
@@ -116,7 +116,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     };
     this.$subscription.add(
       this._requestService
-        .getCMSServices(this.hotelId, config)
+        .getCMSServices(this.entityId, config)
         .subscribe((response) => {
           this.cmsServices = response.cms_services.sort((a, b) =>
             a.itemName.trim().localeCompare(b.itemName.trim())
@@ -166,7 +166,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     };
     this.isRaisingRequest = true;
     this.$subscription.add(
-      this._requestService.createRequest(this.hotelId, data).subscribe(
+      this._requestService.createRequest(this.entityId, data).subscribe(
         (response) => {
           this._translateService
             .get('success.requestCreated')

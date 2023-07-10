@@ -83,7 +83,7 @@ export class InvoiceService extends ApiService {
     data: {
       reservationId: string;
       guestId: string;
-      hotelId: string;
+      entityId: string;
       currency: string;
     },
     descriptionData: Option[]

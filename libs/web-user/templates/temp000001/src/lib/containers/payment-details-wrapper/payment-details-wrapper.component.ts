@@ -66,10 +66,11 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   /**
    * Handle getting the button Config with disabled state
    * @param isNextDisabled to disable the next button
-   * @returns 
+   * @returns
    */
   getUpdatedBtnConfig(isNextDisabled = false) {
-    this.buttonConfig[1].settings.disable = isNextDisabled && this.reservationData.paymentSummary.payableAmount !== 0;
+    this.buttonConfig[1].settings.disable =
+      isNextDisabled && this.reservationData.paymentSummary.payableAmount !== 0;
     return this.buttonConfig;
   }
 
@@ -112,6 +113,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
           },
           gatewayDetails,
           paymentApiKey: `${environment.paymentApiKey}`,
+          env: environment.production ? 'production' : 'development',
         });
       });
   }

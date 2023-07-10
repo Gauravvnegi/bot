@@ -8,34 +8,72 @@ export type CookiesData = {
   brandId: string;
 };
 
-type SocialPlatforms = {
+export type SocialPlatforms = {
   name: string;
   socialPlatformType: string;
   imageUrl: string;
   redirectUrl: string;
 };
 
-type Brand = {
+export type Address = {
+  id: string;
+  city: string;
+  country: string;
+  streetAddress: string;
+  latitude?: number;
+  longitude?: number;
+  pincode?: number;
+  formattedAddress: string;
+  countryCode: string;
+};
+
+export type Entity = {
+  id: string;
+  category: string;
+  name: string;
+  logo: string;
+  address: Address;
+  websiteUrl?: string;
+  socialPlatforms: SocialPlatforms[];
+  nationality: string;
+  status: string;
+  parentId: string;
+  entities?: Entity[];
+  contact: any;
+  redirectionParameter: any;
+  showAddress: boolean;
+  timezone: string;
+  footerLogo: string;
+  privacyPolicyUrl: string;
+  termsUrl?: string;
+  favIcon: string;
+};
+
+export type Brand = {
   id: string;
   name: string;
   logo: string;
-  entities: {
-    id: string;
-    name: string;
-    logo: string;
-    timezone: string;
-    outlets?: any[];
-    address: {
-      id: string;
-      city: string;
-      country: string;
-      latitude: number;
-      longitude: number;
-      pincode: number;
-    };
-    pmsEnable: boolean;
-  }[];
+  entities: Entity[];
   socialPlatforms: SocialPlatforms[];
+  category: string;
+  address: Address;
+  redirectionParameter: {};
+  showAddress: boolean;
+  description: string;
+  status: string | boolean;
+};
+
+export type Sites = {
+  id: string;
+  name: string;
+  siteUrl: string;
+  themeId: string;
+  status: string;
+  brands: Brand[];
+  socialPlatforms: SocialPlatforms[];
+  created: number;
+  updated: number;
+  domainConnected: boolean;
 };
 
 export type UserResponse = {
@@ -47,7 +85,7 @@ export type UserResponse = {
   otpVerified: boolean;
   cc: string;
   phoneNumber: string;
-  hotelAccess: { brands: Brand[] };
+  // hotelAccess: { brands: Brand[] };
   permissions: {
     entity: string;
     label: string;
@@ -75,14 +113,6 @@ export type UserResponse = {
     departmentLabel: string;
     productLabel: string;
   }[];
-  sites: {
-    id: string;
-    name: string;
-    domain: string;
-    themeId: string;
-    status: string;
-    brands: Brand[];
-    socialPlatforms: SocialPlatforms[];
-  }[];
+  sites: Sites[];
   agent: boolean;
 };

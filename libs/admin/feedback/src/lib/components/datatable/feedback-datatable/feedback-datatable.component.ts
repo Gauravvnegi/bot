@@ -251,7 +251,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     this.outlets =
       this._hotelDetailService.hotels.find(
         (branch) => branch['id'] === branchId
-      )?.outlets ?? [];
+      )?.entities ?? [];
+      
     this.outlets = [
       ...this.outlets,
       ...this._hotelDetailService.hotels.filter(

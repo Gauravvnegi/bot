@@ -17,6 +17,7 @@ export * from './lib/constants/charts';
 export * from './lib/models/country-code.model';
 export * from './lib/components/mention';
 export * from './lib/models/userConfig.model';
+export * from './lib/models/entityConfig.model';
 export * from './lib/constants/colors';
 export * from './lib/interfaces/deserializable.interface';
 export * from './lib/constants/routes';

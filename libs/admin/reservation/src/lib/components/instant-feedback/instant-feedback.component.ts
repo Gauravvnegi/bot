@@ -48,7 +48,7 @@ export class InstantFeedbackComponent implements OnInit, OnDestroy {
       .entities.find(
         (branch) => branch['id'] === globalQueryValue.property.branchName
       );
-    this.outlets = branch.outlets;
+    this.outlets = branch.entities;
   }
 
   getOutlet(id) {

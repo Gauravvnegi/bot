@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
 import { tokensConfig } from '../constants/common';
+import {
+  BrandConfig,
+  EntityConfig,
+  SiteConfig,
+} from '../models/entityConfig.model';
 import { UserResponse } from '../types/user.type';
 
 @Injectable({ providedIn: 'root' })
@@ -8,9 +13,9 @@ export class HotelDetailService {
   brandId: string;
   entityId: string;
 
-  sites: Sites[];
-  brands: Brands[];
-  hotels: Hotels[];
+  sites: SiteConfig[];
+  brands: BrandConfig[];
+  hotels: EntityConfig[];
 
   initHotelDetails(input: UserResponse) {
     this.siteId = localStorage.getItem(tokensConfig.siteId);
@@ -18,12 +23,11 @@ export class HotelDetailService {
     this.entityId = localStorage.getItem(tokensConfig.entityId);
 
     // hotel or brand could be empty
-    this.sites = input.sites ?? [];
+    this.sites =
+      input.sites?.map((site) => new SiteConfig().deserialize(site)) ?? [];
 
     this.brands =
-      (!!this.sites.length
-        ? this.sites.find((item) => item.id === this.siteId)?.brands
-        : input.hotelAccess?.brands) ?? [];
+      this.sites.find((item) => item.id === this.siteId)?.brands ?? [];
 
     this.hotels =
       this.brands.find((item) => item.id === this.brandId)?.entities ?? [];

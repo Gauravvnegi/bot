@@ -20,27 +20,23 @@ export class UserConfig implements IDeserializable {
   timezone: string;
 
   deserialize(input: UserResponse) {
-    Object.assign(
-      this,
-      set({}, 'id', get(input, ['id'])),
-      set({}, 'permissionConfigs', get(input, ['permissions'])),
-      set({}, 'departments', get(input, ['departments'])),
-      set({}, 'firstName', get(input, ['firstName'])),
-      set({}, 'lastName', get(input, ['lastName'])),
-      set({}, 'jobTitle', get(input, ['title'])),
-      set({}, 'cc', this.getNationality(get(input, ['cc']))),
-      set({}, 'phoneNumber', get(input, ['phoneNumber'])),
-      set({}, 'profileUrl', get(input, ['profileUrl'])),
-      set({}, 'email', get(input, ['email']))
-    );
+    this.id = input.id;
+    this.permissionConfigs = input.permissions;
+    this.departments = input.departments;
+    this.firstName = input.firstName;
+    this.lastName = input.lastName;
+    this.jobTitle = input.title;
+    this.cc = input.cc;
+    this.phoneNumber = input.phoneNumber;
+    this.profileUrl = input.profileUrl; 
+    this.email = input.email;
 
     this.brandName = localStorage.getItem(tokensConfig.brandId);
     this.branchName = localStorage.getItem(tokensConfig.entityId);
     this.siteName = localStorage.getItem(tokensConfig.siteId);
 
     const brands =
-      input.sites?.find((item) => item.id === this.siteName)?.brands ??
-      input.hotelAccess?.brands;
+      input.sites?.find((item) => item.id === this.siteName)?.brands ?? [];
 
     this.timezone = brands
       ?.find((item) => item.id === this.brandName)

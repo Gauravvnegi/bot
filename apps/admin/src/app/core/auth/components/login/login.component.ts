@@ -93,8 +93,8 @@ export class LoginComponent implements OnInit {
     this._authService.login(data).subscribe(
       (response) => {
         const hasSites = !!response.sites?.length;
-        const hasBrands = response.hotelAccess?.brands?.length;
-        if (hasSites || hasBrands) {
+
+        if (hasSites) {
           this._router.navigate([`/pages`]);
         } else {
           this._router.navigate([`/dashboard`]);

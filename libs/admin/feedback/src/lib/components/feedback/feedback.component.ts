@@ -127,7 +127,7 @@ export class FeedbackComponent implements OnInit, OnDestroy {
     const branch = this._hotelDetailService.brands
       .find((brand) => brand.id === brandId)
       .entities.find((branch) => branch['id'] === branchId);
-    this.outlets = branch.outlets;
+    this.outlets = branch.entities;
     this.statisticsService.outletIds =
       this.globalFeedbackFilterType === feedback.types.both
         ? (this.statisticsService.outletIds = [branch.id])

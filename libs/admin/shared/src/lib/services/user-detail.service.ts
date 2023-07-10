@@ -19,9 +19,7 @@ export class UserService extends ApiService {
 
     const brandData =
       data.sites?.find((item) => item.id === this.userDetails.siteName)
-        ?.brands ??
-      data.hotelAccess?.brands ??
-      [];
+        ?.brands ?? [];
 
     this.hotels = new Hotels().deserialize(brandData);
   }

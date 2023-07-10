@@ -16,9 +16,9 @@ import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
 import { SnackBarService } from 'libs/shared/material/src';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
-import { ChipType } from '../../constant/datatable';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
+import { inhouseStatus } from '../../constant/datatable';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-datatable',
@@ -30,6 +30,7 @@ import { AnalyticsService } from '../../services/analytics.service';
 })
 export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
+  isAllTabFilterRequired = true;
   @Input() entityType = 'Inhouse';
   @Input() optionLabels = [];
   @Output() onModalClose = new EventEmitter();
@@ -78,7 +79,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.entityType,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFiltersV2(),
         ]);
       })
     );
@@ -93,9 +94,6 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
-          if (this.tabFilterItems[this.tabFilterIdx].chips.length === 1)
-            this.addQuickReplyFilter(data.entityStateCounts, this.totalRecords);
-          else this.updateQuickReplyFilterCount(data.entityStateCounts);
           this.setRecords(data);
         },
         ({ error }) => {
@@ -107,37 +105,15 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   }
 
   setRecords(data): void {
-    this.values = new InhouseTable().deserialize(data)?.records;
-    this.updateTabFilterCount(data?.entityTypeCounts, data.total);
-    this.updateTotalRecords();
+    const inhouseData = new InhouseTable().deserialize(data);
+    this.values = inhouseData.records;
+    this.initFilters(
+      inhouseData.entityTypeCounts,
+      inhouseData.entityStateCounts,
+      inhouseData.total,
+      inhouseStatus
+    );
     this.loading = false;
-  }
-
-  addQuickReplyFilter(entityStateCounts, total) {
-    this.tabFilterItems[this.tabFilterIdx].chips[0].total = Number(
-      Object.values(entityStateCounts).reduce(
-        (a: number, b: number) => a + b,
-        0
-      )
-    );
-    Object.keys(entityStateCounts).forEach((key) =>
-      this.tabFilterItems[this.tabFilterIdx].chips.push({
-        label: key,
-        icon: '',
-        value: key,
-        total: entityStateCounts[key],
-        isSelected: false,
-        type: ChipType[key],
-      })
-    );
-  }
-
-  getSelectedQuickReplyFilters() {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected === true)
-      .map((item) => ({
-        actionType: item.value,
-      }));
   }
 
   fetchDataFrom(
@@ -164,7 +140,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.entityType,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFiltersV2(),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -208,7 +184,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.entityType,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -254,7 +230,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
               order: 'DESC',
               entityType: this.entityType,
             },
-            ...this.getSelectedQuickReplyFilters(),
+            ...this.getSelectedQuickReplyFiltersV2(),
           ],
           false,
           {

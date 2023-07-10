@@ -1,3 +1,5 @@
+import { FlagType } from '@hospitality-bot/admin/shared';
+
 export enum ChipType {
   'Reject' = 'new',
   'Accept' = 'completed',
@@ -5,3 +7,25 @@ export enum ChipType {
   'Pending' = 'initiated',
   'Timeout' = 'new',
 }
+
+export const inhouseStatus: Record<
+  'Closed' | 'Pending' | 'Timeout' | 'Todo',
+  { label: string; type: FlagType }
+> = {
+  Closed: {
+    label: 'Closed',
+    type: 'failed',
+  },
+  Pending: {
+    label: 'Pending',
+    type: 'warning',
+  },
+  Timeout: {
+    label: 'Timeout',
+    type: 'default',
+  },
+  Todo: {
+    label: 'Todo',
+    type: 'active',
+  },
+};

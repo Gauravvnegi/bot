@@ -36,6 +36,7 @@ import { FeedbackTableService } from '../../../services/table.service';
 import { SelectedChip } from '../../../types/feedback.type';
 import { FeedbackDatatableComponent } from '../../datatable/feedback-datatable/feedback-datatable.component';
 import { FeedbackDetailModalComponent } from '../feedback-detail-modal/feedback-detail.component';
+import { feedbackStatus } from '../../../constants/feedback';
 
 @Component({
   selector: 'hospitality-bot-feedback-datatable-modal',
@@ -221,7 +222,8 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
     this.initFilters(
       feedback.entityTypeCounts,
       feedback.entityStateCounts,
-      feedback.total
+      feedback.total,
+      feedbackStatus
     );
     this.loading = false;
   }

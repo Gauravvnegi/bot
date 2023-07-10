@@ -173,6 +173,7 @@ export class BaseDatatableComponent implements OnInit {
         documentType: ['csv'],
       }),
       quickReplyActionFilters: [[]],
+      search: [''],
     });
   }
 

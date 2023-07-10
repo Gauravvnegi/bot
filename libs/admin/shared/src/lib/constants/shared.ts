@@ -39,5 +39,5 @@ export enum StatCardImageUrls {
 
 export enum DiscountType {
   PERCENTAGE = '%OFF',
-  NUMBER = 'Flat',
+  FLAT = 'Flat',
 }

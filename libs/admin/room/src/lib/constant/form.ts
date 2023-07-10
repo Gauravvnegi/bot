@@ -50,29 +50,57 @@ export type RoomTypeFormData = {
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  originalPrice: number;
-  discountType: string;
-  discountValue: number;
-  discountedPrice: number;
-  variablePriceCurrency: string;
-  currency: string;
-  variableAmount: number;
-  discountedPriceCurrency: string;
+  // staticRatePlans?: Omit<StaticPricingRatePlan, 'label'>[];
+  // dynamicRatePlans?: Omit<DynamicPricingRatePlan, 'label'>[];
+  ratePlans: StaticPricingRatePlan[] | DynamicPricingRatePlan[];
   maxOccupancy: number;
   maxChildren: number;
   maxAdult: number;
   area: number;
 };
 
+export type RoomTypeModData = Omit<RoomTypeData, 'ratePlans'> & {
+  ratePlans: StaticPricingMod[] | DynamicPricingRatePlan[];
+};
+
+export type StaticPricingMod = Omit<
+  StaticPricingRatePlan,
+  'discountType' | 'discountValue' | 'label'
+> & {
+  discount: {
+    type: string;
+    value: number;
+  };
+};
+
+export type StaticPricingRatePlan = RatePlan & {
+  basePriceCurrency: string;
+  basePrice: string;
+  discountType: string;
+  discountValue: number;
+  bestPriceCurrency: string;
+  bestAvailablePrice: number;
+};
+
+export type DynamicPricingRatePlan = RatePlan & {
+  maxPriceCurrency: string;
+  maxPrice: number;
+  minPriceCurrency: string;
+  minPrice: number;
+};
+
+export type RatePlan = {
+  paxPriceCurrency: string;
+  paxPrice: string;
+  ratePlanTypeId: string;
+  label: string;
+};
+
 export type RoomTypeData = Omit<
   RoomTypeFormData,
-  | 'complimentaryAmenities'
-  | 'paidAmenities'
-  | 'variablePriceCurrency'
-  | 'discountedPriceCurrency'
+  'complimentaryAmenities' | 'paidAmenities'
 > & {
   roomAmenityIds: string[];
-  status: boolean;
 };
 
 export const errorMessages = {

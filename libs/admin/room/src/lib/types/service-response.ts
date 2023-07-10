@@ -1,3 +1,5 @@
+import { StaticPricingMod } from "../constant/form";
+
 export type RoomStatus =
   | 'CLEAN'
   | 'INSPECTED'
@@ -68,21 +70,16 @@ export type RoomTypeResponse = {
   description: string;
   complimentaryAmenities: Amenity[];
   paidAmenities: Amenity[];
-  currency: string;
-  originalPrice: number;
-  discountedPrice: number;
   roomCount: number;
   activeRoomCount: number;
   unavailableRoomCount: number;
+  ratePlans: StaticPricingMod[];
   soldOutCount: number;
   maxChildren: number;
   maxAdult: number;
   area: number;
   status: boolean;
   maxOccupancy: number;
-  discountType: string;
-  discountValue: number;
-  variableAmount: number;
 };
 
 export type RoomTypeListResponse = {
@@ -168,4 +165,11 @@ export interface InventoryCostRemainingResponse {
 export type GraphData = {
   label: string;
   value: number;
+};
+
+export type RatePlanResponse = {
+  id: string;
+  label: string;
+  key: string;
+  isDefault: boolean;
 };

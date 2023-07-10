@@ -1,4 +1,8 @@
-import { RoomTypeFormData } from '../constant/form';
+import {
+  DynamicPricingRatePlan,
+  RoomTypeFormData,
+  StaticPricingRatePlan,
+} from '../constant/form';
 import { RoomStatus, RoomTypeResponse } from '../types/service-response';
 import {
   MultipleRoomData,
@@ -93,20 +97,13 @@ export class RoomTypeForm {
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  originalPrice: number;
-  discountType: string;
-  discountValue: number;
-  discountedPrice: number;
-  variablePriceCurrency: string;
-  currency: string;
-  variableAmount: number;
-  discountedPriceCurrency: string;
+  ratePlans: StaticPricingRatePlan[] | DynamicPricingRatePlan[];
   maxOccupancy: number;
   maxChildren: number;
   maxAdult: number;
   area: number;
 
-  deserialize(input: RoomTypeResponse): RoomTypeFormData {
+  deserialize(input: RoomTypeResponse) {
     this.status = input.status;
     this.name = input.name;
     this.imageUrls = input.imageUrls;
@@ -114,18 +111,22 @@ export class RoomTypeForm {
     this.complimentaryAmenities =
       input.complimentaryAmenities?.map((item) => item.id) ?? [];
     this.paidAmenities = input.paidAmenities?.map((item) => item.id) ?? [];
-    this.originalPrice = input.originalPrice;
-    this.discountType = input.discountType;
-    this.discountValue = input.discountValue;
-    this.discountedPrice = input.discountedPrice;
-    this.variablePriceCurrency = input.currency;
-    this.currency = input.currency;
-    this.variableAmount = input.variableAmount;
-    this.discountedPriceCurrency = input.currency;
     this.maxOccupancy = input.maxOccupancy;
     this.maxChildren = input.maxChildren;
     this.maxAdult = input.maxAdult;
     this.area = input.area;
+    this.ratePlans = input.ratePlans.map((ratePlan) => ({
+      ratePlanTypeId: ratePlan.ratePlanTypeId,
+      paxPriceCurrency: ratePlan.paxPriceCurrency,
+      paxPrice: ratePlan.paxPrice,
+      discountType: ratePlan.discount.type,
+      discountValue: ratePlan.discount.value,
+      bestPriceCurrency: ratePlan.bestPriceCurrency,
+      bestAvailablePrice: ratePlan.bestAvailablePrice,
+      label: '',
+      basePrice: ratePlan.basePrice,
+      basePriceCurrency: ratePlan.basePriceCurrency,
+    }));
 
     return this;
   }

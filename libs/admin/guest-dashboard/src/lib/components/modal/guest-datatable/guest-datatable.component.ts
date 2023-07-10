@@ -24,6 +24,7 @@ import { GuestTableService } from '../../../services/guest-table.service';
 import { GuestDatatableComponent } from '../../datatable/guest/guest.component';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { guestStatusDetails } from '../../../constants/guest';
 
 @Component({
   selector: 'hospitality-bot-guest-datatable-modal',
@@ -36,6 +37,7 @@ import { filter } from 'rxjs/operators';
 })
 export class GuestDatatableModalComponent extends GuestDatatableComponent
   implements OnInit, OnDestroy {
+  isAllTabFilterRequired = true;
   @Input() callingMethod: string;
   @Input() guestFilter: string;
   @Input() exportURL: string;
@@ -92,10 +94,14 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   }
 
   setRecords(data): void {
-    this.values = new GuestTable().deserialize(data).records;
-    this.updateTabFilterCount(data.entityTypeCounts, data.total);
-    this.updateQuickReplyFilterCount(data.entityStateCounts);
-    this.updateTotalRecords();
+    const guestRecord = new GuestTable().deserialize(data);
+    this.values = guestRecord.records;
+    this.initFilters(
+      guestRecord.entityTypeCounts,
+      guestRecord.entityStateCounts,
+      guestRecord.totalRecord,
+      guestStatusDetails
+    );
     this.loading = false;
   }
 
@@ -115,6 +121,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
       offset: this.first,
       limit: this.rowsPerPage,
       guestFilter: this.guestFilter,
+      type: 'GUEST',
     }
   ): Observable<any> {
     this.resetRowSelection();
@@ -143,6 +150,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
           offset: this.first,
           limit: this.rowsPerPage,
           guestFilter: this.guestFilter,
+          type: 'GUEST',
         }
       ).subscribe(
         (data) => {

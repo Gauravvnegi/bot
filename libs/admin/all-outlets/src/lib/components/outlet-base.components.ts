@@ -8,8 +8,8 @@ import {
   OutletAddRoutes,
   OutletEditRoutes,
   correspondingEditRouteName,
-  getRoutes,
   hasId,
+  navRoutes,
   outletBusinessRoutes,
 } from '../constants/routes';
 
@@ -38,15 +38,44 @@ export class OutletBaseComponent {
           this.outletId = outletId;
         }
         if (brandId) this.brandId = brandId;
-        if (entityId) this.entityId = entityId;
+        if (entityId) {
+          this.entityId = entityId;
+        }
         if (menuId) this.menuId = menuId;
       }
     );
   }
 
+  getRoutes(routeName: string, isHotel: boolean, isEdit?: boolean) {
+    routeName = isEdit ? correspondingEditRouteName[routeName] : routeName;
+
+    if (isHotel) {
+      // entityId is present
+
+      //clone
+      const updatedRoutes = Object.assign({}, outletBusinessRoutes[routeName]);
+      updatedRoutes.navRoutes = [...outletBusinessRoutes[routeName].navRoutes];
+
+      updatedRoutes.navRoutes.splice(3, 0, navRoutes.editHotel);
+
+      if (isEdit)
+        updatedRoutes.navRoutes.forEach((element) => {
+          if (element.link.includes(':brandId/outlet')) {
+            element.link = element.link.replace(
+              ':brandId/outlet',
+              ':brandId/hotel/:entityId/outlet'
+            );
+          }
+        });
+
+      return updatedRoutes;
+    }
+  }
+
   initComponent(routeName: OutletAddRoutes | 'importService') {
     const { navRoutes, title } = this.entityId
-      ? getRoutes(
+      ? this.getRoutes(
+          //edit hotel case and add hotel is in business module
           routeName,
           this.entityId ? true : false,
           this[hasId[routeName]] ? true : false
@@ -56,10 +85,12 @@ export class OutletBaseComponent {
             ? correspondingEditRouteName[routeName]
             : routeName
         ];
+
     navRoutes[2].link = navRoutes[2].link
       .replace(':brandId', this.brandId)
       .replace(':outletId', this.outletId)
       .replace(':entityId', this.entityId);
+
     navRoutes[3].link = navRoutes[3].link
       .replace(':entityId', this.entityId)
       .replace(':brandId', this.brandId)

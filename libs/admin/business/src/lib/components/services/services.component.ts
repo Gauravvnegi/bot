@@ -88,7 +88,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
     }
 
     if (this.hotelDataService.hotelFormState && !this.entityId) {
-      this.filteredServices = this.hotelDataService.hotelInfoFormData?.services;
+      this.compServices = this.hotelDataService.hotelInfoFormData?.services;
 
       this.useForm
         .get('serviceIds')

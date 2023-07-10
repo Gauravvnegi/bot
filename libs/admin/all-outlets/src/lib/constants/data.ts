@@ -61,7 +61,7 @@ export const hours: Option[] = [
   { label: '11:30 PM', value: '23:30' },
 ];
 
-export const areaUnits: Option[] = [
+export const dimensions: Option[] = [
   { label: 'Sq. Ft.', value: 'sqft' },
   { label: 'Sq. M.', value: 'sqm' },
   { label: 'Sq. Yd.', value: 'sqyd' },

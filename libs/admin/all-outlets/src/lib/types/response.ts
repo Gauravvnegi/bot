@@ -10,7 +10,7 @@ export type OutletResponse = {
   serviceIds: string[];
   socialPlatforms;
   type: string;
-  subtype: string;
+  subType: string;
   cuisinesType: string;
   minimumOccupancy: number;
   maximumOccupancy: number;
@@ -19,7 +19,7 @@ export type OutletResponse = {
   timeDayStart: string;
   timeDayEnd: string;
   area: string;
-  areaUnit: string;
+  dimension: string;
   rules: string;
 };
 

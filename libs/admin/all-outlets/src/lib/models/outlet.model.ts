@@ -42,3 +42,5 @@ export class MenuItem {
     return this;
   }
 }
+
+export class Outlet {}

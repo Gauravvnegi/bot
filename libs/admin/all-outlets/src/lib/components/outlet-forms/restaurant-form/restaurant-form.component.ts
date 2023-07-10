@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
-import { areaUnits, days, hours } from '../../../constants/data';
+import { dimensions, days, hours } from '../../../constants/data';
 import {
   noRecordActionForComp,
   noRecordActionForCompWithId,
@@ -21,13 +21,14 @@ export class RestaurantFormComponent implements OnInit {
       this.modifyNoRecordActions();
     }
   }
+  @Input() compServices: any[] = [];
   @Output() onCreateAndContinueFeature = new EventEmitter<Feature>();
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
 
   days = days;
   hours = hours;
-  areaUnits = areaUnits;
+  dimensions = dimensions;
 
   constructor(public controlContainer: ControlContainer) {}
 

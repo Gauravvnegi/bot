@@ -32,9 +32,19 @@ export const navRoutes = {
     label: 'Add Outlet',
     link: '/pages/settings/business-info/brand/:brandId/outlet',
   },
+  addHotelOutlet: {
+    label: 'Add Outlet',
+    link: '/pages/settings/business-info/brand/:brandId/hotel/:entityId/outlet',
+  },
   editOutlet: {
+    id: 'editOutlet',
     label: 'Edit Outlet',
     link: '/pages/settings/business-info/brand/:brandId/outlet/:outletId',
+  },
+  editHotelOutlet: {
+    label: 'Edit Outlet',
+    link:
+      '/pages/settings/business-info/brand/:brandId/hotel/:entityId/outlet/:outletId',
   },
   importService: {
     label: 'Import Service',
@@ -161,23 +171,6 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
     title: 'Edit Food Package',
   },
 };
-
-export function getRoutes(
-  routeName: string,
-  isHotel: boolean,
-  isEdit?: boolean
-) {
-  routeName = isEdit ? correspondingEditRouteName[routeName] : routeName;
-
-  if (isHotel) {
-    const updatedRoutes = Object.assign({}, outletBusinessRoutes[routeName]);
-    updatedRoutes.navRoutes = [...outletBusinessRoutes[routeName].navRoutes];
-
-    updatedRoutes.navRoutes.splice(3, 0, navRoutes.editHotel);
-
-    return updatedRoutes;
-  }
-}
 
 export type OutletEditRoutes =
   | 'editOutlet'

@@ -1,3 +1,5 @@
+import { getNoDataLabel } from "@hospitality-bot/admin/shared";
+
 export const dashboard = {
   images: {
     arrivals: {
@@ -154,6 +156,9 @@ export const dashboard = {
           titleMarginBottom: 5,
           xPadding: 10,
           yPadding: 10,
+          callbacks: {
+            label: getNoDataLabel,
+          },
         },
         responsive: true,
         cutoutPercentage: 75,

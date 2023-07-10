@@ -1,3 +1,6 @@
+import { getNoDataLabel } from '@hospitality-bot/admin/shared';
+import * as Chart from 'chart.js';
+
 export const chartConfig = {
   type: { bar: 'bar', line: 'line', doughnut: 'doughnut' },
   options: {
@@ -13,6 +16,9 @@ export const chartConfig = {
         titleMarginBottom: 5,
         xPadding: 10,
         yPadding: 10,
+        callbacks: {
+          label: getNoDataLabel,
+        },
       },
     },
     bifurcation: {
@@ -41,6 +47,9 @@ export const chartConfig = {
         titleMarginBottom: 5,
         xPadding: 10,
         yPadding: 10,
+        callbacks: {
+          label: getNoDataLabel,
+        },
       },
     },
     globalNPS: {
@@ -55,6 +64,9 @@ export const chartConfig = {
         titleMarginBottom: 5,
         xPadding: 10,
         yPadding: 10,
+        callbacks: {
+          label: getNoDataLabel,
+        },
       },
     },
     feedback: {
@@ -69,6 +81,9 @@ export const chartConfig = {
         titleMarginBottom: 5,
         xPadding: 10,
         yPadding: 10,
+        callbacks: {
+          label: getNoDataLabel,
+        },
       },
     },
     nps: {
@@ -184,6 +199,9 @@ export const chartConfig = {
           titleMarginBottom: 5,
           xPadding: 10,
           yPadding: 10,
+          callbacks: {
+            label: getNoDataLabel,
+          },
         },
         responsive: true,
         cutoutPercentage: 40,

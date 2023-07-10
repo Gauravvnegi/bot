@@ -615,3 +615,19 @@ export const analytics = {
     type: 'line',
   },
 };
+
+
+export function getNoDataLabel(
+  ttItem: Chart.ChartTooltipItem,
+  data: Chart.ChartData
+) {
+  const label = data.labels[ttItem.index];
+  const value = data.datasets[ttItem.datasetIndex].data[ttItem.index];
+
+  if (label === 'No Data' && value === 100) {
+    return label;
+  } else {
+    return `${label}: ${value}`;
+  }
+}
+

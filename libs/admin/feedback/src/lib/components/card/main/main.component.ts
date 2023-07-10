@@ -110,7 +110,7 @@ export class MainComponent implements OnInit, OnDestroy {
   getOutlets(branchId: string): void {
     this.outlets = this._hotelDetailService.hotels.find(
       (branch) => branch['id'] === branchId
-    ).outlets;
+    ).entities;
     this.outlets = [
       ...this.outlets,
       ...this._hotelDetailService.hotels.filter(

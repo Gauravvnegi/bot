@@ -28,15 +28,13 @@ export class MarketingNotificationComponent extends NotificationComponent
   templateList: Option[] = [];
   to: Option[] = [];
   attachmentsList: Option[] = [];
-  selectedTemplate;
-  separatorKeysCodes = [ENTER, COMMA];
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
   isSending = false;
   template = '';
-  isTemplateDisabled = false;
+  isTemplateDisabled = true;
 
   @ViewChild('attachmentComponent') updateAttachment: any;
 
@@ -117,7 +115,6 @@ export class MarketingNotificationComponent extends NotificationComponent
         .getTemplate(this.hotelId, event.value, config)
         .subscribe(
           (response) => {
-            console.log(response);
             this.emailFG
               .get('message')
               .patchValue(this.modifyTemplate(response.template));
@@ -133,7 +130,9 @@ export class MarketingNotificationComponent extends NotificationComponent
     const topic = this.topicList.find(
       (type) => type.value === selectedMessageType
     );
-    if (topic) {
+    this.emailFG.get('templateId').patchValue('')
+    this.templateList = [];
+    if (topic && topic.templateIds) {
       this.isTemplateDisabled = false;
       this.templateList = topic.templateIds.map((template) => ({
         label: template.name,
@@ -189,25 +188,26 @@ export class MarketingNotificationComponent extends NotificationComponent
   //   }
   // }
 
-  getTemplateList(event) {
-    console.log(event);
-    this.$subscription.add(
-      this._emailService
-        .getTemplateByTopic(this.hotelId, event.value)
-        .subscribe((response) => {
-          console.log(response);
-          this.templateList = response.records;
-          this.emailFG.get('templateId').setValue('');
-        })
-    );
-    if (this.templateList.length === 0) {
-      this.templateList.push({
-        label: 'No Data',
-        value: 'noData',
-      });
-      this.emailFG.get('templateId').setValue(this.templateList[0].value);
-    }
-  }
+  // getTemplateList(event) {
+  //   console.log(event);
+  //   this.$subscription.add(
+  //     this._emailService
+  //       .getTemplateByTopic(this.hotelId, event.value)
+  //       .subscribe((response) => {
+  //         console.log(response);
+  //         this.templateList = response.records;
+  //         this.emailFG.get('templateId').setValue('');
+  //       })
+  //   );
+  //   if (this.templateList.length === 0) {
+  //     this.templateList.push({
+  //       label: 'No Data',
+  //       value: 'noData',
+  //     });
+  //     
+  //     this.emailFG.get('templateId').setValue(this.templateList[0].value);
+  //   }
+  // }
 
   // handleTemplateChange(event) {
   //   this.emailFG.get('message').patchValue(event.value.htmlTemplate);

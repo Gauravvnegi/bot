@@ -44,7 +44,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
   @Input() dataSource = [];
   @Input() totalRecords = 0;
   @Input() add = true;
-  @Input() hotelId: string;
+  @Input() entityId: string;
   @Output() updateContacts = new EventEmitter();
   @Input() list: List;
   tableName = contactConfig.datatable.title;
@@ -133,7 +133,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
     };
     this.$subscription.add(
       this._listingService
-        .exportContact(this.hotelId, this.list.id, config)
+        .exportContact(this.entityId, this.list.id, config)
         .subscribe(
           (response) => {
             FileSaver.saveAs(
@@ -158,7 +158,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
       this.$subscription.add(
         this._listingService
           .deleteContact(
-            this.hotelId,
+            this.entityId,
             this._adminUtilityService.makeQueryParams(ids)
           )
           .subscribe(
@@ -224,7 +224,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
           if (!this.add) {
             this.$subscription.add(
               this._listingService
-                .updateListContact(this.hotelId, this.list.id, response.data)
+                .updateListContact(this.entityId, this.list.id, response.data)
                 .subscribe(
                   (response) => {
                     this.handleContactAddEvent(response);
@@ -273,7 +273,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
       dialogConfig
     );
 
-    importCompRef.componentInstance.hotelId = this.hotelId;
+    importCompRef.componentInstance.entityId = this.entityId;
     importCompRef.componentInstance.onImportClosed.subscribe((response) => {
       if (response.status) this.handleContactImport(response.data);
 
@@ -316,7 +316,7 @@ export class ContactDatatableComponent extends BaseDatatableComponent
       });
       this.$subscription.add(
         this._listingService
-          .updateListContact(this.hotelId, this.list.id, reqData)
+          .updateListContact(this.entityId, this.list.id, reqData)
           .subscribe(
             (response) => {
               this.dataSource = [...this.dataSource, ...data];

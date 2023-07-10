@@ -42,7 +42,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   readonly routes = routes;
   readonly roomStatusDetails = roomStatusDetails;
 
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   selectedTab: TableValue;
   tabFilterIdx: number = 0;
@@ -60,7 +60,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.roomService.resetRoomTypeFormState();
 
     this.selectedTab = this.roomService.selectedTable;
@@ -147,7 +147,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     if (this.selectedTab === TableValue.room)
       this.$subscription.add(
         this.roomService
-          .getList<RoomListResponse>(this.hotelId, this.getQueryConfig())
+          .getList<RoomListResponse>(this.entityId, this.getQueryConfig())
           .subscribe(
             (res) => {
               const roomList = new RoomList().deserialize(res);
@@ -174,7 +174,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     if (this.selectedTab === TableValue.roomType)
       this.$subscription.add(
         this.roomService
-          .getList<RoomTypeListResponse>(this.hotelId, this.getQueryConfig())
+          .getList<RoomTypeListResponse>(this.entityId, this.getQueryConfig())
           .subscribe(
             (res) => {
               const roomTypesList = new RoomTypeList().deserialize(res);
@@ -209,7 +209,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
 
     this.$subscription.add(
       this.roomService
-        .updateRoomStatus(this.hotelId, {
+        .updateRoomStatus(this.entityId, {
           rooms: [{ id, roomStatus: status }],
         })
         .subscribe(
@@ -233,7 +233,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
 
     this.$subscription.add(
       this.roomService
-        .updateRoomTypeStatus(this.hotelId, {
+        .updateRoomTypeStatus(this.entityId, {
           id,
           status,
         })
@@ -341,7 +341,7 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     };
     this.$subscription.add(
       this.roomService
-        .exportCSV(this.hotelId, this.selectedTab, config)
+        .exportCSV(this.entityId, this.selectedTab, config)
         .subscribe(
           (res) => {
             FileSaver.saveAs(

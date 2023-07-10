@@ -79,7 +79,7 @@ export const noRecordAction = {
   description: 'No services found',
   actionName: 'Import Services',
   actionLink:
-    '/pages/settings/business-info/brand/brandId/hotel/hotelId/import-service',
+    '/pages/settings/business-info/brand/brandId/hotel/entityId/import-service',
 };
 
 export class SegmentList {

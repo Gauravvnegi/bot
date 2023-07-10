@@ -87,13 +87,13 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
   // need to merge v1 into v2
   initPaymentDetailsDSV2() {
     this._paymentDetailsService
-      .getPaymentConfigurationV2(this._hotelService.hotelId)
+      .getPaymentConfigurationV2(this._hotelService.entityId)
       .subscribe((data) => {
         const gatewayDetails = data?.paymentConfigurations?.map((gateway) => ({
           gatewayType: gateway?.gatewayType,
           imgSrc:
             gateway?.imgSrc || gateway?.gatewayType === 'CCAVENUE'
-              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/hotel/roseate/banner/ccavenue.webp'
+              ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/entity/roseate/banner/ccavenue.webp'
               : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/PayU.svg/1200px-PayU.svg.png',
           payload: {
             redirectUrl: `${environment.host_url}${this.router.url}&entity=payment`,
@@ -103,7 +103,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
         this.paymentUrl = initPaymentModule({
           userInfo: {
             appName: 'web',
-            entityId: this._hotelService.hotelId,
+            entityId: this._hotelService.entityId,
             reservationId: this._reservationService.reservationId,
           },
           uiConfig: {

@@ -21,7 +21,7 @@ export class StatisticsService extends ApiService {
   }
 
   getGuestList(config): Observable<any> {
-    return this.get(`/api/v1/guests${config.queryObj}`);
+    return this.get(`/api/v1/members${config.queryObj ? `${config.queryObj}&type=GUEST` : ''}`);
   }
 
   getSourceStatistics(config): Observable<any> {

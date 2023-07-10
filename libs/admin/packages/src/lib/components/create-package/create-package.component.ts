@@ -26,7 +26,7 @@ export class CreatePackageComponent implements OnInit {
   readonly errorMessages = errorMessages;
 
   packageId: string;
-  hotelId: string;
+  entityId: string;
   useForm: FormGroup;
   code: string = '# will be auto generated';
 
@@ -74,7 +74,7 @@ export class CreatePackageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.initForm();
     this.initOptionsConfig();
   }
@@ -106,7 +106,7 @@ export class CreatePackageComponent implements OnInit {
     if (this.packageId) {
       this.$subscription.add(
         this.packagesService
-          .getLibraryItemById<PackageResponse>(this.hotelId, this.packageId, {
+          .getLibraryItemById<PackageResponse>(this.entityId, this.packageId, {
             params: `?type=${LibraryItem.package}`,
           })
           .subscribe(
@@ -295,7 +295,7 @@ export class CreatePackageComponent implements OnInit {
     this.loadingServices = true;
     this.$subscription.add(
       this.packagesService
-        .getLibraryItems<ServiceListResponse>(this.hotelId, {
+        .getLibraryItems<ServiceListResponse>(this.entityId, {
           params: `?type=SERVICE&offset=${this.servicesOffSet}&limit=10&status=true&serviceType=${ServicesTypeValue.PAID}`,
         })
         .subscribe(
@@ -331,7 +331,7 @@ export class CreatePackageComponent implements OnInit {
     if (text) {
       this.loadingServices = true;
       this.packagesService
-        .searchLibraryItem(this.hotelId, {
+        .searchLibraryItem(this.entityId, {
           params: `?key=${text}&type=${LibrarySearchItem.SERVICE}`,
         })
         .subscribe(
@@ -402,7 +402,7 @@ export class CreatePackageComponent implements OnInit {
       this.$subscription.add(
         this.packagesService
           .updateLibraryItem<Partial<PackageData>, PackageResponse>(
-            this.hotelId,
+            this.entityId,
             this.packageId,
             {
               ...rest,
@@ -416,7 +416,7 @@ export class CreatePackageComponent implements OnInit {
     } else {
       this.$subscription.add(
         this.packagesService
-          .createLibraryItem<PackageData, PackageResponse>(this.hotelId, {
+          .createLibraryItem<PackageData, PackageResponse>(this.entityId, {
             ...rest,
             type: 'PACKAGE',
             source: 1,

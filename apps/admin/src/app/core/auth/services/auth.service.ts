@@ -25,7 +25,7 @@ export class AuthService extends ApiService {
     'x-userId',
     'x-siteId',
     'x-brandId',
-    'x-hotelId',
+    'x-entityId',
   ];
 
   /**
@@ -131,7 +131,7 @@ export class AuthService extends ApiService {
       'accessRefreshToken',
       'user',
       'x-userId',
-      'hotelId',
+      'entityId',
       'siteId',
       'brandId',
     ];

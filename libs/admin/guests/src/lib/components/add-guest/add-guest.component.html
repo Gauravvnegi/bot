@@ -52,21 +52,12 @@
         placeholder: 'Enter'
       }"
     ></hospitality-bot-phone-number>
-    <hospitality-bot-select
+    <hospitality-bot-company-list
       class="half-width"
-      controlName="companyName"
-      label="Company Name"
-      [options]="companies"
-      [props]="{ isAsync: true, createPrompt: '+ Add New Company' }"
-      [loading]="loadingCompany"
-      (paginate)="loadMoreCompany()"
-      (onSearch)="searchCompany($event)"
-      [stopEmission]="noMoreCompany"
-      (onCreate)="createCompany()"
-      [props]="{
-        placeholder: 'Search'
-      }"
-    ></hospitality-bot-select>
+      controlName="company"
+      type="COMPANY"
+      (createCompany)="createNewCompany()"
+    ></hospitality-bot-company-list>
     <hospitality-bot-select
       class="half-width"
       controlName="gender"
@@ -99,7 +90,7 @@
     <div class="btn-wrapper full-width">
       <hospitality-bot-button
         class="create-btn"
-        label="Save"
+        [label]="guestId ? 'Update' : 'Save'"
         (onClick)="handleSubmit()"
         [disabled]="loading"
       ></hospitality-bot-button>

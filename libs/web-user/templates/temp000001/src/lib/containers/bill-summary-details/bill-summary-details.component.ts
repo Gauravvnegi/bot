@@ -117,7 +117,7 @@ export class BillSummaryDetailsComponent implements OnInit, OnDestroy {
         this._summaryService
           .uploadSignature(
             this._reservationService.reservationId,
-            this._hotelService.hotelId,
+            this._hotelService.entityId,
             this._reservationService.reservationData.guestDetails.primaryGuest
               .id,
             formData

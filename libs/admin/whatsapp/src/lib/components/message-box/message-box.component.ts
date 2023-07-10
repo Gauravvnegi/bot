@@ -31,7 +31,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
   @Input() selectedChat;
   @Input() chatList;
   @Output() messageSent = new EventEmitter();
-  @Input() hotelId;
+  @Input() entityId;
   items: Array<User | Department>;
   mentions = [];
 
@@ -53,7 +53,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((_) => {
         this.userService
-          .getMentionList(this.globalFilterService.hotelId)
+          .getMentionList(this.globalFilterService.entityId)
           .subscribe((response) => {
             const userList = new UserList().deserialize(response?.users);
             const departmentList = new DepartmentList().deserialize(
@@ -125,7 +125,7 @@ export class MessageBoxComponent implements OnInit, OnDestroy {
     ]);
 
     this.$subscription.add(
-      this.messageService.sendMessage(this.hotelId, values, queryObj).subscribe(
+      this.messageService.sendMessage(this.entityId, values, queryObj).subscribe(
         (_) => {
           this.messageSent.emit({
             message: encodeURIComponent(this.chatFG.get('message').value),

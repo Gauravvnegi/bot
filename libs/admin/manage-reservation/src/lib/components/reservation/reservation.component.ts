@@ -14,7 +14,7 @@ import { FormBuilder } from '@angular/forms';
 })
 export class ReservationComponent extends BaseDatatableComponent
   implements OnInit {
-  hotelId: string = '';
+  entityId: string = '';
   tabFilterIdx = 0;
   tabFilterItems = [];
   selectedOutlet: EntityTabGroup;
@@ -36,13 +36,13 @@ export class ReservationComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.getTabFilterItems();
   }
 
   getTabFilterItems(): void {
     //api call to get the outlet list
-    this.reservationService.getOutletList(this.hotelId).subscribe((res) => {
+    this.reservationService.getOutletList(this.entityId).subscribe((res) => {
       res.records.forEach((element) => {
         this.tabFilterItems.push({
           label: element.name,

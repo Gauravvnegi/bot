@@ -41,7 +41,7 @@
   <div class="email-style one-third-width">
     <hospitality-bot-to-receiver-field
       [name]="'to'"
-      [hotelId]="hotelId"
+      [entityId]="entityId"
       [chipList]="campaignFG.get('to')?.value || []"
       [disableInput]="(campaignFG.get('to')?.value || []).length"
       (updateChipSet)="updateFieldData($event, campaignFG.get('to'))"

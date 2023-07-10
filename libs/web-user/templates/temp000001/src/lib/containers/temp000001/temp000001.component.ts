@@ -55,12 +55,12 @@ export class Temp000001Component implements OnInit, AfterViewInit, OnDestroy {
     const {
       journey,
       reservationId,
-      hotelId,
+      entityId,
     } = this.templateService.templateConfig;
 
     this.reservationService.reservationId = reservationId;
     this.hotelService.currentJourney = journey;
-    this.hotelService.hotelId = hotelId;
+    this.hotelService.entityId = entityId;
     // this.setWebUserTitle();
   }
 

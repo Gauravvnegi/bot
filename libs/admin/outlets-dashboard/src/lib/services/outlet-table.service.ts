@@ -8,13 +8,13 @@ export class OutletTableService extends ApiService {
     return this.get(`/api/v1/config?key=OUTLET_CONFIGURATION`);
   }
 
-  exportCSV(hotelId, config): Observable<any> {
+  exportCSV(entityId, config): Observable<any> {
     return this.get(`/api/v1/outlets/export/${config.queryObj}`);
   }
 
-  updateOutletItem(hotelId, outletId, status): Observable<any> {
+  updateOutletItem(entityId, outletId, status): Observable<any> {
     return this.patch(
-      `/api/v1/user/${outletId}/sites/${hotelId}?status=${status}`,
+      `/api/v1/user/${outletId}/sites/${entityId}?status=${status}`,
       {}
     );
   }

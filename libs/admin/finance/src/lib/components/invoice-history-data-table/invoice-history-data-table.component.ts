@@ -27,7 +27,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   tableName = title;
   cols = cols.invoice;
   isQuickFilters = true;
-  hotelId: string;
+  entityId: string;
   globalQueries = [];
 
   $subscription = new Subscription();
@@ -44,7 +44,7 @@ export class InvoiceHistoryDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.listenForGlobalFilters();
   }
 

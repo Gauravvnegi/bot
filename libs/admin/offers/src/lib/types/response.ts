@@ -18,7 +18,7 @@ export type OfferResponse = {
   packageCode: string;
   imageUrl: string;
   source: string;
-  hotelId: string;
+  entityId: string;
   autoAccept: boolean;
   hasChild: boolean;
   discountType: string;

@@ -60,7 +60,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       chips: [],
     },
   ];
-  hotelId: string;
+  entityId: string;
   filterChips = chips;
   cols = cols;
   allUsersValues;
@@ -82,7 +82,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.hotelId = this.userService.getHotelId();
+    this.entityId = this.userService.getentityId();
     this.loadInitialData();
   }
 
@@ -128,7 +128,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
     const config: QueryConfig = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
       loggedInUserId: this.userService.getLoggedInUserId(),
-      hotelId: this.hotelId,
+      entityId: this.entityId,
     };
     const allUsers$ = this._managePermissionService.getAllUsers(config);
     const managedUsers$ = this._managePermissionService.getManagedUsers(config);
@@ -157,7 +157,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
         ...this.selectedRows.map((item) => ({ ids: item.userId })),
       ]),
       loggedInUserId: this.userService.getLoggedInUserId(),
-      hotelId: this.hotelId,
+      entityId: this.entityId,
     };
 
     this.$subscription.add(

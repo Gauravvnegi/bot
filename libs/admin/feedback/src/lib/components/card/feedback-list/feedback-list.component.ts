@@ -37,7 +37,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   cardTabFilterItems = card.list.tabFilterItems;
   selectedFeedback;
   tabFilterIdx = 0;
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
   globalQueries = [];
   enableSearchField = false;
@@ -100,7 +100,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.cardService.$selectedFeedback.next(null);
         this.pagination = {
           offset: 0,
@@ -277,7 +277,7 @@ export class FeedbackListComponent implements OnInit, OnDestroy {
   setEntityId() {
     if (this.feedbackType === feedback.types.transactional)
       return this.statisticService.outletIds;
-    return this.hotelId;
+    return this.entityId;
   }
 
   /**

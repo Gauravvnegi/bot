@@ -23,7 +23,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
   loading = false;
   subscriptionPlanUsage;
   globalQueries;
-  hotelId: string;
+  entityId: string;
   subscriptionData;
   planUsageChartData;
   planUsagePercentage: PlanUsagePercentage;
@@ -49,7 +49,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = data['filter'].queryValue[0].hotelId;
+        this.entityId = data['filter'].queryValue[0].entityId;
         this.initSubscriptionPlan();
       })
     );
@@ -57,19 +57,19 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
   initSubscriptionPlan(): void {
     this.loading = true;
-    this.subscriptionService.getSubscriptionPlan(this.hotelId).subscribe(
+    this.subscriptionService.getSubscriptionPlan(this.entityId).subscribe(
       (response) => {
         this.loading = false;
         this.subscriptionData = new Subscriptions().deserialize(response);
         this.subscriptionPlanUsage = new PlanUsage().deserialize(
           this.subscriptionData
         );
-        this.getSubscriptionUsage(this.hotelId);
+        this.getSubscriptionUsage(this.entityId);
       }
     );
   }
 
-  getSubscriptionUsage(hotelId: string): void {
+  getSubscriptionUsage(entityId: string): void {
     this.loading = true;
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
@@ -82,9 +82,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
     this.$subscription.add(
       forkJoin([
-        // this.subscriptionService.getSubscriptionUsage(hotelId, config),
+        // this.subscriptionService.getSubscriptionUsage(entityId, config),
         this.subscriptionService.getSubscriptionUsagePercentage(
-          hotelId,
+          entityId,
           config
         ),
       ]).subscribe((response) => {
@@ -99,10 +99,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     );
   }
 
-  getSubscriptionPlanUsagePercentage(hotelId, config) {
+  getSubscriptionPlanUsagePercentage(entityId, config) {
     this.$subscription.add(
       this.subscriptionService
-        .getSubscriptionUsagePercentage(hotelId, config)
+        .getSubscriptionUsagePercentage(entityId, config)
         .subscribe((response) => console.log(response))
     );
   }

@@ -5,8 +5,11 @@ import {
   Router,
 } from '@angular/router';
 import {
-  OutletBusinessRoutes,
+  OutletAddRoutes,
+  OutletEditRoutes,
+  correspondingEditRouteName,
   getRoutes,
+  hasId,
   outletBusinessRoutes,
 } from '../constants/routes';
 
@@ -17,8 +20,10 @@ import {
 export class OutletBaseComponent {
   outletId: string;
   brandId: string;
-  hotelId: string;
+  entityId: string;
   menuId: string;
+  menuItemId: string;
+  foodPackageId: string;
   navRoutes: any[];
   pageTitle: string;
 
@@ -27,23 +32,45 @@ export class OutletBaseComponent {
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
         const outletId = snapshot?.params['outletId'];
         const brandId = snapshot?.params['brandId'];
-        const hotelId = snapshot?.params['hotelId'];
+        const entityId = snapshot?.params['entityId'];
         const menuId = snapshot?.params['menuId'];
-        if (outletId) this.outletId = outletId;
+        if (outletId) {
+          this.outletId = outletId;
+        }
         if (brandId) this.brandId = brandId;
-        if (hotelId) this.hotelId = hotelId;
+        if (entityId) this.entityId = entityId;
         if (menuId) this.menuId = menuId;
       }
     );
   }
 
-  initComponent(routeName: OutletBusinessRoutes) {
-    const { navRoutes, title } = this.hotelId
-      ? getRoutes(routeName, true)
-      : outletBusinessRoutes[routeName];
-    navRoutes[2].link = navRoutes[2].link.replace(':brandId', this.brandId);
-    navRoutes[3].link = navRoutes[3].link.replace(':hotelId', this.hotelId);
+  initComponent(routeName: OutletAddRoutes | 'importService') {
+    const { navRoutes, title } = this.entityId
+      ? getRoutes(
+          routeName,
+          this.entityId ? true : false,
+          this[hasId[routeName]] ? true : false
+        )
+      : outletBusinessRoutes[
+          this[hasId[routeName]]
+            ? correspondingEditRouteName[routeName]
+            : routeName
+        ];
+    navRoutes[2].link = navRoutes[2].link
+      .replace(':brandId', this.brandId)
+      .replace(':outletId', this.outletId)
+      .replace(':entityId', this.entityId);
+    navRoutes[3].link = navRoutes[3].link
+      .replace(':entityId', this.entityId)
+      .replace(':brandId', this.brandId)
+      .replace(':outletId', this.outletId);
 
+    if (navRoutes[4]?.link.includes(':outletId')) {
+      navRoutes[4].link = navRoutes[4]?.link
+        .replace(':brandId', this.brandId)
+        .replace(':outletId', this.outletId)
+        .replace(':entityId', this.entityId);
+    }
     this.navRoutes = navRoutes;
 
     this.pageTitle = title;

@@ -27,7 +27,7 @@ import { ServiceData, ServiceFormData } from '../../types/service';
 })
 export class CreateServiceComponent implements OnInit {
   serviceId: string;
-  hotelId: string;
+  entityId: string;
   useForm: FormGroup;
   code: string = '# will be auto generated';
 
@@ -79,7 +79,7 @@ export class CreateServiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hotelId = this.globalFilterService.hotelId;
+    this.entityId = this.globalFilterService.entityId;
     this.initForm();
     this.initOptionsConfig();
   }
@@ -108,7 +108,7 @@ export class CreateServiceComponent implements OnInit {
     if (this.serviceId) {
       this.$subscription.add(
         this.servicesService
-          .getLibraryItemById<ServiceResponse>(this.hotelId, this.serviceId, {
+          .getLibraryItemById<ServiceResponse>(this.entityId, this.serviceId, {
             params: `?type=${LibraryItem.service}`,
           })
           .subscribe((res) => {
@@ -172,7 +172,7 @@ export class CreateServiceComponent implements OnInit {
    */
   getTax() {
     this.$subscription.add(
-      this.servicesService.getTaxList(this.hotelId).subscribe(({ records }) => {
+      this.servicesService.getTaxList(this.entityId).subscribe(({ records }) => {
         records = records.filter(
           (item) => item.category === 'service' && item.status
         );
@@ -210,7 +210,7 @@ export class CreateServiceComponent implements OnInit {
         // ** refactor ** patch not working
         this.servicesService
           .updateLibraryItem<Partial<ServiceData>, ServiceResponse>(
-            this.hotelId,
+            this.entityId,
             this.serviceId,
             data,
             { params: '?type=SERVICE' }
@@ -221,7 +221,7 @@ export class CreateServiceComponent implements OnInit {
     } else {
       this.$subscription.add(
         this.servicesService
-          .createLibraryItem<ServiceData, ServiceResponse>(this.hotelId, {
+          .createLibraryItem<ServiceData, ServiceResponse>(this.entityId, {
             ...data,
             type: 'SERVICE',
             source: 1,

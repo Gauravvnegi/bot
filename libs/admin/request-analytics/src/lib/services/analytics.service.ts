@@ -20,11 +20,11 @@ export class AnalyticsService extends ApiService {
     );
   }
 
-  getSentReceivedStat(hotelId: string): Observable<any> {
+  getSentReceivedStat(entityId: string): Observable<any> {
     return this.get(`/api/v1/conversations-stats/graph`);
   }
 
-  exportCSV(hotelId, config): Observable<any> {
+  exportCSV(entityId, config): Observable<any> {
     return this.get(`/api/v1/conversations-stats/export${config.queryObj}`, {
       responseType: 'blob',
     });
@@ -59,8 +59,8 @@ export class AnalyticsService extends ApiService {
     );
   }
 
-  getPackageList(hotelId: string) {
-    return this.get(`/api/v1/entity/${hotelId}/packages`);
+  getPackageList(entityId: string) {
+    return this.get(`/api/v1/entity/${entityId}/packages`);
   }
 
   updatePreArrivalRequest(id, data) {

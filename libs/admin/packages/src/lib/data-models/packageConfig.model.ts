@@ -25,7 +25,7 @@ export class Package implements IDeserializable {
   description: string;
   name: string;
   currency: string;
-  hotelId: string;
+  entityId: string;
   packageCode: string;
   imageUrl: string;
   rate: number;
@@ -73,7 +73,7 @@ export class Amenity {
   currency: string;
   packageCode: string;
   imageUrl: string;
-  hotelId: string;
+  entityId: string;
   source: string;
   type: string;
   unit: string;

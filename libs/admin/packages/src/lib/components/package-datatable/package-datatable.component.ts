@@ -29,7 +29,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   readonly routes = packagesRoutes;
 
-  hotelId: string;
+  entityId: string;
   tableName = title;
 
   isCustomSort = true;
@@ -62,7 +62,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
    */
   listenForGlobalFilters(): void {
     this.globalFilterService.globalFilter$.subscribe((data) => {
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
 
       //set-global query every time global filter changes
       this.globalQueries = [
@@ -87,7 +87,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.packagesService
         .getLibraryItems<PackageListResponse>(
-          this.hotelId,
+          this.entityId,
           this.getQueryConfig()
         )
         .subscribe(
@@ -140,7 +140,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
     };
 
     this.$subscription.add(
-      this.packagesService.exportCSV(this.hotelId, config).subscribe((res) => {
+      this.packagesService.exportCSV(this.entityId, config).subscribe((res) => {
         FileSaver.saveAs(
           res,
           `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
@@ -159,7 +159,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.packagesService
         .updateLibraryItem<Partial<PackageData>, PackageResponse>(
-          this.hotelId,
+          this.entityId,
           rowData.id,
           { active: status },
           { params: '?type=PACKAGE' }

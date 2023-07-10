@@ -42,7 +42,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   isAllTabFilterRequired = true;
   triggerInitialData = false;
   cols = listingConfig.datatable.cols;
-  hotelId: string;
+  entityId: string;
   $subscription = new Subscription();
 
   constructor(
@@ -75,7 +75,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
     this.selectedTab = this.listingService.selectedTab;
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.loadInitialData([
           {
             order: sharedConfig.defaultOrder,
@@ -173,7 +173,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
 
-    return this.listingService.getListings(config, this.hotelId);
+    return this.listingService.getListings(config, this.entityId);
   }
 
   /**
@@ -208,7 +208,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
       ]),
     };
     this.$subscription.add(
-      this.listingService.exportListings(this.hotelId, config).subscribe(
+      this.listingService.exportListings(this.entityId, config).subscribe(
         (response) => {
           FileSaver.saveAs(
             response,
@@ -240,7 +240,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
   updateStatus(status, rowData) {
     this.$subscription.add(
       this.listingService
-        .updateListStatus(this.hotelId, rowData.id, { status: status })
+        .updateListStatus(this.entityId, rowData.id, { status: status })
         .subscribe(
           (_) => {
             this.loadInitialData();

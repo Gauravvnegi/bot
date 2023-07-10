@@ -41,7 +41,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
   cols = topicConfig.datatable.cols;
   globalQueries = [];
   $subscription = new Subscription();
-  hotelId: any;
+  entityId: any;
 
   constructor(
     public fb: FormBuilder,
@@ -72,7 +72,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         ...data['filter'].queryValue,
         ...data['dateRange'].queryValue,
       ];
-      this.hotelId = this.globalFilterService.hotelId;
+      this.entityId = this.globalFilterService.entityId;
       // fetch-api for records
       this.loadInitialData([
         ...this.globalQueries,
@@ -133,7 +133,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams(queries),
     };
-    return this.topicService.getHotelTopic(config, this.hotelId);
+    return this.topicService.getHotelTopic(config, this.entityId);
   }
 
   /**
@@ -146,7 +146,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
     const data = {
       active: event.checked,
     };
-    this.topicService.updateTopicStatus(this.hotelId, data, topicId).subscribe(
+    this.topicService.updateTopicStatus(this.entityId, data, topicId).subscribe(
       (response) => {
         this.loadData();
         this.snackbarService
@@ -254,7 +254,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
       ]),
     };
     this.$subscription.add(
-      this.topicService.exportCSV(this.hotelId, config).subscribe(
+      this.topicService.exportCSV(this.entityId, config).subscribe(
         (response) => {
           FileSaver.saveAs(
             response,

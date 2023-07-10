@@ -59,7 +59,7 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
   }
 
   ngOnInit(): void {
-    this.outletId = this.globalFilterService.hotelId;
+    this.outletId = this.globalFilterService.entityId;
     this.listenToTableChange();
   }
 

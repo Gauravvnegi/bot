@@ -42,7 +42,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   isAutoLayout = false;
   isCustomSort = true;
   triggerInitialData = false;
-  hotelId: string;
+  entityId: string;
   cols = guest.cols.datatable;
   tabFilterIdx = 0;
   globalQueries = [];
@@ -84,7 +84,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this.loadInitialData([
           ...this.globalQueries,
           {
@@ -148,7 +148,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
    */
   fetchDataFrom(
     queries,
-    defaultProps = { offset: this.first, limit: this.rowsPerPage }
+    defaultProps = { offset: this.first, limit: this.rowsPerPage, type: 'GUEST' }
   ): Observable<any> {
     this.resetRowSelection();
     queries.push(defaultProps);
@@ -174,7 +174,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           },
           ...this.getSelectedQuickReplyFiltersV2(),
         ],
-        { offset: this.first, limit: this.rowsPerPage }
+        { offset: this.first, limit: this.rowsPerPage, type: 'GUEST' }
       ).subscribe(
         (data) => {
           this.setRecords(data);
@@ -243,6 +243,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         },
         ...this.getSelectedQuickReplyFiltersV2(),
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
+        { type: 'GUEST' }
       ]),
     };
     this.$subscription.add(

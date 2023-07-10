@@ -56,7 +56,7 @@ export class GtmClosureComponent implements OnInit {
   };
   selectedDepartment;
   $subscription = new Subscription();
-  hotelId: string;
+  entityId: string;
   constructor(
     private dateService: DateService,
     private _globalFilterService: GlobalFilterService,

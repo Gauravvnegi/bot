@@ -1,17 +1,24 @@
 import { EntityState } from '@hospitality-bot/admin/shared';
 
-export type AgentResponseType = {
+export type AgentTableResponse = {
   id?: string;
-  nameTitle?: string;
+  salutation?: string;
   firstName: string;
-  lastName?: string;
+  lastName: string;
   contactDetails: {
     cc: string;
     contactNumber: string;
     emailId: string;
   };
-  nationality?: string;
+  nationality: string;
   age?: number;
+  type: string;
+  priceModifier: string;
+  priceModifierValue: string;
+  iataNumber: string;
+  isVerified: boolean;
+  status?: boolean;
+  code?: string;
   address: {
     addressLine1: string;
     city: string;
@@ -19,18 +26,14 @@ export type AgentResponseType = {
     countryCode: string;
     postalCode: string;
   };
-  iataNumber?: string;
-  priceModifier?: string; //'COMMISSION';
-  priceModifierType: string; //'PERCENTAGE';
-  priceModifierValue: string;
   companyId: string;
-  code?: string;
-  commission?: string;
-  action?: boolean;
+  company?: AgentTableResponse;
+  gender?: string;
+  dateOfBirth?: string;
 };
 
 export type AgentListResponse = {
-  records: AgentResponseType[];
+  records: AgentTableResponse[];
   total: number;
   entityTypeCounts: EntityState<string>;
   entityStateCounts: EntityState<string>;

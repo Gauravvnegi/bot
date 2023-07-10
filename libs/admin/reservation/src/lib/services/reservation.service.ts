@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class ReservationService extends ApiService {
 
-  
+
 
   getReservationDetails(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
@@ -15,9 +15,9 @@ export class ReservationService extends ApiService {
     return this.get(`/api/v1/countries`);
   }
 
-  getDocumentsByNationality(hotelId, nationality): Observable<any> {
+  getDocumentsByNationality(entityId, nationality): Observable<any> {
     return this.get(
-      `/api/v1/hotel/${hotelId}/support-documents?nationality=${nationality}`
+      `/api/v1/entity/${entityId}/support-documents?nationality=${nationality}`
     );
   }
 
@@ -89,11 +89,11 @@ export class ReservationService extends ApiService {
   }
 
   getGuestById(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}`);
+    return this.get(`/api/v1/members/${guestId}`);
   }
 
   getGuestReservations(guestId: string): Observable<any> {
-    return this.get(`/api/v1/guest/${guestId}/reservations`);
+    return this.get(`/api/v1/members/${guestId}/reservations`);
   }
 
   /**

@@ -33,18 +33,13 @@
         description="This is a free of cost services"
         formControlName="serviceIds"
         [itemList]=""
-        (onEmptyViewAction)="onCreateAndContinue('service')"
-        [noRecordsAction]="{
-          actionName: 'Create and Continue',
-          description:
-            'No services found. Tap the +Create and Continue to Import Services.',
-          imageSrc: 'assets/images/empty-table-service.png'
-        }"
+        (onEmptyViewAction)="onCreateAndContinue('import-services')"
+        [noRecordsAction]="noRecordActionForComp"
       >
         <hospitality-bot-button
           label="+ Import Services"
           variant="text"
-          (onClick)="onCreateAndContinue('service')"
+          (onClick)="onCreateAndContinue('import-services')"
         ></hospitality-bot-button>
       </hospitality-bot-custom-select>
     </div>
@@ -60,12 +55,7 @@
         description="Do not forget to add this cost in addition to the room cost"
         [itemList]=""
         (onEmptyViewAction)="onCreateAndContinue('menu')"
-        [noRecordsAction]="{
-          description:
-            'No Menu found. Tap the +Create and Continue to create the Menu.',
-          imageSrc: 'assets/images/empty-table-service.png',
-          actionName: 'Create and Continue'
-        }"
+        [noRecordsAction]="noRecordActionForMenu"
       >
         <hospitality-bot-button
           label="+ Add Menu"

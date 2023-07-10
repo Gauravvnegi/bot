@@ -41,7 +41,7 @@ export class PagesComponent implements OnInit {
       adminDetails['manageSiteList']
     );
 
-    this.getConfigData(localStorage.getItem(tokensConfig.hotelId));
+    this.getConfigData(localStorage.getItem(tokensConfig.entityId));
     this._userService.initUserDetails(get(adminDetails, ['userDetail']));
 
     // Setting cookies when login/refresh after setting userDetails
@@ -58,9 +58,9 @@ export class PagesComponent implements OnInit {
       );
   }
 
-  getConfigData(hotelId) {
+  getConfigData(entityId) {
     this._configService
-      .getColorAndIconConfig(hotelId)
+      .getColorAndIconConfig(entityId)
       .subscribe((response) => this._configService.$config.next(response));
   }
 }

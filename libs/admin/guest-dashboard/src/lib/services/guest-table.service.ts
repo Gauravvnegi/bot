@@ -40,7 +40,7 @@ export class GuestTableService extends ApiService {
     });
   }
 
-  getFeedback(hotelId): Observable<FeedbackConfigI> {
+  getFeedback(entityId): Observable<FeedbackConfigI> {
     return this.get(`/api/v1/cms/feedback-form`);
   }
 

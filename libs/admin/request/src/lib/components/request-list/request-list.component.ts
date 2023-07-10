@@ -42,7 +42,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   tabFilterItems = request.tabFilter;
 
   tabFilterIdx = 0;
-  hotelId: string;
+  entityId: string;
   constructor(
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
@@ -84,7 +84,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
           ...data['filter'].queryValue,
           ...data['dateRange'].queryValue,
         ];
-        this.hotelId = this.globalFilterService.hotelId;
+        this.entityId = this.globalFilterService.entityId;
         this._requestService.selectedRequest.next(null);
         this.loadInitialRequestList([
           ...this.globalQueries,
@@ -306,7 +306,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
    */
   getRequestWithSearchAndFilter(offset, limit): void {
     this._requestService
-      .searchRequest(this.hotelId, {
+      .searchRequest(this.entityId, {
         queryObj: this._adminUtilityService.makeQueryParams([
           ...this.globalQueries,
           {

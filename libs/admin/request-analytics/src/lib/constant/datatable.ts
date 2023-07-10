@@ -9,7 +9,7 @@ export enum ChipType {
 }
 
 export const inhouseStatus: Record<
-  'Closed' | 'Pending' | 'Timeout' | 'Todo',
+  'Closed' | 'Pending' | 'Timeout' | 'Todo' | 'Accept' | 'Reject',
   { label: string; type: FlagType }
 > = {
   Closed: {
@@ -27,5 +27,13 @@ export const inhouseStatus: Record<
   Todo: {
     label: 'Todo',
     type: 'active',
+  },
+  Accept: {
+    label: 'Accept',
+    type: 'completed',
+  },
+  Reject: {
+    label: 'Reject',
+    type: 'failed',
   },
 };

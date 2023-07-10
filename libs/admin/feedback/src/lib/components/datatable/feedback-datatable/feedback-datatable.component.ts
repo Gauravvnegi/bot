@@ -138,7 +138,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.loadInitialData([
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
       ]);
       this.getUserPermission(this.tabFilterItems[this.tabFilterIdx]?.value);
     } else this.selectedRows = [];
@@ -179,7 +179,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.loadInitialData([
             ...this.globalQueries,
             { order: sharedConfig.defaultOrder },
-            ...this.getSelectedQuickReplyFilters(),
+            ...this.getSelectedQuickReplyFiltersV2(),
           ]);
         }
       })
@@ -202,7 +202,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             this.loadInitialData([
               ...this.globalQueries,
               { order: sharedConfig.defaultOrder },
-              ...this.getSelectedQuickReplyFilters(),
+              ...this.getSelectedQuickReplyFiltersV2(),
             ]);
         }
       })
@@ -282,18 +282,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function getSelectedQuickReplyFilters To get the selected chips.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters(): SelectedChip[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected === true)
-      .map((item) => ({
-        entityType: item.value,
-      }));
-  }
-
-  /**
    * @function fetchDataFrom To fetch api data.
    * @param queries The filter data.
    * @param defaultProps The default page data.
@@ -341,7 +329,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         [
           ...this.globalQueries,
           { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFiltersV2(),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -361,56 +349,26 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    * @param data The api response data for feedback.
    */
   setRecords(data): void {
+    let modifiedData;
     if (
       this.tabFilterItems[this.tabFilterIdx].value ===
       this.globalFeedbackConfig.types.transactional
     )
-      this.values = new FeedbackTable().deserialize(data, this.outlets).records;
+      modifiedData = new FeedbackTable().deserialize(data, this.outlets);
     else
-      this.values = new StayFeedbackTable().deserialize(
+      modifiedData = new StayFeedbackTable().deserialize(
         data,
         this.outlets,
         this.colorMap
-      ).records;
-    this.totalRecords =
-      data.entityTypeCounts[
-        this.tabFilterItems[this.tabFilterIdx].chips.filter(
-          (item) => item.isSelected
-        )[0].value
-      ];
-    this.tabFilterItems[this.tabFilterIdx].total = data.total;
-    data.entityTypeCounts &&
-      this.updateQuickReplyFilterCount(data.entityTypeCounts);
-    this.updateTotalRecords();
+      );
+
+    this.values = modifiedData.records;
+    this.initFilters(
+      modifiedData.entityTypeCounts,
+      modifiedData.entityStateCounts,
+      modifiedData.totalRecord
+    );
     this.loading = false;
-  }
-
-  updateQuickReplyFilterCount(countObj: any): void {
-    if (countObj) {
-      if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
-        this.setFilterChips(
-          this.tabFilterItems[this.tabFilterIdx]?.chips,
-          countObj
-        );
-      } else if (this.filterChips?.length) {
-        this.setFilterChips(this.filterChips, countObj);
-      }
-    }
-  }
-
-  /**
-   * @function setFilterChips To set the total count for the chips.
-   * @param chips The chips array.
-   * @param countObj The object with count for all the chip.
-   */
-  setFilterChips(chips, countObj) {
-    countObj = Object.entries(countObj).reduce((acc, [key, value]) => {
-      acc[key.toUpperCase()] = value;
-      return acc;
-    }, {});
-    chips.forEach((chip) => {
-      chip.total = countObj[chip.value] ?? 0;
-    });
   }
 
   updateFeedbackState(event) {
@@ -436,26 +394,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.loadInitialData([
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
       ]);
     });
-  }
-
-  /**
-   * @function updatePaginations To handle page change event.
-   * @param event The lazy load event.
-   */
-  updatePaginations(event: LazyLoadEvent): void {
-    this.first = event.first;
-    this.rowsPerPage = event.rows;
-  }
-
-  /**
-   * @function updatePaginationForFilterItems To update the page number for a tab.
-   * @param pageEvent The page number.
-   */
-  updatePaginationForFilterItems(pageEvent: number): void {
-    this.tabFilterItems[this.tabFilterIdx].lastPage = pageEvent;
   }
 
   /**
@@ -523,7 +464,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
         entityIds: this.setEntityId(),
       },
-      ...this.getSelectedQuickReplyFilters(),
+      ...this.getSelectedQuickReplyFiltersV2(),
       ...this.selectedRows.map((item) => ({ ids: item.id })),
     ];
     if (
@@ -573,7 +514,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           order: sharedConfig.defaultOrder,
           feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
       ]),
     };
 
@@ -699,7 +640,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       [
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
       ],
       false
     );

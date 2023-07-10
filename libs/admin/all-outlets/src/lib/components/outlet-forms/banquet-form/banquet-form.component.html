@@ -7,31 +7,24 @@
         label="Complimentary Services"
         description="This is a free of cost services"
         formControlName="serviceIds"
-        [itemList]=""
-        [noRecordsAction]="{
-          actionName: 'Create and Continue',
-          description:
-            'No services found. Tap the +Create and Continue to Import Services.',
-          imageSrc: 'assets/images/empty-table-service.png'
-        }"
+        [itemList]="compServices"
+        (onEmptyViewAction)="onCreateAndContinue('import-services')"
+        [noRecordsAction]="noRecordActionForComp"
+        type="icon"
       >
         <hospitality-bot-button
           label="+ Import Services"
           variant="text"
-          link=""
+          (onClick)="onCreateAndContinue('import-services')"
         ></hospitality-bot-button>
       </hospitality-bot-custom-select>
       <hospitality-bot-custom-select
         label="Paid Services"
         description="Do not forget to add this cost in addition to the room cost"
         formControlName="serviceIds"
-        [itemList]=""
-        [noRecordsAction]="{
-          actionName: 'Create and Continue',
-          description:
-            'No services found. Tap the +Create and Continue to Create Services',
-          imageSrc: 'assets/images/empty-table-service.png'
-        }"
+        [itemList]="paidServices"
+        (onEmptyViewAction)="onCreateAndContinue('service')"
+        [noRecordsAction]="noRecordActionForPaid"
       ></hospitality-bot-custom-select>
     </div>
   </div>
@@ -58,21 +51,21 @@
       </hospitality-bot-prefix-field>
       <hospitality-bot-prefix-field
         preControlName="area"
-        postControlName="areaUnit"
+        postControlName="dimension"
         class="half-width"
         label="Area"
         [settings]="{
           preFieldType: 'input',
           postFieldType: 'select',
           layout: 'pre-main',
-          postOptions: areaUnits
+          postOptions: dimensions
         }"
       ></hospitality-bot-prefix-field>
       <hospitality-bot-prefix-field
         label="Days Of operation"
         class="half-width"
-        preControlName="openingDay"
-        postControlName="closingDay"
+        preControlName="dayOfOperationStart"
+        postControlName="dayOfOperationEnd"
         preFieldType="select"
         postFieldType="select"
         [preOptions]="days"
@@ -86,8 +79,8 @@
       <hospitality-bot-prefix-field
         label="Timings"
         class="half-width"
-        preControlName="openingHour"
-        postControlName="closingHour"
+        preControlName="timeDayStart"
+        postControlName="timeDayEnd"
         preFieldType="select"
         postFieldType="select"
         [preOptions]="hours"

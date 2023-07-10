@@ -20,6 +20,13 @@ export const noRecordActionForComp = {
   imageSrc: 'assets/images/empty-table-service.png',
 };
 
+export const noRecordActionForPaid = {
+  actionName: 'Create and Continue',
+  description:
+    'No services found. Tap the +Create and Continue to Create Service.',
+  imageSrc: 'assets/images/empty-table-service.png',
+};
+
 export const noRecordActionForMenu = {
   description:
     'No Menu found. Tap the +Create and Continue to create the Menu.',
@@ -31,6 +38,12 @@ export const noRecordActionForCompWithId = {
   actionName: '+ Import Services',
   description:
     'No Services Found. Tap the + Import Service to Import Services.',
+  imageSrc: 'assets/images/empty-table-service.png',
+};
+
+export const noRecordActionForPaidWithId = {
+  actionName: '+ Add Service',
+  description: 'No Services Found. Tap the + Add Service to create Service.',
   imageSrc: 'assets/images/empty-table-service.png',
 };
 export const noRecordActionForMenuWithId = {

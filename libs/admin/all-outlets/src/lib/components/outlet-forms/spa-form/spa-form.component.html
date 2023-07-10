@@ -7,18 +7,14 @@
         label="Services"
         description="Do not forget to add this cost in addition to the room cost"
         formControlName="serviceIds"
-        [itemList]=""
-        [noRecordsAction]="{
-          actionName: 'Create and Continue',
-          description:
-            'No services found. Tap the +Create and Continue to Import Services.',
-          imageSrc: 'assets/images/empty-view-food-package.jpg'
-        }"
+        [itemList]="paidServices"
+        (onEmptyViewAction)="onCreateAndContinue('service')"
+        [noRecordsAction]="noRecordActionForPaid"
       >
         <hospitality-bot-button
           label="+ Add Service"
           variant="outlined"
-          link="pages"
+          (onEmptyViewAction)="onCreateAndContinue('service')"
         ></hospitality-bot-button>
       </hospitality-bot-custom-select>
     </div>
@@ -30,8 +26,8 @@
       <hospitality-bot-prefix-field
         label="Days Of operation"
         class="half-width"
-        preControlName="openingDay"
-        postControlName="closingDay"
+        preControlName="dayOfOperationStart"
+        postControlName="dayOfOperationEnd"
         preFieldType="select"
         postFieldType="select"
         [preOptions]="days"
@@ -45,8 +41,8 @@
       <hospitality-bot-prefix-field
         label="Timings"
         class="half-width"
-        preControlName="openingHour"
-        postControlName="closingHour"
+        preControlName="timeDayStart"
+        postControlName="timeDayEnd"
         preFieldType="select"
         postFieldType="select"
         [preOptions]="hours"

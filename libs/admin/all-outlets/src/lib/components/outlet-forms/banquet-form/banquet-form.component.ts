@@ -1,6 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ControlContainer } from '@angular/forms';
-import { areaUnits, days, hours } from '../../../constants/data';
+import { dimensions, days, hours } from '../../../constants/data';
+import { Feature } from '../../../types/outlet';
+import {
+  noRecordActionForComp,
+  noRecordActionForCompWithId,
+  noRecordActionForMenu,
+  noRecordActionForMenuWithId,
+  noRecordActionForPaid,
+  noRecordActionForPaidWithId,
+} from '../../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-banquet-form',
@@ -10,8 +19,30 @@ import { areaUnits, days, hours } from '../../../constants/data';
 export class BanquetFormComponent implements OnInit {
   hours = hours;
   days = days;
-  areaUnits = areaUnits;
+  dimensions = dimensions;
+  noRecordActionForComp = noRecordActionForComp;
+  noRecordActionForMenu = noRecordActionForMenu;
+  noRecordActionForPaid = noRecordActionForPaid;
+
+  @Input() set outletId(id: string) {
+    if (id) {
+      this.modifyNoRecordActions();
+    }
+  }
+  @Input() compServices: any[] = [];
+  @Input() paidServices: any[] = [];
+  @Output() onCreateAndContinueFeature = new EventEmitter<Feature>();
   constructor(public controlContainer: ControlContainer) {}
 
   ngOnInit(): void {}
+
+  onCreateAndContinue(features: Feature) {
+    this.onCreateAndContinueFeature.emit(features);
+  }
+
+  modifyNoRecordActions() {
+    this.noRecordActionForComp = noRecordActionForCompWithId;
+    this.noRecordActionForPaid = noRecordActionForPaidWithId;
+    this.noRecordActionForMenu = noRecordActionForMenuWithId;
+  }
 }

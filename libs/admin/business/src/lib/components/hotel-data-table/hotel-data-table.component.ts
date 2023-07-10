@@ -16,7 +16,12 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { cols, tableName } from '../../constant/hotel-data-table';
+import {
+  BrandTableName,
+  HotelTableName,
+  cols,
+  tableName,
+} from '../../constant/hotel-data-table';
 import { BusinessService } from '../../services/business.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
@@ -37,7 +42,7 @@ import { HotelFormDataService } from '../../services/hotel-form.service';
 export class HotelDataTableComponent extends BaseDatatableComponent
   implements OnInit {
   cols = cols;
-  tableName = tableName;
+  tableName = BrandTableName;
   $subscription = new Subscription();
   entityId: string;
   hotelId: string;
@@ -65,6 +70,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.initTableValue();
     this.hotelId = this.route.snapshot.params['entityId'];
+    this.tableName = this.hotelId ? HotelTableName : BrandTableName;
   }
 
   /**

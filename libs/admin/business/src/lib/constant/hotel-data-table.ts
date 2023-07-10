@@ -1,4 +1,6 @@
-export const tableName = 'Property / Outlet';
+export const BrandTableName = 'Property / Outlet';
+export const HotelTableName = 'Outlet';
+
 export const cols = [
   {
     field: 'name',

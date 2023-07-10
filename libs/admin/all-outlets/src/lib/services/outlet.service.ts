@@ -80,15 +80,17 @@ export class OutletService extends ApiService {
   };
 
   //dummy
-  getOutletById(outletId: string): Observable<any> {
+  getOutletById(outletId: string): Observable<OutletResponse> {
     return this.get(`/api/v1/entity/${outletId}?type=OUTLET`);
   }
 
-  updateOutlet(outletId: string, data): Observable<any> {
-    return this.patch(`/api/v1/entity/${outletId}`, data);
+  updateOutlet(outletId: string, data): Observable<OutletResponse> {
+    return this.patch(`/api/v1/entity/${outletId}?type=OUTLET`, data);
+
+    // return this.patch(`/api/v1/entity/${entityId}?type=HOTEL`, data);
   }
 
-  addOutlet(data): Observable<any> {
+  addOutlet(data): Observable<OutletResponse> {
     return this.post(
       `/api/v1/entity/onboarding?source=CREATE_WITH&onboardingType=OUTLET`,
       data
@@ -126,10 +128,7 @@ export class OutletService extends ApiService {
     return this.get(`/api/v1/food-package/${packageId}`);
   }
 
-  getServices(
-    entityId: string,
-    config?: QueryConfig
-  ): Observable<ServiceResponse> {
+  getServices(entityId: string, config?: QueryConfig): Observable<any> {
     return this.get(
       `/api/v1/entity/${entityId}/library${config?.params ?? ''}`,
       { headers: { 'entity-id': entityId } }

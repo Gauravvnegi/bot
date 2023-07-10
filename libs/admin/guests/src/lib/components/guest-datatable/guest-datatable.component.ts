@@ -31,7 +31,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   isQuickFilters = false;
   isTabFilters = false;
 
-  isAllTabFilterRequired = true;
   entityId: string;
   cols = guestCols;
   globalQueries = [];

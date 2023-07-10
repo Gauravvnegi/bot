@@ -33,7 +33,6 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   cols = cols;
   entityId: string;
 
-  isAllTabFilterRequired = true;
   $subscription = new Subscription();
 
   constructor(

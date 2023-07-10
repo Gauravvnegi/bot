@@ -50,6 +50,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   isPricingDynamic = false;
 
   plans: RatePlanOptions[] = [];
+  removedRatePlans: string[] = [];
   planCount = 0;
 
   selectedIndex = 0;
@@ -165,7 +166,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
               data.ratePlans.forEach((item: any, idx: number) => {
                 if (idx > 0) this.addNewRatePlan();
               });
-              this.useForm.patchValue(data, { emitEvent: false });
+              this.useForm.patchValue(data);
             },
             (err) => {
               this.snackbarService.openSnackBarAsText(err.error.message);
@@ -275,6 +276,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   onRemove(value: string, index: number): void {
     const removedPlan = this.ratePlanArray.at(index).get('ratePlanTypeId')
       .value;
+    this.removedRatePlans.push(removedPlan);
     this.ratePlanArray.removeAt(index);
     this.setDisabled(value);
     this.planCount--;
@@ -491,6 +493,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   updateDetails() {
     const data = {
       ...this.getRoomTypeModData(),
+      removeRatePlan: this.removedRatePlans,
       id: this.roomTypeId,
     };
 
@@ -520,7 +523,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       ratePlans,
       ...rest
     } = this.useForm.getRawValue() as RoomTypeFormData;
-
     let staticRatePlanModData: any[];
     if (!this.isPricingDynamic) {
       staticRatePlanModData = ratePlans.map((ratePlan) => {
@@ -535,11 +537,13 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       });
     }
 
+    // const ratePlan = this.isPricingDynamic
+    //   ? { ratePlans: ratePlans }
+    //   : { ratePlans: staticRatePlanModData };
+
     const data = {
       ...rest,
-      ...(this.isPricingDynamic
-        ? { ratePlans: ratePlans }
-        : { ratePlans: staticRatePlanModData }),
+      ratePlans: staticRatePlanModData,
       roomAmenityIds: complimentaryAmenities.concat(paidAmenities),
     };
 

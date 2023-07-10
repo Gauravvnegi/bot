@@ -165,7 +165,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         this.loadInitialData([
           ...this.globalQueries,
           { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFiltersV2(),
         ]);
       })
     );
@@ -208,20 +208,21 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
    * @param data The api response data for feedback.
    */
   setRecords(data): void {
+    let feedback;
     if (this.feedbackType === this.globalFeedbackConfig.types.transactional)
-      this.values = new FeedbackTable().deserialize(data, this.outlets).records;
+      feedback = new FeedbackTable().deserialize(data, this.outlets);
     else
-      this.values = new StayFeedbackTable().deserialize(
+      feedback = new StayFeedbackTable().deserialize(
         data,
         this.outlets,
         this.colorMap
-      ).records;
-    data.entityTypeCounts &&
-      this.updateTabFilterCount(data.entityTypeCounts, data.total);
-    data.entityStateCounts &&
-      this.updateQuickReplyFilterCount(data.entityStateCounts);
-    this.updateTotalRecords();
-
+      );
+    this.values = feedback.records;
+    this.initFilters(
+      feedback.entityTypeCounts,
+      feedback.entityStateCounts,
+      feedback.total
+    );
     this.loading = false;
   }
 
@@ -249,7 +250,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         this.loadInitialData([
           ...this.globalQueries,
           { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFiltersV2(),
         ]);
       },
       ({ error }) => {}
@@ -291,7 +292,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
           order: sharedConfig.defaultOrder,
           feedbackType: this.feedbackType,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
       ]),
     };
 
@@ -320,7 +321,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
             [
               ...this.globalQueries,
               { order: sharedConfig.defaultOrder },
-              ...this.getSelectedQuickReplyFilters(),
+              ...this.getSelectedQuickReplyFiltersV2(),
             ],
             false
           );
@@ -331,18 +332,6 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         }
       )
     );
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To get the selected chips.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters(): SelectedChip[] {
-    return this.tabFilterItems[this.tabFilterIdx].chips
-      .filter((item) => item.isSelected === true)
-      .map((item) => ({
-        entityState: item.value,
-      }));
   }
 
   /**
@@ -361,7 +350,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       [
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
       ],
       true
     );
@@ -379,7 +368,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         feedbackType: this.feedbackType,
         entityIds: this.setEntityId(),
       },
-      ...this.getSelectedQuickReplyFilters(),
+      ...this.getSelectedQuickReplyFiltersV2(),
       ...this.selectedRows.map((item) => ({ ids: item.id })),
     ];
     if (

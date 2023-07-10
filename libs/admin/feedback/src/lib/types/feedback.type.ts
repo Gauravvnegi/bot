@@ -51,4 +51,12 @@ export type StatCard = {
   additionalData: string | number;
   comparisonPercent: number;
   color?: string;
-}
+};
+
+export type FeedbackStatusType =
+  | 'HIGHPOTENTIAL'
+  | 'HIGHRISK'
+  | 'TODO'
+  | 'INPROGRESS'
+  | 'RESOLVED'
+  | 'NOACTION';

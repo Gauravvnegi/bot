@@ -17,6 +17,7 @@
     [(first)]="first"
     [totalRecords]="totalRecords"
     [filterDelay]="0"
+    *ngIf="!isEmpty; else emptyTable"
   >
     <ng-template pTemplate="emptymessage">
       <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>

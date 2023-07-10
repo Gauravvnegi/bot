@@ -18,7 +18,14 @@ export type SearchGuestResponse = {
     cc?: string;
     contactNumber?: string;
     emailId?: string;
-  }
+  };
   nationality?: string;
   age: number;
-}
+};
+
+export type GuestModalStatus =
+  | 'BOT'
+  | 'EMAIL'
+  | 'MICROSITE'
+  | 'OTHERS'
+  | 'WHATSAPP';

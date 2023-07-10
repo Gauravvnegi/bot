@@ -12,8 +12,11 @@
       ></hospitality-bot-export-list>
     </hospitality-bot-modal-header>
   </div>
-  
-  <div class="table-container" [ngStyle]="tabFilterItems[tabFilterIdx]?.total ? {} : { 'padding': '10px' }">
+
+  <div
+    class="table-container"
+    [ngStyle]="tabFilterItems[tabFilterIdx]?.total ? {} : { padding: '10px' }"
+  >
     <ng-container>
       <p-table
         #dt
@@ -38,15 +41,16 @@
         (sortFunction)="customSort($event)"
         [customSort]="isCustomSort"
         (onFilter)="onDataFilter($event)"
-        *ngIf="tabFilterItems[tabFilterIdx]?.total; else emptyTable"
+        *ngIf="!isEmpty; else emptyTable"
       >
         <ng-template pTemplate="caption">
           <div class="caption__wrapper" [formGroup]="tableFG">
             <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
             <hospitality-bot-filter-chips
               *ngIf="isQuickFilters"
-              [chips]="tabFilterItems[tabFilterIdx].chips"
+              [chips]="filterChips"
               (onChange)="toggleQuickReplyFilter($event)"
+              [selectedChips]="selectedFilterChips"
             ></hospitality-bot-filter-chips>
           </div>
         </ng-template>

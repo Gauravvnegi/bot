@@ -105,17 +105,14 @@
           <ng-container matColumnDef="unitPrice">
             <th mat-header-cell *matHeaderCellDef>Unit Price</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.currency }}
-              {{ element.base }}
+              {{ element.base | currency: element.currency }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="amount">
             <th mat-header-cell *matHeaderCellDef>Amount</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.currency }}
-
-              {{ element.amount }}
+              {{ element.amount | currency: element.currency }}
             </td>
           </ng-container>
 
@@ -140,18 +137,14 @@
           <ng-container matColumnDef="discount">
             <th mat-header-cell *matHeaderCellDef>Discount</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.currency }}
-
-              {{ element.discount }}
+              {{ element.discount | currency: element.currency }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="totalAmount">
             <th mat-header-cell *matHeaderCellDef>Total Amount</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.currency }}
-
-              {{ element.totalAmount | number: '1.1-1' }}
+              {{ element.totalAmount | currency: element.currency }}
             </td>
           </ng-container>
 
@@ -163,8 +156,7 @@
             <mat-label class="label">Total Amount:</mat-label>
             <span class="value">
               {{
-                detailsData.paymentDetails.totalAmount
-                  | number: '1.1-1'
+                +detailsData.paymentDetails.totalAmount
                   | currency: detailsData.paymentDetails.currency
               }}</span
             >
@@ -174,8 +166,7 @@
             <span class="value"
               >-
               {{
-                detailsData.paymentDetails.totalDiscount
-                  | number: '1.1-1'
+                +detailsData.paymentDetails.totalDiscount
                   | currency: detailsData.paymentDetails.currency
               }}</span
             >
@@ -185,8 +176,7 @@
             <span class="value"
               >-
               {{
-                detailsData.paymentDetails.paidAmount
-                  | number: '1.1-1'
+                +detailsData.paymentDetails.paidAmount
                   | currency: detailsData.paymentDetails.currency
               }}</span
             >
@@ -195,8 +185,7 @@
             <mat-label class="label">Due Amount:</mat-label>
             <span class="value">
               {{
-                detailsData.paymentDetails.dueAmount
-                  | number: '1.1-1'
+                +detailsData.paymentDetails.dueAmount
                   | currency: detailsData.paymentDetails.currency
               }}</span
             >
@@ -400,7 +389,7 @@
               <ng-container matColumnDef="totalAmount">
                 <th mat-header-cell *matHeaderCellDef>Total Amount</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element?.amount | number: '1.1-1' }}
+                  {{ +element?.amount | currency: element.currency }}
                 </td>
               </ng-container>
 

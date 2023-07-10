@@ -4,13 +4,13 @@ export const navRoute = {
   eFrontdesk: { label: 'eFrontdesk', link: './' },
   manageBooking: {
     label: 'Booking',
-    link: '/pages/efrontdesk/manage-booking',
+    link: '/pages/efrontdesk/booking',
   },
   addBooking: {
     label: 'Add Booking',
-    link: '/pages/efrontdesk/manage-booking/add-booking',
+    link: '/pages/efrontdesk/booking/add-booking',
   },
-  editBooking: { label: 'Edit Booking', link: '/pages/efrontdesk/manage-booking/edit-booking/:id' },
+  editBooking: { label: 'Edit Booking', link: '/pages/efrontdesk/booking/edit-booking/:id' },
   addGuest: { label: 'Add Guest', link: './' },
 };
 

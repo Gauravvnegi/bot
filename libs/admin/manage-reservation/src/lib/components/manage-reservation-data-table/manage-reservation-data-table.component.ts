@@ -353,7 +353,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     const queryParams = expandAccordion ? { expandAccordion: true } : undefined;
     this.router.navigate(
       [
-        `/pages/efrontdesk/manage-booking/${manageBookingRoutes.editBooking.route}/${id}`,
+        `/pages/efrontdesk/booking/${manageBookingRoutes.editBooking.route}/${id}`,
       ],
       { queryParams }
     );

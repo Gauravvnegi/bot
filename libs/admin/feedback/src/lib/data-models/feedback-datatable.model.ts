@@ -12,9 +12,6 @@ export class FeedbackTable {
 
   deserialize(input, outlets) {
     Object.assign(this, set({}, 'total', get(input, ['total'])));
-    // this.entityStateCounts = new EntityStateCounts().deserialize(
-    //   input.entityStateCounts
-    // );
     this.entityStateCounts = input['entityStateCounts'];
     this.entityTypeCounts = input['entityTypeCounts'];
 

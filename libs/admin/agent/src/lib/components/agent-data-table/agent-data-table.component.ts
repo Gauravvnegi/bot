@@ -30,7 +30,7 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   readonly routes = agentRoutes;
 
   entityId: string;
-
+  isAllTabFilterRequired = true;
   tableName = title;
   cols = cols;
 

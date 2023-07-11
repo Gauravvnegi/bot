@@ -25,7 +25,7 @@ export class Details implements IDeserializable {
   pmsBooking: boolean;
 
   deserialize(input: any, timezone) {
-    const hotelNationality = input.hotel.address.countryCode;
+    const hotelNationality = input?.hotel?.address?.countryCode;
     this.invoicePrepareRequest = input.invoicePrepareRequest || false;
     this.pmsBooking = input.pmsBooking || false;
     this.guestDetails = new GuestDetailDS().deserialize(

@@ -4,8 +4,9 @@ import { Cols } from '@hospitality-bot/admin/shared';
 export const cols: Cols[] = [
   {
     field: 'name',
-    header: 'Company Name / Code',
+    header: 'Name / Code',
     sortType: 'string',
+    searchField: ['name', 'id'],
   },
   {
     field: 'contactName',
@@ -45,6 +46,6 @@ export const cols: Cols[] = [
   },
 ];
 
-export const chips = filtersChips.map((item)=> ({ ...item}));
+export const chips = filtersChips.map((item) => ({ ...item }));
 
-export const title = 'Company'
+export const title = 'Company';

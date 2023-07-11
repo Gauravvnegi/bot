@@ -32,8 +32,6 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   tableName = 'Guest List';
 
   guestRoutes = manageGuestRoutes;
-  isQuickFilters = false;
-  isTabFilters = false;
 
   entityId: string;
   cols = guestCols;
@@ -53,11 +51,11 @@ export class GuestDatatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    // this.getDataTableValue();
+    this.getDataTableValue();
   }
 
   loadData(event: LazyLoadEvent): void {
-    // this.getDataTableValue();
+    this.getDataTableValue();
   }
 
   getDataTableValue() {
@@ -68,8 +66,8 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           const guestData = new GuestTable().deserialize(res);
           this.values = guestData.records;
           this.initFilters(
-            guestData.entityTypeCounts,
             guestData.entityStateCounts,
+            guestData.entityTypeCounts,
             guestData.totalRecord
           );
           this.loading = false;
@@ -116,7 +114,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
 
   searchGuest(key: string) {
     if (!key.length) {
-      this.values = [];
+      this.getDataTableValue();
       return;
     }
     this.loading = true;

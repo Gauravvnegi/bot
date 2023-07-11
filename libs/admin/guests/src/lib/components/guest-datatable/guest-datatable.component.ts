@@ -130,10 +130,11 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     this.loading = true;
 
     const config = {
-      queryObj: this.adminUtilityService.makeQueryParams([
+      params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
         {
           order: 'DESC',
+          type: 'GUEST',
           entityType: this.selectedTab,
         },
         ...this.getSelectedQuickReplyFiltersV2(),

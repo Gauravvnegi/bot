@@ -9,9 +9,11 @@
     ></hospitality-bot-button>
 
     <hospitality-bot-export-list
+      [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </div>
 </div>

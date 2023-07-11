@@ -48,6 +48,10 @@ export class AgentService extends ApiService {
     });
   }
 
+  searchAgent(config: QueryConfig) {
+    return this.get(`/api/v1/search/members${config.params}`);
+  }
+
   exportCSV(config: QueryConfig): Observable<any> {
     return this.get(`/api/v1/members/export${config?.params}`, {
       responseType: 'blob',

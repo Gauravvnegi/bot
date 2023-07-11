@@ -1,6 +1,12 @@
 import { Component, Input, OnInit, SimpleChange } from '@angular/core';
 import { FormComponent } from '../form-component/form.components';
-import { ControlContainer, Form, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  ControlContainer,
+  Form,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 declare let google: any;
@@ -34,6 +40,11 @@ export class AddressComponent extends FormComponent implements OnInit {
     this.addressForm = this.fb.group({
       addressData: [[]],
     });
+
+    if (
+      Validators.required(this.controlContainer.control.get(this.controlName))
+    )
+      this.addressForm.get('addressData').setValidators([Validators.required]);
   }
 
   getValueFromParent() {

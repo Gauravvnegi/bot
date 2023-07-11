@@ -1,3 +1,4 @@
+@import '../form-component/form.component.scss';
 :host ::ng-deep .label__main {
   overflow: visible;
   text-overflow: unset;
@@ -6,6 +7,6 @@
   position: relative;
 }
 
-:host ::ng-deep .label{
+:host ::ng-deep .label {
   display: block !important;
 }

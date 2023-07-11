@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -14,7 +14,7 @@ import { agentRoutes } from '../../constant/routes';
 import * as FileSaver from 'file-saver';
 import { QueryConfig } from '../../types/agent';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { AgentResponseModel } from '../../models/agent.model';
+import { AgentModel, AgentResponseModel } from '../../models/agent.model';
 import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
@@ -33,6 +33,8 @@ export class AgentDataTableComponent extends BaseDatatableComponent
 
   tableName = title;
   cols = cols;
+
+  searchForm: FormGroup;
 
   subscription$ = new Subscription();
 
@@ -91,6 +93,8 @@ export class AgentDataTableComponent extends BaseDatatableComponent
         {
           type: 'AGENT',
           entityId: this.entityId,
+          orderBy: 'DESC',
+          sort: 'created',
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -138,6 +142,17 @@ export class AgentDataTableComponent extends BaseDatatableComponent
     this.router.navigate([
       `/pages/members/agent/${this.routes.editAgent.route}/${rowData.id}`,
     ]);
+  }
+
+  searchAgent(key: string) {
+    !key.length && this.initTable();
+    this.loading = true;
+    this.agentService
+      .searchAgent({ params: `?key=${key}&type=AGENT` })
+      .subscribe((res) => {
+        this.values = res.map((item) => new AgentModel().deserialize(item));
+        this.loading = false;
+      });
   }
 
   /**

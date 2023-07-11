@@ -7,7 +7,7 @@
 </hospitality-bot-navigation-header>
 
 <form class="wrapper" [formGroup]="userForm">
-  <div class="form-block">
+  <div class="form-block" *ngIf="!dataLoading; else loader">
     <hospitality-bot-custom-file-upload
       class="two-third-width"
       formControlName="profileUrl"
@@ -245,3 +245,7 @@
     </div>
   </div>
 </form>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>

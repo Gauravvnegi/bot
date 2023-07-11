@@ -97,7 +97,7 @@ export class RoomTypeForm {
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  ratePlans: StaticPricingRatePlan[] | DynamicPricingRatePlan[];
+  ratePlans: StaticPricingRatePlan[];
   maxOccupancy: number;
   maxChildren: number;
   maxAdult: number;
@@ -126,6 +126,7 @@ export class RoomTypeForm {
       label: '',
       basePrice: ratePlan.basePrice,
       basePriceCurrency: ratePlan.basePriceCurrency,
+      id: ratePlan.id,
     }));
 
     return this;

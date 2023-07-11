@@ -17,6 +17,7 @@ import {
   DynamicPricingRatePlan,
   RoomTypeFormData,
   ServicesTypeValue,
+  StaticPricingMod,
   StaticPricingRatePlan,
   errorMessages,
   noRecordAction,
@@ -145,47 +146,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.initFormSubscription();
   }
 
-  initFormDetails() {
-    this.pageTitle = 'Update Room Type';
-    this.navRoutes[2].label = 'Update Room Type';
-
-    if (!this.roomService.roomTypeFormState) {
-      this.subscription$.add(
-        this.roomService
-          .getRoomTypeById(this.entityId, this.roomTypeId)
-          .subscribe(
-            (res) => {
-              const data = new RoomTypeForm().deserialize(res);
-              // data.ratePlans = data.ratePlans.map((item: any) => {
-              //   return {
-              //     ...item,
-              //     label: this.getPlanLabel(item.ratePlanTypeId),
-              //   };
-              // });
-
-              // data.ratePlans.forEach((item: any, idx: number) => {
-              //   if (idx > 0) this.addNewRatePlan();
-              // });
-              this.useForm.patchValue(data);
-            },
-            (err) => {
-              this.snackbarService.openSnackBarAsText(err.error.message);
-            }
-          )
-      );
-    }
-  }
-
-  getPlanLabel(id: string) {
-    let label: string;
-    this.configService.$config.subscribe((value) => {
-      const { roomRatePlans } = value;
-      const plan = roomRatePlans.find((plan: any) => plan.id === id);
-      label = plan.label;
-    });
-    return label;
-  }
-
   /**
    * @function initOptionsConfig To get all the dropdown options
    */
@@ -215,6 +175,48 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.getServices(ServicesTypeValue.COMPLIMENTARY);
   }
 
+  initFormDetails() {
+    this.pageTitle = 'Update Room Type';
+    this.navRoutes[2].label = 'Update Room Type';
+
+    if (!this.roomService.roomTypeFormState) {
+      this.subscription$.add(
+        this.roomService
+          .getRoomTypeById(this.entityId, this.roomTypeId)
+          .subscribe(
+            (res) => {
+              let data = new RoomTypeForm().deserialize(res);
+              data.ratePlans = data.ratePlans.map(
+                (item: StaticPricingRatePlan) => {
+                  return {
+                    ...item,
+                    label: this.getPlanLabel(item.ratePlanTypeId),
+                  };
+                }
+              );
+              data.ratePlans.forEach((item: StaticPricingRatePlan) => {
+                this.addNewRatePlan(item.ratePlanTypeId, item.label);
+              });
+              this.useForm.patchValue(data);
+            },
+            (err) => {
+              this.snackbarService.openSnackBarAsText(err.error.message);
+            }
+          )
+      );
+    }
+  }
+
+  getPlanLabel(id: string) {
+    let label: string;
+    this.configService.$config.subscribe((value) => {
+      const { roomRatePlans } = value;
+      const plan = roomRatePlans.find((plan: any) => plan.id === id);
+      label = plan.label;
+    });
+    return label;
+  }
+
   getRatePlans(ratePlans: RatePlanResponse[]) {
     const plansData = ratePlans.map((option, index) => ({
       label: option.label,
@@ -224,7 +226,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       command: () => this.handleRatePlan(option.id, option.label),
     }));
     this.plans = plansData;
-    this.addNewRatePlan();
+    if (!this.roomTypeId) this.addNewRatePlan();
   }
 
   /**
@@ -258,7 +260,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     const ratePlanIds = this.ratePlanArray.controls.map(
       (control) => control.get('ratePlanTypeId').value
     );
-
     // Disables currently selected rate plans in the array
     if (ratePlanIds.includes(value)) {
       selectedRatePlans.map((type) => (type.disabled = true));
@@ -276,7 +277,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   onRemove(value: string, index: number): void {
     const removedPlan = this.ratePlanArray.at(index).get('ratePlanTypeId')
       .value;
-    this.removedRatePlans.push(removedPlan);
+    this.removedRatePlans.push(value);
     this.ratePlanArray.removeAt(index);
     this.setDisabled(value);
     this.planCount--;
@@ -285,7 +286,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   /**
    * @function addNewRatePlan Adds new rate plan array based on pricing type
    */
-  addNewRatePlan() {
+  addNewRatePlan(id?: string, label?: string) {
     const staticPricing: Record<keyof StaticPricingRatePlan, any> = {
       basePriceCurrency: ['INR'],
       basePrice: ['', [Validators.required, Validators.min(0)]],
@@ -297,6 +298,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       paxPrice: ['', [Validators.required, Validators.min(0)]],
       ratePlanTypeId: [''],
       label: [''],
+      id: [''],
     };
 
     const dynamicPricing: Record<keyof DynamicPricingRatePlan, any> = {
@@ -308,6 +310,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       paxPrice: ['', [Validators.required, Validators.min(0)]],
       ratePlanTypeId: [''],
       label: [''],
+      id: [''],
     };
 
     let formGroup: FormGroup;
@@ -316,12 +319,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       : (formGroup = this.fb.group(staticPricing));
     this.ratePlanArray.push(formGroup);
 
-    const ratePlanArrayIndex = this.ratePlanArray.length - 1;
-    this.handleRatePlan(
-      this.plans[ratePlanArrayIndex].value,
-      this.plans[ratePlanArrayIndex].label,
-      ratePlanArrayIndex
-    );
+    let planIndex = this.ratePlanArray.length - 1;
+    let planLabel = label ? label : this.plans[planIndex].label;
+    let planId = id ? id : this.plans[planIndex].value;
+    this.handleRatePlan(planId, planLabel, planIndex);
     this.planCount++;
   }
 
@@ -496,7 +497,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       removeRatePlan: this.removedRatePlans,
       id: this.roomTypeId,
     };
-
     this.subscription$.add(
       this.roomService.updateRoomType(this.entityId, data).subscribe(
         (res) => {
@@ -523,30 +523,28 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       ratePlans,
       ...rest
     } = this.useForm.getRawValue() as RoomTypeFormData;
-    // let staticRatePlanModData: any[];
-    // if (!this.isPricingDynamic) {
-    //   staticRatePlanModData = ratePlans.map((ratePlan) => {
-    //     const { discountType, discountValue, ...restRatePlan } = ratePlan;
-    //     return {
-    //       ...restRatePlan,
-    //       discount: {
-    //         type: discountType,
-    //         value: discountValue,
-    //       },
-    //     };
-    //   });
-    // }
-
+    let staticRatePlanModData: StaticPricingMod[];
+    staticRatePlanModData = ratePlans.map((ratePlan) => {
+      const { discountType, discountValue, id, ...restRatePlan } = ratePlan;
+      return {
+        ...restRatePlan,
+        id: id ? id : null,
+        discount: {
+          type: discountType,
+          value: discountValue,
+        },
+      };
+    });
     // const ratePlan = this.isPricingDynamic
     //   ? { ratePlans: ratePlans }
     //   : { ratePlans: staticRatePlanModData };
 
     const data = {
       ...rest,
-      ratePlans: ratePlans,
+      ratePlans: staticRatePlanModData,
       roomAmenityIds: complimentaryAmenities.concat(paidAmenities),
     };
-
+    debugger;
     return data;
   }
 

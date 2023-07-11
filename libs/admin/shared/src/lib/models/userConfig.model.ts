@@ -135,9 +135,9 @@ export class Department {
 export class Hotels {
   records: Hotel[];
   total: number;
-  deserialize(chains: any[]) {
-    this.records = chains.map((item) => new Hotel().deserialize(item));
-    this.total = chains?.length ?? 0;
+  deserialize(brands: any[]) {
+    this.records = brands.map((item) => new Hotel().deserialize(item));
+    this.total = brands?.length ?? 0;
     return this;
   }
 }

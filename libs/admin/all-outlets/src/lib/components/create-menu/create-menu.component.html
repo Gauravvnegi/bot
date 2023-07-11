@@ -14,7 +14,7 @@
     </div>
     <hospitality-bot-toggle-switch
       class="status"
-      controlName="active"
+      controlName="status"
       label="Status"
     ></hospitality-bot-toggle-switch>
     <hospitality-bot-input
@@ -48,6 +48,7 @@
       <hospitality-bot-button
         label="Create"
         (onClick)="handleSubmit()"
+        [isLoading]="loading"
       ></hospitality-bot-button>
       <hospitality-bot-button
         variant="outlined"

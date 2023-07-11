@@ -8,6 +8,7 @@ import { QueryConfig } from '@hospitality-bot/admin/library';
 import { MenuConfig, OutletConfig } from '../types/config';
 import { OutletResponse } from '../types/response';
 import { ServiceResponse } from 'libs/admin/services/src/lib/types/response';
+import { MenuFormData, MenuResponse } from '../types/menu';
 
 @Injectable()
 export class OutletService extends ApiService {
@@ -99,6 +100,18 @@ export class OutletService extends ApiService {
 
   addMenuItems(data, config: QueryConfig): Observable<any> {
     return this.post(`/api/v1/menu-item ${config.params ?? ''}`, data);
+  }
+
+  addMenu(data: MenuFormData): Observable<MenuResponse> {
+    return this.post(`/api/v1/menus`, data);
+  }
+
+  updateMenu(data: MenuFormData, menuId: string): Observable<any> {
+    return this.patch(`/api/v1/menus/${menuId}`, data);
+  }
+
+  getMenu(menuId: string): Observable<MenuFormData> {
+    return this.get(`/api/v1/menus/${menuId}`);
   }
 
   /**

@@ -156,7 +156,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           .subscribe(
             (res) => {
               const data = new RoomTypeForm().deserialize(res);
-              data.ratePlans = data.ratePlans.map((item: any) => {
+              data.ratePlans = data.ratePlans?.map((item: any) => {
                 return {
                   ...item,
                   label: this.getPlanLabel(item.ratePlanTypeId),
@@ -525,7 +525,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     } = this.useForm.getRawValue() as RoomTypeFormData;
     let staticRatePlanModData: any[];
     if (!this.isPricingDynamic) {
-      staticRatePlanModData = ratePlans.map((ratePlan) => {
+      staticRatePlanModData = ratePlans?.map((ratePlan) => {
         const { discountType, discountValue, ...restRatePlan } = ratePlan;
         return {
           ...restRatePlan,

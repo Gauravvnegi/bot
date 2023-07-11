@@ -1,4 +1,4 @@
-import { Amenity } from '../constants/service-response';
+import { Amenity } from '../types/service-response';
 
 export class Services {
   services = new Array<Service>();

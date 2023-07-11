@@ -22,7 +22,7 @@ import { OutletService } from '../../services/outlet.service';
 import { Feature, OutletForm } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
 import { OutletFormService } from '../../services/outlet-form.service';
-import { Services } from '../../types/services';
+import { Services } from '../../models/services';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
@@ -66,7 +66,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     this.siteId = this.hotelDetailService.siteId;
     this.initOptions();
     this.initForm();
-    this.onTypeChange();
     this.initComponent('outlet');
     this.initOptionConfig();
   }
@@ -117,6 +116,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       foodPackages: [[]],
       cuisinesType: [''],
     });
+    this.onTypeChange();
 
     //patch value if there is outlet id
     if (this.outletId) {
@@ -124,6 +124,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         const { type, subType, ...rest } = res;
 
         this.useForm.get('type').setValue(type);
+
         this.useForm.get('type').disable();
         this.useForm.get('subType').setValue(subType.toUpperCase());
 

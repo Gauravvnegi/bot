@@ -100,6 +100,7 @@
   <ng-container [ngSwitch]="useForm.get('type').value">
     <hospitality-bot-restaurant-form
       [compServices]="compServices"
+      [menuList]="menuList"
       [outletId]="outletId"
       *ngSwitchCase="'RESTAURANT'"
       class="full-width"

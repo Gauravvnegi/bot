@@ -20,6 +20,10 @@ export type OutletForm = {
   area: string;
   dimension: string;
   rules: Rules;
+  paidAmenities;
+  complimentaryAmenities;
+  menuIds;
+  foodPackageIds;
 };
 type Rules = {
   title: string;
@@ -78,4 +82,7 @@ export type Feature =
   | 'import-services'
   | 'food-package'
   | 'brand'
-  | 'hotel';
+  | 'hotel'
+  | 'view-all';
+
+export type OutletType = 'RESTAURANT' | 'SPA' | 'VENUE';

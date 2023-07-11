@@ -3,7 +3,13 @@ import { OutletForm } from '../types/outlet';
 
 @Injectable()
 export class OutletFormService {
-  OutletFormData: Partial<OutletForm> = {};
+  OutletFormData: Partial<OutletForm> = {
+    paidAmenities: [],
+    complimentaryAmenities: [],
+    menuIds: [],
+    foodPackageIds: [],
+  };
+  Outlet: any = 'RESTAURANT';
 
   outletFormState: boolean = false;
 

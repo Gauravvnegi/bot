@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
 import { cousins } from '../../constants/data';
 import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
-import { Feature, OutletForm } from '../../types/outlet';
+import { Feature, OutletForm, OutletType } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { Services } from '../../models/services';
@@ -37,6 +37,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   cousins = cousins;
   compServices: any[] = [];
   paidServices: any[] = [];
+  menuList: any[] = [];
 
   $subscription = new Subscription();
   loading = false;
@@ -66,6 +67,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     this.siteId = this.hotelDetailService.siteId;
     this.initOptions();
     this.initForm();
+
     this.initComponent('outlet');
     this.initOptionConfig();
   }
@@ -78,6 +80,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         subTypes: item.subtype,
         menu: item?.menu,
       }));
+      this.onTypeChange();
+      this.getOutletData();
     });
   }
 
@@ -94,30 +98,30 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         countryCode: ['+91'],
         number: [''],
       }),
-      cc: [''],
-      //this field are not creating form BE
+
       dayOfOperationStart: ['', [Validators.required]],
       dayOfOperationEnd: ['', [Validators.required]],
       timeDayStart: ['', [Validators.required]],
       timeDayEnd: ['', [Validators.required]],
-      rules: [[]],
-
       address: [{}, [Validators.required]],
       imageUrl: [[], [Validators.required]],
-
       description: [''],
       serviceIds: [[]],
-      menu: [[]],
       socialPlatforms: [[]],
       maximumOccupancy: [''],
       minimumOccupancy: [''],
       area: [''],
       dimension: ['sqft'],
-      foodPackages: [[]],
-      cuisinesType: [''],
-    });
-    this.onTypeChange();
+      cuisinesType: [[]],
 
+      //not working filed
+      foodPackages: [[]],
+      rules: [[]],
+      menu: [[]],
+    });
+  }
+
+  getOutletData() {
     //patch value if there is outlet id
     if (this.outletId) {
       this.outletService.getOutletById(this.outletId).subscribe((res) => {
@@ -135,7 +139,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
 
   onTypeChange() {
     const { type } = this.formControls;
-    type.valueChanges.subscribe((type) => {
+    type.valueChanges.subscribe((type: OutletType) => {
       const selectedType = this.types.filter((item) => item.value === type);
 
       this.isTypeSelected = true;
@@ -143,7 +147,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         label: item,
         value: item.toUpperCase(),
       }));
-
       if (selectedType[0].value === 'RESTAURANT') {
         this.outletService.menu.next(selectedType[0].menu);
       }
@@ -152,6 +155,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       const { maximumOccupancy, minimumOccupancy } = this.formControls;
       switch (type) {
         case 'RESTAURANT':
+          this.getMenuList();
           this.getServices('COMPLIMENTARY');
           maximumOccupancy.setValidators([Validators.required]);
           minimumOccupancy.clearValidators();
@@ -170,6 +174,15 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
           minimumOccupancy.clearValidators();
       }
     });
+  }
+
+  getMenuList() {
+    this.$subscription.add(
+      this.outletService.getMenuList(this.outletId).subscribe((res) => {
+        this.menuList = res.records;
+        console.log(this.menuList);
+      })
+    );
   }
 
   /**

@@ -35,6 +35,7 @@
         label="Complimentary Services"
         description="This is a free of cost services"
         formControlName="serviceIds"
+        (viewAll)="onCreateAndContinue('view-all')"
         [itemList]="compServices"
         (onEmptyViewAction)="onCreateAndContinue('import-services')"
         [noRecordsAction]="noRecordActionForComp"
@@ -57,7 +58,7 @@
         label="Menu"
         formControlName="menu"
         description="Do not forget to add this cost in addition to the room cost"
-        [itemList]=""
+        [itemList]="menuList"
         (onEmptyViewAction)="onCreateAndContinue('menu')"
         [noRecordsAction]="noRecordActionForMenu"
       >

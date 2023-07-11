@@ -97,3 +97,36 @@ export const cousins: Option[] = [
   { label: 'British', value: 'british' },
   { label: 'Irish', value: 'irish' },
 ];
+
+export const restaurantTabItemList = [
+  {
+    label: 'Complimentary Services',
+    value: 'compServices',
+  },
+  {
+    label: 'Menu',
+    value: 'menu',
+  },
+  {
+    label: 'Food Package',
+    value: 'foodPackage',
+  },
+];
+
+export const spaTabItemList = [
+  {
+    label: 'Paid Services',
+    value: 'paidServices',
+  },
+  {
+    label: 'Complimentary Services',
+    value: 'compServices',
+  },
+];
+
+export const VenueTabItemList = [
+  {
+    label: 'Paid Services',
+    value: 'paidServices',
+  },
+];

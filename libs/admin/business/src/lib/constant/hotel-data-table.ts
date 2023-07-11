@@ -11,7 +11,7 @@ export const cols = [
   },
   {
     field: 'workingDays',
-    header: 'Working days / Hours of',
+    header: 'Working days / Timings',
     sortType: 'string',
     searchField: ['propertyCategory.label'],
     width: '23.75%',

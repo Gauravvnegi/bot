@@ -134,4 +134,10 @@ export class OutletService extends ApiService {
       { headers: { 'entity-id': entityId } }
     );
   }
+
+  getMenuList(entityId: string): Observable<any> {
+    return this.get(`/api/v1/menus`, {
+      headers: { 'entity-id': entityId },
+    });
+  }
 }

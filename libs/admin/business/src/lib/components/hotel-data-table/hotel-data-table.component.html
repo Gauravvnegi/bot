@@ -80,28 +80,34 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="cell-content type" *ngIf="rowData?.name; else emptyCell">
+        <div class="cell-content" *ngIf="rowData?.name; else emptyCell">
           <div class="primary-text">
             {{ rowData?.name }}
           </div>
-          <div *ngIf="rowData?.propertyCategory">
+          <div class="secondary-text">
+            {{ rowData?.category }}
+          </div>
+          <!-- <div *ngIf="rowData?.propertyCategory">
             <img
               class="img"
               [src]="getSrc(rowData?.propertyCategory?.iconCount)"
               [alt]="img"
             />
-          </div>
+          </div> -->
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData?.openingDay; else emptyCell">
+        <div
+          class="cell-content"
+          *ngIf="rowData?.dayOfOperationStart; else emptyCell"
+        >
           <div class="primary-text">
-            {{ rowData?.openingDay }} -
+            {{ rowData?.dayOfOperationStart }} -
             {{ rowData?.dayOfOperationEnd }}
           </div>
           <div class="primary-text">
-            {{ rowData?.openingTime }} -
-            {{ rowData?.closingTime }}
+            {{ rowData?.timeDayStart }} -
+            {{ rowData?.timeDayEnd }}
           </div>
         </div>
       </td>
@@ -117,9 +123,9 @@
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData?.url; else emptyCell">
+        <div class="cell-content" *ngIf="rowData?.route; else emptyCell">
           <hospitality-bot-copy-link
-            [url]="rowData?.url"
+            [url]="rowData?.route"
           ></hospitality-bot-copy-link>
         </div>
       </td>

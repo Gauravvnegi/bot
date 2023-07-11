@@ -22,7 +22,9 @@ export class RestaurantFormComponent implements OnInit {
     }
   }
   @Input() compServices: any[] = [];
+  @Input() menuList: any[] = [];
   @Output() onCreateAndContinueFeature = new EventEmitter<Feature>();
+
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
 

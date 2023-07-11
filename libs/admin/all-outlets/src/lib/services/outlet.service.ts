@@ -7,8 +7,8 @@ import { map } from 'rxjs/operators';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { MenuConfig, OutletConfig } from '../types/config';
 import { OutletResponse } from '../types/response';
-import { ServiceResponse } from 'libs/admin/services/src/lib/types/response';
 import { MenuFormData, MenuResponse } from '../types/menu';
+import { MenuItemForm, MenuItemResponse } from '../types/outlet';
 
 @Injectable()
 export class OutletService extends ApiService {
@@ -98,31 +98,40 @@ export class OutletService extends ApiService {
     );
   }
 
-  addMenuItems(data, config: QueryConfig): Observable<any> {
-    return this.post(`/api/v1/menu-item ${config.params ?? ''}`, data);
+  addMenuItems(data: MenuItemForm, menuId: string): Observable<MenuItemResponse> {
+    return this.post(`/api/v1/menus/items?menuId=${menuId}`, data, {
+      headers: { 'entity-id': menuId },
+    });
   }
 
-  addMenu(data: MenuFormData): Observable<MenuResponse> {
-    return this.post(`/api/v1/menus`, data);
+  updateMenuItems(
+    data: MenuItemForm,
+    menuItemId: string,
+    menuId: string
+  ): Observable<any> {
+    return this.patch(`/api/v1/menus/items/${menuItemId}`, data, {
+      headers: { entityId: menuId },
+    });
   }
 
-  updateMenu(data: MenuFormData, menuId: string): Observable<any> {
-    return this.patch(`/api/v1/menus/${menuId}`, data);
+  addMenu(data: MenuFormData, entityId: string): Observable<MenuResponse> {
+    return this.post(`/api/v1/menus`, data, {
+      headers: { 'entity-id': entityId },
+    });
+  }
+
+  updateMenu(
+    data: MenuFormData,
+    menuId: string,
+    entityId: string
+  ): Observable<any> {
+    return this.patch(`/api/v1/menus/${menuId}`, data, {
+      headers: { 'entity-id': entityId },
+    });
   }
 
   getMenu(menuId: string): Observable<MenuFormData> {
     return this.get(`/api/v1/menus/${menuId}`);
-  }
-
-  /**
-   * @function updateMenuItems
-   * @description update menu items
-   * @param data
-   * @param itemId
-   * @returns
-   */
-  updateMenuItems(itemId, data): Observable<any> {
-    return this.patch(`/api/v1/menu-item /${itemId}`, data);
   }
 
   getMenuItemsById(itemId: string): Observable<any> {

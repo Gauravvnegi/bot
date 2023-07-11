@@ -1,7 +1,7 @@
 import { managePermissionRoutes } from '../constants/routes';
 
 export type Permission = {
-  entity: string;
+  module: string;
   label: string;
   permissions: {
     manage: -1 | 0 | 1;
@@ -41,10 +41,10 @@ export type Department = {
   productType: string;
   departmentLabel: string;
   productLabel: string;
-}
+};
 
 export type HotelAccess = {
-  chains: {
+  brands: {
     id: string;
     name: string;
     hotels: {
@@ -61,5 +61,5 @@ export type HotelAccess = {
       domain: string;
       pmsEnable: boolean;
     }[];
-  }[]
-}
+  }[];
+};

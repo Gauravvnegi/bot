@@ -349,7 +349,7 @@ export class UserProfileComponent implements OnInit {
 
     if (this.state === 'editUser') {
       const userConfig = this.userPermissions.find(
-        (item) => item.entity === config.entity
+        (item) => item.module === config.module
       );
       const userView = userConfig ? userConfig.permissions.view : 0;
       const userManage = userConfig ? userConfig.permissions.manage : 0;
@@ -379,7 +379,7 @@ export class UserProfileComponent implements OnInit {
     this.adminPermissions.forEach((config, index) => {
       formArray.push(
         this._fb.group({
-          entity: [config.entity],
+          module: [config.module],
           label: [config.label],
           permissions: this.constructPermission(config),
           productType: [config.productType],
@@ -474,7 +474,7 @@ export class UserProfileComponent implements OnInit {
         .editUserDetails({
           ...userProfileData,
           status: true,
-          userId: this._userService.getLoggedInUserId(),
+          id: this._userService.getLoggedInUserId(),
         })
         .subscribe(handleSuccess, handleError);
       this.isEdited = false;

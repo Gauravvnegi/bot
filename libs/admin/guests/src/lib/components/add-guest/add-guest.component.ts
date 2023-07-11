@@ -75,8 +75,8 @@ export class AddGuestComponent implements OnInit {
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       cc: ['+91'],
       phoneNo: [null, [Validators.required]],
-      company: ['', [Validators.required]],
-      gender: ['', Validators.required],
+      company: [''],
+      gender: [''],
       dateOfBirth: ['', Validators.required],
       age: [{ value: '', disabled: true }, Validators.required],
     });

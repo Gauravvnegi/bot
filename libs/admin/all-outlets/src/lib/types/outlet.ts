@@ -48,7 +48,7 @@ export type MenuItemForm = {
   mealPreference: string;
   category: string;
   type: string;
-  preparationTime: string;
+  preparationTime: number;
   quantity: string;
   unit: string;
   dineInPrice: string;
@@ -56,6 +56,10 @@ export type MenuItemForm = {
   hsnCode: string;
   taxIds: string[];
 };
+
+export type MenuItemResponse = MenuItemForm & {
+  id: string;
+}
 
 export type FoodPackageForm = {
   active: boolean;

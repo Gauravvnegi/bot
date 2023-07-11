@@ -85,8 +85,12 @@
       label="Tax"
       class="one-third-width"
       controlName="tax"
+      [props]="{
+        isAsync: true,
+        createPrompt: '+ Create New Tax'
+      }"
+      (onCreate)="createTax()"
       [options]="taxes"
-      [settings]="{ showHeader: false }"
     ></hospitality-bot-multi-select>
     <div class="des-template">
       <div class="des-template__label">Notes</div>

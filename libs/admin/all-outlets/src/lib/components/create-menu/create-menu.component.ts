@@ -8,6 +8,7 @@ import { OutletBaseComponent } from '../outlet-base.components';
 import { MenuFormData, MenuResponse } from '../../types/menu';
 import { Subscription } from 'rxjs';
 import { OutletService } from '../../services/outlet.service';
+import { PageReloadService } from '../../services/page-reload.service.service';
 
 @Component({
   selector: 'hospitality-bot-create-menu',
@@ -34,26 +35,19 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
     },
   ];
 
-  @HostListener('window:beforeunload', ['$event'])
-  handleBeforeUnload(event: BeforeUnloadEvent) {
-    event.preventDefault();
-    event.returnValue = false;
-    return 'Are you sure you want to leave? Your unsaved changes will be lost.';
-  }
-
   constructor(
     private fb: FormBuilder,
-    private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private configService: ConfigService,
     public router: Router,
     public route: ActivatedRoute,
-    private outletService: OutletService
+    private outletService: OutletService,
+    private pageReloadService: PageReloadService
   ) {
     super(router, route);
   }
 
   ngOnInit(): void {
+    this.pageReloadService.enablePageReloadConfirmation();
     this.initForm();
     // this.initOptionsConfig();
     this.initComponent('menu');
@@ -93,34 +87,32 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
       this.loading = true;
       this.$subscription.add(
         this.outletService
-          .updateMenu(data, this.menuId)
+          .updateMenu(data, this.menuId, this.outletId)
           .subscribe(this.handleSuccess, this.handleError)
       );
     } else {
       this.loading = true;
       this.$subscription.add(
-        this.outletService.addMenu(data).subscribe((res: MenuResponse) => {
-          this.handleSuccess(res?.id);
-        }, this.handleError)
+        this.outletService
+          .addMenu(data, this.outletId)
+          .subscribe((res: MenuResponse) => {
+            this.handleSuccess(res?.id);
+          }, this.handleError)
       );
     }
   }
 
   handleSuccess = (id?: string) => {
     this.loading = false;
-    const event = new BeforeUnloadEvent();
-    debugger;
-    event.returnValue = true;
     this.snackbarService.openSnackBarAsText(
-      `Service ${this.menuId ? 'edited' : 'created'} successfully`,
+      `Menu ${this.menuId ? 'edited' : 'created'} successfully`,
       '',
       { panelClass: 'success' }
     );
-    if (event.returnValue && id) {
-      this.router.navigate([id], {
-        relativeTo: this.route,
-      });
-    }
+    this.pageReloadService.disablePageReloadConfirmation();
+    this.router.navigate([id], {
+      relativeTo: this.route,
+    });
   };
 
   handleReset() {
@@ -144,5 +136,6 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
    */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+    this.pageReloadService.disablePageReloadConfirmation();
   }
 }

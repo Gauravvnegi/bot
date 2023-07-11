@@ -13,9 +13,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SubscriptionPlanService } from '@hospitality-bot/admin/core/theme';
-import {
-  MarketingNotificationComponent,
-} from '@hospitality-bot/admin/notification';
+import { MarketingNotificationComponent } from '@hospitality-bot/admin/notification';
 import { ConfigService, ModuleNames } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
@@ -365,7 +363,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   editBooking() {
     this.onDetailsClose.next(false);
-    this.router.navigateByUrl(`pages/efrontdesk/manage-reservation/edit-reservation/${this.bookingId}`)
+    this.router.navigateByUrl(
+      `pages/efrontdesk/manage-reservation/edit-reservation/${this.bookingId}`
+    );
   }
 
   prepareInvoice() {
@@ -420,9 +420,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
 
   generateFeedback() {
     this._reservationService
-      .generateFeedback(
-        this.reservationDetailsFG.get('bookingId').value,
-      )
+      .generateFeedback(this.reservationDetailsFG.get('bookingId').value)
       .subscribe((res) => {
         this._clipboard.copy(`${res.domain}${res.feedback.token}`);
         this.snackbarService.openSnackBarAsText(
@@ -723,14 +721,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
     const sharedIcon = this.shareIconList.find(
       (icon) => icon.label === channelLabel
     );
-
-    if(sharedIcon){
-      return channel.isSubscribed
-      ? sharedIcon.iconUrl
-      : sharedIcon.iconUrl;
+    if (sharedIcon) {
+      return channel.isSubscribed ? sharedIcon.iconUrl : sharedIcon.iconUrl;
     }
-
-    return ''
+    return '';
   }
 
   checkForTransactionFeedbackSubscribed() {

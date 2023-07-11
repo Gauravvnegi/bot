@@ -16,7 +16,12 @@ import {
   SnackBarService,
 } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { cols, tableName } from '../../constant/hotel-data-table';
+import {
+  BrandTableName,
+  HotelTableName,
+  cols,
+  tableName,
+} from '../../constant/hotel-data-table';
 import { BusinessService } from '../../services/business.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
@@ -37,7 +42,7 @@ import { HotelFormDataService } from '../../services/hotel-form.service';
 export class HotelDataTableComponent extends BaseDatatableComponent
   implements OnInit {
   cols = cols;
-  tableName = tableName;
+  tableName = BrandTableName;
   $subscription = new Subscription();
   entityId: string;
   hotelId: string;
@@ -65,6 +70,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   ngOnInit(): void {
     this.initTableValue();
     this.hotelId = this.route.snapshot.params['entityId'];
+    this.tableName = this.hotelId ? HotelTableName : BrandTableName;
   }
 
   /**
@@ -100,7 +106,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   getQueryConfig() {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFiltersV2(),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           offset: this.first,
@@ -110,21 +116,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     };
 
     return config;
-  }
-
-  /**
-   * @function getSelectedQuickReplyFilters To return the selected chip list.
-   * @returns The selected chips.
-   */
-  getSelectedQuickReplyFilters() {
-    const chips = this.filterChips.filter(
-      (item) => item.isSelected && item.value !== 'ALL'
-    );
-    return [
-      chips.length !== 1
-        ? { entityState: null }
-        : { entityState: chips[0].value === 'ACTIVE' },
-    ];
   }
 
   /**

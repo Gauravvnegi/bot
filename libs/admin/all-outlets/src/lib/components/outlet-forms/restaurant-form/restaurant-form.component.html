@@ -11,14 +11,14 @@
       ></hospitality-bot-input>
       <hospitality-bot-prefix-field
         preControlName="area"
-        postControlName="areaUnit"
+        postControlName="dimension"
         class="half-width"
         label="Area"
         [settings]="{
           preFieldType: 'input',
           postFieldType: 'select',
           layout: 'pre-main',
-          postOptions: areaUnits
+          postOptions: dimensions
         }"
       ></hospitality-bot-prefix-field>
     </div>
@@ -32,9 +32,10 @@
         label="Complimentary Services"
         description="This is a free of cost services"
         formControlName="serviceIds"
-        [itemList]=""
+        [itemList]="compServices"
         (onEmptyViewAction)="onCreateAndContinue('import-services')"
         [noRecordsAction]="noRecordActionForComp"
+        type="icon"
       >
         <hospitality-bot-button
           label="+ Import Services"
@@ -67,6 +68,41 @@
   </div>
 
   <hospitality-bot-food-package></hospitality-bot-food-package>
+  <div class="container-wrapper">
+    <div class="header">Other Details</div>
+    <hr />
+    <div class="details-wrapper">
+      <hospitality-bot-prefix-field
+        label="Days Of operation"
+        class="half-width"
+        preControlName="dayOfOperationStart"
+        postControlName="dayOfOperationEnd"
+        preFieldType="select"
+        postFieldType="select"
+        [preOptions]="days"
+        [postOptions]="days"
+        [settings]="{
+          layout: 'dashed'
+        }"
+      >
+      </hospitality-bot-prefix-field>
+
+      <hospitality-bot-prefix-field
+        label="Timings"
+        class="half-width"
+        preControlName="timeDayStart"
+        postControlName="timeDayEnd"
+        preFieldType="select"
+        postFieldType="select"
+        [preOptions]="hours"
+        [postOptions]="hours"
+        [settings]="{
+          layout: 'dashed'
+        }"
+      >
+      </hospitality-bot-prefix-field>
+    </div>
+  </div>
 
   <hospitality-bot-rules
     controlName="rules"

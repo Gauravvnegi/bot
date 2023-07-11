@@ -18,7 +18,7 @@ export type OutletForm = {
   timeDayStart: string;
   timeDayEnd: string;
   area: string;
-  areaUnit: string;
+  dimension: string;
   rules: Rules;
 };
 type Rules = {
@@ -72,4 +72,10 @@ export type FoodPackageForm = {
   source: number;
 };
 
-export type Feature = 'menu' | 'import-services' | 'food-package';
+export type Feature =
+  | 'service'
+  | 'menu'
+  | 'import-services'
+  | 'food-package'
+  | 'brand'
+  | 'hotel';

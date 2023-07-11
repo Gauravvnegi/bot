@@ -1,6 +1,5 @@
 @import 'main';
 
-
 .container-wrapper {
   margin: 30px 0 24px;
   width: 100%;
@@ -23,13 +22,8 @@
   .sub-container-wrapper {
     padding: 34.5px 50px 37px 50px;
   }
-  ::ng-deep .wrapper {
-    height: fit-content !important;
-  }
-  ::ng-deep .wrapper__standard {
-    min-height: fit-content !important;
-  }
-  .details-wrapper{
-  @include form-block;
+
+  .details-wrapper {
+    @include form-block;
   }
 }

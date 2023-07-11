@@ -6,7 +6,7 @@ import { QueryConfig } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class GuestTableService extends ApiService {
-  getGuestList(config): Observable<any> {
+  getGuestList(config: QueryConfig): Observable<any> {
     return this.get(`/api/v1/members${config.params}`);
   }
 

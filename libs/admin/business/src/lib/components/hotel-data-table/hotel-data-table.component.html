@@ -84,7 +84,7 @@
           <div class="primary-text">
             {{ rowData?.name }}
           </div>
-          <div *ngIf="rowData?.propertyCategory?.label">
+          <div *ngIf="rowData?.propertyCategory">
             <img
               class="img"
               [src]="getSrc(rowData?.propertyCategory?.iconCount)"
@@ -97,7 +97,7 @@
         <div class="cell-content" *ngIf="rowData?.openingDay; else emptyCell">
           <div class="primary-text">
             {{ rowData?.openingDay }} -
-            {{ rowData?.closingDay }}
+            {{ rowData?.dayOfOperationEnd }}
           </div>
           <div class="primary-text">
             {{ rowData?.openingTime }} -

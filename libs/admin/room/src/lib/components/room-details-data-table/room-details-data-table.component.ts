@@ -53,7 +53,7 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
           offset: this.first,
           limit: this.rowsPerPage,
           // ---refactor---- room type query param for selected room data - BE dependent
-          roomTypeId: this.roomTypeId, 
+          roomTypeId: this.roomTypeId,
         },
       ]),
     };
@@ -72,8 +72,11 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
         (res) => {
           const roomList = new RoomList().deserialize(res);
           this.values = roomList.records;
-          this.updateTotalRecords();
-          console.log(this.totalRecords);
+          this.initFilters(
+            roomList.entityTypeCounts,
+            roomList.entityStateCounts,
+            roomList.totalRecord
+          );
           this.loading = false;
         },
         () => {

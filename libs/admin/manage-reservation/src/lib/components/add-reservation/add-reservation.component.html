@@ -6,8 +6,13 @@
       <hospitality-bot-booking-info
         [reservationTypes]="reservationTypes"
         [bookingType]="bookingType"
+        [expandAccordion]="expandAccordion"
       ></hospitality-bot-booking-info>
-      <p-accordionTab class="room-info" header="Room Information">
+      <p-accordionTab
+        [selected]="expandAccordion"
+        class="room-info"
+        header="Room Information"
+      >
         <hospitality-bot-room-iterator
           (refreshData)="getSummaryData()"
           (listenChanges)="listenForFormChanges()"

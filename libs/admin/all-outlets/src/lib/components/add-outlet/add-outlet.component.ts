@@ -5,11 +5,14 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Location } from '@angular/common';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   HotelDetailService,
   NavRouteOptions,
   Option,
+  Regex,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
@@ -19,6 +22,7 @@ import { OutletService } from '../../services/outlet.service';
 import { Feature, OutletForm } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
 import { OutletFormService } from '../../services/outlet-form.service';
+import { Services } from '../../types/services';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
@@ -31,6 +35,9 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   subType: Option[] = [];
   isTypeSelected = false;
   cousins = cousins;
+  compServices: any[] = [];
+  paidServices: any[] = [];
+
   $subscription = new Subscription();
   loading = false;
   siteId: string;
@@ -48,6 +55,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     private snackbarService: SnackBarService,
     private hotelDetailService: HotelDetailService,
     private OutletFormService: OutletFormService,
+    private location: Location,
     router: Router,
     route: ActivatedRoute
   ) {
@@ -58,6 +66,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     this.siteId = this.hotelDetailService.siteId;
     this.initOptions();
     this.initForm();
+    this.onTypeChange();
     this.initComponent('outlet');
     this.initOptionConfig();
   }
@@ -78,65 +87,88 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       name: ['', [Validators.required]],
       type: [[], [Validators.required]],
       subType: [[], [Validators.required]],
+      emailId: [
+        '',
+        [Validators.pattern(Regex.EMAIL_REGEX), Validators.required],
+      ],
       contact: this.fb.group({
         countryCode: ['+91'],
         number: [''],
       }),
       cc: [''],
-      closingDay: [''],
-      openingHour: [''],
-      closingHour: [''],
+      //this field are not creating form BE
+      dayOfOperationStart: ['', [Validators.required]],
+      dayOfOperationEnd: ['', [Validators.required]],
+      timeDayStart: ['', [Validators.required]],
+      timeDayEnd: ['', [Validators.required]],
+      rules: [[]],
+
       address: [{}, [Validators.required]],
       imageUrl: [[], [Validators.required]],
+
       description: [''],
-      rules: [[]],
       serviceIds: [[]],
       menu: [[]],
-      socialMedia: [[]],
+      socialPlatforms: [[]],
       maximumOccupancy: [''],
       minimumOccupancy: [''],
       area: [''],
-      areaUnit: ['sqft'],
+      dimension: ['sqft'],
       foodPackages: [[]],
-      cousins: [[]],
+      cuisinesType: [''],
     });
 
     //patch value if there is outlet id
     if (this.outletId) {
       this.outletService.getOutletById(this.outletId).subscribe((res) => {
-        this.useForm.patchValue(res);
+        const { type, subType, ...rest } = res;
+
+        this.useForm.get('type').setValue(type);
+        this.useForm.get('type').disable();
+        this.useForm.get('subType').setValue(subType.toUpperCase());
+
+        this.useForm.patchValue(rest);
       });
     }
   }
 
-  onTypeChange(type: string) {
-    const selectedType = this.types.filter((item) => item.value === type);
-    this.isTypeSelected = true;
-    this.subType = selectedType[0].subTypes.map((item) => ({
-      label: item,
-      value: item,
-    }));
-    if (selectedType[0].value === 'RESTAURANT') {
-      this.outletService.menu.next(selectedType[0].menu);
-    }
+  onTypeChange() {
+    const { type } = this.formControls;
+    type.valueChanges.subscribe((type) => {
+      const selectedType = this.types.filter((item) => item.value === type);
 
-    //set form validation on type change
-    const { maximumOccupancy, minimumOccupancy } = this.formControls;
-    switch (type) {
-      case 'RESTAURANT':
-        maximumOccupancy.setValidators([Validators.required]);
-        minimumOccupancy.clearValidators();
-        break;
+      this.isTypeSelected = true;
+      this.subType = selectedType[0].subTypes.map((item) => ({
+        label: item,
+        value: item.toUpperCase(),
+      }));
 
-      case 'VENUE':
-        minimumOccupancy.setValidators([Validators.required]);
-        maximumOccupancy.clearAsyncValidators();
-        break;
+      if (selectedType[0].value === 'RESTAURANT') {
+        this.outletService.menu.next(selectedType[0].menu);
+      }
 
-      case 'SPA':
-        maximumOccupancy.clearValidators();
-        minimumOccupancy.clearValidators();
-    }
+      //set form validation on type change
+      const { maximumOccupancy, minimumOccupancy } = this.formControls;
+      switch (type) {
+        case 'RESTAURANT':
+          this.getServices('COMPLIMENTARY');
+          maximumOccupancy.setValidators([Validators.required]);
+          minimumOccupancy.clearValidators();
+          break;
+
+        case 'VENUE':
+          this.getServices('PAID');
+          this.getServices('COMPLIMENTARY');
+          minimumOccupancy.setValidators([Validators.required]);
+          maximumOccupancy.clearAsyncValidators();
+          break;
+
+        case 'SPA':
+          this.getServices('PAID');
+          maximumOccupancy.clearValidators();
+          minimumOccupancy.clearValidators();
+      }
+    });
   }
 
   /**
@@ -144,17 +176,30 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    * @description submits the form
    */
   submitForm(features?: Feature): void {
-    if (this.outletId && !(features === undefined)) {
-      //save data into service
+    if (this.outletId && !(features === 'brand' || features === 'hotel')) {
+      //save data into service for later use
+
       this.OutletFormService.initOutletFormData(
         this.useForm.getRawValue(),
         true
       );
-      this.router.navigate([features], {
-        relativeTo: this.route,
-      });
+
+      //navigate to respective feature
+      if (features === 'service') {
+        //navigate to create service
+        this.router.navigate([`/pages/library/services/create-service`], {
+          relativeTo: this.route,
+        });
+      } else {
+        //navigate to respective feature
+        this.router.navigate([features], {
+          relativeTo: this.route,
+        });
+      }
+
       return;
     }
+
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
@@ -162,13 +207,21 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       );
       return;
     }
+
     let data = this.useForm.getRawValue() as OutletForm;
 
+    //api call to add/update outlet
     if (this.outletId) {
       this.$subscription.add(
         this.outletService
           .updateOutlet(this.outletId, data)
-          .subscribe(this.handleSuccess, this.handleError)
+          .subscribe(
+            () =>
+              this.entityId
+                ? this.handleSuccess('hotel')
+                : this.handleSuccess('brand'),
+            this.handleError
+          )
       );
     } else {
       this.$subscription.add(
@@ -179,7 +232,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
             parentId: this.entityId ? this.entityId : this.brandId,
           })
           .subscribe((res) => {
-            if (res) this.handleSuccess(features, res.id);
+            if (res?.id) this.handleSuccess(features, res.id);
           }, this.handleError)
       );
     }
@@ -191,21 +244,44 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   }
 
   initOptionConfig() {
-    this.getServices('PAID');
-    this.getServices('COMPLIMENTARY');
+    // this.getServices('PAID');
+    // this.getServices('COMPLIMENTARY');
   }
 
   getServices(serviceType: string) {
+    let param = '?type=SERVICE&serviceType=COMPLIMENTARY&pagination=false';
+
+    if (serviceType === 'PAID') {
+      param = '?limit=5&type=SERVICE&serviceType=PAID&status=true';
+    }
     this.outletService
       .getServices(
         this.outletId,
 
         {
-          params: `?limit=5&type=SERVICE&serviceType=${serviceType}&status=true`,
+          params: param,
         }
       )
       .subscribe((res) => {
-        console.log(res, 'services');
+        if (serviceType === 'PAID') {
+          this.paidServices = new Services().deserialize(
+            res.paidPackages
+          ).services;
+        }
+        if (serviceType === 'COMPLIMENTARY') {
+          this.compServices = new Services().deserialize(
+            res.complimentaryPackages
+          ).services;
+
+          const data = this.compServices.map((item) => {
+            if (item.active) return item.id;
+          });
+
+          this.compServices = this.compServices.slice(0, 5);
+
+          const { serviceIds } = this.formControls;
+          serviceIds.patchValue(data);
+        }
       });
   }
 
@@ -231,15 +307,20 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     switch (feature) {
       case 'menu':
         this.router.navigate(
-          [`${outletId} /${outletBusinessRoutes.menu.route}`],
+          [`${outletId}/${outletBusinessRoutes.menu.route}`],
           {
             relativeTo: this.route,
           }
         );
         break;
+      case 'service':
+        this.router.navigate([`pages/library/services/create-service`], {
+          relativeTo: this.route,
+        });
+        break;
       case 'import-services':
         this.router.navigate(
-          [`${outletId} /${outletBusinessRoutes.importService.route}`],
+          [`${outletId}/${outletBusinessRoutes.importService.route}`],
           {
             relativeTo: this.route,
           }
@@ -249,6 +330,23 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.router.navigate([outletBusinessRoutes.foodPackage.route], {
           relativeTo: this.route,
         });
+        break;
+
+      case 'brand':
+        this.router.navigate(
+          [`/pages/settings/business-info/brand/${this.brandId}`],
+          { relativeTo: this.route }
+        );
+        break;
+      case 'hotel':
+        this.router.navigate(
+          [
+            `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}`,
+          ],
+          {
+            relativeTo: this.route,
+          }
+        );
         break;
       default:
         this.router.navigate([`${outletId}`], {

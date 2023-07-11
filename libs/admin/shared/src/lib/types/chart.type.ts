@@ -38,3 +38,4 @@ export type Bar = {
   backgroundColor?: string[];
   hoverBackgroundColor?: string[];
 };
+

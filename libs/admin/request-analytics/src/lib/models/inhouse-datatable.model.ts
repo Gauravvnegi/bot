@@ -1,11 +1,10 @@
+import { EntityState } from '@hospitality-bot/admin/shared';
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
 
 export class InhouseTable {
-  entityStateCounts: any;
-  entityStateLabels: any;
-  entityTypeCounts: any;
-  entityTypeLabels: any;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
   records: InhouseData[];
   total: number;
 
@@ -14,9 +13,7 @@ export class InhouseTable {
     Object.assign(
       this,
       set({}, 'entityStateCounts', get(input, ['entityStateCounts'])),
-      set({}, 'entityStateLabels', get(input, ['entityStateLabels'])),
       set({}, 'entityTypeCounts', get(input, ['entityTypeCounts'])),
-      set({}, 'entityTypeLabels', get(input, ['entityTypeLabels'])),
       set({}, 'total', get(input, ['total']))
     );
 

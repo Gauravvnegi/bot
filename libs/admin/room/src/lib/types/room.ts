@@ -14,4 +14,7 @@ export type RoomTypeOption = {
 export type RatePlanOptions = {
   label: string;
   value: string;
-}
+  disabled: boolean;
+  isDefault: boolean;
+  command: () => void;
+};

@@ -12,10 +12,8 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
   currencies: Option[] = [{ label: 'INR', value: 'INR' }];
   discountTypes: Option[] = [
     { label: '%Off', value: 'PERCENTAGE' },
-    { label: 'Flat', value: 'NUMBER' },
+    { label: 'Flat', value: 'FLAT' },
   ];
-
-
 
   className = 'half-width'
 
@@ -160,7 +158,6 @@ export class DiscountFormComponent extends FormComponent implements OnInit {
       discountedPriceCurrency.setValue(res);
       // variablePriceCurrency.setValue(res);
     });
-
   }
 }
 

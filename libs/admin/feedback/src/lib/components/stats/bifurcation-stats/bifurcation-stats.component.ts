@@ -38,8 +38,8 @@ export class BifurcationStatsComponent implements OnInit {
   entityType = 'GTM';
   tabFeedbackType: string;
   $subscription = new Subscription();
-  selectedInterval;
-  globalQueries;
+  selectedInterval: string;
+  globalQueries = [];
   statCard: StatCard[] = [];
 
   chart: CircularChart = {

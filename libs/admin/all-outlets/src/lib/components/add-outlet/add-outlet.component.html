@@ -26,7 +26,6 @@
         controlName="type"
         label="Type"
         [options]="types"
-        (itemSelection)="onTypeChange($event.value)"
         [props]="{
           placeholder: 'Select Type'
         }"
@@ -42,6 +41,15 @@
         }"
       ></hospitality-bot-select>
     </div>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="emailId"
+      label="Email"
+      maxLength="60"
+      [props]="{
+        placeholder: 'Enter'
+      }"
+    ></hospitality-bot-input>
     <div class="half-width" [formGroup]="useForm.get('contact')">
       <hospitality-bot-phone-number
         preControlName="countryCode"
@@ -54,7 +62,7 @@
 
     <hospitality-bot-multi-select
       class="half-width"
-      controlName="cousins"
+      controlName="cuisinesType"
       label="Cousine Type"
       [options]="cousins"
       *ngIf="useForm.get('type').value === 'RESTAURANT'"
@@ -91,20 +99,34 @@
 
   <ng-container [ngSwitch]="useForm.get('type').value">
     <hospitality-bot-restaurant-form
+      [compServices]="compServices"
       [outletId]="outletId"
       *ngSwitchCase="'RESTAURANT'"
       class="full-width"
       (onCreateAndContinueFeature)="submitForm($event)"
     ></hospitality-bot-restaurant-form>
-    <hospitality-bot-spa-form *ngSwitchCase="'SPA'" class="full-width">
+    <hospitality-bot-spa-form
+      [paidServices]="paidServices"
+      [outletId]="outletId"
+      *ngSwitchCase="'SPA'"
+      (onCreateAndContinueFeature)="submitForm($event)"
+      class="full-width"
+    >
     </hospitality-bot-spa-form>
-    <hospitality-bot-banquet-form *ngSwitchCase="'VENUE'" class="full-width">
+    <hospitality-bot-banquet-form
+      [compServices]="compServices"
+      [paidServices]="paidServices"
+      [outletId]="outletId"
+      (onCreateAndContinueFeature)="submitForm($event)"
+      *ngSwitchCase="'VENUE'"
+      class="full-width"
+    >
     </hospitality-bot-banquet-form>
   </ng-container>
 
   <hospitality-bot-social-media
     *ngIf="useForm.get('type').value.length"
-    controlName="socialMedia"
+    controlName="socialPlatforms"
   ></hospitality-bot-social-media>
 
   <div class="footer-buttons full-width">
@@ -115,8 +137,8 @@
       severity="reset"
     ></hospitality-bot-button>
     <hospitality-bot-button
-      [label]="'Create'"
-      (onClick)="submitForm()"
+      [label]="outletId ? 'update' : 'Create'"
+      (onClick)="submitForm(entityId ? 'hotel' : 'brand')"
     ></hospitality-bot-button>
   </div>
 </div>

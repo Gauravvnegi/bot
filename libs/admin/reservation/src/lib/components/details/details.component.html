@@ -523,10 +523,11 @@
             <div class="right-bottom-icons">
               <ng-container *ngFor="let channel of channels">
                 <div
+                  *ngIf="channel.isView"
                   class="social-icons"
                   (click)="openSendNotification(channel.name)"
-                  [style.display]="channel.isView ? 'flex' : 'none'"
-                >
+                  >
+                  <!-- [style.display]="channel.isView ? 'flex' : 'none'" -->
                   <div class="icon">
                     <img [src]="getIconUrl(channel)" />
                   </div>

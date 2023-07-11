@@ -1,6 +1,6 @@
 <p-accordionTab
-  header="Reservation Information"
-  [selected]="true"
+  header="Booking Information"
+  [selected]="!expandAccordion"
   [formGroup]="controlContainer.control"
 >
   <div class="form-block" formGroupName="reservationInformation">
@@ -61,7 +61,7 @@
       <hospitality-bot-date
         class="half-width"
         controlName="reservationDateAndTime"
-        label="Reservation Date and Time"
+        label="Booking Date and Time"
         [settings]="{
           enableTime: false,
           dateValue: startMinDate

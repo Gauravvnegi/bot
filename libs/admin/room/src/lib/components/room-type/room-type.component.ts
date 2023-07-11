@@ -14,8 +14,10 @@ import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import {
+  DynamicPricingRatePlan,
   RoomTypeFormData,
   ServicesTypeValue,
+  StaticPricingRatePlan,
   errorMessages,
   noRecordAction,
   noRecordActionForComp,
@@ -24,6 +26,8 @@ import routes from '../../constant/routes';
 import { Service, Services } from '../../models/amenities.model';
 import { RoomTypeForm } from '../../models/room.model';
 import { RoomService } from '../../services/room.service';
+import { RatePlanOptions } from '../../types/room';
+import { RatePlanResponse } from '../../types/service-response';
 
 @Component({
   selector: 'hospitality-bot-room-type',
@@ -43,13 +47,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   isCompLoading: boolean = false;
   isPaidLoading: boolean = false;
+  isPricingDynamic = false;
 
-  plans: {
-    label: string;
-    value: string;
-    disabled: boolean;
-    command: () => void;
-  }[] = [];
+  plans: RatePlanOptions[] = [];
+  removedRatePlans: string[] = [];
   planCount = 0;
 
   selectedIndex = 0;
@@ -112,14 +113,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       description: ['', [Validators.required]],
       complimentaryAmenities: [[], [Validators.required]],
       paidAmenities: [[]],
-      // originalPrice: ['', [Validators.required, Validators.min(0)]],
-      // discountType: ['PERCENTAGE'],
-      // discountValue: ['0', [Validators.min(0)]],
-      // discountedPrice: [{ value: '', disabled: true }],
-      // variablePriceCurrency: [{ value: '', disabled: true }],
       currency: ['', [Validators.required, Validators.min(0)]],
-      // variableAmount: ['', [Validators.min(0)]],
-      // discountedPriceCurrency: [{ value: '', disabled: true }],
       maxOccupancy: [
         null,
         [
@@ -132,12 +126,10 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       maxAdult: [{ value: null, disabled: true }, occupancyValidation],
       area: ['', [Validators.required, Validators.min(0)]],
 
-      ratePlan: new FormArray([]),
-      // minPrice: ['', [Validators.required, Validators.min(0)]],
-      // maxPrice: ['', [Validators.required, Validators.min(0)]],
+      ratePlans: new FormArray([]),
     });
 
-    this.ratePlanArray = this.useForm.get('ratePlan') as FormArray;
+    this.ratePlanArray = this.useForm.get('ratePlans') as FormArray;
 
     // If Data is already present
     if (this.roomService.roomTypeFormState) {
@@ -146,28 +138,52 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
     // Patch the form value if service id present
     if (this.roomTypeId) {
-      this.pageTitle = 'Update Room Type';
-      this.navRoutes[2].label = 'Update Room Type';
-
-      if (!this.roomService.roomTypeFormState) {
-        this.subscription$.add(
-          this.roomService
-            .getRoomTypeById(this.entityId, this.roomTypeId)
-            .subscribe(
-              (res) => {
-                this.useForm.patchValue(new RoomTypeForm().deserialize(res));
-              },
-              (err) => {
-                this.snackbarService.openSnackBarAsText(err.error.message);
-              }
-            )
-        );
-      }
+      this.initFormDetails();
     }
 
     /* Value changes subscription */
     this.initFormSubscription();
-    this.getRatePlans();
+  }
+
+  initFormDetails() {
+    this.pageTitle = 'Update Room Type';
+    this.navRoutes[2].label = 'Update Room Type';
+
+    if (!this.roomService.roomTypeFormState) {
+      this.subscription$.add(
+        this.roomService
+          .getRoomTypeById(this.entityId, this.roomTypeId)
+          .subscribe(
+            (res) => {
+              const data = new RoomTypeForm().deserialize(res);
+              data.ratePlans = data.ratePlans.map((item: any) => {
+                return {
+                  ...item,
+                  label: this.getPlanLabel(item.ratePlanTypeId),
+                };
+              });
+
+              data.ratePlans.forEach((item: any, idx: number) => {
+                if (idx > 0) this.addNewRatePlan();
+              });
+              this.useForm.patchValue(data);
+            },
+            (err) => {
+              this.snackbarService.openSnackBarAsText(err.error.message);
+            }
+          )
+      );
+    }
+  }
+
+  getPlanLabel(id: string) {
+    let label: string;
+    this.configService.$config.subscribe((value) => {
+      const { roomRatePlans } = value;
+      const plan = roomRatePlans.find((plan: any) => plan.id === id);
+      label = plan.label;
+    });
+    return label;
   }
 
   /**
@@ -179,17 +195,18 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.subscription$.add(
       this.configService.$config.subscribe((value) => {
         if (value) {
-          const { currencyConfiguration, roomDiscountConfig } = value;
+          const {
+            currencyConfiguration,
+            roomDiscountConfig,
+            roomRatePlans,
+          } = value;
           this.currencies = currencyConfiguration.map(modOption);
           this.discountTypes = roomDiscountConfig.map(({ value }) => ({
             label: DiscountType[value],
             value,
           }));
-          // this.useForm.get('variablePriceCurrency').setValue(this.currencies[0].value);
           this.useForm.get('currency').setValue(this.currencies[0].value);
-          // this.useForm
-          //   .get('discountedPriceCurrency')
-          //   .setValue(this.currencies[0].value);
+          this.getRatePlans(roomRatePlans);
         }
       })
     );
@@ -198,84 +215,113 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.getServices(ServicesTypeValue.COMPLIMENTARY);
   }
 
-  getRatePlans() {
-    this.roomService.getRatePlan(this.entityId).subscribe((res) => {
-      const plansData = res.map((option, index) => ({
-        label: option.label,
-        value: option.value,
-        disabled: false,
-        command: () => this.handlePlan(option.value),
-      }));
-      this.plans = plansData;
-      this.addNewRatePlan();
-    });
+  getRatePlans(ratePlans: RatePlanResponse[]) {
+    const plansData = ratePlans.map((option, index) => ({
+      label: option.label,
+      value: option.id,
+      disabled: false,
+      isDefault: option.isDefault,
+      command: () => this.handleRatePlan(option.id, option.label),
+    }));
+    this.plans = plansData;
+    this.addNewRatePlan();
   }
 
-  handlePlan(value, index?) {
-    const targetIndex = index ? index : this.selectedIndex;
+  /**
+   * @function handleRatePlan To handle rate plan dropdown clicks
+   */
+  handleRatePlan(value: string, label: string, index?: number) {
+    const targetIndex = index ?? this.selectedIndex;
     const currentPlan = this.plans.find((plan) => plan.value === value);
+    const ratePlanControl = this.ratePlanArray.at(targetIndex);
+
+    // If current plan is disabled then add next enabled plan
     if (!currentPlan.disabled) {
-      this.ratePlanArray.at(targetIndex).get('type').patchValue(value);
+      ratePlanControl.get('ratePlanTypeId').patchValue(value);
+      ratePlanControl.get('label').patchValue(label);
     } else {
       const nextEnabledPlan = this.plans.find((plan) => !plan.disabled);
-      if (nextEnabledPlan) {
-        this.ratePlanArray
-          .at(targetIndex)
-          .get('type')
-          .patchValue(nextEnabledPlan.value);
-        nextEnabledPlan.disabled = true;
-      }
+      ratePlanControl.get('ratePlanTypeId').patchValue(nextEnabledPlan.value);
+      ratePlanControl.get('label').patchValue(nextEnabledPlan.label);
+      nextEnabledPlan.disabled = true;
     }
     this.setDisabled(value);
   }
 
-  setDisabled(value) {
-    const ratePlans = this.plans.filter((item) => item.value === value);
-    const types = this.ratePlanArray.controls.map(
-      (control) => control.get('type').value
+  /**
+   * Disables the rate plan if already added
+   */
+  setDisabled(value: string) {
+    // Currently selected rate plans
+    const selectedRatePlans = this.plans.filter((item) => item.value === value);
+
+    const ratePlanIds = this.ratePlanArray.controls.map(
+      (control) => control.get('ratePlanTypeId').value
     );
 
-    if (types.includes(value)) {
-      ratePlans.map((type) => (type.disabled = true));
+    // Disables currently selected rate plans in the array
+    if (ratePlanIds.includes(value)) {
+      selectedRatePlans.map((type) => (type.disabled = true));
     }
+
+    // Enables remaining rate plans
     this.plans
-      .filter((item) => !types.includes(item.value))
+      .filter((item) => !ratePlanIds.includes(item.value))
       .map((plan) => (plan.disabled = false));
   }
 
+  /**
+   * Handle remove rate plan based on index
+   */
   onRemove(value: string, index: number): void {
-    const removedPlan = this.ratePlanArray.at(index).get('type').value;
+    const removedPlan = this.ratePlanArray.at(index).get('ratePlanTypeId')
+      .value;
+    this.removedRatePlans.push(removedPlan);
     this.ratePlanArray.removeAt(index);
     this.setDisabled(value);
     this.planCount--;
   }
 
+  /**
+   * @function addNewRatePlan Adds new rate plan array based on pricing type
+   */
   addNewRatePlan() {
-    const data = {
+    const staticPricing: Record<keyof StaticPricingRatePlan, any> = {
       basePriceCurrency: ['INR'],
-      basePrice: [''],
+      basePrice: ['', [Validators.required, Validators.min(0)]],
       discountType: ['PERCENTAGE'],
-      discountValue: [''],
-      bestRateCurrency: ['INR'],
-      bestAvailableRate: [''],
-      paxAdditionalCostCurrency: ['INR'],
-      paxAdditionalCost: [''],
-      type: [''],
-      // basePriceCurrency: ['INR'],
-      // basePrice: ['', [Validators.required, Validators.min(0)]],
-      // discountType: ['PERCENTAGE'],
-      // discountValue: ['', [Validators.required, Validators.min(0)]],
-      // bestRateCurrency: ['INR'],
-      // bestAvailableRate: ['', [Validators.required, Validators.min(0)]],
-      // paxAdditionalCostCurrency: ['INR'],
-      // paxAdditionalCost: ['', [Validators.required, Validators.min(0)]],
-      // type: [''],
+      discountValue: ['', [Validators.required, Validators.min(0)]],
+      bestPriceCurrency: ['INR'],
+      bestAvailablePrice: ['', [Validators.required, Validators.min(0)]],
+      paxPriceCurrency: ['INR'],
+      paxPrice: ['', [Validators.required, Validators.min(0)]],
+      ratePlanTypeId: [''],
+      label: [''],
     };
-    const formGroup = this.fb.group(data);
+
+    const dynamicPricing: Record<keyof DynamicPricingRatePlan, any> = {
+      minPriceCurrency: ['INR'],
+      minPrice: ['', [Validators.required, Validators.min(0)]],
+      maxPriceCurrency: ['INR'],
+      maxPrice: ['', [Validators.required, Validators.min(0)]],
+      paxPriceCurrency: ['INR'],
+      paxPrice: ['', [Validators.required, Validators.min(0)]],
+      ratePlanTypeId: [''],
+      label: [''],
+    };
+
+    let formGroup: FormGroup;
+    this.isPricingDynamic
+      ? (formGroup = this.fb.group(dynamicPricing))
+      : (formGroup = this.fb.group(staticPricing));
     this.ratePlanArray.push(formGroup);
 
     const ratePlanArrayIndex = this.ratePlanArray.length - 1;
-    this.handlePlan(this.plans[ratePlanArrayIndex].value, ratePlanArrayIndex);
+    this.handleRatePlan(
+      this.plans[ratePlanArrayIndex].value,
+      this.plans[ratePlanArrayIndex].label,
+      ratePlanArrayIndex
+    );
     this.planCount++;
   }
 
@@ -283,103 +329,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    * @function initFormSubscription Initialize the subscription of form value change
    */
   initFormSubscription() {
-    // this.registerRateAndDiscountChange();
     this.registerOccupancyChanges();
   }
-
-  // /**
-  //  * @function registerRateAndDiscountChange Subscribe to rate and discount value subscription to get discounted price
-  //  */
-  // registerRateAndDiscountChange() {
-  //   const {
-  //     originalPrice,
-  //     discountType,
-  //     discountedPriceCurrency,
-  //     discountValue,
-  //     currency,
-  //     // variablePriceCurrency,
-  //   } = this.inputControl;
-
-  //   /**
-  //    * @function setDiscountValueAndErrors To update the discount value
-  //    * @returns error type
-  //    */
-  //   const setDiscountValueAndErrors = () => {
-  //     const price = +originalPrice.value;
-  //     const discount = +(discountValue.value ?? 0);
-  //     const type = discountType.value;
-
-  //     if (price)
-  //       this.useForm.patchValue({
-  //         discountedPrice:
-  //           type === 'NUMBER'
-  //             ? price - discount
-  //             : Math.round(
-  //                 (price - (price * discount) / 100 + Number.EPSILON) * 100
-  //               ) / 100,
-  //       });
-
-  //     if (type === 'NUMBER' && discount > price) {
-  //       return 'isNumError';
-  //     }
-
-  //     if (type === 'PERCENTAGE' && discount > 100) {
-  //       return 'isPercentError';
-  //     }
-
-  //     if (discount < 0) {
-  //       return 'isMinError';
-  //     }
-  //   };
-
-  //   const clearError = () => {
-  //     originalPrice.setErrors(null);
-  //     discountValue.setErrors(null);
-  //   };
-
-  //   /* Original price Subscription */
-  //   originalPrice.valueChanges.subscribe(() => {
-  //     clearError();
-  //     const error = setDiscountValueAndErrors();
-  //     if (error === 'isNumError') {
-  //       originalPrice.setErrors({ isPriceLess: true });
-  //     }
-  //     if (error === 'isPercentError') {
-  //       discountValue.setErrors({ moreThan100: true });
-  //     }
-  //     if (originalPrice.value < 0) {
-  //       originalPrice.setErrors({ min: true });
-  //     }
-  //   });
-
-  //   /**
-  //    * @function discountSubscription To handle changes in discount value
-  //    */
-  //   const discountSubscription = () => {
-  //     discountValue.enable({ emitEvent: false });
-  //     clearError();
-  //     const error = setDiscountValueAndErrors();
-  //     if (error === 'isNumError') {
-  //       discountValue.setErrors({ isDiscountMore: true });
-  //     }
-  //     if (error === 'isPercentError') {
-  //       discountValue.setErrors({ moreThan100: true });
-  //     }
-  //     if (error === 'isMinError') {
-  //       discountValue.setErrors({ min: true });
-  //     }
-  //   };
-
-  //   /* Discount Subscription */
-  //   discountValue.valueChanges.subscribe(discountSubscription);
-  //   discountType.valueChanges.subscribe(discountSubscription);
-
-  //   /* Currency Subscription */
-  //   currency.valueChanges.subscribe((res) => {
-  //     discountedPriceCurrency.setValue(res);
-  //     // variablePriceCurrency.setValue(res);
-  //   });
-  // }
 
   /**
    * @function registerOccupancyChanges Subscribe to rate and discount value subscription to get discounted price
@@ -542,6 +493,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   updateDetails() {
     const data = {
       ...this.getRoomTypeModData(),
+      removeRatePlan: this.removedRatePlans,
       id: this.roomTypeId,
     };
 
@@ -568,24 +520,33 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     const {
       complimentaryAmenities,
       paidAmenities,
-      // discountedPriceCurrency,
-      // variablePriceCurrency,
+      ratePlans,
       ...rest
     } = this.useForm.getRawValue() as RoomTypeFormData;
+    let staticRatePlanModData: any[];
+    if (!this.isPricingDynamic) {
+      staticRatePlanModData = ratePlans.map((ratePlan) => {
+        const { discountType, discountValue, ...restRatePlan } = ratePlan;
+        return {
+          ...restRatePlan,
+          discount: {
+            type: discountType,
+            value: discountValue,
+          },
+        };
+      });
+    }
 
-    // Pricing Hard coded for now
+    // const ratePlan = this.isPricingDynamic
+    //   ? { ratePlans: ratePlans }
+    //   : { ratePlans: staticRatePlanModData };
+
     const data = {
       ...rest,
+      ratePlans: staticRatePlanModData,
       roomAmenityIds: complimentaryAmenities.concat(paidAmenities),
-      originalPrice: 100,
-      discountType: 'PERCENTAGE',
-      discountValue: 10,
-      discountedPrice: 90,
-      variablePriceCurrency: '10',
-      currency: 'INR',
-      variableAmount: 200,
-      discountedPriceCurrency: 'INR',
     };
+
     return data;
   }
 

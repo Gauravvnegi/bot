@@ -6,7 +6,12 @@ import {
   Router,
 } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { NavRouteOption, Option, Regex } from '@hospitality-bot/admin/shared';
+import {
+  HotelDetailService,
+  NavRouteOption,
+  Option,
+  Regex,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { businessRoute } from '../../constant/routes';
@@ -23,6 +28,7 @@ declare let google: any;
 })
 export class HotelInfoFormComponent implements OnInit {
   entityId: string;
+  siteId: string;
   useForm: FormGroup;
   compServices = [];
   loading = false;
@@ -51,7 +57,8 @@ export class HotelInfoFormComponent implements OnInit {
     private router: Router,
     private businessService: BusinessService,
     private route: ActivatedRoute,
-    private hotelFormDataService: HotelFormDataService
+    private hotelFormDataService: HotelFormDataService,
+    private hotelDetailService: HotelDetailService
   ) {
     this.router.events.subscribe(
       ({ snapshot }: { snapshot: ActivatedRouteSnapshot }) => {
@@ -65,28 +72,33 @@ export class HotelInfoFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.siteId = this.hotelDetailService.siteId;
     this.initForm();
   }
 
   initForm() {
     this.useForm = this.fb.group({
-      hotel: this.fb.group({
+      entity: this.fb.group({
         status: [true],
         name: ['', [Validators.required]],
         propertyCategory: [''],
-        emailId: ['', [Validators.pattern(Regex.EMAIL_REGEX)]],
+        emailId: [
+          '',
+          [Validators.pattern(Regex.EMAIL_REGEX), Validators.required],
+        ],
         contact: this.fb.group({
           countryCode: ['+91'],
           number: [''],
         }),
         gstNumber: [''],
-        address: [[]],
+        address: [{}],
         imageUrl: [[], [Validators.required]],
         description: [''],
         serviceIds: [[]],
         socialPlatforms: [[]],
       }),
       brandId: [this.brandId],
+      siteId: [this.siteId],
     });
 
     if (this.hotelFormDataService.hotelFormState) {
@@ -102,7 +114,7 @@ export class HotelInfoFormComponent implements OnInit {
         5
       );
       this.useForm
-        .get('hotel')
+        .get('entity')
         .patchValue(this.hotelFormDataService.hotelInfoFormData);
     }
     this.manageRoutes();
@@ -113,9 +125,9 @@ export class HotelInfoFormComponent implements OnInit {
         // const data = new HotelResponse().deserialize(res);
         const { propertyCategory, ...rest } = res;
         this.useForm
-          .get('hotel.propertyCategory')
+          .get('entity.propertyCategory')
           .patchValue(propertyCategory?.value);
-        this.useForm.get('hotel').patchValue(rest);
+        this.useForm.get('entity').patchValue(rest);
       });
 
       //get the servcie list after getting hotel by id
@@ -137,7 +149,7 @@ export class HotelInfoFormComponent implements OnInit {
             .filter((item) => item.active)
             .map((item) => item.id);
 
-          this.useForm.get('hotel.serviceIds').patchValue(data);
+          this.useForm.get('entity.serviceIds').patchValue(data);
         });
     }
   }
@@ -184,14 +196,14 @@ export class HotelInfoFormComponent implements OnInit {
     }
     const data = this.useForm.getRawValue();
     // get modified segment
-    data.hotel.propertyCategory = this.segmentList.find(
-      (item) => item?.value === data.hotel.propertyCategory
+    data.entity.propertyCategory = this.segmentList.find(
+      (item) => item?.value === data?.entity?.propertyCategory
     );
 
     //if entityId is present then update hotel else create hotel
     if (this.entityId) {
       this.$subscription.add(
-        this.businessService.updateHotel(this.entityId, data.hotel).subscribe(
+        this.businessService.updateHotel(this.entityId, data.entity).subscribe(
           (res) => {
             this.router.navigate([
               `/pages/settings/business-info/brand/${this.brandId}`,
@@ -220,7 +232,7 @@ export class HotelInfoFormComponent implements OnInit {
   saveHotelData() {
     //saving the hotel data locally
     this.hotelFormDataService.initHotelInfoFormData(
-      this.useForm.getRawValue().hotel,
+      this.useForm.getRawValue().entity,
       true
     );
 
@@ -241,7 +253,7 @@ export class HotelInfoFormComponent implements OnInit {
 
     //save hotel form data and now got to import service page
     this.hotelFormDataService.initHotelInfoFormData(
-      { ...data.hotel, allServices: this.allServices },
+      { ...data.entity, allServices: this.allServices },
       true
     );
 

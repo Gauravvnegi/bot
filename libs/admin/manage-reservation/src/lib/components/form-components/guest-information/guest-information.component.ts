@@ -134,6 +134,6 @@ export class GuestInformationComponent implements OnInit {
       ...this.globalQueries,
       { entityState: 'ALL', offset: this.guestsOffSet, limit: 5, type: 'GUEST' },
     ];
-    return { queryObj: this.adminUtilityService.makeQueryParams(config) };
+    return { params: this.adminUtilityService.makeQueryParams(config) };
   }
 }

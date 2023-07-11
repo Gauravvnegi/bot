@@ -19,7 +19,11 @@ import { AdminUtilityService, Option } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { RequestService } from '../../services/request.service';
-import { RequestConfig, RequestData, RequestMessageData } from '../../data-models/request.model';
+import {
+  RequestConfig,
+  RequestData,
+  RequestMessageData,
+} from '../../data-models/request.model';
 
 @Component({
   selector: 'hospitality-bot-send-message',
@@ -71,11 +75,13 @@ export class SendMessageComponent implements OnInit {
   }
 
   getConfigData(entityId): void {
-    this.requestService.getNotificationConfig(entityId).subscribe((response) => {
-      this.config = new RequestConfig().deserialize(response);
-      this.initOptions();
-      this.initNotificationForm();
-    });
+    this.requestService
+      .getNotificationConfig(entityId)
+      .subscribe((response) => {
+        this.config = new RequestConfig().deserialize(response);
+        this.initOptions();
+        this.initNotificationForm();
+      });
   }
 
   initOptions() {
@@ -93,7 +99,8 @@ export class SendMessageComponent implements OnInit {
     const messageType = this.messageTypes.find(
       (type) => type.value === selectedMessageType
     );
-    if (messageType) {
+    this.messageFG.get('templateId').patchValue('');
+    if (messageType && messageType.templateIds) {
       this.isTemplateDisabled = false;
       this.templates = messageType.templateIds.map((template) => ({
         label: template.name,
@@ -119,7 +126,9 @@ export class SendMessageComponent implements OnInit {
       attachments: [[]],
     });
     this.messageFG.get('roomNumbers').setValue(this.rooms);
-    this.messageFG.get('socialChannels').patchValue(this.channels.map(item=> item.value));
+    this.messageFG
+      .get('socialChannels')
+      .patchValue(this.channels.map((item) => item.value));
   }
 
   sendMessage() {
@@ -133,7 +142,9 @@ export class SendMessageComponent implements OnInit {
     this.isSending = true;
     console.log(this.messageFG.getRawValue());
     // const values = new RequestData().deserialize(this.messageFG.getRawValue());
-    const values = new RequestMessageData().deserialize(this.messageFG.getRawValue());
+    const values = new RequestMessageData().deserialize(
+      this.messageFG.getRawValue()
+    );
     if (values.templateId.length === 0) {
       values.templateId = '';
     }
@@ -171,7 +182,9 @@ export class SendMessageComponent implements OnInit {
           value: response.fileDownloadUri,
         });
         this.setUpdatedOptions(this.attachmentsList);
-        this.messageFG.get('attachments').patchValue(this.attachmentsList.map(item=> item.value));
+        this.messageFG
+          .get('attachments')
+          .patchValue(this.attachmentsList.map((item) => item.value));
         this.snackbarService
           .openSnackBarWithTranslate(
             {

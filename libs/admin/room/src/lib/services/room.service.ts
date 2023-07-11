@@ -7,10 +7,11 @@ import { TableValue } from '../constant/data-table';
 import {
   RoomTypeData,
   RoomTypeFormData,
+  RoomTypeModData,
   ServicesTypeValue,
 } from '../constant/form';
 import { MultipleRoom, SingleRoom } from '../models/room.model';
-import { QueryConfig, RatePlanOptions } from '../types/room';
+import { QueryConfig } from '../types/room';
 import {
   AddRoomsResponse,
   RoomByIdResponse,
@@ -21,7 +22,6 @@ import {
   RoomTypeResponse,
   ServiceResponse,
 } from '../types/service-response';
-import { ratePlanResponse } from '../constant/response';
 
 @Injectable()
 export class RoomService extends ApiService {
@@ -77,14 +77,6 @@ export class RoomService extends ApiService {
 
   getRoomTypes(entityId: string): Observable<any> {
     return this.get(`/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`);
-  }
-
-  getRatePlan(entityId: string): Observable<RatePlanOptions[]> {
-    return this.get(`/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`).pipe(
-      map((res) => {
-        return ratePlanResponse as RatePlanOptions[];
-      })
-    );
   }
 
   getList<T extends RoomTypeListResponse | RoomListResponse>(
@@ -188,7 +180,7 @@ export class RoomService extends ApiService {
     );
   }
 
-  createRoomType(entityId: string, data: any): Observable<RoomTypeResponse> {
+  createRoomType(entityId: string, data: RoomTypeModData): Observable<RoomTypeResponse> {
     return this.post(
       `/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`,
       data
@@ -206,7 +198,7 @@ export class RoomService extends ApiService {
 
   updateRoomType(
     entityId: string,
-    data: RoomTypeData
+    data: RoomTypeModData
   ): Observable<RoomTypeResponse> {
     return this.put(`/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`, data);
   }

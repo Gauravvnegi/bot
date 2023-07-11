@@ -1,5 +1,5 @@
 <div class="wrapper" [formGroup]="useForm">
-  <div [formGroup]="useForm.get('hotel')">
+  <div [formGroup]="useForm.get('entity')">
     <hospitality-bot-navigation-header
       [heading]="pageTitle"
       [routes]="navRoutes"
@@ -43,7 +43,10 @@
           placeholder: 'Enter'
         }"
       ></hospitality-bot-input>
-      <div class="half-width" [formGroup]="useForm.get('hotel').get('contact')">
+      <div
+        class="half-width"
+        [formGroup]="useForm.get('entity').get('contact')"
+      >
         <hospitality-bot-phone-number
           preControlName="countryCode"
           postControlName="number"
@@ -83,7 +86,7 @@
         <div class="des-template__label">Description</div>
         <div class="des-template__input">
           <hospitality-bot-template-editor
-            [parentFG]="useForm.get('hotel')"
+            [parentFG]="useForm.get('entity')"
             [name]="'description'"
             [height]="250"
           ></hospitality-bot-template-editor>

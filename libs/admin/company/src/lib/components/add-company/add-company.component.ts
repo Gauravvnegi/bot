@@ -128,7 +128,7 @@ export class AddCompanyComponent implements OnInit {
             },
             salePersonName: response.salesPersonName,
             salePersonNo: response.salesPersonPhone,
-            discountType: response.priceModifierType,
+            discountType: response.priceModifier,
             discount: response.priceModifierValue,
           });
         },

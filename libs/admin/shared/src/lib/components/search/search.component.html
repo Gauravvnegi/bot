@@ -1,0 +1,11 @@
+<span class="p-input-icon-right">
+  <form [formGroup]="controlContainer.control">
+    <input
+      type="text"
+      pInputText
+      [formControlName]="controlName"
+      [placeholder]="placeholder.length ? placeholder : 'Search...'"
+    />
+    <i class="pi pi-times-circle search-icon" (click)="clearSearch()"></i>
+  </form>
+</span>

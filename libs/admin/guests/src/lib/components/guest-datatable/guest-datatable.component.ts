@@ -92,8 +92,10 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
         {
-          type: 'GUEST',
+          type: 'AGENT',
           entityId: this.entityId,
+          orderBy: 'DESC',
+          sort: 'created',
           offset: this.first,
           limit: this.rowsPerPage,
         },

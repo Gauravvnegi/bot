@@ -150,7 +150,7 @@
       color: $unavailable-state;
     }
   }
-  
+
   &-contained {
     &-default {
       background-color: $default-state;
@@ -191,7 +191,6 @@
   }
 }
 
-
-
-
-
+.search {
+  margin-top: -7px;
+}

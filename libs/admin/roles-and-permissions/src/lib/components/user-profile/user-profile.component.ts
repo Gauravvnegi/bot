@@ -40,7 +40,8 @@ export class UserProfileComponent implements OnInit {
 
   isEdited = false;
   isLoading = true;
-  dataLoading = true;
+  dataLoading = false;
+  userDataLoading = false;
 
   teamMember: { initial: string; color: string }[] = [];
   totalTeamMember: number = 0;
@@ -175,7 +176,6 @@ export class UserProfileComponent implements OnInit {
 
   initStateSubscription() {
     this.tabIdx = 0;
-    this.dataLoading = true;
 
     switch (this.state) {
       case 'userProfile':
@@ -208,6 +208,8 @@ export class UserProfileComponent implements OnInit {
         break;
 
       case 'editUser':
+        this.userDataLoading = true;
+
         this._managePermissionService
           .getUserDetailsById(this.route.snapshot.paramMap.get('id'))
           .subscribe(
@@ -221,10 +223,10 @@ export class UserProfileComponent implements OnInit {
                 'User',
                 `${this.userToModDetails.firstName} ${this.userToModDetails.lastName}`
               );
-              this.dataLoading = false;
+              this.userDataLoading = false;
             },
             (err) => {
-              this.dataLoading = false;
+              this.userDataLoading = false;
             }
           );
         break;

@@ -93,6 +93,8 @@ export class AgentDataTableComponent extends BaseDatatableComponent
         {
           type: 'AGENT',
           entityId: this.entityId,
+          orderBy: 'DESC',
+          sort: 'created',
           offset: this.first,
           limit: this.rowsPerPage,
         },

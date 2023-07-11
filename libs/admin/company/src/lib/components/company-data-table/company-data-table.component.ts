@@ -87,6 +87,8 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
         {
           type: 'COMPANY',
           entityId: this.entityId,
+          orderBy: 'DESC',
+          sort: 'created',
           offset: this.first,
           limit: this.rowsPerPage,
         },

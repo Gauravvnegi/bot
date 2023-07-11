@@ -27,7 +27,7 @@ export class SearchComponent extends FormComponent {
       .get(this.controlName)
       .valueChanges.pipe(debounceTime(1000))
       .subscribe((searchKey) => {
-        searchKey && this.onSearch.emit(searchKey.trim());
+        this.onSearch.emit(searchKey.trim());
       });
   }
 

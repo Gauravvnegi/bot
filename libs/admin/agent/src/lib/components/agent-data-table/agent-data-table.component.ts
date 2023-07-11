@@ -142,10 +142,11 @@ export class AgentDataTableComponent extends BaseDatatableComponent
     ]);
   }
 
-  searchAgent(event: string) {
+  searchAgent(key: string) {
+    !key.length && this.initTable();
     this.loading = true;
     this.agentService
-      .searchAgent({ params: `?key=${event}&type=AGENT` })
+      .searchAgent({ params: `?key=${key}&type=AGENT` })
       .subscribe((res) => {
         this.values = res.map((item) => new AgentModel().deserialize(item));
         this.loading = false;

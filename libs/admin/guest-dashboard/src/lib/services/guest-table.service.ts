@@ -15,7 +15,7 @@ export class GuestTableService extends ApiService {
   }
 
   searchGuest(text: string): Observable<SearchGuestResponse> {
-    return this.get(`api/v1/search/guest?key=${text}`);
+    return this.get(`/api/v1/search/guest?key=${text}`);
   }
 
   getReservationFeedback(reservationId: string): Observable<any> {

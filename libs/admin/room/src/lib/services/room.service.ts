@@ -180,7 +180,10 @@ export class RoomService extends ApiService {
     );
   }
 
-  createRoomType(entityId: string, data: RoomTypeModData): Observable<RoomTypeResponse> {
+  createRoomType(
+    entityId: string,
+    data: RoomTypeModData
+  ): Observable<RoomTypeResponse> {
     return this.post(
       `/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`,
       data
@@ -200,7 +203,10 @@ export class RoomService extends ApiService {
     entityId: string,
     data: RoomTypeModData
   ): Observable<RoomTypeResponse> {
-    return this.put(`/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`, data);
+    return this.put(
+      `/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`,
+      data
+    );
   }
 
   updateHotel(entityId: string, data): Observable<any> {

@@ -109,6 +109,7 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
   handleSuccess = (id?: string) => {
     this.loading = false;
     const event = new BeforeUnloadEvent();
+    debugger;
     event.returnValue = true;
     this.snackbarService.openSnackBarAsText(
       `Service ${this.menuId ? 'edited' : 'created'} successfully`,

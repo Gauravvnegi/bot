@@ -14,6 +14,9 @@
         postControlName="dimension"
         class="half-width"
         label="Area"
+        [props]="{
+          placeholder: 'Enter'
+        }"
         [settings]="{
           preFieldType: 'input',
           postFieldType: 'select',
@@ -81,6 +84,9 @@
         postFieldType="select"
         [preOptions]="days"
         [postOptions]="days"
+        [props]="{
+          placeholder: 'Select Days'
+        }"
         [settings]="{
           layout: 'dashed'
         }"
@@ -96,6 +102,9 @@
         postFieldType="select"
         [preOptions]="hours"
         [postOptions]="hours"
+        [props]="{
+          placeholder: 'Select Timings'
+        }"
         [settings]="{
           layout: 'dashed'
         }"

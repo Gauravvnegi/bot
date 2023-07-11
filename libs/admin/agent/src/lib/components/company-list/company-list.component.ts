@@ -80,13 +80,13 @@ export class CompanyListComponent implements OnInit {
    */
   searchCompany(text: string) {
     this.loadingCompany = true;
-    if (text) {
+    if (text.length) {
       this.$subscription.add(
         this.companyService
           .searchCompany({ params: `?key=${text}&type=${this.type}` })
           .subscribe((res) => {
             const data = AgentModel.getCompanyList(res['records']);
-            this.companyList = [...this.companyList, ...data];
+            this.companyList = [...data];
             this.loadingCompany = false;
           })
       );

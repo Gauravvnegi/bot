@@ -92,9 +92,6 @@
       <td>
         <div class="cell-content">
           <span class="primary-text">{{ rowData.name }}</span>
-          <div *ngIf="rowData.isVerified" class="badge">
-            <img src="assets/images/verified-badge.webp" alt="badge" />
-          </div>
         </div>
       </td>
       <td>
@@ -104,15 +101,14 @@
           </span>
         </div>
       </td>
-      <td>
+      <td (click)="$event.stopPropagation()">
         <div class="cell-content">
-          <span *ngIf="rowData.mobileNumber; else emptyCell">
-            <a
-              href="tel:{{ rowData.mobileNumber }}"
-              class="email"
-              (click)="openDetailPage($event)"
-            >
-              <u> {{ rowData.mobileNumber }}</u>
+          <span
+            class="primary-text"
+            *ngIf="rowData.mobileNumber; else emptyCell"
+          >
+            <a href="tel:{{ rowData.mobileNumber }}">
+              {{ rowData.mobileNumber }}
             </a>
           </span>
         </div>

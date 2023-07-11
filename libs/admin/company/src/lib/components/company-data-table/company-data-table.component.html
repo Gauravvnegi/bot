@@ -111,10 +111,12 @@
           </div>
         </div>
       </td>
-      <td>
+      <td (click)="$event.stopPropagation()">
         <div class="cell-content" *ngIf="rowData.phoneNumber; else emptyCell">
           <div class="primary-text">
-            {{ rowData.phoneNumber }}
+            <a href="tel:{{ rowData.phoneNumber }}">{{
+              rowData.phoneNumber
+            }}</a>
           </div>
         </div>
       </td>
@@ -128,7 +130,7 @@
           </div>
         </div>
       </td>
-      <td>
+      <td (click)="$event.stopPropagation()">
         <div
           class="cell-content"
           *ngIf="rowData.salesPersonNumber; else emptyCell"

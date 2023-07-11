@@ -7,7 +7,7 @@ import { SearchGuestResponse } from '../types/guest.type';
 @Injectable()
 export class GuestTableService extends ApiService {
   getGuestList(config): Observable<any> {
-    return this.get(`/api/v1/guests${config.queryObj}`);
+    return this.get(`/api/v1/members${config.queryObj}`);
   }
 
   getGuestById(guestId: string): Observable<any> {

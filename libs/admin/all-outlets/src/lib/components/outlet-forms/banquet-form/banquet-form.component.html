@@ -42,6 +42,9 @@
         postControlName="minimumOccupancy"
         preFieldType="input"
         postFieldType="input"
+        [props]="{
+          placeholder: 'Enter'
+        }"
         [settings]="{
           layout: 'dashed',
           preProps: { type: 'number' },
@@ -53,6 +56,9 @@
         preControlName="area"
         postControlName="dimension"
         class="half-width"
+        [props]="{
+          placeholder: 'Enter'
+        }"
         label="Area"
         [settings]="{
           preFieldType: 'input',
@@ -68,6 +74,9 @@
         postControlName="dayOfOperationEnd"
         preFieldType="select"
         postFieldType="select"
+        [props]="{
+          placeholder: 'Select Days'
+        }"
         [preOptions]="days"
         [postOptions]="days"
         [settings]="{
@@ -85,6 +94,9 @@
         postFieldType="select"
         [preOptions]="hours"
         [postOptions]="hours"
+        [props]="{
+          placeholder: 'Select Timings'
+        }"
         [settings]="{
           layout: 'dashed'
         }"

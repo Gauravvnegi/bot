@@ -1,4 +1,4 @@
-import { StaticPricingMod } from "../constant/form";
+import { StaticPricingMod } from '../constant/form';
 
 export type RoomStatus =
   | 'CLEAN'
@@ -80,6 +80,9 @@ export type RoomTypeResponse = {
   area: number;
   status: boolean;
   maxOccupancy: number;
+  discountedPrice: number;
+  originalPrice: number;
+  currency: string;
 };
 
 export type RoomTypeListResponse = {

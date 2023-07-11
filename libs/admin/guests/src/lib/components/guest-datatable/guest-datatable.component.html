@@ -28,7 +28,6 @@
   [loading]="loading"
   [columns]="cols"
   [value]="values"
-  [paginator]="isPaginator"
   [rows]="rowsPerPage"
   [showCurrentPageReport]="showCurrentPageReport"
   [rowsPerPageOptions]="rowsPerPageOptions"
@@ -44,7 +43,6 @@
   (sortFunction)="customSort($event)"
   [customSort]="isCustomSort"
   (onFilter)="onDataFilter($event)"
-  *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
     <div
@@ -58,8 +56,10 @@
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
         [selectedChips]="selectedFilterChips"
-      ></hospitality-bot-filter-chips>
+      >
+      </hospitality-bot-filter-chips>
     </div>
+    <ng-container [ngTemplateOutlet]="search"></ng-container>
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
@@ -89,57 +89,46 @@
           (click)="onCheckboxClicked($event)"
         ></p-tableCheckbox>
       </td>
-      <td class="cell-content">
-        <span class="primary-text">{{ rowData.getFullName() }}</span>
-        <span class="secondary-text">{{ rowData.email }}</span>
+      <td>
+        <div class="cell-content">
+          <span class="primary-text">{{ rowData.name }}</span>
+          <div *ngIf="rowData.isVerified" class="badge">
+            <img src="assets/images/verified-badge.webp" alt="badge" />
+          </div>
+        </div>
       </td>
       <td>
-        <span *ngIf="rowData.email; else emptyCell">
-          {{ rowData.email }}
-        </span>
+        <div class="cell-content">
+          <span class="primary-text" *ngIf="rowData.email; else emptyCell">
+            {{ rowData.email }}
+          </span>
+        </div>
       </td>
-      <td class="package">
-        <span
-          *ngIf="
-            rowData.getPhoneNumber().length && rowData.getPhoneNumber() !== ' ';
-            else emptyCell
-          "
-        >
-          <ng-container
-            *ngIf="rowData.getPhoneNumber().includes(','); else singlePhone"
-          >
-            <ng-container
-              *ngFor="let link of rowData.getPhoneNumber().split(',\n')"
-            >
-              <a
-                href="tel:{{ link }}"
-                *ngIf="link"
-                class="email"
-                (click)="openDetailPage($event)"
-              >
-                <u> {{ link }}</u> </a
-              ><br />
-            </ng-container>
-          </ng-container>
-          <ng-template #singlePhone>
+      <td>
+        <div class="cell-content">
+          <span *ngIf="rowData.mobileNumber; else emptyCell">
             <a
-              href="tel:{{ rowData.countryCode }}{{ rowData.phoneNumber }}"
+              href="tel:{{ rowData.mobileNumber }}"
               class="email"
               (click)="openDetailPage($event)"
             >
-              <u> {{ rowData.countryCode }}-{{ rowData.phoneNumber }}</u>
+              <u> {{ rowData.mobileNumber }}</u>
             </a>
-          </ng-template>
-        </span>
+          </span>
+        </div>
       </td>
-      <td class="amount">
-        {{ rowData.payment.totalAmount | currency: 'INR' }}
+      <td>
+        <div class="cell-content">
+          <span *ngIf="rowData.age; else emptyCell">
+            {{ rowData.age }}
+          </span>
+        </div>
       </td>
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->
-  <ng-template pTemplate="summary">
-    <p-paginator
+  <!-- <ng-template pTemplate="summary"> -->
+  <!-- <p-paginator
       #paginator
       [rows]="rowsPerPage"
       [totalRecords]="totalRecords"
@@ -147,8 +136,8 @@
       (onPageChange)="paginate($event)"
       [currentPageReportTemplate]="reportTemplate"
       showCurrentPageReport="true"
-    ></p-paginator>
-  </ng-template>
+    ></p-paginator> -->
+  <!-- </ng-template> -->
 </p-table>
 
 <ng-template #emptyCell>
@@ -163,6 +152,7 @@
     }"
   >
     <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+    <ng-container [ngTemplateOutlet]="search"></ng-container>
   </hospitality-bot-empty-table>
 </ng-template>
 
@@ -173,4 +163,16 @@
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
+</ng-template>
+
+<ng-template #search>
+  <hospitality-bot-search
+    class="search"
+    [formGroup]="tableFG"
+    controlName="search"
+    [props]="{
+      placeholder: 'Search Guest...'
+    }"
+    (onSearch)="searchGuest($event)"
+  ></hospitality-bot-search>
 </ng-template>

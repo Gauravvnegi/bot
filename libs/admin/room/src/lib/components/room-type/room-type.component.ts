@@ -156,16 +156,16 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           .subscribe(
             (res) => {
               const data = new RoomTypeForm().deserialize(res);
-              data.ratePlans = data.ratePlans?.map((item: any) => {
-                return {
-                  ...item,
-                  label: this.getPlanLabel(item.ratePlanTypeId),
-                };
-              });
+              // data.ratePlans = data.ratePlans.map((item: any) => {
+              //   return {
+              //     ...item,
+              //     label: this.getPlanLabel(item.ratePlanTypeId),
+              //   };
+              // });
 
-              data.ratePlans.forEach((item: any, idx: number) => {
-                if (idx > 0) this.addNewRatePlan();
-              });
+              // data.ratePlans.forEach((item: any, idx: number) => {
+              //   if (idx > 0) this.addNewRatePlan();
+              // });
               this.useForm.patchValue(data);
             },
             (err) => {
@@ -523,19 +523,19 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       ratePlans,
       ...rest
     } = this.useForm.getRawValue() as RoomTypeFormData;
-    let staticRatePlanModData: any[];
-    if (!this.isPricingDynamic) {
-      staticRatePlanModData = ratePlans?.map((ratePlan) => {
-        const { discountType, discountValue, ...restRatePlan } = ratePlan;
-        return {
-          ...restRatePlan,
-          discount: {
-            type: discountType,
-            value: discountValue,
-          },
-        };
-      });
-    }
+    // let staticRatePlanModData: any[];
+    // if (!this.isPricingDynamic) {
+    //   staticRatePlanModData = ratePlans.map((ratePlan) => {
+    //     const { discountType, discountValue, ...restRatePlan } = ratePlan;
+    //     return {
+    //       ...restRatePlan,
+    //       discount: {
+    //         type: discountType,
+    //         value: discountValue,
+    //       },
+    //     };
+    //   });
+    // }
 
     // const ratePlan = this.isPricingDynamic
     //   ? { ratePlans: ratePlans }
@@ -543,7 +543,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
 
     const data = {
       ...rest,
-      ratePlans: staticRatePlanModData,
+      ratePlans: ratePlans,
       roomAmenityIds: complimentaryAmenities.concat(paidAmenities),
     };
 

@@ -1,5 +1,9 @@
 <p-accordion>
-  <p-accordionTab class="accordion-header" header="Social Media" [formGroup]="useForm">
+  <p-accordionTab
+    class="accordion-header"
+    header="Social Media"
+    [formGroup]="useForm"
+  >
     <div class="form-block" formArrayName="socialPlatforms">
       <div
         class="one-third-width"
@@ -15,6 +19,9 @@
           <hospitality-bot-input
             controlName="redirectUrl"
             class="input"
+            [props]="{
+              placeholder: 'Enter URL'
+            }"
           ></hospitality-bot-input>
           <img
             src="/assets/svg/cross.svg"

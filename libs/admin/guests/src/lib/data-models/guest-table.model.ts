@@ -68,6 +68,36 @@ export class EntityStateCounts {
   }
 }
 
+export class GuestData {
+  age: number;
+  mobileNumber: string;
+  email: string;
+  name: string;
+  id: string;
+  isVerified: boolean;
+  status: boolean;
+  type: string;
+
+  deserialize(input) {
+    const contact = input['contactDetails'];
+    Object.assign(this, {
+      age: input['age'],
+      mobileNumber:
+        contact['cc'] && contact['contactNumber']
+          ? contact['cc'] + '-' + contact['contactNumber']
+          : '',
+      email: contact['emailId'],
+      name: input['firstName'] + ' ' + (input['lastName'] ?? ''),
+      id: input['id'],
+      isVerified: input['isVerified'],
+      status: input['status'],
+      type: input['type'],
+    });
+
+    return this;
+  }
+}
+
 export class Guest implements IDeserializable {
   dateOfBirth: string;
   contactDetails;

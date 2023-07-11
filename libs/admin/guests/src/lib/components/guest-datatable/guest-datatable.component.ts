@@ -9,7 +9,11 @@ import {
 } from '@hospitality-bot/admin/shared';
 import * as FileSaver from 'file-saver';
 import { Subscription } from 'rxjs';
-import { GuestTable } from '../../data-models/guest-table.model';
+import {
+  Guest,
+  GuestData,
+  GuestTable,
+} from '../../data-models/guest-table.model';
 import { GuestTableService } from '../../services/guest-table.service';
 import { manageGuestRoutes } from '../../constant/route';
 import { guestCols } from '../../constant/guest';
@@ -49,11 +53,11 @@ export class GuestDatatableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.getDataTableValue();
+    // this.getDataTableValue();
   }
 
   loadData(event: LazyLoadEvent): void {
-    this.getDataTableValue();
+    // this.getDataTableValue();
   }
 
   getDataTableValue() {
@@ -92,7 +96,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
         {
-          type: 'AGENT',
+          type: 'GUEST',
           entityId: this.entityId,
           orderBy: 'DESC',
           sort: 'created',
@@ -108,6 +112,18 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     this.router.navigate([
       `/pages/members/guests/${manageGuestRoutes.editGuest.route}/${rowData.id}`,
     ]);
+  }
+
+  searchGuest(key: string) {
+    if (!key.length) {
+      this.values = [];
+      return;
+    }
+    this.loading = true;
+    this.guestTableService.searchGuest(key).subscribe((res) => {
+      this.values = res.map((item) => new GuestData().deserialize(item));
+      this.loading = false;
+    });
   }
 
   exportCSV(): void {

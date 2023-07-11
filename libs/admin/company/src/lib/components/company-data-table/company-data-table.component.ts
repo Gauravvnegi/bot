@@ -14,7 +14,7 @@ import { CompanyService } from '../../services/company.service';
 import { Router } from '@angular/router';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { LazyLoadEvent } from 'primeng/api';
-import { CompanyResponseModel } from '../../models/company.model';
+import { CompanyModel, CompanyResponseModel } from '../../models/company.model';
 import { CompanyListResponse } from '../../types/response';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
@@ -136,6 +136,22 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
     this.router.navigate([
       `/pages/members/company/${this.companyRoutes.editCompany.route}/${rowData.id}`,
     ]);
+  }
+
+  searchCompany(key: string) {
+    if (!key.length) {
+      this.initTable();
+      return;
+    }
+    this.loading = true;
+    this.companyService
+      .searchCompany({ params: `?key=${key}&type=COMPANY` })
+      .subscribe((res) => {
+        this.values =
+          res?.records?.map((item) => new CompanyModel().deserialize(item)) ??
+          [];
+        this.loading = false;
+      });
   }
 
   /**

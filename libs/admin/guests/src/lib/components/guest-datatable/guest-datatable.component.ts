@@ -115,7 +115,10 @@ export class GuestDatatableComponent extends BaseDatatableComponent
   }
 
   searchGuest(key: string) {
-    !key.length && (this.values = []);
+    if (!key.length) {
+      this.values = [];
+      return;
+    }
     this.loading = true;
     this.guestTableService.searchGuest(key).subscribe((res) => {
       this.values = res.map((item) => new GuestData().deserialize(item));

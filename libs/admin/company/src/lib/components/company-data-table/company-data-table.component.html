@@ -53,7 +53,8 @@
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
         [selectedChips]="selectedFilterChips"
-      ></hospitality-bot-filter-chips>
+        ><ng-container [ngTemplateOutlet]="search"></ng-container>
+      </hospitality-bot-filter-chips>
     </div>
   </ng-template>
 
@@ -199,4 +200,15 @@
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
+</ng-template>
+
+<ng-template #search>
+  <hospitality-bot-search
+    [formGroup]="tableFG"
+    controlName="search"
+    [props]="{
+      placeholder: 'Search Company...'
+    }"
+    (onSearch)="searchCompany($event)"
+  ></hospitality-bot-search>
 </ng-template>

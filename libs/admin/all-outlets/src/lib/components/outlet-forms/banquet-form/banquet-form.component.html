@@ -42,8 +42,13 @@
         postControlName="minimumOccupancy"
         preFieldType="input"
         postFieldType="input"
-        [props]="{
-          placeholder: 'Enter'
+        [defaultProps]="{
+          pre: {
+            placeholder: 'Max Occupancy'
+          },
+          post: {
+            placeholder: 'Min Occupancy'
+          }
         }"
         [settings]="{
           layout: 'dashed',

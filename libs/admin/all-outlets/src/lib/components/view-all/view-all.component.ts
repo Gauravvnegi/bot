@@ -20,6 +20,11 @@ import {
   spaTabItemList,
 } from '../../constants/data';
 import { OutletType } from '../../types/outlet';
+import {
+  noRecordActionForCompWithId,
+  noRecordActionForMenuWithId,
+  noRecordActionForPaidWithId,
+} from '../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-view-all',
@@ -36,6 +41,9 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   isCompLoading: boolean;
   isPaidLoading: boolean;
   noRecordAction = {};
+  noRecordActionPaidWithId = noRecordActionForPaidWithId;
+  noRecordActionForCompWithId = noRecordActionForCompWithId;
+  noRecordActionForMenuWithId = noRecordActionForMenuWithId;
 
   /** Paid Services Variable */
   paidServices: Service[] = [];
@@ -50,7 +58,7 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   limit = 10;
   disablePagination = false;
   subscription$ = new Subscription();
-  selectedTabFilterItems = this.tabItemList[0].value;
+  selectedTabFilterItems = this.tabItemList[0]?.value;
   offset: number;
   constructor(
     route: ActivatedRoute,
@@ -68,9 +76,9 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.initSelectedService();
-    if (!this.outletFormService.outletFormState) {
-      this.location.back();
-    }
+    // if (!this.outletFormService.outletFormState) {
+    //   this.location.back();
+    // }
   }
 
   initForm(): void {
@@ -116,6 +124,8 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
       case 'VENUE':
         this.tabItemList = VenueTabItemList;
         break;
+      default:
+        this.tabItemList = restaurantTabItemList;
     }
   }
 
@@ -128,7 +138,7 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
     //this will be used to set and for api call according to the selected tab filter item list
 
     const event = this.tabItemList[index.index];
-    switch (event.value) {
+    switch (event?.value) {
       case 'paidServices':
         this.selectedTabFilterItems = 'PAID';
         this.getServices(ServicesTypeValue.PAID);
@@ -200,7 +210,9 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
     );
   }
 
-  getMenuList() {}
+  getMenuList() {
+    //api call to get menu list item
+  }
 
   getQueryConfig = (offset: number, type: ServicesTypeValue): QueryConfig => {
     const config = {

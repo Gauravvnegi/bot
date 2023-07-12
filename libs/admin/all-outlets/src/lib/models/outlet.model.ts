@@ -1,5 +1,5 @@
 import { MenuItemResponse } from '../types/menu';
-import { OutletResponse } from '../types/response';
+import { MenuListResponse, MenuResponse } from '../types/outlet';
 
 export class OutletList {
   id: string;
@@ -18,6 +18,40 @@ export class OutletList {
     return this;
   }
 }
+
+export class MenuList {
+  total: number;
+  entityStateCounts;
+  records: Menu[];
+
+  deserialize(input: MenuListResponse) {
+    this.total = input.total;
+    this.entityStateCounts = input.entityStateCounts;
+    this.records = input.records.map((item) => new Menu().deserialize(item));
+    return this;
+  }
+}
+
+class Menu {
+  id: string;
+  name: string;
+  imageUrl: string;
+  description: string;
+  status: boolean;
+  entityId: string;
+
+  deserialize(input: MenuResponse) {
+    this.id = input.id;
+    this.name = input.name;
+    this.imageUrl = input.imageUrl;
+    this.description = input.description;
+    this.status = input.status;
+    this.entityId = input.entityId;
+    return this;
+  }
+}
+
+export class Records {}
 
 export class MenuItem {
   code: string;

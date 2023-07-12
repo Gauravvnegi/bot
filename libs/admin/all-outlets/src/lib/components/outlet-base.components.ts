@@ -24,8 +24,8 @@ export class OutletBaseComponent {
   menuId: string;
   menuItemId: string;
   foodPackageId: string;
-  navRoutes: any[];
-  pageTitle: string;
+  navRoutes: any[] = [];
+  pageTitle: string = 'Outlet';
 
   constructor(protected router: Router, protected route: ActivatedRoute) {
     this.router.events.subscribe(
@@ -72,7 +72,7 @@ export class OutletBaseComponent {
     }
   }
 
-  initComponent(routeName: OutletAddRoutes | 'importService') {
+  initComponent(routeName: OutletAddRoutes | 'importService' | 'viewAll') {
     const { navRoutes, title } = this.entityId
       ? this.getRoutes(
           //edit hotel case and add hotel is in business module

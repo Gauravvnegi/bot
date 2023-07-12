@@ -22,7 +22,7 @@ export class SpaFormComponent implements OnInit {
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
   noRecordActionForPaid = noRecordActionForPaid;
-
+  @Input() isLoading = false;
   @Input() compServices: any[] = [];
   @Input() paidServices: any[] = [];
 

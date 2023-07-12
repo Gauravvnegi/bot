@@ -16,6 +16,7 @@ import { FoodItemsComponent } from './components/food-items/food-items.component
 import { FoodPackageComponent } from './components/outlet-forms/food-package/food-package.component';
 import { ImportServiceComponent } from './components/import-service/import-service.component';
 import { outletBusinessRoutes } from './constants/routes';
+import { ViewAllComponent } from './components/Services/view-all.component';
 
 const appRoutes: Route[] = [
   {
@@ -35,8 +36,13 @@ const appRoutes: Route[] = [
             component: AddOutletComponent,
           },
           {
-            path: 'import-services',
+            path: outletBusinessRoutes.importService.route,
             component: ImportServiceComponent,
+            pathMatch: 'full',
+          },
+          {
+            path: outletBusinessRoutes.viewAll.route,
+            component: ViewAllComponent,
             pathMatch: 'full',
           },
           {
@@ -94,5 +100,6 @@ export class AdminAllOutletsRoutingModule {
     FoodItemsComponent,
     FoodPackageComponent,
     ImportServiceComponent,
+    ViewAllComponent,
   ];
 }

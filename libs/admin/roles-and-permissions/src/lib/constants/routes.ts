@@ -33,6 +33,6 @@ export const managePermissionRoutes: Record<RouteKey, PageRoutes> = {
   editUser: {
     route: 'edit-user/:id',
     navRoutes: [navRoute.userProfile, navRoute.editUser],
-    title: 'Edit {0} Profile',
+    title: 'Edit User Profile',
   },
 };

@@ -87,7 +87,7 @@ export type UserResponse = {
   phoneNumber: string;
   // hotelAccess: { brands: Brand[] };
   permissions: {
-    entity: string;
+    module: string;
     label: string;
     permissions: {
       manage: -1 | 0 | 1;

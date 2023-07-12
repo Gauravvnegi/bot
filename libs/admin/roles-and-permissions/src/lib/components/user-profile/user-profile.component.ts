@@ -40,6 +40,8 @@ export class UserProfileComponent implements OnInit {
 
   isEdited = false;
   isLoading = true;
+  dataLoading = false;
+  userDataLoading = false;
 
   teamMember: { initial: string; color: string }[] = [];
   totalTeamMember: number = 0;
@@ -57,6 +59,12 @@ export class UserProfileComponent implements OnInit {
   pageTitle: string;
   navRoutes: NavRouteOptions = [];
   state: PageState;
+
+  updateMessage: Record<PageState, string> = {
+    addNewUser: 'User Added Successfully',
+    editUser: 'User Profile Updated Successfully',
+    userProfile: 'Profile Updated Successfully',
+  };
 
   constructor(
     private _fb: FormBuilder,
@@ -101,21 +109,29 @@ export class UserProfileComponent implements OnInit {
    * To initialize logged in user data
    */
   initAdminUserDetails() {
+    this.dataLoading = true;
+
     this._managePermissionService
       .getUserDetailsById(this.loggedInUserId)
-      .subscribe((data) => {
-        this.adminToModDetails = new UserConfig().deserialize(data);
-        this.products = this.adminToModDetails.products;
-        this.departments = this.adminToModDetails.departments.map((item) => ({
-          ...item,
-          label: item.departmentLabel,
-          value: item.department,
-        }));
+      .subscribe(
+        (data) => {
+          this.adminToModDetails = new UserConfig().deserialize(data);
+          this.products = this.adminToModDetails.products;
+          this.departments = this.adminToModDetails.departments.map((item) => ({
+            ...item,
+            label: item.departmentLabel,
+            value: item.department,
+          }));
 
-        const { permissionConfigs } = this._userService.userDetails;
-        this.adminPermissions = permissionConfigs;
-        this.initStateSubscription();
-      });
+          const { permissionConfigs } = this._userService.userDetails;
+          this.adminPermissions = permissionConfigs;
+          this.initStateSubscription();
+          this.dataLoading = false;
+        },
+        (err) => {
+          this.dataLoading = false;
+        }
+      );
   }
 
   /**
@@ -192,19 +208,27 @@ export class UserProfileComponent implements OnInit {
         break;
 
       case 'editUser':
+        this.userDataLoading = true;
+
         this._managePermissionService
           .getUserDetailsById(this.route.snapshot.paramMap.get('id'))
-          .subscribe((data) => {
-            this.userToModDetails = new UserConfig().deserialize(data);
-            this.userPermissions = this.userToModDetails.permissionConfigs;
-            this.initFormValues();
-            this.initAfterFormLoaded();
-            this.initUserPermissions();
-            this.pageTitle = this.pageTitle.replace(
-              '{0}',
-              `${this.userToModDetails.firstName} ${this.userToModDetails.lastName}`
-            );
-          });
+          .subscribe(
+            (data) => {
+              this.userToModDetails = new UserConfig().deserialize(data);
+              this.userPermissions = this.userToModDetails.permissionConfigs;
+              this.initFormValues();
+              this.initAfterFormLoaded();
+              this.initUserPermissions();
+              this.pageTitle = this.pageTitle.replace(
+                'User',
+                `${this.userToModDetails.firstName} ${this.userToModDetails.lastName}`
+              );
+              this.userDataLoading = false;
+            },
+            (err) => {
+              this.userDataLoading = false;
+            }
+          );
         break;
       default:
         break;
@@ -349,7 +373,7 @@ export class UserProfileComponent implements OnInit {
 
     if (this.state === 'editUser') {
       const userConfig = this.userPermissions.find(
-        (item) => item.entity === config.entity
+        (item) => item.module === config.module
       );
       const userView = userConfig ? userConfig.permissions.view : 0;
       const userManage = userConfig ? userConfig.permissions.manage : 0;
@@ -379,7 +403,7 @@ export class UserProfileComponent implements OnInit {
     this.adminPermissions.forEach((config, index) => {
       formArray.push(
         this._fb.group({
-          entity: [config.entity],
+          module: [config.module],
           label: [config.label],
           permissions: this.constructPermission(config),
           productType: [config.productType],
@@ -455,16 +479,13 @@ export class UserProfileComponent implements OnInit {
 
     const handleSuccess = (res) => {
       this.snackbarService.openSnackBarAsText(
-        this.hasPageState('addNewUser')
-          ? 'User Added Successfully'
-          : 'User Edited Successfully',
+        this.updateMessage[this.state],
         '',
-        {
-          panelClass: 'success',
-        }
+        { panelClass: 'success' }
       );
       this.isUpdatingPermissions = false;
-      this.router.navigate([navRoute.userProfile.link]);
+      if (this.state !== 'editUser')
+        this.router.navigate([navRoute.userProfile.link]);
     };
 
     this.isUpdatingPermissions = true;
@@ -474,7 +495,7 @@ export class UserProfileComponent implements OnInit {
         .editUserDetails({
           ...userProfileData,
           status: true,
-          userId: this._userService.getLoggedInUserId(),
+          id: this._userService.getLoggedInUserId(),
         })
         .subscribe(handleSuccess, handleError);
       this.isEdited = false;

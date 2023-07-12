@@ -29,8 +29,8 @@ export class FilterComponent implements OnChanges, OnInit {
   @Output() onApplyFilter = new EventEmitter();
   @Output() onResetFilter = new EventEmitter();
 
-  hotelList = [];
-  branchList = [];
+  entityList = [];
+  brandList = [];
   feedbackType;
   outlets = [];
   hotelBasedToken = { key: null, value: null };
@@ -55,8 +55,8 @@ export class FilterComponent implements OnChanges, OnInit {
   initFilterForm() {
     this.filterForm = this._fb.group({
       property: this._fb.group({
-        hotelName: ['', [Validators.required]],
-        branchName: ['', [Validators.required]],
+        brandName: ['', [Validators.required]],
+        entityName: ['', [Validators.required]],
       }),
       guest: this._fb.group({
         guestCategory: this._fb.group({
@@ -106,26 +106,26 @@ export class FilterComponent implements OnChanges, OnInit {
   listenForBrandChanges() {
     this.filterForm
       .get('property')
-      .get('hotelName')
+      .get('brandName')
       .valueChanges.subscribe((brandId) => {
         const { entities } = this._hotelDetailService.brands.find(
           (brand) => brand['id'] === brandId
         );
 
-        this.branchList = entities.map((item) => ({
+        this.brandList = entities.map((item) => ({
           label: item.name,
           value: item.id,
         }));
 
-        const currentBranch = this.filterForm.get('property').get('branchName')
+        const currentBranch = this.filterForm.get('property').get('entityName')
           .value;
 
         if (
           currentBranch &&
-          this.branchList.findIndex((item) => item.value === currentBranch) ===
+          this.brandList.findIndex((item) => item.value === currentBranch) ===
             -1
         ) {
-          this.filterForm.get('property').patchValue({ branchName: '' }); //resetting hotel
+          this.filterForm.get('property').patchValue({ entityName: '' }); //resetting hotel
         }
       });
   }
@@ -133,9 +133,9 @@ export class FilterComponent implements OnChanges, OnInit {
   listenForBranchChanges() {
     this.filterForm
       .get('property')
-      .get('branchName')
+      .get('entityName')
       .valueChanges.subscribe((id) => {
-        const brandName = this.filterForm.get('property').get('hotelName')
+        const brandName = this.filterForm.get('property').get('brandName')
           .value;
         const outlets =
           this._hotelDetailService.brands
@@ -172,7 +172,7 @@ export class FilterComponent implements OnChanges, OnInit {
   }
 
   setBrandLOV() {
-    this.hotelList = this._hotelDetailService.brands.map((item) => ({
+    this.entityList = this._hotelDetailService.brands.map((item) => ({
       label: item.name,
       value: item.id,
     }));
@@ -181,6 +181,7 @@ export class FilterComponent implements OnChanges, OnInit {
   applyFilter() {
     if (
       this.feedbackFG.get('feedbackType').value !== 'STAYFEEDBACK' &&
+      !!this.outlets.length &&
       !Object.keys(this.outletFG.value)
         .map((key) => this.outletFG.value[key])
         .reduce((acc, red) => acc || red)
@@ -287,11 +288,11 @@ export class FilterComponent implements OnChanges, OnInit {
     return this.filterForm.get('guest') as FormGroup;
   }
 
-  get hotelNameFC() {
-    return this.propertyFG.get('hotelName') as FormControl;
+  get brandNameFC() {
+    return this.propertyFG.get('brandName') as FormControl;
   }
 
-  get branchNameFC() {
-    return this.propertyFG.get('branchName') as FormControl;
+  get entityNameFC() {
+    return this.propertyFG.get('entityName') as FormControl;
   }
 }

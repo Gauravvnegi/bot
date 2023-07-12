@@ -65,7 +65,7 @@ export class MainComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.getOutlets(data['filter'].value.property.branchName);
+        this.getOutlets(data['filter'].value.property.entityName);
         this.feedbackType = data['filter'].value.feedback.feedbackType;
       })
     );

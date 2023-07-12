@@ -134,7 +134,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         this.entityId = this.globalFilterService.entityId;
-        const { hotelName: brandId, branchName: branchId } = data[
+        const { brandName: brandId, entityName: branchId } = data[
           'filter'
         ].value.property;
         const brandConfig = this._hotelDetailService.brands.find(

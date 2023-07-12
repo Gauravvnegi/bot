@@ -183,7 +183,7 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
       navRoutes.editOutlet,
       navRoutes.viewAll,
     ],
-    title: 'View All',
+    title: 'Services',
   },
 };
 

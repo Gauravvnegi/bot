@@ -8,6 +8,7 @@ import { QueryConfig } from '@hospitality-bot/admin/library';
 import { MenuConfig, OutletConfig } from '../types/config';
 import { OutletResponse } from '../types/response';
 import { ServiceResponse } from 'libs/admin/services/src/lib/types/response';
+import { MenuListResponse } from '../types/outlet';
 
 @Injectable()
 export class OutletService extends ApiService {
@@ -135,7 +136,7 @@ export class OutletService extends ApiService {
     );
   }
 
-  getMenuList(entityId: string): Observable<any> {
+  getMenuList(entityId: string): Observable<MenuListResponse> {
     return this.get(`/api/v1/menus`, {
       headers: { 'entity-id': entityId },
     });

@@ -7,21 +7,26 @@
         label="Complimentary Services"
         description="This is a free of cost services"
         formControlName="serviceIds"
+        [loading]="isLoading"
         [itemList]="compServices"
+        (viewAll)="onCreateAndContinue('view-all')"
         (onEmptyViewAction)="onCreateAndContinue('import-services')"
         [noRecordsAction]="noRecordActionForComp"
         type="icon"
       >
         <hospitality-bot-button
+          *ngIf="outletId"
           label="+ Import Services"
           variant="text"
           (onClick)="onCreateAndContinue('import-services')"
         ></hospitality-bot-button>
       </hospitality-bot-custom-select>
       <hospitality-bot-custom-select
+        [loading]="isLoading"
         label="Paid Services"
         description="Do not forget to add this cost in addition to the room cost"
         formControlName="serviceIds"
+        (viewAll)="onCreateAndContinue('view-all')"
         [itemList]="paidServices"
         (onEmptyViewAction)="onCreateAndContinue('service')"
         [noRecordsAction]="noRecordActionForPaid"
@@ -29,7 +34,9 @@
     </div>
   </div>
 
-  <hospitality-bot-food-package></hospitality-bot-food-package>
+  <hospitality-bot-food-package
+    [outletId]="outletId"
+  ></hospitality-bot-food-package>
 
   <div class="container-wrapper">
     <div class="header">Other Details</div>

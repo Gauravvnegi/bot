@@ -20,11 +20,19 @@ export type OutletForm = {
   area: string;
   dimension: string;
   rules: Rules;
-  paidAmenities;
-  complimentaryAmenities;
-  menuIds;
-  foodPackageIds;
+  paidServiceIds?;
+  menuIds?;
+  foodPackageIds?;
 };
+
+type OutletItems = {
+  paidAmenities?;
+  complimentaryAmenities?;
+  MenuList?;
+};
+
+export type OutletFormData = OutletForm & OutletItems;
+
 type Rules = {
   title: string;
   description: string;
@@ -36,6 +44,35 @@ type Address = {
   pinCode: string;
   city: string;
 } & Record<string, any>;
+
+export type MenuListResponse = {
+  total: number;
+  entityStateCounts: EntityStateCounts;
+  records: MenuResponse[];
+};
+
+export type MenuResponse = {
+  id: string;
+  name: string;
+  imageUrl: string;
+  description: string;
+  status: boolean;
+  entityId: string;
+};
+
+export type Menu = {
+  id: string;
+  name: string;
+  imageUrl: string;
+  description: string;
+  status: boolean;
+  entityId: string;
+};
+
+type EntityStateCounts = {
+  ACTIVE: number;
+  INACTIVE: number;
+};
 
 export type RestaurantForm = Omit<OutletForm, 'minimumOccupancy'>;
 

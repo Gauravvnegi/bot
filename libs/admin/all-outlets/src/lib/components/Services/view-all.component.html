@@ -31,12 +31,12 @@
       <hospitality-bot-tab-group
         [listItems]="tabItemList"
         [selectedIndex]="tabItemIdx"
-        (selectedTabChange)="onSelectedTabFilterChange($event)"
+        (selectedTabChange)="onSelectedTabFilterChange($event.index)"
       ></hospitality-bot-tab-group>
       <form [formGroup]="useForm">
-        <ng-container>
+        <ng-container *ngIf="selectedTabFilterItems == 'PAID_SERVICES'">
           <hospitality-bot-custom-select
-            formControlName="paidAmenities"
+            formControlName="paidServiceIds"
             [itemList]="paidServices"
             [fullView]="true"
             (loadMoreData)="loadMore()"
@@ -45,21 +45,24 @@
             [loading]="loading || isPaidLoading"
           ></hospitality-bot-custom-select>
         </ng-container>
-        <ng-container *ngIf="selectedTabFilterItems == 'COMPLIMENTARY'">
+        <ng-container
+          *ngIf="selectedTabFilterItems == 'COMPLIMENTARY_SERVICES'"
+        >
           <hospitality-bot-custom-select
-            formControlName="complimentaryAmenities"
+            formControlName="serviceIds"
             [itemList]="compServices"
             [fullView]="true"
             (loadMoreData)="loadMore()"
             [noMoreData]="noMoreCompServices || disablePagination"
             [noRecordsAction]="noRecordActionCompWithId"
             [loading]="loading || isCompLoading"
+            type="icon"
           ></hospitality-bot-custom-select>
         </ng-container>
         <ng-container *ngIf="selectedTabFilterItems == 'MENU'">
           <hospitality-bot-custom-select
-            formControlName="complimentaryAmenities"
-            [itemList]="compServices"
+            formControlName="menuIds"
+            [itemList]="menuList"
             [fullView]="true"
             (loadMoreData)="loadMore()"
             [noMoreData]="noMoreCompServices || disablePagination"

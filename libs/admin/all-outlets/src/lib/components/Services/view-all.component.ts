@@ -19,12 +19,13 @@ import {
   restaurantTabItemList,
   spaTabItemList,
 } from '../../constants/data';
-import { OutletType } from '../../types/outlet';
+import { Menu, MenuResponse, OutletType } from '../../types/outlet';
 import {
   noRecordActionForCompWithId,
   noRecordActionForMenuWithId,
   noRecordActionForPaidWithId,
 } from '../../constants/form';
+import { MenuList } from '../../models/outlet.model';
 
 @Component({
   selector: 'hospitality-bot-view-all',
@@ -52,6 +53,7 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
 
   /** Complimentary Services Variable */
   compServices: Service[] = [];
+  menuList: Menu[] = [];
   noMoreCompServices = false;
   compOffset = 0;
 
@@ -76,16 +78,16 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.initSelectedService();
-    // if (!this.outletFormService.outletFormState) {
-    //   this.location.back();
-    // }
+    if (!this.outletFormService.outletFormState) {
+      this.location.back();
+    }
   }
 
   initForm(): void {
     this.initComponent('viewAll');
     this.useForm = this.fb.group({
-      paidAmenities: [[]],
-      complimentaryAmenities: [[]],
+      paidServiceIds: [[]],
+      serviceIds: [[]],
       menuIds: [[]],
       foodPackageIds: [[]],
     });
@@ -95,18 +97,19 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
     });
 
     const {
-      paidAmenities,
-      complimentaryAmenities,
+      paidServiceIds,
+      serviceIds,
       menuIds,
       foodPackageIds,
     } = this.outletFormService.OutletFormData;
 
     this.useForm.patchValue({
-      paidAmenities,
-      complimentaryAmenities,
+      serviceIds,
+      paidServiceIds,
       menuIds,
       foodPackageIds,
     });
+    // this.useForm.get('serviceIds').setValue(serviceIds);
   }
 
   initSelectedService() {
@@ -117,43 +120,44 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
     switch (this.selectedOutlet) {
       case 'RESTAURANT':
         this.tabItemList = restaurantTabItemList;
+        this.onSelectedTabFilterChange(0);
         break;
+
       case 'SPA':
         this.tabItemList = spaTabItemList;
+        this.onSelectedTabFilterChange(0);
         break;
+
       case 'VENUE':
         this.tabItemList = VenueTabItemList;
+        this.onSelectedTabFilterChange(0);
         break;
-      default:
-        this.tabItemList = restaurantTabItemList;
     }
   }
 
-  // initOptionConfig(): void {
-  //   this.getServices(ServicesTypeValue.PAID);
-  //   this.getServices(ServicesTypeValue.COMPLIMENTARY);
-  // }
-
-  onSelectedTabFilterChange(index: MatTabChangeEvent): void {
+  onSelectedTabFilterChange(index: number): void {
+    this.compServices = [];
+    this.paidServices = [];
+    this.menuList = [];
     //this will be used to set and for api call according to the selected tab filter item list
+    const data = this.tabItemList[index].value;
 
-    const event = this.tabItemList[index.index];
-    switch (event?.value) {
-      case 'paidServices':
-        this.selectedTabFilterItems = 'PAID';
+    switch (data) {
+      case 'PAID_SERVICES':
+        this.selectedTabFilterItems = data;
         this.getServices(ServicesTypeValue.PAID);
         break;
-      case 'compServices':
-        this.selectedTabFilterItems = 'compServices';
+      case 'COMPLIMENTARY_SERVICES':
+        this.selectedTabFilterItems = data;
         this.getServices(ServicesTypeValue.COMPLIMENTARY);
         break;
-      case 'menu':
+      case 'MENU':
         this.getMenuList();
-        this.selectedTabFilterItems = 'menu';
+        this.selectedTabFilterItems = data;
 
         break;
-      case 'foodPackage':
-        this.selectedTabFilterItems = 'foodPackage';
+      case 'FOOD_PACKAGE':
+        this.selectedTabFilterItems = data;
         break;
     }
   }
@@ -211,7 +215,11 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   }
 
   getMenuList() {
-    //api call to get menu list item
+    this.subscription$.add(
+      this.outletService.getMenuList(this.outletId).subscribe((res) => {
+        this.menuList = new MenuList().deserialize(res).records;
+      })
+    );
   }
 
   getQueryConfig = (offset: number, type: ServicesTypeValue): QueryConfig => {

@@ -40,8 +40,10 @@
         (onEmptyViewAction)="onCreateAndContinue('import-services')"
         [noRecordsAction]="noRecordActionForComp"
         type="icon"
+        [loading]="isLoading"
       >
         <hospitality-bot-button
+          *ngIf="outletId"
           label="+ Import Services"
           variant="text"
           (onClick)="onCreateAndContinue('import-services')"
@@ -54,24 +56,62 @@
     <div class="header">Menu</div>
     <hr />
     <div class="sub-container-wrapper">
-      <hospitality-bot-custom-select
-        label="Menu"
-        formControlName="menu"
-        description="Do not forget to add this cost in addition to the room cost"
-        [itemList]="menuList"
-        (onEmptyViewAction)="onCreateAndContinue('menu')"
-        [noRecordsAction]="noRecordActionForMenu"
-      >
-        <hospitality-bot-button
-          label="+ Add Menu"
-          variant="outlined"
-          (onClick)="onCreateAndContinue('menu')"
-        ></hospitality-bot-button>
-      </hospitality-bot-custom-select>
+      <div class="wrapper">
+        <div class="menu-header">
+          <div>
+            <div class="menu-heading">Menu</div>
+            <div class="menu-sub-heading">
+              Do not forget to add this cost in addition to the room cost + Add
+              Menu
+            </div>
+          </div>
+          <div class="btn-wrapper">
+            <hospitality-bot-button
+              *ngIf="outletId"
+              label="+ Add Menu"
+              variant="outlined"
+              (onClick)="onCreateAndContinue('menu')"
+            ></hospitality-bot-button>
+            <!-- <hospitality-bot-button
+              *ngIf="menuList?.length > 0"
+              label="View All"
+              (onClick)="onCreateAndContinue('view-all')"
+              variant="outlined"
+            ></hospitality-bot-button> -->
+          </div>
+        </div>
+        <div class="item-boxes" *ngIf="!!menuList.length; else emptyTable">
+          <ng-container *ngFor="let item of menuList; index as i">
+            <div class="item-box" (click)="selectItems(item.id)">
+              <div class="image-type" [ngClass]="!item?.active">
+                <img
+                  alt="image"
+                  [src]="item.imageUrl"
+                  class="show-image"
+                  [alt]="item.imageUrl"
+                />
+              </div>
+              <div class="text">
+                <span>{{ item.name }}</span>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
     </div>
   </div>
+  <ng-template #emptyTable>
+    <hospitality-bot-empty-table
+      [height]="fullView ? '51vh' : 'fit-content'"
+      [isLoading]="loading"
+      [content]="noRecordActionForMenu"
+    >
+    </hospitality-bot-empty-table>
+  </ng-template>
 
-  <hospitality-bot-food-package></hospitality-bot-food-package>
+  <hospitality-bot-food-package
+    [outletId]="outletId"
+  ></hospitality-bot-food-package>
   <div class="container-wrapper">
     <div class="header">Other Details</div>
     <hr />

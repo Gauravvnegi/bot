@@ -6,6 +6,7 @@ export class EntityList {
 
   deserialize(input) {
     this.records = input?.records.map((x) => new Entity().deserialize(x));
+    this.total = input?.total;
     return this;
   }
 }

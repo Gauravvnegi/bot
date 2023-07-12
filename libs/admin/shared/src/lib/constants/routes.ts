@@ -55,7 +55,7 @@ export const routes = {
   // FINANCE
   [ModuleNames.FINANCE]: 'finance',
   [ModuleNames.INVOICE]: 'finance/invoice',
-  [ModuleNames.TRANSACTION]: 'finance/transaction',
+  [ModuleNames.TRANSACTIONS]: 'finance/transactions',
 
   // MEMBERS
   [ModuleNames.MEMBERS]: 'members',
@@ -74,8 +74,9 @@ export const routes = {
 
   //CHANNEL_MANAGER
   [ModuleNames.CHANNEL_MANAGER]: 'channel-manager',
-  [ModuleNames.UPDATE_RATES]: 'channel-manager/update-rates',
-  [ModuleNames.UPDATE_INVENTORY]: 'channel-manager/update-inventory',
+  [ModuleNames.MANAGE_RATE]: 'channel-manager/update-rates',
+  [ModuleNames.MANAGE_INVENTORY]: 'channel-manager/update-inventory',
+  [ModuleNames.DYNAMIC_PRICING]: 'channel-manager/dynamic-pricing',
 
   RoleAndPermission: 'roles-permissions',
 };

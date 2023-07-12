@@ -24,6 +24,7 @@ export type CompanyResponseType = {
   salesPersonPhone: string;
   iataNumber?: string;
   priceModifier: string;
+  priceModifierType?: string;
   priceModifierValue: string;
   companyName?: string;
   companyCode?: number;

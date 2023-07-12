@@ -34,6 +34,7 @@ export class CompanyModel {
       salesPersonPhone: form.salePersonNo ?? '',
       priceModifier: form.discountType ?? '',
       priceModifierValue: form.discount ?? '',
+      status: form.status,
     };
     return data;
   }

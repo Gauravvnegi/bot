@@ -97,11 +97,13 @@
       <td>
         <div class="cell-content">
           <span
-            (click)="$event.stopPropagation()"
             class="primary-text"
             *ngIf="rowData.mobileNumber; else emptyCell"
           >
-            <a href="tel:{{ rowData.mobileNumber }}">
+            <a
+              (click)="$event.stopPropagation()"
+              href="tel:{{ rowData.mobileNumber }}"
+            >
               {{ rowData.mobileNumber }}
             </a>
           </span>

@@ -40,6 +40,7 @@ export class AgentModel {
         postalCode: form.address['postalCode'] ?? '',
       },
       companyId: form.company,
+      status: form.status,
     };
 
     return data;

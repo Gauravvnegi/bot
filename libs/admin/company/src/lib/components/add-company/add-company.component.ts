@@ -58,7 +58,7 @@ export class AddCompanyComponent implements OnInit {
 
   initCompanyForm() {
     this.companyForm = this.fb.group({
-      active: [true],
+      status: [true, [Validators.required]],
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       cc: ['+91', [Validators.required]],
@@ -130,6 +130,7 @@ export class AddCompanyComponent implements OnInit {
             salePersonNo: response.salesPersonPhone,
             discountType: response.priceModifier,
             discount: response.priceModifierValue,
+            status: response.status,
           });
         },
         (error) => {

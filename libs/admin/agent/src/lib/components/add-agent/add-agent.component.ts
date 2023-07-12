@@ -79,7 +79,7 @@ export class AddAgentComponent implements OnInit {
 
   initAgentForm() {
     this.agentForm = this.fb.group({
-      active: [true],
+      status: [true, Validators.required],
       name: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       cc: ['+91', [Validators.required]],
@@ -159,6 +159,7 @@ export class AddAgentComponent implements OnInit {
             },
             commissionType: response.priceModifier,
             commission: response.priceModifierValue,
+            status: response.status,
           });
           this.loading = false;
         }, this.handleFinal)

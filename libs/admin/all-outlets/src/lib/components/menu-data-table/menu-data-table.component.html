@@ -81,9 +81,9 @@
           </div>
         </td>
         <td>
-          <div class="cell-content" *ngIf="rowData.itemName; else emptyCell">
+          <div class="cell-content" *ngIf="rowData.name; else emptyCell">
             <div class="primary-text">
-              {{ rowData.itemName }}
+              {{ rowData.name }}
             </div>
           </div>
         </td>
@@ -116,9 +116,9 @@
           </div>
         </td>
         <td>
-          <div class="center-align" *ngIf="rowData.delivery; else emptyCell">
+          <div class="center-align" *ngIf="rowData.dineInPrice; else emptyCell">
             <div class="primary-text">
-              {{ rowData.delivery }}
+              {{ rowData.dineInPrice | currency: 'INR' }}
             </div>
           </div>
         </td>

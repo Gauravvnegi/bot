@@ -1,8 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ConfigService, NavRouteOptions } from '@hospitality-bot/admin/shared';
+import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { OutletBaseComponent } from '../outlet-base.components';
 import { MenuFormData, MenuResponse } from '../../types/menu';

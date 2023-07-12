@@ -12,7 +12,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { cols } from '../../constants/data-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { outletBusinessRoutes } from '../../constants/routes';
-import { MenuItem } from '../../models/outlet.model';
+import { MenuItem, MenuItemList } from '../../models/outlet.model';
 
 @Component({
   selector: 'hospitality-bot-menu-data-table',
@@ -50,8 +50,9 @@ export class MenuDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.outletService.getMenuItems().subscribe(
       (res) => {
-        const menuItem = new MenuItem().deserialize(res);
-        this.values = res;
+        const menuItem = new MenuItemList().deserialize(res).records;
+        this.values = menuItem;
+        this.totalRecords = res.total;
       },
       () => {
         this.values = [];

@@ -51,7 +51,7 @@ export type MenuItemForm = {
   preparationTime: number;
   quantity: string;
   unit: string;
-  dineInPrice: string;
+  dineInPrice: number;
   deliveryPrice: string;
   hsnCode: string;
   taxIds: string[];
@@ -59,6 +59,13 @@ export type MenuItemForm = {
 
 export type MenuItemResponse = MenuItemForm & {
   id: string;
+  kitchenDept?: string;
+  code?: string;
+}
+
+export type MenuItemListResponse = {
+  records: MenuItemResponse[];
+  total: number;
 }
 
 export type FoodPackageForm = {

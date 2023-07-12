@@ -66,7 +66,7 @@ type MenuItemsData = {
 type Address = {
   addressLine1: string;
   city: string;
-  countryCode: string;
+  country: string;
   state: string;
   postalCode: string;
 };

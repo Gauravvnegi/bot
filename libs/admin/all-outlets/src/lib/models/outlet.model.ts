@@ -1,5 +1,4 @@
-import { MenuItemResponse } from '../types/menu';
-import { OutletResponse } from '../types/response';
+import { MenuItemListResponse, MenuItemResponse } from '../types/outlet';
 
 export class OutletList {
   id: string;
@@ -21,26 +20,42 @@ export class OutletList {
 
 export class MenuItem {
   code: string;
-  itemName: string;
+  name: string;
+  description: string;
   type: string;
   hsnCode: string;
   category: string;
+  deliveryPrice: string;
   kitchenDept: string;
-  delivery: string;
-  preparationTime: string;
-  unit: number;
+  dineInPrice: number;
+  preparationTime: number;
+  unit: string;
 
   deserialize(input: MenuItemResponse) {
     this.code = input.code;
-    this.itemName = input.itemName;
+    this.name = input.name;
+    this.description = input.description;
     this.type = input.type;
     this.hsnCode = input.hsnCode;
     this.category = input.category;
     this.kitchenDept = input.kitchenDept;
-    this.delivery = input.delivery;
+    this.dineInPrice = input.dineInPrice;
+    this.deliveryPrice = input.deliveryPrice;
     this.preparationTime = input.preparationTime;
+    this.unit = input.unit;
     return this;
   }
 }
 
-export class Outlet {}
+export class MenuItemList {
+  records: MenuItem[];
+  total: number;
+
+  deserialize(input: MenuItemListResponse) {
+    this.records = input.records?.map((item) =>
+      new MenuItem().deserialize(item)
+    );
+    this.total = input.total;
+    return this;
+  }
+}

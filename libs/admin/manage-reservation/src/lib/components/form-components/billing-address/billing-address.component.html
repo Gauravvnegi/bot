@@ -1,11 +1,13 @@
 <p-accordionTab header="Billing Address" [formGroup]="parentFormGroup">
   <div class="form-block" formGroupName="address">
-    <hospitality-bot-input
+    <!-- <hospitality-bot-input
       class="full-width"
       controlName="addressLine1"
       label="Address"
       [props]="{ placeholder: 'Enter ' }"
-    ></hospitality-bot-input>
+    ></hospitality-bot-input> -->
+    <hospitality-bot-address-component class="full-width" controlName="addressLine1">
+    </hospitality-bot-address-component>
     <hospitality-bot-input
       class="half-width"
       controlName="city"
@@ -20,7 +22,7 @@
     ></hospitality-bot-input>
     <hospitality-bot-input
       class="half-width"
-      controlName="countryCode"
+      controlName="country"
       label="Country"
       [props]="{ placeholder: 'Enter ' }"
     ></hospitality-bot-input>

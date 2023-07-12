@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
 import { MenuItemForm } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';

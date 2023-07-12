@@ -11,7 +11,7 @@ export type UserResponse = {
   phoneNumber: string;
   profileUrl: string;
   permissions: {
-    entity: string;
+    module: string;
     label: string;
     permissions: {
       manage: -1 | 0 | 1;

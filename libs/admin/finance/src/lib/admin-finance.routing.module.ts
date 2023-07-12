@@ -23,7 +23,7 @@ const appRoutes: CRoutes = [
       },
       {
         path: 'transaction',
-        name: ModuleNames.TRANSACTION,
+        name: ModuleNames.TRANSACTIONS,
         component: TransactionHistoryDataTableComponent,
       },
     ],

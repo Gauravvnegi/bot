@@ -79,7 +79,12 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
   loadInitialData(queries = [], loading = true) {
     this.loading = loading && true;
     this.$subscription.add(
-      this.fetchDataFrom(queries).subscribe(
+      this.fetchDataFrom(queries, {
+        offset: this.first,
+        limit: this.rowsPerPage,
+        guestFilter: this.guestFilter,
+        type: 'GUEST',
+      }).subscribe(
         (data) => {
           this.initialLoading = false;
           this.setRecords(data);
@@ -115,15 +120,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
     }
   }
 
-  fetchDataFrom(
-    queries,
-    defaultProps = {
-      offset: this.first,
-      limit: this.rowsPerPage,
-      guestFilter: this.guestFilter,
-      type: 'GUEST',
-    }
-  ): Observable<any> {
+  fetchDataFrom(queries, defaultProps): Observable<any> {
     this.resetRowSelection();
     queries.push(defaultProps);
     const config = {

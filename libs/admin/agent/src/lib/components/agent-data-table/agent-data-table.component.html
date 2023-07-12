@@ -112,7 +112,7 @@
           <div class="primary-text">{{ rowData.email }}</div>
         </div>
       </td>
-      <td>
+      <td (click)="$event.stopPropagation()">
         <div class="cell-content" *ngIf="rowData.phoneNo; else emptyCell">
           <a href="tel:{{ rowData.phoneNo }}">
             <u> {{ rowData.phoneNo }}</u>
@@ -187,7 +187,7 @@
     [formGroup]="tableFG"
     controlName="search"
     [props]="{
-      placeholder: 'Search Agent...'
+      placeholder: 'Search by Name, Code...'
     }"
     (onSearch)="searchAgent($event)"
   ></hospitality-bot-search>

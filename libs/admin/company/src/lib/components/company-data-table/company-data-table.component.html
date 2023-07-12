@@ -53,7 +53,8 @@
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
         [selectedChips]="selectedFilterChips"
-      ></hospitality-bot-filter-chips>
+        ><ng-container [ngTemplateOutlet]="search"></ng-container>
+      </hospitality-bot-filter-chips>
     </div>
   </ng-template>
 
@@ -110,10 +111,12 @@
           </div>
         </div>
       </td>
-      <td>
+      <td (click)="$event.stopPropagation()">
         <div class="cell-content" *ngIf="rowData.phoneNumber; else emptyCell">
           <div class="primary-text">
-            {{ rowData.phoneNumber }}
+            <a href="tel:{{ rowData.phoneNumber }}">{{
+              rowData.phoneNumber
+            }}</a>
           </div>
         </div>
       </td>
@@ -127,7 +130,7 @@
           </div>
         </div>
       </td>
-      <td>
+      <td (click)="$event.stopPropagation()">
         <div
           class="cell-content"
           *ngIf="rowData.salesPersonNumber; else emptyCell"
@@ -199,4 +202,15 @@
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
+</ng-template>
+
+<ng-template #search>
+  <hospitality-bot-search
+    [formGroup]="tableFG"
+    controlName="search"
+    [props]="{
+      placeholder: 'Search by Name, Code...'
+    }"
+    (onSearch)="searchCompany($event)"
+  ></hospitality-bot-search>
 </ng-template>

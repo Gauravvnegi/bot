@@ -1,26 +1,30 @@
 export const guestCols = [
   {
-    field: 'fullName',
-    header: 'Guest / Company',
+    field: 'name',
+    header: 'Guest',
     sortType: 'string',
-    searchField: ['fullName', 'company'],
+    width: '25%',
+    searchField: ['name'],
   },
   {
     field: 'email',
     header: 'Email Id',
     sortType: 'string',
+    width: '30%',
     searchField: ['email'],
   },
   {
     field: `phoneNumber`,
     header: 'Phone No.',
-    sortType: 'number',
-    searchField: ['phoneNumber', 'countryCode'],
+    sortType: 'string',
+    width: '30%',
+    searchField: ['phoneNumber'],
   },
   {
-    field: 'totalSpend',
-    header: 'Total Spend',
+    field: `age`,
+    header: 'Age',
     sortType: 'number',
-    isSearchDisabled: true,
+    width: '15%',
+    searchField: ['age'],
   },
 ];

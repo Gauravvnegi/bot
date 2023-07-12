@@ -44,8 +44,8 @@ export class User{
   }
 
   getBrandAndBranchName() {
-    if (this.hotelAccess?.chains?.length) {
-      return `${this.hotelAccess.chains[0].name},${this.hotelAccess.chains[0].hotels[0].name} `;
+    if (this.hotelAccess?.brands?.length) {
+      return `${this.hotelAccess.brands[0].name},${this.hotelAccess.brands[0].hotels[0].name} `;
     }
     return '';
   }
@@ -63,7 +63,7 @@ export class User{
       for (let permissionType in config.permissions) {
         if (config.permissions[permissionType] === 1) {
           availablePermissions.push(
-            `${config.entity.slice(0, 1).toUpperCase()}${config.entity
+            `${config.module.slice(0, 1).toUpperCase()}${config.module
               .slice(1)
               .toLowerCase()}_${permissionType}`
           );

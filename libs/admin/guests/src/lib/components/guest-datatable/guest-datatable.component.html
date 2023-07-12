@@ -1,8 +1,4 @@
-<div
-  class="action-header"
-  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
-  [formGroup]="tableFG"
->
+<div class="action-header" [formGroup]="tableFG">
   <div class="heading">
     {{ tableName }}
   </div>
@@ -13,9 +9,11 @@
     ></hospitality-bot-button>
 
     <hospitality-bot-export-list
+      [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </div>
 </div>
@@ -36,29 +34,23 @@
   [(first)]="first"
   [totalRecords]="totalRecords"
   [filterDelay]="0"
-  [selectionMode]="selectionMode"
   [(selection)]="selectedRows"
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
   (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
-  (sortFunction)="customSort($event)"
-  [customSort]="isCustomSort"
-  (onFilter)="onDataFilter($event)"
   *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
-    <div
-      [formGroup]="tableFG"
-      [ngClass]="(isQuickFilters || isTabFilters) && 'caption__wrapper'"
-    >
+    <div class="caption__wrapper" [formGroup]="tableFG">
       <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
         [selectedChips]="selectedFilterChips"
-      ></hospitality-bot-filter-chips>
+      >
+        <ng-container [ngTemplateOutlet]="search"></ng-container>
+      </hospitality-bot-filter-chips>
     </div>
   </ng-template>
 
@@ -89,51 +81,36 @@
           (click)="onCheckboxClicked($event)"
         ></p-tableCheckbox>
       </td>
-      <td class="cell-content">
-        <span class="primary-text">{{ rowData.getFullName() }}</span>
-        <span class="secondary-text">{{ rowData.email }}</span>
+      <td>
+        <div class="cell-content">
+          <span class="primary-text">{{ rowData.name }}</span>
+        </div>
       </td>
       <td>
-        <span *ngIf="rowData.email; else emptyCell">
-          {{ rowData.email }}
-        </span>
+        <div class="cell-content">
+          <span class="primary-text" *ngIf="rowData.email; else emptyCell">
+            {{ rowData.email }}
+          </span>
+        </div>
       </td>
-      <td class="package">
-        <span
-          *ngIf="
-            rowData.getPhoneNumber().length && rowData.getPhoneNumber() !== ' ';
-            else emptyCell
-          "
-        >
-          <ng-container
-            *ngIf="rowData.getPhoneNumber().includes(','); else singlePhone"
+      <td (click)="$event.stopPropagation()">
+        <div class="cell-content">
+          <span
+            class="primary-text"
+            *ngIf="rowData.mobileNumber; else emptyCell"
           >
-            <ng-container
-              *ngFor="let link of rowData.getPhoneNumber().split(',\n')"
-            >
-              <a
-                href="tel:{{ link }}"
-                *ngIf="link"
-                class="email"
-                (click)="openDetailPage($event)"
-              >
-                <u> {{ link }}</u> </a
-              ><br />
-            </ng-container>
-          </ng-container>
-          <ng-template #singlePhone>
-            <a
-              href="tel:{{ rowData.countryCode }}{{ rowData.phoneNumber }}"
-              class="email"
-              (click)="openDetailPage($event)"
-            >
-              <u> {{ rowData.countryCode }}-{{ rowData.phoneNumber }}</u>
+            <a href="tel:{{ rowData.mobileNumber }}">
+              {{ rowData.mobileNumber }}
             </a>
-          </ng-template>
-        </span>
+          </span>
+        </div>
       </td>
-      <td class="amount">
-        {{ rowData.payment.totalAmount | currency: 'INR' }}
+      <td>
+        <div class="cell-content">
+          <span *ngIf="rowData.age; else emptyCell">
+            {{ rowData.age }}
+          </span>
+        </div>
       </td>
     </tr>
   </ng-template>
@@ -173,4 +150,16 @@
     [listItems]="tabFilterItems"
     (selectedTabChange)="onSelectedTabFilterChange($event)"
   ></hospitality-bot-tab-group>
+</ng-template>
+
+<ng-template #search>
+  <hospitality-bot-search
+    class="search"
+    [formGroup]="tableFG"
+    controlName="search"
+    [props]="{
+      placeholder: 'Search by Name, Code...'
+    }"
+    (onSearch)="searchGuest($event)"
+  ></hospitality-bot-search>
 </ng-template>

@@ -17,53 +17,17 @@ export class GuestTable implements IDeserializable {
   totalRecord: number;
   entityTypeCounts: EntityState<string>;
   entityStateCounts: EntityState<string>;
-  records: Guest[];
+  records: GuestData[];
 
   deserialize(input: any) {
     this.records = input.records.map((record) =>
-      new Guest().deserialize(record)
+      new GuestData().deserialize(record)
     );
-    // TODO: it will be replace(input.entityTypeCounts/input.entityStateCounts) after getting guest table api
-    this.entityTypeCounts = null;
-    this.entityStateCounts = null;
 
-    this.totalRecord = input?.total;
-    return this;
-  }
-}
+    this.entityTypeCounts = input.entityTypeCounts;
+    this.entityStateCounts = input.entityStateCounts;
 
-export class EntityTypeCounts {
-  ALL: number;
-  ARRIVAL: number;
-  OUTGUEST: number;
-  INHOUSE: number;
-  DEPARTURE: number;
-
-  deserialize(data, total) {
-    Object.assign(
-      this,
-      set({}, 'ARRIVAL', get(data, ['ARRIVAL'])),
-      set({}, 'OUTGUEST', get(data, ['OUTGUEST'])),
-      set({}, 'INHOUSE', get(data, ['INHOUSE'])),
-      set({}, 'DEPARTURE', get(data, ['DEPARTURE']))
-    );
-    this.ALL = total ?? 0;
-    return this;
-  }
-}
-
-export class EntityStateCounts {
-  HIGHPOTENTIAL: number;
-  VIP: number;
-  HIGHRISK: number;
-
-  deserialize(data) {
-    Object.assign(
-      this,
-      set({}, 'HIGHPOTENTIAL', get(data, ['HIGHPOTENTIAL'])),
-      set({}, 'VIP', get(data, ['VIP'])),
-      set({}, 'HIGHRISK', get(data, ['HIGHRISK']))
-    );
+    this.totalRecord = input.total;
     return this;
   }
 }

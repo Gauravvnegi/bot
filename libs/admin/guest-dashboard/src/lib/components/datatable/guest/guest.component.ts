@@ -148,7 +148,12 @@ export class GuestDatatableComponent extends BaseDatatableComponent
    */
   fetchDataFrom(
     queries,
-    defaultProps = { offset: this.first, limit: this.rowsPerPage, type: 'GUEST' }
+    defaultProps = {
+      offset: this.first,
+      limit: this.rowsPerPage,
+      type: 'GUEST',
+      dashboard: true,
+    }
   ): Observable<any> {
     this.resetRowSelection();
     queries.push(defaultProps);
@@ -174,7 +179,12 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           },
           ...this.getSelectedQuickReplyFiltersV2(),
         ],
-        { offset: this.first, limit: this.rowsPerPage, type: 'GUEST' }
+        {
+          offset: this.first,
+          limit: this.rowsPerPage,
+          type: 'GUEST',
+          dashboard: true,
+        }
       ).subscribe(
         (data) => {
           this.setRecords(data);
@@ -243,7 +253,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         },
         ...this.getSelectedQuickReplyFiltersV2(),
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
-        { type: 'GUEST' }
+        { type: 'GUEST' },
       ]),
     };
     this.$subscription.add(

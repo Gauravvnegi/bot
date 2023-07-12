@@ -4,7 +4,7 @@ import { Cols } from '@hospitality-bot/admin/shared';
 export const cols: Cols[] = [
   {
     field: 'name',
-    header: 'Agent Name / Code',
+    header: 'Name / Code',
     sortType: 'string',
     width: '10%',
     searchField: ['name', 'code'],

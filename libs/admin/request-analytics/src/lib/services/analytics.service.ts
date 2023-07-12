@@ -36,7 +36,7 @@ export class AnalyticsService extends ApiService {
     );
   }
 
-  getSentimentsStats(config) {
+  getSentimentsStats(config): Observable<any> {
     return this.get(
       `/api/v1/request-analytics/sentiment-stats/count${config.queryObj}`
     );

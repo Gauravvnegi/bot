@@ -83,6 +83,7 @@ export class FeedbackComponent implements OnInit, OnDestroy {
           this.globalFeedbackFilterType === feedback.types.both
         ) {
           this.tabFilterIdx = 0;
+         
           this.getOutletsSelected(
             [...data['feedback'].queryValue],
             data['filter'].value
@@ -180,8 +181,8 @@ export class FeedbackComponent implements OnInit, OnDestroy {
       if (element.hasOwnProperty('outlets')) this.outletIds = element.outlets;
     });
     this.getOutlets(
-      globalQueryValue.property.branchName,
-      globalQueryValue.property.hotelName
+      globalQueryValue.property.entityName,
+      globalQueryValue.property.brandName
     );
   }
 

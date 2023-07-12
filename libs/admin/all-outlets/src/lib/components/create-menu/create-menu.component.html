@@ -1,6 +1,7 @@
 <div class="wrapper">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <p-splitButton
+    class="download-btn"
       label="Download Menu"
       (onClick)="handleDownload()"
       [model]="buttons"
@@ -60,5 +61,7 @@
   </div>
   <hospitality-bot-menu-data-table
     *ngIf="menuId"
+    [outletId]="outletId"
+    [menuId]="menuId"
   ></hospitality-bot-menu-data-table>
 </div>

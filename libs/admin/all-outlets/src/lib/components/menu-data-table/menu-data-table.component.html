@@ -43,7 +43,20 @@
     (sortFunction)="customSort($event)"
     [customSort]="isCustomSort"
     (onFilter)="onDataFilter()"
+    *ngIf="!isEmpty; else emptyTable"
   >
+    <ng-template pTemplate="caption">
+      <div class="caption__wrapper" [formGroup]="tableFG">
+        <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+
+        <hospitality-bot-filter-chips
+          *ngIf="isQuickFilters"
+          [chips]="filterChips"
+          (onChange)="toggleQuickReplyFilter($event)"
+          [selectedChips]="selectedFilterChips"
+        ></hospitality-bot-filter-chips>
+      </div>
+    </ng-template>
     <!-- *******************************EMPTY TABLE VIEW******************************* -->
     <ng-template pTemplate="emptymessage">
       <tr hospitality-bot-empty-view [noOfColumns]="cols.length"></tr>
@@ -128,15 +141,25 @@
             *ngIf="rowData.preparationTime; else emptyCell"
           >
             <div class="primary-text">
-              {{ rowData.preparationTime }}
+              {{ rowData.preparationTime | date: 'HH:mm' }}
             </div>
           </div>
         </td>
         <td>
-          <div class="center-align" *ngIf="rowData.unit; else emptyCell">
+          <div class="center-align" *ngIf="rowData.quantity; else emptyCell">
             <div class="primary-text">
-              {{ rowData.unit }}
+              {{ rowData.quantity }}
             </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-content">
+            <hospitality-bot-status-dropdown-toggle
+              class="toggle-btn"
+              (onClick)="handleStatus($event, rowData)"
+              [state]="rowData.status"
+            >
+            </hospitality-bot-status-dropdown-toggle>
           </div>
         </td>
       </tr>
@@ -158,6 +181,21 @@
 
 <ng-template #emptyCell>
   <div class="emptyCell">&mdash;</div>
+</ng-template>
+
+<ng-template #emptyTable>
+  <hospitality-bot-empty-table
+    [isLoading]="loading"
+    [routerLink]="[navigationRoute.menuItem.route]"
+    [content]="{
+      description:
+        'No Menu Items found. Tap the +Add Menu Item to create menu items ',
+      actionName: '+Add Menu Items',
+      imageSrc: 'assets/images/empty-table-service.png'
+    }"
+  >
+    <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
+  </hospitality-bot-empty-table>
 </ng-template>
 
 <ng-template #emptyView>

@@ -1,3 +1,5 @@
+import { EntityState } from '@hospitality-bot/admin/shared';
+
 export type OutletForm = {
   status: string;
   name: string;
@@ -49,24 +51,29 @@ export type MenuItemForm = {
   category: string;
   type: string;
   preparationTime: number;
-  quantity: string;
+  quantity: number;
   unit: string;
   dineInPrice: number;
-  deliveryPrice: string;
+  dineInPriceCurrency: string;
+  deliveryPrice: number;
+  deliveryPriceCurrency: string;
   hsnCode: string;
   taxIds: string[];
+  status: boolean;
 };
 
 export type MenuItemResponse = MenuItemForm & {
   id: string;
   kitchenDept?: string;
   code?: string;
-}
+};
 
 export type MenuItemListResponse = {
   records: MenuItemResponse[];
   total: number;
-}
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
+};
 
 export type FoodPackageForm = {
   active: boolean;

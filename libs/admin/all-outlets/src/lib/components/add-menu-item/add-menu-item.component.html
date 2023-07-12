@@ -11,7 +11,7 @@
     </div>
     <hospitality-bot-toggle-switch
       class="status"
-      controlName="active"
+      controlName="status"
       label="Status"
     ></hospitality-bot-toggle-switch>
     <hospitality-bot-input
@@ -54,25 +54,46 @@
       class="one-third-width"
       controlName="preparationTime"
       label="Preparation Time"
+      format="millisecond"
     ></hospitality-bot-time-picker>
-    <hospitality-bot-input
+    <hospitality-bot-prefix-field
       class="one-third-width"
-      controlName="unit"
+      preControlName="quantity"
+      postControlName="unit"
       label="Qty/Unit"
       [props]="{
         placeholder: 'Enter unit',
-        subtitle: 'grams',
         type: 'number'
       }"
-    ></hospitality-bot-input>
-    <hospitality-bot-input
+      [settings]="{
+        preFieldType: 'input',
+        postFieldType: 'select',
+        layout: 'pre-main',
+        postOptions: unitOptions
+      }"
+    ></hospitality-bot-prefix-field>
+    <hospitality-bot-prefix-field
+      *ngIf="currencies.length"
       class="one-third-width"
-      controlName="dineInPrice"
+      preControlName="dineInPriceCurrency"
+      postControlName="dineInPrice"
+      [options]="currencies"
       label="Dine In Price"
       [props]="{
         placeholder: 'Enter Dine in price'
       }"
-    ></hospitality-bot-input>
+    ></hospitality-bot-prefix-field>
+    <hospitality-bot-prefix-field
+      *ngIf="currencies.length"
+      class="one-third-width"
+      preControlName="deliveryPriceCurrency"
+      postControlName="deliveryPrice"
+      [options]="currencies"
+      label="Delivery Price"
+      [props]="{
+        placeholder: 'Enter delivery price'
+      }"
+    ></hospitality-bot-prefix-field>
     <hospitality-bot-input
       class="one-third-width"
       controlName="hsnCode"
@@ -84,10 +105,11 @@
     <hospitality-bot-multi-select
       label="Tax"
       class="one-third-width"
-      controlName="tax"
+      controlName="taxIds"
       [props]="{
         isAsync: true,
-        createPrompt: '+ Create New Tax'
+        createPrompt: '+ Create New Tax',
+        placeholder: 'Select Tax'
       }"
       (onCreate)="createTax()"
       [options]="taxes"
@@ -97,7 +119,7 @@
       <div class="des-template__input">
         <hospitality-bot-template-editor
           [parentFG]="useForm"
-          [name]="'notes'"
+          [name]="'description'"
           [height]="250"
         ></hospitality-bot-template-editor>
       </div>

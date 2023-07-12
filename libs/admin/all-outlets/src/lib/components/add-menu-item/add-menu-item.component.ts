@@ -1,7 +1,11 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import {
+  ConfigService,
+  NavRouteOptions,
+  Option,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { OutletService } from '../../services/outlet.service';
@@ -9,6 +13,8 @@ import { MenuItemForm } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
 import { PageReloadService } from '../../services/page-reload.service.service';
 import { TaxService } from 'libs/admin/tax/src/lib/services/tax.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-add-menu-item',
@@ -28,7 +34,12 @@ export class AddMenuItemComponent extends OutletBaseComponent
   loading: boolean = false;
   $subscription = new Subscription();
   taxes: Option[] = [];
-
+  currencies: Option[] = [{ label: 'INR', value: 'INR' }];
+  unitOptions = [
+    { label: 'gram', value: 'GRAMS' },
+    { label: 'piece', value: 'PIECE' },
+    { label: 'litre', value: 'LITRE' },
+  ];
   constructor(
     private fb: FormBuilder,
     private outletService: OutletService,
@@ -36,17 +47,38 @@ export class AddMenuItemComponent extends OutletBaseComponent
     route: ActivatedRoute,
     router: Router,
     private pageReloadService: PageReloadService,
-    private taxService: TaxService
+    private taxService: TaxService,
+    private globalFilterService: GlobalFilterService,
+    private configService: ConfigService,
+    private location: Location
   ) {
     super(router, route);
   }
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
     this.pageReloadService.enablePageReloadConfirmation();
     this.initOptions();
     this.initForm();
+    // this.initConfig();
     this.initComponent('menuItem');
   }
+
+  // initConfig() {
+  //   this.configService.$config.subscribe((value) => {
+  //     if (value) {
+  //       const { currencyConfiguration } = value;
+  //       this.currencies = currencyConfiguration.map(({ key, value }) => ({
+  //         label: key,
+  //         value,
+  //       }));
+  //       this.useForm.setValue({
+  //         dineInPriceCurrency: this.currencies[0].value,
+  //         deliveryPriceCurrency: this.currencies[0].value,
+  //       });
+  //     }
+  //   });
+  // }
 
   initOptions() {
     // const menu = this.outletService.menu.value;
@@ -72,17 +104,21 @@ export class AddMenuItemComponent extends OutletBaseComponent
 
   initForm(): void {
     this.useForm = this.fb.group({
-      active: [true],
+      status: [true],
       name: ['', Validators.required],
       mealPreference: ['', Validators.required],
       category: ['', Validators.required],
       type: ['', Validators.required],
       preparationTime: ['', Validators.required],
-      unit: ['', Validators.required],
-      dineInPrice: ['', Validators.required],
+      quantity: ['', Validators.required],
+      unit: ['GRAMS'],
+      dineInPriceCurrency: ['INR'],
+      dineInPrice: ['', [Validators.required, Validators.min(0)]],
+      deliveryPriceCurrency: ['INR'],
+      deliveryPrice: ['', [Validators.required, Validators.min(0)]],
       hsnCode: ['', Validators.required],
-      tax: ['', Validators.required],
-      notes: [''],
+      taxIds: ['', Validators.required],
+      description: [''],
     });
 
     if (this.itemId) {
@@ -125,7 +161,6 @@ export class AddMenuItemComponent extends OutletBaseComponent
     }
 
     const data = this.useForm.getRawValue() as MenuItemForm;
-
     if (this.itemId) {
       this.$subscription.add(
         this.outletService
@@ -134,9 +169,9 @@ export class AddMenuItemComponent extends OutletBaseComponent
       );
     } else {
       this.$subscription.add(
-        this.outletService.addMenuItems(data, this.itemId).subscribe((res) => {
-          this.handleSuccess(res?.id);
-        }, this.handleError)
+        this.outletService
+          .addMenuItems(data, this.menuId, this.outletId)
+          .subscribe(this.handleSuccess, this.handleError)
       );
     }
   }
@@ -149,7 +184,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
    * @function handleSuccess To show success message
    * @returns void
    */
-  handleSuccess = (id?: string) => {
+  handleSuccess = () => {
     this.loading = false;
     this.snackbarService.openSnackBarAsText(
       `MenuItem ${this.itemId ? 'edited' : 'created'} successfully`,
@@ -157,9 +192,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
       { panelClass: 'success' }
     );
     this.pageReloadService.disablePageReloadConfirmation();
-    this.router.navigate([id], {
-      relativeTo: this.route,
-    });
+    this.location.back();
   };
 
   handleError = ({ err }) => {

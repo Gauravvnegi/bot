@@ -13,7 +13,6 @@ import {
 })
 export class TimePickerComponent extends FormComponent {
   timePickerFG: FormGroup;
-  @Input() controlName: string;
   @Input() format: 'millisecond' | 'HH:MM' = 'HH:MM';
 
   constructor(
@@ -36,28 +35,29 @@ export class TimePickerComponent extends FormComponent {
   }
 
   listenChanges() {
-    this.controlContainer.control
-      .get(this.controlName)
-      .valueChanges.subscribe((value) => {
-        const [HH, MM] = (this.format === 'HH:MM'
-          ? value
-          : this.millisecondsToRequiredFormat(+value)
-        ).split(':');
-        this.timePickerFG.patchValue(
-          {
-            hh: HH,
-            mm: MM,
-          },
-          { emitEvent: false }
-        );
-      });
+    // TODO: Need to be refactor, for edit mode
+    // this.controlContainer.control
+    //   .get(this.controlName)
+    //   .valueChanges.subscribe((value) => {
+    //     if (value.length) {
+    //       const [HH, MM] = (this.format === 'HH:MM'
+    //         ? value
+    //         : this.millisecondsToRequiredFormat(+value)
+    //       ).split(':');
+    //       this.timePickerFG.patchValue(
+    //         {
+    //           hh: HH,
+    //           mm: MM,
+    //         },
+    //         { emitEvent: false }
+    //       );
+    //     }
+    //   });
 
     this.timePickerFG.valueChanges.subscribe(
       (value: { hh: string; mm: string }) => {
         const res = value.hh && value.mm ? this.getFormateTime(value) : '';
-        this.controlContainer.control.get(this.controlName).patchValue({
-          [this.controlName]: res,
-        });
+        this.controlContainer.control.get(this.controlName).patchValue(res);
       }
     );
   }
@@ -67,10 +67,14 @@ export class TimePickerComponent extends FormComponent {
    * @param value hour and minutes
    * @returns formatted time
    */
-  getFormateTime(value: { hh: string; mm: string }) {
-    return this.format === 'HH:MM'
-      ? `${value.hh}:${value.mm}`
-      : +value.hh * 3600 + +value.mm;
+  getFormateTime(value: { hh: string; mm: string }): string | number {
+    if (this.format === 'millisecond') {
+      const hoursToMilliseconds = +value.hh * 60 * 60 * 1000; // Convert hours to milliseconds
+      const minutesToMilliseconds = +value.mm * 60 * 1000; // Convert minutes to milliseconds
+      return hoursToMilliseconds + minutesToMilliseconds;
+    } else {
+      return `${value.hh}:${value.mm}`;
+    }
   }
 
   /**
@@ -79,6 +83,7 @@ export class TimePickerComponent extends FormComponent {
    * @returns formatted time HH:MM
    */
   millisecondsToRequiredFormat(time: number) {
+    debugger;
     const hours = Math.floor(time / (1000 * 60 * 60));
     const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
     const formattedHours = ('0' + hours).slice(-2);

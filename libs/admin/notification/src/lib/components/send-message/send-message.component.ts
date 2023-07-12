@@ -140,7 +140,6 @@ export class SendMessageComponent implements OnInit {
       return;
     }
     this.isSending = true;
-    console.log(this.messageFG.getRawValue());
     // const values = new RequestData().deserialize(this.messageFG.getRawValue());
     const values = new RequestMessageData().deserialize(
       this.messageFG.getRawValue()

@@ -3,10 +3,10 @@ import { Cols } from '@hospitality-bot/admin/shared';
 
 export const cols: Cols[] = [
   {
-    field: 'name',
+    field: 'companyName',
     header: 'Name / Code',
     sortType: 'string',
-    searchField: ['name', 'id'],
+    searchField: ['companyName', 'code'],
   },
   {
     field: 'contactName',
@@ -21,7 +21,7 @@ export const cols: Cols[] = [
   {
     field: 'phoneNumber',
     header: 'Phone No.',
-    sortType: 'number',
+    sortType: 'string',
   },
   {
     field: 'salesPersonName',

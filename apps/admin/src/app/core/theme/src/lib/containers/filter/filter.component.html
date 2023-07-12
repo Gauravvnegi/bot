@@ -45,27 +45,27 @@
             <div>
               <div>
                 <mat-form-field>
-                  <mat-label>Brand</mat-label>
-                  <mat-select formControlName="hotelName">
+                  <mat-label>Select Brand</mat-label>
+                  <mat-select formControlName="brandName">
                     <mat-option
-                      *ngFor="let hotel of hotelList"
-                      [value]="hotel.value"
-                      >{{ hotel.label }}</mat-option
+                      *ngFor="let entity of entityList"
+                      [value]="entity.value"
+                      >{{ entity.label }}</mat-option
                     >
                   </mat-select>
                 </mat-form-field>
               </div>
               <div>
                 <mat-form-field>
-                  <mat-label>Hotel Name</mat-label>
+                  <mat-label>Select Property</mat-label>
                   <mat-select
-                    formControlName="branchName"
+                    formControlName="entityName"
                     (selectionChange)="handleHotelChange($event.value)"
                   >
                     <mat-option
-                      *ngFor="let branch of branchList"
-                      [value]="branch.value"
-                      >{{ branch.label }}</mat-option
+                      *ngFor="let brand of brandList"
+                      [value]="brand.value"
+                      >{{ brand.label }}</mat-option
                     >
                   </mat-select>
                 </mat-form-field>

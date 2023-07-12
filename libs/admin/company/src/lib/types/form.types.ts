@@ -1,5 +1,5 @@
 export type CompanyFormType = {
-  active: boolean;
+  status: boolean;
   name: string;
   email: string;
   cc: string;

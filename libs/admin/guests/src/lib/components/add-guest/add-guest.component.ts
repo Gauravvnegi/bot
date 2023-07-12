@@ -76,7 +76,7 @@ export class AddGuestComponent implements OnInit {
       cc: ['+91', [Validators.required]],
       phoneNo: [null, [Validators.required]],
       company: [''],
-      gender: [''],
+      gender: ['', [Validators.required]],
       dateOfBirth: ['', Validators.required],
       age: [{ value: '', disabled: true }, Validators.required],
     });

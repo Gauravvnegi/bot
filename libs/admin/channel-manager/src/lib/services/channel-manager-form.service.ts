@@ -9,6 +9,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ChannelManagerFormService extends ApiService {
   // roomDetails: RoomTypes[] = [];
   roomDetails = new BehaviorSubject<RoomTypes[]>([]);
+  RatePlan = {
+    SUITE: '61bb58e1-962f-47da-bcbf-2281b09df91c',
+    EXECUTIVE: '37139fa5-7dea-4e73-830c-2bf3abb83e85',
+  };
 
   reset() {
     this.roomDetails.next([]);
@@ -19,7 +23,13 @@ export class ChannelManagerFormService extends ApiService {
     this.get(
       `/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE&offset=0&limit=${100}`
     ).subscribe((res) => {
-      const rooms = new RoomTypeList().deserialize(res).records;
+      const rooms = new RoomTypeList()
+        .deserialize(res)
+        .records.filter(
+          (item) =>
+            item.id === this.RatePlan.EXECUTIVE ||
+            item.id === this.RatePlan.SUITE
+        );
       this.roomDetails.next(
         rooms.map((item) => ({
           label: item.name,

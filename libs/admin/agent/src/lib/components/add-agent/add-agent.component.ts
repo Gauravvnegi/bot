@@ -6,6 +6,7 @@ import {
   NavRouteOptions,
   Option,
   QueryConfig,
+  Regex,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { AgentService } from '../../services/agent.service';
@@ -80,7 +81,7 @@ export class AddAgentComponent implements OnInit {
     this.agentForm = this.fb.group({
       active: [true],
       name: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       cc: ['+91', [Validators.required]],
       phoneNo: ['', [Validators.required]],
       iataNo: ['', [CustomValidators.requiredLength(14)]],

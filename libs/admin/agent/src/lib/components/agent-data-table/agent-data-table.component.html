@@ -99,7 +99,12 @@
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.company; else emptyCell">
-          <div class="primary-text">{{ rowData.company }}</div>
+          <a
+            (click)="openCompany(rowData); $event.stopPropagation()"
+            class="link"
+          >
+            {{ rowData.company }}
+          </a>
         </div>
       </td>
       <td>

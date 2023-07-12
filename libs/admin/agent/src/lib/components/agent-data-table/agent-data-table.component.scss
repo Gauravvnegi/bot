@@ -7,3 +7,7 @@
 :host ::ng-deep .p-datatable {
   @include tableCellPadding(0.3em);
 }
+
+.link {
+  color: #0000ee !important;
+}

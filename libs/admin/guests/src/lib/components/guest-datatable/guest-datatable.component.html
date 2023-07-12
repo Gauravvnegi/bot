@@ -84,6 +84,7 @@
       <td>
         <div class="cell-content">
           <span class="primary-text">{{ rowData.name }}</span>
+          <span class="secondary-text">{{ rowData.code }}</span>
         </div>
       </td>
       <td>
@@ -108,8 +109,8 @@
       </td>
       <td>
         <div class="cell-content">
-          <span *ngIf="rowData.age; else emptyCell">
-            {{ rowData.age }}
+          <span class="primary-text" *ngIf="rowData.dob; else emptyCell">
+            {{ rowData.dob | date }}
           </span>
         </div>
       </td>

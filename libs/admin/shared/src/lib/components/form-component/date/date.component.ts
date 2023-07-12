@@ -18,6 +18,7 @@ export class DateComponent extends FormComponent implements OnInit {
   dateFormat = 'd/m/yy';
   readonlyInput = true;
   enableButtonBar = false;
+  yearRange = '2000:2030';
 
   /**
    * @Input to change default date setting

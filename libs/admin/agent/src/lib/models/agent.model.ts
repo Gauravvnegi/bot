@@ -8,6 +8,7 @@ export class AgentModel {
   code: number;
   verified: boolean;
   company: string;
+  companyId: string;
   iataNo: number;
   email: string;
   phoneNo: string;
@@ -55,9 +56,10 @@ export class AgentModel {
       email: contact.emailId,
       phoneNo: `${contact.cc}-${contact.contactNumber}`,
       commissionType: input.priceModifier,
-      company: input?.company?.firstName,
+      company: input.company?.firstName,
       commission: input.priceModifierValue,
       status: input.status,
+      companyId: input.company?.id,
     });
     return this;
   }

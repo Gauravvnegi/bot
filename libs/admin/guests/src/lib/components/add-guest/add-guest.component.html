@@ -39,7 +39,7 @@
         type: 'email',
         errorMessages: {
           required: 'This is a required field.',
-          email: 'Enter valid email address'
+          pattern: 'Please enter a valid email address.'
         },
         placeholder: 'Enter'
       }"
@@ -49,7 +49,10 @@
       preControlName="cc"
       postControlName="phoneNo"
       [props]="{
-        placeholder: 'Enter'
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.'
+        }
       }"
     ></hospitality-bot-phone-number>
     <hospitality-bot-company-list
@@ -72,7 +75,8 @@
       controlName="dateOfBirth"
       label="Date of Birth"
       [settings]="{
-        enableTime: false
+        enableTime: false,
+        yearRange: '1900:' + ageRestriction.getFullYear()
       }"
       [props]="{
         placeholder: 'DD/MM/YYYY'

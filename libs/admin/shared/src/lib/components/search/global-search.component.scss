@@ -1,0 +1,62 @@
+:host ::ng-deep {
+  .search__container {
+    width: 22vw !important;
+    input {
+      font-size: 11px !important;
+      &::placeholder {
+        font-size: 11px !important;
+      }
+    }
+  }
+}
+
+// For collapsed search bar
+// span.p-input-icon-right {
+//   position: relative;
+//   display: inline-block;
+
+//   // Styling the search input
+//   input[type='text'] {
+//     width: 40px;
+//     height: 40px;
+//     padding: 8px;
+//     border: 1px solid #ccc;
+//     border-radius: 50px;
+//     font-size: 10px;
+//     transition: width 0.3s ease-in-out;
+//     box-sizing: border-box;
+
+//     &:focus {
+//       width: 300px;
+//     }
+//   }
+
+//   // Styling the search icon
+//   .search-icon {
+//     position: absolute;
+//     top: 50%;
+//     right: 8px;
+//     transform: translateY(-50%);
+//     color: #ccc;
+//     cursor: pointer;
+//     transition: transform 0.3s ease-in-out;
+
+//     &:hover {
+//       color: #000;
+//     }
+//   }
+
+//   .search-bar-icon {
+//     position: absolute;
+//     top: 0px;
+//     background: white;
+//     height: 40px;
+//     width: 40px;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     border-radius: 50px;
+//     font-size: 11px;
+//     box-shadow: 0px 0px 3px black;
+//   }
+// }

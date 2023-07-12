@@ -5,6 +5,7 @@
 >
   <div class="heading">{{ tableName }}</div>
   <div class="action-wrapper">
+    <ng-container [ngTemplateOutlet]="search"></ng-container>
     <hospitality-bot-button
       label="+ Add Company"
       link="/pages/members/company/{{ companyRoutes.addCompany.route }}"
@@ -53,7 +54,7 @@
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
         [selectedChips]="selectedFilterChips"
-        ><ng-container [ngTemplateOutlet]="search"></ng-container>
+      >
       </hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -210,12 +211,12 @@
 </ng-template>
 
 <ng-template #search>
-  <hospitality-bot-search
+  <hospitality-bot-global-search
     [formGroup]="tableFG"
     controlName="search"
     [props]="{
       placeholder: 'Search by Name, Code...'
     }"
     (onSearch)="searchCompany($event)"
-  ></hospitality-bot-search>
+  ></hospitality-bot-global-search>
 </ng-template>

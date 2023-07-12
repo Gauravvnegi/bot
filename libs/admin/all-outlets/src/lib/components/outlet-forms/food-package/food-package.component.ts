@@ -16,7 +16,6 @@ export class FoodPackageComponent implements OnInit {
 
   @Input() set outletId(id: string) {
     if (id) {
-      debugger;
       this.noRecordActionForFood = noRecordActionForFoodWithId;
     }
   }

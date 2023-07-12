@@ -51,17 +51,6 @@ class Menu {
   }
 }
 
-// export class EntityStateCounts {
-//   ACTIVE: number;
-//   INACTIVE: number;
-
-//   deserialize(input: EntityStateCounts) {
-//     this.ACTIVE = input.ACTIVE;
-//     this.INACTIVE = input.INACTIVE;
-//     return this;
-//   }
-// }
-
 export class Records {}
 
 export class MenuItem {

@@ -93,9 +93,10 @@
           </span>
         </div>
       </td>
-      <td (click)="$event.stopPropagation()">
+      <td>
         <div class="cell-content">
           <span
+            (click)="$event.stopPropagation()"
             class="primary-text"
             *ngIf="rowData.mobileNumber; else emptyCell"
           >

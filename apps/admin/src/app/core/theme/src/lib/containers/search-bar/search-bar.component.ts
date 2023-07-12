@@ -66,8 +66,8 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        const { branchName: branchId } = data['filter'].value.property;
-        this.entityId = branchId;
+        const { entityName: entityId } = data['filter'].value.property;
+        this.entityId = entityId;
       })
     );
   }

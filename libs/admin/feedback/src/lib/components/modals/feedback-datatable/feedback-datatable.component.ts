@@ -161,7 +161,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
           ...this.config,
         ];
         this.entityId = this.globalFilterService.entityId;
-        this.getOutlets(data['filter'].value.property.branchName);
+        this.getOutlets(data['filter'].value.property.entityName);
         //fetch-api for records
         this.loadInitialData([
           ...this.globalQueries,

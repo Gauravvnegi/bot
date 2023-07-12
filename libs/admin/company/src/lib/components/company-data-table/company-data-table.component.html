@@ -5,6 +5,7 @@
 >
   <div class="heading">{{ tableName }}</div>
   <div class="action-wrapper">
+    <ng-container [ngTemplateOutlet]="search"></ng-container>
     <hospitality-bot-button
       label="+ Add Company"
       link="/pages/members/company/{{ companyRoutes.addCompany.route }}"
@@ -53,7 +54,7 @@
         [chips]="filterChips"
         (onChange)="toggleQuickReplyFilter($event)"
         [selectedChips]="selectedFilterChips"
-        ><ng-container [ngTemplateOutlet]="search"></ng-container>
+      >
       </hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -111,12 +112,14 @@
           </div>
         </div>
       </td>
-      <td (click)="$event.stopPropagation()">
+      <td>
         <div class="cell-content" *ngIf="rowData.phoneNumber; else emptyCell">
           <div class="primary-text">
-            <a href="tel:{{ rowData.phoneNumber }}">{{
-              rowData.phoneNumber
-            }}</a>
+            <a
+              (click)="$event.stopPropagation()"
+              href="tel:{{ rowData.phoneNumber }}"
+              >{{ rowData.phoneNumber }}</a
+            >
           </div>
         </div>
       </td>
@@ -130,13 +133,16 @@
           </div>
         </div>
       </td>
-      <td (click)="$event.stopPropagation()">
+      <td>
         <div
           class="cell-content"
           *ngIf="rowData.salesPersonNumber; else emptyCell"
         >
           <div class="primary-text">
-            <a href="tel:{{ rowData.salesPersonNumber }}">
+            <a
+              (click)="$event.stopPropagation()"
+              href="tel:{{ rowData.salesPersonNumber }}"
+            >
               <u> {{ rowData.salesPersonNumber }}</u>
             </a>
           </div>
@@ -205,12 +211,12 @@
 </ng-template>
 
 <ng-template #search>
-  <hospitality-bot-search
+  <hospitality-bot-global-search
     [formGroup]="tableFG"
     controlName="search"
     [props]="{
       placeholder: 'Search by Name, Code...'
     }"
     (onSearch)="searchCompany($event)"
-  ></hospitality-bot-search>
+  ></hospitality-bot-global-search>
 </ng-template>

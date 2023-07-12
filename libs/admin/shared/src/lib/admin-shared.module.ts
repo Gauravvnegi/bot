@@ -107,7 +107,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TabHeaderComponent } from './components/tab-header/tab-header.component';
 import { ImportServiceContainerComponent } from './components/import-service-container/import-service-container.component';
 import { BackdropDirective } from './directives/backdrop.directive';
-import { SearchComponent } from './components/search/search.component';
+import { GlobalSearchComponent } from './components/search/global-search.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -221,7 +221,7 @@ import { SearchComponent } from './components/search/search.component';
     BackdropDirective,
     ImportServiceContainerComponent,
     InputNumberComponent,
-    SearchComponent,
+    GlobalSearchComponent,
   ],
 
   exports: [
@@ -325,7 +325,7 @@ import { SearchComponent } from './components/search/search.component';
     TabHeaderComponent,
     ImportServiceContainerComponent,
     InputNumberComponent,
-    SearchComponent,
+    GlobalSearchComponent,
   ],
 })
 export class AdminSharedModule {}

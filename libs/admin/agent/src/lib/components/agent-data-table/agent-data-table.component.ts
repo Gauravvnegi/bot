@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
@@ -16,6 +16,7 @@ import { QueryConfig } from '../../types/agent';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { AgentModel, AgentResponseModel } from '../../models/agent.model';
 import { LazyLoadEvent } from 'primeng/api';
+import { companyRoutes } from 'libs/admin/company/src/lib/constants/route';
 
 @Component({
   selector: 'hospitality-bot-agent-data-table',
@@ -27,7 +28,7 @@ import { LazyLoadEvent } from 'primeng/api';
 })
 export class AgentDataTableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  readonly routes = agentRoutes;
+  readonly routes = { ...agentRoutes, ...companyRoutes };
 
   entityId: string;
 
@@ -141,6 +142,12 @@ export class AgentDataTableComponent extends BaseDatatableComponent
   editAgent(rowData) {
     this.router.navigate([
       `/pages/members/agent/${this.routes.editAgent.route}/${rowData.id}`,
+    ]);
+  }
+
+  openCompany(rowData) {
+    this.router.navigate([
+      `/pages/members/company/${this.routes.editCompany.route}/${rowData.companyId}`,
     ]);
   }
 

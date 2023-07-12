@@ -1,5 +1,5 @@
 export type AgentFormType = {
-  active: boolean;
+  status: boolean;
   name: string;
   email: string;
   cc: string;

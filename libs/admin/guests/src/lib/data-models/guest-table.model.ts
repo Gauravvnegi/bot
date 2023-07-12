@@ -33,12 +33,14 @@ export class GuestTable implements IDeserializable {
 }
 
 export class GuestData {
+  id: string;
+  code: string;
   age: number;
   mobileNumber: string;
   email: string;
   name: string;
-  id: string;
   isVerified: boolean;
+  dob: number;
   status: boolean;
   type: string;
 
@@ -56,6 +58,8 @@ export class GuestData {
       isVerified: input['isVerified'],
       status: input['status'],
       type: input['type'],
+      code: input['code'],
+      dob: input['dateOfBirth'],
     });
 
     return this;

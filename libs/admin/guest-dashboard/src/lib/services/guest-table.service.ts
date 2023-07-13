@@ -45,11 +45,11 @@ export class GuestTableService extends ApiService {
   }
 
   getAllGuestStats(config): Observable<any> {
-    return this.get(`/api/v1/guests/stats/${config.queryObj}`);
+    return this.get(`/api/v1/members/stats/${config.queryObj}`);
   }
 
   exportCSVStat(config): Observable<any> {
-    return this.get(`/api/v1/guests/stats/export/${config.queryObj}`, {
+    return this.get(`/api/v1/members/stats/export/${config.queryObj}`, {
       responseType: 'blob',
     });
   }

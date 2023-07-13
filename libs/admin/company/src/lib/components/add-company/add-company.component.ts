@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import { NavRouteOptions, Option, Regex } from '@hospitality-bot/admin/shared';
 import { CompanyService } from '../../services/company.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ActivatedRoute } from '@angular/router';
@@ -58,9 +58,9 @@ export class AddCompanyComponent implements OnInit {
 
   initCompanyForm() {
     this.companyForm = this.fb.group({
-      active: [true],
+      status: [true, [Validators.required]],
       name: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       cc: ['+91', [Validators.required]],
       phoneNo: [null, [Validators.required]],
       address: ['', [Validators.required]],
@@ -130,6 +130,7 @@ export class AddCompanyComponent implements OnInit {
             salePersonNo: response.salesPersonPhone,
             discountType: response.priceModifier,
             discount: response.priceModifierValue,
+            status: response.status,
           });
         },
         (error) => {

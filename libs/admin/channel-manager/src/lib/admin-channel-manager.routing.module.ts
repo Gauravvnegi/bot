@@ -25,35 +25,35 @@ const appRoutes: CRoutes = [
     children: [
       {
         path: 'update-rates',
-        name: ModuleNames.UPDATE_RATES,
+        name: ModuleNames.MANAGE_RATE,
         component: MainComponent,
         children: [
           {
             path: '',
             component: UpdateRatesComponent,
-            name: ModuleNames.UPDATE_RATES,
+            name: ModuleNames.MANAGE_RATE,
           },
           {
             path: 'rates-bulk-update',
             component: RatesBulkUpdateComponent,
-            name: ModuleNames.UPDATE_RATES,
+            name: ModuleNames.MANAGE_RATE,
           },
         ],
       },
       {
         path: 'update-inventory',
-        name: ModuleNames.UPDATE_INVENTORY,
+        name: ModuleNames.MANAGE_INVENTORY,
         component: MainComponent,
         children: [
           {
             path: '',
             component: UpdateInventoryComponent,
-            name: ModuleNames.UPDATE_RATES,
+            name: ModuleNames.MANAGE_INVENTORY,
           },
           {
             path: 'inventory-bulk-update',
             component: InventoryBulkUpdateComponent,
-            name: ModuleNames.UPDATE_RATES,
+            name: ModuleNames.MANAGE_INVENTORY,
           },
         ],
       },

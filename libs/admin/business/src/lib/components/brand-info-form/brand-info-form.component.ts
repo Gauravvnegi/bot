@@ -13,6 +13,8 @@ import { BrandResponse } from '../../models/brand.model';
 import { BusinessService } from '../../services/business.service';
 import { BrandFormData } from '../../types/brand.type';
 import { HotelFormDataService } from '../../services/hotel-form.service';
+import { OutletFormData } from 'libs/admin/all-outlets/src/lib/types/outlet';
+import { OutletFormService } from 'libs/admin/all-outlets/src/lib/services/outlet-form.service';
 
 @Component({
   selector: 'hospitality-bot-brand-info-form',
@@ -40,7 +42,8 @@ export class BrandInfoFormComponent implements OnInit {
     private router: Router,
     private hotelDetailService: HotelDetailService,
     private businessService: BusinessService,
-    private hotelFormDataService: HotelFormDataService
+    private hotelFormDataService: HotelFormDataService,
+    private outletFormService: OutletFormService
   ) {
     this.brandId = this.route.snapshot.paramMap.get('brandId');
     const { navRoutes, title } = businessRoute[
@@ -49,6 +52,7 @@ export class BrandInfoFormComponent implements OnInit {
     this.pageTitle = title;
     this.navRoutes = navRoutes;
     this.hotelFormDataService.resetHotelInfoFormData();
+    this.outletFormService.resetOutletFormData();
   }
 
   ngOnInit(): void {

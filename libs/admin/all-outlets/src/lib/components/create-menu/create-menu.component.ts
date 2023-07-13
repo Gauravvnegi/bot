@@ -1,15 +1,13 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  Router,
-} from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ConfigService, NavRouteOptions } from '@hospitality-bot/admin/shared';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NavRouteOptions } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletBaseComponent } from '../outlet-base.components';
+import { MenuFormData, MenuResponse } from '../../types/menu';
+import { Subscription } from 'rxjs';
+import { OutletService } from '../../services/outlet.service';
+import { PageReloadService } from '../../services/page-reload.service.service';
 
 @Component({
   selector: 'hospitality-bot-create-menu',
@@ -24,6 +22,8 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
   pageTitle: string;
   navRoutes: NavRouteOptions;
   packageCode: string = '# will be auto generated';
+  loading = false;
+  $subscription = new Subscription();
 
   buttons = [
     {
@@ -34,25 +34,19 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
     },
   ];
 
-  @HostListener('window:beforeunload', ['$event'])
-  handleBeforeUnload(event: BeforeUnloadEvent) {
-    event.preventDefault();
-    event.returnValue = false;
-    return 'Are you sure you want to leave? Your unsaved changes will be lost.';
-  }
-
   constructor(
     private fb: FormBuilder,
-    private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
-    private configService: ConfigService,
-    router: Router,
-    route: ActivatedRoute
+    public router: Router,
+    public route: ActivatedRoute,
+    private outletService: OutletService,
+    private pageReloadService: PageReloadService
   ) {
     super(router, route);
   }
 
   ngOnInit(): void {
+    this.pageReloadService.enablePageReloadConfirmation();
     this.initForm();
     // this.initOptionsConfig();
     this.initComponent('menu');
@@ -60,18 +54,87 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
 
   initForm(): void {
     this.useForm = this.fb.group({
-      active: [true],
+      status: [true],
       name: ['', Validators.required],
       imageUrl: ['', Validators.required],
       description: [''],
     });
+
+    if (this.menuId) {
+      this.initFormData();
+    }
   }
 
-  handleSubmit() {}
+  initFormData() {
+    this.$subscription.add(
+      this.outletService.getMenu(this.menuId).subscribe((res) => {
+        this.useForm.patchValue(res);
+      }, this.handleError)
+    );
+  }
 
-  handleReset() {}
+  handleSubmit() {
+    if (this.useForm.invalid) {
+      this.useForm.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix errors'
+      );
+      return;
+    }
+    const data = this.useForm.getRawValue() as MenuFormData;
+    if (this.menuId) {
+      this.loading = true;
+      this.$subscription.add(
+        this.outletService
+          .updateMenu(data, this.menuId, this.outletId)
+          .subscribe(this.handleSuccess, this.handleError)
+      );
+    } else {
+      this.loading = true;
+      this.$subscription.add(
+        this.outletService
+          .addMenu(data, this.outletId)
+          .subscribe((res: MenuResponse) => {
+            this.handleSuccess(res?.id);
+          }, this.handleError)
+      );
+    }
+  }
+
+  handleSuccess = (id?: string) => {
+    this.loading = false;
+    this.snackbarService.openSnackBarAsText(
+      `Menu ${this.menuId ? 'edited' : 'created'} successfully`,
+      '',
+      { panelClass: 'success' }
+    );
+    this.pageReloadService.disablePageReloadConfirmation();
+    this.router.navigate([id], {
+      relativeTo: this.route,
+    });
+  };
+
+  handleReset() {
+    this.useForm.reset();
+  }
 
   handleDownload() {}
 
   handlePrintMenu() {}
+
+  /**
+   * @function handleError to show the error
+   * @param param0 network error
+   */
+  handleError = ({ error }): void => {
+    this.loading = false;
+  };
+
+  /**
+   * Unsubscribe when component is getting removed
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+    this.pageReloadService.disablePageReloadConfirmation();
+  }
 }

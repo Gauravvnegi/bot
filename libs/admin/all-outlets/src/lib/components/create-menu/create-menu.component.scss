@@ -4,21 +4,28 @@
   @include form-block;
 }
 
-:host ::ng-deep .p-button{
-  background-color: $primary-cta !important;
+:host ::ng-deep .download-btn {
+  .p-button {
+    background-color: $primary-cta !important;
+  }
 }
 
-:host ::ng-deep .p-splitbutton-defaultbutton:hover {
-  background-color: $primary-hover !important;
-}
-
-:host ::ng-deep .p-splitbutton-menubutton:hover {
+:host ::ng-deep .download-btn {
+  .p-splitbutton-defaultbutton:hover {
     background-color: $primary-hover !important;
+  }
 }
 
-:host ::ng-deep .p-component, .p-button{
-  font-size: 14px;
-  font-weight: $medium;
+:host ::ng-deep .download-btn {
+  .p-splitbutton-menubutton:hover {
+    background-color: $primary-hover !important;
+  }
 }
 
-
+:host ::ng-deep .download-btn {
+  .p-component,
+  .p-button {
+    font-size: 14px;
+    font-weight: $medium;
+  }
+}

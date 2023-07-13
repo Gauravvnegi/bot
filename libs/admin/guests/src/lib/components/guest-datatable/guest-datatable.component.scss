@@ -217,29 +217,3 @@
 :host ::ng-deep .p-datatable {
   @include tableCellPadding(0.3em);
 }
-
-// TODO: need to refactor
-:host ::ng-deep {
-  .p-datatable-header {
-    display: flex !important;
-    justify-content: space-between;
-    display: block;
-    padding: 10px 10px 10px 0 !important;
-    .search {
-      width: 40%;
-      display: block;
-    }
-  }
-  .p-datatable {
-    .p-datatable-thead,
-    .p-datatable-header {
-      position: sticky;
-      top: 120px;
-      z-index: 10;
-    }
-    .p-datatable-header {
-      top: 57px;
-      background-color: white;
-    }
-  }
-}

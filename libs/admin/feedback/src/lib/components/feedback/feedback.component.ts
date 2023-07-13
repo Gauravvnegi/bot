@@ -83,6 +83,7 @@ export class FeedbackComponent implements OnInit, OnDestroy {
           this.globalFeedbackFilterType === feedback.types.both
         ) {
           this.tabFilterIdx = 0;
+         
           this.getOutletsSelected(
             [...data['feedback'].queryValue],
             data['filter'].value
@@ -116,9 +117,9 @@ export class FeedbackComponent implements OnInit, OnDestroy {
 
   setStayTabFilters(globalQueryValue) {
     const branch = this._hotelDetailService.brands
-      .find((brand) => brand.id === globalQueryValue.property.hotelName)
+      .find((brand) => brand.id === globalQueryValue.property.brandName)
       .entities.find(
-        (branch) => branch['id'] === globalQueryValue.property.branchName
+        (branch) => branch['id'] === globalQueryValue.property.entityName
       );
     this.setTabFilterItems(branch);
   }
@@ -180,8 +181,8 @@ export class FeedbackComponent implements OnInit, OnDestroy {
       if (element.hasOwnProperty('outlets')) this.outletIds = element.outlets;
     });
     this.getOutlets(
-      globalQueryValue.property.branchName,
-      globalQueryValue.property.hotelName
+      globalQueryValue.property.entityName,
+      globalQueryValue.property.brandName
     );
   }
 

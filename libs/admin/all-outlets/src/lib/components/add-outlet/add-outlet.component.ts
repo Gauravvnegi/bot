@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -5,12 +6,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Location } from '@angular/common';
 
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   HotelDetailService,
-  NavRouteOptions,
   Option,
   Regex,
 } from '@hospitality-bot/admin/shared';
@@ -18,11 +17,12 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { Subscription } from 'rxjs';
 import { cousins } from '../../constants/data';
 import { outletBusinessRoutes } from '../../constants/routes';
-import { OutletService } from '../../services/outlet.service';
-import { Feature, OutletForm } from '../../types/outlet';
-import { OutletBaseComponent } from '../outlet-base.components';
-import { OutletFormService } from '../../services/outlet-form.service';
 import { Services } from '../../models/services';
+import { OutletFormService } from '../../services/outlet-form.service';
+import { OutletService } from '../../services/outlet.service';
+import { Feature, OutletForm, OutletType } from '../../types/outlet';
+import { OutletBaseComponent } from '../outlet-base.components';
+import { MenuList } from '../../models/outlet.model';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
@@ -37,6 +37,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   cousins = cousins;
   compServices: any[] = [];
   paidServices: any[] = [];
+  menuList: any[] = [];
 
   $subscription = new Subscription();
   loading = false;
@@ -78,6 +79,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         subTypes: item.subtype,
         menu: item?.menu,
       }));
+      this.onTypeChange();
+      this.getOutletData();
     });
   }
 
@@ -94,32 +97,40 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         countryCode: ['+91'],
         number: [''],
       }),
-      cc: [''],
-      //this field are not creating form BE
       dayOfOperationStart: ['', [Validators.required]],
       dayOfOperationEnd: ['', [Validators.required]],
       timeDayStart: ['', [Validators.required]],
       timeDayEnd: ['', [Validators.required]],
-      rules: [[]],
-
       address: [{}, [Validators.required]],
       imageUrl: [[], [Validators.required]],
-
       description: [''],
       serviceIds: [[]],
-      menu: [[]],
+      paidServiceIds: [[]],
+      menuIds: [[]],
+      foodPackageIds: [[]],
+
       socialPlatforms: [[]],
       maximumOccupancy: [''],
       minimumOccupancy: [''],
       area: [''],
       dimension: ['sqft'],
-      foodPackages: [[]],
-      cuisinesType: [''],
-    });
-    this.onTypeChange();
+      cuisinesType: [[]],
 
+      //not working filed
+      rules: [[]],
+    });
+  }
+
+  getOutletData() {
     //patch value if there is outlet id
-    if (this.outletId) {
+    if (this.OutletFormService.outletFormState) {
+      this.compServices = this.OutletFormService.OutletFormData.complimentaryAmenities;
+      this.paidServices = this.OutletFormService.OutletFormData.paidAmenities;
+      this.menuList = this.OutletFormService.OutletFormData.MenuList;
+
+      this.useForm.patchValue(this.OutletFormService.OutletFormData);
+    }
+    if (this.outletId && !this.OutletFormService.outletFormState) {
       this.outletService.getOutletById(this.outletId).subscribe((res) => {
         const { type, subType, ...rest } = res;
 
@@ -129,13 +140,26 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.useForm.get('subType').setValue(subType.toUpperCase());
 
         this.useForm.patchValue(rest);
+
+        switch (type) {
+          case 'RESTAURANT':
+            this.getMenuList();
+            this.getServices('COMPLIMENTARY');
+            break;
+          case 'VENUE':
+            this.getServices('PAID');
+            this.getServices('COMPLIMENTARY');
+            break;
+          case 'SPA':
+            this.getServices('PAID');
+        }
       });
     }
   }
 
   onTypeChange() {
     const { type } = this.formControls;
-    type.valueChanges.subscribe((type) => {
+    type.valueChanges.subscribe((type: OutletType) => {
       const selectedType = this.types.filter((item) => item.value === type);
 
       this.isTypeSelected = true;
@@ -144,32 +168,32 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         value: item.toUpperCase(),
       }));
 
-      if (selectedType[0].value === 'RESTAURANT') {
-        this.outletService.menu.next(selectedType[0].menu);
-      }
-
       //set form validation on type change
       const { maximumOccupancy, minimumOccupancy } = this.formControls;
       switch (type) {
         case 'RESTAURANT':
-          this.getServices('COMPLIMENTARY');
           maximumOccupancy.setValidators([Validators.required]);
           minimumOccupancy.clearValidators();
           break;
 
         case 'VENUE':
-          this.getServices('PAID');
-          this.getServices('COMPLIMENTARY');
           minimumOccupancy.setValidators([Validators.required]);
           maximumOccupancy.clearAsyncValidators();
           break;
 
         case 'SPA':
-          this.getServices('PAID');
           maximumOccupancy.clearValidators();
           minimumOccupancy.clearValidators();
       }
     });
+  }
+
+  getMenuList() {
+    this.$subscription.add(
+      this.outletService.getMenuList(this.outletId).subscribe((res) => {
+        this.menuList = new MenuList().deserialize(res).records;
+      })
+    );
   }
 
   /**
@@ -177,11 +201,23 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    * @description submits the form
    */
   submitForm(features?: Feature): void {
-    if (this.outletId && !(features === 'brand' || features === 'hotel')) {
+    if (
+      this.outletId &&
+      !(
+        features === 'brand' ||
+        features === 'hotel' ||
+        features === 'import-services'
+      )
+    ) {
       //save data into service for later use
 
       this.OutletFormService.initOutletFormData(
-        this.useForm.getRawValue(),
+        {
+          ...this.useForm.getRawValue(),
+          complimentaryAmenities: this.compServices,
+          paidAmenities: this.paidServices,
+          MenuList: this.menuList,
+        },
         true
       );
 
@@ -217,10 +253,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.outletService
           .updateOutlet(this.outletId, data)
           .subscribe(
-            () =>
-              this.entityId
-                ? this.handleSuccess('hotel')
-                : this.handleSuccess('brand'),
+            () => this.handleSuccess(features, this.outletId),
             this.handleError
           )
       );
@@ -250,6 +283,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   }
 
   getServices(serviceType: string) {
+    this.loading = true;
     let param = '?type=SERVICE&serviceType=COMPLIMENTARY&pagination=false';
 
     if (serviceType === 'PAID') {
@@ -264,6 +298,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         }
       )
       .subscribe((res) => {
+        this.loading = false;
         if (serviceType === 'PAID') {
           this.paidServices = new Services().deserialize(
             res.paidPackages
@@ -300,6 +335,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    * @description handles success
    */
   handleSuccess = (feature?: Feature, outletId?: string) => {
+    this.OutletFormService.resetOutletFormData();
     this.snackbarService.openSnackBarAsText(
       this.outletId
         ? 'Outlet updated successfully'

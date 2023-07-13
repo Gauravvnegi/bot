@@ -86,7 +86,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     );
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
-        const { hotelName: brandId, branchName: branchId } = data[
+        const { brandName: brandId, entityName: branchId } = data[
           'filter'
         ].value.property;
 

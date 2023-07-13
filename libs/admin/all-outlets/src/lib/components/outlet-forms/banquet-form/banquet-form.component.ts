@@ -17,6 +17,7 @@ import {
   styleUrls: ['./banquet-form.component.scss'],
 })
 export class BanquetFormComponent implements OnInit {
+  @Input() isLoading = false;
   hours = hours;
   days = days;
   dimensions = dimensions;

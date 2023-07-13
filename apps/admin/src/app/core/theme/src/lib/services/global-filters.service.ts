@@ -8,10 +8,10 @@ import { FilterService } from './filter.service';
 @Injectable({ providedIn: 'root' })
 export class GlobalFilterService {
   selectedModule = new BehaviorSubject<ModuleNames | ''>('');
-  globalFilter$ = new BehaviorSubject({});
+  globalFilter$ = new BehaviorSubject<Partial<GlobalFilterData>>({});
   timezone: string;
   entityId: string;
-  globalFilterObj = {
+  globalFilterObj: GlobalFilterData = {
     filter: {
       value: {},
       queryValue: [],
@@ -52,11 +52,11 @@ export class GlobalFilterService {
       }
     });
 
-    this.filterService.emitFilterValue$.subscribe((data) => {
+    this.filterService.emitFilterValue$.subscribe((data:Partial<GlobalFilterData>) => {
       if (Object.keys(data).length) {
         this.globalFilterObj.filter.value = data;
         this.globalFilterObj.filter.queryValue = [
-          { entityId: get(data, ['property', 'branchName']) },
+          { entityId: get(data, ['property', 'entityName']) },
           {
             guestType: get(data, ['guest', 'guestType', 'isVip'])
               ? 'VIP'
@@ -95,3 +95,27 @@ export class GlobalFilterService {
     });
   }
 }
+
+type GlobalFilterData = {
+  filter: {
+    value: any;
+    queryValue: any[];
+  };
+  dateRange: {
+    value: any;
+    queryValue: any[];
+  };
+  feedback: {
+    value?: {
+      property?: {
+        brandName: string; //hotelName (prev)
+        entityName: string; //branchName (prev)
+      };
+      feedback?: {
+        feedbackType: string; //'STAYFEEDBACK'; 'TRANSACTIONALFEEDBACK', ALL
+      };
+      outlets?: any;
+    };
+    queryValue: any[];
+  };
+};

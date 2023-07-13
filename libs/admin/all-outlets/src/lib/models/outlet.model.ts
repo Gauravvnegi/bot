@@ -1,5 +1,10 @@
-import { MenuItemResponse } from '../types/menu';
-import { OutletResponse } from '../types/response';
+import { EntityState } from '@hospitality-bot/admin/shared';
+import {
+  MenuItemListResponse,
+  MenuItemResponse,
+  MenuListResponse,
+  MenuResponse,
+} from '../types/outlet';
 
 export class OutletList {
   id: string;
@@ -19,28 +24,87 @@ export class OutletList {
   }
 }
 
-export class MenuItem {
-  code: string;
-  itemName: string;
-  type: string;
-  hsnCode: string;
-  category: string;
-  kitchenDept: string;
-  delivery: string;
-  preparationTime: string;
-  unit: number;
+export class MenuList {
+  total: number;
+  entityStateCounts: EntityState<string>;
+  records: Menu[];
 
-  deserialize(input: MenuItemResponse) {
-    this.code = input.code;
-    this.itemName = input.itemName;
-    this.type = input.type;
-    this.hsnCode = input.hsnCode;
-    this.category = input.category;
-    this.kitchenDept = input.kitchenDept;
-    this.delivery = input.delivery;
-    this.preparationTime = input.preparationTime;
+  deserialize(input: MenuListResponse) {
+    this.total = input.total;
+    this.entityStateCounts = input.entityStateCounts;
+    this.records = input.records.map((item) => new Menu().deserialize(item));
     return this;
   }
 }
 
-export class Outlet {}
+class Menu {
+  id: string;
+  name: string;
+  imageUrl: string;
+  description: string;
+  status: boolean;
+  entityId: string;
+
+  deserialize(input: MenuResponse) {
+    this.id = input.id;
+    this.name = input.name;
+    this.imageUrl = input.imageUrl;
+    this.description = input.description;
+    this.status = input.status;
+    this.entityId = input.entityId;
+    return this;
+  }
+}
+
+export class Records {}
+
+export class MenuItem {
+  code: string;
+  name: string;
+  description: string;
+  type: string;
+  hsnCode: string;
+  category: string;
+  deliveryPrice: number;
+  kitchenDept: string;
+  dineInPrice: number;
+  preparationTime: number;
+  unit: string;
+  status: boolean;
+  quantity: number;
+  id: string;
+
+  deserialize(input: MenuItemResponse) {
+    this.code = input.code;
+    this.name = input.name;
+    this.description = input.description;
+    this.type = input.type;
+    this.hsnCode = input.hsnCode;
+    this.category = input.category;
+    this.dineInPrice = input.dineInPrice;
+    this.deliveryPrice = input.deliveryPrice;
+    this.preparationTime = input.preparationTime;
+    this.unit = input.unit;
+    this.status = input.status;
+    this.quantity = input.quantity;
+    this.id = input.id;
+    return this;
+  }
+}
+
+export class MenuItemList {
+  records: MenuItem[];
+  total: number;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
+
+  deserialize(input: MenuItemListResponse) {
+    this.records = input.records?.map((item) =>
+      new MenuItem().deserialize(item)
+    );
+    this.entityStateCounts = input?.entityStateCounts ?? {};
+    this.entityTypeCounts = input?.entityTypeCounts ?? {};
+    this.total = input?.total ?? 0;
+    return this;
+  }
+}

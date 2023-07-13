@@ -51,8 +51,8 @@ export class CompanyListComponent implements OnInit {
         .subscribe(
           (res) => {
             const data = AgentModel.getCompanyList(res['records']);
-            this.companyList = [...data];
-            // this.noMoreCompany = data.length < this.companyLimit;
+            this.companyList = data;
+            this.noMoreCompany = data.length < 1;
           },
           (error) => {},
           () => {
@@ -80,13 +80,13 @@ export class CompanyListComponent implements OnInit {
    */
   searchCompany(text: string) {
     this.loadingCompany = true;
-    if (text) {
+    if (text.length) {
       this.$subscription.add(
         this.companyService
           .searchCompany({ params: `?key=${text}&type=${this.type}` })
           .subscribe((res) => {
             const data = AgentModel.getCompanyList(res['records']);
-            this.companyList = [...this.companyList, ...data];
+            this.companyList = data;
             this.loadingCompany = false;
           })
       );
@@ -111,7 +111,6 @@ export class CompanyListComponent implements OnInit {
       params: this.adminUtilityService.makeQueryParams([
         {
           type: type,
-          // offset: this.categoryOffSet,
         },
       ]),
     };

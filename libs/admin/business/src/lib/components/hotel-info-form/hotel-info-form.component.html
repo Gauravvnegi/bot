@@ -103,6 +103,7 @@
           formControlName="serviceIds"
           [itemList]="compServices"
           (viewAll)="saveHotelData()"
+          (onEmptyViewAction)="openImportService()"
           (addAction)="openImportService()"
           [noRecordsAction]="noRecordAction"
           type="icon"

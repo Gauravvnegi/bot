@@ -9,6 +9,7 @@ import {
 } from '../types/brand.type';
 import { HotelConfiguration, HotelFormData } from '../types/hotel.type';
 import { map } from 'rxjs/operators';
+import { EntityResponse } from '../types/entity-response.type';
 
 export class BusinessService extends ApiService {
   /**
@@ -18,21 +19,14 @@ export class BusinessService extends ApiService {
    * @memberof BusinessService
    */
 
-  getHotelList(brandId: string, config: QueryConfig): Observable<any> {
-    //the type will be changed to ALL to get both hotel and outlet
+  getPropertyList(
+    brandId: string,
+    config: QueryConfig
+  ): Observable<EntityResponse> {
     return this.get(
       `/api/v1/entity?type=ALL&parentId=${brandId}&${
         config.params.slice(1) ?? ''
       }`
-    ).pipe(
-      //it will be removed after improvement in api integration
-      map((res) => {
-        res.records = res.records.map((element) => ({
-          ...element,
-          type: 'HOTEL',
-        }));
-        return res;
-      })
     );
   }
 

@@ -20,7 +20,7 @@ export enum TableValue {
   allOutlets = 'ALL_OUTLETS',
   menu = 'MENU',
   menuList = 'MENU_LIST',
-  foodItems = 'FOOD_ITEMS'
+  foodItems = 'FOOD_ITEMS',
 }
 
 export const filters: Filter<TabValue, string>[] = [
@@ -113,24 +113,20 @@ export const cols: Record<TableValue, Cols[]> = {
       sortType: 'string',
     },
     {
-      field: 'hsnCode',
-      header: 'HSN Code',
-      sortType: 'number',
-    },
-    {
       field: 'category',
       header: 'Category',
       sortType: 'string',
     },
     {
-      field: 'kitchenDept',
-      header: 'Kitchen Dep',
-      sortType: 'string',
+      field: 'hsnCode',
+      header: 'HSN Code',
+      sortType: 'number',
     },
     {
-      field: 'dineIn',
+      field: 'dineInPrice',
       header: 'Dine in / Delivery',
       sortType: 'string',
+      searchField: ['dineInPrice, deliveryPrice'],
     },
     {
       field: 'preparationTime',
@@ -138,9 +134,15 @@ export const cols: Record<TableValue, Cols[]> = {
       sortType: 'number',
     },
     {
-      field: 'unit',
+      field: 'quantity',
       header: 'Qty/Unit',
       sortType: 'number',
+      searchField: ['quantity', 'unit'],
+    },
+    {
+      field: 'status',
+      header: 'Status',
+      sortType: 'string',
     },
   ],
 
@@ -159,11 +161,6 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'type',
       header: 'Type',
       sortType: 'string',
-    },
-    {
-      field: 'hsnCode',
-      header: 'HSN Code',
-      sortType: 'number',
     },
     {
       field: 'category',
@@ -201,10 +198,10 @@ export const cols: Record<TableValue, Cols[]> = {
     },
     {
       field: 'action',
-      header:'Action',
+      header: 'Action',
       width: '10%',
       isHidden: true,
-    }
+    },
   ],
 };
 

@@ -96,6 +96,7 @@
 
 .btn-wrapper {
   @include flex-item-center;
+  gap: 1em;
 }
 
 .icon-type {

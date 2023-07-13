@@ -5,16 +5,16 @@
   ></hospitality-bot-navigation-header>
 
   <div class="form-block" [formGroup]="companyForm">
-    <div class="code">
+    <div class="code half-width">
       <span class="code__label"> Code: </span>
       <span class="code__hash"> {{ packageCode }} </span>
     </div>
     <hospitality-bot-toggle-switch
-      class="status"
-      controlName="active"
-      label="Black listed:"
-      onLabel="Yes"
-      offLabel="No"
+      class="status half-width"
+      controlName="status"
+      label="Status:"
+      onLabel="Active"
+      offLabel="Inactive"
     ></hospitality-bot-toggle-switch>
 
     <hospitality-bot-input
@@ -31,7 +31,7 @@
         type: 'email',
         errorMessages: {
           required: 'This is a required field.',
-          email: 'Enter valid email.'
+          pattern: 'Please enter a valid email address.'
         }
       }"
     ></hospitality-bot-input>

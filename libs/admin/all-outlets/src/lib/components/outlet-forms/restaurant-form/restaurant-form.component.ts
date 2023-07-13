@@ -18,8 +18,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class RestaurantFormComponent implements OnInit {
   routes = navRoutes;
   console: any;
+  isId: boolean = false;
   @Input() set outletId(id: string) {
     if (id) {
+      this.isId = true;
       this.modifyNoRecordActions();
     }
   }
@@ -41,9 +43,7 @@ export class RestaurantFormComponent implements OnInit {
     private route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
-    this.console.log(this.menuList);
-  }
+  ngOnInit(): void {}
 
   modifyNoRecordActions() {
     this.noRecordActionForComp = noRecordActionForCompWithId;

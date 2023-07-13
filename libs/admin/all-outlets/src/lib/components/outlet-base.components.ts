@@ -88,22 +88,14 @@ export class OutletBaseComponent {
             : routeName
         ];
 
-    navRoutes[2].link = navRoutes[2].link
-      .replace(':brandId', this.brandId)
-      .replace(':outletId', this.outletId)
-      .replace(':entityId', this.entityId);
-
-    navRoutes[3].link = navRoutes[3].link
-      .replace(':entityId', this.entityId)
-      .replace(':brandId', this.brandId)
-      .replace(':outletId', this.outletId);
-
-    if (navRoutes[4]?.link.includes(':outletId')) {
-      navRoutes[4].link = navRoutes[4]?.link
+    navRoutes.forEach((element) => {
+      element.link = element.link
         .replace(':brandId', this.brandId)
         .replace(':outletId', this.outletId)
-        .replace(':entityId', this.entityId);
-    }
+        .replace(':entityId', this.entityId)
+        .replace(':menuId', this.menuId)
+        .replace(':menuItemId', this.menuItemId);
+    });
     this.navRoutes = navRoutes;
 
     this.pageTitle = title;

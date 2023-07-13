@@ -26,6 +26,8 @@ import {
   noRecordActionForPaidWithId,
 } from '../../constants/form';
 import { MenuList } from '../../models/outlet.model';
+import { Cancelable, debounce } from 'lodash';
+import { LibrarySearchItem } from '@hospitality-bot/admin/library';
 
 @Component({
   selector: 'hospitality-bot-view-all',
@@ -81,6 +83,7 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
     if (!this.outletFormService.outletFormState) {
       this.location.back();
     }
+    this.registerSearch();
   }
 
   initForm(): void {
@@ -160,6 +163,59 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
         this.selectedTabFilterItems = data;
         break;
     }
+  }
+
+  registerSearch() {
+    let debounceCall: (() => void) & Cancelable;
+
+    this.searchForm.get('searchText').valueChanges.subscribe((res) => {
+      debounceCall?.cancel();
+      if (res) {
+        debounceCall = debounce(() => {
+          this.loading = true;
+          this.disablePagination = true;
+          this.outletService
+            .searchLibraryItem(this.outletId, {
+              params: `?key=${res}&type=${LibrarySearchItem.SERVICE}`,
+            })
+            .subscribe(
+              (res) => {
+                this.loading = false;
+                const data = res && res[LibrarySearchItem.SERVICE];
+                const paidServices = [];
+                const compServices = [];
+
+                data?.forEach((item) => {
+                  if (item.type == 'Paid' && item.active) {
+                    paidServices.push(item);
+                  }
+                  if (item.type == 'Complimentary' && item.active) {
+                    compServices.push(item);
+                  }
+                });
+
+                this.paidServices = paidServices;
+                this.compServices = compServices;
+              },
+              (error) => {
+                this.snackbarService.openSnackBarAsText(error.error.message);
+              },
+              () => {
+                this.loading = false;
+              }
+            );
+        }, 500);
+        debounceCall();
+      } else {
+        this.compOffset = 0;
+        this.paidOffset = 0;
+        this.paidServices = [];
+        this.compServices = [];
+        this.getServices(ServicesTypeValue.COMPLIMENTARY);
+        this.getServices(ServicesTypeValue.PAID);
+        this.disablePagination = false;
+      }
+    });
   }
 
   /**

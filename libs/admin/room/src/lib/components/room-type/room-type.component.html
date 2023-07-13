@@ -149,7 +149,12 @@
         </div>
       </div>
     </div> -->
-    <div class="room-wrapper" formArrayName="ratePlans">
+    <div
+      class="room-wrapper"
+      [formArrayName]="
+        isPricingDynamic ? 'dynamicRatePlans' : 'staticRatePlans'
+      "
+    >
       <div class="header">Room Pricing</div>
       <hr />
       <div class="room-pricing-form-wrapper">
@@ -250,7 +255,7 @@
                   preControlName="maxPriceCurrency"
                   postControlName="maxPrice"
                   label="Max Price"
-                  [options]="currenices"
+                  [options]="currencies"
                   [defaultProps]="{
                     post: { type: 'number' }
                   }"

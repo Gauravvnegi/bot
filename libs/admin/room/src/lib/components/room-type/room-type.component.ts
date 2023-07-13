@@ -17,7 +17,6 @@ import {
   DynamicPricingRatePlan,
   RoomTypeFormData,
   ServicesTypeValue,
-  StaticPricingMod,
   StaticPricingRatePlan,
   errorMessages,
   noRecordAction,
@@ -114,7 +113,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       description: ['', [Validators.required]],
       complimentaryAmenities: [[], [Validators.required]],
       paidAmenities: [[]],
-      currency: ['', [Validators.required, Validators.min(0)]],
       maxOccupancy: [
         null,
         [
@@ -127,11 +125,13 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       maxAdult: [{ value: null, disabled: true }, occupancyValidation],
       area: ['', [Validators.required, Validators.min(0)]],
 
-      ratePlans: new FormArray([]),
+      staticRatePlans: new FormArray([]),
+      dynamicRatePlans: new FormArray([]),
     });
 
-    this.ratePlanArray = this.useForm.get('ratePlans') as FormArray;
-
+    this.ratePlanArray = this.isPricingDynamic
+      ? (this.useForm.get('dynamicRatePlans') as FormArray)
+      : (this.useForm.get('staticRatePlans') as FormArray);
     // If Data is already present
     if (this.roomService.roomTypeFormState) {
       this.useForm.patchValue(this.roomService.roomTypeFormData);
@@ -165,7 +165,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             label: DiscountType[value],
             value,
           }));
-          this.useForm.get('currency').setValue(this.currencies[0].value);
           this.getRatePlans(roomRatePlans);
         }
       })
@@ -277,8 +276,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.plans
       .filter((item) => !ratePlanIds.includes(item.value))
       .map((plan) => (plan.disabled = false));
-
-    console.log(selectedRatePlans);
   }
 
   /**
@@ -529,30 +526,39 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     const {
       complimentaryAmenities,
       paidAmenities,
-      ratePlans,
+      staticRatePlans,
+      dynamicRatePlans,
       ...rest
     } = this.useForm.getRawValue() as RoomTypeFormData;
-    let staticRatePlanModData: StaticPricingMod[];
-    staticRatePlanModData = ratePlans.map((ratePlan) => {
-      const { discountType, discountValue, id, ...restRatePlan } = ratePlan;
-      return {
+
+    let staticRatePlanModData = staticRatePlans?.map(
+      ({ discountType, discountValue, id, ...restRatePlan }) => ({
         ...restRatePlan,
-        id: id ? id : null,
+        id: id || null,
         discount: {
           type: discountType,
           value: discountValue,
         },
-      };
-    });
-    // const ratePlan = this.isPricingDynamic
-    //   ? { ratePlans: ratePlans }
-    //   : { ratePlans: staticRatePlanModData };
+      })
+    );
+
+    let dynamicRatePlanModData = dynamicRatePlans?.map(
+      ({ id, ...restPlan }) => ({
+        ...restPlan,
+        id: id || null,
+      })
+    );
+
+    const ratePlans = this.isPricingDynamic
+      ? dynamicRatePlanModData
+      : staticRatePlanModData;
 
     const data = {
       ...rest,
-      ratePlans: staticRatePlanModData,
-      roomAmenityIds: complimentaryAmenities.concat(paidAmenities),
+      ratePlans,
+      roomAmenityIds: [...complimentaryAmenities, ...paidAmenities],
     };
+
     return data;
   }
 

@@ -206,6 +206,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.timezone = selectedHotelData?.['timezone'];
     this.globalFilterService.timezone = this.timezone;
     this.globalFilterService.entityId = selectedentityId;
+    this.globalFilterService.entityType = selectedHotelData.category;
+    this.globalFilterService.entitySubType = selectedHotelData.type;
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
   }

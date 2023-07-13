@@ -11,6 +11,8 @@ export class GlobalFilterService {
   globalFilter$ = new BehaviorSubject<Partial<GlobalFilterData>>({});
   timezone: string;
   entityId: string;
+  entityType; //category  -- ADD type from shared
+  entitySubType; // type
   globalFilterObj: GlobalFilterData = {
     filter: {
       value: {},

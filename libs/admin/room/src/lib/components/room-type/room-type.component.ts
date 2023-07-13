@@ -186,17 +186,20 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           .subscribe(
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
-              data.ratePlans = data.ratePlans.map(
-                (item: StaticPricingRatePlan) => {
-                  return {
-                    ...item,
-                    label: this.getPlanLabel(item.ratePlanTypeId),
-                  };
-                }
-              );
-              data.ratePlans.forEach((item: StaticPricingRatePlan) => {
-                this.addNewRatePlan(item.ratePlanTypeId, item.label);
-              });
+
+              // Adds a RatePlan if it exists in api response with label and id, else add default
+              if (data.ratePlans.length > 0) {
+                data.ratePlans = data.ratePlans.map(
+                  (item: StaticPricingRatePlan) => {
+                    // Get Rate Plan label according to its id from config api
+                    const label = this.getPlanLabel(item.ratePlanTypeId);
+                    this.addNewRatePlan(item.ratePlanTypeId, label);
+                    return { ...item, label };
+                  }
+                );
+              } else {
+                this.addNewRatePlan();
+              }
               this.useForm.patchValue(data);
             },
             (err) => {
@@ -207,6 +210,9 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * @function getPlanLabel Get label from config api using rate plan id
+   */
   getPlanLabel(id: string) {
     let label: string;
     this.configService.$config.subscribe((value) => {
@@ -217,6 +223,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     return label;
   }
 
+  // Get All Rate Plans from config api and add initial rate plan.
   getRatePlans(ratePlans: RatePlanResponse[]) {
     const plansData = ratePlans.map((option, index) => ({
       label: option.label,
@@ -226,6 +233,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       command: () => this.handleRatePlan(option.id, option.label),
     }));
     this.plans = plansData;
+    // Adds rate plan only when the rate plan is not already added
     if (!this.roomTypeId) this.addNewRatePlan();
   }
 
@@ -269,15 +277,16 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.plans
       .filter((item) => !ratePlanIds.includes(item.value))
       .map((plan) => (plan.disabled = false));
+
+    console.log(selectedRatePlans);
   }
 
   /**
    * Handle remove rate plan based on index
    */
-  onRemove(value: string, index: number): void {
-    const removedPlan = this.ratePlanArray.at(index).get('ratePlanTypeId')
-      .value;
-    this.removedRatePlans.push(value);
+  removeRatePlan(value: string, index: number): void {
+    const removedPlan = this.ratePlanArray.at(index).get('id').value;
+    this.removedRatePlans.push(removedPlan);
     this.ratePlanArray.removeAt(index);
     this.setDisabled(value);
     this.planCount--;
@@ -544,7 +553,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       ratePlans: staticRatePlanModData,
       roomAmenityIds: complimentaryAmenities.concat(paidAmenities),
     };
-    debugger;
     return data;
   }
 

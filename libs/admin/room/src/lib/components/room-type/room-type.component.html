@@ -198,7 +198,7 @@
                 variant="text"
                 severity="reset"
                 (onClick)="
-                  onRemove(ratePlanGroup.get('ratePlanTypeId').value, i)
+                  removeRatePlan(ratePlanGroup.get('ratePlanTypeId').value, i)
                 "
                 [disabled]="ratePlanArray.length === 1"
               ></hospitality-bot-button>

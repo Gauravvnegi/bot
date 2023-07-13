@@ -1,33 +1,32 @@
-import { Component, OnInit } from '@angular/core';
-import { OutletBaseComponent } from '../outlet-base.components';
-import { ActivatedRoute, Route, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
-import { Service, Services } from '../../models/services';
-import { SnackBarService } from '@hospitality-bot/shared/material';
-import { OutletService } from '../../services/outlet.service';
 import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LibrarySearchItem } from '@hospitality-bot/admin/library';
 import {
   AdminUtilityService,
   QueryConfig,
 } from '@hospitality-bot/admin/shared';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { ServicesTypeValue } from 'libs/admin/room/src/lib/constant/form';
+import { Cancelable, debounce } from 'lodash';
 import { Subscription } from 'rxjs';
-import { OutletFormService } from '../../services/outlet-form.service';
 import {
   VenueTabItemList,
   restaurantTabItemList,
   spaTabItemList,
 } from '../../constants/data';
-import { Menu, MenuResponse, OutletType } from '../../types/outlet';
 import {
   noRecordActionForCompWithId,
   noRecordActionForMenuWithId,
   noRecordActionForPaidWithId,
 } from '../../constants/form';
 import { MenuList } from '../../models/outlet.model';
-import { Cancelable, debounce } from 'lodash';
-import { LibrarySearchItem } from '@hospitality-bot/admin/library';
+import { Service, Services } from '../../models/services';
+import { OutletFormService } from '../../services/outlet-form.service';
+import { OutletService } from '../../services/outlet.service';
+import { Menu, OutletType } from '../../types/outlet';
+import { OutletBaseComponent } from '../outlet-base.components';
 
 @Component({
   selector: 'hospitality-bot-view-all',
@@ -45,7 +44,7 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   isPaidLoading: boolean;
   noRecordAction = {};
   noRecordActionPaidWithId = noRecordActionForPaidWithId;
-  noRecordActionForCompWithId = noRecordActionForCompWithId;
+  noRecordActionCompWithId = noRecordActionForCompWithId;
   noRecordActionForMenuWithId = noRecordActionForMenuWithId;
 
   /** Paid Services Variable */
@@ -59,7 +58,7 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   noMoreCompServices = false;
   compOffset = 0;
 
-  limit = 10;
+  limit = 15;
   disablePagination = false;
   subscription$ = new Subscription();
   selectedTabFilterItems = this.tabItemList[0]?.value;
@@ -305,9 +304,14 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   }
 
   loadMore() {
-    if (this.entityId) {
-      this.offset += this.limit;
-      // this.getServices();
+    if (this.selectedTabFilterItems === 'PAID_SERVICES') {
+      this.compOffset = this.compOffset + this.limit;
+      this.getServices(ServicesTypeValue.COMPLIMENTARY);
+    }
+
+    if (this.selectedTabFilterItems === 'COMPLIMENTARY_SERVICES') {
+      this.paidOffset = this.paidOffset + this.limit;
+      this.getServices(ServicesTypeValue.PAID);
     }
   }
 }

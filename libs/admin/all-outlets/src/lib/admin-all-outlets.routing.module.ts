@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 import { AddMenuItemComponent } from './components/add-menu-item/add-menu-item.component';
 import { AddOutletComponent } from './components/add-outlet/add-outlet.component';
@@ -6,7 +6,6 @@ import { AllOutletsDataTableComponent } from './components/all-outlets-data-tabl
 import { CreateMenuComponent } from './components/create-menu/create-menu.component';
 import { MainComponent } from './components/main/main.component';
 import { MenuDataTableComponent } from './components/menu-data-table/menu-data-table.component';
-import { MenuListDataTableComponent } from './components/menu-list-data-table/menu-list-data-table.component';
 import { RestaurantFormComponent } from './components/outlet-forms/restaurant-form/restaurant-form.component';
 import { RulesComponent } from './components/outlet-forms/rules/rules.component';
 import { SpaFormComponent } from './components/outlet-forms/spa-form/spa-form.component';
@@ -67,7 +66,17 @@ const appRoutes: Route[] = [
                   },
                   {
                     path: outletBusinessRoutes.menuItem.route,
-                    component: AddMenuItemComponent,
+                    component: MainComponent,
+                    children: [
+                      {
+                        path: '',
+                        component: AddMenuItemComponent,
+                      },
+                      {
+                        path: outletBusinessRoutes.editMenuItem.route,
+                        component: AddMenuItemComponent,
+                      },
+                    ],
                   },
                 ],
               },
@@ -90,7 +99,6 @@ export class AdminAllOutletsRoutingModule {
     CreateMenuComponent,
     MenuDataTableComponent,
     AddMenuItemComponent,
-    MenuListDataTableComponent,
     AddOutletComponent,
     RulesComponent,
     RestaurantFormComponent,

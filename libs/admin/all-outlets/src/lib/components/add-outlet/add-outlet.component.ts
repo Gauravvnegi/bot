@@ -167,9 +167,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         label: item,
         value: item.toUpperCase(),
       }));
-      if (selectedType[0].value === 'RESTAURANT') {
-        this.outletService.menu.next(selectedType[0].menu);
-      }
 
       //set form validation on type change
       const { maximumOccupancy, minimumOccupancy } = this.formControls;

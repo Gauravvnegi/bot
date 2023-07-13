@@ -9,6 +9,8 @@ import {
 } from '@angular/forms';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { AddressInfo } from 'libs/admin/manage-reservation/src/lib/models/reservations.model';
+import { AddressData } from '../../types/form.type';
 declare let google: any;
 
 @Component({
@@ -178,7 +180,6 @@ export class AddressComponent extends FormComponent implements OnInit {
     const addressComponents = result.address_components;
     const location = result.geometry.location;
     const formattedAddress = result.formatted_address;
-    let data: any = {};
 
     const getAddressComponent = (type: string): string => {
       const component = addressComponents.find((c: any) =>
@@ -187,7 +188,7 @@ export class AddressComponent extends FormComponent implements OnInit {
       return component ? component.long_name : '';
     };
 
-    data = {
+    let data: AddressData = {
       placeId: result.place_id,
       formattedAddress: formattedAddress || '',
       buildingName: getAddressComponent('premise'),

@@ -1,12 +1,14 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from 'libs/shared/material/src';
 import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { RequestService } from '../../services/request.service';
 import { RaiseRequestComponent } from '../raise-request/raise-request.component';
-import { trigger, transition, animate, style } from '@angular/animations';
 
 @Component({
   selector: 'hospitality-bot-request-wrapper',
@@ -48,7 +50,9 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
 
   constructor(
     private _modal: ModalService,
-    private _requestService: RequestService
+    private _requestService: RequestService,
+    private _globalFilterService: GlobalFilterService,
+    private snackbarService: SnackBarService
   ) {}
 
   ngOnInit(): void {}
@@ -71,6 +75,21 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
     if (event.close) {
       this.guestInfoEnable = false;
     }
+  }
+
+  syncRequest() {
+    this.$subscription.add(
+      this._requestService
+        .syncRequest(this._globalFilterService.entityId)
+        .subscribe((res) => {
+          this.snackbarService.openSnackBarAsText(`Syncing successful`, '', {
+            panelClass: 'success',
+          });
+          this._globalFilterService.globalFilter$.next(
+            this._globalFilterService.globalFilterObj
+          );
+        })
+    );
   }
 
   /**

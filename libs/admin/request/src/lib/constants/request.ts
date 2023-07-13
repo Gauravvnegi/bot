@@ -4,54 +4,14 @@ export const request = {
     { label: 'High', value: 'HIGH' },
     { label: 'ASAP', value: 'ASAP' },
   ],
-  status: [
-    { label: 'To-Do', value: 'Todo' },
-    // { label: 'To-Do', value: 'Immediate' },
-    { label: 'Timeout', value: 'Timeout' },
-    { label: 'Closed', value: 'Closed' },
-  ],
-  tabFilter: [
-    {
-      label: 'All',
-      content: '',
-      value: 'ALL',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Pending',
-      content: '',
-      value: 'Pending',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'To-Do',
-      content: '',
-      value: 'Todo',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Closed',
-      content: '',
-      value: 'Closed',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-    {
-      label: 'Timed-Out',
-      content: '',
-      value: 'Timeout',
-      disabled: false,
-      total: 0,
-      chips: [],
-    },
-  ],
+  // status: [
+  //   { label: 'To-Do', value: 'Todo' },
+  //   // { label: 'To-Do', value: 'Immediate' },
+  //   { label: 'Timeout', value: 'Timeout' },
+  //   { label: 'Closed', value: 'Closed' },
+  // ],
+
+  defaultTabFilter: [{ label: 'All', value: 'ALL' }],
   filter: ['ASAP', 'High', 'Medium'],
   sort: [
     { label: 'Latest', value: '', order: '' },
@@ -91,3 +51,11 @@ export const request = {
     comment: { url: 'assets/svg/comments.svg', alt: 'comment' },
   },
 };
+
+export enum RequestStatus {
+  TODO = 'TODO',
+  IN_PROGRESS = 'IN_PROGRESS',
+  RESOLVED = 'RESOLVED',
+  CANCELED = 'CANCELED',
+  TIMEOUT = 'TIMEOUT',
+}

@@ -9,6 +9,7 @@ import { MenuConfig, OutletConfig } from '../types/config';
 import { OutletResponse } from '../types/response';
 import { ServiceResponse } from 'libs/admin/services/src/lib/types/response';
 import { MenuListResponse } from '../types/outlet';
+import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 
 @Injectable()
 export class OutletService extends ApiService {
@@ -140,5 +141,14 @@ export class OutletService extends ApiService {
     return this.get(`/api/v1/menus`, {
       headers: { 'entity-id': entityId },
     });
+  }
+
+  searchLibraryItem(
+    entityId: string,
+    config?: QueryConfig
+  ): Observable<SearchResultResponse> {
+    return this.get(
+      `/api/v1/entity/${entityId}/library/search${config?.params ?? ''}`
+    );
   }
 }

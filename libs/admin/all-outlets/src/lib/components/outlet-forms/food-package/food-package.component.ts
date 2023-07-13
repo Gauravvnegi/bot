@@ -14,8 +14,8 @@ export class FoodPackageComponent implements OnInit {
   routerLink = outletBusinessRoutes;
   noRecordActionForFood = noRecordActionForFood;
 
-  @Input() set outletId(id: string) {
-    if (id) {
+  @Input() set isId(isId: boolean) {
+    if (isId) {
       this.noRecordActionForFood = noRecordActionForFoodWithId;
     }
   }

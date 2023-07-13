@@ -68,7 +68,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     this.initOptions();
     this.initForm();
     this.initComponent('outlet');
-    this.initOptionConfig();
   }
 
   initOptions() {
@@ -123,13 +122,15 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
 
   getOutletData() {
     //patch value if there is outlet id
-    if (this.OutletFormService.outletFormState) {
+    if (this.OutletFormService.outletFormState && this.outletId) {
+      //saving list data into services
       this.compServices = this.OutletFormService.OutletFormData.complimentaryAmenities;
       this.paidServices = this.OutletFormService.OutletFormData.paidAmenities;
       this.menuList = this.OutletFormService.OutletFormData.MenuList;
 
       this.useForm.patchValue(this.OutletFormService.OutletFormData);
     }
+
     if (this.outletId && !this.OutletFormService.outletFormState) {
       this.outletService.getOutletById(this.outletId).subscribe((res) => {
         const { type, subType, ...rest } = res;
@@ -280,17 +281,12 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     return this.useForm.controls as Record<keyof OutletForm, AbstractControl>;
   }
 
-  initOptionConfig() {
-    // this.getServices('PAID');
-    // this.getServices('COMPLIMENTARY');
-  }
-
   getServices(serviceType: string) {
     this.loading = true;
     let param = '?type=SERVICE&serviceType=COMPLIMENTARY&pagination=false';
 
     if (serviceType === 'PAID') {
-      param = '?limit=5&type=SERVICE&serviceType=PAID&status=true';
+      param = '?type=SERVICE&serviceType=PAID&pagination=false';
     }
     this.outletService
       .getServices(
@@ -306,6 +302,16 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
           this.paidServices = new Services().deserialize(
             res.paidPackages
           ).services;
+
+          //extracting id of paid services
+          const data = this.paidServices.map((item) => {
+            if (item.active) return item.id;
+          });
+
+          this.compServices = this.compServices.slice(0, 5);
+
+          const { paidServiceIds } = this.formControls;
+          paidServiceIds.patchValue(data);
         }
         if (serviceType === 'COMPLIMENTARY') {
           this.compServices = new Services().deserialize(

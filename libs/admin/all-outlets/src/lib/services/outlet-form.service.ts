@@ -18,6 +18,7 @@ export class OutletFormService {
   }
 
   resetOutletFormData() {
+    this.OutletFormData = {};
     this.OutletFormData = {
       paidServiceIds: [],
       serviceIds: [],

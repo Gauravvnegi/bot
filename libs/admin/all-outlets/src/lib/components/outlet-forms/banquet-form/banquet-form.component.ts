@@ -24,9 +24,11 @@ export class BanquetFormComponent implements OnInit {
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
   noRecordActionForPaid = noRecordActionForPaid;
+  isId: boolean = false;
 
   @Input() set outletId(id: string) {
     if (id) {
+      this.isId = true;
       this.modifyNoRecordActions();
     }
   }

@@ -40,7 +40,7 @@ const appRoutes: Route[] = [
             pathMatch: 'full',
           },
           {
-            path: outletBusinessRoutes.viewAll.route,
+            path: outletBusinessRoutes.services.route,
             component: ViewAllComponent,
             pathMatch: 'full',
           },

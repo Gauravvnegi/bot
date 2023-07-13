@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { OutletForm, OutletFormData } from '../types/outlet';
-
+@Injectable({
+  providedIn: 'root',
+})
 export class OutletFormService {
   OutletFormData: Partial<OutletFormData> = {
     paidServiceIds: [],

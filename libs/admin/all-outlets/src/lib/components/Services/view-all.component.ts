@@ -87,7 +87,7 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   }
 
   initForm(): void {
-    this.initComponent('viewAll');
+    this.initComponent('services');
     this.useForm = this.fb.group({
       paidServiceIds: [[]],
       serviceIds: [[]],

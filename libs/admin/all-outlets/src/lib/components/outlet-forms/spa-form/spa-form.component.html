@@ -9,7 +9,7 @@
         formControlName="serviceIds"
         [itemList]="paidServices"
         [loading]="isLoading"
-        (viewAll)="onCreateAndContinue('view-all')"
+        (viewAll)="onCreateAndContinue('services')"
         (onEmptyViewAction)="onCreateAndContinue('service')"
         [noRecordsAction]="noRecordActionForPaid"
       >

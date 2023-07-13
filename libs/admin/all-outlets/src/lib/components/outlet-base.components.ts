@@ -74,7 +74,7 @@ export class OutletBaseComponent {
     }
   }
 
-  initComponent(routeName: OutletAddRoutes | 'importService' | 'viewAll') {
+  initComponent(routeName: OutletAddRoutes | 'importService' | 'services') {
     const { navRoutes, title } = this.entityId
       ? this.getRoutes(
           //edit hotel case and add hotel is in business module

@@ -187,17 +187,32 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
               let data = new RoomTypeForm().deserialize(res);
 
               // Adds a RatePlan if it exists in api response with label and id, else add default
-              if (data.ratePlans.length > 0) {
-                data.ratePlans = data.ratePlans.map(
-                  (item: StaticPricingRatePlan) => {
-                    // Get Rate Plan label according to its id from config api
-                    const label = this.getPlanLabel(item.ratePlanTypeId);
-                    this.addNewRatePlan(item.ratePlanTypeId, label);
-                    return { ...item, label };
-                  }
-                );
+              if (this.isPricingDynamic) {
+                if (data.dynamicRatePlans.length > 0) {
+                  data.dynamicRatePlans = data.dynamicRatePlans.map(
+                    (item: any) => {
+                      // Get Rate Plan label according to its id from config api
+                      const label = this.getPlanLabel(item.ratePlanTypeId);
+                      this.addNewRatePlan(item.ratePlanTypeId, label);
+                      return { ...item, label };
+                    }
+                  );
+                } else {
+                  this.addNewRatePlan();
+                }
               } else {
-                this.addNewRatePlan();
+                if (data.staticRatePlans.length > 0) {
+                  data.staticRatePlans = data.staticRatePlans.map(
+                    (item: any) => {
+                      // Get Rate Plan label according to its id from config api
+                      const label = this.getPlanLabel(item.ratePlanTypeId);
+                      this.addNewRatePlan(item.ratePlanTypeId, label);
+                      return { ...item, label };
+                    }
+                  );
+                } else {
+                  this.addNewRatePlan();
+                }
               }
               this.useForm.patchValue(data);
             },

@@ -15,7 +15,6 @@
         type="icon"
       >
         <hospitality-bot-button
-          *ngIf="outletId"
           label="+ Import Services"
           variant="text"
           (onClick)="onCreateAndContinue('import-services')"
@@ -25,7 +24,7 @@
         [loading]="isLoading"
         label="Paid Services"
         description="Do not forget to add this cost in addition to the room cost"
-        formControlName="serviceIds"
+        formControlName="paidServiceIds"
         (viewAll)="onCreateAndContinue('view-all')"
         [itemList]="paidServices"
         (onEmptyViewAction)="onCreateAndContinue('service')"
@@ -34,9 +33,7 @@
     </div>
   </div>
 
-  <hospitality-bot-food-package
-    [outletId]="outletId"
-  ></hospitality-bot-food-package>
+  <hospitality-bot-food-package [isId]="isId"></hospitality-bot-food-package>
 
   <div class="container-wrapper">
     <div class="header">Other Details</div>

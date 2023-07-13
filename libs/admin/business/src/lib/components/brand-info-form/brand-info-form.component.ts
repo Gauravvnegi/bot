@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -7,14 +7,12 @@ import {
   NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { OutletFormService } from 'libs/admin/all-outlets/src/lib/services/outlet-form.service';
 import { Subscription } from 'rxjs';
 import { businessRoute } from '../../constant/routes';
-import { BrandResponse } from '../../models/brand.model';
 import { BusinessService } from '../../services/business.service';
-import { BrandFormData } from '../../types/brand.type';
 import { HotelFormDataService } from '../../services/hotel-form.service';
-import { OutletFormData } from 'libs/admin/all-outlets/src/lib/types/outlet';
-import { OutletFormService } from 'libs/admin/all-outlets/src/lib/services/outlet-form.service';
+import { BrandFormData } from '../../types/brand.type';
 
 @Component({
   selector: 'hospitality-bot-brand-info-form',
@@ -60,6 +58,7 @@ export class BrandInfoFormComponent implements OnInit {
     this.siteId = this.hotelDetailService.siteId;
     this.initForm();
     this.hotelFormDataService.hotelFormState = false;
+    this.outletFormService.outletFormState = false;
   }
 
   socialPLatform: any;

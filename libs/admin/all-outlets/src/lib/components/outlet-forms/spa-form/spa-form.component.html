@@ -14,7 +14,6 @@
         [noRecordsAction]="noRecordActionForPaid"
       >
         <hospitality-bot-button
-          *ngIf="outletId"
           label="+ Add Service"
           variant="outlined"
           (onEmptyViewAction)="onCreateAndContinue('service')"

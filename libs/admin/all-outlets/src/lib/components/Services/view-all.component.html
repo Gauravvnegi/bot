@@ -59,17 +59,6 @@
             type="icon"
           ></hospitality-bot-custom-select>
         </ng-container>
-        <ng-container *ngIf="selectedTabFilterItems == 'MENU'">
-          <hospitality-bot-custom-select
-            formControlName="menuIds"
-            [itemList]="menuList"
-            [fullView]="true"
-            (loadMoreData)="loadMore()"
-            [noMoreData]="noMoreCompServices || disablePagination"
-            [noRecordsAction]="noRecordActionForMenuWithId"
-            [loading]="loading || isCompLoading"
-          ></hospitality-bot-custom-select>
-        </ng-container>
       </form>
     </div>
     <div class="footer-buttons">

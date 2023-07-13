@@ -1,5 +1,6 @@
-import { get, set } from 'lodash';
 import { colors as randomColors } from '@hospitality-bot/admin/shared';
+import { get, set } from 'lodash';
+import { SentimentStatsResponse } from '../types/response.types';
 
 export class InhouseSource {
   inhouseRequestSourceStats: any;
@@ -31,24 +32,20 @@ export class InhouseSentiments {
   label: string;
   totalCount: number;
 
-  deserialize(input: any) {
-    Object.assign(
-      this,
-      set({}, 'label', get(input, ['label'])),
-      set({}, 'totalCount', get(input, ['totalCount']))
-    );
+  deserialize(input: SentimentStatsResponse) {
+    this.label = input.label;
+    this.totalCount = input.totalCount;
 
     const keys = Object.keys(input);
-    const keysNotToBeIncluded = [
-      'label',
-      'totalCount',
-      'comparisonPercent',
-      'score',
-    ];
 
     keys.forEach((key) => {
-      // if (!['label', 'totalCount', 'packageTotalCounts'].includes(key)) {
-      if (!keysNotToBeIncluded.includes(key)) {
+      const currItem = input[key];
+      if (
+        typeof currItem === 'object' &&
+        'label' in currItem &&
+        'totalCount' in currItem &&
+        'stats' in currItem
+      ) {
         this[key] = new Sentiment().deserialize(input[key]);
       }
     });

@@ -36,23 +36,23 @@ export class TimePickerComponent extends FormComponent {
 
   listenChanges() {
     // TODO: Need to be refactor, for edit mode
-    // this.controlContainer.control
-    //   .get(this.controlName)
-    //   .valueChanges.subscribe((value) => {
-    //     if (value.length) {
-    //       const [HH, MM] = (this.format === 'HH:MM'
-    //         ? value
-    //         : this.millisecondsToRequiredFormat(+value)
-    //       ).split(':');
-    //       this.timePickerFG.patchValue(
-    //         {
-    //           hh: HH,
-    //           mm: MM,
-    //         },
-    //         { emitEvent: false }
-    //       );
-    //     }
-    //   });
+    this.controlContainer.control
+      .get(this.controlName)
+      .valueChanges.subscribe((value) => {
+        if (value) {
+          const [HH, MM] = (this.format === 'HH:MM'
+            ? value
+            : this.millisecondsToRequiredFormat(+value)
+          ).split(':');
+          this.timePickerFG.patchValue(
+            {
+              hh: HH,
+              mm: MM,
+            },
+            { emitEvent: false }
+          );
+        }
+      });
 
     this.timePickerFG.valueChanges.subscribe(
       (value: { hh: string; mm: string }) => {
@@ -83,7 +83,6 @@ export class TimePickerComponent extends FormComponent {
    * @returns formatted time HH:MM
    */
   millisecondsToRequiredFormat(time: number) {
-    debugger;
     const hours = Math.floor(time / (1000 * 60 * 60));
     const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
     const formattedHours = ('0' + hours).slice(-2);

@@ -3,6 +3,7 @@
     {{ tableName }}
   </div>
   <div class="action-wrapper">
+    <ng-container [ngTemplateOutlet]="search"></ng-container>
     <hospitality-bot-button
       label="+ Add Guest"
       [link]="'/pages/members/guests/' + guestRoutes.addGuest.route"
@@ -49,7 +50,6 @@
         (onChange)="toggleQuickReplyFilter($event)"
         [selectedChips]="selectedFilterChips"
       >
-        <ng-container [ngTemplateOutlet]="search"></ng-container>
       </hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -84,6 +84,7 @@
       <td>
         <div class="cell-content">
           <span class="primary-text">{{ rowData.name }}</span>
+          <span class="secondary-text">{{ rowData.code }}</span>
         </div>
       </td>
       <td>
@@ -93,13 +94,16 @@
           </span>
         </div>
       </td>
-      <td (click)="$event.stopPropagation()">
+      <td>
         <div class="cell-content">
           <span
             class="primary-text"
             *ngIf="rowData.mobileNumber; else emptyCell"
           >
-            <a href="tel:{{ rowData.mobileNumber }}">
+            <a
+              (click)="$event.stopPropagation()"
+              href="tel:{{ rowData.mobileNumber }}"
+            >
               {{ rowData.mobileNumber }}
             </a>
           </span>
@@ -107,8 +111,8 @@
       </td>
       <td>
         <div class="cell-content">
-          <span *ngIf="rowData.age; else emptyCell">
-            {{ rowData.age }}
+          <span class="primary-text" *ngIf="rowData.dob; else emptyCell">
+            {{ rowData.dob | date }}
           </span>
         </div>
       </td>
@@ -153,7 +157,7 @@
 </ng-template>
 
 <ng-template #search>
-  <hospitality-bot-search
+  <hospitality-bot-global-search
     class="search"
     [formGroup]="tableFG"
     controlName="search"
@@ -161,5 +165,5 @@
       placeholder: 'Search by Name, Code...'
     }"
     (onSearch)="searchGuest($event)"
-  ></hospitality-bot-search>
+  ></hospitality-bot-global-search>
 </ng-template>

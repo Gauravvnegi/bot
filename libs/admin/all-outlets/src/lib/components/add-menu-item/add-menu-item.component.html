@@ -126,7 +126,7 @@
     </div>
     <div class="full-width btn">
       <hospitality-bot-button
-        label="Create"
+        [label]="menuItemId ? 'Udpate' : 'Create'"
         (onClick)="handleSubmit()"
       ></hospitality-bot-button>
       <hospitality-bot-button

@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { outletBusinessRoutes } from '../../../constants/routes';
+import {
+  noRecordActionForFood,
+  noRecordActionForFoodWithId,
+} from '../../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-food-package',
@@ -8,6 +12,13 @@ import { outletBusinessRoutes } from '../../../constants/routes';
 })
 export class FoodPackageComponent implements OnInit {
   routerLink = outletBusinessRoutes;
+  noRecordActionForFood = noRecordActionForFood;
+
+  @Input() set outletId(id: string) {
+    if (id) {
+      this.noRecordActionForFood = noRecordActionForFoodWithId;
+    }
+  }
 
   constructor() {}
 

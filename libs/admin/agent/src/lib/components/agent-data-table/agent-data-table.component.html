@@ -5,6 +5,7 @@
 >
   <div class="heading">{{ tableName }}</div>
   <div class="action-wrapper">
+    <ng-container [ngTemplateOutlet]="search"></ng-container>
     <hospitality-bot-button
       label="+ Add agent"
       link="/pages/members/agent/{{ routes.addAgent.route }}"
@@ -51,7 +52,6 @@
         (onChange)="toggleQuickReplyFilter($event)"
         [selectedChips]="selectedFilterChips"
       >
-        <ng-container [ngTemplateOutlet]="search"></ng-container>
       </hospitality-bot-filter-chips>
     </div>
   </ng-template>
@@ -99,7 +99,12 @@
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.company; else emptyCell">
-          <div class="primary-text">{{ rowData.company }}</div>
+          <a
+            (click)="openCompany(rowData); $event.stopPropagation()"
+            class="primary-text clear-whitespace link"
+          >
+            {{ rowData.company }}
+          </a>
         </div>
       </td>
       <td>
@@ -112,9 +117,13 @@
           <div class="primary-text">{{ rowData.email }}</div>
         </div>
       </td>
-      <td (click)="$event.stopPropagation()">
+      <td>
         <div class="cell-content" *ngIf="rowData.phoneNo; else emptyCell">
-          <a href="tel:{{ rowData.phoneNo }}">
+          <a
+            (click)="$event.stopPropagation()"
+            class="primary-text link"
+            href="tel:{{ rowData.phoneNo }}"
+          >
             <u> {{ rowData.phoneNo }}</u>
           </a>
         </div>
@@ -183,12 +192,12 @@
 </ng-template>
 
 <ng-template #search>
-  <hospitality-bot-search
+  <hospitality-bot-global-search
     [formGroup]="tableFG"
     controlName="search"
     [props]="{
       placeholder: 'Search by Name, Code...'
     }"
     (onSearch)="searchAgent($event)"
-  ></hospitality-bot-search>
+  ></hospitality-bot-global-search>
 </ng-template>

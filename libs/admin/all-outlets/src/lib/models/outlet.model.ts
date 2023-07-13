@@ -1,5 +1,10 @@
 import { EntityState } from '@hospitality-bot/admin/shared';
-import { MenuItemListResponse, MenuItemResponse } from '../types/outlet';
+import {
+  MenuItemListResponse,
+  MenuItemResponse,
+  MenuListResponse,
+  MenuResponse,
+} from '../types/outlet';
 
 export class OutletList {
   id: string;
@@ -18,6 +23,40 @@ export class OutletList {
     return this;
   }
 }
+
+export class MenuList {
+  total: number;
+  entityStateCounts: EntityState<string>;
+  records: Menu[];
+
+  deserialize(input: MenuListResponse) {
+    this.total = input.total;
+    this.entityStateCounts = input.entityStateCounts;
+    this.records = input.records.map((item) => new Menu().deserialize(item));
+    return this;
+  }
+}
+
+class Menu {
+  id: string;
+  name: string;
+  imageUrl: string;
+  description: string;
+  status: boolean;
+  entityId: string;
+
+  deserialize(input: MenuResponse) {
+    this.id = input.id;
+    this.name = input.name;
+    this.imageUrl = input.imageUrl;
+    this.description = input.description;
+    this.status = input.status;
+    this.entityId = input.entityId;
+    return this;
+  }
+}
+
+export class Records {}
 
 export class MenuItem {
   code: string;
@@ -42,7 +81,6 @@ export class MenuItem {
     this.type = input.type;
     this.hsnCode = input.hsnCode;
     this.category = input.category;
-    this.kitchenDept = input.kitchenDept;
     this.dineInPrice = input.dineInPrice;
     this.deliveryPrice = input.deliveryPrice;
     this.preparationTime = input.preparationTime;

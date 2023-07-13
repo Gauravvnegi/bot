@@ -113,19 +113,14 @@ export const cols: Record<TableValue, Cols[]> = {
       sortType: 'string',
     },
     {
-      field: 'hsnCode',
-      header: 'HSN Code',
-      sortType: 'number',
-    },
-    {
       field: 'category',
       header: 'Category',
       sortType: 'string',
     },
     {
-      field: 'kitchenDept',
-      header: 'Kitchen Dep',
-      sortType: 'string',
+      field: 'hsnCode',
+      header: 'HSN Code',
+      sortType: 'number',
     },
     {
       field: 'dineInPrice',
@@ -166,11 +161,6 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'type',
       header: 'Type',
       sortType: 'string',
-    },
-    {
-      field: 'hsnCode',
-      header: 'HSN Code',
-      sortType: 'number',
     },
     {
       field: 'category',

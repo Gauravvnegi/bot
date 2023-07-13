@@ -2,23 +2,25 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { MenuTabValue, TabValue } from '../constants/data-table';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { allOutletsResponse, menuListResponse } from '../constants/response';
 import { map } from 'rxjs/operators';
 import { QueryConfig } from '@hospitality-bot/admin/library';
-import { MenuConfig, OutletConfig } from '../types/config';
+import { OutletConfig } from '../types/config';
 import { OutletResponse } from '../types/response';
 import { MenuFormData, MenuResponse } from '../types/menu';
-import { MenuItemForm, MenuItemResponse } from '../types/outlet';
+import {
+  MenuItemForm,
+  MenuItemResponse,
+  MenuListResponse,
+} from '../types/outlet';
 
 @Injectable()
 export class OutletService extends ApiService {
   selectedTable = new BehaviorSubject<TabValue>(TabValue.ALL);
-  selectedMenuTable = new BehaviorSubject<MenuTabValue>(MenuTabValue.BREAKFAST);
 
   getAllOutlets(entityId: string, config?: QueryConfig): Observable<any> {
     return this.get(
       `/api/v1/entity/${entityId}/library?type=SERVICE&serviceType=ALL&limit=5`
-    )
+    );
   }
 
   exportCSV(entityId: string): Observable<any> {
@@ -104,8 +106,8 @@ export class OutletService extends ApiService {
     return this.get(`/api/v1/menus/${menuId}`);
   }
 
-  getMenuItemsById(itemId: string): Observable<any> {
-    return this.get(`/api/v1/menu-item /${itemId}`);
+  getMenuItemsById(menuItemId: string): Observable<any> {
+    return this.get(`/api/v1/menus/items/${menuItemId}`);
   }
 
   addFoodPackage(data): Observable<any> {
@@ -125,5 +127,11 @@ export class OutletService extends ApiService {
       `/api/v1/entity/${entityId}/library${config?.params ?? ''}`,
       { headers: { 'entity-id': entityId } }
     );
+  }
+
+  getMenuList(entityId: string): Observable<MenuListResponse> {
+    return this.get(`/api/v1/menus`, {
+      headers: { 'entity-id': entityId },
+    });
   }
 }

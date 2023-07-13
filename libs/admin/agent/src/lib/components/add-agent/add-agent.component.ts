@@ -6,6 +6,7 @@ import {
   NavRouteOptions,
   Option,
   QueryConfig,
+  Regex,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { AgentService } from '../../services/agent.service';
@@ -78,9 +79,9 @@ export class AddAgentComponent implements OnInit {
 
   initAgentForm() {
     this.agentForm = this.fb.group({
-      active: [true],
+      status: [true, Validators.required],
       name: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.pattern(Regex.EMAIL_REGEX)]],
       cc: ['+91', [Validators.required]],
       phoneNo: ['', [Validators.required]],
       iataNo: ['', [CustomValidators.requiredLength(14)]],
@@ -158,6 +159,7 @@ export class AddAgentComponent implements OnInit {
             },
             commissionType: response.priceModifier,
             commission: response.priceModifierValue,
+            status: response.status,
           });
           this.loading = false;
         }, this.handleFinal)

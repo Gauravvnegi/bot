@@ -24,8 +24,8 @@ export class OutletBaseComponent {
   menuId: string;
   menuItemId: string;
   foodPackageId: string;
-  navRoutes: any[];
-  pageTitle: string;
+  navRoutes: any[] = [];
+  pageTitle: string = 'Outlet';
 
   constructor(protected router: Router, protected route: ActivatedRoute) {
     this.router.events.subscribe(
@@ -34,6 +34,7 @@ export class OutletBaseComponent {
         const brandId = snapshot?.params['brandId'];
         const entityId = snapshot?.params['entityId'];
         const menuId = snapshot?.params['menuId'];
+        const menuItemId = snapshot?.params['menuItemId'];
         if (outletId) {
           this.outletId = outletId;
         }
@@ -42,6 +43,7 @@ export class OutletBaseComponent {
           this.entityId = entityId;
         }
         if (menuId) this.menuId = menuId;
+        if (menuItemId) this.menuItemId = menuItemId;
       }
     );
   }
@@ -72,7 +74,7 @@ export class OutletBaseComponent {
     }
   }
 
-  initComponent(routeName: OutletAddRoutes | 'importService') {
+  initComponent(routeName: OutletAddRoutes | 'importService' | 'viewAll') {
     const { navRoutes, title } = this.entityId
       ? this.getRoutes(
           //edit hotel case and add hotel is in business module

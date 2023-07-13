@@ -52,11 +52,11 @@ export class GlobalFilterService {
       }
     });
 
-    this.filterService.emitFilterValue$.subscribe((data) => {
+    this.filterService.emitFilterValue$.subscribe((data:Partial<GlobalFilterData>) => {
       if (Object.keys(data).length) {
         this.globalFilterObj.filter.value = data;
         this.globalFilterObj.filter.queryValue = [
-          { entityId: get(data, ['property', 'branchName']) },
+          { entityId: get(data, ['property', 'entityName']) },
           {
             guestType: get(data, ['guest', 'guestType', 'isVip'])
               ? 'VIP'
@@ -107,14 +107,14 @@ type GlobalFilterData = {
   };
   feedback: {
     value?: {
-      property: {
+      property?: {
         brandName: string; //hotelName (prev)
         entityName: string; //branchName (prev)
       };
-      feedback: {
+      feedback?: {
         feedbackType: string; //'STAYFEEDBACK'; 'TRANSACTIONALFEEDBACK', ALL
       };
-      outlets: any;
+      outlets?: any;
     };
     queryValue: any[];
   };

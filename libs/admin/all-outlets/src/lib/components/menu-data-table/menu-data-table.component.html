@@ -78,7 +78,7 @@
       let-columns="columns"
       let-rowIndex="rowIndex"
     >
-      <tr class="table-row">
+      <tr class="table-row" (click)="editMenuItem(rowData)">
         <td class="table-row__checkbox">
           <p-tableCheckbox
             [value]="rowData"
@@ -111,13 +111,6 @@
           <div class="center-align" *ngIf="rowData.category; else emptyCell">
             <div class="primary-text">
               {{ rowData.category }}
-            </div>
-          </div>
-        </td>
-        <td>
-          <div class="center-align" *ngIf="rowData.kitchenDept; else emptyCell">
-            <div class="primary-text">
-              {{ rowData.kitchenDept }}
             </div>
           </div>
         </td>

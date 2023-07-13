@@ -22,7 +22,19 @@ export type OutletForm = {
   area: string;
   dimension: string;
   rules: Rules;
+  paidServiceIds?;
+  menuIds?;
+  foodPackageIds?;
 };
+
+type OutletItems = {
+  paidAmenities?;
+  complimentaryAmenities?;
+  MenuList?;
+};
+
+export type OutletFormData = OutletForm & OutletItems;
+
 type Rules = {
   title: string;
   description: string;
@@ -34,6 +46,35 @@ type Address = {
   pinCode: string;
   city: string;
 } & Record<string, any>;
+
+export type MenuListResponse = {
+  total: number;
+  entityStateCounts: EntityStateCounts;
+  records: MenuResponse[];
+};
+
+export type MenuResponse = {
+  id: string;
+  name: string;
+  imageUrl: string;
+  description: string;
+  status: boolean;
+  entityId: string;
+};
+
+export type Menu = {
+  id: string;
+  name: string;
+  imageUrl: string;
+  description: string;
+  status: boolean;
+  entityId: string;
+};
+
+type EntityStateCounts = {
+  ACTIVE: number;
+  INACTIVE: number;
+};
 
 export type RestaurantForm = Omit<OutletForm, 'minimumOccupancy'>;
 
@@ -58,13 +99,12 @@ export type MenuItemForm = {
   deliveryPrice: number;
   deliveryPriceCurrency: string;
   hsnCode: string;
-  taxIds: string[];
+  taxes: TaxData[];
   status: boolean;
 };
 
 export type MenuItemResponse = MenuItemForm & {
   id: string;
-  kitchenDept?: string;
   code?: string;
 };
 
@@ -96,4 +136,18 @@ export type Feature =
   | 'import-services'
   | 'food-package'
   | 'brand'
-  | 'hotel';
+  | 'hotel'
+  | 'view-all';
+
+export type OutletType = 'RESTAURANT' | 'SPA' | 'VENUE';
+
+export type TaxData = {
+  category: string;
+  country: string;
+  created: number;
+  id: string;
+  status: boolean;
+  taxType: string;
+  taxValue: number;
+  updated: number;
+};

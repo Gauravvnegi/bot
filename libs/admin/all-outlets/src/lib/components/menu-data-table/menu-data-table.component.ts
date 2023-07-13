@@ -136,6 +136,12 @@ export class MenuDataTableComponent extends BaseDatatableComponent
     });
   }
 
+  editMenuItem(rowData: MenuItemResponse) {
+    this.router.navigate([`menu-item/${rowData.id}`], {
+      relativeTo: this.route,
+    });
+  }
+
   handleImport() {}
 
   /**

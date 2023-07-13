@@ -9,7 +9,7 @@ import {
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { OutletService } from '../../services/outlet.service';
-import { MenuItemForm } from '../../types/outlet';
+import { MenuItemForm, MenuItemResponse } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
 import { PageReloadService } from '../../services/page-reload.service.service';
 import { TaxService } from 'libs/admin/tax/src/lib/services/tax.service';
@@ -27,7 +27,6 @@ export class AddMenuItemComponent extends OutletBaseComponent
   pageTitle: string;
   navRoutes: NavRouteOptions;
   packageCode: string = '# will be auto generated';
-  itemId: string = '';
   mealPreferences: Option[] = [];
   types: Option[] = [];
   categories: Option[] = [];
@@ -117,15 +116,20 @@ export class AddMenuItemComponent extends OutletBaseComponent
       deliveryPriceCurrency: ['INR'],
       deliveryPrice: ['', [Validators.required, Validators.min(0)]],
       hsnCode: ['', Validators.required],
-      taxIds: ['', Validators.required],
+      taxIds: [[], Validators.required],
       description: [''],
     });
-
-    if (this.itemId) {
+    if (this.menuItemId) {
       this.$subscription.add(
-        this.outletService.getMenuItemsById(this.itemId).subscribe((res) => {
-          this.useForm.patchValue(res);
-        })
+        this.outletService
+          .getMenuItemsById(this.menuItemId)
+          .subscribe((res: MenuItemResponse) => {
+            const { taxes, ...rest } = res;
+            this.useForm.patchValue({
+              ...rest,
+              taxIds: taxes.map((item) => item.id),
+            });
+          })
       );
     }
   }
@@ -161,11 +165,11 @@ export class AddMenuItemComponent extends OutletBaseComponent
     }
 
     const data = this.useForm.getRawValue() as MenuItemForm;
-    if (this.itemId) {
+    if (this.menuItemId) {
       this.$subscription.add(
         this.outletService
-          .updateMenuItems(data, this.itemId, this.menuId)
-          .subscribe(this.handleError, this.handleSuccess)
+          .updateMenuItems(data, this.menuItemId, this.menuId)
+          .subscribe(this.handleSuccess, this.handleError)
       );
     } else {
       this.$subscription.add(
@@ -187,7 +191,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
   handleSuccess = () => {
     this.loading = false;
     this.snackbarService.openSnackBarAsText(
-      `MenuItem ${this.itemId ? 'edited' : 'created'} successfully`,
+      `MenuItem ${this.menuItemId ? 'edited' : 'created'} successfully`,
       '',
       { panelClass: 'success' }
     );

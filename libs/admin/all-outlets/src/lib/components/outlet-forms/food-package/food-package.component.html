@@ -3,13 +3,10 @@
     <div class="package-wrapper">
       <hospitality-bot-custom-select
         label="Food Packages"
-        formControlName="foodPackages"
+        formControlName="foodPackageIds"
         description="Do not forget to add this cost in addition to the room cost"
         [itemList]=""
-        [noRecordsAction]="{
-          description: 'No Food Package yet',
-          imageSrc: 'assets/images/empty-view-food-package.jpg'
-        }"
+        [noRecordsAction]="noRecordActionForFood"
       >
         <hospitality-bot-button
           label="+ Add Packages"

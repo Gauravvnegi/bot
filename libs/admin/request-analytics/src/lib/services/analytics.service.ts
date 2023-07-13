@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { Observable } from 'rxjs';
+import { SentimentStatsResponse } from '../types/response.types';
 
 @Injectable()
 export class AnalyticsService extends ApiService {
@@ -36,7 +37,7 @@ export class AnalyticsService extends ApiService {
     );
   }
 
-  getSentimentsStats(config) {
+  getSentimentsStats(config): Observable<SentimentStatsResponse> {
     return this.get(
       `/api/v1/request-analytics/sentiment-stats/count${config.queryObj}`
     );

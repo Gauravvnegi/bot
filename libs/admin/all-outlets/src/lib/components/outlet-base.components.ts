@@ -34,6 +34,7 @@ export class OutletBaseComponent {
         const brandId = snapshot?.params['brandId'];
         const entityId = snapshot?.params['entityId'];
         const menuId = snapshot?.params['menuId'];
+        const menuItemId = snapshot?.params['menuItemId'];
         if (outletId) {
           this.outletId = outletId;
         }
@@ -42,6 +43,7 @@ export class OutletBaseComponent {
           this.entityId = entityId;
         }
         if (menuId) this.menuId = menuId;
+        if (menuItemId) this.menuItemId = menuItemId;
       }
     );
   }

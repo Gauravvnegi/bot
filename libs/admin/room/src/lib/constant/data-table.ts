@@ -24,12 +24,12 @@ export const cols: Record<TableValue, Cols[]> = {
       header: 'Reservation Status',
       sortType: 'string',
     },
-    {
-      field: 'price',
-      header: 'Price',
-      sortType: 'number',
-      width: '23%',
-    },
+    // {
+    //   field: 'price',
+    //   header: 'Price',
+    //   sortType: 'number',
+    //   width: '23%',
+    // },
     {
       field: 'status.value',
       header: 'Action / Status',

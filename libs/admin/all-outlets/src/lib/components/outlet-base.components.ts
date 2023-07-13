@@ -92,7 +92,9 @@ export class OutletBaseComponent {
       element.link = element.link
         .replace(':brandId', this.brandId)
         .replace(':outletId', this.outletId)
-        .replace(':entityId', this.entityId);
+        .replace(':entityId', this.entityId)
+        .replace(':menuId', this.menuId)
+        .replace(':menuItemId', this.menuItemId);
     });
     this.navRoutes = navRoutes;
 

@@ -1,7 +1,7 @@
 <div class="wrapper">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <p-splitButton
-    class="download-btn"
+      class="download-btn"
       label="Download Menu"
       (onClick)="handleDownload()"
       [model]="buttons"
@@ -47,7 +47,7 @@
     </div>
     <div class="full-width btn-wrapper">
       <hospitality-bot-button
-        label="Create"
+        [label]="menuId ? 'update' : 'Create'"
         (onClick)="handleSubmit()"
         [isLoading]="loading"
       ></hospitality-bot-button>

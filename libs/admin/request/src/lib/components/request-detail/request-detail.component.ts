@@ -148,7 +148,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
           (response) => {
             this.snackbarService.openSnackBarAsText(
               `Job: ${
-                this.data.jobID
+                this.data.jobNo
               } status updated successfully to ${convertToTitleCase(
                 event.value
               )}.`,

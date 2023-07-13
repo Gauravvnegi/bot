@@ -57,8 +57,6 @@ export class BrandInfoFormComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.siteId = this.hotelDetailService.siteId;
     this.initForm();
-    this.hotelFormDataService.hotelFormState = false;
-    this.outletFormService.outletFormState = false;
   }
 
   socialPLatform: any;

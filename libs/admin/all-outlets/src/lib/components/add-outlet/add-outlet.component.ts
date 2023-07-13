@@ -129,6 +129,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       this.menuList = this.OutletFormService.OutletFormData.MenuList;
 
       this.useForm.patchValue(this.OutletFormService.OutletFormData);
+      this.useForm.get('type').disable();
     }
 
     if (this.outletId && !this.OutletFormService.outletFormState) {

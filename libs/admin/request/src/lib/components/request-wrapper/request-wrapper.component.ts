@@ -98,7 +98,7 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
   openRaiseRequest() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
-    dialogConfig.width = '50%';
+    dialogConfig.width = '500px';
     const raiseRequestCompRef = this._modal.openDialog(
       RaiseRequestComponent,
       dialogConfig

@@ -187,6 +187,10 @@ export class RequestListComponent implements OnInit, OnDestroy {
     }
   }
 
+  getTitleCaseValue(value: string) {
+    return convertToTitleCase(value);
+  }
+
   /**
    * @function fetchDataFrom To fetch data from api.
    * @param queries The queries for data fetching.

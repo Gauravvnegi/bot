@@ -66,6 +66,7 @@
               time: item.requestTime | date: 'EEEE',
               taskStatus: {
                 action: item.action,
+                name: getTitleCaseValue(item.action),
                 sla: item.getSLA(),
                 jd: item.jobDuration,
                 slaValue: item.getSLAvalue()

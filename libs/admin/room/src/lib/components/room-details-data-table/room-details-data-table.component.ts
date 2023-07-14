@@ -5,6 +5,7 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   AdminUtilityService,
   BaseDatatableComponent,
+  FlagType,
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { LazyLoadEvent } from 'primeng/api';
@@ -13,7 +14,8 @@ import routes from '../../constant/routes';
 import { RoomList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { QueryConfig } from '../../types/room';
-import { RoomListResponse } from '../../types/service-response';
+import { RoomListResponse, RoomStatus } from '../../types/service-response';
+import { roomStatusDetails } from '../../constant/response';
 
 @Component({
   selector: 'hospitality-bot-room-details-data-table',
@@ -25,8 +27,10 @@ import { RoomListResponse } from '../../types/service-response';
 })
 export class RoomDetailsDataTableComponent extends BaseDatatableComponent
   implements OnInit {
+  readonly roomStatusDetails = roomStatusDetails;
   entityId: string;
   cols = roomDetailsCols;
+  currentRoomState: { value: string; type: FlagType }[] = [];
   @Input() roomTypeId: string;
 
   constructor(

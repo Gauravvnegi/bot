@@ -1,6 +1,7 @@
 import {
   DynamicPricingRatePlan,
   RoomTypeFormData,
+  StaticPricingMod,
   StaticPricingRatePlan,
 } from '../constant/form';
 import { RoomStatus, RoomTypeResponse } from '../types/service-response';
@@ -97,7 +98,8 @@ export class RoomTypeForm {
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  ratePlans: StaticPricingRatePlan[] | DynamicPricingRatePlan[];
+  staticRatePlans: StaticPricingRatePlan[];
+  dynamicRatePlans: DynamicPricingRatePlan[];
   maxOccupancy: number;
   maxChildren: number;
   maxAdult: number;
@@ -115,17 +117,29 @@ export class RoomTypeForm {
     this.maxChildren = input.maxChildren;
     this.maxAdult = input.maxAdult;
     this.area = input.area;
-    this.ratePlans = input.ratePlans.map((ratePlan) => ({
+    this.staticRatePlans = input.ratePlans.map((ratePlan) => ({
       ratePlanTypeId: ratePlan.ratePlanTypeId,
       paxPriceCurrency: ratePlan.paxPriceCurrency,
       paxPrice: ratePlan.paxPrice,
       discountType: ratePlan.discount.type,
       discountValue: ratePlan.discount.value,
-      bestPriceCurrency: ratePlan.bestPriceCurrency,
+      bestPriceCurrency: ratePlan.basePriceCurrency,
       bestAvailablePrice: ratePlan.bestAvailablePrice,
       label: '',
       basePrice: ratePlan.basePrice,
       basePriceCurrency: ratePlan.basePriceCurrency,
+      id: ratePlan.id,
+    }));
+    this.dynamicRatePlans = input.ratePlans.map((ratePlan) => ({
+      ratePlanTypeId: ratePlan.ratePlanTypeId,
+      paxPriceCurrency: ratePlan.paxPriceCurrency,
+      paxPrice: ratePlan.paxPrice,
+      label: '',
+      id: ratePlan.id,
+      maxPriceCurrency: ratePlan.maxPriceCurrency,
+      maxPrice: ratePlan.maxPrice,
+      minPriceCurrency: ratePlan.minPriceCurrency,
+      minPrice: ratePlan.minPrice,
     }));
 
     return this;

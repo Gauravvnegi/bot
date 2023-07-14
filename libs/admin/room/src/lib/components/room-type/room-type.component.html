@@ -22,7 +22,8 @@
             description="Mandatory to add at least 1 image"
             [settings]="{
               limit: 1,
-              unit: 4
+              unit: 4,
+              isMultiple: true
             }"
             [entityId]="entityId"
             path="static-content/room-types"
@@ -148,7 +149,12 @@
         </div>
       </div>
     </div> -->
-    <div class="room-wrapper" formArrayName="ratePlans">
+    <div
+      class="room-wrapper"
+      [formArrayName]="
+        isPricingDynamic ? 'dynamicRatePlans' : 'staticRatePlans'
+      "
+    >
       <div class="header">Room Pricing</div>
       <hr />
       <div class="room-pricing-form-wrapper">
@@ -197,7 +203,7 @@
                 variant="text"
                 severity="reset"
                 (onClick)="
-                  onRemove(ratePlanGroup.get('ratePlanTypeId').value, i)
+                  removeRatePlan(ratePlanGroup.get('ratePlanTypeId').value, i)
                 "
                 [disabled]="ratePlanArray.length === 1"
               ></hospitality-bot-button>
@@ -249,7 +255,7 @@
                   preControlName="maxPriceCurrency"
                   postControlName="maxPrice"
                   label="Max Price"
-                  [options]="currenices"
+                  [options]="currencies"
                   [defaultProps]="{
                     post: { type: 'number' }
                   }"

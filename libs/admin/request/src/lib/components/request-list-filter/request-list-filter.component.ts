@@ -13,29 +13,36 @@ export class RequestListFilterComponent implements OnInit {
   sortList = request.sort;
   @Output() close = new EventEmitter();
 
+  useForm: FormGroup;
+
   filterData = request.filter;
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initFG();
+
+    this.useForm = this.fb.group({
+      sortBy: new FormControl({}),
+      filterBy: this.fb.array(this.filterData.map((x) => false)),
+    });
   }
 
   /**
    * @function initFG To initialize form group.
    */
   initFG(): void {
-    this.parentFG.addControl('sortBy', new FormControl({}));
-    this.parentFG.addControl(
-      'filterBy',
-      this.fb.array(this.filterData.map((x) => false))
-    );
+    // this.parentFG.addControl('sortBy', new FormControl({}));
+    // this.parentFG.addControl(
+    //   'filterBy',
+    //   this.fb.array(this.filterData.map((x) => false))
+    // );
   }
 
   /**
    * @function applyFilter To handle filter submit.
    */
   applyFilter(): void {
-    const values = this.parentFG.getRawValue();
+    const values = this.useForm.getRawValue();
     values.filterBy = this.convertFilterToValue();
     this.filterApplied.emit({
       status: true,
@@ -52,8 +59,11 @@ export class RequestListFilterComponent implements OnInit {
    * @param item The sort data.
    */
   setSortBy(item: { value: string; order: string }): void {
-    this.sortControl.setValue({ label: item.value, order: item.order });
-    this.parentFG.markAsTouched();
+    this.sortControl.setValue(
+      { label: item.value, order: item.order },
+      { emitEvent: false }
+    );
+    // this.parentFG.markAsTouched();
   }
 
   /**
@@ -71,19 +81,23 @@ export class RequestListFilterComponent implements OnInit {
   }
 
   clearFilter() {
-    this.parentFG.patchValue({
+    const value = {
       sortBy: [],
       filterBy: this.filterData.map((x) => false),
-    });
+    }
+    // this.parentFG.patchValue(value);
+    this.useForm.patchValue(value)
+
+    this.applyFilter();
   }
 
   /****************************** Getters *******************************/
 
   get sortControl(): FormControl {
-    return this.parentFG?.get('sortBy') as FormControl;
+    return this.useForm?.get('sortBy') as FormControl;
   }
 
   get filterFormArray(): FormArray {
-    return this.parentFG.controls.filterBy as FormArray;
+    return this.useForm.controls.filterBy as FormArray;
   }
 }

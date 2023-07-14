@@ -212,11 +212,7 @@ export const analytics = {
         xPadding: 10,
         yPadding: 10,
         callbacks: {
-          label: function (tooltipItem, data) {
-            const datasetLabel =
-              data.datasets[tooltipItem.datasetIndex].label || '';
-            return `${datasetLabel}: ${ValueFormatter(tooltipItem.yLabel, 2)}`;
-          },
+          label: getNoDataLabel,
         },
       },
       responsive: true,

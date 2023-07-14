@@ -21,7 +21,7 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
-    private analyticsService: AnalyticsService,
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit(): void {
@@ -62,7 +62,7 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
           );
           this.initGraphData();
         },
-        ({ error }) =>{ }
+        ({ error }) => {}
       )
     );
   }

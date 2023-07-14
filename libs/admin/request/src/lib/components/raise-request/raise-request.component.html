@@ -1,6 +1,11 @@
 <div class="container">
   <div class="header">
     <div class="button raise-request-btn">
+      <img
+        src="assets/svg/requests.svg"
+        alt="raise-request-icon"
+        class="raise-request-icon"
+      />
       {{ 'raiseRequest' | translate }}
     </div>
     <div (click)="close({ status: false })" class="close">
@@ -22,15 +27,15 @@
           placeholder="Room *"
           formControlName="search"
         />
+        <mat-error
+          *ngIf="
+            requestFG.get('roomNo').touched &&
+            requestFG.get('roomNo').hasError('required')
+          "
+        >
+          {{ 'error.roomNoRequired' | translate }}
+        </mat-error>
       </div>
-      <mat-error
-        *ngIf="
-          requestFG.get('roomNo').touched &&
-          requestFG.get('roomNo').hasError('required')
-        "
-      >
-        {{ 'error.roomNoRequired' | translate }}
-      </mat-error>
     </div>
     <div class="form-elements-groups" [formGroup]="requestFG">
       <div class="form-elements-container">
@@ -64,7 +69,7 @@
         <input
           matInput
           class="form-elements"
-          placeholder="LastName *"
+          placeholder="Last Name *"
           formControlName="lastName"
         />
         <mat-error
@@ -111,7 +116,7 @@
           {{ 'error.itemNameRequired' | translate }}
         </mat-error>
       </div>
-      <div class="form-elements-container">
+      <!-- <div class="form-elements-container">
         <img
           class="icon"
           [src]="requestConfig.images.shopping.url"
@@ -137,7 +142,7 @@
         >
           {{ 'error.itemCodeRequired' | translate }}
         </mat-error>
-      </div>
+      </div> -->
       <div class="form-elements-container">
         <img
           class="icon"
@@ -146,7 +151,7 @@
         />
         <mat-select
           class="form-elements"
-          placeholder="Priority Code*"
+          placeholder="Priority *"
           formControlName="priority"
         >
           <mat-option
@@ -164,7 +169,7 @@
           {{ 'error.priorityCodeRequired' | translate }}
         </mat-error>
       </div>
-      <div class="form-elements-container">
+      <!-- <div class="form-elements-container">
         <img
           class="icon"
           [src]="requestConfig.images.hourglass.url"
@@ -182,7 +187,7 @@
             >{{ i + 1 }} {{ 'minute' | translate }}</mat-option
           >
         </mat-select>
-      </div>
+      </div> -->
       <div class="form-elements-container full-width">
         <img
           class="icon"
@@ -192,7 +197,7 @@
         <textarea
           formControlName="remarks"
           class="form-elements"
-          placeholder="Description"
+          placeholder="Remarks"
           matInput
         ></textarea>
       </div>

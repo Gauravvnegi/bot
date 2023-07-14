@@ -1,8 +1,8 @@
 @import 'main';
 .card-wrapper {
+  position: relative;
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
   width: 100%;
   &_image {
     width: 48px;
@@ -148,7 +148,7 @@
       letter-spacing: 0.72px;
       margin-bottom: 10px;
       white-space: nowrap;
-      overflow: hidden;
+      overflow: visible;
       text-overflow: ellipsis;
       &-divider {
         height: 15px;
@@ -229,4 +229,20 @@
   flex-direction: column-reverse;
   justify-content: space-between;
   align-items: flex-end;
+}
+
+.time-left {
+  &__wrapper {
+    position: absolute;
+    right: 0;
+  }
+
+  display: flex;
+  font-size: 10px;
+  color: white;
+  padding: 4px;
+  background-color: $inactive-state;
+  border-radius: 6px;
+  font-weight: 600;
+  gap: 5px;
 }

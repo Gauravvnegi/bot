@@ -14,6 +14,7 @@ import {
   InhouseTable,
 } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
+import { AllJobRequestResponse } from '../../types/response.types';
 
 @Component({
   selector: 'hospitality-bot-request-list',
@@ -33,6 +34,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
   };
   loading = false;
   paginationDisabled = false;
+
+  isSearchEnabled = false;
 
   globalQueries = [];
   listData;
@@ -64,7 +67,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
    */
   initFG(): void {
     this.parentFG = this.fb.group({
-      search: ['', Validators.minLength(3)],
+      search: [''],
     });
   }
 
@@ -184,12 +187,16 @@ export class RequestListComponent implements OnInit, OnDestroy {
     }
   }
 
+  getTitleCaseValue(value: string) {
+    return convertToTitleCase(value);
+  }
+
   /**
    * @function fetchDataFrom To fetch data from api.
    * @param queries The queries for data fetching.
    * @returns The observable with stream of data.
    */
-  fetchDataFrom(queries): Observable<any> {
+  fetchDataFrom(queries): Observable<AllJobRequestResponse> {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
@@ -292,8 +299,13 @@ export class RequestListComponent implements OnInit, OnDestroy {
   clearSearch(): void {
     this.parentFG.patchValue({ search: '' }, { emitEvent: false });
     this.enableSearchField = false;
-    this.loading = true;
-    this.loadData(0, 10);
+
+    if(this.isSearchEnabled){
+      this.loading = true;
+      this.loadData(0, 10);
+      this.isSearchEnabled = false;
+    }
+  
   }
 
   /**
@@ -301,13 +313,17 @@ export class RequestListComponent implements OnInit, OnDestroy {
    * @param event The search event data.
    */
   getSearchValue(event: { status: boolean; response? }): void {
-    if (event.status)
+    if (event.status) {
       this.listData = new InhouseTable().deserialize({
         records: event.response,
       }).records;
-    else {
-      this.loading = true;
-      this.loadData(0, 10);
+      this.isSearchEnabled = true;
+    } else {
+      if (this.isSearchEnabled) {
+        this.isSearchEnabled = false;
+        this.loading = true;
+        this.loadData(0, 10);
+      }
     }
   }
 

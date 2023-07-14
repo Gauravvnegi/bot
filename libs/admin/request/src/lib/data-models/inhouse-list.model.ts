@@ -1,5 +1,6 @@
 import { DateService } from '@hospitality-bot/shared/utils';
 import { get, set, trim } from 'lodash';
+import { JobRequestResponse } from '../types/response.types';
 
 export class InhouseTable {
   entityStateCounts: any;
@@ -39,7 +40,7 @@ export class InhouseData {
   itemCode: string;
   itemName: string;
   jobDuration: number;
-  sla:number;
+  sla: number;
   jobID: string;
   jobNo: string;
   journey: string;
@@ -52,8 +53,10 @@ export class InhouseData {
   state: string;
   status: string;
   stayDetails: StayDetails;
+  timeLeft: number;
+  source: string;
 
-  deserialize(input) {
+  deserialize(input: JobRequestResponse) {
     this.rooms = new Array<Room>();
     this.guestDetails = new GuestType().deserialize(input?.guestDetails);
     this.stayDetails = new StayDetails().deserialize(input?.stayDetails);
@@ -81,8 +84,11 @@ export class InhouseData {
       set({}, 'requestTime', get(input, ['requestTime'])),
       set({}, 'reservationId', get(input, ['reservationId'])),
       set({}, 'state', get(input, ['state'])),
-      set({}, 'status', get(input, ['status']))
+      set({}, 'status', get(input, ['status'])),
     );
+
+    this.timeLeft = input.timeLeft;
+    this.source = input.source;
 
     return this;
   }
@@ -118,10 +124,9 @@ export class InhouseData {
     //   return `${Math.round(
     //     ((this.elapsedTime % 86400000) % 3600000) / 60000
     //   )}m`;
-    if(this.sla){
-      return `${this.sla}m`
-    }
-    else '------';
+    if (this.sla) {
+      return `${this.sla}m`;
+    } else '------';
   }
 
   getSLAvalue() {
@@ -163,7 +168,7 @@ export class Room {
   }
 
   getRoomNumberAndType() {
-    return this.roomNumber + ' - ' + this.type;
+    return this.roomNumber + (this.type ? ' - ' + this.type : '');
   }
 }
 

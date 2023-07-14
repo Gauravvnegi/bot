@@ -31,7 +31,7 @@ export type RoomResponse = {
     unavailableRoomCount: number;
   };
   features: string[];
-  roomStatus: RoomStatus;
+  status: RoomStatus;
   //--- can be modified
   toDate: number;
   fromDate: number;

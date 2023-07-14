@@ -20,6 +20,7 @@ export class SearchComponent implements OnInit {
   @Output() clear = new EventEmitter();
   @Output() search = new EventEmitter();
   searchValue = false;
+  textLimit = 3;
   constructor(
     private _requestService: RequestService,
     private _adminUtilityService: AdminUtilityService,
@@ -50,7 +51,8 @@ export class SearchComponent implements OnInit {
       .pipe(
         debounceTime(1000),
         switchMap((formValue) => {
-          if (formValue.search.trim().length)
+          
+          if (formValue.search.trim().length >= this.textLimit)
             return findSearch$(formValue).pipe(catchError((err) => empty()));
           else return of(null);
         })
@@ -58,7 +60,7 @@ export class SearchComponent implements OnInit {
       .subscribe(
         (response) =>
           this.search.emit({
-            status: this.parentFG.get('search').value.trim().length,
+            status: this.parentFG.get('search').value.trim().length >= this.textLimit,
             response,
           }) 
       );

@@ -9,6 +9,7 @@ import {
 } from '../../../constants/form';
 import { navRoutes } from '../../../constants/routes';
 import { Feature } from '../../../types/outlet';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'hospitality-bot-restaurant-form',
   templateUrl: './restaurant-form.component.html',
@@ -16,13 +17,19 @@ import { Feature } from '../../../types/outlet';
 })
 export class RestaurantFormComponent implements OnInit {
   routes = navRoutes;
+  console: any;
+  isId: boolean = false;
   @Input() set outletId(id: string) {
     if (id) {
+      this.isId = true;
       this.modifyNoRecordActions();
     }
   }
   @Input() compServices: any[] = [];
+  @Input() menuList: any[] = [];
+  @Input() isLoading: boolean;
   @Output() onCreateAndContinueFeature = new EventEmitter<Feature>();
+
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
 
@@ -30,7 +37,11 @@ export class RestaurantFormComponent implements OnInit {
   hours = hours;
   dimensions = dimensions;
 
-  constructor(public controlContainer: ControlContainer) {}
+  constructor(
+    public controlContainer: ControlContainer,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {}
 
@@ -41,5 +52,9 @@ export class RestaurantFormComponent implements OnInit {
 
   onCreateAndContinue(features: Feature) {
     this.onCreateAndContinueFeature.emit(features);
+  }
+
+  selectItems(id) {
+    this.router.navigate([`menu/${id}`], { relativeTo: this.route });
   }
 }

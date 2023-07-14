@@ -82,3 +82,94 @@
 
   opacity: 0.7;
 }
+
+//css
+// @import 'main';
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 17px;
+  width: 100%;
+}
+
+.menu-heading {
+  opacity: 0.75;
+  font-size: 16px;
+  font-weight: $bold;
+  text-align: left;
+  color: #00162b;
+}
+
+.menu-sub-heading {
+  margin-top: 2px;
+  opacity: 0.45;
+  font-size: 12px;
+  text-align: left;
+  color: #00162b;
+}
+
+.item-boxes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 26.5px;
+  min-height: 157px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.item-box {
+  width: 210px;
+  position: relative;
+}
+
+.icon-wrapper {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  filter: brightness(100%);
+}
+
+.no-data {
+  width: 100%;
+  text-align: center;
+  color: #00162b;
+}
+
+.selected {
+  filter: brightness(40%);
+  background-color: #f5f5dc !important;
+  border-radius: 4px;
+}
+
+.image-type {
+  @include flex-all-center();
+  width: 210px;
+  height: 157px;
+
+  .show-image {
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    object-fit: contain;
+  }
+}
+
+.text {
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: center;
+  color: #002046;
+}
+
+:host ::ng-deep .wrapper {
+  border: none !important;
+}
+
+.btn-wrapper {
+  @include flex-item-center;
+  gap: 1em;
+}

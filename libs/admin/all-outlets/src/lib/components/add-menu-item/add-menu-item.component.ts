@@ -1,13 +1,20 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
+import {
+  ConfigService,
+  NavRouteOptions,
+  Option,
+} from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
-import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
-import { MenuItemForm } from '../../types/outlet';
+import { MenuItemForm, MenuItemResponse } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
+import { PageReloadService } from '../../services/page-reload.service.service';
+import { TaxService } from 'libs/admin/tax/src/lib/services/tax.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'hospitality-bot-add-menu-item',
@@ -20,79 +27,133 @@ export class AddMenuItemComponent extends OutletBaseComponent
   pageTitle: string;
   navRoutes: NavRouteOptions;
   packageCode: string = '# will be auto generated';
-  itemId: string = '';
   mealPreferences: Option[] = [];
   types: Option[] = [];
   categories: Option[] = [];
   loading: boolean = false;
   $subscription = new Subscription();
-  taxes: Option[] = [
-    { label: 'CGST 4%', value: 'CGST' },
-    { label: 'sGST 12%', value: 'SGST' },
-    { label: 'VAT 20%', value: 'VAT' },
+  taxes: Option[] = [];
+  currencies: Option[] = [{ label: 'INR', value: 'INR' }];
+  unitOptions = [
+    { label: 'gram', value: 'GRAMS' },
+    { label: 'piece', value: 'PIECE' },
+    { label: 'litre', value: 'LITRE' },
   ];
-
-  @HostListener('window:beforeunload', ['$event'])
-  handleBeforeUnload(event: BeforeUnloadEvent) {
-    event.preventDefault();
-    event.returnValue = false;
-    return 'Are you sure you want to leave? Your unsaved changes will be lost.';
-  }
-
   constructor(
     private fb: FormBuilder,
     private outletService: OutletService,
     private snackbarService: SnackBarService,
     route: ActivatedRoute,
-    router: Router
+    router: Router,
+    private pageReloadService: PageReloadService,
+    private taxService: TaxService,
+    private globalFilterService: GlobalFilterService,
+    private configService: ConfigService,
+    private location: Location
   ) {
     super(router, route);
   }
 
   ngOnInit(): void {
+    this.entityId = this.globalFilterService.entityId;
+    this.pageReloadService.enablePageReloadConfirmation();
     this.initOptions();
     this.initForm();
+    // this.initConfig();
     this.initComponent('menuItem');
   }
 
+  // initConfig() {
+  //   this.configService.$config.subscribe((value) => {
+  //     if (value) {
+  //       const { currencyConfiguration } = value;
+  //       this.currencies = currencyConfiguration.map(({ key, value }) => ({
+  //         label: key,
+  //         value,
+  //       }));
+  //       this.useForm.setValue({
+  //         dineInPriceCurrency: this.currencies[0].value,
+  //         deliveryPriceCurrency: this.currencies[0].value,
+  //       });
+  //     }
+  //   });
+  // }
+
   initOptions() {
-    const menu = this.outletService.menu.value;
-    this.mealPreferences = menu.mealPreference.map((item) => ({
-      label: item,
-      value: item,
-    }));
-    this.types = menu.type.map((item) => ({
-      label: item,
-      value: item,
-    }));
-    this.categories = menu.category.map((item) => ({
-      label: item,
-      value: item,
-    }));
+    // const menu = this.outletService.menu.value;
+    this.outletService.getOutletConfig().subscribe((res) => {
+      const config = res.type.filter((item) => {
+        if (item.menu) return item.menu;
+      });
+      this.mealPreferences = config[0].menu.mealPreference.map((item) => ({
+        label: item,
+        value: item,
+      }));
+      this.types = config[0].menu.type.map((item) => ({
+        label: item,
+        value: item,
+      }));
+      this.categories = config[0].menu.category.map((item) => ({
+        label: item,
+        value: item,
+      }));
+    });
+    this.getTax();
   }
 
   initForm(): void {
     this.useForm = this.fb.group({
-      active: [true],
+      status: [true],
       name: ['', Validators.required],
       mealPreference: ['', Validators.required],
       category: ['', Validators.required],
       type: ['', Validators.required],
       preparationTime: ['', Validators.required],
-      unit: ['', Validators.required],
-      dineInPrice: ['', Validators.required],
+      quantity: ['', Validators.required],
+      unit: ['GRAMS'],
+      dineInPriceCurrency: ['INR'],
+      dineInPrice: ['', [Validators.required, Validators.min(0)]],
+      deliveryPriceCurrency: ['INR'],
+      deliveryPrice: ['', [Validators.required, Validators.min(0)]],
       hsnCode: ['', Validators.required],
-      tax: ['', Validators.required],
-      notes: [''],
+      taxIds: [[], Validators.required],
+      description: [''],
     });
-
-    if (this.itemId) {
+    if (this.menuItemId) {
       this.$subscription.add(
-        this.outletService.getMenuItemsById(this.itemId).subscribe((res) => {
-          this.useForm.patchValue(res);
-        })
+        this.outletService
+          .getMenuItemsById(this.menuItemId)
+          .subscribe((res: MenuItemResponse) => {
+            const { taxes, ...rest } = res;
+            this.useForm.patchValue({
+              ...rest,
+              taxIds: taxes.map((item) => item.id),
+            });
+          })
       );
     }
+  }
+
+  /**
+   * @function getTax to get tax options
+   * @returns void
+   */
+  getTax() {
+    this.$subscription.add(
+      this.taxService.getTaxList(this.entityId).subscribe(({ records }) => {
+        records = records.filter(
+          (item) => item.category === 'service' && item.status
+        );
+        this.taxes = records.map((item) => ({
+          label: item.taxType + ' ' + item.taxValue + '%',
+          value: item.id,
+        }));
+      })
+    );
+  }
+
+  createTax() {
+    this.router.navigate(['pages/settings/tax/create-tax']);
   }
 
   handleSubmit() {
@@ -104,18 +165,18 @@ export class AddMenuItemComponent extends OutletBaseComponent
     }
 
     const data = this.useForm.getRawValue() as MenuItemForm;
-
-    if (this.itemId) {
-      this.outletService
-        .addMenuItems(data, {
-          params:
-            'menuId=4c0ca870-5e1a-4197-b5b1-b53e6c23e2c8&entityId=a1206cf8-a579-4ab9-b345-cc8ea6ca3748',
-        })
-        .subscribe(this.handelError, this.handelSuccess);
+    if (this.menuItemId) {
+      this.$subscription.add(
+        this.outletService
+          .updateMenuItems(data, this.menuItemId, this.menuId)
+          .subscribe(this.handleSuccess, this.handleError)
+      );
     } else {
-      this.outletService
-        .updateMenuItems(this.itemId, data)
-        .subscribe(this.handelError, this.handelSuccess);
+      this.$subscription.add(
+        this.outletService
+          .addMenuItems(data, this.menuId, this.outletId)
+          .subscribe(this.handleSuccess, this.handleError)
+      );
     }
   }
 
@@ -127,16 +188,26 @@ export class AddMenuItemComponent extends OutletBaseComponent
    * @function handleSuccess To show success message
    * @returns void
    */
-  handelSuccess = () => {
+  handleSuccess = () => {
+    this.loading = false;
     this.snackbarService.openSnackBarAsText(
-      `MenuItem ${this.itemId ? 'edited' : 'created'} successfully`,
+      `MenuItem ${this.menuItemId ? 'edited' : 'created'} successfully`,
       '',
       { panelClass: 'success' }
     );
-    this.router.navigate(['/pages/outlet/all-outlets/add-outlet/add-menu']);
+    this.pageReloadService.disablePageReloadConfirmation();
+    this.location.back();
   };
 
-  handelError = ({ err }) => {
+  handleError = ({ err }) => {
     this.loading = false;
   };
+
+  /**
+   * Unsubscribe when component is getting removed
+   */
+  ngOnDestroy(): void {
+    this.$subscription.unsubscribe();
+    this.pageReloadService.disablePageReloadConfirmation();
+  }
 }

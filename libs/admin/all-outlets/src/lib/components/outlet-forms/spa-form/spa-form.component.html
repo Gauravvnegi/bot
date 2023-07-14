@@ -8,6 +8,8 @@
         description="Do not forget to add this cost in addition to the room cost"
         formControlName="serviceIds"
         [itemList]="paidServices"
+        [loading]="isLoading"
+        (viewAll)="onCreateAndContinue('services')"
         (onEmptyViewAction)="onCreateAndContinue('service')"
         [noRecordsAction]="noRecordActionForPaid"
       >

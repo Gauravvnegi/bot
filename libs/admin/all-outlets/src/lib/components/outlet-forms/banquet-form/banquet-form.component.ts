@@ -17,15 +17,18 @@ import {
   styleUrls: ['./banquet-form.component.scss'],
 })
 export class BanquetFormComponent implements OnInit {
+  @Input() isLoading = false;
   hours = hours;
   days = days;
   dimensions = dimensions;
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
   noRecordActionForPaid = noRecordActionForPaid;
+  isId: boolean = false;
 
   @Input() set outletId(id: string) {
     if (id) {
+      this.isId = true;
       this.modifyNoRecordActions();
     }
   }

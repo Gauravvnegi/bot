@@ -34,6 +34,13 @@ export const noRecordActionForMenu = {
   actionName: 'Create and Continue',
 };
 
+export const noRecordActionForFood = {
+  description:
+    'No Menu found. Tap the +Create and Continue to create the Menu.',
+  imageSrc: 'assets/images/empty-table-service.png',
+  actionName: 'Create and Continue',
+};
+
 export const noRecordActionForCompWithId = {
   actionName: '+ Import Services',
   description:
@@ -50,4 +57,11 @@ export const noRecordActionForMenuWithId = {
   actionName: '+ Add Menu',
   description: 'No Menu Found. Tap the + Add Menu to Create the Menu.',
   imageSrc: 'assets/images/empty-table-service.png',
+};
+
+export const noRecordActionForFoodWithId = {
+  description:
+    'No Food found. Tap the + Add Package to create the Food Package.',
+  imageSrc: 'assets/images/empty-table-service.png',
+  actionName: '+ Add Package',
 };

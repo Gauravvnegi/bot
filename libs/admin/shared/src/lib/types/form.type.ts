@@ -35,3 +35,18 @@ export type CategoryFormValue = {
   description: string;
   imageUrl: string;
 };
+
+export type AddressData = {
+  placeId?: string;
+  formattedAddress?: string;
+  buildingName?: string;
+  floor?: string;
+  sector?: string;
+  street?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: string;
+  latitude?: number;
+  longitude?: number;
+}

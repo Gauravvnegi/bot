@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
-import { OutletForm } from '../types/outlet';
-
-@Injectable()
+import { OutletForm, OutletFormData } from '../types/outlet';
+@Injectable({
+  providedIn: 'root',
+})
 export class OutletFormService {
-  OutletFormData: Partial<OutletForm> = {};
+  OutletFormData: Partial<OutletFormData> = {
+    paidServiceIds: [],
+    serviceIds: [],
+    menuIds: [],
+    foodPackageIds: [],
+  };
+  Outlet: any = 'RESTAURANT';
 
   outletFormState: boolean = false;
 
@@ -14,6 +21,12 @@ export class OutletFormService {
 
   resetOutletFormData() {
     this.OutletFormData = {};
+    this.OutletFormData = {
+      paidServiceIds: [],
+      serviceIds: [],
+      menuIds: [],
+      foodPackageIds: [],
+    };
     this.outletFormState = false;
   }
 }

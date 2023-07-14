@@ -18,6 +18,7 @@ import { businessRoute } from '../../constant/routes';
 import { SegmentList, Service } from '../../models/hotel.models';
 import { BusinessService } from '../../services/business.service';
 import { HotelFormDataService } from '../../services/hotel-form.service';
+import { noRecordActionForCompWithId } from 'libs/admin/all-outlets/src/lib/constants/form';
 
 declare let google: any;
 
@@ -42,7 +43,7 @@ export class HotelInfoFormComponent implements OnInit {
   allServices: Service[] = [];
   defaultImage: string = 'assets/images/image-upload.png';
   actlink: string;
-  noRecordAction;
+  noRecordAction = noRecordActionForCompWithId;
 
   google: any;
   options = {
@@ -163,10 +164,6 @@ export class HotelInfoFormComponent implements OnInit {
     this.navRoutes[2].link = `/pages/settings/business-info/brand/${this.brandId}`;
     this.navRoutes[2].isDisabled = !this.brandId;
     this.navRoutes[3].isDisabled = true;
-    this.noRecordAction = {
-      imageSrc: 'assets/images/empty-table-service.png',
-      description: 'No services found',
-    };
   }
 
   /**

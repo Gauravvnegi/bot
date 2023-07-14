@@ -94,10 +94,6 @@ export class ImportServiceComponent implements OnInit {
       ...serviceData.serviceIds,
     ];
 
-    // this.roomService.initRoomTypeFormData({
-    //   complimentaryAmenities: serviceData.serviceIds,
-    // });
-
     this.roomService
       .updateHotel(this.entityId, serviceData)
       .subscribe(this.handleSuccess, this.handelError);

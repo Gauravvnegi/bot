@@ -29,6 +29,7 @@ import * as FileSaver from 'file-saver';
 import { LazyLoadEvent } from 'primeng/api';
 import { businessRoute } from '../../constant/routes';
 import { HotelFormDataService } from '../../services/hotel-form.service';
+import { EntityList } from '../../models/property.model';
 
 @Component({
   selector: 'hospitality-bot-hotel-data-table',
@@ -84,11 +85,12 @@ export class HotelDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.$subscription.add(
       this.businessService
-        .getHotelList(this.parentId, this.getQueryConfig())
+        .getPropertyList(this.parentId, this.getQueryConfig())
         .subscribe(
           (res) => {
-            this.values = res.records;
-            this.totalRecords = res.total;
+            const data = new EntityList().deserialize(res);
+            this.values = data.records;
+            this.totalRecords = data.total;
           },
           ({ error }) => {
             this.values = [];

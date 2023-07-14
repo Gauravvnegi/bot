@@ -1,4 +1,5 @@
 import { colors as randomColors } from '@hospitality-bot/admin/shared';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { get, set } from 'lodash';
 import { SentimentStatsResponse } from '../types/response.types';
 
@@ -34,6 +35,7 @@ export class InhouseSentiments {
 
   deserialize(input: SentimentStatsResponse) {
     this.label = input.label;
+
     this.totalCount = input.totalCount;
 
     const keys = Object.keys(input);
@@ -56,6 +58,8 @@ export class InhouseSentiments {
 
 export class Sentiment {
   label: string;
+  name: string;
+
   stats: any;
   totalCount: number;
   color: string;
@@ -67,6 +71,8 @@ export class Sentiment {
       set({}, 'totalCount', get(input, ['totalCount'])),
       set({}, 'stats', get(input, ['stats']))
     );
+
+    this.name = convertToTitleCase(this.label);
 
     return this;
   }

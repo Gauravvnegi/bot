@@ -2,30 +2,26 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { MenuTabValue, TabValue } from '../constants/data-table';
 import { ApiService } from '@hospitality-bot/shared/utils';
-import { allOutletsResponse, menuListResponse } from '../constants/response';
 import { map } from 'rxjs/operators';
 import { QueryConfig } from '@hospitality-bot/admin/library';
-import { MenuConfig, OutletConfig } from '../types/config';
+import { OutletConfig } from '../types/config';
 import { OutletResponse } from '../types/response';
 import { ServiceResponse } from 'libs/admin/services/src/lib/types/response';
+import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
+import { MenuFormData, MenuResponse } from '../types/menu';
+import {
+  MenuItemForm,
+  MenuItemResponse,
+  MenuListResponse,
+} from '../types/outlet';
 
 @Injectable()
 export class OutletService extends ApiService {
   selectedTable = new BehaviorSubject<TabValue>(TabValue.ALL);
-  selectedMenuTable = new BehaviorSubject<MenuTabValue>(MenuTabValue.BREAKFAST);
-  menu: BehaviorSubject<MenuConfig> = new BehaviorSubject<MenuConfig>({
-    type: [],
-    mealPreference: [],
-    category: [],
-  });
 
   getAllOutlets(entityId: string, config?: QueryConfig): Observable<any> {
     return this.get(
       `/api/v1/entity/${entityId}/library?type=SERVICE&serviceType=ALL&limit=5`
-    ).pipe(
-      map((res) => {
-        return allOutletsResponse;
-      })
     );
   }
 
@@ -51,43 +47,18 @@ export class OutletService extends ApiService {
     );
   }
 
-  getMenuItems(): Observable<any> {
-    return this.get(`/api/v1/config?key=OUTLET_CONFIGURATION`).pipe(
-      map((res) => {
-        return menuListResponse;
-      })
-    );
+  getMenuItems(config: QueryConfig, outletId: string): Observable<any> {
+    return this.get(`/api/v1/menus/items${config.params}`, {
+      headers: { 'entity-id': outletId },
+    });
   }
 
-  outletResponse: Partial<OutletResponse> = {
-    id: '85692aa9-cf86-4f5d-8fe6-9783c9884e9b',
-    name: 'test',
-    type: 'RESTAURANT',
-    contact: {
-      countryCode: '+91',
-      phoneNumber: '1234567890',
-    },
-    dayOfOperationStart: 'MONDAY',
-    dayOfOperationEnd: 'SUNDAY',
-    timeDayStart: '10:00',
-    timeDayEnd: '22:00',
-    address: {
-      city: 'test',
-      state: 'test',
-      country: 'test',
-      pinCode: 12333,
-    },
-  };
-
-  //dummy
   getOutletById(outletId: string): Observable<OutletResponse> {
     return this.get(`/api/v1/entity/${outletId}?type=OUTLET`);
   }
 
   updateOutlet(outletId: string, data): Observable<OutletResponse> {
     return this.patch(`/api/v1/entity/${outletId}?type=OUTLET`, data);
-
-    // return this.patch(`/api/v1/entity/${entityId}?type=HOTEL`, data);
   }
 
   addOutlet(data): Observable<OutletResponse> {
@@ -97,23 +68,48 @@ export class OutletService extends ApiService {
     );
   }
 
-  addMenuItems(data, config: QueryConfig): Observable<any> {
-    return this.post(`/api/v1/menu-item ${config.params ?? ''}`, data);
+  addMenuItems(
+    data: MenuItemForm,
+    menuId: string,
+    outletId: string
+  ): Observable<MenuItemResponse> {
+    return this.post(`/api/v1/menus/items?menuId=${menuId}`, data, {
+      headers: { 'entity-id': outletId },
+    });
   }
 
-  /**
-   * @function updateMenuItems
-   * @description update menu items
-   * @param data
-   * @param itemId
-   * @returns
-   */
-  updateMenuItems(itemId, data): Observable<any> {
-    return this.patch(`/api/v1/menu-item /${itemId}`, data);
+  updateMenuItems(
+    data: MenuItemForm,
+    menuItemId: string,
+    menuId: string
+  ): Observable<any> {
+    return this.patch(`/api/v1/menus/items/${menuItemId}`, data, {
+      headers: { entityId: menuId },
+    });
   }
 
-  getMenuItemsById(itemId: string): Observable<any> {
-    return this.get(`/api/v1/menu-item /${itemId}`);
+  addMenu(data: MenuFormData, entityId: string): Observable<MenuResponse> {
+    return this.post(`/api/v1/menus`, data, {
+      headers: { 'entity-id': entityId },
+    });
+  }
+
+  updateMenu(
+    data: MenuFormData,
+    menuId: string,
+    entityId: string
+  ): Observable<any> {
+    return this.patch(`/api/v1/menus/${menuId}`, data, {
+      headers: { 'entity-id': entityId },
+    });
+  }
+
+  getMenu(menuId: string): Observable<MenuFormData> {
+    return this.get(`/api/v1/menus/${menuId}`);
+  }
+
+  getMenuItemsById(menuItemId: string): Observable<any> {
+    return this.get(`/api/v1/menus/items/${menuItemId}`);
   }
 
   addFoodPackage(data): Observable<any> {
@@ -132,6 +128,21 @@ export class OutletService extends ApiService {
     return this.get(
       `/api/v1/entity/${entityId}/library${config?.params ?? ''}`,
       { headers: { 'entity-id': entityId } }
+    );
+  }
+
+  getMenuList(entityId: string): Observable<MenuListResponse> {
+    return this.get(`/api/v1/menus`, {
+      headers: { 'entity-id': entityId },
+    });
+  }
+
+  searchLibraryItem(
+    entityId: string,
+    config?: QueryConfig
+  ): Observable<SearchResultResponse> {
+    return this.get(
+      `/api/v1/entity/${entityId}/library/search${config?.params ?? ''}`
     );
   }
 }

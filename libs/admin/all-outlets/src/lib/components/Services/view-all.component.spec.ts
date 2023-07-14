@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MenuListDataTableComponent } from './menu-list-data-table.component';
+import { ViewAllComponent } from './view-all.component';
 
-describe('MenuListDataTableComponent', () => {
-  let component: MenuListDataTableComponent;
-  let fixture: ComponentFixture<MenuListDataTableComponent>;
+describe('ViewAllComponent', () => {
+  let component: ViewAllComponent;
+  let fixture: ComponentFixture<ViewAllComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MenuListDataTableComponent ]
+      declarations: [ ViewAllComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MenuListDataTableComponent);
+    fixture = TestBed.createComponent(ViewAllComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

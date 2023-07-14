@@ -7,6 +7,7 @@ import { AdminChannelMangerRoutingModule } from './admin-channel-manager.routing
 import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
 import { LibraryService } from '@hospitality-bot/admin/library';
 import { ChannelManagerFormService } from './services/channel-manager-form.service';
+import { ChannelManagerService } from './services/channel-manager.service';
 
 @NgModule({
   imports: [
@@ -18,6 +19,11 @@ import { ChannelManagerFormService } from './services/channel-manager-form.servi
     ReactiveFormsModule,
   ],
   declarations: [...AdminChannelMangerRoutingModule.components],
-  providers: [RoomService, LibraryService, ChannelManagerFormService],
+  providers: [
+    RoomService,
+    LibraryService,
+    ChannelManagerFormService,
+    ChannelManagerService,
+  ],
 })
 export class AdminChannelManagerModule {}

@@ -20,6 +20,8 @@ export type ReservationResponse = {
   confirmationNo: string;
   name: string;
   company: string;
+  outletType?: string;
+  outletName?: string;
   date: string;
   amount: number;
   source: string;

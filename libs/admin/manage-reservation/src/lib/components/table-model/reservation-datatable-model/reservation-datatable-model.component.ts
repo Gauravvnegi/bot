@@ -7,7 +7,7 @@ import {
   QueryConfig,
   TableService,
 } from '@hospitality-bot/admin/shared';
-import { outletCols } from '../../../constants/reservation-table';
+// import { outletCols } from '../../../constants/reservation-table';
 import { Subscription } from 'rxjs';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
@@ -26,7 +26,7 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
   implements OnInit {
   navLink: string = ''; //link to navigate to booking page on the basis of outlet type
   entityId: string;
-  cols = outletCols;
+  // cols = outletCols;
   globalQueries = [];
   tableName: string = 'Reservation';
 

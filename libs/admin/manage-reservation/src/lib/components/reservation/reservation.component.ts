@@ -134,20 +134,20 @@ export class ReservationComponent extends BaseDatatableComponent
       value: branch.id,
       disabled: false,
       chips: [],
-      type: Feedback.TRANSACTIONAL,
+      type: branch.type,
     });
     if (this.globalFeedbackFilterType === Feedback.BOTH)
       this.tabFilterItems.push(this.getTabItem(branch, Feedback.STAY));
     this.outlets.forEach((outlet) => {
       if (this.outletIds[outlet.id]) {
         this.tabFilterItems.push(
-          this.getTabItem(outlet, Feedback.TRANSACTIONAL)
+          this.getTabItem(outlet, outlet.type)
         );
       }
     });
   }
 
-  getTabItem(item: EntityConfig, type: Feedback) {
+  getTabItem(item: EntityConfig, type: string) {
     return {
       label: item.name,
       content: '',
@@ -160,8 +160,10 @@ export class ReservationComponent extends BaseDatatableComponent
 
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
-    this.selectedEntity = this.tabFilterItems[event.index].type;
-    this.formService.selectedEntity.next(this.selectedEntity);
+    this.selectedOutlet = this.tabFilterItems[event.index].type;
+    this.formService.selectedOutlet.next(this.selectedOutlet);
+    // this.formService.selectedOutlet.next(this.selectedOutlet);
+    debugger;
   }
 }
 

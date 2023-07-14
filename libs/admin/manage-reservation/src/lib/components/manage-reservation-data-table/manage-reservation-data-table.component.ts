@@ -26,7 +26,6 @@ import { switchMap, takeUntil } from 'rxjs/operators';
 import {
   HotelMenuOptions,
   MenuOptions,
-  ReservationSearchItem,
   ReservationStatusType,
   ReservationTableValue,
   ReservationType,
@@ -251,26 +250,18 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           // Store the selected outlet
           this.selectedOutlet = selectedOutlet;
           this.listenForOutletChange(selectedOutlet);
-          if (this.selectedOutlet === EntitySubType.ROOM_TYPE) {
-            // API call for hotel data
-            return this.manageReservationService.getReservationItems<
-              ReservationListResponse
-            >(this.getQueryConfig());
-          } else {
-            // API call for outlet data
-            return this.manageReservationService.getReservationList(
-              this.entityId,
-              this.getOutletConfig()
-            );
-          }
+          // API call for hotel data
+          return this.manageReservationService.getReservationItems<
+            ReservationListResponse
+          >(this.getQueryConfig());
         }),
         takeUntil(this.destroy$) // Unsubscribe when the destroy$ subject emits
       )
       .subscribe(
         (res) => {
           // Process the response and update the data
+          this.reservationLists = new ReservationList().deserialize(res);
           if (this.selectedOutlet === EntitySubType.ROOM_TYPE) {
-            this.reservationLists = new ReservationList().deserialize(res);
             this.values = this.reservationLists.reservationData.map((item) => {
               return {
                 ...item,
@@ -285,11 +276,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
             );
             this.loading = false;
           } else {
-            this.values = res.records;
+            this.values = new ReservationList().deserialize(
+              res
+            ).reservationData;
             this.initFilters(
-              res.entityTypeCounts,
-              res.entityStateCounts,
-              res.total
+              this.reservationLists.entityTypeCounts,
+              this.reservationLists.entityStateCounts,
+              this.reservationLists.total
             );
             this.loading = false;
           }

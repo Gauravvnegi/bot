@@ -16,6 +16,8 @@ export class Reservation {
   confirmationNo: string;
   guestName: string;
   guestCompany: string;
+  outletName: string;
+  outletType: string;
   date: string;
   amount: number;
   source: string;
@@ -52,6 +54,8 @@ export class Reservation {
     this.source = input.source;
     this.payment = input.payment;
     this.status = input.status;
+    this.outletName = input?.outletName ?? '';
+    this.outletType = input?.outletType ?? '';
     this.type = input.reservationTypes;
     this.reservationNumber = input?.reservationNumber;
     this.totalDueAmount = input?.totalDueAmount;
@@ -94,6 +98,8 @@ export class ReservationList {
     return this;
   }
 }
+
+export class Outlets {}
 
 export class EntityTypeCounts {
   ALL: number;

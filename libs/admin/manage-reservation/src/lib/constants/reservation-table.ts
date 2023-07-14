@@ -1,4 +1,4 @@
-import { Cols, FlagType, Option } from '@hospitality-bot/admin/shared';
+import { Cols, FlagType, Option, Status } from '@hospitality-bot/admin/shared';
 import { Chip } from '@hospitality-bot/admin/shared';
 import { ReservationStatus } from '../types/reservation.type';
 /**
@@ -31,6 +31,12 @@ export enum ReservationTableValue {
   BOOKING_ENGINE = 'CREATE_WITH',
 }
 
+export enum EntityTabGroup {
+  HOTEL = 'HOTEL',
+  RESTAURANT_AND_BAR = 'RESTAURANT_AND_BAR',
+  VENUE = 'VENUE',
+  SPA = 'SPA',
+}
 export enum ReservationType {
   DRAFT = 'DRAFT',
   CONFIRMED = 'CONFIRMED',
@@ -61,6 +67,13 @@ export const reservationStatusDetails: Record<
     label: 'Canceled',
     type: 'failed',
   },
+};
+
+export const entityTabGroup: Record<EntityTabGroup, Option> = {
+  HOTEL: { label: 'Hotel', value: 'HOTEL' },
+  RESTAURANT_AND_BAR: { label: 'Res & Bar', value: 'RESTAURANT_AND_BAR' },
+  VENUE: { label: 'Venue', value: 'VENUE' },
+  SPA: { label: 'Spa', value: 'SPA' },
 };
 
 /* Reservation Filters */
@@ -188,7 +201,7 @@ export const outletCols: Cols[] = [
     isSearchDisabled: true,
   },
 ];
-export const title = 'Reservation';
+export const title = 'Booking';
 
 export const reservationChips: Record<
   'DRAFT' | 'CANCELED' | 'CONFIRMED' | 'OTA',

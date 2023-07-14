@@ -7,20 +7,10 @@ import { ReservationTableValue } from '../constants/reservation-table';
 import { ReservationFormData } from '../types/forms.types';
 import { QueryConfig } from '../types/reservation.type';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-import { EntityTabGroup } from '../constants/reservation-table';
+import { EntityType } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
-  public selectedOutlet = new BehaviorSubject<EntityTabGroup>(
-    EntityTabGroup.HOTEL
-  );
-  getSelectedOutlet(): Observable<EntityTabGroup> {
-    return this.selectedOutlet.asObservable().pipe(distinctUntilChanged());
-  }
-
-  reservationDate = new BehaviorSubject<Date>(null);
-  selectedTab = ReservationTableValue.ALL;
-  enableAccordion: boolean = false;
 
   getRoomTypeList(
     entityId: string,
@@ -256,41 +246,6 @@ export class ManageReservationService extends ApiService {
 
         res.total = 5;
 
-        return res;
-      })
-    );
-  }
-
-  getOutletList(
-    entityId,
-    config: QueryConfig = { params: '?order=DESC&limit=5' }
-  ): Observable<any> {
-    return this.get(
-      `/api/v1/entity/${entityId}/tax${config?.params ?? ''}`
-    ).pipe(
-      map((res) => {
-        res.records = [
-          {
-            id: 1,
-            name: 'The Hilltop',
-            type: 'HOTEL',
-          },
-          {
-            id: 2,
-            name: 'Restaurant and Bar',
-            type: 'RESTAURANT_AND_BAR',
-          },
-          {
-            id: 3,
-            name: 'Venue',
-            type: 'VENUE',
-          },
-          {
-            id: 3,
-            name: 'Spa',
-            type: 'SPA',
-          },
-        ];
         return res;
       })
     );

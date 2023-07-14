@@ -1,3 +1,5 @@
+import { EntitySubType, EntityType } from "./table.type";
+
 export type CookiesData = {
   accessToken: string;
   accessRefreshToken: string;
@@ -29,7 +31,7 @@ export type Address = {
 
 export type Entity = {
   id: string;
-  category: string;
+  category: EntityType;
   name: string;
   logo: string;
   address: Address;
@@ -47,7 +49,7 @@ export type Entity = {
   privacyPolicyUrl: string;
   termsUrl?: string;
   favIcon: string;
-  type: string;
+  type: EntitySubType;
 };
 
 export type Brand = {

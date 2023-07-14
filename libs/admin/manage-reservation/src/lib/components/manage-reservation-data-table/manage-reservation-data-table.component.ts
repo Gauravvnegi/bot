@@ -8,6 +8,8 @@ import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
   ConfigService,
+  EntitySubType,
+  EntityType,
   Option,
   TableService,
   sharedConfig,
@@ -22,7 +24,6 @@ import { LazyLoadEvent } from 'primeng/api';
 import { Subject, Subscription } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import {
-  EntityTabGroup,
   HotelMenuOptions,
   MenuOptions,
   ReservationSearchItem,
@@ -42,6 +43,7 @@ import {
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationListResponse } from '../../types/response.type';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -59,8 +61,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   entityId!: string;
   selectedTab: ReservationTableValue = ReservationTableValue.ALL;
-  selectedOutlet: EntityTabGroup = EntityTabGroup.HOTEL;
-  previousOutlet: EntityTabGroup = EntityTabGroup.HOTEL;
+  selectedEntity: EntitySubType = EntitySubType.ROOM_TYPE;
+  previousEntity: EntitySubType = EntitySubType.ROOM_TYPE;
   reservationLists!: ReservationList;
   $subscription = new Subscription();
   globalQueries = [];
@@ -76,6 +78,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     protected tabFilterService: TableService,
     private manageReservationService: ManageReservationService,
     private adminUtilityService: AdminUtilityService,
+    private formService: FormService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     private router: Router,
@@ -133,14 +136,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   loadData(event: LazyLoadEvent): void {
-    this.manageReservationService.selectedTab = this.selectedTab;
+    this.formService.selectedTab = this.selectedTab;
     if (!this.isOutletChanged) this.initTableValue();
   }
 
   listenForOutletChange(value) {
-    // this.manageReservationService.getSelectedOutlet().subscribe((value) => {
-    this.selectedOutlet = value;
-    if (this.selectedOutlet !== this.previousOutlet) {
+    this.selectedEntity = value;
+    if (this.selectedEntity !== this.previousEntity) {
       this.resetTableValues();
       this.loading = true;
       this.isOutletChanged = true;
@@ -148,13 +150,12 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       this.isOutletChanged = false;
     }
 
-    this.previousOutlet = this.selectedOutlet;
-    this.initDetails(this.selectedOutlet);
-    // });
+    this.previousEntity = this.selectedEntity;
+    this.initDetails(this.selectedEntity);
   }
 
-  initDetails(selectedOutlet: EntityTabGroup) {
-    if (selectedOutlet === EntityTabGroup.HOTEL) {
+  initDetails(selectedEntity: EntitySubType) {
+    if (selectedEntity === EntitySubType.ROOM_TYPE) {
       this.selectedTab = ReservationTableValue.ALL;
       this.cols = hotelCols;
       this.menuOptions = HotelMenuOptions;
@@ -165,7 +166,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       this.isTabFilters = false;
       this.isAllTabFilterRequired = false;
       this.menuOptions = MenuOptions;
-      if (selectedOutlet === EntityTabGroup.RESTAURANT_AND_BAR) {
+      if (selectedEntity === EntitySubType.RESTAURANT) {
         this.menuOptions = RestaurantMenuOptions;
       }
     }
@@ -176,14 +177,14 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
    */
   initTableValue() {
     this.loading = true;
-    this.manageReservationService
+    this.formService
       .getSelectedOutlet()
       .pipe(
-        switchMap((selectedOutlet) => {
+        switchMap((selectedEntity) => {
           // Store the selected outlet
-          this.selectedOutlet = selectedOutlet;
-          this.listenForOutletChange(selectedOutlet);
-          if (this.selectedOutlet === EntityTabGroup.HOTEL) {
+          this.selectedEntity = selectedEntity;
+          this.listenForOutletChange(selectedEntity);
+          if (this.selectedEntity === EntitySubType.ROOM_TYPE) {
             // API call for hotel data
             return this.manageReservationService.getReservationItems<
               ReservationListResponse
@@ -201,7 +202,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       .subscribe(
         (res) => {
           // Process the response and update the data
-          if (this.selectedOutlet === EntityTabGroup.HOTEL) {
+          if (this.selectedEntity === EntitySubType.ROOM_TYPE) {
             this.reservationLists = new ReservationList().deserialize(res);
             this.values = this.reservationLists.reservationData.map((item) => {
               return {
@@ -391,7 +392,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         break;
       case 'ASSIGN_ROOM':
       case 'ASSIGN_TABLE':
-        this.manageReservationService.enableAccordion = true;
+        this.formService.enableAccordion = true;
         this.editReservation(id);
         break;
     }

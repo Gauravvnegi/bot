@@ -24,6 +24,7 @@ import {
 } from '@hospitality-bot/admin/shared';
 import { ReservationForm } from '../../constants/form';
 import { roomFields } from '../../constants/reservation';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -61,7 +62,8 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
@@ -73,9 +75,9 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   initDetails() {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.expandAccordion = this.manageReservationService.enableAccordion;
+    this.expandAccordion = this.formService.enableAccordion;
     if (this.expandAccordion) {
-      this.manageReservationService.enableAccordion = false;
+      this.formService.enableAccordion = false;
     }
     const { navRoutes, title } = manageBookingRoutes[
       this.reservationId ? 'editBooking' : 'addBooking'

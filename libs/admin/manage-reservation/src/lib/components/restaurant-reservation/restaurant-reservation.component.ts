@@ -11,7 +11,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   NavRouteOptions,
   AdminUtilityService,
-  Regex,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
@@ -27,7 +26,7 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { menuItemFields } from '../../constants/reservation';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { ReservationForm } from '../../constants/form';
-import { title } from '../../constants/reservation-table';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -74,7 +73,8 @@ export class RestaurantReservationComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    private formSerivce: FormService
   ) {
     this.initForm();
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
@@ -97,9 +97,9 @@ export class RestaurantReservationComponent implements OnInit {
   initDetails() {
     this.entityId = this.globalFilterService.entityId;
     this.fields = menuItemFields;
-    this.expandAccordion = this.manageReservationService.enableAccordion;
+    this.expandAccordion = this.formSerivce.enableAccordion;
     if (this.expandAccordion) {
-      this.manageReservationService.enableAccordion = false;
+      this.formSerivce.enableAccordion = false;
     }
   }
 

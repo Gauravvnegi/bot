@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { get } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
-import { ModuleNames } from 'libs/admin/shared/src/index';
+import {
+  EntitySubType,
+  EntityType,
+  ModuleNames,
+} from 'libs/admin/shared/src/index';
 import { DateRangeFilterService } from './daterange-filter.service';
 import { FilterService } from './filter.service';
 
@@ -11,8 +15,8 @@ export class GlobalFilterService {
   globalFilter$ = new BehaviorSubject<Partial<GlobalFilterData>>({});
   timezone: string;
   entityId: string;
-  entityType; //category  -- ADD type from shared
-  entitySubType; // type
+  entityType: EntityType; //category
+  entitySubType: EntitySubType; // type
   globalFilterObj: GlobalFilterData = {
     filter: {
       value: {},
@@ -54,47 +58,50 @@ export class GlobalFilterService {
       }
     });
 
-    this.filterService.emitFilterValue$.subscribe((data:Partial<GlobalFilterData>) => {
-      if (Object.keys(data).length) {
-        this.globalFilterObj.filter.value = data;
-        this.globalFilterObj.filter.queryValue = [
-          { entityId: get(data, ['property', 'entityName']) },
-          {
-            guestType: get(data, ['guest', 'guestType', 'isVip'])
-              ? 'VIP'
-              : null,
-          },
-          {
-            guestType: get(data, ['guest', 'guestType', 'isGeneral'])
-              ? 'GENERAL'
-              : null,
-          },
-          {
-            guestCategory: get(data, [
-              'guest',
-              'guestCategory',
-              'isRepeatedGuest',
-            ])
-              ? 'REPEATGUEST'
-              : null,
-          },
-          {
-            guestCategory: get(data, ['guest', 'guestCategory', 'isNewGuest'])
-              ? 'NEWGUEST'
-              : null,
-          },
-        ];
-        this.globalFilterObj.feedback.queryValue = [
-          {
-            type: get(data, ['feedback', 'feedbackType']),
-          },
-          {
-            outlets: get(data, ['outlets']),
-          },
-        ];
-        this.globalFilter$.next(this.globalFilterObj);
+    this.filterService.emitFilterValue$.subscribe(
+      (data: Partial<GlobalFilterData>) => {
+        if (Object.keys(data).length) {
+          this.globalFilterObj.filter.value = data;
+          debugger;
+          this.globalFilterObj.filter.queryValue = [
+            { entityId: get(data, ['property', 'entityName']) },
+            {
+              guestType: get(data, ['guest', 'guestType', 'isVip'])
+                ? 'VIP'
+                : null,
+            },
+            {
+              guestType: get(data, ['guest', 'guestType', 'isGeneral'])
+                ? 'GENERAL'
+                : null,
+            },
+            {
+              guestCategory: get(data, [
+                'guest',
+                'guestCategory',
+                'isRepeatedGuest',
+              ])
+                ? 'REPEATGUEST'
+                : null,
+            },
+            {
+              guestCategory: get(data, ['guest', 'guestCategory', 'isNewGuest'])
+                ? 'NEWGUEST'
+                : null,
+            },
+          ];
+          this.globalFilterObj.feedback.queryValue = [
+            {
+              type: get(data, ['feedback', 'feedbackType']),
+            },
+            {
+              outlets: get(data, ['outlets']),
+            },
+          ];
+          this.globalFilter$.next(this.globalFilterObj);
+        }
       }
-    });
+    );
   }
 }
 

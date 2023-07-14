@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ActivatedRoute } from '@angular/router';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
+import { FormService } from '../../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -37,7 +38,7 @@ export class BookingInfoComponent implements OnInit {
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
     private activatedRoute: ActivatedRoute,
-    private manageReservationService: ManageReservationService
+    private formService: FormService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
   }
@@ -89,7 +90,7 @@ export class BookingInfoComponent implements OnInit {
       fromDateControl.valueChanges.subscribe((res) => {
         const maxToLimit = new Date(res);
         this.maxToDate.setDate(maxToLimit.getDate() + 365);
-        this.manageReservationService.reservationDate.next(res);
+        this.formService.reservationDate.next(res);
       });
       toDateControl.valueChanges.subscribe((res) => {
         const maxLimit = new Date(res);
@@ -106,7 +107,7 @@ export class BookingInfoComponent implements OnInit {
         const maxLimit = new Date(res);
         toDateControl.setValue(moment(maxLimit).unix() * 1000);
         this.maxToDate = moment(maxLimit).add(24, 'hours').toDate();
-        this.manageReservationService.reservationDate.next(res);
+        this.formService.reservationDate.next(res);
       });
     } 
     
@@ -114,7 +115,7 @@ export class BookingInfoComponent implements OnInit {
     else {
       dateAndTimeControl.setValue(startTime);
       dateAndTimeControl.valueChanges.subscribe((res) => {
-        this.manageReservationService.reservationDate.next(res);
+        this.formService.reservationDate.next(res);
       });
     }
   }

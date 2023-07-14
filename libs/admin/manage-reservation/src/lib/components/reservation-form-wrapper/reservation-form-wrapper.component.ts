@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ManageReservationService } from '../../services/manage-reservation.service';
-import { EntityTabGroup } from '../../constants/reservation-table';
+import { EntitySubType } from '@hospitality-bot/admin/shared';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-reservation-form-wrapper',
@@ -8,11 +9,11 @@ import { EntityTabGroup } from '../../constants/reservation-table';
   styleUrls: ['./reservation-form-wrapper.component.scss'],
 })
 export class ReservationFormWrapperComponent implements OnInit {
-  selectedOutlet: EntityTabGroup;
-  constructor(private manageReservationService: ManageReservationService) {}
+  selectedOutlet: EntitySubType;
+  constructor(private formService: FormService) {}
 
   ngOnInit(): void {
-    this.manageReservationService
+    this.formService
       .getSelectedOutlet()
       .subscribe((value) => (this.selectedOutlet = value));
   }

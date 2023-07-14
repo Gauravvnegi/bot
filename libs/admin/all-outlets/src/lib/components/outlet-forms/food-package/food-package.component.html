@@ -6,13 +6,13 @@
         formControlName="foodPackageIds"
         description="Do not forget to add this cost in addition to the room cost"
         [itemList]=""
+        (onEmptyViewAction)="onCreateAndContinue('food-package')"
         [noRecordsAction]="noRecordActionForFood"
       >
         <hospitality-bot-button
           label="+ Add Packages"
           variant="outlined"
-          [routerLink]="[routerLink.foodPackage.route]"
-          queryParamsHandling="preserve"
+          (onClick)="onCreateAndContinue('food-package')"
         ></hospitality-bot-button>
       </hospitality-bot-custom-select>
     </div>

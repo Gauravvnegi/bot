@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavRouteOptions, Option } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
@@ -8,13 +8,15 @@ import { errorMessages } from '../../constants/form';
 import { outletBusinessRoutes } from '../../constants/routes';
 import { OutletService } from '../../services/outlet.service';
 import { FoodPackageForm } from '../../types/outlet';
+import { OutletBaseComponent } from '../outlet-base.components';
 
 @Component({
   selector: 'hospitality-bot-create-food-package',
   templateUrl: './create-food-package.component.html',
   styleUrls: ['./create-food-package.component.scss'],
 })
-export class CreateFoodPackageComponent implements OnInit {
+export class CreateFoodPackageComponent extends OutletBaseComponent
+  implements OnInit {
   readonly inputValidationProps = { errorMessages, type: 'number' };
 
   useForm: FormGroup;
@@ -40,17 +42,16 @@ export class CreateFoodPackageComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private snackbarService: SnackBarService,
-    private route: ActivatedRoute,
+    route: ActivatedRoute,
+    router: Router,
     private outletService: OutletService
   ) {
+    super(router, route);
     this.packageId = this.route.snapshot.paramMap.get('id');
-
-    const { navRoutes, title } = outletBusinessRoutes['foodPackage'];
-    this.pageTitle = title;
-    this.navRoutes = navRoutes;
   }
 
   ngOnInit(): void {
+    this.initComponent('foodPackage');
     this.initForm();
   }
 

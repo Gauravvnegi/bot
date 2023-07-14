@@ -143,7 +143,7 @@ export class HotelInfoFormComponent implements OnInit {
 
           this.hotelFormDataService.initHotelInfoFormData(
             { services: this.compServices },
-            true
+            false
           );
 
           const data = res.complimentaryPackages

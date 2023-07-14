@@ -140,9 +140,11 @@
 }
 
 .selected {
-  filter: brightness(40%);
+  filter: brightness(70%);
   background-color: #f5f5dc !important;
   border-radius: 4px;
+
+  opacity: 0.7;
 }
 
 .image-type {

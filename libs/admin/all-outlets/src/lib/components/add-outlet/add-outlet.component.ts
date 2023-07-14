@@ -7,22 +7,25 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   HotelDetailService,
   Option,
   Regex,
 } from '@hospitality-bot/admin/shared';
+import { ModalService } from '@hospitality-bot/shared/material';
+import { QrCodeModalComponent } from 'libs/admin/shared/src/lib/components/qr-code-modal/qr-code-modal.component';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
 import { cousins } from '../../constants/data';
 import { outletBusinessRoutes } from '../../constants/routes';
+import { MenuList } from '../../models/outlet.model';
 import { Services } from '../../models/services';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletService } from '../../services/outlet.service';
 import { Feature, OutletForm, OutletType } from '../../types/outlet';
 import { OutletBaseComponent } from '../outlet-base.components';
-import { MenuList } from '../../models/outlet.model';
 
 @Component({
   selector: 'hospitality-bot-add-outlet',
@@ -41,6 +44,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
 
   $subscription = new Subscription();
   loading = false;
+  isPaidLoading = false;
+  isCompLoading = false;
   siteId: string;
 
   @HostListener('window:beforeunload', ['$event'])
@@ -57,6 +62,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     private hotelDetailService: HotelDetailService,
     private OutletFormService: OutletFormService,
     private location: Location,
+    private modalService: ModalService,
+
     router: Router,
     route: ActivatedRoute
   ) {
@@ -121,41 +128,42 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   }
 
   getOutletData() {
-    //patch value if there is outlet id
-    if (this.OutletFormService.outletFormState && this.outletId) {
-      //saving list data into services
-      this.compServices = this.OutletFormService.OutletFormData.complimentaryAmenities;
-      this.paidServices = this.OutletFormService.OutletFormData.paidAmenities;
-      this.menuList = this.OutletFormService.OutletFormData.MenuList;
+    if (this.outletId) {
+      if (this.OutletFormService.outletFormState) {
+        const { type } = this.OutletFormService.OutletFormData;
+        this.initOptionConfig(type);
 
-      this.useForm.patchValue(this.OutletFormService.OutletFormData);
-      this.useForm.get('type').disable();
-    }
-
-    if (this.outletId && !this.OutletFormService.outletFormState) {
-      this.outletService.getOutletById(this.outletId).subscribe((res) => {
-        const { type, subType, ...rest } = res;
-
-        this.useForm.get('type').setValue(type);
-
+        this.useForm.patchValue(this.OutletFormService.OutletFormData);
         this.useForm.get('type').disable();
-        this.useForm.get('subType').setValue(subType.toUpperCase());
+      } else {
+        this.outletService.getOutletById(this.outletId).subscribe((res) => {
+          const { type, subType, ...rest } = res;
 
-        this.useForm.patchValue(rest);
+          this.initOptionConfig(type);
 
-        switch (type) {
-          case 'RESTAURANT':
-            this.getMenuList();
-            this.getServices('COMPLIMENTARY');
-            break;
-          case 'VENUE':
-            this.getServices('PAID');
-            this.getServices('COMPLIMENTARY');
-            break;
-          case 'SPA':
-            this.getServices('PAID');
-        }
-      });
+          this.useForm.get('type').setValue(type);
+
+          this.useForm.get('type').disable();
+          this.useForm.get('subType').setValue(subType.toUpperCase());
+
+          this.useForm.patchValue(rest);
+        });
+      }
+    }
+  }
+
+  initOptionConfig(type) {
+    switch (type) {
+      case 'RESTAURANT':
+        this.getMenuList();
+        this.getServices('COMPLIMENTARY');
+        break;
+      case 'VENUE':
+        this.getServices('PAID');
+        this.getServices('COMPLIMENTARY');
+        break;
+      case 'SPA':
+        this.getServices('PAID');
     }
   }
 
@@ -180,7 +188,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
 
         case 'VENUE':
           minimumOccupancy.setValidators([Validators.required]);
-          maximumOccupancy.clearAsyncValidators();
+          maximumOccupancy.setValidators([Validators.required]);
           break;
 
         case 'SPA':
@@ -203,14 +211,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    * @description submits the form
    */
   submitForm(features?: Feature): void {
-    if (
-      this.outletId &&
-      !(
-        features === 'brand' ||
-        features === 'hotel' ||
-        features === 'import-services'
-      )
-    ) {
+    if (this.outletId && !(features === 'brand' || features === 'hotel')) {
       //save data into service for later use
 
       this.OutletFormService.initOutletFormData(
@@ -281,51 +282,87 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
 
   getServices(serviceType: string) {
     this.loading = true;
-    let param = '?type=SERVICE&serviceType=COMPLIMENTARY&pagination=false';
-
-    if (serviceType === 'PAID') {
-      param = '?type=SERVICE&serviceType=PAID&pagination=false';
-    }
+    this.isCompLoading = true;
+    this.isPaidLoading = true;
     this.outletService
       .getServices(
         this.outletId,
 
         {
-          params: param,
+          params: `?type=SERVICE&serviceType=${serviceType}&pagination=false`,
         }
       )
-      .subscribe((res) => {
-        this.loading = false;
-        if (serviceType === 'PAID') {
-          this.paidServices = new Services().deserialize(
-            res.paidPackages
-          ).services;
+      .subscribe(
+        (res) => {
+          this.loading = false;
+          if (serviceType === 'PAID') {
+            this.paidServices = new Services().deserialize(
+              res.paidPackages
+            ).services;
 
-          //extracting id of paid services
-          const data = this.paidServices.map((item) => {
-            if (item.active) return item.id;
-          });
+            //extracting id of paid services
+            const data = this.paidServices.map((item) => {
+              if (item.active) return item.id;
+            });
 
-          this.compServices = this.compServices.slice(0, 5);
+            this.compServices = this.compServices.slice(0, 5);
 
-          const { paidServiceIds } = this.formControls;
-          paidServiceIds.patchValue(data);
+            const { paidServiceIds } = this.formControls;
+            paidServiceIds.patchValue(data);
+          }
+          if (serviceType === 'COMPLIMENTARY') {
+            this.compServices = new Services().deserialize(
+              res.complimentaryPackages
+            ).services;
+
+            const data = this.compServices.map((item) => {
+              if (item.active) return item.id;
+            });
+
+            this.compServices = this.compServices.slice(0, 5);
+
+            const { serviceIds } = this.formControls;
+            serviceIds.patchValue(data);
+          }
+        },
+        (err) => {},
+        () => {
+          this.loading = false;
+          if (serviceType === 'COMPLIMENTARY') {
+            this.isCompLoading = false;
+          }
+          if (serviceType === 'PAID') {
+            this.isPaidLoading = false;
+          }
         }
-        if (serviceType === 'COMPLIMENTARY') {
-          this.compServices = new Services().deserialize(
-            res.complimentaryPackages
-          ).services;
+      );
+  }
 
-          const data = this.compServices.map((item) => {
-            if (item.active) return item.id;
-          });
+  onPrintQrCode() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '46vw';
+    dialogConfig.disableClose = true;
+    const togglePopupCompRef = this.modalService.openDialog(
+      QrCodeModalComponent,
+      dialogConfig
+    );
 
-          this.compServices = this.compServices.slice(0, 5);
+    const { imageUrl } = this.formControls;
 
-          const { serviceIds } = this.formControls;
-          serviceIds.patchValue(data);
-        }
-      });
+    togglePopupCompRef.componentInstance.content = {
+      backgroundURl: imageUrl.value[0].url,
+
+      descriptionHeading: 'HOW TO ORDER',
+      descriptionsPoints: [
+        'Scan the QR code to access the menu',
+        'Browse the menu and place your order',
+        'Place your orders',
+      ],
+      route: 'https://Leela.botshot.ai',
+    };
+    togglePopupCompRef.componentInstance.onClose.subscribe(() => {
+      this.modalService.close();
+    });
   }
 
   /**

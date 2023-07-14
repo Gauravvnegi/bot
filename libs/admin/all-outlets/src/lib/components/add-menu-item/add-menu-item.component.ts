@@ -38,6 +38,8 @@ export class AddMenuItemComponent extends OutletBaseComponent
     { label: 'gram', value: 'GRAMS' },
     { label: 'piece', value: 'PIECE' },
     { label: 'litre', value: 'LITRE' },
+    { label: 'kilogram', value: 'KILOGRAMS' },
+    { label: 'mili litre', value: 'MILI_LITRE' },
   ];
   constructor(
     private fb: FormBuilder,

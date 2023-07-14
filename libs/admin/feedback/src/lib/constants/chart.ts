@@ -1,5 +1,4 @@
 import { getNoDataLabel } from '@hospitality-bot/admin/shared';
-import * as Chart from 'chart.js';
 
 export const chartConfig = {
   type: { bar: 'bar', line: 'line', doughnut: 'doughnut' },

@@ -210,6 +210,13 @@ export const analytics = {
         titleMarginBottom: 5,
         xPadding: 10,
         yPadding: 10,
+        callbacks: {
+          label: function (tooltipItem, data) {
+            const datasetLabel =
+              data.datasets[tooltipItem.datasetIndex].label || '';
+            return `${datasetLabel}: ${ValueFormatter(tooltipItem.yLabel, 2)}`;
+          },
+        },
       },
       responsive: true,
       cutoutPercentage: 75,
@@ -616,7 +623,6 @@ export const analytics = {
   },
 };
 
-
 export function getNoDataLabel(
   ttItem: Chart.ChartTooltipItem,
   data: Chart.ChartData
@@ -630,4 +636,3 @@ export function getNoDataLabel(
     return `${label}: ${value}`;
   }
 }
-

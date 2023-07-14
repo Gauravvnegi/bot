@@ -19,6 +19,7 @@ export class ButtonComponent {
   @Output() onClick = new EventEmitter<Event>();
   @Input() isLoading: boolean = false;
   @Input() icon: string;
+  @Input() piIcon: string = '';
 
   constructor(private router: Router) {}
 

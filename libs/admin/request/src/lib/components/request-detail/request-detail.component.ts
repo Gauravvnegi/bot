@@ -7,11 +7,13 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Option } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Subscription } from 'rxjs';
-import { request } from '../../constants/request';
+import { RequestStatus } from '../../constants/request';
 import { InhouseData } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
 import { CMSUpdateJobData } from '../../types/request.type';
@@ -24,7 +26,7 @@ import { CMSUpdateJobData } from '../../types/request.type';
 export class RequestDetailComponent implements OnInit, OnDestroy {
   data: InhouseData;
   status = false;
-  statusList = request.status;
+  statusList: Option[] = [];
   $subscription = new Subscription();
   entityId: string;
   @Output() guestInfo = new EventEmitter();
@@ -49,6 +51,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
   registerListeners() {
     this.listenForGlobalFilters();
     this.listenForSelectedRequest();
+    this.listenForStatusValue();
   }
 
   /**
@@ -65,6 +68,22 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
           this.data = new InhouseData();
           this.status = false;
         }
+      })
+    );
+  }
+
+  listenForStatusValue() {
+    this.$subscription.add(
+      this._requestService.requestStatus.subscribe((response) => {
+        if (!!this.statusList.length) return;
+
+        response.forEach((item) => {
+          if (item !== RequestStatus.TIMEOUT)
+            this.statusList.push({
+              label: convertToTitleCase(item),
+              value: item,
+            });
+        });
       })
     );
   }
@@ -107,12 +126,10 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
    */
 
   handleStatusChange(event) {
-    const isTodo = event.value === 'Todo';
     const requestData: CMSUpdateJobData = {
       jobID: this.data.jobID,
       roomNo: this.data.rooms[0].roomNumber,
       lastName: this.data.guestDetails.primaryGuest.lastName,
-      ...(isTodo ? { action: event.value } : {}),
     };
 
     const config = {
@@ -120,30 +137,31 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
         {
           cmsUserType: 'Bot',
           entityId: this.entityId,
+          actionType: event.value,
         },
       ]),
     };
     this.$subscription.add(
-      this._requestService.closeRequest(config, requestData).subscribe(
-        (response) => {
-          this.snackbarService
-            .openSnackBarWithTranslate(
-              {
-                translateKey: 'messages.SUCCESS.JOB_CLOSED',
-                priorityMessage: `Job: ${this.data.jobID} ${
-                  isTodo ? 'in Todo' : 'closed'
-                }.`,
-              },
+      this._requestService
+        .updateJobRequestStatus(config, requestData)
+        .subscribe(
+          (response) => {
+            this.snackbarService.openSnackBarAsText(
+              `Job: ${
+                this.data.jobNo
+              } status updated successfully to ${convertToTitleCase(
+                event.value
+              )}.`,
               '',
               { panelClass: 'success' }
-            )
-            .subscribe();
-          this._requestService.refreshData.next(true);
-        },
-        ({ error }) => {
-          this.requestFG.patchValue({ status: this.data.action });
-        }
-      )
+            );
+
+            this._requestService.refreshData.next(true);
+          },
+          ({ error }) => {
+            this.requestFG.patchValue({ status: this.data.action });
+          }
+        )
     );
   }
 

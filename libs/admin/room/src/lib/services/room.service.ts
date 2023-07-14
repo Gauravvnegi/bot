@@ -204,7 +204,7 @@ export class RoomService extends ApiService {
   }
 
   updateHotel(entityId: string, data): Observable<any> {
-    return this.patch(`/api/v2/entity/${entityId}?type=HOTEL`, data);
+    return this.patch(`/api/v1/entity/${entityId}?type=HOTEL`, data);
   }
 
   getFeatures(): Observable<any> {

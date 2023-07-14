@@ -1,17 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { EntityState } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Observable, Subscription } from 'rxjs';
-import { request } from '../../constants/request';
+import { request, RequestStatus } from '../../constants/request';
 import {
   InhouseData,
   InhouseTable,
 } from '../../data-models/inhouse-list.model';
 import { RequestService } from '../../services/request.service';
+import { AllJobRequestResponse } from '../../types/response.types';
 
 @Component({
   selector: 'hospitality-bot-request-list',
@@ -32,6 +35,8 @@ export class RequestListComponent implements OnInit, OnDestroy {
   loading = false;
   paginationDisabled = false;
 
+  isSearchEnabled = false;
+
   globalQueries = [];
   listData;
   offset = 0;
@@ -39,8 +44,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   totalData;
   selectedRequest: InhouseData;
   parentFG: FormGroup;
-  tabFilterItems = request.tabFilter;
-
+  tabFilterItems = request.defaultTabFilter;
   tabFilterIdx = 0;
   entityId: string;
   constructor(
@@ -63,7 +67,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
    */
   initFG(): void {
     this.parentFG = this.fb.group({
-      search: ['', Validators.minLength(3)],
+      search: [''],
     });
   }
 
@@ -92,7 +96,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             ...this.filterData,
             order: 'DESC',
             entityType: this.entityType,
-            actionType: this.tabFilterItems[this.tabFilterIdx].value,
+            actionType: this.tabFilterItems[this.tabFilterIdx]?.value,
             offset: 0,
             limit:
               this.listData && this.listData.length > 10
@@ -151,11 +155,40 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe((response) => {
         this.listData = new InhouseTable().deserialize(response).records;
-        this.updateTabFilterCount(response.entityStateCounts, response.total);
+        this.initTabFilter(response.entityStateCounts, response.total);
         this.totalData = response.total;
         this.loading = false;
       })
     );
+  }
+
+  initTabFilter(
+    entityStateCounts: EntityState<RequestStatus>,
+    totalCount: number
+  ) {
+    if (entityStateCounts) {
+      this._requestService.requestStatus.next(
+        Object.keys(entityStateCounts) as RequestStatus[]
+      );
+
+      this.tabFilterItems = Object.entries({
+        ALL: totalCount,
+        ...entityStateCounts,
+      }).map(([key, value]) => {
+        const stateCount = {
+          label: convertToTitleCase(key),
+          value: key,
+          total: value,
+        };
+        return stateCount;
+      });
+    } else {
+      this.tabFilterItems = request.defaultTabFilter;
+    }
+  }
+
+  getTitleCaseValue(value: string) {
+    return convertToTitleCase(value);
   }
 
   /**
@@ -163,7 +196,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
    * @param queries The queries for data fetching.
    * @returns The observable with stream of data.
    */
-  fetchDataFrom(queries): Observable<any> {
+  fetchDataFrom(queries): Observable<AllJobRequestResponse> {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(queries),
     };
@@ -199,25 +232,25 @@ export class RequestListComponent implements OnInit, OnDestroy {
             ).values(),
           ];
         this.totalData = response.total;
-        this.updateTabFilterCount(response.entityStateCounts, response.total);
+        this.initTabFilter(response.entityStateCounts, response.total);
         this.loading = false;
       })
     );
   }
 
-  /**
-   * @function updateTabFilterCount To update tab filter count.
-   * @param countObj The object tab data count.
-   */
-  updateTabFilterCount(countObj, total): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.value === 'ALL'
-          ? (tab.total = total)
-          : (tab.total = countObj[tab.value]);
-      });
-    }
-  }
+  // /**
+  //  * @function updateTabFilterCount To update tab filter count.
+  //  * @param countObj The object tab data count.
+  //  */
+  // updateTabFilterCount(countObj, total): void {
+  //   if (countObj) {
+  //     this.tabFilterItems.forEach((tab) => {
+  //       tab.value === 'ALL'
+  //         ? (tab.total = total)
+  //         : (tab.total = countObj[tab.value]);
+  //     });
+  //   }
+  // }
 
   /**
    * @function onSelectedTabFilterChange To handle tab selection.
@@ -266,8 +299,13 @@ export class RequestListComponent implements OnInit, OnDestroy {
   clearSearch(): void {
     this.parentFG.patchValue({ search: '' }, { emitEvent: false });
     this.enableSearchField = false;
-    this.loading = true;
-    this.loadData(0, 10);
+
+    if(this.isSearchEnabled){
+      this.loading = true;
+      this.loadData(0, 10);
+      this.isSearchEnabled = false;
+    }
+  
   }
 
   /**
@@ -275,13 +313,17 @@ export class RequestListComponent implements OnInit, OnDestroy {
    * @param event The search event data.
    */
   getSearchValue(event: { status: boolean; response? }): void {
-    if (event.status)
+    if (event.status) {
       this.listData = new InhouseTable().deserialize({
         records: event.response,
       }).records;
-    else {
-      this.loading = true;
-      this.loadData(0, 10);
+      this.isSearchEnabled = true;
+    } else {
+      if (this.isSearchEnabled) {
+        this.isSearchEnabled = false;
+        this.loading = true;
+        this.loadData(0, 10);
+      }
     }
   }
 

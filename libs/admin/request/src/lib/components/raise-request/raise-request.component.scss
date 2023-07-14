@@ -4,21 +4,23 @@
   max-height: 80vh;
 }
 .header {
-  height: 108px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  background: $primaryGradient-bg;
+  padding: 14px 17px 12.7px 24px;
+  background-color: #f4f5f7;
   position: sticky;
   top: 0;
   z-index: 999;
   .close {
-    width: 13.7px;
-    height: 13.7px;
-    margin: 15px;
-    color: $white;
-    font-size: 20px;
+    color: $primary-black;
     cursor: pointer;
   }
+}
+
+.raise-request-icon {
+  filter: brightness(0) invert(0) opacity(0.7);
+  padding-right: 8px;
 }
 
 .button:active {
@@ -68,25 +70,18 @@
   width: 100% !important;
 }
 .raise-request-btn {
-  margin: 40px 30px;
-  font-size: 20px;
-  font-weight: $bold;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: normal;
-  letter-spacing: 1.2px;
-  text-align: left;
-  color: $white;
+  color: $primary-black;
 }
 .request-popup-btnwrap {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 25px;
-  position: sticky;
-  bottom: 0;
-  padding: 15px 30px;
-  background: $white;
-  gap: 15px;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 0 5px 1px hsla(0, 0%, 50.2%, 0.49019607843137253);
+  justify-content: center;
+  padding: 20px 0;
+  width: 100%;
+  gap: 30px;
+
   &-cancel {
     width: 113px;
     height: 35px;
@@ -110,11 +105,9 @@
   }
 }
 .body {
-  margin: 30px 0px;
-  max-height: calc(100% - 108px);
-  overflow-y: scroll;
-  padding: 0 30px;
-  height: 49vh;
+  // margin: 30px 0px;
+
+  padding: 30px 30px 15px;
 }
 
 .disabled-btn {

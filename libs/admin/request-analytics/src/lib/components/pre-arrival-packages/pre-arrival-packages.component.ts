@@ -92,6 +92,7 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
         ];
         this.entityId = this.globalFilterService.entityId;
         if (!this.tabFilterItems.length) this.getPackageList();
+        // this.resetHiddenState;
         this.getInhouseSentimentsData();
       })
     );
@@ -169,6 +170,17 @@ export class PreArrivalPackagesComponent implements OnInit, OnDestroy {
     });
     ci.update();
   };
+
+  // resetHiddenState = () => {
+  //   const ci = this.baseChart.chart;
+
+  //   ci.data.datasets.forEach((e, i) => {
+  //     const meta = ci.getDatasetMeta(i);
+  //     meta.hidden = false;
+  //   });
+
+  //   ci.update();
+  // };
 
   setChartType(option, event): void {
     event.stopPropagation();

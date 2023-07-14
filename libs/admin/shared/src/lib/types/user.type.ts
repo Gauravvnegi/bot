@@ -47,6 +47,7 @@ export type Entity = {
   privacyPolicyUrl: string;
   termsUrl?: string;
   favIcon: string;
+  type: string;
 };
 
 export type Brand = {

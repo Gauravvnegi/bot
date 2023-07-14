@@ -1,4 +1,5 @@
 import { ValueFormatter } from '../utils/valueFormatter';
+import * as Chart from 'chart.js';
 
 export const analytics = {
   chart: {
@@ -210,6 +211,9 @@ export const analytics = {
         titleMarginBottom: 5,
         xPadding: 10,
         yPadding: 10,
+        callbacks: {
+          label: getNoDataLabel,
+        },
       },
       responsive: true,
       cutoutPercentage: 75,
@@ -616,7 +620,6 @@ export const analytics = {
   },
 };
 
-
 export function getNoDataLabel(
   ttItem: Chart.ChartTooltipItem,
   data: Chart.ChartData
@@ -630,4 +633,3 @@ export function getNoDataLabel(
     return `${label}: ${value}`;
   }
 }
-

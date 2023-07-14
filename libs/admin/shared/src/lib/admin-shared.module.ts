@@ -107,6 +107,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { TabHeaderComponent } from './components/tab-header/tab-header.component';
 import { ImportServiceContainerComponent } from './components/import-service-container/import-service-container.component';
 import { BackdropDirective } from './directives/backdrop.directive';
+import { CountdownDirective } from './directives/countdown.directive';
 import { GlobalSearchComponent } from './components/search/global-search.component';
 @NgModule({
   imports: [
@@ -219,6 +220,7 @@ import { GlobalSearchComponent } from './components/search/global-search.compone
     MenuButtonComponent,
     TabHeaderComponent,
     BackdropDirective,
+    CountdownDirective,
     ImportServiceContainerComponent,
     InputNumberComponent,
     GlobalSearchComponent,
@@ -323,6 +325,8 @@ import { GlobalSearchComponent } from './components/search/global-search.compone
     MenuButtonComponent,
     ToggleButtonModule,
     TabHeaderComponent,
+    BackdropDirective,
+    CountdownDirective,
     ImportServiceContainerComponent,
     InputNumberComponent,
     GlobalSearchComponent,

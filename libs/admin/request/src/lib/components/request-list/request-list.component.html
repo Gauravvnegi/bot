@@ -27,7 +27,7 @@
     </div>
   </div>
   <div class="right-side-subheader">
-    <div class="right-side-header-nav">
+    <div class="right-side-header-nav" *ngIf="!this.isSearchEnabled">
       <hospitality-bot-tab-group
         [listItems]="tabFilterItems"
         [selectedIndex]="tabFilterIdx"
@@ -44,6 +44,7 @@
     (scrolled)="loadMore()"
     [toggleScrollListener]="paginationDisabled"
     *ngIf="!loading; else loader"
+    [ngStyle]="{ height: this.isSearchEnabled ? 'calc(100% - 69px)' : 'calc(100% - 129px)' }"
   >
     <ng-container *ngIf="listData?.length; else noList">
       <ng-container *ngFor="let item of listData">
@@ -65,9 +66,11 @@
               time: item.requestTime | date: 'EEEE',
               taskStatus: {
                 action: item.action,
+                name: getTitleCaseValue(item.action),
                 sla: item.getSLA(),
                 jd: item.jobDuration,
-                slaValue: item.getSLAvalue()
+                slaValue: item.getSLAvalue(),
+                timeLeft: item.timeLeft
               },
               priority: item.priority,
               subTitle: item.itemName,

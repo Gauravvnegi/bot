@@ -14,6 +14,12 @@
   isSticky="true"
 >
   <div class="request-wrapper-header-btnwrap">
+    <hospitality-bot-button
+      label="Sync Now"
+      variant="text"
+      piIcon="pi pi-sync"
+      (onClick)="syncRequest()"
+    ></hospitality-bot-button>
     <div
       class="guestInfoEditContainer"
       *ngIf="buttonConfig[selectedIndex].button"

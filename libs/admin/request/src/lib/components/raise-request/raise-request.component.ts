@@ -33,9 +33,8 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
   entityId: string;
   reservation = {};
   $subscription = new Subscription();
-  cmsServices = [];
+  items = [];
   priorityList = request.priority;
-  filteredCMSServiceOptions;
   isRaisingRequest = false;
   requestConfig = request;
   constructor(
@@ -69,22 +68,6 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
     );
   }
 
-  listenForItemNameChange() {
-    this.filteredCMSServiceOptions = this.requestFG
-      .get('itemName')!
-      .valueChanges.pipe(
-        startWith(''),
-        map((value) => this._filter(value))
-      );
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.cmsServices.filter((option) =>
-      option.itemName.toLowerCase().includes(filterValue)
-    );
-  }
-
   /**
    * @function initFG To initialize FormGroup.
    */
@@ -93,15 +76,21 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       roomNo: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      itemName: ['', Validators.required],
+      itemName: [''],
       itemCode: ['', Validators.required],
       priority: ['', Validators.required],
       jobDuration: [''],
       remarks: ['', [Validators.maxLength(200)]],
       quantity: [1],
     });
+
     this.searchFG = this.fb.group({
       search: [''],
+    });
+
+    this.requestFG.get('itemCode').valueChanges.subscribe((value) => {
+      const service = this.items.find((d) => d.value === value);
+      this.requestFG.get('itemName').setValue(service.label);
     });
   }
 
@@ -118,24 +107,15 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       this._requestService
         .getCMSServices(this.entityId, config)
         .subscribe((response) => {
-          this.cmsServices = response.cms_services.sort((a, b) =>
-            a.itemName.trim().localeCompare(b.itemName.trim())
-          );
-          this.listenForItemNameChange();
+          this.items = response.cms_services
+            .sort((a, b) => a.itemName.trim().localeCompare(b.itemName.trim()))
+            .map((item) => ({
+              label: item.itemName,
+              value: item.itemCode,
+              duration: item.duration,
+            }));
         })
     );
-  }
-
-  /**
-   * @function handleItemNameChange To handle item name value change.
-   * @param event The MatSelectionChange event.
-   */
-  handleItemNameChange(event): void {
-    const service = this.cmsServices.filter(
-      (d) => d.itemName === event.option.value
-    )[0];
-    this.requestFG.get('itemCode').setValue(service.itemCode);
-    this.requestFG.get('jobDuration').setValue(parseInt(service.duration));
   }
 
   /**
@@ -164,6 +144,7 @@ export class RaiseRequestComponent implements OnInit, OnDestroy {
       sender: request.kiosk,
       propertyID: '1',
     };
+
     this.isRaisingRequest = true;
     this.$subscription.add(
       this._requestService.createRequest(this.entityId, data).subscribe(

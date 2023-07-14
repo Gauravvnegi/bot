@@ -4,15 +4,30 @@ import { Directive, Input, OnInit, OnDestroy, ElementRef } from '@angular/core';
   selector: '[appCountdown]',
 })
 export class CountdownDirective implements OnInit, OnDestroy {
-  @Input('appCountdown') set countdownValue(value:number){
+  @Input() set config(input: { value: number; type: DataType }) {
+    this.countdownValue = input.value;
+    if (input.type) {
+      const { time, abb } = data[input.type];
+      this.interval = time;
+      this.abbText = abb;
+    }
+    this.elementRef.nativeElement.textContent = this.countdownValue + this.abbText;
 
+    if (this.countdownValue) {
+      this.startCountdown();
+    } 
   }
+
+  intervalTime = data.MIN.time;
+  abbText = data.MIN.abb;
+
+  countdownValue: number = 0;
   interval: any;
 
   constructor(private elementRef: ElementRef) {}
 
   ngOnInit(): void {
-    this.startCountdown();
+    // this.startCountdown();
   }
 
   ngOnDestroy(): void {
@@ -26,7 +41,7 @@ export class CountdownDirective implements OnInit, OnDestroy {
         this.stopCountdown();
       }
       this.updateCountdownValue();
-    }, 1000);
+    }, this.intervalTime);
   }
 
   stopCountdown(): void {
@@ -35,6 +50,26 @@ export class CountdownDirective implements OnInit, OnDestroy {
   }
 
   updateCountdownValue(): void {
-    this.elementRef.nativeElement.textContent = this.countdownValue;
+    this.elementRef.nativeElement.textContent =
+      this.countdownValue + this.abbText;
   }
 }
+
+type DataType = 'SEC' | 'MIN';
+
+const data: Record<
+  DataType,
+  {
+    time: number;
+    abb: 's' | 'm';
+  }
+> = {
+  SEC: {
+    time: 1000,
+    abb: 's',
+  },
+  MIN: {
+    time: 1000 * 60,
+    abb: 'm',
+  },
+};

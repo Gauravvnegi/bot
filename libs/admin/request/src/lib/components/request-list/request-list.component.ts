@@ -299,8 +299,13 @@ export class RequestListComponent implements OnInit, OnDestroy {
   clearSearch(): void {
     this.parentFG.patchValue({ search: '' }, { emitEvent: false });
     this.enableSearchField = false;
-    this.loading = true;
-    this.loadData(0, 10);
+
+    if(this.isSearchEnabled){
+      this.loading = true;
+      this.loadData(0, 10);
+      this.isSearchEnabled = false;
+    }
+  
   }
 
   /**

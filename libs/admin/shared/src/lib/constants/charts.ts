@@ -1,4 +1,5 @@
 import { ValueFormatter } from '../utils/valueFormatter';
+import * as Chart from 'chart.js';
 
 export const analytics = {
   chart: {

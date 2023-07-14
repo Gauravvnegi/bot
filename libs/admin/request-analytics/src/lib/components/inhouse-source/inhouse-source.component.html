@@ -9,6 +9,12 @@
       <div class="graph-container">
         <div class="graph">
           <canvas
+            *skeleton="
+              graphData == undefined;
+              height: '33px';
+              width: '115px';
+              borderRadius: '5px'
+            "
             baseChart
             [data]="chart.data"
             [labels]="chart.labels"

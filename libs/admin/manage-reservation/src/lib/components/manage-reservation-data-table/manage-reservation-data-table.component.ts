@@ -60,9 +60,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   scrollTargetPoint: number = 150;
 
   entityId!: string;
+
   selectedTab: ReservationTableValue = ReservationTableValue.ALL;
-  selectedEntity: EntitySubType = EntitySubType.ROOM_TYPE;
-  previousEntity: EntitySubType = EntitySubType.ROOM_TYPE;
+  // selectedEntity: EntityType = EntityType.HOTEL;
+  // previousEntity: EntityType = EntityType.HOTEL;
+  selectedOutlet: EntitySubType = EntitySubType.ROOM_TYPE;
+  previousOutlet: EntitySubType = EntitySubType.ROOM_TYPE;
+
   reservationLists!: ReservationList;
   $subscription = new Subscription();
   globalQueries = [];
@@ -141,8 +145,8 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   listenForOutletChange(value) {
-    this.selectedEntity = value;
-    if (this.selectedEntity !== this.previousEntity) {
+    this.selectedOutlet = value;
+    if (this.selectedOutlet !== this.previousOutlet) {
       this.resetTableValues();
       this.loading = true;
       this.isOutletChanged = true;
@@ -150,12 +154,12 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       this.isOutletChanged = false;
     }
 
-    this.previousEntity = this.selectedEntity;
-    this.initDetails(this.selectedEntity);
+    this.previousOutlet = this.selectedOutlet;
+    this.initDetails(this.selectedOutlet);
   }
 
-  initDetails(selectedEntity: EntitySubType) {
-    if (selectedEntity === EntitySubType.ROOM_TYPE) {
+  initDetails(selectedOutlet: EntitySubType) {
+    if (selectedOutlet === EntitySubType.ROOM_TYPE) {
       this.selectedTab = ReservationTableValue.ALL;
       this.cols = hotelCols;
       this.menuOptions = HotelMenuOptions;
@@ -166,11 +170,74 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       this.isTabFilters = false;
       this.isAllTabFilterRequired = false;
       this.menuOptions = MenuOptions;
-      if (selectedEntity === EntitySubType.RESTAURANT) {
+      if (selectedOutlet === EntitySubType.RESTAURANT) {
         this.menuOptions = RestaurantMenuOptions;
       }
     }
   }
+
+  // /**
+  //  * @function initTableValue initializing data into value of table
+  //  */
+  // initTableValue() {
+  //   this.loading = true;
+  //   this.formService
+  //     .getSelectedOutlet()
+  //     .pipe(
+  //       switchMap((selectedOutlet) => {
+  //         // Store the selected outlet
+  //         this.selectedOutlet = selectedOutlet;
+  //         this.listenForOutletChange(selectedOutlet);
+  //         if (this.selectedOutlet === EntitySubType.ROOM_TYPE) {
+  //           // API call for hotel data
+  //           return this.manageReservationService.getReservationItems<
+  //             ReservationListResponse
+  //           >(this.getQueryConfig());
+  //         } else {
+  //           // API call for outlet data
+  //           return this.manageReservationService.getReservationList(
+  //             this.entityId,
+  //             this.getOutletConfig()
+  //           );
+  //         }
+  //       }),
+  //       takeUntil(this.destroy$) // Unsubscribe when the destroy$ subject emits
+  //     )
+  //     .subscribe(
+  //       (res) => {
+  //         // Process the response and update the data
+  //         if (this.selectedOutlet === EntitySubType.ROOM_TYPE) {
+  //           this.reservationLists = new ReservationList().deserialize(res);
+  //           this.values = this.reservationLists.reservationData.map((item) => {
+  //             return {
+  //               ...item,
+  //               statusValues: this.getStatusValues(item.reservationType),
+  //             };
+  //           });
+  //           this.initFilters(
+  //             this.reservationLists.entityTypeCounts,
+  //             this.reservationLists.entityStateCounts,
+  //             this.reservationLists.total,
+  //             this.reservationStatusDetails
+  //           );
+  //           this.loading = false;
+  //         } else {
+  //           this.values = res.records;
+  //           this.initFilters(
+  //             res.entityTypeCounts,
+  //             res.entityStateCounts,
+  //             res.total
+  //           );
+  //           this.loading = false;
+  //         }
+  //       },
+  //       (error) => {
+  //         // Handle error if needed
+  //         this.values = [];
+  //         this.loading = false;
+  //       }
+  //     );
+  // }
 
   /**
    * @function initTableValue initializing data into value of table
@@ -180,11 +247,11 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.formService
       .getSelectedOutlet()
       .pipe(
-        switchMap((selectedEntity) => {
+        switchMap((selectedOutlet) => {
           // Store the selected outlet
-          this.selectedEntity = selectedEntity;
-          this.listenForOutletChange(selectedEntity);
-          if (this.selectedEntity === EntitySubType.ROOM_TYPE) {
+          this.selectedOutlet = selectedOutlet;
+          this.listenForOutletChange(selectedOutlet);
+          if (this.selectedOutlet === EntitySubType.ROOM_TYPE) {
             // API call for hotel data
             return this.manageReservationService.getReservationItems<
               ReservationListResponse
@@ -202,7 +269,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
       .subscribe(
         (res) => {
           // Process the response and update the data
-          if (this.selectedEntity === EntitySubType.ROOM_TYPE) {
+          if (this.selectedOutlet === EntitySubType.ROOM_TYPE) {
             this.reservationLists = new ReservationList().deserialize(res);
             this.values = this.reservationLists.reservationData.map((item) => {
               return {
@@ -369,7 +436,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         ...this.globalQueries,
         ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
         {
-          type: ReservationSearchItem.ROOM_TYPE,
+          type:
+            this.selectedOutlet === EntitySubType.ROOM_TYPE
+              ? EntitySubType.ROOM_TYPE
+              : EntityType.OUTLET,
+          ...(this.selectedOutlet !== EntitySubType.ROOM_TYPE && {
+            outletType: this.selectedOutlet,
+          }),
           entityType: this.selectedTab,
           entityId: this.entityId,
           offset: this.first,

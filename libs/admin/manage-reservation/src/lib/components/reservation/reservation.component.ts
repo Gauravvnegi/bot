@@ -6,6 +6,7 @@ import {
   BaseDatatableComponent,
   EntityConfig,
   EntitySubType,
+  EntityType,
   HotelDetailService,
   TableService,
 } from '@hospitality-bot/admin/shared';
@@ -23,7 +24,8 @@ export class ReservationComponent extends BaseDatatableComponent
   entityId: string = '';
   tabFilterIdx = 0;
   tabFilterItems = [];
-  selectedEntity: EntitySubType;
+  selectedEntity: EntityType;
+  selectedOutlet: EntitySubType;
   globalFeedbackFilterType = '';
   outlets: EntityConfig[];
   outletIds: string[];
@@ -65,7 +67,6 @@ export class ReservationComponent extends BaseDatatableComponent
           this.globalFeedbackFilterType === Feedback.BOTH
         ) {
           this.tabFilterIdx = 0;
-          console.log(data);
           this.getOutletsSelected(
             [...data['feedback'].queryValue],
             data['filter'].value

@@ -9,9 +9,15 @@ import { ReservationTableValue } from '../constants/reservation-table';
 })
 export class FormService {
   outletIds = [];
-  public selectedEntity = new BehaviorSubject<EntitySubType>(null);
-  getSelectedOutlet(): Observable<EntitySubType> {
+  public selectedEntity = new BehaviorSubject<EntityType>(EntityType.HOTEL);
+  getSelectedEntity(): Observable<EntityType> {
     return this.selectedEntity.asObservable().pipe(distinctUntilChanged());
+  }
+  public selectedOutlet = new BehaviorSubject<EntitySubType>(
+    EntitySubType.ROOM_TYPE
+  );
+  getSelectedOutlet(): Observable<EntitySubType> {
+    return this.selectedOutlet.asObservable().pipe(distinctUntilChanged());
   }
 
   type: string;

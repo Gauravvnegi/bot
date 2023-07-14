@@ -188,7 +188,7 @@ export const outletCols: Cols[] = [
     isSearchDisabled: true,
   },
 ];
-export const title = 'Booking';
+export const title = 'Reservation';
 
 export const reservationChips: Record<
   'DRAFT' | 'CANCELED' | 'CONFIRMED' | 'OTA',

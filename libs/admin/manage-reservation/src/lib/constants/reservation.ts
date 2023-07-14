@@ -104,7 +104,15 @@ export const spaFields: IteratorField[] = [
     type: 'input',
     required: true,
     placeholder: 'Search by name',
-    width: '60%',
+    width: '40%',
+  },
+  {
+    label: 'Quantity',
+    name: 'serviceName',
+    type: 'input',
+    required: true,
+    placeholder: 'Enter',
+    width: '30%',
   },
   {
     label: 'Price',
@@ -126,12 +134,12 @@ export const venueFields: IteratorField[] = [
     width: '30%',
   },
   {
-    label: 'Duration',
-    name: 'duration',
+    label: 'Quantity',
+    name: 'serviceName',
     type: 'input',
     required: true,
     placeholder: 'Enter',
-    width: '20%',
+    width: '30%',
   },
   {
     label: 'Price',
@@ -139,14 +147,6 @@ export const venueFields: IteratorField[] = [
     type: 'input',
     required: false,
     placeholder: 'Enter',
-    width: '20%',
-  },
-  {
-    label: 'Total Price',
-    name: 'totalPrice',
-    type: 'input',
-    required: false,
-    placeholder: 'Enter',
-    width: '20%',
+    width: '30%',
   },
 ];

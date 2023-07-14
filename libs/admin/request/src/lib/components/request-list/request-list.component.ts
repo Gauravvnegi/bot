@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { EntityState } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import { FirebaseMessagingService } from 'apps/admin/src/app/core/theme/src/lib/services/messaging.service';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SnackBarService } from 'libs/shared/material/src';
 import { Observable, Subscription } from 'rxjs';
-import { request } from '../../constants/request';
+import { request, RequestStatus } from '../../constants/request';
 import {
   InhouseData,
   InhouseTable,
@@ -39,8 +41,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
   totalData;
   selectedRequest: InhouseData;
   parentFG: FormGroup;
-  tabFilterItems = request.tabFilter;
-
+  tabFilterItems = request.defaultTabFilter;
   tabFilterIdx = 0;
   entityId: string;
   constructor(
@@ -92,7 +93,7 @@ export class RequestListComponent implements OnInit, OnDestroy {
             ...this.filterData,
             order: 'DESC',
             entityType: this.entityType,
-            actionType: this.tabFilterItems[this.tabFilterIdx].value,
+            actionType: this.tabFilterItems[this.tabFilterIdx]?.value,
             offset: 0,
             limit:
               this.listData && this.listData.length > 10
@@ -151,11 +152,36 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe((response) => {
         this.listData = new InhouseTable().deserialize(response).records;
-        this.updateTabFilterCount(response.entityStateCounts, response.total);
+        this.initTabFilter(response.entityStateCounts, response.total);
         this.totalData = response.total;
         this.loading = false;
       })
     );
+  }
+
+  initTabFilter(
+    entityStateCounts: EntityState<RequestStatus>,
+    totalCount: number
+  ) {
+    if (entityStateCounts) {
+      this._requestService.requestStatus.next(
+        Object.keys(entityStateCounts) as RequestStatus[]
+      );
+
+      this.tabFilterItems = Object.entries({
+        ALL: totalCount,
+        ...entityStateCounts,
+      }).map(([key, value]) => {
+        const stateCount = {
+          label: convertToTitleCase(key),
+          value: key,
+          total: value,
+        };
+        return stateCount;
+      });
+    } else {
+      this.tabFilterItems = request.defaultTabFilter;
+    }
   }
 
   /**
@@ -199,25 +225,25 @@ export class RequestListComponent implements OnInit, OnDestroy {
             ).values(),
           ];
         this.totalData = response.total;
-        this.updateTabFilterCount(response.entityStateCounts, response.total);
+        this.initTabFilter(response.entityStateCounts, response.total);
         this.loading = false;
       })
     );
   }
 
-  /**
-   * @function updateTabFilterCount To update tab filter count.
-   * @param countObj The object tab data count.
-   */
-  updateTabFilterCount(countObj, total): void {
-    if (countObj) {
-      this.tabFilterItems.forEach((tab) => {
-        tab.value === 'ALL'
-          ? (tab.total = total)
-          : (tab.total = countObj[tab.value]);
-      });
-    }
-  }
+  // /**
+  //  * @function updateTabFilterCount To update tab filter count.
+  //  * @param countObj The object tab data count.
+  //  */
+  // updateTabFilterCount(countObj, total): void {
+  //   if (countObj) {
+  //     this.tabFilterItems.forEach((tab) => {
+  //       tab.value === 'ALL'
+  //         ? (tab.total = total)
+  //         : (tab.total = countObj[tab.value]);
+  //     });
+  //   }
+  // }
 
   /**
    * @function onSelectedTabFilterChange To handle tab selection.

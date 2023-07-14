@@ -34,6 +34,7 @@ export class CompanyModel {
       salesPersonPhone: form.salePersonNo ?? '',
       priceModifier: form.discountType ?? '',
       priceModifierValue: form.discount ?? '',
+      status: form.status,
     };
     return data;
   }
@@ -43,7 +44,7 @@ export class CompanyModel {
     Object.assign(this, {
       id: input.id,
       companyName: input.firstName,
-      companyCode: input?.id,
+      companyCode: input.code,
       contactName: input.firstName,
       email: contact.emailId,
       phoneNumber: `${contact.cc}-${contact.contactNumber}`,

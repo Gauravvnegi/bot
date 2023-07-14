@@ -11,24 +11,29 @@ export const cols = [
   },
   {
     field: 'workingDays',
-    header: 'Working days / Hours of',
+    header: 'Working days / Timings',
     sortType: 'string',
-    searchField: ['propertyCategory.label'],
+    searchField: [
+      'dayOfOperationStart',
+      'dayOfOperationEnd',
+      'timeDayStart',
+      'timeDayEnd',
+    ],
     width: '23.75%',
   },
   {
     field: 'contact',
     header: 'Contact / Email',
     sortType: 'string',
-    searchField: ['contact', 'emailId'],
+    searchField: ['contact.number', 'contact.countryCode', 'emailId'],
     width: '23.75%',
   },
   {
     field: 'url',
     header: 'URL',
     sortType: 'string',
-    searchField: ['emailId'],
     width: '23.75%',
+    isSearchDisabled: true,
   },
   {
     field: 'status',

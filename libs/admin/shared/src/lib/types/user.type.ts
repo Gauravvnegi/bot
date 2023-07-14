@@ -47,6 +47,7 @@ export type Entity = {
   privacyPolicyUrl: string;
   termsUrl?: string;
   favIcon: string;
+  type: string;
 };
 
 export type Brand = {
@@ -87,7 +88,7 @@ export type UserResponse = {
   phoneNumber: string;
   // hotelAccess: { brands: Brand[] };
   permissions: {
-    entity: string;
+    module: string;
     label: string;
     permissions: {
       manage: -1 | 0 | 1;

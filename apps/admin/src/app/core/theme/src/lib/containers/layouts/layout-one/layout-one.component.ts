@@ -189,8 +189,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.filterConfig.branchName = selectedHotelData?.['name'];
     this.filterService.emitFilterValue$.next({
       property: {
-        hotelName: selectedBrandData?.['id'],
-        branchName: selectedHotelData?.['id'],
+        brandName: selectedBrandData?.['id'],
+        entityName: selectedHotelData?.['id'],
       },
       feedback: {
         feedbackType: this.checkForTransactionFeedbackSubscribed()
@@ -206,6 +206,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
     this.timezone = selectedHotelData?.['timezone'];
     this.globalFilterService.timezone = this.timezone;
     this.globalFilterService.entityId = selectedentityId;
+    this.globalFilterService.entityType = selectedHotelData.category;
+    this.globalFilterService.entitySubType = selectedHotelData.type;
     this.isSitesAvailable =
       !!selectedSiteId && !!this._hotelDetailService.sites?.length;
   }
@@ -252,8 +254,8 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
   applyFilter(event) {
     const values = event.values;
-    const entityId = values.property.branchName;
-    const brandId = values.property.hotelName;
+    const entityId = values.property.entityName;
+    const brandId = values.property.brandName;
     if (event.token.key && event.token.value && entityId && brandId) {
       /**
        * Update business session will update the local storage and reload to reset the data

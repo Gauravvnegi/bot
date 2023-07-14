@@ -3,12 +3,20 @@ import { FormGroup } from '@angular/forms';
 import { ApiService } from 'libs/shared/utils/src/lib/services/api.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { RequestData } from '../../../../notification/src/lib/data-models/request.model';
+import { RequestStatus } from '../constants/request';
 import { CMSUpdateJobData } from '../types/request.type';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
   selectedRequest = new BehaviorSubject(null);
   refreshData = new BehaviorSubject<boolean>(false);
+  requestStatus = new BehaviorSubject<RequestStatus[]>([]); // ['TODO', 'RESOLVED', 'CANCELED', 'IN_PROGRESS', 'TIMEOUT']
+
+  syncRequest(entityId: string): Observable<any> {
+    return this.get(
+      `/api/v1/request/entity/${entityId}/sync-cms?cmsUserType=bot`
+    );
+  }
 
   getReservationDetails(reservationId): Observable<any> {
     return this.get(`/api/v1/reservation/${reservationId}?raw=true`);
@@ -69,7 +77,9 @@ export class RequestService extends ApiService {
   }
 
   getCMSServices(entityId: string, config) {
-    return this.get(`/api/v1/entity/${entityId}/cms-services${config.queryObj}`);
+    return this.get(
+      `/api/v1/entity/${entityId}/cms-services${config.queryObj}`
+    );
   }
 
   validateRequestData(fg: FormGroup, channelSelection) {
@@ -105,17 +115,9 @@ export class RequestService extends ApiService {
   /**
    * Updates status of job to to-do or close
    */
-  closeRequest(config, data: CMSUpdateJobData) {
-    const isToDo = data.action === 'Todo';
-    if (isToDo) {
-      return this.put(
-        `/api/v1/reservation/cms-update-job${config.queryObj}`,
-        data
-      );
-    }
-
-    return this.post(
-      `/api/v1/reservation/cms-close-job${config.queryObj}`,
+  updateJobRequestStatus(config, data: CMSUpdateJobData) {
+    return this.put(
+      `/api/v1/reservation/cms-update-job-status${config.queryObj}`,
       data
     );
   }

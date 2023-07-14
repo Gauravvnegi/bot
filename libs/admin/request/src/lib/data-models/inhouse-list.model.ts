@@ -39,6 +39,7 @@ export class InhouseData {
   itemCode: string;
   itemName: string;
   jobDuration: number;
+  sla:number;
   jobID: string;
   jobNo: string;
   journey: string;
@@ -65,6 +66,7 @@ export class InhouseData {
       set({}, 'closedTime', get(input, ['closedTime'])),
       set({}, 'confirmationNumber', get(input, ['confirmationNumber'])),
       set({}, 'elapsedTime', get(input, ['elapsedTime'])),
+      set({}, 'sla', get(input, ['sla'])),
       set({}, 'entityId', get(input, ['entityId'])),
       set({}, 'id', get(input, ['id'])),
       set({}, 'itemCode', get(input, ['itemCode'])),
@@ -112,10 +114,13 @@ export class InhouseData {
   }
 
   getSLA() {
-    if (this.elapsedTime)
-      return `${Math.round(
-        ((this.elapsedTime % 86400000) % 3600000) / 60000
-      )}m`;
+    // if (this.elapsedTime)
+    //   return `${Math.round(
+    //     ((this.elapsedTime % 86400000) % 3600000) / 60000
+    //   )}m`;
+    if(this.sla){
+      return `${this.sla}m`
+    }
     else '------';
   }
 

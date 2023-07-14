@@ -28,11 +28,7 @@ export class SubscriptionPlanService extends ApiService {
           guest['label'] = 'Members';
           guest['config'] = customModule.guests.config;
         }
-        res.products = [
-          ...res.products,
-          customModule.finance,
-          customModule.channelManager,
-        ];
+        res.products = [...res.products];
         return res;
       })
     );

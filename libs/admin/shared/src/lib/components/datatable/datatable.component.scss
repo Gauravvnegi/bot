@@ -982,3 +982,10 @@ $table-hover-color: #f3f3f3;
   display: block;
   min-height: 77vh;
 }
+
+:host ::ng-deep {
+  .clear-whitespace {
+    overflow: unset;
+    white-space: wrap;
+  }
+}

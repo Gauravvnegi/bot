@@ -1,21 +1,20 @@
-<div
-  class="action-header"
-  [ngClass]="{ 'action-header__sticky': isScrolledUp }"
-  [formGroup]="tableFG"
->
+<div class="action-header" [formGroup]="tableFG">
   <div class="heading">
     {{ tableName }}
   </div>
   <div class="action-wrapper">
+    <ng-container [ngTemplateOutlet]="search"></ng-container>
     <hospitality-bot-button
       label="+ Add Guest"
       [link]="'/pages/members/guests/' + guestRoutes.addGuest.route"
     ></hospitality-bot-button>
 
     <hospitality-bot-export-list
+      [additionalActionItems]="additionalActionItems"
       (onDocumentActions)="onDocumentActions()"
       [documentTypes]="documentTypes"
       [documentActionTypes]="documentActionTypes"
+      [isDisable]="values.length === 0"
     ></hospitality-bot-export-list>
   </div>
 </div>
@@ -28,6 +27,7 @@
   [loading]="loading"
   [columns]="cols"
   [value]="values"
+  [paginator]="isPaginator"
   [rows]="rowsPerPage"
   [showCurrentPageReport]="showCurrentPageReport"
   [rowsPerPageOptions]="rowsPerPageOptions"
@@ -35,22 +35,15 @@
   [(first)]="first"
   [totalRecords]="totalRecords"
   [filterDelay]="0"
-  [selectionMode]="selectionMode"
   [(selection)]="selectedRows"
   (onRowSelect)="onRowSelect($event)"
   (onRowUnselect)="onRowUnselect($event)"
   (onHeaderCheckboxToggle)="onToggleSelectAll($event)"
-  (sortFunction)="customSort($event)"
-  [customSort]="isCustomSort"
-  (onFilter)="onDataFilter($event)"
+  *ngIf="!isEmpty; else emptyTable"
 >
   <ng-template pTemplate="caption">
-    <div
-      [formGroup]="tableFG"
-      [ngClass]="(isQuickFilters || isTabFilters) && 'caption__wrapper'"
-    >
+    <div class="caption__wrapper" [formGroup]="tableFG">
       <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-
       <hospitality-bot-filter-chips
         *ngIf="isQuickFilters"
         [chips]="filterChips"
@@ -59,7 +52,6 @@
       >
       </hospitality-bot-filter-chips>
     </div>
-    <ng-container [ngTemplateOutlet]="search"></ng-container>
   </ng-template>
 
   <ng-template pTemplate="emptymessage">
@@ -92,9 +84,7 @@
       <td>
         <div class="cell-content">
           <span class="primary-text">{{ rowData.name }}</span>
-          <div *ngIf="rowData.isVerified" class="badge">
-            <img src="assets/images/verified-badge.webp" alt="badge" />
-          </div>
+          <span class="secondary-text">{{ rowData.code }}</span>
         </div>
       </td>
       <td>
@@ -106,29 +96,31 @@
       </td>
       <td>
         <div class="cell-content">
-          <span *ngIf="rowData.mobileNumber; else emptyCell">
+          <span
+            class="primary-text"
+            *ngIf="rowData.mobileNumber; else emptyCell"
+          >
             <a
+              (click)="$event.stopPropagation()"
               href="tel:{{ rowData.mobileNumber }}"
-              class="email"
-              (click)="openDetailPage($event)"
             >
-              <u> {{ rowData.mobileNumber }}</u>
+              {{ rowData.mobileNumber }}
             </a>
           </span>
         </div>
       </td>
       <td>
         <div class="cell-content">
-          <span *ngIf="rowData.age; else emptyCell">
-            {{ rowData.age }}
+          <span class="primary-text" *ngIf="rowData.dob; else emptyCell">
+            {{ rowData.dob | date }}
           </span>
         </div>
       </td>
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->
-  <!-- <ng-template pTemplate="summary"> -->
-  <!-- <p-paginator
+  <ng-template pTemplate="summary">
+    <p-paginator
       #paginator
       [rows]="rowsPerPage"
       [totalRecords]="totalRecords"
@@ -136,8 +128,8 @@
       (onPageChange)="paginate($event)"
       [currentPageReportTemplate]="reportTemplate"
       showCurrentPageReport="true"
-    ></p-paginator> -->
-  <!-- </ng-template> -->
+    ></p-paginator>
+  </ng-template>
 </p-table>
 
 <ng-template #emptyCell>
@@ -152,7 +144,6 @@
     }"
   >
     <ng-container [ngTemplateOutlet]="tabFilter"> </ng-container>
-    <ng-container [ngTemplateOutlet]="search"></ng-container>
   </hospitality-bot-empty-table>
 </ng-template>
 
@@ -166,13 +157,13 @@
 </ng-template>
 
 <ng-template #search>
-  <hospitality-bot-search
+  <hospitality-bot-global-search
     class="search"
     [formGroup]="tableFG"
     controlName="search"
     [props]="{
-      placeholder: 'Search Guest...'
+      placeholder: 'Search by Name, Code...'
     }"
     (onSearch)="searchGuest($event)"
-  ></hospitality-bot-search>
+  ></hospitality-bot-global-search>
 </ng-template>

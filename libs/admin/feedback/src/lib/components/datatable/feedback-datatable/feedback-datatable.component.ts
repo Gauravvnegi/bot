@@ -166,7 +166,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           ...data['dateRange'].queryValue,
         ];
         this.entityId = this.globalFilterService.entityId;
-        this.getOutlets(data['filter'].value.property.branchName);
+        this.getOutlets(data['filter'].value.property.entityName);
         const feedbackType = data['filter'].value.feedback.feedbackType;
 
         if (this.tableFG?.get('tableType').value !== 'card') {

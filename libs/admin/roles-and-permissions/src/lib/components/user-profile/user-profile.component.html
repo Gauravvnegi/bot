@@ -7,10 +7,13 @@
 </hospitality-bot-navigation-header>
 
 <form class="wrapper" [formGroup]="userForm">
-  <div class="form-block">
+  <div
+    class="form-block"
+    *ngIf="!(dataLoading || userDataLoading); else loader"
+  >
     <hospitality-bot-custom-file-upload
       class="two-third-width"
-      controlName="profileUrl"
+      formControlName="profileUrl"
       [entityId]="loggedInUserId"
       path="static-content/user-profile"
       description="Add your profile image"
@@ -52,7 +55,10 @@
       Manage By: {{ userToModDetails.firstName }}
       {{ userToModDetails.lastName }}, Admin
     </div>
-    <div class="one-third-width" *ngIf="hasPageState('addNewUser') && !userToModDetails"></div>
+    <div
+      class="one-third-width"
+      *ngIf="hasPageState('addNewUser') && !userToModDetails"
+    ></div>
 
     <hospitality-bot-input
       class="one-third-width"
@@ -245,3 +251,7 @@
     </div>
   </div>
 </form>
+
+<ng-template #loader>
+  <hospitality-bot-loader-bounce class="loader"></hospitality-bot-loader-bounce>
+</ng-template>

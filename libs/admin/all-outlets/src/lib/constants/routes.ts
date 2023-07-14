@@ -68,6 +68,10 @@ export const navRoutes = {
     label: 'Food Package',
     link: `/pages/settings/business-info/brand/:brandId/outlet/:outletId/menu/:menuId/food-package`,
   },
+  services: {
+    label: 'Services',
+    link: `/pages/settings/business-info/brand/:brandId/outlet/:outletId/view-all`,
+  },
 };
 
 export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
@@ -170,6 +174,17 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
     ],
     title: 'Edit Food Package',
   },
+  services: {
+    route: 'services',
+    navRoutes: [
+      navRoutes.settings,
+      navRoutes.businessInfo,
+      navRoutes.editBrand,
+      navRoutes.editOutlet,
+      navRoutes.services,
+    ],
+    title: 'Services',
+  },
 };
 
 export type OutletEditRoutes =
@@ -183,7 +198,8 @@ export type OutletAddRoutes = 'outlet' | 'menu' | 'menuItem' | 'foodPackage';
 export type OutletBusinessRoutes =
   | OutletAddRoutes
   | OutletEditRoutes
-  | 'importService';
+  | 'importService'
+  | 'services';
 
 export const hasId: Record<OutletAddRoutes, keyof OutletBaseComponent> = {
   outlet: 'outletId',

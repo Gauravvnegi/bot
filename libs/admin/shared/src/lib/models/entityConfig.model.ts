@@ -19,6 +19,7 @@ export class EntityConfig {
   parentId: string;
   entities?: EntityConfig[];
   timezone: string;
+  type: string;
 
   deserialize(input: Entity) {
     this.id = input.id;
@@ -36,6 +37,7 @@ export class EntityConfig {
       input.entities?.map((item) => new EntityConfig().deserialize(item)) ?? [];
 
     this.timezone = input.timezone;
+    this.type = input.type;
 
     return this;
   }
@@ -85,7 +87,7 @@ export class SiteConfig {
     this.brands =
       input.brands?.map((item) => new BrandConfig().deserialize(item)) ?? [];
     this.socialPlatforms = input.socialPlatforms;
-    
+
     return this;
   }
 }

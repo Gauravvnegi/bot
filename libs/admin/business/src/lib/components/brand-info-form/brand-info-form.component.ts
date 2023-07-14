@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -7,12 +7,12 @@ import {
   NavRouteOptions,
 } from '@hospitality-bot/admin/shared';
 import { SnackBarService } from '@hospitality-bot/shared/material';
+import { OutletFormService } from 'libs/admin/all-outlets/src/lib/services/outlet-form.service';
 import { Subscription } from 'rxjs';
 import { businessRoute } from '../../constant/routes';
-import { BrandResponse } from '../../models/brand.model';
 import { BusinessService } from '../../services/business.service';
-import { BrandFormData } from '../../types/brand.type';
 import { HotelFormDataService } from '../../services/hotel-form.service';
+import { BrandFormData } from '../../types/brand.type';
 
 @Component({
   selector: 'hospitality-bot-brand-info-form',
@@ -40,7 +40,8 @@ export class BrandInfoFormComponent implements OnInit {
     private router: Router,
     private hotelDetailService: HotelDetailService,
     private businessService: BusinessService,
-    private hotelFormDataService: HotelFormDataService
+    private hotelFormDataService: HotelFormDataService,
+    private outletFormService: OutletFormService
   ) {
     this.brandId = this.route.snapshot.paramMap.get('brandId');
     const { navRoutes, title } = businessRoute[
@@ -49,13 +50,13 @@ export class BrandInfoFormComponent implements OnInit {
     this.pageTitle = title;
     this.navRoutes = navRoutes;
     this.hotelFormDataService.resetHotelInfoFormData();
+    this.outletFormService.resetOutletFormData();
   }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.siteId = this.hotelDetailService.siteId;
     this.initForm();
-    this.hotelFormDataService.hotelFormState = false;
   }
 
   socialPLatform: any;

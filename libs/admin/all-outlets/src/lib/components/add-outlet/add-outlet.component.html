@@ -100,12 +100,15 @@
   <ng-container [ngSwitch]="useForm.get('type').value">
     <hospitality-bot-restaurant-form
       [compServices]="compServices"
+      [menuList]="menuList"
       [outletId]="outletId"
       *ngSwitchCase="'RESTAURANT'"
       class="full-width"
+      [isLoading]="loading"
       (onCreateAndContinueFeature)="submitForm($event)"
     ></hospitality-bot-restaurant-form>
     <hospitality-bot-spa-form
+      [isLoading]="loading"
       [paidServices]="paidServices"
       [outletId]="outletId"
       *ngSwitchCase="'SPA'"
@@ -114,6 +117,7 @@
     >
     </hospitality-bot-spa-form>
     <hospitality-bot-banquet-form
+      [isLoading]="loading"
       [compServices]="compServices"
       [paidServices]="paidServices"
       [outletId]="outletId"

@@ -30,7 +30,7 @@ export class ManagePermissionService extends ApiService {
       permissions: value.permissionConfigs,
       departments: value.departments,
       hotelAccess: {
-        chains: [
+        brands: [
           {
             id: value.brandName,
             hotels: [
@@ -44,13 +44,33 @@ export class ManagePermissionService extends ApiService {
     };
   }
 
-  modifyUserDetailsForEdit(value){
-    return{
+  modifyUserDetailsForEdit(value) {
+    return {
       firstName: value.firstName,
       lastName: value.lastName,
       phoneNumber: value.phoneNumber,
-      profileUrl: value.profileUrl
-    }
+      profileUrl: value.profileUrl,
+      permissions:
+        value.permissionConfigs?.map((item) => ({
+          ...item,
+          permissions: {
+            manage: item.permissions.manage,
+            view: item.permissions.view,
+          },
+        })) ?? [],
+      hotelAccess: {
+        brands: [
+          {
+            id: value.brandName,
+            hotels: [
+              {
+                id: value.branchName,
+              },
+            ],
+          },
+        ],
+      },
+    };
   }
 
   modifyPermissionDetailsForEdit(value, allDepartments) {
@@ -75,7 +95,7 @@ export class ManagePermissionService extends ApiService {
           value.products?.includes(productType)
       ),
       hotelAccess: {
-        chains: [
+        brands: [
           {
             id: value.brandName,
             hotels: [
@@ -100,15 +120,15 @@ export class ManagePermissionService extends ApiService {
     return this.put(`/api/v1/user/${data.parentId}`, data);
   }
 
-  editUserDetails(data): Observable<any>{
-    return this.put(`/api/v1/user/${data.userId}`, data);
+  editUserDetails(data): Observable<any> {
+    return this.put(`/api/v1/user/${data.id}`, data);
   }
 
   updateRolesStatus(userId: string, statusData) {
     return this.patch(`/api/v1/user/${userId}`, statusData);
   }
 
-  getUserDetailsById(userId: string,): Observable<any> {
+  getUserDetailsById(userId: string): Observable<any> {
     return this.get(`/api/v1/user/${userId}`);
   }
 
@@ -128,11 +148,15 @@ export class ManagePermissionService extends ApiService {
   // }
 
   getManagedUsers(config: QueryConfig): Observable<UserListResponse> {
-    return this.get(`/api/v1/user/${config.loggedInUserId}/users${config.queryObj ?? ''}`);
+    return this.get(
+      `/api/v1/user/${config.loggedInUserId}/users${config.queryObj ?? ''}`
+    );
   }
 
   getAllUsers(config: QueryConfig): Observable<UserListResponse> {
-    return this.get(`/api/v1/entity/${config.entityId}/users${config.queryObj ?? ''}`);
+    return this.get(
+      `/api/v1/entity/${config.entityId}/users${config.queryObj ?? ''}`
+    );
   }
 
   addNewUser(parentUserId: string, data: any) {

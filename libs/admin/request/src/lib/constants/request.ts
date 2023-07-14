@@ -15,8 +15,8 @@ export const request = {
   filter: ['ASAP', 'High', 'Medium'],
   sort: [
     { label: 'Latest', value: '', order: '' },
-    { label: 'Room Ascending', value: 'roomNo', order: 'ASC' },
-    { label: 'Room Descending', value: 'roomNo', order: 'DESC' },
+    { label: 'Room Ascending', value: 'room_number', order: 'ASC' },
+    { label: 'Room Descending', value: 'room_number', order: 'DESC' },
     // { label: 'Function Code', value: 'itemCode', order: 'ASC' },
   ],
   cmsServices: 'cms services',

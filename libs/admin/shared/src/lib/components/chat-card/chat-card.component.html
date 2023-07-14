@@ -50,12 +50,13 @@
       <div class="content-wrap-r2">
         <div
           [ngClass]="{
-            'status-text-initiated': taskStatus?.action === 'Timeout',
-            'status-text-reject': taskStatus?.action === 'Pending',
-            'status-text-success': taskStatus?.action === 'Closed'
+            'status-text-initiated': taskStatus?.action === 'IN_PROGRESS',
+            'status-text-reject': taskStatus?.action === 'CANCELED',
+            'status-text-success': taskStatus?.action === 'RESOLVED',
+            'status-text-reject': taskStatus?.action === 'TIMEOUT'  
           }"
         >
-          {{ taskStatus?.action || '------' }}
+          {{ taskStatus?.name || taskStatus?.action || '------' }}
         </div>
         <div class="content-wrap-r2-divider"></div>
         <div

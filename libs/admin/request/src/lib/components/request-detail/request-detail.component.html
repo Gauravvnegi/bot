@@ -56,10 +56,10 @@
             </div>
           </td>
           <td>
-            <div class="request-items-body-card-booking">
+            <span class="request-items-body-card-booking">
               {{ data.rooms[0]?.getRoomNumberAndType() }}
-            </div>
-            <div
+            </span>
+            <span
               class="request-items-body-card-status"
               [ngClass]="{
                 'priority-low': data.priority === 'Low',
@@ -69,7 +69,7 @@
               }"
             >
               {{ data.priority }}
-            </div>
+            </span>
           </td>
           <td>{{ data.source }}</td>
           <td>

@@ -168,7 +168,7 @@ export class Room {
   }
 
   getRoomNumberAndType() {
-    return this.roomNumber + ' - ' + this.type;
+    return this.roomNumber + (this.type ? ' - ' + this.type : '');
   }
 }
 

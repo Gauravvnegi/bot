@@ -327,7 +327,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
             roomTypeId: roomDetails.roomTypeDetails.id,
             price: roomDetails.price,
             currency: roomDetails.currency,
-            status: roomDetails.roomStatus,
+            status: roomDetails.status,
             rooms: [
               {
                 roomNo: roomDetails.roomNumber,
@@ -353,7 +353,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
           this.useForm.patchValue(data);
 
           this.statusQuoForm.patchValue({
-            roomStatus: roomDetails.roomStatus,
+            roomStatus: roomDetails.status,
             remarks: roomDetails.remarks,
             foStatus: roomDetails.frontOfficeState,
           });

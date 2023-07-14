@@ -54,19 +54,23 @@
           </div>
         </td>
         <td>
-          <div class="cell-content" *ngIf="rowData.roomStatus; else emptyCell">
+          <div class="cell-content" *ngIf="rowData.status; else emptyCell">
             <div
               statusCell
-              [status]="rowData.roomStatus"
-              [type]="rowData.roomStatus === 'PAID' ? 'paid' : 'unpaid'"
+              [status]="rowData.status"
+              [type]="roomStatusDetails[rowData.status].type"
             >
-              {{ rowData.roomStatus }}
+              {{ rowData.status }}
             </div>
           </div>
         </td>
         <td>
           <div class="cell-content" *ngIf="rowData.foStatus; else emptyCell">
-            <div class="status-text">
+            <div
+              statusCell
+              [status]="rowData.foStatus"
+              [type]="rowData.foStaus !== 'VACANT' ? 'success' : 'failed'"
+            >
               {{ rowData.foStatus }}
             </div>
           </div>

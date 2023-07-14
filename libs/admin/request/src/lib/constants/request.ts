@@ -17,7 +17,7 @@ export const request = {
     { label: 'Latest', value: '', order: '' },
     { label: 'Room Ascending', value: 'roomNo', order: 'ASC' },
     { label: 'Room Descending', value: 'roomNo', order: 'DESC' },
-    { label: 'Function Code', value: 'itemCode', order: 'ASC' },
+    // { label: 'Function Code', value: 'itemCode', order: 'ASC' },
   ],
   cmsServices: 'cms services',
   kiosk: 'KIOSK',

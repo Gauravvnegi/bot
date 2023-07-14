@@ -59,16 +59,18 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
    */
   listenForSelectedRequest() {
     this.$subscription.add(
-      this._requestService.selectedRequest.subscribe((response) => {
-        if (response) {
-          this.data = response;
-          this.requestFG.patchValue({ status: response.action });
-          this.status = true;
-        } else {
-          this.data = new InhouseData();
-          this.status = false;
+      this._requestService.selectedRequest.subscribe(
+        (response: InhouseData) => {
+          if (response) {
+            this.data = response;
+            this.requestFG.patchValue({ status: response.action });
+            this.status = true;
+          } else {
+            this.data = new InhouseData();
+            this.status = false;
+          }
         }
-      })
+      )
     );
   }
 
@@ -135,7 +137,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
     const config = {
       queryObj: this.adminUtilityService.makeQueryParams([
         {
-          cmsUserType: 'Bot',
+          cmsUserType: 'Admin',
           entityId: this.entityId,
           actionType: event.value,
         },

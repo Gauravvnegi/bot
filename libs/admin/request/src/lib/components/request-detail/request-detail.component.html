@@ -37,21 +37,27 @@
     <div class="request-items-body-title">
       {{ data.itemName }}
     </div>
+    <!-- <div appCountdown [countdownValue]="100"></div> -->
     <div class="request-items-body-subtitle">
       {{ data.remarks }}
     </div>
     <div class="request-items-body-card">
       <table>
         <tr class="tr">
-          <th>{{ 'requestDetail.priorityCode' | translate }}</th>
-          <th>{{ 'requestDetail.bookingRoomNo' | translate }}</th>
-          <th>{{ 'requestDetail.company' | translate }}</th>
-          <th>{{ 'requestDetail.contactInfo' | translate }}</th>
+          <th>Job No.</th>
+          <th>Room No. / Priority</th>
+          <th>Source</th>
+          <th>Phone No. / Email</th>
         </tr>
         <tr>
           <td>
             <div>
-              {{ data.itemCode }}
+              {{ data.jobNo }}
+            </div>
+          </td>
+          <td>
+            <div class="request-items-body-card-booking">
+              {{ data.rooms[0]?.getRoomNumberAndType() }}
             </div>
             <div
               class="request-items-body-card-status"
@@ -65,19 +71,16 @@
               {{ data.priority }}
             </div>
           </td>
-          <td>
-            <div>{{ data.confirmationNumber }}</div>
-            <div class="request-items-body-card-booking">
-              {{ data.rooms[0]?.getRoomNumberAndType() }}
-            </div>
-          </td>
-          <td>-</td>
+          <td>{{ data.source }}</td>
           <td>
             <a href="tel:{{ data.guestDetails.getPhoneNumbers() }}">
               <div>
                 {{ data.guestDetails.getPhoneNumbers() }}
               </div>
             </a>
+            <div>
+              {{ data.guestDetails.primaryGuest.email }}
+            </div>
           </td>
         </tr>
       </table>

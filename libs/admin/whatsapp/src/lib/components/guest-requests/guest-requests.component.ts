@@ -47,7 +47,7 @@ export class GuestRequestsComponent implements OnChanges {
       const config = {
         queryObj: this._adminUtilityService.makeQueryParams([
           {
-            cmsUserType: 'Bot',
+            cmsUserType: 'Admin',
             entityId: this.entityId,
           },
         ]),

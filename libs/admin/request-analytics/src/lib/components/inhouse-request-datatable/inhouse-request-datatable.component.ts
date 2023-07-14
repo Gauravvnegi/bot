@@ -215,7 +215,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([
         {
-          cmsUserType: 'Bot',
+          cmsUserType: 'Admin',
           entityId: this.entityId,
         },
       ]),

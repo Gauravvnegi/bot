@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { RequestData } from '../../../../notification/src/lib/data-models/request.model';
 import { RequestStatus } from '../constants/request';
 import { CMSUpdateJobData } from '../types/request.type';
+import { AllJobRequestResponse } from '../types/response.types';
 
 @Injectable({ providedIn: 'root' })
 export class RequestService extends ApiService {
@@ -14,7 +15,7 @@ export class RequestService extends ApiService {
 
   syncRequest(entityId: string): Observable<any> {
     return this.get(
-      `/api/v1/request/entity/${entityId}/sync-cms?cmsUserType=bot`
+      `/api/v1/request/entity/${entityId}/sync-cms?cmsUserType=admin`
     );
   }
 
@@ -26,7 +27,7 @@ export class RequestService extends ApiService {
     return this.get(`/api/v1/request/${config.queryObj}`);
   }
 
-  getAllLiveRequest(config) {
+  getAllLiveRequest(config): Observable<AllJobRequestResponse> {
     return this.get(`/api/v1/request/${config.queryObj}`);
   }
 
@@ -107,7 +108,7 @@ export class RequestService extends ApiService {
 
   createRequest(entityId, data) {
     return this.post(
-      `/api/v1/request?cmsUserType=Bot&entityId=${entityId}`,
+      `/api/v1/request?cmsUserType=admin&entityId=${entityId}`,
       data
     );
   }

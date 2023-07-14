@@ -3,9 +3,15 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
+  Validators,
 } from '@angular/forms';
-import { daysOfWeek } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  QueryConfig,
+  daysOfWeek,
+} from '@hospitality-bot/admin/shared';
 import {
   inventoryRestrictions,
   RestrictionAndValuesOption,
@@ -13,8 +19,13 @@ import {
 } from '../../constants/data';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { DateOption, RoomTypes } from '../../types/channel-manager.types';
-import { getWeekendBG } from '../../models/bulk-update.models';
+import { UpdateInventory, getWeekendBG } from '../../models/bulk-update.models';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Subscription } from 'rxjs';
+import { ChannelManagerService } from '../../services/channel-manager.service';
+import * as moment from 'moment';
+import { startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
@@ -27,23 +38,34 @@ export class UpdateInventoryComponent implements OnInit {
   useForm: FormGroup;
   roomTypes: RoomTypes[] = [];
   allRoomTypes: RoomTypes[] = [];
-
   dates: DateOption[];
   dateLimit: number = 15;
-
   restrictions: RestrictionAndValuesOption[];
   entityId: string;
+
+  loading = false;
+  loadingError = false;
+  $subscription = new Subscription();
+
+  perDayRoomAvailability = new Map<number, any>();
+  inventoryRoomDetails: Map<any, any[]>;
+  currentDate = new Date();
 
   constructor(
     private fb: FormBuilder,
     private channelMangerForm: ChannelManagerFormService,
-    private globalFilter: GlobalFilterService
+    private globalFilter: GlobalFilterService,
+    private snackbarService: SnackBarService,
+    private channelManagerService: ChannelManagerService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
     this.initOptions();
     this.initForm();
+    this.listenChanges();
+    this.initEditView();
   }
 
   initOptions() {
@@ -82,9 +104,10 @@ export class UpdateInventoryComponent implements OnInit {
   }
 
   initForm() {
+    this.currentDate.setHours(0, 0, 0, 0);
     this.useForm = this.fb.group({
       roomType: [],
-      date: [Date.now()],
+      date: [this.currentDate.getTime()],
     });
 
     this.addRoomTypesControl();
@@ -93,9 +116,9 @@ export class UpdateInventoryComponent implements OnInit {
       this.initDate(res);
     });
 
-    this.useForm.valueChanges.subscribe((res) => {
-      console.log(res);
-    });
+    // this.useForm.valueChanges.subscribe((res) => {
+    //   console.log(res);
+    // });
 
     this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
       if (res.length) {
@@ -112,7 +135,7 @@ export class UpdateInventoryComponent implements OnInit {
   }
 
   /**
-   * Add Room Types Control
+   * Add Room Types Control & setting data for edit view
    */
   addRoomTypesControl() {
     this.useForm.addControl('roomTypes', this.fb.array([]));
@@ -134,6 +157,7 @@ export class UpdateInventoryComponent implements OnInit {
 
       this.addChannelsControl(roomType.channels, roomTypeIdx);
     });
+    this.setRoomDetails();
   }
 
   /**
@@ -204,7 +228,9 @@ export class UpdateInventoryComponent implements OnInit {
   getValuesArrayControl(type: RestrictionAndValuesOption['type'] = 'number') {
     return this.fb.array(
       this.dates.map((item) =>
-        this.fb.group({ value: [type === 'number' ? null : false] })
+        this.fb.group({
+          value: type === 'number' ? [null, [Validators.min(0)]] : [false],
+        })
       )
     );
   }
@@ -237,11 +263,178 @@ export class UpdateInventoryComponent implements OnInit {
     this.dates = dates;
   }
 
-  handleSave() {
-    // this.snacu
+  listenChanges() {
+    this.useForm.controls['date'].valueChanges.subscribe((selectedDate) => {
+      this.useForm.controls['date'].patchValue(selectedDate, {
+        emitEvent: false,
+      });
+      this.initEditView(selectedDate);
+    });
   }
 
   getWeekendBG(day: string, isOccupancy = false) {
     return getWeekendBG(day, isOccupancy);
+  }
+
+  initEditView(selectedDate = this.useForm.value.date) {
+    this.loading = true;
+    this.$subscription.add(
+      this.channelManagerService
+        .getChannelManagerDetails(
+          this.entityId,
+          'inventory',
+          this.getQueryConfig(selectedDate)
+        )
+        .subscribe(
+          (res) => {
+            const data = new UpdateInventory().deserialize(res.roomType);
+            this.perDayRoomAvailability = data.perDayRoomAvailability;
+            this.inventoryRoomDetails = data.inventoryRoomDetails;
+            this.setRoomDetails(selectedDate);
+            this.loading = false;
+            this.loadingError = false;
+          },
+          (error) => {
+            this.useForm.controls['date'].patchValue(this.currentDate, {
+              emitEvent: false,
+            });
+            this.setRoomDetails();
+            this.loading = false;
+            this.loadingError = true;
+          },
+          this.handleFinal
+        )
+    );
+  }
+
+  setRoomDetails(selectedDate?: number) {
+    const { fromDate } = this.getFromAndToDateEpoch(
+      selectedDate ? selectedDate : this.useForm.controls['date'].value
+    );
+    let currentDate = new Date(fromDate);
+
+    if (this.inventoryRoomDetails) {
+      for (let control of (this.useForm.get('roomTypes') as FormArray)
+        .controls) {
+        const availabilityControl = (control as FormArray).controls[
+          'availability'
+        ]?.controls as FormArray;
+
+        for (
+          let controlIndex = 0;
+          controlIndex < availabilityControl?.length;
+          controlIndex++
+        ) {
+          const roomId = (control as FormArray).controls['value'].value;
+          const room = this.inventoryRoomDetails[roomId];
+
+          const selectedDateRoom = room?.find(
+            (item) => item.date === currentDate.getTime()
+          );
+
+          const formGroup = availabilityControl[controlIndex] as FormGroup;
+          const availableRoom = selectedDateRoom?.availableRoom ?? undefined;
+
+          formGroup.controls['value'].patchValue(availableRoom, {
+            emitEvent: false,
+          });
+
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
+        currentDate = new Date(fromDate);
+      }
+    }
+  }
+
+  handleSave() {
+    if (this.useForm.invalid) {
+      this.useForm.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix errors'
+      );
+      return;
+    }
+
+    this.loading = true;
+    const { fromDate } = this.getFromAndToDateEpoch(
+      this.useForm.controls['date'].value
+    );
+    const data = UpdateInventory.buildRequestData(
+      this.useForm.getRawValue(),
+      fromDate
+    );
+
+    this.$subscription.add(
+      this.channelManagerService
+        .updateChannelManager(
+          { updates: data },
+          this.entityId,
+          'inventory',
+          this.getQueryConfig()
+        )
+        .subscribe(
+          (res) => {
+            this.initEditView();
+            this.snackbarService.openSnackBarAsText(
+              'Inventory Update successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.loading = false;
+          },
+          (error) => {
+            this.useForm.controls['date'].patchValue(this.currentDate, {
+              emitEvent: false,
+            });
+            this.setRoomDetails();
+            this.loading = false;
+          },
+          this.handleFinal
+        )
+    );
+    this.loading = true;
+  }
+
+  handleFinal() {
+    this.loading = false;
+  }
+
+  getQueryConfig(selectedDate?: number): QueryConfig {
+    const { fromDate, toDate } = this.getFromAndToDateEpoch(
+      selectedDate ? selectedDate : this.useForm.controls['date'].value
+    );
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'ROOM_TYPE',
+          limit: 5,
+          inventoryUpdateType: 'INVENTORY',
+        },
+        selectedDate && { fromDate: fromDate, toDate: toDate },
+      ]),
+    };
+    return config;
+  }
+
+  getFromAndToDateEpoch(currentTime) {
+    const fromDate = currentTime;
+    const toDate = new Date(currentTime);
+    toDate.setDate(toDate.getDate() + this.dates.length - 1);
+    return {
+      fromDate: moment(fromDate).unix() * 1000,
+      toDate: moment(toDate).unix() * 1000,
+    };
+  }
+
+  getAvailability(nextDate, type: 'qty' | 'occupy') {
+    const date = new Date(this.useForm.controls['date'].value);
+    date.setDate(date.getDate() + nextDate);
+    const availability = this.perDayRoomAvailability[date.getTime()];
+
+    const data = availability
+      ? availability[type === 'qty' ? 'roomAvailable' : 'occupancy']
+      : 0;
+
+    return data === 'NaN' ? 0 : data;
   }
 }

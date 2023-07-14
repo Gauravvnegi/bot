@@ -58,7 +58,6 @@ export class ReservationComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
         this.entityId = this.globalFilterService.entityId;
-        debugger;
         this.globalFeedbackFilterType =
           data['filter'].value.feedback.feedbackType;
         if (
@@ -71,7 +70,6 @@ export class ReservationComponent extends BaseDatatableComponent
             [...data['feedback'].queryValue],
             data['filter'].value
           );
-          debugger;
           if (this.globalFeedbackFilterType === Feedback.TRANSACTIONAL) {
             this.formService.type = this.globalFeedbackFilterType;
             this.formService.$feedbackType.next(this.globalFeedbackFilterType);
@@ -90,10 +88,8 @@ export class ReservationComponent extends BaseDatatableComponent
 
   getOutletsSelected(globalQueries, globalQueryValue) {
     globalQueries.forEach((element) => {
-      debugger;
       if (element.hasOwnProperty('outlets')) this.outletIds = element.outlets;
     });
-    debugger;
     this.getOutlets(
       globalQueryValue.property.entityName,
       globalQueryValue.property.brandName
@@ -105,13 +101,11 @@ export class ReservationComponent extends BaseDatatableComponent
       .find((brand) => brand.id === brandId)
       .entities.find((branch) => branch['id'] === branchId);
     this.outlets = branch.entities;
-    debugger;
     this.formService.outletIds =
       this.globalFeedbackFilterType === Feedback.BOTH
         ? (this.formService.outletIds = [branch.id])
         : this.outlets
             .map((outlet) => {
-              debugger;
               if (outlet.id && this.outletIds[outlet.id]) return outlet.id;
             })
             .filter((id) => id !== undefined);
@@ -119,7 +113,6 @@ export class ReservationComponent extends BaseDatatableComponent
   }
 
   setStayTabFilters(globalQueryValue) {
-    debugger;
     const branch = this._hotelDetailService.brands
       .find((brand) => brand.id === globalQueryValue.property.brandName)
       .entities.find(

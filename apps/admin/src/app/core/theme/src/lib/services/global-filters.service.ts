@@ -62,7 +62,6 @@ export class GlobalFilterService {
       (data: Partial<GlobalFilterData>) => {
         if (Object.keys(data).length) {
           this.globalFilterObj.filter.value = data;
-          debugger;
           this.globalFilterObj.filter.queryValue = [
             { entityId: get(data, ['property', 'entityName']) },
             {

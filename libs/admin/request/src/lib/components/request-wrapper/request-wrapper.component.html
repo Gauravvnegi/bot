@@ -14,12 +14,21 @@
   isSticky="true"
 >
   <div class="request-wrapper-header-btnwrap">
-    <hospitality-bot-button
-      label="Sync Now"
-      variant="text"
-      piIcon="pi pi-sync"
-      (onClick)="syncRequest()"
-    ></hospitality-bot-button>
+    <div class="sync-now">
+      <hospitality-bot-custom-tooltip
+        [text]="'Initiate data synchronization with FCS by clicking here.'"
+        class="additional-info"
+        [onlyContent]="true"
+      >
+        <hospitality-bot-button
+          label="Sync Now"
+          variant="text"
+          piIcon="pi pi-sync"
+          (onClick)="syncRequest()"
+        ></hospitality-bot-button>
+      </hospitality-bot-custom-tooltip>
+    </div>
+
     <div
       class="guestInfoEditContainer"
       *ngIf="buttonConfig[selectedIndex].button"

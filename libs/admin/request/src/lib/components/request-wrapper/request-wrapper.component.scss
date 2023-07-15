@@ -8,6 +8,17 @@
   font-size: 14px;
   font-weight: $bold;
 }
+
+:host ::ng-deep .sync-now{
+  padding:0 25px;
+  display: flex;
+  align-items: center;
+  .button{
+    padding: 0px;
+    min-width: 0;
+  }
+}
+
 .request-wrapper-header {
   padding: 10px 42px 10px 15px;
   background-color: $white;

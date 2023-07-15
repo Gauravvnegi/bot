@@ -32,7 +32,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   loading: boolean;
   isCompLoading: boolean;
   isPaidLoading: boolean;
-  limit = 10;
+  limit = 15;
 
   pageTitle = 'Services';
   navRoutes: NavRouteOptions = [

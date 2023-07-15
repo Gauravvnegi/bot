@@ -25,6 +25,7 @@
             <hospitality-bot-date
               controlName="date"
               [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
+              [minDate]="currentDate"
             >
             </hospitality-bot-date>
           </div>
@@ -146,11 +147,15 @@
             <div class="data-cell heading-section">
               <div
                 class="cell"
-                *ngFor="let date of dates"
+                *ngFor="let date of dates; let currentPosition = index"
                 [ngClass]="getWeekendBG(date.day, true)"
               >
-                <div class="main-text">9</div>
-                <div class="seconday-text">32%</div>
+                <div class="main-text">
+                  {{ getAvailability(currentPosition, 'qty') }}
+                </div>
+                <div class="seconday-text">
+                  {{ getAvailability(currentPosition, 'occupy') }}%
+                </div>
               </div>
             </div>
           </div>
@@ -180,6 +185,13 @@
                       <hospitality-bot-input
                         *ngSwitchCase="'number'"
                         controlName="value"
+                        min="0"
+                        [props]="{
+                          type: 'number',
+                          errorMessages: {
+                            min: 'Invalid'
+                          }
+                        }"
                       ></hospitality-bot-input>
                       <hospitality-bot-input-switch
                         *ngSwitchCase="'boolean'"
@@ -245,5 +257,6 @@
     class="save-btn"
     label="Save"
     (onClick)="handleSave()"
+    [disabled]="loading || loadingError"
   ></hospitality-bot-button>
 </div>

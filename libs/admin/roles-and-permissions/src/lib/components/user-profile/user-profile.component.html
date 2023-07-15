@@ -50,10 +50,10 @@
 
     <div
       class="one-third-width managed-by"
-      *ngIf="hasPageState('addNewUser') && userToModDetails"
+      *ngIf="hasPageState('addNewUser', 'editUser')"
     >
-      Manage By: {{ userToModDetails.firstName }}
-      {{ userToModDetails.lastName }}, Admin
+      Manage By: {{ adminToModDetails.firstName }}
+      {{ adminToModDetails.lastName }}, Admin
     </div>
     <div
       class="one-third-width"

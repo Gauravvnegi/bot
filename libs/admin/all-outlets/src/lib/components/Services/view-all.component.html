@@ -61,7 +61,10 @@
         </ng-container>
       </form>
     </div>
-    <div class="footer-buttons">
+    <div
+      class="footer-buttons"
+      *ngIf="paidServices.length || compServices.length"
+    >
       <hospitality-bot-button
         (onClick)="resetForm()"
         label="Reset"

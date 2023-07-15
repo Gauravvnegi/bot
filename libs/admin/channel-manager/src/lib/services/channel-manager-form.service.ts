@@ -27,7 +27,6 @@ export class ChannelManagerFormService {
   }
 
   loadRoomTypes(entityId) {
-    // this.roomDetails = roomTypeData;
     this.channelMangerService.getRoomDetails(entityId).subscribe((res) => {
       const rooms = new RoomTypeList()
         .deserialize(res)
@@ -63,10 +62,6 @@ export class ChannelManagerFormService {
           return room;
         })
       );
-
-      // this.roomDetails.subscribe((value) => {
-      //   debugger;
-      // });
     });
   }
 }

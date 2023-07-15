@@ -90,24 +90,25 @@ export class UpdateRates {
   deserialize(input: ChannelManagerResponse) {
     input.updates?.forEach((currentData) => {
       const currentDay = currentData.startDate ?? currentData.endDate;
-
+      this.ratesRoomDetails;
+      // debugger;
       // rate plan iteration
       const ratePlanData = currentData.inventoryDataMap;
       Object.keys(ratePlanData).forEach((currentRoomId) => {
         const { available, occupancy } = ratePlanData[currentRoomId];
         if (!this.ratesRoomDetails[currentRoomId]) {
           // if first time create
-          this.ratesRoomDetails = new Map();
+          // this.ratesRoomDetails = new Map();
           this.ratesRoomDetails[currentRoomId] = {
             availability: new Map(),
             ratePlans: new Map(),
           };
         }
-
         this.ratesRoomDetails[currentRoomId].availability[currentDay] = {
           quantity: available,
           occupancy: occupancy,
         };
+        // debugger;
       });
       // all rates plan on current day
       currentData.rates.forEach((currentRatePlan) => {

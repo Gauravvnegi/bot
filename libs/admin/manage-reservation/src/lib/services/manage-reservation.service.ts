@@ -11,7 +11,6 @@ import { EntityType } from '@hospitality-bot/admin/shared';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
-
   getRoomTypeList(
     entityId: string,
     config?: QueryConfig
@@ -95,8 +94,10 @@ export class ManageReservationService extends ApiService {
     );
   }
 
-  getReservationItems<T>(config?: QueryConfig): Observable<T> {
-    return this.get(`/api/v1/booking${config?.params}`);
+  getReservationItems<T>(config?: QueryConfig, id?: string): Observable<T> {
+    return this.get(`/api/v1/booking${config?.params}`, {
+      headers: { 'entity-id': id },
+    });
   }
 
   getReservationItemsByCategory<T>(config?: QueryConfig): Observable<T> {

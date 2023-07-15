@@ -125,13 +125,13 @@ export const cols: Record<TableValue, Cols[]> = {
     {
       field: 'dineInPrice',
       header: 'Dine in / Delivery',
-      sortType: 'string',
-      searchField: ['dineInPrice, deliveryPrice'],
+      sortType: 'number',
+      searchField: ['dineInPrice', 'deliveryPrice'],
     },
     {
       field: 'preparationTime',
       header: 'Preparation Time',
-      sortType: 'number',
+      sortType: 'date',
     },
     {
       field: 'quantity',
@@ -143,6 +143,7 @@ export const cols: Record<TableValue, Cols[]> = {
       field: 'status',
       header: 'Status',
       sortType: 'string',
+      width: '14%',
     },
   ],
 
@@ -170,12 +171,13 @@ export const cols: Record<TableValue, Cols[]> = {
     {
       field: 'preparationTime',
       header: 'PreparationTime',
-      sortType: 'number',
+      sortType: 'date',
     },
     {
-      field: 'unit',
+      field: 'quantity',
       header: 'Qty/Unit',
       sortType: 'number',
+      searchField: ['unit, quantity'],
     },
     {
       field: 'status',

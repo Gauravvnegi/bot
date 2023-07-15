@@ -112,6 +112,16 @@ export class UpdateRatesComponent implements OnInit {
     return Array.from({ length: this.dateLimit }, (_, index) => index);
   }
 
+  selectRooms() {
+    //default room select
+    this.useFormControl.roomType.patchValue(
+      {
+        value: this.roomTypes.map((room) => room.value),
+      },
+      { emitEvent: false }
+    );
+  }
+
   initForm() {
     this.currentDate.setHours(0, 0, 0, 0);
     this.useForm = this.fb.group({
@@ -377,16 +387,42 @@ export class UpdateRatesComponent implements OnInit {
       this.snackbarService.openSnackBarAsText(
         'Invalid form: Please fix errors'
       );
-      this.loading = true;
-
-      const { fromDate } = this.getFromAndToDateEpoch(
-        this.useForm.controls['date'].value
-      );
-      const data = UpdateInventory.buildRequestData(
-        this.useForm.getRawValue(),
-        fromDate
-      );
     }
+    this.loading = true;
+
+    const { fromDate } = this.getFromAndToDateEpoch(
+      this.useForm.controls['date'].value
+    );
+
+    const data = UpdateRates.buildRequestData(
+      this.useForm.getRawValue(),
+      fromDate
+    );
+
+    this.$subscription.add(
+      this.channelManagerService
+        .updateChannelManager(data, this.entityId, this.getQueryConfig())
+        .subscribe(
+          (res) => {
+            this.initEditView();
+            this.snackbarService.openSnackBarAsText(
+              'Inventory Update successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.loading = false;
+            this.loadingError = false;
+          },
+          (error) => {
+            this.useForm.controls['date'].patchValue(this.currentDate, {
+              emitEvent: false,
+            });
+            this.setRoomDetails();
+            this.loading = false;
+          },
+          this.handleFinal
+        )
+    );
   }
 
   setRoomDetails(selectedDate?: number) {
@@ -397,36 +433,32 @@ export class UpdateRatesComponent implements OnInit {
     );
     let currentDate = new Date(fromDate);
 
-    if (this.ratesRoomDetails && roomTypeControls.length > 0) {
-      // this.setDynamicPricing(fromDate);
+    if (
+      Object.keys(this.ratesRoomDetails).length > 0 &&
+      roomTypeControls.length > 0
+    ) {
       for (const roomControl of roomTypeControls) {
         const roomId = roomControl.value.value;
+        ((roomControl as FormGroup).controls[
+          'ratePlans'
+        ] as FormArray).controls.forEach((ratePlan: FormGroup, index) => {
+          const { rates, value } = ratePlan.controls;
 
-        roomControl.value.ratePlans.forEach((ratePlan, index) => {
-          const ratePlanId = ratePlan.value;
-          const ratePlanControl = ((roomControl as FormGroup).controls[
-            'ratePlans'
-          ] as FormArray).controls;
-          // current plan, all control iteration
-          ratePlanControl.forEach((currentPlanDayControl) => {
-            const currentPlanDayValueControl = ((currentPlanDayControl as FormGroup)
-              .controls['rates'] as FormArray).controls;
-
-            // current plan each day input iteration
-            currentPlanDayValueControl.forEach(
-              (valueControl: FormGroup, index) => {
-                const responseRatePlan = this.ratesRoomDetails[roomId][
-                  'ratePlans'
-                ][ratePlanId][currentDate.getTime()];
-
-                valueControl.controls['value'].patchValue(
-                  responseRatePlan ? responseRatePlan.available : null
-                );
-                currentDate.setDate(currentDate.getDate() + 1);
-              }
-            );
-            currentDate = new Date(fromDate);
-          });
+          (rates as FormArray).controls.forEach(
+            (ratePlanControl: FormGroup) => {
+              const valueControl = ratePlanControl.controls[
+                'value'
+              ] as FormControl;
+              const responseRatePlan = this.ratesRoomDetails[roomId][
+                'ratePlans'
+              ][value.value][currentDate.getTime()];
+              valueControl.patchValue(
+                responseRatePlan ? responseRatePlan.available : null
+              );
+              currentDate.setDate(currentDate.getDate() + 1);
+            }
+          );
+          currentDate = new Date(fromDate);
         });
       }
     }
@@ -444,6 +476,7 @@ export class UpdateRatesComponent implements OnInit {
 
   handleFinal() {
     this.loading = false;
+    this.loadingError = false;
   }
 
   getWeekendBG(day: string, isOccupancy = false) {
@@ -482,7 +515,7 @@ export class UpdateRatesComponent implements OnInit {
     type: 'quantity' | 'occupancy',
     roomTypeId: string
   ) {
-    if (!this.ratesRoomDetails) return 0;
+    if (Object.keys(this.ratesRoomDetails).length === 0) return 0;
 
     const date = new Date(this.useForm.controls['date'].value);
     date.setDate(date.getDate() + nextDate);

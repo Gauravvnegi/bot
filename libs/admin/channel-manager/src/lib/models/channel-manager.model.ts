@@ -144,5 +144,54 @@ export class UpdateRates {
     return this;
   }
 
-  static buildRequestData(formData, fromDate: number) {}
+  static buildRequestData(formData, fromDate: number) {
+    let dynamicPricingMap = new Map<number, boolean>();
+    //if dynamic pricing true then do not send data of those date
+    let updates: {
+      startDate: number;
+      endDate: number;
+      rates: {
+        roomTypeId: string;
+        rate: number;
+        ratePlanId: string;
+        dynamicPricing: boolean;
+      }[];
+    }[] = [];
+
+    let selectedDate = new Date(fromDate);
+    formData.dynamicPricing.forEach((price) => {
+      dynamicPricingMap[selectedDate.getTime()] = price.value;
+      selectedDate.setDate(selectedDate.getDate() + 1);
+    });
+
+    formData.roomTypes.forEach((room) => {
+      room.ratePlans.forEach((ratePlan) => {
+        selectedDate = new Date(fromDate);
+        updates = ratePlan.rates.map((rate, dayIndex) => {
+          const rates = {
+            roomTypeId: room.value,
+            rate: rate.value ? +rate.value : null,
+            ratePlanId: ratePlan.value,
+            dynamicPricing: false, // get current day dynamic pricing status from Map, if required ex- dynamicPricingMap[currentDay]
+          };
+
+          let perDayData = {
+            startDate: selectedDate.getTime(),
+            endDate: selectedDate.getTime(),
+            rates: updates[dayIndex]
+              ? [...updates[dayIndex]?.rates, rates]
+              : [rates],
+          };
+
+          // filter rates plan who have not any input on this particular day
+          perDayData.rates = perDayData.rates.filter((item) => item.rate);
+          selectedDate.setDate(selectedDate.getDate() + 1);
+          return perDayData;
+        });
+        // filter data who haven't exist any rate plans
+      });
+    });
+
+    return { updates: updates.filter((item) => item.rates.length > 0) };
+  }
 }

@@ -327,5 +327,6 @@
     class="save-btn"
     label="Save"
     (onClick)="handleSave()"
+    [disabled]="loading || loadingError"
   ></hospitality-bot-button>
 </div>

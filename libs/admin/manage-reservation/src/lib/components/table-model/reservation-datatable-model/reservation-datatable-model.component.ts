@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 import { ReservationService } from 'libs/admin/reservation/src/lib/services/reservation.service';
 import { ManageReservationService } from '../../../services/manage-reservation.service';
 import { Router } from '@angular/router';
-import { selectedOutlet } from '../../../types/reservation.type';
+// import { selectedOutlet } from '../../../types/reservation.type';
 
 @Component({
   selector: 'hospitality-bot-reservation-datatable-model',
@@ -43,25 +43,25 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
     super(fb, tabFilterService);
   }
 
-  @Input() set selectedOutlet(value: selectedOutlet) {
-    this.globalQueries = [];
-    this.initTableValues(value.id, value.type);
+  // @Input() set selectedOutlet(value: selectedOutlet) {
+  //   this.globalQueries = [];
+  //   this.initTableValues(value.id, value.type);
 
-    //set the nav link on the basis of outlet type
-    switch (value.type) {
-      case 'HOTEL':
-        this.navLink = '/pages/efrontdesk/manage-reservation/add-reservation';
-        break;
-      case 'RESTAURANT':
-        this.navLink = `/hotel/${this.entityId}/reservation/restaurant`;
-        break;
-      case 'SPA':
-        this.navLink = `/hotel/${this.entityId}/reservation/spa`;
-        break;
-      case 'VENUE':
-        this.navLink = `/hotel/${this.entityId}/reservation/activity`;
-    }
-  }
+  //   //set the nav link on the basis of outlet type
+  //   switch (value.type) {
+  //     case 'HOTEL':
+  //       this.navLink = '/pages/efrontdesk/manage-reservation/add-reservation';
+  //       break;
+  //     case 'RESTAURANT':
+  //       this.navLink = `/hotel/${this.entityId}/reservation/restaurant`;
+  //       break;
+  //     case 'SPA':
+  //       this.navLink = `/hotel/${this.entityId}/reservation/spa`;
+  //       break;
+  //     case 'VENUE':
+  //       this.navLink = `/hotel/${this.entityId}/reservation/activity`;
+  //   }
+  // }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;

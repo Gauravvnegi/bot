@@ -136,13 +136,20 @@ export class ReservationComponent extends BaseDatatableComponent
       chips: [],
       type: branch.type,
     });
+
+    this.formService.selectedEntity.next({
+      id: this.tabFilterItems[0].value,
+      label: this.tabFilterItems[0].label,
+      type: this.tabFilterItems[0].type ? EntityType.OUTLET : EntityType.HOTEL,
+      subType: this.tabFilterItems[0].type
+        ? this.tabFilterItems[0].type
+        : EntitySubType.ROOM_TYPE,
+    });
     if (this.globalFeedbackFilterType === Feedback.BOTH)
       this.tabFilterItems.push(this.getTabItem(branch, Feedback.STAY));
     this.outlets.forEach((outlet) => {
       if (this.outletIds[outlet.id]) {
-        this.tabFilterItems.push(
-          this.getTabItem(outlet, outlet.type)
-        );
+        this.tabFilterItems.push(this.getTabItem(outlet, outlet.type));
       }
     });
   }
@@ -160,10 +167,18 @@ export class ReservationComponent extends BaseDatatableComponent
 
   onSelectedTabFilterChange(event: MatTabChangeEvent): void {
     this.tabFilterIdx = event.index;
-    this.selectedOutlet = this.tabFilterItems[event.index].type;
-    this.formService.selectedOutlet.next(this.selectedOutlet);
-    // this.formService.selectedOutlet.next(this.selectedOutlet);
+    this.selectedOutlet =
+      this.tabFilterItems[event.index].type ?? EntitySubType.ROOM_TYPE;
     debugger;
+    this.formService.selectedEntity.next({
+      id: this.tabFilterItems[event.index].value,
+      label: this.tabFilterItems[event.index].label,
+      type:
+        this.selectedOutlet === EntitySubType.ROOM_TYPE
+          ? EntityType.HOTEL
+          : EntityType.OUTLET,
+      subType: this.selectedOutlet,
+    });
   }
 }
 

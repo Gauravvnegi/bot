@@ -14,7 +14,7 @@ export class ReservationFormWrapperComponent implements OnInit {
 
   ngOnInit(): void {
     this.formService
-      .getSelectedOutlet()
-      .subscribe((value) => (this.selectedOutlet = value));
+      .getSelectedEntity()
+      .subscribe((value) => (this.selectedOutlet = value.subType));
   }
 }

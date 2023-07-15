@@ -545,7 +545,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       dynamicRatePlans,
       ...rest
     } = this.useForm.getRawValue() as RoomTypeFormData;
-
+    debugger;
     let staticRatePlanModData = staticRatePlans?.map(
       ({ discountType, discountValue, id, ...restRatePlan }) => ({
         ...restRatePlan,

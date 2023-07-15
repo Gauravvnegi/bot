@@ -52,9 +52,9 @@ export class Room {
     this.date = input.updated ?? input.created ?? null;
     this.price = input.price ?? null;
     this.currency = input.currency ?? '';
-    this.status = input.roomStatus ?? '';
+    this.status = input.status ?? '';
     this.foStatus = input.frontOfficeState ?? '';
-    this.nextStates = [...input.nextStates, input.roomStatus];
+    this.nextStates = [...input.nextStates, input.status];
     return this;
   }
 

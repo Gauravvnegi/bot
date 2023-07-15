@@ -85,9 +85,9 @@ export class InhouseData {
       set({}, 'reservationId', get(input, ['reservationId'])),
       set({}, 'state', get(input, ['state'])),
       set({}, 'status', get(input, ['status'])),
-      set({}, 'timeLeft', get(input, ['timeLeft']))
     );
 
+    this.timeLeft = input.timeLeft;
     this.source = input.source;
 
     return this;

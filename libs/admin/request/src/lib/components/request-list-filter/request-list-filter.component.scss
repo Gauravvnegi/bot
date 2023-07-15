@@ -30,7 +30,12 @@
         letter-spacing: 0.56px;
         color: $grayMedium;
         margin-right: 5px;
-        &:hover {
+      }
+      &:hover {
+        .filter {
+          color: $primary-cta;
+        }
+        .cross {
           color: $primary-cta;
         }
       }
@@ -41,9 +46,9 @@
   font-size: 22px;
   cursor: pointer;
   color: $grayMedium;
-  &:hover {
-    color: $primary-cta;
-  }
+  // &:hover {
+  //   color: $primary-cta;
+  // }
 }
 .sortFilterWrapper {
   height: 100%;

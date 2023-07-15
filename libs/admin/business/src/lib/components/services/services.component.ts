@@ -38,7 +38,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   compServices: Service[] = [];
   filteredServices: any[] = [];
   noMoreServices = false;
-  limit = 10;
+  limit = 15;
   offset = 0;
 
   constructor(

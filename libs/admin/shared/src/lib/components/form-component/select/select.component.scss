@@ -4,8 +4,9 @@
   display: inline-flex;
   align-items: center;
   gap: 4%;
-  overflow: hidden;
+  // overflow: hidden;
 }
+
 :host ::ng-deep .option-image {
   width: 2em;
   height: 2em;

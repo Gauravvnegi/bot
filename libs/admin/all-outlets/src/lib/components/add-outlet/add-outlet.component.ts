@@ -343,10 +343,13 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    */
   handleSuccess = (feature?: Feature, outletId?: string) => {
     this.OutletFormService.resetOutletFormData();
+
     this.snackbarService.openSnackBarAsText(
       this.outletId
         ? 'Outlet updated successfully'
-        : 'Outlet added successfully'
+        : 'Outlet added successfully',
+      '',
+      { panelClass: 'success' }
     );
     switch (feature) {
       case 'menu':

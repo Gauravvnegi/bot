@@ -19,14 +19,12 @@ import {
 } from '../../constants/data';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { DateOption, RoomTypes } from '../../types/channel-manager.types';
-import { getWeekendBG } from '../../models/bulk-update.models';
+import { UpdateInventory, getWeekendBG } from '../../models/bulk-update.models';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
-import { startWith } from 'rxjs/operators';
-import { UpdateInventory } from '../../models/channel-manager.model';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',

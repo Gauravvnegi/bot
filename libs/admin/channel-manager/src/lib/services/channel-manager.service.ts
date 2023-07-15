@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { QueryConfig } from '@hospitality-bot/admin/shared';
 import { ApiService } from '@hospitality-bot/shared/utils';
 import { Observable } from 'rxjs';
-import {
-  ChannelManagerResponse,
-  UpdateRatesResponse,
-} from '../types/response.type';
+import { ChannelManagerResponse } from '../types/response.type';
 
 @Injectable()
 export class ChannelManagerService extends ApiService {

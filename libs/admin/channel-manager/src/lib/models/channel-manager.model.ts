@@ -1,8 +1,5 @@
 import { RoomMapType } from '../types/channel-manager.types';
-import {
-  ChannelManagerResponse,
-  UpdateRatesResponse,
-} from '../types/response.type';
+import { ChannelManagerResponse } from '../types/response.type';
 
 export class UpdateInventory {
   perDayRoomAvailability = new Map<
@@ -146,4 +143,6 @@ export class UpdateRates {
 
     return this;
   }
+
+  static buildRequestData(formData, fromDate: number) {}
 }

@@ -250,6 +250,14 @@
                           <hospitality-bot-input
                             *ngSwitchCase="'number'"
                             controlName="value"
+                            min="0"
+                            [props]="{
+                              type: 'number',
+                              errorMessages: {
+                                min: 'Invalid'
+                              }
+                            }"
+                            class="hide-spinner"
                           ></hospitality-bot-input>
                           <hospitality-bot-input-switch
                             *ngSwitchCase="'boolean'"

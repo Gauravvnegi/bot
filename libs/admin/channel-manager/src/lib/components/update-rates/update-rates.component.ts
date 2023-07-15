@@ -5,6 +5,7 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
+  Validators,
 } from '@angular/forms';
 import {
   AdminUtilityService,
@@ -28,7 +29,10 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
-import { UpdateRates } from '../../models/channel-manager.model';
+import {
+  UpdateInventory,
+  UpdateRates,
+} from '../../models/channel-manager.model';
 
 @Component({
   selector: 'hospitality-bot-update-rates',
@@ -293,7 +297,9 @@ export class UpdateRatesComponent implements OnInit {
   getValuesArrayControl(type: RestrictionAndValuesOption['type'] = 'number') {
     return this.fb.array(
       this.dates.map((item) =>
-        this.fb.group({ value: [type === 'number' ? null : false] })
+        this.fb.group({
+          value: type === 'number' ? [null, [Validators.min(0)]] : [false],
+        })
       )
     );
   }
@@ -366,7 +372,21 @@ export class UpdateRatesComponent implements OnInit {
   }
 
   handleSave() {
-    // this.snacu
+    if (this.useForm.invalid) {
+      this.useForm.markAllAsTouched();
+      this.snackbarService.openSnackBarAsText(
+        'Invalid form: Please fix errors'
+      );
+      this.loading = true;
+
+      const { fromDate } = this.getFromAndToDateEpoch(
+        this.useForm.controls['date'].value
+      );
+      const data = UpdateInventory.buildRequestData(
+        this.useForm.getRawValue(),
+        fromDate
+      );
+    }
   }
 
   setRoomDetails(selectedDate?: number) {
@@ -381,14 +401,12 @@ export class UpdateRatesComponent implements OnInit {
       // this.setDynamicPricing(fromDate);
       for (const roomControl of roomTypeControls) {
         const roomId = roomControl.value.value;
-        // debugger;
 
         roomControl.value.ratePlans.forEach((ratePlan, index) => {
           const ratePlanId = ratePlan.value;
           const ratePlanControl = ((roomControl as FormGroup).controls[
             'ratePlans'
           ] as FormArray).controls;
-          // debugger;
           // current plan, all control iteration
           ratePlanControl.forEach((currentPlanDayControl) => {
             const currentPlanDayValueControl = ((currentPlanDayControl as FormGroup)
@@ -401,12 +419,9 @@ export class UpdateRatesComponent implements OnInit {
                   'ratePlans'
                 ][ratePlanId][currentDate.getTime()];
 
-                // const d = currentDate.getTime();
-
                 valueControl.controls['value'].patchValue(
                   responseRatePlan ? responseRatePlan.available : null
                 );
-                // debugger;
                 currentDate.setDate(currentDate.getDate() + 1);
               }
             );
@@ -414,7 +429,6 @@ export class UpdateRatesComponent implements OnInit {
           });
         });
       }
-      // debugger;
     }
   }
 

@@ -25,6 +25,7 @@
             <hospitality-bot-date
               controlName="date"
               [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
+              [minDate]="currentDate"
             >
             </hospitality-bot-date>
           </div>
@@ -66,9 +67,9 @@
                   <div class="input-content-section left-main-cell">
                     <div class="left-main-cell__left">
                       <div class="room-type">
-                        <div>{{ ratePlan.get('type').value }}</div>
+                        <!-- <div>{{ ratePlan.get('type').value }}</div> -->
                         <div class="room-type__subtitle">
-                          ({{ ratePlan.get('label').value }})
+                          {{ ratePlan.get('label').value }}
                         </div>
                       </div>
 
@@ -176,6 +177,11 @@
               >
                 <hospitality-bot-input-switch
                   controlName="value"
+                  [defaultValue]="
+                    getDynamicPriceSize() > 0
+                      ? getDynamicPrice(controlIdx)
+                      : false
+                  "
                 ></hospitality-bot-input-switch>
               </div>
             </div>
@@ -190,11 +196,27 @@
                   <div class="data-cell heading-section">
                     <div
                       class="cell"
-                      *ngFor="let date of dates"
+                      *ngFor="let date of dates; let dateIndex = index"
                       [ngClass]="getWeekendBG(date.day, true)"
                     >
-                      <div class="main-text">9</div>
-                      <div class="seconday-text">32%</div>
+                      <div class="main-text">
+                        {{
+                          getAvailability(
+                            dateIndex,
+                            'quantity',
+                            roomType.value.value
+                          )
+                        }}
+                      </div>
+                      <div class="seconday-text">
+                        {{
+                          getAvailability(
+                            dateIndex,
+                            'occupancy',
+                            roomType.value.value
+                          )
+                        }}%
+                      </div>
                     </div>
                   </div>
                 </div>

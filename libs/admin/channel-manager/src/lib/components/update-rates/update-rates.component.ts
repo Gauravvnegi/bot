@@ -3,18 +3,32 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
 } from '@angular/forms';
-import { daysOfWeek } from '@hospitality-bot/admin/shared';
+import {
+  AdminUtilityService,
+  QueryConfig,
+  daysOfWeek,
+} from '@hospitality-bot/admin/shared';
 import {
   ratesRestrictions,
   RestrictionAndValuesOption,
   restrictionsRecord,
 } from '../../constants/data';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
-import { DateOption, RoomTypes } from '../../types/channel-manager.types';
+import {
+  DateOption,
+  RoomMapType,
+  RoomTypes,
+} from '../../types/channel-manager.types';
 import { getWeekendBG } from '../../models/bulk-update.models';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { ChannelManagerService } from '../../services/channel-manager.service';
+import * as moment from 'moment';
+import { Subscription } from 'rxjs';
+import { UpdateRates } from '../../models/channel-manager.model';
 
 @Component({
   selector: 'hospitality-bot-update-rates',
@@ -34,17 +48,29 @@ export class UpdateRatesComponent implements OnInit {
   dateLimit: number = 15;
 
   restrictions: RestrictionAndValuesOption[];
+  loading = false;
+  loadingError = false;
+  currentDate = new Date();
+
+  $subscription = new Subscription();
+  dynamicPricing = new Map<number, boolean>();
+  ratesRoomDetails = new Map<string, RoomMapType>();
 
   constructor(
     private fb: FormBuilder,
     private channelMangerForm: ChannelManagerFormService,
-    private globalFilter: GlobalFilterService
+    private globalFilter: GlobalFilterService,
+    private snackbarService: SnackBarService,
+    private channelManagerService: ChannelManagerService,
+    private adminUtilityService: AdminUtilityService
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
     this.initOptions();
     this.initForm();
+    this.listenChanges();
+    this.initEditView();
   }
 
   initOptions() {
@@ -83,11 +109,11 @@ export class UpdateRatesComponent implements OnInit {
   }
 
   initForm() {
+    this.currentDate.setHours(0, 0, 0, 0);
     this.useForm = this.fb.group({
       roomType: [],
-      date: [Date.now()],
+      date: [this.currentDate.getTime()],
     });
-
     this.addRoomTypesControl();
     this.addDynamicControl();
 
@@ -161,6 +187,7 @@ export class UpdateRatesComponent implements OnInit {
       );
       this.addRatePlansControls(roomType.ratePlans, roomTypeIdx);
     });
+    this.setRoomDetails();
   }
 
   /**
@@ -299,11 +326,156 @@ export class UpdateRatesComponent implements OnInit {
     this.dates = dates;
   }
 
+  listenChanges() {
+    this.useForm.controls['date'].valueChanges.subscribe((selectedDate) => {
+      this.useForm.controls['date'].patchValue(selectedDate, {
+        emitEvent: false,
+      });
+      this.initEditView(selectedDate);
+    });
+  }
+
+  initEditView(selectedDate = this.useForm.value.date) {
+    this.loading = true;
+    this.$subscription.add(
+      this.channelManagerService
+        .getChannelManagerDetails(
+          this.entityId,
+          this.getQueryConfig(selectedDate)
+        )
+        .subscribe(
+          (res) => {
+            const data = new UpdateRates().deserialize(res.roomType);
+            this.dynamicPricing = data.dynamicPricing;
+            this.ratesRoomDetails = data.ratesRoomDetails;
+            this.setRoomDetails(selectedDate);
+            this.loading = false;
+            this.loadingError = false;
+          },
+          (error) => {
+            this.useForm.controls['date'].patchValue(this.currentDate, {
+              emitEvent: false,
+            });
+            this.setRoomDetails();
+            this.loading = false;
+            this.loadingError = true;
+          },
+          this.handleFinal
+        )
+    );
+  }
+
   handleSave() {
     // this.snacu
   }
 
+  setRoomDetails(selectedDate?: number) {
+    const roomTypeControls = (this.useForm.controls['roomTypes'] as FormArray)
+      .controls;
+    const { fromDate } = this.getFromAndToDateEpoch(
+      selectedDate ? selectedDate : this.useForm.controls['date'].value
+    );
+    let currentDate = new Date(fromDate);
+
+    if (this.ratesRoomDetails && roomTypeControls.length > 0) {
+      // this.setDynamicPricing(fromDate);
+      for (const roomControl of roomTypeControls) {
+        const roomId = roomControl.value.value;
+        // debugger;
+
+        roomControl.value.ratePlans.forEach((ratePlan, index) => {
+          const ratePlanId = ratePlan.value;
+          const ratePlanControl = ((roomControl as FormGroup).controls[
+            'ratePlans'
+          ] as FormArray).controls;
+          // debugger;
+          // current plan, all control iteration
+          ratePlanControl.forEach((currentPlanDayControl) => {
+            const currentPlanDayValueControl = ((currentPlanDayControl as FormGroup)
+              .controls['rates'] as FormArray).controls;
+
+            // current plan each day input iteration
+            currentPlanDayValueControl.forEach(
+              (valueControl: FormGroup, index) => {
+                const responseRatePlan = this.ratesRoomDetails[roomId][
+                  'ratePlans'
+                ][ratePlanId][currentDate.getTime()];
+
+                // const d = currentDate.getTime();
+
+                valueControl.controls['value'].patchValue(
+                  responseRatePlan ? responseRatePlan.available : null
+                );
+                // debugger;
+                currentDate.setDate(currentDate.getDate() + 1);
+              }
+            );
+            currentDate = new Date(fromDate);
+          });
+        });
+      }
+      // debugger;
+    }
+  }
+
+  getDynamicPriceSize() {
+    return Object.keys(this.dynamicPricing).length;
+  }
+
+  getDynamicPrice(nextDay) {
+    const currDay = new Date(this.useForm.controls['date'].value);
+    currDay.setDate(currDay.getDate() + nextDay);
+    return this.dynamicPricing[currDay.getTime()] ?? false;
+  }
+
+  handleFinal() {
+    this.loading = false;
+  }
+
   getWeekendBG(day: string, isOccupancy = false) {
     return getWeekendBG(day, isOccupancy);
+  }
+
+  getQueryConfig(selectedDate?: number): QueryConfig {
+    const { fromDate, toDate } = this.getFromAndToDateEpoch(
+      selectedDate ? selectedDate : this.useForm.controls['date'].value
+    );
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'ROOM_TYPE',
+          limit: 5,
+          inventoryUpdateType: 'RATES',
+        },
+        selectedDate && { fromDate: fromDate, toDate: toDate },
+      ]),
+    };
+    return config;
+  }
+
+  getFromAndToDateEpoch(currentTime) {
+    const fromDate = currentTime;
+    const toDate = new Date(currentTime);
+    toDate.setDate(toDate.getDate() + this.dates.length - 1);
+    return {
+      fromDate: moment(fromDate).unix() * 1000,
+      toDate: moment(toDate).unix() * 1000,
+    };
+  }
+
+  getAvailability(
+    nextDate: number,
+    type: 'quantity' | 'occupancy',
+    roomTypeId: string
+  ) {
+    if (!this.ratesRoomDetails) return 0;
+
+    const date = new Date(this.useForm.controls['date'].value);
+    date.setDate(date.getDate() + nextDate);
+    let room = this.ratesRoomDetails[roomTypeId]['availability'][
+      date.getTime()
+    ];
+    if (room) return room[type] === 'NaN' || !room[type] ? 0 : room[type];
+    return 0;
   }
 }

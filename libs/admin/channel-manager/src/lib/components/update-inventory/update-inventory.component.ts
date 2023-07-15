@@ -19,13 +19,14 @@ import {
 } from '../../constants/data';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { DateOption, RoomTypes } from '../../types/channel-manager.types';
-import { UpdateInventory, getWeekendBG } from '../../models/bulk-update.models';
+import { getWeekendBG } from '../../models/bulk-update.models';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
 import { startWith } from 'rxjs/operators';
+import { UpdateInventory } from '../../models/channel-manager.model';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
@@ -282,7 +283,6 @@ export class UpdateInventoryComponent implements OnInit {
       this.channelManagerService
         .getChannelManagerDetails(
           this.entityId,
-          'inventory',
           this.getQueryConfig(selectedDate)
         )
         .subscribe(
@@ -369,7 +369,6 @@ export class UpdateInventoryComponent implements OnInit {
         .updateChannelManager(
           { updates: data },
           this.entityId,
-          'inventory',
           this.getQueryConfig()
         )
         .subscribe(

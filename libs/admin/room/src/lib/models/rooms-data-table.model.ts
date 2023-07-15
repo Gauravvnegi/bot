@@ -11,6 +11,7 @@ import {
   RoomTypeListResponse,
   RoomTypeResponse,
 } from '../types/service-response';
+import { channels } from 'libs/admin/channel-manager/src/lib/constants/data';
 
 // ************ Room Models ******************
 
@@ -99,6 +100,7 @@ export class RoomType {
   price: number;
   currency: string;
   nextStates: string[];
+  ratePlans?: any[];
 
   deserialize(input: RoomTypeResponse) {
     this.id = input.id ?? '';
@@ -114,7 +116,12 @@ export class RoomType {
     // mapping discounted price
     this.price = input.discountedPrice ?? input.originalPrice;
     this.currency = input.currency ?? '';
-
+    this.ratePlans = input.ratePlans?.map((item) => ({
+      type: '',
+      label: '',
+      value: item.ratePlanTypeId,
+      channels: [],
+    }));
     return this;
   }
 }

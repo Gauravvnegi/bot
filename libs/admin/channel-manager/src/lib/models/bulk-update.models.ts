@@ -5,7 +5,6 @@ import {
   RoomTypes,
   Variant,
 } from '../types/bulk-update.types';
-import { ChannelManagerResponse } from '../types/response.type';
 export class FormFactory {
   static makeRatesRequestData(formData: BulkUpdateForm) {
     let modifiedData: BulkUpdateRequest[] = [];
@@ -77,86 +76,4 @@ export function getWeekendBG(day: string, isOccupancy = false) {
       ? 'weekend-occupancy-bg'
       : 'weekend-bg'
     : '';
-}
-
-export class UpdateInventory {
-  perDayRoomAvailability = new Map<
-    number,
-    {
-      roomAvailable: number;
-      occupancy: number;
-    }
-  >();
-
-  inventoryRoomDetails = new Map<
-    string,
-    {
-      roomId: string;
-      roomCode: string;
-      availableRoom: number;
-    }[]
-  >();
-
-  deserialize(input: ChannelManagerResponse) {
-    input.updates?.forEach((item) => {
-      item.rooms?.forEach((inventory) => {
-        if (!this.inventoryRoomDetails[inventory.roomTypeId]) {
-          this.inventoryRoomDetails[inventory.roomTypeId] = [];
-        }
-
-        this.inventoryRoomDetails[inventory.roomTypeId] = [
-          ...this.inventoryRoomDetails[inventory.roomTypeId],
-          {
-            date: item.startDate ?? item.endDate,
-            roomId: inventory.roomTypeId,
-            roomCode: inventory.roomCode,
-            availableRoom: inventory.available,
-          },
-        ];
-      });
-
-      this.perDayRoomAvailability[item.startDate] = {
-        roomAvailable: item.inventoryData.available,
-        occupancy: item.inventoryData.occupancy,
-      };
-    });
-    return this;
-  }
-
-  static buildRequestData(formData, fromDate: number) {
-    let updates: {
-      startDate: number;
-      endDate: number;
-      rooms: {
-        roomTypeId: string;
-        available: number;
-      }[];
-    }[] = [];
-    formData.roomTypes.forEach((item, index) => {
-      let currentDate = new Date(fromDate);
-      updates =
-        item.availability.map((available, dayIndex) => {
-          var roomData = {
-            roomTypeId: item.value,
-            available: available.value ? +available.value : null,
-          };
-          var rooms = {
-            startDate: currentDate.getTime(),
-            endDate: currentDate.getTime(),
-            rooms: !updates.length
-              ? [{ ...roomData }]
-              : updates[dayIndex]?.rooms?.length
-              ? [...updates[dayIndex]?.rooms, { ...roomData }]
-              : [{ ...roomData }],
-          };
-
-          rooms.rooms =
-            rooms.rooms.filter((filterItem) => filterItem.available) ?? [];
-
-          currentDate.setDate(currentDate.getDate() + 1);
-          return rooms.rooms.length > 0 && rooms;
-        }) ?? [];
-    });
-    return updates.filter((item) => item) ?? [];
-  }
 }

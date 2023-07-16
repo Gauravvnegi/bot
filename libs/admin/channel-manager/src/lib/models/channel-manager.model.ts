@@ -186,10 +186,10 @@ export class UpdateRates {
           selectedDate.setDate(selectedDate.getDate() + 1);
           return perDayData;
         });
-        // filter data who haven't exist any rate plans
       });
     });
 
+    // filter data who haven't exist any rate plans
     return { updates: updates.filter((item) => item.rates.length > 0) };
   }
 }

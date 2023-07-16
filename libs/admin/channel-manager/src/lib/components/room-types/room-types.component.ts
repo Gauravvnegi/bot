@@ -24,6 +24,7 @@ import { RoomTypes } from '../../types/channel-manager.types';
 export class RoomTypesComponent extends FormComponent {
   entityId = '';
   roomTypes: Option[] = [];
+  @Input() isAllSelected = false;
 
   $subscription = new Subscription();
   /* roomTypes options variable */
@@ -53,6 +54,16 @@ export class RoomTypesComponent extends FormComponent {
     this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       this.roomTypes = rooms;
+      this.isAllSelected && this.defaultSelect();
     });
+  }
+
+  defaultSelect() {
+    this.controlContainer.control.patchValue(
+      {
+        [this.controlName]: this.roomTypes.map((item) => item.value),
+      },
+      { emitEvent: false }
+    );
   }
 }

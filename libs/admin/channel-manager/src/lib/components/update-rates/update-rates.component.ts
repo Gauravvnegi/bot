@@ -112,16 +112,6 @@ export class UpdateRatesComponent implements OnInit {
     return Array.from({ length: this.dateLimit }, (_, index) => index);
   }
 
-  selectRooms() {
-    //default room select
-    this.useFormControl.roomType.patchValue(
-      {
-        value: this.roomTypes.map((room) => room.value),
-      },
-      { emitEvent: false }
-    );
-  }
-
   initForm() {
     this.currentDate.setHours(0, 0, 0, 0);
     this.useForm = this.fb.group({

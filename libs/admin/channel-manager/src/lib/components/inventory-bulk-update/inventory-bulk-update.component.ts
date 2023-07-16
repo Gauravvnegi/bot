@@ -1,10 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NavRouteOptions } from '@hospitality-bot/admin/shared';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
+import {
+  AdminUtilityService,
+  NavRouteOptions,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { CheckBoxTreeFactory } from '../../models/bulk-update.models';
 import { RoomTypes } from '../../types/channel-manager.types';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Subscription } from 'rxjs';
+import { UpdateInventory } from '../../models/channel-manager.model';
+import { ChannelManagerService } from '../../services/channel-manager.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'hospitality-bot-inventory-bulk-update',
@@ -15,8 +30,9 @@ export class InventoryBulkUpdateComponent implements OnInit {
   entityId: string;
   inventoryTreeList = [];
   useForm: FormGroup;
-  isFormValid = false;
   pageTitle = 'Bulk Update';
+  loading = false;
+  $subscription = new Subscription();
   navRoutes: NavRouteOptions = [
     {
       label: 'Update Inventory',
@@ -29,13 +45,19 @@ export class InventoryBulkUpdateComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private globalFilter: GlobalFilterService,
-    private formService: ChannelManagerFormService
+    private formService: ChannelManagerFormService,
+    public snackbarService: SnackBarService,
+    private adminUtilityService: AdminUtilityService,
+    private channelManagerService: ChannelManagerService,
+    public router: Router
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const seventhDate = new Date();
+    seventhDate.setHours(0, 0, 0, 0);
     seventhDate.setDate(today.getDate() + 7);
 
     this.useForm = this.fb.group({
@@ -44,10 +66,23 @@ export class InventoryBulkUpdateComponent implements OnInit {
       fromDate: [today.getTime(), [Validators.required]],
       toDate: [seventhDate.getTime(), [Validators.required]],
       roomType: [''],
+      roomTypes: [
+        this.fb.group({
+          roomTypeIds: [[], [Validators.required, this.validateRoomTypeIds]],
+          channelIds: [],
+        }),
+      ],
       selectedDays: [[], [Validators.required]],
     });
     this.listenChanges();
     this.loadRooms();
+  }
+
+  get isFormValid() {
+    return (
+      this.useForm.valid &&
+      (this.useForm.controls['roomTypes'].value as FormGroup).valid
+    );
   }
 
   loadRooms() {
@@ -59,10 +94,10 @@ export class InventoryBulkUpdateComponent implements OnInit {
   }
 
   listenChanges() {
-    this.useForm.valueChanges.subscribe((value) => {
-      this.isFormValid = this.useForm.valid;
-      this.loadTree(value);
-    });
+    // this.useForm.valueChanges.subscribe((value) => {
+    //   this.isFormValid = this.useForm.valid;
+    //   this.loadTree(value);
+    // });
   }
 
   loadTree(controls) {
@@ -73,11 +108,68 @@ export class InventoryBulkUpdateComponent implements OnInit {
     );
   }
 
-  objectChange() {
-    console.log('***Object Change', this.inventoryTreeList);
+  onSubmit() {
+    if (!this.isFormValid) {
+      this.snackbarService.openSnackBarAsText(
+        'Please Fix Form before submit',
+        '',
+        { panelClass: 'error' }
+      );
+      return;
+    }
+
+    this.loading = true;
+    const data = UpdateInventory.buildBulkUpdateRequest(
+      this.useForm.getRawValue()
+    );
+
+    this.$subscription.add(
+      this.channelManagerService
+        .updateChannelManager(
+          { updates: data },
+          this.entityId,
+          this.getQueryConfig()
+        )
+        .subscribe(
+          (res) => {
+            this.snackbarService.openSnackBarAsText(
+              'Bulk Inventory Updated successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.router.navigate([this.navRoutes[0].link]);
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+          },
+          this.handleFinal
+        )
+    );
   }
 
-  onSubmit() {
-    console.log(this.useForm.getRawValue());
+  getQueryConfig(): QueryConfig {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'ROOM_TYPE',
+          limit: 5,
+          inventoryUpdateType: 'INVENTORY',
+        },
+      ]),
+    };
+    return config;
+  }
+  validateRoomTypeIds(control: AbstractControl): ValidationErrors | null {
+    const roomTypeIds = control.value;
+    if (!roomTypeIds || roomTypeIds.length === 0) {
+      // If roomTypeIds is empty, mark the entire form as invalid
+      return { roomTypeIdsRequired: true };
+    }
+    return null;
+  }
+
+  handleFinal() {
+    this.loading = false;
   }
 }

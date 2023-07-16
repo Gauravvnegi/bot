@@ -31,3 +31,12 @@ export type RoomMapType = {
     > // date, qty
   >;
 };
+
+export type UpdateInventoryType = {
+  startDate: number;
+  endDate: number;
+  rooms: {
+    roomTypeId: string;
+    available: number;
+  }[];
+};

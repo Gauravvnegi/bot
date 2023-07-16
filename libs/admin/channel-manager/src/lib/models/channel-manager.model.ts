@@ -1,4 +1,7 @@
-import { RoomMapType } from '../types/channel-manager.types';
+import {
+  RoomMapType,
+  UpdateInventoryType,
+} from '../types/channel-manager.types';
 import { ChannelManagerResponse } from '../types/response.type';
 
 export class UpdateInventory {
@@ -46,14 +49,7 @@ export class UpdateInventory {
   }
 
   static buildRequestData(formData, fromDate: number) {
-    let updates: {
-      startDate: number;
-      endDate: number;
-      rooms: {
-        roomTypeId: string;
-        available: number;
-      }[];
-    }[] = [];
+    let updates: UpdateInventoryType[] = [];
     formData.roomTypes.forEach((item, index) => {
       let currentDate = new Date(fromDate);
       updates =
@@ -80,6 +76,29 @@ export class UpdateInventory {
         }) ?? [];
     });
     return updates.filter((item) => item) ?? [];
+  }
+
+  static buildBulkUpdateRequest(formData) {
+    let updates: UpdateInventoryType[] = [];
+    let { fromDate, toDate, roomTypes, selectedDays, updateValue } = formData;
+    let currentDay = new Date(fromDate);
+    let lastDay = new Date(toDate);
+    lastDay.setDate(lastDay.getDate() + 1);
+    while (currentDay.getTime() != lastDay.getTime()) {
+      const day = currentDay.toLocaleDateString(undefined, { weekday: 'long' });
+      console.log(day, selectedDays.includes(day));
+      selectedDays.includes(day) &&
+        updates.push({
+          startDate: currentDay.getTime(),
+          endDate: currentDay.getTime(),
+          rooms: roomTypes.value.roomTypeIds.map((item) => ({
+            roomTypeId: item,
+            available: +updateValue,
+          })),
+        });
+      currentDay.setDate(currentDay.getDate() + 1);
+    }
+    return updates;
   }
 }
 

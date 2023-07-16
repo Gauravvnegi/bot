@@ -36,7 +36,7 @@
       "
     ></hospitality-bot-custom-file-upload>
     <div class="des-template">
-      <div class="des-template__label">Offer Description</div>
+      <div class="des-template__label">Menu Description</div>
       <div class="des-template__input">
         <hospitality-bot-template-editor
           [parentFG]="useForm"
@@ -47,7 +47,7 @@
     </div>
     <div class="full-width btn-wrapper">
       <hospitality-bot-button
-        [label]="menuId ? 'update' : 'Create'"
+        [label]="menuId ? 'Update' : 'Create'"
         (onClick)="handleSubmit()"
         [isLoading]="loading"
       ></hospitality-bot-button>

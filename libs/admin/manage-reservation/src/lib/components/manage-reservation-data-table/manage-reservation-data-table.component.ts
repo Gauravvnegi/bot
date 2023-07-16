@@ -22,7 +22,6 @@ import * as FileSaver from 'file-saver';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subject, Subscription } from 'rxjs';
-import { switchMap, takeUntil } from 'rxjs/operators';
 import {
   HotelMenuOptions,
   MenuOptions,
@@ -140,7 +139,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.globalFilterService.globalFilter$.subscribe((data) => {
       // set-global query everytime global filter changes
       this.globalQueries = [...data['dateRange'].queryValue];
-      debugger;
       if (!this.isSelectedEntityChanged && this.selectedEntity) {
         this.initTableValue();
       }
@@ -154,12 +152,10 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   listenForSelectedEntityChange() {
     this.formService.selectedEntity.subscribe((res) => {
       this.selectedEntity = res;
-      debugger;
       this.selectedEntity.id !== this.previousSelectedEntity?.id
         ? (this.isSelectedEntityChanged = true)
         : (this.isSelectedEntityChanged = false);
       this.previousSelectedEntity = { ...this.selectedEntity };
-      debugger;
       if (this.selectedEntity && this.isSelectedEntityChanged) {
         this.initDetails(this.selectedEntity);
         this.initTableValue();
@@ -395,7 +391,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         },
       ]),
     };
-    debugger;
     return config;
   }
 

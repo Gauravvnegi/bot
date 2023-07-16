@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ManageReservationService } from '../../services/manage-reservation.service';
-import { EntitySubType } from '@hospitality-bot/admin/shared';
+import {
+  EntitySubType,
+  HotelDetailService,
+} from '@hospitality-bot/admin/shared';
 import { FormService } from '../../services/form.service';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { initial } from 'lodash';
 
 @Component({
   selector: 'hospitality-bot-reservation-form-wrapper',
@@ -10,11 +14,34 @@ import { FormService } from '../../services/form.service';
 })
 export class ReservationFormWrapperComponent implements OnInit {
   selectedOutlet: EntitySubType;
-  constructor(private formService: FormService) {}
+  intitalEntity: EntitySubType;
+  constructor(
+    private formService: FormService,
+    private globalFilterService: GlobalFilterService,
+    private hotelDetailService: HotelDetailService
+  ) {}
 
   ngOnInit(): void {
-    this.formService
-      .getSelectedEntity()
-      .subscribe((value) => (this.selectedOutlet = value.subType));
+    this.listenForGlobalFilters();
+    this.formService.getSelectedEntity().subscribe((value) => {
+      this.selectedOutlet = value?.subType ?? this.intitalEntity;
+    });
+  }
+
+  listenForGlobalFilters(): void {
+    this.globalFilterService.globalFilter$.subscribe((data) => {
+      this.getSelectedOutlet(
+        data['filter'].value.property.entityName,
+        data['filter'].value.property.brandName
+      );
+    });
+  }
+
+  getSelectedOutlet(branchId: string, brandId: string) {
+    const brand = this.hotelDetailService.brands.find(
+      (brand) => brand.id === brandId
+    );
+    const branch = brand.entities.find((branch) => branch.id === branchId);
+    this.intitalEntity = branch.type ? branch.type : EntitySubType.ROOM_TYPE;
   }
 }

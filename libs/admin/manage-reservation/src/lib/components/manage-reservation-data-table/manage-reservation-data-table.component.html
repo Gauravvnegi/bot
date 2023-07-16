@@ -98,7 +98,7 @@
           </div>
         </div>
       </td>
-      <td *ngIf="selectedOutlet !== 'ROOM_TYPE'">
+      <td *ngIf="selectedEntity.subType !== 'ROOM_TYPE'">
         <div class="primary-text">
           <div>{{ rowData.outletName }}</div>
         </div>
@@ -106,7 +106,7 @@
           {{ rowData.type }}
         </div>
       </td>
-      <td *ngIf="selectedOutlet === 'ROOM_TYPE'">
+      <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
         <div class="table-room-no" [roomStatus]="rowData.roomStatus">
           <div>
             {{ rowData.roomNumber || '--' }}&nbsp;-&nbsp;{{
@@ -129,7 +129,7 @@
         </div>
       </td>
 
-      <td *ngIf="selectedOutlet !== 'ROOM_TYPE'">
+      <td *ngIf="selectedEntity.subType !== 'ROOM_TYPE'">
         <div class="center-align">
           <div class="primary-text txtSize">
             {{ rowData.date | date: 'dd/MM/yy' }}
@@ -139,7 +139,7 @@
           </div>
         </div>
       </td>
-      <td *ngIf="selectedOutlet === 'ROOM_TYPE'">
+      <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
         <div class="center-align">
           <div class="primary-text txtSize">
             {{ rowData.from | date: 'dd/MM/yy' }}-{{
@@ -152,13 +152,16 @@
         </div>
       </td>
       <td>
-        <div class="center-align">
+        <div
+          class="center-align"
+          *ngIf="rowData.totalDueAmount && rowData.totalAmount"
+        >
           <div class="primary-text txtSize">
             <span
               [ngClass]="{
                 'status-text-reject':
-                  rowData.totalDueAmount > 0 &&
-                  rowData.totalDueAmount <= rowData.totalAmount
+                  rowData?.totalDueAmount > 0 &&
+                  rowData?.totalDueAmount <= rowData?.totalAmount
               }"
               >{{ rowData.totalDueAmount | currency: 'INR' }}</span
             >
@@ -167,7 +170,7 @@
         </div>
       </td>
       <td>
-        <div class="center-align" *ngIf="rowData.sourceName; else emptyCell" >
+        <div class="center-align" *ngIf="rowData.sourceName; else emptyCell">
           <div class="primary-text">
             {{ rowData.sourceName }}
           </div>

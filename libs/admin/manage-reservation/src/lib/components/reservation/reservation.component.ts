@@ -56,6 +56,140 @@ export class ReservationComponent extends BaseDatatableComponent
     // this.getTabFilterItems();
   }
 
+  // listenForGlobalFilters(): void {
+  //   this.$subscription.add(
+  //     this.globalFilterService.globalFilter$.subscribe((data) => {
+  //       this.entityId = this.globalFilterService.entityId;
+  //       this.globalFeedbackFilterType =
+  //         data['filter'].value.feedback.feedbackType;
+  //       if (
+  //         this.globalFeedbackFilterType === Feedback.TRANSACTIONAL ||
+  //         this.globalFeedbackFilterType === Feedback.BOTH
+  //       ) {
+  //         this.tabFilterIdx = 0;
+  //         this.getOutletsSelected(
+  //           [...data['feedback'].queryValue],
+  //           data['filter'].value
+  //         );
+  //         if (this.globalFeedbackFilterType === Feedback.TRANSACTIONAL) {
+  //           this.formService.type = this.globalFeedbackFilterType;
+  //           this.formService.$feedbackType.next(this.globalFeedbackFilterType);
+  //         } else {
+  //           this.formService.type = '';
+  //           this.formService.$feedbackType.next('');
+  //         }
+  //       } else {
+  //         this.formService.type = Feedback.TRANSACTIONAL;
+  //         this.formService.$feedbackType.next(Feedback.STAY);
+  //         this.setStayTabFilters(data['filter'].value);
+  //       }
+  //     })
+  //   );
+  // }
+
+  // getOutletsSelected(globalQueries, globalQueryValue) {
+  //   globalQueries.forEach((element) => {
+  //     if (element.hasOwnProperty('outlets')) this.outletIds = element.outlets;
+  //   });
+  //   this.getOutlets(
+  //     globalQueryValue.property.entityName,
+  //     globalQueryValue.property.brandName
+  //   );
+  // }
+
+  // getOutlets(branchId: string, brandId: string) {
+  //   const branch = this._hotelDetailService.brands
+  //     .find((brand) => brand.id === brandId)
+  //     .entities.find((branch) => branch['id'] === branchId);
+  //   this.outlets = branch.entities;
+  //   this.formService.outletIds =
+  //     this.globalFeedbackFilterType === Feedback.BOTH
+  //       ? (this.formService.outletIds = [branch.id])
+  //       : this.outlets
+  //           .map((outlet) => {
+  //             if (outlet.id && this.outletIds[outlet.id]) return outlet.id;
+  //           })
+  //           .filter((id) => id !== undefined);
+  //   this.setTabFilterItems(branch);
+  // }
+
+  // setStayTabFilters(globalQueryValue) {
+  //   const branch = this._hotelDetailService.brands
+  //     .find((brand) => brand.id === globalQueryValue.property.brandName)
+  //     .entities.find(
+  //       (branch) => branch['id'] === globalQueryValue.property.entityName
+  //     );
+  //   this.setTabFilterItems(branch);
+  // }
+
+  // setTabFilterItems(branch: EntityConfig) {
+  //   if (this.globalFeedbackFilterType === Feedback.STAY) {
+  //     this.tabFilterItems = [this.getTabItem(branch, branch.category)];
+  //     this.formService.selectedEntity.next({
+  //       id: this.tabFilterItems[0].value,
+  //       label: this.tabFilterItems[0].label,
+  //       type: this.tabFilterItems[0].type
+  //         ? EntityType.OUTLET
+  //         : EntityType.HOTEL,
+  //       subType: this.tabFilterItems[0].type
+  //         ? this.tabFilterItems[0].type
+  //         : EntitySubType.ROOM_TYPE,
+  //     });
+  //     return;
+  //   }
+  //   this.tabFilterItems = [];
+  //   this.tabFilterItems.push({
+  //     label: branch.name,
+  //     content: '',
+  //     value: branch.id,
+  //     disabled: false,
+  //     chips: [],
+  //     type: branch.type,
+  //   });
+
+  //   this.formService.selectedEntity.next({
+  //     id: this.tabFilterItems[0].value,
+  //     label: this.tabFilterItems[0].label,
+  //     type: this.tabFilterItems[0].type ? EntityType.OUTLET : EntityType.HOTEL,
+  //     subType: this.tabFilterItems[0].type
+  //       ? this.tabFilterItems[0].type
+  //       : EntitySubType.ROOM_TYPE,
+  //   });
+  //   if (this.globalFeedbackFilterType === Feedback.BOTH)
+  //     this.tabFilterItems.push(this.getTabItem(branch, Feedback.STAY));
+  //   this.outlets.forEach((outlet) => {
+  //     if (this.outletIds[outlet.id]) {
+  //       this.tabFilterItems.push(this.getTabItem(outlet, outlet.type));
+  //     }
+  //   });
+  // }
+
+  // getTabItem(item: EntityConfig, type: string) {
+  //   return {
+  //     label: item.name,
+  //     content: '',
+  //     value: item.id,
+  //     disabled: false,
+  //     chips: [],
+  //     type: type === EntityType.HOTEL ? EntitySubType.ROOM_TYPE : type,
+  //   };
+  // }
+
+  // onSelectedTabFilterChange(event: MatTabChangeEvent): void {
+  //   this.tabFilterIdx = event.index;
+  //   this.selectedOutlet =
+  //     this.tabFilterItems[event.index].type ?? EntitySubType.ROOM_TYPE;
+  //   this.formService.selectedEntity.next({
+  //     id: this.tabFilterItems[event.index].value,
+  //     label: this.tabFilterItems[event.index].label,
+  //     type:
+  //       this.selectedOutlet === EntitySubType.ROOM_TYPE
+  //         ? EntityType.HOTEL
+  //         : EntityType.OUTLET,
+  //     subType: this.selectedOutlet,
+  //   });
+  // }
+
   listenForGlobalFilters(): void {
     this.$subscription.add(
       this.globalFilterService.globalFilter$.subscribe((data) => {
@@ -71,13 +205,11 @@ export class ReservationComponent extends BaseDatatableComponent
             [...data['feedback'].queryValue],
             data['filter'].value
           );
-          if (this.globalFeedbackFilterType === Feedback.TRANSACTIONAL) {
-            this.formService.type = this.globalFeedbackFilterType;
-            this.formService.$feedbackType.next(this.globalFeedbackFilterType);
-          } else {
-            this.formService.type = '';
-            this.formService.$feedbackType.next('');
-          }
+          this.formService.type =
+            this.globalFeedbackFilterType === Feedback.TRANSACTIONAL
+              ? this.globalFeedbackFilterType
+              : '';
+          this.formService.$feedbackType.next(this.formService.type);
         } else {
           this.formService.type = Feedback.TRANSACTIONAL;
           this.formService.$feedbackType.next(Feedback.STAY);
@@ -98,9 +230,10 @@ export class ReservationComponent extends BaseDatatableComponent
   }
 
   getOutlets(branchId: string, brandId: string) {
-    const branch = this._hotelDetailService.brands
-      .find((brand) => brand.id === brandId)
-      .entities.find((branch) => branch['id'] === branchId);
+    const brand = this._hotelDetailService.brands.find(
+      (brand) => brand.id === brandId
+    );
+    const branch = brand.entities.find((branch) => branch.id === branchId);
     this.outlets = branch.entities;
     this.formService.outletIds =
       this.globalFeedbackFilterType === Feedback.BOTH
@@ -114,54 +247,49 @@ export class ReservationComponent extends BaseDatatableComponent
   }
 
   setStayTabFilters(globalQueryValue) {
-    const branch = this._hotelDetailService.brands
-      .find((brand) => brand.id === globalQueryValue.property.brandName)
-      .entities.find(
-        (branch) => branch['id'] === globalQueryValue.property.entityName
-      );
+    const brand = this._hotelDetailService.brands.find(
+      (brand) => brand.id === globalQueryValue.property.brandName
+    );
+    const branch = brand.entities.find(
+      (branch) => branch.id === globalQueryValue.property.entityName
+    );
     this.setTabFilterItems(branch);
   }
 
   setTabFilterItems(branch: EntityConfig) {
-    if (this.globalFeedbackFilterType === Feedback.STAY) {
-      this.tabFilterItems = [this.getTabItem(branch, Feedback.STAY)];
-      return;
-    }
     this.tabFilterItems = [];
-    this.tabFilterItems.push({
-      label: branch.name,
-      content: '',
-      value: branch.id,
-      disabled: false,
-      chips: [],
-      type: branch.type,
-    });
-
-    this.formService.selectedEntity.next({
-      id: this.tabFilterItems[0].value,
-      label: this.tabFilterItems[0].label,
-      type: this.tabFilterItems[0].type ? EntityType.OUTLET : EntityType.HOTEL,
-      subType: this.tabFilterItems[0].type
-        ? this.tabFilterItems[0].type
-        : EntitySubType.ROOM_TYPE,
-    });
-    if (this.globalFeedbackFilterType === Feedback.BOTH)
-      this.tabFilterItems.push(this.getTabItem(branch, Feedback.STAY));
-    this.outlets.forEach((outlet) => {
-      if (this.outletIds[outlet.id]) {
-        this.tabFilterItems.push(this.getTabItem(outlet, outlet.type));
-      }
-    });
+    this.tabFilterItems.push(this.getTabItem(branch));
+    this.formService.selectedEntity.next(
+      this.getFormServiceEntity(this.tabFilterItems[0])
+    );
+    // if (this.globalFeedbackFilterType === Feedback.BOTH) {
+    //   this.tabFilterItems.push(this.getTabItem(branch));
+    // }
+    if (this.outlets)
+      this.outlets.forEach((outlet) => {
+        if (this.outletIds[outlet.id]) {
+          this.tabFilterItems.push(this.getTabItem(outlet));
+        }
+      });
   }
 
-  getTabItem(item: EntityConfig, type: string) {
+  getTabItem(item: EntityConfig) {
     return {
       label: item.name,
       content: '',
       value: item.id,
       disabled: false,
       chips: [],
-      type: type,
+      type: item.type,
+    };
+  }
+
+  getFormServiceEntity(item) {
+    return {
+      id: item.value,
+      label: item.label,
+      type: item.type ? EntityType.OUTLET : EntityType.HOTEL,
+      subType: item.type ? item.type : EntitySubType.ROOM_TYPE,
     };
   }
 
@@ -169,16 +297,9 @@ export class ReservationComponent extends BaseDatatableComponent
     this.tabFilterIdx = event.index;
     this.selectedOutlet =
       this.tabFilterItems[event.index].type ?? EntitySubType.ROOM_TYPE;
-    debugger;
-    this.formService.selectedEntity.next({
-      id: this.tabFilterItems[event.index].value,
-      label: this.tabFilterItems[event.index].label,
-      type:
-        this.selectedOutlet === EntitySubType.ROOM_TYPE
-          ? EntityType.HOTEL
-          : EntityType.OUTLET,
-      subType: this.selectedOutlet,
-    });
+    this.formService.selectedEntity.next(
+      this.getFormServiceEntity(this.tabFilterItems[event.index])
+    );
   }
 }
 

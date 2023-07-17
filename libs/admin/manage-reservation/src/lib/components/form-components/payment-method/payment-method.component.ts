@@ -43,11 +43,12 @@ export class PaymentMethodComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
     private userService: UserService
-  ) {}
-
+  ) {
+  }
+  
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
     this.addFormGroup();
+    this.entityId = this.globalFilterService.entityId;
     this.getPaymentMethod();
     this.initConfig();
 
@@ -73,6 +74,7 @@ export class PaymentMethodComponent implements OnInit {
     };
 
     this.parentFormGroup.addControl('paymentMethod', this.fb.group(data));
+
   }
 
   initConfig() {
@@ -117,6 +119,4 @@ export class PaymentMethodComponent implements OnInit {
       AbstractControl
     >;
   }
-
-  // get input
 }

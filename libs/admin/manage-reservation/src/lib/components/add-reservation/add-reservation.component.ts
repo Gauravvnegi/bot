@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
+  FormArray,
   FormBuilder,
   FormGroup,
   Validators,
@@ -22,7 +23,7 @@ import {
   NavRouteOptions,
   Option,
 } from '@hospitality-bot/admin/shared';
-import { ReservationForm } from '../../constants/form';
+import { ReservationForm, RoomTypes } from '../../constants/form';
 import { roomFields } from '../../constants/reservation';
 import { FormService } from '../../services/form.service';
 
@@ -67,8 +68,8 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
     this.initForm();
+    this.entityId = this.globalFilterService.entityId;
     this.initDetails();
     this.getReservationId();
   }
@@ -108,21 +109,22 @@ export class AddReservationComponent implements OnInit, OnDestroy {
    */
   listenForFormChanges(): void {
     this.formValueChanges = true;
-    this.roomControls.roomTypeId?.valueChanges.subscribe((res) => {
+    this.roomControls[0].get('roomTypeId')?.valueChanges.subscribe((res) => {
       if (res) {
         this.userForm.get('offerId').reset();
         this.getOfferByRoomType(res);
         this.getSummaryData();
       }
     });
-    this.roomControls.roomCount?.valueChanges.subscribe((res) => {
+    this.roomControls[0].get('roomCount')?.valueChanges.subscribe((res) => {
       if (res) {
         if (
-          this.roomControls.roomCount.value > this.roomControls.adultCount.value
+          this.roomControls[0].get('roomCount').value >
+          this.roomControls[0].get('adultCount').value
         )
-          this.roomControls.adultCount.patchValue(
-            this.roomControls.roomCount.value
-          );
+          this.roomControls[0]
+            .get('adultCount')
+            .patchValue(this.roomControls[0].get('roomCount').value);
       }
     });
   }
@@ -154,7 +156,9 @@ export class AddReservationComponent implements OnInit, OnDestroy {
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
             if (data.offerId)
-              this.getOfferByRoomType(this.roomControls.roomTypeId.value);
+              this.getOfferByRoomType(
+                this.roomControls[0].get('roomTypeId').value
+              );
             this.userForm.valueChanges.subscribe((_) => {
               if (!this.formValueChanges) {
                 this.formValueChanges = true;
@@ -223,10 +227,10 @@ export class AddReservationComponent implements OnInit, OnDestroy {
         type: 'ROOM_TYPE',
         fromDate: this.userForm.get('reservationInformation.from')?.value,
         toDate: this.userForm.get('reservationInformation.to')?.value,
-        adultCount: this.roomControls.adultCount?.value || 1,
-        roomCount: this.roomControls.roomCount?.value || 1,
-        childCount: this.roomControls.childCount?.value || 0,
-        roomType: this.roomControls.roomTypeId?.value,
+        adultCount: this.roomControls[0].get('adultCount')?.value || 1,
+        roomCount: this.roomControls[0].get('roomCount')?.value || 1,
+        childCount: this.roomControls[0].get('childCount')?.value || 0,
+        roomType: this.roomControls[0].get('roomTypeId')?.value,
         offerId: this.userForm.get('offerId')?.value,
         entityId: this.entityId,
       },
@@ -235,7 +239,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     const config = {
       params: this.adminUtilityService.makeQueryParams(defaultProps),
     };
-    if (this.roomControls.roomTypeId?.value) {
+    if (this.roomControls[0].get('roomTypeId')?.value) {
       this.$subscription.add(
         this.manageReservationService.getSummaryData(config).subscribe(
           (res) => {
@@ -244,10 +248,12 @@ export class AddReservationComponent implements OnInit, OnDestroy {
             this.userForm
               .get('roomInformation')
               .patchValue(this.summaryData, { emitEvent: false });
-            this.paymentControls.totalPaidAmount.setValidators([
-              Validators.max(this.summaryData?.totalAmount),
-            ]);
-            this.paymentControls.totalPaidAmount.updateValueAndValidity();
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .updateValueAndValidity();
             this.userForm
               .get('paymentRule.deductedAmount')
               .patchValue(this.summaryData?.totalAmount);
@@ -259,25 +265,16 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     }
   }
 
-  get paymentControls() {
-    return (this.userForm.get('paymentMethod') as FormGroup).controls as Record<
-      keyof ReservationForm['paymentMethod'],
-      AbstractControl
-    >;
-  }
-
-  get roomControls() {
-    return (this.userForm.get('roomInformation') as FormGroup)
-      .controls as Record<
-      keyof ReservationForm['roomInformation'],
-      AbstractControl
-    >;
-  }
-
   /**
    * @function ngOnDestroy to unsubscribe subscription.
    */
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+  }
+
+  get roomControls() {
+    return ((this.userForm.get('roomInformation') as FormGroup).get(
+      'roomTypes'
+    ) as FormArray).controls;
   }
 }

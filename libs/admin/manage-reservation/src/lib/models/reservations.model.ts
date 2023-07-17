@@ -165,15 +165,19 @@ export class RoomTypeOptionList {
 export class RoomTypeOption {
   id: string;
   name: string;
+  ratePlanId: string[];
+  roomNumber: string[];
   roomCount: number;
   occupancy: number;
   maxChildren: number;
   maxAdult: number;
 
-  deserialize(input: RoomTypeResponse) {
+  deserialize(input) {
     this.id = input.id ?? '';
     this.name = input.name ?? '';
     this.maxChildren = input.maxChildren ?? 0;
+    this.roomNumber = input.roomNumber ?? [];
+    this.ratePlanId = input.ratePlans.map((item)=> item.ratePlanTypeId) ?? '';
     this.maxAdult = input.maxAdult ?? 0;
     this.roomCount = input.roomCount ?? 0;
     this.occupancy = input.maxOccupancy ?? null;

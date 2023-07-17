@@ -32,9 +32,13 @@ type Instructions = {
 };
 
 type RoomInformation = {
+  roomTypes: RoomTypes[];
+};
+
+export type RoomTypes = {
   roomTypeId: string;
-  roomCount: number;
-  roomNumber: number;
+  ratePlanId: string;
+  roomNumber: string[];
   adultCount: number;
   childCount: number;
 };

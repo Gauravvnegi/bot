@@ -139,8 +139,8 @@ export class FilterComponent implements OnChanges, OnInit {
           .value;
         const outlets =
           this._hotelDetailService.brands
-            .find((item) => item.id === brandName)
-            ?.entities.find((item) => item.id).entities ?? [];
+            .find((item) => item.id == brandName)
+            ?.entities.find((item) => item.id === id).entities ?? [];
 
         this.outlets = outlets;
         this.updateOutletsFormControls(outlets);

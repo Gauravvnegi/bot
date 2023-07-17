@@ -1,3 +1,4 @@
+import { EntitySubType, EntityType } from '../types/table.type';
 import {
   Address,
   Brand,
@@ -8,7 +9,7 @@ import {
 
 export class EntityConfig {
   id: string;
-  category: string;
+  category: EntityType;
   name: string;
   logo: string;
   address: Address;
@@ -19,7 +20,7 @@ export class EntityConfig {
   parentId: string;
   entities?: EntityConfig[];
   timezone: string;
-  type: string;
+  type: EntitySubType;
 
   deserialize(input: Entity) {
     this.id = input.id;

@@ -108,7 +108,7 @@ export class RequestService extends ApiService {
 
   createRequest(entityId, data) {
     return this.post(
-      `/api/v1/request?cmsUserType=admin&entityId=${entityId}`,
+      `/api/v1/request?cmsUserType=admin&source=ADMIN&entityId=${entityId}`,
       data
     );
   }

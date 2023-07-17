@@ -15,12 +15,12 @@
       >
         <hospitality-bot-room-iterator
           (refreshData)="getSummaryData()"
-          (listenChanges)="listenForFormChanges()"
+          (listenChanges)="listenForFormChanges($event)"
         >
         </hospitality-bot-room-iterator>
       </p-accordionTab>
       <hospitality-bot-guest-information></hospitality-bot-guest-information>
-      <hospitality-bot-billing-address></hospitality-bot-billing-address>
+      <!-- <hospitality-bot-billing-address></hospitality-bot-billing-address> -->
       <hospitality-bot-instructions></hospitality-bot-instructions>
       <hospitality-bot-payment-rule
         [deductedAmount]="deductedAmount"
@@ -61,11 +61,11 @@
             Rooms & Guests
           </p>
           <p class="bk-summary_roomInfo_guestInfo_subText">
-            {{ userForm.get('roomInformation.roomCount').value }}
+            <!-- {{ userForm.get('roomInformation.roomCount').value }} -->
             Room,
-            {{ userForm.get('roomInformation.adultCount').value }}
+            <!-- {{ userForm.get('roomInformation.adultCount').value }} -->
             Adult,
-            {{ userForm.get('roomInformation.childCount').value }}
+            <!-- {{ userForm.get('roomInformation.childCount').value }} -->
             Kid
           </p>
         </div>

@@ -1,27 +1,5 @@
 <ng-container [formGroup]="controlContainer.control">
   <div class="container-wrapper">
-    <div class="header">Services</div>
-    <hr />
-    <div class="sub-container-wrapper">
-      <hospitality-bot-custom-select
-        label="Services"
-        description="Do not forget to add this cost in addition to the room cost"
-        formControlName="serviceIds"
-        [itemList]="paidServices"
-        [loading]="isLoading"
-        (viewAll)="onCreateAndContinue('services')"
-        (onEmptyViewAction)="onCreateAndContinue('service')"
-        [noRecordsAction]="noRecordActionForPaid"
-      >
-        <hospitality-bot-button
-          label="+ Add Service"
-          variant="outlined"
-          (onEmptyViewAction)="onCreateAndContinue('service')"
-        ></hospitality-bot-button>
-      </hospitality-bot-custom-select>
-    </div>
-  </div>
-  <div class="container-wrapper">
     <div class="header">Other Details</div>
     <hr />
     <div class="details-wrapper">
@@ -60,6 +38,28 @@
         }"
       >
       </hospitality-bot-prefix-field>
+    </div>
+  </div>
+  <div class="container-wrapper">
+    <div class="header">Services</div>
+    <hr />
+    <div class="sub-container-wrapper">
+      <hospitality-bot-custom-select
+        label="Services"
+        description="Do not forget to add this cost in addition to the room cost"
+        formControlName="serviceIds"
+        [itemList]="paidServices"
+        [loading]="isLoading"
+        (viewAll)="onCreateAndContinue('services')"
+        (onEmptyViewAction)="onCreateAndContinue('service')"
+        [noRecordsAction]="noRecordActionForPaid"
+      >
+        <hospitality-bot-button
+          label="+ Add Service"
+          variant="outlined"
+          (onClick)="onCreateAndContinue('service')"
+        ></hospitality-bot-button>
+      </hospitality-bot-custom-select>
     </div>
   </div>
 

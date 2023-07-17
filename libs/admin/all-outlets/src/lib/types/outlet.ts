@@ -137,7 +137,8 @@ export type Feature =
   | 'food-package'
   | 'brand'
   | 'hotel'
-  | 'services';
+  | 'services'
+  | 'save';
 
 export type OutletType = 'RESTAURANT' | 'SPA' | 'VENUE';
 

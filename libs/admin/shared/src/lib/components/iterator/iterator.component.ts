@@ -44,7 +44,9 @@ export class IteratorComponent implements OnChanges {
       prev[curr.name] = value;
       return prev;
     }, {});
-    this.useFormArray.push(this.fb.group(data));
+
+    const formGroup = this.fb.group(data);
+    this.useFormArray.push(formGroup);
   }
 
   get width() {

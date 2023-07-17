@@ -46,8 +46,8 @@ export class PaymentMethodComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
     this.addFormGroup();
+    this.entityId = this.globalFilterService.entityId;
     this.getPaymentMethod();
     this.initConfig();
 
@@ -117,6 +117,4 @@ export class PaymentMethodComponent implements OnInit {
       AbstractControl
     >;
   }
-
-  // get input
 }

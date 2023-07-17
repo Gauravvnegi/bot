@@ -11,7 +11,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   NavRouteOptions,
   AdminUtilityService,
-  Regex,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
@@ -27,7 +26,8 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { menuItemFields } from '../../constants/reservation';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { ReservationForm } from '../../constants/form';
-import { title } from '../../constants/reservation-table';
+import { FormService } from '../../services/form.service';
+import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -57,6 +57,8 @@ export class RestaurantReservationComponent implements OnInit {
   disabledForm = false;
   expandAccordion = false;
 
+  date: string;
+  time: string;
   deductedAmount = 0;
   bookingType = 'RESTAURANT';
 
@@ -74,7 +76,9 @@ export class RestaurantReservationComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    private formSerivce: FormService,
+    private outletService: OutletService
   ) {
     this.initForm();
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
@@ -97,28 +101,17 @@ export class RestaurantReservationComponent implements OnInit {
   initDetails() {
     this.entityId = this.globalFilterService.entityId;
     this.fields = menuItemFields;
-    this.expandAccordion = this.manageReservationService.enableAccordion;
+    this.expandAccordion = this.formSerivce.enableAccordion;
     if (this.expandAccordion) {
-      this.manageReservationService.enableAccordion = false;
+      this.formSerivce.enableAccordion = false;
     }
-  }
-
-  get inputControl() {
-    return this.userForm.controls as Record<
-      keyof ReservationForm,
-      AbstractControl
-    >;
+    // this.setDateAndTime(this.reservationInfoControls.dateAndTime.value);
   }
 
   initOptions() {
     this.reservationTypes = [
       { label: 'Dine-in', value: 'DINE_IN' },
       { label: 'Delivery', value: 'Delivery' },
-    ];
-    this.statusOptions = [
-      { label: 'Confirmed', value: 'CONFIRMED' },
-      { label: 'Waitlist', value: 'WAITLIST' },
-      { label: 'Draft', value: 'DRAFT' },
     ];
   }
 
@@ -130,7 +123,7 @@ export class RestaurantReservationComponent implements OnInit {
 
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
-        reservationDateAndTime: ['', Validators.required],
+        dateAndTime: ['', Validators.required],
         reservationType: ['', Validators.required],
         status: ['', Validators.required],
         source: ['', Validators.required],
@@ -155,20 +148,57 @@ export class RestaurantReservationComponent implements OnInit {
       this.numberOfAdults = `For ${res?.numberOfAdults} Adults`;
       this.tableNumber = `Table Number: ${res?.tableNumber}`;
     });
+    // this.reservationInfoControls.dateAndTime.valueChanges.subscribe((res) => {
+    //   this.setDateAndTime(res);
+    // });
+    this.formSerivce.reservationDateAndTime.subscribe((res) => {
+      if (res) this.setDateAndTime(res);
+    });
+
+    this.reservationInfoControls.reservationType.valueChanges.subscribe(
+      (res) => {
+        if (res === 'NOSHOW' || res === 'CANCELLED') {
+          this.orderInfoControls.tableNumber.disable();
+          this.orderInfoControls.numberOfAdults.disable();
+        } else {
+          this.orderInfoControls.numberOfAdults.enable();
+          this.orderInfoControls.tableNumber.enable();
+        }
+      }
+    );
+  }
+
+  setDateAndTime(dateTime: number) {
+    const dateAndTime = new Date(dateTime);
+    const date = dateAndTime.toLocaleDateString();
+    const time = dateAndTime.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    // Update template variables
+    this.date = date;
+    this.time = time;
   }
 
   getReservationId(): void {
     if (this.reservationId) {
-      this.reservationTypes = [
+      this.statusOptions = [
         { label: 'Draft', value: 'DRAFT' },
         { label: 'Confirmed', value: 'CONFIRMED' },
-        { label: 'Cancelled', value: 'CANCELED' },
+        { label: 'Waitlisted', value: 'WAITLISTED' },
+        { label: 'Cancelled', value: 'CANCELLED' },
+        { label: 'No Show', value: 'NOSHOW' },
+        { label: 'Seated', value: 'SEATED' },
+        { label: 'Completed', value: 'COMPLETED' },
       ];
       this.getReservationDetails();
     } else {
-      this.reservationTypes = [
+      this.statusOptions = [
         { label: 'Draft', value: 'DRAFT' },
         { label: 'Confirmed', value: 'CONFIRMED' },
+        { label: 'Waitlisted', value: 'WAITLISTED' },
+        { label: 'Seated', value: 'SEATED' },
+        { label: 'Completed', value: 'COMPLETED' },
       ];
       this.userForm.valueChanges.subscribe((_) => {
         if (!this.formValueChanges) {
@@ -295,6 +325,29 @@ export class RestaurantReservationComponent implements OnInit {
         )
       );
     }
+  }
+
+  get inputControl() {
+    return this.userForm.controls as Record<
+      keyof ReservationForm,
+      AbstractControl
+    >;
+  }
+
+  get reservationInfoControls() {
+    return (this.userForm.get('reservationInformation') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['reservationInformation'],
+      AbstractControl
+    >;
+  }
+
+  get orderInfoControls() {
+    return (this.userForm.get('orderInformation') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['orderInformation'],
+      AbstractControl
+    >;
   }
 
   /**

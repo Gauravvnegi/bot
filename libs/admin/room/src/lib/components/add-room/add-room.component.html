@@ -51,10 +51,11 @@
         <hospitality-bot-custom-select
           label="Features"
           description="Select the features available in the room"
-          formControlName="features"
+          formControlName="featureIds"
           [itemList]="features"
-          [noRecordsAction]=""
+          [noRecordsAction]="noRecordsActionFeatures"
           [loading]="loading"
+          [noMoreData]="true"
         >
         </hospitality-bot-custom-select>
       </div>
@@ -86,19 +87,30 @@
         [loading]="isRoomInfoLoading"
       ></hospitality-bot-select>
       <div class="container" *ngIf="isDateRequired">
-        <hospitality-bot-date controlName="fromDate" class="half-width">
-        </hospitality-bot-date>
         <hospitality-bot-date
+          class="half-width"
+          controlName="fromDate"
+          label="From"
+          [props]="{ placeholder: 'Select From Date' }"
           [settings]="{
             enableTime: false,
             dateValue: endMinDate,
-            isDisabled: disabledForm
+            isDisabled: false
+          }"
+          [minDate]="startMinDate"
+        ></hospitality-bot-date>
+        <hospitality-bot-date
+          class="half-width"
+          controlName="toDate"
+          label="To"
+          [props]="{ placeholder: 'Select To Date' }"
+          [settings]="{
+            enableTime: false,
+            dateValue: endMinDate,
+            isDisabled: false
           }"
           [minDate]="endMinDate"
-          controlName="toDate"
-          class="half-width"
-        >
-        </hospitality-bot-date>
+        ></hospitality-bot-date>
       </div>
       <hospitality-bot-text-area
         class="full-width"

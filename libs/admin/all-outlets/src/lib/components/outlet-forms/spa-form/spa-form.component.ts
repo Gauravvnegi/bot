@@ -36,6 +36,7 @@ export class SpaFormComponent implements OnInit {
   constructor(public controlContainer: ControlContainer) {}
 
   ngOnInit(): void {}
+
   onCreateAndContinue(features: Feature) {
     this.onCreateAndContinueFeature.emit(features);
   }

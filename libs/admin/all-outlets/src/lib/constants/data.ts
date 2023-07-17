@@ -75,27 +75,14 @@ export const dimensions: Option[] = [
 ];
 
 export const cousins: Option[] = [
-  { label: 'Chinese', value: 'chinese' },
-  { label: 'Indian', value: 'indian' },
   { label: 'Italian', value: 'italian' },
-  { label: 'Mexican', value: 'mexican' },
-  { label: 'Thai', value: 'thai' },
-  { label: 'American', value: 'american' },
-  { label: 'Japanese', value: 'japanese' },
-  { label: 'Korean', value: 'korean' },
-  { label: 'Vietnamese', value: 'vietnamese' },
   { label: 'French', value: 'french' },
+  { label: 'Chinese', value: 'chinese' },
+  { label: 'Mexican', value: 'mexican' },
+  { label: 'Japanese', value: 'japanese' },
   { label: 'Spanish', value: 'spanish' },
-  { label: 'Middle Eastern', value: 'middle_eastern' },
   { label: 'Greek', value: 'greek' },
-  { label: 'German', value: 'german' },
-  { label: 'Brazilian', value: 'brazilian' },
-  { label: 'Caribbean', value: 'caribbean' },
-  { label: 'Moroccan', value: 'moroccan' },
-  { label: 'Ethiopian', value: 'ethiopian' },
-  { label: 'Turkish', value: 'turkish' },
-  { label: 'British', value: 'british' },
-  { label: 'Irish', value: 'irish' },
+  { label: 'Indian', value: 'indian' },
 ];
 
 export const restaurantTabItemList = [

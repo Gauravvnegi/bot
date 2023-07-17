@@ -16,6 +16,8 @@ export class Reservation {
   confirmationNo: string;
   guestName: string;
   guestCompany: string;
+  outletName: string;
+  outletType: string;
   date: string;
   amount: number;
   source: string;
@@ -52,6 +54,8 @@ export class Reservation {
     this.source = input.source;
     this.payment = input.payment;
     this.status = input.status;
+    this.outletName = input?.outletName ?? '';
+    this.outletType = input?.outletType ?? '';
     this.type = input.reservationTypes;
     this.reservationNumber = input?.reservationNumber;
     this.totalDueAmount = input?.totalDueAmount;
@@ -94,6 +98,8 @@ export class ReservationList {
     return this;
   }
 }
+
+export class Outlets {}
 
 export class EntityTypeCounts {
   ALL: number;
@@ -159,15 +165,23 @@ export class RoomTypeOptionList {
 export class RoomTypeOption {
   id: string;
   name: string;
+  ratePlan: RatePlanData[];
+  roomNumber: string[];
   roomCount: number;
   occupancy: number;
   maxChildren: number;
   maxAdult: number;
 
-  deserialize(input: RoomTypeResponse) {
+  deserialize(input) {
     this.id = input.id ?? '';
     this.name = input.name ?? '';
     this.maxChildren = input.maxChildren ?? 0;
+    this.roomNumber = input.roomNumber ?? [];
+    this.ratePlan =
+      input.ratePlans.map((item) => ({
+        value: item.ratePlanTypeId,
+        price: item.bestAvailablePrice,
+      })) ?? '';
     this.maxAdult = input.maxAdult ?? 0;
     this.roomCount = input.roomCount ?? 0;
     this.occupancy = input.maxOccupancy ?? null;
@@ -183,6 +197,12 @@ export class OfferList {
     return this;
   }
 }
+
+export type RatePlanData = {
+  label?: string;
+  value: string;
+  price: number;
+};
 
 export class OfferData {
   id: string;

@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { request } from '../../constants/request';
 import { RequestService } from '../../services/request.service';
 import { RaiseRequestComponent } from '../raise-request/raise-request.component';
+import { SubscriptionPlanService } from 'apps/admin/src/app/core/theme/src/lib/services/subscription-plan.service';
 
 @Component({
   selector: 'hospitality-bot-request-wrapper',
@@ -52,10 +53,15 @@ export class RequestWrapperComponent implements OnInit, OnDestroy {
     private _modal: ModalService,
     private _requestService: RequestService,
     private _globalFilterService: GlobalFilterService,
-    private snackbarService: SnackBarService
+    private snackbarService: SnackBarService,
+    private subscriptionService: SubscriptionPlanService
   ) {}
 
   ngOnInit(): void {}
+
+  get hasComplaintManagementSystem() {
+    return this.subscriptionService.hasComplaintManagementSystem();
+  }
 
   /**
    * @function onSelectedTabFilterChange To handle tab filter change.

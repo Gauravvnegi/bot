@@ -105,6 +105,12 @@
     </div>
   </div>
 </div>
+<p
+  class="validation-error"
+  *ngIf="control?.errors?.required && control?.touched"
+>
+  {{ validationErrMsg }}
+</p>
 <hospitality-bot-button
   class="create-btn"
   label="+Add More Images"
@@ -112,9 +118,3 @@
   *ngIf="isMultiple"
   variant="outlined"
 ></hospitality-bot-button>
-<p
-  class="validation-error"
-  *ngIf="control?.errors?.required && control?.touched"
->
-  {{ validationErrMsg }}
-</p>

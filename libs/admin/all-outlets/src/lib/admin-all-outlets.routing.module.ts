@@ -16,6 +16,7 @@ import { FoodPackageComponent } from './components/outlet-forms/food-package/foo
 import { ImportServiceComponent } from './components/import-service/import-service.component';
 import { outletBusinessRoutes } from './constants/routes';
 import { ViewAllComponent } from './components/Services/view-all.component';
+import { ChildMainComponent } from './components/child-main/child-main.component';
 
 const appRoutes: Route[] = [
   {
@@ -50,7 +51,7 @@ const appRoutes: Route[] = [
           },
           {
             path: outletBusinessRoutes.menu.route,
-            component: MainComponent,
+            component: ChildMainComponent,
             children: [
               {
                 path: '',
@@ -58,7 +59,7 @@ const appRoutes: Route[] = [
               },
               {
                 path: outletBusinessRoutes.editMenu.route,
-                component: MainComponent,
+                component: ChildMainComponent,
                 children: [
                   {
                     path: '',
@@ -66,7 +67,7 @@ const appRoutes: Route[] = [
                   },
                   {
                     path: outletBusinessRoutes.menuItem.route,
-                    component: MainComponent,
+                    component: ChildMainComponent,
                     children: [
                       {
                         path: '',
@@ -109,5 +110,6 @@ export class AdminAllOutletsRoutingModule {
     FoodPackageComponent,
     ImportServiceComponent,
     ViewAllComponent,
+    ChildMainComponent,
   ];
 }

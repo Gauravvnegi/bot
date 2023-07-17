@@ -165,7 +165,7 @@ export class RoomTypeOptionList {
 export class RoomTypeOption {
   id: string;
   name: string;
-  ratePlanId: string[];
+  ratePlan: RatePlanData[];
   roomNumber: string[];
   roomCount: number;
   occupancy: number;
@@ -177,7 +177,11 @@ export class RoomTypeOption {
     this.name = input.name ?? '';
     this.maxChildren = input.maxChildren ?? 0;
     this.roomNumber = input.roomNumber ?? [];
-    this.ratePlanId = input.ratePlans.map((item)=> item.ratePlanTypeId) ?? '';
+    this.ratePlan =
+      input.ratePlans.map((item) => ({
+        value: item.ratePlanTypeId,
+        price: item.bestAvailablePrice,
+      })) ?? '';
     this.maxAdult = input.maxAdult ?? 0;
     this.roomCount = input.roomCount ?? 0;
     this.occupancy = input.maxOccupancy ?? null;
@@ -193,6 +197,12 @@ export class OfferList {
     return this;
   }
 }
+
+export type RatePlanData = {
+  label?: string;
+  value: string;
+  price: number;
+};
 
 export class OfferData {
   id: string;

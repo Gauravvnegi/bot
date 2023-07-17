@@ -15,7 +15,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { GlobalFilterService, Item } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import {
   AdminUtilityService,
@@ -99,6 +99,32 @@ export class RoomIteratorComponent extends IteratorComponent
       roomTypes: this.roomTypeArray,
     });
     this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
+
+    this.listenRoomTypeChanges();
+  }
+
+  listenRoomTypeChanges() {
+    this.roomControls[0].get('roomTypeId')?.valueChanges.subscribe((res) => {
+      if (res) {
+        const selectedRoomType = this.roomTypes.find(
+          (item) => item.value === res
+        );
+        if (selectedRoomType) {
+          this.fields[1].options = selectedRoomType.ratePlan.map((item) => {
+            const availableRatePlan = this.ratePlans.find(
+              (ratePlan) => ratePlan.value === item.value
+            );
+            return {
+              label: availableRatePlan ? availableRatePlan.label : '',
+              value: item.value,
+              price: item.price,
+            };
+          });
+          this.fields[1].disabled = false;
+        }
+        // this.fields[2].options = ['201', '202'];
+      }
+    });
   }
 
   initOptions() {
@@ -163,6 +189,7 @@ export class RoomIteratorComponent extends IteratorComponent
                 };
               }) ?? [];
             this.fields[0].options = this.roomTypes;
+            // this.fields[3].options = this.roomTypes.map((item)=>)
           },
           ({ error }) => {
             this.snackbarService.openSnackBarAsText(error.message);
@@ -216,14 +243,13 @@ export class RoomIteratorComponent extends IteratorComponent
               .records.map((item) => ({
                 label: item.name,
                 value: item.id,
-                ratePlanId: item.ratePlanId,
+                ratePlan: item.ratePlan,
                 roomNumber: ['200', '201'],
                 roomCount: item.roomCount,
                 maxChildren: item.maxChildren,
                 maxAdult: item.maxAdult,
               }));
             this.roomTypes = [...this.roomTypes, ...data];
-
             this.fields[0].options = this.roomTypes;
           },
           ({ error }) => {

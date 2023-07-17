@@ -1,4 +1,5 @@
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
+import { RatePlanData } from '../models/reservations.model';
 
 export const roomFields: IteratorField[] = [
   {
@@ -16,6 +17,7 @@ export const roomFields: IteratorField[] = [
     type: 'select',
     options: [],
     required: false,
+    disabled: true,
     placeholder: 'Enter',
     width: '22%',
   },
@@ -49,7 +51,7 @@ export type RoomFieldTypeOption = {
   label: string;
   value: string;
   roomCount: number;
-  ratePlanId: string[];
+  ratePlan: RatePlanData[];
   roomNumber: string[];
   maxChildren: number;
   maxAdult: number;

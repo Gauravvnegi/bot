@@ -193,7 +193,6 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     });
 
     roomStatus.valueChanges.subscribe((res: RoomStatus) => {
-      debugger;
       this.currentRoomState[0] = {
         value: roomStatusDetails[res]?.label,
         type: roomStatusDetails[res]?.type,

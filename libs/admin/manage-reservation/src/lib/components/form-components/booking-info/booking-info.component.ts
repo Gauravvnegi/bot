@@ -24,7 +24,7 @@ export class BookingInfoComponent implements OnInit {
   maxToDate = new Date();
   entityId: string;
   reservationId: string;
-  
+
   countries: Option[];
   @Input() expandAccordion: boolean = false;
   @Input() reservationTypes: Option[] = [];
@@ -65,7 +65,6 @@ export class BookingInfoComponent implements OnInit {
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
   }
 
-
   /**
    * Listen for date changes in hotel and outlets.
    */
@@ -79,7 +78,7 @@ export class BookingInfoComponent implements OnInit {
       'reservationInformation.from'
     );
     const dateAndTimeControl = this.controlContainer.control.get(
-      'reservationInformation.reservationDateAndTime'
+      'reservationInformation.dateAndTime'
     );
 
     // Listen to from and to date changes in hotel and setting
@@ -96,7 +95,7 @@ export class BookingInfoComponent implements OnInit {
         const maxLimit = new Date(res);
         this.maxFromDate.setDate(maxLimit.getDate() - 1);
       });
-    } 
+    }
 
     // Listen to from and to date changes in Venue
     else if (this.bookingType === 'VENUE') {
@@ -109,13 +108,15 @@ export class BookingInfoComponent implements OnInit {
         this.maxToDate = moment(maxLimit).add(24, 'hours').toDate();
         this.formService.reservationDate.next(res);
       });
-    } 
-    
+    }
+
     // Listen for date and time change in restaurant and spa
     else {
       dateAndTimeControl.setValue(startTime);
+      this.formService.reservationDateAndTime.next(startTime);
+
       dateAndTimeControl.valueChanges.subscribe((res) => {
-        this.formService.reservationDate.next(res);
+        this.formService.reservationDateAndTime.next(res);
       });
     }
   }

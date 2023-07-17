@@ -21,6 +21,10 @@ export class FormService {
   $feedbackType = new BehaviorSubject('');
 
   reservationDate = new BehaviorSubject<Date>(null);
+  reservationDateAndTime = new BehaviorSubject<number>(0);
+  getReservationDateAndTime(): Observable<Date>{
+    return this.reservationDate.asObservable();
+  }
   selectedTab = ReservationTableValue.ALL;
   enableAccordion: boolean = false;
 }

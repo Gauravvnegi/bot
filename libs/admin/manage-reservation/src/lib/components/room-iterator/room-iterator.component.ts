@@ -90,7 +90,6 @@ export class RoomIteratorComponent extends IteratorComponent
       adultCount: ['', [Validators.required, Validators.min(1)]],
       childCount: ['', [Validators.min(0)]],
       price: [''],
-      index: [''],
     };
 
     const formGroup = this.fb.group(data);
@@ -102,7 +101,7 @@ export class RoomIteratorComponent extends IteratorComponent
       roomTypes: this.roomTypeArray,
     });
     this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
-    this.roomControls[index].get('index').setValue(index);
+    // this.roomControls[index].get('index').setValue(index);
     this.listenRoomTypeChanges(index);
     this.listenRatePlanChanges(index);
     this.listenForFormChanges(index);

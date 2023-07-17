@@ -56,6 +56,8 @@ export class RestaurantReservationComponent implements OnInit {
   disabledForm = false;
   expandAccordion = false;
 
+  date: string;
+  time: string;
   deductedAmount = 0;
   bookingType = 'RESTAURANT';
 
@@ -101,13 +103,7 @@ export class RestaurantReservationComponent implements OnInit {
     if (this.expandAccordion) {
       this.formSerivce.enableAccordion = false;
     }
-  }
-
-  get inputControl() {
-    return this.userForm.controls as Record<
-      keyof ReservationForm,
-      AbstractControl
-    >;
+    // this.setDateAndTime(this.reservationInfoControls.dateAndTime.value);
   }
 
   initOptions() {
@@ -130,7 +126,7 @@ export class RestaurantReservationComponent implements OnInit {
 
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
-        reservationDateAndTime: ['', Validators.required],
+        dateAndTime: ['', Validators.required],
         reservationType: ['', Validators.required],
         status: ['', Validators.required],
         source: ['', Validators.required],
@@ -155,6 +151,24 @@ export class RestaurantReservationComponent implements OnInit {
       this.numberOfAdults = `For ${res?.numberOfAdults} Adults`;
       this.tableNumber = `Table Number: ${res?.tableNumber}`;
     });
+    // this.reservationInfoControls.dateAndTime.valueChanges.subscribe((res) => {
+    //   this.setDateAndTime(res);
+    // });
+    this.formSerivce.reservationDateAndTime.subscribe((res) => {
+      if (res) this.setDateAndTime(res);
+    });
+  }
+
+  setDateAndTime(dateTime: number) {
+    const dateAndTime = new Date(dateTime);
+    const date = dateAndTime.toLocaleDateString();
+    const time = dateAndTime.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    // Update template variables
+    this.date = date;
+    this.time = time;
   }
 
   getReservationId(): void {
@@ -295,6 +309,21 @@ export class RestaurantReservationComponent implements OnInit {
         )
       );
     }
+  }
+
+  get inputControl() {
+    return this.userForm.controls as Record<
+      keyof ReservationForm,
+      AbstractControl
+    >;
+  }
+
+  get reservationInfoControls() {
+    return (this.userForm.get('reservationInformation') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['reservationInformation'],
+      AbstractControl
+    >;
   }
 
   /**

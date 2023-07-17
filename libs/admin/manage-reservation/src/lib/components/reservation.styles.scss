@@ -119,6 +119,17 @@
     }
   }
 
+  &_spaDateInfo {
+    width: 100%;
+    min-width: 150px;
+    padding: 12px;
+    border-radius: 5px;
+    background-color: $background-grey;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   &_offerInfo {
     font-weight: $bold;
     margin-bottom: 16px;
@@ -137,6 +148,12 @@
       &_amount {
         text-align: right;
         color: $grayMedium;
+      }
+      &_discountedAmount {
+        text-align: right;
+        font-size: 14px;
+        font-weight: $bolder;
+        color: #2e3440;
       }
     }
     &_person {
@@ -299,4 +316,3 @@
     min-width: max-content;
   }
 }
-

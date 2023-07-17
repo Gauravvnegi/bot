@@ -12,7 +12,7 @@ export class FormService {
   outletIds = [];
 
   public selectedEntity = new BehaviorSubject<SelectedEntity>(null);
-  getSelectedEntity(): Observable<SelectedEntity>{
+  getSelectedEntity(): Observable<SelectedEntity> {
     return this.selectedEntity.asObservable().pipe(distinctUntilChanged());
   }
 
@@ -22,9 +22,13 @@ export class FormService {
 
   reservationDate = new BehaviorSubject<Date>(null);
   reservationDateAndTime = new BehaviorSubject<number>(0);
-  getReservationDateAndTime(): Observable<Date>{
+  getReservationDateAndTime(): Observable<Date> {
     return this.reservationDate.asObservable();
   }
   selectedTab = ReservationTableValue.ALL;
   enableAccordion: boolean = false;
+
+  //  Booking Summary Props
+  price = new BehaviorSubject(0);
+  discountedPrice = new BehaviorSubject(0);
 }

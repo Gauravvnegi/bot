@@ -1,6 +1,7 @@
 import {
   RoomMapType,
   UpdateInventoryType,
+  UpdateRatesType,
 } from '../types/channel-manager.types';
 import { ChannelManagerResponse } from '../types/response.type';
 
@@ -164,16 +165,7 @@ export class UpdateRates {
   static buildRequestData(formData, fromDate: number) {
     let dynamicPricingMap = new Map<number, boolean>();
     //if dynamic pricing true then do not send data of those date
-    let updates: {
-      startDate: number;
-      endDate: number;
-      rates: {
-        roomTypeId: string;
-        rate: number;
-        ratePlanId: string;
-        dynamicPricing: boolean;
-      }[];
-    }[] = [];
+    let updates: UpdateRatesType[] = [];
 
     let selectedDate = new Date(fromDate);
     formData.dynamicPricing.forEach((price) => {
@@ -210,5 +202,30 @@ export class UpdateRates {
 
     // filter data who haven't exist any rate plans
     return { updates: updates.filter((item) => item.rates.length > 0) };
+  }
+
+  static buildBulkUpdateRequest(formData) {
+    let updates: UpdateRatesType[] = [];
+    let { fromDate, toDate, roomTypes, selectedDays, updateValue } = formData;
+    let currentDay = new Date(fromDate);
+    let lastDay = new Date(toDate);
+    lastDay.setDate(lastDay.getDate() + 1);
+    while (currentDay.getTime() != lastDay.getTime()) {
+      const day = currentDay.toLocaleDateString(undefined, { weekday: 'long' });
+
+      selectedDays.includes(day) &&
+        updates.push({
+          startDate: currentDay.getTime(),
+          endDate: currentDay.getTime(),
+          rates: roomTypes.map((item) => ({
+            roomTypeId: item.roomTypeId,
+            rate: +updateValue,
+            ratePlanId: item.ratePlanId,
+            dynamicPricing: false, // TODO, Manage dynamic pricing according to your need
+          })),
+        });
+      currentDay.setDate(currentDay.getDate() + 1);
+    }
+    return updates;
   }
 }

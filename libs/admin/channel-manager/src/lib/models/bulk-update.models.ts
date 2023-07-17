@@ -5,13 +5,6 @@ import {
   RoomTypes,
   Variant,
 } from '../types/bulk-update.types';
-import { ChannelManagerResponse } from '../types/response.type';
-export class FormFactory {
-  static makeRatesRequestData(formData: BulkUpdateForm) {
-    let modifiedData: BulkUpdateRequest[] = [];
-    return modifiedData;
-  }
-}
 
 export function makeRoomOption(...data) {
   return data.map((item) => {
@@ -58,7 +51,7 @@ export class CheckBoxTreeFactory {
         for (let ratePlan of item['ratePlans']) {
           buildData['variants'].push({
             id: ratePlan.value,
-            name: ratePlan.type + ` ( ${ratePlan.label} )`,
+            name: ratePlan.label,
             isSelected: false,
             channels: getChannels(ratePlan),
           });

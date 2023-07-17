@@ -755,24 +755,8 @@ export class BaseDatatableComponent implements OnInit {
 
     if (this.table) {
       const { top } = this.table?.el?.nativeElement.getBoundingClientRect();
-      console.log(top);
       this.isScrolledUp = top < this.scrollTargetPoint;
       this.isReachedEnd = top < 300;
     }
-
-    // if (
-    //   this.mainLayout.scrollTop + this.mainLayout.clientHeight >=
-    //   this.mainLayout.scrollHeight
-    // ) {
-    //   // Reached the end of scrollable area
-    //   console.log('Reached the end');
-    //   this.isReachedEnd = true;
-    // } else if (currentScrollPosition < this.previousScrollPosition) {
-    //   // Scrolling upward
-    //   console.log('Scrolling upward');
-    //   this.isReachedEnd = false;
-    // }
-
-    // this.previousScrollPosition = currentScrollPosition;
   };
 }

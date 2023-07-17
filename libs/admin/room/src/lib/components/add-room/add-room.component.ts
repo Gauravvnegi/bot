@@ -22,7 +22,10 @@ import { FlagType, NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
-import { iteratorFields } from '../../constant/form';
+import {
+  iteratorFields,
+  noRecordsActionForFeatures,
+} from '../../constant/form';
 import { roomStatusDetails, roomStatuses } from '../../constant/response';
 import routes from '../../constant/routes';
 import { MultipleRoomList, SingleRoomList } from '../../models/room.model';
@@ -70,13 +73,15 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   ];
 
   isRoomInfoLoading = false;
+  isLoadingFeatures = false;
 
   /* roomTypes options variable */
   roomTypeOffSet = 0;
   loadingRoomTypes = false;
   noMoreRoomTypes = false;
   roomTypeLimit = 10;
-  features;
+  features = [];
+  noRecordsActionFeatures = noRecordsActionForFeatures;
 
   $subscription = new Subscription();
 
@@ -252,13 +257,16 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   }
 
   getDefaultFeatures() {
+    this.isLoadingFeatures = true;
     this.$subscription.add(
       this.roomService.getFeatures().subscribe(
         (res) => {
           this.features = new Services().deserialize(res.features).services;
         },
         (err) => {},
-        () => {}
+        () => {
+          this.isLoadingFeatures = false;
+        }
       )
     );
   }
@@ -367,7 +375,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    * Get loading state
    */
   get loading() {
-    return this.isRoomInfoLoading || this.loadingRoomTypes;
+    return (
+      this.isRoomInfoLoading || this.loadingRoomTypes || this.isLoadingFeatures
+    );
   }
 
   /**

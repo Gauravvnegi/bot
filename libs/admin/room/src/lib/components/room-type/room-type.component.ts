@@ -443,9 +443,14 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       serviceType,
       true
     );
-    this.router.navigate([
-      'pages/inventory/room/add-room-type/import-services',
-    ]);
+
+    if (serviceType === 'PAID') {
+      this.router.navigate(['pages/library/services/create-service']);
+    } else {
+      this.router.navigate([
+        'pages/inventory/room/add-room-type/import-services',
+      ]);
+    }
   }
 
   /**

@@ -79,6 +79,7 @@
               profileNickName: item.guestDetails.primaryGuest.getProfileNickName(),
               backgroundColor: item.color
             }"
+            [isSelected]="selectedRequest?.id === item.id"
           ></hospitality-bot-chat-card>
         </div>
       </ng-container>

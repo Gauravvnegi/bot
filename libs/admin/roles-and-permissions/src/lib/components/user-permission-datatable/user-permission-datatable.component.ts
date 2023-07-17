@@ -97,11 +97,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
           this.manageUsersValues = new UserPermissionTable().deserialize(
             manageUsersData
           ).records;
-          //set pagination
-          this.setTableValues();
 
           this.tabFilterItems[0].total = allUsersData.total;
           this.tabFilterItems[1].total = manageUsersData.total;
+          this.setTableValues();
+
           this.loading = false;
         },
         (error) => {
@@ -145,7 +145,6 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   onSelectedTabFilterChange({ index }) {
     this.tabFilterIdx = index;
     this.setTableValues();
-
     // this.loadInitialData();
   }
 

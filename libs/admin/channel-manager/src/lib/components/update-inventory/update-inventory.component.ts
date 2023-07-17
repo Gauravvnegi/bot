@@ -110,10 +110,6 @@ export class UpdateInventoryComponent implements OnInit {
       this.initDate(res);
     });
 
-    // this.useForm.valueChanges.subscribe((res) => {
-    //   console.log(res);
-    // });
-
     this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
       if (res.length) {
         this.roomTypes = this.allRoomTypes.filter((item) =>

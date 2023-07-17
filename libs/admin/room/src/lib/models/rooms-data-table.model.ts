@@ -6,12 +6,12 @@ import {
   InventoryCostRemainingResponse,
   InventoryRemainingResponse,
   OccupancyResponse,
+  RatePlanRes,
   RoomListResponse,
   RoomResponse,
   RoomTypeListResponse,
   RoomTypeResponse,
 } from '../types/service-response';
-import { channels } from 'libs/admin/channel-manager/src/lib/constants/data';
 
 // ************ Room Models ******************
 
@@ -100,7 +100,7 @@ export class RoomType {
   price: number;
   currency: string;
   nextStates: string[];
-  ratePlans?: any[];
+  ratePlans?: RatePlanRes[];
 
   deserialize(input: RoomTypeResponse) {
     this.id = input.id ?? '';

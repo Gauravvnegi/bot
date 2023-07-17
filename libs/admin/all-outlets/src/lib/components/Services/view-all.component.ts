@@ -77,21 +77,19 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initForm();
-    this.initSelectedService();
     if (!this.outletFormService.outletFormState) {
       this.location.back();
     }
+    this.initForm();
+    this.initSelectedService();
     this.registerSearch();
+    this.initRoutes('services');
   }
 
   initForm(): void {
-    this.initComponent('services');
     this.useForm = this.fb.group({
       paidServiceIds: [[]],
       serviceIds: [[]],
-      menuIds: [[]],
-      foodPackageIds: [[]],
     });
 
     this.searchForm = this.fb.group({
@@ -101,15 +99,11 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
     const {
       paidServiceIds,
       serviceIds,
-      menuIds,
-      foodPackageIds,
     } = this.outletFormService.OutletFormData;
 
     this.useForm.patchValue({
       serviceIds,
       paidServiceIds,
-      menuIds,
-      foodPackageIds,
     });
     // this.useForm.get('serviceIds').setValue(serviceIds);
   }
@@ -138,11 +132,10 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   }
 
   onSelectedTabFilterChange(index: number): void {
+    const data = this.tabItemList[index].value;
     this.compServices = [];
     this.paidServices = [];
-    this.menuList = [];
     //this will be used to set and for api call according to the selected tab filter item list
-    const data = this.tabItemList[index].value;
 
     switch (data) {
       case 'PAID_SERVICES':
@@ -152,14 +145,6 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
       case 'COMPLIMENTARY_SERVICES':
         this.selectedTabFilterItems = data;
         this.getServices(ServicesTypeValue.COMPLIMENTARY);
-        break;
-      case 'MENU':
-        this.getMenuList();
-        this.selectedTabFilterItems = data;
-
-        break;
-      case 'FOOD_PACKAGE':
-        this.selectedTabFilterItems = data;
         break;
     }
   }
@@ -239,7 +224,7 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
           if (serviceType == ServicesTypeValue.PAID && res.paidPackages) {
             const data = new Services().deserialize(res.paidPackages).services;
             this.paidServices = [...this.paidServices, ...data];
-            this.noMorePaidServices = data.length < 10;
+            this.noMorePaidServices = data.length < 15;
           }
 
           /* Setting Complimentary Services */
@@ -250,7 +235,7 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
             const data = new Services().deserialize(res.complimentaryPackages)
               .services;
             this.compServices = [...this.compServices, ...data];
-            this.noMoreCompServices = data.length < 10;
+            this.noMoreCompServices = data.length < 15;
           }
         },
         (error) => {
@@ -269,14 +254,6 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
     );
   }
 
-  getMenuList() {
-    this.subscription$.add(
-      this.outletService.getMenuList(this.outletId).subscribe((res) => {
-        this.menuList = new MenuList().deserialize(res).records;
-      })
-    );
-  }
-
   getQueryConfig = (offset: number, type: ServicesTypeValue): QueryConfig => {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
@@ -285,7 +262,6 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
           limit: this.limit,
           type: 'SERVICE',
           serviceType: type,
-          status: true,
         },
       ]),
     };
@@ -294,7 +270,13 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   };
 
   resetForm(): void {
-    this.useForm.reset();
+    if (this.selectedTabFilterItems === ServicesTypeValue.COMPLIMENTARY) {
+      this.useForm.get('complimentaryAmenities').setValue([]);
+    }
+
+    if (this.selectedTabFilterItems === ServicesTypeValue.PAID) {
+      this.useForm.get('paidAmenities').setValue([]);
+    }
   }
 
   saveForm(): void {
@@ -304,12 +286,10 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
   }
 
   loadMore() {
-    if (this.selectedTabFilterItems === 'PAID_SERVICES') {
+    if (this.selectedTabFilterItems === 'COMPLIMENTARY_SERVICES') {
       this.compOffset = this.compOffset + this.limit;
       this.getServices(ServicesTypeValue.COMPLIMENTARY);
-    }
-
-    if (this.selectedTabFilterItems === 'COMPLIMENTARY_SERVICES') {
+    } else {
       this.paidOffset = this.paidOffset + this.limit;
       this.getServices(ServicesTypeValue.PAID);
     }

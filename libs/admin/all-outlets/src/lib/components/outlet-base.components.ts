@@ -36,31 +36,40 @@ export class OutletBaseComponent {
         const menuId = snapshot?.params['menuId'];
         const menuItemId = snapshot?.params['menuItemId'];
         if (outletId) {
+          console.log('outletId', outletId);
           this.outletId = outletId;
         }
         if (brandId) this.brandId = brandId;
         if (entityId) {
           this.entityId = entityId;
         }
-        if (menuId) this.menuId = menuId;
+        if (menuId) {
+          this.menuId = menuId;
+        }
+
         if (menuItemId) this.menuItemId = menuItemId;
       }
     );
   }
 
-  getRoutes(routeName: string, isHotel: boolean, isEdit?: boolean) {
+  getRoutes(routeName, isHotel, isEdit) {
     routeName = isEdit ? correspondingEditRouteName[routeName] : routeName;
 
     if (isHotel) {
       // entityId is present
 
-      //clone
-      const updatedRoutes = Object.assign({}, outletBusinessRoutes[routeName]);
-      updatedRoutes.navRoutes = [...outletBusinessRoutes[routeName].navRoutes];
+      // Deep clone
+      const outletBusinessRoutesClone = JSON.parse(
+        JSON.stringify(outletBusinessRoutes)
+      );
+
+      const updatedRoutes = this.deepCloneRoutes(
+        outletBusinessRoutes[routeName]
+      );
 
       updatedRoutes.navRoutes.splice(3, 0, navRoutes.editHotel);
 
-      if (isEdit)
+      if (isHotel) {
         updatedRoutes.navRoutes.forEach((element) => {
           if (element.link.includes(':brandId/outlet')) {
             element.link = element.link.replace(
@@ -69,12 +78,31 @@ export class OutletBaseComponent {
             );
           }
         });
+      }
 
       return updatedRoutes;
     }
   }
 
-  initComponent(routeName: OutletAddRoutes | 'importService' | 'services') {
+  deepCloneRoutes(routes) {
+    const clonedRoutes = { ...routes };
+
+    clonedRoutes.navRoutes = clonedRoutes.navRoutes.map((item) => {
+      return this.deepCloneRoute(item);
+    });
+
+    return clonedRoutes;
+  }
+
+  deepCloneRoute(route) {
+    return { ...route };
+  }
+
+  initRoutes(routeName: OutletAddRoutes | 'importService' | 'services') {
+    const outletBusinessRoutesClone = JSON.parse(
+      JSON.stringify(outletBusinessRoutes)
+    );
+
     const { navRoutes, title } = this.entityId
       ? this.getRoutes(
           //edit hotel case and add hotel is in business module
@@ -82,7 +110,7 @@ export class OutletBaseComponent {
           this.entityId ? true : false,
           this[hasId[routeName]] ? true : false
         )
-      : outletBusinessRoutes[
+      : outletBusinessRoutesClone[
           this[hasId[routeName]]
             ? correspondingEditRouteName[routeName]
             : routeName

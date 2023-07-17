@@ -6,7 +6,7 @@
         {{ description }}
       </div>
     </div>
-    <div class="btn-wrapper" *ngIf="!fullView">
+    <div class="btn-wrapper" *ngIf="!fullView && !noMoreData">
       <ng-content></ng-content>
 
       <hospitality-bot-button

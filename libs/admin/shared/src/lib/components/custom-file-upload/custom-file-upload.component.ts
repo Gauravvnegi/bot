@@ -61,7 +61,7 @@ export class CustomFileUploadComponent
   }
 
   defaultValue: UploadFileData = {
-    maxFileSize: 3145728,
+    maxFileSize: 5242880,
     fileType: fileUploadConfiguration[this.baseType],
   };
 
@@ -77,7 +77,7 @@ export class CustomFileUploadComponent
 
   @Input() label: string = '';
   @Input() description: string = 'Mandatory to add at least 1 image';
-  @Input() hint: string = 'Recommended Ratio : 16:9 | 3 MB Max Size';
+  @Input() hint: string = 'Recommended Ratio : 16:9 | 5 MB Max Size';
   @Input() validationErrMsg: string = 'Image is required.';
   indexToBeUpload: number;
   fileUrls: string[];
@@ -131,7 +131,7 @@ export class CustomFileUploadComponent
       this.fileUrls = [controlValue];
     } else if (typeof controlValue === 'object' && controlValue?.length) {
       if (this.isFeatureView) this.featureValueIndex = [];
-      this.fileUrls = Array(this.getImageLength(controlValue.length, this.unit))
+      this.fileUrls = Array(this.getImageCount(controlValue.length, this.unit))
         .fill(this.defaultImage)
         .map((item, idx) => {
           const value = controlValue[idx];
@@ -149,7 +149,7 @@ export class CustomFileUploadComponent
     }
   }
 
-  getImageLength(currentLength: number, interval: number) {
+  getImageCount(currentLength: number, interval: number) {
     if (currentLength >= 1 && currentLength <= interval) {
       return interval;
     } else {
@@ -240,7 +240,7 @@ export class CustomFileUploadComponent
           'error',
           null,
           'message.error.upload',
-          'File size can not be more than 3 MB'
+          'The selected file does not meet the requirements'
         );
       }
     }
@@ -306,7 +306,7 @@ export class CustomFileUploadComponent
   }
 
   checkFileType(extension: string) {
-    return this.uploadFileData.fileType.includes(extension);
+    return this.uploadFileData.fileType.includes(extension.toLocaleLowerCase());
   }
 
   removeImage(index: number) {
@@ -362,11 +362,11 @@ export class CustomFileUploadComponent
 
   getChangedData() {
     if (this.isFeatureView) {
-      const data: FeatureValue = this.fileUrls.map((item, index) => ({
+      let data: FeatureValue = this.fileUrls.map((item, index) => ({
         url: item,
         isFeatured: this.featureValueIndex.includes(index),
       }));
-      data.filter((item) => item.url !== this.defaultImage);
+      data = data.filter((item) => item.url !== this.defaultImage);
       return data;
     }
     const fileUrls = this.fileUrls.filter((item) => item !== this.defaultImage);

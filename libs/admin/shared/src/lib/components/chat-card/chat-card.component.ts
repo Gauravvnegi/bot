@@ -34,6 +34,8 @@ export class ChatCardComponent implements OnInit {
     });
   }
 
+  @Input() isSelected = false;
+
   constructor(public globalFilterService: GlobalFilterService) {}
 
   ngOnInit(): void {}

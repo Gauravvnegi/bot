@@ -30,7 +30,7 @@ export type RoomResponse = {
     soldOut: boolean;
     unavailableRoomCount: number;
   };
-  features: string[];
+  features: Features[];
   status: RoomStatus;
   //--- can be modified
   toDate: number;
@@ -83,6 +83,7 @@ export type RoomTypeResponse = {
   discountedPrice: number;
   originalPrice: number;
   currency: string;
+  features: string[];
 };
 
 export type RatePlanRes = {
@@ -195,4 +196,12 @@ export type RatePlanResponse = {
   label: string;
   key: string;
   isDefault: boolean;
+};
+
+export type Features = {
+  id: string;
+  name: string;
+  imageUrl: string;
+  created: number;
+  updated: number;
 };

@@ -18,7 +18,7 @@ export const sharedConfig = {
 };
 
 export const fileUploadConfiguration = {
-  image: ['png', 'jpg', 'jpeg', 'gif', 'eps'],
+  image: ['png', 'jpg', 'jpeg', 'gif', 'eps', 'webp'],
   video: ['mp4', 'MPEG', 'MOV', 'AVI', 'MKV'],
   docs: ['pdf', 'csv'],
 };
@@ -33,8 +33,8 @@ export enum StatCardImageUrls {
   Resolved = 'assets/svg/resolved.svg',
   Timedout = 'assets/svg/timedout.svg',
   SellsGraph = 'assets/svg/avg-room-rate.svg',
-  TotalOrders = 'assets/svg/remaining-inventory-cost.svg',  
-  InProgress = 'assets/svg/in-progress.svg'
+  TotalOrders = 'assets/svg/remaining-inventory-cost.svg',
+  InProgress = 'assets/svg/in-progress.svg',
 }
 
 export enum DiscountType {

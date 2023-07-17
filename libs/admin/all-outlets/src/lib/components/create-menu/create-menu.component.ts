@@ -49,7 +49,7 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
     this.pageReloadService.enablePageReloadConfirmation();
     this.initForm();
     // this.initOptionsConfig();
-    this.initComponent('menu');
+    this.initRoutes('menu');
   }
 
   initForm(): void {

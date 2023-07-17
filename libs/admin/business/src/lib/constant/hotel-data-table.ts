@@ -7,7 +7,7 @@ export const cols = [
     header: 'Name / Type',
     sortType: 'string',
     searchField: ['name'],
-    width: '27%',
+    width: '29%',
   },
   {
     field: 'workingDays',

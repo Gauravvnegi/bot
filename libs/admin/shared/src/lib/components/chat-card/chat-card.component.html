@@ -95,8 +95,8 @@
     </div>
   </div>
 
-  <div class="time-left__wrapper">
-    <div *ngIf="taskStatus.timeLeft !== undefined" class="time-left">
+  <div class="time-left__wrapper" *ngIf="taskStatus">
+    <div *ngIf="taskStatus.timeLeft !== undefined && !isSelected" class="time-left">
       <div>Time Left:</div>
       <!-- <div appCountdown [config]="{ value: taskStatus.timeLeft }"></div> -->
       <div>{{ taskStatus.timeLeft }}m</div>

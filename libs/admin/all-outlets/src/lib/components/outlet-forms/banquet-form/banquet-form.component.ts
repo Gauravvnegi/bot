@@ -18,17 +18,20 @@ import {
 })
 export class BanquetFormComponent implements OnInit {
   @Input() isLoading = false;
+  @Input() isPaidLoading = false;
+  @Input() isCompLoading = false;
+
   hours = hours;
   days = days;
   dimensions = dimensions;
   noRecordActionForComp = noRecordActionForComp;
   noRecordActionForMenu = noRecordActionForMenu;
   noRecordActionForPaid = noRecordActionForPaid;
-  isId: boolean = false;
+  isOutletId: boolean = false;
 
   @Input() set outletId(id: string) {
     if (id) {
-      this.isId = true;
+      this.isOutletId = true;
       this.modifyNoRecordActions();
     }
   }

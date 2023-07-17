@@ -55,6 +55,8 @@ export class RestaurantFormComponent implements OnInit {
   }
 
   selectItems(id) {
+    this.onCreateAndContinueFeature.emit('save');
+
     this.router.navigate([`menu/${id}`], { relativeTo: this.route });
   }
 }

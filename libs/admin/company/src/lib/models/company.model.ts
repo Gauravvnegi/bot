@@ -27,7 +27,7 @@ export class CompanyModel {
         addressLine1: form.address['formattedAddress'] ?? '',
         city: form.address['city'] ?? '',
         state: form.address['state'] ?? '',
-        countryCode: form.address['country'] ?? '',
+        countryCode: form.address['countryCode'] ?? '',
         postalCode: form.address['postalCode'] ?? '',
       },
       salesPersonName: form.salePersonName ?? '',

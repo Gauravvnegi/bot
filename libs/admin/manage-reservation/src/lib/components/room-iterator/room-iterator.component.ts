@@ -43,19 +43,29 @@ export class RoomIteratorComponent extends IteratorComponent
 
   @Output() refreshData = new EventEmitter();
   @Output() listenChanges = new EventEmitter();
+
   fields = roomFields;
+
+  entityId: string;
   globalQueries = [];
   errorMessages = {};
+
   roomTypeOffSet = 0;
   roomTypeLimit = 10;
+
+  maxAdultLimit = 0;
+  maxChildLimit = 0;
+
   ratePlans: Option[] = [];
   roomTypes: RoomFieldTypeOption[] = [];
-  entityId: string;
+
   $subscription = new Subscription();
+
   loadingRoomTypes = false;
 
   ratePlanOptionsArray: Option[][] = [];
   roomNumberOptionsArray: Option[][] = [];
+
   @ViewChild('main') main: ElementRef;
 
   constructor(
@@ -72,9 +82,7 @@ export class RoomIteratorComponent extends IteratorComponent
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initOptions();
-    this.parentFormGroup = this.controlContainer.control as FormGroup;
-    this.roomTypeArray = this.fb.array([]);
+    this.initDetails();
     this.createNewFields();
     this.listenForGlobalFilters();
   }
@@ -87,8 +95,8 @@ export class RoomIteratorComponent extends IteratorComponent
       roomTypeId: ['', [Validators.required]],
       ratePlan: [{ value: '', disabled: true }],
       roomNumber: [{ value: [], disabled: true }],
-      adultCount: ['', [Validators.required, Validators.min(1)]],
-      childCount: ['', [Validators.min(0)]],
+      adultCount: [''],
+      childCount: [''],
       price: [''],
     };
 
@@ -105,8 +113,6 @@ export class RoomIteratorComponent extends IteratorComponent
     this.listenRoomTypeChanges(index);
     this.listenRatePlanChanges(index);
     this.listenForFormChanges(index);
-
-    // this.setFormDisability();
   }
 
   listenRoomTypeChanges(index: number) {
@@ -135,11 +141,34 @@ export class RoomIteratorComponent extends IteratorComponent
               .get('ratePlan')
               .setValidators([Validators.required]);
           }
-          this.roomControls[index].get('adultCount').setValue(1);
-          this.roomControls[index].get('childCount').setValue(0);
-          // this.fields[2].options = ['201', '202'];
+
+          this.updateAdultAndChildCount(selectedRoomType, index);
         }
       });
+  }
+
+  updateAdultAndChildCount(
+    selectedRoomType: RoomFieldTypeOption,
+    index: number
+  ) {
+
+    this.maxAdultLimit = selectedRoomType.maxAdult;
+    this.maxChildLimit = selectedRoomType.maxAdult;
+    this.roomControls[index]
+      .get('childCount')
+      .setValidators([
+        Validators.min(0),
+        Validators.max(selectedRoomType.maxChildren),
+      ]);
+    this.roomControls[index]
+      .get('adultCount')
+      .setValidators([
+        Validators.required,
+        Validators.min(1),
+        Validators.max(selectedRoomType.maxAdult),
+      ]);
+    this.roomControls[index].get('adultCount').setValue(1);
+    this.roomControls[index].get('childCount').setValue(0);
   }
 
   listenRatePlanChanges(index: number) {
@@ -152,7 +181,9 @@ export class RoomIteratorComponent extends IteratorComponent
     });
   }
 
-  initOptions() {
+  initDetails() {
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
+    this.roomTypeArray = this.fb.array([]);
     this.configService.$config.subscribe((value) => {
       if (value) {
         const { roomRatePlans } = value;

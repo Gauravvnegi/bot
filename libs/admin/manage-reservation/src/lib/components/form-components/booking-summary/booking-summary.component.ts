@@ -90,7 +90,8 @@ export class BookingSummaryComponent implements OnInit {
 
   handleBooking(): void {
     this.isBooking = true;
-    const data = this.parentFormGroup.getRawValue();
+    const data = this.parentFormGroup.getRawValue() as ReservationForm;
+    debugger;
     if (this.reservationId) this.updateReservation(data);
     else this.createReservation(data);
   }

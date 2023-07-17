@@ -42,7 +42,6 @@ export class RatesNestedCheckboxTreeComponent extends FormControl {
   }
 
   patchTreeChanges() {
-    console.log(this.parentFG, this.roomsData);
     const selectedItems = this.roomsData.filter((item) =>
       item.variants.some((ratePlan) => ratePlan.isSelected)
     );

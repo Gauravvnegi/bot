@@ -1,7 +1,7 @@
 @import 'main';
 
 .container {
-  max-height: 80vh;
+  position: relative;
 }
 .header {
   display: flex;
@@ -81,6 +81,8 @@
   padding: 20px 0;
   width: 100%;
   gap: 30px;
+  position: absolute;
+  bottom: 0;
 
   &-cancel {
     width: 113px;
@@ -104,10 +106,11 @@
     cursor: pointer;
   }
 }
-.body {
-  // margin: 30px 0px;
 
-  padding: 30px 30px 15px;
+.body {
+  overflow: auto;
+  height: calc(100vh - 200px);
+  padding: 15px 30px;
 }
 
 .disabled-btn {

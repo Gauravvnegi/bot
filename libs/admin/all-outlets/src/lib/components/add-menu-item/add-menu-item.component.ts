@@ -35,11 +35,11 @@ export class AddMenuItemComponent extends OutletBaseComponent
   taxes: Option[] = [];
   currencies: Option[] = [{ label: 'INR', value: 'INR' }];
   unitOptions = [
-    { label: 'gram', value: 'GRAMS' },
+    { label: 'gm', value: 'GRAMS' },
     { label: 'piece', value: 'PIECE' },
     { label: 'litre', value: 'LITRE' },
-    { label: 'kilogram', value: 'KILOGRAMS' },
-    { label: 'mili litre', value: 'MILI_LITRE' },
+    { label: 'kg', value: 'KILOGRAM' },
+    { label: 'ml', value: 'MILLILITER' },
   ];
   constructor(
     private fb: FormBuilder,
@@ -116,8 +116,8 @@ export class AddMenuItemComponent extends OutletBaseComponent
       dineInPrice: ['', [Validators.required, Validators.min(0)]],
       deliveryPriceCurrency: ['INR'],
       deliveryPrice: ['', [Validators.required, Validators.min(0)]],
-      hsnCode: ['', Validators.required],
-      taxIds: [[], Validators.required],
+      hsnCode: [''],
+      taxIds: [[]],
       description: [''],
     });
     if (this.menuItemId) {
@@ -192,7 +192,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
   handleSuccess = () => {
     this.loading = false;
     this.snackbarService.openSnackBarAsText(
-      `MenuItem ${this.menuItemId ? 'edited' : 'created'} successfully`,
+      `Menu Item ${this.menuItemId ? 'edited' : 'created'} successfully`,
       '',
       { panelClass: 'success' }
     );

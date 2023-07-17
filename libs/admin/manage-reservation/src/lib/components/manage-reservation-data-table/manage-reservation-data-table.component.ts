@@ -8,6 +8,8 @@ import {
   AdminUtilityService,
   BaseDatatableComponent as BaseDatableComponent,
   ConfigService,
+  EntitySubType,
+  EntityType,
   Option,
   TableService,
   sharedConfig,
@@ -20,12 +22,9 @@ import * as FileSaver from 'file-saver';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subject, Subscription } from 'rxjs';
-import { switchMap, takeUntil } from 'rxjs/operators';
 import {
-  EntityTabGroup,
   HotelMenuOptions,
   MenuOptions,
-  ReservationSearchItem,
   ReservationStatusType,
   ReservationTableValue,
   ReservationType,
@@ -42,6 +41,8 @@ import {
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationListResponse } from '../../types/response.type';
+import { FormService } from '../../services/form.service';
+import { SelectedEntity } from '../../types/reservation.type';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -58,15 +59,26 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   scrollTargetPoint: number = 150;
 
   entityId!: string;
+
   selectedTab: ReservationTableValue = ReservationTableValue.ALL;
-  selectedOutlet: EntityTabGroup = EntityTabGroup.HOTEL;
-  previousOutlet: EntityTabGroup = EntityTabGroup.HOTEL;
+
+  // selectedOutlet: EntitySubType = EntitySubType.ROOM_TYPE;
+  // previousOutlet: EntitySubType = EntitySubType.ROOM_TYPE;
+
+  selectedEntity: SelectedEntity;
+  previousSelectedEntity: SelectedEntity;
+
   reservationLists!: ReservationList;
+
   $subscription = new Subscription();
+
   globalQueries = [];
   configData: BookingConfig;
+
   isAllTabFilterRequired: boolean = true;
+  isSelectedEntityChanged = false;
   isOutletChanged: boolean = false;
+
   private destroy$ = new Subject<void>();
 
   menuOptions: Option[] = MenuOptions;
@@ -76,6 +88,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     protected tabFilterService: TableService,
     private manageReservationService: ManageReservationService,
     private adminUtilityService: AdminUtilityService,
+    private formService: FormService,
     private globalFilterService: GlobalFilterService,
     protected snackbarService: SnackBarService,
     private router: Router,
@@ -89,6 +102,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     // this.getConfigData();
     this.tableName = title;
     this.listenForGlobalFilters();
+    this.listenForSelectedEntityChange();
   }
 
   // initTableDetails = () => {
@@ -124,51 +138,29 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     this.globalQueries = [];
     this.globalFilterService.globalFilter$.subscribe((data) => {
       // set-global query everytime global filter changes
-      this.globalQueries = [
-        ...data['filter'].queryValue,
-        ...data['dateRange'].queryValue,
-      ];
-      this.initTableValue();
+      this.globalQueries = [...data['dateRange'].queryValue];
+      if (!this.isSelectedEntityChanged && this.selectedEntity) {
+        this.initTableValue();
+      }
     });
   }
 
   loadData(event: LazyLoadEvent): void {
-    this.manageReservationService.selectedTab = this.selectedTab;
-    if (!this.isOutletChanged) this.initTableValue();
+    this.formService.selectedTab = this.selectedTab;
   }
 
-  listenForOutletChange(value) {
-    // this.manageReservationService.getSelectedOutlet().subscribe((value) => {
-    this.selectedOutlet = value;
-    if (this.selectedOutlet !== this.previousOutlet) {
-      this.resetTableValues();
-      this.loading = true;
-      this.isOutletChanged = true;
-    } else {
-      this.isOutletChanged = false;
-    }
-
-    this.previousOutlet = this.selectedOutlet;
-    this.initDetails(this.selectedOutlet);
-    // });
-  }
-
-  initDetails(selectedOutlet: EntityTabGroup) {
-    if (selectedOutlet === EntityTabGroup.HOTEL) {
-      this.selectedTab = ReservationTableValue.ALL;
-      this.cols = hotelCols;
-      this.menuOptions = HotelMenuOptions;
-      this.isAllTabFilterRequired = true;
-      this.isTabFilters = true;
-    } else {
-      this.cols = outletCols;
-      this.isTabFilters = false;
-      this.isAllTabFilterRequired = false;
-      this.menuOptions = MenuOptions;
-      if (selectedOutlet === EntityTabGroup.RESTAURANT_AND_BAR) {
-        this.menuOptions = RestaurantMenuOptions;
+  listenForSelectedEntityChange() {
+    this.formService.selectedEntity.subscribe((res) => {
+      this.selectedEntity = res;
+      this.selectedEntity.id !== this.previousSelectedEntity?.id
+        ? (this.isSelectedEntityChanged = true)
+        : (this.isSelectedEntityChanged = false);
+      this.previousSelectedEntity = { ...this.selectedEntity };
+      if (this.selectedEntity && this.isSelectedEntityChanged) {
+        this.initDetails(this.selectedEntity);
+        this.initTableValue();
       }
-    }
+    });
   }
 
   /**
@@ -177,32 +169,15 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   initTableValue() {
     this.loading = true;
     this.manageReservationService
-      .getSelectedOutlet()
-      .pipe(
-        switchMap((selectedOutlet) => {
-          // Store the selected outlet
-          this.selectedOutlet = selectedOutlet;
-          this.listenForOutletChange(selectedOutlet);
-          if (this.selectedOutlet === EntityTabGroup.HOTEL) {
-            // API call for hotel data
-            return this.manageReservationService.getReservationItems<
-              ReservationListResponse
-            >(this.getQueryConfig());
-          } else {
-            // API call for outlet data
-            return this.manageReservationService.getReservationList(
-              this.entityId,
-              this.getOutletConfig()
-            );
-          }
-        }),
-        takeUntil(this.destroy$) // Unsubscribe when the destroy$ subject emits
+      .getReservationItems<ReservationListResponse>(
+        this.getQueryConfig(),
+        this.selectedEntity.id
       )
       .subscribe(
         (res) => {
           // Process the response and update the data
-          if (this.selectedOutlet === EntityTabGroup.HOTEL) {
-            this.reservationLists = new ReservationList().deserialize(res);
+          this.reservationLists = new ReservationList().deserialize(res);
+          if (this.selectedEntity.subType === EntitySubType.ROOM_TYPE) {
             this.values = this.reservationLists.reservationData.map((item) => {
               return {
                 ...item,
@@ -217,11 +192,13 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
             );
             this.loading = false;
           } else {
-            this.values = res.records;
+            this.values = new ReservationList().deserialize(
+              res
+            ).reservationData;
             this.initFilters(
-              res.entityTypeCounts,
-              res.entityStateCounts,
-              res.total
+              this.reservationLists.entityTypeCounts,
+              this.reservationLists.entityStateCounts,
+              this.reservationLists.total
             );
             this.loading = false;
           }
@@ -232,6 +209,39 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           this.loading = false;
         }
       );
+  }
+
+  // listenForOutletChange(value: SelectedEntity) {
+  //   this.selectedOutlets = value;
+  //   // if (this.selectedOutlet !== this.previousOutlet) {
+  //   //   this.resetTableValues();
+  //   //   this.loading = true;
+  //   //   this.isOutletChanged = true;
+  //   // } else {
+  //   //   this.isOutletChanged = false;
+  //   // }
+  //   this.resetTableValues();
+  //   this.loading = true;
+  //   // this.previousOutlet = this.selectedOutlet;
+  //   this.initDetails(this.selectedOutlets);
+  // }
+
+  initDetails(selectedEntity: SelectedEntity) {
+    if (selectedEntity.subType === EntitySubType.ROOM_TYPE) {
+      this.selectedTab = ReservationTableValue.ALL;
+      this.cols = hotelCols;
+      this.menuOptions = HotelMenuOptions;
+      this.isAllTabFilterRequired = true;
+      this.isTabFilters = true;
+    } else {
+      this.cols = outletCols;
+      this.isTabFilters = false;
+      this.isAllTabFilterRequired = false;
+      this.menuOptions = MenuOptions;
+      if (selectedEntity.subType === EntitySubType.RESTAURANT) {
+        this.menuOptions = RestaurantMenuOptions;
+      }
+    }
   }
 
   /**
@@ -368,9 +378,14 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         ...this.globalQueries,
         ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
         {
-          type: ReservationSearchItem.ROOM_TYPE,
+          type:
+            this.selectedEntity.subType === EntitySubType.ROOM_TYPE
+              ? EntitySubType.ROOM_TYPE
+              : EntityType.OUTLET,
+          ...(this.selectedEntity.subType !== EntitySubType.ROOM_TYPE && {
+            outletType: this.selectedEntity.subType,
+          }),
           entityType: this.selectedTab,
-          entityId: this.entityId,
           offset: this.first,
           limit: this.rowsPerPage,
         },
@@ -391,7 +406,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         break;
       case 'ASSIGN_ROOM':
       case 'ASSIGN_TABLE':
-        this.manageReservationService.enableAccordion = true;
+        this.formService.enableAccordion = true;
         this.editReservation(id);
         break;
     }

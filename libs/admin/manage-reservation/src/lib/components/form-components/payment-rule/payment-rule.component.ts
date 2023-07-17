@@ -6,8 +6,8 @@ import {
   FormGroup,
 } from '@angular/forms';
 import * as moment from 'moment';
-import { ManageReservationService } from '../../../services/manage-reservation.service';
 import { ReservationForm } from '../../../constants/form';
+import { FormService } from '../../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-payment-rule',
@@ -24,11 +24,11 @@ export class PaymentRuleComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public controlContainer: ControlContainer,
-    private manageReservationService: ManageReservationService
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
-    this.manageReservationService.reservationDate.subscribe((res) => {
+    this.formService.reservationDate.subscribe((res) => {
       if (res) this.startMinDate = new Date(res);
     });
     this.addFormGroup();

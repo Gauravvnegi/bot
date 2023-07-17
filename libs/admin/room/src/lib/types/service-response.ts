@@ -1,4 +1,4 @@
-import { StaticPricingMod } from '../constant/form';
+import { DynamicPricingRatePlan, StaticPricingMod } from '../constant/form';
 
 export type RoomStatus =
   | 'CLEAN'
@@ -31,7 +31,7 @@ export type RoomResponse = {
     unavailableRoomCount: number;
   };
   features: string[];
-  roomStatus: RoomStatus;
+  status: RoomStatus;
   //--- can be modified
   toDate: number;
   fromDate: number;
@@ -73,7 +73,7 @@ export type RoomTypeResponse = {
   roomCount: number;
   activeRoomCount: number;
   unavailableRoomCount: number;
-  ratePlans: StaticPricingMod[];
+  ratePlans: RatePlanRes[];
   soldOutCount: number;
   maxChildren: number;
   maxAdult: number;
@@ -83,6 +83,26 @@ export type RoomTypeResponse = {
   discountedPrice: number;
   originalPrice: number;
   currency: string;
+};
+
+export type RatePlanRes = {
+  basePriceCurrency: string;
+  basePrice: string;
+  discountType: string;
+  discountValue: number;
+  bestAvailablePrice: string;
+  maxPriceCurrency: string;
+  maxPrice: number;
+  minPriceCurrency: string;
+  minPrice: number;
+  paxPriceCurrency: string;
+  paxPrice: string;
+  ratePlanTypeId: string;
+  discount: {
+    type: string;
+    value: number;
+  };
+  id: string;
 };
 
 export type RoomTypeListResponse = {

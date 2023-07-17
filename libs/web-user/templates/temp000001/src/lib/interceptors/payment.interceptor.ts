@@ -15,7 +15,8 @@ export class PaymentInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (req.url.includes('payment-configuration')) {
+    // if (req.url.includes('payment-configuration')) {
+    if (req.url.includes('payment/configurations/web')) {
       const modifiedRequest = req.clone({
         setHeaders: {
           key: environment.paymentApiKey,

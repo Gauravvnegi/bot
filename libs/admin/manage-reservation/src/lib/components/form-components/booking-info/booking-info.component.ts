@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
 import {
   ConfigService,
   CountryCodeList,
@@ -9,7 +9,8 @@ import { BookingConfig } from '../../../models/reservations.model';
 import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ActivatedRoute } from '@angular/router';
-import { ManageReservationService } from '../../../services/manage-reservation.service';
+import { FormService } from '../../../services/form.service';
+import { ReservationForm } from '../../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -23,7 +24,7 @@ export class BookingInfoComponent implements OnInit {
   maxToDate = new Date();
   entityId: string;
   reservationId: string;
-  
+
   countries: Option[];
   @Input() expandAccordion: boolean = false;
   @Input() reservationTypes: Option[] = [];
@@ -37,7 +38,7 @@ export class BookingInfoComponent implements OnInit {
     private configService: ConfigService,
     private globalFilterService: GlobalFilterService,
     private activatedRoute: ActivatedRoute,
-    private manageReservationService: ManageReservationService
+    private formService: FormService
   ) {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
   }
@@ -47,6 +48,13 @@ export class BookingInfoComponent implements OnInit {
     this.getCountryCode();
     this.initDefaultDates();
     this.listenForDateChange();
+    this.listenFormChanges();
+  }
+
+  listenFormChanges() {
+    this.reservationInfoControls.source.valueChanges.subscribe((res) => {
+      this.reservationInfoControls.sourceName.setValue('');
+    });
   }
 
   /**
@@ -64,7 +72,6 @@ export class BookingInfoComponent implements OnInit {
     this.endMinDate.setTime(this.endMinDate.getTime() - 5 * 60 * 1000);
   }
 
-
   /**
    * Listen for date changes in hotel and outlets.
    */
@@ -78,7 +85,7 @@ export class BookingInfoComponent implements OnInit {
       'reservationInformation.from'
     );
     const dateAndTimeControl = this.controlContainer.control.get(
-      'reservationInformation.reservationDateAndTime'
+      'reservationInformation.dateAndTime'
     );
 
     // Listen to from and to date changes in hotel and setting
@@ -89,13 +96,13 @@ export class BookingInfoComponent implements OnInit {
       fromDateControl.valueChanges.subscribe((res) => {
         const maxToLimit = new Date(res);
         this.maxToDate.setDate(maxToLimit.getDate() + 365);
-        this.manageReservationService.reservationDate.next(res);
+        this.formService.reservationDate.next(res);
       });
       toDateControl.valueChanges.subscribe((res) => {
         const maxLimit = new Date(res);
         this.maxFromDate.setDate(maxLimit.getDate() - 1);
       });
-    } 
+    }
 
     // Listen to from and to date changes in Venue
     else if (this.bookingType === 'VENUE') {
@@ -106,15 +113,17 @@ export class BookingInfoComponent implements OnInit {
         const maxLimit = new Date(res);
         toDateControl.setValue(moment(maxLimit).unix() * 1000);
         this.maxToDate = moment(maxLimit).add(24, 'hours').toDate();
-        this.manageReservationService.reservationDate.next(res);
+        this.formService.reservationDate.next(res);
       });
-    } 
-    
+    }
+
     // Listen for date and time change in restaurant and spa
     else {
       dateAndTimeControl.setValue(startTime);
+      this.formService.reservationDateAndTime.next(startTime);
+
       dateAndTimeControl.valueChanges.subscribe((res) => {
-        this.manageReservationService.reservationDate.next(res);
+        this.formService.reservationDateAndTime.next(res);
       });
     }
   }
@@ -134,5 +143,14 @@ export class BookingInfoComponent implements OnInit {
       const data = new CountryCodeList().deserialize(res);
       this.countries = data.records;
     });
+  }
+
+  get reservationInfoControls() {
+    return (this.controlContainer.control.get(
+      'reservationInformation'
+    ) as FormGroup).controls as Record<
+      keyof ReservationForm['reservationInformation'],
+      AbstractControl
+    >;
   }
 }

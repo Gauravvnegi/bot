@@ -298,10 +298,10 @@ export class RequestListComponent implements OnInit, OnDestroy {
   setSelectedRequest(item: InhouseData, i: number): void {
     clearInterval(this.timeInterval);
 
-    this.startTimeLeftTimer();
+
     const request = item;
     request.timeLeft = this.timeLeft[i];
-
+    this.startTimeLeftTimer();
     // this logic will be removed api should be call to get the new data
 
     this.selectedRequest = request;

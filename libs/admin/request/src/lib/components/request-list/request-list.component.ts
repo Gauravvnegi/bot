@@ -47,6 +47,10 @@ export class RequestListComponent implements OnInit, OnDestroy {
   tabFilterItems = request.defaultTabFilter;
   tabFilterIdx = 0;
   entityId: string;
+
+  timeInterval;
+  timeLeft = [];
+
   constructor(
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
@@ -155,6 +159,9 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.$subscription.add(
       this.fetchDataFrom(queries).subscribe((response) => {
         this.listData = new InhouseTable().deserialize(response).records;
+        this.timeLeft = this.listData.map((item) => item.timeLeft);
+        this.startTimeLeftTimer();
+
         this.initTabFilter(response.entityStateCounts, response.total);
         this.totalData = response.total;
         this.loading = false;
@@ -276,13 +283,29 @@ export class RequestListComponent implements OnInit, OnDestroy {
     }
   }
 
+  startTimeLeftTimer() {
+    this.timeInterval = setInterval(() => {
+      this.timeLeft = this.timeLeft.map((item) =>
+        item - 1 > 0 ? item - 1 : 0
+      );
+    }, 1000 * 60);
+  }
+
   /**
    * @function setSelectedRequest To set selected request data.
    * @param item The request data.
    */
-  setSelectedRequest(item: InhouseData): void {
-    this.selectedRequest = item;
-    this._requestService.selectedRequest.next(item);
+  setSelectedRequest(item: InhouseData, i: number): void {
+    clearInterval(this.timeInterval);
+
+    this.startTimeLeftTimer();
+    const request = item;
+    request.timeLeft = this.timeLeft[i];
+
+    // this logic will be removed api should be call to get the new data
+
+    this.selectedRequest = request;
+    this._requestService.selectedRequest.next(request);
   }
 
   /**
@@ -300,12 +323,11 @@ export class RequestListComponent implements OnInit, OnDestroy {
     this.parentFG.patchValue({ search: '' }, { emitEvent: false });
     this.enableSearchField = false;
 
-    if(this.isSearchEnabled){
+    if (this.isSearchEnabled) {
       this.loading = true;
       this.loadData(0, 10);
       this.isSearchEnabled = false;
     }
-  
   }
 
   /**
@@ -378,5 +400,6 @@ export class RequestListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+    clearInterval(this.timeInterval);
   }
 }

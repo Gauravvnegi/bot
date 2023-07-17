@@ -98,7 +98,8 @@
   <div class="time-left__wrapper">
     <div *ngIf="taskStatus.timeLeft !== undefined" class="time-left">
       <div>Time Left:</div>
-      <div appCountdown [config]="{ value: taskStatus.timeLeft }"></div>
+      <!-- <div appCountdown [config]="{ value: taskStatus.timeLeft }"></div> -->
+      <div>{{ taskStatus.timeLeft }}m</div>
     </div>
     <div class="card-wrapper_time" [ngStyle]="{ 'float': 'right' }">
       {{ time }}

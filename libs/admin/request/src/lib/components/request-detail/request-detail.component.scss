@@ -201,3 +201,14 @@ td {
   cursor: pointer;
   padding-left: 15px;
 }
+
+.time-left {
+  display: flex;
+  position: absolute;
+  right: 25px;
+  font-size: 22px;
+  .time {
+    margin-left: 7px;
+    color: $inactive-state;
+  }
+}

@@ -240,7 +240,10 @@
           </div>
         </mat-expansion-panel>
       </mat-accordion>
-      <div class="permission-button-wrapper">
+      <div
+        class="permission-button-wrapper"
+        *ngIf="doesNotHasPageSate('viewUser')"
+      >
         <hospitality-bot-button
           [label]="isUpdatingPermissions ? 'Saving...' : 'Save'"
           (click)="savePermission()"

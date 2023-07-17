@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import {
+  FormGroup,
+  FormArray,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -20,6 +26,8 @@ import {
   BookingInfo,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
+import { ReservationForm } from '../../constants/form';
+import { FormService } from '../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-spa-reservation',
@@ -44,6 +52,9 @@ export class SpaReservationComponent implements OnInit {
   formValueChanges = false;
   disabledForm = false;
 
+  date: string;
+  time: string;
+
   deductedAmount = 0;
   bookingType = 'SPA';
 
@@ -57,7 +68,8 @@ export class SpaReservationComponent implements OnInit {
     private adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    private formService: FormService
   ) {
     this.initForm();
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
@@ -92,7 +104,7 @@ export class SpaReservationComponent implements OnInit {
 
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
-        reservationDateAndTime: ['', Validators.required],
+        dateAndTime: ['', Validators.required],
         status: ['', Validators.required],
         source: ['', Validators.required],
         sourceName: ['', [Validators.required, Validators.maxLength(60)]],
@@ -110,28 +122,21 @@ export class SpaReservationComponent implements OnInit {
    * @function listenForFormChanges Listen for form values changes.
    */
   listenForFormChanges(): void {
-    this.userForm
-      .get('roomInformation.roomTypeId')
-      ?.valueChanges.subscribe((res) => {
-        if (res) {
-          this.userForm.get('offerId').reset();
-          this.getOfferByRoomType(res);
-          this.getSummaryData();
-        }
-      });
-    this.userForm
-      .get('roomInformation.roomCount')
-      ?.valueChanges.subscribe((res) => {
-        if (res) {
-          if (
-            this.userForm.get('roomInformation.roomCount').value >
-            this.userForm.get('roomInformation.adultCount').value
-          )
-            this.userForm
-              .get('roomInformation.adultCount')
-              .patchValue(this.userForm.get('roomInformation.roomCount').value);
-        }
-      });
+    this.formService.reservationDateAndTime.subscribe((res) => {
+      if (res) this.setDateAndTime(res);
+    });
+  }
+
+  setDateAndTime(dateTime: number) {
+    const dateAndTime = new Date(dateTime);
+    const date = dateAndTime.toLocaleDateString();
+    const time = dateAndTime.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    // Update template variables
+    this.date = date;
+    this.time = time;
   }
 
   getReservationId(): void {
@@ -272,6 +277,14 @@ export class SpaReservationComponent implements OnInit {
         )
       );
     }
+  }
+
+  get reservationInfoControls() {
+    return (this.userForm.get('reservationInformation') as FormGroup)
+      .controls as Record<
+      keyof ReservationForm['reservationInformation'],
+      AbstractControl
+    >;
   }
 
   /**

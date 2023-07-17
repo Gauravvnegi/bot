@@ -42,7 +42,7 @@ export class BookingSummaryComponent implements OnInit {
   price = '';
   guestInfo = '';
   discountedPrice = '';
-  bookingType = ''
+  bookingType = '';
 
   $subscription = new Subscription();
 
@@ -90,61 +90,45 @@ export class BookingSummaryComponent implements OnInit {
 
   handleBooking(): void {
     this.isBooking = true;
-    const data = this.manageReservationService.mapReservationData(
-      this.parentFormGroup.getRawValue()
-    );
+    const data = this.parentFormGroup.getRawValue();
     if (this.reservationId) this.updateReservation(data);
     else this.createReservation(data);
   }
 
   createReservation(data): void {
-    (data = {
-      ...data,
-      firstName: 'Dummy',
-      lastName: 'Reservation',
-      contact: { countryCode: '+91', phoneNumber: '99999999999' },
-      email: 'botshot@gmail.com',
-    }),
-      this.$subscription.add(
-        this.manageReservationService
-          .createReservation(this.entityId, data)
-          .subscribe(
-            (res: ReservationResponse) => {
-              this.bookingConfirmationPopup(res?.reservationNumber);
-            },
-            (error) => {
-              this.isBooking = false;
-            },
-            () => {
-              this.isBooking = false;
-            }
-          )
-      );
+    this.$subscription.add(
+      this.manageReservationService
+        .createReservation(this.entityId, data)
+        .subscribe(
+          (res: ReservationResponse) => {
+            this.bookingConfirmationPopup(res?.reservationNumber);
+          },
+          (error) => {
+            this.isBooking = false;
+          },
+          () => {
+            this.isBooking = false;
+          }
+        )
+    );
   }
 
   updateReservation(data): void {
-    (data = {
-      ...data,
-      firstName: 'Dummy',
-      lastName: 'Reservation',
-      contact: { countryCode: '+91', phoneNumber: '99999999999' },
-      email: 'botshot@gmail.com',
-    }),
-      this.$subscription.add(
-        this.manageReservationService
-          .updateReservation(this.entityId, this.reservationId, data)
-          .subscribe(
-            (res: ReservationResponse) => {
-              this.bookingConfirmationPopup(res?.reservationNumber);
-            },
-            (error) => {
-              this.isBooking = false;
-            },
-            () => {
-              this.isBooking = false;
-            }
-          )
-      );
+    this.$subscription.add(
+      this.manageReservationService
+        .updateReservation(this.entityId, this.reservationId, data)
+        .subscribe(
+          (res: ReservationResponse) => {
+            this.bookingConfirmationPopup(res?.reservationNumber);
+          },
+          (error) => {
+            this.isBooking = false;
+          },
+          () => {
+            this.isBooking = false;
+          }
+        )
+    );
   }
 
   /**
@@ -210,7 +194,10 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   get inputControl() {
-    return this.parentFormGroup.controls as Record<keyof ReservationForm, AbstractControl>;
+    return this.parentFormGroup.controls as Record<
+      keyof ReservationForm,
+      AbstractControl
+    >;
   }
 }
 
@@ -223,4 +210,3 @@ type BookingSummaryInfo = {
   discountedPrice: string;
   bookingType: string;
 };
-

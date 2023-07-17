@@ -1,5 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -14,7 +20,7 @@ import { ModalService, SnackBarService } from 'libs/shared/material/src';
 import { UserConfig } from '../../../../../shared/src/lib/models/userConfig.model';
 import { managePermissionRoutes, navRoute } from '../../constants/routes';
 import { ManagePermissionService } from '../../services/manage-permission.service';
-import { PageState, Permission, PermissionMod } from '../../types';
+import { PageState, Permission, PermissionMod, UserForm } from '../../types';
 import { UserPermissionDatatableComponent } from '../user-permission-datatable/user-permission-datatable.component';
 
 @Component({
@@ -64,6 +70,7 @@ export class UserProfileComponent implements OnInit {
     addNewUser: 'User Added Successfully',
     editUser: 'User Profile Updated Successfully',
     userProfile: 'Profile Updated Successfully',
+    viewUser: '',
   };
 
   constructor(
@@ -193,7 +200,8 @@ export class UserProfileComponent implements OnInit {
             phoneNumber: '',
             email: '',
             id: '',
-          });
+            profileUrl: '',
+          } as Partial<UserForm>);
 
           this.userForm.enable();
         } else {
@@ -207,6 +215,7 @@ export class UserProfileComponent implements OnInit {
 
         break;
 
+      case 'viewUser':
       case 'editUser':
         this.userDataLoading = true;
 
@@ -223,13 +232,19 @@ export class UserProfileComponent implements OnInit {
                 'User',
                 `${this.userToModDetails.firstName} ${this.userToModDetails.lastName}`
               );
-              this.userDataLoading = false;
             },
-            (err) => {
+            () => {},
+            () => {
+              // disabling field if only view user
+              if (this.state === 'viewUser') {
+                this.userForm.disable();
+              }
               this.userDataLoading = false;
             }
           );
+
         break;
+
       default:
         break;
     }
@@ -243,6 +258,10 @@ export class UserProfileComponent implements OnInit {
 
   hasPageState(...args: PageState[]) {
     return args.includes(this.state);
+  }
+
+  doesNotHasPageSate(...args: PageState[]) {
+    return !args.includes(this.state);
   }
 
   initAfterFormLoaded() {
@@ -283,8 +302,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   listenForBrandChanges() {
-    this.userForm.get('branchName').disable();
-    this.userForm.get('brandName').valueChanges.subscribe((brandId) => {
+    const { branchName, brandName } = this.userFormControl;
+    branchName.disable();
+    brandName.valueChanges.subscribe((brandId) => {
       const currentBrand = this._hotelDetailService.brands.find(
         (brand) => brand['id'] === brandId
       );
@@ -294,15 +314,16 @@ export class UserProfileComponent implements OnInit {
           label: item.name,
           value: item.id,
         }));
-        if (this.state !== 'userProfile')
-          this.userForm.get('branchName').enable();
+        if (this.state !== 'userProfile') branchName.enable();
       }
     });
   }
 
   listenForProductChange() {
-    this.userForm.get('products').valueChanges.subscribe((products) => {
-      const departmentValue = this.userForm.get('departments').value;
+    const { products, departments } = this.userFormControl;
+
+    products.valueChanges.subscribe((products) => {
+      const departmentValue = departments.value;
 
       this.tabListItems = this.products.filter((item) =>
         products.includes(item.value)
@@ -371,7 +392,7 @@ export class UserProfileComponent implements OnInit {
       });
     }
 
-    if (this.state === 'editUser') {
+    if (this.state === 'editUser' || this.state === 'viewUser') {
       const userConfig = this.userPermissions.find(
         (item) => item.module === config.module
       );
@@ -427,11 +448,19 @@ export class UserProfileComponent implements OnInit {
     tableCompRef.componentInstance.tabFilterIdx =
       this.totalTeamMember === 0 ? 0 : 1;
 
-    tableCompRef.componentInstance.onModalClose.subscribe((userId) => {
-      tableCompRef.close();
-      if (userId)
-        this.router.navigate([navRoute.editUser.link.replace('{0}', userId)]);
-    });
+    tableCompRef.componentInstance.onModalClose.subscribe(
+      ({ userId, isView }) => {
+        tableCompRef.close();
+        if (userId) {
+          this.router.navigate([
+            navRoute[isView ? 'viewUser' : 'editUser'].link.replace(
+              ':userId',
+              userId
+            ),
+          ]);
+        }
+      }
+    );
   }
 
   savePermission() {
@@ -528,5 +557,9 @@ export class UserProfileComponent implements OnInit {
       event.stopPropagation();
       event.preventDefault();
     }
+  }
+
+  get userFormControl() {
+    return this.userForm.controls as Record<keyof UserForm, AbstractControl>;
   }
 }

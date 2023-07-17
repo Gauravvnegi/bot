@@ -107,3 +107,15 @@ export type QuickReplyFilterConfig = {
   isStatusBoolean: boolean;
   activeStateKey: string;
 };
+
+export enum EntityType {
+  HOTEL = 'HOTEL',
+  OUTLET = 'OUTLET',
+}
+
+export enum EntitySubType {
+  ROOM_TYPE = 'ROOM_TYPE',
+  RESTAURANT = 'RESTAURANT',
+  VENUE = 'VENUE',
+  SPA = 'SPA',
+}

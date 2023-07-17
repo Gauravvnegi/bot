@@ -1,3 +1,5 @@
+import { EntitySubType, EntityType } from "@hospitality-bot/admin/shared";
+
 /**
  * @type CategoryData
  * @key params format is `?type=NEW`
@@ -21,9 +23,9 @@ export type QueryConfig = {
 
 export type ReservationStatus = 'DRAFT' | 'CONFIRMED' | 'CANCELED';
 
-export type selectedOutlet = {
+export type SelectedEntity = {
   id: string;
-  type: string;
+  type: EntityType;
+  subType: EntitySubType; 
   label: string;
-  value: string;
 };

@@ -122,7 +122,7 @@
         <div class="item-boxes" *ngIf="!!menuList.length; else emptyTable">
           <ng-container *ngFor="let item of menuList; index as i">
             <div class="item-box" (click)="selectItems(item.id)">
-              <div class="image-type" [ngClass]="{ selected: false }">
+              <div class="image-type" [ngClass]="{ selected: !item.status }">
                 <img
                   alt="image"
                   [src]="item.imageUrl"
@@ -144,11 +144,15 @@
       [height]="fullView ? '51vh' : 'fit-content'"
       [isLoading]="loading"
       [content]="noRecordActionForMenu"
+      (action)="onCreateAndContinue('menu')"
     >
     </hospitality-bot-empty-table>
   </ng-template>
 
-  <hospitality-bot-food-package [isId]="isId"></hospitality-bot-food-package>
+  <hospitality-bot-food-package
+    (onCreateAndContinueFeature)="onCreateAndContinue($event)"
+    [isOutletId]="isId"
+  ></hospitality-bot-food-package>
 
   <hospitality-bot-rules
     controlName="rules"

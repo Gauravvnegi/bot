@@ -1,41 +1,5 @@
 <ng-container [formGroup]="controlContainer.control">
   <div class="container-wrapper">
-    <div class="header">Services</div>
-    <hr />
-    <div class="sub-container-wrapper">
-      <hospitality-bot-custom-select
-        label="Complimentary Services"
-        description="This is a free of cost services"
-        formControlName="serviceIds"
-        [loading]="isLoading"
-        [itemList]="compServices"
-        (viewAll)="onCreateAndContinue('services')"
-        (onEmptyViewAction)="onCreateAndContinue('import-services')"
-        [noRecordsAction]="noRecordActionForComp"
-        type="icon"
-      >
-        <hospitality-bot-button
-          label="+ Import Services"
-          variant="text"
-          (onClick)="onCreateAndContinue('import-services')"
-        ></hospitality-bot-button>
-      </hospitality-bot-custom-select>
-      <hospitality-bot-custom-select
-        [loading]="isLoading"
-        label="Paid Services"
-        description="Do not forget to add this cost in addition to the room cost"
-        formControlName="paidServiceIds"
-        (viewAll)="onCreateAndContinue('services')"
-        [itemList]="paidServices"
-        (onEmptyViewAction)="onCreateAndContinue('service')"
-        [noRecordsAction]="noRecordActionForPaid"
-      ></hospitality-bot-custom-select>
-    </div>
-  </div>
-
-  <hospitality-bot-food-package [isId]="isId"></hospitality-bot-food-package>
-
-  <div class="container-wrapper">
     <div class="header">Other Details</div>
     <hr />
     <div class="details-wrapper">
@@ -48,10 +12,10 @@
         postFieldType="input"
         [defaultProps]="{
           pre: {
-            placeholder: 'Max Occupancy'
+            placeholder: 'Min Occupancy'
           },
           post: {
-            placeholder: 'Min Occupancy'
+            placeholder: 'Max Occupancy'
           }
         }"
         [settings]="{
@@ -113,6 +77,44 @@
       </hospitality-bot-prefix-field>
     </div>
   </div>
+  <div class="container-wrapper">
+    <div class="header">Services</div>
+    <hr />
+    <div class="sub-container-wrapper">
+      <hospitality-bot-custom-select
+        label="Complimentary Services"
+        description="This is a free of cost services"
+        formControlName="serviceIds"
+        [loading]="isLoading || isCompLoading"
+        [itemList]="compServices"
+        (viewAll)="onCreateAndContinue('services')"
+        (onEmptyViewAction)="onCreateAndContinue('import-services')"
+        [noRecordsAction]="noRecordActionForComp"
+        type="icon"
+      >
+        <hospitality-bot-button
+          label="+ Import Services"
+          variant="text"
+          (onClick)="onCreateAndContinue('import-services')"
+        ></hospitality-bot-button>
+      </hospitality-bot-custom-select>
+      <hospitality-bot-custom-select
+        [loading]="isLoading || isPaidLoading"
+        label="Paid Services"
+        description="Do not forget to add this cost in addition to the room cost"
+        formControlName="paidServiceIds"
+        (viewAll)="onCreateAndContinue('services')"
+        [itemList]="paidServices"
+        (onEmptyViewAction)="onCreateAndContinue('service')"
+        [noRecordsAction]="noRecordActionForPaid"
+      ></hospitality-bot-custom-select>
+    </div>
+  </div>
+
+  <hospitality-bot-food-package
+    (onCreateAndContinueFeature)="onCreateAndContinue($event)"
+    [isOutletId]="isOutletId"
+  ></hospitality-bot-food-package>
 
   <hospitality-bot-rules
     controlName="rules"

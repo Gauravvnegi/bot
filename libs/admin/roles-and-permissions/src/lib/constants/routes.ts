@@ -1,15 +1,19 @@
 import { NavRouteOption, PageRoutes } from '@hospitality-bot/admin/shared';
 
-type RouteKey = 'userProfile' | 'addNewUser' | 'editUser';
+export type UserPermissionRoutes =
+  | 'userProfile'
+  | 'addNewUser'
+  | 'editUser'
+  | 'viewUser';
 
-export const navRoute: Record<RouteKey, NavRouteOption> = {
+export const navRoute: Record<UserPermissionRoutes, NavRouteOption> = {
   userProfile: {
     label: 'User Profile',
     link: '/pages/roles-permissions/manage-profile',
   },
   editUser: {
     label: 'Edit User',
-    link: '/pages/roles-permissions/edit-user/{0}',
+    link: '/pages/roles-permissions/edit-user/:userId',
     isDisabled: true,
   },
   addNewUser: {
@@ -17,9 +21,17 @@ export const navRoute: Record<RouteKey, NavRouteOption> = {
     link: '/pages/roles-permissions/add-user',
     isDisabled: true,
   },
+  viewUser: {
+    label: 'View User',
+    link: '/pages/roles-permissions/view-user/:userId',
+    isDisabled: true,
+  },
 };
 
-export const managePermissionRoutes: Record<RouteKey, PageRoutes> = {
+export const managePermissionRoutes: Record<
+  UserPermissionRoutes,
+  PageRoutes
+> = {
   userProfile: {
     route: 'manage-profile',
     navRoutes: [{ ...navRoute.userProfile, isDisabled: true }],
@@ -34,5 +46,10 @@ export const managePermissionRoutes: Record<RouteKey, PageRoutes> = {
     route: 'edit-user/:id',
     navRoutes: [navRoute.userProfile, navRoute.editUser],
     title: 'Edit User Profile',
+  },
+  viewUser: {
+    route: 'view-user/:id',
+    navRoutes: [navRoute.userProfile, navRoute.viewUser],
+    title: 'View User Profile',
   },
 };

@@ -79,7 +79,7 @@ export type StaticPricingRatePlan = RatePlan & {
   discountType: string;
   discountValue: number;
   bestPriceCurrency: string;
-  bestAvailablePrice: number;
+  bestAvailablePrice: string;
 };
 
 export type DynamicPricingRatePlan = RatePlan & {
@@ -117,7 +117,6 @@ export const errorMessages = {
 
 export const noRecordAction = {
   actionName: '+Create New Service',
-  link: '/pages/library/services/create-service',
   imageSrc: 'assets/images/empty-table-service.png',
   description:
     'No services found. Tap the +Create Services to create & manage the services offered by your hotel',
@@ -128,4 +127,9 @@ export const noRecordActionForComp = {
   imageSrc: 'assets/images/empty-table-service.png',
   description:
     'No services found. Tap the +Import Services to Import & manage the services offered by your hotel',
+};
+
+export const noRecordsActionForFeatures = {
+  imageSrc: 'assets/images/empty-table-service.png',
+  description: 'No services found.',
 };

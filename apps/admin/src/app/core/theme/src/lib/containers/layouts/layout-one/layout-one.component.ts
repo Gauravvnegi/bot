@@ -184,7 +184,7 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
 
     this.logoUrl = selectedHotelData?.['logoUrl'];
     this.bgColor = selectedHotelData?.['headerBgColor'];
-    this.outlets = selectedHotelData?.['outlets'] ?? [];
+    this.outlets = selectedHotelData?.['entities'] ?? [];
     this.filterConfig.brandName = selectedBrandData?.['name'];
     this.filterConfig.branchName = selectedHotelData?.['name'];
     this.filterService.emitFilterValue$.next({

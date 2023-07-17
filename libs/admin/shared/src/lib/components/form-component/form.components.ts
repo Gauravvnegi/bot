@@ -26,7 +26,7 @@ export class FormComponent implements OnInit {
     // error messages with appropriate error-key
     required: 'This is a required field.',
   };
-  tabIndex = ""; // Removes tab focus in input 
+  tabIndex = ''; // Removes tab focus in input
   type: InputType = 'text';
   dropdownIcon = 'pi pi-chevron-down'; // Arrow icon for dropdown inputs
   isAsync = false; // To register load-more/search option query
@@ -111,8 +111,10 @@ export class FormComponent implements OnInit {
   /**
    * Init Input Control
    */
-  initInputControl() {
-    this.inputControl = this.controlContainer.control.get(this.controlName);
+  initInputControl(controlName?: string) {
+    this.inputControl = this.controlContainer.control.get(
+      controlName ? controlName : this.controlName
+    );
     this.addRequiredAsterisk();
   }
 

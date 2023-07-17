@@ -63,3 +63,19 @@ export type HotelAccess = {
     }[];
   }[];
 };
+
+export type UserForm = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  jobTitle: string;
+  brandName: string;
+  products: string[];
+  departments: string[];
+  branchName: string[];
+  cc: string;
+  phoneNumber: string;
+  email: string;
+  profileUrl: string;
+  permissionConfigs: any;
+};

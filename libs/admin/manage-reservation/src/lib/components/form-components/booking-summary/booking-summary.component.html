@@ -11,7 +11,7 @@
   <div class="bk-summary_roomInfo">
     <ng-content *ngIf="!displayBookingOffer"></ng-content>
   </div>
-  <div class="bk-summary_offerInfo">
+  <div class="bk-summary_offerInfo" *ngIf="bookingType === 'HOTEL'">
     <ng-container
       *ngIf="
         controlContainer.control.get('offerId').value &&
@@ -80,7 +80,7 @@
     </p>
     <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'HOTEL'">
       <span class="bk-summary_priceInfo_perNight_label">{{ guestInfo }}</span>
-      <span class="bk-summary_priceInfo_perNight_amount">{{
+      <span class="bk-summary_priceInfo_perNight_discountedAmount">{{
         discountedPrice
       }}</span>
     </p>

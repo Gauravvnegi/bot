@@ -32,7 +32,10 @@ import { chips, cols, tableName } from '../../constants/data-table';
 })
 export class UserPermissionDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
-  @Output() onModalClose = new EventEmitter();
+  @Output() onModalClose = new EventEmitter<{
+    userId?: string;
+    isView?: boolean;
+  }>();
   @Input() tabFilterIdx = 1;
 
   tableName = tableName;
@@ -97,11 +100,11 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
           this.manageUsersValues = new UserPermissionTable().deserialize(
             manageUsersData
           ).records;
-          //set pagination
-          this.setTableValues();
 
           this.tabFilterItems[0].total = allUsersData.total;
           this.tabFilterItems[1].total = manageUsersData.total;
+          this.setTableValues();
+
           this.loading = false;
         },
         (error) => {
@@ -145,7 +148,6 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
   onSelectedTabFilterChange({ index }) {
     this.tabFilterIdx = index;
     this.setTableValues();
-
     // this.loadInitialData();
   }
 
@@ -215,54 +217,22 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       );
   }
 
-  /**
-   * @function customSort To sort the rows of the table.
-   * @param eventThe The event for sort click action.
-   */
-  customSort(event: SortEvent): void {
-    const col = this.cols.filter((data) => data.field === event.field)[0];
-    const field =
-      event.field[event.field.length - 1] === ')'
-        ? event.field.substring(0, event.field.lastIndexOf('.') || 0)
-        : event.field;
-    event.data.sort((data1, data2) =>
-      this.sortOrder(event, field, data1, data2, col)
-    );
-  }
-
   addUser() {
     this._router.navigate(['add-user'], { relativeTo: this._route });
   }
 
   openUserDetails(rowData) {
-    if (this.tabFilterItems[this.tabFilterIdx].value === 'REPORTING')
-      this.closeModal(rowData.userId);
-  }
-
-  onFilterTypeTextChange(value, field, matchMode = 'startsWith') {
-    // value = value && value.trim();
-    // this.table.filter(value, field, matchMode);
-
-    if (!!value && !this.isSearchSet) {
-      this.tempFirst = this.first;
-      this.tempRowsPerPage = this.rowsPerPage;
-      this.isSearchSet = true;
-    } else if (!!!value) {
-      this.isSearchSet = false;
-      this.first = this.tempFirst;
-      this.rowsPerPage = this.tempRowsPerPage;
-    }
-
-    value = value && value.trim();
-    this.table.filter(value, field, matchMode);
+    this.onModalClose.emit({
+      userId: rowData.userId,
+      isView: rowData.parentId !== this.userService.getLoggedInUserId(),
+    });
   }
 
   /**
    * @function closeModal To emit user id on close modal
-   * @param userId
    */
-  closeModal(userId?: string): void {
-    this.onModalClose.emit(userId);
+  closeModal(): void {
+    this.onModalClose.emit();
   }
 
   ngOnDestroy() {

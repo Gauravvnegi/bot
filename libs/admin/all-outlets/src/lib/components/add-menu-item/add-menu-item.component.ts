@@ -57,7 +57,6 @@ export class AddMenuItemComponent extends OutletBaseComponent
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
     this.pageReloadService.enablePageReloadConfirmation();
     this.initOptions();
     this.initForm();

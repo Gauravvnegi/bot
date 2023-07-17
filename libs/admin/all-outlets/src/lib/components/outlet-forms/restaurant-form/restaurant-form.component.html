@@ -144,6 +144,7 @@
       [height]="fullView ? '51vh' : 'fit-content'"
       [isLoading]="loading"
       [content]="noRecordActionForMenu"
+      (action)="onCreateAndContinue('menu')"
     >
     </hospitality-bot-empty-table>
   </ng-template>

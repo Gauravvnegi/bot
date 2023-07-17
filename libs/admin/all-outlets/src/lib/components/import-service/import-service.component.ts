@@ -4,6 +4,7 @@ import { OutletBaseComponent } from '../outlet-base.components';
 import { OutletService } from '../../services/outlet.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Location } from '@angular/common';
+import { OutletFormService } from '../../services/outlet-form.service';
 
 @Component({
   selector: 'hospitality-bot-import-service',
@@ -16,7 +17,8 @@ export class ImportServiceComponent extends OutletBaseComponent
   constructor(
     router: Router,
     route: ActivatedRoute,
-    private OutletService: OutletService,
+    private outletService: OutletService,
+    private outletFormService: OutletFormService,
     private location: Location,
     private snackbarService: SnackBarService
   ) {
@@ -30,13 +32,11 @@ export class ImportServiceComponent extends OutletBaseComponent
   saveForm(serviceData) {
     serviceData.serviceIds = [
       ...serviceData.serviceIds,
-      //outlet service ids
+      ...this.outletFormService.OutletFormData.serviceIds,
     ];
-
-    this.OutletService.updateOutlet(this.outletId, serviceData).subscribe(
-      this.handleSuccess,
-      this.handelError
-    );
+    this.outletService
+      .updateOutlet(this.outletId, serviceData)
+      .subscribe(this.handleSuccess, this.handelError);
   }
 
   resetForm() {}
@@ -50,7 +50,25 @@ export class ImportServiceComponent extends OutletBaseComponent
       '',
       { panelClass: 'success' }
     );
-    this.location.back();
+    if (this.entityId) {
+      this.router.navigate(
+        [
+          `/pages/settings/business-info/brand/${this.brandId}/hotel/${this.entityId}/outlet/${this.outletId}`,
+        ],
+        {
+          relativeTo: this.route,
+        }
+      );
+      return;
+    }
+    this.router.navigate(
+      [
+        `/pages/settings/business-info/brand/${this.brandId}/outlet/${this.outletId}`,
+      ],
+      {
+        relativeTo: this.route,
+      }
+    );
   };
 
   /**

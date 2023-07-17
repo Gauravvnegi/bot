@@ -225,7 +225,9 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       );
 
       //navigate to respective feature
-      if (features === 'service') {
+      if (features === 'save') {
+        return;
+      } else if (features === 'service') {
         //navigate to create service
         this.router.navigate([`/pages/library/services/create-service`], {
           relativeTo: this.route,

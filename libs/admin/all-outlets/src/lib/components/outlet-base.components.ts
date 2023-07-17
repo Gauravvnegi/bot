@@ -71,7 +71,6 @@ export class OutletBaseComponent {
 
       if (isHotel) {
         updatedRoutes.navRoutes.forEach((element) => {
-          debugger;
           if (element.link.includes(':brandId/outlet')) {
             element.link = element.link.replace(
               ':brandId/outlet',
@@ -104,7 +103,6 @@ export class OutletBaseComponent {
       JSON.stringify(outletBusinessRoutes)
     );
 
-    debugger;
     const { navRoutes, title } = this.entityId
       ? this.getRoutes(
           //edit hotel case and add hotel is in business module
@@ -119,7 +117,6 @@ export class OutletBaseComponent {
         ];
 
     navRoutes.forEach((element) => {
-      debugger;
       element.link = element.link
         .replace(':brandId', this.brandId)
         .replace(':outletId', this.outletId)

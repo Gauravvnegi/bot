@@ -49,8 +49,8 @@
               <div class="input-content-section left-main-cell">
                 <div class="left-main-cell__left">
                   <div class="room-type">{{ roomType.get('label').value }}</div>
-
-                  <p-toggleButton
+                  <!-- TODO: This feature may be used in future -->
+                  <!-- <p-toggleButton
                     class="channel-btn"
                     formControlName="showChannels"
                     [offIcon]="'pi pi-angle-down'"
@@ -63,13 +63,14 @@
                     "
                     iconPos="right"
                   >
-                  </p-toggleButton>
+                  </p-toggleButton> -->
                 </div>
                 <div class="left-main-cell__right row-cell ltr">
                   <div class="rates">
                     <p-dropdown
                       formControlName="selectedRestriction"
                       [options]="restrictions"
+                      [disabled]="true"
                     ></p-dropdown>
                   </div>
                   <p-toggleButton

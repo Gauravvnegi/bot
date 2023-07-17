@@ -18,12 +18,14 @@ import { UpdateRates } from '../../models/channel-manager.model';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Router } from '@angular/router';
+import { ratesRestrictions } from '../../constants/data';
 @Component({
   selector: 'hospitality-bot-rates-bulk-update',
   templateUrl: './rates-bulk-update.component.html',
   styleUrls: ['./rates-bulk-update.component.scss'],
 })
 export class RatesBulkUpdateComponent implements OnInit {
+  readonly ratesRestrictions = ratesRestrictions;
   entityId: string;
   roomsData: any;
   useForm: FormGroup;
@@ -60,7 +62,7 @@ export class RatesBulkUpdateComponent implements OnInit {
     seventhDate.setDate(today.getDate() + 7);
 
     this.useForm = this.fb.group({
-      update: ['availability'], // RATE, AVAILABILITY,
+      update: ['rates'], // RATE, AVAILABILITY,
       updateValue: ['', [Validators.required, Validators.min(0)]],
       fromDate: [today.getTime(), [Validators.required]],
       toDate: [seventhDate.getTime(), [Validators.required]],

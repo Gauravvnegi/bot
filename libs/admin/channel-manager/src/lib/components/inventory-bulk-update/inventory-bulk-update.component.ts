@@ -19,7 +19,8 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { UpdateInventory } from '../../models/channel-manager.model';
 import { ChannelManagerService } from '../../services/channel-manager.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { inventoryRestrictions } from '../../constants/data';
 
 @Component({
   selector: 'hospitality-bot-inventory-bulk-update',
@@ -27,6 +28,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./inventory-bulk-update.component.scss'],
 })
 export class InventoryBulkUpdateComponent implements OnInit {
+  readonly inventoryRestrictions = inventoryRestrictions;
   entityId: string;
   inventoryTreeList = [];
   useForm: FormGroup;

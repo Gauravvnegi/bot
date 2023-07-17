@@ -9,6 +9,7 @@ import {
   RestrictionAndValuesOption,
   restrictionsRecord,
   inventoryRestrictions,
+  ratesRestrictions,
 } from '../../constants/data';
 @Component({
   selector: 'hospitality-bot-bulk-update-form',
@@ -17,7 +18,7 @@ import {
 })
 export class BulkUpdateFormComponent extends FormComponent {
   readonly restrictionsRecord = restrictionsRecord;
-
+  @Input() allRestrictions = [];
   updateItems = updateItems;
 
   restrictions: RestrictionAndValuesOption[];
@@ -90,7 +91,7 @@ export class BulkUpdateFormComponent extends FormComponent {
   }
 
   getRestrictions() {
-    this.restrictions = inventoryRestrictions.map((item) => {
+    this.restrictions = this.allRestrictions.map((item) => {
       const { label, type } = this.restrictionsRecord[item];
       return { label, type, value: item };
     });

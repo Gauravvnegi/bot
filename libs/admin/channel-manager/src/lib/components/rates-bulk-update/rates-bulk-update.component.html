@@ -5,7 +5,9 @@
   ></hospitality-bot-navigation-header>
 
   <div class="content-wrapper">
-    <hospitality-bot-bulk-update-form></hospitality-bot-bulk-update-form>
+    <hospitality-bot-bulk-update-form
+      [allRestrictions]="ratesRestrictions"
+    ></hospitality-bot-bulk-update-form>
 
     <hospitality-bot-rates-nested-checkbox-tree
       class="full-width"

@@ -61,7 +61,7 @@ export class RatesBulkUpdateComponent implements OnInit {
 
     this.useForm = this.fb.group({
       update: ['availability'], // RATE, AVAILABILITY,
-      updateValue: ['', [Validators.required]],
+      updateValue: ['', [Validators.required, Validators.min(0)]],
       fromDate: [today.getTime(), [Validators.required]],
       toDate: [seventhDate.getTime(), [Validators.required]],
       roomType: [[]],
@@ -81,10 +81,10 @@ export class RatesBulkUpdateComponent implements OnInit {
   }
 
   listenChanges() {
-    this.useForm.valueChanges.subscribe((value) => {
-      this.roomTypes;
-      this.loadTree(value);
-    });
+    // this.useForm.valueChanges.subscribe((value) => {
+    //   this.roomTypes;
+    //   this.loadTree(value);
+    // });
   }
 
   loadTree(controls) {
@@ -126,7 +126,6 @@ export class RatesBulkUpdateComponent implements OnInit {
               '',
               { panelClass: 'success' }
             );
-            this.router.navigate([this.navRoutes[0].link]);
             this.loading = false;
           },
           (error) => {

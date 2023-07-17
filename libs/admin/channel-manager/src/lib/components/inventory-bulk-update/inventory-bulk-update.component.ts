@@ -62,7 +62,7 @@ export class InventoryBulkUpdateComponent implements OnInit {
 
     this.useForm = this.fb.group({
       update: ['availability'], // RATE, AVAILABILITY,
-      updateValue: ['', [Validators.required]],
+      updateValue: ['', [Validators.required, Validators.min(0)]],
       fromDate: [today.getTime(), [Validators.required]],
       toDate: [seventhDate.getTime(), [Validators.required]],
       roomType: [''],

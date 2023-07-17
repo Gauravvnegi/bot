@@ -26,7 +26,11 @@
           label="To"
           [props]="{
             placeholder: 'Enter',
-            alignment: 'horizontal'
+            alignment: 'horizontal',
+            type: 'number',
+            errorMessages: {
+              min: 'Min value should not be less than 0.'
+            }
           }"
         >
         </hospitality-bot-input>

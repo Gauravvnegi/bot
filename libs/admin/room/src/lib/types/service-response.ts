@@ -30,7 +30,7 @@ export type RoomResponse = {
     soldOut: boolean;
     unavailableRoomCount: number;
   };
-  features: string[];
+  features: any[];
   roomStatus: RoomStatus;
   //--- can be modified
   toDate: number;
@@ -83,6 +83,7 @@ export type RoomTypeResponse = {
   discountedPrice: number;
   originalPrice: number;
   currency: string;
+  features: string[];
 };
 
 export type RoomTypeListResponse = {

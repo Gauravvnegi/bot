@@ -107,26 +107,27 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   /**
    * @function listenForFormChanges Listen for form values changes.
    */
-  listenForFormChanges(): void {
+  listenForFormChanges(index?: number): void {
     this.formValueChanges = true;
-    this.roomControls[0].get('roomTypeId')?.valueChanges.subscribe((res) => {
+
+    this.roomControls[index].get('roomTypeId')?.valueChanges.subscribe((res) => {
       if (res) {
         this.userForm.get('offerId').reset();
         this.getOfferByRoomType(res);
         this.getSummaryData();
       }
     });
-    this.roomControls[0].get('roomCount')?.valueChanges.subscribe((res) => {
-      if (res) {
-        if (
-          this.roomControls[0].get('roomCount').value >
-          this.roomControls[0].get('adultCount').value
-        )
-          this.roomControls[0]
-            .get('adultCount')
-            .patchValue(this.roomControls[0].get('roomCount').value);
-      }
-    });
+    // this.roomControls[index].get('roomCount')?.valueChanges.subscribe((res) => {
+    //   if (res) {
+    //     if (
+    //       this.roomControls[index].get('roomCount').value >
+    //       this.roomControls[index].get('adultCount').value
+    //     )
+    //       this.roomControls[index]
+    //         .get('adultCount')
+    //         .patchValue(this.roomControls[].get('roomCount').value);
+    //   }
+    // });
   }
 
   getReservationId(): void {

@@ -54,6 +54,8 @@ export class RoomIteratorComponent extends IteratorComponent
   $subscription = new Subscription();
   loadingRoomTypes = false;
 
+  ratePlanOptionsArray: Option[][] = [];
+
   @ViewChild('main') main: ElementRef;
 
   constructor(
@@ -82,48 +84,70 @@ export class RoomIteratorComponent extends IteratorComponent
    */
   createNewFields(): void {
     const data = {
-      roomTypeId: [''],
-      ratePlan: ['', [Validators.required, Validators.min(1)]],
+      roomTypeId: ['', [Validators.required]],
+      ratePlan: [{ value: '', disabled: true }],
       roomNumber: [[]],
       adultCount: ['', [Validators.required, Validators.min(1)]],
       childCount: ['', [Validators.min(0)]],
+      price: [''],
+      index: [''],
     };
 
     const formGroup = this.fb.group(data);
-    this.roomTypeArray.push(this.fb.group(data));
+    this.roomTypeArray.push(formGroup);
 
     const index = this.roomTypeArray.controls.indexOf(formGroup);
-    formGroup.addControl('index', this.fb.control(index));
-
+    // formGroup.addControl('index', this.fb.control(index));
     const roomInformationGroup = this.fb.group({
       roomTypes: this.roomTypeArray,
     });
     this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
+    this.roomControls[index].get('index').setValue(index);
+    this.listenRoomTypeChanges(index);
+    this.listenRatePlanChanges(index);
+    this.listenForFormChanges(index);
 
-    this.listenRoomTypeChanges();
+    // this.setFormDisability();
   }
 
-  listenRoomTypeChanges() {
-    this.roomControls[0].get('roomTypeId')?.valueChanges.subscribe((res) => {
-      if (res) {
-        const selectedRoomType = this.roomTypes.find(
-          (item) => item.value === res
-        );
-        if (selectedRoomType) {
-          this.fields[1].options = selectedRoomType.ratePlan.map((item) => {
-            const availableRatePlan = this.ratePlans.find(
-              (ratePlan) => ratePlan.value === item.value
+  listenRoomTypeChanges(index: number) {
+    this.roomControls[index]
+      .get('roomTypeId')
+      ?.valueChanges.subscribe((res) => {
+        if (res) {
+          const selectedRoomType = this.roomTypes.find(
+            (item) => item.value === res
+          );
+          if (selectedRoomType) {
+            this.ratePlanOptionsArray[index] = selectedRoomType.ratePlan.map(
+              (item) => {
+                const availableRatePlan = this.ratePlans.find(
+                  (ratePlan) => ratePlan.value === item.value
+                );
+                return {
+                  label: availableRatePlan ? availableRatePlan.label : '',
+                  value: item.value,
+                  price: item.price,
+                };
+              }
             );
-            return {
-              label: availableRatePlan ? availableRatePlan.label : '',
-              value: item.value,
-              price: item.price,
-            };
-          });
-          this.fields[1].disabled = false;
+            this.roomControls[index].get('ratePlan').enable();
+            this.roomControls[index]
+              .get('ratePlan')
+              .setValidators([Validators.required]);
+          }
+          // this.fields[2].options = ['201', '202'];
         }
-        // this.fields[2].options = ['201', '202'];
-      }
+      });
+  }
+
+  listenRatePlanChanges(index: number) {
+    this.roomControls[index].get('ratePlan')?.valueChanges.subscribe((res) => {
+      const selectedRatePlan = this.ratePlanOptionsArray[index].find(
+        (item) => item.value === res
+      );
+      if (selectedRatePlan)
+        this.roomControls[index].get('price').setValue(selectedRatePlan.price);
     });
   }
 
@@ -135,7 +159,7 @@ export class RoomIteratorComponent extends IteratorComponent
           label: item.label,
           value: item.id,
         }));
-        this.fields[1].options = this.ratePlans;
+        // this.fields[1].options = this.ratePlans;
       }
     });
   }
@@ -149,7 +173,6 @@ export class RoomIteratorComponent extends IteratorComponent
       ];
 
       this.getRoomType(this.globalQueries);
-      this.listenForFormChanges();
     });
   }
 
@@ -209,8 +232,8 @@ export class RoomIteratorComponent extends IteratorComponent
     this.refreshData.emit();
   }
 
-  listenForFormChanges(): void {
-    this.listenChanges.emit();
+  listenForFormChanges(index: number): void {
+    this.listenChanges.emit(index);
   }
 
   /**

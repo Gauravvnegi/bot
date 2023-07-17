@@ -9,6 +9,7 @@ export type IteratorField = {
   disabled?: boolean;
   placeholder?: string;
   width?: string;
+  isAsync?: boolean;
 };
 
 export type ModalAction = {

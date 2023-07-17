@@ -68,11 +68,11 @@
             [controlName]="field.name"
             [props]="{
               placeholder: field.placeholder,
-              isAsync: true
+              isAsync: field.isAsync
             }"
             (paginate)="loadMoreRoomTypes(i)"
             (onSearch)="searchRoomTypes($event)"
-            [options]="field.options"
+            [options]="field.options ? field.options : ratePlanOptionsArray[i]"
             [disabled]="field.disabled"
             [loading]="loadingRoomTypes"
           ></hospitality-bot-select>

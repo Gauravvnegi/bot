@@ -74,7 +74,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     this.siteId = this.hotelDetailService.siteId;
     this.initOptions();
     this.initForm();
-    this.initComponent('outlet');
+    this.initRoutes('outlet');
   }
 
   initOptions() {
@@ -309,8 +309,10 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
 
             this.compServices = this.compServices.slice(0, 5);
 
-            const { paidServiceIds } = this.formControls;
-            paidServiceIds.patchValue(data);
+            if (!this.OutletFormService.outletFormState) {
+              const { paidServiceIds } = this.formControls;
+              paidServiceIds.patchValue(data);
+            }
           }
           if (serviceType === 'COMPLIMENTARY') {
             this.compServices = new Services().deserialize(
@@ -322,9 +324,10 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
             });
 
             this.compServices = this.compServices.slice(0, 5);
-
-            const { serviceIds } = this.formControls;
-            serviceIds.patchValue(data);
+            if (!this.OutletFormService.outletFormState) {
+              const { serviceIds } = this.formControls;
+              serviceIds.patchValue(data);
+            }
           }
         },
         (err) => {},

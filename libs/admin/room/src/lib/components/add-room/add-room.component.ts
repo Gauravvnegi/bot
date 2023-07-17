@@ -22,7 +22,10 @@ import { FlagType, NavRouteOptions, Option } from 'libs/admin/shared/src';
 import { ModalComponent } from 'libs/admin/shared/src/lib/components/modal/modal.component';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
-import { iteratorFields } from '../../constant/form';
+import {
+  iteratorFields,
+  noRecordsActionForFeatures,
+} from '../../constant/form';
 import { roomStatusDetails, roomStatuses } from '../../constant/response';
 import routes from '../../constant/routes';
 import { MultipleRoomList, SingleRoomList } from '../../models/room.model';
@@ -61,6 +64,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   roomStatuses: Option[] = [];
   roomTypes: RoomTypeOption[] = [];
   submissionType: AddRoomTypes;
+  featureIds: string[] = [];
 
   pageTitle = 'Add rooms';
   navRoutes: NavRouteOptions = [
@@ -70,13 +74,15 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   ];
 
   isRoomInfoLoading = false;
+  isLoadingFeatures = false;
 
   /* roomTypes options variable */
   roomTypeOffSet = 0;
   loadingRoomTypes = false;
   noMoreRoomTypes = false;
   roomTypeLimit = 10;
-  features;
+  features = [];
+  noRecordsActionFeatures = noRecordsActionForFeatures;
 
   $subscription = new Subscription();
 
@@ -129,7 +135,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       currency: [''],
       status: ['DIRTY'],
       rooms: this.useFormArray,
-      features: [[], Validators.required],
+      featureIds: [[], Validators.required],
     });
 
     this.statusQuoForm = this.fb.group({
@@ -187,9 +193,10 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     });
 
     roomStatus.valueChanges.subscribe((res: RoomStatus) => {
+      debugger;
       this.currentRoomState[0] = {
-        value: roomStatusDetails[res].label,
-        type: roomStatusDetails[res].type,
+        value: roomStatusDetails[res]?.label,
+        type: roomStatusDetails[res]?.type,
       };
 
       this.isDateRequired = res === 'OUT_OF_ORDER' || res === 'OUT_OF_SERVICE';
@@ -252,13 +259,16 @@ export class AddRoomComponent implements OnInit, OnDestroy {
   }
 
   getDefaultFeatures() {
+    this.isLoadingFeatures = true;
     this.$subscription.add(
       this.roomService.getFeatures().subscribe(
         (res) => {
           this.features = new Services().deserialize(res.features).services;
         },
         (err) => {},
-        () => {}
+        () => {
+          this.isLoadingFeatures = false;
+        }
       )
     );
   }
@@ -320,6 +330,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
       this.roomService
         .getRoomById(this.entityId, this.roomId)
         .subscribe((res) => {
+          this.featureIds = res.rooms[0].features.map((item) => item.id);
           const roomDetails = res.rooms[0];
           this.draftDate = roomDetails.updated ?? roomDetails.created;
           this.dateTitle = roomDetails.updated ? 'Updated on' : 'Activated on';
@@ -334,7 +345,7 @@ export class AddRoomComponent implements OnInit, OnDestroy {
                 floorNo: roomDetails.floorNumber,
               },
             ],
-            features: roomDetails.features,
+            featureIds: roomDetails.features.map((item) => item.id),
           };
 
           if (
@@ -367,7 +378,9 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    * Get loading state
    */
   get loading() {
-    return this.isRoomInfoLoading || this.loadingRoomTypes;
+    return (
+      this.isRoomInfoLoading || this.loadingRoomTypes || this.isLoadingFeatures
+    );
   }
 
   /**
@@ -415,13 +428,20 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    */
   updateRoom(): void {
     const data = this.useForm.getRawValue();
+    const activeFeatures = data.featureIds;
+    const removeFeatures = this.featureIds.filter(
+      (item) => !activeFeatures.includes(item)
+    );
 
     this.$subscription.add(
       this.roomService
         .updateRoom(this.entityId, {
           rooms: [
-            new SingleRoomList().deserialize({ id: this.roomId, ...data })
-              .list[0],
+            new SingleRoomList().deserialize({
+              id: this.roomId,
+              removeFeatures: removeFeatures,
+              ...data,
+            }).list[0],
           ],
         })
         .subscribe(

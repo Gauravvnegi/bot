@@ -71,6 +71,7 @@
             description="Do not forget to add this cost in addition to the room cost"
             formControlName="paidAmenities"
             [itemList]="paidServices"
+            (onEmptyViewAction)="openImportService('PAID')"
             (viewAll)="saveRoomTypeData('PAID')"
             [noRecordsAction]="noRecordAction"
             [loading]="isPaidLoading"

@@ -83,7 +83,7 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
     this.initForm();
     this.initSelectedService();
     this.registerSearch();
-    this.initComponent('services');
+    this.initRoutes('services');
   }
 
   initForm(): void {
@@ -262,7 +262,6 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
           limit: this.limit,
           type: 'SERVICE',
           serviceType: type,
-          status: true,
         },
       ]),
     };
@@ -288,13 +287,11 @@ export class ViewAllComponent extends OutletBaseComponent implements OnInit {
 
   loadMore() {
     if (this.selectedTabFilterItems === 'COMPLIMENTARY_SERVICES') {
-      this.paidOffset = this.paidOffset + this.limit;
-      this.getServices(ServicesTypeValue.PAID);
-    }
-
-    if (this.selectedTabFilterItems === 'PAID_SERVICES') {
       this.compOffset = this.compOffset + this.limit;
       this.getServices(ServicesTypeValue.COMPLIMENTARY);
+    } else {
+      this.paidOffset = this.paidOffset + this.limit;
+      this.getServices(ServicesTypeValue.PAID);
     }
   }
 }

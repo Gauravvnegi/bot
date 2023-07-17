@@ -26,14 +26,16 @@ export class ImportServiceComponent extends OutletBaseComponent
   }
 
   ngOnInit(): void {
-    this.initComponent('importService');
+    this.initRoutes('importService');
   }
 
   saveForm(serviceData) {
+    //filter are already applied using props
     serviceData.serviceIds = [
       ...serviceData.serviceIds,
       ...this.outletFormService.OutletFormData.serviceIds,
     ];
+    //pass active service ids + selected service ids in import service so that selected services can be marked as active
     this.outletService
       .updateOutlet(this.outletId, serviceData)
       .subscribe(this.handleSuccess, this.handelError);
@@ -50,6 +52,7 @@ export class ImportServiceComponent extends OutletBaseComponent
       '',
       { panelClass: 'success' }
     );
+    //to handle redirection in case of hotel and outlet
     if (this.entityId) {
       this.router.navigate(
         [

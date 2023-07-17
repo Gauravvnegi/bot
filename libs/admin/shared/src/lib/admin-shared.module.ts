@@ -109,6 +109,9 @@ import { ImportServiceContainerComponent } from './components/import-service-con
 import { BackdropDirective } from './directives/backdrop.directive';
 import { CountdownDirective } from './directives/countdown.directive';
 import { GlobalSearchComponent } from './components/search/global-search.component';
+import { QrCodeModalComponent } from './components/qr-code-modal/qr-code-modal.component';
+import { QRCodeModule } from 'angularx-qrcode';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -137,6 +140,7 @@ import { GlobalSearchComponent } from './components/search/global-search.compone
     MenuModule,
     ToggleButtonModule,
     InputNumberModule,
+    QRCodeModule,
   ],
   declarations: [
     DatatableComponent,
@@ -224,6 +228,7 @@ import { GlobalSearchComponent } from './components/search/global-search.compone
     ImportServiceContainerComponent,
     InputNumberComponent,
     GlobalSearchComponent,
+    QrCodeModalComponent,
   ],
 
   exports: [

@@ -39,7 +39,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
     { label: 'piece', value: 'PIECE' },
     { label: 'litre', value: 'LITRE' },
     { label: 'kg', value: 'KILOGRAM' },
-    { label: 'ml', value: 'MILILITRE' },
+    { label: 'ml', value: 'MILLILITER' },
   ];
   constructor(
     private fb: FormBuilder,
@@ -57,7 +57,6 @@ export class AddMenuItemComponent extends OutletBaseComponent
   }
 
   ngOnInit(): void {
-    this.entityId = this.globalFilterService.entityId;
     this.pageReloadService.enablePageReloadConfirmation();
     this.initOptions();
     this.initForm();

@@ -126,6 +126,7 @@ export class RatesBulkUpdateComponent implements OnInit {
               '',
               { panelClass: 'success' }
             );
+            this.router.navigate([this.navRoutes[0].link]);
             this.loading = false;
           },
           (error) => {

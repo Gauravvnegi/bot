@@ -87,10 +87,10 @@ export type RoomTypeResponse = {
 
 export type RatePlanRes = {
   basePriceCurrency: string;
-  basePrice: string;
+  basePrice: number;
   discountType: string;
   discountValue: number;
-  bestAvailablePrice: string;
+  bestAvailablePrice: number;
   maxPriceCurrency: string;
   maxPrice: number;
   minPriceCurrency: string;

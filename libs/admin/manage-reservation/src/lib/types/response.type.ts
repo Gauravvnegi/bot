@@ -69,3 +69,59 @@ export type PaymentMethodConfig = {
   label: string;
   instructions?: any;
 };
+
+export type RoomTypeResponse = {
+  id: string;
+  name: string;
+  imageUrls: string[];
+  description: string;
+  roomCount: number;
+  activeRoomCount: number;
+  unavailableRoomCount: number;
+  ratePlans: RatePlanRes[];
+  soldOutCount: number;
+  maxChildren: number;
+  maxAdult: number;
+  area: number;
+  status: boolean;
+  maxOccupancy: number;
+  discountedPrice: number;
+  originalPrice: number;
+  currency: string;
+};
+
+export type RatePlanRes = {
+  basePriceCurrency: string;
+  basePrice: string;
+  discountType: string;
+  discountValue: number;
+  bestAvailablePrice: string;
+  maxPriceCurrency: string;
+  maxPrice: number;
+  minPriceCurrency: string;
+  minPrice: number;
+  paxPriceCurrency: string;
+  paxPrice: string;
+  ratePlanTypeId: string;
+  discount: {
+    type: string;
+    value: number;
+  };
+  id: string;
+};
+
+export type SummaryResponse = {
+  name: string;
+  from: number;
+  to: number;
+  roomCount: number;
+  adultCount: number;
+  childCount: number;
+  location: string;
+  originalPrice: number;
+  basePrice: number;
+  offerAmount: number;
+  taxAndFees: number;
+  totalAmount: number;
+  taxes: string[];
+}

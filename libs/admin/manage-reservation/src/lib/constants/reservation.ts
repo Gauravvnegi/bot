@@ -9,7 +9,7 @@ export const roomFields: IteratorField[] = [
     options: [],
     required: true,
     placeholder: 'Select',
-    width: '22%',
+    width: '20%',
     isAsync: true,
   },
   {
@@ -25,7 +25,7 @@ export const roomFields: IteratorField[] = [
     name: 'roomNumber',
     type: 'multi-select',
     placeholder: 'Enter',
-    width: '22%',
+    width: '20%',
   },
   {
     label: 'Adult',

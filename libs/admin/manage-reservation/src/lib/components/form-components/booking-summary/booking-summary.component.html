@@ -75,7 +75,7 @@
         Kid Child
       </span>
       <span class="bk-summary_priceInfo_perNight_amount">
-        {{ summaryData?.basePrice | currency: 'INR' }}
+        {{ discountedPrice | currency: 'INR' }}
       </span>
     </p>
     <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'HOTEL'">
@@ -96,9 +96,7 @@
       <span class="bk-summary_priceInfo_perNight_label"
         >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
       ></span>
-      <span class="bk-summary_priceInfo_perNight_amount"
-        >+{{ summaryData?.taxAndFees | currency: 'INR' }}</span
-      >
+      <span class="bk-summary_priceInfo_perNight_amount">+{{ 0 }}</span>
     </p>
     <p
       class="bk-summary_priceInfo_perNight"
@@ -120,7 +118,7 @@
     <p class="bk-summary_total_label">Total Amount to be paid</p>
     <p class="bk-summary_total_amount">
       {{
-        summaryData?.totalAmount -
+        discountedPrice -
           controlContainer.control.get('paymentMethod.totalPaidAmount').value
           | currency: 'INR'
       }}

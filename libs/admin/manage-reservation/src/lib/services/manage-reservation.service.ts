@@ -8,6 +8,7 @@ import { ReservationFormData } from '../types/forms.types';
 import { QueryConfig } from '../types/reservation.type';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { EntityType } from '@hospitality-bot/admin/shared';
+import { SummaryData } from '../models/reservations.model';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
@@ -22,7 +23,6 @@ export class ManageReservationService extends ApiService {
     return this.get(
       // `/api/v1/entity/${entityId}/configuration?configType=PAYMENT&status=ACTIVE`
       `/api/v1/payment/configurations/admin?entity_id=${entityId}&status=ACTIVE`
-
     );
   }
 
@@ -81,19 +81,10 @@ export class ManageReservationService extends ApiService {
     return this.post('api/v1/members?type=GUEST', data);
   }
 
-  getSummaryData(config: QueryConfig): Observable<any> {
-    return this.get(`/api/v1/booking/summary${config?.params}`).pipe(
-      map((res) => ({
-        ...res,
-        roomNumbers: [
-          { label: '200', value: '200' },
-          { label: '201', value: '201' },
-          { label: '202', value: '202' },
-          { label: '203', value: '203' },
-          { label: '204', value: '204' },
-        ],
-      }))
-    );
+  getSummaryData(entityId: string, data, config: QueryConfig): Observable<any> {
+    return this.post(`/api/v1/booking/summary${config?.params}`, data, {
+      headers: { 'entity-id': entityId },
+    });
   }
 
   getReservationItems<T>(config?: QueryConfig, id?: string): Observable<T> {

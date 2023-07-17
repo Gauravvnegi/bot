@@ -31,6 +31,7 @@ import {
   RoomTypeOption,
   RoomTypeOptionList,
 } from '../../models/reservations.model';
+import { FormService } from '../../services/form.service';
 @Component({
   selector: 'hospitality-bot-room-iterator',
   templateUrl: './room-iterator.component.html',
@@ -75,7 +76,8 @@ export class RoomIteratorComponent extends IteratorComponent
     private manageReservationService: ManageReservationService,
     private snackbarService: SnackBarService,
     private controlContainer: ControlContainer,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private formService: FormService
   ) {
     super(fb);
   }
@@ -97,7 +99,6 @@ export class RoomIteratorComponent extends IteratorComponent
       roomNumber: [{ value: [], disabled: true }],
       adultCount: [''],
       childCount: [''],
-      price: [''],
     };
 
     const formGroup = this.fb.group(data);
@@ -133,6 +134,7 @@ export class RoomIteratorComponent extends IteratorComponent
                   label: availableRatePlan ? availableRatePlan.label : '',
                   value: item.value,
                   price: item.price,
+                  discountedPrice: item.discountedPrice,
                 };
               }
             );
@@ -151,7 +153,6 @@ export class RoomIteratorComponent extends IteratorComponent
     selectedRoomType: RoomFieldTypeOption,
     index: number
   ) {
-
     this.maxAdultLimit = selectedRoomType.maxAdult;
     this.maxChildLimit = selectedRoomType.maxAdult;
     this.roomControls[index]
@@ -171,13 +172,19 @@ export class RoomIteratorComponent extends IteratorComponent
     this.roomControls[index].get('childCount').setValue(0);
   }
 
+  /**
+   * @function listenRatePlanChanges Listen changes in rate plan
+   * @param index to keep track of the form array.
+   */
   listenRatePlanChanges(index: number) {
     this.roomControls[index].get('ratePlan')?.valueChanges.subscribe((res) => {
       const selectedRatePlan = this.ratePlanOptionsArray[index].find(
         (item) => item.value === res
       );
-      if (selectedRatePlan)
-        this.roomControls[index].get('price').setValue(selectedRatePlan.price);
+      if (selectedRatePlan) {
+        this.formService.price.next(selectedRatePlan.price);
+        this.formService.discountedPrice.next(selectedRatePlan.discountedPrice);
+      }
     });
   }
 
@@ -191,7 +198,6 @@ export class RoomIteratorComponent extends IteratorComponent
           label: item.label,
           value: item.id,
         }));
-        // this.fields[1].options = this.ratePlans;
       }
     });
   }
@@ -236,7 +242,7 @@ export class RoomIteratorComponent extends IteratorComponent
                 return {
                   label: item.name,
                   value: item.id,
-                  ratePlanId: item.ratePlanId,
+                  ratePlan: item.ratePlan,
                   roomNumber: ['200', '201'],
                   roomCount: item.roomCount,
                   maxChildren: item.maxChildren,

@@ -3,6 +3,7 @@ import {
   PaymentMethodConfig,
   ReservationListResponse,
   ReservationResponse,
+  SummaryResponse,
 } from '../types/response.type';
 import { EntityState, FlagType, Option } from '@hospitality-bot/admin/shared';
 import { SearchGuestResponse } from 'libs/admin/guests/src/lib/types/guest.type';
@@ -172,16 +173,16 @@ export class RoomTypeOption {
   maxChildren: number;
   maxAdult: number;
 
-  deserialize(input) {
+  deserialize(input: RoomTypeResponse) {
     this.id = input.id ?? '';
     this.name = input.name ?? '';
     this.maxChildren = input.maxChildren ?? 0;
-    this.roomNumber = input.roomNumber ?? [];
-    this.ratePlan =
-      input.ratePlans.map((item) => ({
-        value: item.ratePlanTypeId,
-        price: item.bestAvailablePrice,
-      })) ?? '';
+    // this.roomNumber = input.roomNumber ?? [];
+    this.ratePlan = input?.ratePlans.map((item) => ({
+      value: item.ratePlanTypeId,
+      price: item.basePrice,
+      discountedPrice: item.bestAvailablePrice,
+    }));
     this.maxAdult = input.maxAdult ?? 0;
     this.roomCount = input.roomCount ?? 0;
     this.occupancy = input.maxOccupancy ?? null;
@@ -202,6 +203,7 @@ export type RatePlanData = {
   label?: string;
   value: string;
   price: number;
+  discountedPrice: number;
 };
 
 export class OfferData {
@@ -223,7 +225,7 @@ export class ReservationFormData {
   offerId: string;
   roomInformation: RoomTypeInfo;
 
-  deserialize(input): this {
+  deserialize(input) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input);
     this.address = new AddressInfo().deserialize(input.address);
@@ -242,7 +244,7 @@ export class BookingInfo {
   sourceName: string;
   marketSegment: string;
 
-  deserialize(input): this {
+  deserialize(input) {
     this.from = input?.from;
     this.to = input?.to;
     this.reservationType = input?.reservationType;
@@ -338,32 +340,40 @@ export class PaymentMethod {
 }
 
 export class SummaryData {
-  originalPrice: number;
-  basePrice: number;
-  id: string;
-  location: string;
-  offerAmount: number;
-  roomTypeName: string;
-  taxAndFees: number;
-  totalAmount: number;
+  name: string;
+  from: number;
+  to: number;
+  roomCount: number;
   adultCount: number;
   childCount: number;
-  roomCount: number;
-  roomNumbers: Option[];
+  location: string;
+  originalPrice: number;
+  basePrice: number;
+  offerAmount: number;
+  taxAndFees: number;
+  totalAmount: number;
+  taxes: string[];
+  // id: string;
+  // roomTypeName: string;
+  // roomNumbers: Option[];
 
-  deserialize(input): this {
-    this.id = input?.id;
+  deserialize(input: SummaryResponse) {
+    // this.id = input?.id;
+    // this.roomTypeName = input?.roomTypeName;
+    // this.roomNumbers = input?.roomNumbers;
+    this.from = input.from;
+    this.to = input.to;
+    this.name = input.name;
     this.location = input?.location;
     this.offerAmount = input?.offerAmount;
-    this.roomTypeName = input?.roomTypeName;
-    this.originalPrice = input?.originalPrice || input?.roomOriginalPrice;
-    this.basePrice = input?.basePrice || input?.roomBasePrice;
+    this.originalPrice = input?.originalPrice;
+    this.basePrice = input?.basePrice;
     this.taxAndFees = input?.taxAndFees;
     this.totalAmount = input?.totalAmount;
     this.adultCount = input?.adultCount;
     this.childCount = input?.childCount;
     this.roomCount = input?.roomCount;
-    this.roomNumbers = input?.roomNumbers;
+    this.taxes = input?.taxes;
     return this;
   }
 }

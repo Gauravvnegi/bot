@@ -152,7 +152,6 @@ export class AddCompanyComponent implements OnInit {
 
     this.loading = true;
     const formData = CompanyModel.mapFormData(this.companyForm.getRawValue());
-    debugger;
     const queryParams = { params: `?type=COMPANY&entityId=${this.entityId}` };
     const request = this.companyId
       ? this.companyService.updateCompany(formData, this.companyId)

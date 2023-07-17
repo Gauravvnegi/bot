@@ -20,6 +20,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ReservationForm } from '../../../constants/form';
+import { FormService } from '../../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -39,9 +40,9 @@ export class BookingSummaryComponent implements OnInit {
   header = '';
   subHeader = '';
   stayInfo = '';
-  price = '';
+  price = 0;
   guestInfo = '';
-  discountedPrice = '';
+  discountedPrice = 0;
   bookingType = '';
 
   $subscription = new Subscription();
@@ -70,13 +71,24 @@ export class BookingSummaryComponent implements OnInit {
     private router: Router,
     protected activatedRoute: ActivatedRoute,
     private modalService: ModalService,
-    private _clipboard: Clipboard
+    private _clipboard: Clipboard,
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
+    this.listenForPriceChanges();
+  }
+
+  listenForPriceChanges() {
+    this.formService.price.subscribe((res) => {
+      this.price = res;
+    });
+    this.formService.discountedPrice.subscribe((res) => {
+      this.discountedPrice = res;
+    });
   }
 
   offerSelect(item?: any): void {
@@ -91,7 +103,6 @@ export class BookingSummaryComponent implements OnInit {
   handleBooking(): void {
     this.isBooking = true;
     const data = this.parentFormGroup.getRawValue() as ReservationForm;
-    debugger;
     if (this.reservationId) this.updateReservation(data);
     else this.createReservation(data);
   }

@@ -288,23 +288,36 @@ export class RestaurantReservationComponent implements OnInit {
   getSummaryData(): void {
     const defaultProps = [
       {
-        type: 'ROOM_TYPE',
-        fromDate: this.userForm.get('reservationInformation.from')?.value,
-        toDate: this.userForm.get('reservationInformation.to')?.value,
-        adultCount: this.userForm.get('roomInformation.adultCount')?.value || 1,
-        roomCount: this.userForm.get('roomInformation.roomCount')?.value || 1,
-        childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
-        roomType: this.userForm.get('roomInformation.roomTypeId')?.value,
-        offerId: this.userForm.get('offerId')?.value,
-        entityId: this.entityId,
+        type: 'RESTAURANT',
+        // fromDate: this.userForm.get('reservationInformation.from')?.value,
+        // toDate: this.userForm.get('reservationInformation.to')?.value,
+        // adultCount: this.userForm.get('roomInformation.adultCount')?.value || 1,
+        // roomCount: this.userForm.get('roomInformation.roomCount')?.value || 1,
+        // childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
+        // roomType: this.userForm.get('roomInformation.roomTypeId')?.value,
+        // offerId: this.userForm.get('offerId')?.value,
+        // entityId: this.entityId,
       },
     ];
     const config = {
       params: this.adminUtilityService.makeQueryParams(defaultProps),
     };
+
+    const data = {
+      dateAndTime: this.reservationInfoControls.dateAndTime.value,
+      adultCount: this.orderInfoControls.numberOfAdults.value,
+      items: [
+        {
+          itemId: '7dcc88bc-6785-4d5d-97a8-9bfef5b2fecf',
+          unit: 23,
+          amount: 2.8,
+        },
+      ],
+      outletType: 'RESTAURANT',
+    };
     if (this.userForm.get('roomInformation.roomTypeId')?.value) {
       this.$subscription.add(
-        this.manageReservationService.getSummaryData(config).subscribe(
+        this.manageReservationService.getSummaryData(this.entityId, data, config).subscribe(
           (res) => {
             this.summaryData = new SummaryData()?.deserialize(res);
             this.userForm

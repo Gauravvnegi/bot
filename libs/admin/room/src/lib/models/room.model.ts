@@ -1,7 +1,5 @@
 import {
   DynamicPricingRatePlan,
-  RoomTypeFormData,
-  StaticPricingMod,
   StaticPricingRatePlan,
 } from '../constant/form';
 import { RoomStatus, RoomTypeResponse } from '../types/service-response';

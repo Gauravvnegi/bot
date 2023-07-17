@@ -94,7 +94,6 @@ export class PaymentMethodComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService.getPaymentMethod(this.entityId).subscribe(
         (response) => {
-          debugger;
           const types = new PaymentMethodList()
             .deserialize(response)
             .records.map((item) => item.type);

@@ -4,17 +4,8 @@ import { FormComponent } from 'libs/admin/shared/src/lib/components/form-compone
 import { ControlContainer } from '@angular/forms';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { Subscription } from 'rxjs';
-import {
-  LibrarySearchItem,
-  LibraryService,
-} from '@hospitality-bot/admin/library';
-import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  RoomType,
-  RoomTypeList,
-} from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 import { RoomTypes } from '../../types/channel-manager.types';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-room-types',

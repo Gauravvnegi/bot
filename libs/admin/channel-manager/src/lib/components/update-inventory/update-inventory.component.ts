@@ -64,18 +64,15 @@ export class UpdateInventoryComponent implements OnInit {
     this.initDate(Date.now());
     this.getRestrictions();
     this.initRoomTypes();
-    this.initForm();
-    this.listenChanges();
-    this.initEditView();
   }
 
   initRoomTypes() {
+    this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       if (rooms.length !== 0) {
         this.roomTypes = rooms;
         this.allRoomTypes = rooms;
         this.initForm();
-        this.loadDefaultData();
       }
     });
   }
@@ -104,23 +101,13 @@ export class UpdateInventoryComponent implements OnInit {
       roomType: [],
       date: [this.currentDate.getTime()],
     });
+    this.addRoomsControl();
+  }
+
+  addRoomsControl() {
     this.addRoomTypesControl();
-    this.useFormControl.date.valueChanges.subscribe((res) => {
-      this.initDate(res);
-    });
-
-    this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
-      if (res.length) {
-        this.roomTypes = this.allRoomTypes.filter((item) =>
-          res.includes(item.value)
-        );
-      } else {
-        this.initRoomTypes();
-      }
-
-      this.useForm.removeControl('roomTypes');
-      this.addRoomTypesControl();
-    });
+    this.listenChanges();
+    this.getInventory();
   }
 
   /**
@@ -253,11 +240,28 @@ export class UpdateInventoryComponent implements OnInit {
   }
 
   listenChanges() {
+    this.useFormControl.date.valueChanges.subscribe((res) => {
+      this.initDate(res);
+    });
+
     this.useForm.controls['date'].valueChanges.subscribe((selectedDate) => {
       this.useForm.controls['date'].patchValue(selectedDate, {
         emitEvent: false,
       });
-      this.initEditView(selectedDate);
+      this.getInventory(selectedDate);
+    });
+
+    this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
+      if (res.length) {
+        this.roomTypes = this.allRoomTypes.filter((item) =>
+          res.includes(item.value)
+        );
+      } else {
+        this.initRoomTypes();
+      }
+
+      this.useForm.removeControl('roomTypes');
+      this.addRoomTypesControl();
     });
   }
 
@@ -265,7 +269,7 @@ export class UpdateInventoryComponent implements OnInit {
     return getWeekendBG(day, isOccupancy);
   }
 
-  initEditView(selectedDate = this.useForm.value.date) {
+  getInventory(selectedDate = this.useForm.value.date) {
     this.loading = true;
     this.$subscription.add(
       this.channelManagerService
@@ -295,12 +299,12 @@ export class UpdateInventoryComponent implements OnInit {
     );
   }
 
-  loadDefaultData() {
-    this.useForm.controls['roomType'].patchValue(
-      [...this.allRoomTypes.map((item) => item.value)],
-      { emitEvent: false }
-    );
-  }
+  // loadDefaultData() {
+  //   this.useForm.controls['roomType'].patchValue(
+  //     [...this.allRoomTypes.map((item) => item.value)],
+  //     { emitEvent: false }
+  //   );
+  // }
 
   setRoomDetails(selectedDate?: number) {
     const { fromDate } = this.getFromAndToDateEpoch(
@@ -339,10 +343,6 @@ export class UpdateInventoryComponent implements OnInit {
         currentDate = new Date(fromDate);
       }
     }
-    this.useForm.controls['roomType'].patchValue(
-      [...this.allRoomTypes.map((item) => item.value)],
-      { emitEvent: false }
-    );
   }
 
   handleSave() {
@@ -372,7 +372,7 @@ export class UpdateInventoryComponent implements OnInit {
         )
         .subscribe(
           (res) => {
-            this.initEditView();
+            this.getInventory();
             this.snackbarService.openSnackBarAsText(
               'Inventory Update successfully',
               '',

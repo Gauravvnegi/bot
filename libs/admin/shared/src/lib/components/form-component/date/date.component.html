@@ -36,10 +36,11 @@
     (onBlur)="markAsTouched()"
     [disabled]="isDisabled"
     [placeholder]="placeholder"
+    [showIcon]="true"
   ></p-calendar>
   <small *ngIf="error" class="p-error">{{ error }} </small>
 
   <label *ngIf="label && float" [for]="controlName">{{ label }}</label>
 
-  <i class="pi" [ngClass]="modIconNgClasses"></i>
+  <!-- <i class="pi" [ngClass]="modIconNgClasses"></i> -->
 </div>

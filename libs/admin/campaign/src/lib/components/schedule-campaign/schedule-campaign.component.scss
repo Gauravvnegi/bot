@@ -72,7 +72,7 @@
     border-radius: 23px;
     background-color: $primary-cta;
     cursor: pointer;
-    &:active {
+    & {
       transform: scale(0.97);
     }
     &__text {

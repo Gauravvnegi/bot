@@ -51,7 +51,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
   }
 
   ngOnInit(): void {
-    this.initComponent('foodPackage');
+    this.initRoutes('foodPackage');
     this.initForm();
   }
 

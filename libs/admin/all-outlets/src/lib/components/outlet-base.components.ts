@@ -98,7 +98,7 @@ export class OutletBaseComponent {
     return { ...route };
   }
 
-  initComponent(routeName: OutletAddRoutes | 'importService' | 'services') {
+  initRoutes(routeName: OutletAddRoutes | 'importService' | 'services') {
     const outletBusinessRoutesClone = JSON.parse(
       JSON.stringify(outletBusinessRoutes)
     );

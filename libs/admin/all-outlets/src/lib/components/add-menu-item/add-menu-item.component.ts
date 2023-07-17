@@ -61,7 +61,7 @@ export class AddMenuItemComponent extends OutletBaseComponent
     this.initOptions();
     this.initForm();
     // this.initConfig();
-    this.initComponent('menuItem');
+    this.initRoutes('menuItem');
   }
 
   // initConfig() {

@@ -362,11 +362,11 @@ export class CustomFileUploadComponent
 
   getChangedData() {
     if (this.isFeatureView) {
-      const data: FeatureValue = this.fileUrls.map((item, index) => ({
+      let data: FeatureValue = this.fileUrls.map((item, index) => ({
         url: item,
         isFeatured: this.featureValueIndex.includes(index),
       }));
-      data.filter((item) => item.url !== this.defaultImage);
+      data = data.filter((item) => item.url !== this.defaultImage);
       return data;
     }
     const fileUrls = this.fileUrls.filter((item) => item !== this.defaultImage);

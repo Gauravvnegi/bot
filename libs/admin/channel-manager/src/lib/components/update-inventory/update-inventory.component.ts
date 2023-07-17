@@ -61,20 +61,15 @@ export class UpdateInventoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
-    this.initOptions();
+    this.initDate(Date.now());
+    this.getRestrictions();
+    this.initRoomTypes();
     this.initForm();
     this.listenChanges();
     this.initEditView();
   }
 
-  initOptions() {
-    this.initDate(Date.now());
-    this.initRoomTypes();
-    this.getRestrictions();
-  }
-
   initRoomTypes() {
-    this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       if (rooms.length !== 0) {
         this.roomTypes = rooms;

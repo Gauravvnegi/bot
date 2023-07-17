@@ -116,12 +116,7 @@ export class RoomType {
     // mapping discounted price
     this.price = input.discountedPrice ?? input.originalPrice;
     this.currency = input.currency ?? '';
-    this.ratePlans = input.ratePlans?.map((item) => ({
-      type: '',
-      label: '',
-      value: item.ratePlanTypeId,
-      channels: [],
-    }));
+    this.ratePlans = input.ratePlans;
     return this;
   }
 }

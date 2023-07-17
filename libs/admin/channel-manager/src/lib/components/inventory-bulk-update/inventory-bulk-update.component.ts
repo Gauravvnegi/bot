@@ -90,18 +90,15 @@ export class InventoryBulkUpdateComponent implements OnInit {
   loadRooms() {
     this.formService.roomDetails.subscribe((rooms) => {
       this.roomTypes = rooms;
-      !this.roomTypes.length && this.formService.loadRoomTypes(this.entityId);
-      this.loadTree({ roomType: '' });
+      this.loadTree({ roomType: [] });
     });
   }
 
   listenChanges() {
-    // this.useForm.valueChanges.subscribe((value) => {
-    //   this.isFormValid = this.useForm.valid;
-    //   this.loadTree(value);
-    // });
+    this.useForm.controls['roomType'].valueChanges.subscribe((value) => {
+      this.loadTree(this.useForm.getRawValue());
+    });
   }
-
   loadTree(controls) {
     this.inventoryTreeList = CheckBoxTreeFactory.buildTree(
       this.roomTypes,

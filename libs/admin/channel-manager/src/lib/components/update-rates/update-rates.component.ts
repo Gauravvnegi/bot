@@ -71,20 +71,15 @@ export class UpdateRatesComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
-    this.initOptions();
+    this.initDate(Date.now());
+    this.getRestrictions();
+    this.initRoomTypes();
     this.initForm();
     this.listenChanges();
     this.initEditView();
   }
 
-  initOptions() {
-    this.initDate(Date.now());
-    this.initRoomTypes();
-    this.getRestrictions();
-  }
-
   initRoomTypes() {
-    this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       if (rooms.length !== 0) {
         this.roomTypes = rooms;
@@ -191,7 +186,6 @@ export class UpdateRatesComponent implements OnInit {
       );
       this.addRatePlansControls(roomType.ratePlans, roomTypeIdx);
     });
-    this.setRoomDetails();
   }
 
   /**
@@ -226,6 +220,7 @@ export class UpdateRatesComponent implements OnInit {
 
       this.addChannelsControl(ratePlan.channels, roomTypeIdx, ratePlanIdx);
     });
+    this.setRoomDetails();
   }
 
   /**
@@ -416,8 +411,7 @@ export class UpdateRatesComponent implements OnInit {
   }
 
   setRoomDetails(selectedDate?: number) {
-    const roomTypeControls = (this.useForm.controls['roomTypes'] as FormArray)
-      .controls;
+    const roomTypeControls = this.useFormControl.roomTypes.controls;
     const { fromDate } = this.getFromAndToDateEpoch(
       selectedDate ? selectedDate : this.useForm.controls['date'].value
     );
@@ -433,12 +427,12 @@ export class UpdateRatesComponent implements OnInit {
           'ratePlans'
         ] as FormArray).controls.forEach((ratePlan: FormGroup, index) => {
           const { rates, value } = ratePlan.controls;
-
           (rates as FormArray).controls.forEach(
             (ratePlanControl: FormGroup) => {
               const valueControl = ratePlanControl.controls[
                 'value'
               ] as FormControl;
+
               const responseRatePlan = this.ratesRoomDetails[roomId][
                 'ratePlans'
               ][value.value][currentDate.getTime()];

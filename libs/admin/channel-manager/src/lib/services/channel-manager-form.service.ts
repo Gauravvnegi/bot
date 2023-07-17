@@ -49,12 +49,14 @@ export class ChannelManagerFormService {
             channels: [],
             ratePlans: item.ratePlans.map((ratePlan) => {
               let rates = configRatePlans.find(
-                (configRates) => configRates.id === ratePlan.value
+                (configRates) => configRates.id === ratePlan.ratePlanTypeId
               );
               let myRatePlan = {
                 ...ratePlan,
-                type: rates.id,
+                type: rates.key,
                 label: rates.label,
+                value: rates.id,
+                channels: [],
               };
               return myRatePlan;
             }),

@@ -75,6 +75,7 @@ export class UpdateInventoryComponent implements OnInit {
         this.roomTypes = rooms;
         this.allRoomTypes = rooms;
         this.initForm();
+        this.loadDefaultData();
       }
     });
   }
@@ -103,9 +104,7 @@ export class UpdateInventoryComponent implements OnInit {
       roomType: [],
       date: [this.currentDate.getTime()],
     });
-
     this.addRoomTypesControl();
-
     this.useFormControl.date.valueChanges.subscribe((res) => {
       this.initDate(res);
     });
@@ -296,6 +295,13 @@ export class UpdateInventoryComponent implements OnInit {
     );
   }
 
+  loadDefaultData() {
+    this.useForm.controls['roomType'].patchValue(
+      [...this.allRoomTypes.map((item) => item.value)],
+      { emitEvent: false }
+    );
+  }
+
   setRoomDetails(selectedDate?: number) {
     const { fromDate } = this.getFromAndToDateEpoch(
       selectedDate ? selectedDate : this.useForm.controls['date'].value
@@ -333,6 +339,10 @@ export class UpdateInventoryComponent implements OnInit {
         currentDate = new Date(fromDate);
       }
     }
+    this.useForm.controls['roomType'].patchValue(
+      [...this.allRoomTypes.map((item) => item.value)],
+      { emitEvent: false }
+    );
   }
 
   handleSave() {

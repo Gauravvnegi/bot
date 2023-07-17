@@ -8,8 +8,6 @@ import { Subscription } from 'rxjs';
 import {
   RestrictionAndValuesOption,
   restrictionsRecord,
-  inventoryRestrictions,
-  ratesRestrictions,
 } from '../../constants/data';
 @Component({
   selector: 'hospitality-bot-bulk-update-form',

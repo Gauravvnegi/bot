@@ -85,6 +85,7 @@ export class UpdateRatesComponent implements OnInit {
         this.roomTypes = rooms;
         this.allRoomTypes = rooms;
         this.initForm();
+        this.loadDefaultData();
       }
     });
   }
@@ -359,6 +360,13 @@ export class UpdateRatesComponent implements OnInit {
           },
           this.handleFinal
         )
+    );
+  }
+
+  loadDefaultData() {
+    this.useForm.controls['roomType'].patchValue(
+      [...this.allRoomTypes.map((item) => item.value)],
+      { emitEvent: false }
     );
   }
 

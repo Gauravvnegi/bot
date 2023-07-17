@@ -43,9 +43,8 @@ export class PaymentMethodComponent implements OnInit {
     private manageReservationService: ManageReservationService,
     private globalFilterService: GlobalFilterService,
     private userService: UserService
-  ) {
-  }
-  
+  ) {}
+
   ngOnInit(): void {
     this.addFormGroup();
     this.entityId = this.globalFilterService.entityId;
@@ -74,7 +73,6 @@ export class PaymentMethodComponent implements OnInit {
     };
 
     this.parentFormGroup.addControl('paymentMethod', this.fb.group(data));
-
   }
 
   initConfig() {
@@ -96,6 +94,7 @@ export class PaymentMethodComponent implements OnInit {
     this.$subscription.add(
       this.manageReservationService.getPaymentMethod(this.entityId).subscribe(
         (response) => {
+          debugger;
           const types = new PaymentMethodList()
             .deserialize(response)
             .records.map((item) => item.type);

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ControlContainer } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormGroup } from '@angular/forms';
 import {
   ConfigService,
   CountryCodeList,
@@ -9,8 +9,8 @@ import { BookingConfig } from '../../../models/reservations.model';
 import * as moment from 'moment';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { ActivatedRoute } from '@angular/router';
-import { ManageReservationService } from '../../../services/manage-reservation.service';
 import { FormService } from '../../../services/form.service';
+import { ReservationForm } from '../../../constants/form';
 
 @Component({
   selector: 'hospitality-bot-booking-info',
@@ -48,6 +48,13 @@ export class BookingInfoComponent implements OnInit {
     this.getCountryCode();
     this.initDefaultDates();
     this.listenForDateChange();
+    this.listenFormChanges();
+  }
+
+  listenFormChanges() {
+    this.reservationInfoControls.source.valueChanges.subscribe((res) => {
+      this.reservationInfoControls.sourceName.setValue('');
+    });
   }
 
   /**
@@ -136,5 +143,14 @@ export class BookingInfoComponent implements OnInit {
       const data = new CountryCodeList().deserialize(res);
       this.countries = data.records;
     });
+  }
+
+  get reservationInfoControls() {
+    return (this.controlContainer.control.get(
+      'reservationInformation'
+    ) as FormGroup).controls as Record<
+      keyof ReservationForm['reservationInformation'],
+      AbstractControl
+    >;
   }
 }

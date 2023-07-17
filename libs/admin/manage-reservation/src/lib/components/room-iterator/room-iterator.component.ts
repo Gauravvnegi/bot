@@ -55,7 +55,7 @@ export class RoomIteratorComponent extends IteratorComponent
   loadingRoomTypes = false;
 
   ratePlanOptionsArray: Option[][] = [];
-
+  roomNumberOptionsArray: Option[][] = [];
   @ViewChild('main') main: ElementRef;
 
   constructor(
@@ -86,7 +86,7 @@ export class RoomIteratorComponent extends IteratorComponent
     const data = {
       roomTypeId: ['', [Validators.required]],
       ratePlan: [{ value: '', disabled: true }],
-      roomNumber: [[]],
+      roomNumber: [{ value: [], disabled: true }],
       adultCount: ['', [Validators.required, Validators.min(1)]],
       childCount: ['', [Validators.min(0)]],
       price: [''],
@@ -135,6 +135,8 @@ export class RoomIteratorComponent extends IteratorComponent
               .get('ratePlan')
               .setValidators([Validators.required]);
           }
+          this.roomControls[index].get('adultCount').setValue(1);
+          this.roomControls[index].get('childCount').setValue(0);
           // this.fields[2].options = ['201', '202'];
         }
       });

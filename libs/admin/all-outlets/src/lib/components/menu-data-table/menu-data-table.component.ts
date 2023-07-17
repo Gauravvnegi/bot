@@ -13,8 +13,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { cols } from '../../constants/data-table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { outletBusinessRoutes } from '../../constants/routes';
-import { MenuItem, MenuItemList } from '../../models/outlet.model';
-import { transactionHistoryRes } from 'libs/admin/finance/src/lib/constants/response';
+import { MenuItemList } from '../../models/outlet.model';
 import { LazyLoadEvent } from 'primeng/api';
 import { MenuItemResponse } from '../../types/outlet';
 

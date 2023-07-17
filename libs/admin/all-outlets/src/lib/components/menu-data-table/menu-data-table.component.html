@@ -7,7 +7,7 @@
     <div class="heading">{{ tableName }}</div>
     <div class="action-wrapper">
       <hospitality-bot-button
-        label="Import Menu Items"
+        label="+ Import Menu Items"
         variant="text"
         (onClick)="handleImport()"
       ></hospitality-bot-button>
@@ -108,29 +108,32 @@
           </div>
         </td>
         <td>
-          <div class="center-align" *ngIf="rowData.category; else emptyCell">
+          <div class="cell-content" *ngIf="rowData.category; else emptyCell">
             <div class="primary-text">
               {{ rowData.category }}
             </div>
           </div>
         </td>
         <td>
-          <div class="center-align" *ngIf="rowData.hsnCode; else emptyCell">
+          <div class="cell-content" *ngIf="rowData.hsnCode; else emptyCell">
             <div class="primary-text">
               {{ rowData.hsnCode }}
             </div>
           </div>
         </td>
         <td>
-          <div class="center-align" *ngIf="rowData.dineInPrice; else emptyCell">
+          <div class="cell-content" *ngIf="rowData.dineInPrice; else emptyCell">
             <div class="primary-text">
-              {{ rowData.dineInPrice | currency: 'INR' }}
+              {{ rowData.dineInPrice | currency: 'INR' }}/Dine In Price
+            </div>
+            <div class="secondary-text" *ngIf="rowData.deliveryPrice">
+              {{ rowData?.deliveryPrice | currency: 'INR' }}/Delivery Price
             </div>
           </div>
         </td>
         <td>
           <div
-            class="center-align"
+            class="cell-content"
             *ngIf="rowData.preparationTime; else emptyCell"
           >
             <div class="primary-text">
@@ -139,9 +142,9 @@
           </div>
         </td>
         <td>
-          <div class="center-align" *ngIf="rowData.quantity; else emptyCell">
+          <div class="cell-content" *ngIf="rowData.quantity; else emptyCell">
             <div class="primary-text">
-              {{ rowData.quantity }}
+              {{ rowData.quantity }} {{ rowData.unit }}
             </div>
           </div>
         </td>

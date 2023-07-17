@@ -88,4 +88,11 @@ export class SubscriptionPlanService extends ApiService {
 
     return this;
   }
+
+  hasComplaintManagementSystem() {
+    const requestManagementSystems = ['FCS'];
+    return requestManagementSystems.reduce((prev, curr) => {
+      return prev || this.productSubscription.subscribedIntegrations.has(curr);
+    }, false);
+  }
 }

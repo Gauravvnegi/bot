@@ -53,17 +53,16 @@
             placeholder: 'To'
           }"
           [minDate]="endMinDate"
-          [maxDate]="maxToDate"
         ></hospitality-bot-date>
       </div>
     </ng-container>
     <ng-container *ngIf="bookingType !== 'HOTEL' && bookingType !== 'VENUE'">
       <hospitality-bot-date
         class="half-width"
-        controlName="reservationDateAndTime"
+        controlName="dateAndTime"
         label="Booking Date and Time"
         [settings]="{
-          enableTime: false,
+          enableTime: true,
           dateValue: startMinDate
         }"
         [minDate]="startMinDate"

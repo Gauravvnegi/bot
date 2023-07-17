@@ -1,7 +1,6 @@
 import {
   EntityStateCountsResponse,
   EntityTypeCountsResponse,
-  Status,
 } from '../models/reservations.model';
 /* Reservation List Response Types deceleration */
 export type ReservationListResponse = {
@@ -21,6 +20,8 @@ export type ReservationResponse = {
   confirmationNo: string;
   name: string;
   company: string;
+  outletType?: string;
+  outletName?: string;
   date: string;
   amount: number;
   source: string;

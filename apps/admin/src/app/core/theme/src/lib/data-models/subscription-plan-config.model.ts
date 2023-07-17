@@ -182,6 +182,7 @@ export class Feature {
 export class ProductSubscription {
   subscribedModules: ModuleNames[];
   modules: Partial<Modules>;
+  subscribedIntegrations: Set<string>;
 
   deserialize(input: any) {
     this.subscribedModules = new Array<ModuleNames>();
@@ -192,6 +193,13 @@ export class ProductSubscription {
       product.config?.forEach((subProduct) => {
         this.setConfig(subProduct);
       });
+    });
+
+    this.subscribedIntegrations = new Set<string>();
+    input.integration.forEach((item) => {
+      if (item.isSubscribed) {
+        this.subscribedIntegrations.add(item.name);
+      }
     });
 
     return this;

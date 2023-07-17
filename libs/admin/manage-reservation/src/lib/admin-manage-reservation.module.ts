@@ -6,6 +6,7 @@ import { AdminSharedModule } from '@hospitality-bot/admin/shared';
 import { AdminManageReservationRoutingModule } from './admin-manage.routing.module';
 import { ManageReservationService } from './services/manage-reservation.service';
 import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-table.service';
+import { FormService } from './services/form.service';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-tabl
     AdminManageReservationRoutingModule,
   ],
   declarations: [...AdminManageReservationRoutingModule.components],
-  providers: [ManageReservationService, GuestTableService],
+  providers: [ManageReservationService, GuestTableService, FormService],
 })
 export class AdminManageReservationModule {}

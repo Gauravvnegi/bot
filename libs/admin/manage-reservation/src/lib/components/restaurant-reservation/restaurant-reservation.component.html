@@ -37,7 +37,7 @@
         </div>
       </p-accordionTab>
       <hospitality-bot-guest-information></hospitality-bot-guest-information>
-      <hospitality-bot-billing-address></hospitality-bot-billing-address>
+      <!-- <hospitality-bot-billing-address></hospitality-bot-billing-address> -->
       <hospitality-bot-payment-rule
         [deductedAmount]="deductedAmount"
       ></hospitality-bot-payment-rule>
@@ -67,7 +67,7 @@
             Date
           </p>
           <p class="bk-summary_roomInfo_checkoutInfo_subText">
-            5 April, Monday
+            {{ date }}
           </p>
         </div>
         <div class="bk-summary_roomInfo_guestInfo">
@@ -75,7 +75,7 @@
             Time
           </p>
           <p class="bk-summary_roomInfo_guestInfo_subText">
-            06:00 PM
+            {{ time }}
           </p>
         </div>
         <div class="bk-summary_roomInfo_guestInfo">

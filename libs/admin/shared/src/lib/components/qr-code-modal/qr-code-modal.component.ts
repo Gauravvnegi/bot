@@ -1,9 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ModalContent } from '../../types/fields.type';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import * as html2pdf from 'html2pdf.js';
-import jspdf from 'jspdf';
 
 @Component({
   selector: 'hospitality-bot-qr-code-modal',
@@ -55,27 +52,14 @@ export class QrCodeModalComponent implements OnInit {
   }
 
   generatePdf() {
-    const doc = new jsPDF();
+    const pdf = new jsPDF();
+    const container = document.getElementById('qr-code-modal');
 
-    // Get the element containing the page content
-    const content = document.getElementById('qr-code-modal');
-
-    html2canvas(content).then((canvas) => {
-      // Convert the canvas to an image data URL
-      const imgData = canvas.toDataURL('image/png');
-
-      // Set the image as the background of the first PDF page
-      doc.addImage(
-        imgData,
-        'PNG',
-        0,
-        0,
-        doc.internal.pageSize.getWidth(),
-        doc.internal.pageSize.getHeight()
-      );
-
-      // Save the PDF
-      doc.save('your-page.pdf');
+    // Generate PDF from HTML using the html() method of jsPDF
+    pdf.html(container, {
+      callback: (pdf) => {
+        pdf.save('qr-code.pdf');
+      },
     });
   }
 }

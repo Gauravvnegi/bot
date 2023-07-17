@@ -1,7 +1,7 @@
 <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
   <hospitality-bot-button
     label="Print QR Code"
-    link=""
+    (onClick)="onPrintQrCode()"
     [disabled]="!outletId"
   ></hospitality-bot-button>
 </hospitality-bot-navigation-header>
@@ -45,9 +45,12 @@
       class="half-width"
       controlName="emailId"
       label="Email"
-      maxLength="60"
       [props]="{
-        placeholder: 'Enter'
+        placeholder: 'Enter',
+        errorMessages: {
+          required: 'This is a required field.',
+          pattern: 'Please enter a valid email address.'
+        }
       }"
     ></hospitality-bot-input>
     <div class="half-width" [formGroup]="useForm.get('contact')">
@@ -120,6 +123,8 @@
       [isLoading]="loading"
       [compServices]="compServices"
       [paidServices]="paidServices"
+      [isPaidLoading]="isPaidLoading"
+      [isCompLoading]="isCompLoading"
       [outletId]="outletId"
       (onCreateAndContinueFeature)="submitForm($event)"
       *ngSwitchCase="'VENUE'"

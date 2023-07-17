@@ -2,24 +2,23 @@
 
 .form-block {
   @include form-block;
-    border: solid 1px rgba(112, 112, 112, 0.35);
-    border-top-left-radius: 0px;
-      border-top-right-radius: 0px;
+  border: solid 1px rgba(112, 112, 112, 0.35);
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
 }
 
-.type-wrapper{
+.type-wrapper {
   display: flex;
 
-  .half-width{
+  .half-width {
     flex-basis: 50%;
   }
-
 }
 
 .footer-buttons {
-@include flex-all-center;
+  @include flex-all-center;
   gap: 38.5px;
-      margin-top: 20px;
+  margin-top: 20px;
 }
 
 @mixin header {
@@ -44,4 +43,8 @@
 
 :host ::ng-deep hospitality-bot-navigation-header .nav-wrapper__sticky {
   padding: 20px 32px 20px 22px;
+}
+
+:host ::ng-deep mat-dialog-container .mat-dialog-container {
+  width: 52vw !important;
 }

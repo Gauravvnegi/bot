@@ -1,4 +1,10 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { ControlContainer } from '@angular/forms';
 import { FormProps, Option } from '../../../types/form.type';
 import { FormComponent } from '../form.components';
@@ -8,7 +14,7 @@ import { FormComponent } from '../form.components';
   templateUrl: './prefix-field.component.html',
   styleUrls: ['./prefix-field.component.scss'],
 })
-export class PrefixFieldComponent extends FormComponent {
+export class PrefixFieldComponent extends FormComponent implements OnInit {
   constructor(public controlContainer: ControlContainer) {
     super(controlContainer);
   }
@@ -35,6 +41,10 @@ export class PrefixFieldComponent extends FormComponent {
         this[key] = value[key];
       }
     }
+  }
+
+  ngOnInit(): void {
+    this.initInputControl(this.preControlName);
   }
 
   /**

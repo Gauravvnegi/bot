@@ -26,22 +26,18 @@
   height: 100%;
 
   .p-calendar {
-    .p-inputtext {
-      border-color: $border-color;
-      &:hover {
-        border-color: $primary-form-color;
-      }
-      &:enabled:focus {
-        border-color: $primary-form-color;
-      }
+    border-color: $border-color;
+    &:hover {
+      border-color: $primary-form-color;
+    }
+    &:enabled:focus {
+      border-color: $primary-form-color;
     }
   }
 
   &__error {
     .p-calendar {
-      .p-inputtext {
-        border-color: $form-error-color;
-      }
+      border-color: $form-error-color;
     }
   }
 

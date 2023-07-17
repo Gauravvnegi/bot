@@ -38,7 +38,8 @@ export class SingleRoom {
   currency: string;
   price: number;
   roomTypeId: string;
-  features: string[];
+  featureIds: string[];
+  removeFeatures?: string[];
 
   deserialize(input: SingleRoomData) {
     this.id = input.id ?? '';
@@ -48,7 +49,8 @@ export class SingleRoom {
     this.currency = input.currency ?? '';
     this.price = input.price ?? null;
     this.roomTypeId = input.roomTypeId ?? '';
-    this.features = input.features ?? [];
+    this.featureIds = input.featureIds ?? [];
+    this.removeFeatures = input.removeFeatures ?? null; //as per BE requirement
     return this;
   }
 }

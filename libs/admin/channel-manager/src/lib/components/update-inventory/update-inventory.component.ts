@@ -67,12 +67,13 @@ export class UpdateInventoryComponent implements OnInit {
   }
 
   initRoomTypes() {
-    this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       if (rooms.length !== 0) {
         this.roomTypes = rooms;
         this.allRoomTypes = rooms;
         this.initForm();
+      } else {
+        this.channelMangerForm.loadRoomTypes(this.entityId);
       }
     });
   }
@@ -252,13 +253,9 @@ export class UpdateInventoryComponent implements OnInit {
     });
 
     this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
-      if (res.length) {
-        this.roomTypes = this.allRoomTypes.filter((item) =>
-          res.includes(item.value)
-        );
-      } else {
-        this.initRoomTypes();
-      }
+      this.roomTypes = this.allRoomTypes.filter((item) =>
+        res.length ? res.includes(item.value) : true
+      );
 
       this.useForm.removeControl('roomTypes');
       this.addRoomTypesControl();

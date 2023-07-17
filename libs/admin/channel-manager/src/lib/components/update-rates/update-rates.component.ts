@@ -74,20 +74,6 @@ export class UpdateRatesComponent implements OnInit {
     this.initDate(Date.now());
     this.getRestrictions();
     this.initRoomTypes();
-    this.initForm();
-    this.listenChanges();
-    this.initEditView();
-  }
-
-  initRoomTypes() {
-    this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
-      if (rooms.length !== 0) {
-        this.roomTypes = rooms;
-        this.allRoomTypes = rooms;
-        this.initForm();
-        this.loadDefaultData();
-      }
-    });
   }
 
   getRestrictions() {
@@ -108,31 +94,31 @@ export class UpdateRatesComponent implements OnInit {
     return Array.from({ length: this.dateLimit }, (_, index) => index);
   }
 
+  initRoomTypes() {
+    this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
+      if (rooms.length !== 0) {
+        this.roomTypes = rooms;
+        this.allRoomTypes = rooms;
+        this.initForm();
+      } else {
+        this.channelMangerForm.loadRoomTypes(this.entityId);
+      }
+    });
+  }
+
   initForm() {
     this.currentDate.setHours(0, 0, 0, 0);
     this.useForm = this.fb.group({
       roomType: [],
       date: [this.currentDate.getTime()],
     });
-    this.addRoomTypesControl();
     this.addDynamicControl();
+    this.addRoomsControl();
+  }
 
-    this.useFormControl.date.valueChanges.subscribe((res) => {
-      this.initDate(res);
-    });
-
-    this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
-      if (res.length) {
-        this.roomTypes = this.allRoomTypes.filter((item) =>
-          res.includes(item.value)
-        );
-      } else {
-        this.initRoomTypes();
-      }
-
-      this.useForm.removeControl('roomTypes');
-      this.addRoomTypesControl();
-    });
+  addRoomsControl() {
+    this.addRoomTypesControl();
+    this.listenChanges();
   }
 
   addDynamicControl() {
@@ -183,6 +169,7 @@ export class UpdateRatesComponent implements OnInit {
       );
       this.addRatePlansControls(roomType.ratePlans, roomTypeIdx);
     });
+    this.getRates();
   }
 
   /**
@@ -217,7 +204,6 @@ export class UpdateRatesComponent implements OnInit {
 
       this.addChannelsControl(ratePlan.channels, roomTypeIdx, ratePlanIdx);
     });
-    this.setRoomDetails();
   }
 
   /**
@@ -325,15 +311,27 @@ export class UpdateRatesComponent implements OnInit {
   }
 
   listenChanges() {
+    this.useFormControl.date.valueChanges.subscribe((res) => {
+      this.initDate(res);
+    });
+
     this.useForm.controls['date'].valueChanges.subscribe((selectedDate) => {
       this.useForm.controls['date'].patchValue(selectedDate, {
         emitEvent: false,
       });
-      this.initEditView(selectedDate);
+      this.getRates(selectedDate);
+    });
+
+    this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
+      this.roomTypes = this.allRoomTypes.filter((item) =>
+        res.length ? res.includes(item.value) : true
+      );
+      this.useForm.removeControl('roomTypes');
+      this.addRoomTypesControl();
     });
   }
 
-  initEditView(selectedDate = this.useForm.value.date) {
+  getRates(selectedDate = this.useForm.value.date) {
     this.loading = true;
     this.$subscription.add(
       this.channelManagerService
@@ -351,22 +349,10 @@ export class UpdateRatesComponent implements OnInit {
             this.loadingError = false;
           },
           (error) => {
-            this.useForm.controls['date'].patchValue(this.currentDate, {
-              emitEvent: false,
-            });
-            this.setRoomDetails();
-            this.loading = false;
             this.loadingError = true;
           },
           this.handleFinal
         )
-    );
-  }
-
-  loadDefaultData() {
-    this.useForm.controls['roomType'].patchValue(
-      [...this.allRoomTypes.map((item) => item.value)],
-      { emitEvent: false }
     );
   }
 
@@ -393,7 +379,7 @@ export class UpdateRatesComponent implements OnInit {
         .updateChannelManager(data, this.entityId, this.getQueryConfig())
         .subscribe(
           (res) => {
-            this.initEditView();
+            this.getRates();
             this.snackbarService.openSnackBarAsText(
               'Inventory Update successfully',
               '',
@@ -403,10 +389,6 @@ export class UpdateRatesComponent implements OnInit {
             this.loadingError = false;
           },
           (error) => {
-            this.useForm.controls['date'].patchValue(this.currentDate, {
-              emitEvent: false,
-            });
-            this.setRoomDetails();
             this.loading = false;
           },
           this.handleFinal

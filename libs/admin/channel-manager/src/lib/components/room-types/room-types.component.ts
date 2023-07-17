@@ -42,7 +42,7 @@ export class RoomTypesComponent extends FormComponent {
   }
 
   initRoomTypes() {
-    this.channelMangerForm.loadRoomTypes(this.entityId);
+    // this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       this.roomTypes = rooms;
       this.isAllSelected && this.defaultSelect();

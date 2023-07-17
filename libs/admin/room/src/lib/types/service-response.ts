@@ -90,8 +90,7 @@ export type RatePlanRes = {
   basePrice: string;
   discountType: string;
   discountValue: number;
-  bestPriceCurrency: string;
-  bestAvailablePrice: number;
+  bestAvailablePrice: string;
   maxPriceCurrency: string;
   maxPrice: number;
   minPriceCurrency: string;

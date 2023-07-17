@@ -60,12 +60,12 @@
       </div>
     </div>
   </div>
-
-  <hospitality-bot-button
-    *ngIf="ctaLabel && (!maxLimit || maxLimit > useFormArray.length)"
-    class="action-btn"
-    [label]="ctaLabel"
-    (onClick)="addNewField()"
-    variant="text"
-  ></hospitality-bot-button>
+  <div class="action-btn">
+    <hospitality-bot-button
+      *ngIf="ctaLabel && (!maxLimit || maxLimit > useFormArray.length)"
+      [label]="ctaLabel"
+      (onClick)="addNewField()"
+      variant="text"
+    ></hospitality-bot-button>
+  </div>
 </div>

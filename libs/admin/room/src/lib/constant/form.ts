@@ -79,7 +79,7 @@ export type StaticPricingRatePlan = RatePlan & {
   discountType: string;
   discountValue: number;
   bestPriceCurrency: string;
-  bestAvailablePrice: number;
+  bestAvailablePrice: string;
 };
 
 export type DynamicPricingRatePlan = RatePlan & {

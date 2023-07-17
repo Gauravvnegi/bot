@@ -14,7 +14,7 @@
   isSticky="true"
 >
   <div class="request-wrapper-header-btnwrap">
-    <div class="sync-now">
+    <div class="sync-now" *ngIf="hasComplaintManagementSystem">
       <hospitality-bot-custom-tooltip
         [text]="'Initiate data synchronization with FCS by clicking here.'"
         class="additional-info"

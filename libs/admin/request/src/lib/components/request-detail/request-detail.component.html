@@ -37,7 +37,12 @@
     <div class="request-items-body-title">
       {{ data.itemName }}
     </div>
-    <!-- <div appCountdown [countdownValue]="100"></div> -->
+
+    <div class="time-left">
+      <div>Time Left:</div>
+      <div class="time" appCountdown [config]="{ value: data.timeLeft }"></div>
+    </div>
+
     <div class="request-items-body-subtitle">
       {{ data.remarks }}
     </div>
@@ -78,9 +83,11 @@
                 {{ data.guestDetails.getPhoneNumbers() }}
               </div>
             </a>
-            <div>
-              {{ data.guestDetails.primaryGuest.email }}
-            </div>
+            <a href="mailto: {{ data.guestDetails.primaryGuest.email }}">
+              <div>
+                {{ data.guestDetails.primaryGuest.email }}
+              </div>
+            </a>
           </td>
         </tr>
       </table>

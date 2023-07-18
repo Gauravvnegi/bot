@@ -6,6 +6,7 @@ import { RoomTypeList } from 'libs/admin/room/src/lib/models/rooms-data-table.mo
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ConfigService } from '@hospitality-bot/admin/shared';
 import { ChannelManagerService } from './channel-manager.service';
+import { makeRoomsData } from '../models/bulk-update.models';
 
 @Injectable()
 export class ChannelManagerFormService {
@@ -41,29 +42,7 @@ export class ChannelManagerFormService {
         configRatePlans = data.roomRatePlans;
       });
 
-      this.roomDetails.next(
-        rooms.map((item) => {
-          let room = {
-            label: item.name,
-            value: item.id,
-            channels: [],
-            ratePlans: item.ratePlans.map((ratePlan) => {
-              let rates = configRatePlans.find(
-                (configRates) => configRates.id === ratePlan.ratePlanTypeId
-              );
-              let myRatePlan = {
-                ...ratePlan,
-                type: rates.key,
-                label: rates.label,
-                value: rates.id,
-                channels: [],
-              };
-              return myRatePlan;
-            }),
-          };
-          return room;
-        })
-      );
+      this.roomDetails.next(makeRoomsData(rooms, configRatePlans));
     });
   }
 }

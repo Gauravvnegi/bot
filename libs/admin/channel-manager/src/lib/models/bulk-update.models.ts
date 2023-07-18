@@ -12,6 +12,30 @@ export function makeRoomOption(...data) {
   }) as Option[];
 }
 
+export function makeRoomsData(rooms, configRatePlans) {
+  return rooms.map((item) => {
+    let room = {
+      label: item.name,
+      value: item.id,
+      channels: [],
+      ratePlans: item.ratePlans.map((ratePlan) => {
+        let rates = configRatePlans.find(
+          (configRates) => configRates.id === ratePlan.ratePlanTypeId
+        );
+        let myRatePlan = {
+          ...ratePlan,
+          type: rates.key,
+          label: rates.label,
+          value: rates.id,
+          channels: [],
+        };
+        return myRatePlan;
+      }),
+    };
+    return room;
+  });
+}
+
 export class CheckBoxTreeFactory {
   static buildTree(
     data,

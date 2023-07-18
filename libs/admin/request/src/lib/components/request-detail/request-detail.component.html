@@ -38,7 +38,7 @@
       {{ data.itemName }}
     </div>
 
-    <div class="time-left">
+    <div *ngIf="data?.timeLeft !== undefined" class="time-left">
       <div>Time Left:</div>
       <div class="time" appCountdown [config]="{ value: data.timeLeft }"></div>
     </div>

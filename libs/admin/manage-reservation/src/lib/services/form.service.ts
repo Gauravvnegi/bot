@@ -4,6 +4,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { ReservationTableValue } from '../constants/reservation-table';
 import { SelectedEntity } from '../types/reservation.type';
+import { OutletFormData } from '../types/forms.types';
+import { ReservationForm } from '../constants/form';
 
 @Injectable({
   providedIn: 'root',
@@ -31,4 +33,52 @@ export class FormService {
   //  Booking Summary Props
   price = new BehaviorSubject(0);
   discountedPrice = new BehaviorSubject(0);
+
+  mapOutletReservationData(input: ReservationForm, outletType: string) {
+    const reservationData = new OutletFormData();
+
+    // Reservation Info
+    reservationData.eventType = input.reservationInformation?.eventType ?? '';
+    reservationData.from =
+      input.reservationInformation.dateAndTime ??
+      input.reservationInformation.from;
+    reservationData.to =
+      input.reservationInformation.dateAndTime ??
+      input.reservationInformation.to;
+    reservationData.reservationType =
+      input.reservationInformation.reservationType;
+    reservationData.sourceName = input.reservationInformation.sourceName;
+    reservationData.source = input.reservationInformation.source;
+    reservationData.marketSegment = input.reservationInformation.marketSegment;
+
+    // Booking/order/event info
+    reservationData.adultCount =
+      input.orderInformation.numberOfAdults ??
+      input.bookingInformation.numberOfAdults;
+    reservationData.items =
+      input.bookingInformation.spaItems.map((item) => ({
+        itemId: item.serviceName,
+        unit: item.quantity,
+        amount: item.price,
+      })) ??
+      input.orderInformation.menuItems.map((item) => ({
+        itemId: item.menuItems,
+        unit: item.quantity,
+        amount: item.price,
+      })) ??
+      input.eventInformation.venueInfo.map((item) => ({
+        itemId: item.description,
+        unit: item.quantity,
+        amount: item.price,
+      }));
+
+    // Payment Info
+    reservationData.paymentMethod = input.paymentMethod.paymentMethod;
+    reservationData.paymentRemark = input.paymentMethod.paymentRemark;
+    reservationData.totalPaidAmount = input.paymentMethod.totalPaidAmount;
+
+    reservationData.guestId = input.guestInformation.guestDetails;
+    reservationData.offerId = input.offerId ?? '';
+    reservationData.outletType = outletType;
+  }
 }

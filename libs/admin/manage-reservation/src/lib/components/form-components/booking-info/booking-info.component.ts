@@ -64,7 +64,7 @@ export class BookingInfoComponent implements OnInit {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.maxFromDate.setDate(this.endMinDate.getDate() - 1);
 
-    if (this.bookingType === 'HOTEL')
+    if (this.bookingType === 'ROOM_TYPE')
       this.maxToDate.setDate(this.startMinDate.getDate() + 365);
     if (this.bookingType === 'VENUE')
       this.maxToDate = moment().add(24, 'hours').toDate();
@@ -73,7 +73,7 @@ export class BookingInfoComponent implements OnInit {
   }
 
   /**
-   * Listen for date changes in hotel and outlets.
+   * Listen for date changes in ROOM_TYPE and outlets.
    */
   listenForDateChange() {
     const startTime = moment(this.startMinDate).unix() * 1000;
@@ -88,9 +88,9 @@ export class BookingInfoComponent implements OnInit {
       'reservationInformation.dateAndTime'
     );
 
-    // Listen to from and to date changes in hotel and setting
+    // Listen to from and to date changes in ROOM_TYPE and setting
     // min and max dates accordingly
-    if (this.bookingType === 'HOTEL') {
+    if (this.bookingType === 'ROOM_TYPE') {
       fromDateControl.setValue(startTime);
       toDateControl.setValue(endTime);
       fromDateControl.valueChanges.subscribe((res) => {
@@ -136,8 +136,21 @@ export class BookingInfoComponent implements OnInit {
           response.bookingConfig
         );
         this.configData.source = this.configData.source.filter(
-          (item) => item.value !== 'CREATE_WITH' && item.value !== 'OTHERS'
+          (item) =>
+            item.value !== 'CREATE_WITH' &&
+            item.value !== 'OTHERS' &&
+            item.value !== 'OTA'
         );
+        if (this.bookingType === 'ROOM_TYPE')
+          this.configData.source = [
+            ...this.configData.source,
+            { label: 'OTA', value: 'OTA' },
+          ];
+        if (this.bookingType === 'RESTAURANT')
+          this.configData.source = [
+            ...this.configData.source,
+            { label: 'Online food order', value: 'ONLINE_FOOD_ORDER' },
+          ];
       });
     this.configService.getCountryCode().subscribe((res) => {
       const data = new CountryCodeList().deserialize(res);

@@ -23,11 +23,16 @@ import {
   BookingInfo,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
-import { menuItemFields } from '../../constants/reservation';
+import {
+  editModeStatusOptions,
+  restaurantReservationTypes,
+  statusOptions,
+} from '../../constants/reservation';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
+import { MenuItemList } from '../../models/forms.model';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -65,6 +70,12 @@ export class RestaurantReservationComponent implements OnInit {
   pageTitle: string;
   routes: NavRouteOptions = [];
 
+  /* menu options variable */
+  menuItemsOffSet = 0;
+  loadingResults = false;
+  noMoreResults = false;
+  menuItems: (Option & { price: number })[] = [];
+
   // summaryInfo: SummaryInfo;
   tableNumber = '';
   numberOfAdults = '';
@@ -93,14 +104,12 @@ export class RestaurantReservationComponent implements OnInit {
   ngOnInit(): void {
     this.initDetails();
     this.entityId = this.globalFilterService.entityId;
-    this.fields = menuItemFields;
     this.initOptions();
     this.getReservationId();
   }
 
   initDetails() {
     this.entityId = this.globalFilterService.entityId;
-    this.fields = menuItemFields;
     this.expandAccordion = this.formSerivce.enableAccordion;
     if (this.expandAccordion) {
       this.formSerivce.enableAccordion = false;
@@ -109,10 +118,14 @@ export class RestaurantReservationComponent implements OnInit {
   }
 
   initOptions() {
-    this.reservationTypes = [
-      { label: 'Dine-in', value: 'DINE_IN' },
-      { label: 'Delivery', value: 'Delivery' },
-    ];
+    this.fields[0] = {
+      ...this.fields[0],
+      loading: this.loadingResults,
+      noMoreResults: this.noMoreResults,
+      searchResults: this.searchResults.bind(this),
+      loadMoreResults: this.loadingMoreResults.bind(this),
+    };
+    this.reservationTypes = restaurantReservationTypes;
   }
 
   /**
@@ -131,8 +144,8 @@ export class RestaurantReservationComponent implements OnInit {
         marketSegment: ['', Validators.required],
       }),
       orderInformation: this.fb.group({
-        tableNumber: ['', Validators.required],
-        numberOfAdults: ['', Validators.required],
+        tableNumber: [''],
+        numberOfAdults: [''],
         menuItems: this.menuItemsArray,
         kotInstructions: [''],
       }),
@@ -168,6 +181,23 @@ export class RestaurantReservationComponent implements OnInit {
     );
   }
 
+  onItemsAdded(index: number): void {
+    this.orderInfoControls[index]
+      .get('menuItems')
+      .valueChanges.subscribe((res) => {
+        const selectedMenuItem = this.menuItems.find(
+          (service) => service.value === res
+        );
+        this.orderInfoControls[index]
+          .get('price')
+          .setValue(selectedMenuItem.price);
+        // this.formService.discountedPrice.next(selectedService.price);
+      });
+    this.orderInfoControls[index].valueChanges.subscribe((res) => {
+      this.getSummaryData();
+    });
+  }
+
   setDateAndTime(dateTime: number) {
     const dateAndTime = new Date(dateTime);
     const date = dateAndTime.toLocaleDateString();
@@ -183,22 +213,14 @@ export class RestaurantReservationComponent implements OnInit {
   getReservationId(): void {
     if (this.reservationId) {
       this.statusOptions = [
-        { label: 'Draft', value: 'DRAFT' },
-        { label: 'Confirmed', value: 'CONFIRMED' },
-        { label: 'Waitlisted', value: 'WAITLISTED' },
-        { label: 'Cancelled', value: 'CANCELLED' },
-        { label: 'No Show', value: 'NOSHOW' },
+        ...statusOptions,
         { label: 'Seated', value: 'SEATED' },
-        { label: 'Completed', value: 'COMPLETED' },
       ];
       this.getReservationDetails();
     } else {
       this.statusOptions = [
-        { label: 'Draft', value: 'DRAFT' },
-        { label: 'Confirmed', value: 'CONFIRMED' },
-        { label: 'Waitlisted', value: 'WAITLISTED' },
+        ...editModeStatusOptions,
         { label: 'Seated', value: 'SEATED' },
-        { label: 'Completed', value: 'COMPLETED' },
       ];
       this.userForm.valueChanges.subscribe((_) => {
         if (!this.formValueChanges) {
@@ -286,58 +308,133 @@ export class RestaurantReservationComponent implements OnInit {
   }
 
   getSummaryData(): void {
-    const defaultProps = [
-      {
-        type: 'RESTAURANT',
-        // fromDate: this.userForm.get('reservationInformation.from')?.value,
-        // toDate: this.userForm.get('reservationInformation.to')?.value,
-        // adultCount: this.userForm.get('roomInformation.adultCount')?.value || 1,
-        // roomCount: this.userForm.get('roomInformation.roomCount')?.value || 1,
-        // childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
-        // roomType: this.userForm.get('roomInformation.roomTypeId')?.value,
-        // offerId: this.userForm.get('offerId')?.value,
-        // entityId: this.entityId,
-      },
-    ];
     const config = {
-      params: this.adminUtilityService.makeQueryParams(defaultProps),
+      params: this.adminUtilityService.makeQueryParams([
+        { type: 'RESTAURANT' },
+      ]),
     };
 
     const data = {
-      dateAndTime: this.reservationInfoControls.dateAndTime.value,
-      adultCount: this.orderInfoControls.numberOfAdults.value,
-      items: [
-        {
-          itemId: '7dcc88bc-6785-4d5d-97a8-9bfef5b2fecf',
-          unit: 23,
-          amount: 2.8,
-        },
-      ],
-      outletType: 'RESTAURANT',
+      fromDate: this.reservationInfoControls.dateAndTime.value,
+      toDate: this.reservationInfoControls.dateAndTime.value,
+      adultCount: this.orderInfoControls.numberOfAdults,
+      items: this.menuItemsControls.map((item) => ({
+        itemId: item.get('serviceName').value,
+        unit: item.get('quantity')?.value ?? 0,
+        price: item.get('price').value,
+      })),
+      outletType: 'SPA',
     };
     if (this.userForm.get('roomInformation.roomTypeId')?.value) {
       this.$subscription.add(
-        this.manageReservationService.getSummaryData(this.entityId, data, config).subscribe(
-          (res) => {
-            this.summaryData = new SummaryData()?.deserialize(res);
-            this.userForm
-              .get('roomInformation')
-              .patchValue(this.summaryData, { emitEvent: false });
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .updateValueAndValidity();
-            this.userForm
-              .get('paymentRule.deductedAmount')
-              .patchValue(this.summaryData?.totalAmount);
-            this.deductedAmount = this.summaryData?.totalAmount;
-          },
-          (error) => {}
-        )
+        this.manageReservationService
+          .getSummaryData(this.entityId, data, config)
+          .subscribe(
+            (res) => {
+              this.summaryData = new SummaryData()?.deserialize(res);
+              this.userForm
+                .get('roomInformation')
+                .patchValue(this.summaryData, { emitEvent: false });
+              this.userForm
+                .get('paymentMethod.totalPaidAmount')
+                .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+              this.userForm
+                .get('paymentMethod.totalPaidAmount')
+                .updateValueAndValidity();
+              this.userForm
+                .get('paymentRule.deductedAmount')
+                .patchValue(this.summaryData?.totalAmount);
+              this.deductedAmount = this.summaryData?.totalAmount;
+            },
+            (error) => {}
+          )
       );
     }
+  }
+
+  /**
+   * @function getServices to get services options
+   */
+  getServices() {
+    this.loadingResults = true;
+    this.$subscription.add(
+      this.outletService
+        .getMenuItems(
+          {
+            params: `?type=SERVICE&offset=${this.menuItemsOffSet}&limit=10`,
+          },
+          this.entityId
+        )
+        .subscribe(
+          (res) => {
+            const data = new MenuItemList()
+              .deserialize(res)
+              .records.map((item) => {
+                let price = item.dineInPrice;
+                return {
+                  label: `${item.name}`,
+                  value: item.id,
+                  price,
+                };
+              });
+
+            this.menuItems = [...this.menuItems, ...data];
+            this.fields[0].options = this.menuItems;
+            this.noMoreResults = data.length < 10;
+            this.loadingResults = false;
+          },
+          this.handleError,
+          this.handleFinal
+        )
+    );
+  }
+
+  /**
+   * @function searchServices To search services
+   * @param text search text
+   */
+  searchResults(text: string) {
+    // if (text) {
+    //   this.loadingResults = true;
+    //   this.libraryService
+    //     .searchLibraryItem(this.entityId, {
+    //       params: `?key=${text}&type=${LibrarySearchItem.SERVICE}`,
+    //     })
+    //     .subscribe(
+    //       (res) => {
+    //         this.loadingResults = false;
+    //         const data = res;
+    //         this.menuItems =
+    //           data
+    //             ?.filter((item) => item.active)
+    //             .map((item) => {
+    //               let price = item.rate;
+    //               return {
+    //                 label: `${item.name} ${
+    //                   price ? `[${item.currency} ${price}]` : ''
+    //                 }`,
+    //                 value: item.id,
+    //                 price,
+    //               };
+    //             }) ?? [];
+    //         this.fields[0].options = this.menuItems;
+    //       },
+    //       this.handleError,
+    //       this.handleFinal
+    //     );
+    // } else {
+    //   this.menuItemsOffSet = 0;
+    //   this.menuItems = [];
+    //   this.getServices();
+    // }
+  }
+
+  /**
+   * @function loadMoreServices load more services options
+   */
+  loadingMoreResults() {
+    this.menuItemsOffSet = this.menuItemsOffSet + 10;
+    this.getServices();
   }
 
   get inputControl() {
@@ -362,6 +459,24 @@ export class RestaurantReservationComponent implements OnInit {
       AbstractControl
     >;
   }
+
+  get menuItemsControls() {
+    return ((this.userForm.get('orderInformation') as FormGroup).get(
+      'menuItems'
+    ) as FormArray).controls;
+  }
+
+  /**
+   * @function handleError to show the error
+   * @param param network error
+   */
+  handleError = ({ error }): void => {
+    this.loadingResults = false;
+  };
+
+  handleFinal = () => {
+    this.loadingResults = false;
+  };
 
   /**
    * @function ngOnDestroy to unsubscribe subscription.

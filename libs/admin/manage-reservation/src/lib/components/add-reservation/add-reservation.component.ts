@@ -51,7 +51,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   expandAccordion = false;
 
   deductedAmount = 0;
-  bookingType = 'HOTEL';
+  bookingType = 'ROOM_TYPE';
 
   pageTitle = 'Add Booking';
   routes: NavRouteOptions = [];

@@ -5,7 +5,6 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {
@@ -96,6 +95,7 @@ export class RoomIteratorComponent extends IteratorComponent
     const data = {
       roomTypeId: ['', [Validators.required]],
       ratePlan: [{ value: '', disabled: true }],
+      roomCount: ['', [Validators.required, Validators.min(1)]],
       roomNumber: [{ value: [], disabled: true }],
       adultCount: [''],
       childCount: [''],
@@ -104,18 +104,19 @@ export class RoomIteratorComponent extends IteratorComponent
     const formGroup = this.fb.group(data);
     this.roomTypeArray.push(formGroup);
 
+    // Index for keeping track of roomTypes array.
     const index = this.roomTypeArray.controls.indexOf(formGroup);
-    // formGroup.addControl('index', this.fb.control(index));
     const roomInformationGroup = this.fb.group({
       roomTypes: this.roomTypeArray,
     });
     this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
-    // this.roomControls[index].get('index').setValue(index);
+
     this.listenRoomTypeChanges(index);
     this.listenRatePlanChanges(index);
     this.listenForFormChanges(index);
   }
 
+  
   listenRoomTypeChanges(index: number) {
     this.roomControls[index]
       .get('roomTypeId')
@@ -143,13 +144,12 @@ export class RoomIteratorComponent extends IteratorComponent
               .get('ratePlan')
               .setValidators([Validators.required]);
           }
-
-          this.updateAdultAndChildCount(selectedRoomType, index);
+          this.updateFormValueAndValidity(selectedRoomType, index);
         }
       });
   }
 
-  updateAdultAndChildCount(
+  updateFormValueAndValidity(
     selectedRoomType: RoomFieldTypeOption,
     index: number
   ) {
@@ -169,6 +169,7 @@ export class RoomIteratorComponent extends IteratorComponent
         Validators.max(selectedRoomType.maxAdult),
       ]);
     this.roomControls[index].get('adultCount').setValue(1);
+    this.roomControls[index].get('roomCount').setValue(1);
     this.roomControls[index].get('childCount').setValue(0);
   }
 

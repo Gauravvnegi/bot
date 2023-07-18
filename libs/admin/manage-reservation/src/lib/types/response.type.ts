@@ -1,3 +1,4 @@
+import { EntityState } from '@hospitality-bot/admin/shared';
 import {
   EntityStateCountsResponse,
   EntityTypeCountsResponse,
@@ -124,4 +125,66 @@ export type SummaryResponse = {
   taxAndFees: number;
   totalAmount: number;
   taxes: string[];
-}
+};
+
+export type ServiceListResponse = {
+  services?: ServiceResponse[];
+  paidPackages?: ServiceResponse[];
+  complimentaryPackages?: ServiceResponse[];
+  total: number;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
+};
+
+export type ServiceResponse = {
+  id: string;
+  name: string;
+  description: string;
+  rate: number;
+  startDate: number;
+  endDate: number;
+  active: boolean;
+  currency: string;
+  packageCode: string;
+  imageUrl: string;
+  entityId: string;
+  source: string;
+  type: string;
+  unit: string;
+  autoAccept: boolean;
+  hasChild: boolean;
+  parentId: string;
+  categoryName: string;
+  enableVisibility: string[];
+  taxes: any[];
+};
+
+export type MenuItemForm = {
+  name: string;
+  description: string;
+  mealPreference: string;
+  category: string;
+  type: string;
+  preparationTime: number;
+  quantity: number;
+  unit: string;
+  dineInPrice: number;
+  dineInPriceCurrency: string;
+  deliveryPrice: number;
+  deliveryPriceCurrency: string;
+  hsnCode: string;
+  taxes: any[];
+  status: boolean;
+};
+
+export type MenuItemResponse = MenuItemForm & {
+  id: string;
+  code?: string;
+};
+
+export type MenuItemListResponse = {
+  records: MenuItemResponse[];
+  total: number;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts: EntityState<string>;
+};

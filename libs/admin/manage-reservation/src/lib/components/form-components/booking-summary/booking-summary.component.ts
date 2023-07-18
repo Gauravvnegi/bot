@@ -102,7 +102,17 @@ export class BookingSummaryComponent implements OnInit {
 
   handleBooking(): void {
     this.isBooking = true;
-    const data = this.parentFormGroup.getRawValue() as ReservationForm;
+    let data;
+    if (this.bookingType === 'HOTEL')
+      data = this.manageReservationService.mapReservationData(
+        this.parentFormGroup.getRawValue()
+      );
+    if (this.bookingType !== 'HOTEL')
+      data = this.formService.mapOutletReservationData(
+        this.parentFormGroup.getRawValue(),
+        this.bookingType
+      );
+    debugger;
     if (this.reservationId) this.updateReservation(data);
     else this.createReservation(data);
   }
@@ -110,7 +120,7 @@ export class BookingSummaryComponent implements OnInit {
   createReservation(data): void {
     this.$subscription.add(
       this.manageReservationService
-        .createReservation(this.entityId, data)
+        .createReservation(this.entityId, data, this.bookingType)
         .subscribe(
           (res: ReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
@@ -216,7 +226,7 @@ export class BookingSummaryComponent implements OnInit {
 type BookingSummaryInfo = {
   header: string;
   subHeader: string;
-  stayInfo: string;
+  itemInfo: string;
   price: string;
   guestInfo: string;
   discountedPrice: string;

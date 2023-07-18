@@ -25,6 +25,7 @@
             [fields]="fields"
             [useFormArray]="menuItemsArray"
             ctaLabel="+ Add Item"
+            (currentIndex)="onItemsAdded($event)"
           ></hospitality-bot-iterator>
           <hospitality-bot-text-area
             class="full-width"
@@ -57,7 +58,7 @@
           subHeader: 'The Leela, New Delhi, 210002',
           price: 2000,
           discountedPrice: 1200,
-          guestInfo: numberOfAdults,
+          itemInfo: numberOfAdults,
           stayInfo: tableNumber,
           bookingType: bookingType
         }"

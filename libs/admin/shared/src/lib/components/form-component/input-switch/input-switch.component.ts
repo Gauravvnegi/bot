@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormComponent } from '../form.components';
-import { ControlContainer } from '@angular/forms';
+import { ControlContainer, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-input-switch',

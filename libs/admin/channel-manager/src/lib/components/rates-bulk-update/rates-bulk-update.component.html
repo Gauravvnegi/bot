@@ -5,12 +5,16 @@
   ></hospitality-bot-navigation-header>
 
   <div class="content-wrapper">
-    <hospitality-bot-bulk-update-form></hospitality-bot-bulk-update-form>
+    <hospitality-bot-bulk-update-form
+      [allRestrictions]="ratesRestrictions"
+    ></hospitality-bot-bulk-update-form>
 
     <hospitality-bot-rates-nested-checkbox-tree
       class="full-width"
       [roomsData]="roomsData"
-      (objectChanged)="onChangeNesting()"
+      [controlNames]="{
+        roomTypes: 'roomTypes'
+      }"
     ></hospitality-bot-rates-nested-checkbox-tree>
 
     <div class="action-button w-100">

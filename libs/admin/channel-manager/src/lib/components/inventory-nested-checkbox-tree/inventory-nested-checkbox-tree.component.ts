@@ -1,16 +1,21 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { UpdatedEmitType, Variant } from '../../types/bulk-update.types';
+import { FormComponent } from 'libs/admin/shared/src/lib/components/form-component/form.components';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'hospitality-bot-inventory-nested-checkbox-tree',
   templateUrl: './inventory-nested-checkbox-tree.component.html',
   styleUrls: ['./inventory-nested-checkbox-tree.component.scss'],
 })
-export class InventoryNestedCheckboxTreeComponent implements OnInit {
+export class InventoryNestedCheckboxTreeComponent extends FormComponent {
   @Input() variants: Variant[];
-  @Output() objectChange = new EventEmitter();
+  @Input() childrenControlName = {
+    roomTypeIds: 'roomTypeIds',
+    channelIds: 'channelIds',
+  };
 
-  constructor() {}
+  @Output() objectChange = new EventEmitter();
 
   ngOnInit(): void {
     this.checkBoxVerify();
@@ -23,6 +28,7 @@ export class InventoryNestedCheckboxTreeComponent implements OnInit {
       (item) => item.isSelected
     );
     this.objectChange.emit();
+    this.patchChildrenData(this.childrenControlName.channelIds);
   }
 
   onVariantChange(status: boolean, variantIndex) {
@@ -30,6 +36,22 @@ export class InventoryNestedCheckboxTreeComponent implements OnInit {
     selectedObject.isSelected = status;
     selectedObject.channels.map((item) => (item.isSelected = status));
     this.objectChange.emit();
+    this.patchChildrenData(this.childrenControlName.roomTypeIds);
+  }
+
+  get parentFG() {
+    return this.controlContainer.control as FormGroup;
+  }
+
+  patchChildrenData(controlName) {
+    (this.parentFG.controls[this.controlName].value as FormGroup).patchValue(
+      {
+        [controlName]: this.variants
+          .map((variant) => variant.isSelected && variant.id)
+          .filter((item) => item),
+      },
+      { emitEvent: false }
+    );
   }
 
   checkBoxVerify() {

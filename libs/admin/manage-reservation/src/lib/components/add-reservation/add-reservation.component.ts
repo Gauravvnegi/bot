@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -24,8 +24,9 @@ import {
   Option,
 } from '@hospitality-bot/admin/shared';
 import { ReservationForm, RoomTypes } from '../../constants/form';
-import { roomFields } from '../../constants/reservation';
+import { roomFields, roomReservationTypes } from '../../constants/reservation';
 import { FormService } from '../../services/form.service';
+import { SelectedEntity } from '../../types/reservation.type';
 
 @Component({
   selector: 'hospitality-bot-add-reservation',
@@ -45,7 +46,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   selectedOffer: OfferData;
   summaryData: SummaryData;
   fields = roomFields;
-  // loading = false;
+
   formValueChanges = false;
   disabledForm = false;
   expandAccordion = false;
@@ -58,6 +59,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   $subscription = new Subscription();
 
+  @Input() selectedEntity: SelectedEntity;
   // Booking Summary props
   adultCount = 0;
   roomCount = 1;
@@ -147,16 +149,12 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   getReservationId(): void {
     if (this.reservationId) {
       this.reservationTypes = [
-        { label: 'Draft', value: 'DRAFT' },
-        { label: 'Confirmed', value: 'CONFIRMED' },
-        { label: 'Cancelled', value: 'CANCELED' },
+        ...roomReservationTypes,
+        { label: 'Cancelled', value: 'CANCELLED' },
       ];
       this.getReservationDetails();
     } else {
-      this.reservationTypes = [
-        { label: 'Draft', value: 'DRAFT' },
-        { label: 'Confirmed', value: 'CONFIRMED' },
-      ];
+      this.reservationTypes = roomReservationTypes;
     }
   }
 
@@ -237,21 +235,8 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   }
 
   getSummaryData(): void {
-    const defaultProps = [
-      {
-        type: 'ROOM_TYPE',
-        // fromDate: this.userForm.get('reservationInformation.from')?.value,
-        // toDate: this.userForm.get('reservationInformation.to')?.value,
-        // adultCount: this.roomControls[0].get('adultCount')?.value || 1,
-        // roomCount: this.roomControls[0].get('roomCount')?.value || 1,
-        // childCount: this.roomControls[0].get('childCount')?.value || 0,
-        // roomType: this.roomControls[0].get('roomTypeId')?.value,
-        // offerId: this.userForm.get('offerId')?.value,
-      },
-    ];
-
     const config = {
-      params: this.adminUtilityService.makeQueryParams(defaultProps),
+      params: this.adminUtilityService.makeQueryParams([{ type: 'ROOM_TYPE' }]),
     };
     const data = {
       fromDate: this.reservationInfoControls.from.value,

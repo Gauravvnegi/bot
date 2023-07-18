@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormBuilder,
@@ -25,6 +25,7 @@ import {
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import {
   editModeStatusOptions,
+  menuItemFields,
   restaurantReservationTypes,
   statusOptions,
 } from '../../constants/reservation';
@@ -33,6 +34,7 @@ import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
 import { MenuItemList } from '../../models/forms.model';
+import { SelectedEntity } from '../../types/reservation.type';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -80,6 +82,9 @@ export class RestaurantReservationComponent implements OnInit {
   tableNumber = '';
   numberOfAdults = '';
   price = 0;
+
+  @Input() selectedEntity: SelectedEntity;
+
   $subscription = new Subscription();
 
   constructor(
@@ -104,6 +109,7 @@ export class RestaurantReservationComponent implements OnInit {
   ngOnInit(): void {
     this.initDetails();
     this.entityId = this.globalFilterService.entityId;
+    this.fields = menuItemFields;
     this.initOptions();
     this.getReservationId();
   }
@@ -118,6 +124,7 @@ export class RestaurantReservationComponent implements OnInit {
   }
 
   initOptions() {
+    // Update fields for search in select component
     this.fields[0] = {
       ...this.fields[0],
       loading: this.loadingResults,
@@ -161,9 +168,7 @@ export class RestaurantReservationComponent implements OnInit {
       this.numberOfAdults = `For ${res?.numberOfAdults} Adults`;
       this.tableNumber = `Table Number: ${res?.tableNumber}`;
     });
-    // this.reservationInfoControls.dateAndTime.valueChanges.subscribe((res) => {
-    //   this.setDateAndTime(res);
-    // });
+
     this.formSerivce.reservationDateAndTime.subscribe((res) => {
       if (res) this.setDateAndTime(res);
     });
@@ -181,6 +186,10 @@ export class RestaurantReservationComponent implements OnInit {
     );
   }
 
+  /**
+   * @function onItemsAdded To keep track of current index of form array
+   * @param index current index
+   */
   onItemsAdded(index: number): void {
     this.orderInfoControls[index]
       .get('menuItems')
@@ -198,6 +207,10 @@ export class RestaurantReservationComponent implements OnInit {
     });
   }
 
+  /**
+   * @function setDateAndTime Set date and time in summary data
+   * @param dateTime epoch date
+   */
   setDateAndTime(dateTime: number) {
     const dateAndTime = new Date(dateTime);
     const date = dateAndTime.toLocaleDateString();

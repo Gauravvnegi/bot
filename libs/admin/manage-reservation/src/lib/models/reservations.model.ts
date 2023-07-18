@@ -363,7 +363,7 @@ export class SummaryData {
     // this.roomNumbers = input?.roomNumbers;
     this.from = input.from;
     this.to = input.to;
-    this.name = input.name;
+    this.name = input?.name;
     this.location = input?.location;
     this.offerAmount = input?.offerAmount;
     this.originalPrice = input?.originalPrice;

@@ -36,49 +36,50 @@ export class FormService {
 
   mapOutletReservationData(input: ReservationForm, outletType: string) {
     const reservationData = new OutletFormData();
-
     // Reservation Info
     reservationData.eventType = input.reservationInformation?.eventType ?? '';
     reservationData.from =
-      input.reservationInformation.dateAndTime ??
-      input.reservationInformation.from;
+      input.reservationInformation?.dateAndTime ??
+      input.reservationInformation?.from;
     reservationData.to =
-      input.reservationInformation.dateAndTime ??
-      input.reservationInformation.to;
+      input.reservationInformation?.dateAndTime ??
+      input.reservationInformation?.to;
     reservationData.reservationType =
-      input.reservationInformation.reservationType;
-    reservationData.sourceName = input.reservationInformation.sourceName;
-    reservationData.source = input.reservationInformation.source;
-    reservationData.marketSegment = input.reservationInformation.marketSegment;
+      input.reservationInformation?.reservationType ?? '';
+    reservationData.sourceName = input.reservationInformation?.sourceName;
+    reservationData.source = input.reservationInformation?.source;
+    reservationData.marketSegment = input.reservationInformation?.marketSegment;
 
     // Booking/order/event info
     reservationData.adultCount =
-      input.orderInformation.numberOfAdults ??
-      input.bookingInformation.numberOfAdults;
+      input.orderInformation?.numberOfAdults ??
+      input.bookingInformation?.numberOfAdults;
     reservationData.items =
-      input.bookingInformation.spaItems.map((item) => ({
+      input.bookingInformation?.spaItems.map((item) => ({
         itemId: item.serviceName,
-        unit: item.quantity,
+        unit: item?.quantity ?? 1,
         amount: item.price,
       })) ??
-      input.orderInformation.menuItems.map((item) => ({
+      input.orderInformation?.menuItems.map((item) => ({
         itemId: item.menuItems,
-        unit: item.quantity,
+        unit: item?.quantity ?? 1,
         amount: item.price,
       })) ??
-      input.eventInformation.venueInfo.map((item) => ({
+      input.eventInformation?.venueInfo.map((item) => ({
         itemId: item.description,
-        unit: item.quantity,
+        unit: item?.quantity ?? 1,
         amount: item.price,
       }));
 
     // Payment Info
-    reservationData.paymentMethod = input.paymentMethod.paymentMethod;
-    reservationData.paymentRemark = input.paymentMethod.paymentRemark;
-    reservationData.totalPaidAmount = input.paymentMethod.totalPaidAmount;
+    reservationData.paymentMethod = input.paymentMethod?.paymentMethod ?? '';
+    reservationData.paymentRemark = input.paymentMethod?.paymentRemark ?? '';
+    reservationData.totalPaidAmount = input.paymentMethod?.totalPaidAmount ?? 0;
 
-    reservationData.guestId = input.guestInformation.guestDetails;
-    reservationData.offerId = input.offerId ?? '';
+    reservationData.guestId = input.guestInformation?.guestDetails;
+    reservationData.offerId = input?.offerId ?? '';
     reservationData.outletType = outletType;
+
+    return reservationData;
   }
 }

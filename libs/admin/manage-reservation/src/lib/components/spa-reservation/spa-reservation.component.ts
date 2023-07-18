@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormArray,
@@ -34,6 +34,7 @@ import { FormService } from '../../services/form.service';
 import { ServiceList } from '../../models/forms.model';
 import {
   LibrarySearchItem,
+  SelectedEntity,
   ServicesTypeValue,
 } from '../../types/reservation.type';
 import { ServiceListResponse } from '../../types/response.type';
@@ -49,6 +50,7 @@ export class SpaReservationComponent implements OnInit {
   spaBookingInfo: FormArray;
   fields: IteratorField[];
 
+  outletId: string;
   entityId: string;
   reservationId: string;
 
@@ -79,6 +81,8 @@ export class SpaReservationComponent implements OnInit {
   pageTitle: string;
   routes: NavRouteOptions = [];
 
+  @Input() selectedEntity: SelectedEntity;
+
   $subscription = new Subscription();
 
   constructor(
@@ -103,6 +107,7 @@ export class SpaReservationComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    this.outletId = this.selectedEntity.id;
     this.fields = spaFields;
     this.initOptions();
     this.getReservationId();
@@ -110,6 +115,7 @@ export class SpaReservationComponent implements OnInit {
   }
 
   initOptions() {
+    // Update Fields for search in select component
     this.fields[0] = {
       ...this.fields[0],
       loading: this.loadingResults,
@@ -156,6 +162,10 @@ export class SpaReservationComponent implements OnInit {
       });
   }
 
+  /**
+   * @function onItemsAdded To keep track of the current index in the form array.
+   * @param index current index
+   */
   onItemsAdded(index: number): void {
     this.spaItemsControls[index]
       .get('serviceName')
@@ -167,12 +177,15 @@ export class SpaReservationComponent implements OnInit {
           .get('price')
           .setValue(selectedService.price);
         this.formService.discountedPrice.next(selectedService.price);
+        this.getSummaryData();
       });
-    this.spaItemsControls[index].valueChanges.subscribe((res) => {
-      this.getSummaryData();
-    });
+    // this.spaItemsControls[index].valueChanges.subscribe((res) => {});
   }
 
+  /**
+   * @function setDateAndTime Set date and time in summary data
+   * @param dateTime epoch date
+   */
   setDateAndTime(dateTime: number) {
     const dateAndTime = new Date(dateTime);
     const date = dateAndTime.toLocaleDateString();
@@ -303,7 +316,7 @@ export class SpaReservationComponent implements OnInit {
     };
     this.$subscription.add(
       this.manageReservationService
-        .getSummaryData(this.entityId, data, config)
+        .getSummaryData(this.outletId, data, config)
         .subscribe(
           (res) => {
             this.summaryData = new SummaryData()?.deserialize(res);
@@ -362,7 +375,7 @@ export class SpaReservationComponent implements OnInit {
   }
 
   /**
-   * @function searchServices To search services
+   * @function searchResults To search services
    * @param text search text
    */
   searchResults(text: string) {
@@ -402,7 +415,7 @@ export class SpaReservationComponent implements OnInit {
   }
 
   /**
-   * @function loadMoreServices load more services options
+   * @function loadMoreResults load more services options
    */
   loadingMoreResults() {
     this.servicesOffSet = this.servicesOffSet + 10;

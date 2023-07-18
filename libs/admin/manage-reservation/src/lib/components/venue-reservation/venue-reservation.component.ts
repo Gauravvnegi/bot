@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
@@ -26,6 +26,7 @@ import {
   BookingInfo,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
+import { SelectedEntity } from '../../types/reservation.type';
 
 @Component({
   selector: 'hospitality-bot-venue-reservation',
@@ -59,6 +60,8 @@ export class VenueReservationComponent implements OnInit {
 
   pageTitle = 'Add Reservation';
   routes: NavRouteOptions = [];
+
+  @Input() selectedEntity: SelectedEntity;
 
   $subscription = new Subscription();
 

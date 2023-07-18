@@ -44,6 +44,7 @@ export class BookingSummaryComponent implements OnInit {
   guestInfo = '';
   discountedPrice = 0;
   bookingType = '';
+  outletId = '';
 
   $subscription = new Subscription();
 
@@ -102,17 +103,16 @@ export class BookingSummaryComponent implements OnInit {
 
   handleBooking(): void {
     this.isBooking = true;
-    let data;
+    let data: any;
     if (this.bookingType === 'HOTEL')
       data = this.manageReservationService.mapReservationData(
         this.parentFormGroup.getRawValue()
       );
-    if (this.bookingType !== 'HOTEL')
+    else
       data = this.formService.mapOutletReservationData(
         this.parentFormGroup.getRawValue(),
         this.bookingType
       );
-    debugger;
     if (this.reservationId) this.updateReservation(data);
     else this.createReservation(data);
   }
@@ -120,7 +120,7 @@ export class BookingSummaryComponent implements OnInit {
   createReservation(data): void {
     this.$subscription.add(
       this.manageReservationService
-        .createReservation(this.entityId, data, this.bookingType)
+        .createReservation(this.outletId, data, this.bookingType)
         .subscribe(
           (res: ReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
@@ -138,7 +138,7 @@ export class BookingSummaryComponent implements OnInit {
   updateReservation(data): void {
     this.$subscription.add(
       this.manageReservationService
-        .updateReservation(this.entityId, this.reservationId, data)
+        .updateReservation(this.outletId, this.reservationId, data)
         .subscribe(
           (res: ReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
@@ -231,4 +231,5 @@ type BookingSummaryInfo = {
   guestInfo: string;
   discountedPrice: string;
   bookingType: string;
+  outletId?: string;
 };

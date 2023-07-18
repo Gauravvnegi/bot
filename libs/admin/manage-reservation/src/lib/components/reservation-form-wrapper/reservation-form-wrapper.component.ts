@@ -6,6 +6,7 @@ import {
 import { FormService } from '../../services/form.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { initial } from 'lodash';
+import { SelectedEntity } from '../../types/reservation.type';
 
 @Component({
   selector: 'hospitality-bot-reservation-form-wrapper',
@@ -15,6 +16,8 @@ import { initial } from 'lodash';
 export class ReservationFormWrapperComponent implements OnInit {
   selectedOutlet: EntitySubType;
   intitalEntity: EntitySubType;
+
+  selectedEntity: SelectedEntity;
   constructor(
     private formService: FormService,
     private globalFilterService: GlobalFilterService,
@@ -24,6 +27,7 @@ export class ReservationFormWrapperComponent implements OnInit {
   ngOnInit(): void {
     this.listenForGlobalFilters();
     this.formService.getSelectedEntity().subscribe((value) => {
+      this.selectedEntity = value;
       this.selectedOutlet = value?.subType ?? this.intitalEntity;
     });
   }

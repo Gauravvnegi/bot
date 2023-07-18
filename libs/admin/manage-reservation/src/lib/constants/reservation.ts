@@ -183,3 +183,9 @@ export const restaurantReservationTypes = [
   { label: 'Dine-in', value: 'DINE_IN' },
   { label: 'Delivery', value: 'Delivery' },
 ];
+
+export const roomReservationTypes = [
+  { label: 'Draft', value: 'DRAFT' },
+  { label: 'Confirmed', value: 'CONFIRMED' },
+  { label: 'No Show', value: 'NOSHOW' },
+];

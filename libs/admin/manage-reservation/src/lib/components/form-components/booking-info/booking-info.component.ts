@@ -132,6 +132,7 @@ export class BookingInfoComponent implements OnInit {
     this.configService
       .getColorAndIconConfig(this.entityId)
       .subscribe((response) => {
+        // Config data -> OTA only for rooms, Online Order for restaurant
         this.configData = new BookingConfig().deserialize(
           response.bookingConfig
         );

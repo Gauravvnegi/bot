@@ -79,7 +79,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.entityType,
           },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ]);
       })
     );
@@ -140,7 +140,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.entityType,
           },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -184,7 +184,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.entityType,
         },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -230,7 +230,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
               order: 'DESC',
               entityType: this.entityType,
             },
-            ...this.getSelectedQuickReplyFiltersV2(),
+            ...this.getSelectedQuickReplyFilters(),
           ],
           false,
           {

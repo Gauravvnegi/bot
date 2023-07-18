@@ -95,7 +95,7 @@ export class MenuDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         ...this.globalQueries,
         {
           offset: this.first,

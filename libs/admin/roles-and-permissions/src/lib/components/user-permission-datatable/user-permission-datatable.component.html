@@ -13,7 +13,10 @@
     </hospitality-bot-modal-header>
   </div>
 
-  <div class="table-container" [ngStyle]="tabFilterItems[tabFilterIdx]?.total ? {} : { 'padding': '10px' }">
+  <div
+    class="table-container"
+    [ngStyle]="tabFilterItems[tabFilterIdx]?.total ? {} : { padding: '10px' }"
+  >
     <p-table
       #dt
       [styleClass]="tableConfig.styleClass"
@@ -96,13 +99,13 @@
           </td>
           <td>
             <div class="cell-content">
-              <hospitality-bot-toggle-dropdown
+              <hospitality-bot-status-dropdown-toggle
                 class="toggle-btn"
                 (onClick)="updateRolesStatus($event, rowData)"
-                [status]="rowData.status"
+                [state]="rowData.status"
                 [disabled]="tabFilterItems[tabFilterIdx].value === 'ALL'"
               >
-              </hospitality-bot-toggle-dropdown>
+              </hospitality-bot-status-dropdown-toggle>
             </div>
           </td>
         </tr>

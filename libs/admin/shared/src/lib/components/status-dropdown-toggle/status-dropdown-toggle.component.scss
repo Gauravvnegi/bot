@@ -18,7 +18,6 @@
   color: white;
 }
 
-
 // need to verify classes from the flag types
 :host ::ng-deep .defaultButton {
   .p-button {
@@ -83,8 +82,4 @@
   span {
     color: $primary !important;
   }
-}
-
-.wrapper{
-  display: flex;
 }

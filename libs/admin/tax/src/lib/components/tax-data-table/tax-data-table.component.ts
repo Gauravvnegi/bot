@@ -75,23 +75,25 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   initTableValue(): void {
     this.loading = true;
     this.$subscription.add(
-      this.taxService.getTaxList(this.entityId, this.getQueryConfig()).subscribe(
-        (res) => {
-          const taxList = new TaxList().deserialize(res);
+      this.taxService
+        .getTaxList(this.entityId, this.getQueryConfig())
+        .subscribe(
+          (res) => {
+            const taxList = new TaxList().deserialize(res);
 
-          this.values = taxList.records;
-          this.initFilters(
-            taxList.entityTypeCounts,
-            taxList.entityStateCounts,
-            taxList.total
-          );
-        },
-        ({ error }) => {
-          this.values = [];
-          this.loading = false;
-        },
-        this.handleFinal
-      )
+            this.values = taxList.records;
+            this.initFilters(
+              taxList.entityTypeCounts,
+              taxList.entityStateCounts,
+              taxList.total
+            );
+          },
+          ({ error }) => {
+            this.values = [];
+            this.loading = false;
+          },
+          this.handleFinal
+        )
     );
   }
 
@@ -101,7 +103,7 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           offset: this.first,

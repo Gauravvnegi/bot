@@ -113,9 +113,12 @@ export class RoomDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2({
+        ...this.getSelectedQuickReplyFilters({
           isStatusBoolean: this.selectedTab === TableValue.roomType,
-          key: this.selectedTab === TableValue.roomType ? 'roomTypeStatus' : 'roomStatus'
+          key:
+            this.selectedTab === TableValue.roomType
+              ? 'roomTypeStatus'
+              : 'roomStatus',
         }),
         {
           type: this.selectedTab,

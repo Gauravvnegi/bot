@@ -81,7 +81,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
           order: sharedConfig.defaultOrder,
           entityType: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
       ]);
     });
   }
@@ -153,7 +153,7 @@ export class AssetDatatableComponent extends BaseDatatableComponent
             order: sharedConfig.defaultOrder,
             entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+          ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ],
         {
           offset: this.first,

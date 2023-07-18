@@ -45,7 +45,6 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   tableName = BrandTableName;
   $subscription = new Subscription();
   entityId: string;
-  hotelId: string;
   loading: boolean = false;
   globalQueries = [];
   tableFG;
@@ -69,8 +68,8 @@ export class HotelDataTableComponent extends BaseDatatableComponent
 
   ngOnInit(): void {
     this.initTableValue();
-    this.hotelId = this.route.snapshot.params['entityId'];
-    this.tableName = this.hotelId ? HotelTableName : BrandTableName;
+    this.entityId = this.route.snapshot.params['entityId'];
+    this.tableName = this.entityId ? HotelTableName : BrandTableName;
   }
 
   /**

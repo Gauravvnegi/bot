@@ -5,12 +5,14 @@
   ></hospitality-bot-navigation-header>
 
   <div class="content-wrapper">
-    <hospitality-bot-bulk-update-form></hospitality-bot-bulk-update-form>
+    <hospitality-bot-bulk-update-form
+      [allRestrictions]="inventoryRestrictions"
+    ></hospitality-bot-bulk-update-form>
 
     <hospitality-bot-inventory-nested-checkbox-tree
       class="full-width"
+      controlName="roomTypes"
       [variants]="inventoryTreeList"
-      (objectChange)="objectChange()"
     ></hospitality-bot-inventory-nested-checkbox-tree>
 
     <div class="action-button w-100">

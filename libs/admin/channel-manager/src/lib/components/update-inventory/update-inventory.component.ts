@@ -3,7 +3,6 @@ import {
   AbstractControl,
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
@@ -19,13 +18,13 @@ import {
 } from '../../constants/data';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { DateOption, RoomTypes } from '../../types/channel-manager.types';
-import { UpdateInventory, getWeekendBG } from '../../models/bulk-update.models';
+import { getWeekendBG } from '../../models/bulk-update.models';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { SnackBarService } from '@hospitality-bot/shared/material';
 import { Subscription } from 'rxjs';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
-import { startWith } from 'rxjs/operators';
+import { UpdateInventory } from '../../models/channel-manager.model';
 
 @Component({
   selector: 'hospitality-bot-update-inventory',
@@ -62,25 +61,19 @@ export class UpdateInventoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
-    this.initOptions();
-    this.initForm();
-    this.listenChanges();
-    this.initEditView();
-  }
-
-  initOptions() {
     this.initDate(Date.now());
-    this.initRoomTypes();
     this.getRestrictions();
+    this.initRoomTypes();
   }
 
   initRoomTypes() {
-    this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       if (rooms.length !== 0) {
         this.roomTypes = rooms;
         this.allRoomTypes = rooms;
         this.initForm();
+      } else {
+        this.channelMangerForm.loadRoomTypes(this.entityId);
       }
     });
   }
@@ -109,29 +102,13 @@ export class UpdateInventoryComponent implements OnInit {
       roomType: [],
       date: [this.currentDate.getTime()],
     });
+    this.addRoomsControl();
+  }
 
+  addRoomsControl() {
     this.addRoomTypesControl();
-
-    this.useFormControl.date.valueChanges.subscribe((res) => {
-      this.initDate(res);
-    });
-
-    // this.useForm.valueChanges.subscribe((res) => {
-    //   console.log(res);
-    // });
-
-    this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
-      if (res.length) {
-        this.roomTypes = this.allRoomTypes.filter((item) =>
-          res.includes(item.value)
-        );
-      } else {
-        this.initRoomTypes();
-      }
-
-      this.useForm.removeControl('roomTypes');
-      this.addRoomTypesControl();
-    });
+    this.listenChanges();
+    this.getInventory();
   }
 
   /**
@@ -264,11 +241,24 @@ export class UpdateInventoryComponent implements OnInit {
   }
 
   listenChanges() {
+    this.useFormControl.date.valueChanges.subscribe((res) => {
+      this.initDate(res);
+    });
+
     this.useForm.controls['date'].valueChanges.subscribe((selectedDate) => {
       this.useForm.controls['date'].patchValue(selectedDate, {
         emitEvent: false,
       });
-      this.initEditView(selectedDate);
+      this.getInventory(selectedDate);
+    });
+
+    this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
+      this.roomTypes = this.allRoomTypes.filter((item) =>
+        res.length ? res.includes(item.value) : true
+      );
+
+      this.useForm.removeControl('roomTypes');
+      this.addRoomTypesControl();
     });
   }
 
@@ -276,13 +266,12 @@ export class UpdateInventoryComponent implements OnInit {
     return getWeekendBG(day, isOccupancy);
   }
 
-  initEditView(selectedDate = this.useForm.value.date) {
+  getInventory(selectedDate = this.useForm.value.date) {
     this.loading = true;
     this.$subscription.add(
       this.channelManagerService
         .getChannelManagerDetails(
           this.entityId,
-          'inventory',
           this.getQueryConfig(selectedDate)
         )
         .subscribe(
@@ -306,6 +295,13 @@ export class UpdateInventoryComponent implements OnInit {
         )
     );
   }
+
+  // loadDefaultData() {
+  //   this.useForm.controls['roomType'].patchValue(
+  //     [...this.allRoomTypes.map((item) => item.value)],
+  //     { emitEvent: false }
+  //   );
+  // }
 
   setRoomDetails(selectedDate?: number) {
     const { fromDate } = this.getFromAndToDateEpoch(
@@ -369,12 +365,11 @@ export class UpdateInventoryComponent implements OnInit {
         .updateChannelManager(
           { updates: data },
           this.entityId,
-          'inventory',
           this.getQueryConfig()
         )
         .subscribe(
           (res) => {
-            this.initEditView();
+            this.getInventory();
             this.snackbarService.openSnackBarAsText(
               'Inventory Update successfully',
               '',

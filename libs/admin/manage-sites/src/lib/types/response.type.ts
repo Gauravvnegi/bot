@@ -5,7 +5,7 @@ export type ManageSiteResponse = {
   id: string;
   favIcon: string;
   name: string;
-  domain: string;
+  siteUrl: string;
   themeId: string;
   nextState: ManageSiteStatus[];
   status: ManageSiteStatus;

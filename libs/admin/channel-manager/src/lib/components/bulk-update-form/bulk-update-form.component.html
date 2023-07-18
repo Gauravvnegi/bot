@@ -10,6 +10,7 @@
           placeholder: 'Select',
           alignment: 'horizontal'
         }"
+        [disabled]="true"
       >
       </hospitality-bot-select>
       <ng-container
@@ -26,7 +27,11 @@
           label="To"
           [props]="{
             placeholder: 'Enter',
-            alignment: 'horizontal'
+            alignment: 'horizontal',
+            type: 'number',
+            errorMessages: {
+              min: 'Min value should not be less than 0.'
+            }
           }"
         >
         </hospitality-bot-input>
@@ -71,6 +76,9 @@
     <hospitality-bot-room-types
       class="bulk-update__room-type"
       [controlName]="controls.roomType"
+      [props]="{
+        isAllSelected: true
+      }"
     >
     </hospitality-bot-room-types>
     <hospitality-bot-checkbox-selector

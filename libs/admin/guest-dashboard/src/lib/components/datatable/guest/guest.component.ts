@@ -253,7 +253,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
         },
         ...this.getSelectedQuickReplyFiltersV2(),
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
-        { type: 'GUEST' },
+        { type: 'GUEST', dashboard: true },
       ]),
     };
     this.$subscription.add(

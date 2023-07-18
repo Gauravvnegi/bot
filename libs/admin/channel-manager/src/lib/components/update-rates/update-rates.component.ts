@@ -431,11 +431,17 @@ export class UpdateRatesComponent implements OnInit {
           currentDate = new Date(fromDate);
         });
       }
-    }
-  }
 
-  getDynamicPriceSize() {
-    return Object.keys(this.dynamicPricing).length;
+      currentDate = new Date(fromDate);
+      this.useFormControl.dynamicPricing.controls.forEach(
+        (dynamicPrice: FormGroup) => {
+          dynamicPrice.controls.value.patchValue(
+            this.dynamicPricing[currentDate.getTime()] ?? false
+          );
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
+      );
+    }
   }
 
   getDynamicPrice(nextDay) {

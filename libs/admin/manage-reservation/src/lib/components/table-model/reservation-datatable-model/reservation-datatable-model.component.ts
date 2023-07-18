@@ -95,7 +95,7 @@ export class ReservationDataTableModelComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           offset: this.first,

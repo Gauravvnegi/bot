@@ -370,12 +370,6 @@ export class BaseDatatableComponent implements OnInit {
     return this.values ? this.first === 0 : true;
   }
 
-  isQuickReplyFilterSelected(quickReplyFilter) {
-    // const index = this.quickReplyTypes.indexOf(offer);
-    // return index >= 0;
-    return true;
-  }
-
   /**
    * @function toggleQuickReplyFilter To handle the chip click for a tab.
    */
@@ -388,27 +382,7 @@ export class BaseDatatableComponent implements OnInit {
   }): void {
     this.selectedFilterChips = selectedChips;
 
-    // REMOVE
-    // If multiple tab filter chips - remove
-    if (this.tabFilterItems[this.tabFilterIdx])
-      this.tabFilterItems[this.tabFilterIdx].chips = chips;
-
-    // If no tab to switch (singleFilter) - remove
-    if (this.filterChips) this.filterChips = chips;
-
     this.changePage(0);
-  }
-
-  // remove
-  /**
-   * @function calculateTotalChipsCount To calculate the total count of the chips.
-   * @param chips The chips array.
-   * @returns The total count of the chips.
-   */
-  calculateTotalChipsCount(chips) {
-    return chips
-      ?.filter((chip) => chip?.isSelected)
-      ?.reduce((total, chip) => total + (chip?.total ?? 0), 0);
   }
 
   onSelectedTabFilterChange(event: MatTabChangeEvent) {
@@ -493,7 +467,7 @@ export class BaseDatatableComponent implements OnInit {
   }
 
   //- different version for
-  getSelectedQuickReplyFiltersV2(config?: Partial<QuickReplyFilterConfig>) {
+  getSelectedQuickReplyFilters(config?: Partial<QuickReplyFilterConfig>) {
     const configSetting: QuickReplyFilterConfig = {
       ...quickReplyFilterDefaultConfig,
       ...(config ?? {}),
@@ -516,100 +490,6 @@ export class BaseDatatableComponent implements OnInit {
             : { [key]: chips[0] === activeStateKey },
         ];
   }
-  // -------------------------------------------
-
-  // REMOVE
-  /**
-   * @function updateTotalRecords To update the total records count.
-   * @param chips The chips array.
-   */
-  updateTotalRecords() {
-    if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
-      this.totalRecords = this.calculateTotalChipsCount(
-        this.tabFilterItems[this.tabFilterIdx]?.chips
-      );
-    } else if (this.filterChips?.length) {
-      this.totalRecords = this.calculateTotalChipsCount(this.filterChips);
-    } else {
-      this.totalRecords = this.tabFilterItems[this.tabFilterIdx]?.total;
-    }
-  }
-
-  // REMOVE
-  /**
-   * @function updateTabFilterCount To update the count for the tabs.
-   * @param countObj The object with count for all the tab.
-   * @param currentTabCount The count for current selected tab.
-   */
-  updateTabFilterCount(countObj, currentTabCount: number): void {
-    countObj = countObj ?? {};
-    this.tabFilterItems?.forEach((tab) => {
-      tab.value === defaultFilterChipValue.value
-        ? (tab.total = currentTabCount ?? 0)
-        : (tab.total = countObj[tab.value] ?? 0);
-    });
-  }
-
-  // REMOVE
-  /**
-   * @function setFilterChips To set the total count for the chips.
-   * @param chips The chips array.
-   * @param countObj The object with count for all the chip.
-   */
-  setFilterChips(chips, countObj) {
-    countObj = Object.entries(countObj).reduce((acc, [key, value]) => {
-      acc[key.toUpperCase()] = value;
-      return acc;
-    }, {});
-    chips.forEach((chip) => {
-      chip.value === defaultFilterChipValue.value
-        ? (chip.total =
-            Number(
-              Object.values(countObj).reduce((a: number, b: number) => a + b, 0)
-            ) ?? 0)
-        : (chip.total = countObj[chip.value] ?? 0);
-    });
-  }
-
-  // REMOVE
-  /**
-   * @function updateQuickReplyFilterCount To update the count for chips.
-   * @param countObj The object with count for all the chip.
-   */
-  updateQuickReplyFilterCount(countObj): void {
-    if (countObj) {
-      if (this.tabFilterItems[this.tabFilterIdx]?.chips?.length) {
-        this.setFilterChips(
-          this.tabFilterItems[this.tabFilterIdx]?.chips,
-          countObj
-        );
-      } else if (this.filterChips?.length) {
-        this.setFilterChips(this.filterChips, countObj);
-      }
-    }
-  }
-
-  // REMOVE
-  /**
-   * @function updateStatusAndCount To change the count without reloading the table
-   */
-  updateStatusAndCount = (prevStatus, currStatus) => {
-    /* for single filterChips */
-
-    if (this.filterChips) {
-      this.filterChips.forEach((item) => {
-        if (!isNaN(item.total)) {
-          if (item.value === prevStatus) {
-            item.total = item.total - 1;
-          }
-          if (item.value === currStatus) {
-            item.total = item.total + 1;
-          }
-        }
-      });
-    }
-    /* for multiple tab chip */
-  };
 
   onRowSelect = (event) => {
     this.documentActionTypes.forEach((item) => {

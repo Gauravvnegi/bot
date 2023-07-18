@@ -243,7 +243,7 @@ export class ManageSiteDataTableComponent extends BaseDatatableComponent {
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
         {
           // not using pagination as of now
           // offset: this.first,

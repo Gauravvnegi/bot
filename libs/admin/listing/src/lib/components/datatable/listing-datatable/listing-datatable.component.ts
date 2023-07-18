@@ -81,7 +81,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
             order: sharedConfig.defaultOrder,
             entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ]);
       })
     );
@@ -142,7 +142,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
             order: sharedConfig.defaultOrder,
             entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -203,7 +203,7 @@ export class ListingDatatableComponent extends BaseDatatableComponent
           order: sharedConfig.defaultOrder,
           entityType: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };

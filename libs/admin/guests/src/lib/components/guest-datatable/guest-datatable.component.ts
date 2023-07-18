@@ -92,7 +92,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         {
           type: 'GUEST',
           entityId: this.entityId,
@@ -135,7 +135,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           type: 'GUEST',
           entityType: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
       ]),
     };

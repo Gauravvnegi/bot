@@ -192,18 +192,7 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
       .updateRolesStatus(userData.parentId, data)
       .subscribe(
         (_) => {
-          const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-          this.updateStatusAndCount(
-            statusValue(userData.status),
-            statusValue(status)
-          );
-          this.allUsersValues.find(
-            (item) => item.id === userData.id
-          ).status = status;
-          this.manageUsersValues.find(
-            (item) => item.id === userData.id
-          ).status = status;
-
+          this.loadInitialData();
           this.snackbarService.openSnackBarWithTranslate(
             {
               translateKey: `messages.SUCCESS.STATUS_UPDATED`,

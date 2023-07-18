@@ -76,7 +76,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
           order: sharedConfig.defaultOrder,
           entityType: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
       ]);
     });
   }
@@ -261,7 +261,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
             order: sharedConfig.defaultOrder,
             entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ],
         {
           offset: this.first,
@@ -318,7 +318,7 @@ export class CampaignDatatableComponent extends BaseDatatableComponent
           order: sharedConfig.defaultOrder,
           entityType: this.selectedTab,
         },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };

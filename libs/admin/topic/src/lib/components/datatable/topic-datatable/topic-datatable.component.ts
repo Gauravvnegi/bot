@@ -79,7 +79,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
         {
           order: sharedConfig.defaultOrder,
         },
-        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
       ]);
     });
   }
@@ -205,7 +205,7 @@ export class TopicDatatableComponent extends BaseDatatableComponent
           {
             order: sharedConfig.defaultOrder,
           },
-          ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+          ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ],
         {
           offset: this.first,

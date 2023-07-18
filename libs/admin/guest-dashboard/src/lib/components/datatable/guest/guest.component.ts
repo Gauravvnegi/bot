@@ -91,7 +91,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ]);
       })
     );
@@ -177,7 +177,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ],
         {
           offset: this.first,
@@ -251,7 +251,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
         { type: 'GUEST', dashboard: true },
       ]),
@@ -298,7 +298,7 @@ export class GuestDatatableComponent extends BaseDatatableComponent
                 order: 'DESC',
                 entityType: this.tabFilterItems[this.tabFilterIdx].value,
               },
-              ...this.getSelectedQuickReplyFiltersV2(),
+              ...this.getSelectedQuickReplyFilters(),
             ],
             false
           );

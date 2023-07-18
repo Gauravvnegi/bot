@@ -166,7 +166,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         this.loadInitialData([
           ...this.globalQueries,
           { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ]);
       })
     );
@@ -252,7 +252,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         this.loadInitialData([
           ...this.globalQueries,
           { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ]);
       },
       ({ error }) => {}
@@ -294,7 +294,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
           order: sharedConfig.defaultOrder,
           feedbackType: this.feedbackType,
         },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
       ]),
     };
 
@@ -323,7 +323,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
             [
               ...this.globalQueries,
               { order: sharedConfig.defaultOrder },
-              ...this.getSelectedQuickReplyFiltersV2(),
+              ...this.getSelectedQuickReplyFilters(),
             ],
             false
           );
@@ -352,7 +352,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
       [
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
       ],
       true
     );
@@ -370,7 +370,7 @@ export class FeedbackDatatableModalComponent extends FeedbackDatatableComponent
         feedbackType: this.feedbackType,
         entityIds: this.setEntityId(),
       },
-      ...this.getSelectedQuickReplyFiltersV2(),
+      ...this.getSelectedQuickReplyFilters(),
       ...this.selectedRows.map((item) => ({ ids: item.id })),
     ];
     if (

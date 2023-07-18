@@ -141,7 +141,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
             order: 'DESC',
             entityType: this.tabFilterItems[this.tabFilterIdx].value,
           },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ],
         {
           offset: this.first,
@@ -174,7 +174,7 @@ export class GuestDatatableModalComponent extends GuestDatatableComponent
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
           guestFilter: this.guestFilter,
         },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
       ]),
     };

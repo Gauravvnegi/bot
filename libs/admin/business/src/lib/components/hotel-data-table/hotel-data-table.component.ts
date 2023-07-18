@@ -106,7 +106,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
   getQueryConfig() {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           offset: this.first,
@@ -179,12 +179,7 @@ export class HotelDataTableComponent extends BaseDatatableComponent
         .updateHotel(rowData.id, { status: status })
         .subscribe(
           (res) => {
-            const statusValue = (val: boolean) => (val ? 'ACTIVE' : 'INACTIVE');
-            this.updateStatusAndCount(
-              statusValue(rowData.status),
-              statusValue(status)
-            );
-            this.values.find((item) => item.id === rowData.id).status = status;
+            this.loadInitialData();
             this.snackbarService.openSnackBarAsText(
               'Status changes successfully',
               '',

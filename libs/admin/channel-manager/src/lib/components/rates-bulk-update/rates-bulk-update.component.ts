@@ -1,20 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RoomsData } from '../constants/bulkupdate-response';
-import { NavRouteOptions } from '@hospitality-bot/admin/shared';
-import { BulkUpdateRequest, RoomTypes } from '../../types/bulk-update.types';
 import {
-  CheckBoxTreeFactory,
-  FormFactory,
-} from '../../models/bulk-update.models';
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  AdminUtilityService,
+  NavRouteOptions,
+  QueryConfig,
+} from '@hospitality-bot/admin/shared';
+import { CheckBoxTreeFactory } from '../../models/bulk-update.models';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
+import { Subscription } from 'rxjs';
+import { UpdateRates } from '../../models/channel-manager.model';
+import { ChannelManagerService } from '../../services/channel-manager.service';
+import { SnackBarService } from '@hospitality-bot/shared/material';
+import { Router } from '@angular/router';
+import { ratesRestrictions } from '../../constants/data';
 @Component({
   selector: 'hospitality-bot-rates-bulk-update',
   templateUrl: './rates-bulk-update.component.html',
   styleUrls: ['./rates-bulk-update.component.scss'],
 })
 export class RatesBulkUpdateComponent implements OnInit {
+  readonly ratesRestrictions = ratesRestrictions;
   entityId: string;
   roomsData: any;
   useForm: FormGroup;
@@ -28,29 +39,36 @@ export class RatesBulkUpdateComponent implements OnInit {
   ];
   startMinDate = new Date();
   endMinDate = new Date();
-  isFormValid = false;
-
+  loading = false;
+  $subscription = new Subscription();
   roomTypes = [];
 
   constructor(
     private fb: FormBuilder,
     private globalFilter: GlobalFilterService,
-    private formService: ChannelManagerFormService
+    private formService: ChannelManagerFormService,
+    private adminUtilityService: AdminUtilityService,
+    private channelManagerService: ChannelManagerService,
+    private snackbarService: SnackBarService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const seventhDate = new Date();
+    seventhDate.setHours(0, 0, 0, 0);
     seventhDate.setDate(today.getDate() + 7);
 
     this.useForm = this.fb.group({
-      update: ['availability'], // RATE, AVAILABILITY,
-      updateValue: ['', [Validators.required]],
+      update: ['rates'], // RATE, AVAILABILITY,
+      updateValue: ['', [Validators.required, Validators.min(0)]],
       fromDate: [today.getTime(), [Validators.required]],
       toDate: [seventhDate.getTime(), [Validators.required]],
       roomType: [[]],
-      selectedDays: [[], [Validators.required]],
+      roomTypes: this.fb.array([], [Validators.required]),
+      selectedDays: [[new FormControl()], [Validators.required]],
     });
     this.listenChanges();
     this.loadRooms();
@@ -59,16 +77,13 @@ export class RatesBulkUpdateComponent implements OnInit {
   loadRooms() {
     this.formService.roomDetails.subscribe((rooms) => {
       this.roomTypes = rooms;
-      !this.roomTypes.length && this.formService.loadRoomTypes(this.entityId);
-      this.loadTree({ roomType: '' });
+      this.loadTree({ roomType: [] });
     });
   }
 
   listenChanges() {
-    this.useForm.valueChanges.subscribe((value) => {
-      this.isFormValid = this.useForm.valid;
-      this.roomTypes;
-      this.loadTree(value);
+    this.useForm.controls['roomType'].valueChanges.subscribe((value) => {
+      this.loadTree(this.useForm.getRawValue());
     });
   }
 
@@ -80,17 +95,62 @@ export class RatesBulkUpdateComponent implements OnInit {
     );
   }
 
-  onChangeNesting() {
-    console.log('***Object List***', this.roomsData);
+  get isFormValid() {
+    return this.useForm.valid;
   }
 
   onSubmit() {
-    console.log('*** Form data', this.useForm.getRawValue());
+    if (!this.isFormValid) {
+      this.snackbarService.openSnackBarAsText(
+        'Please Fix Form before submit',
+        '',
+        { panelClass: 'error' }
+      );
+      return;
+    }
 
-    const data: BulkUpdateRequest[] = FormFactory.makeRatesRequestData(
-      this.useForm.getRawValue()
+    this.loading = true;
+    const data = UpdateRates.buildBulkUpdateRequest(this.useForm.getRawValue());
+
+    this.$subscription.add(
+      this.channelManagerService
+        .updateChannelManager(
+          { updates: data },
+          this.entityId,
+          this.getQueryConfig()
+        )
+        .subscribe(
+          (res) => {
+            this.snackbarService.openSnackBarAsText(
+              'Bulk Rates Updated successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.router.navigate([this.navRoutes[0].link]);
+            this.loading = false;
+          },
+          (error) => {
+            this.loading = false;
+          },
+          this.handleFinal
+        )
     );
+  }
 
-    console.log('*** Ready For Request data', data);
+  getQueryConfig(): QueryConfig {
+    const config = {
+      params: this.adminUtilityService.makeQueryParams([
+        {
+          type: 'ROOM_TYPE',
+          limit: 5,
+          inventoryUpdateType: 'RATES',
+        },
+      ]),
+    };
+    return config;
+  }
+
+  handleFinal() {
+    this.loading = false;
   }
 }

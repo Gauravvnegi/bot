@@ -343,6 +343,11 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       );
   }
 
+  /**
+   * @function onPrintQrCode
+   * @description opens the qr code modal
+   * @returns void
+   */
   onPrintQrCode() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '46vw';
@@ -394,6 +399,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       { panelClass: 'success' }
     );
     switch (feature) {
+      //to navigate back to create menu page
       case 'menu':
         this.router.navigate(
           [`${outletId}/${outletBusinessRoutes.menu.route}`],
@@ -402,11 +408,13 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
           }
         );
         break;
+      //to navigate to create service page
       case 'service':
         this.router.navigate([`pages/library/services/create-service`], {
           relativeTo: this.route,
         });
         break;
+      //to navigate  to create import service page
       case 'import-services':
         this.router.navigate(
           [`${outletId}/${outletBusinessRoutes.importService.route}`],
@@ -415,18 +423,20 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
           }
         );
         break;
+      //to navigate to create food package page
       case 'food-package':
         this.router.navigate([outletBusinessRoutes.foodPackage.route], {
           relativeTo: this.route,
         });
         break;
-
+      //to navigate back to edit brand page
       case 'brand':
         this.router.navigate(
           [`/pages/settings/business-info/brand/${this.brandId}`],
           { relativeTo: this.route }
         );
         break;
+      //to navigate back to edit hotel page
       case 'hotel':
         this.router.navigate(
           [

@@ -13,7 +13,7 @@ export class ImportService extends ApiService {
     config
   ): Observable<any> {
     return this.get(`/api/v1/${endPoint}${config?.params ?? ''}`, {
-      headers: { 'hotel-id': entityId },
+      headers: { 'entity-id': entityId },
     });
   }
 }

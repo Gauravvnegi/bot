@@ -74,7 +74,7 @@ export class AddAgentComponent implements OnInit {
   ngOnInit(): void {
     this.entityId = this.globalService.entityId;
     this.initAgentForm();
-    this.initDefaultForm();
+    this.formService.restoreForm(this.agentForm, 'agent');
   }
 
   initAgentForm() {
@@ -92,12 +92,6 @@ export class AddAgentComponent implements OnInit {
     });
     this.listenChanges();
     if (this.agentId) this.getAgentById();
-  }
-
-  initDefaultForm() {
-    this.formService.agentForm &&
-      this.formService.restoreForm(this.agentForm, 'agent');
-    this.formService.reset();
   }
 
   listenChanges() {

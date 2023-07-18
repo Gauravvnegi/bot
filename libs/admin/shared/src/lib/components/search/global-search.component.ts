@@ -1,15 +1,14 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { ControlContainer, FormGroup } from '@angular/forms';
+import { ControlContainer } from '@angular/forms';
 import { FormComponent } from '../form-component/form.components';
-import { catchError, debounceTime } from 'rxjs/operators';
-import { empty } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-global-search',
   templateUrl: './global-search.component.html',
   styleUrls: [
-    './global-search.component.scss',
     '../../../../../../admin/request/src/lib/components/search/search.component.scss',
+    './global-search.component.scss',
   ],
 })
 export class GlobalSearchComponent extends FormComponent {

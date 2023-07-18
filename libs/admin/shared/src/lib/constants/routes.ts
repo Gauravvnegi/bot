@@ -15,6 +15,7 @@ export const routes = {
   // Front Desk
   [ModuleNames.FRONT_DESK]: 'efrontdesk',
   [ModuleNames.FRONT_DESK_DASHBOARD]: 'efrontdesk/dashboard',
+  [ModuleNames.HOUSE_GUEST]: 'efrontdesk/house-guest',
   [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/request-analytics',
   [ModuleNames.REQUEST]: 'efrontdesk/request',
   [ModuleNames.ADD_RESERVATION]: 'efrontdesk/booking',

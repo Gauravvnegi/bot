@@ -133,12 +133,12 @@
         label="Text Button"
         variant="text"
       ></hospitality-bot-button>
-      <hospitality-bot-toggle-dropdown
-        [listItem]="listItem"
+      <hospitality-bot-status-dropdown-toggle
+        [nextStates]="listItem"
         (onClick)="handleStatus($event)"
-        [status]="currentStatus"
+        [state]="currentStatus"
       >
-      </hospitality-bot-toggle-dropdown>
+      </hospitality-bot-status-dropdown-toggle>
     </div>
   </div>
 </div>

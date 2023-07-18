@@ -66,6 +66,7 @@ export type EntityResponse = {
   cuisinesType?: string[];
   maximumOccupancy?: number;
   propertyCategory?: PropertyCategory;
+  absoluteRoute: string;
 };
 
 const entities: EntityResponse[] = [

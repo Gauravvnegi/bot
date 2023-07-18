@@ -252,7 +252,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
         {
           offset: this.first,
           limit: this.rowsPerPage,
@@ -377,7 +377,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
         ...this.globalQueries,
-        ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         {
           type:
             this.selectedEntity.subType === EntitySubType.ROOM_TYPE

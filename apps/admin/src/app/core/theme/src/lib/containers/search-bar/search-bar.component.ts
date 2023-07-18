@@ -94,7 +94,6 @@ export class SearchBarComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (response) => {
-          debugger;
           if (response === 'minThreeChar') {
             this.searchDropdownVisible = false;
             this.searchValue = false;

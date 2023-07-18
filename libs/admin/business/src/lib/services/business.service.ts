@@ -67,7 +67,7 @@ export class BusinessService extends ApiService {
    */
 
   updateBrand(brandId: string, data: any): Observable<BrandResponse> {
-    return this.patch(`/api/v1/brand/${brandId}`, data);
+    return this.patch(`/api/v1/entity/${brandId}?type=BRAND`, data);
   }
 
   /**

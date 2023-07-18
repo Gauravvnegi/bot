@@ -96,7 +96,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
             order: sharedConfig.defaultOrder,
             entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ]);
       })
     );
@@ -193,7 +193,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
             order: sharedConfig.defaultOrder,
             entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -236,7 +236,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
           order: sharedConfig.defaultOrder,
           entityType: this.tabFilterItems[this.tabFilterIdx].value,
         },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
         ...this.selectedRows.map((item) => ({ ids: item.booking.bookingId })),
       ]),
     };
@@ -299,7 +299,7 @@ export class ReservationDatatableComponent extends BaseDatatableComponent
                 order: sharedConfig.defaultOrder,
                 entityType: this.tabFilterItems[this.tabFilterIdx].value,
               },
-              ...this.getSelectedQuickReplyFiltersV2(),
+              ...this.getSelectedQuickReplyFilters(),
             ],
             false,
             {

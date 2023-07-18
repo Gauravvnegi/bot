@@ -225,7 +225,7 @@ export class AddAgentComponent implements OnInit {
   getQueryConfig(type = 'AGENT'): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        // ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        // ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         {
           type: type,
           // offset: this.first,

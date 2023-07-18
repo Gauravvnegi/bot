@@ -121,9 +121,11 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
         //     this.values = outletList.restaurant;
         //     break;
         // }
-        this.updateTabFilterCount(res.entityTypeCounts, res.total);
-        this.updateQuickReplyFilterCount(res.entityStateCounts);
-        this.updateTotalRecords();
+        this.initFilters(
+          res.entityTypeCounts,
+          res.entityStateCounts,
+          res.total
+        );
       },
       () => {
         this.values = [];
@@ -154,8 +156,7 @@ export class AllOutletsDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.outletService.updateOutletItem(rowData.id, status).subscribe(
         () => {
-          this.updateStatusAndCount(rowData.status, status);
-
+          this.loadInitialData();
           this.snackbarService.openSnackBarAsText(
             'Status changes successfully',
             '',

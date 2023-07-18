@@ -115,7 +115,7 @@ export class PackageDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ...[...this.globalQueries, { order: 'DESC' }],
         {
           type: LibraryItem.package,

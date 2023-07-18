@@ -67,9 +67,11 @@ export class CreateMenuComponent extends OutletBaseComponent implements OnInit {
 
   initFormData() {
     this.$subscription.add(
-      this.outletService.getMenu(this.menuId).subscribe((res) => {
-        this.useForm.patchValue(res);
-      }, this.handleError)
+      this.outletService
+        .getMenu(this.menuId, this.outletId)
+        .subscribe((res) => {
+          this.useForm.patchValue(res);
+        }, this.handleError)
     );
   }
 

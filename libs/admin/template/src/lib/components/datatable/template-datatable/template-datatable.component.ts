@@ -103,7 +103,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
               order: sharedConfig.defaultOrder,
               entityType: this.selectedTab,
             },
-            ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+            ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
           ]);
         })
     );
@@ -221,7 +221,7 @@ export class TemplateDatatableComponent extends BaseDatatableComponent
             order: sharedConfig.defaultOrder,
             entityType: this.selectedTab,
           },
-          ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+          ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         ],
         {
           offset: this.first,

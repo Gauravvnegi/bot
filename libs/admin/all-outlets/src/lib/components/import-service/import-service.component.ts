@@ -35,6 +35,7 @@ export class ImportServiceComponent extends OutletBaseComponent
       ...serviceData.serviceIds,
       ...this.outletFormService.OutletFormData.serviceIds,
     ];
+    this.outletFormService.initOutletFormData(serviceData, true);
     //pass active service ids + selected service ids in import service so that selected services can be marked as active
     this.outletService
       .updateOutlet(this.outletId, serviceData)

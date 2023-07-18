@@ -17,7 +17,7 @@ export class ManageSite {
     this.id = input.id;
     this.thumbnail = input.favIcon;
     this.siteName = input.name;
-    this.url = input.domain;
+    this.url = input.siteUrl;
     this.nextState = input.nextState;
     this.status = input.status;
     this.nextState = [...input.nextState, input.status];

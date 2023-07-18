@@ -10,7 +10,7 @@ export class SearchService extends ApiService {
 
   search(searchKey, entityId): Observable<any> {
     if (searchKey) {
-      return this.get(`/api/v1/search?key=${searchKey}&hotel_id=${entityId}`);
+      return this.get(`/api/v1/search?key=${searchKey}&entity-id=${entityId}`);
     } else {
       this.cartItems.next({
         reservations: [],

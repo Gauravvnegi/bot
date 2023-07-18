@@ -4,17 +4,8 @@ import { FormComponent } from 'libs/admin/shared/src/lib/components/form-compone
 import { ControlContainer } from '@angular/forms';
 import { ChannelManagerFormService } from '../../services/channel-manager-form.service';
 import { Subscription } from 'rxjs';
-import {
-  LibrarySearchItem,
-  LibraryService,
-} from '@hospitality-bot/admin/library';
-import { RoomService } from 'libs/admin/room/src/lib/services/room.service';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import {
-  RoomType,
-  RoomTypeList,
-} from 'libs/admin/room/src/lib/models/rooms-data-table.model';
 import { RoomTypes } from '../../types/channel-manager.types';
+import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 
 @Component({
   selector: 'hospitality-bot-room-types',
@@ -24,6 +15,7 @@ import { RoomTypes } from '../../types/channel-manager.types';
 export class RoomTypesComponent extends FormComponent {
   entityId = '';
   roomTypes: Option[] = [];
+  @Input() isAllSelected = false;
 
   $subscription = new Subscription();
   /* roomTypes options variable */
@@ -50,9 +42,19 @@ export class RoomTypesComponent extends FormComponent {
   }
 
   initRoomTypes() {
-    this.channelMangerForm.loadRoomTypes(this.entityId);
+    // this.channelMangerForm.loadRoomTypes(this.entityId);
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
       this.roomTypes = rooms;
+      this.isAllSelected && this.defaultSelect();
     });
+  }
+
+  defaultSelect() {
+    this.controlContainer.control.patchValue(
+      {
+        [this.controlName]: this.roomTypes.map((item) => item.value),
+      },
+      { emitEvent: false }
+    );
   }
 }

@@ -6,6 +6,7 @@ import {
   InventoryCostRemainingResponse,
   InventoryRemainingResponse,
   OccupancyResponse,
+  RatePlanRes,
   RoomListResponse,
   RoomResponse,
   RoomTypeListResponse,
@@ -99,6 +100,7 @@ export class RoomType {
   price: number;
   currency: string;
   nextStates: string[];
+  ratePlans?: RatePlanRes[];
 
   deserialize(input: RoomTypeResponse) {
     this.id = input.id ?? '';
@@ -114,7 +116,7 @@ export class RoomType {
     // mapping discounted price
     this.price = input.discountedPrice ?? input.originalPrice;
     this.currency = input.currency ?? '';
-
+    this.ratePlans = input.ratePlans;
     return this;
   }
 }

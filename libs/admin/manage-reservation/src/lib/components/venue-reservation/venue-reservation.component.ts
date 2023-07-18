@@ -254,9 +254,10 @@ export class VenueReservationComponent implements OnInit {
     const config = {
       params: this.adminUtilityService.makeQueryParams(defaultProps),
     };
+    const data = {};
     if (this.userForm.get('roomInformation.roomTypeId')?.value) {
       this.$subscription.add(
-        this.manageReservationService.getSummaryData(config).subscribe(
+        this.manageReservationService.getSummaryData(this.entityId, data, config).subscribe(
           (res) => {
             this.summaryData = new SummaryData()?.deserialize(res);
             this.userForm

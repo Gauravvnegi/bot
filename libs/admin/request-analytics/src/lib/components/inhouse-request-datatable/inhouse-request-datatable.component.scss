@@ -122,10 +122,14 @@ td {
   @include tableCellPadding(0.3em);
 }
 
-.table-container{
+.table-container {
   overflow-y: auto;
 }
 
 .email {
   color: #3e6ded;
+}
+//reset table header sticky position
+:host ::ng-deep .p-datatable .p-datatable-thead {
+  top: 0;
 }

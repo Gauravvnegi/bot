@@ -212,8 +212,8 @@ export class UserPermissionDatatableComponent extends BaseDatatableComponent
 
   openUserDetails(rowData) {
     this.onModalClose.emit({
-      userId: rowData.userId,
-      isView: rowData.parentId !== this.userService.getLoggedInUserId(),
+      userId: rowData?.userId,
+      isView: rowData?.parentId !== this.userService.getLoggedInUserId(),
     });
   }
 

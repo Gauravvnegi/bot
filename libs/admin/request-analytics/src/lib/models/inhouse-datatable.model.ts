@@ -253,7 +253,6 @@ export class StayDetails {
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'status', get(input, ['status']))
     );
-
     this.statusMessage = new Status().deserialize(input?.statusMessage);
 
     return this;

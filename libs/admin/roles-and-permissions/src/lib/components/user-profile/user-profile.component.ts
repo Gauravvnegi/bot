@@ -449,13 +449,13 @@ export class UserProfileComponent implements OnInit {
       this.totalTeamMember === 0 ? 0 : 1;
 
     tableCompRef.componentInstance.onModalClose.subscribe(
-      ({ userId, isView }) => {
+      (res: { userId?: string; isView?: boolean }) => {
         tableCompRef.close();
-        if (userId) {
+        if (res?.userId) {
           this.router.navigate([
-            navRoute[isView ? 'viewUser' : 'editUser'].link.replace(
+            navRoute[res?.isView ? 'viewUser' : 'editUser'].link.replace(
               ':userId',
-              userId
+              res.userId
             ),
           ]);
         }

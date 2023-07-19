@@ -113,6 +113,10 @@
           </td>
           <td>
             <a
+              *ngIf="
+                rowData?.guestDetails?.primaryGuest?.phoneNumber;
+                else emptyCell
+              "
               href="tel:{{ rowData?.guestDetails?.primaryGuest?.phoneNumber }}"
             >
               <div class="email primary-text">
@@ -121,7 +125,10 @@
                 }}
               </div>
             </a>
-            <p class="email primary-text">
+            <p
+              class="email primary-text"
+              *ngIf="rowData?.guestDetails?.primaryGuest?.email; else emptyCell"
+            >
               {{ rowData?.guestDetails?.primaryGuest?.email }}
             </p>
           </td>
@@ -159,7 +166,6 @@
               <mat-option
                 [value]="item.value"
                 *ngFor="let item of optionLabels"
-                [disabled]="item.value === 'TIMEOUT'"
                 >{{ item.label }}</mat-option
               >
             </mat-select>
@@ -183,8 +189,13 @@
   </div>
 </div>
 
+<ng-template #emptyCell>
+  <div class="emptyCell">&mdash;</div>
+</ng-template>
+
 <ng-template #emptyTable>
   <hospitality-bot-empty-table
+    [loading]="loading"
     [content]="{
       description: 'No pending requests from in-house guests.',
       imageSrc: 'assets/images/empty-table-in-house.png'

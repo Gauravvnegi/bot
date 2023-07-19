@@ -20,6 +20,9 @@ import { AnalyticsService } from '../../services/analytics.service';
 import * as FileSaver from 'file-saver';
 import { analytics } from '@hospitality-bot/admin/shared';
 import { ChipType, inhouseStatus } from '../../constant/datatable';
+import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
+import { RequestStatus } from 'libs/admin/request/src/lib/constants/request';
 
 @Component({
   selector: 'hospitality-bot-pre-arrival-datatable',
@@ -32,8 +35,8 @@ import { ChipType, inhouseStatus } from '../../constant/datatable';
 export class PreArrivalDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   isAllTabFilterRequired = true;
-  @Input() entityType = 'Inhouse';
-  @Input() optionLabels = [];
+  @Input() entityType = 'pre-arrival';
+  optionLabels = [];
   @Input() packageId: string;
   @Output() onModalClose = new EventEmitter();
   globalQueries;
@@ -45,7 +48,8 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private analyticsService: AnalyticsService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    private _requestService: RequestService
   ) {
     super(fb, tabFilterService);
   }
@@ -88,6 +92,25 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  reloadData() {
+    this.loadInitialData(
+      [
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          entityType: this.entityType,
+          packageId: this.packageId,
+        },
+        ...this.getSelectedQuickReplyFilters(),
+      ],
+      false,
+      {
+        offset: this.tempFirst,
+        limit: this.tempRowsPerPage ? this.tempRowsPerPage : this.rowsPerPage,
+      }
+    );
+  }
+
   loadInitialData(
     queries = [],
     loading = true,
@@ -110,6 +133,15 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   setRecords(data): void {
     const preArrivalData = new InhouseTable().deserialize(data);
     this.values = preArrivalData.records;
+    if (!this.optionLabels.length) {
+      Object.keys(preArrivalData.entityStateCounts).forEach((item) => {
+        if (item !== RequestStatus.TIMEOUT)
+          this.optionLabels.push({
+            label: convertToTitleCase(item),
+            value: item,
+          });
+      });
+    }
     this.initFilters(
       preArrivalData.entityTypeCounts,
       preArrivalData.entityStateCounts,
@@ -210,40 +242,42 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   }
 
   handleStatusChange(data, event) {
+    debugger;
+    // if (event.value !== 'Closed') return;
+    this.loading = true;
     const requestData = {
+      jobID: data.id,
+      roomNo: data.rooms[0]?.roomNumber,
+      lastName: data.guestDetails.primaryGuest.lastName,
       systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
-      action: event.value,
     };
-    this.analyticsService
-      .updatePreArrivalRequest(data.id, requestData)
-      .subscribe((response) => {
-        this.loadInitialData(
-          [
-            ...this.globalQueries,
-            {
-              order: 'DESC',
-              entityType: this.entityType,
-              packageId: this.packageId,
-            },
-            ...this.getSelectedQuickReplyFilters(),
-          ],
-          false,
-          {
-            offset: this.tempFirst,
-            limit: this.tempRowsPerPage
-              ? this.tempRowsPerPage
-              : this.rowsPerPage,
-          }
-        );
-        this.snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
-            priorityMessage: 'Request status updated',
-          },
+
+    const config = {
+      queryObj: this._adminUtilityService.makeQueryParams([
+        {
+          cmsUserType: 'Admin',
+          entityId: this.entityId,
+          actionType: event.value,
+          entityType: this.entityType,
+        },
+      ]),
+    };
+    this._requestService.updateJobRequestStatus(config, requestData).subscribe(
+      (response) => {
+        this.snackbarService.openSnackBarAsText(
+          `Job: ${
+            data.jobNo
+          } status updated successfully to ${convertToTitleCase(event.value)}.`,
           '',
           { panelClass: 'success' }
         );
-      });
+
+        this.reloadData();
+      },
+      (err) => {
+        this.reloadData();
+      }
+    );
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {

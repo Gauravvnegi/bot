@@ -151,19 +151,13 @@
             <mat-select
               class="form-elements"
               placeholder=""
-              [value]="rowData.action"
-              [disabled]="
-                rowData.action === 'Closed' ||
-                rowData.action === 'Timeout' ||
-                rowData.action === 'Reject'
-              "
+              [value]="rowData?.action"
               (selectionChange)="handleStatusChange(rowData, $event)"
             >
               <mat-option
-                [value]="item"
+                [value]="item.value"
                 *ngFor="let item of optionLabels"
-                [disabled]="item === 'Timeout'"
-                >{{ item }}</mat-option
+                >{{ item.label }}</mat-option
               >
             </mat-select>
           </td>

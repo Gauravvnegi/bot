@@ -22,6 +22,7 @@ import { Observable, Subscription } from 'rxjs';
 import { inhouseStatus } from '../../constant/datatable';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
+import { DateService } from '@hospitality-bot/shared/utils';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-datatable',
@@ -103,6 +104,9 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         },
         ({ error }) => {
           this.values = [];
+          this.loading = false;
+        },
+        () => {
           this.loading = false;
         }
       )
@@ -247,6 +251,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
       jobID: data.id,
       roomNo: data.rooms[0].roomNumber,
       lastName: data.guestDetails.primaryGuest.lastName,
+      systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
     };
 
     const config = {
@@ -255,7 +260,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           cmsUserType: 'Admin',
           entityId: this.entityId,
           actionType: event.value,
-          entityType: this.entityType
+          entityType: this.entityType,
         },
       ]),
     };

@@ -228,7 +228,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.entityType,
         },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
       ],
       false,
       {

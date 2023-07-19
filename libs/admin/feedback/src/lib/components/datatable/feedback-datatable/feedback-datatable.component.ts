@@ -57,8 +57,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   @ViewChild('cardComponent') cardComponent: MainComponent;
   @Input() globalFeedbackFilterType: string;
   @Input() tableName = feedback.table.name;
-  @Input() tabFilterIdx = 0;
-  @Input() tabFilterItems = [];
+  // @Input() tabFilterIdx = 0;
+  // @Input() tabFilterItems = [];
   globalFeedbackConfig = feedback;
   outlets = [];
   actionButtons = true;
@@ -79,6 +79,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   globalQueries = [];
   $subscription = new Subscription();
   userPermissions: Departmentpermission[];
+  feedbackType = '';
   navRoutes = [{ label: 'Feedback', link: './' }];
   constructor(
     public fb: FormBuilder,
@@ -107,6 +108,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       type: '',
       defaultLabel: 'Export Summary',
     });
+    this.selectedTab = 'ALL';
   }
 
   registerListeners(): void {
@@ -214,9 +216,9 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   listenForFeedbackTypeChanged(): void {
     this.$subscription.add(
-      this.tableService.$feedbackType.subscribe((response) =>
-        this.setTabFilters(response)
-      )
+      this.tableService.$feedbackType.subscribe((response) => {
+        this.setTabFilters(response);
+      })
     );
   }
 
@@ -228,6 +230,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     if (feedbackType === feedback.types.transactional)
       this.tabFilterItems = feedback.tabFilterItems.datatable.transactional;
     else this.tabFilterItems = feedback.tabFilterItems.datatable.stay;
+    this.feedbackType = feedbackType;
     this.setTableCols();
     this.getUserPermission(this.tabFilterItems[this.tabFilterIdx].value);
   }
@@ -237,8 +240,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
    */
   setTableCols(): void {
     this.cols =
-      this.tabFilterItems[this.tabFilterIdx]?.value ===
-      this.globalFeedbackConfig.types.stay
+      this.feedbackType === this.globalFeedbackConfig.types.stay
         ? this.globalFeedbackConfig.cols.feedbackDatatable.stay
         : this.globalFeedbackConfig.cols.feedbackDatatable.transactional;
   }
@@ -298,7 +300,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       queryObj: this._adminUtilityService.makeQueryParams([
         ...queries,
         {
-          feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+          feedbackType: this.feedbackType,
+          entityType: this.selectedTab,
           entityIds: this.setEntityId(),
         },
       ]),
@@ -416,19 +419,6 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
   }
 
   /**
-   * @function onSelectedTabFilterChange To handle tab filter selection.
-   * @param event The material tab change event.
-   */
-  onSelectedTabFilterChange(event: MatTabChangeEvent): void {
-    this.tabFilterIdx = event.index;
-    if (this.tableFG?.get('tableType').value !== 'card') {
-      this.setTableCols();
-      this.values = [];
-      this.loadData();
-    }
-  }
-
-  /**
    * @function onFilterTypeTextChange To handle filter field text change.
    * @param value The value for filter field.
    * @param field The field for which table is to be filtered.
@@ -462,7 +452,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       ...this.globalQueries,
       {
         order: sharedConfig.defaultOrder,
-        feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+        feedbackType: this.feedbackType,
+        entityType: this.selectedTab,
         entityIds: this.setEntityId(),
       },
       ...this.getSelectedQuickReplyFilters(),
@@ -513,7 +504,8 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         ...this.globalQueries,
         {
           order: sharedConfig.defaultOrder,
-          feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+          feedbackType: this.feedbackType,
+          entityType: this.selectedTab,
         },
         ...this.getSelectedQuickReplyFilters(),
       ]),
@@ -618,7 +610,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
     dialogConfig.data = {
       feedback: rowData,
       colorMap: this.colorMap,
-      feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
+      feedbackType: this.feedbackType,
       isModal: true,
       globalQueries: this.globalQueries,
     };

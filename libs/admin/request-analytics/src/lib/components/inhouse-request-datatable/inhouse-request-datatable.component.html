@@ -154,13 +154,7 @@
               class="form-elements"
               placeholder=""
               [value]="rowData?.action"
-              [disabled]="
-                rowData?.action === 'Closed' ||
-                rowData?.action === 'Timeout' ||
-                rowData?.action === 'Reject'
-              "
               (selectionChange)="handleStatusChange(rowData, $event)"
-              [(ngModel)]="rowData.action"
             >
               <mat-option
                 [value]="item.value"

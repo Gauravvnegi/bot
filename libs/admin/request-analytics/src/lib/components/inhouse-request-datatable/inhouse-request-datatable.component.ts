@@ -244,7 +244,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     // if (event.value !== 'Closed') return;
     this.loading = true;
     const requestData = {
-      jobID: data.jobID,
+      jobID: data.id,
       roomNo: data.rooms[0].roomNumber,
       lastName: data.guestDetails.primaryGuest.lastName,
     };
@@ -255,6 +255,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           cmsUserType: 'Admin',
           entityId: this.entityId,
           actionType: event.value,
+          entityType: this.entityType
         },
       ]),
     };

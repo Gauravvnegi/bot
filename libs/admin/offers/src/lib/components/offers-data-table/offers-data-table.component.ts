@@ -67,7 +67,10 @@ export class OffersDataTableComponent extends BaseDatatableComponent
     this.loading = true;
     this.subscription$.add(
       this.offerService
-        .getLibraryItems<OfferListResponse>(this.entityId, this.getQueryConfig())
+        .getLibraryItems<OfferListResponse>(
+          this.entityId,
+          this.getQueryConfig()
+        )
         .subscribe(
           (res) => {
             const data = new OfferList().deserialize(res);
@@ -118,7 +121,7 @@ export class OffersDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         {
           type: LibraryItem.offer,
           offset: this.first,

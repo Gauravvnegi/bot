@@ -126,20 +126,20 @@
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData?.route; else emptyCell">
+        <div class="cell-content" *ngIf="rowData?.url; else emptyCell">
           <hospitality-bot-copy-link
-            [url]="rowData?.route"
+            [url]="rowData?.url"
           ></hospitality-bot-copy-link>
         </div>
       </td>
       <td>
         <div class="cell-content">
-          <hospitality-bot-toggle-dropdown
+          <hospitality-bot-status-dropdown-toggle
             class="toggle-btn"
             (onClick)="handleStatus($event, rowData)"
-            [status]="rowData.status"
+            [state]="rowData.status"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>

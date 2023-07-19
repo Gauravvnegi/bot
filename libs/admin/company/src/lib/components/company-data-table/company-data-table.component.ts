@@ -83,7 +83,7 @@ export class CompanyDataTableComponent extends BaseDatatableComponent
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2({ key: 'entityState' }),
+        ...this.getSelectedQuickReplyFilters({ key: 'entityState' }),
         {
           type: 'COMPANY',
           entityId: this.entityId,

@@ -27,7 +27,7 @@ export class Entity {
   emailId: string;
   status: string;
   parentId: string;
-  route: string;
+  url: string;
   minimumOccupancy?: number;
   dayOfOperationStart?: string;
   dayOfOperationEnd?: string;
@@ -56,7 +56,7 @@ export class Entity {
     this.emailId = input?.emailId;
     this.status = input?.status;
     this.parentId = input?.parentId;
-    this.route = input?.route;
+    this.url = input?.absoluteRoute;
     this.minimumOccupancy = input?.minimumOccupancy;
     this.dayOfOperationStart = input?.dayOfOperationStart;
     this.dayOfOperationEnd = input?.dayOfOperationEnd;

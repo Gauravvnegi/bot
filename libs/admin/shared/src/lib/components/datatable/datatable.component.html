@@ -93,12 +93,12 @@
       </td>
       <td>
         <div class="cell-content">
-          <hospitality-bot-toggle-dropdown
+          <hospitality-bot-status-dropdown-toggle
             (onClick)="handleStatus($event, rowData.name)"
-            [status]="rowData.status"
-            [listItem]="status"
+            [state]="rowData.status"
+            [nextStates]="status"
           >
-          </hospitality-bot-toggle-dropdown>
+          </hospitality-bot-status-dropdown-toggle>
         </div>
       </td>
     </tr>

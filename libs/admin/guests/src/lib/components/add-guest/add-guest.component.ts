@@ -9,6 +9,8 @@ import { Subscription } from 'rxjs';
 import { Location } from '@angular/common';
 import { GuestTableService } from '../../services/guest-table.service';
 import { GuestFactory } from '../../data-models/guest.model';
+import { FormService } from 'libs/admin/members/src/lib/services/form.service';
+import { GuestFormType } from 'libs/admin/agent/src/lib/types/form.types';
 
 @Component({
   selector: 'hospitality-bot-add-guest',
@@ -50,7 +52,8 @@ export class AddGuestComponent implements OnInit {
     private guestService: GuestTableService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
@@ -66,6 +69,7 @@ export class AddGuestComponent implements OnInit {
       this.initEditView();
     });
     this.listenChanges();
+    this.formService.restoreForm(this.guestForm, 'guest');
   }
 
   initGuestForm() {
@@ -81,6 +85,7 @@ export class AddGuestComponent implements OnInit {
       age: [{ value: '', disabled: true }, Validators.required],
     });
   }
+
   initEditView() {
     this.guestId &&
       ((this.loading = true),
@@ -106,7 +111,19 @@ export class AddGuestComponent implements OnInit {
   }
 
   createNewCompany() {
+    this.saveForm();
     this.router.navigateByUrl('pages/members/company/add-company');
+  }
+
+  saveForm() {
+    this.formService.companyRedirectRoute = '/pages/members/agent';
+    this.activatedRoute.snapshot.url.forEach((segment) => {
+      this.formService.companyRedirectRoute += `/${segment.path}`;
+    });
+    this.formService.setForm(
+      this.guestForm.getRawValue() as GuestFormType,
+      'guest'
+    );
   }
 
   handleSubmit() {

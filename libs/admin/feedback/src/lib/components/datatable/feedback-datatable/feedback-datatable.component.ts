@@ -138,7 +138,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.loadInitialData([
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
       ]);
       this.getUserPermission(this.tabFilterItems[this.tabFilterIdx]?.value);
     } else this.selectedRows = [];
@@ -179,7 +179,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           this.loadInitialData([
             ...this.globalQueries,
             { order: sharedConfig.defaultOrder },
-            ...this.getSelectedQuickReplyFiltersV2(),
+            ...this.getSelectedQuickReplyFilters(),
           ]);
         }
       })
@@ -202,7 +202,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
             this.loadInitialData([
               ...this.globalQueries,
               { order: sharedConfig.defaultOrder },
-              ...this.getSelectedQuickReplyFiltersV2(),
+              ...this.getSelectedQuickReplyFilters(),
             ]);
         }
       })
@@ -252,7 +252,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this._hotelDetailService.hotels.find(
         (branch) => branch['id'] === branchId
       )?.entities ?? [];
-      
+
     this.outlets = [
       ...this.outlets,
       ...this._hotelDetailService.hotels.filter(
@@ -330,7 +330,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         [
           ...this.globalQueries,
           { order: sharedConfig.defaultOrder },
-          ...this.getSelectedQuickReplyFiltersV2(),
+          ...this.getSelectedQuickReplyFilters(),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -395,7 +395,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       this.loadInitialData([
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
       ]);
     });
   }
@@ -465,7 +465,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
         feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
         entityIds: this.setEntityId(),
       },
-      ...this.getSelectedQuickReplyFiltersV2(),
+      ...this.getSelectedQuickReplyFilters(),
       ...this.selectedRows.map((item) => ({ ids: item.id })),
     ];
     if (
@@ -515,7 +515,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
           order: sharedConfig.defaultOrder,
           feedbackType: this.tabFilterItems[this.tabFilterIdx].value,
         },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
       ]),
     };
 
@@ -641,7 +641,7 @@ export class FeedbackDatatableComponent extends BaseDatatableComponent
       [
         ...this.globalQueries,
         { order: sharedConfig.defaultOrder },
-        ...this.getSelectedQuickReplyFiltersV2(),
+        ...this.getSelectedQuickReplyFilters(),
       ],
       false
     );

@@ -94,7 +94,7 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
       .subscribe(
         (res) => {
           const serviceList = new ServiceList().deserialize(res);
-          switch (this.selectedTable) {
+          switch (this.tabFilterItems[this.tabFilterIdx]?.value) {
             case TableValue.ALL:
               this.values = serviceList.allService;
               break;
@@ -166,10 +166,10 @@ export class ServicesDataTableComponent extends BaseDatatableComponent {
   getQueryConfig(): QueryConfig {
     const config = {
       params: this.adminUtilityService.makeQueryParams([
-        ...this.getSelectedQuickReplyFiltersV2({ isStatusBoolean: true }),
+        ...this.getSelectedQuickReplyFilters({ isStatusBoolean: true }),
         {
           type: LibraryItem.service,
-          serviceType: this.selectedTable,
+          serviceType: this.tabFilterItems[this.tabFilterIdx].value,
           offset: this.first,
           limit: this.rowsPerPage,
         },

@@ -51,8 +51,9 @@ export class InhouseData {
 
   deserialize(input) {
     this.rooms = new Array<Room>();
-    this.guestDetails = new GuestType().deserialize(input.guestDetails);
-    this.stayDetails = new StayDetails().deserialize(input.stayDetails);
+    this.guestDetails = new GuestType().deserialize(input?.guestDetails);
+
+    this.stayDetails = new StayDetails().deserialize(input?.stayDetails);
     input.rooms.forEach((room) => this.rooms.push(new Room().desrialize(room)));
     Object.assign(
       this,
@@ -252,7 +253,8 @@ export class StayDetails {
       set({}, 'roomType', get(input, ['roomType'])),
       set({}, 'status', get(input, ['status']))
     );
-    this.statusMessage = new Status().deserialize(input.statusMessage);
+
+    this.statusMessage = new Status().deserialize(input?.statusMessage);
 
     return this;
   }

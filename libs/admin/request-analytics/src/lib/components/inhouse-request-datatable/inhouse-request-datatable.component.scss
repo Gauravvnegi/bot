@@ -110,11 +110,16 @@ td {
   color: rgb(75, 86, 192) !important;
 }
 
+// :host ::ng-deep .p-datatable {
+//   margin: 10px 1.5% !important;
+//   .p-datatable-thead {
+//     top: 0;
+//   }
+// }
+
+// *** over ride the table style ***
 :host ::ng-deep .p-datatable {
-  margin: 10px 1.5% !important;
-  .p-datatable-thead {
-    top: 0;
-  }
+  @include tableCellPadding(0.3em);
 }
 
 .table-container{

@@ -75,23 +75,25 @@ export class TaxDataTableComponent extends BaseDatatableComponent
   initTableValue(): void {
     this.loading = true;
     this.$subscription.add(
-      this.taxService.getTaxList(this.entityId, this.getQueryConfig()).subscribe(
-        (res) => {
-          const taxList = new TaxList().deserialize(res);
+      this.taxService
+        .getTaxList(this.entityId, this.getQueryConfig())
+        .subscribe(
+          (res) => {
+            const taxList = new TaxList().deserialize(res);
 
-          this.values = taxList.records;
-          this.initFilters(
-            taxList.entityTypeCounts,
-            taxList.entityStateCounts,
-            taxList.total
-          );
-        },
-        ({ error }) => {
-          this.values = [];
-          this.loading = false;
-        },
-        this.handleFinal
-      )
+            this.values = taxList.records;
+            this.initFilters(
+              taxList.entityTypeCounts,
+              taxList.entityStateCounts,
+              taxList.total
+            );
+          },
+          ({ error }) => {
+            this.values = [];
+            this.loading = false;
+          },
+          this.handleFinal
+        )
     );
   }
 
@@ -155,12 +157,16 @@ export class TaxDataTableComponent extends BaseDatatableComponent
     };
 
     this.$subscription.add(
-      this.taxService.exportCSV(this.entityId, config).subscribe((res) => {
-        FileSaver.saveAs(
-          res,
-          `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
-        );
-      }, this.handleFinal)
+      this.taxService.exportCSV(this.entityId, config).subscribe(
+        (res) => {
+          FileSaver.saveAs(
+            res,
+            `${this.tableName.toLowerCase()}_export_${new Date().getTime()}.csv`
+          );
+        },
+        () => {},
+        this.handleFinal
+      )
     );
   }
 

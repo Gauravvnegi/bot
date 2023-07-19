@@ -189,11 +189,6 @@ export class InhouseSentimentsComponent implements OnInit, OnDestroy {
 
     detailCompRef.componentInstance.tableName = 'In-house Request';
     detailCompRef.componentInstance.tabFilterIdx = 0;
-    detailCompRef.componentInstance.optionLabels = [
-      'Immediate',
-      'Timeout',
-      'Closed',
-    ];
     detailCompRef.componentInstance.onModalClose.subscribe((res) =>
       // remove loader for detail close
       detailCompRef.close()

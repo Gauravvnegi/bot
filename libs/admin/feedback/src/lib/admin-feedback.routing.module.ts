@@ -48,6 +48,7 @@ import {
 } from './components/stats';
 import { DepartmentBarGraphComponent } from './components/stats/department-bar-graph/department-bar-graph.component';
 import { FeedbackWrapperComponent } from './components/feedback-wrapper/feedback-wrapper.component';
+import { FeedbackTypesComponent } from './components/feedback-types/feedback-types.component';
 
 const appRoutes: CRoutes = [
   { path: '', redirectTo: 'analytics' },
@@ -126,5 +127,6 @@ export class AdminFeedbackRoutingModule {
     GtmClosureComponent,
     BifurcationStatsComponent,
     FeedbackWrapperComponent,
+    FeedbackTypesComponent,
   ];
 }

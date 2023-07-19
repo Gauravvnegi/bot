@@ -10,15 +10,18 @@ import { FormBuilder } from '@angular/forms';
 import { analytics } from '@hospitality-bot/admin/shared';
 import { GlobalFilterService } from 'apps/admin/src/app/core/theme/src/lib/services/global-filters.service';
 import * as FileSaver from 'file-saver';
+import { RequestStatus } from 'libs/admin/request/src/lib/constants/request';
+import { RequestService } from 'libs/admin/request/src/lib/services/request.service';
 import { BaseDatatableComponent } from 'libs/admin/shared/src/lib/components/datatable/base-datatable.component';
 import { AdminUtilityService } from 'libs/admin/shared/src/lib/services/admin-utility.service';
 import { TableService } from 'libs/admin/shared/src/lib/services/table.service';
+import { convertToTitleCase } from 'libs/admin/shared/src/lib/utils/valueFormatter';
 import { SnackBarService } from 'libs/shared/material/src';
 import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { Observable, Subscription } from 'rxjs';
+import { inhouseStatus } from '../../constant/datatable';
 import { InhouseTable } from '../../models/inhouse-datatable.model';
 import { AnalyticsService } from '../../services/analytics.service';
-import { inhouseStatus } from '../../constant/datatable';
 
 @Component({
   selector: 'hospitality-bot-inhouse-request-datatable',
@@ -32,18 +35,20 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   implements OnInit, OnDestroy {
   isAllTabFilterRequired = true;
   @Input() entityType = 'Inhouse';
-  @Input() optionLabels = [];
+  optionLabels = [];
   @Output() onModalClose = new EventEmitter();
   globalQueries;
   $subscription = new Subscription();
   tabFilterIdx = 0;
+
   constructor(
     public fb: FormBuilder,
     private _adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private analyticsService: AnalyticsService,
-    protected tabFilterService: TableService
+    protected tabFilterService: TableService,
+    private _requestService: RequestService
   ) {
     super(fb, tabFilterService);
   }
@@ -90,7 +95,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     loading = true,
     props?: { offset: number; limit: number }
   ) {
-    this.loading = loading && true;
+    this.loading = loading;
     this.$subscription.add(
       this.fetchDataFrom(queries, props).subscribe(
         (data) => {
@@ -107,6 +112,17 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
   setRecords(data): void {
     const inhouseData = new InhouseTable().deserialize(data);
     this.values = inhouseData.records;
+
+    if (!this.optionLabels.length) {
+      Object.keys(inhouseData.entityStateCounts).forEach((item) => {
+        if (item !== RequestStatus.TIMEOUT)
+          this.optionLabels.push({
+            label: convertToTitleCase(item),
+            value: item,
+          });
+      });
+    }
+
     this.initFilters(
       inhouseData.entityTypeCounts,
       inhouseData.entityStateCounts,
@@ -140,7 +156,9 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.entityType,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({
+            activeStateKey: 'actionType',
+          }),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -184,7 +202,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.entityType,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ activeStateKey: 'actionType' }),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -204,8 +222,27 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     );
   }
 
+  reloadData() {
+    this.loadInitialData(
+      [
+        ...this.globalQueries,
+        {
+          order: 'DESC',
+          entityType: this.entityType,
+        },
+        ...this.getSelectedQuickReplyFilters({ activeStateKey: 'actionType' }),
+      ],
+      false,
+      {
+        offset: this.tempFirst,
+        limit: this.tempRowsPerPage ? this.tempRowsPerPage : this.rowsPerPage,
+      }
+    );
+  }
+
   handleStatusChange(data, event) {
-    if (event.value !== 'Closed') return;
+    // if (event.value !== 'Closed') return;
+    this.loading = true;
     const requestData = {
       jobID: data.jobID,
       roomNo: data.rooms[0].roomNumber,
@@ -217,38 +254,26 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
         {
           cmsUserType: 'Admin',
           entityId: this.entityId,
+          actionType: event.value,
         },
       ]),
     };
-    this.analyticsService
-      .closeRequest(config, requestData)
-      .subscribe((response) => {
-        this.loadInitialData(
-          [
-            ...this.globalQueries,
-            {
-              order: 'DESC',
-              entityType: this.entityType,
-            },
-            ...this.getSelectedQuickReplyFilters(),
-          ],
-          false,
-          {
-            offset: this.tempFirst,
-            limit: this.tempRowsPerPage
-              ? this.tempRowsPerPage
-              : this.rowsPerPage,
-          }
-        );
-        this.snackbarService.openSnackBarWithTranslate(
-          {
-            translateKey: `messages.SUCCESS.REQUEST_STATUS_UPDATED`,
-            priorityMessage: 'Request status updated',
-          },
+    this._requestService.updateJobRequestStatus(config, requestData).subscribe(
+      (response) => {
+        this.snackbarService.openSnackBarAsText(
+          `Job: ${
+            data.jobNo
+          } status updated successfully to ${convertToTitleCase(event.value)}.`,
           '',
           { panelClass: 'success' }
         );
-      });
+
+        this.reloadData();
+      },
+      (err) => {
+        this.reloadData();
+      }
+    );
   }
 
   onFilterTypeTextChange(value, field, matchMode = 'startsWith') {

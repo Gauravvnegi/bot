@@ -57,16 +57,16 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
   initSubscriptionPlan(): void {
     this.loading = true;
-    this.subscriptionService.getSubscriptionPlan(this.entityId).subscribe(
-      (response) => {
+    this.subscriptionService
+      .getSubscriptionPlan(this.entityId)
+      .subscribe((response) => {
         this.loading = false;
         this.subscriptionData = new Subscriptions().deserialize(response);
         this.subscriptionPlanUsage = new PlanUsage().deserialize(
           this.subscriptionData
         );
         this.getSubscriptionUsage(this.entityId);
-      }
-    );
+      });
   }
 
   getSubscriptionUsage(entityId: string): void {
@@ -87,15 +87,20 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
           entityId,
           config
         ),
-      ]).subscribe((response) => {
-        this.loading = false;
-        // this.planUsageChartData = new PlanUsageCharts().deserialize(
-        //   response[0]
-        // );
-        this.planUsagePercentage = new PlanUsagePercentage().deserialize(
-          response[0]
-        );
-      })
+      ]).subscribe(
+        (response) => {
+          this.loading = false;
+          // this.planUsageChartData = new PlanUsageCharts().deserialize(
+          //   response[0]
+          // );
+          this.planUsagePercentage = new PlanUsagePercentage().deserialize(
+            response[0]
+          );
+        },
+        () => {
+          this.loading = false;
+        }
+      )
     );
   }
 

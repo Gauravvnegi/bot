@@ -11,6 +11,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
+  AbstractControl,
+  ControlContainer,
   ControlValueAccessor,
   FormArray,
   FormBuilder,
@@ -41,6 +43,7 @@ export class CustomFileUploadComponent
   @Input() path = 'static-content/files';
   @Input() entityId: string;
   @Input() limit: number = 1;
+  @Input() formControlName: string;
   unit: number = 1;
   isMultiple: boolean = false;
   @Input() parentFG: FormGroup;
@@ -85,23 +88,29 @@ export class CustomFileUploadComponent
   @Input() isFeatureView: boolean = false;
   useForm: FormGroup;
   formArray: FormArray;
+  inputControl: AbstractControl;
 
   constructor(
     private snackbarService: SnackBarService,
     private userDetailsService: UserService,
     private fb: FormBuilder,
-    @Self() @Optional() public control: NgControl
+    @Self() @Optional() public control: NgControl,
+    private controlContainer: ControlContainer
   ) {
     if (this.control) this.control.valueAccessor = this;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.inputControl = this.controlContainer.control.get(this.formControlName);
+    if (this.inputControl.disabled) this.isDisable = this.inputControl.disabled;
+  }
 
   /**
    * @function processCheckboxChange
    * @description process checkbox change
    * @param event
    * @param index
+   *
    */
   processCheckboxChange(event, index) {
     if (event.target.checked) {

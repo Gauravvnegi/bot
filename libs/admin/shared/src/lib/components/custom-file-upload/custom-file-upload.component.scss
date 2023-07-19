@@ -124,3 +124,7 @@
   margin-top: 3em;
   @include flex-justify-center();
 }
+
+.disable {
+  color: lightgray;
+}

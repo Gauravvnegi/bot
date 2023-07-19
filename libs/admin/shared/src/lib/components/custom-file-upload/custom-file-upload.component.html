@@ -40,7 +40,11 @@
         >
       </div>
 
-      <div [style.display]="unit == 1 ? 'flex' : ''" class="right-content">
+      <div
+        [style.display]="unit == 1 ? 'flex' : ''"
+        class="right-content"
+        [ngClass]="{ disable: isDisable }"
+      >
         <div *ngIf="unit == 1" class="content">{{ description }}</div>
         <div [style.width]="unit == 1 ? '302px' : '200px'" class="hint">
           {{ hint }}
@@ -72,6 +76,7 @@
           ></hospitality-bot-button>
           <hospitality-bot-button
             label="Change"
+            [disabled]="isDisable"
             (click)="uploadFiles(i)"
             *ngIf="url !== defaultImage || thumbUrl"
             variant="outlined"
@@ -79,6 +84,7 @@
 
           <div *ngIf="url !== defaultImage || thumbUrl">
             <hospitality-bot-button
+              [disabled]="isDisable"
               [label]="
                 'Remove ' +
                 this.baseType.charAt(0).toUpperCase() +

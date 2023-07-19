@@ -50,7 +50,9 @@ export class SingleRoom {
     this.price = input.price ?? null;
     this.roomTypeId = input.roomTypeId ?? '';
     this.featureIds = input.featureIds ?? [];
-    this.removeFeatures = input.removeFeatures ?? null; //as per BE requirement
+    this.removeFeatures = input.removeFeatures.length
+      ? input.removeFeatures
+      : null; //as per BE requirement
     return this;
   }
 }

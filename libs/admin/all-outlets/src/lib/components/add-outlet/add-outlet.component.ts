@@ -18,7 +18,7 @@ import { ModalService } from '@hospitality-bot/shared/material';
 import { QrCodeModalComponent } from 'libs/admin/shared/src/lib/components/qr-code-modal/qr-code-modal.component';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
 import { Subscription } from 'rxjs';
-import { cousins } from '../../constants/data';
+import { cuisinesType } from '../../constants/data';
 import { outletBusinessRoutes } from '../../constants/routes';
 import { MenuList } from '../../models/outlet.model';
 import { Services } from '../../models/services';
@@ -37,7 +37,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   types: Option[] = [];
   subType: Option[] = [];
   isTypeSelected = false;
-  cousins = cousins;
+  cuisines = cuisinesType;
   compServices: any[] = [];
   paidServices: any[] = [];
   menuList: any[] = [];
@@ -136,18 +136,23 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.useForm.patchValue(this.OutletFormService.OutletFormData);
         this.useForm.get('type').disable();
       } else {
-        this.outletService.getOutletById(this.outletId).subscribe((res) => {
-          const { type, subType, ...rest } = res;
+        this.loading = true;
+        this.outletService.getOutletById(this.outletId).subscribe(
+          (res) => {
+            const { type, subType, ...rest } = res;
 
-          this.initOptionConfig(type);
+            this.initOptionConfig(type);
 
-          this.useForm.get('type').setValue(type);
+            this.useForm.get('type').setValue(type);
 
-          this.useForm.get('type').disable();
-          this.useForm.get('subType').setValue(subType.toUpperCase());
+            this.useForm.get('type').disable();
+            this.useForm.get('subType').setValue(subType.toUpperCase());
 
-          this.useForm.patchValue(rest);
-        });
+            this.useForm.patchValue(rest);
+          },
+          this.handleError,
+          () => (this.loading = false)
+        );
       }
     }
   }
@@ -389,6 +394,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    * @description handles success
    */
   handleSuccess = (feature?: Feature, outletId?: string) => {
+    this.loading = false;
     this.OutletFormService.resetOutletFormData();
 
     this.snackbarService.openSnackBarAsText(

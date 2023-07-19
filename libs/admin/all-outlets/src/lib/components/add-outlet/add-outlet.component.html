@@ -12,6 +12,7 @@
   </div>
   <div class="form-block">
     <hospitality-bot-input
+      [loading]="loading"
       class="half-width"
       controlName="name"
       label="Name"
@@ -22,6 +23,7 @@
     ></hospitality-bot-input>
     <div class="half-width type-wrapper">
       <hospitality-bot-select
+        [loading]="loading"
         class="half-width"
         controlName="type"
         label="Type"
@@ -31,6 +33,7 @@
         }"
       ></hospitality-bot-select>
       <hospitality-bot-select
+        [loading]="loading"
         class="half-width"
         controlName="subType"
         label="Sub Type"
@@ -42,6 +45,7 @@
       ></hospitality-bot-select>
     </div>
     <hospitality-bot-input
+      [loading]="loading"
       class="half-width"
       controlName="emailId"
       label="Email"
@@ -55,6 +59,7 @@
     ></hospitality-bot-input>
     <div class="half-width" [formGroup]="useForm.get('contact')">
       <hospitality-bot-phone-number
+        [loading]="loading"
         preControlName="countryCode"
         postControlName="number"
       ></hospitality-bot-phone-number>
@@ -64,10 +69,11 @@
     </hospitality-bot-address-component>
 
     <hospitality-bot-multi-select
+      [loading]="loading"
       class="half-width"
       controlName="cuisinesType"
-      label="cuisine Type"
-      [options]="Cousins"
+      label="Cuisines Type"
+      [options]="cuisines"
       *ngIf="useForm.get('type').value === 'RESTAURANT'"
     ></hospitality-bot-multi-select>
 

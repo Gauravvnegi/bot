@@ -29,7 +29,7 @@
   height: 85vh;
   // max-height: 100%;
   // @media screen and (max-width: 1100px) {
-    // height: 85vh;
+  // height: 85vh;
   // }
   padding-bottom: 10px;
 }
@@ -243,7 +243,7 @@
 
 mat-option {
   color: black !important;
-}  
+}
 
 :host ::ng-deep .mat-select-panel:not([class*='mat-elevation-z']) {
   margin: 30px 0 0 15px !important;
@@ -493,11 +493,14 @@ mat-option {
   position: absolute;
   top: 62px;
   right: 10px;
-  height: 97%;
+  height: 87%;
   z-index: 1;
   background-color: $white;
   overflow-y: auto;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   .contact {
     font-size: 11px;
     color: $grayMedium;
@@ -505,9 +508,13 @@ mat-option {
     margin-bottom: 7px;
   }
   .button-wrapper {
-    @include flex-col-all-Center;
+    flex-grow: 1;
+    // @include flex-col-justify-center;
+    @include flex-all-center;
+    @include flex-col;
     height: 32vh;
-    gap: 15px;
+    gap: 8px;
+    overflow-y: scroll;
 
     .button {
       height: 46px;
@@ -657,8 +664,7 @@ mat-option {
     min-width: 175px !important;
   }
 }
-:host ::ng-deep .tab-buttons{
+:host ::ng-deep .tab-buttons {
   right: 0;
   width: 20%;
 }
-

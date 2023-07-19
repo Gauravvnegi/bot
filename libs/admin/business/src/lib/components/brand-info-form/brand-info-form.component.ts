@@ -78,10 +78,14 @@ export class BrandInfoFormComponent implements OnInit {
     if (this.brandId) {
       this.loading = true;
       this.$subscription.add(
-        this.businessService.getBrandById(this.brandId).subscribe((res) => {
-          this.useForm.get('brand').patchValue(res);
-          this.code = res.brandCode;
-        }, this.handelError)
+        this.businessService.getBrandById(this.brandId).subscribe(
+          (res) => {
+            this.useForm.get('brand').patchValue(res);
+            this.code = res.brandCode;
+          },
+          this.handelError,
+          this.handelFinal
+        )
       );
     }
   }

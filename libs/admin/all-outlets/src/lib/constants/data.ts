@@ -74,7 +74,7 @@ export const dimensions: Option[] = [
   { label: 'Hectare', value: 'hectare' },
 ];
 
-export const cousins: Option[] = [
+export const cuisinesType: Option[] = [
   { label: 'Italian', value: 'italian' },
   { label: 'French', value: 'french' },
   { label: 'Chinese', value: 'chinese' },

@@ -16,6 +16,7 @@
         label="Status:"
       ></hospitality-bot-toggle-switch>
       <hospitality-bot-input
+        [loading]="loading"
         class="half-width"
         controlName="name"
         label="Name"
@@ -26,6 +27,7 @@
       ></hospitality-bot-input>
       <div class="half-width"></div>
       <hospitality-bot-input
+        [loading]="loading"
         class="half-width"
         controlName="gstNumber"
         label="GST"
@@ -35,6 +37,7 @@
         }"
       ></hospitality-bot-input>
       <hospitality-bot-input
+        [loading]="loading"
         class="half-width"
         controlName="fssaiNumber"
         label="FSSAI NO."
@@ -63,6 +66,7 @@
 
     <div class="footer">
       <hospitality-bot-button
+        [isLoading]="loading"
         severity="reset"
         variant="outlined"
         [label]="'Reset'"
@@ -71,6 +75,7 @@
       </hospitality-bot-button>
 
       <hospitality-bot-button
+        [isLoading]="loading"
         [label]="brandId ? 'Update' : 'Create'"
         (onClick)="handleSubmit()"
       ></hospitality-bot-button>

@@ -4,12 +4,14 @@
     <hr />
     <div class="occupancy-wrapper">
       <hospitality-bot-input
+        [loading]="isLoading"
         controlName="maximumOccupancy"
         class="half-width"
         label="Max Occupancy"
         [props]="{ type: 'number', placeholder: 'Enter' }"
       ></hospitality-bot-input>
       <hospitality-bot-prefix-field
+        [loading]="isLoading"
         preControlName="area"
         postControlName="dimension"
         class="half-width"
@@ -31,6 +33,7 @@
     <hr />
     <div class="details-wrapper">
       <hospitality-bot-prefix-field
+        [loading]="isLoading"
         label="Days Of operation"
         class="half-width"
         preControlName="dayOfOperationStart"
@@ -49,6 +52,7 @@
       </hospitality-bot-prefix-field>
 
       <hospitality-bot-prefix-field
+        [loading]="isLoading"
         label="Timings"
         class="half-width"
         preControlName="timeDayStart"

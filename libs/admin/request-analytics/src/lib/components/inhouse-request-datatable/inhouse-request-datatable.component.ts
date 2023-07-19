@@ -4,7 +4,7 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { analytics } from '@hospitality-bot/admin/shared';
@@ -156,7 +156,9 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
             order: 'DESC',
             entityType: this.entityType,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({
+            activeStateKey: 'actionType',
+          }),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -200,7 +202,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.entityType,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ activeStateKey: 'actionType' }),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -228,7 +230,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.entityType,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ activeStateKey: 'actionType' }),
       ],
       false,
       {

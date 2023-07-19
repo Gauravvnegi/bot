@@ -9,7 +9,7 @@ export const roomFields: IteratorField[] = [
     options: [],
     required: true,
     placeholder: 'Select',
-    width: '20%',
+    width: '18%',
     isAsync: true,
   },
   {
@@ -17,29 +17,37 @@ export const roomFields: IteratorField[] = [
     name: 'ratePlan',
     type: 'select',
     placeholder: 'Enter',
-    width: '22%',
+    width: '20%',
     isAsync: false,
+  },
+  {
+    label: 'Room Count',
+    name: 'roomCount',
+    type: 'input',
+    required: true,
+    placeholder: 'Enter',
+    width: '10%'
   },
   {
     label: 'Room Number',
     name: 'roomNumber',
     type: 'multi-select',
     placeholder: 'Enter',
-    width: '20%',
+    width: '18%',
   },
   {
     label: 'Adult',
     name: 'adultCount',
     type: 'input',
     placeholder: 'Enter',
-    width: '12%',
+    width: '10%',
   },
   {
     label: 'Kids',
     name: 'childCount',
     type: 'input',
     placeholder: 'Enter',
-    width: '12%',
+    width: '10%',
   },
 ];
 

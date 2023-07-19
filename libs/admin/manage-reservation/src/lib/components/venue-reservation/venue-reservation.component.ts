@@ -5,7 +5,6 @@ import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   NavRouteOptions,
   AdminUtilityService,
-  Regex,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
@@ -13,7 +12,6 @@ import { Subscription } from 'rxjs';
 import {
   editModeStatusOptions,
   eventOptions,
-  menuItemFields,
   statusOptions,
   venueFields,
 } from '../../constants/reservation';
@@ -46,6 +44,7 @@ export class VenueReservationComponent implements OnInit {
 
   statusOptions: Option[] = [];
   eventOptions: Option[] = [];
+  foodPackages: Option[] = [];
 
   offersList: OfferList;
   selectedOffer: OfferData;
@@ -111,6 +110,8 @@ export class VenueReservationComponent implements OnInit {
       }),
       eventInformation: this.fb.group({
         numberOfAdults: ['', Validators.required],
+        foodPackage: ['', Validators.required],
+        foodPackageCount: [''],
         venueInfo: this.venueBookingInfo,
       }),
       offerId: [''],
@@ -149,13 +150,13 @@ export class VenueReservationComponent implements OnInit {
     if (this.reservationId) {
       this.statusOptions = [
         ...statusOptions,
-        { label: 'In Progress', value: 'INPROGRESS' },
+        { label: 'In Progress', value: 'IN_PROGRESS' },
       ];
       this.getReservationDetails();
     } else {
       this.statusOptions = [
         ...editModeStatusOptions,
-        { label: 'In Progress', value: 'INPROGRESS' },
+        { label: 'In Progress', value: 'IN_PROGRESS' },
       ];
       this.userForm.valueChanges.subscribe((_) => {
         if (!this.formValueChanges) {

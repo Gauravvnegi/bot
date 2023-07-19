@@ -1,7 +1,10 @@
 <ng-container *ngIf="!displayBookingOffer; else bookingOffer">
   <div class="bk-summary_heading">Booking Summary</div>
   <p class="divider"></p>
-  <div class="bk-summary_subheading">
+  <div class="bk-summary_subheading" *ngIf="bookingType === 'ROOM_TYPE'">
+    {{ summaryData?.name }}
+  </div>
+  <div class="bk-summary_subheading" *ngIf="bookingType !== 'ROOM_TYPE'">
     {{ heading }}
   </div>
   <div class="bk-summary_subheading_label">
@@ -43,9 +46,9 @@
   </div>
   <div class="bk-summary_priceInfo">
     <p class="bk-summary_priceInfo_perNight">
-      <span class="bk-summary_priceInfo_perNight_label" *ngIf="itemInfo">{{
+      <!-- <span class="bk-summary_priceInfo_perNight_label" *ngIf="itemInfo">{{
         itemInfo
-      }}</span>
+      }}</span> -->
       <span
         *ngIf="bookingType === 'ROOM_TYPE'"
         class="bk-summary_priceInfo_perNight_label"
@@ -98,7 +101,11 @@
       <span class="bk-summary_priceInfo_perNight_label"
         >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
       ></span>
-      <span class="bk-summary_priceInfo_perNight_amount" *ngIf="summaryData?.taxesAndFees">+{{ summaryData.taxesAndFees }}</span>
+      <span
+        class="bk-summary_priceInfo_perNight_amount"
+        *ngIf="summaryData?.taxesAndFees"
+        >+{{ summaryData.taxesAndFees }}</span
+      >
     </p>
     <p
       class="bk-summary_priceInfo_perNight"

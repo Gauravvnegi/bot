@@ -7,6 +7,8 @@ import {
 } from '../types/response.type';
 import { EntityState, FlagType, Option } from '@hospitality-bot/admin/shared';
 import { SearchGuestResponse } from 'libs/admin/guests/src/lib/types/guest.type';
+import { MenuItemsData, SpaItems } from '../constants/form';
+import { OutletFormData } from '../types/forms.types';
 /* Reservation */
 export class Reservation {
   id: string;
@@ -224,23 +226,107 @@ export class ReservationFormData {
   paymentMethod: PaymentInfo;
   offerId: string;
   roomInformation: RoomTypeInfo;
-
+  orderInforamtion: OrderInfo;
   deserialize(input) {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input);
     this.address = new AddressInfo().deserialize(input.address);
     this.paymentMethod = new PaymentInfo().deserialize(input);
-    this.roomInformation = new RoomTypeInfo().deserialize(input);
     this.offerId = input?.offerId;
+    this.roomInformation = new RoomTypeInfo().deserialize(input);
+    return this;
+  }
+}
+
+export class OutletForm {
+  reservationInformation: BookingInfo;
+  guestInformation: GuestInfo;
+  address: AddressInfo;
+  paymentMethod: PaymentInfo;
+  offerId: string;
+  orderInforamtion?: OrderInfo;
+  bookingInformation?: BookingInformation;
+  eventInformation?: EventInformation;
+
+  deserialize(input: OutletFormData) {
+    this.reservationInformation = new BookingInfo().deserialize(input);
+    this.guestInformation = new GuestInfo().deserialize(input);
+    this.address = new AddressInfo().deserialize(input.address);
+    this.paymentMethod = new PaymentInfo().deserialize(input);
+    this.offerId = input?.offerId;
+
+    switch (input.outletType) {
+      case 'RESTUARANT':
+        this.orderInforamtion = new OrderInfo().deserialize(input);
+      case 'VENUE':
+        this.eventInformation = new EventInformation().deserialize(input);
+      case 'SPA':
+        this.bookingInformation = new BookingInformation().deserialize(input);
+    }
+    return this;
+  }
+}
+
+export class OrderInfo {
+  numberOfAdults?: number;
+  kotInstructions?: string;
+  menuItems: MenuItemsData[];
+  tableNumber: string;
+
+  deserialize(input) {
+    this.numberOfAdults = input?.numberOfAdults ?? 1;
+    this.kotInstructions = input?.kotInstructions ?? '';
+    this.menuItems = input.items.map((item) => ({
+      menuItems: item?.itemId,
+      quantity: item?.quantity ?? 1,
+      price: item?.amount ?? 0,
+    }));
+    this.tableNumber = input?.tableNumber ?? '';
+    return this;
+  }
+}
+
+export class EventInformation {
+  numberOfAdults: number;
+  foodPackage: string;
+  foodPackageCount: number;
+  venueInfo: MenuItemsData[];
+
+  deserialize(input) {
+    this.numberOfAdults = input?.numberOfAdults ?? 1;
+    this.foodPackage = input?.foodPackage;
+    this.foodPackageCount = input?.foodPackageCount ?? 1;
+    this.venueInfo = input.items.map((item) => ({
+      description: item?.itemId,
+      quantity: item?.quantity ?? 1,
+      price: item?.amount ?? 0,
+    }));
+    return this;
+  }
+}
+
+export class BookingInformation {
+  numberOfAdults?: number;
+  spaItems: SpaItems[];
+
+  deserialize(input) {
+    this.numberOfAdults = input?.numberOfAdults ?? 1;
+    this.spaItems = input.items.map((item) => ({
+      serviceName: item?.itemId,
+      quantity: item?.quantity ?? 1,
+      price: item?.amount ?? 0,
+    }));
     return this;
   }
 }
 
 export class BookingInfo {
-  from: number;
-  to: number;
-  reservationType: string;
+  from?: number;
+  to?: number;
+  dateAndTime?: number;
+  reservationType?: string;
   source: string;
+  status?: string;
   sourceName: string;
   marketSegment: string;
 
@@ -251,6 +337,8 @@ export class BookingInfo {
     this.source = input?.source;
     this.sourceName = input?.sourceName;
     this.marketSegment = input?.marketSegment;
+    this.status = input?.status ?? '';
+    this.dateAndTime = input?.from;
     return this;
   }
 }
@@ -261,7 +349,7 @@ export class GuestInfo {
   email: string;
   countryCode: number;
   phoneNumber: number;
-  deserialize(input): this {
+  deserialize(input) {
     this.firstName = input?.firstName;
     this.lastName = input?.lastName;
     this.email = input?.email;
@@ -277,7 +365,7 @@ export class AddressInfo {
   countryCode: string;
   state: string;
   postalCode: string;
-  deserialize(input): this {
+  deserialize(input) {
     this.addressLine1 = input?.addressLine1;
     this.city = input?.city;
     this.countryCode = input?.countryCode;
@@ -291,7 +379,7 @@ export class PaymentInfo {
   totalPaidAmount: string;
   paymentMethod: string;
   paymentRemark: string;
-  deserialize(input): this {
+  deserialize(input) {
     this.totalPaidAmount = input?.totalPaidAmount;
     this.paymentMethod = input?.paymentMethod;
     this.paymentRemark = input?.paymentRemark;

@@ -118,9 +118,10 @@ export class BookingSummaryComponent implements OnInit {
   }
 
   createReservation(data): void {
+    const type = this.bookingType === 'ROOM_TYPE' ? 'ROOM_TYPE' : 'OUTLET';
     this.$subscription.add(
       this.manageReservationService
-        .createReservation(this.outletId, data, this.bookingType)
+        .createReservation(this.outletId, data, type)
         .subscribe(
           (res: ReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);

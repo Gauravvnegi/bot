@@ -60,7 +60,9 @@ export class AddReservationComponent implements OnInit, OnDestroy {
   $subscription = new Subscription();
 
   @Input() selectedEntity: SelectedEntity;
+
   // Booking Summary props
+  heading = '';
   adultCount = 0;
   roomCount = 1;
   childCount = 0;
@@ -83,6 +85,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   initDetails() {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
+    // this.heading = this.selectedEntity.label;
     this.expandAccordion = this.formService.enableAccordion;
     if (this.expandAccordion) {
       this.formService.enableAccordion = false;

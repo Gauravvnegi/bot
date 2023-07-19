@@ -33,7 +33,7 @@ type BookingInformation = {
   spaItems: SpaItems[];
 };
 
-type SpaItems = {
+export type SpaItems = {
   serviceName: string;
   quantity: number;
   price: number;
@@ -56,7 +56,7 @@ export type RoomTypes = {
   childCount: number;
 };
 
-type OrderInformation = {
+export type OrderInformation = {
   tableNumber: string;
   numberOfAdults: number;
   menuItems: MenuItemsData[];
@@ -64,16 +64,19 @@ type OrderInformation = {
 };
 
 type EventInformation = {
+  numberOfAdults: number;
+  foodPackage: string;
+  foodPackageCount: number;
   venueInfo: VenueItemsData[];
 };
 
-type VenueItemsData = {
+export type VenueItemsData = {
   description: string;
   quantity: number;
   price: number;
 };
 
-type MenuItemsData = {
+export type MenuItemsData = {
   menuItems: string;
   quantity: number;
   price: number;

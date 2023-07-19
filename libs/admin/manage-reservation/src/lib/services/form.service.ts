@@ -38,14 +38,15 @@ export class FormService {
     const reservationData = new OutletFormData();
     // Reservation Info
     reservationData.eventType = input.reservationInformation?.eventType ?? '';
-    reservationData.from =
-      input.reservationInformation?.dateAndTime ??
-      input.reservationInformation?.from;
-    reservationData.to =
-      input.reservationInformation?.dateAndTime ??
-      input.reservationInformation?.to;
+    reservationData.from = 1689836082000;
+    // input.reservationInformation?.dateAndTime ??
+    // input.reservationInformation?.from;
+    reservationData.to = 1690008882000;
+    // input.reservationInformation?.dateAndTime ??
+    // input.reservationInformation?.to;
     reservationData.reservationType =
-      input.reservationInformation?.reservationType ?? '';
+      input.reservationInformation?.reservationType ??
+      input.reservationInformation?.status;
     reservationData.sourceName = input.reservationInformation?.sourceName;
     reservationData.source = input.reservationInformation?.source;
     reservationData.marketSegment = input.reservationInformation?.marketSegment;

@@ -116,21 +116,27 @@ export class RoomIteratorComponent extends IteratorComponent
     this.listenForFormChanges(index);
   }
 
-  
+  /**
+   * @function listenRoomTypeChanges Listen changes in room type
+   * @param index to keep track of the form array.
+   */
   listenRoomTypeChanges(index: number) {
     this.roomControls[index]
       .get('roomTypeId')
       ?.valueChanges.subscribe((res) => {
         if (res) {
+          // Get currently selected room type
           const selectedRoomType = this.roomTypes.find(
             (item) => item.value === res
           );
           if (selectedRoomType) {
+            // find the rate plan available in the room type
             this.ratePlanOptionsArray[index] = selectedRoomType.ratePlan.map(
               (item) => {
                 const availableRatePlan = this.ratePlans.find(
                   (ratePlan) => ratePlan.value === item.value
                 );
+                // set the price, value and discounted price of the rate plan.
                 return {
                   label: availableRatePlan ? availableRatePlan.label : '',
                   value: item.value,
@@ -149,6 +155,9 @@ export class RoomIteratorComponent extends IteratorComponent
       });
   }
 
+  /**
+   * @function updateFormValueAndValidity Updates child, adult and room count values and validations
+   */
   updateFormValueAndValidity(
     selectedRoomType: RoomFieldTypeOption,
     index: number
@@ -251,7 +260,6 @@ export class RoomIteratorComponent extends IteratorComponent
                 };
               }) ?? [];
             this.fields[0].options = this.roomTypes;
-            // this.fields[3].options = this.roomTypes.map((item)=>)
           },
           ({ error }) => {
             this.snackbarService.openSnackBarAsText(error.message);
@@ -325,7 +333,7 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   /**
-   * Handle addition of new field to array
+   * @function addNewField Handle addition of new field to array
    */
   addNewField() {
     if (this.roomTypeArray.invalid) {

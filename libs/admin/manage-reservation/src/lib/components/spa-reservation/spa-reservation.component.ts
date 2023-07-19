@@ -25,8 +25,8 @@ import {
   OfferList,
   OfferData,
   SummaryData,
-  ReservationFormData,
   BookingInfo,
+  OutletForm,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationForm } from '../../constants/form';
@@ -224,14 +224,14 @@ export class SpaReservationComponent implements OnInit {
         .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
           (response) => {
-            const data = new ReservationFormData().deserialize(response);
+            const data = new OutletForm().deserialize(response);
             this.userForm.patchValue(data);
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
-            if (data.offerId)
-              this.getOfferByRoomType(
-                this.userForm.get('roomInformation.roomTypeId').value
-              );
+            // if (data.offerId)
+            //   this.getOfferByRoomType(
+            //     this.userForm.get('roomInformation.roomTypeId').value
+            //   );
             this.userForm.valueChanges.subscribe((_) => {
               if (!this.formValueChanges) {
                 this.formValueChanges = true;
@@ -320,15 +320,15 @@ export class SpaReservationComponent implements OnInit {
         .subscribe(
           (res) => {
             this.summaryData = new SummaryData()?.deserialize(res);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .updateValueAndValidity();
-            this.userForm
-              .get('paymentRule.deductedAmount')
-              .patchValue(this.summaryData?.totalAmount);
+            // this.userForm
+            //   .get('paymentMethod.totalPaidAmount')
+            //   .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+            // this.userForm
+            //   .get('paymentMethod.totalPaidAmount')
+            //   .updateValueAndValidity();
+            // this.userForm
+            //   .get('paymentRule.deductedAmount')
+            //   .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
           },
           (error) => {}

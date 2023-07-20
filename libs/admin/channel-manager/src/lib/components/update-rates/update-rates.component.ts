@@ -381,7 +381,7 @@ export class UpdateRatesComponent implements OnInit {
           (res) => {
             this.getRates();
             this.snackbarService.openSnackBarAsText(
-              'Inventory Update successfully',
+              'Rates Update successfully',
               '',
               { panelClass: 'success' }
             );

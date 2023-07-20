@@ -242,7 +242,6 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   }
 
   handleStatusChange(data, event) {
-    debugger;
     // if (event.value !== 'Closed') return;
     this.loading = true;
     const requestData = {

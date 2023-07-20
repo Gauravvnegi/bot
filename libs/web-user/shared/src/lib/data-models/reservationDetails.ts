@@ -11,7 +11,7 @@ export class ReservationDetails {
   redirectionParameter: any;
   healthDeclaration: Object;
   currentJourney: string;
-  hotel: Hotel;
+  entity: Entity;
 }
 
 export class StayDetails {
@@ -57,7 +57,7 @@ export class DocumentDetails {
   backUrl: string;
 }
 
-export class Hotel {
+export class Entity {
   id: string;
   name: string;
 }

@@ -220,7 +220,7 @@
                 <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Upload Complete</span>
               </p>
-              <p *ngIf="this.reservationData.hotel.ocrActive">
+              <p *ngIf="this.reservationData.entity.ocrActive">
                 <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Clearly Visible</span>
               </p>
@@ -232,7 +232,7 @@
                 guestGroup.get('documents')['controls'].length
               "
             >
-              <p *ngIf="this.reservationData.hotel.ocrActive">
+              <p *ngIf="this.reservationData.entity.ocrActive">
                 <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Document in Valid Period</span>
               </p>
@@ -252,11 +252,11 @@
                 <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Upload Complete</span>
               </p>
-              <p *ngIf="this.reservationData.hotel.ocrActive">
+              <p *ngIf="this.reservationData.entity.ocrActive">
                 <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Clearly Visible</span>
               </p>
-              <p *ngIf="this.reservationData.hotel.ocrActive">
+              <p *ngIf="this.reservationData.entity.ocrActive">
                 <mat-icon matSuffix *ngIf="!guestGroup.get('uploadStatus').value; else success">error_outline</mat-icon>
                 <span>Document in Valid Period</span>
               </p>

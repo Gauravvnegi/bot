@@ -67,8 +67,8 @@ export class PaymentMainComponent implements OnInit, OnDestroy {
         .getReservationDetails(this._reservationService.reservationId)
         .subscribe(
           (reservationData) => {
-            this._hotelService.hotelConfig = reservationData['hotel'];
-            this._hotelService.titleConfig$.next(reservationData['hotel']);
+            this._hotelService.hotelConfig = reservationData['entity'];
+            this._hotelService.titleConfig$.next(reservationData['entity']);
             this.isReservationData = true;
             this.reservationData = reservationData;
             this._reservationService.reservationData = reservationData;

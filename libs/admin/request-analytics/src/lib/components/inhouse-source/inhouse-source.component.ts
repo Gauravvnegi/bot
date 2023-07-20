@@ -18,6 +18,8 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
   globalFilters;
   graphData;
   chart = analytics.inhouseSourceChart;
+  loadingGraph = false;
+
   constructor(
     private _adminUtilityService: AdminUtilityService,
     private globalFilterService: GlobalFilterService,
@@ -52,7 +54,7 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams(this.globalFilters),
     };
-
+    this.loadingGraph = true;
     this.$subscription.add(
       this.analyticsService.getSourceStats(config).subscribe(
         (response) => {
@@ -62,7 +64,7 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
           );
           this.initGraphData();
         },
-        ({ error }) => {}
+        ({ error }) => {this.loadingGraph = false}
       )
     );
   }
@@ -97,6 +99,7 @@ export class InhouseSourceComponent implements OnInit, OnDestroy {
       ];
       this.chart.labels = ['No data'];
     }
+    this.loadingGraph = false;
   }
 
   get stats() {

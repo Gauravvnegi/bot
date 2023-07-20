@@ -10,11 +10,11 @@
         <div class="graph">
           <canvas
             *skeleton="
-              graphData == undefined;
-              height: '120px';
-              width: '120px';
+              graphData == undefined || loadingGraph;
+              height: '180px';
+              width: '180px';
               borderRadius: '50%';
-              margin: '0 0 20px 40px'
+              margin: '0 0 20px 70px'
             "
             baseChart
             [data]="chart.data"
@@ -41,11 +41,10 @@
     <div
       class="stat-val-container"
       *skeleton="
-        graphData == undefined;
+        graphData == undefined || loadingGraph;
         height: '25px';
-        width: '220px';
-        margin: '0 0 10px 0';
-        repeat: 2
+        width: '90%';
+        margin: '0 0 10px 0'
       "
     >
       <div

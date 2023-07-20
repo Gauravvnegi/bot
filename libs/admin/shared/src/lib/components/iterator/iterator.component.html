@@ -36,8 +36,14 @@
             [disabled]="field.disabled"
             [props]="{
               placeholder: field.placeholder ? field.placeholder : '',
-              fontSize: '14px'
+              fontSize: '14px',
+              isAsync: field.isAsync
             }"
+            [loading]="field?.loadingResults"
+            (paginate)="field?.loadMoreResults()"
+            (onSearch)="field?.searchResults($event)"
+            [stopEmission]="field?.noMoreResults"
+            (onCreate)="field?.create()"
           ></hospitality-bot-select>
           <hospitality-bot-multi-select
             *ngSwitchCase="'multi-select'"

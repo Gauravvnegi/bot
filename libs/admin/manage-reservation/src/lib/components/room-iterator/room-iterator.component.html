@@ -32,7 +32,8 @@
                       type: 'number',
                       errorMessages: {
                         required: 'This is a required field.',
-                        min: 'Value must be greater than 0'
+                        min: 'Value must be greater than 0',
+                        max: 'Value cannot be more than max limit'
                       }
                     }
                   : {
@@ -40,7 +41,8 @@
                       type: 'number',
                       errorMessages: {
                         required: 'This is a required field.',
-                        min: 'Value can not be less than 0.'
+                        min: 'Value can not be less than 0.',
+                        max: 'Value can not be more than max limit'
                       }
                     }
                 : {

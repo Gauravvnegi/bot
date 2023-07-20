@@ -1,17 +1,20 @@
 <ng-container *ngIf="!displayBookingOffer; else bookingOffer">
-  <div class="bk-summary_heading">Booking Summary</div>
+  <div class="bk-summary_heading">Reservation Summary</div>
   <p class="divider"></p>
-  <div class="bk-summary_subheading">
-    {{ summaryData?.roomTypeName ? summaryData.roomTypeName : header }}
+  <div class="bk-summary_subheading" *ngIf="bookingType === 'ROOM_TYPE'">
+    {{ roomTypeLabel }}<span *ngIf="roomTypeCount">+ {{ roomTypeCount }}</span>
+  </div>
+  <div class="bk-summary_subheading" *ngIf="bookingType === 'ROOM_TYPE'">
+    {{ heading }}
   </div>
   <div class="bk-summary_subheading_label">
-    {{ summaryData?.location ? summaryData.location : subHeader }}
+    {{ summaryData?.location }}
   </div>
 
   <div class="bk-summary_roomInfo">
     <ng-content *ngIf="!displayBookingOffer"></ng-content>
   </div>
-  <div class="bk-summary_offerInfo" *ngIf="bookingType === 'HOTEL'">
+  <div class="bk-summary_offerInfo" *ngIf="bookingType === 'ROOM_TYPE'">
     <ng-container
       *ngIf="
         controlContainer.control.get('offerId').value &&
@@ -43,10 +46,12 @@
   </div>
   <div class="bk-summary_priceInfo">
     <p class="bk-summary_priceInfo_perNight">
-      <span class="bk-summary_priceInfo_perNight_label" *ngIf="stayInfo">{{
-        stayInfo
-      }}</span>
-      <span *ngIf="!stayInfo" class="bk-summary_priceInfo_perNight_label"
+      <!-- <span class="bk-summary_priceInfo_perNight_label" *ngIf="itemInfo">{{
+        itemInfo
+      }}</span> -->
+      <span
+        *ngIf="bookingType === 'ROOM_TYPE'"
+        class="bk-summary_priceInfo_perNight_label"
         >Per Night</span
       >
       <s
@@ -54,11 +59,11 @@
         *ngIf="summaryData?.originalPrice"
         >{{ summaryData?.originalPrice | currency: 'INR' }}</s
       >
-      <s class="bk-summary_priceInfo_perNight_amount" *ngIf="price">
+      <!-- <s class="bk-summary_priceInfo_perNight_amount" *ngIf="price">
         {{ price }}
-      </s>
+      </s> -->
     </p>
-    <p class="bk-summary_priceInfo_person" *ngIf="bookingType === 'HOTEL'">
+    <p class="bk-summary_priceInfo_person" *ngIf="bookingType === 'ROOM_TYPE'">
       <span class="bk-summary_priceInfo_perNight_label">
         For
         {{
@@ -75,11 +80,11 @@
         Kid Child
       </span>
       <span class="bk-summary_priceInfo_perNight_amount">
-        {{ summaryData?.basePrice | currency: 'INR' }}
+        {{ discountedPrice | currency: 'INR' }}
       </span>
     </p>
-    <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'HOTEL'">
-      <span class="bk-summary_priceInfo_perNight_label">{{ guestInfo }}</span>
+    <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'ROOM_TYPE'">
+      <span class="bk-summary_priceInfo_perNight_label">{{ itemInfo }}</span>
       <span class="bk-summary_priceInfo_perNight_discountedAmount">{{
         discountedPrice
       }}</span>
@@ -96,8 +101,10 @@
       <span class="bk-summary_priceInfo_perNight_label"
         >Taxes & Fees <i class="fa fa-info-circle" aria-hidden="true"></i
       ></span>
-      <span class="bk-summary_priceInfo_perNight_amount"
-        >+{{ summaryData?.taxAndFees | currency: 'INR' }}</span
+      <span
+        class="bk-summary_priceInfo_perNight_amount"
+        *ngIf="summaryData?.taxesAndFees"
+        >+{{ summaryData.taxesAndFees }}</span
       >
     </p>
     <p
@@ -120,7 +127,7 @@
     <p class="bk-summary_total_label">Total Amount to be paid</p>
     <p class="bk-summary_total_amount">
       {{
-        summaryData?.totalAmount -
+        discountedPrice -
           controlContainer.control.get('paymentMethod.totalPaidAmount').value
           | currency: 'INR'
       }}
@@ -129,7 +136,7 @@
   <div class="bk-summary_btnwrapper">
     <hospitality-bot-button
       (click)="handleBooking()"
-      label="{{ this.reservationId ? 'Update' : 'Confirm' }} Booking"
+      label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"
       [disabled]="controlContainer.control.invalid || disabledForm"
       [isLoading]="isBooking"
     ></hospitality-bot-button>

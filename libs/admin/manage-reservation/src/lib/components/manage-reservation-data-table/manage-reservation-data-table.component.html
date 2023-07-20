@@ -6,9 +6,9 @@
   <div class="heading">{{ tableName }}</div>
   <div class="action-wrapper">
     <hospitality-bot-button
-      label="+ Create Booking"
-      link="/pages/efrontdesk/booking/{{
-        manageBookingRoutes.addBooking.route
+      label="+ Create Reservation"
+      link="/pages/efrontdesk/reservation/{{
+        manageReservationRoutes.addReservation.route
       }}"
     ></hospitality-bot-button>
     <hospitality-bot-export-list
@@ -224,11 +224,11 @@
   <hospitality-bot-empty-table
     [height]="'62vh'"
     [isLoading]="loading"
-    link="/pages/efrontdesk/booking/{{ manageBookingRoutes.addBooking.route }}"
+    link="/pages/efrontdesk/reservation/{{ manageReservationRoutes.addReservation.route }}"
     [content]="{
       description:
-        'No Booking found. Tap the +Create Booking to create & manage the booking offered by your hotel',
-      actionName: '+ Create Booking',
+        'No Reservation found. Tap the +Create Reservation to create & manage the reservation offered by your hotel',
+      actionName: '+ Create Reservation',
       imageSrc: 'assets/images/empty-table-package.png'
     }"
   >

@@ -1,0 +1,16 @@
+.type-wrapper {
+  display: flex;
+
+  .half-width {
+    flex-basis: 50%;
+  }
+}
+
+:host ::ng-deep .food-package {
+  .label {
+    visibility: hidden;
+  }
+  .text__wrapper {
+    min-width: max-content;
+  }
+}

@@ -367,7 +367,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
     const { imageUrl } = this.formControls;
 
     togglePopupCompRef.componentInstance.content = {
-      backgroundURl: imageUrl.value[0].url,
+      backgroundURl: imageUrl?.value[0]?.url,
 
       descriptionHeading: 'HOW TO ORDER',
       descriptionsPoints: [

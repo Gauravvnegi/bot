@@ -157,6 +157,13 @@ export class AddMenuItemComponent extends OutletBaseComponent
     this.router.navigate(['pages/settings/tax/create-tax']);
   }
 
+  // To be added from BE first
+  createCategory(name: string) {}
+
+  createMealPreference(name: string) {}
+
+  createType(name: string) {}
+
   handleSubmit() {
     if (this.useForm.invalid) {
       this.snackbarService.openSnackBarAsText(

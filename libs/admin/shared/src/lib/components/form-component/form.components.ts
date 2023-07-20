@@ -244,7 +244,8 @@ export class FormComponent implements OnInit {
     const id = `${this.controlName}-dropdown-input-cta`;
     if (!document.getElementById(id) && this.createPrompt) {
       const newDiv = document.createElement('div');
-      newDiv.innerHTML = `<input type="text" id="myInput" placeholder="${this.inputPrompt}"><button id="myButton" onclick="myFunction()">Save</button>`;
+      newDiv.innerHTML = `<input type="text" id="myInput"     pInputText
+ maxlength="35" placeholder="${this.inputPrompt}"><button id="myButton" onclick="myFunction()">Save</button>`;
       newDiv.id = id;
       newDiv.className = 'dropdown-input-action-cta'; // styling class
       const menu = document.querySelector(`.${this.menuClass}`);

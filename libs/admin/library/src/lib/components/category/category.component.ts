@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AbstractControl, ControlContainer } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
@@ -26,17 +27,20 @@ export class CategoryComponent implements OnInit {
   $subscription = new Subscription();
   entityId: string;
   servicesService: any;
+  inputControl: AbstractControl;
 
   constructor(
     private globalFilterService: GlobalFilterService,
     private libraryService: LibraryService,
     private router: Router,
     private snackbarService: SnackBarService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private controlContainer: ControlContainer
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    this.inputControl = this.controlContainer.control.get(this.controlName);
     this.getCategories();
   }
   /**
@@ -120,15 +124,21 @@ export class CategoryComponent implements OnInit {
           type: this.type,
           active: true,
         })
-        .subscribe(() => {
-          this.snackbarService.openSnackBarAsText(
-            'Category created successfully',
-            '',
-            { panelClass: 'success' }
-          );
-          this.categoryOffSet = 0;
-          this.getCategories();
-        })
+        .subscribe(
+          (res) => {
+            this.inputControl.setValue(res.id);
+          },
+          () => {
+            this.snackbarService.openSnackBarAsText(
+              'Category created successfully',
+              '',
+              { panelClass: 'success' }
+            );
+            this.categoryOffSet = 0;
+            this.categories = [];
+            this.getCategories();
+          }
+        )
     );
   }
 

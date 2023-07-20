@@ -29,8 +29,11 @@
       [options]="mealPreferences"
       label="Meal Preference"
       [props]="{
-        placeholder: 'Select Type'
+        placeholder: 'Select Meal Preference',
+        createPrompt: 'Add New Meal Preference',
+        inputPrompt: 'Enter Meal Preference'
       }"
+      (onCreate)="createMealPreference($event)"
     ></hospitality-bot-select>
     <hospitality-bot-select
       class="one-third-width"
@@ -38,8 +41,11 @@
       [options]="categories"
       label="Category"
       [props]="{
-        placeholder: 'Select Category'
+        placeholder: 'Select Category',
+        createPrompt: 'Add New Category',
+        inputPrompt: 'Enter Category'
       }"
+      (onCreate)="createCategory($event)"
     ></hospitality-bot-select>
     <hospitality-bot-select
       class="one-third-width"
@@ -47,8 +53,11 @@
       [options]="types"
       label="Type"
       [props]="{
-        placeholder: 'Select Type'
+        placeholder: 'Select Type',
+        createPrompt: 'Add New Type',
+        inputPrompt: 'Enter Type'
       }"
+      (onCreate)="createType($event)"
     ></hospitality-bot-select>
     <hospitality-bot-time-picker
       class="one-third-width"

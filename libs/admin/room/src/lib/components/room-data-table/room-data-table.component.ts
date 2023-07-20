@@ -214,13 +214,19 @@ export class RoomDataTableComponent extends BaseDatatableComponent
     this.$subscription.add(
       this.roomService
         .updateRoomStatus(this.entityId, {
-          rooms: [{ id, roomStatus: status }],
+          rooms: [{ id, status: status }],
         })
         .subscribe(
           () => {
             this.getDataTableValue();
+            this.snackbarService.openSnackBarAsText(
+              'Status changes successfully',
+              '',
+              { panelClass: 'success' }
+            );
           },
           () => {
+            // this.snackbarService.openSnackBar({})
             this.loading = false;
           }
         )

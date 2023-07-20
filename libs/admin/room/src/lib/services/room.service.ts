@@ -128,7 +128,7 @@ export class RoomService extends ApiService {
 
   updateRoomStatus(
     entityId: string,
-    data: { rooms: [{ id: string; roomStatus: RoomStatus }] }
+    data: { rooms: [{ id: string; status: RoomStatus }] }
   ): Observable<RoomResponse> {
     return this.patch(`/api/v1/entity/${entityId}/inventory?type=ROOM`, data);
   }
@@ -196,11 +196,11 @@ export class RoomService extends ApiService {
     );
   }
 
-  updateRoomType(
-    entityId: string,
-    data: any
-  ): Observable<any> {
-    return this.put(`/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`, data);
+  updateRoomType(entityId: string, data: any): Observable<any> {
+    return this.put(
+      `/api/v1/entity/${entityId}/inventory?type=ROOM_TYPE`,
+      data
+    );
   }
 
   updateHotel(entityId: string, data): Observable<any> {

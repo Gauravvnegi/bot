@@ -49,3 +49,10 @@ Deploy_Web:
     - kubectl apply -f deployment.yaml --validate=false
   tags:
     - k8s-dev
+
+
+
+
+
+
+

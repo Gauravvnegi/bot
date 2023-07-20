@@ -33,6 +33,7 @@
         createPrompt: 'Add New Meal Preference',
         inputPrompt: 'Enter Meal Preference'
       }"
+      (onCreate)="createMealPreference($event)"
     ></hospitality-bot-select>
     <hospitality-bot-select
       class="one-third-width"
@@ -44,6 +45,7 @@
         createPrompt: 'Add New Category',
         inputPrompt: 'Enter Category'
       }"
+      (onCreate)="createCategory($event)"
     ></hospitality-bot-select>
     <hospitality-bot-select
       class="one-third-width"
@@ -55,6 +57,7 @@
         createPrompt: 'Add New Type',
         inputPrompt: 'Enter Type'
       }"
+      (onCreate)="createType($event)"
     ></hospitality-bot-select>
     <hospitality-bot-time-picker
       class="one-third-width"

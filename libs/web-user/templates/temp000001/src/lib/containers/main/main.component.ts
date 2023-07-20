@@ -72,9 +72,13 @@ export class MainComponent implements OnInit, OnDestroy {
             this.getStepperData();
             this.listenForStepperChange();
             this.reservationData = reservationData;
-            this.reservationData.stateCompletedSteps = StepsArray.indexOf(
+
+            const stepIndex = StepsArray.indexOf(
               reservationData.stateCompletedSteps
             );
+
+            this.reservationData.stateCompletedSteps =
+              stepIndex === -1 ? 0 : stepIndex;
             this._reservationService.reservationData = reservationData;
           },
           ({ error }) => {

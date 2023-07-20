@@ -29,8 +29,9 @@ export class SummaryDetails implements Deserializable {
     );
 
     // refactor
-    this.stateCompletedSteps = StepsArray.indexOf(summary.stateCompletedSteps);
-    
+    const stepIndex = StepsArray.indexOf(summary.stateCompletedSteps);
+    this.stateCompletedSteps = stepIndex === -1 ? 0 : stepIndex;
+
     this.guestDetails = new GuestDetails().deserialize(summary.guestDetails);
     this.healthDeclaration = new Health().deserialize(
       summary.healthDeclaration

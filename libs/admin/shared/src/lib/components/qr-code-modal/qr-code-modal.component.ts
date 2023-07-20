@@ -20,7 +20,7 @@ export class QrCodeModalComponent implements OnInit {
   botshotUrl = 'assets/images/botshotlogo-color.png';
 
   //for route to redirect after scan
-  route = 'https://Leela.botshot.ai';
+  route = 'https://www.test.menu.com/';
 
   //for description heading
   descriptionsHeading = 'HOW TO ORDER';

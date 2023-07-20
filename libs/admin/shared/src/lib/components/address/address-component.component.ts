@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, SimpleChange } from '@angular/core';
 import { FormComponent } from '../form-component/form.components';
 import {
+  AbstractControl,
   ControlContainer,
   Form,
   FormBuilder,
@@ -34,6 +35,12 @@ export class AddressComponent extends FormComponent implements OnInit {
     this.loadGoogleMapsAPI();
     this.initForm();
     this.initInputControl();
+    const validators = this.inputControl?.validator;
+    //  const isRequired =
+
+    if (validators && validators({} as AbstractControl)?.required) {
+      this.addressForm.get('addressData').setValidators([Validators.required]);
+    }
     this.getValueFromParent();
     this.onValueChange();
   }
@@ -42,11 +49,6 @@ export class AddressComponent extends FormComponent implements OnInit {
     this.addressForm = this.fb.group({
       addressData: [[]],
     });
-
-    if (
-      Validators.required(this.controlContainer.control.get(this.controlName))
-    )
-      this.addressForm.get('addressData').setValidators([Validators.required]);
   }
 
   getValueFromParent() {

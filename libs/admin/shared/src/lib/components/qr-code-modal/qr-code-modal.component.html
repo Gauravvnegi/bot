@@ -17,43 +17,46 @@
 </div>
 <!-- /..../ -->
 <div
-  class="wrapper"
   id="qr-code-modal"
   [ngStyle]="{ 'background-image': 'url(' + backgroundURl + ')' }"
 >
   <div class="logo-container">
-    <img [src]="logoUrl" alt="" class="logo" />
-  </div>
-
-  <div class="description">
-    <p class="description__heading">{{ descriptionsHeading }}</p>
-    <div>
-      <ol class="custom-counter">
-        <li *ngFor="let item of descriptionsPoints">
-          {{ item }}
-        </li>
-      </ol>
+    <div class="logo-wrapper">
+      <img [src]="logoUrl" alt="" class="logo" />
     </div>
   </div>
 
-  <div class="qr-container">
-    <div class="qr-code">
-      <qrcode
-        [qrdata]="route"
-        [width]="256"
-        [errorCorrectionLevel]="'M'"
-      ></qrcode>
+  <div class="wrapper">
+    <div class="description">
+      <p class="description__heading">{{ descriptionsHeading }}</p>
+      <div>
+        <ol class="custom-counter">
+          <li *ngFor="let item of descriptionsPoints">
+            {{ item }}
+          </li>
+        </ol>
+      </div>
     </div>
-    <div class="url">
-      <p>
-        Please Visit <a href="">{{ route }}</a>
-      </p>
+
+    <div class="qr-container">
+      <div class="qr-code">
+        <qrcode
+          [qrdata]="route"
+          [width]="200"
+          [errorCorrectionLevel]="'M'"
+        ></qrcode>
+      </div>
+      <div class="url">
+        <p>
+          Please Visit <a href="">{{ route }}</a>
+        </p>
+      </div>
     </div>
-  </div>
-  <div class="footer">
-    <span class="text">Powered By</span>
-    <div class="logo-container">
-      <img class="logo" [src]="botshotUrl" alt="" />
+    <div class="footer">
+      <span class="footer__text">Powered By</span>
+      <div class="botshot-logo-container">
+        <img class="logo" [src]="botshotUrl" alt="" />
+      </div>
     </div>
   </div>
 </div>

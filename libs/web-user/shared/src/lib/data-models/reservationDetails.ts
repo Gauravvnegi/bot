@@ -27,7 +27,7 @@ export class StayDetails {
 
 export class Guest {
   id: string;
-  nameTitle: string;
+  salutation: string;
   firstName: string;
   lastName: string;
   contactDetails: ContactDetails;

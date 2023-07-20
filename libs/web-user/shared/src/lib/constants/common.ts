@@ -3,6 +3,6 @@ export const StepsArray = [
     'GUESTDETAILS',
     'DOCUMENTS',
     'PAYMENT',
-    'HEALTHDECLARATION',
+    // 'HEALTHDECLARATION',
     'SUMMARY',
   ];

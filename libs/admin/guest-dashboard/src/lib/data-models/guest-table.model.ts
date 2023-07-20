@@ -72,7 +72,7 @@ export class Guest implements IDeserializable {
   firstName: string;
   id: string;
   lastName: string;
-  nameTitle: string;
+  salutation: string;
   nationality: string;
   countryCode: string;
   phoneNumber: string;
@@ -103,7 +103,7 @@ export class Guest implements IDeserializable {
           get(input, ['lastName'], 'Name')
         )}`
       ),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'nationality', get(input, ['nationality'])),
       set(
         {},

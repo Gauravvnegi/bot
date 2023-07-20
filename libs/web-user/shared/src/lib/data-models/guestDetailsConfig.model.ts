@@ -72,7 +72,7 @@ export class Guest implements Deserializable {
   mobileNumber: string;
   nationality: string;
   email: string;
-  nameTitle: string;
+  salutation: string;
   type: string;
   label: string;
   role: string;
@@ -91,7 +91,7 @@ export class Guest implements Deserializable {
         this.getNationality(get(input, ['contactDetails', 'cc']))
       ),
       set({}, 'email', get(input, ['contactDetails', 'emailId'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'])),
+      set({}, 'salutation', get(input, ['salutation'])),
       set({}, 'type', get(input, ['type'])),
       set({}, 'label', get(input, ['label'])),
       set({}, 'role', get(input, ['role'])),

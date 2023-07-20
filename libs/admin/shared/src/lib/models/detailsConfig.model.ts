@@ -224,7 +224,7 @@ export class GuestDetailsConfig implements IDeserializable {
       this,
       set({}, 'id', get(input, ['id'])),
       set({}, 'code', get(input, ['code'])),
-      set({}, 'title', get(input, ['nameTitle'], '')),
+      set({}, 'title', get(input, ['salutation'], '')),
       set({}, 'firstName', get(input, ['firstName'])),
       set({}, 'lastName', get(input, ['lastName'])),
       set({}, 'countryCode', this.getNationality(get(contactDetails, ['cc']))),

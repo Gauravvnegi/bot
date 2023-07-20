@@ -108,7 +108,7 @@ export class StayDetails {
 
 export class Guest {
   id: string;
-  nameTitle: string;
+  salutation: string;
   firstName: string;
   lastName: string;
   contactDetails: ContactDetails;
@@ -128,7 +128,7 @@ export class Guest {
     Object.assign(
       this,
       set({}, 'id', get(summary, ['id'])),
-      set({}, 'nameTitle', get(summary, ['nameTitle'])),
+      set({}, 'salutation', get(summary, ['salutation'])),
       set({}, 'firstName', get(summary, ['firstName'])),
       set({}, 'lastName', get(summary, ['lastName'])),
       set({}, 'statusMessage', get(summary, ['statusMessage'])),

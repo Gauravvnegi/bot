@@ -1,7 +1,7 @@
 export const dataList = [
   {
     id: '1',
-    nameTitle: 'Mr.',
+    salutation: 'Mr.',
     firstName: 'John',
     lastName: 'Doe',
     contactDetails: {
@@ -31,7 +31,7 @@ export const dataList = [
   },
   {
     id: '1',
-    nameTitle: 'Mr.',
+    salutation: 'Mr.',
     firstName: 'John',
     lastName: 'Doe',
     contactDetails: {

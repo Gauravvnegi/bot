@@ -217,7 +217,7 @@ export class Guest {
   documentRequired: boolean;
   regcardUrl: string;
   id;
-  nameTitle;
+  salutation;
   firstName: string;
   lastName: string;
   countryCode: string;
@@ -229,7 +229,7 @@ export class Guest {
     Object.assign(
       this,
       set({}, 'id', get(input, ['id'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'firstName', trim(get(input, ['firstName']))),
       set({}, 'lastName', trim(get(input, ['lastName']))),
       set(

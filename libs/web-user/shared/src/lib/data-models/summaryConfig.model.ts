@@ -1,4 +1,5 @@
 import { DateService } from '@hospitality-bot/shared/utils';
+import { StepsArray } from 'libs/web-user/shared/src/lib/constants/common';
 import { get, set } from 'lodash';
 import { GuestTypes, GuestRole } from '../constants/guest';
 
@@ -23,9 +24,13 @@ export class SummaryDetails implements Deserializable {
       set({}, 'id', get(summary, ['id'])),
       set({}, 'arrivalTime', get(summary, ['arrivalTime'])),
       set({}, 'departureTime', get(summary, ['departureTime'])),
-      set({}, 'stateCompletedSteps', get(summary, ['stateCompletedSteps'])),
+      // set({}, 'stateCompletedSteps', get(summary, ['stateCompletedSteps'])),
       set({}, 'termsStatus', get(summary, ['termsStatus'], false))
     );
+
+    // refactor
+    this.stateCompletedSteps = StepsArray.indexOf(summary.stateCompletedSteps);
+    
     this.guestDetails = new GuestDetails().deserialize(summary.guestDetails);
     this.healthDeclaration = new Health().deserialize(
       summary.healthDeclaration

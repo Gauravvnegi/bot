@@ -3,7 +3,9 @@ export class ReservationDetails {
   number: string;
   status: string;
   state: string;
-  stateCompletedSteps: number;
+  // stateCompletedSteps: number; // 'DOCUMENTS'|'GUESTDETAILS'|'HEALTHDECLARATION'|'PAYMENT'|'STAYDETAILS'
+  stateCompletedSteps: any;
+
   stateMessage: object;
   stayDetails: StayDetails;
   guestDetails: GuestDetails;

@@ -123,7 +123,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     const journey = this._hotelService.getCurrentJourneyConfig();
     this.$subscription.add(
       this._paymentDetailsService
-        .getPaymentConfiguration(res_data.hotel.id, journey.name)
+        .getPaymentConfiguration(res_data.entity.id, journey.name)
         .subscribe((response) => {
           this.hotelPaymentConfig = response;
           this.isConfigLoaded = true;

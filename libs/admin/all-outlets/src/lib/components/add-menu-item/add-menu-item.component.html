@@ -29,7 +29,9 @@
       [options]="mealPreferences"
       label="Meal Preference"
       [props]="{
-        placeholder: 'Select Type'
+        placeholder: 'Select Type',
+        createPrompt: 'Add New Meal Preference',
+        inputPrompt: 'Enter Meal Preference'
       }"
     ></hospitality-bot-select>
     <hospitality-bot-select
@@ -38,7 +40,9 @@
       [options]="categories"
       label="Category"
       [props]="{
-        placeholder: 'Select Category'
+        placeholder: 'Select Category',
+        createPrompt: 'Add New Category',
+        inputPrompt: 'Enter Category'
       }"
     ></hospitality-bot-select>
     <hospitality-bot-select
@@ -47,7 +51,9 @@
       [options]="types"
       label="Type"
       [props]="{
-        placeholder: 'Select Type'
+        placeholder: 'Select Type',
+        createPrompt: 'Add New Type',
+        inputPrompt: 'Enter Type'
       }"
     ></hospitality-bot-select>
     <hospitality-bot-time-picker

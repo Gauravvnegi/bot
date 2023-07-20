@@ -2,9 +2,9 @@
   <div class="bk-summary_heading">Booking Summary</div>
   <p class="divider"></p>
   <div class="bk-summary_subheading" *ngIf="bookingType === 'ROOM_TYPE'">
-    {{ summaryData?.name }}
+    {{ roomTypeLabel }}<span *ngIf="roomTypeCount">+ {{ roomTypeCount }}</span>
   </div>
-  <div class="bk-summary_subheading" *ngIf="bookingType !== 'ROOM_TYPE'">
+  <div class="bk-summary_subheading" *ngIf="bookingType === 'ROOM_TYPE'">
     {{ heading }}
   </div>
   <div class="bk-summary_subheading_label">

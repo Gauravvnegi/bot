@@ -145,6 +145,7 @@ export class RoomIteratorComponent extends IteratorComponent
                 };
               }
             );
+
             this.roomControls[index].get('ratePlan').enable();
             this.roomControls[index]
               .get('ratePlan')
@@ -188,12 +189,16 @@ export class RoomIteratorComponent extends IteratorComponent
    */
   listenRatePlanChanges(index: number) {
     this.roomControls[index].get('ratePlan')?.valueChanges.subscribe((res) => {
-      const selectedRatePlan = this.ratePlanOptionsArray[index].find(
-        (item) => item.value === res
-      );
-      if (selectedRatePlan) {
-        this.formService.price.next(selectedRatePlan.price);
-        this.formService.discountedPrice.next(selectedRatePlan.discountedPrice);
+      if (res) {
+        const selectedRatePlan = this.ratePlanOptionsArray[index].find(
+          (item) => item.value === res
+        );
+        if (selectedRatePlan) {
+          this.formService.price.next(selectedRatePlan.price);
+          this.formService.discountedPrice.next(
+            selectedRatePlan.discountedPrice
+          );
+        }
       }
     });
   }

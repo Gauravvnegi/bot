@@ -33,6 +33,7 @@ export class FormService {
   //  Booking Summary Props
   price = new BehaviorSubject(0);
   discountedPrice = new BehaviorSubject(0);
+  // roomType = new BehaviorSubject({roomTypeCount: 0, roomTypeName: ''});
 
   mapOutletReservationData(input: ReservationForm, outletType: string) {
     const reservationData = new OutletFormData();

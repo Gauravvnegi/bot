@@ -242,7 +242,7 @@ export enum ReservationStatusType {
 //   },
 //   {
 //     label: 'Cancel',
-//     value: ReservationStatusType.CANCELLED,
+//     value: ReservationStatusType.CANCELED,
 //     type: 'failed',
 //     disabled: false,
 //   },
@@ -283,7 +283,7 @@ export const chips: Chip<
     type: 'active',
   },
   {
-    label: 'Cancelled ',
+    label: 'Canceled ',
     value: ReservationStatusType.CANCELED,
     total: 0,
     isSelected: false,

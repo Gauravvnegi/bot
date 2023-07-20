@@ -80,10 +80,10 @@ export class BookingSummaryComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
-    this.listenForPriceChanges();
+    this.listenForSummaryDataChanges();
   }
 
-  listenForPriceChanges() {
+  listenForSummaryDataChanges() {
     this.formService.price.subscribe((res) => {
       this.price = res;
     });

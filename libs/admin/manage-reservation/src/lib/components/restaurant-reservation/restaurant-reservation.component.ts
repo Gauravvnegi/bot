@@ -175,7 +175,7 @@ export class RestaurantReservationComponent implements OnInit {
 
     this.reservationInfoControls.reservationType.valueChanges.subscribe(
       (res) => {
-        if (res === 'NOSHOW' || res === 'CANCELLED') {
+        if (res === 'NOSHOW' || res === 'CANCELED') {
           this.orderInfoControls.tableNumber.disable();
           this.orderInfoControls.numberOfAdults.disable();
         } else {

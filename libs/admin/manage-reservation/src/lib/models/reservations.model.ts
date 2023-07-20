@@ -7,7 +7,7 @@ import {
 } from '../types/response.type';
 import { EntityState, FlagType, Option } from '@hospitality-bot/admin/shared';
 import { SearchGuestResponse } from 'libs/admin/guests/src/lib/types/guest.type';
-import { MenuItemsData, SpaItems } from '../constants/form';
+import { MenuItemsData, RoomTypes, SpaItems } from '../constants/form';
 import { OutletFormData } from '../types/forms.types';
 /* Reservation */
 export class Reservation {
@@ -227,7 +227,7 @@ export class ReservationFormData {
   offerId: string;
   roomInformation: RoomTypeInfo;
   orderInforamtion: OrderInfo;
-  deserialize(input) {
+  deserialize(input): this {
     this.reservationInformation = new BookingInfo().deserialize(input);
     this.guestInformation = new GuestInfo().deserialize(input);
     this.address = new AddressInfo().deserialize(input.address);
@@ -330,7 +330,7 @@ export class BookingInfo {
   sourceName: string;
   marketSegment: string;
 
-  deserialize(input) {
+  deserialize(input): this {
     this.from = input?.from;
     this.to = input?.to;
     this.reservationType = input?.reservationType;
@@ -349,7 +349,7 @@ export class GuestInfo {
   email: string;
   countryCode: number;
   phoneNumber: number;
-  deserialize(input) {
+  deserialize(input): this {
     this.firstName = input?.firstName;
     this.lastName = input?.lastName;
     this.email = input?.email;
@@ -365,7 +365,7 @@ export class AddressInfo {
   countryCode: string;
   state: string;
   postalCode: string;
-  deserialize(input) {
+  deserialize(input): this {
     this.addressLine1 = input?.addressLine1;
     this.city = input?.city;
     this.countryCode = input?.countryCode;
@@ -379,7 +379,7 @@ export class PaymentInfo {
   totalPaidAmount: string;
   paymentMethod: string;
   paymentRemark: string;
-  deserialize(input) {
+  deserialize(input): this {
     this.totalPaidAmount = input?.totalPaidAmount;
     this.paymentMethod = input?.paymentMethod;
     this.paymentRemark = input?.paymentRemark;
@@ -388,10 +388,11 @@ export class PaymentInfo {
 }
 
 export class RoomTypeInfo {
+  // roomTypes: RoomTypes[];
   adultCount: number;
   childCount: number;
   roomCount: number;
-  roomType: string;
+  roomType: number;
   roomTypeId: string;
   deserialize(input): this {
     this.adultCount = input?.adultCount;
@@ -399,13 +400,21 @@ export class RoomTypeInfo {
     this.roomCount = input?.roomCount;
     this.roomType = input?.roomType;
     this.roomTypeId = input?.roomTypeId;
+    // this.roomTypes.map((item)=>({
+    //   roomTypeId: item?.roomTypeId,
+    //   ratePlanId: item?.ratePlanId,
+    //   roomCount: item?.roomCount,
+    //   roomNumber: item?.roomNumber,
+    //   adultCount: item?.adultCount,
+    //   childCount: input?.childCount,
+    // }))
     return this;
   }
 }
 
 export class PaymentMethodList {
   records: PaymentMethod[];
-  deserialize(input) {
+  deserialize(input): this {
     this.records = Object.keys(input).map((key) => {
       return new PaymentMethod().deserialize(input[key]);
     });
@@ -445,7 +454,7 @@ export class SummaryData {
   // roomTypeName: string;
   // roomNumbers: Option[];
 
-  deserialize(input: SummaryResponse) {
+  deserialize(input: SummaryResponse): this {
     // this.id = input?.id;
     // this.roomTypeName = input?.roomTypeName;
     // this.roomNumbers = input?.roomNumbers;

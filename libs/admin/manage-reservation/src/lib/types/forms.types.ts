@@ -85,3 +85,9 @@ type ItemsData = {
   unit: number;
   amount: number;
 };
+
+// export type RoomTypeSummary = {
+//   roomTypeName: string;
+//   roomTypeCount: number;
+//   numberOfRooms: number;
+// }

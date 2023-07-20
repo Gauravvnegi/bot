@@ -153,7 +153,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     if (this.reservationId) {
       this.reservationTypes = [
         ...roomReservationTypes,
-        { label: 'Cancelled', value: 'CANCELLED' },
+        { label: 'Canceled', value: 'CANCELED' },
       ];
       this.getReservationDetails();
     } else {

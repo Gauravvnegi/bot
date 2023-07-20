@@ -166,7 +166,7 @@ export const statusOptions = [
   { label: 'Draft', value: 'DRAFT' },
   { label: 'Confirmed', value: 'CONFIRMED' },
   { label: 'Waitlisted', value: 'WAITLISTED' },
-  { label: 'Cancelled', value: 'CANCELLED' },
+  { label: 'Canceled', value: 'CANCELED' },
   { label: 'No Show', value: 'NOSHOW' },
   { label: 'Completed', value: 'COMPLETED' },
 ];

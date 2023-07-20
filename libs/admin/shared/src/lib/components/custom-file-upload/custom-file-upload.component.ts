@@ -103,8 +103,17 @@ export class CustomFileUploadComponent
   ngOnInit(): void {
     this.inputControl = this.controlContainer.control.get(this.formControlName);
     if (this.inputControl.disabled) this.isDisable = this.inputControl.disabled;
+    this.addRequiredAsterisk();
   }
 
+  addRequiredAsterisk() {
+    const validators = this.inputControl?.validator;
+    const isRequired =
+      validators && validators({} as AbstractControl)?.required;
+    if (this.label && isRequired) {
+      this.label = this.label + ' *';
+    }
+  }
   /**
    * @function processCheckboxChange
    * @description process checkbox change

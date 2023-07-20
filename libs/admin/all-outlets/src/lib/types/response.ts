@@ -1,18 +1,18 @@
 export type OutletResponse = {
   id: string;
-  status: string;
+  category: string;
   name: string;
-  emailId: string;
-  contact: Contact;
+  imageUrl: Image[];
+  logo: string;
   address: Address;
-  imageUrl;
+  timezone: string;
+  redirectionParameter: {};
+  socialPlatforms: any[];
+  showAddress: boolean;
+  contact: Contact;
   description: string;
-  serviceIds: string[];
-  socialPlatforms;
-  type: string;
-  subType: string;
-  cuisinesType: string;
-  minimumOccupancy: number;
+  emailId: string;
+  status: string;
   maximumOccupancy: number;
   dayOfOperationStart: string;
   dayOfOperationEnd: string;
@@ -20,7 +20,14 @@ export type OutletResponse = {
   timeDayEnd: string;
   area: string;
   dimension: string;
-  rules: string;
+  type: string;
+  subType: string;
+  parentId: string;
+};
+
+type Image = {
+  url: string;
+  isFeatured: boolean;
 };
 
 export type Contact = {
@@ -29,8 +36,13 @@ export type Contact = {
 };
 
 export type Address = {
-  country: string;
-  pinCode: number;
+  id: string;
   city: string;
+  country: string;
+  latitude: number;
+  longitude: number;
+  pincode: number;
+  formattedAddress: string;
   state: string;
+  postalCode: string;
 } & Record<string, any>;

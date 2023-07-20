@@ -47,6 +47,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   isPaidLoading = false;
   isCompLoading = false;
   siteId: string;
+  logoUrl: string;
 
   @HostListener('window:beforeunload', ['$event'])
   handleBeforeUnload(event: BeforeUnloadEvent) {
@@ -139,7 +140,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         this.loading = true;
         this.outletService.getOutletById(this.outletId).subscribe(
           (res) => {
-            const { type, subType, ...rest } = res;
+            const { type, subType, logo, ...rest } = res;
+            this.logoUrl = logo;
 
             this.initOptionConfig(type);
 
@@ -355,7 +357,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    */
   onPrintQrCode() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '46vw';
+    dialogConfig.width = '40vw';
     dialogConfig.disableClose = true;
     const togglePopupCompRef = this.modalService.openDialog(
       QrCodeModalComponent,
@@ -373,7 +375,8 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         'Browse the menu and place your order',
         'Place your orders',
       ],
-      route: 'https://Leela.botshot.ai',
+      route: 'https://www.test.menu.com/',
+      logoUrl: this.logoUrl,
     };
     togglePopupCompRef.componentInstance.onClose.subscribe(() => {
       this.modalService.close();

@@ -107,7 +107,7 @@
             >
           </ng-container>
         </button>
-        <button
+        <!-- <button
           (click)="downloadHealthcard(details.healDeclarationDetails.url)"
           class="check-button"
         >
@@ -137,7 +137,7 @@
               >help</mat-icon
             >
           </ng-container>
-        </button>
+        </button> -->
       </div>
     </div>
     <div
@@ -490,7 +490,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMPLETED'">
                   <!-- <hospitality-bot-button
-                    *ngIf="branchConfig.pmsEnable"      
+                    *ngIf="branchConfig.pmsEnable"
                     label="Download Invoice/Folio"
                     (click)="downloadInvoice()"
                     variant="outlined"
@@ -526,7 +526,7 @@
                   *ngIf="channel.isView"
                   class="social-icons"
                   (click)="openSendNotification(channel.name)"
-                  >
+                >
                   <!-- [style.display]="channel.isView ? 'flex' : 'none'" -->
                   <div class="icon">
                     <img [src]="getIconUrl(channel)" />

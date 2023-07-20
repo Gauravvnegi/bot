@@ -248,9 +248,9 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
     // if (event.value !== 'Closed') return;
     this.loading = true;
     const requestData = {
-      jobID: data.id,
-      roomNo: data.rooms[0].roomNumber,
-      lastName: data.guestDetails.primaryGuest.lastName,
+      jobID: data?.id,
+      roomNo: data?.rooms[0]?.roomNumber,
+      lastName: data?.guestDetails?.primaryGuest?.lastName,
       systemDateTime: DateService.currentDate('DD-MMM-YYYY HH:mm:ss'),
     };
 

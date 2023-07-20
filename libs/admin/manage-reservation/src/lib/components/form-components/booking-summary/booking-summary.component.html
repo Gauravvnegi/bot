@@ -1,5 +1,5 @@
 <ng-container *ngIf="!displayBookingOffer; else bookingOffer">
-  <div class="bk-summary_heading">Booking Summary</div>
+  <div class="bk-summary_heading">Reservation Summary</div>
   <p class="divider"></p>
   <div class="bk-summary_subheading" *ngIf="bookingType === 'ROOM_TYPE'">
     {{ roomTypeLabel }}<span *ngIf="roomTypeCount">+ {{ roomTypeCount }}</span>
@@ -136,7 +136,7 @@
   <div class="bk-summary_btnwrapper">
     <hospitality-bot-button
       (click)="handleBooking()"
-      label="{{ this.reservationId ? 'Update' : 'Confirm' }} Booking"
+      label="{{ this.reservationId ? 'Update' : 'Confirm' }} Reservation"
       [disabled]="controlContainer.control.invalid || disabledForm"
       [isLoading]="isBooking"
     ></hospitality-bot-button>

@@ -34,7 +34,7 @@ import {
   reservationStatusDetails,
   title,
 } from '../../constants/reservation-table';
-import { manageBookingRoutes } from '../../constants/routes';
+import { manageReservationRoutes } from '../../constants/routes';
 import {
   BookingConfig,
   ReservationList,
@@ -53,7 +53,7 @@ import { SelectedEntity } from '../../types/reservation.type';
   ],
 })
 export class ManageReservationDataTableComponent extends BaseDatableComponent {
-  readonly manageBookingRoutes = manageBookingRoutes;
+  readonly manageReservationRoutes = manageReservationRoutes;
   readonly reservationStatusDetails = reservationStatusDetails;
   readonly reservationType = ReservationType;
   scrollTargetPoint: number = 150;
@@ -365,7 +365,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   editReservation(id: string) {
     this.router.navigate(
       [
-        `/pages/efrontdesk/booking/${manageBookingRoutes.editBooking.route}/${id}`,
+        `/pages/efrontdesk/reservation/${manageReservationRoutes.editReservation.route}/${id}`,
       ],
     );
   }

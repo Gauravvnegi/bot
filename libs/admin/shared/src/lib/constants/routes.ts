@@ -18,7 +18,7 @@ export const routes = {
   [ModuleNames.HOUSE_GUEST]: 'efrontdesk/house-guest',
   [ModuleNames.REQUEST_DASHBOARD]: 'efrontdesk/request-analytics',
   [ModuleNames.REQUEST]: 'efrontdesk/request',
-  [ModuleNames.ADD_RESERVATION]: 'efrontdesk/booking',
+  [ModuleNames.ADD_RESERVATION]: 'efrontdesk/reservation',
 
   // Freddie
   [ModuleNames.FREDDIE]: 'freddie',

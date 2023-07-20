@@ -9,7 +9,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import { Subscription } from 'rxjs';
-import { manageBookingRoutes } from '../../constants/routes';
+import { manageReservationRoutes } from '../../constants/routes';
 import {
   BookingInfo,
   OfferData,
@@ -90,8 +90,8 @@ export class AddReservationComponent implements OnInit, OnDestroy {
     if (this.expandAccordion) {
       this.formService.enableAccordion = false;
     }
-    const { navRoutes, title } = manageBookingRoutes[
-      this.reservationId ? 'editBooking' : 'addBooking'
+    const { navRoutes, title } = manageReservationRoutes[
+      this.reservationId ? 'editReservation' : 'addReservation'
     ];
     this.routes = navRoutes;
     this.pageTitle = title;

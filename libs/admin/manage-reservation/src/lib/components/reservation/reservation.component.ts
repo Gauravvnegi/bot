@@ -33,7 +33,7 @@ export class ReservationComponent extends BaseDatatableComponent
   loading = false;
   navRoutes = [
     {
-      label: 'Manage Booking',
+      label: 'Manage Reservation',
       link: '/admin',
     },
   ];

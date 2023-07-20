@@ -14,7 +14,7 @@ import {
   Option,
 } from '@hospitality-bot/admin/shared';
 import { Subscription } from 'rxjs';
-import { manageBookingRoutes } from '../../constants/routes';
+import { manageReservationRoutes } from '../../constants/routes';
 import {
   OfferList,
   OfferData,
@@ -99,8 +99,8 @@ export class RestaurantReservationComponent implements OnInit {
     this.initForm();
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
 
-    const { navRoutes, title } = manageBookingRoutes[
-      this.reservationId ? 'editBooking' : 'addBooking'
+    const { navRoutes, title } = manageReservationRoutes[
+      this.reservationId ? 'editReservation' : 'addReservation'
     ];
     this.routes = navRoutes;
     this.pageTitle = title;

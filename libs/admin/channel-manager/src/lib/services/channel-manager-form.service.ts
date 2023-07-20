@@ -17,6 +17,7 @@ export class ChannelManagerFormService {
     private configService: ConfigService
   ) {}
 
+  isRoomDetailsLoaded = false;
   roomDetails = new BehaviorSubject<RoomTypes[]>([]);
   RatePlan = {
     SUITE: '61bb58e1-962f-47da-bcbf-2281b09df91c',
@@ -41,7 +42,7 @@ export class ChannelManagerFormService {
       this.configService.$config.subscribe((data) => {
         configRatePlans = data.roomRatePlans;
       });
-
+      this.isRoomDetailsLoaded = true;
       this.roomDetails.next(makeRoomsData(rooms, configRatePlans));
     });
   }

@@ -27,7 +27,7 @@ export class GuestFactory {
       phoneNo: contact.contactNumber,
       company: input.companyId,
       gender: input.gender ?? '',
-      dateOfBirth: input.dob ?? Date.now(),
+      dateOfBirth: input.dateOfBirth ?? Date.now(),
       age: input?.age ?? '',
     });
   }

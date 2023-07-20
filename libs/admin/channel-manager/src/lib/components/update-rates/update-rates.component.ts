@@ -96,7 +96,7 @@ export class UpdateRatesComponent implements OnInit {
 
   initRoomTypes() {
     this.channelMangerForm.roomDetails.subscribe((rooms: RoomTypes[]) => {
-      if (rooms.length !== 0) {
+      if (this.channelMangerForm.isRoomDetailsLoaded) {
         this.roomTypes = rooms;
         this.allRoomTypes = rooms;
         this.initForm();

@@ -15,6 +15,26 @@
             label="No. of Adults"
             controlName="numberOfAdults"
           ></hospitality-bot-input>
+          <div class="half-width type-wrapper">
+            <hospitality-bot-select
+              label="Food Package"
+              class="half-width"
+              controlName="foodPackage"
+              [options]="foodPackages"
+              [props]="{
+                placeholder: 'Select'
+              }"
+            ></hospitality-bot-select>
+            <hospitality-bot-input
+              class="half-width food-package"
+              label="Count"
+              controlName="foodPackageCount"
+              [props]="{
+                placeholder: 'Enter Count',
+                type: 'number'
+              }"
+            ></hospitality-bot-input>
+          </div>
           <hospitality-bot-iterator
             class="iterator full-width"
             [fields]="fields"
@@ -43,9 +63,9 @@
         [bookingInfo]="{
           header: 'Wedding And Hall',
           subHeader: 'The Leela, New Delhi, 210002',
-          price: '2000',
-          discountedPrice: '1200',
-          guestInfo: 'For 2 Adults',
+          price: 2000,
+          discountedPrice: 1200,
+          item: 'For 2 Adults',
           stayInfo: 'some info',
           bookingType: bookingType
         }"

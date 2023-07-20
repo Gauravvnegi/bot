@@ -20,6 +20,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ReservationForm } from '../../../constants/form';
+import { FormService } from '../../../services/form.service';
 
 @Component({
   selector: 'hospitality-bot-booking-summary',
@@ -39,10 +40,11 @@ export class BookingSummaryComponent implements OnInit {
   header = '';
   subHeader = '';
   stayInfo = '';
-  price = '';
+  price = 0;
   guestInfo = '';
-  discountedPrice = '';
+  discountedPrice = 0;
   bookingType = '';
+  outletId = '';
 
   $subscription = new Subscription();
 
@@ -70,13 +72,24 @@ export class BookingSummaryComponent implements OnInit {
     private router: Router,
     protected activatedRoute: ActivatedRoute,
     private modalService: ModalService,
-    private _clipboard: Clipboard
+    private _clipboard: Clipboard,
+    private formService: FormService
   ) {}
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
+    this.listenForSummaryDataChanges();
+  }
+
+  listenForSummaryDataChanges() {
+    this.formService.price.subscribe((res) => {
+      this.price = res;
+    });
+    this.formService.discountedPrice.subscribe((res) => {
+      this.discountedPrice = res;
+    });
   }
 
   offerSelect(item?: any): void {
@@ -90,15 +103,25 @@ export class BookingSummaryComponent implements OnInit {
 
   handleBooking(): void {
     this.isBooking = true;
-    const data = this.parentFormGroup.getRawValue();
+    let data: any;
+    if (this.bookingType === 'HOTEL')
+      data = this.manageReservationService.mapReservationData(
+        this.parentFormGroup.getRawValue()
+      );
+    else
+      data = this.formService.mapOutletReservationData(
+        this.parentFormGroup.getRawValue(),
+        this.bookingType
+      );
     if (this.reservationId) this.updateReservation(data);
     else this.createReservation(data);
   }
 
   createReservation(data): void {
+    const type = this.bookingType === 'ROOM_TYPE' ? 'ROOM_TYPE' : 'OUTLET';
     this.$subscription.add(
       this.manageReservationService
-        .createReservation(this.entityId, data)
+        .createReservation(this.outletId, data, type)
         .subscribe(
           (res: ReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
@@ -116,7 +139,7 @@ export class BookingSummaryComponent implements OnInit {
   updateReservation(data): void {
     this.$subscription.add(
       this.manageReservationService
-        .updateReservation(this.entityId, this.reservationId, data)
+        .updateReservation(this.outletId, this.reservationId, data)
         .subscribe(
           (res: ReservationResponse) => {
             this.bookingConfirmationPopup(res?.reservationNumber);
@@ -204,9 +227,10 @@ export class BookingSummaryComponent implements OnInit {
 type BookingSummaryInfo = {
   header: string;
   subHeader: string;
-  stayInfo: string;
+  itemInfo: string;
   price: string;
   guestInfo: string;
   discountedPrice: string;
   bookingType: string;
+  outletId?: string;
 };

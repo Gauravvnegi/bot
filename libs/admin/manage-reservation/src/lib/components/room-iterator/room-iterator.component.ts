@@ -5,7 +5,6 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import {
@@ -31,6 +30,7 @@ import {
   RoomTypeOption,
   RoomTypeOptionList,
 } from '../../models/reservations.model';
+import { FormService } from '../../services/form.service';
 @Component({
   selector: 'hospitality-bot-room-iterator',
   templateUrl: './room-iterator.component.html',
@@ -43,19 +43,29 @@ export class RoomIteratorComponent extends IteratorComponent
 
   @Output() refreshData = new EventEmitter();
   @Output() listenChanges = new EventEmitter();
+
   fields = roomFields;
+
+  entityId: string;
   globalQueries = [];
   errorMessages = {};
+
   roomTypeOffSet = 0;
   roomTypeLimit = 10;
+
+  maxAdultLimit = 0;
+  maxChildLimit = 0;
+
   ratePlans: Option[] = [];
   roomTypes: RoomFieldTypeOption[] = [];
-  entityId: string;
+
   $subscription = new Subscription();
+
   loadingRoomTypes = false;
 
   ratePlanOptionsArray: Option[][] = [];
   roomNumberOptionsArray: Option[][] = [];
+
   @ViewChild('main') main: ElementRef;
 
   constructor(
@@ -65,16 +75,15 @@ export class RoomIteratorComponent extends IteratorComponent
     private manageReservationService: ManageReservationService,
     private snackbarService: SnackBarService,
     private controlContainer: ControlContainer,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private formService: FormService
   ) {
     super(fb);
   }
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-    this.initOptions();
-    this.parentFormGroup = this.controlContainer.control as FormGroup;
-    this.roomTypeArray = this.fb.array([]);
+    this.initDetails();
     this.createNewFields();
     this.listenForGlobalFilters();
   }
@@ -86,73 +95,117 @@ export class RoomIteratorComponent extends IteratorComponent
     const data = {
       roomTypeId: ['', [Validators.required]],
       ratePlan: [{ value: '', disabled: true }],
+      roomCount: ['', [Validators.required, Validators.min(1)]],
       roomNumber: [{ value: [], disabled: true }],
-      adultCount: ['', [Validators.required, Validators.min(1)]],
-      childCount: ['', [Validators.min(0)]],
-      price: [''],
+      adultCount: [''],
+      childCount: [''],
     };
 
     const formGroup = this.fb.group(data);
     this.roomTypeArray.push(formGroup);
 
+    // Index for keeping track of roomTypes array.
     const index = this.roomTypeArray.controls.indexOf(formGroup);
-    // formGroup.addControl('index', this.fb.control(index));
     const roomInformationGroup = this.fb.group({
       roomTypes: this.roomTypeArray,
     });
     this.parentFormGroup.addControl('roomInformation', roomInformationGroup);
-    // this.roomControls[index].get('index').setValue(index);
+
     this.listenRoomTypeChanges(index);
     this.listenRatePlanChanges(index);
     this.listenForFormChanges(index);
-
-    // this.setFormDisability();
   }
 
+  /**
+   * @function listenRoomTypeChanges Listen changes in room type
+   * @param index to keep track of the form array.
+   */
   listenRoomTypeChanges(index: number) {
     this.roomControls[index]
       .get('roomTypeId')
       ?.valueChanges.subscribe((res) => {
         if (res) {
+          // Get currently selected room type
           const selectedRoomType = this.roomTypes.find(
             (item) => item.value === res
           );
           if (selectedRoomType) {
+            // find the rate plan available in the room type
             this.ratePlanOptionsArray[index] = selectedRoomType.ratePlan.map(
               (item) => {
                 const availableRatePlan = this.ratePlans.find(
                   (ratePlan) => ratePlan.value === item.value
                 );
+                // set the price, value and discounted price of the rate plan.
                 return {
                   label: availableRatePlan ? availableRatePlan.label : '',
                   value: item.value,
                   price: item.price,
+                  discountedPrice: item.discountedPrice,
                 };
               }
             );
+
             this.roomControls[index].get('ratePlan').enable();
             this.roomControls[index]
               .get('ratePlan')
               .setValidators([Validators.required]);
           }
-          this.roomControls[index].get('adultCount').setValue(1);
-          this.roomControls[index].get('childCount').setValue(0);
-          // this.fields[2].options = ['201', '202'];
+          this.updateFormValueAndValidity(selectedRoomType, index);
         }
       });
   }
 
+  /**
+   * @function updateFormValueAndValidity Updates child, adult and room count values and validations
+   */
+  updateFormValueAndValidity(
+    selectedRoomType: RoomFieldTypeOption,
+    index: number
+  ) {
+    this.maxAdultLimit = selectedRoomType.maxAdult;
+    this.maxChildLimit = selectedRoomType.maxAdult;
+    this.roomControls[index]
+      .get('childCount')
+      .setValidators([
+        Validators.min(0),
+        Validators.max(selectedRoomType.maxChildren),
+      ]);
+    this.roomControls[index]
+      .get('adultCount')
+      .setValidators([
+        Validators.required,
+        Validators.min(1),
+        Validators.max(selectedRoomType.maxAdult),
+      ]);
+    this.roomControls[index].get('adultCount').setValue(1);
+    this.roomControls[index].get('roomCount').setValue(1);
+    this.roomControls[index].get('childCount').setValue(0);
+  }
+
+  /**
+   * @function listenRatePlanChanges Listen changes in rate plan
+   * @param index to keep track of the form array.
+   */
   listenRatePlanChanges(index: number) {
     this.roomControls[index].get('ratePlan')?.valueChanges.subscribe((res) => {
-      const selectedRatePlan = this.ratePlanOptionsArray[index].find(
-        (item) => item.value === res
-      );
-      if (selectedRatePlan)
-        this.roomControls[index].get('price').setValue(selectedRatePlan.price);
+      if (res) {
+        const selectedRatePlan = this.ratePlanOptionsArray[index].find(
+          (item) => item.value === res
+        );
+        if (selectedRatePlan) {
+          this.formService.price.next(selectedRatePlan.price);
+          this.formService.discountedPrice.next(
+            selectedRatePlan.discountedPrice
+          );
+        }
+      }
     });
   }
 
-  initOptions() {
+  initDetails() {
+    this.parentFormGroup = this.controlContainer.control as FormGroup;
+    this.roomTypeArray = this.fb.array([]);
     this.configService.$config.subscribe((value) => {
       if (value) {
         const { roomRatePlans } = value;
@@ -160,7 +213,6 @@ export class RoomIteratorComponent extends IteratorComponent
           label: item.label,
           value: item.id,
         }));
-        // this.fields[1].options = this.ratePlans;
       }
     });
   }
@@ -205,7 +257,7 @@ export class RoomIteratorComponent extends IteratorComponent
                 return {
                   label: item.name,
                   value: item.id,
-                  ratePlanId: item.ratePlanId,
+                  ratePlan: item.ratePlan,
                   roomNumber: ['200', '201'],
                   roomCount: item.roomCount,
                   maxChildren: item.maxChildren,
@@ -213,7 +265,6 @@ export class RoomIteratorComponent extends IteratorComponent
                 };
               }) ?? [];
             this.fields[0].options = this.roomTypes;
-            // this.fields[3].options = this.roomTypes.map((item)=>)
           },
           ({ error }) => {
             this.snackbarService.openSnackBarAsText(error.message);
@@ -287,7 +338,7 @@ export class RoomIteratorComponent extends IteratorComponent
   }
 
   /**
-   * Handle addition of new field to array
+   * @function addNewField Handle addition of new field to array
    */
   addNewField() {
     if (this.roomTypeArray.invalid) {

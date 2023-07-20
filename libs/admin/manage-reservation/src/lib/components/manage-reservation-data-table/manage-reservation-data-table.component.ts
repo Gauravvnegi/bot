@@ -147,6 +147,9 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   loadData(event: LazyLoadEvent): void {
     this.formService.selectedTab = this.selectedTab;
+    if (!this.isSelectedEntityChanged && this.selectedEntity) {
+      this.initTableValue();
+    }
   }
 
   listenForSelectedEntityChange() {
@@ -359,13 +362,11 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   /**
    * @function editReservation To navigate to the edit page
    */
-  editReservation(id: string, expandAccordion = false) {
-    const queryParams = expandAccordion ? { expandAccordion: true } : undefined;
+  editReservation(id: string) {
     this.router.navigate(
       [
         `/pages/efrontdesk/booking/${manageBookingRoutes.editBooking.route}/${id}`,
       ],
-      { queryParams }
     );
   }
 

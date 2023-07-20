@@ -8,6 +8,7 @@ import { ReservationFormData } from '../types/forms.types';
 import { QueryConfig } from '../types/reservation.type';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { EntityType } from '@hospitality-bot/admin/shared';
+import { SummaryData } from '../models/reservations.model';
 
 @Injectable()
 export class ManageReservationService extends ApiService {
@@ -22,19 +23,36 @@ export class ManageReservationService extends ApiService {
     return this.get(
       // `/api/v1/entity/${entityId}/configuration?configType=PAYMENT&status=ACTIVE`
       `/api/v1/payment/configurations/admin?entity_id=${entityId}&status=ACTIVE`
-
     );
   }
 
-  createReservation(entityId: string, data): Observable<any> {
-    return this.post(
-      `/api/v1/booking?bookingType=ROOM_TYPE&entityId=${entityId}`,
-      data
-    );
+  createReservation(entityId: string, data, bookingType): Observable<any> {
+    return this.post(`/api/v1/booking?type=${bookingType}`, data, {
+      headers: { 'entity-id': entityId },
+    });
   }
 
   getOfferByRoomType(entityId: string, roomTypeId: string): Observable<any> {
-    return this.get(`/api/v1/entity/${entityId}/inventory/room/${roomTypeId}`);
+    // `/api/v1/entity/${entityId}/inventory/room/${roomTypeId}`
+    return this.get(
+      `/api/v1/payment/configurations/admin?entity_id=${entityId}&status=ACTIVE`
+    ).pipe(
+      map((res) => {
+        res = {
+          offers: [
+            {
+              id: 1,
+              description: 'AGENT0020',
+            },
+            {
+              id: 2,
+              description: 'AGENT0202',
+            },
+          ],
+        };
+        return res;
+      })
+    );
   }
 
   getReservationDataById(bookingId: string, entityId: string): Observable<any> {
@@ -81,19 +99,10 @@ export class ManageReservationService extends ApiService {
     return this.post('api/v1/members?type=GUEST', data);
   }
 
-  getSummaryData(config: QueryConfig): Observable<any> {
-    return this.get(`/api/v1/booking/summary${config?.params}`).pipe(
-      map((res) => ({
-        ...res,
-        roomNumbers: [
-          { label: '200', value: '200' },
-          { label: '201', value: '201' },
-          { label: '202', value: '202' },
-          { label: '203', value: '203' },
-          { label: '204', value: '204' },
-        ],
-      }))
-    );
+  getSummaryData(entityId: string, data, config: QueryConfig): Observable<any> {
+    return this.post(`/api/v1/booking/summary${config?.params}`, data, {
+      headers: { 'entity-id': entityId },
+    });
   }
 
   getReservationItems<T>(config?: QueryConfig, id?: string): Observable<T> {
@@ -112,43 +121,43 @@ export class ManageReservationService extends ApiService {
     });
   }
 
-  // mapReservationData(formValue) {
-  //   const reservationData = new ReservationFormData();
-  //   // reservationData.firstName = formValue.guestInformation.firstName ?? '';
-  //   // reservationData.lastName = formValue.guestInformation.lastName ?? '';
-  //   // reservationData.email = formValue.guestInformation.email ?? '';
-  //   // reservationData.contact = {
-  //   //   countryCode: formValue?.guestInformation?.countryCode ?? '',
-  //   //   phoneNumber: formValue?.guestInformation?.phoneNumber ?? '',
-  //   // };
-  //   // reservationData.guestDetails = formValue.guestInformation.guestDetails;
-  //   reservationData.roomTypeId = formValue.roomInformation?.roomTypeId ?? '';
-  //   reservationData.adultCount = formValue.roomInformation?.adultCount ?? 0;
-  //   reservationData.childCount = formValue.roomInformation?.childCount ?? 0;
-  //   reservationData.roomCount = formValue.roomInformation?.roomCount ?? 0;
-  //   reservationData.from = formValue.reservationInformation.from ?? 0;
-  //   reservationData.to = formValue.reservationInformation.to ?? 0;
-  //   reservationData.reservationType =
-  //     formValue.reservationInformation.reservationType ?? '';
-  //   reservationData.source = formValue.reservationInformation.source ?? '';
-  //   reservationData.sourceName =
-  //     formValue.reservationInformation.sourceName ?? '';
-  //   reservationData.marketSegment =
-  //     formValue.reservationInformation.marketSegment ?? '';
-  //   reservationData.address = {
-  //     addressLine1: formValue.address.addressLine1 ?? '',
-  //     city: formValue.address.city ?? '',
-  //     state: formValue.address.state ?? '',
-  //     countryCode: formValue.address.countryCode ?? '',
-  //     postalCode: formValue.address.postalCode ?? '',
-  //   };
-  //   reservationData.paymentMethod = formValue.paymentMethod.paymentMethod ?? '';
-  //   reservationData.totalPaidAmount =
-  //     formValue.paymentMethod.totalPaidAmount ?? 0;
-  //   reservationData.offerId = formValue.offerId ?? '';
-  //   reservationData.paymentRemark = formValue.paymentMethod.paymentRemark ?? '';
-  //   return reservationData;
-  // }
+  mapReservationData(formValue) {
+    const reservationData = new ReservationFormData();
+    // reservationData.firstName = formValue.guestInformation.firstName ?? '';
+    // reservationData.lastName = formValue.guestInformation.lastName ?? '';
+    // reservationData.email = formValue.guestInformation.email ?? '';
+    // reservationData.contact = {
+    //   countryCode: formValue?.guestInformation?.countryCode ?? '',
+    //   phoneNumber: formValue?.guestInformation?.phoneNumber ?? '',
+    // };
+    // reservationData.guestDetails = formValue.guestInformation.guestDetails;
+    reservationData.roomTypeId = formValue.roomInformation?.roomTypeId ?? '';
+    reservationData.adultCount = formValue.roomInformation?.adultCount ?? 0;
+    reservationData.childCount = formValue.roomInformation?.childCount ?? 0;
+    reservationData.roomCount = formValue.roomInformation?.roomCount ?? 0;
+    reservationData.from = formValue.reservationInformation.from ?? 0;
+    reservationData.to = formValue.reservationInformation.to ?? 0;
+    reservationData.reservationType =
+      formValue.reservationInformation.reservationType ?? '';
+    reservationData.source = formValue.reservationInformation.source ?? '';
+    reservationData.sourceName =
+      formValue.reservationInformation.sourceName ?? '';
+    reservationData.marketSegment =
+      formValue.reservationInformation.marketSegment ?? '';
+    reservationData.address = {
+      addressLine1: formValue.address.addressLine1 ?? '',
+      city: formValue.address.city ?? '',
+      state: formValue.address.state ?? '',
+      countryCode: formValue.address.countryCode ?? '',
+      postalCode: formValue.address.postalCode ?? '',
+    };
+    reservationData.paymentMethod = formValue.paymentMethod.paymentMethod ?? '';
+    reservationData.totalPaidAmount =
+      formValue.paymentMethod.totalPaidAmount ?? 0;
+    reservationData.offerId = formValue.offerId ?? '';
+    reservationData.paymentRemark = formValue.paymentMethod.paymentRemark ?? '';
+    return reservationData;
+  }
 
   getReservationList(
     entityId,
@@ -240,7 +249,7 @@ export class ManageReservationService extends ApiService {
         res.entityStateCounts = {
           draft: 3,
           confirmed: 2,
-          cancelled: 0,
+          canceled: 0,
           waitListed: 0,
           noShow: 0,
           inSession: 0,

@@ -9,7 +9,7 @@ export const roomFields: IteratorField[] = [
     options: [],
     required: true,
     placeholder: 'Select',
-    width: '22%',
+    width: '18%',
     isAsync: true,
   },
   {
@@ -17,32 +17,37 @@ export const roomFields: IteratorField[] = [
     name: 'ratePlan',
     type: 'select',
     placeholder: 'Enter',
-    width: '22%',
+    width: '20%',
     isAsync: false,
+  },
+  {
+    label: 'Room Count',
+    name: 'roomCount',
+    type: 'input',
+    required: true,
+    placeholder: 'Enter',
+    width: '10%'
   },
   {
     label: 'Room Number',
     name: 'roomNumber',
     type: 'multi-select',
-    required: false,
     placeholder: 'Enter',
-    width: '22%',
+    width: '18%',
   },
   {
     label: 'Adult',
     name: 'adultCount',
     type: 'input',
-    required: true,
     placeholder: 'Enter',
-    width: '12%',
+    width: '10%',
   },
   {
     label: 'Kids',
     name: 'childCount',
     type: 'input',
-    required: false,
     placeholder: 'Enter',
-    width: '12%',
+    width: '10%',
   },
 ];
 
@@ -79,7 +84,7 @@ export const menuItemFields: IteratorField[] = [
     label: 'Menu Item',
     name: 'menuItems',
     type: 'select',
-    required: true,
+    required: false,
     placeholder: 'Search by name',
     width: '40%',
   },
@@ -87,7 +92,7 @@ export const menuItemFields: IteratorField[] = [
     label: 'Quantity',
     name: 'quantity',
     type: 'input',
-    required: true,
+    required: false,
     placeholder: 'Enter',
     width: '25%',
   },
@@ -95,7 +100,7 @@ export const menuItemFields: IteratorField[] = [
     label: 'Price',
     name: 'price',
     type: 'input',
-    required: true,
+    required: false,
     placeholder: 'Enter',
     width: '25%',
   },
@@ -105,26 +110,28 @@ export const spaFields: IteratorField[] = [
   {
     label: 'Service Name',
     name: 'serviceName',
-    type: 'input',
-    required: true,
+    type: 'select',
+    required: false,
+    options: [],
     placeholder: 'Search by name',
-    width: '40%',
+    width: '36%',
+    isAsync: true,
   },
   {
     label: 'Quantity',
-    name: 'serviceName',
+    name: 'quantity',
     type: 'input',
-    required: true,
+    required: false,
     placeholder: 'Enter',
-    width: '30%',
+    width: '28%',
   },
   {
     label: 'Price',
     name: 'price',
     type: 'input',
-    required: true,
+    required: false,
     placeholder: 'Enter',
-    width: '30%',
+    width: '28%',
   },
 ];
 
@@ -153,4 +160,40 @@ export const venueFields: IteratorField[] = [
     placeholder: 'Enter',
     width: '30%',
   },
+];
+
+export const statusOptions = [
+  { label: 'Draft', value: 'DRAFT' },
+  { label: 'Confirmed', value: 'CONFIRMED' },
+  { label: 'Waitlisted', value: 'WAITLISTED' },
+  { label: 'Canceled', value: 'CANCELED' },
+  { label: 'No Show', value: 'NOSHOW' },
+  { label: 'Completed', value: 'COMPLETED' },
+];
+
+export const editModeStatusOptions = [
+  { label: 'Draft', value: 'DRAFT' },
+  { label: 'Confirmed', value: 'CONFIRMED' },
+  { label: 'Waitlisted', value: 'WAITLISTED' },
+  { label: 'Completed', value: 'COMPLETED' },
+];
+
+export const eventOptions = [
+  { label: 'Anniversary', value: 'ANNIVERSARY' },
+  { label: 'Birthday', value: 'BIRTHDAY' },
+  { label: 'Wedding', value: 'WEDDING' },
+  { label: 'Conference', value: 'CONFERENCE' },
+  { label: 'Exhibition', value: 'EXHIBITION' },
+  { label: 'Seminar', value: 'SEMINAR' },
+];
+
+export const restaurantReservationTypes = [
+  { label: 'Dine-in', value: 'DINE_IN' },
+  { label: 'Delivery', value: 'Delivery' },
+];
+
+export const roomReservationTypes = [
+  { label: 'Draft', value: 'DRAFT' },
+  { label: 'Confirmed', value: 'CONFIRMED' },
+  { label: 'No Show', value: 'NOSHOW' },
 ];

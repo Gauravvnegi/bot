@@ -10,6 +10,11 @@ export type IteratorField = {
   placeholder?: string;
   width?: string;
   isAsync?: boolean;
+  loadMoreResults?: () => void;
+  searchResults?: (event: string) => void;
+  create?: () => void;
+  loading?: boolean;
+  noMoreResults?: boolean;
 };
 
 export type ModalAction = {

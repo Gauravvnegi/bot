@@ -41,7 +41,7 @@ export type GuestDetails = {
   cc: string;
   phoneNumber: string;
   email: string;
-}
+};
 
 export type GuestType = {
   active: boolean;
@@ -54,3 +54,40 @@ export type GuestType = {
   dateOfBirth: string;
   age: string;
 };
+
+export class OutletFormData {
+  adultCount: number;
+  from: number;
+  to: number;
+  reservationType: string;
+  source: string;
+  sourceName: string;
+  marketSegment: string;
+  address?: {
+    addressLine1: string;
+    city: string;
+    state: string;
+    countryCode: string;
+    postalCode: string;
+  };
+  paymentMethod: string;
+  totalPaidAmount: number;
+  offerId: string;
+  paymentRemark: string;
+  eventType: string;
+  guestId: string;
+  items: ItemsData[];
+  outletType: string;
+}
+
+type ItemsData = {
+  itemId: string;
+  unit: number;
+  amount: number;
+};
+
+// export type RoomTypeSummary = {
+//   roomTypeName: string;
+//   roomTypeCount: number;
+//   numberOfRooms: number;
+// }

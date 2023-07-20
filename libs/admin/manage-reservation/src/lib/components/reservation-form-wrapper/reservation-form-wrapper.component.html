@@ -1,14 +1,18 @@
 <ng-container [ngSwitch]="selectedOutlet">
   <hospitality-bot-add-reservation
     *ngSwitchCase="'ROOM_TYPE'"
+    [selectedEntity]="selectedEntity"
   ></hospitality-bot-add-reservation>
   <hospitality-bot-restaurant-reservation
     *ngSwitchCase="'RESTAURANT'"
+    [selectedEntity]="selectedEntity"
   ></hospitality-bot-restaurant-reservation>
   <hospitality-bot-spa-reservation
     *ngSwitchCase="'SPA'"
+    [selectedEntity]="selectedEntity"
   ></hospitality-bot-spa-reservation>
   <hospitality-bot-venue-reservation
     *ngSwitchCase="'VENUE'"
+    [selectedEntity]="selectedEntity"
   ></hospitality-bot-venue-reservation>
 </ng-container>

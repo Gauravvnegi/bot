@@ -4,7 +4,7 @@
   [formGroup]="controlContainer.control"
 >
   <div class="form-block" formGroupName="reservationInformation">
-    <ng-container *ngIf="bookingType === 'HOTEL'">
+    <ng-container *ngIf="bookingType === 'ROOM_TYPE'">
       <hospitality-bot-date
         class="half-width"
         controlName="from"
@@ -56,7 +56,7 @@
         ></hospitality-bot-date>
       </div>
     </ng-container>
-    <ng-container *ngIf="bookingType !== 'HOTEL' && bookingType !== 'VENUE'">
+    <ng-container *ngIf="bookingType !== 'ROOM_TYPE' && bookingType !== 'VENUE'">
       <hospitality-bot-date
         class="half-width"
         controlName="dateAndTime"

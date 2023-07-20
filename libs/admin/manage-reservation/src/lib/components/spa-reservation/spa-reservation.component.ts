@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   FormGroup,
   FormArray,
@@ -6,28 +6,39 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   NavRouteOptions,
   AdminUtilityService,
-  Regex,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
-import { menuItemFields, spaFields } from '../../constants/reservation';
+import {
+  editModeStatusOptions,
+  spaFields,
+  statusOptions,
+} from '../../constants/reservation';
 import { manageBookingRoutes } from '../../constants/routes';
 import {
   OfferList,
   OfferData,
   SummaryData,
-  ReservationFormData,
   BookingInfo,
+  OutletForm,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
 import { ReservationForm } from '../../constants/form';
 import { FormService } from '../../services/form.service';
+import { ServiceList } from '../../models/forms.model';
+import {
+  LibrarySearchItem,
+  SelectedEntity,
+  ServicesTypeValue,
+} from '../../types/reservation.type';
+import { ServiceListResponse } from '../../types/response.type';
+import { LibraryService } from '@hospitality-bot/admin/library';
 
 @Component({
   selector: 'hospitality-bot-spa-reservation',
@@ -39,6 +50,7 @@ export class SpaReservationComponent implements OnInit {
   spaBookingInfo: FormArray;
   fields: IteratorField[];
 
+  outletId: string;
   entityId: string;
   reservationId: string;
 
@@ -55,11 +67,21 @@ export class SpaReservationComponent implements OnInit {
   date: string;
   time: string;
 
+  /* service options variable */
+  servicesOffSet = 0;
+  loadingResults = false;
+  noMoreResults = false;
+  services: (Option & { price: number })[] = [];
+
   deductedAmount = 0;
   bookingType = 'SPA';
 
+  itemInfo = 'For 1 Adult';
+
   pageTitle: string;
   routes: NavRouteOptions = [];
+
+  @Input() selectedEntity: SelectedEntity;
 
   $subscription = new Subscription();
 
@@ -69,7 +91,9 @@ export class SpaReservationComponent implements OnInit {
     private globalFilterService: GlobalFilterService,
     private manageReservationService: ManageReservationService,
     protected activatedRoute: ActivatedRoute,
-    private formService: FormService
+    private formService: FormService,
+    private libraryService: LibraryService,
+    private router: Router
   ) {
     this.initForm();
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
@@ -83,17 +107,23 @@ export class SpaReservationComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
+    this.outletId = this.selectedEntity.id;
     this.fields = spaFields;
     this.initOptions();
     this.getReservationId();
+    this.getServices();
   }
 
   initOptions() {
-    this.statusOptions = [
-      { label: 'Confirmed', value: 'CONFIRMED' },
-      { label: 'Waitlist', value: 'WAITLIST' },
-      { label: 'Draft', value: 'DRAFT' },
-    ];
+    // Update Fields for search in select component
+    this.fields[0] = {
+      ...this.fields[0],
+      loading: this.loadingResults,
+      noMoreResults: this.noMoreResults,
+      create: this.create.bind(this),
+      searchResults: this.searchResults.bind(this),
+      loadMoreResults: this.loadingMoreResults.bind(this),
+    };
   }
 
   /**
@@ -111,8 +141,8 @@ export class SpaReservationComponent implements OnInit {
         marketSegment: ['', Validators.required],
       }),
       bookingInformation: this.fb.group({
-        numberOfAdults: ['', Validators.required],
-        menuItems: this.spaBookingInfo,
+        numberOfAdults: [1, [Validators.required, Validators.min(1)]],
+        spaItems: this.spaBookingInfo,
       }),
       offerId: [''],
     });
@@ -125,8 +155,37 @@ export class SpaReservationComponent implements OnInit {
     this.formService.reservationDateAndTime.subscribe((res) => {
       if (res) this.setDateAndTime(res);
     });
+    this.userForm
+      .get('bookingInformation.numberOfAdults')
+      .valueChanges.subscribe((res) => {
+        this.itemInfo = `For ${res} Adult`;
+      });
   }
 
+  /**
+   * @function onItemsAdded To keep track of the current index in the form array.
+   * @param index current index
+   */
+  onItemsAdded(index: number): void {
+    this.spaItemsControls[index]
+      .get('serviceName')
+      .valueChanges.subscribe((res) => {
+        const selectedService = this.services.find(
+          (service) => service.value === res
+        );
+        this.spaItemsControls[index]
+          .get('price')
+          .setValue(selectedService.price);
+        this.formService.discountedPrice.next(selectedService.price);
+        this.getSummaryData();
+      });
+    // this.spaItemsControls[index].valueChanges.subscribe((res) => {});
+  }
+
+  /**
+   * @function setDateAndTime Set date and time in summary data
+   * @param dateTime epoch date
+   */
   setDateAndTime(dateTime: number) {
     const dateAndTime = new Date(dateTime);
     const date = dateAndTime.toLocaleDateString();
@@ -134,24 +193,22 @@ export class SpaReservationComponent implements OnInit {
       hour: '2-digit',
       minute: '2-digit',
     });
-    // Update template variables
     this.date = date;
     this.time = time;
   }
 
   getReservationId(): void {
     if (this.reservationId) {
-      // this.reservationTypes = [
-      //   { label: 'Draft', value: 'DRAFT' },
-      //   { label: 'Confirmed', value: 'CONFIRMED' },
-      //   { label: 'Cancelled', value: 'CANCELED' },
-      // ];
+      this.statusOptions = [
+        ...statusOptions,
+        { label: 'In Session', value: 'INSESSION' },
+      ];
       this.getReservationDetails();
     } else {
-      // this.reservationTypes = [
-      //   { label: 'Draft', value: 'DRAFT' },
-      //   { label: 'Confirmed', value: 'CONFIRMED' },
-      // ];
+      this.statusOptions = [
+        ...editModeStatusOptions,
+        { label: 'In Session', value: 'INSESSION' },
+      ];
       this.userForm.valueChanges.subscribe((_) => {
         if (!this.formValueChanges) {
           this.formValueChanges = true;
@@ -167,14 +224,14 @@ export class SpaReservationComponent implements OnInit {
         .getReservationDataById(this.reservationId, this.entityId)
         .subscribe(
           (response) => {
-            const data = new ReservationFormData().deserialize(response);
+            const data = new OutletForm().deserialize(response);
             this.userForm.patchValue(data);
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
-            if (data.offerId)
-              this.getOfferByRoomType(
-                this.userForm.get('roomInformation.roomTypeId').value
-              );
+            // if (data.offerId)
+            //   this.getOfferByRoomType(
+            //     this.userForm.get('roomInformation.roomTypeId').value
+            //   );
             this.userForm.valueChanges.subscribe((_) => {
               if (!this.formValueChanges) {
                 this.formValueChanges = true;
@@ -240,43 +297,136 @@ export class SpaReservationComponent implements OnInit {
   getSummaryData(): void {
     const defaultProps = [
       {
-        type: 'ROOM_TYPE',
-        fromDate: this.userForm.get('reservationInformation.from')?.value,
-        toDate: this.userForm.get('reservationInformation.to')?.value,
-        adultCount: this.userForm.get('roomInformation.adultCount')?.value || 1,
-        roomCount: this.userForm.get('roomInformation.roomCount')?.value || 1,
-        childCount: this.userForm.get('roomInformation.childCount')?.value || 0,
-        roomType: this.userForm.get('roomInformation.roomTypeId')?.value,
-        offerId: this.userForm.get('offerId')?.value,
-        entityId: this.entityId,
+        type: 'OUTLET',
       },
     ];
     const config = {
       params: this.adminUtilityService.makeQueryParams(defaultProps),
     };
-    if (this.userForm.get('roomInformation.roomTypeId')?.value) {
-      this.$subscription.add(
-        this.manageReservationService.getSummaryData(config).subscribe(
+    const data = {
+      fromDate: this.reservationInfoControls.dateAndTime.value,
+      toDate: this.reservationInfoControls.dateAndTime.value,
+      adultCount: this.userForm.get('bookingInformation.numberOfAdults').value,
+      items: this.spaItemsControls.map((item) => ({
+        itemId: item.get('serviceName').value,
+        unit: item.get('quantity')?.value ?? 0,
+        price: item.get('price').value,
+      })),
+      outletType: 'SPA',
+    };
+    this.$subscription.add(
+      this.manageReservationService
+        .getSummaryData(this.outletId, data, config)
+        .subscribe(
           (res) => {
             this.summaryData = new SummaryData()?.deserialize(res);
-            this.userForm
-              .get('roomInformation')
-              .patchValue(this.summaryData, { emitEvent: false });
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .updateValueAndValidity();
-            this.userForm
-              .get('paymentRule.deductedAmount')
-              .patchValue(this.summaryData?.totalAmount);
+            // this.userForm
+            //   .get('paymentMethod.totalPaidAmount')
+            //   .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+            // this.userForm
+            //   .get('paymentMethod.totalPaidAmount')
+            //   .updateValueAndValidity();
+            // this.userForm
+            //   .get('paymentRule.deductedAmount')
+            //   .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
           },
           (error) => {}
         )
-      );
+    );
+  }
+
+  // Service
+
+  /**
+   * @function getServices to get services options
+   */
+  getServices() {
+    this.loadingResults = true;
+    this.$subscription.add(
+      this.libraryService
+        .getLibraryItems<ServiceListResponse>(this.entityId, {
+          params: `?type=SERVICE&offset=${this.servicesOffSet}&limit=10&status=true&serviceType=${ServicesTypeValue.PAID}`,
+        })
+        .subscribe(
+          (res) => {
+            const data = new ServiceList()
+              .deserialize(res)
+              .paidService.map((item) => {
+                let price = item.amount;
+                return {
+                  label: `${item.name} ${
+                    price ? `[${item.currency} ${price}]` : ''
+                  }`,
+                  value: item.id,
+                  price,
+                };
+              });
+
+            this.services = [...this.services, ...data];
+            this.fields[0].options = this.services;
+            this.noMoreResults = data.length < 10;
+            this.loadingResults = false;
+          },
+          this.handleError,
+          this.handleFinal
+        )
+    );
+  }
+
+  /**
+   * @function searchResults To search services
+   * @param text search text
+   */
+  searchResults(text: string) {
+    if (text) {
+      this.loadingResults = true;
+      this.libraryService
+        .searchLibraryItem(this.entityId, {
+          params: `?key=${text}&type=${LibrarySearchItem.SERVICE}`,
+        })
+        .subscribe(
+          (res) => {
+            this.loadingResults = false;
+            const data = res && res[LibrarySearchItem.SERVICE];
+            this.services =
+              data
+                ?.filter((item) => item.active)
+                .map((item) => {
+                  let price = item.rate;
+                  return {
+                    label: `${item.name} ${
+                      price ? `[${item.currency} ${price}]` : ''
+                    }`,
+                    value: item.id,
+                    price,
+                  };
+                }) ?? [];
+            this.fields[0].options = this.services;
+          },
+          this.handleError,
+          this.handleFinal
+        );
+    } else {
+      this.servicesOffSet = 0;
+      this.services = [];
+      this.getServices();
     }
+  }
+
+  /**
+   * @function loadMoreResults load more services options
+   */
+  loadingMoreResults() {
+    this.servicesOffSet = this.servicesOffSet + 10;
+    this.getServices();
+  }
+
+  /**
+   * @function create Reroute to create service or create package category
+   */
+  create() {
+    this.router.navigate([`/pages/library/services/create-service`]);
   }
 
   get reservationInfoControls() {
@@ -286,6 +436,24 @@ export class SpaReservationComponent implements OnInit {
       AbstractControl
     >;
   }
+
+  get spaItemsControls() {
+    return ((this.userForm.get('bookingInformation') as FormGroup).get(
+      'spaItems'
+    ) as FormArray).controls;
+  }
+
+  /**
+   * @function handleError to show the error
+   * @param param network error
+   */
+  handleError = ({ error }): void => {
+    this.loadingResults = false;
+  };
+
+  handleFinal = () => {
+    this.loadingResults = false;
+  };
 
   /**
    * @function ngOnDestroy to unsubscribe subscription.

@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
 import {
   NavRouteOptions,
   AdminUtilityService,
-  Regex,
   Option,
 } from '@hospitality-bot/admin/shared';
 import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 import { Subscription } from 'rxjs';
-import { menuItemFields, venueFields } from '../../constants/reservation';
+import {
+  editModeStatusOptions,
+  eventOptions,
+  statusOptions,
+  venueFields,
+} from '../../constants/reservation';
 import { manageBookingRoutes } from '../../constants/routes';
 import {
   OfferList,
@@ -20,6 +24,7 @@ import {
   BookingInfo,
 } from '../../models/reservations.model';
 import { ManageReservationService } from '../../services/manage-reservation.service';
+import { SelectedEntity } from '../../types/reservation.type';
 
 @Component({
   selector: 'hospitality-bot-venue-reservation',
@@ -39,6 +44,7 @@ export class VenueReservationComponent implements OnInit {
 
   statusOptions: Option[] = [];
   eventOptions: Option[] = [];
+  foodPackages: Option[] = [];
 
   offersList: OfferList;
   selectedOffer: OfferData;
@@ -53,6 +59,8 @@ export class VenueReservationComponent implements OnInit {
 
   pageTitle = 'Add Reservation';
   routes: NavRouteOptions = [];
+
+  @Input() selectedEntity: SelectedEntity;
 
   $subscription = new Subscription();
 
@@ -81,19 +89,7 @@ export class VenueReservationComponent implements OnInit {
   }
 
   initOptions() {
-    this.statusOptions = [
-      { label: 'Confirmed', value: 'CONFIRMED' },
-      { label: 'Waitlist', value: 'WAITLIST' },
-      { label: 'Draft', value: 'DRAFT' },
-    ];
-    this.eventOptions = [
-      { label: 'Anniversary', value: 'ANNIVERSARY' },
-      { label: 'Birthday', value: 'BIRTHDAY' },
-      { label: 'Wedding', value: 'WEDDING' },
-      { label: 'Conference', value: 'CONFERENCE' },
-      { label: 'Exhibition', value: 'EXHIBITION' },
-      { label: 'Seminar', value: 'SEMINAR' },
-    ];
+    this.eventOptions = eventOptions;
   }
 
   /**
@@ -114,6 +110,8 @@ export class VenueReservationComponent implements OnInit {
       }),
       eventInformation: this.fb.group({
         numberOfAdults: ['', Validators.required],
+        foodPackage: ['', Validators.required],
+        foodPackageCount: [''],
         venueInfo: this.venueBookingInfo,
       }),
       offerId: [''],
@@ -150,8 +148,16 @@ export class VenueReservationComponent implements OnInit {
 
   getReservationId(): void {
     if (this.reservationId) {
+      this.statusOptions = [
+        ...statusOptions,
+        { label: 'In Progress', value: 'IN_PROGRESS' },
+      ];
       this.getReservationDetails();
     } else {
+      this.statusOptions = [
+        ...editModeStatusOptions,
+        { label: 'In Progress', value: 'IN_PROGRESS' },
+      ];
       this.userForm.valueChanges.subscribe((_) => {
         if (!this.formValueChanges) {
           this.formValueChanges = true;
@@ -254,27 +260,30 @@ export class VenueReservationComponent implements OnInit {
     const config = {
       params: this.adminUtilityService.makeQueryParams(defaultProps),
     };
+    const data = {};
     if (this.userForm.get('roomInformation.roomTypeId')?.value) {
       this.$subscription.add(
-        this.manageReservationService.getSummaryData(config).subscribe(
-          (res) => {
-            this.summaryData = new SummaryData()?.deserialize(res);
-            this.userForm
-              .get('roomInformation')
-              .patchValue(this.summaryData, { emitEvent: false });
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-            this.userForm
-              .get('paymentMethod.totalPaidAmount')
-              .updateValueAndValidity();
-            this.userForm
-              .get('paymentRule.deductedAmount')
-              .patchValue(this.summaryData?.totalAmount);
-            this.deductedAmount = this.summaryData?.totalAmount;
-          },
-          (error) => {}
-        )
+        this.manageReservationService
+          .getSummaryData(this.entityId, data, config)
+          .subscribe(
+            (res) => {
+              this.summaryData = new SummaryData()?.deserialize(res);
+              this.userForm
+                .get('roomInformation')
+                .patchValue(this.summaryData, { emitEvent: false });
+              this.userForm
+                .get('paymentMethod.totalPaidAmount')
+                .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+              this.userForm
+                .get('paymentMethod.totalPaidAmount')
+                .updateValueAndValidity();
+              this.userForm
+                .get('paymentRule.deductedAmount')
+                .patchValue(this.summaryData?.totalAmount);
+              this.deductedAmount = this.summaryData?.totalAmount;
+            },
+            (error) => {}
+          )
       );
     }
   }

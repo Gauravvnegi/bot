@@ -25,6 +25,7 @@
             [fields]="fields"
             [useFormArray]="menuItemsArray"
             ctaLabel="+ Add Item"
+            (currentIndex)="onItemsAdded($event)"
           ></hospitality-bot-iterator>
           <hospitality-bot-text-area
             class="full-width"
@@ -55,9 +56,9 @@
         [bookingInfo]="{
           header: 'United Coffee House Rewind',
           subHeader: 'The Leela, New Delhi, 210002',
-          price: '2000',
-          discountedPrice: '1200',
-          guestInfo: numberOfAdults,
+          price: 2000,
+          discountedPrice: 1200,
+          itemInfo: numberOfAdults,
           stayInfo: tableNumber,
           bookingType: bookingType
         }"

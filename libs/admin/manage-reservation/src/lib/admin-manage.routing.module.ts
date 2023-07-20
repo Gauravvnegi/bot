@@ -16,7 +16,6 @@ import { BillingAddressComponent } from './components/form-components/billing-ad
 import { GuestInformationComponent } from './components/form-components/guest-information/guest-information.component';
 import { BookingSummaryComponent } from './components/form-components/booking-summary/booking-summary.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
-import { ReservationDataTableModelComponent } from './components/table-model/reservation-datatable-model/reservation-datatable-model.component';
 import { ReservationFormWrapperComponent } from './components/reservation-form-wrapper/reservation-form-wrapper.component';
 
 export const adminManageReservationRoutes: Route[] = [
@@ -73,7 +72,6 @@ export class AdminManageReservationRoutingModule {
     GuestInformationComponent,
     BookingSummaryComponent,
     ReservationComponent,
-    ReservationDataTableModelComponent,
     ReservationFormWrapperComponent,
   ];
 }

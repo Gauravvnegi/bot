@@ -1,8 +1,10 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
+  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -18,8 +20,7 @@ import { FormProps } from '../../types/form.type';
 export class IteratorComponent implements OnChanges {
   constructor(protected fb: FormBuilder) {}
 
-  // props: FormProps = {
-  // };
+  @Output() currentIndex: EventEmitter<number> = new EventEmitter<number>();
 
   @Input() fields: IteratorField[];
   @Input() useFormArray: FormArray;
@@ -47,6 +48,8 @@ export class IteratorComponent implements OnChanges {
 
     const formGroup = this.fb.group(data);
     this.useFormArray.push(formGroup);
+    const index = this.useFormArray.controls.indexOf(formGroup);
+    this.currentIndex.emit(index);
   }
 
   get width() {

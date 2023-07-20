@@ -13,12 +13,19 @@
             class="half-width"
             controlName="numberOfAdults"
             label="No. of Adults"
+            [props]="{
+              errorMessages: {
+                required: 'This is a required field.',
+                min: 'Value should be more than 0'
+              }
+            }"
           ></hospitality-bot-input>
           <hospitality-bot-iterator
             class="iterator full-width"
             [fields]="fields"
             [useFormArray]="spaBookingInfo"
             ctaLabel="+ Add Item"
+            (currentIndex)="onItemsAdded($event)"
           ></hospitality-bot-iterator>
         </div>
       </p-accordionTab>
@@ -40,13 +47,10 @@
         (handleInitForm)="initForm()"
         [disabledForm]="disabledForm"
         [bookingInfo]="{
-          header: 'Spa Place',
-          subHeader: 'The Leela, New Delhi, 210002',
-          price: '2000',
-          discountedPrice: '1800',
-          guestInfo: 'For 1 Adult',
-          stayInfo: 'some info',
-          bookingType: bookingType
+          itemInfo: itemInfo,
+          bookingType: bookingType,
+          outletId: outletId,
+          heading: selectedEntity.label
         }"
       >
         <div class="bk-summary_spaDateInfo">

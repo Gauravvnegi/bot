@@ -10,7 +10,7 @@ export class DocumentDetailDS implements Deserializable {
   guests: DocumentDetail[];
 
   deserialize(input: any) {
-    let hotelNationality = input.hotel.address.countryCode;
+    let hotelNationality = input.entity.address.countryCode;
 
     // input.guestDetails.primaryGuest['isPrimary'] = true;
     // input.guestDetails.sharerGuests.forEach((secondaryGuest) => {

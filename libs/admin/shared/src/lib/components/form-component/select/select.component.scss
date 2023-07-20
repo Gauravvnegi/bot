@@ -7,6 +7,10 @@
   // overflow: hidden;
 }
 
+:host ::ng-deep .p-dropdown-empty-message{
+  padding: 1rem;
+}
+
 :host ::ng-deep .option-image {
   width: 2em;
   height: 2em;

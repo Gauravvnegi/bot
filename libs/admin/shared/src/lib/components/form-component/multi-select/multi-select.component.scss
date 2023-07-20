@@ -6,6 +6,10 @@
   height: auto;
 }
 
+:host ::ng-deep .p-multiselect-empty-message{
+  padding: 1rem;
+}
+
 :host ::ng-deep .p-multiselect-label {
   padding: 0;
 }

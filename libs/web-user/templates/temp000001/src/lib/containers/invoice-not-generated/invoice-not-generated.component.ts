@@ -38,7 +38,7 @@ export class InvoiceNotGeneratedComponent implements OnInit, OnDestroy {
         .getReservationDetails(this._reservationService.reservationId)
         .subscribe(
           (reservationData) => {
-            this._hotelService.hotelConfig = reservationData['hotel'];
+            this._hotelService.hotelConfig = reservationData['entity'];
             this._templateLoadingService.isTemplateLoading$.next(false);
             this.isReservationData = true;
             this.reservationDetails = reservationData;

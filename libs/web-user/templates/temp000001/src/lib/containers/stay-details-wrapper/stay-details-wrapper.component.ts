@@ -126,7 +126,7 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     } = this.parentForm.controls;
     if (
       accept.invalid ||
-      address.invalid ||
+      address?.invalid ||
       special_comments.invalid ||
       stayDetail.invalid
     ) {

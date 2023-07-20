@@ -61,13 +61,13 @@ export class MainComponent implements OnInit, OnDestroy {
         .getReservationDetails(this._reservationService.reservationId)
         .subscribe(
           (reservationData) => {
-            this._hotelService.hotelConfig = reservationData['hotel'];
-            this.checkForExpiry(reservationData['hotel']);
+            this._hotelService.hotelConfig = reservationData['entity'];
+            this.checkForExpiry(reservationData['entity']);
             this.isReservationData = true;
             this.stepperData = this._templateService.templateData[
               this._templateService.templateId
             ];
-            this._hotelService.titleConfig$.next(reservationData['hotel']);
+            this._hotelService.titleConfig$.next(reservationData['entity']);
             this.getStepperData();
             this.listenForStepperChange();
             this.reservationData = reservationData;
@@ -121,26 +121,28 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   getHotelDataById(errorType) {
-    this._hotelService.getHotelConfigById(this._hotelService.entityId).subscribe(
-      (hotel) => {
-        this._hotelService.hotelConfig = hotel;
-        this._hotelService.titleConfig$.next(hotel);
-        switch (errorType) {
-          case 'BOOKING_CANCELED':
-            this.router.navigate(['booking-cancel'], {
-              queryParamsHandling: 'preserve',
-            });
-            break;
-          case 'expiry':
-            this.router.navigate(['booking-expired'], {
-              queryParamsHandling: 'preserve',
-            });
-            break;
-        }
-        this._templateLoadingService.isTemplateLoading$.next(false);
-      },
-      ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
-    );
+    this._hotelService
+      .getHotelConfigById(this._hotelService.entityId)
+      .subscribe(
+        (hotel) => {
+          this._hotelService.hotelConfig = hotel;
+          this._hotelService.titleConfig$.next(hotel);
+          switch (errorType) {
+            case 'BOOKING_CANCELED':
+              this.router.navigate(['booking-cancel'], {
+                queryParamsHandling: 'preserve',
+              });
+              break;
+            case 'expiry':
+              this.router.navigate(['booking-expired'], {
+                queryParamsHandling: 'preserve',
+              });
+              break;
+          }
+          this._templateLoadingService.isTemplateLoading$.next(false);
+        },
+        ({ error }) => this.snackbarService.openSnackBarAsText(error.message)
+      );
   }
 
   registerListeners() {

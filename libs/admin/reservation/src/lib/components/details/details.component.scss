@@ -514,7 +514,7 @@ mat-option {
     @include flex-col;
     height: 32vh;
     gap: 8px;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     .button {
       height: 46px;
@@ -657,12 +657,11 @@ mat-option {
 
 :host ::ng-deep .button {
   font-size: 12px !important;
-  min-width: 200px !important;
+  // min-width: 200px !important;
   border-radius: 25px !important;
   max-width: 200px;
-  @media screen and (max-width: 1450px) {
-    min-width: 175px !important;
-  }
+
+  width: 175px !important;
 }
 :host ::ng-deep .tab-buttons {
   right: 0;

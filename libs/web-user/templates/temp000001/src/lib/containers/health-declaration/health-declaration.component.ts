@@ -305,14 +305,16 @@ export class HealthDeclarationComponent implements OnInit, OnDestroy {
   }
 
   getHealthTemplate() {
-    this.$subscription.add(
-      this._healthDetailsService
-        .getHealthTemplate(this._hotelService.healthFormId)
-        .subscribe((response) => {
-          this.settings = [response];
-          this.createFormgroupForPanel();
-        })
-    );
+    // need to verify
+    if (this._hotelService.healthFormId)
+      this.$subscription.add(
+        this._healthDetailsService
+          .getHealthTemplate(this._hotelService.healthFormId)
+          .subscribe((response) => {
+            this.settings = [response];
+            this.createFormgroupForPanel();
+          })
+      );
   }
 
   patchHealthData(data, signatureUrl) {

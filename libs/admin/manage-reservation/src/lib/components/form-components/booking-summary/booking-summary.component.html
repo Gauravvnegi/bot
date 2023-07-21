@@ -4,7 +4,7 @@
   <div class="bk-summary_subheading" *ngIf="bookingType === 'ROOM_TYPE'">
     {{ roomTypeLabel }}<span *ngIf="roomTypeCount">+ {{ roomTypeCount }}</span>
   </div>
-  <div class="bk-summary_subheading" *ngIf="bookingType === 'ROOM_TYPE'">
+  <div class="bk-summary_subheading" *ngIf="bookingType !== 'ROOM_TYPE'">
     {{ heading }}
   </div>
   <div class="bk-summary_subheading_label">
@@ -86,7 +86,7 @@
     <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'ROOM_TYPE'">
       <span class="bk-summary_priceInfo_perNight_label">{{ itemInfo }}</span>
       <span class="bk-summary_priceInfo_perNight_discountedAmount">{{
-        discountedPrice
+        discountedPrice | currency: 'INR'
       }}</span>
     </p>
     <p class="bk-summary_priceInfo_taxFair" *ngIf="summaryData?.offerAmount">

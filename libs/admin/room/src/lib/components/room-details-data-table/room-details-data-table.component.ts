@@ -77,8 +77,8 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
           const roomList = new RoomList().deserialize(res);
           this.values = roomList.records;
           this.initFilters(
-            roomList.entityTypeCounts,
-            roomList.entityStateCounts,
+            {},
+            {},
             roomList.totalRecord
           );
           this.loading = false;

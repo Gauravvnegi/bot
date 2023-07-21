@@ -29,6 +29,18 @@
               fontSize: '14px'
             }"
           ></hospitality-bot-input>
+          <hospitality-bot-auto-complete
+            *ngSwitchCase="'auto-complete'"
+            [controlName]="field.name"
+            [options]="field.options"
+            [disabled]="field.disabled"
+            [loading]="field.loadingResults"
+            (onSearch)="field.searchResults($event)"
+            [props]="{
+              placeholder: field.placeholder ? field.placeholder : '',
+              fontSize: '14px'
+            }"
+          ></hospitality-bot-auto-complete>
           <hospitality-bot-select
             *ngSwitchCase="'select'"
             [controlName]="field.name"

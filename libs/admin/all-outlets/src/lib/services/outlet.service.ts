@@ -147,4 +147,13 @@ export class OutletService extends ApiService {
       `/api/v1/entity/${entityId}/library/search${config?.params ?? ''}`
     );
   }
+
+  searchItem(
+    entityId: string,
+    config?: QueryConfig
+  ): Observable<SearchResultResponse> {
+    return this.get(
+      `/api/v1/entity/${entityId}/menu/search${config?.params ?? ''}`
+    );
+  }
 }

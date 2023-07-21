@@ -35,6 +35,7 @@ import { FormService } from '../../services/form.service';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
 import { MenuItemList } from '../../models/forms.model';
 import { SelectedEntity } from '../../types/reservation.type';
+import { OutletItems } from '../../constants/reservation-table';
 
 @Component({
   selector: 'hospitality-bot-restaurant-reservation',
@@ -51,6 +52,7 @@ export class RestaurantReservationComponent implements OnInit {
 
   entityId: string;
   reservationId: string;
+  outletId: string;
 
   reservationTypes: Option[] = [];
   statusOptions: Option[] = [];
@@ -73,11 +75,9 @@ export class RestaurantReservationComponent implements OnInit {
   routes: NavRouteOptions = [];
 
   /* menu options variable */
-  menuItemsOffSet = 0;
   loadingResults = false;
-  noMoreResults = false;
-  menuItems: (Option & { price: number })[] = [];
-
+  menuItems: Option[] = [];
+  outletItems: OutletItems[] = [];
   // summaryInfo: SummaryInfo;
   tableNumber = '';
   numberOfAdults = '';
@@ -104,11 +104,13 @@ export class RestaurantReservationComponent implements OnInit {
     ];
     this.routes = navRoutes;
     this.pageTitle = title;
+    this.outletItems = [OutletItems.MENU_ITEM, OutletItems.FOOD_PACKAGE];
   }
 
   ngOnInit(): void {
     this.initDetails();
     this.entityId = this.globalFilterService.entityId;
+    this.outletId = this.selectedEntity.id;
     this.fields = menuItemFields;
     this.initOptions();
     this.getReservationId();
@@ -128,9 +130,7 @@ export class RestaurantReservationComponent implements OnInit {
     this.fields[0] = {
       ...this.fields[0],
       loading: this.loadingResults,
-      noMoreResults: this.noMoreResults,
       searchResults: this.searchResults.bind(this),
-      loadMoreResults: this.loadingMoreResults.bind(this),
     };
     this.reservationTypes = restaurantReservationTypes;
   }
@@ -191,20 +191,20 @@ export class RestaurantReservationComponent implements OnInit {
    * @param index current index
    */
   onItemsAdded(index: number): void {
-    this.orderInfoControls[index]
+    this.menuItemsControls[index]
       .get('menuItems')
       .valueChanges.subscribe((res) => {
         const selectedMenuItem = this.menuItems.find(
           (service) => service.value === res
         );
-        this.orderInfoControls[index]
+        this.menuItemsControls[index]
           .get('price')
           .setValue(selectedMenuItem.price);
         // this.formService.discountedPrice.next(selectedService.price);
       });
-    this.orderInfoControls[index].valueChanges.subscribe((res) => {
-      this.getSummaryData();
-    });
+    // this.orderInfoControls[index].valueChanges.subscribe((res) => {
+    //   this.getSummaryData();
+    // });
   }
 
   /**
@@ -341,7 +341,7 @@ export class RestaurantReservationComponent implements OnInit {
     if (this.userForm.get('roomInformation.roomTypeId')?.value) {
       this.$subscription.add(
         this.manageReservationService
-          .getSummaryData(this.entityId, data, config)
+          .getSummaryData(this.outletId, data, config)
           .subscribe(
             (res) => {
               this.summaryData = new SummaryData()?.deserialize(res);
@@ -366,88 +366,36 @@ export class RestaurantReservationComponent implements OnInit {
   }
 
   /**
-   * @function getServices to get services options
-   */
-  getServices() {
-    this.loadingResults = true;
-    this.$subscription.add(
-      this.outletService
-        .getMenuItems(
-          {
-            params: `?type=SERVICE&offset=${this.menuItemsOffSet}&limit=10`,
-          },
-          this.entityId
-        )
-        .subscribe(
-          (res) => {
-            const data = new MenuItemList()
-              .deserialize(res)
-              .records.map((item) => {
-                let price = item.dineInPrice;
-                return {
-                  label: `${item.name}`,
-                  value: item.id,
-                  price,
-                };
-              });
-
-            this.menuItems = [...this.menuItems, ...data];
-            this.fields[0].options = this.menuItems;
-            this.noMoreResults = data.length < 10;
-            this.loadingResults = false;
-          },
-          this.handleError,
-          this.handleFinal
-        )
-    );
-  }
-
-  /**
    * @function searchServices To search services
    * @param text search text
    */
   searchResults(text: string) {
-    // if (text) {
-    //   this.loadingResults = true;
-    //   this.libraryService
-    //     .searchLibraryItem(this.entityId, {
-    //       params: `?key=${text}&type=${LibrarySearchItem.SERVICE}`,
-    //     })
-    //     .subscribe(
-    //       (res) => {
-    //         this.loadingResults = false;
-    //         const data = res;
-    //         this.menuItems =
-    //           data
-    //             ?.filter((item) => item.active)
-    //             .map((item) => {
-    //               let price = item.rate;
-    //               return {
-    //                 label: `${item.name} ${
-    //                   price ? `[${item.currency} ${price}]` : ''
-    //                 }`,
-    //                 value: item.id,
-    //                 price,
-    //               };
-    //             }) ?? [];
-    //         this.fields[0].options = this.menuItems;
-    //       },
-    //       this.handleError,
-    //       this.handleFinal
-    //     );
-    // } else {
-    //   this.menuItemsOffSet = 0;
-    //   this.menuItems = [];
-    //   this.getServices();
-    // }
-  }
+    if (text) {
+      this.loadingResults = true;
+      this.outletService
+        .searchItem(this.outletId, {
+          params: `?key=${text}&type=${OutletItems.MENU_ITEM}`,
+        })
+        .subscribe((res) => {
+          this.loadingResults = false;
+          this.menuItems = res
+            ? this.outletItems.reduce((prev, curr) => {
+                let currentList = res[curr] as Option[];
+                let descriptiveType: string = curr;
 
-  /**
-   * @function loadMoreServices load more services options
-   */
-  loadingMoreResults() {
-    this.menuItemsOffSet = this.menuItemsOffSet + 10;
-    this.getServices();
+                let data =
+                  currentList.map((item) => {
+                    return {
+                      label: item.name,
+                      value: item.id,
+                    };
+                  }) ?? [];
+                return [...prev, ...data];
+              }, [])
+            : [];
+          this.fields[0].options = this.menuItems;
+        });
+    }
   }
 
   get inputControl() {
@@ -478,18 +426,6 @@ export class RestaurantReservationComponent implements OnInit {
       'menuItems'
     ) as FormArray).controls;
   }
-
-  /**
-   * @function handleError to show the error
-   * @param param network error
-   */
-  handleError = ({ error }): void => {
-    this.loadingResults = false;
-  };
-
-  handleFinal = () => {
-    this.loadingResults = false;
-  };
 
   /**
    * @function ngOnDestroy to unsubscribe subscription.

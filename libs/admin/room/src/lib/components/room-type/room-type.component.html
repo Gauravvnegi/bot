@@ -41,7 +41,9 @@
     </div>
 
     <div class="room-details-wrapper" *ngIf="roomTypeId">
-      <hospitality-bot-room-details-data-table></hospitality-bot-room-details-data-table>
+      <hospitality-bot-room-details-data-table
+        [roomTypeId]="roomTypeId"
+      ></hospitality-bot-room-details-data-table>
     </div>
 
     <div class="room-wrapper">

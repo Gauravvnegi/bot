@@ -176,10 +176,15 @@ export class SpaReservationComponent implements OnInit {
         this.spaItemsControls[index]
           .get('price')
           .setValue(selectedService.price);
+        this.spaItemsControls[index].get('quantity').setValue(1);
         this.formService.discountedPrice.next(selectedService.price);
         this.getSummaryData();
       });
-    // this.spaItemsControls[index].valueChanges.subscribe((res) => {});
+    this.spaItemsControls[index]
+      .get('quantity')
+      .valueChanges.subscribe((res) => {
+        this.getSummaryData();
+      });
   }
 
   /**

@@ -7,4 +7,8 @@
 :host ::ng-deep .p-datatable {
   border: unset;
   border-top: 1px solid rgba(112, 112, 112, 0.35);
+
+  .p-datatable-thead {
+    top: 55px;
+  }
 }

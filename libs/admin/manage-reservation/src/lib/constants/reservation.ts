@@ -83,7 +83,8 @@ export const menuItemFields: IteratorField[] = [
   {
     label: 'Menu Item',
     name: 'menuItems',
-    type: 'select',
+    type: 'auto-complete',
+    options: [],
     required: false,
     placeholder: 'Search by name',
     width: '40%',

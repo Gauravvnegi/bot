@@ -31,6 +31,11 @@ export enum ReservationTableValue {
   BOOKING_ENGINE = 'CREATE_WITH',
 }
 
+export enum OutletItems {
+  MENU_ITEM = 'MENU_ITEM',
+  FOOD_PACKAGE = 'FOOD_PACKAGE',
+}
+
 export enum EntityTabGroup {
   HOTEL = 'HOTEL',
   RESTAURANT_AND_BAR = 'RESTAURANT_AND_BAR',

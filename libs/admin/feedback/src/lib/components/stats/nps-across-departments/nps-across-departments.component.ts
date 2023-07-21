@@ -164,7 +164,7 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
   }
 
   getNPSDepartments() {
-    if (!this.tabFilterItems.length) return;
+    // if (!this.tabFilterItems.length) return;
     this.loading = true;
     const config = {
       queryObj: this._adminUtilityService.makeQueryParams([

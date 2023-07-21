@@ -116,9 +116,10 @@ export type MenuItemListResponse = {
 };
 
 export type FoodPackageForm = {
+  id?: string;
   active: boolean;
   name: string;
-  category: string;
+  categoryName: string;
   imageUrl: string;
   currency: string;
   rate: number;
@@ -127,6 +128,8 @@ export type FoodPackageForm = {
   discountedPrice: number;
   enableVisibility: string[];
   type: string;
+  // hsnCode: string;
+  taxes: TaxData[];
   source: number;
 };
 

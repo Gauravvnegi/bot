@@ -1,10 +1,10 @@
-<div class="wrapper">
+<div class="wrapper" [formGroup]="useForm">
   <hospitality-bot-navigation-header
     [heading]="pageTitle"
     [routes]="navRoutes"
   ></hospitality-bot-navigation-header>
 
-  <div class="form-wrapper" [formGroup]="useForm">
+  <div class="form-wrapper">
     <div class="form-block">
       <div class="code">
         <span class="code__label">Code: </span>
@@ -19,16 +19,46 @@
         class="half-width"
         label="Name"
         controlName="name"
+        maxLength="60"
+        [props]="{
+          placeholder: 'Enter name'
+        }"
       ></hospitality-bot-input>
       <hospitality-bot-select
         class="half-width"
         label="Type"
         controlName="type"
         [options]="types"
+        [props]="{
+          placeholder: 'Select Type',
+          createPrompt: 'Add New Type',
+          inputPrompt: 'Enter Type'
+        }"
+        (onCreate)="createType($event)"
       ></hospitality-bot-select>
       <hospitality-bot-discount-form
         class="container"
       ></hospitality-bot-discount-form>
+      <hospitality-bot-input
+        class="one-third-width"
+        controlName="hsnCode"
+        label="HSN Code"
+        [props]="{
+          placeholder: 'Enter HSN Code'
+        }"
+      ></hospitality-bot-input>
+      <hospitality-bot-multi-select
+        label="Tax"
+        class="one-third-width"
+        controlName="taxIds"
+        [props]="{
+          isAsync: true,
+          createPrompt: '+ Create New Tax',
+          placeholder: 'Select Tax'
+        }"
+        (onCreate)="createTax()"
+        [options]="taxes"
+      ></hospitality-bot-multi-select>
       <hospitality-bot-custom-file-upload
         formControlName="imageUrl"
         label="Image"
@@ -39,7 +69,7 @@
       <div class="full-width btn-wrapper">
         <hospitality-bot-button
           label="Create"
-          (onClick)="handleCreate()"
+          (onClick)="handleSubmit()"
         ></hospitality-bot-button>
         <hospitality-bot-button
           variant="outlined"
@@ -50,6 +80,29 @@
       </div>
     </div>
 
-      <hospitality-bot-food-items></hospitality-bot-food-items>
+    <!-- <hospitality-bot-food-items></hospitality-bot-food-items> -->
+  </div>
+
+  <div class="form-wrapper">
+    <div class="items-wrapper">
+      <div class="heading-wrapper">
+        <div class="heading">Items</div>
+      </div>
+      <hospitality-bot-iterator
+        class="iterator full-width"
+        [fields]="fields"
+        [useFormArray]="foodItemsArray"
+        ctaLabel="+ Add Item"
+        (currentIndex)="onItemsAdded($event)"
+      ></hospitality-bot-iterator>
+    </div>
+  </div>
+
+  <div class="btn-wrapper">
+    <hospitality-bot-button
+      label="Save"
+      [disabled]="!isPackageCreated"
+      (onClick)="handleSave()"
+    ></hospitality-bot-button>
   </div>
 </div>

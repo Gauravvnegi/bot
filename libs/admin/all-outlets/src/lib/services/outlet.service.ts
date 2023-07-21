@@ -10,6 +10,7 @@ import { ServiceResponse } from 'libs/admin/services/src/lib/types/response';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 import { MenuFormData, MenuResponse } from '../types/menu';
 import {
+  FoodPackageForm,
   MenuItemForm,
   MenuItemResponse,
   MenuListResponse,
@@ -114,8 +115,8 @@ export class OutletService extends ApiService {
     return this.get(`/api/v1/menus/items/${menuItemId}`);
   }
 
-  addFoodPackage(data): Observable<any> {
-    return this.post(`/api/v1/food-package`, data);
+  addFoodPackage(outletId: string, data: FoodPackageForm): Observable<any> {
+    return this.post(`/api/v1/entity/${outletId}/library`, data);
   }
 
   updateFoodPackage(packageId, data): Observable<any> {

@@ -14,7 +14,7 @@ import routes from '../../constant/routes';
 import { RoomList } from '../../models/rooms-data-table.model';
 import { RoomService } from '../../services/room.service';
 import { QueryConfig } from '../../types/room';
-import { RoomListResponse, RoomStatus } from '../../types/service-response';
+import { RoomListResponse } from '../../types/service-response';
 import { roomStatusDetails } from '../../constant/response';
 
 @Component({
@@ -56,7 +56,6 @@ export class RoomDetailsDataTableComponent extends BaseDatatableComponent
           type: TableValue.room,
           offset: this.first,
           limit: this.rowsPerPage,
-          // ---refactor---- room type query param for selected room data - BE dependent
           roomTypeId: this.roomTypeId,
         },
       ]),

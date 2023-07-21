@@ -1,4 +1,5 @@
 import { Option } from '@hospitality-bot/admin/shared';
+import { IteratorField } from 'libs/admin/shared/src/lib/types/fields.type';
 
 export const days: Option[] = [
   { label: 'Sunday', value: 'Sun' },
@@ -107,5 +108,24 @@ export const VenueTabItemList = [
   {
     label: 'Complimentary Services',
     value: 'COMPLIMENTARY_SERVICES',
+  },
+];
+
+export const foodPackageFields: IteratorField[] = [
+  {
+    label: 'Food Category',
+    name: 'name',
+    type: 'input',
+    required: false,
+    placeholder: 'Enter name',
+    width: '45%',
+  },
+  {
+    label: 'Type',
+    name: 'type',
+    type: 'input',
+    required: false,
+    placeholder: 'Enter',
+    width: '40%',
   },
 ];

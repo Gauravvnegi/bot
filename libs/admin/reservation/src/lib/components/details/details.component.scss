@@ -430,16 +430,10 @@ mat-option {
   width: 77%;
   margin: 20px 25px;
   margin-right: 0;
-  height: 48vh;
   border-right: 2px solid $whiteDeep;
   padding-right: 15px;
   overflow-y: auto;
-  @media screen and (min-resolution: 125dpi) {
-    height: calc(53vh - 105px);
-  }
-  @media screen and (max-resolution: 110dpi) {
-    height: 52vh;
-  }
+  height: calc(85vh - 279px);
 }
 
 :host ::ng-deep .mat-group {

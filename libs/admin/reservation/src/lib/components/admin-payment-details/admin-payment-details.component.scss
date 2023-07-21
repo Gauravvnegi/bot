@@ -36,10 +36,9 @@
   background-color: #ff6384;
 }
 
-.status-button--refund{
+.status-button--refund {
   background-color: #36a2eb;
 }
-
 
 .fields-wrapper {
   @include flex-item-center;
@@ -244,4 +243,8 @@ td {
 
 :host ::ng-deep .mat-expansion-indicator {
   display: none !important;
+}
+
+.panel-wrapper {
+  height: 56vh;
 }

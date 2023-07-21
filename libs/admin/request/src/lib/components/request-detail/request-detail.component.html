@@ -9,6 +9,20 @@
       </div>
     </div>
     <div class="request-items-header-right" [formGroup]="requestFG">
+      <!-- <div class="form-elements-container">
+        <mat-select
+          class="form-elements"
+          placeholder="Status"
+          formControlName="status"
+          (selectionChange)="handleStatusChange($event)"
+        >
+          <mat-option
+            *ngFor="let status of statusList"
+            [value]="status.value"
+            >{{ status.label }}</mat-option
+          >
+        </mat-select>
+      </div> -->
       <div class="form-elements-container">
         <mat-select
           class="form-elements"
@@ -39,8 +53,9 @@
     </div>
 
     <div *ngIf="data?.timeLeft !== undefined" class="time-left">
-      <div>Time Left:</div>
+      <img src="assets/images/timer.webp" alt="timer" />
       <div class="time" appCountdown [config]="{ value: data.timeLeft }"></div>
+      <!-- <div class="text">Left</div> -->
     </div>
 
     <div class="request-items-body-subtitle">

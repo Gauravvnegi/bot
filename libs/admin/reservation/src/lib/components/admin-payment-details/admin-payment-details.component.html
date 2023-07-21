@@ -70,7 +70,7 @@
       <span class="value">{{ stayDetailsFG.get('kidsCount').value }}</span>
     </div>
   </div>
-  <div>
+  <div class="panel-wrapper">
     <mat-accordion>
       <mat-expansion-panel #panel [expanded]="true">
         <mat-expansion-panel-header>
@@ -197,7 +197,7 @@
       <p class="heading">Payment Details</p>
       <div class="status-wrapper">
         <p class="status">
-          Status :&nbsp;  
+          Status :&nbsp;
           <ng-container [ngSwitch]="'PENDING'">
             <b *ngSwitchCase="'COMPLETED'" class="status-text-success">
               COMPLETED
@@ -243,7 +243,7 @@
             >
           </mat-panel-title>
         </mat-expansion-panel-header>
-        
+
         <hospitality-bot-deposit-rule
         [parentForm]="parentForm"
         [data]="detailsData"
@@ -292,7 +292,7 @@
         <div class="value">G. Murray</div>
       </div>
     </div>
-    
+
     <hr class="data-seperator" /> -->
     <ng-container
       *ngIf="detailsData.paymentDetails.transactionHistory.length > 0"

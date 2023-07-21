@@ -346,7 +346,9 @@ export class NpsAcrossDepartmentsComponent implements OnInit, OnDestroy {
               this.tabFilterItems[this.tabFilterIdx].chips = res;
             });
         },
-        ({ error }) => {},
+        ({ error }) => {
+          this.loading = false;
+        },
         () => {
           this.loading = false;
         }

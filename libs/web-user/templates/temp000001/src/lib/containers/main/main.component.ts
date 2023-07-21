@@ -4,8 +4,8 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SnackBarService } from '@hospitality-bot/shared/material';
-import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { DateService } from '@hospitality-bot/shared/utils';
+import { ModalService } from 'libs/shared/material/src/lib/services/modal.service';
 import { ReservationDetails } from 'libs/web-user/shared/src/lib/data-models/reservationDetails';
 import { CheckinDateAlertComponent } from 'libs/web-user/shared/src/lib/presentational/checkin-date-alert/checkin-date-alert.component';
 import { ReservationService } from 'libs/web-user/shared/src/lib/services/booking.service';
@@ -16,6 +16,7 @@ import { TemplateLoaderService } from 'libs/web-user/shared/src/lib/services/tem
 import { TemplateService } from 'libs/web-user/shared/src/lib/services/template.service';
 import { ITemplateTemp000001 } from 'libs/web-user/shared/src/lib/types/temp000001';
 import { Subscription } from 'rxjs';
+import { StepsArray } from 'libs/web-user/shared/src/lib/constants/common';
 import { Temp000001StepperComponent } from '../../presentational/temp000001-stepper/temp000001-stepper.component';
 
 @Component({
@@ -71,6 +72,13 @@ export class MainComponent implements OnInit, OnDestroy {
             this.getStepperData();
             this.listenForStepperChange();
             this.reservationData = reservationData;
+
+            const stepIndex = StepsArray.indexOf(
+              reservationData.stateCompletedSteps
+            );
+
+            this.reservationData.stateCompletedSteps =
+              stepIndex === -1 ? 0 : stepIndex;
             this._reservationService.reservationData = reservationData;
           },
           ({ error }) => {

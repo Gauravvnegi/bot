@@ -161,7 +161,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
             entityType: this.entityType,
           },
           ...this.getSelectedQuickReplyFilters({
-            activeStateKey: 'actionType',
+            key: 'actionType',
           }),
         ],
         { offset: this.first, limit: this.rowsPerPage }
@@ -206,7 +206,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.entityType,
         },
-        ...this.getSelectedQuickReplyFilters({ activeStateKey: 'actionType' }),
+        ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };
@@ -234,7 +234,7 @@ export class InhouseRequestDatatableComponent extends BaseDatatableComponent
           order: 'DESC',
           entityType: this.entityType,
         },
-        ...this.getSelectedQuickReplyFilters({ activeStateKey: 'actionType' }),
+        ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
       ],
       false,
       {

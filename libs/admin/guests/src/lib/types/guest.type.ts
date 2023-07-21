@@ -13,7 +13,7 @@ export type SelectedEntityState = {
 
 export type SearchGuestResponse = {
   id: string;
-  nameTitle?: string;
+  salutation?: string;
   firstName: string;
   lastName: string;
   contactDetails: {

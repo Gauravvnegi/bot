@@ -3,7 +3,9 @@ export class ReservationDetails {
   number: string;
   status: string;
   state: string;
-  stateCompletedSteps: number;
+  // stateCompletedSteps: number; // 'DOCUMENTS'|'GUESTDETAILS'|'HEALTHDECLARATION'|'PAYMENT'|'STAYDETAILS'
+  stateCompletedSteps: any;
+
   stateMessage: object;
   stayDetails: StayDetails;
   guestDetails: GuestDetails;
@@ -25,7 +27,7 @@ export class StayDetails {
 
 export class Guest {
   id: string;
-  nameTitle: string;
+  salutation: string;
   firstName: string;
   lastName: string;
   contactDetails: ContactDetails;

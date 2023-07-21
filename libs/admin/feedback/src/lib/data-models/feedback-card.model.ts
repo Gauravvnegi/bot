@@ -234,7 +234,7 @@ export class Reservation {
 
 export class Guest implements IDeserializable {
   id;
-  nameTitle;
+  salutation;
   name: string;
   firstName: string;
   lastName: string;
@@ -251,7 +251,7 @@ export class Guest implements IDeserializable {
       this,
 
       set({}, 'id', get(input, ['id'])),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'name', get(input, ['name'])),
       set({}, 'firstName', trim(get(input, ['firstName'], 'No'))),
       set({}, 'lastName', trim(get(input, ['lastName'], 'Name'))),

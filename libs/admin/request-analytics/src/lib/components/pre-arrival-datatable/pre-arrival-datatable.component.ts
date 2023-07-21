@@ -86,7 +86,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
             entityType: this.entityType,
             packageId: this.packageId,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
         ]);
       })
     );
@@ -101,7 +101,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
           entityType: this.entityType,
           packageId: this.packageId,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
       ],
       false,
       {
@@ -176,7 +176,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
             entityType: this.entityType,
             packageId: this.packageId,
           },
-          ...this.getSelectedQuickReplyFilters(),
+          ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(
@@ -221,7 +221,7 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
           entityType: this.entityType,
           packageId: this.packageId,
         },
-        ...this.getSelectedQuickReplyFilters(),
+        ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
         ...this.selectedRows.map((item) => ({ ids: item.id })),
       ]),
     };

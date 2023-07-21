@@ -184,7 +184,7 @@ export class DocumentDetailsService extends ApiService {
     data.firstName = 'Test';
     data.lastName = 'Test';
     data.email = 'test2gmail.com';
-    data.nameTitle = 'Mr.';
+    data.salutation = 'Mr.';
     data.type = value.selectedDocument;
     data.nationality = this.getCountryByKey(value.country);
     data.contactDetails = new ContactDetails();

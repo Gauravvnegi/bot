@@ -151,7 +151,7 @@ export class GuestDetailsService extends ApiService {
     data.id = value.id;
     data.firstName = (value.firstName || '').trim();
     data.lastName = (value.lastName || '').trim();
-    data.nameTitle = value.nameTitle;
+    data.salutation = value.salutation;
     if (value.role === GuestRole.kids || value.role === GuestRole.accompany) {
       data.age = value.age;
     } else {

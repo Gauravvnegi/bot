@@ -6,14 +6,14 @@
       (addFGEvent)="addFGEvent($event)"
     ></hospitality-bot-stay-details>
 
-    <ng-container *ngIf="_hotelService.hotelConfig?.showAddress">
+    <!-- <ng-container *ngIf="_hotelService.hotelConfig?.showAddress"> -->
       <hospitality-bot-address
         #addressFields
         [parentForm]="parentForm"
         [reservationData]="reservationData"
         (addFGEvent)="addFGEvent($event)"
       ></hospitality-bot-address>
-    </ng-container>
+    <!-- </ng-container> -->
 
     <hospitality-bot-amenities
       *ngIf="isAmenityDataAvl"

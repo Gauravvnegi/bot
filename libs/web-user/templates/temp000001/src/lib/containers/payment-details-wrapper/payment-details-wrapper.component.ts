@@ -90,16 +90,18 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     this._paymentDetailsService
       .getPaymentConfigurationV2(this._hotelService.entityId)
       .subscribe((data) => {
-        const gatewayDetails = data?.paymentConfigurations?.map((gateway) => ({
-          gatewayType: gateway?.gatewayType,
+        const gatewayDetails = data?.paymentConfiguration?.map((gateway) => ({
+          gatewayType: gateway?.type,
           imgSrc:
-            gateway?.imgSrc || gateway?.gatewayType === 'CCAVENUE'
+            gateway?.imgSrc || gateway?.type === 'CCAVENUE'
               ? 'https://nyc3.digitaloceanspaces.com/botfiles/bot/entity/roseate/banner/ccavenue.webp'
               : 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/PayU.svg/1200px-PayU.svg.png',
           payload: {
             redirectUrl: `${environment.host_url}${this.router.url}&entity=payment`,
           },
         }));
+
+        console.log(gatewayDetails)
 
         this.paymentUrl = initPaymentModule({
           userInfo: {
@@ -123,7 +125,7 @@ export class PaymentDetailsWrapperComponent extends BaseWrapperComponent
     const journey = this._hotelService.getCurrentJourneyConfig();
     this.$subscription.add(
       this._paymentDetailsService
-        .getPaymentConfiguration(res_data.hotel.id, journey.name)
+        .getPaymentConfiguration(res_data.entity.id, journey.name)
         .subscribe((response) => {
           this.hotelPaymentConfig = response;
           this.isConfigLoaded = true;

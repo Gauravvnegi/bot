@@ -273,7 +273,7 @@ export class Guest {
   firstName: string;
   id: string;
   lastName: string;
-  nameTitle: string;
+  salutation: string;
   phoneNumber: string;
   place: string;
   spouseBirthDate: string;
@@ -297,7 +297,7 @@ export class Guest {
           get(input, ['lastName'], 'Name')
         )}`
       ),
-      set({}, 'nameTitle', get(input, ['nameTitle'], '')),
+      set({}, 'salutation', get(input, ['salutation'], '')),
       set({}, 'place', get(input, ['place'], '')),
       set({}, 'spouseBirthDate', get(input, ['spouseBirthDate'], '')),
       set({}, 'updated', get(input, ['updated'], '')),
@@ -307,7 +307,7 @@ export class Guest {
   }
 
   getFullName() {
-    return `${this.nameTitle ? this.nameTitle + ' ' : ''}${this.firstName} ${
+    return `${this.salutation ? this.salutation + ' ' : ''}${this.firstName} ${
       this.lastName
     }`;
   }

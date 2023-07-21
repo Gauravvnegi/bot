@@ -43,7 +43,6 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.entityId = this.globalFilterService.entityId;
-
     this.registerListeners();
     this.initFG();
   }
@@ -129,9 +128,10 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
 
   handleStatusChange(event) {
     const requestData: CMSUpdateJobData = {
-      jobID: this.data.jobID,
+      jobID: this.data.id,
       roomNo: this.data.rooms[0].roomNumber,
       lastName: this.data.guestDetails.primaryGuest.lastName,
+
     };
 
     const config = {
@@ -140,6 +140,7 @@ export class RequestDetailComponent implements OnInit, OnDestroy {
           cmsUserType: 'Admin',
           entityId: this.entityId,
           actionType: event.value,
+          entityType: 'Inhouse' // cannot be hardcoded - refactor
         },
       ]),
     };

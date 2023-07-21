@@ -3,7 +3,7 @@ import { EntityState } from '@hospitality-bot/admin/shared';
 export type CompanyResponseType = {
   id?: string;
   code?: string;
-  nameTitle?: string;
+  salutation?: string;
   firstName: string;
   lastName?: string;
   contactDetails: {

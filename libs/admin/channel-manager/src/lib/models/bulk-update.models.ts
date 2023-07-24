@@ -63,7 +63,7 @@ export class CheckBoxTreeFactory {
       let buildData = {
         id: item.value,
         name: item.label,
-        isSelected: false,
+        isSelected: true,
         [buildType.isInventory ? 'channels' : 'variants']: [],
       };
 
@@ -72,7 +72,7 @@ export class CheckBoxTreeFactory {
           return {
             id: item.value,
             name: item.label,
-            isSelected: false,
+            isSelected: true,
           };
         });
       };
@@ -84,7 +84,7 @@ export class CheckBoxTreeFactory {
           buildData['variants'].push({
             id: ratePlan.value,
             name: ratePlan.label,
-            isSelected: false,
+            isSelected: true,
             channels: getChannels(ratePlan),
           });
         }

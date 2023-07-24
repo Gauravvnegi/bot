@@ -22,7 +22,12 @@ export class EmailService extends ApiService {
    * @returns get api for email.
    */
   getFromEmail(entityId: string): Observable<any> {
-    return this.get(`/api/v1/configurations/smtp`, { 'entity-id': entityId });
+    return this.get(
+      `/api/v1/configurations/smtp?entity-id=${entityId}&module=MARKETING`,
+      {
+        'entity-id': entityId,
+      }
+    );
   }
   // getFromEmail(entityId: string): Observable<any> {
   //   return this.get(`/api/v1/hotel/${entityId}/email`);

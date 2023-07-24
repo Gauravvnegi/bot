@@ -155,13 +155,14 @@ export class FormComponent implements OnInit {
   /**
    * Input wrapper classes
    */
-  get wrapperNgClasses() {
+  wrapperNgClasses(hideSpinner: boolean) {
     return {
       // 'p-input-icon-right': this.isLoading,
       'p-float-label': this.float,
       wrapper__vertical: this.alignment === 'vertical',
       wrapper__horizontal: this.alignment === 'horizontal',
       'custom-disabled': this.isDisabled,
+       'hide-spinner': hideSpinner
     };
   }
 

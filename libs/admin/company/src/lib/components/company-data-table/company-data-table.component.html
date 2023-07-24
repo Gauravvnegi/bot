@@ -108,7 +108,11 @@
       <td>
         <div class="cell-content" *ngIf="rowData.email; else emptyCell">
           <div class="primary-text">
-            {{ rowData.email }}
+            <a
+              (click)="$event.stopPropagation()"
+              href="mailto:{{ rowData.email }}"
+              >{{ rowData.email }}</a
+            >
           </div>
         </div>
       </td>

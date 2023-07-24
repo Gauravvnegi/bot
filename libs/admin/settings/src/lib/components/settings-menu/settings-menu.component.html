@@ -9,7 +9,12 @@
         (click)="selectSetting(setting.name, setting.isDisabled)"
       >
         <div class="setting__header">
-          <img [src]="setting.icon" [alt]="setting.title" />
+          <img
+            appImage
+            [placeholderSrc]="'assets/images/empty-view-icon.png'"
+            [src]="setting.icon"
+            [alt]="setting.title"
+          />
           <div>{{ setting.title }}</div>
         </div>
         <div class="setting__description">{{ setting.description }}</div>

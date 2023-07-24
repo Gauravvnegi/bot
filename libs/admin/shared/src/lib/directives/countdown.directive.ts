@@ -11,15 +11,18 @@ export class CountdownDirective implements OnInit, OnDestroy {
       this.interval = time;
       this.abbText = abb;
     }
-    this.elementRef.nativeElement.textContent = this.countdownValue + this.abbText;
+    this.elementRef.nativeElement.textContent =
+      this.countdownValue + ':' + this.seconds + this.abbText + ' left';
 
     if (this.countdownValue) {
+      this.seconds = 60;
       this.startCountdown();
-    } 
+    }
   }
 
   intervalTime = data.MIN.time;
   abbText = data.MIN.abb;
+  seconds = 0;
 
   countdownValue: number = 0;
   interval: any;
@@ -35,13 +38,24 @@ export class CountdownDirective implements OnInit, OnDestroy {
   }
 
   startCountdown(): void {
+    this.countdownValue--;
     this.interval = setInterval(() => {
-      this.countdownValue--;
-      if (this.countdownValue === 0) {
-        this.stopCountdown();
+      this.seconds--;
+
+      if (this.seconds === 0) {
+        this.seconds = 60;
+        this.countdownValue--;
       }
+
+      if (this.countdownValue < 0) {
+        this.elementRef.nativeElement.textContent =
+          '0' + ':' + '00' + this.abbText + ' left';
+        this.stopCountdown();
+        return;
+      }
+
       this.updateCountdownValue();
-    }, this.intervalTime);
+    }, 1000);
   }
 
   stopCountdown(): void {
@@ -51,7 +65,12 @@ export class CountdownDirective implements OnInit, OnDestroy {
 
   updateCountdownValue(): void {
     this.elementRef.nativeElement.textContent =
-      this.countdownValue + this.abbText;
+      this.countdownValue +
+      ':' +
+      (this.seconds < 10 ? '0' : '') +
+      this.seconds +
+      this.abbText +
+      ' left';
   }
 }
 

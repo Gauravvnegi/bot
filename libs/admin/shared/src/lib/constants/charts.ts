@@ -279,16 +279,19 @@ export const analytics = {
       field: 'itemCode',
       header: 'Item & Priority Code / Qty',
       sortType: 'number',
+      width: '18%',
     },
     {
       field: 'confirmationNumber',
       header: 'Booking No. / Rooms',
       sortType: 'number',
+      width: '18%',
     },
     {
       field: 'guestDetails.primaryGuest.getFullName()',
       header: 'Guest / company',
       sortType: 'string',
+      width: '18%',
     },
     {
       field: 'guestDetails.primaryGuest.phoneNumber',
@@ -299,12 +302,14 @@ export const analytics = {
         'guestDetails.primaryGuest.phoneNumber',
         'guestDetails.primaryGuest.email',
       ],
+      width: '18%',
     },
     {
       field: 'itemName',
       header: 'Item Name / Desc. / Status / Job Duration',
       sortType: 'string',
       searchField: ['itemName', 'remarks', 'status', 'jobDuration'],
+      width: '18%',
     },
     {
       field: '',
@@ -312,6 +317,7 @@ export const analytics = {
       isSortDisabled: true,
       sortType: 'string',
       isSearchDisabled: true,
+      width: '18%',
     },
     {
       field: '',
@@ -319,6 +325,7 @@ export const analytics = {
       isSortDisabled: true,
       sortType: '',
       isSearchDisabled: true,
+      width: '13%',
     },
   ],
 

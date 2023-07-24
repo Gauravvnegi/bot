@@ -725,10 +725,17 @@ $table-hover-color: #f3f3f3;
         font-size: 14px;
         letter-spacing: 0.84px;
         color: $subtitle;
+        overflow: visible;
+        word-break: break-word;
+        text-overflow: unset;
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         overflow: hidden;
-        text-overflow: ellipsis;
 
         &:hover {
+          display: block;
           overflow: visible;
           text-overflow: unset;
           white-space: normal;

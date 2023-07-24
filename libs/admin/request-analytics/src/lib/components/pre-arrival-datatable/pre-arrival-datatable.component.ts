@@ -86,7 +86,9 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
             entityType: this.entityType,
             packageId: this.packageId,
           },
-          ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
+          ...this.getSelectedQuickReplyFilters({
+            key: 'actionType',
+          }),
         ]);
       })
     );
@@ -176,7 +178,9 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
             entityType: this.entityType,
             packageId: this.packageId,
           },
-          ...this.getSelectedQuickReplyFilters({ key: 'actionType' }),
+          ...this.getSelectedQuickReplyFilters({
+            key: 'actionType',
+          }),
         ],
         { offset: this.first, limit: this.rowsPerPage }
       ).subscribe(

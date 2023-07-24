@@ -9,6 +9,7 @@ import { ignoreElements } from 'rxjs/operators';
   styleUrls: ['./input.component.scss'],
 })
 export class InputComponent extends FormComponent {
+  @Input() isHideSpinners = false;
   @Input() maxLength: number;
   @Input() min: number;
   @Input() max: number;

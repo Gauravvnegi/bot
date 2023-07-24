@@ -264,7 +264,7 @@
                                   min: 'Invalid'
                                 }
                               }"
-                              class="hide-spinner"
+                              [isHideSpinners]="true"
                             ></hospitality-bot-input>
                             <hospitality-bot-input-switch
                               *ngSwitchCase="'boolean'"
@@ -309,6 +309,7 @@
                                 <hospitality-bot-input
                                   *ngSwitchCase="'number'"
                                   controlName="value"
+                                  [isHideSpinners]="true"
                                 ></hospitality-bot-input>
                                 <hospitality-bot-input-switch
                                   *ngSwitchCase="'boolean'"

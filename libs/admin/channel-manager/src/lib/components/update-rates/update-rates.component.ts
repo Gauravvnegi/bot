@@ -185,7 +185,6 @@ export class UpdateRatesComponent implements OnInit {
     roomTypeFG.addControl('ratePlans', this.fb.array([]));
 
     const ratePlansControl = roomTypeFG.get('ratePlans') as FormArray;
-
     ratePlans.forEach((ratePlan, ratePlanIdx) => {
       ratePlansControl.push(
         this.fb.group({
@@ -419,9 +418,11 @@ export class UpdateRatesComponent implements OnInit {
                 'value'
               ] as FormControl;
 
-              const responseRatePlan = this.ratesRoomDetails[roomId][
-                'ratePlans'
-              ][value.value][currentDate.getTime()];
+              const responseRatePlan = this.ratesRoomDetails[roomId]?.ratePlans
+                ? this.ratesRoomDetails[roomId]['ratePlans'][value.value][
+                    currentDate.getTime()
+                  ]
+                : null;
               valueControl.patchValue(
                 responseRatePlan ? responseRatePlan.available : null
               );
@@ -491,7 +492,11 @@ export class UpdateRatesComponent implements OnInit {
     type: 'quantity' | 'occupancy',
     roomTypeId: string
   ) {
-    if (Object.keys(this.ratesRoomDetails).length === 0) return 0;
+    if (
+      Object.keys(this.ratesRoomDetails).length === 0 ||
+      !this.ratesRoomDetails[roomTypeId]?.availability
+    )
+      return 0;
 
     const date = new Date(this.useForm.controls['date'].value);
     date.setDate(date.getDate() + nextDate);

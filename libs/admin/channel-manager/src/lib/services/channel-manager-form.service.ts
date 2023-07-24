@@ -20,8 +20,8 @@ export class ChannelManagerFormService {
   isRoomDetailsLoaded = false;
   roomDetails = new BehaviorSubject<RoomTypes[]>([]);
   RatePlan = {
-    SUITE: '61bb58e1-962f-47da-bcbf-2281b09df91c',
-    EXECUTIVE: '37139fa5-7dea-4e73-830c-2bf3abb83e85',
+    SUITE: 'SUITE',
+    EXECUTIVE: 'EXECUTIVE',
   };
 
   reset() {
@@ -30,14 +30,13 @@ export class ChannelManagerFormService {
 
   loadRoomTypes(entityId) {
     this.channelMangerService.getRoomDetails(entityId).subscribe((res) => {
-      const rooms = new RoomTypeList()
-        .deserialize(res)
-        .records.filter(
-          (item) =>
-            item.id === this.RatePlan.EXECUTIVE ||
-            item.id === this.RatePlan.SUITE
-        );
-
+      const rooms = new RoomTypeList().deserialize(res).records;
+      //TODO: Filter for only two room
+      // .filter(
+      //   (item) =>
+      //     item.name === this.RatePlan.EXECUTIVE ||
+      //     item.name === this.RatePlan.SUITE
+      // );
       let configRatePlans = [];
       this.configService.$config.subscribe((data) => {
         configRatePlans = data.roomRatePlans;

@@ -89,8 +89,12 @@ export class InventoryBulkUpdateComponent implements OnInit {
 
   loadRooms() {
     this.formService.roomDetails.subscribe((rooms) => {
-      this.roomTypes = rooms;
-      this.loadTree({ roomType: [] });
+      if (this.formService.isRoomDetailsLoaded) {
+        this.roomTypes = rooms;
+        this.loadTree({ roomType: [] });
+      } else {
+        this.formService.loadRoomTypes(this.entityId);
+      }
     });
   }
 

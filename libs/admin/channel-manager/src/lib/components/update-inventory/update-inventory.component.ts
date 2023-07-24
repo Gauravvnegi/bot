@@ -182,7 +182,7 @@ export class UpdateInventoryComponent implements OnInit {
 
     const channelControl = roomTypeFG.get('channels') as FormArray;
 
-    channels.forEach((channel, channelIdx) => {
+    channels?.forEach((channel, channelIdx) => {
       channelControl.push(
         this.fb.group({
           label: channel.label,

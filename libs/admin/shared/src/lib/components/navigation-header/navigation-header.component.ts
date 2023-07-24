@@ -31,6 +31,7 @@ export class NavigationHeaderComponent implements OnInit, OnDestroy {
   @Input() set dateTime(
     value: number | { dateTitle: string; dateTime: number }
   ) {
+    debugger;
     if (typeof value !== 'object') {
       this.setDraftTime(new Date(value as number));
     } else {

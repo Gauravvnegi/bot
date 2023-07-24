@@ -195,6 +195,7 @@
                         "
                       >
                         <hospitality-bot-input
+                          [isHideSpinners]="true"
                           *ngSwitchCase="'number'"
                           controlName="value"
                           min="0"
@@ -246,6 +247,7 @@
                             <hospitality-bot-input
                               *ngSwitchCase="'number'"
                               controlName="value"
+                              [isHideSpinners]="true"
                             ></hospitality-bot-input>
                             <hospitality-bot-input-switch
                               *ngSwitchCase="'boolean'"

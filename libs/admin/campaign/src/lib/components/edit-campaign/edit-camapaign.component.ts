@@ -151,23 +151,21 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
           return of(null);
         })
       )
-      .subscribe(
-        (response) => {
-          if (this.campaignId) {
-            console.log('Saved');
-            this.setDataAfterUpdate(response);
-          } else {
-            this.campaignFG.patchValue({ id: response.id });
-            this.campaignId = response.id;
-            this.location.replaceState(
-              `/pages/marketing/campaign/edit/${response.id}`
-            );
-            this.setDataAfterSave(response);
-          }
-          this.$formChangeDetection.unsubscribe();
-          this.listenForAutoSave();
+      .subscribe((response) => {
+        if (this.campaignId) {
+          console.log('Saved');
+          this.setDataAfterUpdate(response);
+        } else {
+          this.campaignFG.patchValue({ id: response.id });
+          this.campaignId = response.id;
+          this.location.replaceState(
+            `/pages/marketing/campaign/edit/${response.id}`
+          );
+          this.setDataAfterSave(response);
         }
-      );
+        this.$formChangeDetection.unsubscribe();
+        this.listenForAutoSave();
+      });
   }
 
   /**
@@ -180,6 +178,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
         .getCampaignById(this.entityId, id)
         .subscribe((response) => {
           this.campaign = new Campaign().deserialize(response);
+          console.log(this.campaign, 'this.campaign');
           if (this.campaign.cc && this.campaign.cc.length)
             this.campaignFG.addControl('cc', this._fb.array([]));
           if (this.campaign.bcc && this.campaign.bcc.length)
@@ -266,20 +265,18 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
   listenForAutoSave() {
     this.$autoSaveSubscription.add(
       interval(campaignConfig.autosave.time).subscribe(() => {
-        this.autoSave(this.campaignFG.getRawValue()).subscribe(
-          (response) => {
-            if (this.campaignId) {
-              this.setDataAfterUpdate(response);
-            } else {
-              this.campaignFG.patchValue({ id: response.id });
-              this.campaignId = response.id;
-              this.setDataAfterSave(response);
-              this.location.replaceState(
-                `/pages/marketing/campaign/edit/${response.id}`
-              );
-            }
-          } 
-        );
+        this.autoSave(this.campaignFG.getRawValue()).subscribe((response) => {
+          if (this.campaignId) {
+            this.setDataAfterUpdate(response);
+          } else {
+            this.campaignFG.patchValue({ id: response.id });
+            this.campaignId = response.id;
+            this.setDataAfterSave(response);
+            this.location.replaceState(
+              `/pages/marketing/campaign/edit/${response.id}`
+            );
+          }
+        });
       })
     );
   }
@@ -361,7 +358,7 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
       this.$subscription.add(
         this.autoSave(this.campaignFG.getRawValue()).subscribe(
           (_response) => this._router.navigate(['/pages/marketing/campaign']),
-          ({ error }) => { 
+          ({ error }) => {
             this._router.navigate(['/pages/marketing/campaign']);
           }
         )
@@ -402,19 +399,17 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
                 this.scheduleFG.get('time').value
               )
             )
-            .subscribe(
-              (response) => {
-                this.snackbarService.openSnackBarWithTranslate(
-                  {
-                    translateKey: `messages.SUCCESS.CAMPAIGN_SCEDULED`,
-                    priorityMessage: 'Campaign scheduled.',
-                  },
-                  '',
-                  { panelClass: 'success' }
-                );
-                this._router.navigate(['pages/marketing/campaign']);
-              } 
-            )
+            .subscribe((response) => {
+              this.snackbarService.openSnackBarWithTranslate(
+                {
+                  translateKey: `messages.SUCCESS.CAMPAIGN_SCEDULED`,
+                  priorityMessage: 'Campaign scheduled.',
+                },
+                '',
+                { panelClass: 'success' }
+              );
+              this._router.navigate(['pages/marketing/campaign']);
+            })
         );
       } else this.scheduleFG.reset();
       detailCompRef.close();
@@ -458,7 +453,9 @@ export class EditCampaignComponent implements OnInit, OnDestroy {
             .subscribe();
           this._router.navigate(['pages/marketing/campaign']);
         },
-        ({ error }) => {this.isSending = false}
+        ({ error }) => {
+          this.isSending = false;
+        }
       )
     );
   }

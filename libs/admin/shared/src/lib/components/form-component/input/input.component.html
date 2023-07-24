@@ -1,9 +1,8 @@
 <div
   class="wrapper p-field"
   [style.fontSize]="fontSize"
-  [ngClass]="wrapperNgClasses"
+  [ngClass]="wrapperNgClasses(isHideSpinners)"
   [formGroup]="controlContainer.control"
-  [ngClass]="{ 'hide-spinner': isHideSpinners }"
 >
   <label
     *ngIf="label && !float"

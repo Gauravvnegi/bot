@@ -85,7 +85,7 @@
         ></p-tableCheckbox>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.name; else emptyCell">
+        <div class="cell-content prop" *ngIf="rowData.name; else emptyCell">
           <div class="primary-text badge-container">
             <div>{{ rowData.name }}</div>
             <div *ngIf="rowData.verified" class="badge">
@@ -114,7 +114,13 @@
       </td>
       <td>
         <div class="cell-content" *ngIf="rowData.email; else emptyCell">
-          <div class="primary-text">{{ rowData.email }}</div>
+          <div class="primary-text">
+            <a
+              (click)="$event.stopPropagation()"
+              href="mailto:{{ rowData.email }}"
+              >{{ rowData.email }}</a
+            >
+          </div>
         </div>
       </td>
       <td>

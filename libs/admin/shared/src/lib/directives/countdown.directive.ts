@@ -38,6 +38,7 @@ export class CountdownDirective implements OnInit, OnDestroy {
   }
 
   startCountdown(): void {
+    this.countdownValue--;
     this.interval = setInterval(() => {
       this.seconds--;
 
@@ -46,7 +47,12 @@ export class CountdownDirective implements OnInit, OnDestroy {
         this.countdownValue--;
       }
 
-      if (this.countdownValue === 0 && this.seconds === 0) this.stopCountdown();
+      if (this.countdownValue < 0) {
+        this.elementRef.nativeElement.textContent =
+          '0' + ':' + '00' + this.abbText + ' left';
+        this.stopCountdown();
+        return;
+      }
 
       this.updateCountdownValue();
     }, 1000);
@@ -59,7 +65,12 @@ export class CountdownDirective implements OnInit, OnDestroy {
 
   updateCountdownValue(): void {
     this.elementRef.nativeElement.textContent =
-      this.countdownValue + ':' + this.seconds + this.abbText + ' left';
+      this.countdownValue +
+      ':' +
+      (this.seconds < 10 ? '0' : '') +
+      this.seconds +
+      this.abbText +
+      ' left';
   }
 }
 

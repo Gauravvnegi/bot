@@ -314,10 +314,3 @@ $border-color: rgba(112, 112, 112, 0.35);
     }
   }
 }
-
-//to hide number spinners
-:host :ng-deep hospitality-bot-input input::-webkit-outer-spin-button,
-hospitality-bot-input input::-webkit-inner-spin-button {
-  -webkit-appearance: none !important;
-  margin: 0 !important;
-}

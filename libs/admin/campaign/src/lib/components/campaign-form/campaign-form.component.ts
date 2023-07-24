@@ -72,7 +72,6 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
       this.navRoutes[2].label = 'Edit Campaign';
     }
     this.draftDate = this.campaign?.updatedAt ?? this.campaign?.createdAt;
-    debugger;
     this.getFromEmails();
   }
 
@@ -82,7 +81,6 @@ export class CampaignFormComponent implements OnInit, OnDestroy {
   getFromEmails() {
     this.$subscription.add(
       this._emailService.getFromEmail(this.entityId).subscribe((response) => {
-        debugger;
         this.fromEmailList = new EmailList()
           .deserialize(response)
           .map((item) => ({ label: item.email, value: item.id }));

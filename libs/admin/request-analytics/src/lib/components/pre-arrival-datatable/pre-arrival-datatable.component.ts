@@ -167,7 +167,6 @@ export class PreArrivalDatatableComponent extends BaseDatatableComponent
   }
 
   loadData(event: LazyLoadEvent) {
-    debugger;
     this.loading = true;
     this.updatePaginations(event);
     this.$subscription.add(

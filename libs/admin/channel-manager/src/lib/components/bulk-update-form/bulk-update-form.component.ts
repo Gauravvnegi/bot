@@ -17,6 +17,7 @@ import {
 export class BulkUpdateFormComponent extends FormComponent {
   readonly restrictionsRecord = restrictionsRecord;
   @Input() allRestrictions = [];
+  @Input() isRoomsEmpty = false;
   updateItems = updateItems;
 
   restrictions: RestrictionAndValuesOption[];
@@ -25,8 +26,9 @@ export class BulkUpdateFormComponent extends FormComponent {
 
   entityId: string;
   parentForm: FormGroup;
-  endMinDate = new Date();
   startMinDate = new Date();
+  endMinDate = new Date();
+  endDateValue = new Date();
   roomTypes: RoomTypeOption[] = [];
 
   $subscription = new Subscription();
@@ -64,7 +66,12 @@ export class BulkUpdateFormComponent extends FormComponent {
     this.parentForm
       .get(this.controls.fromDate)
       .valueChanges.subscribe((value) => {
-        this.endMinDate = new Date(value);
+        if (value > this.parentForm.controls[this.controls.toDate].value) {
+          this.endMinDate = new Date(value);
+          this.endDateValue = new Date(value);
+        } else {
+          this.endMinDate = new Date();
+        }
       });
 
     this.parentForm

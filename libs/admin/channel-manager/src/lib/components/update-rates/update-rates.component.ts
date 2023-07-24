@@ -54,6 +54,7 @@ export class UpdateRatesComponent implements OnInit {
   restrictions: RestrictionAndValuesOption[];
   loading = false;
   loadingError = false;
+  isRoomsEmpty = false;
   currentDate = new Date();
 
   $subscription = new Subscription();
@@ -185,7 +186,6 @@ export class UpdateRatesComponent implements OnInit {
     roomTypeFG.addControl('ratePlans', this.fb.array([]));
 
     const ratePlansControl = roomTypeFG.get('ratePlans') as FormArray;
-
     ratePlans.forEach((ratePlan, ratePlanIdx) => {
       ratePlansControl.push(
         this.fb.group({
@@ -324,8 +324,9 @@ export class UpdateRatesComponent implements OnInit {
 
     this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
       this.roomTypes = this.allRoomTypes.filter((item) =>
-        res.length ? res.includes(item.value) : true
+        res.includes(item.value)
       );
+      this.isRoomsEmpty = !res.length;
       this.useForm.removeControl('roomTypes');
       this.addRoomTypesControl();
     });
@@ -403,10 +404,7 @@ export class UpdateRatesComponent implements OnInit {
     );
     let currentDate = new Date(fromDate);
 
-    if (
-      Object.keys(this.ratesRoomDetails).length > 0 &&
-      roomTypeControls.length > 0
-    ) {
+    if (roomTypeControls.length > 0) {
       for (const roomControl of roomTypeControls) {
         const roomId = roomControl.value.value;
         ((roomControl as FormGroup).controls[
@@ -419,9 +417,13 @@ export class UpdateRatesComponent implements OnInit {
                 'value'
               ] as FormControl;
 
-              const responseRatePlan = this.ratesRoomDetails[roomId][
-                'ratePlans'
-              ][value.value][currentDate.getTime()];
+              const responseRatePlan = this.ratesRoomDetails[roomId]?.ratePlans[
+                value.value
+              ]
+                ? this.ratesRoomDetails[roomId]['ratePlans'][value.value][
+                    currentDate.getTime()
+                  ]
+                : null;
               valueControl.patchValue(
                 responseRatePlan ? responseRatePlan.available : null
               );
@@ -491,7 +493,11 @@ export class UpdateRatesComponent implements OnInit {
     type: 'quantity' | 'occupancy',
     roomTypeId: string
   ) {
-    if (Object.keys(this.ratesRoomDetails).length === 0) return 0;
+    if (
+      Object.keys(this.ratesRoomDetails).length === 0 ||
+      !this.ratesRoomDetails[roomTypeId]?.availability
+    )
+      return 0;
 
     const date = new Date(this.useForm.controls['date'].value);
     date.setDate(date.getDate() + nextDate);

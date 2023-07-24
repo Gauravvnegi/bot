@@ -9,7 +9,16 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./inventory-nested-checkbox-tree.component.scss'],
 })
 export class InventoryNestedCheckboxTreeComponent extends FormComponent {
-  @Input() variants: Variant[];
+  private _variants: Variant[];
+  @Input() set variants(value: Variant[]) {
+    this._variants = value;
+    this._variants &&
+      this.patchChildrenData(this.childrenControlName.roomTypeIds);
+  }
+
+  get variants() {
+    return this._variants;
+  }
   @Input() childrenControlName = {
     roomTypeIds: 'roomTypeIds',
     channelIds: 'channelIds',

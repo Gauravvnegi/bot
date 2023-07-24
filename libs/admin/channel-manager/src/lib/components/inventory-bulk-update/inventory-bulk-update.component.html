@@ -7,12 +7,14 @@
   <div class="content-wrapper">
     <hospitality-bot-bulk-update-form
       [allRestrictions]="inventoryRestrictions"
+      [isRoomsEmpty]="isRoomsEmpty"
     ></hospitality-bot-bulk-update-form>
 
     <hospitality-bot-inventory-nested-checkbox-tree
       class="full-width"
       controlName="roomTypes"
       [variants]="inventoryTreeList"
+      *ngIf="!isRoomsEmpty; else emptyTable"
     ></hospitality-bot-inventory-nested-checkbox-tree>
 
     <div class="action-button w-100">
@@ -22,5 +24,15 @@
         [disabled]="!isFormValid"
       ></hospitality-bot-button>
     </div>
+    <ng-template #emptyTable>
+      <hospitality-bot-empty-table
+        [isLoading]="loading"
+        [content]="{
+          description: 'Please select at least one room',
+          imageSrc: 'assets/images/empty-table-service.png'
+        }"
+      >
+      </hospitality-bot-empty-table>
+    </ng-template>
   </div>
 </div>

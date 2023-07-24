@@ -13,27 +13,35 @@ export function makeRoomOption(...data) {
 }
 
 export function makeRoomsData(rooms, configRatePlans) {
-  return rooms.map((item) => {
+  let res = rooms.map((item) => {
     let room = {
       label: item.name,
       value: item.id,
       channels: [],
-      ratePlans: item.ratePlans.map((ratePlan) => {
-        let rates = configRatePlans.find(
-          (configRates) => configRates.id === ratePlan.ratePlanTypeId
-        );
-        let myRatePlan = {
-          ...ratePlan,
-          type: rates.key,
-          label: rates.label,
-          value: rates.id,
-          channels: [],
-        };
-        return myRatePlan;
-      }),
+      ratePlans: item.ratePlans
+        .map((ratePlan) => {
+          let rates = configRatePlans.find(
+            (configRates) => configRates.id === ratePlan.ratePlanTypeId
+          );
+          let myRatePlan = rates
+            ? {
+                ...ratePlan,
+                type: rates.key,
+                label: rates.label,
+                value: rates.id,
+                channels: [],
+              }
+            : null;
+          return myRatePlan;
+        })
+        // TODO: It must at least 1 ratePlans
+        .filter((item) => item),
     };
     return room;
   });
+
+  // TODO: It must at least 1 ratePlans
+  return res.filter((item) => item.ratePlans.length);
 }
 
 export class CheckBoxTreeFactory {
@@ -55,7 +63,7 @@ export class CheckBoxTreeFactory {
       let buildData = {
         id: item.value,
         name: item.label,
-        isSelected: false,
+        isSelected: true,
         [buildType.isInventory ? 'channels' : 'variants']: [],
       };
 
@@ -64,7 +72,7 @@ export class CheckBoxTreeFactory {
           return {
             id: item.value,
             name: item.label,
-            isSelected: false,
+            isSelected: true,
           };
         });
       };
@@ -76,7 +84,7 @@ export class CheckBoxTreeFactory {
           buildData['variants'].push({
             id: ratePlan.value,
             name: ratePlan.label,
-            isSelected: false,
+            isSelected: true,
             channels: getChannels(ratePlan),
           });
         }

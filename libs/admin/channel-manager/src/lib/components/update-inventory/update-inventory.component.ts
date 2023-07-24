@@ -44,6 +44,7 @@ export class UpdateInventoryComponent implements OnInit {
 
   loading = false;
   loadingError = false;
+  isRoomsEmpty = false;
   $subscription = new Subscription();
 
   perDayRoomAvailability = new Map<number, any>();
@@ -182,7 +183,7 @@ export class UpdateInventoryComponent implements OnInit {
 
     const channelControl = roomTypeFG.get('channels') as FormArray;
 
-    channels.forEach((channel, channelIdx) => {
+    channels?.forEach((channel, channelIdx) => {
       channelControl.push(
         this.fb.group({
           label: channel.label,
@@ -254,9 +255,9 @@ export class UpdateInventoryComponent implements OnInit {
 
     this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
       this.roomTypes = this.allRoomTypes.filter((item) =>
-        res.length ? res.includes(item.value) : true
+        res.includes(item.value)
       );
-
+      this.isRoomsEmpty = !res.length;
       this.useForm.removeControl('roomTypes');
       this.addRoomTypesControl();
     });
@@ -295,13 +296,6 @@ export class UpdateInventoryComponent implements OnInit {
         )
     );
   }
-
-  // loadDefaultData() {
-  //   this.useForm.controls['roomType'].patchValue(
-  //     [...this.allRoomTypes.map((item) => item.value)],
-  //     { emitEvent: false }
-  //   );
-  // }
 
   setRoomDetails(selectedDate?: number) {
     const { fromDate } = this.getFromAndToDateEpoch(

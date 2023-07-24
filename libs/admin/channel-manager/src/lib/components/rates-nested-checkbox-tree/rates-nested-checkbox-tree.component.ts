@@ -18,7 +18,16 @@ import {
   styleUrls: ['./rates-nested-checkbox-tree.component.scss'],
 })
 export class RatesNestedCheckboxTreeComponent extends FormControl {
-  @Input() roomsData: RoomTypes[];
+  private _roomsData: RoomTypes[];
+  @Input() set roomsData(value: RoomTypes[]) {
+    this._roomsData = value;
+    this.roomsData && this.patchTreeChanges();
+  }
+
+  get roomsData() {
+    return this._roomsData;
+  }
+
   @Input() controlNames = {
     roomTypes: 'roomTypes',
   };
@@ -42,11 +51,11 @@ export class RatesNestedCheckboxTreeComponent extends FormControl {
   }
 
   patchTreeChanges() {
-    const selectedItems = this.roomsData.filter((item) =>
+    const selectedItems = this.roomsData?.filter((item) =>
       item.variants.some((ratePlan) => ratePlan.isSelected)
     );
     this.manageControl();
-    selectedItems.forEach((item) => {
+    selectedItems?.forEach((item) => {
       const types = this.parentFG.controls[
         this.controlNames.roomTypes
       ] as FormArray;

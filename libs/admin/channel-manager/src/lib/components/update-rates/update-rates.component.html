@@ -11,7 +11,10 @@
     ></hospitality-bot-button>
   </hospitality-bot-navigation-header>
   <div class="inventory-form" *ngIf="!!useForm; else loader">
-    <div class="wrapper" [formGroup]="useForm">
+    <div
+      [ngClass]="!isRoomsEmpty ? 'wrapper' : 'wrapper reduce-height'"
+      [formGroup]="useForm"
+    >
       <!-- LEFT SECTION -->
       <div class="left">
         <div class="left__main">
@@ -29,11 +32,12 @@
                 controlName="date"
                 [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
                 [minDate]="currentDate"
+                [disabled]="isRoomsEmpty"
               >
               </hospitality-bot-date>
             </div>
           </div>
-          <div class="main-section">
+          <div class="main-section" *ngIf="!isRoomsEmpty">
             <div class="dynamic-section left-main-cell">
               <span class="text">
                 Dynamic Pricing
@@ -174,7 +178,7 @@
               </div>
             </div>
           </div>
-          <div class="main-section">
+          <div class="main-section" *ngIf="!isRoomsEmpty">
             <div class="data-cell-wrapper" formArrayName="dynamicPricing">
               <div class="data-cell dynamic-section">
                 <div
@@ -336,9 +340,21 @@
       label="Save"
       (onClick)="handleSave()"
       [disabled]="loading || loadingError"
+      *ngIf="!isRoomsEmpty"
     ></hospitality-bot-button>
+    <ng-container *ngIf="!isRoomsEmpty; else emptyTable"></ng-container>
   </div>
   <ng-template #loader>
     <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
+  </ng-template>
+  <ng-template #emptyTable>
+    <hospitality-bot-empty-table
+      [isLoading]="loading"
+      [content]="{
+        description: 'Please select at least one rooms',
+        imageSrc: 'assets/images/empty-table-service.png'
+      }"
+    >
+    </hospitality-bot-empty-table>
   </ng-template>
 </div>

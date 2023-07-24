@@ -404,10 +404,7 @@ export class UpdateRatesComponent implements OnInit {
     );
     let currentDate = new Date(fromDate);
 
-    if (
-      Object.keys(this.ratesRoomDetails).length > 0 &&
-      roomTypeControls.length > 0
-    ) {
+    if (roomTypeControls.length > 0) {
       for (const roomControl of roomTypeControls) {
         const roomId = roomControl.value.value;
         ((roomControl as FormGroup).controls[
@@ -420,7 +417,9 @@ export class UpdateRatesComponent implements OnInit {
                 'value'
               ] as FormControl;
 
-              const responseRatePlan = this.ratesRoomDetails[roomId]?.ratePlans
+              const responseRatePlan = this.ratesRoomDetails[roomId]?.ratePlans[
+                value.value
+              ]
                 ? this.ratesRoomDetails[roomId]['ratePlans'][value.value][
                     currentDate.getTime()
                   ]

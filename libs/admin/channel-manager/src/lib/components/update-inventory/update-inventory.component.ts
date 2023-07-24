@@ -297,13 +297,6 @@ export class UpdateInventoryComponent implements OnInit {
     );
   }
 
-  // loadDefaultData() {
-  //   this.useForm.controls['roomType'].patchValue(
-  //     [...this.allRoomTypes.map((item) => item.value)],
-  //     { emitEvent: false }
-  //   );
-  // }
-
   setRoomDetails(selectedDate?: number) {
     const { fromDate } = this.getFromAndToDateEpoch(
       selectedDate ? selectedDate : this.useForm.controls['date'].value

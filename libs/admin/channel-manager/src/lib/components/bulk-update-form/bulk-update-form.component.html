@@ -52,8 +52,7 @@
         [props]="{ placeholder: 'Select From Date' }"
         [settings]="{
           enableTime: false,
-          dateValue: endMinDate,
-          isDisabled: false
+          isDisabled: isRoomsEmpty
         }"
         [minDate]="startMinDate"
       ></hospitality-bot-date>
@@ -64,8 +63,8 @@
         [props]="{ placeholder: 'Select To Date' }"
         [settings]="{
           enableTime: false,
-          dateValue: endMinDate,
-          isDisabled: false
+          dateValue: endDateValue,
+          isDisabled: isRoomsEmpty
         }"
         [minDate]="endMinDate"
       ></hospitality-bot-date>

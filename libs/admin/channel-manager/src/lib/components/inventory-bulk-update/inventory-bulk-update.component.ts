@@ -35,6 +35,7 @@ export class InventoryBulkUpdateComponent implements OnInit {
   pageTitle = 'Bulk Update';
   loading = false;
   $subscription = new Subscription();
+  isRoomsEmpty = false;
   navRoutes: NavRouteOptions = [
     {
       label: 'Update Inventory',
@@ -100,7 +101,8 @@ export class InventoryBulkUpdateComponent implements OnInit {
 
   listenChanges() {
     this.useForm.controls['roomType'].valueChanges.subscribe((value) => {
-      this.loadTree(this.useForm.getRawValue());
+      this.isRoomsEmpty = !value.length;
+      !this.isRoomsEmpty && this.loadTree(this.useForm.getRawValue());
     });
   }
   loadTree(controls) {
@@ -109,6 +111,7 @@ export class InventoryBulkUpdateComponent implements OnInit {
       controls.roomType,
       { isInventory: true }
     );
+    this.loading = false;
   }
 
   onSubmit() {

@@ -44,6 +44,7 @@ export class UpdateInventoryComponent implements OnInit {
 
   loading = false;
   loadingError = false;
+  isRoomsEmpty = false;
   $subscription = new Subscription();
 
   perDayRoomAvailability = new Map<number, any>();
@@ -254,9 +255,9 @@ export class UpdateInventoryComponent implements OnInit {
 
     this.useFormControl.roomType.valueChanges.subscribe((res: string[]) => {
       this.roomTypes = this.allRoomTypes.filter((item) =>
-        res.length ? res.includes(item.value) : true
+        res.includes(item.value)
       );
-
+      this.isRoomsEmpty = !res.length;
       this.useForm.removeControl('roomTypes');
       this.addRoomTypesControl();
     });

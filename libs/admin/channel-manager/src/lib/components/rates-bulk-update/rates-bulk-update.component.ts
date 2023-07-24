@@ -40,6 +40,7 @@ export class RatesBulkUpdateComponent implements OnInit {
   startMinDate = new Date();
   endMinDate = new Date();
   loading = false;
+  isRoomsEmpty = false;
   $subscription = new Subscription();
   roomTypes = [];
 
@@ -87,7 +88,8 @@ export class RatesBulkUpdateComponent implements OnInit {
 
   listenChanges() {
     this.useForm.controls['roomType'].valueChanges.subscribe((value) => {
-      this.loadTree(this.useForm.getRawValue());
+      this.isRoomsEmpty = !value.length;
+      !this.isRoomsEmpty && this.loadTree(this.useForm.getRawValue());
     });
   }
 

@@ -426,12 +426,12 @@ export class AddRoomComponent implements OnInit, OnDestroy {
    * @function updateRoom To update the room data
    */
   updateRoom(): void {
-    const data = this.useForm.getRawValue();
+    let data = this.useForm.getRawValue();
     const activeFeatures = data.featureIds;
     const removeFeatures = this.featureIds.filter(
       (item) => !activeFeatures.includes(item)
     );
-
+    data.status = this.statusQuoForm.get('roomStatus').value;
     this.$subscription.add(
       this.roomService
         .updateRoom(this.entityId, {

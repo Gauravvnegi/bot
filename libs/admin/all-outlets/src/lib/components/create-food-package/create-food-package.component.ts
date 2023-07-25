@@ -142,7 +142,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
    */
   getTax() {
     this.$subscription.add(
-      this.taxService.getTaxList(this.entityId).subscribe(({ records }) => {
+      this.taxService.getTaxList(this.outletId).subscribe(({ records }) => {
         records = records.filter(
           (item) => item.category === 'service' && item.status
         );

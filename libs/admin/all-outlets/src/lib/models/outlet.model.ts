@@ -5,6 +5,10 @@ import {
   MenuListResponse,
   MenuResponse,
 } from '../types/outlet';
+import {
+  FoodPackageListResponse,
+  FoodPackageResponse,
+} from '../types/response';
 
 export class OutletList {
   id: string;
@@ -105,6 +109,60 @@ export class MenuItemList {
     this.entityStateCounts = input?.entityStateCounts ?? {};
     this.entityTypeCounts = input?.entityTypeCounts ?? {};
     this.total = input?.total ?? 0;
+    return this;
+  }
+}
+
+export class FoodPackageList {
+  records: FoodPackage[];
+  total: number;
+  entityStateCounts;
+  entityTypeCounts;
+
+  deserialize(input: FoodPackageListResponse) {
+    this.records = input.foodPackages.map((item) =>
+      new FoodPackage().deserialize(item)
+    );
+    this.entityStateCounts = input?.entityStateCounts ?? {};
+    this.entityTypeCounts = input?.entityTypeCounts ?? {};
+    this.total = input?.total ?? 0;
+    return this;
+  }
+}
+
+export class FoodPackage {
+  id: string;
+  name: string;
+  imageUrl: string;
+  status: boolean;
+  rate: number;
+  startDate: number;
+  endDate: number;
+  currency: string;
+  packageCode: string;
+  source: string;
+  hotelId: string;
+  category: string;
+  autoAccept: boolean;
+  hasChild: boolean;
+  discountedPrice: number;
+
+  deserialize(input: FoodPackageResponse) {
+    this.id = input?.id;
+    this.name = input?.name;
+    this.imageUrl = input?.imageUrl;
+    this.status = input?.active;
+    this.rate = input?.rate;
+    this.startDate = input?.startDate;
+    this.endDate = input?.endDate;
+    this.currency = input?.currency;
+    this.packageCode = input?.packageCode;
+    this.source = input?.source;
+    this.hotelId = input?.hotelId;
+    this.category = input?.category;
+    this.autoAccept = input?.autoAccept;
+    this.hasChild = input?.hasChild;
+    this.discountedPrice = input?.discountedPrice;
     return this;
   }
 }

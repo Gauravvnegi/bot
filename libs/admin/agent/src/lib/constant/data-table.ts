@@ -23,27 +23,29 @@ export const cols: Cols[] = [
   },
   {
     field: 'email',
-    header: 'Email',
-    sortType: 'string',
-    width: '7%',
-  },
-  {
-    field: 'phoneNo',
-    header: 'Phone No',
+    header: 'Email/Phone No.',
     sortType: 'string',
     width: '10%',
+    searchField: ['email', 'phoneNo'],
   },
   {
     field: 'commission',
     header: 'Commission',
     sortType: 'string',
+    width: '5%',
+  },
+  {
+    field: `created`,
+    header: 'Created',
+    sortType: 'string',
     width: '8%',
+    searchField: ['created'],
   },
   {
     field: 'status',
     header: 'Action',
     sortType: 'string',
-    width: '10%',
+    width: '8%',
     isSearchDisabled: true,
   },
 ];

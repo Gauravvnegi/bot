@@ -41,6 +41,7 @@ export class GuestData {
   name: string;
   isVerified: boolean;
   dob: number;
+  created: number;
   status: boolean;
   type: string;
 
@@ -60,6 +61,7 @@ export class GuestData {
       type: input['type'],
       code: input['code'],
       dob: input['dateOfBirth'],
+      created: input['created'],
     });
 
     return this;

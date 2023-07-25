@@ -314,6 +314,9 @@ $border-color: rgba(112, 112, 112, 0.35);
       background: transparent;
     }
   }
+  .p-multiselect .p-multiselect-panel {
+    min-width: 255px;
+  }
 }
 .reduce-height {
   min-height: 13vh;

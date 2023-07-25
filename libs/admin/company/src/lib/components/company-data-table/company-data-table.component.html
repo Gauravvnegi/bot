@@ -108,23 +108,14 @@
       <td>
         <div class="cell-content" *ngIf="rowData.email; else emptyCell">
           <div class="primary-text">
-            <a
-              (click)="$event.stopPropagation()"
-              href="mailto:{{ rowData.email }}"
-              >{{ rowData.email }}</a
-            >
+            {{ rowData.email }}
           </div>
-        </div>
-      </td>
-      <td>
-        <div class="cell-content" *ngIf="rowData.phoneNumber; else emptyCell">
-          <div class="primary-text">
-            <a
-              (click)="$event.stopPropagation()"
-              href="tel:{{ rowData.phoneNumber }}"
-              >{{ rowData.phoneNumber }}</a
-            >
-          </div>
+          <a
+            class="secondary-text link"
+            (click)="$event.stopPropagation()"
+            href="tel:{{ rowData.phoneNumber }}"
+            >{{ rowData.phoneNumber }}</a
+          >
         </div>
       </td>
       <td>
@@ -135,14 +126,7 @@
           <div class="primary-text">
             {{ rowData.salesPersonName }}
           </div>
-        </div>
-      </td>
-      <td>
-        <div
-          class="cell-content"
-          *ngIf="rowData.salesPersonNumber; else emptyCell"
-        >
-          <div class="primary-text">
+          <div class="secondary-text">
             <a
               (click)="$event.stopPropagation()"
               href="tel:{{ rowData.salesPersonNumber }}"
@@ -157,6 +141,13 @@
           <div class="primary-text">
             {{ rowData.discount
             }}{{ rowData.discountType === 'DISCOUNT' ? '/-' : '%' }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content" *ngIf="rowData.created; else emptyCell">
+          <div class="primary-text">
+            {{ rowData.created | date }}
           </div>
         </div>
       </td>

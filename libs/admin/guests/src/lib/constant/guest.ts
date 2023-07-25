@@ -10,14 +10,14 @@ export const guestCols = [
     field: 'email',
     header: 'Email Id',
     sortType: 'string',
-    width: '30%',
+    width: '20%',
     searchField: ['email'],
   },
   {
     field: `phoneNumber`,
     header: 'Phone No.',
     sortType: 'string',
-    width: '30%',
+    width: '20%',
     searchField: ['phoneNumber'],
   },
   {
@@ -26,5 +26,12 @@ export const guestCols = [
     sortType: 'string',
     width: '15%',
     searchField: ['dob'],
+  },
+  {
+    field: `created`,
+    header: 'Created',
+    sortType: 'string',
+    width: '15%',
+    searchField: ['created'],
   },
 ];

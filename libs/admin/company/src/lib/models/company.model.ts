@@ -13,7 +13,8 @@ export class CompanyModel {
   salesPersonNumber: string;
   discount: string;
   discountType: string;
-  status: true;
+  created: number;
+  status: boolean;
 
   static mapFormData(form: CompanyFormType) {
     let data: CompanyResponseType = {
@@ -55,6 +56,7 @@ export class CompanyModel {
       discount: input.priceModifierValue,
       discountType: input.priceModifier,
       status: input.status,
+      created: input.created,
     });
     return this;
   }

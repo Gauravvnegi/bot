@@ -29,6 +29,7 @@ export type CompanyResponseType = {
   companyName?: string;
   companyCode?: number;
   status?: boolean;
+  created?: number;
 };
 
 export type CompanyListResponse = {

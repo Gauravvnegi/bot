@@ -15,23 +15,15 @@ export const cols: Cols[] = [
   },
   {
     field: 'email',
-    header: 'Email',
+    header: 'Email/No.',
     sortType: 'string',
-  },
-  {
-    field: 'phoneNumber',
-    header: 'Phone No.',
-    sortType: 'string',
+    searchField: ['email', 'phoneNumber'],
   },
   {
     field: 'salesPersonName',
-    header: 'Sales Person Name',
+    header: 'Sales Person Name/No.',
     sortType: 'string',
-  },
-  {
-    field: 'salesPersonNumber',
-    header: 'Sales Person No.',
-    sortType: 'string',
+    searchField: ['salesPersonName', 'salesPersonNumber'],
   },
   {
     field: 'discount',
@@ -39,9 +31,14 @@ export const cols: Cols[] = [
     sortType: 'number',
   },
   {
+    field: 'created',
+    header: 'Created',
+    sortType: 'string',
+  },
+  {
     field: 'status',
     header: 'Action/Status',
-    sortType: 'string',
+    sortType: 'boolean',
     isSearchDisabled: true,
   },
 ];

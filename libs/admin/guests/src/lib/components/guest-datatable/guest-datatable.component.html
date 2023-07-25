@@ -126,6 +126,13 @@
           </span>
         </div>
       </td>
+      <td>
+        <div class="cell-content">
+          <span class="primary-text" *ngIf="rowData.created; else emptyCell">
+            {{ rowData.created | date }}
+          </span>
+        </div>
+      </td>
     </tr>
   </ng-template>
   <!-- *********************************FOOTER******************************* -->

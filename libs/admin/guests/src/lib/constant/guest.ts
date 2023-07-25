@@ -14,11 +14,11 @@ export const guestCols = [
     searchField: ['email'],
   },
   {
-    field: `phoneNumber`,
+    field: `mobileNumber`,
     header: 'Phone No.',
     sortType: 'string',
     width: '20%',
-    searchField: ['phoneNumber'],
+    searchField: ['mobileNumber'],
   },
   {
     field: `dob`,

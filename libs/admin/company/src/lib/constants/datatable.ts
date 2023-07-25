@@ -33,12 +33,12 @@ export const cols: Cols[] = [
   {
     field: 'created',
     header: 'Created',
-    sortType: 'string',
+    sortType: 'number',
   },
   {
     field: 'status',
     header: 'Action/Status',
-    sortType: 'boolean',
+    sortType: 'number',
     isSearchDisabled: true,
   },
 ];

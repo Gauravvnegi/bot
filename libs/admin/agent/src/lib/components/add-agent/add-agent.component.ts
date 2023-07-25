@@ -122,6 +122,10 @@ export class AddAgentComponent implements OnInit {
 
     commissionValueControl.valueChanges.subscribe(commissionSubscription);
     commissionControl.valueChanges.subscribe(commissionSubscription);
+
+    this.formService.companyId.subscribe((res) => {
+      if (res.length) this.agentForm.get('company').patchValue(res);
+    });
   }
 
   /**

@@ -334,7 +334,7 @@ export class RestaurantReservationComponent implements OnInit {
       items: this.menuItemsControls.map((item) => ({
         itemId: item.get('serviceName').value,
         unit: item.get('quantity')?.value ?? 0,
-        price: item.get('price').value,
+        amount: item.get('price').value,
       })),
       outletType: 'SPA',
     };

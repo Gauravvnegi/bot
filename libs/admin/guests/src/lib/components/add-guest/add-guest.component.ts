@@ -95,6 +95,10 @@ export class AddGuestComponent implements OnInit {
           this.loading = false;
         }, this.handleFinal)
       ));
+
+    this.formService.companyId.subscribe((res) => {
+      if (res.length) this.guestForm.get('company').patchValue(res);
+    });
   }
 
   listenChanges() {

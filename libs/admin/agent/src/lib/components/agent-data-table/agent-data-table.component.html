@@ -115,23 +115,17 @@
       <td>
         <div class="cell-content" *ngIf="rowData.email; else emptyCell">
           <div class="primary-text">
+            {{ rowData.email }}
+          </div>
+          <div class="secondary-text">
             <a
               (click)="$event.stopPropagation()"
-              href="mailto:{{ rowData.email }}"
-              >{{ rowData.email }}</a
+              class="link"
+              href="tel:{{ rowData.phoneNo }}"
             >
+              <u> {{ rowData.phoneNo }}</u>
+            </a>
           </div>
-        </div>
-      </td>
-      <td>
-        <div class="cell-content" *ngIf="rowData.phoneNo; else emptyCell">
-          <a
-            (click)="$event.stopPropagation()"
-            class="primary-text link"
-            href="tel:{{ rowData.phoneNo }}"
-          >
-            <u> {{ rowData.phoneNo }}</u>
-          </a>
         </div>
       </td>
       <td>
@@ -140,6 +134,13 @@
             {{ rowData.commission
             }}{{ rowData.commissionType === 'COMMISSION' ? '/-' : '%' }}
           </div>
+        </div>
+      </td>
+      <td>
+        <div class="cell-content">
+          <span class="primary-text" *ngIf="rowData.created; else emptyCell">
+            {{ rowData.created | date }}
+          </span>
         </div>
       </td>
       <td>

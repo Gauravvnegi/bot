@@ -28,7 +28,6 @@ export class BulkUpdateFormComponent extends FormComponent {
   parentForm: FormGroup;
   startMinDate = new Date();
   endMinDate = new Date();
-  endDateValue = new Date();
   roomTypes: RoomTypeOption[] = [];
 
   $subscription = new Subscription();
@@ -44,6 +43,8 @@ export class BulkUpdateFormComponent extends FormComponent {
   @Input() set controls(value: { [key: string]: string }) {
     this._controls = { ...this._controls, ...value };
   }
+
+  @Input() endDateValue = new Date();
 
   get controls() {
     return this._controls;
@@ -79,11 +80,9 @@ export class BulkUpdateFormComponent extends FormComponent {
       .valueChanges.subscribe((changedValue) => {
         const target = this.parentForm.controls[this.controls.updateValue];
         target.reset();
-
         restrictionsRecord[changedValue].type === 'boolean'
           ? target.clearValidators()
           : target.setValidators([Validators.required]);
-
         target.updateValueAndValidity();
       });
   }

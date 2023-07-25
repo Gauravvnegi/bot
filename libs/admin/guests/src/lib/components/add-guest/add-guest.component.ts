@@ -159,7 +159,9 @@ export class AddGuestComponent implements OnInit {
       )
     );
   }
-
+  resetForm() {
+    this.guestForm.reset();
+  }
   /**
    * @function handleFinal
    */

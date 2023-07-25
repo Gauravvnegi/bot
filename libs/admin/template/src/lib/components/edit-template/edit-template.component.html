@@ -117,10 +117,12 @@
       </div>
     </div>
   </ng-template>
-  <hospitality-bot-button
-    class="create-btn"
-    [label]="isSaving ? 'Saving' : 'Save'"
-    [ngClass]="{ active: !isSaving, disabled: isSaving }"
-    (click)="handleSubmit($event)"
-  ></hospitality-bot-button>
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="isSaving"
+    [isId]="templateId"
+    (onReset)="resetForm()"
+    (onSave)="handleSubmit($event)"
+  >
+  </hospitality-bot-form-action>
 </form>

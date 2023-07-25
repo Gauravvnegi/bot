@@ -120,11 +120,12 @@
       ></hospitality-bot-text-area>
     </div>
   </div>
-
-  <div class="save-footer">
-    <hospitality-bot-button
-      label="Save"
-      (onClick)="handleSubmit()"
-    ></hospitality-bot-button>
-  </div>
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [isId]="roomId"
+      (onReset)="resetForm()"
+      (onSave)="handleSubmit()"
+    >
+    </hospitality-bot-form-action>
 </div>

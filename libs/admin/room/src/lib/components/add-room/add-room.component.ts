@@ -422,6 +422,10 @@ export class AddRoomComponent implements OnInit, OnDestroy {
     }
   }
 
+  resetForm() {
+    this.useForm.reset();
+  }
+
   /**
    * @function updateRoom To update the room data
    */

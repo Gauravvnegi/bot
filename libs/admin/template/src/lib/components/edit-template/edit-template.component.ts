@@ -102,14 +102,14 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
       ]),
     };
     this.$subscription.add(
-      this.templateService.getTopicList(entityId, config).subscribe(
-        (response) => {
+      this.templateService
+        .getTopicList(entityId, config)
+        .subscribe((response) => {
           const data = new Topics()
             .deserialize(response)
             .records.map((item) => ({ label: item.name, value: item.id }));
           this.topicList = [...this.topicList, ...data];
-        }
-      )
+        })
     );
   }
 
@@ -168,6 +168,7 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
    */
   handleSubmit(event) {
     if (this.templateForm.invalid) {
+      this.templateForm.markAllAsTouched();
       this.snackbarService
         .openSnackBarWithTranslate(
           {
@@ -350,6 +351,10 @@ export class EditTemplateComponent implements OnInit, OnDestroy {
   //   }
   //   this.move(0);
   // }
+
+  resetForm(){
+    this.templateForm.reset();
+  }
 
   /**
    * @function htmlTemplate function to get html template.

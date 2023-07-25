@@ -1,0 +1,22 @@
+@import 'main';
+.footer-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 38.5px;
+  height: 88px;
+  background: transparent;
+}
+
+.fixed {
+  position: fixed;
+  bottom: 0;
+  z-index: 100;
+  width: 100%;
+  left: 35px;
+  background: #f4f5f6;
+}
+
+.footer-height {
+  height: 88px;
+}

@@ -68,10 +68,12 @@
     (updateContacts)="updateContactList($event)"
   ></hospitality-bot-contact-datatable>
 
-  <hospitality-bot-button
-    class="create-btn"
-    [label]="isSaving ? 'Saving' : 'Save'"
-    [ngClass]="{ active: !isSaving, disabled: isSaving }"
-    (click)="listId ? updateList() : createList()"
-  ></hospitality-bot-button>
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading || isSaving"
+    [isId]="listId"
+    (onReset)="resetForm()"
+    (onSave)="handleSubmit()"
+  >
+  </hospitality-bot-form-action>
 </div>

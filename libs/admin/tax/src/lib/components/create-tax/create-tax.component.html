@@ -36,17 +36,11 @@
   </div>
 </form>
 
-<div class="footer">
-  <hospitality-bot-button
-    severity="reset"
-    variant="outlined"
-    [label]="'Reset'"
-    (onClick)="handleReset()"
-  >
-  </hospitality-bot-button>
-
-  <hospitality-bot-button
-    [label]="taxId ? 'Update' : 'Create'"
-    (onClick)="handleSubmit()"
-  ></hospitality-bot-button>
-</div>
+<hospitality-bot-form-action
+  class="full-width"
+  [loading]="loading"
+  [isId]="taxId"
+  (onReset)="handleReset()"
+  (onSave)="handleSubmit()"
+>
+</hospitality-bot-form-action>

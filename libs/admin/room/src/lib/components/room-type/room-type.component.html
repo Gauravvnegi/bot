@@ -334,16 +334,12 @@
       </div>
     </div>
   </form>
-  <div class="footer-buttons">
-    <hospitality-bot-button
-      label="Reset All"
-      (onClick)="resetForm()"
-      variant="outlined"
-      severity="reset"
-    ></hospitality-bot-button>
-    <hospitality-bot-button
-      [label]="roomTypeId ? 'Update' : 'Create'"
-      (onClick)="submitForm()"
-    ></hospitality-bot-button>
-  </div>
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [isId]="roomTypeId"
+    (onReset)="resetForm()"
+    (onSave)="submitForm()"
+  >
+  </hospitality-bot-form-action>
 </div>

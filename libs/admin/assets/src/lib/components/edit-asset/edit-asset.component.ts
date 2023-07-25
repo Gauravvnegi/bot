@@ -175,7 +175,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
 
           this.isSavingasset = false;
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.isSavingasset = false;
         }
       )
@@ -220,7 +220,7 @@ export class EditAssetComponent implements OnInit, OnDestroy {
 
             this.isSavingasset = false;
           },
-          ({ error }) => { 
+          ({ error }) => {
             this.isSavingasset = false;
           }
         )
@@ -261,6 +261,10 @@ export class EditAssetComponent implements OnInit, OnDestroy {
    */
   get assetType() {
     return this.assetForm?.get('type').value || assetConfig.type.image;
+  }
+
+  resetForm() {
+    this.assetForm.reset();
   }
 
   /**

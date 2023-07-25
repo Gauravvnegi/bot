@@ -84,21 +84,12 @@
       }"
     ></hospitality-bot-prefix-field>
   </div>
-
-  <div class="action-buttons">
-    <hospitality-bot-button
-      variant="outlined"
-      severity="reset"
-      class="reset-btn"
-      [label]="'Reset All'"
-      (onClick)="reset()"
-    ></hospitality-bot-button>
-
-    <hospitality-bot-button
-      class="create-btn"
-      [label]="companyId ? 'Update' : 'Save'"
-      (onClick)="handleSubmit()"
-      [disabled]="loading"
-    ></hospitality-bot-button>
-  </div>
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [isId]="companyId"
+    (onReset)="reset()"
+    (onSave)="handleSubmit()"
+  >
+  </hospitality-bot-form-action>
 </div>

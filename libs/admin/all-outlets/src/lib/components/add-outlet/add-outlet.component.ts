@@ -94,7 +94,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
 
   initForm(): void {
     this.useForm = this.fb.group({
-      active: [true],
+      status: ['ACTIVE'],
       name: ['', [Validators.required]],
       type: [[], [Validators.required]],
       subType: [[], [Validators.required]],

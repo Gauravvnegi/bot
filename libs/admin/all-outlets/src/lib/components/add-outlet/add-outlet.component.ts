@@ -81,7 +81,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   initOptions() {
     this.outletService.getOutletConfig().subscribe((res) => {
       this.types = res.type.map((item) => ({
-        label: item.name,
+        label: item.label,
         value: item.value,
         subTypes: item.subtype,
         menu: item?.menu,
@@ -93,6 +93,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
 
   initForm(): void {
     this.useForm = this.fb.group({
+      active: [true],
       name: ['', [Validators.required]],
       type: [[], [Validators.required]],
       subType: [[], [Validators.required]],

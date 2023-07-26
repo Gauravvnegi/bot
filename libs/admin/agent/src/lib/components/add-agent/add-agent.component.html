@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fd.referenceId">
   <hospitality-bot-navigation-header
     [heading]="pageTitle"
     [routes]="navRoutes"
@@ -91,6 +91,7 @@
     [isId]="agentId"
     (onReset)="reset()"
     (onSave)="handleSubmit()"
+    #fd
   >
   </hospitality-bot-form-action>
 </div>

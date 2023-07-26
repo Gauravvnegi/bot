@@ -15,11 +15,15 @@ import {
   styleUrls: ['./form-action.component.scss'],
 })
 export class FormActionComponent implements OnInit {
-  @ViewChild('fd') fd: HTMLElement;
   saveLabel = 'Create';
   resetLabel = 'Reset';
   id: boolean = false;
-  @Input() bottomThreshold: number = 100; //746;
+  @Input() bottomThreshold: number = 60; //746;
+  @Input() type: stickyFormActionType = 'Sticky';
+  referenceId: string = 'form-layout';
+  constructor(private elementRef: ElementRef, private location: Location) {
+    this.generateRandomId();
+  }
   //746 for the form with table
   //100 for the form without table
 
@@ -34,12 +38,14 @@ export class FormActionComponent implements OnInit {
   @Output() onReset = new EventEmitter<Event>();
   @Output() onSave = new EventEmitter<Event>();
   mainLayout: HTMLElement;
+  formLayout: HTMLElement;
   isFixed = true;
 
   ngOnInit(): void {}
 
   ngAfterViewInit() {
     this.mainLayout = document.getElementById('main-layout');
+    this.formLayout = document.getElementById(this.referenceId);
     this.mainLayout?.addEventListener('scroll', this.onScroll.bind(this));
   }
 
@@ -52,27 +58,32 @@ export class FormActionComponent implements OnInit {
     this.onSave.emit();
   }
 
-  constructor(private elementRef: ElementRef, private location: Location) {}
-
-  // Set the threshold for how close to the bottom the scroll position should be
-  onScroll = () => {
-    // Get the native elements from the ElementRe
-    const fixedElementNativeElement: HTMLElement = this.fd;
-
-    // Calculate the distance from the bottom of the container
-    console.log(this.mainLayout, 'mainLayout');
+  onScroll() {
+    console.log(this.referenceId, 'referenceId');
+    console.log(this.formLayout.scrollHeight, 'formLayout');
     const distanceFromBottom =
-      this.mainLayout.scrollHeight -
+      this.formLayout.scrollHeight -
       (this.mainLayout.scrollTop + this.mainLayout.clientHeight);
 
     console.log(distanceFromBottom, 'distanceFromBottom');
 
-    // Check if the distance from the bottom is less than the threshold
-    // If so, unfixed the element; otherwise, fix it.
-    if (distanceFromBottom <= this.bottomThreshold && this.isFixed) {
+    // Check if the user has scrolled close to the bottom
+    if (distanceFromBottom <= 0 && this.isFixed) {
+      // If we're at the bottom, set the position to fixed
       this.isFixed = false;
-    } else if (distanceFromBottom > this.bottomThreshold && !this.isFixed) {
+    } else if (distanceFromBottom > 0 && !this.isFixed) {
+      // If we're not at the bottom, set the position to relative
       this.isFixed = true;
     }
-  };
+  }
+
+  generateRandomId() {
+    this.referenceId = new Date().getUTCMilliseconds().toString();
+  }
+
+  ngOnDestroy() {
+    this.mainLayout?.removeEventListener('scroll', this.onScroll.bind(this));
+  }
 }
+
+export type stickyFormActionType = 'Sticky' | 'Non-Sticky';

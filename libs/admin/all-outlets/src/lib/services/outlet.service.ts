@@ -5,7 +5,11 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import { map } from 'rxjs/operators';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { OutletConfig } from '../types/config';
-import { FoodPackageListResponse, FoodPackageResponse, OutletResponse } from '../types/response';
+import {
+  FoodPackageListResponse,
+  FoodPackageResponse,
+  OutletResponse,
+} from '../types/response';
 import { ServiceResponse } from 'libs/admin/services/src/lib/types/response';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 import { MenuFormData, MenuResponse } from '../types/menu';
@@ -107,7 +111,10 @@ export class OutletService extends ApiService {
     return this.get(`/api/v1/menus/items/${menuItemId}`);
   }
 
-  addFoodPackage(outletId: string, data: FoodPackageForm): Observable<FoodPackageResponse> {
+  addFoodPackage(
+    outletId: string,
+    data: FoodPackageForm
+  ): Observable<FoodPackageResponse> {
     return this.post(`/api/v1/entity/${outletId}/library`, data, {
       headers: { entityId: outletId },
     });
@@ -117,8 +124,14 @@ export class OutletService extends ApiService {
     return this.patch(`/api/v1/food-package/${packageId}`, data);
   }
 
-  getFoodPackageById(packageId: string): Observable<any> {
-    return this.get(`/api/v1/food-package/${packageId}`);
+  getFoodPackageById(
+    outletId: string,
+    packageId: string,
+    config?: QueryConfig
+  ): Observable<any> {
+    return this.get(
+      `/api/v1/entity/${outletId}/library/${packageId}${config?.params ?? ''}`
+    );
   }
 
   getServices(entityId: string, config?: QueryConfig): Observable<any> {
@@ -134,7 +147,10 @@ export class OutletService extends ApiService {
     });
   }
 
-  getFoodPackageList(entityId: string, config?: QueryConfig): Observable<FoodPackageListResponse> {
+  getFoodPackageList(
+    entityId: string,
+    config?: QueryConfig
+  ): Observable<FoodPackageListResponse> {
     return this.get(
       `/api/v1/entity/${entityId}/library${config?.params ?? ''}`,
       { headers: { 'entity-id': entityId } }

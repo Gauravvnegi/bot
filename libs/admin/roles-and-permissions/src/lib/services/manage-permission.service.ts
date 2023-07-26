@@ -33,7 +33,7 @@ export class ManagePermissionService extends ApiService {
         brands: [
           {
             id: value.brandName,
-            hotels: [
+            entities: [
               {
                 id: value.branchName,
               },
@@ -62,7 +62,7 @@ export class ManagePermissionService extends ApiService {
         brands: [
           {
             id: value.brandName,
-            hotels: [
+            entities: [
               {
                 id: value.branchName,
               },
@@ -98,7 +98,7 @@ export class ManagePermissionService extends ApiService {
         brands: [
           {
             id: value.brandName,
-            hotels: [
+            entities: [
               {
                 id: value.branchName,
               },

@@ -1,10 +1,11 @@
 @import 'main';
 .footer-buttons {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 38.5px;
-  height: 88px;
+  height: 70px;
   background: transparent;
 }
 
@@ -18,5 +19,5 @@
 }
 
 .footer-height {
-  height: 88px;
+  height: 70px;
 }

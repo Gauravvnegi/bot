@@ -1,4 +1,4 @@
-<div class="wrapper" [formGroup]="useForm">
+<div class="wrapper" [formGroup]="useForm" [id]="fa.referenceId">
   <div [formGroup]="useForm.get('entity')">
     <hospitality-bot-navigation-header
       [heading]="pageTitle"
@@ -12,7 +12,7 @@
       </div>
       <hospitality-bot-toggle-switch
         class="status"
-        controlName="status"
+        controlName="active"
         label="Status:"
       ></hospitality-bot-toggle-switch>
     </div>
@@ -128,7 +128,7 @@
       [loading]="loading"
       (onReset)="resetForm()"
       (onSave)="submitForm()"
-      [bottomThreshold]="entityId ? 475 : 80"
+      #fa
     >
     </hospitality-bot-form-action>
   </div>

@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
   </hospitality-bot-navigation-header>
 
@@ -54,14 +54,13 @@
         ></hospitality-bot-template-editor>
       </div>
     </div>
-
-     <hospitality-bot-form-action
-      class="full-width"
-      [loading]="loading || isSavingAsset"
-      [isId]="assetId"
-      (onReset)="resetForm()"
-      (onSave)="handleSubmit()"
-    >
-    </hospitality-bot-form-action>
   </div>
+  <hospitality-bot-form-action
+    class="full-width"
+    [isId]="assetId"
+    (onReset)="resetForm()"
+    (onSave)="handleSubmit()"
+    #fa
+  >
+  </hospitality-bot-form-action>
 </div>

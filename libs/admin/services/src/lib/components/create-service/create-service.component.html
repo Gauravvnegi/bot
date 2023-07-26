@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
   </hospitality-bot-navigation-header>
   <div class="form-block" [formGroup]="useForm">
@@ -89,6 +89,7 @@
       [isId]="serviceId"
       (onReset)="resetForm()"
       (onSave)="handleSubmit()"
+      #fa
     >
     </hospitality-bot-form-action>
   </div>

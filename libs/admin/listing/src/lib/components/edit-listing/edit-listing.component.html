@@ -1,72 +1,76 @@
-<hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
-</hospitality-bot-navigation-header>
+<div class="wrapper" [id]="fa.referenceId">
+  <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
+  </hospitality-bot-navigation-header>
 
-<ng-container *ngIf="listId">
-  <div class="stats-container">
-    <div class="stats">
-      <div class="stats__value">{{ listData?.stats.totalContacts }}</div>
-      <div class="stats__text">{{ 'stats.totalContacts' | translate }}</div>
+  <ng-container *ngIf="listId">
+    <div class="stats-container">
+      <div class="stats">
+        <div class="stats__value">{{ listData?.stats.totalContacts }}</div>
+        <div class="stats__text">{{ 'stats.totalContacts' | translate }}</div>
+      </div>
+      <div class="stats">
+        <div class="stats__value">{{ listData?.stats.unsubscribed }}</div>
+        <div class="stats__text">{{ 'stats.unsubscribed' | translate }}</div>
+      </div>
+      <div class="stats">
+        <div class="stats__value">{{ listData?.stats.bounce }}</div>
+        <div class="stats__text">{{ 'stats.bounce' | translate }}</div>
+      </div>
+      <div class="stats">
+        <div class="stats__value">{{ listData?.stats.sendCampaign }}</div>
+        <div class="stats__text">{{ 'stats.sendCampaign' | translate }}</div>
+      </div>
+      <div class="stats">
+        <div class="stats__value">{{ listData?.stats.scheduleCampaign }}</div>
+        <div class="stats__text">
+          {{ 'stats.scheduleCampaign' | translate }}
+        </div>
+      </div>
     </div>
-    <div class="stats">
-      <div class="stats__value">{{ listData?.stats.unsubscribed }}</div>
-      <div class="stats__text">{{ 'stats.unsubscribed' | translate }}</div>
+  </ng-container>
+
+  <form class="form-block" [formGroup]="listFG">
+    <div class="half-width"></div>
+    <hospitality-bot-toggle-switch
+      class="status"
+      controlName="active"
+      label="Status:"
+    ></hospitality-bot-toggle-switch>
+    <hospitality-bot-input
+      class="half-width"
+      controlName="name"
+      label="Name"
+      maxLength="60"
+    ></hospitality-bot-input>
+    <hospitality-bot-select
+      class="half-width"
+      label="Topic"
+      controlName="topicName"
+      [options]="topicList"
+    ></hospitality-bot-select>
+
+    <div class="des-template">
+      <div class="des-template__label">Description</div>
+      <div class="des-template__input">
+        <hospitality-bot-template-editor
+          [parentFG]="listFG"
+          [name]="'description'"
+          [isSimpleEditor]="true"
+        ></hospitality-bot-template-editor>
+      </div>
     </div>
-    <div class="stats">
-      <div class="stats__value">{{ listData?.stats.bounce }}</div>
-      <div class="stats__text">{{ 'stats.bounce' | translate }}</div>
-    </div>
-    <div class="stats">
-      <div class="stats__value">{{ listData?.stats.sendCampaign }}</div>
-      <div class="stats__text">{{ 'stats.sendCampaign' | translate }}</div>
-    </div>
-    <div class="stats">
-      <div class="stats__value">{{ listData?.stats.scheduleCampaign }}</div>
-      <div class="stats__text">{{ 'stats.scheduleCampaign' | translate }}</div>
-    </div>
+  </form>
+
+  <div class="table-block" *ngIf="!loading">
+    <hospitality-bot-contact-datatable
+      [add]="listId ? false : true"
+      [dataSource]="listFG?.get('marketingContacts')?.value"
+      [totalRecords]="listFG?.get('marketingContacts')?.value.length"
+      [entityId]="entityId"
+      [list]="listId ? listFG?.getRawValue() : ''"
+      (updateContacts)="updateContactList($event)"
+    ></hospitality-bot-contact-datatable>
   </div>
-</ng-container>
-
-<form class="form-block" [formGroup]="listFG">
-  <div class="half-width"></div>
-  <hospitality-bot-toggle-switch
-    class="status"
-    controlName="active"
-    label="Status:"
-  ></hospitality-bot-toggle-switch>
-  <hospitality-bot-input
-    class="half-width"
-    controlName="name"
-    label="Name"
-    maxLength="60"
-  ></hospitality-bot-input>
-  <hospitality-bot-select
-    class="half-width"
-    label="Topic"
-    controlName="topicName"
-    [options]="topicList"
-  ></hospitality-bot-select>
-
-  <div class="des-template">
-    <div class="des-template__label">Description</div>
-    <div class="des-template__input">
-      <hospitality-bot-template-editor
-        [parentFG]="listFG"
-        [name]="'description'"
-        [isSimpleEditor]="true"
-      ></hospitality-bot-template-editor>
-    </div>
-  </div>
-</form>
-
-<div class="table-block" *ngIf="!loading">
-  <hospitality-bot-contact-datatable
-    [add]="listId ? false : true"
-    [dataSource]="listFG?.get('marketingContacts')?.value"
-    [totalRecords]="listFG?.get('marketingContacts')?.value.length"
-    [entityId]="entityId"
-    [list]="listId ? listFG?.getRawValue() : ''"
-    (updateContacts)="updateContactList($event)"
-  ></hospitality-bot-contact-datatable>
 
   <hospitality-bot-form-action
     class="full-width"
@@ -74,6 +78,7 @@
     [isId]="listId"
     (onReset)="resetForm()"
     (onSave)="handleSubmit()"
+    #fa
   >
   </hospitality-bot-form-action>
 </div>

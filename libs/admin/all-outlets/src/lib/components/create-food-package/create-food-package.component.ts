@@ -88,7 +88,9 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     if (this.foodPackageId) {
       this.$subscription.add(
         this.outletService
-          .getFoodPackageById(this.foodPackageId)
+          .getFoodPackageById(this.outletId, this.foodPackageId, {
+            params: '?type=FOOD_PACKAGE',
+          })
           .subscribe((res) => {
             const { taxes, ...rest } = res;
             this.useForm.patchValue({

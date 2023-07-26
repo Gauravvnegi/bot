@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header
     [heading]="pageTitle"
     [routes]="navRoutes"
@@ -91,12 +91,14 @@
         placeholder: 'Enter'
       }"
     ></hospitality-bot-input>
-      <hospitality-bot-form-action
+    <hospitality-bot-form-action
       class="full-width"
       [loading]="loading"
       [isId]="guestId"
       (onReset)="resetForm()"
       (onSave)="handleSubmit()"
+      type="Non-sticky"
+      #fa
     >
     </hospitality-bot-form-action>
   </div>

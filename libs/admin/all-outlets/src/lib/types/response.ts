@@ -1,3 +1,6 @@
+import { EntityTypeCounts } from '@hospitality-bot/admin/library';
+import { EntityState, EntityType } from '@hospitality-bot/admin/shared';
+
 export type OutletResponse = {
   id: string;
   category: string;
@@ -46,3 +49,30 @@ export type Address = {
   state: string;
   postalCode: string;
 } & Record<string, any>;
+
+export type FoodPackageListResponse = {
+  foodPackages: FoodPackageResponse[];
+  total: number;
+  entityStateCounts: EntityState<string>;
+  entityTypeCounts;
+};
+
+export type FoodPackageResponse = {
+  id: string;
+  name: string;
+  rate: number;
+  startDate: number;
+  endDate: number;
+  active: boolean;
+  currency: string;
+  packageCode: string;
+  imageUrl: string;
+  source: string;
+  hotelId: string;
+  category: string;
+  autoAccept: boolean;
+  hasChild: boolean;
+  discountedPrice: number;
+  created: number;
+  updated: number;
+};

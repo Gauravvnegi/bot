@@ -11,27 +11,23 @@ export const guestCols = [
     header: 'Email Id',
     sortType: 'string',
     width: '20%',
-    searchField: ['email'],
   },
   {
     field: `mobileNumber`,
     header: 'Phone No.',
     sortType: 'string',
     width: '20%',
-    searchField: ['mobileNumber'],
   },
   {
     field: `dob`,
     header: 'Date Of Birth',
     sortType: 'string',
     width: '15%',
-    searchField: ['dob'],
   },
   {
     field: `created`,
     header: 'Created',
     sortType: 'string',
     width: '15%',
-    searchField: ['created'],
   },
 ];

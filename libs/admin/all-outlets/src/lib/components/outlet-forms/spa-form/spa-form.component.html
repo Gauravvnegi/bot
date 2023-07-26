@@ -12,8 +12,13 @@
         postFieldType="select"
         [preOptions]="days"
         [postOptions]="days"
-        [props]="{
-          placeholder: 'Select Days'
+        [defaultProps]="{
+          pre: {
+            placeholder: 'From'
+          },
+          post: {
+            placeholder: 'To'
+          }
         }"
         [settings]="{
           layout: 'dashed'
@@ -30,8 +35,13 @@
         postFieldType="select"
         [preOptions]="hours"
         [postOptions]="hours"
-        [props]="{
-          placeholder: 'Select Timings'
+        [defaultProps]="{
+          pre: {
+            placeholder: 'From'
+          },
+          post: {
+            placeholder: 'To'
+          }
         }"
         [settings]="{
           layout: 'dashed'

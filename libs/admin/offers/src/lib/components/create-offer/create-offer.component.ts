@@ -163,7 +163,7 @@ export class CreateOfferComponent implements OnInit {
    */
   registerServicesSelectedChange() {
     this.useForm.get('libraryItems').valueChanges.subscribe((res) => {
-      this.setDiscountPrice(res);
+      if (res.length) this.setDiscountPrice(res);
     });
   }
 

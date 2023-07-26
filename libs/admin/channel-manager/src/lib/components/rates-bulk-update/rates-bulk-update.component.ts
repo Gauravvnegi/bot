@@ -37,8 +37,8 @@ export class RatesBulkUpdateComponent implements OnInit {
     },
     { label: 'Bulk Update', link: './' },
   ];
-  startMinDate = new Date();
-  endMinDate = new Date();
+  today = new Date();
+  seventhDate = new Date();
   loading = false;
   isRoomsEmpty = false;
   $subscription = new Subscription();
@@ -56,17 +56,16 @@ export class RatesBulkUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.entityId = this.globalFilter.entityId;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const seventhDate = new Date();
-    seventhDate.setHours(0, 0, 0, 0);
-    seventhDate.setDate(today.getDate() + 7);
+    this.today = new Date();
+    this.today.setHours(0, 0, 0, 0);
+    this.seventhDate.setHours(0, 0, 0, 0);
+    this.seventhDate.setDate(this.today.getDate() + 7);
 
     this.useForm = this.fb.group({
       update: ['rates'], // RATE, AVAILABILITY,
       updateValue: ['', [Validators.required, Validators.min(0)]],
-      fromDate: [today.getTime(), [Validators.required]],
-      toDate: [seventhDate.getTime(), [Validators.required]],
+      fromDate: [this.today.getTime(), [Validators.required]],
+      toDate: [this.seventhDate.getTime(), [Validators.required]],
       roomType: [[]],
       roomTypes: this.fb.array([], [Validators.required]),
       selectedDays: [[new FormControl()], [Validators.required]],

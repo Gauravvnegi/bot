@@ -59,14 +59,19 @@ export type RoomTypes = {
 export type OrderInformation = {
   tableNumber: string;
   numberOfAdults: number;
+  foodPackages: FoodPackages[];
   menuItems: MenuItemsData[];
   kotInstructions: string;
 };
 
+export type FoodPackages = {
+  type: string;
+  count: number;
+};
+
 type EventInformation = {
   numberOfAdults: number;
-  foodPackage: string;
-  foodPackageCount: number;
+  foodPackages: FoodPackages[];
   venueInfo: VenueItemsData[];
 };
 

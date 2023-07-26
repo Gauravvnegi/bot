@@ -8,3 +8,7 @@
 .prevent-click {
   pointer-events: none;
 }
+
+.link {
+  color: $link !important;
+}

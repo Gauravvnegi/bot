@@ -48,6 +48,8 @@ import { OutletItems } from '../../constants/reservation-table';
 export class RestaurantReservationComponent implements OnInit {
   userForm: FormGroup;
   menuItemsArray: FormArray;
+  foodPackageArray: FormArray;
+
   fields: IteratorField[];
 
   entityId: string;
@@ -56,6 +58,7 @@ export class RestaurantReservationComponent implements OnInit {
 
   reservationTypes: Option[] = [];
   statusOptions: Option[] = [];
+  foodPackages: Option[] = [];
 
   offersList: OfferList;
   selectedOffer: OfferData;
@@ -140,6 +143,7 @@ export class RestaurantReservationComponent implements OnInit {
    */
   initForm(): void {
     this.menuItemsArray = this.fb.array([]);
+    this.foodPackageArray = this.fb.array([]);
 
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
@@ -153,11 +157,35 @@ export class RestaurantReservationComponent implements OnInit {
       orderInformation: this.fb.group({
         tableNumber: [''],
         numberOfAdults: [''],
+        foodPackages: new FormArray([]),
         menuItems: this.menuItemsArray,
         kotInstructions: [''],
       }),
       offerId: [''],
     });
+
+    // Add food package items to the form
+    this.foodPackageArray = this.userForm.get(
+      'orderInformation.foodPackages'
+    ) as FormArray;
+
+    // Add the first food package item to the form
+    this.foodPackageArray.push(this.createFoodPackageItem());
+  }
+
+  createFoodPackageItem(): FormGroup {
+    return this.fb.group({
+      type: [''],
+      count: [''],
+    });
+  }
+
+  addFoodPackageItem(): void {
+    this.foodPackageArray.push(this.createFoodPackageItem());
+  }
+
+  removeFoodPackageItem(index: number): void {
+    this.foodPackageArray.removeAt(index);
   }
 
   /**
@@ -200,11 +228,12 @@ export class RestaurantReservationComponent implements OnInit {
         this.menuItemsControls[index]
           .get('price')
           .setValue(selectedMenuItem.price);
-        // this.formService.discountedPrice.next(selectedService.price);
       });
-    // this.orderInfoControls[index].valueChanges.subscribe((res) => {
-    //   this.getSummaryData();
-    // });
+    this.orderInfoControls[index]
+      .get('quantity')
+      .valueChanges.subscribe((res: number) => {
+        this.getSummaryData();
+      });
   }
 
   /**
@@ -334,7 +363,7 @@ export class RestaurantReservationComponent implements OnInit {
       items: this.menuItemsControls.map((item) => ({
         itemId: item.get('serviceName').value,
         unit: item.get('quantity')?.value ?? 0,
-        price: item.get('price').value,
+        amount: item.get('price').value,
       })),
       outletType: 'SPA',
     };

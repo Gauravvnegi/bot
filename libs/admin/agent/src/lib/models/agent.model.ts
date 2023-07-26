@@ -15,6 +15,7 @@ export class AgentModel {
   commissionType: string;
   commission: string;
   status: boolean;
+  created: number;
 
   static mapFormData(form: AgentFormType) {
     const name = form.name.split(' ');
@@ -61,6 +62,7 @@ export class AgentModel {
       commission: input.priceModifierValue,
       status: input.status,
       companyId: input.company?.id,
+      created: input?.created,
     });
     return this;
   }

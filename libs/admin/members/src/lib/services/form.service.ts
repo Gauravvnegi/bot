@@ -5,6 +5,7 @@ import {
 } from '../../../../agent/src/lib/types/form.types';
 import { CompanyFormType } from '../../../../company/src/lib/types/form.types';
 import { FormGroup } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 type ComponentTypes = 'agent' | 'company' | 'guest';
 type SetFormTypes = AgentFormType | CompanyFormType | GuestFormType;
 @Injectable()
@@ -13,6 +14,9 @@ export class FormService {
   agentForm: AgentFormType;
   guestForm: GuestFormType;
   companyForm: CompanyFormType;
+
+  companyId = new BehaviorSubject<string>('');
+
   constructor() {}
 
   // Reset the entire services inside the reset method

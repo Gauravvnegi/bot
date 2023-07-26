@@ -177,7 +177,7 @@ export class SpaReservationComponent implements OnInit {
           .get('price')
           .setValue(selectedService.price);
         this.spaItemsControls[index].get('quantity').setValue(1);
-        this.formService.discountedPrice.next(selectedService.price);
+        // this.formService.discountedPrice.next(selectedService.price);
         this.getSummaryData();
       });
     this.spaItemsControls[index]
@@ -315,7 +315,7 @@ export class SpaReservationComponent implements OnInit {
       items: this.spaItemsControls.map((item) => ({
         itemId: item.get('serviceName').value,
         unit: item.get('quantity')?.value ?? 0,
-        price: item.get('price').value,
+        amount: item.get('price').value,
       })),
       outletType: 'SPA',
     };
@@ -325,15 +325,15 @@ export class SpaReservationComponent implements OnInit {
         .subscribe(
           (res) => {
             this.summaryData = new SummaryData()?.deserialize(res);
-            // this.userForm
-            //   .get('paymentMethod.totalPaidAmount')
-            //   .setValidators([Validators.max(this.summaryData?.totalAmount)]);
-            // this.userForm
-            //   .get('paymentMethod.totalPaidAmount')
-            //   .updateValueAndValidity();
-            // this.userForm
-            //   .get('paymentRule.deductedAmount')
-            //   .patchValue(this.summaryData?.totalAmount);
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .setValidators([Validators.max(this.summaryData?.totalAmount)]);
+            this.userForm
+              .get('paymentMethod.totalPaidAmount')
+              .updateValueAndValidity();
+            this.userForm
+              .get('paymentRule.deductedAmount')
+              .patchValue(this.summaryData?.totalAmount);
             this.deductedAmount = this.summaryData?.totalAmount;
           },
           (error) => {}

@@ -15,25 +15,53 @@
             label="No. of Adults"
             controlName="numberOfAdults"
           ></hospitality-bot-input>
-          <div class="half-width type-wrapper">
-            <hospitality-bot-select
-              label="Food Package"
+          <div
+            class="food-package-wrapper full-width"
+            formArrayName="foodPackage"
+          >
+            <div
               class="half-width"
-              controlName="foodPackage"
-              [options]="foodPackages"
-              [props]="{
-                placeholder: 'Select'
-              }"
-            ></hospitality-bot-select>
-            <hospitality-bot-input
-              class="half-width food-package"
-              label="Count"
-              controlName="foodPackageCount"
-              [props]="{
-                placeholder: 'Enter Count',
-                type: 'number'
-              }"
-            ></hospitality-bot-input>
+              *ngFor="
+                let packageItem of foodPackageArray.controls;
+                let i = index
+              "
+            >
+              <div class="type-wrapper" [formGroupName]="i">
+                <hospitality-bot-select
+                  label="Food Package"
+                  class="half-width"
+                  controlName="type"
+                  [options]="foodPackages"
+                  [props]="{
+                    placeholder: 'Select'
+                  }"
+                ></hospitality-bot-select>
+                <hospitality-bot-input
+                  class="half-width food-package"
+                  label="Count"
+                  controlName="count"
+                  [props]="{
+                    placeholder: 'Enter Count',
+                    type: 'number'
+                  }"
+                ></hospitality-bot-input>
+              </div>
+              <div class="food-package-btn">
+                <hospitality-bot-button
+                  *ngIf="i === foodPackageArray.length - 1"
+                  (onClick)="addFoodPackageItem()"
+                  variant="text"
+                  label="+Add Food Package"
+                ></hospitality-bot-button>
+                <hospitality-bot-button
+                  *ngIf="i > 0 || foodPackageArray.length > 1"
+                  (onClick)="removeFoodPackageItem(i)"
+                  variant="text"
+                  severity="reset"
+                  label="Remove"
+                ></hospitality-bot-button>
+              </div>
+            </div>
           </div>
           <hospitality-bot-iterator
             class="iterator full-width"

@@ -28,7 +28,6 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
   pageTitle: string;
   navRoutes: NavRouteOptions;
   packageCode: string = '# will be auto generated';
-  packageId: string = '';
   $subscription = new Subscription();
   loading: boolean = false;
   taxes: Option[] = [];
@@ -56,7 +55,6 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     private pageReloadService: PageReloadService
   ) {
     super(router, route);
-    this.packageId = this.route.snapshot.paramMap.get('id');
   }
 
   ngOnInit(): void {
@@ -87,10 +85,10 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       source: [1],
     });
 
-    if (this.packageId) {
+    if (this.foodPackageId) {
       this.$subscription.add(
         this.outletService
-          .getFoodPackageById(this.packageId)
+          .getFoodPackageById(this.foodPackageId)
           .subscribe((res) => {
             const { taxes, ...rest } = res;
             this.useForm.patchValue({
@@ -118,11 +116,11 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
       type: 'FOOD_PACKAGE',
     };
 
-    if (this.packageId) {
-      data = { ...data, id: this.packageId };
+    if (this.foodPackageId) {
+      data = { ...data, id: this.foodPackageId };
       this.$subscription.add(
         this.outletService
-          .updateFoodPackage(this.packageId, data)
+          .updateFoodPackage(this.foodPackageId, data)
           .subscribe(this.handleSuccess, this.handleErrors)
       );
     } else {
@@ -142,7 +140,7 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
    */
   getTax() {
     this.$subscription.add(
-      this.taxService.getTaxList(this.entityId).subscribe(({ records }) => {
+      this.taxService.getTaxList(this.outletId).subscribe(({ records }) => {
         records = records.filter(
           (item) => item.category === 'service' && item.status
         );
@@ -168,7 +166,9 @@ export class CreateFoodPackageComponent extends OutletBaseComponent
     this.loading = false;
     this.isPackageCreated = true;
     this.snackbarService.openSnackBarAsText(
-      `FoodPackage is ${!this.packageId ? 'created' : 'updated'} successfully`,
+      `FoodPackage is ${
+        !this.foodPackageId ? 'created' : 'updated'
+      } successfully`,
       '',
       { panelClass: 'success' }
     );

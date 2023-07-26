@@ -42,8 +42,13 @@
         postFieldType="select"
         [preOptions]="days"
         [postOptions]="days"
-        [props]="{
-          placeholder: 'Select Days'
+        [defaultProps]="{
+          pre: {
+            placeholder: 'From'
+          },
+          post: {
+            placeholder: 'To'
+          }
         }"
         [settings]="{
           layout: 'dashed'
@@ -61,8 +66,13 @@
         postFieldType="select"
         [preOptions]="hours"
         [postOptions]="hours"
-        [props]="{
-          placeholder: 'Select Timings'
+        [defaultProps]="{
+          pre: {
+            placeholder: 'From'
+          },
+          post: {
+            placeholder: 'To'
+          }
         }"
         [settings]="{
           layout: 'dashed'
@@ -115,12 +125,6 @@
               variant="outlined"
               (onClick)="onCreateAndContinue('menu')"
             ></hospitality-bot-button>
-            <!-- <hospitality-bot-button
-              *ngIf="menuList?.length > 0"
-              label="View All"
-              (onClick)="onCreateAndContinue('view-all')"
-              variant="outlined"
-            ></hospitality-bot-button> -->
           </div>
         </div>
         <div class="item-boxes" *ngIf="!!menuList.length; else emptyTable">

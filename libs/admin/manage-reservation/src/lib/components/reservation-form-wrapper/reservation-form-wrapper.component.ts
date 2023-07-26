@@ -15,9 +15,11 @@ import { SelectedEntity } from '../../types/reservation.type';
 })
 export class ReservationFormWrapperComponent implements OnInit {
   selectedOutlet: EntitySubType;
-  intitalEntity: EntitySubType;
+  initialSubType: EntitySubType;
 
+  intitalEntity: SelectedEntity;
   selectedEntity: SelectedEntity;
+
   constructor(
     private formService: FormService,
     private globalFilterService: GlobalFilterService,
@@ -27,8 +29,8 @@ export class ReservationFormWrapperComponent implements OnInit {
   ngOnInit(): void {
     this.listenForGlobalFilters();
     this.formService.getSelectedEntity().subscribe((value) => {
-      this.selectedEntity = value;
-      this.selectedOutlet = value?.subType ?? this.intitalEntity;
+      this.selectedEntity = value ?? this.intitalEntity;
+      this.selectedOutlet = value?.subType ?? this.initialSubType;
     });
   }
 
@@ -45,7 +47,14 @@ export class ReservationFormWrapperComponent implements OnInit {
     const brand = this.hotelDetailService.brands.find(
       (brand) => brand.id === brandId
     );
+
     const branch = brand.entities.find((branch) => branch.id === branchId);
-    this.intitalEntity = branch.type ? branch.type : EntitySubType.ROOM_TYPE;
+    this.initialSubType = branch.type ? branch.type : EntitySubType.ROOM_TYPE;
+    this.intitalEntity = {
+      label: branch.name,
+      type: branch.category,
+      subType: branch.type,
+      id: branch.id,
+    };
   }
 }

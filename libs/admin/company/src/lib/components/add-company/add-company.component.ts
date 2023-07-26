@@ -11,6 +11,7 @@ import { CompanyModel } from '../../models/company.model';
 import { CompanyResponseType } from '../../types/response';
 import { companyDiscount } from '../../constants/company';
 import { Location } from '@angular/common';
+import { FormService } from 'libs/admin/members/src/lib/services/form.service';
 @Component({
   selector: 'hospitality-bot-add-company',
   templateUrl: './add-company.component.html',
@@ -40,7 +41,8 @@ export class AddCompanyComponent implements OnInit {
     private globalService: GlobalFilterService,
     private snackbarService: SnackBarService,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private formService: FormService
   ) {
     this.companyId = this.route.snapshot.paramMap.get('id');
     const { navRoutes, title } = companyRoutes[
@@ -160,6 +162,7 @@ export class AddCompanyComponent implements OnInit {
     this.subscription$.add(
       request.subscribe(
         (res) => {
+          this.formService.companyId.next(res?.id);
           this.snackbarService.openSnackBarAsText(
             `Company is ${!this.companyId ? 'created' : 'edited'} successfully`,
             '',

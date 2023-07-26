@@ -20,3 +20,9 @@
     @include tableHeadingStickyPosition(114px);
   }
 }
+
+:host ::ng-deep .status-toggle {
+  .wrapper {
+    display: flex;
+  }
+}

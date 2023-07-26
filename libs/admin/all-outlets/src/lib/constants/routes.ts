@@ -172,13 +172,13 @@ export const outletBusinessRoutes: Record<OutletBusinessRoutes, PageRoutes> = {
     title: 'Add Food Package',
   },
   editFoodPackage: {
-    route: 'food-package',
+    route: ':foodPackageId',
     navRoutes: [
       navRoutes.settings,
       navRoutes.businessInfo,
       navRoutes.editBrand,
       navRoutes.editOutlet,
-      navRoutes.foodPackage,
+      navRoutes.editFoodPackage,
     ],
     title: 'Edit Food Package',
   },

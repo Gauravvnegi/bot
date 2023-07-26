@@ -1,0 +1,30 @@
+<div class="wrapper p-field" [formGroup]="controlContainer.control">
+  <label
+    *ngIf="mainLabel"
+    class="label label__static"
+    [for]="postCountControlName"
+    >{{ mainLabel }}</label
+  >
+  <div class="main">
+    <hospitality-bot-select
+      class="input pre-input"
+      [controlName]="currencyControlName"
+      [props]="getProps('pre')"
+      [disabled]="inputDisabled.pre || isDisabled"
+      [options]="currencyOptions"
+      [stopEmission]="stopEmission"
+    ></hospitality-bot-select>
+    <hospitality-bot-input
+      class="input count-input"
+      [label]="preCountLabel"
+      [controlName]="preCountControlName"
+      [props]="getProps('post')"
+    ></hospitality-bot-input>
+    <hospitality-bot-input
+      class="input count-input"
+      [label]="postCountLabel"
+      [controlName]="postCountControlName"
+      [props]="getProps('post')"
+    ></hospitality-bot-input>
+  </div>
+</div>

@@ -194,6 +194,7 @@
       <td>
         <div class="" *ngIf="rowData.reservationType; else emptyCell">
           <hospitality-bot-status-dropdown-toggle
+            class="status-toggle"
             [nextStates]="rowData.nextStates"
             (onClick)="handleStatus($event, rowData)"
             [state]="rowData.reservationType"
@@ -224,7 +225,9 @@
   <hospitality-bot-empty-table
     [height]="'62vh'"
     [isLoading]="loading"
-    link="/pages/efrontdesk/reservation/{{ manageReservationRoutes.addReservation.route }}"
+    link="/pages/efrontdesk/reservation/{{
+      manageReservationRoutes.addReservation.route
+    }}"
     [content]="{
       description:
         'No Reservation found. Tap the +Create Reservation to create & manage the reservation offered by your hotel',

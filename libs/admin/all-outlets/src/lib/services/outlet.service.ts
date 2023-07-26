@@ -5,7 +5,7 @@ import { ApiService } from '@hospitality-bot/shared/utils';
 import { map } from 'rxjs/operators';
 import { QueryConfig } from '@hospitality-bot/admin/library';
 import { OutletConfig } from '../types/config';
-import { OutletResponse } from '../types/response';
+import { FoodPackageListResponse, FoodPackageResponse, OutletResponse } from '../types/response';
 import { ServiceResponse } from 'libs/admin/services/src/lib/types/response';
 import { SearchResultResponse } from 'libs/admin/library/src/lib/types/response';
 import { MenuFormData, MenuResponse } from '../types/menu';
@@ -107,8 +107,10 @@ export class OutletService extends ApiService {
     return this.get(`/api/v1/menus/items/${menuItemId}`);
   }
 
-  addFoodPackage(outletId: string, data: FoodPackageForm): Observable<any> {
-    return this.post(`/api/v1/entity/${outletId}/library`, data);
+  addFoodPackage(outletId: string, data: FoodPackageForm): Observable<FoodPackageResponse> {
+    return this.post(`/api/v1/entity/${outletId}/library`, data, {
+      headers: { entityId: outletId },
+    });
   }
 
   updateFoodPackage(packageId, data): Observable<any> {
@@ -130,6 +132,13 @@ export class OutletService extends ApiService {
     return this.get(`/api/v1/menus`, {
       headers: { 'entity-id': entityId },
     });
+  }
+
+  getFoodPackageList(entityId: string, config?: QueryConfig): Observable<FoodPackageListResponse> {
+    return this.get(
+      `/api/v1/entity/${entityId}/library${config?.params ?? ''}`,
+      { headers: { 'entity-id': entityId } }
+    );
   }
 
   searchLibraryItem(

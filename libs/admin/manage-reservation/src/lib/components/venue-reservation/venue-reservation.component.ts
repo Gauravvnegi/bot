@@ -37,6 +37,8 @@ import { SelectedEntity } from '../../types/reservation.type';
 export class VenueReservationComponent implements OnInit {
   userForm: FormGroup;
   venueBookingInfo: FormArray;
+  foodPackageArray: FormArray;
+
   fields: IteratorField[];
 
   entityId: string;
@@ -97,6 +99,7 @@ export class VenueReservationComponent implements OnInit {
    */
   initForm(): void {
     this.venueBookingInfo = this.fb.array([]);
+    this.foodPackageArray = this.fb.array([]);
 
     this.userForm = this.fb.group({
       reservationInformation: this.fb.group({
@@ -110,12 +113,34 @@ export class VenueReservationComponent implements OnInit {
       }),
       eventInformation: this.fb.group({
         numberOfAdults: ['', Validators.required],
-        foodPackage: ['', Validators.required],
-        foodPackageCount: [''],
+        foodPackages: new FormArray([]),
         venueInfo: this.venueBookingInfo,
       }),
       offerId: [''],
     });
+
+    // Add food package items to the form
+    this.foodPackageArray = this.userForm.get(
+      'orderInformation.foodPackages'
+    ) as FormArray;
+
+    // Add the first food package item to the form
+    this.foodPackageArray.push(this.createFoodPackageItem());
+  }
+
+  createFoodPackageItem(): FormGroup {
+    return this.fb.group({
+      type: [''],
+      count: [''],
+    });
+  }
+
+  addFoodPackageItem(): void {
+    this.foodPackageArray.push(this.createFoodPackageItem());
+  }
+
+  removeFoodPackageItem(index: number): void {
+    this.foodPackageArray.removeAt(index);
   }
 
   /**

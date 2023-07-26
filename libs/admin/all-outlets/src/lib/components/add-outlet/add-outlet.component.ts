@@ -20,7 +20,7 @@ import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.
 import { Subscription } from 'rxjs';
 import { cuisinesType } from '../../constants/data';
 import { outletBusinessRoutes } from '../../constants/routes';
-import { MenuList } from '../../models/outlet.model';
+import { FoodPackageList, MenuList } from '../../models/outlet.model';
 import { Services } from '../../models/services';
 import { OutletFormService } from '../../services/outlet-form.service';
 import { OutletService } from '../../services/outlet.service';
@@ -41,6 +41,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
   compServices: any[] = [];
   paidServices: any[] = [];
   menuList: any[] = [];
+  foodPackages: any[] = [];
 
   $subscription = new Subscription();
   loading = false;
@@ -181,7 +182,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       const selectedType = this.types.filter((item) => item.value === type);
 
       this.isTypeSelected = true;
-      this.subType = selectedType[0].subTypes.map((item) => ({
+      this.subType = selectedType[0]?.subTypes.map((item) => ({
         label: item,
         value: item.toUpperCase(),
       }));
@@ -219,18 +220,17 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    * @description submits the form
    */
   submitForm(features?: Feature): void {
+    this.OutletFormService.initOutletFormData(
+      {
+        ...this.useForm.getRawValue(),
+        complimentaryAmenities: this.compServices,
+        paidAmenities: this.paidServices,
+        MenuList: this.menuList,
+      },
+      true
+    );
     if (this.outletId && !(features === 'brand' || features === 'hotel')) {
       //save data into service for later use
-
-      this.OutletFormService.initOutletFormData(
-        {
-          ...this.useForm.getRawValue(),
-          complimentaryAmenities: this.compServices,
-          paidAmenities: this.paidServices,
-          MenuList: this.menuList,
-        },
-        true
-      );
 
       //navigate to respective feature
       if (features === 'save') {
@@ -399,7 +399,6 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    */
   handleSuccess = (feature?: Feature, outletId?: string) => {
     this.loading = false;
-    this.OutletFormService.resetOutletFormData();
 
     this.snackbarService.openSnackBarAsText(
       this.outletId

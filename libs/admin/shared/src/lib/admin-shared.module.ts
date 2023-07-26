@@ -111,7 +111,7 @@ import { CountdownDirective } from './directives/countdown.directive';
 import { GlobalSearchComponent } from './components/search/global-search.component';
 import { QrCodeModalComponent } from './components/qr-code-modal/qr-code-modal.component';
 import { QRCodeModule } from 'angularx-qrcode';
-
+import { MultiplePrefixInputComponent } from './components/form-component/multiple-prefix-input/multiple-prefix-input.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -229,6 +229,7 @@ import { QRCodeModule } from 'angularx-qrcode';
     InputNumberComponent,
     GlobalSearchComponent,
     QrCodeModalComponent,
+    MultiplePrefixInputComponent,
   ],
 
   exports: [
@@ -335,6 +336,7 @@ import { QRCodeModule } from 'angularx-qrcode';
     ImportServiceContainerComponent,
     InputNumberComponent,
     GlobalSearchComponent,
+    MultiplePrefixInputComponent,
   ],
 })
 export class AdminSharedModule {}

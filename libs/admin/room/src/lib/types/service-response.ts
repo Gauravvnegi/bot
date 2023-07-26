@@ -1,5 +1,3 @@
-import { DynamicPricingRatePlan, StaticPricingMod } from '../constant/form';
-
 export type RoomStatus =
   | 'CLEAN'
   | 'INSPECTED'
@@ -73,6 +71,7 @@ export type RoomTypeResponse = {
   roomCount: number;
   activeRoomCount: number;
   unavailableRoomCount: number;
+  pricingDetails: PricingDetails;
   ratePlans: RatePlanRes[];
   soldOutCount: number;
   maxChildren: number;
@@ -87,23 +86,31 @@ export type RoomTypeResponse = {
 };
 
 export type RatePlanRes = {
-  basePriceCurrency: string;
-  basePrice: number;
-  discountType: string;
-  discountValue: number;
-  bestAvailablePrice: number;
-  maxPriceCurrency: string;
-  maxPrice: number;
-  minPriceCurrency: string;
-  minPrice: number;
-  paxPriceCurrency: string;
-  paxPrice: string;
-  ratePlanTypeId: string;
+  label: string;
+  variablePrice: number;
+  currency: string;
+  isBase: boolean;
+  description: string;
   discount: {
     type: string;
     value: number;
   };
-  id: string;
+  ratePlanId: string;
+};
+
+export type PricingDetails = {
+  base: number;
+  discountType?: string;
+  discountValue?: number;
+  bestAvailablePrice: number;
+  currency: string;
+  max: number;
+  min: number;
+  paxPrice: string;
+  discount: {
+    type: string;
+    value: number;
+  };
 };
 
 export type RoomTypeListResponse = {

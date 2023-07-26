@@ -1,5 +1,7 @@
 import {
+  AddedRatePlans,
   DynamicPricingRatePlan,
+  RatePlan,
   StaticPricingRatePlan,
 } from '../constant/form';
 import { RoomStatus, RoomTypeResponse } from '../types/service-response';
@@ -100,8 +102,9 @@ export class RoomTypeForm {
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  staticRatePlans: StaticPricingRatePlan[];
-  dynamicRatePlans: DynamicPricingRatePlan[];
+  staticRatePlans: StaticPricingRatePlan;
+  dynamicRatePlans: DynamicPricingRatePlan;
+  ratePlans: AddedRatePlans[];
   maxOccupancy: number;
   maxChildren: number;
   maxAdult: number;
@@ -119,29 +122,36 @@ export class RoomTypeForm {
     this.maxChildren = input.maxChildren;
     this.maxAdult = input.maxAdult;
     this.area = input.area;
-    this.staticRatePlans = input.ratePlans.map((ratePlan) => ({
-      ratePlanTypeId: ratePlan.ratePlanTypeId,
-      paxPriceCurrency: ratePlan.paxPriceCurrency,
-      paxPrice: ratePlan.paxPrice,
-      discountType: ratePlan.discount?.type ?? 'PERCENTAGE',
-      discountValue: ratePlan.discount?.value ?? 0,
-      bestPriceCurrency: ratePlan.basePriceCurrency,
-      bestAvailablePrice: ratePlan.bestAvailablePrice,
-      label: '',
-      basePrice: ratePlan.basePrice,
-      basePriceCurrency: ratePlan.basePriceCurrency,
-      id: ratePlan.id,
-    }));
-    this.dynamicRatePlans = input.ratePlans.map((ratePlan) => ({
-      ratePlanTypeId: ratePlan.ratePlanTypeId,
-      paxPriceCurrency: ratePlan.paxPriceCurrency,
-      paxPrice: ratePlan.paxPrice,
-      label: '',
-      id: ratePlan.id,
-      maxPriceCurrency: ratePlan.maxPriceCurrency,
-      maxPrice: ratePlan.maxPrice,
-      minPriceCurrency: ratePlan.minPriceCurrency,
-      minPrice: ratePlan.minPrice,
+    this.staticRatePlans = {
+      paxPriceCurrency: input.pricingDetails.currency,
+      paxPrice: input.pricingDetails.paxPrice,
+      discountType: input.ratePlans[0].discount?.type ?? 'PERCENTAGE',
+      discountValue: input.ratePlans[0].discount?.value ?? 0,
+      bestPriceCurrency: input.pricingDetails.currency,
+      bestAvailablePrice: input.pricingDetails.bestAvailablePrice,
+      label: input.ratePlans[0].label,
+      basePrice: input.pricingDetails.base,
+      basePriceCurrency: input.pricingDetails.currency,
+      ratePlanId: input?.ratePlans[0].ratePlanId,
+    };
+    this.dynamicRatePlans = {
+      paxPriceCurrency: input.pricingDetails.currency,
+      paxPrice: input.pricingDetails.paxPrice,
+      label: input.ratePlans[0].label,
+      basePrice: input.pricingDetails.base,
+      basePriceCurrency: input.pricingDetails.currency,
+      maxPriceCurrency: input.pricingDetails.currency,
+      maxPrice: input.pricingDetails.max,
+      minPriceCurrency: input.pricingDetails.currency,
+      minPrice: input.pricingDetails.min,
+      ratePlanId: input?.ratePlans[0].ratePlanId,
+    };
+    this.ratePlans = input.ratePlans.map((item)=>({
+      label: item.label,
+      ratePlanId: item.ratePlanId,
+      extraPrice: item.variablePrice,
+      currency: input.pricingDetails.currency,
+      description: item?.description,
     }));
 
     return this;

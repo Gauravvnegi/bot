@@ -90,7 +90,7 @@ export class BrandInfoFormComponent implements OnInit {
     }
   }
 
-  handleSubmit() {
+  submitForm() {
     if (this.useForm.invalid) {
       this.useForm.markAllAsTouched();
       this.snackbarService.openSnackBarAsText(
@@ -122,7 +122,7 @@ export class BrandInfoFormComponent implements OnInit {
       );
     }
   }
-  handleReset() {
+  resetForm() {
     this.useForm.reset();
   }
 

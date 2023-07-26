@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header [heading]="pageTitle" [routes]="navRoutes">
     <p-splitButton
       class="download-btn"
@@ -45,23 +45,19 @@
         ></hospitality-bot-template-editor>
       </div>
     </div>
-    <div class="full-width btn-wrapper">
-      <hospitality-bot-button
-        [label]="menuId ? 'Update' : 'Create'"
-        (onClick)="handleSubmit()"
-        [isLoading]="loading"
-      ></hospitality-bot-button>
-      <hospitality-bot-button
-        variant="outlined"
-        severity="reset"
-        label="Reset All"
-        (onClick)="handleReset()"
-      ></hospitality-bot-button>
-    </div>
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [isId]="menuId"
+      (onReset)="handleReset()"
+      (onSave)="handleSubmit()"
+      #fa
+    >
+    </hospitality-bot-form-action>
   </div>
-  <hospitality-bot-menu-data-table
-    *ngIf="menuId"
-    [outletId]="outletId"
-    [menuId]="menuId"
-  ></hospitality-bot-menu-data-table>
 </div>
+<hospitality-bot-menu-data-table
+  *ngIf="menuId"
+  [outletId]="outletId"
+  [menuId]="menuId"
+></hospitality-bot-menu-data-table>

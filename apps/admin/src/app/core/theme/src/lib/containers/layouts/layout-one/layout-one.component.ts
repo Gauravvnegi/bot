@@ -17,6 +17,7 @@ import { FirebaseMessagingService } from '../../../services/messaging.service';
 import { NotificationService } from '../../../services/notification.service';
 import { ProgressSpinnerService } from '../../../services/progress-spinner.service';
 import { SubscriptionPlanService } from '../../../services/subscription-plan.service';
+import { NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'admin-layout-one',
@@ -103,6 +104,17 @@ export class LayoutOneComponent implements OnInit, OnDestroy {
         }
       })
     );
+    //reset scroll to top on route change
+    this._router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.scrollToTop();
+      }
+    });
+  }
+
+  scrollToTop() {
+    const mainLayout = document.getElementById('main-layout');
+    mainLayout.scrollTo(0, 0);
   }
 
   initNotification() {

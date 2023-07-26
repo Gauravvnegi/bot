@@ -4,7 +4,7 @@ export interface IDeserializable {
   deserialize(input: any, hotelNationality: string): this;
 }
 
-export class User{
+export class User {
   firstName: string;
   lastName: string;
   jobTitle: string;
@@ -45,13 +45,13 @@ export class User{
 
   getBrandAndBranchName() {
     if (this.hotelAccess?.brands?.length) {
-      return `${this.hotelAccess.brands[0].name},${this.hotelAccess.brands[0].hotels[0].name} `;
+      return `${this.hotelAccess.brands[0].name},${this.hotelAccess.brands[0].entities[0].name} `;
     }
     return '';
   }
 
-  getDepartments(){
-    if(this.departments.length){
+  getDepartments() {
+    if (this.departments.length) {
       return `${this.departments[0].departmentLabel}`;
     }
     return '';
@@ -93,7 +93,7 @@ export class User{
   }
 }
 
-export class UserPermissionTable{
+export class UserPermissionTable {
   records: User[];
   deserialize(input: UserListResponse) {
     this.records = input.records.map((record) =>

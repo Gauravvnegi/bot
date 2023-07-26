@@ -400,6 +400,12 @@ export class CreateOfferComponent implements OnInit {
     this.loading = false;
   };
 
+  resetForm() {
+    this.useForm.reset();
+    this.libraryItems = [];
+    this.selectedServicePrice = {};
+  }
+
   /**
    * Unsubscribe when component is getting removed
    */

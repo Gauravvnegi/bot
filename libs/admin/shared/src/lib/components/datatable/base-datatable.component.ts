@@ -628,7 +628,6 @@ export class BaseDatatableComponent implements OnInit {
   /**
    * @function onScroll Handle the scrolled to show changes is UI
    */
-  previousScrollPosition = 0;
 
   onScroll = () => {
     const currentScrollPosition = this.mainLayout.scrollTop;

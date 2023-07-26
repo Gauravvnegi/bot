@@ -98,8 +98,9 @@ export class EditListingComponent implements OnInit, OnDestroy {
       ]),
     };
     this.$subscription.add(
-      this._listingService.getTopicList(entityId, config).subscribe(
-        (response) => {
+      this._listingService
+        .getTopicList(entityId, config)
+        .subscribe((response) => {
           const data = new Topics()
             .deserialize(response)
             .records.map((item) => ({ label: item.name, value: item.id }));
@@ -138,10 +139,19 @@ export class EditListingComponent implements OnInit, OnDestroy {
           this.listFG.patchValue(this.listData);
         },
         ({ error }) => {
-          this.loading = false; 
+          this.loading = false;
         }
       )
     );
+  }
+
+  resetForm() {
+    this.listFG.reset();
+  }
+
+  handleSubmit() {
+    if (this.listId) this.updateList();
+    else this.createList();
   }
 
   /**
@@ -199,7 +209,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
           .subscribe();
         this._router.navigate([`pages/library/listing`]);
       },
-      ({ error }) => { },
+      ({ error }) => {},
       () => (this.isSaving = false)
     );
   }
@@ -257,7 +267,7 @@ export class EditListingComponent implements OnInit, OnDestroy {
           .subscribe();
         this._router.navigate([`pages/library/listing`]);
       },
-      ({ error }) => {  },
+      ({ error }) => {},
       () => (this.isSaving = false)
     );
   }

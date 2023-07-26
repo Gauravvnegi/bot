@@ -35,6 +35,7 @@ export class OutletBaseComponent {
         const entityId = snapshot?.params['entityId'];
         const menuId = snapshot?.params['menuId'];
         const menuItemId = snapshot?.params['menuItemId'];
+        const foodPackageId = snapshot?.params['foodPackageId'];
         if (outletId) {
           console.log('outletId', outletId);
           this.outletId = outletId;
@@ -48,6 +49,8 @@ export class OutletBaseComponent {
         }
 
         if (menuItemId) this.menuItemId = menuItemId;
+
+        if (foodPackageId) this.foodPackageId = foodPackageId;
       }
     );
   }
@@ -122,7 +125,8 @@ export class OutletBaseComponent {
         .replace(':outletId', this.outletId)
         .replace(':entityId', this.entityId)
         .replace(':menuId', this.menuId)
-        .replace(':menuItemId', this.menuItemId);
+        .replace(':menuItemId', this.menuItemId)
+        .replace(':foodPackageId', this.foodPackageId);
     });
     this.navRoutes = navRoutes;
 

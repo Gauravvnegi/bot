@@ -82,27 +82,28 @@
 
     <!-- <hospitality-bot-food-items></hospitality-bot-food-items> -->
   </div>
-
-  <div class="form-wrapper">
-    <div class="items-wrapper">
-      <div class="heading-wrapper">
-        <div class="heading">Items</div>
+  <div *ngIf="foodPackageId">
+    <div class="form-wrapper">
+      <div class="items-wrapper">
+        <div class="heading-wrapper">
+          <div class="heading">Items</div>
+        </div>
+        <hospitality-bot-iterator
+          class="iterator full-width"
+          [fields]="fields"
+          [useFormArray]="foodItemsArray"
+          ctaLabel="+ Add Item"
+          (currentIndex)="onItemsAdded($event)"
+        ></hospitality-bot-iterator>
       </div>
-      <hospitality-bot-iterator
-        class="iterator full-width"
-        [fields]="fields"
-        [useFormArray]="foodItemsArray"
-        ctaLabel="+ Add Item"
-        (currentIndex)="onItemsAdded($event)"
-      ></hospitality-bot-iterator>
     </div>
-  </div>
 
-  <div class="btn-wrapper">
-    <hospitality-bot-button
-      label="Save"
-      [disabled]="!isPackageCreated"
-      (onClick)="handleSave()"
-    ></hospitality-bot-button>
+    <div class="btn-wrapper">
+      <hospitality-bot-button
+        label="Save"
+        [disabled]="!isPackageCreated"
+        (onClick)="handleSave()"
+      ></hospitality-bot-button>
+    </div>
   </div>
 </div>

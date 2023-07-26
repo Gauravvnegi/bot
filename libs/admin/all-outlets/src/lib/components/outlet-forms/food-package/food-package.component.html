@@ -4,24 +4,18 @@
       <div class="wrapper">
         <div class="header">
           <div>
-            <div class="heading">Menu</div>
+            <div class="heading">Food Packages</div>
             <div class="sub-heading">
               Do not forget to add this cost in addition to the room cost + Add
-              Menu
+              Package
             </div>
           </div>
           <div class="btn-wrapper">
             <hospitality-bot-button
-              label="+ Add Menu"
+              label="+ Add Package"
               variant="outlined"
               (onClick)="onCreateAndContinue('food-package')"
             ></hospitality-bot-button>
-            <!-- <hospitality-bot-button
-              *ngIf="menuList?.length > 0"
-              label="View All"
-              (onClick)="onCreateAndContinue('view-all')"
-              variant="outlined"
-            ></hospitality-bot-button> -->
           </div>
         </div>
         <div class="item-boxes" *ngIf="!!foodPackages.length; else emptyTable">

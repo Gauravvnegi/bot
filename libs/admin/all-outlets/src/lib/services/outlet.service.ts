@@ -37,15 +37,7 @@ export class OutletService extends ApiService {
   }
 
   getOutletConfig(): Observable<OutletConfig> {
-    return this.get(`/api/v1/config?key=OUTLET_CONFIGURATION`).pipe(
-      map((response: OutletConfig) => {
-        response.type = response.type.map((item: any) => ({
-          ...item,
-          value: item.name.split(' ')[0].toUpperCase(),
-        }));
-        return response;
-      })
-    );
+    return this.get(`/api/v1/config?key=OUTLET_CONFIGURATION`);
   }
 
   getMenuItems(config: QueryConfig, outletId: string): Observable<any> {

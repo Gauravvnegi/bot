@@ -120,8 +120,16 @@ export class OutletService extends ApiService {
     });
   }
 
-  updateFoodPackage(packageId, data): Observable<any> {
-    return this.patch(`/api/v1/food-package/${packageId}`, data);
+  updateFoodPackage(
+    outletId: string,
+    packageId,
+    data,
+    config?: QueryConfig
+  ): Observable<any> {
+    return this.patch(
+      `/api/v1/entity/${outletId}/library/${packageId}${config?.params ?? ''}`,
+      data
+    );
   }
 
   getFoodPackageById(

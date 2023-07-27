@@ -131,6 +131,7 @@ export type FoodPackageForm = {
   // hsnCode: string;
   taxes: TaxData[];
   source: number;
+  foodItems?;
 };
 
 export type Feature =

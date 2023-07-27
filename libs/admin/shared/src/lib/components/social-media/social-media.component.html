@@ -24,6 +24,7 @@
             }"
           ></hospitality-bot-input>
           <img
+            *ngIf="socialMediaControl.controls[i].get('redirectUrl').value"
             src="/assets/svg/cross.svg"
             (click)="
               socialMediaControl.controls[i].get('redirectUrl').setValue('')

@@ -1,10 +1,7 @@
 <ng-container *ngIf="!displayBookingOffer; else bookingOffer">
   <div class="bk-summary_heading">Reservation Summary</div>
   <p class="divider"></p>
-  <div class="bk-summary_subheading" *ngIf="bookingType === 'ROOM_TYPE'">
-    {{ roomTypeLabel }}<span *ngIf="roomTypeCount">+ {{ roomTypeCount }}</span>
-  </div>
-  <div class="bk-summary_subheading" *ngIf="bookingType !== 'ROOM_TYPE'">
+  <div class="bk-summary_subheading" *ngIf="heading">
     {{ heading }}
   </div>
   <div class="bk-summary_subheading_label">
@@ -49,18 +46,11 @@
       class="bk-summary_priceInfo_perNight"
       *ngIf="bookingType === 'ROOM_TYPE'"
     >
-      <!-- <span class="bk-summary_priceInfo_perNight_label" *ngIf="itemInfo">{{
-        itemInfo
-      }}</span> -->
       <span class="bk-summary_priceInfo_perNight_label">Per Night</span>
       <s
         class="bk-summary_priceInfo_perNight_amount"
-        *ngIf="summaryData?.originalPrice"
-        >{{ summaryData?.originalPrice | currency: 'INR' }}</s
+        >{{ summaryData?.totalAmount | currency: 'INR' }}</s
       >
-      <!-- <s class="bk-summary_priceInfo_perNight_amount" *ngIf="price">
-        {{ price }}
-      </s> -->
     </p>
     <p class="bk-summary_priceInfo_person" *ngIf="bookingType === 'ROOM_TYPE'">
       <span class="bk-summary_priceInfo_perNight_label">
@@ -79,19 +69,13 @@
         Kid Child
       </span>
       <span class="bk-summary_priceInfo_perNight_amount">
-        {{
-          summaryData?.originalPrice
-            ? (summaryData?.originalPrice | currency: 'INR')
-            : (0 | currency: 'INR')
-        }}
+        {{ summaryData?.totalAmount | currency: 'INR' }}
       </span>
     </p>
     <p class="bk-summary_priceInfo_person" *ngIf="bookingType !== 'ROOM_TYPE'">
       <span class="bk-summary_priceInfo_perNight_label">{{ itemInfo }}</span>
       <span class="bk-summary_priceInfo_perNight_discountedAmount">{{
-        summaryData?.originalPrice
-          ? (summaryData?.originalPrice | currency: 'INR')
-          : (0 | currency: 'INR')
+        summaryData?.totalAmount | currency: 'INR'
       }}</span>
     </p>
     <p class="bk-summary_priceInfo_taxFair" *ngIf="summaryData?.offerAmount">
@@ -132,7 +116,7 @@
     <p class="bk-summary_total_label">Total Amount to be paid</p>
     <p class="bk-summary_total_amount">
       {{
-        discountedPrice -
+        summaryData?.totalAmount -
           controlContainer.control.get('paymentMethod.totalPaidAmount').value
           | currency: 'INR'
       }}

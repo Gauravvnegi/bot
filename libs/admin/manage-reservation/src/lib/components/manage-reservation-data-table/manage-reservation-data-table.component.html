@@ -100,10 +100,10 @@
       </td>
       <td *ngIf="selectedEntity.subType !== 'ROOM_TYPE'">
         <div class="primary-text">
-          <div>{{ rowData.outletName }}</div>
+          <div>{{ this.selectedEntity.label }}</div>
         </div>
         <div class="secondary-text">
-          {{ rowData.type }}
+          {{ this.selectedEntity.subType }}
         </div>
       </td>
       <td *ngIf="selectedEntity.subType === 'ROOM_TYPE'">
@@ -122,7 +122,10 @@
       </td>
 
       <td>
-        <div class="cell-content">
+        <div
+          class="cell-content"
+          *ngIf="rowData.fullName.length; else emptyCell"
+        >
           <div class="primary-text">
             {{ rowData.fullName }}
           </div>
@@ -132,10 +135,10 @@
       <td *ngIf="selectedEntity.subType !== 'ROOM_TYPE'">
         <div class="center-align">
           <div class="primary-text txtSize">
-            {{ rowData.date | date: 'dd/MM/yy' }}
+            {{ rowData.from | date: 'dd/MM/yy' }}
           </div>
           <div class="secondary-text">
-            {{ rowData.time | date: 'HH:mm' }}
+            {{ rowData.from | date: 'HH:mm' }}
           </div>
         </div>
       </td>

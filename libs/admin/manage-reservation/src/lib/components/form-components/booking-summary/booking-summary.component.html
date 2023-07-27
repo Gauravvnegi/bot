@@ -132,7 +132,7 @@
     <p class="bk-summary_total_label">Total Amount to be paid</p>
     <p class="bk-summary_total_amount">
       {{
-        discountedPrice -
+        summaryData?.originalPrice -
           controlContainer.control.get('paymentMethod.totalPaidAmount').value
           | currency: 'INR'
       }}

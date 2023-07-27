@@ -43,6 +43,7 @@ import { ManageReservationService } from '../../services/manage-reservation.serv
 import { ReservationListResponse } from '../../types/response.type';
 import { FormService } from '../../services/form.service';
 import { SelectedEntity } from '../../types/reservation.type';
+import { skip, distinctUntilChanged, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-manage-reservation-data-table',
@@ -62,22 +63,18 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   selectedTab: ReservationTableValue = ReservationTableValue.ALL;
 
-  // selectedOutlet: EntitySubType = EntitySubType.ROOM_TYPE;
-  // previousOutlet: EntitySubType = EntitySubType.ROOM_TYPE;
-
   selectedEntity: SelectedEntity;
-  previousSelectedEntity: SelectedEntity;
 
   reservationLists!: ReservationList;
 
   $subscription = new Subscription();
+  $selectedEntitySubscription = new Subscription();
 
   globalQueries = [];
   configData: BookingConfig;
 
   isAllTabFilterRequired: boolean = true;
   isSelectedEntityChanged = false;
-  isOutletChanged: boolean = false;
 
   private destroy$ = new Subject<void>();
 
@@ -100,6 +97,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   ngOnInit(): void {
     // this.getConfigData();
+
     this.tableName = title;
     this.listenForGlobalFilters();
     this.listenForSelectedEntityChange();
@@ -153,17 +151,22 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   listenForSelectedEntityChange() {
-    this.formService.selectedEntity.subscribe((res) => {
-      this.selectedEntity = res;
-      this.selectedEntity.id !== this.previousSelectedEntity?.id
-        ? (this.isSelectedEntityChanged = true)
-        : (this.isSelectedEntityChanged = false);
-      this.previousSelectedEntity = { ...this.selectedEntity };
-      if (this.selectedEntity && this.isSelectedEntityChanged) {
-        this.initDetails(this.selectedEntity);
-        this.initTableValue();
-      }
-    });
+    this.$selectedEntitySubscription.add(
+      this.formService.selectedEntity
+        .pipe(
+          skip(1), // Skip the initial value emitted when the subscription is first established
+          distinctUntilChanged((prev, curr) => prev.subType === curr.subType), // Compare subType property for changes
+          tap((res) => {
+            this.selectedEntity = res;
+            this.isSelectedEntityChanged = false; // Set to false by default
+          })
+        )
+        .subscribe((res) => {
+          this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
+          this.initDetails(this.selectedEntity);
+          this.initTableValue();
+        })
+    );
   }
 
   /**
@@ -193,7 +196,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
               this.reservationLists.total,
               this.reservationStatusDetails
             );
-            this.loading = false;
           } else {
             this.values = new ReservationList().deserialize(
               res
@@ -203,12 +205,14 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
               this.reservationLists.entityStateCounts,
               this.reservationLists.total
             );
-            this.loading = false;
           }
         },
         (error) => {
           // Handle error if needed
           this.values = [];
+          this.loading = false;
+        },
+        () => {
           this.loading = false;
         }
       );
@@ -454,6 +458,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
 
   ngOnDestroy(): void {
     this.$subscription.unsubscribe();
+    this.$selectedEntitySubscription.unsubscribe();
     this.destroy$.next();
     this.destroy$.complete();
   }

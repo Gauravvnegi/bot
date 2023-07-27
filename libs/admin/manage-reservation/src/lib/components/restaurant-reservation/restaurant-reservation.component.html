@@ -22,7 +22,7 @@
           ></hospitality-bot-input>
           <div
             class="food-package-wrapper full-width"
-            formArrayName="foodPackage"
+            formArrayName="foodPackages"
           >
             <div
               class="half-width"
@@ -102,10 +102,7 @@
         (handleInitForm)="initForm()"
         [disabledForm]="disabledForm"
         [bookingInfo]="{
-          header: 'United Coffee House Rewind',
-          subHeader: 'The Leela, New Delhi, 210002',
-          price: 2000,
-          discountedPrice: 1200,
+          heading: selectedEntity.label,
           itemInfo: numberOfAdults,
           stayInfo: tableNumber,
           bookingType: bookingType

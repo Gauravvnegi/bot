@@ -26,7 +26,7 @@ export const roomFields: IteratorField[] = [
     type: 'input',
     required: true,
     placeholder: 'Enter',
-    width: '10%'
+    width: '10%',
   },
   {
     label: 'Room Number',
@@ -98,8 +98,8 @@ export const menuItemFields: IteratorField[] = [
     width: '25%',
   },
   {
-    label: 'Price',
-    name: 'price',
+    label: 'Amount',
+    name: 'amount',
     type: 'input',
     required: false,
     placeholder: 'Enter',
@@ -127,8 +127,8 @@ export const spaFields: IteratorField[] = [
     width: '28%',
   },
   {
-    label: 'Price',
-    name: 'price',
+    label: 'Amount',
+    name: 'amount',
     type: 'input',
     required: false,
     placeholder: 'Enter',
@@ -154,8 +154,8 @@ export const venueFields: IteratorField[] = [
     width: '30%',
   },
   {
-    label: 'Price',
-    name: 'price',
+    label: 'Amount',
+    name: 'amount',
     type: 'input',
     required: false,
     placeholder: 'Enter',

@@ -37,12 +37,9 @@ export class BookingSummaryComponent implements OnInit {
   parentFormGroup: FormGroup;
   isBooking = false;
 
-  header = '';
-  subHeader = '';
+  heading = '';
   stayInfo = '';
-  price = 0;
   guestInfo = '';
-  discountedPrice = 0;
   bookingType = '';
   outletId = '';
 
@@ -80,16 +77,6 @@ export class BookingSummaryComponent implements OnInit {
     this.entityId = this.globalFilterService.entityId;
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
     this.parentFormGroup = this.controlContainer.control as FormGroup;
-    this.listenForSummaryDataChanges();
-  }
-
-  listenForSummaryDataChanges() {
-    this.formService.price.subscribe((res) => {
-      this.price = res;
-    });
-    this.formService.discountedPrice.subscribe((res) => {
-      this.discountedPrice = res;
-    });
   }
 
   offerSelect(item?: any): void {
@@ -225,12 +212,9 @@ export class BookingSummaryComponent implements OnInit {
 }
 
 type BookingSummaryInfo = {
-  header: string;
-  subHeader: string;
+  heading: string;
   itemInfo: string;
-  price: string;
   guestInfo: string;
-  discountedPrice: string;
   bookingType: string;
   outletId?: string;
 };

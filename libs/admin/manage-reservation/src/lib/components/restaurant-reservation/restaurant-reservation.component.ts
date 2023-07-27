@@ -84,7 +84,6 @@ export class RestaurantReservationComponent implements OnInit {
   // summaryInfo: SummaryInfo;
   tableNumber = '';
   numberOfAdults = '';
-  price = 0;
 
   @Input() selectedEntity: SelectedEntity;
 
@@ -226,10 +225,10 @@ export class RestaurantReservationComponent implements OnInit {
           (service) => service.value === res
         );
         this.menuItemsControls[index]
-          .get('price')
+          .get('amount')
           .setValue(selectedMenuItem.price);
       });
-    this.orderInfoControls[index]
+    this.menuItemsControls[index]
       .get('quantity')
       .valueChanges.subscribe((res: number) => {
         this.getSummaryData();
@@ -363,7 +362,7 @@ export class RestaurantReservationComponent implements OnInit {
       items: this.menuItemsControls.map((item) => ({
         itemId: item.get('serviceName').value,
         unit: item.get('quantity')?.value ?? 0,
-        amount: item.get('price').value,
+        amount: item.get('amount').value,
       })),
       outletType: 'SPA',
     };

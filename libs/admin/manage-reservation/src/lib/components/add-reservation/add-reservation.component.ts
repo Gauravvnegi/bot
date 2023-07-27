@@ -85,7 +85,7 @@ export class AddReservationComponent implements OnInit, OnDestroy {
 
   initDetails() {
     this.reservationId = this.activatedRoute.snapshot.paramMap.get('id');
-    // this.heading = this.selectedEntity.label;
+    this.heading = this.selectedEntity.label;
     this.expandAccordion = this.formService.enableAccordion;
     if (this.expandAccordion) {
       this.formService.enableAccordion = false;

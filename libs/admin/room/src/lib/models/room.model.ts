@@ -124,7 +124,8 @@ export class RoomTypeForm {
     this.area = input.area;
     this.staticRatePlans = {
       paxPriceCurrency: input.pricingDetails.currency,
-      paxPrice: input.pricingDetails.paxPrice,
+      paxAdultPrice: input.pricingDetails.paxAdult,
+      paxChildPrice: input.pricingDetails.paxChild,
       discountType: input.ratePlans[0].discount?.type ?? 'PERCENTAGE',
       discountValue: input.ratePlans[0].discount?.value ?? 0,
       bestPriceCurrency: input.pricingDetails.currency,
@@ -136,7 +137,8 @@ export class RoomTypeForm {
     };
     this.dynamicRatePlans = {
       paxPriceCurrency: input.pricingDetails.currency,
-      paxPrice: input.pricingDetails.paxPrice,
+      paxAdultPrice: input.pricingDetails.paxAdult,
+      paxChildPrice: input.pricingDetails.paxChild,
       label: input.ratePlans[0].label,
       basePrice: input.pricingDetails.base,
       basePriceCurrency: input.pricingDetails.currency,
@@ -146,7 +148,7 @@ export class RoomTypeForm {
       minPrice: input.pricingDetails.min,
       ratePlanId: input?.ratePlans[0].ratePlanId,
     };
-    this.ratePlans = input.ratePlans.map((item)=>({
+    this.ratePlans = input.ratePlans.map((item) => ({
       label: item.label,
       ratePlanId: item.ratePlanId,
       extraPrice: item.variablePrice,

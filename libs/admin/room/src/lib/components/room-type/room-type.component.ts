@@ -321,8 +321,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    * Handle remove rate plan based on index
    */
   removeRatePlan(value: string, index: number): void {
-    // const removedPlan = this.ratePlanArray.at(index).get('id').value;
-    // this.removedRatePlans.push(removedPlan);
+    const removedPlan = this.ratePlanArray.at(index).get('id').value;
+    this.removedRatePlans.push(removedPlan);
     this.ratePlanArray.removeAt(index);
   }
 
@@ -331,7 +331,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
    */
   addNewRatePlan(id?: string, label?: string) {
     const addedRatePlan = {
-      label: ['Rate Plan'],
+      label: ['Rate Plan', [Validators.maxLength(60)]],
       currency: ['INR'],
       extraPrice: ['', [Validators.required]],
       description: [''],
@@ -583,7 +583,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       addedRatePlans,
       roomAmenityIds: [...complimentaryAmenities, ...paidAmenities],
     };
-
     return data;
   }
 

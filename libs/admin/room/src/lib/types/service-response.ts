@@ -106,7 +106,8 @@ export type PricingDetails = {
   currency: string;
   max: number;
   min: number;
-  paxPrice: string;
+  paxAdult: number;
+  paxChild: number;
   discount: {
     type: string;
     value: number;

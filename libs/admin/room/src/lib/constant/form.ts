@@ -90,7 +90,8 @@ export type DynamicPricingRatePlan = RatePlan & {
 
 export type RatePlan = {
   paxPriceCurrency: string;
-  paxPrice: string;
+  paxChildPrice: number;
+  paxAdultPrice: number;
   label: string;
   ratePlanId?: string;
   basePriceCurrency: string;

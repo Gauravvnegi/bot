@@ -36,7 +36,7 @@ type BookingInformation = {
 export type SpaItems = {
   serviceName: string;
   quantity: number;
-  price: number;
+  amount: number;
 };
 
 type Instructions = {
@@ -78,13 +78,13 @@ type EventInformation = {
 export type VenueItemsData = {
   description: string;
   quantity: number;
-  price: number;
+  amount: number;
 };
 
 export type MenuItemsData = {
   menuItems: string;
   quantity: number;
-  price: number;
+  amount: number;
 };
 
 type Address = {

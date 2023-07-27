@@ -160,6 +160,9 @@ export class SpaReservationComponent implements OnInit {
       .valueChanges.subscribe((res) => {
         this.itemInfo = `For ${res} Adult`;
       });
+    this.spaBookingInfo.valueChanges.subscribe((res) => {
+      this.getSummaryData();
+    });
   }
 
   /**
@@ -174,16 +177,9 @@ export class SpaReservationComponent implements OnInit {
           (service) => service.value === res
         );
         this.spaItemsControls[index]
-          .get('price')
-          .setValue(selectedService.price);
+          .get('amount')
+          .setValue(selectedService?.price);
         this.spaItemsControls[index].get('quantity').setValue(1);
-        // this.formService.discountedPrice.next(selectedService.price);
-        this.getSummaryData();
-      });
-    this.spaItemsControls[index]
-      .get('quantity')
-      .valueChanges.subscribe((res) => {
-        this.getSummaryData();
       });
   }
 
@@ -233,10 +229,6 @@ export class SpaReservationComponent implements OnInit {
             this.userForm.patchValue(data);
             this.summaryData = new SummaryData().deserialize(response);
             this.setFormDisability(data.reservationInformation);
-            // if (data.offerId)
-            //   this.getOfferByRoomType(
-            //     this.userForm.get('roomInformation.roomTypeId').value
-            //   );
             this.userForm.valueChanges.subscribe((_) => {
               if (!this.formValueChanges) {
                 this.formValueChanges = true;
@@ -315,7 +307,7 @@ export class SpaReservationComponent implements OnInit {
       items: this.spaItemsControls.map((item) => ({
         itemId: item.get('serviceName').value,
         unit: item.get('quantity')?.value ?? 0,
-        amount: item.get('price').value,
+        amount: item.get('amount').value,
       })),
       outletType: 'SPA',
     };

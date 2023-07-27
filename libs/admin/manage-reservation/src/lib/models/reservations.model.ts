@@ -71,7 +71,9 @@ export class Reservation {
     this.from = input?.from;
     this.to = input?.to;
     this.totalAmount = input?.totalAmount;
-    this.fullName = this.firstName + ' ' + this.lastName;
+    this.fullName = this.firstName
+      ? this?.firstName + ' ' + (this?.lastName ?? '')
+      : '';
     this.roomNumber = input?.roomNumber;
     this.sourceName = input?.sourceName;
     this.nextStates = [...input.nextStates, input.reservationType];
@@ -279,7 +281,7 @@ export class OrderInfo {
     this.menuItems = input.items.map((item) => ({
       menuItems: item?.itemId,
       quantity: item?.quantity ?? 1,
-      price: item?.amount ?? 0,
+      amount: item?.amount ?? 0,
     }));
     this.tableNumber = input?.tableNumber ?? '';
     return this;
@@ -299,7 +301,7 @@ export class EventInformation {
     this.venueInfo = input.items.map((item) => ({
       description: item?.itemId,
       quantity: item?.quantity ?? 1,
-      price: item?.amount ?? 0,
+      amount: item?.amount ?? 0,
     }));
     return this;
   }
@@ -314,7 +316,7 @@ export class BookingInformation {
     this.spaItems = input.items.map((item) => ({
       serviceName: item?.itemId,
       quantity: item?.quantity ?? 1,
-      price: item?.amount ?? 0,
+      amount: item?.amount ?? 0,
     }));
     return this;
   }

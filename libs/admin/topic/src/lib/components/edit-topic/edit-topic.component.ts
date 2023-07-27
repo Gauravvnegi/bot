@@ -131,7 +131,7 @@ export class EditTopicComponent implements OnInit, OnDestroy {
           this._router.navigate(['/pages/library/topic']);
           this.isSavingTopic = false;
         },
-        ({ error }) => { 
+        ({ error }) => {
           this.isSavingTopic = false;
         }
       )
@@ -202,11 +202,15 @@ export class EditTopicComponent implements OnInit, OnDestroy {
             this._router.navigate(['/pages/library/topic']);
             this.isSavingTopic = false;
           },
-          ({ error }) => { 
+          ({ error }) => {
             this.isSavingTopic = false;
           }
         )
     );
+  }
+
+  resetForm() {
+    this.topicForm.reset();
   }
 
   /**

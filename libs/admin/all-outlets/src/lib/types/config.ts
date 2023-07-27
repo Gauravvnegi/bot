@@ -3,7 +3,7 @@ export type OutletConfig = {
 };
 
 export type ConfigTypes = {
-  name: string;
+  label: string;
   subtype: string[];
   menu?: MenuConfig;
   value: string;

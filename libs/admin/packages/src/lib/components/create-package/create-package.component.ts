@@ -174,7 +174,9 @@ export class CreatePackageComponent implements OnInit {
           value,
         }));
         this.useForm.get('currency').setValue(this.currencies[0].value);
-        this.useForm.get('discountedCurrency').setValue(this.currencies[0].value);
+        this.useForm
+          .get('discountedCurrency')
+          .setValue(this.currencies[0].value);
       }
     });
     this.getServices();
@@ -424,6 +426,10 @@ export class CreatePackageComponent implements OnInit {
           .subscribe(this.handleSuccess, this.handleError, this.handleFinal)
       );
     }
+  }
+
+  resetForm() {
+    this.useForm.reset();
   }
 
   /**

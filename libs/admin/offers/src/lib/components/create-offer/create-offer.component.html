@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header
     [heading]="offerId ? 'Edit Offer' : 'Create Offer'"
     [routes]="routes"
@@ -85,19 +85,22 @@
       }"
     ></hospitality-bot-prefix-field>
 
-    <!-- <hospitality-bot-view-input
+    <hospitality-bot-view-input
       class="half-width"
       label="Discount Price"
       controlName="discountedPrice"
       [strikeValue]="useForm.get('rate').value"
       [suffix]="currency"
     >
-    </hospitality-bot-view-input> -->
-
-    <hospitality-bot-button
-      class="create-btn"
-      [label]="offerId ? 'Update' : 'Create'"
-      (onClick)="handleSubmit()"
-    ></hospitality-bot-button>
+    </hospitality-bot-view-input>
+    <hospitality-bot-form-action
+      class="full-width"
+      [loading]="loading"
+      [isId]="offerId"
+      (onReset)="resetForm()"
+      (onSave)="handleSubmit()"
+      #fa
+    >
+    </hospitality-bot-form-action>
   </div>
 </div>

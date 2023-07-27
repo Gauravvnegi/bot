@@ -47,7 +47,7 @@ export type HotelAccess = {
   brands: {
     id: string;
     name: string;
-    hotels: {
+    entities: {
       id: string;
       name: string;
       imageUrl: string;

@@ -197,6 +197,8 @@ export class HotelInfoFormComponent implements OnInit {
       (item) => item?.value === data?.entity?.propertyCategory
     );
 
+    data.status = data.status === true ? 'ACTIVE' : 'INACTIVE';
+
     //if entityId is present then update hotel else create hotel
     if (this.entityId) {
       this.$subscription.add(

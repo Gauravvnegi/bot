@@ -1,0 +1,21 @@
+<div id>
+  <ng-content></ng-content>
+  <div
+    class="footer-buttons"
+    [ngClass]="{ fixed: isFixed && type === 'Sticky' }"
+    #fd
+  >
+    <hospitality-bot-button
+      [label]="resetLabel"
+      (onClick)="resetForm()"
+      variant="outlined"
+      severity="reset"
+    ></hospitality-bot-button>
+    <hospitality-bot-button
+      [label]="saveLabel"
+      (onClick)="submitForm()"
+      [isLoading]="loading"
+    ></hospitality-bot-button>
+  </div>
+  <div *ngIf="isFixed" class="footer-height"></div>
+</div>

@@ -124,8 +124,8 @@
     class="full-width"
     [loading]="loading"
     [isId]="roomId"
-    (onReset)="resetForm()"
-    (onSave)="handleSubmit()"
+    (onPreAction)="resetForm()"
+    (onPostAction)="handleSubmit()"
     #fa
   >
   </hospitality-bot-form-action>

@@ -27,8 +27,8 @@
     class="full-width"
     [loading]="loading || isSavingTopic"
     [isId]="topicId"
-    (onReset)="resetForm()"
-    (onSave)="handleSubmit()"
+    (onPreAction)="resetForm()"
+    (onPostAction)="handleSubmit()"
   >
   </hospitality-bot-form-action>
 </div>

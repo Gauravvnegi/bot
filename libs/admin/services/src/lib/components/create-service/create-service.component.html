@@ -87,8 +87,8 @@
       class="full-width"
       [loading]="loading"
       [isId]="serviceId"
-      (onReset)="resetForm()"
-      (onSave)="handleSubmit()"
+      (onPreAction)="resetForm()"
+      (onPostAction)="handleSubmit()"
       #fa
     >
     </hospitality-bot-form-action>

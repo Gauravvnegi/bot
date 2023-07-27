@@ -76,8 +76,8 @@
     class="full-width"
     [loading]="loading || isSaving"
     [isId]="listId"
-    (onReset)="resetForm()"
-    (onSave)="handleSubmit()"
+    (onPreAction)="resetForm()"
+    (onPostAction)="handleSubmit()"
     #fa
   >
   </hospitality-bot-form-action>

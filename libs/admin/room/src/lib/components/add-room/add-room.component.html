@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fa.referenceId">
   <hospitality-bot-navigation-header
     [heading]="pageTitle"
     [routes]="navRoutes"
@@ -120,11 +120,13 @@
       ></hospitality-bot-text-area>
     </div>
   </div>
-
-  <div class="save-footer">
-    <hospitality-bot-button
-      label="Save"
-      (onClick)="handleSubmit()"
-    ></hospitality-bot-button>
-  </div>
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [isId]="roomId"
+    (onReset)="resetForm()"
+    (onSave)="handleSubmit()"
+    #fa
+  >
+  </hospitality-bot-form-action>
 </div>

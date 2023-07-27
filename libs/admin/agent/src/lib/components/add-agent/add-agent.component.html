@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" [id]="fd.referenceId">
   <hospitality-bot-navigation-header
     [heading]="pageTitle"
     [routes]="navRoutes"
@@ -85,20 +85,13 @@
     ></hospitality-bot-prefix-field>
   </div>
 
-  <div class="action-buttons">
-    <hospitality-bot-button
-      variant="outlined"
-      severity="reset"
-      class="reset-btn"
-      [label]="'Reset All'"
-      (onClick)="reset()"
-    ></hospitality-bot-button>
-
-    <hospitality-bot-button
-      class="create-btn"
-      [label]="agentId ? 'Update' : 'Save'"
-      (onClick)="handleSubmit()"
-      [disabled]="loading"
-    ></hospitality-bot-button>
-  </div>
+  <hospitality-bot-form-action
+    class="full-width"
+    [loading]="loading"
+    [isId]="agentId"
+    (onReset)="reset()"
+    (onSave)="handleSubmit()"
+    #fd
+  >
+  </hospitality-bot-form-action>
 </div>

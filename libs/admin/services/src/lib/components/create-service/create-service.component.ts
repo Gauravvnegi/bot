@@ -172,15 +172,17 @@ export class CreateServiceComponent implements OnInit {
    */
   getTax() {
     this.$subscription.add(
-      this.servicesService.getTaxList(this.entityId).subscribe(({ records }) => {
-        records = records.filter(
-          (item) => item.category === 'service' && item.status
-        );
-        this.tax = records.map((item) => ({
-          label: item.taxType + ' ' + item.taxValue + '%',
-          value: item.id,
-        }));
-      })
+      this.servicesService
+        .getTaxList(this.entityId)
+        .subscribe(({ records }) => {
+          records = records.filter(
+            (item) => item.category === 'service' && item.status
+          );
+          this.tax = records.map((item) => ({
+            label: item.taxType + ' ' + item.taxValue + '%',
+            value: item.id,
+          }));
+        })
     );
   }
   /**
@@ -248,6 +250,10 @@ export class CreateServiceComponent implements OnInit {
     this.loadingCategory = false;
     this.loading = false;
   };
+
+  resetForm() {
+    this.useForm.reset();
+  }
 
   /**
    * @function handleError to show the error

@@ -112,6 +112,8 @@ import { GlobalSearchComponent } from './components/search/global-search.compone
 import { QrCodeModalComponent } from './components/qr-code-modal/qr-code-modal.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { MultiplePrefixInputComponent } from './components/form-component/multiple-prefix-input/multiple-prefix-input.component';
+import { FormActionComponent } from './components/form-component/form-action/form-action.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -230,6 +232,7 @@ import { MultiplePrefixInputComponent } from './components/form-component/multip
     GlobalSearchComponent,
     QrCodeModalComponent,
     MultiplePrefixInputComponent,
+    FormActionComponent,
   ],
 
   exports: [
@@ -337,6 +340,7 @@ import { MultiplePrefixInputComponent } from './components/form-component/multip
     InputNumberComponent,
     GlobalSearchComponent,
     MultiplePrefixInputComponent,
+    FormActionComponent,
   ],
 })
 export class AdminSharedModule {}

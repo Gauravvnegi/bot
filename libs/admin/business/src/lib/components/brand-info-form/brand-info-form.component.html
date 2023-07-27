@@ -1,4 +1,4 @@
-<div class="wrapper" [formGroup]="useForm">
+<div class="wrapper" [formGroup]="useForm" [id]="fa.referenceId">
   <div [formGroup]="useForm.get('brand')">
     <hospitality-bot-navigation-header
       [heading]="pageTitle"
@@ -63,24 +63,16 @@
       [isLoading]="loading"
     >
     </hospitality-bot-social-media>
-
-    <div class="footer">
-      <hospitality-bot-button
-        [isLoading]="loading"
-        severity="reset"
-        variant="outlined"
-        [label]="'Reset'"
-        (onClick)="handleReset()"
-      >
-      </hospitality-bot-button>
-
-      <hospitality-bot-button
-        [isLoading]="loading"
-        [label]="brandId ? 'Update' : 'Create'"
-        (onClick)="handleSubmit()"
-      ></hospitality-bot-button>
-    </div>
   </div>
+  <hospitality-bot-form-action
+    class="full-width"
+    [isId]="brandId"
+    [loading]="loading"
+    (onReset)="resetForm()"
+    (onSave)="submitForm()"
+    #fa
+  >
+  </hospitality-bot-form-action>
 </div>
 
 <hospitality-bot-hotel-data-table

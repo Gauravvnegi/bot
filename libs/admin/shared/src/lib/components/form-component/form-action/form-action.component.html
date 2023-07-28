@@ -10,8 +10,7 @@
       (onClick)="preAction()"
       [variant]="preVariant"
       [severity]="preSeverity"
-      [isLoading]="loading"
-      [disabled]="preDisabled || disabled"
+      [disabled]="preDisabled || disabled || loading"
     ></hospitality-bot-button>
     <hospitality-bot-button
       [label]="postLabel"

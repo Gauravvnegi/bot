@@ -132,11 +132,12 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
     ) {
       this.parentForm.markAllAsTouched();
       if (
-        this._hotelService.hotelConfig?.showAddress &&
+        // this._hotelService.hotelConfig?.showAddress &&
         this.parentForm.get('address').invalid
-      )
+      ) {
         this.openPanels(this.addressFields.panelList.toArray());
-
+        this._snackBarService.openSnackBarAsText('Please fill the address');
+      }
       if (!this.parentForm.get('accept').get('disclaimer').value) {
         this._snackBarService.openSnackBarAsText('Please accept disclaimer');
       }
@@ -149,7 +150,8 @@ export class StayDetailsWrapperComponent extends BaseWrapperComponent
       formValue,
       this._hotelService.hotelConfig.timezone,
       this.countries,
-      this._hotelService.hotelConfig?.showAddress
+      // this._hotelService.hotelConfig?.showAddress
+      true
     );
     this.$subscription.add(
       this._stayDetailService

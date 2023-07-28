@@ -6,7 +6,6 @@ import {
   Input,
   OnInit,
   Output,
-  ViewChild,
 } from '@angular/core';
 
 @Component({
@@ -15,28 +14,50 @@ import {
   styleUrls: ['./form-action.component.scss'],
 })
 export class FormActionComponent implements OnInit {
-  saveLabel = 'Create';
-  resetLabel = 'Reset';
+  //pre-action
+  preLabel = 'Reset';
+  preLabelWithId = 'Cancel';
+  preVariant = 'outlined';
+  preSeverity = 'reset';
+  preDisabled = false;
+
+  //post-action
+  postLabel = 'Create';
+  postLabelWithId = 'Update';
+  postVariant = 'contained';
+  postSeverity = 'primary';
+  postDisabled = false;
+
+  @Input() disabled: boolean = false;
+
+  type: StickyFormActionType = 'sticky';
+
   id: boolean = false;
-  @Input() bottomThreshold: number = 60; //746;
-  @Input() type: stickyFormActionType = 'Sticky';
   referenceId: string = 'form-layout';
+
   constructor(private elementRef: ElementRef, private location: Location) {
     this.generateRandomId();
   }
-  //746 for the form with table
-  //100 for the form without table
+
+  @Input() set config(value: FormActionConfig) {
+    for (const key in value) {
+      if (Object.prototype.hasOwnProperty.call(value, key)) {
+        this[key] = value[key];
+      }
+    }
+  }
 
   @Input() set isId(value: boolean) {
     if (value) {
       this.id = true;
-      this.saveLabel = 'Update';
-      this.resetLabel = 'Cancel';
+      this.preLabel = this.preLabelWithId;
+      this.postLabel = this.preLabelWithId;
     }
   }
   @Input() loading: boolean = false;
-  @Output() onReset = new EventEmitter<Event>();
-  @Output() onSave = new EventEmitter<Event>();
+  @Output() onPreAction = new EventEmitter<Event>();
+  @Output() onPostAction = new EventEmitter<Event>();
+
   mainLayout: HTMLElement;
   formLayout: HTMLElement;
   isFixed = true;
@@ -49,30 +70,27 @@ export class FormActionComponent implements OnInit {
     this.mainLayout?.addEventListener('scroll', this.onScroll.bind(this));
   }
 
-  resetForm() {
-    if (this.id) return this.location.back();
-    this.onReset.emit();
+  preAction() {
+    if (this.id && this.preLabel.toLocaleLowerCase() === 'cancel')
+      return this.location.back();
+    this.onPreAction.emit();
   }
 
-  submitForm() {
-    this.onSave.emit();
+  postAction() {
+    this.onPostAction.emit();
   }
 
   onScroll() {
-    console.log(this.referenceId, 'referenceId');
-    console.log(this.formLayout.scrollHeight, 'formLayout');
     const distanceFromBottom =
       this.formLayout.scrollHeight -
       (this.mainLayout.scrollTop + this.mainLayout.clientHeight);
 
-    console.log(distanceFromBottom, 'distanceFromBottom');
-
     // Check if the user has scrolled close to the bottom
     if (distanceFromBottom <= 0 && this.isFixed) {
-      // If we're at the bottom, set the position to fixed
+      // If we're at the bottom, set the position to relative
       this.isFixed = false;
     } else if (distanceFromBottom > 0 && !this.isFixed) {
-      // If we're not at the bottom, set the position to relative
+      // If we're not at the bottom, set the position to fixed
       this.isFixed = true;
     }
   }
@@ -86,4 +104,16 @@ export class FormActionComponent implements OnInit {
   }
 }
 
-export type stickyFormActionType = 'Sticky' | 'Non-Sticky';
+export type StickyFormActionType = 'sticky' | 'non-sticky';
+
+export type FormActionConfig = {
+  preLabel: string;
+  postLabel: string;
+  preVariant: string;
+  postVariant: string;
+  PreLabelWithId: string;
+  postLabelWithId: string;
+  type: StickyFormActionType;
+  id: boolean;
+  referenceId: string;
+};

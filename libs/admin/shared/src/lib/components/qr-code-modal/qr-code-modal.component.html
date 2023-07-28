@@ -5,11 +5,11 @@
     <div>{{ heading }}</div>
   </div>
   <div class="button-wrapper">
-    <hospitality-bot-button
+    <!-- <hospitality-bot-button
       label="Download"
       (onClick)="generatePdf()"
       variant="text"
-    ></hospitality-bot-button>
+    ></hospitality-bot-button> -->
     <div (click)="close()" class="header__close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
@@ -18,7 +18,11 @@
 <!-- /..../ -->
 <div
   id="qr-code-modal"
-  [ngStyle]="{ 'background-image': 'url(' + backgroundURl + ')' }"
+  [ngStyle]="{
+    'background-image': 'url(' + backgroundURl + ')',
+    'background-size': 'cover',
+    'background-repeat': 'no-repeat'
+  }"
 >
   <div class="logo-container">
     <div class="logo-wrapper">
@@ -47,9 +51,10 @@
         ></qrcode>
       </div>
       <div class="url">
-        <p>
-          Please Visit <a href="">{{ route }}</a>
-        </p>
+        <span>
+          Please Visit
+        </span>
+        <a href="">{{ route }}</a>
       </div>
     </div>
     <div class="footer">

@@ -122,8 +122,8 @@
       class="full-width"
       [loading]="isSaving"
       [isId]="templateId"
-      (onReset)="resetForm()"
-      (onSave)="handleSubmit($event)"
+      (onPreAction)="resetForm()"
+      (onPostAction)="handleSubmit($event)"
       #fa
     >
     </hospitality-bot-form-action>

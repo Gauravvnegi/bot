@@ -41,8 +41,8 @@
     class="full-width"
     [loading]="loading"
     [isId]="taxId"
-    (onReset)="handleReset()"
-    (onSave)="handleSubmit()"
+    (onPreAction)="handleReset()"
+    (onPostAction)="handleSubmit()"
     #fa
   >
   </hospitality-bot-form-action>

@@ -26,6 +26,7 @@ export type OutletResponse = {
   type: string;
   subType: string;
   parentId: string;
+  absoluteRoute: string;
 };
 
 type Image = {

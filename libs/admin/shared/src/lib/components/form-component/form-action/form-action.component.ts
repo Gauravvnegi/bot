@@ -51,7 +51,7 @@ export class FormActionComponent implements OnInit {
     if (value) {
       this.id = true;
       this.preLabel = this.preLabelWithId;
-      this.postLabel = this.preLabelWithId;
+      this.postLabel = this.postLabelWithId;
     }
   }
   @Input() loading: boolean = false;

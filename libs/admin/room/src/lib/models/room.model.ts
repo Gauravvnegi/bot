@@ -124,16 +124,16 @@ export class RoomTypeForm {
     this.area = input.area;
     this.staticRatePlans = {
       paxPriceCurrency: input.pricingDetails.currency,
-      paxAdultPrice: input.pricingDetails.paxAdult,
-      paxChildPrice: input.pricingDetails.paxChild,
+      paxAdultPrice: input.pricingDetails?.paxAdult,
+      paxChildPrice: input.pricingDetails?.paxChild,
       discountType: input.ratePlans[0].discount?.type ?? 'PERCENTAGE',
       discountValue: input.ratePlans[0].discount?.value ?? 0,
       bestPriceCurrency: input.pricingDetails.currency,
-      bestAvailablePrice: input.pricingDetails.bestAvailablePrice,
+      bestAvailablePrice: input.pricingDetails?.bestAvailablePrice ?? 0,
       label: input.ratePlans[0].label,
       basePrice: input.pricingDetails.base,
       basePriceCurrency: input.pricingDetails.currency,
-      ratePlanId: input?.ratePlans[0].ratePlanId,
+      ratePlanId: input?.ratePlans[0].id,
     };
     this.dynamicRatePlans = {
       paxPriceCurrency: input.pricingDetails.currency,
@@ -146,11 +146,12 @@ export class RoomTypeForm {
       maxPrice: input.pricingDetails.max,
       minPriceCurrency: input.pricingDetails.currency,
       minPrice: input.pricingDetails.min,
-      ratePlanId: input?.ratePlans[0].ratePlanId,
+      ratePlanId: input?.ratePlans[0].id,
     };
     this.ratePlans = input.ratePlans.map((item) => ({
       label: item.label,
-      ratePlanId: item.ratePlanId,
+      ratePlanId: item.id,
+      idBase: item.isBase,
       extraPrice: item.variablePrice,
       currency: input.pricingDetails.currency,
       description: item?.description,

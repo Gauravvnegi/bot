@@ -50,8 +50,8 @@ export type RoomTypeFormData = {
   description: string;
   complimentaryAmenities: string[];
   paidAmenities: string[];
-  staticRatePlans: StaticPricingRatePlan;
-  dynamicRatePlans: DynamicPricingRatePlan;
+  staticRatePlans?: StaticPricingRatePlan;
+  dynamicRatePlans?: DynamicPricingRatePlan;
   ratePlans: AddedRatePlans[];
   maxOccupancy: number;
   maxChildren: number;

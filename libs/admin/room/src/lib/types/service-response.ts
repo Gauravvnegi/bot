@@ -95,7 +95,7 @@ export type RatePlanRes = {
     type: string;
     value: number;
   };
-  ratePlanId: string;
+  id: string;
 };
 
 export type PricingDetails = {

@@ -133,7 +133,7 @@ export class CreateServiceComponent implements OnInit {
       if (this.isSelectedTypePaid) {
         this.useForm.addControl(
           'rate',
-          new FormControl('', Validators.required)
+          new FormControl('', [Validators.required, Validators.min(0)])
         );
         this.useForm.addControl(
           'currency',
@@ -207,6 +207,7 @@ export class CreateServiceComponent implements OnInit {
     }
 
     const data = this.useForm.getRawValue() as ServiceFormData;
+    this.loading = true;
     if (this.serviceId) {
       this.$subscription.add(
         // ** refactor ** patch not working
@@ -238,6 +239,7 @@ export class CreateServiceComponent implements OnInit {
   }
 
   handleSuccess = () => {
+    this.closeLoading();
     this.snackbarService.openSnackBarAsText(
       `Service ${this.serviceId ? 'edited' : 'created'} successfully`,
       '',

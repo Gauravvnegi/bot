@@ -118,9 +118,9 @@ export class RoomTypeForm {
     this.complimentaryAmenities =
       input.complimentaryAmenities?.map((item) => item.id) ?? [];
     this.paidAmenities = input.paidAmenities?.map((item) => item.id) ?? [];
-    this.maxOccupancy = input.maxOccupancy;
-    this.maxChildren = input.maxChildren;
-    this.maxAdult = input.maxAdult;
+    this.maxOccupancy = input.occupancyDetails.maxOccupancy;
+    this.maxChildren = input.occupancyDetails.maxChildren;
+    this.maxAdult = input.occupancyDetails.maxAdult;
     this.area = input.area;
     this.staticRatePlans = {
       paxPriceCurrency: input.pricingDetails.currency,

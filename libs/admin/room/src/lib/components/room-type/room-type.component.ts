@@ -222,12 +222,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
           .subscribe(
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
-              const {
-                staticRatePlans,
-                dynamicRatePlans,
-                ratePlans,
-                ...rest
-              } = data;
+              const { staticRatePlans, dynamicRatePlans, ...rest } = data;
 
               this.isPricingDynamic
                 ? this.useForm
@@ -237,11 +232,12 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
                     .get('staticRatePlans')
                     .patchValue(staticRatePlans);
 
-              ratePlans.slice(1).forEach(() => {
+              data.ratePlans = data.ratePlans.slice(1);
+
+              data.ratePlans.forEach(() => {
                 this.addNewRatePlan();
               });
-
-              this.useForm.patchValue({ ...rest, ratePlans });
+              this.useForm.patchValue(data, { emitEvent: false });
             },
             (err) => {
               this.snackbarService.openSnackBarAsText(err.error.message);
@@ -323,8 +319,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   /**
    * Handle remove rate plan based on index
    */
-  removeRatePlan(value: string, index: number): void {
-    const removedPlan = this.ratePlanArray.at(index).get('id').value;
+  removeRatePlan( index: number): void {
+    const removedPlan = this.ratePlanArray.at(index).get('ratePlanId').value;
     this.removedRatePlans.push(removedPlan);
     this.ratePlanArray.removeAt(index);
   }

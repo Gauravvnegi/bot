@@ -44,6 +44,7 @@ export class FormService {
       variablePrice: item.extraPrice,
       isBase: false,
       description: item.description,
+      id: defaultRatePlan.ratePlanId,
       ...(!isPricingDynamic
         ? {
             discount: {
@@ -64,6 +65,7 @@ export class FormService {
     const defaultPlan = {
       label: defaultRatePlan.label,
       isBase: true,
+      id: defaultRatePlan.ratePlanId,
       ...(!isPricingDynamic
         ? {
             discount: {
@@ -105,7 +107,6 @@ export class FormService {
     roomTypeFormData.roomAmenityIds = data.roomAmenityIds;
     roomTypeFormData.status = data.status;
 
-    debugger;
     return roomTypeFormData;
   }
 }
@@ -143,4 +144,5 @@ export type RatePlanFormData = {
     type: string;
     value: number;
   };
+  id?: string;
 };

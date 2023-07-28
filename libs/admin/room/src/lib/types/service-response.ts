@@ -74,11 +74,13 @@ export type RoomTypeResponse = {
   pricingDetails: PricingDetails;
   ratePlans: RatePlanRes[];
   soldOutCount: number;
-  maxChildren: number;
-  maxAdult: number;
+  occupancyDetails: {
+    maxChildren: number;
+    maxAdult: number;
+    maxOccupancy: number;
+  };
   area: number;
   status: boolean;
-  maxOccupancy: number;
   discountedPrice: number;
   originalPrice: number;
   currency: string;

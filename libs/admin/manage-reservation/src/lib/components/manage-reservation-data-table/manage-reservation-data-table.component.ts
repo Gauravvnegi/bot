@@ -163,6 +163,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         )
         .subscribe((res) => {
           this.isSelectedEntityChanged = true; // Since we only get here when selectedEntity has changed
+          this.resetTableValues();
           this.initDetails(this.selectedEntity);
           this.initTableValue();
         })
@@ -252,23 +253,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   /**
-   * To get query params
-   */
-  getOutletConfig(): QueryConfig {
-    const config = {
-      params: this.adminUtilityService.makeQueryParams([
-        ...this.globalQueries,
-        ...this.getSelectedQuickReplyFilters(),
-        {
-          offset: this.first,
-          limit: this.rowsPerPage,
-        },
-      ]),
-    };
-    return config;
-  }
-
-  /**
    * @function getStatusValues To get status value.
    */
   getStatusValues(status) {
@@ -339,14 +323,24 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
   }
 
   changeStatus(status: ReservationStatusType, reservationData) {
+    let bookingType =
+      this.selectedEntity.type === EntityType.HOTEL
+        ? EntitySubType.ROOM_TYPE
+        : EntityType.OUTLET;
     this.loading = true;
     this.$subscription.add(
       this.manageReservationService
-        .updateBookingStatus(reservationData.id, this.entityId, {
-          reservationType: status,
-        })
+        .updateBookingStatus(
+          reservationData.id,
+          this.selectedEntity.id,
+          bookingType,
+          {
+            reservationType: status,
+          }
+        )
         .subscribe(
           (res) => {
+            debugger;
             this.values.find(
               (item) => item.id === reservationData.id
             ).reservationType = status;

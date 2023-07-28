@@ -7,8 +7,15 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GlobalFilterService } from '@hospitality-bot/admin/core/theme';
-import { ConfigService, DiscountType } from '@hospitality-bot/admin/shared';
+import {
+  GlobalFilterService,
+  SubscriptionPlanService,
+} from '@hospitality-bot/admin/core/theme';
+import {
+  ConfigService,
+  DiscountType,
+  ModuleNames,
+} from '@hospitality-bot/admin/shared';
 import { NavRouteOptions, Option } from 'libs/admin/shared/src';
 import CustomValidators from 'libs/admin/shared/src/lib/utils/validators';
 import { SnackBarService } from 'libs/shared/material/src/lib/services/snackbar.service';
@@ -78,13 +85,17 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private snackbarService: SnackBarService,
-    private formService: FormService
+    private formService: FormService,
+    private subscriptionPlanService: SubscriptionPlanService
   ) {
     this.roomTypeId = this.route.snapshot.paramMap.get('id');
   }
 
   ngOnInit(): void {
     this.entityId = this.globalService.entityId;
+    this.isPricingDynamic = this.subscriptionPlanService.checkModuleSubscription(
+      ModuleNames.DYNAMIC_PRICING
+    );
     this.initForm();
     this.initOptionConfig();
   }
@@ -319,7 +330,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   /**
    * Handle remove rate plan based on index
    */
-  removeRatePlan( index: number): void {
+  removeRatePlan(index: number): void {
     const removedPlan = this.ratePlanArray.at(index).get('ratePlanId').value;
     this.removedRatePlans.push(removedPlan);
     this.ratePlanArray.removeAt(index);

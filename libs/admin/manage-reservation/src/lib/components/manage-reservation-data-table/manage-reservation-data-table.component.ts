@@ -157,7 +157,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
           distinctUntilChanged((prev, curr) => prev.subType === curr.subType), // Compare subType property for changes
           tap((res) => {
             this.selectedEntity = res;
-            this.isSelectedEntityChanged = false; // Set to false by default
           })
         )
         .subscribe((res) => {
@@ -214,6 +213,7 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         },
         () => {
           this.loading = false;
+          this.isSelectedEntityChanged = false;
         }
       );
   }
@@ -339,7 +339,6 @@ export class ManageReservationDataTableComponent extends BaseDatableComponent {
         )
         .subscribe(
           (res) => {
-            debugger;
             this.values.find(
               (item) => item.id === reservationData.id
             ).reservationType = status;

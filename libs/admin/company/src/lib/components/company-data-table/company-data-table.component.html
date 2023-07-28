@@ -106,16 +106,26 @@
         </div>
       </td>
       <td>
-        <div class="cell-content" *ngIf="rowData.email; else emptyCell">
+        <div
+          class="cell-content"
+          *ngIf="rowData?.email || rowData?.phoneNumber; else emptyCell"
+        >
           <div class="primary-text">
-            {{ rowData.email }}
+            <a
+              class="link"
+              (click)="$event.stopPropagation()"
+              href="tel:{{ rowData.phoneNumber }}"
+              >{{ rowData.phoneNumber }}</a
+            >
           </div>
-          <a
-            class="secondary-text link"
-            (click)="$event.stopPropagation()"
-            href="tel:{{ rowData.phoneNumber }}"
-            >{{ rowData.phoneNumber }}</a
-          >
+          <div class="primary-text">
+            <a
+              class="slink"
+              (click)="$event.stopPropagation()"
+              href="mailto:{{ rowData?.email }}"
+              >{{ rowData?.email }}</a
+            >
+          </div>
         </div>
       </td>
       <td>

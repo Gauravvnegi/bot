@@ -137,6 +137,12 @@
                   [defaultProps]="{
                     post: { type: 'number', float: true }
                   }"
+                  [props]="{
+                    errorMessages: {
+                      required: 'This is a required field.',
+                      min: 'Value must be greater than 0.'
+                    }
+                  }"
                 ></hospitality-bot-multiple-prefix-input>
               </hospitality-bot-discount-form>
 
@@ -150,6 +156,12 @@
                   [defaultProps]="{
                     post: { type: 'number' }
                   }"
+                  [props]="{
+                    errorMessages: {
+                      required: 'This is a required field.',
+                      min: 'Value must be greater than 0.'
+                    }
+                  }"
                 ></hospitality-bot-prefix-field>
                 <hospitality-bot-prefix-field
                   class="half-width"
@@ -160,6 +172,12 @@
                   [defaultProps]="{
                     post: { type: 'number' }
                   }"
+                  [props]="{
+                    errorMessages: {
+                      required: 'This is a required field.',
+                      min: 'Value must be greater than 0.'
+                    }
+                  }"
                 ></hospitality-bot-prefix-field>
                 <hospitality-bot-prefix-field
                   class="half-width"
@@ -169,6 +187,12 @@
                   [options]="currencies"
                   [defaultProps]="{
                     post: { type: 'number' }
+                  }"
+                  [props]="{
+                    errorMessages: {
+                      required: 'This is a required field.',
+                      min: 'Value must be greater than 0.'
+                    }
                   }"
                 ></hospitality-bot-prefix-field>
                 <!-- <hospitality-bot-prefix-field
@@ -254,6 +278,12 @@
                 [options]="currencies"
                 [defaultProps]="{
                   post: { type: 'number' }
+                }"
+                [props]="{
+                  errorMessages: {
+                    required: 'This is a required field.',
+                    min: 'Value must be greater than 0.'
+                  }
                 }"
               ></hospitality-bot-prefix-field>
               <hospitality-bot-text-area

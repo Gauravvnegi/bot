@@ -18,22 +18,37 @@ export class FormService {
       ...rest
     } = roomTypeData;
 
-    const {
-      ratePlanId,
-      discountType,
-      discountValue,
-      ...restRatePlan
-    } = staticRatePlans;
+    let staticRatePlanModData: any;
+    let dynamicRatePlanModData: any;
 
-    let staticRatePlanModData = {
-      ...restRatePlan,
-      ratePlanId: ratePlanId || null,
+    let discount: {
+      type: string;
+      value: number;
     };
 
-    let dynamicRatePlanModData = {
-      ratePlanId: dynamicRatePlans?.ratePlanId || null,
-      ...dynamicRatePlans,
-    };
+    if (!isPricingDynamic) {
+      const {
+        ratePlanId,
+        discountType,
+        discountValue,
+        ...restRatePlan
+      } = staticRatePlans;
+
+      discount = {
+        type: discountType,
+        value: discountValue,
+      };
+
+      staticRatePlanModData = {
+        ...restRatePlan,
+        ratePlanId: ratePlanId || null,
+      };
+    } else {
+      dynamicRatePlanModData = {
+        ratePlanId: dynamicRatePlans?.ratePlanId || null,
+        ...dynamicRatePlans,
+      };
+    }
 
     const defaultRatePlan = isPricingDynamic
       ? dynamicRatePlanModData
@@ -47,10 +62,7 @@ export class FormService {
       id: defaultRatePlan.ratePlanId,
       ...(!isPricingDynamic
         ? {
-            discount: {
-              type: discountType,
-              value: discountValue,
-            },
+            discount: discount,
           }
         : {}),
     }));
@@ -68,10 +80,7 @@ export class FormService {
       id: defaultRatePlan.ratePlanId,
       ...(!isPricingDynamic
         ? {
-            discount: {
-              type: discountType,
-              value: discountValue,
-            },
+            discount: discount,
           }
         : {}),
     };
@@ -91,10 +100,10 @@ export class FormService {
       roomTypeFormData.pricingDetails = {
         max: dynamicRatePlanModData?.maxPrice,
         min: dynamicRatePlanModData?.minPrice,
-        currency: dynamicRatePlanModData.maxPriceCurrency,
-        base: dynamicRatePlanModData.basePrice,
-        paxAdult: dynamicRatePlanModData.paxAdultPrice,
-        paxChild: dynamicRatePlanModData.paxChildPrice,
+        currency: dynamicRatePlanModData?.maxPriceCurrency,
+        base: dynamicRatePlanModData?.basePrice,
+        paxAdult: dynamicRatePlanModData?.paxAdultPrice,
+        paxChild: dynamicRatePlanModData?.paxChildPrice,
       };
     else
       roomTypeFormData.pricingDetails = {

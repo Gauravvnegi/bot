@@ -243,8 +243,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
                     .get('staticRatePlans')
                     .patchValue(staticRatePlans);
 
-              data.ratePlans = data.ratePlans.slice(1);
-
               data.ratePlans.forEach(() => {
                 this.addNewRatePlan();
               });
@@ -343,7 +341,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     const addedRatePlan = {
       label: ['Rate Plan', [Validators.maxLength(60)]],
       currency: ['INR'],
-      extraPrice: ['', [Validators.required]],
+      extraPrice: ['', [Validators.required, Validators.min(0)]],
       description: [''],
     };
 

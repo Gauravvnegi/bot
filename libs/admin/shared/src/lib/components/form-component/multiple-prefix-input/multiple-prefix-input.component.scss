@@ -1,0 +1,41 @@
+@import '../form.component.scss';
+
+@mixin input {
+  display: block;
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-top: $label-gap;
+}
+
+.currency-input {
+  @include input();
+  flex-basis: 14%;
+}
+
+.count-input {
+  @include input();
+  flex-basis: 43%;
+}
+
+:host ::ng-deep .count-input {
+  .wrapper {
+    .label {
+      margin-top: -0.5rem !important;
+    }
+    .input__static {
+      margin-top: 0px !important;
+    }
+  }
+}
+
+:host ::ng-deep .p-float-label input.p-filled ~ label {
+  top: 0.2rem !important;
+}
+
+:host ::ng-deep .p-float-label input:focus ~ label {
+  top: 0.2rem !important;
+}

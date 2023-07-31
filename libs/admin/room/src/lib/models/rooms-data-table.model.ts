@@ -111,7 +111,7 @@ export class RoomType {
       input.paidAmenities
         ?.map((item) => item.name)
         .concat(input.complimentaryAmenities.map((item) => item.name)) ?? [];
-    this.occupancy = input.maxOccupancy ?? null;
+    this.occupancy = input.occupancyDetails.maxOccupancy ?? null;
     this.status = input.status;
     // mapping discounted price
     this.price = input.discountedPrice ?? input.originalPrice;

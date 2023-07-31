@@ -100,6 +100,11 @@
                   formControlName="label"
                   (keydown.space)="$event.stopPropagation()"
                 />
+                <hospitality-bot-toggle-switch-with-label
+                  [isToggleOn]="true"
+                  (onToggleSwitch)="onToggleSwitch($event)"
+                  click-stop-propagation
+                ></hospitality-bot-toggle-switch-with-label>
               </div>
             </p-header>
 
@@ -259,6 +264,11 @@
                   formControlName="label"
                   (keydown.space)="$event.stopPropagation()"
                 />
+                <hospitality-bot-toggle-switch-with-label
+                  [isToggleOn]="true"
+                  (onToggleSwitch)="onToggleSwitch($event)"
+                  click-stop-propagation
+                ></hospitality-bot-toggle-switch-with-label>
               </div>
               <hospitality-bot-button
                 click-stop-propagation

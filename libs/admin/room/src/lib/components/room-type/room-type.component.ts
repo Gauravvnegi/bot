@@ -166,17 +166,12 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
     this.subscription$.add(
       this.configService.$config.subscribe((value) => {
         if (value) {
-          const {
-            currencyConfiguration,
-            roomDiscountConfig,
-            roomRatePlans,
-          } = value;
+          const { currencyConfiguration, roomDiscountConfig } = value;
           this.currencies = currencyConfiguration.map(modOption);
           this.discountTypes = roomDiscountConfig.map(({ value }) => ({
             label: DiscountType[value],
             value,
           }));
-          this.getRatePlans(roomRatePlans);
         }
       })
     );
@@ -234,7 +229,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
               const { staticRatePlans, dynamicRatePlans, ...rest } = data;
-
+              debugger;
               this.isPricingDynamic
                 ? this.useForm
                     .get('dynamicRatePlans')
@@ -257,75 +252,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * @function getPlanLabel Get label from config api using rate plan id
-   */
-  getPlanLabel(id: string) {
-    let label: string;
-    this.configService.$config.subscribe((value) => {
-      const { roomRatePlans } = value;
-      const plan = roomRatePlans.find((plan: any) => plan.id === id);
-      label = plan.label;
-    });
-    return label;
-  }
-
-  // Get All Rate Plans from config api and add initial rate plan.
-  getRatePlans(ratePlans: RatePlanResponse[]) {
-    const plansData = ratePlans.map((option, index) => ({
-      label: option.label,
-      value: option.id,
-      disabled: false,
-      isDefault: option.isDefault,
-      command: () => this.handleRatePlan(option.id, option.label),
-    }));
-    this.plans = plansData;
-    // Adds rate plan only when the rate plan is not already added
-    // if (!this.roomTypeId) this.addNewRatePlan();
-  }
-
-  /**
-   * @function handleRatePlan To handle rate plan dropdown clicks
-   */
-  handleRatePlan(value: string, label: string, index?: number) {
-    const targetIndex = index ?? this.selectedIndex;
-    const currentPlan = this.plans.find((plan) => plan.value === value);
-    const ratePlanControl = this.ratePlanArray.at(targetIndex);
-
-    // If current plan is disabled then add next enabled plan
-    if (!currentPlan.disabled) {
-      ratePlanControl.get('ratePlanTypeId').patchValue(value);
-      ratePlanControl.get('label').patchValue(label);
-    } else {
-      const nextEnabledPlan = this.plans.find((plan) => !plan.disabled);
-      ratePlanControl.get('ratePlanTypeId').patchValue(nextEnabledPlan.value);
-      ratePlanControl.get('label').patchValue(nextEnabledPlan.label);
-      nextEnabledPlan.disabled = true;
-    }
-    this.setDisabled(value);
-  }
-
-  /**
-   * Disables the rate plan if already added
-   */
-  setDisabled(value: string) {
-    // Currently selected rate plans
-    const selectedRatePlans = this.plans.filter((item) => item.value === value);
-
-    const ratePlanIds = this.ratePlanArray.controls.map(
-      (control) => control.get('ratePlanTypeId').value
-    );
-    // Disables currently selected rate plans in the array
-    if (ratePlanIds.includes(value)) {
-      selectedRatePlans.map((type) => (type.disabled = true));
-    }
-
-    // Enables remaining rate plans
-    this.plans
-      .filter((item) => !ratePlanIds.includes(item.value))
-      .map((plan) => (plan.disabled = false));
-  }
-
-  /**
    * Handle remove rate plan based on index
    */
   removeRatePlan(index: number): void {
@@ -343,6 +269,7 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       currency: ['INR'],
       extraPrice: ['', [Validators.required, Validators.min(0)]],
       description: [''],
+      ratePlanId: [''],
     };
 
     this.ratePlanArray.push(this.fb.group(addedRatePlan));
@@ -549,6 +476,8 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
       )
     );
   }
+
+  onToggleSwitch(isToogleOn: boolean) {}
 
   resetForm() {
     this.useForm.reset({}, { emitEvent: true });

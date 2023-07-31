@@ -74,6 +74,8 @@ export type RoomTypeFormData = {
 //   id: string;
 // };
 
+export type StaticPricingMod = Omit<RatePlan, 'discountType' | 'discountValue'>
+
 export type StaticPricingRatePlan = RatePlan & {
   discountType: string;
   discountValue: number;
@@ -93,7 +95,7 @@ export type RatePlan = {
   paxChildPrice: number;
   paxAdultPrice: number;
   label: string;
-  ratePlanId?: string;
+  ratePlanId?: string | null;
   basePriceCurrency: string;
   basePrice: number;
 };

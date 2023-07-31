@@ -188,3 +188,12 @@ export type MenuItemListResponse = {
   entityStateCounts: EntityState<string>;
   entityTypeCounts: EntityState<string>;
 };
+
+export class RoomTypeInfoRes {
+  adultCount: number;
+  childCount: number;
+  roomCount: number;
+  roomTypeId: string;
+  roomNumbers: string[];
+  ratePlanTypeId: string;
+}

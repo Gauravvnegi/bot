@@ -12,7 +12,11 @@
   </hospitality-bot-navigation-header>
   <div class="inventory-form" *ngIf="!!useForm; else loader">
     <div
-      [ngClass]="!isRoomsEmpty ? 'wrapper' : 'wrapper reduce-height'"
+      [ngClass]="
+        !isRoomsEmpty && allRoomTypes?.length
+          ? 'wrapper'
+          : 'wrapper reduce-height'
+      "
       [formGroup]="useForm"
     >
       <!-- LEFT SECTION -->
@@ -32,12 +36,15 @@
                 controlName="date"
                 [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
                 [minDate]="currentDate"
-                [disabled]="isRoomsEmpty"
+                [disabled]="isRoomsEmpty || !allRoomTypes?.length"
               >
               </hospitality-bot-date>
             </div>
           </div>
-          <div class="main-section" *ngIf="!isRoomsEmpty">
+          <div
+            class="main-section"
+            *ngIf="!isRoomsEmpty && allRoomTypes?.length"
+          >
             <div class="heading-section left-main-cell">
               <div class="left-main-cell__left head-cell ttp">
                 <div class="main-text">
@@ -275,18 +282,22 @@
       label="Save"
       (onClick)="handleSave()"
       [disabled]="loading || loadingError"
-      *ngIf="!isRoomsEmpty"
+      *ngIf="!isRoomsEmpty && allRoomTypes?.length"
     ></hospitality-bot-button>
-    <ng-container *ngIf="!isRoomsEmpty; else emptyTable"></ng-container>
+    <ng-container
+      *ngIf="!isRoomsEmpty && allRoomTypes?.length; else emptyView"
+    ></ng-container>
   </div>
   <ng-template #loader>
     <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
   </ng-template>
-  <ng-template #emptyTable>
+  <ng-template #emptyView>
     <hospitality-bot-empty-table
       [isLoading]="loading"
       [content]="{
-        description: 'Please select at least one rooms',
+        description: allRoomTypes?.length
+          ? 'Please select at least one rooms'
+          : 'There is no room available',
         imageSrc: 'assets/images/empty-table-service.png'
       }"
     >

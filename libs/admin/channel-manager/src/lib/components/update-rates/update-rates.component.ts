@@ -29,10 +29,7 @@ import { SnackBarService } from '@hospitality-bot/shared/material';
 import { ChannelManagerService } from '../../services/channel-manager.service';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
-import {
-  UpdateInventory,
-  UpdateRates,
-} from '../../models/channel-manager.model';
+import { UpdateRates } from '../../models/channel-manager.model';
 
 @Component({
   selector: 'hospitality-bot-update-rates',
@@ -113,8 +110,9 @@ export class UpdateRatesComponent implements OnInit {
       roomType: [],
       date: [this.currentDate.getTime()],
     });
-    this.addDynamicControl();
     this.addRoomsControl();
+    this.addDynamicControl();
+    console.log(this.useForm);
   }
 
   addRoomsControl() {
@@ -128,30 +126,37 @@ export class UpdateRatesComponent implements OnInit {
       this.getValuesArrayControl('boolean')
     );
 
-    const disableRateControls = (
-      control: AbstractControl,
-      idx: number,
-      res: { value: boolean }
-    ) => {
-      const rateControl = (control.get('rates') as FormArray).at(idx);
-      if (res.value) rateControl.disable();
-      else rateControl.enable();
-    };
-
     this.useFormControl.dynamicPricing.controls.forEach((control, idx) => {
       control.valueChanges.subscribe((res) => {
         this.useFormControl.roomTypes.controls.forEach((roomTypeControl) => {
           (roomTypeControl.get('ratePlans') as FormArray).controls.forEach(
             (ratePlanControl) => {
-              disableRateControls(ratePlanControl, idx, res);
+              this.disableRateControls(ratePlanControl, idx, res);
               (ratePlanControl.get('channels') as FormArray).controls.forEach(
                 (channelControl) => {
-                  disableRateControls(channelControl, idx, res);
+                  this.disableRateControls(channelControl, idx, res);
                 }
               );
             }
           );
+
+          // Dynamic price for each room
+          (roomTypeControl.get('dynamicPrice') as FormArray).controls[
+            idx
+          ].patchValue({ value: res.value }, { emitEvent: false });
         });
+        // TODO: Not support on backend side
+        // res.value &&
+        //   this.getDynamicPrice({
+        //     ...res,
+        //     dateIndex: idx,
+        //     roomList: this.useFormControl.roomTypes.controls.map(
+        //       (roomTypeControl) => ({
+        //         roomTypeLabel: roomTypeControl.get('label').value,
+        //         roomTypeId: roomTypeControl.get('value').value,
+        //       })
+        //     ),
+        //   });
       });
     });
   }
@@ -168,9 +173,90 @@ export class UpdateRatesComponent implements OnInit {
           value: roomType.value,
         })
       );
+      this.addRoomDynamicPriceControl(roomTypeIdx);
       this.addRatePlansControls(roomType.ratePlans, roomTypeIdx);
     });
     this.getRates();
+  }
+
+  /**
+   * Add Rates plan control to room type control
+   * @param ratePlans rate plans array
+   * @param roomTypeIdx selected room type index
+   */
+  addRoomDynamicPriceControl(roomTypeIdx: number) {
+    const roomTypeFormGroup = this.useFormControl.roomTypes.at(
+      roomTypeIdx
+    ) as FormGroup;
+
+    roomTypeFormGroup.addControl('dynamicPrice', this.fb.array([]));
+    const dynamicPriceFormArray = roomTypeFormGroup.get(
+      'dynamicPrice'
+    ) as FormArray;
+
+    this.dates.forEach((date, idx) => {
+      dynamicPriceFormArray.push(
+        this.fb.group({
+          dateIndex: idx,
+          value: false,
+        })
+      );
+      (dynamicPriceFormArray.controls[idx] as FormGroup).valueChanges.subscribe(
+        (res) => {
+          res.value &&
+            this.getDynamicPrice({
+              ...res,
+              roomList: [
+                {
+                  roomTypeLabel: roomTypeFormGroup.controls['label'].value,
+                  roomTypeId: roomTypeFormGroup.controls['value'].value,
+                },
+              ],
+            });
+          (roomTypeFormGroup.get('ratePlans') as FormArray).controls.forEach(
+            (ratePlanControl) => {
+              this.disableRateControls(ratePlanControl, idx, res);
+              (ratePlanControl.get('channels') as FormArray).controls.forEach(
+                (channelControl) => {
+                  this.disableRateControls(channelControl, idx, res);
+                }
+              );
+            }
+          );
+          this.changeDynamicPriceStatus(res);
+        }
+      );
+    });
+  }
+
+  disableRateControls(
+    control: AbstractControl,
+    idx: number,
+    res: { value: boolean }
+  ) {
+    const rateControl = (control.get('rates') as FormArray).at(idx);
+    if (res.value) rateControl.disable();
+    else rateControl.enable();
+  }
+
+  changeDynamicPriceStatus(res) {
+    const index = res.dateIndex;
+    let isDynamicPriceAvailable = true;
+
+    const roomTypes = this.useFormControl.roomTypes as FormArray;
+    roomTypes.controls.forEach((roomType) => {
+      const dynamicPrices = roomType.get('dynamicPrice') as FormArray;
+      if (!dynamicPrices.at(index).value.value) {
+        isDynamicPriceAvailable = false;
+      }
+    });
+
+    const dynamicPricing = this.useFormControl.dynamicPricing as FormArray;
+    const dateGroup = dynamicPricing.at(index) as FormGroup;
+    dateGroup.patchValue(
+      { value: isDynamicPriceAvailable },
+      { emitEvent: false }
+    );
   }
 
   /**
@@ -350,6 +436,7 @@ export class UpdateRatesComponent implements OnInit {
             this.loadingError = false;
           },
           (error) => {
+            this.loading = false;
             this.loadingError = true;
           },
           this.handleFinal
@@ -446,10 +533,40 @@ export class UpdateRatesComponent implements OnInit {
     }
   }
 
-  getDynamicPrice(nextDay) {
-    const currDay = new Date(this.useForm.controls['date'].value);
-    currDay.setDate(currDay.getDate() + nextDay);
-    return this.dynamicPricing[currDay.getTime()] ?? false;
+  getDynamicPrice(dynamicPrice: {
+    value: boolean;
+    roomList: { roomTypeId: string; roomTypeLabel: string }[];
+    dateIndex: number;
+  }) {
+    const d = this.useFormControl.roomTypes;
+    console.log(d);
+    let currentDate = new Date(this.useFormControl.date.value);
+    currentDate.setDate(currentDate.getDate() + dynamicPrice.dateIndex);
+    this.useFormControl.roomTypes;
+    this.loading = true;
+    this.$subscription.add(
+      this.channelManagerService
+        .getDynamicPricing(
+          this.entityId,
+          this.getQueryConfig(
+            currentDate.getTime(),
+            'DYNAMIC_PRICING',
+            dynamicPrice.roomList.map((item) => item.roomTypeId).join(',')
+          )
+        )
+        .subscribe(
+          (res) => {
+            // TODO: mapping dynamic pricing
+            // debugger;
+          },
+          (error) => {
+            this.loading = false;
+            // TODO: reset state on error
+            // this.disableRateControls()
+          },
+          this.handleFinal
+        )
+    );
   }
 
   handleFinal() {
@@ -461,7 +578,11 @@ export class UpdateRatesComponent implements OnInit {
     return getWeekendBG(day, isOccupancy);
   }
 
-  getQueryConfig(selectedDate?: number): QueryConfig {
+  getQueryConfig(
+    selectedDate?: number,
+    inventoryType = 'RATES',
+    roomTypeId?: string
+  ): QueryConfig {
     const { fromDate, toDate } = this.getFromAndToDateEpoch(
       selectedDate ? selectedDate : this.useForm.controls['date'].value
     );
@@ -470,9 +591,13 @@ export class UpdateRatesComponent implements OnInit {
         {
           type: 'ROOM_TYPE',
           limit: 5,
-          inventoryUpdateType: 'RATES',
+          inventoryUpdateType: inventoryType,
+          roomTypeId: roomTypeId,
         },
-        selectedDate && { fromDate: fromDate, toDate: toDate },
+        selectedDate && {
+          fromDate: fromDate,
+          toDate: roomTypeId ? fromDate : toDate,
+        },
       ]),
     };
     return config;

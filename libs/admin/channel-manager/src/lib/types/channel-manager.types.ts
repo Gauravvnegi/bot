@@ -12,6 +12,7 @@ export type RoomTypes = {
     label: string;
     value: string;
     channels: Channel[];
+    dynamicPrice: boolean[];
   }[];
 };
 

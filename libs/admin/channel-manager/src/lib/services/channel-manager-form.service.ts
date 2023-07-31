@@ -12,10 +12,7 @@ import { makeRoomsData } from '../models/bulk-update.models';
 export class ChannelManagerFormService {
   // roomDetails: RoomTypes[] = [];
 
-  constructor(
-    private channelMangerService: ChannelManagerService,
-    private configService: ConfigService
-  ) {}
+  constructor(private channelMangerService: ChannelManagerService) {}
 
   isRoomDetailsLoaded = false;
   roomDetails = new BehaviorSubject<RoomTypes[]>([]);
@@ -37,12 +34,9 @@ export class ChannelManagerFormService {
       //     item.name === this.RatePlan.EXECUTIVE ||
       //     item.name === this.RatePlan.SUITE
       // );
-      let configRatePlans = [];
-      this.configService.$config.subscribe((data) => {
-        configRatePlans = data.roomRatePlans;
-      });
+
       this.isRoomDetailsLoaded = true;
-      this.roomDetails.next(makeRoomsData(rooms, configRatePlans));
+      this.roomDetails.next(makeRoomsData(rooms));
     });
   }
 }

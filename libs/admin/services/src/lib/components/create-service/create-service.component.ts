@@ -92,6 +92,8 @@ export class CreateServiceComponent implements OnInit {
       active: [true],
       // currency: [''],
       parentId: ['', Validators.required],
+      type: ['', Validators.required],
+      subType: [''],
       categoryName: [''],
       imageUrl: ['', Validators.required],
       name: ['', Validators.required],
@@ -100,6 +102,7 @@ export class CreateServiceComponent implements OnInit {
       unit: ['', Validators.required],
       enableVisibility: [[], Validators.required],
       taxIds: [[]],
+      hsnCode: [''],
     });
 
     this.updateFormControlSubscription();

@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { RoomTypeFormData } from '../constant/form';
+import {
+  DynamicPricingRatePlan,
+  RoomTypeFormData,
+  StaticPricingMod,
+} from '../constant/form';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +22,8 @@ export class FormService {
       ...rest
     } = roomTypeData;
 
-    let staticRatePlanModData: any;
-    let dynamicRatePlanModData: any;
+    let staticRatePlanModData: StaticPricingMod;
+    let dynamicRatePlanModData: DynamicPricingRatePlan;
 
     let discount: {
       type: string;

@@ -63,13 +63,6 @@ export class OutletFormData {
   source: string;
   sourceName: string;
   marketSegment: string;
-  address?: {
-    addressLine1: string;
-    city: string;
-    state: string;
-    countryCode: string;
-    postalCode: string;
-  };
   paymentMethod: string;
   totalPaidAmount: number;
   offerId: string;

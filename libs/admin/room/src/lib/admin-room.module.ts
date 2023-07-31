@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ChartsModule } from 'ng2-charts';
 import { LibraryService } from '@hospitality-bot/admin/library';
 import { RoomDetailsDataTableComponent } from './components/room-details-data-table/room-details-data-table.component';
+import { FormService } from './services/form.service';
 
 @NgModule({
   imports: [
@@ -27,7 +28,10 @@ import { RoomDetailsDataTableComponent } from './components/room-details-data-ta
     MatTooltipModule,
     TranslateModule.forChild(getTranslationConfigs([HttpClient], ['room'])),
   ],
-  declarations: [...AdminRoomRoutingModule.components, RoomDetailsDataTableComponent],
-  providers: [RoomService, LibraryService],
+  declarations: [
+    ...AdminRoomRoutingModule.components,
+    RoomDetailsDataTableComponent,
+  ],
+  providers: [RoomService, LibraryService, FormService],
 })
 export class AdminRoomModule {}

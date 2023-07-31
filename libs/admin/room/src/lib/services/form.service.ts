@@ -63,7 +63,7 @@ export class FormService {
       variablePrice: item.extraPrice,
       isBase: false,
       description: item.description,
-      id: defaultRatePlan.ratePlanId,
+      id: item.ratePlanId,
       ...(!isPricingDynamic
         ? {
             discount: discount,

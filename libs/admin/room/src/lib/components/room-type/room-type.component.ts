@@ -229,7 +229,6 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
             (res) => {
               let data = new RoomTypeForm().deserialize(res);
               const { staticRatePlans, dynamicRatePlans, ...rest } = data;
-              debugger;
               this.isPricingDynamic
                 ? this.useForm
                     .get('dynamicRatePlans')

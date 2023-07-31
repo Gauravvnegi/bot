@@ -87,10 +87,11 @@ export class ManageReservationService extends ApiService {
   updateBookingStatus(
     bookingId: string,
     entityId: string,
+    bookingType: string,
     data
   ): Observable<any> {
     return this.patch(
-      `/api/v1/booking/${bookingId}?bookingType=ROOM_TYPE&entityId=${entityId}`,
+      `/api/v1/booking/${bookingId}?bookingType=${bookingType}&entityId=${entityId}`,
       data
     );
   }

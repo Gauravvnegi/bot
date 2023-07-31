@@ -11,8 +11,9 @@ import {
   TableService,
 } from '@hospitality-bot/admin/shared';
 import { FormBuilder } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { FormService } from '../../services/form.service';
+import { filter, skipWhile, take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'hospitality-bot-reservation',
@@ -191,31 +192,45 @@ export class ReservationComponent extends BaseDatatableComponent
   // }
 
   listenForGlobalFilters(): void {
+    const destroy$ = new Subject<void>();
+    let isFirstDateRangeChange = true;
+
     this.$subscription.add(
-      this.globalFilterService.globalFilter$.subscribe((data) => {
-        this.entityId = this.globalFilterService.entityId;
-        this.globalFeedbackFilterType =
-          data['filter'].value.feedback.feedbackType;
-        if (
-          this.globalFeedbackFilterType === Feedback.TRANSACTIONAL ||
-          this.globalFeedbackFilterType === Feedback.BOTH
-        ) {
-          this.tabFilterIdx = 0;
-          this.getOutletsSelected(
-            [...data['feedback'].queryValue],
-            data['filter'].value
-          );
-          this.formService.type =
-            this.globalFeedbackFilterType === Feedback.TRANSACTIONAL
-              ? this.globalFeedbackFilterType
-              : '';
-          this.formService.$feedbackType.next(this.formService.type);
-        } else {
-          this.formService.type = Feedback.TRANSACTIONAL;
-          this.formService.$feedbackType.next(Feedback.STAY);
-          this.setStayTabFilters(data['filter'].value);
-        }
-      })
+      this.globalFilterService.globalFilter$
+        .pipe(
+          takeUntil(destroy$),
+          filter((data) => {
+            if ('dateRange' in data && isFirstDateRangeChange) {
+              isFirstDateRangeChange = false;
+              return true; // Allow the first change in dateRange
+            }
+            return !('dateRange' in data); // Ignore changes in dateRange for subsequent emissions
+          })
+        )
+        .subscribe((data) => {
+          this.entityId = this.globalFilterService.entityId;
+          this.globalFeedbackFilterType =
+            data['filter'].value.feedback.feedbackType;
+          if (
+            this.globalFeedbackFilterType === Feedback.TRANSACTIONAL ||
+            this.globalFeedbackFilterType === Feedback.BOTH
+          ) {
+            this.tabFilterIdx = 0;
+            this.getOutletsSelected(
+              [...data['feedback'].queryValue],
+              data['filter'].value
+            );
+            this.formService.type =
+              this.globalFeedbackFilterType === Feedback.TRANSACTIONAL
+                ? this.globalFeedbackFilterType
+                : '';
+            this.formService.$feedbackType.next(this.formService.type);
+          } else {
+            this.formService.type = Feedback.TRANSACTIONAL;
+            this.formService.$feedbackType.next(Feedback.STAY);
+            this.setStayTabFilters(data['filter'].value);
+          }
+        })
     );
   }
 
@@ -259,9 +274,11 @@ export class ReservationComponent extends BaseDatatableComponent
   setTabFilterItems(branch: EntityConfig) {
     this.tabFilterItems = [];
     this.tabFilterItems.push(this.getTabItem(branch));
+    const prev = this.formService.selectedEntity.value;
     this.formService.selectedEntity.next(
       this.getFormServiceEntity(this.tabFilterItems[0])
     );
+
     // if (this.globalFeedbackFilterType === Feedback.BOTH) {
     //   this.tabFilterItems.push(this.getTabItem(branch));
     // }

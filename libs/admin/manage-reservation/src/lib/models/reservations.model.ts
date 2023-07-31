@@ -180,16 +180,16 @@ export class RoomTypeOption {
   deserialize(input: RoomTypeResponse) {
     this.id = input.id ?? '';
     this.name = input.name ?? '';
-    this.maxChildren = input.maxChildren ?? 0;
+    this.maxChildren = input.occupancyDetails.maxChildren ?? 0;
     // this.roomNumber = input.roomNumber ?? [];
-    this.ratePlan = input?.ratePlans.map((item) => ({
-      value: item.ratePlanTypeId,
-      price: item.basePrice,
-      discountedPrice: item.bestAvailablePrice,
-    }));
-    this.maxAdult = input.maxAdult ?? 0;
+    // this.ratePlan = input?.ratePlans.map((item) => ({
+    //   value: item.ratePlanTypeId,
+    //   price: item.basePrice,
+    //   discountedPrice: item.bestAvailablePrice,
+    // }));
+    this.maxAdult = input.occupancyDetails.maxAdult ?? 0;
     this.roomCount = input.roomCount ?? 0;
-    this.occupancy = input.maxOccupancy ?? null;
+    this.occupancy = input.occupancyDetails.maxOccupancy ?? null;
     return this;
   }
 }

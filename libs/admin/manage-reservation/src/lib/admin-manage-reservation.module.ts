@@ -9,6 +9,7 @@ import { GuestTableService } from 'libs/admin/guests/src/lib/services/guest-tabl
 import { FormService } from './services/form.service';
 import { LibraryService } from '@hospitality-bot/admin/library';
 import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.service';
+import { InvoiceService } from 'libs/admin/invoice/src/lib/services/invoice.service';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { OutletService } from 'libs/admin/all-outlets/src/lib/services/outlet.se
     FormService,
     LibraryService,
     OutletService,
+    InvoiceService,
   ],
 })
 export class AdminManageReservationModule {}

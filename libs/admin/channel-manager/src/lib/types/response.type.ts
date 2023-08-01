@@ -23,7 +23,7 @@ export type ChannelManagerResponse = {
   soldOut: boolean;
 };
 
-type Rates = {
+export type Rates = {
   dynamicPricing: boolean;
   rate: number;
   ratePlanId: string;

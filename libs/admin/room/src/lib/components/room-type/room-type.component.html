@@ -94,12 +94,17 @@
           <p-accordionTab click [selected]="true">
             <p-header>
               <div class="header-wrapper">
-                <input
-                  click-stop-propagation
-                  class="header-button"
-                  formControlName="label"
-                  (keydown.space)="$event.stopPropagation()"
-                />
+                <div class="header-button">
+                  <span class="label">
+                    {{
+                      useForm.get(
+                        isPricingDynamic
+                          ? 'dynamicRatePlans.label'
+                          : 'staticRatePlans.label'
+                      ).value
+                    }}</span
+                  >
+                </div>
                 <hospitality-bot-toggle-switch-with-label
                   [isToggleOn]="defaultRatePlanStatus"
                   (onToggleSwitch)="onToggleSwitch($event)"
@@ -109,6 +114,14 @@
             </p-header>
 
             <div>
+              <div class="form-block" *ngIf="!isPricingDynamic">
+                <hospitality-bot-input
+                  label="Name"
+                  class="half-width"
+                  controlName="label"
+                  maxLength="60"
+                ></hospitality-bot-input>
+              </div>
               <hospitality-bot-discount-form
                 *ngIf="!isPricingDynamic"
                 class="form-block"
@@ -152,6 +165,13 @@
               </hospitality-bot-discount-form>
 
               <div class="form-block" *ngIf="isPricingDynamic">
+                <hospitality-bot-input
+                  label="Name"
+                  controlName="label"
+                  class="half-width"
+                  maxLength="60"
+                ></hospitality-bot-input>
+                <div class="half-width"></div>
                 <hospitality-bot-prefix-field
                   class="half-width"
                   label="Base Price-Single Occupancy"
@@ -258,12 +278,11 @@
           >
             <p-header>
               <div class="header-wrapper">
-                <input
-                  click-stop-propagation
-                  class="header-button"
-                  formControlName="label"
-                  (keydown.space)="$event.stopPropagation()"
-                />
+                <div class="header-button">
+                  <span class="label">
+                    {{ ratePlanGroup.get('label').value }}</span
+                  >
+                </div>
                 <hospitality-bot-toggle-switch-with-label
                   [isToggleOn]="ratePlanGroup.get('status').value"
                   (onToggleSwitch)="onToggleSwitch($event, i)"
@@ -280,6 +299,12 @@
             </p-header>
 
             <div class="form-block">
+              <hospitality-bot-input
+                label="Name"
+                class="half-width"
+                controlName="label"
+                maxLength="60"
+              ></hospitality-bot-input>
               <hospitality-bot-prefix-field
                 class="half-width"
                 preControlName="currency"

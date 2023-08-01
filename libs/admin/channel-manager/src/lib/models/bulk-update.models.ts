@@ -12,36 +12,25 @@ export function makeRoomOption(...data) {
   }) as Option[];
 }
 
-export function makeRoomsData(rooms, configRatePlans) {
+export function makeRoomsData(rooms) {
   let res = rooms.map((item) => {
     let room = {
       label: item.name,
       value: item.id,
       channels: [],
-      ratePlans: item.ratePlans
-        .map((ratePlan) => {
-          let rates = configRatePlans.find(
-            (configRates) => configRates.id === ratePlan.ratePlanTypeId
-          );
-          let myRatePlan = rates
-            ? {
-                ...ratePlan,
-                type: rates.key,
-                label: rates.label,
-                value: rates.id,
-                channels: [],
-              }
-            : null;
-          return myRatePlan;
-        })
-        // TODO: It must at least 1 ratePlans
-        .filter((item) => item),
+      ratePlans:
+        item.ratePlans.map((ratePlan) => ({
+          type: ratePlan.label,
+          label: ratePlan.label,
+          value: ratePlan.id,
+          channels: [],
+        })) ?? [],
     };
-    return room;
+    return room.ratePlans.length ? room : null;
   });
 
   // TODO: It must at least 1 ratePlans
-  return res.filter((item) => item.ratePlans.length);
+  return res.filter((item) => item);
 }
 
 export class CheckBoxTreeFactory {

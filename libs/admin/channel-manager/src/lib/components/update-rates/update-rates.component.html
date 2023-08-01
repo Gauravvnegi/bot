@@ -12,7 +12,11 @@
   </hospitality-bot-navigation-header>
   <div class="inventory-form" *ngIf="!!useForm; else loader">
     <div
-      [ngClass]="!isRoomsEmpty ? 'wrapper' : 'wrapper reduce-height'"
+      [ngClass]="
+        !isRoomsEmpty && allRoomTypes?.length
+          ? 'wrapper'
+          : 'wrapper reduce-height'
+      "
       [formGroup]="useForm"
     >
       <!-- LEFT SECTION -->
@@ -32,13 +36,19 @@
                 controlName="date"
                 [settings]="{ enableTime: false, dateFormat: 'M dd, yy' }"
                 [minDate]="currentDate"
-                [disabled]="isRoomsEmpty"
+                [disabled]="isRoomsEmpty || !allRoomTypes?.length"
               >
               </hospitality-bot-date>
             </div>
           </div>
-          <div class="main-section" *ngIf="!isRoomsEmpty">
-            <div class="dynamic-section left-main-cell">
+          <div
+            class="main-section"
+            *ngIf="!isRoomsEmpty && allRoomTypes?.length"
+          >
+            <div
+              *ngIf="hasDynamicPricing"
+              class="dynamic-section left-main-cell"
+            >
               <span class="text">
                 Dynamic Pricing
               </span>
@@ -64,6 +74,14 @@
                         (Occupancy%)
                       </div>
                     </div>
+                  </div>
+                  <div
+                    *ngIf="hasDynamicPricing"
+                    class="room-dynamic-section left-main-cell"
+                  >
+                    <span class="text">
+                      Dynamic Pricing
+                    </span>
                   </div>
                   <ng-container
                     *ngFor="
@@ -178,8 +196,15 @@
               </div>
             </div>
           </div>
-          <div class="main-section" *ngIf="!isRoomsEmpty">
-            <div class="data-cell-wrapper" formArrayName="dynamicPricing">
+          <div
+            class="main-section"
+            *ngIf="!isRoomsEmpty && allRoomTypes?.length"
+          >
+            <div
+              *ngIf="hasDynamicPricing"
+              class="data-cell-wrapper"
+              formArrayName="dynamicPricing"
+            >
               <div class="data-cell dynamic-section">
                 <div
                   class="cell"
@@ -200,35 +225,53 @@
                 "
                 [formGroupName]="roomTypeIdx"
               >
-                <ng-container formArrayName="ratePlans">
-                  <div class="data-cell-wrapper">
-                    <div class="data-cell heading-section">
-                      <div
-                        class="cell"
-                        *ngFor="let date of dates; let dateIndex = index"
-                        [ngClass]="getWeekendBG(date.day, true)"
-                      >
-                        <div class="main-text">
-                          {{
-                            getAvailability(
-                              dateIndex,
-                              'quantity',
-                              roomType.value.value
-                            )
-                          }}
-                        </div>
-                        <div class="seconday-text">
-                          {{
-                            getAvailability(
-                              dateIndex,
-                              'occupancy',
-                              roomType.value.value
-                            )
-                          }}%
-                        </div>
+                <div class="data-cell-wrapper">
+                  <div class="data-cell heading-section">
+                    <div
+                      class="cell"
+                      *ngFor="let date of dates; let dateIndex = index"
+                      [ngClass]="getWeekendBG(date.day, true)"
+                    >
+                      <div class="main-text">
+                        {{
+                          getAvailability(
+                            dateIndex,
+                            'quantity',
+                            roomType.value.value
+                          )
+                        }}
+                      </div>
+                      <div class="seconday-text">
+                        {{
+                          getAvailability(
+                            dateIndex,
+                            'occupancy',
+                            roomType.value.value
+                          )
+                        }}%
                       </div>
                     </div>
                   </div>
+                </div>
+                <div
+                  *ngIf="hasDynamicPricing"
+                  class="data-cell-wrapper"
+                  formArrayName="dynamicPrice"
+                >
+                  <div class="data-cell room-dynamic-section">
+                    <div
+                      class="cell"
+                      *ngFor="let date of dates; let dynamicPriceIndx = index"
+                      [ngClass]="getWeekendBG(date.day, true)"
+                      [formGroupName]="dynamicPriceIndx"
+                    >
+                      <hospitality-bot-input-switch
+                        controlName="value"
+                      ></hospitality-bot-input-switch>
+                    </div>
+                  </div>
+                </div>
+                <ng-container formArrayName="ratePlans">
                   <ng-container
                     *ngFor="
                       let ratePlan of roomTypesControl[roomTypeIdx].get(
@@ -340,18 +383,22 @@
       label="Save"
       (onClick)="handleSave()"
       [disabled]="loading || loadingError"
-      *ngIf="!isRoomsEmpty"
+      *ngIf="!isRoomsEmpty && allRoomTypes?.length"
     ></hospitality-bot-button>
-    <ng-container *ngIf="!isRoomsEmpty; else emptyTable"></ng-container>
+    <ng-container
+      *ngIf="!isRoomsEmpty && allRoomTypes?.length; else emptyView"
+    ></ng-container>
   </div>
   <ng-template #loader>
     <hospitality-bot-loader-bounce></hospitality-bot-loader-bounce>
   </ng-template>
-  <ng-template #emptyTable>
+  <ng-template #emptyView>
     <hospitality-bot-empty-table
       [isLoading]="loading"
       [content]="{
-        description: 'Please select at least one rooms',
+        description: allRoomTypes?.length
+          ? 'Please select at least one rooms'
+          : 'There is no room available',
         imageSrc: 'assets/images/empty-table-service.png'
       }"
     >

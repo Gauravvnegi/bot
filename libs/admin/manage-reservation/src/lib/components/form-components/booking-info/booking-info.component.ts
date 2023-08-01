@@ -63,6 +63,8 @@ export class BookingInfoComponent implements OnInit {
   initDefaultDates() {
     this.endMinDate.setDate(this.startMinDate.getDate() + 1);
     this.maxFromDate.setDate(this.endMinDate.getDate() - 1);
+    this.formService.toDate = this.endMinDate;
+    this.formService.fromDate = this.maxFromDate;
 
     if (this.bookingType === 'ROOM_TYPE')
       this.maxToDate.setDate(this.startMinDate.getDate() + 365);
@@ -95,11 +97,15 @@ export class BookingInfoComponent implements OnInit {
       toDateControl.setValue(endTime);
       fromDateControl.valueChanges.subscribe((res) => {
         const maxToLimit = new Date(res);
+        this.formService.fromDate = maxToLimit;
+        this.updateDateDifference();
         this.maxToDate.setDate(maxToLimit.getDate() + 365);
         this.formService.reservationDate.next(res);
       });
       toDateControl.valueChanges.subscribe((res) => {
         const maxLimit = new Date(res);
+        this.formService.toDate = maxLimit;
+        this.updateDateDifference();
         this.maxFromDate.setDate(maxLimit.getDate() - 1);
       });
     }
@@ -157,6 +163,24 @@ export class BookingInfoComponent implements OnInit {
       const data = new CountryCodeList().deserialize(res);
       this.countries = data.records;
     });
+  }
+
+  updateDateDifference() {
+    // Get the toDate and fromDate values from the form service
+    const toDateValue = this.formService.toDate;
+    const fromDateValue = this.formService.fromDate;
+
+    if (toDateValue && fromDateValue) {
+      // Calculate the date difference in days
+      const dateDiffInMilliseconds =
+        toDateValue.getTime() - fromDateValue.getTime();
+      const dateDiffInDays = Math.ceil(
+        dateDiffInMilliseconds / (1000 * 60 * 60 * 24)
+      );
+
+      // Update the dateDifference BehaviorSubject with the new value
+      this.formService.dateDifference.next(dateDiffInDays);
+    }
   }
 
   get reservationInfoControls() {

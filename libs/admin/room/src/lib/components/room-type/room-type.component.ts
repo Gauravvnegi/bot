@@ -485,13 +485,12 @@ export class RoomTypeComponent implements OnInit, OnDestroy {
   }
 
   onToggleSwitch(isToogleOn: boolean, index?: number) {
-    if (!index) {
+    if (!index && index !== 0) {
       this.isPricingDynamic
-        ? this.useForm.get('dynamicRatePlans').setValue(isToogleOn)
-        : this.useForm.get('staticRatePlans').setValue(isToogleOn);
+        ? this.useForm.get('dynamicRatePlans.status').setValue(isToogleOn)
+        : this.useForm.get('staticRatePlans.status').setValue(isToogleOn);
       return;
     }
-
     this.ratePlanArray.at(index).get('status').setValue(isToogleOn);
   }
 

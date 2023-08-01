@@ -230,6 +230,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
       },
       true
     );
+    debugger;
     if (this.outletId && !(features === 'brand' || features === 'hotel')) {
       //save data into service for later use
 
@@ -399,6 +400,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
    * @description handles success
    */
   handleSuccess = (feature?: Feature, outletId?: string) => {
+    debugger;
     this.loading = false;
 
     this.snackbarService.openSnackBarAsText(
@@ -420,7 +422,7 @@ export class AddOutletComponent extends OutletBaseComponent implements OnInit {
         break;
       //to navigate to create service page
       case 'service':
-        this.router.navigate([`pages/library/services/create-service`], {
+        this.router.navigate([`/pages/library/services/create-service`], {
           relativeTo: this.route,
         });
         break;
